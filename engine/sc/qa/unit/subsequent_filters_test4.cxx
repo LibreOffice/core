@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCellAnchoredShapesODS)
     {
         SdrObject* pObj = pPage->GetObj(i);
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
-        ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+        ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
         CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
         CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                                !pData->getShapeRect().IsEmpty());

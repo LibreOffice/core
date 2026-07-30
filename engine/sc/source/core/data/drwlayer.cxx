@@ -123,7 +123,7 @@ ScUndoObjData::~ScUndoObjData()
 
 void ScUndoObjData::Undo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( mxObj.get() );
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( mxObj.get() );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
@@ -132,7 +132,7 @@ void ScUndoObjData::Undo()
     }
 
     // Undo also an untransformed anchor
-    pData = ScDrawLayer::GetNonRotatedObjData( mxObj.get() );
+    pData = ScDrawLayer::getOrCreateNonRotatedObjData( mxObj.get() );
     if (pData)
     {
         pData->maStart = aOldStt;
@@ -142,7 +142,7 @@ void ScUndoObjData::Undo()
 
 void ScUndoObjData::Redo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( mxObj.get() );
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( mxObj.get() );
     OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
@@ -151,7 +151,7 @@ void ScUndoObjData::Redo()
     }
 
     // Redo also an untransformed anchor
-    pData = ScDrawLayer::GetNonRotatedObjData( mxObj.get() );
+    pData = ScDrawLayer::getOrCreateNonRotatedObjData( mxObj.get() );
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -515,7 +515,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
         SdrObjListIter aIter( pOldPage, SdrIterMode::Flat );
         while (SdrObject* pOldObject = aIter.Next())
         {
-            ScDrawObjData* pOldData = GetObjData(pOldObject);
+            ScDrawObjData* pOldData = GetOrCreateObjData(pOldObject);
             if (pOldData)
             {
                 pOldData->maStart.SetTab(nOldTab);
@@ -526,7 +526,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
             rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
             pNewObject->NbcMove(Size(0,0));
             pNewPage->InsertObject( pNewObject.get() );
-            ScDrawObjData* pNewData = GetObjData(pNewObject.get());
+            ScDrawObjData* pNewData = GetOrCreateObjData(pNewObject.get());
             if (pNewData)
             {
                 pNewData->maStart.SetTab(nNewTab);
@@ -561,7 +561,7 @@ void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
         SdrObjListIter aIter(pPage, SdrIterMode::Flat);
         while (SdrObject* pObj = aIter.Next())
         {
-            ScDrawObjData* pData = GetObjData(pObj);
+            ScDrawObjData* pData = GetOrCreateObjData(pObj);
             if (!pData)
                 continue;
 
@@ -613,7 +613,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                     pData->maStart.PutInOrder( pData->maEnd );
 
                 // Update also an untransformed anchor that's what we stored ( and still do ) to xml
-                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj.get() );
+                ScDrawObjData* pNoRotatedAnchor = getOrCreateNonRotatedObjData( pObj.get() );
                 if ( pNoRotatedAnchor )
                 {
                     const ScAddress aOldSttNoRotatedAnchor = pNoRotatedAnchor->maStart;
@@ -992,7 +992,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     // rNoRotatedAnchor refers in its start and end addresses and its start and end offsets to
     // the logic rectangle of the object. The values are so, as if no hidden columns and rows
     // exists and if it is a LTR sheet. These values are directly used for XML in ODF file.
-    ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData(pObj, true /*bCreate*/);
+    ScDrawObjData& rNoRotatedAnchor = *getOrCreateNonRotatedObjData(pObj, true /*bCreate*/);
 
     // From XML import, rData contains temporarily the anchor information as they are given in
     // XML. Copy it to rNoRotatedAnchor, where it belongs. rData will later contain the anchor
@@ -1273,7 +1273,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         // update anchor with snap rect
         ResizeLastRectFromAnchor( pObj, rData, bNegativePage, bCanResize );
 
-        ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true /*bCreate*/);
+        ScDrawObjData& rNoRotatedAnchor = *getOrCreateNonRotatedObjData( pObj, true /*bCreate*/);
 
         if( bCanResize )
         {
@@ -1654,7 +1654,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
         if (!IsNoteCaption( pObject ))
         {
             tools::Rectangle aObjRect;
-            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
+            ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObject);
             if (pObjData && pObjData->meType == ScDrawObjData::ValidationCircle)
             {
                 aObjRect = pObject->GetLogicRect();
@@ -1730,7 +1730,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                         ScRange aRange = pDoc->GetRange(nTab, aObjRect);
                         bool bObjectInMarkArea =
                             aMarkBound.Contains(aObjRect) && rMark.IsAllMarked(aRange);
-                        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
+                        const ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObject);
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
                         bool bObjectAnchoredToMarkedCell
                             = ((aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
@@ -1781,7 +1781,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
         if (pOldObject->GetLayer() == SC_LAYER_INTERN)
             continue;
 
-        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        const ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pOldObject);
         if (IsNoteCaption(pObjData))
             continue;
 
@@ -1996,7 +1996,7 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
         // For cell anchored objects we use the start address of the anchor, for page anchored objects
         // we use the cell range behind the bounding box of the shape.
         ScAddress aSrcObjStart;
-        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        const ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pOldObject);
         if (pObjData) // Object is anchored to cell.
         {
             aSrcObjStart = (*pObjData).maStart;
@@ -2292,14 +2292,14 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 
     if (bCanMirror)
     {
-        ScDrawObjData* pData = GetObjData(pObj);
+        ScDrawObjData* pData = GetOrCreateObjData(pObj);
         if (pData) // cell anchored
         {
             // Remember values from positive side.
             const tools::Rectangle aOldSnapRect = pObj->GetSnapRect();
             const tools::Rectangle aOldLogicRect = pObj->GetLogicRect();
             // Generate noRotate anchor if missing.
-            ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj);
+            ScDrawObjData* pNoRotatedAnchor = getOrCreateNonRotatedObjData(pObj);
             if (!pNoRotatedAnchor)
             {
                 ScDrawObjData aNoRotateAnchor;
@@ -2308,7 +2308,7 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
                               *pDoc, pData->maStart.Tab());
                 aNoRotateAnchor.mbResizeWithCell = pData->mbResizeWithCell;
                 SetNonRotatedAnchor(*pObj, aNoRotateAnchor);
-                pNoRotatedAnchor = GetNonRotatedObjData(pObj);
+                pNoRotatedAnchor = getOrCreateNonRotatedObjData(pObj);
                 assert(pNoRotatedAnchor);
             }
             // Mirror object at vertical axis
@@ -2350,11 +2350,11 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     }
 
     // for cell anchored objects adapt rectangles in anchors
-    ScDrawObjData* pData = GetObjData(pObj);
+    ScDrawObjData* pData = GetOrCreateObjData(pObj);
     if (pData)
     {
         pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
-        ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
+        ScDrawObjData* pNoRotatedAnchor = getOrCreateNonRotatedObjData(pObj, true /*bCreate*/);
         pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
     }
 }
@@ -2368,11 +2368,11 @@ void ScDrawLayer::MoveRTL(SdrObject* pObj)
     pObj->Move( aMoveSize );
 
     // for cell anchored objects adapt rectangles in anchors
-    ScDrawObjData* pData = GetObjData(pObj);
+    ScDrawObjData* pData = GetOrCreateObjData(pObj);
     if (pData)
     {
         pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
-        ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
+        ScDrawObjData* pNoRotatedAnchor = getOrCreateNonRotatedObjData(pObj, true /*bCreate*/);
         pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
     }
 }
@@ -2521,35 +2521,9 @@ void ScDrawLayer::EnsureGraphicNames()
     }
 }
 
-namespace
-{
-    SdrObjUserData* GetFirstUserDataOfType(const SdrObject *pObj, sal_uInt16 nId)
-    {
-        sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
-        for( sal_uInt16 i = 0; i < nCount; i++ )
-        {
-            SdrObjUserData* pData = pObj->GetUserData( i );
-            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == nId )
-                return pData;
-        }
-        return nullptr;
-    }
-
-    void DeleteFirstUserDataOfType(SdrObject *pObj, sal_uInt16 nId)
-    {
-        sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
-        for( sal_uInt16 i = nCount; i > 0; i-- )
-        {
-            SdrObjUserData* pData = pObj->GetUserData( i-1 );
-            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == nId )
-                pObj->DeleteUserData(i-1);
-        }
-    }
-}
-
 void ScDrawLayer::SetNonRotatedAnchor(SdrObject& rObj, const ScDrawObjData& rAnchor)
 {
-    ScDrawObjData* pAnchor = GetNonRotatedObjData( &rObj, true );
+    ScDrawObjData* pAnchor = getOrCreateNonRotatedObjData( &rObj, true );
     pAnchor->maStart = rAnchor.maStart;
     pAnchor->maEnd = rAnchor.maEnd;
     pAnchor->maStartOffset = rAnchor.maStartOffset;
@@ -2559,7 +2533,7 @@ void ScDrawLayer::SetNonRotatedAnchor(SdrObject& rObj, const ScDrawObjData& rAnc
 
 void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
 {
-    ScDrawObjData* pAnchor = GetObjData( &rObj, true );
+    ScDrawObjData* pAnchor = GetOrCreateObjData( &rObj, true );
     pAnchor->maStart = rAnchor.maStart;
     pAnchor->maEnd = rAnchor.maEnd;
     pAnchor->maStartOffset = rAnchor.maStartOffset;
@@ -2586,7 +2560,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     SetCellAnchored( rObj, aAnchor );
 
     // absolutely necessary to set flag, ScDrawLayer::RecalcPos expects it.
-    if ( ScDrawObjData* pAnchor = GetObjData( &rObj ) )
+    if ( ScDrawObjData* pAnchor = GetOrCreateObjData( &rObj ) )
     {
         pAnchor->setShapeRect(&rDoc, rObj.GetSnapRect());
     }
@@ -2635,7 +2609,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     aNoRotatedAnchor.mbResizeWithCell = bResizeWithCell;
     SetNonRotatedAnchor( rObj, aNoRotatedAnchor);
     // And update maShapeRect. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
-    if (ScDrawObjData* pAnchor = GetNonRotatedObjData(&rObj))
+    if (ScDrawObjData* pAnchor = getOrCreateNonRotatedObjData(&rObj))
     {
         pAnchor->setShapeRect(&rDoc, rObj.GetLogicRect());
     }
@@ -2696,16 +2670,19 @@ bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
 {
     // Cell anchored object always has a user data, to store the anchor cell
     // info. If it doesn't then it's page-anchored.
+
     // tdf#140866: Caption objects anchor position are handled differently.
-    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != nullptr
-           && rObj.GetObjIdentifier() != SdrObjKind::Caption;
+    if (SdrObjKind::Caption == rObj.GetObjIdentifier())
+        return false;
+
+    return nullptr != rObj.getUserData(UserDataID::ID_ScDrawObjData);
 }
 
 bool ScDrawLayer::IsResizeWithCell( const SdrObject& rObj )
 {
     // Cell anchored object always has a user data, to store the anchor cell
     // info. If it doesn't then it's page-anchored.
-    ScDrawObjData* pDrawObjData = GetObjData(const_cast<SdrObject*>(&rObj));
+    ScDrawObjData* pDrawObjData = GetOrCreateObjData(const_cast<SdrObject*>(&rObj));
     if (!pDrawObjData)
         return false;
 
@@ -2714,15 +2691,15 @@ bool ScDrawLayer::IsResizeWithCell( const SdrObject& rObj )
 
 void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
 {
-    DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
-    DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
+    rObj.deleteUserData(UserDataID::ID_ScDrawObjData);
+    rObj.deleteUserData(UserDataID::ID_ScDrawObjDataNonRotated);
 }
 
 ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
 {
     //If this object has a cell anchor associated with it
     //then it's cell-anchored, otherwise it's page-anchored
-    const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj));
+    const ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(const_cast<SdrObject*>(&rObj));
 
     // When there is no cell anchor, it is page anchored.
     if (!pObjData)
@@ -2747,7 +2724,7 @@ ScDrawLayer::GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow
     ScRange aRange( 0, nStartRow, nTab, pDoc->MaxCol(), nEndRow, nTab);
     while (SdrObject* pObject = aIter.Next())
     {
-        ScDrawObjData* pObjData = GetObjData(pObject);
+        ScDrawObjData* pObjData = GetOrCreateObjData(pObject);
         if (pObjData && aRange.Contains(pObjData->maStart))
             aObjects.push_back(pObject);
     }
@@ -2768,7 +2745,7 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
-            ScDrawObjData* pObjData = GetObjData(pObject);
+            ScDrawObjData* pObjData = GetOrCreateObjData(pObject);
             if (pObjData && aRange.Contains(pObjData->maStart))
                 aRowObjects[pObjData->maStart.Row()].push_back(pObject);
         }
@@ -2790,7 +2767,7 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(const ScRange& rRange)
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
-            ScDrawObjData* pObjData = GetObjData(pObject);
+            ScDrawObjData* pObjData = GetOrCreateObjData(pObject);
             if (pObjData && rRange.Contains(pObjData->maStart)) // Object is in given range
                 return true;
         }
@@ -2810,7 +2787,7 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
     ScRange aRange(nStartCol, 0, nTab, nEndCol, pDoc->MaxRow(), nTab);
     while (SdrObject* pObject = aIter.Next())
     {
-        ScDrawObjData* pObjData = GetObjData(pObject);
+        ScDrawObjData* pObjData = GetOrCreateObjData(pObject);
         if (pObjData && aRange.Contains(pObjData->maStart))
             aObjects.push_back(pObject);
     }
@@ -2820,7 +2797,7 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
 void ScDrawLayer::MoveObject(SdrObject* pObject, const ScAddress& rNewPosition)
 {
     // Get anchor data
-    ScDrawObjData* pObjData = GetObjData(pObject, false);
+    ScDrawObjData* pObjData = GetOrCreateObjData(pObject, false);
     if (!pObjData)
         return;
     const ScAddress aOldStart = pObjData->maStart;
@@ -2841,42 +2818,49 @@ void ScDrawLayer::MoveObject(SdrObject* pObject, const ScAddress& rNewPosition)
     RecalcPos(pObject, *pObjData, false, false);
 }
 
-ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate )
+ScDrawObjData* ScDrawLayer::getOrCreateNonRotatedObjData( SdrObject* pObj, bool bCreate )
 {
-    sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
-    sal_uInt16 nFound = 0;
-    for( sal_uInt16 i = 0; i < nCount; i++ )
-    {
-        SdrObjUserData* pData = pObj->GetUserData( i );
-        if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw && pData->GetId() == SC_UD_OBJDATA && ++nFound == 2 )
-            return static_cast<ScDrawObjData*>(pData);
-    }
-    if( pObj && bCreate )
-    {
-        ScDrawObjData* pData = new ScDrawObjData;
-        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
-        return pData;
-    }
-    return nullptr;
+    if (nullptr == pObj)
+        return nullptr;
+
+    // get Non-Rotated version
+    ScDrawObjData_UserDataNonRotated* pUserData(dynamic_cast<ScDrawObjData_UserDataNonRotated*>(pObj->getUserData(UserDataID::ID_ScDrawObjDataNonRotated)));
+
+    if (nullptr != pUserData)
+        return &pUserData->getScDrawObjData();
+
+    if (!bCreate)
+        return nullptr;
+
+    // create Non-Rotated version and add
+    pUserData = new ScDrawObjData_UserDataNonRotated;
+    pObj->appendUserData(std::unique_ptr<SdrObjUserData>(pUserData));
+    return &pUserData->getScDrawObjData();
 }
 
-ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
+ScDrawObjData* ScDrawLayer::GetOrCreateObjData( SdrObject* pObj, bool bCreate )
 {
-    if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_OBJDATA))
-        return static_cast<ScDrawObjData*>(pData);
+    if (nullptr == pObj)
+        return nullptr;
 
-    if( pObj && bCreate )
-    {
-        ScDrawObjData* pData = new ScDrawObjData;
-        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
-        return pData;
-    }
-    return nullptr;
+    // get standard version
+    ScDrawObjData_UserData* pUserData(dynamic_cast<ScDrawObjData_UserData*>(pObj->getUserData(UserDataID::ID_ScDrawObjData)));
+
+    if (nullptr != pUserData)
+        return &pUserData->getScDrawObjData();
+
+    if (!bCreate)
+        return nullptr;
+
+        // create and add standard version (using ID_ScDrawObjData)
+    pUserData = new ScDrawObjData_UserData;
+    pObj->appendUserData(std::unique_ptr<SdrObjUserData>(pUserData));
+    return &pUserData->getScDrawObjData();
 }
 
 ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
 {
-    ScDrawObjData* pData = GetObjData( pObj );
+    ScDrawObjData* pData = GetOrCreateObjData( pObj );
     if ( pData )
     {
         if ( pData->maStart.IsValid() )
@@ -2900,15 +2884,18 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
 
 ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
 {
-    if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_MACRODATA))
-        return static_cast<ScMacroInfo*>(pData);
+    SdrObjUserData* pUserData(nullptr == pObj ? nullptr : pObj->getUserData(UserDataID::ID_ScMacroInfo));
+
+    if (nullptr != pUserData)
+        return static_cast<ScMacroInfo*>(pUserData);
 
     if ( bCreate )
     {
         ScMacroInfo* pData = new ScMacroInfo;
-        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
+        pObj->appendUserData(std::unique_ptr<SdrObjUserData>(pData));
         return pData;
     }
+
     return nullptr;
 }
 

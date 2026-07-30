@@ -1233,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testDrawCircleInMergeCells)
 
     // Change the height of the first row. (556 ~ 1cm)
     pDoc->SetRowHeight(0, 0, 556);
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     pDrawLayer->RecalcPos(pObj, *pData, false, false);
 
     tools::Rectangle aRecalcRect(pObj->GetLogicRect());

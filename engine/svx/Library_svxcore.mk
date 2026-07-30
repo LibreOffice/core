@@ -366,7 +366,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdoashp \
     svx/source/svdraw/svdoattr \
     svx/source/svdraw/svdobj \
-    svx/source/svdraw/svdobjuserdatalist \
     svx/source/svdraw/svdocapt \
     svx/source/svdraw/svdocirc \
     svx/source/svdraw/svdoedge \

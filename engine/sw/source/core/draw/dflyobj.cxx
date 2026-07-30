@@ -1184,8 +1184,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
     GetFormat()->GetDoc().GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
-void SwVirtFlyDrawObj::Resize(const Point& rRef,
-                    double xFact, double yFact, bool /*bUnsetRelative*/)
+void SwVirtFlyDrawObj::Resize(const Point& rRef, double xFact, double yFact)
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();

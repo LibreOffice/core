@@ -95,8 +95,8 @@ void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShow
 
 void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos )
 {
-    // pass true to ScDrawLayer::GetObjData() to create the object data entry
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData( &rCaption, true );
+    // pass true to ScDrawLayer::GetOrCreateObjData() to create the object data entry
+    ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData( &rCaption, true );
     assert(pObjData && "ScCaptionUtil::SetCaptionUserData - missing drawing object user data");
     pObjData->maStart = rPos;
     pObjData->meType = ScDrawObjData::CellNote;

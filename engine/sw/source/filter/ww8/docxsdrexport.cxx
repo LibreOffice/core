@@ -40,6 +40,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <frmfmt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <SwRelativeWidthHeight.hxx>
 
 #include <svx/svdtrans.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1484,11 +1485,16 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     pFS->endElementNS(XML_a, XML_graphic);
 
     // Relative size of the drawing.
-    if (pSdrObject->GetRelativeWidth())
+    SwRelativeWidthHeight* pRelWH(dynamic_cast<SwRelativeWidthHeight*>(
+        pSdrObject->getUserData(UserDataID::ID_SwRelativeWidthHeight)));
+    const double* pRelativeWidth(pRelWH ? pRelWH->GetRelativeWidth() : nullptr);
+    const double* pRelativeHeight(pRelWH ? pRelWH->GetRelativeHeight() : nullptr);
+
+    if (nullptr != pRelativeWidth)
     {
         // At the moment drawinglayer objects are always relative from page.
         OUString sValue;
-        switch (pSdrObject->GetRelativeWidthRelation())
+        switch (pRelWH->GetRelativeWidthRelation())
         {
             case text::RelOrientation::FRAME:
                 sValue = u"margin"_ustr;
@@ -1512,15 +1518,15 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         }
         pFS->startElementNS(XML_wp14, XML_sizeRelH, XML_relativeFrom, sValue);
         pFS->startElementNS(XML_wp14, XML_pctWidth);
-        pFS->writeEscaped(
-            OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->writeEscaped(OUString::number((*pRelativeWidth) * 100 * oox::drawingml::PER_PERCENT));
         pFS->endElementNS(XML_wp14, XML_pctWidth);
         pFS->endElementNS(XML_wp14, XML_sizeRelH);
     }
-    if (pSdrObject->GetRelativeHeight())
+
+    if (nullptr != pRelativeHeight)
     {
         OUString sValue;
-        switch (pSdrObject->GetRelativeHeightRelation())
+        switch (pRelWH->GetRelativeHeightRelation())
         {
             case text::RelOrientation::FRAME:
                 sValue = u"margin"_ustr;
@@ -1538,8 +1544,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         }
         pFS->startElementNS(XML_wp14, XML_sizeRelV, XML_relativeFrom, sValue);
         pFS->startElementNS(XML_wp14, XML_pctHeight);
-        pFS->writeEscaped(
-            OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->writeEscaped(OUString::number((*pRelativeHeight) * 100 * oox::drawingml::PER_PERCENT));
         pFS->endElementNS(XML_wp14, XML_pctHeight);
         pFS->endElementNS(XML_wp14, XML_sizeRelV);
     }

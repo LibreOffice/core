@@ -152,7 +152,7 @@ void ScGridWindow::dumpGraphicInformation()
         {
             SdrObject* pObj = pPage->GetObj(nObj);
             std::cout << "Graphic Object" << std::endl;
-            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+            ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
             if (pObjData)
                 dumpScDrawObjData(*this, *pObjData, pDrawLayer->GetScaleUnit());
 

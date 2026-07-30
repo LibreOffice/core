@@ -624,7 +624,7 @@ void SdrObjGroup::Move(const Size& rSiz)
 }
 
 
-void SdrObjGroup::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
+void SdrObjGroup::Resize(const Point& rRef, double xFact, double yFact)
 {
     if (xFact == 1.0 && yFact == 1.0)
         return;
@@ -654,13 +654,13 @@ void SdrObjGroup::Resize(const Point& rRef, double xFact, double yFact, bool bUn
         for (const rtl::Reference<SdrObject>& pObj : *this)
         {
             if (pObj->IsEdgeObj())
-                pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
+                pObj->Resize(rRef,xFact,yFact);
         }
 
         for (const rtl::Reference<SdrObject>& pObj : *this)
         {
             if (!pObj->IsEdgeObj())
-                pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
+                pObj->Resize(rRef,xFact,yFact);
         }
     }
     else

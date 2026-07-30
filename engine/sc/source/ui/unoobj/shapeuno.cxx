@@ -466,7 +466,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                     ScDrawObjData aAnchor;
                                     aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
                                     aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
-                                    ScDrawObjData* pDrawObjData = ScDrawLayer::GetObjData(pObj);
+                                    ScDrawObjData* pDrawObjData = ScDrawLayer::GetOrCreateObjData(pObj);
                                     if (pDrawObjData)
                                         aAnchor.mbResizeWithCell = pDrawObjData->mbResizeWithCell;
                                     //Uno sets the Anchor in terms of the unrotated shape, not much we can do
@@ -496,7 +496,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
         if (aAnchorType == SCA_PAGE)
             return;
 
-        ScDrawObjData* pDrawObjData = ScDrawLayer::GetObjData(pObj);
+        ScDrawObjData* pDrawObjData = ScDrawLayer::GetOrCreateObjData(pObj);
         if (!pDrawObjData)
             return;
 
@@ -524,7 +524,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             else
             {
                 // insert new user data with image map
-                pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
+                pObj->appendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
             }
         }
     }

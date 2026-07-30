@@ -390,7 +390,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pPage->InsertObject( pBox.get() );
         pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox.get(), true );
+        ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pBox.get(), true );
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
         pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
@@ -436,7 +436,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pPage->InsertObject( pArrow.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pArrow.get(), true);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pArrow.get(), true);
     if (bFromOtherTab)
         pData->maStart.SetInvalid();
     else
@@ -470,7 +470,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         pPage->InsertObject( pBox.get() );
         pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox.get(), true );
+        ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pBox.get(), true );
         pData->maStart.Set( nStartCol, nStartRow, nTab);
         pData->maEnd.Set( nEndCol, nEndRow, nTab);
     }
@@ -508,7 +508,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pPage->InsertObject( pArrow.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow.get(), true );
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pArrow.get(), true );
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
@@ -580,7 +580,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pPage->InsertObject( pCircle.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pCircle ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle.get(), true );
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pCircle.get(), true );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
     pData->meType = ScDrawObjData::ValidationCircle;

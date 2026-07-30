@@ -144,7 +144,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
 
         if (pImageMap)
-            pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
+            pNewGrafObj->appendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
 
         ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj.get()); // maybe ReplaceObjectAtView
 
@@ -250,7 +250,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             // replace object
             if (pImageMap)
-                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
+                pNewGrafObj->appendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
 
             ::tools::Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
             Size aPickObjSize(aPickObjRect.GetSize());
@@ -290,7 +290,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (!bSuccess)
                 pNewGrafObj = nullptr;
             else if (pImageMap)
-                pNewGrafObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
+                pNewGrafObj->appendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(*pImageMap)));
         }
     }
 

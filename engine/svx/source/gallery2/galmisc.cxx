@@ -126,24 +126,16 @@ bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
     if (!pGrafObj)
         return false;
 
-    bool bRet = false;
-    const sal_uInt16 nCount = pObj->GetUserDataCount();
+    SdrObjUserData* pUserData(pObj->getUserData(UserDataID::ID_SgaIMapInfo));
 
-    // Exist in the user data an IMap information?
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    if (nullptr != pUserData)
     {
-        const SdrObjUserData* pUserData = pObj->GetUserData( i );
-
-        if ( ( pUserData->GetInventor() == SdrInventor::SgaImap ) && ( pUserData->GetId() == ID_IMAPINFO ) )
-        {
-            rGraphic = pGrafObj->GetGraphic();
-            rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();
-            bRet = true;
-            break;
-        }
+        rGraphic = pGrafObj->GetGraphic();
+        rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )

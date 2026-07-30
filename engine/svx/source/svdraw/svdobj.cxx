@@ -112,7 +112,6 @@
 #include <svx/svdsob.hxx>
 #include <svl/whiter.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <svdobjuserdatalist.hxx>
 #include <svx/xfillit0.hxx>
 
 #include <optional>
@@ -147,17 +146,6 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
     pPageView(nullptr),
     nTol(0) {}
 
-
-SdrObjUserData::SdrObjUserData(SdrInventor nInv, sal_uInt16 nId) :
-    m_nInventor(nInv),
-    m_nIdentifier(nId) {}
-
-SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
-    m_nInventor(rData.m_nInventor),
-    m_nIdentifier(rData.m_nIdentifier) {}
-
-SdrObjUserData::~SdrObjUserData() {}
-
 SdrObjGeoData::SdrObjGeoData():
     bMovProt(false),
     bSizProt(false),
@@ -191,19 +179,6 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bCanConvToContour(false),
     bCanConvToPathLineToArea(true),
     bCanConvToPolyLineToArea(true) {}
-
-struct SdrObject::Impl
-{
-    sdr::ObjectUserVector maObjectUsers;
-    std::optional<double> mnRelativeWidth;
-    std::optional<double> mnRelativeHeight;
-    sal_Int16               meRelativeWidthRelation;
-    sal_Int16               meRelativeHeightRelation;
-
-    Impl() :
-        meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME),
-        meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
-};
 
 bool SdrObject::ObjectNameIsDiagramModelID()
 {
@@ -336,16 +311,16 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 
 void SdrObject::AddObjectUser(sdr::ObjectUser& rNewUser)
 {
-    mpImpl->maObjectUsers.push_back(&rNewUser);
+    maObjectUsers.push_back(&rNewUser);
 }
 
 void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
 {
     const sdr::ObjectUserVector::iterator aFindResult =
-        std::find(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end(), &rOldUser);
-    if (aFindResult != mpImpl->maObjectUsers.end())
+        std::find(maObjectUsers.begin(), maObjectUsers.end(), &rOldUser);
+    if (aFindResult != maObjectUsers.end())
     {
-        mpImpl->maObjectUsers.erase(aFindResult);
+        maObjectUsers.erase(aFindResult);
     }
 }
 
@@ -446,7 +421,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
     , m_pUserCall(nullptr)
-    , mpImpl(new Impl)
+    , maObjectUsers()
     , mpParentOfSdrObject(nullptr)
     , m_nOrdNum(0)
     , mnNavigationPosition(SAL_MAX_UINT32)
@@ -482,7 +457,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
     , m_pUserCall(nullptr)
-    , mpImpl(new Impl)
+    , maObjectUsers()
     , mpParentOfSdrObject(nullptr)
     , m_nOrdNum(0)
     , mnNavigationPosition(SAL_MAX_UINT32)
@@ -535,21 +510,15 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
 
     if (rSource.m_pUserDataList)
     {
-        const sal_uInt16 nCount(rSource.m_pUserDataList->GetUserDataCount());
+        m_pUserDataList.reset(new UserDataListType);
 
-        if (nCount)
+        for (const auto& rCandidate : *rSource.m_pUserDataList)
         {
-            m_pUserDataList.reset(new SdrObjUserDataList);
-
-            for (sal_uInt16 i(0); i < nCount; i++)
-            {
-                std::unique_ptr<SdrObjUserData> pNewUserData = rSource.m_pUserDataList->GetUserData(i).Clone(this);
-                if (pNewUserData)
-                    m_pUserDataList->AppendUserData(std::move(pNewUserData));
-                else {
-                    OSL_FAIL("SdrObject::SdrObject(): UserData.Clone() returns NULL.");
-                }
-            }
+            std::unique_ptr<SdrObjUserData> pNewUserData(rCandidate.second->Clone(this));
+            if (pNewUserData)
+                (*m_pUserDataList)[pNewUserData->getUserDataID()] = std::move(pNewUserData);
+            else
+                OSL_FAIL("SdrObject::SdrObject(): UserData.Clone() returns NULL.");
         }
     }
 
@@ -578,7 +547,7 @@ SdrObject::~SdrObject()
     // And clear the vector. This means that user do not need to call RemoveObjectUser()
     // when they get called from ObjectInDestruction().
     sdr::ObjectUserVector aList;
-    aList.swap(mpImpl->maObjectUsers);
+    aList.swap(maObjectUsers);
     for(sdr::ObjectUser* pObjectUser : aList)
     {
         DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
@@ -650,52 +619,6 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     }() );
 
     return *xGlobalItemPool.get();
-}
-
-void SdrObject::SetRelativeWidth( double nValue )
-{
-    mpImpl->mnRelativeWidth = nValue;
-}
-
-void SdrObject::SetRelativeWidthRelation( sal_Int16 eValue )
-{
-    mpImpl->meRelativeWidthRelation = eValue;
-}
-
-void SdrObject::SetRelativeHeight( double nValue )
-{
-    mpImpl->mnRelativeHeight = nValue;
-}
-
-void SdrObject::SetRelativeHeightRelation( sal_Int16 eValue )
-{
-    mpImpl->meRelativeHeightRelation = eValue;
-}
-
-const double* SdrObject::GetRelativeWidth( ) const
-{
-    if (!mpImpl->mnRelativeWidth)
-        return nullptr;
-
-    return &*mpImpl->mnRelativeWidth;
-}
-
-sal_Int16 SdrObject::GetRelativeWidthRelation() const
-{
-    return mpImpl->meRelativeWidthRelation;
-}
-
-const double* SdrObject::GetRelativeHeight( ) const
-{
-    if (!mpImpl->mnRelativeHeight)
-        return nullptr;
-
-    return &*mpImpl->mnRelativeHeight;
-}
-
-sal_Int16 SdrObject::GetRelativeHeightRelation() const
-{
-    return mpImpl->meRelativeHeightRelation;
 }
 
 SfxItemPool& SdrObject::GetObjectItemPool() const
@@ -1658,18 +1581,15 @@ void SdrObject::NbcCrop(const basegfx::B2DPoint& /*aRef*/, double /*fxFact*/, do
     // Where SwVirtFlyDrawObj is the only real user of it to do something local
 }
 
-void SdrObject::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
+void SdrObject::Resize(const Point& rRef, double xFact, double yFact)
 {
     if (xFact == 1.0 && yFact == 1.0)
         return;
 
-    if (bUnsetRelative)
-    {
-        mpImpl->mnRelativeWidth.reset();
-        mpImpl->meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
-        mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
-        mpImpl->mnRelativeHeight.reset();
-    }
+    // always flush this UserData, see formal bUnsetRelative, but also
+    // SwAnchoredDrawObject::GetObjBoundRect() and it's call to Resize
+    deleteUserData(UserDataID::ID_SwRelativeWidthHeight);
+
     tools::Rectangle aBoundRect0;
 
     if (m_pUserCall != nullptr)
@@ -2925,43 +2845,44 @@ void SdrObject::SetVisible(bool bVisible)
 }
 
 
-sal_uInt16 SdrObject::GetUserDataCount() const
+
+SdrObjUserData* SdrObject::getUserData(UserDataID aID) const
 {
-    if (m_pUserDataList==nullptr) return 0;
-    return m_pUserDataList->GetUserDataCount();
+    if (!m_pUserDataList)
+        return nullptr;
+
+    UserDataListType::iterator aHit(m_pUserDataList->find(aID));
+
+    if (aHit == m_pUserDataList->end())
+        return nullptr;
+
+    return aHit->second.get();
 }
 
-SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
-{
-    if (m_pUserDataList==nullptr) return nullptr;
-    return &m_pUserDataList->GetUserData(nNum);
-}
-
-void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
+bool SdrObject::appendUserData(std::unique_ptr<SdrObjUserData> pData)
 {
     if (!pData)
-    {
-        OSL_FAIL("SdrObject::AppendUserData(): pData is NULL pointer.");
-        return;
-    }
+        return false;
 
     if (!m_pUserDataList)
-        m_pUserDataList.reset( new SdrObjUserDataList );
+        m_pUserDataList.reset(new UserDataListType);
 
-    m_pUserDataList->AppendUserData(std::move(pData));
+    (*m_pUserDataList)[pData->getUserDataID()] = std::move(pData);
+    return true;
 }
 
-void SdrObject::DeleteUserData(sal_uInt16 nNum)
+bool SdrObject::deleteUserData(UserDataID aID)
 {
-    sal_uInt16 nCount=GetUserDataCount();
-    if (nNum<nCount) {
-        m_pUserDataList->DeleteUserData(nNum);
-        if (nCount==1)  {
-            m_pUserDataList.reset();
-        }
-    } else {
-        OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");
-    }
+    if (!m_pUserDataList)
+        return false;
+
+    UserDataListType::iterator aHit(m_pUserDataList->find(aID));
+
+    if (aHit == m_pUserDataList->end())
+        return false;
+
+    m_pUserDataList->erase(aHit);
+    return true;
 }
 
 void SdrObject::SetUserCall(SdrObjUserCall* pUser)

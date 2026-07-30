@@ -634,7 +634,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                         else
                         {
                             // insert new user data with image map
-                            pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
+                            pObj->appendUserData(std::unique_ptr<SdrObjUserData>(new SvxIMapInfo(aImageMap) ));
                         }
                     }
                 }

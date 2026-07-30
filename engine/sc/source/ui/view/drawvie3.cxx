@@ -169,7 +169,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
     if (!pObj)
         return;
 
-    ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData *pAnchor = ScDrawLayer::GetOrCreateObjData(pObj);
     if (!pAnchor)
         return;
 
@@ -179,7 +179,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
     // SetCellAnchoredFromPosition has to be called only if shape geometry has been changed, and not
     // if only shape visibility has been changed. It is not enough to test shape rect, because e.g. a
     // 180deg rotation changes only the logic rect (tdf#139583).
-    ScDrawObjData& rNoRotatedAnchor = *ScDrawLayer::GetNonRotatedObjData(pObj, true /*bCreate*/);
+    ScDrawObjData& rNoRotatedAnchor = *ScDrawLayer::getOrCreateNonRotatedObjData(pObj, true /*bCreate*/);
     if (lcl_AreRectanglesApproxEqual(pAnchor->getShapeRect(), pObj->GetSnapRect())
         && lcl_AreRectanglesApproxEqual(rNoRotatedAnchor.getShapeRect(), pObj->GetLogicRect()))
         return;

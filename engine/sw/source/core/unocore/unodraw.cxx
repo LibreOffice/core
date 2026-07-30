@@ -77,6 +77,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <SwRelativeWidthHeight.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1257,19 +1258,29 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
                     SdrObject* pObj = pSvxShape->GetSdrObject();
                     sal_Int16 nPercent(100);
                     aValue >>= nPercent;
+
+                    // get evtl. existing instance of SwRelativeWidthHeight
+                    SwRelativeWidthHeight* pData(dynamic_cast<SwRelativeWidthHeight*>(pObj->getUserData(UserDataID::ID_SwRelativeWidthHeight)));
+                    if (nullptr == pData)
+                    {
+                        // create and set on-demand
+                        pData = new SwRelativeWidthHeight();
+                        pObj->appendUserData(std::unique_ptr<SdrObjUserData>(pData));
+                    }
+
                     switch (pEntry->nMemberId)
                     {
                     case MID_FRMSIZE_REL_WIDTH:
-                        pObj->SetRelativeWidth( nPercent / 100.0 );
+                        pData->SetRelativeWidth( nPercent / 100.0 );
                     break;
                     case MID_FRMSIZE_REL_HEIGHT:
-                        pObj->SetRelativeHeight( nPercent / 100.0 );
+                        pData->SetRelativeHeight( nPercent / 100.0 );
                     break;
                     case MID_FRMSIZE_REL_WIDTH_RELATION:
-                        pObj->SetRelativeWidthRelation(nPercent);
+                        pData->SetRelativeWidthRelation(nPercent);
                     break;
                     case MID_FRMSIZE_REL_HEIGHT_RELATION:
-                        pObj->SetRelativeHeightRelation(nPercent);
+                        pData->SetRelativeHeightRelation(nPercent);
                     break;
                     }
                 }
@@ -1637,21 +1648,23 @@ cpo::uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     if (pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
+                        SwRelativeWidthHeight* pData(dynamic_cast<SwRelativeWidthHeight*>(pObj->getUserData(UserDataID::ID_SwRelativeWidthHeight)));
+
                         switch (pEntry->nMemberId)
                         {
                         case MID_FRMSIZE_REL_WIDTH:
-                            if (pObj->GetRelativeWidth())
-                                nRet = *pObj->GetRelativeWidth() * 100;
+                            if (nullptr != pData && nullptr != pData->GetRelativeWidth())
+                                nRet = (*pData->GetRelativeWidth()) * 100;
                             break;
                         case MID_FRMSIZE_REL_HEIGHT:
-                            if (pObj->GetRelativeHeight())
-                                nRet = *pObj->GetRelativeHeight() * 100;
+                            if (nullptr != pData && nullptr != pData->GetRelativeHeight())
+                                nRet = (*pData->GetRelativeHeight()) * 100;
                             break;
                         case MID_FRMSIZE_REL_WIDTH_RELATION:
-                            nRet = pObj->GetRelativeWidthRelation();
+                            nRet = nullptr != pData ? pData->GetRelativeWidthRelation() : text::RelOrientation::PAGE_FRAME;
                             break;
                         case MID_FRMSIZE_REL_HEIGHT_RELATION:
-                            nRet = pObj->GetRelativeHeightRelation();
+                            nRet = nullptr != pData ? pData->GetRelativeHeightRelation() : text::RelOrientation::PAGE_FRAME;
                             break;
                         }
                     }

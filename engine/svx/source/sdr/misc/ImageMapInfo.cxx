@@ -29,21 +29,7 @@
 SvxIMapInfo* SvxIMapInfo::GetIMapInfo(SdrObject const* pObject)
 {
     assert(pObject);
-
-    SvxIMapInfo* pIMapInfo = nullptr;
-    sal_uInt16 nCount = pObject->GetUserDataCount();
-
-    // Can we find IMap information within the user data?
-    for (sal_uInt16 i = 0; i < nCount; i++)
-    {
-        SdrObjUserData* pUserData = pObject->GetUserData(i);
-
-        if ((pUserData->GetInventor() == SdrInventor::StarDrawUserData)
-            && (pUserData->GetId() == SVX_IMAPINFO_ID))
-            pIMapInfo = static_cast<SvxIMapInfo*>(pUserData);
-    }
-
-    return pIMapInfo;
+    return static_cast<SvxIMapInfo*>(pObject->getUserData(UserDataID::ID_SvxIMapInfo));
 }
 
 IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,

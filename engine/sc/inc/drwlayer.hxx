@@ -206,8 +206,8 @@ public:
     void MoveObject(SdrObject* pObj, const ScAddress& rNewPosition);
 
     // positions for detective lines
-    SC_DLLPUBLIC static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
-    SC_DLLPUBLIC static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
+    SC_DLLPUBLIC static ScDrawObjData* GetOrCreateObjData( SdrObject* pObj, bool bCreate=false );
+    SC_DLLPUBLIC static ScDrawObjData* getOrCreateNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
@@ -216,7 +216,7 @@ public:
 
     /** Returns true, if the passed object is the caption of a cell note. */
     SC_DLLPUBLIC static bool IsNoteCaption(const ScDrawObjData* pData);
-    static bool IsNoteCaption(SdrObject* pObj) { return IsNoteCaption(GetObjData(pObj)); }
+    static bool IsNoteCaption(SdrObject* pObj) { return IsNoteCaption(GetOrCreateObjData(pObj)); }
 
     /** Returns the object data, if the passed object is a cell note caption. */
     static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );

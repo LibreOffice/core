@@ -544,7 +544,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
             if (!pSdrObj)
                 continue;
 
-            ScDrawObjData* pAnchor = ScDrawLayer::GetNonRotatedObjData(pSdrObj);
+            ScDrawObjData* pAnchor = ScDrawLayer::getOrCreateNonRotatedObjData(pSdrObj);
             if (pAnchor && pAnchor->maStart.IsValid())
             {
                 ScMyShape aMyShape;
@@ -3561,7 +3561,7 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
         SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.xShape);
         if (!pObj)
             continue;
-        ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+        ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
         if (!pObjData)
             continue;
         ScAddress aSnapStartAddress = pObjData->maStart;
@@ -3674,7 +3674,7 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
         {
             // In these cases we set reference point so that the offset calculation in XML export
             // (=  matrix translate - reference point) results in maStartOffset.
-            ScDrawObjData* pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj);
+            ScDrawObjData* pNRObjData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
             if (pNRObjData)
             {
                 awt::Point aMatrixTranslate = rShape.xShape->getPosition();

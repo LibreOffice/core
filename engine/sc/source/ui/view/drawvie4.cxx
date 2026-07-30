@@ -529,7 +529,7 @@ void ScDrawView::FitToCellSize()
         return;
     }
 
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     if (!pObjData)
     {
         SAL_WARN("sc.ui", "Missing ScDrawObjData!");

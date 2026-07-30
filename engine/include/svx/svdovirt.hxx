@@ -120,8 +120,7 @@ public:
     virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
 
     virtual void Move(const Size& rSiz) override;
-    virtual void Resize(const Point& rRef, double xFact, double yFact,
-                        bool bUnsetRelative = true) override;
+    virtual void Resize(const Point& rRef, double xFact, double yFact) override;
     virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
     virtual void Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;

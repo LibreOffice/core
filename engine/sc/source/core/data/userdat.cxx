@@ -19,23 +19,8 @@
 
 #include <userdat.hxx>
 
-
-ScDrawObjData::ScDrawObjData() :
-    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_OBJDATA ),
-    maStart( ScAddress::INITIALIZE_INVALID ),
-    maEnd( ScAddress::INITIALIZE_INVALID ),
-    meType( DrawingObject ),
-    mbResizeWithCell( false )
-{
-}
-
-std::unique_ptr<SdrObjUserData> ScDrawObjData::Clone( SdrObject* ) const
-{
-    return std::unique_ptr<SdrObjUserData>(new ScDrawObjData( *this ));
-}
-
 ScMacroInfo::ScMacroInfo() :
-    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_MACRODATA )
+    SdrObjUserData(UserDataID::ID_ScMacroInfo)
 {
 }
 
@@ -46,6 +31,28 @@ ScMacroInfo::~ScMacroInfo()
 std::unique_ptr<SdrObjUserData> ScMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {
    return std::unique_ptr<SdrObjUserData>(new ScMacroInfo( *this ));
+}
+
+ScDrawObjData_UserData::ScDrawObjData_UserData()
+: SdrObjUserData(UserDataID::ID_ScDrawObjData)
+, m_aScDrawObjData()
+{
+}
+
+std::unique_ptr<SdrObjUserData> ScDrawObjData_UserData::Clone( SdrObject* /*pObj*/ ) const
+{
+    return std::unique_ptr<SdrObjUserData>(new ScDrawObjData_UserData(*this));
+}
+
+ScDrawObjData_UserDataNonRotated::ScDrawObjData_UserDataNonRotated()
+: SdrObjUserData(UserDataID::ID_ScDrawObjDataNonRotated)
+, m_aScDrawObjData()
+{
+}
+
+std::unique_ptr<SdrObjUserData> ScDrawObjData_UserDataNonRotated::Clone( SdrObject* /*pObj*/ ) const
+{
+    return std::unique_ptr<SdrObjUserData>(new ScDrawObjData_UserDataNonRotated(*this));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

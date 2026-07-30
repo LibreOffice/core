@@ -1325,25 +1325,12 @@ SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject)
 
 SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCreate /* = false */ )
 {
-    sal_uInt16 nUD          = 0;
-    sal_uInt16 nUDCount     = rObject.GetUserDataCount();
-    SdAnimationInfo* pRet = nullptr;
+    SdAnimationInfo* pRet(dynamic_cast<SdAnimationInfo*>(rObject.getUserData(UserDataID::ID_SdAnimationInfo)));
 
-    // Can we find animation information within the user data?
-    for (nUD = 0; nUD < nUDCount; nUD++)
-    {
-        SdrObjUserData* pUD = rObject.GetUserData(nUD);
-        if((pUD->GetInventor() == SdrInventor::StarDrawUserData) && (pUD->GetId() == SD_ANIMATIONINFO_ID))
-        {
-            pRet = dynamic_cast<SdAnimationInfo*>(pUD);
-            break;
-        }
-    }
-
-    if( (pRet == nullptr) && bCreate )
+    if (nullptr == pRet && bCreate)
     {
         pRet = new SdAnimationInfo( rObject );
-        rObject.AppendUserData( std::unique_ptr<SdrObjUserData>(pRet) );
+        rObject.appendUserData( std::unique_ptr<SdrObjUserData>(pRet) );
     }
 
     return pRet;

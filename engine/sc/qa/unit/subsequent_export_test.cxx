@@ -2085,7 +2085,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellAnchoredGroupXLS)
 
     SdrObject* pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Upper left of bounding rectangle should be nonnegative.",
                            pData->getShapeRect().Left() >= 0 || pData->getShapeRect().Top() >= 0);

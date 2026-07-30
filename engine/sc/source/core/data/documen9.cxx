@@ -93,7 +93,7 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
                 pNewPage->InsertObject( pNewObject.get() );
 
                 // tdf#167450 adapt anchor tab
-                ScDrawObjData* pNewData = ScDrawLayer::GetObjData(pNewObject.get());
+                ScDrawObjData* pNewData = ScDrawLayer::GetOrCreateObjData(pNewObject.get());
                 if (pNewData)
                 {
                     pNewData->maStart.SetTab(nDestPos);

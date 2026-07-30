@@ -2571,12 +2571,12 @@ void SwDrawVirtObj::Move(const Size& rSiz)
     SdrObject::Move( rSiz );
 }
 
-void SwDrawVirtObj::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
+void SwDrawVirtObj::Resize(const Point& rRef, double xFact, double yFact)
 {
     if(xFact != 1.0 || yFact != 1.0)
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
-        mxRefObj->Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
+        mxRefObj->Resize(rRef - GetOffset(), xFact, yFact);
         SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }

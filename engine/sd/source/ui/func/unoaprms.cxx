@@ -54,7 +54,7 @@ void SdAnimationPrmsUndoAction::Undo()
     // info was created by action: delete info
     else
     {
-        pObject->DeleteUserData(0);
+        pObject->deleteUserData(UserDataID::ID_SdAnimationInfo);
     }
     // force ModelHasChanged() in order to update effect window (animation order)
     pObject->SetChanged();

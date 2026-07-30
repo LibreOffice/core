@@ -23,19 +23,17 @@
 #include <svx/svxdllapi.h>
 #include <vcl/imap.hxx>
 
-#define SVX_IMAPINFO_ID 2
-
 class SVXCORE_DLLPUBLIC SvxIMapInfo final : public SdrObjUserData, public SfxListener
 {
     ImageMap m_aImageMap;
 
 public:
     SvxIMapInfo(const ImageMap& rImageMap)
-        : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
+        : SdrObjUserData(UserDataID::ID_SvxIMapInfo)
         , m_aImageMap(rImageMap){};
 
     SvxIMapInfo(const SvxIMapInfo& rIMapInfo)
-        : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
+        : SdrObjUserData(UserDataID::ID_SvxIMapInfo)
         , SfxListener()
         , m_aImageMap(rIMapInfo.m_aImageMap){};
 

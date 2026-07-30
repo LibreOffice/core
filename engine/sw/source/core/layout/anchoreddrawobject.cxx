@@ -42,6 +42,7 @@
 #include <unomid.h>
 #include <svx/svdoashp.hxx>
 #include <osl/diagnose.h>
+#include <SwRelativeWidthHeight.hxx>
 
 using namespace ::com::sun::star;
 
@@ -701,11 +702,14 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     // page, and its percentage names an exact width, which the scaling below cannot express - the
     // factor would be a division by next to nothing for a rule whose width is still unresolved.
     // Vertical text is left to the general handling: a rule is only defined for horizontal text.
-    if (GetDrawObj()->IsHorizontalRule() && GetDrawObj()->GetRelativeWidth() && GetAnchorFrame()
+    SwRelativeWidthHeight* pRelWH(dynamic_cast<SwRelativeWidthHeight*>(GetDrawObj()->getUserData(UserDataID::ID_SwRelativeWidthHeight)));
+    const double* pRelativeWidth(pRelWH ? pRelWH->GetRelativeWidth() : nullptr);
+
+    if (GetDrawObj()->IsHorizontalRule() && nullptr != pRelativeWidth && GetAnchorFrame()
         && !GetAnchorFrame()->IsVertical())
     {
         const tools::Long nWidth
-            = getHorizontalRuleRefWidth(GetAnchorFrame()) * (*GetDrawObj()->GetRelativeWidth());
+            = getHorizontalRuleRefWidth(GetAnchorFrame()) * (*pRelativeWidth);
         tools::Rectangle aRule(GetDrawObj()->GetSnapRect());
         if (nWidth > 0 && aRule.getOpenWidth() != nWidth)
         {
@@ -721,22 +725,25 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     }
 
     bool bGroupShape = dynamic_cast<const SdrObjGroup*>( GetDrawObj() );
+    const double* pRelativeHeight(pRelWH ? pRelWH->GetRelativeHeight() : nullptr);
+
     // Resize objects with relative width or height
-    if ( !bGroupShape && GetPageFrame( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
+    if ( !bGroupShape && GetPageFrame( ) && ( nullptr != pRelativeWidth || nullptr != pRelativeHeight ) )
     {
         tools::Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
 
         tools::Long nTargetWidth = aCurrObjRect.GetWidth( );
-        if ( GetDrawObj( )->GetRelativeWidth( ) )
+        if ( nullptr != pRelativeWidth )
         {
             tools::Long nWidth = 0;
-            if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
+            const sal_Int16 nRelativeWidthRelation(pRelWH->GetRelativeWidthRelation());
+            if (nRelativeWidthRelation == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nWidth = GetPageFrame()->getFramePrintArea().SVRect().GetWidth();
             // Here we handle the relative size of the width of some shape.
             // The size of the shape's width is going to be relative to the size of the left margin.
             // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
-            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_LEFT)
+            else if (nRelativeWidthRelation == text::RelOrientation::PAGE_LEFT)
             {
                 if (GetPageFrame()->GetPageDesc()->GetUseOn() == UseOnPage::Mirror)
                     // We want to get the width of whatever is going through here using the size of the
@@ -746,7 +753,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                     nWidth = GetPageFrame()->GetLeftMargin();
             }
             // Same as the left margin above.
-            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_RIGHT)
+            else if (nRelativeWidthRelation == text::RelOrientation::PAGE_RIGHT)
                 if (GetPageFrame()->GetPageDesc()->GetUseOn() == UseOnPage::Mirror)
                     // We want to get the width of whatever is going through here using the size of the
                     // inside margin.
@@ -755,10 +762,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                     nWidth = GetPageFrame()->GetRightMargin();
             else
                 nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
-            nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
+            nTargetWidth = nWidth * (*pRelativeWidth);
         }
 
-        bool bCheck = GetDrawObj()->GetRelativeHeight();
+        bool bCheck(nullptr != pRelativeHeight);// = GetDrawObj()->GetRelativeHeight();
         if (bCheck)
         {
             auto pObjCustomShape = dynamic_cast<const SdrObjCustomShape*>(GetDrawObj());
@@ -769,10 +776,11 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         if (bCheck)
         {
             tools::Long nHeight = 0;
-            if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
+            const sal_Int16 nRelativeHeightRelation(pRelWH->GetRelativeHeightRelation());
+            if (nRelativeHeightRelation == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
-            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA)
+            else if (nRelativeHeightRelation == text::RelOrientation::PAGE_PRINT_AREA)
             {
                 // count required height: print area top = top margin + header
                 SwRect aHeaderRect;
@@ -781,7 +789,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                     aHeaderRect = pHeaderFrame->GetPaintArea();
                 nHeight = GetPageFrame()->GetTopMargin() + aHeaderRect.Height();
             }
-            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+            else if (nRelativeHeightRelation == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
             {
                 // count required height: print area bottom = bottom margin + footer
                 SwRect aFooterRect;
@@ -792,7 +800,7 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             }
             else
                 nHeight = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetHeight();
-            nTargetHeight = nHeight * (*GetDrawObj()->GetRelativeHeight());
+            nTargetHeight = nHeight * (*pRelativeHeight);
         }
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
@@ -802,9 +810,19 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             bool bEnableSetModified = rDoc.getIDocumentState().IsEnableSetModified();
             rDoc.getIDocumentState().SetEnableSetModified(false);
             auto pObject = const_cast<SdrObject*>(GetDrawObj());
+
+            // if a SwRelativeWidthHeight is set, Resize below will flush it, see SdrObject::Resize.
+            // This is the *only* place where this is not intended not happen, so get a clone to
+            // restore at SdrObject after that call
+            std::unique_ptr<SdrObjUserData> pClone(nullptr != pRelWH ? pRelWH->Clone(pObject) : nullptr);
+
             pObject->Resize( aCurrObjRect.TopLeft(),
                     double( nTargetWidth ) / aCurrObjRect.GetWidth(),
-                    double( nTargetHeight ) / aCurrObjRect.GetHeight(), false );
+                    double( nTargetHeight ) / aCurrObjRect.GetHeight());
+
+            if (pClone)
+                // set the cloned SwRelativeWidthHeight. Transfer of ownership.
+                pObject->appendUserData(std::move(pClone));
 
             if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
             {

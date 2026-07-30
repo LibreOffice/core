@@ -97,7 +97,7 @@ void ImpSdrObjTextLink::Closed()
 
 
 ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData():
-    SdrObjUserData(SdrInventor::Default,SDRUSERDATA_OBJTEXTLINK),
+    SdrObjUserData(UserDataID::ID_ImpSdrObjTextLinkUserData),
     maFileDate0( DateTime::EMPTY ),
     meCharSet(RTL_TEXTENCODING_DONTKNOW)
 {
@@ -131,21 +131,14 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
     pData->maFileName = rFileName;
     pData->maFilterName = rFilterName;
     pData->meCharSet = eCharSet;
-    AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
+    appendUserData(std::unique_ptr<SdrObjUserData>(pData));
     ImpRegisterLink();
 }
 
 void SdrTextObj::ReleaseTextLink()
 {
     ImpDeregisterLink();
-    sal_uInt16 nCount=GetUserDataCount();
-    for (sal_uInt16 nNum=nCount; nNum>0;) {
-        nNum--;
-        SdrObjUserData* pData=GetUserData(nNum);
-        if (pData->GetInventor()==SdrInventor::Default && pData->GetId()==SDRUSERDATA_OBJTEXTLINK) {
-            DeleteUserData(nNum);
-        }
-    }
+    deleteUserData(UserDataID::ID_ImpSdrObjTextLinkUserData);
 }
 
 bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
@@ -238,17 +231,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet)
 
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 {
-    sal_uInt16 nCount=GetUserDataCount();
-    for (sal_uInt16 nNum=nCount; nNum>0;) {
-        nNum--;
-        SdrObjUserData * pData=GetUserData(nNum);
-        if (pData->GetInventor() == SdrInventor::Default
-            && pData->GetId() == SDRUSERDATA_OBJTEXTLINK)
-        {
-            return static_cast<ImpSdrObjTextLinkUserData *>(pData);
-        }
-    }
-    return nullptr;
+    return static_cast<ImpSdrObjTextLinkUserData *>(getUserData(UserDataID::ID_ImpSdrObjTextLinkUserData));
 }
 
 void SdrTextObj::ImpRegisterLink()

@@ -117,8 +117,7 @@ public:
     virtual       bool       IsSizeValid(Size aTargetSize) override;
     virtual       void       NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       Move  (const Size& rSiz) override;
-    virtual       void       Resize(const Point& rRef, double xFact,
-                                    double yFact, bool bUnsetRelative = true) override;
+    virtual       void       Resize(const Point& rRef, double xFact, double yFact) override;
     virtual       void       Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
     virtual       void       Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;

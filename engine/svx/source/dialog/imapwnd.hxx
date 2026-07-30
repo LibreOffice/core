@@ -39,9 +39,6 @@ struct NotifyInfo
     bool    bActivated;
 };
 
-
-#define SVD_IMAP_USERDATA   0x0001
-
 typedef std::shared_ptr< IMapObject > IMapObjectPtr;
 
 class IMapUserData : public SdrObjUserData
@@ -52,11 +49,11 @@ class IMapUserData : public SdrObjUserData
 public:
 
                    explicit IMapUserData( IMapObjectPtr xIMapObj ) :
-                                SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
+                                SdrObjUserData  ( UserDataID::ID_IMapUserData ),
                                 mpObj           (std::move( xIMapObj )) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
-                                SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
+                                SdrObjUserData  ( UserDataID::ID_IMapUserData ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject * ) const override { return std::unique_ptr<SdrObjUserData>(new IMapUserData( *this )); }

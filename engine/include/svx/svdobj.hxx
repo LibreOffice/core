@@ -59,7 +59,6 @@ class SfxGrabBagItem;
 class SfxStyleSheet;
 class SfxItemPool;
 class SdrVirtObj;
-class SdrObjUserDataList;
 class SdrGluePoint;
 class SdrGluePointList;
 class SdrLayerIDSet;
@@ -80,6 +79,7 @@ namespace sdr::contact { class ViewContact; }
 namespace sdr::annotation { class ObjectAnnotationData; }
 namespace com::sun::star::drawing { class XShape; }
 namespace svx::diagram { class DiagramHelper_svx; }
+namespace sdr { typedef ::std::vector< ObjectUser* > ObjectUserVector; }
 
 
 enum class SdrInventor : sal_uInt32 {
@@ -131,28 +131,41 @@ public:
 
 /**
  * User data of a drawing object, e.g. application specific data.
- * Every drawing object can have an arbitrary amount of such records (SV list).
- * Whoever wants to save data here, must inherit from this and set a corresponding link in the factory.
+ * Every drawing object can have an arbitrary amount of such records,
+ * but just one of each UserDataID. To use, inherit from this and extend as needed.
  */
+enum class UserDataID : sal_uInt16
+{
+    ID_SgaIMapInfo,
+    ID_SvxIMapInfo,
+    ID_ImpSdrObjTextLinkUserData,
+    ID_ScDrawObjData,
+    ID_ScDrawObjDataNonRotated,
+    ID_ScMacroInfo,
+    ID_SdAnimationInfo,
+    ID_IMapUserData,
+    ID_SwMacroInfo,
+    ID_SwRelativeWidthHeight
+};
+
 class SVXCORE_DLLPUBLIC SdrObjUserData
 {
-    SdrInventor                      m_nInventor;
-    sal_uInt16                       m_nIdentifier;
+    UserDataID              m_aID;
 
     void operator=(const SdrObjUserData& rData) = delete;
     bool operator==(const SdrObjUserData& rData) const = delete;
     bool operator!=(const SdrObjUserData& rData) const = delete;
 
 public:
-    SdrObjUserData(SdrInventor nInv, sal_uInt16 nId);
-    SdrObjUserData(const SdrObjUserData& rData);
-    virtual ~SdrObjUserData();
+    SdrObjUserData(UserDataID aID) : m_aID(aID) {}
+    SdrObjUserData(const SdrObjUserData& rData) : m_aID(rData.getUserDataID()) {}
+    virtual ~SdrObjUserData() {}
 
     virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    SdrInventor GetInventor() const { return m_nInventor;}
-    sal_uInt16 GetId() const { return m_nIdentifier;}
+    UserDataID getUserDataID() const { return m_aID; }
 };
 
+typedef std::unordered_map<UserDataID, std::unique_ptr<SdrObjUserData>> UserDataListType;
 
 /**
  * Provides information about various ZObject properties
@@ -320,14 +333,6 @@ public:
     void ActionChanged() const;
 
     static SdrItemPool& GetGlobalDrawObjectItemPool();
-    void SetRelativeWidth( double nValue );
-    void SetRelativeWidthRelation( sal_Int16 eValue );
-    void SetRelativeHeight( double nValue );
-    void SetRelativeHeightRelation( sal_Int16 eValue );
-    const double* GetRelativeWidth() const;
-    sal_Int16 GetRelativeWidthRelation() const;
-    const double* GetRelativeHeight() const;
-    sal_Int16 GetRelativeHeightRelation() const;
 
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///
@@ -572,7 +577,7 @@ public:
     virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
-    virtual void Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative = true);
+    virtual void Resize(const Point& rRef, double xFact, double yFact);
     virtual void Crop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
@@ -800,14 +805,11 @@ public:
     /// Whether the aspect ratio should be kept by default when resizing.
     virtual bool shouldKeepAspectRatio() const { return false; }
 
-    // application specific data
-    sal_uInt16 GetUserDataCount() const;
-    SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
-
-    void AppendUserData(std::unique_ptr<SdrObjUserData> pData);
-
-    // removes the record from the list and performs delete (FreeMem+Dtor).
-    void DeleteUserData(sal_uInt16 nNum);
+    // user specific data access
+    SdrObjUserData* getUserData(UserDataID aID) const;
+    // these two return success (if needed)
+    bool appendUserData(std::unique_ptr<SdrObjUserData> pData);
+    bool deleteUserData(UserDataID aID);
 
     // access to the UNO representation of the shape
     css::uno::Reference< css::drawing::XShape > getUnoShape();
@@ -933,7 +935,7 @@ protected:
     std::unique_ptr<SfxBroadcaster>     m_pBroadcaster;
 
     // user-defined data
-    std::unique_ptr<SdrObjUserDataList> m_pUserDataList;
+    std::unique_ptr<UserDataListType>   m_pUserDataList;
 
     // glue points for connecting object connectors
     std::unique_ptr<SdrGluePointList>   m_pGluePoints;
@@ -1019,8 +1021,7 @@ protected:
                     bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true);
 
 private:
-    struct Impl;
-    std::unique_ptr<Impl>             mpImpl;
+    sdr::ObjectUserVector             maObjectUsers;
     SdrObjList*                       mpParentOfSdrObject;     // list that includes this object
     sal_uInt32                        m_nOrdNum;      // order number of the object in the list
     class UniqueID                          maUniqueID;

@@ -916,7 +916,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 
     ScSplitPos eWhich = rViewData.GetActivePart();
     ScGridWindow* pGridWin = rViewData.GetActiveWin();
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pObj );
     if ( !pGridWin )
         return;
 
@@ -974,7 +974,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
         return false;
     }
 
-    ScDrawObjData* pData(ScDrawLayer::GetObjData(&rSdrObject));
+    ScDrawObjData* pData(ScDrawLayer::GetOrCreateObjData(&rSdrObject));
     ScAddress aOldStt;
 
     if(nullptr != pData && pData->maStart.IsValid())

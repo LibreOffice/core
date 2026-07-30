@@ -512,7 +512,7 @@ void ScTable::updateObjectsForColsChanged(SCCOL nStartCol, SCCOL nEndCol, bool b
         aColDrawObjects = pDrawLayer->GetObjectsAnchoredToCols(GetTab(), nStartCol, nEndCol);
         for (auto aObj : aColDrawObjects)
         {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
+            ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(aObj);
             if (pData)
             {
                 if (bHidden)
@@ -541,7 +541,7 @@ void ScTable::updateObjectsForRowsChanged(SCROW nStartRow, SCROW nEndRow, bool b
         aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRows(GetTab(), nStartRow, nEndRow);
         for (auto aObj : aRowDrawObjects)
         {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
+            ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(aObj);
             if (pData)
             {
                 if (bHidden)

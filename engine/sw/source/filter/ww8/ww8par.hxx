@@ -57,8 +57,6 @@
 #include <o3tl/sorted_vector.hxx>
 #include <oox/ole/olehelper.hxx>
 
-#define SW_UD_IMAPDATA      2
-
 class SwDoc;
 class SwPaM;
 class SfxPoolItem;

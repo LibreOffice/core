@@ -2795,26 +2795,14 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
         return nullptr;
     }
 
-    sal_uInt16 nCount = pObject->GetUserDataCount();
-    if(nCount)
+    SwMacroInfo* macInf(dynamic_cast<SwMacroInfo*>(pObject->getUserData(UserDataID::ID_SwMacroInfo)));
+
+    if (macInf && macInf->GetShapeId() == aFSFA.nSpId)
     {
-        OUString lnName, aObjName, aTarFrame;
-        for (sal_uInt16 i = 0; i < nCount; i++ )
-        {
-            SdrObjUserData* pData = pObject->GetUserData( i );
-            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw
-                    && pData->GetId() == SW_UD_IMAPDATA)
-            {
-                SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
-                if (macInf && macInf->GetShapeId() == aFSFA.nSpId)
-                {
-                    lnName = macInf->GetHlink();
-                    aObjName = macInf->GetName();
-                    aTarFrame = macInf->GetTarFrame();
-                    break;
-                }
-            }
-        }
+        const OUString lnName(macInf->GetHlink());
+        const OUString aObjName(macInf->GetName());
+        const OUString aTarFrame(macInf->GetTarFrame());
+
         std::unique_ptr<SwFormatURL> pFormatURL(new SwFormatURL());
         pFormatURL->SetURL( lnName, false );
         if (!aObjName.isEmpty())

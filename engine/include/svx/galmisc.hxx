@@ -61,8 +61,6 @@ enum class SgaObjKind
     Inet = 6    // graphics from the internet
 };
 
-#define ID_IMAPINFO             2
-
 enum class GalleryGraphicImportRet
 {
     IMPORT_NONE, IMPORT_FILE
@@ -93,10 +91,10 @@ class SgaIMapInfo final : public SdrObjUserData, public SfxListener
     ImageMap                m_aImageMap;
 
 public:
-                            SgaIMapInfo() : SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ) {};
+                            SgaIMapInfo() : SdrObjUserData( UserDataID::ID_SgaIMapInfo ) {};
 
                             SgaIMapInfo( const ImageMap& rImageMap) :
-                                SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ),
+                                SdrObjUserData(UserDataID::ID_SgaIMapInfo),
                                 m_aImageMap( rImageMap ) {};
 
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* ) const override

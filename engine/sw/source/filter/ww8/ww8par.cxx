@@ -166,24 +166,17 @@ using namespace nsHdFtFlags;
 
 static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 {
-    if ( pObj )
-    {
-        sal_uInt16 nCount = pObj->GetUserDataCount();
-        for( sal_uInt16 i = 0; i < nCount; i++ )
-        {
-            SdrObjUserData* pData = pObj->GetUserData( i );
-            if( pData && pData->GetInventor() == SdrInventor::ScOrSwDraw
-                && pData->GetId() == SW_UD_IMAPDATA)
-            {
-                return dynamic_cast<SwMacroInfo*>(pData);
-            }
-        }
-        SwMacroInfo* pData = new SwMacroInfo;
-        pObj->AppendUserData(std::unique_ptr<SdrObjUserData>(pData));
-        return pData;
-    }
+    if (nullptr == pObj)
+        return nullptr;
 
-    return nullptr;
+    SdrObjUserData* pUserData(pObj->getUserData(UserDataID::ID_SwMacroInfo));
+    if (nullptr != pUserData)
+        return dynamic_cast<SwMacroInfo*>(pUserData);
+
+    SwMacroInfo* pData = new SwMacroInfo;
+    pObj->appendUserData(std::unique_ptr<SdrObjUserData> (pData));
+
+    return pData;
 };
 
 static void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
@@ -6564,7 +6557,7 @@ namespace sw::hack
 }
 
 SwMacroInfo::SwMacroInfo()
-    : SdrObjUserData( SdrInventor::ScOrSwDraw, SW_UD_IMAPDATA )
+    : SdrObjUserData( UserDataID::ID_SwMacroInfo )
     , mnShapeId(-1)
 {
 }

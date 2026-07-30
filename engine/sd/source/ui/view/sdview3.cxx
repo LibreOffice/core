@@ -1062,7 +1062,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     bool bInserted = InsertObjectAtView( pObj.get(), *pPV, nOptions );
 
                     if (bInserted && pImageMap)
-                        pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
+                        pObj->appendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
 
                     if (bInserted && pObj->IsChart())
                     {
@@ -1235,7 +1235,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (InsertObjectAtView(pObj.get(), *pPV, nOptions))
                     {
                         if( pImageMap )
-                            pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
+                            pObj->appendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
 
                         // let the object stay in loaded state after insertion
                         pObj->Unload();

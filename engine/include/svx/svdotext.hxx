@@ -77,11 +77,6 @@ namespace sdr::table {
     class SdrTableHTMLParser;
 }
 
-
-//   Defines
-constexpr const sal_uInt16 SDRUSERDATA_OBJTEXTLINK = 1;
-
-
 //   helper class SdrTextObjGeoData
 class SdrTextObjGeoData : public SdrObjGeoData
 {

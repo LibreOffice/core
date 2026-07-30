@@ -392,11 +392,11 @@ void SdrVirtObj::Move(const Size& rSiz)
     }
 }
 
-void SdrVirtObj::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
+void SdrVirtObj::Resize(const Point& rRef, double xFact, double yFact)
 {
     if (xFact != 1.0 || yFact != 1.0) {
         tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        mxRefObj->Resize(rRef-m_aAnchor,xFact,yFact, bUnsetRelative);
+        mxRefObj->Resize(rRef-m_aAnchor,xFact,yFact);
         SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }

@@ -618,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137576_LogicRectInNewMeasureline)
 
     // Anchor "to cell (resize with cell)" and examine NonRotatedAnchor
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
-    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj.get());
+    ScDrawObjData* pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to get NonRotatedAnchor", pNData);
     // Without the fix all four values would be zero.
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), pNData->maStart.Col());
@@ -719,7 +719,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testFormSizeWithHiddenCol)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, rShapeRect, 1);
 
     // Check anchor
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
 
     const OUString sActual("start col " + OUString::number(pData->maStart.Col()) + " row "
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testCustomShapeCellAnchoredRotatedShape)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, rShapeRect, 1);
 
     // Check anchor
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
 
     const OUString sActual("start col " + OUString::number(pData->maStart.Col()) + " row "
@@ -1085,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155095_shape_collapsed_group)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 
     // Without fix the shape spans C28:C32
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     ScAddress aExpectedStart(SCCOL(2), SCROW(25), SCTAB(0)); // zero based
     ScAddress aExpectedEnd(SCCOL(2), SCROW(32), SCTAB(0));
     CPPUNIT_ASSERT_EQUAL(aExpectedStart, (*pObjData).maStart);
@@ -1180,7 +1180,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf125938_anchor_after_copy_paste)
     SdrObject* pObj = pPage->GetObj(0);
 
     // Make sure object is anchored to E9
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     ScAddress aExpectedAddress(SCCOL(4), SCROW(8), SCTAB(1)); // zero based
     CPPUNIT_ASSERT_EQUAL(aExpectedAddress, (*pObjData).maStart);
 }
@@ -1274,7 +1274,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     pDoc->SetDrawPageSize(0);
 
     // Get geometry of the group
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     ScAddress aOrigStart = (*pObjData).maStart;
     ScAddress aOrigEnd = (*pObjData).maEnd;
     tools::Rectangle aOrigRect = pObj->GetSnapRect();
@@ -1283,7 +1283,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     save(TestFilter::ODS);
 
     // Get geometry of the group again
-    ScDrawObjData* pAfterObjData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pAfterObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     ScAddress aAfterStart = (*pAfterObjData).maStart;
     ScAddress aAfterEnd = (*pAfterObjData).maEnd;
     tools::Rectangle aAfterRect = pObj->GetSnapRect();
@@ -1308,7 +1308,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
     // Verify geometry is same as before save
     pDoc = getScDoc();
     pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
-    pAfterObjData = ScDrawLayer::GetObjData(pObj);
+    pAfterObjData = ScDrawLayer::GetOrCreateObjData(pObj);
     aAfterStart = (*pAfterObjData).maStart;
     aAfterEnd = (*pAfterObjData).maEnd;
     aAfterRect = pObj->GetSnapRect();

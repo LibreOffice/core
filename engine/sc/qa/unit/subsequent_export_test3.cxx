@@ -1616,7 +1616,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to get anchor type", SCA_CELL_RESIZE, oldType);
 
     // Get anchor data
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pData->getShapeRect().IsEmpty());
@@ -1625,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     ScAddress aDataEnd = pData->maEnd;
 
     // Get non rotated anchor data
-    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    ScDrawObjData* pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pNData->getShapeRect().IsEmpty());
@@ -1639,13 +1639,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     pDoc->InsertRow(ScRange(0, aDataStart.Row() - 1, 0, pDoc->MaxCol(), aDataStart.Row(), 0));
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pNData->getShapeRect().IsEmpty());
@@ -1682,13 +1682,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to get anchor type", SCA_CELL_RESIZE, oldType);
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pNData->getShapeRect().IsEmpty());
@@ -1704,13 +1704,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     pDoc->InsertCol(ScRange(aDataStart.Col(), 0, 0, aDataStart.Col(), pDoc->MaxRow(), 0));
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pNData->getShapeRect().IsEmpty());
@@ -1747,13 +1747,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to get anchor type", SCA_CELL_RESIZE, oldType);
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj);
+    pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.",
                            !pNData->getShapeRect().IsEmpty());
@@ -1783,7 +1783,7 @@ static void impl_testLegacyCellAnchoredRotatedShape(ScDocument& rDoc, const tool
     CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.Left(), aSnap.Left(), TOLERANCE);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.Top(), aSnap.Top(), TOLERANCE);
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
     CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Row(), pData->maStart.Row());
     CPPUNIT_ASSERT_EQUAL(aAnchor.maStart.Col(), pData->maStart.Col());
@@ -1957,7 +1957,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137044_CoverHiddenRows)
 
     // Get original object values
     tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
-    Point aOriginalEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
+    Point aOriginalEndOffset = ScDrawLayer::GetOrCreateObjData(pObj)->maEndOffset;
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
         tools::Rectangle(Point(500, 3500), Size(1501, 11001)), aSnapRectOrig, 1);
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aOriginalEndOffset, 1);
@@ -1979,7 +1979,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137044_CoverHiddenRows)
 
     // Get new values and compare. End offset should be the same, height should be 6000 smaller.
     tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
-    Point aReloadEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
+    Point aReloadEndOffset = ScDrawLayer::GetOrCreateObjData(pObj)->maEndOffset;
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
         tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aReloadEndOffset, 1);

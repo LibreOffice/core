@@ -23,12 +23,7 @@
 #include "address.hxx"
 #include "drwlayer.hxx"
 
-// Object IDs for UserData
-#define SC_UD_OBJDATA       1
-// SVX_IMAPINFO_ID = 2
-#define SC_UD_MACRODATA     3
-
-class SC_DLLPUBLIC ScDrawObjData final : public SdrObjUserData
+class SC_DLLPUBLIC ScDrawObjData final
 {
 public:
     enum Type { CellNote, ValidationCircle, DetectiveArrow, DrawingObject };
@@ -41,7 +36,13 @@ public:
     bool                mbResizeWithCell = false;
     bool                mbWasInHiddenRow = false;
 
-    explicit            ScDrawObjData();
+    explicit            ScDrawObjData()
+    :   maStart( ScAddress::INITIALIZE_INVALID ),
+        maEnd( ScAddress::INITIALIZE_INVALID ),
+        meType( DrawingObject ),
+        mbResizeWithCell( false )
+    {
+    }
 
     const tools::Rectangle & getShapeRect() const { return maShapeRect; };
     const tools::Rectangle & getLastCellRect() const { return maLastCellRect; };
@@ -56,13 +57,38 @@ public:
     };
 
 private:
-     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
-
     // Stores the last cell rect this shape was anchored to.
     // Needed when the cell is resized to resize the image accordingly.
     tools::Rectangle maLastCellRect;
     // Stores the rect of the shape to which this ScDrawObjData belongs.
     tools::Rectangle maShapeRect;
+};
+
+// tooling class to allow adding a ScDrawObjData to SdrObject as SdrObjUserData
+class SC_DLLPUBLIC ScDrawObjData_UserData final : public SdrObjUserData
+{
+    ScDrawObjData       m_aScDrawObjData;
+
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* /*pObj*/ ) const override;
+
+public:
+    explicit ScDrawObjData_UserData();
+
+    ScDrawObjData& getScDrawObjData() { return m_aScDrawObjData; }
+};
+
+// tooling class to allow adding a ScDrawObjData to SdrObject as SdrObjUserData,
+// this time with another UserDataID
+class SC_DLLPUBLIC ScDrawObjData_UserDataNonRotated final : public SdrObjUserData
+{
+    ScDrawObjData       m_aScDrawObjData;
+
+    virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* /*pObj*/ ) const override;
+
+public:
+    explicit ScDrawObjData_UserDataNonRotated();
+
+    ScDrawObjData& getScDrawObjData() { return m_aScDrawObjData; }
 };
 
 class SAL_DLLPUBLIC_RTTI ScMacroInfo final : public SdrObjUserData

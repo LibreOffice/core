@@ -1092,7 +1092,7 @@ std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawin
         uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
         if (pSdrObj && xShapeProp.is())
         {
-            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
+            if (ScDrawObjData *pAnchor = ScDrawLayer::GetOrCreateObjData(pSdrObj))
                 return std::optional<ScAddress>(pAnchor->maStart);
         }
     }

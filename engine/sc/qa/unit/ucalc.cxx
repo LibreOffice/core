@@ -3367,7 +3367,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsOnSheetMove)
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", static_cast<size_t>(1), pPage->GetObjCount());
 
-    const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj.get());
+    const ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maStart.Tab());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maEnd.Tab());
@@ -3423,7 +3423,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsOnSheetMove)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Copied sheet should have one object.", size_t(1), pPage->GetObjCount());
     pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
-    pData = ScDrawLayer::GetObjData(pObj.get());
+    pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maStart.Tab());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maEnd.Tab());
@@ -5797,7 +5797,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredRotatedShape)
         CPPUNIT_ASSERT_DOUBLES_EQUAL( aRotRect.Top(), aSnap.Top(), TOLERANCE );
 
         ScDrawObjData aAnchor;
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj.get() );
+        ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData( pObj.get() );
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
 
         aAnchor.maStart = pData->maStart;
@@ -6776,14 +6776,14 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoDataAnchor)
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
     // Get anchor data
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj.get());
+    ScDrawObjData* pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aOldStart = pData->maStart;
     ScAddress aOldEnd   = pData->maEnd;
 
     // Get non rotated anchor data
-    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
+    ScDrawObjData* pNData = ScDrawLayer::getOrCreateNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     ScAddress aNOldStart = pNData->maStart;
@@ -6798,14 +6798,14 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoDataAnchor)
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, m_pDoc->MaxCol(), aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
 
-    pData = ScDrawLayer::GetObjData(pObj.get());
+    pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aNewStart = pData->maStart;
     ScAddress aNewEnd   = pData->maEnd;
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     ScAddress aNNewStart = pNData->maStart;
@@ -6826,11 +6826,11 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoDataAnchor)
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Failed to check state SCA_CELL.", SCA_CELL, oldType);
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj.get());
+    pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     // Check if data has moved to new rows
@@ -6843,11 +6843,11 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoDataAnchor)
     pUndoMgr->Redo();
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj.get());
+    pData = ScDrawLayer::GetOrCreateObjData(pObj.get());
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data
-    pNData = ScDrawLayer::GetNonRotatedObjData( pObj.get() );
+    pNData = ScDrawLayer::getOrCreateNonRotatedObjData( pObj.get() );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
 
     // Check if data has moved to new rows

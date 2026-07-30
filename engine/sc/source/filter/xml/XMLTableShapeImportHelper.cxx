@@ -194,7 +194,7 @@ void XMLTableShapeImportHelper::finishShape(
             {
                 if (SdrObject *pSdrObj = SdrObject::getSdrObjectFromXShape(lcl_getTopLevelParent(xChild)))
                 {
-                    if ( ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( pSdrObj ) )
+                    if ( ScDrawObjData* pAnchor = ScDrawLayer::GetOrCreateObjData( pSdrObj ) )
                     {
                        if ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
                             pAnchor->maStartOffset = aStartPoint;

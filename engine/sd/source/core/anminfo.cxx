@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
-               : SdrObjUserData(SdrInventor::StarDrawUserData, SD_ANIMATIONINFO_ID),
+               : SdrObjUserData(UserDataID::ID_SdAnimationInfo),
                  mePresObjKind              (PresObjKind::NONE),
                  meEffect                   (presentation::AnimationEffect_NONE),
                  meTextEffect               (presentation::AnimationEffect_NONE),
