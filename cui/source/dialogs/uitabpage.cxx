@@ -82,15 +82,27 @@ OUString UITabPage::GetCurrentMode()
     return sResult;
 }
 
-OUString UITabPage::GetCurrentApp()
+std::optional<vcl::EnumContext::Application> UITabPage::GetCurrentAppEnum()
 {
-    OUString sResult;
     if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
     {
         const auto xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
         const auto& xContext = comphelper::getProcessComponentContext();
         const auto xModuleManager = css::frame::ModuleManager::create(xContext);
-        switch (vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xCurrentFrame)))
+        return vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xCurrentFrame));
+    }
+    else
+    {
+        return std::nullopt;
+    }
+}
+
+OUString UITabPage::GetCurrentApp()
+{
+    OUString sResult;
+    if (std::optional<vcl::EnumContext::Application> aAppEnum = GetCurrentAppEnum())
+    {
+        switch (*aAppEnum)
         {
             case vcl::EnumContext::Application::Writer:
                 sResult = "Writer";
