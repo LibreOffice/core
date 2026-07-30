@@ -154,6 +154,13 @@ public:
     static std::set<pid_t> getSpareKitPids();
     static std::set<pid_t> getDocKitPids();
 
+    /// Returns the number of loaded documents, excluding convert-to instances.
+    static ssize_t getInteractiveDocBrokerCount();
+
+    /// Returns the number of kit processes that have been requested from the forkit but have
+    /// not connected back yet.
+    static int getOutstandingForksCount();
+
     static const std::string& getHardwareResourceWarning()
     {
         return HardwareResourceWarning;

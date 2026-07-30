@@ -116,6 +116,9 @@ public:
         return *Instance;
     }
 
+    /// True between initialize() and uninitialize(). Test binaries run without an instance.
+    static bool isInitialized() { return Instance != nullptr; }
+
     void start();
     void stop();
 
@@ -129,6 +132,9 @@ public:
     void pollingThread() override;
 
     size_t getTotalMemoryUsage() const;
+    /// The total memory usage in KB as of the most recent periodic sample.
+    /// Zero until the first sample has been taken.
+    size_t getLastTotalMemoryUsage() const { return _lastTotalMemory; }
     /// Takes into account the 'memproportion' property in config file to find the amount of memory
     /// available to us.
     size_t getTotalAvailableMemory() const { return _totalAvailMemKb; }
@@ -266,7 +272,7 @@ private:
     /// The total available memory to our process, per memproportion.
     size_t _totalAvailMemKb;
 
-    size_t _lastTotalMemory;
+    std::atomic<size_t> _lastTotalMemory;
     mutable size_t _lastJiffies;
     uint64_t _lastSentCount;
     uint64_t _lastRecvCount;

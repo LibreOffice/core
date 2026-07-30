@@ -50,6 +50,7 @@
 #if !MOBILEAPP
 #include <common/JailUtil.hpp>
 #include <wsd/Admin.hpp>
+#include <wsd/HealthCheck.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/SpecialBrokers.hpp>
 #include <wsd/CollabBroker.hpp>
@@ -1368,6 +1369,10 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         }
         else if (requestDetails.isGet("/robots.txt"))
             servedSync = handleRobotsTxtRequest(request, socket);
+
+        // See healthchecks.txt
+        else if (requestDetails.equals(0, "livez") || requestDetails.equals(0, "readyz"))
+            servedSync = HealthCheck::handleRequest(request, socket);
 
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "media"))

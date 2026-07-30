@@ -30,6 +30,8 @@
 #include <memory>
 #include <string>
 
+#include <unistd.h>
+
 #include <Poco/Net/HTTPRequest.h>
 
 /// Unit tests for ClientRequestDispatcher.
@@ -60,6 +62,16 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testJsonResultResponse);
     CPPUNIT_TEST(testHandleIncomingMessage_RobotsTxt);
     CPPUNIT_TEST(testHandleIncomingMessage_Capabilities);
+
+    CPPUNIT_TEST(testHealthCheck_LivezOk);
+    CPPUNIT_TEST(testHealthCheck_LivezVerbose);
+    CPPUNIT_TEST(testHealthCheck_LivezHead);
+    CPPUNIT_TEST(testHealthCheck_ReadyzFailsWithoutSpareKits);
+    CPPUNIT_TEST(testHealthCheck_ReadyzExclude);
+    CPPUNIT_TEST(testHealthCheck_UnknownExcludeWarns);
+    CPPUNIT_TEST(testHealthCheck_SingleCheck);
+    CPPUNIT_TEST(testHealthCheck_UnknownPaths);
+    CPPUNIT_TEST(testHealthCheck_PostNotAllowed);
 
     CPPUNIT_TEST(testServerURL_ProxyPrefixNegativePort);
     CPPUNIT_TEST(testServerURL_ProxyPrefixValidPort);
@@ -365,6 +377,158 @@ private:
         // with MockStreamSocket. It used to work because Application::instance()
         // threw, and we returned an error.
         LOK_ASSERT(response.empty());
+    }
+
+    /// Pretend a forkit is running for the duration of a health check test. The test process
+    /// itself stands in for the forkit, so the process liveness probe succeeds.
+    class FakeForKit
+    {
+        const int _savedPid;
+
+    public:
+        FakeForKit()
+            : _savedPid(COOLWSD::ForKitProcId)
+        {
+            COOLWSD::ForKitProcId = getpid();
+        }
+
+        ~FakeForKit() { COOLWSD::ForKitProcId = _savedPid; }
+    };
+
+    void testHealthCheck_LivezOk()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response =
+            dispatchRequest("GET /livez HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(response.find("Content-Type: text/plain; charset=utf-8") != std::string::npos);
+        // A non-verbose pass has the two-byte body "ok" and nothing more.
+        LOK_ASSERT(response.ends_with("\r\n\r\nok"));
+    }
+
+    void testHealthCheck_LivezVerbose()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response =
+            dispatchRequest("GET /livez?verbose HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(response.find("[+]ping ok\n") != std::string::npos);
+        LOK_ASSERT(response.find("[+]forkit ok\n") != std::string::npos);
+        LOK_ASSERT(response.ends_with("livez check passed\n"));
+    }
+
+    void testHealthCheck_LivezHead()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response =
+            dispatchRequest("HEAD /livez HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        // The headers announce the body a GET would return, but none is sent.
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(response.find("Content-Length: 2") != std::string::npos);
+        LOK_ASSERT(response.ends_with("\r\n\r\n"));
+    }
+
+    void testHealthCheck_ReadyzFailsWithoutSpareKits()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        // No spare kit exists in this test setup, so readiness reports a failure, but the
+        // response body withholds the reason.
+        const std::string response =
+            dispatchRequest("GET /readyz HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        LOK_ASSERT(response.find("HTTP/1.1 500") != std::string::npos);
+        LOK_ASSERT(response.find("[+]ping ok\n") != std::string::npos);
+        LOK_ASSERT(response.find("[-]kit-spares failed: reason withheld\n") != std::string::npos);
+        LOK_ASSERT(response.ends_with("readyz check failed\n"));
+    }
+
+    void testHealthCheck_ReadyzExclude()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response = dispatchRequest(
+            "GET /readyz?verbose&exclude=kit-spares HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(response.find("[+]kit-spares excluded: ok\n") != std::string::npos);
+        LOK_ASSERT(response.find("[+]shutdown ok\n") != std::string::npos);
+        LOK_ASSERT(response.ends_with("readyz check passed\n"));
+    }
+
+    void testHealthCheck_UnknownExcludeWarns()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response = dispatchRequest(
+            "GET /livez?verbose&exclude=nosuch HTTP/1.1\r\nHost: localhost\r\n\r\n");
+
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(
+            response.find(
+                "warn: some health checks cannot be excluded: no matches for \"nosuch\"\n") !=
+            std::string::npos);
+        LOK_ASSERT(response.ends_with("livez check passed\n"));
+    }
+
+    void testHealthCheck_SingleCheck()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        std::string response =
+            dispatchRequest("GET /livez/forkit HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
+        LOK_ASSERT(response.ends_with("\r\n\r\nok"));
+
+        // A failing check names its reason, unlike the aggregate response.
+        response = dispatchRequest("GET /readyz/kit-spares HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 500") != std::string::npos);
+        LOK_ASSERT(response.find("internal server error: ") != std::string::npos);
+    }
+
+    void testHealthCheck_UnknownPaths()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        // The shutdown check is not part of the liveness endpoint.
+        std::string response =
+            dispatchRequest("GET /livez/shutdown HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 404") != std::string::npos);
+
+        response = dispatchRequest("GET /readyz/nosuch HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 404") != std::string::npos);
+
+        response = dispatchRequest("GET /readyz/ping/deeper HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 404") != std::string::npos);
+
+        // Only livez and readyz are served. The healthz endpoint that Kubernetes considers
+        // deprecated does not exist here.
+        response = dispatchRequest("GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 200") == std::string::npos);
+    }
+
+    void testHealthCheck_PostNotAllowed()
+    {
+        constexpr std::string_view testname = __func__;
+        FakeForKit fakeForKit;
+
+        const std::string response = dispatchRequest(
+            "POST /readyz HTTP/1.1\r\nHost: localhost\r\nContent-Length: 0\r\n\r\n");
+        LOK_ASSERT(response.find("HTTP/1.1 405") != std::string::npos);
     }
 
     // Verify that a ProxyPrefix containing port -1 (produced by some reverse

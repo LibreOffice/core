@@ -102,6 +102,7 @@ man_MANS = man/coolwsd.1 \
 dist_doc_DATA = wsd/README.vars \
                 wsd/protocol.txt \
                 wsd/metrics.txt \
+                wsd/healthchecks.txt \
                 THIRDPARTYLICENSES
 
 if !ENABLE_FUZZERS
@@ -241,6 +242,7 @@ coolwsd_sources = \
                   wsd/DocumentBroker.cpp \
                   wsd/FileServer.cpp \
                   wsd/FileServerUtil.cpp \
+                  wsd/HealthCheck.cpp \
                   wsd/HostUtil.cpp \
                   wsd/ProofKey.cpp \
                   wsd/ProxyProtocol.cpp \
@@ -457,6 +459,7 @@ wsd_headers = \
               wsd/DocumentBroker.hpp \
               wsd/Exceptions.hpp \
               wsd/FileServer.hpp \
+              wsd/HealthCheck.hpp \
               wsd/HostUtil.hpp \
               wsd/PlatformDesktop.hpp \
               wsd/PlatformMobile.hpp \

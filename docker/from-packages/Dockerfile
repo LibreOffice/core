@@ -208,9 +208,9 @@ EXPOSE 9980
 USER 1001
 
 # Health-check via coolwsd's built-in --probe: it reads this image's config to
-# pick the listening port and the http/https scheme, then checks the loopback
-# endpoint. This needs no curl or shell, so it works in the distroless image.
-# Exit 0 means healthy.
+# pick the listening port and the http/https scheme, then checks the /livez
+# liveness endpoint over the loopback. This needs no curl or shell, so it works
+# in the distroless image. Exit 0 means healthy.
 #
 # --use-env-vars lets the probe honour the same 'extra_params' the entrypoint
 # does, so a TLS-terminating deployment that sets --o:ssl.enable=false there gets

@@ -357,11 +357,13 @@ void COOLWSD::writeTraceEventRecording(const std::string &recording)
 }
 
 #if !MOBILEAPP
-static ssize_t getInteractiveDocBrokerCount()
+ssize_t COOLWSD::getInteractiveDocBrokerCount()
 {
     std::lock_guard<std::mutex> docBrokersLock(DocBrokersMutex);
     return DocBrokers.size() - ConvertToBroker::getInstanceCount();
 }
+
+int COOLWSD::getOutstandingForksCount() { return TotalOutstandingForks; }
 #endif
 
 void COOLWSD::checkSessionLimitsAndWarnClients()
@@ -1465,9 +1467,13 @@ void ensureUserEntry()
 
 #if !MOBILEAPP
 /// Health-check the locally running coolwsd for the --probe option: connect to
-/// the loopback interface on the configured port, GET the root ("OK") endpoint,
-/// and return EX_OK when the server answers HTTP 200. This gives the shell-less,
-/// distroless container image a self-contained HEALTHCHECK that needs no curl.
+/// the loopback interface on the configured port, GET the /livez liveness
+/// endpoint (see healthchecks.txt), and return EX_OK when the server answers
+/// HTTP 200. This gives the shell-less, distroless container image a
+/// self-contained HEALTHCHECK that needs no curl. A container is restarted when
+/// its health check fails, so this probes liveness, not readiness: a server
+/// that is merely at capacity stays up, while one whose liveness checks fail
+/// answers HTTP 500 and gets restarted.
 ///
 /// It talks to coolwsd's own socket, so ssl.termination is irrelevant here - it
 /// describes the upstream proxy this probe deliberately bypasses.
@@ -1482,7 +1488,7 @@ void ensureUserEntry()
 static int probeRunningServer()
 {
     const int port = ClientPortNumber > 0 ? ClientPortNumber : DEFAULT_CLIENT_PORT_NUMBER;
-    const std::string path = COOLWSD::ServiceRoot + "/";
+    const std::string path = COOLWSD::ServiceRoot + "/livez";
 
     // Reach the server over the loopback. net.listen (any/loopback) always
     // includes the loopback, so only the address family matters: the IPv4
@@ -4134,11 +4140,13 @@ void COOLWSD::innerMain()
 
     const std::string adminURI = getServiceURI(COOLWSD_TEST_ADMIN_CONSOLE, true);
     if (!adminURI.empty())
-        oss << "\nOr for the admin, monitoring, capabilities & discovery:\n\n"
+        oss << "\nOr for the admin, monitoring, capabilities, discovery & health:\n\n"
             << adminURI << '\n'
             << getServiceURI(COOLWSD_TEST_METRICS, true) << '\n'
             << getServiceURI("/hosting/capabilities") << '\n'
-            << getServiceURI("/hosting/discovery") << '\n';
+            << getServiceURI("/hosting/discovery") << '\n'
+            << getServiceURI("/livez?verbose") << '\n'
+            << getServiceURI("/readyz?verbose") << '\n';
 
     oss << std::endl;
     std::cerr << oss.str();

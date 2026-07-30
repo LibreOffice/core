@@ -1,0 +1,100 @@
+Below is the description of the health check endpoints served by coolwsd.
+
+The endpoints try to follow the Kubernetes API server health check protocol:
+https://kubernetes.io/docs/reference/using-api/health-checks/
+
+They need no authentication, so load balancers and the kubelet can probe them
+directly. For security reasons a failed aggregate response never provides a
+reason - which goes to the log instead.
+
+ENDPOINTS
+
+    Why do they end in 'z' - yes, well ... fashion and Google's example.
+
+    /livez   - liveness: is the process healthy at all? A failure means a
+               restart is the right remedy.
+
+    /readyz  - readiness: can the server take new traffic? A failure means new
+               work should be routed elsewhere while existing documents keep
+               being served. It runs the liveness checks too, since a dead
+               server is clearly ready!
+
+    There is no /healthz endpoint, notionally this is deprecated and ambiguous
+    confusing whether a failure calls for a restart or for draining traffic.
+
+RESPONSES
+
+    All responses are text/plain. A passing endpoint returns HTTP 200 with the
+    body "ok". A failing endpoint returns HTTP 500.
+
+    Appending "?verbose" prints one line per check followed by a trailer line:
+
+        $ curl 'https://localhost:9980/readyz?verbose'
+        [+]ping ok
+        [+]forkit ok
+        [+]shutdown ok
+        [+]kit-spares ok
+        [+]disk-space ok
+        [+]memory ok
+        [+]connections ok
+        [+]documents ok
+        readyz check passed
+
+    A failing endpoint is always verbose and ends with "<endpoint> check
+    failed". A failed line reads "[-]<name> failed: reason withheld".
+
+    Individual checks can be excluded with one "exclude" parameter per check:
+
+        $ curl 'https://localhost:9980/readyz?verbose&exclude=memory&exclude=documents'
+
+    An excluded check is reported as "[+]<name> excluded: ok". An exclude
+    parameter that matches no check adds a warning line but does not fail the
+    endpoint.
+
+INDIVIDUAL CHECKS
+
+    Each check is also served on its own at /<endpoint>/<check>, for example
+    /readyz/forkit or /livez/ping. The response is HTTP 200 with the body
+    "ok", or HTTP 500 with the body "internal server error: <reason>".
+    A check that is not part of the endpoint returns HTTP 404.
+
+CHECKS
+
+    ping        (livez, readyz) - Always passes. Answering at all proves that
+                the server accepts connections and dispatches requests.
+    forkit      (livez, readyz) - The forkit process is running. The forkit
+                spawns a kit process per document, so nothing can be opened
+                without it. Always passes in a build with the kit compiled
+                into coolwsd.
+    shutdown    (readyz) - The server has not been asked to shut down. During
+                shutdown existing documents are still served while they
+                close, but new work should go elsewhere.
+    kit-spares  (readyz) - A pre-spawned kit process is available for the next
+                document, or one is currently being forked.
+    disk-space  (readyz) - None of the periodically checked file systems (the
+                child jails, the cache) is nearly full. The underlying check
+                is cached, so a change can take up to a minute to show.
+    memory      (readyz) - The most recent memory usage sample is within the
+                budget derived from the memproportion setting and any cgroup
+                limits. The sample is taken by the periodic memory statistics
+                task, so it can lag by one sampling interval.
+    connections (readyz) - The number of connections is below the configured
+                maximum.
+    documents   (readyz) - The number of loaded documents (convert-to
+                requests do not count) is below the configured maximum.
+                Always passes when the limit is 10000 or higher, which means
+                an unlimited build.
+
+RELATED ENDPOINTS
+
+    /             - returns HTTP 200 with the body "OK". The simplest probe,
+                    with no insight into server state.
+    coolwsd --probe - not an endpoint but a command line option: it fetches
+                    /livez on the locally running coolwsd and exits 0 when the
+                    answer is HTTP 200. The container images use it as their
+                    HEALTHCHECK, so a container is restarted when liveness
+                    fails, never because the server is merely at capacity.
+    /cool/getMetrics - Prometheus metrics, including the raw values behind
+                    these checks. Needs admin authentication unless
+                    security.enable_metrics_unauthenticated is set. See
+                    metrics.txt.
