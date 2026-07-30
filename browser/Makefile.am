@@ -595,7 +595,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Util.KeyboardGridNavigation.ts \
 	src/control/jsdialog/Util.KeyboardListNavigation.ts \
 	src/control/jsdialog/Util.KeyboardRadioGroupNavigation.ts \
-	src/control/jsdialog/Util.FocusCycle.js \
+	src/control/jsdialog/Util.FocusCycle.ts \
 	src/control/jsdialog/Util.FormulaBarSelectionHandle.ts \
 	src/control/jsdialog/Util.MessageRouter.ts \
 	src/control/jsdialog/Util.ModalHelper.js \
@@ -627,7 +627,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.HTMLContent.ts \
 	src/control/jsdialog/Widget.IconView.ts \
 	src/control/jsdialog/Widget.NotebookbarIconView.ts \
-	src/control/jsdialog/Widget.MenuButton.js \
+	src/control/jsdialog/Widget.MenuButton.ts \
 	src/control/jsdialog/Widget.Listbox.ts \
 	src/control/jsdialog/Widget.MobileBorderSelector.js \
 	src/control/jsdialog/Widget.MobileTabControl.js \

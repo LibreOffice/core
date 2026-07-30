@@ -102,16 +102,24 @@ type JSWidgetHandler = (
 	customCallback?: () => void,
 ) => boolean;
 
-type UnoToolButtonHandler = (
-	parentContainer: Element,
-	data: WidgetJSON,
-	builder: JSBuilder,
-) => {
+// elements which make up a toolitem-like button
+type UnoToolButtonControl = {
 	container: HTMLElement;
 	button: HTMLElement;
 	label: HTMLElement;
 	arrow?: HTMLElement;
 };
+
+type UnoToolButtonOptions = {
+	hasDropdownArrow?: boolean; // show an arrow which indicates that a menu can be opened
+};
+
+type UnoToolButtonHandler = (
+	parentContainer: Element,
+	data: WidgetJSON,
+	builder: JSBuilder,
+	options?: UnoToolButtonOptions,
+) => UnoToolButtonControl;
 
 // callback triggered by user actions
 type JSDialogCallback = (
@@ -137,6 +145,30 @@ type JSDialogMenuCallback = (
 	data: any,
 	entry: JSBuilder | MenuDefinition,
 ) => boolean;
+
+// Members of the JSDialog global object which are available with types. That
+// object collects the widget handlers and the shared helpers of the dialog
+// framework. The sources which are still JavaScript put more members on it
+// than are listed here.
+interface JSDialogGlobal {
+	AddOnClick: (element: Element, callback: EventListener) => void;
+	CloseDropdown: (id: string, focusHandled?: boolean) => void;
+	OpenDropdown: (
+		id: string,
+		popupParent: string | HTMLElement,
+		entries: Array<MenuDefinition>,
+		innerCallback: JSDialogMenuCallback,
+		popupAnchor?: string,
+		isSubmenu?: boolean,
+		earlyCallbackCall?: boolean,
+		noDefaultSelection?: boolean,
+	) => void;
+	SetupA11yLabelForNonLabelableElement: (
+		container: HTMLElement,
+		data: WidgetJSON,
+		builder: JSBuilder,
+	) => void;
+}
 
 interface DialogResponse {
 	id: string;
@@ -232,6 +264,7 @@ interface MenuDefinition extends WidgetJSON {
 	hint?: string; // hint text
 	uno?: string; // uno command
 	action?: string; // dispatch command
+	command?: string; // UNO command which the entry applies its value to, used in colorpicker type
 	htmlId?: string; // DEPRECATED: id of HTMLContent - used in html type
 	content?: WidgetJSON; // custom content - used in json type
 	img?: string; // icon name
@@ -357,7 +390,11 @@ interface PushButtonWidget extends WidgetJSON {
 // type: 'menubutton'
 interface MenuButtonWidgetJSON extends WidgetJSON {
 	menu?: Array<MenuDefinition>; // custom menu
-	applyCallback?: () => void; // split button callback for left part
+	// split button action for the left part: either a callback or the name of a
+	// UNO command or of a dispatcher action
+	applyCallback?: (() => void) | string;
+	// UNO command of the button, falls back to the id of the button or of its menu
+	command?: string;
 	class?: string;
 	image?: string | boolean;
 	icon?: string; // theme-aware icon file name, e.g. 'lc_recsearch.svg'

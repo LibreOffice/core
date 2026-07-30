@@ -60,7 +60,6 @@
 /src/control/Control.UserList.js
 /src/control/Control.Zotero.js
 /src/control/IFrameDialog.js
-/src/control/jsdialog/Util.FocusCycle.js
 /src/control/jsdialog/Util.ModalHelper.js
 /src/control/jsdialog/Util.StateChange.ts
 /src/control/jsdialog/Widget.Calendar.js
@@ -69,7 +68,6 @@
 /src/control/jsdialog/Widget.FormulabarEdit.js
 /src/control/jsdialog/Widget.IconView.js
 /src/control/jsdialog/Widget.LanguageSelector.js
-/src/control/jsdialog/Widget.MenuButton.js
 /src/control/jsdialog/Widget.MobileBorderSelector.js
 /src/control/jsdialog/Widget.MobileTabControl.js
 /src/control/jsdialog/Widget.MultilineEdit.js
