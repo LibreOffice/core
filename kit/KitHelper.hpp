@@ -143,14 +143,14 @@ namespace LOKitHelper
     inline std::string getDocumentTypeAsString(COKitDocument *loKitDocument)
     {
         assert(loKitDocument && "null loKitDocument");
-        const auto type = static_cast<COKitDocumentType>(loKitDocument->pClass->getDocumentType(loKitDocument));
+        const auto type = loKitDocument->pClass->getDocumentType(loKitDocument);
         return documentTypeToString(type);
     }
 
     inline std::string documentStatus(COKitDocument *loKitDocument, bool diffSizePages = false)
     {
         assert(loKitDocument && "null loKitDocument");
-        const auto type = static_cast<COKitDocumentType>(loKitDocument->pClass->getDocumentType(loKitDocument));
+        const auto type = loKitDocument->pClass->getDocumentType(loKitDocument);
 
         std::unordered_map<std::string, std::string> resultInfo;
 

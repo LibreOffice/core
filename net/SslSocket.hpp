@@ -521,7 +521,7 @@ private:
 
         auto cb = [](const char* str, size_t len, void* u) -> int
         {
-            std::ostringstream& os = *reinterpret_cast<std::ostringstream*>(u);
+            std::ostringstream& os = *static_cast<std::ostringstream*>(u);
             os << '\n' << std::string_view(str, len);
             return 1; // Apparently 0 means failure here.
         };

@@ -331,7 +331,7 @@ void SpookyHash::Final(uint64 *hash1, uint64 *hash2)
         return;
     }
 
-    uint64 *data = static_cast<uint64 *>(m_data);
+    uint64 *data = m_data;
     uint8 remainder = m_remainder;
 
     uint64 h0 = m_state[0];

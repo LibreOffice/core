@@ -283,7 +283,7 @@ class DeltaGenerator {
 
             if (_rleSize > 0)
             {
-                _rleData = static_cast<uint32_t *>(malloc((size_t)_rleSize * 4));
+                _rleData = static_cast<uint32_t *>(malloc(_rleSize * 4));
                 memcpy(_rleData, scratch, _rleSize * 4);
             }
             else

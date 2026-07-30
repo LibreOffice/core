@@ -3366,7 +3366,7 @@ int pollCallback([[maybe_unused]] void* data, int timeoutUs)
     if (!data)
         return 0;
     else
-        return reinterpret_cast<KitSocketPoll*>(data)->kitPoll(timeoutUs);
+        return static_cast<KitSocketPoll*>(data)->kitPoll(timeoutUs);
 #else
     std::unique_lock<std::mutex> lock(KitSocketPoll::KSPollsMutex);
     std::vector<std::shared_ptr<KitSocketPoll>> v;
@@ -3412,7 +3412,7 @@ bool anyInputCallback(void* data, int mostUrgentPriority)
     if (!data)
         return false;
 
-    return reinterpret_cast<KitSocketPoll*>(data)->kitHasAnyInput(mostUrgentPriority);
+    return static_cast<KitSocketPoll*>(data)->kitHasAnyInput(mostUrgentPriority);
 }
 
 } // namespace
@@ -3469,7 +3469,7 @@ void wakeCallback(void* data)
     if (!data)
         return;
 
-    return reinterpret_cast<KitSocketPoll*>(data)->kitWakeup();
+    return static_cast<KitSocketPoll*>(data)->kitWakeup();
 }
 
 #if !defined(_WIN32)
