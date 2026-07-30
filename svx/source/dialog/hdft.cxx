@@ -654,7 +654,8 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
                     SfxItemSet aTempSet(*pBBSet->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                               getActiveDocumentLinkReferer());
                     aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
                 }
             }
@@ -726,7 +727,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                               getActiveDocumentLinkReferer());
                     aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
                 }
             }
@@ -762,7 +764,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                               getActiveDocumentLinkReferer());
                     aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
                 }
             }
@@ -788,7 +791,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
             SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
-            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                       getActiveDocumentLinkReferer());
             aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
         }
     }

@@ -1357,6 +1357,10 @@ public:
     // For Autotexts? (text modules) They have only one SVPersist at their disposal.
     SfxObjectShell* GetPersist() const;
 
+    /** The file name carried by the document shell, or an empty string while the shell has
+        no file name. */
+    OUString GetLinkReferer() const;
+
     // Pointer to storage of SfxDocShells. Can be 0!!!
     css::uno::Reference< css::embed::XStorage > GetDocStorage();
 

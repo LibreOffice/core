@@ -475,7 +475,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
         // fill a local ItemSet with the attributes corresponding as good as possible
         // to the new fill properties [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and set these
         // as ItemSet
-        setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet, GetDoc()->GetLinkReferer());
 
         if(IsModifyLocked())
         {
@@ -581,7 +581,8 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
             // corresponding as good as possible to the new fill properties and set the whole ItemSet
             const SvxBrushItem& rSource(static_cast< const SvxBrushItem& >(*pSource));
-            setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet,
+                                                       GetDoc()->GetLinkReferer());
 
             if(IsModifyLocked())
             {

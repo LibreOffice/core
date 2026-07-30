@@ -19,6 +19,9 @@
 
 #include <sal/config.h>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+
 #include <algorithm>
 
 #include <svx/unobrushitemhelper.hxx>
@@ -42,7 +45,16 @@
 
 using namespace com::sun::star;
 
-void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet)
+OUString getActiveDocumentLinkReferer()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    if (pShell != nullptr && pShell->HasName())
+        return pShell->GetMedium()->GetName();
+    return OUString();
+}
+
+void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet,
+                                               OUString const& rReferer)
 {
     // Clear all items from the DrawingLayer FillStyle range (if we have any). All
     // items that need to be set will be set as hard attributes
@@ -60,7 +72,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         rToSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
 
         // set graphic (if available)
-        const Graphic* pGraphic = rBrush.GetGraphic();
+        const Graphic* pGraphic = rBrush.GetGraphic(rReferer);
 
         if(pGraphic)
         {

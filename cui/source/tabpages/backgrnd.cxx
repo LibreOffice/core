@@ -1562,13 +1562,15 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
         sal_uInt16 nWhich(maSet.GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
         Color aBackColor(static_cast<const SvxBackgroundColorItem&>(maSet.Get(nWhich)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet,
+                                                   getActiveDocumentLinkReferer());
     }
     else
     {
         sal_uInt16 nWhich(maSet.GetPool()->GetWhich(bHighlighting ? SID_ATTR_BRUSH_CHAR : SID_ATTR_BRUSH));
         SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet,
+                                                   getActiveDocumentLinkReferer());
     }
 
     m_pResetSet = maSet.Clone();
@@ -1596,7 +1598,8 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
         if (SfxItemState::SET == maSet.GetItemState(nWhich))
         {
             SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-            setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet,
+                                                       getActiveDocumentLinkReferer());
         }
         else
         {
@@ -1624,7 +1627,8 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
                 SelectFillType(*m_xBtnColor, &maSet);
                 // color tab page Active and New preview controls are same after SelectFillType
                 // hack to restore color tab page Active preview
-                setSvxBrushItemAsFillAttributesToTargetSet(static_cast<const SvxBrushItem&>(m_pResetSet->Get(nWhich)), *m_pResetSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(static_cast<const SvxBrushItem&>(m_pResetSet->Get(nWhich)), *m_pResetSet,
+                                                           getActiveDocumentLinkReferer());
                 static_cast<SvxColorTabPage*>(GetFillTabPage())->SetCtlPreviewOld(*m_pResetSet);
                 break;
             }

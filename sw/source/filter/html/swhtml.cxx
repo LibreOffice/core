@@ -2923,7 +2923,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->m_pItem);
                     SfxItemSet aNewSet(m_xDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet,
+                                                               m_xDoc->GetLinkReferer());
                     m_xDoc->getIDocumentContentOperations().InsertItemSet(*pAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
                     break;
                 }
