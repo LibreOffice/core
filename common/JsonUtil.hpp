@@ -86,7 +86,7 @@ int getLevenshteinDist(const std::string& string1, const std::string& string2)
 
 /// Converts the given @valueVar to the type T, if possible.
 /// @key is used for logging only.
-template <typename T> T getJSONValue(const std::string& key, const Poco::Dynamic::Var valueVar)
+template <typename T> T getJSONValue(const std::string& key, const Poco::Dynamic::Var & valueVar)
 {
     try
     {
