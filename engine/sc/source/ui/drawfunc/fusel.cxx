@@ -22,6 +22,8 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <svl/eitem.hxx>
 #include <vcl/imapobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
@@ -521,8 +523,10 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         bool bVertical = ( pOPO && pOPO->IsEffectivelyVertical() );
                         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
-                        rViewShell.GetViewData().GetDispatcher().
-                            Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+                        // the object to edit is there, so ask for the text function without a new object
+                        SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
+                        rViewShell.GetViewData().GetDispatcher().ExecuteList(
+                            nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aCreateDirectly });
 
                         // Get the created FuText now and change into EditMode
                         FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();

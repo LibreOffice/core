@@ -24,6 +24,8 @@
 #include <unotools/moduleoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <svl/eitem.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <tabvwsh.hxx>
@@ -318,6 +320,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_NOTEEDIT:
             pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, rModel, aNewReq));
             bCreateDirectly = comphelper::COKit::isActive();
+            // A caller that wants the text function for an object it is about to edit asks for no
+            // construction, the way sd reads the argument
+            if ((nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL) && pArgs
+                && pArgs->HasItem(FN_PARAM_1))
+                bCreateDirectly = static_cast<const SfxBoolItem&>(pArgs->Get(FN_PARAM_1)).GetValue();
             break;
 
         case SID_FM_CREATE_CONTROL:

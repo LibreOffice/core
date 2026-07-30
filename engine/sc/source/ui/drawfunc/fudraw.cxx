@@ -24,7 +24,9 @@
 #include <svx/svdouno.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
@@ -175,8 +177,10 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell& rViewShell, const 
         FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
         if ( !pPoor || pPoor->GetSlotID() != nTextSlotId )
         {
-            rViewShell.GetViewData().GetDispatcher().
-                Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+            // the object to edit is there, so ask for the text function without a new object
+            SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
+            rViewShell.GetViewData().GetDispatcher().ExecuteList(
+                nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aCreateDirectly });
         }
 
         // get the resulting FuText and set in edit mode

@@ -9148,7 +9148,7 @@ SfxBoolItem VerticalCaption SID_DRAW_CAPTION_VERTICAL
 
 
 SfxBoolItem VerticalText SID_DRAW_TEXT_VERTICAL
-
+(SfxBoolItem CreateDirectly FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
