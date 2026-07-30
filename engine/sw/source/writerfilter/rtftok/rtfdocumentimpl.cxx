@@ -1315,10 +1315,20 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     {
         m_pBinaryData = std::make_shared<SvMemoryStream>();
         m_pBinaryData->WriteChar(ch);
-        for (int i = 0; i < m_aStates.top().getBinaryToRead() - 1; ++i)
+        const int nBinaryToRead = m_aStates.top().getBinaryToRead();
+        SAL_WARN_IF(nBinaryToRead < 0, "writerfilter.rtf",
+                    "negative \\bin length of " << nBinaryToRead);
+        if (nBinaryToRead > 1)
         {
-            Strm().ReadChar(ch);
-            m_pBinaryData->WriteChar(ch);
+            const sal_uInt64 nWanted = nBinaryToRead - 1;
+            const sal_uInt64 nCount = std::min(nWanted, Strm().remainingSize());
+            SAL_WARN_IF(nCount < nWanted, "writerfilter.rtf",
+                        "\\bin asks for " << nWanted << " bytes with only " << nCount << " left");
+            for (sal_uInt64 i = 0; i < nCount; ++i)
+            {
+                Strm().ReadChar(ch);
+                m_pBinaryData->WriteChar(ch);
+            }
         }
         m_aStates.top().setInternalState(RTFInternalState::NORMAL);
         return RTFError::OK;
