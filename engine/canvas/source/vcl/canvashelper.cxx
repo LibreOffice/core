@@ -46,10 +46,10 @@
 
 #include <canvastools.hxx>
 
-#include <canvasbitmap.hxx>
 #include "canvasfont.hxx"
 #include <canvashelper.hxx>
 #include <impltools.hxx>
+#include <verifyinput.hxx>
 #include "textlayout.hxx"
 #include <XGraphicDevice.hxx>
 

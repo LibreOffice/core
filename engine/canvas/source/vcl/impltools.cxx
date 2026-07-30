@@ -26,6 +26,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <com/sun/star/geometry/Matrix2D.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
@@ -37,7 +38,6 @@
 
 #include <canvastools.hxx>
 
-#include <canvasbitmap.hxx>
 #include <impltools.hxx>
 
 
@@ -48,22 +48,13 @@ namespace vclcanvastools
 using namespace vclcanvas;
         ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
-            CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
+            ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xBitmap );
+            if( !aBmp.IsEmpty() )
+                return aBmp;
 
-            if( pBitmapImpl )
-            {
-                return pBitmapImpl->getBitmap();
-            }
-            else
-            {
-                ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xBitmap );
-                if( !aBmp.IsEmpty() )
-                    return aBmp;
-
-                // TODO(F1): extract pixel from XBitmap interface
-                ENSURE_OR_THROW( false,
-                                  "bitmapExFromXBitmap(): could not extract bitmap" );
-            }
+            // TODO(F1): extract pixel from XBitmap interface
+            ENSURE_OR_THROW( false,
+                              "bitmapExFromXBitmap(): could not extract bitmap" );
 
             return ::Bitmap();
         }

@@ -22,11 +22,12 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <canvastools.hxx>
 #include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/outdev.hxx>
 
-#include <canvasbitmap.hxx>
 #include <devicehelper.hxx>
 #include <unopolypolygon.hxx>
 
@@ -54,19 +55,6 @@ namespace vclcanvas
                        ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ), rendering::FillRule_EVEN_ODD ) );
 
         return xPoly;
-    }
-
-    rtl::Reference< CanvasBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
-        const geometry::IntegerSize2D&                     size )
-    {
-        if( !mpOutDev )
-            return {}; // we're disposed
-
-        return new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
-                              true,
-                              *rDevice,
-                              mpOutDev );
     }
 
     void DeviceHelper::disposing()

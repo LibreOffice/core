@@ -19,7 +19,6 @@
 
 #include <vclfactory.hxx>
 #include <canvas.hxx>
-#include <canvasbitmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -65,37 +64,6 @@ public:
     {
     }
 };
-
-CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
-{
-    ScopedVclPtrInstance<WorkWindow> pWin(nullptr, WB_STDWORK);
-
-    uno::Reference<vclcanvas::XCanvas> xCanvas = new vclcanvas::Canvas(pWin->GetOutDev());
-    CPPUNIT_ASSERT(xCanvas.is());
-
-    // a huge canvas ...
-    Size aSize(1, 1);
-    rtl::Reference<vclcanvas::CanvasBitmap> xBitmapCanvas
-        = xCanvas->getDevice()->createCompatibleAlphaBitmap(
-            vcl::unotools::integerSize2DFromSize(aSize));
-    CPPUNIT_ASSERT(xBitmapCanvas.is());
-
-    {
-        // render something
-        vclcanvas::RenderState aDefaultState;
-        cpo::uno::Sequence<double> aRedTransparent{ 1.0, // R
-                                                    0.0, // G
-                                                    0.0, // B
-                                                    0.5 }; // A
-        aDefaultState.DeviceColor = aRedTransparent;
-#if 0
-        // words fail me to describe the sheer beauty of allocating a UNO
-        // object to represent a polygon, and manually handling the ViewState
-        // and there being no public helper for this - to render ... a rectangle.
-        XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
-#endif
-    }
-}
 
 CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 {

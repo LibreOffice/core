@@ -27,7 +27,6 @@
 #include <vcl/outdev.hxx>
 
 #include "outdevholder.hxx"
-#include <canvasbitmap.hxx>
 
 using namespace ::com::sun::star;
 

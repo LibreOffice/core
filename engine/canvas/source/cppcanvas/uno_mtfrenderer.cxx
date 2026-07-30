@@ -20,8 +20,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/virdev.hxx>
 #include <canvas.hxx>
-#include <canvasbitmap.hxx>
 
 using namespace ::com::sun::star;
 

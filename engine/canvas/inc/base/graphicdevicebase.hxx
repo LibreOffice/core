@@ -28,7 +28,7 @@
 #include <parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>
 #include <verifyinput.hxx>
-#include <canvasbitmap.hxx>
+
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
@@ -146,17 +146,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
-        }
-
-        virtual rtl::Reference< vclcanvas::CanvasBitmap > createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
-        {
-            canvastools::verifyBitmapSize(size,
-                                    __func__,
-                                    static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
         }
 
         virtual ::css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( const ::rtl::OUString& GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio ) override

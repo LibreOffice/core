@@ -44,8 +44,6 @@ class Type;
 
 namespace vclcanvas
 {
-class CanvasBitmap;
-
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
    to. But see below
@@ -85,16 +83,6 @@ public:
     createCompatibleLinePolyPolygon(
         const ::cpo::uno::Sequence<::cpo::uno::Sequence<::css::geometry::RealPoint2D>>& points)
         = 0;
-
-    /** Create a bitmap with alpha channel whose memory layout and
-        sample model is compatible to the graphic device.
-
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
-     */
-    virtual rtl::Reference<vclcanvas::CanvasBitmap>
-    createCompatibleAlphaBitmap(const ::css::geometry::IntegerSize2D& size) = 0;
 
     /** Create a parametric polygon.
 

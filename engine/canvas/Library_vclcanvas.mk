@@ -55,7 +55,6 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/bitmapbackbuffer \
 	canvas/source/vcl/cachedbitmap \
 	canvas/source/vcl/canvas \
-	canvas/source/vcl/canvasbitmap \
 	canvas/source/vcl/canvasbitmaphelper \
 	canvas/source/vcl/canvasfont \
 	canvas/source/vcl/canvashelper \

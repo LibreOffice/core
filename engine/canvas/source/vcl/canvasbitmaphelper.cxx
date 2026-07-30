@@ -26,7 +26,6 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 
-#include <canvasbitmap.hxx>
 #include <canvasbitmaphelper.hxx>
 
 
