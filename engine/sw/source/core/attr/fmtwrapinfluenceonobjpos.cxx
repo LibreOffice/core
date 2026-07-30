@@ -156,12 +156,12 @@ bool SwFormatWrapInfluenceOnObjPos::GetAllowOverlap() const
     return mbAllowOverlap;
 }
 
-void SwFormatWrapInfluenceOnObjPos::SetOverlapVertOffset(SwTwips nOverlapVertOffset)
+void SwFormatWrapInfluenceOnObjPos::SetOverlapVertOffset(gfx::Length nOverlapVertOffset)
 {
     mnOverlapVertOffset = nOverlapVertOffset;
 }
 
-SwTwips SwFormatWrapInfluenceOnObjPos::GetOverlapVertOffset() const { return mnOverlapVertOffset; }
+gfx::Length SwFormatWrapInfluenceOnObjPos::GetOverlapVertOffset() const { return mnOverlapVertOffset; }
 
 void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
