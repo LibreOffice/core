@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Paperless core abstractions: units, geometry, colour, format identification, the document model and the device-independent display list. No external dependencies by design.</Description>
+  </PropertyGroup>
+
+</Project>

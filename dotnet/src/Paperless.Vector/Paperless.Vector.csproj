@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG, decoded into the Paperless display list.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+  </ItemGroup>
+
+</Project>

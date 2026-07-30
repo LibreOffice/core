@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Optional ImageSharp raster backend. OFF BY DEFAULT: SixLabors.ImageSharp 4.x fails the build without a purchased Six Labors licence key. Build with -p:EnableImageSharpBackend=true if you hold one.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      SixLabors.ImageSharp 4.0.0 ships an MSBuild target that errors out unless a
+      licence key is present, so referencing it unconditionally would break the
+      build for everyone. Gated off by default; nothing else in the solution
+      depends on this project.
+    -->
+    <EnableImageSharpBackend Condition="'$(EnableImageSharpBackend)' == ''">false</EnableImageSharpBackend>
+    <DefineConstants Condition="'$(EnableImageSharpBackend)' == 'true'">$(DefineConstants);PAPERLESS_IMAGESHARP</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EnableImageSharpBackend)' == 'true'">
+    <PackageReference Include="SixLabors.ImageSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Rendering\Paperless.Rendering.csproj" />
+  </ItemGroup>
+
+</Project>

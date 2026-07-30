@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Spreadsheet documents (the LibreOffice Calc equivalent): XLSX/XLSM/XLTX/XLTM/XLSB, XLS/XLT, ODS/OTS/FODS, CSV. Includes the formula engine and cell rendering.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+    <ProjectReference Include="..\Paperless.Ooxml\Paperless.Ooxml.csproj" />
+    <ProjectReference Include="..\Paperless.OpenDocument\Paperless.OpenDocument.csproj" />
+    <ProjectReference Include="..\Paperless.MsBinary\Paperless.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

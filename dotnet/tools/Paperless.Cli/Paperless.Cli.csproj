@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Paperless.Cli</RootNamespace>
+    <!--
+      Note: the assembly is deliberately NOT named "paperless". A lowercase
+      "paperless" assembly collides case-insensitively with the Paperless library
+      project and breaks restore with "Ambiguous project name". The user-facing
+      command name comes from ToolCommandName below, which is what matters.
+    -->
+    <Description>Command-line front end for Paperless. Used by humans and by the LibreOffice fidelity-comparison skills.</Description>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>paperless</ToolCommandName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Rendering.ImageSharp\Paperless.Rendering.ImageSharp.csproj" />
+  </ItemGroup>
+
+</Project>
