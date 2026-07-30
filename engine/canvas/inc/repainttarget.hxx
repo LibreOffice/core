@@ -29,7 +29,7 @@ namespace vclcanvas
 {
     /* Definition of RepaintTarget interface */
 
-    /** Target interface for XCachedPrimitive implementations
+    /** Target interface for CachedBitmap implementations
 
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives

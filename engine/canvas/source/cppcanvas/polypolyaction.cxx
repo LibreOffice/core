@@ -66,7 +66,7 @@ namespace cppcanvas
                 using Action::render;
                 virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
-                                              uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                              rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
@@ -130,7 +130,7 @@ namespace cppcanvas
 
             bool PolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                                   const vclcanvas::ViewState& rViewState,
-                                                  uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                                  rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                   const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
@@ -206,7 +206,7 @@ namespace cppcanvas
                 using Action::render;
                 virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
-                                              uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                              rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
@@ -228,7 +228,7 @@ namespace cppcanvas
 
             bool TexturedPolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                                           const vclcanvas::ViewState& rViewState,
-                                                          uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                                          rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                           const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
@@ -289,7 +289,7 @@ namespace cppcanvas
                 using Action::render;
                 virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
-                                              uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                              rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
@@ -310,7 +310,7 @@ namespace cppcanvas
 
             bool StrokedPolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                                          const vclcanvas::ViewState& rViewState,
-                                                         uno::Reference< vclcanvas::XCachedPrimitive >& /*rCachedPrimitive*/,
+                                                         rtl::Reference< vclcanvas::CachedBitmap >& /*rCachedPrimitive*/,
                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );

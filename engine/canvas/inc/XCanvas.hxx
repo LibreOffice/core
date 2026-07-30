@@ -51,7 +51,7 @@ namespace vclcanvas
 {
 class CanvasFont;
 class TextLayout;
-class XCachedPrimitive;
+class CachedBitmap;
 class XGraphicDevice;
 }
 
@@ -253,7 +253,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
      */
-    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
+    virtual rtl::Reference<::vclcanvas::CachedBitmap>
     fillPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const ::vclcanvas::ViewState& aViewState,
                     const ::vclcanvas::RenderState& aRenderState)
@@ -284,7 +284,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
     */
-    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive> fillTexturedPolyPolygon(
+    virtual ::rtl::Reference<::vclcanvas::CachedBitmap> fillTexturedPolyPolygon(
         const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
         const ::vclcanvas::ViewState& aViewState, const ::vclcanvas::RenderState& aRenderState,
         const ::cpo::uno::Sequence<::css::rendering::Texture>& xTextures)
@@ -410,7 +410,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
      */
-    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
+    virtual ::rtl::Reference<::vclcanvas::CachedBitmap>
     drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
                const ::vclcanvas::ViewState& aViewState,
                const ::vclcanvas::RenderState& aRenderState)

@@ -95,21 +95,6 @@ namespace vclcanvas
         return rendering::RepaintResult::REDRAWN;
     }
 
-    OUString CachedBitmap::getImplementationName(  )
-    {
-        return u"canvas::CachedPrimitiveBase"_ustr;
-    }
-
-    bool CachedBitmap::supportsService( const OUString& ServiceName )
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    cpo::uno::Sequence< OUString > CachedBitmap::getSupportedServiceNames(  )
-    {
-        return { u"com.sun.star.rendering.CachedBitmap"_ustr };
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

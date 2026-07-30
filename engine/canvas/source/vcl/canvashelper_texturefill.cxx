@@ -576,7 +576,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const vclcanvas::ViewState&                        viewState,
                                                                                          const vclcanvas::RenderState&                      renderState,
@@ -1001,7 +1001,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
+        return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
     }
 
 }

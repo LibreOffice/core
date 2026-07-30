@@ -17,6 +17,7 @@
 #include "textlineshelper.hxx"
 #include "mtftools.hxx"
 #include <XCanvas.hxx>
+#include <cachedbitmap.hxx>
 
 using namespace ::com::sun::star;
 

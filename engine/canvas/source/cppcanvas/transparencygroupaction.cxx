@@ -53,6 +53,7 @@
 #include <vcl/canvastools.hxx>
 #endif
 #include <XCanvas.hxx>
+#include <cachedbitmap.hxx>
 
 using namespace ::com::sun::star;
 

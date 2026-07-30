@@ -30,7 +30,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::rendering { class XBitmap; }
-namespace vclcanvas { class XCachedPrimitive; }
+namespace vclcanvas { class CachedBitmap; }
 namespace vclcanvas { class CanvasFont; }
 namespace vclcanvas { class XGraphicDevice; }
 namespace vclcanvas { class TextLayout; }
@@ -174,7 +174,7 @@ namespace canvas
             maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
+        virtual rtl::Reference< vclcanvas::CachedBitmap >
             fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
                              const ::vclcanvas::ViewState&                                          viewState,
                              const ::vclcanvas::RenderState&                                        renderState) override
@@ -190,7 +190,7 @@ namespace canvas
             return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
+        virtual rtl::Reference< vclcanvas::CachedBitmap >
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                     const ::vclcanvas::ViewState&                             viewState,
                                     const ::vclcanvas::RenderState&                           renderState,
@@ -264,7 +264,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
+        virtual rtl::Reference< vclcanvas::CachedBitmap >
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const ::vclcanvas::ViewState&                                   viewState,
                         const ::vclcanvas::RenderState&                                 renderState ) override

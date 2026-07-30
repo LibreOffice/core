@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "RenderState.hxx"
-#include "XCachedPrimitive.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <memory>
@@ -33,13 +32,12 @@ namespace vclcanvas
 {
     typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
-    typedef comphelper::WeakComponentImplHelper< vclcanvas::XCachedPrimitive,
-                                           css::lang::XServiceInfo > CachedBitmap_Base;
+    typedef comphelper::WeakComponentImplHelper<> CachedBitmap_Base;
     class CachedBitmap : public CachedBitmap_Base
     {
     public:
 
-        /** Create an XCachedPrimitive for given GraphicObject
+        /** Create an CachedBitmap for given GraphicObject
          */
         CachedBitmap( GraphicObjectSharedPtr                          xGraphicObject,
                       const ::Point&                                  rPoint,
@@ -52,13 +50,7 @@ namespace vclcanvas
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
-        // XCachedPrimitive
-        virtual ::sal_Int8 redraw( const ::vclcanvas::ViewState& aState ) override;
-
-        // XServiceInfo
-        virtual OUString getImplementationName(  ) override;
-        virtual bool supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+        ::sal_Int8 redraw( const ::vclcanvas::ViewState& aState );
 
     private:
         ::vclcanvas::ViewState                         maUsedViewState;

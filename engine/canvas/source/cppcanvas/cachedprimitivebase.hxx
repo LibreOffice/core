@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <XCachedPrimitive.hxx>
+#include <cachedbitmap.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -32,7 +32,7 @@
 namespace cppcanvas
     {
         /** Base class providing cached re-rendering, if XCanvas
-            returns XCachedPrimitive
+            returns CachedBitmap
 
             Derive from this class and implement private render()
             method to perform the actual primitive rendering. Return
@@ -69,10 +69,10 @@ namespace cppcanvas
         private:
             virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                           const vclcanvas::ViewState& rViewState,
-                                          css::uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+                                          rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
-            mutable css::uno::Reference< vclcanvas::XCachedPrimitive >      mxCachedPrimitive;
+            mutable rtl::Reference< vclcanvas::CachedBitmap >               mxCachedPrimitive;
             mutable ::basegfx::B2DHomMatrix                                 maLastTransformation;
             const bool                                                      mbOnlyRedrawWithSameTransform;
         };
