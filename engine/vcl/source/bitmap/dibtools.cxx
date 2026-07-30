@@ -35,6 +35,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/ColorMask.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <memory>
 
 #define DIBCOREHEADERSIZE       ( 12UL )
@@ -328,16 +329,7 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
 
 BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, const BitmapPalette& rPalette)
 {
-    const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
-    if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
-    {
-        auto nSanitizedIndex = nIndex % nPaletteEntryCount;
-        SAL_WARN_IF(nIndex != nSanitizedIndex, "vcl", "invalid colormap index: "
-                    << static_cast<unsigned int>(nIndex) << ", colormap len is: "
-                    << nPaletteEntryCount);
-        nIndex = nSanitizedIndex;
-    }
-    return BitmapColor(nIndex);
+    return BitmapColor(vcl::bitmap::sanitizePaletteIndex(nIndex, rPalette.GetEntryCount()));
 }
 
 bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteAccess& rAcc, const BitmapPalette& rPalette, bool bRLE4)

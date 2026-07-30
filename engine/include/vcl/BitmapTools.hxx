@@ -17,7 +17,9 @@
 #include <vcl/Scanline.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <array>
+#include <cstddef>
 #include <optional>
+#include <vector>
 #include <vcl/RawBitmap.hxx>
 
 class SvStream;
@@ -48,6 +50,18 @@ struct ScanlineChannelOffsets
 /** For a premultiplied 32-bit truecolor scanline format (ABGR/ARGB/BGRA/RGBA), return the byte offsets */
 VCL_DLLPUBLIC std::optional<ScanlineChannelOffsets>
 get32BitTcChannelOffsets(ScanlineFormat eFormat);
+
+/** Reduce an index modulo nEntryCount, so the result is below nEntryCount.
+
+    A count of zero has no valid index to give, so the index comes back as it came in.
+*/
+sal_uInt8 sanitizePaletteIndex(sal_uInt8 nIndex, std::size_t nEntryCount);
+
+/** The colour that nIndex names in rvPalette, with the index reduced to fit the palette.
+
+    An empty palette names no colour, so black stands in.
+*/
+const Color& sanitizedPaletteColor(std::vector<Color> const& rvPalette, sal_uInt8 nIndex);
 
 Bitmap VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 

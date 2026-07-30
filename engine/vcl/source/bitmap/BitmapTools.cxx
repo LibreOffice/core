@@ -46,6 +46,27 @@ using drawinglayer::primitive2d::Primitive2DReference;
 namespace vcl::bitmap
 {
 
+sal_uInt8 sanitizePaletteIndex(sal_uInt8 nIndex, std::size_t nEntryCount)
+{
+    if (nEntryCount == 0 || nIndex < nEntryCount)
+        return nIndex;
+
+    SAL_WARN("vcl", "invalid palette index: " << static_cast<unsigned int>(nIndex)
+                                              << ", palette len is: " << nEntryCount);
+    return nIndex % nEntryCount;
+}
+
+const Color& sanitizedPaletteColor(std::vector<Color> const& rvPalette, sal_uInt8 nIndex)
+{
+    if (rvPalette.empty())
+    {
+        SAL_WARN("vcl", "palette index " << static_cast<unsigned int>(nIndex) << " with no palette");
+        return COL_BLACK;
+    }
+
+    return rvPalette[sanitizePaletteIndex(nIndex, rvPalette.size())];
+}
+
 Bitmap loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 {
     bool bSuccess = true;
