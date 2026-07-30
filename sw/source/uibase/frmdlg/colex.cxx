@@ -121,7 +121,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                 const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
                 SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rHeaderSet.GetPool()));
 
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                           getActiveDocumentLinkReferer());
                 setHeaderFillAttributes(
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
@@ -157,7 +158,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                 const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
                 SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rFooterSet.GetPool()));
 
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                           getActiveDocumentLinkReferer());
                 setFooterFillAttributes(
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
@@ -172,7 +174,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         // create FillAttributes from SvxBrushItem
         SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rSet.GetPool()));
 
-        setSvxBrushItemAsFillAttributesToTargetSet(*pBrushItem, aTempSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(*pBrushItem, aTempSet,
+                                                   getActiveDocumentLinkReferer());
         setPageFillAttributes(
             std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                     aTempSet));
