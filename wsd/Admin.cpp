@@ -177,7 +177,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
         sendTextFrame("recv_bytes " + std::to_string(model.getRecvBytesTotal() / 1024));
 
     else if (tokens.equals(0, "uptime"))
-        sendTextFrame("uptime " + std::to_string(model.getServerUptimeSecs()));
+        sendTextFrame("uptime " + std::to_string(AdminModel::getServerUptimeSecs()));
 
     else if (tokens.equals(0, "log_lines"))
         sendTextFrame("log_lines " + _admin->getLogLines());
@@ -192,7 +192,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
             std::set<pid_t> pids = model.getDocumentPids();
             if (pids.find(pid) != pids.end())
             {
-                if (Admin::instance().logAdminAction())
+                if (Admin::logAdminAction())
                 {
                     LOG_ANY("Admin request to kill document ["
                             << Anonymizer::anonymizeUrl(model.getFilename(pid)) << "] with pid ["
@@ -243,7 +243,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
     else if (tokens.equals(0, "shutdown"))
     {
         LOG_INF("Setting ShutdownRequestFlag: Shutdown requested by admin.");
-        if (Admin::instance().logAdminAction())
+        if (Admin::logAdminAction())
         {
             LOG_ANY("Shutdown requested by admin with source IPAddress [" << _clientIPAdress
                                                                           << ']');
@@ -1215,7 +1215,7 @@ void MonitorSocketHandler::onDisconnect()
 {
     bool reconnect = false;
     // schedule monitor reconnect only if monitor uri exist in configuration
-    for (const auto& monitor : Admin::instance().getMonitorList())
+    for (const auto& monitor : Admin::getMonitorList())
     {
         const std::string uriWithoutParam = _uri.substr(0, _uri.find('?'));
         if (Util::iequal(monitor.first, uriWithoutParam))

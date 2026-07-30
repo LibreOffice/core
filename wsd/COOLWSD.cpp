@@ -3729,7 +3729,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
     PrisonerPoll->dumpState(os);
 
 #if !MOBILEAPP
-    _admin.dumpMetrics(); // Dump the state from the Admin poll thread.
+    Admin::dumpMetrics(); // Dump the state from the Admin poll thread.
 
     // If we have any DNS work going on.
     os << '\n';
@@ -4373,7 +4373,7 @@ void COOLWSD::innerMain()
     }
 #endif
 
-    COOLWSDServer::Instance->stopPrisoners();
+    COOLWSDServer::stopPrisoners();
 
     SigUtil::addActivity("prisoners stopped");
 

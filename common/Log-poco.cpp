@@ -544,7 +544,7 @@ namespace Log
 
     GenericLogger& logger()
     {
-        GenericLogger* logger = Static.getThreadLocalLogger();
+        GenericLogger* logger = StaticHelper::getThreadLocalLogger();
         if (logger != nullptr)
             return *logger;
 
@@ -556,7 +556,7 @@ namespace Log
 
     GenericLogger& loggerUI()
     {
-        GenericLogger* logger = StaticUILog.getThreadLocalLogger();
+        GenericLogger* logger = StaticHelper::getThreadLocalLogger();
         if (logger != nullptr)
             return *logger;
 
@@ -570,7 +570,7 @@ namespace Log
 
     bool isLogUIEnabled()
     {
-        return (StaticUILog.getThreadLocalLogger() != nullptr) ||
+        return (StaticHelper::getThreadLocalLogger() != nullptr) ||
                (StaticUILog.getLogger() != nullptr);
     }
 
@@ -602,7 +602,7 @@ namespace Log
 
         // Check if logger is properly initialized before calling logger()
         // to avoid invalid downcast from Poco::Logger to GenericLogger.
-        if (!Static.getThreadLocalLogger() && !Static.getLogger())
+        if (!StaticHelper::getThreadLocalLogger() && !Static.getLogger())
             return false;
 
         Log::Level logLevel = GenericLogger::mapToLevel(
@@ -696,7 +696,7 @@ namespace Log
                                              std::move(channel),
                                              Poco::Logger::parseLevel(logLevel));
 
-        Static.setThreadLocalLogger(&logger);
+        StaticHelper::setThreadLocalLogger(&logger);
     }
 
     const std::string& getLevelName()

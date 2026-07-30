@@ -659,7 +659,7 @@ void DocumentBroker::pollThread()
                             << ", Upload failures: " << _storageManager.uploadFailureCount()
 #if !MOBILEAPP
                             << ". Giving up"
-                            << (_storage && _quarantine && _quarantine->isEnabled()
+                            << (_storage && _quarantine && Quarantine::isEnabled()
                                     ? ". The document should be recoverable from the quarantine. "
                                     : ", but Quarantine is disabled. ")
 #endif // !MOBILEAPP
@@ -907,11 +907,11 @@ void DocumentBroker::pollThread()
         // Quarantine the last copy, if different.
         LOG_WRN((dataLoss ? "Data loss " : "Crash ")
                 << "detected on [" << getDocKey() << ']'
-                << (_storage && _quarantine && _quarantine->isEnabled()
+                << (_storage && _quarantine && Quarantine::isEnabled()
                         ? ". Will quarantine the last version. "
                         : ", but Quarantine is disabled. ")
                 << "Storage available: " << bool(_storage));
-        if (_storage && _quarantine && _quarantine->isEnabled())
+        if (_storage && _quarantine && Quarantine::isEnabled())
         {
             const std::string uploading = _storage->getRootFilePathUploading();
             if (FileUtil::Stat(uploading).exists())
@@ -3090,7 +3090,7 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
         const std::string oldName = _storage->getRootFilePathToUpload();
         if (FileUtil::Stat(oldName).exists())
         {
-            if (_quarantine && _quarantine->isEnabled())
+            if (_quarantine && Quarantine::isEnabled())
             {
                 // Quarantine the file before renaming, if it exists.
                 LOG_DBG("Quarantining the old file after saving: " << oldName);
@@ -6481,7 +6481,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     if constexpr (!Util::isMobileApp())
     {
         os << "\n  last quarantined version: "
-           << (_quarantine && _quarantine->isEnabled() ? _quarantine->lastQuarantinedFilePath()
+           << (_quarantine && Quarantine::isEnabled() ? _quarantine->lastQuarantinedFilePath()
                                                        : "<unavailable>");
     }
 
