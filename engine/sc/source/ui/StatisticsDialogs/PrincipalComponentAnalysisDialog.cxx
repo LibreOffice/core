@@ -33,6 +33,7 @@ namespace
 const SCROW nMeanRow = 0;
 const SCROW nDeviationRow = 1;
 const SCROW nLabelRow = 2;
+const SCROW nFirstValueRow = nLabelRow + 1;
 
 OUString FillIn(TranslateId aMessageId, std::u16string_view aVariable, std::u16string_view aValue)
 {
@@ -189,7 +190,6 @@ bool ScPrincipalComponentAnalysisDialog::InputIsValid()
     }
 
     const sal_Int32 nRank = std::min<sal_Int32>(nRowCount, nColumnCount);
-    const SCROW nFirstValueRow = mbWithLabels ? nLabelRow + 1 : nLabelRow;
     // The right vectors have one row per column of the data, so with more
     // columns than rows they reach further down than the standardized values.
     const sal_Int32 nBlockHeight = std::max<sal_Int32>(nRowCount, nColumnCount);
@@ -259,7 +259,6 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     const SCCOL nColumnCount = maDataRange.aEnd.Col() - maDataRange.aStart.Col() + 1;
     const SCROW nRowCount = maDataRange.aEnd.Row() - maDataRange.aStart.Row() + 1;
     const SCCOL nRank = static_cast<SCCOL>(std::min<sal_Int32>(nRowCount, nColumnCount));
-    const SCROW nFirstValueRow = mbWithLabels ? nLabelRow + 1 : nLabelRow;
 
     AddressWalkerWriter aOutput(ScAddress(0, nMeanRow, nOutputTab), &rDocShell, mrDocument,
                                 formula::FormulaGrammar::mergeToGrammar(
@@ -290,26 +289,50 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     }
     aOutput.newLine();
 
-    if (mbWithLabels)
+    auto aNumberedLabel = [&aTemplate](TranslateId aTemplateId, SCCOL nColumn) {
+        aTemplate.setTemplate(ScResId(aTemplateId));
+        aTemplate.applyNumber(u"%NUMBER%", nColumn + 1);
+        return aTemplate.getTemplate();
+    };
+
+    // A header row naming every column of what follows. The features take the
+    // labels of the source columns, and a source column with no label of its
+    // own is named after its place in the range.
+    for (SCCOL nColumn = 0; nColumn < nColumnCount; ++nColumn)
     {
-        for (SCCOL nColumn = 0; nColumn < nColumnCount; ++nColumn)
-        {
-            const OUString aLabel = mrDocument.GetString(maDataRange.aStart.Col() + nColumn,
-                                                         maInputRange.aStart.Row(), nSourceTab);
-            if (aLabel.isEmpty())
-            {
-                aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
-                aTemplate.applyNumber(u"%NUMBER%", nColumn + 1);
-                aOutput.writeBoldString(aTemplate.getTemplate());
-            }
-            else
-            {
-                aOutput.writeBoldString(aLabel);
-            }
-            aOutput.nextColumn();
-        }
-        aOutput.newLine();
+        OUString aLabel;
+        if (mbWithLabels)
+            aLabel = mrDocument.GetString(maDataRange.aStart.Col() + nColumn,
+                                          maInputRange.aStart.Row(), nSourceTab);
+        if (aLabel.isEmpty())
+            aLabel = aNumberedLabel(STR_FEATURE_LABEL_TEMPLATE, nColumn);
+        aOutput.writeBoldString(aLabel);
+        aOutput.nextColumn();
     }
+
+    // One score column per component, holding where each observation sits
+    // along it.
+    for (SCCOL nColumn = 0; nColumn < nRank; ++nColumn)
+    {
+        aOutput.writeBoldString(aNumberedLabel(STR_COMPONENT_SCORE_LABEL_TEMPLATE, nColumn));
+        aOutput.nextColumn();
+    }
+
+    aOutput.writeBoldString(ScResId(STR_SINGULAR_VALUE_LABEL));
+    aOutput.nextColumn();
+
+    // One loading column per component, holding how much each feature weighs
+    // in it.
+    for (SCCOL nColumn = 0; nColumn < nRank; ++nColumn)
+    {
+        aOutput.writeBoldString(aNumberedLabel(STR_COMPONENT_LOADING_LABEL_TEMPLATE, nColumn));
+        aOutput.nextColumn();
+    }
+
+    aOutput.writeBoldString(ScResId(STR_VARIANCE_SHARE_LABEL));
+    aOutput.nextColumn();
+    aOutput.writeBoldString(ScResId(STR_CUMULATIVE_VARIANCE_SHARE_LABEL));
+    aOutput.newLine();
 
     for (SCCOL nColumn = 0; nColumn < nColumnCount; ++nColumn)
     {

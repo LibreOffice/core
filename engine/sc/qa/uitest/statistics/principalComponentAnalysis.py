@@ -23,8 +23,9 @@ aColumns = [
     ("Age", [30, 20, 40, 10, 50]),
 ]
 
-# The mean row, the standard deviation row and the label row come before the
+# The mean row, the standard deviation row and the header row come before the
 # standardized values.
+nHeaderRow = 2
 nFirstValueRow = 3
 
 
@@ -66,10 +67,17 @@ class principalComponentAnalysis(UITestCase):
 
             self.assertEqual(document.Sheets.getByIndex(1).Name, "Sheet1_PCA")
 
-            # The label row is copied over as it stands.
-            for nColumn, (sLabel, _) in enumerate(aColumns):
-                self.assertEqual(
-                    get_cell_by_position(document, 1, nColumn, 2).getString(), sLabel)
+            # The feature columns take the labels of the source columns, and
+            # every column after them says what it holds.
+            aExpectedHeader = [sLabel for sLabel, _ in aColumns] \
+                + ["Score_1", "Score_2", "Score_3"] \
+                + ["Singular value"] \
+                + ["Loading_1", "Loading_2", "Loading_3"] \
+                + ["Variance share", "Cumulative share"]
+            aHeader = [
+                get_cell_by_position(document, 1, nColumn, nHeaderRow).getString()
+                for nColumn in range(len(aExpectedHeader))]
+            self.assertEqual(aHeader, aExpectedHeader)
 
             # The mean and the standard deviation of every column sit above the
             # standardized values.
@@ -150,7 +158,7 @@ class principalComponentAnalysis(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
             self.assertEqual(document.Sheets.getCount(), 1)
 
-    def test_the_first_row_holds_data_when_the_labels_box_is_left_clear(self):
+    def test_features_are_named_after_their_place_when_the_source_has_no_labels(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -158,10 +166,38 @@ class principalComponentAnalysis(UITestCase):
 
             self.runAnalysis(gridwin, "$A$1:$C$5", False)
 
-            # Without a label row the standardized values start one row higher.
+            # With nothing to take a name from, each feature is named after its
+            # place in the range, and the header row is there all the same.
+            for nColumn in range(len(aColumns)):
+                self.assertEqual(
+                    get_cell_by_position(document, 1, nColumn, nHeaderRow).getString(),
+                    "Feature_" + str(nColumn + 1))
+
+            # Every row of the source counts as data, so the mean covers all
+            # five and the standardized values start below the header row.
             self.assertEqual(get_cell_by_position(document, 1, 0, 0).getValue(), 14)
             self.assertEqual(
-                round(get_cell_by_position(document, 1, 0, 2).getValue(), 10), -1.2649110641)
+                round(get_cell_by_position(document, 1, 0, nFirstValueRow).getValue(), 10),
+                -1.2649110641)
+
+    def test_a_labelled_source_column_left_blank_is_named_after_its_place(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            self.enterData(gridwin, True)
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+            self.xUITest.executeCommand(".uno:ClearContents")
+
+            self.runAnalysis(gridwin, "$A$1:$C$6", True)
+
+            # The labelled columns keep their names and the blank one falls back
+            # to its place in the range.
+            self.assertEqual(
+                get_cell_by_position(document, 1, 0, nHeaderRow).getString(), "Height")
+            self.assertEqual(
+                get_cell_by_position(document, 1, 1, nHeaderRow).getString(), "Feature_2")
+            self.assertEqual(
+                get_cell_by_position(document, 1, 2, nHeaderRow).getString(), "Age")
 
     def test_a_cell_that_is_not_a_number_stops_the_analysis(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:

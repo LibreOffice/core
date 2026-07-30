@@ -372,6 +372,12 @@
 #define STR_MESSAGE_TOO_FEW_DATA_ROWS               NC_("STR_MESSAGE_TOO_FEW_DATA_ROWS", "The data range needs at least two rows of numbers.")
 #define STR_MESSAGE_TOO_FEW_DATA_COLUMNS            NC_("STR_MESSAGE_TOO_FEW_DATA_COLUMNS", "The data range needs at least two columns.")
 #define STR_MESSAGE_RANGE_SPANS_SHEETS              NC_("STR_MESSAGE_RANGE_SPANS_SHEETS", "The data range has to be on a single sheet.")
+#define STR_FEATURE_LABEL_TEMPLATE                  NC_("STR_FEATURE_LABEL_TEMPLATE", "Feature_%NUMBER%")
+#define STR_COMPONENT_SCORE_LABEL_TEMPLATE          NC_("STR_COMPONENT_SCORE_LABEL_TEMPLATE", "Score_%NUMBER%")
+#define STR_COMPONENT_LOADING_LABEL_TEMPLATE        NC_("STR_COMPONENT_LOADING_LABEL_TEMPLATE", "Loading_%NUMBER%")
+#define STR_SINGULAR_VALUE_LABEL                    NC_("STR_SINGULAR_VALUE_LABEL", "Singular value")
+#define STR_VARIANCE_SHARE_LABEL                    NC_("STR_VARIANCE_SHARE_LABEL", "Variance share")
+#define STR_CUMULATIVE_VARIANCE_SHARE_LABEL         NC_("STR_CUMULATIVE_VARIANCE_SHARE_LABEL", "Cumulative share")
 /*Insert image dialog*/
 #define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")
