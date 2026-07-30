@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <comphelper/propertysequence.hxx>
@@ -58,6 +60,7 @@
 #include <itabenum.hxx>
 #include <redline.hxx>
 #include <UndoRedline.hxx>
+#include <editeng/memberids.h>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -1415,6 +1418,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCloseDocWithFillBitmapLinkTracker)
     // ~FillBitmapLinkTracker as the document was destroyed.
     mxComponent->dispose();
     mxComponent.clear();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBrushGraphicLinkProtocols)
+{
+    // Register every configured content provider, as a running office does.
+    uno::Reference<lang::XInitialization> xBroker(
+        m_xSFactory->createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr),
+        uno::UNO_QUERY_THROW);
+    xBroker->initialize({});
+
+    const OUString aFileURL
+        = m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/TypeDetectionExample.png");
+    SvxBrushItem aFileBrush(aFileURL, OUString(), GPOS_TILED, RES_BACKGROUND);
+    uno::Any aValue;
+    CPPUNIT_ASSERT(aFileBrush.QueryValue(aValue, MID_GRAPHIC));
+    CPPUNIT_ASSERT(aValue.get<uno::Reference<graphic::XGraphic>>().is());
+
+    // A picture named through a protocol that does not name a picture file gives none.
+    SvxBrushItem aExpandBrush(u"vnd.sun.star.expand:$BRAND_BASE_DIR/program/intro.png"_ustr,
+                              OUString(), GPOS_TILED, RES_BACKGROUND);
+    CPPUNIT_ASSERT(aExpandBrush.QueryValue(aValue, MID_GRAPHIC));
+    CPPUNIT_ASSERT(!aValue.get<uno::Reference<graphic::XGraphic>>().is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

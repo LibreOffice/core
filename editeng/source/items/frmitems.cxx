@@ -4660,15 +4660,8 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRAPHIC:
         {
             uno::Reference<graphic::XGraphic> xGraphic;
-            if (!maStrLink.isEmpty())
-            {
-                Graphic aGraphic(vcl::graphic::loadFromURL(maStrLink));
-                xGraphic = aGraphic.GetXGraphic();
-            }
-            else if (mxGraphicObject)
-            {
-                xGraphic = mxGraphicObject->GetGraphic().GetXGraphic();
-            }
+            if (const GraphicObject* pGraphicObject = GetGraphicObject())
+                xGraphic = pGraphicObject->GetGraphic().GetXGraphic();
             rVal <<= xGraphic;
         }
         break;
