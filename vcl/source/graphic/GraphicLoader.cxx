@@ -11,6 +11,8 @@
 #include <vcl/GraphicLoader.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <sal/log.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/weld.hxx>
@@ -22,6 +24,13 @@ namespace vcl::graphic
 Graphic loadFromURL(OUString const& rURL, weld::Window* pParentWin)
 {
     Graphic aGraphic;
+
+    // Internal schemes are not followed.
+    if (INetURLObject(rURL).IsExoticProtocol())
+    {
+        SAL_WARN("vcl", "Ignore exotic protocol: " << rURL);
+        return aGraphic;
+    }
 
     std::unique_ptr<SvStream> pInputStream = utl::UcbStreamHelper::CreateStream(
         rURL, StreamMode::READ, pParentWin ? pParentWin->GetXWindow() : nullptr);
