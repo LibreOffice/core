@@ -45,12 +45,18 @@ private:
     ScRange maDataRange;
     bool mbWithLabels;
 
+    // Which of the two charts the sheet is to carry.
+    bool mbVarianceChart;
+    bool mbCorrelationCircleChart;
+
     bool mbDialogLostFocus;
 
     std::unique_ptr<weld::Label> mxInputRangeLabel;
     std::unique_ptr<formula::RefEdit> mxInputRangeEdit;
     std::unique_ptr<formula::RefButton> mxInputRangeButton;
     std::unique_ptr<weld::CheckButton> mxWithLabelsCheckBox;
+    std::unique_ptr<weld::CheckButton> mxVarianceChartCheckBox;
+    std::unique_ptr<weld::CheckButton> mxCorrelationChartCheckBox;
     std::unique_ptr<weld::Label> mxErrorMessage;
     std::unique_ptr<weld::Button> mxButtonCalculate;
     std::unique_ptr<weld::Button> mxButtonCancel;
@@ -83,11 +89,12 @@ private:
         the running total of it, as bars with a line over them. */
     void AddVarianceChart(ScDocShell& rDocShell, const ScRange& rShareRange, SCCOL nChartColumn);
 
-    /** Draws rDataRange as a correlation circle. Its last two columns are the
-        two components the features are placed against, and every column before
-        them is a feature. */
+    /** Draws rDataRange as a correlation circle, nTopOffset in hundredths of a
+        millimetre below the top of the anchor cell. Its last two columns are
+        the two components the features are placed against, and every column
+        before them is a feature. */
     void AddCorrelationCircleChart(ScDocShell& rDocShell, const ScRange& rDataRange,
-                                   SCCOL nChartColumn);
+                                   SCCOL nChartColumn, sal_Int32 nTopOffset);
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(CheckBoxToggled, weld::Toggleable&, void);

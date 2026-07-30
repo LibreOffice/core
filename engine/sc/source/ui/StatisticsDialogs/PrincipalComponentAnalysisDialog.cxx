@@ -87,12 +87,16 @@ ScPrincipalComponentAnalysisDialog::ScPrincipalComponentAnalysisDialog(SfxBindin
     , maAddressDetails(mrDocument.GetAddressConvention(), 0, 0)
     , maDataRange(ScAddress::INITIALIZE_INVALID)
     , mbWithLabels(false)
+    , mbVarianceChart(false)
+    , mbCorrelationCircleChart(false)
     , mbDialogLostFocus(false)
     , mxInputRangeLabel(m_xBuilder->weld_label(u"input-range-label"_ustr))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry(u"input-range-edit"_ustr)))
     , mxInputRangeButton(
           new formula::RefButton(m_xBuilder->weld_button(u"input-range-button"_ustr)))
     , mxWithLabelsCheckBox(m_xBuilder->weld_check_button(u"withlabels-check"_ustr))
+    , mxVarianceChartCheckBox(m_xBuilder->weld_check_button(u"variance-chart-check"_ustr))
+    , mxCorrelationChartCheckBox(m_xBuilder->weld_check_button(u"correlation-chart-check"_ustr))
     , mxErrorMessage(m_xBuilder->weld_label(u"error-message"_ustr))
     , mxButtonCalculate(m_xBuilder->weld_button(u"ok"_ustr))
     , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
@@ -200,6 +204,8 @@ bool ScPrincipalComponentAnalysisDialog::InputIsValid()
     }
 
     mbWithLabels = mxWithLabelsCheckBox->get_active();
+    mbVarianceChart = mxVarianceChartCheckBox->get_active();
+    mbCorrelationCircleChart = mxCorrelationChartCheckBox->get_active();
 
     maDataRange = maInputRange;
     if (mbWithLabels)
@@ -443,7 +449,8 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     // them, which names the two things it draws.
     const ScRange aShareRange(ScAddress(nShareColumn, nLabelRow, nOutputTab),
                               ScAddress(nShareColumn + 1, nFirstValueRow + nRank - 1, nOutputTab));
-    AddVarianceChart(rDocShell, aShareRange, nShareColumn + 3);
+    if (mbVarianceChart)
+        AddVarianceChart(rDocShell, aShareRange, nShareColumn + 3);
 
     // The standardized values run straight into the scores, so one range holds
     // the features followed by the first two components, which is the order the
@@ -451,7 +458,12 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     const ScRange aCorrelationRange(
         ScAddress(0, nLabelRow, nOutputTab),
         ScAddress(nColumnCount + 1, nFirstValueRow + nRowCount - 1, nOutputTab));
-    AddCorrelationCircleChart(rDocShell, aCorrelationRange, nShareColumn + 3);
+    if (mbCorrelationCircleChart)
+    {
+        // With no chart of the variance above it the circle starts at the top.
+        const sal_Int32 nTopOffset = mbVarianceChart ? nChartHeight + nChartGap : 0;
+        AddCorrelationCircleChart(rDocShell, aCorrelationRange, nShareColumn + 3, nTopOffset);
+    }
 
     const SCROW nBlockHeight = std::max<SCROW>(nRowCount, nColumnCount);
     return ScRange(
@@ -593,17 +605,17 @@ void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
 
 void ScPrincipalComponentAnalysisDialog::AddCorrelationCircleChart(ScDocShell& rDocShell,
                                                                    const ScRange& rDataRange,
-                                                                   SCCOL nChartColumn)
+                                                                   SCCOL nChartColumn,
+                                                                   sal_Int32 nTopOffset)
 {
     try
     {
-        // Under the chart of the variance, in the same column.
         const tools::Rectangle aCell = ScDrawLayer::GetCellRect(
             mrDocument, ScAddress(nChartColumn, nMeanRow, rDataRange.aStart.Tab()), false);
-        css::uno::Reference<css::chart2::XChartDocument> xChartDocument = CreateSheetChart(
-            rDocShell, rDataRange,
-            css::awt::Rectangle(aCell.Left(), aCell.Top() + nChartHeight + nChartGap,
-                                nCircleChartSide, nCircleChartSide));
+        css::uno::Reference<css::chart2::XChartDocument> xChartDocument
+            = CreateSheetChart(rDocShell, rDataRange,
+                               css::awt::Rectangle(aCell.Left(), aCell.Top() + nTopOffset,
+                                                   nCircleChartSide, nCircleChartSide));
 
         // The template reads the last two columns of the range as the pair of
         // components the features are placed against, and every column before

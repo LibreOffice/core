@@ -41,7 +41,8 @@ class principalComponentAnalysis(UITestCase):
                 enter_text_to_cell(gridwin, sColumn + str(nRow), str(fValue))
                 nRow += 1
 
-    def runAnalysis(self, gridwin, sRange, bWithLabels, close_button="ok"):
+    def runAnalysis(self, gridwin, sRange, bWithLabels, close_button="ok",
+                    aClearBoxes=()):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": sRange}))
         with self.ui_test.execute_modeless_dialog_through_command(
                 ".uno:PrincipalComponentAnalysisDialog", close_button=close_button) as xDialog:
@@ -50,7 +51,10 @@ class principalComponentAnalysis(UITestCase):
             xInputRangeEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
             xInputRangeEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$Sheet1." + sRange}))
 
-            if bWithLabels:
+            # Every box starts ticked, so one is only clicked to clear it.
+            for sBox in aClearBoxes:
+                xDialog.getChild(sBox).executeAction("CLICK", tuple())
+            if not bWithLabels:
                 xDialog.getChild("withlabels-check").executeAction("CLICK", tuple())
 
             if close_button != "ok":
@@ -326,6 +330,43 @@ class principalComponentAnalysis(UITestCase):
 
             self.assertIn("$C$5", self.sErrorMessage)
             self.assertEqual(document.Sheets.getCount(), 1)
+
+    def test_every_box_starts_ticked(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            self.enterData(gridwin, True)
+
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "$A$1:$C$6"}))
+            with self.ui_test.execute_modeless_dialog_through_command(
+                    ".uno:PrincipalComponentAnalysisDialog", close_button="cancel") as xDialog:
+                for sBox in ("withlabels-check", "variance-chart-check",
+                             "correlation-chart-check"):
+                    self.assertEqual(
+                        get_state_as_dict(xDialog.getChild(sBox))["Selected"], "true")
+
+    def test_clearing_a_chart_box_leaves_that_chart_out(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            self.enterData(gridwin, True)
+
+            # Only the correlation circle is asked for, so it is the one chart
+            # on the sheet.
+            self.runAnalysis(gridwin, "$A$1:$C$6", True,
+                             aClearBoxes=("variance-chart-check",))
+            oCharts = document.Sheets.getByIndex(1).Charts
+            self.assertEqual(oCharts.getCount(), 1)
+            self.assertEqual(
+                oCharts.getByIndex(0).getEmbeddedObject().getFirstDiagram()
+                .getCoordinateSystems()[0].getChartTypes()[0].getChartType(),
+                "com.sun.star.chart2.CorrelationCircleChartType")
+
+            # Clearing both leaves the numbers on their own.
+            self.xUITest.executeCommand(".uno:Undo")
+            self.runAnalysis(gridwin, "$A$1:$C$6", True,
+                             aClearBoxes=("variance-chart-check", "correlation-chart-check"))
+            self.assertEqual(document.Sheets.getByIndex(1).Charts.getCount(), 0)
 
     def test_a_single_column_cannot_be_analysed(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
