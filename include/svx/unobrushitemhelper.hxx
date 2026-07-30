@@ -37,9 +37,16 @@ class SfxItemSet;
 // Set the equivalent in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST] in the given
 // SfxItemSet to create the same FillStyle as is expressed by the given SvxBrushItem.
 // This method will reset all items in the XATTR_FILL_* range first.
+// rReferer is the name of the document the brush came from, or an empty string when no
+// document named it.
 SVXCORE_DLLPUBLIC void setSvxBrushItemAsFillAttributesToTargetSet(
     const SvxBrushItem& rBrush,
-    SfxItemSet& rToSet);
+    SfxItemSet& rToSet,
+    OUString const& rReferer);
+
+// The file name carried by the active document shell, or an empty string when there is no
+// active shell or the shell has no file name.
+SVXCORE_DLLPUBLIC OUString getActiveDocumentLinkReferer();
 
 // Create a SvxBrushItem as close as possible to the settings in the DrawingLayer
 // items in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Since this is not 100%

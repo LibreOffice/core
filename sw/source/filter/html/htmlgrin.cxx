@@ -308,13 +308,7 @@ namespace
 {
     bool allowAccessLink(const SwDoc& rDoc)
     {
-        OUString sReferer;
-        SfxObjectShell * sh = rDoc.GetPersist();
-        if (sh != nullptr && sh->HasName())
-        {
-            sReferer = sh->GetMedium()->GetName();
-        }
-        return !SvtSecurityOptions::isUntrustedReferer(sReferer);
+        return !SvtSecurityOptions::isUntrustedReferer(rDoc.GetLinkReferer());
     }
 }
 
