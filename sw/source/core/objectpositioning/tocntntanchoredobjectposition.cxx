@@ -1227,7 +1227,8 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             = SwTextBoxHelper::getOtherTextBoxFormat(&rFrameFormat, RES_FLYFRMFMT);
         if (pShapeOfTextBox)
         {
-            SwTwips nYDiff = pShapeOfTextBox->GetWrapInfluenceOnObjPos().GetOverlapVertOffset();
+            SwTwips nYDiff
+                = pShapeOfTextBox->GetWrapInfluenceOnObjPos().GetOverlapVertOffset().as_twip<SwTwips>();
             if (nYDiff > 0)
             {
                 rRelPos.setY(rRelPos.getY() + nYDiff + 1);
@@ -1376,7 +1377,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         // Store our offset that avoids the overlap. If this is a shape of a textbox, then the frame
         // of the textbox will use it.
         SwFormatWrapInfluenceOnObjPos aInfluence(rFrameFormat.GetWrapInfluenceOnObjPos());
-        aInfluence.SetOverlapVertOffset(nYDiff);
+        aInfluence.SetOverlapVertOffset(gfx::Length::twip(nYDiff));
         const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
         const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr(aInfluence);
         const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
