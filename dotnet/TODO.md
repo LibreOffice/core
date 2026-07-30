@@ -41,14 +41,16 @@ Rendering on top of a shaky reader wastes effort twice.
 
 Nothing else can be verified until these work.
 
-- [ ] **Format identification** (`Paperless.Core`, `Paperless.Containers`).
-      Implement `IFormatIdentifier` and the `IFormatCatalogue` from the table in
-      `research/01-formats-and-detection.md`. Content-based, extension only as a
-      tie-breaker.
-- [ ] **OLE2 / CFB reader** (`Paperless.Containers`). Byte layouts are in
-      `research/05-infrastructure.md` section A. Must tolerate malformed files —
-      wrong CLSIDs, overlong FAT chains, inconsistent directory trees are all common.
-      Decide then whether `OpenMcdf` suffices or a hand-rolled Span-based reader is needed.
+- [x] **Format identification** (`Paperless.Core`, `Paperless.Containers`). Done:
+      `FormatCatalogue` covers all 43 formats; `FormatIdentifier` detects by content via
+      ODF `mimetype`, OOXML main-part content type (resolved through `_rels/.rels`), OLE2
+      root stream names, and text/XML signatures. Verified against all 17 corpus formats,
+      including with deliberately wrong extensions and with no file name at all.
+- [x] **OLE2 / CFB reader** (`Paperless.Containers`). Done, hand-rolled: header, DIFAT/FAT
+      chains, mini-FAT and mini-stream, directory walk with cycle guard. Tolerates truncated
+      files, out-of-range sectors, cyclic chains and duplicate entries, reporting each as a
+      `Diagnostic`. `OpenMcdf` was not needed and its package reference should be dropped
+      once nothing else wants it.
 - [ ] **ZIP + OPC + ODF packages** (`Paperless.Containers`). `System.IO.Compression` for
       the ZIP layer; hand-roll content-type resolution and relationships.
 - [ ] **`paperless identify`** end to end. First externally visible behaviour, and it makes

@@ -1,0 +1,5 @@
+Region,Units,Price,Total
+North,12,4.50,=B2*C2
+South,7,4.50,=B3*C3
+East,23,3.25,=B4*C4
+West,4,3.25,=B5*C5
