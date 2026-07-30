@@ -14,6 +14,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <comphelper/configuration.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -730,6 +731,10 @@ DECLARE_OOXMLEXPORT_TEST(testFieldMarkFormat, "fontsize-field-separator.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, tdf167527_title_letters_cut_from_below)
 {
+    // The Kit leaves field shadings off, so there is no field background to measure
+    if (comphelper::COKit::isActive())
+        return;
+
     createSwDoc("tdf167527_title_letters_cut_from_below.docx");
 
     SwDocShell* pDocShell = getSwDocShell();

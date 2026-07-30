@@ -22,6 +22,7 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <svtools/rtfkeywd.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sot/storage.hxx>
@@ -894,9 +895,17 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShade)
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    // Without the accompanying fix in place, this test would have failed with 'Expected: 1; Actual:
-    // 0', i.e. shading for the field was lost.
-    assertXPath(pDoc, "/html/body/p[1]/span", "style", u"background: #c0c0c0");
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit leaves field shadings off, so nothing wraps the field
+        assertXPath(pDoc, "/html/body/p[1]/span", 0);
+    }
+    else
+    {
+        // Without the accompanying fix in place, this test would have failed with 'Expected: 1;
+        // Actual: 0', i.e. shading for the field was lost.
+        assertXPath(pDoc, "/html/body/p[1]/span", "style", u"background: #c0c0c0");
+    }
 
     // Check that field shading is written only in case there is no user-defined span background.
     assertXPath(pDoc, "/html/body/p[2]/span", "style", u"background: #ff0000");
