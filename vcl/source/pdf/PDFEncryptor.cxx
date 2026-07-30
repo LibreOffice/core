@@ -13,7 +13,6 @@
 #include <vcl/pdfwriter.hxx>
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <array>
 
