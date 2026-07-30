@@ -264,6 +264,12 @@ public:
 
 static const Color& SanitizePaletteIndex(std::vector<Color> const & rvPalette, sal_uInt8 nIndex)
 {
+    if (rvPalette.empty())
+    {
+        SAL_WARN("filter.pict", "palette index " << static_cast<unsigned int>(nIndex)
+                 << " with no palette");
+        return COL_BLACK;
+    }
     if (nIndex >= rvPalette.size())
     {
         auto nSanitizedIndex = nIndex % rvPalette.size();
@@ -843,6 +849,9 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
     // read and write Bitmap bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
+        if (aPalette.empty())
+            return 0xffffffff;
+
         sal_uInt16  nSrcBPL, nDestBPL;
         size_t nCount;
 
