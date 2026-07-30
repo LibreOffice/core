@@ -56,24 +56,22 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     mxUnderline.clear();
     mxStrikeout.clear();
 
-    uno::Reference<vclcanvas::XGraphicDevice> xDevice = mpCanvas->getUNOCanvas()->getDevice();
-
     if (aOverline.count())
     {
         aRange.expand(aOverline.getB2DRange());
-        mxOverline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aOverline);
+        mxOverline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aOverline);
     }
 
     if (aUnderline.count())
     {
         aRange.expand(aUnderline.getB2DRange());
-        mxUnderline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aUnderline);
+        mxUnderline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aUnderline);
     }
 
     if (aStrikeout.count())
     {
         aRange.expand(aStrikeout.getB2DRange());
-        mxStrikeout = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aStrikeout);
+        mxStrikeout = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aStrikeout);
     }
 
     initLineStyleWaveline(rLineInfo.mnOverlineStyle, mbOverlineWaveline, mbOverlineWavelineBold);

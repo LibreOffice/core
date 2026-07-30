@@ -129,7 +129,6 @@ namespace cppcanvastools
          */
         bool modifyClip( ::vclcanvas::RenderState&                       o_rRenderState,
                          const struct ::cppcanvas::OutDevState&   rOutdevState,
-                         const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
                          const double*                                      pRotation );

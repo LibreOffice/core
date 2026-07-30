@@ -394,12 +394,10 @@ namespace canvastools
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
 
         CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolygon( const css::uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
-                                        const ::basegfx::B2DPolygon&                        rPoly    );
+            xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    );
 
         CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< vclcanvas::XGraphicDevice >& xGraphicDevice,
-                                            const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
+            xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)
 

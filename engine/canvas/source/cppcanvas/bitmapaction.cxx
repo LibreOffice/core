@@ -90,7 +90,6 @@ namespace cppcanvas
                 // correct clip (which is relative to original transform)
                 cppcanvastools::modifyClip( maState,
                                    rState,
-                                   rCanvas,
                                    rDstPoint,
                                    nullptr,
                                    nullptr );
@@ -121,7 +120,6 @@ namespace cppcanvas
                 // correct clip (which is relative to original transform)
                 cppcanvastools::modifyClip( maState,
                                    rState,
-                                   rCanvas,
                                    rDstPoint,
                                    &aScale,
                                    nullptr );

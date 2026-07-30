@@ -82,7 +82,7 @@ namespace cppcanvas
                                             bool                                bFill,
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rPolyPoly) ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -101,7 +101,7 @@ namespace cppcanvas
                                             bool                                bStroke,
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rPolyPoly) ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -218,7 +218,7 @@ namespace cppcanvas
                                                             const OutDevState&               rState,
                                                             const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
-                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maTexture( rTexture )
             {
@@ -295,7 +295,7 @@ namespace cppcanvas
                                                           const OutDevState&                    rState,
                                                           rendering::StrokeAttributes           aStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maStrokeAttributes(std::move( aStrokeAttributes ))
             {

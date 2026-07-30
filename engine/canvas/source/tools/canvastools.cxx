@@ -372,12 +372,8 @@ namespace canvastools
             }
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
-                                                                                    const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
-            if( !xGraphicDevice.is() )
-                return {};
-
             // vcl only handles even_odd polygons
             rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon( rPolyPoly, rendering::FillRule_EVEN_ODD );
 
@@ -387,12 +383,8 @@ namespace canvastools
                 return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
-                                                                                const ::basegfx::B2DPolygon&                        rPoly    )
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    )
         {
-            if( !xGraphicDevice.is() )
-                return {};
-
             // vcl only handles even_odd polygons
             rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon(basegfx::B2DPolyPolygon(rPoly), rendering::FillRule_EVEN_ODD);
 

@@ -55,8 +55,7 @@ namespace cppcanvas
         {
             void init( vclcanvas::RenderState&                  o_rRenderState,
                        const ::basegfx::B2DPoint&               rStartPoint,
-                       const OutDevState&                       rState,
-                       const CanvasSharedPtr&                   rCanvas      )
+                       const OutDevState&                       rState)
             {
                 cppcanvastools::initRenderState(o_rRenderState,rState);
 
@@ -68,7 +67,6 @@ namespace cppcanvas
                 // state transform.
                 cppcanvastools::modifyClip( o_rRenderState,
                                    rState,
-                                   rCanvas,
                                    rStartPoint,
                                    nullptr,
                                    &rState.fontRotation );
@@ -107,8 +105,7 @@ namespace cppcanvas
 
                 init( o_rRenderState,
                       rStartPoint,
-                      rState,
-                      rCanvas );
+                      rState );
             }
 
             void init( vclcanvas::RenderState&                      o_rRenderState,
@@ -523,7 +520,6 @@ namespace cppcanvas
 
             void initEffectLinePolyPolygon( ::basegfx::B2DSize&                             o_rOverallSize,
                                             uno::Reference< rendering::XPolyPolygon2D >&    o_rTextLines,
-                                            const CanvasSharedPtr&                          rCanvas,
                                             double                                          nLineWidth,
                                             const cppcanvastools::TextLineInfo&                      rLineInfo   )
             {
@@ -534,7 +530,6 @@ namespace cppcanvas
                 o_rOverallSize = basegfx::B2DSize(aRange.getX(), aRange.getY());
 
                 o_rTextLines = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                    rCanvas->getUNOCanvas()->getDevice(),
                     aPoly );
             }
 
@@ -659,8 +654,8 @@ namespace cppcanvas
                 /// Interface TextRenderer
                 virtual bool operator()( const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
-                geometry::RealRectangle2D queryTextBounds() const;
-                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const;
+                geometry::RealRectangle2D queryTextBoundsRect() const;
+                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBoundsPoly() const;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -710,7 +705,6 @@ namespace cppcanvas
                 const double nLineWidth(getLineWidth( rVDev, rState, maStringContext ));
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
-                                           rCanvas,
                                            nLineWidth,
                                            maTextLineInfo );
 
@@ -733,7 +727,7 @@ namespace cppcanvas
                     vclcanvas::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         rTextFillColor);
-                    auto xTextBounds = queryTextBounds(aCanvas);
+                    auto xTextBounds = queryTextBoundsPoly();
                     // background of text
                     aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
                 }
@@ -780,7 +774,7 @@ namespace cppcanvas
                 return render( rTransformation );
             }
 
-            geometry::RealRectangle2D EffectTextAction::queryTextBounds() const
+            geometry::RealRectangle2D EffectTextAction::queryTextBoundsRect() const
             {
                 // create XTextLayout, to have the
                 // XTextLayout::queryTextBounds() method available
@@ -793,12 +787,12 @@ namespace cppcanvas
                 return xTextLayout->queryTextBounds();
             }
 
-            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextAction::queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const
+            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextAction::queryTextBoundsPoly() const
             {
-                auto aTextBounds = queryTextBounds();
+                auto aTextBounds = queryTextBoundsRect();
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                 auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                return ::canvastools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
+                return ::canvastools::xPolyPolygonFromB2DPolygon(aTextBoundsPoly);
             }
 
             sal_Int32 EffectTextAction::getActionCount() const
@@ -954,7 +948,7 @@ namespace cppcanvas
                 // TextRenderer interface
                 virtual bool operator()( const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
-                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const;
+                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBoundsPoly() const;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1015,12 +1009,12 @@ namespace cppcanvas
                                  rState, nullptr );
             }
 
-            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const
+            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBoundsPoly() const
             {
                 const geometry::RealRectangle2D aTextBounds(mxTextLayout->queryTextBounds());
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                 auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                return ::canvastools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
+                return ::canvastools::xPolyPolygonFromB2DPolygon(aTextBoundsPoly);
             }
 
             bool EffectTextArrayAction::operator()( const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
@@ -1034,7 +1028,7 @@ namespace cppcanvas
                     vclcanvas::RenderState aLocalState(rRenderState);
                     aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         rTextFillColor);
-                    auto xTextBounds = queryTextBounds(aCanvas);
+                    auto xTextBounds = queryTextBoundsPoly();
                     // background of text
                     aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
                 }
@@ -1110,7 +1104,7 @@ namespace cppcanvas
                     const geometry::RealRectangle2D aTextBounds(mrTextLayout->queryTextBounds());
                     auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                     auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                    return ::canvastools::xPolyPolygonFromB2DPolygon(mrCanvas->getDevice(), aTextBoundsPoly);
+                    return ::canvastools::xPolyPolygonFromB2DPolygon(aTextBoundsPoly);
                 }
 
                 const uno::Reference< vclcanvas::XCanvas >&         mrCanvas;
@@ -1280,14 +1274,12 @@ namespace cppcanvas
 
                 initEffectLinePolyPolygon( maLinesOverallSize,
                                            mxTextLines,
-                                           rCanvas,
                                            nLayoutWidth,
                                            maTextLineInfo );
 
                 init( maState,
                       rStartPoint,
-                      rState,
-                      rCanvas );
+                      rState );
             }
 
             bool OutlineAction::operator()( const vclcanvas::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
@@ -1590,7 +1582,6 @@ namespace cppcanvas
                                   rState ));
                 const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
                     ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
                         aResultingPolyPolygon ) );
 
                 // create background color fill polygon?
@@ -1608,7 +1599,6 @@ namespace cppcanvas
                     auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                     auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
                     xTextBoundsPoly = ::canvastools::xPolyPolygonFromB2DPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
                         aTextBoundsPoly);
                 }
 

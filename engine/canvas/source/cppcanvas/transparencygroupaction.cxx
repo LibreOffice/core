@@ -148,7 +148,6 @@ namespace cppcanvas
                 // correct clip (which is relative to original transform)
                 cppcanvastools::modifyClip( maState,
                                    rState,
-                                   rCanvas,
                                    rDstPoint,
                                    nullptr,
                                    nullptr );
@@ -414,7 +413,7 @@ namespace cppcanvas
                     // Adjust renderstate clip to modified scale from above
                     ::basegfx::B2DPolyPolygon aClip = ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(aLocalState.Clip);
                     aClip.transform(basegfx::utils::createScaleB2DHomMatrix(aScale));
-                    aLocalState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(mpCanvas->getUNOCanvas()->getDevice(), aClip);
+                    aLocalState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aClip);
                 }
 
 #if OSL_DEBUG_LEVEL > 2

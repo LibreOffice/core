@@ -111,7 +111,6 @@ namespace cppcanvastools
 
         bool modifyClip( vclcanvas::RenderState&                            o_rRenderState,
                          const struct ::cppcanvas::OutDevState&   rOutdevState,
-                         const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
                          const double*                                      pRotation )
@@ -145,7 +144,6 @@ namespace cppcanvastools
                 aLocalClip.transform( aTransform );
 
                 o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                    rCanvas->getUNOCanvas()->getDevice(),
                     aLocalClip );
 
                 return true;
@@ -176,7 +174,6 @@ namespace cppcanvastools
                     aLocalClip.transform( aTransform );
 
                     o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon( aLocalClip ) );
                 }
                 else if( bScaling )
@@ -184,7 +181,6 @@ namespace cppcanvastools
                     // scale and offset - do it on the fly, have to
                     // convert to float anyway.
                     o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
@@ -198,7 +194,6 @@ namespace cppcanvastools
                     // offset only - do it on the fly, have to convert
                     // to float anyway.
                     o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle( aLocalClipRect.Left() - rOffset.getX(),
