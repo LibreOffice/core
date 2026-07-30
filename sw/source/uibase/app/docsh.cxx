@@ -208,6 +208,10 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
       return false; // #129881# return if no reader is found
     rtl::Reference<SotStorage> pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
+    // Reading a foreign format starts from the same state as reading our own one, so link updates
+    // are off until the load settles them.
+    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+
     m_xDoc->setDocAccTitle(OUString());
     if (const auto pFrame1 = SfxViewFrame::GetFirst(this))
     {
