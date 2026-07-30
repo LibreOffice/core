@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <vcl/font.hxx>
@@ -33,15 +32,13 @@
 
 #include "outdevprovider.hxx"
 
+#include <CanvasFontBase.hxx>
 
 /* Definition of CanvasFont class */
 
 namespace vclcanvas
 {
-    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont,
-                                             css::lang::XServiceInfo > CanvasFont_Base;
-
-    class CanvasFont : public CanvasFont_Base
+    class CanvasFont : public cppu::ImplInheritanceHelper<CanvasFontBase, css::lang::XServiceInfo>
     {
     public:
         typedef rtl::Reference<CanvasFont> Reference;
@@ -63,8 +60,6 @@ namespace vclcanvas
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
         virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
-        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

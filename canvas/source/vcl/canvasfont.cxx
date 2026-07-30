@@ -123,18 +123,6 @@ namespace vclcanvas
             aMetric.GetAscent() / 2.0);
     }
 
-    uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  )
-    {
-        // TODO(F1)
-        return uno::Sequence< double >();
-    }
-
-    uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  )
-    {
-        // TODO(F1)
-        return uno::Sequence< beans::PropertyValue >();
-    }
-
     OUString SAL_CALL CanvasFont::getImplementationName()
     {
         return u"VCLCanvas::CanvasFont"_ustr;
