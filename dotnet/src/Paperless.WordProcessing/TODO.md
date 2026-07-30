@@ -10,21 +10,54 @@ Reference: `research/02-writer.md` — model, layout engine, and all four import
 
 ## Document model
 
-- [ ] Node sequence with paired start/end markers for nesting (tables, sections, frames) —
-      the `SwNodes` arrangement. A flat array with markers handles arbitrary nesting without
-      a deep tree.
-- [ ] Paragraph nodes with text plus character-formatting runs stored as interval-tagged
-      attributes over the text, not as a split-run list. Overlapping formatting is common and
-      intervals handle it without exploding into fragments.
-- [ ] Style model with parent-chain resolution; paragraph, character, frame, list, page styles
-- [ ] Tables: rows, cells, spans, nested tables
-- [ ] Lists and numbering with multi-level definitions and restart semantics
-- [ ] Sections; page styles; headers and footers, including first-page and even/odd variants
+In `Model/`, distinct from the extraction tree in `Paperless.Core` and built by a separate pass —
+extraction is the common case and must not pay for interval-tagged formatting, document-order
+indexes or resolvable style chains.
+
+- [x] A **tree** rather than `SwNodes`' flat array of paired start and end markers. The research
+      notes say the markers exist because LibreOffice's node array is also its edit buffer and its
+      undo unit, and that a conventional tree is semantically equivalent and the natural C# shape
+      (`research/02-writer.md` section A.2).
+- [x] **Document order** kept anyway, since that is what the flat array is really for: layout,
+      bookmarks, cross-references and tracked changes all ask "before", "after" and "inside". Each
+      node carries its own index and its subtree's end, so containment is two integer comparisons.
+      Assigned once when the tree is finished, not maintained per append.
+- [x] Paragraph text as one string with the character formatting as **interval-tagged hints**, not
+      as a split-run list. Overlapping formatting is the normal case — a bold range, a language
+      range and a hyperlink each start where the user put them — and runs force every overlap to
+      split every run that crosses it, so three pairwise overlaps become seven fragments that
+      correspond to nothing the document said.
+- [x] The resolution order between hint kinds, which is load-bearing: direct formatting must beat a
+      character style and a link's own formatting must beat the style too, or a hyperlink inside a
+      styled run loses its colour. `TextHintKind`'s declaration order *is* that order.
+- [x] Placeholder characters for what occupies a position without being text — a field, a note or
+      comment anchor, an as-character frame. They count towards a paragraph's length, because every
+      offset in the document is counted against the same string; they are not in its text.
+- [x] What an edit does to the hints across it: text typed inside a bold range is bold, text typed
+      immediately before it is not, and an anchor never stretches because its width is the one
+      character it stands for.
+- [x] Positions and ranges as node-plus-offset, never an offset into a whole-document string.
+      Ranges normalise on construction, so a selection made backwards is the same range as one made
+      forwards.
+- [x] Style model with parent-chain resolution, one pool per family — ODF documents routinely have a
+      paragraph style and a character style both called `Standard`, and resolving across families
+      would take one style's parent from the other's chain. Cycle-guarded; the family's defaults lead
+      a chain that does not reach them.
+- [x] Tables: rows, cells, spans, nested tables, and the column-edge grid the spans index into
+- [ ] Lists and numbering with multi-level definitions and restart semantics. The four readers each
+      compute labels already; the model holds the label but not yet the definitions that produced it.
+- [ ] Sections; page styles; headers and footers as page furniture rather than as flows. The flows
+      exist; which page description uses which does not.
 - [ ] Fields — store both the definition and the cached result. The cached result is what a
-      reference renderer shows, so prefer it by default.
-- [ ] Bookmarks, hyperlinks, comments, footnotes and endnotes
-- [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode
-- [ ] Tracked changes (redlines)
+      reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
+- [ ] Bookmarks and cross-references
+- [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode. An
+      as-character anchor is a hint over a placeholder; the other three need a per-page anchor model.
+- [ ] Tracked changes (redlines) with their author and timestamp. The hint kinds exist and the
+      readers currently resolve changes rather than recording them.
+- [ ] Importers that build this model. All four build the extraction tree today; the second pass
+      that builds this one is what layout will need, and is deliberately not written until the layout
+      engine can say which parts of it are load-bearing.
 
 ## Importers
 
