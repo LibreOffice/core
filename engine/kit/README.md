@@ -1,22 +1,18 @@
 # COKit
 
-COKit can be used for accessing CollaboraOffice functionality
-through C/C++, without any need to use UNO.
+COKit can be used for accessing Collabora Office functionality
+through C++, without any need to use UNO.
 
 For now it only offers document conversion (in addition to an experimental
 tiled rendering API).
 
 ## Integrating COKit Into Other Software
 
-COKit functionality can be accessed by including `COKit.h[xx]` in your
+COKit functionality can be accessed by including `COKit.hxx` in your
 program.
 
 COKit initialisation (`cok_init`) requires the inclusion of `COKitInit.h` in
-your program. If you use the C++ `COKit.hxx` header, it already includes
-`COKitInit.h` for you.
-
-(`COKit.hxx` is a simple and fully inlined C++ wrapper for the same
-functionality as in `COKit.h`.)
+your program.
 
 An example program can be seen on:
 <https://gitlab.com/ojwb/lloconv>
@@ -50,10 +46,9 @@ methods and their documentation.
 The other way around (CollaboraOffice -> COKit client) is implemented using a
 callback. A COKit client can register a callback using the registerCallback()
 method. Whenever editing requires some action on the client side, a callback
-event is emitted. The callback types are described using the
-`COKitCallbackType` enumeration in `COKitEnums.h`, the callback
-function signature itself is provided by the COKitCallback typedef in
-`COKitTypes.h`. The most important callback types:
+event is emitted. The callback types are described using the `COKitCallbackType`
+enumeration, the callback function signature itself is provided by the
+COKitCallback typedef. The most important callback types:
 
 - `KIT_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
   intersect with the provided rectangle
