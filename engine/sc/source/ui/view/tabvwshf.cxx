@@ -417,6 +417,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_TOGGLE_GRID:
             {
+                if (rViewData.GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
+                    break;
+
                 bool bShowGrid = rViewData.GetShowGrid();
                 rViewData.SetShowGrid(!bShowGrid);
                 SfxBindings& rBindings = GetViewFrame().GetBindings();
