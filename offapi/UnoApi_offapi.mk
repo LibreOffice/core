@@ -3022,7 +3022,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XMtfRenderer \
 	XParametricPolyPolygon2D \
 	XPolyPolygon2D \
-	XSimpleCanvas \
 	XSprite \
 	XSpriteCanvas \
 	XTextLayout \
