@@ -236,7 +236,7 @@ inline std::string escapeJSONValue(const std::string_view val)
                     i += 2;
                     break;
                 }
-                // Fallthrough...
+                [[fallthrough]];
             default:
                 buf.push_back(ch);
                 break;
