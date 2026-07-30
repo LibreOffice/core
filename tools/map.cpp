@@ -210,7 +210,7 @@ public:
             printf("%cStrings      :%20lld, %lld chars\n",
                    prefixes[i], (addr_t)_strings[i].getCount(),
                    (addr_t)_strings[i].getChars());
-       }
+        }
     }
 
     const Map *findMap(addr_t addr) const

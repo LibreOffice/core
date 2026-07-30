@@ -919,7 +919,7 @@ std::string AdminModel::getDocuments() const
                         << "\"userId\"" << ':' << '"' << viewIt.second.getUserId() << '"' << ','
                         << "\"sessionid\"" << ':' << '"' << viewIt.second.getSessionId() << '"' << ','
                         << "\"readonly\"" << ':' << '"' << viewIt.second.isReadOnly() << '"' << '}';
-                        separator = ',';
+                    separator = ',';
                 }
             }
             oss << ']'

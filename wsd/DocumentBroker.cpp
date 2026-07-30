@@ -140,8 +140,8 @@ void ChildProcess::setDocumentBroker(const std::shared_ptr<DocumentBroker>& docB
             std::string(), _urpToKitFD, Socket::Type::Unix, /*isClient=*/false,
             HostType::Other, std::make_shared<UrpHandler>(this),
             StreamSocket::ReadType::NormalRead, now);
-       docBroker->addSocketToPoll(urpToKit);
-       _urpToKit = urpToKit;
+        docBroker->addSocketToPoll(urpToKit);
+        _urpToKit = urpToKit;
     }
 
     if (UnitWSD::isUnitTesting())

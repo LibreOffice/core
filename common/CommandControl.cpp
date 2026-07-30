@@ -185,7 +185,7 @@ const std::unordered_set<std::string>& RestrictionManager::getRestrictedCommandL
         {
             std::string command = commandList[i];
             if (!command.empty())
-            RestrictedCommandList.emplace(command);
+                RestrictedCommandList.emplace(command);
         }
     }
 

@@ -110,7 +110,7 @@ UnitBase** UnitBase::linkAndCreateUnit([[maybe_unused]] UnitType type,
 
 void UnitBase::closeUnit()
 {
-  if (DlHandle)
+    if (DlHandle)
         dlclose(DlHandle);
     DlHandle = nullptr;
 }

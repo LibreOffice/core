@@ -1550,25 +1550,25 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     Poco::replaceInPlace(preprocess, std::string("%MIN_SAVED_MESSAGE_TIMEOUT_SECS%"), std::to_string(minSavedMessTimeoutSecs));
 
     #if ENABLE_WELCOME_MESSAGE
-        std::string enableWelcomeMessage = "true";
-        std::string autoShowWelcome = "true";
-        if (config.getBool("home_mode.enable", false))
-        {
-            autoShowWelcome = stringifyBoolFromConfig(config, "welcome.enable", false);
-        }
-        Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_NAME%"), std::string());
-        Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_URL%"), std::string());
-        Poco::replaceInPlace(preprocess, std::string("%LOGO_URL%"), std::string());
+    std::string enableWelcomeMessage = "true";
+    std::string autoShowWelcome = "true";
+    if (config.getBool("home_mode.enable", false))
+    {
+        autoShowWelcome = stringifyBoolFromConfig(config, "welcome.enable", false);
+    }
+    Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_NAME%"), std::string());
+    Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_URL%"), std::string());
+    Poco::replaceInPlace(preprocess, std::string("%LOGO_URL%"), std::string());
     #else // configurable
-        std::string enableWelcomeMessage = stringifyBoolFromConfig(config, "welcome.enable", false);
-        std::string autoShowWelcome = stringifyBoolFromConfig(config, "welcome.enable", false);
+    std::string enableWelcomeMessage = stringifyBoolFromConfig(config, "welcome.enable", false);
+    std::string autoShowWelcome = stringifyBoolFromConfig(config, "welcome.enable", false);
 
-        std::string brandProductURL = ConfigUtil::getConfigValue<std::string>(config, "user_interface.brandProductURL", "");
-        std::string brandProductName = ConfigUtil::getConfigValue<std::string>(config, "user_interface.brandProductName", "");
-        std::string logoUrl = ConfigUtil::getConfigValue<std::string>(config, "user_interface.logoURL", "");
-        Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_NAME%"), brandProductName);
-        Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_URL%"), brandProductURL);
-        Poco::replaceInPlace(preprocess, std::string("%LOGO_URL%"), logoUrl);
+    std::string brandProductURL = ConfigUtil::getConfigValue<std::string>(config, "user_interface.brandProductURL", "");
+    std::string brandProductName = ConfigUtil::getConfigValue<std::string>(config, "user_interface.brandProductName", "");
+    std::string logoUrl = ConfigUtil::getConfigValue<std::string>(config, "user_interface.logoURL", "");
+    Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_NAME%"), brandProductName);
+    Poco::replaceInPlace(preprocess, std::string("%PRODUCT_BRANDING_URL%"), brandProductURL);
+    Poco::replaceInPlace(preprocess, std::string("%LOGO_URL%"), logoUrl);
     #endif
 
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_WELCOME_MSG%"), enableWelcomeMessage);

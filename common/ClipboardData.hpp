@@ -80,7 +80,7 @@ struct ClipboardData
                 }
             }
         }
-	return true;
+        return true;
     }
 
     std::size_t size() const
