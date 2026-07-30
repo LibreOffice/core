@@ -3781,7 +3781,7 @@ std::shared_ptr<ServerSocket> COOLWSDServer::findPrisonerServerPort()
     }
 
     LOG_INF("Listening to prisoner connections on " << location);
-    MasterLocation = std::move(location);
+    MasterLocation = location;
 #if ENABLE_CHILDROOTS
     if(!socket->linkTo(COOLWSD::SysTemplate))
     {
