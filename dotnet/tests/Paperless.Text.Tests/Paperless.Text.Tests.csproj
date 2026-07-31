@@ -15,6 +15,8 @@
   <ItemGroup>
     <!-- The generated line-break cases, read at run time so the tests need no Python. -->
     <None Include="line-break-cases.txt" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The generated bidi cases, likewise, so the tests need neither Python nor ICU. -->
+    <None Include="bidi-cases.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

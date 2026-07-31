@@ -224,6 +224,26 @@ each shaded cell *twice* at identical coordinates where its ODF render fills it 
 distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
 per-band `WW8_SHD` array that is not read yet.
 
+`bidi.fodt` is nine short paragraphs of mixed-direction text, six declared left-to-right and three
+right-to-left, and it exists in one format on purpose: what it is compared against is LibreOffice's own
+rendering of it rather than Paperless's reading of it, so a second format would exercise a second
+ODF-to-something conversion and nothing else. Every paragraph fits one line, which makes a line of the
+reference PDF a paragraph and removes any need to group. It is set in DejaVu Sans for both the Western and
+the complex-script font because that is the only face on a bare Linux carrying Latin, Hebrew and Arabic
+together — check `fc-list :lang=he` before assuming a machine can render it, since a missing face renders as
+boxes and compares as nonsense. Its text deliberately contains nothing that ligates, so a portion's glyph
+count is its character count and the reference's portion boundaries read straight off as character offsets;
+the comparison asserts that rather than assuming it, because one ligature would silently shift every offset
+after it.
+
+Two things in `bidi.fodt` are stated explicitly that look redundant and are not, both found by measuring the
+reference against Paperless. `style:letter-kerning="true"` is there because ODF's default is **false**, so a
+document that says nothing is a reference for the *unkerned* widths — 33.13 pt against 33.30 for the six
+characters of "Start ". And the right-to-left paragraph style repeats every text property instead of
+inheriting them through `style:parent-style-name`: with inheritance, LibreOffice set those three paragraphs
+in FreeSans and Liberation Serif rather than DejaVu Sans, and the portions came out 5.1 pt wrong against a
+face the test never loaded.
+
 `table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
 the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
 with the text by default, and a distinct one makes it obvious in a rendered page which strokes are being

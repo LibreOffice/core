@@ -186,8 +186,21 @@ The part that decides whether rendering can ever match.
       word-processing TODO.
 - [ ] Verification against Unicode's `LineBreakTest.txt`, which needs the file — not reachable
       from this container, so the implementation is checked against LibreOffice's own breaks
-      instead.
-- [ ] Bidi and script runs; vertical text.
+      instead. Re-checked while the bidi work was done: `unicode.org` still answers a CONNECT with
+      403, so `BidiTest.txt` is equally out of reach. The bidi implementation did not need it,
+      because ICU is on the machine and is a *better* oracle than a conformance file — it is the
+      one LibreOffice runs. There is no equivalent for UAX #14: ICU's `BreakIterator` is not
+      exposed by the BCL, so the line breaker's differential is against another implementation.
+- [x] **Bidi and script sub-runs** (UAX #9 and UAX #24). The property tables *and* the differential
+      cases come from **ICU** rather than from the UCD, because ICU is the library LibreOffice
+      itself resolves bidi and script with — so agreeing with it is agreeing with Writer, and it
+      supplies the conformance oracle `unicode.org` cannot. 7,944 generated cases agree with ICU,
+      and the sub-run boundaries agree with LibreOffice's own PDF portions. Detail, and the two
+      places ICU departs from the letter of UAX #9, in `src/Paperless.Text/TODO.md`.
+- [ ] Drawing right-to-left text. The levels and the visual order are computed and carried on
+      `MeasuredParagraph`; nothing in the layouter consumes them yet, so a mixed-direction
+      paragraph measures correctly and draws its runs in logical order.
+- [ ] Vertical text.
 - [x] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
 **Exit criterion — met for word processing.** For a text-heavy document Paperless breaks lines

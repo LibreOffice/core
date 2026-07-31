@@ -1,5 +1,6 @@
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Shaping;
 
 namespace Paperless.Text.Layout;
@@ -70,19 +71,45 @@ public sealed class MeasuredParagraph
 {
     private readonly MeasuredRun[] _runs;
     private readonly long[] _prefixEmu;
+    private readonly TextItem[] _items;
 
-    private MeasuredParagraph(string text, MeasuredRun[] runs, long[] prefixEmu)
+    private MeasuredParagraph(
+        string text, MeasuredRun[] runs, long[] prefixEmu, TextItem[] items, byte paragraphLevel)
     {
         Text = text;
         _runs = runs;
         _prefixEmu = prefixEmu;
+        _items = items;
+        ParagraphLevel = paragraphLevel;
     }
 
     /// <summary>The paragraph's text.</summary>
     public string Text { get; }
 
-    /// <summary>The runs, in order, partitioning the text.</summary>
+    /// <summary>
+    /// The runs, in logical order, one per formatting change and per direction, script or face change
+    /// within it.
+    /// </summary>
+    /// <remarks>
+    /// Logical rather than visual, which is what Writer's own line portions are: its PDF export emits
+    /// them in the order the characters are stored and positions each with an absolute pen. Drawing
+    /// right-to-left text needs the visual order, and <see cref="Items"/> carries the levels it is
+    /// derived from.
+    /// </remarks>
     public IReadOnlyList<MeasuredRun> Runs => _runs;
+
+    /// <summary>
+    /// The direction and script sub-runs the paragraph was cut into, in logical order.
+    /// </summary>
+    /// <remarks>
+    /// One entry per stretch of one embedding level and one script — the same partition the runs
+    /// were shaped against, minus the formatting changes. A caller drawing the paragraph needs these
+    /// to put the runs in visual order; <see cref="TextItemiser.InVisualOrder"/> does that.
+    /// </remarks>
+    public IReadOnlyList<TextItem> Items => _items;
+
+    /// <summary>The paragraph's own embedding level: even for left to right, odd for right to left.</summary>
+    public byte ParagraphLevel { get; }
 
     /// <summary>
     /// Shapes a paragraph's runs and builds its prefix widths.
@@ -96,41 +123,128 @@ public sealed class MeasuredParagraph
     /// <param name="text">The paragraph's text.</param>
     /// <param name="runs">Its runs; may be empty, in which case the paragraph measures as nothing.</param>
     /// <param name="shaper">The shaper to use, or null for the default.</param>
+    /// <param name="itemisation">
+    /// How to cut the paragraph into sub-runs before shaping, or null for the neutral settings: left
+    /// to right, and no glyph fallback. A paragraph of Latin prose is cut into one sub-run per
+    /// formatting run either way, and shaped in exactly the calls it was shaped in before sub-runs
+    /// existed.
+    /// </param>
     public static MeasuredParagraph Measure(
-        string text, IReadOnlyList<FormattedRun> runs, ITextShaper? shaper = null)
+        string text,
+        IReadOnlyList<FormattedRun> runs,
+        ITextShaper? shaper = null,
+        ItemisationOptions? itemisation = null)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(runs);
 
         ITextShaper engine = shaper ?? TextShaper.Default;
+        List<FormattedRun> formatted = Normalise(text, runs);
+        ItemisationOptions options = itemisation ?? DefaultItemisation(formatted);
+
+        // The bidi algorithm is resolved over the whole paragraph, never per formatting run: a run
+        // boundary is a change of font, not a change of direction, and resolving each separately
+        // would let a bold word inside a Hebrew sentence see the paragraph's direction instead of
+        // the sentence's.
+        BidiParagraph bidi = BidiParagraph.Resolve(text, options.BaseDirection);
+        List<TextItem> items = TextItemiser.Itemise(text, bidi);
+
         List<MeasuredRun> measured = [];
         long[] prefix = new long[text.Length + 1];
+        long running = 0;
 
-        foreach (FormattedRun run in Normalise(text, runs))
+        foreach (FormattedRun run in formatted)
         {
-            ShapedText shaped = engine.Shape(
-                run.Face, text.AsSpan(run.Start, run.Length), run.Shaping);
-
-            measured.Add(new MeasuredRun(run, shaped, LineSpacing.Resolve(run.Face)));
-
-            // Each run's own prefix widths, scaled from its own grid into EMUs, laid into the paragraph's
-            // table at its own offset. Summing in design units instead would add numbers from two
-            // different grids.
-            for (int i = 1; i <= run.Length; i++)
+            foreach (FormattedRun part in SubRuns(text, run, items, options))
             {
-                prefix[run.Start + i] =
-                    prefix[run.Start] + shaped.WidthUpTo(i, run.EmSize).Emu;
+                ShapedText shaped = engine.Shape(
+                    part.Face, text.AsSpan(part.Start, part.Length), part.Shaping);
+
+                measured.Add(new MeasuredRun(part, shaped, LineSpacing.Resolve(part.Face)));
+
+                // Each sub-run's own prefix widths, scaled from its own grid into EMUs and added to
+                // the running total. Summing in design units instead would add numbers from two
+                // different grids; reading the running total off the table instead would break the
+                // moment a control character left a gap between two sub-runs.
+                for (int i = 1; i <= part.Length; i++)
+                {
+                    prefix[part.Start + i] = running + shaped.WidthUpTo(i, part.EmSize).Emu;
+                }
+
+                running += shaped.Width(part.EmSize).Emu;
             }
         }
 
-        // Any position no run covered — a text with no runs at all, or a trailing gap — carries the width
-        // of the last position that was covered, so the table stays monotonic.
+        // Any position no sub-run covered — a text with no runs at all, a trailing gap, or a format
+        // control character that was cut out — carries the width of the last position that was
+        // covered, so the table stays monotonic and the control measures as nothing.
         for (int i = 1; i <= text.Length; i++)
         {
             if (prefix[i] < prefix[i - 1]) prefix[i] = prefix[i - 1];
         }
 
-        return new MeasuredParagraph(text, [.. measured], prefix);
+        return new MeasuredParagraph(
+            text, [.. measured], prefix, [.. items], bidi.ParagraphLevel);
+    }
+
+    /// <summary>
+    /// The itemisation to use when the caller stated none.
+    /// </summary>
+    /// <remarks>
+    /// The base direction comes from the runs' own shaping options, so a caller that has been saying
+    /// <c>RightToLeft</c> on every run of a Hebrew paragraph keeps getting a right-to-left paragraph.
+    /// That was the only way to say it before this existed, and silently changing what it meant would
+    /// re-align every such document.
+    /// </remarks>
+    private static ItemisationOptions DefaultItemisation(List<FormattedRun> runs)
+        => runs.Count > 0 && runs[0].Shaping.RightToLeft
+            ? new ItemisationOptions { BaseDirection = BidiDirection.RightToLeft }
+            : ItemisationOptions.Default;
+
+    /// <summary>
+    /// Cuts one formatting run into the pieces a shaper can take.
+    /// </summary>
+    /// <remarks>
+    /// The whole run unchanged is the common case and is returned untouched — not merely equivalent,
+    /// but the same <see cref="ShapingOptions"/> the caller passed, so a paragraph of Latin prose
+    /// reaches HarfBuzz in the identical call it did before any of this existed. Anything else is
+    /// split at every change of direction, script or face, and each piece is told which it is.
+    /// </remarks>
+    private static List<FormattedRun> SubRuns(
+        string text, FormattedRun run, List<TextItem> items, ItemisationOptions options)
+    {
+        List<FormattedRun> parts = [];
+
+        foreach (TextItem item in items)
+        {
+            int start = Math.Max(item.Start, run.Start);
+            int end = Math.Min(item.End, run.End);
+            if (end <= start) continue;
+
+            foreach (FaceRun face in FontItemiser.Split(
+                         text, start, end - start, run.Face,
+                         options.GlyphFallback, options.OnGlyphFallback))
+            {
+                bool wholeRun = face.Start == run.Start && face.End == run.End;
+                bool plain = wholeRun && !item.IsRightToLeft && !face.IsFallback;
+
+                parts.Add(run with
+                {
+                    Start = face.Start,
+                    Length = face.Length,
+                    Face = face.Face,
+                    Shaping = plain
+                        ? run.Shaping
+                        : run.Shaping with
+                        {
+                            Script = item.Script,
+                            RightToLeft = item.IsRightToLeft,
+                        },
+                });
+            }
+        }
+
+        return parts;
     }
 
     /// <summary>The width of the characters between two indices.</summary>
