@@ -1,6 +1,7 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 
@@ -466,7 +467,7 @@ public static class PageDrawing
 
             Length pen = lineLeft + segment.Left;
 
-            foreach (PageRun run in RunsIn(paragraph, segment.Start, segment.End))
+            foreach (PageRun run in InVisualOrder(paragraph, segment.Start, segment.End))
             {
                 string text = paragraph.Text[run.Start..run.End];
                 ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
@@ -557,6 +558,84 @@ public static class PageDrawing
     }
 
     /// <summary>
+    /// The runs a stretch draws, in the order they are drawn left to right.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Rule L2 over the runs, which is the whole of what makes a mixed-direction line readable: the
+    /// runs are stored in logical order and drawn in visual order, so a Hebrew phrase between two
+    /// English ones is drawn in the middle and its own words run the other way. Writer arrives at
+    /// the same place by a different route — it keeps the portions logical and jumps the pen by the
+    /// whole width of a bidi portion whose direction differs from its surroundings
+    /// (<c>SwTextPainter::PaintMultiPortion</c>, <c>sw/source/core/text/pormulti.cxx:1630</c>) —
+    /// and the result is identical, because both are rule L2.
+    /// </para>
+    /// <para>
+    /// The split is the itemiser's, not a second one: the same sub-runs the paragraph was
+    /// <em>measured</em> against, so a line's drawn width is the width its break was decided with.
+    /// Each piece is told its script and its direction, which is not decoration — a shaper handed a
+    /// Hebrew run without them lays its glyphs out left to right and the word comes out reversed.
+    /// </para>
+    /// <para>
+    /// A paragraph with nothing right-to-left in it never gets here:
+    /// <see cref="TextItemiser.MayReorder"/> is checked first, and the runs are returned exactly as
+    /// they were. That matters more than it
+    /// looks — a run split at a boundary it does not need loses its shaping context and measures
+    /// very slightly wide, which is enough to move a line break.
+    /// </para>
+    /// </remarks>
+    private static List<PageRun> InVisualOrder(PageParagraph paragraph, int start, int end)
+    {
+        List<(PageRun Run, byte Level)> pieces = Pieces(paragraph, start, end);
+        if (pieces.Count == 0) return RunsIn(paragraph, start, end);
+
+        TextItemiser.ReorderVisually(pieces, piece => piece.Level);
+        return [.. pieces.Select(piece => piece.Run)];
+    }
+
+    /// <summary>
+    /// A stretch cut into the pieces one direction and one script each, in logical order.
+    /// </summary>
+    /// <remarks>
+    /// Empty when the paragraph cannot reorder, which is how both callers say "use the runs as they
+    /// are" without either of them repeating the test.
+    /// </remarks>
+    private static List<(PageRun Run, byte Level)> Pieces(
+        PageParagraph paragraph, int start, int end)
+    {
+        BidiDirection direction = paragraph.BaseDirection;
+        if (!TextItemiser.MayReorder(paragraph.Text, direction)) return [];
+
+        List<TextItem> items = TextItemiser.Itemise(paragraph.Text, direction);
+        List<(PageRun, byte)> pieces = [];
+
+        foreach (PageRun run in RunsIn(paragraph, start, end))
+        {
+            foreach (TextItem item in items)
+            {
+                int from = Math.Max(run.Start, item.Start);
+                int to = Math.Min(run.End, item.End);
+                if (to <= from) continue;
+
+                pieces.Add((
+                    run with
+                    {
+                        Start = from,
+                        Length = to - from,
+                        Shaping = run.Shaping with
+                        {
+                            Script = item.Script,
+                            RightToLeft = item.IsRightToLeft,
+                        },
+                    },
+                    item.Level));
+            }
+        }
+
+        return pieces;
+    }
+
+    /// <summary>
     /// The width of a range of a paragraph's text, in whichever faces cover it.
     /// </summary>
     /// <remarks>
@@ -569,7 +648,14 @@ public static class PageDrawing
     {
         Length total = Length.Zero;
 
-        foreach (PageRun run in RunsIn(paragraph, from, to))
+        // The same pieces the stretch will be drawn in, unordered — a width is a sum and does not
+        // care which way round they go, but it does care that they were shaped the same way, or a
+        // tab in a mixed-direction line would advance to a stop the text does not reach.
+        List<(PageRun Run, byte Level)> pieces = Pieces(paragraph, from, to);
+
+        foreach (PageRun run in pieces.Count > 0
+                     ? pieces.Select(piece => piece.Run)
+                     : RunsIn(paragraph, from, to))
         {
             string text = paragraph.Text[run.Start..run.End];
             total += TextShaper.Default.Shape(run.Face, text, run.Shaping).Width(run.EmSize);

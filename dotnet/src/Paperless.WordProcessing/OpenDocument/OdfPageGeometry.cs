@@ -87,6 +87,11 @@ internal static class OdfPageGeometry
                 : null,
             Columns = ColumnCount(properties),
             ColumnGap = ColumnGap(properties),
+
+            // The page layout's own writing mode, which is a different statement from a paragraph's
+            // and does a different thing: it reverses the order of the section's columns. The
+            // vertical modes are left alone here as everywhere else.
+            IsRightToLeft = properties?.Get(OdfNamespaces.Style, "writing-mode") is "rl-tb" or "rl",
             IsLandscape = string.Equals(
                 properties?.Get(OdfNamespaces.Style, "print-orientation"),
                 "landscape",

@@ -101,8 +101,141 @@ Not yet, and why:
 - **Drawings, charts, pivot caches and defined names.** None is reached yet;
   `oneCellAnchor`/`twoCellAnchor` will want the shared DrawingML text-body reader in
   `Paperless.Ooxml` that the PPTX work is building.
-- **Print setup**, which is the page geometry and therefore a rendering prerequisite.
 - **The sparse typed cell storage below**, which extraction does not need and layout will.
+
+## Done: print setup and pagination
+
+`Layout/`. A spreadsheet has no pages until a print setup is applied, so this is not "apply a
+page size to a document" — the print setup **is** the page geometry, and everything about where
+the pages fall follows from it. Measured against LibreOffice 24.2.7.2: the three
+`sheet-print-*` corpus workbooks paginate to **14 pages each**, from all three formats, and
+every one of those forty-two pages starts at the cell LibreOffice's own PDF starts it at.
+`sheet-features.ods` gives 2, `sheet-ooxml-features.xlsx` 3 and `xls-features.xls` 4, which are
+the counts `pdfinfo` reports for LibreOffice's renderings of the same files.
+
+**Page count is the assertion worth having.** It is the one number that catches a wrong scale, a
+missed print area, a break honoured that should have been suppressed and a repeated band not
+subtracted from the page, and no tolerance can hide any of them. The second assertion, in
+`SheetPaginationComparisonTests`, is which cells land on which page: every cell of the print-setup
+workbook names its own coordinates, so the first word LibreOffice drew on a page states where that
+page starts. That is what catches the error a count cannot — a page order read backwards produces
+the right number of pages holding the wrong cells.
+
+**Two routines are ported, because LibreOffice splits the work in two and the split matters.**
+`ScTable::UpdatePageBreaks` (`sc/source/core/data/table5.cxx:57`) walks the columns and rows
+accumulating sizes against the page and records a break wherever the running total would
+overflow; `sc::PrintPageRanges::calculate` (`sc/source/ui/view/printfun.cxx:3082`) turns that set
+of breaks into page ranges. The second pass is where hidden rows and columns collapse — several
+breaks inside one hidden block count as one, because a page holding nothing visible must not
+exist. `ScPrintFunc::CalcZoom` (`:2816`) sits on top and bisects on the integer percentage when
+the sheet has to fit a page count; it converges in about seven repaginations, and it has to be a
+search rather than a formula because halving the scale does not halve the page count — a column
+either fits a page or starts a new one.
+
+**The arithmetic is done in whole twips, deliberately.** Calc accumulates `sal_uInt16` twips
+against a page size derived by integer division (`… * 100 / nZoom`, `GetDocPageSize`,
+`printfun.cxx:2987`), so a page that fills exactly is decided by those roundings rather than by
+the exact measure. Working in EMUs and converting at the end puts the boundary somewhere else on
+any sheet whose columns happen to fill the width. The `- 1` and `+ 1` in the port are not noise
+either: the page rectangle is a VCL `tools::Rectangle`, whose right and bottom edges are
+inclusive.
+
+**The margin model is Calc's, not any one file format's**, because the reference rendering is
+Calc's. `TopMargin` is the distance to the top of the *header* when a header is switched on, and
+`HeaderHeight` is the whole band down to the first row — so the first row sits at
+`TopMargin + HeaderHeight`. ODF states exactly that. SpreadsheetML and BIFF both state a top
+margin measured to the first row and a header margin measured to the header, and both readers
+swap them round the way LibreOffice does (`sc/source/filter/oox/pagesettings.cxx:1001-1040`,
+`sc/source/filter/excel/xipage.cxx:296-315`). The invariant that falls out is what makes those two
+readers cheap: with or without a header, the first row still starts at the file's own top margin.
+
+Traps that cost time, recorded so they are not rediscovered:
+
+- **An ODF page layout that states nothing is not a page of nothing.** `sheet-features.ods`'s
+  `style:page-layout` holds a writing mode and two header/footer bands: no page size, no margin.
+  LibreOffice renders it on A4 with two-centimetre margins, because those are what
+  `ScStyleSheet::GetItemSet` puts in a page style *before any file is read*
+  (`sc/source/core/data/stlsheet.cxx:170-200`). Reading an absent `fo:margin-left` as zero widens
+  the page by four centimetres and loses a break. The same routine is where the 0.5 cm + 0.25 cm
+  default header band comes from.
+- **`fitToWidth` and `fitToHeight` mean nothing without `pageSetUpPr/@fitToPage`.** Every workbook
+  LibreOffice writes carries `fitToWidth="1" fitToHeight="1"` on `pageSetup` whether or not
+  anything is fitting to anything, and the flag that switches them on lives in a different element
+  — LibreOffice calls the separation out as odd itself
+  (`sc/source/filter/oox/worksheetfragment.cxx:650`). Reading them without the flag turns every
+  ordinary sheet into a one-page sheet. BIFF has the same trap with `SETUP` and `WSBOOL`.
+- **A sheet of long strings is wider than its cells.** `xls-features.xls` came out three pages
+  against LibreOffice's four for half an hour before the cause turned up: a string too wide for
+  its column spills into the empty cells beside it, and Calc *widens the print area* to cover all
+  of it before paginating (`ScTable::ExtendPrintArea`, `sc/source/core/data/table1.cxx:2127`).
+  This is the single place pagination depends on measuring text, and it is survivable that the
+  measurement is approximate: the extension is by whole columns, so being within one column's
+  width of LibreOffice's answer gives the same page. Its 183-character strings in a 64-point
+  column extend to column N either way.
+- **The used area starts at A1, not at the first cell that holds something.**
+  `AdjustPrintArea(true)` sets the start to column zero and row zero and searches only for the end
+  (`printfun.cxx:700`). A sheet whose data begins at C3 still prints columns A and B, blank.
+- **A column width is not a length in either Excel format.** SpreadsheetML states it in *digits*
+  of the workbook's default font and BIFF in 256ths of a character, so neither is a measurement
+  until a font has been measured. LibreOffice asks its reference device for the widest digit's
+  advance in whole twips (`worksheethelper.cxx:1212`, `xltools.cxx:304`). 111 twips is what
+  10-point Liberation Sans gives, and it checks out: `sheet-ooxml-features.xlsx` writes
+  `width="20.76"` and LibreOffice's rendering puts the columns 115.2 points — 2304 twips — apart,
+  which is 20.76 × 111 rounded.
+- **A whole-column print range covers a million rows.** `A:D` paginated literally gives a
+  four-column sheet twenty thousand blank pages. Calc cuts it back by re-searching the axis the
+  range spans entirely, and only that axis (`AdjustPrintArea(false)`, `printfun.cxx:707`).
+- **An empty visible sheet prints nothing at all**, not a blank page — measured on a two-sheet
+  document whose second sheet holds one empty cell, which converts to a one-page PDF. Worth
+  measuring rather than assuming, because `AdjustPrintArea`'s early return is guarded by the
+  skip-empty option and reads as though it would produce a page without it.
+- **`Print_Titles` holds both repeated bands in one name and distinguishes them by shape**, not by
+  order: the column band is a whole-column reference with no row digits and the row band a
+  whole-row reference with no column letters. In BIFF that is stored against sheet limits of 255
+  columns and 65 535 rows, so the "spans the whole sheet" test has to be made against *those*
+  limits and then widened, not against Calc's.
+
+Deliberate deviations from the port, both narrow:
+
+- **A fit-to-pages search that bottoms out is clamped rather than reproduced.** LibreOffice leaves
+  its loop with the page split from the *previous* scale and the zoom from this one
+  (`printfun.cxx:2862`), which is self-inconsistent; the port clamps to `ZOOM_MIN` and re-splits.
+  It shows only on a sheet with a column too wide to fit at any scale.
+- **A page break inside a repeated band steps past the band.** Calc's own loop clears the breaks
+  inside the band by pre-incrementing the loop variable, so those columns are never measured
+  against the page either (`table5.cxx:180`). It reads like an off-by-one and it is what the
+  reference renderer does, so it is reproduced rather than corrected. It only bites a repeated
+  band that does not start at the print range's own first column.
+
+Not yet, and why:
+
+- **A header or footer taller than its declared height is under-measured.** Calc recomputes a
+  dynamic band's height from the text in it and floors the result at the declared height
+  (`UpdateHFHeight`, `printfun.cxx:846`). Every file LibreOffice writes declares 0.75 cm and puts
+  one line of ten-point text in it, which measures well under that — so the declared value is the
+  answer for all of them, and a header of several lines is the case this gets wrong. Fixing it
+  needs the header's field language parsed and its text laid out, which is the same work as
+  drawing it.
+- **The paper size default is locale-dependent and A4 is assumed.** Calc's is
+  `SvxPaperInfo::GetDefaultPaperSize()`, which is Letter in an American locale; the same missing
+  locale infrastructure that keeps the two built-in number-format tables apart is what keeps this
+  from being answered properly.
+- **`SkipEmpty` is not implemented.** Calc drops a page whose whole block is blank, but only when
+  the caller passes the option (`ScPrintOptions::GetSkipEmpty`), and its PDF export does not — so
+  reproducing the reference means not implementing it.
+- **The used area counts cells with content only.** Calc's own search also counts a cell carrying
+  nothing but a style, because its attribute array knows about it. The content tree records no
+  formatting, so a sheet whose last two columns are empty-but-shaded comes out narrower here.
+- **Multiple print ranges are paginated but not merged.** Calc paginates each in turn with a zoom
+  of its own, which is what the port does; what it does not do is Calc's own oddity of hiding all
+  breaks when a sheet has more than one range (`table5.cxx:97`).
+- **Cell text layout.** Alignment, wrap, shrink-to-fit, rotation, indent, rich text inside a cell,
+  the `###` a too-narrow numeric cell shows and the overflow of a long string *as drawn* are all
+  still the separate item below. Pagination needed only as much of it as the print-area extension
+  above, because a row's height and a column's width come from the file and never from the text.
+  What `SheetPage.Draw` does today is one glyph run per cell at a baseline, in one face for the
+  whole workbook, left for text and right for numbers — enough to see the pages, not enough to
+  compare them against a rendering.
 
 **Done: XLS (BIFF8 and BIFF5) extraction and CSV**, in `MsBinary/` and `Csv/`. The XLS reader
 produces the same content-tree shape as the ODS one — a section per sheet holding one table,
@@ -210,14 +343,17 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
 - [ ] Formatting as a separate run-length structure keyed by row, with pooled pattern
       objects
 - [ ] Three-level attribute resolution: direct formatting → named cell style → default
-- [ ] Row heights and column widths as run-length segments; hidden rows/columns
+- [x] Row heights and column widths as run-length segments; hidden rows/columns — `Layout/SheetGrid.cs`.
+      Run-length in all three formats and kept that way: a `<col>` spans `min`..`max`, ODF repeats a
+      column element, and a sheet has 1 048 576 rows almost all at the default height
 - [ ] Merged ranges; cell borders (resolving the shared-edge conflicts between neighbours)
 - [ ] Number formats, including custom codes and locale-dependent behaviour
 - [ ] Conditional formatting; data validation
 - [ ] Defined names; sheet-local and workbook-global scopes
 - [ ] Comments/notes; drawing objects; charts
-- [ ] Print setup: print areas, repeated rows/columns, scale-to-pages, page order, headers
-      and footers
+- [x] Print setup: print areas, repeated rows/columns, scale-to-pages, page order, headers
+      and footers — `Layout/SheetPrintSetup.cs`, read by all three formats. Header and footer
+      *text* is carried as written and not yet parsed or drawn
 
 ## Formula engine
 
@@ -380,11 +516,20 @@ number-formatted.
 
 ## Rendering
 
-- [ ] Cell text: alignment, wrap, shrink-to-fit, rotation, indent
+- [ ] Cell text: alignment, wrap, shrink-to-fit, rotation, indent. Pagination needed none of it
+      — a row's height and a column's width come from the file, never from the text — so what
+      draws today is one glyph run per cell at a baseline, left for text and right for numbers,
+      in one face for the whole workbook. Cell fonts are the prerequisite: `FONT` records and
+      `styles.xml`'s `fonts` element are both still unread
 - [ ] Overflow into adjacent empty cells; `###` when a number does not fit — note the
-      displayed text is **column-width dependent**, so it cannot be computed before layout
+      displayed text is **column-width dependent**, so it cannot be computed before layout.
+      The *print area* is already widened for overflow (`Layout/SheetTextOverflow.cs`), because
+      that changes the page count; drawing the overflow, and clipping it where a neighbour stops
+      it, is what is left
 - [ ] Rich text within a cell
 - [ ] Grid lines, backgrounds, and border resolution between neighbouring cells
-- [ ] **Print pagination** — port this faithfully; it is the page geometry
-- [ ] Repeated rows/columns; scale-to-pages; headers and footers
+- [x] **Print pagination** — ported, in `Layout/SheetPagination.cs`
+- [x] Repeated rows/columns; scale-to-pages; page order
+- [ ] Header and footer text: the `&P`/`&D`/`&A` field language, and laying it out. The band's
+      *height* is read and reserved, which is what pagination needs; nothing draws in it yet
 - [ ] Drawing objects and charts anchored to cells

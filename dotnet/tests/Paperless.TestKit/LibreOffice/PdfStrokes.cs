@@ -15,8 +15,18 @@ namespace Paperless.TestKit.LibreOffice;
 /// <param name="ToX">Where it ends horizontally.</param>
 /// <param name="ToY">Where it ends vertically, again from the page's top.</param>
 /// <param name="Width">The pen width in points.</param>
+/// <param name="Colour">
+/// The <em>stroking</em> colour in force when it was drawn, as <c>0xRRGGBB</c>.
+/// <para>
+/// Tracked across the content stream rather than read off the path, for the reason
+/// <see cref="PdfFill.Colour"/> is: it belongs to the graphics state, so the operator that set it
+/// may be far earlier and may serve several strokes. Defaults to black, which is PDF's initial
+/// state — and which is also, for a table border, by far the commonest right answer.
+/// </para>
+/// </param>
 public readonly record struct PdfStroke(
-    int PageIndex, double FromX, double FromY, double ToX, double ToY, double Width)
+    int PageIndex, double FromX, double FromY, double ToX, double ToY, double Width,
+    uint Colour = 0)
 {
     /// <summary>True when the line is horizontal, within a rounding of a twentieth of a point.</summary>
     public bool IsHorizontal => Math.Abs(FromY - ToY) < 0.05;
@@ -77,8 +87,18 @@ public static partial class PdfStrokes
     /// </remarks>
     private static IEnumerable<PdfStroke> LinesIn(string content, int page, double pageHeight)
     {
+        // One pass over the colour operators, merged with the lines by position in the stream.
+        List<(int At, uint Colour)> colours = [.. Colours(content)];
+        int next = 0;
+        uint current = 0;
+
         foreach (Match match in StrokedLine().Matches(content))
         {
+            while (next < colours.Count && colours[next].At < match.Index)
+            {
+                current = colours[next++].Colour;
+            }
+
             double width = double.TryParse(
                 match.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture,
                 out double stated)
@@ -91,9 +111,56 @@ public static partial class PdfStrokes
                 page,
                 points[0], pageHeight - points[1],
                 points[2], pageHeight - points[3],
-                width);
+                width,
+                current);
         }
     }
+
+    /// <summary>
+    /// Every change to the stroking colour, with where in the stream it happened.
+    /// </summary>
+    /// <remarks>
+    /// Upper case, which is the whole difference from <see cref="PdfFills"/>: <c>RG</c>, <c>G</c>
+    /// and <c>K</c> set the pen, while their lower-case twins set the paint. A reader that took
+    /// the lower-case operators would report a bordered table's strokes in whatever colour the
+    /// last shaded cell was filled with.
+    /// </remarks>
+    private static IEnumerable<(int At, uint Colour)> Colours(string content)
+    {
+        foreach (Match match in StrokingColour().Matches(content))
+        {
+            double[] values =
+            [
+                .. match.Groups[1].Captures
+                    .Select(capture => double.TryParse(
+                        capture.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double v)
+                        ? v
+                        : 0.0),
+            ];
+
+            uint colour = match.Groups[2].Value switch
+            {
+                "G" when values.Length == 1 => Pack(values[0], values[0], values[0]),
+                "RG" when values.Length == 3 => Pack(values[0], values[1], values[2]),
+                "K" when values.Length == 4 => Pack(
+                    (1 - values[0]) * (1 - values[3]),
+                    (1 - values[1]) * (1 - values[3]),
+                    (1 - values[2]) * (1 - values[3])),
+                _ => 0,
+            };
+
+            yield return (match.Index, colour);
+        }
+    }
+
+    private static uint Pack(double r, double g, double b)
+        => ((uint)Math.Clamp(Math.Round(r * 255), 0, 255) << 16)
+           | ((uint)Math.Clamp(Math.Round(g * 255), 0, 255) << 8)
+           | (uint)Math.Clamp(Math.Round(b * 255), 0, 255);
+
+    /// <summary>One to four numbers followed by an upper-case colour operator.</summary>
+    [GeneratedRegex(@"(?:(-?[\d.]+)\s+){1,4}(RG|G|K)(?![A-Za-z])")]
+    private static partial Regex StrokingColour();
 
     private static double[]? Numbers(Match match, int firstGroup, int count)
     {

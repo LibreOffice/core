@@ -191,8 +191,16 @@ public sealed partial class RtfDocumentReader
         /// <summary>True when <c>\slmult1</c> said the spacing is a multiple rather than twips.</summary>
         public bool IsMultipleLineSpacing { get; set; }
 
-        /// <summary>The alignment, as one of RTF's four <c>\q</c> words.</summary>
+        /// <summary>The alignment, as one of RTF's four <c>\q</c> words, by page side.</summary>
+        /// <remarks>
+        /// The side rather than the edge: RTF's <c>\ql</c> is the physical left even in a
+        /// <c>\rtlpar</c> paragraph, so <see cref="TextAlignment.Start"/> here means "left" and is
+        /// folded onto the paragraph's start or end edge when the paragraph is recorded.
+        /// </remarks>
         public TextAlignment Alignment { get; set; }
+
+        /// <summary>True when <c>\rtlpar</c> said the paragraph reads right to left.</summary>
+        public bool IsRightToLeft { get; set; }
 
         /// <summary>True when the paragraph must stay with the next.</summary>
         public bool KeepWithNext { get; set; }
@@ -248,6 +256,7 @@ public sealed partial class RtfDocumentReader
             LineSpacing = LineSpacing,
             IsMultipleLineSpacing = IsMultipleLineSpacing,
             Alignment = Alignment,
+            IsRightToLeft = IsRightToLeft,
             KeepWithNext = KeepWithNext,
             KeepTogether = KeepTogether,
             HasWidowControl = HasWidowControl,
@@ -297,6 +306,7 @@ public sealed partial class RtfDocumentReader
             LineSpacing = null;
             IsMultipleLineSpacing = false;
             Alignment = TextAlignment.Start;
+            IsRightToLeft = false;
             KeepWithNext = false;
             KeepTogether = false;
             HasWidowControl = false;
@@ -422,6 +432,16 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>Where this note's citation sits in the paragraph that cites it.</summary>
         public int NoteOffset { get; init; }
+
+        /// <summary>
+        /// The note's citation, kept after <see cref="LayoutPrefix"/> has been consumed.
+        /// </summary>
+        /// <remarks>
+        /// The prefix is cleared the moment the note's first paragraph takes it, which is the right thing
+        /// for a prefix and the wrong thing for a record: a renumbering pass runs long after and needs to
+        /// know what the note was cited as in order to find it again.
+        /// </remarks>
+        public string NoteCitation { get; init; } = "";
 
         /// <summary>True when this flow is an endnote's rather than a footnote's.</summary>
         /// <remarks>
@@ -1029,6 +1049,7 @@ public sealed partial class RtfDocumentReader
             new Ww8.Ww8LayoutFormat
             {
                 Justification = null,
+                IsRightToLeft = state.IsRightToLeft,
                 LeftIndent = state.LeftIndent,
                 RightIndent = state.RightIndent,
                 FirstLineIndent = state.FirstLineIndent,
@@ -1043,7 +1064,7 @@ public sealed partial class RtfDocumentReader
                 HasContextualSpacing = state.HasContextualSpacing,
             }.ToParagraphFormat(SizeOf(state)) with
             {
-                Alignment = state.Alignment,
+                Alignment = AlignmentOf(state),
                 TabStops = [.. state.TabStops.OrderBy(stop => stop.Position.Emu)],
                 DefaultTabInterval = _defaultTabInterval,
             },
@@ -1061,6 +1082,24 @@ public sealed partial class RtfDocumentReader
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);
     }
+
+    /// <summary>
+    /// The paragraph's alignment as an edge, from the page side its <c>\q</c> word named.
+    /// </summary>
+    /// <remarks>
+    /// The two sides swap in a <c>\rtlpar</c> paragraph, because RTF names sides and the layout
+    /// engine takes edges: <c>\qr</c> in a right-to-left paragraph is its <em>start</em>. Measured
+    /// on LibreOffice's own RTF export of a right-aligned right-to-left ODF paragraph, which writes
+    /// exactly <c>\qr … \rtlpar</c> and renders it against the right margin.
+    /// </remarks>
+    private static TextAlignment AlignmentOf(GroupState state) => state.IsRightToLeft
+        ? state.Alignment switch
+        {
+            TextAlignment.Start => TextAlignment.End,
+            TextAlignment.End => TextAlignment.Start,
+            _ => state.Alignment,
+        }
+        : state.Alignment;
 
     /// <summary>
     /// The run a note's own citation is drawn in: superscript, at the size that goes with it.
@@ -1443,6 +1482,7 @@ public sealed partial class RtfDocumentReader
             Depth = _groupDepth,
             NoteBlocks = new Staged(),
             NoteOffset = offset,
+            NoteCitation = citation,
             LayoutPrefix = citation,
         });
     }
@@ -1555,7 +1595,15 @@ public sealed partial class RtfDocumentReader
                             finished.IsEndnote,
                             blocks,
                             (finished.IsEndnote ? _endnotes : _footnotes).Placement,
-                            (finished.IsEndnote ? _endnotes : _footnotes).Restart));
+                            (finished.IsEndnote ? _endnotes : _footnotes).Restart)
+                        {
+                            Numbering = finished.IsEndnote ? _endnotes : _footnotes,
+
+                            // The flow's own prefix, which is where the note's copy of its number came
+                            // from: RTF repeats the `\chftn` inside the group and extraction drops it, so
+                            // the head of the note carries the prefix and nothing else.
+                            Citation = finished.NoteCitation,
+                        });
                 }
             }
         }

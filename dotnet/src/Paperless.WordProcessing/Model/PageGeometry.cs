@@ -224,6 +224,26 @@ public sealed record PageGeometry
     /// <summary>The gap between columns, when there is more than one.</summary>
     public Length ColumnGap { get; init; }
 
+    /// <summary>
+    /// True when the section itself reads right to left, which reverses its columns.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A section's direction is a separate statement from its paragraphs' — OOXML's
+    /// <c>w:sectPr/w:bidi</c>, ODF's <c>style:writing-mode</c> on the page layout, RTF's
+    /// <c>\rtlsect</c>, WW8's <c>sprmSFBiDi</c> — and the one thing it changes that shows on a page
+    /// is which column comes first. Measured: a two-column A4 page whose layout says <c>rl-tb</c>
+    /// has its first column drawn at 319 pt, which is the right-hand one, and its margins stay
+    /// where they were.
+    /// </para>
+    /// <para>
+    /// It does <em>not</em> mirror the margins, and it does not decide a paragraph's direction: a
+    /// paragraph takes that from its own properties, which is why a right-to-left section holding
+    /// left-to-right paragraphs is an ordinary thing to meet.
+    /// </para>
+    /// </remarks>
+    public bool IsRightToLeft { get; init; }
+
     /// <summary>True when the page is wider than it is tall, as the document declares it.</summary>
     /// <remarks>
     /// Taken from the document's own orientation flag rather than derived by comparing the two
@@ -292,8 +312,14 @@ public sealed record PageGeometry
     /// <param name="column">The column, counted from zero at the leading edge.</param>
     public DocRect ColumnArea(int column)
     {
-        int at = Math.Clamp(column, 0, Math.Max(0, Columns - 1));
+        int columns = Math.Max(1, Columns);
+        int at = Math.Clamp(column, 0, columns - 1);
         Length width = ColumnWidth;
+
+        // "Leading" rather than "left": a right-to-left section fills its rightmost column first,
+        // which is the whole of what its direction does to a page. Measured against LibreOffice —
+        // a two-column A4 page in rl-tb draws its first line at 319 pt.
+        if (IsRightToLeft) at = columns - 1 - at;
 
         return new DocRect(
             Margins.Left + Gutter + ((width + ColumnGap) * at), Margins.Top, width, TextHeight);

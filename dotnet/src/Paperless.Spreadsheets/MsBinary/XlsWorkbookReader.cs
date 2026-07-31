@@ -1,5 +1,6 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
+using Paperless.Spreadsheets.Layout;
 using Paperless.Spreadsheets.Numbers;
 using Paperless.Text.Encodings;
 
@@ -49,6 +50,11 @@ internal sealed class XlsWorkbookReader
     private readonly List<XfRecord> _formats = [];
     private readonly Dictionary<int, string> _formatCodes = [];
     private readonly Dictionary<int, NumberFormatCode> _parsedFormats = [];
+    private readonly List<SheetLayout> _layouts = [];
+    private readonly Dictionary<int, List<SheetRange>> _printAreas = [];
+    private readonly Dictionary<int, SheetRange> _repeatColumns = [];
+    private readonly Dictionary<int, SheetRange> _repeatRows = [];
+    private XlsSheetPrintState _page = new();
     private bool _reportedFormat;
     private bool _reportedSstIndex;
 
@@ -150,6 +156,10 @@ internal sealed class XlsWorkbookReader
 
                 case BiffRecords.Xf or BiffRecords.Xf2 or BiffRecords.Xf3 or BiffRecords.Xf4:
                     ReadXf();
+                    break;
+
+                case BiffPageRecords.Name:
+                    ReadName();
                     break;
 
                 default:
@@ -391,6 +401,7 @@ internal sealed class XlsWorkbookReader
     private ContentSection ReadSheet(SheetEntry sheet, int index)
     {
         SheetBuilder builder = new(this, sheet.Name);
+        _page = new XlsSheetPrintState();
 
         if (StartSubstream(sheet))
         {
@@ -416,7 +427,28 @@ internal sealed class XlsWorkbookReader
             IsHidden = sheet.IsHidden,
         };
 
-        section.Children.Add(builder.Build());
+        ContentTable table = builder.Build();
+        section.Children.Add(table);
+
+        // The print names are workbook-level and scoped by the sheet's position in the
+        // directory, so they are attached here rather than while the sheet's records go by.
+        if (_printAreas.TryGetValue(index, out List<SheetRange>? areas))
+            _page.PrintAreas.AddRange(areas);
+        if (_repeatColumns.TryGetValue(index, out SheetRange columns))
+            _page.RepeatColumns = columns;
+        if (_repeatRows.TryGetValue(index, out SheetRange rows))
+            _page.RepeatRows = rows;
+
+        _layouts.Add(new SheetLayout
+        {
+            Name = sheet.Name,
+            Index = index,
+            IsHidden = sheet.IsHidden,
+            Setup = _page.ToSetup(),
+            Grid = _page.ToGrid(),
+            Cells = table,
+        });
+
         return section;
     }
 
@@ -531,6 +563,7 @@ internal sealed class XlsWorkbookReader
                     break;
 
                 default:
+                    ReadPageRecord(id);
                     break;
             }
         }
@@ -729,6 +762,260 @@ internal sealed class XlsWorkbookReader
             int firstColumn = _stream.ReadUInt16();
             int lastColumn = _stream.ReadUInt16();
             builder.AddMergedRange(firstRow, lastRow, firstColumn, lastColumn);
+        }
+    }
+
+
+    /// <summary>The sheets' print setups and geometry, in directory order.</summary>
+    /// <remarks>
+    /// Chart and macro substreams contribute nothing here, exactly as they contribute no
+    /// section: they keep their place in the sheet numbering and have no page setup of their
+    /// own.
+    /// </remarks>
+    public IReadOnlyList<SheetLayout> Layouts => _layouts;
+
+    /// <summary>
+    /// Reads one of the records that carry a sheet's page geometry.
+    /// </summary>
+    /// <remarks>
+    /// Reached from the sheet loop's default branch, so a workbook with none of them costs one
+    /// switch per record. Every one of these is optional and several are written only when they
+    /// differ from Excel's default, which is why <see cref="XlsSheetPrintState"/> starts from
+    /// the defaults rather than from zero.
+    /// </remarks>
+    private void ReadPageRecord(ushort id)
+    {
+        switch (id)
+        {
+            case BiffPageRecords.LeftMargin or BiffPageRecords.RightMargin
+                or BiffPageRecords.TopMargin or BiffPageRecords.BottomMargin:
+                if (_stream.RecordLeft >= 8) _page.SetMargin(id, _stream.ReadDouble());
+                break;
+
+            case BiffPageRecords.Setup:
+                ReadSetup();
+                break;
+
+            case BiffPageRecords.WsBool:
+                if (_stream.RecordLeft >= 2)
+                {
+                    _page.SetFitsToPages(
+                        (_stream.ReadUInt16() & BiffPageRecords.WsBoolFitToPage) != 0);
+                }
+                break;
+
+            case BiffPageRecords.Header or BiffPageRecords.Footer:
+                // An empty record is a header that was switched off, and it is the emptiness
+                // rather than the record's absence that Calc reads as "no header". The length
+                // field is one byte in BIFF5 and two in BIFF8, which is not a property of the
+                // format but of this record — LibreOffice picks between ReadByteString(false)
+                // and ReadUniString() on the generation (xipage.cxx:114).
+                _page.SetFurniture(
+                    id,
+                    _stream.RecordLeft > 0
+                        ? _stream.ReadString(_stream.Version == BiffVersion.Biff5)
+                        : string.Empty);
+                break;
+
+            case BiffPageRecords.HorizontalCentre or BiffPageRecords.VerticalCentre
+                or BiffPageRecords.PrintHeaders or BiffPageRecords.PrintGridLines:
+                if (_stream.RecordLeft >= 2) _page.SetFlag(id, _stream.ReadUInt16() != 0);
+                break;
+
+            case BiffPageRecords.HorizontalPageBreaks or BiffPageRecords.VerticalPageBreaks:
+                ReadPageBreaks(id);
+                break;
+
+            case BiffPageRecords.DefColWidth:
+                if (_stream.RecordLeft >= 2) _page.SetDefaultColumnWidth(_stream.ReadUInt16());
+                break;
+
+            case BiffPageRecords.DefaultRowHeight:
+                if (_stream.RecordLeft >= 4)
+                {
+                    _stream.ReadUInt16();
+                    _page.SetDefaultRowHeight(_stream.ReadUInt16());
+                }
+                break;
+
+            case BiffPageRecords.ColInfo:
+                ReadColInfo();
+                break;
+
+            case BiffPageRecords.Row:
+                ReadRow();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void ReadSetup()
+    {
+        if (_stream.RecordLeft < 12) return;
+
+        int paper = _stream.ReadUInt16();
+        int scale = _stream.ReadUInt16();
+        int startPage = _stream.ReadUInt16();
+        int fitWidth = _stream.ReadUInt16();
+        int fitHeight = _stream.ReadUInt16();
+        ushort flags = _stream.ReadUInt16();
+
+        // BIFF5 added the resolutions and the header and footer margins; a BIFF4 SETUP stops
+        // after the flags, so the rest is read only when the record is long enough to hold it.
+        double? headerMargin = null;
+        double? footerMargin = null;
+        if (_stream.RecordLeft >= 20)
+        {
+            _stream.ReadUInt16();
+            _stream.ReadUInt16();
+            headerMargin = _stream.ReadDouble();
+            footerMargin = _stream.ReadDouble();
+        }
+
+        _page.SetSetup(paper, scale, startPage, fitWidth, fitHeight, flags, headerMargin, footerMargin);
+    }
+
+    /// <summary>
+    /// Reads a <c>HORIZONTALPAGEBREAKS</c> or <c>VERTICALPAGEBREAKS</c> record.
+    /// </summary>
+    /// <remarks>
+    /// BIFF8 widened each entry from one position to a position plus the first and last
+    /// column or row the break applies to, and LibreOffice ignores the extra pair
+    /// (<c>XclImpPageSettings::ReadPageBreaks</c>, <c>sc/source/filter/excel/xipage.cxx:151</c>)
+    /// — a break in Calc runs across the whole sheet, so a partial one cannot be represented.
+    /// </remarks>
+    private void ReadPageBreaks(ushort id)
+    {
+        if (_stream.RecordLeft < 2) return;
+
+        int count = _stream.ReadUInt16();
+        bool wide = _stream.Version == BiffVersion.Biff8;
+        List<int> positions = [];
+
+        for (int at = 0; at < count && _stream.RecordLeft >= 2; at++)
+        {
+            positions.Add(_stream.ReadUInt16());
+            if (wide && _stream.RecordLeft >= 4) _stream.Skip(4);
+        }
+
+        _page.AddBreaks(id, positions);
+    }
+
+    private void ReadColInfo()
+    {
+        if (_stream.RecordLeft < 10) return;
+
+        int first = _stream.ReadUInt16();
+        int last = _stream.ReadUInt16();
+        int width = _stream.ReadUInt16();
+        _stream.ReadUInt16();
+        ushort options = _stream.ReadUInt16();
+
+        _page.AddColumns(first, last, width, (options & 0x0001) != 0);
+    }
+
+    /// <summary>
+    /// Reads a <c>ROW</c> record's height and hidden flag.
+    /// </summary>
+    /// <remarks>
+    /// Bit 15 of the height means "not set by hand" rather than being part of the number, so it
+    /// is masked off and the value used regardless — which is what Calc does
+    /// (<c>ImportExcel::Row34</c>, <c>sc/source/filter/excel/impop.cxx:1026</c>). A height of
+    /// zero after masking falls back to the sheet default rather than collapsing the row.
+    /// </remarks>
+    private void ReadRow()
+    {
+        if (_stream.RecordLeft < 16) return;
+
+        int row = _stream.ReadUInt16();
+        _stream.Skip(4);
+        int height = _stream.ReadUInt16() & 0x7FFF;
+        _stream.Skip(4);
+        ushort flags = _stream.ReadUInt16();
+
+        _page.AddRow(row, height, (flags & 0x0020) != 0);
+    }
+
+    /// <summary>
+    /// Reads a <c>NAME</c> record, keeping only the two built-in names that are print setup.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A built-in name's text is one byte holding a code rather than a name — 6 for the print
+    /// area and 7 for the repeated rows and columns — and its value is a formula token array,
+    /// not text. Only the reference tokens are decoded: a print area is one or more
+    /// <c>tArea3d</c> tokens, optionally wrapped in a <c>tMemFunc</c> and joined by the union
+    /// operator, and anything else in the array means the name is not a plain range and is
+    /// skipped rather than guessed at.
+    /// </para>
+    /// <para>
+    /// <c>itab</c> is one-based and zero means a workbook-global name, which neither of these
+    /// ever is.
+    /// </para>
+    /// </remarks>
+    private void ReadName()
+    {
+        if (_stream.RecordLeft < 14) return;
+
+        ushort flags = _stream.ReadUInt16();
+        _stream.ReadByte();
+        int nameLength = _stream.ReadByte();
+        int formulaLength = _stream.ReadUInt16();
+        _stream.Skip(2);
+        int sheet = _stream.ReadUInt16();
+        int customMenu = _stream.ReadByte();
+        int description = _stream.ReadByte();
+        int help = _stream.ReadByte();
+        int status = _stream.ReadByte();
+
+        if ((flags & BiffPageRecords.NameBuiltIn) == 0 || nameLength < 1 || sheet < 1) return;
+
+        byte code;
+        if (_stream.Version == BiffVersion.Biff8)
+        {
+            // The name is a BIFF8 string, so its own flags byte comes first and a built-in
+            // name's single character may be stored wide.
+            if (_stream.RecordLeft < 2) return;
+            byte stringFlags = _stream.ReadByte();
+            code = _stream.ReadByte();
+            if ((stringFlags & 0x01) != 0 && _stream.RecordLeft >= 1) _stream.ReadByte();
+            if (nameLength > 1) _stream.Skip(Math.Min(_stream.RecordLeft, (nameLength - 1) * ((stringFlags & 0x01) != 0 ? 2 : 1)));
+        }
+        else
+        {
+            code = _stream.ReadByte();
+            if (nameLength > 1) _stream.Skip(Math.Min(_stream.RecordLeft, nameLength - 1));
+        }
+
+        if (code is not (BiffPageRecords.BuiltInPrintArea or BiffPageRecords.BuiltInPrintTitles))
+            return;
+
+        List<SheetRange> ranges = XlsNameRanges.Read(
+            _stream, Math.Min(formulaLength, _stream.RecordLeft), _stream.Version);
+
+        _ = customMenu;
+        _ = description;
+        _ = help;
+        _ = status;
+
+        int index = sheet - 1;
+        if (code == BiffPageRecords.BuiltInPrintArea)
+        {
+            if (!_printAreas.TryGetValue(index, out List<SheetRange>? areas))
+                _printAreas[index] = areas = [];
+            areas.AddRange(ranges);
+            return;
+        }
+
+        // Print_Titles holds both bands in one name and tells them apart by shape, exactly as
+        // the OOXML path does: a band spanning every row is the repeated columns, and one
+        // spanning every column is the repeated rows.
+        foreach (SheetRange range in ranges)
+        {
+            if (range.LastRow >= SheetAddress.MaxRow) _repeatColumns[index] = range;
+            else if (range.LastColumn >= SheetAddress.MaxColumn) _repeatRows[index] = range;
         }
     }
 

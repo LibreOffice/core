@@ -246,6 +246,28 @@ public sealed record ParagraphFormat
     /// <summary>How the lines sit in the width available to them.</summary>
     public TextAlignment Alignment { get; init; } = TextAlignment.Start;
 
+    /// <summary>
+    /// True when the paragraph itself reads right to left, whatever its text says.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The paragraph's declared writing mode — ODF's <c>style:writing-mode</c>, OOXML's
+    /// <c>w:bidi</c>, RTF's <c>\rtlpar</c>, WW8's <c>sprmPFBiDi</c> — and not a guess from its
+    /// content: an Arabic sentence in an English paragraph still starts at the left margin, and an
+    /// empty right-to-left paragraph still puts its caret on the right.
+    /// </para>
+    /// <para>
+    /// It decides three separate things, which is why one flag is not enough on its own: the base
+    /// embedding level the bidi algorithm resolves against, which side <see cref="StartIndent"/> and
+    /// <see cref="FirstLineIndent"/> are measured from, and which edge
+    /// <see cref="TextAlignment.Start"/> means. Writer gets all three at once by laying a
+    /// right-to-left frame out as though it were left to right and mirroring the result
+    /// (<c>SwTextFrame::SwitchLTRtoRTL</c>, <c>sw/source/core/text/txtfrm.cxx:682</c>), which is
+    /// exactly what <see cref="ParagraphLayouter"/> does with this.
+    /// </para>
+    /// </remarks>
+    public bool IsRightToLeft { get; init; }
+
     /// <summary>How far the paragraph is indented from the text area's start edge.</summary>
     public Length StartIndent { get; init; }
 

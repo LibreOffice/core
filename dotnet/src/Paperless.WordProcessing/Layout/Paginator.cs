@@ -187,6 +187,19 @@ public sealed class Paginator
     public PaginationOptions Options => _options;
 
     /// <summary>
+    /// The blocks the last run really paginated, or null when they were the ones it was handed.
+    /// </summary>
+    /// <remarks>
+    /// Non-null only where a per-page note restart rewrote a citation, which changes the text of the citing
+    /// paragraph and of the note's own first line. The pages index into <em>these</em> blocks, so a caller
+    /// keeping the list it passed in would draw the numbering the document was read with rather than the one
+    /// its pages settled on. Each page also names the list directly through <see cref="LaidOutPage.Blocks"/>,
+    /// so a caller that ignores this still draws the right thing; this is what lets the block list a caller
+    /// holds agree with them.
+    /// </remarks>
+    public IReadOnlyList<PageBlock>? Blocks { get; private set; }
+
+    /// <summary>
     /// True when the last run hit <see cref="PaginationOptions.MaxPages"/> and stopped early.
     /// </summary>
     /// <remarks>
@@ -245,11 +258,31 @@ public sealed class Paginator
         ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sections);
 
+        Blocks = null;
+
         List<PaginatedSection> withFrames =
             sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
 
         List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
-        if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
+
+        // A per-page note restart, which is the one numbering rule that cannot be settled before the pages
+        // exist — and Writer damps it rather than iterating, so this renumbers over the finished pages, lays
+        // them out once more and stops. See `NoteRenumbering` for the citations and for why stopping is the
+        // answer rather than a compromise. Guarded, so a document whose notes do not restart pays one walk.
+        if (NoteRenumbering.Applies(blocks)
+            && NoteRenumbering.Apply(blocks, pages) is { } renumbered)
+        {
+            blocks = renumbered;
+            Blocks = renumbered;
+            pages = Fill(blocks, withFrames, startingNumber);
+
+            // Each page now has to name the list its lines index, because the caller's is the one it was
+            // handed and this one is not it. An endnote page already carries its own flow and keeps it.
+            for (int i = 0; i < pages.Count; i++)
+            {
+                if (pages[i].Blocks is null) pages[i] = pages[i] with { Blocks = blocks };
+            }
+        }
 
         // The loop frames close, and the reason pagination cannot be a single pass once one is present:
         // where a frame goes depends on where its anchor paragraph ended up, and where that paragraph's
@@ -258,9 +291,15 @@ public sealed class Paginator
         // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
         // of laying the whole document out again, which converges in one further pass whenever the frames
         // stay on the page they started on — the case every real document is.
+        //
+        // "Has this document a frame at all" is asked of the finished pages rather than of the blocks,
+        // because a frame need not be anchored in the body: one anchored in a table cell or a header is
+        // reached through the flow it landed in, which exists only once a page has been filled. Scanning
+        // the blocks instead returned early on exactly those documents and left their frames unplaced.
         FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+        if (resolution.IsEmpty) return pages;
 
-        for (int pass = 0; pass < MaxFramePasses && !resolution.IsEmpty; pass++)
+        for (int pass = 0; pass < MaxFramePasses; pass++)
         {
             _obstacles = resolution.ObstaclesFor;
             List<LaidOutPage> next;
@@ -565,21 +604,37 @@ public sealed class Paginator
                 }
             }
 
+            allowed = WholeLines(layout.Lines, lineIndex, allowed);
+
             Length top = used + spaceAbove;
+            bool firstLineHere = columnIsEmpty;
+            bool firstLineOfParagraph = lineIndex == 0;
+
             for (int i = 0; i < allowed; i++)
             {
-                LineBox box = layout.Lines[lineIndex + i];
-
-                // The first line in a frame loses the leading above its text, box and all: Writer counts
-                // that leading as part of the paragraph's upper space and drops it at the top of a frame.
-                // Only when it really is the frame's first content — a line below a table is not — and
-                // whether the paragraph *began* here is beside the point: a paragraph carried over from the
-                // previous page drops the leading above its continuation just the same, which at 200% line
-                // spacing is the difference between twenty-five lines on a page and twenty-four.
-                if (columnIsEmpty && i == 0) box = box.WithoutSpaceAbove();
+                // A paragraph's first line never carries the leading proportional line spacing adds — it is
+                // the paragraph above's to give, and `SpaceAbove` collects it there. Nor does the first line
+                // in a frame, whatever line of its paragraph it is, since Writer drops the whole upper space
+                // at the top of a text frame. See `ParagraphLeading`.
+                // Both flags are per *line* rather than per stretch: a line beside a frame clear of both
+                // margins is several boxes on one baseline, and they share one box's worth of geometry, so
+                // the leading has to come off whichever of them is the one whose height is counted.
+                LineBox box = ParagraphLeading.AsDrawn(
+                    layout.Lines[lineIndex + i],
+                    isFirstOfParagraph: firstLineOfParagraph,
+                    isFirstInFrame: firstLineHere);
+                bool shares = box.SharesLineWithNext;
 
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top, column));
-                top += box.Height;
+
+                // A stretch that shares its line with the next one leaves the pen where it is: the box
+                // after it is more of the same line, at the same top.
+                if (!shares)
+                {
+                    top += box.Height;
+                    firstLineHere = false;
+                    firstLineOfParagraph = false;
+                }
             }
 
             notes.AddRange(NotesIn(paragraph, layout, lineIndex, allowed));
@@ -708,7 +763,7 @@ public sealed class Paginator
                 0, paragraph.Text.Length, paragraph.Face, paragraph.EmSize, paragraph.Shaping));
         }
 
-        return MeasuredParagraph.Measure(paragraph.Text, runs);
+        return MeasuredParagraph.Measure(paragraph.Text, runs, shaper: null, paragraph.Itemisation);
     }
 
     /// <summary>
@@ -723,10 +778,10 @@ public sealed class Paginator
     /// How many of a paragraph's remaining lines fit in what is left of the page.
     /// </summary>
     /// <remarks>
-    /// The first line on the page is measured as it will be drawn — without the leading above its text,
-    /// which Writer drops at the top of a frame. Measuring it with the leading gives the page one line
-    /// fewer than Writer allows at every spacing above single, and a page one line short moves every
-    /// break after it.
+    /// Every line is measured as it will be drawn, which for the two that lose their leading — a
+    /// paragraph's first and a frame's first — means without it. Measuring one with the leading gives the
+    /// page one line fewer than Writer allows at every spacing above single, and a page one line short
+    /// moves every break after it.
     /// </remarks>
     private static int Fit(
         LaidOutParagraph layout, int from, Length used, Length available, bool atTopOfPage)
@@ -734,19 +789,60 @@ public sealed class Paginator
         Length room = available - used;
         int count = 0;
 
-        for (int i = from; i < layout.Lines.Count; i++)
+        for (int i = from; i < layout.Lines.Count;)
         {
-            LineBox box = atTopOfPage && count == 0
-                ? layout.Lines[i].WithoutSpaceAbove()
-                : layout.Lines[i];
+            // A line beside a frame clear of both margins is several boxes on one baseline and costs its
+            // height once, counted from its last stretch — the one whose height and leading are the line's.
+            // Taken whole, so a page can never end between the text left of a frame and the text right of it.
+            int last = LastStretch(layout.Lines, i);
+
+            LineBox box = ParagraphLeading.AsDrawn(
+                layout.Lines[last],
+                isFirstOfParagraph: i == 0,
+                isFirstInFrame: atTopOfPage && count == 0);
 
             if (box.Height > room) break;
 
             room -= box.Height;
-            count++;
+            count += last - i + 1;
+            i = last + 1;
         }
 
         return count;
+    }
+
+    /// <summary>Where the line that begins at <paramref name="from"/> ends, as a box index.</summary>
+    /// <remarks>
+    /// Its own index for every box of a document with no floating frame in it, so the walk costs one
+    /// comparison per line and changes nothing about how such a document paginates.
+    /// </remarks>
+    private static int LastStretch(IReadOnlyList<LineBox> lines, int from)
+    {
+        int last = from;
+        while (last + 1 < lines.Count && lines[last].SharesLineWithNext) last++;
+        return last;
+    }
+
+    /// <summary>
+    /// The same count of boxes, shortened so that it does not end in the middle of a line.
+    /// </summary>
+    /// <remarks>
+    /// The keep rules count boxes, and a line beside a frame can be more than one of them — so an orphan
+    /// or widow limit, or the "place it anyway" fallback of a single box, can land between the text left
+    /// of a frame and the text right of it. Splitting there would draw half a line on each of two pages
+    /// and leave the second half at the wrong baseline, so the count backs off to the line's start; if
+    /// that leaves nothing, the whole line goes rather than none of it, since a box that cannot be placed
+    /// anywhere would loop.
+    /// </remarks>
+    private static int WholeLines(IReadOnlyList<LineBox> lines, int from, int count)
+    {
+        if (count <= 0 || from + count >= lines.Count) return count;
+        if (!lines[from + count - 1].SharesLineWithNext) return count;
+
+        int end = from + count - 1;
+        while (end > from && lines[end - 1].SharesLineWithNext) end--;
+
+        return end > from ? end - from : LastStretch(lines, from) - from + 1;
     }
 
     /// <summary>
@@ -801,7 +897,7 @@ public sealed class Paginator
 
     private static bool FirstLineFits(LaidOutParagraph layout, Length used, Length available)
         => layout.Lines.Count == 0
-           || used + layout.SpaceBefore + layout.Lines[0].Height <= available;
+           || used + layout.SpaceBefore + layout.Lines[0].WithoutSpaceAbove().Height <= available;
 
     /// <summary>
     /// The space above a paragraph, once collapsing and the top-of-page rule have applied.
@@ -810,6 +906,12 @@ public sealed class Paginator
     /// Both behaviours are compatibility flags rather than properties of the paragraph, which is why
     /// they live on the paginator: the same document laid out as Word would and as Writer would differs
     /// here on every paragraph boundary and at the top of every page.
+    /// <para>
+    /// The third term is neither, and is not the paragraph's either: the leading proportional line
+    /// spacing adds above a first line belongs to the paragraph <em>above</em>, which is what
+    /// <c>SwFlowFrame::CalcUpperSpace</c> adds as <c>nPrevLineSpacing</c> in both of its branches. See
+    /// <see cref="ParagraphLeading"/> for the citations and for what it costs to get wrong.
+    /// </para>
     /// </remarks>
     private Length SpaceAbove(
         IReadOnlyList<PageBlock> blocks,
@@ -820,17 +922,28 @@ public sealed class Paginator
         Length before = laid[index].Paragraph!.SpaceBefore;
 
         if (atTopOfPage && !_options.KeepsSpacingAtTopOfPage) return Length.Zero;
-        if (index == 0 || !_options.CollapsesSpacing) return before;
+
+        // The previous paragraph's leading, and only when there is a previous paragraph in this frame:
+        // at the top of a page or a column Writer finds no previous frame at all
+        // (`GetPrevFrameForUpperSpaceCalc_`) and never reaches the line-spacing term, so a page that
+        // keeps its paragraph spacing still starts its first line hard against the margin. A table above
+        // hands nothing down either — `GetSpacingValuesOfFrame` reports a line spacing only for a text
+        // frame.
+        Length leading = atTopOfPage || index == 0 || blocks[index - 1] is not PageParagraph
+            ? Length.Zero
+            : ParagraphLeading.Below(laid[index - 1].Paragraph);
+
+        if (index == 0 || !_options.CollapsesSpacing) return before + leading;
 
         // Collapsing: the gap is the larger of the two rather than their sum. The previous paragraph's
         // space-after has already been added to the running height, so what is added here is only the
         // part of space-before that exceeds it. A table before this paragraph collapses nothing, because
         // its own space-after is a table property rather than a paragraph's and the formats do not
         // collapse the two against each other.
-        if (blocks[index - 1] is not PageParagraph previous) return before;
+        if (blocks[index - 1] is not PageParagraph previous) return before + leading;
 
         Length excess = before - previous.Format.SpaceAfter;
-        return excess > Length.Zero ? excess : Length.Zero;
+        return (excess > Length.Zero ? excess : Length.Zero) + leading;
     }
 
     /// <summary>
@@ -897,6 +1010,7 @@ public sealed class Paginator
             BodyArea = geometry.TextArea,
             ColumnCount = geometry.Columns,
             ColumnGap = geometry.ColumnGap,
+            IsRightToLeft = geometry.IsRightToLeft,
             Lines = [.. lines],
             Tables = [.. tables],
             Header = furniture.Header,
@@ -918,6 +1032,7 @@ public sealed class Paginator
             BodyArea = geometry.TextArea,
             ColumnCount = geometry.Columns,
             ColumnGap = geometry.ColumnGap,
+            IsRightToLeft = geometry.IsRightToLeft,
             Lines = [],
             Header = furniture.Header,
             Footer = furniture.Footer,

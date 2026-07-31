@@ -82,6 +82,13 @@ internal static class WordParagraphFormats
             Alignment = Alignment(Word.Attribute(
                 Layer(styles, paragraphProperties, styleId, "jc"), "val")),
 
+            // w:bidi, which OOXML states on the paragraph and not on its runs. w:rtl on a run is
+            // deliberately not read: LibreOffice's own importer discards it —
+            // `case NS_ooxml::LN_EG_RPrBase_rtl: break;`,
+            // sw/source/writerfilter/dmapper/DomainMapper.cxx:2511 — and resolves direction from
+            // the text against this instead, so honouring it would put runs where Writer does not.
+            IsRightToLeft = IsOn(styles, paragraphProperties, styleId, "bidi"),
+
             // w:start and w:left are the same attribute under two names: the first is the
             // reading-direction form ECMA-376 standardised on and the second is what Word 2007 wrote
             // and what most files in existence still carry.
@@ -283,6 +290,18 @@ internal static class WordParagraphFormats
         return styles.ResolveInDocumentDefaults(runProperty: false, localName).IsOn;
     }
 
+    /// <summary>
+    /// The alignment, from <c>w:jc</c>.
+    /// </summary>
+    /// <remarks>
+    /// OOXML's four values are <em>direction-relative</em>, unlike ODF's and RTF's: <c>left</c> is
+    /// the older spelling of <c>start</c> and means the right margin in a <c>w:bidi</c> paragraph.
+    /// LibreOffice reaches the same answer by swapping them on import — "Paragraph justification
+    /// reverses its meaning in an RTL context",
+    /// <c>sw/source/writerfilter/dmapper/DomainMapper.cxx:2176</c> — and its own export of a
+    /// right-aligned right-to-left ODF paragraph writes <c>w:jc w:val="start"</c>, which is the
+    /// same statement read the other way round.
+    /// </remarks>
     private static TextAlignment Alignment(string? value) => value switch
     {
         "end" or "right" => TextAlignment.End,

@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Ooxml;
+using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
 
@@ -52,6 +53,12 @@ public static class XlsxReader
             };
 
             XlsxSheetReader reader = new(file, diagnostics);
+
+            // The print names are workbook-level and scoped to a sheet by position, so they are
+            // read once up front rather than looked up per sheet.
+            Dictionary<int, XlsxSheetPrintNames> names = XlsxPrintNames.Read(file.Workbook);
+            List<SheetLayout> layouts = [];
+
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
                 ContentSection section = new()
@@ -63,10 +70,29 @@ public static class XlsxReader
                 };
 
                 XElement? worksheet = file.LoadSheet(entry);
-                section.Children.Add(worksheet is null
+                ContentTable table = worksheet is null
                     ? new ContentTable()
-                    : reader.ReadSheet(worksheet));
+                    : reader.ReadSheet(worksheet);
+
+                section.Children.Add(table);
                 content.Children.Add(section);
+
+                // The print setup is read from the part that is already open rather than in a
+                // second pass, because parsing the worksheet is the expensive half of reading a
+                // workbook and doing it twice is also a second chance to disagree with itself.
+                XlsxSheetPrintNames print = names.GetValueOrDefault(entry.Index, XlsxSheetPrintNames.None);
+                (SheetPrintSetup setup, SheetGrid grid) = XlsxPrintSetup.Read(
+                    worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows);
+
+                layouts.Add(new SheetLayout
+                {
+                    Name = entry.Name,
+                    Index = entry.Index,
+                    IsHidden = entry.IsHidden,
+                    Setup = setup,
+                    Grid = grid,
+                    Cells = table,
+                });
 
                 // Comments belong to the sheet that holds them, so they land immediately after
                 // it rather than at the end of the workbook.
@@ -82,7 +108,7 @@ public static class XlsxReader
             }
 
             return new OoxmlSpreadsheetDocument(
-                format, file, content, [.. file.Diagnostics, .. diagnostics]);
+                format, file, content, [.. file.Diagnostics, .. diagnostics], layouts);
         }
         catch
         {
@@ -93,7 +119,7 @@ public static class XlsxReader
 }
 
 /// <summary>An OOXML spreadsheet that has been read.</summary>
-public sealed class OoxmlSpreadsheetDocument : IDocument
+public sealed class OoxmlSpreadsheetDocument : IPaginatedDocument
 {
     private readonly XlsxFile _file;
 
@@ -101,13 +127,18 @@ public sealed class OoxmlSpreadsheetDocument : IDocument
         DocumentFormat format,
         XlsxFile file,
         ContentDocument content,
-        IReadOnlyList<Diagnostic> diagnostics)
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<SheetLayout> sheets)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
+        Sheets = sheets;
     }
+
+    /// <summary>The sheets' print setups and geometry, in workbook order.</summary>
+    public IReadOnlyList<SheetLayout> Sheets { get; }
 
     /// <inheritdoc/>
     public DocumentFormat Format { get; }
@@ -133,6 +164,15 @@ public sealed class OoxmlSpreadsheetDocument : IDocument
     /// else. Valid until this document is disposed.
     /// </remarks>
     public XlsxFile File => _file;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// A workbook's pages come from its print setup and from nothing else, so this is where the
+    /// difference between the families shows: laying out a text document means measuring text,
+    /// and laying out a workbook means dividing a grid whose sizes the file already states.
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+        => new SpreadsheetPages(Sheets, options);
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

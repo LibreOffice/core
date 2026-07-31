@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mixed-direction text, for checking that a line is *drawn* the way LibreOffice draws it:
+  the sub-runs in visual order, and a right-to-left paragraph mirrored — its alignment,
+  its indents and the edge its lines start from.
+
+  Every paragraph is short enough to take one line, so a line of the reference PDF is one
+  paragraph and no grouping is needed. Set in DejaVu Sans throughout, for both the Western
+  and the complex-script font, because it is the only face on a bare Linux with Latin and
+  Hebrew in it; the text avoids anything that ligates, so a portion's glyph count is its
+  character count.
+
+  The right-to-left paragraphs state fo:text-align as "left" or "right" rather than as
+  "start" or "end", and that is deliberate. ODF's start and end are direction-relative and
+  its left and right are physical, but ParagraphAdjust::START only exists from LibreOffice
+  26.2 (offapi/com/sun/star/style/ParagraphAdjust.idl) — before it, xmloff mapped "start"
+  onto plain left, so a reference rendered by 24.2 puts a start-aligned right-to-left
+  paragraph against the *left* margin. The physical spellings mean the same thing in every
+  version, which is what makes this document a reference rather than a version test.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="left" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="lr-tb"/>
+   <!--
+     letter-kerning stated rather than left to the default, which is *false* in ODF, so that
+     the reference is the kerned widths Paperless measures.
+   -->
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <!--
+    Every right-to-left style repeats the text properties rather than inheriting them through
+    style:parent-style-name. Measured on the sibling document bidi.fodt: with a parent style the
+    right-to-left paragraphs came back set in FreeSans and Liberation Serif instead of DejaVu
+    Sans, which moved the reference widths by 5.1 pt.
+  -->
+  <style:style style:name="BodyRtl" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="right" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="rl-tb"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <!-- A start indent, which in a right-to-left paragraph is measured from the right margin. -->
+  <style:style style:name="BodyRtlIndent" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="right" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-left="3cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="rl-tb"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <!-- And a right-to-left paragraph aligned against the physical left, which is its end edge. -->
+  <style:style style:name="BodyRtlLeft" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="left" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="rl-tb"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Latin only, nothing reorders.</text:p>
+   <text:p text:style-name="Body">Start &#1513;&#1500;&#1493;&#1501; end.</text:p>
+   <text:p text:style-name="Body">Start &#1513;&#1500;&#1493;&#1501; 123 &#1506;&#1493;&#1500;&#1501; end.</text:p>
+   <text:p text:style-name="BodyRtl">&#1513;&#1500;&#1493;&#1501; end &#1506;&#1493;&#1500;&#1501;</text:p>
+   <text:p text:style-name="BodyRtl">Latin start &#1513;&#1500;&#1493;&#1501; done</text:p>
+   <text:p text:style-name="BodyRtlIndent">&#1513;&#1500;&#1493;&#1501; &#1506;&#1493;&#1500;&#1501;</text:p>
+   <text:p text:style-name="BodyRtlLeft">&#1513;&#1500;&#1493;&#1501; &#1506;&#1493;&#1500;&#1501;</text:p>
+ </office:text></office:body>
+</office:document>

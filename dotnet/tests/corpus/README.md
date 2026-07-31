@@ -86,6 +86,9 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `sheet-ooxml-features.xlsx` | XLSX | The same workbook as `sheet-features.ods` plus a fourth sheet of number formats, converted — so it covers the same features through a different vocabulary. Adds what only SpreadsheetML has: sheets located by relationship rather than by part name, `sharedStrings.xml` indices, `t="s"`/`t="b"`/`t="e"` cell types, `mergeCells` declared away from the cells it merges, comments hanging off the *worksheet* part with a separate author list, and — the reason the fourth sheet exists — **no cached display text at all**, so `styles.xml` has to be resolved for `[$£-809]#,##0.00`, `0.00E+00`, `0 ?/?`, `dd\ mmmm\ yyyy` and `#,##0.00;[RED]\-#,##0.00` to read as anything but raw numbers |
 | `sheet-ooxml-template.xltx` | XLTX | The same content as a template, so the template content type is exercised end to end |
 | `xls-features.xls` | XLS | Four sheets, one hidden; a shared string table larger than one 8224-byte record, so the CONTINUE path is exercised; MULRK, RK, NUMBER, LABELSST, MULBLANK and BOOLERR cells; a formula cached result of each kind — double, error, string (in the following STRING record) and boolean; number formats for currency, percent, date, time, datetime, scientific, grouped thousands and a custom code with literal text; a three-column merged range; a gap in a row |
+| `sheet-print-ods.ods` | ODS | Print setup as page geometry, which is the only thing that gives a spreadsheet pages at all. Five sheets: twelve one-inch columns and eighty rows with column A and row 1 repeated on every page (six pages, down then across); a sheet whose `table:print-ranges` limits it to `B2:D10` although it holds eight columns and forty rows; a sheet whose page layout carries `style:scale-to-X="1"`, so ten columns that need two pages have to be shrunk onto one; a sheet with `fo:break-before="page"` on row eleven, splitting thirty rows that would otherwise fit one page; and a sheet with `style:print-page-order="ltr"`, whose second page is the block to the *right* of the first rather than the one below it. Every cell names its own coordinates, so a page's first word states where the page starts. Fourteen pages in LibreOffice |
+| `sheet-print-xlsx.xlsx` | XLSX | The same workbook converted, so the same fourteen pages have to come out of `pageSetup`, `printOptions`, `rowBreaks`/`colBreaks` and the `_xlnm.Print_Area` and `_xlnm.Print_Titles` defined names instead |
+| `sheet-print-xls.xls` | XLS | And again out of BIFF's `SETUP`, its four margin records, `WSBOOL`, `HORIZONTALPAGEBREAKS`/`VERTICALPAGEBREAKS`, `COLINFO`, `ROW` and the built-in `NAME` records — whose value is a formula token array rather than a range |
 | `csv-semicolon.csv` | CSV | Semicolon separator with a decimal comma inside the fields, so frequency alone chooses wrongly; quoted fields containing a separator, a line break and a doubled quote; CRLF endings |
 | `csv-latin1.csv` | CSV | Windows-1252 bytes that are not valid UTF-8, so the encoding fallback is what makes the accents come out right |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
@@ -96,20 +99,34 @@ output after the input stem alone: converting both from a shared stem would have
 overwrite the other.
 
 | `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order, and a title whose boldness is stated nowhere on the slide because it lives in the master's `TxMasterStyleAtom` |
+| `shape-geometry.pptx` | PPTX | Four slides of nothing but placed shapes, hand-written so that every offset and extent is a round number of inches and every fill is stated rather than inherited. Slide 1: five rectangles at known EMU offsets — a literal fill, a `schemeClr accent1` fill, an `accent2` fill under `lumMod`/`lumOff`, an outline with no fill, and one rotated 30°. Slide 2: a group whose `chExt` is half its `ext`, so a child's coordinates are doubled on the way out, beside an ungrouped shape for comparison. Slide 3: four text bodies covering zero insets, the OOXML default insets, centred alignment and middle anchoring. Slide 4: four `rtTriangle`s — plain, `flipH`, `flipV`, and `flipH` with `rot="5400000"` — which is the only shape in the corpus that tells flip-before-rotate apart from rotate-before-flip, since a rectangle looks identical under either order |
+| `shape-geometry.odp` | ODP | The same deck converted, so the same placements are covered through ODF's vocabulary. Adds what only ODF has: `svg:x`/`svg:y`/`svg:width`/`svg:height` in centimetres, a `draw:transform="rotate (…) translate (…)"` whose angle runs the other way from OOXML's `rot`, a `draw:g` whose children carry absolute coordinates rather than a child coordinate space, and fills and strokes reached through a `draw:style-name` rather than stated on the shape |
 | `annotated-slides.odp` | ODP | Two slides, the first carrying two review comments by two different authors, the first comment having two paragraphs. It exists because no other corpus deck has a comment at all: Impress writes a page-level comment as `officeooo:annotation` in the OpenOffice.org extension namespace rather than as ODF's own `office:annotation`, and a reader that knows only the latter does not lose the text — it files it as slide content, where nothing tells it apart |
 | `comment-deck.pptx` | PPTX | The same deck converted, so slide comments are covered through PresentationML as well. Adds what only PPTX has: a `comments` part reached by relationship *from the slide*, a `commentAuthors.xml` reached from the presentation, a comment that names only an author **id**, and a two-paragraph comment carried as a single `p:text` with a newline in it |
 
 The two stems differ for the same reason `deck-features` does: `soffice --convert-to` would have
 had them overwrite each other's output.
 
-
-### Hand-written DOCX files
-
-Four documents that LibreOffice cannot produce, because what they exercise is something its own
-export normalises away. Each is written by a script rather than converted, and each is minimal.
+### Hand-written PPTX files
 
 | File | Exercises |
 |---|---|
+| `deck-text-style.pptx` | Where the shape's own text style sits in a slide's character chain. Seven text boxes on one slide, each stating the colour at a different rung: only the shape's `p:style/a:fontRef`; the body's `a:lstStyle` *and* the fontRef; the run's own `a:rPr` and the fontRef; a fontRef colour carrying a `lumMod`; nothing at all, so the master's `p:otherStyle`; and a placeholder whose *layout* placeholder carries the fontRef. A theme with a real `a:fontScheme`, so `idx="minor"` resolves to a face. LibreOffice cannot write this: its PPTX export states every property on every run, so no round-tripped deck ever consults the chain |
+
+### Hand-written DOCX files
+
+Five documents that LibreOffice cannot produce, because what they exercise is something its own
+export normalises away. Each is written by a script rather than converted, and each is minimal.
+
+`shape-geometry.pptx` is hand-written for the same reason and one more. LibreOffice's own PPTX
+export resolves every themed fill to a literal colour and rounds every offset through hundredths
+of a millimetre, so a converted deck can show neither that `schemeClr` resolution happened nor
+that a placement is exact — and it never writes a `flipH` beside a `rot`, which is the one
+combination that tells the two transform orders apart.
+
+| File | Exercises |
+|---|---|
+| `theme-table.docx` | Themed colours on the parts of a table: six `w:shd` cells whose fill is stated only as `w:themeFill` with a tint or a shade, and five rows whose bottom border is stated only as `w:themeColor` — one of them on the table's `w:tblBorders` rather than the cell's. Beside them, nine inline shapes stating the equivalent DrawingML chain, so the arithmetic stays measurable against LibreOffice even though the elements carrying it are not: LibreOffice resolves neither, leaving the themed shades unpainted and the themed borders black. Its DOCX export round-trips `w:themeFill` through a grab bag but **flattens a themed border to a literal `000000`**, so a converted file loses half of this |
 | `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
@@ -432,3 +449,52 @@ Writer settles that self-reference one line lower than this does. Everything els
 It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
 begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
 the end margin while `frame-wrap.fodt` passed throughout.
+
+`frame-parallel.{fodt,odt}` is the third, and it exists for the one thing a frame against a margin can never
+show: a 4 cm frame set 6.5 cm into a 17 cm measure with a `parallel` wrap leaves 6.5 cm free on *either*
+side, so every line it crosses has text left of it and text right of it. LibreOffice divides seven of the
+eighteen lines that way and starts each right-hand stretch at 354.50 pt. ODF only — LibreOffice's own DOCX
+export of the same document narrows one line fewer, because its OOXML import turns on
+`ADD_VERTICAL_FLY_OFFSETS` and that changes the rectangle `CalcFlyWidth` intersects. That is a compatibility
+flag rather than anything about the wrap, so the document is kept in the two forms that agree.
+
+`frame-in-header.{fodt,odt}` and `frame-in-cell.{fodt,odt}` are for the anchors that are not in the body at
+all. The header one is the more useful of the two: its frame is 3 cm tall in a 1.5 cm header, so its
+rectangle hangs into the body area and LibreOffice divides the first four *body* lines round it — which says
+outright that an anchored object belongs to the page however deeply its anchor is nested, and gives a
+whole-page comparison to hold that to. The cell one is compared for the frame's placement and its own text
+only: **the cell's text does not yet flow round it**, since obstacles reach a paragraph through the
+paginator and a cell's paragraphs are laid out by `FlowLayouter`, which is handed none.
+
+Two things about building them are worth knowing, because both look like engine bugs. `style:header-style`
+is a child of `style:page-layout`, **not** of `style:page-layout-properties`; nesting it inside gives a
+document whose header LibreOffice reads and this engine does not. And a cell border is not neutral to a
+frame measurement — a 0.5 pt border moved the cell's content top half a point away from LibreOffice's, which
+is why the cell in `frame-in-cell` states `fo:border="none"`.
+
+### Right-to-left documents
+
+`bidi-drawing.*` is `bidi.fodt`'s sibling, one step further along: where that one exists to check the
+sub-runs a paragraph is *cut into*, this one exists to check where they are *drawn*. Seven paragraphs, each
+one line, all in DejaVu Sans for the same reason — three left-to-right with Hebrew inside them, four
+right-to-left, and among those four one with a start indent and one aligned against the physical left. It
+does exist in four formats, unlike `bidi.fodt`, because the direction properties are the point: ODF's
+`style:writing-mode`, OOXML's `w:bidi`, RTF's `\rtlpar` and WW8's `sprmPFBiDi` all have to arrive as the
+same flag.
+
+**Its right-to-left paragraphs state `fo:text-align` as `left` and `right` rather than `start` and `end`,
+and that is the whole reason it is a usable reference.** ODF's start and end are relative to the writing
+mode and its left and right are physical, but `ParagraphAdjust::START` only exists from LibreOffice 26.2
+(`offapi/com/sun/star/style/ParagraphAdjust.idl`) — before it, xmloff mapped start and end straight onto left
+and right, so 24.2 renders a start-aligned right-to-left paragraph against the **left** margin. The physical
+spellings mean the same thing in every version. The same trap is why the round-tripped `.odt` is deliberately
+absent: LibreOffice 24.2 rewrites `fo:text-align="right"` as `end` on the way out, which by the specification
+means the opposite edge, so that file is a version artefact rather than coverage. The flat document exercises
+the same reader.
+
+`bidi-columns.*` is a right-to-left **section** rather than a right-to-left paragraph: a two-column page
+layout whose `style:writing-mode` is `rl-tb`, holding one ordinary left-to-right Latin paragraph. Everything
+about it except the page layout is deliberately plain, because the only question it asks is which column
+fills first — LibreOffice draws its first line at 319 pt on this A4 page, which is the right-hand column.
+Three formats and not four: **LibreOffice's RTF export drops the section direction entirely**, writing
+`\cols2` and no `\rtlsect`, so an RTF round trip has nothing left to read.

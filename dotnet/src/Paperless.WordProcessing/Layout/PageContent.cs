@@ -2,6 +2,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 
@@ -116,6 +117,34 @@ public sealed record PageParagraph : PageBlock
     public bool HasRuns => Runs.Count > 0;
 
     /// <summary>
+    /// The direction its bidi resolution takes as its base.
+    /// </summary>
+    /// <remarks>
+    /// The declared writing mode first and the runs' shaping options after it, which is the rule
+    /// <see cref="MeasuredParagraph"/> applies when it is handed no itemisation of its own. One
+    /// rule rather than two, because measuring a paragraph at one base level and drawing it at
+    /// another puts its sub-runs in an order its own widths do not describe.
+    /// </remarks>
+    public BidiDirection BaseDirection
+        => Format.IsRightToLeft || (HasRuns ? Runs[0].Shaping : Shaping).RightToLeft
+            ? BidiDirection.RightToLeft
+            : BidiDirection.LeftToRight;
+
+    /// <summary>
+    /// How to cut it into sub-runs, or null for the neutral settings.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than a left-to-right instance for the paragraph that needs nothing, so a
+    /// document that says nothing about direction is measured through exactly the path it took
+    /// before writing modes existed — including a caller that says right-to-left on its runs and
+    /// nothing on the paragraph, which is how it had to be said before.
+    /// </remarks>
+    internal ItemisationOptions? Itemisation
+        => Format.IsRightToLeft
+            ? new ItemisationOptions { BaseDirection = BidiDirection.RightToLeft }
+            : null;
+
+    /// <summary>
     /// The notes anchored in the paragraph's text, in order.
     /// </summary>
     /// <remarks>
@@ -184,6 +213,38 @@ public sealed record PageNote
     /// its position within its page, and which page it is on is what filling the page decides.
     /// </remarks>
     public NoteRestart Restart { get; init; }
+
+    /// <summary>
+    /// How this note's class is numbered, for a pagination pass that has to number it again.
+    /// </summary>
+    /// <remarks>
+    /// The sequence and the start value, which <see cref="Restart"/> alone cannot supply: a per-page restart
+    /// says the count begins again and this says what the count is written in. Defaults to the footnote
+    /// sequence, which is what a note whose reader states nothing renders as.
+    /// </remarks>
+    public NoteNumbering Numbering { get; init; } = NoteNumbering.Footnotes;
+
+    /// <summary>
+    /// The citation this note carries as it was read, in document order.
+    /// </summary>
+    /// <remarks>
+    /// Kept so that a renumbering pass can find it again. It sits in the citing paragraph's text at
+    /// <see cref="Offset"/> and in the note body's first paragraph at <see cref="BodyOffset"/>, in both cases
+    /// exactly this many characters long — LibreOffice draws a note's number twice and the readers emit it
+    /// twice, so both have to be rewritten or the sentence and the note disagree about which note it is.
+    /// </remarks>
+    public string Citation { get; init; } = "";
+
+    /// <summary>
+    /// Where the citation sits in the first block of <see cref="Blocks"/>.
+    /// </summary>
+    /// <remarks>
+    /// Zero in three of the four formats, which prepend it, and not in DOCX: the note body marks where its own
+    /// number goes with a <c>w:footnoteRef</c>, and a note beginning with a tab puts it at one rather than at
+    /// nought. Recorded rather than searched for, because searching a note's text for the string "1" finds
+    /// whatever the note happens to say first.
+    /// </remarks>
+    public int BodyOffset { get; init; }
 }
 
 /// <summary>
@@ -355,6 +416,16 @@ public sealed record LaidOutPage
     public Length ColumnGap { get; init; }
 
     /// <summary>
+    /// True when the page's section reads right to left, so that its first column is the rightmost.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the page rather than looked up from the section for the same reason
+    /// <see cref="ColumnArea"/> is: a renderer is handed a page, and a page that had to consult the
+    /// section could disagree with the one that laid the lines out.
+    /// </remarks>
+    public bool IsRightToLeft { get; init; }
+
+    /// <summary>
     /// One column's rectangle, which is what a line's own coordinates are relative to.
     /// </summary>
     /// <remarks>
@@ -371,6 +442,10 @@ public sealed record LaidOutPage
         Length gaps = ColumnGap * (columns - 1);
         Length width = BodyArea.Width - gaps;
         width = width > Length.Zero ? width / columns : BodyArea.Width;
+
+        // The leading edge is the right one in a right-to-left section, so its first column is the
+        // rightmost — see PageGeometry.IsRightToLeft, where it is measured.
+        if (IsRightToLeft) at = columns - 1 - at;
 
         return new DocRect(
             BodyArea.X + ((width + ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);
