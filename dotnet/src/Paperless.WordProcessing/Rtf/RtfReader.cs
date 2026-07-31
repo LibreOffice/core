@@ -44,7 +44,8 @@ public static class RtfReader
         ContentDocument content = reader.Read();
 
         return new RtfDocument(
-            format, content, diagnostics, reader.Sections, reader.LayoutParagraphs);
+            format, content, diagnostics, reader.Sections, reader.LayoutParagraphs,
+            reader.HeaderLayout, reader.FooterLayout);
     }
 
     /// <summary>
@@ -91,19 +92,25 @@ public static class RtfReader
 public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly IReadOnlyList<RtfLayoutParagraph> _layoutParagraphs;
+    private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout;
+    private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout;
 
     internal RtfDocument(
         DocumentFormat format,
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
         IReadOnlyList<Model.WritingSection> sections,
-        IReadOnlyList<RtfLayoutParagraph> layoutParagraphs)
+        IReadOnlyList<RtfLayoutParagraph> layoutParagraphs,
+        IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> headerLayout,
+        IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> footerLayout)
     {
         Format = format;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
         _layoutParagraphs = layoutParagraphs;
+        _headerLayout = headerLayout;
+        _footerLayout = footerLayout;
     }
 
     /// <inheritdoc/>
@@ -141,9 +148,64 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     public IPageSequence Layout(LayoutOptions? options = null)
     {
         LayoutFonts fonts = new();
-        List<PageParagraph> paragraphs = [];
+        List<PageParagraph> paragraphs = Convert(fonts, _layoutParagraphs);
 
-        foreach (RtfLayoutParagraph paragraph in _layoutParagraphs)
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            CollapsesSpacing = false,
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
+        };
+
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(
+                paragraphs, Sections[0], furniture: Furniture(fonts)),
+            paragraphs);
+    }
+
+    /// <summary>
+    /// The document's headers and footers, ready for the page frames.
+    /// </summary>
+    /// <remarks>
+    /// The same conversion the body goes through, over the paragraphs the read collected per slot. One
+    /// font cache is shared with the body's conversion, so a header in the body's face costs no second
+    /// lookup — and, more to the point, resolves to the identical face object, which is what lets the
+    /// measurement caches downstream see them as one font.
+    /// </remarks>
+    private PageFurnitureSet? Furniture(LayoutFonts fonts)
+    {
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+
+        Fill(headers, _headerLayout);
+        Fill(footers, _footerLayout);
+
+        PageFurnitureSet set = new(headers, footers);
+        return set.IsEmpty ? null : set;
+
+        void Fill(
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> into,
+            IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> from)
+        {
+            foreach ((Model.PageFurnitureSlot slot, List<RtfLayoutParagraph> stated) in from)
+            {
+                List<PageParagraph> converted = Convert(fonts, stated);
+                if (converted.Count > 0) into[slot] = converted;
+            }
+        }
+    }
+
+    /// <summary>Turns recorded paragraphs into the layout engine's own, resolving each one's face.</summary>
+    /// <remarks>
+    /// A paragraph whose family resolves to nothing at all is dropped rather than drawn in a fallback,
+    /// because there is nothing to measure it with — and a machine with no fonts installed should fail the
+    /// comparison tests rather than quietly produce a page of guesses.
+    /// </remarks>
+    private static List<PageParagraph> Convert(
+        LayoutFonts fonts, IReadOnlyList<RtfLayoutParagraph> stated)
+    {
+        List<PageParagraph> paragraphs = new(stated.Count);
+
+        foreach (RtfLayoutParagraph paragraph in stated)
         {
             OpenTypeFace? face = fonts.Face(
                 paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
@@ -163,14 +225,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             });
         }
 
-        PaginationOptions pagination = PaginationOptions.Word with
-        {
-            CollapsesSpacing = false,
-            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
-        };
-
-        return new WordProcessingPages(
-            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+        return paragraphs;
     }
 
     /// <summary>

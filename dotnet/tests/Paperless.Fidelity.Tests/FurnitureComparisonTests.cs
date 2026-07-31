@@ -65,6 +65,9 @@ public sealed class FurnitureComparisonTests : IDisposable
 
     [Theory]
     [InlineData("furniture.fodt")]
+    [InlineData("furniture.docx")]
+    [InlineData("furniture.rtf")]
+    [InlineData("furniture.doc")]
     public void EveryPageDrawsItsHeaderAndFooterWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -136,6 +139,9 @@ public sealed class FurnitureComparisonTests : IDisposable
 
     [Theory]
     [InlineData("furniture.fodt")]
+    [InlineData("furniture.docx")]
+    [InlineData("furniture.rtf")]
+    [InlineData("furniture.doc")]
     public void AHeaderPushesTheBodyDown(string fileName)
     {
         string path = Corpus.Require(fileName);

@@ -751,17 +751,29 @@ public sealed partial class RtfDocumentReader
     /// Records a paragraph's layout formatting as it closes.
     /// </summary>
     /// <remarks>
-    /// Only the body's, and only outside tables: a header is furniture that a page assembles separately,
-    /// and a table is laid out as a grid rather than as a run of paragraphs. Recording them anyway and
-    /// letting the caller filter would leave the paragraph indexes meaning something different from what
-    /// the pages hold.
+    /// <para>
+    /// The body's paragraphs and the furniture's, kept in separate lists because they are laid out into
+    /// separate frames: the body's index has to mean the same thing to the paginator as it does here, so a
+    /// header's paragraph cannot share the numbering. A footnote's or a shape's does not reach layout at
+    /// all yet, and neither does anything inside a table — a table is laid out as a grid rather than as a
+    /// run of paragraphs.
+    /// </para>
+    /// <para>
+    /// Recorded as each paragraph closes rather than by a second pass, because RTF is a token stream with
+    /// no structure to revisit; re-reading it would mean running the whole state machine again.
+    /// </para>
     /// </remarks>
     private void RecordLayoutParagraph(Flow flow, GroupState state, string text)
     {
-        if (!ReferenceEquals(flow, _flows[0]) || flow.InTable) return;
-        if (_layoutParagraphs.Count >= MaxLayoutParagraphs) return;
+        if (flow.InTable) return;
 
-        _layoutParagraphs.Add(new RtfLayoutParagraph(
+        List<RtfLayoutParagraph>? into = ReferenceEquals(flow, _flows[0])
+            ? _layoutParagraphs
+            : FurnitureList(flow);
+
+        if (into is null || into.Count >= MaxLayoutParagraphs) return;
+
+        into.Add(new RtfLayoutParagraph(
             text,
             new Ww8.Ww8LayoutFormat
             {
@@ -791,6 +803,52 @@ public sealed partial class RtfDocumentReader
             state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
             ColourAt(state.ForegroundColourIndex),
             [.. flow.LayoutRuns]));
+    }
+
+    /// <summary>
+    /// The list a header's or footer's paragraphs go in, or null when the flow is not furniture.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// RTF names its four header destinations by suffix, and the mapping onto the three slots every format
+    /// shares is not one-to-one. <c>\headerf</c> is the first page's and <c>\headerl</c> the left-hand —
+    /// which is the even one, since a document's first page is a right-hand page. <c>\headerr</c> is the
+    /// right-hand, so it is the <em>default</em>: the slot every page takes that no other slot claims,
+    /// which for a facing-pages document is exactly the odd ones. A document writing both <c>\header</c>
+    /// and <c>\headerr</c> means the latter, and it comes second in the file, so the later write winning is
+    /// the right answer rather than a coincidence.
+    /// </para>
+    /// <para>
+    /// Only the outermost furniture flow qualifies: a footnote opened inside a header is a
+    /// <see cref="SectionKind.Note"/> flow and falls through to null, which keeps its paragraphs out of the
+    /// header rather than appending them to it.
+    /// </para>
+    /// </remarks>
+    private List<RtfLayoutParagraph>? FurnitureList(Flow flow)
+    {
+        bool isHeader = flow.Target.Kind == SectionKind.Header;
+        if (!isHeader && flow.Target.Kind != SectionKind.Footer) return null;
+
+        Model.PageFurnitureSlot? slot = flow.Target.Name switch
+        {
+            "default" or "r" => Model.PageFurnitureSlot.Default,
+            "l" => Model.PageFurnitureSlot.Even,
+            "f" => Model.PageFurnitureSlot.First,
+            _ => null,
+        };
+
+        if (slot is null) return null;
+
+        Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> slots =
+            isHeader ? _headerLayout : _footerLayout;
+
+        if (!slots.TryGetValue(slot.Value, out List<RtfLayoutParagraph>? paragraphs))
+        {
+            paragraphs = [];
+            slots[slot.Value] = paragraphs;
+        }
+
+        return paragraphs;
     }
 
     /// <summary>

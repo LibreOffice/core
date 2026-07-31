@@ -245,7 +245,6 @@ public sealed partial class Ww8DocumentReader
     {
         List<Ww8Range> stories = [.. SplitSubdocument(Ranges.Headers, Ww8FibTable.HeaderTexts)];
 
-        const int SeparatorStories = 6;
         string[] names = ["even header", "odd header", "even footer", "odd footer",
                           "first header", "first footer"];
 

@@ -177,17 +177,73 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// spacings rather than collapsing them. A document with no <c>Dop</c> at all adds them, which is what
     /// every document LibreOffice itself wrote does.
     /// </para>
-    /// <para>
-    /// Table paragraphs are left out, because a table is laid out as a grid and stacking its cells would
-    /// give the page a height no table has.
-    /// </para>
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
     {
-        List<PageParagraph> paragraphs = [];
         LayoutFonts fonts = new();
+        List<PageParagraph> paragraphs = Convert(fonts, _reader.ReadLayoutParagraphs());
 
-        foreach (Ww8DocumentReader.Ww8LayoutParagraph paragraph in _reader.ReadLayoutParagraphs())
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            CollapsesSpacing = _reader.DocumentProperties.CollapsesSpacing,
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
+        };
+
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(
+                paragraphs, Sections[0], furniture: Furniture(fonts)),
+            paragraphs);
+    }
+
+    /// <summary>
+    /// The document's headers and footers, ready for the page frames.
+    /// </summary>
+    /// <remarks>
+    /// The same conversion the body goes through, over the stories the header subdocument holds — see
+    /// <c>Ww8DocumentReader.ReadLayoutFurniture</c> for why the order of those stories is the whole
+    /// mapping. One font cache is shared with the body, so a header in the body's face resolves to the
+    /// identical face object rather than an equal one.
+    /// </remarks>
+    private PageFurnitureSet? Furniture(LayoutFonts fonts)
+    {
+        Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture();
+
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+
+        Fill(headers, stated.Headers);
+        Fill(footers, stated.Footers);
+
+        PageFurnitureSet set = new(headers, footers);
+        return set.IsEmpty ? null : set;
+
+        void Fill(
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> into,
+            IReadOnlyDictionary<Model.PageFurnitureSlot,
+                List<Ww8DocumentReader.Ww8LayoutParagraph>> from)
+        {
+            foreach ((Model.PageFurnitureSlot slot,
+                      List<Ww8DocumentReader.Ww8LayoutParagraph> stories) in from)
+            {
+                List<PageParagraph> converted = Convert(fonts, stories);
+                if (converted.Count > 0) into[slot] = converted;
+            }
+        }
+    }
+
+    /// <summary>Turns recorded paragraphs into the layout engine's own, resolving each one's face.</summary>
+    /// <remarks>
+    /// Table paragraphs are left out, because a table is laid out as a grid and stacking its cells would
+    /// give the page a height no table has. A paragraph whose family resolves to nothing is dropped too:
+    /// there is nothing to measure it with, and a machine missing its fonts should fail the comparison
+    /// tests rather than quietly produce a page of guesses.
+    /// </remarks>
+    private static List<PageParagraph> Convert(
+        LayoutFonts fonts, List<Ww8DocumentReader.Ww8LayoutParagraph> stated)
+    {
+        List<PageParagraph> paragraphs = new(stated.Count);
+
+        foreach (Ww8DocumentReader.Ww8LayoutParagraph paragraph in stated)
         {
             if (paragraph.IsInTable) continue;
 
@@ -209,14 +265,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             });
         }
 
-        PaginationOptions pagination = PaginationOptions.Word with
-        {
-            CollapsesSpacing = _reader.DocumentProperties.CollapsesSpacing,
-            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
-        };
-
-        return new WordProcessingPages(
-            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+        return paragraphs;
     }
 
     /// <summary>

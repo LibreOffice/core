@@ -88,6 +88,8 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     private readonly List<Colour?> _colours = [];
     private readonly List<RtfLayoutParagraph> _layoutParagraphs = [];
+    private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout = [];
+    private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout = [];
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
     private readonly Dictionary<string, string> _info = new(StringComparer.Ordinal);
@@ -139,6 +141,16 @@ public sealed partial class RtfDocumentReader
     /// disagree. So the formatting in force is recorded as each paragraph closes.
     /// </remarks>
     public IReadOnlyList<RtfLayoutParagraph> LayoutParagraphs => _layoutParagraphs;
+
+    /// <summary>The headers' paragraphs, by slot, with the same formatting layout needs.</summary>
+    /// <remarks>
+    /// Separate from <see cref="LayoutParagraphs"/> rather than mixed in with a marker, because a header is
+    /// laid out into its own frame and the body's paragraph index has to keep meaning the body's.
+    /// </remarks>
+    public IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> HeaderLayout => _headerLayout;
+
+    /// <summary>The footers' paragraphs, by slot.</summary>
+    public IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> FooterLayout => _footerLayout;
 
     /// <summary>Reads the document.</summary>
     public ContentDocument Read()

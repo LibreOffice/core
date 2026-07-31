@@ -247,8 +247,73 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         };
 
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+            new Paginator(pagination).Paginate(
+                paragraphs, Sections[0], furniture: Furniture(source, body)),
+            paragraphs);
     }
+
+    /// <summary>
+    /// The headers and footers of the first section, laid out from the parts it names.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The first section's, to match the geometry the pagination uses — a document that changes its
+    /// furniture halfway through gets the first set throughout, which is the same limitation as the
+    /// geometry and is recorded with it.
+    /// </para>
+    /// <para>
+    /// Read through the same walk the body uses, because a header's paragraphs are paragraphs: they
+    /// resolve their styles the same way, measure the same way, and a second walk would be a second place
+    /// for the run and tab handling to be got right. A <c>w:hdr</c> root holds block-level children just
+    /// as <c>w:body</c> does, so the walk needs no special case.
+    /// </para>
+    /// <para>
+    /// A DOCX names its furniture by relationship and labels each with a <c>w:type</c>, so — unlike ODF
+    /// — an unreferenced part is never picked up. The <c>w:type</c> is the only thing distinguishing the
+    /// three variants; a reference without one is the default.
+    /// </para>
+    /// </remarks>
+    private PageFurnitureSet? Furniture(DocxLayoutSource source, XElement body)
+    {
+        XElement? sectionProperties = DocxContentReader.SectionProperties(body).FirstOrDefault();
+        if (sectionProperties is null) return null;
+
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+
+        foreach (XElement reference in sectionProperties.Elements())
+        {
+            bool isHeader = Word.Is(reference, "headerReference");
+            if (!isHeader && !Word.Is(reference, "footerReference")) continue;
+
+            if (SlotOf(Word.Attribute(reference, "type")) is not { } slot) continue;
+            if (_file.LoadHeaderOrFooter(Word.RelationshipId(reference)) is not { } part) continue;
+
+            List<PageParagraph> paragraphs = source.Read(part);
+            if (paragraphs.Count == 0) continue;
+
+            (isHeader ? headers : footers)[slot] = paragraphs;
+        }
+
+        PageFurnitureSet set = new(headers, footers);
+        return set.IsEmpty ? null : set;
+    }
+
+    /// <summary>
+    /// The slot a <c>w:type</c> names, or null for a value this reader does not know.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than falling back to the default slot, because a producer writing an unknown type
+    /// means something by it, and quietly filing it as the default would put that content on every page
+    /// of the document.
+    /// </remarks>
+    private static PageFurnitureSlot? SlotOf(string? type) => type switch
+    {
+        null or "" or "default" => PageFurnitureSlot.Default,
+        "first" => PageFurnitureSlot.First,
+        "even" => PageFurnitureSlot.Even,
+        _ => null,
+    };
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

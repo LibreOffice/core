@@ -114,12 +114,92 @@ public sealed partial class Ww8DocumentReader
     /// Reads the body's paragraphs with the formatting layout needs.
     /// </summary>
     /// <remarks>
-    /// The body range only. The other subdocuments are furniture and notes, which a page assembles
-    /// separately once it knows which section it belongs to.
+    /// The body range only. The headers and footers are read by <see cref="ReadLayoutFurniture"/> and the
+    /// notes not at all yet, because a page assembles those separately from the run of body paragraphs.
     /// </remarks>
     public List<Ww8LayoutParagraph> ReadLayoutParagraphs()
+        => ReadLayoutParagraphs(Ranges.Body, keepTrailingEmpty: true);
+
+    /// <summary>
+    /// The first section's headers and footers, with the formatting layout needs.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// DOC keeps its furniture in the header subdocument as a flat run of stories: six that are not
+    /// furniture at all — the footnote and endnote separators, continuation separators and continuation
+    /// notices — and then six per section, in a fixed order. The order is the whole mapping, and it does
+    /// not match the order the other formats use, so it is spelled out in <see cref="FurnitureSlots"/>.
+    /// </para>
+    /// <para>
+    /// Word writes all six whether the section uses them or not, so most hold nothing but a paragraph
+    /// mark; an empty story therefore means "this section has no such header" rather than "it has an empty
+    /// one", and filling the slot with the empty paragraph would draw a blank line on every page and push
+    /// nothing anywhere. Emptiness is the only thing distinguishing the two.
+    /// </para>
+    /// <para>
+    /// The first section's, to match the geometry the pagination uses — recorded with that limitation
+    /// rather than separately.
+    /// </para>
+    /// </remarks>
+    public Ww8LayoutFurniture ReadLayoutFurniture()
     {
-        Ww8Range body = Ranges.Body;
+        List<Ww8Range> stories = [.. SplitSubdocument(Ranges.Headers, Ww8FibTable.HeaderTexts)];
+
+        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutParagraph>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutParagraph>> footers = [];
+
+        for (int slot = 0; slot < FurnitureSlots.Length; slot++)
+        {
+            int story = SeparatorStories + slot;
+            if (story >= stories.Count) break;
+            if (stories[story].Length <= 0) continue;
+
+            List<Ww8LayoutParagraph> paragraphs =
+                ReadLayoutParagraphs(stories[story], keepTrailingEmpty: false);
+
+            paragraphs.RemoveAll(paragraph => paragraph.Text.Length == 0);
+            if (paragraphs.Count == 0) continue;
+
+            (bool isHeader, Model.PageFurnitureSlot which) = FurnitureSlots[slot];
+            (isHeader ? headers : footers)[which] = paragraphs;
+        }
+
+        return new Ww8LayoutFurniture(headers, footers);
+    }
+
+    /// <summary>How many stories precede the first section's furniture in the header subdocument.</summary>
+    private const int SeparatorStories = 6;
+
+    /// <summary>
+    /// What each of a section's six header stories is, in the order DOC writes them.
+    /// </summary>
+    /// <remarks>
+    /// Even before odd, headers before footers, and the first page's pair last — so the odd header is the
+    /// <em>default</em> slot, since a document's first page is a right-hand page and the odd stories are
+    /// what every page takes that no other story claims.
+    /// </remarks>
+    private static readonly (bool IsHeader, Model.PageFurnitureSlot Slot)[] FurnitureSlots =
+    [
+        (true, Model.PageFurnitureSlot.Even),
+        (true, Model.PageFurnitureSlot.Default),
+        (false, Model.PageFurnitureSlot.Even),
+        (false, Model.PageFurnitureSlot.Default),
+        (true, Model.PageFurnitureSlot.First),
+        (false, Model.PageFurnitureSlot.First),
+    ];
+
+    /// <summary>
+    /// Reads one range's paragraphs with the formatting layout needs.
+    /// </summary>
+    /// <param name="body">The range to read, which is the body's for the body pass.</param>
+    /// <param name="keepTrailingEmpty">
+    /// True to close a final paragraph that no paragraph mark closed, and to yield one empty paragraph for
+    /// a range that produced none at all. Right for the body — a document has at least one paragraph
+    /// whatever its text says — and wrong for furniture, where nothing to lay out has to stay
+    /// distinguishable from one blank line to lay out.
+    /// </param>
+    private List<Ww8LayoutParagraph> ReadLayoutParagraphs(Ww8Range body, bool keepTrailingEmpty)
+    {
         List<Ww8LayoutParagraph> paragraphs = [];
         if (body.Length <= 0) return paragraphs;
 
@@ -204,7 +284,7 @@ public sealed partial class Ww8DocumentReader
             }
         }
 
-        if (current.Length > 0 || paragraphs.Count == 0)
+        if (current.Length > 0 || (keepTrailingEmpty && paragraphs.Count == 0))
         {
             paragraphs.Add(
                 Describe(current.ToString(), positions, body.Start + start, body.End - 1));
@@ -727,3 +807,17 @@ public sealed partial class Ww8DocumentReader
         Colour.FromRgb(0xC0C0C0),
     ];
 }
+
+/// <summary>
+/// A DOC section's headers and footers, as the layout pass reads them.
+/// </summary>
+/// <remarks>
+/// A pair rather than one dictionary keyed by both, because every consumer wants one or the other: a
+/// header goes in the header area and a footer in the footer area, and nothing iterates the twelve
+/// together.
+/// </remarks>
+/// <param name="Headers">The headers, by slot; a slot with no entry has no header.</param>
+/// <param name="Footers">The footers, by slot.</param>
+public sealed record Ww8LayoutFurniture(
+    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8DocumentReader.Ww8LayoutParagraph>> Headers,
+    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8DocumentReader.Ww8LayoutParagraph>> Footers);

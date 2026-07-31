@@ -217,9 +217,14 @@ Order chosen so each is verifiable before the next gets harder.
       size on the same line; two of them invite an off-by-one, since `sprmSCcolumns` holds the column
       count *minus one* and `sprmSBOrientation` uses Word's `DM_*` numbering where 1 is portrait, so a
       plain truth test makes every portrait page landscape.
-- [ ] Which header slots a section uses. The stories are read by position today, which is right for
-      extraction; connecting them to the section that names them needs the six-per-section slot
-      indexing the reader already computes to be carried into the model.
+- [x] Which slot each header story fills, for the layout pass: the six stories per section, in DOC's
+      own order — even header, odd header, even footer, odd footer, first header, first footer, after
+      the six separator stories that are not furniture at all. The *odd* one is the default slot, since
+      a first page is a right-hand page. Word writes all six whether the section uses them or not, so an
+      empty story is what distinguishes "no header" from "an empty header"; filling the slot anyway
+      draws a blank line on every page.
+- [ ] Connecting those stories to the section that names them in the *model*, which needs the
+      six-per-section indexing carried through `WritingSection.Headers` rather than only into layout.
 - [x] Nested tables: `sprmPItap` for the depth, and the detail that makes them readable at all —
       only the *outermost* table separates cells with U+0007. A nested table reuses the paragraph
       mark and says what it means with `sprmPFInnerTableCell` and `sprmPFInnerTtp`, so a reader that
@@ -296,9 +301,11 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [x] Header and footer frames beside the body, laid out per slot and cached — most pages of a document
       share one header, and shaping its text again per page would be the largest single cost of
       paginating a long one. `PageFurnitureSet` holds them, `PageGeometry.HeaderArea`/`FooterArea` say
-      where they go, and `Paginator` places one of each on every page by the section's slot rules.
-      **ODF only so far**: the other three formats' furniture is read into the content tree but not into
-      layout.
+      where they go, and `Paginator` places one of each on every page by the section's slot rules. All
+      four formats reach it, each through the walk its body already uses — and each names its slots
+      differently: DOCX by `w:type`, RTF by the suffix on `\header` (where `\headerr` is the *default*
+      slot rather than a third one), DOC by the position of a story in the header subdocument, ODF by
+      `style:header-left` for what everything else calls even.
 - [x] Where a footer's first line goes, which the two families genuinely disagree about — five points
       apart on A4, so it is not a rounding matter. Word bottom-aligns the footer: its *last* line sits
       at `pageHeight - w:footer`, and a second line grows upwards. ODF top-aligns it below the body: its
