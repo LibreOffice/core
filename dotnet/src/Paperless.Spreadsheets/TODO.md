@@ -73,28 +73,136 @@ Traps that cost time, recorded so they are not rediscovered:
 
 Not yet, and why:
 
-- **Built-in number-format ids 0–49 are the `en_US` table.** They are locale-dependent —
-  LibreOffice keeps one table per locale (`sc/source/filter/oox/numberformatsbuffer.cxx:436`,
-  `en_US` at `:798`) and picks by the workbook's locale — so a German workbook using bare id
-  14 extracts its dates as `M/D/YYYY` rather than `DD.MM.YYYY`. It only bites files that use
-  a built-in id *without* declaring a `numFmt`, which LibreOffice never writes and Excel does
-  constantly. Fixing it needs locale infrastructure Paperless does not have.
+- **Built-in number-format ids 0–49 are locale-dependent, and the two readers pick different
+  rows.** The XLSX path uses the `en_US` row of LibreOffice's per-locale table
+  (`sc/source/filter/oox/numberformatsbuffer.cxx:436`, `en_US` at `:798`); the XLS path uses
+  its `DONTKNOW` fallback (`sc/source/filter/excel/xlstyle.cxx:819`). LibreOffice picks by the
+  workbook's locale and neither reader can, so a German workbook using bare id 14 extracts as
+  `M/D/YYYY` from an XLSX and `DD/MM/YYYY` from an XLS rather than `DD.MM.YYYY` from either.
+  It only bites files that use a built-in id *without* declaring the code, which LibreOffice
+  never writes and Excel does constantly. Fixing it needs locale infrastructure Paperless does
+  not have — and only then would the two tables be worth merging.
 - **`General` is fifteen significant digits, not column-width dependent.** Calc's `General`
   picks between fixed and scientific by how many characters fit in the column
   (`research/03-calc.md` §A.7), and so does the `###` a too-narrow numeric cell shows. Both
   need a width, which extraction has no way to know; they belong to layout.
-- **Dates before March 1900 follow Excel, not LibreOffice.** Excel treats 1900 as a leap year
-  — a Lotus 1-2-3 compatibility bug — so its serial 59 is 28 February 1900 and 60 is a
-  29 February that never existed. Paperless reproduces that, because the file was written
-  under it. LibreOffice deliberately does not
-  (`sc/source/filter/oox/workbooksettings.cxx:295`: "LO never treats 1900 as a leap year"),
-  so a comparison of dates in the first two months of 1900 will differ by one day. Nothing
-  real is affected; recorded so the difference is not mistaken for a bug.
+- **Dates before March 1900 follow Excel, and LibreOffice's own two filters disagree about
+  them.** Excel treats 1900 as a leap year — a Lotus 1-2-3 compatibility bug — so its serial
+  59 is 28 February 1900 and 60 is a 29 February that never existed. LibreOffice's *BIFF*
+  filter reproduces that, adding a day to anything landing before 1900-03-01
+  (`XclRoot::GetDateTimeFromDouble`, `sc/source/filter/excel/xlroot.cxx:351`), which puts
+  serial 60 on 1 March sharing the day with 61. Its *OOXML* filter does not, and says so
+  (`sc/source/filter/oox/workbooksettings.cxx:295`: "LO never treats 1900 as a leap year (so
+  we never match Excel's first two months of 1900)"). `SpreadsheetDate` follows the BIFF rule
+  for both readers, because the file was written under it and because one rule shared between
+  the two readers is worth more than matching each LibreOffice filter separately. The
+  consequence: dates in January and February 1900 agree with an XLS render and are one day
+  later than an XLSX one. Nothing real is affected; recorded so it is not mistaken for a bug.
 - **Drawings, charts, pivot caches and defined names.** None is reached yet;
   `oneCellAnchor`/`twoCellAnchor` will want the shared DrawingML text-body reader in
   `Paperless.Ooxml` that the PPTX work is building.
 - **Print setup**, which is the page geometry and therefore a rendering prerequisite.
 - **The sparse typed cell storage below**, which extraction does not need and layout will.
+
+**Done: XLS (BIFF8 and BIFF5) extraction and CSV**, in `MsBinary/` and `Csv/`. The XLS reader
+produces the same content-tree shape as the ODS one — a section per sheet holding one table,
+hidden sheets flagged rather than skipped, cells carrying a typed value and the displayed
+text — with one deliberate difference: `Formula` is null, because BIFF formulas are RPN token
+arrays and the cached result is what a reference renderer shows.
+
+**Done: number formats**, in `Numbers/`. Not optional for BIFF the way it is for ODF: a date
+is a serial number and nothing caches the text, so without the format a workbook of dates
+extracts as five-digit integers. One engine serves XLSX, XLS and XLSB alike, because the
+`numFmt` codes and the `FORMAT` records are the same language.
+
+### One number-format engine, not two
+
+XLSX and XLS were implemented concurrently, and both discovered the same thing — neither
+format caches the displayed text the way ODF does — so both wrote an Excel format-code engine
+in `Numbers/`. The decomposed one (`NumberFormatCode` → `NumberFormatSection` → `FormatToken`,
+rendered by `NumberFormatter`) survived; the self-contained 1040-line one was dropped. The
+evidence, not the merge order:
+
+- **Conditions.** `[>=100]#,##0;[RED]-#,##0` selects a subformat by comparing the value. The
+  survivor evaluates them and falls back to the first unconditional subformat as the
+  else-branch; the other parsed them only far enough to set `IsUnderstood = false` and hand
+  the caller a number it could not justify. Built-in ids 5–8 and 41–44 are conditional-shaped
+  accounting formats, so this is not an exotic path.
+- **Fixed denominators.** `# ?/8` — eighths, the fraction format a price sheet uses — needs
+  the literal `8` after the bar read as a denominator. The survivor does; the other required a
+  digit placeholder on both sides of `/` and lexed `?/8` as a placeholder, a literal slash and
+  a literal 8.
+- **`?` versus `#`.** Both mean "no digit here", but `?` writes a space so a column lines up on
+  its decimal point and `#` writes nothing. The survivor distinguishes them in both the
+  integer and the fraction parts; the other only in the fraction.
+- **Sub-second times.** `mm:ss.0` is built-in id 47, and only the survivor renders the digit
+  after the point.
+
+Structurally the decomposed design was the right one to keep for a second reason: the parse
+and the render are separable, so `NumberFormatSection` can gain a token kind without the
+renderer's 700 lines being in the same file as the lexer's. The self-contained one is easier
+to read end to end, and that is a real cost being paid here — a reader who wants to know what
+`# ??/??` does now opens three files.
+
+**Three things the dropped engine did better, and all three are now in the survivor**, found
+by re-measuring rather than by reading:
+
+- **A half rounds away from zero.** 4.5 under `0` shows 5. LibreOffice's
+  `rtl_math_RoundingMode_Corrected` is literally `approxFloor(magnitude + 0.5)`
+  (`sal/rtl/math.cxx:483`); .NET's own `"F0"` is IEEE-correct and rounds a half to *even*, so
+  it gave 4. Wrong one time in two on any column of prices shown without decimals, and not the
+  kind of error a spot check finds.
+- **A clock field truncates rather than rounds.** 05:35:31 under `hh:mm` reads 05:35.
+  LibreOffice says so in as many words — "do not round values (specifically not up), but
+  truncate to the next magnitude, so 23:59:59.99 is still 23:59:59 and not 24:00:00 (or even
+  00:00:00 which Excel does)", `tools/source/datetime/ttime.cxx:217`. The survivor rounded to
+  the minute, which is Excel's rule; since the comparison is against LibreOffice's render, and
+  since the two disagree only in the last displayed digit of a value the file did not round
+  either, LibreOffice's is now the one reproduced. This is the single difference the
+  reconciliation caught by measuring: `formats.xls` Sheet3 holds 05:35:31.2 and showed 05:36.
+- **The denominator of a fraction pads on the right.** `# ??/??` over 1.25 is `1  1/4 `, not
+  `1  1/ 4`: LibreOffice passes `bInsertRightBlank` for the denominator alone and calls it
+  "left alignment of denominator" (`svl/source/numbers/zformat.cxx`, `ImpNumberFill`). That is
+  what lines a column of fractions up on its bars.
+
+Its BIFF built-in table came across untouched as `Numbers/BuiltInNumberFormats.cs` (see
+below), and none of its 46 number-format test cases was dropped for failing to compile. They
+split along the same seam the code does: `NumberFormatterTests` asserts the text a code
+produces and `NumberFormatCodeTests` what a parsed code *says* — whether a stored double is a
+date, a duration or a number, and which built-in code an index stands for, which are the
+decisions that change a cell's type before any text exists. Cases asserting a behaviour the
+other file already covered through a different API were folded into it rather than kept twice;
+the ones that reached somewhere new — the fractions, `dddd`, an empty middle section, an `mm`
+that is a month and an `mm` that is a minute in one code — were rewritten and kept. The one
+assertion that had to change meaning is `IsUnderstood` on a conditional code: it is now a test
+that the condition *selects correctly*, plus a second on `IsFullyReproduced` for the
+numeral-system directives that genuinely are not reproduced.
+
+**Re-measured after the reconciliation**, against LibreOffice 24.2.7.2's *rendering* — not its
+CSV export, for the reason recorded further down:
+
+- `sc/qa/unit/data/xls/formats.xls`, LibreOffice's own number-format torture sheet, now comes
+  out **identical on every row of every sheet bar one**: decimals, percent with a shorter
+  negative section, currency, three-digit-exponent scientific, both fractions (`25 31/82` and
+  `  7/18`) and the `hh:mm` time on Sheet3. The exception is the boolean row, which is the
+  documented `TRUE`-versus-`1` difference. Before the clock fix it was two rows.
+- `[h]:mm:ss` on 1.5208333 gives `36:30:00`, keeping the whole day; `[mm]:ss` gives `2190:00`;
+  `h:mm:ss` on the same value gives `12:30:00`. Elapsed time survives intact.
+- `features/sheet-ooxml-features.xlsx` still matches the reference PDF's text layer on every
+  displayed value across all four sheets — `£4.50`, `£85.50`, `63.5%`, `#DIV/0!`, `1.23E+04`,
+  `72.5 kg`, `-1,234.50`, `2 1/4`, `30 July 2026` — plus the hidden sheet and the comment,
+  which LibreOffice's export drops and Paperless deliberately keeps.
+- `features/xls-features.xls` likewise, with the same two documented exceptions: the boolean,
+  and the `###` LibreOffice draws for a timestamp too wide for its column.
+
+**Two built-in tables, deliberately.** `BuiltInNumberFormats` (BIFF) and
+`XlsxStyles.BuiltinCode` (OOXML) look like duplication and are not: LibreOffice uses different
+tables for the two filters. BIFF falls back to `spBuiltInFormats_DONTKNOW`
+(`sc/source/filter/excel/xlstyle.cxx:819`), where id 14 is `DD/MM/YYYY` and id 37 is
+`#,##0;-#,##0`; OOXML uses the per-locale table in
+`sc/source/filter/oox/numberformatsbuffer.cxx:436`, whose `en_US` row makes id 14 `M/D/YYYY`
+and id 37 the parenthesised `#,##0_);(#,##0)`. Merging them would change what one of the two
+readers extracts. Both are locale-dependent in the same way and both are on the list below.
 
 ## Document model
 
@@ -162,17 +270,113 @@ Not yet, and why:
 - [ ] **Import only** — LibreOffice cannot write XLSB, so test files must come from Excel.
 
 ### XLS (BIFF8)
-- [ ] Substreams; the `BOF`/`EOF` structure
-- [ ] `SST`, `XF`, `FONT`, `FORMAT`, `DIMENSIONS`, `ROW`, `COLINFO`, `MERGEDCELLS`
-- [ ] Cell records: `LABELSST`, `NUMBER`, `RK`, `MULRK`, `BLANK`, `MULBLANK`, `FORMULA`,
-      `ARRAY`, `SHRFMLA`, `STRING`, `BOOLERR`
-- [ ] BIFF formula token decoding
-- [ ] RC4/XOR decryption; `CODEPAGE`
-- [ ] BIFF5 where cheap; BIFF2 probably not worth it
+- [x] Substreams; the `BOF`/`EOF` structure. A sheet is found by the offset its `BOUNDSHEET`
+      states, and that offset is wrong often enough that LibreOffice carries a fallback for it
+      (`read.cxx:52-66`, i#115255): when it does not land on a `BOF`, scan forward until one
+      does. Nested `BOF`/`EOF` pairs — an embedded chart inside a sheet — are counted, or the
+      inner `EOF` ends the sheet three records in.
+- [x] `SST`, `XF`, `FORMAT`, `DIMENSIONS`, `MERGEDCELLS`, `CODEPAGE`, `1904`
+- [x] Cell records: `LABELSST`, `LABEL`, `NUMBER`, `RK`, `MULRK`, `BLANK`, `MULBLANK`,
+      `FORMULA`, `STRING`, `BOOLERR`, `INTEGER`
+- [x] BIFF5 as well. Measured against `sc/qa/unit/data/xls/shared-formula/biff5.xls`: all 376
+      rows match LibreOffice's own CSV export cell for cell, Greek text included — that file
+      declares code page 1253 and its strings are byte strings, so it exercises the
+      `CODEPAGE` path that BIFF8 almost never needs. **It is not in the corpus**, because
+      LibreOffice cannot write BIFF5: its filter is import-only
+      (`filter/source/config/fragments/filters/MS_Excel_5_0_95.xcu:19`, `Flags: IMPORT ALIEN
+      PREFERRED`), so a committed BIFF5 file would have to come from Excel 95 or be built by
+      hand. BIFF2–BIFF4 are read on the BIFF5 path with a diagnostic; their record layouts
+      differ enough that this recovers cells rather than reading the file properly.
+- [ ] `FONT`, `ROW`, `COLINFO` — read past, not read. Nothing in the content tree records a
+      font, a row height or a column width; rendering will need all three.
+- [ ] BIFF formula token decoding. Out of scope for extraction on purpose: the cached result
+      in the `FORMULA` record is what a reference renderer displays, so decoding the tokens
+      would buy a `Formula` string and nothing else. Note the class-selection problem before
+      starting — Excel encodes the reference, value and array forms of one operator as three
+      different opcodes, and LibreOffice resolves them through the tables in
+      `sc/source/filter/excel/xlformula.cxx`, which is most of the work.
+- [ ] `ARRAY`, `SHRFMLA`, `TABLE`. A shared-formula cell's own `FORMULA` record still carries
+      its cached result, so those cells extract correctly today; only the expression is
+      missing, and it is missing for every formula anyway.
+- [ ] RC4/XOR decryption. A `FILEPASS` record raises `PasswordRequiredException` rather than
+      producing garbled cells. Both schemes are in `xistream.cxx:37-195`; the XOR one is
+      twenty lines, the RC4 one needs the Office 97 key derivation shared with DOC and PPT,
+      so it belongs in `Paperless.MsBinary` rather than here.
+- [ ] `NOTE` (cell comments) and `HLINK`. A BIFF8 `NOTE` is an Escher object and the text
+      lives in the drawing layer's `TXO` records, so it needs the MS-ODRAW reader that the
+      PPT work owns — this is the one piece of cell extraction that is blocked on somebody
+      else's module rather than on effort here.
+- [ ] Rich-text runs inside a cell. The `SST` string's formatting runs are read far enough to
+      skip past them; splitting a cell into several `ContentRun`s needs the `FONT` table.
+
+**Two differences from LibreOffice's rendering, both deliberate.** A boolean cell shows as
+`TRUE` here and as `1` in Calc, which has no boolean cell type and imports the cell with the
+General format; Excel, which wrote the file, shows `TRUE`, and so does the ODS reader, and
+`Value` carries the boolean either way. And a cell too narrow for its text renders as `###` in
+Calc; extraction reports the whole text, because `###` is a function of the column width and
+there is no column width in extracted text.
+
+### Number formats
+- [x] The code language: sections, digit placeholders, date and time parts, quoted literals,
+      `[$symbol-locale]` currency, `[h]` elapsed time, `E+00` scientific.
+- [x] The built-in indices below 164, from LibreOffice's own `DONTKNOW` table
+      (`xlstyle.cxx:820-905`). **Which table is a real ambiguity**: index 14 is `DD/MM/YYYY`
+      there and `M/D/YYYY` in the US table, and LibreOffice picks by the *reading* machine's
+      locale, not by anything in the file. Files LibreOffice writes sidestep it by emitting an
+      explicit `FORMAT` record for every format they use.
+- [x] Fractions, both `# ?/?` with a placeholder denominator and `# ?/8` with a fixed one. The
+      placeholder form gives the denominator's *width*, not its value, so it is a
+      continued-fraction expansion for the closest fraction with a bounded denominator rather
+      than a digit walk. Measured against LibreOffice's rendering of
+      `sc/qa/unit/data/xls/formats.xls`: 25.378 under `# ??/??` shows `25 31/82` in both, and
+      0.389 shows `  7/18`.
+- [x] Conditions (`[>100]`), which select a subformat by comparing the value, with the first
+      unconditional subformat as the else-branch.
+- [ ] Month and weekday names in a locale other than English. The name a spreadsheet shows
+      depends on the reading application's locale, so there is no right answer available from
+      the file alone, and the English names are what both readers emit.
+- [ ] `[NatNum…]` and `[DBNum…]` numeral systems, and `[~calendar]` era substitution. These
+      change the *characters*, so silently ignoring one produces plausible Western digits that
+      are not what the cell shows. `IsFullyReproduced` reports false and the XLS reader raises
+      `PL2324` rather than presenting a guess. (This is the narrowed remains of the dropped
+      engine's `IsUnderstood`, which also covered conditions; those are reproduced now.)
+
+`formats.xls` is worth knowing about: it is LibreOffice's own number-format torture sheet, and
+every row of every sheet now comes out identical to LibreOffice's rendering character for
+character — decimals, percent with a shorter negative section, currency, scientific with a
+three-digit exponent, both fractions, and Sheet3's `hh:mm` time — except the boolean row, which
+is the deliberate `TRUE`-versus-`1` difference recorded above.
+
+**The trap that cost the most time here**: LibreOffice's CSV export is *not* a reference for
+number formats. Exporting the feature workbook writes `4.5` where its own PDF rendering of the
+same cell shows `£4.50` — and it does the same to `sheet-features.ods`, whose cached display
+text says `£4.50` in the file. Percentages survive the round trip and currencies do not. Half
+an hour went into looking for the bug in the XF resolution before rendering the file and
+finding the reader was right all along. Compare against the PDF text layer for anything
+number-formatted.
 
 ### CSV
-- [ ] Separator, quoting and encoding detection. Genuinely ambiguous — a mismatch here may
-      be expected rather than a bug.
+- [x] Separator, quoting and encoding detection, in `Csv/`. Every decision is an Information
+      diagnostic naming its evidence (`PL2340`–`PL2342`), because the TODO's warning is
+      right — a mismatch here is usually a different reading of an ambiguous file rather than
+      a defect, and that is only arguable when the reading is visible.
+- [x] Separator chosen by *consistency* rather than frequency. Frequency loses badly on
+      prose: a one-column file of English sentences holds more commas than a three-column
+      semicolon file holds semicolons, while a real separator appears the same number of times
+      in every line.
+- [x] Encoding by byte-order mark, then a strict UTF-8 validation, then Windows-1252. The
+      validation is what makes this reliable rather than a coin toss: Windows-1252 text is
+      almost always invalid UTF-8 the moment it uses an accent.
+- [ ] A decimal comma is not inferred. `4,50` in a semicolon file extracts as the text `4,50`
+      rather than as 4.5, because deciding otherwise means guessing a locale from a file that
+      states none — and the displayed text would be the same either way.
+- [ ] Nothing is interpreted: `=B2*C2` extracts as six characters where Calc's import compiles
+      it and shows the result. That is deliberate for extraction and wrong for rendering, so
+      the CSV path will need an import-options record before it can be laid out.
+- [ ] LibreOffice is not an oracle here at all: its CSV *import* uses the filter options its
+      caller passed rather than detecting anything, so a headless conversion of
+      `csv-semicolon.csv` reads it as one column. Comparing against it measures the options,
+      not the file.
 
 ## Rendering
 

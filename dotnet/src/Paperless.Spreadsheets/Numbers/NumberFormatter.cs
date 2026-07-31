@@ -178,9 +178,7 @@ public static class NumberFormatter
         IReadOnlyList<FormatToken> tokens, int point, double magnitude, StringBuilder output)
     {
         int decimals = CountPlaceholders(tokens, point < 0 ? tokens.Count : point + 1, tokens.Count);
-        string rounded = magnitude.ToString(
-            "F" + Math.Min(decimals, 15).ToString(CultureInfo.InvariantCulture),
-            CultureInfo.InvariantCulture);
+        string rounded = Round(magnitude, decimals);
 
         int dot = rounded.IndexOf('.', StringComparison.Ordinal);
         string integerDigits = dot < 0 ? rounded : rounded[..dot];
@@ -223,6 +221,27 @@ public static class NumberFormatter
         if (pointPosition >= 0 && pointPosition == output.Length - 1) output.Length = pointPosition;
     }
 
+    /// <summary>
+    /// Rounds a non-negative magnitude to a number of decimals and writes it out in full.
+    /// </summary>
+    /// <remarks>
+    /// The midpoint is what needs stating: a spreadsheet rounds a half <em>away from zero</em>,
+    /// so 4.5 under <c>0</c> shows 5. LibreOffice does this with
+    /// <c>rtl_math_RoundingMode_Corrected</c>, which is literally
+    /// <c>approxFloor(value + 0.5)</c> on the magnitude (<c>sal/rtl/math.cxx:483</c>). .NET's
+    /// own <c>"F0"</c> is IEEE-correct instead and rounds a half to even, which turns the same
+    /// 4.5 into 4 while leaving 5.5 as 6 — so it disagrees on half the values that land exactly
+    /// on a midpoint and agrees on the other half, which is not the kind of error a spot check
+    /// finds.
+    /// </remarks>
+    private static string Round(double magnitude, int decimals)
+    {
+        int places = Math.Clamp(decimals, 0, 15);
+        double rounded = Math.Round(magnitude, places, MidpointRounding.AwayFromZero);
+        return rounded.ToString(
+            "F" + places.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+    }
+
     private static void RenderScientific(
         IReadOnlyList<FormatToken> tokens, int exponentIndex, int point, double magnitude,
         StringBuilder output)
@@ -253,8 +272,7 @@ public static class NumberFormatter
             }
         }
 
-        string rounded = mantissa.ToString(
-            "F" + mantissaDecimals.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+        string rounded = Round(mantissa, mantissaDecimals);
         int dot = rounded.IndexOf('.', StringComparison.Ordinal);
         string integerDigits = dot < 0 ? rounded : rounded[..dot];
         string decimalDigits = dot < 0 ? string.Empty : rounded[(dot + 1)..];
@@ -366,16 +384,44 @@ public static class NumberFormatter
                         : FormatIntegerPart(token, numerator.ToString(CultureInfo.InvariantCulture)));
                     break;
 
+                // The denominator is the one run padded on the *right*: LibreOffice passes
+                // bInsertRightBlank for it alone and calls that "left alignment of
+                // denominator" (svl/source/numbers/zformat.cxx, ImpNumberFill). So a column
+                // of "# ??/??" lines up on the bar with the denominators hard against it —
+                // "1/4 " rather than "1/ 4".
                 case FormatTokenKind.Digits when afterSlash:
                     output.Append(numerator == 0
                         ? new string(' ', token.Text.Length)
-                        : FormatIntegerPart(token, denominator.ToString(CultureInfo.InvariantCulture)));
+                        : PadDenominator(token, denominator));
                     break;
 
                 default:
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// Lays the denominator into its placeholder run, padding with spaces on the right where
+    /// the run is wider and the placeholder is <c>?</c>.
+    /// </summary>
+    private static string PadDenominator(FormatToken token, long denominator)
+    {
+        string placeholders = token.Text;
+        string digits = denominator.ToString(CultureInfo.InvariantCulture);
+
+        // The digits fill the run from the right, so the placeholders left unfilled are the
+        // leading ones — a `0` among them still writes a leading zero, only a `?` moves.
+        int zeros = 0;
+        int spaces = 0;
+        for (int i = 0; i < placeholders.Length - digits.Length; i++)
+        {
+            if (placeholders[i] == '0') zeros++;
+            else if (placeholders[i] == '?') spaces++;
+        }
+
+        string body = zeros > 0 ? digits.PadLeft(digits.Length + zeros, '0') : digits;
+        return spaces > 0 ? body + new string(' ', spaces) : body;
     }
 
     /// <summary>
@@ -558,9 +604,7 @@ public static class NumberFormatter
         if (moment is null) return General(value);
 
         DateTime when = moment.Value;
-        // Excel rounds seconds up rather than truncating, and a format without a seconds
-        // field rounds the minutes; without this a stored 14:29:59.6 shows as 14:29.
-        when = RoundForPrecision(when, section);
+        when = TruncateToPrecision(when, section);
 
         StringBuilder output = new();
         bool twelveHour = section.TwelveHour;
@@ -607,7 +651,33 @@ public static class NumberFormatter
         return output.ToString();
     }
 
-    private static DateTime RoundForPrecision(DateTime when, NumberFormatSection section)
+    /// <summary>
+    /// Drops the time detail a clock format does not show.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Truncation, not rounding, and the difference is visible: 05:35:31 under <c>hh:mm</c>
+    /// reads 05:35 and not 05:36. That is LibreOffice's rule and it is a deliberate one —
+    /// <c>tools::Time::GetClock</c> says so in as many words ("do not round values
+    /// (specifically not up), but truncate to the next magnitude, so 23:59:59.99 is still
+    /// 23:59:59 and not 24:00:00 (or even 00:00:00 which Excel does)",
+    /// <c>tools/source/datetime/ttime.cxx:217</c>).
+    /// </para>
+    /// <para>
+    /// Excel rounds instead, and following it would put 24:00:00 or midnight on the page for a
+    /// value a second short of the day. Since a rendering comparison is against LibreOffice,
+    /// and since the two only disagree in the last displayed digit of a value the file did not
+    /// round either, LibreOffice's rule is the one reproduced. Measured on
+    /// <c>sc/qa/unit/data/xls/formats.xls</c>, whose Sheet3 holds 05:35:31.2 under
+    /// <c>hh:mm</c>: rounding shows 05:36 where LibreOffice's render shows 05:35.
+    /// </para>
+    /// <para>
+    /// A serial has already been rounded to the millisecond by
+    /// <see cref="SpreadsheetDate.FromSerial"/>, which is what keeps a stored 14:30 —
+    /// 0.604166666… — from truncating to 14:29:59.
+    /// </para>
+    /// </remarks>
+    private static DateTime TruncateToPrecision(DateTime when, NumberFormatSection section)
     {
         bool hasSeconds = false;
         bool hasSubSeconds = false;
@@ -623,15 +693,9 @@ public static class NumberFormatter
         }
 
         if (hasSubSeconds) return when;
-        if (hasSeconds)
-        {
-            return when.Millisecond >= 500 ? when.AddMilliseconds(1000 - when.Millisecond) : when.AddMilliseconds(-when.Millisecond);
-        }
+        if (hasSeconds) return when.AddMilliseconds(-when.Millisecond);
 
-        // Round to the minute.
-        double intoMinute = when.Second + (when.Millisecond / 1000.0);
-        DateTime floor = when.AddSeconds(-intoMinute);
-        return intoMinute >= 30 ? floor.AddMinutes(1) : floor;
+        return when.AddSeconds(-when.Second).AddMilliseconds(-when.Millisecond);
     }
 
     private static string FractionalSeconds(DateTime when, int digits)

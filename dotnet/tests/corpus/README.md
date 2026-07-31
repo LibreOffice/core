@@ -85,6 +85,9 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `word-features.rtf` | RTF | The same document again, in the one format with no container. Adds what only RTF has: `\'hh` escapes in a declared code page, `\uN` with a code-page fallback to skip, a `{\listtext}` group holding the rendered list label, a `HYPERLINK` field instruction, and a merged table cell expressed purely by its `\cellx` edge |
 | `sheet-ooxml-features.xlsx` | XLSX | The same workbook as `sheet-features.ods` plus a fourth sheet of number formats, converted — so it covers the same features through a different vocabulary. Adds what only SpreadsheetML has: sheets located by relationship rather than by part name, `sharedStrings.xml` indices, `t="s"`/`t="b"`/`t="e"` cell types, `mergeCells` declared away from the cells it merges, comments hanging off the *worksheet* part with a separate author list, and — the reason the fourth sheet exists — **no cached display text at all**, so `styles.xml` has to be resolved for `[$£-809]#,##0.00`, `0.00E+00`, `0 ?/?`, `dd\ mmmm\ yyyy` and `#,##0.00;[RED]\-#,##0.00` to read as anything but raw numbers |
 | `sheet-ooxml-template.xltx` | XLTX | The same content as a template, so the template content type is exercised end to end |
+| `xls-features.xls` | XLS | Four sheets, one hidden; a shared string table larger than one 8224-byte record, so the CONTINUE path is exercised; MULRK, RK, NUMBER, LABELSST, MULBLANK and BOOLERR cells; a formula cached result of each kind — double, error, string (in the following STRING record) and boolean; number formats for currency, percent, date, time, datetime, scientific, grouped thousands and a custom code with literal text; a three-column merged range; a gap in a row |
+| `csv-semicolon.csv` | CSV | Semicolon separator with a decimal comma inside the fields, so frequency alone chooses wrongly; quoted fields containing a separator, a line break and a doubled quote; CRLF endings |
+| `csv-latin1.csv` | CSV | Windows-1252 bytes that are not valid UTF-8, so the encoding fallback is what makes the accents come out right |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
 | `deck-features.pptx` | PPTX | The same document as `slides-features.odp` with a table slide added, converted — so it covers the same features through a different vocabulary. Adds what only PPTX has: parts located by relationship with the master hanging off the *layout* rather than the slide; `p:sldIdLst` order; `p:sld show="0"` for the hidden slide; a bare `<p:ph/>` with no `type`; outline text carrying `a:pPr lvl` and a Private-Use-Area `a:buChar`; a `p:grpSp`; a table inside a `p:graphicFrame`; a notes slide in its own part under its own notes master; and a master whose placeholders carry prompt text that must **not** reach any slide |
 
@@ -117,6 +120,17 @@ conversion profile makes the same deck 18 kB instead of 464 kB, which is how
 `slides-ppt.ppt` keeps its thumbnail rather than being regenerated, because it earns its
 size: at ~865 sectors it is the only corpus file that exercises long FAT chains, where every
 other file's streams fit in a handful of sectors.
+
+### The XLS feature workbook has no cached formula results in its source
+
+`xls-features.xls` was authored as a flat ODF spreadsheet and converted, like the rest of
+`features/`. Its formula cells deliberately carry **no** `office:value` in that source.
+Supplying one makes LibreOffice's XLS exporter write a zero double for a string- or
+boolean-valued formula, because it picks the cached-result encoding from the cell's
+number-format type rather than from the value the cell holds
+(`XclExpFormulaCell::WriteContents`, `sc/source/filter/excel/xetable.cxx:1098`). With the
+value omitted, LibreOffice computes the formula on load and writes a genuine cached result —
+which is the only way to get a `STRING` record into a file LibreOffice wrote.
 
 ## Writing a flat-XML corpus document by hand
 

@@ -25,7 +25,8 @@ public sealed class NumberFormatSection
         bool hasDatePart,
         bool hasTimePart,
         bool twelveHour,
-        bool hasElapsed)
+        bool hasElapsed,
+        bool hasUnreproducedDirective)
     {
         Code = code;
         _tokens = tokens;
@@ -37,6 +38,7 @@ public sealed class NumberFormatSection
         HasTimePart = hasTimePart;
         TwelveHour = twelveHour;
         HasElapsed = hasElapsed;
+        HasUnreproducedDirective = hasUnreproducedDirective;
     }
 
     /// <summary>The subformat as written.</summary>
@@ -69,6 +71,19 @@ public sealed class NumberFormatSection
     /// <summary>True when this is the bare <c>General</c> subformat.</summary>
     public bool IsGeneral => Kind == NumberFormatKind.General;
 
+    /// <summary>
+    /// True when the subformat carries a directive that changes the characters shown and is
+    /// not reproduced — a numeral-system or calendar substitution.
+    /// </summary>
+    /// <remarks>
+    /// <c>[NatNum1]</c> and <c>[DBNum2]</c> replace the Western digits with another numeral
+    /// system, and <c>[~buddhist]</c> counts the years from another era; LibreOffice carries
+    /// each as a modifier on the whole format (<c>svl/source/numbers/zforscan.cxx:215</c>).
+    /// Ignoring one silently produces plausible digits that are not the ones the cell shows,
+    /// which is worse than saying so — a caller can raise a diagnostic instead.
+    /// </remarks>
+    public bool HasUnreproducedDirective { get; }
+
     /// <summary>The tokens, for the renderer.</summary>
     internal IReadOnlyList<FormatToken> Tokens => _tokens;
 
@@ -93,6 +108,7 @@ public sealed class NumberFormatSection
         bool sawDateTime = false;
         bool twelveHour = false;
         bool hasElapsed = false;
+        bool unreproduced = false;
 
         for (int i = 0; i < code.Length;)
         {
@@ -152,8 +168,12 @@ public sealed class NumberFormatSection
                         hasElapsed = true;
                         sawDateTime = true;
                     }
-                    // Anything else — a colour name, [ENG], [NatNum1] — changes appearance or
-                    // numeral system, not the text this extracts.
+                    else if (IsNumeralOrCalendarDirective(body))
+                    {
+                        unreproduced = true;
+                    }
+                    // Anything else — a colour name, [ENG] — changes appearance rather than
+                    // the text this extracts.
                     continue;
                 }
 
@@ -268,8 +288,13 @@ public sealed class NumberFormatSection
 
         return new NumberFormatSection(
             code, tokens, kind, condition, percents, thousandScale,
-            hasDate, hasTime, twelveHour, hasElapsed);
+            hasDate, hasTime, twelveHour, hasElapsed, unreproduced);
     }
+
+    private static bool IsNumeralOrCalendarDirective(string body)
+        => body.StartsWith("NatNum", StringComparison.OrdinalIgnoreCase)
+           || body.StartsWith("DBNum", StringComparison.OrdinalIgnoreCase)
+           || body.StartsWith('~');
 
     private static bool MatchesWord(string code, int index, string word)
         => index + word.Length <= code.Length

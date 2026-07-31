@@ -59,9 +59,11 @@ public static class SpreadsheetDate
         {
             epoch = Epoch1900;
             // Serials below 61 predate the phantom 29 February 1900, so they are one day
-            // ahead of the epoch arithmetic; 60 itself is that phantom day and clamps.
-            if (days < 60) days += 1;
-            else if (days < 61) days = 60;
+            // ahead of the epoch arithmetic. Serial 60 *is* that phantom day; adding the day
+            // anyway lands it on 1 March, sharing that day with serial 61, which is what
+            // LibreOffice does (XclRoot::GetDateTimeFromDouble adjusts everything before
+            // 1900-03-01) and therefore what a comparison against its rendering expects.
+            if (days < 61) days += 1;
         }
 
         // A whole day is 86400 seconds; rounding to the millisecond keeps 0.604166666666667
