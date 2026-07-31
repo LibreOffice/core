@@ -432,3 +432,30 @@ Writer settles that self-reference one line lower than this does. Everything els
 It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
 begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
 the end margin while `frame-wrap.fodt` passed throughout.
+
+### Right-to-left documents
+
+`bidi-drawing.*` is `bidi.fodt`'s sibling, one step further along: where that one exists to check the
+sub-runs a paragraph is *cut into*, this one exists to check where they are *drawn*. Seven paragraphs, each
+one line, all in DejaVu Sans for the same reason — three left-to-right with Hebrew inside them, four
+right-to-left, and among those four one with a start indent and one aligned against the physical left. It
+does exist in four formats, unlike `bidi.fodt`, because the direction properties are the point: ODF's
+`style:writing-mode`, OOXML's `w:bidi`, RTF's `\rtlpar` and WW8's `sprmPFBiDi` all have to arrive as the
+same flag.
+
+**Its right-to-left paragraphs state `fo:text-align` as `left` and `right` rather than `start` and `end`,
+and that is the whole reason it is a usable reference.** ODF's start and end are relative to the writing
+mode and its left and right are physical, but `ParagraphAdjust::START` only exists from LibreOffice 26.2
+(`offapi/com/sun/star/style/ParagraphAdjust.idl`) — before it, xmloff mapped start and end straight onto left
+and right, so 24.2 renders a start-aligned right-to-left paragraph against the **left** margin. The physical
+spellings mean the same thing in every version. The same trap is why the round-tripped `.odt` is deliberately
+absent: LibreOffice 24.2 rewrites `fo:text-align="right"` as `end` on the way out, which by the specification
+means the opposite edge, so that file is a version artefact rather than coverage. The flat document exercises
+the same reader.
+
+`bidi-columns.*` is a right-to-left **section** rather than a right-to-left paragraph: a two-column page
+layout whose `style:writing-mode` is `rl-tb`, holding one ordinary left-to-right Latin paragraph. Everything
+about it except the page layout is deliberately plain, because the only question it asks is which column
+fills first — LibreOffice draws its first line at 319 pt on this A4 page, which is the right-hand column.
+Three formats and not four: **LibreOffice's RTF export drops the section direction entirely**, writing
+`\cols2` and no `\rtlsect`, so an RTF round trip has nothing left to read.
