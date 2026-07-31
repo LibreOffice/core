@@ -167,9 +167,17 @@ public static class DrawingTextBody
         // has to be known before the marker is resolved rather than after the runs are read.
         bool hasText = HasText(paragraph);
 
-        string? marker = ResolveMarker(
-            LevelChain(properties, bodyListStyle, level, options),
-            level, counters, counting, hasText);
+        // Materialised because the chain is now walked twice — once for the bullet and once for
+        // the character defaults — and the caller's part of it costs a search of the master's
+        // shape tree.
+        List<XElement> chain = [.. LevelChain(properties, bodyListStyle, level, options)];
+
+        string? marker = ResolveMarker(chain, level, counters, counting, hasText);
+
+        // Every <c>a:defRPr</c> the chain offers, most specific first. A run states only what
+        // differs from these, and on a PowerPoint-authored deck it commonly states nothing.
+        List<XElement> characterDefaults =
+            [.. chain.Select(source => Drawing.Child(source, "defRPr")).OfType<XElement>()];
 
         ContentParagraph result = new()
         {
@@ -184,8 +192,8 @@ public static class DrawingTextBody
 
         foreach (XElement child in paragraph.Elements())
         {
-            if (Drawing.Is(child, "r")) ReadRun(child, result, options);
-            else if (Drawing.Is(child, "fld")) ReadRun(child, result, options);
+            if (Drawing.Is(child, "r")) ReadRun(child, result, options, characterDefaults);
+            else if (Drawing.Is(child, "fld")) ReadRun(child, result, options, characterDefaults);
             else if (Drawing.Is(child, "br")) result.Children.Add(new ContentRun { Text = "\n" });
         }
 
@@ -224,7 +232,11 @@ public static class DrawingTextBody
     /// something the file does not say and that a reference renderer, which uses the cache, does
     /// not show either.
     /// </remarks>
-    private static void ReadRun(XElement run, ContentParagraph paragraph, DrawingTextOptions options)
+    private static void ReadRun(
+        XElement run,
+        ContentParagraph paragraph,
+        DrawingTextOptions options,
+        IReadOnlyList<XElement> characterDefaults)
     {
         string? text = Drawing.Child(run, "t")?.Value;
         if (string.IsNullOrEmpty(text)) return;
@@ -233,34 +245,85 @@ public static class DrawingTextBody
         paragraph.Children.Add(new ContentRun
         {
             Text = text,
-            Emphasis = EmphasisOf(properties),
-            Language = Drawing.Attribute(properties, "lang"),
+            Emphasis = EmphasisOf(properties, characterDefaults),
+            Language = Stated(properties, characterDefaults, "lang"),
             HyperlinkTarget = HyperlinkOf(properties, options),
         });
     }
 
-    private static RunEmphasis EmphasisOf(XElement? properties)
+    /// <summary>
+    /// A run's effective emphasis: its own <c>a:rPr</c> over the <c>a:defRPr</c> chain.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Resolved attribute by attribute rather than element by element, because a run that states
+    /// <c>b="1"</c> and nothing else has not cancelled the italic its level's <c>defRPr</c>
+    /// gives it. LibreOffice does the same with <c>assignUsed</c>, applying the master list
+    /// style, then the body's, then the paragraph's <c>defRPr</c>, then the run
+    /// (<c>oox/source/drawingml/textparagraph.cxx:51-67</c> and
+    /// <c>textrun.cxx:80</c>) — every step overwriting only what it sets.
+    /// </para>
+    /// <para>
+    /// The step this cannot do is the one between the master's list style and the body's: the
+    /// shape's own text style, which comes from the theme's <c>txDef</c> and the shape style's
+    /// <c>a:fontRef</c>. That needs theme resolution, and neither of the properties it carries
+    /// — typeface and colour — is anything extraction reports.
+    /// </para>
+    /// </remarks>
+    private static RunEmphasis EmphasisOf(
+        XElement? properties, IReadOnlyList<XElement> characterDefaults)
     {
-        if (properties is null) return RunEmphasis.None;
-
         RunEmphasis emphasis = RunEmphasis.None;
-        if (Drawing.Flag(properties, "b") == true) emphasis |= RunEmphasis.Bold;
-        if (Drawing.Flag(properties, "i") == true) emphasis |= RunEmphasis.Italic;
+
+        if (Flag(properties, characterDefaults, "b") == true) emphasis |= RunEmphasis.Bold;
+        if (Flag(properties, characterDefaults, "i") == true) emphasis |= RunEmphasis.Italic;
 
         // u and strike are enumerations whose "none" member is the off state, and both are
         // written explicitly by LibreOffice's exporter on every run — so testing for presence
         // rather than for a value would mark every run struck through.
-        if (Drawing.Attribute(properties, "u") is { Length: > 0 } and not "none")
+        if (Stated(properties, characterDefaults, "u") is { Length: > 0 } and not "none")
             emphasis |= RunEmphasis.Underline;
-        if (Drawing.Attribute(properties, "strike") is { Length: > 0 } and not "noStrike")
+        if (Stated(properties, characterDefaults, "strike") is { Length: > 0 } and not "noStrike")
             emphasis |= RunEmphasis.Strikethrough;
 
         // baseline is a signed percentage of the em: positive raises, negative lowers.
-        if (Drawing.Number(properties, "baseline") is { } baseline && baseline != 0)
+        if (Stated(properties, characterDefaults, "baseline") is { } text
+            && int.TryParse(text, System.Globalization.NumberStyles.Integer,
+                            System.Globalization.CultureInfo.InvariantCulture, out int baseline)
+            && baseline != 0)
+        {
             emphasis |= baseline > 0 ? RunEmphasis.Superscript : RunEmphasis.Subscript;
+        }
 
         return emphasis;
     }
+
+    /// <summary>
+    /// The value of an attribute on the run's own properties, or on the nearest
+    /// <c>a:defRPr</c> that states one.
+    /// </summary>
+    private static string? Stated(
+        XElement? properties, IReadOnlyList<XElement> characterDefaults, string name)
+    {
+        if (Drawing.Attribute(properties, name) is { } own) return own;
+
+        foreach (XElement source in characterDefaults)
+        {
+            if (Drawing.Attribute(source, name) is { } inherited) return inherited;
+        }
+
+        return null;
+    }
+
+    /// <summary>The same, read as an ST_Boolean.</summary>
+    private static bool? Flag(
+        XElement? properties, IReadOnlyList<XElement> characterDefaults, string name)
+        => Stated(properties, characterDefaults, name) switch
+        {
+            "1" or "true" or "on" => true,
+            "0" or "false" or "off" => false,
+            _ => null,
+        };
 
     private static string? HyperlinkOf(XElement? properties, DrawingTextOptions options)
     {
