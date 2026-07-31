@@ -185,3 +185,10 @@ two-part running head, one cell hard left and another hard right on one line. It
 height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame cannot hold a table — so the
 document exercises the dynamic-height path at the same time, and the body's first baseline moves with the
 header's real height.
+
+`table-exact-row.*` is `table-grid` with its second row given an *exact* height of 0.8 cm — less than its
+content needs. LibreOffice renders that row 22.70 pt tall rather than growing it to 32.60, so every row below
+it moves up, which is what makes the difference visible in a word-position comparison at all. The row style
+has to be an **automatic** style for LibreOffice to honour it, per the warning above: declared in
+`office:styles` it is ignored and the row grows, which is exactly the answer a reader with no exact-height
+support gives — so the corpus file would have passed for the wrong reason.

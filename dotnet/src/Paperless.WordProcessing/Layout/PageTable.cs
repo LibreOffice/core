@@ -60,10 +60,11 @@ public enum CellVerticalAlignment
 /// implied, but the same information.
 /// </para>
 /// <para>
-/// Heights are absent on purpose: a row is as tall as its tallest cell, and a cell is as tall as its
-/// content at its own width. Only a floor can be stated (<see cref="PageTableRow.MinHeight"/>), because
-/// only a floor is what the formats mean by a row height — the value is honoured when the content is
-/// shorter and ignored when it is taller.
+/// Heights are mostly absent on purpose: a row is as tall as its tallest cell, and a cell is as tall as its
+/// content at its own width. What a row can state is a <em>floor</em>
+/// (<see cref="PageTableRow.MinHeight"/>), honoured when the content is shorter and ignored when it is
+/// taller, which is what three of the four spellings mean. The fourth is
+/// <see cref="PageTableRow.HasExactHeight"/>, the one that really is a height: it clips.
 /// </para>
 /// </remarks>
 public sealed record PageTable : PageBlock
@@ -131,14 +132,32 @@ public sealed record PageTableRow
     public required IReadOnlyList<PageTableCell> Cells { get; init; }
 
     /// <summary>
-    /// The row's declared height, which is a floor rather than a size.
+    /// The row's declared height, which is a floor unless <see cref="HasExactHeight"/> says otherwise.
     /// </summary>
     /// <remarks>
-    /// Honoured when the content is shorter and ignored when it is taller, which is what "at least" means
-    /// in all four formats. An exact row height exists in DOCX (<c>w:hRule="exact"</c>) and clips its
-    /// content; it is not modelled yet, and a document using one gets the taller of the two instead.
+    /// Honoured when the content is shorter and ignored when it is taller, which is what "at least" means in
+    /// all four formats and what a row height usually is.
     /// </remarks>
     public Length MinHeight { get; init; }
+
+    /// <summary>
+    /// True when <see cref="MinHeight"/> is an <em>exact</em> height rather than a floor.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one row height that really is a height: the row is that tall whatever its content, so content
+    /// taller than the row is clipped rather than growing it. Every format has a spelling for it, and three of
+    /// the four say it by a <em>sign</em> rather than by a word — RTF's <c>\trrh</c> and WW8's
+    /// <c>sprmTDyaRowHeight</c> are both "at least" when positive and exact when negative, and ODF
+    /// distinguishes <c>style:row-height</c> from <c>style:min-row-height</c> by the attribute name. Only DOCX
+    /// spells it out, as <c>w:hRule="exact"</c>.
+    /// </para>
+    /// <para>
+    /// A negative height is therefore not an error to reject: it is how two of the four formats say this, and
+    /// a reader that clamped it to zero would silently turn every exact row into an automatic one.
+    /// </para>
+    /// </remarks>
+    public bool HasExactHeight { get; init; }
 
     /// <summary>True when the row is one of the table's repeating heading rows.</summary>
     public bool IsHeader { get; init; }

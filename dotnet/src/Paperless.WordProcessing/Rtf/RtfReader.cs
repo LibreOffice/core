@@ -209,6 +209,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             {
                 Cells = cells,
                 MinHeight = row.MinHeight,
+                HasExactHeight = row.HasExactHeight,
                 IsHeader = row.IsHeader,
             });
         }

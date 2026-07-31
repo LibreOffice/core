@@ -453,8 +453,20 @@ is read and verified, so what remains is the filling of pages rather than the me
       "is this flow laid out at all" had to stop meaning "is this the body". It had been guarding the *cell*
       path too, which meant a table in a running head closed normally and simply held nothing — a table with
       no cells draws no text and reports no error.
-- [ ] `w:hRule="exact"`, the one row height that really is a height: it clips its content rather than
-      growing. Every other spelling in every format is a floor, which is what `PageTableRow.MinHeight` is.
+- [x] **Exact row heights**, in all four formats — the one row height that really is a height rather than a
+      floor. `PageTableRow.HasExactHeight` says which, and the layouter then takes the stated height as the
+      row's whatever its content, so the rows below it move up. Measured: a 0.8 cm exact row whose content
+      needs 32.6 pt renders 22.70 pt, which moves every row after it.
+      Three of the four formats say it by a **sign** rather than by a word: RTF's `\trrh` and WW8's
+      `sprmTDyaRowHeight` are both "at least" when positive and exact when negative, so the parameter has to
+      be kept signed — taking its magnitude, which both readers did, turns every exact row into a minimum.
+      ODF distinguishes `style:row-height` from `style:min-row-height` by the attribute name, and a row stating
+      both means the floor: a minimum the content may exceed is the weaker claim.
+      This also uncovered a bug that had been silent since row heights were first read: DOCX's `w:trHeight`
+      carries `w:val`, not the `w:w` a `w:tblWidth` carries, so it was being read with the width helper and
+      coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
+      only surfaced when the same value became an exact height and produced a zero-height row.
+      `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
 - [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read
       time — the readers currently take the declared grid and nothing else.
 - [ ] Floating objects and text wrap, including contour wrap

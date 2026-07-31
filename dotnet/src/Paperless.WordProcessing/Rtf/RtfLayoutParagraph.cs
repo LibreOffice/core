@@ -168,12 +168,17 @@ public sealed record RtfLayoutTable(
 
 /// <summary>One row of an RTF table.</summary>
 /// <param name="Cells">Its cells, left to right; a cell covered by a merge above is absent.</param>
-/// <param name="MinHeight">Its declared height, as a floor.</param>
+/// <param name="MinHeight">Its declared height, as a magnitude.</param>
 /// <param name="IsHeader">True when <c>\trhdr</c> marked it a heading row.</param>
+/// <param name="HasExactHeight">
+/// True when <c>\trrh</c>'s parameter was negative, which is how RTF says the height is exact rather than a
+/// floor — the row is that tall and content past it is clipped.
+/// </param>
 public sealed record RtfLayoutRow(
     IReadOnlyList<RtfLayoutCell> Cells,
     Core.Units.Length MinHeight,
-    bool IsHeader);
+    bool IsHeader,
+    bool HasExactHeight = false);
 
 /// <summary>One cell of an RTF table.</summary>
 /// <param name="Column">The grid column it starts at.</param>

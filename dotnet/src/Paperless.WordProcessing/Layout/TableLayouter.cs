@@ -79,7 +79,12 @@ public static class TableLayouter
                 }
             }
 
-            heights[row] = Length.Max(heights[row], table.Rows[row].MinHeight);
+            // The declared height, which is a floor unless the row says it is exact — in which case it is the
+            // height, and content taller than it is clipped rather than growing the row. Applied per row
+            // before the merge shortfall below, so that a merge spanning an exact row cannot stretch it.
+            heights[row] = table.Rows[row].HasExactHeight
+                ? Length.Max(Length.Zero, table.Rows[row].MinHeight)
+                : Length.Max(heights[row], table.Rows[row].MinHeight);
         }
 
         // A merged cell may still need more room than the rows it covers add up to, so the last row it
@@ -91,6 +96,10 @@ public static class TableLayouter
 
             Length available = Length.Zero;
             for (int row = cell.Row; row <= cell.LastRow; row++) available += heights[row];
+
+            // An exact row does not grow, so a merge ending in one has nowhere to put its shortfall and its
+            // content overflows. Skipping the row rather than growing it is the whole point of "exact".
+            if (table.Rows[cell.LastRow].HasExactHeight) continue;
 
             Length needed = cell.TextHeight + cell.Cell.Padding.Vertical;
             if (needed > available) heights[cell.LastRow] += needed - available;

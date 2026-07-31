@@ -402,7 +402,13 @@ public sealed partial class RtfDocumentReader
         /// </remarks>
         public int? RowHalfGap { get; set; }
 
-        /// <summary>The row's declared height from <c>\trrh</c>, in twips.</summary>
+        /// <summary>
+        /// The row's declared height from <c>\trrh</c>, in twips, signed as the control word gave it.
+        /// </summary>
+        /// <remarks>
+        /// Signed on purpose: positive is a floor and negative is an exact height that clips, and the sign is
+        /// the only thing that says which. Clamping it to a magnitude turns every exact row into a minimum.
+        /// </remarks>
         public int RowHeight { get; set; }
 
         /// <summary>
@@ -508,7 +514,9 @@ public sealed partial class RtfDocumentReader
         /// </summary>
         public int LeftEdge { get; init; }
 
-        /// <summary>The row's declared height in twips, from <c>\trrh</c>; zero for none.</summary>
+        /// <summary>
+        /// The row's declared height in twips, from <c>\trrh</c>; zero for none, negative for an exact height.
+        /// </summary>
         public int Height { get; init; }
 
         public List<CellDraft> Cells { get; } = [];

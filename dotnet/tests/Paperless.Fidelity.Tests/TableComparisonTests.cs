@@ -73,6 +73,14 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-pages.docx")]
     [InlineData("table-pages.doc")]
     [InlineData("table-pages.rtf")]
+    // A row whose height is *exact* rather than a floor, and whose content is taller than it — so the row does
+    // not grow and the rows below it move up by the difference. Measured: 22.70 pt where the same row grows to
+    // 32.60 when the height is read as a minimum, which moves every row after it.
+    [InlineData("table-exact-row.fodt")]
+    [InlineData("table-exact-row.odt")]
+    [InlineData("table-exact-row.docx")]
+    [InlineData("table-exact-row.doc")]
+    [InlineData("table-exact-row.rtf")]
     // A nested table in every format, which is worth stating because no two of them express it the same
     // way: ODF and DOCX nest the markup, while DOC and RTF nest the *paragraph* — sprmPItap and \itap give
     // a depth, and an inner table's cells end at paragraph marks rather than at U+0007.

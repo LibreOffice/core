@@ -285,7 +285,13 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 });
             }
 
-            rows.Add(new PageTableRow { Cells = cells, IsHeader = row.IsHeader });
+            rows.Add(new PageTableRow
+            {
+                Cells = cells,
+                IsHeader = row.IsHeader,
+                MinHeight = row.MinHeight,
+                HasExactHeight = row.HasExactHeight,
+            });
         }
 
         return new PageTable

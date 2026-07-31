@@ -355,6 +355,10 @@ public sealed partial class Ww8DocumentReader
         public int Index { get; init; }
         public int LeftEdge { get; init; }
         public bool IsHeader { get; init; }
+
+        /// <summary>Its declared height in twips, signed: negative means exact rather than a floor.</summary>
+        public int HeightTwips { get; init; }
+
         public List<Ww8CellDraft> Cells { get; } = [];
     }
 

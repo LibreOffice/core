@@ -729,9 +729,10 @@ public sealed partial class RtfDocumentReader
                 DefinitionTarget(CurrentFlow).RowHalfGap = token.Parameter ?? 0;
                 return;
             case "trrh":
-                // A row height. Negative means "exactly this", which is not modelled — the magnitude is
-                // taken as a floor either way, which shows the text rather than clipping it.
-                DefinitionTarget(CurrentFlow).RowHeight = Math.Abs(token.Parameter ?? 0);
+                // A row height, whose *sign* carries the rule: positive is "at least" and negative is
+                // "exactly this", which clips. So the parameter is kept as it arrived rather than made
+                // positive — taking the magnitude either way loses the only thing that says which it is.
+                DefinitionTarget(CurrentFlow).RowHeight = token.Parameter ?? 0;
                 return;
             case "clpadl" or "clpadr" or "clpadt" or "clpadb":
                 SetPadding(

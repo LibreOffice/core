@@ -182,6 +182,7 @@ public sealed partial class Ww8DocumentReader
                 Index = level.Rows.Count,
                 LeftEdge = definition?.LeftEdge ?? 0,
                 IsHeader = format.IsTableHeaderRow,
+                HeightTwips = format.RowHeightTwips,
             };
             row.Cells.AddRange(level.RowCells);
             level.Rows.Add(row);
@@ -283,7 +284,11 @@ public sealed partial class Ww8DocumentReader
                     [.. cell.LayoutBlocks]));
             }
 
-            layoutRows.Add(new Ww8LayoutRow(cells, row.IsHeader));
+            layoutRows.Add(new Ww8LayoutRow(
+                cells,
+                row.IsHeader,
+                Length.FromTwips(Math.Abs(row.HeightTwips)),
+                row.HeightTwips < 0));
         }
 
         return new Ww8LayoutTable(
@@ -417,7 +422,16 @@ public sealed record Ww8LayoutTable(
 /// <summary>One row of a DOC table.</summary>
 /// <param name="Cells">Its cells, left to right; one covered by a merge above is absent.</param>
 /// <param name="IsHeader">True when <c>sprmTTableHeader</c> marked it a heading row.</param>
-public sealed record Ww8LayoutRow(IReadOnlyList<Ww8LayoutCell> Cells, bool IsHeader);
+/// <param name="MinHeight">Its declared height, as a magnitude.</param>
+/// <param name="HasExactHeight">
+/// True when <c>sprmTDyaRowHeight</c>'s operand was negative, which is how WW8 says the height is exact
+/// rather than a floor — the row is that tall and content past it is clipped.
+/// </param>
+public sealed record Ww8LayoutRow(
+    IReadOnlyList<Ww8LayoutCell> Cells,
+    bool IsHeader,
+    Length MinHeight = default,
+    bool HasExactHeight = false);
 
 /// <summary>One cell of a DOC table.</summary>
 /// <param name="Column">The grid column it starts at.</param>

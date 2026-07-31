@@ -414,6 +414,11 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.IsTableHeaderRow:
                     format = format with { IsTableHeaderRow = sprm.Byte != 0 };
                     break;
+                case Ww8SprmReader.Ids.RowHeight:
+                    // Signed as the sprm gave it: positive is a floor and negative an exact height that
+                    // clips, and the sign is the only thing that says which.
+                    format = format with { RowHeightTwips = sprm.SignedWord };
+                    break;
 
                 case Ww8SprmReader.Ids.TableDefinition:
                     format = format with { TableDefinition = ReadTableDefinition(sprm.Operand) };
@@ -616,6 +621,16 @@ public readonly record struct Ww8ParagraphFormat
 
     /// <summary>True when the row this paragraph ends repeats as a header on every page.</summary>
     public bool IsTableHeaderRow { get; init; }
+
+    /// <summary>
+    /// The row's declared height in twips from <c>sprmTDyaRowHeight</c>, signed; zero for none.
+    /// </summary>
+    /// <remarks>
+    /// Signed on purpose — positive is a floor, negative is an exact height that clips — and carried on the
+    /// paragraph format because WW8 states a row's properties on the paragraph mark that <em>ends</em> the row
+    /// rather than anywhere a row begins.
+    /// </remarks>
+    public int RowHeightTwips { get; init; }
 
     /// <summary>
     /// The cell padding the row declares, as the entries the document stated.

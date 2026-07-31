@@ -107,6 +107,15 @@ public static class Ww8SprmReader
         public const ushort IsTableHeaderRow = 0x3404;
 
         /// <summary>
+        /// <c>sprmTDyaRowHeight</c>: the row's height in twips, whose sign carries the rule.
+        /// </summary>
+        /// <remarks>
+        /// Positive is "at least" and negative is exact, which clips — the same convention RTF's
+        /// <c>\trrh</c> uses, and for the same reason: both formats are Word's.
+        /// </remarks>
+        public const ushort RowHeight = 0x9407;
+
+        /// <summary>
         /// The row's geometry: its column edges and its cells' merge flags.
         /// </summary>
         /// <remarks>

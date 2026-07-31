@@ -152,7 +152,7 @@ public sealed partial class DocxLayoutSource
             cells,
             IsHeading: Word.IsOn(Word.Child(properties, "tblHeader"))
                        || Word.Child(properties, "tblHeader") is not null,
-            MinHeight: RowHeight(properties));
+            RowHeight(properties));
     }
 
     /// <summary>
@@ -164,13 +164,25 @@ public sealed partial class DocxLayoutSource
     /// height that clips its content, which is not modelled — such a row gets the taller of the two
     /// instead, which is wrong in the direction of showing the text rather than hiding it.
     /// </remarks>
-    private static Length RowHeight(XElement? properties)
+    private static (Length Height, bool IsExact) RowHeight(XElement? properties)
     {
         XElement? height = Word.Child(properties, "trHeight");
-        if (height is null) return Length.Zero;
-        if (Word.Attribute(height, "hRule") == "auto") return Length.Zero;
+        if (height is null) return (Length.Zero, false);
 
-        return Twips(height) ?? Length.Zero;
+        string? rule = Word.Attribute(height, "hRule");
+        if (rule == "auto") return (Length.Zero, false);
+
+        // `w:val`, not `w:w`. A row height is a bare measurement rather than a `w:tblWidth`, so it carries
+        // neither a type nor a `w:w` — and reading it with the width helper returns nothing at all, which for
+        // an "at least" height is invisible (a zero floor is no floor) and for an exact one is a zero-height
+        // row. That is how this was found: the bug had been silent since the heights were first read.
+        Length measured =
+            Word.Attribute(height, "val") is { } text
+            && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int twips)
+                ? Length.FromTwips(Math.Abs(twips))
+                : Length.Zero;
+
+        return (measured, rule == "exact");
     }
 
     /// <summary>
@@ -270,7 +282,8 @@ public sealed partial class DocxLayoutSource
             {
                 Cells = cells,
                 IsHeader = rows[row].IsHeading,
-                MinHeight = rows[row].MinHeight,
+                MinHeight = rows[row].Height.Height,
+                HasExactHeight = rows[row].Height.IsExact,
             });
         }
 
@@ -358,5 +371,5 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>A row before its cells' row spans are known.</summary>
     private readonly record struct PendingRow(
-        List<PendingCell> Cells, bool IsHeading, Length MinHeight);
+        List<PendingCell> Cells, bool IsHeading, (Length Height, bool IsExact) Height);
 }

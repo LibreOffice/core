@@ -512,7 +512,8 @@ public sealed partial class RtfDocumentReader
                     [.. cell.LayoutBlocks]));
             }
 
-            layoutRows.Add(new RtfLayoutRow(cells, Length.FromTwips(row.Height), row.IsHeader));
+            layoutRows.Add(new RtfLayoutRow(
+                cells, Length.FromTwips(Math.Abs(row.Height)), row.IsHeader, row.Height < 0));
         }
 
         return new RtfLayoutTable(

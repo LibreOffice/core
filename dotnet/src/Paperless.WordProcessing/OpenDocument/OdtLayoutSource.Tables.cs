@@ -230,7 +230,8 @@ public sealed partial class OdtLayoutSource
         {
             Cells = cells,
             IsHeader = isHeader,
-            MinHeight = RowHeight(element) ?? Length.Zero,
+            MinHeight = RowHeight(element).Height,
+            HasExactHeight = RowHeight(element).IsExact,
         };
     }
 
@@ -242,11 +243,25 @@ public sealed partial class OdtLayoutSource
     /// LibreOffice honours it only while the content fits, and grows the row otherwise — so both map to the
     /// same floor here, which is what a row whose text has been edited since it was written actually does.
     /// </remarks>
-    private Length? RowHeight(XElement row)
+    /// <summary>
+    /// The row's declared height and whether it is exact.
+    /// </summary>
+    /// <remarks>
+    /// ODF distinguishes the two by attribute name rather than by a rule: <c>style:min-row-height</c> is a
+    /// floor and <c>style:row-height</c> is a height, and a row stating both means the floor — a minimum the
+    /// content can exceed is a weaker claim than an exact size, so honouring the exact one would clip content
+    /// the document said could grow.
+    /// </remarks>
+    /// <param name="row">The <c>table:table-row</c> element.</param>
+    private (Length Height, bool IsExact) RowHeight(XElement row)
     {
         string? styleName = row.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
 
-        return RowMeasure(styleName, "min-row-height") ?? RowMeasure(styleName, "row-height");
+        if (RowMeasure(styleName, "min-row-height") is { } floor) return (floor, false);
+
+        return RowMeasure(styleName, "row-height") is { } exact
+            ? (exact, true)
+            : (Length.Zero, false);
     }
 
     private Length? RowMeasure(string? styleName, string propertyName)
