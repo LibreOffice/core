@@ -96,6 +96,8 @@ output after the input stem alone: converting both from a shared stem would have
 overwrite the other.
 
 | `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order, and a title whose boldness is stated nowhere on the slide because it lives in the master's `TxMasterStyleAtom` |
+| `shape-geometry.pptx` | PPTX | Four slides of nothing but placed shapes, hand-written so that every offset and extent is a round number of inches and every fill is stated rather than inherited. Slide 1: five rectangles at known EMU offsets — a literal fill, a `schemeClr accent1` fill, an `accent2` fill under `lumMod`/`lumOff`, an outline with no fill, and one rotated 30°. Slide 2: a group whose `chExt` is half its `ext`, so a child's coordinates are doubled on the way out, beside an ungrouped shape for comparison. Slide 3: four text bodies covering zero insets, the OOXML default insets, centred alignment and middle anchoring. Slide 4: four `rtTriangle`s — plain, `flipH`, `flipV`, and `flipH` with `rot="5400000"` — which is the only shape in the corpus that tells flip-before-rotate apart from rotate-before-flip, since a rectangle looks identical under either order |
+| `shape-geometry.odp` | ODP | The same deck converted, so the same placements are covered through ODF's vocabulary. Adds what only ODF has: `svg:x`/`svg:y`/`svg:width`/`svg:height` in centimetres, a `draw:transform="rotate (…) translate (…)"` whose angle runs the other way from OOXML's `rot`, a `draw:g` whose children carry absolute coordinates rather than a child coordinate space, and fills and strokes reached through a `draw:style-name` rather than stated on the shape |
 | `annotated-slides.odp` | ODP | Two slides, the first carrying two review comments by two different authors, the first comment having two paragraphs. It exists because no other corpus deck has a comment at all: Impress writes a page-level comment as `officeooo:annotation` in the OpenOffice.org extension namespace rather than as ODF's own `office:annotation`, and a reader that knows only the latter does not lose the text — it files it as slide content, where nothing tells it apart |
 | `comment-deck.pptx` | PPTX | The same deck converted, so slide comments are covered through PresentationML as well. Adds what only PPTX has: a `comments` part reached by relationship *from the slide*, a `commentAuthors.xml` reached from the presentation, a comment that names only an author **id**, and a two-paragraph comment carried as a single `p:text` with a newline in it |
 
@@ -107,6 +109,12 @@ had them overwrite each other's output.
 
 Four documents that LibreOffice cannot produce, because what they exercise is something its own
 export normalises away. Each is written by a script rather than converted, and each is minimal.
+
+`shape-geometry.pptx` is hand-written for the same reason and one more. LibreOffice's own PPTX
+export resolves every themed fill to a literal colour and rounds every offset through hundredths
+of a millimetre, so a converted deck can show neither that `schemeClr` resolution happened nor
+that a placement is exact — and it never writes a `flipH` beside a `rot`, which is the one
+combination that tells the two transform orders apart.
 
 | File | Exercises |
 |---|---|
