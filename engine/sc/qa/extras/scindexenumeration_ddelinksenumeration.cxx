@@ -10,9 +10,12 @@
 #include <test/unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
+#include <comphelper/kit.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -64,6 +67,11 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DDELinksEnumeration::init()
         u"=DDE(\"soffice\";\"ScDDELinksObj.ods\";\"Sheet1.A1\""_ustr);
     xSheet0->getCellByPosition(2, 0)->setFormula(
         u"=DDE(\"soffice\";\"ScDDELinksObj.ods\";\"Sheet1.A1\""_ustr);
+
+    // Interpreting a DDE formula is what registers its link, and with the Kit only the range
+    // a client specifies is interpreted
+    if (comphelper::COKit::isActive())
+        xDoc.queryThrow<sheet::XCalculatable>()->calculateAll();
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);
 

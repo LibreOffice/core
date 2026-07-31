@@ -12,12 +12,14 @@
 #include <test/sheet/xddelink.hxx>
 #include <test/util/xrefreshable.hxx>
 
+#include <comphelper/kit.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -82,6 +84,11 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
                                                 + "\";\"Sheet1.A1\")");
     xSheet->getCellByPosition(1, 4)->setFormula("=DDE(\"soffice\";\"" + testdoc
                                                 + "\";\"Sheet1.A1\")");
+
+    // Interpreting a DDE formula is what registers its link, and with the Kit only the range
+    // a client specifies is interpreted
+    if (comphelper::COKit::isActive())
+        xDoc.queryThrow<sheet::XCalculatable>()->calculateAll();
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
     cpo::uno::Any aDDELinks = xPropSet->getPropertyValue(u"DDELinks"_ustr);
