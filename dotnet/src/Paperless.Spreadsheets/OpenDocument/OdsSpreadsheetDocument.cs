@@ -97,6 +97,7 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
                 Setup = setup,
                 Grid = grid,
                 Cells = section?.Children.OfType<ContentTable>().FirstOrDefault(),
+                Formats = OdsCellFormats.Read(document.File, table),
             });
 
             index++;

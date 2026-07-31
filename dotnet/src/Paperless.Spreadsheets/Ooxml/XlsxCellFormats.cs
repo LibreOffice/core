@@ -27,12 +27,23 @@ namespace Paperless.Spreadsheets.Ooxml;
 /// </remarks>
 internal static class XlsxCellFormats
 {
-    /// <summary>One Excel indent level, in twips.</summary>
+    /// <summary>
+    /// How many space widths one <c>indent</c> level is worth.
+    /// </summary>
     /// <remarks>
-    /// "1 Excel unit == 10 pt == 200 twips", <c>sc/source/filter/excel/xistyle.cxx:846</c>. The
-    /// OOXML filter uses the same conversion.
+    /// Three, measured in the <em>workbook's default font</em> rather than the cell's:
+    /// <c>rUnitConverter.scaleValue(3.0 * mnIndent, Unit::Space, Unit::Twip)</c>
+    /// (<c>sc/source/filter/oox/stylesbuffer.cxx:1263</c>), where one <c>Space</c> is the space
+    /// character's advance in the default font (<c>unitconverter.cxx:139</c>). That is not the
+    /// BIFF rule — <c>xistyle.cxx:846</c> uses a flat 200 twips a level — and the difference is
+    /// visible: two levels of ten-point Liberation Sans is 330 twips here and 400 there, which
+    /// is 3.5 pt of indent.
     /// </remarks>
-    private const int TwipsPerIndentLevel = 200;
+    private const int SpacesPerIndentLevel = 3;
+
+    /// <summary>What one indent level is worth when no font can be measured.</summary>
+    /// <remarks>The BIFF conversion, which is the closest answer available without a face.</remarks>
+    private const int FallbackTwipsPerIndentLevel = 200;
 
     /// <summary>Reads the cell formats a workbook's <c>styleSheet</c> declares.</summary>
     /// <param name="styleSheet">The <c>styleSheet</c> root, or null when the part is missing.</param>
@@ -52,6 +63,8 @@ internal static class XlsxCellFormats
         List<Record> styleXfs = [.. Xlsx.Children(Xlsx.Child(styleSheet, "cellStyleXfs"), "xf")
                                         .Select(ReadRecord)];
 
+        Length indentUnit = IndentUnit(fonts);
+
         List<SheetCellFormat> formats = [];
         foreach (XElement xf in Xlsx.Children(Xlsx.Child(styleSheet, "cellXfs"), "xf"))
         {
@@ -60,7 +73,7 @@ internal static class XlsxCellFormats
                 ? styleXfs[id]
                 : null;
 
-            formats.Add(Resolve(record, parent, fonts, styles, formats.Count));
+            formats.Add(Resolve(record, parent, fonts, styles, indentUnit, formats.Count));
         }
 
         return formats.Count == 0 ? [SheetCellFormat.Default] : formats;
@@ -308,11 +321,39 @@ internal static class XlsxCellFormats
 
     // ----------------------------------------------------------------------------- resolving
 
+    /// <summary>What one <c>indent</c> level is worth, measured in the default font.</summary>
+    private static Length IndentUnit(List<Font> fonts)
+    {
+        if (fonts.Count == 0) return Length.FromTwips(FallbackTwipsPerIndentLevel);
+
+        Font first = fonts[0];
+        SheetCellFormat probe = new()
+        {
+            FontFamily = first.Family,
+            FontSize = first.Size,
+            FontWeight = first.Weight,
+            IsItalic = first.Italic,
+        };
+
+        if (SheetFonts.For(probe) is not { } face)
+            return Length.FromTwips(FallbackTwipsPerIndentLevel);
+
+        // Truncated to whole twips, because that is the unit LibreOffice's own measurement lands
+        // in before it is multiplied: XFont::getCharWidth answers in twips. Ten-point Liberation
+        // Sans has a 55.57-twip space, and rounding it to 56 rather than truncating to 55 puts a
+        // two-level indent 0.3 pt out.
+        long space = SheetText.Measure(" ", face, first.Size).Emu / 635;
+        return space > 0
+            ? Length.FromTwips(space * SpacesPerIndentLevel)
+            : Length.FromTwips(FallbackTwipsPerIndentLevel);
+    }
+
     private static SheetCellFormat Resolve(
         Record record,
         Record? parent,
         List<Font> fonts,
         XlsxStyles styles,
+        Length indentUnit,
         int index)
     {
         int fontId = record.FontUsed || parent is null ? record.FontId : parent.Value.FontId;
@@ -337,10 +378,12 @@ internal static class XlsxCellFormats
             Vertical = alignment.Vertical,
             Wraps = alignment.Wraps,
             ShrinksToFit = alignment.Shrinks,
-            Indent = Length.FromTwips((long)alignment.Indent * TwipsPerIndentLevel),
+            Indent = indentUnit * alignment.Indent,
             RotationDegrees = Rotation(alignment.Rotation),
             IsStacked = alignment.Stacked,
-            NumberFormat = code.IsGeneral ? null : code,
+            NumberFormatKind = code.IsGeneral || code.Sections.Count == 0
+                ? Numbers.NumberFormatKind.General
+                : code.Sections[0].Kind,
         };
     }
 

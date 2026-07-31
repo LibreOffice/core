@@ -3,7 +3,6 @@ using Paperless.Core.Extraction;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
-using Paperless.Spreadsheets.Numbers;
 using Paperless.Text.Layout;
 
 namespace Paperless.Spreadsheets.Layout;
@@ -114,17 +113,47 @@ internal static class SheetTextLayout
             return;
         }
 
-        foreach (PlacedLine line in placement.Lines)
+        // Whatever a shortened string still hangs over the edge, and every wrapped line taller
+        // than its row, is cut off rather than drawn across the neighbour. Calc sets the clip
+        // region to the same rectangle it aligned in (output2.cxx:2126) and only when it is
+        // needed, which is worth keeping: a clip per cell would put two operators around every
+        // run in the file.
+        bool clipped = placement.Clipped;
+        if (clipped)
         {
-            sink.DrawGlyphRun(line.Run.At(new DocPoint(line.X, line.Baseline)), paint);
+            sink.Save();
+            sink.ClipPath(Rectangle(new DocRect(
+                placement.Left, cell.Box.Y, placement.Right - placement.Left, cell.Box.Height)));
+        }
+
+        try
+        {
+            foreach (PlacedLine line in placement.Lines)
+            {
+                sink.DrawGlyphRun(line.Run.At(new DocPoint(line.X, line.Baseline)), paint);
+            }
+        }
+        finally
+        {
+            if (clipped) sink.Restore();
         }
     }
+
+    private static GraphicsPath Rectangle(DocRect rect)
+        => new GraphicsPath()
+           .MoveTo(new DocPoint(rect.X, rect.Y))
+           .LineTo(new DocPoint(rect.X + rect.Width, rect.Y))
+           .LineTo(new DocPoint(rect.X + rect.Width, rect.Y + rect.Height))
+           .LineTo(new DocPoint(rect.X, rect.Y + rect.Height))
+           .Close();
 
     // ------------------------------------------------------------------------------ placement
 
     private readonly record struct PlacedLine(SheetTextRun Run, Length X, Length Baseline);
 
-    private readonly record struct Placement(List<PlacedLine> Lines, Length Height);
+    private readonly record struct Placement(
+        List<PlacedLine> Lines, Length Height, bool Clipped = false,
+        Length Left = default, Length Right = default);
 
     private static Placement Place(in SheetTextContext context, in SheetCellText cell, SheetFace face)
     {
@@ -169,13 +198,19 @@ internal static class SheetTextLayout
         if (shrinks && area.IsClipped && available > Length.Zero && run.Width > Length.Zero)
         {
             (run, size) = Shrink(text, face, size, run, available);
-            if (run.Width <= available) area = area with { LeftClip = false, RightClip = false };
+            if (run.Width <= available) area = area.Unclipped();
         }
 
         if (isValue && area.IsClipped)
         {
             (run, text) = Hash(cell, face, size, available, run);
-            if (run.Width + totalMargin <= area.Width) area = area with { LeftClip = false, RightClip = false };
+            if (run.Width + totalMargin <= area.Width) area = area.Unclipped();
+        }
+
+        Length shift = Length.Zero;
+        if (!isValue && !breaks && area.IsClipped)
+        {
+            (run, shift) = Shorten(run, text, face, size, horizontal, area);
         }
 
         List<SheetTextRun> lines = breaks
@@ -195,12 +230,12 @@ internal static class SheetTextLayout
         {
             placed.Add(new PlacedLine(
                 line,
-                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin),
+                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin) + shift,
                 baseline));
             baseline += lineHeight;
         }
 
-        return new Placement(placed, textHeight);
+        return new Placement(placed, textHeight, area.IsClipped, area.Left, area.Right);
     }
 
     /// <summary>
@@ -244,25 +279,23 @@ internal static class SheetTextLayout
                       || format.Vertical is SheetVerticalAlignment.Justify
                           or SheetVerticalAlignment.Distributed;
 
-        if (!breaks || !isValue) return breaks;
-
-        NumberFormatCode? code = format.NumberFormat;
-        bool plainNumber = code is null
-                           || code.IsGeneral
-                           || (code.Sections.Count > 0
-                               && code.Sections[0].Kind == NumberFormatKind.Number);
-
-        return !plainNumber;
+        return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
     }
 
     // -------------------------------------------------------------------------- output area
 
-    /// <summary>How far the text may run, and whether it is cut off at either end.</summary>
-    private readonly record struct Area(Length Left, Length Right, bool LeftClip, bool RightClip)
+    /// <summary>How far the text may run, and how much of it is cut off at either end.</summary>
+    private readonly record struct Area(Length Left, Length Right, Length LeftMissing, Length RightMissing)
     {
+        public bool LeftClip => LeftMissing > Length.Zero;
+
+        public bool RightClip => RightMissing > Length.Zero;
+
         public bool IsClipped => LeftClip || RightClip;
 
         public Length Width => Right - Left;
+
+        public Area Unclipped() => this with { LeftMissing = Length.Zero, RightMissing = Length.Zero };
     }
 
     /// <summary>
@@ -286,7 +319,7 @@ internal static class SheetTextLayout
     {
         Length left = cell.Box.X;
         Length right = cell.Box.X + cell.Box.Width;
-        if (needed <= cell.Box.Width) return new Area(left, right, false, false);
+        if (needed <= cell.Box.Width) return new Area(left, right, Length.Zero, Length.Zero);
 
         Length missing = needed - cell.Box.Width;
         Length leftMissing = Length.Zero;
@@ -331,7 +364,7 @@ internal static class SheetTextLayout
             }
         }
 
-        return new Area(left, right, leftMissing > Length.Zero, rightMissing > Length.Zero);
+        return new Area(left, right, leftMissing, rightMissing);
     }
 
     // ------------------------------------------------------------------------------- shrink
@@ -414,6 +447,59 @@ internal static class SheetTextLayout
         return (SheetText.Shape(text, face, size) ?? run, text);
     }
 
+    // ------------------------------------------------------------------------------ shorten
+
+    /// <summary>
+    /// Drops the characters a clipped string cannot show.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice does this for speed — "if the string is clipped, make it shorter for better
+    /// performance since drawing by HarfBuzz is quite expensive" (<c>output2.cxx:2202</c>) — and
+    /// it is reproduced because it is <em>visible</em> in the output rather than only faster: the
+    /// PDF holds the shortened text, so a cell blocked by its neighbour extracts as the 23
+    /// characters that fit rather than the 31 it holds. Reproducing it is what makes a
+    /// run-for-run comparison of glyph counts mean anything.
+    /// </para>
+    /// <para>
+    /// The estimate is deliberately crude on both sides — the ratio of visible width to total
+    /// width, times the character count, plus one — so it over-keeps rather than under-keeps and
+    /// the clip does the rest. Right-aligned text keeps its <em>end</em> and is shifted right by
+    /// the width it lost, since its pen was placed for the whole string.
+    /// </para>
+    /// </remarks>
+    private static (SheetTextRun Run, Length Shift) Shorten(
+        SheetTextRun run,
+        string text,
+        SheetFace face,
+        Length size,
+        SheetHorizontalAlignment horizontal,
+        Area area)
+    {
+        if (run.Width <= Length.Zero || text.Length == 0) return (run, Length.Zero);
+
+        if (horizontal == SheetHorizontalAlignment.Left && area.RightClip)
+        {
+            double ratio = (double)(run.Width - area.RightMissing).Emu / run.Width.Emu;
+            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+
+            int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
+            return (SheetText.Shape(text[..keep], face, size) ?? run, Length.Zero);
+        }
+
+        if (horizontal == SheetHorizontalAlignment.Right && area.LeftClip)
+        {
+            double ratio = (double)(run.Width - area.LeftMissing).Emu / run.Width.Emu;
+            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+
+            int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
+            SheetTextRun? shorter = SheetText.Shape(text[^keep..], face, size);
+            return shorter is null ? (run, Length.Zero) : (shorter, run.Width - shorter.Width);
+        }
+
+        return (run, Length.Zero);
+    }
+
     // --------------------------------------------------------------------------------- wrap
 
     /// <summary>
@@ -435,7 +521,8 @@ internal static class SheetTextLayout
         ParagraphLayouter layouter = Layouters.GetOrAdd(
             face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
 
-        LaidOutParagraph laid = layouter.Layout(text, emSize: size, textAreaWidth: available);
+        LaidOutParagraph laid = layouter.Layout(
+            text, emSize: size, textAreaWidth: available, options: SheetText.NoKerning);
 
         List<SheetTextRun> lines = [];
         foreach (LineBox box in laid.Lines)

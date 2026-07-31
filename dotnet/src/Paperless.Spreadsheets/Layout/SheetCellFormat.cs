@@ -151,19 +151,34 @@ public sealed record SheetCellFormat
     public bool IsRotated => IsStacked || RotationDegrees != 0;
 
     /// <summary>
-    /// The number format the cell's value was rendered through, or null when it is
-    /// <c>General</c> or unknown.
+    /// What kind of number format the cell's value is rendered through.
     /// </summary>
     /// <remarks>
-    /// Here rather than beside the value because only <em>drawing</em> needs it: a numeric cell
-    /// too narrow for its text shows <c>###</c> when its format is anything but <c>General</c>,
-    /// and re-renders itself shorter when it is <c>General</c>
-    /// (<c>ScDrawStringsVars::SetTextToWidthOrHash</c>, <c>output2.cxx:635</c>). Extraction
-    /// reports the full text either way, which is a recorded decision and not an oversight —
-    /// <c>###</c> is a function of the column width, and extracted text has no column width.
+    /// <para>
+    /// The <em>kind</em> rather than the code, because drawing asks two questions of it and
+    /// neither needs the format itself. Is it <c>General</c>, which decides whether a too-narrow
+    /// numeric cell shows <c>###</c> or re-renders itself shorter
+    /// (<c>ScDrawStringsVars::SetTextToWidthOrHash</c>, <c>output2.cxx:635</c>)? And is it a plain
+    /// number, which is the case that never wraps whatever the cell's wrap flag says
+    /// (<c>output2.cxx:1834</c>, i#111387)? Keeping the kind also lets the ODF reader answer at
+    /// all: ODF states a structured <c>number:*-style</c> rather than an Excel format code, so it
+    /// has a kind and no code.
+    /// </para>
+    /// <para>
+    /// Extraction reports the cell's full text whatever this says, which is a recorded decision
+    /// rather than an oversight: <c>###</c> is a function of a column width, and extracted text
+    /// has no column width.
+    /// </para>
     /// </remarks>
-    public Numbers.NumberFormatCode? NumberFormat { get; init; }
+    public Numbers.NumberFormatKind NumberFormatKind { get; init; } = Numbers.NumberFormatKind.General;
 
     /// <summary>True when the cell's number format is <c>General</c>, which is the default.</summary>
-    public bool HasGeneralFormat => NumberFormat is null || NumberFormat.IsGeneral;
+    public bool HasGeneralFormat => NumberFormatKind == Numbers.NumberFormatKind.General;
+
+    /// <summary>
+    /// True when the cell's format is a plain number rather than a date, a time or text.
+    /// </summary>
+    /// <remarks><c>General</c> counts: it is <c>SvNumFormatType::NUMBER</c> in Calc too.</remarks>
+    public bool HasPlainNumberFormat =>
+        NumberFormatKind is Numbers.NumberFormatKind.General or Numbers.NumberFormatKind.Number;
 }

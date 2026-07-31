@@ -64,6 +64,20 @@ internal sealed class SheetTextRun
 /// </remarks>
 internal static class SheetText
 {
+    /// <summary>
+    /// How a cell's text is shaped: kerned pairs off.
+    /// </summary>
+    /// <remarks>
+    /// Calc says so in as many words — "There is no cell attribute for kerning, default is kerning
+    /// OFF, all kerning is stored at an EditText object that is drawn using EditEngine"
+    /// (<c>ScDrawStringsVars::SetPattern</c>, <c>sc/source/ui/view/output2.cxx:405-409</c>) — and
+    /// it is measurable rather than theoretical: HarfBuzz kerns <c>1.2E+11</c> by 152 design
+    /// units, which puts a right-aligned cell 0.74 pt away from where LibreOffice puts it. That
+    /// is a difference no font metric or margin would explain, so it is worth having the reason
+    /// written down beside the flag.
+    /// </remarks>
+    public static readonly ShapingOptions NoKerning = new(DisableKerning: true);
+
     /// <summary>Shapes a string, or null when there is no face to shape it with.</summary>
     /// <param name="text">The text to shape.</param>
     /// <param name="face">The face to shape it in.</param>
@@ -72,7 +86,7 @@ internal static class SheetText
     {
         if (text.Length == 0 || face is not { } resolved) return null;
 
-        ShapedText shaped = TextShaper.Default.Shape(resolved.Face, text);
+        ShapedText shaped = TextShaper.Default.Shape(resolved.Face, text, NoKerning);
 
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
