@@ -16,16 +16,36 @@ namespace Paperless.Text.Layout;
 /// <param name="Height">The box's height: the distance from this line's top to the next line's.</param>
 /// <param name="Baseline">
 /// Where the text sits within the box, measured from <paramref name="Top"/>. Not derivable from the
-/// height, because the extra space that line spacing adds does not go where the font's own ascent
-/// would put it.
+/// height, because the space line spacing adds sits above the text rather than being shared around it.
+/// </param>
+/// <param name="SpaceAbove">
+/// How much of the box is empty space above the text. Kept separately because whoever fills pages has
+/// to be able to take it away: the first line at the top of a page loses the space above it, so its
+/// text sits on the top margin rather than a line's worth below it, and recomputing it there would mean
+/// knowing the spacing rule — which is the paragraph's business rather than the page's.
 /// </param>
 public readonly record struct LineBox(
     TextLine Line,
     Length Left,
     Length Top,
     Length Height,
-    Length Baseline)
+    Length Baseline,
+    Length SpaceAbove)
 {
+    /// <summary>The same line with the space above its text removed.</summary>
+    /// <remarks>
+    /// What the first line on a page becomes. Writer drops the space above the first line of a text
+    /// frame — the observable consequence is that a 200%-spaced A4 page holds twenty-five lines rather
+    /// than twenty-four, and every page break after the first therefore falls somewhere else.
+    /// </remarks>
+    public LineBox WithoutSpaceAbove()
+        => this with
+        {
+            Height = Height - SpaceAbove,
+            Baseline = Baseline - SpaceAbove,
+            SpaceAbove = Length.Zero,
+        };
+
     /// <summary>The absolute baseline, given where the paragraph starts.</summary>
     public Length BaselineFrom(Length paragraphTop) => paragraphTop + Top + Baseline;
 
@@ -62,11 +82,16 @@ public sealed record LaidOutParagraph(
 /// page — which together are what pagination adds up and what drawing needs.
 /// </para>
 /// <para>
-/// Two decisions here are worth stating because they are asymmetrical and easy to get backwards.
-/// Proportional line spacing puts its extra height <em>above</em> the text, so a double-spaced
-/// paragraph pushes its first baseline down rather than leaving a gap under its last line. And exact
-/// spacing shorter than the text does not move the baseline up past the top of the box: the text is
-/// clipped from below, because that is what a form with fixed rows is asking for.
+/// The decision that matters, because it is invisible to a pitch comparison and moves every page break:
+/// the space line spacing adds sits <em>above</em> the text, not below it and not shared around it.
+/// Writer's drawing ascent is <c>ascent + realHeight - height</c>, so a double-spaced line is a
+/// single-spaced line with a blank line stacked on top. Putting the space below gives identical
+/// baseline pitches and a different paragraph height — which is why this was found by a pagination
+/// test rather than by the four line-spacing tests that pass either way.
+/// </para>
+/// <para>
+/// Exact spacing does not use the font's ascent at all: Writer puts the baseline at four fifths of the
+/// box, so a fixed-height row does not shift when its font changes.
 /// </para>
 /// </remarks>
 public sealed class ParagraphLayouter
@@ -130,7 +155,8 @@ public sealed class ParagraphLayouter
 
         Length natural = _metrics.ScaledLineHeight(size);
         Length height = paragraph.LineSpacing.Apply(natural);
-        Length baseline = BaselineIn(height, natural, size, paragraph.LineSpacing.Mode);
+        (Length baseline, Length spaceAbove) =
+            BaselineIn(height, natural, size, paragraph.LineSpacing.Mode);
 
         List<LineBox> boxes = new(lines.Count);
         Length top = Length.Zero;
@@ -148,7 +174,8 @@ public sealed class ParagraphLayouter
                     paragraph.Alignment, lines[i], available, isLast: i == lines.Count - 1),
                 top,
                 height,
-                baseline));
+                baseline,
+                spaceAbove));
 
             top += height;
         }
@@ -191,34 +218,35 @@ public sealed class ParagraphLayouter
     }
 
     /// <summary>
-    /// Where the baseline sits inside a line box.
+    /// Where the baseline sits inside a line box, and how much of the box is empty above the text.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// For single spacing it is the font's own ascent, which is what puts consecutive baselines exactly
-    /// one line height apart. For anything larger the question is where the extra space goes, and the
-    /// answer is above the text: Writer pushes the first baseline down rather than leaving the gap under
-    /// the last line, so a two-line double-spaced paragraph is as tall as four single-spaced lines and
-    /// its first line of text is not at the top of it.
+    /// The space that line spacing adds goes <em>above</em> the text, always. That is not a choice:
+    /// Writer computes a line's drawing ascent as <c>ascent + realHeight - height</c> — its own text
+    /// height subtracted from the height it will advance by — in
+    /// <c>SwTextIter::CalcAscentAndHeight</c> (<c>sw/source/core/text/itrtxt.cxx</c>), so every extra
+    /// twip lands between the previous line and this one. Putting it below instead leaves the pitch
+    /// unchanged and the paragraph's height different, which is invisible to a comparison of line
+    /// pitches and moves every page break.
     /// </para>
     /// <para>
-    /// Exact spacing is the case that needs a floor. A box shorter than the ascent would put the
-    /// baseline above the box's own top and the text would climb into the paragraph before it, so the
-    /// baseline is clamped to the box and the text is clipped from below instead — which is what a form
-    /// with fixed rows is asking for when it sets a height its text does not fit in.
+    /// Exact spacing is the exception, and its rule is a plain fraction rather than anything derived
+    /// from the font: <c>SwTextFormatter::CalcRealHeight</c> sets the ascent to
+    /// <c>(4 * nLineHeight) / 5</c> — eighty per cent of the box, whatever the face's own ascent is —
+    /// and marks the line as clipping when the text does not fit. So a fixed-height line's baseline
+    /// does not move when the font changes, which is what a form with fixed rows wants.
     /// </para>
     /// </remarks>
-    private Length BaselineIn(Length height, Length natural, Length emSize, LineSpacingMode mode)
+    private (Length Baseline, Length SpaceAbove) BaselineIn(
+        Length height, Length natural, Length emSize, LineSpacingMode mode)
     {
+        if (mode == LineSpacingMode.Exact) return (height * 0.8, Length.Zero);
+
         Length ascent = _metrics.ScaledAscent(emSize);
-
-        if (mode == LineSpacingMode.Exact)
-        {
-            return height < ascent ? height : ascent;
-        }
-
         Length extra = height - natural;
-        return extra > Length.Zero ? ascent + extra : ascent;
+
+        return extra > Length.Zero ? (ascent + extra, extra) : (ascent, Length.Zero);
     }
 
     /// <summary>

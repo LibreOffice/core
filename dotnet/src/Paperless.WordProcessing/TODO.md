@@ -238,9 +238,31 @@ Only after extraction is solid and `Paperless.Text` breaks lines correctly. Line
 with Writer's — see `Paperless.Text/TODO.md` — and the page geometry every break is measured against
 is read and verified, so what remains is the filling of pages rather than the measuring of lines.
 
-- [ ] Frame hierarchy: page → body/header/footer → text/table/section/floating frames
-- [ ] Pagination: fill a page, split what does not fit, continue
-- [ ] Paragraph splitting across pages; keep-with-next; widow/orphan control
+- [x] **Pagination**: fill a page, split what does not fit, continue. Verified against LibreOffice on a
+      sixty-paragraph document at three line spacings, comparing which paragraph starts each page — the
+      assertion that catches every upstream measurement error, since a wrong advance width moves a line
+      break, a moved line break changes a line count, and a changed line count moves a page break.
+- [x] Paragraph splitting across pages, keep-together, keep-with-next (as a chain, so three headings in
+      a row all move together), and orphan and widow counts. Each turns "fill until full" into "fill
+      until full, then reconsider", and the reconsidering is what moves whole paragraphs.
+- [x] The constraint that cannot be honoured is overridden rather than obeyed: a keep-together
+      paragraph taller than a page splits, because placing nothing page after page is a hang and not a
+      layout.
+- [x] **The first line on a page loses the space above its text.** Found by this test and not by the
+      four line-spacing tests, which all pass either way — the space line spacing adds sits above the
+      text, so putting it below leaves every baseline pitch identical and every paragraph height wrong.
+      A 200%-spaced A4 page holds twenty-five lines with the rule and twenty-four without, and every
+      break after the first then falls somewhere else.
+- [x] `PaginationOptions` for the two places Word and Writer disagree and the file says which by a
+      compatibility flag rather than by a property: whether a paragraph keeps its space-before at the
+      top of a page, and whether space-before collapses against the previous space-after or adds to it.
+- [ ] Frame hierarchy: header and footer frames beside the body, and section/floating frames inside it.
+      The page's body area is computed and filled; the furniture areas are known
+      (`HeaderDistance`/`HeaderHeight`) but nothing lays anything out in them, because the flows that
+      would go there are built by the extraction pass.
+- [ ] Several sections in one document. The paginator takes one section's geometry; carrying a section
+      change mid-document needs each paragraph to know which section it is in, which is the gap recorded
+      under the document model above.
 - [ ] Tables spanning page breaks, with header-row repetition
 - [ ] Floating objects and text wrap, including contour wrap
 - [ ] Footnote placement — footnote area growth changes how much body text fits, which
