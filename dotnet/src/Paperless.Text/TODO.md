@@ -10,19 +10,31 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
 
 ## Font resolution
 
-- [ ] `IFontResolver` over the system font set (fontconfig on Linux, the platform store
-      elsewhere)
-- [ ] Reproduce LibreOffice's substitution order: the document's own font table, then
-      LibreOffice's built-in substitution tables, then the platform's, then a last-resort
-      default
-- [ ] Metric-compatible pairs must resolve correctly — Calibri→Carlito, Cambria→Caladea,
-      Arial→Liberation Sans, Times New Roman→Liberation Serif. These preserve advance
-      widths and therefore line breaks; a non-metric-compatible substitution reflows
-      everything.
-- [ ] Embedded fonts win over anything installed: they are what the author saw
-- [ ] **Report every substitution.** A silent one explains most otherwise-baffling reflow
-      differences, so surface it rather than hiding it.
-- [ ] Font caching keyed on `FaceKey`
+- [x] `SystemFontIndex` over the platform's font directories, built by reading each file's `name`
+      table. Deliberately not fontconfig: since the substitution chain comes from LibreOffice's own
+      table rather than from the platform, going through fontconfig would add a second source of
+      truth rather than the missing one — at the cost of any rules an administrator configured.
+- [x] LibreOffice's substitution order: the document's embedded face, the requested family, then
+      LibreOffice's chain, then a fallback by shape, then whatever is installed. Never null, because
+      a document naming a font nobody has still has to render.
+- [x] The substitution table itself, **generated from
+      `officecfg/registry/data/org/openoffice/VCL.xcu`** rather than reimplemented — the research
+      notes call that file the single most valuable portable artefact for a C# port, because it
+      encodes what LibreOffice actually falls back to independently of any platform font API.
+- [x] The metric-compatible pairs resolve: Calibri→Carlito, Cambria→Caladea, Arial→Liberation Sans,
+      Times New Roman→Liberation Serif, Courier New→Liberation Mono. Compatibility is *derived* from
+      the table's own Microsoft-equivalent declarations rather than hardcoded, so a new pair needs no
+      code.
+- [x] Embedded fonts win over anything installed: they are what the author saw, and the only face
+      guaranteed to have the metrics the document was laid out against.
+- [x] **Every substitution is reported**, with whether it was metric-compatible — the difference
+      between a page that looks slightly different and a document whose every later page is wrong.
+- [x] Faces cached on `FaceKey`, so disposing one view of a face does not invalidate another.
+- [ ] Per-locale substitution. Only the neutral `en` table is generated; the per-locale ones differ
+      mainly in CJK preference order, and using one locale's answers for another changes which font a
+      document renders in. Wants the locale plumbed through the resolver first.
+- [ ] Mid-run fallback when the primary face lacks a glyph. Coverage is queryable; choosing the
+      fallback face and splitting the run is shaping's job and not written yet.
 
 ## Metrics — hand-rolled OpenType reader
 

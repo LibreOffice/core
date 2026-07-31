@@ -7,6 +7,7 @@ hand-made correction to one row is lost the next time it is rebuilt.
 | Script | Writes | Source of the data |
 |---|---|---|
 | `generate-language-table.py` | `Paperless.Core/Globalization/WindowsLanguages.Table.cs` | LibreOffice's own `i18nlangtag` tables, read from the surrounding C++ tree |
+| `generate-font-substitutions.py` | `Paperless.Text/Fonts/FontSubstitutions.Tables.cs` | LibreOffice's own `VCL.xcu` font substitution configuration |
 | `generate-line-break-tables.py` | `Paperless.Text/Layout/LineBreakProperties.Tables.cs` | The Unicode Character Database, via the `uniseg` package and Python's `unicodedata` |
 | `generate-line-break-cases.py` | `Paperless.Text.Tests/line-break-cases.txt` | `uniseg`'s own UAX #14 implementation, as a differential reference |
 
@@ -17,7 +18,7 @@ pip install uniseg          # for the two line-break scripts
 python3 scripts/<script>.py
 ```
 
-The language table needs nothing but the LibreOffice checkout these live in.
+The language and font-substitution tables need nothing but the LibreOffice checkout these live in.
 
 ## Provenance, and what to improve
 
