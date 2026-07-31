@@ -53,6 +53,7 @@ public class FormatCatalogueTests
             DocumentFormat.Doc, DocumentFormat.Dot,
             DocumentFormat.Rtf,
             DocumentFormat.Ods, DocumentFormat.Ots, DocumentFormat.Fods,
+            DocumentFormat.Xlsx, DocumentFormat.Xlsm, DocumentFormat.Xltx, DocumentFormat.Xltm,
             DocumentFormat.Odp, DocumentFormat.Otp, DocumentFormat.Fodp,
         ];
 

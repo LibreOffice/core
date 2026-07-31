@@ -107,16 +107,17 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // ---- Spreadsheet: OOXML -------------------------------------------------------
         New(DocumentFormat.Xlsx, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "Excel 2007-365"),
+            "Excel 2007-365", read: true),
         New(DocumentFormat.Xlsm, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xlsm",
             "application/vnd.ms-excel.sheet.macroEnabled.12",
-            "Excel 2007-365 (macro-enabled)", macros: true),
+            "Excel 2007-365 (macro-enabled)", macros: true, read: true),
         New(DocumentFormat.Xltx, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xltx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
-            "Excel 2007-365 Template", template: true),
+            "Excel 2007-365 Template", template: true, read: true),
         New(DocumentFormat.Xltm, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xltm",
             "application/vnd.ms-excel.template.macroEnabled.12",
-            "Excel 2007-365 Template (macro-enabled)", template: true, macros: true),
+            "Excel 2007-365 Template (macro-enabled)", template: true, macros: true,
+            read: true),
         // Binary OOXML (BIFF12 parts in an OPC package). LibreOffice reads it but cannot
         // write it, so test files have to come from Excel.
         New(DocumentFormat.Xlsb, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xlsb",

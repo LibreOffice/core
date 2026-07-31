@@ -199,8 +199,8 @@ public class OdsReaderTests
     public void AFormatWithNoReaderYetIsReportedAsUnsupported()
     {
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("sheet-xlsx.xlsx"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Xlsx);
+            () => Open("sheet-csv.csv"));
+        unimplemented.Format.ShouldBe(DocumentFormat.Csv);
         unimplemented.Message.ShouldContain("not implemented yet");
     }
 }
