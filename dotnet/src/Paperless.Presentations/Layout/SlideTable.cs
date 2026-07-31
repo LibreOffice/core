@@ -95,12 +95,15 @@ public static class SlideTable
             });
         }
 
-        foreach (Edge edge in GridLines(table, cells, columnEdges, rowEdges))
+        Grid grid = Grid.Of(cells, columnEdges.Length - 1, rowEdges.Length - 1);
+
+        foreach (Edge edge in grid.Lines())
         {
             shapes.Add(new PlacedShape
             {
                 Name = name,
-                Outline = ShapeTransform.Apply(placement, Line(edge)),
+                Outline = ShapeTransform.Apply(
+                    placement, Line(edge, grid, columnEdges, rowEdges)),
                 Bounds = DocRect.Empty,
                 Line = new Stroke(
                     Paint.Solid(edge.Pen.Colour),
@@ -252,121 +255,207 @@ public static class SlideTable
     private static bool IsUpright(AffineTransform transform)
         => transform.A == 1 && transform.B == 0 && transform.C == 0 && transform.D == 1;
 
-    /// <summary>One grid line: where it sits, how far it runs, and the pen it is drawn with.</summary>
+    /// <summary>
+    /// One consolidated grid line, in grid indices: which line, and which run of it is drawn.
+    /// </summary>
+    /// <param name="IsHorizontal">True when it runs across the table.</param>
+    /// <param name="At">Its own grid index: the row edge it sits on, or the column edge.</param>
+    /// <param name="From">The first grid index it spans along its own axis.</param>
+    /// <param name="To">One past the last.</param>
+    /// <param name="Pen">The pen it is drawn with.</param>
     private readonly record struct Edge(
-        bool IsHorizontal, Length At, Length From, Length To, DrawingTableEdge Pen);
+        bool IsHorizontal, int At, int From, int To, DrawingTableEdge Pen);
 
     /// <summary>
-    /// The consolidated grid lines, in the order LibreOffice creates them.
+    /// The pen at every grid position, and the runs of them a table draws.
     /// </summary>
     /// <remarks>
-    /// Two steps, both LibreOffice's. First every grid position takes <em>one</em> pen, chosen
-    /// between the two cells that meet there by <c>TableLayouter::HasPriority</c>
-    /// (<c>tablelayouter.cxx:944-978</c>): the wider wins, a tie goes to whichever was written
-    /// later — which under a row-major walk is the cell below or to the right — and a cell that
-    /// states no edge never displaces one that does. Then the per-cell segments are emitted in
-    /// the walk's order and collinear neighbours merge into the first of them.
+    /// Every grid position takes <em>one</em> pen, chosen between the two cells that meet there by
+    /// <c>TableLayouter::HasPriority</c> (<c>svx/source/table/tablelayouter.cxx:944-978</c>): the
+    /// wider wins, a tie goes to whichever was written later — which under a row-major walk is the
+    /// cell below or to the right — and a cell that states no edge never displaces one that does.
+    /// All three are measured on <c>slide-table-grid.pptx</c>, whose middle row states a green
+    /// left edge against its neighbour's grey right edge of the same width (green wins) and an
+    /// orange three-point right edge against a grey one-point left edge (orange wins), while its
+    /// top row states a red right edge against a grey left edge of the same width (grey wins,
+    /// because it is the later cell).
     /// </remarks>
-    private static List<Edge> GridLines(
-        DrawingTableBox table, Cell[] cells, Length[] columnEdges, Length[] rowEdges)
+    private sealed class Grid
     {
-        int columns = columnEdges.Length - 1;
-        int rows = rowEdges.Length - 1;
+        private readonly DrawingTableEdge?[,] _horizontal;
+        private readonly DrawingTableEdge?[,] _vertical;
+        private readonly bool[,] _coveredAbove;
+        private readonly bool[,] _coveredLeft;
+        private readonly int _columns;
+        private readonly int _rows;
 
-        DrawingTableEdge?[,] horizontal = new DrawingTableEdge?[columns, rows + 1];
-        DrawingTableEdge?[,] vertical = new DrawingTableEdge?[columns + 1, rows];
-        bool[,] coveredAbove = new bool[columns, rows];
-        bool[,] coveredLeft = new bool[columns, rows];
-
-        foreach (Cell cell in cells)
+        private Grid(int columns, int rows)
         {
-            if (cell.Box.IsCovered) continue;
+            _columns = columns;
+            _rows = rows;
+            _horizontal = new DrawingTableEdge?[columns, rows + 1];
+            _vertical = new DrawingTableEdge?[columns + 1, rows];
+            _coveredAbove = new bool[columns, rows];
+            _coveredLeft = new bool[columns, rows];
+        }
 
-            int lastRow = Math.Min(cell.Box.Row + cell.Box.RowSpan, rows);
-            int lastColumn = Math.Min(cell.Box.Column + cell.Box.ColumnSpan, columns);
+        public static Grid Of(Cell[] cells, int columns, int rows)
+        {
+            Grid grid = new(columns, rows);
 
-            for (int row = cell.Box.Row; row < lastRow; row++)
+            foreach (Cell cell in cells)
             {
-                Set(vertical, cell.Box.Column, row, cell.Box.Left);
-                Set(vertical, lastColumn, row, cell.Box.Right);
+                if (cell.Box.IsCovered) continue;
+
+                int lastRow = Math.Min(cell.Box.Row + cell.Box.RowSpan, rows);
+                int lastColumn = Math.Min(cell.Box.Column + cell.Box.ColumnSpan, columns);
+
+                for (int row = cell.Box.Row; row < lastRow; row++)
+                {
+                    Set(grid._vertical, cell.Box.Column, row, cell.Box.Left);
+                    Set(grid._vertical, lastColumn, row, cell.Box.Right);
+
+                    for (int column = cell.Box.Column; column < lastColumn; column++)
+                    {
+                        if (row > cell.Box.Row) grid._coveredAbove[column, row] = true;
+                        if (column > cell.Box.Column) grid._coveredLeft[column, row] = true;
+                    }
+                }
 
                 for (int column = cell.Box.Column; column < lastColumn; column++)
                 {
-                    if (row > cell.Box.Row) coveredAbove[column, row] = true;
-                    if (column > cell.Box.Column) coveredLeft[column, row] = true;
+                    Set(grid._horizontal, column, cell.Box.Row, cell.Box.Top);
+                    Set(grid._horizontal, column, lastRow, cell.Box.Bottom);
                 }
             }
 
-            for (int column = cell.Box.Column; column < lastColumn; column++)
-            {
-                Set(horizontal, column, cell.Box.Row, cell.Box.Top);
-                Set(horizontal, column, lastRow, cell.Box.Bottom);
-            }
+            return grid;
         }
 
-        List<Edge> merged = [];
-
-        for (int row = 0; row < rows; row++)
+        /// <summary>
+        /// The grid lines to draw, merged, in the order LibreOffice creates them.
+        /// </summary>
+        /// <remarks>
+        /// The cells are walked row-major and each contributes its top edge, its bottom edge if
+        /// it is on the last row, its left edge, and its right edge if it is on the last column
+        /// (<c>svx/source/dialog/framelinkarray.cxx:1487-1530</c>). Collinear neighbours that
+        /// agree merge into whichever appeared first, so a three-row table emits its top rule,
+        /// then the verticals crossing its first row, then the next horizontal, and so on — which
+        /// is the order the reference PDF's twelve strokes come out in, stroke for stroke.
+        /// </remarks>
+        public List<Edge> Lines()
         {
-            for (int column = 0; column < columns; column++)
+            List<Edge> merged = [];
+
+            for (int row = 0; row < _rows; row++)
             {
-                if ((!coveredAbove[column, row] || row == 0)
-                    && horizontal[column, row] is { } top)
+                for (int column = 0; column < _columns; column++)
                 {
-                    Add(new Edge(
-                        true, rowEdges[row], columnEdges[column], columnEdges[column + 1], top));
+                    if ((!_coveredAbove[column, row] || row == 0)
+                        && _horizontal[column, row] is { } top)
+                    {
+                        Add(new Edge(true, row, column, column + 1, top));
+                    }
+
+                    if (row == _rows - 1 && _horizontal[column, _rows] is { } bottom)
+                    {
+                        Add(new Edge(true, _rows, column, column + 1, bottom));
+                    }
+
+                    if ((!_coveredLeft[column, row] || column == 0)
+                        && _vertical[column, row] is { } left)
+                    {
+                        Add(new Edge(false, column, row, row + 1, left));
+                    }
+
+                    if (column == _columns - 1 && _vertical[_columns, row] is { } right)
+                    {
+                        Add(new Edge(false, _columns, row, row + 1, right));
+                    }
+                }
+            }
+
+            return merged;
+
+            void Add(Edge edge)
+            {
+                for (int i = 0; i < merged.Count; i++)
+                {
+                    Edge run = merged[i];
+                    if (run.IsHorizontal != edge.IsHorizontal || run.At != edge.At) continue;
+                    if (run.Pen != edge.Pen) continue;
+                    if (edge.From > run.To || edge.To < run.From) continue;
+
+                    merged[i] = run with
+                    {
+                        From = Math.Min(run.From, edge.From),
+                        To = Math.Max(run.To, edge.To),
+                    };
+                    return;
                 }
 
-                if (row == rows - 1 && horizontal[column, rows] is { } bottom)
-                {
-                    Add(new Edge(
-                        true, rowEdges[rows], columnEdges[column], columnEdges[column + 1], bottom));
-                }
-
-                if ((!coveredLeft[column, row] || column == 0)
-                    && vertical[column, row] is { } left)
-                {
-                    Add(new Edge(
-                        false, columnEdges[column], rowEdges[row], rowEdges[row + 1], left));
-                }
-
-                if (column == columns - 1 && vertical[columns, row] is { } right)
-                {
-                    Add(new Edge(
-                        false, columnEdges[columns], rowEdges[row], rowEdges[row + 1], right));
-                }
+                merged.Add(edge);
             }
         }
 
-        return merged;
-
-        void Add(Edge edge)
+        /// <summary>
+        /// How far past its own end a line runs, to meet the line crossing it there.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// <strong>Half the width of the line it meets, not half its own.</strong> Measured on
+        /// <c>slide-table-grid.pptx</c>: its one-point grey horizontals run from 71.121 to 612.879
+        /// on a table spanning 72 to 612 pt, which is 0.879 at each end — half of the
+        /// <em>two-point</em> outer verticals they meet, where half of their own width would be
+        /// 0.425. Its three-point orange vertical, conversely, is extended by 0.425 at each end,
+        /// which is half of the one-point horizontals crossing it.
+        /// </para>
+        /// <para>
+        /// The general rule is <c>getExtends</c>
+        /// (<c>svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx:310-395</c>), which
+        /// intersects this border's two offset edges with every style meeting the junction and
+        /// takes the <em>nearest</em> crossing — hence the minimum here when the two perpendicular
+        /// lines at a junction differ. For single lines meeting at a right angle that reduces to
+        /// half the perpendicular width, which is every junction a table has; the double-line and
+        /// diagonal cases it also serves are Calc's, and are not implemented.
+        /// </para>
+        /// </remarks>
+        public Length Extension(Edge edge, bool atStart)
         {
-            for (int i = 0; i < merged.Count; i++)
-            {
-                Edge run = merged[i];
-                if (run.IsHorizontal != edge.IsHorizontal || run.At != edge.At) continue;
-                if (run.Pen != edge.Pen) continue;
-                if (edge.From > run.To || edge.To < run.From) continue;
+            int along = atStart ? edge.From : edge.To;
+            Length? nearest = null;
 
-                merged[i] = run with
-                {
-                    From = Length.Min(run.From, edge.From),
-                    To = Length.Max(run.To, edge.To),
-                };
-                return;
+            foreach (DrawingTableEdge? crossing in Crossing(edge, along))
+            {
+                if (crossing is not { } pen) continue;
+                nearest = nearest is { } best ? Length.Min(best, pen.Width) : pen.Width;
             }
 
-            merged.Add(edge);
+            return nearest is { } width ? Length.FromEmu(width.Emu / 2) : Length.Zero;
         }
 
-        static void Set(DrawingTableEdge?[,] map, int x, int y, DrawingTableEdge? pen)
+        private IEnumerable<DrawingTableEdge?> Crossing(Edge edge, int along)
+        {
+            if (edge.IsHorizontal)
+            {
+                yield return At(_vertical, along, edge.At - 1);
+                yield return At(_vertical, along, edge.At);
+            }
+            else
+            {
+                yield return At(_horizontal, edge.At - 1, along);
+                yield return At(_horizontal, edge.At, along);
+            }
+        }
+
+        private static DrawingTableEdge? At(DrawingTableEdge?[,] map, int x, int y)
+            => x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1) ? null : map[x, y];
+
+        private static void Set(DrawingTableEdge?[,] map, int x, int y, DrawingTableEdge? pen)
         {
             if (pen is not { } candidate) return;
             if (x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1)) return;
 
-            // The wider wins and a tie goes to the newcomer, which is HasPriority's own answer
-            // once an unstated edge is modelled as no edge at all.
             if (map[x, y] is { } existing && existing.Width > candidate.Width) return;
 
             map[x, y] = candidate;
@@ -374,26 +463,24 @@ public static class SlideTable
     }
 
     /// <summary>
-    /// One grid line as a two-point path, overshooting half its pen width at each end.
+    /// One grid line as a two-point path, run out at each end to meet what crosses it.
     /// </summary>
-    /// <remarks>
-    /// The overshoot is what makes two perpendicular borders meet at a corner rather than leaving
-    /// a notch, and it is measurable: a 0.85009 pt pen on a table running 56.693 to 623.622 pt
-    /// draws from 56.268 to 624.047, which is 0.425 — half the pen — at each end.
-    /// </remarks>
-    private static GraphicsPath Line(Edge edge)
+    private static GraphicsPath Line(
+        Edge edge, Grid grid, Length[] columnEdges, Length[] rowEdges)
     {
-        Length half = Length.FromEmu(edge.Pen.Width.Emu / 2);
-        Length from = edge.From - half;
-        Length to = edge.To + half;
+        Length[] along = edge.IsHorizontal ? columnEdges : rowEdges;
+        Length at = (edge.IsHorizontal ? rowEdges : columnEdges)[edge.At];
+
+        Length from = along[edge.From] - grid.Extension(edge, atStart: true);
+        Length to = along[edge.To] + grid.Extension(edge, atStart: false);
 
         return edge.IsHorizontal
             ? new GraphicsPath()
-                .MoveTo(new DocPoint(from, edge.At))
-                .LineTo(new DocPoint(to, edge.At))
+                .MoveTo(new DocPoint(from, at))
+                .LineTo(new DocPoint(to, at))
             : new GraphicsPath()
-                .MoveTo(new DocPoint(edge.At, from))
-                .LineTo(new DocPoint(edge.At, to));
+                .MoveTo(new DocPoint(at, from))
+                .LineTo(new DocPoint(at, to));
     }
 
     private static GraphicsPath Rectangle(DocRect area)
