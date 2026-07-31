@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
 using Paperless.Text.Shaping;
@@ -51,6 +52,8 @@ public sealed class DocxLayoutSource
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
+    private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
+        [];
 
     /// <summary>Creates a source over a document's styles and settings.</summary>
     /// <param name="styles">The document's styles, including its <c>w:docDefaults</c>.</param>
@@ -121,6 +124,8 @@ public sealed class DocxLayoutSource
         {
             Text = TextOf(element),
             Face = face,
+            Font = _references.GetValueOrDefault(
+                (text.FamilyName, text.Weight, text.IsItalic)),
             Format = WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval),
             EmSize = text.Size,
             Language = text.Language,
@@ -223,8 +228,11 @@ public sealed class DocxLayoutSource
         OpenTypeFace? face = null;
         try
         {
-            face = _fonts.LoadOpenType(_fonts.Resolve(
-                new FontRequest(text.FamilyName ?? string.Empty, text.Weight, text.IsItalic)));
+            FontReference reference = _fonts.Resolve(
+                new FontRequest(text.FamilyName ?? string.Empty, text.Weight, text.IsItalic));
+
+            face = _fonts.LoadOpenType(reference);
+            _references[key] = reference;
         }
         catch (Exception exception) when (exception is Core.MalformedDocumentException
                                              or IOException

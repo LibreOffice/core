@@ -32,24 +32,27 @@ public readonly record struct LineBox(
     Length Baseline,
     Length SpaceAbove)
 {
-    /// <summary>The same line with its text moved to the top of its box.</summary>
+    /// <summary>The same line with the space above its text removed, box and all.</summary>
     /// <remarks>
     /// <para>
-    /// What the first line on a page becomes: its text sits on the top margin rather than a line's worth
-    /// below it. The box keeps its full height, which is the part that is easy to get wrong — Writer
-    /// advances by the whole line height even for the line whose leading it just suppressed, so shrinking
-    /// the box instead lifts every following line on the page by the same amount. Measured over a page
-    /// of 115%-spaced 11 pt text that is two points, which is enough to fit one line more than Writer
-    /// does and so to move the break.
+    /// What the first line on a page becomes. Writer treats the leading proportional spacing adds as part
+    /// of the <em>paragraph's</em> upper space rather than as part of the line, and drops it at the top of
+    /// a text frame — so the first line's text sits on the top margin and everything below it moves up by
+    /// the same amount. Both the height and the baseline shrink, which is what keeps the pitch between
+    /// the first line and the second equal to the pitch everywhere else.
     /// </para>
     /// <para>
-    /// The counterpart is that a page's <em>last</em> line may hang <see cref="SpaceAbove"/> past the
-    /// bottom margin, since what hangs is empty space. The two together are what make a 200%-spaced A4
-    /// page hold twenty-five lines rather than twenty-four.
+    /// The visible consequence is a page that holds one line more: a 200%-spaced A4 page fits
+    /// twenty-five lines this way and twenty-four with the leading kept.
     /// </para>
     /// </remarks>
-    public LineBox WithTextAtTop()
-        => this with { Baseline = Baseline - SpaceAbove, SpaceAbove = Length.Zero };
+    public LineBox WithoutSpaceAbove()
+        => this with
+        {
+            Height = Height - SpaceAbove,
+            Baseline = Baseline - SpaceAbove,
+            SpaceAbove = Length.Zero,
+        };
 
     /// <summary>The absolute baseline, given where the paragraph starts.</summary>
     public Length BaselineFrom(Length paragraphTop) => paragraphTop + Top + Baseline;

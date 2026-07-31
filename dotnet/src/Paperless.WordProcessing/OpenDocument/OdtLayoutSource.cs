@@ -64,6 +64,8 @@ public sealed class OdtLayoutSource
     private readonly OdfStyles _styles;
     private readonly SystemFontResolver _fonts;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace> _faces = [];
+    private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
+        [];
 
     /// <summary>Creates a source over a document's styles.</summary>
     /// <param name="styles">The document's resolved styles.</param>
@@ -165,6 +167,8 @@ public sealed class OdtLayoutSource
         {
             Text = TextOf(element),
             Face = face,
+            Font = _references.GetValueOrDefault(
+                (text.FamilyName, text.Weight, text.IsItalic)),
             Format = OdfParagraphFormats.Resolve(_styles, styleName),
             EmSize = text.Size,
             Language = text.Language,
@@ -283,6 +287,7 @@ public sealed class OdtLayoutSource
 
             OpenTypeFace face = _fonts.LoadOpenType(reference);
             _faces[key] = face;
+            _references[key] = reference;
             return face;
         }
         catch (Exception exception) when (exception is Core.MalformedDocumentException

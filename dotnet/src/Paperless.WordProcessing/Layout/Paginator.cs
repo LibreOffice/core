@@ -186,7 +186,8 @@ public sealed class Paginator
                 ? SpaceAbove(paragraphs, laid, paragraphIndex, atTopOfPage: placed.Count == 0)
                 : Length.Zero;
 
-            int fitted = Fit(layout, lineIndex, used + spaceAbove, bodyHeight);
+            int fitted = Fit(
+                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: placed.Count == 0);
             int allowed = Allowed(
                 paragraph.Format, layout.Lines.Count, lineIndex, fitted, placed.Count == 0);
 
@@ -212,9 +213,9 @@ public sealed class Paginator
             {
                 LineBox box = layout.Lines[lineIndex + i];
 
-                // The first line on a page draws its text at the top margin rather than a line's worth
-                // below it — but keeps its full height, so the lines under it are not lifted.
-                if (placed.Count == 0) box = box.WithTextAtTop();
+                // The first line on a page loses the leading above its text, box and all: Writer counts
+                // that leading as part of the paragraph's upper space and drops it at the top of a frame.
+                if (placed.Count == 0) box = box.WithoutSpaceAbove();
 
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top));
                 top += box.Height;
@@ -276,29 +277,26 @@ public sealed class Paginator
     /// How many of a paragraph's remaining lines fit in what is left of the page.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// A line fits when its box does, <em>less the empty space above its text</em>. That allowance looks
-    /// like slack and is not: Writer lets a page's last line hang its leading past the bottom margin,
-    /// because what hangs is whitespace. Testing the full box instead gives the page one line fewer at
-    /// every spacing above single, and a page one line short moves every break after it.
-    /// </para>
-    /// <para>
-    /// The allowance is safe to apply to every line rather than only to the last, because a line that
-    /// needs it <em>becomes</em> the last: the next line's own test then starts from a running height
-    /// already past the margin and fails.
-    /// </para>
+    /// The first line on the page is measured as it will be drawn — without the leading above its text,
+    /// which Writer drops at the top of a frame. Measuring it with the leading gives the page one line
+    /// fewer than Writer allows at every spacing above single, and a page one line short moves every
+    /// break after it.
     /// </remarks>
-    private static int Fit(LaidOutParagraph layout, int from, Length used, Length available)
+    private static int Fit(
+        LaidOutParagraph layout, int from, Length used, Length available, bool atTopOfPage)
     {
-        Length running = used;
+        Length room = available - used;
         int count = 0;
 
         for (int i = from; i < layout.Lines.Count; i++)
         {
-            LineBox box = layout.Lines[i];
-            if (running + box.Height - box.SpaceAbove > available) break;
+            LineBox box = atTopOfPage && count == 0
+                ? layout.Lines[i].WithoutSpaceAbove()
+                : layout.Lines[i];
 
-            running += box.Height;
+            if (box.Height > room) break;
+
+            room -= box.Height;
             count++;
         }
 

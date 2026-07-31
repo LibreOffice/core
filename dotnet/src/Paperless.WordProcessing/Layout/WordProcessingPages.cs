@@ -21,8 +21,8 @@ public sealed class WordProcessingPages : IPageSequence
         IReadOnlyList<LaidOutPage> pages, IReadOnlyList<PageParagraph>? paragraphs = null)
     {
         ArgumentNullException.ThrowIfNull(pages);
-        _pages = [.. pages.Select(page => new PageView(page))];
         Paragraphs = paragraphs ?? [];
+        _pages = [.. pages.Select(page => new PageView(page, Paragraphs))];
     }
 
     /// <inheritdoc/>
@@ -61,7 +61,7 @@ public sealed class WordProcessingPages : IPageSequence
         return line.Box.Line.VisibleTextIn(paragraph).ToString();
     }
 
-    private sealed class PageView(LaidOutPage laid) : IPage
+    private sealed class PageView(LaidOutPage laid, IReadOnlyList<PageParagraph> paragraphs) : IPage
     {
         internal LaidOutPage Laid { get; } = laid;
 
@@ -80,17 +80,11 @@ public sealed class WordProcessingPages : IPageSequence
 
         /// <inheritdoc/>
         /// <remarks>
-        /// Not implemented yet. Drawing needs the glyph runs, and those need each line's characters
-        /// shaped again with the runs' own formatting rather than the paragraph's — the pass that
-        /// resolves run formatting. Throwing says so rather than silently producing a blank page, which
-        /// would look like a rendering bug rather than a missing feature.
+        /// The page's body text, as one glyph run per line. Not its furniture: headers, footers and
+        /// floating frames are not placed by pagination yet, so what is drawn is what the page holds.
+        /// Runs carry their own formatting once the run-level pass exists; today a paragraph draws in the
+        /// font its paragraph mark named, which is the same simplification its measurement made.
         /// </remarks>
-        public void Draw(IDrawingSink sink)
-        {
-            ArgumentNullException.ThrowIfNull(sink);
-            throw new NotSupportedException(
-                "Drawing a laid-out page is not implemented yet; the line boxes are available through "
-                + "WordProcessingPages.Pages.");
-        }
+        public void Draw(IDrawingSink sink) => PageDrawing.Draw(Laid, paragraphs, sink);
     }
 }

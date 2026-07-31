@@ -308,9 +308,11 @@ is read and verified, so what remains is the filling of pages rather than the me
       DOC and RTF, and takes the larger for DOCX — the same source document exported four ways puts its
       41st line 5.65 pt lower in three of them, which is exactly one paragraph space-after. For DOCX the
       answer is read from the file (`w:doNotUseHTMLParagraphAutoSpacing`); for DOC it needs the `Dop`.
-- [ ] Per-run formatting. A paragraph is measured wholly in the font its paragraph mark carries, so a
-      paragraph mixing sizes lays out slightly short — the tallest run on a line should set that line's
-      height. This is also what blocks drawing, since a glyph run needs its own font and colour.
+- [ ] Per-run formatting. A paragraph is measured and drawn wholly in the font its paragraph mark
+      carries, so a paragraph mixing sizes lays out slightly short — the tallest run on a line should set
+      that line's height — and emphasis inside a paragraph draws in the paragraph's own face. The line
+      filler would need to measure across a run list rather than one face, which is the change that
+      unblocks bold, italic, colour and mixed sizes together.
 - [ ] Tables. Skipped by every layout source rather than flattened, because a table is laid out as a grid
       and stacking its cells would give the page a height no table has.
 - [ ] Tables spanning page breaks, with header-row repetition
@@ -318,7 +320,18 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Footnote placement — footnote area growth changes how much body text fits, which
       changes pagination, so it must feed back into the page-filling loop
 - [ ] Columns; vertical and RTL writing modes
-- [ ] Emit to `IDrawingSink`
+- [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
+      per-glyph advances rather than characters — a backend must not re-shape, since layout already
+      committed to these advances when it decided where the lines broke. The run carries the resolved
+      `FontReference` so a PDF backend embeds the face the document was laid out against rather than the
+      one it asked for, and the text plus cluster map so extracted text and a `ToUnicode` map are correct.
+- [x] Verified against LibreOffice's own rendering for all four formats, comparing a display list rather
+      than pixels: each line's drawn origin against the first word's left edge, its summed advances
+      against the last word's right edge, and the baseline pitch against the rendered line pitch. An image
+      comparison answers "does it look the same", which is weaker and much harder to attribute — a
+      baseline a point out and a wrong glyph look equally different.
+- [ ] A rasteriser and a PDF writer. `Paperless.Rendering`'s two backends are still stubs; the display
+      list they consume is now real, which is the half that had to come first.
 
 ## Open questions
 

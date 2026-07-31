@@ -1,4 +1,5 @@
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
@@ -29,6 +30,25 @@ public sealed record PageParagraph
 
     /// <summary>The face the text is set in.</summary>
     public required OpenTypeFace Face { get; init; }
+
+    /// <summary>
+    /// The resolved font reference, for a renderer that has to name the face it is drawing with.
+    /// </summary>
+    /// <remarks>
+    /// Kept beside the face rather than derived from it, because the two answer different questions: the
+    /// face has the metrics that decided the layout, and the reference records <em>which</em> face that
+    /// was and what was asked for before substitution. A PDF backend deduplicates embedded fonts on the
+    /// reference's key, and a comparison against a reference renderer needs the requested family to
+    /// explain a difference.
+    /// </remarks>
+    public FontReference? Font { get; init; }
+
+    /// <summary>The colour the text is drawn in.</summary>
+    /// <remarks>
+    /// Black by default rather than nothing, since a run with no colour is drawn in the document's text
+    /// colour and every format's default for that is black.
+    /// </remarks>
+    public Colour Colour { get; init; } = Colour.Black;
 
     /// <summary>Its resolved layout properties.</summary>
     public ParagraphFormat Format { get; init; } = ParagraphFormat.Default;
