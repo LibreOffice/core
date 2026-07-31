@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <functional>
 #include <typeinfo>
 
 extern int i;
@@ -17,6 +18,13 @@ int i = i;
 int j = [](int n) { return j + n; }(0);
 // expected-error@-1 {{referencing a variable during its own initialization is error-prone and thus suspicious [loplugin:selfinit]}}
 // expected-note@-2 {{variable declared here [loplugin:selfinit]}}
+
+struct WithCallback
+{
+    WithCallback(std::function<int()>);
+    int value() const;
+};
+WithCallback withCallback([]() { return withCallback.value(); });
 
 int k = sizeof k;
 
