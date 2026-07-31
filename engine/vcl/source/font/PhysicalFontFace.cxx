@@ -394,7 +394,8 @@ OUString GenerateVariableFontPSName(const PhysicalFontFace& rFace,
             {
                 if (rVariation.value == info.default_value)
                     continue;
-                char aTag[5];
+                // hb_tag_to_string writes four characters and no terminator
+                char aTag[5] = {};
                 hb_tag_to_string(rVariation.tag, aTag);
                 aName.append("_" + OUString::number(rVariation.value)
                              + o3tl::trim(OUString::createFromAscii(aTag)));
