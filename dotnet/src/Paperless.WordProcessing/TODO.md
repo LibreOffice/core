@@ -1296,6 +1296,16 @@ is read and verified, so what remains is the filling of pages rather than the me
       `\rtlsect` at all, so a document round-tripped through RTF loses its section direction. The
       control word is still read, since another producer may write it and LibreOffice's own importer
       maps it (`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx:653`).
+- [ ] Tabs in a right-to-left paragraph. `TabRuler` measures from the paragraph's start edge and the
+      drawing lays its stretches out left to right, so a tabbed right-to-left line advances the wrong
+      way. It is not a mirror of the line: Writer resolves a tab against the *frame's* direction and
+      keeps the stops where the ruler puts them, so the stretch between two stops reads right to left
+      while the stops themselves march left to right. Nothing in the corpus exercises it yet.
+- [ ] The itemisation is redone per line when a paragraph reorders — `PageDrawing.Pieces` resolves the
+      whole paragraph's bidi for every line it draws, because what reaches a page is a
+      `PageParagraph` and its line boxes rather than the `MeasuredParagraph` the layout built. Cheap
+      today (only paragraphs that could reorder pay, and each is one linear pass) and the obvious fix
+      is to carry the measured paragraph onto the page, which is a bigger change than this was.
 - [ ] Mirroring anything else a right-to-left section might mirror. Only the column order is done,
       because only the column order was measurable: the margins stayed put in the reference, and
       whether a table's columns or a page's furniture mirror is untested — a table in a right-to-left
