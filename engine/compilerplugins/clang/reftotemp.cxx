@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <stack>
+#include <unordered_set>
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -32,12 +33,25 @@ public:
     {
     }
 
+    bool VisitCXXForRangeStmt(const CXXForRangeStmt* stmt)
+    {
+        // A range-based for loop keeps its loop variable valid for each iteration, so skip it even
+        // when the variable is a reference bound to a temporary:
+        if (auto const varDecl = stmt->getLoopVariable())
+        {
+            rangeForLoopVariables.insert(varDecl);
+        }
+        return true;
+    }
+
     bool VisitVarDecl(const VarDecl* varDecl)
     {
         if (ignoreLocation(varDecl))
             return true;
         // reference parameters might have a default temporary value, which is ok
         if (isa<ParmVarDecl>(varDecl))
+            return true;
+        if (rangeForLoopVariables.count(varDecl))
             return true;
         if (!varDecl->getType()->isReferenceType())
             return true;
@@ -70,6 +84,8 @@ public:
     }
 
 private:
+    std::unordered_set<const VarDecl*> rangeForLoopVariables;
+
     void run() override
     {
         if (preRun())
