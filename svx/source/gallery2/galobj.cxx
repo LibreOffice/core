@@ -133,7 +133,6 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
-                aThumbBmp.Convert( BmpConversion::N8BitColors );
                 bRet = true;
             }
             else
@@ -146,7 +145,6 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     static_cast<double>(aNewSize.Height()) / aBmpSize.Height(),
                     BmpScaleFlag::BestQuality ) )
                 {
-                    aThumbBmp.Convert( BmpConversion::N8BitColors );
                     bRet = true;
                 }
             }
@@ -167,7 +165,6 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( !aThumbBmp.IsEmpty() )
         {
-            aThumbBmp.Convert( BmpConversion::N8BitColors );
             bRet = true;
         }
     }
