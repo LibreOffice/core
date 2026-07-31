@@ -1,0 +1,5 @@
+Region;Units;Price;Note
+North;12;4,50;"Contains a ; separator"
+South;7;3,25;"Two
+lines"
+Ostersund;23;1,00;"He said ""yes"""

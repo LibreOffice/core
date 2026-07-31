@@ -54,9 +54,13 @@ public sealed class SpreadsheetReader : IDocumentReader
             DocumentFormat.Xlsx or DocumentFormat.Xlsm or DocumentFormat.Xltx or DocumentFormat.Xltm
                 => Ooxml.XlsxReader.Read(source, format),
 
+            DocumentFormat.Xls or DocumentFormat.Xlt or DocumentFormat.Xls5
+                => MsBinary.XlsReader.Read(source, format),
+
+            DocumentFormat.Csv => Csv.CsvReader.Read(source, format),
+
             // Named in SupportedFormats but not implemented yet.
-            DocumentFormat.Xlsb or DocumentFormat.Xls or DocumentFormat.Xlt
-                or DocumentFormat.Xls5 or DocumentFormat.ExcelXml2003 or DocumentFormat.Csv
+            DocumentFormat.Xlsb or DocumentFormat.ExcelXml2003
                 or DocumentFormat.Dif or DocumentFormat.Sxc or DocumentFormat.Stc
                 => throw new UnsupportedFormatException(
                     format, $"Reading {format} is not implemented yet."),

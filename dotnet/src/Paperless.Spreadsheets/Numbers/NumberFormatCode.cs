@@ -52,6 +52,27 @@ public sealed class NumberFormatCode
         => IsDateTime && !Sections[0].HasDatePart && Sections[0].HasTimePart;
 
     /// <summary>
+    /// False when the code uses a construct whose output this does not reproduce, so a reader
+    /// can record a diagnostic rather than presenting a guess as the displayed text.
+    /// </summary>
+    /// <remarks>
+    /// Only the constructs that change the <em>characters</em> count: a numeral-system or
+    /// calendar substitution. A colour, a condition or an alignment directive does not, so a
+    /// code carrying one of those is fully reproduced.
+    /// </remarks>
+    public bool IsFullyReproduced
+    {
+        get
+        {
+            foreach (NumberFormatSection section in Sections)
+            {
+                if (section.HasUnreproducedDirective) return false;
+            }
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Parses a format code. Never throws: an unparseable code degrades to <c>General</c>,
     /// because a cell with a strange format is still a cell with a value.
     /// </summary>
