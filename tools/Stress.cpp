@@ -21,6 +21,8 @@
 
 int ClientPortNumber = DEFAULT_CLIENT_PORT_NUMBER;
 
+namespace {
+
 /// Stress testing and performance/scalability benchmarking tool.
 class Stress: public Poco::Util::Application
 {
@@ -32,6 +34,8 @@ protected:
     void handleOption(const std::string& name, const std::string& value) override;
     int  main(const std::vector<std::string>& args) override;
 };
+
+}
 
 void Stress::defineOptions(Poco::Util::OptionSet& optionSet)
 {

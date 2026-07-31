@@ -149,6 +149,8 @@ namespace Log
 
     using namespace Poco;
 
+    namespace {
+
     class ConsoleChannel : public Poco::Channel
     {
     public:
@@ -228,6 +230,8 @@ namespace Log
         }
     };
 
+    }
+
     void preFork() { flush(); }
 
     void postFork()
@@ -250,6 +254,8 @@ namespace Log
             oss << '-' << std::setw(5) << std::setfill('0') << ProcUtil::getProcessId();
         Static.setId(oss.str());
     }
+
+    namespace {
 
     class BufferedConsoleChannel : public ConsoleChannel
     {
@@ -374,7 +380,11 @@ namespace Log
         static thread_local ThreadLocalBuffer _tlb;
     };
 
+    }
+
     thread_local BufferedConsoleChannel::ThreadLocalBuffer BufferedConsoleChannel::_tlb;
+
+    namespace {
 
     /// Colored Console channel (needs to be buffered).
     class ColorConsoleChannel : public BufferedConsoleChannel
@@ -437,6 +447,8 @@ namespace Log
     private:
         std::unordered_map<Poco::Message::Priority, std::string> _colorByPriority;
     };
+
+    }
 
     void initialize(const std::string& name,
                     const std::string& logLevel,

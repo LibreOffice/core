@@ -17,6 +17,7 @@
 #include <config.h>
 
 #include <common/Log.hpp>
+#include <common/ProcUtil.hpp>
 #include <common/Util.hpp>
 
 #include <o3tl/safeint.hxx>

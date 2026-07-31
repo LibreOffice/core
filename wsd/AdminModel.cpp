@@ -992,7 +992,7 @@ void AdminModel::addLostKitsTerminated(unsigned lostKitsTerminated)
     _lostKitsTerminatedCount += lostKitsTerminated;
 }
 
-int filterNumberName(const struct dirent *dir)
+static int filterNumberName(const struct dirent *dir)
 {
     return fnmatch("[0-9]*", dir->d_name, 0) == 0 ? 1 : 0;
 }
@@ -1057,6 +1057,9 @@ void AdminModel::getKitPidsFromSystem(std::vector<int> *pids)
     getUnassignedKitPids(pids);
 }
 
+//TODO: Has external linkage, as DocumentAggregateStats holds it by value and is itself external, so
+// internal linkage here would cause -Wsubobject-linkage in DocumentAggregateStats:
+// [-loplugin:external]
 class AggregateStats final
 {
 public:
@@ -1094,6 +1097,9 @@ private:
     uint64_t _count; ///< The number of samples. We are 8-byte aligned, so make this 64-bits.
 };
 
+//TODO: Has external linkage, as DocumentAggregateStats holds it by value and is itself external, so
+// internal linkage here would cause -Wsubobject-linkage in DocumentAggregateStats:
+// [-loplugin:external]
 class ActiveExpiredStats final
 {
 public:
@@ -1173,6 +1179,8 @@ struct DocumentAggregateStats final
     int _resConsAbortPendingCount;
 };
 
+namespace {
+
 struct KitProcStats
 {
     void UpdateAggregateStats(int pid)
@@ -1186,6 +1194,8 @@ struct KitProcStats
     AggregateStats _threadCount;
     AggregateStats _cpuTime;
 };
+
+}
 
 /// The aggregate stats of expired documents.
 /// Since expired documents don't change their stats,
@@ -1228,7 +1238,7 @@ void AdminModel::CalcDocAggregateStats(DocumentAggregateStats& stats) const
         stats.Update(d.second, true);
 }
 
-void CalcKitStats(KitProcStats& stats)
+static void CalcKitStats(KitProcStats& stats)
 {
     std::vector<int> childProcs;
     stats.unassignedCount = AdminModel::getUnassignedKitPids(&childProcs);
@@ -1239,13 +1249,13 @@ void CalcKitStats(KitProcStats& stats)
     }
 }
 
-void PrintDocActExpMetrics(std::ostream& oss, const char* name, const char* unit,
+static void PrintDocActExpMetrics(std::ostream& oss, const char* name, const char* unit,
                            const ActiveExpiredStats& values)
 {
     values.Print(oss, "document", name, unit);
 }
 
-void PrintKitAggregateMetrics(std::ostream& oss, const char* name, const char* unit,
+static void PrintKitAggregateMetrics(std::ostream& oss, const char* name, const char* unit,
                               const AggregateStats& values)
 {
     const std::string prefix = std::string("kit_") + name;

@@ -95,6 +95,7 @@ std::unique_ptr<SocketPoll> ForKitPoll;
 
 extern "C" { void dump_forkit_state(void); /* easy for gdb */ }
 
+// [-loplugin:external]
 void dump_forkit_state()
 {
     std::ostringstream oss(Util::makeDumpStateStream());
@@ -122,6 +123,9 @@ void dump_forkit_state()
     fprintf(stderr, "%s", msg.c_str());
     LOG_WRN(msg);
 }
+
+namespace
+{
 
 class ServerWSHandler;
 
@@ -225,9 +229,6 @@ protected:
         SigUtil::setTerminationFlag();
     }
 };
-
-namespace
-{
 
 #if HAVE_LIBCAP
 bool haveCapability(cap_value_t capability)

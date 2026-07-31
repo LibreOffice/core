@@ -15,13 +15,12 @@
 
 #include <config.h>
 
+#include <common/CoolMount.hpp>
 #include <common/security.h>
 
 #include <cstdio>
 #include <cstdlib>
 #include <sysexits.h>
-
-extern int domount(int argc, const char* const* argv);
 
 int main(int argc, char** argv)
 {

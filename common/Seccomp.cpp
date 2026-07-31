@@ -281,7 +281,7 @@ bool lockdown([[maybe_unused]] Type type)
 
 namespace Rlimit {
 
-void setRLimit(rlim_t confLim, int resource, const std::string& resourceText,
+static void setRLimit(rlim_t confLim, int resource, const std::string& resourceText,
                const std::string& unitText)
 {
     rlim_t lim = confLim;

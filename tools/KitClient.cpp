@@ -16,6 +16,7 @@
 
 #include <config.h>
 
+#include <common/Common.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Png.hpp>
 #include <common/Protocol.hpp>
@@ -50,6 +51,8 @@ extern "C"
                   << " payload: " << payload << std::endl;
     }
 }
+
+namespace {
 
 /// The application class implementing a client.
 class LOKitClient : public Poco::Util::Application
@@ -169,6 +172,8 @@ protected:
         Util::forcedExit(EX_OK);
     }
 };
+
+}
 
 namespace Util
 {

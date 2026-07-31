@@ -27,6 +27,8 @@
 #include <chrono>
 #include <cstdio>
 #include <map>
+#include <memory>
+#include <mutex>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
@@ -50,6 +52,9 @@ class TraceFileWriter;
 std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPoll>& destPoll,
                                                  const std::string& configId,
                                                  unsigned mobileAppDocId);
+
+extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
+extern std::mutex DocBrokersMutex;
 
 /// The Server class which is responsible for all
 /// external interactions.

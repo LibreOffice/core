@@ -22,7 +22,7 @@
 
 using Pixmap = std::vector<char>;
 
-std::vector<Pixmap> pixmaps;
+static std::vector<Pixmap> pixmaps;
 
 class DeltaTests {
 public:

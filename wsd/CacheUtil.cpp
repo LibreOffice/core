@@ -34,9 +34,9 @@
 #include <mutex>
 #include <set>
 
-std::mutex CacheMutex;
-std::string CachePath;
-std::chrono::minutes MaxAgeMins;
+static std::mutex CacheMutex;
+static std::string CachePath;
+static std::chrono::minutes MaxAgeMins;
 
 void Cache::initialize(const std::string& path)
 {

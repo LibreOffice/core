@@ -193,7 +193,7 @@ std::string COOLWSD::ViewModeFileExtensions;
 extern "C"
 {
     void dump_state(void); /* easy for gdb */
-    void forwardSigUsr2();
+    static void forwardSigUsr2();
 }
 
 void COOLWSD::appendAllowedHostsFrom(const LayeredConfiguration& conf, const std::string& root, std::vector<std::string>& allowed)
@@ -891,6 +891,8 @@ static std::string UnitTestLibrary;
 unsigned int COOLWSD::NumPreSpawnedChildren = 0;
 std::unique_ptr<TraceFileWriter> COOLWSD::TraceDumper;
 
+namespace {
+
 class PrisonPoll : public TerminatingPoll
 {
 public:
@@ -966,6 +968,8 @@ private:
 
 #endif
 };
+
+}
 
 /// This thread listens for and accepts prisoner kit processes.
 /// And also cleans up and balances the correct number of children.
@@ -1088,6 +1092,8 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
 
 #ifdef __linux__
 #if !MOBILEAPP
+namespace {
+
 class InotifySocket : public Socket
 {
 public:
@@ -1121,6 +1127,8 @@ private:
     int _watchedCount = 0;
     bool _stopOnConfigChange;
 };
+
+}
 
 bool InotifySocket::watch(const std::string_view configFile)
 {
@@ -3562,6 +3570,8 @@ private:
     void performWrites(std::size_t /*capacity*/) override {}
 };
 
+namespace {
+
 class PlainSocketFactory final : public SocketFactory
 {
     std::shared_ptr<Socket> create(const int physicalFd, Socket::Type type) override
@@ -3594,6 +3604,8 @@ class PrisonerSocketFactory final : public SocketFactory
                                                   StreamSocket::ReadType::UseRecvmsgExpectFD);
     }
 };
+
+}
 
 COOLWSDServer::COOLWSDServer()
     : _acceptPoll("accept_poll")
@@ -4644,6 +4656,7 @@ static void forwardSignal(int signum);
 
 #endif
 
+// [-loplugin:external]
 void dump_state()
 {
     std::ostringstream oss(Util::makeDumpStateStream());

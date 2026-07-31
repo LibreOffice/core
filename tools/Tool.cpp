@@ -45,6 +45,8 @@
 #include <thread>
 #include <unistd.h>
 
+namespace {
+
 /// Simple command-line tool for file format conversion.
 class Tool: public Poco::Util::Application
 {
@@ -70,11 +72,15 @@ protected:
     int  main(const std::vector<std::string>& args) override;
 };
 
+}
+
 
 using namespace COOLProtocol;
 
 using Poco::Runnable;
 using Poco::Util::OptionSet;
+
+namespace {
 
 /// Thread class which performs the conversion.
 class Worker: public Runnable
@@ -148,6 +154,8 @@ public:
         delete session;
     }
 };
+
+}
 
 Tool::Tool() :
     _numWorkers(4),

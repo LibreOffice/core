@@ -56,11 +56,11 @@ void error(int status, int errnum, const char *format, ...)
 
 typedef unsigned long long addr_t;
 
-bool DumpHex = false;
-bool DumpAll = false;
-bool DumpMap = false;
-bool DumpStrings = false;
-int  DumpWidth = 32;
+static bool DumpHex = false;
+static bool DumpAll = false;
+static bool DumpMap = false;
+static bool DumpStrings = false;
+static int  DumpWidth = 32;
 
 #define MAP_SIZE 21
 #define PATH_SIZE 1000 // No harm in having it much larger than strictly necessary. Avoids compiler warning.
@@ -130,6 +130,8 @@ static int openPid(unsigned proc_id, const char *name)
         error(EXIT_FAILURE, errno, "Failed to open %s", path_proc);
     return fd;
 }
+
+namespace {
 
 struct Map {
 private:
@@ -339,6 +341,8 @@ public:
 
     const std::unordered_map<addr_t, std::string>& getAddrToStr() const { return _addrToStr; }
 };
+
+}
 
 
 static void dumpDiff(const AddrSpace &space,

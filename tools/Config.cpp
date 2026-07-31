@@ -17,6 +17,7 @@
 #include <config.h>
 
 #include <common/Anonymizer.hpp>
+#include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/Crypto.hpp>
 #include <common/NumUtil.hpp>
@@ -55,6 +56,8 @@ using Poco::Util::XMLConfiguration;
 #define MIN_PWD_HASH_LENGTH 20
 
 bool EnableExperimental = false;
+
+namespace {
 
 class CoolConfig final: public XMLConfiguration
 {
@@ -109,6 +112,8 @@ protected:
     void handleOption(const std::string&, const std::string&) override;
     int main(const std::vector<std::string>&) override;
 };
+
+}
 
 std::string Config::ConfigFile =
 #if ENABLE_DEBUG

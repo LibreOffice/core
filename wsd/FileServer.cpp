@@ -1288,6 +1288,8 @@ const std::string VERSION = "%VERSION%";
 const std::string WOPI_HOST_ID = "%WOPI_HOST_ID%";
 const std::string EXPERIMENTAL_FEATURES = "%EXPERIMENTAL_FEATURES%";
 
+namespace
+{
 /// Per user request variables.
 /// Holds access_token, css_variables, postmessage_origin, etc.
 class UserRequestVars
@@ -1421,8 +1423,6 @@ private:
     const std::string _blank;
 };
 
-namespace
-{
 std::string boolToString(const bool value)
 {
     return value ? std::string("true"): std::string("false");

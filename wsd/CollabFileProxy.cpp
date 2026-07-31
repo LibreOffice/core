@@ -27,9 +27,6 @@
 #include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
 
-extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
-extern std::mutex DocBrokersMutex;
-
 CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDetails,
                                  const std::shared_ptr<StreamSocket>& socket,
                                  const std::string& wopiSrc, const std::string& accessToken)

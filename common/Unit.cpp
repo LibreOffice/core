@@ -14,6 +14,7 @@
 
 #include "Unit.hpp"
 
+#include <common/Common.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>

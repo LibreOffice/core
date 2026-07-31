@@ -159,7 +159,7 @@ namespace Util
 
         /// Generates a random string in Base64.
         /// Note: May contain '/' characters.
-        std::string getB64String(const std::size_t length)
+        static std::string getB64String(const std::size_t length)
         {
             auto bytes = getBytes(length);
             return macaron::Base64::Encode(

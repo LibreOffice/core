@@ -25,6 +25,7 @@
 #include <common/Util.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/CacheUtil.hpp>
+#include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Exceptions.hpp>
@@ -36,12 +37,6 @@
 #include <common/JailUtil.hpp>
 #include <wsd/wopi/CheckFileInfo.hpp>
 #endif // !MOBILEAPP
-
-extern std::pair<std::shared_ptr<DocumentBroker>, std::string>
-findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
-                      const std::string& docKey, const std::string& configId,
-                      const std::string& id, const Poco::URI& uriPublic,
-                      unsigned mobileAppDocId);
 
 namespace
 {

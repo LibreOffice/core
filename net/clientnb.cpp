@@ -16,6 +16,7 @@
 
 #include <config.h>
 
+#include <common/Common.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Util.hpp>
 
@@ -54,6 +55,8 @@ constexpr int SslPortNumber = 9193;
 
 static bool EnableHttps = false;
 bool EnableExperimental = false;
+
+namespace {
 
 struct Session
 {
@@ -290,6 +293,8 @@ public:
         return 0;
     }
 };
+
+}
 
 // coverity[root_function] : don't warn about uncaught exceptions
 POCO_APP_MAIN(Client)

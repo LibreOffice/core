@@ -37,7 +37,7 @@
 using namespace Poco;
 using namespace Poco::Crypto;
 
-std::string getSupportPublicKey()
+static std::string getSupportPublicKey()
 {
 #if ENABLE_SUPPORT_KEY
     return SUPPORT_PUBLIC_KEY;

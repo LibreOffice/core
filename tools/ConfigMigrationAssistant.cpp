@@ -62,7 +62,7 @@ static std::string getTargetKey(int id, const std::string& commonKeyPart)
     return commonKeyPart + "[" + std::to_string(id) + "]";
 }
 
-void MigrateLevel(const XMLConfiguration &sourceConfig, XMLConfiguration &targetConfig, const std::string& sourceLevel)
+static void MigrateLevel(const XMLConfiguration &sourceConfig, XMLConfiguration &targetConfig, const std::string& sourceLevel)
 {
     Poco::Util::AbstractConfiguration::Keys subKeys;
     sourceConfig.keys(sourceLevel, subKeys);
@@ -219,7 +219,7 @@ void MigrateLevel(const XMLConfiguration &sourceConfig, XMLConfiguration &target
     }
 }
 
-void PreProcess()
+static void PreProcess()
 {
     netPostAllow.clear();
     netPostAllowDesc.clear();
@@ -230,7 +230,7 @@ void PreProcess()
     wopiHostAdded = false;
 }
 
-void PostProcess(XMLConfiguration &targetConfig)
+static void PostProcess(XMLConfiguration &targetConfig)
 {
     assert(netPostAllow.size() == netPostAllowDesc.size());
     assert(wopiHost.size() == wopiHostDesc.size());

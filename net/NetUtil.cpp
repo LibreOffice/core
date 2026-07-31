@@ -133,6 +133,8 @@ HostEntry::HostEntry(std::string desc)
 
 HostEntry::~HostEntry() = default;
 
+namespace {
+
 struct DNSCacheEntry
 {
     std::string queryAddress;
@@ -147,6 +149,8 @@ struct DNSCacheEntry
     {
     }
 };
+
+}
 
 static HostEntry resolveDNS(const std::string& addressToCheck,
                             std::vector<DNSCacheEntry>& querycache)

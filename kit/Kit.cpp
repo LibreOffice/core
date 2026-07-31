@@ -154,11 +154,6 @@ using JsonUtil::makePropertyValue;
 
 extern "C" { void dump_kit_state(void); /* easy for gdb */ }
 
-#if MOBILEAPP
-extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
-extern std::mutex DocBrokersMutex;
-#endif
-
 #if !MOBILEAPP
 
 // A Kit process hosts only a single document in its lifetime.
@@ -3581,7 +3576,7 @@ void KitSocketPoll::kitWakeup() {
  *
  * The LOKit main loop will use/call these callbacks inside VCL's Yield(), see SvpSalInstance::ImplYield().
  */
-void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
+static void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, const std::shared_ptr<KitSocketPoll>& mainKit) {
 #if MOBILEAPP
     // The server sets loKitPtr in globalPreinit(); MOBILEAPP has no ForKit, so publish the
     // engine handle here, before the poll loop runs, so kitPoll's reentry guard can reach
@@ -3631,7 +3626,7 @@ extern "C"
     }
 }
 
-void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
+static void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
 {
     std::string certificatePathString = ConfigUtil::getString("certificates.database_path", "");
     if (!certificatePathString.empty())
@@ -4799,6 +4794,7 @@ std::string anonymizeUsername(const std::string& username)
 
 #endif // !MOBILEAPP
 
+// [-loplugin:external]
 void dump_kit_state()
 {
     std::ostringstream oss(Util::makeDumpStateStream());

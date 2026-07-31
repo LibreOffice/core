@@ -87,9 +87,6 @@ std::size_t ClientRequestDispatcher::NextRvsCleanupSize = RvsLowWatermark;
 Util::UnorderedStringMap<std::shared_ptr<RequestVettingStation>>
     ClientRequestDispatcher::RequestVettingStations;
 
-extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
-extern std::mutex DocBrokersMutex;
-
 #if !MOBILEAPP
 constexpr std::string_view MEDIA_STR = "str";
 constexpr std::string_view MEDIA_MP4 = "url";
@@ -128,11 +125,7 @@ inline void shutdownLimitReached(const std::shared_ptr<ProtocolHandlerInterface>
 
 } // end anonymous namespace
 
-/// Find the DocumentBroker for the given docKey, if one exists.
-/// Otherwise, creates and adds a new one to DocBrokers.
-/// May return null if terminating or MaxDocuments limit is reached.
-/// Returns the error message, if any, when no DocBroker is created/found.
-extern std::pair<std::shared_ptr<DocumentBroker>, std::string>
+std::pair<std::shared_ptr<DocumentBroker>, std::string>
 findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
                       const std::string& docKey, const std::string& configId, const std::string& id,
                       const Poco::URI& uriPublic, unsigned mobileAppDocId)
@@ -219,6 +212,8 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
 }
 
 #if !MOBILEAPP
+
+namespace {
 
 /// For clipboard setting
 class ClipboardPartHandler : public Poco::Net::PartHandler
@@ -412,6 +407,8 @@ public:
     }
 };
 
+}
+
 /// Constructs ConvertToBroker implementation based on request type
 static std::shared_ptr<ConvertToBroker>
 getConvertToBrokerImplementation(const std::string& requestType, const std::string& fromPath,
@@ -445,6 +442,8 @@ getConvertToBrokerImplementation(const std::string& requestType, const std::stri
 
     return nullptr;
 }
+
+namespace {
 
 class ConvertToAddressResolver : public std::enable_shared_from_this<ConvertToAddressResolver>
 {
@@ -580,6 +579,8 @@ public:
         dispatchNextLookup();
     }
 };
+
+}
 
 bool ClientRequestDispatcher::allowPostFrom(const std::string& address)
 {

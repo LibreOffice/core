@@ -381,7 +381,7 @@ bool isInitialized() { return Config != nullptr; }
 const Util::UnorderedStringMap<std::string>& getDefaultAppConfig() { return DefAppConfig; }
 
 /// Recursively extract the sub-keys of the given parent key.
-void extract(const std::string& parentKey, const Poco::Util::AbstractConfiguration& config,
+static void extract(const std::string& parentKey, const Poco::Util::AbstractConfiguration& config,
              std::map<std::string, std::string>& map)
 {
     if (parentKey.empty() || !config.has(parentKey))

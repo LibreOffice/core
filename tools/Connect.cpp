@@ -70,6 +70,8 @@ static std::mutex coutMutex;
 
 const std::string Name = "connect ";
 
+namespace {
+
 /// Prints incoming data from a COOLWebSocket.
 class Output : public Runnable
 {
@@ -240,6 +242,8 @@ protected:
 private:
     URI _uri;
 };
+
+}
 
 namespace Util
 {

@@ -18,6 +18,7 @@
 
 #include "JailUtil.hpp"
 
+#include <common/CoolMount.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
@@ -42,8 +43,6 @@
 #ifdef __linux__
 #include <sys/sysmacros.h>
 #endif
-
-extern int domount(int argc, const char* const* argv);
 
 namespace JailUtil
 {

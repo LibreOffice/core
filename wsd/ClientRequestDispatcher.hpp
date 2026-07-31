@@ -18,6 +18,7 @@
 
 #include <common/ContainerUtil.hpp>
 #include <net/Socket.hpp>
+#include <wsd/DocumentBroker.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/RequestVettingStation.hpp>
 #if !MOBILEAPP
@@ -27,6 +28,15 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+
+/// Find the DocumentBroker for the given docKey, if one exists.
+/// Otherwise, creates and adds a new one to DocBrokers.
+/// May return null if terminating or MaxDocuments limit is reached.
+/// Returns the error message, if any, when no DocBroker is created/found.
+std::pair<std::shared_ptr<DocumentBroker>, std::string>
+findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
+                      const std::string& docKey, const std::string& configId, const std::string& id,
+                      const Poco::URI& uriPublic, unsigned mobileAppDocId);
 
 /// Handles incoming connections and dispatches to the appropriate handler.
 class ClientRequestDispatcher final : public SimpleSocketHandler

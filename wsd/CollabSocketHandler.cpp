@@ -34,9 +34,6 @@
 
 #include <sstream>
 
-extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
-extern std::mutex DocBrokersMutex;
-
 CollabSocketHandler::CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,
                                          const Poco::Net::HTTPRequest& request,
                                          bool allowedOrigin,

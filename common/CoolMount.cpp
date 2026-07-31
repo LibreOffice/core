@@ -25,6 +25,8 @@
 #include <sysexits.h>
 #include <unistd.h>
 
+#include "CoolMount.hpp"
+
 #ifdef __FreeBSD__
 #include <stdlib.h>
 #include <sys/uio.h>
@@ -164,7 +166,7 @@ int umount2(const char *target, int flags)
 }
 #endif
 
-void usage(const char* program)
+static void usage(const char* program)
 {
     fprintf(stderr, "Usage: %s <-b|-r> <source path> <target path>\n", program);
     fprintf(stderr, "       %s -u [-s] <target>.\n", program);

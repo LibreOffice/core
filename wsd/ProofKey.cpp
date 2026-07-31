@@ -257,7 +257,7 @@ VecOfStringPairs Proof::GetProofHeaders(const std::string& access_token, const s
     return vec;
 }
 
-const Proof& GetProof()
+static const Proof& GetProof()
 {
     static const Proof proof;
     return proof;

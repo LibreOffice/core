@@ -34,6 +34,8 @@
 
 #include <unistd.h>
 
+namespace {
+
 // Dumps incoming websocket messages and doesn't respond.
 class DumpSocketHandler : public WebSocketHandler
 {
@@ -212,6 +214,8 @@ public:
     }
 };
 
+}
+
 namespace Util
 {
     void alertAllUsers(const std::string& cmd, const std::string& kind)
@@ -220,12 +224,16 @@ namespace Util
     }
 }
 
+namespace {
+
 class CoolConfig final: public Poco::Util::XMLConfiguration
 {
 public:
     CoolConfig()
         {}
 };
+
+}
 
 // coverity[root_function] : don't warn about uncaught exceptions
 int main (int argc, char **argv)
