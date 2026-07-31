@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
-    uno::Reference<vclcanvas::XCanvas> mCanvas;
+    rtl::Reference<vclcanvas::Canvas> mCanvas;
     uno::Reference<vclcanvas::XGraphicDevice> mDevice;
     vclcanvas::ViewState mViewState;
     vclcanvas::RenderState mRenderState;
@@ -70,7 +70,7 @@ public:
     virtual void tearDown() override
     {
         mVclDevice.disposeAndClear();
-        mCanvas = uno::Reference<vclcanvas::XCanvas>();
+        mCanvas = rtl::Reference<vclcanvas::Canvas>();
         mDevice = uno::Reference<vclcanvas::XGraphicDevice>();
         BootstrapFixture::tearDown();
     }

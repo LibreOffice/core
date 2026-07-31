@@ -13,7 +13,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <RenderState.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <XCanvas.hxx>
 
 namespace com::sun::star::rendering
 {
@@ -23,6 +22,10 @@ class XPolyPolygon2D;
 namespace cppcanvastools
 {
 struct TextLineInfo;
+}
+namespace vclcanvas
+{
+class Canvas;
 }
 
 namespace cppcanvas
@@ -64,7 +67,7 @@ public:
         Use overline color and underline color if the value is true, ignore those
         colors otherwise ( typical case is to render the shadow ).
      */
-    void render(const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+    void render(const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                 const vclcanvas::ViewState& rViewState,
                 const ::vclcanvas::RenderState& rRenderState, bool bNormalText) const;
 };

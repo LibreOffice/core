@@ -34,7 +34,7 @@
 #include "outdevstate.hxx"
 #include <utility>
 #include "mtftools.hxx"
-#include <XCanvas.hxx>
+#include <canvas.hxx>
 #include <Texture.hxx>
 
 using namespace ::com::sun::star;
@@ -56,7 +56,7 @@ namespace cppcanvas
                                 bool bStroke,
                                 int nTransparency );
 
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -65,7 +65,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -129,7 +129,7 @@ namespace cppcanvas
                 }
             }
 
-            bool PolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool PolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                   const vclcanvas::ViewState& rViewState,
                                                   rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                   const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -164,7 +164,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PolyPolyAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool PolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                const vclcanvas::ViewState& rViewState,
                                                const ::basegfx::B2DHomMatrix& rTransformation,
                                                const Subset&                  rSubset ) const
@@ -196,7 +196,7 @@ namespace cppcanvas
                                         const OutDevState&               rState,
                                         const vclcanvas::Texture&        rTexture );
 
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -205,7 +205,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -227,7 +227,7 @@ namespace cppcanvas
                 cppcanvastools::initRenderState(maState,rState);
             }
 
-            bool TexturedPolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool TexturedPolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                           const vclcanvas::ViewState& rViewState,
                                                           rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                           const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -247,7 +247,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool TexturedPolyPolyAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool TexturedPolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                        const vclcanvas::ViewState& rViewState,
                                                        const ::basegfx::B2DHomMatrix& rTransformation,
                                                        const Subset&                  rSubset ) const
@@ -279,7 +279,7 @@ namespace cppcanvas
                                        const OutDevState&                   rState,
                                        rendering::StrokeAttributes          aStrokeAttributes );
 
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -288,7 +288,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -309,7 +309,7 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool StrokedPolyPolyAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool StrokedPolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                          const vclcanvas::ViewState& rViewState,
                                                          rtl::Reference< vclcanvas::CachedBitmap >& /*rCachedPrimitive*/,
                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -327,7 +327,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool StrokedPolyPolyAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool StrokedPolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                       const vclcanvas::ViewState& rViewState,
                                                       const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const

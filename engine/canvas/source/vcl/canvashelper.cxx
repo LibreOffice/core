@@ -52,6 +52,7 @@
 #include <verifyinput.hxx>
 #include <textlayout.hxx>
 #include <XGraphicDevice.hxx>
+#include <canvas.hxx>
 
 
 using namespace ::com::sun::star;
@@ -160,7 +161,7 @@ namespace vclcanvas
                                      rOutDev.GetOutputSizePixel()) );
     }
 
-    void CanvasHelper::drawLine( const vclcanvas::XCanvas*      ,
+    void CanvasHelper::drawLine( const vclcanvas::Canvas*      ,
                                  const geometry::RealPoint2D&   aStartRealPoint2D,
                                  const geometry::RealPoint2D&   aEndRealPoint2D,
                                  const vclcanvas::ViewState&    viewState,
@@ -182,7 +183,7 @@ namespace vclcanvas
         mpOutDevProvider->getOutDev().DrawLine( aStartPoint, aEndPoint );
     }
 
-    void CanvasHelper::drawPolyPolygon( const vclcanvas::XCanvas*                          ,
+    void CanvasHelper::drawPolyPolygon( const vclcanvas::Canvas*                          ,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                          const vclcanvas::ViewState&                        viewState,
                                          const vclcanvas::RenderState&                      renderState )
@@ -222,7 +223,7 @@ namespace vclcanvas
         }
     }
 
-    void CanvasHelper::strokePolyPolygon( const vclcanvas::XCanvas*                            ,
+    void CanvasHelper::strokePolyPolygon( const vclcanvas::Canvas*                            ,
                                            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                            const vclcanvas::ViewState&                          viewState,
                                            const vclcanvas::RenderState&                        renderState,
@@ -335,7 +336,7 @@ namespace vclcanvas
         }
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillPolyPolygon( const vclcanvas::Canvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const vclcanvas::ViewState&                        viewState,
                                                                                  const vclcanvas::RenderState&                      renderState )
@@ -369,7 +370,7 @@ namespace vclcanvas
         return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
     }
 
-    rtl::Reference< vclcanvas::CanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
+    rtl::Reference< vclcanvas::CanvasFont > CanvasHelper::createFont( const vclcanvas::Canvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
                                                                        FontEmphasisMark                                  eMark,
                                                                        const geometry::Matrix2D&                        fontMatrix )
@@ -384,7 +385,7 @@ namespace vclcanvas
         return rtl::Reference< vclcanvas::CanvasFont >();
     }
 
-    void CanvasHelper::drawText( const vclcanvas::XCanvas*                         ,
+    void CanvasHelper::drawText( const vclcanvas::Canvas*                         ,
                                   const rendering::StringContext&                   text,
                                   const rtl::Reference< vclcanvas::CanvasFont >&   xFont,
                                   const vclcanvas::ViewState&                       viewState,
@@ -430,7 +431,7 @@ namespace vclcanvas
         }
     }
 
-    void CanvasHelper::drawTextLayout( const vclcanvas::XCanvas*                       ,
+    void CanvasHelper::drawTextLayout( const vclcanvas::Canvas*                       ,
                                         const rtl::Reference< vclcanvas::TextLayout >& xLayoutedText,
                                         const vclcanvas::ViewState&                     viewState,
                                         const vclcanvas::RenderState&                   renderState )
@@ -457,7 +458,7 @@ namespace vclcanvas
         }
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::implDrawBitmap( const vclcanvas::Canvas*                   pCanvas,
                                                                                 const Bitmap& rBitmap,
                                                                                 const vclcanvas::ViewState&                 viewState,
                                                                                 const vclcanvas::RenderState&               renderState,
@@ -629,7 +630,7 @@ namespace vclcanvas
                                       // change refcount (as this is
                                       // ~invisible to client code,
                                       // still logically const)
-                                      const_cast< vclcanvas::XCanvas* >(pCanvas));
+                                      const_cast< vclcanvas::Canvas* >(pCanvas));
             }
         }
 
@@ -637,7 +638,7 @@ namespace vclcanvas
         return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmap( const vclcanvas::Canvas*                   pCanvas,
                                                                             const Bitmap& rBitmap,
                                                                             const vclcanvas::ViewState&                 viewState,
                                                                             const vclcanvas::RenderState&               renderState )
@@ -649,7 +650,7 @@ namespace vclcanvas
                                false );
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmapModulated( const vclcanvas::Canvas*                      pCanvas,
                                                                                      const Bitmap&    rBitmap,
                                                                                      const vclcanvas::ViewState&                    viewState,
                                                                                      const vclcanvas::RenderState&                  renderState )

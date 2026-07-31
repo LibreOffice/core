@@ -33,7 +33,6 @@
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

@@ -39,7 +39,7 @@ namespace cppcanvas
             // redraw if changed.
         }
 
-        bool CachedPrimitiveBase::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+        bool CachedPrimitiveBase::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                           const vclcanvas::ViewState& rViewState,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const
         {

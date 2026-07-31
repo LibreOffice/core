@@ -16,8 +16,8 @@
 #include <utility>
 #include "textlineshelper.hxx"
 #include "mtftools.hxx"
-#include <XCanvas.hxx>
 #include <cachedbitmap.hxx>
+#include <canvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -79,7 +79,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);
 }
 
-void TextLinesHelper::render(const css::uno::Reference<vclcanvas::XCanvas>& xCanvas,
+void TextLinesHelper::render(const rtl::Reference<vclcanvas::Canvas>& xCanvas,
                              const vclcanvas::ViewState& aViewState,
                              const vclcanvas::RenderState& rRenderState, bool bNormalText) const
 {

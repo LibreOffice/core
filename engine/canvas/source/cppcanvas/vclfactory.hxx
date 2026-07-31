@@ -24,13 +24,8 @@
 
 namespace vcl { class Window; }
 class Bitmap;
-
 class GDIMetaFile;
 
-namespace vclcanvas
-{
-    class  XCanvas;
-}
 
 /* Definition of VCLFactory class */
 
@@ -52,7 +47,7 @@ namespace cppcanvas
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        static RendererSharedPtr createRenderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+        static RendererSharedPtr createRenderer( const rtl::Reference< vclcanvas::Canvas >& rCanvas,
                                                  const basegfx::B2DHomMatrix& rViewTransform,
                                                  const ::GDIMetaFile&            rMtf );
 

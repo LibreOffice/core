@@ -437,7 +437,6 @@ canvas/inc/impltools.hxx
 canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/propertysethelper.hxx
-canvas/inc/repainttarget.hxx
 canvas/inc/textlayout.hxx
 canvas/inc/unopolypolygon.hxx
 canvas/inc/vclwrapper.hxx

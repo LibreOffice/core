@@ -32,7 +32,7 @@
 #include "pointaction.hxx"
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
-#include <XCanvas.hxx>
+#include <canvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -52,10 +52,10 @@ namespace cppcanvas
                 PointAction(const PointAction&) = delete;
                 const PointAction& operator=(const PointAction&) = delete;
 
-                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -85,7 +85,7 @@ namespace cppcanvas
                     rAltColor );
             }
 
-            bool PointAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool PointAction::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                       const vclcanvas::ViewState& rViewState,
                                       const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
@@ -102,7 +102,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PointAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool PointAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                             const vclcanvas::ViewState& rViewState,
                                             const ::basegfx::B2DHomMatrix&    rTransformation,
                                             const Subset&                     rSubset ) const

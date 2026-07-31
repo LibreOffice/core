@@ -21,15 +21,18 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "RenderState.hxx"
+#include "ViewState.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
-#include "XCanvas.hxx"
 
 /* Definition of CachedBitmap class */
 
 namespace vclcanvas
 {
+    class Canvas;
+
     typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
     typedef comphelper::WeakComponentImplHelper<> CachedBitmap_Base;
@@ -45,7 +48,7 @@ namespace vclcanvas
                       const GraphicAttr&                              rAttr,
                       const ::vclcanvas::ViewState&                rUsedViewState,
                       ::vclcanvas::RenderState                     aUsedRenderState,
-                      const css::uno::Reference< vclcanvas::XCanvas >&   rTarget );
+                      const rtl::Reference< vclcanvas::Canvas >&   rTarget );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -54,7 +57,7 @@ namespace vclcanvas
 
     private:
         ::vclcanvas::ViewState                         maUsedViewState;
-        css::uno::Reference< vclcanvas::XCanvas >                      mxTarget;
+        rtl::Reference< vclcanvas::Canvas >                            mxTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
         const ::vclcanvas::RenderState                              maRenderState;
         const ::Point                                                  maPoint;

@@ -69,6 +69,7 @@
 #include <memory>
 #include <string_view>
 #include "mtftools.hxx"
+#include <Texture.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2424,7 +2425,7 @@ namespace cppcanvas
         // Public methods
 
 
-        Renderer::Renderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+        Renderer::Renderer( const rtl::Reference< vclcanvas::Canvas >& rCanvas,
                             const basegfx::B2DHomMatrix& rViewTransform,
                             const GDIMetaFile&      rMtf )
             : mpCanvas(rCanvas)

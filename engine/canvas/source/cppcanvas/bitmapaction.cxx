@@ -32,7 +32,7 @@
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <XCanvas.hxx>
+#include <canvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -52,7 +52,7 @@ namespace cppcanvas
                               const ::basegfx::B2DVector& rDstSize,
                               const OutDevState& );
 
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -61,7 +61,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -121,7 +121,7 @@ namespace cppcanvas
                                    nullptr );
             }
 
-            bool BitmapAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool BitmapAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                 const vclcanvas::ViewState& rViewState,
                                                 rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -139,7 +139,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool BitmapAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool BitmapAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                              const vclcanvas::ViewState& rViewState,
                                              const ::basegfx::B2DHomMatrix&   rTransformation,
                                              const Subset&                    rSubset ) const

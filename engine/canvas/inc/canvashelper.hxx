@@ -21,13 +21,21 @@
 
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
+#include <com/sun/star/rendering/FontRequest.hpp>
+#include <com/sun/star/rendering/StringContext.hpp>
 
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
+#include <canvas/vclcanvasdllapi.h>
 
 
 namespace vclcanvas
 {
+    class Canvas;
+    class CanvasFont;
+    class TextLayout;
 
     /** Helper class for basic canvas functionality. Also offers
         optional backbuffer painting, when providing it with a second
@@ -91,30 +99,30 @@ namespace vclcanvas
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
         void clear();
-        void drawLine( const vclcanvas::XCanvas*      rCanvas,
+        VCLCANVAS_DLLPUBLIC void drawLine( const vclcanvas::Canvas*      rCanvas,
                        const css::geometry::RealPoint2D&   aStartPoint,
                        const css::geometry::RealPoint2D&   aEndPoint,
                        const ::vclcanvas::ViewState&    viewState,
                        const ::vclcanvas::RenderState&  renderState );
-        void drawPolyPolygon( const vclcanvas::XCanvas*        rCanvas,
+        void drawPolyPolygon( const vclcanvas::Canvas*        rCanvas,
                              const css::uno::Reference<
                                  css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const ::vclcanvas::ViewState&      viewState,
                              const ::vclcanvas::RenderState&    renderState );
-        void strokePolyPolygon( const vclcanvas::XCanvas*          rCanvas,
+        VCLCANVAS_DLLPUBLIC void strokePolyPolygon( const vclcanvas::Canvas*          rCanvas,
                                const css::uno::Reference<
                                        css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                const ::vclcanvas::ViewState&        viewState,
                                const ::vclcanvas::RenderState&      renderState,
                                const css::rendering::StrokeAttributes& strokeAttributes );
         rtl::Reference< vclcanvas::CachedBitmap >
-            fillPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
+            fillPolyPolygon( const vclcanvas::Canvas*            rCanvas,
                              const css::uno::Reference<
                                      css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const ::vclcanvas::ViewState&          viewState,
                              const ::vclcanvas::RenderState&        renderState );
         rtl::Reference< vclcanvas::CachedBitmap >
-            fillTexturedPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
+            fillTexturedPolyPolygon( const vclcanvas::Canvas*            rCanvas,
                                      const css::uno::Reference<
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const ::vclcanvas::ViewState&          viewState,
@@ -123,30 +131,30 @@ namespace vclcanvas
                                              vclcanvas::Texture >&        textures );
 
         rtl::Reference< vclcanvas::CanvasFont >
-            createFont( const vclcanvas::XCanvas*         rCanvas,
+            createFont( const vclcanvas::Canvas*         rCanvas,
                         const css::rendering::FontRequest&     fontRequest,
                         FontEmphasisMark eMark,
                         const css::geometry::Matrix2D&         fontMatrix );
 
-        void drawText( const vclcanvas::XCanvas*       rCanvas,
+        void drawText( const vclcanvas::Canvas*       rCanvas,
                       const css::rendering::StringContext& text,
                       const rtl::Reference<vclcanvas::CanvasFont >& xFont,
                       const ::vclcanvas::ViewState&     viewState,
                       const ::vclcanvas::RenderState&   renderState,
                       sal_Int8                                          textDirection );
 
-        void drawTextLayout( const vclcanvas::XCanvas*         rCanvas,
+        void drawTextLayout( const vclcanvas::Canvas*         rCanvas,
                             const rtl::Reference< vclcanvas::TextLayout >& laidOutText,
                             const ::vclcanvas::ViewState&       viewState,
                             const ::vclcanvas::RenderState&     renderState );
 
         rtl::Reference< vclcanvas::CachedBitmap >
-            drawBitmap( const vclcanvas::XCanvas*     rCanvas,
+            drawBitmap( const vclcanvas::Canvas*     rCanvas,
                         const Bitmap& rBitmap,
                         const ::vclcanvas::ViewState&   viewState,
                         const ::vclcanvas::RenderState& renderState );
         rtl::Reference< vclcanvas::CachedBitmap >
-            drawBitmapModulated( const vclcanvas::XCanvas*        rCanvas,
+            drawBitmapModulated( const vclcanvas::Canvas*        rCanvas,
                                  const Bitmap& rBitmap,
                                  const ::vclcanvas::ViewState&      viewState,
                                  const ::vclcanvas::RenderState&    renderState );
@@ -198,7 +206,7 @@ namespace vclcanvas
 
     private:
         rtl::Reference< vclcanvas::CachedBitmap >
-            implDrawBitmap( const vclcanvas::XCanvas*     rCanvas,
+            implDrawBitmap( const vclcanvas::Canvas*     rCanvas,
                             const Bitmap&     rBitmap,
                             const ::vclcanvas::ViewState&   viewState,
                             const ::vclcanvas::RenderState& renderState,

@@ -47,6 +47,7 @@
 
 #include <canvashelper.hxx>
 #include <impltools.hxx>
+#include <Texture.hxx>
 
 
 using namespace ::com::sun::star;
@@ -575,7 +576,7 @@ namespace vclcanvas
         }
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
+    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::Canvas*                          pCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const vclcanvas::ViewState&                        viewState,
                                                                                          const vclcanvas::RenderState&                      renderState,

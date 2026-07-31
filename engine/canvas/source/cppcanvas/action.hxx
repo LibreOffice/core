@@ -20,14 +20,18 @@
 #pragma once
 
 #include <sal/types.h>
-#include <XCanvas.hxx>
+#include <rtl/ref.hxx>
 
 namespace basegfx
 {
     class B2DHomMatrix;
     class B2DRange;
 }
-
+namespace vclcanvas
+{
+    class Canvas;
+    struct ViewState;
+}
 
 /* Definition of Action interface */
 
@@ -85,7 +89,7 @@ namespace cppcanvas
                 @return true, if rendering was successful. If
                 rendering failed, false is returned.
              */
-            virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                  const vclcanvas::ViewState& rViewState,
                                  const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
@@ -103,7 +107,7 @@ namespace cppcanvas
                 specified subset is invalid for this action, or if
                 rendering failed for other reasons, false is returned.
              */
-            virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                        const vclcanvas::ViewState& rViewState,
                                        const ::basegfx::B2DHomMatrix& rTransformation,
                                        const Subset&                  rSubset ) const = 0;

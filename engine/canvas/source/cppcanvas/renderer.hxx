@@ -35,6 +35,7 @@
 #include "action.hxx"
 #include "color.hxx"
 #include "outdevstate.hxx"
+#include <ViewState.hxx>
 
 #include <osl/diagnose.h>
 
@@ -124,7 +125,7 @@ namespace cppcanvas
         class VCLCANVAS_DLLPUBLIC Renderer
         {
         public:
-            Renderer( const css::uno::Reference< vclcanvas::XCanvas >&    rCanvas,
+            Renderer( const rtl::Reference< vclcanvas::Canvas >&    rCanvas,
                       const basegfx::B2DHomMatrix& rViewTransform,
                       const GDIMetaFile&        rMtf );
 
@@ -205,7 +206,7 @@ namespace cppcanvas
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
-            css::uno::Reference< vclcanvas::XCanvas > mpCanvas;
+            rtl::Reference< vclcanvas::Canvas > mpCanvas;
             mutable vclcanvas::ViewState  maViewState;
             mutable ::vclcanvas::RenderState maRenderState;
             ActionVector maActions;
@@ -229,7 +230,7 @@ namespace cppcanvas
         struct ActionFactoryParameters
         {
             ActionFactoryParameters( VectorOfOutDevStates&       rStates,
-                                     const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                      ::VirtualDevice&            rVDev,
                                      sal_Int32&                  io_rCurrActionIndex ) :
                 mrStates(rStates),
@@ -239,7 +240,7 @@ namespace cppcanvas
             {}
 
             VectorOfOutDevStates&       mrStates;
-            const css::uno::Reference<vclcanvas::XCanvas>& mrUnoCanvas;
+            const rtl::Reference<vclcanvas::Canvas>& mrUnoCanvas;
             ::VirtualDevice&            mrVDev;
             sal_Int32&                  mrCurrActionIndex;
         };

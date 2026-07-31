@@ -50,8 +50,8 @@
 #if OSL_DEBUG_LEVEL > 2
 #include <vcl/canvastools.hxx>
 #endif
-#include <XCanvas.hxx>
 #include <cachedbitmap.hxx>
+#include <canvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -91,10 +91,10 @@ namespace cppcanvas
                 TransparencyGroupAction(const TransparencyGroupAction&) = delete;
                 const TransparencyGroupAction& operator=(const TransparencyGroupAction&) = delete;
 
-                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -162,7 +162,7 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool TransparencyGroupAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                         const vclcanvas::ViewState& rViewState,
                                                         const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
@@ -443,7 +443,7 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+            bool TransparencyGroupAction::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
                                                   const vclcanvas::ViewState& rViewState,
                                                   const ::basegfx::B2DHomMatrix& rTransformation ) const
             {

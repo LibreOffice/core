@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 
         aOutputMetaFile.Record(pDev.get());
 
-        uno::Reference<vclcanvas::XCanvas> xCanvas = new vclcanvas::Canvas(pDev.get());
+        rtl::Reference<vclcanvas::Canvas> xCanvas = new vclcanvas::Canvas(pDev.get());
         CPPUNIT_ASSERT(xCanvas.is());
 
         ::basegfx::B2DHomMatrix aMatrix;

@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas
 {
-    RendererSharedPtr VCLFactory::createRenderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+    RendererSharedPtr VCLFactory::createRenderer( const rtl::Reference< vclcanvas::Canvas >& rCanvas,
                                                   const basegfx::B2DHomMatrix& rViewTransform,
                                                   const ::GDIMetaFile&          rMtf )
     {
@@ -44,7 +44,7 @@ namespace cppcanvas
             GDIMetaFile& rMetaFile,
             const basegfx::B2DHomMatrix& rTransform2)
     {
-        css::uno::Reference<vclcanvas::XCanvas> rCanvas = new vclcanvas::Canvas(pOutDev);
+        rtl::Reference<vclcanvas::Canvas> rCanvas = new vclcanvas::Canvas(pOutDev);
         cppcanvas::RendererSharedPtr renderer
             = cppcanvas::VCLFactory::createRenderer(rCanvas, rTransform1, rMetaFile);
         renderer->setTransformation(rTransform2);

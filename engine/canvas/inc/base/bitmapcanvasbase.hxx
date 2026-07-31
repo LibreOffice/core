@@ -101,8 +101,7 @@ namespace canvas
             BaseType::disposeThis();
         }
 
-        // XCanvas
-        virtual void clear() override
+        void clear()
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -111,9 +110,9 @@ namespace canvas
             maCanvasHelper.clear();
         }
 
-        virtual void drawPoint(const css::geometry::RealPoint2D&     aPoint,
+        void drawPoint(const css::geometry::RealPoint2D&     aPoint,
                                         const ::vclcanvas::ViewState&      viewState,
-                                        const ::vclcanvas::RenderState&    renderState) override
+                                        const ::vclcanvas::RenderState&    renderState)
         {
             canvastools::verifyArgs(aPoint, viewState, renderState,
                               __func__,
@@ -124,159 +123,7 @@ namespace canvas
             mbSurfaceDirty = true;
         }
 
-        virtual void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
-                                       const css::geometry::RealPoint2D&  aEndPoint,
-                                       const ::vclcanvas::ViewState&   viewState,
-                                       const ::vclcanvas::RenderState& renderState) override
-        {
-            canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
-        }
-
-        virtual void
-            drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-                            const ::vclcanvas::ViewState&                             viewState,
-                            const ::vclcanvas::RenderState&                           renderState) override
-        {
-            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
-        }
-
-        virtual void
-            strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                              const ::vclcanvas::ViewState&                               viewState,
-                              const ::vclcanvas::RenderState&                             renderState,
-                              const css::rendering::StrokeAttributes&                        strokeAttributes) override
-        {
-            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
-        }
-
-        virtual rtl::Reference< vclcanvas::CachedBitmap >
-            fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
-                             const ::vclcanvas::ViewState&                                          viewState,
-                             const ::vclcanvas::RenderState&                                        renderState) override
-        {
-            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
-        }
-
-        virtual rtl::Reference< vclcanvas::CachedBitmap >
-            fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-                                    const ::vclcanvas::ViewState&                             viewState,
-                                    const ::vclcanvas::RenderState&                           renderState,
-                                    const std::vector< vclcanvas::Texture >&           textures) override
-        {
-            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
-        }
-
-        virtual rtl::Reference< vclcanvas::CanvasFont >
-            createFont( const css::rendering::FontRequest&                                     fontRequest,
-                        FontEmphasisMark                                                       eMark,
-                        const css::geometry::Matrix2D&                                         fontMatrix ) override
-        {
-            canvastools::verifyArgs(fontRequest,
-                              // dummy, to keep argPos in sync
-                              fontRequest,
-                              fontMatrix,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maCanvasHelper.createFont( this, fontRequest, eMark, fontMatrix );
-        }
-
-
-        virtual void
-            drawText(const css::rendering::StringContext&                                     text,
-                     const rtl::Reference< vclcanvas::CanvasFont >&                xFont,
-                     const ::vclcanvas::ViewState&                                         viewState,
-                     const ::vclcanvas::RenderState&                                       renderState,
-                     sal_Int8                                                                 textDirection) override
-        {
-            canvastools::verifyArgs(xFont, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-            canvastools::verifyRange( textDirection,
-                                css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
-                                css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            maCanvasHelper.drawText( this, text, xFont, viewState, renderState, textDirection );
-        }
-
-
-        virtual void
-            drawTextLayout(const rtl::Reference< vclcanvas::TextLayout >&               laidOutText,
-                            const ::vclcanvas::ViewState&                                       viewState,
-                            const ::vclcanvas::RenderState&                                     renderState) override
-        {
-            canvastools::verifyArgs(laidOutText, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            maCanvasHelper.drawTextLayout( this, laidOutText, viewState, renderState );
-        }
-
-
-        virtual rtl::Reference< vclcanvas::CachedBitmap >
-            drawBitmap( const Bitmap&                                                   rBitmap,
-                        const ::vclcanvas::ViewState&                                   viewState,
-                        const ::vclcanvas::RenderState&                                 renderState ) override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
-
-            return maCanvasHelper.drawBitmap( this, rBitmap, viewState, renderState );
-        }
-
-        virtual css::uno::Reference< vclcanvas::XGraphicDevice >
-            getDevice() override
+        css::uno::Reference< vclcanvas::XGraphicDevice > getDevice()
         {
             MutexType aGuard( BaseType::m_aMutex );
 

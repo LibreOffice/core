@@ -26,7 +26,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <cachedbitmap.hxx>
-#include <repainttarget.hxx>
+#include <canvas.hxx>
 
 
 using namespace ::com::sun::star;
@@ -39,7 +39,7 @@ namespace vclcanvas
                                 const GraphicAttr&                          rAttr,
                                 const vclcanvas::ViewState&                 rUsedViewState,
                                 vclcanvas::RenderState                      aUsedRenderState,
-                                const uno::Reference< vclcanvas::XCanvas >& rTarget ) :
+                                const rtl::Reference< vclcanvas::Canvas >& rTarget ) :
         CachedBitmap_Base(),
         maUsedViewState( rUsedViewState ),
         mxTarget( rTarget ),
@@ -76,12 +76,10 @@ namespace vclcanvas
             return rendering::RepaintResult::FAILED;
         }
 
-        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(mxTarget.get());
-
-        ENSURE_OR_THROW( pTarget,
+        ENSURE_OR_THROW( mxTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
-        if( !pTarget->repaint( mpGraphicObject,
+        if( !mxTarget->repaint( mpGraphicObject,
                                aState,
                                maRenderState,
                                maPoint,

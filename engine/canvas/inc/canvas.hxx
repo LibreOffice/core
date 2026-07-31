@@ -34,15 +34,13 @@
 #include "canvashelper.hxx"
 #include "impltools.hxx"
 #include "devicehelper.hxx"
-#include "repainttarget.hxx"
 #include "XGraphicDevice.hxx"
 
 class OutputDevice;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XCanvas,
-                                             vclcanvas::XGraphicDevice,
+    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet >    GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
@@ -64,8 +62,7 @@ namespace vclcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class Canvas : public CanvasBaseT,
-                   public RepaintTarget
+    class Canvas : public CanvasBaseT
     {
     public:
         VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
@@ -97,14 +94,162 @@ namespace vclcanvas
             ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
         }
 
-        // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
+        bool repaint( const GraphicObjectSharedPtr&                 rGrf,
                               const ::vclcanvas::ViewState&              viewState,
                               const ::vclcanvas::RenderState&            renderState,
                               const ::Point&                                rPt,
                               const ::Size&                                 rSz,
-                              const GraphicAttr&                            rAttr ) const override;
+                              const GraphicAttr&                            rAttr ) const;
 
+        void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
+                                       const css::geometry::RealPoint2D&  aEndPoint,
+                                       const ::vclcanvas::ViewState&   viewState,
+                                       const ::vclcanvas::RenderState& renderState)
+        {
+            canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
+        }
+
+        rtl::Reference< vclcanvas::CachedBitmap >
+            drawBitmap( const Bitmap&                                                   rBitmap,
+                        const ::vclcanvas::ViewState&                                   viewState,
+                        const ::vclcanvas::RenderState&                                 renderState )
+        {
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawBitmap( this, rBitmap, viewState, renderState );
+        }
+
+        void
+            strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+                              const ::vclcanvas::ViewState&                               viewState,
+                              const ::vclcanvas::RenderState&                             renderState,
+                              const css::rendering::StrokeAttributes&                        strokeAttributes)
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
+        }
+
+        rtl::Reference< vclcanvas::CachedBitmap >
+            fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
+                             const ::vclcanvas::ViewState&                                          viewState,
+                             const ::vclcanvas::RenderState&                                        renderState)
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
+        }
+
+        rtl::Reference< vclcanvas::CachedBitmap >
+            fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                                    const ::vclcanvas::ViewState&                             viewState,
+                                    const ::vclcanvas::RenderState&                           renderState,
+                                    const std::vector< vclcanvas::Texture >&           textures)
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
+        }
+
+        rtl::Reference< vclcanvas::CanvasFont >
+            createFont( const css::rendering::FontRequest&                                     fontRequest,
+                        FontEmphasisMark                                                       eMark,
+                        const css::geometry::Matrix2D&                                         fontMatrix )
+        {
+            canvastools::verifyArgs(fontRequest,
+                              // dummy, to keep argPos in sync
+                              fontRequest,
+                              fontMatrix,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            return maCanvasHelper.createFont( this, fontRequest, eMark, fontMatrix );
+        }
+
+
+        void
+            drawText(const css::rendering::StringContext&                                     text,
+                     const rtl::Reference< vclcanvas::CanvasFont >&                xFont,
+                     const ::vclcanvas::ViewState&                                         viewState,
+                     const ::vclcanvas::RenderState&                                       renderState,
+                     sal_Int8                                                                 textDirection)
+        {
+            canvastools::verifyArgs(xFont, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+            canvastools::verifyRange( textDirection,
+                                css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+                                css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawText( this, text, xFont, viewState, renderState, textDirection );
+        }
+
+
+        void
+            drawTextLayout(const rtl::Reference< vclcanvas::TextLayout >&               laidOutText,
+                            const ::vclcanvas::ViewState&                                       viewState,
+                            const ::vclcanvas::RenderState&                                     renderState)
+        {
+            canvastools::verifyArgs(laidOutText, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawTextLayout( this, laidOutText, viewState, renderState );
+        }
+
+        void
+            drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                            const ::vclcanvas::ViewState&                             viewState,
+                            const ::vclcanvas::RenderState&                           renderState)
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
+        }
     };
 }
 
