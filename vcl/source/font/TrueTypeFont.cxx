@@ -24,27 +24,10 @@
  *
  */
 
-#include <assert.h>
-
-#include <stdlib.h>
-#include <string.h>
 #include <hb-ot.h>
 #include <font/TrueTypeFont.hxx>
-#include <font/TTFStructure.hxx>
-#ifdef SYSTEM_LIBFIXMATH
-#include <libfixmath/fix16.hpp>
-#else
-#include <tools/fix16.hxx>
-#endif
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/crc.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <tools/stream.hxx>
-#include <o3tl/safeint.hxx>
-#include <osl/endian.h>
-#include <unotools/tempfile.hxx>
-#include <fontsubset.hxx>
 
 namespace vcl
 {
