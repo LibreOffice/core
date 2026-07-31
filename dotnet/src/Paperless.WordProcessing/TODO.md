@@ -369,7 +369,9 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [x] Tables spanning page breaks, with header-row repetition. A row moves whole rather than being cut,
       which is Writer's behaviour and not Word's, and the heading rows are placed again at the top of each
       continuation. Because the cells are laid out once relative to the table's own top-left, both are a
-      shift rather than a re-layout — a long table is not shaped once per page it touches.
+      shift rather than a re-layout — a long table is not shaped once per page it touches. Verified in all
+      four formats against a sixty-row table that crosses a page break: same page count, same words on each
+      page, heading row repeated, every line start within a tenth of a point.
 - [x] DOCX's grid, which expresses the same two facts differently from ODF's and so is a separate set of
       mistakes to avoid. A horizontal merge is `w:gridSpan` with **no placeholder** for the columns it
       swallows, so the next cell starts at column plus span — the opposite of ODF's covered cells. A

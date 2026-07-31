@@ -68,25 +68,59 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-grid.docx")]
     [InlineData("table-grid.rtf")]
     [InlineData("table-grid.doc")]
+    [InlineData("table-pages.fodt")]
+    [InlineData("table-pages.odt")]
+    [InlineData("table-pages.docx")]
+    [InlineData("table-pages.doc")]
+    [InlineData("table-pages.rtf")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
 
         string path = Corpus.Require(fileName);
-        List<DrawnWord> drawn = InDrawnOrder(Drawn(path));
-        List<PdfWord> rendered = InReadingOrder(
-            PdfWords.Read(_libreOffice.ConvertToPdf(path, _workDirectory)));
+        List<List<DrawnWord>> drawnPages = Drawn(path);
+        List<PdfWord> everything = PdfWords.Read(_libreOffice.ConvertToPdf(path, _workDirectory));
 
         Assert.SkipWhen(
-            rendered.Count == 0,
+            everything.Count == 0,
             "pdftotext is not available; install poppler-utils — see check-env.sh");
+
+        int pages = everything.Select(word => word.PageIndex).Distinct().Count();
+        drawnPages.Count.ShouldBe(pages, $"{fileName}: page count");
+
+        int compared = 0;
+        for (int page = 0; page < pages; page++)
+        {
+            compared += ComparePage(
+                fileName,
+                page,
+                InDrawnOrder(drawnPages[page]),
+                InReadingOrder([.. everything.Where(word => word.PageIndex == page)]));
+        }
+
+        compared.ShouldBeGreaterThan(10, $"{fileName}: too few cells compared to prove anything");
+    }
+
+    /// <summary>
+    /// Compares one page's words, returning how many line starts were checked.
+    /// </summary>
+    /// <remarks>
+    /// Page by page because a table that crosses a break is the case worth testing hardest: its
+    /// continuation starts at whichever row did not fit, and its heading rows are placed again above that.
+    /// Comparing the document's words as one stream would let a row placed on the wrong page pass, since
+    /// the order would still be right.
+    /// </remarks>
+    private static int ComparePage(
+        string fileName, int page, List<DrawnWord> drawn, List<PdfWord> rendered)
+    {
+        string where = $"{fileName}: page {page + 1}";
 
         // Text first: a table whose cells were laid out in the wrong order, or whose covered cell was
         // taken for a real one, fails here rather than on a position that would take longer to read.
         string.Join(' ', drawn.Select(word => word.Text))
             .ShouldBe(
                 string.Join(' ', rendered.Select(word => word.Text)),
-                $"{fileName}: the drawn text differs from the rendered text");
+                $"{where}: the drawn text differs from the rendered text");
 
         int lines = 0;
         for (int i = 0; i < rendered.Count; i++)
@@ -97,18 +131,16 @@ public sealed class TableComparisonTests : IDisposable
             // column grid and the cell padding decide.
             if (i > 0 && !StartsALine(rendered, i)) continue;
 
-            string where = $"{fileName}: word {i + 1} (\"{rendered[i].Text}\")";
+            string word = $"{where}, word {i + 1} (\"{rendered[i].Text}\")";
 
             Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
                 .ShouldBeLessThanOrEqualTo(
                     TolerancePoints,
-                    $"{where}: starts at {drawn[i].Left:F3} pt drawn, "
+                    $"{word}: starts at {drawn[i].Left:F3} pt drawn, "
                     + $"{rendered[i].Left - PdfPenOffsetPoints:F3} pt rendered");
 
             lines++;
         }
-
-        lines.ShouldBeGreaterThan(10, $"{fileName}: too few cells compared to prove anything");
 
         // Vertically as differences from the first word, which cancels the ascent that separates a box top
         // from a baseline. This is what the row heights are checked by: every word below the first row is
@@ -120,9 +152,11 @@ public sealed class TableComparisonTests : IDisposable
 
             Math.Abs(drawnGap - renderedGap).ShouldBeLessThanOrEqualTo(
                 TolerancePoints,
-                $"{fileName}: word {i + 1} (\"{rendered[i].Text}\") sits {drawnGap:F3} pt below the "
+                $"{where}, word {i + 1} (\"{rendered[i].Text}\") sits {drawnGap:F3} pt below the "
                 + $"first word drawn, {renderedGap:F3} pt rendered");
         }
+
+        return lines;
     }
 
     // ------------------------------------------------------------------------- the machinery
@@ -171,7 +205,7 @@ public sealed class TableComparisonTests : IDisposable
             .OrderBy(word => Math.Round(word.Baseline, 1))
             .ThenBy(word => word.Left)];
 
-    private static List<DrawnWord> Drawn(string path)
+    private static List<List<DrawnWord>> Drawn(string path)
     {
         RecordingDrawingSink sink = new();
 
@@ -184,6 +218,6 @@ public sealed class TableComparisonTests : IDisposable
             for (int i = 0; i < pages.Count; i++) pages[i].Draw(sink);
         }
 
-        return [.. sink.Pages.SelectMany(DrawnWords.On)];
+        return [.. sink.Pages.Select(page => DrawnWords.On(page))];
     }
 }

@@ -111,3 +111,28 @@ Two traps, both found the hard way:
   one-block path, which distributes the slack over the *letters* as well as the blanks, so
   the words themselves come out wider. Use a manual `<text:line-break/>` when a justified
   line's words need to be fixed.
+
+### Table layout documents
+
+`table-grid.*` and `table-pages.*` exist to separate the several measurements a table needs, so a failure
+names the one that is wrong rather than "the table is out".
+
+`table-grid` has three columns of three *different* widths, which catches a reader that divided the
+table's width equally — and that is not a hypothetical: LibreOffice itself does exactly that when it
+cannot resolve a column style. One cell has a much larger left padding than the others, so padding cannot
+be confused with the column edge. One holds enough text to wrap twice, which proves the width the text
+breaks in and makes its row taller than its neighbours. The last row spans two columns, the one case where
+a cell's width is not a column's.
+
+`table-pages` is sixty rows and a `table:table-header-rows`, long enough to cross a page break. It is what
+proves the heading row is placed again on the continuation and that the split falls between rows rather
+than through one.
+
+Two things about writing these by hand, both learned the hard way:
+
+- A table's **column and cell styles must be automatic styles**. Declared in `office:styles`, LibreOffice
+  ignores them and divides the table's width equally between its columns — which renders without complaint
+  and is not the document you wrote.
+- LibreOffice's own RTF export writes a cell's left padding as `\clpadt`, not `\clpadl`. That is not a bug
+  in the export: top and left are swapped in RTF, deliberately, because that is what Word does. An
+  exported corpus file will therefore look wrong to anyone reading the specification.
