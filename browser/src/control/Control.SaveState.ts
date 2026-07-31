@@ -19,6 +19,9 @@ class SaveState {
 	map: any;
 	saveEle: HTMLElement;
 	saveIconEl: HTMLElement;
+	// True from the moment a save of modified content starts until the "Saved"
+	// state has been shown for it.
+	saveRunning: boolean = false;
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	constructor(map: any) {
@@ -46,6 +49,7 @@ class SaveState {
 
 		// Only do saving animation if any content is modified in document
 		if (this.saveEle && this.saveEle.classList.contains('savemodified')) {
+			this.saveRunning = true;
 			this.saveEle.classList.remove('savemodified');
 			// Dynamically set the content string for saving state
 			const savingText = _('Saving');
@@ -62,7 +66,12 @@ class SaveState {
 
 		if (!this.saveEle) this.initialize();
 
-		if (this.saveEle && !this.saveEle.classList.contains('savemodified')) {
+		if (
+			this.saveEle &&
+			this.saveRunning &&
+			!this.saveEle.classList.contains('savemodified')
+		) {
+			this.saveRunning = false;
 			this.saveEle.classList.remove('saving');
 			this.saveIconEl?.classList.remove('rotate-icon'); // Stop the icon rotation
 			// Dynamically set the content string for saved state
@@ -80,6 +89,7 @@ class SaveState {
 	showModifiedStatus(): void {
 		if (!this.saveEle) this.initialize();
 		if (this.saveEle) {
+			this.saveRunning = false;
 			this.saveEle.classList.remove('saving');
 			this.saveEle.classList.remove('saved');
 			this.saveIconEl?.classList.remove('rotate-icon'); // Stop the icon rotation

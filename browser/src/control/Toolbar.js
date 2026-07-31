@@ -250,6 +250,9 @@ window.L.Map.include({
 	save: function(dontTerminateEdit, dontSaveIfUnmodified, extendedData) {
 		this.fire('updatemodificationindicator', { status: 'SAVING' });
 
+		if (this.saveState)
+			this.saveState.showSavingStatus();
+
 		// Let the native host know a save round-trip has started so
 		// it can defer a close-clicked-mid-save until the round-trip
 		// finishes (rather than prompting about "unsaved changes"

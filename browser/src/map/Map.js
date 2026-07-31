@@ -295,6 +295,13 @@ window.L.Map = window.L.Evented.extend({
 			}
 		}, this);
 
+		// The engine reports save progress from the ODF filters only, so the
+		// result of the save is the one completion signal every format has.
+		this.on('commandresult', function(e) {
+			if (e.commandName === '.uno:Save' && e.success && this.saveState)
+				this.saveState.showSavedStatus();
+		}, this);
+
 		this.on('commandvalues', function(e) {
 			if (e.commandName === '.uno:LanguageStatus' && app.util.isArray(e.commandValues)) {
 				app.languages = [];
