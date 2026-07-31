@@ -159,6 +159,7 @@ public sealed class EscherDrawingReader
         Flags = shape.Flags | EscherShapeAttributes.Group,
         Properties = shape.Properties,
         MasterProperties = shape.MasterProperties,
+        TertiaryProperties = shape.TertiaryProperties,
         ChildAnchor = shape.ChildAnchor,
         GroupBounds = shape.GroupBounds,
         ClientAnchor = shape.ClientAnchor,
@@ -167,14 +168,25 @@ public sealed class EscherDrawingReader
         Children = children,
     };
 
-    /// <summary>Reads one <c>SpContainer</c>.</summary>
-    private EscherShape ReadShape(DffRecordHeader container)
+    /// <summary>
+    /// Reads one <c>SpContainer</c>, without the drawing that would normally enclose it.
+    /// </summary>
+    /// <remarks>
+    /// Public because a shape does not always live in a <c>DgContainer</c>. Word stores an
+    /// <em>inline</em> shape — a picture or a small drawing set in the text like a character — on its
+    /// own in the picture stream, directly after the <c>PICF</c> header that locates it, with no
+    /// drawing or group around it at all. The children of a group are still read, so a lone group
+    /// container's members arrive too.
+    /// </remarks>
+    /// <param name="container">The <c>SpContainer</c> record's header.</param>
+    public EscherShape ReadShape(DffRecordHeader container)
     {
         uint shapeId = 0;
         ushort shapeType = 0;
         EscherShapeAttributes flags = EscherShapeAttributes.None;
         EscherPropertyTable properties = EscherPropertyTable.Empty;
         EscherPropertyTable master = EscherPropertyTable.Empty;
+        EscherPropertyTable tertiary = EscherPropertyTable.Empty;
         EscherRectangle? childAnchor = null;
         EscherRectangle? groupBounds = null;
         DffRecordHeader? clientAnchor = null;
@@ -198,8 +210,11 @@ public sealed class EscherDrawingReader
                     break;
 
                 case EscherRecordTypes.SecondaryShapeProperties:
-                case EscherRecordTypes.TertiaryShapeProperties:
                     if (master.Count == 0) master = EscherPropertyTable.Read(content, record.Instance);
+                    break;
+
+                case EscherRecordTypes.TertiaryShapeProperties:
+                    if (tertiary.Count == 0) tertiary = EscherPropertyTable.Read(content, record.Instance);
                     break;
 
                 case EscherRecordTypes.ShapeGroup:
@@ -234,6 +249,7 @@ public sealed class EscherDrawingReader
             Flags = flags,
             Properties = properties,
             MasterProperties = master,
+            TertiaryProperties = tertiary,
             ChildAnchor = childAnchor,
             GroupBounds = groupBounds,
             ClientAnchor = clientAnchor,

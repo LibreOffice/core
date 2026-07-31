@@ -55,9 +55,22 @@ public sealed class EscherShape
     public EscherPropertyTable Properties { get; init; } = EscherPropertyTable.Empty;
 
     /// <summary>
-    /// The properties a shape's master supplies, from the secondary and tertiary tables.
+    /// The properties a shape's master supplies, from the secondary table (<c>msofbtSecondaryOPT</c>).
     /// </summary>
     public EscherPropertyTable MasterProperties { get; init; } = EscherPropertyTable.Empty;
+
+    /// <summary>
+    /// The tertiary property table, <c>msofbtUDefProp</c>.
+    /// </summary>
+    /// <remarks>
+    /// Kept apart from <see cref="MasterProperties"/> rather than merged with it, because despite
+    /// sharing the property table's layout the two are not the same kind of thing: the secondary
+    /// table holds a master's values for the shape's own properties, while this one is where a host
+    /// writes properties of its own invention. Word puts a floating shape's position origins here
+    /// and nowhere else (<c>msdffimp.cxx:5199</c>), so a reader that merged the two would take
+    /// whichever table happened to come first in the file.
+    /// </remarks>
+    public EscherPropertyTable TertiaryProperties { get; init; } = EscherPropertyTable.Empty;
 
     /// <summary>The shape's bounds inside its parent group, when it is a group member.</summary>
     public EscherRectangle? ChildAnchor { get; init; }

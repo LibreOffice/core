@@ -497,6 +497,25 @@ public sealed record Ww8LayoutNote(
     Layout.NotePlacement Placement = Layout.NotePlacement.PageBottom,
     Layout.NoteRestart Restart = Layout.NoteRestart.Never);
 
+/// <summary>
+/// A floating shape as layout sees it: the two records that describe it, and its own text.
+/// </summary>
+/// <remarks>
+/// Carried unconverted rather than as a <see cref="Layout.PageFrame"/>, for the same reason a note is:
+/// the shape's own text is blocks whose faces this reader cannot resolve, having no fonts. The caller
+/// converts the blocks and then hands both records to <see cref="Ww8Frames.Build"/>, so that the
+/// mapping from Word's numbering to the engine's lives in one place.
+/// </remarks>
+/// <param name="Anchor">The <c>FSPA</c> that anchors the shape at a character position.</param>
+/// <param name="Shape">The Escher shape it names, or null when the drawing does not hold it.</param>
+/// <param name="Offset">Where the anchor sits in its paragraph's text.</param>
+/// <param name="Blocks">The shape's own text, empty for a picture or an empty box.</param>
+public sealed record Ww8LayoutFrame(
+    Ww8ShapeAnchor Anchor,
+    MsBinary.Escher.EscherShape? Shape,
+    int Offset,
+    IReadOnlyList<Ww8LayoutBlock> Blocks);
+
 /// <summary>A DOC table as layout sees it: the column grid in twips, and cells holding paragraphs.</summary>
 /// <param name="ColumnWidths">The grid's column widths, left to right.</param>
 /// <param name="Rows">The rows, top to bottom.</param>

@@ -101,6 +101,43 @@ public sealed class EscherPropertyTable
         => _entries.TryGetValue(id, out Entry entry) ? entry.Value != 0 : fallback;
 
     /// <summary>
+    /// A boolean property, which the format does not store under its own identifier.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Each group of boolean properties is written as <em>one</em> thirty-two-bit entry under the
+    /// group's highest identifier — <c>id | 31</c> — with each boolean occupying the bit
+    /// <c>1 &lt;&lt; (base - id)</c> of its low half and a "was this stated" bit sixteen places
+    /// higher. So <c>fLine</c> (508) is bit 3 of property 511, and asking for property 508 directly
+    /// finds nothing at all whatever the shape said. <c>DffPropSet::GetPropertyBool</c>,
+    /// <c>filter/source/msfilter/dffpropset.cxx:1308</c>.
+    /// </para>
+    /// <para>
+    /// The trap is that a table stating the group at all looks, to <see cref="Has"/>, like a table
+    /// stating every boolean in it: property 511 is present as soon as one of its thirty-two
+    /// members is. <see cref="StatesBoolean"/> is what tells them apart, and it matters because
+    /// "stated false" and "said nothing" take different defaults in every host.
+    /// </para>
+    /// </remarks>
+    /// <param name="id">The boolean property's own identifier, not its group's.</param>
+    /// <param name="fallback">What to answer when the shape does not state it.</param>
+    public bool Boolean(ushort id, bool fallback = false)
+    {
+        ushort group = (ushort)(id | 31);
+        if (!_entries.TryGetValue(group, out Entry entry)) return fallback;
+        return (entry.Value & (1u << (group - id))) != 0;
+    }
+
+    /// <summary>Whether the shape states this boolean property, as opposed to leaving it default.</summary>
+    /// <inheritdoc cref="Boolean"/>
+    public bool StatesBoolean(ushort id)
+    {
+        ushort group = (ushort)(id | 31);
+        return _entries.TryGetValue(group, out Entry entry)
+            && (entry.Value & (1u << (group - id + 16))) != 0;
+    }
+
+    /// <summary>
     /// Whether the property's value is an index into the blip store rather than a plain number.
     /// </summary>
     /// <remarks>

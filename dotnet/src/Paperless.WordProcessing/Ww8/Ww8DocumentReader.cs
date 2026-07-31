@@ -44,6 +44,7 @@ public sealed partial class Ww8DocumentReader
 
     private readonly byte[] _wordDocument;
     private readonly byte[] _table;
+    private readonly byte[] _pictures;
     private readonly Ww8Fib _fib;
     private readonly List<Diagnostic> _diagnostics;
     private readonly Encoding _codePage;
@@ -70,8 +71,17 @@ public sealed partial class Ww8DocumentReader
     /// <param name="table">The <c>0Table</c> or <c>1Table</c> stream, whichever the FIB names.</param>
     /// <param name="fib">The parsed FIB.</param>
     /// <param name="diagnostics">Receives problems found while reading.</param>
+    /// <param name="data">
+    /// The optional <c>Data</c> stream. When a document has one, every picture's <c>PICF</c> is in
+    /// it at the offset <c>sprmCPicLocation</c> states; when it has none the same offsets are into
+    /// <c>WordDocument</c>, which is why this falls back to that stream rather than to nothing.
+    /// </param>
     public Ww8DocumentReader(
-        byte[] wordDocument, byte[] table, Ww8Fib fib, List<Diagnostic> diagnostics)
+        byte[] wordDocument,
+        byte[] table,
+        Ww8Fib fib,
+        List<Diagnostic> diagnostics,
+        byte[]? data = null)
     {
         ArgumentNullException.ThrowIfNull(wordDocument);
         ArgumentNullException.ThrowIfNull(table);
@@ -82,6 +92,7 @@ public sealed partial class Ww8DocumentReader
         _table = table;
         _fib = fib;
         _diagnostics = diagnostics;
+        _pictures = data is { Length: > 0 } ? data : wordDocument;
 
         // WW8 records no code page: the encoding of its 8-bit text is inferred from the document's
         // language id (research/05-infrastructure.md section F.2).
@@ -189,6 +200,27 @@ public sealed partial class Ww8DocumentReader
 
         return document;
     }
+
+    /// <summary>
+    /// The document's shapes and the character positions they are anchored at.
+    /// </summary>
+    /// <remarks>
+    /// Read on demand and cached, because a document with no drawings — which is most of them — must
+    /// not pay for a record walk, and because both the content pass and the layout pass ask for it.
+    /// A header shape's anchor position is rebased onto the document's own position space here, at
+    /// the one place that knows where the header subdocument starts.
+    /// </remarks>
+    public Ww8Drawings Drawings =>
+        _drawings ??= _fib.Has(Ww8FibTable.DrawingInformation)
+            ? Ww8Drawings.Read(
+                Slice(Ww8FibTable.DrawingAnchors),
+                Slice(Ww8FibTable.HeaderDrawingAnchors),
+                Slice(Ww8FibTable.DrawingInformation).ToArray(),
+                Ranges.Headers.Start,
+                _diagnostics)
+            : Ww8Drawings.Empty;
+
+    private Ww8Drawings? _drawings;
 
     /// <summary>
     /// The character-position extents of each subdocument.
