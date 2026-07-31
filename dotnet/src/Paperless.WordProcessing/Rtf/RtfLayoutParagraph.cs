@@ -91,3 +91,71 @@ public readonly record struct RtfLayoutParagraph(
     string? Language,
     Colour? Colour = null,
     IReadOnlyList<RtfLayoutRun>? Runs = null);
+
+/// <summary>
+/// One block of an RTF flow as layout sees it: a paragraph or a table, never both.
+/// </summary>
+/// <remarks>
+/// A wrapper struct rather than a class hierarchy because <see cref="RtfLayoutParagraph"/> is a struct, and
+/// making it a class to gain a base type would allocate one per paragraph of every document read — for a
+/// distinction only the body's block list needs. Exactly one of the two is non-null; the constructors are
+/// the only way to build one, so that stays true.
+/// </remarks>
+public readonly record struct RtfLayoutBlock
+{
+    /// <summary>Wraps a paragraph.</summary>
+    public RtfLayoutBlock(RtfLayoutParagraph paragraph) => Paragraph = paragraph;
+
+    /// <summary>Wraps a table.</summary>
+    public RtfLayoutBlock(RtfLayoutTable table) => Table = table;
+
+    /// <summary>The paragraph, when this block is one.</summary>
+    public RtfLayoutParagraph? Paragraph { get; }
+
+    /// <summary>The table, when this block is one.</summary>
+    public RtfLayoutTable? Table { get; }
+}
+
+/// <summary>
+/// A table as layout sees it: the column grid in twips, and cells holding paragraphs.
+/// </summary>
+/// <remarks>
+/// The grid comes from the <c>\cellx</c> edges the extraction pass already resolved, which is where RTF
+/// keeps it: an edge is a cell's <em>right</em> boundary in twips from the row's left, so the widths are
+/// the differences between consecutive edges and the merges fall out of the same arithmetic. Recording the
+/// widths rather than the edges is what the layout engine wants, and converting once here keeps the two
+/// conventions from meeting anywhere else.
+/// </remarks>
+/// <param name="ColumnWidths">The grid's column widths, left to right.</param>
+/// <param name="Rows">The rows, top to bottom.</param>
+/// <param name="HeaderRowCount">How many rows at the top repeat across a page break.</param>
+/// <param name="LeftIndent">How far the table's left edge sits from the body area's.</param>
+public sealed record RtfLayoutTable(
+    IReadOnlyList<Core.Units.Length> ColumnWidths,
+    IReadOnlyList<RtfLayoutRow> Rows,
+    int HeaderRowCount,
+    Core.Units.Length LeftIndent);
+
+/// <summary>One row of an RTF table.</summary>
+/// <param name="Cells">Its cells, left to right; a cell covered by a merge above is absent.</param>
+/// <param name="MinHeight">Its declared height, as a floor.</param>
+/// <param name="IsHeader">True when <c>\trhdr</c> marked it a heading row.</param>
+public sealed record RtfLayoutRow(
+    IReadOnlyList<RtfLayoutCell> Cells,
+    Core.Units.Length MinHeight,
+    bool IsHeader);
+
+/// <summary>One cell of an RTF table.</summary>
+/// <param name="Column">The grid column it starts at.</param>
+/// <param name="ColumnSpan">How many grid columns it covers.</param>
+/// <param name="RowSpan">How many rows it covers downwards.</param>
+/// <param name="Padding">The gap between its edges and its text.</param>
+/// <param name="VerticalAlignment">Where its text sits when the row is taller than its content.</param>
+/// <param name="Paragraphs">The paragraphs inside it, in order.</param>
+public sealed record RtfLayoutCell(
+    int Column,
+    int ColumnSpan,
+    int RowSpan,
+    Layout.CellPadding Padding,
+    Layout.CellVerticalAlignment VerticalAlignment,
+    IReadOnlyList<RtfLayoutParagraph> Paragraphs);

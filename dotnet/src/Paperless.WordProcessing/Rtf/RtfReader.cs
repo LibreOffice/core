@@ -44,7 +44,7 @@ public static class RtfReader
         ContentDocument content = reader.Read();
 
         return new RtfDocument(
-            format, content, diagnostics, reader.Sections, reader.LayoutParagraphs,
+            format, content, diagnostics, reader.Sections, reader.LayoutBlocks,
             reader.HeaderLayout, reader.FooterLayout);
     }
 
@@ -91,7 +91,7 @@ public static class RtfReader
 /// <summary>An RTF document that has been read.</summary>
 public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 {
-    private readonly IReadOnlyList<RtfLayoutParagraph> _layoutParagraphs;
+    private readonly IReadOnlyList<RtfLayoutBlock> _layoutBlocks;
     private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout;
     private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout;
 
@@ -100,7 +100,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
         IReadOnlyList<Model.WritingSection> sections,
-        IReadOnlyList<RtfLayoutParagraph> layoutParagraphs,
+        IReadOnlyList<RtfLayoutBlock> layoutBlocks,
         IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> headerLayout,
         IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> footerLayout)
     {
@@ -108,7 +108,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
-        _layoutParagraphs = layoutParagraphs;
+        _layoutBlocks = layoutBlocks;
         _headerLayout = headerLayout;
         _footerLayout = footerLayout;
     }
@@ -148,7 +148,18 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     public IPageSequence Layout(LayoutOptions? options = null)
     {
         LayoutFonts fonts = new();
-        List<PageParagraph> paragraphs = Convert(fonts, _layoutParagraphs);
+        List<PageBlock> blocks = [];
+
+        foreach (RtfLayoutBlock block in _layoutBlocks)
+        {
+            if (block.Paragraph is { } paragraph)
+            {
+                blocks.AddRange(Convert(fonts, [paragraph]));
+                continue;
+            }
+
+            if (block.Table is { } table && Grid(fonts, table) is { } grid) blocks.Add(grid);
+        }
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
@@ -158,8 +169,54 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                paragraphs, Sections[0], furniture: Furniture(fonts)),
-            paragraphs);
+                blocks, Sections[0], furniture: Furniture(fonts)),
+            blocks);
+    }
+
+    /// <summary>
+    /// Turns a recorded table into the layout engine's own, or null when it has no usable grid.
+    /// </summary>
+    /// <remarks>
+    /// A shallow conversion: the grid and the spans were resolved during the read, from the same
+    /// <c>\cellx</c> edges the extraction tree used, so all that happens here is that each cell's
+    /// paragraphs get their faces resolved — the one thing the reader cannot do, since it has no fonts.
+    /// </remarks>
+    private static PageTable? Grid(LayoutFonts fonts, RtfLayoutTable table)
+    {
+        if (table.ColumnWidths.Count == 0 || table.Rows.Count == 0) return null;
+
+        List<PageTableRow> rows = new(table.Rows.Count);
+        foreach (RtfLayoutRow row in table.Rows)
+        {
+            List<PageTableCell> cells = new(row.Cells.Count);
+            foreach (RtfLayoutCell cell in row.Cells)
+            {
+                cells.Add(new PageTableCell
+                {
+                    Paragraphs = Convert(fonts, cell.Paragraphs),
+                    Column = cell.Column,
+                    ColumnSpan = cell.ColumnSpan,
+                    RowSpan = cell.RowSpan,
+                    Padding = cell.Padding,
+                    VerticalAlignment = cell.VerticalAlignment,
+                });
+            }
+
+            rows.Add(new PageTableRow
+            {
+                Cells = cells,
+                MinHeight = row.MinHeight,
+                IsHeader = row.IsHeader,
+            });
+        }
+
+        return new PageTable
+        {
+            ColumnWidths = table.ColumnWidths,
+            Rows = rows,
+            HeaderRowCount = table.HeaderRowCount,
+            LeftIndent = table.LeftIndent,
+        };
     }
 
     /// <summary>

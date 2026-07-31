@@ -350,7 +350,39 @@ public sealed partial class RtfDocumentReader
 
         public List<CellDraft> RowCells { get; } = [];
         public List<ContentNode> CellContent { get; } = [];
+
+        /// <summary>The current cell's layout paragraphs, until the cell mark collects them.</summary>
+        public List<RtfLayoutParagraph> CellLayout { get; } = [];
+
         public List<RowDraft> TableRows { get; } = [];
+
+        /// <summary>The half-gap between cells from <c>\trgaph</c>, in twips, or null for none.</summary>
+        /// <remarks>
+        /// RTF's oldest way of stating cell padding, and the one LibreOffice writes: a single value that
+        /// applies to the left and right of every cell in the row. The per-cell <c>\clpad*</c> words
+        /// override it where present.
+        /// </remarks>
+        public int? RowHalfGap { get; set; }
+
+        /// <summary>The row's declared height from <c>\trrh</c>, in twips.</summary>
+        public int RowHeight { get; set; }
+
+        /// <summary>
+        /// The padding <c>\clpad*</c> stated for the cell being declared, in left, right, top, bottom
+        /// order — which is not the order the control words name.
+        /// </summary>
+        public int?[] PendingCellPadding { get; } = new int?[4];
+
+        /// <summary>The row-wide default cell padding from <c>\trpadd*</c>, same order.</summary>
+        /// <remarks>
+        /// A default for every cell of the row rather than a property of the row itself, which is how
+        /// LibreOffice's importer treats it — it writes the value to the table's cell margins and to the
+        /// current cell at once (<c>rtfdispatchvalue.cxx</c>, <c>RTFKeyword::TRPADDL</c>).
+        /// </remarks>
+        public int?[] RowPadding { get; } = new int?[4];
+
+        /// <summary>The vertical alignment <c>\clvertal*</c> stated for the cell being declared.</summary>
+        public Layout.CellVerticalAlignment PendingCellAlignment { get; set; }
 
         public bool PendingCellMergesFirst { get; set; }
         public bool PendingCellMerged { get; set; }
@@ -372,8 +404,19 @@ public sealed partial class RtfDocumentReader
     /// <param name="Merged"><c>\clmrg</c>: this cell is merged into the one before it.</param>
     /// <param name="VerticalFirst"><c>\clvmgf</c>: this cell starts a vertical merge.</param>
     /// <param name="VerticalMerged"><c>\clvmrg</c>: this cell continues a vertical merge.</param>
+    /// <param name="Padding">
+    /// The four <c>\clpad*</c> values in left, right, top, bottom order, each null when the cell states
+    /// none and so falls back to the row's half-gap.
+    /// </param>
+    /// <param name="VerticalAlignment">Where the cell's text sits inside its row.</param>
     private readonly record struct CellDefinition(
-        int RightEdge, bool MergesFirst, bool Merged, bool VerticalFirst, bool VerticalMerged);
+        int RightEdge,
+        bool MergesFirst,
+        bool Merged,
+        bool VerticalFirst,
+        bool VerticalMerged,
+        int?[]? Padding = null,
+        Layout.CellVerticalAlignment VerticalAlignment = Layout.CellVerticalAlignment.Top);
 
     private sealed class CellDraft
     {
@@ -393,7 +436,25 @@ public sealed partial class RtfDocumentReader
         public bool IsHorizontallyMerged { get; set; }
 
         public bool ContinuesMergeAbove { get; set; }
+
+        /// <summary>The gap between the cell's edges and its text, resolved when the row closes.</summary>
+        public Layout.CellPadding Padding { get; set; }
+
+        /// <summary>Where its text sits when the row is taller than its content.</summary>
+        public Layout.CellVerticalAlignment VerticalAlignment { get; set; }
+
         public List<ContentNode> Content { get; } = [];
+
+        /// <summary>
+        /// The cell's paragraphs with the formatting layout needs, beside the content nodes.
+        /// </summary>
+        /// <remarks>
+        /// Two lists rather than one, for the same reason the body has two: extraction discards the sizes
+        /// and indents that decide where a line breaks, and a cell's text has to break at the cell's width.
+        /// They are filled by the same pass and stay in step because both are appended as a paragraph
+        /// closes.
+        /// </remarks>
+        public List<RtfLayoutParagraph> LayoutParagraphs { get; } = [];
     }
 
     private sealed class RowDraft
@@ -408,6 +469,9 @@ public sealed partial class RtfDocumentReader
         /// indented from the table's left margin still lines up with the column grid.
         /// </summary>
         public int LeftEdge { get; init; }
+
+        /// <summary>The row's declared height in twips, from <c>\trrh</c>; zero for none.</summary>
+        public int Height { get; init; }
 
         public List<CellDraft> Cells { get; } = [];
     }
@@ -618,6 +682,12 @@ public sealed partial class RtfDocumentReader
         foreach (ContentRun run in flow.PendingRuns) paragraph.Children.Add(run);
         foreach (ContentImage image in flow.PendingImages) paragraph.Children.Add(image);
 
+        // Consecutive rows form a table only by being adjacent, so the first paragraph that is not
+        // in one is what closes it — and the table has to land before that paragraph. Resolved before the
+        // layout record for exactly that reason: closing the table is what appends it to the block list,
+        // so recording this paragraph first would put the paragraph after the table it follows.
+        IList<ContentNode> destination = Destination(flow, LevelOf(flow));
+
         if (state is not null)
         {
             // The layout text differs from the extracted text in one character: a manual line break, which
@@ -631,9 +701,7 @@ public sealed partial class RtfDocumentReader
                     .Replace('\n', LayoutLineSeparator));
         }
 
-        // Consecutive rows form a table only by being adjacent, so the first paragraph that is not
-        // in one is what closes it — and the table has to land before that paragraph.
-        Destination(flow, LevelOf(flow)).Add(paragraph);
+        destination.Add(paragraph);
 
         ResetParagraphState(flow);
     }
@@ -765,11 +833,22 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     private void RecordLayoutParagraph(Flow flow, GroupState state, string text)
     {
-        if (flow.InTable) return;
+        List<RtfLayoutParagraph>? into;
 
-        List<RtfLayoutParagraph>? into = ReferenceEquals(flow, _flows[0])
-            ? _layoutParagraphs
-            : FurnitureList(flow);
+        if (flow.InTable)
+        {
+            // A cell's paragraphs, staged on the table level until the cell mark collects them. Only the
+            // body's tables reach layout, and only the outermost level of those — a nested table's cells
+            // are laid out as a flow, which has no grid to put one in.
+            int level = LevelOf(flow);
+            into = ReferenceEquals(flow, _flows[0]) && level == 1
+                ? LevelAt(flow, level).CellLayout
+                : null;
+        }
+        else
+        {
+            into = ReferenceEquals(flow, _flows[0]) ? _layoutBlocks.Paragraphs : FurnitureList(flow);
+        }
 
         if (into is null || into.Count >= MaxLayoutParagraphs) return;
 
@@ -803,6 +882,42 @@ public sealed partial class RtfDocumentReader
             state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
             ColourAt(state.ForegroundColourIndex),
             [.. flow.LayoutRuns]));
+    }
+
+    /// <summary>
+    /// The body's blocks in document order, with the staging list the paragraph recorder appends to.
+    /// </summary>
+    /// <remarks>
+    /// A paragraph is appended to <see cref="Staged.Paragraphs"/> as it closes, and the wrapper flushes
+    /// that run of paragraphs into the block list before a table is added — so the blocks end up in
+    /// document order without the recorder having to know that tables exist.
+    /// </remarks>
+    private sealed class Staged
+    {
+        public List<RtfLayoutParagraph> Paragraphs { get; } = [];
+
+        public List<RtfLayoutBlock> Blocks { get; } = [];
+
+        /// <summary>Moves the paragraphs collected so far into the block list.</summary>
+        public void Flush()
+        {
+            foreach (RtfLayoutParagraph paragraph in Paragraphs) Blocks.Add(new RtfLayoutBlock(paragraph));
+            Paragraphs.Clear();
+        }
+
+        /// <summary>Adds a table after whatever paragraphs preceded it.</summary>
+        public void Add(RtfLayoutTable table)
+        {
+            Flush();
+            Blocks.Add(new RtfLayoutBlock(table));
+        }
+
+        /// <summary>Everything, with any trailing paragraphs included.</summary>
+        public List<RtfLayoutBlock> Finished()
+        {
+            Flush();
+            return Blocks;
+        }
     }
 
     /// <summary>

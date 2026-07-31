@@ -87,7 +87,7 @@ public sealed partial class RtfDocumentReader
     /// every colour in the document by one — which is a silver word where a red one belongs.
     /// </remarks>
     private readonly List<Colour?> _colours = [];
-    private readonly List<RtfLayoutParagraph> _layoutParagraphs = [];
+    private readonly Staged _layoutBlocks = new();
     private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout = [];
     private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout = [];
     private readonly List<Flow> _flows = [];
@@ -132,7 +132,8 @@ public sealed partial class RtfDocumentReader
     public IReadOnlyList<Model.WritingSection> Sections => _geometry.Sections;
 
     /// <summary>
-    /// The body's paragraphs with the formatting layout needs, valid once <see cref="Read"/> has run.
+    /// The body's blocks — its paragraphs and its tables — with the formatting layout needs, valid once
+    /// <see cref="Read"/> has run.
     /// </summary>
     /// <remarks>
     /// Collected during the content walk rather than by a second pass, unlike the XML formats. RTF is a
@@ -140,11 +141,11 @@ public sealed partial class RtfDocumentReader
     /// machine again, including its encoding and destination handling, and the two runs could then
     /// disagree. So the formatting in force is recorded as each paragraph closes.
     /// </remarks>
-    public IReadOnlyList<RtfLayoutParagraph> LayoutParagraphs => _layoutParagraphs;
+    public IReadOnlyList<RtfLayoutBlock> LayoutBlocks => _layoutBlocks.Finished();
 
     /// <summary>The headers' paragraphs, by slot, with the same formatting layout needs.</summary>
     /// <remarks>
-    /// Separate from <see cref="LayoutParagraphs"/> rather than mixed in with a marker, because a header is
+    /// Separate from <see cref="LayoutBlocks"/> rather than mixed in with a marker, because a header is
     /// laid out into its own frame and the body's paragraph index has to keep meaning the body's.
     /// </remarks>
     public IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> HeaderLayout => _headerLayout;
@@ -594,6 +595,44 @@ public sealed partial class RtfDocumentReader
                 return;
             case "trleft":
                 DefinitionTarget(CurrentFlow).RowLeftEdge = token.Parameter ?? 0;
+                return;
+            case "trgaph":
+                // Half the gap between two cells, so it is the padding on each side of one. RTF's oldest
+                // spelling of cell padding and the one LibreOffice writes.
+                DefinitionTarget(CurrentFlow).RowHalfGap = token.Parameter ?? 0;
+                return;
+            case "trrh":
+                // A row height. Negative means "exactly this", which is not modelled — the magnitude is
+                // taken as a floor either way, which shows the text rather than clipping it.
+                DefinitionTarget(CurrentFlow).RowHeight = Math.Abs(token.Parameter ?? 0);
+                return;
+            case "clpadl" or "clpadr" or "clpadt" or "clpadb":
+                SetPadding(
+                    DefinitionTarget(CurrentFlow).PendingCellPadding,
+                    CellPaddingSide(token.Name[5]),
+                    token.Parameter);
+                return;
+            case "trpaddl" or "trpaddr" or "trpaddt" or "trpaddb":
+                SetPadding(
+                    DefinitionTarget(CurrentFlow).RowPadding,
+                    RowPaddingSide(token.Name[6]),
+                    token.Parameter);
+                return;
+            case "trpaddfl" or "trpaddfr" or "trpaddft" or "trpaddfb":
+                // The unit flag for the matching \trpadd, as \clpadf* is for \clpad*.
+                return;
+            case "clpadfl" or "clpadfr" or "clpadft" or "clpadfb":
+                // The unit the matching \clpad takes: 3 is twips and 0 is a "null" the specification
+                // leaves undefined. Only twips is honoured, which is what every producer writes.
+                return;
+            case "clvertalt":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.CellVerticalAlignment.Top;
+                return;
+            case "clvertalc":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.CellVerticalAlignment.Middle;
+                return;
+            case "clvertalb":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.CellVerticalAlignment.Bottom;
                 return;
             case "clmgf":
                 DefinitionTarget(CurrentFlow).PendingCellMergesFirst = true;

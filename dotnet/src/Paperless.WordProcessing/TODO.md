@@ -378,9 +378,20 @@ is read and verified, so what remains is the filling of pages rather than the me
       all be read before any span is known. And cell padding is stated twice, `w:tblCellMar` for the table
       and `w:tcMar` per cell, overriding **per side** — LibreOffice writes a `w:tcMar` holding only the
       side that differs, so taking the element as all four zeroes the other three.
-- [ ] DOC's `sprmTDefTable` column edges and RTF's `\cellx` positions. Both readers already resolve the
-      whole grid — columns, spans, row spans, heading rows — for the extraction tree; what is missing is
-      the per-cell *layout* paragraph lists, since both record those only for the body outside tables.
+- [x] RTF's `\cellx` edges, which the extraction pass already resolves into a grid — including the merges
+      LibreOffice writes with no flag at all. What was missing was the per-cell *layout* paragraph lists,
+      and the reason they were empty is worth recording: `\cell` closes a paragraph through a call that
+      passed no group state, and without the state a paragraph reaches the content tree but never the
+      layout pass. So a cell's text extracted and did not draw.
+- [x] **`\clpadl` is the top margin and `\clpadt` the left.** Top and left are swapped; bottom and right
+      are not. LibreOffice's own importer does this deliberately — "Top and left is swapped, that's what
+      Word does", `rtfdispatchvalue.cxx`, `RTFKeyword::CLPADL` — so it is the specification's reading of
+      those two words that is wrong, Word being what defines RTF in practice. `\trpadd*` maps straight
+      through, so the two spellings of one quantity disagree about which side is which. Caught by
+      measurement: LibreOffice exports 0.6 cm of left padding as `\clpadt340` and then renders it on the
+      left.
+- [ ] DOC's `sprmTDefTable` column edges. The extraction pass resolves the whole grid already; layout
+      needs the per-cell paragraph lists, as RTF did.
 - [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
