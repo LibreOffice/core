@@ -1361,6 +1361,11 @@ is read and verified, so what remains is the filling of pages rather than the me
       from an ODF document, not Word's 720, so assuming either constant is wrong. It is FIB entry **31**,
       two before the piece table's 33. The same record's `fDontUseHTMLAutoSpacing` now answers whether the
       two paragraph spacings collapse, which was the last thing the DOC path had hard-coded.
+- [ ] A justified **right-to-left** line whose stretch `ManualBreakJustification` removes keeps the
+      position it was given while it was still stretched, so it hangs at the left margin instead of
+      returning to the start edge. It needs three things at once to appear — right to left, justified,
+      and a DOCX carrying `w:doNotExpandShiftReturn` — and closing it means the suppression knowing
+      the room the line was given, which is per line once frames are in play.
 - [ ] A justified line that also holds a tab is left ragged. Writer stops justifying at a centre, right or
       decimal tab and gives each stretch between tabs its own space-add, which is a per-stretch answer where
       the engine has one per line; stretching the blanks anyway would move text out of the columns the tabs
