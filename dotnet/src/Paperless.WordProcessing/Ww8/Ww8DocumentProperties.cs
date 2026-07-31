@@ -120,6 +120,20 @@ public readonly record struct Ww8DocumentProperties
         {
             ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[NoteFormatsOffset..]);
 
+            // The lowest two bits are `epc`, where zero means "collect at the end of the section" and three
+            // means the end of the document. LibreOffice's own WW8 export writes zero, which is why a document
+            // round-tripped through DOC has its endnotes at the foot of a page rather than on pages of their
+            // own — and why reading this is what makes a DOC agree with the file it came from.
+            properties = properties with
+            {
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    Placement = (word & 0x0003) == 0
+                        ? Layout.NotePlacement.SectionEnd
+                        : Layout.NotePlacement.DocumentEnd,
+                },
+            };
+
             properties = properties with
             {
                 FootnoteNumbering = properties.FootnoteNumbering with

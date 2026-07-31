@@ -115,10 +115,12 @@ public readonly record struct RtfLayoutParagraph(
 /// <param name="Offset">Where the citation sits in the citing paragraph's text.</param>
 /// <param name="IsEndnote">True for an endnote, which collects at the end of the document.</param>
 /// <param name="Blocks">The note's body.</param>
+/// <param name="Placement">Where it collects, which for an endnote is not always the end of the document.</param>
 public sealed record RtfLayoutNote(
     int Offset,
     bool IsEndnote,
-    IReadOnlyList<RtfLayoutBlock> Blocks);
+    IReadOnlyList<RtfLayoutBlock> Blocks,
+    Layout.NotePlacement Placement = Layout.NotePlacement.PageBottom);
 
 /// <summary>
 /// One block of an RTF flow as layout sees it: a paragraph or a table, never both.

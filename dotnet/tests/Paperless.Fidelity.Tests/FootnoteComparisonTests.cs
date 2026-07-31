@@ -125,7 +125,7 @@ public sealed class FootnoteComparisonTests : IDisposable
                 // smaller than the body, so measuring a note line against a body line leaves the ascent
                 // difference behind: on this document that is 0.95 pt, which reads as a placement error and
                 // is not one.
-                int anchor = FirstOfSize(mine, mine[i].Size);
+                int anchor = ReadingOrder.FirstOfSize(mine, mine[i].Size);
 
                 double drawnGap = mine[i].Baseline - mine[anchor].Baseline;
                 double renderedGap = reference[i].Top - reference[anchor].Top;
@@ -234,17 +234,6 @@ public sealed class FootnoteComparisonTests : IDisposable
         }
 
         return pens;
-    }
-
-    /// <summary>The first word drawn at a given size, which anchors that size's vertical comparison.</summary>
-    private static int FirstOfSize(List<DrawnWord> words, double size)
-    {
-        for (int i = 0; i < words.Count; i++)
-        {
-            if (Math.Abs(words[i].Size - size) < 0.01) return i;
-        }
-
-        return 0;
     }
 
     /// <summary>How far two portions' verticals may differ and still be one line, in points.</summary>

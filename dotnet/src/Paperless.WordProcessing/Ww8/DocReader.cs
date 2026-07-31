@@ -362,6 +362,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Blocks = blocks,
                 Offset = note.Offset,
                 IsEndnote = note.IsEndnote,
+                Placement = note.Placement,
             });
         }
 

@@ -899,7 +899,7 @@ public sealed class Paginator
                     case PageParagraph paragraph:
                         foreach (PageNote note in paragraph.Notes)
                         {
-                            if (note.IsEndnote) flow.AddRange(note.Blocks);
+                            if (note.Placement == NotePlacement.DocumentEnd) flow.AddRange(note.Blocks);
                         }
 
                         break;
@@ -931,7 +931,9 @@ public sealed class Paginator
         {
             // Endnotes collect at the end of the document rather than the foot of a page, so they take no
             // room here — recorded as a gap rather than placed wrongly.
-            if (note.IsEndnote) continue;
+            // By where the note goes rather than by what class it is: an endnote whose document asks for its
+            // endnotes at the end of each section is placed at the foot of the page, exactly as a footnote is.
+            if (note.Placement == NotePlacement.DocumentEnd) continue;
             if (note.Offset >= first && note.Offset < last) yield return note;
         }
     }

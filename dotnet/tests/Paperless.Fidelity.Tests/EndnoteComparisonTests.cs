@@ -7,7 +7,7 @@ using Shouldly;
 namespace Paperless.Fidelity.Tests;
 
 /// <summary>
-/// Checks that endnotes collect after the last page rather than at the foot of one.
+/// Checks that endnotes collect where their document says, which is not always after the last page.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -52,15 +52,14 @@ public sealed class EndnoteComparisonTests : IDisposable
     [InlineData("endnotes.fodt")]
     [InlineData("endnotes.odt")]
     [InlineData("endnotes.docx")]
-    // DOC is absent, and for a reason that is a real gap rather than an upstream defect: LibreOffice's WW8
-    // export writes the DOP's `epc` as 0, "collect at the end of the *section*", and its import turns that
-    // into `SwFormatEndAtTextEnd` (`ww8par6.cxx`, `if (0 == epc)`). Writer then renders the notes in the
-    // page-bottom note area of the section's last page — measured at tops 770.35 and 782.55 on a page whose
-    // body ends at 699.35, which is exactly where the same document's footnotes go. Paperless collects every
-    // endnote at the end of the document, so `endnotes.doc` is checked structurally in `FootnoteReadingTests`
-    // until the section-end position is read. RTF is absent for the separate reason given in
-    // `FootnoteComparisonTests`.
-    public void EndnotesCollectOnPagesOfTheirOwn(string fileName)
+    // The DOC is the same document with its endnotes somewhere else, and it belongs in the same test for
+    // exactly that reason: LibreOffice's WW8 export writes the DOP's `epc` as 0, "collect at the end of the
+    // *section*", and its import turns that into `SwFormatEndAtTextEnd` (`ww8par6.cxx`, `if (0 == epc)`). So
+    // these notes render in the page-bottom note area instead — one page rather than two — and a reader that
+    // placed notes by class rather than by position lays the same document out two ways depending on which
+    // format it was saved in. RTF is absent for the separate reason given in `FootnoteComparisonTests`.
+    [InlineData("endnotes.doc")]
+    public void EndnotesCollectWhereTheirDocumentPutsThem(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
 
@@ -72,9 +71,6 @@ public sealed class EndnoteComparisonTests : IDisposable
 
         int pages = everything.Select(word => word.PageIndex).Distinct().Count();
 
-        // Two pages, and which is which is the assertion: the body fits on one page exactly, so the second
-        // page exists only because the endnotes made it. A reader that placed them as footnotes gets one page.
-        pages.ShouldBeGreaterThan(1, $"{fileName}: the reference should need a page for its endnotes");
         drawn.Count.ShouldBe(pages, $"{fileName}: page count");
 
         int compared = 0;
@@ -101,16 +97,20 @@ public sealed class EndnoteComparisonTests : IDisposable
                         + $"{mine[i].Left:F3} pt drawn, "
                         + $"{reference[i].Left - PdfPenOffsetPoints:F3} pt rendered");
 
-                // Vertically as a difference from the page's first line, which cancels the ascent — and on
-                // the endnote page that is what proves they start at the *top* of the text area rather than
-                // at the bottom where a footnote would be.
-                double drawnGap = mine[i].Baseline - mine[0].Baseline;
-                double renderedGap = reference[i].Top - reference[0].Top;
+                // Vertically as a difference from the first word *of the same size*, which is what cancels the
+                // ascent — see ReadingOrder.FirstOfSize. On a page holding both body text and notes the two
+                // sizes differ, so anchoring at the page's first word leaves 0.95 pt of ascent difference
+                // behind and reads as a placement error.
+                int anchor = ReadingOrder.FirstOfSize(mine, mine[i].Size);
+
+                double drawnGap = mine[i].Baseline - mine[anchor].Baseline;
+                double renderedGap = reference[i].Top - reference[anchor].Top;
 
                 Math.Abs(drawnGap - renderedGap).ShouldBeLessThanOrEqualTo(
                     TolerancePoints,
                     $"{fileName}: page {page + 1}, word {i + 1} (\"{reference[i].Text}\") sits "
-                    + $"{drawnGap:F3} pt below the page's first word drawn, {renderedGap:F3} pt rendered");
+                    + $"{drawnGap:F3} pt below the first word of its size drawn, "
+                    + $"{renderedGap:F3} pt rendered");
 
                 compared++;
             }

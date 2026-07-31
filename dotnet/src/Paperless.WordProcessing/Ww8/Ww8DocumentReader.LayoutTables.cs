@@ -401,10 +401,12 @@ public readonly record struct Ww8LayoutBlock
 /// <param name="Offset">Where the citation sits in the citing paragraph's text.</param>
 /// <param name="IsEndnote">True for an endnote, which collects at the end of the document.</param>
 /// <param name="Blocks">The note's body.</param>
+/// <param name="Placement">Where it collects, which for an endnote the DOP's <c>epc</c> decides.</param>
 public sealed record Ww8LayoutNote(
     int Offset,
     bool IsEndnote,
-    IReadOnlyList<Ww8LayoutBlock> Blocks);
+    IReadOnlyList<Ww8LayoutBlock> Blocks,
+    Layout.NotePlacement Placement = Layout.NotePlacement.PageBottom);
 
 /// <summary>A DOC table as layout sees it: the column grid in twips, and cells holding paragraphs.</summary>
 /// <param name="ColumnWidths">The grid's column widths, left to right.</param>

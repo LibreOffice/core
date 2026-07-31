@@ -1219,7 +1219,11 @@ public sealed partial class RtfDocumentReader
                 if (blocks.Count > 0)
                 {
                     CurrentFlow.PendingNotes.Add(
-                        new RtfLayoutNote(finished.NoteOffset, finished.IsEndnote, blocks));
+                        new RtfLayoutNote(
+                            finished.NoteOffset,
+                            finished.IsEndnote,
+                            blocks,
+                            (finished.IsEndnote ? _endnotes : _footnotes).Placement));
                 }
             }
         }

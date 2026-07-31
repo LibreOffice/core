@@ -146,7 +146,20 @@ public sealed partial class OdtLayoutSource
             ? offset + 1
             : fallback.StartAt;
 
-        return new NoteNumbering(format, start);
+        // Where the class collects. ODF states this only for footnotes, as `text:footnotes-position`, whose
+        // "document" is the same thing an endnote does by default; endnotes have no such attribute at all, so
+        // theirs is always the class default. Carrying the fallback's placement through is not optional: a
+        // document that declares a configuration purely to set a start value would otherwise have its
+        // endnotes silently moved to the foot of the page, because a fresh NoteNumbering defaults there.
+        NotePlacement placement =
+            configuration.Attribute(XName.Get("footnotes-position", OdfNamespaces.Text))?.Value switch
+            {
+                "document" => NotePlacement.DocumentEnd,
+                "page" => NotePlacement.PageBottom,
+                _ => fallback.Placement,
+            };
+
+        return new NoteNumbering(format, start) { Placement = placement };
     }
 
     /// <summary>Which section each master page is, by name.</summary>
@@ -414,6 +427,7 @@ public sealed partial class OdtLayoutSource
                 Blocks = blocks,
                 Offset = anchor.Offset,
                 IsEndnote = IsEndnote(anchor.Element),
+                Placement = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Placement,
             });
         }
 

@@ -36,6 +36,30 @@ public static class ReadingOrder
     public static List<DrawnWord> Of(IReadOnlyList<DrawnWord> words)
         => InLines(words, word => word.Baseline, word => word.Left);
 
+    /// <summary>
+    /// The first word drawn at a given size, which is what a vertical comparison has to be anchored at.
+    /// </summary>
+    /// <remarks>
+    /// A box's top sits above its baseline by the font's ascent, and the PDF never states that ascent — so a
+    /// vertical comparison can only ever be of <em>differences</em>, and a difference only cancels the ascent
+    /// between words of the same size. Measuring a 10 pt note line against an 11 pt body line leaves the
+    /// difference of the two ascents behind: on the corpus documents here that is 0.95 pt, nearly ten times the
+    /// tolerance, and it reads as a placement error while being nothing of the kind.
+    /// </remarks>
+    /// <param name="words">The page's words.</param>
+    /// <param name="size">The size to anchor at, in points.</param>
+    public static int FirstOfSize(IReadOnlyList<DrawnWord> words, double size)
+    {
+        ArgumentNullException.ThrowIfNull(words);
+
+        for (int i = 0; i < words.Count; i++)
+        {
+            if (Math.Abs(words[i].Size - size) < 0.01) return i;
+        }
+
+        return 0;
+    }
+
     private static List<T> InLines<T>(
         IReadOnlyList<T> words, Func<T, double> vertical, Func<T, double> horizontal)
     {

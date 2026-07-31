@@ -149,15 +149,20 @@ public sealed record PageNote
     /// </remarks>
     public int Offset { get; init; }
 
-    /// <summary>
-    /// True for an endnote, which collects at the end of the document rather than the foot of the page.
-    /// </summary>
+    /// <summary>True for an endnote, which is a class rather than a position — see <see cref="Placement"/>.</summary>
     /// <remarks>
-    /// Distinguished but not yet placed differently: an endnote needs a flow after the last page, which is
-    /// a document-level concern rather than a page-level one. Recorded so that a reader need not guess later
-    /// which of its notes were which.
+    /// Kept apart from the placement because the two really are different questions: an endnote numbered in
+    /// roman and collected at the end of a section is still an endnote, and a reader wanting to list a
+    /// document's endnotes should not have to know where they were put.
     /// </remarks>
     public bool IsEndnote { get; init; }
+
+    /// <summary>Where the note collects.</summary>
+    /// <remarks>
+    /// Defaults to the foot of the page, which is what a footnote is and what an endnote becomes when the
+    /// document asks for its endnotes at the end of each section.
+    /// </remarks>
+    public NotePlacement Placement { get; init; }
 }
 
 /// <summary>

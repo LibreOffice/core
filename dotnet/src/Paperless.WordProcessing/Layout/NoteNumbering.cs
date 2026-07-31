@@ -2,6 +2,33 @@ using Paperless.Core.Numbering;
 
 namespace Paperless.WordProcessing.Layout;
 
+/// <summary>Where a class of note collects.</summary>
+/// <remarks>
+/// A footnote is always at the foot of its page; an <em>endnote</em> is not always at the end of the document,
+/// which is the part that surprises. Every Word-family format can put endnotes at the end of each *section*
+/// instead, and LibreOffice's own DOC export writes exactly that — so a document round-tripped through DOC has
+/// its endnotes in the page-bottom note area of the section's last page rather than on pages of their own.
+/// ODF has no per-section option at all, so its endnotes are always <see cref="DocumentEnd"/>.
+/// </remarks>
+public enum NotePlacement
+{
+    /// <summary>At the foot of the page that cites it, which is what a footnote is.</summary>
+    PageBottom,
+
+    /// <summary>
+    /// In the note area of the last page of the citing note's section.
+    /// </summary>
+    /// <remarks>
+    /// Writer's <c>FTNEND_ATTXTEND</c>, from RTF's <c>\aendsec</c>, OOXML's <c>w:pos w:val="sectEnd"</c> and
+    /// the DOP's <c>epc</c> of zero. Measured on a single-section document: the notes land where the same
+    /// document's footnotes do, at the foot of the page.
+    /// </remarks>
+    SectionEnd,
+
+    /// <summary>On pages of their own after the last page of the document.</summary>
+    DocumentEnd,
+}
+
 /// <summary>How a note's citation is written.</summary>
 /// <remarks>
 /// The formats every one of the four spells, under four different names — ODF's
@@ -63,11 +90,16 @@ public enum NoteNumberFormat
 /// </param>
 public readonly record struct NoteNumbering(NoteNumberFormat Format, int StartAt)
 {
-    /// <summary>What a footnote takes when the document states nothing: 1, 2, 3.</summary>
-    public static NoteNumbering Footnotes { get; } = new(NoteNumberFormat.Arabic, 1);
+    /// <summary>Where notes of this class collect.</summary>
+    public NotePlacement Placement { get; init; }
 
-    /// <summary>What an endnote takes: i, ii, iii.</summary>
-    public static NoteNumbering Endnotes { get; } = new(NoteNumberFormat.LowerRoman, 1);
+    /// <summary>What a footnote takes when the document states nothing: 1, 2, 3, at the foot of the page.</summary>
+    public static NoteNumbering Footnotes { get; } =
+        new(NoteNumberFormat.Arabic, 1) { Placement = NotePlacement.PageBottom };
+
+    /// <summary>What an endnote takes: i, ii, iii, at the end of the document.</summary>
+    public static NoteNumbering Endnotes { get; } =
+        new(NoteNumberFormat.LowerRoman, 1) { Placement = NotePlacement.DocumentEnd };
 
     /// <summary>The default for a class.</summary>
     /// <param name="isEndnote">True for an endnote.</param>

@@ -395,6 +395,16 @@ public sealed partial class RtfDocumentReader
                 _endnotes = _endnotes with { Format = NoteNumberFormat.Chicago };
                 return;
 
+            // Where the endnotes collect. \aenddoc is the default and puts them after the last page;
+            // \aendsec puts them in the note area of the section's last page, which is where the same
+            // document's footnotes go.
+            case "aenddoc":
+                _endnotes = _endnotes with { Placement = NotePlacement.DocumentEnd };
+                return;
+            case "aendnotes" or "aendsec":
+                _endnotes = _endnotes with { Placement = NotePlacement.SectionEnd };
+                return;
+
             // ---- destinations that are not content
             case "fonttbl":
                 state.Destination = RtfDestination.FontTable;

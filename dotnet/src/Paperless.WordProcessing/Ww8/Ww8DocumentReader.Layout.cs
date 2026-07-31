@@ -407,7 +407,12 @@ public sealed partial class Ww8DocumentReader
                         {
                             _pendingNotes.Add(
                                 new Ww8LayoutNote(
-                                    current.Length - citation.Length, note.IsEndnote, read));
+                                    current.Length - citation.Length,
+                                    note.IsEndnote,
+                                    read,
+                                    note.IsEndnote
+                                        ? DocumentProperties.EndnoteNumbering.Placement
+                                        : DocumentProperties.FootnoteNumbering.Placement));
                         }
                     }
 

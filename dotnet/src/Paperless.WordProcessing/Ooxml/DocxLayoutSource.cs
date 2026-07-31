@@ -124,7 +124,17 @@ public sealed partial class DocxLayoutSource
             ? stated
             : fallback.StartAt;
 
-        return new NoteNumbering(format, start);
+        // Where the class collects. `w:pos` means different things for the two elements and only the endnote
+        // one matters here: a footnote's `beneathText` is still the foot of its page, while an endnote's
+        // `sectEnd` moves it into the note area of the section's last page.
+        NotePlacement placement = Word.Attribute(Word.Child(properties, "pos"), "val") switch
+        {
+            "sectEnd" => NotePlacement.SectionEnd,
+            "docEnd" => NotePlacement.DocumentEnd,
+            _ => fallback.Placement,
+        };
+
+        return new NoteNumbering(format, start) { Placement = placement };
     }
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
@@ -324,6 +334,8 @@ public sealed partial class DocxLayoutSource
                 Blocks = blocks,
                 Offset = anchor.Offset,
                 IsEndnote = anchor.IsEndnote,
+                Placement =
+                    (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Placement,
             });
         }
 

@@ -631,12 +631,23 @@ is read and verified, so what remains is the filling of pages rather than the me
         `{\*\footnote …}` group, which comes *after* the `\chftn` where the citation has to be numbered and
         appended. LibreOffice's own importer peeks seven bytes ahead for exactly this; the reader now looks in
         the same short window.
-- [ ] Endnotes collected at the end of a **section** rather than of the document, which is `\aendsec` in RTF,
-      `SwFormatEndAtTextEnd` in Writer, and the DOP's `epc == 0` in DOC. It matters because LibreOffice's WW8
-      export *writes* `epc = 0`: `endnotes.doc` renders its notes in the page-bottom note area of the section's
-      last page — measured at tops 770.35 and 782.55 on a page whose body ends at 699.35, exactly where the
-      same document's footnotes go — while Paperless collects them at the end of the document. So the DOC case
-      is checked structurally rather than against the rendering until this is read.
+- [x] **Note placement read apart from note class**, in `NotePlacement`. An endnote is not always at the end
+      of the document and the exception is not exotic: LibreOffice's own WW8 export writes the DOP's `epc` as
+      zero, "collect at the end of the section", so a document round-tripped through DOC has its endnotes in
+      the page-bottom note area instead of on pages of their own. Read from all four — RTF's
+      `\aenddoc`/`\aendsec`, OOXML's `w:pos`, the DOP's `epc`, and ODF's `text:footnotes-position` (which
+      exists for footnotes only; ODF cannot move its endnotes off the end of the document at all). The
+      paginator now places by position rather than by class, which turned `endnotes.doc` from a documented
+      divergence into a compared case: one page rather than two, notes at the foot.
+      One trap worth naming, because it produced the only failure: a reader building a fresh `NoteNumbering`
+      from a document's stated format and start value silently loses the class's *default placement*, so a
+      document declaring a configuration purely to set a start value has its endnotes moved to the foot of the
+      page. The fallback's placement has to be carried through explicitly.
+- [ ] Section-end endnotes on a section spanning **more than one page**. Writer collects them on the section's
+      last page; this places them at the foot of the page that cites them, which is the same thing for a
+      one-page section — the case LibreOffice's own DOC export produces and the one the corpus verifies — and
+      not for a longer one. Doing it properly is the footnote feedback loop at section granularity: which page
+      is last is not known until the section is full, and reserving the notes' room changes which page that is.
 - [ ] Vertical and RTL writing modes
 - [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
       per-glyph advances rather than characters — a backend must not re-shape, since layout already
