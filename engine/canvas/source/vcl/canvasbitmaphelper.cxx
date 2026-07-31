@@ -22,6 +22,7 @@
 
 #include <canvastools.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>

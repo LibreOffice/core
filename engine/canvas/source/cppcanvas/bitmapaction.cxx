@@ -67,16 +67,16 @@ namespace cppcanvas
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
-                uno::Reference< rendering::XBitmap >                    mxBitmap;
+                Bitmap                                                  maBitmap;
                 vclcanvas::RenderState                                  maState;
             };
 
 
-            BitmapAction::BitmapAction( const ::Bitmap&          rBmpEx,
+            BitmapAction::BitmapAction( const ::Bitmap&          rBmp,
                                         const ::basegfx::B2DPoint& rDstPoint,
                                         const OutDevState&         rState ) :
                 CachedPrimitiveBase( true ),
-                mxBitmap( vcl::unotools::xBitmapFromBitmap( rBmpEx ) )
+                maBitmap( rBmp )
             {
                 cppcanvastools::initRenderState(maState,rState);
 
@@ -99,7 +99,7 @@ namespace cppcanvas
                                         const ::basegfx::B2DVector& rDstSize,
                                         const OutDevState&          rState      ) :
                 CachedPrimitiveBase( true ),
-                mxBitmap( vcl::unotools::xBitmapFromBitmap( rBmp ) )
+                maBitmap( rBmp )
             {
                 cppcanvastools::initRenderState(maState,rState);
 
@@ -133,7 +133,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCachedPrimitive = rCanvas->drawBitmap( mxBitmap,
+                rCachedPrimitive = rCanvas->drawBitmap( maBitmap,
                                                      rViewState,
                                                      aLocalState );
 

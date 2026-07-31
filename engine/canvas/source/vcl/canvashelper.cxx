@@ -458,14 +458,11 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
-                                                                                const uno::Reference< rendering::XBitmap >& xBitmap,
+                                                                                const Bitmap& rBitmap,
                                                                                 const vclcanvas::ViewState&                 viewState,
                                                                                 const vclcanvas::RenderState&               renderState,
                                                                                 bool                                        bModulateColors )
     {
-        ENSURE_ARG_OR_THROW( xBitmap.is(),
-                             "bitmap is NULL");
-
         ::canvastools::verifyInput( renderState,
                                       __func__,
                                       mpDevice,
@@ -483,7 +480,7 @@ namespace vclcanvas
             ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
             aOutputPos *= aMatrix;
 
-            ::Bitmap aBmp( vclcanvastools::bitmapFromXBitmap(xBitmap) );
+            ::Bitmap aBmp( rBitmap );
 
             // TODO(F2): Implement modulation again for other color
             // channels (currently, works only for alpha). Note: this
@@ -641,24 +638,24 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
-                                                                            const uno::Reference< rendering::XBitmap >& xBitmap,
+                                                                            const Bitmap& rBitmap,
                                                                             const vclcanvas::ViewState&                 viewState,
                                                                             const vclcanvas::RenderState&               renderState )
     {
         return implDrawBitmap( pCanvas,
-                               xBitmap,
+                               rBitmap,
                                viewState,
                                renderState,
                                false );
     }
 
     rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
-                                                                                     const uno::Reference< rendering::XBitmap >&    xBitmap,
+                                                                                     const Bitmap&    rBitmap,
                                                                                      const vclcanvas::ViewState&                    viewState,
                                                                                      const vclcanvas::RenderState&                  renderState )
     {
         return implDrawBitmap( pCanvas,
-                               xBitmap,
+                               rBitmap,
                                viewState,
                                renderState,
                                true );

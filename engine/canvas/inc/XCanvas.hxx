@@ -55,6 +55,7 @@ class CachedBitmap;
 class XGraphicDevice;
 }
 enum class FontEmphasisMark;
+class Bitmap;
 
 /** Central interface for rendering.<p>
 
@@ -403,8 +404,7 @@ public:
         specified range.
      */
     virtual ::rtl::Reference<::vclcanvas::CachedBitmap>
-    drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
-               const ::vclcanvas::ViewState& aViewState,
+    drawBitmap(const ::Bitmap& rBitmap, const ::vclcanvas::ViewState& aViewState,
                const ::vclcanvas::RenderState& aRenderState)
         = 0;
 

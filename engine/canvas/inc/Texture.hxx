@@ -21,15 +21,14 @@
 #include <sal/config.h>
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/bitmap.hxx>
 
 namespace vclcanvas
 {
-
-    /** Contains all information needed to define a texture.<p>
+/** Contains all information needed to define a texture.<p>
 
     This structure contains all information necessary to define a
     texture. A texture describes the filled area of polygonal shapes,
@@ -53,16 +52,14 @@ struct Texture
         state and view state transformation being applied to the
         textured primitive).<p>
      */
-    ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
-
+    ::com::sun::star::geometry::AffineMatrix2D AffineTransform;
 
     /** Overall transparency of the texturing.<p>
 
         The valid range for this value is [0,1], where 0 denotes
         complete transparency, and 1 denotes fully opaque.<p>
      */
-    double                                      Alpha;
-
+    double Alpha;
 
     /** Texture bitmap.<p>
 
@@ -71,8 +68,7 @@ struct Texture
         The bitmap is scaled to a one-by-one rectangle, to cover the
         same area as both the gradient and the hatching.<p>
     */
-    css::uno::Reference<css::rendering::XBitmap>                Bitmap;
-
+    ::Bitmap aBitmap;
 
     /** Texture gradient.<p>
 
@@ -80,7 +76,7 @@ struct Texture
         parametric polygons color value is used to fill the returned
         polygonal outlines.<p>
      */
-    css::uno::Reference<css::rendering::XParametricPolyPolygon2D>  Gradient;
+    css::uno::Reference<css::rendering::XParametricPolyPolygon2D> Gradient;
 
     /** Repeat mode of the texture, x direction.<p>
 
@@ -88,7 +84,7 @@ struct Texture
         the x direction part. Permissible values are from the
         TexturingMode constants.<p>
     */
-    sal_Int8                                        RepeatModeX;
+    sal_Int8 RepeatModeX;
 
     /** Repeat mode of the texture, y direction.<p>
 
@@ -96,10 +92,8 @@ struct Texture
         the y direction part. Permissible values are from the
         TexturingMode constants.<p>
     */
-    sal_Int8                                        RepeatModeY;
-
+    sal_Int8 RepeatModeY;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

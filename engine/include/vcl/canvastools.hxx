@@ -58,18 +58,6 @@ namespace com::sun::star::rendering
 
 namespace vcl::unotools
 {
-        // Bitmap conversions
-
-
-        /** Create an XBitmap from VCL Bitmap(
-         */
-        css::uno::Reference< css::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmap( const ::Bitmap& inputBitmap );
-
-        /** Create a Bitmap from an XBitmap
-         */
-        ::Bitmap VCL_DLLPUBLIC bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >& xInputBitmap );
-
         // Geometry conversions (vcl/tools <-> x)
 
 

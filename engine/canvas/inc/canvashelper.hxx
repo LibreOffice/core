@@ -142,14 +142,12 @@ namespace vclcanvas
 
         rtl::Reference< vclcanvas::CachedBitmap >
             drawBitmap( const vclcanvas::XCanvas*     rCanvas,
-                        const css::uno::Reference<
-                                css::rendering::XBitmap >& xBitmap,
+                        const Bitmap& rBitmap,
                         const ::vclcanvas::ViewState&   viewState,
                         const ::vclcanvas::RenderState& renderState );
         rtl::Reference< vclcanvas::CachedBitmap >
             drawBitmapModulated( const vclcanvas::XCanvas*        rCanvas,
-                                 const css::uno::Reference<
-                                         css::rendering::XBitmap >&        xBitmap,
+                                 const Bitmap& rBitmap,
                                  const ::vclcanvas::ViewState&      viewState,
                                  const ::vclcanvas::RenderState&    renderState );
         // cast away const, need to change refcount (as this is
@@ -201,8 +199,7 @@ namespace vclcanvas
     private:
         rtl::Reference< vclcanvas::CachedBitmap >
             implDrawBitmap( const vclcanvas::XCanvas*     rCanvas,
-                            const css::uno::Reference<
-                                    css::rendering::XBitmap >&     xBitmap,
+                            const Bitmap&     rBitmap,
                             const ::vclcanvas::ViewState&   viewState,
                             const ::vclcanvas::RenderState& renderState,
                             bool                                            bModulateColors );

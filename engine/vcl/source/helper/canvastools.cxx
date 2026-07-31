@@ -38,7 +38,6 @@
 
 #include <vcl/bitmap.hxx>
 
-#include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
@@ -46,35 +45,6 @@ using namespace ::com::sun::star;
 
 namespace vcl::unotools
 {
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmap(const ::Bitmap& inputBitmap )
-        {
-            SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
-
-            return new vcl::unotools::VclCanvasBitmap( inputBitmap );
-        }
-
-        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xInputBitmap )
-        {
-            SAL_INFO( "vcl.helper", "vcl::unotools::bitmapExFromXBitmap()" );
-
-            if( !xInputBitmap.is() )
-                return ::Bitmap();
-
-            // tunnel directly for known implementation
-            VclCanvasBitmap* pImplBitmap = dynamic_cast<VclCanvasBitmap*>(xInputBitmap.get());
-            if( pImplBitmap )
-                return pImplBitmap->getBitmap();
-
-            // The only other possible implementation of XBitmap is
-            // vclcanvas::CanvasBitmap in canvas/source/vcl/canvasbitmap.cxx, which has a XFastPropertySet fast-path
-            uno::Reference<css::beans::XFastPropertySet> xFastProp(xInputBitmap, uno::UNO_QUERY_THROW);
-            cpo::uno::Any aAny = xFastProp->getFastPropertyValue(0);
-            sal_Int64 nBitmapPtr(0);
-            aAny >>= nBitmapPtr;
-            std::unique_ptr<Bitmap> pBitmap(reinterpret_cast<Bitmap*>(nBitmapPtr));
-            return *pBitmap;
-        }
-
         geometry::RealSize2D size2DFromSize( const Size& rSize )
         {
             return geometry::RealSize2D( rSize.Width(),

@@ -265,19 +265,15 @@ namespace canvas
 
 
         virtual rtl::Reference< vclcanvas::CachedBitmap >
-            drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
+            drawBitmap( const Bitmap&                                                   rBitmap,
                         const ::vclcanvas::ViewState&                                   viewState,
                         const ::vclcanvas::RenderState&                                 renderState ) override
         {
-            canvastools::verifyArgs(xBitmap, viewState, renderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
 
-            return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
+            return maCanvasHelper.drawBitmap( this, rBitmap, viewState, renderState );
         }
 
         virtual css::uno::Reference< vclcanvas::XGraphicDevice >

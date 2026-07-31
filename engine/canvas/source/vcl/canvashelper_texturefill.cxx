@@ -645,9 +645,9 @@ namespace vclcanvas
                                       "CanvasHelper::fillTexturedPolyPolygon(): unknown parametric polygon encountered" );
                 }
             }
-            else if( textures[0].Bitmap.is() )
+            else if( !textures[0].aBitmap.IsEmpty() )
             {
-                geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
+                geometry::IntegerSize2D aBmpSize = vcl::unotools::integerSize2DFromSize( textures[0].aBitmap.GetSizePixel() );
 
                 ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
                                  aBmpSize.Height != 0,
@@ -708,14 +708,14 @@ namespace vclcanvas
                         pColor[3] = textures[0].Alpha;
 
                         return drawBitmapModulated( pCanvas,
-                                                    textures[0].Bitmap,
+                                                    textures[0].aBitmap,
                                                     viewState,
                                                     aLocalState );
                     }
                     else
                     {
                         return drawBitmap( pCanvas,
-                                           textures[0].Bitmap,
+                                           textures[0].aBitmap,
                                            viewState,
                                            aLocalState );
                     }
@@ -726,7 +726,7 @@ namespace vclcanvas
                     // texturing parameters
                     // ===========================================
 
-                    ::Bitmap aBmp( vclcanvastools::bitmapFromXBitmap( textures[0].Bitmap ) );
+                    ::Bitmap aBmp( textures[0].aBitmap );
 
                     // scale down bitmap to [0,1]x[0,1] rect, as required
                     // from the XCanvas interface.

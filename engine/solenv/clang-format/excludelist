@@ -12840,7 +12840,6 @@ vcl/inc/animate/AnimationRenderer.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/calendar.hxx
-vcl/inc/canvasbitmap.hxx
 vcl/inc/debugevent.hxx
 vcl/inc/displayconnectiondispatch.hxx
 vcl/inc/dndeventdispatcher.hxx
@@ -13447,7 +13446,6 @@ vcl/source/graphic/UnoGraphic.cxx
 vcl/source/graphic/UnoGraphicDescriptor.cxx
 vcl/source/graphic/UnoGraphicObject.cxx
 vcl/source/graphic/UnoGraphicProvider.cxx
-vcl/source/helper/canvasbitmap.cxx
 vcl/source/helper/canvastools.cxx
 vcl/source/helper/commandinfoprovider.cxx
 vcl/source/helper/displayconnectiondispatch.cxx

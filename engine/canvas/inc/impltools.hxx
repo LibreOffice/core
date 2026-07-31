@@ -52,10 +52,6 @@ namespace vclcanvas
 
 namespace vclcanvastools
 {
-        ::Bitmap
-        bitmapFromXBitmap( const css::uno::Reference<
-                             css::rendering::XBitmap >& );
-
         /** Setup VCL font and output position
 
             @returns false, if no text output should happen

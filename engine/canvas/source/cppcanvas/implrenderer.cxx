@@ -1601,7 +1601,7 @@ namespace cppcanvas
                                         aMatrix );
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
-                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmap( aBmp );
+                                    aTexture.aBitmap = aBmp;
                                     if( aFill.isTiling() )
                                     {
                                         aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;

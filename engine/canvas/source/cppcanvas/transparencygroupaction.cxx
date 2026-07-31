@@ -109,7 +109,7 @@ namespace cppcanvas
 
                 const ::basegfx::B2DSize                            maDstSize;
 
-                mutable uno::Reference< rendering::XBitmap >        mxBufferBitmap; // contains last rendered version
+                mutable ::Bitmap                                    maBufferBitmap; // contains last rendered version
                 mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains last active transformation
                 mutable Subset                                      maLastSubset; // contains last effective subset
 
@@ -206,7 +206,7 @@ namespace cppcanvas
                 // if there's no buffer bitmap, or as soon as the
                 // total transformation changes, we've got to
                 // re-render the bitmap
-                if( !mxBufferBitmap.is() ||
+                if( maBufferBitmap.IsEmpty() ||
                     aTotalTransform != maLastTransformation ||
                     rSubset.mnSubsetBegin != maLastSubset.mnSubsetBegin ||
                     rSubset.mnSubsetEnd != maLastSubset.mnSubsetEnd )
@@ -379,9 +379,7 @@ namespace cppcanvas
 
 
                     // update buffered bitmap and transformation
-                    mxBufferBitmap =  vcl::unotools::xBitmapFromBitmap(aVDev->GetBitmap(
-                                                  aBitmapPoint,
-                                                  aBitmapSizePixel ) );
+                    maBufferBitmap = aVDev->GetBitmap(aBitmapPoint, aBitmapSizePixel);
                     maLastTransformation = aTotalTransform;
                     maLastSubset = rSubset;
                 }
@@ -434,7 +432,7 @@ namespace cppcanvas
 #endif
 
                 // no further alpha changes necessary -> draw directly
-                rCanvas->drawBitmap( mxBufferBitmap,
+                rCanvas->drawBitmap( maBufferBitmap,
                                       rViewState,
                                       aLocalState );
                 return true;

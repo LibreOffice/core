@@ -46,18 +46,6 @@ using namespace ::com::sun::star;
 namespace vclcanvastools
 {
 using namespace vclcanvas;
-        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
-        {
-            ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xBitmap );
-            if( !aBmp.IsEmpty() )
-                return aBmp;
-
-            // TODO(F1): extract pixel from XBitmap interface
-            ENSURE_OR_THROW( false,
-                              "bitmapExFromXBitmap(): could not extract bitmap" );
-
-            return ::Bitmap();
-        }
 
         bool setupFontTransform( ::Point&                       o_rPoint,
                                  vcl::Font&                    io_rVCLFont,
