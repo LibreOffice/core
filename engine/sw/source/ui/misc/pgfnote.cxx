@@ -176,7 +176,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
         pFootnoteInfo = &*pDefFootnoteInfo;
     }
         // footnote area's height
-    SwTwips lHeight = pFootnoteInfo->GetHeight();
+    SwTwips lHeight = pFootnoteInfo->GetHeight().as_twip<SwTwips>();
     if(lHeight)
     {
         m_xMaxHeightEdit->set_value(m_xMaxHeightEdit->normalize(lHeight),FieldUnit::TWIP);
@@ -230,9 +230,9 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_xLineLengthEdit->set_value(static_cast<tools::Long>(fTmp), FieldUnit::PERCENT);
 
     // gap footnote area
-    m_xDistEdit->set_value(m_xDistEdit->normalize(pFootnoteInfo->GetTopDist()), FieldUnit::TWIP);
+    m_xDistEdit->set_value(m_xDistEdit->normalize(pFootnoteInfo->GetTopDist().as_twip<SwTwips>()), FieldUnit::TWIP);
     m_xLineDistEdit->set_value(
-        m_xLineDistEdit->normalize(pFootnoteInfo->GetBottomDist()), FieldUnit::TWIP);
+        m_xLineDistEdit->normalize(pFootnoteInfo->GetBottomDist().as_twip<SwTwips>()), FieldUnit::TWIP);
     ActivatePage( *rSet );
 }
 
@@ -246,15 +246,14 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
     // footnote area's height
     if (m_xMaxHeightBtn->get_active())
-        rFootnoteInfo.SetHeight( static_cast< SwTwips >(
-                m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FieldUnit::TWIP))));
+        rFootnoteInfo.SetHeight(gfx::Length::twip(
+            m_xMaxHeightEdit->denormalize(m_xMaxHeightEdit->get_value(FieldUnit::TWIP))));
     else
-        rFootnoteInfo.SetHeight(0);
+        rFootnoteInfo.SetHeight(0_emu);
 
         // gap footnote area
-    rFootnoteInfo.SetTopDist(  static_cast< SwTwips >(
-            m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP))));
-    rFootnoteInfo.SetBottomDist(  static_cast< SwTwips >(
+    rFootnoteInfo.SetTopDist(gfx::Length::twip(m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP))));
+    rFootnoteInfo.SetBottomDist(gfx::Length::twip(
             m_xLineDistEdit->denormalize(m_xLineDistEdit->get_value(FieldUnit::TWIP))));
 
     // Separator style

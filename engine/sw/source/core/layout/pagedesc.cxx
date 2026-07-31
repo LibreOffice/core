@@ -726,12 +726,9 @@ void SwPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwPageFootnoteInfo::SwPageFootnoteInfo()
-    : m_nMaxHeight( 0 )
-    , m_nLineWidth(10)
+    : m_nLineWidth(10)
     , m_eLineStyle( SvxBorderLineStyle::SOLID )
     , m_Width( 25.0 / 100 )
-    , m_nTopDist( 57 )         //1mm
-    , m_nBottomDist( 57 )
 {
     m_eAdjust = SvxFrameDirection::Horizontal_RL_TB == GetDefaultFrameDirection(GetAppLanguage()) ?
            css::text::HorizontalAdjust_RIGHT :

@@ -204,8 +204,8 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     }
     else
         m_bHasGrid = false;
-    SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
-                     pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX );
+    SetMaxFootnoteHeight(pPgDsc->GetFootnoteInfo().GetHeight() != 0_emu ?
+                     pPgDsc->GetFootnoteInfo().GetHeight().as_twip<SwTwips>() : LONG_MAX);
     mnFrameType = SwFrameType::Page;
     m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
     m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;
@@ -527,7 +527,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
         // currently the savest way:
         static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();
-        SetMaxFootnoteHeight(m_pDesc->GetFootnoteInfo().GetHeight());
+        SetMaxFootnoteHeight(m_pDesc->GetFootnoteInfo().GetHeight().as_twip<SwTwips>());
         if(!GetMaxFootnoteHeight())
             SetMaxFootnoteHeight(LONG_MAX);
         SetColMaxFootnoteHeight();

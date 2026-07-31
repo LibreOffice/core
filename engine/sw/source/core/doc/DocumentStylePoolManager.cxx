@@ -1924,8 +1924,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( SwPoolFormatId nId, b
             pNewPgDsc->SetUseOn( UseOnPage::All );
             SwPageFootnoteInfo aInf( pNewPgDsc->GetFootnoteInfo() );
             aInf.SetLineWidth( 0 );
-            aInf.SetTopDist( 0 );
-            aInf.SetBottomDist( 0 );
+            aInf.SetTopDist(0_emu);
+            aInf.SetBottomDist(0_emu);
             pNewPgDsc->SetFootnoteInfo( aInf );
         }
         break;

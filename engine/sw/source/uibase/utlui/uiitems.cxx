@@ -66,7 +66,7 @@ bool SwPageFootnoteInfoItem::GetPresentation
     const IntlWrapper&  rIntl
 )   const
 {
-    const SwTwips nHght = GetPageFootnoteInfo().GetHeight();
+    const SwTwips nHght = GetPageFootnoteInfo().GetHeight().as_twip<SwTwips>();
     if ( nHght )
     {
         rText = SwResId( STR_MAX_FTN_HEIGHT ) + " " +
@@ -81,7 +81,7 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
-        case MID_FTN_HEIGHT        :     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetHeight()));break;
+        case MID_FTN_HEIGHT: rVal <<= m_aFootnoteInfo.GetHeight().as_hmm<sal_Int32>(); break;
         case MID_LINE_WEIGHT       :     rVal <<= static_cast<sal_Int16>(convertTwipToMm100(m_aFootnoteInfo.GetLineWidth()));break;
         case MID_LINE_COLOR        :     rVal <<= m_aFootnoteInfo.GetLineColor();break;
         case MID_LINE_RELWIDTH     :
@@ -91,8 +91,8 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_LINE_ADJUST       :     rVal <<= static_cast<sal_Int16>(m_aFootnoteInfo.GetAdj());break;//text::HorizontalAdjust
-        case MID_LINE_TEXT_DIST    :     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetTopDist()));break;
-        case MID_LINE_FOOTNOTE_DIST:     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(m_aFootnoteInfo.GetBottomDist()));break;
+        case MID_LINE_TEXT_DIST: rVal <<= m_aFootnoteInfo.GetTopDist().as_hmm<sal_Int32>(); break;
+        case MID_LINE_FOOTNOTE_DIST: rVal <<= m_aFootnoteInfo.GetBottomDist().as_hmm<sal_Int32>(); break;
         case MID_FTN_LINE_STYLE    :
         {
             switch ( m_aFootnoteInfo.GetLineStyle( ) )
@@ -130,12 +130,11 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                     bRet = false;
                 else
                 {
-                    nSet32 = o3tl::toTwips(nSet32, o3tl::Length::mm100);
-                    switch(nMemberId & ~CONVERT_TWIPS)
+                    switch (nMemberId & ~CONVERT_TWIPS)
                     {
-                        case MID_FTN_HEIGHT:            m_aFootnoteInfo.SetHeight(nSet32);    break;
-                        case MID_LINE_TEXT_DIST:        m_aFootnoteInfo.SetTopDist(nSet32);break;
-                        case MID_LINE_FOOTNOTE_DIST:    m_aFootnoteInfo.SetBottomDist(nSet32);break;
+                        case MID_FTN_HEIGHT: m_aFootnoteInfo.SetHeight(gfx::Length::hmm(nSet32)); break;
+                        case MID_LINE_TEXT_DIST: m_aFootnoteInfo.SetTopDist(gfx::Length::hmm(nSet32)); break;
+                        case MID_LINE_FOOTNOTE_DIST: m_aFootnoteInfo.SetBottomDist(gfx::Length::hmm(nSet32)); break;
                     }
                 }
         break;

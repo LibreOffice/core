@@ -5813,12 +5813,12 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     std::optional<SwRect> oLineRect;
     if (aRectFnSet.IsVert())
     {
-        oLineRect.emplace(Point(getFrameArea().Left()+getFrameArea().Width()-rInf.GetTopDist()-nLineWidth,
+        oLineRect.emplace(Point(getFrameArea().Left()+getFrameArea().Width()-rInf.GetTopDist().as_twip<SwTwips>()-nLineWidth,
                       nX), Size( nLineWidth, nWidth ) );
     }
     else
     {
-        Point aPoint(nX, getFrameArea().Pos().Y() + rInf.GetTopDist());
+        Point aPoint(nX, getFrameArea().Pos().Y() + rInf.GetTopDist().as_twip<SwTwips>());
         const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
         if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
         {
