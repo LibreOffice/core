@@ -1249,16 +1249,18 @@ struct SwFindParaAttr : public SwFindParas
     SwCursor& m_rCursor;
     SwRootFrame const* m_pLayout;
     std::unique_ptr<utl::TextSearch> pSText;
+    bool m_bFindAll;
 
     SwFindParaAttr( const SfxItemSet& rSet, bool bNoCollection,
                     const i18nutil::SearchOptions2* pOpt, const SfxItemSet* pRSet,
-                    SwCursor& rCursor, SwRootFrame const*const pLayout)
+                    bool bFindAll, SwCursor& rCursor, SwRootFrame const*const pLayout)
         : m_bNoCollection(bNoCollection)
         , pSet( &rSet )
         , pReplSet( pRSet )
         , pSearchOpt( pOpt )
         , m_rCursor(rCursor)
         , m_pLayout(pLayout)
+        , m_bFindAll(bFindAll)
     {}
 
     virtual ~SwFindParaAttr()   {}
@@ -1322,7 +1324,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             // TODO: searching for attributes in Outliner text?!
 
             // continue search in correct section (pTextRegion)
-            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_pLayout, xSearchItem) &&
+            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_bFindAll, m_pLayout, xSearchItem) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )
                 break; // found
             else if( !pSet->Count() )
@@ -1436,8 +1438,8 @@ sal_Int32 SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
         rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
     }
 
-    SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
-                                    pReplSet, *this, pLayout );
+    SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt, pReplSet,
+                                    bool(eFndRngs & FindRanges::InSelAll), *this, pLayout );
 
     sal_Int32 nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );

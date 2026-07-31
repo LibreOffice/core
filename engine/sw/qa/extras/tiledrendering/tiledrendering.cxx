@@ -24,6 +24,8 @@
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/util/XSearchable.hpp>
+#include <com/sun/star/util/XSearchDescriptor.hpp>
 
 #include <test/helper/transferable.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -393,6 +395,26 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAllWithShape)
+{
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+
+    // The document has a shape anchored to a paragraph, and its text matches as well.
+    uno::Reference<util::XSearchable> xSearchable(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XSearchDescriptor> xDescriptor = xSearchable->createSearchDescriptor();
+    xDescriptor->setSearchString(u"shape"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 4
+    // the search having stepped into the shape's text edit and counted its matches as well.
+    uno::Reference<container::XIndexAccess> xResults(xSearchable->findAll(xDescriptor),
+                                                    uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xResults->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)

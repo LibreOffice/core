@@ -52,7 +52,6 @@
 #include <breakit.hxx>
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
-#include <view.hxx>
 
 using namespace ::com::sun::star;
 using namespace util;
@@ -366,11 +365,12 @@ static bool DoSearch(SwPaM & rSearchPam,
 namespace sw {
 
 // @param xSearchItem allocate in parent so we can do so outside the calling loop
+// @param bFindAll the search collects every match, rather than stepping from one to the next
 bool FindTextImpl(SwPaM & rSearchPam,
         const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
         utl::TextSearch& rSText,
         SwMoveFnCollection const & fnMove, const SwPaM & rRegion,
-        bool bInReadOnly, SwRootFrame const*const pLayout,
+        bool bInReadOnly, bool bFindAll, SwRootFrame const*const pLayout,
         std::unique_ptr<SvxSearchItem>& xSearchItem)
 {
     if( rSearchOpt.searchString.isEmpty() )
@@ -547,10 +547,10 @@ bool FindTextImpl(SwPaM & rSearchPam,
         if (comphelper::COKit::isActive())
         {
             // Writer and editeng selections are not supported in parallel.
-            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-            // If we just finished search in shape text, don't attempt to do that again.
-            if (!bEndedTextEdit
-                && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
+            // If we just finished search in shape text, don't attempt to do that again. Leave a
+            // shape to a search that steps from match to match, which is what carries its text
+            // edit forward: one that collects every match finds the shape's text again and again.
+            if (!bEndedTextEdit && !bFindAll)
             {
                 // If there are any shapes anchored to this node, search there.
                 SwPaM aPaM(pNode->GetDoc().GetNodes().GetEndOfContent());
@@ -937,15 +937,17 @@ struct SwFindParaText : public SwFindParas
     utl::TextSearch m_aSText;
     bool m_bReplace;
     bool m_bSearchInNotes;
+    bool m_bFindAll;
 
     SwFindParaText(const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes,
-            bool bRepl, SwCursor& rCursor, SwRootFrame const*const pLayout)
+            bool bRepl, bool bFindAll, SwCursor& rCursor, SwRootFrame const*const pLayout)
         : m_rSearchOpt( rOpt )
         , m_rCursor( rCursor )
         , m_pLayout(pLayout)
         , m_aSText(rOpt)
         , m_bReplace( bRepl )
         , m_bSearchInNotes( bSearchInNotes )
+        , m_bFindAll( bFindAll )
     {}
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly, std::unique_ptr<SvxSearchItem>& xSearchItem) override;
     virtual bool IsReplaceMode() const override;
@@ -966,7 +968,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         bInReadOnly = false;
 
     const bool bFnd = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes,
-            m_aSText, fnMove, rRegion, bInReadOnly, m_pLayout, xSearchItem);
+            m_aSText, fnMove, rRegion, bInReadOnly, m_bFindAll, m_pLayout, xSearchItem);
 
     if( bFnd && m_bReplace ) // replace string
     {
@@ -1039,7 +1041,8 @@ sal_Int32 SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
-    SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout);
+    SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace,
+            bool(eFndRngs & FindRanges::InSelAll), *this, pLayout);
     sal_Int32 nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )
