@@ -1,6 +1,7 @@
 using System.Text;
 using Paperless.Core.Extraction;
 using Paperless.Core.Globalization;
+using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 
@@ -423,6 +424,44 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.TableDefinition:
                     format = format with { TableDefinition = ReadTableDefinition(sprm.Operand) };
                     break;
+
+                case Ww8SprmReader.Ids.SetCellBorder or Ww8SprmReader.Ids.SetCellBorder80:
+                    if (ReadBorderOverride(
+                            sprm.Operand,
+                            isLongForm: sprm.Identifier == Ww8SprmReader.Ids.SetCellBorder)
+                        is { } border)
+                    {
+                        format = format with
+                        {
+                            CellBorderOverrides = [.. format.CellBorderOverrides ?? [], border],
+                        };
+                    }
+
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading:
+                    format = format with
+                    {
+                        CellShading = Ww8Shading.ReadLong(sprm.Operand, firstCell: 0),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading2nd or Ww8SprmReader.Ids.CellShading3rd:
+                    format = format with
+                    {
+                        CellShading = Overlay(
+                            format.CellShading,
+                            Ww8Shading.ReadLong(
+                                sprm.Operand,
+                                firstCell: sprm.Identifier == Ww8SprmReader.Ids.CellShading2nd
+                                    ? SecondShadingCell
+                                    : ThirdShadingCell)),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading80:
+                    format = format with { CellShading80 = Ww8Shading.ReadShort(sprm.Operand) };
+                    break;
             }
         }
         return format;
@@ -659,6 +698,44 @@ public readonly record struct Ww8ParagraphFormat
     /// </remarks>
     public Ww8TableDefinition? TableDefinition { get; init; }
 
+    /// <summary>
+    /// The border codes <c>sprmTSetBrc</c> laid over the row's cell descriptors, in the order stated.
+    /// </summary>
+    /// <remarks>
+    /// A list rather than a resolved set per cell, because each entry covers a <em>range</em> of cells and a
+    /// selection of sides, and the ranges overlap: LibreOffice's own export writes four of them per row, one
+    /// per side, each covering every cell. Applying them in order is what turns them into a set, and the
+    /// order matters because a later entry overwrites an earlier one on the sides it names.
+    /// </remarks>
+    public IReadOnlyList<Ww8BorderOverride>? CellBorderOverrides { get; init; }
+
+    /// <summary>
+    /// The row's cell shading from the newer sprms, one entry per cell; null where a cell has none.
+    /// </summary>
+    /// <remarks>
+    /// Already blended: WW8 states a shade as a foreground, a background and a pattern index rather than as
+    /// the colour it looks like, and there is nothing further downstream that could do the blending.
+    /// </remarks>
+    public IReadOnlyList<Colour?>? CellShading { get; init; }
+
+    /// <summary>The same from <c>sprmTDefTableShd80</c>, which the newer form beats per cell.</summary>
+    public IReadOnlyList<Colour?>? CellShading80 { get; init; }
+}
+
+/// <summary>
+/// One <c>sprmTSetBrc</c>: a border, the sides it sets, and the range of cells it sets them on.
+/// </summary>
+/// <param name="FirstCell">The first cell it applies to.</param>
+/// <param name="CellLimit">One past the last.</param>
+/// <param name="Sides">
+/// Which sides it sets, as WW8's own bits — the same top-before-left order the padding sprms use.
+/// </param>
+/// <param name="Border">The border code to put on each of those sides.</param>
+public readonly record struct Ww8BorderOverride(
+    int FirstCell, int CellLimit, int Sides, Ww8Border Border)
+{
+    /// <summary>True when this entry applies to the cell at an index.</summary>
+    public bool Covers(int cell) => cell >= FirstCell && cell < CellLimit;
 }
 
 /// <summary>

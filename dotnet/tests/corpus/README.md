@@ -205,8 +205,10 @@ an earlier version had both and could not be compared at all, because a border t
 either side of each grid line — so 0.05 pt borders make the table 0.1 pt taller per row boundary and shift every
 column edge. One feature per document, as above. Two things about comparing it: LibreOffice's DOCX render fills
 each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
-distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
-per-band `WW8_SHD` array that is not read yet.
+distinct rectangles; and `table-shading.doc` earns its place by being the hardest of the five, since WW8 states
+a shade as a foreground, a background and a pattern index rather than as a colour — the grey has to be blended
+out of black over white at Word's own twenty per cent, so a reader that took the foreground would fill the cell
+black and still be in exactly the right place.
 
 `table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
 the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
@@ -214,8 +216,13 @@ with the text by default, and a distinct one makes it obvious in a rendered page
 checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
 one document could not test either cleanly.
 
-`table-borders.*` exists in all five formats but only the two ODF ones are compared stroke for stroke, and the
-reason is the table's *origin* rather than its borders: each export writes the table's own left edge differently
-relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
-DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
-right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
+`table-borders.*` exists in all five formats and all five are compared stroke for stroke. Getting the last three
+there turned up two rules worth knowing before writing another table document. The first is that **Word and
+Writer measure a table's left edge from different places** — Writer from the middle of the left border, Word from
+its outer edge — so a DOCX or RTF indent is half a border too small, which is also why LibreOffice's own DOCX
+export writes `w:tblInd w:w="-5"` for a table sitting at the margin. DOC needs no such correction, because WW8's
+column boundaries are grid lines already. The second is that **the same table is drawn differently depending on
+which family it came from**: an interior grid line stops at the *inner* edge of the table's outline for a
+Word-family document and crosses to its outer edge for an ODF one, half a point at each end. So the four
+renders of one table legitimately disagree, and a comparison that assumed otherwise would chase a bug that is
+not there.

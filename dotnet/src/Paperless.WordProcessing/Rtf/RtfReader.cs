@@ -222,7 +222,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             ColumnWidths = table.ColumnWidths,
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
-            LeftIndent = table.LeftIndent,
+            LeftIndent = PageTable.WordLeftIndent(table.LeftIndent, rows),
+            InnerBordersStopAtTheOuterEdge = true,
         };
     }
 

@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.WordProcessing.Layout;
 
@@ -169,6 +170,8 @@ public sealed partial class Ww8DocumentReader
             {
                 level.RowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
                 level.RowCells[i].Padding = PaddingOf(format, i);
+                level.RowCells[i].Borders = BordersOf(format, definition, i);
+                level.RowCells[i].Shading = ShadingOf(format, i);
 
                 Ww8CellDefinition cell = definition?.CellAt(i) ?? default;
                 level.RowCells[i].IsHorizontallyMerged = cell.IsMerged;
@@ -281,7 +284,9 @@ public sealed partial class Ww8DocumentReader
                     cell.ColumnSpan,
                     cell.RowSpan,
                     cell.Padding,
-                    [.. cell.LayoutBlocks]));
+                    [.. cell.LayoutBlocks],
+                    cell.Borders,
+                    cell.Shading));
             }
 
             layoutRows.Add(new Ww8LayoutRow(
@@ -362,8 +367,64 @@ public sealed partial class Ww8DocumentReader
             Ww8CellDraft owner = cells[index - 1];
             owner.RightEdge = Math.Max(owner.RightEdge, cells[index].RightEdge);
             owner.LayoutBlocks.AddRange(cells[index].LayoutBlocks);
+
+            // The widened cell's right edge is now where the swallowed one's was, so it is that cell's
+            // right border that bounds it — the same thing LibreOffice's own WW6 read does when it folds a
+            // merge. Keeping the owner's would draw the line down the middle of the merged cell.
+            owner.Borders = owner.Borders with { Right = cells[index].Borders.Right };
+
             cells.RemoveAt(index);
         }
+    }
+
+    /// <summary>
+    /// One cell's four edges, from the row's cell descriptor and the overrides laid over it.
+    /// </summary>
+    /// <param name="format">The row-end paragraph's properties.</param>
+    /// <param name="definition">The row's geometry, whose descriptors carry each cell's own codes.</param>
+    /// <param name="cell">Which cell of the row.</param>
+    /// <remarks>
+    /// <para>
+    /// Two layers, applied in that order: the descriptor's own four codes, then every
+    /// <c>sprmTSetBrc</c> covering this cell, in the order the document stated them. The overrides
+    /// <em>replace</em> rather than merge — LibreOffice's <c>ProcessSprmTSetBRC</c> writes straight into the
+    /// cell descriptor it already read — so a document can turn a single edge off by naming it with the nil
+    /// border code.
+    /// </para>
+    /// <para>
+    /// What is not read is <c>sprmTTableBorders</c>, the table's own six defaults, which fill in only the
+    /// sides no cell stated and choose between the outer and the interior code by the row's position in the
+    /// table and the cell's in the row. A table stating only those gets no borders rather than wrong ones.
+    /// </para>
+    /// </remarks>
+    private static CellBorders BordersOf(
+        Ww8ParagraphFormat format, Ww8TableDefinition? definition, int cell)
+    {
+        Ww8CellBorders borders = definition?.CellAt(cell).Borders ?? default;
+
+        foreach (Ww8BorderOverride stated in format.CellBorderOverrides ?? [])
+        {
+            if (stated.Covers(cell)) borders = borders.With(stated.Sides, stated.Border);
+        }
+
+        return borders.AsCellBorders();
+    }
+
+    /// <summary>
+    /// One cell's background, from whichever of the row's two shading spellings says anything about it.
+    /// </summary>
+    /// <remarks>
+    /// The newer form wins per cell rather than whole, which is what <c>WW8TabDesc::SetTabShades</c> does:
+    /// LibreOffice's own export writes both, and a colour outside Word's seventeen-entry palette can only be
+    /// stated by the newer one, so a reader preferring the older gets the nearest palette entry instead of
+    /// the colour the document asked for.
+    /// </remarks>
+    private static Colour? ShadingOf(Ww8ParagraphFormat format, int cell)
+    {
+        return At(format.CellShading) ?? At(format.CellShading80);
+
+        Colour? At(IReadOnlyList<Colour?>? shades)
+            => shades is not null && cell < shades.Count ? shades[cell] : null;
     }
 }
 
@@ -441,9 +502,13 @@ public sealed record Ww8LayoutRow(
 /// <param name="RowSpan">How many rows it covers downwards.</param>
 /// <param name="Padding">The gap between its edges and its text.</param>
 /// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
+/// <param name="Borders">Its four edges.</param>
+/// <param name="Shading">Its background, or null when it has none.</param>
 public sealed record Ww8LayoutCell(
     int Column,
     int ColumnSpan,
     int RowSpan,
     CellPadding Padding,
-    IReadOnlyList<Ww8LayoutBlock> Blocks);
+    IReadOnlyList<Ww8LayoutBlock> Blocks,
+    CellBorders Borders = default,
+    Colour? Shading = null);

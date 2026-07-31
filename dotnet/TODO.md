@@ -20,14 +20,13 @@ processor draws that is not text — a footnote separator, a cell border, a cell
 filled or stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in the TestKit read
 them. So those features are verifiable at the same tenth of a point as text, without pixels.
 Footnotes and endnotes are done in all four formats, including the feedback loop into pagination
-that a footnote needs and the separate pages an endnote takes. Cell shading is done in three
-formats and cell borders in two, consolidated the way LibreOffice consolidates them. What
-remains is floating frames with text wrap, the DOC reads for borders and shading, the table
-origin in DOCX and RTF, and note numbering *restarts*. Read
-`src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
-warning about borders: they cannot be verified the way everything else in this library has
-been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
-is still a stub. That makes the rasteriser the thing to build before the borders, not after.
+that a footnote needs and the separate pages an endnote takes. Cell shading and cell borders are
+done in **all four**, consolidated the way LibreOffice consolidates them and compared stroke by
+stroke — including the one place a table is *drawn* differently rather than merely described
+differently, where an interior grid line stops inside the outline for a Word-family document and
+crosses it for an ODF one. What remains is floating frames with text wrap, note numbering
+*restarts*, and table auto-fit. Read `src/Paperless.WordProcessing/TODO.md`, whose open items
+each say what is missing and why.
 
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
 spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
@@ -87,7 +86,7 @@ binary.
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Floating frames with text wrap; cell borders and shading for DOC |
+| ❌ | Floating frames with text wrap; table auto-fit; note-numbering restarts |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -210,9 +209,12 @@ was found because a page comparison put a word a measurable distance from where 
       loop shortens the page until it holds. Endnotes instead take pages of their own after the
       last body page, numbered i, ii, iii rather than 1, 2, 3. Notes read from all four formats,
       with the separator rule above them drawn and compared.
-- [x] Table cell shading (ODF, DOCX, RTF) and cell borders (ODF, DOCX, RTF), the borders
-      consolidated into one stroke per grid line as LibreOffice writes them.
-- [ ] The rest of it: floating frames with text wrap, and the DOC reads for borders and shading.
+- [x] Table cell shading and cell borders in all four formats, the borders consolidated into one
+      stroke per grid line as LibreOffice writes them. DOC was the largest of the four and the only
+      one that needed arithmetic rather than translation: it states a shade as a foreground, a
+      background and a *pattern index* rather than as a colour, and its borders arrive both in the
+      table definition's cell descriptors and as a sprm covering a range of cells.
+- [ ] The rest of it: floating frames with text wrap, and table auto-fit.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.

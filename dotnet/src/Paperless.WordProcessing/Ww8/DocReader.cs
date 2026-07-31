@@ -282,6 +282,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,
                     Padding = cell.Padding,
+                    Borders = cell.Borders,
+                    Shading = cell.Shading,
                 });
             }
 
@@ -301,6 +303,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
             LeftIndent = table.LeftIndent,
+
+            // Word's own rule, which Writer follows for anything its DOC, DOCX and RTF importers read.
+            InnerBordersStopAtTheOuterEdge = true,
         };
     }
 

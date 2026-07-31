@@ -788,10 +788,7 @@ public sealed partial class Ww8DocumentReader
                 }
 
                 case LayoutSprms.ColourIndex:
-                    format = format with
-                    {
-                        Colour = sprm.Byte < IcoPalette.Length ? IcoPalette[sprm.Byte] : null,
-                    };
+                    format = format with { Colour = Ww8Colours.At(sprm.Byte) };
                     break;
 
                 case LayoutSprms.VerticalPosition:
@@ -997,35 +994,6 @@ public sealed partial class Ww8DocumentReader
     /// </remarks>
     public const int MaxTabStops = 256;
 
-    /// <summary>
-    /// The seventeen colours a <c>sprmCIco</c> index names.
-    /// </summary>
-    /// <remarks>
-    /// Copied from <c>SwWW8ImplReader::GetCol</c> (<c>sw/source/filter/ww8/ww8par6.cxx</c>), whose order is
-    /// not the obvious one: index 2 is <em>light</em> blue and index 9 is blue, so the palette runs bright
-    /// colours first and dark ones second. Index 0 is the automatic colour and is null rather than black,
-    /// so the document's own default applies.
-    /// </remarks>
-    private static readonly Colour?[] IcoPalette =
-    [
-        null,
-        Colour.FromRgb(0x000000),
-        Colour.FromRgb(0x0000FF),
-        Colour.FromRgb(0x00FFFF),
-        Colour.FromRgb(0x00FF00),
-        Colour.FromRgb(0xFF00FF),
-        Colour.FromRgb(0xFF0000),
-        Colour.FromRgb(0xFFFF00),
-        Colour.FromRgb(0xFFFFFF),
-        Colour.FromRgb(0x000080),
-        Colour.FromRgb(0x008080),
-        Colour.FromRgb(0x008000),
-        Colour.FromRgb(0x800080),
-        Colour.FromRgb(0x800000),
-        Colour.FromRgb(0x808000),
-        Colour.FromRgb(0x808080),
-        Colour.FromRgb(0xC0C0C0),
-    ];
 }
 
 /// <summary>
