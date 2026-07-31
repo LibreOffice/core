@@ -165,6 +165,47 @@ public sealed class PaintTests
         pdf.ShouldContain("/ColorSpace/DeviceGray");
     }
 
+    [Fact]
+    public void AGradientWhoseStopsFadeStatesALuminositySoftMask()
+    {
+        string pdf = Write(sink => sink.FillPath(
+            Rectangle(0, 0, 72, 72),
+            new GradientPaint(
+                GradientKind.Linear,
+                [new GradientStop(0, Red), new GradientStop(1, Red.WithAlpha(0))],
+                new DocPoint(Pt(0), Pt(0)),
+                new DocPoint(Pt(72), Pt(0)),
+                AffineTransform.Identity))).Text;
+
+        // A shading's colour space is DeviceRGB and that is all it has, so a fade is a second
+        // shading in DeviceGray whose brightness the mask reads as alpha. Without it the same
+        // GradientPaint would fade on a PNG and be opaque in a PDF.
+        pdf.ShouldContain("/SMask<</S/Luminosity");
+        pdf.ShouldContain("/ColorSpace/DeviceGray");
+        pdf.ShouldContain("/Group<</Type/Group/S/Transparency/CS/DeviceGray>>");
+        Regex.Count(pdf, @"/ShadingType 2").ShouldBe(2, "one shading for the colour, one for the alpha");
+    }
+
+    [Fact]
+    public void AGradientAtOneAlphaThroughoutNeedsOnlyAConstantAlpha()
+    {
+        string pdf = Write(sink => sink.FillPath(
+            Rectangle(0, 0, 72, 72),
+            new GradientPaint(
+                GradientKind.Linear,
+                [new GradientStop(0, Red.WithAlpha(128)), new GradientStop(1, Blue.WithAlpha(128))],
+                new DocPoint(Pt(0), Pt(0)),
+                new DocPoint(Pt(72), Pt(0)),
+                AffineTransform.Identity))).Text;
+
+        // A soft mask costs a form XObject, a transparency group and a second shading. A gradient
+        // that is uniformly half transparent needs none of it, and half-transparent shapes are
+        // common enough that the difference is worth the branch.
+        pdf.ShouldContain("/ca ");
+        pdf.ShouldNotContain("/SMask");
+        Regex.Count(pdf, @"/ShadingType").ShouldBe(1);
+    }
+
     // ----------------------------------------------------------------------------- the raster
 
     [Fact]
@@ -196,6 +237,28 @@ public sealed class PaintTests
         // the page, which every colour assertion above would still pass.
         page.GetPixel(80, 36).ShouldBe(new SKColor(255, 255, 255, 255));
         page.GetPixel(36, 80).ShouldBe(new SKColor(255, 255, 255, 255));
+    }
+
+    [Fact]
+    public void AFadingGradientBlendsIntoThePageInPixelsToo()
+    {
+        using SKBitmap page = Rasterise(sink => sink.FillPath(
+            Rectangle(0, 0, 72, 72),
+            new GradientPaint(
+                GradientKind.Linear,
+                [new GradientStop(0, Red), new GradientStop(1, Red.WithAlpha(0))],
+                new DocPoint(Pt(0), Pt(0)),
+                new DocPoint(Pt(72), Pt(0)),
+                AffineTransform.Identity)));
+
+        // The same picture the PDF's luminosity mask produces, checked here because the two are
+        // built completely differently — Skia carries alpha in the shader's own colours — and the
+        // whole point is that one display list gives one picture. Rasterising our PDF of the same
+        // fill through poppler and comparing puts the two at a mean absolute difference of 0.0003.
+        page.GetPixel(1, 36).Red.ShouldBeGreaterThan((byte)180);
+        page.GetPixel(1, 36).Green.ShouldBeLessThan((byte)40);
+        page.GetPixel(70, 36).Green.ShouldBeGreaterThan((byte)245, "all but faded into the white page");
+        page.GetPixel(36, 36).Green.ShouldBeInRange((byte)110, (byte)150);
     }
 
     [Fact]

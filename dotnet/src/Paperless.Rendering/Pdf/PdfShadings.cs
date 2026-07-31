@@ -50,13 +50,20 @@ internal static class PdfShadings
     /// space the <c>sh</c> operator paints in and every other coordinate this backend writes
     /// is converted the same way.
     /// </param>
-    public static int Write(PdfDocumentWriter writer, GradientPaint gradient, double pageHeight)
+    /// <param name="alphaOnly">
+    /// When true the shading is written in <c>DeviceGray</c> with each stop's <em>alpha</em> as
+    /// its grey level, which is the luminosity a soft mask reads. A PDF shading has no alpha
+    /// channel of its own, so a gradient that fades is two shadings: this one masking the other.
+    /// </param>
+    public static int Write(
+        PdfDocumentWriter writer, GradientPaint gradient, double pageHeight, bool alphaOnly = false)
     {
         ArgumentNullException.ThrowIfNull(writer);
         ArgumentNullException.ThrowIfNull(gradient);
 
         IReadOnlyList<GradientStop> stops = Gradients.Normalise(gradient.Stops);
-        int function = Function(writer, stops);
+        int function = Function(writer, stops, alphaOnly);
+        string space = alphaOnly ? "/DeviceGray" : "/DeviceRGB";
 
         double x0 = gradient.Start.X.Points;
         double y0 = pageHeight - gradient.Start.Y.Points;
@@ -66,7 +73,7 @@ internal static class PdfShadings
         if (gradient.Kind == GradientKind.Linear)
         {
             return writer.Add(
-                "<</ShadingType 2/ColorSpace/DeviceRGB"
+                $"<</ShadingType 2/ColorSpace{space}"
                 + $"/Coords[{N(x0)} {N(y0)} {N(x1)} {N(y1)}]"
                 + $"/Function {function} 0 R/Extend[true true]>>");
         }
@@ -78,7 +85,7 @@ internal static class PdfShadings
         if (radius <= 0) radius = 1;
 
         return writer.Add(
-            "<</ShadingType 3/ColorSpace/DeviceRGB"
+            $"<</ShadingType 3/ColorSpace{space}"
             + $"/Coords[{N(x0)} {N(y0)} 0 {N(x0)} {N(y0)} {N(radius)}]"
             + $"/Function {function} 0 R/Extend[true true]>>");
     }
@@ -92,13 +99,13 @@ internal static class PdfShadings
     /// type 3, whose <c>/Bounds</c> are the interior stop offsets and whose <c>/Encode</c>
     /// re-maps each piece's own slice of the domain back onto 0 to 1.
     /// </remarks>
-    private static int Function(PdfDocumentWriter writer, IReadOnlyList<GradientStop> stops)
+    private static int Function(PdfDocumentWriter writer, IReadOnlyList<GradientStop> stops, bool alphaOnly)
     {
         if (stops.Count == 2)
         {
             return writer.Add(
-                $"<</FunctionType 2/Domain[0 1]/C0[{Components(stops[0].Colour)}]"
-                + $"/C1[{Components(stops[1].Colour)}]/N 1>>");
+                $"<</FunctionType 2/Domain[0 1]/C0[{Components(stops[0].Colour, alphaOnly)}]"
+                + $"/C1[{Components(stops[1].Colour, alphaOnly)}]/N 1>>");
         }
 
         StringBuilder functions = new();
@@ -108,8 +115,8 @@ internal static class PdfShadings
         for (int i = 1; i < stops.Count; i++)
         {
             int piece = writer.Add(
-                $"<</FunctionType 2/Domain[0 1]/C0[{Components(stops[i - 1].Colour)}]"
-                + $"/C1[{Components(stops[i].Colour)}]/N 1>>");
+                $"<</FunctionType 2/Domain[0 1]/C0[{Components(stops[i - 1].Colour, alphaOnly)}]"
+                + $"/C1[{Components(stops[i].Colour, alphaOnly)}]/N 1>>");
 
             if (i > 1)
             {
@@ -129,8 +136,10 @@ internal static class PdfShadings
             + $"/Bounds[{bounds.ToString().Trim()}]/Encode[{encode}]>>");
     }
 
-    private static string Components(Colour colour)
-        => $"{PdfSyntax.Component(colour.R)} {PdfSyntax.Component(colour.G)} {PdfSyntax.Component(colour.B)}";
+    private static string Components(Colour colour, bool alphaOnly)
+        => alphaOnly
+            ? PdfSyntax.Component(colour.A)
+            : $"{PdfSyntax.Component(colour.R)} {PdfSyntax.Component(colour.G)} {PdfSyntax.Component(colour.B)}";
 
     private static string N(double value) => PdfSyntax.Number(value);
 }

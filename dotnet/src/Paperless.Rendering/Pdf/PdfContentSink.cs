@@ -290,17 +290,99 @@ internal sealed class PdfContentSink(
             return;
         }
 
-        int id = PdfShadings.Write(writer, gradient, _pageHeight);
-        string name = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
-        _shadings.Add((name, id));
+        string name = Shading(gradient, alphaOnly: false);
 
         _content.Append("q\n");
+        AppendTransparency(path, gradient, rule);
         AppendPath(path);
         _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
 
         if (gradient.Transform != AffineTransform.Identity) Transform(gradient.Transform);
 
         _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
+    }
+
+    /// <summary>Names a shading, adding it to the page's resources.</summary>
+    private string Shading(GradientPaint gradient, bool alphaOnly)
+    {
+        int id = PdfShadings.Write(writer, gradient, _pageHeight, alphaOnly);
+        string name = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
+        _shadings.Add((name, id));
+        return name;
+    }
+
+    /// <summary>
+    /// States a gradient's transparency, if it has any.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A PDF shading has no alpha channel — its colour space is <c>DeviceRGB</c> and that is
+    /// all — so a gradient that fades has to say so somewhere else. Where depends on what it
+    /// does: one alpha shared by every stop is a constant <c>/ca</c> in an <c>ExtGState</c>,
+    /// which costs one small object; an alpha that <em>varies</em> along the ramp needs a
+    /// luminosity soft mask, which is a second shading in <c>DeviceGray</c> painted into a
+    /// transparency group whose brightness the mask reads as the alpha.
+    /// </para>
+    /// <para>
+    /// This is not a refinement. The raster backend honours a stop's alpha for nothing, because
+    /// a Skia shader's colours carry one, so without this the same <see cref="GradientPaint"/>
+    /// would fade on a PNG and be opaque in a PDF — two pictures from one display list, which is
+    /// the failure the shared band decomposition exists to prevent elsewhere.
+    /// </para>
+    /// <para>
+    /// <c>/BC [0]</c> makes everything outside the group's own bounding box fully masked, so
+    /// only what the mask actually paints shows through. The group states
+    /// <c>/CS /DeviceGray</c> to match, since a luminosity mask reads brightness.
+    /// </para>
+    /// </remarks>
+    private void AppendTransparency(GraphicsPath path, GradientPaint gradient, FillRule rule)
+    {
+        IReadOnlyList<GradientStop> stops = Fills.Gradients.Normalise(gradient.Stops);
+
+        byte first = stops[0].Colour.A;
+        bool uniform = true;
+        foreach (GradientStop stop in stops)
+        {
+            if (stop.Colour.A != first) { uniform = false; break; }
+        }
+
+        if (uniform)
+        {
+            AppendAlpha(first, stroking: false);
+            return;
+        }
+
+        string mask = Shading(gradient, alphaOnly: true);
+
+        StringBuilder inner = new();
+        StringBuilder outer = _content;
+        _content = inner;
+
+        AppendPath(path);
+        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+        if (gradient.Transform != AffineTransform.Identity) Transform(gradient.Transform);
+        _content.Append(CultureInfo.InvariantCulture, $"/{mask} sh\n");
+
+        _content = outer;
+
+        int form = writer.Reserve();
+        string name = string.Create(CultureInfo.InvariantCulture, $"Fm{_xObjects.Count + 1}");
+        _xObjects.Add((name, form));
+
+        writer.SetStream(
+            form,
+            "/Type/XObject/Subtype/Form/FormType 1"
+            + $"/BBox[0 0 {N(_size.Width.Points)} {N(_pageHeight)}]"
+            + "/Group<</Type/Group/S/Transparency/CS/DeviceGray>>"
+            + $"/Resources {ResourcesPlaceholder} 0 R",
+            Encoding.Latin1.GetBytes(inner.ToString()),
+            compress: true);
+
+        string state = string.Create(CultureInfo.InvariantCulture, $"GS{_states.Count + 1}");
+        _states.Add((state, writer.Add(
+            $"<</Type/ExtGState/SMask<</S/Luminosity/G {form} 0 R/BC[0]>>>>")));
+
+        _content.Append(CultureInfo.InvariantCulture, $"/{state} gs\n");
     }
 
     /// <summary>
