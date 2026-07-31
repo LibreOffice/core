@@ -32,6 +32,17 @@ public abstract record PageBlock
     /// engine know about the document model.
     /// </remarks>
     public object? Source { get; init; }
+
+    /// <summary>
+    /// Which of the document's sections this block belongs to.
+    /// </summary>
+    /// <remarks>
+    /// On the block rather than worked out by the paginator, because only the reader can know it: three of
+    /// the four formats delimit sections by position in a stream the layout engine never sees, and ODF does
+    /// not delimit them at all — a paragraph reaches its page description through its style's master page.
+    /// Zero for a document with one section, which is most of them.
+    /// </remarks>
+    public int SectionIndex { get; init; }
 }
 
 /// <summary>

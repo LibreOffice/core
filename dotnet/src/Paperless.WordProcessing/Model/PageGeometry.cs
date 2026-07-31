@@ -52,6 +52,36 @@ public enum PageFurnitureSlot
 }
 
 /// <summary>
+/// How a section starts relative to the one before it.
+/// </summary>
+/// <remarks>
+/// Every format states this and none of them can leave it out, because it decides whether a section change
+/// costs a page. Word's <c>w:type</c>, DOC's <c>sprmSBkc</c> and RTF's <c>\sbk*</c> all say the same four
+/// things; ODF has no equivalent at all, because a change of master page in ODF <em>is</em> a page break —
+/// there is no way to state a continuous one.
+/// </remarks>
+public enum SectionBreak
+{
+    /// <summary>The section starts on a new page, which is what every format defaults to.</summary>
+    NextPage,
+
+    /// <summary>
+    /// The section continues on the same page.
+    /// </summary>
+    /// <remarks>
+    /// The one break that is not a break. Used for a stretch of two-column text in the middle of a page,
+    /// which is the whole reason it exists — the geometry changes and the page does not.
+    /// </remarks>
+    Continuous,
+
+    /// <summary>The section starts on the next even-numbered page, leaving a blank one if need be.</summary>
+    EvenPage,
+
+    /// <summary>The section starts on the next odd-numbered page.</summary>
+    OddPage,
+}
+
+/// <summary>
 /// A page's physical geometry: how big it is, and where the text sits on it.
 /// </summary>
 /// <remarks>
@@ -297,6 +327,15 @@ public sealed record WritingSection
 {
     /// <summary>The section's page geometry.</summary>
     public PageGeometry Page { get; init; } = PageGeometry.Default;
+
+    /// <summary>
+    /// How the section starts relative to the one before it.
+    /// </summary>
+    /// <remarks>
+    /// Meaningless for the first section of a document, which starts where the document starts however this
+    /// reads. Every format's default is <see cref="SectionBreak.NextPage"/>, so that is this one's too.
+    /// </remarks>
+    public SectionBreak Break { get; init; }
 
     /// <summary>The section's headers, by slot.</summary>
     public IReadOnlyDictionary<PageFurnitureSlot, WritingBody> Headers { get; init; } =

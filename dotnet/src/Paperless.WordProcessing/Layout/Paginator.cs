@@ -71,6 +71,22 @@ public sealed record PaginationOptions
 }
 
 /// <summary>
+/// One of a document's sections, with the furniture that goes round it.
+/// </summary>
+/// <remarks>
+/// A pair rather than two parallel lists, because the two are always looked up together and a mismatch
+/// between them would put one section's header on another's pages — which is the sort of error that looks
+/// like a header bug and is not.
+/// </remarks>
+/// <param name="Section">The section's geometry and slot rules.</param>
+/// <param name="Furniture">
+/// Its headers and footers, or null when it has none. Laid out per slot rather than per page: the same
+/// header appears on most pages of a section, and laying it out again for each would shape its text over
+/// and over for an answer that cannot change.
+/// </param>
+public sealed record PaginatedSection(WritingSection Section, PageFurnitureSet? Furniture = null);
+
+/// <summary>
 /// Fills pages: lay out a paragraph, put what fits on the page, carry the rest over.
 /// </summary>
 /// <remarks>
@@ -126,12 +142,46 @@ public sealed class Paginator
         WritingSection? section = null,
         int startingNumber = 1,
         PageFurnitureSet? furniture = null)
+        => Paginate(blocks, [new PaginatedSection(section ?? new WritingSection(), furniture)], startingNumber);
+
+    /// <summary>
+    /// Paginates a sequence of blocks across a document's sections.
+    /// </summary>
+    /// <param name="blocks">
+    /// The paragraphs and tables, in document order, each naming its section through
+    /// <see cref="PageBlock.SectionIndex"/>.
+    /// </param>
+    /// <param name="sections">The sections, in document order, with their furniture.</param>
+    /// <param name="startingNumber">The number to print on the first page.</param>
+    /// <remarks>
+    /// <para>
+    /// A section change is a change of everything: the paper size, the margins, the width lines break at,
+    /// and the headers. So the blocks are laid out per section rather than once — a paragraph in a landscape
+    /// section breaks at the landscape width, and laying it out at the first section's would give the right
+    /// page setup with the wrong lines on it.
+    /// </para>
+    /// <para>
+    /// Whether the change costs a page is the document's to say, through
+    /// <see cref="WritingSection.Break"/>. Three of the four kinds start a new page and one — continuous —
+    /// deliberately does not, which is what a stretch of two-column text in the middle of a page is.
+    /// </para>
+    /// </remarks>
+    public List<LaidOutPage> Paginate(
+        IReadOnlyList<PageBlock> blocks,
+        IReadOnlyList<PaginatedSection> sections,
+        int startingNumber = 1)
     {
         ArgumentNullException.ThrowIfNull(blocks);
+        ArgumentNullException.ThrowIfNull(sections);
 
         WasTruncated = false;
 
-        WritingSection geometry = section ?? new WritingSection();
+        List<PaginatedSection> resolved =
+            sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
+
+        int sectionIndex = blocks.Count > 0 ? SectionOf(blocks[0], resolved.Count) : 0;
+        WritingSection geometry = resolved[sectionIndex].Section;
+        PageFurnitureSet? furnitureSet = resolved[sectionIndex].Furniture;
         PageGeometry page = geometry.Page;
         Length bodyHeight = page.TextHeight;
         Length bodyWidth = page.ColumnWidth;
@@ -139,7 +189,9 @@ public sealed class Paginator
         List<LaidOutPage> pages = [];
         if (blocks.Count == 0 || bodyHeight <= Length.Zero || bodyWidth <= Length.Zero)
         {
-            pages.Add(EmptyPage(0, startingNumber, page, Furniture(furniture, geometry, page, startingNumber, first: true)));
+            pages.Add(EmptyPage(
+                0, startingNumber, page,
+                Furniture(furnitureSet, geometry, page, startingNumber, first: true)));
             return pages;
         }
 
@@ -150,6 +202,11 @@ public sealed class Paginator
         List<LaidBlock> laid = new(blocks.Count);
         for (int i = 0; i < blocks.Count; i++)
         {
+            // The block's own section's width, not the first section's: a paragraph in a landscape section
+            // breaks where landscape says it does.
+            Length width = resolved[SectionOf(blocks[i], resolved.Count)].Section.Page.ColumnWidth;
+            if (width <= Length.Zero) width = bodyWidth;
+
             if (blocks[i] is PageTable table)
             {
                 (List<PlacedTableCell> cells, List<Length> rowHeights) =
@@ -171,20 +228,21 @@ public sealed class Paginator
                 ? layouter.Layout(
                     Measure(paragraph),
                     paragraph.Format,
-                    bodyWidth,
+                    width,
                     paragraph.Language,
                     previous)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,
                     paragraph.EmSize,
-                    bodyWidth,
+                    width,
                     paragraph.Language,
                     previous,
                     paragraph.Shaping)));
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
+        int sectionFirstPage = 0;
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
         Length used = Length.Zero;
@@ -201,6 +259,39 @@ public sealed class Paginator
 
             bool pageIsEmpty = placed.Count == 0 && tables.Count == 0;
 
+            // A section boundary, which is a change of paper size, margins, breaking width and headers all
+            // at once. Only at a block boundary: a paragraph already half-placed finishes on the geometry it
+            // started on, because its lines were measured at that width and re-breaking them mid-flight
+            // would leave the two halves disagreeing about where the words go.
+            int blockSection = SectionOf(blocks[paragraphIndex], resolved.Count);
+            if (blockSection != sectionIndex && lineIndex == 0)
+            {
+                if (resolved[blockSection].Section.Break != SectionBreak.Continuous)
+                {
+                    if (!pageIsEmpty) EmitPage();
+
+                    // An even- or odd-page break leaves a blank page when the parity is already wrong. The
+                    // filler belongs to the section that ended, so it is emitted before the geometry
+                    // changes — which is also what puts the old section's header on it.
+                    SectionBreak kind = resolved[blockSection].Section.Break;
+                    while (kind is SectionBreak.EvenPage or SectionBreak.OddPage
+                           && pageNumber % 2 == 0 != (kind == SectionBreak.EvenPage)
+                           && pages.Count < _options.MaxPages)
+                    {
+                        EmitPage();
+                    }
+                }
+
+                sectionIndex = blockSection;
+                geometry = resolved[sectionIndex].Section;
+                furnitureSet = resolved[sectionIndex].Furniture;
+                page = geometry.Page;
+                bodyHeight = page.TextHeight;
+                sectionFirstPage = pages.Count;
+                pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
+                continue;
+            }
+
             if (blocks[paragraphIndex] is PageTable table)
             {
                 Length before = pageIsEmpty && !_options.KeepsSpacingAtTopOfPage
@@ -216,12 +307,7 @@ public sealed class Paginator
                 {
                     if (!pageIsEmpty)
                     {
-                        pages.Add(Page(
-                            pages.Count, pageNumber++, page, placed, tables,
-                            Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                        placed = [];
-                        tables = [];
-                        used = Length.Zero;
+                        EmitPage();
                         continue;
                     }
 
@@ -239,12 +325,7 @@ public sealed class Paginator
                 if (lineIndex < laid[paragraphIndex].RowHeights.Count)
                 {
                     // The table is split: the rest goes on the next page, with its headings repeated.
-                    pages.Add(Page(
-                        pages.Count, pageNumber++, page, placed, tables,
-                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                    placed = [];
-                    tables = [];
-                    used = Length.Zero;
+                    EmitPage();
                     continue;
                 }
 
@@ -260,16 +341,7 @@ public sealed class Paginator
             // A page break before a paragraph that is not already at the top of a page.
             if (lineIndex == 0 && paragraph.Format.StartsNewPage && !pageIsEmpty)
             {
-                pages.Add(Page(
-                    pages.Count,
-                    pageNumber++,
-                    page,
-                    placed,
-                    tables,
-                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                placed = [];
-                tables = [];
-                used = Length.Zero;
+                EmitPage();
                 continue;
             }
 
@@ -292,16 +364,7 @@ public sealed class Paginator
                 }
                 else
                 {
-                    pages.Add(Page(
-                        pages.Count,
-                        pageNumber++,
-                        page,
-                        placed,
-                        tables,
-                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                    placed = [];
-                    tables = [];
-                    used = Length.Zero;
+                    EmitPage();
                     continue;
                 }
             }
@@ -326,16 +389,7 @@ public sealed class Paginator
             if (lineIndex < layout.Lines.Count)
             {
                 // The paragraph is split: the rest goes on the next page.
-                pages.Add(Page(
-                    pages.Count,
-                    pageNumber++,
-                    page,
-                    placed,
-                    tables,
-                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                placed = [];
-                tables = [];
-                used = Length.Zero;
+                EmitPage();
                 continue;
             }
 
@@ -355,23 +409,23 @@ public sealed class Paginator
 
                 if (moved.Count > 0 && movedFrom > 0)
                 {
-                    pages.Add(Page(
-                        pages.Count,
-                        pageNumber++,
-                        page,
-                        placed,
-                        tables,
-                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
-                    placed = [];
-                    tables = [];
-                    used = Length.Zero;
+                    EmitPage();
                     paragraphIndex = movedFrom;
                     continue;
                 }
             }
         }
 
-        if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0)
+        if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0) EmitPage();
+
+        return pages;
+
+        // Closes the current page and starts an empty one. A local function because it needs every piece of
+        // the loop's state — which page geometry is in force, which section's furniture, and how far into
+        // the section we are — and threading seven parameters through seven call sites was how the "first
+        // page of the section" test came to read `pages.Count == 0` and be wrong for every section but the
+        // first.
+        void EmitPage()
         {
             pages.Add(Page(
                 pages.Count,
@@ -379,11 +433,28 @@ public sealed class Paginator
                 page,
                 placed,
                 tables,
-                Furniture(furniture, geometry, page, pageNumber, pages.Count == 0)));
-        }
+                Furniture(
+                    furnitureSet, geometry, page, pageNumber,
+                    first: pages.Count == sectionFirstPage)));
 
-        return pages;
+            pageNumber++;
+            placed = [];
+            tables = [];
+            used = Length.Zero;
+        }
     }
+
+    /// <summary>
+    /// Which section a block belongs to, clamped to the sections that exist.
+    /// </summary>
+    /// <remarks>
+    /// Clamped rather than trusted, because the index comes from a reader and a document can name a section
+    /// it does not define — a DOCX whose last paragraph carries a <c>w:sectPr</c> the body's own does not
+    /// match, for instance. An out-of-range index lands on the last section, which is the one a document's
+    /// trailing content belongs to anyway.
+    /// </remarks>
+    private static int SectionOf(PageBlock block, int sections)
+        => Math.Clamp(block.SectionIndex, 0, Math.Max(0, sections - 1));
 
     /// <summary>
     /// Shapes a paragraph's runs, ready for measuring across them.

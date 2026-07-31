@@ -66,6 +66,7 @@ public sealed partial class DocxLayoutSource
 
         return new PageTable
         {
+            SectionIndex = _sectionIndex,
             ColumnWidths = columns,
             Rows = Resolved(rows),
             HeaderRowCount = HeadingRows(rows),

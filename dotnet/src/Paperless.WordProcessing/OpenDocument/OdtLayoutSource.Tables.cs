@@ -61,6 +61,7 @@ public sealed partial class OdtLayoutSource
 
         return new PageTable
         {
+            SectionIndex = _sectionIndex,
             ColumnWidths = columns,
             Rows = rows,
             HeaderRowCount = headerRows,

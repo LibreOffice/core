@@ -79,12 +79,34 @@ public sealed partial class OdtLayoutSource
     /// <summary>Creates a source over a document's styles.</summary>
     /// <param name="styles">The document's resolved styles.</param>
     /// <param name="fonts">The font resolver, or null to build one over the installed fonts.</param>
-    public OdtLayoutSource(OdfStyles styles, SystemFontResolver? fonts = null)
+    /// <param name="masterPages">
+    /// Which section each master page is, by name. Empty for a document laid out on one section, which
+    /// leaves every block in section zero.
+    /// </param>
+    public OdtLayoutSource(
+        OdfStyles styles,
+        SystemFontResolver? fonts = null,
+        IReadOnlyDictionary<string, int>? masterPages = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
+        _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
     }
+
+    /// <summary>Which section each master page is, by name.</summary>
+    private readonly IReadOnlyDictionary<string, int> _masterPages;
+
+    /// <summary>
+    /// The section the walk is in, which a paragraph naming a master page changes.
+    /// </summary>
+    /// <remarks>
+    /// ODF has no section delimiter at all: a paragraph reaches its page description through its paragraph
+    /// style's <c>style:master-page-name</c>, and a paragraph naming one <em>starts a page</em> on that
+    /// master. Everything after it stays there until another paragraph names a different one — which is why
+    /// this is state carried along the walk rather than a property of the paragraph.
+    /// </remarks>
+    private int _sectionIndex;
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
     /// <remarks>
@@ -102,6 +124,7 @@ public sealed partial class OdtLayoutSource
     {
         ArgumentNullException.ThrowIfNull(body);
 
+        _sectionIndex = 0;
         List<PageBlock> blocks = [];
         Walk(body, blocks, depth: 0);
         return blocks;
@@ -189,10 +212,47 @@ public sealed partial class OdtLayoutSource
         }
     }
 
+    /// <summary>
+    /// The section a paragraph style's master page names, or null when it names none.
+    /// </summary>
+    /// <remarks>
+    /// Followed up the parent chain, because a document's own styles are usually derived from
+    /// <c>Standard</c> and it is the derived style that names the master. An empty name is not the same as
+    /// an absent one — ODF writes <c>style:master-page-name=""</c> to mean "explicitly no master page, so
+    /// no page break here", which is what an automatic style derived from one that names a master uses to
+    /// cancel it. Cycle-guarded, since a style pool read from a file can point at itself.
+    /// </remarks>
+    private int? MasterPageOf(string? styleName)
+    {
+        if (_masterPages.Count == 0) return null;
+
+        HashSet<string> seen = new(StringComparer.Ordinal);
+        string? name = styleName;
+
+        for (int depth = 0; depth < 64 && name is not null && seen.Add(name); depth++)
+        {
+            OdfStyle? style = _styles.Find(name, OdfStyleFamily.Paragraph);
+            if (style is null) return null;
+
+            if (style.MasterPageName is { } master)
+            {
+                return master.Length == 0 ? null : _masterPages.GetValueOrDefault(master, 0);
+            }
+
+            name = style.ParentStyleName;
+        }
+
+        return null;
+    }
+
     private PageParagraph? Paragraph(XElement element)
     {
         string? styleName = element
             .Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
+
+        // A paragraph whose style names a master page moves the document onto that master, and everything
+        // after it follows until another paragraph says otherwise.
+        if (MasterPageOf(styleName) is { } section) _sectionIndex = section;
 
         OdfTextStyle text = OdfParagraphFormats.ResolveText(_styles, styleName);
         OpenTypeFace? face = Face(text);
@@ -203,6 +263,7 @@ public sealed partial class OdtLayoutSource
 
         return new PageParagraph
         {
+            SectionIndex = _sectionIndex,
             Text = walker.Text,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),

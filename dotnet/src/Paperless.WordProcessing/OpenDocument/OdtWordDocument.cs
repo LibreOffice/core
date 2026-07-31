@@ -81,7 +81,14 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
         XElement? body = _inner.File.Body;
         if (body is null) return new WordProcessingPages([]);
 
-        OdtLayoutSource source = new(_inner.File.Styles);
+        List<OdfMasterPage> masters = OrderedMasters(_inner.File.Styles);
+        OdtLayoutSource source = new(
+            _inner.File.Styles,
+            masterPages: masters
+                .Select((master, index) => (master.Name, index))
+                .Where(pair => pair.Name is not null)
+                .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal));
+
         List<PageBlock> blocks = source.Read(body);
 
         PaginationOptions pagination = PaginationOptions.Default with
@@ -91,12 +98,15 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                blocks, Sections[0], furniture: Furniture(source)),
+                blocks,
+                [.. masters.Select((master, index) => new PaginatedSection(
+                    index < Sections.Count ? Sections[index] : Sections[^1],
+                    Furniture(source, master)))]),
             blocks);
     }
 
     /// <summary>
-    /// The headers and footers of the master page the body is laid on.
+    /// The headers and footers of one master page.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -111,13 +121,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     /// which is why its absence leaves the slot empty and lets the default apply.
     /// </para>
     /// </remarks>
-    private PageFurnitureSet? Furniture(OdtLayoutSource source)
+    private static PageFurnitureSet? Furniture(OdtLayoutSource source, OdfMasterPage? master)
     {
-        OdfMasterPage? master = _inner.File.Styles.MasterPages.Values
-            .OrderBy(page => page.Name == StandardMasterName ? 0 : 1)
-            .ThenBy(page => page.Name, StringComparer.Ordinal)
-            .FirstOrDefault();
-
         if (master is null) return null;
 
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
@@ -167,18 +172,26 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     /// </remarks>
     private static List<WritingSection> ReadSections(OdfStyles styles)
     {
-        List<WritingSection> sections = [];
-
-        foreach (OdfMasterPage master in styles.MasterPages.Values
-                     .OrderBy(m => m.Name == StandardMasterName ? 0 : 1)
-                     .ThenBy(m => m.Name, StringComparer.Ordinal))
-        {
-            sections.Add(OdfPageGeometry.Read(styles, master));
-        }
+        List<WritingSection> sections =
+            [.. OrderedMasters(styles).Select(master => OdfPageGeometry.Read(styles, master))];
 
         if (sections.Count == 0) sections.Add(OdfPageGeometry.Read(styles, master: null));
         return sections;
     }
+
+    /// <summary>
+    /// The document's master pages in the order the sections are numbered.
+    /// </summary>
+    /// <remarks>
+    /// <c>Standard</c> first, because that is the master a paragraph naming none is laid on and so the one
+    /// section zero has to be; the rest by name, so the numbering is stable across reads of the same file.
+    /// The <em>order</em> is what matters here rather than the sequence — ODF has no document order for
+    /// masters, since a master is reached from a style rather than from a position.
+    /// </remarks>
+    private static List<OdfMasterPage> OrderedMasters(OdfStyles styles)
+        => [.. styles.MasterPages.Values
+            .OrderBy(master => master.Name == StandardMasterName ? 0 : 1)
+            .ThenBy(master => master.Name, StringComparer.Ordinal)];
 
     /// <summary>
     /// The master page a paragraph naming none is laid on.

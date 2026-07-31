@@ -247,20 +247,38 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         };
 
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(
-                blocks, Sections[0], furniture: Furniture(source, body)),
+            new Paginator(pagination).Paginate(blocks, Paginated(source, body)),
             blocks);
     }
 
     /// <summary>
-    /// The headers and footers of the first section, laid out from the parts it names.
+    /// The document's sections, each paired with the furniture its own <c>w:sectPr</c> names.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// The first section's, to match the geometry the pagination uses — a document that changes its
-    /// furniture halfway through gets the first set throughout, which is the same limitation as the
-    /// geometry and is recorded with it.
-    /// </para>
+    /// Per section rather than the first section's throughout, because a document that changes its page
+    /// setup halfway usually changes its headers with it — a landscape appendix with its own running head is
+    /// the ordinary case. The enumeration order matches <see cref="Sections"/>, which is what
+    /// <see cref="PageBlock.SectionIndex"/> indexes.
+    /// </remarks>
+    private List<PaginatedSection> Paginated(DocxLayoutSource source, XElement body)
+    {
+        List<XElement> properties = [.. DocxContentReader.SectionProperties(body)];
+        List<PaginatedSection> sections = new(Sections.Count);
+
+        for (int i = 0; i < Sections.Count; i++)
+        {
+            sections.Add(new PaginatedSection(
+                Sections[i],
+                i < properties.Count ? Furniture(source, properties[i]) : null));
+        }
+
+        return sections;
+    }
+
+    /// <summary>
+    /// One section's headers and footers, laid out from the parts its <c>w:sectPr</c> names.
+    /// </summary>
+    /// <remarks>
     /// <para>
     /// Read through the same walk the body uses, because a header's paragraphs are paragraphs: they
     /// resolve their styles the same way, measure the same way, and a second walk would be a second place
@@ -273,11 +291,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
     /// three variants; a reference without one is the default.
     /// </para>
     /// </remarks>
-    private PageFurnitureSet? Furniture(DocxLayoutSource source, XElement body)
+    private PageFurnitureSet? Furniture(DocxLayoutSource source, XElement sectionProperties)
     {
-        XElement? sectionProperties = DocxContentReader.SectionProperties(body).FirstOrDefault();
-        if (sectionProperties is null) return null;
-
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
 

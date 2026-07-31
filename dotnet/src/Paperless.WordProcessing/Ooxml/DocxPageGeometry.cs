@@ -49,6 +49,16 @@ internal static class DocxPageGeometry
             // w:titlePg is per-section; even-and-odd is per-document. Mixing the two up is easy and
             // shows up as a first-page header appearing on every page or on none.
             HasDifferentFirstPage = Word.IsOn(Word.Child(sectionProperties, "titlePg")),
+
+            // w:type names the break, and its absence means nextPage — which is both the schema's default
+            // and what a document that never thought about it wants.
+            Break = Word.Attribute(Word.Child(sectionProperties, "type"), "val") switch
+            {
+                "continuous" => SectionBreak.Continuous,
+                "evenPage" => SectionBreak.EvenPage,
+                "oddPage" => SectionBreak.OddPage,
+                _ => SectionBreak.NextPage,
+            },
             HasDifferentEvenPages = Word.IsOn(Word.Child(settings, "evenAndOddHeaders")),
         };
     }

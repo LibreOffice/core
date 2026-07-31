@@ -77,6 +77,7 @@ public sealed partial class DocxLayoutSource
     {
         ArgumentNullException.ThrowIfNull(body);
 
+        _sectionIndex = 0;
         List<PageBlock> blocks = [];
         Walk(body, blocks, depth: 0);
         return blocks;
@@ -99,6 +100,16 @@ public sealed partial class DocxLayoutSource
         Walk(element, paragraphs, depth: 0);
         return paragraphs;
     }
+
+    /// <summary>
+    /// Which section the walk is in, advanced by each paragraph that closes one.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a walk parameter because the walk recurses through content controls and tracked
+    /// insertions, and a section can end inside one — so the count has to survive returning from a nested
+    /// call rather than being restored with it.
+    /// </remarks>
+    private int _sectionIndex;
 
     /// <summary>
     /// Walks the body's block-level children.
@@ -128,6 +139,11 @@ public sealed partial class DocxLayoutSource
             if (Word.Is(child, "p"))
             {
                 if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
+
+                // A DOCX states a section's properties at its *end*: the w:sectPr inside a paragraph's
+                // properties closes the section that paragraph finishes. So the counter advances after the
+                // paragraph, which is what puts that paragraph in the section it ends rather than the next.
+                if (Word.Child(Word.Child(child, "pPr"), "sectPr") is not null) _sectionIndex++;
                 continue;
             }
 
@@ -157,6 +173,7 @@ public sealed partial class DocxLayoutSource
 
         return new PageParagraph
         {
+            SectionIndex = _sectionIndex,
             Text = walker.Text,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),

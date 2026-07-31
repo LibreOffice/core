@@ -313,9 +313,20 @@ is read and verified, so what remains is the filling of pages rather than the me
       grows downwards. `PageGeometry.FooterOffset` carries the ODF answer and null means the Word rule;
       both were measured against LibreOffice's rendering of the same one-line footer in each format.
 - [ ] Section and floating frames inside the body.
-- [ ] Several sections in one document. The paginator takes one section's geometry; carrying a section
-      change mid-document needs each paragraph to know which section it is in, which is the gap recorded
-      under the document model above.
+- [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and
+      the paginator switches paper size, margins, breaking width and furniture at the boundary — and lays
+      each block out at *its own* section's width, since a paragraph in a landscape section breaks where
+      landscape says it does. `WritingSection.Break` decides whether the change costs a page: three of the
+      four kinds start one and continuous deliberately does not.
+- [x] Which section each block belongs to, per format. Three of the four delimit sections by position:
+      DOCX by the `w:sectPr` inside the properties of the paragraph that *ends* a section, so the counter
+      advances after the paragraph rather than before. ODF delimits nothing at all — a paragraph reaches its
+      page description through its style's `style:master-page-name`, followed up the parent chain, and a
+      paragraph naming one *starts a page* on that master. An empty name is not an absent one: ODF writes
+      `style:master-page-name=""` to cancel a master a parent style named.
+- [ ] DOC's `sprmSBkc` and RTF's `\sbk*` for the break kind, and their section boundaries — both are read
+      into the geometry list already but every block still reports section zero, so a multi-section DOC or
+      RTF is laid out on its first section's setup.
 - [x] **All four formats reach the layout engine**, and all four paginate a five-page document the way
       LibreOffice does — same page count, same words on every page, verified against its own rendering of
       each format. `DocumentPaginationTests` is the test that proves the links are connected rather than

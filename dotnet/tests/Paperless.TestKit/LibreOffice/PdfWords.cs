@@ -51,6 +51,18 @@ public static class PdfWords
     {
         ArgumentNullException.ThrowIfNull(pdfPath);
 
+        return RunBoundingBoxes(pdfPath) is { } output ? Parse(output) : [];
+    }
+
+    /// <summary>
+    /// The raw <c>pdftotext -bbox</c> output, or null when the tool is missing or failed.
+    /// </summary>
+    /// <remarks>
+    /// Shared rather than private because the same output carries more than the words: it opens each page
+    /// with that page's own size, which <see cref="PdfPageSizes"/> reads. One invocation serves both.
+    /// </remarks>
+    internal static string? RunBoundingBoxes(string pdfPath)
+    {
         ProcessStartInfo start = new("pdftotext")
         {
             RedirectStandardOutput = true,
@@ -66,7 +78,7 @@ public static class PdfWords
         string output = process.StandardOutput.ReadToEnd();
         process.WaitForExit((int)LibreOfficeRunner.Timeout.TotalMilliseconds);
 
-        return process.ExitCode == 0 ? Parse(output) : [];
+        return process.ExitCode == 0 ? output : null;
     }
 
     /// <summary>True when <c>pdftotext</c> can be run at all.</summary>
