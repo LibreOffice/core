@@ -125,6 +125,18 @@ public sealed record PageParagraph : PageBlock
     /// makes notes a pagination matter rather than a reading one.
     /// </remarks>
     public IReadOnlyList<PageNote> Notes { get; init; } = [];
+
+    /// <summary>
+    /// The floating frames anchored in this paragraph, in document order.
+    /// </summary>
+    /// <remarks>
+    /// On the paragraph because that is where every format puts the anchor, a page-anchored frame
+    /// included: even <c>text:anchor-type="page"</c> is written at a position in the text, and Word has
+    /// no page anchor at all — its page-relative positions are still anchored to a paragraph. So which
+    /// page a frame lands on is a pagination result rather than a property, which is what makes frames a
+    /// two-pass affair; see <see cref="Paginator"/>.
+    /// </remarks>
+    public IReadOnlyList<PageFrame> Frames { get; init; } = [];
 }
 
 /// <summary>
@@ -409,6 +421,17 @@ public sealed record LaidOutPage
     /// </para>
     /// </remarks>
     public DocRect? NoteSeparator { get; init; }
+
+    /// <summary>
+    /// The floating frames that landed on this page, with the rectangles they were given.
+    /// </summary>
+    /// <remarks>
+    /// Beside the lines rather than among them, for the same reason a table is: a frame is placed at a
+    /// resolved position rather than stacked, and the lines around it have already been shortened to make
+    /// room. A renderer draws these after the body text, which is what puts an opaque frame over the text
+    /// it displaced rather than under it.
+    /// </remarks>
+    public IReadOnlyList<PlacedFrame> Frames { get; init; } = [];
 
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>

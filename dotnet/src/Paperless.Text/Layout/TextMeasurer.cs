@@ -156,12 +156,18 @@ public sealed class LineFiller
     /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
     /// so a paragraph without one measures exactly as it would without this parameter.
     /// </param>
+    /// <param name="widthOfLine">
+    /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
+    /// case, where every line but the first gets the same width; it exists for text flowing round a
+    /// floating frame, where the width depends on how far down the paragraph the line sits.
+    /// </param>
     public List<TextLine> Fill(
         MeasuredParagraph measured,
         Length availableWidth,
         Length? firstLineWidth = null,
         string? language = null,
-        ParagraphFormat? tabs = null)
+        ParagraphFormat? tabs = null,
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         ArgumentNullException.ThrowIfNull(measured);
 
@@ -171,7 +177,8 @@ public sealed class LineFiller
             firstLineWidth,
             language,
             measured.WidthBetween,
-            tabs);
+            tabs,
+            widthOfLine);
     }
 
     /// <summary>
@@ -192,6 +199,11 @@ public sealed class LineFiller
     /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
     /// so a paragraph without one measures exactly as it would without this parameter.
     /// </param>
+    /// <param name="widthOfLine">
+    /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
+    /// case, where every line but the first gets the same width; it exists for text flowing round a
+    /// floating frame, where the width depends on how far down the paragraph the line sits.
+    /// </param>
     public List<TextLine> Fill(
         string text,
         Length emSize,
@@ -199,7 +211,8 @@ public sealed class LineFiller
         Length? firstLineWidth = null,
         string? language = null,
         ShapingOptions? options = null,
-        ParagraphFormat? tabs = null)
+        ParagraphFormat? tabs = null,
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         ArgumentNullException.ThrowIfNull(text);
 
@@ -214,7 +227,8 @@ public sealed class LineFiller
             firstLineWidth,
             language,
             (from, to) => shaped.WidthBetween(from, to, emSize),
-            tabs);
+            tabs,
+            widthOfLine);
     }
 
     /// <summary>
@@ -231,7 +245,8 @@ public sealed class LineFiller
         Length? firstLineWidth,
         string? language,
         Func<int, int, Length> widthBetween,
-        ParagraphFormat? tabs = null)
+        ParagraphFormat? tabs = null,
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         List<TextLine> lines = [];
         if (text.Length == 0)
@@ -248,7 +263,9 @@ public sealed class LineFiller
 
         while (lineStart < text.Length)
         {
-            Length limit = lines.Count == 0 ? firstLineWidth ?? availableWidth : availableWidth;
+            Length limit = widthOfLine is not null
+                ? widthOfLine(lines.Count, lines)
+                : lines.Count == 0 ? firstLineWidth ?? availableWidth : availableWidth;
 
             int chosen = -1;
             Length chosenWidth = Length.Zero;
