@@ -527,9 +527,126 @@ number-formatted.
       that changes the page count; drawing the overflow, and clipping it where a neighbour stops
       it, is what is left
 - [ ] Rich text within a cell
-- [ ] Grid lines, backgrounds, and border resolution between neighbouring cells
+- [x] **Cell backgrounds, cell borders, the printed grid and the row and column headings** —
+      in `Layout/SheetPageDecoration.cs`, read into `Layout/SheetDecoration.cs` by
+      `Ooxml/XlsxCellDecoration.cs`, `OpenDocument/OdsCellDecoration.cs` and
+      `MsBinary/XlsCellDecoration.cs`
 - [x] **Print pagination** — ported, in `Layout/SheetPagination.cs`
 - [x] Repeated rows/columns; scale-to-pages; page order
-- [ ] Header and footer text: the `&P`/`&D`/`&A` field language, and laying it out. The band's
-      *height* is read and reserved, which is what pagination needs; nothing draws in it yet
+- [x] **Header and footer text**: the field language is `Layout/SheetHeaderFooter.cs` and the
+      placement is `SheetPageDecoration.DrawHeaderAndFooter`
 - [ ] Drawing objects and charts anchored to cells
+
+### What the decoration path draws, and the rules it draws by
+
+Measured against LibreOffice's own PDF of `sheet-decor-{ods,xlsx,xls}` with
+`SheetDecorationComparisonTests`: four fills and twenty-eight lines on each, matching operator
+for operator — same count, same order, same colours, same pen widths, positions within half a
+point.
+
+**Why a shared edge goes where it does.** When two neighbours both state a border on the edge
+between them, Calc takes `std::max` of the two under `svx::frame::Style::operator<`
+(`svx/source/dialog/framelinkarray.cxx:796-799`, `svx/source/dialog/framelink.cxx:306-334`).
+The ordering is: wider wins; then double beats single; then the double with the *narrower* gap;
+and only two single rules **one twip wide** are settled by their pattern, the lower
+`SvxBorderLineStyle` enumerator winning. Colour is not in the comparison at all, so two
+equal-width borders of different colours are *equal* and `std::max` returns its first argument —
+which is always the cell being asked about. Both neighbours are consulted even at the page's own
+edges, because `ScDocument::FillInfo` builds the array one column and one row wider than the
+page on every side (`sc/source/core/data/fillinfo.cxx:1019`) and printing sets no clip range.
+
+**Why it is not the Writer rule.** A Writer table consolidates its borders into one stroke per
+grid line and overshoots each end by half its *own* width. Calc does neither.
+`Array::CreateB2DPrimitiveRange` emits one primitive per cell's top and left edge, and the
+bottom and right only for the last row and column
+(`svx/source/dialog/framelinkarray.cxx:1490-1537`), so two adjacent cells agreeing about a
+border produce two strokes. And an end is extended by half the width of the **perpendicular**
+border it meets, or by nothing where it meets none — the simple case of `getExtends`
+(`svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx:310`). Measured on
+`sheet-decor-ods.ods`: the red 2.5 pt vertical in row 2 meets no horizontal and runs 12.784 pt
+against a row 12.813 pt tall, while the blue one in row 3 ends on a one-point box and overshoots
+it by 0.509 pt. The Writer rule would have made the red one 2.5 pt too long.
+
+**The printed grid is black and sits at the far edge.** `ScPrintFunc::PrintPage` starts from
+`Color aGridColor(COL_BLACK)` and only takes the screen's colours when the printout asks for
+them, which a PDF export does not (`printfun.cxx:1662`, `:2340`) — every gridline in the
+reference PDF is written under `0 0 0 RG`, not the pale grey the screen shows.
+`ScOutputData::DrawGrid` advances the pen by a column's width *before* drawing
+(`output.cxx:420-424`), so there is no line down the left of the first column and none along the
+top of the first row; the block's own left and top edges come from the single rectangle Calc
+draws round the whole printed area whenever *either* the grid or the headings print
+(`printfun.cxx:2384`). Widths: LibreOffice writes them as a hairline, which its export emits as
+`0.1 w`.
+
+**Border widths are twips, and the names lie.** `hair` is 1 twip, `thin` 15, `medium` 35 and
+`thick` 50 (`sc/source/filter/inc/xlconst.hxx:250-253`, and the same four numbers under
+different names in `stylesbuffer.hxx:63-67`). So `thin` strokes at 0.75 pt and `hair` at a
+twentieth of a point. ODF states its widths as lengths and they are snapped to whole twips,
+because that is what `SvxBorderLine` stores: a 2.5 pt border round-trips through 1/100 mm and
+comes back as `"2.49pt"`, which taken literally strokes 0.01 pt thin.
+
+**A named trap, and it cost an hour.** Saving the corpus source as ODS, LibreOffice *moved* the
+one blue cell's fill onto its whole column as `table:default-cell-style-name="ce12"` and then
+cancelled it seven rows down with `table:style-name="Default"` on the single cell that must stay
+white. A reader that treats "names the default style" as "names no style" paints a cell
+LibreOffice leaves blank — so `SheetFormatting` keeps an explicit zero, meaning "this cell states
+a style and it paints nothing", distinct from having no entry at all. The same shape appears in
+SpreadsheetML as `s="0"` against a `<col style="…">` and in BIFF as a cell XF of 0 against a
+`COLINFO`.
+
+**Two reader fixes the measurements forced.** An ODF header band's declared height *already
+includes* its gap to the body: Calc's `aHdr.nHeight` is `ATTR_PAGE_SIZE`'s height and
+`aHdr.nDistance` is subtracted from it to get the rectangle the text is laid out in
+(`lcl_FillHFParam`, `printfun.cxx:664`; `PrintHF`, `:1808`), so adding the gap double-counted it
+by 0.25 cm — 7.09 pt — on every page of every file LibreOffice writes. And a BIFF header band has
+a floor an OOXML one does not, because `XclImpPageSettings::Finalize` never puts an
+`ATTR_PAGE_SIZE` on the header's item set (`sc/source/filter/excel/xipage.cxx:310-331`): Calc's
+own 0.75 cm default stands as `nManHeight`, which on `sheet-decor-xls.xls` is 4 pt more than the
+file's margins alone would give and matches LibreOffice's 21.11 pt to within 0.15.
+
+### What is left, and why
+
+- [ ] **A dynamic header band, measured the way Calc measures it.** `UpdateHFHeight` recomputes
+      the band from the header's own text and takes the larger of that and the declared height
+      (`printfun.cxx:846-856`). Reproducing it needs the header font's metrics inside the
+      *reader*, which has none — the readers produce a `SheetPrintSetup` before any font is
+      resolved. Measured cost: on `sheet-decor-xlsx.xlsx` LibreOffice's band is 18.13 pt against
+      the 17.10 pt the file's margins give, because the OOXML filter's own text measurement and
+      the EditEngine's disagree by that much; every line on the page therefore sits 1.03 pt
+      lower than ours. `SheetDecorationComparisonTests` allows for it once per page rather than
+      per stroke, so everything *within* a page is still compared to half a point
+- [ ] **1/100 mm quantisation.** LibreOffice's whole drawing layer works in hundredths of a
+      millimetre, so a row 12.813 pt tall is stored as 451 units and comes back as 12.784 — 0.03
+      pt a row, 0.03 pt a column, accumulating to 0.38 pt over the seven rows of
+      `sheet-decor-ods.ods`. Removing it means routing every sheet measurement through the same
+      grid rather than keeping EMUs, which is a change to `SheetGrid` and `SheetPagination` and
+      would need the pagination comparison re-run against all six print corpus files
+- [ ] **Hatch patterns.** SpreadsheetML has eighteen and BIFF the same, each a foreground drawn
+      over a background. One colour cannot stand for them, so a hatched cell is painted with its
+      *background* colour, which is Calc's own fallback
+      (`XclImpCellArea`, `sc/source/filter/excel/xistyle.cxx:1075`). Drawing the hatch needs a
+      tiling paint the drawing IR does not have
+- [ ] **Diagonal borders.** `ATTR_BORDER_TLBR` and `ATTR_BORDER_BLTR` are read by all three
+      filters and by none of the three readers here. They are the one part of a cell's border
+      set that is not an edge, so they need their own geometry rather than fitting into
+      `SheetCellBorders`
+- [ ] **Double rules** are modelled — `SheetBorder` carries a primary, a gap and a secondary,
+      which is what `svx::frame::Style` carries and what the shared-edge ordering needs — but
+      the widths of the three parts are guessed as thirds rather than derived the way
+      `SvxBorderLine::GuessLinesWidths` does. Nothing in the corpus states one
+- [ ] **Conditional formatting** changes a cell's fill and border and is read by none of the
+      three readers. It has to be resolved per cell against the cell's *value*, so it cannot go
+      in the run-length store as it stands
+- [ ] **A multi-line header.** Every format can write a line break into one part of a band;
+      only the first line is drawn, because laying out the rest means growing the band, and the
+      band's height is what pagination already decided
+- [ ] **`&D` and `&T` resolve against the clock**, so a document holding them cannot be compared
+      against a reference rendering made at another moment. `SheetHeaderContext.Printed` exists
+      so a caller can pin it; the corpus file deliberately uses `&A`, `&P`, `&N` and `&F` instead
+- [ ] **A page's own background and border.** `ATTR_PAGE_BACKGROUND` and `ATTR_PAGE_BORDER` are
+      drawn by `ScPrintFunc::DrawBorder` round the whole printed block (`printfun.cxx:2295`) and
+      are read by none of the three readers
+- [ ] **Headings are placed unscaled by pagination and scaled by drawing.** Calc does both:
+      `nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX` on the paper (`printfun.cxx:2205`) while
+      `CalcPages` subtracts the unscaled constant in document twips. The two agree; it is worth
+      knowing they are different numbers before changing either
