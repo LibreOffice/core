@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
-#include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -598,25 +597,12 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     if (hb_ot_metrics_get_position(pSubsetFont, HB_OT_METRICS_TAG_CAP_HEIGHT, &nCapHeight))
         rInfo.m_nCapHeight = XUnits(nUPEM, nCapHeight);
 
-    hb_blob_t* pHeadBlob = hb_face_reference_table(pSubsetFace, HB_TAG('h', 'e', 'a', 'd'));
-    comphelper::ScopeGuard aHeadBlobGuard([&]() { hb_blob_destroy(pHeadBlob); });
-
-    unsigned int nHeadLen;
-    const char* pHead = hb_blob_get_data(pHeadBlob, &nHeadLen);
-    SvMemoryStream aStream(const_cast<char*>(pHead), nHeadLen, StreamMode::READ);
-    // Font data are big endian.
-    aStream.SetEndian(SvStreamEndian::BIG);
-    if (aStream.Seek(vcl::HEAD_yMax_offset) == vcl::HEAD_yMax_offset)
-    {
-        sal_Int16 xMin, yMin, xMax, yMax;
-        aStream.Seek(vcl::HEAD_xMin_offset);
-        aStream.ReadInt16(xMin);
-        aStream.ReadInt16(yMin);
-        aStream.ReadInt16(xMax);
-        aStream.ReadInt16(yMax);
-        rInfo.m_aFontBBox = tools::Rectangle(Point(XUnits(nUPEM, xMin), XUnits(nUPEM, yMin)),
-                                             Point(XUnits(nUPEM, xMax), XUnits(nUPEM, yMax)));
-    }
+    auto nXMin = hb_ot_fetch_number(pSubsetFace, HB_OT_NUMBER_TAG_FONT_X_MIN);
+    auto nYMin = hb_ot_fetch_number(pSubsetFace, HB_OT_NUMBER_TAG_FONT_Y_MIN);
+    auto nXMax = hb_ot_fetch_number(pSubsetFace, HB_OT_NUMBER_TAG_FONT_X_MAX);
+    auto nYMax = hb_ot_fetch_number(pSubsetFace, HB_OT_NUMBER_TAG_FONT_Y_MAX);
+    rInfo.m_aFontBBox = tools::Rectangle(Point(XUnits(nUPEM, nXMin), XUnits(nUPEM, nYMin)),
+                                         Point(XUnits(nUPEM, nXMax), XUnits(nUPEM, nYMax)));
 
     hb_blob_t* pCFFBlob = hb_face_reference_table(pSubsetFace, HB_TAG('C', 'F', 'F', ' '));
     comphelper::ScopeGuard aCFFBlobGuard([&]() { hb_blob_destroy(pCFFBlob); });
