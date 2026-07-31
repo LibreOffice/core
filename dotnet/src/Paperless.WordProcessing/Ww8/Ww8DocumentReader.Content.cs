@@ -1,6 +1,7 @@
 using System.Text;
 using Paperless.Core.Extraction;
 using Paperless.Core.Globalization;
+using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 
@@ -423,6 +424,63 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.TableDefinition:
                     format = format with { TableDefinition = ReadTableDefinition(sprm.Operand) };
                     break;
+
+                case Ww8SprmReader.Ids.SetCellBorder80 or Ww8SprmReader.Ids.SetCellBorder:
+                    // Kept in the order the document wrote them and applied in that order, because a
+                    // document states the same border twice — once in each BRC form — and means the
+                    // second. LibreOffice runs every 80 and then every 90, which comes to the same
+                    // thing for any producer that writes the pair in that order, and every one does.
+                    if (ReadCellBorderChange(
+                            sprm.Operand,
+                            isVersion9: sprm.Identifier == Ww8SprmReader.Ids.SetCellBorder)
+                        is { } change)
+                    {
+                        format = format with
+                        {
+                            CellBorderChanges = [.. format.CellBorderChanges ?? [], change],
+                        };
+                    }
+
+                    break;
+
+                case Ww8SprmReader.Ids.TableBorders80 or Ww8SprmReader.Ids.TableBorders:
+                    if (ReadTableBorders(
+                            sprm.Operand,
+                            isVersion9: sprm.Identifier == Ww8SprmReader.Ids.TableBorders)
+                        is { } defaults)
+                    {
+                        format = format with { TableBorders = defaults };
+                    }
+
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading80:
+                    if (ReadPaletteShading(sprm.Operand) is { } palette)
+                        format = format with { PaletteCellShading = palette };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(format.CellShading, sprm.Operand, 0),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShadingSecond:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(
+                            format.CellShading, sprm.Operand, Ww8SprmReader.Ids.CellShadingSecondStart),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShadingThird:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(
+                            format.CellShading, sprm.Operand, Ww8SprmReader.Ids.CellShadingThirdStart),
+                    };
+                    break;
             }
         }
         return format;
@@ -659,6 +717,39 @@ public readonly record struct Ww8ParagraphFormat
     /// </remarks>
     public Ww8TableDefinition? TableDefinition { get; init; }
 
+    /// <summary>
+    /// The borders the row's <c>sprmTSetBrc</c>s set, in the order they were stated.
+    /// </summary>
+    /// <remarks>
+    /// A list, and it has to be applied in order rather than searched: each entry names a range of cells
+    /// and a set of sides, so a uniform four-cell row is four entries — one per side — and a row whose
+    /// producer wrote both BRC forms is eight, where the later four restate the earlier four with a real
+    /// colour instead of a palette index.
+    /// </remarks>
+    public IReadOnlyList<Ww8CellBorderChange>? CellBorderChanges { get; init; }
+
+    /// <summary>
+    /// The table's six default borders, when the row states them.
+    /// </summary>
+    /// <remarks>
+    /// Only a side no cell states falls back here. Word writes these and almost nothing else for a table
+    /// with a uniform grid, so a reader that skipped them would find no borders at all in most documents
+    /// Word itself produced — while LibreOffice's own export states every cell's four sides instead.
+    /// </remarks>
+    public Ww8TableBorders? TableBorders { get; init; }
+
+    /// <summary>The row's cell shading in full RGB, indexed by cell; null means the automatic colour.</summary>
+    public IReadOnlyList<Colour?>? CellShading { get; init; }
+
+    /// <summary>
+    /// The same, as the older palette-and-pattern form states it.
+    /// </summary>
+    /// <remarks>
+    /// Kept beside the RGB form rather than merged, because the precedence is per cell: the RGB array wins
+    /// wherever it names a colour, and a cell it leaves automatic falls back to this one. Merging them at
+    /// read time would need the two sprms to arrive in a known order, and they need not.
+    /// </remarks>
+    public IReadOnlyList<Colour?>? PaletteCellShading { get; init; }
 }
 
 /// <summary>

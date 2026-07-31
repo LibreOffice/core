@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.WordProcessing.Layout;
 
@@ -169,10 +170,12 @@ public sealed partial class Ww8DocumentReader
             {
                 level.RowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
                 level.RowCells[i].Padding = PaddingOf(format, i);
+                level.RowCells[i].Shading = ShadingOf(format, i);
 
                 Ww8CellDefinition cell = definition?.CellAt(i) ?? default;
                 level.RowCells[i].IsHorizontallyMerged = cell.IsMerged;
                 level.RowCells[i].ContinuesMergeAbove = cell.IsVerticallyMerged && !cell.StartsVerticalMerge;
+                level.RowCells[i].Borders = BordersOf(format, cell.Borders, i);
             }
 
             ApplyExplicitMerges(level.RowCells);
@@ -183,6 +186,7 @@ public sealed partial class Ww8DocumentReader
                 LeftEdge = definition?.LeftEdge ?? 0,
                 IsHeader = format.IsTableHeaderRow,
                 HeightTwips = format.RowHeightTwips,
+                DefaultBorders = format.TableBorders,
             };
             row.Cells.AddRange(level.RowCells);
             level.Rows.Add(row);
@@ -281,7 +285,18 @@ public sealed partial class Ww8DocumentReader
                     cell.ColumnSpan,
                     cell.RowSpan,
                     cell.Padding,
-                    [.. cell.LayoutBlocks]));
+                    [.. cell.LayoutBlocks],
+                    cell.Shading,
+                    // Resolved here rather than as the row was closed, because the defaults a missing
+                    // side falls back to depend on the cell's place in the whole table — and a row being
+                    // built does not know whether another follows it.
+                    ResolveBorders(
+                        cell.Borders,
+                        row.DefaultBorders,
+                        isFirstRow: row.Index == 0,
+                        isLastRow: row.Index == rows.Count - 1,
+                        isFirstCell: cell.ColumnStart == 0,
+                        isLastCell: cell.ColumnStart + cell.ColumnSpan >= widths.Count)));
             }
 
             layoutRows.Add(new Ww8LayoutRow(
@@ -346,6 +361,74 @@ public sealed partial class Ww8DocumentReader
     }
 
     /// <summary>
+    /// One cell's shading, from the two arrays its row states.
+    /// </summary>
+    /// <remarks>
+    /// The RGB array wins wherever it names a colour and the palette array fills in behind it, per cell
+    /// rather than per row — which is exactly what LibreOffice's <c>SetTabShades</c> does, testing
+    /// <c>pNewSHDs[i] != COL_AUTO</c> before falling back to <c>pSHDs[i]</c>. It matters because the two
+    /// disagree: the corpus document's grey is <c>#CCCCCC</c> in the RGB array and <c>#C0C0C0</c> —
+    /// Word's nearest palette entry — in the older one.
+    /// </remarks>
+    private static Colour? ShadingOf(Ww8ParagraphFormat format, int cell)
+    {
+        if (format.CellShading is { } rgb && cell < rgb.Count && rgb[cell] is { } stated) return stated;
+
+        IReadOnlyList<Colour?>? palette = format.PaletteCellShading;
+        return palette is not null && cell < palette.Count ? palette[cell] : null;
+    }
+
+    /// <summary>
+    /// One cell's borders: what its descriptor said, with every <c>sprmTSetBrc</c> covering it applied.
+    /// </summary>
+    /// <remarks>
+    /// In order and unconditionally, both of which matter. A later sprm restating a side wins over an
+    /// earlier one, which is how the RGB form supersedes the palette form; and a sprm carrying a BRC that
+    /// states nothing <em>clears</em> the descriptor's border rather than being ignored, which is how a
+    /// row removes a border its table's defaults would otherwise put back.
+    /// </remarks>
+    private static Ww8CellBorders BordersOf(
+        Ww8ParagraphFormat format, Ww8CellBorders stated, int cell)
+    {
+        foreach (Ww8CellBorderChange change in format.CellBorderChanges ?? [])
+        {
+            if (change.Covers(cell)) stated = stated.With(change.Sides, change.Border);
+        }
+
+        return stated;
+    }
+
+    /// <summary>
+    /// A cell's four edges as the layout engine wants them, with the table's defaults filling the gaps.
+    /// </summary>
+    /// <remarks>
+    /// The fall-back is positional, which is the whole reason a table states six defaults rather than
+    /// four: a cell's top is the table's outline in the first row and the inside horizontal everywhere
+    /// else. A side left unstated with no defaults at all has no border, which is how a Word table with
+    /// no grid comes out.
+    /// </remarks>
+    private static CellBorders ResolveBorders(
+        Ww8CellBorders stated,
+        Ww8TableBorders? defaults,
+        bool isFirstRow,
+        bool isLastRow,
+        bool isFirstCell,
+        bool isLastCell)
+    {
+        return new CellBorders(
+            Side(stated.Left, Ww8CellBorders.LeftSide),
+            Side(stated.Right, Ww8CellBorders.RightSide),
+            Side(stated.Top, Ww8CellBorders.TopSide),
+            Side(stated.Bottom, Ww8CellBorders.BottomSide));
+
+        TableBorder Side(Ww8Border? border, int side)
+        {
+            border ??= defaults?.For(side, isFirstRow, isLastRow, isFirstCell, isLastCell);
+            return border?.Resolved ?? default;
+        }
+    }
+
+    /// <summary>
     /// Folds cells the definition marks as merged into the cell they were merged with.
     /// </summary>
     /// <remarks>
@@ -362,6 +445,10 @@ public sealed partial class Ww8DocumentReader
             Ww8CellDraft owner = cells[index - 1];
             owner.RightEdge = Math.Max(owner.RightEdge, cells[index].RightEdge);
             owner.LayoutBlocks.AddRange(cells[index].LayoutBlocks);
+
+            // The swallowed cell's right edge is now the owner's, so its right border is too — the same
+            // hand-over LibreOffice makes when it folds a merged cell (`ww8par2.cxx`, `ReadDef`).
+            owner.Borders = owner.Borders with { Right = cells[index].Borders.Right };
             cells.RemoveAt(index);
         }
     }
@@ -441,9 +528,13 @@ public sealed record Ww8LayoutRow(
 /// <param name="RowSpan">How many rows it covers downwards.</param>
 /// <param name="Padding">The gap between its edges and its text.</param>
 /// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
+/// <param name="Shading">The colour behind its text, or null when it is not shaded.</param>
+/// <param name="Borders">Its four edges, with the table's defaults already applied.</param>
 public sealed record Ww8LayoutCell(
     int Column,
     int ColumnSpan,
     int RowSpan,
     CellPadding Padding,
-    IReadOnlyList<Ww8LayoutBlock> Blocks);
+    IReadOnlyList<Ww8LayoutBlock> Blocks,
+    Colour? Shading = null,
+    CellBorders Borders = default);
