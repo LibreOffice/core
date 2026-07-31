@@ -414,7 +414,7 @@ namespace sw {
         PageFootnoteHint() : SfxHint(SfxHintId::SwPageFootnote) {}
     };
 
-    SW_DLLPUBLIC SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const&);
+    SW_DLLPUBLIC gfx::Length FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const&);
 }
 
 typedef boost::multi_index_container<
