@@ -335,34 +335,31 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     if (!mxFontCapabilities)
     {
         mxFontCapabilities.emplace();
-        RawFontData aData(GetRawFontData(HB_TAG('O', 'S', '/', '2')));
+        hb_face_t* pHbFace = GetHbFace();
 
-        SvMemoryStream aStream(const_cast<uint8_t*>(aData.data()), aData.size(), StreamMode::READ);
-        aStream.SetEndian(SvStreamEndian::BIG);
-
-        sal_uInt32 nValue = 0;
-
-        std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aUnicodeRange;
-        aStream.Seek(vcl::OS2_ulUnicodeRange1_offset);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aUnicodeRange, 0, nValue);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aUnicodeRange, 32, nValue);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aUnicodeRange, 64, nValue);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aUnicodeRange, 96, nValue);
-        if (aStream.good())
+        const sal_uInt32 nUR1 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_UNICODE_RANGE_1);
+        const sal_uInt32 nUR2 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_UNICODE_RANGE_2);
+        const sal_uInt32 nUR3 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_UNICODE_RANGE_3);
+        const sal_uInt32 nUR4 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_UNICODE_RANGE_4);
+        if (nUR1 || nUR2 || nUR3 || nUR4)
+        {
+            std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aUnicodeRange;
+            appendBitset(aUnicodeRange, 0, nUR1);
+            appendBitset(aUnicodeRange, 32, nUR2);
+            appendBitset(aUnicodeRange, 64, nUR3);
+            appendBitset(aUnicodeRange, 96, nUR4);
             mxFontCapabilities->oUnicodeRange = aUnicodeRange;
+        }
 
-        std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCodePageRange;
-        aStream.Seek(vcl::OS2_ulCodePageRange1_offset);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aCodePageRange, 0, nValue);
-        aStream.ReadUInt32(nValue);
-        appendBitset(aCodePageRange, 32, nValue);
-        if (aStream.good())
+        const sal_uInt32 nCPR1 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_CODE_PAGE_RANGE_1);
+        const sal_uInt32 nCPR2 = hb_ot_fetch_bits(pHbFace, HB_OT_BITS_TAG_CODE_PAGE_RANGE_2);
+        if (nCPR1 || nCPR2)
+        {
+            std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCodePageRange;
+            appendBitset(aCodePageRange, 0, nCPR1);
+            appendBitset(aCodePageRange, 32, nCPR2);
             mxFontCapabilities->oCodePageRange = aCodePageRange;
+        }
     }
 
     rFontCapabilities = *mxFontCapabilities;
