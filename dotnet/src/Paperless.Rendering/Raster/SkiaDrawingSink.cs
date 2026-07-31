@@ -89,8 +89,19 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
         ArgumentNullException.ThrowIfNull(path);
         ArgumentNullException.ThrowIfNull(paint);
 
+        // Conical and rectangular gradients have no Skia shader and no PDF shading either, so
+        // both backends expand them into flat bands through the same shared arithmetic. Doing it
+        // here rather than inside Brush keeps the two backends drawing the same picture, which is
+        // the whole reason the decomposition is shared.
+        if (paint is GradientPaint { Stops.Count: > 0 } gradient
+            && !Fills.Gradients.HasNativeForm(gradient.Kind))
+        {
+            Fills.Gradients.DrawBands(this, path, gradient, rule);
+            return;
+        }
+
         using SKPath skia = Convert(path, rule);
-        using SKPaint brush = Brush(paint, SKPaintStyle.Fill);
+        using SKPaint brush = Brush(paint, SKPaintStyle.Fill, Fills.Gradients.Bounds(path));
         _canvas.DrawPath(skia, brush);
     }
 
@@ -217,34 +228,20 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     {
         ArgumentNullException.ThrowIfNull(image);
         if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
-        if (image.Pixels.Length < image.Width * image.Height * 4) return;
+        if (Image(image) is not { } drawable) return;
 
-        SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
-        using SKBitmap bitmap = new();
-
-        byte[] pixels = image.Pixels.ToArray();
-        System.Runtime.InteropServices.GCHandle pin =
-            System.Runtime.InteropServices.GCHandle.Alloc(pixels, System.Runtime.InteropServices.GCHandleType.Pinned);
-
-        try
+        using (drawable)
+        using (SKPaint brush = new()
         {
-            bitmap.InstallPixels(info, pin.AddrOfPinnedObject(), info.RowBytes);
-
-            using SKPaint brush = new()
-            {
-                IsAntialias = _options.Antialias,
-                Color = SKColors.White.WithAlpha((byte)Math.Clamp(Math.Round(opacity * 255), 0, 255)),
-            };
-
-            _canvas.DrawBitmap(
-                bitmap,
+            IsAntialias = _options.Antialias,
+            Color = SKColors.White.WithAlpha((byte)Math.Clamp(Math.Round(opacity * 255), 0, 255)),
+        })
+        {
+            _canvas.DrawImage(
+                drawable,
                 Rect(destination),
                 new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.None),
                 brush);
-        }
-        finally
-        {
-            pin.Free();
         }
     }
 
@@ -321,7 +318,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
         return (key[..hash], index);
     }
 
-    private SKPaint Brush(Paint paint, SKPaintStyle style)
+    private SKPaint Brush(Paint paint, SKPaintStyle style, DocRect? region = null)
     {
         SKPaint brush = new() { IsAntialias = _options.Antialias, Style = style };
 
@@ -333,6 +330,11 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
 
             case GradientPaint gradient when gradient.Stops.Count > 0:
                 brush.Shader = Shader(gradient);
+                break;
+
+            case BitmapPaint bitmap when region is { } bounds:
+                brush.Shader = Shader(bitmap, bounds);
+                if (brush.Shader is null) brush.Color = SKColors.Transparent;
                 break;
 
             default:
@@ -347,38 +349,123 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// A gradient as Skia states it.
     /// </summary>
     /// <remarks>
-    /// Linear and radial map straight across. Conical and rectangular are LibreOffice's own
-    /// geometries and Skia's sweep gradient is not the same construction, so they are drawn
-    /// as a radial for now; nothing in the display list produces one yet, and reproducing
-    /// <c>basegfx</c>'s gradient arithmetic exactly is recorded as outstanding in this
-    /// library's <c>TODO.md</c> rather than approximated silently.
+    /// <para>
+    /// Linear is a linear shader and radial a radial one. Elliptical is the <em>same</em>
+    /// radial shader with the gradient's own transform squashing one axis, which is what that
+    /// transform exists for: it distorts the ramp without distorting the geometry underneath
+    /// it. The two kinds that have no shader — conical and rectangular — never reach here;
+    /// <see cref="FillPath"/> sends them to the shared band decomposition instead.
+    /// </para>
+    /// <para>
+    /// The stops are normalised first, so a list that started at 0.2 or repeated an offset
+    /// reaches Skia in the strictly-increasing, end-to-end form both it and PDF need. Skia
+    /// tolerates more than PDF does, and normalising in one place is what stops the two
+    /// backends drawing different pictures from the same list.
+    /// </para>
     /// </remarks>
     private SKShader Shader(GradientPaint gradient)
     {
-        SKColor[] colours = new SKColor[gradient.Stops.Count];
-        float[] offsets = new float[gradient.Stops.Count];
+        IReadOnlyList<GradientStop> stops = Fills.Gradients.Normalise(gradient.Stops);
 
-        for (int i = 0; i < gradient.Stops.Count; i++)
+        SKColor[] colours = new SKColor[stops.Count];
+        float[] offsets = new float[stops.Count];
+
+        for (int i = 0; i < stops.Count; i++)
         {
-            GradientStop stop = gradient.Stops[i];
-            colours[i] = new SKColor(stop.Colour.R, stop.Colour.G, stop.Colour.B, stop.Colour.A);
-            offsets[i] = (float)stop.Offset;
+            colours[i] = new SKColor(stops[i].Colour.R, stops[i].Colour.G, stops[i].Colour.B, stops[i].Colour.A);
+            offsets[i] = (float)stops[i].Offset;
         }
 
         SKPoint start = Point(gradient.Start);
         SKPoint end = Point(gradient.End);
+        SKMatrix local = Matrix(gradient.Transform);
 
         if (gradient.Kind == GradientKind.Linear)
         {
-            return SKShader.CreateLinearGradient(start, end, colours, offsets, SKShaderTileMode.Clamp);
+            return SKShader.CreateLinearGradient(
+                start, end, colours, offsets, SKShaderTileMode.Clamp, local);
         }
 
         float radius = (float)Math.Sqrt(
             ((end.X - start.X) * (end.X - start.X)) + ((end.Y - start.Y) * (end.Y - start.Y)));
 
         return SKShader.CreateRadialGradient(
-            start, radius <= 0 ? 1 : radius, colours, offsets, SKShaderTileMode.Clamp);
+            start, radius <= 0 ? 1 : radius, colours, offsets, SKShaderTileMode.Clamp, local);
     }
+
+    /// <summary>
+    /// A tiled or stretched bitmap fill as Skia states it.
+    /// </summary>
+    /// <remarks>
+    /// A repeating image shader rather than the explicit grid of draws the PDF backend emits.
+    /// The two are the same picture because both take their origin and step from
+    /// <see cref="Fills.Tiles"/>: the shader's local matrix places one tile and Skia repeats it
+    /// on exactly the lattice the PDF backend walks. Stretching is the degenerate case where
+    /// the lattice has one cell the size of the region, and it clamps rather than repeats so
+    /// that a rounding pixel at the edge does not wrap the far side of the image into view.
+    /// </remarks>
+    private SKShader? Shader(BitmapPaint bitmap, DocRect region)
+    {
+        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return null;
+        if (Image(bitmap.Image) is not { } image) return null;
+
+        try
+        {
+            DocRect cell = bitmap.Stretch
+                ? region
+                : Fills.Tiles.Cover(bitmap, region).FirstOrDefault();
+
+            if (cell.Width.Emu <= 0 || cell.Height.Emu <= 0) return null;
+
+            SKRect placed = Rect(cell);
+            SKMatrix local = SKMatrix.CreateScaleTranslation(
+                placed.Width / image.Width,
+                placed.Height / image.Height,
+                placed.Left,
+                placed.Top);
+
+            SKShaderTileMode mode = bitmap.Stretch ? SKShaderTileMode.Clamp : SKShaderTileMode.Repeat;
+            return SKShader.CreateImage(image, mode, mode, local);
+        }
+        finally
+        {
+            image.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// A display-list image as an immutable Skia one.
+    /// </summary>
+    /// <remarks>
+    /// The pixels are copied rather than pinned and installed, because an <c>SKImage</c>
+    /// outlives the call that made it — a shader holds one for as long as the paint does —
+    /// and a pinned array freed at the end of the call would leave it reading released memory.
+    /// </remarks>
+    private static SKImage? Image(RasterImage image)
+    {
+        if (image.Pixels.Length < image.Width * image.Height * 4) return null;
+
+        SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
+        byte[] pixels = image.Pixels.ToArray();
+        System.Runtime.InteropServices.GCHandle pin =
+            System.Runtime.InteropServices.GCHandle.Alloc(pixels, System.Runtime.InteropServices.GCHandleType.Pinned);
+
+        try
+        {
+            using SKData data = SKData.CreateCopy(pin.AddrOfPinnedObject(), (ulong)pixels.Length);
+            return SKImage.FromPixels(info, data, info.RowBytes);
+        }
+        finally
+        {
+            pin.Free();
+        }
+    }
+
+    /// <summary>The document-space transform Skia states in device pixels.</summary>
+    private SKMatrix Matrix(AffineTransform transform) => new(
+        (float)transform.A, (float)transform.C, (float)(transform.E * _scale),
+        (float)transform.B, (float)transform.D, (float)(transform.F * _scale),
+        0, 0, 1);
 
     private SKPath Convert(GraphicsPath path, FillRule rule)
     {

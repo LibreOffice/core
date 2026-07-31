@@ -57,7 +57,9 @@ internal sealed class PdfContentSink(
     private readonly List<PdfPageContent> _pages = [];
     private readonly List<(string Name, int Id)> _xObjects = [];
     private readonly List<(string Name, int Id)> _states = [];
+    private readonly List<(string Name, int Id)> _shadings = [];
     private readonly Dictionary<string, string> _stateNames = new(StringComparer.Ordinal);
+    private readonly Dictionary<RasterImage, string> _imageNames = new(ReferenceEqualityComparer.Instance);
     private readonly Stack<StringBuilder> _groups = new();
     private readonly Stack<double> _groupOpacities = new();
 
@@ -141,6 +143,20 @@ internal sealed class PdfContentSink(
         ArgumentNullException.ThrowIfNull(path);
         ArgumentNullException.ThrowIfNull(paint);
         if (path.Commands.Count == 0) return;
+
+        switch (paint)
+        {
+            case GradientPaint gradient when gradient.Stops.Count > 0:
+                FillGradient(path, gradient, rule);
+                return;
+
+            case BitmapPaint bitmap:
+                FillBitmap(path, bitmap, rule);
+                return;
+
+            default:
+                break;
+        }
 
         Colour colour = Flatten(paint);
         if (colour.IsTransparent) return;
@@ -245,13 +261,104 @@ internal sealed class PdfContentSink(
         _content.Append("ET\nQ\n");
     }
 
+    // -------------------------------------------------------------------------------- fills
+
+    /// <summary>
+    /// Fills a path with a gradient.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Clip, then <c>sh</c>, which is the form LibreOffice writes
+    /// (<c>PDFWriterImpl::drawGradient</c>, <c>vcl/source/pdf/pdfwriter_impl.cxx:9194</c>) and
+    /// not the shading <em>pattern</em> the same picture could be spelled as. The reason is
+    /// the transform: a pattern's <c>/Matrix</c> maps pattern space to the page's default
+    /// space and so ignores any <c>cm</c> in force, which would leave a rotated shape's
+    /// gradient pointing the wrong way, whereas <c>sh</c> paints in the current user space
+    /// and inherits it for nothing.
+    /// </para>
+    /// <para>
+    /// A gradient's own <see cref="GradientPaint.Transform"/> — what expresses a squashed or
+    /// rotated ramp without distorting the shape under it — is then simply one more <c>cm</c>
+    /// inside the clip.
+    /// </para>
+    /// </remarks>
+    private void FillGradient(GraphicsPath path, GradientPaint gradient, FillRule rule)
+    {
+        if (!Fills.Gradients.HasNativeForm(gradient.Kind))
+        {
+            Fills.Gradients.DrawBands(this, path, gradient, rule);
+            return;
+        }
+
+        int id = PdfShadings.Write(writer, gradient, _pageHeight);
+        string name = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
+        _shadings.Add((name, id));
+
+        _content.Append("q\n");
+        AppendPath(path);
+        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+
+        if (gradient.Transform != AffineTransform.Identity) Transform(gradient.Transform);
+
+        _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
+    }
+
+    /// <summary>
+    /// Fills a path with a bitmap, tiled or stretched.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One <c>Do</c> per tile inside a clip, not a <c>/PatternType 1</c> tiling pattern.
+    /// That is what LibreOffice writes — measured on its own PDF of
+    /// <c>tests/corpus/features/paint-fills.fodp</c>, whose one checkerboard rectangle comes
+    /// out as a <c>re W* n</c> clip and 47 <c>q … cm /Im10 Do Q</c> groups sharing a single
+    /// 8×8 image XObject — and it has the same advantage the <c>sh</c> form has: an explicit
+    /// tile inherits the current transform, where a pattern matrix does not.
+    /// </para>
+    /// <para>
+    /// The image itself is written once however many tiles name it, which is what makes the
+    /// difference between 47 copies of a bitmap and one.
+    /// </para>
+    /// </remarks>
+    private void FillBitmap(GraphicsPath path, BitmapPaint bitmap, FillRule rule)
+    {
+        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return;
+        if (Fills.Gradients.Bounds(path) is not { } bounds || bounds.IsEmpty) return;
+
+        string name = ImageName(bitmap.Image);
+        if (name.Length == 0) return;
+
+        _content.Append("q\n");
+        AppendPath(path);
+        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+
+        foreach (DocRect tile in Fills.Tiles.Cover(bitmap, bounds))
+        {
+            _content.Append(CultureInfo.InvariantCulture,
+                $"q {N(tile.Width.Points)} 0 0 {N(tile.Height.Points)} "
+                + $"{N(tile.Left.Points)} {N(_pageHeight - tile.Bottom.Points)} cm\n/{name} Do Q\n");
+        }
+
+        _content.Append("Q\n");
+    }
+
+    /// <summary>The resource name of an image, written once however many times it is drawn.</summary>
+    private string ImageName(RasterImage image)
+    {
+        if (_imageNames.TryGetValue(image, out string? existing)) return existing;
+
+        string name = PdfImages.Write(writer, image, options, _xObjects);
+        _imageNames[image] = name;
+        return name;
+    }
+
     /// <inheritdoc/>
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
         if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
 
-        string name = PdfImages.Write(writer, image, options, _xObjects);
+        string name = ImageName(image);
         if (name.Length == 0) return;
 
         _content.Append("q\n");
@@ -320,6 +427,7 @@ internal sealed class PdfContentSink(
 
         Append(resources, "/XObject", _xObjects);
         Append(resources, "/ExtGState", _states);
+        Append(resources, "/Shading", _shadings);
 
         static void Append(StringBuilder into, string key, List<(string Name, int Id)> entries)
         {
@@ -537,19 +645,20 @@ internal sealed class PdfContentSink(
     // ------------------------------------------------------------------------------- paints
 
     /// <summary>
-    /// The one colour a paint is drawn as.
+    /// The one colour a paint is drawn as where only one is available.
     /// </summary>
     /// <remarks>
-    /// Gradients and bitmap fills reach a PDF as shading dictionaries and tiling patterns,
-    /// and neither is written yet — nothing in the display list produces one, since the only
-    /// paints word-processing layout emits are solid. Rather than write untested machinery,
-    /// a gradient is drawn as its middle stop and a bitmap as nothing, both recorded in this
-    /// library's <c>TODO.md</c> under what is left.
+    /// Fills no longer come here — a gradient is a shading and a bitmap is a grid of image
+    /// draws — but a <em>pen</em> and a glyph run still do, and both are one colour in PDF:
+    /// there is no gradient stroke operator, and text is shown in the current fill colour.
+    /// LibreOffice's own writer has neither either. A gradient pen is drawn as its middle
+    /// stop, which is the closest single colour to the ramp, and a bitmap pen as nothing.
     /// </remarks>
     private static Colour Flatten(Paint paint) => paint switch
     {
         SolidPaint solid => solid.Colour,
-        GradientPaint { Stops.Count: > 0 } gradient => gradient.Stops[gradient.Stops.Count / 2].Colour,
+        GradientPaint { Stops.Count: > 0 } gradient
+            => Fills.Gradients.Sample(Fills.Gradients.Normalise(gradient.Stops), 0.5),
         _ => Colour.Transparent,
     };
 
