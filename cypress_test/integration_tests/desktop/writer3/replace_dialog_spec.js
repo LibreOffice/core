@@ -1,11 +1,18 @@
 /* global describe it cy beforeEach require */
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 var findHelper = require('../../common/find_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', { testIsolation: false }, function() {
+
+    // A search starts from the caret, and the tests below read which instance
+    // it lands on, so each one starts from the top of the document.
+    desktopHelper.shareDocumentAcrossTests('writer/find_replace.odt', {
+        caretToDocumentStart: true,
+    });
+
     beforeEach(function() {
-        helper.setupAndLoadDocument('writer/find_replace.odt');
         cy.getFrameWindow().then(function(win) {
             this.win = win;
         });
@@ -42,7 +49,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', fun
         helper.typeIntoDocument('{ctrl}h');
         findHelper.waitForFindReplaceDialog(this.win);
 
-        cy.cGet('#searchterm-input-dialog').type('test').realPress('Enter');
+        // Core keeps the search term for the session, so a reopened dialog can
+        // arrive with the term of an earlier search in the field.
+        cy.cGet('#searchterm-input-dialog').type('{selectall}{backspace}test').realPress('Enter');
 
         // Verify text was found and selected
         helper.textSelectionShouldExist();
@@ -56,7 +65,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', fun
         findHelper.waitForFindReplaceDialog(this.win);
 
         // Go to first instance - Not Bold text
-        cy.cGet('#searchterm-input-dialog').type('test');
+        cy.cGet('#searchterm-input-dialog').type('{selectall}{backspace}test');
         cy.realPress('Enter');
         helper.textSelectionShouldExist();
         cy.cGet('#copy-paste-container p b').should('not.exist');
@@ -86,11 +95,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', fun
         findHelper.waitForFindReplaceDialog(this.win);
 
         // Search for text first
-        cy.cGet('#searchterm-input-dialog').type('test').realPress('Enter');
+        cy.cGet('#searchterm-input-dialog').type('{selectall}{backspace}test').realPress('Enter');
         helper.textSelectionShouldExist();
 
         // Type replacement and press Enter
-        cy.cGet('#replaceterm-input-dialog').type('replaced').realPress('Enter');
+        cy.cGet('#replaceterm-input-dialog').type('{selectall}{backspace}replaced').realPress('Enter');
 
         // The replace triggers a jsdialog update and when the browser-side
         // processes the update the dialog gets rebuilt, and

@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global describe it cy beforeEach afterEach require */
+/* global describe it cy before beforeEach afterEach require */
 
 var helper = require('../../common/helper');
 
@@ -14,29 +14,38 @@ function ensureBackstage(win) {
 	return win.app.map.backstageView;
 }
 
-describe(['tagdesktop'], 'Backstage View Tests', function() {
+describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, function() {
+
+	let win;
+
+	before(function() {
+		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		cy.getFrameWindow().then((frameWindow) => {
+			win = frameWindow;
+		});
+	});
 
 	beforeEach(function() {
+		// Cypress restores the configured viewport before every test, so the
+		// size the tests were written for is set again here.
 		cy.viewport(1400, 1000);
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-		});
 	});
 
 	afterEach(function() {
 		// Hide the backstage view in case a test fails partway through, so
 		// document container is restored for subsequent tests.
 		cy.then(() => {
-			if (this.win.app.map.backstageView) {
-				this.win.app.map.backstageView.hide();
+			if (win.app.map.backstageView) {
+				win.app.map.backstageView.hide();
 			}
 		});
 	});
 
+	// The backstage view is built once and stays for the whole file, so the
+	// test that reads it as first built comes before the ones that switch tabs.
 	it('Shows backstage chrome with sidebar tabs and content area', function() {
 		cy.then(() => {
-			ensureBackstage(this.win).show();
+			ensureBackstage(win).show();
 		});
 
 		cy.cGet('.backstage-view').should('be.visible');
@@ -60,7 +69,7 @@ describe(['tagdesktop'], 'Backstage View Tests', function() {
 
 	it('Switches between view tabs', function() {
 		cy.then(() => {
-			ensureBackstage(this.win).show();
+			ensureBackstage(win).show();
 		});
 
 		cy.cGet('#backstage-new').click();
@@ -89,7 +98,7 @@ describe(['tagdesktop'], 'Backstage View Tests', function() {
 
 	it('Filters templates via the search input', function() {
 		cy.then(() => {
-			ensureBackstage(this.win).show();
+			ensureBackstage(win).show();
 		});
 
 		cy.cGet('#backstage-new').click();
@@ -104,6 +113,48 @@ describe(['tagdesktop'], 'Backstage View Tests', function() {
 		// Clearing the search should remove the empty-state message.
 		cy.cGet('.template-search-input').clear();
 		cy.cGet('.template-grid-empty').should('not.exist');
+	});
+
+	it('Closes via the sidebar back button', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
+		cy.cGet('.backstage-sidebar-back').click();
+		cy.cGet('.backstage-view').should('have.class', 'hidden');
+	});
+
+	it('Toggles via the public API', function() {
+		cy.then(() => {
+			const bv = ensureBackstage(win);
+			bv.show();
+		});
+		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
+
+		cy.then(() => {
+			win.app.map.backstageView.hide();
+		});
+		cy.cGet('.backstage-view').should('have.class', 'hidden');
+
+		cy.then(() => {
+			win.app.map.backstageView.toggle();
+		});
+		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
+	});
+});
+
+// Whether the header carries a close button is settled when the view is built,
+// so each of these two tests needs a session of its own with the setting it
+// asks about.
+describe(['tagdesktop'], 'Backstage View close button', function() {
+
+	beforeEach(function() {
+		cy.viewport(1400, 1000);
+		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Closes via the header close button', function() {
@@ -129,33 +180,5 @@ describe(['tagdesktop'], 'Backstage View Tests', function() {
 		cy.cGet('.backstage-header-close').should('not.exist');
 		// The sidebar back button still returns to the document.
 		cy.cGet('.backstage-sidebar-back').should('be.visible');
-	});
-
-	it('Closes via the sidebar back button', function() {
-		cy.then(() => {
-			ensureBackstage(this.win).show();
-		});
-
-		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
-		cy.cGet('.backstage-sidebar-back').click();
-		cy.cGet('.backstage-view').should('have.class', 'hidden');
-	});
-
-	it('Toggles via the public API', function() {
-		cy.then(() => {
-			const bv = ensureBackstage(this.win);
-			bv.show();
-		});
-		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
-
-		cy.then(() => {
-			this.win.app.map.backstageView.hide();
-		});
-		cy.cGet('.backstage-view').should('have.class', 'hidden');
-
-		cy.then(() => {
-			this.win.app.map.backstageView.toggle();
-		});
-		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
 	});
 });

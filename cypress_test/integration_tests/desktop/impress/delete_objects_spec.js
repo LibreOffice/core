@@ -1,17 +1,23 @@
-/* global describe it cy require beforeEach expect Cypress */
+/* global describe it cy require before beforeEach expect Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/delete_objects.odp');
+	desktopHelper.shareDocumentAcrossTests('impress/delete_objects.odp');
+
+	before(function() {
 		desktopHelper.switchUIToCompact();
 
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
+		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
+		});
+	});
+
+	beforeEach(function() {
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
 		});
 	});
 
@@ -85,6 +91,21 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function(
 		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 	});
 
+	it('Delete Fontwork', function() {
+		cy.cGet('#menu-insert').click();
+		cy.cGet('body').contains('a','Fontwork...').click();
+		cy.cGet('#ok').click();
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
+		helper.processToIdle(this.win);
+
+		//delete
+		helper.typeIntoDocument('{del}');
+
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
+	});
+
+	// This one comes last because it zooms out to 50 percent, which is not part
+	// of the document and stays for whatever runs after it.
 	it('Delete Table',function() {
 		desktopHelper.selectZoomLevel('50', false);
 
@@ -109,18 +130,5 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function(
 
 		helper.getContextMenuItem('Delete').click();
 		cy.cGet('.table-column-resize-marker').should('not.exist');
-	});
-
-	it('Delete Fontwork', function() {
-		cy.cGet('#menu-insert').click();
-		cy.cGet('body').contains('a','Fontwork...').click();
-		cy.cGet('#ok').click();
-		cy.cGet('#test-div-shapeHandlesSection').should('exist');
-		helper.processToIdle(this.win);
-
-		//delete
-		helper.typeIntoDocument('{del}');
-
-		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 	});
 });

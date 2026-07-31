@@ -1,7 +1,8 @@
 /* -*- js-indent-level: 8 -*- */
-/* global describe it cy beforeEach require expect */
+/* global describe it cy before beforeEach require expect */
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 
 // Tests for the Zotero citation control (browser/src/control/Control.Zotero.js).
 //
@@ -75,10 +76,19 @@ function caretY(win) {
 
 describe(['tagdesktop'], 'Zotero citations', function() {
 
-	describe('Insert citation', function() {
+	// Nothing in this group reaches the document: the tests stub sendUnoCommand
+	// and read the parameters it was called with. So the document is loaded once
+	// and stays as it arrived, with no rewind between tests. A rewind would not
+	// work here either, because Cypress puts the stubs back only after the hooks
+	// have run and the idle round-trip a rewind waits for goes over the stubbed
+	// socket.
+	describe('Insert citation', { testIsolation: false }, function() {
+		before(function() {
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		});
+
 		beforeEach(function() {
 			cy.viewport(1400, 1000);
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
 			cy.getFrameWindow().then((win) => { this.win = win; });
 		});
 
@@ -144,12 +154,17 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 		});
 	});
 
-	describe('Insert bibliography', function() {
+	// These tests stub sendUnoCommand as well, so the document is loaded once and
+	// stays as it arrived.
+	describe('Insert bibliography', { testIsolation: false }, function() {
 		const BIB_HTML = '<div class="csl-entry">A reference</div>';
+
+		before(function() {
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		});
 
 		beforeEach(function() {
 			cy.viewport(1400, 1000);
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
 			cy.getFrameWindow().then((win) => { this.win = win; });
 		});
 
@@ -196,10 +211,15 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 		});
 	});
 
-	describe('Unlink citations', function() {
+	// The three command tests stub sendUnoCommand and the confirmation test only
+	// opens a warning, so the document is loaded once and stays as it arrived.
+	describe('Unlink citations', { testIsolation: false }, function() {
+		before(function() {
+			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
+		});
+
 		beforeEach(function() {
 			cy.viewport(1400, 1000);
-			helper.setupAndLoadDocument('writer/copy_paste_simple.odt');
 			cy.getFrameWindow().then((win) => { this.win = win; });
 		});
 
@@ -314,14 +334,18 @@ describe(['tagdesktop'], 'Zotero citations', function() {
 		});
 	});
 
-	describe('Citations list', function() {
+	// The tests run in file order: the list is read as the document arrives,
+	// then after an insert, then after a delete.
+	describe('Citations list', { testIsolation: false }, function() {
 		// The citations map is rebuilt from the field list core reports, so it
 		// must reflect the document after an insert or a delete. zotero.odt
 		// holds two citations with item keys V5D7Z3EL ("[1]") and EVCF32P3
 		// ("[2]").
+		desktopHelper.shareDocumentAcrossTests('writer/zotero.odt', {
+			viewport: [1400, 1000],
+		});
+
 		beforeEach(function() {
-			cy.viewport(1400, 1000);
-			helper.setupAndLoadDocument('writer/zotero.odt');
 			cy.getFrameWindow().then((win) => { this.win = win; });
 		});
 

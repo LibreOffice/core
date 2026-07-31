@@ -3,7 +3,13 @@
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
+describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('writer/styles.odt', {
+		notebookbar: true,
+		viewport: [1280, 720],
+	});
+
 	// check expand button visibility and click on it
 	const openExpander = () => {
 		cy.cGet('#stylesview-iconview-list-expand-button').should('exist').should('be.visible');
@@ -13,10 +19,12 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 	}
 
 	beforeEach(function() {
-		cy.viewport(1280, 720);
-		helper.setupAndLoadDocument('writer/styles.odt');
-		desktopHelper.switchUIToNotebookbar();
-		desktopHelper.sidebarToggle();
+		// The styles view these tests read is the one in the notebookbar, so the
+		// sidebar dock stays out of the way. Opening the styles deck brings it
+		// back, and so does the notebookbar being built again after a view mode
+		// switch, which is why the state is read rather than toggled.
+		desktopHelper.ensureSidebarHidden();
+
 		cy.cGet('.notebookbar #stylesview').should('exist').should('be.visible').should('not.be.empty');
 	});
 
@@ -35,19 +43,6 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 		cy.cGet('.jsdialog #stylesview_9').should('not.exist');
 		openExpander();
 		cy.cGet('.jsdialog #stylesview_9').should('exist').should('be.visible');
-	});
-
-	it('Open Styles Sidebar Button', function() {
-		openExpander();
-
-		// open sidebar
-		cy.cGet('#format-style-list-dialog-button').should('exist').should('be.visible');
-		cy.cGet('#format-style-list-dialog-button').click();
-
-		// close dropdown on button click
-		desktopHelper.getDropdown('stylesview').should('not.exist');
-
-		cy.cGet('#StyleListDeck').should('exist').should('be.visible');
 	});
 
 	// Switching to viewing mode tears down the notebookbar (which marks it
@@ -103,5 +98,21 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 		cy.viewport(650, 454);
 		cy.cGet('.jsdialog #stylesview_4').should('exist').should('be.visible');
 		cy.cGet('#format-style-list-dialog-button').should('exist').should('be.visible');
+	});
+
+	// This one comes last because it leaves the styles deck showing in the
+	// sidebar. From there the button that hides the dock switches the deck
+	// instead, so the tests above get the sidebar as the file started.
+	it('Open Styles Sidebar Button', function() {
+		openExpander();
+
+		// open sidebar
+		cy.cGet('#format-style-list-dialog-button').should('exist').should('be.visible');
+		cy.cGet('#format-style-list-dialog-button').click();
+
+		// close dropdown on button click
+		desktopHelper.getDropdown('stylesview').should('not.exist');
+
+		cy.cGet('#StyleListDeck').should('exist').should('be.visible');
 	});
 });

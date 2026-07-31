@@ -1,24 +1,25 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy before require Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var calcHelper = require('../../common/calc_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/statusbar.ods');
+	desktopHelper.shareDocumentAcrossTests('calc/statusbar.ods');
 
+	// The document opens at 100 percent with the cursor on A3. The tests below
+	// change both, so this says what the document arrives as.
+	before(function() {
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showStatusBarIfHidden();
 		}
 
 		desktopHelper.shouldHaveZoomLevel('100');
-
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A3');
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-			helper.processToIdle(this.win);
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
 		});
 	});
 
@@ -46,11 +47,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 		cy.cGet('#InsertMode').should('not.be.visible');
 	});
 
+	// This one reads the status bar with the functions on their default choice,
+	// so it belongs above the test that changes which functions are shown.
 	it('Selected data summary.', function() {
 		// Ensure the viewport is large enough to show the whole status bar
 		// In Calc #StateTableCellMenu has a high data-priority
 		// and will be hidden if the status bar doesn't have enough space
 		cy.viewport(1280, 720);
+
+		// A3 is empty, which is what the summary of no numbers is read from.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A3');
 		cy.cGet('#StateTableCell').should('have.text', 'Average: ; Sum: 0');
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1:A2');
 		cy.cGet('#StateTableCell').should('have.text', 'Average: 15.5; Sum: 31');
@@ -64,6 +70,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 		cy.cGet('.ui-combobox-entry.selected').contains(/Average|Sum/g);
 	});
 
+	// Which functions the status bar shows is not part of the document, so the
+	// None this test ends on stays for the rest of the file.
 	it('Cell function menu multi-selection.', function() {
 		cy.viewport(1280, 720);
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1:A2');
@@ -107,6 +115,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 		desktopHelper.shouldHaveZoomLevel('100');
 	});
 
+	// The zoom level this leaves behind is not part of the document either, so
+	// this test comes last.
 	it('Select zoom level.', function() {
 		desktopHelper.resetZoomLevel();
 		desktopHelper.shouldHaveZoomLevel('100');
