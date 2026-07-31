@@ -112,11 +112,71 @@ internal sealed class PptxShapeReader
             return;
         }
 
+        if (uri == DiagramUri && ReadDiagram(data!, target)) return;
+
         target.Children.Add(new ContentImage
         {
             AlternativeText = Description(frame),
             MediaType = uri,
         });
+    }
+
+    /// <summary>The <c>a:graphicData</c> URI that identifies a SmartArt diagram.</summary>
+    private const string DiagramUri = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+
+    /// <summary>
+    /// Reads the text of a SmartArt diagram from its data model.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A diagram's text is <em>typed by the author</em> and lives in <c>data1.xml</c> as ordinary
+    /// DrawingML text bodies, one per <c>dgm:pt</c>. Only the <em>shapes</em> need the layout
+    /// algorithm — the declarative "layout atom" program in <c>layout1.xml</c> that LibreOffice
+    /// executes in <c>oox/source/drawingml/diagram/</c>, and which is the single largest
+    /// subsystem in the PPTX importer. Extraction needs none of it: the words are already there.
+    /// </para>
+    /// <para>
+    /// Skipping that is worth roughly a dozen files in LibreOffice's own PPTX test corpus that
+    /// otherwise extract to nothing at all, and it is the reason "SmartArt: fallback or
+    /// implement?" is answered "extract the text, decline the layout" rather than deferred.
+    /// </para>
+    /// <para>
+    /// Points are read in <c>dgm:ptLst</c> order. LibreOffice walks the connection list instead,
+    /// which is the difference between authoring order and drawn order — they agree for every
+    /// diagram measured, and reconstructing a tree from <c>dgm:cxnLst</c> to reorder text is
+    /// work the extracted output would not visibly benefit from.
+    /// </para>
+    /// </remarks>
+    private bool ReadDiagram(XElement data, ContentNode target)
+    {
+        XName relIds = XName.Get("relIds", DiagramUri);
+        string? dataModelId = data.Element(relIds)
+            ?.Attribute(XName.Get("dm", OoxmlNamespaces.Relationships))?.Value;
+
+        if (_file.Relationship(_partName, dataModelId) is not { IsExternal: false } relationship)
+            return false;
+        if (_file.Load(relationship.Target) is not { } model) return false;
+
+        int before = target.Children.Count;
+        foreach (XElement point in model.Element(XName.Get("ptLst", DiagramUri))
+                                       ?.Elements(XName.Get("pt", DiagramUri)) ?? [])
+        {
+            // "doc" is the diagram itself, "pres" is a generated presentation node, and the two
+            // transition types are the connectors between points. None of them carries text a
+            // reader sees, and a "pres" point can duplicate a real one's.
+            string? type = point.Attribute("type")?.Value;
+            if (type is "doc" or "pres" or "parTrans" or "sibTrans") continue;
+
+            XElement? body = point.Element(XName.Get("t", DiagramUri));
+            if (DrawingTextBody.IsEmpty(body)) continue;
+
+            DrawingTextBody.Read(body!, target, new DrawingTextOptions
+            {
+                ResolveHyperlink = ResolveHyperlink,
+            });
+        }
+
+        return target.Children.Count > before;
     }
 
     private void ReadPicture(XElement picture, ContentNode target)

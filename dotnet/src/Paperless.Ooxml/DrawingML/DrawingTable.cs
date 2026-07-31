@@ -46,32 +46,33 @@ public static class DrawingTable
         {
             ContentTableRow contentRow = new() { Index = rowIndex };
 
+            // The grid position is the cell's ordinal in the row, not a running total of the
+            // spans: a row always holds one a:tc per grid column, and the ones a span covers are
+            // written out as hMerge/vMerge markers rather than omitted. Adding gridSpan on top
+            // of that counts the covered columns twice and puts every cell after a merge one
+            // column too far right.
             int column = 0;
             foreach (XElement cell in Drawing.Children(row, "tc"))
             {
-                int columnSpan = Math.Max(1, Drawing.Number(cell, "gridSpan") ?? 1);
-                int rowSpan = Math.Max(1, Drawing.Number(cell, "rowSpan") ?? 1);
+                int position = column++;
 
-                // hMerge and vMerge mark the cells a span covers. They are present in the file
-                // — the grid stays rectangular — but they hold no content and reporting them
-                // would put an empty cell after every merged one.
-                bool covered = Drawing.Flag(cell, "hMerge") == true
-                               || Drawing.Flag(cell, "vMerge") == true;
-                if (covered) { column++; continue; }
+                // The covered cells hold no content, and reporting them would put an empty cell
+                // after every merged one.
+                if (Drawing.Flag(cell, "hMerge") == true || Drawing.Flag(cell, "vMerge") == true)
+                    continue;
 
                 ContentTableCell contentCell = new()
                 {
                     Row = rowIndex,
-                    Column = column,
-                    ColumnSpan = columnSpan,
-                    RowSpan = rowSpan,
+                    Column = position,
+                    ColumnSpan = Math.Max(1, Drawing.Number(cell, "gridSpan") ?? 1),
+                    RowSpan = Math.Max(1, Drawing.Number(cell, "rowSpan") ?? 1),
                 };
 
                 if (Drawing.Child(cell, "txBody") is { } body)
                     DrawingTextBody.Read(body, contentCell, options);
 
                 contentRow.Children.Add(contentCell);
-                column += columnSpan;
             }
 
             rows.Add(contentRow);

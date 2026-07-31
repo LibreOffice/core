@@ -84,6 +84,11 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `word-features.dotx` | DOTX | The same content as a template, so the template content type is exercised end to end |
 | `word-features.rtf` | RTF | The same document again, in the one format with no container. Adds what only RTF has: `\'hh` escapes in a declared code page, `\uN` with a code-page fallback to skip, a `{\listtext}` group holding the rendered list label, a `HYPERLINK` field instruction, and a merged table cell expressed purely by its `\cellx` edge |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
+| `deck-features.pptx` | PPTX | The same document as `slides-features.odp` with a table slide added, converted — so it covers the same features through a different vocabulary. Adds what only PPTX has: parts located by relationship with the master hanging off the *layout* rather than the slide; `p:sldIdLst` order; `p:sld show="0"` for the hidden slide; a bare `<p:ph/>` with no `type`; outline text carrying `a:pPr lvl` and a Private-Use-Area `a:buChar`; a `p:grpSp`; a table inside a `p:graphicFrame`; a notes slide in its own part under its own notes master; and a master whose placeholders carry prompt text that must **not** reach any slide |
+
+The stem is `deck-features` rather than `slides-features` because `soffice --convert-to` names its
+output after the input stem alone: converting both from a shared stem would have made one silently
+overwrite the other.
 
 ### Why `slides-ppt.ppt` is 460 kB
 

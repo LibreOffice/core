@@ -154,8 +154,8 @@ public class OdpReaderTests
     public void AFormatWithNoReaderYetIsReportedAsUnsupported()
     {
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("slides-pptx.pptx"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Pptx);
+            () => Open("slides-ppt.ppt"));
+        unimplemented.Format.ShouldBe(DocumentFormat.Ppt);
         unimplemented.Message.ShouldContain("not implemented yet");
     }
 

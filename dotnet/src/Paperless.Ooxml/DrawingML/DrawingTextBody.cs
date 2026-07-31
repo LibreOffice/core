@@ -163,8 +163,13 @@ public static class DrawingTextBody
         // the schema; a file stating one is clamped rather than refused.
         int level = Math.Clamp(Drawing.Number(properties, "lvl") ?? 0, 0, 8);
 
+        // Whether the paragraph has any text at all decides whether it draws its bullet, so it
+        // has to be known before the marker is resolved rather than after the runs are read.
+        bool hasText = HasText(paragraph);
+
         string? marker = ResolveMarker(
-            LevelChain(properties, bodyListStyle, level, options), level, counters, counting);
+            LevelChain(properties, bodyListStyle, level, options),
+            level, counters, counting, hasText);
 
         ContentParagraph result = new()
         {
@@ -185,6 +190,29 @@ public static class DrawingTextBody
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// True when a paragraph holds any text.
+    /// </summary>
+    /// <remarks>
+    /// The blank line an author leaves between two bulleted points is still an <c>a:p</c>, and it
+    /// still inherits the level's bullet — but neither PowerPoint nor Impress draws one on it.
+    /// Measured against LibreOffice's own layout expectations for
+    /// <c>sd/qa/unit/data/pptx/NumberedList-12ab-ab-34.pptx</c>
+    /// (<c>sd/qa/unit/layout-tests.cxx:270-292</c>), whose trailing empty item is expected to
+    /// produce no text at all: emitting the marker gave a stray "a." after the last real item.
+    /// </remarks>
+    private static bool HasText(XElement paragraph)
+    {
+        foreach (XElement child in paragraph.Elements())
+        {
+            if (Drawing.Is(child, "br")) return true;
+            if ((Drawing.Is(child, "r") || Drawing.Is(child, "fld"))
+                && Drawing.Child(child, "t")?.Value.Length > 0)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -292,7 +320,7 @@ public static class DrawingTextBody
     /// a body style that bullets.
     /// </remarks>
     private static string? ResolveMarker(
-        IEnumerable<XElement> chain, int level, int[] counters, bool[] counting)
+        IEnumerable<XElement> chain, int level, int[] counters, bool[] counting, bool hasText)
     {
         foreach (XElement source in chain)
         {
@@ -305,12 +333,19 @@ public static class DrawingTextBody
             if (Drawing.Child(source, "buChar") is { } character)
             {
                 counting[level] = false;
+                if (!hasText) return null;
+
                 string? bullet = Drawing.Attribute(character, "char");
                 return string.IsNullOrEmpty(bullet) ? null : OutlineNumbers.NormaliseBullet(bullet);
             }
 
             if (Drawing.Child(source, "buAutoNum") is { } autoNumber)
-                return AutoNumber(autoNumber, level, counters, counting);
+            {
+                // An empty item does not consume a number either, so the counter is left alone
+                // rather than advanced and hidden — otherwise a blank line between two items
+                // makes the second jump from 2 to 4.
+                return hasText ? AutoNumber(autoNumber, level, counters, counting) : null;
+            }
         }
 
         // Nothing in the chain said anything. The schema's default is no bullet, which is what
