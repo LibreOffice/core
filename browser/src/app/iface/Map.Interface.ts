@@ -38,6 +38,8 @@ interface MapInterface extends Evented {
 	};
 	addressInputField: AddressInputField;
 
+	saveState?: SaveState;
+
 	tabsControl?: {
 		openContextMenuForFocusedTab(): void;
 	};

@@ -2316,6 +2316,8 @@ class Socket {
 
 				return true; // caller should exit immediately.
 			}
+		} else if (textMsg.startsWith('error:') && command.errorCmd === 'save') {
+			this._map.saveState?.showSaveFailedStatus();
 		} else if (
 			textMsg.startsWith('error:') &&
 			command.errorCmd === 'internal'

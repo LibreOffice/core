@@ -89,13 +89,25 @@ class SaveState {
 	showModifiedStatus(): void {
 		if (!this.saveEle) this.initialize();
 		if (this.saveEle) {
-			this.saveRunning = false;
-			this.saveEle.classList.remove('saving');
-			this.saveEle.classList.remove('saved');
-			this.saveIconEl?.classList.remove('rotate-icon'); // Stop the icon rotation
-			this.saveEle.removeAttribute('disabled'); // Enable the button
+			this.clearSaveInProgress();
 			this.saveEle.classList.add('savemodified');
 		}
+	}
+
+	showSaveFailedStatus(): void {
+		if (!this.saveEle) this.initialize();
+		if (this.saveEle) {
+			this.clearSaveInProgress();
+			if (app.file.modified) this.saveEle.classList.add('savemodified');
+		}
+	}
+
+	private clearSaveInProgress(): void {
+		this.saveRunning = false;
+		this.saveEle.classList.remove('saving');
+		this.saveEle.classList.remove('saved');
+		this.saveIconEl?.classList.remove('rotate-icon');
+		this.saveEle.removeAttribute('disabled');
 	}
 }
 
