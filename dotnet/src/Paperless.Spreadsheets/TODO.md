@@ -137,12 +137,20 @@ there is no column width in extracted text.
       there and `M/D/YYYY` in the US table, and LibreOffice picks by the *reading* machine's
       locale, not by anything in the file. Files LibreOffice writes sidestep it by emitting an
       explicit `FORMAT` record for every format they use.
-- [ ] Fractions (`# ?/?`). `NumberFormatCode.IsUnderstood` reports false for them and the
-      reader records a diagnostic rather than showing a wrong number; they need a
-      continued-fraction search rather than a digit walk.
+- [x] Fractions (`# ?/?`). The pattern gives the denominator's *width*, not its value, so
+      this is a Stern-Brocot search for the closest fraction with a bounded denominator rather
+      than a digit walk. Measured against LibreOffice's rendering of
+      `sc/qa/unit/data/xls/formats.xls`: 25.378 under `# ??/??` shows 25 31/82 in both.
 - [ ] Conditions (`[>100]`), and month and weekday names in a locale other than English. The
       name a spreadsheet shows depends on the reading application's locale, so there is no
-      right answer available from the file alone.
+      right answer available from the file alone. `IsUnderstood` reports false for a
+      conditional section and the reader records a diagnostic rather than showing a number it
+      cannot justify.
+
+`formats.xls` is worth knowing about: it is LibreOffice's own number-format torture sheet, and
+four of its six rows — decimals, percent with a shorter negative section, currency, and
+scientific with a three-digit exponent — come out identical to LibreOffice's rendering
+character for character. The fifth is the fractions above. The sixth is the boolean difference.
 
 **The trap that cost the most time here**: LibreOffice's CSV export is *not* a reference for
 number formats. Exporting the feature workbook writes `4.5` where its own PDF rendering of the

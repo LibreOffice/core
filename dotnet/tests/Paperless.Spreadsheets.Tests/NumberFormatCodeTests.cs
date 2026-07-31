@@ -122,13 +122,35 @@ public class NumberFormatCodeTests
             .ShouldBe(NumberFormatCode.CellValueKind.DateTime);
     }
 
-    [Fact]
-    public void AFractionFormatIsReportedRatherThanGuessedAt()
+    [Theory]
+    [InlineData("# ??/??", 25.378, "25 31/82")]
+    [InlineData("# ??/??", 0.389, "  7/18")]
+    [InlineData("# ?/?", 2.5, "2 1/2")]
+    [InlineData("# ?/?", 3.0, "3    ")]
+    [InlineData("# ??/??", -1.25, "-1  1/4 ")]
+    public void AFractionFormatApproximatesRatherThanLaysOutDigits(
+        string code, double value, string expected)
     {
-        // Fractions need a continued-fraction search, not a digit walk. Saying so lets the
-        // reader record a diagnostic instead of presenting a wrong answer as the truth.
-        NumberFormatCode.Parse("# ?/?").IsUnderstood.ShouldBeFalse();
+        // The pattern gives the denominator's width, not its value, so this is a search for
+        // the closest fraction below a hundred rather than a digit walk. Measured against
+        // LibreOffice's own rendering of sc/qa/unit/data/xls/formats.xls, which shows
+        // 25 31/82 and 7/18 for the first two.
+        //
+        // The spaces are the pattern's: a placeholder with no digit to show pads instead, so
+        // that a column of fractions lines up on its bars, and a value with nothing left over
+        // shows a blank fraction rather than 0/1.
+        Format(code, value).ShouldBe(expected);
+    }
+
+    [Fact]
+    public void AConditionalSectionIsReportedRatherThanGuessedAt()
+    {
+        // A condition selects between sections on the value, which this does not reproduce.
+        // Saying so lets the reader record a diagnostic instead of presenting a wrong answer
+        // as the truth.
+        NumberFormatCode.Parse("[>100]0.0;0.00").IsUnderstood.ShouldBeFalse();
         NumberFormatCode.Parse("#,##0.00").IsUnderstood.ShouldBeTrue();
+        NumberFormatCode.Parse("# ??/??").IsUnderstood.ShouldBeTrue();
     }
 
     [Fact]

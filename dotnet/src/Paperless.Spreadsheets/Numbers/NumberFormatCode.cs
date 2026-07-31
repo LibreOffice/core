@@ -18,7 +18,8 @@ namespace Paperless.Spreadsheets.Numbers;
 /// sections (positive, negative, zero, text), each a mix of digit placeholders, date and time
 /// parts, quoted literals and bracketed directives. This implements the constructs that occur
 /// in real files rather than the whole language — see <see cref="IsUnderstood"/> for what is
-/// not covered, which is fractions and the locale-dependent calendar modifiers.
+/// not covered, which is the conditional sections and the locale-dependent calendar
+/// modifiers.
 /// </para>
 /// <para>
 /// Two deliberate approximations. Month and weekday names come out in English, because the
@@ -207,6 +208,9 @@ public sealed class NumberFormatCode
         private readonly bool _exponentSigned;
         private readonly bool _general;
         private readonly bool _twelveHour;
+        private readonly int _fractionAt = -1;
+        private readonly int _numeratorPlaces;
+        private readonly int _denominatorPlaces;
 
         private Section(Token[] tokens)
         {
@@ -271,6 +275,10 @@ public sealed class NumberFormatCode
                         IsText = true;
                         break;
 
+                    case TokenKind.Fraction:
+                        _fractionAt = i;
+                        break;
+
                     case TokenKind.Unsupported:
                         IsUnderstood = false;
                         break;
@@ -281,6 +289,18 @@ public sealed class NumberFormatCode
             }
 
             _decimalPattern = decimalPattern.ToString();
+
+            if (_fractionAt >= 0)
+            {
+                // The numerator is the run of placeholders immediately before the bar and the
+                // denominator the run immediately after; anything further left is the whole
+                // number, which is why "# ??/??" shows 25 31/82 rather than 2537.8/100.
+                for (int i = _fractionAt - 1; i >= 0 && tokens[i].Kind == TokenKind.Digit; i--)
+                    _numeratorPlaces++;
+                for (int i = _fractionAt + 1; i < tokens.Length && tokens[i].Kind == TokenKind.Digit; i++)
+                    _denominatorPlaces++;
+                _integerPlaces -= _numeratorPlaces;
+            }
 
             // A comma with a digit placeholder still to come groups thousands; one after the
             // last placeholder divides the value by a thousand instead. Both spellings are the
@@ -376,11 +396,13 @@ public sealed class NumberFormatCode
                         continue;
 
                     case '/':
-                        // A slash between digit placeholders is a fraction, which needs a
-                        // continued-fraction search rather than a digit walk.
-                        if (tokens.Any(t => t.Kind == TokenKind.Digit))
+                        // A slash with digit placeholders on both sides is a fraction bar,
+                        // and the value is approximated rather than laid out digit by digit.
+                        // Anywhere else it is punctuation — a date separator, usually.
+                        if (tokens.Count > 0 && tokens[^1].Kind == TokenKind.Digit
+                            && i + 1 < code.Length && code[i + 1] is '0' or '#' or '?')
                         {
-                            tokens.Add(new Token(TokenKind.Unsupported, '/', 0, null, false));
+                            tokens.Add(new Token(TokenKind.Fraction, '/', 0, null, false));
                             i++;
                             continue;
                         }
@@ -536,10 +558,13 @@ public sealed class NumberFormatCode
 
         public string Format(double value, DateTime epoch)
         {
-            if (_general || (_integerPlaces == 0 && _decimalPattern.Length == 0 && !HasDate && !HasTime))
+            if (_general
+                || (_integerPlaces == 0 && _decimalPattern.Length == 0 && _fractionAt < 0
+                    && !HasDate && !HasTime))
                 return FormatGeneral(value);
 
-            return HasDate || HasTime ? FormatDateTime(value, epoch) : FormatNumber(value);
+            if (HasDate || HasTime) return FormatDateTime(value, epoch);
+            return _fractionAt >= 0 ? FormatFraction(value) : FormatNumber(value);
         }
 
         /// <summary>
@@ -725,6 +750,161 @@ public sealed class NumberFormatCode
             return builder.ToString();
         }
 
+
+        /// <summary>
+        /// Renders a value as a whole number and a vulgar fraction.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The pattern gives the denominator's width, not its value, so <c># ??/??</c> means
+        /// "the closest fraction with a denominator below a hundred" — 25.378 becomes 25 31/82
+        /// and not 25 378/1000. Finding it is a walk down the Stern-Brocot tree, which lands
+        /// on the best rational approximation for a bounded denominator; trying every
+        /// denominator in turn gives the same answer far more slowly.
+        /// </para>
+        /// <para>
+        /// The numerator is padded on the left and the denominator on the right, which is how
+        /// the placeholders line the fractions of a column up on their bars.
+        /// </para>
+        /// </remarks>
+        private string FormatFraction(double value)
+        {
+            double magnitude = Math.Abs(value);
+            long whole = _integerPlaces > 0 ? (long)Math.Floor(magnitude) : 0;
+            double remainder = magnitude - whole;
+
+            long maxDenominator = (long)Math.Pow(10, Math.Max(_denominatorPlaces, 1)) - 1;
+            (long numerator, long denominator) = Approximate(remainder, maxDenominator);
+
+            // Rounding up to 1 turns the fraction back into a whole number.
+            if (numerator == denominator)
+            {
+                whole++;
+                numerator = 0;
+            }
+
+            // A value with no fractional part left shows a blank fraction rather than 0/1,
+            // so a column of "# ?/?" cells keeps its whole numbers lined up on the bar.
+            bool blank = numerator == 0 && _integerPlaces > 0;
+
+            StringBuilder builder = new();
+            bool wholeEmitted = false;
+            bool numeratorEmitted = false;
+            bool denominatorEmitted = false;
+            bool afterBar = false;
+
+            for (int i = 0; i < _tokens.Length; i++)
+            {
+                Token token = _tokens[i];
+                switch (token.Kind)
+                {
+                    case TokenKind.Literal:
+                        builder.Append(token.Text);
+                        break;
+
+                    case TokenKind.Fraction:
+                        afterBar = true;
+                        builder.Append(blank ? ' ' : '/');
+                        break;
+
+                    case TokenKind.Digit when afterBar:
+                        if (!denominatorEmitted)
+                        {
+                            builder.Append(blank
+                                ? new string(' ', _denominatorPlaces)
+                                : denominator.ToString(CultureInfo.InvariantCulture)
+                                             .PadRight(_denominatorPlaces));
+                            denominatorEmitted = true;
+                        }
+
+                        break;
+
+                    case TokenKind.Digit when i > _fractionAt - _numeratorPlaces - 1:
+                        if (!numeratorEmitted)
+                        {
+                            builder.Append(blank
+                                ? new string(' ', _numeratorPlaces)
+                                : numerator.ToString(CultureInfo.InvariantCulture)
+                                           .PadLeft(_numeratorPlaces));
+                            numeratorEmitted = true;
+                        }
+
+                        break;
+
+                    case TokenKind.Digit:
+                        if (!wholeEmitted)
+                        {
+                            // A zero whole number disappears under "#" and shows under "0",
+                            // the same rule the integer part of any other pattern follows.
+                            if (whole != 0 || token.Symbol == '0')
+                                builder.Append(whole.ToString(CultureInfo.InvariantCulture));
+                            wholeEmitted = true;
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return value < 0 ? "-" + builder.ToString() : builder.ToString();
+        }
+
+        /// <summary>
+        /// The closest fraction to a value whose denominator does not exceed a limit.
+        /// </summary>
+        /// <remarks>
+        /// The Stern-Brocot search: keep the best fraction below the value and the best above
+        /// it, and repeatedly replace whichever is on the wrong side with the mediant of the
+        /// two. Every fraction in lowest terms appears exactly once in that tree, so the last
+        /// mediant whose denominator still fits is the best approximation available.
+        /// </remarks>
+        private static (long Numerator, long Denominator) Approximate(double value, long maxDenominator)
+        {
+            if (value <= 0) return (0, 1);
+
+            long lowNumerator = 0;
+            long lowDenominator = 1;
+            long highNumerator = 1;
+            long highDenominator = 1;
+            long bestNumerator = 0;
+            long bestDenominator = 1;
+            double bestError = value;
+
+            for (int step = 0; step < 64; step++)
+            {
+                long numerator = lowNumerator + highNumerator;
+                long denominator = lowDenominator + highDenominator;
+                if (denominator > maxDenominator) break;
+
+                double mediant = (double)numerator / denominator;
+                double error = Math.Abs(mediant - value);
+                if (error < bestError)
+                {
+                    bestError = error;
+                    bestNumerator = numerator;
+                    bestDenominator = denominator;
+                }
+
+                if (mediant < value)
+                {
+                    lowNumerator = numerator;
+                    lowDenominator = denominator;
+                }
+                else
+                {
+                    highNumerator = numerator;
+                    highDenominator = denominator;
+                }
+            }
+
+            // 1/1 is reachable only as an endpoint, and it is the right answer for anything
+            // rounding up to a whole.
+            if (Math.Abs(1.0 - value) < bestError) return (1, 1);
+            return (bestNumerator, bestDenominator);
+        }
+
         private string FormatDateTime(double value, DateTime epoch)
         {
             // An elapsed time is a count of days, not a point on the calendar, so it is
@@ -843,6 +1023,7 @@ public sealed class NumberFormatCode
         Exponent,
         Text,
         General,
+        Fraction,
         Date,
         AmPm,
         Unsupported,

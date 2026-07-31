@@ -58,9 +58,6 @@ internal sealed class XlsWorkbookReader
         _stream = new BiffRecordReader(workbook, diagnostics);
     }
 
-    /// <summary>The BIFF generation the file turned out to be.</summary>
-    public BiffVersion Version => _stream.Version;
-
     /// <summary>How many sheets the workbook declares, hidden ones included.</summary>
     public int SheetCount => _sheets.Count;
 
@@ -620,8 +617,10 @@ internal sealed class XlsWorkbookReader
     {
         (int row, int column, int xf) = ReadCellHeader();
 
-        // The BIFF2 spelling of LABEL carries a three-byte cell header, so the XF index read
-        // above consumed one byte too many. It is the only record where that is true.
+        // 0x0004 is the Excel 2.1 spelling, whose string length is one byte where every
+        // later generation uses two. Its cell header is three bytes of attributes rather
+        // than a two-byte XF index as well, which this does not correct for: BIFF2 is read
+        // best-effort, and the string is what matters.
         bool eightBitLength = id == BiffRecords.Label2 && _stream.Version == BiffVersion.Biff5;
         string text = _stream.ReadString(eightBitLength);
         builder.SetText(row, column, xf, text);
