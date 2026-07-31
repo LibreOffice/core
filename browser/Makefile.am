@@ -116,9 +116,13 @@ MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
 
 ENGINE_WORKDIR = @LO_PATH@/../workdir
 
+# The mocha bundle compiles the files that mocha_tests/sources.ts references out
+# of src/, so a change to any source file there must rebuild it.
+MOCHA_SRC_DEPS = $(shell find $(srcdir)/src \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
+
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
-$(MOCHA_JS_DIR)/main.js: $(MOCHA_DIR)/main.ts $(wildcard $(MOCHA_DIR)/*.ts $(MOCHA_DIR)/*/*.ts)
+$(MOCHA_JS_DIR)/main.js: $(MOCHA_DIR)/main.ts $(wildcard $(MOCHA_DIR)/*.ts $(MOCHA_DIR)/*/*.ts) $(MOCHA_SRC_DEPS)
 	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --moduleResolution node --lib dom,es2016 --target ES5 --downlevelIteration --allowJs --jsx react --jsxFactory h --jsxFragmentFactory Fragment || (rm -f $@ && false)
 
 JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
@@ -956,7 +960,7 @@ endef
 
 .PHONY: build-cool
 
-all-local: build-cool
+all-local: build-cool $(MOCHA_JS_DIR)/main.js
 
 ADMIN_BUNDLE = $(DIST_FOLDER)/admin-bundle.js
 
