@@ -377,7 +377,7 @@ public sealed partial class RtfDocumentReader
             ? _layoutBlocks
             : flow.NoteBlocks ?? FurnitureList(flow);
 
-        if (outer is not null && LayoutTableOf(table.TableRows) is { } laid)
+        if (outer is not null && LayoutTableOf(table.TableRows, isNested: level > 1) is { } laid)
         {
             if (level == 1) outer.Add(laid);
             else LevelAt(flow, level - 1).CellLayout.Add(new RtfLayoutBlock(laid));
@@ -516,8 +516,20 @@ public sealed partial class RtfDocumentReader
     /// sharing one indent — exact, and leaves the rare one out by the difference rather than by the whole
     /// indent.
     /// </para>
+    /// <para>
+    /// <c>\trleft</c> is <em>not</em> where the left edge goes, though. RTF and DOCX share an import path
+    /// from here on — <c>rtfdocumentimpl.cxx</c> feeds <c>\trleft</c> in as <c>w:tblInd</c> — and
+    /// <c>DomainMapperTableHandler::endTableGetTableStyle</c> then moves the table half a border to the
+    /// right, because "Writer starts a table in the middle of the border, Word starts a table at the left
+    /// edge of the border". RTF takes that branch unconditionally: the older rule the same function keeps
+    /// for pre-2013 DOCX is guarded by <c>IsOOXMLImport()</c>, so a compatibility mode never enters into it.
+    /// Measured on the corpus table, whose rows say <c>\trleft0</c>: LibreOffice draws its first vertical
+    /// at 57.00 pt where the page's text starts at 56.70, and its 0.5 pt border accounts for the 0.30.
+    /// </para>
     /// </remarks>
-    private RtfLayoutTable? LayoutTableOf(List<RowDraft> rows)
+    /// <param name="rows">The rows, whose first cell states the border the rule needs.</param>
+    /// <param name="isNested">True when this table sits inside a cell of another.</param>
+    private RtfLayoutTable? LayoutTableOf(List<RowDraft> rows, bool isNested)
     {
         List<int> edges = [.. rows.SelectMany(r => r.Cells).Select(c => c.RightEdge).Distinct().Order()];
         if (edges.Count == 0 || edges[^1] <= 0) return null;
@@ -555,11 +567,18 @@ public sealed partial class RtfDocumentReader
                 cells, Length.FromTwips(Math.Abs(row.Height)), row.IsHeader, row.Height < 0));
         }
 
+        // A nested table's indent is relative to the enclosing cell's text, which it cannot start to the
+        // left of — dmapper floors it at zero before adding the border, and only for a nested one.
+        Length stated = Length.FromTwips(isNested ? Math.Max(0, left) : left);
+        Length border = layoutRows.Count > 0 && layoutRows[0].Cells.Count > 0
+            ? layoutRows[0].Cells[0].Borders.Left.Width
+            : Length.Zero;
+
         return new RtfLayoutTable(
             widths,
             layoutRows,
             rows.TakeWhile(r => r.IsHeader).Count(),
-            Length.FromTwips(left),
+            stated + (border / 2),
             _sectionIndex);
     }
 

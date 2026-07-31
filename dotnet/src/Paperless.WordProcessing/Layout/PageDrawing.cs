@@ -154,6 +154,12 @@ public static class PageDrawing
     /// borders meet at a corner rather than leaving a notch.
     /// </para>
     /// <para>
+    /// The overshoot has one exception, and it is the table's format rather than its geometry that decides
+    /// it: in a Word table an interior line meeting the outer frame stops at the frame's <em>inner</em> edge
+    /// instead. See <see cref="PageTable.HasWordBorderJoins"/> — measured, the same table read from DOCX
+    /// runs its middle horizontals 56.95 to 538.35 where the ODF one runs them 56.45 to 538.85.
+    /// </para>
+    /// <para>
     /// Horizontals before verticals, which matters only for which one wins a join and is free to match.
     /// </para>
     /// </remarks>
@@ -162,21 +168,84 @@ public static class PageDrawing
         // Collected per grid line and merged, so that a run of cells agreeing about an edge becomes one
         // stroke. Keyed on the line's own coordinate rounded to a twip, because two cells' shared edge is
         // computed from two different rectangles and can differ in the last EMU.
-        foreach (Edge edge in Edges(table))
+        List<Edge> edges = Edges(table);
+        Dictionary<(bool IsHorizontal, long At), Length> frame =
+            table.Table.HasWordBorderJoins ? FrameLines(table, edges) : [];
+
+        foreach (Edge edge in edges)
         {
             Stroke stroke = new(Paint.Solid(edge.Border.Colour), edge.Border.Width);
             Length half = edge.Border.Width / 2;
+            bool isFrame = frame.ContainsKey((edge.IsHorizontal, edge.At.Twips));
+
+            Length from = edge.From - Overshoot(edge.From);
+            Length to = edge.To + Overshoot(edge.To);
 
             GraphicsPath path = edge.IsHorizontal
                 ? new GraphicsPath()
-                    .MoveTo(new DocPoint(edge.From - half, edge.At))
-                    .LineTo(new DocPoint(edge.To + half, edge.At))
+                    .MoveTo(new DocPoint(from, edge.At))
+                    .LineTo(new DocPoint(to, edge.At))
                 : new GraphicsPath()
-                    .MoveTo(new DocPoint(edge.At, edge.From - half))
-                    .LineTo(new DocPoint(edge.At, edge.To + half));
+                    .MoveTo(new DocPoint(edge.At, from))
+                    .LineTo(new DocPoint(edge.At, to));
 
             sink.StrokePath(path, stroke);
+
+            // How far past one of its ends the line runs — half its own width, or, for a Word table's
+            // interior line ending on the frame, half the *frame's* width the other way.
+            Length Overshoot(Length end)
+                => !isFrame && frame.TryGetValue((!edge.IsHorizontal, end.Twips), out Length width)
+                    ? -(width / 2)
+                    : half;
         }
+    }
+
+    /// <summary>
+    /// The grid lines that make up the table's outer frame, by axis and position, with their widths.
+    /// </summary>
+    /// <remarks>
+    /// Taken from the placed cells rather than from the row and column counts, so that a table continuing
+    /// onto a second page has that page's own first row as its top — which is what Writer's painter means by
+    /// outer too, since it asks the <em>frame</em> whether a row is its first rather than asking the table.
+    /// </remarks>
+    private static Dictionary<(bool IsHorizontal, long At), Length> FrameLines(
+        PlacedTable table, List<Edge> edges)
+    {
+        if (table.Cells.Count == 0) return [];
+
+        Length left = table.Cells[0].Area.X;
+        Length right = table.Cells[0].Area.Right;
+        Length top = table.Cells[0].Area.Y;
+        Length bottom = table.Cells[0].Area.Bottom;
+
+        foreach (PlacedTableCell cell in table.Cells)
+        {
+            left = Length.Min(left, cell.Area.X);
+            right = Length.Max(right, cell.Area.Right);
+            top = Length.Min(top, cell.Area.Y);
+            bottom = Length.Max(bottom, cell.Area.Bottom);
+        }
+
+        Dictionary<(bool IsHorizontal, long At), Length> frame = [];
+
+        foreach (Edge edge in edges)
+        {
+            bool outer = edge.IsHorizontal
+                ? edge.At.Twips == top.Twips || edge.At.Twips == bottom.Twips
+                : edge.At.Twips == left.Twips || edge.At.Twips == right.Twips;
+
+            if (!outer) continue;
+
+            (bool, long) key = (edge.IsHorizontal, edge.At.Twips);
+
+            // The widest run wins, for a frame whose cells disagree about their own edge: the interior line
+            // has to clear whichever border is actually drawn over the join.
+            frame[key] = frame.TryGetValue(key, out Length known)
+                ? Length.Max(known, edge.Border.Width)
+                : edge.Border.Width;
+        }
+
+        return frame;
     }
 
     /// <summary>One consolidated grid line: where it sits, how far it runs, and its border.</summary>
