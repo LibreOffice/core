@@ -518,16 +518,21 @@ internal sealed class SheetPageDecoration(SheetLayout sheet, SheetPagePlacement 
                     edges.Add(false, column.X, row.Y, row.Bottom, SheetCellBorders.Resolve(
                         own.Left, formatting.At(row.Row, column.Column - 1).Borders.Right));
 
-                    // The far edges only for the last row and column, because every other one is
-                    // already covered by the next cell's near edge — which is what keeps two
-                    // neighbours agreeing about a border from drawing it twice.
-                    if (r == rows.Count - 1)
+                    // The far edges only where nothing follows to cover them, because every
+                    // other one is already the next cell's near edge — which is what keeps two
+                    // neighbours agreeing about a border from drawing it twice. "Nothing
+                    // follows" is not the same as "last on the page": a repeated header band is
+                    // placed above a block it is not adjacent to, and a hidden row leaves the
+                    // same gap, so the test is whether the next placed row really is this row's
+                    // successor in the sheet. Calc reaches the same answer by drawing each band
+                    // through its own ScOutputData (ScPrintFunc::PrintPage, printfun.cxx:2300).
+                    if (r == rows.Count - 1 || rows[r + 1].Row != row.Row + 1)
                     {
                         edges.Add(true, row.Bottom, column.X, column.Right, SheetCellBorders.Resolve(
                             own.Bottom, formatting.At(row.Row + 1, column.Column).Borders.Top));
                     }
 
-                    if (c == columns.Count - 1)
+                    if (c == columns.Count - 1 || columns[c + 1].Column != column.Column + 1)
                     {
                         edges.Add(false, column.Right, row.Y, row.Bottom, SheetCellBorders.Resolve(
                             own.Right, formatting.At(row.Row, column.Column + 1).Borders.Left));
