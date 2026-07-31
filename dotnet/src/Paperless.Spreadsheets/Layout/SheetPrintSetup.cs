@@ -237,23 +237,25 @@ public sealed record SheetPrintSetup
     /// <summary>The footer text, in the format's own field syntax, or null.</summary>
     public string? FooterText { get; init; }
 
-    /// <summary>The width available to cells, before scaling and before headings.</summary>
-    public Length PrintableWidth
+    /// <summary>The rectangle the sheet's cells are printed into, headings included.</summary>
+    /// <remarks>
+    /// The paper less the margins and the two furniture bands. Pagination does not use this —
+    /// it needs the same rectangle in whole twips at the print scale, which
+    /// <c>SheetPagination</c> derives itself so that its arithmetic matches Calc's roundings —
+    /// so this is for placing what a page holds rather than for deciding what it holds.
+    /// </remarks>
+    public DocRect PrintableArea
     {
         get
         {
             Length width = PageSize.Width - LeftMargin - RightMargin;
-            return width > Length.Zero ? width : Length.Zero;
-        }
-    }
-
-    /// <summary>The height available to cells, before scaling and before headings.</summary>
-    public Length PrintableHeight
-    {
-        get
-        {
             Length height = PageSize.Height - TopMargin - BottomMargin - HeaderHeight - FooterHeight;
-            return height > Length.Zero ? height : Length.Zero;
+
+            return new DocRect(
+                LeftMargin,
+                TopMargin + HeaderHeight,
+                width > Length.Zero ? width : Length.Zero,
+                height > Length.Zero ? height : Length.Zero);
         }
     }
 }

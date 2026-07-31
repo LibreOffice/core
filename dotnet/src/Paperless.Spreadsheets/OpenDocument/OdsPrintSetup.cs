@@ -109,8 +109,8 @@ internal static class OdsPrintSetup
                 Get(page, OdfNamespaces.Style, "print-page-order"), "ltr", StringComparison.Ordinal)
                 ? PagePrintOrder.AcrossThenDown
                 : PagePrintOrder.DownThenAcross,
-            HeaderText = master?.Header?.Value,
-            FooterText = master?.Footer?.Value,
+            HeaderText = Displayed(master?.Header)?.Value,
+            FooterText = Displayed(master?.Footer)?.Value,
             PrintsGrid = prints.Contains("grid"),
             PrintsHeadings = prints.Contains("headers"),
             CentresHorizontally = centring is "horizontal" or "both",
@@ -142,6 +142,16 @@ internal static class OdsPrintSetup
     private static Length BandHeight(OdfPropertySet? properties, XElement? content, string gap)
     {
         if (properties is null || content is null) return Length.Zero;
+
+        // style:display="false" is how a master page switches a band off while keeping the
+        // element, so its presence is not enough — and a page layout is free to keep declaring a
+        // height for a header that is not printed.
+        if (string.Equals(
+                content.Attribute(XName.Get("display", OdfNamespaces.Style))?.Value, "false",
+                StringComparison.Ordinal))
+        {
+            return Length.Zero;
+        }
 
         Length height = Measure(properties, OdfNamespaces.SvgCompatible, "height")
                         ?? Measure(properties, OdfNamespaces.FoCompatible, "min-height")
@@ -304,6 +314,15 @@ internal static class OdsPrintSetup
 
         return areas;
     }
+
+    /// <summary>The element, or null when the master page has switched it off.</summary>
+    private static XElement? Displayed(XElement? element)
+        => element is null
+           || string.Equals(
+               element.Attribute(XName.Get("display", OdfNamespaces.Style))?.Value, "false",
+               StringComparison.Ordinal)
+            ? null
+            : element;
 
     private static string? Attribute(XElement element, string localName)
         => element.Attribute(XName.Get(localName, OdfNamespaces.Table))?.Value;

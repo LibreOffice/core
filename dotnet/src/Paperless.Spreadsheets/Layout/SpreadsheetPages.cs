@@ -204,8 +204,9 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         sink.BeginPage(sheet.Setup.PageSize);
         try
         {
-            List<PlacedColumn> columns = Columns();
-            List<PlacedRow> rows = Rows();
+            DocPoint origin = BodyOrigin;
+            List<PlacedColumn> columns = Columns(origin.X);
+            List<PlacedRow> rows = Rows(origin.Y);
 
             if (sheet.Setup.PrintsGrid) DrawGrid(columns, rows, sink);
 
@@ -231,20 +232,53 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         }
     }
 
-    /// <summary>Where the page's cell block starts down the page.</summary>
-    private Length BodyTop =>
-        sheet.Setup.TopMargin + sheet.Setup.HeaderHeight
-        + (sheet.Setup.PrintsHeadings ? HeadingHeight : Length.Zero);
+    /// <summary>
+    /// Where the page's cell block starts, centring included.
+    /// </summary>
+    /// <remarks>
+    /// Centring is measured against what this page holds rather than against the sheet, which is
+    /// what makes the last page of a sheet sit differently from the ones before it: Calc sums the
+    /// widths of the columns on <em>this</em> page and halves the remainder
+    /// (<c>ScPrintFunc::PrintPage</c>, <c>printfun.cxx:2150</c>).
+    /// </remarks>
+    private DocPoint BodyOrigin
+    {
+        get
+        {
+            SheetPrintSetup setup = sheet.Setup;
+            DocRect area = setup.PrintableArea;
 
-    /// <summary>Where it starts across the page.</summary>
-    private Length BodyLeft =>
-        sheet.Setup.LeftMargin + (sheet.Setup.PrintsHeadings ? HeadingWidth : Length.Zero);
+            Length x = area.X + (setup.PrintsHeadings ? HeadingWidth : Length.Zero);
+            Length y = area.Y + (setup.PrintsHeadings ? HeadingHeight : Length.Zero);
+
+            if (setup.CentresHorizontally)
+            {
+                Length spare = area.Width - Extent(Columns(x).Select(c => c.Width));
+                if (spare > Length.Zero) x += spare / 2;
+            }
+
+            if (setup.CentresVertically)
+            {
+                Length spare = area.Height - Extent(Rows(y).Select(r => r.Height));
+                if (spare > Length.Zero) y += spare / 2;
+            }
+
+            return new DocPoint(x, y);
+        }
+    }
+
+    private static Length Extent(IEnumerable<Length> sizes)
+    {
+        Length total = Length.Zero;
+        foreach (Length size in sizes) total += size;
+        return total;
+    }
 
     /// <summary>The columns on the page, repeated band first, each with its position.</summary>
-    private List<PlacedColumn> Columns()
+    private List<PlacedColumn> Columns(Length left)
     {
         List<PlacedColumn> placed = [];
-        Length x = BodyLeft;
+        Length x = left;
 
         if (placement.RepeatColumns is { IsValid: true } repeat)
             Append(repeat.FirstColumn, repeat.LastColumn);
@@ -266,10 +300,10 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     }
 
     /// <summary>The rows on the page, repeated band first.</summary>
-    private List<PlacedRow> Rows()
+    private List<PlacedRow> Rows(Length top)
     {
         List<PlacedRow> placed = [];
-        Length y = BodyTop;
+        Length y = top;
 
         if (placement.RepeatRows is { IsValid: true } repeat)
             Append(repeat.FirstRow, repeat.LastRow);
@@ -290,7 +324,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         }
     }
 
-    private void DrawGrid(List<PlacedColumn> columns, List<PlacedRow> rows, IDrawingSink sink)
+    private static void DrawGrid(List<PlacedColumn> columns, List<PlacedRow> rows, IDrawingSink sink)
     {
         if (columns.Count == 0 || rows.Count == 0) return;
 
@@ -298,8 +332,9 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         Length bottom = rows[^1].Y + rows[^1].Height;
         Stroke stroke = new(Paint.Solid(Colour.FromRgb(0xB0B0B0)), Length.FromTwips(1));
 
-        foreach (PlacedColumn column in columns) Line(column.X, BodyTop, column.X, bottom);
-        Line(right, BodyTop, right, bottom);
+        Length top = rows[0].Y;
+        foreach (PlacedColumn column in columns) Line(column.X, top, column.X, bottom);
+        Line(right, top, right, bottom);
 
         foreach (PlacedRow row in rows) Line(columns[0].X, row.Y, right, row.Y);
         Line(columns[0].X, bottom, right, bottom);

@@ -259,4 +259,33 @@ public class SheetPaginationTests
         across[2].Placement.Cells.FirstColumn.ShouldBe(0);
         across[2].Placement.Cells.FirstRow.ShouldBeGreaterThan(0);
     }
+
+    [Fact]
+    public void APageDrawsTheCellsItHolds()
+    {
+        // The pages are the point of the work and the ink is not yet, but a page that places
+        // cells and draws nothing is indistinguishable from one that placed none — so this
+        // asserts that every cell of the block reaches the sink, in the order it is placed, and
+        // that a repeated band is drawn above the block rather than after it.
+        using IPaginatedDocument document = Open("sheet-print-ods.ods");
+        SpreadsheetPages pages = (SpreadsheetPages)document.Layout();
+        SheetPage second = pages.Pages.First(
+            page => page.Sheet.Name == "Wide" && page.Placement.RepeatRows is not null);
+
+        RecordingDrawingSink sink = new();
+        second.Draw(sink);
+
+        sink.Pages.Count.ShouldBe(1);
+        sink.UnclosedPages.ShouldBe(0);
+
+        List<string> drawn = [.. sink.Pages[0].Runs.Select(run => run.Text)];
+        drawn.ShouldNotBeEmpty();
+
+        // The repeated row is drawn first and above everything else on the page.
+        drawn[0].ShouldStartWith("C");
+        sink.Pages[0].Runs[0].Origin.Y.ShouldBeLessThan(sink.Pages[0].Runs[^1].Origin.Y);
+
+        // And the block's own first row follows it.
+        drawn.ShouldContain($"R{second.Placement.Cells.FirstRow:00}C00");
+    }
 }
