@@ -28,6 +28,8 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <viewsh.hxx>
 
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -106,6 +108,11 @@ bool DocxExportFilter::exportDocument()
     pCurPam->SetMark();
     *pCurPam->GetPoint() = *aPam.Start();
 
+    const uno::Reference<task::XStatusIndicator>& xStatusIndicator = getStatusIndicator();
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->start( SwResId(STR_STATSTR_W4WWRITE),
+                                 sal_Int32(pDoc->GetNodes().Count()) );
+
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
@@ -118,6 +125,9 @@ bool DocxExportFilter::exportDocument()
     // delete the pCurPam
     while ( pCurPam->GetNext() != pCurPam.get() )
         delete pCurPam->GetNext();
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return true;
 }

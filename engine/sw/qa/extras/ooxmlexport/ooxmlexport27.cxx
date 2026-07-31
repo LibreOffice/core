@@ -10,12 +10,20 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
+#include <comphelper/propertyvalue.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
+
+using namespace css;
+using namespace css::uno;
 
 namespace
 {
@@ -26,6 +34,25 @@ public:
         : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
+};
+
+class ProgressRecorder : public cppu::WeakImplHelper<css::task::XStatusIndicator>
+{
+public:
+    sal_Int32 mnStartCount = 0;
+    sal_Int32 mnEndCount = 0;
+    sal_Int32 mnLastValue = -1;
+    OUString maText;
+
+    void SAL_CALL start(const OUString& rText, sal_Int32 /*nRange*/) override
+    {
+        ++mnStartCount;
+        maText = rText;
+    }
+    void SAL_CALL end() override { ++mnEndCount; }
+    void SAL_CALL setText(const OUString& rText) override { maText = rText; }
+    void SAL_CALL setValue(sal_Int32 nValue) override { mnLastValue = nValue; }
+    void SAL_CALL reset() override {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf38575_fullWidthLine, "tdf38575_fullWidthLine.docx")
@@ -102,6 +129,25 @@ CPPUNIT_TEST_FIXTURE(Test, testCool15788_symbolContentControl)
     CPPUNIT_ASSERT_EQUAL(0, countXPathNodes(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:sym"));
     // simply a <w:t> element with the symbol must exist instead
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", u"\xf04b");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxSaveReportsProgress)
+{
+    createSwDoc();
+
+    rtl::Reference<ProgressRecorder> xRecorder(new ProgressRecorder);
+    cpo::uno::Sequence<beans::PropertyValue> aStoreArguments{
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"MS Word 2007 XML"_ustr),
+        comphelper::makePropertyValue(
+            u"StatusIndicator"_ustr, uno::Reference<task::XStatusIndicator>(xRecorder))
+    };
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreArguments);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRecorder->mnStartCount);
+    CPPUNIT_ASSERT(xRecorder->mnLastValue >= 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRecorder->mnEndCount);
 }
 
 } // end of anonymous namespace

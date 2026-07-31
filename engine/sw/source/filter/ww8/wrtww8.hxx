@@ -28,6 +28,7 @@
 #include <filter/msfilter/ww8fields.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <unotools/securityoptions.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <shellio.hxx>
 
@@ -487,6 +488,9 @@ public:
     std::unordered_map<OUString, OUString> m_TOXMarkBookmarksByURL;
     std::unordered_map<SwTOXMark const*, OUString> m_TOXMarkBookmarksByTOXMark;
     ww8::Frames m_aFrames;             // The floating frames in this document
+    /// Progress of the running export, reported as a node index between zero and the node count
+    /// of the document.
+    css::uno::Reference<css::task::XStatusIndicator> m_xStatusIndicator;
     const SwPageDesc *m_pCurrentPageDesc;
     const SwPageDesc* m_pPreviousSectionPageDesc;
     bool m_bFirstTOCNodeWithSection;

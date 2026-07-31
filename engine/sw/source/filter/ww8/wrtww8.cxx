@@ -3076,6 +3076,8 @@ void MSWordExportBase::WriteText()
 
         SwNodeOffset nPos = m_pCurPam->GetPoint()->GetNodeIndex();
         ::SetProgressState( sal_Int32(nPos), m_pCurPam->GetDoc().GetDocShell() );
+        if ( m_xStatusIndicator.is() )
+            m_xStatusIndicator->setValue( sal_Int32(nPos) );
     }
 
     SAL_INFO( "sw.ww8.level2", "</WriteText>" );

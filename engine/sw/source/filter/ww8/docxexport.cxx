@@ -2430,6 +2430,8 @@ DocxExport::DocxExport(DocxExportFilter& rFilter, SwDoc& rDocument,
       m_nWordCompatibilityMode(-1),
       m_pAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
+    m_xStatusIndicator = m_rFilter.getStatusIndicator();
+
     // Write the document properties
     WriteProperties( );
 
