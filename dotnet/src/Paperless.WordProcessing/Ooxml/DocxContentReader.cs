@@ -203,13 +203,7 @@ public sealed partial class DocxContentReader
                 return;
 
             case "altChunk":
-                // An embedded foreign document — HTML, RTF, another DOCX — imported by
-                // reference. Reading it means running another reader over another part, which
-                // is worth doing but is not this walk's job.
-                _diagnostics.Add(new Diagnostic(
-                    DiagnosticSeverity.Warning, "PL2120",
-                    "The document embeds an external chunk (w:altChunk), whose content is not "
-                    + "extracted yet."));
+                ReadAltChunk(element, target);
                 return;
 
             default:
