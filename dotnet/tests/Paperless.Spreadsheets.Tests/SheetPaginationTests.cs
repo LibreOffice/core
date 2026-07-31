@@ -288,4 +288,25 @@ public class SheetPaginationTests
         // And the block's own first row follows it.
         drawn.ShouldContain($"R{second.Placement.Cells.FirstRow:00}C00");
     }
+
+    [Fact]
+    public void ABiffTopMarginSurvivesTheHeaderBandConversionToo()
+    {
+        // The same conversion as the OOXML one, out of TOPMARGIN and SETUP's header margin. It
+        // is asserted separately because the page count cannot catch it: getting the header
+        // wrong moves the first row and the band by the same amount in opposite directions, so
+        // the printable height — and therefore the number of pages — is unchanged.
+        using IPaginatedDocument document = Open("xls-features.xls");
+        SheetLayout sales = ((SpreadsheetPages)document.Layout()).Sheets[0];
+
+        sales.Setup.HeaderText.ShouldNotBeNullOrEmpty();
+        sales.Setup.TopMargin.Inches.ShouldBe(0.7875, 0.001);
+        (sales.Setup.TopMargin + sales.Setup.HeaderHeight).Inches.ShouldBe(1.0528, 0.001);
+
+        // A COLINFO of 2953 256ths of a character at 111 twips a digit, which is 1280.4 — and
+        // 1279, not 1280, because LibreOffice's conversion takes half a twip off before
+        // truncating rather than rounding (XclTools::GetScColumnWidth). Measured: its rendering
+        // puts "Region" at 58.677 points and "Units" at 122.627, which is 63.95 points apart.
+        sales.Grid.Columns.SizeAt(0).Twips.ShouldBe(1279);
+    }
 }

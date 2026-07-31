@@ -806,9 +806,15 @@ internal sealed class XlsWorkbookReader
 
             case BiffPageRecords.Header or BiffPageRecords.Footer:
                 // An empty record is a header that was switched off, and it is the emptiness
-                // rather than the record's absence that Calc reads as "no header".
+                // rather than the record's absence that Calc reads as "no header". The length
+                // field is one byte in BIFF5 and two in BIFF8, which is not a property of the
+                // format but of this record — LibreOffice picks between ReadByteString(false)
+                // and ReadUniString() on the generation (xipage.cxx:114).
                 _page.SetFurniture(
-                    id, _stream.RecordLeft > 0 ? _stream.ReadString(eightBitLength: false) : string.Empty);
+                    id,
+                    _stream.RecordLeft > 0
+                        ? _stream.ReadString(_stream.Version == BiffVersion.Biff5)
+                        : string.Empty);
                 break;
 
             case BiffPageRecords.HorizontalCentre or BiffPageRecords.VerticalCentre
