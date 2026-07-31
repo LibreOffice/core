@@ -4,6 +4,7 @@ using Paperless.Containers.Ooxml;
 using Paperless.Core;
 using Paperless.Core.Diagnostics;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 
 namespace Paperless.WordProcessing.Ooxml;
 
@@ -51,6 +52,16 @@ public sealed class DocxFile : IDisposable
         if (LoadRelated("numbering", "word/numbering.xml") is { } numbering) Numbering.Add(numbering);
 
         Settings = LoadRelated("settings", "word/settings.xml");
+
+        // The colour map is not in the theme part. DrawingML hangs an a:clrMap on a slide master
+        // and Word writes a w:clrSchemeMapping beside its compatibility options, so the two
+        // halves of a resolvable theme arrive from different parts and are joined here.
+        Theme = DrawingTheme
+            .Read(LoadRelated("theme", "word/theme/theme1.xml"))
+            ?.WithMap(DrawingColourMap.Read(Word.Child(Settings, "clrSchemeMapping")));
+
+        FontTable = WordFontTable.Read(LoadRelated("fontTable", "word/fontTable.xml"));
+
         FootnoteNumbering = ReadNoteNumbering(Word.Child(Settings, "footnotePr"));
         EndnoteNumbering = ReadNoteNumbering(Word.Child(Settings, "endnotePr"));
         Footnotes = ReadNotes(LoadRelated("footnotes", "word/footnotes.xml"), "footnote");
@@ -81,6 +92,22 @@ public sealed class DocxFile : IDisposable
     /// changes layout maths to match a particular Word version, so layout will need it.
     /// </remarks>
     public XElement? Settings { get; }
+
+    /// <summary>
+    /// The document's theme, with its colour map already applied, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// Loaded during extraction rather than deferred to layout, because a run's colour is part
+    /// of the extracted content and a themed run's colour cannot be read without it. A DOCX
+    /// without a theme part is legal and common in hand-written files; a <c>w:themeColor</c> in
+    /// one resolves to nothing rather than to a guess.
+    /// </remarks>
+    public DrawingTheme? Theme { get; }
+
+    /// <summary>
+    /// What <c>fontTable.xml</c> declares about the fonts the document names.
+    /// </summary>
+    public WordFontTable FontTable { get; }
 
     /// <summary>How footnote citations are numbered.</summary>
     public WordNoteNumbering FootnoteNumbering { get; }

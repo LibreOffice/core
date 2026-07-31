@@ -2,6 +2,7 @@ using System.Xml.Linq;
 using Paperless.Core.Extraction;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Ooxml.DrawingML;
 
 namespace Paperless.WordProcessing.Ooxml;
 
@@ -78,8 +79,15 @@ public sealed record WordCharacterFormat
     /// <param name="styles">The document's styles.</param>
     /// <param name="directRunProperties">The run's own <c>w:rPr</c>, or null.</param>
     /// <param name="paragraphStyleId">The paragraph style in force, or null.</param>
+    /// <param name="theme">
+    /// The document's theme, for a <c>w:themeColor</c>. Null leaves a themed colour unresolved
+    /// rather than guessing at it, which is what a package with no theme part deserves.
+    /// </param>
     public static WordCharacterFormat Resolve(
-        WordStyles styles, XElement? directRunProperties, string? paragraphStyleId)
+        WordStyles styles,
+        XElement? directRunProperties,
+        string? paragraphStyleId,
+        DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
@@ -108,28 +116,12 @@ public sealed record WordCharacterFormat
                 ? Length.FromPoints(halfPoints / 2.0)
                 : null,
             FontName = Word.Attribute(Get("rFonts").Element, "ascii"),
-            Colour = ParseColour(colour.Value),
+            Colour = WordThemeColour.Read(colour.Element, theme),
             Language = Get("lang").Value,
         };
 
         WordProperty Get(string localName)
             => styles.ResolveRunProperty(
                 localName, directRunProperties, paragraphStyleId, characterStyleId);
-    }
-
-    /// <summary>
-    /// Parses a <c>w:color</c> value: six hex digits, or the keyword <c>auto</c>.
-    /// </summary>
-    /// <remarks>
-    /// <c>auto</c> means "let the renderer choose from the background", which is not a colour —
-    /// reporting it as black would be a guess that happens to be wrong on a dark background.
-    /// </remarks>
-    private static Colour? ParseColour(string? value)
-    {
-        if (value is null || value.Length != 6) return null;
-        return uint.TryParse(value, System.Globalization.NumberStyles.HexNumber,
-                             System.Globalization.CultureInfo.InvariantCulture, out uint rgb)
-            ? Core.Graphics.Colour.FromRgb(rgb)
-            : null;
     }
 }

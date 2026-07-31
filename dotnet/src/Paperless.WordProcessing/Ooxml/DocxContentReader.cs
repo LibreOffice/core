@@ -382,7 +382,8 @@ public sealed partial class DocxContentReader
         XElement run, ContentParagraph paragraph, string? paragraphStyleId, string? hyperlink)
     {
         XElement? runProperties = Word.Child(run, "rPr");
-        WordCharacterFormat format = WordCharacterFormat.Resolve(_styles, runProperties, paragraphStyleId);
+        WordCharacterFormat format =
+            WordCharacterFormat.Resolve(_styles, runProperties, paragraphStyleId, _file.Theme);
 
         // Hidden text is not displayed by any reader, so extracting it would inject text the
         // document does not show. Unlike a header or a footnote — which a reader does see and
