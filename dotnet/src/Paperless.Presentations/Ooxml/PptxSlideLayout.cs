@@ -155,6 +155,13 @@ internal sealed class PptxSlideLayout
             {
                 Walk(element, slide, theme, GroupSpace(element, space), shapes, depth + 1);
             }
+            else if (Ppt.Is(element, "graphicFrame"))
+            {
+                // A graphic frame is a table, a chart, a diagram or an embedded object. Only the
+                // table is drawn; the rest have no geometry here yet and drawing their frame would
+                // put an empty rectangle where the reference draws a picture.
+                shapes.AddRange(Table(element, theme, space));
+            }
             else if (Ppt.Is(element, "pic"))
             {
                 // A picture's pixels need a decoder nothing in the layout path has yet, so what is
@@ -187,6 +194,75 @@ internal sealed class PptxSlideLayout
             Drawing.Flag(transform, "flipH") ?? false,
             Drawing.Flag(transform, "flipV") ?? false,
             space);
+    }
+
+    /// <summary>
+    /// The shapes a <c>p:graphicFrame</c> holding an <c>a:tbl</c> draws.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A frame's transform is <c>p:xfrm</c> — PresentationML's own element, with DrawingML's
+    /// <c>a:off</c> and <c>a:ext</c> inside it — rather than the <c>a:xfrm</c> a shape carries.
+    /// Reading it with the drawing namespace finds nothing and puts every table at the slide's
+    /// top-left corner at no size.
+    /// </para>
+    /// <para>
+    /// A cell's text body is read by the same reader a shape's is, with three properties
+    /// replaced: the insets become the cell's own <c>marL</c>…<c>marB</c> rather than the body's
+    /// <c>a:bodyPr</c> insets, the anchor comes from <c>a:tcPr/@anchor</c>, and the line height
+    /// comes from the <em>font's</em> metrics rather than from the em. That last one is measured
+    /// rather than assumed, and is the trap in this feature — see the TODO.
+    /// </para>
+    /// </remarks>
+    private List<PlacedShape> Table(XElement frame, SlideTheme theme, AffineTransform space)
+    {
+        XElement? graphic = Drawing.Child(Drawing.Child(frame, "graphic"), "graphicData");
+        if (Drawing.Attribute(graphic, "uri") != DrawingTable.TableUri) return [];
+        if (Drawing.Child(graphic, "tbl") is not { } table) return [];
+
+        XElement? transform = Ppt.Child(frame, "xfrm");
+        DocRect local = Bounds(transform);
+        if (local.Width <= Length.Zero || local.Height <= Length.Zero) return [];
+
+        AffineTransform placement = ShapeTransform.Place(
+            local,
+            ShapeTransform.Radians(Rotation(transform)),
+            Drawing.Flag(transform, "flipH") ?? false,
+            Drawing.Flag(transform, "flipV") ?? false,
+            space);
+
+        return SlideTable.Place(
+            DrawingTableGeometry.Read(table, theme.Colours),
+            local.Size,
+            placement,
+            cell => CellBody(cell, theme),
+            _fonts,
+            Name(frame));
+    }
+
+    private static SlideTextBody? CellBody(DrawingTableCellBox cell, SlideTheme theme)
+    {
+        if (cell.TextBody is not { } body || DrawingTextBody.IsEmpty(body)) return null;
+
+        return PptxTextBody.Read(body, theme.Colours, theme.MinorLatin) with
+        {
+            Insets = cell.Margins,
+            Anchor = cell.Anchor switch
+            {
+                "ctr" => TextAnchor.Middle,
+                "b" => TextAnchor.Bottom,
+                _ => TextAnchor.Top,
+            },
+
+            // Measured, and it is the opposite of what the current C++ says. A slide shape's line
+            // height is the em (FontIndependentLineSpacing); a table cell's is the face's own
+            // ascent. LibreOffice 24.2.7.2 draws deck-features.pptx's first cell — 18 pt Arial,
+            // substituted by Liberation Sans, in a cell whose top edge its own PDF puts at
+            // 170.079 pt — with a baseline 19.93 pt below that edge. Take off the 3.6 pt top
+            // margin and the ascent is 16.33 pt, which is 0.907 em: the font's, not the em's,
+            // which would have been 18.00.
+            FontIndependentLineSpacing = false,
+        };
     }
 
     private PlacedShape? Shape(

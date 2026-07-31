@@ -69,23 +69,7 @@ public static class SlideTextLayout
         List<PlacedGlyphRun> placed = [];
         if (body.Paragraphs.Count == 0) return placed;
 
-        // wrap="none" is expressed as an effectively unbounded width rather than as clipping,
-        // which is what keeps an unwrapped label on the single line its author saw.
-        Length width = body.Wraps && area.Width > Length.Zero
-            ? area.Width
-            : Length.FromEmu(int.MaxValue);
-
-        List<Block> blocks = [];
-        Length total = Length.Zero;
-
-        foreach (SlideParagraph paragraph in body.Paragraphs)
-        {
-            Block? block = Measure(paragraph, body, width, fonts);
-            if (block is null) continue;
-
-            total += block.Height;
-            blocks.Add(block);
-        }
+        (List<Block> blocks, Length total) = Measure(body, area.Width, fonts);
 
         if (blocks.Count == 0) return placed;
 
@@ -117,6 +101,52 @@ public static class SlideTextLayout
         }
 
         return placed;
+    }
+
+    /// <summary>
+    /// How tall a body's text is once broken to a width, insets excluded.
+    /// </summary>
+    /// <remarks>
+    /// The measurement a table row needs and nothing else does: a row's stated <c>a:tr/@h</c> is a
+    /// <em>minimum</em>, and LibreOffice grows the row to its tallest cell's content
+    /// (<c>svx/source/table/tablelayouter.cxx:1026-1029</c>). Sharing the measurement with
+    /// <see cref="Place"/> rather than approximating it is the point: a row that grows must grow
+    /// by exactly what the text then occupies, or the cell's own baselines land somewhere else.
+    /// </remarks>
+    /// <param name="body">The text body.</param>
+    /// <param name="width">The width available for the lines, inside the insets.</param>
+    /// <param name="fonts">The face cache.</param>
+    public static Length Height(SlideTextBody body, Length width, SlideFonts fonts)
+    {
+        ArgumentNullException.ThrowIfNull(body);
+        ArgumentNullException.ThrowIfNull(fonts);
+
+        return Measure(body, width, fonts).Total;
+    }
+
+    /// <summary>Breaks every paragraph of a body and totals their heights.</summary>
+    private static (List<Block> Blocks, Length Total) Measure(
+        SlideTextBody body, Length available, SlideFonts fonts)
+    {
+        // wrap="none" is expressed as an effectively unbounded width rather than as clipping,
+        // which is what keeps an unwrapped label on the single line its author saw.
+        Length width = body.Wraps && available > Length.Zero
+            ? available
+            : Length.FromEmu(int.MaxValue);
+
+        List<Block> blocks = [];
+        Length total = Length.Zero;
+
+        foreach (SlideParagraph paragraph in body.Paragraphs)
+        {
+            Block? block = Measure(paragraph, body, width, fonts);
+            if (block is null) continue;
+
+            total += block.Height;
+            blocks.Add(block);
+        }
+
+        return (blocks, total);
     }
 
     /// <summary>
