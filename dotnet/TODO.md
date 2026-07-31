@@ -18,7 +18,7 @@ Two fronts, and they are independent.
 the feedback loop into pagination, since the note area takes its room out of the body's, so
 adding a note can push the line that cites it onto the next page and thereby remove the note
 again — and notes are read from all four formats. What remains is floating frames with text wrap,
-cell borders and shading, and note numbering beyond the two defaults. Read
+cell borders and shading, and note numbering *restarts*. Read
 `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
 warning about borders: they cannot be verified the way everything else in this library has
 been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser

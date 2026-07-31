@@ -549,11 +549,28 @@ is read and verified, so what remains is the filling of pages rather than the me
       hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
       records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
-- [ ] Note numbering beyond the two defaults. Footnotes count 1, 2, 3 and endnotes i, ii, iii, which is what
-      LibreOffice does when the file says nothing — but every format *can* say something:
-      `text:notes-configuration`, a section-level `w:footnotePr`/`w:endnotePr`, RTF's `\ftnnar`/`\aftnnrlc`
-      family, and the DOP's `nFtn`/`nEdn` and `rncFtn`/`rncEdn`. None is read, so a document stating a format,
-      a start value or a per-page restart is numbered by the defaults instead.
+- [x] **Note numbering the document states**, in `NoteNumbering`: the sequence and the start value, per class,
+      read from all four formats. The defaults stay what LibreOffice does when a file says nothing — footnotes
+      1, 2, 3 and endnotes i, ii, iii. What each format says and how it lies:
+      - **ODF**'s `text:notes-configuration` states the format *by example* — `style:num-format="I"` is the
+        literal numeral, not a name — and its `text:start-value` is an **offset, not the first number**. A
+        document stating 7 renders VIII and IX, because LibreOffice maps the attribute to
+        `SwFootnoteInfo::nFootnoteOffset` and adds one. Measured; a reader taking it at face value is out by
+        one on every citation.
+      - **OOXML** names the format (`w:numFmt w:val="upperRoman"`) and its `w:numStart` *is* the first number.
+      - **RTF** puts the sequence in the control word itself — one word per format, `\ftnnar` through
+        `\ftnnchi`, doubled with an `a` prefix for the endnotes — and `\ftnstart` is one-based.
+      - **DOC** packs it into the DOP three ways: `nFootnote` at 0x02 and `nEdn` at 0x34 above two bits of
+        restart rule, and both sequence codes four bits each in one word at 0x36. The `MSONFC` order has a
+        trap in it: **upper** roman is 1 and lower roman is 2, so assuming the lower-case form comes first
+        gives I where the document says i.
+      Word's `chicago` sequence is modelled too, since it is the one format that is not an arithmetic
+      progression — the fifth mark is `**` rather than a fifth symbol.
+- [ ] Note numbering **restarts**: per page, per chapter, per section. Every format states one
+      (`text:start-numbering-at`, `w:numRestart`, `\ftnrstpg`, the DOP's `rncFootnote`) and none is read,
+      because a restart cannot be resolved while the document is being read — it has to be applied as the
+      pages are filled, which means the citation's text depends on pagination and pagination depends on the
+      citation's width. Deliberately left until something needs it.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —
       0.1 cm above and below, which is what Writer's `Footnote Separator` frame style ships with — but
       nothing draws the line, and its exact spacing cannot be measured from a text comparison. Same problem

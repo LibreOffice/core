@@ -87,7 +87,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
             masterPages: masters
                 .Select((master, index) => (master.Name, index))
                 .Where(pair => pair.Name is not null)
-                .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal));
+                .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal),
+            stylesRoot: _inner.File.StylesRoot);
 
         List<PageBlock> blocks = source.Read(body);
 

@@ -44,6 +44,8 @@ public readonly record struct Ww8DocumentProperties
     {
         DefaultTabInterval = Length.FromTwips(720),
         CollapsesSpacing = false,
+        FootnoteNumbering = Layout.NoteNumbering.Footnotes,
+        EndnoteNumbering = Layout.NoteNumbering.Endnotes,
     };
 
     /// <summary>The interval at which tabs fall when no stop covers them.</summary>
@@ -59,6 +61,18 @@ public readonly record struct Ww8DocumentProperties
     /// every line after the first paragraph boundary.
     /// </remarks>
     public bool CollapsesSpacing { get; init; }
+
+    /// <summary>How the document's footnotes are numbered.</summary>
+    /// <remarks>
+    /// The DOP states the two classes in three different places: <c>nFootnote</c> and <c>nEdn</c> hold the
+    /// first number and <c>nfcFootnoteRef</c> and <c>nfcEdnRef</c> the sequence, packed as bit fields into two
+    /// different sixteen-bit words. Both start values are one-based, so a document that means "start at one"
+    /// says one — unlike ODF, whose attribute is an offset.
+    /// </remarks>
+    public Layout.NoteNumbering FootnoteNumbering { get; init; }
+
+    /// <inheritdoc cref="FootnoteNumbering"/>
+    public Layout.NoteNumbering EndnoteNumbering { get; init; }
 
     /// <summary>Reads what layout needs from a <c>Dop</c>, falling back to the defaults per field.</summary>
     /// <param name="dop">The document properties stream.</param>
@@ -78,6 +92,47 @@ public readonly record struct Ww8DocumentProperties
             };
         }
 
+        // The first footnote number, at 0x02: two bits of restart rule and then the value. Zero means the
+        // document said nothing, which is why LibreOffice's own import guards on it before subtracting one.
+        if (dop.Length >= FootnoteNumberOffset + 2)
+        {
+            int packed = BinaryPrimitives.ReadUInt16LittleEndian(dop[FootnoteNumberOffset..]) >> 2;
+            if (packed > 0) properties = properties with
+            {
+                FootnoteNumbering = properties.FootnoteNumbering with { StartAt = packed },
+            };
+        }
+
+        // The first endnote number, packed the same way at 0x34.
+        if (dop.Length >= EndnoteNumberOffset + 2)
+        {
+            int packed = BinaryPrimitives.ReadUInt16LittleEndian(dop[EndnoteNumberOffset..]) >> 2;
+            if (packed > 0) properties = properties with
+            {
+                EndnoteNumbering = properties.EndnoteNumbering with { StartAt = packed },
+            };
+        }
+
+        // Both sequences share one word at 0x36, four bits each, above the two that hold the endnote
+        // position. Reading the wrong field is not an error a document reports: it is a footnote numbered in
+        // roman because the endnote's format was picked up.
+        if (dop.Length >= NoteFormatsOffset + 2)
+        {
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[NoteFormatsOffset..]);
+
+            properties = properties with
+            {
+                FootnoteNumbering = properties.FootnoteNumbering with
+                {
+                    Format = FormatOf((word & 0x003C) >> 2, Layout.NoteNumberFormat.Arabic),
+                },
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    Format = FormatOf((word & 0x03C0) >> 6, Layout.NoteNumberFormat.LowerRoman),
+                },
+            };
+        }
+
         if (dop.Length >= CompatibilityOptions2Offset + 4)
         {
             uint options = BinaryPrimitives.ReadUInt32LittleEndian(dop[CompatibilityOptions2Offset..]);
@@ -86,4 +141,37 @@ public readonly record struct Ww8DocumentProperties
 
         return properties;
     }
+
+    /// <summary>
+    /// The sequence an <c>MSONFC</c> code names, or a fallback for the codes not modelled.
+    /// </summary>
+    /// <remarks>
+    /// The numbers come from <c>WW8ListManager::GetSvxNumTypeFromMSONFC</c>, which is also where the ordering
+    /// surprise is: upper roman is 1 and <em>lower</em> roman is 2, and upper letter comes before lower in the
+    /// same way. A reader that assumed the lower-case form came first gets I where the document says i. The
+    /// codes past nine are the East Asian and enclosed-numeral sequences, which fall back rather than being
+    /// approximated.
+    /// </remarks>
+    /// <param name="code">The four-bit code.</param>
+    /// <param name="fallback">What to use for a code this does not model.</param>
+    private static Layout.NoteNumberFormat FormatOf(int code, Layout.NoteNumberFormat fallback)
+        => code switch
+        {
+            0 => Layout.NoteNumberFormat.Arabic,
+            1 => Layout.NoteNumberFormat.UpperRoman,
+            2 => Layout.NoteNumberFormat.LowerRoman,
+            3 => Layout.NoteNumberFormat.UpperLetter,
+            4 => Layout.NoteNumberFormat.LowerLetter,
+            9 => Layout.NoteNumberFormat.Chicago,
+            _ => fallback,
+        };
+
+    /// <summary>Where the first footnote number sits in the <c>Dop</c>, above two bits of restart rule.</summary>
+    private const int FootnoteNumberOffset = 0x02;
+
+    /// <summary>Where the first endnote number sits, packed the same way.</summary>
+    private const int EndnoteNumberOffset = 0x34;
+
+    /// <summary>Where both classes' sequence codes sit, four bits each in one word.</summary>
+    private const int NoteFormatsOffset = 0x36;
 }

@@ -74,6 +74,8 @@ public sealed partial class DocxLayoutSource
         _defaultTabInterval = TabInterval(settings);
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
+        _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
+        _endnoteNumbering = NumberingIn(settings, "endnotePr", NoteNumbering.Endnotes);
     }
 
     /// <summary>The footnote bodies by <c>w:id</c>, from <c>footnotes.xml</c>.</summary>
@@ -85,6 +87,45 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>The endnote bodies by <c>w:id</c>.</summary>
     private readonly IReadOnlyDictionary<string, XElement> _endnotes;
+
+    /// <summary>How the document's footnotes are numbered.</summary>
+    private readonly NoteNumbering _footnoteNumbering;
+
+    /// <summary>How its endnotes are numbered, which is a separate sequence in a separate format.</summary>
+    private readonly NoteNumbering _endnoteNumbering;
+
+    /// <summary>
+    /// The numbering one class of note declares in the document's settings, or the class's default.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:footnotePr</c> and <c>w:endnotePr</c> in <c>w:settings</c>, whose <c>w:numStart</c> is the first
+    /// note's number outright — one-based, unlike ODF's <c>text:start-value</c>, which is an offset. A
+    /// <em>section</em> can carry the same two elements and override the document's; that is not read, and a
+    /// document doing it is numbered by the document-wide values instead.
+    /// </remarks>
+    /// <param name="settings">The <c>w:settings</c> root, or null.</param>
+    /// <param name="element">Which of the two elements to read.</param>
+    /// <param name="fallback">The class's default, for whatever the file leaves unsaid.</param>
+    private static NoteNumbering NumberingIn(
+        XElement? settings, string element, NoteNumbering fallback)
+    {
+        XElement? properties = Word.Child(settings, element);
+        if (properties is null) return fallback;
+
+        NoteNumberFormat format =
+            NoteNumbering.Parse(Word.Attribute(Word.Child(properties, "numFmt"), "val"))
+            ?? fallback.Format;
+
+        int start = int.TryParse(
+            Word.Attribute(Word.Child(properties, "numStart"), "val"),
+            NumberStyles.Integer,
+            CultureInfo.InvariantCulture,
+            out int stated)
+            ? stated
+            : fallback.StartAt;
+
+        return new NoteNumbering(format, start);
+    }
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
     public IReadOnlyList<FontSubstitution> Substitutions => _fonts.Substitutions;
@@ -213,7 +254,7 @@ public sealed partial class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new(_footnoteNumber, _endnoteNumber);
+        RunWalker walker = new(CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
         // Notes are numbered across the document, so the counters advance by however many this paragraph
@@ -239,8 +280,8 @@ public sealed partial class DocxLayoutSource
         };
     }
 
-    /// <summary>The number the next footnote is cited by, counted across the document.</summary>
-    private int _footnoteNumber = 1;
+    /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
+    private int _footnoteNumber;
 
     /// <summary>
     /// The number the next endnote is cited by, counted separately from the footnotes.
@@ -249,7 +290,7 @@ public sealed partial class DocxLayoutSource
     /// Its own counter because the two sequences are independent — a document with two footnotes and two
     /// endnotes cites 1, 2, i and ii, not 1, 2, iii and iv — and because they are formatted differently.
     /// </remarks>
-    private int _endnoteNumber = 1;
+    private int _endnoteNumber;
 
     /// <summary>
     /// Reads each referenced note's body from the document's notes part.
@@ -430,16 +471,25 @@ public sealed partial class DocxLayoutSource
     private sealed class RunWalker
     {
         /// <summary>Creates a walker.</summary>
+        /// <param name="citation">How a note of a class and an index is cited.</param>
         /// <param name="footnote">
-        /// The number the next footnote it meets is cited by. Passed in because notes are numbered across the
+        /// How many footnotes came before this paragraph. Passed in because notes are numbered across the
         /// document rather than within a paragraph, so the counters belong to the source.
         /// </param>
-        /// <param name="endnote">The number the next endnote is cited by, counted separately.</param>
-        internal RunWalker(int footnote = 1, int endnote = 1)
+        /// <param name="endnote">How many endnotes came before it, counted separately.</param>
+        internal RunWalker(Func<bool, int, string> citation, int footnote = 0, int endnote = 0)
         {
+            _citationOf = citation;
             _footnote = footnote;
             _endnote = endnote;
         }
+
+        /// <summary>How a note of a class and an index is cited, which the source resolves.</summary>
+        /// <remarks>
+        /// A delegate because the walker is nested but not owned: the numbering comes from the document's
+        /// settings, which the source read, and a walker is built per paragraph.
+        /// </remarks>
+        private readonly Func<bool, int, string> _citationOf;
 
         /// <summary>How deep a paragraph's element nesting is followed.</summary>
         /// <remarks>
@@ -525,7 +575,7 @@ public sealed partial class DocxLayoutSource
                         // superscript and again at the head of the note. The style comes from the run this
                         // reference sits in, which is what carries w:vertAlign="superscript".
                         bool isEndnote = Word.Is(child, "endnoteReference");
-                        string number = CitationOf(isEndnote, isEndnote ? _endnote : _footnote);
+                        string number = _citationOf(isEndnote, isEndnote ? _endnote : _footnote);
 
                         _notes.Add(new NoteAnchor(
                             _builder.Length, Word.Attribute(child, "id"), isEndnote, number));
@@ -622,24 +672,23 @@ public sealed partial class DocxLayoutSource
     /// what Word draws rather than what the file happens to state. Applied only when nothing has been said,
     /// so a run that does state a shift keeps it.
     /// </remarks>
-    /// <summary>
-    /// How a note of each class is cited, which is not the same for the two.
-    /// </summary>
-    /// <remarks>
-    /// LibreOffice's defaults, and they differ: footnotes count 1, 2, 3 and endnotes i, ii, iii — measured on
-    /// a two-endnote document, whose citations render as "i" and "ii" both in the sentence and at the head of
-    /// the note. A section-level <c>w:footnotePr</c> or <c>w:endnotePr</c> can state a format and a start
-    /// value and is not read yet, so a document overriding either is numbered by these defaults instead.
-    /// </remarks>
-    private static string CitationOf(bool isEndnote, int number)
-        => isEndnote
-            ? Core.Numbering.OutlineNumbers.Roman(number, upperCase: false)
-            : Core.Numbering.OutlineNumbers.Digits(number);
-
     private static WordTextStyle AsCitation(WordTextStyle style)
         => style.Escapement.IsNone
             ? style with { Escapement = Layout.Escapement.Superscript }
             : style;
+
+    /// <summary>
+    /// How a note of each class is cited, which is not the same for the two.
+    /// </summary>
+    /// <remarks>
+    /// Two sequences in two formats, from the document's <c>w:footnotePr</c> and <c>w:endnotePr</c> where it
+    /// has them and from LibreOffice's own defaults where it does not — footnotes 1, 2, 3 and endnotes
+    /// i, ii, iii, which is measured rather than assumed.
+    /// </remarks>
+    /// <param name="isEndnote">True for an endnote.</param>
+    /// <param name="index">How many notes of the class came before, counted from zero.</param>
+    private string CitationOf(bool isEndnote, int index)
+        => (isEndnote ? _endnoteNumbering : _footnoteNumbering).Citation(index);
 
     /// <summary>
     /// The document's default tab interval.

@@ -7,6 +7,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Text.Encodings;
 using Paperless.Text.Layout;
+using Paperless.WordProcessing.Layout;
 
 namespace Paperless.WordProcessing.Rtf;
 
@@ -113,7 +114,6 @@ public sealed partial class RtfDocumentReader
     private int _colourBlue;
     private bool _colourStated;
     private int _footnoteNumber;
-    private int _footnoteStart = 1;
 
     /// <summary>
     /// True when the note group about to follow is an endnote's, decided by peeking at the bytes.
@@ -336,7 +336,51 @@ public sealed partial class RtfDocumentReader
                 state.UnicodeSkip = Math.Clamp(token.Parameter ?? 1, 0, 32);
                 return;
             case "ftnstart":
-                _footnoteStart = token.Parameter ?? 1;
+                // The first footnote's number, one-based — unlike ODF's `text:start-value`, which is an
+                // offset. So this needs no adjustment and that one does.
+                _footnotes = _footnotes with { StartAt = token.Parameter ?? 1 };
+                return;
+            case "aftnstart":
+                _endnotes = _endnotes with { StartAt = token.Parameter ?? 1 };
+                return;
+
+            // The two families of sequence words, one per class. RTF names the sequence in the control word
+            // itself rather than in a parameter, so there is one word per format and they cannot be folded.
+            case "ftnnar":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.Arabic };
+                return;
+            case "ftnnalc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.LowerLetter };
+                return;
+            case "ftnnauc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.UpperLetter };
+                return;
+            case "ftnnrlc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.LowerRoman };
+                return;
+            case "ftnnruc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.UpperRoman };
+                return;
+            case "ftnnchi":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.Chicago };
+                return;
+            case "aftnnar":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.Arabic };
+                return;
+            case "aftnnalc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.LowerLetter };
+                return;
+            case "aftnnauc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.UpperLetter };
+                return;
+            case "aftnnrlc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.LowerRoman };
+                return;
+            case "aftnnruc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.UpperRoman };
+                return;
+            case "aftnnchi":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.Chicago };
                 return;
 
             // ---- destinations that are not content
@@ -980,7 +1024,7 @@ public sealed partial class RtfDocumentReader
     }
 
     private string CurrentFootnoteCitation()
-        => OutlineNumbers.Digits(_footnoteStart + Math.Max(0, _footnoteNumber - 1));
+        => _footnotes.Citation(Math.Max(0, _footnoteNumber - 1));
 
     /// <summary>
     /// The number the next note of a class is cited by, formatted the way LibreOffice formats that class.
@@ -992,20 +1036,17 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     /// <param name="isEndnote">True for an endnote.</param>
     private string NextNoteCitation(bool isEndnote)
-    {
-        if (!isEndnote)
-        {
-            _footnoteNumber++;
-            return CurrentFootnoteCitation();
-        }
-
-        _endnoteNumber++;
-        return OutlineNumbers.Roman(
-            _endnoteStart + Math.Max(0, _endnoteNumber - 1), upperCase: false);
-    }
+        => isEndnote
+            ? _endnotes.Citation(_endnoteNumber++)
+            : _footnotes.Citation(_footnoteNumber++);
 
     private int _endnoteNumber;
-    private int _endnoteStart = 1;
+
+    /// <summary>How the document's footnotes are numbered, from the <c>\ftnn*</c> family.</summary>
+    private NoteNumbering _footnotes = NoteNumbering.Footnotes;
+
+    /// <summary>How its endnotes are numbered, from the <c>\aftnn*</c> family.</summary>
+    private NoteNumbering _endnotes = NoteNumbering.Endnotes;
 
     private DocumentMetadata BuildMetadata()
     {

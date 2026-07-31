@@ -173,3 +173,9 @@ fails on the citation text. `endnotes.doc` is again the exception, and again for
 LibreOffice's WW8 export writes the DOP's `epc` as 0, "collect at the end of the section", and its own import
 then renders the notes in the page-bottom note area instead. `endnotes.rtf` inherits the footnote formatting
 loss described above.
+
+`note-numbering.*` is the footnote document with a `text:notes-configuration` asking for upper roman from
+eight, so its notes are cited VIII and IX. All five formats survived the export with the sequence intact,
+which makes this the one note document comparable in every one of them. It catches two mistakes that look
+alike and are not: ignoring the format gives 8 and 9, and taking ODF's `text:start-value` for the first
+number rather than for an offset gives VII and VIII.

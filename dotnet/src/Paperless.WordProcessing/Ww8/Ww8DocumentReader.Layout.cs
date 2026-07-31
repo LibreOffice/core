@@ -137,15 +137,16 @@ public sealed partial class Ww8DocumentReader
     /// The next number of a note's class, formatted the way LibreOffice formats that class.
     /// </summary>
     /// <remarks>
-    /// Two sequences, not one, and two formats: footnotes count 1, 2, 3 and endnotes i, ii, iii. Both are
-    /// LibreOffice's defaults; the DOP's <c>nFtn</c>/<c>nEdn</c> start values and <c>rncFtn</c>/<c>rncEdn</c>
-    /// restart rules are not read yet, so a document overriding either is numbered by these instead.
+    /// Two sequences in two formats, from the DOP where the document states them and from LibreOffice's own
+    /// defaults where it does not — footnotes 1, 2, 3 and endnotes i, ii, iii. The DOP's
+    /// <c>rncFootnote</c>/<c>rncEdn</c> restart rules are still unread, because a restart has to be applied
+    /// while pages are being filled rather than while the document is read.
     /// </remarks>
     /// <param name="isEndnote">True for an endnote.</param>
     private string CitationOf(bool isEndnote)
         => isEndnote
-            ? Core.Numbering.OutlineNumbers.Roman(++_layoutEndnoteNumber, upperCase: false)
-            : Core.Numbering.OutlineNumbers.Digits(++_layoutNoteNumber);
+            ? DocumentProperties.EndnoteNumbering.Citation(_layoutEndnoteNumber++)
+            : DocumentProperties.FootnoteNumbering.Citation(_layoutNoteNumber++);
 
     /// <summary>How many endnotes the layout walk has passed.</summary>
     private int _layoutEndnoteNumber;

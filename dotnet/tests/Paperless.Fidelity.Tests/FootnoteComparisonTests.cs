@@ -64,6 +64,13 @@ public sealed class FootnoteComparisonTests : IDisposable
     [InlineData("footnote-pages.docx")]
     [InlineData("footnotes.doc")]
     [InlineData("footnote-pages.doc")]
+    // The same document with `text:notes-configuration` asking for upper roman from eight, which every format
+    // survived the export of. It is here rather than in a file of its own because the *placement* is the same
+    // and only the citation's text differs — so a failure here is a numbering failure and nothing else.
+    [InlineData("note-numbering.fodt")]
+    [InlineData("note-numbering.odt")]
+    [InlineData("note-numbering.docx")]
+    [InlineData("note-numbering.doc")]
     // RTF is deliberately absent, and the reason is in LibreOffice rather than here: its RTF import drops the
     // character and paragraph formatting stated inside a `{\*\footnote …}` group and falls back to the
     // document's defaults. A note the file sets in Carlito at 10 pt with no indent renders in Liberation Serif

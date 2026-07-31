@@ -83,15 +83,70 @@ public sealed partial class OdtLayoutSource
     /// Which section each master page is, by name. Empty for a document laid out on one section, which
     /// leaves every block in section zero.
     /// </param>
+    /// <param name="stylesRoot">
+    /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
+    /// is numbered. Null leaves both classes on LibreOffice's defaults.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
-        IReadOnlyDictionary<string, int>? masterPages = null)
+        IReadOnlyDictionary<string, int>? masterPages = null,
+        XElement? stylesRoot = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
+        _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
+        _endnotes = NumberingIn(stylesRoot, "endnote", NoteNumbering.Endnotes);
+    }
+
+    /// <summary>How the document's footnotes are numbered.</summary>
+    private readonly NoteNumbering _footnotes;
+
+    /// <summary>How its endnotes are numbered, which is a separate sequence in a separate format.</summary>
+    private readonly NoteNumbering _endnotes;
+
+    /// <summary>
+    /// The numbering one class of note declares, or the class's default when it declares none.
+    /// </summary>
+    /// <remarks>
+    /// <c>text:notes-configuration</c>, which lives in <c>office:styles</c> rather than in the content and is
+    /// written once per class. ODF states the format by <em>example</em> — <c>style:num-format</c> holds the
+    /// literal "1", "i" or "A" — which is why parsing it belongs with OOXML's naming of the same set rather
+    /// than here. <c>text:start-numbering-at</c> can ask for a per-page or per-chapter restart and is not read:
+    /// a restart has to be applied while pages are being filled, not while the document is being read.
+    /// </remarks>
+    private static NoteNumbering NumberingIn(
+        XElement? stylesRoot, string noteClass, NoteNumbering fallback)
+    {
+        XElement? styles = stylesRoot?.Element(XName.Get("styles", OdfNamespaces.Office));
+
+        XElement? configuration = styles?
+            .Elements(XName.Get("notes-configuration", OdfNamespaces.Text))
+            .FirstOrDefault(element =>
+                element.Attribute(XName.Get("note-class", OdfNamespaces.Text))?.Value == noteClass);
+
+        if (configuration is null) return fallback;
+
+        NoteNumberFormat format =
+            NoteNumbering.Parse(
+                configuration.Attribute(XName.Get("num-format", OdfNamespaces.Style))?.Value)
+            ?? fallback.Format;
+
+        // `text:start-value` is an *offset*, not the first note's number, which is measured rather than read
+        // off the specification: a document stating 7 renders VIII and IX. LibreOffice maps the attribute to
+        // `SwFootnoteInfo::nFootnoteOffset` and adds one when it numbers, so a reader taking the value as the
+        // first number is out by one on every citation in the document.
+        int start = int.TryParse(
+            configuration.Attribute(XName.Get("start-value", OdfNamespaces.Text))?.Value,
+            System.Globalization.NumberStyles.Integer,
+            System.Globalization.CultureInfo.InvariantCulture,
+            out int offset)
+            ? offset + 1
+            : fallback.StartAt;
+
+        return new NoteNumbering(format, start);
     }
 
     /// <summary>Which section each master page is, by name.</summary>
@@ -286,7 +341,7 @@ public sealed partial class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new(styleName, _footnoteNumber, _endnoteNumber);
+        RunWalker walker = new(styleName, CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, prefix, prefixStyle);
 
         // Notes are numbered across the document, so the counters advance by however many this paragraph
@@ -312,8 +367,8 @@ public sealed partial class OdtLayoutSource
         };
     }
 
-    /// <summary>The number the next footnote is cited by, counted across the document.</summary>
-    private int _footnoteNumber = 1;
+    /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
+    private int _footnoteNumber;
 
     /// <summary>
     /// The number the next endnote is cited by, counted separately from the footnotes.
@@ -322,7 +377,7 @@ public sealed partial class OdtLayoutSource
     /// Its own counter because the two sequences are independent — a document with two footnotes and two
     /// endnotes cites 1, 2, i and ii, not 1, 2, iii and iv — and because they are formatted differently.
     /// </remarks>
-    private int _endnoteNumber = 1;
+    private int _endnoteNumber;
 
     /// <summary>
     /// Reads each anchored note's body.
@@ -522,15 +577,14 @@ public sealed partial class OdtLayoutSource
     /// How a note of each class is cited, which is not the same for the two.
     /// </summary>
     /// <remarks>
-    /// LibreOffice's defaults, and they differ: footnotes count 1, 2, 3 and endnotes i, ii, iii — measured on
-    /// a two-endnote document, whose citations render as "i" and "ii" both in the sentence and at the head of
-    /// the note. <c>text:notes-configuration</c> can state a format and a start value per class and is not
-    /// read yet, so a document overriding either is numbered by these defaults instead.
+    /// Two sequences in two formats, from the document's <c>text:notes-configuration</c> where it has one and
+    /// from LibreOffice's own defaults where it does not — footnotes 1, 2, 3 and endnotes i, ii, iii, which is
+    /// measured rather than assumed.
     /// </remarks>
-    private static string CitationOf(bool isEndnote, int number)
-        => isEndnote
-            ? Core.Numbering.OutlineNumbers.Roman(number, upperCase: false)
-            : Core.Numbering.OutlineNumbers.Digits(number);
+    /// <param name="isEndnote">True for an endnote.</param>
+    /// <param name="index">How many notes of the class came before, counted from zero.</param>
+    private string CitationOf(bool isEndnote, int index)
+        => (isEndnote ? _endnotes : _footnotes).Citation(index);
 
     /// <summary>
     /// Walks a paragraph, building its text and the ranges its spans divide it into.
@@ -563,17 +617,30 @@ public sealed partial class OdtLayoutSource
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
+        /// <param name="citation">How a note of a class and an index is cited.</param>
         /// <param name="footnote">
-        /// The number the next footnote in this paragraph is cited by. Passed in because notes are numbered
-        /// across the document rather than within a paragraph, so the counters belong to the source.
+        /// How many footnotes came before this paragraph. Passed in because notes are numbered across the
+        /// document rather than within a paragraph, so the counters belong to the source.
         /// </param>
-        /// <param name="endnote">The number the next endnote is cited by, counted separately.</param>
-        internal RunWalker(string? paragraphStyleName, int footnote = 1, int endnote = 1)
+        /// <param name="endnote">How many endnotes came before it, counted separately.</param>
+        internal RunWalker(
+            string? paragraphStyleName,
+            Func<bool, int, string> citation,
+            int footnote = 0,
+            int endnote = 0)
         {
             _cascade.Add(new OdfStyleReference(paragraphStyleName, OdfStyleFamily.Paragraph));
+            _citationOf = citation;
             _footnote = footnote;
             _endnote = endnote;
         }
+
+        /// <summary>How a note of a class and an index is cited, which the source resolves.</summary>
+        /// <remarks>
+        /// A delegate because the walker is nested but not owned: the numbering comes from the document's
+        /// <c>text:notes-configuration</c>, which the source read, and a walker is built per paragraph.
+        /// </remarks>
+        private readonly Func<bool, int, string> _citationOf;
 
         private int _footnote;
         private int _endnote;
@@ -691,8 +758,7 @@ public sealed partial class OdtLayoutSource
                     // which is what makes it small and raised.
                 {
                     bool isEndnote = IsEndnote(child);
-                    string citation = CitationOf(
-                        isEndnote, isEndnote ? _endnote : _footnote);
+                    string citation = _citationOf(isEndnote, isEndnote ? _endnote : _footnote);
 
                     _notes.Add(new NoteAnchor(_builder.Length, child, citation));
                     Citation(child, citation);

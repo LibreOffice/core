@@ -130,6 +130,37 @@ public sealed class FootnoteReadingTests
             citing.EmSize, $"{fileName}: the citation is not set smaller than its sentence");
     }
 
+    [Theory]
+    [InlineData("note-numbering.fodt")]
+    [InlineData("note-numbering.odt")]
+    [InlineData("note-numbering.docx")]
+    [InlineData("note-numbering.doc")]
+    [InlineData("note-numbering.rtf")]
+    public void ADocumentCanStateItsOwnSequenceAndStartValue(string fileName)
+    {
+        List<PageParagraph> citing = [.. Paragraphs(fileName).Where(p => p.Notes.Count > 0)];
+
+        citing.Count.ShouldBe(2, $"{fileName}: expected two paragraphs to cite a note");
+
+        // The corpus document asks for upper roman from eight, so the two notes are VIII and IX. Both halves
+        // matter and both are easy to get wrong: a reader that ignored the format numbers them 8 and 9, and one
+        // that took ODF's `text:start-value` for the first number rather than an offset gets VII and VIII.
+        string[] expected = ["VIII", "IX"];
+
+        for (int i = 0; i < citing.Count; i++)
+        {
+            PageNote note = citing[i].Notes.ShouldHaveSingleItem();
+
+            note.Blocks.ShouldHaveSingleItem().ShouldBeOfType<PageParagraph>().Text.ShouldBe(
+                $"{expected[i]}Note {(i == 0 ? 2 : 5)} text alpha bravo charlie.",
+                $"{fileName}: note {i + 1} should be cited \"{expected[i]}\"");
+
+            citing[i].Runs.First(run => run.Start == note.Offset).Length.ShouldBe(
+                expected[i].Length,
+                $"{fileName}: the anchor's citation should be as long as \"{expected[i]}\"");
+        }
+    }
+
     // ------------------------------------------------------------------------- the machinery
 
     /// <summary>Every paragraph of a document's body, tables flattened away.</summary>
