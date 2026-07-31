@@ -432,3 +432,25 @@ Writer settles that self-reference one line lower than this does. Everything els
 It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
 begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
 the end margin while `frame-wrap.fodt` passed throughout.
+
+`frame-parallel.{fodt,odt}` is the third, and it exists for the one thing a frame against a margin can never
+show: a 4 cm frame set 6.5 cm into a 17 cm measure with a `parallel` wrap leaves 6.5 cm free on *either*
+side, so every line it crosses has text left of it and text right of it. LibreOffice divides seven of the
+eighteen lines that way and starts each right-hand stretch at 354.50 pt. ODF only — LibreOffice's own DOCX
+export of the same document narrows one line fewer, because its OOXML import turns on
+`ADD_VERTICAL_FLY_OFFSETS` and that changes the rectangle `CalcFlyWidth` intersects. That is a compatibility
+flag rather than anything about the wrap, so the document is kept in the two forms that agree.
+
+`frame-in-header.{fodt,odt}` and `frame-in-cell.{fodt,odt}` are for the anchors that are not in the body at
+all. The header one is the more useful of the two: its frame is 3 cm tall in a 1.5 cm header, so its
+rectangle hangs into the body area and LibreOffice divides the first four *body* lines round it — which says
+outright that an anchored object belongs to the page however deeply its anchor is nested, and gives a
+whole-page comparison to hold that to. The cell one is compared for the frame's placement and its own text
+only: **the cell's text does not yet flow round it**, since obstacles reach a paragraph through the
+paginator and a cell's paragraphs are laid out by `FlowLayouter`, which is handed none.
+
+Two things about building them are worth knowing, because both look like engine bugs. `style:header-style`
+is a child of `style:page-layout`, **not** of `style:page-layout-properties`; nesting it inside gives a
+document whose header LibreOffice reads and this engine does not. And a cell border is not neutral to a
+frame measurement — a 0.5 pt border moved the cell's content top half a point away from LibreOffice's, which
+is why the cell in `frame-in-cell` states `fo:border="none"`.

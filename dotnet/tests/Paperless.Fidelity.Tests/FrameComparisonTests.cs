@@ -403,6 +403,124 @@ public sealed class FrameComparisonTests : IDisposable
         divided.ShouldBeInRange(5, 9, $"{fileName}: lines drawn on both sides of the frame");
     }
 
+    /// <summary>
+    /// A frame anchored in a header obstructs the body text its rectangle reaches into.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// An anchored object belongs to the <em>page</em> however deeply its anchor is nested, which is the
+    /// whole of why this document is interesting: the frame is anchored in the running head and is 1 cm
+    /// tall, so its rectangle hangs past the header area and into the body, and LibreOffice divides the
+    /// first two body lines round it — at 387.80 and 482.05 pt, then 362.20 and 482.05. Nothing about the
+    /// body's own blocks mentions it. The resolution pass therefore has to reach the frame through the
+    /// <em>flow</em> the header was laid out into, which is only there once a page has been filled.
+    /// </para>
+    /// <para>
+    /// A page-wide comparison rather than a check that the frame exists, because the failure this replaced
+    /// was silent: the frame was read correctly, carried into the header's blocks correctly, and then
+    /// dropped, so the document rendered as though it had no frame at all and every line was in a
+    /// defensible place.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("frame-in-header.fodt")]
+    [InlineData("frame-in-header.odt")]
+    public void AFrameAnchoredInAHeaderMovesTheBodyTextBelowIt(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+
+        LaidOutPage page = Pages(path).Pages[0];
+        page.Frames.Count.ShouldBe(1, $"{fileName}: frames placed on the page");
+
+        List<Line> expected = Reference(path);
+        List<Line> actual = Drawn(path);
+
+        actual.Count.ShouldBe(
+            expected.Count,
+            $"{fileName}: {actual.Count} lines drawn against {expected.Count} in LibreOffice's own output");
+
+        int divided = 0;
+
+        for (int i = 0; i < expected.Count; i++)
+        {
+            Close(
+                actual[i].Left,
+                expected[i].Left - PdfPenOffsetPoints,
+                $"{fileName}: line {i + 1} starts at");
+
+            Close(actual[i].Baseline, expected[i].Baseline, $"{fileName}: line {i + 1} baseline");
+
+            foreach (double pen in actual[i].Pens!.Skip(1))
+            {
+                divided++;
+
+                expected[i].Pens!.ShouldContain(
+                    reference => Math.Abs(reference - PdfPenOffsetPoints - pen) < TolerancePoints,
+                    $"{fileName}: line {i + 1} resumes at {pen:0.00} pt, where LibreOffice drew nothing");
+            }
+        }
+
+        // The header's own line is in that list too, so a document that lost the frame would still have to
+        // fail on the two body lines the frame divides.
+        divided.ShouldBe(4, $"{fileName}: body lines drawn on both sides of the header's frame");
+    }
+
+    /// <summary>
+    /// A frame anchored in a table cell is placed where LibreOffice places it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The other flow a frame can be anchored in, and the arithmetic is worth stating because it is what
+    /// says the origin is the cell rather than the page or the table: LibreOffice draws this frame's own
+    /// text at 73.70 pt, which is the table's left edge at 56.70, plus the cell's 0.1 cm padding, plus the
+    /// frame's own 0.5 cm offset, and nothing else.
+    /// </para>
+    /// <para>
+    /// The frame's placement and its own text, not the cell's. <em>The cell's text does not yet flow round
+    /// it</em> — obstacles reach a paragraph through the paginator, and a cell's paragraphs are laid out by
+    /// <c>FlowLayouter</c>, which is not given any. LibreOffice starts this cell's text at 158.90 pt and
+    /// drops it back to 59.65 below the frame; this engine leaves it at the cell's own left edge and the
+    /// frame is drawn over it. That is written down in the TODO rather than asserted here, since asserting
+    /// the wrong answer would have to be undone to fix it.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("frame-in-cell.fodt")]
+    [InlineData("frame-in-cell.odt")]
+    public void AFrameAnchoredInATableCellIsPlacedAgainstTheCell(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+
+        LaidOutPage page = Pages(path).Pages[0];
+        page.Frames.Count.ShouldBe(1, $"{fileName}: frames placed on the page");
+
+        PlacedFrame frame = page.Frames[0];
+        frame.Content.ShouldNotBeNull($"{fileName}: the frame's own content");
+
+        List<PdfTextRun> reference = [.. PdfTextRuns
+            .Read(_libreOffice.ConvertToPdf(path, _workDirectory))
+            .Where(run => Math.Abs(run.FontSize - FramePoints) < 0.01)];
+
+        reference.Count.ShouldBe(1, $"{fileName}: lines LibreOffice drew inside the frame");
+
+        List<DrawnGlyphRun> drawn = [.. Record(path).Pages
+            .SelectMany(drawnPage => drawnPage.Runs)
+            .Where(run => Math.Abs(run.Run.FontSize.Points - FramePoints) < 0.01)];
+
+        drawn.Count.ShouldBe(1, $"{fileName}: lines drawn inside the frame");
+
+        Close(
+            drawn[0].Origin.X.Points,
+            reference[0].X - PdfPenOffsetPoints,
+            $"{fileName}: the frame's own text starts at");
+
+        Close(drawn[0].Origin.Y.Points, reference[0].Y, $"{fileName}: the frame's own text sits at");
+    }
+
     /// <summary>One drawn line: which page it is on, where it starts, and where its baseline sits.</summary>
     /// <param name="Page">Which page it is on.</param>
     /// <param name="Left">The leftmost pen on the line, which is where the line begins.</param>

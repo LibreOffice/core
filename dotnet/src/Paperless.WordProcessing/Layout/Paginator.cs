@@ -249,7 +249,6 @@ public sealed class Paginator
             sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
 
         List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
-        if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
 
         // The loop frames close, and the reason pagination cannot be a single pass once one is present:
         // where a frame goes depends on where its anchor paragraph ended up, and where that paragraph's
@@ -258,9 +257,14 @@ public sealed class Paginator
         // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
         // of laying the whole document out again, which converges in one further pass whenever the frames
         // stay on the page they started on — the case every real document is.
+        // Asked of the finished pages rather than of the blocks, because a frame need not be anchored in
+        // the body at all: one anchored in a table cell or a header is reached through the flow it landed
+        // in, which only exists once the page has been filled. Scanning the blocks instead returned early
+        // on exactly those documents and left their frames unplaced.
         FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+        if (resolution.IsEmpty) return pages;
 
-        for (int pass = 0; pass < MaxFramePasses && !resolution.IsEmpty; pass++)
+        for (int pass = 0; pass < MaxFramePasses; pass++)
         {
             _obstacles = resolution.ObstaclesFor;
             List<LaidOutPage> next;

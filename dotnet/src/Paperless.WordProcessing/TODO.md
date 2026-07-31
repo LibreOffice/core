@@ -475,10 +475,11 @@ Order chosen so each is verifiable before the next gets harder.
       stream, which parses as a `PICF` with mapping mode 0 and would be reported as a picture.
 - [ ] Shapes anchored in a **header or footer**. `PlcSpaHdr` is read and its positions rebased onto the
       header subdocument, and a header shape's text is taken from `PlcfHdrtxbxTxt` rather than the body's
-      table — but nothing places one, because the furniture pass hands `PageFurnitureSet` a list of blocks
-      and the frames a paragraph carries are dropped on the way. No corpus document has one: LibreOffice's
-      DOC export writes `lcbPlcSpaHdr` 0 for every document in the corpus, so this needs a document built
-      for it before it can be got right rather than merely written.
+      table. The *layout* half is no longer the obstacle it was: a frame a header paragraph carries is now
+      placed, and `frame-in-header.{fodt,odt}` pins it against LibreOffice. What is unverified is the DOC
+      reading path itself, and it is unverifiable from the corpus — LibreOffice's DOC export writes
+      `lcbPlcSpaHdr` 0 for every document in it, so this still needs a document built for it rather than
+      merely written.
 - [ ] The `#i36649#` alignment rewrites (`ww8graf.cxx:2445`). Word's "flush left against the page" does not
       mean what it says — LibreOffice converts it to "offset by minus the shape's width from the page's
       *text area*" — and its "flush right against the page" becomes an offset from the right page border.
@@ -653,34 +654,108 @@ is read and verified, so what remains is the filling of pages rather than the me
       below one that grew by wrapping starts lower than the previous pass believed, and its lines were
       measured against the frame at the height it used to be. Comparing only the rectangles declares victory
       with the paragraph after the frame still wrapped round nothing.
-- [ ] **Two segments on one line**, which is what a `parallel` wrap round a frame that touches neither margin
-      needs. Writer fills the gap left of the frame, inserts a fly portion, and carries on filling to the
-      right of it — one line, two stretches of text — and the corpus proves it: a 4 cm frame centred in a
-      17 cm measure renders with words on both sides of every line it crosses. This engine takes the
-      *leftmost* free interval and leaves the rest, so such a line comes out short and the paragraph gains
-      lines. The cases that touch a margin — which is nearly every real frame, and every wrap mode other
-      than `parallel` — are exact, because the wrap side widens the frame to the margin and leaves one
-      interval. Doing it properly means `LineBox` carrying a list of stretches rather than a left and a
-      width, and the drawing splitting a line's runs at each boundary.
-- [ ] **Contour wrap.** `wp:wrapTight` and `wp:wrapThrough` are read as the square wrap their `wrapText`
-      names, which is the same hole with straight sides; ODF's `style:wrap-contour` is ignored. Writer builds
-      the outline with `SwContourCache::ContourRect` and a `TextRanger`, and asks it *per line* for the
-      polygon's extent in that strip — so it is not a different rectangle but a different question, and it
-      needs the drawing's own geometry, which for a picture means the raster.
+- [x] **Two stretches on one line**, which is what a `parallel` wrap round a frame touching neither margin
+      needs: Writer fills the gap left of the frame, inserts a fly portion, and carries on filling to the
+      right of it, so one baseline carries two runs of text. This engine took the leftmost free interval and
+      left the rest, which made every crossed line short and gave the paragraph lines it should not have had.
+      **A `LineBox` is now one *stretch* rather than one line.** Every stretch of a line carries the line's
+      geometry — the same top, height, baseline and leading — and all but the last set `SharesLineWithNext`.
+      That one flag is what tells whoever stacks boxes to advance once per line rather than once per box, and
+      what stops a page break falling between the text left of a frame and the text right of it
+      (`Paginator.Fit` counts by line and `WholeLines` backs an orphan or widow count off to a line's start).
+      Two boxes rather than a list of stretches inside one box, because a stretch is a line as far as every
+      consumer is concerned: drawing, notes, markup and extraction each got the second stretch for nothing,
+      where a nested list would have needed each of them taught about it.
+      **`ILineObstacles` needed nothing added, which is the point.** Writer's second `CalcFlyWidth` call is
+      the same question asked from further along the line (`itrform2.cxx:2911`, called again from
+      `BuildPortions` once the pen is past the fly portion), so a continuation is `SpaceFor` with the wanted
+      stretch starting at the far edge of the one already taken. Two answers are refused: one carrying a
+      descent, which is the line running out of room rather than continuing beside the frame, and one under
+      `MINLAY` — 23 twips, `sw/inc/swtypes.hxx` — because the filler hands an over-long word a whole line
+      and a sliver beside a frame would be drawn straight across it.
+      Measured on a new corpus document, `frame-parallel.{fodt,odt}`: a 4 cm frame 6.5 cm into a 17 cm
+      measure. LibreOffice divides seven lines and starts each right-hand stretch at 354.50 pt where the
+      frame's own right edge is 354.33 — the one twip of the inclusive rectangle plus the tenth of a point
+      the PDF export adds. Both forms now agree to a tenth of a point on all eighteen line starts, all
+      eighteen baselines and every stretch.
+      **The trap, and it cost an hour**: LibreOffice's PDF export draws a line's *trailing blank* as a
+      portion of its own, one glyph wide, out at the right margin. So the rightmost pen on an ordinary
+      unwrapped line is 538.45 pt and says nothing about where a stretch begins — a comparison has to look
+      for each stretch among the line's pens rather than compare the two lists.
+      What is deliberately not done: alignment and justification are applied per stretch rather than across
+      the line. Writer treats the fly portion as fixed glue inside one line and distributes the rest over the
+      whole of it, which differs for a centred or justified paragraph beside a frame. No corpus document has
+      one, and the difference is invisible for start-aligned text.
+- [ ] **Contour wrap.** `wp:wrapTight` and `wp:wrapThrough`, DOC's `nwr` 4 and 5, and ODF's
+      `style:wrap-contour` are all read as the square wrap their side attribute names — the same hole with
+      straight sides. Exact for a rectangle, which is every shape in the corpus, and wrong for anything else.
+      Writer builds the outline once per object and caches it (`SwContourCache::ContourRect`,
+      `sw/source/core/text/txtfly.cxx:207`): a `TextRanger` over the shape's `TakeXorPoly`/`TakeContour`, or
+      over the fly's own `GetContour` for a picture — which *loads the graphic*, since a picture's contour is
+      derived from its raster. It is then asked per line, `GetTextRanges(aRange)` for the strip the line
+      occupies, and that returns **a list of interval boundaries** rather than one rectangle;
+      `ContourRect` walks it from `nXPos` — the pen — to the interval that applies.
+      So the shape of the question is now available: that is the same "which free interval starts at or
+      after this pen" that a `parallel` wrap round a frame clear of both margins needed, and a line of
+      several stretches is what a concave outline produces every time. What is still missing is the
+      *polygon*: `PageFrame` carries a rectangle and no geometry at all, so there is nothing to intersect a
+      strip against. The readers have the source data — DOC's `pWrapPolygonVertices`, DOCX's
+      `wp:wrapPolygon`, ODF's `draw:contour-polygon` — and a picture's derived contour needs the decoded
+      raster, which is a separate unstarted item. This is the largest of the four and the only one whose
+      cost is dominated by something other than layout.
 - [ ] **A top-and-bottom frame anchored to the paragraph it pushes down.** Self-referential, and Writer
       settles it one line lower than this does: measured on `frame-wrap-modes.fodt`, LibreOffice keeps the
       anchor paragraph's first line above the frame and starts the band below it, where this drops the
       whole paragraph. The loop is the frame's position depending on a paragraph whose own position the
       frame decides, and the bounded relayout converges on the other answer. The three modes that leave a
       side open have no such degeneracy, since the paragraph does not move.
-- [ ] **Frames anchored in a table cell or a header**, which are dropped: the resolution pass walks the body's
-      blocks and takes a frame's page from the line that starts its paragraph, and a cell's paragraphs have no
-      such line. A frame in a cell reads correctly and is never placed.
+- [x] **Frames anchored in a table cell, a header, a footer or a footnote are placed.** They were dropped:
+      the resolution pass walked the body's blocks and took a frame's page from the line that starts its
+      paragraph, and a cell's paragraphs have no such line, so the frame was read correctly and then thrown
+      away. It now walks each finished page's *flows* as well — and one walk covers all four, because
+      `PlacedFlow` is one type for a header, a footer, a cell and a footnote.
+      **An anchored object belongs to the page however deeply its anchor is nested**, which is not a
+      simplification but what Writer does, and `frame-in-header.fodt` proves it: a 3 cm frame anchored in a
+      running head hangs past the header area, and LibreOffice divides the first four *body* lines round it.
+      So a flow's frames join the page's list and become obstacles for the body's text exactly as a body
+      frame does. Both ODF forms now agree with LibreOffice on every line of that document.
+      The flow's own rectangle is what a paragraph-, column- or text-area-relative origin resolves against
+      inside a flow, and it is exact rather than approximate: LibreOffice draws `frame-in-cell.fodt`'s frame
+      at 73.70 pt, which is the table's left edge at 56.70 plus the cell's 0.1 cm padding plus the frame's
+      own 0.5 cm offset and nothing else.
+      The early-out moved with it. `Paginate` used to scan the *blocks* for a frame and return before ever
+      resolving one; a document whose only frame is in a cell or a header has no such block, so it returned
+      early on exactly the documents this fixes. It now resolves once and returns if that found nothing.
+      Two traps, both in building the corpus rather than in the code. `style:header-style` is a child of
+      `style:page-layout`, **not** of `style:page-layout-properties`; nesting it inside cost a document whose
+      header LibreOffice read and this engine did not, which looks exactly like a reader bug. And a cell
+      border is not neutral: a 0.5 pt border put the cell's content top half a point from LibreOffice's, which
+      landed on the frame's measured position, so the corpus cell states `fo:border="none"`.
+- [ ] **A frame in a cell or a header does not narrow that flow's own text.** The other half of the item
+      above, and the visible one: LibreOffice starts `frame-in-cell.fodt`'s cell text at 158.90 pt and drops
+      it back to 59.65 below the frame, where this leaves it at the cell's left edge and draws the frame over
+      it. Obstacles reach a paragraph through `Paginator._obstacles`, which is keyed on a *body block index*;
+      a cell's and a header's paragraphs go through `FlowLayouter`, which is handed none. The shape of the
+      fix is a `Func<Length, ILineObstacles?>` on `FlowLayouter.LayOut` taking the paragraph's top within the
+      flow — the flow knows that as it stacks — threaded through `TableLayouter` and `PageFurnitureSet`, and
+      then the frame's position and the cell's height become circular in the same way the body's already are,
+      so the bounded relayout has to cover the flows too. Four files, three of them shared.
 - [ ] **As-character frames take no room on their line.** All four readers recognise the anchor —
       `text:anchor-type="as-char"`, `wp:inline`, and the RTF and WW8 equivalents — and record the frame, but
       nothing gives the line a portion as wide as the frame, so the text closes over it. Writer's
-      `SwFlyCntPortion` is a line portion with the frame's own width and height, which is a different
-      mechanism from the wrap and belongs with the run model rather than with the obstacles.
+      `SwFlyCntPortion` (`sw/source/core/text/porfly.cxx`) is a line portion with the frame's own width and
+      height, which is a different mechanism from the wrap: it changes what a line *measures*, not what it
+      may use.
+      Why it is not merely more of the same. A floating frame is answered entirely inside
+      `Paperless.WordProcessing`, because `ILineObstacles` is the seam and the seam already exists. An
+      as-character frame has no such seam: the run model has no way to say "this range is this many EMUs
+      wide whatever its glyphs measure". `FormattedRun` would need a fixed advance, `MeasuredParagraph`
+      would have to honour it in its prefix sums and in `HeightOf`, and the drawing would have to skip the
+      range rather than shape it — all of which is `Paperless.Text`, and none of which the obstacles
+      interface reaches. There is a second half in the readers too: a `draw:frame` currently contributes no
+      character to its paragraph's text, only an offset, so an as-character frame has no range for a fixed
+      advance to apply to. It would have to emit an anchor character the way a comment and a footnote
+      citation already do (`OdtLayoutSource.AnchorCharacter`, U+0001) and mark the frame as owning it.
 - [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
       it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and

@@ -166,19 +166,19 @@ internal sealed class FrameResolution
         List<long> signature = [];
         int frames = 0;
 
-        for (int index = 0; index < blocks.Count; index++)
+        // One paragraph's frames, given the rectangle its origins are measured in and where its own top
+        // ended up. Shared by the body's blocks and by the flows, which differ only in how those two are
+        // arrived at — the body's from a placed line, a flow's from the flow's own area.
+        void PlaceFrames(
+            PageParagraph paragraph, int pageIndex, LaidOutPage page, DocRect origin, Length anchorTop)
         {
-            if (blocks[index] is not PageParagraph paragraph || paragraph.Frames.Count == 0) continue;
-            if (!placements.TryGetValue(index, out Placement placement)) continue;
-
             PageGeometry geometry = sections[
-                Math.Clamp(placement.Page.SectionIndex, 0, sections.Count - 1)].Section.Page;
+                Math.Clamp(page.SectionIndex, 0, sections.Count - 1)].Section.Page;
 
             foreach (PageFrame frame in paragraph.Frames)
             {
                 DocRect area = FrameLayout.Place(
-                    frame, geometry, placement.Column, placement.Top,
-                    rightHandPage: placement.Page.Number % 2 == 1);
+                    frame, geometry, origin, anchorTop, rightHandPage: page.Number % 2 == 1);
 
                 frames++;
                 signature.Add(area.X.Emu);
@@ -186,9 +186,9 @@ internal sealed class FrameResolution
                 signature.Add(area.Width.Emu);
                 signature.Add(area.Height.Emu);
 
-                if (!byPage.TryGetValue(placement.Index, out List<PlacedFrame>? placed))
+                if (!byPage.TryGetValue(pageIndex, out List<PlacedFrame>? placed))
                 {
-                    byPage[placement.Index] = placed = [];
+                    byPage[pageIndex] = placed = [];
                 }
 
                 placed.Add(new PlacedFrame(frame, area, Content(frame, area)));
@@ -197,12 +197,47 @@ internal sealed class FrameResolution
                 // down, which is exactly what `SwTextFly::ForEach` skips it for.
                 if (frame.Wrap == TextWrap.Through) continue;
 
-                if (!obstaclesByPage.TryGetValue(placement.Index, out List<WrapObstacle>? list))
+                if (!obstaclesByPage.TryGetValue(pageIndex, out List<WrapObstacle>? list))
                 {
-                    obstaclesByPage[placement.Index] = list = [];
+                    obstaclesByPage[pageIndex] = list = [];
                 }
 
                 list.Add(new WrapObstacle(Widened(area, frame.Spacing), frame.Wrap));
+            }
+        }
+
+        for (int index = 0; index < blocks.Count; index++)
+        {
+            if (blocks[index] is not PageParagraph paragraph || paragraph.Frames.Count == 0) continue;
+            if (!placements.TryGetValue(index, out Placement placement)) continue;
+
+            PlaceFrames(paragraph, placement.Index, placement.Page, placement.Column, placement.Top);
+        }
+
+        // And the frames anchored in a flow rather than in the body: a table cell, a header, a footer, a
+        // footnote. Writer places all of these the same way, because an anchored object belongs to the
+        // *page* however deeply its anchor is nested — which is visible in LibreOffice's own rendering of
+        // `frame-in-flow.fodt`, where a frame anchored in the header hangs into the body area and the
+        // first two body lines wrap round it. So a flow's frames go on the page's list beside the body's
+        // and become obstacles for the body's text, exactly as a body frame does.
+        for (int index = 0; index < pages.Count; index++)
+        {
+            foreach (PlacedFlow flow in FlowsOn(pages[index]))
+            {
+                foreach (PlacedLine line in flow.Lines)
+                {
+                    if (!line.StartsParagraph) continue;
+                    if (line.ParagraphIndex < 0 || line.ParagraphIndex >= flow.Blocks.Count) continue;
+                    if (flow.Blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
+                    if (paragraph.Frames.Count == 0) continue;
+
+                    // The flow's own rectangle is what a paragraph-, column- or text-area-relative origin
+                    // resolves against inside a flow, and it is exact: LibreOffice draws the cell frame of
+                    // `frame-in-flow.fodt` at 73.70 pt, which is the table's left edge plus the cell's
+                    // 0.1 cm padding plus the frame's own 0.5 cm offset and nothing else.
+                    PlaceFrames(
+                        paragraph, index, pages[index], flow.Area, flow.Area.Y + line.Top);
+                }
             }
         }
 
@@ -255,6 +290,49 @@ internal sealed class FrameResolution
     {
         ArgumentNullException.ThrowIfNull(other);
         return _signature.SequenceEqual(other._signature);
+    }
+
+    /// <summary>
+    /// Every flow on a page whose paragraphs may anchor a frame: the furniture, the notes, and the cells
+    /// of every table, however deeply the tables nest.
+    /// </summary>
+    /// <remarks>
+    /// A flow is a flow — <see cref="PlacedFlow"/> is one type for a header, a footer, a cell and a
+    /// footnote — so there is one walk rather than four. What is deliberately <em>not</em> walked is a
+    /// placed frame's own content: a frame anchored inside another frame would need the outer one's
+    /// rectangle before the inner one could be placed, and the outer one is being placed by this loop.
+    /// No format in the corpus writes one and Writer treats it as anchored to the page.
+    /// </remarks>
+    private static IEnumerable<PlacedFlow> FlowsOn(LaidOutPage page)
+    {
+        if (page.Header is { } header) yield return header;
+        if (page.Footer is { } footer) yield return footer;
+        if (page.Notes is { } notes) yield return notes;
+
+        foreach (PlacedTable table in page.Tables)
+        {
+            foreach (PlacedFlow flow in CellFlows(table, 0)) yield return flow;
+        }
+    }
+
+    /// <summary>The flows of a table's cells, and of any table inside one of them.</summary>
+    /// <param name="table">The table.</param>
+    /// <param name="nesting">How many tables enclose it, bounded as <see cref="FlowLayouter"/> bounds it.</param>
+    private static IEnumerable<PlacedFlow> CellFlows(PlacedTable table, int nesting)
+    {
+        if (nesting >= FlowLayouter.MaxNesting) yield break;
+
+        foreach (PlacedTableCell cell in table.Cells)
+        {
+            if (cell.Content is not { } content) continue;
+
+            yield return content;
+
+            foreach (PlacedTable inner in content.Tables)
+            {
+                foreach (PlacedFlow flow in CellFlows(inner, nesting + 1)) yield return flow;
+            }
+        }
     }
 
     /// <summary>The rectangle text has to keep clear of, which is the frame's plus its wrap spacing.</summary>
