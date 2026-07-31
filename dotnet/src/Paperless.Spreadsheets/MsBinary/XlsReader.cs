@@ -88,7 +88,7 @@ public static class XlsReader
             };
 
             foreach (ContentSection sheet in sheets) content.Children.Add(sheet);
-            return new XlsDocument(format, file, content, diagnostics);
+            return new XlsDocument(format, file, content, diagnostics, reader.Layouts);
         }
         catch
         {
@@ -116,7 +116,7 @@ public static class XlsReader
 }
 
 /// <summary>A legacy binary Excel workbook that has been read.</summary>
-public sealed class XlsDocument : IDocument
+public sealed class XlsDocument : IPaginatedDocument
 {
     private readonly CompoundFile _file;
 
@@ -124,13 +124,18 @@ public sealed class XlsDocument : IDocument
         DocumentFormat format,
         CompoundFile file,
         ContentDocument content,
-        IReadOnlyList<Diagnostic> diagnostics)
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<Layout.SheetLayout> sheets)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
+        Sheets = sheets;
     }
+
+    /// <summary>The sheets' print setups and geometry, in directory order.</summary>
+    public IReadOnlyList<Layout.SheetLayout> Sheets { get; }
 
     /// <inheritdoc/>
     public DocumentFormat Format { get; }
@@ -153,6 +158,10 @@ public sealed class XlsDocument : IDocument
     /// disposed.
     /// </summary>
     public CompoundFile File => _file;
+
+    /// <inheritdoc/>
+    public IPageSequence Layout(LayoutOptions? options = null)
+        => new Layout.SpreadsheetPages(Sheets, options);
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

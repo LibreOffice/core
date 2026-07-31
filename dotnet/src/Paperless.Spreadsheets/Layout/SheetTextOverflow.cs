@@ -1,0 +1,107 @@
+using Paperless.Core.Extraction;
+using Paperless.Core.Units;
+
+namespace Paperless.Spreadsheets.Layout;
+
+/// <summary>
+/// Widens a sheet's print area to cover text that overflows its column.
+/// </summary>
+/// <remarks>
+/// <para>
+/// A string too wide for its cell spills into the empty cells to its right, and Calc prints all
+/// of it — so the printed area is wider than the area that holds cells. <c>AdjustPrintArea</c>
+/// calls <c>ScTable::ExtendPrintArea</c> for exactly this
+/// (<c>sc/source/core/data/table1.cxx:2127</c>, and the per-cell rule in
+/// <c>MaybeAddExtraColumn</c> at <c>:2217</c>), and without it a sheet of long strings comes out
+/// a page narrower than the reference.
+/// </para>
+/// <para>
+/// It is worth being clear that this is the one place pagination depends on measuring text. Row
+/// heights and column widths are stated in the file, so nothing else about where the pages fall
+/// needs a font — which is why an inexact measurement here is survivable: the extension is by
+/// <em>whole columns</em>, so being within one column's width of LibreOffice's answer gives the
+/// same page. Measured on <c>xls-features.xls</c>, whose Strings sheet holds 183-character
+/// strings in a 64-point column: the extension runs to column N either way, and the sheet takes
+/// two pages.
+/// </para>
+/// <para>
+/// Three of Calc's conditions are reproduced and matter. Only a cell holding <em>text</em>
+/// overflows — a number too wide shows <c>###</c> instead, which takes no extra room. Overflow
+/// stops at the first non-empty cell to the right, so a value in the next column truncates the
+/// string rather than being written over. And a right-aligned cell overflows to the left, which
+/// costs no columns at the right-hand end; alignment is not read yet, so every text cell is
+/// treated as left-aligned, which is Calc's default for text and therefore right for a file that
+/// states nothing.
+/// </para>
+/// </remarks>
+internal static class SheetTextOverflow
+{
+    /// <summary>
+    /// How many cells will be measured before the walk gives up.
+    /// </summary>
+    /// <remarks>
+    /// A guard against a hostile sheet rather than a tuning knob: measuring is shaping, and a
+    /// million-row sheet of distinct strings would otherwise shape a million of them to decide a
+    /// page boundary. Reaching the limit leaves the print area as wide as it had got, which
+    /// under-reports rather than mis-reports.
+    /// </remarks>
+    private const int MeasurementBudget = 20_000;
+
+    /// <summary>The cell text margin either side, which counts towards the width needed.</summary>
+    /// <remarks><c>ATTR_MARGIN</c>'s default of 20 twips, left and right.</remarks>
+    private static readonly Length CellMargins = Length.FromTwips(40);
+
+    /// <summary>The last column a sheet's contents reach, overflow included.</summary>
+    /// <param name="sheet">The sheet.</param>
+    /// <param name="used">The block of cells the sheet holds.</param>
+    public static int ExtendedLastColumn(SheetLayout sheet, SheetRange used)
+    {
+        ArgumentNullException.ThrowIfNull(sheet);
+        if (!used.IsValid) return used.LastColumn;
+
+        Dictionary<string, Length> widths = new(StringComparer.Ordinal);
+        int last = used.LastColumn;
+        int measured = 0;
+
+        foreach (ContentTableRow row in (sheet.Cells?.Children ?? []).OfType<ContentTableRow>())
+        {
+            if (row.Index < used.FirstRow || row.Index > used.LastRow) continue;
+
+            foreach (ContentTableCell cell in row.Children.OfType<ContentTableCell>())
+            {
+                if (cell.Column < used.FirstColumn || cell.Column > used.LastColumn) continue;
+                if (cell.Value is not null and not string) continue;
+                if (sheet.Grid.Columns.IsHidden(cell.Column)) continue;
+
+                string text = cell.GetText();
+                if (text.Length == 0) continue;
+
+                // Nothing overflows into an occupied cell, and checking first is what keeps a
+                // dense sheet from being measured at all — the same short-circuit Calc added in
+                // tdf#128873.
+                if (sheet.CellAt(row.Index, cell.Column + 1) is not null) continue;
+                if (measured++ >= MeasurementBudget) return last;
+
+                if (!widths.TryGetValue(text, out Length width))
+                {
+                    width = (SheetText.Shape(text, Length.FromPoints(10))?.Width ?? Length.Zero)
+                            + CellMargins;
+                    widths[text] = width;
+                }
+
+                Length missing = width - sheet.Grid.Columns.SizeAt(cell.Column);
+                int at = cell.Column;
+                while (missing > Length.Zero && at < SheetAddress.MaxColumn)
+                {
+                    if (sheet.CellAt(row.Index, at + 1) is not null) break;
+                    at++;
+                    missing -= sheet.Grid.Columns.PrintedSizeAt(at);
+                }
+
+                if (at > last) last = at;
+            }
+        }
+
+        return last;
+    }
+}
