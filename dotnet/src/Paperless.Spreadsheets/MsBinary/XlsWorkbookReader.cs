@@ -807,24 +807,28 @@ internal sealed class XlsWorkbookReader
         private readonly SortedDictionary<int, SortedDictionary<int, Cell>> _rows = [];
         private readonly List<(int FirstRow, int LastRow, int FirstColumn, int LastColumn)> _merged = [];
         private int _cellCount;
+        private int _declaredLastRow = -1;
+        private int _declaredLastColumn = -1;
         private bool _reportedLimit;
+        private bool _reportedExtent;
         private (int Row, int Column, int Xf)? _pendingString;
 
         public string SheetName => sheetName;
 
+        /// <summary>Records what DIMENSIONS says the sheet's used range is.</summary>
+        /// <remarks>
+        /// Advisory, never enforced. The record states the first <em>unused</em> row and
+        /// column, so both bounds are exclusive, and plenty of files understate them — a cell
+        /// outside the declared range is still a cell. It is kept only so that a disagreement
+        /// can be reported, because a sheet whose content runs past what it claims is usually
+        /// a file that was written by something that lost track of its own extent.
+        /// </remarks>
         public void SetDeclaredExtent(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
-            // Recorded but not enforced. The extent is advisory — plenty of files understate
-            // it — so it is used only to notice a disagreement, never to drop a cell that is
-            // really there.
             if (lastRow <= firstRow && lastColumn <= firstColumn) return;
-            DeclaredRowCount = Math.Max(0, lastRow - firstRow);
-            DeclaredColumnCount = Math.Max(0, lastColumn - firstColumn);
+            _declaredLastRow = lastRow - 1;
+            _declaredLastColumn = lastColumn - 1;
         }
-
-        public int DeclaredRowCount { get; private set; }
-
-        public int DeclaredColumnCount { get; private set; }
 
         public void SetBlank(int row, int column, int xf) => Put(row, column, new Cell(xf));
 
@@ -885,6 +889,23 @@ internal sealed class XlsWorkbookReader
 
             if (!cells.ContainsKey(column)) _cellCount++;
             cells[column] = cell;
+            if (!cell.IsEmpty) CheckExtent(row, column);
+        }
+
+        /// <summary>Notes a cell that falls outside what DIMENSIONS declared.</summary>
+        private void CheckExtent(int row, int column)
+        {
+            if (_reportedExtent || _declaredLastRow < 0) return;
+            if (row <= _declaredLastRow && column <= _declaredLastColumn) return;
+
+            _reportedExtent = true;
+            owner._diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Information, "PL2329",
+                $"Sheet \"{sheetName}\" has content at row {row + 1}, column {column + 1}, "
+                + $"outside the used range it declares (to row {_declaredLastRow + 1}, column "
+                + $"{_declaredLastColumn + 1}). The content is kept; the declaration is not "
+                + "trusted.",
+                new DiagnosticLocation(PartName: "Workbook", Context: sheetName)));
         }
 
         public ContentTable Build()
