@@ -60,7 +60,15 @@ public sealed class SheetPage : IPage
     /// <inheritdoc/>
     public void Draw(IDrawingSink sink) => _drawing.Draw(sink, HeaderContext());
 
-    /// <summary>What this page's header and footer fields stand for.</summary>
+    /// <summary>
+    /// What this page's header and footer fields stand for.
+    /// </summary>
+    /// <remarks>
+    /// <c>&amp;Z</c> gets the file's name rather than its path, because that is all a document
+    /// read from a stream ever knows: <c>DocumentSource</c> carries a name hint and not a
+    /// location. The name is nearer than nothing, and a caller with a path can say so by
+    /// building the context itself.
+    /// </remarks>
     private SheetHeaderContext HeaderContext() => new()
     {
         PageNumber = Number,
