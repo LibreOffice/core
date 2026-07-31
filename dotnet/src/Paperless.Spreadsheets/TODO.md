@@ -541,7 +541,10 @@ LibreOffice 24.2.7.2's own PDF on **all 2 281 positioned text runs across fourte
 **0.006 pt** across and **0.024 pt** down — every run, not a sample, compared operator for operator
 out of the two content streams. The new `sheet-cell-text.{fods,xlsx}` agrees on all 24 runs of its
 alignment sheet, including the glyph counts, the em sizes and the fill colours, within 0.075 pt.
-Page counts are unchanged: `SheetPaginationComparisonTests` still passes on all six workbooks.
+Page counts are unchanged: `SheetPaginationComparisonTests` still passes on all six workbooks. The
+suite is 1 808 passing, 0 failed, 0 skipped — 29 more than before, in
+`SheetTextComparisonTests` (twelve, against `soffice`) and `SheetCellTextTests` (seventeen, which
+need no LibreOffice).
 
 **Two roundings, not one, and only one of them matters.** Calc stores geometry in twips and draws
 through a device whose unit is a hundredth of a millimetre, so every length crosses a lossy
