@@ -272,6 +272,10 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     if( hasPathnamePrefix(bufferName, BUILDDIR "/")
         || hasPathnamePrefix(bufferName, SRCDIR "/") )
         return false; // ok
+    // For online's sources outside online/engine:
+    if (hasPathnamePrefix(bufferName, std::string(makePathnameAbsolute(SRCDIR "/..")) + "/")) {
+        return false; // ok
+    }
     return true;
 }
 
@@ -346,6 +350,9 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             pathWarning = "modified source in build dir : %0";
         else if( name.starts_with(SRCDIR "/") )
             ; // ok
+        else if (name.starts_with(std::string(makePathnameAbsolute(SRCDIR "/..")) + "/")) {
+            // ok; for online's sources outside online/engine
+        }
         else
         {
             pathWarning = "modified source in unknown location, not modifying : %0";
