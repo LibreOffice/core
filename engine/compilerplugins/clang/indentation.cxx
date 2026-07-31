@@ -17,6 +17,7 @@
 #include <set>
 #include <unordered_set>
 #include "config_clang.h"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /*
@@ -125,6 +126,18 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
             continue;
 
         auto stmtLoc = stmt->getBeginLoc();
+
+        // The online CONFIG_STATIC macro can expand to nothing:
+        if (!SM.isMacroArgExpansion(stmtLoc) && !SM.isMacroBodyExpansion(stmtLoc))
+        {
+            auto const prev = compat::findPreviousToken(stmtLoc, SM, compiler.getLangOpts(), false);
+            if (prev && prev->is(tok::raw_identifier) && prev->getRawIdentifier() == "CONFIG_STATIC"
+                && SM.getPresumedLineNumber(prev->getLocation())
+                       == SM.getPresumedLineNumber(stmtLoc))
+            {
+                stmtLoc = prev->getLocation();
+            }
+        }
 
         StringRef macroName;
         bool partOfMacro = false;

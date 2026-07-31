@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <optional>
 #include <utility>
 
 #include "clang/AST/ASTContext.h"
@@ -16,6 +17,7 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
+#include "clang/Lex/Lexer.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/Twine.h"
 #include "llvm/Support/FileSystem.h"
@@ -41,6 +43,33 @@ inline std::pair<clang::SourceLocation, clang::SourceLocation> getImmediateExpan
     auto const csr = SM.getImmediateExpansionRange(Loc);
     if (csr.isCharRange()) { /*TODO*/ }
     return {csr.getBegin(), csr.getEnd()};
+}
+
+inline std::optional<clang::Token> findPreviousToken(
+    clang::SourceLocation Loc, clang::SourceManager const & SM, clang::LangOptions const & LangOpts,
+    bool IncludeComments)
+{
+#if CLANG_VERSION >= 200000
+    return clang::Lexer::findPreviousToken(Loc, SM, LangOpts, IncludeComments);
+#else
+    // Copied from LLVM's clang/lib/Lex/Lexer.cpp:
+    auto const StartOfFile = SM.getLocForStartOfFile(SM.getFileID(Loc));
+    while (Loc != StartOfFile) {
+        Loc = Loc.getLocWithOffset(-1);
+        if (Loc.isInvalid()) {
+            return std::nullopt;
+        }
+        Loc = clang::Lexer::GetBeginningOfToken(Loc, SM, LangOpts);
+        clang::Token Tok;
+        if (clang::Lexer::getRawToken(Loc, Tok, SM, LangOpts)) {
+            continue;
+        }
+        if (!Tok.is(clang::tok::comment) || IncludeComments) {
+            return Tok;
+        }
+    }
+    return std::nullopt;
+#endif
 }
 
 inline bool isAtLeastAsQualifiedAs(
