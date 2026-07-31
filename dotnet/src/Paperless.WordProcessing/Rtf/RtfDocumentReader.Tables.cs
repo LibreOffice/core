@@ -333,12 +333,13 @@ public sealed partial class RtfDocumentReader
         AssignColumns(table.TableRows);
         ResolveVerticalMerges(table.TableRows);
 
-        // The layout copy, taken before the rows are cleared. The outermost level goes into the body's own
+        // The layout copy, taken before the rows are cleared. The outermost level goes into the flow's own
         // block list; a deeper one goes into whichever cell of the enclosing level is open, which is exactly
         // where a nested table belongs — a cell's content is a flow, and a flow holds blocks.
-        if (ReferenceEquals(flow, _flows[0]) && LayoutTableOf(table.TableRows) is { } laid)
+        if ((ReferenceEquals(flow, _flows[0]) || flow.NoteBlocks is not null)
+            && LayoutTableOf(table.TableRows) is { } laid)
         {
-            if (level == 1) _layoutBlocks.Add(laid);
+            if (level == 1) (flow.NoteBlocks ?? _layoutBlocks).Add(laid);
             else LevelAt(flow, level - 1).CellLayout.Add(new RtfLayoutBlock(laid));
         }
 

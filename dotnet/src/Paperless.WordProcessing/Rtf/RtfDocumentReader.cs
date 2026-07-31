@@ -114,6 +114,13 @@ public sealed partial class RtfDocumentReader
     private bool _colourStated;
     private int _footnoteNumber;
     private int _footnoteStart = 1;
+
+    /// <summary>Where the citation just appended sits, for the note group that follows it.</summary>
+    /// <remarks>
+    /// Carried on the reader rather than the flow because it crosses between them: the offset belongs to the
+    /// citing paragraph, and the group that reads it has already pushed a flow of its own.
+    /// </remarks>
+    private int _pendingNoteOffset;
     private string? _pendingAnnotationAuthor;
     private bool _reportedDepthLimit;
     private bool _reportedEncoding;
@@ -337,8 +344,8 @@ public sealed partial class RtfDocumentReader
             // ---- flows
             case "footnote":
                 // The reference mark was written just before this group, so the number it took is
-                // the one this note carries.
-                BeginFlow(state, SectionKind.Note, CurrentFootnoteCitation());
+                // the one this note carries — and the offset it left behind is where the note is anchored.
+                BeginNoteFlow(state, CurrentFootnoteCitation(), _pendingNoteOffset);
                 return;
             case "annotation":
                 BeginFlow(state, SectionKind.Comment, _pendingAnnotationAuthor);
@@ -691,10 +698,19 @@ public sealed partial class RtfDocumentReader
                     // note section already carries it as its name, so emitting it here would
                     // prefix every note's text with its own number — which is not what the other
                     // readers do and would make the same document extract differently per format.
+                    // Layout does want it, and takes it from the flow's LayoutPrefix instead.
                     return;
                 }
+
+                // Where the note is anchored: the offset the citation starts at, taken before it is
+                // appended. The {\*\footnote} group that needs it comes immediately after this word.
+                _pendingNoteOffset = CurrentFlow.LayoutLength;
                 _footnoteNumber++;
                 AppendText(state, CurrentFootnoteCitation());
+                return;
+            case "ftnalt":
+                // An endnote, which RTF writes as a footnote whose first control word says otherwise.
+                CurrentFlow.IsEndnote = true;
                 return;
             case "chatn" or "chftnsep" or "chftnsepc":
                 return;

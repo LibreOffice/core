@@ -20,6 +20,11 @@ namespace Paperless.WordProcessing.Rtf;
 /// <param name="IsItalic">True when the text is italic.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
 /// <param name="Colour">The colour the text is drawn in, or null for the automatic colour.</param>
+/// <param name="Escapement">
+/// The superscript or subscript <c>\super</c> and <c>\sub</c> ask for, unresolved. Unresolved because both
+/// halves of it — the rise and the smaller size — are fractions of the <em>face's</em> height and size, and
+/// this reader has no faces: it records what the token stream said and the layout reader loads the fonts.
+/// </param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -28,7 +33,8 @@ public readonly record struct RtfLayoutRun(
     int Weight,
     bool IsItalic,
     string? Language,
-    Colour? Colour)
+    Colour? Colour,
+    Layout.Escapement Escapement = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -47,7 +53,8 @@ public readonly record struct RtfLayoutRun(
            && Weight == other.Weight
            && IsItalic == other.IsItalic
            && string.Equals(Language, other.Language, StringComparison.Ordinal)
-           && Colour == other.Colour;
+           && Colour == other.Colour
+           && Escapement == other.Escapement;
 }
 
 /// <summary>
@@ -82,6 +89,7 @@ public readonly record struct RtfLayoutRun(
 /// the only party that can compare two <em>resolved</em> faces rather than two requested families.
 /// </param>
 /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
+/// <param name="Notes">The notes anchored in the paragraph's text, or null when it cites none.</param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -92,7 +100,25 @@ public readonly record struct RtfLayoutParagraph(
     string? Language,
     Colour? Colour = null,
     IReadOnlyList<RtfLayoutRun>? Runs = null,
-    int SectionIndex = 0);
+    int SectionIndex = 0,
+    IReadOnlyList<RtfLayoutNote>? Notes = null);
+
+/// <summary>
+/// A footnote or endnote as layout sees it: where it is cited, and the blocks of its body.
+/// </summary>
+/// <remarks>
+/// Collected while the citing paragraph is still open, because that is how RTF writes it — the
+/// <c>{\*\footnote …}</c> group sits immediately after the <c>\chftn</c> that references it, part way through
+/// the sentence rather than in a store of its own. So the note is finished before the paragraph that carries
+/// it is, and waits on the flow until the paragraph closes.
+/// </remarks>
+/// <param name="Offset">Where the citation sits in the citing paragraph's text.</param>
+/// <param name="IsEndnote">True for an endnote, which collects at the end of the document.</param>
+/// <param name="Blocks">The note's body.</param>
+public sealed record RtfLayoutNote(
+    int Offset,
+    bool IsEndnote,
+    IReadOnlyList<RtfLayoutBlock> Blocks);
 
 /// <summary>
 /// One block of an RTF flow as layout sees it: a paragraph or a table, never both.

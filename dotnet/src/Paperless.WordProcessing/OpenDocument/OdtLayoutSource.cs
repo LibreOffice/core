@@ -420,11 +420,16 @@ public sealed partial class OdtLayoutSource
 
             OpenTypeFace face = Face(style) ?? paragraphFace;
 
+            // The escapement is resolved here rather than where it was read, because its rise is a fraction
+            // of the face's height and the face is only known now.
+            Core.Units.Length size = style.Escapement.SizeOf(style.Size);
+            Core.Units.Length rise = style.Escapement.RiseOf(face, style.Size);
+
             if (face != paragraphFace
-                || style.Size != paragraph.Size
+                || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
-                || style.Rise != paragraph.Rise)
+                || rise != Core.Units.Length.Zero)
             {
                 varies = true;
             }
@@ -433,47 +438,37 @@ public sealed partial class OdtLayoutSource
                 range.Start,
                 range.Length,
                 face,
-                style.Size,
+                size,
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
-                style.Rise));
+                rise));
         }
 
         return varies ? runs : [];
     }
 
     /// <summary>
-    /// A citation's style, defaulted to superscript when the document names none.
+    /// An <em>anchor</em> citation's style, defaulted to superscript when the document names none.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// LibreOffice draws a footnote's citation in its built-in <c>Footnote Symbol</c> character style, which
-    /// it does not write into the file — a saved document names no style on <c>text:note-citation</c> at
-    /// all, and LibreOffice's own round trip of a document that <em>did</em> name one drops it. So a reader
-    /// applying only what the file states draws the citation full size and on the baseline, where it fuses
-    /// with the word before it and pushes the rest of the line along by the difference.
+    /// LibreOffice draws the number in the sentence in its built-in <c>Footnote Anchor</c> character style,
+    /// which carries an automatic superscript and which it does not write into the file — a saved document
+    /// names no style on <c>text:note-citation</c> at all, and LibreOffice's own round trip of a document
+    /// that <em>did</em> name one drops it. So a reader applying only what the file states draws the citation
+    /// full size and on the baseline, where it fuses with the word before it and pushes the rest of the line
+    /// along by the difference.
     /// </para>
     /// <para>
-    /// The two values are the automatic pair the character dialogue offers: raised a third of the font size
-    /// and set at 58% of it. Applied only when the document has said nothing, so a document that does name a
-    /// style keeps it.
+    /// The <em>note body's</em> number is deliberately not defaulted the same way, and that asymmetry is
+    /// measured rather than assumed: Writer's other built-in style, <c>Footnote Characters</c>, states nothing
+    /// at all (<c>DocumentStylePoolManager.cxx</c> falls straight through for it), and LibreOffice duly draws
+    /// the number at the head of a note full size on the note's own baseline. Only the anchor is raised.
     /// </para>
     /// </remarks>
     private static OdfTextStyle AsCitation(OdfTextStyle style)
-        => style.Rise != Core.Units.Length.Zero
-            ? style
-            : style with
-            {
-                Size = style.Size * CitationSize,
-                Rise = style.Size * CitationRise,
-            };
-
-    /// <summary>How much of the font size a citation is set at.</summary>
-    private const double CitationSize = 0.58;
-
-    /// <summary>How far a citation is raised, as a fraction of the font size.</summary>
-    private const double CitationRise = 0.33;
+        => style.Escapement.IsNone ? style with { Escapement = Escapement.Superscript } : style;
 
     /// <summary>The text style a cascade resolves to, cached because spans repeat their styles.</summary>
     private OdfTextStyle Resolve(OdfStyleReference[] cascade)

@@ -62,6 +62,12 @@ public sealed class FootnoteComparisonTests : IDisposable
     [InlineData("footnotes.docx")]
     [InlineData("footnote-pages.odt")]
     [InlineData("footnote-pages.docx")]
+    // RTF is deliberately absent, and the reason is in LibreOffice rather than here: its RTF import drops the
+    // character and paragraph formatting stated inside a `{\*\footnote …}` group and falls back to the
+    // document's defaults. A note the file sets in Carlito at 10 pt with no indent renders in Liberation Serif
+    // with a 340-twip hanging indent, which moves every word of every note line. Confirmed on a hand-written
+    // three-line RTF as well as on the corpus files, so it is not an artefact of how these were exported.
+    // Paperless reads what the file says; `RtfFootnoteTests` checks it structurally instead.
     public void EveryNoteSitsAtTheFootOfItsOwnPage(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -133,7 +139,91 @@ public sealed class FootnoteComparisonTests : IDisposable
             2, $"{fileName}: expected at least one line per footnote");
     }
 
+    [Theory]
+    [InlineData("footnotes.fodt")]
+    [InlineData("footnotes.odt")]
+    [InlineData("footnotes.docx")]
+    public void EveryCitationIsSetAndRaisedAsLibreOfficeSetsIt(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        List<PdfTextRun> reference = PdfTextRuns.Read(
+            _libreOffice.ConvertToPdf(path, _workDirectory));
+
+        Assert.SkipWhen(reference.Count == 0, "the reference PDF held no positioned text");
+
+        List<Pen> mine = Pens(
+            [.. Rendered(path)[0].Runs.Select(
+                run => (run.Origin.X.Points, run.Origin.Y.Points, run.Run.FontSize.Points))]);
+
+        List<Pen> theirs = Pens(
+            [.. reference.Where(run => run.PageIndex == 0)
+                .Select(run => (run.X - PdfPenOffsetPoints, run.Y, run.FontSize))]);
+
+        // Collapsed rather than compared run for run, because the two sides split runs differently and
+        // legitimately: once a citation is drawn at the same size and on the same baseline as the text after
+        // it, nothing distinguishes the two — but LibreOffice still writes them as separate text portions,
+        // because it knew they came from different runs of the document.
+        string drawn = string.Join(" | ", mine.Select(pen => pen.ToString()));
+        string rendered = string.Join(" | ", theirs.Select(pen => pen.ToString()));
+
+        drawn.ShouldBe(
+            rendered,
+            $"{fileName}: page 1's pens differ from LibreOffice's, as "
+            + "'<line start> <size>@<rise above the line's baseline>'");
+    }
+
     // ------------------------------------------------------------------------- the machinery
+
+    /// <summary>
+    /// One drawn portion, as the pair of numbers a word-box comparison cannot see.
+    /// </summary>
+    /// <remarks>
+    /// The size and the rise, and the rise is the point: the PDF's <c>Td</c> is the pen, so a superscript's
+    /// shift is in it directly with no font ascent in the way. A box's top carries that ascent, which is why
+    /// the other test here can only ever compare boxes to boxes of the same size.
+    /// </remarks>
+    /// <param name="LineStart">Where the line this portion belongs to begins, in points.</param>
+    /// <param name="Size">Its em size, in points.</param>
+    /// <param name="Rise">How far above its line's baseline it sits, in points.</param>
+    private readonly record struct Pen(double LineStart, double Size, double Rise)
+    {
+        public override string ToString()
+            => $"{LineStart:F1} {Size:F2}@{Rise:F2}";
+    }
+
+    /// <summary>
+    /// Turns positioned portions into pens, one per formatting change per line.
+    /// </summary>
+    /// <remarks>
+    /// Grouped into lines by the lowest baseline within <see cref="SameLine"/>, because a raised portion's
+    /// own pen is not its line's baseline and comparing the two across documents would compare two rises
+    /// against nothing. Adjacent portions that agree on both numbers collapse into one, so that a producer
+    /// splitting a uniform stretch in two does not read as a difference.
+    /// </remarks>
+    private static List<Pen> Pens(List<(double X, double Y, double Size)> portions)
+    {
+        List<Pen> pens = [];
+
+        foreach ((double x, double y, double size) in portions)
+        {
+            double baseline = portions
+                .Where(other => Math.Abs(other.Y - y) <= SameLine)
+                .Max(other => other.Y);
+
+            double start = portions
+                .Where(other => Math.Abs(other.Y - baseline) <= SameLine)
+                .Min(other => other.X);
+
+            Pen pen = new(start, Math.Round(size, 2), Math.Round(baseline - y, 2));
+            if (pens.Count > 0 && pens[^1] == pen) continue;
+
+            pens.Add(pen);
+        }
+
+        return pens;
+    }
 
     /// <summary>The first word drawn at a given size, which anchors that size's vertical comparison.</summary>
     private static int FirstOfSize(List<DrawnWord> words, double size)
@@ -186,6 +276,10 @@ public sealed class FootnoteComparisonTests : IDisposable
     }
 
     private static List<List<DrawnWord>> Drawn(string path)
+        => [.. Rendered(path).Select(DrawnWords.On)];
+
+    /// <summary>Lays a document out and records what it drew, page by page.</summary>
+    private static IReadOnlyList<DrawnPage> Rendered(string path)
     {
         RecordingDrawingSink sink = new();
 
@@ -198,6 +292,6 @@ public sealed class FootnoteComparisonTests : IDisposable
             for (int i = 0; i < pages.Count; i++) pages[i].Draw(sink);
         }
 
-        return [.. sink.Pages.Select(page => DrawnWords.On(page))];
+        return sink.Pages;
     }
 }

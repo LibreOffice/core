@@ -494,11 +494,48 @@ is read and verified, so what remains is the filling of pages rather than the me
         `2Note 5` against LibreOffice's `2 Note 5`.
       `w:vertAlign` supplies `PageRun.Rise` for the anchor's own citation, which *is* stated — the run in
       the sentence carries `superscript` properly.
-- [ ] Footnote reading for DOC and RTF. The placement is format-independent and the ODF and DOCX readers
-      show the shape; what each needs is its own note store — the WW8 footnote subdocument with its
-      `PlcffndRef`/`PlcffndTxt` pair, and RTF's `\footnote` destination — both of which the extraction
-      passes already read. `footnotes.doc`/`.rtf` and `footnote-pages.doc`/`.rtf` are in the corpus,
-      exported and waiting, and go into `FootnoteComparisonTests` when their readers land.
+- [x] Footnote reading for **RTF**, whose note is a `{\*\footnote …}` group sitting *inside* the sentence,
+      immediately after the `\chftn` that cites it. So the note is finished before the paragraph carrying it
+      is, which is the opposite of every other format: the body is collected onto the flow and the paragraph
+      claims it when it closes. Three details are RTF's own:
+      - The anchor's offset has to be taken at the `\chftn`, before the group opens — by then the reader has
+        pushed a flow of its own and the citing paragraph is no longer the current one.
+      - The note body opens with a **second** `\chftn` repeating the same number. Extraction deliberately
+        drops it (the note's section already carries the number as its name), so layout takes it from a
+        separate `LayoutPrefix` on the flow — the one place the layout text differs from the extracted text
+        by more than a character's identity.
+      - An endnote is a `\footnote` group whose *first* control word is `\ftnalt`. LibreOffice peeks seven
+        bytes ahead in the stream to see it; reading the flag when the tokeniser reaches it says the same.
+- [x] **`Escapement`**, and it is worth reading before touching a superscript. The rise is a percentage of
+      the font's **height** — ascent plus descent plus line gap — not of its em size, which for a Latin face
+      is about 22% smaller. Reading it as the em size puts a citation 0.7 pt low at eleven point, seven times
+      the tolerance a comparison runs at, and no word-box test can see it: a box top carries the font's
+      ascent, so a rise and a size change are indistinguishable from boxes alone. Measured off the PDF
+      content stream at two sizes, where it comes out exact both times — an eleven-point citation is raised
+      4.40 pt and a ten-point one 4.00 pt, which is 33% of Carlito's height truncated to whole twips. The
+      size is 58% of the em, also snapped to twips, which is why LibreOffice draws 6.4 pt and not 6.38.
+      Both halves now live in one place and each reader hands it the face, because the face is what the
+      percentage is of. Two bugs fell out of writing it down: ODF's `style:text-position="super 58%"` and
+      DOCX's `w:vertAlign` were shrinking nothing at all, so both drew their anchors full size.
+- [x] The **asymmetry between the two citations**, which is measured rather than assumed. Writer has two
+      built-in character styles and they do not agree: `Footnote Anchor` carries an automatic superscript and
+      `Footnote Characters` carries *nothing* — `DocumentStylePoolManager.cxx` falls straight through for the
+      latter. So the number in the sentence is raised and shrunk, and the number at the head of the note is
+      full size on the note's own baseline. LibreOffice renders ODF exactly that way. A DOCX gets a raised one
+      anyway, because its file names `FootnoteCharacters` on the run and LibreOffice's import gives that style
+      the shift; an RTF gets one because the note-body `\chftn` inherits the `\super` still in force from the
+      anchor's group. So all three are right for three different reasons.
+- [ ] Footnote reading for **DOC**. The placement is format-independent and three readers now show the shape;
+      what WW8 needs is its own note store — the footnote subdocument indexed by the
+      `PlcffndRef`/`PlcffndTxt` pair, which the extraction pass already reads. `footnotes.doc` and
+      `footnote-pages.doc` are in the corpus, exported and waiting.
+- [ ] RTF and DOC footnotes cannot be compared against LibreOffice's *rendering*, and the reason is upstream
+      rather than here: LibreOffice's RTF import drops the character and paragraph formatting stated inside a
+      `{\*\footnote …}` group and falls back to the document's defaults — a note the file sets in Carlito at
+      10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent. Reproduced on a
+      hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
+      file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
+      records the measurement.
 - [ ] Note numbering beyond decimal-from-one. `text:notes-configuration` and its counterparts state a format
       and a start value, and can restart per page or per section; the counter here is document-wide decimal.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —

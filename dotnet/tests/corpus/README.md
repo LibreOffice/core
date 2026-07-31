@@ -136,3 +136,31 @@ Two things about writing these by hand, both learned the hard way:
 - LibreOffice's own RTF export writes a cell's left padding as `\clpadt`, not `\clpadl`. That is not a bug
   in the export: top and left are swapped in RTF, deliberately, because that is what Word does. An
   exported corpus file will therefore look wrong to anyone reading the specification.
+
+### Footnote documents
+
+`footnotes.*` and `footnote-pages.*` separate two different things. `footnotes` proves the *placement*: two
+notes, cited from two paragraphs, sitting at the foot of page one. `footnote-pages` proves the
+*reservation*, which is the half that changes pagination — its notes are long and sit near a page end, so
+page one holds twelve paragraphs where without them it would hold thirteen. A reader that placed the notes
+and forgot to charge the body for them passes the first and fails the second on every word of page two.
+
+Both state their citations as **2 and 5** deliberately. LibreOffice renumbers, counting in document order
+and ignoring what the file says, so a reader taking the file at its word draws "2" where LibreOffice draws
+"1". A corpus document whose citations were already 1 and 2 could not tell the two readers apart.
+
+Two things about comparing these:
+
+- **The RTF pair cannot be compared against LibreOffice's rendering, and the reason is upstream.**
+  LibreOffice's RTF import drops the character and paragraph formatting stated inside a
+  `{\*\footnote …}` group and falls back to the document's defaults: a note the file sets in Carlito at
+  10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent, which moves every word
+  of every note line. Reproduced on a hand-written three-line RTF as well as on the exported corpus files,
+  so it is not an artefact of how these were made. Paperless reads what the file says, so
+  `FootnoteComparisonTests` skips RTF and `FootnoteReadingTests` checks the notes structurally instead.
+- **The citation's size and rise need a content-stream comparison, not a word-box one.** A raised run's
+  box top sits above its baseline by the font's ascent, so `pdftotext -bbox` cannot separate a rise from a
+  size change — and a full-size citation on the baseline fuses with the note's first word into a single
+  box that lands in the right place for the wrong reasons. `PdfTextRuns` reads the pens and the sizes out
+  of the content stream, which is what caught the escapement being 33% of the font's *height* rather than
+  of its em size.

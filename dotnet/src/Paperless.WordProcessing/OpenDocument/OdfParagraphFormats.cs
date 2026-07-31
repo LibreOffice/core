@@ -21,10 +21,11 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// <param name="IsItalic">True when the text is italic or oblique.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
 /// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
-/// <param name="Rise">
-/// How far the text is raised above the baseline; negative lowers it. From
-/// <c>style:text-position</c>, which states it as a percentage of the font size — so a superscript is a
-/// rise <em>and</em> a smaller size, and the two are stated in the same attribute but are independent.
+/// <param name="Escapement">
+/// The superscript or subscript <c>style:text-position</c> asks for, unresolved. Kept as the pair of
+/// percentages rather than as a length and a size because the rise is a fraction of the font's
+/// <em>height</em>, which is not known until the face has been loaded — see
+/// <see cref="Layout.Escapement"/>.
 /// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
@@ -33,7 +34,7 @@ public readonly record struct OdfTextStyle(
     bool IsItalic,
     string? Language,
     Colour? Colour = null,
-    Length Rise = default)
+    Layout.Escapement Escapement = default)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -151,55 +152,51 @@ internal static class OdfParagraphFormats
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "language").Value,
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
             Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
-            RiseIn(styles, cascade));
+            EscapementIn(styles, cascade));
     }
 
     /// <summary>
-    /// The baseline shift the cascade asks for, as a length.
+    /// The superscript or subscript the cascade asks for.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <c>style:text-position</c> carries one or two values: a vertical position and, optionally, a font
-    /// size percentage. The position is a percentage of the font size, or one of the keywords <c>super</c>
-    /// and <c>sub</c> — which LibreOffice takes as ±33%, the automatic values its dialogue offers. A
-    /// percentage is positive upwards, so <c>sub</c> is the negative case rather than a separate one.
+    /// <c>style:text-position</c> carries one or two values: a vertical position and, optionally, the size
+    /// the text is set at as a percentage. The position is either a percentage — positive upwards, so a
+    /// subscript is the negative case rather than a separate one — or one of the keywords <c>super</c> and
+    /// <c>sub</c>, which mean the automatic pair LibreOffice's own character dialogue offers.
     /// </para>
     /// <para>
-    /// The size half is deliberately not read here: it belongs to <c>SizeIn</c>, which already walks the
-    /// cascade multiplying percentages, and reading it in two places would apply it twice to a span whose
-    /// style states both.
+    /// Both halves are read here, and the size half matters: a span stating <c>super 58%</c> is set at 58%
+    /// of the size it would otherwise take, and a reader that took only the position draws the text full
+    /// size — 11 pt where LibreOffice draws 6.4. It is not folded into <c>SizeIn</c> because that walks the
+    /// cascade multiplying <c>fo:font-size</c> percentages, and this is a different percentage of a
+    /// different thing.
     /// </para>
     /// </remarks>
-    private static Length RiseIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    private static Layout.Escapement EscapementIn(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
     {
         string? stated = Cascaded(styles, cascade, OdfNamespaces.Style, "text-position").Value;
-        if (string.IsNullOrWhiteSpace(stated)) return Length.Zero;
+        if (string.IsNullOrWhiteSpace(stated)) return Layout.Escapement.None;
 
-        string position = stated.Split(' ', StringSplitOptions.RemoveEmptyEntries) is [string first, ..]
-            ? first
-            : stated;
+        string[] parts = stated.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0) return Layout.Escapement.None;
 
-        Length size = SizeIn(styles, cascade);
+        // An omitted size means the automatic one, which is what the keywords carry with them.
+        // `ParsePercentage` returns a fraction, so both readings scale back to whole percent.
+        int proportion = parts.Length > 1 && OdfValue.ParsePercentage(parts[1]) is { } fraction
+            ? (int)Math.Round(fraction * 100)
+            : Layout.Escapement.AutomaticProportion;
 
-        return position switch
+        return parts[0] switch
         {
-            "super" => size * AutomaticRise / 100.0,
-            "sub" => size * -AutomaticRise / 100.0,
-            _ => OdfValue.ParsePercentage(position) is { } percent
-                ? OdfWriterUnits.ToCore(size * percent / 100.0)
-                : Length.Zero,
+            "super" => new Layout.Escapement(Layout.Escapement.AutomaticPercent, proportion),
+            "sub" => new Layout.Escapement(-Layout.Escapement.AutomaticPercent, proportion),
+            _ => OdfValue.ParsePercentage(parts[0]) is { } percent
+                ? new Layout.Escapement((int)Math.Round(percent * 100), proportion)
+                : Layout.Escapement.None,
         };
     }
-
-    /// <summary>
-    /// The rise <c>super</c> and <c>sub</c> mean, as a percentage of the font size.
-    /// </summary>
-    /// <remarks>
-    /// A third, which is what LibreOffice's own character dialogue offers as its automatic value and what
-    /// its ODF import uses for the two keywords. The keywords are the common case by a wide margin, because
-    /// that dialogue is how a superscript is usually applied.
-    /// </remarks>
-    private const double AutomaticRise = 33;
 
     /// <summary>
     /// The family the cascade asks for, deciding the level before the spelling.

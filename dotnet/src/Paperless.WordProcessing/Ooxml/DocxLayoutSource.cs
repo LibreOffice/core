@@ -347,11 +347,16 @@ public sealed partial class DocxLayoutSource
 
             OpenTypeFace face = Face(style) ?? paragraphFace;
 
+            // The escapement is resolved here rather than where it was read, because its rise is a fraction
+            // of the face's height and the face is only known now.
+            Length size = style.Escapement.SizeOf(style.Size);
+            Length rise = style.Escapement.RiseOf(face, style.Size);
+
             if (face != paragraphFace
-                || style.Size != paragraph.Size
+                || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
-                || style.Rise != paragraph.Rise)
+                || rise != Length.Zero)
             {
                 varies = true;
             }
@@ -360,11 +365,11 @@ public sealed partial class DocxLayoutSource
                 range.Start,
                 range.Length,
                 face,
-                style.Size,
+                size,
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
-                style.Rise));
+                rise));
         }
 
         return varies ? runs : [];
@@ -584,19 +589,9 @@ public sealed partial class DocxLayoutSource
     /// so a run that does state a shift keeps it.
     /// </remarks>
     private static WordTextStyle AsCitation(WordTextStyle style)
-        => style.Rise != Length.Zero
-            ? style
-            : style with
-            {
-                Size = style.Size * CitationSize,
-                Rise = style.Size * CitationRise,
-            };
-
-    /// <summary>How much of the font size a citation is set at.</summary>
-    private const double CitationSize = 0.58;
-
-    /// <summary>How far a citation is raised, as a fraction of the font size.</summary>
-    private const double CitationRise = 0.33;
+        => style.Escapement.IsNone
+            ? style with { Escapement = Layout.Escapement.Superscript }
+            : style;
 
     /// <summary>
     /// The document's default tab interval.

@@ -13,10 +13,10 @@ namespace Paperless.WordProcessing.Ooxml;
 /// <param name="IsItalic">True when the text is italic.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
 /// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
-/// <param name="Rise">
-/// How far the run is raised above the baseline; negative lowers it. From <c>w:vertAlign</c>, whose two
-/// values are relative rather than absolute — so the length is worked out from the font size here rather
-/// than being read from the file.
+/// <param name="Escapement">
+/// The superscript or subscript <c>w:vertAlign</c> asks for, unresolved. Kept as the pair of percentages
+/// rather than as a length and a size because the rise is a fraction of the face's <em>height</em>, which is
+/// not known until the face has been loaded — see <see cref="Layout.Escapement"/>.
 /// </param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
@@ -25,7 +25,7 @@ public readonly record struct WordTextStyle(
     bool IsItalic,
     string? Language,
     Colour? Colour = null,
-    Length Rise = default)
+    Layout.Escapement Escapement = default)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -173,28 +173,25 @@ internal static class WordParagraphFormats
             italic.IsOn,
             Word.Attribute(language.Element, "val"),
             TextColour(colour.Element),
-            Rise(vertical.Element, resolvedSize));
+            EscapementOf(vertical.Element));
     }
 
     /// <summary>
-    /// The baseline shift a <c>w:vertAlign</c> asks for.
+    /// The superscript or subscript a <c>w:vertAlign</c> asks for.
     /// </summary>
     /// <remarks>
-    /// Two values and no number: <c>superscript</c> and <c>subscript</c>, which Word raises and lowers by a
-    /// third of the font size — the same automatic pair ODF's <c>super</c> and <c>sub</c> keywords mean, and
-    /// what LibreOffice imports both as. <c>baseline</c> is the third value and means no shift, which is also
-    /// what an absent element means.
+    /// Two values and no numbers: <c>superscript</c> and <c>subscript</c>, which carry both halves of the
+    /// automatic pair with them — the shift <em>and</em> the smaller size — exactly as ODF's <c>super</c> and
+    /// <c>sub</c> keywords do, and which LibreOffice imports as the same item. <c>baseline</c> is the third
+    /// value and means neither, which is also what an absent element means.
     /// </remarks>
-    private static Length Rise(XElement? vertAlign, Length size) =>
+    private static Layout.Escapement EscapementOf(XElement? vertAlign) =>
         Word.Attribute(vertAlign, "val") switch
         {
-            "superscript" => size * AutomaticRise,
-            "subscript" => size * -AutomaticRise,
-            _ => Length.Zero,
+            "superscript" => Layout.Escapement.Superscript,
+            "subscript" => Layout.Escapement.Subscript,
+            _ => Layout.Escapement.None,
         };
-
-    /// <summary>How far <c>superscript</c> raises text, as a fraction of the font size.</summary>
-    private const double AutomaticRise = 0.33;
 
     /// <summary>
     /// A run's colour, or null when it has none of its own.

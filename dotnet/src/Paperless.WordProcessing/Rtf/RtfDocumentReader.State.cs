@@ -335,6 +335,44 @@ public sealed partial class RtfDocumentReader
         /// level the cells before it were at.
         /// </remarks>
         public int DefinitionLevel { get; set; }
+
+        /// <summary>
+        /// The notes cited by the paragraph being read, waiting for it to close.
+        /// </summary>
+        /// <remarks>
+        /// They arrive before the paragraph does: RTF puts the note's whole body immediately after the
+        /// <c>\chftn</c> that cites it, so a note is finished part way through the sentence that carries it.
+        /// Cleared with the rest of the paragraph state, so a note is never attached to the paragraph after
+        /// the one that cited it.
+        /// </remarks>
+        public List<RtfLayoutNote> PendingNotes { get; } = [];
+
+        /// <summary>
+        /// Text to put in front of the next layout paragraph, which is a note's own citation.
+        /// </summary>
+        /// <remarks>
+        /// Layout-only, and the one place the layout text differs from the extracted text by more than a
+        /// character's identity. LibreOffice draws a note's number at the head of its first line, and RTF does
+        /// mark the position — the note body opens with a second <c>\chftn</c> — but extraction deliberately
+        /// drops it, because the note's section already carries the number as its name and emitting it would
+        /// prefix every extracted note with its own number. So layout takes it here instead.
+        /// </remarks>
+        public string? LayoutPrefix { get; set; }
+
+        /// <summary>The blocks of this flow, when it is a note's; null for every other flow.</summary>
+        public Staged? NoteBlocks { get; init; }
+
+        /// <summary>Where this note's citation sits in the paragraph that cites it.</summary>
+        public int NoteOffset { get; init; }
+
+        /// <summary>True when this flow is an endnote's rather than a footnote's.</summary>
+        /// <remarks>
+        /// Settable rather than fixed at construction because RTF says so a token late: an endnote is a
+        /// <c>\footnote</c> group whose <em>first</em> control word is <c>\ftnalt</c>, which the tokeniser
+        /// reaches only after the group has been opened. LibreOffice's own importer peeks seven bytes ahead
+        /// in the stream to avoid this; reading the flag when it arrives says the same thing.
+        /// </remarks>
+        public bool IsEndnote { get; set; }
     }
 
     /// <summary>One table under construction, at one nesting level.</summary>
@@ -799,7 +837,8 @@ public sealed partial class RtfDocumentReader
             state.LanguageId is > 0 and <= ushort.MaxValue
                 ? WindowsLanguages.TagOf((ushort)state.LanguageId)
                 : null,
-            ColourAt(state.ForegroundColourIndex));
+            ColourAt(state.ForegroundColourIndex),
+            EscapementOf(state));
 
         flow.LayoutLength += length;
 
@@ -822,9 +861,10 @@ public sealed partial class RtfDocumentReader
     /// <para>
     /// The body's paragraphs and the furniture's, kept in separate lists because they are laid out into
     /// separate frames: the body's index has to mean the same thing to the paginator as it does here, so a
-    /// header's paragraph cannot share the numbering. A footnote's or a shape's does not reach layout at
-    /// all yet, and neither does anything inside a table — a table is laid out as a grid rather than as a
-    /// run of paragraphs.
+    /// header's paragraph cannot share the numbering. A note's goes into the note's own block list, which the
+    /// paragraph that cites it collects when it closes; a shape's does not reach layout at all yet. Anything
+    /// inside a table goes to the cell being built, because a table is laid out as a grid rather than as a run
+    /// of paragraphs.
     /// </para>
     /// <para>
     /// Recorded as each paragraph closes rather than by a second pass, because RTF is a token stream with
@@ -837,21 +877,42 @@ public sealed partial class RtfDocumentReader
 
         List<RtfLayoutBlock>? cell = null;
 
+        bool isLayoutFlow = ReferenceEquals(flow, _flows[0]) || flow.NoteBlocks is not null;
+
         if (flow.InTable)
         {
             // A cell's paragraphs, staged on its own table level until the cell mark collects them. Any
             // level, not just the outermost: an inner table's cells are a flow, and a flow holds blocks.
             int level = LevelOf(flow);
-            cell = ReferenceEquals(flow, _flows[0]) ? LevelAt(flow, level).CellLayout : null;
+            cell = isLayoutFlow ? LevelAt(flow, level).CellLayout : null;
             into = null;
         }
         else
         {
-            into = ReferenceEquals(flow, _flows[0]) ? _layoutBlocks.Paragraphs : FurnitureList(flow);
+            into = flow.NoteBlocks?.Paragraphs
+                ?? (isLayoutFlow ? _layoutBlocks.Paragraphs : FurnitureList(flow));
         }
 
         if (cell is null && into is null) return;
         if ((cell?.Count ?? into!.Count) >= MaxLayoutParagraphs) return;
+
+        // A note's own citation, which layout draws at the head of the note's first line and extraction
+        // deliberately leaves out. Prefixing it here rather than in the text builder is what keeps the two
+        // apart; the runs already recorded shift along by its length.
+        List<RtfLayoutRun> runs = [.. flow.LayoutRuns];
+
+        if (flow.LayoutPrefix is { Length: > 0 } prefix)
+        {
+            flow.LayoutPrefix = null;
+
+            for (int i = 0; i < runs.Count; i++)
+            {
+                runs[i] = runs[i] with { Start = runs[i].Start + prefix.Length };
+            }
+
+            runs.Insert(0, CitationRun(state, 0, prefix.Length));
+            text = prefix + text;
+        }
 
         RtfLayoutParagraph recorded = new(
             text,
@@ -882,12 +943,53 @@ public sealed partial class RtfDocumentReader
             state.Italic,
             state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
             ColourAt(state.ForegroundColourIndex),
-            [.. flow.LayoutRuns],
-            _sectionIndex);
+            runs,
+            _sectionIndex,
+            flow.PendingNotes.Count == 0 ? null : [.. flow.PendingNotes]);
 
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);
     }
+
+    /// <summary>
+    /// The run a note's own citation is drawn in: superscript, at the size that goes with it.
+    /// </summary>
+    /// <remarks>
+    /// Defaulted rather than read, because RTF does not state it. LibreOffice writes the number inside the
+    /// note body as a bare second <c>\chftn</c> with no <c>\super</c> around it — unlike the reference in the
+    /// sentence, which it does wrap — and leaves the superscript to its built-in <c>Footnote Symbol</c>
+    /// character style, which no RTF document defines. A reader taking the file at its word draws the number
+    /// full size on the baseline, where it fuses with the note's first word.
+    /// </remarks>
+    private RtfLayoutRun CitationRun(GroupState state, int start, int length)
+        => new(
+            start,
+            length,
+            _fontFamilies.GetValueOrDefault(state.FontIndex),
+            SizeOf(state),
+            state.Bold ? 700 : 400,
+            state.Italic,
+            state.LanguageId is > 0 and <= ushort.MaxValue
+                ? WindowsLanguages.TagOf((ushort)state.LanguageId)
+                : null,
+            ColourAt(state.ForegroundColourIndex),
+            Layout.Escapement.Superscript);
+
+    /// <summary>The escapement <c>\super</c> or <c>\sub</c> put in force, if either did.</summary>
+    /// <remarks>
+    /// Both words carry the automatic pair with them: they shrink the text as well as moving it, and neither
+    /// number is in the file. LibreOffice's RTF importer turns them straight into <c>w:vertAlign</c>'s two
+    /// values, so the answer is the same one the DOCX reader reaches. <c>\up</c> and <c>\dn</c> state a
+    /// half-point offset instead and are not read yet; a document using one gets no shift rather than a
+    /// wrong one.
+    /// </remarks>
+    private static Layout.Escapement EscapementOf(GroupState state)
+        => state.VerticalPosition switch
+        {
+            > 0 => Layout.Escapement.Superscript,
+            < 0 => Layout.Escapement.Subscript,
+            _ => Layout.Escapement.None,
+        };
 
     /// <summary>
     /// The body's blocks in document order, with the staging list the paragraph recorder appends to.
@@ -991,6 +1093,7 @@ public sealed partial class RtfDocumentReader
     {
         flow.LayoutRuns.Clear();
         flow.LayoutLength = 0;
+        flow.PendingNotes.Clear();
         flow.PendingRuns.Clear();
         flow.PendingImages.Clear();
         flow.ListMarker.Clear();
@@ -1016,6 +1119,36 @@ public sealed partial class RtfDocumentReader
         })
         {
             Depth = _groupDepth,
+        });
+    }
+
+    /// <summary>
+    /// Starts a note's flow, which is a flow that also collects blocks for layout.
+    /// </summary>
+    /// <remarks>
+    /// Its own entry point because a note is the one flow whose position in the citing paragraph matters:
+    /// the offset has to be taken now, while that paragraph is still open, and it is the offset of the
+    /// <c>\chftn</c> just read rather than of anything in this group. The citation is staged as the note's
+    /// layout prefix at the same time, so that it lands on the note's first paragraph whichever paragraph
+    /// that turns out to be.
+    /// </remarks>
+    /// <param name="state">The group state, whose destination becomes the note's body.</param>
+    /// <param name="citation">The number the note is cited by.</param>
+    /// <param name="offset">Where that citation sits in the citing paragraph's text.</param>
+    private void BeginNoteFlow(GroupState state, string citation, int offset)
+    {
+        state.Destination = RtfDestination.Body;
+        _flows.Add(new Flow(new ContentSection
+        {
+            Kind = SectionKind.Note,
+            Index = _hoisted.Count,
+            Name = citation,
+        })
+        {
+            Depth = _groupDepth,
+            NoteBlocks = new Staged(),
+            NoteOffset = offset,
+            LayoutPrefix = citation,
         });
     }
 
@@ -1063,6 +1196,18 @@ public sealed partial class RtfDocumentReader
             _flows.RemoveAt(_flows.Count - 1);
 
             if (finished.Target.Children.Count > 0) _hoisted.Add(finished.Target);
+
+            // A note hands its body to the paragraph that cited it, which is still open: the citing
+            // paragraph's own \par has not been read yet, since the note group sits inside the sentence.
+            if (finished.NoteBlocks is { } body)
+            {
+                List<RtfLayoutBlock> blocks = body.Finished();
+                if (blocks.Count > 0)
+                {
+                    CurrentFlow.PendingNotes.Add(
+                        new RtfLayoutNote(finished.NoteOffset, finished.IsEndnote, blocks));
+                }
+            }
         }
     }
 
