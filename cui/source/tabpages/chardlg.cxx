@@ -2336,7 +2336,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the effect style will be allowed if a style is
         //! selected in the listbox.
-        bool bAllowChg = nPos != -1 &&
+        bool bAllowChg = nCapsPos != -1 &&
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCaseMapItem& rItem = *static_cast<const SvxCaseMapItem*>(pOld);
