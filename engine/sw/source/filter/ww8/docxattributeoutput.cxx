@@ -9205,15 +9205,18 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
 }
 
 static void WriteFootnoteSeparatorHeight(
-    ::sax_fastparser::FSHelperPtr const& pSerializer, SwTwips const nHeight)
+    ::sax_fastparser::FSHelperPtr const& pSerializer, gfx::Length const nHeight)
 {
     // try to get the height by setting font size of the paragraph
-    if (nHeight != 0)
+    if (nHeight != 0_emu)
     {
+        // The font size is in half-points, taken from the exact height so it
+        // is rounded only once.
+        const sal_Int32 nHalfPoints(std::round(nHeight.as_pt() * 2.0));
         pSerializer->startElementNS(XML_w, XML_pPr);
         pSerializer->startElementNS(XML_w, XML_rPr);
         pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val),
-            OString::number((nHeight + 5) / 10));
+            OString::number(nHalfPoints));
         pSerializer->endElementNS(XML_w, XML_rPr);
         pSerializer->endElementNS(XML_w, XML_pPr);
     }
@@ -9238,7 +9241,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     m_pSerializer->startElementNS(XML_w, XML_p);
 
     bool bSeparator = true;
-    SwTwips nHeight(0);
+    gfx::Length nHeight = 0_emu;
     if (bFootnotes)
     {
         const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_rDoc.GetPageDesc(0).GetFootnoteInfo();
@@ -9253,7 +9256,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
         {
             // Don't request separator if this is a Word-style separator, which is handled at a
             // layout level.
-            nHeight = 0;
+            nHeight = 0_emu;
         }
     }
 

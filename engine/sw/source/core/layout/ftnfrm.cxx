@@ -254,7 +254,7 @@ static tools::Long lcl_Undersize( const SwFrame* pFrame )
 
 namespace sw {
 
-SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const& rInf)
+gfx::Length FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const& rInf)
 {
     const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
     if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
@@ -263,13 +263,12 @@ SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const& rInf)
         SwTwips nHeight{};
         if (FootnoteSeparatorHeightFromParagraph(rDoc, nHeight))
         {
-            return nHeight;
+            return gfx::Length::twip(nHeight);
         }
     }
 
     // Writer style: calculate from the page style.
-    return rInf.GetTopDist().as_twip<SwTwips>() + rInf.GetBottomDist().as_twip<SwTwips>()
-           + rInf.GetLineWidth();
+    return rInf.GetTopDist() + rInf.GetBottomDist() + gfx::Length::twip(rInf.GetLineWidth());
 }
 
 } // namespace sw
@@ -281,7 +280,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     const SwPageFrame* pPage = FindPageFrame();
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
     SwDoc* pDoc = getRootFrame()->GetCurrShell()->GetDoc();
-    const SwTwips nBorder = sw::FootnoteSeparatorHeight(*pDoc, rInf);
+    const SwTwips nBorder = sw::FootnoteSeparatorHeight(*pDoc, rInf).as_twip<SwTwips>();
     SwRectFnSet aRectFnSet(*this);
 
     if ( !isFramePrintAreaValid() )
