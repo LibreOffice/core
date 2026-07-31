@@ -4481,6 +4481,7 @@ int COOLWSD::cleanup(int returnValue)
 
         Util::forcedExit(returnValue);
 
+#if 0
         TraceDumper.reset();
 
         ThreadChecks::Inhibit = true;
@@ -4508,6 +4509,7 @@ int COOLWSD::cleanup(int returnValue)
             ssl::Manager::uninitializeClientContext();
             ssl::Manager::uninitializeServerContext();
         }
+#endif
 #endif
 #endif
     }
