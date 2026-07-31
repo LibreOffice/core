@@ -266,7 +266,9 @@ public class ItemisationTests
 
         // Reported, not silent: a fallback face is chosen for its coverage rather than its metrics,
         // so the run it lands in measures differently and every line after it can break elsewhere.
-        reported.Count.ShouldBe(2);
+        // Once per stretch rather than once per character, so a paragraph in a script the face does
+        // not cover leaves one entry and not a thousand.
+        reported.Count.ShouldBe(1);
         reported[0].CodePoint.ShouldBe('ש');
         reported[0].ToFamily.ShouldBe(fallback!.FamilyName);
         reported[0].IsResolved.ShouldBeTrue();

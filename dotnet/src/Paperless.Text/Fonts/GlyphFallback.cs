@@ -7,8 +7,8 @@ namespace Paperless.Text.Fonts;
 /// <para>
 /// Separate from <see cref="IFontResolver"/> because it answers a different question. A resolver
 /// answers "what did the author mean by <em>Calibri</em>"; this answers "the face I have has no
-/// glyph for this character, what does". The first is asked once per run, the second once per
-/// character the run cannot show, and a document that needs neither should pay for neither.
+/// glyph for this character, what does". The first is asked once per run, the second only for the
+/// characters a run cannot show, and a document that needs neither should pay for neither.
 /// </para>
 /// <para>
 /// LibreOffice asks the platform first — fontconfig's <c>FcFontMatch</c> with the missing characters
@@ -30,14 +30,16 @@ public interface IGlyphFallbackResolver
     OpenTypeFace? FallbackFor(int codePoint, int weight = 400, bool isItalic = false);
 }
 
-/// <summary>One mid-run fallback: a character the run's own face could not show.</summary>
+/// <summary>One mid-run fallback: a stretch the run's own face could not show.</summary>
 /// <remarks>
 /// Reported rather than applied silently, for the same reason a family substitution is. A fallback
 /// face is almost never metric-compatible with the one it replaces, so the run it lands in measures
 /// differently and every line after it can break somewhere else — and a caller comparing against a
-/// reference renderer otherwise has no way to tell that from a layout bug.
+/// reference renderer otherwise has no way to tell that from a layout bug. One entry per contiguous
+/// stretch rather than per character, so a paragraph in a script the face does not cover leaves one
+/// line in the list and not a thousand.
 /// </remarks>
-/// <param name="CodePoint">The character that was missing.</param>
+/// <param name="CodePoint">The first character of the stretch that was missing.</param>
 /// <param name="FromFamily">The family the run was set in.</param>
 /// <param name="ToFamily">The family that drew it, or null when nothing could.</param>
 public readonly record struct GlyphFallback(int CodePoint, string? FromFamily, string? ToFamily)

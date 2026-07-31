@@ -49,7 +49,7 @@ public static class FontItemiser
     /// <param name="length">How many characters it covers.</param>
     /// <param name="primary">The face the run asked for.</param>
     /// <param name="fallback">Where to look when the primary face has no glyph, or null to not look.</param>
-    /// <param name="report">Called once per character that needed a fallback, resolved or not.</param>
+    /// <param name="report">Called once per contiguous stretch that needed a fallback, resolved or not.</param>
     public static List<FaceRun> Split(
         ReadOnlySpan<char> text,
         int start,
@@ -74,6 +74,8 @@ public static class FontItemiser
         OpenTypeFace runFace = primary;
         bool runIsFallback = false;
         bool started = false;
+        bool wasMissing = false;
+        OpenTypeFace? lastMissingFace = null;
 
         for (int at = start; at < end;)
         {
@@ -87,6 +89,7 @@ public static class FontItemiser
 
             OpenTypeFace face = primary;
             bool isFallback = false;
+            bool missing = false;
 
             if (!primary.HasGlyphFor(codePoint))
             {
@@ -105,16 +108,28 @@ public static class FontItemiser
                 {
                     face = found;
                     isFallback = true;
-                    report?.Invoke(new GlyphFallback(codePoint, primary.FamilyName, found.FamilyName));
+                    missing = true;
                 }
                 else
                 {
                     // Nothing installed has it. The primary face draws its missing-glyph box, which
                     // is what LibreOffice does too once its fallback chain is exhausted — but the
                     // caller is told, because a box on a page is worth explaining.
-                    report?.Invoke(new GlyphFallback(codePoint, primary.FamilyName, null));
+                    missing = true;
                 }
             }
+
+            // Reported once per stretch rather than once per character, so a paragraph in a script
+            // the face does not cover leaves one entry and not a thousand. The character named is the
+            // first of the stretch, which is what a caller needs to find it in the text.
+            if (missing && (!wasMissing || !ReferenceEquals(face, lastMissingFace)))
+            {
+                report?.Invoke(new GlyphFallback(
+                    codePoint, primary.FamilyName, isFallback ? face.FamilyName : null));
+            }
+
+            wasMissing = missing;
+            lastMissingFace = missing && isFallback ? face : null;
 
             if (!started)
             {

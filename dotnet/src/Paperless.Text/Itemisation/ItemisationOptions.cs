@@ -45,6 +45,6 @@ public sealed record ItemisationOptions
     /// </remarks>
     public IGlyphFallbackResolver? GlyphFallback { get; init; }
 
-    /// <summary>Called once per character that needed a fallback face, resolved or not.</summary>
+    /// <summary>Called once per contiguous stretch that needed a fallback face, resolved or not.</summary>
     public Action<GlyphFallback>? OnGlyphFallback { get; init; }
 }

@@ -278,7 +278,6 @@ public sealed class BidiParagraph
     /// </remarks>
     private static byte? FlatLevel(BidiClass[] initial, byte paragraphLevel)
     {
-        bool anyLeft = false;
         bool anyRight = false;
         bool anyArabicNumber = false;
         bool anyPossibleNeutral = false;
@@ -289,16 +288,9 @@ public sealed class BidiParagraph
             {
                 case BidiClass.AN:
                     anyArabicNumber = true;
-                    anyLeft = true;
-                    break;
-                case BidiClass.L:
-                case BidiClass.EN:
-                case BidiClass.LRI:
-                    anyLeft = true;
                     break;
                 case BidiClass.LRE:
                 case BidiClass.LRO:
-                    anyLeft = true;
                     anyPossibleNeutral = true;
                     break;
                 case BidiClass.R:
@@ -324,8 +316,6 @@ public sealed class BidiParagraph
                     break;
             }
         }
-
-        _ = anyLeft;
 
         return (paragraphLevel & 1) == 0
                && !anyRight

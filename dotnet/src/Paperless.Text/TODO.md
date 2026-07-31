@@ -39,9 +39,11 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
       draws a missing character decides its advance width and therefore where the line holding it
       breaks. Anything installed that covers the character is tried after that list, ordered by name
       so two runs of the same document agree. **Every fallback is reported** on
-      `SystemFontResolver.GlyphFallbacks`, including the characters nothing could draw: a fallback
+      `SystemFontResolver.GlyphFallbacks`, including the stretches nothing could draw: a fallback
       face is chosen for its coverage rather than its metrics, so it is almost never
       metric-compatible, and without the list there is nothing to tell that apart from a layout bug.
+      One entry per contiguous stretch rather than per character, so a paragraph in a script nothing
+      installed covers leaves one line in the list and not a thousand.
 - [ ] The platform half of the fallback chain. LibreOffice asks fontconfig first, with the missing
       characters as a charset (`vcl/unx/generic/fontmanager/fontconfig.cxx`), and only falls back to
       the generic list when that fails. Paperless has only the second half, deliberately — see the
@@ -169,8 +171,18 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       LibreOffice emits one `BT … ET` block per portion in *logical* order with an absolute pen, so
       one reference PDF gives both halves: the glyph counts read cumulatively are the portion
       boundaries as character offsets, and the pens are the visual order the reordering produced.
-      Every level-run boundary is one of LibreOffice's, and the leftmost pen of each sub-run rises
-      strictly along the visual order — nine paragraphs, six left-to-right and three right-to-left.
+      Every level-run boundary is one of LibreOffice's, the leftmost pen of each sub-run rises
+      strictly along the visual order, and the gap between one pen and the next is that sub-run's
+      own width — nine paragraphs, six left-to-right and three right-to-left, twenty-two portions.
+      The widths agree to within 0.221 pt, the worst case being the six characters of "Start ";
+      that residual is VCL rounding each portion through its reference device and does not
+      accumulate, since every portion's pen is absolute. Two findings from that measurement worth
+      keeping: ODF's `style:letter-kerning` defaults to **false**, so a corpus document that does
+      not state it is a reference for the *unkerned* widths; and a paragraph style that inherits its
+      text properties through `style:parent-style-name` lost them here — the three right-to-left
+      paragraphs came back in FreeSans and Liberation Serif until the style spelled its fonts out,
+      which showed up as a 5.1 pt error and is exactly the size of mistake this assertion exists to
+      catch.
 - [x] Verified against ICU differentially: every ordered pair and triple of bidi classes, brackets
       with each kind of content and context, and prose in Hebrew, Arabic and Latin, at both
       paragraph directions. Two behaviours were **measured out of ICU rather than read out of the

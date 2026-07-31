@@ -255,7 +255,7 @@ public sealed class SystemFontResolver : IFontResolver, IGlyphFallbackResolver
     public IReadOnlyList<FontSubstitution> Substitutions => _substitutions;
 
     /// <summary>
-    /// Every mid-run glyph fallback made so far, one per character, in the order they were made.
+    /// Every mid-run glyph fallback made so far, one per contiguous stretch, in the order they were made.
     /// </summary>
     /// <remarks>
     /// The same argument as <see cref="Substitutions"/>, and a sharper one: a fallback face is

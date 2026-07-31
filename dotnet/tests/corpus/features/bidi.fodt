@@ -27,12 +27,30 @@
    <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
        fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
        fo:orphans="0" fo:widows="0" style:writing-mode="lr-tb"/>
+   <!--
+     letter-kerning stated rather than left to the default, which is *false* in ODF. Paperless
+     kerns by default, because that is what Writer's own layout does; without this the reference
+     would be the unkerned widths and every portion would measure a fraction wide.
+   -->
    <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
        style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
-       style:font-size-complex="12pt" fo:language="en" fo:country="GB"/>
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
   </style:style>
-  <style:style style:name="BodyRtl" style:family="paragraph" style:parent-style-name="Body">
-   <style:paragraph-properties fo:text-align="start" style:writing-mode="rl-tb"/>
+  <!--
+    The right-to-left style repeats every text property rather than inheriting them from Body.
+    Measured, not preferred: with style:parent-style-name the three right-to-left paragraphs came
+    back set in FreeSans and Liberation Serif instead of DejaVu Sans, so the comparison would have
+    been against two faces the test never loaded.
+  -->
+  <style:style style:name="BodyRtl" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="rl-tb"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
   </style:style>
  </office:styles>
  <office:body><office:text>

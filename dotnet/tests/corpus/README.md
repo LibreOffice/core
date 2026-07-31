@@ -220,6 +220,14 @@ count is its character count and the reference's portion boundaries read straigh
 the comparison asserts that rather than assuming it, because one ligature would silently shift every offset
 after it.
 
+Two things in `bidi.fodt` are stated explicitly that look redundant and are not, both found by measuring the
+reference against Paperless. `style:letter-kerning="true"` is there because ODF's default is **false**, so a
+document that says nothing is a reference for the *unkerned* widths — 33.13 pt against 33.30 for the six
+characters of "Start ". And the right-to-left paragraph style repeats every text property instead of
+inheriting them through `style:parent-style-name`: with inheritance, LibreOffice set those three paragraphs
+in FreeSans and Liberation Serif rather than DejaVu Sans, and the portions came out 5.1 pt wrong against a
+face the test never loaded.
+
 `table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
 the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
 with the text by default, and a distinct one makes it obvious in a rendered page which strokes are being
