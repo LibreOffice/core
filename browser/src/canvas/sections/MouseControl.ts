@@ -47,6 +47,8 @@ class MouseControl extends CanvasSectionObject {
 
 	pinchStartCenter: any;
 	zoom: any;
+	// The pinch zoom level before clamping to the allowed zoom range.
+	pinchRequestedZoom: number | undefined;
 	origCenter: any;
 	pinchLength: number = 0;
 
@@ -746,8 +748,8 @@ class MouseControl extends CanvasSectionObject {
 				Math.pow(e.touches[0].clientY - e.touches[1].clientY, 2),
 		);
 		const diff = newPinchLength - this.pinchLength;
-		this.zoom = app.map.getZoom() + diff * 0.01;
-		this.zoom = app.map._limitZoom(this.zoom);
+		this.pinchRequestedZoom = app.map.getZoom() + diff * 0.01;
+		this.zoom = app.map._limitZoom(this.pinchRequestedZoom);
 
 		this.origCenter = app.map.mouseEventToIntern({
 			clientX: center.x,
@@ -766,6 +768,15 @@ class MouseControl extends CanvasSectionObject {
 		var finalZoom = app.map._limitZoom(
 			zoomDelta > 0 ? Math.ceil(this.zoom) : Math.floor(this.zoom),
 		);
+
+		if (this.pinchRequestedZoom !== undefined) {
+			OverviewFade.handleZoomBeyondLimit(
+				this.pinchRequestedZoom > oldZoom
+					? Math.ceil(this.pinchRequestedZoom)
+					: Math.floor(this.pinchRequestedZoom),
+			);
+			this.pinchRequestedZoom = undefined;
+		}
 
 		this.pinchStartCenter = undefined;
 

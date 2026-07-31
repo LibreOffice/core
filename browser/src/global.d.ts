@@ -167,6 +167,7 @@ interface AppInterface {
 	impress: {
 		partList: any; // Info for parts.
 		notesMode: boolean;
+		hasOverviewPage: boolean; // Whether the document has an Overview slide (part 0 when present).
 		savedViewMode: string | null; // 'normal' | 'notes' | 'master' | null
 		twipsCorrection: number;
 		getIndexFromPart(part: number): number;

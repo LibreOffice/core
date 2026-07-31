@@ -356,6 +356,7 @@ COOL_JS_LST =\
 	src/app/CellSelectionMarkerMiddleware.ts \
 	src/app/TableMiddleware.ts \
 	src/app/ImpressSelectionMiddleware.ts \
+	src/app/OverviewFade.ts \
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutNewBase.ts \
 	src/app/ViewLayoutWriter.ts \

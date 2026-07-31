@@ -3,7 +3,7 @@
  * window.L.Handler.Scroll is used by window.L.Map to enable mouse scroll wheel zoom on the map.
  */
 
-/* global app OtherViewCellCursorSection InternPointUtil */
+/* global app OtherViewCellCursorSection InternPointUtil OverviewFade */
 window.L.Map.mergeOptions({
 	scrollHandler: true,
 	wheelDebounceTime: 40,
@@ -114,6 +114,7 @@ window.L.Map.Scroll = window.L.Handler.extend({
 		if (newAnimation && this._zoom === mapZoom) {
 			// We hit limits, don't start a new animation.
 			this._zoomScrollTime = undefined;
+			OverviewFade.handleZoomBeyondLimit(prevZoom + delta);
 			return;
 		}
 

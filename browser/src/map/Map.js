@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog RenderManager cool InternPointUtil InternBoundsUtil */
+/* global app _ Cursor JSDialog RenderManager cool InternPointUtil InternBoundsUtil OverviewFade */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -814,11 +814,17 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	zoomIn: function (delta, options, animate) {
-		return this.setZoom(this._zoom + (delta || 1), options, animate);
+		const requestedZoom = this._zoom + (delta || 1);
+		if (OverviewFade.handleZoomBeyondLimit(requestedZoom))
+			return this;
+		return this.setZoom(requestedZoom, options, animate);
 	},
 
 	zoomOut: function (delta, options, animate) {
-		return this.setZoom(this._zoom - (delta || 1), options, animate);
+		const requestedZoom = this._zoom - (delta || 1);
+		if (OverviewFade.handleZoomBeyondLimit(requestedZoom))
+			return this;
+		return this.setZoom(requestedZoom, options, animate);
 	},
 
 	panTo: function (center) { // (Intern)

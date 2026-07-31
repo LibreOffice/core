@@ -249,6 +249,18 @@ input, button {
 	height: 100%;
 }
 
+/* Fade used when a zoom gesture at the zoom limit switches between the Overview slide
+   and a normal slide: overview-fade carries the opacity transition, overview-fade-out
+   is the faded-out state. The view fades out with ease-in (it is going away) and back
+   in with ease-out (it is coming in). */
+#document-container.overview-fade {
+	transition: opacity var(--duration-slow) var(--ease-out);
+}
+#document-container.overview-fade-out {
+	opacity: 0;
+	transition-timing-function: var(--ease-in);
+}
+
 .color-palette-selector {
 	margin: 0 5px !important;
 }

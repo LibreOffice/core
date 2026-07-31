@@ -167,6 +167,7 @@
 /// <reference path="../src/layer/marker/Cursor.ts" />
 /// <reference path="../src/layer/vector/CanvasOverlay.ts" />
 /// <reference path="../src/canvas/sections/ScrollSection.ts" />
+/// <reference path="../src/app/OverviewFade.ts" />
 /// <reference path="../src/canvas/sections/MouseControl.ts" />
 /// <reference path="../src/app/LayerUtil.ts" />
 /// <reference path="../src/layer/vector/CDarkOverlay.ts" />
