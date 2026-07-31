@@ -61,10 +61,17 @@ internal static class PptxTextBody
         XElement? properties = Drawing.Child(body, "bodyPr");
         XElement? listStyle = Drawing.Child(body, "lstStyle");
 
+        // One counter and one "is this level numbering" flag per outline level, carried across
+        // the whole body: a:buAutoNum numbers a *run* of paragraphs, and the run is broken by a
+        // paragraph that draws a different kind of marker or none at all.
+        int[] counters = new int[9];
+        bool[] counting = new bool[9];
+
         List<SlideParagraph> paragraphs = [];
         foreach (XElement paragraph in Drawing.Children(body, "p"))
         {
-            paragraphs.Add(Paragraph(paragraph, listStyle, theme, defaultTypeface));
+            paragraphs.Add(
+                Paragraph(paragraph, listStyle, theme, defaultTypeface, counters, counting));
         }
 
         XElement? autofit = Drawing.Child(properties, "normAutofit");
@@ -104,7 +111,12 @@ internal static class PptxTextBody
     };
 
     private static SlideParagraph Paragraph(
-        XElement paragraph, XElement? listStyle, DrawingTheme? theme, string? defaultTypeface)
+        XElement paragraph,
+        XElement? listStyle,
+        DrawingTheme? theme,
+        string? defaultTypeface,
+        int[] counters,
+        bool[] counting)
     {
         XElement? paragraphProperties = Drawing.Child(paragraph, "pPr");
         int level = Drawing.Number(paragraphProperties, "lvl") ?? 0;
@@ -170,7 +182,9 @@ internal static class PptxTextBody
             Length.FromEmu(Emu(paragraphProperties, "marL", 0)),
             Length.FromEmu(Emu(paragraphProperties, "indent", 0)),
             Language(Drawing.Child(paragraph, "r")),
-            Marker(paragraphProperties, levelStyle, theme));
+            Marker(
+                paragraphProperties, levelStyle, theme, level, counters, counting,
+                hasText: text.Length > 0));
     }
 
     /// <summary>
@@ -191,27 +205,69 @@ internal static class PptxTextBody
     /// which are not installed on the machines this runs on.
     /// </para>
     /// <para>
-    /// <c>a:buAutoNum</c> yields null rather than a wrong number: numbering needs a counter per
-    /// outline level carried across the body's paragraphs, restarted where the level rises, and
-    /// inventing "1." for every item of every list would be worse than drawing none. The
-    /// paragraph still gets its hanging indent, so its text lands where the reference puts it.
+    /// <c>a:buAutoNum</c> is numbered by the counters the caller carries across the body, which
+    /// is the same walk and the same arrays extraction uses — <see cref="DrawingTextBody"/> owns
+    /// the arithmetic so that a nested list cannot be numbered two different ways by the two
+    /// readers. <strong>An empty paragraph draws no marker and consumes no number:</strong> the
+    /// blank line an author leaves between two items is still an <c>a:p</c> and still inherits
+    /// the level's bullet, and counting it makes the next item jump from 2 to 4.
     /// </para>
     /// </remarks>
     private static SlideMarker? Marker(
-        XElement? paragraphProperties, XElement? levelStyle, DrawingTheme? theme)
+        XElement? paragraphProperties,
+        XElement? levelStyle,
+        DrawingTheme? theme,
+        int level,
+        int[] counters,
+        bool[] counting,
+        bool hasText)
     {
+        int slot = Math.Clamp(level, 0, counters.Length - 1);
+
         foreach (XElement? source in (XElement?[])[paragraphProperties, levelStyle])
         {
             if (source is null) continue;
-            if (Drawing.Child(source, "buNone") is not null) return null;
-            if (Drawing.Child(source, "buAutoNum") is not null) return null;
+
+            if (Drawing.Child(source, "buNone") is not null)
+            {
+                counting[slot] = false;
+                return null;
+            }
+
+            if (Drawing.Child(source, "buAutoNum") is { } number)
+            {
+                if (!hasText) return null;
+
+                return Marked(
+                    DrawingTextBody.AutoNumber(number, slot, counters, counting),
+                    source, paragraphProperties, levelStyle, theme);
+            }
+
             if (Drawing.Child(source, "buChar") is not { } bullet) continue;
+
+            counting[slot] = false;
 
             string? character = Drawing.Attribute(bullet, "char");
             if (string.IsNullOrEmpty(character)) return null;
 
-            return new SlideMarker(
+            return Marked(
                 OutlineNumbers.NormaliseBullet(character),
+                source, paragraphProperties, levelStyle, theme);
+        }
+
+        counting[slot] = false;
+        return null;
+    }
+
+    /// <summary>A marker's text with the font, size and colour the chain gives it.</summary>
+    private static SlideMarker Marked(
+        string text,
+        XElement source,
+        XElement? paragraphProperties,
+        XElement? levelStyle,
+        DrawingTheme? theme)
+        => new(
+                text,
                 Drawing.Attribute(Bullet(source, "buFont", paragraphProperties, levelStyle), "typeface"),
                 Drawing.Number(
                     Bullet(source, "buSzPct", paragraphProperties, levelStyle), "val") is { } percent
@@ -219,10 +275,6 @@ internal static class PptxTextBody
                     ? percent / 100000.0
                     : 1.0,
                 ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme));
-        }
-
-        return null;
-    }
 
     /// <summary>
     /// One of the bullet's satellite properties, from wherever in the chain states it.

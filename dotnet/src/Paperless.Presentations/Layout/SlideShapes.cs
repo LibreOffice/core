@@ -97,6 +97,20 @@ public sealed record PlacedShape
     /// <summary>The pen its outline is drawn with, or null when it has none.</summary>
     public Stroke? Line { get; init; }
 
+    /// <summary>
+    /// The marker at the start of its outline, when the outline is a line and carries one.
+    /// </summary>
+    /// <remarks>
+    /// Carried rather than resolved into geometry here because resolving it produces *more
+    /// shapes* — an arrowhead is a filled polygon beside the shaft, not a property of the stroke
+    /// — and a reader that wants the model rather than the drawing should be able to see which
+    /// end of which line the file put a marker on.
+    /// </remarks>
+    public SlideLineEnd HeadEnd { get; init; }
+
+    /// <summary>The marker at the end of its outline.</summary>
+    public SlideLineEnd TailEnd { get; init; }
+
     /// <summary>The text inside it, or null when it holds none.</summary>
     public PlacedText? Text { get; init; }
 }
