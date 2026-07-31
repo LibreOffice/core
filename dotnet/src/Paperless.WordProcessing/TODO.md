@@ -248,6 +248,15 @@ Order chosen so each is verifiable before the next gets harder.
       on the corpus document that makes the line above the frame touch it and narrows one line more than
       LibreOffice does. A whole line in the wrong place is a worse error than a twip, so neither half is
       applied and the DOCX comparison runs two twips wider than the ODF one instead.
+- [ ] `ADD_VERTICAL_FLY_OFFSETS`, which the OOXML import turns on and this engine does not read at all.
+      Measured while building `frame-parallel`: LibreOffice's own DOCX export of that document narrows one
+      line fewer than its ODF form does — the last line of the paragraph *above* the frame is divided in
+      ODF and left whole in DOCX. The flag is why. It makes `CalcFlyWidth` grow the line's rectangle by the
+      text frame's upper margin before intersecting it (`itrform2.cxx:2956`, `SubTop`) and adds
+      `GetLowerMarginForFlyIntersect` at the bottom, so a Word document decides "does this line touch the
+      frame" against a taller strip than a Writer document does. Nothing in the corpus turns on it in a way
+      that is currently compared, which is why `frame-parallel` is kept in its two ODF forms only — but any
+      DOCX with a frame whose top lands mid-paragraph will differ by one line until this is read.
 - [x] Tables: `w:gridSpan`, and `w:vMerge`'s top-and-continuation encoding turned into a row
       span, which needs the rows drafted before they are materialised
 - [x] `settings.xml` compatibility flags, in `WordCompatibility` — and **one** of them, which is the
