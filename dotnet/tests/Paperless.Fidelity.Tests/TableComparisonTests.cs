@@ -73,13 +73,14 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-pages.docx")]
     [InlineData("table-pages.doc")]
     [InlineData("table-pages.rtf")]
-    // The nested case is ODF and DOCX only. DOC and RTF express nesting through the *paragraph* rather
-    // than through the markup — sprmPItap and \itap give a depth, and the inner table's cells end at
-    // paragraph marks rather than at U+0007 — so their layout assemblers work one level at a time and drop
-    // the inner table. The corpus holds those two exports so the gap can be closed against them.
+    // A nested table in every format, which is worth stating because no two of them express it the same
+    // way: ODF and DOCX nest the markup, while DOC and RTF nest the *paragraph* — sprmPItap and \itap give
+    // a depth, and an inner table's cells end at paragraph marks rather than at U+0007.
     [InlineData("table-nested.fodt")]
     [InlineData("table-nested.odt")]
     [InlineData("table-nested.docx")]
+    [InlineData("table-nested.rtf")]
+    [InlineData("table-nested.doc")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

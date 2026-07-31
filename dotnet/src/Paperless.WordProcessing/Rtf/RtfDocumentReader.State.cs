@@ -351,8 +351,8 @@ public sealed partial class RtfDocumentReader
         public List<CellDraft> RowCells { get; } = [];
         public List<ContentNode> CellContent { get; } = [];
 
-        /// <summary>The current cell's layout paragraphs, until the cell mark collects them.</summary>
-        public List<RtfLayoutParagraph> CellLayout { get; } = [];
+        /// <summary>The current cell's layout blocks, until the cell mark collects them.</summary>
+        public List<RtfLayoutBlock> CellLayout { get; } = [];
 
         public List<RowDraft> TableRows { get; } = [];
 
@@ -446,15 +446,15 @@ public sealed partial class RtfDocumentReader
         public List<ContentNode> Content { get; } = [];
 
         /// <summary>
-        /// The cell's paragraphs with the formatting layout needs, beside the content nodes.
+        /// The cell's blocks with the formatting layout needs, beside the content nodes.
         /// </summary>
         /// <remarks>
         /// Two lists rather than one, for the same reason the body has two: extraction discards the sizes
         /// and indents that decide where a line breaks, and a cell's text has to break at the cell's width.
-        /// They are filled by the same pass and stay in step because both are appended as a paragraph
-        /// closes.
+        /// Blocks rather than paragraphs because a cell can hold a table — RTF nests by <c>\itap</c> depth,
+        /// and a finished inner table is appended to whichever cell of the enclosing level was open.
         /// </remarks>
-        public List<RtfLayoutParagraph> LayoutParagraphs { get; } = [];
+        public List<RtfLayoutBlock> LayoutBlocks { get; } = [];
     }
 
     private sealed class RowDraft
@@ -835,24 +835,25 @@ public sealed partial class RtfDocumentReader
     {
         List<RtfLayoutParagraph>? into;
 
+        List<RtfLayoutBlock>? cell = null;
+
         if (flow.InTable)
         {
-            // A cell's paragraphs, staged on the table level until the cell mark collects them. Only the
-            // body's tables reach layout, and only the outermost level of those — a nested table's cells
-            // are laid out as a flow, which has no grid to put one in.
+            // A cell's paragraphs, staged on its own table level until the cell mark collects them. Any
+            // level, not just the outermost: an inner table's cells are a flow, and a flow holds blocks.
             int level = LevelOf(flow);
-            into = ReferenceEquals(flow, _flows[0]) && level == 1
-                ? LevelAt(flow, level).CellLayout
-                : null;
+            cell = ReferenceEquals(flow, _flows[0]) ? LevelAt(flow, level).CellLayout : null;
+            into = null;
         }
         else
         {
             into = ReferenceEquals(flow, _flows[0]) ? _layoutBlocks.Paragraphs : FurnitureList(flow);
         }
 
-        if (into is null || into.Count >= MaxLayoutParagraphs) return;
+        if (cell is null && into is null) return;
+        if ((cell?.Count ?? into!.Count) >= MaxLayoutParagraphs) return;
 
-        into.Add(new RtfLayoutParagraph(
+        RtfLayoutParagraph recorded = new(
             text,
             new Ww8.Ww8LayoutFormat
             {
@@ -882,7 +883,10 @@ public sealed partial class RtfDocumentReader
             state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
             ColourAt(state.ForegroundColourIndex),
             [.. flow.LayoutRuns],
-            _sectionIndex));
+            _sectionIndex);
+
+        if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
+        else into!.Add(recorded);
     }
 
     /// <summary>

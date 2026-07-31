@@ -88,122 +88,152 @@ public sealed partial class Ww8DocumentReader
     private sealed class LayoutTableAssembler
     {
         private readonly List<Ww8LayoutBlock> _blocks = [];
-        private readonly List<Ww8LayoutParagraph> _cell = [];
-        private readonly List<Ww8CellDraft> _rowCells = [];
-        private readonly List<Ww8RowDraft> _rows = [];
-
-        /// <summary>The section the table's rows were in, taken from the paragraphs that made them.</summary>
-        private int _section;
+        private readonly List<Level> _levels = [];
 
         /// <summary>Takes one paragraph, with the properties of the mark that ended it.</summary>
         /// <param name="paragraph">The paragraph.</param>
         /// <param name="format">Its mark's properties.</param>
         /// <param name="endsCell">
-        /// True when the mark was U+0007, which ends a cell of the outermost table — or its row, when the
-        /// properties say so. A paragraph mark inside a cell ends neither.
+        /// True when the mark was U+0007. Only the outermost table uses that character; a nested table
+        /// reuses the paragraph mark and says what it means with <c>sprmPFInnerTableCell</c> and
+        /// <c>sprmPFInnerTtp</c> instead — which is why the depth cannot be read off the character.
         /// </param>
         public void Add(Ww8LayoutParagraph paragraph, Ww8ParagraphFormat format, bool endsCell)
         {
-            if (format.Level == 0)
+            // U+0007 always belongs to the outermost table. A paragraph mark belongs to whichever level its
+            // own sprms name, and a mark that ends a nested cell is at least level two whatever the depth
+            // sprm reads — the flag means "a table inside a cell", so it cannot be the outermost.
+            int level = endsCell
+                ? 1
+                : format.IsInnerTableCell ? Math.Max(2, format.Level) : format.Level;
+
+            if (level <= 0)
             {
-                // The first paragraph outside a table is what closes it: consecutive rows form a table
-                // only by being adjacent, and WW8 marks no end.
-                Close();
+                // The first paragraph outside every table closes them all, innermost first: consecutive
+                // rows form a table only by being adjacent, and WW8 marks no end.
+                CloseDeeperThan(0);
                 _blocks.Add(new Ww8LayoutBlock(paragraph));
                 return;
             }
 
-            // A nested table's cells are not laid out, so neither are its paragraphs — putting them in the
-            // enclosing cell instead would stack a whole inner table into one cell's flow.
-            if (format.Level > 1) return;
+            // Anything at a shallower level than the open tables closes the deeper ones first, and a
+            // finished inner table lands in the cell of the level that encloses it.
+            CloseDeeperThan(level);
+            Level open = LevelAt(level);
+            open.Section = paragraph.SectionIndex;
 
-            if (endsCell && format.IsTableRowEnd)
+            bool endsRow = endsCell ? format.IsTableRowEnd : format.IsInnerTableRowEnd;
+
+            if (endsRow)
             {
                 // The row-end paragraph is the terminator rather than content, so it is dropped — but it
                 // still closes whatever cell was open, and it carries the row's geometry.
-                FinishRow(format);
+                FinishRow(open, format);
                 return;
             }
 
-            _section = paragraph.SectionIndex;
-
-            if (paragraph.Text.Length > 0 || endsCell) _cell.Add(paragraph);
-            if (endsCell) FinishCell();
+            bool closesCell = endsCell || format.IsInnerTableCell;
+            if (paragraph.Text.Length > 0 || closesCell) open.Cell.Add(new Ww8LayoutBlock(paragraph));
+            if (closesCell) FinishCell(open);
         }
 
-        /// <summary>Everything collected, with a trailing unterminated table closed.</summary>
+        /// <summary>Everything collected, with any unterminated tables closed.</summary>
         public List<Ww8LayoutBlock> Finished()
         {
-            Close();
+            CloseDeeperThan(0);
             return _blocks;
         }
 
-        private void FinishCell()
+        private Level LevelAt(int level)
         {
-            Ww8CellDraft cell = new();
-            cell.LayoutParagraphs.AddRange(_cell);
-            _cell.Clear();
-            _rowCells.Add(cell);
+            while (_levels.Count < level) _levels.Add(new Level());
+            return _levels[level - 1];
         }
 
-        private void FinishRow(Ww8ParagraphFormat format)
+        private static void FinishCell(Level level)
         {
-            if (_cell.Count > 0) FinishCell();
-            if (_rowCells.Count == 0) return;
+            Ww8CellDraft cell = new();
+            cell.LayoutBlocks.AddRange(level.Cell);
+            level.Cell.Clear();
+            level.RowCells.Add(cell);
+        }
+
+        private static void FinishRow(Level level, Ww8ParagraphFormat format)
+        {
+            if (level.Cell.Count > 0) FinishCell(level);
+            if (level.RowCells.Count == 0) return;
 
             Ww8TableDefinition? definition = format.TableDefinition;
 
-            for (int i = 0; i < _rowCells.Count; i++)
+            for (int i = 0; i < level.RowCells.Count; i++)
             {
-                _rowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
-                _rowCells[i].Padding = PaddingOf(format, i);
+                level.RowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
+                level.RowCells[i].Padding = PaddingOf(format, i);
 
                 Ww8CellDefinition cell = definition?.CellAt(i) ?? default;
-                _rowCells[i].IsHorizontallyMerged = cell.IsMerged;
-                _rowCells[i].ContinuesMergeAbove = cell.IsVerticallyMerged && !cell.StartsVerticalMerge;
+                level.RowCells[i].IsHorizontallyMerged = cell.IsMerged;
+                level.RowCells[i].ContinuesMergeAbove = cell.IsVerticallyMerged && !cell.StartsVerticalMerge;
             }
 
-            ApplyExplicitMerges(_rowCells);
+            ApplyExplicitMerges(level.RowCells);
 
             Ww8RowDraft row = new()
             {
-                Index = _rows.Count,
+                Index = level.Rows.Count,
                 LeftEdge = definition?.LeftEdge ?? 0,
                 IsHeader = format.IsTableHeaderRow,
             };
-            row.Cells.AddRange(_rowCells);
-            _rows.Add(row);
+            row.Cells.AddRange(level.RowCells);
+            level.Rows.Add(row);
 
-            _rowCells.Clear();
+            level.RowCells.Clear();
         }
 
-        /// <summary>Turns the rows collected so far into a table, and appends it.</summary>
-        private void Close()
+        /// <summary>
+        /// Materialises every open level deeper than one, innermost first.
+        /// </summary>
+        /// <remarks>
+        /// Innermost first, because a finished inner table goes into a cell of the table that encloses it
+        /// and so has to exist before that cell is closed. The outermost level's table goes into the body's
+        /// own block list instead, which is what makes it a block the paginator sees.
+        /// </remarks>
+        private void CloseDeeperThan(int level)
         {
-            // Cells collected but never closed by a row mark: a truncated table, still worth keeping.
-            if (_cell.Count > 0) FinishCell();
-            if (_rowCells.Count > 0) FinishRow(default);
-
-            if (_rows.Count == 0)
+            for (int deeper = _levels.Count; deeper > Math.Max(0, level); deeper--)
             {
-                Reset();
-                return;
+                Level open = _levels[deeper - 1];
+
+                // Cells collected but never closed by a row mark: a truncated table, still worth keeping.
+                if (open.Cell.Count > 0) FinishCell(open);
+                if (open.RowCells.Count > 0) FinishRow(open, default);
+
+                if (open.Rows.Count > 0)
+                {
+                    AssignColumns(open.Rows);
+                    ResolveVerticalMerges(open.Rows);
+
+                    if (LayoutTableOf(open.Rows, open.Section) is { } table)
+                    {
+                        if (deeper == 1) _blocks.Add(new Ww8LayoutBlock(table));
+                        else LevelAt(deeper - 1).Cell.Add(new Ww8LayoutBlock(table));
+                    }
+                }
+
+                _levels.RemoveAt(deeper - 1);
             }
-
-            AssignColumns(_rows);
-            ResolveVerticalMerges(_rows);
-
-            if (LayoutTableOf(_rows, _section) is { } table) _blocks.Add(new Ww8LayoutBlock(table));
-
-            Reset();
         }
 
-        private void Reset()
+        /// <summary>One table under construction, at one nesting level.</summary>
+        private sealed class Level
         {
-            _cell.Clear();
-            _rowCells.Clear();
-            _rows.Clear();
-            _section = 0;
+            public List<Ww8LayoutBlock> Cell { get; } = [];
+
+            public List<Ww8CellDraft> RowCells { get; } = [];
+
+            public List<Ww8RowDraft> Rows { get; } = [];
+
+            /// <summary>The section its rows were in, taken from the paragraphs that made them.</summary>
+            public int Section { get; set; }
         }
     }
 
@@ -250,7 +280,7 @@ public sealed partial class Ww8DocumentReader
                     cell.ColumnSpan,
                     cell.RowSpan,
                     cell.Padding,
-                    [.. cell.LayoutParagraphs]));
+                    [.. cell.LayoutBlocks]));
             }
 
             layoutRows.Add(new Ww8LayoutRow(cells, row.IsHeader));
@@ -326,7 +356,7 @@ public sealed partial class Ww8DocumentReader
 
             Ww8CellDraft owner = cells[index - 1];
             owner.RightEdge = Math.Max(owner.RightEdge, cells[index].RightEdge);
-            owner.LayoutParagraphs.AddRange(cells[index].LayoutParagraphs);
+            owner.LayoutBlocks.AddRange(cells[index].LayoutBlocks);
             cells.RemoveAt(index);
         }
     }
@@ -378,10 +408,10 @@ public sealed record Ww8LayoutRow(IReadOnlyList<Ww8LayoutCell> Cells, bool IsHea
 /// <param name="ColumnSpan">How many grid columns it covers.</param>
 /// <param name="RowSpan">How many rows it covers downwards.</param>
 /// <param name="Padding">The gap between its edges and its text.</param>
-/// <param name="Paragraphs">The paragraphs inside it, in order.</param>
+/// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
 public sealed record Ww8LayoutCell(
     int Column,
     int ColumnSpan,
     int RowSpan,
     CellPadding Padding,
-    IReadOnlyList<Ww8DocumentReader.Ww8LayoutParagraph> Paragraphs);
+    IReadOnlyList<Ww8LayoutBlock> Blocks);

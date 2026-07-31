@@ -325,14 +325,16 @@ public sealed partial class Ww8DocumentReader
         public List<ContentNode> Content { get; } = [];
 
         /// <summary>
-        /// The cell's paragraphs with the formatting layout needs, beside the content nodes.
+        /// The cell's blocks with the formatting layout needs, beside the content nodes.
         /// </summary>
         /// <remarks>
         /// One draft type serving two walks, which is what lets the column grid, the spans and the vertical
         /// merges be resolved once — <c>AssignColumns</c> and <c>ResolveVerticalMerges</c> care only about
-        /// the edges. Whichever walk built the draft fills its own list and leaves the other empty.
+        /// the edges. Whichever walk built the draft fills its own list and leaves the other empty. Blocks
+        /// rather than paragraphs because a cell can hold a table, which is what <c>sprmPItap</c>'s depth
+        /// expresses.
         /// </remarks>
-        public List<Ww8LayoutParagraph> LayoutParagraphs { get; } = [];
+        public List<Ww8LayoutBlock> LayoutBlocks { get; } = [];
 
         /// <summary>The cell's right edge in twips, which is what places it in the grid.</summary>
         public int RightEdge { get; set; }

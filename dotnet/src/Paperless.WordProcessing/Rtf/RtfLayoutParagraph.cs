@@ -155,11 +155,11 @@ public sealed record RtfLayoutRow(
 /// <param name="RowSpan">How many rows it covers downwards.</param>
 /// <param name="Padding">The gap between its edges and its text.</param>
 /// <param name="VerticalAlignment">Where its text sits when the row is taller than its content.</param>
-/// <param name="Paragraphs">The paragraphs inside it, in order.</param>
+/// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
 public sealed record RtfLayoutCell(
     int Column,
     int ColumnSpan,
     int RowSpan,
     Layout.CellPadding Padding,
     Layout.CellVerticalAlignment VerticalAlignment,
-    IReadOnlyList<RtfLayoutParagraph> Paragraphs);
+    IReadOnlyList<RtfLayoutBlock> Blocks);

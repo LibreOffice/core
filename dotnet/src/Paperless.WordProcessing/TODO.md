@@ -429,17 +429,18 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
-- [x] A table inside a cell, for ODF and DOCX. A cell holds *blocks* rather than paragraphs and
+- [x] A table inside a cell, in all four formats. A cell holds *blocks* rather than paragraphs and
       `FlowLayouter` places a table among its lines, so a cell's content is exactly what a header's is —
       which is what made this a small change rather than a second layout path. The subtle part is that a
       nested table's cells carry page coordinates while a flow's lines carry flow-relative ones, so moving a
       cell has to move the tables inside it explicitly; forgetting it leaves the inner table near the page's
       top-left corner, where the pre-layout pass built it.
-- [ ] A table inside a cell for DOC and RTF. Both express nesting through the paragraph rather than the
-      markup — `sprmPItap` and `\itap` give a depth, and an inner table's cells end at paragraph marks
-      rather than at U+0007 — so their layout assemblers work one level at a time and drop the inner table.
-      The extraction pass already nests in both; it is the layout assembler that does not.
-      `table-nested.doc` and `table-nested.rtf` are in the corpus for closing it against.
+- [x] The two binary formats' nesting, which they express through the *paragraph* rather than the markup:
+      `sprmPItap` and `\itap` give a depth, and an inner table's cells end at paragraph marks rather than
+      at U+0007. So the depth cannot be read off the character — U+0007 always means the outermost table,
+      while a paragraph mark means whichever level its own sprms name, and `sprmPFInnerTableCell` implies at
+      least level two whatever the depth sprm says. Both assemblers now keep one open table per level and
+      append a finished inner one to the cell of the level enclosing it, innermost first.
 - [ ] A table inside a header. The layouter places one; no reader passes one, because `ReadFlow` collects
       paragraphs only. Dropping it is the smaller wrong answer: stacking a table's cells into a header as
       loose paragraphs would give the header a height no table has and push the body text down by it.

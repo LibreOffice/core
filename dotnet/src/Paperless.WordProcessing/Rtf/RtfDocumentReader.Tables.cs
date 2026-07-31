@@ -229,7 +229,7 @@ public sealed partial class RtfDocumentReader
     {
         CellDraft cell = new();
         cell.Content.AddRange(table.CellContent);
-        cell.LayoutParagraphs.AddRange(table.CellLayout);
+        cell.LayoutBlocks.AddRange(table.CellLayout);
         table.CellContent.Clear();
         table.CellLayout.Clear();
         table.RowCells.Add(cell);
@@ -315,7 +315,7 @@ public sealed partial class RtfDocumentReader
             // The merged cell's right edge becomes the owner's: that is what the pair covers.
             owner.RightEdge = Math.Max(owner.RightEdge, table.RowCells[index].RightEdge);
             owner.Content.AddRange(table.RowCells[index].Content);
-            owner.LayoutParagraphs.AddRange(table.RowCells[index].LayoutParagraphs);
+            owner.LayoutBlocks.AddRange(table.RowCells[index].LayoutBlocks);
             table.RowCells.RemoveAt(index);
         }
     }
@@ -333,12 +333,13 @@ public sealed partial class RtfDocumentReader
         AssignColumns(table.TableRows);
         ResolveVerticalMerges(table.TableRows);
 
-        // The layout copy, taken before the rows are cleared. Only the body's outermost tables: a nested
-        // one is laid out as part of its parent cell's flow, which has no grid to hold it.
-        if (level == 1 && ReferenceEquals(flow, _flows[0])
-            && LayoutTableOf(table.TableRows) is { } laid)
+        // The layout copy, taken before the rows are cleared. The outermost level goes into the body's own
+        // block list; a deeper one goes into whichever cell of the enclosing level is open, which is exactly
+        // where a nested table belongs — a cell's content is a flow, and a flow holds blocks.
+        if (ReferenceEquals(flow, _flows[0]) && LayoutTableOf(table.TableRows) is { } laid)
         {
-            _layoutBlocks.Add(laid);
+            if (level == 1) _layoutBlocks.Add(laid);
+            else LevelAt(flow, level - 1).CellLayout.Add(new RtfLayoutBlock(laid));
         }
 
         ContentTable content = new()
@@ -504,7 +505,7 @@ public sealed partial class RtfDocumentReader
                     cell.RowSpan,
                     cell.Padding,
                     cell.VerticalAlignment,
-                    [.. cell.LayoutParagraphs]));
+                    [.. cell.LayoutBlocks]));
             }
 
             layoutRows.Add(new RtfLayoutRow(cells, Length.FromTwips(row.Height), row.IsHeader));

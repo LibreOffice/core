@@ -240,6 +240,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// A shallow conversion: the column grid, the spans and the vertical merges were resolved during the
     /// read, from the same <c>sprmTDefTable</c> edges the extraction tree used, so all that happens here is
     /// that each paragraph gets its face resolved — the one thing the reader cannot do, having no fonts.
+    /// Recursive through a cell's own blocks, which is what makes a nested table convert by the same code as
+    /// a table in the body: by this point the assembler has already put each in the right list.
     /// </remarks>
     private static List<PageBlock> BlocksOf(LayoutFonts fonts, List<Ww8LayoutBlock> stated)
     {
@@ -250,7 +252,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             if (block.Paragraph is { } paragraph)
             {
                 blocks.AddRange(Convert(fonts, [paragraph])
-                    .Select(converted => converted with { SectionIndex = paragraph.SectionIndex }));
+                    .Select(converted => (PageBlock)(converted with
+                    {
+                        SectionIndex = paragraph.SectionIndex,
+                    })));
                 continue;
             }
 
@@ -274,7 +279,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             {
                 cells.Add(new PageTableCell
                 {
-                    Blocks = Convert(fonts, [.. cell.Paragraphs]),
+                    Blocks = BlocksOf(fonts, [.. cell.Blocks]),
                     Column = cell.Column,
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,

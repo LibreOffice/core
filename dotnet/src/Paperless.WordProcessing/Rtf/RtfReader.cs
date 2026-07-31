@@ -159,14 +159,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         foreach (RtfLayoutBlock block in _layoutBlocks)
         {
-            if (block.Paragraph is { } paragraph)
-            {
-                blocks.AddRange(Convert(fonts, [paragraph])
-                    .Select(converted => converted with { SectionIndex = paragraph.SectionIndex }));
-                continue;
-            }
-
-            if (block.Table is { } table && Grid(fonts, table) is { } grid) blocks.Add(grid);
+            blocks.AddRange(Convert(fonts, block));
         }
 
         PaginationOptions pagination = PaginationOptions.Word with
@@ -203,7 +196,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             {
                 cells.Add(new PageTableCell
                 {
-                    Blocks = Convert(fonts, cell.Paragraphs),
+                    Blocks = Convert(fonts, cell.Blocks),
                     Column = cell.Column,
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,
@@ -277,8 +270,40 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// because there is nothing to measure it with — and a machine with no fonts installed should fail the
     /// comparison tests rather than quietly produce a page of guesses.
     /// </remarks>
+    /// <summary>
+    /// Turns recorded blocks into the layout engine's own, recursing into nested tables.
+    /// </summary>
+    /// <remarks>
+    /// One conversion for the body and for a cell's contents, which is what lets a table inside a cell be
+    /// converted by the same code as a table in the body — RTF distinguishes them only by <c>\itap</c>
+    /// depth, and by this point that has already put each table in the right list.
+    /// </remarks>
+    private static List<PageBlock> Convert(LayoutFonts fonts, IReadOnlyList<RtfLayoutBlock> stated)
+    {
+        List<PageBlock> blocks = new(stated.Count);
+        foreach (RtfLayoutBlock block in stated) blocks.AddRange(Convert(fonts, block));
+        return blocks;
+    }
+
+    /// <summary>One block, which yields nothing when its family resolves to no face at all.</summary>
+    private static IEnumerable<PageBlock> Convert(LayoutFonts fonts, RtfLayoutBlock block)
+    {
+        if (block.Paragraph is { } paragraph)
+        {
+            return Convert(fonts, [paragraph])
+                .Select(converted => (PageBlock)(converted with
+                {
+                    SectionIndex = paragraph.SectionIndex,
+                }));
+        }
+
+        return block.Table is { } table && Grid(fonts, table) is { } grid
+            ? [grid]
+            : [];
+    }
+
     private static List<PageParagraph> Convert(
-        LayoutFonts fonts, IReadOnlyList<RtfLayoutParagraph> stated)
+        LayoutFonts fonts, List<RtfLayoutParagraph> stated)
     {
         List<PageParagraph> paragraphs = new(stated.Count);
 
