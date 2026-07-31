@@ -115,6 +115,7 @@ interface MapInterface extends Evented {
 	getNumberOfParts(): number;
 	getZoom(): number;
 	getMinZoom(): number;
+	getMaxZoom(): number;
 	showBusy(label: string, bar: boolean): void;
 	hideBusy(): void;
 

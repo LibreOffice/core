@@ -10,11 +10,13 @@
  */
 
 /*
- * OverviewFade - switches to the Overview slide with a fade when a zoom gesture asks
- * for a level outside the allowed zoom range.
+ * OverviewFade - switches between the Overview slide and a normal slide with a fade
+ * when a zoom gesture asks for a level outside the allowed zoom range.
  *
  * The zoom range is clamped to 20% - 400%. On a normal slide, a zoom-out gesture at
  * 20% fades the view out, switches to the Overview slide (part 0) and fades back in.
+ * On the Overview slide, a zoom-in gesture at 400% does the same towards the slide
+ * that was viewed before entering the Overview.
  */
 
 class OverviewFade {
@@ -32,7 +34,8 @@ class OverviewFade {
 
 	// Handles a request for a zoom level outside the allowed range. The request
 	// switches slide instead of zooming when the view already sits at the limit
-	// being pushed: zooming out on a normal slide goes to the Overview slide.
+	// being pushed: zooming out on a normal slide goes to the Overview slide,
+	// zooming in on the Overview slide goes back to the slide viewed before it.
 	// Returns true when the request switched slide, false when the caller should
 	// clamp and zoom as usual.
 	public static handleZoomBeyondLimit(requestedZoom: number): boolean {
@@ -54,7 +57,28 @@ class OverviewFade {
 			return true;
 		}
 
+		if (requestedZoom > map.getMaxZoom()) {
+			if (currentZoom !== map.getMaxZoom() || docLayer._selectedPart !== 0)
+				return false;
+			if (docLayer._parts < 2) return false;
+			OverviewFade.fadeToPart(OverviewFade.getReturnPart(docLayer));
+			return true;
+		}
+
 		return false;
+	}
+
+	// The slide to show when leaving the Overview: the slide viewed before entering
+	// it, or the first normal slide when no valid previous slide is known.
+	private static getReturnPart(docLayer: any): number {
+		const previousPart = docLayer._prevSelectedPart;
+		if (
+			typeof previousPart === 'number' &&
+			previousPart > 0 &&
+			previousPart < docLayer._parts
+		)
+			return previousPart;
+		return 1;
 	}
 
 	private static fadeToPart(part: number): void {
