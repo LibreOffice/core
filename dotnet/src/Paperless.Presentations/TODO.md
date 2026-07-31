@@ -14,6 +14,12 @@ order, including grouped shapes and shapes with text bodies, both of which Libre
 HTML export loses. Hidden slides are extracted and flagged. A shape's own style joins the
 character cascade, which is where nearly all of a slide's formatting lives.
 
+**Done: PPT extraction** (`ppt`/`pot`/`pps`), via `MsBinary/` here and the Escher reader in
+`Paperless.MsBinary`. Produces the same content tree as the ODF path for the same deck —
+`ppt-features.ppt` is `slides-features.odp` converted, and a test asserts the two extract to
+identical sections, so a divergence names which reader is wrong. Metadata comes from the OLE
+property sets, not from anything PowerPoint-specific.
+
 Not yet: the placeholder inheritance chain against the master slide (extraction does not need
 it, slide rendering does), and everything below.
 
@@ -64,14 +70,65 @@ resolved **per text level** for list styles (`lvlXpPr`).
 - [ ] SmartArt and charts — decide fallback-vs-implement (open question in master TODO)
 
 ### PPT (binary)
-- [ ] The persist directory and `UserEditAtom` chain — **this must be walked correctly to
-      find the current version of each record**; a file edited repeatedly contains stale
-      copies, and reading the wrong one yields an old version of the slide
-- [ ] Atom/container records
-- [ ] Text: `TextHeaderAtom`, `TextCharsAtom`, `TextBytesAtom`, `StyleTextPropAtom`,
-      `TextSpecInfoAtom`
-- [ ] Master/slide relationships
-- [ ] Escher shapes via `Paperless.MsBinary`
+- [x] The persist directory and `UserEditAtom` chain (`MsBinary/PptPersistDirectory.cs`). The
+      chain is walked newest-first from the offset the `Current User` stream names, and **the
+      first offset written for an id wins** — later blocks are the superseded copies
+      (`filter/source/msfilter/svdfppt.cxx:1379`). Both corpus decks have a single edit
+      session, so a reader that ignored the chain entirely would pass on every file
+      LibreOffice can write and then read a stale slide out of the first real PowerPoint file
+      it met; the chain tests build their streams by hand for that reason. The walk's cycle
+      guard is that the chain must strictly decrease, which is also how the format is written.
+- [x] Atom/container records (`Paperless.MsBinary/Records/DffRecord.cs`, shared with Escher —
+      the eight-byte header is the same one, and the two vocabularies interleave in one stream)
+- [x] Text: `TextHeaderAtom`, `TextCharsAtom`, `TextBytesAtom`, `StyleTextPropAtom`
+- [x] Escher shapes via `Paperless.MsBinary` — groups walked through, the group's own shape
+      record recognised as the group rather than as a phantom empty shape in front of it
+- [ ] `TextSpecInfoAtom` — per-run language and spelling state. Read only far enough to be
+      skipped. Extraction does not need it; `ContentRun.Language` would.
+- [ ] Master/slide relationships. `SlideAtom` states a master persist id and the layout's eight
+      placeholder ids, and the masters' `TxMasterStyleAtom` records hold the per-outline-level
+      character and paragraph defaults. Everything a slide does *not* state falls through to
+      them, which is why `ppt-features.ppt` reports its title as unemphasised where the ODF
+      deck reports it bold: the title's own `StyleTextPropAtom` states a mask of `0x040000`,
+      colour alone, and the boldness lives in the master's `TxMasterStyleAtom` instance 0. The
+      equality test against the ODF deck compares text, order and the hidden flag, and passes;
+      it deliberately does not compare emphasis for this reason. Building the eight-level style
+      sheet is the next piece of work here and is what rendering will need anyway.
+- [ ] The `Environment` container's `FontCollection`, so a run's `cfTypeface` index resolves to
+      a face name rather than to nothing.
+- [ ] `OutlineTextRefAtom` is implemented but has **no corpus coverage**, and cannot get any
+      from a file LibreOffice writes: its PPT exporter never emits the record —
+      `grep OutlineTextRefAtom sd/source/filter/eppt/` returns nothing, while the importer at
+      `svdfppt.cxx:6570` handles it. PowerPoint itself writes it for autolayout placeholders,
+      whose characters then live in the slide's own entry in the document's `SlideListWithText`
+      rather than in the shape. A reader without it loses every title and body of a
+      PowerPoint-authored deck while reading a LibreOffice-authored one perfectly, so the code
+      was written from the C++ and is waiting on a genuinely PowerPoint-written file to confirm.
+- [ ] Encrypted files. The `CurrentUserAtom`'s header token distinguishes them — the corpus
+      decks both carry `0xE391C05F`, and MS-PPT gives `0xF3D1C4DF` for an encrypted one — and
+      nothing here checks it yet, so an encrypted deck reads as a tree of garbage rather than
+      raising `PasswordRequiredException`. LibreOffice does not check it either; its PPT filter
+      simply fails later, which is why there is no C++ line to cite for the second value.
+
+### What PPT extraction was measured against
+
+LibreOffice's `impress_html_Export` is close to useless as an oracle here: it emits only the
+title and outline *placeholder* text plus notes, and drops every ordinary text box. Run over
+`slides-ppt.ppt` — whose shapes are all plain text boxes — it produces a stylesheet and no
+text at all. The PDF text layer is the usable reference.
+
+| File | Similarity | Every difference, by name |
+|---|---|---|
+| `slides-ppt.ppt` | 1.0000 | Blank-line padding the PDF layer puts between text frames |
+| `ppt-features.ppt` | 0.7000 | Four things, all of them the reference being narrower |
+
+For `ppt-features.ppt` the differences are: the `• ` markers Paperless emits because a bullet
+is text a reader sees and it exists nowhere in the file's runs (the ODF path does the same);
+the speaker notes, which are not on a printed slide; the hidden slide's text, which PDF export
+excludes by design and Paperless extracts and flags; and line breaks — the reference wraps
+"Text in a custom shape" across two rendered lines and "A plain text box with an emphasised
+word." across three, and orders two side-by-side frames by position where Paperless uses
+document order. None is a defect.
 
 ## Rendering
 

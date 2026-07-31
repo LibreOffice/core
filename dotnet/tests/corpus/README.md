@@ -84,19 +84,31 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `word-features.dotx` | DOTX | The same content as a template, so the template content type is exercised end to end |
 | `word-features.rtf` | RTF | The same document again, in the one format with no container. Adds what only RTF has: `\'hh` escapes in a declared code page, `\uN` with a code-page fallback to skip, a `{\listtext}` group holding the rendered list label, a `HYPERLINK` field instruction, and a merged table cell expressed purely by its `\cellx` edge |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
+| `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, and emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order |
 
-### Why `slides-ppt.ppt` is 460 kB
+### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 
-96% of it is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation` property set
-(`PIDSI_THUMBNAIL`) when exporting PPT. Turning off
+96% of `slides-ppt.ppt` is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation`
+property set (`PIDSI_THUMBNAIL`) when exporting PPT. Turning off
 `Office.Common/Save/Document/GenerateThumbnail` does **not** suppress it — that setting
-governs the ODF `Thumbnails/` entry, not the PPT filter, which writes the property
-unconditionally.
+governs the ODF `Thumbnails/` entry, not the PPT filter.
 
-It is kept rather than trimmed, because stripping it would mean rewriting a property set by
-hand and producing a file no real application would emit. It also earns its size: at ~865
-sectors it is the only corpus file that exercises long FAT chains, where every other file's
-streams fit in a handful of sectors.
+The setting that does is `Office.Common/Filter/Microsoft/Export/EnablePowerPointPreview`. It
+is the only thing gating the thumbnail on the PPT path: it supplies the `0x8000` convert flag
+(`sd/source/filter/sdpptwrp.cxx:202`) that the PPT writer tests before passing a preview
+bitmap to `SaveOlePropertySet` (`sd/source/filter/eppt/eppt.cxx:537`). Setting it false in the
+conversion profile makes the same deck 18 kB instead of 464 kB, which is how
+`ppt-features.ppt` was produced:
+
+```xml
+<item oor:path="/org.openoffice.Office.Common/Filter/Microsoft/Export">
+  <prop oor:name="EnablePowerPointPreview" oor:op="fuse"><value>false</value></prop>
+</item>
+```
+
+`slides-ppt.ppt` keeps its thumbnail rather than being regenerated, because it earns its
+size: at ~865 sectors it is the only corpus file that exercises long FAT chains, where every
+other file's streams fit in a handful of sectors.
 
 ## Writing a flat-XML corpus document by hand
 
