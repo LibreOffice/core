@@ -57,6 +57,13 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     public const int MaxLayoutParagraphs = 200000;
 
+    /// <summary>How many tab stops a paragraph may declare before the rest are ignored.</summary>
+    /// <remarks>
+    /// A guard on untrusted input. Word's own limit is 64 and a real paragraph uses a handful; a generated
+    /// file can restate <c>\tx</c> without end, and each stop costs a lookup on every tab.
+    /// </remarks>
+    public const int MaxTabStops = 256;
+
     /// <summary>How many colour table entries are kept.</summary>
     /// <remarks>
     /// A guard on untrusted input rather than a real limit: a document uses a handful, and \cf indexes
@@ -87,6 +94,16 @@ public sealed partial class RtfDocumentReader
     private readonly RtfPageGeometry _geometry = new();
 
     private Encoding _documentEncoding = LegacyCodePages.Fallback;
+    /// <summary>
+    /// The document's <c>\deftab</c>, or Word's own default.
+    /// </summary>
+    /// <remarks>
+    /// Half an inch, because RTF is Word's format and that is what Word uses — unlike ODF, whose default is
+    /// 1.25 cm. A document that states none and relies on the wrong one puts every tabulated column in the
+    /// wrong place.
+    /// </remarks>
+    private Core.Units.Length _defaultTabInterval = Core.Units.Length.FromTwips(720);
+
     private int _colourRed;
     private int _colourGreen;
     private int _colourBlue;
@@ -341,6 +358,47 @@ public sealed partial class RtfDocumentReader
                 // Half-points, as in OOXML: \fs24 is twelve points.
                 state.FontSizeHalfPoints = token.Parameter;
                 return;
+            // ---- tab stops. The kind and the leader precede the position, and \pard clears the lot.
+            case "tqc":
+                state.PendingTabAlignment = TabAlignment.Centre;
+                return;
+            case "tqr":
+                state.PendingTabAlignment = TabAlignment.Right;
+                return;
+            case "tqdec":
+                state.PendingTabAlignment = TabAlignment.DecimalSeparator;
+                return;
+            case "tldot":
+                state.PendingTabLeader = '.';
+                return;
+            case "tlhyph":
+                state.PendingTabLeader = '-';
+                return;
+            case "tlul" or "tlth":
+                state.PendingTabLeader = '_';
+                return;
+            case "tleq":
+                state.PendingTabLeader = '=';
+                return;
+            case "tx" or "tb":
+                // \tb is a bar tab: a vertical rule rather than an advance, so it is recorded as a plain
+                // stop. Drawing the rule needs the line's height, which a paragraph property does not have.
+                if (token.Parameter is { } position && state.TabStops.Count < MaxTabStops)
+                {
+                    state.TabStops.Add(new TabStop(
+                        Core.Units.Length.FromTwips(position),
+                        state.PendingTabAlignment,
+                        state.PendingTabLeader));
+                }
+
+                state.PendingTabAlignment = TabAlignment.Left;
+                state.PendingTabLeader = '\0';
+                return;
+            case "deftab":
+                if (token.Parameter is { } interval and > 0)
+                    _defaultTabInterval = Core.Units.Length.FromTwips(interval);
+                return;
+
             case "li":
                 state.LeftIndent = token.Parameter;
                 return;

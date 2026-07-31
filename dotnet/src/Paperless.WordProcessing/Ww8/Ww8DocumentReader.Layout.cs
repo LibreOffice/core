@@ -1,7 +1,9 @@
+using System.Buffers.Binary;
 using System.Text;
 using Paperless.Core.Globalization;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Ww8;
 
@@ -85,6 +87,22 @@ public sealed partial class Ww8DocumentReader
 
     /// <summary>The document's font table, read on demand.</summary>
     private Ww8FontTable? _fonts;
+
+    /// <summary>The document's <c>Dop</c>, read on demand.</summary>
+    private Ww8DocumentProperties? _properties;
+
+    /// <summary>
+    /// The document-wide layout decisions: the default tab interval and how spacings combine.
+    /// </summary>
+    /// <remarks>
+    /// Read on demand and cached, because extraction never asks — and a document whose <c>Dop</c> is
+    /// missing gets the defaults rather than an exception, which is the same leniency every other table
+    /// gets here.
+    /// </remarks>
+    public Ww8DocumentProperties DocumentProperties =>
+        _properties ??= _fib.Has(Ww8FibTable.DocumentProperties)
+            ? Ww8DocumentProperties.Parse(Slice(Ww8FibTable.DocumentProperties))
+            : Ww8DocumentProperties.Default;
 
     /// <summary>The families the document's <c>sprmCRgFtc0</c> indexes name.</summary>
     public Ww8FontTable Fonts =>
@@ -245,7 +263,10 @@ public sealed partial class Ww8DocumentReader
 
         return new Ww8LayoutParagraph(
             text,
-            layout.ToParagraphFormat(size),
+            layout.ToParagraphFormat(size) with
+            {
+                DefaultTabInterval = DocumentProperties.DefaultTabInterval,
+            },
             character.FontIndex is { } index ? Fonts.Name(index) : null,
             size,
             character.IsBold == true ? 700 : 400,
@@ -513,6 +534,13 @@ public sealed partial class Ww8DocumentReader
                     break;
                 }
 
+                case LayoutSprms.TabStops:
+                    format = format with
+                    {
+                        TabStops = ApplyTabChange(format.TabStops, sprm.Operand.Span),
+                    };
+                    break;
+
                 case LayoutSprms.KeepTogether:
                     format = format with { KeepTogether = sprm.Byte != 0 };
                     break;
@@ -587,7 +615,87 @@ public sealed partial class Ww8DocumentReader
         internal const ushort Language = 0x4873;
         internal const ushort ColourIndex = 0x2A42;
         internal const ushort Colour = 0x6870;
+        internal const ushort TabStops = 0xC60D;
     }
+
+    /// <summary>
+    /// Applies one <c>sprmPChgTabsPapx</c> to the stops accumulated so far.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The sprm is a <em>change</em>, not a list, and its operand packs three arrays whose lengths depend on
+    /// each other: a count of deletions, that many two-byte positions, a count of insertions, that many
+    /// two-byte positions, and finally that many one-byte descriptors. Reading the descriptors from the
+    /// wrong offset gives every stop a plausible-looking wrong alignment, so the bounds are checked the way
+    /// <c>SwWW8ImplReader::Read_Tab</c> checks them — a record claiming more than it carries is discarded
+    /// whole rather than half-read.
+    /// </para>
+    /// <para>
+    /// A descriptor's low three bits are the alignment and the next three the leader. Alignment 4 is a bar
+    /// tab — a vertical rule rather than an advance — which LibreOffice ignores here, and so does this: a
+    /// bar recorded as a left stop would put a column boundary where the document asked for a line.
+    /// </para>
+    /// </remarks>
+    private static List<TabStop> ApplyTabChange(
+        IReadOnlyList<TabStop>? inherited, ReadOnlySpan<byte> operand)
+    {
+        List<TabStop> stops = inherited is null ? [] : [.. inherited];
+        if (operand.Length < 1) return stops;
+
+        int deletions = operand[0];
+        if (operand.Length < (2 * deletions) + 2) return stops;
+
+        int insertions = operand[(2 * deletions) + 1];
+
+        // 2 + 2*del + 2*ins + 1*ins, which is the length the record needs to describe what it claims.
+        if (2 + (2 * deletions) + (3 * insertions) > operand.Length) return stops;
+
+        for (int i = 0; i < deletions; i++)
+        {
+            long position = Length
+                .FromTwips(BinaryPrimitives.ReadUInt16LittleEndian(operand[(1 + (2 * i))..])).Emu;
+
+            stops.RemoveAll(stop => stop.Position.Emu == position);
+        }
+
+        int positions = (2 * deletions) + 2;
+        int descriptors = positions + (2 * insertions);
+
+        for (int i = 0; i < insertions && stops.Count < MaxTabStops; i++)
+        {
+            byte descriptor = operand[descriptors + i];
+            int alignment = descriptor & 0x7;
+            if (alignment == 4) continue;
+
+            stops.Add(new TabStop(
+                Length.FromTwips(
+                    BinaryPrimitives.ReadUInt16LittleEndian(operand[(positions + (2 * i))..])),
+                alignment switch
+                {
+                    1 => TabAlignment.Centre,
+                    2 => TabAlignment.Right,
+                    3 => TabAlignment.DecimalSeparator,
+                    _ => TabAlignment.Left,
+                },
+                ((descriptor >> 3) & 0x7) switch
+                {
+                    1 => '.',
+                    2 => '-',
+                    3 or 4 => '_',
+                    _ => '\0',
+                }));
+        }
+
+        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
+        return stops;
+    }
+
+    /// <summary>How many tab stops a paragraph may declare before the rest are ignored.</summary>
+    /// <remarks>
+    /// A guard on untrusted input. Word's own limit is 64 and a real paragraph uses a handful; each stop
+    /// costs a lookup on every tab in the paragraph.
+    /// </remarks>
+    public const int MaxTabStops = 256;
 
     /// <summary>
     /// The seventeen colours a <c>sprmCIco</c> index names.

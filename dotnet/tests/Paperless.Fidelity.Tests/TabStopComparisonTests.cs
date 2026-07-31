@@ -61,6 +61,8 @@ public sealed class TabStopComparisonTests : IDisposable
     [Theory]
     [InlineData("tabbed.fodt")]
     [InlineData("tabbed.docx")]
+    [InlineData("tabbed.doc")]
+    [InlineData("tabbed.rtf")]
     public void EveryTabAdvancesToLibreOfficesStop(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

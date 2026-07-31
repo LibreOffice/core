@@ -67,6 +67,28 @@ public sealed partial class RtfDocumentReader
         public bool Italic { get; set; }
 
         /// <summary>
+        /// The paragraph's tab stops so far, in the order the control words gave them.
+        /// </summary>
+        /// <remarks>
+        /// A list on the group state because RTF states a paragraph's stops the same way it states its
+        /// indents — loose control words before the <c>\par</c> — and <c>\pard</c> clears them. It is
+        /// copied when a group nests, so a stop set inside a group does not leak out of it.
+        /// </remarks>
+        public List<Text.Layout.TabStop> TabStops { get; set; } = [];
+
+        /// <summary>
+        /// The alignment the next <c>\tx</c> will carry, which precedes it.
+        /// </summary>
+        /// <remarks>
+        /// RTF writes the kind before the position — <c>\tqr\tx5000</c> — and the kind applies to that one
+        /// stop only. So it is held here and consumed by the position that follows.
+        /// </remarks>
+        public TabAlignment PendingTabAlignment { get; set; }
+
+        /// <summary>The leader the next <c>\tx</c> will carry, or <c>'\0'</c> for none.</summary>
+        public char PendingTabLeader { get; set; }
+
+        /// <summary>
         /// The <c>\cf</c> index into the colour table, or null for the automatic colour.
         /// </summary>
         /// <remarks>
@@ -153,6 +175,11 @@ public sealed partial class RtfDocumentReader
             Bold = Bold,
             Italic = Italic,
             ForegroundColourIndex = ForegroundColourIndex,
+
+            // A copy, not the same list: a stop set inside a group belongs to that group.
+            TabStops = [.. TabStops],
+            PendingTabAlignment = PendingTabAlignment,
+            PendingTabLeader = PendingTabLeader,
             Underline = Underline,
             Strike = Strike,
             Hidden = Hidden,
@@ -191,6 +218,9 @@ public sealed partial class RtfDocumentReader
             Bold = false;
             Italic = false;
             ForegroundColourIndex = null;
+            TabStops = [];
+            PendingTabAlignment = TabAlignment.Left;
+            PendingTabLeader = '\0';
             Underline = false;
             Strike = false;
             Hidden = false;
@@ -748,7 +778,12 @@ public sealed partial class RtfDocumentReader
                 StartsNewPage = state.StartsNewPage,
                 HasWidowControl = state.HasWidowControl,
                 HasContextualSpacing = state.HasContextualSpacing,
-            }.ToParagraphFormat(SizeOf(state)) with { Alignment = state.Alignment },
+            }.ToParagraphFormat(SizeOf(state)) with
+            {
+                Alignment = state.Alignment,
+                TabStops = [.. state.TabStops.OrderBy(stop => stop.Position.Emu)],
+                DefaultTabInterval = _defaultTabInterval,
+            },
             _fontFamilies.GetValueOrDefault(state.FontIndex),
             SizeOf(state),
             state.Bold ? 700 : 400,

@@ -261,6 +261,16 @@ public enum Ww8FibTable
     /// <summary>Field positions in comments.</summary>
     AnnotationFields = 19,
 
+    /// <summary>
+    /// The document properties: the <c>Dop</c>.
+    /// </summary>
+    /// <remarks>
+    /// A single fixed-layout record rather than a table, and the only place a few document-wide layout
+    /// decisions live — the default tab interval among them, which no paragraph states. Thirty-one, which
+    /// is <c>fcDop</c>'s place in the FIB's array of offsets, two before the piece table's thirty-three.
+    /// </remarks>
+    DocumentProperties = 31,
+
     /// <summary>The piece table and its formatting prefixes.</summary>
     PieceTable = 33,
 

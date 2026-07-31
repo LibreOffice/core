@@ -172,9 +172,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// rendering of a DOC shows — the opposite of the DOCX path, whose flag is absent by default.
     /// </para>
     /// <para>
-    /// The DOC carries its own answer in <c>Dop.fDontUseHTMLAutoSpacing</c>, which the importer reads
-    /// into that same flag; reading it here needs the <c>Dop</c> parsed and is recorded in this library's
-    /// TODO. Until then the default matches every document LibreOffice itself wrote.
+    /// The document's own answer, read from <c>Dop.fDontUseHTMLAutoSpacing</c> — the flag whose name states
+    /// what is switched <em>off</em>, so a document that does not use HTML auto-spacing adds the two
+    /// spacings rather than collapsing them. A document with no <c>Dop</c> at all adds them, which is what
+    /// every document LibreOffice itself wrote does.
     /// </para>
     /// <para>
     /// Table paragraphs are left out, because a table is laid out as a grid and stacking its cells would
@@ -210,7 +211,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
-            CollapsesSpacing = false,
+            CollapsesSpacing = _reader.DocumentProperties.CollapsesSpacing,
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
         };
 

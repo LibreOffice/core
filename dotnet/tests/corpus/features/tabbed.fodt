@@ -48,9 +48,9 @@
   </style:style>
  </office:styles>
  <office:body><office:text>
-   <text:p text:style-name="Plain">Alpha<text:tab/>Beta<text:tab/>Gamma<text:tab/>Delta</text:p>
-   <text:p text:style-name="Plain">Considerably<text:tab/>longer<text:tab/>entries<text:tab/>here</text:p>
-   <text:p text:style-name="Plain">One<text:tab/>Two<text:tab/>Three<text:tab/>Four</text:p>
+   <text:p text:style-name="Plain">Aa<text:tab/>Bb<text:tab/>Cc<text:tab/>Dd</text:p>
+   <text:p text:style-name="Plain">Ee<text:tab/>Ff<text:tab/>Gg<text:tab/>Hh</text:p>
+   <text:p text:style-name="Plain">Ii<text:tab/>Jj<text:tab/>Kk<text:tab/>Ll</text:p>
    <text:p text:style-name="Left">Alpha<text:tab/>Beta<text:tab/>Gamma<text:tab/>Delta</text:p>
    <text:p text:style-name="Left">Considerably<text:tab/>longer<text:tab/>entries<text:tab/>here</text:p>
    <text:p text:style-name="Left">One<text:tab/>Two<text:tab/>Three<text:tab/>Four</text:p>

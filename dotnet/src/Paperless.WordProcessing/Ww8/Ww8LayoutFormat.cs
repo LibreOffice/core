@@ -54,6 +54,17 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>True when <c>sprmPDyaLine</c>'s <c>fMultLinespace</c> is set.</summary>
     public bool IsMultipleLineSpacing { get; init; }
 
+    /// <summary>
+    /// The paragraph's tab stops, already accumulated through the style chain.
+    /// </summary>
+    /// <remarks>
+    /// A resolved list rather than the sprm's own contents, because <c>sprmPChgTabsPapx</c> states a
+    /// <em>change</em>: a set of positions to delete and a set to add. Applying the style chain and then
+    /// the direct formatting in order is what turns those changes into a list, which is exactly the order
+    /// the sprms are applied in anyway.
+    /// </remarks>
+    public IReadOnlyList<TabStop>? TabStops { get; init; }
+
     /// <summary>True when the paragraph must not be split across pages.</summary>
     public bool? KeepTogether { get; init; }
 
@@ -109,6 +120,7 @@ public readonly record struct Ww8LayoutFormat
         return new ParagraphFormat
         {
             Alignment = Alignment(Justification),
+            TabStops = TabStops ?? [],
             StartIndent = Twips(LeftIndent),
             EndIndent = Twips(RightIndent),
             FirstLineIndent = Twips(FirstLineIndent),

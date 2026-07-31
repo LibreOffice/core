@@ -386,9 +386,16 @@ is read and verified, so what remains is the filling of pages rather than the me
       default interval is **1.25 cm**, not the half inch Word uses — measured, a tab in a paragraph with no
       stops lands 709 twips along — and its `style:type="char"` is only a decimal stop when `style:char`
       names a separator, behaving as a right stop otherwise, which is what LibreOffice renders.
-- [ ] Tab stops for DOC and RTF. The engine and the two XML readers are done; WW8's `sprmPChgTabsPapx` and
-      RTF's `\tx`/`\tqc`/`\tqr`/`\tqdec` are not read, so a tabbed line in those two formats falls back to
-      the default interval — right for an untabbed paragraph, wrong wherever a document sets its own stops.
+- [x] Tab stops for DOC and RTF too, so all four formats now advance a tab to the same place. WW8's
+      `sprmPChgTabsPapx` states a *change* rather than a list — a count of positions to delete, a count to
+      add, and then one descriptor byte each — so applying the style chain and then the direct formatting in
+      order is what turns it into a list. RTF states the kind *before* the position (`\tqr\tx5000`), so the
+      kind is held and consumed by the `\tx` that follows.
+- [x] The `Dop`, at last: its `dxaTab` is where a DOC's default tab interval lives, and reading it was the
+      only way the DOC agreed with the other three — LibreOffice writes 709 twips into a DOC it exported
+      from an ODF document, not Word's 720, so assuming either constant is wrong. It is FIB entry **31**,
+      two before the piece table's 33. The same record's `fDontUseHTMLAutoSpacing` now answers whether the
+      two paragraph spacings collapse, which was the last thing the DOC path had hard-coded.
 - [ ] A justified line that also holds a tab is left ragged. Writer stops justifying at a centre, right or
       decimal tab and gives each stretch between tabs its own space-add, which is a per-stretch answer where
       the engine has one per line; stretching the blanks anyway would move text out of the columns the tabs
