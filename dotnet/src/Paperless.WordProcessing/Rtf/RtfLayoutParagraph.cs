@@ -163,12 +163,16 @@ public readonly record struct RtfLayoutBlock
 /// <param name="HeaderRowCount">How many rows at the top repeat across a page break.</param>
 /// <param name="LeftIndent">How far the table's left edge sits from the body area's.</param>
 /// <param name="SectionIndex">Which of the document's sections the table sits in.</param>
+/// <param name="ColumnFit">
+/// How to size the columns when the <c>\cellx</c> edges stated none, and null when they stated them all.
+/// </param>
 public sealed record RtfLayoutTable(
     IReadOnlyList<Core.Units.Length> ColumnWidths,
     IReadOnlyList<RtfLayoutRow> Rows,
     int HeaderRowCount,
     Core.Units.Length LeftIndent,
-    int SectionIndex = 0);
+    int SectionIndex = 0,
+    Layout.TableColumnFit? ColumnFit = null);
 
 /// <summary>One row of an RTF table.</summary>
 /// <param name="Cells">Its cells, left to right; a cell covered by a merge above is absent.</param>

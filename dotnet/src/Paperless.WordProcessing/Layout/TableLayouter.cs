@@ -34,16 +34,22 @@ public static class TableLayouter
     /// <param name="nesting">
     /// How many tables enclose this one, so that a file claiming absurd nesting stops rather than recursing.
     /// </param>
+    /// <param name="available">
+    /// How wide the area holding the table is — the body's text width, or the enclosing cell's inner width
+    /// for a nested one. It changes nothing for a table that declares its grid, which is every table this
+    /// engine has ever laid out; it is read only by one that left a column without a width and so has to be
+    /// fitted to what it sits in. See <see cref="PageTable.ColumnFit"/>.
+    /// </param>
     /// <returns>
     /// The cells with page-coordinate rectangles, and each row's height in order — the caller needs the
     /// heights to decide where the table ends and which rows fit on the page.
     /// </returns>
     public static (List<PlacedTableCell> Cells, List<Length> RowHeights) LayOut(
-        PageTable table, DocPoint origin, int nesting = 0)
+        PageTable table, DocPoint origin, int nesting = 0, Length? available = null)
     {
         ArgumentNullException.ThrowIfNull(table);
 
-        List<Length> lefts = ColumnLefts(table);
+        List<Length> lefts = ColumnLefts(table.WidthsWithin(available ?? table.Width));
         int rows = Math.Min(table.Rows.Count, PageTable.MaxRows);
 
         // Pass one: every cell's text, laid out at its own width, with the row it charges its height to.
@@ -54,7 +60,7 @@ public static class TableLayouter
         {
             foreach (PageTableCell cell in table.Rows[row].Cells)
             {
-                Length width = WidthOf(cell, lefts, table);
+                Length width = WidthOf(cell, lefts);
                 if (width <= Length.Zero) continue;
 
                 Length inner = width - cell.Padding.Horizontal;
@@ -98,15 +104,15 @@ public static class TableLayouter
         {
             if (cell.LastRow == cell.Row) continue;
 
-            Length available = Length.Zero;
-            for (int row = cell.Row; row <= cell.LastRow; row++) available += heights[row];
+            Length covered = Length.Zero;
+            for (int row = cell.Row; row <= cell.LastRow; row++) covered += heights[row];
 
             // An exact row does not grow, so a merge ending in one has nowhere to put its shortfall and its
             // content overflows. Skipping the row rather than growing it is the whole point of "exact".
             if (table.Rows[cell.LastRow].HasExactHeight) continue;
 
             Length needed = cell.TextHeight + cell.Cell.Padding.Vertical;
-            if (needed > available) heights[cell.LastRow] += needed - available;
+            if (needed > covered) heights[cell.LastRow] += needed - covered;
         }
 
         // Pass two: the heights are settled, so every cell has a rectangle.
@@ -275,16 +281,16 @@ public static class TableLayouter
     /// two lookups whatever it spans — including a cell whose span runs off the end of the declared grid,
     /// which real documents contain.
     /// </remarks>
-    private static List<Length> ColumnLefts(PageTable table)
+    private static List<Length> ColumnLefts(IReadOnlyList<Length> widths)
     {
-        int columns = Math.Min(table.ColumnWidths.Count, PageTable.MaxColumns);
+        int columns = Math.Min(widths.Count, PageTable.MaxColumns);
         List<Length> lefts = new(columns + 1);
 
         Length at = Length.Zero;
         for (int column = 0; column < columns; column++)
         {
             lefts.Add(at);
-            at += table.ColumnWidths[column];
+            at += widths[column];
         }
 
         lefts.Add(at);
@@ -297,7 +303,7 @@ public static class TableLayouter
     /// dropped; one spanning past it stops at the edge, which is what LibreOffice's own importers do with a
     /// row whose cells overrun the grid rather than widening the table.
     /// </remarks>
-    private static Length WidthOf(PageTableCell cell, List<Length> lefts, PageTable table)
+    private static Length WidthOf(PageTableCell cell, List<Length> lefts)
     {
         int columns = lefts.Count - 1;
         if (cell.Column < 0 || cell.Column >= columns) return Length.Zero;

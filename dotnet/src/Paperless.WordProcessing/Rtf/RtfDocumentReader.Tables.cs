@@ -532,16 +532,39 @@ public sealed partial class RtfDocumentReader
     private RtfLayoutTable? LayoutTableOf(List<RowDraft> rows, bool isNested)
     {
         List<int> edges = [.. rows.SelectMany(r => r.Cells).Select(c => c.RightEdge).Distinct().Order()];
-        if (edges.Count == 0 || edges[^1] <= 0) return null;
 
         int left = rows.Count > 0 ? rows[0].LeftEdge : 0;
+        List<Length> widths = [];
+        TableColumnFit? fit = null;
 
-        List<Length> widths = new(edges.Count);
-        int previous = left;
-        foreach (int edge in edges)
+        // A row states its cells' right edges and nothing else, so a table whose \cellx values are all zero
+        // has stated no widths at all rather than zero-width columns — AssignColumns already fell back to
+        // counting cells for the same reason. The columns are then Word's to size, which for a grid of
+        // nothing is an equal division of whatever the table sits in.
+        if (edges.Count == 0 || edges[^1] <= 0)
         {
-            widths.Add(Length.FromTwips(Math.Max(0, edge - previous)));
-            previous = edge;
+            int columns = rows.Count == 0
+                ? 0
+                : rows.Max(row => row.Cells.Count(cell => !cell.ContinuesMergeAbove));
+            if (columns == 0) return null;
+
+            widths = [.. Enumerable.Repeat(Length.Zero, columns)];
+            fit = new TableColumnFit
+            {
+                IsAuto = [.. Enumerable.Repeat(true, columns)],
+                TableWidth = null,
+                Rule = TableWidthRule.Word,
+            };
+        }
+        else
+        {
+            widths = new List<Length>(edges.Count);
+            int previous = left;
+            foreach (int edge in edges)
+            {
+                widths.Add(Length.FromTwips(Math.Max(0, edge - previous)));
+                previous = edge;
+            }
         }
 
         List<RtfLayoutRow> layoutRows = new(rows.Count);
@@ -579,7 +602,8 @@ public sealed partial class RtfDocumentReader
             layoutRows,
             rows.TakeWhile(r => r.IsHeader).Count(),
             stated + (border / 2),
-            _sectionIndex);
+            _sectionIndex,
+            fit);
     }
 
     private static void ResolveVerticalMerges(List<RowDraft> rows)

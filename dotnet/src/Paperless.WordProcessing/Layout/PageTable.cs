@@ -117,7 +117,23 @@ public sealed record PageTable : PageBlock
     public const int MaxRows = 20000;
 
     /// <summary>The grid's column widths, left to right.</summary>
+    /// <remarks>
+    /// What the file stated. When <see cref="ColumnFit"/> is not null some of these are placeholders for a
+    /// column that stated nothing, and <see cref="WidthsWithin"/> rather than this is what the table is laid
+    /// out at.
+    /// </remarks>
     public required IReadOnlyList<Length> ColumnWidths { get; init; }
+
+    /// <summary>
+    /// How to size the columns the file left without a width, or null when it stated all of them.
+    /// </summary>
+    /// <remarks>
+    /// Null is the ordinary case and deliberately the untouched one: a table that declares its grid is laid
+    /// out from <see cref="ColumnWidths"/> and never reaches the fitting arithmetic. Only a table missing at
+    /// least one width carries this — see <see cref="TableColumnFit"/> for what the two families then do,
+    /// and for why it is not the content-measuring auto-layout it looks like it should be.
+    /// </remarks>
+    public TableColumnFit? ColumnFit { get; init; }
 
     /// <summary>The rows, top to bottom.</summary>
     public required IReadOnlyList<PageTableRow> Rows { get; init; }
@@ -173,6 +189,11 @@ public sealed record PageTable : PageBlock
     public bool JoinsBordersLikeWord { get; init; }
 
     /// <summary>How wide the table is, which is its columns added up.</summary>
+    /// <remarks>
+    /// The declared columns, so a table whose grid the file left blank answers with what it declared rather
+    /// than with what it will be laid out at. Use <see cref="WidthWithin"/> when the answer has to be the
+    /// second.
+    /// </remarks>
     public Length Width
     {
         get
@@ -181,6 +202,30 @@ public sealed record PageTable : PageBlock
             foreach (Length column in ColumnWidths) total += column;
             return total;
         }
+    }
+
+    /// <summary>
+    /// The column widths the table is laid out at inside an area of a given width.
+    /// </summary>
+    /// <remarks>
+    /// The same list as <see cref="ColumnWidths"/> for a table that declared its grid, so nothing stating
+    /// its widths pays for this or can be changed by it. The area's width matters only to a table that
+    /// stated neither its own width nor all of its columns', which is Writer's
+    /// <c>HoriOrientation::FULL</c> — as wide as whatever it sits in.
+    /// </remarks>
+    /// <param name="available">The width of the area the table sits in.</param>
+    public IReadOnlyList<Length> WidthsWithin(Length available)
+        => ColumnFit is null ? ColumnWidths : ColumnFit.Resolve(ColumnWidths, available);
+
+    /// <summary>How wide the table is inside an area of a given width.</summary>
+    /// <param name="available">The width of the area the table sits in.</param>
+    public Length WidthWithin(Length available)
+    {
+        if (ColumnFit is null) return Width;
+
+        Length total = Length.Zero;
+        foreach (Length column in WidthsWithin(available)) total += column;
+        return total;
     }
 }
 

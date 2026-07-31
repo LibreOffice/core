@@ -69,10 +69,13 @@ public static class FlowLayouter
 
                 top += nested.SpaceBefore;
 
+                // The flow's width is what a table stating none of its own is fitted to, which for a cell is
+                // the cell and for a header the text area. It changes nothing for a table declaring a grid.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) = TableLayouter.LayOut(
                     nested,
                     new DocPoint(area.X, area.Y + top),
-                    nesting + 1);
+                    nesting + 1,
+                    area.Width);
 
                 Length height = Length.Zero;
                 foreach (Length row in rowHeights) height += row;
@@ -81,7 +84,10 @@ public static class FlowLayouter
                 {
                     Table = nested,
                     Area = new DocRect(
-                        area.X + nested.LeftIndent, area.Y + top, nested.Width, height),
+                        area.X + nested.LeftIndent,
+                        area.Y + top,
+                        nested.WidthWithin(area.Width),
+                        height),
                     Cells = cells,
                     FirstRow = 0,
                     RowEnd = rowHeights.Count,

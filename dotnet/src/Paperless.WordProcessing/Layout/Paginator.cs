@@ -262,8 +262,10 @@ public sealed class Paginator
 
             if (blocks[i] is PageTable table)
             {
+                // The section's own breaking width is also what a table stating no widths of its own is
+                // fitted to. A table that declares its grid is laid out exactly as it was before.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) =
-                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero));
+                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero), 0, width);
 
                 laid.Add(new LaidBlock(null, cells, rowHeights));
                 continue;
@@ -1154,7 +1156,10 @@ public sealed class Paginator
             {
                 Table = table,
                 Area = new DocRect(
-                    body.X + table.LeftIndent, body.Y + top, table.Width, placedHeight),
+                    body.X + table.LeftIndent,
+                    body.Y + top,
+                    table.WidthWithin(body.Width),
+                    placedHeight),
                 Cells = cells,
                 FirstRow = from,
                 RowEnd = end,
