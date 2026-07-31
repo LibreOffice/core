@@ -1,11 +1,12 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 all but the OOXML spreadsheet and presentation formats;
-Phase 2 complete for word processing.** Every word-processing format reads and *lays out* —
-`odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and footers,
-tables, sections and columns all verified against LibreOffice's own rendering to a tenth of a
-point. The ODF spreadsheet and presentation formats extract. `xlsx`, `pptx`, the legacy `xls`
-and `ppt`, and CSV do not read at all yet.
+Status: **Phase 0 complete; Phase 1 all but the OOXML and legacy spreadsheet and presentation
+formats; Phase 2 complete for word processing.** Every word-processing format reads and *lays
+out* — `odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and
+footers, tables, sections and columns all verified against LibreOffice's own rendering to a
+tenth of a point, and everything a table draws — cell borders and shading — now compared
+stroke for stroke and fill for fill in all four. The ODF spreadsheet and presentation formats
+extract. `xlsx`, `pptx`, the legacy `xls` and `ppt`, and CSV do not read at all yet.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
@@ -15,23 +16,34 @@ behind it.
 Two fronts, and they are independent.
 
 **Word processing** is deep into Phase 3's layout half, and the thing to know before picking it
-up is that **the rasteriser is no longer the blocker it was recorded as**. Everything a word
-processor draws that is not text — a footnote separator, a cell border, a cell shade — is a
-filled or stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in the TestKit read
-them. So those features are verifiable at the same tenth of a point as text, without pixels.
-Footnotes and endnotes are done in all four formats, including the feedback loop into pagination
-that a footnote needs and the separate pages an endnote takes. Cell shading is done in three
-formats and cell borders in two, consolidated the way LibreOffice consolidates them. What
-remains is floating frames with text wrap, the DOC reads for borders and shading, the table
-origin in DOCX and RTF, and note numbering *restarts*. Read
-`src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
-warning about borders: they cannot be verified the way everything else in this library has
-been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
-is still a stub. That makes the rasteriser the thing to build before the borders, not after.
+up is that **the rasteriser is not a prerequisite for any of it.** Everything a word processor
+draws that is not text — a footnote separator, a cell border, a cell shade — is a filled or
+stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in the TestKit read them. So
+those features are verifiable at the same tenth of a point as text, without pixels, and they
+were: footnotes and endnotes in all four formats including the feedback loop into pagination,
+cell shading in all four, and cell borders in all four, consolidated the way LibreOffice
+consolidates them.
+
+*(An earlier version of this note said the opposite — that borders could not be verified without
+the rasteriser, so it had to be built first. That was the wrong conclusion from a true premise. A
+word-*position* comparison genuinely cannot see a border; the PDF's content stream states every
+one as an explicit path. The lesson generalises past borders, so it is left here rather than
+quietly deleted: before concluding a feature cannot be compared, check what the reference
+actually writes, not what `pdftotext` can be made to report.)*
+
+What remains in the layout half is floating frames with text wrap, table auto-layout for a table
+whose columns state no widths, the note-numbering restart *application* pass, and RTL text in the
+layouter — the last newly unblocked, since bidi levels are now resolved and carried but nothing
+consumes them. Read `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is
+missing and why.
 
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
 spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
-has the model.
+has the model. Two pieces of shared infrastructure are worth building deliberately rather than
+per format, because each buys three formats at once: **DrawingML text bodies** in
+`Paperless.Ooxml`, shared by DOCX, XLSX and PPTX, and **Escher/MS-ODRAW** in
+`Paperless.MsBinary`, which DOC, XLS and PPT all delegate their drawings to — the DOC reader has
+an open item waiting on exactly that.
 
 Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
 
@@ -59,7 +71,7 @@ binary.
 
 | Done | |
 |---|---|
-| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 280 tests passing |
+| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 852 tests passing |
 | ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
 | ✅ | `FormatCatalogue`: all 43 formats described |
 | ✅ | Content-based format identification, verified on all 17 corpus formats |
@@ -81,13 +93,17 @@ binary.
 | ✅ | Text layout: a hand-rolled OpenType reader, HarfBuzz shaping, UAX #14 line breaking, and paragraph layout with alignment, justification, tabs, indents and line spacing |
 | ✅ | Word-processing page layout: pagination, headers and footers, tables as grids that split across pages with repeating headings, several sections per document, and columns — all four formats, all compared against LibreOffice's own rendering |
 | ✅ | Footnotes and endnotes: read from all four formats, placed with the feedback loop into pagination that a footnote needs and the pages of their own that an endnote takes, with the escapement rule measured off LibreOffice's PDF content stream |
+| ✅ | Table cell borders and shading in all four formats, compared stroke for stroke and fill for fill — including the two rules that separate a Word table from a Writer one: the table's origin against its left border, and Word's own grid-line joins |
+| ✅ | Note numbering: the sequence, the start value and the *restart rule* read from all four formats. Applying a restart is pagination's half and is still open |
+| ✅ | Tracked changes, bookmarks and fields recorded in the model with their author, timestamp and range, from all four formats — extraction still resolves changes rather than showing marks, which is what LibreOffice's *renderer* does and is now measured rather than assumed |
+| ✅ | Bidi (UAX #9), script itemisation (UAX #24) and mid-run font fallback in `Paperless.Text`, differentially tested against ICU — the library LibreOffice itself resolves bidi with — and against LibreOffice's own PDF portion boundaries |
 
 | Not started | |
 |---|---|
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Floating frames with text wrap; cell borders and shading for DOC |
+| ❌ | Floating frames with text wrap; table auto-layout; RTL text in the layouter |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -223,9 +239,15 @@ was found because a page comparison put a word a measurable distance from where 
       loop shortens the page until it holds. Endnotes instead take pages of their own after the
       last body page, numbered i, ii, iii rather than 1, 2, 3. Notes read from all four formats,
       with the separator rule above them drawn and compared.
-- [x] Table cell shading (ODF, DOCX, RTF) and cell borders (ODF, DOCX, RTF), the borders
-      consolidated into one stroke per grid line as LibreOffice writes them.
-- [ ] The rest of it: floating frames with text wrap, and the DOC reads for borders and shading.
+- [x] Table cell shading and cell borders in **all four** formats, the borders consolidated into one
+      stroke per grid line as LibreOffice writes them. Two rules had to be found before the Word family
+      would agree, and the second was found twice independently, from DOCX/RTF and from DOC: Writer
+      positions a table by the *centre* of its left border where Word uses the border's outer edge, and
+      LibreOffice joins a Word table's grid lines by Word's rule — an inner line stops a whole border
+      width short of the outline it meets instead of overshooting it by half.
+- [ ] The rest of it: floating frames with text wrap, table auto-layout for a table stating no column
+      widths, and RTL text in the layouter — bidi levels are resolved and carried, and nothing consumes
+      them yet, so a mixed-direction paragraph measures correctly and still draws in logical order.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
