@@ -39,7 +39,15 @@ public static class BiffRecords
     public const ushort Xf4 = 0x0443;
     public const ushort Xf = 0x00E0;
 
-    /// <summary>The colours a workbook redefines; its table starts at palette index 8.</summary>
+    /// <summary>A <c>FONT</c> record; <c>0x0031</c> from BIFF5 and <c>0x0231</c> in BIFF3/4.</summary>
+    public const ushort Font = 0x0031;
+
+    /// <inheritdoc cref="Font"/>
+    public const ushort Font34 = 0x0231;
+
+    /// <summary>
+    /// A <c>PALETTE</c> record: the colours a workbook redefines, from palette index 8 upwards.
+    /// </summary>
     public const ushort Palette = 0x0092;
 
     // Sheet structure.

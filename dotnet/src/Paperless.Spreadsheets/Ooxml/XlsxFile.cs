@@ -48,8 +48,8 @@ public sealed class XlsxFile : IDisposable
 
         SharedStrings = XlsxSharedStrings.Read(
             LoadRelated("sharedStrings", "xl/sharedStrings.xml"));
-        StylesRoot = LoadRelated("styles", "xl/styles.xml");
-        Styles = XlsxStyles.Read(StylesRoot);
+        StyleSheet = LoadRelated("styles", "xl/styles.xml");
+        Styles = XlsxStyles.Read(StyleSheet);
         ThemeRoot = LoadRelated("theme", "xl/theme/theme1.xml");
 
         // The 1904 epoch is a workbook-wide switch, and reading it wrong shifts every date in
@@ -80,15 +80,18 @@ public sealed class XlsxFile : IDisposable
     public XlsxStyles Styles { get; }
 
     /// <summary>
-    /// The <c>styleSheet</c> root, kept so that rendering can read what extraction ignored.
+    /// The <c>styleSheet</c> root, for readers that need more of it than extraction does.
     /// </summary>
     /// <remarks>
-    /// The element rather than a second load: <see cref="Styles"/> deliberately reads only the
-    /// number formats, and the fills and borders beside them are wanted only when a workbook is
-    /// drawn. Opening the part twice would be a second chance for the two readers to disagree
-    /// about the same file.
+    /// Kept as the element rather than folded into <see cref="Styles"/> because everything past
+    /// the number formats — fonts, fills, borders — belongs to rendering, and rendering wants
+    /// different subsets of it in different places. Cell text reads the <c>fonts</c> and the
+    /// alignment on each <c>xf</c>, decoration reads the <c>fills</c> and the <c>borders</c>
+    /// beside them, and both walk this one element: opening the part twice would be a second
+    /// chance for the two readers to disagree about the same file, and it would keep
+    /// <see cref="XlsxStyles"/> from staying the extraction-sized thing it is.
     /// </remarks>
-    public XElement? StylesRoot { get; }
+    public XElement? StyleSheet { get; }
 
     /// <summary>The <c>theme</c> root, for the colours a fill names by index.</summary>
     public XElement? ThemeRoot { get; }

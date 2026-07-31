@@ -189,37 +189,16 @@ public sealed class SpreadsheetPages : IPageSequence
 /// once at the end.
 /// </para>
 /// <para>
-/// What is drawn is deliberately less than what is placed. Each cell's text is laid down as one
-/// glyph run at a baseline, aligned left for text and right for numbers, which is Calc's default
-/// alignment for a cell that states none. Explicit alignment, wrapping, shrink-to-fit, rotation,
-/// indent, the overflow of a long string into empty neighbours and the <c>###</c> a too-narrow
-/// numeric cell shows are all cell <em>text</em> layout, which is a separate item on the module's
-/// TODO — none of them moves a page boundary, because a row's height and a column's width are
-/// stated in the file rather than derived from the text.
+/// Where the text goes inside a cell is <see cref="SheetTextLayout"/>'s business, not this
+/// class's: alignment, wrapping, shrink-to-fit, indent, rotation, the overflow of a long string
+/// into empty neighbours and the <c>###</c> a too-narrow numeric cell shows are all one body of
+/// rules ported from Calc's own text output, and none of them needs to know what a page is. What
+/// this class supplies is the cell's rectangle, the print zoom and a way to ask whether the
+/// neighbours are free.
 /// </para>
 /// </remarks>
 internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement placement)
 {
-    /// <summary>
-    /// How far below a row's top the text sits, as a fraction of the row's height.
-    /// </summary>
-    /// <remarks>
-    /// A stand-in for the real answer, which is the row's ascent in the cell's own font. Calc
-    /// bottom-aligns cell text by default and leaves a small margin below it
-    /// (<c>ATTR_MARGIN</c>, 20 twips), so the baseline sits close to the bottom of the row; four
-    /// fifths of the height puts it there for the 10-point text in a 12.8-point row that every
-    /// default sheet uses. Replacing it needs the font metrics that cell text layout will bring.
-    /// </remarks>
-    private const double BaselineFraction = 0.8;
-
-    /// <summary>The margin between a cell's edge and its text.</summary>
-    /// <remarks>
-    /// <c>ATTR_MARGIN</c>'s default, 20 twips, which is measurable in any Calc rendering: the
-    /// first column of a sheet with a two-centimetre left margin starts its text at 57.7 points
-    /// rather than at 56.7.
-    /// </remarks>
-    private static readonly Length CellMargin = Length.FromTwips(20);
-
     private readonly double _scale = Math.Max(1, placement.ZoomPercentage) / 100.0;
     private readonly SheetPageDecoration _decoration = new(sheet, placement);
 
@@ -276,6 +255,26 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         }
     }
 
+    /// <summary>
+    /// How much of the page the row and column heading strips take, at the print scale.
+    /// </summary>
+    /// <remarks>
+    /// Zero on both axes when the sheet does not print them. Snapped, and snapped before the
+    /// zoom, for the same reason a column is (<see cref="SheetDeviceUnits"/>) and with the same
+    /// citation — <c>nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX</c> (<c>printfun.cxx:2204</c>)
+    /// is computed in unscaled hundredths of a millimetre and the map mode's fraction scales it
+    /// afterwards. The strip's own error is small, a twentieth of a hundredth; what matters is
+    /// that it leaves the block's origin on a whole device unit, so the snapped column widths
+    /// accumulate onto the boundaries LibreOffice puts them on. Measured on
+    /// <c>sheet-decor-ods.ods</c>: the first column starts at exactly 3000 hundredths — 85.039 pt
+    /// — in both renderings.
+    /// </remarks>
+    private DocPoint HeadingStrip => sheet.Setup.PrintsHeadings
+        ? new DocPoint(
+            SheetDeviceUnits.Snap(SheetPageDecoration.HeadingWidth) * _scale,
+            SheetDeviceUnits.Snap(SheetPageDecoration.HeadingHeight) * _scale)
+        : new DocPoint(Length.Zero, Length.Zero);
+
     /// <summary>Where the block starts including its heading strips, which the frame encloses.</summary>
     private DocPoint HeadingOrigin
     {
@@ -284,9 +283,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             DocPoint body = BodyOrigin;
             if (!sheet.Setup.PrintsHeadings) return body;
 
-            return new DocPoint(
-                body.X - (SheetPageDecoration.HeadingWidth * _scale),
-                body.Y - (SheetPageDecoration.HeadingHeight * _scale));
+            return new DocPoint(body.X - HeadingStrip.X, body.Y - HeadingStrip.Y);
         }
     }
 
@@ -306,18 +303,15 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             SheetPrintSetup setup = sheet.Setup;
             DocRect area = setup.PrintableArea;
 
-            // The heading strips are scaled with the sheet, which is what Calc does —
-            // nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX (printfun.cxx:2205) — even though
-            // pagination subtracts them unscaled, because pagination measures in document
-            // twips and this measures on the paper.
-            Length x = area.X
-                       + (setup.PrintsHeadings
-                           ? SheetPageDecoration.HeadingWidth * _scale
-                           : Length.Zero);
-            Length y = area.Y
-                       + (setup.PrintsHeadings
-                           ? SheetPageDecoration.HeadingHeight * _scale
-                           : Length.Zero);
+            // Two roundings and one scaling, in Calc's own order. The margin and the heading
+            // strip each reach the device separately — nStartX = nLeftSpace * nScaleX and
+            // nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX, both truncated into hundredths of a
+            // millimetre (printfun.cxx:2204 and :2220) — and only then does the map mode's
+            // fraction apply the print zoom, which is why the strip is snapped before it is
+            // scaled and the margin is not scaled at all (aPageRect divides it by the zoom
+            // first, printfun.cxx:2104, so the device's multiplication gives it back).
+            Length x = SheetDeviceUnits.Snap(area.X) + HeadingStrip.X;
+            Length y = SheetDeviceUnits.Snap(area.Y) + HeadingStrip.Y;
 
             if (setup.CentresHorizontally)
             {
@@ -343,10 +337,17 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     }
 
     /// <summary>The columns on the page, repeated band first, each with its position.</summary>
+    /// <remarks>
+    /// Snapped to the device unit <em>before</em> the print zoom is applied, not after, and the
+    /// difference is measurable on any scaled sheet: Calc hands its output device coordinates in
+    /// unscaled hundredths of a millimetre and lets the map mode's fraction do the scaling, so a
+    /// 72 pt column at 66% comes out at exactly 47.52 pt rather than at the 47.5087 that snapping
+    /// the scaled value gives. See <see cref="SheetDeviceUnits"/>.
+    /// </remarks>
     private List<PlacedColumn> Columns(Length left)
     {
         List<PlacedColumn> placed = [];
-        Length x = left;
+        Length offset = Length.Zero;
 
         if (placement.RepeatColumns is { IsValid: true } repeat)
             Append(repeat.FirstColumn, repeat.LastColumn);
@@ -360,9 +361,9 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             {
                 if (sheet.Grid.Columns.IsHidden(column)) continue;
 
-                Length width = sheet.Grid.Columns.SizeAt(column) * _scale;
-                placed.Add(new PlacedColumn(column, x, width));
-                x += width;
+                Length width = SheetDeviceUnits.Snap(sheet.Grid.Columns.SizeAt(column));
+                placed.Add(new PlacedColumn(column, left + (offset * _scale), width * _scale));
+                offset += width;
             }
         }
     }
@@ -371,7 +372,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     private List<PlacedRow> Rows(Length top)
     {
         List<PlacedRow> placed = [];
-        Length y = top;
+        Length offset = Length.Zero;
 
         if (placement.RepeatRows is { IsValid: true } repeat)
             Append(repeat.FirstRow, repeat.LastRow);
@@ -385,29 +386,61 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             {
                 if (sheet.Grid.Rows.IsHidden(row)) continue;
 
-                Length height = sheet.Grid.Rows.SizeAt(row) * _scale;
-                placed.Add(new PlacedRow(row, y, height));
-                y += height;
+                Length height = SheetDeviceUnits.Snap(sheet.Grid.Rows.SizeAt(row));
+                placed.Add(new PlacedRow(row, top + (offset * _scale), height * _scale));
+                offset += height;
             }
         }
     }
 
+    /// <summary>
+    /// The context a cell's text is laid out in: the zoom, the neighbours, the column widths.
+    /// </summary>
+    /// <remarks>
+    /// The widths come from the sheet's grid rather than from the page's placed columns, because a
+    /// string may spill past the last column on the page and Calc measures the spill against the
+    /// document (<c>mpDoc-&gt;GetColWidth</c> in <c>GetOutputArea</c>). Using the page's columns
+    /// would stop the overflow at the page boundary and draw a shorter string on the last column
+    /// of every page.
+    /// </remarks>
+    private SheetTextContext Context => new(
+        _scale,
+        (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column)),
+        column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale);
+
     private void DrawCell(
         string text, ContentTableCell cell, PlacedColumn column, PlacedRow row, IDrawingSink sink)
     {
-        Length size = Length.FromPoints(10) * _scale;
-        SheetTextRun? run = SheetText.Shape(text, size);
-        if (run is null) return;
+        SheetTextLayout.Draw(sink, Context, new SheetCellText(
+            text,
+            cell.Value,
+            sheet.Formats.At(row.Row, column.Column),
+            row.Row,
+            column.Column,
+            new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row))));
+    }
 
-        // Calc's default alignment, which is the cell's type and not a property: a string sits
-        // against the left edge and a number against the right, so a column of figures lines up.
-        bool rightAligned = cell.Value is not null and not string and not bool;
-        Length margin = CellMargin * _scale;
-        Length x = rightAligned
-            ? column.X + column.Width - margin - run.Width
-            : column.X + margin;
+    /// <summary>How wide a cell is, a merge's further columns included.</summary>
+    private Length SpanWidth(ContentTableCell cell, PlacedColumn column)
+    {
+        Length width = column.Width;
+        for (int at = 1; at < Math.Max(1, cell.ColumnSpan); at++)
+        {
+            width += SheetDeviceUnits.Snap(
+                sheet.Grid.Columns.PrintedSizeAt(column.Column + at)) * _scale;
+        }
+        return width;
+    }
 
-        Length baseline = row.Y + (row.Height * BaselineFraction);
-        sink.DrawGlyphRun(run.At(new DocPoint(x, baseline)), Paint.Solid(Colour.Black));
+    /// <summary>How tall a cell is, a merge's further rows included.</summary>
+    private Length SpanHeight(ContentTableCell cell, PlacedRow row)
+    {
+        Length height = row.Height;
+        for (int at = 1; at < Math.Max(1, cell.RowSpan); at++)
+        {
+            height += SheetDeviceUnits.Snap(
+                sheet.Grid.Rows.PrintedSizeAt(row.Row + at)) * _scale;
+        }
+        return height;
     }
 }

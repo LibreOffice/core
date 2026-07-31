@@ -138,7 +138,7 @@ internal static class OdsCellDecoration
             if (string.IsNullOrEmpty(styleName)) return -1;
             if (handles.TryGetValue(styleName, out int cached)) return cached;
 
-            SheetCellFormat format = Describe(styles, styleName);
+            SheetCellDecoration format = Describe(styles, styleName);
             int handle = format.IsNone ? 0 : formatting.Intern(format);
             handles[styleName] = handle;
             return handle;
@@ -257,7 +257,7 @@ internal static class OdsCellDecoration
     }
 
     /// <summary>What one cell style paints.</summary>
-    private static SheetCellFormat Describe(OdfStyles styles, string styleName)
+    private static SheetCellDecoration Describe(OdfStyles styles, string styleName)
     {
         Colour? background = null;
 
@@ -293,8 +293,8 @@ internal static class OdsCellDecoration
             Edge("bottom", "border-line-width-bottom"));
 
         return background is null && borders.IsNone
-            ? SheetCellFormat.None
-            : new SheetCellFormat(background, borders);
+            ? SheetCellDecoration.None
+            : new SheetCellDecoration(background, borders);
     }
 
     private static string? Property(

@@ -46,7 +46,7 @@ internal static class XlsxCellDecoration
         if (worksheet is null) return SheetFormatting.Empty;
 
         Palette palette = Palette.Read(styles, theme);
-        List<SheetCellFormat> formats = ReadCellFormats(styles, palette);
+        List<SheetCellDecoration> formats = ReadCellFormats(styles, palette);
         if (formats.Count == 0) return SheetFormatting.Empty;
 
         SheetFormatting formatting = new();
@@ -94,9 +94,9 @@ internal static class XlsxCellDecoration
     }
 
     /// <summary>One entry per <c>cellXfs</c> index, in that order.</summary>
-    private static List<SheetCellFormat> ReadCellFormats(XElement? styles, Palette palette)
+    private static List<SheetCellDecoration> ReadCellFormats(XElement? styles, Palette palette)
     {
-        List<SheetCellFormat> formats = [];
+        List<SheetCellDecoration> formats = [];
         if (styles is null) return formats;
 
         List<Colour?> fills = [.. Xlsx.Children(Xlsx.Child(styles, "fills"), "fill")
@@ -121,8 +121,8 @@ internal static class XlsxCellDecoration
             SheetCellBorders border = At(borders, Xlsx.Integer(borderFrom, "borderId"));
 
             formats.Add(fill is null && border.IsNone
-                ? SheetCellFormat.None
-                : new SheetCellFormat(fill, border));
+                ? SheetCellDecoration.None
+                : new SheetCellDecoration(fill, border));
         }
 
         return formats;

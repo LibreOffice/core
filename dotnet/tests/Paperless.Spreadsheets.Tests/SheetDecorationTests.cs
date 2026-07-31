@@ -72,7 +72,7 @@ public sealed class SheetDecorationTests
     public void ACellsOwnFormatBeatsItsColumns()
     {
         SheetFormatting formatting = new();
-        int blue = formatting.Intern(new SheetCellFormat(Colour.FromRgb(0x0000FF), default));
+        int blue = formatting.Intern(new SheetCellDecoration(Colour.FromRgb(0x0000FF), default));
 
         formatting.SetColumns(1, 1, blue);
         formatting.SetCell(6, 1, 0);

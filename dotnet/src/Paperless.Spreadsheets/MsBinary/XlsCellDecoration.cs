@@ -130,13 +130,13 @@ internal sealed class XlsDecorationTable
     }
 
     /// <summary>
-    /// What one <c>XF</c> index paints, or <see cref="SheetCellFormat.None"/> when it paints
+    /// What one <c>XF</c> index paints, or <see cref="SheetCellDecoration.None"/> when it paints
     /// nothing.
     /// </summary>
     /// <param name="index">The <c>XF</c> index a cell, row or column stated.</param>
-    public SheetCellFormat FormatOf(int index)
+    public SheetCellDecoration FormatOf(int index)
     {
-        if (index < 0 || index >= _formats.Count) return SheetCellFormat.None;
+        if (index < 0 || index >= _formats.Count) return SheetCellDecoration.None;
 
         XlsXfDecoration xf = _formats[index];
 
@@ -158,8 +158,8 @@ internal sealed class XlsDecorationTable
             : SheetCellBorders.None;
 
         return background is null && borders.IsNone
-            ? SheetCellFormat.None
-            : new SheetCellFormat(background, borders);
+            ? SheetCellDecoration.None
+            : new SheetCellDecoration(background, borders);
     }
 
     /// <summary>
@@ -310,7 +310,7 @@ internal sealed class XlsSheetDecoration
         {
             if (handles.TryGetValue(xf, out int cached)) return cached;
 
-            SheetCellFormat format = table.FormatOf(xf);
+            SheetCellDecoration format = table.FormatOf(xf);
             int handle = format.IsNone ? 0 : formatting.Intern(format);
             handles[xf] = handle;
             return handle;
