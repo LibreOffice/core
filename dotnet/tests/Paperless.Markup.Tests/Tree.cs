@@ -24,8 +24,11 @@ internal static class Tree
         => Section(SectionKind.Body, null, children);
 
     public static ContentSection Section(SectionKind kind, string? name, params ContentNode[] children)
+        => Section(kind, name, 0, children);
+
+    public static ContentSection Section(SectionKind kind, string? name, int index, params ContentNode[] children)
     {
-        ContentSection section = new() { Kind = kind, Name = name };
+        ContentSection section = new() { Kind = kind, Name = name, Index = index };
         foreach (ContentNode child in children) section.Children.Add(child);
         return section;
     }

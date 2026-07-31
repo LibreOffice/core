@@ -1,5 +1,6 @@
 using Markdig;
 using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using Paperless.Core.Extraction;
 using Paperless.Markup;
 
@@ -52,6 +53,43 @@ internal static class Markdown
     /// <summary>Emits a content tree as Markdown and reads the result back as plain text.</summary>
     public static string RoundTrip(ContentNode content)
         => PlainText(MarkdownWriter.ToMarkdown(content));
+
+    /// <summary>
+    /// The words a parsed node says, ignoring how they were marked up.
+    /// </summary>
+    /// <remarks>
+    /// Hand-walked rather than done with Markdig's <c>Descendants()</c>, because neither
+    /// overload of that reaches the inlines of a <em>leaf</em> block: a block quote comes back
+    /// full and a heading comes back empty, which looks precisely like the writer having emitted
+    /// an empty heading.
+    /// </remarks>
+    public static string Text(MarkdownObject node)
+    {
+        System.Text.StringBuilder text = new();
+        Walk(node);
+        return text.ToString().Trim();
+
+        void Walk(MarkdownObject current)
+        {
+            switch (current)
+            {
+                case LiteralInline literal:
+                    text.Append(literal.Content.ToString()).Append(' ');
+                    break;
+                case LeafBlock { Inline: not null } leaf:
+                    foreach (Inline inline in leaf.Inline) Walk(inline);
+                    break;
+                case ContainerInline container:
+                    foreach (Inline inline in container) Walk(inline);
+                    break;
+                case ContainerBlock blocks:
+                    foreach (Block block in blocks) Walk(block);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     /// <summary>
     /// Collapses every run of whitespace to one space, for comparing what two texts say rather

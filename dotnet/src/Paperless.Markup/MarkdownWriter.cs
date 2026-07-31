@@ -58,7 +58,6 @@ public static class MarkdownWriter
     private sealed class Renderer
     {
         private readonly StringBuilder _out = new();
-        private readonly List<XElement> _notes = [];
         private string _prefix = string.Empty;
         private string? _firstLinePrefix;
         private bool _blankPending;
@@ -66,7 +65,6 @@ public static class MarkdownWriter
         public string Render(XElement root)
         {
             Blocks(root);
-            Notes();
             return _out.ToString();
         }
 
@@ -111,10 +109,6 @@ public static class MarkdownWriter
                     Paragraph(Image(element));
                     break;
 
-                case "aside" when Class(element) == "note":
-                    _notes.Add(element);
-                    break;
-
                 case "aside" or "header" or "footer":
                     Quoted(Label(element), () => Blocks(element));
                     break;
@@ -148,14 +142,18 @@ public static class MarkdownWriter
                 "page-footer" => "Footer",
                 "comment" => "Comment",
                 "frame" => "Text frame",
+                "note" => "Note",
                 _ => string.Empty,
             };
             if (label.Length == 0) return null;
 
+            // The name is the note's own anchor ("1", "iv") or the comment's author, and both
+            // belong in the label: an unattributed note is a paragraph from nowhere.
             string? name = element.Attribute("data-name")?.Value;
-            return name is { Length: > 0 } && Class(element) == "comment"
-                ? "**" + MarkdownEscape.Inline(label + " — " + name) + "**"
-                : "**" + MarkdownEscape.Inline(label) + "**";
+            if (name is { Length: > 0 } && Class(element) is "comment" or "note")
+                label += Class(element) == "note" ? " " + name : " — " + name;
+
+            return "**" + MarkdownEscape.Inline(label) + "**";
         }
 
         private static string Class(XElement element) => element.Attribute("class")?.Value ?? string.Empty;
@@ -235,35 +233,22 @@ public static class MarkdownWriter
             _ => false,
         };
 
-        private void Notes()
-        {
-            for (int i = 0; i < _notes.Count; i++)
-            {
-                string label = NoteLabel(_notes[i], i);
-                string saved = _prefix;
-                _firstLinePrefix = saved + "[^" + label + "]: ";
-                _prefix = saved + "    ";
-                Blocks(_notes[i]);
-                _prefix = saved;
-                _firstLinePrefix = null;
-            }
-        }
-
-        /// <summary>
-        /// A footnote's GFM label, taken from the number the document itself rendered.
-        /// </summary>
-        /// <remarks>
-        /// The content tree names a note section after the anchor text the document shows — "1",
-        /// "i", "*" — so reusing it keeps the Markdown's numbering the document's own rather
-        /// than a fresh one. A name GFM cannot carry in a label falls back to the ordinal.
-        /// </remarks>
-        private static string NoteLabel(XElement note, int index)
-        {
-            string? name = note.Attribute("data-name")?.Value;
-            return name is { Length: > 0 } && name.All(c => char.IsLetterOrDigit(c) || c is '-' or '_' or '.')
-                ? name
-                : (index + 1).ToString(CultureInfo.InvariantCulture);
-        }
+        // Footnotes and endnotes: NOT GFM's [^1], and that is a decision made on evidence
+        // rather than a shortcut. Two things have to hold for [^1] to work and neither does.
+        //
+        // The definition has to be referenced. A conformant renderer drops an unreferenced
+        // footnote definition outright — measured with Markdig 1.3.2, a document whose only
+        // footnote is undefined renders as <div class="footnotes"><hr/><ol></ol></div>, with
+        // the note's text nowhere in the output. And a reference cannot be placed, because the
+        // content tree carries no inline anchor: every reader bakes the anchor number into the
+        // text of the run beside it ("a footnote reference1 here"), so finding the spot would
+        // mean matching text rather than reading structure. Recorded as a gap in the content
+        // tree, not worked around here.
+        //
+        // So a note is set apart the same way a comment, a header and a speaker note are: a
+        // block quote labelled with the number the document itself rendered. It loses the link
+        // between anchor and note, which the tree does not have either, and it keeps the text —
+        // which [^1] would not.
 
         private void Fenced(string content)
         {

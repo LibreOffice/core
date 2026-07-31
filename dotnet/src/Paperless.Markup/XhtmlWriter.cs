@@ -282,7 +282,12 @@ public static class XhtmlWriter
 
         private void Paragraph(ContentParagraph paragraph, XElement target)
         {
-            if (paragraph.ListLevel is int level && level >= 0)
+            // A heading wins over a list level, and this is not a preference. Word attaches its
+            // heading styles to an outline list, so in the DOC and DOCX of the same document
+            // every heading arrives carrying ListLevel 0 and an empty marker — taken as a list
+            // item it comes out as "- # Top level heading", a bullet wrapping a heading, in
+            // every Word file in the corpus.
+            if (paragraph.HeadingLevel is null && paragraph.ListLevel is int level && level >= 0)
             {
                 ListItem(paragraph, level, target);
                 return;
@@ -473,7 +478,12 @@ public static class XhtmlWriter
             // would put an attribute on most elements in the file. A run in a *different*
             // language is the case a consumer cares about, and it is rare enough to justify a
             // <span> of its own when there is no other element to carry it.
+            // Nothing is tagged when the document's own language is unknown: "different from
+            // the document" is not a judgement that can be made without knowing what the
+            // document is, and tagging every run instead would put a <span> around every word of
+            // a DOC, whose metadata records no language at all.
             if (run.Language is { Length: > 0 } language
+                && documentLanguage is { Length: > 0 }
                 && !string.Equals(language, documentLanguage, StringComparison.OrdinalIgnoreCase))
             {
                 if (current is not [XElement single])
