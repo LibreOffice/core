@@ -359,6 +359,18 @@ public:
         return OUString();
     }
 
+    /*
+     * The stable identifier of one part: a nonzero integer assigned to the part
+     * for the whole document session, kept over part moves, insertions and
+     * deletions of other parts. nMode selects the part list the index addresses:
+     * 0 for the standard parts, 1 for the master pages, 2 for the notes pages.
+     * Zero when there is no such part or the document has no part identifiers.
+     */
+    virtual sal_uInt64 getPartUniqueId(int /*nPart*/, int /*nMode*/)
+    {
+        return 0;
+    }
+
     /**
      * Select/Unselect a document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet(?).

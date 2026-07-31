@@ -4823,7 +4823,10 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     if (!pViewSh)
         return OUString();
 
-    SdPage* pSdPage = mpDoc->GetSdPage(nPart, pViewSh->GetPageKind());
+    // In master view the parts are the master pages, so describe the master page at
+    // that index, the same list getPartName and getPartHash read in that mode.
+    SdPage* pSdPage = isMasterViewMode() ? mpDoc->GetMasterSdPage(nPart, pViewSh->GetPageKind())
+                                         : mpDoc->GetSdPage(nPart, pViewSh->GetPageKind());
     const sal_Int16 nMasterPageCount= pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
 
     ::tools::JsonWriter jsonWriter;
@@ -4847,6 +4850,36 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
         SAL_WARN("sd", "getPartInfo request for SdPage " << nPart << " that does not exist!");
 
     return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
+}
+
+sal_uInt64 SdXImpressDocument::getPartUniqueId(int nPart, int nMode)
+{
+    if (!mpDoc || nPart < 0)
+        return 0;
+
+    // The mode selects the page list the index addresses, independently of any
+    // view's current edit mode: 0 the standard slides, 1 the master pages, 2 the
+    // notes pages.
+    SdPage* pPage = nullptr;
+    switch (nMode)
+    {
+        case 0:
+            if (nPart < mpDoc->GetSdPageCount(PageKind::Standard))
+                pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+            break;
+        case 1:
+            if (nPart < mpDoc->GetMasterSdPageCount(PageKind::Standard))
+                pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+            break;
+        case 2:
+            if (nPart < mpDoc->GetSdPageCount(PageKind::Notes))
+                pPage = mpDoc->GetSdPage(nPart, PageKind::Notes);
+            break;
+        default:
+            break;
+    }
+
+    return pPage ? pPage->GetUniqueID() : 0;
 }
 
 void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )

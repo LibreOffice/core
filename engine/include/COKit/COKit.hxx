@@ -1990,6 +1990,9 @@ struct COKitDocumentClass
     /// @see kit::Document::flushClipboard().
     void (*flushClipboard)(COKitDocument* pThis);
 
+    /// @see kit::Document::getPartUniqueId().
+    unsigned long long (*getPartUniqueId)(COKitDocument* pThis, int nPart, int nMode);
+
 };
 
 /*
@@ -2097,6 +2100,19 @@ public:
     char* getPartHash(int nPart)
     {
         return mpDoc->pClass->getPartHash(mpDoc, nPart);
+    }
+
+    /**
+     * Get the stable unique identifier of one part: a nonzero integer assigned
+     * to the part for the whole document session, kept over part moves,
+     * insertions and deletions of other parts. nMode selects the part list the
+     * index addresses: 0 for the standard parts, 1 for the master pages, 2 for
+     * the notes pages. Zero when there is no such part or the document has no
+     * part identifiers.
+     */
+    unsigned long long getPartUniqueId(int nPart, int nMode)
+    {
+        return mpDoc->pClass->getPartUniqueId(mpDoc, nPart, nMode);
     }
 
     void setPartMode(COKitPartMode eMode)

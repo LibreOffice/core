@@ -1313,6 +1313,7 @@ static void doc_postWindow(COKitDocument* pThis, unsigned nKitWindowId,
                            COKitWindowAction eAction, const char* pData);
 
 static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
+static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, int nMode);
 
 static bool doc_insertCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary,
@@ -1582,6 +1583,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
 
         m_pDocumentClass->getPartInfo = doc_getPartInfo;
+        m_pDocumentClass->getPartUniqueId = doc_getPartUniqueId;
 
         m_pDocumentClass->insertCertificate = doc_insertCertificate;
         m_pDocumentClass->addCertificate = doc_addCertificate;
@@ -4303,6 +4305,21 @@ static char* doc_getPartInfo(COKitDocument* pThis, int nPart)
     }
 
     return convertOUString(pDoc->getPartInfo(nPart));
+}
+
+static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, int nMode)
+{
+    comphelper::ProfileZone aZone("doc_getPartUniqueId");
+
+    SolarMutexGuard aGuard;
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return 0;
+    }
+
+    return pDoc->getPartUniqueId(nPart, nMode);
 }
 
 static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
