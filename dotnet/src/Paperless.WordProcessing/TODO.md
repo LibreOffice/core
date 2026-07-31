@@ -1192,6 +1192,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
       records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
+      **Bisected, since the sentence above was too broad to be true.** A note stating `\f1` with nothing else
+      keeps its face; the same note with a `\sN` in front of it loses the style's font *and* the direct one.
+      So the trigger is the style reference, not the group: three hand-written RTFs differing only in whether
+      the note paragraph names a style, rendered by the same `soffice`. `footnotes.rtf` names `\s26`, whose
+      own definition is `\f4\fs20` — Carlito at ten point — and restates `\f4\fs20` directly beside it, and
+      LibreOffice renders neither. What it renders instead is its built-in Footnote style, which is `\s27` in
+      that file: `\fi-340\li340\fs20` with the font inherited from `Normal`, which is `\f3`, Liberation Serif.
+      The size survives; only the face and the indent are lost.
+      This is what made `footnotes.rtf`'s **note separator** look like a bug of ours, and it is not one. The
+      rule is drawn from where the notes landed — 0.1 cm above the first note's line box — and the note area
+      is bottom-aligned in the body's rectangle, so a shorter note line raises the whole area and the rule
+      with it. Liberation Serif is 11.55 pt a line at ten point where Carlito is 12.20, 13 twips; two notes,
+      26 twips, 1.30 pt — against the 1.286 pt the rule differs by, the remainder being the sub-twip rounding
+      of the bottom alignment. Every input to the separator's arithmetic other than the note height is
+      identical, and the other four formats of the same document agree with LibreOffice to a hundredth of a
+      point. `NoteSeparatorComparisonTests` pins both halves: that LibreOffice's RTF rendering draws the
+      notes in a font resource its own body does not use while its ODF rendering of the same document uses
+      one throughout, and that the separator's whole disagreement is accounted for by the shorter lines.
+      It fails if either stops being true — including if LibreOffice fixes its import, at which point
+      `footnotes.rtf` can rejoin the fill comparison.
 - [x] **Note numbering the document states**, in `NoteNumbering`: the sequence and the start value, per class,
       read from all four formats. The defaults stay what LibreOffice does when a file says nothing — footnotes
       1, 2, 3 and endnotes i, ii, iii. What each format says and how it lies:

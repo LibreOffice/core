@@ -217,12 +217,13 @@ public sealed class PdfOutputComparisonTests : IDisposable
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]
     [InlineData("footnotes.doc")]
-    // footnotes.rtf is left out, and what it is left out for is a layout finding rather than a
-    // drawing one: its note separator is drawn 757.465 pt down the page where LibreOffice puts it
-    // at 758.751, a difference of 1.286 pt — about 26 twips — in the height of the note area the
-    // RTF reader reserves. The other four formats agree with LibreOffice to a hundredth of a
-    // point on the same document, so this is the RTF reader's alone. Recorded in
-    // src/Paperless.Rendering/TODO.md; not fixed here because the layout is another library's.
+    // footnotes.rtf is left out, and what it is left out for is LibreOffice's rather than ours:
+    // its RTF import loses the face the note paragraph states — the file says Carlito both
+    // directly and through the style it names, and LibreOffice sets the notes in Liberation
+    // Serif, 13 twips a line shorter at ten point. The note area is bottom-aligned, so its top
+    // and the rule above it start two lines' worth higher: 758.751 pt against our 757.465, which
+    // is 1.286 of the 1.30 the shorter lines account for. NoteSeparatorComparisonTests pins that
+    // attribution and will fail if it stops holding, at which point this file rejoins the list.
     [InlineData("table-shading.fodt")]
     [InlineData("table-shading.odt")]
     [InlineData("table-shading.docx")]

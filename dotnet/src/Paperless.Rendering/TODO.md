@@ -154,11 +154,13 @@ and neither is this library's: the layout is `Paperless.WordProcessing`'s.
   Fixed there: the leading proportional line spacing adds above a paragraph's first line belongs
   to the paragraph *above* it. The rule, its citations and the before-and-after numbers are in
   `src/Paperless.WordProcessing/TODO.md`.
-- **`footnotes.rtf` draws its note separator 1.286 pt too high** — 757.465 pt down the page
-  against LibreOffice's 758.751, about 26 twips in the height of the note area the RTF reader
-  reserves. The other four formats agree to a hundredth of a point on the same document, so it
-  is the RTF reader's alone. `PdfOutputComparisonTests` leaves that one file out of the fill
-  comparison and says why.
+- **`footnotes.rtf` draws its note separator 1.286 pt above LibreOffice's** — 757.465 pt down the
+  page against 758.751. Settled, and it is LibreOffice's rather than ours: its RTF import loses
+  the face the note states and sets the notes in Liberation Serif, which is 13 twips a line
+  shorter than the Carlito the file names, so its bottom-aligned note area — and the rule above
+  it — starts two lines' worth higher. The evidence and the bisection are in
+  `src/Paperless.WordProcessing/TODO.md`; `NoteSeparatorComparisonTests` pins the attribution and
+  `PdfOutputComparisonTests` still leaves that one file out of the fill comparison.
 
 ## Open questions
 
