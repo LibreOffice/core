@@ -1,7 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
-using Paperless.Text.Fonts;
 using Paperless.Text.Shaping;
 
 namespace Paperless.Spreadsheets.Layout;
@@ -39,6 +38,9 @@ internal sealed class SheetTextRun
     /// <summary>How far the run's pen travels.</summary>
     public Length Width { get; }
 
+    /// <summary>The em size the run is set at.</summary>
+    public Length Size => _size;
+
     /// <summary>The run placed at a baseline origin.</summary>
     public GlyphRun At(DocPoint origin) => new()
     {
@@ -52,39 +54,25 @@ internal sealed class SheetTextRun
 }
 
 /// <summary>
-/// Shapes cell text in the sheet's default face.
+/// Shapes cell text in a resolved face.
 /// </summary>
 /// <remarks>
-/// <para>
-/// One face for the whole workbook, deliberately for now. Cell fonts are a formatting attribute
-/// the content tree does not carry and the readers do not yet resolve — <c>FONT</c> records and
-/// <c>styles.xml</c>'s <c>fonts</c> element are both on the module's TODO — so drawing every
-/// cell in the default face is the honest shape of what has been read. It costs nothing in
-/// pagination: a row's height and a column's width come from the file, never from the text.
-/// </para>
-/// <para>
-/// Liberation Sans is the face asked for because it is what LibreOffice puts in a new
-/// spreadsheet on Linux (<c>DefaultFontType::LATIN_SPREADSHEET</c>) and therefore what every
-/// reference rendering of a document that names no font is measured in. The resolver
-/// substitutes if it is absent, and a face that cannot be read at all yields no run rather than
-/// an exception, so a machine with no fonts draws an empty page instead of failing.
-/// </para>
+/// Shaping only — where the run goes is <see cref="SheetTextLayout"/>'s business. The two are
+/// kept apart because measuring is what pagination needs (<see cref="SheetTextOverflow"/> widens
+/// a sheet's print area by measuring strings) and placing is what drawing needs, and the first
+/// must not drag in the second.
 /// </remarks>
 internal static class SheetText
 {
-    private const string DefaultFamily = "Liberation Sans";
-
-    private static readonly Lazy<OpenTypeFace?> Face = new(Load);
-    private static readonly Lazy<FontReference> Reference = new(Describe);
-
     /// <summary>Shapes a string, or null when there is no face to shape it with.</summary>
     /// <param name="text">The text to shape.</param>
+    /// <param name="face">The face to shape it in.</param>
     /// <param name="size">The em size to scale the advances to.</param>
-    public static SheetTextRun? Shape(string text, Length size)
+    public static SheetTextRun? Shape(string text, SheetFace? face, Length size)
     {
-        if (text.Length == 0 || Face.Value is not { } face) return null;
+        if (text.Length == 0 || face is not { } resolved) return null;
 
-        ShapedText shaped = TextShaper.Default.Shape(face, text);
+        ShapedText shaped = TextShaper.Default.Shape(resolved.Face, text);
 
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
@@ -103,34 +91,16 @@ internal static class SheetText
             pen += advance;
         }
 
-        return new SheetTextRun(glyphs, clusters, Reference.Value, size, text, pen);
+        return new SheetTextRun(glyphs, clusters, resolved.Reference, size, text, pen);
     }
 
-    private static OpenTypeFace? Load()
-    {
-        try
-        {
-            SystemFontResolver resolver = SystemFontResolver.Build();
-            return resolver.LoadOpenType(resolver.Resolve(new FontRequest(DefaultFamily)));
-        }
-        catch (Exception exception) when (exception is Core.MalformedDocumentException
-                                             or IOException
-                                             or UnauthorizedAccessException)
-        {
-            // No readable face is not a reason to fail a layout — the pages, their count and
-            // their geometry are all already decided, and only the ink is missing.
-            return null;
-        }
-    }
+    /// <summary>How wide a string is in a face, without keeping the run.</summary>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="face">The face; null measures as nothing.</param>
+    /// <param name="size">The em size.</param>
+    public static Length Measure(string text, SheetFace? face, Length size)
+        => Shape(text, face, size)?.Width ?? Length.Zero;
 
-    private static FontReference Describe() => Face.Value is { } face
-        ? new FontReference
-        {
-            FamilyName = face.FamilyName ?? DefaultFamily,
-            RequestedFamily = DefaultFamily,
-            Weight = face.Weight,
-            IsItalic = face.IsItalic,
-            FaceKey = face.FamilyName ?? DefaultFamily,
-        }
-        : new FontReference { FamilyName = DefaultFamily, FaceKey = DefaultFamily };
+    /// <summary>The face a sheet's cells fall back to, resolved once.</summary>
+    public static SheetFace? DefaultFace => SheetFonts.For(SheetCellFormat.Default);
 }

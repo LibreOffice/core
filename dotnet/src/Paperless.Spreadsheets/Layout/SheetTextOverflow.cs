@@ -49,7 +49,7 @@ internal static class SheetTextOverflow
 
     /// <summary>The cell text margin either side, which counts towards the width needed.</summary>
     /// <remarks><c>ATTR_MARGIN</c>'s default of 20 twips, left and right.</remarks>
-    private static readonly Length CellMargins = Length.FromTwips(40);
+    private static readonly Length CellMargins = SheetTextLayout.CellMargin * 2;
 
     /// <summary>The last column a sheet's contents reach, overflow included.</summary>
     /// <param name="sheet">The sheet.</param>
@@ -59,7 +59,7 @@ internal static class SheetTextOverflow
         ArgumentNullException.ThrowIfNull(sheet);
         if (!used.IsValid) return used.LastColumn;
 
-        Dictionary<string, Length> widths = new(StringComparer.Ordinal);
+        Dictionary<(string Text, SheetCellFormat Format), Length> widths = [];
         int last = used.LastColumn;
         int measured = 0;
 
@@ -79,21 +79,35 @@ internal static class SheetTextOverflow
                 // Nothing overflows into an occupied cell, and checking first is what keeps a
                 // dense sheet from being measured at all — the same short-circuit Calc added in
                 // tdf#128873.
-                if (sheet.CellAt(row.Index, cell.Column + 1) is not null) continue;
+                if (!SheetTextLayout.IsAvailable(sheet.CellAt(row.Index, cell.Column + 1))) continue;
                 if (measured++ >= MeasurementBudget) return last;
 
-                if (!widths.TryGetValue(text, out Length width))
+                SheetCellFormat format = sheet.Formats.At(row.Index, cell.Column);
+
+                if (!widths.TryGetValue((text, format), out Length width))
                 {
-                    width = (SheetText.Shape(text, Length.FromPoints(10))?.Width ?? Length.Zero)
-                            + CellMargins;
-                    widths[text] = width;
+                    width = SheetText.Measure(text, SheetFonts.For(format), format.FontSize)
+                            + CellMargins + format.Indent;
+                    widths[(text, format)] = width;
                 }
 
                 Length missing = width - sheet.Grid.Columns.SizeAt(cell.Column);
+
+                // Alignment decides which way the overflow goes, and only the rightward part
+                // costs columns. Calc looks at exactly this and no more: a centred cell spills
+                // both ways so half is missing to the right, and a right-aligned one spills only
+                // to the left, which costs nothing at the right-hand end
+                // (`ScTable::MaybeAddExtraColumn`, sc/source/core/data/table1.cxx:2264-2276).
+                if (missing > Length.Zero)
+                {
+                    if (format.Horizontal == SheetHorizontalAlignment.Centre) missing /= 2;
+                    else if (format.Horizontal == SheetHorizontalAlignment.Right) missing = Length.Zero;
+                }
+
                 int at = cell.Column;
                 while (missing > Length.Zero && at < SheetAddress.MaxColumn)
                 {
-                    if (sheet.CellAt(row.Index, at + 1) is not null) break;
+                    if (!SheetTextLayout.IsAvailable(sheet.CellAt(row.Index, at + 1))) break;
                     at++;
                     missing -= sheet.Grid.Columns.PrintedSizeAt(at);
                 }
