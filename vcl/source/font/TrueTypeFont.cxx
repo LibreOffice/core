@@ -71,11 +71,6 @@ hb_font_t* TrueTypeFont::getFont() const
     return m_pFont;
 }
 
-font::RawFontData TrueTypeFont::getTable(hb_tag_t tag) const
-{
-    return font::RawFontData(hb_face_reference_table(m_pFace, tag));
-}
-
 sal_uInt32 TrueTypeFont::countNonEmptyGlyphs() const
 {
     hb_font_t* pFont = getFont();

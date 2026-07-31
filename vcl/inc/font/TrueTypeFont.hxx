@@ -145,7 +145,6 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TrueTypeFont
     mutable hb_font_t* m_pFont = nullptr;
 
     hb_font_t* getFont() const;
-    font::RawFontData getTable(hb_tag_t tag) const;
     OUString getName(hb_ot_name_id_t nNameID,
                      const LanguageTag& rLang = LanguageTag(LANGUAGE_DONTKNOW)) const;
 
