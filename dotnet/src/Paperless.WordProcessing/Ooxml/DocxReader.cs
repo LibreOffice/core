@@ -239,17 +239,20 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             theme: _file.Theme);
         List<PageBlock> blocks = source.Read(body);
 
-        // Read from the document rather than assumed per format. LibreOffice's PARA_SPACE_MAX means the
-        // two spacings *add*; when it is off the larger wins, which is Word's behaviour. Its OOXML
-        // exporter writes w:doNotUseHTMLParagraphAutoSpacing exactly when the flag is on
-        // (docxexport.cxx), so the element's absence is what makes a DOCX collapse — and a document
-        // carrying it adds, like an ODF one.
-        bool collapses = !Word.IsOn(
-            Word.Child(Word.Child(_file.Settings, "compat"), "doNotUseHTMLParagraphAutoSpacing"));
+        // The compatibility options, of which two reach pagination. Which ones those are was
+        // settled by rendering documents with and without each flag rather than by reading the
+        // schema; WordCompatibility records what every one of them was measured to do.
+        WordCompatibility compatibility = WordCompatibility.Read(_file.Settings);
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
-            CollapsesSpacing = collapses,
+            // LibreOffice's PARA_SPACE_MAX means the two spacings *add*; when it is off the larger
+            // wins, which is Word's behaviour. Its OOXML exporter writes
+            // w:doNotUseHTMLParagraphAutoSpacing exactly when the flag is on (docxexport.cxx), so
+            // the element's absence is what makes a DOCX collapse — and a document carrying it
+            // adds, like an ODF one.
+            CollapsesSpacing = !compatibility.DoNotUseHtmlParagraphAutoSpacing,
+            JustifiesLinesEndedByBreak = !compatibility.DoNotExpandShiftReturn,
             MaxPages = options?.MaxPages is > 0
                 ? options.MaxPages
                 : PaginationOptions.Word.MaxPages,

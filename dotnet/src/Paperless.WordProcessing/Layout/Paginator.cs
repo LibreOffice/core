@@ -61,6 +61,18 @@ public sealed record PaginationOptions
     public bool CollapsesSpacing { get; init; }
 
     /// <summary>
+    /// Whether a justified line ended by a manual break is stretched to the margin.
+    /// </summary>
+    /// <remarks>
+    /// True everywhere except in a DOCX carrying <c>w:doNotExpandShiftReturn</c>, which is how a
+    /// file asks for Word's pre-2000 behaviour: a line ended by a shift-return is left ragged,
+    /// as a paragraph's last line is, rather than having its two words pushed to opposite
+    /// margins. LibreOffice reads the same flag into <c>DoNotJustifyLinesWithManualBreak</c>.
+    /// It changes only the drawing, never where a line breaks.
+    /// </remarks>
+    public bool JustifiesLinesEndedByBreak { get; init; } = true;
+
+    /// <summary>
     /// Upper bound on pages, as a guard against a document that cannot be paginated.
     /// </summary>
     /// <remarks>
@@ -348,7 +360,7 @@ public sealed class Paginator
             // paragraph that has one.
             ILineObstacles? obstacles = _obstacles?.Invoke(i);
 
-            laid.Add(new LaidBlock(paragraph.HasRuns
+            LaidOutParagraph laidOut = paragraph.HasRuns
                 ? layouter.Layout(
                     Measure(paragraph),
                     paragraph.Format,
@@ -364,7 +376,12 @@ public sealed class Paginator
                     paragraph.Language,
                     previous,
                     paragraph.Shaping,
-                    obstacles)));
+                    obstacles);
+
+            laid.Add(new LaidBlock(
+                _options.JustifiesLinesEndedByBreak
+                    ? laidOut
+                    : ManualBreakJustification.Suppress(laidOut, paragraph.Text)));
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
