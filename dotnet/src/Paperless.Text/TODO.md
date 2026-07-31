@@ -69,6 +69,31 @@ is ICU-backed on Linux, the BCL surfaces only collation, casing, normalisation a
 So `ICU4N` (prerelease-only) or a native ICU binding were the alternatives, and hand-rolling
 avoids both a prerelease dependency and a native one.
 
+- [x] The `Line_Break`, `East_Asian_Width` and `Extended_Pictographic` tables, generated into
+      `Layout/LineBreakProperties.Tables.cs` — see `scripts/README.md` for their provenance and
+      what would improve it.
+- [x] Rules LB1 to LB31, written **in the standard's order** rather than as a pair table. A pair
+      table is faster and opaque: when a break comes out wrong, the only way to find out why is to
+      work out which cell decided it. A paragraph is a few hundred characters, so the speed is
+      irrelevant and the legibility is not.
+- [x] The four places LibreOffice's rule set differs from current UAX #14, since matching
+      LibreOffice's line breaks is the whole point: LB15 disabled (i#83649), a number range that
+      breaks after its hyphen (i#83229), CJ folded into NS for strict breaking, and LB21a in the
+      Unicode 15.0 form without 15.1's `[^HL]`.
+- [x] Verified differentially against an independent implementation of the same specification over
+      4,065 generated cases — every ordered pair of line-break classes, the same pairs across a
+      space, and real prose in eight scripts. The four deliberate differences are excluded from that
+      set and asserted directly instead, because agreeing there would be wrong.
+- [ ] Unicode's own `LineBreakTest.txt` as a third source. Stronger evidence than agreement with
+      another implementation, and not reachable from this environment: the egress policy denies
+      `unicode.org`.
+- [ ] Language-specific tailoring. `FindBreakOpportunities` takes a language and ignores it; the
+      cases that need it are few but real — Finnish and Slovak hyphenation-adjacent rules, and the
+      CJ handling that a document could ask to be loose rather than strict.
+- [ ] Dictionary-based breaking for Thai, Lao, Khmer and Burmese. Those scripts resolve to
+      `Alphabetic` today, so their text gets no intra-word breaks at all — which is what every
+      implementation without a dictionary produces, and better than breaking in the wrong places.
+
 - [ ] Generate the `Line_Break` property table from Unicode's `LineBreak.txt` into a compact
       trie. This is the bulk of the data and it is mechanical — generate it, do not hand-write
       it, and check the generator in so it can be re-run on a Unicode update.
