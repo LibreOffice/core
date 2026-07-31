@@ -181,6 +181,22 @@ which makes this the one note document comparable in every one of them. It catch
 alike and are not: ignoring the format gives 8 and 9, and taking ODF's `text:start-value` for the first
 number rather than for an offset gives VII and VIII.
 
+`note-restart.*` is a two-page document with eight footnotes, four to a page, whose configuration asks for
+the count to begin again on every page. It is the ground truth for the restart rules, and it was worth
+building before writing any of them because the measurement settled two questions at once.
+
+All four formats keep the rule through LibreOffice's own export, each in its own spelling —
+`text:start-numbering-at="page"`, `<w:numRestart w:val="eachPage"/>`, `\ftnrstpg`, and the DOP's
+`rncFootnote` — and all four then render *identically*: page one cites 1, 2, 3, 4 and page two cites 1, 2,
+3, 4 again, at the anchor in the sentence and at the head of the note alike. So this is comparable in every
+format, which the restart rules did not have to be and which makes a wrong reader fail visibly rather than
+subtly.
+
+The document deliberately holds four notes per page rather than ten. That keeps every citation one digit
+wide, so a reader that gets the *numbering* right but has not yet solved the width feedback — a restart makes
+numbers smaller, so a page's tenth note goes from `10` to `1` and its line rebreaks — still passes. A second
+document is what that case would need, and there is no point in one until the numbering itself is right.
+
 `header-table.fodt` puts a two-column table in the header, which is what a table in a header is *for*: a
 two-part running head, one cell hard left and another hard right on one line. It also has a header whose
 height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame cannot hold a table — so the
