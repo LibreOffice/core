@@ -108,7 +108,6 @@ namespace vcl
 constexpr int OS2_fsType_offset = 8;
 constexpr int OS2_panose_offset = 32;
 constexpr int OS2_ulUnicodeRange1_offset = 42;
-constexpr int OS2_fsSelection_offset = 62;
 constexpr int OS2_ulCodePageRange1_offset = 78;
 
 /*
