@@ -36,6 +36,10 @@
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.150.1" />
     <PackageVersion Include="SkiaSharp.HarfBuzz" Version="4.150.1" />
     <PackageVersion Include="HarfBuzzSharp" Version="14.2.1.1" />
+    <!-- The native harfbuzz build. Referenced alongside the managed binding by the library
+         that shapes, the same way Paperless.Rendering carries SkiaSharp's, so a consumer gets
+         a working shaper from a project reference rather than having to know to add it. -->
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Linux" Version="14.2.1.1" />
   </ItemGroup>
 
   <ItemGroup Label="Containers and crypto">

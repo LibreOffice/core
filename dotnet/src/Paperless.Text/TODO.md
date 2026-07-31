@@ -67,15 +67,56 @@ library's interpretation of them.
       `FontsDontUseUnderlineMetrics`) for the specific fonts known to lie about their own metrics
 - [ ] Variable fonts: at minimum do not crash; ideally honour the named instance. Today the
       static metrics are read, which is the default instance rather than the requested one.
-- [ ] `kern` and `GPOS` for the pair kerning shaping does not cover
+- [x] `kern` and `GPOS` are not read here on purpose — HarfBuzz reads them, and it is handed the
+      font file whole for exactly that reason. Two readers of the same positioning tables would be
+      two chances to disagree with LibreOffice about an advance width.
 
 ## Shaping
 
-- [ ] HarfBuzzSharp — the same engine LibreOffice uses, so advances agree by construction
-- [ ] Script and direction runs; bidi resolution (UBA)
-- [ ] Kerning, standard ligatures, letter spacing, justification adjustments
-- [ ] Vertical text
-- [ ] Font fallback mid-run when the primary face lacks a glyph
+- [x] HarfBuzzSharp, configured the way LibreOffice configures it — which is what makes the advances
+      agree by construction rather than by approximation. Four details do the work: the font is
+      scaled to the face's own units per em (`hb_font_set_scale(font, upem, upem)` in
+      `LogicalFontInstance::InitHbFont`) so advances come back on the design grid unrounded; metrics
+      come from the OpenType tables rather than a rasteriser; **no features are passed unless
+      something is being switched off**, which leaves HarfBuzz's defaults in force the way an empty
+      feature list does in `CommonSalLayout.cxx`; and clusters are counted per character
+      (`HB_BUFFER_CLUSTER_LEVEL_CHARACTERS`) so a cluster index is an index into the text.
+- [x] `ShapingOptions` is named after what it switches **off**, so `default` means what LibreOffice
+      means by default. LibreOffice's own flags are the same way round (`DisableKerning`,
+      `DisableLigatures`), and getting it backwards would silently give every caller who said nothing
+      an unkerned approximation.
+- [x] Kerning and the standard ligatures, therefore. Not cosmetic: a line of English prose at 12 pt
+      in Carlito accumulates 244 thousandths of an em of kerning — just under 3 pt — which is enough
+      to decide whether its last word fits. Measured without it, one of the fidelity test's
+      paragraphs came out 0.8 pt over a 481.9 pt text width and lost its last word, and every line
+      after that was wrong too.
+- [x] `ShapedText` answers for **every prefix** of the run, not just the whole. Filling lines asks
+      for hundreds of prefix widths per paragraph, and shaping each separately would be quadratic
+      *and* wrong, since a prefix shaped alone is not always a prefix of the shaped whole. A glyph's
+      width is credited to its cluster, which is what `GenericSalLayout::GetPartialTextWidth` does.
+- [x] Graceful fallback to `MetricsShaper` when the native harfbuzz library is absent, with
+      `TextShaper.IsShapingAvailable` saying which was used — an unshaped document has slightly wrong
+      line breaks, where a `DllNotFoundException` is no document at all. The two shapers agree
+      exactly for text with nothing to kern, which is what makes the fallback a fallback rather than
+      a different answer that happens to be close.
+- [x] Verified end to end: `LineBreakPositionTests` has LibreOffice lay six paragraphs out to PDF at
+      a known text width, reads the word boxes back with `pdftotext -bbox`, groups them into lines,
+      and compares line by line — at three em sizes, and with kerning both on and off on both sides.
+      Two of the paragraphs are kerning-heavy on purpose, and the test asserts that they really do
+      break differently with kerning than without, so the comparison cannot pass by accident.
+- [ ] Script and direction sub-runs. LibreOffice splits a bidi run into script runs and shapes each
+      separately; Paperless shapes the whole run with the script guessed from its text, so a
+      paragraph mixing Latin with a complex script may shape differently. Needs a script property
+      table, which is the same shape of generated artefact as the line-break tables.
+- [ ] Bidi resolution (UBA). `ShapingOptions.RightToLeft` shapes a run in one direction; resolving
+      mixed direction into runs is not written.
+- [ ] Letter spacing and justification adjustments — both adjust advances after shaping, so they
+      belong here rather than in the measurer.
+- [ ] Vertical text.
+- [ ] Font fallback mid-run when the primary face lacks a glyph. Coverage is queryable and the
+      resolver can choose a face; splitting the run and shaping each part is the missing piece.
+- [ ] Cache shaped runs across calls. The harfbuzz face and font are cached per face, but a repeated
+      word is reshaped; tables and lists repeat text constantly.
 
 ## Line breaking
 
@@ -125,18 +166,6 @@ avoids both a prerelease dependency and a native one.
       `Alphabetic` today, so their text gets no intra-word breaks at all — which is what every
       implementation without a dictionary produces, and better than breaking in the wrong places.
 
-- [ ] Generate the `Line_Break` property table from Unicode's `LineBreak.txt` into a compact
-      trie. This is the bulk of the data and it is mechanical — generate it, do not hand-write
-      it, and check the generator in so it can be re-run on a Unicode update.
-- [ ] Generate the `East_Asian_Width` table from `EastAsianWidth.txt` (needed by rule LB30
-      and by kinsoku).
-- [ ] Implement rules LB1–LB31 as a pair-table plus the handful of rules that need context.
-      Around 400 lines of rule engine on top of the generated tables.
-- [ ] Test against Unicode's own `LineBreakTest.txt` conformance suite — it is exhaustive and
-      makes this verifiable independently of LibreOffice.
-- [ ] Then diff against LibreOffice on real documents, since conformance to UAX #14 and
-      agreement with ICU are not the same thing (below).
-
 ### Where this will diverge from LibreOffice, and what to do about it
 
 LibreOffice's breaks are **ICU's** breaks, and ICU is UAX #14 *plus tailorings*. Expect two
@@ -164,15 +193,22 @@ gaps:
 
 ## Paragraph layout
 
-- [ ] Break a paragraph into lines within a given width, honouring indents
+- [x] Break a paragraph into lines within a given width, honouring a first-line indent that differs
+      from the rest. **Greedy, deliberately not Knuth-Plass**: total-fit produces better-looking
+      paragraphs and *different* line breaks, and different line breaks are precisely what must not
+      happen when the point is to agree with Writer.
+- [x] Two details that decide more breaks than the measurement does. A line's trailing spaces do not
+      count towards its width, so a space that would overflow the margin does not push its word to
+      the next line — which is why a paragraph of short words does not break after every one of them.
+      And a single word too long for the line takes the line alone and is allowed to exceed it,
+      because the alternative is an empty line followed by the same problem.
 - [ ] Alignment: left, right, centre, justified, distributed
 - [ ] Tab stops, including default intervals and decimal tabs
 - [ ] Line spacing: proportional, at-least, exact, leading
-- [ ] Drop caps; first-line indent; widow/orphan control
+- [ ] Drop caps; widow/orphan control
 - [ ] Non-rectangular text areas, for text wrapping around floating objects
 
 ## Open questions
 
-- [ ] Cache shaped runs? Shaping the same word repeatedly is common in tables and lists.
 - [ ] How closely must justification match? LibreOffice distributes extra space by a
       specific rule; approximating it shifts every glyph on a justified line.

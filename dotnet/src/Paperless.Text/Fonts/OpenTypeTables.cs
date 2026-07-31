@@ -45,6 +45,17 @@ public sealed class SfntFile
     /// <summary>Which face of the file this instance reads.</summary>
     public int FaceIndex { get; private set; }
 
+    /// <summary>
+    /// The whole font file, not just this face's tables.
+    /// </summary>
+    /// <remarks>
+    /// Exposed because a shaper needs the file and a face index rather than a table directory: HarfBuzz
+    /// parses the sfnt itself and reads tables this reader deliberately does not, <c>GSUB</c> and
+    /// <c>GPOS</c> among them. Handing over the bytes is what keeps the two agreeing about which face
+    /// they are looking at.
+    /// </remarks>
+    public ReadOnlyMemory<byte> Bytes => _data;
+
     /// <summary>The tags of the tables the face holds.</summary>
     public IReadOnlyCollection<uint> TableTags => _tables.Keys;
 

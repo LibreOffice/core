@@ -1,43 +1,64 @@
-using Paperless.Core.Graphics;
-using Paperless.Core.Units;
+using Paperless.Text.Fonts;
 
 namespace Paperless.Text.Shaping;
 
 /// <summary>
-/// Converts a run of characters into positioned glyphs.
+/// How a run of text is to be shaped.
 /// </summary>
 /// <remarks>
-/// LibreOffice shapes with HarfBuzz, so Paperless does too (via HarfBuzzSharp) rather
-/// than using a different engine: shaping differences would change advance widths,
-/// which would change line breaks, which would change pagination.
+/// <para>
+/// Named after what it switches <em>off</em>, so that <c>default</c> means what LibreOffice means by
+/// default: kerning and the optional ligatures applied, left to right. LibreOffice's layout arguments
+/// are the same way round — <c>SalLayoutFlags::DisableKerning</c> and <c>DisableLigatures</c> push a
+/// feature with value zero onto an otherwise empty feature list, and an empty list leaves HarfBuzz's
+/// own defaults in place (<c>vcl/source/gdi/CommonSalLayout.cxx</c>). Matching that means a caller who
+/// says nothing gets Writer's behaviour rather than an unkerned approximation of it.
+/// </para>
+/// <para>
+/// Kerning is not cosmetic. A line of ordinary English prose at 12 pt carries something like a quarter
+/// of an em of accumulated kerning, which is enough to decide whether its last word fits — so a shaper
+/// that skips it breaks lines in different places than Writer does, and every line after the first
+/// difference is wrong too.
+/// </para>
+/// </remarks>
+/// <param name="Language">
+/// A BCP 47 tag. Some features are language-specific, and it is passed through to the shaper for the
+/// same reason LibreOffice passes it.
+/// </param>
+/// <param name="Script">
+/// An ISO 15924 code such as <c>Latn</c> or <c>Arab</c>. Left null, the shaper infers one from the
+/// text.
+/// </param>
+/// <param name="DisableKerning">Suppresses the <c>kern</c> feature.</param>
+/// <param name="DisableLigatures">
+/// Suppresses <c>liga</c> and <c>clig</c> — the optional ligatures only. The orthographically required
+/// ones stay, because a script that needs them is unreadable without them.
+/// </param>
+/// <param name="RightToLeft">Shapes the run right to left.</param>
+public readonly record struct ShapingOptions(
+    string? Language = null,
+    string? Script = null,
+    bool DisableKerning = false,
+    bool DisableLigatures = false,
+    bool RightToLeft = false);
+
+/// <summary>
+/// Turns characters into positioned glyphs.
+/// </summary>
+/// <remarks>
+/// Keyed on <see cref="OpenTypeFace"/> and answering in design units rather than at an em size,
+/// because that is what the rest of layout needs: advances summed on the design grid and scaled once
+/// keep a long line's width equal to the sum of its parts, and a measurement rounded per glyph does
+/// not.
 /// </remarks>
 public interface ITextShaper
 {
     /// <summary>
-    /// Shapes a single-font, single-direction, single-script run.
+    /// Shapes a run of text with a face.
     /// </summary>
-    /// <param name="text">The characters to shape.</param>
-    /// <param name="face">The face to shape with.</param>
-    /// <param name="fontSize">The em size to compute advances at.</param>
-    /// <param name="options">Directionality, script and language.</param>
-    GlyphRun Shape(
-        ReadOnlySpan<char> text,
-        Fonts.IFontFace face,
-        Length fontSize,
-        ShapingOptions options);
+    /// <remarks>
+    /// The whole run at once, not character by character: shaping is contextual, so the result for a
+    /// run is not the concatenation of the results for its parts.
+    /// </remarks>
+    ShapedText Shape(OpenTypeFace face, ReadOnlySpan<char> text, ShapingOptions options = default);
 }
-
-/// <summary>Options controlling how a run is shaped.</summary>
-/// <param name="IsRightToLeft">Whether the run reads right-to-left.</param>
-/// <param name="Script">An ISO 15924 script code, e.g. <c>Latn</c> or <c>Arab</c>.</param>
-/// <param name="Language">A BCP 47 language tag; affects language-specific features.</param>
-/// <param name="EnableKerning">Whether to apply the font's kerning.</param>
-/// <param name="EnableLigatures">Whether to apply standard ligatures.</param>
-/// <param name="LetterSpacing">Extra tracking added to each glyph's advance.</param>
-public readonly record struct ShapingOptions(
-    bool IsRightToLeft = false,
-    string? Script = null,
-    string? Language = null,
-    bool EnableKerning = true,
-    bool EnableLigatures = true,
-    Length LetterSpacing = default);
