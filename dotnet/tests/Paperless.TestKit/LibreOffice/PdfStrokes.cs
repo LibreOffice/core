@@ -24,10 +24,21 @@ namespace Paperless.TestKit.LibreOffice;
 /// state — and which is also, for a table border, by far the commonest right answer.
 /// </para>
 /// </param>
+/// <param name="Dashes">
+/// The dash array in force, in points, or empty for a solid line.
+/// <para>
+/// Read because a preset dash states no lengths at all — <c>a:prstDash val="dash"</c> is four
+/// line widths of ink and three of gap, and the only place either number appears is the PDF's
+/// own <c>d</c> operator. Without it a dashed line and a solid one are the same measurement.
+/// </para>
+/// </param>
 public readonly record struct PdfStroke(
     int PageIndex, double FromX, double FromY, double ToX, double ToY, double Width,
-    uint Colour = 0)
+    uint Colour = 0, IReadOnlyList<double>? Dashes = null)
 {
+    /// <summary>The dash array, empty rather than null when the line is solid.</summary>
+    public IReadOnlyList<double> Dashes { get; init; } = Dashes ?? [];
+
     /// <summary>True when the line is horizontal, within a rounding of a twentieth of a point.</summary>
     public bool IsHorizontal => Math.Abs(FromY - ToY) < 0.05;
 
@@ -94,7 +105,12 @@ public static partial class PdfStrokes
 
         foreach (Match match in StrokedLine().Matches(content))
         {
-            while (next < colours.Count && colours[next].At < match.Index)
+            // Up to the end of the stroke rather than to its start, because the two writers put
+            // the operator on opposite sides of the pen width: LibreOffice sets the colour before
+            // the `q … w`, and Paperless's own PDF writer sets it inside the same group, after it.
+            // Stopping at the start of the match attributes our colour to the *next* stroke and
+            // reports the first one black, which looks exactly like a colour bug and is not one.
+            while (next < colours.Count && colours[next].At < match.Index + match.Length)
             {
                 current = colours[next++].Colour;
             }
@@ -112,9 +128,41 @@ public static partial class PdfStrokes
                 points[0], pageHeight - points[1],
                 points[2], pageHeight - points[3],
                 width,
-                current);
+                current,
+                Dashes(match.Value));
         }
     }
+
+    /// <summary>
+    /// The dash array a stroke's own graphics-state group sets, or empty.
+    /// </summary>
+    /// <remarks>
+    /// Inside the match rather than tracked across the stream, because both writers set it in the
+    /// same <c>q … Q</c> group as the pen width: a dash array leaking from one stroke to the next
+    /// would report a solid line as dashed.
+    /// </remarks>
+    private static List<double> Dashes(string stroke)
+    {
+        Match match = DashArray().Match(stroke);
+        if (!match.Success) return [];
+
+        List<double> lengths = [];
+        foreach (Capture capture in match.Groups[1].Captures)
+        {
+            if (double.TryParse(
+                    capture.Value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out double length))
+            {
+                lengths.Add(length);
+            }
+        }
+
+        return lengths;
+    }
+
+    /// <summary>A bracketed run of numbers, a phase, and the <c>d</c> operator.</summary>
+    [GeneratedRegex(@"\[\s*(?:(-?[\d.]+)\s*)*\]\s*-?[\d.]+\s+d\b")]
+    private static partial Regex DashArray();
 
     /// <summary>
     /// Every change to the stroking colour, with where in the stream it happened.
@@ -226,7 +274,15 @@ public static partial class PdfStrokes
                 inflater.CopyTo(plain);
 
                 string content = Encoding.Latin1.GetString(plain.ToArray());
-                if (content.Contains("BT", StringComparison.Ordinal)) streams.Add(content);
+                // A page's content stream, told apart from a CMap or a font program by the
+                // operators it contains rather than by its text: a slide of nothing but shapes has
+                // no BT at all, and testing for one alone drops that page and shifts every page
+                // index after it. Both writers paint a page background, so " re" is on every page.
+                if (content.Contains("BT", StringComparison.Ordinal)
+                    || content.Contains(" re", StringComparison.Ordinal))
+                {
+                    streams.Add(content);
+                }
             }
             catch (InvalidDataException)
             {

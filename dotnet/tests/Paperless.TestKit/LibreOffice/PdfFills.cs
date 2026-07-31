@@ -303,7 +303,15 @@ public static partial class PdfFills
                 inflater.CopyTo(plain);
 
                 string content = Encoding.Latin1.GetString(plain.ToArray());
-                if (content.Contains("BT", StringComparison.Ordinal)) streams.Add(content);
+                // A page's content stream, told apart from a CMap or a font program by the
+                // operators it contains rather than by its text: a slide of nothing but shapes has
+                // no BT at all, and testing for one alone drops that page and shifts every page
+                // index after it. Both writers paint a page background, so " re" is on every page.
+                if (content.Contains("BT", StringComparison.Ordinal)
+                    || content.Contains(" re", StringComparison.Ordinal))
+                {
+                    streams.Add(content);
+                }
             }
             catch (InvalidDataException)
             {

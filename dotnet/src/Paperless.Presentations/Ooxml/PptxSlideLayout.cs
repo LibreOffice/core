@@ -149,20 +149,52 @@ internal sealed class PptxSlideLayout
         {
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))
             {
-                if (Shape(element, slide, theme, space) is { } placed) shapes.Add(placed);
+                if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
             {
                 Walk(element, slide, theme, GroupSpace(element, space), shapes, depth + 1);
+            }
+            else if (Ppt.Is(element, "graphicFrame"))
+            {
+                // A graphic frame is a table, a chart, a diagram or an embedded object. Only the
+                // table is drawn; the rest have no geometry here yet and drawing their frame would
+                // put an empty rectangle where the reference draws a picture.
+                shapes.AddRange(Table(element, theme, space));
             }
             else if (Ppt.Is(element, "pic"))
             {
                 // A picture's pixels need a decoder nothing in the layout path has yet, so what is
                 // placed is its frame: the outline and any line it carries, which is what makes a
                 // missing image visible as a hole rather than as nothing at all.
-                if (Shape(element, slide, theme, space) is { } placed) shapes.Add(placed);
+                if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
         }
+    }
+
+    /// <summary>
+    /// Adds a shape, and the arrowheads its line carries.
+    /// </summary>
+    /// <remarks>
+    /// After the shape rather than before, because a marker is filled over the end of the shaft
+    /// and the overlap between them is deliberate — a fifteenth of the marker's width, so that a
+    /// notched arrowhead has no gap behind it. Drawing the markers first would put the shaft's
+    /// own cap on top of that overlap.
+    /// </remarks>
+    private static void Add(PlacedShape shape, List<PlacedShape> shapes)
+    {
+        if (shape.Line is not { } stroke
+            || (shape.HeadEnd.Type is null && shape.TailEnd.Type is null))
+        {
+            shapes.Add(shape);
+            return;
+        }
+
+        (GraphicsPath shaft, List<PlacedShape> markers) = SlideLineEnds.Apply(
+            shape.Outline, stroke, shape.HeadEnd, shape.TailEnd, shape.Name);
+
+        shapes.Add(shape with { Outline = shaft });
+        shapes.AddRange(markers);
     }
 
     /// <summary>The matrix taking a group's child coordinate space onto the slide.</summary>
@@ -187,6 +219,75 @@ internal sealed class PptxSlideLayout
             Drawing.Flag(transform, "flipH") ?? false,
             Drawing.Flag(transform, "flipV") ?? false,
             space);
+    }
+
+    /// <summary>
+    /// The shapes a <c>p:graphicFrame</c> holding an <c>a:tbl</c> draws.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A frame's transform is <c>p:xfrm</c> — PresentationML's own element, with DrawingML's
+    /// <c>a:off</c> and <c>a:ext</c> inside it — rather than the <c>a:xfrm</c> a shape carries.
+    /// Reading it with the drawing namespace finds nothing and puts every table at the slide's
+    /// top-left corner at no size.
+    /// </para>
+    /// <para>
+    /// A cell's text body is read by the same reader a shape's is, with three properties
+    /// replaced: the insets become the cell's own <c>marL</c>…<c>marB</c> rather than the body's
+    /// <c>a:bodyPr</c> insets, the anchor comes from <c>a:tcPr/@anchor</c>, and the line height
+    /// comes from the <em>font's</em> metrics rather than from the em. That last one is measured
+    /// rather than assumed, and is the trap in this feature — see the TODO.
+    /// </para>
+    /// </remarks>
+    private List<PlacedShape> Table(XElement frame, SlideTheme theme, AffineTransform space)
+    {
+        XElement? graphic = Drawing.Child(Drawing.Child(frame, "graphic"), "graphicData");
+        if (Drawing.Attribute(graphic, "uri") != DrawingTable.TableUri) return [];
+        if (Drawing.Child(graphic, "tbl") is not { } table) return [];
+
+        XElement? transform = Ppt.Child(frame, "xfrm");
+        DocRect local = Bounds(transform);
+        if (local.Width <= Length.Zero || local.Height <= Length.Zero) return [];
+
+        AffineTransform placement = ShapeTransform.Place(
+            local,
+            ShapeTransform.Radians(Rotation(transform)),
+            Drawing.Flag(transform, "flipH") ?? false,
+            Drawing.Flag(transform, "flipV") ?? false,
+            space);
+
+        return SlideTable.Place(
+            DrawingTableGeometry.Read(table, theme.Colours),
+            local.Size,
+            placement,
+            cell => CellBody(cell, theme),
+            _fonts,
+            Name(frame));
+    }
+
+    private static SlideTextBody? CellBody(DrawingTableCellBox cell, SlideTheme theme)
+    {
+        if (cell.TextBody is not { } body || DrawingTextBody.IsEmpty(body)) return null;
+
+        return PptxTextBody.Read(body, theme.Colours, theme.MinorLatin) with
+        {
+            Insets = cell.Margins,
+            Anchor = cell.Anchor switch
+            {
+                "ctr" => TextAnchor.Middle,
+                "b" => TextAnchor.Bottom,
+                _ => TextAnchor.Top,
+            },
+
+            // Measured, and it is the opposite of what the current C++ says. A slide shape's line
+            // height is the em (FontIndependentLineSpacing); a table cell's is the face's own
+            // ascent. LibreOffice 24.2.7.2 draws deck-features.pptx's first cell — 18 pt Arial,
+            // substituted by Liberation Sans, in a cell whose top edge its own PDF puts at
+            // 170.079 pt — with a baseline 19.93 pt below that edge. Take off the 3.6 pt top
+            // margin and the ascent is 16.33 pt, which is 0.907 em: the font's, not the em's,
+            // which would have been 18.00.
+            FontIndependentLineSpacing = false,
+        };
     }
 
     private PlacedShape? Shape(
@@ -216,10 +317,20 @@ internal sealed class PptxSlideLayout
         XElement? geometry = Drawing.Child(properties, "prstGeom")
                              ?? Drawing.Child(inherited, "prstGeom");
         string? preset = Drawing.Attribute(geometry, "prst");
-        int? adjustment = Adjustment(geometry);
+        Dictionary<string, double>? adjustment = Adjustments(geometry);
+
+        // a:custGeom states its own guides and paths, so it needs no preset name — and a shape
+        // carrying one has no a:prstGeom at all.
+        XElement? custom = Drawing.Child(properties, "custGeom")
+                           ?? Drawing.Child(inherited, "custGeom");
+
+        CustomShapeGeometry.Geometry? own = custom is null
+            ? null
+            : CustomShapeGeometry.Custom(custom, local.Size);
 
         GraphicsPath outline = ShapeTransform.Apply(
-            placement, SlidePresetGeometry.Outline(preset, local.Size, adjustment));
+            placement,
+            own?.Outline ?? SlidePresetGeometry.Outline(preset, local.Size, adjustment));
 
         return new PlacedShape
         {
@@ -228,7 +339,11 @@ internal sealed class PptxSlideLayout
             Bounds = ShapeTransform.PlacedBounds(placement, local.Size),
             Fill = Fill(properties, inherited, theme.Colours),
             Line = Line(properties, inherited, theme.Colours),
-            Text = Text(shape, local, preset, adjustment, placement, theme),
+            HeadEnd = LineEnd(properties, inherited, "headEnd"),
+            TailEnd = LineEnd(properties, inherited, "tailEnd"),
+            Text = Text(shape, local, own?.TextRectangle
+                        ?? SlidePresetGeometry.TextRectangle(preset, local.Size, adjustment),
+                        placement, theme),
         };
     }
 
@@ -262,14 +377,11 @@ internal sealed class PptxSlideLayout
     private PlacedText? Text(
         XElement shape,
         DocRect local,
-        string? preset,
-        int? adjustment,
+        DocRect rectangle,
         AffineTransform placement,
         SlideTheme theme)
     {
         if (BodyOf(shape, theme) is not { } body) return null;
-
-        DocRect rectangle = SlidePresetGeometry.TextRectangle(preset, local.Size, adjustment);
 
         // An upright shape's text goes straight into slide coordinates, which keeps the pens a
         // backend writes directly comparable with a reference renderer's. A rotated or mirrored
@@ -345,15 +457,44 @@ internal sealed class PptxSlideLayout
             if (Drawing.Child(line, "noFill") is not null) return null;
             if (SolidFill(line, theme, placeholder: null) is not { } paint) continue;
 
-            long width = Emu(line, "w");
+            // The width rounds into the drawing layer's own unit before anything is drawn with
+            // it: a stated 38100 EMU — three points — comes out of the reference's PDF as a
+            // 3.00467 pt pen, which is 106 hundredths of a millimetre. It matters beyond the pen
+            // itself, because a dash pattern's lengths are multiples of it.
+            Length width = Length.FromMm100((Emu(line, "w") + 180) / 360);
+            LineCap cap = Cap(Drawing.Attribute(line, "cap"));
+
             return new Stroke(
                 paint,
-                Length.FromEmu(width),
-                Cap(Drawing.Attribute(line, "cap")),
-                Join(line));
+                width,
+                cap,
+                Join(line),
+                DashPattern: SlideDashes.Pattern(
+                    Drawing.Attribute(Drawing.Child(line, "prstDash"), "val"),
+                    width,
+                    capExtendsDash: cap != LineCap.Butt));
         }
 
         return null;
+    }
+
+    /// <summary>The marker one end of a line carries, from its own <c>a:ln</c> or its placeholder's.</summary>
+    private static SlideLineEnd LineEnd(XElement? properties, XElement? inherited, string which)
+    {
+        foreach (XElement? source in (XElement?[])[properties, inherited])
+        {
+            XElement? line = Drawing.Child(source, "ln");
+            if (line is null) continue;
+            if (Drawing.Child(line, which) is not { } end) continue;
+
+            string? type = Drawing.Attribute(end, "type");
+            if (type is null or "none") return default;
+
+            return new SlideLineEnd(
+                type, Drawing.Attribute(end, "w"), Drawing.Attribute(end, "len"));
+        }
+
+        return default;
     }
 
     private static LineCap Cap(string? cap) => cap switch
@@ -394,21 +535,39 @@ internal sealed class PptxSlideLayout
             ? rotation
             : 0;
 
-    /// <summary>The first adjustment value, which is all the supported presets take.</summary>
-    private static int? Adjustment(XElement? geometry)
+    /// <summary>
+    /// The adjustment values a shape states, by name.
+    /// </summary>
+    /// <remarks>
+    /// By name and not by position: a shape states only the handles its author moved, so
+    /// <c>&lt;a:gd name="adj2" fmla="val 30000"/&gt;</c> alone must leave <c>adj1</c> at the
+    /// preset's own default rather than becoming the first adjustment. Six of the presets take
+    /// four handles and one takes eight.
+    /// </remarks>
+    private static Dictionary<string, double>? Adjustments(XElement? geometry)
     {
+        Dictionary<string, double>? values = null;
+
         foreach (XElement guide in Drawing.Children(Drawing.Child(geometry, "avLst"), "gd"))
         {
             string? formula = Drawing.Attribute(guide, "fmla");
-            if (formula is null || !formula.StartsWith("val ", StringComparison.Ordinal)) continue;
+            string? name = Drawing.Attribute(guide, "name");
 
-            if (int.TryParse(
-                    formula.AsSpan(4), NumberStyles.Integer, CultureInfo.InvariantCulture,
-                    out int value))
-                return value;
+            if (name is null || formula is null
+                || !formula.StartsWith("val ", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (double.TryParse(
+                    formula.AsSpan(4), NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out double value))
+            {
+                (values ??= new Dictionary<string, double>(StringComparer.Ordinal))[name] = value;
+            }
         }
 
-        return null;
+        return values;
     }
 
     private static long Emu(XElement? element, string attribute)
