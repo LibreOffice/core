@@ -53,17 +53,22 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         ArgumentNullException.ThrowIfNull(font);
 
         Face face = FaceFor(font);
-        if (face.Current.CodeOf.TryGetValue(glyphId, out byte existing))
+
+        // Across every subset of the face, not just the one being filled. A glyph already placed
+        // keeps its code: looking only in the current subset would re-place all 255 glyphs of the
+        // first one into the second the moment a face overflowed, which produces a third subset,
+        // then a fourth, and a content stream that switches font between consecutive letters.
+        if (face.Placed.TryGetValue(glyphId, out (Subset Subset, byte Code) existing))
         {
-            RecordText(face.Current, existing, text);
-            return (face.Current.Resource, existing);
+            RecordText(existing.Subset, existing.Code, text);
+            return (existing.Subset.Resource, existing.Code);
         }
 
         if (face.Current.GlyphsByCode.Count > CodesPerSubset) face.Current = NewSubset(face);
 
         byte code = (byte)face.Current.GlyphsByCode.Count;
         face.Current.GlyphsByCode.Add(glyphId);
-        face.Current.CodeOf[glyphId] = code;
+        face.Placed[glyphId] = (face.Current, code);
         RecordText(face.Current, code, text);
 
         return (face.Current.Resource, code);
@@ -388,6 +393,9 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
 
         public Dictionary<ushort, double> Widths { get; } = [];
 
+        /// <summary>Where each glyph of this face ended up: which PDF font, and at which code.</summary>
+        public Dictionary<ushort, (Subset Subset, byte Code)> Placed { get; } = [];
+
         public Subset Current { get; set; } = null!;
     }
 
@@ -401,8 +409,6 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
 
         /// <summary>The original glyph for each code; index 0 is <c>.notdef</c>.</summary>
         public List<ushort> GlyphsByCode { get; } = [0];
-
-        public Dictionary<ushort, byte> CodeOf { get; } = [];
 
         public Dictionary<byte, string> Text { get; } = [];
     }

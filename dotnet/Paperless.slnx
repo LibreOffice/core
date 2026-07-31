@@ -19,6 +19,7 @@
     <Project Path="tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj" />
     <Project Path="tests/Paperless.OpenDocument.Tests/Paperless.OpenDocument.Tests.csproj" />
     <Project Path="tests/Paperless.Presentations.Tests/Paperless.Presentations.Tests.csproj" />
+    <Project Path="tests/Paperless.Rendering.Tests/Paperless.Rendering.Tests.csproj" />
     <Project Path="tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj" />
     <Project Path="tests/Paperless.TestKit/Paperless.TestKit.csproj" />
     <Project Path="tests/Paperless.Text.Tests/Paperless.Text.Tests.csproj" />
