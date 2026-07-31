@@ -405,6 +405,31 @@ public sealed partial class RtfDocumentReader
                 _endnotes = _endnotes with { Placement = NotePlacement.SectionEnd };
                 return;
 
+            // Where the count begins again. RTF says it in the control word itself, one word per rule, the
+            // same shape as the sequence words above — but the `a`-prefixed endnote set is one word short
+            // rather than a mirror image: there is no `\aftnrstpg`, because an endnote does not restart per
+            // page. So the two classes genuinely have different sets, and a reader that assumed the mirror
+            // would be inventing a keyword.
+            //
+            // `\ftnrestart` is the *section* spelling and reads as a chapter restart, because that is the
+            // case LibreOffice exports it from (`rtfexport.cxx:970`) and Writer has no per-section footnote
+            // restart to read it back into.
+            case "ftnrstcont":
+                _footnotes = _footnotes with { Restart = NoteRestart.Never };
+                return;
+            case "ftnrestart":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachChapter };
+                return;
+            case "ftnrstpg":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachPage };
+                return;
+            case "aftnrstcont":
+                _endnotes = _endnotes with { Restart = NoteRestart.Never };
+                return;
+            case "aftnrestart":
+                _endnotes = _endnotes with { Restart = NoteRestart.EachChapter };
+                return;
+
             // ---- destinations that are not content
             case "fonttbl":
                 state.Destination = RtfDestination.FontTable;

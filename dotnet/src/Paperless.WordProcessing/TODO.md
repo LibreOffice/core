@@ -659,11 +659,42 @@ is read and verified, so what remains is the filling of pages rather than the me
         gives I where the document says i.
       Word's `chicago` sequence is modelled too, since it is the one format that is not an arithmetic
       progression — the fifth mark is `**` rather than a fifth symbol.
-- [ ] Note numbering **restarts**: per page, per chapter, per section. Every format states one
-      (`text:start-numbering-at`, `w:numRestart`, `\ftnrstpg`, the DOP's `rncFootnote`) and none is read,
-      because a restart cannot be resolved while the document is being read — it has to be applied as the
-      pages are filled, which means the citation's text depends on pagination and pagination depends on the
-      citation's width. Deliberately left until something needs it.
+- [x] Note numbering **restarts**, the *rule*: read from all four formats into `NoteRestart` and carried on
+      `PageNote` beside `Placement`, which is the same kind of thing — a property of the note's class that only
+      pagination can act on. `note-restart.*` is the corpus case, and building it first settled the shape of the
+      problem: all four formats keep the rule through LibreOffice's own export and all four then render
+      *identically*, page one citing 1, 2, 3, 4 and page two citing 1, 2, 3, 4 again.
+      Three findings, each of which would otherwise have been a wrong guess:
+      - **There are three restart kinds, not four.** Writer's `SwFootnoteNum` is exactly
+        `FTNNUM_DOC`/`FTNNUM_CHAPTER`/`FTNNUM_PAGE` (`ftninfo.hxx:92`), and every importer folds a
+        per-*section* restart onto the chapter one — WW8 through
+        `{ FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC }` (`ww8par.cxx:5064`), OOXML's `eachSect`
+        (`docxattributeoutput.cxx:9329`) and RTF's `\ftnrestart` (`rtfexport.cxx:970`). A fourth member would
+        model something no reference implementation round-trips.
+      - **WW8's own comment contradicts its own code.** `ww8scan.hxx:1624` documents `rncFootnote` as
+        "1 section, 2 page"; the mapping array reads 1 as *chapter*. The comment describes Word's field, the
+        array what Writer does with it. The bits cost nothing to read, incidentally — they are the two the DOP
+        reader was already shifting past to reach the start value, in the same word at 0x02 and at 0x34.
+      - **RTF's endnote set is one word short rather than a mirror.** `\ftnrstcont`, `\ftnrestart` and
+        `\ftnrstpg` have `a`-prefixed twins for only the first two: there is no `\aftnrstpg`, because an endnote
+        does not restart per page. A reader assuming the mirror would be inventing a keyword.
+- [ ] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
+      genuinely circular: a note's number under a restart is its position within its page, the citation's width
+      depends on that number, and where the citing line breaks depends on the width. **Writer has an answer and
+      it is not a fixed point**, which is the correction to the note that used to stand here:
+      - It numbers per page as a pass over pages that already exist — `SwRootFrame::UpdateFootnoteNums`
+        (`ftnfrm.cxx:971`) runs only for `FTNNUM_PAGE` and walks the finished page frames, and
+        `SwPageFrame::UpdateFootnoteNum` (`ftnfrm.cxx:2564`) counts one page's notes and assigns 1..n.
+      - The loop is real: `SwTextFootnote::SetNumber` (`atrftn.cxx:362`) invalidates the citing text node *and*
+        every text node of the note's own body, so a renumber can rebreak the line that cites it.
+      - And Writer **damps rather than iterating**. `flowfrm.cxx:2268` renumbers both pages the moment a note
+        moves between them, and `txtftn.cxx:560` then validates the frame under the comment
+        *"We break the oscillation"* — accepting a layout one iteration stale rather than chasing a fixed point
+        that need not exist.
+      So the shape is: paginate with the document-order numbering, renumber per page over the finished pages,
+      re-lay out once, and stop. The corpus document deliberately holds four notes to a page so that every
+      citation stays one digit wide — the numbering can be got right before the width feedback is, and a second
+      document with ten notes on a page is what would exercise the rest.
 - [x] **The separator rule above the notes**, drawn and compared — and the interesting part is that it turned
       out to be comparable at all. The old note here said it could not be, that it needed the rasteriser first
       because a text comparison sees no lines. That was the wrong conclusion from a true premise: `pdftotext`

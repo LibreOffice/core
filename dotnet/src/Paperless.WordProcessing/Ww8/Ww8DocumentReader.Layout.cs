@@ -412,7 +412,10 @@ public sealed partial class Ww8DocumentReader
                                     read,
                                     note.IsEndnote
                                         ? DocumentProperties.EndnoteNumbering.Placement
-                                        : DocumentProperties.FootnoteNumbering.Placement));
+                                        : DocumentProperties.FootnoteNumbering.Placement,
+                                    note.IsEndnote
+                                        ? DocumentProperties.EndnoteNumbering.Restart
+                                        : DocumentProperties.FootnoteNumbering.Restart));
                         }
                     }
 

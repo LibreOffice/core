@@ -1250,7 +1250,8 @@ public sealed partial class RtfDocumentReader
                             finished.NoteOffset,
                             finished.IsEndnote,
                             blocks,
-                            (finished.IsEndnote ? _endnotes : _footnotes).Placement));
+                            (finished.IsEndnote ? _endnotes : _footnotes).Placement,
+                            (finished.IsEndnote ? _endnotes : _footnotes).Restart));
                 }
             }
         }

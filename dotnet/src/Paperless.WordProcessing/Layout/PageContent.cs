@@ -163,6 +163,15 @@ public sealed record PageNote
     /// document asks for its endnotes at the end of each section.
     /// </remarks>
     public NotePlacement Placement { get; init; }
+
+    /// <summary>Where this class of note begins counting again.</summary>
+    /// <remarks>
+    /// Carried on the note beside <see cref="Placement"/>, and for the same reason: both are properties of the
+    /// note's <em>class</em> that only pagination can act on, and the paginator is handed notes rather than the
+    /// document. This is the one numbering rule a reader cannot resolve — a note's number under a restart is
+    /// its position within its page, and which page it is on is what filling the page decides.
+    /// </remarks>
+    public NoteRestart Restart { get; init; }
 }
 
 /// <summary>

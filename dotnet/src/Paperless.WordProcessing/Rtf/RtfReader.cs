@@ -357,6 +357,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 Offset = note.Offset,
                 IsEndnote = note.IsEndnote,
                 Placement = note.Placement,
+                Restart = note.Restart,
             });
         }
 

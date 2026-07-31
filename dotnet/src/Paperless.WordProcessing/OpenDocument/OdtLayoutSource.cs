@@ -114,8 +114,9 @@ public sealed partial class OdtLayoutSource
     /// <c>text:notes-configuration</c>, which lives in <c>office:styles</c> rather than in the content and is
     /// written once per class. ODF states the format by <em>example</em> — <c>style:num-format</c> holds the
     /// literal "1", "i" or "A" — which is why parsing it belongs with OOXML's naming of the same set rather
-    /// than here. <c>text:start-numbering-at</c> can ask for a per-page or per-chapter restart and is not read:
-    /// a restart has to be applied while pages are being filled, not while the document is being read.
+    /// than here. <c>text:start-numbering-at</c> asks for a per-page or per-chapter restart, and is recorded
+    /// rather than resolved: which page a note lands on is what filling the page decides, so the rule is
+    /// carried and the paginator applies it.
     /// </remarks>
     private static NoteNumbering NumberingIn(
         XElement? stylesRoot, string noteClass, NoteNumbering fallback)
@@ -159,7 +160,12 @@ public sealed partial class OdtLayoutSource
                 _ => fallback.Placement,
             };
 
-        return new NoteNumbering(format, start) { Placement = placement };
+        NoteRestart restart =
+            NoteNumbering.ParseRestart(
+                configuration.Attribute(XName.Get("start-numbering-at", OdfNamespaces.Text))?.Value)
+            ?? fallback.Restart;
+
+        return new NoteNumbering(format, start) { Placement = placement, Restart = restart };
     }
 
     /// <summary>Which section each master page is, by name.</summary>
@@ -428,6 +434,7 @@ public sealed partial class OdtLayoutSource
                 Offset = anchor.Offset,
                 IsEndnote = IsEndnote(anchor.Element),
                 Placement = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Placement,
+                Restart = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Restart,
             });
         }
 

@@ -134,7 +134,13 @@ public sealed partial class DocxLayoutSource
             _ => fallback.Placement,
         };
 
-        return new NoteNumbering(format, start) { Placement = placement };
+        // Where the count begins again. `eachSect` is not a third kind of restart: Writer has no per-section
+        // one, so its chapter restart is what OOXML's `eachSect` both exports from and reads back as.
+        NoteRestart restart =
+            NoteNumbering.ParseRestart(Word.Attribute(Word.Child(properties, "numRestart"), "val"))
+            ?? fallback.Restart;
+
+        return new NoteNumbering(format, start) { Placement = placement, Restart = restart };
     }
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
@@ -336,6 +342,7 @@ public sealed partial class DocxLayoutSource
                 IsEndnote = anchor.IsEndnote,
                 Placement =
                     (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Placement,
+                Restart = (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Restart,
             });
         }
 

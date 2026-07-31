@@ -94,22 +94,36 @@ public readonly record struct Ww8DocumentProperties
 
         // The first footnote number, at 0x02: two bits of restart rule and then the value. Zero means the
         // document said nothing, which is why LibreOffice's own import guards on it before subtracting one.
+        // The two bits the value is shifted past are `rncFootnote`, the restart rule — the same word states
+        // both, so reading the rule costs nothing but the mask.
         if (dop.Length >= FootnoteNumberOffset + 2)
         {
-            int packed = BinaryPrimitives.ReadUInt16LittleEndian(dop[FootnoteNumberOffset..]) >> 2;
-            if (packed > 0) properties = properties with
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[FootnoteNumberOffset..]);
+            int packed = word >> 2;
+
+            properties = properties with
             {
-                FootnoteNumbering = properties.FootnoteNumbering with { StartAt = packed },
+                FootnoteNumbering = properties.FootnoteNumbering with
+                {
+                    StartAt = packed > 0 ? packed : properties.FootnoteNumbering.StartAt,
+                    Restart = Layout.NoteNumbering.FromWw8Rnc(word & 0x0003),
+                },
             };
         }
 
-        // The first endnote number, packed the same way at 0x34.
+        // The first endnote number and `rncEdn`, packed the same way at 0x34.
         if (dop.Length >= EndnoteNumberOffset + 2)
         {
-            int packed = BinaryPrimitives.ReadUInt16LittleEndian(dop[EndnoteNumberOffset..]) >> 2;
-            if (packed > 0) properties = properties with
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[EndnoteNumberOffset..]);
+            int packed = word >> 2;
+
+            properties = properties with
             {
-                EndnoteNumbering = properties.EndnoteNumbering with { StartAt = packed },
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    StartAt = packed > 0 ? packed : properties.EndnoteNumbering.StartAt,
+                    Restart = Layout.NoteNumbering.FromWw8Rnc(word & 0x0003),
+                },
             };
         }
 
