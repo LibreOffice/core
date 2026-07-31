@@ -129,7 +129,13 @@ public sealed class RecordingDrawingSink : IDrawingSink
     }
 
     /// <inheritdoc/>
-    public void StrokePath(GraphicsPath path, Stroke stroke) => _current?.Strokes.Add(stroke);
+    public void StrokePath(GraphicsPath path, Stroke stroke)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        _current?.Strokes.Add(stroke);
+        _current?.StrokedPaths.Add(new DrawnStroke(Bounds(path), stroke));
+    }
 
     /// <inheritdoc/>
     public void ClipPath(GraphicsPath path, FillRule rule = FillRule.NonZero) => Clips++;
@@ -186,6 +192,14 @@ public sealed record DrawnPage(DocSize Size)
     /// </remarks>
     public List<DrawnFill> FilledPaths { get; } = [];
 
+    /// <summary>The stroked paths, in order, paired with the pen each was stroked with.</summary>
+    /// <remarks>
+    /// As with <see cref="FilledPaths"/>, the geometry as well as the pen: what a cell border needs checking on
+    /// is where the line ran and how far, and a table's borders are drawn consolidated — one stroke per grid
+    /// line — so the extents are the evidence that the consolidation matched.
+    /// </remarks>
+    public List<DrawnStroke> StrokedPaths { get; } = [];
+
     /// <summary>The strokes paths were drawn with.</summary>
     public List<Stroke> Strokes { get; } = [];
 }
@@ -194,6 +208,11 @@ public sealed record DrawnPage(DocSize Size)
 /// <param name="Bounds">The path's extent, which for everything drawn so far <em>is</em> the shape.</param>
 /// <param name="Paint">What it was filled with.</param>
 public readonly record struct DrawnFill(DocRect Bounds, Paint Paint);
+
+/// <summary>One recorded stroked path, as its bounding box and the pen it was stroked with.</summary>
+/// <param name="Bounds">The path's extent; for a straight line, the line.</param>
+/// <param name="Stroke">The pen it was stroked with.</param>
+public readonly record struct DrawnStroke(DocRect Bounds, Stroke Stroke);
 
 /// <summary>One recorded glyph run and the paint it was drawn with.</summary>
 /// <param name="Run">The run.</param>

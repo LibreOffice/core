@@ -1,5 +1,6 @@
 using Paperless.Core.Documents;
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.TestKit;
 using Paperless.TestKit.LibreOffice;
 using Paperless.WordProcessing;
@@ -238,6 +239,98 @@ public sealed class TableComparisonTests : IDisposable
                 $"{fileName}: shade {i + 1} sits {drawnGap:F3} pt below the first drawn, "
                 + $"{renderedGap:F3} pt rendered");
         }
+    }
+
+    [Theory]
+    [InlineData("table-borders.fodt")]
+    public void ABorderIsStrokedAsOneLinePerGridLine(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        List<PdfStroke> reference =
+            [.. PdfStrokes.Read(_libreOffice.ConvertToPdf(path, _workDirectory))
+                .Where(stroke => stroke.PageIndex == 0)];
+
+        Assert.SkipWhen(reference.Count == 0, "the reference PDF stroked nothing");
+
+        List<DrawnStroke> lines = [.. Rendered(path)[0].StrokedPaths];
+        List<Stroke> mine = [.. Rendered(path)[0].Strokes];
+
+        // The count is the assertion that matters most, and it is why this test exists: LibreOffice writes one
+        // stroke per grid line across the whole table — five horizontals for a four-row table and one vertical
+        // per column boundary — and a reader that drew four borders round each cell would produce three times
+        // as many strokes in the right places. Being right on the page is not the same as agreeing.
+        mine.Count.ShouldBe(
+            reference.Count,
+            $"{fileName}: page 1 stroked {mine.Count} lines, LibreOffice {reference.Count}");
+
+        // Then where each ran. Compared numerically rather than as formatted text, because several of these
+        // land within a rounding of a tenth of a point — a border's position is a grid line plus half a pen
+        // width, and 70.45 rounds two ways. Paired by sorting both sides the same way, which is sound because
+        // the counts already agree.
+        List<Line> drawnLines = [.. lines.Select(Line.Of).OrderBy(line => line.Key)];
+        List<Line> renderedLines = [.. reference.Select(Line.Of).OrderBy(line => line.Key)];
+
+        for (int i = 0; i < renderedLines.Count; i++)
+        {
+            Line drawn = drawnLines[i];
+            Line rendered = renderedLines[i];
+
+            drawn.IsHorizontal.ShouldBe(
+                rendered.IsHorizontal, $"{fileName}: stroke {i + 1} runs along the other axis");
+
+            Math.Abs(drawn.At - rendered.At).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: stroke {i + 1} sits at {drawn.At:F3} pt drawn, {rendered.At:F3} pt rendered");
+
+            Math.Abs(drawn.From - rendered.From).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: stroke {i + 1} starts at {drawn.From:F3} pt drawn, "
+                + $"{rendered.From:F3} pt rendered");
+
+            Math.Abs(drawn.To - rendered.To).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: stroke {i + 1} ends at {drawn.To:F3} pt drawn, {rendered.To:F3} pt rendered");
+
+            Math.Abs(drawn.Width - rendered.Width).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: stroke {i + 1} is {drawn.Width:F3} pt thick drawn, "
+                + $"{rendered.Width:F3} pt rendered");
+        }
+    }
+
+    /// <summary>One stroked grid line, from either side, as the four numbers worth comparing.</summary>
+    /// <param name="IsHorizontal">True when it runs across the page.</param>
+    /// <param name="At">Where it sits on the other axis.</param>
+    /// <param name="From">Where it starts along its own axis.</param>
+    /// <param name="To">Where it ends.</param>
+    /// <param name="Width">The pen width.</param>
+    private readonly record struct Line(
+        bool IsHorizontal, double At, double From, double To, double Width)
+    {
+        /// <summary>A sort key that pairs the two sides' strokes: axis first, then position, then start.</summary>
+        public (bool, double, double) Key => (IsHorizontal, Math.Round(At, 1), Math.Round(From, 1));
+
+        public static Line Of(DrawnStroke stroke)
+        {
+            DocRect bounds = stroke.Bounds;
+
+            return bounds.Height.Points < 0.05
+                ? new Line(true, bounds.Y.Points, bounds.X.Points, bounds.Right.Points,
+                    stroke.Stroke.Width.Points)
+                : new Line(false, bounds.X.Points, bounds.Y.Points, bounds.Bottom.Points,
+                    stroke.Stroke.Width.Points);
+        }
+
+        public static Line Of(PdfStroke stroke)
+            => stroke.IsHorizontal
+                ? new Line(
+                    true, stroke.FromY, Math.Min(stroke.FromX, stroke.ToX),
+                    Math.Max(stroke.FromX, stroke.ToX), stroke.Width)
+                : new Line(
+                    false, stroke.FromX, Math.Min(stroke.FromY, stroke.ToY),
+                    Math.Max(stroke.FromY, stroke.ToY), stroke.Width);
     }
 
     // ------------------------------------------------------------------------- the machinery

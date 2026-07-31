@@ -36,6 +36,42 @@ public readonly record struct CellPadding(Length Left, Length Right, Length Top,
     public Length Vertical => Top + Bottom;
 }
 
+/// <summary>
+/// One edge of a cell: how thick its border is and what colour.
+/// </summary>
+/// <remarks>
+/// A width and a colour and no style, because a style is a rasteriser's problem and none of the four formats
+/// agrees on the set — ODF spells CSS's, OOXML has forty-odd names, RTF a control word each. A dashed border
+/// at the right width in the right place is far closer than none, and the width is what changes the layout.
+/// </remarks>
+/// <param name="Width">How thick the border is; zero means there is none.</param>
+/// <param name="Colour">What colour it is drawn in.</param>
+public readonly record struct TableBorder(Length Width, Colour Colour)
+{
+    /// <summary>True when the edge has no border at all.</summary>
+    public bool IsNone => Width <= Length.Zero;
+}
+
+/// <summary>The four edges of a cell.</summary>
+/// <remarks>
+/// All four, rather than a nullable per side, because "no border" is a border of zero width and the two need
+/// no telling apart: nothing is drawn either way, and nothing takes space either way.
+/// </remarks>
+/// <param name="Left">Its left edge.</param>
+/// <param name="Right">Its right edge.</param>
+/// <param name="Top">Its top edge.</param>
+/// <param name="Bottom">Its bottom edge.</param>
+public readonly record struct CellBorders(
+    TableBorder Left, TableBorder Right, TableBorder Top, TableBorder Bottom)
+{
+    /// <summary>The same border on all four edges.</summary>
+    public static CellBorders Uniform(TableBorder border)
+        => new(border, border, border, border);
+
+    /// <summary>True when no edge has a border.</summary>
+    public bool IsNone => Left.IsNone && Right.IsNone && Top.IsNone && Bottom.IsNone;
+}
+
 /// <summary>Where a cell's text sits when its content is shorter than its row.</summary>
 public enum CellVerticalAlignment
 {
@@ -216,6 +252,14 @@ public sealed record PageTableCell
     /// different — one lets a page background through and the other does not.
     /// </remarks>
     public Colour? Shading { get; init; }
+
+    /// <summary>The cell's four edges.</summary>
+    /// <remarks>
+    /// Per cell even though LibreOffice draws them consolidated — one stroke per grid line across the whole
+    /// table rather than four round each cell. That is a drawing decision and this is what the document says:
+    /// two cells sharing an edge can disagree about it, and the consolidation is what resolves that.
+    /// </remarks>
+    public CellBorders Borders { get; init; }
 
     /// <summary>One past the last grid column the cell covers.</summary>
     public int ColumnEnd => Column + Math.Max(1, ColumnSpan);

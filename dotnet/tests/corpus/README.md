@@ -207,3 +207,9 @@ column edge. One feature per document, as above. Two things about comparing it: 
 each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
 distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
 per-band `WW8_SHD` array that is not read yet.
+
+`table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
+the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
+with the text by default, and a distinct one makes it obvious in a rendered page which strokes are being
+checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
+one document could not test either cleanly.

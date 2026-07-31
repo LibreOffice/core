@@ -79,6 +79,10 @@ public static class TableLayouter
                 }
             }
 
+            // A border takes space, and a row owns *half* of each of the two grid lines it sits between — the
+            // line runs through the border's centre, so the other half belongs to the neighbour.
+            heights[row] += BorderHeight(table.Rows[row]);
+
             // The declared height, which is a floor unless the row says it is exact — in which case it is the
             // height, and content taller than it is clipped rather than growing the row. Applied per row
             // before the merge shortfall below, so that a merge spanning an exact row cannot stretch it.
@@ -107,7 +111,12 @@ public static class TableLayouter
 
         // Pass two: the heights are settled, so every cell has a rectangle.
         List<Length> tops = [];
-        Length top = Length.Zero;
+
+        // The first grid line sits half a border *below* the table's top edge, because a grid line runs through
+        // the centre of its border and the row heights already include half of it at each end. Measured: a
+        // table whose top edge is at 70.2 pt draws its first border at 70.45 with a 0.5 pt border.
+        Length top = rows > 0 ? BorderHeight(table.Rows[0]) / 2 : Length.Zero;
+
         for (int row = 0; row < rows; row++)
         {
             tops.Add(top);
@@ -191,6 +200,29 @@ public static class TableLayouter
                 Cells = Offset(table.Cells, dx, dy),
             })],
         };
+    }
+
+    /// <summary>
+    /// How much of a row's height its borders take: half of its thickest top and half of its thickest bottom.
+    /// </summary>
+    /// <remarks>
+    /// The thickest rather than each cell's own, because the row has one height and one grid line above it: two
+    /// cells disagreeing about their top border share the thicker one's line, which is what the drawing does too
+    /// when it consolidates. Measured: a row 18.95 pt tall without borders is 19.4 pt with 0.5 pt ones, and half
+    /// of each of two borders is 0.5 pt — right to within a twip of rounding.
+    /// </remarks>
+    private static Length BorderHeight(PageTableRow row)
+    {
+        Length top = Length.Zero;
+        Length bottom = Length.Zero;
+
+        foreach (PageTableCell cell in row.Cells)
+        {
+            top = Length.Max(top, cell.Borders.Top.Width);
+            bottom = Length.Max(bottom, cell.Borders.Bottom.Width);
+        }
+
+        return (top + bottom) / 2;
     }
 
     private static DocRect Shift(DocRect area, Length dx, Length dy)

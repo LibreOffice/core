@@ -216,6 +216,7 @@ public sealed partial class OdtLayoutSource
                     Padding = Padding(styleName),
                     VerticalAlignment = VerticalAlignment(styleName),
                     Shading = Shading(styleName),
+                    Borders = Borders(styleName),
                 });
 
                 // One column per element, not one per column spanned. A cell covering two columns is
@@ -330,6 +331,69 @@ public sealed partial class OdtLayoutSource
 
         return stated.Value == "transparent" ? null : stated.AsColour();
     }
+
+    /// <summary>
+    /// A cell's four borders.
+    /// </summary>
+    /// <remarks>
+    /// <c>fo:border</c> sets all four and each <c>fo:border-left</c> and friends overrides its own side, which
+    /// is CSS's rule and ODF's — the same cascade <see cref="Padding"/> follows for the same reason.
+    /// </remarks>
+    private CellBorders Borders(string? styleName)
+    {
+        TableBorder all = Border(styleName, "border");
+
+        return new CellBorders(
+            Border(styleName, "border-left", all),
+            Border(styleName, "border-right", all),
+            Border(styleName, "border-top", all),
+            Border(styleName, "border-bottom", all));
+    }
+
+    /// <summary>
+    /// One border from an ODF shorthand, or a fallback when the property says nothing.
+    /// </summary>
+    /// <remarks>
+    /// The value is CSS's three-part shorthand — <c>0.5pt solid #ff0000</c> — in any order, and <c>none</c> is a
+    /// value in its own right meaning there is no border rather than that nothing was said. So <c>none</c> has
+    /// to beat the fallback: a style setting <c>fo:border</c> and then <c>fo:border-top="none"</c> means three
+    /// borders, not four.
+    /// </remarks>
+    private TableBorder Border(string? styleName, string propertyName, TableBorder fallback = default)
+    {
+        string? stated = _styles.ResolveProperty(
+            styleName, OdfStyleFamily.TableCell, OdfPropertyKind.TableCell,
+            OdfNamespaces.FoCompatible, propertyName).Value;
+
+        if (string.IsNullOrWhiteSpace(stated)) return fallback;
+        if (stated.Trim() == "none") return default;
+
+        Length width = Length.Zero;
+        Colour colour = Colour.Black;
+
+        foreach (string part in stated.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (OdfValue.ParseLength(part) is { } measured)
+            {
+                width = OdfWriterUnits.ToCore(measured);
+                continue;
+            }
+
+            if (part.StartsWith('#') && OdfValue.ParseColour(part) is { } stated_colour)
+            {
+                colour = stated_colour;
+            }
+        }
+
+        // A shorthand naming a style and a colour but no width still means a border: LibreOffice draws such a
+        // one hairline, which is its thinnest visible stroke rather than nothing.
+        if (width <= Length.Zero) width = HairlineBorder;
+
+        return new TableBorder(width, colour);
+    }
+
+    /// <summary>The width a border with no stated one is drawn at: half a point, Writer's hairline.</summary>
+    private static readonly Length HairlineBorder = Length.FromPoints(0.5);
 
     private Length? TableMeasure(string? styleName, string propertyNamespace, string propertyName)
         => OdfWriterUnits.ToCore(

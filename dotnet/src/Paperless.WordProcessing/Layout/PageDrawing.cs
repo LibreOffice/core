@@ -119,11 +119,8 @@ public static class PageDrawing
     /// Draws a table, which is its cells' text.
     /// </summary>
     /// <remarks>
-    /// Shading and text. Borders are still missing, and they are more than a fourth fill per cell:
-    /// LibreOffice <em>consolidates</em> them, writing one stroke across the whole table per grid line rather
-    /// than four round each cell — measured, five horizontals spanning 56.65 to 538.65 pt on a four-row table.
-    /// Drawing twelve short segments where the reference writes five long ones would be right on the page and
-    /// incomparable against it.
+    /// Shading behind the text and borders over it, which is paint order rather than preference: a border
+    /// runs through the centre of a grid line, so half its width overlaps the cells either side of it.
     /// </remarks>
     private static void DrawTable(PlacedTable table, IDrawingSink sink)
     {
@@ -136,6 +133,124 @@ public static class PageDrawing
         }
 
         foreach (PlacedTableCell cell in table.Cells) DrawFlow(cell.Content, sink);
+
+        DrawBorders(table, sink);
+    }
+
+    /// <summary>
+    /// Draws a table's borders, consolidated the way LibreOffice consolidates them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One stroke per <em>grid line</em> rather than four round each cell, which is measured rather than
+    /// chosen: LibreOffice writes five horizontals for a four-row table and one vertical per column boundary,
+    /// each as a single <c>m … l S</c>. Drawing twelve short segments instead would be right on the page and
+    /// incomparable against the reference.
+    /// </para>
+    /// <para>
+    /// Two details of the geometry, both measured. A grid line runs through the <em>centre</em> of the border,
+    /// and every stroke <strong>overshoots by half its own width at both ends</strong> — on a table spanning
+    /// 56.7 to 538.6 pt the horizontals run 56.45 to 538.85. So the overshoot is what makes two perpendicular
+    /// borders meet at a corner rather than leaving a notch.
+    /// </para>
+    /// <para>
+    /// Horizontals before verticals, which matters only for which one wins a join and is free to match.
+    /// </para>
+    /// </remarks>
+    private static void DrawBorders(PlacedTable table, IDrawingSink sink)
+    {
+        // Collected per grid line and merged, so that a run of cells agreeing about an edge becomes one
+        // stroke. Keyed on the line's own coordinate rounded to a twip, because two cells' shared edge is
+        // computed from two different rectangles and can differ in the last EMU.
+        foreach (Edge edge in Edges(table))
+        {
+            Stroke stroke = new(Paint.Solid(edge.Border.Colour), edge.Border.Width);
+            Length half = edge.Border.Width / 2;
+
+            GraphicsPath path = edge.IsHorizontal
+                ? new GraphicsPath()
+                    .MoveTo(new DocPoint(edge.From - half, edge.At))
+                    .LineTo(new DocPoint(edge.To + half, edge.At))
+                : new GraphicsPath()
+                    .MoveTo(new DocPoint(edge.At, edge.From - half))
+                    .LineTo(new DocPoint(edge.At, edge.To + half));
+
+            sink.StrokePath(path, stroke);
+        }
+    }
+
+    /// <summary>One consolidated grid line: where it sits, how far it runs, and its border.</summary>
+    private readonly record struct Edge(
+        bool IsHorizontal, Length At, Length From, Length To, TableBorder Border);
+
+    /// <summary>
+    /// A table's grid lines, merged along each line where consecutive cells agree.
+    /// </summary>
+    /// <remarks>
+    /// Horizontals first and then verticals, each built by grouping the cells' edges on the line they sit on
+    /// and joining the runs that touch. A vertical therefore stops where its boundary stops, which is what
+    /// LibreOffice does: a table whose last row spans two columns leaves that column's stroke short.
+    /// </remarks>
+    private static List<Edge> Edges(PlacedTable table)
+    {
+        List<Edge> loose = [];
+
+        foreach (PlacedTableCell cell in table.Cells)
+        {
+            CellBorders borders = cell.Cell.Borders;
+            DocRect area = cell.Area;
+
+            if (!borders.Top.IsNone)
+                loose.Add(new Edge(true, area.Y, area.X, area.Right, borders.Top));
+            if (!borders.Bottom.IsNone)
+                loose.Add(new Edge(true, area.Bottom, area.X, area.Right, borders.Bottom));
+            if (!borders.Left.IsNone)
+                loose.Add(new Edge(false, area.X, area.Y, area.Bottom, borders.Left));
+            if (!borders.Right.IsNone)
+                loose.Add(new Edge(false, area.Right, area.Y, area.Bottom, borders.Right));
+        }
+
+        List<Edge> merged = [];
+
+        foreach (bool horizontal in (bool[])[true, false])
+        {
+            IEnumerable<IGrouping<(long, Length, Colour), Edge>> lines = loose
+                .Where(edge => edge.IsHorizontal == horizontal)
+                .GroupBy(edge => (edge.At.Twips, edge.Border.Width, edge.Border.Colour));
+
+            foreach (IGrouping<(long, Length, Colour), Edge> line in lines)
+            {
+                foreach (Edge run in Merge([.. line.OrderBy(edge => edge.From.Emu)]))
+                {
+                    merged.Add(run);
+                }
+            }
+        }
+
+        return merged;
+    }
+
+    /// <summary>Joins the runs along one grid line that touch or overlap.</summary>
+    /// <remarks>
+    /// Touching counts, and has to: two cells side by side produce two separate edges that meet exactly at
+    /// the boundary between them, and a reference that wrote one stroke across both would disagree with two.
+    /// </remarks>
+    private static List<Edge> Merge(List<Edge> sorted)
+    {
+        List<Edge> runs = [];
+
+        foreach (Edge edge in sorted)
+        {
+            if (runs.Count > 0 && edge.From <= runs[^1].To)
+            {
+                if (edge.To > runs[^1].To) runs[^1] = runs[^1] with { To = edge.To };
+                continue;
+            }
+
+            runs.Add(edge);
+        }
+
+        return runs;
     }
 
     /// <summary>Fills a rectangle, which is what a shade and a rule both are.</summary>

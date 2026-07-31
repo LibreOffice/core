@@ -456,32 +456,28 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Cell shading for **DOC**, which is a bigger read than the other three: a per-band `WW8_SHD` array from
       `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form (`sprmTDefTableNewShd` and its 2nd and
       3rd parts) carrying full RGB.
-- [ ] Cell **borders**. Not started, but fully **measured** — everything below came out of LibreOffice's own
-      PDF for a four-row table with a uniform 0.5 pt red border, so the next session can implement rather than
-      investigate. What it writes, in order:
-      ```
-      1 0 0 RG                       ← the stroke colour, once
-      q 0.5 w 0 J 1 j                ← width, butt caps, round joins, per stroke
-      56.45 771.439 m 538.85 771.439 l S
-      Q
-      ```
-      - **One stroke per grid line, not four per cell.** Five horizontals for a four-row table, then one
-        vertical per column boundary. Drawing twelve short segments where the reference writes five long ones
-        would be right on the page and incomparable against it — so the same consolidation is needed, which in
-        general means merging maximal runs of identical border along each grid line.
-      - **A grid line runs through the centre of the border**, and each stroke **overshoots by half the border
-        width at both ends**: the table spans 56.7 to 538.6 and the horizontals run 56.45 to 538.85. The
-        verticals overshoot the outermost horizontals the same way, 771.439 + 0.25 to 680.239 − 0.25.
-      - **A vertical stops where its boundary stops.** The corpus table's last row spans two columns, so the
-        stroke at x = 141.8 runs only to 699.389 while the others reach 679.989.
-      - **Horizontals before verticals**, which matters only for a join but is free to match.
-      - **A border takes space.** The five row boundaries sit at 771.439, 752.039, 719.139, 699.639 and
-        680.239, so the first row is 19.4 pt tall where the same table without borders gives 18.95 — a 0.5 pt
-        border adds 0.45 pt to the row. That is the half a text comparison sees, and it is why the shading
-        corpus document has no borders: it would be testing two things and failing on the unread one.
-        LibreOffice's `MinRowHeightInclBorder` compatibility flag is about this exact arithmetic.
-      Still needed to verify it: a `PdfStrokes` reader beside `PdfFills`, reading `w`, `RG` and the `m`/`l`/`S`
-      run — a smaller job than `PdfFills` was, since a stroke is already a pair of points.
+- [x] **Cell borders**, for ODF: read, drawn *consolidated*, and compared against LibreOffice's own strokes —
+      axis, position, both ends and thickness, every one within a tenth of a point. What had to be right:
+      - **One stroke per grid line, not four per cell.** Five horizontals for a four-row table and one vertical
+        per column boundary, built by grouping the cells' edges onto the line they sit on and merging the runs
+        that touch. Drawing twelve short segments would be right on the page and incomparable against the
+        reference — which is the whole reason this needed a `PdfStrokes` reader before it could be attempted.
+      - **A vertical stops where its boundary stops.** The corpus table's last row spans two columns, so that
+        column's stroke is shorter than the rest — and it falls out of the merge rather than being special-cased.
+      - **A grid line runs through the centre of its border**, and each stroke **overshoots by half its width at
+        both ends**, which is what makes two perpendicular borders meet rather than leaving a notch.
+      - **A border takes space**, and the arithmetic is per row rather than per table: a row owns *half* of each
+        of the two grid lines it sits between, so a row 18.95 pt tall gains 0.5 pt from two 0.5 pt borders. And
+        the table's **first** grid line sits half a border below its top edge, which is one shift of the whole
+        table and was the last 0.25 pt of disagreement.
+      - Width and colour, no style: a style is a rasteriser's problem and no two formats agree on the set, while
+        a dashed border at the right width in the right place is far closer than none — and the width is the half
+        that moves text.
+- [ ] Cell borders for **DOCX, RTF and DOC**. The model, the consolidation and the comparison are all done and
+      format-independent; what each needs is its own read — `w:tcBorders`, `\clbrdr*` with its own width control
+      word per side, and WW8's `sprmTSetBrc` with the `BRC` structure. The ODF read shows the shape, including
+      the one trap in it: ODF's `none` is a *value* meaning there is no border, so it has to beat the
+      `fo:border` shorthand rather than falling through to it.
       The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
