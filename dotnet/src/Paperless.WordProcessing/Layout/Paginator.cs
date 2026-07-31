@@ -249,7 +249,6 @@ public sealed class Paginator
             sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
 
         List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
-        if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
 
         // The loop frames close, and the reason pagination cannot be a single pass once one is present:
         // where a frame goes depends on where its anchor paragraph ended up, and where that paragraph's
@@ -258,9 +257,15 @@ public sealed class Paginator
         // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
         // of laying the whole document out again, which converges in one further pass whenever the frames
         // stay on the page they started on — the case every real document is.
+        //
+        // "Has this document a frame at all" is asked of the finished pages rather than of the blocks,
+        // because a frame need not be anchored in the body: one anchored in a table cell or a header is
+        // reached through the flow it landed in, which exists only once a page has been filled. Scanning
+        // the blocks instead returned early on exactly those documents and left their frames unplaced.
         FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+        if (resolution.IsEmpty) return pages;
 
-        for (int pass = 0; pass < MaxFramePasses && !resolution.IsEmpty; pass++)
+        for (int pass = 0; pass < MaxFramePasses; pass++)
         {
             _obstacles = resolution.ObstaclesFor;
             List<LaidOutPage> next;
@@ -565,10 +570,15 @@ public sealed class Paginator
                 }
             }
 
+            allowed = WholeLines(layout.Lines, lineIndex, allowed);
+
             Length top = used + spaceAbove;
+            bool firstLineHere = columnIsEmpty;
+
             for (int i = 0; i < allowed; i++)
             {
                 LineBox box = layout.Lines[lineIndex + i];
+                bool shares = box.SharesLineWithNext;
 
                 // The first line in a frame loses the leading above its text, box and all: Writer counts
                 // that leading as part of the paragraph's upper space and drops it at the top of a frame.
@@ -576,10 +586,18 @@ public sealed class Paginator
                 // whether the paragraph *began* here is beside the point: a paragraph carried over from the
                 // previous page drops the leading above its continuation just the same, which at 200% line
                 // spacing is the difference between twenty-five lines on a page and twenty-four.
-                if (columnIsEmpty && i == 0) box = box.WithoutSpaceAbove();
+                // Every stretch of that line, since they share one box's worth of geometry between them.
+                if (firstLineHere) box = box.WithoutSpaceAbove();
 
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top, column));
-                top += box.Height;
+
+                // A stretch that shares its line with the next one leaves the pen where it is: the box
+                // after it is more of the same line, at the same top.
+                if (!shares)
+                {
+                    top += box.Height;
+                    firstLineHere = false;
+                }
             }
 
             notes.AddRange(NotesIn(paragraph, layout, lineIndex, allowed));
@@ -734,19 +752,60 @@ public sealed class Paginator
         Length room = available - used;
         int count = 0;
 
-        for (int i = from; i < layout.Lines.Count; i++)
+        for (int i = from; i < layout.Lines.Count;)
         {
+            // A line beside a frame clear of both margins is two boxes on one baseline, and it costs its
+            // height once. Counted from its last stretch, which is the one whose height and leading are
+            // the line's — and taken whole, so a page can never end between the text left of a frame and
+            // the text right of it.
+            int last = LastStretch(layout.Lines, i);
+
             LineBox box = atTopOfPage && count == 0
-                ? layout.Lines[i].WithoutSpaceAbove()
-                : layout.Lines[i];
+                ? layout.Lines[last].WithoutSpaceAbove()
+                : layout.Lines[last];
 
             if (box.Height > room) break;
 
             room -= box.Height;
-            count++;
+            count += last - i + 1;
+            i = last + 1;
         }
 
         return count;
+    }
+
+    /// <summary>Where the line that begins at <paramref name="from"/> ends, as a box index.</summary>
+    /// <remarks>
+    /// Its own index for every box of a document with no floating frame in it, so the walk costs one
+    /// comparison per line and changes nothing about how such a document paginates.
+    /// </remarks>
+    private static int LastStretch(IReadOnlyList<LineBox> lines, int from)
+    {
+        int last = from;
+        while (last + 1 < lines.Count && lines[last].SharesLineWithNext) last++;
+        return last;
+    }
+
+    /// <summary>
+    /// The same count of boxes, shortened so that it does not end in the middle of a line.
+    /// </summary>
+    /// <remarks>
+    /// The keep rules count boxes, and a line beside a frame can be more than one of them — so an orphan
+    /// or widow limit, or the "place it anyway" fallback of a single box, can land between the text left
+    /// of a frame and the text right of it. Splitting there would draw half a line on each of two pages
+    /// and leave the second half at the wrong baseline, so the count backs off to the line's start; if
+    /// that leaves nothing, the whole line goes rather than none of it, since a box that cannot be placed
+    /// anywhere would loop.
+    /// </remarks>
+    private static int WholeLines(IReadOnlyList<LineBox> lines, int from, int count)
+    {
+        if (count <= 0 || from + count >= lines.Count) return count;
+        if (!lines[from + count - 1].SharesLineWithNext) return count;
+
+        int end = from + count - 1;
+        while (end > from && lines[end - 1].SharesLineWithNext) end--;
+
+        return end > from ? end - from : LastStretch(lines, from) - from + 1;
     }
 
     /// <summary>
