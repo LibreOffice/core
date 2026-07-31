@@ -173,12 +173,14 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
         };
 
+        Paginator paginator = new(pagination);
+
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(
+            paginator.Paginate(
                 blocks,
                 [.. Sections.Select((section, index) =>
                     new PaginatedSection(section, Furniture(fonts, index)))]),
-            blocks);
+            paginator.Blocks ?? blocks);
     }
 
     /// <summary>
@@ -471,6 +473,12 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 IsEndnote = note.IsEndnote,
                 Placement = note.Placement,
                 Restart = note.Restart,
+                Numbering = note.Numbering,
+
+                // RTF's own copy of the number is a prefix on the note's first paragraph, so its offset is
+                // nought — the same place ODF's ends up, by a different route.
+                Citation = note.Citation,
+                BodyOffset = 0,
             });
         }
 

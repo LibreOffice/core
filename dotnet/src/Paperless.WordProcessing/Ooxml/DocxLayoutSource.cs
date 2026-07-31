@@ -291,6 +291,11 @@ public sealed partial class DocxLayoutSource
         RunWalker walker = new(CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
+        // Where the note's own number landed, for a renumbering pass that has to find it again. A field
+        // rather than an out parameter because this method reads an ordinary paragraph and a note's first
+        // paragraph alike, and only the call that supplied a citation can have produced one.
+        if (citation is not null) _noteCitationOffset = walker.CitationOffset;
+
         // Notes are numbered across the document, so the counters advance by however many this paragraph
         // referenced — and the bodies are read after the walk, since reading one recurses into this method
         // and would otherwise renumber from the middle of the paragraph that references it.
@@ -317,6 +322,16 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
     private int _footnoteNumber;
+
+    /// <summary>
+    /// Where the last note body's own citation was emitted, or −1 when it emitted none.
+    /// </summary>
+    /// <remarks>
+    /// A DOCX marks the place: a <c>w:footnoteRef</c> in the note's first paragraph, which a note beginning
+    /// with a tab puts at one rather than at nought. Recorded so that a renumbering pass can rewrite the
+    /// number at the head of the note as well as the one in the sentence.
+    /// </remarks>
+    private int _noteCitationOffset = -1;
 
     /// <summary>
     /// The number the next endnote is cited by, counted separately from the footnotes.
@@ -350,7 +365,7 @@ public sealed partial class DocxLayoutSource
 
             if (!part.TryGetValue(anchor.Id, out XElement? body)) continue;
 
-            List<PageBlock> blocks = ReadNoteBody(body, anchor.Citation);
+            List<PageBlock> blocks = ReadNoteBody(body, anchor.Citation, out int bodyOffset);
             if (blocks.Count == 0) continue;
 
             notes.Add(new PageNote
@@ -361,6 +376,9 @@ public sealed partial class DocxLayoutSource
                 Placement =
                     (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Placement,
                 Restart = (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Restart,
+                Numbering = anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering,
+                Citation = anchor.Citation,
+                BodyOffset = bodyOffset,
             });
         }
 
@@ -374,10 +392,12 @@ public sealed partial class DocxLayoutSource
     /// Its own walk rather than <see cref="ReadCell"/>'s, only because the first paragraph takes the
     /// citation and the rest do not — everything else about it is the same, tables included.
     /// </remarks>
-    private List<PageBlock> ReadNoteBody(XElement body, string citation)
+    private List<PageBlock> ReadNoteBody(XElement body, string citation, out int citationOffset)
     {
         List<PageBlock> blocks = [];
         bool first = true;
+
+        _noteCitationOffset = -1;
 
         foreach (XElement child in body.Elements())
         {
@@ -397,6 +417,9 @@ public sealed partial class DocxLayoutSource
             Walk(child, blocks, depth: 0);
         }
 
+        // Nought when the part marks no place for its number, which is what a note whose first paragraph
+        // holds no `w:footnoteRef` is: the citation was never emitted and there is nothing to rewrite.
+        citationOffset = Math.Max(0, _noteCitationOffset);
         return blocks;
     }
 
@@ -637,6 +660,9 @@ public sealed partial class DocxLayoutSource
         /// <summary>The number a <c>w:footnoteRef</c> stands for, when this paragraph is a note's.</summary>
         private string? _citation;
 
+        /// <summary>Where that number was emitted, or −1 when the paragraph marked no place for one.</summary>
+        internal int CitationOffset { get; private set; } = -1;
+
         private void Append(XElement element, int depth)
         {
             if (depth > MaxDepth) return;
@@ -706,6 +732,7 @@ public sealed partial class DocxLayoutSource
                         // fuses with the note's first word.
                         if (_citation is not null)
                         {
+                            CitationOffset = _builder.Length;
                             _inCitation = true;
                             Emit(_citation);
                             _inCitation = false;

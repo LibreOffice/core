@@ -202,12 +202,14 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
         };
 
+        Paginator paginator = new(pagination);
+
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(
+            paginator.Paginate(
                 blocks,
                 [.. Sections.Select((section, index) =>
                     new PaginatedSection(section, Furniture(fonts, index)))]),
-            blocks);
+            paginator.Blocks ?? blocks);
     }
 
     /// <summary>
@@ -412,6 +414,12 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 IsEndnote = note.IsEndnote,
                 Placement = note.Placement,
                 Restart = note.Restart,
+                Numbering = note.Numbering,
+
+                // WW8's copy of the number is the U+0002 at the head of the note's own range, so its offset
+                // is nought — the same place ODF's and RTF's end up, by a third route.
+                Citation = note.Citation,
+                BodyOffset = 0,
             });
         }
 

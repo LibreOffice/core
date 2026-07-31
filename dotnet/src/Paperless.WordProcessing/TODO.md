@@ -1248,7 +1248,7 @@ is read and verified, so what remains is the filling of pages rather than the me
       - **RTF's endnote set is one word short rather than a mirror.** `\ftnrstcont`, `\ftnrestart` and
         `\ftnrstpg` have `a`-prefixed twins for only the first two: there is no `\aftnrstpg`, because an endnote
         does not restart per page. A reader assuming the mirror would be inventing a keyword.
-- [ ] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
+- [x] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
       genuinely circular: a note's number under a restart is its position within its page, the citation's width
       depends on that number, and where the citing line breaks depends on the width. **Writer has an answer and
       it is not a fixed point**, which is the correction to the note that used to stand here:
@@ -1265,6 +1265,32 @@ is read and verified, so what remains is the filling of pages rather than the me
       re-lay out once, and stop. The corpus document deliberately holds four notes to a page so that every
       citation stays one digit wide — the numbering can be got right before the width feedback is, and a second
       document with ten notes on a page is what would exercise the rest.
+      **Done, in `Layout/NoteRenumbering.cs`, exactly that shape.** What writing it turned up:
+      - **A renumbering is a text edit, not a number.** The number is nowhere in this engine as a number: all
+        four readers emit it into the text twice, as a superscript at the anchor and again at the head of the
+        note, because that is what LibreOffice draws. So the pass rewrites paragraphs — text, runs, frame
+        anchors and the offsets of the notes after it — which is also why the width feedback is real rather
+        than theoretical, and why doing it once and stopping is the only terminating answer.
+      - **`PageNote` had to learn three things** it did not carry: the class's whole `NoteNumbering` (the
+        restart alone cannot say what sequence to write the new number in), the citation as read, and where
+        that citation sits inside the note's own body. The last is not zero in DOCX and is in the other three:
+        ODF and RTF have no number in the note at all and the reader prepends it, WW8 puts it at the U+0002
+        that heads the note's range, and a DOCX marks the place with a `w:footnoteRef` — which a note
+        beginning with a tab puts at one. Searching the note's text for the citation instead would find
+        whatever the note happens to say first.
+      - **The rewritten blocks have to reach the caller**, which is the part that would have been silently
+        half-right: pagination indexes lines into a block list the reader still holds, so rewriting the
+        paragraphs and returning the old list draws the numbering the document was read with. Each page now
+        names its own list and `Paginator.Blocks` reports it, so both halves agree.
+      - Guarded on `NoteRenumbering.Applies`, so every document whose notes do not restart per page — which
+        is all of the corpus but one — pays a single walk over its blocks and takes no second pagination.
+      Verified against LibreOffice in all four formats: `NoteRestartComparisonTests` asserts page one citing
+      1, 2, 3, 4 and page two citing 1, 2, 3, 4 again, at the anchor *and* at the head of the note, and then
+      that the text drawn is character for character LibreOffice's. Before the pass, page two cited 5, 6, 7, 8.
+      What is still open is the width feedback the corpus deliberately does not exercise: a page whose tenth
+      note becomes its first goes from `10` to `1` and the citing line rebreaks. The single re-layout picks
+      that up; whether a *second* renumbering would then be needed is precisely what Writer refuses to chase,
+      so the behaviour is right and the case is untested for want of a document with ten notes on a page.
 - [x] **The separator rule above the notes**, drawn and compared — and the interesting part is that it turned
       out to be comparable at all. The old note here said it could not be, that it needed the rasteriser first
       because a text comparison sees no lines. That was the wrong conclusion from a true premise: `pdftotext`

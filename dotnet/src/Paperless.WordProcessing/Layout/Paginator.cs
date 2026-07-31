@@ -187,6 +187,19 @@ public sealed class Paginator
     public PaginationOptions Options => _options;
 
     /// <summary>
+    /// The blocks the last run really paginated, or null when they were the ones it was handed.
+    /// </summary>
+    /// <remarks>
+    /// Non-null only where a per-page note restart rewrote a citation, which changes the text of the citing
+    /// paragraph and of the note's own first line. The pages index into <em>these</em> blocks, so a caller
+    /// keeping the list it passed in would draw the numbering the document was read with rather than the one
+    /// its pages settled on. Each page also names the list directly through <see cref="LaidOutPage.Blocks"/>,
+    /// so a caller that ignores this still draws the right thing; this is what lets the block list a caller
+    /// holds agree with them.
+    /// </remarks>
+    public IReadOnlyList<PageBlock>? Blocks { get; private set; }
+
+    /// <summary>
     /// True when the last run hit <see cref="PaginationOptions.MaxPages"/> and stopped early.
     /// </summary>
     /// <remarks>
@@ -245,10 +258,32 @@ public sealed class Paginator
         ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sections);
 
+        Blocks = null;
+
         List<PaginatedSection> withFrames =
             sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
 
         List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
+
+        // A per-page note restart, which is the one numbering rule that cannot be settled before the pages
+        // exist — and Writer damps it rather than iterating, so this renumbers over the finished pages, lays
+        // them out once more and stops. See `NoteRenumbering` for the citations and for why stopping is the
+        // answer rather than a compromise. Guarded, so a document whose notes do not restart pays one walk.
+        if (NoteRenumbering.Applies(blocks)
+            && NoteRenumbering.Apply(blocks, pages) is { } renumbered)
+        {
+            blocks = renumbered;
+            Blocks = renumbered;
+            pages = Fill(blocks, withFrames, startingNumber);
+
+            // Each page now has to name the list its lines index, because the caller's is the one it was
+            // handed and this one is not it. An endnote page already carries its own flow and keeps it.
+            for (int i = 0; i < pages.Count; i++)
+            {
+                if (pages[i].Blocks is null) pages[i] = pages[i] with { Blocks = blocks };
+            }
+        }
+
         if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
 
         // The loop frames close, and the reason pagination cannot be a single pass once one is present:

@@ -258,9 +258,11 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
                 : PaginationOptions.Word.MaxPages,
         };
 
+        Paginator paginator = new(pagination);
+
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(blocks, Paginated(source, body)),
-            blocks);
+            paginator.Paginate(blocks, Paginated(source, body)),
+            paginator.Blocks ?? blocks);
     }
 
     /// <summary>
