@@ -480,16 +480,20 @@ bool SwHTMLParser::InsertEmbed()
                            URIHelper::GetMaybeFileHdl()) );
     bool bHasData = !aData.isEmpty();
 
-    try
+    if (bHasData)
     {
-        // Strip query and everything after that for file:// URLs, browsers do
-        // the same.
-        aURLObj.SetURL(rtl::Uri::convertRelToAbs(
-            m_sBaseURL, SwHTMLParser::StripQueryFromPath(m_sBaseURL, aData)));
-    }
-    catch (const rtl::MalformedUriException& /*rException*/)
-    {
-        bHasData = false;
+        // The data attribute wins over src, so aURLObj is the data URL from here on.
+        try
+        {
+            // Strip query and everything after that for file:// URLs, browsers do
+            // the same.
+            aURLObj.SetURL(rtl::Uri::convertRelToAbs(
+                m_sBaseURL, SwHTMLParser::StripQueryFromPath(m_sBaseURL, aData)));
+        }
+        catch (const rtl::MalformedUriException& /*rException*/)
+        {
+            bHasData = false;
+        }
     }
 
     // do not insert plugin if it has neither URL nor type
