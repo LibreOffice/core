@@ -59,6 +59,12 @@ public static class XlsxReader
             Dictionary<int, XlsxSheetPrintNames> names = XlsxPrintNames.Read(file.Workbook);
             List<SheetLayout> layouts = [];
 
+            // The workbook's cell formats, read once. Only layout looks at them, and only the
+            // fonts-and-alignment half of styles.xml is read here — the number formats extraction
+            // needs are already resolved on file.Styles.
+            IReadOnlyList<SheetCellFormat> cellFormats =
+                XlsxCellFormats.Read(file.StyleSheet, file.Styles);
+
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
                 ContentSection section = new()
@@ -92,7 +98,8 @@ public static class XlsxReader
                     Setup = setup,
                     Grid = grid,
                     Cells = table,
-                    Formatting = XlsxCellDecoration.Read(file.StylesRoot, file.ThemeRoot, worksheet),
+                    Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
+                    Formats = XlsxSheetFormats.Read(worksheet, cellFormats),
                     FileName = source.FileName ?? string.Empty,
                 });
 

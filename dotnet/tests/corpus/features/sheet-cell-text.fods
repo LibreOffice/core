@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;"
+                     style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;"
+                     style:font-family-generic="roman" style:font-pitch="variable"/>
+  </office:font-face-decls>
+
+  <office:styles>
+    <number:number-style style:name="N-fixed">
+      <number:number number:decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+    </number:number-style>
+    <style:default-style style:family="table-cell">
+      <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/>
+    </style:default-style>
+  </office:styles>
+
+  <office:automatic-styles>
+    <!-- A page with no header and no footer, so every baseline is the cell's own and not a
+         band's. Calc reserves 0.75 cm for a header band by default and recomputes its height
+         from the text in it, which would shift every row on the page. -->
+    <style:page-layout style:name="pm-plain">
+      <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in"
+                                    style:print-orientation="portrait"
+                                    fo:margin-top="0.7875in" fo:margin-bottom="0.7875in"
+                                    fo:margin-left="0.7875in" fo:margin-right="0.7875in"
+                                    style:writing-mode="lr-tb"/>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+
+    <style:style style:name="co-narrow" style:family="table-column">
+      <style:table-column-properties fo:break-before="auto" style:column-width="0.6in"/>
+    </style:style>
+    <style:style style:name="co-wide" style:family="table-column">
+      <style:table-column-properties fo:break-before="auto" style:column-width="1.4in"/>
+    </style:style>
+    <style:style style:name="ro-normal" style:family="table-row">
+      <style:table-row-properties style:row-height="0.18in" style:use-optimal-row-height="false"
+                                  fo:break-before="auto"/>
+    </style:style>
+    <style:style style:name="ro-tall" style:family="table-row">
+      <style:table-row-properties style:row-height="0.6in" style:use-optimal-row-height="false"
+                                  fo:break-before="auto"/>
+    </style:style>
+
+    <style:style style:name="ce-left" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="start"/>
+    </style:style>
+    <style:style style:name="ce-centre" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="ce-right" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="end"/>
+    </style:style>
+    <style:style style:name="ce-indent" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="start" fo:margin-left="0.2778in"/>
+    </style:style>
+    <style:style style:name="ce-top" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="top"/>
+    </style:style>
+    <style:style style:name="ce-middle" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="ce-bottom" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="bottom"/>
+    </style:style>
+    <style:style style:name="ce-wrap" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="top"/>
+    </style:style>
+    <style:style style:name="ce-shrink" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:shrink-to-fit="true"/>
+    </style:style>
+    <style:style style:name="ce-rot45" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:rotation-angle="45"/>
+    </style:style>
+    <style:style style:name="ce-rot90" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:rotation-angle="90"/>
+    </style:style>
+    <style:style style:name="ce-bold" style:family="table-cell" style:parent-style-name="Default">
+      <style:text-properties fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="ce-italic14" style:family="table-cell" style:parent-style-name="Default">
+      <style:text-properties fo:font-style="italic" fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="ce-red12" style:family="table-cell" style:parent-style-name="Default">
+      <style:text-properties fo:color="#c00000" fo:font-size="12pt"/>
+    </style:style>
+    <style:style style:name="ce-serif11" style:family="table-cell" style:parent-style-name="Default">
+      <style:text-properties fo:font-family="&apos;Liberation Serif&apos;" fo:font-size="11pt"/>
+    </style:style>
+    <style:style style:name="ce-fixed" style:family="table-cell" style:parent-style-name="Default"
+                 style:data-style-name="N-fixed"/>
+  </office:automatic-styles>
+
+  <office:master-styles>
+    <style:master-page style:name="Default" style:page-layout-name="pm-plain">
+      <style:header style:display="false"/>
+      <style:footer style:display="false"/>
+    </style:master-page>
+  </office:master-styles>
+
+  <office:body>
+    <office:spreadsheet>
+      <table:table table:name="Text" table:style-name="Default">
+        <table:table-column table:style-name="co-wide"/>
+        <table:table-column table:style-name="co-narrow"/>
+        <table:table-column table:style-name="co-narrow"/>
+        <table:table-column table:style-name="co-narrow"/>
+        <table:table-column table:style-name="co-wide"/>
+
+        <!-- Row 1: horizontal alignment, including the two General cases. -->
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string" table:style-name="ce-left"><text:p>Lft</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-centre"><text:p>Ctr</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-right"><text:p>Rgt</text:p></table:table-cell>
+          <table:table-cell office:value-type="string"><text:p>Gen</text:p></table:table-cell>
+          <table:table-cell office:value-type="float" office:value="1234"><text:p>1234</text:p></table:table-cell>
+        </table:table-row>
+
+        <!-- Row 2: vertical alignment in a tall row, indent, and wrapping. -->
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell office:value-type="string" table:style-name="ce-top"><text:p>Top</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-middle"><text:p>Mid</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-bottom"><text:p>Bot</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-indent"><text:p>Ind</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-wrap"><text:p>Wrapped text that needs three lines here</text:p></table:table-cell>
+        </table:table-row>
+
+        <!-- Row 3: fonts — weight, posture, size, colour, family — and shrink-to-fit. -->
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string" table:style-name="ce-bold"><text:p>Bold</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-italic14"><text:p>It</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-red12"><text:p>Red</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-serif11"><text:p>Ser</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-shrink"><text:p>Shrink this long line down</text:p></table:table-cell>
+        </table:table-row>
+
+        <!-- Row 4: the two ways a too-narrow number is drawn. General re-renders itself with
+             fewer digits and falls back to scientific notation; anything else shows hashes. -->
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell table:number-columns-repeated="2"/>
+          <table:table-cell office:value-type="float" office:value="123456789012"><text:p>123456789012</text:p></table:table-cell>
+          <table:table-cell office:value-type="float" office:value="123456789012" table:style-name="ce-fixed"><text:p>123,456,789,012.00</text:p></table:table-cell>
+          <table:table-cell office:value-type="string"><text:p>Plain</text:p></table:table-cell>
+        </table:table-row>
+
+        <!-- Row 5: a string that overflows into the empty cells beside it. -->
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string"><text:p>Overflowing string with nothing beside it at all</text:p></table:table-cell>
+          <table:table-cell table:number-columns-repeated="4"/>
+        </table:table-row>
+
+        <!-- Row 6: the same string stopped by an occupied neighbour, so it is clipped. -->
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string"><text:p>Blocked string with a neighbour</text:p></table:table-cell>
+          <table:table-cell office:value-type="string"><text:p>X</text:p></table:table-cell>
+          <table:table-cell table:number-columns-repeated="3"/>
+        </table:table-row>
+
+        <!-- Row 7: a right-aligned string overflows to the left instead. -->
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell table:number-columns-repeated="2"/>
+          <table:table-cell office:value-type="string" table:style-name="ce-right"><text:p>Right-aligned overflow</text:p></table:table-cell>
+          <table:table-cell table:number-columns-repeated="2"/>
+        </table:table-row>
+      </table:table>
+
+      <!-- Turned text sits on its own sheet, so that a comparison of the sheet above is a
+           comparison of pens: a rotated run is written with a text matrix rather than an
+           absolute pen, and the two renderers express the rotation differently. -->
+      <table:table table:name="Turned" table:style-name="Default">
+        <table:table-column table:style-name="co-narrow" table:number-columns-repeated="3"/>
+
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell office:value-type="string" table:style-name="ce-rot45"><text:p>R45</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-rot90"><text:p>R90</text:p></table:table-cell>
+          <table:table-cell office:value-type="string"><text:p>Flat</text:p></table:table-cell>
+        </table:table-row>
+      </table:table>
+    </office:spreadsheet>
+  </office:body>
+</office:document>

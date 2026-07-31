@@ -167,10 +167,10 @@ public readonly record struct SheetCellBorders(
 /// </remarks>
 /// <param name="Background">The cell's fill, or null when it is transparent.</param>
 /// <param name="Borders">Its four edges.</param>
-public readonly record struct SheetCellFormat(Colour? Background, SheetCellBorders Borders)
+public readonly record struct SheetCellDecoration(Colour? Background, SheetCellBorders Borders)
 {
     /// <summary>A cell with no fill and no border, which is what most cells have.</summary>
-    public static SheetCellFormat None { get; }
+    public static SheetCellDecoration None { get; }
 
     /// <summary>True when the cell draws nothing but its text.</summary>
     public bool IsNone => Background is null && Borders.IsNone;
@@ -196,8 +196,8 @@ public readonly record struct SheetCellFormat(Colour? Background, SheetCellBorde
 /// </remarks>
 public sealed class SheetFormatting
 {
-    private readonly List<SheetCellFormat> _palette = [SheetCellFormat.None];
-    private readonly Dictionary<SheetCellFormat, int> _byFormat = new() { [SheetCellFormat.None] = 0 };
+    private readonly List<SheetCellDecoration> _palette = [SheetCellDecoration.None];
+    private readonly Dictionary<SheetCellDecoration, int> _byFormat = new() { [SheetCellDecoration.None] = 0 };
     private readonly Dictionary<(int Row, int Column), int> _cells = [];
     private readonly Dictionary<int, int> _rows = [];
     private readonly List<(int First, int Last, int Format)> _columns = [];
@@ -217,7 +217,7 @@ public sealed class SheetFormatting
 
     /// <summary>Interns a format and returns the handle the setters take.</summary>
     /// <param name="format">The format to intern.</param>
-    public int Intern(SheetCellFormat format)
+    public int Intern(SheetCellDecoration format)
     {
         if (_byFormat.TryGetValue(format, out int found)) return found;
 
@@ -293,7 +293,7 @@ public sealed class SheetFormatting
     /// <summary>What is painted behind and around one cell.</summary>
     /// <param name="row">The zero-based row.</param>
     /// <param name="column">The zero-based column.</param>
-    public SheetCellFormat At(int row, int column)
+    public SheetCellDecoration At(int row, int column)
     {
         if (_cells.TryGetValue((row, column), out int cell)) return _palette[cell];
         if (_rows.TryGetValue(row, out int inRow)) return _palette[inRow];

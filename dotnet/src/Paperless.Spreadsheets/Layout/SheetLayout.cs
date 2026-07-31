@@ -64,6 +64,18 @@ public sealed class SheetLayout
     public string FileName { get; init; } = string.Empty;
 
     /// <summary>
+    /// The formats its cells are drawn in, kept apart from the cells themselves.
+    /// </summary>
+    /// <remarks>
+    /// Separate because a spreadsheet stores it separately: formatting is a run-length structure
+    /// keyed by row rather than a property of a cell, and a sheet with one uniformly-formatted
+    /// million-cell region stays cheap only while that holds. Extraction never reads it — a font
+    /// changes nothing about what a cell says — so a reader that has not been taught to fill it in
+    /// yields <see cref="SheetCellFormats.Empty"/> and every cell draws in the default face.
+    /// </remarks>
+    public SheetCellFormats Formats { get; init; } = SheetCellFormats.Empty;
+
+    /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
     /// </summary>
     /// <remarks>

@@ -516,16 +516,11 @@ number-formatted.
 
 ## Rendering
 
-- [ ] Cell text: alignment, wrap, shrink-to-fit, rotation, indent. Pagination needed none of it
-      — a row's height and a column's width come from the file, never from the text — so what
-      draws today is one glyph run per cell at a baseline, left for text and right for numbers,
-      in one face for the whole workbook. Cell fonts are the prerequisite: `FONT` records and
-      `styles.xml`'s `fonts` element are both still unread
-- [ ] Overflow into adjacent empty cells; `###` when a number does not fit — note the
-      displayed text is **column-width dependent**, so it cannot be computed before layout.
-      The *print area* is already widened for overflow (`Layout/SheetTextOverflow.cs`), because
-      that changes the page count; drawing the overflow, and clipping it where a neighbour stops
-      it, is what is left
+- [x] Cell text: fonts, alignment, wrap, shrink-to-fit, rotation, indent — `Layout/SheetTextLayout.cs`,
+      with the formats read in `Ooxml/XlsxCellFormats.cs`, `MsBinary/XlsCellFormats.cs` and
+      `OpenDocument/OdsCellFormats.cs`. See the section below
+- [x] Overflow into adjacent empty cells; `###` when a number does not fit, and the
+      `General`-shrunk form that is drawn *instead* of hashes when the format allows it
 - [ ] Rich text within a cell
 - [x] **Cell backgrounds, cell borders, the printed grid and the row and column headings** —
       in `Layout/SheetPageDecoration.cs`, read into `Layout/SheetDecoration.cs` by
@@ -615,12 +610,10 @@ file's margins alone would give and matches LibreOffice's 21.11 pt to within 0.1
       the EditEngine's disagree by that much; every line on the page therefore sits 1.03 pt
       lower than ours. `SheetDecorationComparisonTests` allows for it once per page rather than
       per stroke, so everything *within* a page is still compared to half a point
-- [ ] **1/100 mm quantisation.** LibreOffice's whole drawing layer works in hundredths of a
-      millimetre, so a row 12.813 pt tall is stored as 451 units and comes back as 12.784 — 0.03
-      pt a row, 0.03 pt a column, accumulating to 0.38 pt over the seven rows of
-      `sheet-decor-ods.ods`. Removing it means routing every sheet measurement through the same
-      grid rather than keeping EMUs, which is a change to `SheetGrid` and `SheetPagination` and
-      would need the pagination comparison re-run against all six print corpus files
+- [x] **1/100 mm quantisation** — reproduced rather than tolerated now, in
+      `Layout/SheetDeviceUnits.cs`, which cell text brought and which the decoration path was
+      routed through when the two halves were merged. It is worth less to decoration than to
+      text, but it is worth something: see the reconciliation note at the end
 - [ ] **Hatch patterns.** SpreadsheetML has eighteen and BIFF the same, each a foreground drawn
       over a background. One colour cannot stand for them, so a hatched cell is painted with its
       *background* colour, which is Calc's own fallback
@@ -650,3 +643,221 @@ file's margins alone would give and matches LibreOffice's 21.11 pt to within 0.1
       `nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX` on the paper (`printfun.cxx:2205`) while
       `CalcPages` subtracts the unscaled constant in document twips. The two agree; it is worth
       knowing they are different numbers before changing either
+## Done: cell text
+
+`Layout/SheetTextLayout.cs`, a port of `ScOutputData::LayoutStringsImpl`
+(`sc/source/ui/view/output2.cxx:1595-2290`), with the formats read per format family in
+`Ooxml/XlsxCellFormats.cs`, `MsBinary/XlsCellFormats.cs` and `OpenDocument/OdsCellFormats.cs` and
+pooled per sheet by `Layout/SheetCellFormats.cs`.
+
+**What is measured.** `sheet-print-xlsx.xlsx` and `sheet-print-ods.ods` now agree with
+LibreOffice 24.2.7.2's own PDF on **all 2 281 positioned text runs across fourteen pages**, within
+**0.006 pt** across and **0.024 pt** down — every run, not a sample, compared operator for operator
+out of the two content streams. The new `sheet-cell-text.{fods,xlsx}` agrees on all 24 runs of its
+alignment sheet, including the glyph counts, the em sizes and the fill colours, within 0.075 pt.
+Page counts are unchanged: `SheetPaginationComparisonTests` still passes on all six workbooks. The
+suite is 1 808 passing, 0 failed, 0 skipped — 29 more than before, in
+`SheetTextComparisonTests` (twelve, against `soffice`) and `SheetCellTextTests` (seventeen, which
+need no LibreOffice).
+
+**Two roundings, not one, and only one of them matters.** Calc stores geometry in twips and draws
+through a device whose unit is a hundredth of a millimetre, so every length crosses a lossy
+conversion — and which way it loses differs by what is being converted. A **position or a size
+truncates**: a 12.8 pt row is 451 hundredths, not 451.6, so it draws 12.7843 pt tall. A **font
+height rounds**: ten point is 353 hundredths, so text is emitted at 10.0063 pt. The font size is a
+fixed six thousandths of a point and would never matter; the row height is a sixty-fourth of a
+point *per row*, so by the sixty-seventh row of a page the baseline is 0.86 pt out — eight times
+the bound this project holds itself to, and it reads as a wrong row height rather than as rounding.
+Both live in `Layout/SheetDeviceUnits.cs`.
+
+**And the quantisation is two steps, not one.** A file may state a length in any unit, and Calc's
+own storage is twips, so a length is quantised twice on its way to the page. An ODF row of
+`0.178in` is 452.1 hundredths directly, 256 twips once Calc has it, and 451 hundredths when drawn.
+Snapping straight to the device unit gives 452 and `sheet-print-ods.ods` drifts 1.5 pt down an
+eighty-row page; going through twips first makes it exact.
+
+**Snap before scaling, not after.** Calc hands its device coordinates *unscaled* and lets the map
+mode's fraction apply the print zoom, so a 72 pt column at 66% comes out at exactly 47.52 pt.
+Snapping the scaled value instead gives 47.5087 — 0.2 pt of accumulated error across the scaled
+sheet of `sheet-print-xlsx.xlsx`, and the last of the differences to be found.
+
+Rules ported, each with the citation that states it:
+
+- **The general alignment is the cell's *type*, not a constant.** `getAlignmentFromContext`
+  (`output2.cxx:1443`): a value goes right and everything else left. This is the rule that makes a
+  spreadsheet's alignment enumeration different from a word processor's, where the default is a
+  constant and can be resolved when the style is read.
+- **Vertical `Standard` is bottom**, settled in one line before any drawing happens
+  (`output2.cxx:348`). The baseline is then `rowBottom − bottomMargin − descent`, and the text
+  height is `ascent + descent` from the font metric.
+- **A cell's line height is not the word processor's.** Calc builds it from the metric alone, with
+  no external leading (`aTextSize.setHeight(aMetric.GetAscent() + aMetric.GetDescent())`,
+  `output2.cxx:734`), where Writer adds the line gap. Ten-point Liberation Sans wraps at a pitch of
+  11.17 pt in a cell and 11.50 pt in a paragraph.
+- **All four margins are 20 twips** (`SvxMarginItem(20, 20, 20, 20)`, `svx/source/items/algitem.cxx:123`),
+  and all four are measurable: text starts 0.9921 pt inside its column and its baseline sits that
+  far above the row's bottom.
+- **Overflow is asymmetric.** A left-aligned string spills right into cells that are *visually*
+  empty and stops at the first that is not; a right-aligned one spills left; a centred one both
+  ways; and a **value never spills at all** — it shows `###` instead (`GetOutputArea`,
+  `output2.cxx:1204`). Wrapping, filling and shrinking all suppress it too, because Calc passes
+  `bCellIsValue || bRepeat || bShrink` for the same parameter.
+- **A clipped string is shortened before it is drawn**, by the ratio of visible width to total
+  width (`output2.cxx:2202`). LibreOffice does it for speed; it is reproduced because it is visible
+  in the output — the blocked cell of `sheet-cell-text` holds 31 characters and both PDFs draw 23.
+- **Shrink-to-fit is a measure-and-retry, and the first guess is an integer division.** The scale
+  is `available × 100 / textWidth` truncated, then cut by a tenth up to seven times
+  (`output2.cxx:1864`). The truncation is what makes it reproducible: the corpus cell comes out at
+  87% of ten point in both renderers, which is 8.70 pt rather than the 8.74 an exact proportion
+  gives.
+- **An indent counts only when the cell states left or right alignment outright.** Calc reads
+  `ATTR_INDENT` in that case alone (`output2.cxx:445`), so a General-aligned cell carrying an
+  indent draws without one. It looks like a port bug until the reference renderer is measured.
+- **Cell text is not kerned.** "There is no cell attribute for kerning, default is kerning OFF"
+  (`output2.cxx:405-409`). HarfBuzz kerns `1.2E+11` by 152 design units, which is 0.74 pt of
+  right-aligned cell — a difference no metric or margin would explain.
+
+The trap that cost the most time, recorded so it is not rediscovered:
+
+- **`###` is not what a too-narrow number usually shows.** `SetTextToWidthOrHash`
+  (`output2.cxx:610`) hashes a numeric cell only when its format is *not* `General`. A `General`
+  cell is re-rendered with as many characters as the column has **widest-digit widths** — not a
+  measurement of the text, a count of digit widths — and falls back to scientific notation from
+  there. So 123 456 789 012 in a 43 pt column draws as `1.2E+11` in Calc and not as `###`, and a
+  port that hashes every value that does not fit produces entirely plausible output that disagrees
+  with the reference on every wide number. The width-dependent `General` rendering is
+  `Layout/SheetGeneralWidth.cs`, a port of `SvNumberformat::GetOutputString(double, nCharCount, …)`
+  (`svl/source/numbers/zformat.cxx:2429`). **It is rendering-only**: `paperless extract` still
+  reports the cell's full text, which is the recorded decision — hashes are a function of a column
+  width, and extracted text has no column width.
+
+**A defect found by rendering rather than by testing, and it was ours.** The sheet path built its
+`FontReference` from the face's own family name instead of from the resolver's key. The key a
+`SystemFontResolver` produces is the font *file's* path, and the PDF backend loads and embeds the
+face from it — so a hand-built reference embedded nothing, left the backend with no `/Widths` to
+advance the pen with, and made it correct every glyph with an explicit `TJ` adjustment of about
+-700 thousandths of an em. The output looked right and extracted as loose characters: `pdftotext`
+reads an adjustment that large as a word break, so the fourteen-page print workbook came out as
+13 255 one-character "words" against LibreOffice's 2 281 real ones. It is a searchability bug
+rather than a rendering one, which is why nothing that looked at pixels or positions would ever
+have caught it, and "text stays glyph runs so PDF output can be real searchable text" is the stated
+reason the drawing IR is shaped the way it is. Both sides now give 2 281.
+
+**Deliberate deviations, all narrow.**
+
+- **A rotated cell is drawn but not compared.** Calc turns the text about the cell's bottom-left
+  corner and writes it with a PDF text matrix; Paperless writes a transform around an ordinary pen,
+  which `PdfTextRuns` cannot read. So the corpus document keeps its turned cells on a second sheet
+  and the reading of the angle is asserted without rendering. Stacked text (Excel's rotation 255,
+  ODF's `style:direction="ttb"`) draws one character per line, centred.
+- **A rotated cell does not make its row taller**, and rotated text is not clipped against its
+  neighbours. Both need the rotated bounding box fed back into the row, which is a change to
+  pagination rather than to drawing (`ScColumn::GetNeededSize`'s rotation branch,
+  `sc/source/core/data/column2.cxx:517`).
+- **Justified and distributed alignment place from the left and are not stretched.** They force
+  wrapping, which is the part that changes where the lines fall; the stretch would need the
+  space-distribution the word processor's justification already does, through a `MeasuredParagraph`
+  the cell path does not build.
+- **`Fill` does not repeat its text.** `RepeatToFill` (`output2.cxx:573`) pads the string to the
+  column with copies of itself, sized from a twenty-character sample. Nothing in the corpus uses it.
+- **The right-to-left branch of the general alignment is not reproduced.** It turns the rule round
+  when the text begins with a right-to-left character, and needs the cell's writing direction,
+  which no reader carries yet.
+
+Not yet, and why:
+
+- **Rich text inside a cell is drawn in the cell's own font.** A SpreadsheetML `inlineStr` with
+  several `r` elements, an ODF cell with spans, and a BIFF `SST` string with formatting runs all
+  carry per-character formatting that is read past rather than read. Drawing it needs the cell to
+  become a `MeasuredParagraph` of several `FormattedRun`s rather than one shaped string — which the
+  shared layouter already supports, so the work is in the three readers rather than here.
+- **A wrapping cell does not make its row taller.** Calc's rows are as tall as the file says unless
+  the row asks for an optimal height, in which case Calc recomputes it from the text
+  (`ScColumn::GetNeededSize`). Every file LibreOffice writes stores the computed height, so this
+  bites only a file whose stored height disagrees with its content — and fixing it means moving row
+  height out of the grid and into layout, which would make pagination depend on text measurement in
+  a second place.
+- **The clip mark is not drawn.** Calc puts a small triangle at the edge of a cell whose text is cut
+  off (`SetClipMarks`, `output2.cxx:3371`) and reserves room for it in the clip rectangle. It is a
+  screen decoration that its PDF export does not emit, so reproducing it would be a difference.
+
+Two measured differences that are **LibreOffice reading the file**, not Paperless drawing it, and
+both are recorded here because they look like rendering bugs:
+
+- **LibreOffice's own BIFF import gives a workbook a different geometry from its ODF and
+  SpreadsheetML forms.** Converting `sheet-cell-text.fods` to all three and rendering each with
+  `soffice`: the ODS and XLSX put the first column's text at 57.685 pt and the XLS at 58.677 pt — a
+  page margin 21 twips further right — and the XLS's first four columns span 230.17 pt against
+  230.40. Paperless agrees with the ODS and XLSX in both. It has a knock-on worth naming: a
+  shrink-to-fit scale is an integer percentage of the available width, so LibreOffice shrinks the
+  XLS's cell to 85% where it shrinks the other two to 87%, and clips one character more. Page
+  counts are unaffected, which is why `SheetPaginationComparisonTests` never saw it.
+- **A header band taller than its declared height shifts every row.** Already on the list above;
+  the measurement is 1.3 pt on `sheet-cell-text.xlsx`, whose header margin and top margin differ by
+  19.1 pt while Calc computes 20.4 pt from the twelve-point serif line it puts there. The corpus
+  document switches its header and footer off so that the cell-text comparison is about cell text.
+
+## Reconciling the two halves: what it cost, and what had to give
+
+Cell text and cell decoration were built side by side on the same base, and they collided in nine
+files. Most of it was addition — each half had grown the same three readers to reach a different
+part of the same record — but four decisions were not, and they are recorded here because each
+changes behaviour rather than just moving code.
+
+**One BIFF walk, not two.** Both halves extended `ReadXf`, and neither was a superset: text wanted
+the font index and the alignment word, decoration wanted the two border dwords and the fill word
+that follow them in the *same* record. They are now read in one pass, in stream order, which is the
+only way they can be read at all — the fields are sequential, so a second walk would have to reparse
+every record to reach byte 10. `PALETTE` and `ROW`'s trailing `ixfe` are likewise read once and
+handed to both tables. The `ixfe` mask is decoration's: the low twelve bits are the XF index and the
+top four are flags, and text was reading all sixteen — harmless on every file in the corpus, wrong
+on any row above XF 4095.
+
+**One `styles.xml` parse.** Decoration was loading the part as `StylesRoot` and text as
+`StyleSheet`; they were the same single load under two names, so the property is now `StyleSheet`
+and `XlsxCellDecoration` reads the `fills` and `borders` off it while `XlsxCellFormats` reads the
+`fonts` and the `xf` alignment. Nothing was given up; the name went to text's because
+`SheetCellFormats`/`XlsxCellFormats` already spell it that way.
+
+**A name had to move.** Both halves defined `SheetCellFormat` in `Paperless.Spreadsheets.Layout` —
+decoration's was a fill and four borders, text's is a font, an alignment and a number format. The
+decoration one is now `SheetCellDecoration`, which is what its container `SheetFormatting` and its
+three readers were already called; the text one keeps the name because it is the one a caller sees,
+through `SheetLayout.Formats`.
+
+**The device unit, and it had to be measured.** Cell text brought `Layout/SheetDeviceUnits.cs` with
+a warning that gridlines and borders must go through it or they will not land on the edges the text
+aligns to. Decoration predates it and drew from raw EMUs. Both now share one `Columns()`/`Rows()`,
+so the question was only which rounding that shared geometry should use — and the two halves
+disagreed about what LibreOffice does. Text measured 451 hundredths for a 0.178 in row on
+`sheet-print-ods.ods`; decoration measured 452 for the same row height on `sheet-decor-ods.ods`,
+because Calc's `SetSnapPixel` path rounds a printed *background* differently from the way
+`GetScaledRowHeight` truncates a printed *string*. So there is no rounding that is right for both,
+and the choice was made on the worst error each gives, comparing every rectangle and every line
+against LibreOffice's own PDF:
+
+| file | snapped (kept) | unsnapped (decoration's own) |
+| --- | --- | --- |
+| `sheet-decor-ods.ods` | **0.114 pt** | 0.381 pt |
+| `sheet-decor-xls.xls` | **0.114 pt** | 0.254 pt |
+| `sheet-decor-xlsx.xlsx` | 1.173 pt | 1.143 pt |
+
+Snapping wins on two of the three and loses 0.03 pt on the third, where the number is the known
+header-band offset (1.03 pt) rather than geometry — sideways, not backwards. Against that,
+*not* snapping costs cell text 1.5 pt down an eighty-row page. So the shared geometry snaps, and
+decoration inherits it: the residual 0.114 pt on a three-column sheet is four hundredths of a
+millimetre of disagreement about how LibreOffice rounds its own backgrounds, which is a quarter of
+the half-point the comparison tests hold to.
+
+The heading strip goes through the same rounding for the same reason — it is a centimetre, which is
+1000 hundredths through whole twips and 1000.06 direct — and it is snapped *before* the print zoom
+multiplies it, because Calc computes `PRINT_HEADER_WIDTH * nScaleX` in unscaled hundredths
+(`printfun.cxx:2204`) and lets the map mode's fraction do the scaling afterwards. The page margin
+is snapped and not scaled, which is the same rule seen from the other end: `aPageRect` divides the
+margin by the zoom before the device multiplies it back (`printfun.cxx:2104`).
+
+**What it cost, end to end.** The suite is 1 865 passing, 0 failed, 0 skipped — mainline's 1 836
+plus cell text's 29, with nothing dropped from either half. `sheet-print-xlsx.xlsx` still renders to
+14 pages against LibreOffice's 14, and `pdftotext` still reads 2 281 words and 13 269 non-whitespace
+characters from both, which is the check that catches a PDF whose glyphs land correctly but whose
+text will not come back out.
