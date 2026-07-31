@@ -28,6 +28,7 @@
 
 #include "swdllapi.h"
 #include "swtypes.hxx"
+#include <basegfx/units/Length.hxx>
 #include "calbck.hxx"
 #include "reffld.hxx"
 #include "nodeoffset.hxx"
@@ -169,7 +170,7 @@ public:
 
     void ForceUpdateTextNode();
     void UpdateTextNode(const SfxHint& rHint);
-    void UpdateDocPos(const SwTwips nDocPos);
+    void UpdateDocPos(const gfx::Length nDocPos);
 };
 
 enum class SwFormatFieldHintWhich

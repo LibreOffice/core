@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include "swdllapi.h"
+#include <basegfx/units/Length.hxx>
 #include "IDocumentContentOperations.hxx"
 #include "SwNumberTreeTypes.hxx"
 #include "hintids.hxx"
@@ -244,7 +245,7 @@ public:
 
 public:
     using SwContentNode::GetAttr;
-    void UpdateDocPos(const SwTwips nDocPos, const sal_uInt32 nIndex);
+    void UpdateDocPos(const gfx::Length nDocPos, const sal_uInt32 nIndex);
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     void TriggerNodeUpdate(const sw::AttrSetChangeHint&);

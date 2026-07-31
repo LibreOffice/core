@@ -1224,7 +1224,7 @@ void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->UpdateDocPos(nDocPos);
+            pFieldType->UpdateDocPos(gfx::Length::twip(nDocPos));
             break;
         case SwFieldIds::DocStat:
         {

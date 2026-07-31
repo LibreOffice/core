@@ -325,7 +325,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (rHint.GetId() == SfxHintId::SwDocPosUpdate)
     {
-        UpdateDocPos(static_cast<const sw::DocPosUpdate*>(&rHint)->m_nDocPos.as_twip<SwTwips>());
+        UpdateDocPos(static_cast<const sw::DocPosUpdate*>(&rHint)->m_nDocPos);
     }
 }
 
@@ -418,7 +418,7 @@ void SwFormatField::ForceUpdateTextNode()
     }
     mpTextField->ExpandTextField(bNeedForced);
 }
-void SwFormatField::UpdateDocPos(const SwTwips nDocPos)
+void SwFormatField::UpdateDocPos(const gfx::Length nDocPos)
 {
     if (!IsFieldInDoc())
         return;

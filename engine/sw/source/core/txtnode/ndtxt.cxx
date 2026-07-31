@@ -5673,9 +5673,9 @@ void SwTextNode::HandleNonLegacyHint(const SfxHint& rHint)
     }
 }
 
-void SwTextNode::UpdateDocPos(const SwTwips nDocPos, const sal_uInt32 nIndex)
+void SwTextNode::UpdateDocPos(const gfx::Length nDocPos, const sal_uInt32 nIndex)
 {
-    const sw::DocPosUpdateAtIndex aHint(gfx::Length::twip(nDocPos), *this, nIndex);
+    const sw::DocPosUpdateAtIndex aHint(nDocPos, *this, nIndex);
     CallSwClientNotify(aHint);
 }
 
