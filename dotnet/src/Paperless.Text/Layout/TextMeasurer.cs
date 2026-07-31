@@ -157,9 +157,9 @@ public sealed class LineFiller
     /// so a paragraph without one measures exactly as it would without this parameter.
     /// </param>
     /// <param name="widthOfLine">
-    /// The width the line at an index has, when it differs line by line — which is what something beside the
-    /// text does. Overrides both of the other two widths when given, since they are the answer for a
-    /// paragraph nothing is in the way of.
+    /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
+    /// case, where every line but the first gets the same width; it exists for text flowing round a
+    /// floating frame, where the width depends on how far down the paragraph the line sits.
     /// </param>
     public List<TextLine> Fill(
         MeasuredParagraph measured,
@@ -167,7 +167,7 @@ public sealed class LineFiller
         Length? firstLineWidth = null,
         string? language = null,
         ParagraphFormat? tabs = null,
-        Func<int, Length>? widthOfLine = null)
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         ArgumentNullException.ThrowIfNull(measured);
 
@@ -200,7 +200,9 @@ public sealed class LineFiller
     /// so a paragraph without one measures exactly as it would without this parameter.
     /// </param>
     /// <param name="widthOfLine">
-    /// The width the line at an index has, when it differs line by line. See the other overload.
+    /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
+    /// case, where every line but the first gets the same width; it exists for text flowing round a
+    /// floating frame, where the width depends on how far down the paragraph the line sits.
     /// </param>
     public List<TextLine> Fill(
         string text,
@@ -210,7 +212,7 @@ public sealed class LineFiller
         string? language = null,
         ShapingOptions? options = null,
         ParagraphFormat? tabs = null,
-        Func<int, Length>? widthOfLine = null)
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         ArgumentNullException.ThrowIfNull(text);
 
@@ -244,7 +246,7 @@ public sealed class LineFiller
         string? language,
         Func<int, int, Length> widthBetween,
         ParagraphFormat? tabs = null,
-        Func<int, Length>? widthOfLine = null)
+        Func<int, IReadOnlyList<TextLine>, Length>? widthOfLine = null)
     {
         List<TextLine> lines = [];
         if (text.Length == 0)
@@ -261,11 +263,8 @@ public sealed class LineFiller
 
         while (lineStart < text.Length)
         {
-            // A line's own width when something is beside the text, and the paragraph-wide answer otherwise.
-            // Clamped upwards to a hair rather than allowed to reach zero: a line with no room at all would
-            // take no characters, and the fill loop would not advance.
             Length limit = widthOfLine is not null
-                ? Length.Max(widthOfLine(lines.Count), Length.FromTwips(1))
+                ? widthOfLine(lines.Count, lines)
                 : lines.Count == 0 ? firstLineWidth ?? availableWidth : availableWidth;
 
             int chosen = -1;

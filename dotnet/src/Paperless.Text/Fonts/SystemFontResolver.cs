@@ -223,11 +223,13 @@ public sealed class SystemFontIndex
 /// every break after the first one.
 /// </para>
 /// </remarks>
-public sealed class SystemFontResolver : IFontResolver
+public sealed class SystemFontResolver : IFontResolver, IGlyphFallbackResolver
 {
     private readonly SystemFontIndex _index;
     private readonly Dictionary<string, OpenTypeFace> _loaded = new(StringComparer.Ordinal);
     private readonly List<FontSubstitution> _substitutions = [];
+    private readonly Dictionary<(int CodePoint, int Weight, bool Italic), OpenTypeFace?> _fallbacks = [];
+    private readonly List<GlyphFallback> _glyphFallbacks = [];
 
     /// <summary>Creates a resolver over an index of installed faces.</summary>
     public SystemFontResolver(SystemFontIndex index)
@@ -251,6 +253,92 @@ public sealed class SystemFontResolver : IFontResolver
     /// that went to a log nobody read.
     /// </remarks>
     public IReadOnlyList<FontSubstitution> Substitutions => _substitutions;
+
+    /// <summary>
+    /// Every mid-run glyph fallback made so far, one per contiguous stretch, in the order they were made.
+    /// </summary>
+    /// <remarks>
+    /// The same argument as <see cref="Substitutions"/>, and a sharper one: a fallback face is
+    /// chosen for its coverage rather than for its metrics, so it is almost never metric-compatible
+    /// with the face it stands in for. A run that quietly used two faces measures differently from
+    /// one that used one, and without this list there is nothing to distinguish that from a layout
+    /// bug. Characters that nothing installed could draw are recorded too, with a null family — a
+    /// missing-glyph box is worth knowing about before it is seen on a page.
+    /// </remarks>
+    public IReadOnlyList<GlyphFallback> GlyphFallbacks => _glyphFallbacks;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// LibreOffice's own list first (<c>ImplInitGenericGlyphFallback</c> in
+    /// <c>vcl/source/font/PhysicalFontCollection.cxx</c>), then anything installed that covers the
+    /// character. The order matters for more than tidiness: the face that draws a character decides
+    /// its advance width, so two renderers that pick different faces break the line differently.
+    /// </remarks>
+    public OpenTypeFace? FallbackFor(int codePoint, int weight = 400, bool isItalic = false)
+    {
+        // Cached because a run of unsupported text asks the same question for every character, and
+        // answering it means opening font files until one covers the character.
+        if (_fallbacks.TryGetValue((codePoint, weight, isItalic), out OpenTypeFace? cached))
+        {
+            return cached;
+        }
+
+        OpenTypeFace? found = null;
+
+        foreach (string family in GlyphFallbackFamilies.InOrder)
+        {
+            if (_index.Best(family, weight, isItalic) is not { } candidate) continue;
+            if (Covers(candidate, codePoint) is not { } face) continue;
+
+            found = face;
+            break;
+        }
+
+        // Nothing on LibreOffice's list covers it. Anything installed that does is still better than
+        // a box, and the choice is made deterministic by name so two runs of the same document agree.
+        found ??= _index.Faces
+            .OrderBy(face => face.IsItalic == isItalic ? 0 : 1)
+            .ThenBy(face => Math.Abs(face.Weight - weight))
+            .ThenBy(face => face.FamilyName, StringComparer.Ordinal)
+            .Select(face => Covers(face, codePoint))
+            .FirstOrDefault(face => face is not null);
+
+        _fallbacks[(codePoint, weight, isItalic)] = found;
+        return found;
+    }
+
+    /// <summary>Records a fallback, resolved or not, for the caller comparing against a reference.</summary>
+    public void RecordGlyphFallback(int codePoint, string? fromFamily, string? toFamily)
+        => _glyphFallbacks.Add(new GlyphFallback(codePoint, fromFamily, toFamily));
+
+    /// <summary>The face behind an installed entry when it covers a character, else null.</summary>
+    private OpenTypeFace? Covers(InstalledFace candidate, int codePoint)
+    {
+        OpenTypeFace? face = LoadCached(candidate.FaceKey);
+        return face is not null && face.HasGlyphFor(codePoint) ? face : null;
+    }
+
+    /// <summary>Loads a face by key through the resolver's own cache, or null when it cannot be read.</summary>
+    private OpenTypeFace? LoadCached(string faceKey)
+    {
+        if (_loaded.TryGetValue(faceKey, out OpenTypeFace? existing)) return existing;
+
+        (string path, int index) = SplitKey(faceKey);
+
+        OpenTypeFace? face;
+        try
+        {
+            face = path.Length > 0 ? OpenTypeFace.ReadFile(path, index) : null;
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            // A font that cannot be read is not a reason to abandon the search for one that can.
+            face = null;
+        }
+
+        if (face is not null) _loaded[faceKey] = face;
+        return face;
+    }
 
     /// <summary>The families a resolver falls back to when nothing else matches, by shape.</summary>
     /// <remarks>

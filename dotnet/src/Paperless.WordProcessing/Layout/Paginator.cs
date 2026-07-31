@@ -61,6 +61,18 @@ public sealed record PaginationOptions
     public bool CollapsesSpacing { get; init; }
 
     /// <summary>
+    /// Whether a justified line ended by a manual break is stretched to the margin.
+    /// </summary>
+    /// <remarks>
+    /// True everywhere except in a DOCX carrying <c>w:doNotExpandShiftReturn</c>, which is how a
+    /// file asks for Word's pre-2000 behaviour: a line ended by a shift-return is left ragged,
+    /// as a paragraph's last line is, rather than having its two words pushed to opposite
+    /// margins. LibreOffice reads the same flag into <c>DoNotJustifyLinesWithManualBreak</c>.
+    /// It changes only the drawing, never where a line breaks.
+    /// </remarks>
+    public bool JustifiesLinesEndedByBreak { get; init; } = true;
+
+    /// <summary>
     /// Upper bound on pages, as a guard against a document that cannot be paginated.
     /// </summary>
     /// <remarks>
@@ -155,6 +167,17 @@ public sealed class Paginator
     /// <summary>The width the cached note heights were measured at.</summary>
     private Length _noteWidth;
 
+    /// <summary>
+    /// What each block's lines must flow around, or null on the first pass and for documents with no
+    /// floating frames — which is nearly all of them.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a parameter because it has to reach the block-laying loop through the same
+    /// entry point pagination already uses, and because it is deliberately transient: it holds one pass's
+    /// answer about where the frames were, and is cleared before the result is returned.
+    /// </remarks>
+    private Func<int, ILineObstacles?>? _obstacles;
+
     /// <summary>Creates a paginator.</summary>
     /// <param name="options">The compatibility choices, or null for Writer's.</param>
     public Paginator(PaginationOptions? options = null)
@@ -222,6 +245,62 @@ public sealed class Paginator
         ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sections);
 
+        List<PaginatedSection> withFrames =
+            sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
+
+        List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
+        if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
+
+        // The loop frames close, and the reason pagination cannot be a single pass once one is present:
+        // where a frame goes depends on where its anchor paragraph ended up, and where that paragraph's
+        // lines end up depends on the hole the frame makes in them. Writer resolves the same circularity
+        // by formatting the anchored objects and the text they affect in turn until neither moves
+        // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
+        // of laying the whole document out again, which converges in one further pass whenever the frames
+        // stay on the page they started on — the case every real document is.
+        FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+
+        for (int pass = 0; pass < MaxFramePasses && !resolution.IsEmpty; pass++)
+        {
+            _obstacles = resolution.ObstaclesFor;
+            List<LaidOutPage> next;
+            try
+            {
+                next = Fill(blocks, withFrames, startingNumber);
+            }
+            finally
+            {
+                _obstacles = null;
+            }
+
+            FrameResolution settled = FrameResolution.Of(blocks, withFrames, next);
+            pages = next;
+
+            bool converged = settled.SameAs(resolution);
+            resolution = settled;
+            if (converged) break;
+        }
+
+        return resolution.AttachedTo(pages);
+    }
+
+    /// <summary>
+    /// How many times the document may be laid out again to settle its frames' positions.
+    /// </summary>
+    /// <remarks>
+    /// Four, which is a bound rather than a count: a document whose frames stay on their own page settles
+    /// on the second pass, and the rest are for the case where wrapping pushes an anchor onto the next
+    /// page and so moves the frame with it. Writer bounds its own object-formatting loop for the same
+    /// reason — a frame can chase its anchor indefinitely.
+    /// </remarks>
+    private const int MaxFramePasses = 4;
+
+    /// <summary>The pagination loop itself, with whatever frames the current pass believes in.</summary>
+    private List<LaidOutPage> Fill(
+        IReadOnlyList<PageBlock> blocks,
+        List<PaginatedSection> sections,
+        int startingNumber)
+    {
         WasTruncated = false;
         _noteHeights.Clear();
 
@@ -262,8 +341,10 @@ public sealed class Paginator
 
             if (blocks[i] is PageTable table)
             {
+                // The section's own breaking width is also what a table stating no widths of its own is
+                // fitted to. A table that declares its grid is laid out exactly as it was before.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) =
-                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero));
+                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero), 0, width);
 
                 laid.Add(new LaidBlock(null, cells, rowHeights));
                 continue;
@@ -277,13 +358,16 @@ public sealed class Paginator
             // run rather than as the paragraph's font. Without runs the single-face path is not merely a
             // shortcut — it is the common case, and it avoids building a prefix table per run for a
             // paragraph that has one.
-            laid.Add(new LaidBlock(paragraph.HasRuns
+            ILineObstacles? obstacles = _obstacles?.Invoke(i);
+
+            LaidOutParagraph laidOut = paragraph.HasRuns
                 ? layouter.Layout(
                     Measure(paragraph),
                     paragraph.Format,
                     width,
                     paragraph.Language,
-                    previous)
+                    previous,
+                    obstacles)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,
@@ -291,7 +375,13 @@ public sealed class Paginator
                     width,
                     paragraph.Language,
                     previous,
-                    paragraph.Shaping)));
+                    paragraph.Shaping,
+                    obstacles);
+
+            laid.Add(new LaidBlock(
+                _options.JustifiesLinesEndedByBreak
+                    ? laidOut
+                    : ManualBreakJustification.Suppress(laidOut, paragraph.Text)));
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
@@ -300,14 +390,6 @@ public sealed class Paginator
         List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
-        List<PlacedFrame> frames = [];
-
-        // A paragraph beside a frame is laid out again, because the room its lines have is not knowable
-        // until the paragraph's place on a page is — the up-front pass above has no page to work from. The
-        // result is kept so that a paragraph split across a page break keeps the lines it was given: the
-        // continuation is not re-broken, for the same reason a section change mid-paragraph is not honoured.
-        Dictionary<int, LaidOutParagraph> reflowed = [];
-
         Length used = Length.Zero;
         int paragraphIndex = 0;
         int lineIndex = 0;
@@ -434,6 +516,7 @@ public sealed class Paginator
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[paragraphIndex];
+            LaidOutParagraph layout = laid[paragraphIndex].Paragraph!;
 
             // A page break before a paragraph that is not already at the top of a page.
             if (lineIndex == 0 && paragraph.Format.StartsNewPage && !pageIsEmpty)
@@ -445,13 +528,6 @@ public sealed class Paginator
             Length spaceAbove = lineIndex == 0
                 ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
                 : Length.Zero;
-
-            if (lineIndex == 0) Reflow(paragraph, paragraphIndex, used + spaceAbove);
-
-            LaidOutParagraph layout =
-                reflowed.TryGetValue(paragraphIndex, out LaidOutParagraph? wrapped)
-                    ? wrapped
-                    : laid[paragraphIndex].Paragraph!;
 
             // The notes those lines would anchor take their room out of the body's, so how many lines fit
             // depends on which notes they cite — and which notes they cite depends on how many fit. Resolved
@@ -562,43 +638,6 @@ public sealed class Paginator
         // Ends the whole page rather than the column, which a section break that is not a column break has
         // to do: in a two-column section EmitPage moves to column two, and a page break that stopped there
         // would put the next section beside the last one instead of after it.
-        // Frames anchored to this paragraph join the page's obstructions, and the paragraph is then laid out
-        // again if anything obstructs it. Both happen here rather than in the up-front pass because both
-        // need the paragraph's top on a page, which only pagination knows.
-        void Reflow(PageParagraph paragraph, int index, Length paragraphTop)
-        {
-            DocRect area = page.ColumnArea(column);
-
-            foreach (PageFrame frame in paragraph.Frames)
-            {
-                DocPoint anchor = new(
-                    area.X + paragraph.Format.StartIndent, area.Y + paragraphTop);
-
-                frames.Add(new PlacedFrame(
-                    frame,
-                    frame.BoundsFrom(anchor),
-                    frame.RegionFrom(anchor),
-                    FlowLayouter.LayOut(
-                        frame.Blocks, frame.ContentAreaFrom(anchor), Length.Zero)));
-            }
-
-            reflowed.Remove(index);
-            if (!frames.Exists(frame => frame.Frame.Obstructs)) return;
-
-            LineRoom room = (top, height) => FlowLayouter.FreeSpace(
-                frames, area, area.Y + paragraphTop + top, area.Y + paragraphTop + top + height);
-
-            ParagraphLayouter layouter = new(paragraph.Face);
-            ParagraphFormat? previous = PreviousFormat(blocks, index);
-
-            reflowed[index] = paragraph.HasRuns
-                ? layouter.Layout(
-                    Measure(paragraph), paragraph.Format, area.Width, paragraph.Language, previous, room)
-                : layouter.Layout(
-                    paragraph.Text, paragraph.Format, paragraph.EmSize, area.Width, paragraph.Language,
-                    previous, paragraph.Shaping, room);
-        }
-
         void FinishPage()
         {
             int before = pages.Count;
@@ -628,15 +667,13 @@ public sealed class Paginator
                     furnitureSet, geometry, page, pageNumber,
                     first: pages.Count == sectionFirstPage),
                 noteArea,
-                Separator(noteArea, page),
-                frames));
+                Separator(noteArea, page)));
 
             pageNumber++;
             column = 0;
             placed = [];
             tables = [];
             notes = [];
-            frames = [];
             used = Length.Zero;
         }
     }
@@ -851,8 +888,7 @@ public sealed class Paginator
         List<PlacedTable> tables,
         (PlacedFlow? Header, PlacedFlow? Footer) furniture,
         PlacedFlow? notes,
-        DocRect? separator = null,
-        List<PlacedFrame>? frames = null)
+        DocRect? separator = null)
         => new()
         {
             Index = index,
@@ -867,7 +903,6 @@ public sealed class Paginator
             Footer = furniture.Footer,
             Notes = notes,
             NoteSeparator = separator,
-            Frames = frames is null ? [] : [.. frames],
         };
 
     private static LaidOutPage EmptyPage(
@@ -1209,7 +1244,10 @@ public sealed class Paginator
             {
                 Table = table,
                 Area = new DocRect(
-                    body.X + table.LeftIndent, body.Y + top, table.Width, placedHeight),
+                    body.X + table.LeftIndent,
+                    body.Y + top,
+                    table.WidthWithin(body.Width),
+                    placedHeight),
                 Cells = cells,
                 FirstRow = from,
                 RowEnd = end,

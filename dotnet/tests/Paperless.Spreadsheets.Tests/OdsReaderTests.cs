@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
@@ -198,9 +199,27 @@ public class OdsReaderTests
     [Fact]
     public void AFormatWithNoReaderYetIsReportedAsUnsupported()
     {
+        // Built here rather than taken from the corpus, for the reason OdpReaderTests gives for
+        // its own copy of this test: this one used to open `sheet-csv.csv`, and CSV now reads.
+        // What is left unimplemented in the spreadsheet family is XLSB and the OpenOffice.org
+        // 1.x pair, and there is a corpus file for neither. An ODF-family package is identified
+        // by its `mimetype` entry, which has to be the archive's first entry and stored rather
+        // than deflated, so a few hundred bytes is a complete and honest example of the format
+        // rather than a stub.
+        using MemoryStream archive = new();
+        using (ZipArchive zip = new(archive, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            ZipArchiveEntry mimetype = zip.CreateEntry("mimetype", CompressionLevel.NoCompression);
+            using StreamWriter writer = new(mimetype.Open());
+            writer.Write("application/vnd.sun.xml.calc");
+        }
+
+        archive.Position = 0;
+        using DocumentSource source = DocumentSource.FromStream(archive, "sheet.sxc");
+
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("sheet-xlsx.xlsx"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Xlsx);
+            () => new SpreadsheetReader().Read(source));
+        unimplemented.Format.ShouldBe(DocumentFormat.Sxc);
         unimplemented.Message.ShouldContain("not implemented yet");
     }
 }

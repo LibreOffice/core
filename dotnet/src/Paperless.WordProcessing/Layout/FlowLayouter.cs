@@ -59,7 +59,6 @@ public static class FlowLayouter
 
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
-        List<PlacedFrame> frames = [];
         Length top = Length.Zero;
 
         for (int i = 0; i < blocks.Count; i++)
@@ -70,10 +69,13 @@ public static class FlowLayouter
 
                 top += nested.SpaceBefore;
 
+                // The flow's width is what a table stating none of its own is fitted to, which for a cell is
+                // the cell and for a header the text area. It changes nothing for a table declaring a grid.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) = TableLayouter.LayOut(
                     nested,
                     new DocPoint(area.X, area.Y + top),
-                    nesting + 1);
+                    nesting + 1,
+                    area.Width);
 
                 Length height = Length.Zero;
                 foreach (Length row in rowHeights) height += row;
@@ -82,7 +84,10 @@ public static class FlowLayouter
                 {
                     Table = nested,
                     Area = new DocRect(
-                        area.X + nested.LeftIndent, area.Y + top, nested.Width, height),
+                        area.X + nested.LeftIndent,
+                        area.Y + top,
+                        nested.WidthWithin(area.Width),
+                        height),
                     Cells = cells,
                     FirstRow = 0,
                     RowEnd = rowHeights.Count,
@@ -98,33 +103,6 @@ public static class FlowLayouter
                 ? before.Format
                 : null;
 
-            // Where this paragraph's first line will sit, worked out *before* laying it out, because a frame
-            // anchored here is positioned relative to it and the lines' room depends on the answer.
-            Length paragraphTop =
-                top + ParagraphLayouter.SpaceBetween(previous, paragraph.Format);
-
-            // A frame anchored to this paragraph joins the obstructions before the paragraph is laid out, so
-            // it affects its own paragraph's lines as well as everything below. One anchored further down
-            // does not reach back up, which is what Writer does for anything but a negative offset.
-            foreach (PageFrame frame in paragraph.Frames)
-            {
-                DocPoint anchor = new(
-                    area.X + paragraph.Format.StartIndent, area.Y + paragraphTop);
-
-                frames.Add(new PlacedFrame(
-                    frame,
-                    frame.BoundsFrom(anchor),
-                    frame.RegionFrom(anchor),
-
-                    // The frame's own text, at the frame's width — the same flow a table cell's content is,
-                    // and nested one deeper so that a frame inside a frame cannot recurse forever.
-                    nesting < MaxNesting
-                        ? LayOut(frame.Blocks, frame.ContentAreaFrom(anchor), Length.Zero, nesting + 1)
-                        : null));
-            }
-
-            LineRoom? room = Room(frames, area);
-
             LaidOutParagraph layout = paragraph.HasRuns
                 ? layouter.Layout(
                     MeasuredParagraph.Measure(
@@ -133,8 +111,7 @@ public static class FlowLayouter
                     paragraph.Format,
                     area.Width,
                     paragraph.Language,
-                    previous,
-                    Shifted(room, area.Y + paragraphTop))
+                    previous)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,
@@ -142,8 +119,7 @@ public static class FlowLayouter
                     area.Width,
                     paragraph.Language,
                     previous,
-                    paragraph.Shaping,
-                    Shifted(room, area.Y + paragraphTop));
+                    paragraph.Shaping);
 
             top += layout.SpaceBefore;
 
@@ -194,90 +170,8 @@ public static class FlowLayouter
             Blocks = blocks,
             Lines = placed,
             Tables = tables,
-            Frames = frames,
             Area = area,
         };
-    }
-
-    /// <summary>
-    /// The room each line has, given the frames placed so far — or null when none of them is in the way.
-    /// </summary>
-    /// <remarks>
-    /// Null rather than a callback that always answers "all of it", so that a document without frames — very
-    /// nearly all of them — takes exactly the path it took before any of this existed. The callback is asked
-    /// once per line and walks the frames each time, which is the right trade at the counts involved: a page
-    /// has a handful of frames and a few dozen lines.
-    /// </remarks>
-    private static LineRoom? Room(List<PlacedFrame> frames, DocRect area)
-    {
-        if (frames.Count == 0 || !frames.Exists(frame => frame.Frame.Obstructs)) return null;
-
-        return (top, height) => FreeSpace(frames, area, top, top + height);
-    }
-
-    /// <summary>Turns a paragraph-relative room callback into the page-relative one the frames need.</summary>
-    /// <remarks>
-    /// The layouter measures a line's top from its <em>paragraph's</em> top and a frame's region is in page
-    /// coordinates, so one of the two has to be translated. Doing it here keeps the layouter from having to
-    /// know where on the page it is.
-    /// </remarks>
-    private static LineRoom? Shifted(LineRoom? room, Length paragraphTop)
-        => room is null ? null : (top, height) => room(paragraphTop + top, height);
-
-    /// <summary>
-    /// The widest run of a line's span that no frame obstructs.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The <em>widest</em>, not the first: text goes down whichever side of a frame has more room, which is
-    /// what makes a frame at the left margin push text to its right and a frame at the right margin leave
-    /// text where it was. Computed by cutting the area's span at every overlapping frame and keeping the
-    /// largest piece, which handles two frames side by side without a special case.
-    /// </para>
-    /// <para>
-    /// A frame is in the way when its region overlaps the line's box <em>inclusively</em> — a line whose
-    /// bottom edge exactly meets a frame's top counts as obstructed. That is measured rather than chosen:
-    /// Writer tests with <c>SwRect::Overlaps</c>, whose comparisons are <c>&lt;=</c> and <c>&gt;=</c>, and a
-    /// corpus document that put a line's bottom exactly on a frame's top showed the line wrapped.
-    /// </para>
-    /// <para>
-    /// A <see cref="TextWrap.None"/> frame is not handled here and cannot be: it does not narrow a line, it
-    /// pushes it below the frame, which is a vertical decision and belongs where the tops are assigned.
-    /// </para>
-    /// </remarks>
-    /// <param name="frames">The frames already placed, in page coordinates.</param>
-    /// <param name="area">The area the line is being laid out in.</param>
-    /// <param name="lineTop">The line box's top, in page coordinates.</param>
-    /// <param name="lineBottom">Its bottom.</param>
-    public static LineSpace FreeSpace(
-        List<PlacedFrame> frames, DocRect area, Length lineTop, Length lineBottom)
-    {
-        Length left = Length.Zero;
-        Length right = area.Width;
-
-        foreach (PlacedFrame placed in frames)
-        {
-            if (!placed.Frame.Obstructs) continue;
-
-            DocRect region = placed.Region;
-            if (region.Bottom < lineTop || region.Y > lineBottom) continue;
-
-            // In the area's own coordinates, since that is what a LineSpace is measured in.
-            Length from = region.X - area.X;
-            Length to = region.Right - area.X;
-
-            if (to <= left || from >= right) continue;
-
-            // Whichever side of this frame is wider survives; the other is given up. Two frames narrowing
-            // the same line therefore compose, because the survivor is cut again by the next.
-            Length before = from - left;
-            Length after = right - to;
-
-            if (before >= after) right = Length.Max(left, from);
-            else left = Length.Min(right, to);
-        }
-
-        return new LineSpace(left, Length.Max(Length.Zero, right - left));
     }
 
     /// <summary>

@@ -58,4 +58,51 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+  <!--
+    Projects that *run* build for this machine's architecture only.
+
+    SkiaSharp and HarfBuzzSharp ship native binaries for twenty-one runtime identifiers, and a
+    RID-agnostic build copies every one of them into every output directory: 687 MB per test
+    project, of which the host can execute exactly one. Ten such projects, across several
+    worktrees, is enough to exhaust a container's whole disk allowance — which it did, repeatedly,
+    until this was set.
+
+    Naming the RID is what stops the copy at its source. The alternatives both cost more: linking
+    the assets instead of copying them points the output at the NuGet cache, so clearing the cache
+    leaves dangling links; deleting them after each build fights the incremental copy, which
+    faithfully restores them next time.
+
+    The RID is computed rather than written down, so this stays correct on arm64 and macOS rather
+    than pinning linux-x64 and breaking there. Two traps sit in that computation, and both look like
+    the setting simply having no effect:
+
+      * $(NETCoreSdkPortableRuntimeIdentifier) is not available here. Directory.Build.props is
+        imported by Microsoft.Common.props *before* the SDK defines it, so reading it yields an
+        empty string and sets RuntimeIdentifier to nothing at all.
+      * RuntimeInformation.RuntimeIdentifier gives the *specific* RID — "ubuntu.24.04-x64". Native
+        packages ship portable RIDs ("linux-x64"), and .NET 8 stopped using the RID graph to map one
+        onto the other, so a specific RID resolves no native asset whatsoever and the failure shows
+        up only when a test tries to load libSkiaSharp.
+
+    Hence the portable RID is assembled from the OS and the process architecture. A musl host would
+    need "linux-musl-*" and is not detected; override RuntimeIdentifier on the command line there.
+
+    Deliberately *not* applied to the libraries under src/: a RID-specific build produces a
+    RID-specific package, and these are portable libraries. Nothing packs a test or a tool, so
+    they are free to be specific.
+
+    Building for another platform still works — `-r win-x64` arrives as a global property and those
+    beat anything set here. But it has to be passed to *every* command in the sequence:
+    `dotnet build -r win-x64` followed by a bare `dotnet test` silently rebuilds for the host RID
+    into a second output directory rather than testing what was just built.
+  -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.Cli'))">
+    <_PaperlessHostArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString().ToLowerInvariant())</_PaperlessHostArch>
+    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</_PaperlessHostOs>
+    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</_PaperlessHostOs>
+    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</_PaperlessHostOs>
+    <RuntimeIdentifier Condition="'$(_PaperlessHostOs)' != ''">$(_PaperlessHostOs)-$(_PaperlessHostArch)</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
 </Project>

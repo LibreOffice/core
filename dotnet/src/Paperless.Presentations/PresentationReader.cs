@@ -3,6 +3,7 @@ using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Formats;
 using Paperless.Presentations.OpenDocument;
+using Paperless.Presentations.Ooxml;
 
 namespace Paperless.Presentations;
 
@@ -47,11 +48,16 @@ public sealed class PresentationReader : IDocumentReader
             DocumentFormat.Odp or DocumentFormat.Otp or DocumentFormat.Fodp
                 => new OdpReader().Read(source, format),
 
-            // Named in SupportedFormats but not implemented yet.
             DocumentFormat.Pptx or DocumentFormat.Pptm or DocumentFormat.Potx or DocumentFormat.Potm
-                or DocumentFormat.Ppsx or DocumentFormat.Ppsm or DocumentFormat.Ppt
-                or DocumentFormat.Pot or DocumentFormat.Pps or DocumentFormat.Sxi
-                or DocumentFormat.Sti
+                or DocumentFormat.Ppsx or DocumentFormat.Ppsm
+                => PptxReader.Read(source, format),
+
+            DocumentFormat.Ppt or DocumentFormat.Pot or DocumentFormat.Pps
+                => MsBinary.PptReader.Read(source, format),
+
+            // Named in SupportedFormats but not implemented yet: the OpenOffice.org 1.x presentation
+            // forms, which are a different namespace set rather than a different container.
+            DocumentFormat.Sxi or DocumentFormat.Sti
                 => throw new UnsupportedFormatException(
                     format, $"Reading {format} is not implemented yet."),
 

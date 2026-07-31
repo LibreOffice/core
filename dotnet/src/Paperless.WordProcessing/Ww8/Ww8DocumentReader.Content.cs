@@ -68,12 +68,20 @@ public sealed partial class Ww8DocumentReader
         // Each flow numbers its own lists: a list in a footnote does not continue the body's count.
         _numbering.ResetCounters();
 
-        WalkState state = new(target);
+        WalkState state = new(target)
+        {
+            BookmarkIndex = FirstBookmarkPositionAt(BookmarkPositions(), range.Start),
+        };
+        _marks.OpenParagraph();
 
         for (int index = 0; index < text.Length; index++)
         {
             int position = range.Start + index;
             char character = text[index];
+
+            // Bookmarks are keyed by character position rather than marked in the text, so the walk
+            // has to ask at each one. A single advancing index over a sorted list, not a search.
+            NoteBookmarkPositions(state, position);
 
             switch (character)
             {
@@ -115,6 +123,10 @@ public sealed partial class Ww8DocumentReader
 
                 case Special.FieldSeparator:
                     state.InFieldInstruction = false;
+                    // Where the cached result begins, which is the half of a field a reader saw.
+                    state.FieldResultOffset = OffsetIn(state);
+                    state.FieldResultStart = _marks.At(state.FieldResultOffset);
+                    state.FieldResultStarted = true;
                     // The instruction is the only place a hyperlink's target appears: the cached
                     // result is the text a reader saw, and says nothing about where it points.
                     if (FieldInstructions.HyperlinkTarget(state.Instruction.ToString()) is { } link)
@@ -128,6 +140,7 @@ public sealed partial class Ww8DocumentReader
                     if (state.FieldDepth > 0) state.FieldDepth--;
                     state.InFieldInstruction = false;
                     FlushRun(state);
+                    RecordField(state);
                     state.CurrentHyperlink = state.Hyperlinks.Count > 0 ? state.Hyperlinks.Pop() : null;
                     continue;
 
@@ -149,18 +162,27 @@ public sealed partial class Ww8DocumentReader
                     continue;
 
                 case Special.Picture:
-                    // Only outside a field. A SHAPE or INCLUDEPICTURE field's cached result uses this
-                    // same character for its anchor, so counting every one of them reports a picture
-                    // for every shape in the document — and the shape's own text has already arrived
-                    // as a frame section.
-                    if (state.InFieldInstruction || state.FieldDepth > 0) continue;
+                    // Not every U+0001 is a picture: Word writes an *inline shape* with the same
+                    // character, and what tells the two apart is the mapping mode of the PICF that
+                    // the run's sprmCPicLocation points at. A shape's own text has already arrived as
+                    // a frame section, so reporting an image for one would be a second record of the
+                    // same thing as well as a wrong one.
+                    // A field's instruction is code rather than content, so it is skipped whatever it
+                    // holds; a field's cached *result* is not, which is why the depth is not tested.
+                    if (state.InFieldInstruction) continue;
+                    if (!IsEmbeddedPicture(position)) continue;
                     FlushRun(state);
                     state.PendingImages.Add(new ContentImage());
                     continue;
 
                 case Special.DrawnObject:
-                    // A drawing anchor, not a picture. Telling an embedded image from a shape needs
-                    // the Escher record stream, which extraction does not read.
+                    // A drawing anchor. Whether it is an image depends on what the shape is, which the
+                    // FSPA at this position and the Escher drawing decide between them — a floating
+                    // picture is a shape too, of type mso_sptPictureFrame.
+                    if (state.InFieldInstruction) continue;
+                    if (!IsDrawnPicture(position)) continue;
+                    FlushRun(state);
+                    state.PendingImages.Add(new ContentImage());
                     continue;
 
                 default:
@@ -173,8 +195,12 @@ public sealed partial class Ww8DocumentReader
         }
 
         // A range need not end with a paragraph mark, or with the tables in it closed.
+        NoteBookmarkPositions(state, range.End);
         FinishParagraph(state, force: false, state.ParagraphFormat.Level);
         CloseTablesDeeperThan(state, 0);
+
+        // Balances the paragraph FinishParagraph opened for the text after the last mark.
+        _marks.CloseParagraph(string.Empty);
     }
 
     private void Append(WalkState state, int position, string text)
@@ -188,6 +214,11 @@ public sealed partial class Ww8DocumentReader
         }
 
         Ww8CharacterFormat format = ResolveCharacterFormat(position, state);
+
+        // Before the text is dropped, not after: a deletion's record *is* the text about to be
+        // dropped, and there is nowhere else in the document it survives.
+        RecordRevisions(state, format, text);
+
         if (format.IsHidden || format.IsDeleted) return;
 
         // The link comes from the field the walk is inside rather than from any sprm, so it is
@@ -288,6 +319,12 @@ public sealed partial class Ww8DocumentReader
     private void FinishParagraph(WalkState state, bool force, int level)
     {
         FlushRun(state);
+
+        // Before the paragraph closes, so that a change still open at a paragraph mark ends in the
+        // paragraph it started in rather than reaching into the next one.
+        CloseRevisions(state);
+        _marks.CloseParagraph(ParagraphTextIn(state));
+        _marks.OpenParagraph();
 
         bool hasContent = state.Runs.Count > 0 || state.PendingImages.Count > 0;
         if (!hasContent && !force)
@@ -425,42 +462,61 @@ public sealed partial class Ww8DocumentReader
                     format = format with { TableDefinition = ReadTableDefinition(sprm.Operand) };
                     break;
 
-                case Ww8SprmReader.Ids.SetCellBorder or Ww8SprmReader.Ids.SetCellBorder80:
-                    if (ReadBorderOverride(
+                case Ww8SprmReader.Ids.SetCellBorder80 or Ww8SprmReader.Ids.SetCellBorder:
+                    // Kept in the order the document wrote them and applied in that order, because a
+                    // document states the same border twice — once in each BRC form — and means the
+                    // second. LibreOffice runs every 80 and then every 90, which comes to the same
+                    // thing for any producer that writes the pair in that order, and every one does.
+                    if (ReadCellBorderChange(
                             sprm.Operand,
-                            isLongForm: sprm.Identifier == Ww8SprmReader.Ids.SetCellBorder)
-                        is { } border)
+                            isVersion9: sprm.Identifier == Ww8SprmReader.Ids.SetCellBorder)
+                        is { } change)
                     {
                         format = format with
                         {
-                            CellBorderOverrides = [.. format.CellBorderOverrides ?? [], border],
+                            CellBorderChanges = [.. format.CellBorderChanges ?? [], change],
                         };
                     }
 
                     break;
 
-                case Ww8SprmReader.Ids.CellShading:
-                    format = format with
+                case Ww8SprmReader.Ids.TableBorders80 or Ww8SprmReader.Ids.TableBorders:
+                    if (ReadTableBorders(
+                            sprm.Operand,
+                            isVersion9: sprm.Identifier == Ww8SprmReader.Ids.TableBorders)
+                        is { } defaults)
                     {
-                        CellShading = Ww8Shading.ReadLong(sprm.Operand, firstCell: 0),
-                    };
-                    break;
+                        format = format with { TableBorders = defaults };
+                    }
 
-                case Ww8SprmReader.Ids.CellShading2nd or Ww8SprmReader.Ids.CellShading3rd:
-                    format = format with
-                    {
-                        CellShading = Overlay(
-                            format.CellShading,
-                            Ww8Shading.ReadLong(
-                                sprm.Operand,
-                                firstCell: sprm.Identifier == Ww8SprmReader.Ids.CellShading2nd
-                                    ? SecondShadingCell
-                                    : ThirdShadingCell)),
-                    };
                     break;
 
                 case Ww8SprmReader.Ids.CellShading80:
-                    format = format with { CellShading80 = Ww8Shading.ReadShort(sprm.Operand) };
+                    if (ReadPaletteShading(sprm.Operand) is { } palette)
+                        format = format with { PaletteCellShading = palette };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShading:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(format.CellShading, sprm.Operand, 0),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShadingSecond:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(
+                            format.CellShading, sprm.Operand, Ww8SprmReader.Ids.CellShadingSecondStart),
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.CellShadingThird:
+                    format = format with
+                    {
+                        CellShading = ReadRgbShading(
+                            format.CellShading, sprm.Operand, Ww8SprmReader.Ids.CellShadingThirdStart),
+                    };
                     break;
             }
         }
@@ -556,6 +612,21 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.IsDeleted:
                     format = format with { IsDeleted = sprm.ResolveToggle(format.IsDeleted) };
                     break;
+                case Ww8SprmReader.Ids.IsInserted:
+                    format = format with { IsInserted = sprm.ResolveToggle(format.IsInserted) };
+                    break;
+                case Ww8SprmReader.Ids.InsertionAuthor:
+                    format = format with { InsertionAuthor = sprm.Word };
+                    break;
+                case Ww8SprmReader.Ids.DeletionAuthor:
+                    format = format with { DeletionAuthor = sprm.Word };
+                    break;
+                case Ww8SprmReader.Ids.InsertionDate:
+                    format = format with { InsertionDate = unchecked((uint)sprm.DoubleWord) };
+                    break;
+                case Ww8SprmReader.Ids.DeletionDate:
+                    format = format with { DeletionDate = unchecked((uint)sprm.DoubleWord) };
+                    break;
                 case Ww8SprmReader.Ids.Underline:
                     // The operand is the line style; zero is none.
                     format = format with { IsUnderlined = sprm.Byte != 0 };
@@ -598,6 +669,24 @@ public sealed partial class Ww8DocumentReader
         public StringBuilder Instruction { get; } = new();
         public string? CurrentHyperlink { get; set; }
         public Stack<string?> Hyperlinks { get; } = new();
+
+        /// <summary>How far the sorted bookmark events have been fired, as an advancing index.</summary>
+        public int BookmarkIndex { get; set; }
+
+        /// <summary>True once a field's separator has been seen, so it has a cached result.</summary>
+        public bool FieldResultStarted { get; set; }
+
+        /// <summary>Where that result begins in the paragraph's text.</summary>
+        public int FieldResultOffset { get; set; }
+
+        /// <summary>The position that offset stands for, taken while the paragraph is still current.</summary>
+        public Model.WritingPosition? FieldResultStart { get; set; }
+
+        /// <summary>The insertion in force, so that a change of author ends one and starts another.</summary>
+        public Revision OpenInsertion { get; set; }
+
+        /// <summary>The deletion in force.</summary>
+        public Revision OpenDeletion { get; set; }
 
         /// <summary>
         /// One table under construction per nesting level, outermost first.
@@ -699,43 +788,38 @@ public readonly record struct Ww8ParagraphFormat
     public Ww8TableDefinition? TableDefinition { get; init; }
 
     /// <summary>
-    /// The border codes <c>sprmTSetBrc</c> laid over the row's cell descriptors, in the order stated.
+    /// The borders the row's <c>sprmTSetBrc</c>s set, in the order they were stated.
     /// </summary>
     /// <remarks>
-    /// A list rather than a resolved set per cell, because each entry covers a <em>range</em> of cells and a
-    /// selection of sides, and the ranges overlap: LibreOffice's own export writes four of them per row, one
-    /// per side, each covering every cell. Applying them in order is what turns them into a set, and the
-    /// order matters because a later entry overwrites an earlier one on the sides it names.
+    /// A list, and it has to be applied in order rather than searched: each entry names a range of cells
+    /// and a set of sides, so a uniform four-cell row is four entries — one per side — and a row whose
+    /// producer wrote both BRC forms is eight, where the later four restate the earlier four with a real
+    /// colour instead of a palette index.
     /// </remarks>
-    public IReadOnlyList<Ww8BorderOverride>? CellBorderOverrides { get; init; }
+    public IReadOnlyList<Ww8CellBorderChange>? CellBorderChanges { get; init; }
 
     /// <summary>
-    /// The row's cell shading from the newer sprms, one entry per cell; null where a cell has none.
+    /// The table's six default borders, when the row states them.
     /// </summary>
     /// <remarks>
-    /// Already blended: WW8 states a shade as a foreground, a background and a pattern index rather than as
-    /// the colour it looks like, and there is nothing further downstream that could do the blending.
+    /// Only a side no cell states falls back here. Word writes these and almost nothing else for a table
+    /// with a uniform grid, so a reader that skipped them would find no borders at all in most documents
+    /// Word itself produced — while LibreOffice's own export states every cell's four sides instead.
     /// </remarks>
+    public Ww8TableBorders? TableBorders { get; init; }
+
+    /// <summary>The row's cell shading in full RGB, indexed by cell; null means the automatic colour.</summary>
     public IReadOnlyList<Colour?>? CellShading { get; init; }
 
-    /// <summary>The same from <c>sprmTDefTableShd80</c>, which the newer form beats per cell.</summary>
-    public IReadOnlyList<Colour?>? CellShading80 { get; init; }
-}
-
-/// <summary>
-/// One <c>sprmTSetBrc</c>: a border, the sides it sets, and the range of cells it sets them on.
-/// </summary>
-/// <param name="FirstCell">The first cell it applies to.</param>
-/// <param name="CellLimit">One past the last.</param>
-/// <param name="Sides">
-/// Which sides it sets, as WW8's own bits — the same top-before-left order the padding sprms use.
-/// </param>
-/// <param name="Border">The border code to put on each of those sides.</param>
-public readonly record struct Ww8BorderOverride(
-    int FirstCell, int CellLimit, int Sides, Ww8Border Border)
-{
-    /// <summary>True when this entry applies to the cell at an index.</summary>
-    public bool Covers(int cell) => cell >= FirstCell && cell < CellLimit;
+    /// <summary>
+    /// The same, as the older palette-and-pattern form states it.
+    /// </summary>
+    /// <remarks>
+    /// Kept beside the RGB form rather than merged, because the precedence is per cell: the RGB array wins
+    /// wherever it names a colour, and a cell it leaves automatic falls back to this one. Merging them at
+    /// read time would need the two sprms to arrive in a known order, and they need not.
+    /// </remarks>
+    public IReadOnlyList<Colour?>? PaletteCellShading { get; init; }
 }
 
 /// <summary>
@@ -802,6 +886,25 @@ public readonly record struct Ww8CharacterFormat
 
     /// <summary>True when a tracked change marks the run deleted.</summary>
     public bool IsDeleted { get; init; }
+
+    /// <summary>True when a tracked change marks the run inserted.</summary>
+    /// <remarks>
+    /// Needs no handling for the text — inserted text <em>is</em> content — and is read so the change
+    /// can be recorded with its author and its date.
+    /// </remarks>
+    public bool IsInserted { get; init; }
+
+    /// <summary>The insertion's author, as an index into <c>SttbfRMark</c>.</summary>
+    public ushort InsertionAuthor { get; init; }
+
+    /// <summary>The deletion's author, as an index into <c>SttbfRMark</c>.</summary>
+    public ushort DeletionAuthor { get; init; }
+
+    /// <summary>The insertion's packed <c>DTTM</c> stamp; zero for none.</summary>
+    public uint InsertionDate { get; init; }
+
+    /// <summary>The deletion's packed <c>DTTM</c> stamp; zero for none.</summary>
+    public uint DeletionDate { get; init; }
 
     /// <summary>
     /// Where the run links to, when it sits inside a <c>HYPERLINK</c> field.

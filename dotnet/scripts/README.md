@@ -10,6 +10,8 @@ hand-made correction to one row is lost the next time it is rebuilt.
 | `generate-font-substitutions.py` | `Paperless.Text/Fonts/FontSubstitutions.Tables.cs` | LibreOffice's own `VCL.xcu` font substitution configuration |
 | `generate-line-break-tables.py` | `Paperless.Text/Layout/LineBreakProperties.Tables.cs` | The Unicode Character Database, via the `uniseg` package and Python's `unicodedata` |
 | `generate-line-break-cases.py` | `Paperless.Text.Tests/line-break-cases.txt` | `uniseg`'s own UAX #14 implementation, as a differential reference |
+| `generate-itemisation-tables.py` | `Paperless.Text/Itemisation/BidiProperties.Tables.cs` and `ScriptProperties.Tables.cs` | ICU, through `ctypes` against the installed `libicuuc` |
+| `generate-bidi-cases.py` | `Paperless.Text.Tests/bidi-cases.txt` | ICU's own `ubidi`, as a differential reference |
 
 ## Running them
 
@@ -19,6 +21,8 @@ python3 scripts/<script>.py
 ```
 
 The language and font-substitution tables need nothing but the LibreOffice checkout these live in.
+The two itemisation scripts need a `libicuuc` on the system; they discover its versioned symbol
+suffix rather than assuming one, so a container upgrade does not silently break them.
 
 ## Provenance, and what to improve
 
@@ -28,4 +32,14 @@ directly would be better on both counts — the property data would be a version
 `LineBreakTest.txt` is Unicode's own conformance suite, which is stronger evidence than
 agreement with another implementation. It is not done here because this environment's egress
 policy denies `unicode.org`; the scripts are structured so that swapping the source is a change
-to one function.
+to one function. Checked again for the itemisation work: `unicode.org` still answers a CONNECT
+with 403, so `BidiTest.txt` and `BidiCharacterTest.txt` are out of reach too.
+
+**The itemisation scripts do better, and the reason is worth copying.** They read ICU, which is not
+merely another source of the same data — it is the library LibreOffice itself resolves bidi and
+script with (`ubidi_setPara` in `vcl/source/text/ImplLayoutArgs.cxx`, `uscript_getScript` in
+`vcl/source/gdi/scrptrun.cxx`). Agreeing with it is agreeing with Writer rather than with a
+defensible reading of the specification, and it makes a conformance file unnecessary rather than
+merely unavailable: `generate-bidi-cases.py` asks ICU for its own answer to every case it invents.
+The Unicode version is whatever the installed ICU carries — 15.1 at the time of writing — and it is
+written into each generated file, so a regeneration that moves it shows up in the diff.

@@ -3,7 +3,9 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Core.Graphics;
 using Paperless.TestKit;
+using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Ww8;
 using Shouldly;
 
@@ -301,6 +303,61 @@ public class DocReaderTests
         // counter that advanced at the wrong moment, none of which the structural tests above see
         // in isolation.
         doc.Content.GetText().ShouldBe(docx.Content.GetText());
+    }
+
+    /// <summary>
+    /// The shade comes from the RGB array rather than from the palette one, and from its background.
+    /// </summary>
+    /// <remarks>
+    /// Both facts need a colour to see, which is why they are asserted here rather than in the fidelity
+    /// comparison: a fill's coordinates are the same either way. The document was written with
+    /// <c>#CCCCCC</c>, which the newer <c>sprmTDefTableShd</c> carries exactly and the older
+    /// <c>sprmTDefTableShd80</c> can only round to Word's nearest palette entry, <c>#C0C0C0</c>. And the
+    /// fill pattern is "clear", so what shows is its <em>background</em>; reading the foreground gives
+    /// black, since an automatic foreground is black and an automatic background is white.
+    /// </remarks>
+    [Fact]
+    public void ACellsShadeIsTheRgbBackgroundRatherThanThePaletteOrTheForeground()
+    {
+        List<PageTableCell> cells = TableCells("table-shading.doc");
+
+        cells.Take(3).Select(cell => cell.Shading)
+            .ShouldAllBe(shade => shade == Colour.FromRgb(0xCCCCCC));
+
+        cells.Skip(3).ShouldAllBe(cell => cell.Shading == null);
+    }
+
+    /// <summary>
+    /// A border's width is eighths of a point, and its colour a palette index in the older BRC form.
+    /// </summary>
+    /// <remarks>
+    /// <c>dptLineWidth</c> 4 is half a point — ten twips — which is the one number that would still place
+    /// the text plausibly if it were read as twips or half-points, and would place it a point out. The
+    /// colour arrives twice over as well: <c>ico</c> 6 in the cell descriptor, which is Word's "light red"
+    /// and so <c>#FF0000</c>, and the same again as a real RGB in the <c>sprmTSetBrc</c> that follows.
+    /// </remarks>
+    [Fact]
+    public void ACellsBorderIsHalfAPointOfPaletteRed()
+    {
+        foreach (PageTableCell cell in TableCells("table-borders.doc"))
+        {
+            foreach (TableBorder border in
+                     (TableBorder[])[cell.Borders.Top, cell.Borders.Left,
+                                     cell.Borders.Bottom, cell.Borders.Right])
+            {
+                border.Width.Points.ShouldBe(0.5, 0.001);
+                border.Colour.ShouldBe(Colour.FromRgb(0xFF0000));
+            }
+        }
+    }
+
+    /// <summary>Every cell of the one table on a document's first page, in row order.</summary>
+    private static List<PageTableCell> TableCells(string name)
+    {
+        using IDocument document = Open(name);
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+        return [.. pages.Pages[0].Tables.SelectMany(table => table.Cells).Select(cell => cell.Cell)];
     }
 
     [Fact]

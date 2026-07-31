@@ -1,160 +1,235 @@
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 
 namespace Paperless.WordProcessing.Layout;
 
-/// <summary>What a floating frame's position is measured from.</summary>
+/// <summary>
+/// What a floating frame is fixed to, which decides what moves it.
+/// </summary>
 /// <remarks>
-/// Only the anchor kinds that <em>float</em> are here. An as-character frame is not one of them: it sits in
-/// the line like a very large glyph, takes part in line breaking, and is already modelled as an anchor
-/// character in the paragraph's text. Giving it a case would invite it to be laid out twice.
+/// The distinction is not decoration: a page-anchored frame stays where it is however the text reflows,
+/// and a paragraph-anchored one follows its paragraph onto the next page. Writer's
+/// <c>RndStdIds::FLY_AT_PAGE</c>, <c>FLY_AT_PARA</c>, <c>FLY_AT_CHAR</c> and <c>FLY_AS_CHAR</c>.
 /// </remarks>
 public enum FrameAnchor
 {
-    /// <summary>To the paragraph it is declared in, which is what most documents use.</summary>
+    /// <summary>To a paragraph: the frame sits beside it and moves with it.</summary>
     Paragraph,
 
-    /// <summary>To a character position within that paragraph.</summary>
+    /// <summary>To a character position, which is a finer origin for the same behaviour.</summary>
     Character,
 
-    /// <summary>To the page the anchoring paragraph lands on.</summary>
+    /// <summary>In the text, as one very large character on a line of its own making.</summary>
+    AsCharacter,
+
+    /// <summary>To the page, so reflowing the text does not move it.</summary>
     Page,
 }
 
-/// <summary>How text behaves where a frame is in its way.</summary>
-/// <remarks>
-/// The names are ODF's, and the other three formats' spellings map onto them: DOCX's <c>w:wrap</c> values,
-/// RTF's <c>\wraptext</c> family, and WW8's <c>wr</c> field in the anchor record. What matters to layout is
-/// only which sides a line may use, so five values cover all four formats.
-/// </remarks>
-public enum TextWrap
-{
-    /// <summary>
-    /// No text beside the frame at all: a line that would meet it is pushed below it.
-    /// </summary>
-    /// <remarks>
-    /// ODF's <c>style:wrap="none"</c>, and the one value whose name reads backwards — it means "do not wrap
-    /// text <em>around</em> it", not "do not let it affect the text".
-    /// </remarks>
-    None,
-
-    /// <summary>Text runs down both sides of the frame, whichever has room.</summary>
-    Parallel,
-
-    /// <summary>Text keeps only the room to the frame's left.</summary>
-    Left,
-
-    /// <summary>Text keeps only the room to the frame's right.</summary>
-    Right,
-
-    /// <summary>
-    /// Text takes whichever side has more room, and neither when both are too narrow.
-    /// </summary>
-    /// <remarks>
-    /// ODF's <c>dynamic</c>, which LibreOffice's user interface calls "optimal". Modelled as
-    /// <see cref="Parallel"/> for now, since the side with more room is what the free-interval arithmetic
-    /// picks anyway; what is not modelled is the threshold below which Writer gives up and pushes the line
-    /// down.
-    /// </remarks>
-    Dynamic,
-
-    /// <summary>
-    /// The frame does not affect the text at all, which runs straight through underneath or over it.
-    /// </summary>
-    /// <remarks>
-    /// ODF's <c>run-through</c>. A watermark is the usual reason.
-    /// </remarks>
-    Through,
-}
-
 /// <summary>
-/// A floating frame: a rectangle beside or behind the text, and how the text treats it.
+/// How body text behaves where a frame is in its way.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Its <see cref="Offset"/> is relative to whatever <see cref="Anchor"/> names rather than to the page,
-/// because that is what every format states and because the resolution needs something only layout knows —
-/// where the anchoring paragraph ended up. A frame anchored to a paragraph that moves to the next page moves
-/// with it.
+/// The names are Writer's <c>css::text::WrapTextMode</c> rather than any one format's, because the four
+/// formats spell the same six things differently and one of the spellings is actively misleading: ODF's
+/// <c>style:wrap="none"</c> does <em>not</em> mean "no wrapping" — it means no text beside the frame at
+/// all, so the text goes above and below it. ODF's word for "ignore the frame" is <c>run-through</c>.
+/// </para>
+/// </remarks>
+public enum TextWrap
+{
+    /// <summary>The text ignores the frame and runs under or over it. ODF's <c>run-through</c>.</summary>
+    Through,
+
+    /// <summary>No text beside the frame: it goes above and below. ODF's <c>none</c>.</summary>
+    TopAndBottom,
+
+    /// <summary>Text on both sides. ODF's <c>parallel</c>, OOXML's <c>bothSides</c>.</summary>
+    Both,
+
+    /// <summary>Text on the frame's left only, so the frame reaches the end margin.</summary>
+    Left,
+
+    /// <summary>Text on the frame's right only, so the frame reaches the start margin.</summary>
+    Right,
+
+    /// <summary>
+    /// Whichever side has more room, decided per frame. ODF's <c>dynamic</c>, OOXML's <c>largest</c>.
+    /// </summary>
+    Optimal,
+}
+
+/// <summary>What a frame's horizontal position is measured from.</summary>
+public enum FrameHorizontalOrigin
+{
+    /// <summary>The sheet's own left edge.</summary>
+    Page,
+
+    /// <summary>The text area — inside the page margins. ODF's <c>page-content</c>, OOXML's <c>margin</c>.</summary>
+    PageMargin,
+
+    /// <summary>The column the anchor is in, which for single-column text is the text area.</summary>
+    Column,
+
+    /// <summary>The anchor paragraph's own rectangle, indents included.</summary>
+    Paragraph,
+
+    /// <summary>The anchoring character's position.</summary>
+    Character,
+}
+
+/// <summary>What a frame's vertical position is measured from.</summary>
+public enum FrameVerticalOrigin
+{
+    /// <summary>The sheet's own top edge.</summary>
+    Page,
+
+    /// <summary>The text area — inside the page margins.</summary>
+    PageMargin,
+
+    /// <summary>The anchor paragraph's top.</summary>
+    Paragraph,
+
+    /// <summary>The anchoring line's top, which for a one-line anchor is the paragraph's.</summary>
+    Line,
+}
+
+/// <summary>How a frame sits inside its horizontal origin.</summary>
+public enum FrameHorizontalAlignment
+{
+    /// <summary>At a stated distance from the origin's start edge.</summary>
+    Offset,
+
+    /// <summary>Flush with the origin's start edge.</summary>
+    Left,
+
+    /// <summary>Centred in the origin.</summary>
+    Centre,
+
+    /// <summary>Flush with the origin's end edge.</summary>
+    Right,
+
+    /// <summary>Towards the binding: left on a right-hand page, right on a left-hand one.</summary>
+    Inside,
+
+    /// <summary>Away from the binding.</summary>
+    Outside,
+}
+
+/// <summary>How a frame sits inside its vertical origin.</summary>
+public enum FrameVerticalAlignment
+{
+    /// <summary>At a stated distance below the origin's top edge.</summary>
+    Offset,
+
+    /// <summary>Flush with the origin's top.</summary>
+    Top,
+
+    /// <summary>Centred in the origin.</summary>
+    Middle,
+
+    /// <summary>Flush with the origin's bottom.</summary>
+    Bottom,
+}
+
+/// <summary>
+/// A floating frame: a rectangle of content anchored somewhere in the text, that body text flows round.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Deliberately not a <see cref="PageBlock"/>. A block is something the paginator stacks; a frame is
+/// something it <em>places</em>, at a position derived from an anchor and an origin rather than from
+/// where the last block ended. The two would only share the list, and putting a frame in it would mean
+/// every consumer of a block list having to skip one.
 /// </para>
 /// <para>
-/// Its content is a flow of its own — a frame can hold anything a body can, and it is laid out at the frame's
-/// width by the same <see cref="FlowLayouter"/> a table cell's content goes through. Empty for a frame whose
-/// content is not text, an image above all, which is placed and drawn but has nothing to break into lines.
+/// A frame's own content is blocks, so a text frame containing a table needs no second layout path — it
+/// goes through <see cref="FlowLayouter"/> exactly as a header or a table cell does. An image frame
+/// carries no blocks and is recorded by its rectangle, since decoding the raster is a separate matter and
+/// the wrap does not depend on it.
 /// </para>
 /// </remarks>
 public sealed record PageFrame
 {
-    /// <summary>Where the frame's top-left sits, relative to its anchor.</summary>
-    public required DocPoint Offset { get; init; }
-
-    /// <summary>How big it is.</summary>
+    /// <summary>How big the frame is.</summary>
     public required DocSize Size { get; init; }
 
-    /// <summary>What the offset is measured from.</summary>
+    /// <summary>What the frame is fixed to.</summary>
     public FrameAnchor Anchor { get; init; } = FrameAnchor.Paragraph;
 
-    /// <summary>How text behaves where the frame is in its way.</summary>
-    public TextWrap Wrap { get; init; } = TextWrap.Parallel;
-
     /// <summary>
-    /// The gap kept between the frame and the text beside it, which widens the region text avoids.
+    /// How body text behaves beside it.
     /// </summary>
     /// <remarks>
-    /// Part of the wrap region rather than of the frame: the frame is drawn at
-    /// <see cref="Size"/> and the text stays this much further away. Measured on the corpus document — a
-    /// 5 cm frame at the left margin with a 0.2 cm right margin pushes text to 204.1 pt, which is
-    /// 56.7 + 141.73 + 5.67.
+    /// <see cref="TextWrap.Through"/> by default, which is the harmless answer: a frame whose wrap could
+    /// not be read leaves the text exactly where it would have been rather than moving all of it.
     /// </remarks>
-    public CellPadding Margins { get; init; }
+    public TextWrap Wrap { get; init; } = TextWrap.Through;
+
+    /// <summary>What the horizontal position is measured from.</summary>
+    public FrameHorizontalOrigin HorizontalOrigin { get; init; } = FrameHorizontalOrigin.Paragraph;
+
+    /// <summary>How it sits inside that origin.</summary>
+    public FrameHorizontalAlignment HorizontalAlignment { get; init; } = FrameHorizontalAlignment.Offset;
+
+    /// <summary>The distance from the origin's start edge, when the alignment is an offset.</summary>
+    public Length HorizontalOffset { get; init; }
+
+    /// <summary>What the vertical position is measured from.</summary>
+    public FrameVerticalOrigin VerticalOrigin { get; init; } = FrameVerticalOrigin.Paragraph;
+
+    /// <summary>How it sits inside that origin.</summary>
+    public FrameVerticalAlignment VerticalAlignment { get; init; } = FrameVerticalAlignment.Offset;
+
+    /// <summary>The distance below the origin's top edge, when the alignment is an offset.</summary>
+    public Length VerticalOffset { get; init; }
 
     /// <summary>
-    /// The blocks inside the frame, in order, or empty when it holds no text.
+    /// How far text must stay clear of the frame on each side.
     /// </summary>
     /// <remarks>
-    /// Blocks rather than paragraphs, for the same reason a cell's content is: a frame can hold a table, and
-    /// it goes through the same layout path either way.
+    /// Writer keeps this as the frame's own margins and adds it to the rectangle before asking what a line
+    /// overlaps — <c>SwAnchoredObject::GetObjRectWithSpaces</c>. So it widens the hole in the text without
+    /// moving the frame, which is why it is here rather than folded into the position.
     /// </remarks>
+    public Margins Spacing { get; init; }
+
+    /// <summary>Where the anchoring character sits in the paragraph's text, for a character anchor.</summary>
+    public int AnchorOffset { get; init; }
+
+    /// <summary>A text frame's own content, empty for an image.</summary>
     public IReadOnlyList<PageBlock> Blocks { get; init; } = [];
 
-    /// <summary>
-    /// The gap between the frame's own edges and its text, which comes out of the width its lines break at.
-    /// </summary>
+    /// <summary>The inset between the frame's edge and its text.</summary>
+    public Margins Padding { get; init; }
+
+    /// <summary>The frame's background, or null when it has none.</summary>
+    public Colour? Fill { get; init; }
+
+    /// <summary>The frame's border colour, or null when it has no border.</summary>
+    public Colour? BorderColour { get; init; }
+
+    /// <summary>How thick that border is.</summary>
+    public Length BorderWidth { get; init; }
+
+    /// <summary>True when the frame holds a picture rather than text.</summary>
     /// <remarks>
-    /// The frame's <c>fo:padding</c>, and not to be confused with <see cref="Margins"/>: padding is inside
-    /// the frame and margin is outside it. Conflating the two puts the frame's own text where the body text
-    /// beside it should be.
+    /// Recorded rather than drawn: decoding the raster is a separate unstarted item, and the wrap — which
+    /// is what moves text — depends only on the rectangle. So an image frame reserves its room correctly
+    /// and draws whatever placeholder the sink is given.
     /// </remarks>
-    public CellPadding Padding { get; init; }
+    public bool IsImage { get; init; }
 
-    /// <summary>True when the frame takes room from the text rather than being ignored by it.</summary>
-    public bool Obstructs => Wrap != TextWrap.Through;
-
-    /// <summary>
-    /// The region text keeps clear of, given where the anchor resolved to.
-    /// </summary>
-    /// <param name="anchor">The anchor's own top-left in page coordinates.</param>
-    public DocRect RegionFrom(DocPoint anchor) => new(
-        anchor.X + Offset.X - Margins.Left,
-        anchor.Y + Offset.Y - Margins.Top,
-        Size.Width + Margins.Horizontal,
-        Size.Height + Margins.Vertical);
-
-    /// <summary>The frame itself, given where the anchor resolved to — what would be drawn.</summary>
-    /// <param name="anchor">The anchor's own top-left in page coordinates.</param>
-    public DocRect BoundsFrom(DocPoint anchor)
-        => new(anchor.X + Offset.X, anchor.Y + Offset.Y, Size.Width, Size.Height);
-
-    /// <summary>The rectangle the frame's own text is laid out in: its bounds less its padding.</summary>
-    /// <param name="anchor">The anchor's own top-left in page coordinates.</param>
-    public DocRect ContentAreaFrom(DocPoint anchor)
-    {
-        DocRect bounds = BoundsFrom(anchor);
-
-        return new DocRect(
-            bounds.X + Padding.Left,
-            bounds.Y + Padding.Top,
-            Length.Max(Length.Zero, bounds.Width - Padding.Horizontal),
-            Length.Max(Length.Zero, bounds.Height - Padding.Vertical));
-    }
+    /// <summary>What the frame was called in the document, for diagnostics.</summary>
+    public string? Name { get; init; }
 }
+
+/// <summary>
+/// A frame after it has been given a rectangle on a page.
+/// </summary>
+/// <param name="Frame">What was placed.</param>
+/// <param name="Area">Where it went, in page coordinates.</param>
+/// <param name="Content">Its own text laid out inside that rectangle, or null when it has none.</param>
+public sealed record PlacedFrame(PageFrame Frame, DocRect Area, PlacedFlow? Content = null);

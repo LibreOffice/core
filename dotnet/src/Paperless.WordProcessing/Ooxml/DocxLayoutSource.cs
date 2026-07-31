@@ -3,6 +3,7 @@ using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Fonts;
 using Paperless.Text.Shaping;
 using Paperless.WordProcessing.Layout;
@@ -51,6 +52,8 @@ public sealed partial class DocxLayoutSource
     private readonly WordStyles _styles;
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
+    private readonly int _compatibilityMode;
+    private readonly DrawingTheme? _theme;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
         [];
@@ -61,17 +64,21 @@ public sealed partial class DocxLayoutSource
     /// <param name="fonts">The font resolver, or null to build one over the installed fonts.</param>
     /// <param name="footnotes">The footnote bodies by <c>w:id</c>, or null for a document with none.</param>
     /// <param name="endnotes">The endnote bodies by <c>w:id</c>.</param>
+    /// <param name="theme">The document's theme, for themed run colours, or null.</param>
     public DocxLayoutSource(
         WordStyles styles,
         XElement? settings = null,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, XElement>? footnotes = null,
-        IReadOnlyDictionary<string, XElement>? endnotes = null)
+        IReadOnlyDictionary<string, XElement>? endnotes = null,
+        DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _theme = theme;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
+        _compatibilityMode = CompatibilityMode(settings);
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
@@ -134,7 +141,13 @@ public sealed partial class DocxLayoutSource
             _ => fallback.Placement,
         };
 
-        return new NoteNumbering(format, start) { Placement = placement };
+        // Where the count begins again. `eachSect` is not a third kind of restart: Writer has no per-section
+        // one, so its chapter restart is what OOXML's `eachSect` both exports from and reads back as.
+        NoteRestart restart =
+            NoteNumbering.ParseRestart(Word.Attribute(Word.Child(properties, "numRestart"), "val"))
+            ?? fallback.Restart;
+
+        return new NoteNumbering(format, start) { Placement = placement, Restart = restart };
     }
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
@@ -199,6 +212,16 @@ public sealed partial class DocxLayoutSource
     /// call rather than being restored with it.
     /// </remarks>
     private int _sectionIndex;
+
+    /// <summary>
+    /// How many tables enclose the one being read, counted while its rows are walked.
+    /// </summary>
+    /// <remarks>
+    /// A field for the same reason <see cref="_sectionIndex"/> is one: a cell's blocks are read by the walk
+    /// that reads a paragraph's, so a nested table is found several calls deep rather than through a
+    /// parameter somebody could pass wrongly. Only the table's own left edge depends on it.
+    /// </remarks>
+    private int _tableDepth;
 
     /// <summary>
     /// Walks the body's block-level children.
@@ -287,6 +310,7 @@ public sealed partial class DocxLayoutSource
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, properties, text, face),
             Notes = NotesOf(walker.Notes),
+            Frames = FramesOf(walker.Frames),
             Source = element,
         };
     }
@@ -336,6 +360,7 @@ public sealed partial class DocxLayoutSource
                 IsEndnote = anchor.IsEndnote,
                 Placement =
                     (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Placement,
+                Restart = (anchor.IsEndnote ? _endnoteNumbering : _footnoteNumbering).Restart,
             });
         }
 
@@ -404,7 +429,8 @@ public sealed partial class DocxLayoutSource
         {
             WordTextStyle style = range.RunProperties is null
                 ? paragraph
-                : WordParagraphFormats.ResolveRun(_styles, paragraphProperties, range.RunProperties);
+                : WordParagraphFormats.ResolveRun(
+                    _styles, paragraphProperties, range.RunProperties, _theme);
 
             if (range.IsCitation) style = AsCitation(style);
 
@@ -460,6 +486,62 @@ public sealed partial class DocxLayoutSource
     /// <param name="Citation">The number it is cited by, counted rather than read, and already formatted.</param>
     private readonly record struct NoteAnchor(int Offset, string? Id, bool IsEndnote, string Citation);
 
+    /// <summary>One floating frame in a paragraph, with the character offset it is anchored at.</summary>
+    private readonly record struct FrameAnchor(int Offset, XElement Element);
+
+    /// <summary>
+    /// How deeply a frame's own text may hold further frames before the innermost is dropped.
+    /// </summary>
+    /// <remarks>
+    /// A guard on untrusted input: a text frame holds paragraphs, a paragraph holds drawings, and a file
+    /// claiming a hundred levels would read the same walk a hundred deep. Real documents nest one.
+    /// </remarks>
+    private const int MaxFrameNesting = 8;
+
+    /// <summary>How many frames enclose the paragraph currently being read.</summary>
+    private int _frameDepth;
+
+    /// <summary>
+    /// Reads the frames a paragraph anchors, with their own text laid out inside them.
+    /// </summary>
+    /// <remarks>
+    /// A frame's content goes through <see cref="ReadFlow"/> — the same walk a header takes — so a frame
+    /// containing a table or a list needs nothing of its own. The reader therefore re-enters itself, which
+    /// is why the depth is counted.
+    /// </remarks>
+    private List<PageFrame> FramesOf(List<FrameAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageFrame> frames = [];
+
+        foreach (FrameAnchor anchor in anchors)
+        {
+            Func<XElement, IReadOnlyList<PageBlock>>? content =
+                _frameDepth < MaxFrameNesting ? Content : null;
+
+            if (DocxFrames.Read(anchor.Element, content, anchor.Offset) is { } frame)
+            {
+                frames.Add(frame);
+            }
+        }
+
+        return frames;
+
+        IReadOnlyList<PageBlock> Content(XElement box)
+        {
+            _frameDepth++;
+            try
+            {
+                return ReadFlow(box);
+            }
+            finally
+            {
+                _frameDepth--;
+            }
+        }
+    }
+
     /// <summary>
     /// Walks a paragraph, building the text as laid out and the ranges its runs divide it into.
     /// </summary>
@@ -514,6 +596,7 @@ public sealed partial class DocxLayoutSource
         private readonly StringBuilder _builder = new();
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
+        private readonly List<FrameAnchor> _frames = [];
         private int _footnote;
         private int _endnote;
         private XElement? _runProperties;
@@ -533,6 +616,9 @@ public sealed partial class DocxLayoutSource
 
         /// <summary>The notes referenced in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
+
+        /// <summary>The floating frames anchored in the paragraph, with the offsets they sit at.</summary>
+        internal List<FrameAnchor> Frames => _frames;
 
         /// <summary>Walks a <c>w:p</c>.</summary>
         /// <param name="paragraph">The paragraph element.</param>
@@ -627,7 +713,16 @@ public sealed partial class DocxLayoutSource
 
                         break;
 
-                    case "commentReference" or "drawing" or "pict" or "object":
+                    // A floating frame occupies a position in the paragraph and is not part of it: its
+                    // own text belongs to a rectangle of its own. Recorded with the offset it sits at,
+                    // which is what an anchor is measured in; the anchor character stands for it, as it
+                    // does for every other thing that takes a position and is not text.
+                    case "drawing":
+                        _frames.Add(new FrameAnchor(_builder.Length, child));
+                        Emit(AnchorCharacter.ToString());
+                        break;
+
+                    case "commentReference" or "pict" or "object":
                         Emit(AnchorCharacter.ToString());
                         break;
 
@@ -716,6 +811,43 @@ public sealed partial class DocxLayoutSource
            && twips > 0
             ? Length.FromTwips(twips)
             : Length.FromTwips(720);
+
+    /// <summary>
+    /// Which version of Word wrote the file, from <c>w:compat</c>, or <c>-1</c> when it does not say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A single number covering a decade of behaviour changes: 12 is Word 2007, 14 is 2010 and 15 is 2013
+    /// and after. Word writes it as a <c>w:compatSetting</c> named <c>compatibilityMode</c> in the
+    /// Microsoft namespace, which is a URI rather than the <c>w:</c> one — so the name and the URI both
+    /// have to match, and a setting from another vendor's namespace is not this one.
+    /// </para>
+    /// <para>
+    /// Absent stays <c>-1</c> rather than defaulting to 12, following
+    /// <c>SettingsTable::GetWordCompatibilityMode</c>: everything that consults it asks whether the mode is
+    /// <em>below</em> 15, and −1 is, so a file that says nothing gets the older behaviour without the
+    /// reader having to invent a version for it.
+    /// </para>
+    /// </remarks>
+    private static int CompatibilityMode(XElement? settings)
+    {
+        const string wordUri = "http://schemas.microsoft.com/office/word";
+
+        foreach (XElement setting in Word.Children(Word.Child(settings, "compat"), "compatSetting"))
+        {
+            if (Word.Attribute(setting, "name") != "compatibilityMode") continue;
+            if (Word.Attribute(setting, "uri") != wordUri) continue;
+
+            if (int.TryParse(
+                    Word.Attribute(setting, "val"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                    out int mode))
+            {
+                return mode;
+            }
+        }
+
+        return -1;
+    }
 
     private OpenTypeFace? Face(WordTextStyle text)
     {

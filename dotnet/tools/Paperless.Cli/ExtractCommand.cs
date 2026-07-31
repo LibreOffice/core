@@ -5,6 +5,7 @@ using Paperless.Core;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
+using Paperless.Markup;
 
 namespace Paperless.Cli;
 
@@ -15,7 +16,9 @@ namespace Paperless.Cli;
 /// These are the Paperless side of the <c>extraction-comparison</c> skill, so the output
 /// layout is part of its contract: with <c>--outdir</c>, each input produces
 /// <c>&lt;stem&gt;.txt</c> in that directory, which is what the skill's
-/// <c>compare-text.py</c> is pointed at.
+/// <c>compare-text.py</c> is pointed at. The other formats extend that rather than changing
+/// it — <c>--format markdown</c> writes <c>&lt;stem&gt;.md</c> and leaves the default alone —
+/// because the skill's scripts name the <c>.txt</c> explicitly.
 /// </remarks>
 internal static class ExtractCommand
 {
@@ -37,11 +40,15 @@ internal static class ExtractCommand
             try
             {
                 using IDocument document = PaperlessDocument.Open(path);
-                string output = options.Json
-                    ? JsonSerializer.Serialize(Describe(document), Program.JsonOptions)
-                    : document.Content.GetText();
+                string output = options.Format switch
+                {
+                    OutputFormat.Json => JsonSerializer.Serialize(Describe(document), Program.JsonOptions),
+                    OutputFormat.Xhtml => XhtmlWriter.ToXhtml(document.Content),
+                    OutputFormat.Markdown => MarkdownWriter.ToMarkdown(document.Content),
+                    _ => document.Content.GetText(),
+                };
 
-                Write(options, path, options.Json ? "json" : "txt", output);
+                Write(options, path, Extension(options.Format), output);
                 ReportDiagnostics(options, path, document.Diagnostics);
             }
             catch (Exception ex) when (IsExpected(ex))
@@ -73,11 +80,11 @@ internal static class ExtractCommand
             try
             {
                 using IDocument document = PaperlessDocument.Open(path);
-                string output = options.Json
+                string output = options.Format == OutputFormat.Json
                     ? JsonSerializer.Serialize(document.Metadata, Program.JsonOptions)
                     : FormatMetadata(document, multiple ? path : null);
 
-                Write(options, path, options.Json ? "json" : "txt", output);
+                Write(options, path, options.Format == OutputFormat.Json ? "json" : "txt", output);
             }
             catch (Exception ex) when (IsExpected(ex))
             {
@@ -87,6 +94,30 @@ internal static class ExtractCommand
         }
         return exitCode;
     }
+
+    /// <summary>What the writers produce, and what <c>--outdir</c> names their output.</summary>
+    private enum OutputFormat
+    {
+        /// <summary>Plain text — the default, and the one the comparison skills read.</summary>
+        Text,
+
+        /// <summary>A structural summary as JSON.</summary>
+        Json,
+
+        /// <summary>Semantic XHTML: the structure, losslessly.</summary>
+        Xhtml,
+
+        /// <summary>GitHub-Flavored Markdown, transformed from the XHTML.</summary>
+        Markdown,
+    }
+
+    private static string Extension(OutputFormat format) => format switch
+    {
+        OutputFormat.Json => "json",
+        OutputFormat.Xhtml => "xhtml",
+        OutputFormat.Markdown => "md",
+        _ => "txt",
+    };
 
     private static void Write(Options options, string inputPath, string extension, string content)
     {
@@ -241,14 +272,24 @@ internal static class ExtractCommand
     {
         writer ??= Console.Out;
         writer.WriteLine("""
-            Usage: paperless extract [--outdir DIR] [--json] [--diagnostics] FILE...
+            Usage: paperless extract [--outdir DIR] [--format FORMAT] [--diagnostics] FILE...
 
             Extracts each document's text, tables and structure without laying it out.
 
             Options:
-              --outdir DIR    Write <stem>.txt per input instead of printing to stdout
-              --json          Emit a structural summary as JSON instead of plain text
+              --outdir DIR    Write <stem>.<ext> per input instead of printing to stdout
+              --format FORMAT text (default), json, xhtml or markdown
+              --json          Shorthand for --format json
               --diagnostics   Report non-fatal problems on stderr
+
+            Formats:
+              text      Paragraph text in document order; the structure thrown away
+              json      A structural summary: sections, headings, counts
+              xhtml     Semantic XHTML — headings, lists, tables with colspan/rowspan,
+                        em/strong, links, and the flows only Paperless extracts
+              markdown  GitHub-Flavored Markdown, transformed from that XHTML. Tables
+                        with spans or nesting fall back to an HTML table, which GFM
+                        has no syntax for
 
             Exit codes:
               0   every file was extracted
@@ -275,22 +316,35 @@ internal static class ExtractCommand
 
     /// <summary>The options both subcommands accept.</summary>
     private readonly record struct Options(
-        List<string> Paths, string? OutputDirectory, bool Json, bool ShowDiagnostics, bool WantsHelp)
+        List<string> Paths, string? OutputDirectory, OutputFormat Format, bool ShowDiagnostics, bool WantsHelp)
     {
         public static bool TryParse(string[] args, out Options options, out int usageExit)
         {
             List<string> paths = [];
             string? outputDirectory = null;
-            bool json = false, diagnostics = false, help = false;
+            OutputFormat format = OutputFormat.Text;
+            bool diagnostics = false, help = false;
             usageExit = Program.ExitUsage;
 
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
                 {
-                    case "--json": json = true; break;
+                    // Kept as a shorthand rather than replaced: the comparison skills and
+                    // whatever else already drives this tool pass --json, and breaking them to
+                    // gain a spelling would be a poor trade.
+                    case "--json": format = OutputFormat.Json; break;
                     case "--diagnostics": diagnostics = true; break;
                     case "-h" or "--help": help = true; break;
+                    case "--format":
+                        if (i + 1 >= args.Length || !TryParseFormat(args[++i], out format))
+                        {
+                            Console.Error.WriteLine(
+                                "paperless: --format needs one of text, json, xhtml, markdown.");
+                            options = default;
+                            return false;
+                        }
+                        break;
                     case "--outdir":
                         if (i + 1 >= args.Length)
                         {
@@ -312,8 +366,21 @@ internal static class ExtractCommand
                 }
             }
 
-            options = new Options(paths, outputDirectory, json, diagnostics, help);
+            options = new Options(paths, outputDirectory, format, diagnostics, help);
             return true;
+        }
+
+        private static bool TryParseFormat(string name, out OutputFormat format)
+        {
+            (bool ok, format) = name.ToLowerInvariant() switch
+            {
+                "text" or "txt" => (true, OutputFormat.Text),
+                "json" => (true, OutputFormat.Json),
+                "xhtml" or "html" => (true, OutputFormat.Xhtml),
+                "markdown" or "md" => (true, OutputFormat.Markdown),
+                _ => (false, OutputFormat.Text),
+            };
+            return ok;
         }
     }
 

@@ -36,6 +36,9 @@ public static class DocReader
     /// <summary>The name of the stream holding the FIB and the document's text.</summary>
     public const string WordDocumentStreamName = "WordDocument";
 
+    /// <summary>The optional stream a document's pictures live in when it has one.</summary>
+    public const string PictureStreamName = "Data";
+
     /// <summary>Reads a document, leaving the source's stream for the caller to dispose.</summary>
     /// <param name="source">The document to read.</param>
     /// <param name="format">The identified format, recorded on the result.</param>
@@ -81,7 +84,13 @@ public static class DocReader
                     + "missing or empty; formatting and structure cannot be resolved."));
             }
 
-            Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics);
+            // "Little joke from Microsoft: sometimes a stream named DATA exists", says
+            // SwWW8ImplReader::ImportGraf — and when it does, every picture's PICF and bytes are in
+            // it rather than in WordDocument, at the same offset sprmCPicLocation states. A reader
+            // that looks in the main stream regardless finds whatever happens to sit at that offset.
+            byte[]? data = ReadStream(file, PictureStreamName);
+
+            Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics, data);
             ContentDocument content = reader.Read(OlePropertySetReader.Read(file));
 
             return new Ww8Document(
@@ -129,6 +138,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         IReadOnlyList<Model.WritingSection> sections,
         Ww8DocumentReader reader)
     {
+        Marks = reader.Marks;
         Format = format;
         _file = file;
         _reader = reader;
@@ -154,6 +164,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Model.WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public Model.WritingMarks Marks { get; }
 
     /// <summary>
     /// The underlying compound file, for callers that need a stream the content tree does not
@@ -282,8 +295,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,
                     Padding = cell.Padding,
-                    Borders = cell.Borders,
                     Shading = cell.Shading,
+                    Borders = cell.Borders,
                 });
             }
 
@@ -304,8 +317,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             HeaderRowCount = table.HeaderRowCount,
             LeftIndent = table.LeftIndent,
 
-            // Word's own rule, which Writer follows for anything its DOC, DOCX and RTF importers read.
-            InnerBordersStopAtTheOuterEdge = true,
+            // Every DOC is a Word document by definition, so the flag is not read from anything: it is
+            // what LibreOffice's own filter sets on import, and it changes where the inner grid lines
+            // stop. Measured on the corpus table — the reference's inner horizontals run 56.95 to 538.35
+            // where the same table in ODF runs 56.45 to 538.85.
+            JoinsBordersLikeWord = true,
         };
     }
 
@@ -339,10 +355,37 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
                 Runs = RunsOf(fonts, paragraph, face),
                 Notes = NotesOf(fonts, paragraph.Notes),
+                Frames = FramesOf(fonts, paragraph.Frames),
             });
         }
 
         return paragraphs;
+    }
+
+    /// <summary>
+    /// The floating shapes anchored in a paragraph, as frames the layout engine can place.
+    /// </summary>
+    /// <remarks>
+    /// The conversion itself is <see cref="Ww8Frames.Build"/>'s; all that happens here is that the
+    /// shape's own text gets its faces resolved, which is the one thing the reader cannot do. A shape
+    /// that <see cref="Ww8Frames.Build"/> declines — one with no area, one deleted, one hidden — is
+    /// dropped rather than placed empty, since an empty frame would still make a hole in the text.
+    /// </remarks>
+    private static List<PageFrame> FramesOf(
+        LayoutFonts fonts, IReadOnlyList<Ww8LayoutFrame>? stated)
+    {
+        if (stated is null || stated.Count == 0) return [];
+
+        List<PageFrame> frames = new(stated.Count);
+
+        foreach (Ww8LayoutFrame frame in stated)
+        {
+            PageFrame? built = Ww8Frames.Build(
+                frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks));
+            if (built is not null) frames.Add(built);
+        }
+
+        return frames;
     }
 
     /// <summary>The notes anchored in a paragraph, with their bodies converted.</summary>
@@ -368,6 +411,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Offset = note.Offset,
                 IsEndnote = note.IsEndnote,
                 Placement = note.Placement,
+                Restart = note.Restart,
             });
         }
 

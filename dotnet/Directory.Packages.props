@@ -98,6 +98,13 @@
     <!-- Rasterising reference PDFs in-process (pdfium) so the fidelity harness
          does not require poppler-utils on the machine. -->
     <PackageVersion Include="PDFtoImage" Version="5.3.0" />
+    <!-- Reading the Markdown Paperless emits back, in Paperless.Markup.Tests. An escaping bug
+         leaves every character present, so a text diff cannot see it and only a parser can:
+         the round-trip is the test, and it needs a CommonMark/GFM implementation that is not
+         ours. BSD-2-Clause, pure managed, no native assets, no build-time gate. Test-only —
+         Paperless.Markup itself needs no parser, only a writer, so nothing shipped gains a
+         dependency. -->
+    <PackageVersion Include="Markdig" Version="1.3.2" />
   </ItemGroup>
 
 </Project>

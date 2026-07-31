@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Placeholder matching has five priority rungs and a sentinel index; testing it through
+         a whole package would need a package per rung, so the tests reach the type directly. -->
+    <InternalsVisibleTo Include="Paperless.Presentations.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
     <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
     <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />

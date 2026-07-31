@@ -41,3 +41,43 @@ internal sealed class OwnedSourceDocument(IDocument inner, DocumentSource source
         source.Dispose();
     }
 }
+
+/// <summary>
+/// The same thing for a document that can be laid out.
+/// </summary>
+/// <remarks>
+/// A separate type because <see cref="IPaginatedDocument"/> is discovered by a type test:
+/// a caller asks <c>document is IPaginatedDocument</c> and lays it out if it is. A wrapper
+/// implementing only <see cref="IDocument"/> answers no on behalf of a document that
+/// answers yes, so every word-processing file opened by path reports that it cannot be
+/// rendered — which is exactly what happened the first time <c>paperless render</c> was
+/// pointed at one.
+/// </remarks>
+internal sealed class OwnedPaginatedDocument(IPaginatedDocument inner, DocumentSource source)
+    : IPaginatedDocument
+{
+    /// <inheritdoc/>
+    public DocumentFormat Format => inner.Format;
+
+    /// <inheritdoc/>
+    public DocumentFamily Family => inner.Family;
+
+    /// <inheritdoc/>
+    public DocumentMetadata Metadata => inner.Metadata;
+
+    /// <inheritdoc/>
+    public ContentDocument Content => inner.Content;
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Diagnostic> Diagnostics => inner.Diagnostics;
+
+    /// <inheritdoc/>
+    public IPageSequence Layout(LayoutOptions? options = null) => inner.Layout(options);
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        inner.Dispose();
+        source.Dispose();
+    }
+}

@@ -117,7 +117,23 @@ public sealed record PageTable : PageBlock
     public const int MaxRows = 20000;
 
     /// <summary>The grid's column widths, left to right.</summary>
+    /// <remarks>
+    /// What the file stated. When <see cref="ColumnFit"/> is not null some of these are placeholders for a
+    /// column that stated nothing, and <see cref="WidthsWithin"/> rather than this is what the table is laid
+    /// out at.
+    /// </remarks>
     public required IReadOnlyList<Length> ColumnWidths { get; init; }
+
+    /// <summary>
+    /// How to size the columns the file left without a width, or null when it stated all of them.
+    /// </summary>
+    /// <remarks>
+    /// Null is the ordinary case and deliberately the untouched one: a table that declares its grid is laid
+    /// out from <see cref="ColumnWidths"/> and never reaches the fitting arithmetic. Only a table missing at
+    /// least one width carries this — see <see cref="TableColumnFit"/> for what the two families then do,
+    /// and for why it is not the content-measuring auto-layout it looks like it should be.
+    /// </remarks>
+    public TableColumnFit? ColumnFit { get; init; }
 
     /// <summary>The rows, top to bottom.</summary>
     public required IReadOnlyList<PageTableRow> Rows { get; init; }
@@ -146,66 +162,38 @@ public sealed record PageTable : PageBlock
     public int HeaderRowCount { get; init; }
 
     /// <summary>
-    /// True when an interior grid line stops <em>inside</em> the table's outline rather than crossing it.
+    /// True when the grid lines are joined by Word's rules rather than Writer's own.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// A compatibility flag, and one worth spelling out because it is the only place the four formats' tables
-    /// are drawn differently rather than merely described differently. Writer paints an interior line from the
-    /// outer edge of the outline it meets when the document came from ODF, and from the outline's
-    /// <em>inner</em> edge when it came from Word — a difference of the outline's whole width at each end.
-    /// It hangs off <c>DocumentSettingId::TABLE_ROW_KEEP</c>, which the DOC, DOCX and RTF importers set and
-    /// the ODF one does not, and is applied in <c>SwTabFramePainter::FindStylesForLine</c>
-    /// (<c>sw/source/core/layout/paintfrm.cxx</c>) under a local named <c>bWordTableCell</c>.
+    /// The one place a table's original format still shows after it has been read, and it changes the
+    /// drawing rather than the layout. Everywhere else a grid line overshoots the line it meets by half a
+    /// width, so the two make a solid corner. A Word table instead <em>shortens</em> an interior line by the
+    /// <em>full</em> width of the outer line it meets, so the outline owns the corner outright and the
+    /// interior line stops at the outline's inner edge.
     /// </para>
     /// <para>
-    /// Measured on the same three-column table in four formats: the outline runs 56.45 to 538.85 pt in every
-    /// one of them, and the interior horizontals run 56.45 to 538.85 from the ODF file against 56.95 to 538.35
-    /// from each of the three Word ones. Half a point of line at each end of each interior line, which is
-    /// visible at any zoom as a notch at the corners or the absence of one.
+    /// Measured on the corpus table's half-point borders: the DOC and DOCX renders both run their middle
+    /// horizontals 56.95 to 538.35 where the ODF one runs them 56.45 to 538.85 — half a point at each end of
+    /// five of the nine strokes. Invisible on paper, and the difference between agreeing with a reference
+    /// rendering and not.
+    /// </para>
+    /// <para>
+    /// LibreOffice spells it <c>DocumentSettingId::TABLE_ROW_KEEP</c>, which its DOC, DOCX and RTF filters
+    /// all set and its ODF filter never does, and reads it back as <c>bWordTableCell</c> in
+    /// <c>SwTabFramePainter::FindStylesForLine</c> (<c>sw/source/core/layout/paintfrm.cxx</c>). So it belongs
+    /// to the file's provenance rather than to anything the document says, which is why it is a flag on the
+    /// table and not a property of a border.
     /// </para>
     /// </remarks>
-    public bool InnerBordersStopAtTheOuterEdge { get; init; }
-
-    /// <summary>
-    /// A left indent as stated by DOCX or RTF, corrected for where each measures a table's edge from.
-    /// </summary>
-    /// <param name="stated">The indent the document gave — DOCX's <c>w:tblInd</c> or RTF's <c>\trleft</c>.</param>
-    /// <param name="rows">
-    /// The table's rows, for the border that decides the correction: the top-left cell's left edge.
-    /// </param>
-    /// <remarks>
-    /// <para>
-    /// Writer positions a table at the <em>middle</em> of its left border and Word at the border's outer
-    /// edge, so an indent that came from Word is half a border too small. LibreOffice's own importer adds it
-    /// back in <c>DomainMapperTableHandler::endTableGetTableStyle</c>: "Writer starts a table in the middle of
-    /// the border, Word starts a table at the left edge of the border, so emulate that by adding half the
-    /// width".
-    /// </para>
-    /// <para>
-    /// Which is also why LibreOffice's DOCX export writes <c>w:tblInd w:w="-5"</c> for a table at the margin
-    /// with a half-point border — minus half a border, so that the round trip lands back where it started. A
-    /// reader taking that at face value puts the table a quarter of a point into the margin.
-    /// </para>
-    /// <para>
-    /// DOC needs none of this and must not have it: WW8 states its column boundaries as <em>grid lines</em> —
-    /// LibreOffice calls the array <c>nCenter</c> — which is already Writer's own convention.
-    /// </para>
-    /// </remarks>
-    public static Length WordLeftIndent(Length stated, IReadOnlyList<PageTableRow> rows)
-    {
-        ArgumentNullException.ThrowIfNull(rows);
-
-        // The top-left cell's own left border, which is what LibreOffice takes: the table's border set is only
-        // the fallback, and a cell restating that side wins.
-        TableBorder border = rows.Count > 0 && rows[0].Cells.Count > 0
-            ? rows[0].Cells[0].Borders.Left
-            : default;
-
-        return stated + (border.Width / 2);
-    }
+    public bool JoinsBordersLikeWord { get; init; }
 
     /// <summary>How wide the table is, which is its columns added up.</summary>
+    /// <remarks>
+    /// The declared columns, so a table whose grid the file left blank answers with what it declared rather
+    /// than with what it will be laid out at. Use <see cref="WidthWithin"/> when the answer has to be the
+    /// second.
+    /// </remarks>
     public Length Width
     {
         get
@@ -214,6 +202,30 @@ public sealed record PageTable : PageBlock
             foreach (Length column in ColumnWidths) total += column;
             return total;
         }
+    }
+
+    /// <summary>
+    /// The column widths the table is laid out at inside an area of a given width.
+    /// </summary>
+    /// <remarks>
+    /// The same list as <see cref="ColumnWidths"/> for a table that declared its grid, so nothing stating
+    /// its widths pays for this or can be changed by it. The area's width matters only to a table that
+    /// stated neither its own width nor all of its columns', which is Writer's
+    /// <c>HoriOrientation::FULL</c> — as wide as whatever it sits in.
+    /// </remarks>
+    /// <param name="available">The width of the area the table sits in.</param>
+    public IReadOnlyList<Length> WidthsWithin(Length available)
+        => ColumnFit is null ? ColumnWidths : ColumnFit.Resolve(ColumnWidths, available);
+
+    /// <summary>How wide the table is inside an area of a given width.</summary>
+    /// <param name="available">The width of the area the table sits in.</param>
+    public Length WidthWithin(Length available)
+    {
+        if (ColumnFit is null) return Width;
+
+        Length total = Length.Zero;
+        foreach (Length column in WidthsWithin(available)) total += column;
+        return total;
     }
 }
 

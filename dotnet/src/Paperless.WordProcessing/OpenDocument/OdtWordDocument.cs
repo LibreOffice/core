@@ -30,10 +30,11 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 {
     private readonly OdfDocument _inner;
 
-    internal OdtWordDocument(OdfDocument inner)
+    internal OdtWordDocument(OdfDocument inner, WritingMarks marks)
     {
         ArgumentNullException.ThrowIfNull(inner);
         _inner = inner;
+        Marks = marks;
         Sections = ReadSections(inner.File.Styles);
     }
 
@@ -54,6 +55,9 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public WritingMarks Marks { get; }
 
     /// <summary>The underlying ODF file: its styles, master pages and remaining parts.</summary>
     public OdfFile File => _inner.File;
@@ -88,11 +92,7 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
                 .Select((master, index) => (master.Name, index))
                 .Where(pair => pair.Name is not null)
                 .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal),
-            stylesRoot: _inner.File.StylesRoot,
-
-            // The first section's, matching the note above: this document is laid out wholly on its first
-            // master's geometry, so a table filling "the text area" fills that one's.
-            availableWidth: Sections.Count > 0 ? Sections[0].Page.ColumnWidth : default);
+            stylesRoot: _inner.File.StylesRoot);
 
         List<PageBlock> blocks = source.Read(body);
 

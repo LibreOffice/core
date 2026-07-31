@@ -61,7 +61,7 @@ public abstract class OdfReader
             }
             else
             {
-                OdfContentReader reader = new(file, diagnostics);
+                OdfContentReader reader = new(file, diagnostics) { Marks = CreateMarkSink() };
                 ReadBody(body, reader, content);
 
                 if (IncludesMasterPageContent)
@@ -81,6 +81,15 @@ public abstract class OdfReader
             throw;
         }
     }
+
+    /// <summary>
+    /// A sink for the bookmarks, change marks and fields the content walk steps over, or null.
+    /// </summary>
+    /// <remarks>
+    /// Null for every family but word processing, which is the only one with somewhere to put a
+    /// bookmark's range — a spreadsheet's marks are cell references and a presentation has none.
+    /// </remarks>
+    protected virtual IOdfMarkSink? CreateMarkSink() => null;
 
     /// <summary>
     /// Walks the family's body element, appending sections to the content document.

@@ -161,6 +161,41 @@ public sealed class FootnoteReadingTests
         }
     }
 
+    [Theory]
+    [InlineData("note-restart.fodt")]
+    [InlineData("note-restart.odt")]
+    [InlineData("note-restart.docx")]
+    [InlineData("note-restart.doc")]
+    [InlineData("note-restart.rtf")]
+    public void ADocumentCanAskForItsNotesToBeCountedAfreshOnEveryPage(string fileName)
+    {
+        List<PageNote> notes =
+            [.. Paragraphs(fileName).SelectMany(paragraph => paragraph.Notes)];
+
+        notes.Count.ShouldBe(8, $"{fileName}: expected eight footnotes");
+
+        // The rule itself, which is all a *reader* can answer. Where the count actually begins again is a
+        // pagination matter — a note's number under a restart is its position within its page — so what is
+        // checked here is that every one of the four spellings arrives as the same value.
+        notes.ShouldAllBe(note => note.Restart == NoteRestart.EachPage, $"{fileName}: the per-page restart");
+    }
+
+    [Theory]
+    [InlineData("footnotes.fodt")]
+    [InlineData("footnotes.docx")]
+    [InlineData("footnotes.doc")]
+    [InlineData("footnotes.rtf")]
+    public void ADocumentSayingNothingAboutRestartsCountsStraightThrough(string fileName)
+    {
+        // The other half, and worth its own case: `Never` is the default, so a reader that never read the
+        // attribute at all would pass the test above's opposite by accident. This one fails if a reader
+        // *mis*-reads a document that says nothing — WW8 above all, where the rule shares its word with the
+        // start value and a bad mask turns "no restart" into a per-page one on every DOC ever written.
+        Paragraphs(fileName)
+            .SelectMany(paragraph => paragraph.Notes)
+            .ShouldAllBe(note => note.Restart == NoteRestart.Never, $"{fileName}: no restart stated");
+    }
+
     // ------------------------------------------------------------------------- the machinery
 
     /// <summary>Every paragraph of a document's body, tables flattened away.</summary>

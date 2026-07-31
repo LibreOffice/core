@@ -29,6 +29,37 @@ public enum NotePlacement
     DocumentEnd,
 }
 
+/// <summary>Where a class of note begins counting again.</summary>
+/// <remarks>
+/// <para>
+/// Three values rather than four, and that is a finding rather than a simplification. Writer's
+/// <c>SwFootnoteNum</c> has exactly <c>FTNNUM_DOC</c>, <c>FTNNUM_CHAPTER</c> and <c>FTNNUM_PAGE</c>
+/// (<c>sw/inc/ftninfo.hxx:92</c>), and every one of the four importers folds a per-<em>section</em> restart
+/// onto the chapter one: WW8 maps its <c>rnc</c> through
+/// <c>{ FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC }</c> (<c>ww8par.cxx:5064</c>), OOXML's
+/// <c>eachSect</c> is what <c>FTNNUM_CHAPTER</c> exports as (<c>docxattributeoutput.cxx:9329</c>), and
+/// RTF's <c>\ftnrestart</c> is that same case's (<c>rtfexport.cxx:970</c>). A fourth member would model
+/// something no reference implementation round-trips.
+/// </para>
+/// <para>
+/// The trap is in WW8, and it is the kind that survives review because both halves look authoritative:
+/// <c>ww8scan.hxx:1624</c>'s comment beside <c>rncFootnote</c> reads "0 don't restart note numbering,
+/// 1 section, 2 page", and the code maps that 1 to <em>chapter</em>. The comment describes Word's field;
+/// the array describes what Writer does with it.
+/// </para>
+/// </remarks>
+public enum NoteRestart
+{
+    /// <summary>Count straight through the document, which is what every format means by saying nothing.</summary>
+    Never,
+
+    /// <summary>Begin again at each chapter — and at each <em>section</em>, which folds onto this.</summary>
+    EachChapter,
+
+    /// <summary>Begin again on every page.</summary>
+    EachPage,
+}
+
 /// <summary>How a note's citation is written.</summary>
 /// <remarks>
 /// The formats every one of the four spells, under four different names — ODF's
@@ -73,10 +104,14 @@ public enum NoteNumberFormat
 /// <remarks>
 /// <para>
 /// Two values, because the formats state two and a document can change either alone — a legal brief
-/// numbering its footnotes from 100 is as common as one numbering them in roman. The <em>restart</em> rules
-/// (per page, per chapter, per section) are deliberately absent: they need to be applied while pages are
-/// being filled rather than while the document is being read, so a reader cannot resolve them and a value
-/// here would be a lie.
+/// numbering its footnotes from 100 is as common as one numbering them in roman.
+/// </para>
+/// <para>
+/// <see cref="Restart"/> is a third and is a different kind of thing: it is a rule the reader records and
+/// the <em>paginator</em> applies, because which page a note lands on is not known until the page is full.
+/// So the value here is what the file said, and the citation a reader computes from
+/// <see cref="Citation"/> is the document-order one — correct outright when the restart is
+/// <see cref="NoteRestart.Never"/>, and the starting point pagination renumbers from otherwise.
 /// </para>
 /// <para>
 /// The defaults differ between the two classes and that is measured rather than assumed: LibreOffice cites
@@ -92,6 +127,16 @@ public readonly record struct NoteNumbering(NoteNumberFormat Format, int StartAt
 {
     /// <summary>Where notes of this class collect.</summary>
     public NotePlacement Placement { get; init; }
+
+    /// <summary>
+    /// Where the count begins again, which only pagination can apply.
+    /// </summary>
+    /// <remarks>
+    /// Read from the file and carried rather than resolved, because a restart is the one numbering rule whose
+    /// answer depends on the layout: a note's number is its position within its page, and which page it is on
+    /// is what filling the page decides.
+    /// </remarks>
+    public NoteRestart Restart { get; init; }
 
     /// <summary>What a footnote takes when the document states nothing: 1, 2, 3, at the foot of the page.</summary>
     public static NoteNumbering Footnotes { get; } =
@@ -185,5 +230,52 @@ public readonly record struct NoteNumbering(NoteNumberFormat Format, int StartAt
         "chicago" => NoteNumberFormat.Chicago,
 
         _ => null,
+    };
+
+    /// <summary>
+    /// The restart a name states, or null when the name is one this does not model.
+    /// </summary>
+    /// <remarks>
+    /// One parser for ODF's <c>text:start-numbering-at</c> and OOXML's <c>w:numRestart</c>, the two formats
+    /// that spell the rule as a word. The other two do not and are read where they are: RTF states it in the
+    /// control word itself (<c>\ftnrstcont</c>, <c>\ftnrestart</c>, <c>\ftnrstpg</c>, each doubled with an
+    /// <c>a</c> prefix for the endnotes) and WW8 packs it into two bits of the DOP.
+    /// </remarks>
+    /// <param name="stated">The attribute's value.</param>
+    public static NoteRestart? ParseRestart(string? stated) => stated switch
+    {
+        null or "" => null,
+
+        // ODF, whose three values are Writer's three outright — the mapping in
+        // `XMLFootnoteConfigurationImportContext.cxx:150` is the identity.
+        "document" => NoteRestart.Never,
+        "chapter" => NoteRestart.EachChapter,
+        "page" => NoteRestart.EachPage,
+
+        // OOXML. `eachSect` is *not* a fourth kind: it is what Writer's chapter restart exports as, so it
+        // reads back as one.
+        "continuous" => NoteRestart.Never,
+        "eachSect" => NoteRestart.EachChapter,
+        "eachPage" => NoteRestart.EachPage,
+
+        _ => null,
+    };
+
+    /// <summary>
+    /// The restart the two bits of a WW8 <c>rnc</c> field state.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's own table, <c>{ FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC }</c> at
+    /// <c>ww8par.cxx:5064</c>, rather than the field's documented meaning — <c>ww8scan.hxx</c>'s comment
+    /// beside <c>rncFootnote</c> says 1 is "section", and Writer has no per-section footnote restart, so 1
+    /// becomes a chapter restart. Value 3 is undefined and falls back to no restart, which is what the
+    /// fourth slot of the table says.
+    /// </remarks>
+    /// <param name="rnc">The two-bit field, already masked.</param>
+    public static NoteRestart FromWw8Rnc(int rnc) => rnc switch
+    {
+        1 => NoteRestart.EachChapter,
+        2 => NoteRestart.EachPage,
+        _ => NoteRestart.Never,
     };
 }

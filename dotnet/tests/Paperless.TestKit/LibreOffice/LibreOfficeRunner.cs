@@ -209,6 +209,41 @@ public sealed class LibreOfficeRunner : IDisposable
         => Convert(inputPath, TargetFor(inputPath), outputDirectory);
 
     /// <summary>
+    /// Runs a conversion whose filter writes more than one file, and returns them all.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Separate from <see cref="ExtractText"/> because that one resolves the output by name —
+    /// the input's stem plus the target's extension — and a filter that fans out cannot be
+    /// found that way. The CSV filter driven with a sheet index of <c>-1</c> is the case that
+    /// needs this: it writes one file per sheet, named for the sheet, and the single-output
+    /// path would report that LibreOffice converted nothing.
+    /// </para>
+    /// <para>
+    /// The full filter string is the caller's, because the interesting options — which sheet,
+    /// which delimiter, whether cell contents are written as shown — are exactly what the
+    /// caller is choosing between.
+    /// </para>
+    /// </remarks>
+    /// <param name="inputPath">The document to convert.</param>
+    /// <param name="target">
+    /// The <c>--convert-to</c> argument, filter name and options included.
+    /// </param>
+    /// <param name="outputDirectory">A directory of this conversion's own.</param>
+    /// <returns>Every file the conversion left behind, in name order.</returns>
+    public IReadOnlyList<string> ConvertToMany(
+        string inputPath, string target, string outputDirectory)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(inputPath);
+        ArgumentException.ThrowIfNullOrEmpty(outputDirectory);
+
+        RunConvert([Path.GetFullPath(inputPath)], target, outputDirectory);
+        string[] produced = Directory.GetFiles(outputDirectory);
+        Array.Sort(produced, StringComparer.Ordinal);
+        return produced;
+    }
+
+    /// <summary>
     /// Checks that the fonts a comparison depends on resolve the way they must.
     /// </summary>
     /// <remarks>

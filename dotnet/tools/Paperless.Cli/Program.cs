@@ -39,6 +39,7 @@ internal static class Program
             "identify" => Identify(rest),
             "extract" => ExtractCommand.Extract(rest),
             "metadata" => ExtractCommand.Metadata(rest),
+            "render" => RenderCommand.Render(rest),
             "version" => PrintVersion(),
             _ => Unknown(command),
         };
@@ -208,10 +209,11 @@ internal static class Program
               identify FILE...   Report each file's real format, determined from its content
               extract  FILE...   Extract text, tables and structure
               metadata FILE...   Report the document's metadata
+              render   FILE...   Lay out and write pages as PDF, PNG or JPEG
               version            Print the version
               help               Print this message
 
-            Not yet implemented: render, convert, diagnose.
+            Not yet implemented: convert, diagnose.
             See dotnet/TODO.md for the plan.
             """);
     }

@@ -8,8 +8,8 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
  <office:meta>
-  <dc:title>Paperless table autofit, no stated width</dc:title>
-  <dc:subject>Columns that state no width, for the width-resolution comparison</dc:subject>
+  <dc:title>Paperless table auto-fit</dc:title>
+  <dc:subject>A table whose columns state no width, for the column-fitting comparison</dc:subject>
  </office:meta>
  <office:automatic-styles>
   <style:page-layout style:name="PL">
@@ -17,8 +17,8 @@
        fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
   </style:page-layout>
   <style:style style:name="Grid" style:family="table">
-   <style:table-properties fo:margin-left="0cm"
-       fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="margins"/>
+   <style:table-properties style:width="17cm" fo:margin-left="0cm"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="left"/>
   </style:style>
   <style:style style:name="Cell" style:family="table-cell">
    <style:table-cell-properties fo:padding="0.1cm" style:vertical-align="top"/>

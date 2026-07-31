@@ -130,10 +130,11 @@ public sealed record PageParagraph : PageBlock
     /// The floating frames anchored in this paragraph, in document order.
     /// </summary>
     /// <remarks>
-    /// On the paragraph for the same reason a note is: a frame's position is stated relative to its anchor,
-    /// and where the anchor lands is a pagination result rather than a reading one. Unlike a note, a frame
-    /// affects the text <em>around</em> it — the lines of this paragraph and of the paragraphs after it, for
-    /// as far down the page as the frame reaches.
+    /// On the paragraph because that is where every format puts the anchor, a page-anchored frame
+    /// included: even <c>text:anchor-type="page"</c> is written at a position in the text, and Word has
+    /// no page anchor at all — its page-relative positions are still anchored to a paragraph. So which
+    /// page a frame lands on is a pagination result rather than a property, which is what makes frames a
+    /// two-pass affair; see <see cref="Paginator"/>.
     /// </remarks>
     public IReadOnlyList<PageFrame> Frames { get; init; } = [];
 }
@@ -174,6 +175,15 @@ public sealed record PageNote
     /// document asks for its endnotes at the end of each section.
     /// </remarks>
     public NotePlacement Placement { get; init; }
+
+    /// <summary>Where this class of note begins counting again.</summary>
+    /// <remarks>
+    /// Carried on the note beside <see cref="Placement"/>, and for the same reason: both are properties of the
+    /// note's <em>class</em> that only pagination can act on, and the paginator is handed notes rather than the
+    /// document. This is the one numbering rule a reader cannot resolve — a note's number under a restart is
+    /// its position within its page, and which page it is on is what filling the page decides.
+    /// </remarks>
+    public NoteRestart Restart { get; init; }
 }
 
 /// <summary>
@@ -286,34 +296,12 @@ public sealed record PlacedFlow
     /// <summary>The tables inside the flow, with page-coordinate rectangles.</summary>
     public IReadOnlyList<PlacedTable> Tables { get; init; } = [];
 
-    /// <summary>The floating frames anchored in the flow, with their positions resolved.</summary>
-    public IReadOnlyList<PlacedFrame> Frames { get; init; } = [];
-
     /// <summary>Where the flow sits on the page.</summary>
     public required DocRect Area { get; init; }
 
     /// <summary>True when nothing was laid out.</summary>
     public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }
-
-/// <summary>
-/// A floating frame with its position resolved: where it is on the page, and what the text avoids.
-/// </summary>
-/// <remarks>
-/// Two rectangles rather than one, because they are different: <paramref name="Bounds"/> is the frame itself
-/// and would be drawn, while <paramref name="Region"/> is that grown by the frame's wrap margins and is what
-/// the lines keep clear of. Conflating them puts the text against the frame's edge and draws the frame where
-/// the text should have been.
-/// </remarks>
-/// <param name="Frame">The frame as the document stated it.</param>
-/// <param name="Bounds">Where it sits on the page.</param>
-/// <param name="Region">The area text keeps clear of.</param>
-/// <param name="Content">
-/// Its own text, laid out inside its padding, or null when it holds none. A separate flow because that is
-/// what it is: the lines break at the frame's width and are positioned from the frame's own top.
-/// </param>
-public readonly record struct PlacedFrame(
-    PageFrame Frame, DocRect Bounds, DocRect Region, PlacedFlow? Content = null);
 
 /// <summary>
 /// A page after pagination: how big it is, where its body sits, and which lines landed on it.
@@ -444,12 +432,13 @@ public sealed record LaidOutPage
     public DocRect? NoteSeparator { get; init; }
 
     /// <summary>
-    /// The floating frames whose anchors landed on this page, with their positions resolved.
+    /// The floating frames that landed on this page, with the rectangles they were given.
     /// </summary>
     /// <remarks>
-    /// On the page rather than reached through the paragraphs, because that is the question a renderer asks:
-    /// a frame is drawn once, on the page its anchor resolved to, and which page that is depends on
-    /// pagination. The same frame is never on two pages.
+    /// Beside the lines rather than among them, for the same reason a table is: a frame is placed at a
+    /// resolved position rather than stacked, and the lines around it have already been shortened to make
+    /// room. A renderer draws these after the body text, which is what puts an opaque frame over the text
+    /// it displaced rather than under it.
     /// </remarks>
     public IReadOnlyList<PlacedFrame> Frames { get; init; } = [];
 

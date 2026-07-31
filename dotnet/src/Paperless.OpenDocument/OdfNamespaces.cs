@@ -69,6 +69,20 @@ public static class OdfNamespaces
     /// <summary>LibreOffice's Calc extension namespace, mostly duplicating value types.</summary>
     public const string CalcExt = "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0";
 
+    /// <summary>
+    /// The OpenOffice.org office extension namespace.
+    /// </summary>
+    /// <remarks>
+    /// One element in it matters: a comment on a <em>slide</em>. ODF puts
+    /// <c>office:annotation</c> inside a paragraph or a cell, and Impress needs one on a
+    /// <c>draw:page</c>, so LibreOffice writes <c>officeooo:annotation</c> instead
+    /// (<c>xmloff/source/draw/sdxmlexp.cxx:2647</c>) and accepts either on import
+    /// (<c>xmloff/source/draw/ximppage.cxx:278</c>). Reading only the ODF-namespaced one puts
+    /// every slide comment's text into the slide's own paragraphs, where it is
+    /// indistinguishable from what the slide says.
+    /// </remarks>
+    public const string OfficeExt = "http://openoffice.org/2009/office";
+
     /// <summary>The <c>manifest</c> namespace, used by <c>META-INF/manifest.xml</c>.</summary>
     public const string Manifest = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
 }

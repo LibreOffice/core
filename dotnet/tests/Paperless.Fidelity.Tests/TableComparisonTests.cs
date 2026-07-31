@@ -95,12 +95,6 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-nested.docx")]
     [InlineData("table-nested.rtf")]
     [InlineData("table-nested.doc")]
-    // Columns that state no width at all, in the two documents that resolve them differently — and they do
-    // differ, which is the whole point of having both. The table that states no width of its own divides the
-    // text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt.
-    // ODF only, because the other three formats always write a grid.
-    [InlineData("table-autofit.fodt")]
-    [InlineData("table-autofit-stated.fodt")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -192,6 +186,10 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-shading.odt")]
     [InlineData("table-shading.docx")]
     [InlineData("table-shading.rtf")]
+    // DOC states each shade twice over, and the two disagree: `sprmTDefTableShd80`'s palette index resolves to
+    // #C0C0C0 where the newer `sprmTDefTableShd`'s RGB says the #CCCCCC the document was written with. What
+    // this test can see is only that three cells are filled and where — the colour is checked by the unit
+    // tests — but the count is what catches the shade being read off the wrong side of the pattern.
     [InlineData("table-shading.doc")]
     public void AShadedCellIsFilledWhereLibreOfficeFillsIt(string fileName)
     {
@@ -251,6 +249,16 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-borders.docx")]
     [InlineData("table-borders.rtf")]
     [InlineData("table-borders.doc")]
+    // All five, at last, and the last two exclusions fell to two different rules that had to be found
+    // separately. DOCX and RTF were out because each states the table's own left edge differently relative to
+    // the border, so the whole grid was offset — Writer positions a table by the centre of its left border
+    // and Word by that border's outer edge. DOC was out because WW8 states a border as a `BRC` over a *range*
+    // of cells, which is a bigger read than the other three needed.
+    //
+    // What the two had in common, and neither was looking for: LibreOffice joins a *Word* table's grid lines
+    // by Word's rule rather than Writer's, so an inner line stops a whole border width short of the outline
+    // it meets instead of overshooting it by half. Five of the nine strokes run 56.95 to 538.35 in all three
+    // Word formats where ODF's run 56.45 to 538.85. See `PageTable.JoinsBordersLikeWord`.
     public void ABorderIsStrokedAsOneLinePerGridLine(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

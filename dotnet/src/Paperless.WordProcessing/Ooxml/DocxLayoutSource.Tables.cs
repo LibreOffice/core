@@ -33,6 +33,11 @@ namespace Paperless.WordProcessing.Ooxml;
 ///     cell overrides <em>per side</em>. LibreOffice's own export writes a <c>w:tcMar</c> holding only the
 ///     side that differs, so a reader taking the cell's block as a whole loses the other three.
 ///   </item>
+///   <item>
+///     <c>w:tblInd</c> is not where the table's left edge goes — see <see cref="LeftEdge"/>. Word measures
+///     it to the cell's text and Writer places a table by the centre of its left border, so the two differ
+///     by half a border and a reader taking the indent literally offsets the whole grid.
+///   </item>
 /// </list>
 /// <para>
 /// The measures are twips (<c>w:type="dxa"</c>), which is the unit Writer lays out in, so nothing needs
@@ -55,28 +60,104 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "tblPr");
 
-        List<Length> columns = Columns(element);
-        if (columns.Count == 0) return null;
+        List<Length?> declared = Columns(element);
+        if (declared.Count == 0) return null;
+
+        List<Length> columns = [.. declared.Select(width => width ?? Length.Zero)];
 
         CellPadding tablePadding = Padding(
             Word.Child(properties, "tblCellMar"), DefaultCellPadding);
 
         List<PendingRow> rows = [];
-        ReadRows(element, rows, tablePadding, properties, depth: 0);
-        if (rows.Count == 0) return null;
 
-        List<PageTableRow> resolved = Resolved(rows);
+        // Counted around the rows rather than around this table's own properties, because a cell's blocks
+        // are read while the rows are, and a table inside one of them is what makes this table an enclosing
+        // level. See LeftEdge for the one thing the count decides.
+        _tableDepth++;
+        try
+        {
+            ReadRows(element, rows, tablePadding, properties, depth: 0);
+        }
+        finally
+        {
+            _tableDepth--;
+        }
+
+        if (rows.Count == 0) return null;
 
         return new PageTable
         {
             SectionIndex = _sectionIndex,
             ColumnWidths = columns,
-            Rows = resolved,
+            ColumnFit = Fit(declared, properties),
+            Rows = Resolved(rows),
             HeaderRowCount = HeadingRows(rows),
-            LeftIndent = PageTable.WordLeftIndent(
-                Twips(Word.Child(properties, "tblInd")) ?? Length.Zero, resolved),
-            InnerBordersStopAtTheOuterEdge = true,
+            LeftIndent = LeftEdge(properties, rows, isNested: _tableDepth > 0),
+            JoinsBordersLikeWord = true,
         };
+    }
+
+    /// <summary>
+    /// Where the table's left edge goes, which is not what <c>w:tblInd</c> says.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer positions a table by the <em>centre</em> of its left border; Word states an indent whose
+    /// meaning depends on the file's compatibility mode, and
+    /// <c>DomainMapperTableHandler::endTableGetTableStyle</c> —
+    /// <c>sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx</c>, the block commented "Table
+    /// position in Office is computed in 2 different ways" — converts one to the other. Two rules, and the
+    /// document picks between them:
+    /// </para>
+    /// <list type="bullet">
+    ///   <item>
+    ///     <b>Word 2013 and later</b> (<c>compatibilityMode</c> 15 or more), and <em>every</em> nested
+    ///     table whatever the mode: the indent is to the outer edge of the left border, so the centre is
+    ///     half a border further right. A nested table's indent is also floored at zero first.
+    ///   </item>
+    ///   <item>
+    ///     <b>Word 2007 to 2010</b> (mode 14 or less, which is also what an absent
+    ///     <c>compatibilityMode</c> means), for a table that is not nested: the indent is to the cell's
+    ///     <em>text</em>, so the border's centre sits a whole cell padding to the <em>left</em> of it —
+    ///     <c>max</c> of the first cell's left padding and half the border, subtracted rather than added.
+    ///   </item>
+    /// </list>
+    /// <para>
+    /// The difference is not academic: the corpus table indented <c>w:tblInd w:w="-5"</c> with a 0.5 pt
+    /// border renders at the page's left margin under mode 15 and three points to the left of it under
+    /// mode 12, because its cells are padded by 55 twips.
+    /// </para>
+    /// </remarks>
+    /// <param name="properties">The <c>w:tblPr</c>.</param>
+    /// <param name="rows">The rows, whose first cell states the border and padding the rules need.</param>
+    /// <param name="isNested">True when another table encloses this one.</param>
+    private Length LeftEdge(XElement? properties, List<PendingRow> rows, bool isNested)
+    {
+        XElement? indent = Word.Child(properties, "tblInd");
+        Length stated = Twips(indent) ?? Length.Zero;
+
+        // The first cell of the first row: only its border and padding move the table, because only its
+        // left edge is the table's. A row indented differently from the first is not modelled.
+        PageTableCell? first =
+            rows.Count > 0 && rows[0].Cells.Count > 0 ? rows[0].Cells[0].Definition : null;
+        Length border = first?.Borders.Left.Width ?? Length.Zero;
+
+        if (isNested || _compatibilityMode >= 15)
+        {
+            // A nested table's indent is relative to the enclosing cell's text area, which cannot be to the
+            // left of it — a negative one is Word's way of saying "no indent" rather than an overhang.
+            if (isNested && stated < Length.Zero) stated = Length.Zero;
+
+            return stated + (border / 2);
+        }
+
+        // Only an indent the document actually states makes Word measure to the text. Without one Word
+        // invents an indent of its own, and what it invents behaves like the modern rule.
+        Length distance = indent is null
+            ? border / 2
+            : Length.Max(border / 2, first?.Padding.Left ?? Length.Zero);
+
+        return stated - distance;
     }
 
     /// <summary>The grid's column widths, in order.</summary>
@@ -85,18 +166,60 @@ public sealed partial class DocxLayoutSource
     /// with the grid in real documents, and Word itself lays a fixed table out from the grid — a reader
     /// preferring the cell's width would place two cells of one row at different edges.
     /// </remarks>
-    private static List<Length> Columns(XElement table)
+    private static List<Length?> Columns(XElement table)
     {
-        List<Length> widths = [];
+        List<Length?> widths = [];
 
         foreach (XElement column in Word.Children(Word.Child(table, "tblGrid"), "gridCol"))
         {
             if (widths.Count >= PageTable.MaxColumns) break;
 
-            widths.Add(Twips(column) ?? Length.Zero);
+            // A w:w of zero is how Word writes a column it has not sized, and it is not a zero-width
+            // column: nothing in the format spells that, and the file that means it writes no w:w at all.
+            Length? stated = Twips(column);
+            widths.Add(stated is null || stated <= Length.Zero ? null : stated);
         }
 
         return widths;
+    }
+
+    /// <summary>
+    /// How the columns the file left unsized are to be sized, or null when it sized every one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word's grid never reaches Writer as widths at all. <c>DomainMapperTableManager::endOfRowAction</c>
+    /// turns it into relative <c>TableColumnSeparator</c>s and the table is built with <em>equal</em>
+    /// columns before they are applied, so an unsized column's separator — which comes out at zero — is
+    /// dropped and its divider stays where the equal division put it. See <see cref="TableColumnFit"/>.
+    /// </para>
+    /// <para>
+    /// The table's own width is <c>w:tblW</c> when it states one in twips, and otherwise the grid added up
+    /// (<c>DomainMapperTableManager.cxx</c>:647, "convert sum of grid twip values"). When that is nothing
+    /// either the table is left variable and fills the area it sits in, which is what a
+    /// <c>w:tblW w:w="0" w:type="auto"</c> beside a grid of zeroes means.
+    /// </para>
+    /// </remarks>
+    /// <param name="declared">The grid, with null for each column that stated no width.</param>
+    /// <param name="properties">The <c>w:tblPr</c>.</param>
+    private static TableColumnFit? Fit(List<Length?> declared, XElement? properties)
+    {
+        if (declared.All(width => width is not null)) return null;
+
+        Length? width = Twips(Word.Child(properties, "tblW"));
+        if (width is null || width <= Length.Zero)
+        {
+            Length grid = Length.Zero;
+            foreach (Length? column in declared) grid += column ?? Length.Zero;
+            width = grid > Length.Zero ? grid : null;
+        }
+
+        return new TableColumnFit
+        {
+            IsAuto = [.. declared.Select(column => column is null)],
+            TableWidth = width,
+            Rule = TableWidthRule.Word,
+        };
     }
 
     /// <summary>Reads the rows, following the change-tracking wrappers a row can sit inside.</summary>

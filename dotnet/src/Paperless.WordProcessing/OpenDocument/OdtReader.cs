@@ -27,7 +27,19 @@ public sealed class OdtReader : OdfReader
     /// something only a text document has.
     /// </remarks>
     public OdtWordDocument ReadText(DocumentSource source, DocumentFormat format)
-        => new(Read(source, format));
+    {
+        OdfDocument inner = Read(source, format);
+        return new OdtWordDocument(inner, _marks?.Marks ?? Model.WritingMarks.Empty);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Word processing is the only family with anywhere to put a bookmark's range, so this is the
+    /// only reader that asks for the marks at all.
+    /// </remarks>
+    protected override IOdfMarkSink? CreateMarkSink() => _marks = new OdtMarkSink();
+
+    private OdtMarkSink? _marks;
 
     /// <inheritdoc/>
     protected override DocumentFamily Family => DocumentFamily.WordProcessing;

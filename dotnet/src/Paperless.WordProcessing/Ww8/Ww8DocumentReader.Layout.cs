@@ -44,6 +44,12 @@ public sealed partial class Ww8DocumentReader
     /// </param>
     /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
     /// <param name="Notes">The notes anchored in the paragraph's text, or null when it cites none.</param>
+    /// <param name="Frames">
+    /// The floating shapes anchored in the paragraph's text, or null when none is. On the paragraph
+    /// rather than on the document because that is where WW8 puts the anchor — an <c>FSPA</c> names a
+    /// character position and nothing else — and because which page a shape lands on is decided by
+    /// where its anchor paragraph lands, which is a pagination result rather than a property.
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -56,7 +62,8 @@ public sealed partial class Ww8DocumentReader
         bool IsInTable,
         Colour? Colour = null,
         IReadOnlyList<Ww8LayoutRun>? Runs = null,
-        IReadOnlyList<Ww8LayoutNote>? Notes = null);
+        IReadOnlyList<Ww8LayoutNote>? Notes = null,
+        IReadOnlyList<Ww8LayoutFrame>? Frames = null);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -412,7 +419,10 @@ public sealed partial class Ww8DocumentReader
                                     read,
                                     note.IsEndnote
                                         ? DocumentProperties.EndnoteNumbering.Placement
-                                        : DocumentProperties.FootnoteNumbering.Placement));
+                                        : DocumentProperties.FootnoteNumbering.Placement,
+                                    note.IsEndnote
+                                        ? DocumentProperties.EndnoteNumbering.Restart
+                                        : DocumentProperties.FootnoteNumbering.Restart));
                         }
                     }
 
@@ -420,6 +430,11 @@ public sealed partial class Ww8DocumentReader
                 }
 
                 case Special.Picture or Special.DrawnObject or Special.AnnotationReference:
+                    // The anchor occupies a position and has no width. Collected before the character
+                    // is emitted, so that the frame's offset is where the anchor sits rather than one
+                    // past it — which is what an as-character frame will need and what a character
+                    // origin measures from.
+                    CollectFrame(position, current.Length);
                     Emit(current, positions, AnchorCharacter, position);
                     continue;
 
@@ -450,6 +465,7 @@ public sealed partial class Ww8DocumentReader
                 Describe(current.ToString(), positions, body.Start + start, markPosition) with
                 {
                     Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
+                    Frames = _pendingFrames.Count == 0 ? null : [.. _pendingFrames],
                 },
                 format,
                 endsCell);
@@ -457,8 +473,90 @@ public sealed partial class Ww8DocumentReader
             current.Clear();
             positions.Clear();
             _pendingNotes.Clear();
+            _pendingFrames.Clear();
             emitted++;
         }
+
+        // The shape anchored at a character position, if one is. Reading its own text here rather than
+        // when the frame is built keeps the recursion inside the walk that already handles it: a text
+        // box's story goes through ReadLayoutBlocks exactly as a note's body does, which is what makes a
+        // table inside a text box work without a second path.
+        void CollectFrame(int position, int offset)
+        {
+            if (Drawings.IsEmpty) return;
+            if (Drawings.AnchorAt(position) is not { } anchor) return;
+
+            MsBinary.Escher.EscherShape? shape = Drawings.Shape(anchor.ShapeId);
+            _pendingFrames.Add(
+                new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor)));
+        }
+    }
+
+    /// <summary>
+    /// The floating shapes anchored in the paragraph being read, waiting for it to close.
+    /// </summary>
+    /// <inheritdoc cref="_pendingNotes"/>
+    private readonly List<Ww8LayoutFrame> _pendingFrames = [];
+
+    /// <summary>
+    /// A shape's own text, from the text-box subdocument its <c>lTxid</c> indexes.
+    /// </summary>
+    /// <remarks>
+    /// Two subdocuments, chosen by which <c>PlcSpa</c> the anchor came from: a text box in a running
+    /// head has its text in <c>PlcfHdrtxbxTxt</c> and not in the body's table, and a document with a
+    /// text box in its header therefore has an <em>empty</em> body text-box subdocument. Reading the
+    /// wrong one gives a header's box no text and, in a document with both, gives it another box's.
+    /// </remarks>
+    private List<Ww8LayoutBlock> ReadShapeText(MsBinary.Escher.EscherShape? shape, bool isHeader)
+    {
+        int story = Ww8Frames.TextStoryIndex(shape);
+        if (story < 0) return [];
+
+        // A text box whose own story anchors a shape naming that story again would recur without
+        // bound. Nothing legitimate does it, but the index comes from the file rather than from the
+        // structure, so a document can say it — and the guard costs one set membership per shape.
+        if (!_openStories.Add((isHeader, story))) return [];
+
+        try
+        {
+            return ReadShapeTextCore(story, isHeader);
+        }
+        finally
+        {
+            _openStories.Remove((isHeader, story));
+        }
+    }
+
+    /// <summary>Which text-box stories the walk is already inside, guarding a self-referential index.</summary>
+    private readonly HashSet<(bool IsHeader, int Story)> _openStories = [];
+
+    /// <inheritdoc cref="ReadShapeText"/>
+    private List<Ww8LayoutBlock> ReadShapeTextCore(int story, bool isHeader)
+    {
+        (Ww8Range subdocument, Ww8FibTable boundaries) = isHeader
+            ? (Ranges.HeaderTextBoxes, Ww8FibTable.HeaderTextBoxTexts)
+            : (Ranges.TextBoxes, Ww8FibTable.TextBoxTexts);
+
+        List<Ww8Range> stories =
+            [.. SplitSubdocument(subdocument, boundaries, recordSize: TextBoxRecordSize)];
+        if (story >= stories.Count) return [];
+
+        // Saved and restored for the same reason a note's body is: the paragraph that anchors this
+        // shape is still open, and the shape's own paragraphs must not walk off with the frames and
+        // notes it has collected so far.
+        List<Ww8LayoutNote> outerNotes = [.. _pendingNotes];
+        List<Ww8LayoutFrame> outerFrames = [.. _pendingFrames];
+        _pendingNotes.Clear();
+        _pendingFrames.Clear();
+
+        List<Ww8LayoutBlock> blocks = ReadLayoutBlocks(stories[story], keepTrailingEmpty: false);
+
+        _pendingNotes.Clear();
+        _pendingNotes.AddRange(outerNotes);
+        _pendingFrames.Clear();
+        _pendingFrames.AddRange(outerFrames);
+
+        return blocks;
     }
 
     /// <summary>
@@ -788,7 +886,10 @@ public sealed partial class Ww8DocumentReader
                 }
 
                 case LayoutSprms.ColourIndex:
-                    format = format with { Colour = Ww8Colours.At(sprm.Byte) };
+                    format = format with
+                    {
+                        Colour = sprm.Byte < IcoPalette.Length ? IcoPalette[sprm.Byte] : null,
+                    };
                     break;
 
                 case LayoutSprms.VerticalPosition:
@@ -994,6 +1095,35 @@ public sealed partial class Ww8DocumentReader
     /// </remarks>
     public const int MaxTabStops = 256;
 
+    /// <summary>
+    /// The seventeen colours a <c>sprmCIco</c> index names.
+    /// </summary>
+    /// <remarks>
+    /// Copied from <c>SwWW8ImplReader::GetCol</c> (<c>sw/source/filter/ww8/ww8par6.cxx</c>), whose order is
+    /// not the obvious one: index 2 is <em>light</em> blue and index 9 is blue, so the palette runs bright
+    /// colours first and dark ones second. Index 0 is the automatic colour and is null rather than black,
+    /// so the document's own default applies.
+    /// </remarks>
+    private static readonly Colour?[] IcoPalette =
+    [
+        null,
+        Colour.FromRgb(0x000000),
+        Colour.FromRgb(0x0000FF),
+        Colour.FromRgb(0x00FFFF),
+        Colour.FromRgb(0x00FF00),
+        Colour.FromRgb(0xFF00FF),
+        Colour.FromRgb(0xFF0000),
+        Colour.FromRgb(0xFFFF00),
+        Colour.FromRgb(0xFFFFFF),
+        Colour.FromRgb(0x000080),
+        Colour.FromRgb(0x008080),
+        Colour.FromRgb(0x008000),
+        Colour.FromRgb(0x800080),
+        Colour.FromRgb(0x800000),
+        Colour.FromRgb(0x808000),
+        Colour.FromRgb(0x808080),
+        Colour.FromRgb(0xC0C0C0),
+    ];
 }
 
 /// <summary>

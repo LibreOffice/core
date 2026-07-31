@@ -45,6 +45,7 @@ public static class DocxReader
         {
             List<Diagnostic> diagnostics = [.. file.Diagnostics];
             List<WritingSection> sections = [];
+            WritingMarks marks = WritingMarks.Empty;
             ContentDocument content = new()
             {
                 Metadata = OoxmlMetadata.Read(
@@ -72,9 +73,10 @@ public static class DocxReader
 
                 ReadHeadersAndFooters(file, body, reader, content);
                 sections = ReadSections(file, body);
+                marks = reader.Marks;
             }
 
-            return new OoxmlWordDocument(format, file, content, diagnostics, sections);
+            return new OoxmlWordDocument(format, file, content, diagnostics, sections, marks);
         }
         catch
         {
@@ -176,13 +178,15 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         DocxFile file,
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
-        IReadOnlyList<WritingSection> sections)
+        IReadOnlyList<WritingSection> sections,
+        WritingMarks marks)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new WritingSection()];
+        Marks = marks;
     }
 
     /// <inheritdoc/>
@@ -202,6 +206,9 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public WritingMarks Marks { get; }
 
     /// <summary>
     /// The underlying package: its styles, numbering, settings and remaining parts.
@@ -228,20 +235,24 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         if (body is null) return new WordProcessingPages([]);
 
         DocxLayoutSource source = new(
-            _file.Styles, _file.Settings, footnotes: _file.Footnotes, endnotes: _file.Endnotes);
+            _file.Styles, _file.Settings, footnotes: _file.Footnotes, endnotes: _file.Endnotes,
+            theme: _file.Theme);
         List<PageBlock> blocks = source.Read(body);
 
-        // Read from the document rather than assumed per format. LibreOffice's PARA_SPACE_MAX means the
-        // two spacings *add*; when it is off the larger wins, which is Word's behaviour. Its OOXML
-        // exporter writes w:doNotUseHTMLParagraphAutoSpacing exactly when the flag is on
-        // (docxexport.cxx), so the element's absence is what makes a DOCX collapse — and a document
-        // carrying it adds, like an ODF one.
-        bool collapses = !Word.IsOn(
-            Word.Child(Word.Child(_file.Settings, "compat"), "doNotUseHTMLParagraphAutoSpacing"));
+        // The compatibility options, of which two reach pagination. Which ones those are was
+        // settled by rendering documents with and without each flag rather than by reading the
+        // schema; WordCompatibility records what every one of them was measured to do.
+        WordCompatibility compatibility = WordCompatibility.Read(_file.Settings);
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
-            CollapsesSpacing = collapses,
+            // LibreOffice's PARA_SPACE_MAX means the two spacings *add*; when it is off the larger
+            // wins, which is Word's behaviour. Its OOXML exporter writes
+            // w:doNotUseHTMLParagraphAutoSpacing exactly when the flag is on (docxexport.cxx), so
+            // the element's absence is what makes a DOCX collapse — and a document carrying it
+            // adds, like an ODF one.
+            CollapsesSpacing = !compatibility.DoNotUseHtmlParagraphAutoSpacing,
+            JustifiesLinesEndedByBreak = !compatibility.DoNotExpandShiftReturn,
             MaxPages = options?.MaxPages is > 0
                 ? options.MaxPages
                 : PaginationOptions.Word.MaxPages,

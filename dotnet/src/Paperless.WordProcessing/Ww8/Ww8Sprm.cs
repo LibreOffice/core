@@ -115,57 +115,62 @@ public static class Ww8SprmReader
         /// </remarks>
         public const ushort RowHeight = 0x9407;
 
-        /// <summary><c>sprmSBkc</c>: how a section starts relative to the one before it.</summary>
-        public const ushort SectionBreakKind = 0x3009;
-
         /// <summary>
-        /// The row's geometry: its column edges, and a descriptor per cell carrying its merge flags and its
-        /// four border codes.
+        /// The row's geometry: its column edges and its cells' merge flags.
         /// </summary>
         /// <remarks>
         /// The one sprm whose operand length is two bytes rather than one, because a table definition
         /// can exceed 255 bytes — see <see cref="Read"/>.
         /// </remarks>
+        /// <summary><c>sprmSBkc</c>: how a section starts relative to the one before it.</summary>
+        public const ushort SectionBreakKind = 0x3009;
+
         public const ushort TableDefinition = 0xD608;
 
         /// <summary>
-        /// <c>sprmTSetBrc</c>: one border code applied to a range of a row's cells.
+        /// <c>sprmTSetBrc80</c>: a border applied to a range of a row's cells, in the older BRC form.
         /// </summary>
         /// <remarks>
-        /// The one border sprm that names a <em>range</em> rather than a cell: a first cell, a limit, a flag
-        /// byte saying which sides to change, and then a single border code for all of them. It overwrites
-        /// whatever the table definition's own cell descriptors said, which is how a document turns one edge
-        /// of one cell off without restating the rest.
-        /// </remarks>
-        public const ushort SetCellBorder = 0xD62F;
-
-        /// <summary>
-        /// <c>sprmTSetBrc80</c>: the same, with the older four-byte border code.
-        /// </summary>
-        /// <remarks>
-        /// Word writes both forms, the newer one after the older, so the newer must be applied last — which
-        /// it is, since a grpprl is walked in order and each sprm overwrites.
+        /// A range and a side mask rather than one cell and one side, so a table with a uniform grid is
+        /// four of these per row and not four per cell. The <c>80</c> and the plain form both appear in
+        /// the same document; the plain one is applied second and wins, which is why they are read as two
+        /// ids rather than one.
         /// </remarks>
         public const ushort SetCellBorder80 = 0xD620;
 
-        /// <summary><c>sprmTDefTableShd</c>: ten bytes of shading per cell, from the first.</summary>
-        public const ushort CellShading = 0xD612;
+        /// <summary><c>sprmTSetBrc</c>: the same, with an RGB colour instead of a palette index.</summary>
+        public const ushort SetCellBorder = 0xD62F;
 
-        /// <summary><c>sprmTDefTableShd2nd</c>: the same, for the cells from the twenty-third.</summary>
-        public const ushort CellShading2nd = 0xD616;
+        /// <summary><c>sprmTTableBorders80</c>: the table's six default borders, in the older BRC form.</summary>
+        public const ushort TableBorders80 = 0xD605;
 
-        /// <summary><c>sprmTDefTableShd3rd</c>: the same, for the cells from the forty-fifth.</summary>
-        public const ushort CellShading3rd = 0xD60C;
+        /// <summary><c>sprmTTableBorders</c>: the same six, with RGB colours.</summary>
+        public const ushort TableBorders = 0xD613;
+
+        /// <summary><c>sprmTDefTableShd80</c>: one two-byte <c>SHD</c> per cell of the row.</summary>
+        public const ushort CellShading80 = 0xD609;
 
         /// <summary>
-        /// <c>sprmTDefTableShd80</c>: the older shading form, a packed sixteen-bit pattern per cell.
+        /// <c>sprmTDefTableShd</c>: ten bytes per cell — a foreground, a background and a pattern.
         /// </summary>
         /// <remarks>
-        /// Read as well as the newer form rather than instead of it, because Word writes both and they do
-        /// not always agree: the newer one can state a colour the palette cannot, so it wins wherever it
-        /// says anything at all and this fills in the cells it skipped.
+        /// Three sprms rather than one, because a sprm's operand carries a single length byte and
+        /// sixty-three cells of ten bytes do not fit in one: this one starts at cell 0, and the other two
+        /// at cells 22 and 44.
         /// </remarks>
-        public const ushort CellShading80 = 0xD609;
+        public const ushort CellShading = 0xD612;
+
+        /// <summary><c>sprmTDefTableShd2nd</c>: the same array, from cell 22.</summary>
+        public const ushort CellShadingSecond = 0xD616;
+
+        /// <summary><c>sprmTDefTableShd3rd</c>: the same array, from cell 44.</summary>
+        public const ushort CellShadingThird = 0xD60C;
+
+        /// <summary>Which cell the second of the three shading sprms starts at.</summary>
+        public const int CellShadingSecondStart = 22;
+
+        /// <summary>Which cell the third starts at.</summary>
+        public const int CellShadingThirdStart = 44;
 
         /// <summary><c>sprmTCellPadding</c>: cell padding for a range of a row's cells.</summary>
         public const ushort CellPadding = 0xD632;
@@ -220,10 +225,45 @@ public static class Ww8SprmReader
         /// </summary>
         /// <remarks>
         /// Deleted text is still in the file — that is what makes the change reversible — so emitting
-        /// it invents content the document does not say. The insertion flag needs no handling for the
-        /// same reason: inserted text <em>is</em> content.
+        /// it invents content the document does not say. The insertion flag beside it needs no
+        /// handling for the text, since inserted text <em>is</em> content.
         /// </remarks>
         public const ushort IsDeleted = 0x0800;
+
+        /// <summary>The run was added by a tracked change: <c>sprmCFRMarkIns</c>.</summary>
+        public const ushort IsInserted = 0x0801;
+
+        /// <summary>
+        /// The insertion's author, as an index into <c>SttbfRMark</c>: <c>sprmCIbstRMark</c>.
+        /// </summary>
+        /// <remarks>
+        /// Four sprms carry a revision's identity and none of them is the flag: the author and the
+        /// date sit beside <see cref="IsInserted"/> and <see cref="IsDeleted"/> in the same CHPX, and
+        /// LibreOffice's importer says so outright — "there *must* be a SprmCIbstRMark[Del] and a
+        /// SprmCDttmRMark[Del] pointing to the very same char position as our SprmCFRMark[Del]"
+        /// (<c>ww8par4.cxx</c>, <c>Read_CRevisionMark</c>). The two pairs have separate ids, so
+        /// reading the insertion's author for a deletion names the wrong person.
+        /// </remarks>
+        public const ushort InsertionAuthor = 0x4804;
+
+        /// <summary>The insertion's date, as a packed <c>DTTM</c>: <c>sprmCDttmRMark</c>.</summary>
+        public const ushort InsertionDate = 0x6805;
+
+        /// <summary>The deletion's author: <c>sprmCIbstRMarkDel</c>.</summary>
+        public const ushort DeletionAuthor = 0x4863;
+
+        /// <summary>The deletion's date: <c>sprmCDttmRMarkDel</c>.</summary>
+        public const ushort DeletionDate = 0x6864;
+
+        /// <summary>
+        /// Where the run's picture is: <c>sprmCPicLocation</c>, a byte offset into the picture stream.
+        /// </summary>
+        /// <remarks>
+        /// Into the <c>Data</c> stream when the document has one and into <c>WordDocument</c> when it
+        /// does not, which is the trap: the offset is stated the same way either way, so looking in
+        /// the wrong stream finds a structure that parses and describes something else.
+        /// </remarks>
+        public const ushort PictureLocation = 0x6A03;
     }
 
     /// <summary>

@@ -1,8 +1,6 @@
 using System.Text;
 using System.Xml.Linq;
-using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
-using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
 using Paperless.Text.Fonts;
@@ -89,16 +87,11 @@ public sealed partial class OdtLayoutSource
     /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
     /// is numbered. Null leaves both classes on LibreOffice's defaults.
     /// </param>
-    /// <param name="availableWidth">
-    /// How wide the text area is, for a table that states no width and so fills it. Zero leaves such a table
-    /// with columns at Writer's minimum width rather than at nothing.
-    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
-        XElement? stylesRoot = null,
-        Length availableWidth = default)
+        XElement? stylesRoot = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
@@ -106,19 +99,7 @@ public sealed partial class OdtLayoutSource
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
         _endnotes = NumberingIn(stylesRoot, "endnote", NoteNumbering.Endnotes);
-        _availableWidth = availableWidth;
     }
-
-    /// <summary>
-    /// How wide the text area is, for a table that states no width of its own.
-    /// </summary>
-    /// <remarks>
-    /// The one piece of page geometry the content walk needs, and it needs it because ODF lets a table say
-    /// "as wide as the text" by saying nothing: such a table fills the text area and divides it between its
-    /// columns. Everything else here is resolution-independent, which is why this arrives as a constructor
-    /// argument rather than the walk being given the section it is in.
-    /// </remarks>
-    private readonly Length _availableWidth;
 
     /// <summary>How the document's footnotes are numbered.</summary>
     private readonly NoteNumbering _footnotes;
@@ -133,8 +114,9 @@ public sealed partial class OdtLayoutSource
     /// <c>text:notes-configuration</c>, which lives in <c>office:styles</c> rather than in the content and is
     /// written once per class. ODF states the format by <em>example</em> — <c>style:num-format</c> holds the
     /// literal "1", "i" or "A" — which is why parsing it belongs with OOXML's naming of the same set rather
-    /// than here. <c>text:start-numbering-at</c> can ask for a per-page or per-chapter restart and is not read:
-    /// a restart has to be applied while pages are being filled, not while the document is being read.
+    /// than here. <c>text:start-numbering-at</c> asks for a per-page or per-chapter restart, and is recorded
+    /// rather than resolved: which page a note lands on is what filling the page decides, so the rule is
+    /// carried and the paginator applies it.
     /// </remarks>
     private static NoteNumbering NumberingIn(
         XElement? stylesRoot, string noteClass, NoteNumbering fallback)
@@ -178,7 +160,12 @@ public sealed partial class OdtLayoutSource
                 _ => fallback.Placement,
             };
 
-        return new NoteNumbering(format, start) { Placement = placement };
+        NoteRestart restart =
+            NoteNumbering.ParseRestart(
+                configuration.Attribute(XName.Get("start-numbering-at", OdfNamespaces.Text))?.Value)
+            ?? fallback.Restart;
+
+        return new NoteNumbering(format, start) { Placement = placement, Restart = restart };
     }
 
     /// <summary>Which section each master page is, by name.</summary>
@@ -401,160 +388,6 @@ public sealed partial class OdtLayoutSource
         };
     }
 
-    /// <summary>
-    /// Turns the drawings anchored in a paragraph into frames the layout engine understands.
-    /// </summary>
-    /// <remarks>
-    /// A drawing with no size is dropped rather than placed: ODF lets a shape state its extent by its
-    /// geometry instead of by <c>svg:width</c>, and a frame of no width obstructs nothing, so placing it
-    /// would only risk a division by its own zero somewhere later.
-    /// </remarks>
-    private List<PageFrame> FramesOf(List<FrameAnchorPoint> anchored)
-    {
-        List<PageFrame> frames = [];
-
-        foreach (FrameAnchorPoint point in anchored)
-        {
-            XElement drawing = point.Element;
-
-            DocSize size = new(
-                Measure(drawing, "width") ?? Length.Zero,
-                Measure(drawing, "height") ?? Length.Zero);
-
-            if (size.IsEmpty) continue;
-
-            string? styleName = drawing
-                .Attribute(XName.Get("style-name", OdfNamespaces.Draw))?.Value;
-
-            frames.Add(new PageFrame
-            {
-                Offset = new DocPoint(
-                    Measure(drawing, "x") ?? Length.Zero,
-                    Measure(drawing, "y") ?? Length.Zero),
-                Size = size,
-                Anchor = AnchorOf(drawing),
-                Wrap = WrapOf(styleName),
-                Margins = FrameMargins(styleName),
-                Padding = FramePadding(styleName),
-                Blocks = FrameBlocks(drawing),
-            });
-        }
-
-        return frames;
-
-        static Length? Measure(XElement drawing, string name)
-            => OdfWriterUnits.ToCore(
-                OdfValue.ParseLength(
-                    drawing.Attribute(XName.Get(name, OdfNamespaces.SvgCompatible))?.Value));
-    }
-
-    /// <summary>
-    /// The blocks inside a frame, or empty when it holds no text.
-    /// </summary>
-    /// <remarks>
-    /// Only <c>draw:text-box</c> is walked. A frame's other children — <c>draw:image</c>,
-    /// <c>draw:object</c>, <c>draw:object-ole</c> — have content that is not text, and a frame usually holds
-    /// several as fallbacks for one another, so walking all of them would read the same picture twice. The
-    /// text box is read through the same walk a table cell's content takes, which is what lets a frame hold
-    /// a table.
-    /// </remarks>
-    private List<PageBlock> FrameBlocks(XElement drawing)
-    {
-        XElement? box = drawing.Element(XName.Get("text-box", OdfNamespaces.Draw));
-
-        return box is null ? [] : ReadCell(box);
-    }
-
-    /// <summary>
-    /// The gap between a frame's edges and its own text, from <c>fo:padding-*</c>.
-    /// </summary>
-    /// <remarks>
-    /// The four sides only, and <strong>not</strong> the <c>fo:padding</c> shorthand — which is measured
-    /// rather than an oversight. LibreOffice's ODF import honours the shorthand for a graphic style's
-    /// <em>margins</em> and ignores it for its padding: the same frame written with
-    /// <c>fo:padding="0.15cm"</c> lays its text at the frame's very edge, and written with the four sides
-    /// insets it by 4.25 pt. Honouring the shorthand here would be closer to what ODF says and further from
-    /// every LibreOffice rendering of such a file, which is the wrong trade for this library.
-    /// </remarks>
-    private CellPadding FramePadding(string? styleName)
-        => FrameSides(styleName, "padding", withShorthand: false);
-
-    /// <summary>What a drawing's <c>text:anchor-type</c> means to layout.</summary>
-    /// <remarks>
-    /// <c>as-char</c> never reaches here — it is emitted as an anchor character during the walk instead,
-    /// because such a frame sits in the line rather than beside it. <c>frame</c>, ODF's fifth value, anchors
-    /// to the enclosing frame and is treated as a paragraph anchor: this reader has no frame to nest in.
-    /// </remarks>
-    private static FrameAnchor AnchorOf(XElement drawing)
-        => drawing.Attribute(XName.Get("anchor-type", OdfNamespaces.Text))?.Value switch
-        {
-            "char" => FrameAnchor.Character,
-            "page" => FrameAnchor.Page,
-            _ => FrameAnchor.Paragraph,
-        };
-
-    /// <summary>
-    /// How text treats the frame, from the graphic style's <c>style:wrap</c>.
-    /// </summary>
-    /// <remarks>
-    /// ODF's default is <c>parallel</c> and it is written far more often than it is omitted, but the default
-    /// matters: a frame whose style says nothing still pushes text aside, so treating the absence as
-    /// <c>run-through</c> would draw the frame over the text it should have moved.
-    /// </remarks>
-    private TextWrap WrapOf(string? styleName)
-        => _styles.ResolveProperty(
-            styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
-            OdfNamespaces.Style, "wrap").Value switch
-        {
-            "none" => TextWrap.None,
-            "left" => TextWrap.Left,
-            "right" => TextWrap.Right,
-            "dynamic" => TextWrap.Dynamic,
-            "run-through" => TextWrap.Through,
-            _ => TextWrap.Parallel,
-        };
-
-    /// <summary>
-    /// The gap the frame keeps between itself and the text, from its graphic style's margins.
-    /// </summary>
-    /// <remarks>
-    /// <c>fo:margin</c> and its four sides, which on a graphic style mean the wrap distance rather than the
-    /// space around a paragraph. Measured against LibreOffice's own render: a 5 cm frame at the left margin
-    /// with a 0.2 cm right margin pushes text to 204.1 pt, which is 56.7 + 141.73 + 5.67 — so the margin is
-    /// part of the region text avoids and not part of the frame.
-    /// </remarks>
-    private CellPadding FrameMargins(string? styleName)
-        => FrameSides(styleName, "margin", withShorthand: true);
-
-    /// <summary>
-    /// One of a graphic style's four-sided measures, each side falling back to the shorthand.
-    /// </summary>
-    /// <remarks>
-    /// Whether the shorthand counts is the caller's to say, because LibreOffice does not treat the two
-    /// alike — see <see cref="FramePadding"/>. Measured on a frame written both ways: with
-    /// <c>fo:margin="0.2cm"</c> the wrap region grows on all four sides, and with
-    /// <c>fo:padding="0.15cm"</c> nothing happens at all.
-    /// </remarks>
-    /// <param name="styleName">The graphic style's name.</param>
-    /// <param name="property">Either <c>margin</c> or <c>padding</c>.</param>
-    /// <param name="withShorthand">Whether a side with no value of its own falls back to the shorthand.</param>
-    private CellPadding FrameSides(string? styleName, string property, bool withShorthand)
-    {
-        Length Side(string name)
-            => Measure($"{property}-{name}")
-               ?? (withShorthand ? Measure(property) : null)
-               ?? Length.Zero;
-
-        Length? Measure(string name)
-            => OdfWriterUnits.ToCore(
-                OdfValue.ParseLength(
-                    _styles.ResolveProperty(
-                        styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
-                        OdfNamespaces.FoCompatible, name).Value));
-
-        return new CellPadding(Side("left"), Side("right"), Side("top"), Side("bottom"));
-    }
-
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
     private int _footnoteNumber;
 
@@ -602,6 +435,7 @@ public sealed partial class OdtLayoutSource
                 Offset = anchor.Offset,
                 IsEndnote = IsEndnote(anchor.Element),
                 Placement = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Placement,
+                Restart = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Restart,
             });
         }
 
@@ -753,6 +587,65 @@ public sealed partial class OdtLayoutSource
     /// <param name="Citation">The number it is cited by, counted across the document and already formatted.</param>
     private readonly record struct NoteAnchor(int Offset, XElement Element, string Citation);
 
+    /// <summary>One floating frame in a paragraph, with the character offset it is anchored at.</summary>
+    private readonly record struct FrameAnchor(int Offset, XElement Element);
+
+    /// <summary>
+    /// How deeply a frame's own text may hold further frames before the innermost is dropped.
+    /// </summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a limit anyone meets: a text frame holds paragraphs, a
+    /// paragraph holds frames, and a file claiming a hundred levels would read the same walk a hundred
+    /// deep. Real documents nest one.
+    /// </remarks>
+    private const int MaxFrameNesting = 8;
+
+    /// <summary>How many frames enclose the paragraph currently being read.</summary>
+    private int _frameDepth;
+
+    /// <summary>
+    /// Reads the frames a paragraph anchors, with their own text laid out inside them.
+    /// </summary>
+    /// <remarks>
+    /// A frame's content goes through <see cref="ReadFlow"/> — the same walk a header takes — so a frame
+    /// containing a table or a list needs nothing of its own. That does mean the reader re-enters itself,
+    /// which is why the depth is counted: the recursion is bounded by the document rather than by the
+    /// stack.
+    /// </remarks>
+    private List<PageFrame> FramesOf(List<FrameAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageFrame> frames = [];
+
+        foreach (FrameAnchor anchor in anchors)
+        {
+            Func<XElement, IReadOnlyList<PageBlock>>? content = _frameDepth < MaxFrameNesting
+                ? Content
+                : null;
+
+            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset) is { } frame)
+            {
+                frames.Add(frame);
+            }
+        }
+
+        return frames;
+
+        IReadOnlyList<PageBlock> Content(XElement box)
+        {
+            _frameDepth++;
+            try
+            {
+                return ReadFlow(box);
+            }
+            finally
+            {
+                _frameDepth--;
+            }
+        }
+    }
+
     /// <summary>True when a <c>text:note</c> is an endnote rather than a footnote.</summary>
     /// <remarks>
     /// <c>text:note-class</c>, whose only other value is <c>footnote</c> — and which is worth reading rather
@@ -803,6 +696,7 @@ public sealed partial class OdtLayoutSource
         private readonly List<OdfStyleReference> _cascade = [];
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
+        private readonly List<FrameAnchor> _frames = [];
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
@@ -849,15 +743,8 @@ public sealed partial class OdtLayoutSource
         /// <summary>The notes anchored in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
 
-        /// <summary>The drawings anchored in this paragraph that float, in document order.</summary>
-        internal List<FrameAnchorPoint> Frames { get; } = [];
-
-        /// <summary>A drawing's <c>text:anchor-type</c>, defaulting the way ODF defaults it.</summary>
-        /// <remarks>
-        /// <c>paragraph</c> when absent, which is ODF's own default and also the commonest value written.
-        /// </remarks>
-        private static string AnchorTypeOf(XElement drawing)
-            => drawing.Attribute(XName.Get("anchor-type", OdfNamespaces.Text))?.Value ?? "paragraph";
+        /// <summary>The floating frames anchored in the paragraph, with the offsets they sit at.</summary>
+        internal List<FrameAnchor> Frames => _frames;
 
         /// <summary>Walks a <c>text:p</c> or <c>text:h</c>.</summary>
         /// <param name="paragraph">The paragraph element.</param>
@@ -899,16 +786,12 @@ public sealed partial class OdtLayoutSource
                         AppendTextElement(child, depth);
                         break;
 
-                    // A drawing is not part of the paragraph's text and must not be walked into: a text box
-                    // holds paragraphs of its own, and descending would splice its words into the middle of
-                    // the sentence that anchors it. What it contributes is a *position* — and only when it
-                    // is anchored as a character, which is the one kind that sits in the line.
-                    case XElement child when child.Name.NamespaceName == OdfNamespaces.Draw
-                                             && child.Name.LocalName
-                                                 is "frame" or "custom-shape" or "g"
-                                                 or "rect" or "line" or "polygon" or "path":
-                        if (AnchorTypeOf(child) == "as-char") Emit(AnchorCharacter.ToString());
-                        else Frames.Add(new FrameAnchorPoint(_builder.Length, child));
+                    // A floating frame is *in* the paragraph and is not part of it: its own text belongs
+                    // to a rectangle of its own, and walking into it would splice a caption into the
+                    // middle of the sentence the frame is anchored in. Recorded with the offset it sits
+                    // at, which is what a character anchor is measured in.
+                    case XElement child when OdfFrames.IsFrame(child):
+                        _frames.Add(new FrameAnchor(_builder.Length, child));
                         break;
 
                     case XElement child:
@@ -1119,13 +1002,3 @@ public sealed partial class OdtLayoutSource
         }
     }
 }
-
-/// <summary>One drawing found while walking a paragraph, with the offset it was found at.</summary>
-/// <remarks>
-/// The offset is kept even though only a character-anchored frame uses it, because that is the one thing
-/// the walk knows and the resolution cannot recover: by the time the frames are turned into
-/// <see cref="Layout.PageFrame"/>s the paragraph's text is one string and the element's place in it is gone.
-/// </remarks>
-/// <param name="Offset">Where in the paragraph's text the drawing was declared.</param>
-/// <param name="Element">The <c>draw:</c> element itself.</param>
-internal readonly record struct FrameAnchorPoint(int Offset, XElement Element);

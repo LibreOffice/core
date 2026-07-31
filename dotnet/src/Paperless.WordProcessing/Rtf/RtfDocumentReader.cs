@@ -233,6 +233,7 @@ public sealed partial class RtfDocumentReader
     {
         ContentSection body = new() { Kind = SectionKind.Body, Index = 0 };
         _flows.Add(new Flow(body));
+        _marks.OpenParagraph();
 
         RtfTokeniser tokeniser = new(_data);
         _tokeniser = tokeniser;
@@ -303,6 +304,7 @@ public sealed partial class RtfDocumentReader
         // the stream is the one that would have applied to it.
         FinishParagraph(_flows[0], stack[^1]);
         CloseTablesDeeperThan(_flows[0], 0);
+        _marks.CloseParagraph(string.Empty);
 
         ContentDocument document = new() { Metadata = BuildMetadata() };
         document.Children.Add(body);
@@ -405,6 +407,31 @@ public sealed partial class RtfDocumentReader
                 _endnotes = _endnotes with { Placement = NotePlacement.SectionEnd };
                 return;
 
+            // Where the count begins again. RTF says it in the control word itself, one word per rule, the
+            // same shape as the sequence words above — but the `a`-prefixed endnote set is one word short
+            // rather than a mirror image: there is no `\aftnrstpg`, because an endnote does not restart per
+            // page. So the two classes genuinely have different sets, and a reader that assumed the mirror
+            // would be inventing a keyword.
+            //
+            // `\ftnrestart` is the *section* spelling and reads as a chapter restart, because that is the
+            // case LibreOffice exports it from (`rtfexport.cxx:970`) and Writer has no per-section footnote
+            // restart to read it back into.
+            case "ftnrstcont":
+                _footnotes = _footnotes with { Restart = NoteRestart.Never };
+                return;
+            case "ftnrestart":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachChapter };
+                return;
+            case "ftnrstpg":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachPage };
+                return;
+            case "aftnrstcont":
+                _endnotes = _endnotes with { Restart = NoteRestart.Never };
+                return;
+            case "aftnrestart":
+                _endnotes = _endnotes with { Restart = NoteRestart.EachChapter };
+                return;
+
             // ---- destinations that are not content
             case "fonttbl":
                 state.Destination = RtfDestination.FontTable;
@@ -415,7 +442,12 @@ public sealed partial class RtfDocumentReader
                 state.Destination = RtfDestination.ColourTable;
                 BeginColourTable();
                 return;
-            case "listtable" or "listoverridetable" or "revtbl" or "rsidtbl"
+            case "revtbl":
+                // Read rather than skipped: \revauth indexes it, so without it a tracked change is
+                // recorded against a number rather than a person.
+                state.Destination = RtfDestination.RevisionTable;
+                return;
+            case "listtable" or "listoverridetable" or "rsidtbl"
                  or "generator" or "filetbl" or "themedata" or "colorschememapping"
                  or "datastore" or "latentstyles" or "xmlnstbl" or "pgptbl":
                 state.Destination = token.Name == "generator"
@@ -437,7 +469,13 @@ public sealed partial class RtfDocumentReader
                 // something Paperless does not open during extraction.
                 state.Destination = RtfDestination.Skip;
                 return;
-            case "bkmkstart" or "bkmkend" or "atnid" or "atnref" or "atndate" or "atnparent"
+            case "bkmkstart":
+                state.Destination = RtfDestination.BookmarkStart;
+                return;
+            case "bkmkend":
+                state.Destination = RtfDestination.BookmarkEnd;
+                return;
+            case "atnid" or "atnref" or "atndate" or "atnparent"
                  or "annotprot" or "xe" or "tc" or "tcn" or "datafield" or "fname" or "ftnsep"
                  or "ftnsepc" or "ftncn" or "aftnsep" or "aftnsepc" or "aftncn" or "nonshppict"
                  or "mmath" or "do" or "shpinst" or "shprslt" or "svb" or "template"
@@ -473,8 +511,32 @@ public sealed partial class RtfDocumentReader
                 return;
             case "shptxt" or "txbxtext":
                 // A shape's or text box's own text flow, which is not part of the paragraph it
-                // is anchored in.
-                BeginFlow(state, SectionKind.Frame, null);
+                // is anchored in — and, when a shape is open, a block list of its own, so that the
+                // frame is laid out in its rectangle rather than dropped.
+                BeginFrameFlow(state);
+                return;
+
+            // ---- shapes
+            case "shp":
+                // The one place a group's *first* control word opens something this reader keeps: the
+                // shape's properties and its text both arrive inside it, and the geometry words below are
+                // dispatched whatever destination is in force, since they mean nothing anywhere else.
+                BeginShape();
+                return;
+            case "shpleft" or "shptop" or "shpright" or "shpbottom" or "shpwr" or "shpwrk":
+                if (_shape is not null) _shape.Set(token.Name, token.Parameter ?? 0);
+                return;
+            case "shpbxpage" or "shpbxmargin" or "shpbxcolumn" or "shpbxignore":
+                if (_shape is not null && token.Name != "shpbxignore") _shape.HorizontalOrigin = token.Name;
+                return;
+            case "shpbypage" or "shpbymargin" or "shpbypara" or "shpbyignore":
+                if (_shape is not null && token.Name != "shpbyignore") _shape.VerticalOrigin = token.Name;
+                return;
+            case "sn":
+                state.Destination = RtfDestination.ShapePropertyName;
+                return;
+            case "sv":
+                state.Destination = RtfDestination.ShapePropertyValue;
                 return;
 
             // ---- fields
@@ -490,6 +552,7 @@ public sealed partial class RtfDocumentReader
             case "fldrslt":
                 // The cached result, which is what a reader displays.
                 state.Destination = RtfDestination.Body;
+                BeginFieldResult();
                 return;
 
             // ---- list labels
@@ -924,8 +987,26 @@ public sealed partial class RtfDocumentReader
                 // Breaks move content elsewhere without contributing text.
                 return;
             case "deleted":
-                // Text a tracked change removed, which is still in the file.
-                state.Destination = RtfDestination.Skip;
+                // Text a tracked change removed, which is still in the file. Collected rather than
+                // skipped so the change can be recorded; none of it reaches the document. A toggle,
+                // so \deleted0 turns it off and must not send the text to the collector — where the
+                // old code, which only ever switched to Skip, would have dropped it either way.
+                if (token.Parameter != 0) state.Destination = RtfDestination.Deletion;
+                return;
+            case "revised":
+                state.Revised = token.Parameter != 0;
+                return;
+            case "revauth":
+                state.RevisionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttm":
+                state.RevisionDate = unchecked((uint)(token.Parameter ?? 0));
+                return;
+            case "revauthdel":
+                state.DeletionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttmdel":
+                state.DeletionDate = unchecked((uint)(token.Parameter ?? 0));
                 return;
 
             // ---- info fields

@@ -83,20 +83,71 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `word-features.docx` | DOCX | The same document as `text-features.odt`, converted — so it covers the same features through a different vocabulary. Adds what only OOXML has: parts located by relationship, `mc:AlternateContent` writing the text box twice, a `w:fldChar` field with its instruction and cached result, `w:vMerge`-free `w:gridSpan` spans, footnote citations the file does not cache, and metadata split across `core.xml`, `app.xml` and `custom.xml` |
 | `word-features.dotx` | DOTX | The same content as a template, so the template content type is exercised end to end |
 | `word-features.rtf` | RTF | The same document again, in the one format with no container. Adds what only RTF has: `\'hh` escapes in a declared code page, `\uN` with a code-page fallback to skip, a `{\listtext}` group holding the rendered list label, a `HYPERLINK` field instruction, and a merged table cell expressed purely by its `\cellx` edge |
+| `sheet-ooxml-features.xlsx` | XLSX | The same workbook as `sheet-features.ods` plus a fourth sheet of number formats, converted — so it covers the same features through a different vocabulary. Adds what only SpreadsheetML has: sheets located by relationship rather than by part name, `sharedStrings.xml` indices, `t="s"`/`t="b"`/`t="e"` cell types, `mergeCells` declared away from the cells it merges, comments hanging off the *worksheet* part with a separate author list, and — the reason the fourth sheet exists — **no cached display text at all**, so `styles.xml` has to be resolved for `[$£-809]#,##0.00`, `0.00E+00`, `0 ?/?`, `dd\ mmmm\ yyyy` and `#,##0.00;[RED]\-#,##0.00` to read as anything but raw numbers |
+| `sheet-ooxml-template.xltx` | XLTX | The same content as a template, so the template content type is exercised end to end |
+| `xls-features.xls` | XLS | Four sheets, one hidden; a shared string table larger than one 8224-byte record, so the CONTINUE path is exercised; MULRK, RK, NUMBER, LABELSST, MULBLANK and BOOLERR cells; a formula cached result of each kind — double, error, string (in the following STRING record) and boolean; number formats for currency, percent, date, time, datetime, scientific, grouped thousands and a custom code with literal text; a three-column merged range; a gap in a row |
+| `csv-semicolon.csv` | CSV | Semicolon separator with a decimal comma inside the fields, so frequency alone chooses wrongly; quoted fields containing a separator, a line break and a doubled quote; CRLF endings |
+| `csv-latin1.csv` | CSV | Windows-1252 bytes that are not valid UTF-8, so the encoding fallback is what makes the accents come out right |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
+| `deck-features.pptx` | PPTX | The same document as `slides-features.odp` with a table slide added, converted — so it covers the same features through a different vocabulary. Adds what only PPTX has: parts located by relationship with the master hanging off the *layout* rather than the slide; `p:sldIdLst` order; `p:sld show="0"` for the hidden slide; a bare `<p:ph/>` with no `type`; outline text carrying `a:pPr lvl` and a Private-Use-Area `a:buChar`; a `p:grpSp`; a table inside a `p:graphicFrame`; a notes slide in its own part under its own notes master; and a master whose placeholders carry prompt text that must **not** reach any slide |
 
-### Why `slides-ppt.ppt` is 460 kB
+The stem is `deck-features` rather than `slides-features` because `soffice --convert-to` names its
+output after the input stem alone: converting both from a shared stem would have made one silently
+overwrite the other.
 
-96% of it is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation` property set
-(`PIDSI_THUMBNAIL`) when exporting PPT. Turning off
+| `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order, and a title whose boldness is stated nowhere on the slide because it lives in the master's `TxMasterStyleAtom` |
+| `annotated-slides.odp` | ODP | Two slides, the first carrying two review comments by two different authors, the first comment having two paragraphs. It exists because no other corpus deck has a comment at all: Impress writes a page-level comment as `officeooo:annotation` in the OpenOffice.org extension namespace rather than as ODF's own `office:annotation`, and a reader that knows only the latter does not lose the text — it files it as slide content, where nothing tells it apart |
+| `comment-deck.pptx` | PPTX | The same deck converted, so slide comments are covered through PresentationML as well. Adds what only PPTX has: a `comments` part reached by relationship *from the slide*, a `commentAuthors.xml` reached from the presentation, a comment that names only an author **id**, and a two-paragraph comment carried as a single `p:text` with a newline in it |
+
+The two stems differ for the same reason `deck-features` does: `soffice --convert-to` would have
+had them overwrite each other's output.
+
+
+### Hand-written DOCX files
+
+Four documents that LibreOffice cannot produce, because what they exercise is something its own
+export normalises away. Each is written by a script rather than converted, and each is minimal.
+
+| File | Exercises |
+|---|---|
+| `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
+| `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
+| `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
+
+### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
+
+96% of `slides-ppt.ppt` is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation`
+property set (`PIDSI_THUMBNAIL`) when exporting PPT. Turning off
 `Office.Common/Save/Document/GenerateThumbnail` does **not** suppress it — that setting
-governs the ODF `Thumbnails/` entry, not the PPT filter, which writes the property
-unconditionally.
+governs the ODF `Thumbnails/` entry, not the PPT filter.
 
-It is kept rather than trimmed, because stripping it would mean rewriting a property set by
-hand and producing a file no real application would emit. It also earns its size: at ~865
-sectors it is the only corpus file that exercises long FAT chains, where every other file's
-streams fit in a handful of sectors.
+The setting that does is `Office.Common/Filter/Microsoft/Export/EnablePowerPointPreview`. It
+is the only thing gating the thumbnail on the PPT path: it supplies the `0x8000` convert flag
+(`sd/source/filter/sdpptwrp.cxx:202`) that the PPT writer tests before passing a preview
+bitmap to `SaveOlePropertySet` (`sd/source/filter/eppt/eppt.cxx:537`). Setting it false in the
+conversion profile makes the same deck 18 kB instead of 464 kB, which is how
+`ppt-features.ppt` was produced:
+
+```xml
+<item oor:path="/org.openoffice.Office.Common/Filter/Microsoft/Export">
+  <prop oor:name="EnablePowerPointPreview" oor:op="fuse"><value>false</value></prop>
+</item>
+```
+
+`slides-ppt.ppt` keeps its thumbnail rather than being regenerated, because it earns its
+size: at ~865 sectors it is the only corpus file that exercises long FAT chains, where every
+other file's streams fit in a handful of sectors.
+
+### The XLS feature workbook has no cached formula results in its source
+
+`xls-features.xls` was authored as a flat ODF spreadsheet and converted, like the rest of
+`features/`. Its formula cells deliberately carry **no** `office:value` in that source.
+Supplying one makes LibreOffice's XLS exporter write a zero double for a string- or
+boolean-valued formula, because it picks the cached-result encoding from the cell's
+number-format type rather than from the value the cell holds
+(`XclExpFormulaCell::WriteContents`, `sc/source/filter/excel/xetable.cxx:1098`). With the
+value omitted, LibreOffice computes the formula on load and writes a genuine cached result —
+which is the only way to get a `STRING` record into a file LibreOffice wrote.
 
 ## Writing a flat-XML corpus document by hand
 
@@ -136,6 +187,43 @@ Two things about writing these by hand, both learned the hard way:
 - LibreOffice's own RTF export writes a cell's left padding as `\clpadt`, not `\clpadl`. That is not a bug
   in the export: top and left are swapped in RTF, deliberately, because that is what Word does. An
   exported corpus file will therefore look wrong to anyone reading the specification.
+
+#### The auto-fit documents
+
+`table-autofit.*` is `table-grid` with the column widths taken away, which is the case a real document
+reaches far more often than it reaches a stated grid. They are **hand-written, and they have to be**:
+LibreOffice's own export puts explicit widths back in, so a file produced by converting one of these is a
+fully-declared grid that tests nothing. Round-tripping `table-autofit.fodt` through `soffice --convert-to
+fodt` writes `style:column-width="2.2306in"` where the source said nothing at all.
+
+There are five, and they deliberately disagree with one another, because LibreOffice does:
+
+| File | What it states | What LibreOffice renders |
+|---|---|---|
+| `table-autofit.fodt` | `style:width="17cm"`, `table:align="left"`, three columns with no width | 160.6, 107.1, 214.1 pt — the ratio 3:2:4 |
+| `table-autofit-full.fodt` | the same without `table:align` | 160.6, 160.6, 160.6 pt — the stated width is *discarded* |
+| `table-autofit-mixed.fodt` | 3 cm, nothing, 5 cm, aligned left | 85.05, 255.15, 141.75 pt |
+| `table-autofit.docx`, `.rtf` | a grid of zeroes / `\cellx0` | 160.6, 160.6, 160.6 pt |
+| `table-autofit-partial.docx` | a grid of `0`, `2835`, `5102` | 160.6, 11.5, 309.7 pt |
+
+None of those numbers depends on a single character of the text — moving the long paragraph from the third
+column to the second, or deleting it, moves nothing. That is worth stating because the shape of the numbers
+invites the opposite conclusion; see `src/Paperless.WordProcessing/Layout/TableColumnFit.cs`.
+
+Two traps in writing them:
+
+- **`table:align` is not cosmetic here.** Without it the table is `HoriOrientation::FULL` and its stated
+  width is ignored, which is a 54 pt difference at the third column between two files differing by one
+  attribute.
+- **The Word-family files have no spanning row** where the ODF ones do, and that is a finding rather than
+  tidiness. A `w:gridSpan` row in a width-less table has its own separator, that separator is zero, and so
+  its divider is left where the table's *first* column boundary is — LibreOffice draws the spanning cell one
+  column wide rather than two. RTF escapes it by stating a short row as a row with fewer `\cellx` edges.
+
+There is **no `.doc`**, and it is not an omission. WW8 states a table's geometry as `sprmTDefTable`'s
+`rgdxaCenter`, an edge list that is not optional, so a DOC cannot say "no widths" the way the other three
+can — and LibreOffice's own DOC export always writes real edges, so one cannot be produced by conversion
+either.
 
 ### Footnote documents
 
@@ -181,6 +269,22 @@ which makes this the one note document comparable in every one of them. It catch
 alike and are not: ignoring the format gives 8 and 9, and taking ODF's `text:start-value` for the first
 number rather than for an offset gives VII and VIII.
 
+`note-restart.*` is a two-page document with eight footnotes, four to a page, whose configuration asks for
+the count to begin again on every page. It is the ground truth for the restart rules, and it was worth
+building before writing any of them because the measurement settled two questions at once.
+
+All four formats keep the rule through LibreOffice's own export, each in its own spelling —
+`text:start-numbering-at="page"`, `<w:numRestart w:val="eachPage"/>`, `\ftnrstpg`, and the DOP's
+`rncFootnote` — and all four then render *identically*: page one cites 1, 2, 3, 4 and page two cites 1, 2,
+3, 4 again, at the anchor in the sentence and at the head of the note alike. So this is comparable in every
+format, which the restart rules did not have to be and which makes a wrong reader fail visibly rather than
+subtly.
+
+The document deliberately holds four notes per page rather than ten. That keeps every citation one digit
+wide, so a reader that gets the *numbering* right but has not yet solved the width feedback — a restart makes
+numbers smaller, so a page's tenth note goes from `10` to `1` and its line rebreaks — still passes. A second
+document is what that case would need, and there is no point in one until the numbering itself is right.
+
 `header-table.fodt` puts a two-column table in the header, which is what a table in a header is *for*: a
 two-part running head, one cell hard left and another hard right on one line. It also has a header whose
 height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame cannot hold a table — so the
@@ -205,10 +309,28 @@ an earlier version had both and could not be compared at all, because a border t
 either side of each grid line — so 0.05 pt borders make the table 0.1 pt taller per row boundary and shift every
 column edge. One feature per document, as above. Two things about comparing it: LibreOffice's DOCX render fills
 each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
-distinct rectangles; and `table-shading.doc` earns its place by being the hardest of the five, since WW8 states
-a shade as a foreground, a background and a pattern index rather than as a colour — the grey has to be blended
-out of black over white at Word's own twenty per cent, so a reader that took the foreground would fill the cell
-black and still be in exactly the right place.
+distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
+per-band `WW8_SHD` array that is not read yet.
+
+`bidi.fodt` is nine short paragraphs of mixed-direction text, six declared left-to-right and three
+right-to-left, and it exists in one format on purpose: what it is compared against is LibreOffice's own
+rendering of it rather than Paperless's reading of it, so a second format would exercise a second
+ODF-to-something conversion and nothing else. Every paragraph fits one line, which makes a line of the
+reference PDF a paragraph and removes any need to group. It is set in DejaVu Sans for both the Western and
+the complex-script font because that is the only face on a bare Linux carrying Latin, Hebrew and Arabic
+together — check `fc-list :lang=he` before assuming a machine can render it, since a missing face renders as
+boxes and compares as nonsense. Its text deliberately contains nothing that ligates, so a portion's glyph
+count is its character count and the reference's portion boundaries read straight off as character offsets;
+the comparison asserts that rather than assuming it, because one ligature would silently shift every offset
+after it.
+
+Two things in `bidi.fodt` are stated explicitly that look redundant and are not, both found by measuring the
+reference against Paperless. `style:letter-kerning="true"` is there because ODF's default is **false**, so a
+document that says nothing is a reference for the *unkerned* widths — 33.13 pt against 33.30 for the six
+characters of "Start ". And the right-to-left paragraph style repeats every text property instead of
+inheriting them through `style:parent-style-name`: with inheritance, LibreOffice set those three paragraphs
+in FreeSans and Liberation Serif rather than DejaVu Sans, and the portions came out 5.1 pt wrong against a
+face the test never loaded.
 
 `table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
 the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
@@ -216,57 +338,97 @@ with the text by default, and a distinct one makes it obvious in a rendered page
 checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
 one document could not test either cleanly.
 
-`table-borders.*` exists in all five formats and all five are compared stroke for stroke. Getting the last three
-there turned up two rules worth knowing before writing another table document. The first is that **Word and
-Writer measure a table's left edge from different places** — Writer from the middle of the left border, Word from
-its outer edge — so a DOCX or RTF indent is half a border too small, which is also why LibreOffice's own DOCX
-export writes `w:tblInd w:w="-5"` for a table sitting at the margin. DOC needs no such correction, because WW8's
-column boundaries are grid lines already. The second is that **the same table is drawn differently depending on
-which family it came from**: an interior grid line stops at the *inner* edge of the table's outline for a
-Word-family document and crosses to its outer edge for an ODF one, half a point at each end. So the four
-renders of one table legitimately disagree, and a comparison that assumed otherwise would chase a bug that is
-not there.
+`table-borders.*` exists in all five formats but only the two ODF ones are compared stroke for stroke, and the
+reason is the table's *origin* rather than its borders: each export writes the table's own left edge differently
+relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
+DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
+right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
 
-`table-autofit.fodt` and `table-autofit-stated.fodt` are `table-grid` with the three column widths **removed**,
-and they are a *pair* on purpose: they differ in one attribute — whether the table itself states
-`style:width="17cm"` — and LibreOffice resolves them completely differently. The one that states nothing divides
-the text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt, a
-ratio of 3 : 2 : 4. That second number is not a bug in whatever produced it and not content-based sizing: it
-falls out of `SwXMLTableContext::MakeTable` dividing the space *remaining* after each column by the full sum of
-the column weights. Keep both, because dropping either leaves half the rule untested and the surviving half
-looks arbitrary.
+### Mark documents
 
-ODF only, and unusually so: these two have no `.odt`, `.docx`, `.doc` or `.rtf` siblings. Converting them would
-defeat them — LibreOffice writes explicit column widths on export, so every other format would arrive with the
-grid already resolved, which is the thing under test. It is also why the flat form is the source: an `.odt`
-would have to be zipped by hand to say as little as this one does.
+`revisions.*` and `bookmark-field.*` are the two documents for what a file records *over* its text rather
+than in it. Both are hand-written **RTF** converted by LibreOffice into the other three formats, rather than
+the flat ODF everything else here starts from, and the reason is worth stating: ODF hoists a tracked change's
+description out of the body into a `text:tracked-changes` region, so a hand-written `.fodt` would have to
+state both halves consistently by hand, and getting that wrong produces a document that reads correctly and
+records nothing. RTF states a revision inline, as a toggle beside the text it covers, which is much harder to
+write inconsistently.
 
-`wrap-frame.fodt` is a 5 cm by 3 cm frame anchored to a paragraph, one centimetre below that paragraph's top,
-with text flowing beside it. Its geometry is chosen so that **both** edges of the frame's reach fall inside the
-document: three lines above it at the full width, seven beside it, and one below it back at the full width. That
-matters because the cheap wrong answers are edge answers — a reader that narrowed the whole paragraph would
-shorten the first three lines, and one that wrapped only the anchoring paragraph would leave the last four wide.
+`revisions.*` is one paragraph with an inserted phrase and a deleted phrase in it, by one author. Two things
+it pins beyond the obvious: extraction says what the changes *leave* in all four formats, while LibreOffice's
+own render shows the change *marks* — so its text export contains the deleted phrase and Paperless's does not,
+deliberately. And its `\revdttm` is **zero**, "no date", which LibreOffice's exporters disagree about: the ODF
+and DOC exports write the Unix epoch, the DOCX export omits `w:date` altogether. So the same document reports
+a timestamp in two formats and none in the other two, which is a fact about the exporters rather than about
+the reader.
 
-Two things learnt building it, both worth knowing before writing another. The frame is placed with `svg:y="1cm"`
-rather than at the anchor, because at zero the paragraph above ends *exactly* where the frame begins — and
-LibreOffice counts that as an overlap, so the line above wraps too. It is not a rounding artefact: Writer tests
-with `SwRect::Overlaps`, whose comparisons are `<=` and `>=`. A document sitting on that boundary is a fragile
-test whichever way it is read. And the frame's text box is left **empty**: a frame with text in it contributes
-words of its own to the page, and a comparison of body-text positions would then be comparing two features at
-once.
+`bookmark-field.*` has a bookmark spanning a phrase, a **zero-length** bookmark, and three fields — `PAGE`,
+`NUMPAGES` and a `REF` to the spanning bookmark. The zero-length one is the case that earns its place: WW8
+states bookmarks as two position tables whose starts and ends collide at one character position for such a
+bookmark, and a reader that walks them as an ordered stream of events loses it. The three fields differ in the
+one way that matters between the families — the Word formats carry an instruction string, ODF carries a typed
+element and no instruction at all — and LibreOffice's ODF export caches the page number as `0` where the other
+three cache `1`.
 
-ODF only, for now — the frame reading is done for ODF and the DOCX, DOC and RTF spellings are still open.
+### Frame documents
 
-`wrap-frame-text.fodt` is the same document with the frame's text box **filled**, which checks the two things
-the empty one cannot: that the frame's own lines break at the frame's width rather than the page's, and that
-they are inset by its padding. Building it turned up two LibreOffice behaviours worth knowing, because each
-would otherwise read as a bug in whatever produced the file.
+`frame-wrap.fodt` is one floating frame and one wrap mode, which is deliberate: a document exercising every
+mode makes a cascade that is far harder to attribute than a single narrowed band. A 4 x 3 cm text frame sits
+at the start margin of the second paragraph — anchored to the paragraph, positioned from its top-left, with
+`style:wrap="right"` so the body text passes on its right — on an A4 page with 2 cm margins. Its own text is
+9 pt against the body's 11 so that the two can be told apart by something other than where they are, which is
+the thing under test.
 
-Its padding is written as `fo:padding-left` and the other three sides rather than as the `fo:padding`
-shorthand, because **LibreOffice ignores the shorthand on a graphic style**: the same frame written
-`fo:padding="0.15cm"` lays its text against its own edge. `fo:margin` is not like this — there the shorthand
-works, and setting it grows the wrap region on all four sides. And the frame's paragraph names **no style at
-all**, relying on `style:default-style`, because **LibreOffice ignores a paragraph style named inside a
-`draw:text-box`**: a `text:p` there with `text:style-name="Body"` renders in the default font, and a round trip
-through LibreOffice drops the attribute outright. Measured on the word "the" — 14.92 pt wide in the body
-against 14.62 pt in the frame, at different line heights, so a different typeface rather than a different size.
+Three things about comparing it, all measured:
+
+- **The frame's top is exactly the anchor paragraph's top**, and the line *above* it is narrowed anyway. Its
+  box bottom and the frame's top edge coincide at 2210 twips, and LibreOffice treats that as an overlap.
+- **The DOCX comparison runs at three twips rather than two**, and the extra one is a difference rather than
+  slack: LibreOffice resumes text 3404 twips along where the frame's own geometry ends at 3401. One twip is
+  the inclusive rectangle every format shows; the other two come from the wrap margin its OOXML import
+  derives from `wp:effectExtent`, which cannot be read without also raising the hole's top edge and
+  narrowing one line too many.
+- **The RTF gets a wrap distance the file does not state.** LibreOffice's RTF import supplies 0.2 cm on every
+  side when the shape carries no `dxWrapDist*` property — the wrapped lines start 114 twips past the shape's
+  own right edge with the property absent and 1 twip past it with `{\sp{\sn dxWrapDistLeft}{\sv 0}}` added
+  to the same file. Paperless applies the same default, so its RTF lines land within a twip. What it does
+  *not* reproduce is the inset LibreOffice gives the shape's own text: 17 twips horizontally and 15
+  vertically over and above the file's zeros, so `frame-wrap.rtf` is compared for its wrap and not for the
+  position of the text inside the frame.
+
+`frame-wrap.doc` is compared too, in `DocFrameComparisonTests` rather than beside the other three, because
+LibreOffice's DOC export did not keep the document unchanged and the differences are the interesting part.
+It gave the text box a **0.75 pt blue outline** that the ODF source explicitly asked it not to have, and it
+wrote no `dxWrapDist*` properties at all. Both change where the text goes, by measurable amounts:
+
+- The shape's rectangle is 2267 x 1692 twips at the paragraph's top-left, and LibreOffice draws its right
+  edge at 170.05 pt — exactly the 3401 twips the `FSPA` states.
+- The body text resumes at 179.55 pt, which is 3591 twips. The 190-twip gap is **181** of drawing-layer
+  default wrap distance (114935 EMU, `ww8par.cxx:1001` — not the RTF import's 0.2 cm), plus **half the
+  15-twip line**, plus the 2 twips the same document's ODF form also shows. Word states a shape's rectangle
+  as the path its outline runs along; Writer keeps text clear of the bounding box the stroke straddles.
+- One consequence to know before editing this document: the DOC wraps **seven** lines where the ODF wraps
+  eight, because those same fractions of a twip put the fourth line's box just clear of the frame's top. The
+  two formats agree about the rule and disagree about one line by 0.14 pt, so a change that moves the frame
+  by a twip can legitimately move a whole line.
+
+`picture-anchor.fodt` exists for the one question the frame documents cannot answer: whether a special
+character is an image. It holds an inline 2 x 2 px PNG and a floating text box, and its `.doc` form is the
+discriminating case, because LibreOffice's DOC export writes **both** as records that look alike. The picture
+is a U+0001 whose `PICF` states mapping mode `0x64`, meaning "an Escher shape follows"; the text box is a
+`SHAPE` field whose cached result is a U+0008 for the shape *and* a U+0001 for a picture frame with no
+properties at all. So neither the character, nor the mapping mode, nor the shape type separates them — only
+the `pib` property naming an actual blip does. A reader that answers "picture" to everything and one that
+answers "shape" to everything each pass half of this document.
+
+`frame-wrap-modes.fodt` is the second frame document and exists for the modes the first cannot reach: four
+2 cm-tall frames, far enough apart not to interact, one each for `left` at the end margin, `none` — ODF's
+top-and-bottom — in the middle, `run-through` at the start margin, and `dynamic` with a centimetre of room on
+its left and twelve on its right. It is checked against the engine's own placement of each frame rather than
+against LibreOffice's pens, and the reason is worth stating: **the document is one line short of
+LibreOffice's on the top-and-bottom frame**, whose anchor paragraph is also the paragraph it pushes down —
+Writer settles that self-reference one line lower than this does. Everything else in it agrees.
+
+It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
+begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
+the end margin while `frame-wrap.fodt` passed throughout.
