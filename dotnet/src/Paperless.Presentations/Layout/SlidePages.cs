@@ -25,6 +25,11 @@ namespace Paperless.Presentations.Layout;
 /// slide, which is a difference no per-shape comparison notices.
 /// </para>
 /// <para>
+/// LibreOffice's raster export is no second opinion on this and was checked: <c>--convert-to
+/// png</c> and <c>--convert-to jpg</c> both write exactly one file for a deck, the first slide,
+/// so the PDF export is the only reference that has an opinion about which slides are pages.
+/// </para>
+/// <para>
 /// A hidden slide still consumes a slide <em>number</em>: LibreOffice's page numbers come from
 /// the position in <c>SdPage</c>'s own list, which a hidden page stays in, and a deck's
 /// <c>a:fld</c> slide-number fields carry the cached value the authoring application computed the
