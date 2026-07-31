@@ -2202,8 +2202,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
     {
         m_nModifyFlag |= ModifyFlags::Search;
         m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Normal);
-        if (!SvxSearchDialogWrapper::GetSearchLabel().isEmpty())
-            SvxSearchDialogWrapper::SetSearchLabel(u""_ustr);
+        SvxSearchDialogWrapper::SetSearchLabel(u""_ustr);
     }
     else if ( m_xReplaceLB.get() == pCtrl )
         m_nModifyFlag |= ModifyFlags::Replace;
