@@ -565,7 +565,7 @@ public:
      */
     bool GetFirstLineOfsWithNum( short& rFirstOffset, const SvxFontUnitMetrics& rMetrics ) const;
 
-    SwTwips GetAdditionalIndentForStartingNewList() const;
+    gfx::Length GetAdditionalIndentForStartingNewList() const;
 
     /** return left margin for tab stop position calculation
 
@@ -697,7 +697,7 @@ public:
 
        @return     the width of the leading whitespace
      */
-    SwTwips GetWidthOfLeadingTabs() const;
+    gfx::Length GetWidthOfLeadingTabs() const;
 
     /**
        Returns if the paragraph has a visible numbering or bullet.

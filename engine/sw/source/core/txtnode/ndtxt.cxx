@@ -3523,7 +3523,7 @@ bool SwTextNode::GetFirstLineOfsWithNum(short& rFLOffset,
     return false;
 }
 
-SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
+gfx::Length SwTextNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;
 
@@ -3579,7 +3579,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().ResolveLeft(rFirst, /*metrics*/ {});
     }
 
-    return nAdditionalIndent;
+    return gfx::Length::twip(nAdditionalIndent);
 }
 
 // #i91133#
