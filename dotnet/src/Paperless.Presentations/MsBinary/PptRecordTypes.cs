@@ -39,6 +39,12 @@ public static class PptRecordTypes
     /// <summary>A main master slide.</summary>
     public const ushort MainMaster = 1016;
 
+    /// <summary>The drawing group: the document-wide Escher state.</summary>
+    public const ushort DrawingGroup = 1035;
+
+    /// <summary>One page's Escher drawing.</summary>
+    public const ushort Drawing = 1036;
+
     /// <summary>Slide-show information, including whether the slide is skipped.</summary>
     public const ushort SlideShowSlideInfoAtom = 1017;
 
@@ -88,12 +94,6 @@ public static class PptRecordTypes
 
     /// <summary>A length-prefixed UTF-16 string, used for names throughout.</summary>
     public const ushort CString = 4026;
-
-    /// <summary>The drawing group: the document-wide Escher state.</summary>
-    public const ushort DrawingGroup = 1035;
-
-    /// <summary>One page's Escher drawing.</summary>
-    public const ushort Drawing = 1036;
 
     /// <summary>The headers and footers of a master.</summary>
     public const ushort HeadersFooters = 4057;
