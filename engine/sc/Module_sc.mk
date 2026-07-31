@@ -79,7 +79,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ))
 endif
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter LINUX,$(OS))$(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)),)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_tiledrendering \
 	CppunitTest_sc_tiledrendering2 \
