@@ -49,16 +49,6 @@
 namespace vcl
 {
 /*- Data access methods for data stored in big-endian format */
-static sal_uInt16 GetUInt16(const sal_uInt8* ptr, size_t offset)
-{
-    sal_uInt16 t;
-    assert(ptr != nullptr);
-
-    t = (ptr + offset)[0] << 8 | (ptr + offset)[1];
-
-    return t;
-}
-
 static sal_uInt32 GetUInt32(const sal_uInt8* ptr, size_t offset)
 {
     sal_uInt32 t;
@@ -149,10 +139,7 @@ OUString TrueTypeFont::getSubfamilyName() const { return getName(HB_OT_NAME_ID_F
 
 sal_uInt32 TrueTypeFont::getTypeFlags() const
 {
-    auto aOS2 = getTable(T_OS2);
-    if (aOS2.size() >= 42)
-        return GetUInt16(aOS2.data(), OS2_fsType_offset);
-    return 0;
+    return hb_ot_fetch_bits(m_pFace, HB_OT_BITS_TAG_FS_TYPE);
 }
 
 FontPitch TrueTypeFont::getFontPitch() const
