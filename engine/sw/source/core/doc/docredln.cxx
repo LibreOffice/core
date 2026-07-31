@@ -351,11 +351,28 @@ void SwRedlineTable::setMovedIDIfNeeded(sal_uInt32 nMax)
         m_nMaxMovedID = nMax;
 }
 
-/// Emits COKit notification about one addition / removal of a redline item.
-void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
+namespace
 {
-    // Disable since usability is very low beyond some small number of changes.
-    if (!lcl_KitRedlineNotificationEnabled())
+/// The view a redline notification is composed for, provided a client is there to read it
+SwView* lcl_KitNotificationView()
+{
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    if (!pView
+        || !SfxViewShell::GetFirst(true, [id = pView->GetDocId()](const SfxViewShell& rShell) {
+               return rShell.GetDocId() == id && rShell.hasKitClient();
+           }))
+        return nullptr;
+
+    return pView;
+}
+
+/// Emits COKit notification about one addition / removal of a redline item. Measuring the redline
+/// formats the layout, so only a caller past the change it reports asks for a measurement.
+void lcl_SendKitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline,
+                                    bool bMeasure)
+{
+    SwView* pView = lcl_KitNotificationView();
+    if (!pView)
         return;
 
     boost::property_tree::ptree aRedline;
@@ -372,8 +389,7 @@ void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRe
 
     auto [pStartPos, pEndPos] = pRedline->StartEnd(); // SwPosition*
     SwContentNode* pContentNd = pRedline->GetPointContentNode();
-    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
-    if (pView && pContentNd)
+    if (bMeasure && pContentNd)
     {
         SwShellCursor aCursor(pView->GetWrtShell(), *pStartPos);
         aCursor.SetMark();
@@ -418,9 +434,78 @@ void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRe
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pView && pView->GetDocId() == pViewShell->GetDocId())
+        if (pView->GetDocId() == pViewShell->GetDocId())
             pViewShell->viewCallback(nType == RedlineNotification::Modify ? KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
         pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+} // anonymous namespace
+
+/// Emits COKit notification about one addition / removal of a redline item.
+void SwRedlineTable::KitRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
+{
+    // Disable since usability is very low beyond some small number of changes.
+    if (!lcl_KitRedlineNotificationEnabled())
+        return;
+
+    // Composing the notification measures the redline, so leave it to a view that has a client to
+    // send it to
+    if (!lcl_KitNotificationView())
+        return;
+
+    // A removed redline has nothing left to measure, and the client reads no range for it, so the
+    // removal goes out as it happens - and is the last word on the redline, so whatever was held
+    // back about it is stale
+    if (nType == RedlineNotification::Remove)
+    {
+        pRedline->GetDoc().DropPendingKitRedlineNotification(pRedline->GetId());
+        lcl_SendKitRedlineNotification(nType, pRedline, /*bMeasure=*/false);
+    }
+    else
+        pRedline->GetDoc().AddPendingKitRedlineNotification(nType, pRedline->GetId());
+}
+
+void SwDoc::AddPendingKitRedlineNotification(RedlineNotification eType, sal_uInt32 nRedlineId)
+{
+    // An addition outranks a change to the same redline, the client learning of it once, in the
+    // state the flush finds
+    if (eType == RedlineNotification::Add)
+        m_aPendingKitRedlineNotifications.insert_or_assign(nRedlineId, eType);
+    else
+        m_aPendingKitRedlineNotifications.try_emplace(nRedlineId, eType);
+
+    // The idle covers a change that isn't part of an action
+    maKitRedlineNotificationIdle.Start();
+}
+
+IMPL_LINK_NOARG(SwDoc, DoFlushKitRedlineNotifications, Timer*, void)
+{
+    FlushPendingKitRedlineNotifications();
+}
+
+void SwDoc::DropPendingKitRedlineNotification(sal_uInt32 nRedlineId)
+{
+    m_aPendingKitRedlineNotifications.erase(nRedlineId);
+}
+
+void SwDoc::FlushPendingKitRedlineNotifications()
+{
+    if (m_aPendingKitRedlineNotifications.empty())
+        return;
+
+    // Measuring formats, which can hold back another notification; that one waits for the next
+    // flush rather than extending this one
+    auto aPending = std::exchange(m_aPendingKitRedlineNotifications, {});
+
+    // A redline that has gone since is simply not there to report on
+    const SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type nPos = 0; nPos < rTable.size(); ++nPos)
+    {
+        SwRangeRedline* pRedline = rTable[nPos];
+        auto aIt = aPending.find(pRedline->GetId());
+        if (aIt != aPending.end())
+            lcl_SendKitRedlineNotification(aIt->second, pRedline, /*bMeasure=*/true);
     }
 }
 

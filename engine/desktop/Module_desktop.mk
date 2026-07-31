@@ -111,7 +111,7 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_version \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter LINUX,$(OS))$(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)),)
 $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_lib \
     CppunitTest_desktop_kitinit \

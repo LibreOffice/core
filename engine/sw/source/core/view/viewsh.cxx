@@ -356,6 +356,11 @@ void SwViewShell::EndAction(const bool bIdleEnd)
     if (0 == (mnStartAction - 1))
         ImplEndAction(bIdleEnd);
     --mnStartAction;
+
+    // The layout has settled here, so a held back redline notification can measure without asking
+    // for a format of its own
+    if (!mnStartAction)
+        GetDoc()->FlushPendingKitRedlineNotifications();
 }
 
 void SwViewShell::ImplEndAction( const bool bIdleEnd )

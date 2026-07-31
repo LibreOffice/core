@@ -1265,6 +1265,37 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineNotificationPerChange)
+{
+    // Load a document.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+
+    // Type a few words, then turn on track changes, so that rewriting them records a change of its
+    // own for each rather than editing one insertion of the same author.
+    pWrtShell->Insert(u"one two three four five six seven eight"_ustr);
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
+
+    // Rotate the case of all of it, which records each word as a change of its own.
+    m_nRedlineTableSizeChanged = 0;
+    m_nRedlineTableEntryModified = 0;
+    pWrtShell->SelPara(nullptr);
+    dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
+
+    // The client hears of every one of them
+    const SwRedlineTable& rTable
+        = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(18), rTable.size());
+    CPPUNIT_ASSERT_EQUAL(18, m_nRedlineTableSizeChanged);
+
+    // ... once the change is through, rather than once per text node update on the way. Without the
+    // fix in place, this was 97, each one measuring a redline by formatting the layout in the
+    // middle of the change that was moving it.
+    CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
+}
+
 static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor)
 {
     // Add a minimal dark scheme

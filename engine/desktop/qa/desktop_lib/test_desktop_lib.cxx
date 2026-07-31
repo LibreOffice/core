@@ -968,8 +968,8 @@ void DesktopKitTest::testRowColumnHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
-    tools::Long nWidth = 0;
-    tools::Long nHeight = 0;
+    long nWidth = 0;
+    long nHeight = 0;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
     tools::Long nX = rtl::math::round(nWidth / 4.0);
     tools::Long nY = rtl::math::round(nHeight / 4.0);
@@ -1053,8 +1053,8 @@ void DesktopKitTest::testHiddenRowHeaders()
 
     tools::Long const nX = 0;
     tools::Long const nY = 0;
-    tools::Long nWidth = 0;
-    tools::Long nHeight = 0;
+    long nWidth = 0;
+    long nHeight = 0;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
 
     std::stringstream aPayload;
@@ -2740,7 +2740,7 @@ void DesktopKitTest::testCommentsWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
-    tools::Long nWidth, nHeight;
+    long nWidth, nHeight;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
 
     // Document width alongwith without sidebar comes to be < 13000
@@ -3001,7 +3001,6 @@ OUString getAuthorFieldText(LibLODocument_Impl* pDocument)
     }
 
     CPPUNIT_FAIL("no field found in the first paragraph");
-    return OUString();
 }
 }
 

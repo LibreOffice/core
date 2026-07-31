@@ -209,6 +209,7 @@ class SwDoc final
        Timer should not be members of the model
     */
     Idle       maOLEModifiedIdle;        //< Timer for update modified OLE-Objects
+    Idle       maKitRedlineNotificationIdle;
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     std::vector<OUString> m_PatternNames; //< Array for names of document-templates
@@ -303,6 +304,9 @@ class SwDoc final
 private:
     std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
+    /// Redlines whose COKit notification waits for a settled layout, by redline id
+    std::unordered_map<sal_uInt32, RedlineNotification> m_aPendingKitRedlineNotifications;
+
     // other
 
     sal_uInt32  mnRsid;              //< current session ID of the document
@@ -392,6 +396,7 @@ private:
     // CharTimer calls this method.
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer *, void );
+    DECL_LINK( DoFlushKitRedlineNotifications, Timer *, void );
 
 public:
     SW_DLLPUBLIC SwFormat *MakeCharFormat_(const UIName &, SwFormat *, bool );
@@ -479,6 +484,13 @@ public:
 
     ::sw::DocumentRedlineManager const& GetDocumentRedlineManager() const;
     SW_DLLPUBLIC ::sw::DocumentRedlineManager& GetDocumentRedlineManager();
+
+    /// Holds back a COKit notification about a redline until the layout can be measured
+    void AddPendingKitRedlineNotification(RedlineNotification eType, sal_uInt32 nRedlineId);
+    /// Forgets what AddPendingKitRedlineNotification held back about one redline
+    void DropPendingKitRedlineNotification(sal_uInt32 nRedlineId);
+    /// Sends what AddPendingKitRedlineNotification held back, the layout now being settled
+    void FlushPendingKitRedlineNotifications();
 
     // IDocumentUndoRedo
     SW_DLLPUBLIC IDocumentUndoRedo      & GetIDocumentUndoRedo();

@@ -209,6 +209,7 @@ SwDoc::SwDoc()
     : m_pNodes(new SwNodes(*this)),
     mpAttrPool(new SwAttrPool(SwModule::get()->getItemInfoPackageSwAttributes(), *this)),
     maOLEModifiedIdle( "sw::SwDoc maOLEModifiedIdle" ),
+    maKitRedlineNotificationIdle( "sw::SwDoc maKitRedlineNotificationIdle" ),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pContentControlManager(new ::SwContentControlManager()),
@@ -344,6 +345,9 @@ SwDoc::SwDoc()
 
     maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
     maOLEModifiedIdle.SetInvokeHandler( LINK( this, SwDoc, DoUpdateModifiedOLE ));
+    maKitRedlineNotificationIdle.SetPriority( TaskPriority::HIGH_IDLE );
+    maKitRedlineNotificationIdle.SetInvokeHandler(
+        LINK( this, SwDoc, DoFlushKitRedlineNotifications ));
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     // Create DBManager
