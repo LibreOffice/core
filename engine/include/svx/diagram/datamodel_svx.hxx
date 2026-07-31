@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 namespace svx::diagram {
 
@@ -62,7 +61,6 @@ enum TypeConstant {
 struct SVXCORE_DLLPUBLIC Connection
 {
     Connection();
-    explicit Connection(const boost::property_tree::ptree& rConnectionData);
 
     /* DEFAULT      Variable        varName    XML_Tag */
     /* XML_parOf */ TypeConstant    mnXMLType; // XML_type
@@ -76,7 +74,6 @@ struct SVXCORE_DLLPUBLIC Connection
     /* 0         */ sal_Int32       mnDestOrder; // XML_destOrd
 
     void writeDiagramData_connection(sax_fastparser::FSHelperPtr& rTarget);
-    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
 typedef std::vector< Connection > Connections;
@@ -86,7 +83,6 @@ typedef std::vector< Connection > Connections;
 struct SVXCORE_DLLPUBLIC Point
 {
     Point();
-    explicit Point(const boost::property_tree::ptree& rPointData);
 
     // PT: dgm:pt
     // PRS: dgm:prSet
@@ -136,13 +132,11 @@ struct SVXCORE_DLLPUBLIC Point
     /* PRS (false)  */ bool         mbIsPlaceholder : 1; // XML_phldr
 
     void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
-    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
 TypeConstant SVXCORE_DLLPUBLIC getTypeConstantForName(std::u16string_view aName);
 std::u16string_view SVXCORE_DLLPUBLIC getNameForTypeConstant(TypeConstant aTypeConstant);
 void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
-void SVXCORE_DLLPUBLIC addTypeConstantToDiagramModelData(TypeConstant aTypeConstant, boost::property_tree::ptree& rTarget, bool bPoint);
 
 typedef std::vector< Point >        Points;
 
@@ -188,7 +182,6 @@ protected:
     // shall not be incarnated - target to use is oox::drawingml::DiagramData_oox
     DiagramData_svx();
     explicit DiagramData_svx(DiagramData_svx const& rSource);
-    explicit DiagramData_svx(const boost::property_tree::ptree& rDiagramModel);
 
 public:
     // access associated SdrObjGroup/XShape/RootShape/XModel
@@ -233,9 +226,6 @@ public:
     OUString getTextForPoint(const Point& rPoint) const;
     css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
     const Point* getPointByModelID(std::u16string_view rModelID) const;
-
-    // write data to boost::property_tree
-    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 
 protected:
     // helpers

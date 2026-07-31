@@ -73,15 +73,6 @@ DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
 {
 }
 
-DiagramHelper_oox::DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel)
-    : DiagramHelper_svx()
-    , mpDiagramPtr(new SmartArtDiagram(rDiagramModel))
-    , mpDiagramThemePtr()
-    , msNewNodeId()
-    , msNewNodeText()
-{
-}
-
 DiagramHelper_oox::DiagramHelper_oox(std::u16string_view rLayout, std::u16string_view rData,
                                      std::u16string_view rColors, std::u16string_view rQuickstyle)
     : DiagramHelper_svx()
@@ -639,14 +630,6 @@ DiagramHelper_oox* DiagramHelper_oox::clone() const
     return new DiagramHelper_oox(*this);
 }
 
-void DiagramHelper_oox::addDiagramModelData(boost::property_tree::ptree& rTarget) const
-{
-    if (!mpDiagramPtr)
-        return;
-
-    mpDiagramPtr->addDiagramModelData(rTarget);
-}
-
 bool DiagramHelper_oox::isTextNodeModelID(const OUString& rModelID) const
 {
     if (!mpDiagramPtr || rModelID.isEmpty())
@@ -744,13 +727,6 @@ DiagramHelperFactory_oox::~DiagramHelperFactory_oox()
 {
     if (this == pSingleGlobalDiagramHelperFactory_svx)
         pSingleGlobalDiagramHelperFactory_svx = nullptr;
-}
-
-std::shared_ptr<svx::diagram::DiagramHelper_svx>
-DiagramHelperFactory_oox::createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const
-{
-    // from here we can instantiate DiagramHelper_oox and return
-    return std::make_shared<DiagramHelper_oox>(rTarget);
 }
 
 std::shared_ptr<svx::diagram::DiagramHelper_svx> DiagramHelperFactory_oox::createDiagramHelper_svx(

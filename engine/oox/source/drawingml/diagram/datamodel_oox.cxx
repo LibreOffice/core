@@ -35,7 +35,6 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fastattribs.hxx>
 #include <oox/export/shapes.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 #include <unordered_set>
 
@@ -331,13 +330,6 @@ DiagramData_oox::DiagramData_oox(DiagramData_oox const& rSource)
 , mpBackgroundShapeFillProperties(rSource.mpBackgroundShapeFillProperties)
 , mpBackgroundShapeLineProperties(rSource.mpBackgroundShapeLineProperties)
 , maPointShapeMap()
-{
-}
-
-DiagramData_oox::DiagramData_oox(const boost::property_tree::ptree& rDiagramModel)
-: svx::diagram::DiagramData_svx(rDiagramModel)
-, mpBackgroundShapeFillProperties( std::make_shared<FillProperties>() )
-, mpBackgroundShapeLineProperties( std::make_shared<LineProperties>() )
 {
 }
 

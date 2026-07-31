@@ -43,7 +43,6 @@ public:
 
     DiagramData_oox();
     explicit DiagramData_oox(DiagramData_oox const& rSource);
-    explicit DiagramData_oox(const boost::property_tree::ptree& rDiagramModel);
     virtual ~DiagramData_oox();
 
     // creates temporary processing data from model data

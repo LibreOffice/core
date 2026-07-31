@@ -34,8 +34,6 @@
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
-#include <svx/diagram/DiagramHelper_svx.hxx>
-#include <boost/property_tree/info_parser.hpp>
 
 bool SdrObjGroup::isDiagram() const
 {
@@ -876,84 +874,6 @@ void SdrObjGroup::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const 
     // possible offsets from Writer Anchor is already included, it then does a
     // relative change to new SnapRect
     SetSnapRect(aBaseRect);
-}
-
-void SdrObjGroup::SetDescription(const OUString& rStr)
-{
-    if (!SdrObject::useAdvancedDiagramFeatures())
-    {
-        SdrObject::SetDescription(rStr);
-        return;
-    }
-
-    OUString aOrigDescription(rStr);
-
-    bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
-    if (!bUseNew && !rStr.isEmpty() && getSdrModelFromSdrObject().isInImportExport())
-    {
-        // we maybe importing a Diagram. Try to get the Diagram ModelData and
-        // add needed Diagram ModelData
-        OUString aModelData;
-
-        // check if the identifying token is there
-        if (rStr.startsWith(u"SmartArtModelData:", &aModelData) && !aModelData.isEmpty())
-        {
-            // import to boost::property_tree
-            boost::property_tree::ptree aDiagramModel;
-            std::stringstream aStream(aModelData.toUtf8().getStr());
-
-            // try to read data
-            boost::property_tree::read_info(aStream, aDiagramModel);
-
-            if (!aDiagramModel.empty())
-            {
-                // extract possibly existing original description and set as target value
-                aOrigDescription = OUString::fromUtf8(aDiagramModel.get("origDesc", ""));
-
-                // parse content to a new Diagram DataModel
-                std::shared_ptr<svx::diagram::DiagramHelper_svx> aNewHelper(svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel));
-
-                resetDiagramHelper(aNewHelper);
-                mp_DiagramHelper->getRootShape() = getUnoShape();
-            }
-        }
-    }
-
-    // call parent to set evtl. original description
-    SdrObject::SetDescription(aOrigDescription);
-}
-
-OUString SdrObjGroup::GetDescription() const
-{
-    if (!SdrObject::useAdvancedDiagramFeatures())
-        return SdrObject::GetDescription();
-
-    // call parent to get original description
-    OUString aRetval(SdrObject::GetDescription());
-
-    bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
-    if (!bUseNew && mp_DiagramHelper && getSdrModelFromSdrObject().isInImportExport())
-    {
-        // we are a Diagram and are exporting. Get the Diagram ModelData and
-        // place it to the description
-        boost::property_tree::ptree aDiagramModel;
-
-        // get Diagram ModelData in property_tree
-        mp_DiagramHelper->addDiagramModelData(aDiagramModel);
-
-        // add original description if exists
-        if (!aRetval.isEmpty())
-            aDiagramModel.put("origDesc", aRetval);
-
-        // convert property_tree to OUString and return
-        std::stringstream aStream;
-        boost::property_tree::write_info(aStream, aDiagramModel);
-
-        // add identifying token at start
-        aRetval = u"SmartArtModelData:" + OUString::fromUtf8(aStream.str());
-    }
-
-    return aRetval;
 }
 
 void SdrObjGroup::dumpAsXml(xmlTextWriterPtr pWriter) const

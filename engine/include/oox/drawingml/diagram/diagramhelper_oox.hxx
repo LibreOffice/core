@@ -69,7 +69,6 @@ public:
         std::shared_ptr< SmartArtDiagram > xDiagramPtr,
         std::shared_ptr<::oox::drawingml::Theme> xTheme);
     explicit DiagramHelper_oox(DiagramHelper_oox const& rSource);
-    explicit DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel);
     explicit DiagramHelper_oox(std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors, std::u16string_view rQuickstyle);
 
     virtual ~DiagramHelper_oox();
@@ -114,8 +113,7 @@ public:
     // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
     virtual DiagramHelper_oox* clone() const override;
 
-    // write data to boost::property_tree
-    virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const override;
+    // return DiagramModelData requested by DomMapFlag as OUString
     virtual OUString getDiagramModelData(svx::diagram::DomMapFlag aId) const override;
 
     virtual bool isTextNodeModelID(const OUString& rModelID) const override;
@@ -128,7 +126,6 @@ public:
     virtual ~DiagramHelperFactory_oox();
 
     // overloaded here to allow instantiation of a DiagramHelper_oox
-    virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const override;
     virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors, std::u16string_view rQuickstyle) const override;
 };
 

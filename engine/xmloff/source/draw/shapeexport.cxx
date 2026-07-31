@@ -2075,10 +2075,12 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
     bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
     SvXMLElementExport aPGR(mrExport, XML_NAMESPACE_DRAW, XML_G, bCreateNewline, true);
 
-    // export Diagram (if exists)
-    static bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
-    if (bUseNew)
+    // do export Diagram in current ODF standard
+    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+    {
+        // export Diagram (if exists, test in called method)
         ImpExportDiagramData(xShape, nFeatures);
+    }
 
     ImpExportDescription( xShape ); // #i68101#
     ImpExportEvents( xShape );
