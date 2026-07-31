@@ -5,8 +5,9 @@ Backends consuming `IDrawingSink`: PDF, Skia raster, SVG.
 Reference: `research/06-rendering.md` sections A, E and G.
 
 Status: **the PDF writer and the Skia rasteriser both write files**, and the PDF one is
-compared against LibreOffice's own PDF operator for operator. SVG is still a stub, and so are
-gradients, tiling patterns and vector import in both backends.
+compared against LibreOffice's own PDF operator for operator. **Both now paint every fill the
+display list can express** — solid, gradient and tiled bitmap — and a Skia-backed decoder turns
+an encoded picture into a `RasterImage`. SVG is still a stub, and so is vector import.
 
 ## How this library is verified, and why it is verified that way
 
@@ -18,6 +19,18 @@ LibreOffice.** `tests/Paperless.TestKit/LibreOffice/PdfTextRuns`, `PdfFills`, `P
 sizes out of the reference. Pointed at *our* output they compare two content streams — same
 pens, same sizes, same fills, same strokes — which is a far sharper question than an image
 diff and a far easier one to attribute when the answer is no.
+
+**A fifth reader, `PdfPaints`, was added for the fills.** It reports the shading dictionaries a
+PDF paints — type, coordinates, the colours the function gives at each end of its domain, and the
+clip the `sh` landed in — and every image XObject placement with its pixel size, its filter and
+whether it carries an `/SMask`. It is a separate reader rather than an extension of `PdfFills`
+because `PdfFills` finds a page by inflating every stream and keeping the ones holding `BT`, and
+a slide of four filled shapes has no `BT` in it at all; changing that rule would renumber the
+pages every existing comparison reports, so nothing about `PdfFills`, `PdfStrokes`,
+`PdfTextRuns` or `PdfPageSizes` was touched. `PdfPaints` walks the page objects properly instead
+— which is worth doing rather than guessing, because a shading dictionary contains the string
+`/ShadingType`, so picking the resource list as "the dictionary mentioning `/Shading`" silently
+selects the last shading in the file and every lookup then returns nothing.
 
 That is why the file is shaped the way it is, and each of these would otherwise be a free
 choice:
@@ -60,14 +73,27 @@ LibreOffice reaches the same conclusion and writes its own.
       any pixel is not opaque.
 - [x] Deterministic output: a fixed `CreationDate` and no other varying field. Two writes of
       the same document are byte-identical, pinned by a test.
-- [ ] **Gradients as shading dictionaries, tiling patterns for bitmap fills.** Not written,
-      and deliberately not written blind: nothing in the display list produces either yet —
-      word-processing layout emits only `SolidPaint` — so the code would be unexercised and
-      unverifiable. A `GradientPaint` currently draws as its middle stop and a `BitmapPaint`
-      as nothing (`PdfContentSink.Flatten`). Land these with the first feature that emits one,
-      which is shape fills in slide rendering.
-- [ ] Soft masks (`ExtGState` `/SMask`) beyond the constant alpha now written. Needed for a
-      shape with a gradient transparency, which is the same unblocking as above.
+- [x] **Gradients as shading dictionaries.** Linear is `/ShadingType 2` and radial and
+      elliptical are `/ShadingType 3`, both `/Extend [true true]`, painted as a clip and an
+      `sh` — the form `PDFWriterImpl::drawGradient` writes
+      (`vcl/source/pdf/pdfwriter_impl.cxx:9194`) and *not* the shading pattern the same picture
+      could be spelled as. The reason is the transform: a pattern's `/Matrix` maps pattern space
+      to the page's default space and so ignores any `cm` in force, which would leave a rotated
+      shape's gradient pointing the wrong way, whereas `sh` paints in the current user space and
+      inherits it for nothing. A gradient's own `Transform` is then one more `cm` inside the
+      clip.
+- [x] **Bitmap fills as one image draw per tile**, inside a clip, sharing one XObject however
+      many tiles name it. Also LibreOffice's form and for the same reason — measured on its own
+      PDF of `tests/corpus/features/paint-fills.fodp`, whose one checkerboard rectangle comes out
+      as `re W* n` and 47 `q … cm /Im10 Do Q` groups over a single 8×8 XObject. A
+      `/PatternType 1` tiling pattern would state the same picture and inherit no transform.
+- [x] **Soft masks (`ExtGState` `/SMask`) for a gradient whose stops fade.** A shading's colour
+      space is `DeviceRGB` and it has no alpha, so a fade is a second shading in `DeviceGray`
+      with each stop's alpha as its grey level, painted into a `/Group << /S /Transparency /CS
+      /DeviceGray >>` form that a `/SMask << /S /Luminosity /G … /BC [0] >>` reads. One alpha
+      shared by every stop takes a constant `/ca` instead, which costs one small object rather
+      than three. Not a refinement: Skia's shader colours carry an alpha for nothing, so without
+      this the same `GradientPaint` faded on a PNG and was opaque in a PDF.
 - [ ] Optional: tagged PDF, outlines, links. LibreOffice writes `/StructElem` trees and
       `/MarkInfo` and we do not; a comparison never looks at them, but accessibility does.
 - [ ] **The whole document is buffered before a byte is written.** That is what makes the
@@ -90,11 +116,104 @@ LibreOffice reaches the same conclusion and writes its own.
 - [x] PNG and JPEG encode. PNG is deterministic and a page written twice is byte-identical;
       JPEG is for thumbnails and must not be compared against anything, which a test pins by
       showing a flat fill does not survive the round trip.
-- [ ] Solid paints only, as in the PDF backend: gradients map to Skia shaders and are
-      written but unexercised, and a tiled `BitmapPaint` draws nothing. Same reason, same
-      unblocking.
-- [ ] Raster image decode. `DrawImage` draws a decoded `RasterImage`; nothing decodes a
-      picture out of a document yet.
+- [x] **Gradients as `SKShader`s** — linear and radial, with the gradient's own transform as
+      the shader's local matrix, which is also all an elliptical gradient needs. The stops go
+      through the same normalisation the PDF backend uses rather than straight into Skia, which
+      tolerates more than PDF's stitching function does; normalising in one place is what stops
+      two backends drawing different pictures from one list.
+- [x] **Tiled and stretched `BitmapPaint`** as a repeating image shader whose local matrix
+      places one cell of the grid `Fills.Tiles` computes — the same grid the PDF backend walks
+      tile by tile, so the two agree by construction rather than by inspection. A stretched paint
+      is the degenerate grid of one cell and clamps rather than repeats, so a rounding pixel at
+      the edge does not wrap the far side of the image into view.
+- [x] **Raster image decode**, in `Paperless.Rendering.Images.RasterImageDecoder`. PNG, JPEG,
+      GIF, BMP, WebP and ICO, sniffed **by content** rather than by a declared media type, which
+      is the same rule format identification follows and for the same reason: a `.png` holding a
+      JPEG is routine, and believing the name would cost the `DCTDecode` pass-through or, worse,
+      write a JPEG into a PDF claiming to be deflated RGB. Pixels come back as straight
+      (non-premultiplied) RGBA, because an `/SMask` is a separate greyscale image whose samples
+      *are* the alpha and dividing premultiplied colour back out loses precision exactly where
+      the alpha is low.
+
+## Fills: what draws, what it was measured against, and what is left
+
+The corpus document is `tests/corpus/features/paint-fills.fodp` — a slide stating a linear, an
+axial and a radial gradient, a one-centimetre tiled checkerboard and, on a second page, an
+embedded picture — plus `paint-fills-pptx.pptx`, which is LibreOffice's own export of it and
+keeps all three gradients as `a:gradFill` and the tile as `a:blipFill`/`a:tile`, so the OOXML
+reader has a file to aim at rather than a hypothesis.
+
+### The comparison had to change shape, and this is why
+
+**LibreOffice writes no shading dictionary for a shape gradient, ever.** Its PDF writer has one
+(`PDFWriterImpl::writeGradientFunction`, `vcl/source/pdf/pdfwriter_impl.cxx:7965`) and it is
+unreachable from a slide: the drawing layer decomposes every gradient into flat bands before the
+writer sees it —
+
+> `// tdf#150551 for PDF export, use the decomposition for better gradient visualization`
+> — `drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx`,
+> `VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D`
+
+— and even the metafile path that survives accepts only `LINEAR` and `AXIAL` with no explicit
+step count (`lcl_canUsePDFAxialShading`, `pdfwriter_impl2.cxx:1061`). Measured on the corpus
+slide: **zero** shading dictionaries on its side, **91602 bytes** of page-one content stream
+against our **2570**. So an operator-for-operator comparison of a gradient is not a question that
+can be asked, and the file compares pictures instead — twice, once on what we rasterise and once
+on what a third-party rasteriser makes of our PDF.
+
+### The numbers, at 150 dpi, per channel
+
+| Comparison | Page 1 (three gradients, one tiled fill) | Page 2 (one picture) |
+|---|---|---|
+| Our raster against LibreOffice's rendering | mae **0.0016**, ink ratio 1.003 | mae **0.0018**, ink ratio 1.000 |
+| Our PDF against its PDF, one rasteriser reading both | mae **0.0007** | mae **0.0000** — identical, pixel for pixel |
+
+The second row is the sharper measurement and worth making separately: the same rasteriser reads
+both files, so the antialiasing and image-filtering differences cancel and what is left is the
+drawing. `PaintFillComparisonTests` holds the first row under 0.005 and the second under 0.002.
+
+A fading gradient has no LibreOffice reference in the corpus, so it is measured against *itself*
+across the two backends: a red-to-transparent ramp over 24 cm, our PDF rasterised by poppler
+against our own raster of the same fill, **mae 0.0003**, ink ratio 0.999.
+
+### Two format mappings the readers will need, measured rather than assumed
+
+Neither belongs in this library — a backend takes `GradientPaint.Start` as the centre and stop 0
+as the colour there — but both were found here, by building the display list that makes our
+picture agree with LibreOffice's, and both are invisible until the colours are compared.
+
+- **ODF's `draw:start-color` on a radial gradient paints the outer edge, not the centre.** A
+  `#00c0c0`-to-`#101010` radial renders with a black middle. The reader has to swap the ends.
+- **A radial gradient's outer radius is half the shape's diagonal, not half its width.**
+  `Gradient::GetBoundRect` builds a square of side `hypot(w, h)` for `GradientStyle_RADIAL`
+  (`vcl/source/gdi/gradient.cxx:246-251`); `ELLIPTICAL` instead scales each axis by √2. Using
+  half the width moved the mean absolute error on that page from 0.0016 to **0.0054**, which is
+  what measuring rather than assuming this was worth.
+
+### What is left, and why
+
+- [ ] **A focal radial gradient.** PDF's `/ShadingType 3` takes two circles with different
+      centres and DrawingML's `a:path`/`a:fillToRect` states one, but `GradientPaint` has a
+      single `Start`, so both circles are written concentric. Adding a focus to the IR is a Core
+      change and not worth making until a reader has a `fillToRect` to put in it.
+- [ ] **`GradientKind.Conical` and `GradientKind.Rectangular` are bands, not shaders.** Skia's
+      sweep gradient would draw a conical one natively and PDF has nothing for either, and using
+      the shader in one backend and bands in the other would make a shape's colours depend on
+      the output format. So both use the shared decomposition, at LibreOffice's own step count
+      (`Gradient::GetMetafileSteps`, `gradient.cxx:336`) — the shorter side in 1/100 mm, clamped
+      by the largest channel difference. Nothing emits either kind yet; LibreOffice's own
+      `awt::GradientStyle` has no conical at all, so it can only arrive from EMF+ or SVG.
+- [ ] **A gradient *stroke* is drawn as its middle stop and a bitmap stroke as nothing.** There
+      is no gradient pen operator in PDF and LibreOffice's writer has none either. A glyph run is
+      the same case: text is shown in the current fill colour.
+- [ ] **A tiled fill stops at 8192 tiles.** A one-point tile over an A4 page is half a million
+      image draws. At the cap the grid is drawn as far as it goes and the rest is left unpainted,
+      which is visible and therefore reportable, unlike stretching the tile.
+- [ ] **Nothing in any reader emits a `GradientPaint`, a `BitmapPaint` or a `RasterImage` yet.**
+      The decoder is public in this library and `Paperless.WordProcessing`,
+      `Paperless.Spreadsheets` and `Paperless.Presentations` have no `ProjectReference` on
+      `Paperless.Rendering` — one line each, and the reason a `p:pic`, a `w:drawing` and a
+      sheet's logo are still unpainted.
 
 ### Two measurements the raster backend rests on
 
@@ -141,14 +260,43 @@ Each is a place our output differs from LibreOffice's on purpose, with the evide
 - **No `/Artifact` marked content, no `/StructElem` tree, no page-background clip.**
   LibreOffice opens every page with `q 0 0.028 595.275 841.861 re W* n` and brackets each
   drawing in `BMC`/`EMC`. None of it is drawing and none of it is read by any comparison.
+- **A gradient is one shading where LibreOffice writes hundreds of flat polygons.** Impress
+  decomposes every shape gradient before its PDF writer sees it (tdf#150551, cited above), so its
+  page-one content stream for `paint-fills.fodp` is 91602 bytes and ours 2570. Ours is smooth,
+  resolution-independent and a twentieth of the size; theirs bands at the step count
+  `Gradient::GetMetafileSteps` gives. Rasterised at 150 dpi the two agree to a mean absolute
+  difference of 0.0007 per channel, so the banding is below one level of an eight-bit channel at
+  that resolution and the deviation costs nothing visible. It does mean `PdfFills` reports one
+  rectangle for a gradient on our side and hundreds on LibreOffice's, which is why `PdfPaints`
+  exists.
+- **A magnified picture is interpolated and poppler's rasterisation of the same PDF is not.**
+  A 16×12 picture drawn at 8×6 cm comes back from `pdftoppm` as hard blocks and from our raster
+  backend as a smooth ramp — mean absolute difference 0.0018 over the page, 0.0779 in the worst
+  32×32 tile, all of it on the picture's border. **The deviation is poppler's, not
+  LibreOffice's**: neither writer sets `/Interpolate` on the image XObject, so the choice is the
+  rasteriser's, and LibreOffice's own renderer interpolates exactly as Skia does — checked by
+  exporting the same slide through `impress_png_Export`, which produces a smooth ramp. Our PDF
+  rasterised by poppler is pixel-for-pixel identical to LibreOffice's PDF rasterised by poppler,
+  which is what settles the attribution.
+- **`/Widths` are taken off the display list when a face's file cannot be read.** A
+  `FontReference` whose `FaceKey` names a family rather than a path never loads, and the
+  alternative is an array of zeros — which places every glyph a whole advance from where the
+  stated widths put the pen, so each one takes a `TJ` correction of the entire advance.
+  Measured on `sheet-print-xlsx.xlsx`: adjustments of −722 and −556 thousandths between adjacent
+  glyphs, and `pdftotext` reporting **13255** words over fourteen pages against LibreOffice's
+  **2281**, one per character, because an adjustment that large is how a PDF spells a word break.
+  With the run's own advances the same file extracts as 2281. This is a fallback and not the fix:
+  the face is still not embedded, and the callers that build the reference this way —
+  `SheetText.Describe`, `SlideTextLayout.Reference`, `PageDrawing.Reference` — should carry the
+  resolver's own key.
 - **A blank at the end of a wrapped line is not drawn.** LibreOffice draws it as a run of its
   own — eleven extra one-glyph runs on `paginated.fodt`, each at the right-hand end of a line
   it has already drawn. The glyph occupies the margin and marks nothing.
 
 ## Findings for other libraries
 
-Both surfaced only because the PDF comparison reads the content stream rather than word boxes,
-and neither is this library's: the layout is `Paperless.WordProcessing`'s.
+The first two surfaced only because the PDF comparison reads the content stream rather than word
+boxes, and neither is this library's: the layout is `Paperless.WordProcessing`'s.
 
 - **A 16 pt heading's baseline sat 1.95 pt higher than LibreOffice's**, in all four formats.
   Fixed there: the leading proportional line spacing adds above a paragraph's first line belongs
@@ -161,6 +309,21 @@ and neither is this library's: the layout is `Paperless.WordProcessing`'s.
   it — starts two lines' worth higher. The evidence and the bisection are in
   `src/Paperless.WordProcessing/TODO.md`; `NoteSeparatorComparisonTests` pins the attribution and
   `PdfOutputComparisonTests` still leaves that one file out of the fill comparison.
+- **Three layouters throw the resolver's face key away**, which costs their PDFs their embedded
+  fonts. `SystemFontResolver.Resolve` returns a `FontReference` whose `FaceKey` is the font
+  file's path, and `Paperless.Spreadsheets`' `SheetText.Describe`,
+  `Paperless.Presentations`' `SlideTextLayout.Reference` and `Paperless.WordProcessing`'s
+  `PageDrawing.Reference` each rebuild the reference from the `OpenTypeFace` with
+  `FaceKey = FamilyName`. `FileFontProvider` reads that key as a path, so nothing loads and
+  nothing is embedded. This library now recovers the *metrics* from the run's own advances —
+  see "Known deviations" for what that fixed and what it measured — but not the embedding, which
+  only the callers can.
+- **Two ODF gradient mappings, for whoever reads `draw:gradient`.** Its `draw:start-color` on a
+  `radial` gradient paints the *outer* edge, and the radial's outer radius is half the shape's
+  **diagonal** — `Gradient::GetBoundRect` builds a square of side `hypot(w, h)`
+  (`vcl/source/gdi/gradient.cxx:246-251`), where `ELLIPTICAL` scales each axis by √2 instead.
+  Both are invisible until the colours are compared: taking half the width instead moved the
+  mean absolute error on the corpus slide's radial page from 0.0016 to 0.0054.
 
 ## Open questions
 
