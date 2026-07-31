@@ -1291,7 +1291,9 @@ is read and verified, so what remains is the filling of pages rather than the me
       visible thing: the section fills its **rightmost column first**. Measured — a two-column A4
       page whose ODF page layout says `style:writing-mode="rl-tb"` has LibreOffice drawing its first
       line at 319 pt, the right-hand column, with the margins unmoved. Read from `w:sectPr/w:bidi`,
-      the page layout's writing mode, and `sprmSFBiDi` (0x3228, `sw/source/filter/ww8/sprmids.hxx:429`).
+      the page layout's writing mode, and `sprmSFBiDi` (0x3228, `sw/source/filter/ww8/sprmids.hxx:588`
+      — the paragraph's own `sprmPFBiDi` is 0x2441 at line 429 of the same header, and the two are
+      easy to confuse in a table where every name looks alike).
       Three formats and not four: **LibreOffice's RTF export drops it**, writing `\cols2` and no
       `\rtlsect` at all, so a document round-tripped through RTF loses its section direction. The
       control word is still read, since another producer may write it and LibreOffice's own importer
