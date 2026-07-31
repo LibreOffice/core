@@ -129,7 +129,7 @@ public:
                 return;
             }
         }
-        assert("missing time to remove" && false);
+        assert(false && "missing time to remove");
     }
 };
 
