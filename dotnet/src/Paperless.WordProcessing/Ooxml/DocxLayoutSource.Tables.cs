@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Xml.Linq;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.WordProcessing.Layout;
 
@@ -141,6 +142,7 @@ public sealed partial class DocxLayoutSource
                     ColumnSpan = span,
                     Padding = Padding(Word.Child(cellProperties, "tcMar"), tablePadding),
                     VerticalAlignment = VerticalAlignment(cellProperties),
+                    Shading = Shading(cellProperties),
                 },
                 Merge(cellProperties)));
 
@@ -226,6 +228,35 @@ public sealed partial class DocxLayoutSource
             "bottom" => CellVerticalAlignment.Bottom,
             _ => CellVerticalAlignment.Top,
         };
+
+    /// <summary>
+    /// The colour behind a cell's text, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:shd</c>'s <c>w:fill</c>, which is the colour, rather than its <c>w:color</c>, which is the pattern's
+    /// foreground and only shows through a <c>w:val</c> that is not <c>clear</c> or <c>nil</c>. Word's
+    /// <c>auto</c> means "let whatever is behind show", which is not a colour and so is null. The patterns
+    /// themselves — <c>pct25</c> and its family — are not modelled: their fill colour is drawn solid, which is
+    /// the right colour at the wrong density and much closer than nothing.
+    /// </remarks>
+    private static Colour? Shading(XElement? properties)
+    {
+        XElement? shade = Word.Child(properties, "shd");
+        if (shade is null) return null;
+
+        if (Word.Attribute(shade, "val") is "nil") return null;
+
+        string? fill = Word.Attribute(shade, "fill");
+
+        return fill is null or "" or "auto" ? null : Hex(fill);
+    }
+
+    /// <summary>A six-digit RGB colour, or null when the value is not one.</summary>
+    private static Colour? Hex(string value)
+        => value.Length == 6
+           && uint.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb)
+            ? Colour.FromRgb(rgb)
+            : null;
 
     /// <summary>What a cell's <c>w:vMerge</c> says about the vertical merge it is part of.</summary>
     /// <remarks>

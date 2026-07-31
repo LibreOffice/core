@@ -439,10 +439,31 @@ is read and verified, so what remains is the filling of pages rather than the me
       requiring 3 there rejects every default a real document writes. Each entry states one value and the
       sides it applies to, so a uniform table carries **four** of them; keeping only the last leaves three
       sides at Word's 108 twips.
-- [ ] Cell borders and shading — and this **no longer waits for the rasteriser**, which is what the note here
-      used to say. `PdfFills` reads the filled rectangles out of LibreOffice's PDF, and a border and a shade are
-      both filled rectangles, so they can be compared at the same resolution as text. What is left is the
-      reading and the drawing rather than the verifying.
+- [x] **Cell shading**, for ODF, DOCX and RTF, drawn and compared against LibreOffice's own fills. It covers
+      the whole cell rectangle, padding included — measured: LibreOffice fills 56.7 to 141.75 pt for a cell
+      whose column runs 56.7 to 141.8, so the fill covers the cell and stops half a border short of the next.
+      `fo:background-color`, `w:shd`'s `w:fill` and `\clcbpat`; null rather than white for "no shading", because
+      the two differ. Three details worth keeping:
+      - **`w:fill`, not `w:color`.** The latter is the *pattern's* foreground and only shows through a `w:val`
+        that is not `clear` or `nil`; reading it gives the wrong colour on every ordinary shaded cell. RTF has
+        the same pair, `\clcbpat` and `\clcfpat`, and the same trap.
+      - **A reference can paint one shade twice.** LibreOffice's DOCX render fills each shaded cell in the
+        corpus document at identical coordinates twice, where its ODF render fills it once — so the comparison
+        is of *distinct* rectangles, or the same document passes in one format and fails in the other for a
+        reason unrelated to where anything went.
+      - Every shade before any text, rather than each cell's shade before its own text: a shade is opaque, so a
+        cell whose content overflows would otherwise have that overflow painted over by its neighbour's fill.
+- [ ] Cell shading for **DOC**, which is a bigger read than the other three: a per-band `WW8_SHD` array from
+      `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form (`sprmTDefTableNewShd` and its 2nd and
+      3rd parts) carrying full RGB.
+- [ ] Cell **borders**, and the thing to know before starting is that LibreOffice **consolidates** them: it
+      writes one stroke across the whole table per grid line rather than four round each cell — measured, five
+      horizontals spanning 56.65 to 538.65 pt on a four-row table, and one vertical per column edge. Drawing
+      twelve short segments where the reference writes five long ones would be right on the page and
+      incomparable against it, so a `PdfStrokes` reader and the same consolidation are both needed.
+      A border also **takes space**, half its width either side of the grid line: 0.05 pt borders make a table
+      0.1 pt taller per row boundary and shift every column edge. That is why the shading corpus document has no
+      borders — it would otherwise be testing two things and failing on the unread one.
       The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.

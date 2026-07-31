@@ -1,4 +1,5 @@
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 
 namespace Paperless.WordProcessing.Layout;
@@ -204,6 +205,17 @@ public sealed record PageTableCell
 
     /// <summary>Where the text sits when the row is taller than the content.</summary>
     public CellVerticalAlignment VerticalAlignment { get; init; }
+
+    /// <summary>
+    /// The colour behind the cell's text, or null when the cell is not shaded.
+    /// </summary>
+    /// <remarks>
+    /// The whole cell rectangle, padding included, which is measured rather than assumed: LibreOffice fills
+    /// 56.7 to 141.75 pt for a cell whose column runs 56.7 to 141.8, so the fill covers the cell and stops half
+    /// a border short of the next one. Null rather than white, because "no shading" and "shaded white" are
+    /// different — one lets a page background through and the other does not.
+    /// </remarks>
+    public Colour? Shading { get; init; }
 
     /// <summary>One past the last grid column the cell covers.</summary>
     public int ColumnEnd => Column + Math.Max(1, ColumnSpan);

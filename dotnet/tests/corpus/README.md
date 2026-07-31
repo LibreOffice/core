@@ -199,3 +199,11 @@ again with `\sbkpage` — and it is hand-written rather than exported, because O
 at all and so cannot be the source. LibreOffice renders it as three pages. Two things make it worth having:
 a reader treating a column break as continuous gets one page, and a reader that ends the *column* rather than
 the page when a section breaks gets two, with section two beside section one.
+
+`table-shading.*` is `table-grid` with its first row's cells shaded grey and **no borders**, which is the point:
+an earlier version had both and could not be compared at all, because a border takes space — half its width
+either side of each grid line — so 0.05 pt borders make the table 0.1 pt taller per row boundary and shift every
+column edge. One feature per document, as above. Two things about comparing it: LibreOffice's DOCX render fills
+each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
+distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
+per-band `WW8_SHD` array that is not read yet.

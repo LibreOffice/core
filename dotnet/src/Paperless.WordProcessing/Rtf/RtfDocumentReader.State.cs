@@ -428,6 +428,9 @@ public sealed partial class RtfDocumentReader
         /// <summary>The vertical alignment <c>\clvertal*</c> stated for the cell being declared.</summary>
         public Layout.CellVerticalAlignment PendingCellAlignment { get; set; }
 
+        /// <summary>The <c>\clcbpat</c> colour index for the cell being declared, or null for none.</summary>
+        public int? PendingCellShading { get; set; }
+
         public bool PendingCellMergesFirst { get; set; }
         public bool PendingCellMerged { get; set; }
         public bool PendingCellVerticalFirst { get; set; }
@@ -453,6 +456,7 @@ public sealed partial class RtfDocumentReader
     /// none and so falls back to the row's half-gap.
     /// </param>
     /// <param name="VerticalAlignment">Where the cell's text sits inside its row.</param>
+    /// <param name="ShadingColourIndex">Its <c>\clcbpat</c> colour index, or null for none.</param>
     private readonly record struct CellDefinition(
         int RightEdge,
         bool MergesFirst,
@@ -460,10 +464,14 @@ public sealed partial class RtfDocumentReader
         bool VerticalFirst,
         bool VerticalMerged,
         int?[]? Padding = null,
-        Layout.CellVerticalAlignment VerticalAlignment = Layout.CellVerticalAlignment.Top);
+        Layout.CellVerticalAlignment VerticalAlignment = Layout.CellVerticalAlignment.Top,
+        int? ShadingColourIndex = null);
 
     private sealed class CellDraft
     {
+        /// <summary>The colour behind its text, or null when the cell is not shaded.</summary>
+        public Colour? Shading { get; set; }
+
         /// <summary>
         /// The column the cell starts at. Settable because a horizontal merge earlier in the row
         /// shifts every cell after it, and that is only known once the whole row is read.

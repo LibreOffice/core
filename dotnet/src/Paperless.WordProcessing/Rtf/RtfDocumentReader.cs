@@ -763,6 +763,12 @@ public sealed partial class RtfDocumentReader
                 // The unit the matching \clpad takes: 3 is twips and 0 is a "null" the specification
                 // leaves undefined. Only twips is honoured, which is what every producer writes.
                 return;
+            case "clcbpat":
+                // The cell's *background* colour index. \clcfpat is the pattern's foreground and only shows
+                // through a shading percentage, which is not modelled — drawing the background solid is the
+                // right colour at the wrong density and much closer than nothing.
+                DefinitionTarget(CurrentFlow).PendingCellShading = token.Parameter;
+                return;
             case "clvertalt":
                 DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.CellVerticalAlignment.Top;
                 return;

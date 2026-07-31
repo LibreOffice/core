@@ -202,6 +202,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                     RowSpan = cell.RowSpan,
                     Padding = cell.Padding,
                     VerticalAlignment = cell.VerticalAlignment,
+                    Shading = cell.Shading,
                 });
             }
 

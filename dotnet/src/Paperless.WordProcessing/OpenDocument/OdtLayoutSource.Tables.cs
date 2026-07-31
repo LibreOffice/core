@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
@@ -214,6 +215,7 @@ public sealed partial class OdtLayoutSource
                     RowSpan = rowSpan,
                     Padding = Padding(styleName),
                     VerticalAlignment = VerticalAlignment(styleName),
+                    Shading = Shading(styleName),
                 });
 
                 // One column per element, not one per column spanned. A cell covering two columns is
@@ -311,6 +313,23 @@ public sealed partial class OdtLayoutSource
             "bottom" => CellVerticalAlignment.Bottom,
             _ => CellVerticalAlignment.Top,
         };
+
+    /// <summary>
+    /// The colour behind a cell's text, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <c>fo:background-color</c>, whose <c>transparent</c> is a real value meaning "no shading" rather than a
+    /// colour — so it has to fall through to null rather than being parsed. ODF has no separate pattern or
+    /// foreground colour for a cell the way RTF and WW8 do; the resolved colour is the whole answer.
+    /// </remarks>
+    private Colour? Shading(string? styleName)
+    {
+        OdfProperty stated = _styles.ResolveProperty(
+            styleName, OdfStyleFamily.TableCell, OdfPropertyKind.TableCell,
+            OdfNamespaces.FoCompatible, "background-color");
+
+        return stated.Value == "transparent" ? null : stated.AsColour();
+    }
 
     private Length? TableMeasure(string? styleName, string propertyNamespace, string propertyName)
         => OdfWriterUnits.ToCore(

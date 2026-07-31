@@ -1,4 +1,5 @@
 using Paperless.Core.Documents;
+using Paperless.Core.Geometry;
 using Paperless.TestKit;
 using Paperless.TestKit.LibreOffice;
 using Paperless.WordProcessing;
@@ -81,6 +82,10 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-exact-row.docx")]
     [InlineData("table-exact-row.doc")]
     [InlineData("table-exact-row.rtf")]
+    // `table-borders` is deliberately absent, and only in the shading test: a border *takes space*, half its
+    // width on each side of the grid line, so a table with 0.05 pt borders is 0.1 pt taller per row boundary
+    // than the same table without them. Border widths are not read yet, so its text sits exactly that much
+    // high — right at the tolerance, and a real difference rather than noise.
     // A nested table in every format, which is worth stating because no two of them express it the same
     // way: ODF and DOCX nest the markup, while DOC and RTF nest the *paragraph* — sprmPItap and \itap give
     // a depth, and an inner table's cells end at paragraph marks rather than at U+0007.
@@ -175,7 +180,84 @@ public sealed class TableComparisonTests : IDisposable
         return lines;
     }
 
+    [Theory]
+    [InlineData("table-shading.fodt")]
+    [InlineData("table-shading.odt")]
+    [InlineData("table-shading.docx")]
+    [InlineData("table-shading.rtf")]
+    // DOC is absent from *this* test only: its cell shading is a per-band `WW8_SHD` array from
+    // `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form carrying full RGB — a bigger read than
+    // the other three and still open. Its text is compared above like every other format's.
+    public void AShadedCellIsFilledWhereLibreOfficeFillsIt(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        // Distinct rectangles, because a reference can paint one twice: LibreOffice's own DOCX render fills
+        // each shaded cell in this document exactly twice, at identical coordinates, where its ODF render fills
+        // it once. Counting fills would make the same document pass in one format and fail in the other for a
+        // reason that has nothing to do with where anything went.
+        List<PdfFill> reference =
+            [.. PdfFills.Read(_libreOffice.ConvertToPdf(path, _workDirectory))
+                .Where(fill => fill.PageIndex == 0 && fill.Height > 1 && fill.Width < 500)
+                .DistinctBy(fill => (Math.Round(fill.Left, 1), Math.Round(fill.Top, 1)))
+                .OrderBy(fill => fill.Top).ThenBy(fill => fill.Left)];
+
+        Assert.SkipWhen(reference.Count == 0, "the reference PDF filled no cell-sized paths");
+
+        List<DocRect> mine =
+            [.. Rendered(path)[0].FilledPaths
+                .Select(fill => fill.Bounds)
+                .DistinctBy(bounds => (Math.Round(bounds.X.Points, 1), Math.Round(bounds.Y.Points, 1)))
+                .OrderBy(bounds => bounds.Y.Points).ThenBy(bounds => bounds.X.Points)];
+
+        mine.Count.ShouldBe(
+            reference.Count, $"{fileName}: page 1 filled a different number of distinct cell shades");
+
+        for (int i = 0; i < reference.Count; i++)
+        {
+            DocRect drawn = mine[i];
+
+            Math.Abs(drawn.X.Points - reference[i].Left).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: shade {i + 1} starts at {drawn.X.Points:F3} pt drawn, "
+                + $"{reference[i].Left:F3} pt rendered");
+
+            Math.Abs(drawn.Width.Points - reference[i].Width).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: shade {i + 1} is {drawn.Width.Points:F3} pt wide drawn, "
+                + $"{reference[i].Width:F3} pt rendered");
+
+            // Vertically as a difference from the first shade, which cancels the one thing this cannot know:
+            // where the table's top edge sits relative to the border LibreOffice draws over it.
+            double drawnGap = drawn.Y.Points - mine[0].Y.Points;
+            double renderedGap = reference[i].Top - reference[0].Top;
+
+            Math.Abs(drawnGap - renderedGap).ShouldBeLessThanOrEqualTo(
+                TolerancePoints,
+                $"{fileName}: shade {i + 1} sits {drawnGap:F3} pt below the first drawn, "
+                + $"{renderedGap:F3} pt rendered");
+        }
+    }
+
     // ------------------------------------------------------------------------- the machinery
+
+    /// <summary>Lays a document out and records what it drew, page by page.</summary>
+    private static IReadOnlyList<DrawnPage> Rendered(string path)
+    {
+        RecordingDrawingSink sink = new();
+
+        using (FileStream stream = File.OpenRead(path))
+        {
+            using DocumentSource source = DocumentSource.FromStream(stream, Path.GetFileName(path));
+            using IDocument document = new WordProcessingReader().Read(source);
+
+            IPageSequence pages = ((IPaginatedDocument)document).Layout();
+            for (int i = 0; i < pages.Count; i++) pages[i].Draw(sink);
+        }
+
+        return sink.Pages;
+    }
 
     /// <summary>
     /// The gap between two words, in points, beyond which they belong to different cells.

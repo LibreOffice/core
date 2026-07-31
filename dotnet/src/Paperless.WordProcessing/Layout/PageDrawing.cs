@@ -103,16 +103,7 @@ public static class PageDrawing
     /// </remarks>
     private static void DrawSeparator(DocRect? separator, IDrawingSink sink)
     {
-        if (separator is not { } rule || rule.Width <= Length.Zero || rule.Height <= Length.Zero) return;
-
-        GraphicsPath path = new GraphicsPath()
-            .MoveTo(new DocPoint(rule.X, rule.Y))
-            .LineTo(new DocPoint(rule.Right, rule.Y))
-            .LineTo(new DocPoint(rule.Right, rule.Bottom))
-            .LineTo(new DocPoint(rule.X, rule.Bottom))
-            .Close();
-
-        sink.FillPath(path, Paint.Solid(Colour.Black));
+        if (separator is { } rule) Fill(rule, Colour.Black, sink);
     }
 
     /// <summary>Draws a flow — a header, a footer or a cell — which is lines in their own rectangle.</summary>
@@ -128,13 +119,38 @@ public static class PageDrawing
     /// Draws a table, which is its cells' text.
     /// </summary>
     /// <remarks>
-    /// Text only for now: borders and cell shading are read by the extraction pass but not yet carried into
-    /// layout, so a table currently draws as its words in the right places and nothing round them. That is
-    /// the half a text comparison can verify, and the half every other feature depends on.
+    /// Shading and text. Borders are still missing, and they are more than a fourth fill per cell:
+    /// LibreOffice <em>consolidates</em> them, writing one stroke across the whole table per grid line rather
+    /// than four round each cell — measured, five horizontals spanning 56.65 to 538.65 pt on a four-row table.
+    /// Drawing twelve short segments where the reference writes five long ones would be right on the page and
+    /// incomparable against it.
     /// </remarks>
     private static void DrawTable(PlacedTable table, IDrawingSink sink)
     {
+        // Every shade before any text, rather than each cell's shade before its own text: a shade is opaque,
+        // and a cell whose content overflows into its neighbour would otherwise have that overflow painted
+        // over by the neighbour's fill.
+        foreach (PlacedTableCell cell in table.Cells)
+        {
+            if (cell.Cell.Shading is { } colour) Fill(cell.Area, colour, sink);
+        }
+
         foreach (PlacedTableCell cell in table.Cells) DrawFlow(cell.Content, sink);
+    }
+
+    /// <summary>Fills a rectangle, which is what a shade and a rule both are.</summary>
+    private static void Fill(DocRect area, Colour colour, IDrawingSink sink)
+    {
+        if (area.Width <= Length.Zero || area.Height <= Length.Zero) return;
+
+        GraphicsPath path = new GraphicsPath()
+            .MoveTo(new DocPoint(area.X, area.Y))
+            .LineTo(new DocPoint(area.Right, area.Y))
+            .LineTo(new DocPoint(area.Right, area.Bottom))
+            .LineTo(new DocPoint(area.X, area.Bottom))
+            .Close();
+
+        sink.FillPath(path, Paint.Solid(colour));
     }
 
     /// <summary>

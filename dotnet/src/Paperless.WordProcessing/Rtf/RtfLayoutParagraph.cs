@@ -189,10 +189,12 @@ public sealed record RtfLayoutRow(
 /// <param name="Padding">The gap between its edges and its text.</param>
 /// <param name="VerticalAlignment">Where its text sits when the row is taller than its content.</param>
 /// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
+/// <param name="Shading">The colour behind its text, or null when it is not shaded.</param>
 public sealed record RtfLayoutCell(
     int Column,
     int ColumnSpan,
     int RowSpan,
     Layout.CellPadding Padding,
     Layout.CellVerticalAlignment VerticalAlignment,
-    IReadOnlyList<RtfLayoutBlock> Blocks);
+    IReadOnlyList<RtfLayoutBlock> Blocks,
+    Colour? Shading = null);

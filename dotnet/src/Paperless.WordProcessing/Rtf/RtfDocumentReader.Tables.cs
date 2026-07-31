@@ -105,7 +105,8 @@ public sealed partial class RtfDocumentReader
             table.PendingCellVerticalFirst,
             table.PendingCellVerticalMerged,
             [.. table.PendingCellPadding],
-            table.PendingCellAlignment));
+            table.PendingCellAlignment,
+            table.PendingCellShading));
         ClearPendingCellFlags(table);
     }
 
@@ -167,6 +168,7 @@ public sealed partial class RtfDocumentReader
         table.PendingCellVerticalFirst = false;
         table.PendingCellVerticalMerged = false;
         table.PendingCellAlignment = CellVerticalAlignment.Top;
+        table.PendingCellShading = null;
         Array.Clear(table.PendingCellPadding);
     }
 
@@ -282,7 +284,7 @@ public sealed partial class RtfDocumentReader
     /// Once the row is closed rather than as each cell ends: doing it per cell works for a top-level
     /// table and fails for a nested one, whose definition arrives only after its cells.
     /// </remarks>
-    private static void ApplyDefinitions(TableLevel table)
+    private void ApplyDefinitions(TableLevel table)
     {
         for (int index = 0; index < table.RowCells.Count; index++)
         {
@@ -295,6 +297,7 @@ public sealed partial class RtfDocumentReader
             table.RowCells[index].ContinuesMergeAbove = definition.VerticalMerged;
             table.RowCells[index].Padding = PaddingOf(definition, table);
             table.RowCells[index].VerticalAlignment = definition.VerticalAlignment;
+            table.RowCells[index].Shading = ColourAt(definition.ShadingColourIndex);
         }
     }
 
@@ -509,7 +512,8 @@ public sealed partial class RtfDocumentReader
                     cell.RowSpan,
                     cell.Padding,
                     cell.VerticalAlignment,
-                    [.. cell.LayoutBlocks]));
+                    [.. cell.LayoutBlocks],
+                    cell.Shading));
             }
 
             layoutRows.Add(new RtfLayoutRow(
