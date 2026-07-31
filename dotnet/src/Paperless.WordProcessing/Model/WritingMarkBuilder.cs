@@ -187,6 +187,18 @@ internal sealed class WritingMarkBuilder
         _bookmarks.Add(new WritingBookmark(pending.Name, new WritingRange(pending.Start, to)));
     }
 
+    /// <summary>Records a bookmark whose two ends are already known.</summary>
+    /// <remarks>
+    /// For the format that states a bookmark as a pair of tables rather than as a pair of markers in
+    /// the text: WW8 knows both positions before the walk starts, so pairing them through
+    /// <see cref="OpenBookmark"/> would be a state machine standing in for a lookup.
+    /// </remarks>
+    public void AddBookmark(string name, WritingPosition? start, WritingPosition? end)
+    {
+        if (start is not { } from || end is not { } to) return;
+        _bookmarks.Add(new WritingBookmark(name, new WritingRange(from, to)));
+    }
+
     /// <summary>Records a bookmark that marks a position rather than a span.</summary>
     public void AddPointBookmark(string name, WritingPosition? at)
     {

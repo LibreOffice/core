@@ -184,6 +184,9 @@ public sealed partial class Ww8DocumentReader
         ReadHeadersAndFooters(document);
 
         foreach (ContentNode node in _hoisted) document.Children.Add(node);
+        // Every range has been walked, so every bookmark position that exists has been located.
+        BuildBookmarks();
+
         return document;
     }
 

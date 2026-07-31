@@ -67,7 +67,10 @@ public sealed partial class Ww8DocumentReader
         // Each flow numbers its own lists: a list in a footnote does not continue the body's count.
         _numbering.ResetCounters();
 
-        WalkState state = new(target);
+        WalkState state = new(target)
+        {
+            BookmarkIndex = FirstBookmarkPositionAt(BookmarkPositions(), range.Start),
+        };
         _marks.OpenParagraph();
 
         for (int index = 0; index < text.Length; index++)
@@ -77,7 +80,7 @@ public sealed partial class Ww8DocumentReader
 
             // Bookmarks are keyed by character position rather than marked in the text, so the walk
             // has to ask at each one. A single advancing index over a sorted list, not a search.
-            FireBookmarks(state, position);
+            NoteBookmarkPositions(state, position);
 
             switch (character)
             {
@@ -182,7 +185,7 @@ public sealed partial class Ww8DocumentReader
         }
 
         // A range need not end with a paragraph mark, or with the tables in it closed.
-        FireBookmarks(state, range.End);
+        NoteBookmarkPositions(state, range.End);
         FinishParagraph(state, force: false, state.ParagraphFormat.Level);
         CloseTablesDeeperThan(state, 0);
 

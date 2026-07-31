@@ -72,13 +72,68 @@ indexes or resolvable style chains.
       page that asked for nothing else — but nothing populates them, because the flows are built by the
       extraction pass and the model pass that would connect them is not written. Layout does not wait for
       this: it reads the furniture itself, through the same walk the body uses.
-- [ ] Fields — store both the definition and the cached result. The cached result is what a
-      reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
-- [ ] Bookmarks and cross-references
+- [x] **Fields — both the definition and the cached result**, in `WritingField`. The result stays
+      preferred by default because it is what a reference renderer draws: nothing headless can compute
+      `PAGE` before it has paginated, and recomputing `DATE` would stop reproducing the file at all.
+      The definition is what the result cannot tell you — a hyperlink's target is in the instruction and
+      nowhere else, and a page number reading "4" says nothing about whether it was a field or a typed
+      digit. The four spellings share only their meaning: DOCX's `w:fldChar` state machine *and* its
+      one-element `w:fldSimple` (Word writes whichever it likes, so a reader that knows one finds half
+      the page numbers), RTF's `\fldinst` beside `\fldrslt`, WW8's `U+0013 U+0014 U+0015` in the
+      character stream, and ODF's typed elements, which are **not an instruction string at all** — so
+      an ODF field's `Instruction` is null and its `Kind` carries the whole of its meaning.
+      `FieldInstructions` grew the name-to-kind map the three instruction formats share and
+      `OdtMarkSink` maps element names onto the same `WritingFieldKind`. Measured over one document in
+      four formats: the same three fields, the same kinds, the same ranges and the same results — with
+      one difference that is in the file rather than in the reading of it, LibreOffice's ODF export
+      caching a page number of **0** where the other three cache 1.
+      WW8's field PLCF is deliberately not read. Its `flt` numbering — `ww8par5.cxx`'s `aWW8FieldTab`,
+      where 33 is PAGE, 37 PAGEREF and 31 and 32 DATE and TIME — says the same thing as the instruction
+      sitting beside it in the same character stream, and one mapping shared by three formats cannot
+      disagree with itself the way two mappings could.
+- [x] **Bookmarks as ranges**, from all four formats, over the model's own node-plus-offset positions.
+      Each format pairs the two halves by something different and only two by the name: DOCX by `w:id`,
+      ODF and RTF by the name, WW8 by an index one table holds into the other. **`PlcfBkf` and `PlcfBkl`
+      are not parallel arrays** — a start's four-byte record is an index *into* the end table, so
+      bookmark `i` ends at `PlcfBkl[record(i)]` (`ww8scan.cxx`, `WW8PLCFx_Book::GetLen`). Pairing by
+      ordinal agrees for every document whose bookmarks neither nest nor overlap, which is most of
+      them, so that mistake survives every simple test and mangles exactly the documents that use
+      bookmarks seriously.
+      The trap that actually cost the time is the other half of the same structure. Firing starts and
+      ends as an ordered stream of events needs an order, and **no order works**: two adjacent
+      bookmarks want the first's end before the second's start, while a *zero-length* bookmark wants
+      its own start before its own end — and both pairs sit at the same character position. LibreOffice
+      hits the same wall and says so above `WW8PLCFx_Book::advance` ("the case of `][` … `][` is not
+      solved yet"). So the walk remembers *where each position landed* and the ranges are built
+      afterwards, which has no order to get wrong. The corpus's point bookmark is precisely the one
+      that vanishes otherwise, and it vanished.
+      A collapsed range is a legitimate bookmark rather than a malformed one — ODF spells it as a
+      single `text:bookmark` — and is what a cross-reference target usually is.
 - [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode. An
       as-character anchor is a hint over a placeholder; the other three need a per-page anchor model.
-- [ ] Tracked changes (redlines) with their author and timestamp. The hint kinds exist and the
-      readers currently resolve changes rather than recording them.
+- [x] **Tracked changes with their author, their timestamp and their words.** All four readers still
+      *resolve* a change — an insertion is content and a deletion is not — and `TrackedChangeTests`
+      still pins the four agreeing on that. What is new is the record beside it: `WritingChange` carries
+      the kind, the range, the author, the date and the text. The text is the load-bearing member and
+      the reason the range is not enough: a deletion's words are deliberately absent from the extracted
+      paragraph, so its range is *empty*, collapsed onto the position they were removed from, and
+      without the words the record would say that somebody deleted something somewhere.
+      Four encodings of one idea: `w:ins`/`w:del` with `w:author` and an optional `w:date`; WW8's
+      `sprmCFRMarkIns`/`sprmCFRMarkDel` with **separate** author and date sprms per direction
+      (`0x4804`/`0x6805` against `0x4863`/`0x6864` — reading the insertion's author for a deletion names
+      the wrong person, and `ww8par4.cxx`'s `Read_CRevisionMark` says they must sit at the same
+      character position); RTF's `\revised`/`\deleted` toggles indexing a **zero-based** `{\*\revtbl}`
+      whose conventional first entry is `Unknown`; and ODF's hoisted `text:changed-region`, reached from
+      the body by an id, which is why ODF gets deletions right without the reader doing anything.
+      **WW8's `DTTM` is not packed tight.** Six bits of minute and five of hour do end at bit 11, but
+      the month starts at bit 16 and the year at 20 — LibreOffice's own comment gives masks
+      (`0x000F0000`, `0x1FF00000`) rather than widths for exactly that reason. Shifting by the widths
+      reads a bit of the day as the month's low bit, and `revisions.doc`'s 1970-01-01 comes back as
+      2040-02-01. It decodes to a plausible date, which is what makes it survive a glance.
+      Measured, and worth knowing before trusting a round trip: the source RTF says `\revdttm0`, "no
+      date", and LibreOffice's own exporters disagree about it. Its ODF and DOC exports both write the
+      Unix epoch; its DOCX export omits `w:date` altogether. So two of the four report 1970-01-01 and
+      two report nothing, from one source document.
 - [ ] Importers that build this model. All four build the extraction tree today, and all four now also
       produce the flat paragraph-plus-format sequence the paginator takes — which turned out to be what
       layout actually needed, and is much less than this model holds. The tree itself still has no
@@ -96,8 +151,13 @@ Order chosen so each is verifiable before the next gets harder.
 - [x] `ott` templates and flat `fodt`, through the same reader
 - [x] Tracked changes: a change region is hoisted out of the body by ODF itself, so a deletion is
       absent from the text without the reader having to skip it — which is why all four formats
-      agree. Reading the regions themselves, to report who changed what, is still to do; see
-      `Paperless.OpenDocument/TODO.md`.
+      agree. The regions themselves are now read as well, through `OdtMarkSink`: what is left at the
+      position is an empty element naming a region by id, so recording who changed what is a lookup
+      rather than a walk, and a deletion's words come out of the region's own `text:p` children.
+- [x] Bookmarks and fields, through the same sink. `OdfContentReader` gained an `IOdfMarkSink` hook
+      because the walk knows *where* the marks are and nothing about what they mean, while the
+      word-processing layer knows the reverse and sits above it in the dependency order. Null for
+      Calc and Impress, so neither pays for it.
 - [x] Layout: `OdtLayoutSource` walks `content.xml` a second time and resolves each paragraph's format
       through the style chain that was already built. The translations that needed care: `fo:line-height`
       carries a percentage *or* a length and the length means exact; `fo:font-family` is CSS syntax, so a
@@ -124,7 +184,13 @@ Order chosen so each is verifiable before the next gets harder.
       kept. `w:fldSimple` too.
 - [x] Tracked changes: `w:ins` content read, `w:del`/`w:delText` skipped — deleted text is still
       in the file and emitting it invents content. All four readers agree on this;
-      `TrackedChangeTests` pins it over one document converted to all four formats.
+      `TrackedChangeTests` pins it over one document converted to all four formats. Both wrappers are
+      now *recorded* as well, with `w:author` and the `w:date` that LibreOffice omits whenever the
+      source stated none.
+- [x] Bookmarks, paired by `w:id` and named by the `w:name` on the start alone — the same key
+      LibreOffice's `DomainMapper_Impl::StartOrEndBookmark` uses, and not the name, which a document
+      assembled from several may repeat. They appear at block level as well as inside a paragraph,
+      where the position taken is the end of the paragraph before.
 - [x] Headers/footers (only the parts a section names), footnotes/endnotes with computed
       citations, comments with their author
 - [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
@@ -189,7 +255,12 @@ Order chosen so each is verifiable before the next gets harder.
       shares. The target is in the instruction and nowhere else; the cached result says only what
       the link looked like.
 - [x] Tracked changes: `sprmCFRMarkDel` text is skipped, so the extraction says what the changes
-      leave rather than what they removed. `TrackedChangeTests` pins all four readers agreeing.
+      leave rather than what they removed. `TrackedChangeTests` pins all four readers agreeing. The
+      change itself is recorded from the resolved character format — WW8 states a revision as a run
+      property rather than as a wrapper, so one begins where the flag turns on and ends where it turns
+      off or its author changes — with the author from `SttbfRMark` and the date from a `DTTM`.
+- [x] Bookmarks from `SttbfBkmk`/`PlcfBkf`/`PlcfBkl`, and the two ways that structure is easy to get
+      wrong; see the document-model section.
 - [x] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
       rather than misread
 - [x] Layout: a second walk over the body range, resolving the layout sprms through the same style chain
@@ -249,7 +320,15 @@ Order chosen so each is verifiable before the next gets harder.
       be derived from the table's column grid of `\cellx` edges, because `\clmgf`/`\clmrg` are
       absent from LibreOffice's output
 - [x] Fields: `\fldinst` skipped, `\fldrslt` kept, and `HYPERLINK "…"` parsed out of the
-      instruction, since RTF has no hyperlink markup
+      instruction, since RTF has no hyperlink markup. The instruction is now kept rather than only
+      inspected, and the `\fldrslt` group's extent is what the field's range is
+- [x] Tracked changes and bookmarks. `{\*\revtbl}` is read rather than skipped, since `\revauth`
+      indexes it and without it a change is recorded against a number; it is **zero-based** and its
+      conventional first entry is `Unknown`, so treating it as one-based names the wrong person for
+      every change and nobody for the last. `\deleted` now routes its group to a destination that
+      *collects* the text instead of one that drops it — nothing more of it reaches the document, and
+      the words are the whole of a deletion's record. `{\*\bkmkstart}`/`{\*\bkmkend}` pair by name,
+      which is the one format where the name is also the key
 - [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
 - [x] Embedded pictures recorded as graphics without decoding the bytes
 - [x] Nested tables: `\itap` for the depth, `\nestcell`/`\nestrow` for the inner ends, and
@@ -797,8 +876,29 @@ is read and verified, so what remains is the filling of pages rather than the me
 
 ## Open questions
 
-- [ ] Tracked changes: render as accepted, or show change marks? LibreOffice shows marks by
-      default; `LayoutOptions.AcceptTrackedChanges` exists to choose. Confirm the default
-      matches the reference.
+- [x] **Tracked changes: render as accepted, or show change marks?** Settled by measuring.
+      LibreOffice shows the **marks**, in all four formats, so `LayoutOptions.AcceptTrackedChanges`
+      defaulting to `false` is right. Its PDF of `revisions.*` carries the deleted phrase struck
+      through (`0 3.1 m 80.2 3.1 l S` at 0.7 pt), the insertion underlined in the author's colour
+      (`0 -1.4 m 89.6 -1.4 l S`), and a **change bar** — one vertical stroke at x = 49.65 pt on an
+      A4 page whose text starts at 56.7, running the height of one 12 pt line.
+      `TrackedChangeComparisonTests` pins all three. Two details worth keeping:
+      - The change bar is what a comparison can actually check, because the other two marks are
+        emitted *inside a text matrix* and their coordinates are relative to the run rather than to the
+        page. It also needs its own stroke reader: `PdfStrokes` pairs a stroke with the pen width
+        stated beside it, which is how a table border is written, and a change bar restates no width —
+        it inherits the 0.1 pt default set once at the top of the page.
+      - The author colour differs between the DOC render and the other three, and the mechanism is
+        worth knowing before reading anything into a colour. LibreOffice colours a redline by its
+        author's *index* (`swmodul1.cxx`, `lcl_GetAuthorColor`, `nPos % 9`), and the WW8 importer
+        pre-registers every name in `SttbfRMark` (`ww8par.cxx`, `ReadRevMarkAuthorStrTabl`) — including
+        the `Unknown` placeholder at index 0 — while the other three register an author the first time
+        a change names one. So one author is slot 1 from a DOC and slot 0 from the same document as
+        DOCX, RTF or ODT.
+- [ ] Honouring that flag. The default is now known to be right and **nothing reads it**: layout
+      accepts the changes whichever way it is set, since the layout walks skip deleted text alongside
+      the content walks. Showing marks needs the deleted text kept in the flow, a strike-through and an
+      underline over it, and a change bar per changed line in the margin — which is a per-line margin
+      decoration and the first thing layout would draw outside the text area.
 - [ ] How much compatibility-flag behaviour is worth implementing? There are dozens; only
       some matter visually.

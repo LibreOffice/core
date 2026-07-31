@@ -12,14 +12,16 @@ public sealed partial class Ww8DocumentReader
 {
     private readonly WritingMarkBuilder _marks = new();
 
-    private List<BookmarkEvent>? _bookmarkEvents;
+    private List<Bookmark>? _bookmarks;
+    private int[]? _bookmarkPositions;
+    private readonly Dictionary<int, WritingPosition> _positionAtCp = [];
     private List<string>? _revisionAuthors;
 
     /// <summary>The marks the walk recorded: tracked changes, bookmarks and fields.</summary>
     public WritingMarks Marks => _marks.Build();
 
-    /// <summary>A bookmark's start or end, in character-position space.</summary>
-    private readonly record struct BookmarkEvent(int Position, int Index, string Name, bool IsStart);
+    /// <summary>One bookmark, as the three tables state it: a name and two character positions.</summary>
+    private readonly record struct Bookmark(string Name, int Start, int End);
 
     /// <summary>
     /// The bookmarks, from the three tables that between them state one.
@@ -41,11 +43,11 @@ public sealed partial class Ww8DocumentReader
     /// followed it in the stream. LibreOffice clamps the same three the same way.
     /// </para>
     /// </remarks>
-    private List<BookmarkEvent> BookmarkEvents()
+    private List<Bookmark> Bookmarks()
     {
-        if (_bookmarkEvents is not null) return _bookmarkEvents;
+        if (_bookmarks is not null) return _bookmarks;
 
-        _bookmarkEvents = [];
+        _bookmarks = [];
 
         List<string> names = ReadStringTable(Slice(Ww8FibTable.BookmarkNames));
         Ww8Plcf starts = PlcfOf(Ww8FibTable.BookmarkStarts, recordSize: 4);
@@ -59,25 +61,39 @@ public sealed partial class Ww8DocumentReader
 
             int endIndex = BinaryPrimitives.ReadUInt16LittleEndian(record);
             if (endIndex < 0 || endIndex >= ends.Positions.Count) continue;
+            if (names[i].Length == 0) continue;
 
-            string name = names[i];
-            if (name.Length == 0) continue;
-
-            _bookmarkEvents.Add(new BookmarkEvent(starts.Positions[i], i, name, IsStart: true));
-            _bookmarkEvents.Add(new BookmarkEvent(ends.Positions[endIndex], i, name, IsStart: false));
+            _bookmarks.Add(new Bookmark(names[i], starts.Positions[i], ends.Positions[endIndex]));
         }
 
-        // Sorted so the walk can fire them with one advancing index rather than a search per
-        // character. Ends before starts at the same position, so that two adjacent bookmarks do not
-        // nest — the same order LibreOffice's own iterator takes pains to produce.
-        _bookmarkEvents.Sort(static (left, right) =>
-        {
-            int byPosition = left.Position.CompareTo(right.Position);
-            if (byPosition != 0) return byPosition;
-            return left.IsStart.CompareTo(right.IsStart);
-        });
+        return _bookmarks;
+    }
 
-        return _bookmarkEvents;
+    /// <summary>
+    /// The character positions the walk has to remember, ascending and distinct.
+    /// </summary>
+    /// <remarks>
+    /// Positions rather than paired events, deliberately. Firing a start and an end as two ordered
+    /// events needs an order, and no order works: two adjacent bookmarks want the first's end before
+    /// the second's start, while a <em>zero-length</em> bookmark wants its own start before its own
+    /// end — and both pairs sit at the same position. LibreOffice hits the same wall and says so in
+    /// a comment above <c>WW8PLCFx_Book::advance</c> ("the case of ][ … ][ is not solved yet").
+    /// Remembering where each position landed and building the ranges afterwards has no order to get
+    /// wrong: the corpus's point bookmark is exactly the case that vanishes otherwise.
+    /// </remarks>
+    private int[] BookmarkPositions()
+    {
+        if (_bookmarkPositions is not null) return _bookmarkPositions;
+
+        SortedSet<int> positions = [];
+        foreach (Bookmark bookmark in Bookmarks())
+        {
+            positions.Add(bookmark.Start);
+            positions.Add(bookmark.End);
+        }
+
+        _bookmarkPositions = [.. positions];
+        return _bookmarkPositions;
     }
 
     /// <summary>The revision authors, from <c>SttbfRMark</c>, indexed by the revision sprms.</summary>
@@ -152,23 +168,44 @@ public sealed partial class Ww8DocumentReader
     // ------------------------------------------------------------------- the walk's hooks
 
     /// <summary>
-    /// Fires every bookmark start and end that falls at or before a position.
+    /// Remembers where every bookmark position at or before a character position landed.
     /// </summary>
     /// <remarks>
     /// At or before, rather than at: a bookmark can be anchored to a paragraph mark or to a field
     /// character, neither of which contributes text, and testing for equality would leave such a
-    /// bookmark unfired for the rest of the document.
+    /// bookmark unrecorded for the rest of the document.
     /// </remarks>
-    private void FireBookmarks(WalkState state, int position)
+    private void NoteBookmarkPositions(WalkState state, int position)
     {
-        List<BookmarkEvent> events = BookmarkEvents();
-        while (state.BookmarkIndex < events.Count && events[state.BookmarkIndex].Position <= position)
+        int[] positions = BookmarkPositions();
+        while (state.BookmarkIndex < positions.Length && positions[state.BookmarkIndex] <= position)
         {
-            BookmarkEvent mark = events[state.BookmarkIndex++];
-            string key = mark.Index.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            int cp = positions[state.BookmarkIndex++];
+            if (_marks.At(OffsetIn(state)) is { } here) _positionAtCp[cp] = here;
+        }
+    }
 
-            if (mark.IsStart) _marks.OpenBookmark(key, mark.Name, _marks.At(OffsetIn(state)));
-            else _marks.CloseBookmark(key, _marks.At(OffsetIn(state)));
+    /// <summary>Where in this range's character space the remembering should resume.</summary>
+    /// <remarks>
+    /// Per range rather than one index for the whole document, because the subdocuments are not read
+    /// in ascending character order — the body, then the notes, then the comments, then the page
+    /// furniture — while a bookmark's positions are in the one global space they all share.
+    /// </remarks>
+    private static int FirstBookmarkPositionAt(int[] positions, int start)
+    {
+        int index = Array.BinarySearch(positions, start);
+        return index < 0 ? ~index : index;
+    }
+
+    /// <summary>Builds the bookmarks, once every range has been walked and located its positions.</summary>
+    private void BuildBookmarks()
+    {
+        foreach (Bookmark bookmark in Bookmarks())
+        {
+            if (!_positionAtCp.TryGetValue(bookmark.Start, out WritingPosition start)) continue;
+            if (!_positionAtCp.TryGetValue(bookmark.End, out WritingPosition end)) continue;
+
+            _marks.AddBookmark(bookmark.Name, start, end);
         }
     }
 
