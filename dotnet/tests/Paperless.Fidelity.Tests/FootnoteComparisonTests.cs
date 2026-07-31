@@ -1,4 +1,5 @@
 using Paperless.Core.Documents;
+using Paperless.Core.Geometry;
 using Paperless.TestKit;
 using Paperless.TestKit.LibreOffice;
 using Paperless.WordProcessing;
@@ -183,6 +184,49 @@ public sealed class FootnoteComparisonTests : IDisposable
             rendered,
             $"{fileName}: page 1's pens differ from LibreOffice's, as "
             + "'<line start> <size>@<rise above the line's baseline>'");
+    }
+
+    [Theory]
+    [InlineData("footnotes.fodt")]
+    [InlineData("footnotes.odt")]
+    [InlineData("footnotes.docx")]
+    [InlineData("footnotes.doc")]
+    public void TheRuleAboveTheNotesGoesWhereLibreOfficeDrawsIt(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        List<PdfFill> reference =
+            [.. PdfFills.Read(_libreOffice.ConvertToPdf(path, _workDirectory))
+                .Where(fill => fill.PageIndex == 0)];
+
+        Assert.SkipWhen(reference.Count == 0, "the reference PDF filled no paths");
+
+        // One rule, and finding it by shape rather than by order: the page fills nothing else, and asserting
+        // on "the first fill" would start passing for the wrong reason the moment a border or a shade appeared.
+        PdfFill rule = reference.MinBy(fill => fill.Height);
+
+        List<DrawnFill> mine = [.. Rendered(path)[0].FilledPaths];
+        mine.Count.ShouldBe(1, $"{fileName}: page 1 should fill exactly one path, the note separator");
+
+        DocRect drawn = mine[0].Bounds;
+
+        Math.Abs(drawn.X.Points - rule.Left).ShouldBeLessThanOrEqualTo(
+            TolerancePoints,
+            $"{fileName}: the rule starts at {drawn.X.Points:F3} pt drawn, {rule.Left:F3} pt rendered");
+
+        Math.Abs(drawn.Width.Points - rule.Width).ShouldBeLessThanOrEqualTo(
+            TolerancePoints,
+            $"{fileName}: the rule is {drawn.Width.Points:F3} pt wide drawn, {rule.Width:F3} pt rendered");
+
+        Math.Abs(drawn.Height.Points - rule.Height).ShouldBeLessThanOrEqualTo(
+            TolerancePoints,
+            $"{fileName}: the rule is {drawn.Height.Points:F3} pt thick drawn, "
+            + $"{rule.Height:F3} pt rendered");
+
+        Math.Abs(drawn.Y.Points - rule.Top).ShouldBeLessThanOrEqualTo(
+            TolerancePoints,
+            $"{fileName}: the rule's top is at {drawn.Y.Points:F3} pt drawn, {rule.Top:F3} pt rendered");
     }
 
     // ------------------------------------------------------------------------- the machinery

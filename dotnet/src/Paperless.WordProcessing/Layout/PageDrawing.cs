@@ -32,7 +32,8 @@ public static class PageDrawing
     /// The header first and the footer last, which is reading order and also the order a backend would
     /// prefer — nothing here overlaps, so the order is a convention rather than a correctness matter, but a
     /// recorded display list reads far better when it matches the page. The footnotes come after the body
-    /// they belong to and before the footer, which is where they sit on the sheet.
+    /// they belong to and before the footer, which is where they sit on the sheet, with their separator rule
+    /// immediately before them.
     /// <para>
     /// Floating frames are still missing, being the one kind of page content pagination does not place.
     /// </para>
@@ -53,6 +54,7 @@ public static class PageDrawing
             DrawFlow(page.Header, sink);
             DrawBody(page, blocks, sink);
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
+            DrawSeparator(page.NoteSeparator, sink);
             DrawFlow(page.Notes, sink);
             DrawFlow(page.Footer, sink);
         }
@@ -88,6 +90,29 @@ public static class PageDrawing
 
             DrawLines(area, [.. page.Lines.Where(line => line.Column == at)], blocks, sink);
         }
+    }
+
+    /// <summary>
+    /// Draws the rule above a page's notes.
+    /// </summary>
+    /// <remarks>
+    /// Filled rather than stroked, which is what LibreOffice's own PDF export does: it writes the separator as
+    /// a closed rectangular path and fills it, so its thickness is the rectangle's height rather than a pen
+    /// width. Matching that is not pedantry — a stroke is centred on its path, so the same coordinates stroked
+    /// would put half the rule's thickness on the wrong side of the line.
+    /// </remarks>
+    private static void DrawSeparator(DocRect? separator, IDrawingSink sink)
+    {
+        if (separator is not { } rule || rule.Width <= Length.Zero || rule.Height <= Length.Zero) return;
+
+        GraphicsPath path = new GraphicsPath()
+            .MoveTo(new DocPoint(rule.X, rule.Y))
+            .LineTo(new DocPoint(rule.Right, rule.Y))
+            .LineTo(new DocPoint(rule.Right, rule.Bottom))
+            .LineTo(new DocPoint(rule.X, rule.Bottom))
+            .Close();
+
+        sink.FillPath(path, Paint.Solid(Colour.Black));
     }
 
     /// <summary>Draws a flow — a header, a footer or a cell — which is lines in their own rectangle.</summary>

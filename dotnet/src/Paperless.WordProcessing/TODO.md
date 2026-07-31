@@ -439,7 +439,11 @@ is read and verified, so what remains is the filling of pages rather than the me
       requiring 3 there rejects every default a real document writes. Each entry states one value and the
       sides it applies to, so a uniform table carries **four** of them; keeping only the last leaves three
       sides at Word's 108 twips.
-- [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
+- [ ] Cell borders and shading — and this **no longer waits for the rasteriser**, which is what the note here
+      used to say. `PdfFills` reads the filled rectangles out of LibreOffice's PDF, and a border and a shade are
+      both filled rectangles, so they can be compared at the same resolution as text. What is left is the
+      reading and the drawing rather than the verifying.
+      The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
 - [x] A table inside a cell, in all four formats. A cell holds *blocks* rather than paragraphs and
@@ -610,10 +614,21 @@ is read and verified, so what remains is the filling of pages rather than the me
       because a restart cannot be resolved while the document is being read — it has to be applied as the
       pages are filled, which means the citation's text depends on pagination and pagination depends on the
       citation's width. Deliberately left until something needs it.
-- [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —
-      0.1 cm above and below, which is what Writer's `Footnote Separator` frame style ships with — but
-      nothing draws the line, and its exact spacing cannot be measured from a text comparison. Same problem
-      as cell borders, same answer: the rasteriser first.
+- [x] **The separator rule above the notes**, drawn and compared — and the interesting part is that it turned
+      out to be comparable at all. The old note here said it could not be, that it needed the rasteriser first
+      because a text comparison sees no lines. That was the wrong conclusion from a true premise: `pdftotext`
+      sees no lines, but the PDF's **content stream** does, and LibreOffice writes the rule as an explicit
+      closed rectangle. `PdfFills` reads them, so a rule is now compared at the same tenth of a point as
+      everything else — and every constant in it is measured rather than assumed:
+      - a quarter of the text width (56.7 to 177.15 pt on an A4 page with 2 cm margins, so 120.45 of 481.89),
+      - half a point thick,
+      - left aligned at the text area's left edge,
+      - and 0.1 cm above the first note's line box.
+      **Filled rather than stroked**, which matters: a stroke is centred on its path, so the same coordinates
+      stroked would put half the thickness on the wrong side of the line. LibreOffice fills a closed rectangle
+      and so does this.
+      The same reasoning applies to everything else drawn that is not text, so this unblocks more than itself —
+      see the cell-borders item, which no longer has to wait for a rasteriser either.
 - [x] **Endnotes**, which are the same thing to read as a footnote and a different thing to place: a footnote
       takes its room out of the page that cites it, and an endnote takes none at all. Measured — LibreOffice
       leaves the citing page holding every body paragraph and puts the notes at the top of a fresh page after

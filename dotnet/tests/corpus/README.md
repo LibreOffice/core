@@ -169,10 +169,11 @@ Two things about comparing these:
 behaviour: the notes take no room off the page that cites them, and they collect on a page of their own after
 it. It also changes the *numbering* — LibreOffice cites footnotes 1, 2, 3 and endnotes i, ii, iii — so a reader
 that placed an endnote as a footnote fails on the page count, and one that shared a counter between the two
-fails on the citation text. `endnotes.doc` is again the exception, and again for an upstream reason:
-LibreOffice's WW8 export writes the DOP's `epc` as 0, "collect at the end of the section", and its own import
-then renders the notes in the page-bottom note area instead. `endnotes.rtf` inherits the footnote formatting
-loss described above.
+fails on the citation text. `endnotes.doc` is the odd one out, and deliberately kept: LibreOffice's WW8 export writes the DOP's `epc` as 0,
+"collect at the end of the section", so its notes render in the page-bottom note area on one page rather than
+on a second page of their own. That makes it the corpus's only case of a note whose *class* and *position*
+disagree, which is exactly what `NotePlacement` exists for — so it is compared like the rest rather than
+excused. `endnotes.rtf` inherits the footnote formatting loss described above and is checked structurally.
 
 `note-numbering.*` is the footnote document with a `text:notes-configuration` asking for upper roman from
 eight, so its notes are cited VIII and IX. All five formats survived the export with the sequence intact,

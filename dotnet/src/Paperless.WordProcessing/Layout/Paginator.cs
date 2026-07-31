@@ -80,6 +80,29 @@ public sealed record PaginationOptions
     /// measured one: 0.1 cm above and below, which is what that style ships with.
     /// </remarks>
     public Length NoteSeparatorHeight { get; init; } = Length.FromMm100(200);
+
+    /// <summary>
+    /// How wide the rule above the notes is, as a fraction of the text width.
+    /// </summary>
+    /// <remarks>
+    /// A quarter, which is what Writer's <c>Footnote Separator</c> frame style ships with — and measured
+    /// rather than taken on trust: LibreOffice's PDF export draws the rule from 56.7 to 177.15 pt on an A4
+    /// page with 2 cm margins, and 120.45 of 481.89 is exactly 25%.
+    /// </remarks>
+    public double NoteSeparatorWidth { get; init; } = 0.25;
+
+    /// <summary>How thick the rule is; half a point, again measured from the path the export writes.</summary>
+    public Length NoteSeparatorThickness { get; init; } = Length.FromPoints(0.5);
+
+    /// <summary>
+    /// The gap between the rule and the first note line.
+    /// </summary>
+    /// <remarks>
+    /// 0.1 cm, the lower half of <see cref="NoteSeparatorHeight"/>'s two spacings. Kept separately because the
+    /// reservation is a total and this is a position: the rule sits this far above the notes, not half way up
+    /// the space reserved for it.
+    /// </remarks>
+    public Length NoteSeparatorSpacing { get; init; } = Length.FromMm100(100);
 }
 
 /// <summary>
@@ -542,6 +565,8 @@ public sealed class Paginator
                 return;
             }
 
+            PlacedFlow? noteArea = NoteArea(notes, page);
+
             pages.Add(Page(
                 pages.Count,
                 pageNumber,
@@ -551,7 +576,8 @@ public sealed class Paginator
                 Furniture(
                     furnitureSet, geometry, page, pageNumber,
                     first: pages.Count == sectionFirstPage),
-                NoteArea(notes, page)));
+                noteArea,
+                Separator(noteArea, page)));
 
             pageNumber++;
             column = 0;
@@ -771,7 +797,8 @@ public sealed class Paginator
         List<PlacedLine> lines,
         List<PlacedTable> tables,
         (PlacedFlow? Header, PlacedFlow? Footer) furniture,
-        PlacedFlow? notes)
+        PlacedFlow? notes,
+        DocRect? separator = null)
         => new()
         {
             Index = index,
@@ -785,6 +812,7 @@ public sealed class Paginator
             Header = furniture.Header,
             Footer = furniture.Footer,
             Notes = notes,
+            NoteSeparator = separator,
         };
 
     private static LaidOutPage EmptyPage(
@@ -986,6 +1014,33 @@ public sealed class Paginator
         foreach (PageNote note in notes) blocks.AddRange(note.Blocks);
 
         return FlowLayouter.LayOut(blocks, page.TextArea, offsetFromTop: null);
+    }
+
+    /// <summary>
+    /// The rule above a page's notes, or null when the page has none.
+    /// </summary>
+    /// <remarks>
+    /// Positioned from where the notes actually landed rather than from the room reserved for them, which is
+    /// the only way to get it right: the reservation is a total for the rule and both its spacings, and the
+    /// notes are bottom-aligned inside the text area — so the top of the note flow is a measured position and
+    /// the height of the reservation is not.
+    /// </remarks>
+    /// <param name="notes">The notes placed on the page, laid out.</param>
+    /// <param name="page">The page's geometry, for the text area the rule is a fraction of.</param>
+    private DocRect? Separator(PlacedFlow? notes, PageGeometry page)
+    {
+        if (notes is null || notes.Lines.Count == 0) return null;
+
+        Length width = page.TextWidth * _options.NoteSeparatorWidth;
+        if (width <= Length.Zero) return null;
+
+        // The first note line's *box* top, which is where the flow put it — not its baseline.
+        Length top = notes.Area.Y + notes.Lines[0].Top
+            - _options.NoteSeparatorSpacing
+            - _options.NoteSeparatorThickness;
+
+        return new DocRect(
+            page.TextArea.X, top, width, _options.NoteSeparatorThickness);
     }
 
     /// <summary>

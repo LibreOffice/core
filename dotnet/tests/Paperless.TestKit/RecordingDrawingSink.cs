@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 
 namespace Paperless.TestKit;
 
@@ -68,7 +69,64 @@ public sealed class RecordingDrawingSink : IDrawingSink
 
     /// <inheritdoc/>
     public void FillPath(GraphicsPath path, Paint paint, FillRule rule = FillRule.NonZero)
-        => _current?.Fills.Add(paint);
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        _current?.Fills.Add(paint);
+        _current?.FilledPaths.Add(new DrawnFill(Bounds(path), paint));
+    }
+
+    /// <summary>
+    /// A path's bounding box, which is all a comparison needs of the shapes drawn so far.
+    /// </summary>
+    /// <remarks>
+    /// Everything Paperless fills today is a rectangle — a separator rule, a cell's shading — so the bounds
+    /// are the shape rather than an approximation of it. A curve would be flattened to its control points'
+    /// extent, which is wrong for a curve and honest about being a test harness rather than a rasteriser.
+    /// </remarks>
+    private static DocRect Bounds(GraphicsPath path)
+    {
+        Length left = default;
+        Length top = default;
+        Length right = default;
+        Length bottom = default;
+        bool any = false;
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+
+            foreach (DocPoint point in Points(command))
+            {
+                if (!any)
+                {
+                    left = right = point.X;
+                    top = bottom = point.Y;
+                    any = true;
+                    continue;
+                }
+
+                left = Length.Min(left, point.X);
+                top = Length.Min(top, point.Y);
+                right = Length.Max(right, point.X);
+                bottom = Length.Max(bottom, point.Y);
+            }
+        }
+
+        return any
+            ? new DocRect(left, top, right - left, bottom - top)
+            : default;
+    }
+
+    private static IEnumerable<DocPoint> Points(PathCommand command)
+    {
+        yield return command.Point;
+
+        if (command.Verb != PathVerb.CubicTo) yield break;
+
+        yield return command.Control1;
+        yield return command.Control2;
+    }
 
     /// <inheritdoc/>
     public void StrokePath(GraphicsPath path, Stroke stroke) => _current?.Strokes.Add(stroke);
@@ -120,9 +178,22 @@ public sealed record DrawnPage(DocSize Size)
     /// <summary>The paints paths were filled with.</summary>
     public List<Paint> Fills { get; } = [];
 
+    /// <summary>The filled paths, in order, paired with the paint each was filled with.</summary>
+    /// <remarks>
+    /// The geometry as well as the paint, because a fill's *position* is the interesting half for everything
+    /// drawn that is not text — a footnote separator, a cell border, a shaded row. <see cref="Fills"/> keeps
+    /// only the paints and predates anything caring where they went.
+    /// </remarks>
+    public List<DrawnFill> FilledPaths { get; } = [];
+
     /// <summary>The strokes paths were drawn with.</summary>
     public List<Stroke> Strokes { get; } = [];
 }
+
+/// <summary>One recorded filled path, as its bounding box and the paint it was filled with.</summary>
+/// <param name="Bounds">The path's extent, which for everything drawn so far <em>is</em> the shape.</param>
+/// <param name="Paint">What it was filled with.</param>
+public readonly record struct DrawnFill(DocRect Bounds, Paint Paint);
 
 /// <summary>One recorded glyph run and the paint it was drawn with.</summary>
 /// <param name="Run">The run.</param>

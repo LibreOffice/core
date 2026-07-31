@@ -393,6 +393,23 @@ public sealed record LaidOutPage
     /// </remarks>
     public PlacedFlow? Notes { get; init; }
 
+    /// <summary>
+    /// The rule above the notes, or null when the page has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A rectangle rather than a line, because that is what it is: Writer's <c>Footnote Separator</c> is a
+    /// frame style with a width, a thickness and an alignment, and LibreOffice's PDF export writes it as a
+    /// filled path rather than a stroke. Measured from that path — 56.7 to 177.15 pt on an A4 page with 2 cm
+    /// margins, half a point thick — which makes it a quarter of the text width, left aligned, 0.5 pt.
+    /// </para>
+    /// <para>
+    /// Carried on the page rather than derived by a backend, because its position depends on where the notes
+    /// ended up and only pagination knows that.
+    /// </para>
+    /// </remarks>
+    public DocRect? NoteSeparator { get; init; }
+
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>
         Lines.Count == 0 ? Length.Zero : Lines[^1].Top + Lines[^1].Box.Height;
