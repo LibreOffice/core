@@ -255,8 +255,8 @@ public sealed partial class Ww8DocumentReader
     {
         List<Ww8Range> stories = [.. SplitSubdocument(Ranges.Headers, Ww8FibTable.HeaderTexts)];
 
-        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutParagraph>> headers = [];
-        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutParagraph>> footers = [];
+        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> footers = [];
 
         for (int slot = 0; slot < FurnitureSlots.Length; slot++)
         {
@@ -264,14 +264,20 @@ public sealed partial class Ww8DocumentReader
             if (story >= stories.Count) break;
             if (stories[story].Length <= 0) continue;
 
-            List<Ww8LayoutParagraph> paragraphs =
-                ReadLayoutParagraphs(stories[story], keepTrailingEmpty: false);
+            // Blocks rather than paragraphs, so a table in a running head survives: a two-part running head
+            // is a two-cell table, and stacking its cells as loose paragraphs would give the header a height
+            // no table has and push the body text down by the difference on every page.
+            List<Ww8LayoutBlock> blocks = ReadLayoutBlocks(stories[story], keepTrailingEmpty: false);
 
-            paragraphs.RemoveAll(paragraph => paragraph.Text.Length == 0);
-            if (paragraphs.Count == 0) continue;
+            // Word writes all six stories whether the section uses them or not, so an empty paragraph is a
+            // placeholder rather than a blank line — but only when there is nothing else in the story.
+            blocks.RemoveAll(
+                block => block.Paragraph is { Text.Length: 0 } && block.Table is null);
+
+            if (blocks.Count == 0) continue;
 
             (bool isHeader, Model.PageFurnitureSlot which) = FurnitureSlots[slot];
-            (isHeader ? headers : footers)[which] = paragraphs;
+            (isHeader ? headers : footers)[which] = blocks;
         }
 
         return new Ww8LayoutFurniture(headers, footers);
@@ -1028,5 +1034,5 @@ public sealed partial class Ww8DocumentReader
 /// <param name="Headers">The headers, by slot; a slot with no entry has no header.</param>
 /// <param name="Footers">The footers, by slot.</param>
 public sealed record Ww8LayoutFurniture(
-    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8DocumentReader.Ww8LayoutParagraph>> Headers,
-    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8DocumentReader.Ww8LayoutParagraph>> Footers);
+    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> Headers,
+    IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> Footers);

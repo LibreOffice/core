@@ -89,9 +89,9 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     private readonly List<Colour?> _colours = [];
     private readonly Staged _layoutBlocks = new();
-    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged>
         _headerLayout = [];
-    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged>
         _footerLayout = [];
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
@@ -199,12 +199,24 @@ public sealed partial class RtfDocumentReader
     /// section as well as slot because RTF writes a header in the preamble of the section it belongs to, so
     /// a document that changes its running head halfway says so by writing a second one.
     /// </remarks>
-    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
-        HeaderLayout => _headerLayout;
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        HeaderLayout => Finished(_headerLayout);
 
-    /// <summary>The footers' paragraphs, by section and slot.</summary>
-    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
-        FooterLayout => _footerLayout;
+    /// <summary>The footers' blocks, by section and slot.</summary>
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        FooterLayout => Finished(_footerLayout);
+
+    /// <summary>Flushes each slot's staged paragraphs into its block list.</summary>
+    /// <remarks>
+    /// Blocks rather than paragraphs because a running head is often a two-cell table — one part hard left and
+    /// another hard right — and stacking its cells as loose paragraphs would give the header a height no table
+    /// has, pushing the body text down by the difference on every page.
+    /// </remarks>
+    private static Dictionary<(int, Model.PageFurnitureSlot), IReadOnlyList<RtfLayoutBlock>> Finished(
+        Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged> slots)
+        => slots.ToDictionary(
+            entry => (entry.Key.Section, entry.Key.Slot),
+            entry => (IReadOnlyList<RtfLayoutBlock>)entry.Value.Finished());
 
     /// <summary>
     /// How many <c>\sect</c> marks have been seen, which is the section the reader is in.

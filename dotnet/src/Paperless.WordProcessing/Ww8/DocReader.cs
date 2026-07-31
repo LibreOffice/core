@@ -221,13 +221,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         void Fill(
             Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
-            IReadOnlyDictionary<Model.PageFurnitureSlot,
-                List<Ww8DocumentReader.Ww8LayoutParagraph>> from)
+            IReadOnlyDictionary<Model.PageFurnitureSlot, List<Ww8LayoutBlock>> from)
         {
-            foreach ((Model.PageFurnitureSlot slot,
-                      List<Ww8DocumentReader.Ww8LayoutParagraph> stories) in from)
+            foreach ((Model.PageFurnitureSlot slot, List<Ww8LayoutBlock> stories) in from)
             {
-                List<PageParagraph> converted = Convert(fonts, stories);
+                List<PageBlock> converted = BlocksOf(fonts, stories);
                 if (converted.Count > 0) into[slot] = converted;
             }
         }

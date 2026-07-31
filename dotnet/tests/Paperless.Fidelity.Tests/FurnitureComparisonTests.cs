@@ -73,6 +73,10 @@ public sealed class FurnitureComparisonTests : IDisposable
     // two paragraphs would stack as loose lines, giving the header a height no table has and pushing the body
     // text down by the difference on every page of the document.
     [InlineData("header-table.fodt")]
+    [InlineData("header-table.odt")]
+    [InlineData("header-table.docx")]
+    [InlineData("header-table.doc")]
+    [InlineData("header-table.rtf")]
     public void EveryPageDrawsItsHeaderAndFooterWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -148,6 +152,10 @@ public sealed class FurnitureComparisonTests : IDisposable
     [InlineData("furniture.rtf")]
     [InlineData("furniture.doc")]
     [InlineData("header-table.fodt")]
+    [InlineData("header-table.odt")]
+    [InlineData("header-table.docx")]
+    [InlineData("header-table.doc")]
+    [InlineData("header-table.rtf")]
     public void AHeaderPushesTheBodyDown(string fileName)
     {
         string path = Corpus.Require(fileName);

@@ -877,20 +877,26 @@ public sealed partial class RtfDocumentReader
 
         List<RtfLayoutBlock>? cell = null;
 
-        bool isLayoutFlow = ReferenceEquals(flow, _flows[0]) || flow.NoteBlocks is not null;
+        // Where this flow's blocks go, if anywhere: the body's list, a note's, or a header's or footer's
+        // slot. A shape's text flow has nowhere, and its paragraphs are dropped.
+        Staged? destination = ReferenceEquals(flow, _flows[0])
+            ? _layoutBlocks
+            : flow.NoteBlocks ?? FurnitureList(flow);
 
         if (flow.InTable)
         {
             // A cell's paragraphs, staged on its own table level until the cell mark collects them. Any
             // level, not just the outermost: an inner table's cells are a flow, and a flow holds blocks.
+            // Resolved against the destination rather than against the body alone, because a table in a
+            // running head is a flow with a destination too — and dropping its cells here is invisible
+            // afterwards, since the table still closes and simply holds nothing.
             int level = LevelOf(flow);
-            cell = isLayoutFlow ? LevelAt(flow, level).CellLayout : null;
+            cell = destination is not null ? LevelAt(flow, level).CellLayout : null;
             into = null;
         }
         else
         {
-            into = flow.NoteBlocks?.Paragraphs
-                ?? (isLayoutFlow ? _layoutBlocks.Paragraphs : FurnitureList(flow));
+            into = destination?.Paragraphs;
         }
 
         if (cell is null && into is null) return;
@@ -1046,7 +1052,7 @@ public sealed partial class RtfDocumentReader
     /// header rather than appending them to it.
     /// </para>
     /// </remarks>
-    private List<RtfLayoutParagraph>? FurnitureList(Flow flow)
+    private Staged? FurnitureList(Flow flow)
     {
         bool isHeader = flow.Target.Kind == SectionKind.Header;
         if (!isHeader && flow.Target.Kind != SectionKind.Footer) return null;
@@ -1061,20 +1067,20 @@ public sealed partial class RtfDocumentReader
 
         if (slot is null) return null;
 
-        Dictionary<(int, Model.PageFurnitureSlot), List<RtfLayoutParagraph>> slots =
+        Dictionary<(int, Model.PageFurnitureSlot), Staged> slots =
             isHeader ? _headerLayout : _footerLayout;
 
         // Keyed by the section the flow was opened in: RTF writes a header in the preamble of the section
         // it belongs to, so a document with two running heads has written two headers.
         (int, Model.PageFurnitureSlot) key = (_sectionIndex, slot.Value);
 
-        if (!slots.TryGetValue(key, out List<RtfLayoutParagraph>? paragraphs))
+        if (!slots.TryGetValue(key, out Staged? staged))
         {
-            paragraphs = [];
-            slots[key] = paragraphs;
+            staged = new Staged();
+            slots[key] = staged;
         }
 
-        return paragraphs;
+        return staged;
     }
 
     /// <summary>

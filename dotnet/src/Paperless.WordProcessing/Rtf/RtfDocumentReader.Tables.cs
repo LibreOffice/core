@@ -336,10 +336,13 @@ public sealed partial class RtfDocumentReader
         // The layout copy, taken before the rows are cleared. The outermost level goes into the flow's own
         // block list; a deeper one goes into whichever cell of the enclosing level is open, which is exactly
         // where a nested table belongs — a cell's content is a flow, and a flow holds blocks.
-        if ((ReferenceEquals(flow, _flows[0]) || flow.NoteBlocks is not null)
-            && LayoutTableOf(table.TableRows) is { } laid)
+        Staged? outer = ReferenceEquals(flow, _flows[0])
+            ? _layoutBlocks
+            : flow.NoteBlocks ?? FurnitureList(flow);
+
+        if (outer is not null && LayoutTableOf(table.TableRows) is { } laid)
         {
-            if (level == 1) (flow.NoteBlocks ?? _layoutBlocks).Add(laid);
+            if (level == 1) outer.Add(laid);
             else LevelAt(flow, level - 1).CellLayout.Add(new RtfLayoutBlock(laid));
         }
 

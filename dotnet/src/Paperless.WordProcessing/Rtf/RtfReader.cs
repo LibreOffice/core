@@ -93,11 +93,11 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly IReadOnlyList<RtfLayoutBlock> _layoutBlocks;
     private readonly
-        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
         _headerLayout;
 
     private readonly
-        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
         _footerLayout;
 
     internal RtfDocument(
@@ -106,9 +106,9 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         IReadOnlyList<Diagnostic> diagnostics,
         IReadOnlyList<Model.WritingSection> sections,
         IReadOnlyList<RtfLayoutBlock> layoutBlocks,
-        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
             headerLayout,
-        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
             footerLayout)
     {
         Format = format;
@@ -248,15 +248,16 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         // writes one header and three \sect marks has that header on all four sections.
         void Fill(
             Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
-            IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>> from)
+            IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+                from)
         {
             foreach (Model.PageFurnitureSlot slot in Enum.GetValues<Model.PageFurnitureSlot>())
             {
                 for (int at = section; at >= 0; at--)
                 {
-                    if (!from.TryGetValue((at, slot), out List<RtfLayoutParagraph>? stated)) continue;
+                    if (!from.TryGetValue((at, slot), out IReadOnlyList<RtfLayoutBlock>? stated)) continue;
 
-                    List<PageParagraph> converted = Convert(fonts, stated);
+                    List<PageBlock> converted = Convert(fonts, stated);
                     if (converted.Count > 0) into[slot] = converted;
                     break;
                 }
