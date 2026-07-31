@@ -90,6 +90,7 @@ public readonly record struct RtfLayoutRun(
 /// </param>
 /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
 /// <param name="Notes">The notes anchored in the paragraph's text, or null when it cites none.</param>
+/// <param name="Frames">The floating frames anchored in it, or null when it anchors none.</param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -101,7 +102,59 @@ public readonly record struct RtfLayoutParagraph(
     Colour? Colour = null,
     IReadOnlyList<RtfLayoutRun>? Runs = null,
     int SectionIndex = 0,
-    IReadOnlyList<RtfLayoutNote>? Notes = null);
+    IReadOnlyList<RtfLayoutNote>? Notes = null,
+    IReadOnlyList<RtfLayoutFrame>? Frames = null);
+
+/// <summary>
+/// A floating frame as RTF states it: a shape's rectangle, its wrap, and the text inside it.
+/// </summary>
+/// <remarks>
+/// <para>
+/// RTF says almost nothing about a shape in RTF's own syntax. <c>\shpleft</c> and its three companions
+/// give the rectangle in twips and <c>\shpwr</c> the wrap; everything else — the fill, the line, the
+/// distances from text, and what the coordinates are relative to when <c>\shpbxignore</c> is set — lives
+/// in <c>{\sp{\sn name}{\sv value}}</c> pairs, which are Escher's property table written out as text.
+/// Those pairs sit inside <c>{\*\shpinst}</c>, an ignorable destination this reader skips whole, so what
+/// is read here is the geometry and the wrap and nothing else.
+/// </para>
+/// <para>
+/// Kept as the file's own numbers rather than resolved, for the same reason the notes are: the layout
+/// reader is the half that has the fonts and the page geometry, and translating twice would be two
+/// chances to disagree.
+/// </para>
+/// </remarks>
+/// <param name="Offset">Where the shape sits in the anchoring paragraph's text.</param>
+/// <param name="Left">The rectangle's left edge, in twips, relative to whatever the origin is.</param>
+/// <param name="Top">Its top edge.</param>
+/// <param name="Right">Its right edge.</param>
+/// <param name="Bottom">Its bottom edge.</param>
+/// <param name="Wrap">
+/// <c>\shpwr</c>: 1 around, 2 tight, 3 through, 4 top and bottom, 5 none. The numbering is not the order
+/// the concepts are usually listed in, and 3 and 5 are the pair that invite a swap — 3 leaves a
+/// rectangular hole the text flows through the middle of, and 5 is the one that ignores the shape.
+/// </param>
+/// <param name="WrapSide"><c>\shpwrk</c>: 0 both sides, 1 left, 2 right, 3 the larger side.</param>
+/// <param name="HorizontalOrigin">Which <c>\shpbx*</c> word was seen, or null for none.</param>
+/// <param name="VerticalOrigin">Which <c>\shpby*</c> word was seen, or null for none.</param>
+/// <param name="Blocks">The shape's own text, from <c>{\shptxt}</c>.</param>
+/// <param name="WrapDistance">
+/// How far text must stay clear, or null when the shape said nothing about it. Null and zero are
+/// different answers: LibreOffice's RTF import supplies 0.2 cm on every side when the shape states none,
+/// which is measured rather than assumed — the corpus document's wrapped lines start 114 twips past the
+/// shape's right edge with the property absent and 1 twip past it with the property present and zero.
+/// </param>
+public sealed record RtfLayoutFrame(
+    int Offset,
+    int Left,
+    int Top,
+    int Right,
+    int Bottom,
+    int Wrap,
+    int WrapSide,
+    string? HorizontalOrigin,
+    string? VerticalOrigin,
+    IReadOnlyList<RtfLayoutBlock> Blocks,
+    Core.Geometry.Margins? WrapDistance = null);
 
 /// <summary>
 /// A footnote or endnote as layout sees it: where it is cited, and the blocks of its body.

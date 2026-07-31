@@ -155,6 +155,17 @@ public sealed class Paginator
     /// <summary>The width the cached note heights were measured at.</summary>
     private Length _noteWidth;
 
+    /// <summary>
+    /// What each block's lines must flow around, or null on the first pass and for documents with no
+    /// floating frames — which is nearly all of them.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a parameter because it has to reach the block-laying loop through the same
+    /// entry point pagination already uses, and because it is deliberately transient: it holds one pass's
+    /// answer about where the frames were, and is cleared before the result is returned.
+    /// </remarks>
+    private Func<int, ILineObstacles?>? _obstacles;
+
     /// <summary>Creates a paginator.</summary>
     /// <param name="options">The compatibility choices, or null for Writer's.</param>
     public Paginator(PaginationOptions? options = null)
@@ -222,6 +233,62 @@ public sealed class Paginator
         ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sections);
 
+        List<PaginatedSection> withFrames =
+            sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
+
+        List<LaidOutPage> pages = Fill(blocks, withFrames, startingNumber);
+        if (!blocks.OfType<PageParagraph>().Any(paragraph => paragraph.Frames.Count > 0)) return pages;
+
+        // The loop frames close, and the reason pagination cannot be a single pass once one is present:
+        // where a frame goes depends on where its anchor paragraph ended up, and where that paragraph's
+        // lines end up depends on the hole the frame makes in them. Writer resolves the same circularity
+        // by formatting the anchored objects and the text they affect in turn until neither moves
+        // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
+        // of laying the whole document out again, which converges in one further pass whenever the frames
+        // stay on the page they started on — the case every real document is.
+        FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+
+        for (int pass = 0; pass < MaxFramePasses && !resolution.IsEmpty; pass++)
+        {
+            _obstacles = resolution.ObstaclesFor;
+            List<LaidOutPage> next;
+            try
+            {
+                next = Fill(blocks, withFrames, startingNumber);
+            }
+            finally
+            {
+                _obstacles = null;
+            }
+
+            FrameResolution settled = FrameResolution.Of(blocks, withFrames, next);
+            pages = next;
+
+            bool converged = settled.SameAs(resolution);
+            resolution = settled;
+            if (converged) break;
+        }
+
+        return resolution.AttachedTo(pages);
+    }
+
+    /// <summary>
+    /// How many times the document may be laid out again to settle its frames' positions.
+    /// </summary>
+    /// <remarks>
+    /// Four, which is a bound rather than a count: a document whose frames stay on their own page settles
+    /// on the second pass, and the rest are for the case where wrapping pushes an anchor onto the next
+    /// page and so moves the frame with it. Writer bounds its own object-formatting loop for the same
+    /// reason — a frame can chase its anchor indefinitely.
+    /// </remarks>
+    private const int MaxFramePasses = 4;
+
+    /// <summary>The pagination loop itself, with whatever frames the current pass believes in.</summary>
+    private List<LaidOutPage> Fill(
+        IReadOnlyList<PageBlock> blocks,
+        List<PaginatedSection> sections,
+        int startingNumber)
+    {
         WasTruncated = false;
         _noteHeights.Clear();
 
@@ -277,13 +344,16 @@ public sealed class Paginator
             // run rather than as the paragraph's font. Without runs the single-face path is not merely a
             // shortcut — it is the common case, and it avoids building a prefix table per run for a
             // paragraph that has one.
+            ILineObstacles? obstacles = _obstacles?.Invoke(i);
+
             laid.Add(new LaidBlock(paragraph.HasRuns
                 ? layouter.Layout(
                     Measure(paragraph),
                     paragraph.Format,
                     width,
                     paragraph.Language,
-                    previous)
+                    previous,
+                    obstacles)
                 : layouter.Layout(
                     paragraph.Text,
                     paragraph.Format,
@@ -291,7 +361,8 @@ public sealed class Paginator
                     width,
                     paragraph.Language,
                     previous,
-                    paragraph.Shaping)));
+                    paragraph.Shaping,
+                    obstacles)));
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;

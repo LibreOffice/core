@@ -383,6 +383,7 @@ public sealed partial class OdtLayoutSource
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, text, face),
             Notes = NotesOf(walker.Notes),
+            Frames = FramesOf(walker.Frames),
             Source = element,
         };
     }
@@ -586,6 +587,65 @@ public sealed partial class OdtLayoutSource
     /// <param name="Citation">The number it is cited by, counted across the document and already formatted.</param>
     private readonly record struct NoteAnchor(int Offset, XElement Element, string Citation);
 
+    /// <summary>One floating frame in a paragraph, with the character offset it is anchored at.</summary>
+    private readonly record struct FrameAnchor(int Offset, XElement Element);
+
+    /// <summary>
+    /// How deeply a frame's own text may hold further frames before the innermost is dropped.
+    /// </summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a limit anyone meets: a text frame holds paragraphs, a
+    /// paragraph holds frames, and a file claiming a hundred levels would read the same walk a hundred
+    /// deep. Real documents nest one.
+    /// </remarks>
+    private const int MaxFrameNesting = 8;
+
+    /// <summary>How many frames enclose the paragraph currently being read.</summary>
+    private int _frameDepth;
+
+    /// <summary>
+    /// Reads the frames a paragraph anchors, with their own text laid out inside them.
+    /// </summary>
+    /// <remarks>
+    /// A frame's content goes through <see cref="ReadFlow"/> — the same walk a header takes — so a frame
+    /// containing a table or a list needs nothing of its own. That does mean the reader re-enters itself,
+    /// which is why the depth is counted: the recursion is bounded by the document rather than by the
+    /// stack.
+    /// </remarks>
+    private List<PageFrame> FramesOf(List<FrameAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageFrame> frames = [];
+
+        foreach (FrameAnchor anchor in anchors)
+        {
+            Func<XElement, IReadOnlyList<PageBlock>>? content = _frameDepth < MaxFrameNesting
+                ? Content
+                : null;
+
+            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset) is { } frame)
+            {
+                frames.Add(frame);
+            }
+        }
+
+        return frames;
+
+        IReadOnlyList<PageBlock> Content(XElement box)
+        {
+            _frameDepth++;
+            try
+            {
+                return ReadFlow(box);
+            }
+            finally
+            {
+                _frameDepth--;
+            }
+        }
+    }
+
     /// <summary>True when a <c>text:note</c> is an endnote rather than a footnote.</summary>
     /// <remarks>
     /// <c>text:note-class</c>, whose only other value is <c>footnote</c> — and which is worth reading rather
@@ -636,6 +696,7 @@ public sealed partial class OdtLayoutSource
         private readonly List<OdfStyleReference> _cascade = [];
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
+        private readonly List<FrameAnchor> _frames = [];
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
@@ -682,6 +743,9 @@ public sealed partial class OdtLayoutSource
         /// <summary>The notes anchored in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
 
+        /// <summary>The floating frames anchored in the paragraph, with the offsets they sit at.</summary>
+        internal List<FrameAnchor> Frames => _frames;
+
         /// <summary>Walks a <c>text:p</c> or <c>text:h</c>.</summary>
         /// <param name="paragraph">The paragraph element.</param>
         /// <param name="prefix">
@@ -720,6 +784,14 @@ public sealed partial class OdtLayoutSource
 
                     case XElement child when child.Name.NamespaceName == OdfNamespaces.Text:
                         AppendTextElement(child, depth);
+                        break;
+
+                    // A floating frame is *in* the paragraph and is not part of it: its own text belongs
+                    // to a rectangle of its own, and walking into it would splice a caption into the
+                    // middle of the sentence the frame is anchored in. Recorded with the offset it sits
+                    // at, which is what a character anchor is measured in.
+                    case XElement child when OdfFrames.IsFrame(child):
+                        _frames.Add(new FrameAnchor(_builder.Length, child));
                         break;
 
                     case XElement child:

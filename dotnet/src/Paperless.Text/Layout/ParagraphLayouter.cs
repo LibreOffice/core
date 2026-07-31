@@ -144,6 +144,10 @@ public sealed class ParagraphLayouter
     /// spacing, which suppresses the gap between two paragraphs of the same shape.
     /// </param>
     /// <param name="options">How to shape; the default is what Writer does.</param>
+    /// <param name="obstacles">
+    /// The floating frames the text has to flow around, or null when there are none — which is nearly
+    /// always, and is the path every paragraph took before frames existed.
+    /// </param>
     public LaidOutParagraph Layout(
         string text,
         ParagraphFormat? format = null,
@@ -151,22 +155,14 @@ public sealed class ParagraphLayouter
         Length? textAreaWidth = null,
         string? language = null,
         ParagraphFormat? follows = null,
-        ShapingOptions? options = null)
+        ShapingOptions? options = null,
+        ILineObstacles? obstacles = null)
     {
         ArgumentNullException.ThrowIfNull(text);
 
         ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
         Length size = emSize ?? Length.FromPoints(12);
         Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
-
-        List<TextLine> lines = _filler.Fill(
-            text,
-            size,
-            paragraph.BodyWidth(areaWidth),
-            paragraph.FirstLineWidth(areaWidth),
-            language,
-            options,
-            paragraph);
 
         // Snapped to whole twips before anything else uses it, because that is Writer's layout unit and
         // every later sum inherits the difference: a fifth of a twip per line accumulates over a page to
@@ -176,29 +172,43 @@ public sealed class ParagraphLayouter
         (Length baseline, Length spaceAbove) =
             BaselineIn(height, natural, size, paragraph.LineSpacing.Mode);
 
+        WrappedLines? wrapped = obstacles is { IsEmpty: false }
+            ? new WrappedLines(obstacles, paragraph, areaWidth, (_, _) => height)
+            : null;
+
+        List<TextLine> lines = _filler.Fill(
+            text,
+            size,
+            paragraph.BodyWidth(areaWidth),
+            paragraph.FirstLineWidth(areaWidth),
+            language,
+            options,
+            paragraph,
+            wrapped is null ? null : wrapped.WidthOfLine);
+
         List<LineBox> boxes = new(lines.Count);
         Length top = Length.Zero;
 
         for (int i = 0; i < lines.Count; i++)
         {
             bool isFirst = i == 0;
-            Length available = isFirst
-                ? paragraph.FirstLineWidth(areaWidth)
-                : paragraph.BodyWidth(areaWidth);
+            LineSpace space = wrapped?.At(i, lines) ?? new LineSpace(
+                paragraph.LineStart(isFirst),
+                isFirst ? paragraph.FirstLineWidth(areaWidth) : paragraph.BodyWidth(areaWidth));
 
             boxes.Add(new LineBox(
                 lines[i],
-                paragraph.LineStart(isFirst) + AlignmentOffset(
-                    paragraph.Alignment, lines[i], available, isLast: i == lines.Count - 1),
+                space.Left + AlignmentOffset(
+                    paragraph.Alignment, lines[i], space.Width, isLast: i == lines.Count - 1),
                 top,
-                height,
-                baseline,
+                height + space.Descent,
+                baseline + space.Descent,
                 spaceAbove,
                 Justification(
-                    paragraph.Alignment, lines[i], text, available,
+                    paragraph.Alignment, lines[i], text, space.Width,
                     isLast: i == lines.Count - 1)));
 
-            top += height;
+            top += height + space.Descent;
         }
 
         return new LaidOutParagraph(
@@ -227,24 +237,31 @@ public sealed class ParagraphLayouter
     /// <param name="textAreaWidth">The width available before the paragraph's own indents.</param>
     /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
     /// <param name="follows">The format of the paragraph above, for contextual spacing.</param>
+    /// <param name="obstacles">The floating frames the text has to flow around, or null for none.</param>
     public LaidOutParagraph Layout(
         MeasuredParagraph measured,
         ParagraphFormat? format = null,
         Length? textAreaWidth = null,
         string? language = null,
-        ParagraphFormat? follows = null)
+        ParagraphFormat? follows = null,
+        ILineObstacles? obstacles = null)
     {
         ArgumentNullException.ThrowIfNull(measured);
 
         ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
         Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
 
+        WrappedLines? wrapped = obstacles is { IsEmpty: false }
+            ? new WrappedLines(obstacles, paragraph, areaWidth, HeightOfLine)
+            : null;
+
         List<TextLine> lines = _filler.Fill(
             measured,
             paragraph.BodyWidth(areaWidth),
             paragraph.FirstLineWidth(areaWidth),
             language,
-            paragraph);
+            paragraph,
+            wrapped is null ? null : wrapped.WidthOfLine);
 
         List<LineBox> boxes = new(lines.Count);
         Length top = Length.Zero;
@@ -252,9 +269,9 @@ public sealed class ParagraphLayouter
         for (int i = 0; i < lines.Count; i++)
         {
             bool isFirst = i == 0;
-            Length available = isFirst
-                ? paragraph.FirstLineWidth(areaWidth)
-                : paragraph.BodyWidth(areaWidth);
+            LineSpace space = wrapped?.At(i, lines) ?? new LineSpace(
+                paragraph.LineStart(isFirst),
+                isFirst ? paragraph.FirstLineWidth(areaWidth) : paragraph.BodyWidth(areaWidth));
 
             (Length natural, Length ascent) =
                 measured.HeightOf(lines[i].Start, lines[i].VisibleEnd);
@@ -265,17 +282,33 @@ public sealed class ParagraphLayouter
 
             boxes.Add(new LineBox(
                 lines[i],
-                paragraph.LineStart(isFirst) + AlignmentOffset(
-                    paragraph.Alignment, lines[i], available, isLast: i == lines.Count - 1),
+                space.Left + AlignmentOffset(
+                    paragraph.Alignment, lines[i], space.Width, isLast: i == lines.Count - 1),
                 top,
-                height,
-                baseline,
+                height + space.Descent,
+                baseline + space.Descent,
                 spaceAbove,
                 Justification(
-                    paragraph.Alignment, lines[i], measured.Text, available,
+                    paragraph.Alignment, lines[i], measured.Text, space.Width,
                     isLast: i == lines.Count - 1)));
 
-            top += height;
+            top += height + space.Descent;
+        }
+
+        // How tall a line already broken is, and — for the one not broken yet — a guess. Writer makes the
+        // same guess for the same reason (`SwTextFormatter::CalcFlyWidth` calls `CalcRealHeight` before it
+        // knows the line's content): the frames a line must avoid depend on how tall it is, and how tall it
+        // is depends on which runs it ends up holding.
+        Length HeightOfLine(int index, IReadOnlyList<TextLine> broken)
+        {
+            if (index < broken.Count)
+            {
+                (Length own, _) = measured.HeightOf(broken[index].Start, broken[index].VisibleEnd);
+                return paragraph.LineSpacing.Apply(own);
+            }
+
+            (Length fallback, _) = measured.HeightOf(0, Math.Min(1, measured.Text.Length));
+            return paragraph.LineSpacing.Apply(fallback);
         }
 
         return new LaidOutParagraph(
@@ -419,6 +452,73 @@ public sealed class ParagraphLayouter
 
         long hundredths = slack.Twips * 100 / blanks;
         return Length.FromEmu(hundredths * Length.EmuPerTwip / 100);
+    }
+
+    /// <summary>
+    /// The stretch each line of an obstructed paragraph gets, resolved once and remembered.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Once, and that is the point of the class rather than a lambda: the width a line was <em>filled</em>
+    /// at and the width it is <em>placed</em> at must be the same number. Asking the obstacles twice would
+    /// invite them to answer differently — the second call knows the line's real height where the first
+    /// only guessed it — and a line broken for one width and drawn in another either overflows a frame or
+    /// stops short of it.
+    /// </para>
+    /// <para>
+    /// A line's top is the sum of everything above it, descents included, which is why this cannot be a
+    /// pure function of the index: a line pushed below a top-and-bottom wrapped frame moves every line
+    /// after it down by the same amount. Recomputed from the front on each new line rather than kept as a
+    /// running total, because the heights of the lines already broken are only knowable once they are —
+    /// a paragraph is a few dozen lines and this path is taken only beside a frame.
+    /// </para>
+    /// </remarks>
+    private sealed class WrappedLines(
+        ILineObstacles obstacles,
+        ParagraphFormat format,
+        Length areaWidth,
+        Func<int, IReadOnlyList<TextLine>, Length> heightOfLine)
+    {
+        private readonly List<LineSpace> _spaces = [];
+        private readonly List<Length> _heights = [];
+
+        /// <summary>The width to fill line <paramref name="index"/> to.</summary>
+        public Length WidthOfLine(int index, IReadOnlyList<TextLine> broken)
+            => At(index, broken).Width;
+
+        /// <summary>The stretch line <paramref name="index"/> gets, resolving it if it is new.</summary>
+        public LineSpace At(int index, IReadOnlyList<TextLine> broken)
+        {
+            while (_spaces.Count <= index)
+            {
+                int line = _spaces.Count;
+
+                Length top = Length.Zero;
+                for (int above = 0; above < line; above++)
+                {
+                    top += _spaces[above].Descent + _heights[above];
+                }
+
+                Length height = heightOfLine(line, broken);
+                bool isFirst = line == 0;
+
+                LineSpace wanted = new(
+                    format.LineStart(isFirst),
+                    isFirst ? format.FirstLineWidth(areaWidth) : format.BodyWidth(areaWidth));
+
+                _spaces.Add(obstacles.SpaceFor(top, height, wanted));
+                _heights.Add(height);
+            }
+
+            // The heights of the lines already broken are now known exactly, so the tops of the lines
+            // after them are too. Refreshing keeps the placing pass and the filling pass in step.
+            for (int line = 0; line < Math.Min(_heights.Count, broken.Count); line++)
+            {
+                _heights[line] = heightOfLine(line, broken);
+            }
+
+            return _spaces[index];
+        }
     }
 
     private static Length AlignmentOffset(

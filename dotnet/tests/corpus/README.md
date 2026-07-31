@@ -281,3 +281,44 @@ bookmark, and a reader that walks them as an ordered stream of events loses it. 
 one way that matters between the families — the Word formats carry an instruction string, ODF carries a typed
 element and no instruction at all — and LibreOffice's ODF export caches the page number as `0` where the other
 three cache `1`.
+
+### Frame documents
+
+`frame-wrap.fodt` is one floating frame and one wrap mode, which is deliberate: a document exercising every
+mode makes a cascade that is far harder to attribute than a single narrowed band. A 4 x 3 cm text frame sits
+at the start margin of the second paragraph — anchored to the paragraph, positioned from its top-left, with
+`style:wrap="right"` so the body text passes on its right — on an A4 page with 2 cm margins. Its own text is
+9 pt against the body's 11 so that the two can be told apart by something other than where they are, which is
+the thing under test.
+
+Three things about comparing it, all measured:
+
+- **The frame's top is exactly the anchor paragraph's top**, and the line *above* it is narrowed anyway. Its
+  box bottom and the frame's top edge coincide at 2210 twips, and LibreOffice treats that as an overlap.
+- **The DOCX comparison runs at three twips rather than two**, and the extra one is a difference rather than
+  slack: LibreOffice resumes text 3404 twips along where the frame's own geometry ends at 3401. One twip is
+  the inclusive rectangle every format shows; the other two come from the wrap margin its OOXML import
+  derives from `wp:effectExtent`, which cannot be read without also raising the hole's top edge and
+  narrowing one line too many.
+- **The RTF gets a wrap distance the file does not state.** LibreOffice's RTF import supplies 0.2 cm on every
+  side when the shape carries no `dxWrapDist*` property — the wrapped lines start 114 twips past the shape's
+  own right edge with the property absent and 1 twip past it with `{\sp{\sn dxWrapDistLeft}{\sv 0}}` added
+  to the same file. Paperless applies the same default, so its RTF lines land within a twip. What it does
+  *not* reproduce is the inset LibreOffice gives the shape's own text: 17 twips horizontally and 15
+  vertically over and above the file's zeros, so `frame-wrap.rtf` is compared for its wrap and not for the
+  position of the text inside the frame.
+
+`frame-wrap.doc` is committed and not compared: reading a DOC's drawings needs the Escher record stream,
+which `Paperless.MsBinary` does not have yet. It lays out as though the frame were not there.
+
+`frame-wrap-modes.fodt` is the second frame document and exists for the modes the first cannot reach: four
+2 cm-tall frames, far enough apart not to interact, one each for `left` at the end margin, `none` — ODF's
+top-and-bottom — in the middle, `run-through` at the start margin, and `dynamic` with a centimetre of room on
+its left and twelve on its right. It is checked against the engine's own placement of each frame rather than
+against LibreOffice's pens, and the reason is worth stating: **the document is one line short of
+LibreOffice's on the top-and-bottom frame**, whose anchor paragraph is also the paragraph it pushes down —
+Writer settles that self-reference one line lower than this does. Everything else in it agrees.
+
+It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
+begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
+the end margin while `frame-wrap.fodt` passed throughout.

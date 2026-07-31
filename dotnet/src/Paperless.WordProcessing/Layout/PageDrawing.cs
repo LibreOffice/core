@@ -35,7 +35,10 @@ public static class PageDrawing
     /// they belong to and before the footer, which is where they sit on the sheet, with their separator rule
     /// immediately before them.
     /// <para>
-    /// Floating frames are still missing, being the one kind of page content pagination does not place.
+    /// The floating frames come after the body, which is paint order rather than reading order and is the
+    /// one place the two differ: a frame with a background is opaque, and the text it displaced has
+    /// already been shortened to keep clear of it — so a frame drawn first would be painted over by
+    /// whatever ran under it.
     /// </para>
     /// </remarks>
     /// <param name="page">The page to draw.</param>
@@ -56,6 +59,7 @@ public static class PageDrawing
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
             DrawSeparator(page.NoteSeparator, sink);
             DrawFlow(page.Notes, sink);
+            foreach (PlacedFrame frame in page.Frames) DrawFrame(frame, sink);
             DrawFlow(page.Footer, sink);
         }
         finally
@@ -113,6 +117,42 @@ public static class PageDrawing
 
         DrawLines(flow.Area, flow.Lines, flow.Blocks, sink);
         foreach (PlacedTable table in flow.Tables) DrawTable(table, sink);
+    }
+
+    /// <summary>
+    /// Draws a floating frame: its background, its own text, and its border.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Background, then content, then border — the order a table cell is drawn in and for the same reason:
+    /// a border runs through the centre of its own line, so half of it overlaps whatever is inside.
+    /// </para>
+    /// <para>
+    /// An image frame draws nothing but its background and border. The raster is a separate matter and the
+    /// wrap, which is what moves text, never depended on it — so a picture reserves exactly the right room
+    /// and leaves a hole where its pixels will go.
+    /// </para>
+    /// </remarks>
+    private static void DrawFrame(PlacedFrame frame, IDrawingSink sink)
+    {
+        if (frame.Frame.Fill is { } fill) Fill(frame.Area, fill, sink);
+
+        DrawFlow(frame.Content, sink);
+
+        if (frame.Frame.BorderColour is not { } colour) return;
+        if (frame.Frame.BorderWidth <= Length.Zero) return;
+
+        Stroke stroke = new(Paint.Solid(colour), frame.Frame.BorderWidth);
+        DocRect area = frame.Area;
+
+        sink.StrokePath(
+            new GraphicsPath()
+                .MoveTo(new DocPoint(area.X, area.Y))
+                .LineTo(new DocPoint(area.Right, area.Y))
+                .LineTo(new DocPoint(area.Right, area.Bottom))
+                .LineTo(new DocPoint(area.X, area.Bottom))
+                .Close(),
+            stroke);
     }
 
     /// <summary>

@@ -140,6 +140,17 @@ indexes or resolvable style chains.
       date", and LibreOffice's own exporters disagree about it. Its ODF and DOC exports both write the
       Unix epoch; its DOCX export omits `w:date` altogether. So two of the four report 1970-01-01 and
       two report nothing, from one source document.
+- [ ] Fields — store both the definition and the cached result. The cached result is what a
+      reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
+- [ ] Bookmarks and cross-references
+- [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode, in the
+      *document model*. Layout has them — `Layout/PageFrame.cs` holds the anchor, the two position origins,
+      the wrap and the frame's own blocks, and all four anchor kinds are read — but the tree has no node for
+      one, so a caller walking the model still cannot find a frame. The as-character case is the one that
+      needs the model rather than the layout: it is a hint over a placeholder and takes room on a line, which
+      is a paragraph's business.
+- [ ] Tracked changes (redlines) with their author and timestamp. The hint kinds exist and the
+      readers currently resolve changes rather than recording them.
 - [ ] Importers that build this model. All four build the extraction tree today, and all four now also
       produce the flat paragraph-plus-format sequence the paginator takes — which turned out to be what
       layout actually needed, and is much less than this model holds. The tree itself still has no
@@ -181,6 +192,20 @@ Order chosen so each is verifiable before the next gets harder.
 - [x] ODF's own text-for-layout problem: runs of spaces, tabs and line breaks are elements, so taking the
       descendant text nodes alone loses every one of them — `text:s` above all, which is how any run of
       two or more spaces is written.
+- [x] `draw:frame`, read into the layout engine's frame model: the element carries the anchor and the
+      geometry and its *graphic style* carries everything that decides how text behaves near it, so reading
+      the element alone gives a frame in the right place that no text avoids. The style is resolved up its
+      parent chain, because LibreOffice writes a per-frame automatic style whose parent is the named `Frame`
+      style and the wrap can be on either.
+      Two of ODF's spellings are traps and both are written down where they are read. `style:wrap="none"`
+      means no text *beside* the frame — the text goes above and below it — and ODF's word for "ignore it"
+      is `run-through`; reading `none` as "no wrapping" leaves text running across the frame. And
+      `style:horizontal-pos="from-left"` is the only value that uses `svg:x` at all: `left`, `center` and
+      `right` align against whatever `style:horizontal-rel` names and ignore the coordinate.
+      A frame's own text goes through `ReadFlow`, the same walk a header takes, so a frame containing a
+      table needs nothing of its own. This also fixed a bug that predates frames: a `draw:frame` inside a
+      `text:p` fell through the run walker's default case, which walked *into* the text box and spliced the
+      frame's words into the middle of the sentence it floats beside.
 
 ### DOCX — extraction done
 - [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
@@ -208,6 +233,21 @@ Order chosen so each is verifiable before the next gets harder.
       citations, comments with their author
 - [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
       section, and the DrawingML/VML pair read once rather than twice
+- [x] `w:drawing` read for *layout* as well: `wp:anchor` states the same two facts per axis ODF does — an
+      origin and either an offset in EMUs or an edge to align against — and the wrap in a way that needs
+      saying out loud. It is which of five sibling **elements** is present, and two of the five are named
+      the opposite of what they do: `wp:wrapNone` is the mode where text runs *through* the frame, and
+      `wp:wrapTopAndBottom` is what ODF spells `none`. Only `wp:wrapSquare` carries a side, in `wrapText`.
+      `wp:inline` is read as an as-character frame with no wrap, so an inline picture is recorded rather
+      than misplaced.
+- [ ] `wp:effectExtent`, and the reason it is unread is a measurement rather than a principle. LibreOffice
+      folds it into the wrap margins (`GraphicImport.cxx`, the `WrapTextMode_PARALLEL` branch:
+      `m_nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width - (aLOBoundRect.X + aLOBoundRect.Width)`,
+      which for an unrotated shape comes to the effect extent). Adding it *horizontally* moves the wrapped
+      lines the right way by a twip; adding it *vertically* raises the hole's top edge by a twip too, and
+      on the corpus document that makes the line above the frame touch it and narrows one line more than
+      LibreOffice does. A whole line in the wrong place is a worse error than a twip, so neither half is
+      applied and the DOCX comparison runs two twips wider than the ODF one instead.
 - [x] Tables: `w:gridSpan`, and `w:vMerge`'s top-and-continuation encoding turned into a row
       span, which needs the rows drafted before they are materialised
 - [ ] `settings.xml` compatibility flags — parsed and exposed, nothing reads them yet. They
@@ -289,9 +329,16 @@ Order chosen so each is verifiable before the next gets harder.
 - [ ] The `Dop`, for `fDontUseHTMLAutoSpacing` — which is what LibreOffice's importer reads into
       `PARA_SPACE_MAX` and therefore decides whether two paragraphs' spacings add or the larger wins. The
       DOC path defaults to adding, which matches every document LibreOffice itself wrote.
-- [ ] Escher drawings via `Paperless.MsBinary`. Until then a drawing anchor is not reported as
-      an image: telling an embedded picture from a shape needs the record stream, and counting
-      every `U+0001` reports a picture for every text box.
+- [ ] Escher drawings via `Paperless.MsBinary`, which is also what keeps DOC out of the floating-frame
+      work. A drawing anchor is not reported as an image — telling an embedded picture from a shape needs
+      the record stream, and counting every `U+0001` reports a picture for every text box — and it is not
+      placed either, so `frame-wrap.doc` lays out as though the frame were not there. What it needs is a
+      real read rather than a translation: the `FSPA` in `PlcSpaFdd` gives the anchor's rectangle and its
+      wrap (`fspa.wr` and `fspa.wrk`, the same two numbers RTF's `\shpwr` and `\shpwrk` carry, which is not
+      a coincidence — RTF's shape syntax *is* Escher spelled out), and the shape itself is an `SPCONTAINER`
+      in the `Office Art` stream whose `OPT` property table holds the distances from text and the text-box
+      index. `Paperless.MsBinary`'s Escher reader is listed as not started, and starting one for this alone
+      would be the wrong order: the same reader buys shapes in XLS and PPT too.
 - [x] Section descriptors (`PlcfSed`): the page setup. Two levels of indirection, both easy to get
       wrong — the PLCF's twelve-byte records hold an offset that points into the *WordDocument* stream
       rather than the table stream it was read from, and it points at a length-prefixed grpprl rather
@@ -344,6 +391,24 @@ Order chosen so each is verifiable before the next gets harder.
       which is the one format where the name is also the key
 - [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
 - [x] Embedded pictures recorded as graphics without decoding the bytes
+- [x] `{\shp}` shapes read as floating frames: `\shpleft` and its three companions give the rectangle in
+      twips, `\shpwr` and `\shpwrk` the wrap, and the `{\sp{\sn name}{\sv value}}` pairs — Escher's
+      property table written out as text — give the origin and the distances from text. Those pairs sit
+      inside `{\*\shpinst}`, an ignorable destination the reader skips whole, so `\sn` and `\sv` are read
+      as destinations of their own; without them a file LibreOffice wrote has no origin at all, since its
+      export writes `\shpbxignore` and states `posrelh` instead.
+      `\shpwr`'s numbering is RTF's own and two of its five values invite a swap: 3 is *through*, meaning a
+      rectangular hole the text flows into, and 5 is *none*, meaning the shape is ignored.
+- [x] **A shape that states no `dxWrapDist*` gets 0.2 cm on every side**, which is LibreOffice's default and
+      not the specification's 0.125 inch. Measured both ways on the same file: the corpus RTF's wrapped
+      lines start 114 twips past the shape's own right edge with the property absent, and 1 twip past it
+      with `{\sp{\sn dxWrapDistLeft}{\sv 0}}` and its three siblings added. So "stated zero" and "said
+      nothing" are different answers and the reader keeps them apart.
+- [ ] The inset LibreOffice gives a shape's own **text**: 17 twips horizontally and 15 vertically over and
+      above what the file asks for. The corpus RTF states `dxTextLeft` and its three siblings as zero and
+      LibreOffice still draws the frame's first line at 57.55, 119.80 where the shape's corner is 56.70,
+      110.50. So `frame-wrap.rtf` is compared for its wrap — which is exact to a twip — and not for the
+      position of the text inside the frame.
 - [x] Nested tables: `\itap` for the depth, `\nestcell`/`\nestrow` for the inner ends, and
       `{\*\nesttableprops}` — the one ignorable destination that must **not** be skipped, since it
       holds the inner row's geometry and its end. `{\nonesttables …}` beside it is a plain-text
@@ -402,7 +467,74 @@ is read and verified, so what remains is the filling of pages rather than the me
       *first* line sits the footer style's own spacing below where body text stops, and a second line
       grows downwards. `PageGeometry.FooterOffset` carries the ODF answer and null means the Word rule;
       both were measured against LibreOffice's rendering of the same one-line footer in each format.
-- [ ] Section and floating frames inside the body.
+- [x] **Floating frames inside the body**, with rectangular text wrap. A frame is a rectangle of content
+      anchored somewhere in the text that body text flows round, and the wrap is the half that changes
+      layout: a line beside a frame breaks earlier than the same line above it.
+      `ILineObstacles` is the interface, and it is deliberately thin — `ParagraphLayouter` knows a line's top
+      and height *within its paragraph* and nothing about which frames are anchored where, so the same filler
+      serves a header, a cell and a page body. It is asked once per line, which is exactly what
+      `SwTextFormatter::CalcFlyWidth` does with `SwTextFly::GetFrame`.
+      What was ported rather than guessed, each measured against LibreOffice's rendering of a 4 × 3 cm frame
+      on an A4 page with 2 cm margins:
+      - **The wrap side widens the rectangle** rather than choosing between two of them.
+        `SwTextFly::AnchoredObjToRect` calls `CalcRightMargin` for a left wrap and `CalcLeftMargin` for a
+        right one, so "text on the left only" is expressed as a frame reaching the end margin; top-and-bottom
+        does both, which is what leaves a line nowhere to go and drops it below the frame.
+      - **A line whose box merely touches the frame's top edge is already narrowed.** A frame anchored at the
+        top of paragraph two narrows the *last line of paragraph one*, whose box bottom is exactly the
+        frame's top — both are 2210 twips. Writer's rectangles are inclusive and the fly-portion arithmetic
+        adds a twip back, so the hole is one twip larger than the geometry on every side; that is also why
+        text resumes 3402 rather than 3401 twips along from a frame 2268 twips wide at 1134. Getting this
+        wrong is a whole line in the wrong place, not a rounding.
+      - **The optimal wrap is decided per frame from the room on each side**, per
+        `SwTextFly::GetSurroundForTextWrap`: a side with less than 2 cm for the text is not wrapped on at
+        all, a frame wider than 1.5 cm loses its narrower side outright, and a frame with room on neither
+        side wraps on *both* rather than on neither — Writer prefers the mode that gives the same answer on
+        a re-layout.
+      - **Wrap spacing widens the hole without moving the frame** (`GetObjRectWithSpaces`). Measured: the
+        same frame given `fo:margin-top="0.5cm"` starts narrowing lines one line earlier, and one 11 pt line
+        is 269 twips against the margin's 283.
+- [x] **Pagination is a bounded loop rather than one pass** once a frame is present, because the dependency
+      is circular: where a frame goes depends on where its anchor paragraph landed, and that paragraph's
+      lines depend on the hole the frame makes in them. Writer resolves the same circularity by formatting
+      the anchored objects and the text they affect in turn until neither moves (`SwObjectFormatter`); this
+      lays the whole document out again, up to four times, which converges on the second pass whenever the
+      frames stay on the page they started on.
+      The convergence test is the subtle part and cost a wrong page: it compares the *obstructed paragraphs'
+      own tops* as well as the frame rectangles. The frames can settle while the text has not — a paragraph
+      below one that grew by wrapping starts lower than the previous pass believed, and its lines were
+      measured against the frame at the height it used to be. Comparing only the rectangles declares victory
+      with the paragraph after the frame still wrapped round nothing.
+- [ ] **Two segments on one line**, which is what a `parallel` wrap round a frame that touches neither margin
+      needs. Writer fills the gap left of the frame, inserts a fly portion, and carries on filling to the
+      right of it — one line, two stretches of text — and the corpus proves it: a 4 cm frame centred in a
+      17 cm measure renders with words on both sides of every line it crosses. This engine takes the
+      *leftmost* free interval and leaves the rest, so such a line comes out short and the paragraph gains
+      lines. The cases that touch a margin — which is nearly every real frame, and every wrap mode other
+      than `parallel` — are exact, because the wrap side widens the frame to the margin and leaves one
+      interval. Doing it properly means `LineBox` carrying a list of stretches rather than a left and a
+      width, and the drawing splitting a line's runs at each boundary.
+- [ ] **Contour wrap.** `wp:wrapTight` and `wp:wrapThrough` are read as the square wrap their `wrapText`
+      names, which is the same hole with straight sides; ODF's `style:wrap-contour` is ignored. Writer builds
+      the outline with `SwContourCache::ContourRect` and a `TextRanger`, and asks it *per line* for the
+      polygon's extent in that strip — so it is not a different rectangle but a different question, and it
+      needs the drawing's own geometry, which for a picture means the raster.
+- [ ] **A top-and-bottom frame anchored to the paragraph it pushes down.** Self-referential, and Writer
+      settles it one line lower than this does: measured on `frame-wrap-modes.fodt`, LibreOffice keeps the
+      anchor paragraph's first line above the frame and starts the band below it, where this drops the
+      whole paragraph. The loop is the frame's position depending on a paragraph whose own position the
+      frame decides, and the bounded relayout converges on the other answer. The three modes that leave a
+      side open have no such degeneracy, since the paragraph does not move.
+- [ ] **Frames anchored in a table cell or a header**, which are dropped: the resolution pass walks the body's
+      blocks and takes a frame's page from the line that starts its paragraph, and a cell's paragraphs have no
+      such line. A frame in a cell reads correctly and is never placed.
+- [ ] **As-character frames take no room on their line.** All four readers recognise the anchor —
+      `text:anchor-type="as-char"`, `wp:inline`, and the RTF and WW8 equivalents — and record the frame, but
+      nothing gives the line a portion as wide as the frame, so the text closes over it. Writer's
+      `SwFlyCntPortion` is a line portion with the frame's own width and height, which is a different
+      mechanism from the wrap and belongs with the run model rather than with the obstacles.
+- [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
+      it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and
       the paginator switches paper size, margins, breaking width and furniture at the boundary — and lays
       each block out at *its own* section's width, since a paragraph in a landscape section breaks where
@@ -710,7 +842,8 @@ is read and verified, so what remains is the filling of pages rather than the me
       class of algorithm as CSS's — minimum and maximum content widths per column, then distribution — and it
       needs the cells' text measured before the grid exists. The readers currently take the declared grid and
       nothing else, so a width-less table comes out with zero-width columns.
-- [ ] Floating objects and text wrap, including contour wrap
+- [x] Floating objects and rectangular text wrap — see the frames item above for what was measured. Contour
+      wrap and the two-segments-per-line case are still open and are listed there too.
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can
       push the line that cites it onto the next page, which removes the note again. That is a feedback loop

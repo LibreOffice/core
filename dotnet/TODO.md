@@ -31,12 +31,18 @@ one as an explicit path. The lesson generalises past borders, so it is left here
 quietly deleted: before concluding a feature cannot be compared, check what the reference
 actually writes, not what `pdftotext` can be made to report.)*
 
-What remains in the layout half is floating frames with text wrap, table auto-layout for a table
-whose columns state no widths, the note-numbering restart *application* pass, and RTL text in the
-layouter — the last newly unblocked, since bidi levels are now resolved and carried but nothing
-consumes them. Read `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is
-missing and why.
+Floating frames now read from ODF, DOCX and RTF and the body text wraps round them, which needed a
+**second** circularity resolved and is worth knowing before touching pagination: a frame's position
+depends on where its anchor paragraph landed, and that paragraph's lines depend on the hole the frame
+makes in them, so pagination became a bounded loop rather than a single pass.
 
+What remains in the layout half is table auto-layout for a table whose columns state no widths, the
+note-numbering restart *application* pass, RTL text in the layouter — newly unblocked, since bidi
+levels are resolved and carried but nothing consumes them — and the tail of the frame work: contour
+wrap, two stretches of text on one line (what a `parallel` wrap round a frame touching neither margin
+needs), frames in cells and headers, and DOC's frames, which want `Paperless.MsBinary`'s Escher reader
+rather than a translation of one. Read `src/Paperless.WordProcessing/TODO.md`, whose open items each
+say what is missing and why.
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
 spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
 has the model. Two pieces of shared infrastructure are worth building deliberately rather than
