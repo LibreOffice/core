@@ -235,3 +235,29 @@ reason is the table's *origin* rather than its borders: each export writes the t
 relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
 DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
 right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
+
+### Mark documents
+
+`revisions.*` and `bookmark-field.*` are the two documents for what a file records *over* its text rather
+than in it. Both are hand-written **RTF** converted by LibreOffice into the other three formats, rather than
+the flat ODF everything else here starts from, and the reason is worth stating: ODF hoists a tracked change's
+description out of the body into a `text:tracked-changes` region, so a hand-written `.fodt` would have to
+state both halves consistently by hand, and getting that wrong produces a document that reads correctly and
+records nothing. RTF states a revision inline, as a toggle beside the text it covers, which is much harder to
+write inconsistently.
+
+`revisions.*` is one paragraph with an inserted phrase and a deleted phrase in it, by one author. Two things
+it pins beyond the obvious: extraction says what the changes *leave* in all four formats, while LibreOffice's
+own render shows the change *marks* — so its text export contains the deleted phrase and Paperless's does not,
+deliberately. And its `\revdttm` is **zero**, "no date", which LibreOffice's exporters disagree about: the ODF
+and DOC exports write the Unix epoch, the DOCX export omits `w:date` altogether. So the same document reports
+a timestamp in two formats and none in the other two, which is a fact about the exporters rather than about
+the reader.
+
+`bookmark-field.*` has a bookmark spanning a phrase, a **zero-length** bookmark, and three fields — `PAGE`,
+`NUMPAGES` and a `REF` to the spanning bookmark. The zero-length one is the case that earns its place: WW8
+states bookmarks as two position tables whose starts and ends collide at one character position for such a
+bookmark, and a reader that walks them as an ordered stream of events loses it. The three fields differ in the
+one way that matters between the families — the Word formats carry an instruction string, ODF carries a typed
+element and no instruction at all — and LibreOffice's ODF export caches the page number as `0` where the other
+three cache `1`.

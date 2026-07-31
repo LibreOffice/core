@@ -261,6 +261,24 @@ public enum Ww8FibTable
     /// <summary>Field positions in comments.</summary>
     AnnotationFields = 19,
 
+    /// <summary>The bookmark names, as a string table.</summary>
+    BookmarkNames = 21,
+
+    /// <summary>
+    /// The bookmark start positions, whose four-byte records index <see cref="BookmarkEnds"/>.
+    /// </summary>
+    /// <remarks>
+    /// The index here is the FIB's <em>read order</em>, as everywhere in this enumeration, and not
+    /// the byte offsets the C++ header's comments carry: those describe the Word 6 layout, where
+    /// several of the fields are absent — <c>fcSttbfRMark</c>'s documented 0x1fa works out at index
+    /// 44, where the Word 97 order puts it at 51. <c>ww8scan.cxx</c>'s <c>WW8Fib::WW8Fib</c> reads
+    /// them in sequence and is the authority.
+    /// </remarks>
+    BookmarkStarts = 22,
+
+    /// <summary>The bookmark end positions, reached through the start records rather than by order.</summary>
+    BookmarkEnds = 23,
+
     /// <summary>
     /// The document properties: the <c>Dop</c>.
     /// </summary>
@@ -288,6 +306,9 @@ public enum Ww8FibTable
 
     /// <summary>Drawing information: the Escher container shared with XLS and PPT.</summary>
     DrawingInformation = 50,
+
+    /// <summary>The revision authors, as a string table: <c>SttbfRMark</c>.</summary>
+    RevisionAuthors = 51,
 
     /// <summary>Text-box text ranges in the body.</summary>
     TextBoxTexts = 56,

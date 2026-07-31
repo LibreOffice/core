@@ -67,6 +67,15 @@ public sealed partial class OdfContentReader
     private bool _atBlockStart = true;
     private bool _lastWasSpace;
 
+    /// <summary>
+    /// Receives the bookmarks, change marks and fields the walk steps over, when a caller wants them.
+    /// </summary>
+    /// <remarks>
+    /// Null unless set, which is the ordinary case: nothing about the extracted text depends on it,
+    /// and only the word-processing reader has anywhere to put a bookmark's range.
+    /// </remarks>
+    public IOdfMarkSink? Marks { get; set; }
+
     private readonly List<int> _listCounters = [];
     private OdfListStyle? _currentListStyle;
     private int _listLevel;
@@ -235,8 +244,10 @@ public sealed partial class OdfContentReader
 
         _atBlockStart = true;
         _lastWasSpace = false;
+        Marks?.OpenParagraph();
         ReadInline(element, paragraph, hyperlink: null);
         FlushPendingRun(paragraph);
+        Marks?.CloseParagraph(TextOf(paragraph));
 
         _cascade.RemoveRange(cascadeDepth, _cascade.Count - cascadeDepth);
         return paragraph;
@@ -334,6 +345,13 @@ public sealed partial class OdfContentReader
                          or "alphabetical-index-mark-end" or "toc-mark" or "toc-mark-start"
                          or "toc-mark-end" or "user-index-mark" or "user-index-mark-start"
                          or "user-index-mark-end":
+                        // None of these contributes text. Where they are is still worth knowing, so
+                        // a sink that asked for them is told and the walk goes on unchanged.
+                        if (Marks is not null)
+                        {
+                            int at = OffsetOf(paragraph);
+                            Marks.Mark(child, at, at);
+                        }
                         continue;
                 }
             }
@@ -355,7 +373,16 @@ public sealed partial class OdfContentReader
             }
 
             // Fields, text:meta, loext wrappers: the element content is the cached result.
+            if (Marks is null || ns != OdfNamespaces.Text)
+            {
+                ReadInline(child, paragraph, hyperlink);
+                continue;
+            }
+
+            // A field's result is its content, so its range is what the walk of that content added.
+            int before = OffsetOf(paragraph);
             ReadInline(child, paragraph, hyperlink);
+            Marks.Mark(child, before, OffsetOf(paragraph));
         }
 
         _depth--;
@@ -431,6 +458,34 @@ public sealed partial class OdfContentReader
         Emit(paragraph, text, hyperlink);
         _atBlockStart = false;
         _lastWasSpace = producesSpace;
+    }
+
+    /// <summary>
+    /// How far into the paragraph the walk has got, the half-built run included.
+    /// </summary>
+    /// <remarks>
+    /// Derived from the paragraph rather than counted as text is emitted, so that a document with no
+    /// marks pays nothing: a mark is rare and a character is not.
+    /// </remarks>
+    private int OffsetOf(ContentParagraph paragraph)
+    {
+        int offset = _pendingText.Length;
+        foreach (ContentNode child in paragraph.Children)
+        {
+            if (child is ContentRun run) offset += run.Text.Length;
+        }
+        return offset;
+    }
+
+    /// <summary>The paragraph's own text, which is what those offsets index.</summary>
+    private static string TextOf(ContentParagraph paragraph)
+    {
+        StringBuilder text = new();
+        foreach (ContentNode child in paragraph.Children)
+        {
+            if (child is ContentRun run) text.Append(run.Text);
+        }
+        return text.ToString();
     }
 
     private void Emit(ContentParagraph paragraph, string text, string? hyperlink)

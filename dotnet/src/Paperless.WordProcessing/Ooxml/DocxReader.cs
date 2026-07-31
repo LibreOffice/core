@@ -45,6 +45,7 @@ public static class DocxReader
         {
             List<Diagnostic> diagnostics = [.. file.Diagnostics];
             List<WritingSection> sections = [];
+            WritingMarks marks = WritingMarks.Empty;
             ContentDocument content = new()
             {
                 Metadata = OoxmlMetadata.Read(
@@ -72,9 +73,10 @@ public static class DocxReader
 
                 ReadHeadersAndFooters(file, body, reader, content);
                 sections = ReadSections(file, body);
+                marks = reader.Marks;
             }
 
-            return new OoxmlWordDocument(format, file, content, diagnostics, sections);
+            return new OoxmlWordDocument(format, file, content, diagnostics, sections, marks);
         }
         catch
         {
@@ -176,13 +178,15 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         DocxFile file,
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
-        IReadOnlyList<WritingSection> sections)
+        IReadOnlyList<WritingSection> sections,
+        WritingMarks marks)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new WritingSection()];
+        Marks = marks;
     }
 
     /// <inheritdoc/>
@@ -202,6 +206,9 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public WritingMarks Marks { get; }
 
     /// <summary>
     /// The underlying package: its styles, numbering, settings and remaining parts.

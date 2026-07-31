@@ -45,7 +45,7 @@ public static class RtfReader
 
         return new RtfDocument(
             format, content, diagnostics, reader.Sections, reader.LayoutBlocks,
-            reader.HeaderLayout, reader.FooterLayout);
+            reader.HeaderLayout, reader.FooterLayout, reader.Marks);
     }
 
     /// <summary>
@@ -109,9 +109,11 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
             headerLayout,
         IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
-            footerLayout)
+            footerLayout,
+        Model.WritingMarks marks)
     {
         Format = format;
+        Marks = marks;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
@@ -137,6 +139,9 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Model.WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public Model.WritingMarks Marks { get; }
 
     /// <summary>
     /// Lays the document out into pages.

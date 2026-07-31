@@ -68,12 +68,20 @@ public sealed partial class Ww8DocumentReader
         // Each flow numbers its own lists: a list in a footnote does not continue the body's count.
         _numbering.ResetCounters();
 
-        WalkState state = new(target);
+        WalkState state = new(target)
+        {
+            BookmarkIndex = FirstBookmarkPositionAt(BookmarkPositions(), range.Start),
+        };
+        _marks.OpenParagraph();
 
         for (int index = 0; index < text.Length; index++)
         {
             int position = range.Start + index;
             char character = text[index];
+
+            // Bookmarks are keyed by character position rather than marked in the text, so the walk
+            // has to ask at each one. A single advancing index over a sorted list, not a search.
+            NoteBookmarkPositions(state, position);
 
             switch (character)
             {
@@ -115,6 +123,10 @@ public sealed partial class Ww8DocumentReader
 
                 case Special.FieldSeparator:
                     state.InFieldInstruction = false;
+                    // Where the cached result begins, which is the half of a field a reader saw.
+                    state.FieldResultOffset = OffsetIn(state);
+                    state.FieldResultStart = _marks.At(state.FieldResultOffset);
+                    state.FieldResultStarted = true;
                     // The instruction is the only place a hyperlink's target appears: the cached
                     // result is the text a reader saw, and says nothing about where it points.
                     if (FieldInstructions.HyperlinkTarget(state.Instruction.ToString()) is { } link)
@@ -128,6 +140,7 @@ public sealed partial class Ww8DocumentReader
                     if (state.FieldDepth > 0) state.FieldDepth--;
                     state.InFieldInstruction = false;
                     FlushRun(state);
+                    RecordField(state);
                     state.CurrentHyperlink = state.Hyperlinks.Count > 0 ? state.Hyperlinks.Pop() : null;
                     continue;
 
@@ -173,8 +186,12 @@ public sealed partial class Ww8DocumentReader
         }
 
         // A range need not end with a paragraph mark, or with the tables in it closed.
+        NoteBookmarkPositions(state, range.End);
         FinishParagraph(state, force: false, state.ParagraphFormat.Level);
         CloseTablesDeeperThan(state, 0);
+
+        // Balances the paragraph FinishParagraph opened for the text after the last mark.
+        _marks.CloseParagraph(string.Empty);
     }
 
     private void Append(WalkState state, int position, string text)
@@ -188,6 +205,11 @@ public sealed partial class Ww8DocumentReader
         }
 
         Ww8CharacterFormat format = ResolveCharacterFormat(position, state);
+
+        // Before the text is dropped, not after: a deletion's record *is* the text about to be
+        // dropped, and there is nowhere else in the document it survives.
+        RecordRevisions(state, format, text);
+
         if (format.IsHidden || format.IsDeleted) return;
 
         // The link comes from the field the walk is inside rather than from any sprm, so it is
@@ -288,6 +310,12 @@ public sealed partial class Ww8DocumentReader
     private void FinishParagraph(WalkState state, bool force, int level)
     {
         FlushRun(state);
+
+        // Before the paragraph closes, so that a change still open at a paragraph mark ends in the
+        // paragraph it started in rather than reaching into the next one.
+        CloseRevisions(state);
+        _marks.CloseParagraph(ParagraphTextIn(state));
+        _marks.OpenParagraph();
 
         bool hasContent = state.Runs.Count > 0 || state.PendingImages.Count > 0;
         if (!hasContent && !force)
@@ -575,6 +603,21 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.IsDeleted:
                     format = format with { IsDeleted = sprm.ResolveToggle(format.IsDeleted) };
                     break;
+                case Ww8SprmReader.Ids.IsInserted:
+                    format = format with { IsInserted = sprm.ResolveToggle(format.IsInserted) };
+                    break;
+                case Ww8SprmReader.Ids.InsertionAuthor:
+                    format = format with { InsertionAuthor = sprm.Word };
+                    break;
+                case Ww8SprmReader.Ids.DeletionAuthor:
+                    format = format with { DeletionAuthor = sprm.Word };
+                    break;
+                case Ww8SprmReader.Ids.InsertionDate:
+                    format = format with { InsertionDate = unchecked((uint)sprm.DoubleWord) };
+                    break;
+                case Ww8SprmReader.Ids.DeletionDate:
+                    format = format with { DeletionDate = unchecked((uint)sprm.DoubleWord) };
+                    break;
                 case Ww8SprmReader.Ids.Underline:
                     // The operand is the line style; zero is none.
                     format = format with { IsUnderlined = sprm.Byte != 0 };
@@ -617,6 +660,24 @@ public sealed partial class Ww8DocumentReader
         public StringBuilder Instruction { get; } = new();
         public string? CurrentHyperlink { get; set; }
         public Stack<string?> Hyperlinks { get; } = new();
+
+        /// <summary>How far the sorted bookmark events have been fired, as an advancing index.</summary>
+        public int BookmarkIndex { get; set; }
+
+        /// <summary>True once a field's separator has been seen, so it has a cached result.</summary>
+        public bool FieldResultStarted { get; set; }
+
+        /// <summary>Where that result begins in the paragraph's text.</summary>
+        public int FieldResultOffset { get; set; }
+
+        /// <summary>The position that offset stands for, taken while the paragraph is still current.</summary>
+        public Model.WritingPosition? FieldResultStart { get; set; }
+
+        /// <summary>The insertion in force, so that a change of author ends one and starts another.</summary>
+        public Revision OpenInsertion { get; set; }
+
+        /// <summary>The deletion in force.</summary>
+        public Revision OpenDeletion { get; set; }
 
         /// <summary>
         /// One table under construction per nesting level, outermost first.
@@ -816,6 +877,25 @@ public readonly record struct Ww8CharacterFormat
 
     /// <summary>True when a tracked change marks the run deleted.</summary>
     public bool IsDeleted { get; init; }
+
+    /// <summary>True when a tracked change marks the run inserted.</summary>
+    /// <remarks>
+    /// Needs no handling for the text — inserted text <em>is</em> content — and is read so the change
+    /// can be recorded with its author and its date.
+    /// </remarks>
+    public bool IsInserted { get; init; }
+
+    /// <summary>The insertion's author, as an index into <c>SttbfRMark</c>.</summary>
+    public ushort InsertionAuthor { get; init; }
+
+    /// <summary>The deletion's author, as an index into <c>SttbfRMark</c>.</summary>
+    public ushort DeletionAuthor { get; init; }
+
+    /// <summary>The insertion's packed <c>DTTM</c> stamp; zero for none.</summary>
+    public uint InsertionDate { get; init; }
+
+    /// <summary>The deletion's packed <c>DTTM</c> stamp; zero for none.</summary>
+    public uint DeletionDate { get; init; }
 
     /// <summary>
     /// Where the run links to, when it sits inside a <c>HYPERLINK</c> field.

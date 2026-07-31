@@ -92,9 +92,15 @@ Still open here:
 - [x] Notes and comments hoisted, with the note citation left inline where a reader sees it
 - [x] Fields, by recursing into unknown inline elements to pick up the cached result
 - [x] Indexes and tables of contents, via `text:index-body`
-- [ ] Tracked changes. Deliberately skipped for now: `text:tracked-changes` holds *deleted*
-      text that no reader displays, so recursing into it would invent content. Reading it
-      properly means modelling redlines.
+- [x] Tracked changes, bookmarks and fields — as *positions*, through the `IOdfMarkSink` hook.
+      The walk still does not recurse into `text:tracked-changes`, which holds *deleted* text no
+      reader displays, and still emits none of it. What it does now is tell a sink where each
+      `text:change-start`, `text:bookmark-start` and field element sat, at an offset into the
+      paragraph's own text. The sink is an interface rather than a collection because what a mark
+      *means* is a Writer concept — a bookmark's range, a redline's author — and this library sits
+      below `Paperless.WordProcessing`; `OdtMarkSink` there resolves the ids against the regions.
+      Null for Calc and Impress, and null for a text document too until someone asks, so the cost of
+      the hook on an unmarked document is one null check per paragraph.
 - [ ] Embedded objects (`draw:object`): recorded as a graphic, not opened. An embedded
       spreadsheet inside a text document is a whole nested document.
 - [ ] `text:ruby` annotation text — the base is read, the gloss is dropped.
