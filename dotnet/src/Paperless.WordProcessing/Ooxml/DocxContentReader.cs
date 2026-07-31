@@ -203,13 +203,7 @@ public sealed partial class DocxContentReader
                 return;
 
             case "altChunk":
-                // An embedded foreign document — HTML, RTF, another DOCX — imported by
-                // reference. Reading it means running another reader over another part, which
-                // is worth doing but is not this walk's job.
-                _diagnostics.Add(new Diagnostic(
-                    DiagnosticSeverity.Warning, "PL2120",
-                    "The document embeds an external chunk (w:altChunk), whose content is not "
-                    + "extracted yet."));
+                ReadAltChunk(element, target);
                 return;
 
             default:
@@ -382,7 +376,8 @@ public sealed partial class DocxContentReader
         XElement run, ContentParagraph paragraph, string? paragraphStyleId, string? hyperlink)
     {
         XElement? runProperties = Word.Child(run, "rPr");
-        WordCharacterFormat format = WordCharacterFormat.Resolve(_styles, runProperties, paragraphStyleId);
+        WordCharacterFormat format =
+            WordCharacterFormat.Resolve(_styles, runProperties, paragraphStyleId, _file.Theme);
 
         // Hidden text is not displayed by any reader, so extracting it would inject text the
         // document does not show. Unlike a header or a footnote — which a reader does see and

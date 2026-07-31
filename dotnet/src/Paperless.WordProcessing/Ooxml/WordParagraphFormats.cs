@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Ooxml;
@@ -145,8 +146,12 @@ internal static class WordParagraphFormats
     /// <param name="styles">The document's styles.</param>
     /// <param name="paragraphProperties">The paragraph's <c>w:pPr</c>, for its <c>w:pStyle</c>.</param>
     /// <param name="runProperties">The run's own <c>w:rPr</c>, or null.</param>
+    /// <param name="theme">The document's theme, for a <c>w:themeColor</c>, or null.</param>
     internal static WordTextStyle ResolveRun(
-        WordStyles styles, XElement? paragraphProperties, XElement? runProperties)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        XElement? runProperties,
+        DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
@@ -172,7 +177,7 @@ internal static class WordParagraphFormats
             bold.IsOn ? 700 : 400,
             italic.IsOn,
             Word.Attribute(language.Element, "val"),
-            TextColour(colour.Element),
+            WordThemeColour.Read(colour.Element, theme),
             EscapementOf(vertical.Element));
     }
 
@@ -192,27 +197,6 @@ internal static class WordParagraphFormats
             "subscript" => Layout.Escapement.Subscript,
             _ => Layout.Escapement.None,
         };
-
-    /// <summary>
-    /// A run's colour, or null when it has none of its own.
-    /// </summary>
-    /// <remarks>
-    /// <c>w:val="auto"</c> is not a colour — it means "let the application choose so the text stays
-    /// readable", which for body text on white is black, so it resolves to nothing here and lets the
-    /// document's own default apply. A theme colour (<c>w:themeColor</c>) is not resolved yet, and is
-    /// treated the same way rather than guessed at.
-    /// </remarks>
-    private static Colour? TextColour(XElement? element)
-    {
-        string? value = Word.Attribute(element, "val");
-        if (string.IsNullOrEmpty(value) || value == "auto") return null;
-
-        ReadOnlySpan<char> digits = value.AsSpan().TrimStart('#');
-        return digits.Length == 6
-               && uint.TryParse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb)
-            ? Colour.FromRgb(rgb)
-            : null;
-    }
 
     /// <summary>
     /// A paragraph property from the direct formatting first, then the style chain, then the defaults.

@@ -3,6 +3,7 @@ using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Fonts;
 using Paperless.Text.Shaping;
 using Paperless.WordProcessing.Layout;
@@ -52,6 +53,7 @@ public sealed partial class DocxLayoutSource
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
     private readonly int _compatibilityMode;
+    private readonly DrawingTheme? _theme;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
         [];
@@ -62,15 +64,18 @@ public sealed partial class DocxLayoutSource
     /// <param name="fonts">The font resolver, or null to build one over the installed fonts.</param>
     /// <param name="footnotes">The footnote bodies by <c>w:id</c>, or null for a document with none.</param>
     /// <param name="endnotes">The endnote bodies by <c>w:id</c>.</param>
+    /// <param name="theme">The document's theme, for themed run colours, or null.</param>
     public DocxLayoutSource(
         WordStyles styles,
         XElement? settings = null,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, XElement>? footnotes = null,
-        IReadOnlyDictionary<string, XElement>? endnotes = null)
+        IReadOnlyDictionary<string, XElement>? endnotes = null,
+        DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _theme = theme;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
         _compatibilityMode = CompatibilityMode(settings);
@@ -424,7 +429,8 @@ public sealed partial class DocxLayoutSource
         {
             WordTextStyle style = range.RunProperties is null
                 ? paragraph
-                : WordParagraphFormats.ResolveRun(_styles, paragraphProperties, range.RunProperties);
+                : WordParagraphFormats.ResolveRun(
+                    _styles, paragraphProperties, range.RunProperties, _theme);
 
             if (range.IsCitation) style = AsCitation(style);
 

@@ -52,6 +52,17 @@ per format, because each buys three formats at once: **DrawingML text bodies** i
 `Paperless.MsBinary`, which DOC, XLS and PPT all delegate their drawings to — the DOC reader has
 an open item waiting on exactly that.
 
+A third piece of that shared infrastructure is now **built**: **DrawingML theme-colour
+resolution**, in `Paperless.Ooxml/DrawingML`. It was written for DOCX's `w:themeColor`, but the
+chain is DrawingML's, so it is also what XLSX's `theme=` index on a `fgColor` and PPTX's
+`a:schemeClr` need — neither has to grow its own, and neither should. What is left for each is
+only its own spelling of a reference: XLSX addresses a slot by number and applies its `tint`
+attribute as a signed fraction, which `Color::addExcelTintTransformation` turns into a `lumMod`
+and a `lumOff`; PPTX has to find its `a:clrMap` on the slide master and the overrides on the
+layout. The chain itself is verified against LibreOffice's rendering to the byte — read
+`src/Paperless.Ooxml/TODO.md` first for the two facts about it that a reimplementation would get
+wrong, since both are invisible in the output until the colours are compared numerically.
+
 Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
 
 - **Keep "set here", "inherited" and "defaulted" apart.** `OdfPropertyOrigin` and

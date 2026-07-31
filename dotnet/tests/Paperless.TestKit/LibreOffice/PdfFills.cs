@@ -14,8 +14,17 @@ namespace Paperless.TestKit.LibreOffice;
 /// </param>
 /// <param name="Width">Its width in points.</param>
 /// <param name="Height">Its height in points.</param>
+/// <param name="Colour">
+/// The non-stroking colour in force when it was painted, as <c>0xRRGGBB</c>.
+/// <para>
+/// It is a property of the graphics state rather than of the path, so it is tracked across the
+/// content stream rather than read out of the fill operator — a PDF writer sets a colour once
+/// and paints several shapes with it, and LibreOffice's export omits the operator entirely when
+/// the colour has not changed. Defaults to black, which is the PDF initial state.
+/// </para>
+/// </param>
 public readonly record struct PdfFill(
-    int PageIndex, double Left, double Top, double Width, double Height);
+    int PageIndex, double Left, double Top, double Width, double Height, uint Colour = 0);
 
 /// <summary>
 /// Reads the filled rectangles out of a PDF LibreOffice wrote.
@@ -68,31 +77,100 @@ public static partial class PdfFills
     /// </summary>
     /// <remarks>
     /// Two spellings, because PDF has two: <c>re</c> states a rectangle outright, and a run of
-    /// <c>m</c>/<c>l</c> draws one as four lines — which is the one LibreOffice's own export uses for a rule.
+    /// <c>m</c>/<c>l</c> draws one as a closed polygon — which is the one LibreOffice's own export uses,
+    /// for a rule and for a rectangular shape alike. The number of segments is not fixed: a footnote rule
+    /// comes out as four, while a <c>prstGeom prst="rect"</c> comes out as five, because the traversal
+    /// starts at the middle of an edge and returns to it. So the polygon is read as points and accepted
+    /// when every one of them lies on the boundary of their own bounding box, which is what makes it a
+    /// rectangle however many times the path stops along the way.
     /// The painting operator is checked as well as the geometry, since a path that is only clipped or only
     /// stroked is not a fill: <c>f</c>, <c>F</c>, <c>f*</c>, <c>B</c> and <c>B*</c> all fill.
     /// </remarks>
     private static IEnumerable<PdfFill> RectanglesIn(string content, int page, double pageHeight)
     {
+        List<(int At, PdfFill Fill)> found = [];
+
         foreach (Match match in ExplicitRectangle().Matches(content))
         {
             if (Numbers(match, 4) is not { } r) continue;
 
-            yield return Fill(page, pageHeight, r[0], r[1], r[0] + r[2], r[1] + r[3]);
+            found.Add((match.Index, Fill(page, pageHeight, r[0], r[1], r[0] + r[2], r[1] + r[3])));
         }
 
-        foreach (Match match in LineRectangle().Matches(content))
+        foreach (Match match in ClosedPolygon().Matches(content))
         {
-            if (Numbers(match, 8) is not { } r) continue;
+            if (Rectangle(match) is not { } bounds) continue;
 
-            double left = Math.Min(Math.Min(r[0], r[2]), Math.Min(r[4], r[6]));
-            double right = Math.Max(Math.Max(r[0], r[2]), Math.Max(r[4], r[6]));
-            double lower = Math.Min(Math.Min(r[1], r[3]), Math.Min(r[5], r[7]));
-            double upper = Math.Max(Math.Max(r[1], r[3]), Math.Max(r[5], r[7]));
+            found.Add((match.Index,
+                       Fill(page, pageHeight, bounds.Left, bounds.Lower, bounds.Right, bounds.Upper)));
+        }
 
-            yield return Fill(page, pageHeight, left, lower, right, upper);
+        found.Sort((a, b) => a.At.CompareTo(b.At));
+
+        // One pass over the colour operators, merged with the fills by position, because the
+        // colour belongs to the graphics state: the operator that set it may be thousands of
+        // bytes earlier and may serve several fills.
+        List<(int At, uint Colour)> colours = [.. Colours(content)];
+        int next = 0;
+        uint current = 0;
+
+        foreach ((int at, PdfFill fill) in found)
+        {
+            while (next < colours.Count && colours[next].At < at) current = colours[next++].Colour;
+
+            yield return fill with { Colour = current };
         }
     }
+
+    /// <summary>
+    /// Every change to the non-stroking colour, with where in the stream it happened.
+    /// </summary>
+    /// <remarks>
+    /// Three operators, because PDF has three colour spaces in play and LibreOffice writes all
+    /// of them: <c>rg</c> for RGB, <c>g</c> for greyscale — which is what it uses for pure black
+    /// and pure white — and <c>k</c> for CMYK. Reading only <c>rg</c> leaves a black rule
+    /// reported as whatever colour was set before it.
+    /// </remarks>
+    private static IEnumerable<(int At, uint Colour)> Colours(string content)
+    {
+        foreach (Match match in NonStrokingColour().Matches(content))
+        {
+            double[] values =
+            [
+                .. match.Groups[1].Captures
+                    .Select(capture => double.TryParse(
+                        capture.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double v)
+                        ? v
+                        : 0.0),
+            ];
+
+            uint colour = match.Groups[2].Value switch
+            {
+                "g" when values.Length == 1 => Pack(values[0], values[0], values[0]),
+                "rg" when values.Length == 3 => Pack(values[0], values[1], values[2]),
+                "k" when values.Length == 4 => Pack(
+                    (1 - values[0]) * (1 - values[3]),
+                    (1 - values[1]) * (1 - values[3]),
+                    (1 - values[2]) * (1 - values[3])),
+                _ => 0,
+            };
+
+            yield return (match.Index, colour);
+        }
+    }
+
+    private static uint Pack(double r, double g, double b)
+        => ((uint)Math.Clamp(Math.Round(r * 255), 0, 255) << 16)
+           | ((uint)Math.Clamp(Math.Round(g * 255), 0, 255) << 8)
+           | (uint)Math.Clamp(Math.Round(b * 255), 0, 255);
+
+    /// <summary>One to four numbers followed by a lower-case colour operator.</summary>
+    /// <remarks>
+    /// Lower case only: <c>RG</c>, <c>G</c> and <c>K</c> set the <em>stroking</em> colour, which
+    /// is the pen a border is drawn with rather than the paint a shape is filled with.
+    /// </remarks>
+    [GeneratedRegex(@"(?:(-?[\d.]+)\s+){1,4}(rg|g|k)(?![A-Za-z])")]
+    private static partial Regex NonStrokingColour();
 
     private static PdfFill Fill(
         int page, double pageHeight, double left, double lower, double right, double upper)
@@ -121,12 +199,73 @@ public static partial class PdfFills
         RegexOptions.Singleline)]
     private static partial Regex ExplicitRectangle();
 
-    /// <summary>A move and three lines closing back to the start, then a filling operator.</summary>
+    /// <summary>A move, three or more lines, an explicit close, then a filling operator.</summary>
     [GeneratedRegex(
-        @"(-?[\d.]+)\s+(-?[\d.]+)\s+m\s+(-?[\d.]+)\s+(-?[\d.]+)\s+l\s+(-?[\d.]+)\s+(-?[\d.]+)\s+l\s+"
-        + @"(-?[\d.]+)\s+(-?[\d.]+)\s+l\s+-?[\d.]+\s+-?[\d.]+\s+l\s+h\s+[fFB]\*?\b",
+        @"(-?[\d.]+)\s+(-?[\d.]+)\s+m\s+(?:(-?[\d.]+)\s+(-?[\d.]+)\s+l\s+){3,}h\s+[fFB]\*?\b",
         RegexOptions.Singleline)]
-    private static partial Regex LineRectangle();
+    private static partial Regex ClosedPolygon();
+
+    /// <summary>
+    /// The bounding box of a closed polygon, when the polygon is a rectangle.
+    /// </summary>
+    /// <remarks>
+    /// "Is a rectangle" is tested as "every segment is axis-parallel", not as "every vertex is a
+    /// corner of the bounding box" — the latter rejects the very shape this exists to read,
+    /// since LibreOffice starts a rectangular shape's path at the <em>middle</em> of its bottom
+    /// edge and comes back to it. A triangle fails the axis-parallel test on its hypotenuse and
+    /// an L fails on none of its segments, so an L would be read as its bounding box; that is
+    /// acceptable because nothing LibreOffice draws for a rule or a rectangle is one.
+    /// </remarks>
+    private static (double Left, double Right, double Lower, double Upper)? Rectangle(Match match)
+    {
+        List<double> xs = [];
+        List<double> ys = [];
+
+        if (!double.TryParse(
+                match.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double x0)
+            || !double.TryParse(
+                match.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double y0))
+        {
+            return null;
+        }
+
+        xs.Add(x0);
+        ys.Add(y0);
+
+        for (int i = 0; i < match.Groups[3].Captures.Count; i++)
+        {
+            if (!double.TryParse(
+                    match.Groups[3].Captures[i].Value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out double x)
+                || !double.TryParse(
+                    match.Groups[4].Captures[i].Value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out double y))
+            {
+                return null;
+            }
+
+            xs.Add(x);
+            ys.Add(y);
+        }
+
+        const double Tolerance = 0.01;
+        for (int i = 0; i < xs.Count; i++)
+        {
+            int next = (i + 1) % xs.Count;
+            bool horizontal = Math.Abs(ys[i] - ys[next]) < Tolerance;
+            bool vertical = Math.Abs(xs[i] - xs[next]) < Tolerance;
+            if (!horizontal && !vertical) return null;
+        }
+
+        double left = xs.Min();
+        double right = xs.Max();
+        double lower = ys.Min();
+        double upper = ys.Max();
+
+        return right - left < Tolerance || upper - lower < Tolerance
+            ? null
+            : (left, right, lower, upper);
+    }
 
     /// <summary>The page height in points, for converting PDF space to top-down coordinates.</summary>
     private static double PageHeight(byte[] bytes)
