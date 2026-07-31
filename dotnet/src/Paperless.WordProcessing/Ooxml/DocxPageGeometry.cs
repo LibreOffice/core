@@ -104,6 +104,11 @@ internal static class DocxPageGeometry
             Columns = ColumnCount(columns),
             ColumnGap = Twips(columns, "space") ?? Length.Zero,
             IsLandscape = landscape,
+
+            // w:sectPr/w:bidi, which is a different statement from a paragraph's w:bidi and does a
+            // different thing: it reverses the section's columns rather than mirroring its text.
+            IsRightToLeft = Word.IsOn(Word.Child(sectionProperties, "bidi")),
+
             HasMirroredMargins = Word.IsOn(Word.Child(settings, "mirrorMargins")),
         };
     }

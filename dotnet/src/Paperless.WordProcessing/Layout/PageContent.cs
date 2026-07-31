@@ -384,6 +384,16 @@ public sealed record LaidOutPage
     public Length ColumnGap { get; init; }
 
     /// <summary>
+    /// True when the page's section reads right to left, so that its first column is the rightmost.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the page rather than looked up from the section for the same reason
+    /// <see cref="ColumnArea"/> is: a renderer is handed a page, and a page that had to consult the
+    /// section could disagree with the one that laid the lines out.
+    /// </remarks>
+    public bool IsRightToLeft { get; init; }
+
+    /// <summary>
     /// One column's rectangle, which is what a line's own coordinates are relative to.
     /// </summary>
     /// <remarks>
@@ -400,6 +410,10 @@ public sealed record LaidOutPage
         Length gaps = ColumnGap * (columns - 1);
         Length width = BodyArea.Width - gaps;
         width = width > Length.Zero ? width / columns : BodyArea.Width;
+
+        // The leading edge is the right one in a right-to-left section, so its first column is the
+        // rightmost — see PageGeometry.IsRightToLeft, where it is measured.
+        if (IsRightToLeft) at = columns - 1 - at;
 
         return new DocRect(
             BodyArea.X + ((width + ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);
