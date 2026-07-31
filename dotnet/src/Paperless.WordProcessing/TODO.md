@@ -329,16 +329,73 @@ Order chosen so each is verifiable before the next gets harder.
 - [ ] The `Dop`, for `fDontUseHTMLAutoSpacing` — which is what LibreOffice's importer reads into
       `PARA_SPACE_MAX` and therefore decides whether two paragraphs' spacings add or the larger wins. The
       DOC path defaults to adding, which matches every document LibreOffice itself wrote.
-- [ ] Escher drawings via `Paperless.MsBinary`, which is also what keeps DOC out of the floating-frame
-      work. A drawing anchor is not reported as an image — telling an embedded picture from a shape needs
-      the record stream, and counting every `U+0001` reports a picture for every text box — and it is not
-      placed either, so `frame-wrap.doc` lays out as though the frame were not there. What it needs is a
-      real read rather than a translation: the `FSPA` in `PlcSpaFdd` gives the anchor's rectangle and its
-      wrap (`fspa.wr` and `fspa.wrk`, the same two numbers RTF's `\shpwr` and `\shpwrk` carry, which is not
-      a coincidence — RTF's shape syntax *is* Escher spelled out), and the shape itself is an `SPCONTAINER`
-      in the `Office Art` stream whose `OPT` property table holds the distances from text and the text-box
-      index. `Paperless.MsBinary`'s Escher reader is listed as not started, and starting one for this alone
-      would be the wrong order: the same reader buys shapes in XLS and PPT too.
+- [x] **Escher drawings**, through the shared reader in `Paperless.MsBinary`. Word's half is the
+      `PlcSpaMom`/`PlcSpaHdr` table of 26-byte `FSPA` records — the FIB's slots 40 and 41 — which ties a
+      character position to a shape id, its rectangle in twips, its two position origins and its wrap; the
+      shape itself is found by that id in the Office Art blob at `fcDggInfo`. `fspa.nwr` and `fspa.nwrk`
+      are indeed the two numbers RTF's `\shpwr` and `\shpwrk` carry, and only `nwr` 2 and 4 consult `nwrk`
+      at all (`ww8graf.cxx:2729`) — a shape whose `nwr` is 1 or 3 usually carries a stale `nwrk` that would
+      otherwise decide its wrap.
+      Three things that cost time, in the order they will:
+      **The blob is not a run of sibling records.** It is the `DggContainer` and then one *Word drawing*
+      per subdocument, and a Word drawing is a single label byte — 0 for the body, 1 for the headers — and
+      then the `DgContainer`. LibreOffice allows for it by advancing one byte and re-reading the header
+      (`msdffimp.cxx:5997`, whose comment calls it "trying to get a one-hit wonder"). Walking the blob as
+      records reads that byte plus three of the next header as a record type and finds no shapes at all,
+      which looks exactly like a document that has none.
+      **`posrelh` and its three siblings are in the *tertiary* property table**, `msofbtUDefProp`, not the
+      shape's own, and they override the `FSPA`'s `nbx`/`nby` only when *present* — zero is a meaningful
+      origin, the page's printable area, so comparing against zero moves every shape that relies on the
+      `FSPA` to the page margin. LibreOffice makes the same distinction with a `std::optional`
+      (`ww8graf.cxx:2316`). `posh`/`posv` beside them are the alignment: 0 means "at the stated offset" and
+      1 to 5 name an edge, at which point the `FSPA` coordinate is not used at all — `picture-anchor.doc`
+      states `posh` 2, centred, while still carrying the 3685 twips its box last sat at.
+      **A shape's rectangle is the path its outline runs along, not its bounding box.** Writer keeps text
+      clear of the bounding box, so half the line width has to be added to the wrap distance. Measured on
+      `frame-wrap.doc`: LibreOffice draws the shape's right edge at 170.05 pt, exactly the 3401 twips the
+      `FSPA` states, and resumes the body text at 179.55 pt — 3591. The 190-twip gap is 181 + 7 + 2, where
+      181 is the drawing layer's default `dxWrapDistLeft`/`Right` of 114935 EMU (`ww8par.cxx:1001`, and
+      **not** the 0.2 cm the RTF importer supplies for the same absent property), 7 is half a 15-twip line,
+      and 2 is what the same document's ODF form also shows. Leaving the half-line out lands the wrapped
+      lines 0.35 pt short — which sounds negligible and is not: the DOC wraps seven lines where the ODF
+      wraps eight, because those fractions decide whether the fourth line's box clears the frame's top, and
+      it clears it by 0.14 pt.
+      The frame model, placement and wrap are entirely reused — `FrameLayout`, `FrameResolution`,
+      `FrameObstacles` — so this was reading and nothing else. `DocFrameComparisonTests` compares
+      `frame-wrap.doc` against LibreOffice's own rendering at a tenth of a point, for the body's line starts
+      and for the position of the frame's own text.
+- [x] **A drawing anchor is reported for what it is.** Neither special character describes itself and both
+      can mean either thing, so the answer is two lookups away in each case. A `U+0008` is resolved through
+      the `FSPA` at its position and then through the shape, because a floating *picture* is a shape too. A
+      `U+0001` is resolved through the `PICF` at `sprmCPicLocation` — in the `Data` stream when the document
+      has one and in `WordDocument` when it does not, at the same stated offset either way — whose mapping
+      mode `0x64` or `0x66` says the bytes after the header are an Escher shape rather than a metafile
+      (`ww8graf2.cxx:524`).
+      Stopping at the mapping mode is the trap, and it is a double one. Every inline picture LibreOffice's
+      own DOC export writes is mode `0x64`, so reading that as "a drawing, not a picture" reports no images
+      for a document full of them. But the shape's *type* is not the answer either: LibreOffice exports a
+      text box as a `SHAPE` field whose cached result is a `U+0008` for the shape **and** a `U+0001` for a
+      shape of type `mso_sptPictureFrame` with no property record at all — an empty placeholder. Only the
+      `pib` property naming a real blip separates them, which is what is now tested. LibreOffice's own round
+      trip of `word-features.doc` agrees: one `draw:frame`, no `draw:image`.
+      This replaced a heuristic that skipped every `U+0001` inside a field. Skipping a field's
+      *instruction* is still right and load-bearing, for a different reason: a `HYPERLINK` field's
+      instruction characters carry a `sprmCPicLocation` pointing at the link's own data in the `Data`
+      stream, which parses as a `PICF` with mapping mode 0 and would be reported as a picture.
+- [ ] Shapes anchored in a **header or footer**. `PlcSpaHdr` is read and its positions rebased onto the
+      header subdocument, and a header shape's text is taken from `PlcfHdrtxbxTxt` rather than the body's
+      table — but nothing places one, because the furniture pass hands `PageFurnitureSet` a list of blocks
+      and the frames a paragraph carries are dropped on the way. No corpus document has one: LibreOffice's
+      DOC export writes `lcbPlcSpaHdr` 0 for every document in the corpus, so this needs a document built
+      for it before it can be got right rather than merely written.
+- [ ] The `#i36649#` alignment rewrites (`ww8graf.cxx:2445`). Word's "flush left against the page" does not
+      mean what it says — LibreOffice converts it to "offset by minus the shape's width from the page's
+      *text area*" — and its "flush right against the page" becomes an offset from the right page border.
+      Neither is reachable from the corpus, whose shapes state offsets or a centring, and guessing at them
+      would put a shape a margin's width from where it belongs.
+- [ ] Contour wrap. `nwr` 4 and 5 ask for a wrap round the shape's own outline, from the
+      `pWrapPolygonVertices` property; they are read as the square wrap their `nwrk` names, which is the
+      same hole with straight sides and the same approximation the DOCX reader makes for `wp:wrapTight`.
 - [x] Section descriptors (`PlcfSed`): the page setup. Two levels of indirection, both easy to get
       wrong — the PLCF's twelve-byte records hold an offset that points into the *WordDocument* stream
       rather than the table stream it was read from, and it points at a length-prefixed grpprl rather

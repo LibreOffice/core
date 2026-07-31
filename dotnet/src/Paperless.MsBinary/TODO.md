@@ -33,8 +33,15 @@ once buys shape support in all three — the same leverage LibreOffice gets from
 Written to the format rather than to one host's use of it. The `ClientAnchor`, `ClientData`
 and `ClientTextbox` records are reported as *unparsed* record headers, because their payloads
 are by definition whatever the host chose: PowerPoint puts its text records in the client
-textbox, Word an `FSPA` index in the client anchor, and Excel a cell reference. The PPT reader
-is the first consumer; the DOC reader's open shape item should be able to use the same code.
+textbox, Word an `FSPA` index in the client anchor, and Excel a cell reference. PPT was the
+first consumer and DOC the second, and the second needed no change to the traversal at all —
+only the additions below, all of them things the format states and no host owns.
+
+What the DOC reader had to supply for itself, so that XLS's `NOTE` comments know where the
+line falls: the `PlcSpa` table that maps a character position to a shape id; the **one label
+byte** Word writes before each `DgContainer` (`msdffimp.cxx:5997` advances one byte and
+re-reads the header when the first attempt is not a drawing, which is what that byte is); and
+which of Word's property ids mean what. None of that belongs here.
 
 - [x] Record header: version, instance, type, length (shared with the record walk above)
 - [x] Container traversal (`DrawingContainer` → `ShapeGroupContainer` → `ShapeContainer`).
@@ -47,7 +54,29 @@ is the first consumer; the DOC reader's open shape item should be able to use th
       six bytes per entry out of place and yields plausible strings rather than an error.
 - [x] Group shapes, nested, with a depth cap: an eight-byte container costs a stack frame, so
       a small hostile file can otherwise ask for tens of thousands of them.
-- [ ] Blip store; picture extraction, including the metafile blip types
+- [x] **Boolean properties are not stored under their own identifier.** Each group of them is
+      one thirty-two-bit entry written under the group's highest id — `id | 31` — with the value
+      in bit `1 << (base - id)` of the low half and a "was this stated" bit sixteen places
+      higher (`DffPropSet::GetPropertyBool`, `dffpropset.cxx:1308`). So `fLine` is bit 3 of
+      property 511 and `fFilled` bit 4 of property 447, and asking for 508 or 443 finds nothing
+      whatever the shape said. The old constants named the *group* ids, which made
+      `Value(Filled)` compile and return the whole word — non-zero for any shape stating any
+      fill property at all, so every shape came back filled. `Boolean` and `StatesBoolean` now
+      do the arithmetic, and the second is needed as much as the first: "stated false" and "said
+      nothing" take different defaults in every host.
+- [x] **The tertiary table is kept apart from the secondary.** They share a layout and mean
+      different things: `msofbtSecondaryOPT` holds a master's values for the shape's own
+      properties, `msofbtUDefProp` is where a host writes properties of its own. Word puts a
+      floating shape's position origins — `posh`, `posrelh`, `posv`, `posrelv`, ids 0x038F to
+      0x0392 — there and nowhere else (`msdffimp.cxx:5216`, which reads them as raw six-byte
+      entries rather than through the property-set machinery). Merging the two, as this did, took
+      whichever table came first in the file.
+- [x] `ReadShape` is public, because a shape does not always live in a drawing: Word stores an
+      *inline* shape alone in the picture stream, immediately after the `PICF` header that
+      locates it, with no `DgContainer` and no group around it.
+- [ ] Blip store; picture extraction, including the metafile blip types. A shape is currently
+      told to *be* a picture by its `pib` property being set, which is all a reader classifying
+      an anchor needs and is not enough to get the bytes out.
 - [ ] Shape anchors: the child anchor and the group's coordinate space are decoded, but
       **mapping a child's coordinates through its group's space is not**. A child anchor is in
       the parent's `msofbtSpgr` units and needs the two-rectangle scale
