@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/Paperless.Containers/Paperless.Containers.csproj" />
     <Project Path="src/Paperless.Core/Paperless.Core.csproj" />
+    <Project Path="src/Paperless.Markup/Paperless.Markup.csproj" />
     <Project Path="src/Paperless.MsBinary/Paperless.MsBinary.csproj" />
     <Project Path="src/Paperless.Ooxml/Paperless.Ooxml.csproj" />
     <Project Path="src/Paperless.OpenDocument/Paperless.OpenDocument.csproj" />
@@ -17,6 +18,7 @@
     <Project Path="tests/Paperless.Containers.Tests/Paperless.Containers.Tests.csproj" />
     <Project Path="tests/Paperless.Core.Tests/Paperless.Core.Tests.csproj" />
     <Project Path="tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj" />
+    <Project Path="tests/Paperless.Markup.Tests/Paperless.Markup.Tests.csproj" />
     <Project Path="tests/Paperless.OpenDocument.Tests/Paperless.OpenDocument.Tests.csproj" />
     <Project Path="tests/Paperless.Presentations.Tests/Paperless.Presentations.Tests.csproj" />
     <Project Path="tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj" />

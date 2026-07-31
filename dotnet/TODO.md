@@ -237,69 +237,105 @@ The step between "what does this document say" and "what does it look like", and
 placed here rather than under rendering: **it needs the content tree and nothing else.** No fonts, no
 line breaking, no rasteriser, no page geometry. Everything it emits — headings, lists with their
 levels, tables, emphasis, links, notes — is already in the tree that `paperless extract` walks, and
-plain text is simply the projection that throws all of it away. So this is the cheapest large gain in
-the project: most of the work is a mapping, not a parser.
+plain text is simply the projection that throws all of it away.
 
 It is also what most callers actually want. A retrieval or summarisation pipeline fed flat text has
 lost the heading hierarchy that says what a passage is *about* and the table structure that says which
 number belongs to which column; fed a rendered PDF it has to get it back by inference.
 
-**Two stages, and the order is the point.** A semantic **XHTML** writer over `ContentNode` first, then
-an **XHTML → Markdown** transformation on top of it. Going straight to Markdown is the obvious shape and
-is worse for one concrete reason: LibreOffice exports XHTML for all three families, so stage one can be
-compared against the reference **node for node** — every heading level, every list nesting, every cell's
-row and column — where a direct Markdown writer could only be compared with XHTML at one remove. Stage
-two is then a pure tree transformation with no document parsing in it, testable in complete isolation
-from any office format.
+**Two stages, and the order was the point.** A semantic **XHTML** writer over `ContentNode`, then an
+**XHTML → Markdown** transformation on top of it. It paid off exactly where it was expected to: stage
+one is compared against LibreOffice's own export node for node, and stage two has no document parsing
+in it at all, so the escaping — the part that silently corrupts output — is checkable by parsing the
+result back. It also put the lossy step last: row and column spans and nested tables are still present
+and correct in the XHTML, and only the final hop has to decide what to drop.
 
-It also puts the lossy step last. Everything Markdown cannot express — row and column spans, nested
-tables — is still present and correct in the XHTML, so only the final hop has to decide what to drop.
+Both live in **`src/Paperless.Markup`**, a library beside `Paperless.Core` depending on nothing but it.
+Not inside Core, which holds the abstractions everything agrees on rather than projections of them; and
+not in one of the three family libraries, because it serves all three and the layering forbids the
+sideways dependency that would need.
 
-- [ ] Stage one: a **semantic** XHTML writer serving all three families through the one tree — which is
-      the payoff of having built a single tree for all three in the first place.
-      **LibreOffice's own XHTML export is an oracle, not a target.** Its output is presentation-oriented,
-      full of inline CSS and `<span>` wrappers; reproducing that would be neither achievable nor useful.
-      Emit `h1`–`h6`, `ul`/`ol`/`li`, `table`/`tr`/`td` with `colspan`/`rowspan`, `em`/`strong`,
-      `a[href]`, plus what only Paperless extracts — slides, speaker notes, sheets, comments, notes — and
-      record every deliberate difference the way the rest of this tree records them.
-- [ ] Stage two: **XHTML → Markdown**, a pure transformation with no dependency on any reader.
-- [ ] **Decide the flavour and record it.** CommonMark has no tables at all, so this is GitHub-Flavored
-      Markdown in practice; say so once rather than per feature.
-- [ ] **Escaping, which is the thing that will silently corrupt output.** A document containing a
-      literal `*`, `_`, `|` or backtick is ordinary; emitted unescaped it turns neighbouring text into
-      emphasis or splits a table row. This needs to be right before anything else is worth checking.
-- [ ] **Tables that Markdown cannot express**, which is now a stage-two question only: GFM tables have
-      no row or column spans and no nesting, and the corpus is full of both, but the XHTML above holds
-      them correctly. The choice is an HTML fallback for those tables or a documented flattening — a
-      stated decision with the loss named, not an accident.
-- [ ] **Per family, the shape questions.** A slide is naturally a heading plus its content, with speaker
-      notes as something set apart. A sheet is naturally a table — but a used range of ten thousand rows
-      is not a useful one, so there has to be a bound and a way to say it was applied. A document's
-      footnotes map onto GFM's `[^1]` syntax; comments and tracked changes have no Markdown at all and
-      need a decision rather than silent omission.
-- [ ] Images: the tree records a graphic without decoding it, so there is no target for `![](…)` yet.
-      Decide between a reference placeholder and omission, and revisit when raster decode lands.
-- [ ] `paperless extract --format xhtml` and `--format markdown`, alongside the existing text and JSON.
+- [x] Stage one: a **semantic** XHTML writer serving all three families through the one tree.
+      LibreOffice's own export was used as an oracle and never as a target — Paperless emits `h1`–`h6`,
+      `ul`/`ol`/`li`, `table`/`thead`/`tr`/`th`/`td` with `colspan`/`rowspan`, `em`/`strong`/`s`/`u`/
+      `sup`/`sub`/`code`, `a[href]`, `blockquote`, `img`, and `section`/`aside`/`header`/`footer` for
+      the flows only Paperless extracts. Paperless-specific meaning rides on `class` and `data-`
+      attributes rather than on invented elements, so the result stays ordinary XHTML.
+- [x] Stage two: **XHTML → Markdown**, a pure transformation. `MarkdownWriter.FromXhtml` takes no
+      `MarkupOptions` at all, deliberately: every option is consumed while walking the content tree, so
+      a second copy of them at this stage could only disagree with the first.
+- [x] The flavour, recorded once — GitHub-Flavored Markdown. See *Settled decisions*.
+- [x] **Escaping**, done first and tested hardest. Escaped by *construct* rather than by character
+      class: escaping every ASCII punctuation mark is permitted and safe and turns `snake_case_name`
+      into `snake\_case\_name`, which defeats the point of emitting Markdown rather than text. So `*`
+      is escaped everywhere (it is intraword emphasis in CommonMark) and `_` only at a word boundary
+      (it is not); `#`, `>`, `-`, `+`, `=` and the `.` after a leading number only at the start of a
+      line. Thirty-two hazard strings are each asserted four ways — the text survives, the block stays
+      one paragraph, no inline construct appears, and it survives inside a table cell — all by parsing
+      the output back. Removing `*` from the escape set fails twelve of them.
+- [x] **Tables Markdown cannot express**: an HTML fallback, with the loss named. See *Settled decisions*.
+- [x] **Per family.** A slide is a heading plus its content, numbered from the section's own index so
+      that excluding a hidden slide leaves the rest with the numbers the document gives them; speaker
+      notes are set apart as a labelled block quote. A sheet is a table under its tab name, bounded at
+      1000 rows and 64 columns with the truncation announced in the output — never silent. Footnotes
+      did **not** map onto `[^1]`, and the reason is measured rather than preferred; see
+      *Settled decisions*. Comments become labelled block quotes carrying their author. Tracked changes
+      needed no decision after all: extraction already applies them, so deleted text never reaches the
+      tree and there is nothing for a projection to drop.
+- [x] Images: a **reference placeholder**, not an omission. `src` is the container part holding the
+      bytes (`word/media/image1.png`), which is a real reference that resolves against the original
+      file; an empty `src` means "this page" in HTML, which is worse than saying nothing. Revisit when
+      raster decode lands and there is something to point at.
+- [x] `paperless extract --format text|json|xhtml|markdown`. `--json` stays as a shorthand and
+      `<stem>.txt` is unchanged, because the `extraction-comparison` skill's scripts name that file.
 
-**How this gets verified.** LibreOffice 24.2 has **no Markdown export filter** — `--convert-to md`
-fails outright with "no export filter found" — and the first instinct is therefore that this cannot be
-compared against the reference at all. That is wrong, and wrong in a shape this project has already
-paid for once: the same inference was made about cell borders and the rasteriser, and it was false
-then too. Check what the reference can actually emit before concluding it cannot help.
+**How it was verified, and what the reference turned out to be worth.** The premise held: LibreOffice
+has no Markdown export filter but does export XHTML for all three families, and being well-formed XML
+it is parsed rather than scraped. **Measured across eleven word-processing documents — ODT, FODT,
+DOCX, DOC and RTF — Paperless and LibreOffice agree exactly on every heading's level, every list
+item's nesting depth, every table cell's row, column, `colspan` and `rowspan`, and every external
+hyperlink target.**
 
-It emits **XHTML, for all three families** — `XHTML Writer File`, `XHTML Calc File`,
-`XHTML Impress File` — and XHTML carries precisely the structure Markdown needs. Measured on
-`text-features.odt`: one `h1`, two `h2`, one `h3`, two `ul`, two `ol`, twelve `li`, a `table` with
-eight `td`, and eight anchors. Being well-formed XML it can be parsed rather than scraped, so the
-comparison is structural and exact: every heading level, every list nesting, every cell's row and
-column. `HTML (StarWriter)` is the same idea in a looser serialisation and is already used elsewhere
-in this tree — the DOCX toggle rule was verified against it, because bold is visible there.
+Two corrections to the note this phase used to carry, both from measuring rather than reasoning:
 
-So the method is the usual one after all. Two things still need checking against the tree rather than
-the reference, because XHTML is a different projection and not a truth: escaping (a literal `*` or `|`
-survives XHTML unremarkably and corrupts Markdown), and whatever decision gets made about spans.
-Parsing the emitted Markdown back with a CommonMark parser is what catches the escaping bugs, which a
-text diff cannot see because every character is still present.
+- The figures for `text-features.odt` were slightly off. LibreOffice's export has **eight** `li`, not
+  twelve, and eight `a` **elements** of which only **one** carries an external `href` — the other seven
+  are heading bookmarks and a `#ftn1` footnote anchor, artefacts of its own linking scheme. `h1`×1,
+  `h2`×2, `h3`×1, `ul`×2, `ol`×2 and eight `td` were right.
+- **The three families are not equally useful as oracles, and this was the surprise.** Only the Writer
+  export is semantic. The **Calc** export is a bare `<table>`: no sheet name, no headings, and the used
+  range padded with empty rows the file does not state (seven rows where the sheet has five). The
+  **Impress** export is one absolutely positioned `<div>` per slide with no heading anywhere — the
+  slide's title survives only as the `div`'s `id`. So Writer is compared on everything and the other
+  two only on slide count and cell grids, which they do answer exactly. Asserting more would have been
+  asserting a parity that is not there to be had.
+
+Escaping and the span decision were checked against the tree and a parser instead, as planned:
+`Paperless.Markup.Tests` emits, parses back with **Markdig** (BSD-2-Clause, test-only, on the test
+project alone — `Paperless.Markup` writes Markdown and never reads it) and asserts on the syntax tree.
+Sixteen corpus documents are put through both stages and checked word for word, in order, against the
+content tree they came from, with the writers' deliberate additions enumerated from the tree rather
+than hard-coded.
+
+**Three gaps in the content tree**, noted rather than worked around, since the readers are not this
+phase's to change:
+
+1. A **note has no inline anchor**. Every reader bakes the anchor number into the text of the run
+   beside it — "a footnote reference1 here" — so a `ContentSection` of kind `Note` cannot be tied back
+   to the place it is referenced from without matching text rather than reading structure. This is what
+   sank GFM footnotes.
+2. A **slide's title placeholder is not marked**. `ContentSection` carries no title for a PPTX slide
+   and nothing distinguishes the title paragraph from the body ones, so the slide's heading is
+   "Slide *n*" and its actual title follows as an ordinary paragraph. LibreOffice's own export names
+   each slide `div` after the title, so the information exists in the file.
+3. The **DOC reader drops the list level on a continuation paragraph** where the ODT reader keeps it,
+   so a list interrupted by one restarts its numbering in the Markdown. The document's own marker is
+   preserved on `data-marker` in the XHTML either way.
+
+**Still open.** Nothing in this phase blocks, but two things are worth doing when their prerequisites
+land: fill in an image's `src` once raster decode gives it a target, and add `sheet-xls.xls` and
+`sheet-csv.csv` to the round-trip corpus once those readers exist — they are deliberately absent rather
+than skipped, because a skip would go on reporting itself long after it stopped being true.
 
 **Non-goal: reading Markdown.** Paperless reads office formats; Markdown is an output projection, and
 adding it as an input format would be scope Paperless has said no to.
@@ -416,6 +452,60 @@ treating it as a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/` 
 working from the specifications. Scope and ordering in `src/Paperless.Vector/TODO.md`.
 Scripting, animation and external references stay excluded permanently — that is a security
 decision, not a scope compromise.
+
+**Structured text output is GitHub-Flavored Markdown, not CommonMark.** Forced rather than
+chosen: CommonMark has no tables at all, and a projection of an office document that cannot
+express a table is not worth having. The extensions used are pipe tables and strikethrough,
+and nothing else — deliberately not Markdig's `UseAdvancedExtensions` in the tests either,
+since that turns on syntax GitHub does not implement and a test passing because of an exotic
+extension would be measuring the wrong thing. What GFM still cannot carry is named where it is
+dropped: underline, superscript and subscript keep their text and lose their formatting, and an
+ordered list's marker style collapses to decimal while its start number survives.
+
+**A table GFM cannot express falls back to raw HTML; it is not flattened.** GFM tables have no
+row or column spans, no nesting, and exactly one line per cell, and the corpus is full of all
+three. An HTML `<table>` is valid Markdown — a raw HTML block — and stage one has already built
+exactly the tree to serialise, so nothing is lost and nothing is guessed. **What it costs:** a
+fallback table is not Markdown, so a consumer that reads Markdown as text, or strips HTML rather
+than parsing it, sees tags or sees nothing. The alternative was flattening — repeating a spanned
+cell across the columns it covers, splicing a nested table's rows into its parent — which invents
+a grid the document does not have and is *silently* wrong where this is *visibly* HTML. A table
+goes to the fallback when any cell spans, when any cell holds a nested table, when a cell holds
+more than one block or a list, or when the rows are ragged. One thing GFM forces even in the good
+case: it has no headerless table, so a table declaring no header rows has its first row promoted,
+which is what a sheet and nearly every document table put labels in anyway.
+
+**Footnotes are not GFM's `[^1]`, and that reverses the plan on evidence.** Two things have to
+hold for `[^1]` to work and neither does. A definition has to be *referenced* — measured with
+Markdig 1.3.2, a document whose only footnote definition is unreferenced renders as
+`<div class="footnotes"><hr/><ol></ol></div>`, with the note's text nowhere in the output. And a
+reference cannot be placed, because the content tree carries no inline anchor: every reader bakes
+the anchor number into the text of the run beside it, so finding the spot would mean matching text
+rather than reading structure. So a note is set apart the way a comment, a header and a speaker
+note are — a block quote labelled with the number the document itself rendered. That loses the
+link between anchor and note, which the tree does not have either, and keeps the text, which
+`[^1]` would not. The measurement is pinned as a test, so if a parser starts rendering unreferenced
+definitions the decision is worth revisiting and the suite will say so.
+
+**A heading wins over a list level.** Word attaches its heading styles to an outline list, so in
+the DOC and DOCX of a document whose ODT has plain headings, every heading arrives carrying
+`ListLevel` 0 and an empty marker. Treated as a list item it comes out as `- # Top level heading`,
+a bullet wrapping a heading, in every Word file in the corpus. LibreOffice's own XHTML export
+*does* wrap those headings in `<li>`, so this is a deliberate difference from the reference rather
+than a defect being fixed: the outline number is decorative, and emitting the DOCX and the ODT of
+the same document differently would be worse than disagreeing with the export.
+
+**The XHTML is indented by an explicit pass, not by `XmlWriter`.** The trap that cost the most
+time here, and it looks like nothing. `XmlWriterSettings.Indent` decides progressively, so it
+indents before the first child of `<p><strong>a</strong> tail</p>` — it has not yet seen the text
+that makes the content mixed. Worse, an element whose content is *only* inline elements,
+`<p><strong>a</strong><em>b</em></p>`, is element-only by that test, and indenting it inserts a
+space between "a" and "b" that the document does not contain. So indentation is applied to a named
+set of block containers where whitespace between children is insignificant, and to nothing else.
+Two smaller ones in the same area: `XmlWriter` over a `StringBuilder` reports the encoding as
+`utf-16` whatever the settings say, so the prologue is written by hand; and an empty non-void
+element must be written `<p></p>`, because an HTML parser reads `<p/>` as an *opening* tag and
+swallows the rest of the document — which an empty table cell produces.
 
 **OLE2/CFB is hand-rolled, not OpenMcdf.** Tolerance of malformed real-world files was the
 deciding requirement, and the reader needs control over chain-walking and directory

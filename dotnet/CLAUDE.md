@@ -57,11 +57,11 @@ Arrows point at dependencies. Nothing may point back up.
 ```
                        Paperless.Core          (zero external dependencies)
                             |
-      +---------------+-----+------+-------------------+
-      |               |            |                   |
- Containers        Text          Vector            Rendering
- (OLE2/OPC/ODF)  (fonts,        (EMF/WMF/SVG)     (Skia, PDF, SVG)
-                  shaping,
+      +---------------+-----+------+---------------+-------------+
+      |               |            |               |             |
+ Containers        Text          Vector        Rendering       Markup
+ (OLE2/OPC/ODF)  (fonts,        (EMF/WMF/SVG)  (Skia, PDF,   (XHTML and
+                  shaping,                      SVG)          Markdown out)
                   layout)
       |               |            |
       +-------+-------+------------+
@@ -82,6 +82,11 @@ Arrows point at dependencies. Nothing may point back up.
               |
         Paperless.Cli
 ```
+
+**`Paperless.Markup` serves all three families, so it cannot live in any of them.** It projects
+the shared `ContentNode` tree onto semantic XHTML and then onto Markdown, needs nothing but
+`Paperless.Core`, and sits beside the other Core-only libraries rather than inside Core, which
+holds the abstractions everything agrees on rather than projections of them.
 
 **`Paperless.Core` has no external dependencies and must stay that way.** It holds the
 abstractions everything else agrees on: units, geometry, colour, the format catalogue, the

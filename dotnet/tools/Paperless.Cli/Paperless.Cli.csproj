@@ -18,6 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
     <ProjectReference Include="..\..\src\Paperless.Containers\Paperless.Containers.csproj" />
+    <!-- The structured-text writers, for the xhtml and markdown output formats of `extract`.
+         They depend on Paperless.Core alone, so this adds nothing to the tool's footprint. -->
+    <ProjectReference Include="..\..\src\Paperless.Markup\Paperless.Markup.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Structured text output for Paperless: a semantic XHTML writer over the shared content tree, and a GitHub-Flavored Markdown writer over that XHTML. Depends on Paperless.Core alone.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+  </ItemGroup>
+
+</Project>

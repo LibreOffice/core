@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Unit tests for the XHTML and Markdown writers, including the round-trip that catches escaping bugs a text diff cannot see.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+    <!--
+      The CommonMark/GFM parser the round-trip tests read the emitted Markdown back with.
+      Test-only, and it has to be: an escaping bug leaves every character present, so no text
+      diff can see it and only parsing the result proves the output says what was meant.
+      Markdig is BSD-2-Clause, pure managed, has no native assets and no build-time gate.
+    -->
+    <PackageReference Include="Markdig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.TestKit\Paperless.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Markup\Paperless.Markup.csproj" />
+    <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
+  </ItemGroup>
+
+</Project>
