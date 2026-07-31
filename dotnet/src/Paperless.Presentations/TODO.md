@@ -179,7 +179,18 @@ table asserted, not by the corpus.
 
 ### ODP — first
 - [x] `draw:page`, `draw:frame`, `draw:custom-shape` (text; `draw:enhanced-geometry` is rendering)
-- [ ] Master pages; `style:presentation-page-layout`; `presentation:*` attributes
+- [ ] Master pages; `style:presentation-page-layout`; `presentation:*` attributes. The master's
+      `style:page-layout` **is** read, for the slide size, and it must be the one the page's own
+      master names rather than the first in the file: a deck carries at least two and the notes
+      one is A4 portrait in everything LibreOffice writes. The master's own *shapes* are not
+      drawn, which is the same open question the PPTX side has about `showMasterSp`.
+- [ ] **The list style an outline paragraph's indents, spacing and bullet come from.** A
+      `text:list` names a `text:style-name`, and the level is the nesting depth; `OdfListStyle`
+      already parses the levels. Nothing reads them, so `slides-features.odp`'s outline lands
+      17 pt left of the reference with no bullet, and drifts to 9.3 pt low by its third
+      paragraph. The three quantities needed are `fo:margin-left`, `fo:text-indent` and
+      `text:bullet-char` — exactly what the OOXML side gets from `marL`, `indent` and `a:buChar`,
+      through a different resolution.
 - [x] Simpler two-level inheritance than PPTX, which made it the right place to build first
 
 ### PPTX
@@ -415,7 +426,7 @@ is worth writing down, since it is where the next work is:
 
 | | Reference runs | Ours | Agreement, and what is missing |
 |---|---|---|---|
-| `deck-features.pptx` | 21 | 16 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across and 0.55 down. The five missing runs are the **table** slide, which draws nothing. |
+| `deck-features.pptx` | 21 | 16 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across, 0.55 down inside the ellipse. Six of the reference's runs are the **table** slide, which draws nothing; one of ours is the **hidden** slide, which we lay out and its PDF export omits. |
 | `slides-features.odp` | 14 | 12 | The same slides through ODF. The title and the outline's first line agree to 0.04; the outline then **drifts to 9.3 pt by its third paragraph**, and its text sits at 56.69 where the reference puts it at 73.70. Both have the same cause: an outline paragraph's indents, spacing and bullet come from the `text:list`'s **list style**, and nothing reads it. |
 
 The ODF list style is therefore the single largest remaining item on that path, and it is a
@@ -519,7 +530,7 @@ for `rotate`, `scale` and `skewX`.
 **An outline placeholder's paragraphs are not its children.** A `draw:frame` wraps its text in a
 `draw:text-box`, a `draw:custom-shape` holds its `text:p` children directly, and an *outline*
 placeholder wraps every paragraph in a `text:list`/`text:list-item` pair — one level of nesting per
-outline level. Taking only the direct children lost all six lines of `slides-features.odp`'s
+outline level. Taking only the direct children lost all three lines of `slides-features.odp`'s
 outline while its title read perfectly, which is the shape of failure that looks like a placement
 bug and is not.
 

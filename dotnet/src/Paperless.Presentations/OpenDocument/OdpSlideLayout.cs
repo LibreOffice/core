@@ -185,7 +185,7 @@ internal sealed class OdpSlideLayout
 
         if (size.IsEmpty) return null;
 
-        AffineTransform placement = AffineTransform.Concat(Placement(element, size), space);
+        AffineTransform placement = AffineTransform.Concat(Placement(element), space);
 
         XElement? geometry = element.Element(XName.Get("enhanced-geometry", OdfNamespaces.Draw));
         string? preset = Preset(element, geometry);
@@ -213,7 +213,7 @@ internal sealed class OdpSlideLayout
     /// Either a plain translation from <c>svg:x</c>/<c>svg:y</c>, or the <c>draw:transform</c>
     /// when the shape has one — which is what LibreOffice writes for anything rotated.
     /// </remarks>
-    private static AffineTransform Placement(XElement element, DocSize size)
+    private static AffineTransform Placement(XElement element)
     {
         if (Transform(element) is { } transform) return transform;
 
@@ -509,7 +509,7 @@ internal sealed class OdpSlideLayout
     /// holds its <c>text:p</c> children itself; and an <em>outline</em> placeholder wraps every
     /// paragraph in a <c>text:list</c>/<c>text:list-item</c> pair, one level of nesting per
     /// outline level. Measured on <c>slides-features.odp</c>: taking only the direct children lost
-    /// all six lines of slide one's outline while its title read perfectly, which is exactly the
+    /// all three lines of slide one's outline while its title read perfectly, which is exactly the
     /// failure that looks like a placement bug and is not.
     /// </remarks>
     private static IEnumerable<XElement> Paragraphs(XElement element)
