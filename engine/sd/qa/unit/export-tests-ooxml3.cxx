@@ -12,6 +12,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/unoprnms.hxx>
+#include <osl/process.h>
 #include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -28,6 +29,14 @@ public:
     SdOOXMLExportTest3()
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
+    }
+
+    void setUp() override
+    {
+        SdModelTestBase::setUp();
+
+        // prevent showing warning message box
+        osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
     }
 
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
