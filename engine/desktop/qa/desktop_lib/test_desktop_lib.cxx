@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_crypto.h>
 #include <config_oox.h>
 #include <cstdlib>
 #include <memory>
@@ -891,8 +892,9 @@ void DesktopKitTest::testPasteWriterJPEG()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     OUString aFileURL = createFileURL(u"paste.jpg");
-    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
-    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+    SvFileStream aImageStream(aFileURL, StreamMode::READ);
+    std::vector<char> aImageContents(aImageStream.remainingSize());
+    aImageStream.ReadBytes(aImageContents.data(), aImageContents.size());
 
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
 
@@ -3660,6 +3662,9 @@ void DesktopKitTest::testGetSignatureState_Signed()
 
     CPPUNIT_ASSERT_EQUAL(int(4), nState);
 
+    // Adding a certificate needs XCertificateCreator, which currently only the NSS security
+    // environment implements
+#if USE_CRYPTO_NSS
     std::vector<unsigned char> aCertificate;
     {
         readFileIntoByteVector(u"rootCA.der", aCertificate);
@@ -3677,6 +3682,7 @@ void DesktopKitTest::testGetSignatureState_Signed()
 
     nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
+#endif
 }
 
 void DesktopKitTest::testGetSignatureState_NonSigned()
@@ -3989,8 +3995,9 @@ void DesktopKitTest::testComplexSelection()
 
     // Paste an image.
     OUString aFileURL = createFileURL(u"paste.jpg");
-    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
-    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+    SvFileStream aImageStream(aFileURL, StreamMode::READ);
+    std::vector<char> aImageContents(aImageStream.remainingSize());
+    aImageStream.ReadBytes(aImageContents.data(), aImageContents.size());
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
 
     // Now select-all.
