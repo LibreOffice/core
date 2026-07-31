@@ -202,10 +202,37 @@ gaps:
       the next line — which is why a paragraph of short words does not break after every one of them.
       And a single word too long for the line takes the line alone and is allowed to exceed it,
       because the alternative is an empty line followed by the same problem.
-- [ ] Alignment: left, right, centre, justified, distributed
-- [ ] Tab stops, including default intervals and decimal tabs
-- [ ] Line spacing: proportional, at-least, exact, leading
-- [ ] Drop caps; widow/orphan control
+- [x] `ParagraphFormat`: the resolved layout properties, one type for what the four formats spell four
+      ways. It lives here rather than beside the word-processing model because a spreadsheet cell and a
+      slide's text box lay their paragraphs out with the same rules — LibreOffice's EditEngine plays
+      exactly this part for the same reason.
+- [x] **Line spacing**, all four modes, verified against LibreOffice's rendered baselines: proportional
+      (a multiple), at-least (whichever of the declared and natural heights is larger), exact (honoured
+      even when it clips), and leading (natural plus a gap). They agree at single spacing and are four
+      separate calculations everywhere else, so all four are tested.
+- [x] Where the extra height goes, which is asymmetrical and easy to get backwards: proportional
+      spacing puts it **above** the text, so a double-spaced paragraph pushes its first baseline down
+      rather than leaving a gap under its last line. Exact spacing shorter than the ascent clamps the
+      baseline to the box and clips from below, because text climbing into the paragraph above is worse
+      than text with its descenders cut.
+- [x] Indents: start, end, and a first-line indent that may be **negative** — the hanging indent every
+      numbered list is built from, where the number sits out to the left of the text. A reader that
+      clamps it at zero starts every list in the wrong place.
+- [x] Alignment: start, end and centre, verified against LibreOffice. Centring is computed from the
+      line's own width, so it is also a check on the measurement: a line a point too wide is centred
+      half a point too far left.
+- [x] Contextual spacing, which needs **both** paragraphs to ask for it — that is what keeps a list
+      tight while still leaving a gap before it.
+- [ ] Justification. `TextAlignment.Justify` and `Distribute` are recorded and the last line is left
+      start-aligned, but the stretching itself is not done: it adjusts advances inside the line rather
+      than where the line starts, so it belongs with the shaped run.
+- [ ] Tab stops. `ParagraphFormat` carries them and the default interval; nothing advances to them yet,
+      and doing it properly means the line filler has to be tab-aware, since a tab's width depends on
+      where in the line it falls.
+- [ ] Whether space-before collapses against the previous paragraph's space-after. Word takes the
+      larger, Writer adds them, and which applies is a compatibility flag — so it belongs to whatever
+      assembles paragraphs into a page and knows the flag, not to the paragraph.
+- [ ] Drop caps; widow/orphan control (the counts are carried, nothing enforces them)
 - [ ] Non-rectangular text areas, for text wrapping around floating objects
 
 ## Open questions
