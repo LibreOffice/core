@@ -182,6 +182,13 @@ Traps that cost time, recorded so they are not rediscovered:
   10-point Liberation Sans gives, and it checks out: `sheet-ooxml-features.xlsx` writes
   `width="20.76"` and LibreOffice's rendering puts the columns 115.2 points — 2304 twips — apart,
   which is 20.76 × 111 rounded.
+- **A whole-column print range covers a million rows.** `A:D` paginated literally gives a
+  four-column sheet twenty thousand blank pages. Calc cuts it back by re-searching the axis the
+  range spans entirely, and only that axis (`AdjustPrintArea(false)`, `printfun.cxx:707`).
+- **An empty visible sheet prints nothing at all**, not a blank page — measured on a two-sheet
+  document whose second sheet holds one empty cell, which converts to a one-page PDF. Worth
+  measuring rather than assuming, because `AdjustPrintArea`'s early return is guarded by the
+  skip-empty option and reads as though it would produce a page without it.
 - **`Print_Titles` holds both repeated bands in one name and distinguishes them by shape**, not by
   order: the column band is a whole-column reference with no row digits and the row band a
   whole-row reference with no column letters. In BIFF that is stored against sheet limits of 255
@@ -509,9 +516,16 @@ number-formatted.
 
 ## Rendering
 
-- [ ] Cell text: alignment, wrap, shrink-to-fit, rotation, indent
+- [ ] Cell text: alignment, wrap, shrink-to-fit, rotation, indent. Pagination needed none of it
+      — a row's height and a column's width come from the file, never from the text — so what
+      draws today is one glyph run per cell at a baseline, left for text and right for numbers,
+      in one face for the whole workbook. Cell fonts are the prerequisite: `FONT` records and
+      `styles.xml`'s `fonts` element are both still unread
 - [ ] Overflow into adjacent empty cells; `###` when a number does not fit — note the
-      displayed text is **column-width dependent**, so it cannot be computed before layout
+      displayed text is **column-width dependent**, so it cannot be computed before layout.
+      The *print area* is already widened for overflow (`Layout/SheetTextOverflow.cs`), because
+      that changes the page count; drawing the overflow, and clipping it where a neighbour stops
+      it, is what is left
 - [ ] Rich text within a cell
 - [ ] Grid lines, backgrounds, and border resolution between neighbouring cells
 - [x] **Print pagination** — ported, in `Layout/SheetPagination.cs`
