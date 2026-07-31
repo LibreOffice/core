@@ -19,6 +19,7 @@ $(eval $(call gb_Library_add_defs,smoketest,\
 $(eval $(call gb_Library_use_sdk_api,smoketest))
 
 $(eval $(call gb_Library_use_libraries,smoketest,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
+#include <comphelper/kit.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -128,14 +129,21 @@ private:
 };
 
 void Test::setUp() {
+    // The office ignores its command line while the Kit is active, so nothing accepts a connection
+    if (comphelper::COKit::isActive())
+        return;
     connection_.setUp();
 }
 
 void Test::tearDown() {
+    if (comphelper::COKit::isActive())
+        return;
     connection_.tearDown();
 }
 
 void Test::test() {
+    if (comphelper::COKit::isActive())
+        return;
     OUString doc;
     CPPUNIT_ASSERT(
         test::getTestArgument(

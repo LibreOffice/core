@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_external,smoketest,boost_headers))
 $(eval $(call gb_CppunitTest_use_sdk_api,smoketest))
 
 $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
