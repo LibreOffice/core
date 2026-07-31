@@ -2021,11 +2021,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     DoneBlockMode(true);                // don't delete mark
     InitOwnBlockMode( ScRange( nCol, nRow, nStartTab, nCol, nRow, nEndTab));
 
-    //  If search starts at the beginning don't ask again whether it shall start at the beginning
     bool bFirst = true;
-    if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
-        bFirst = false;
-
     bool bFound = false;
     while (true)
     {
