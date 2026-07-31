@@ -49,7 +49,9 @@ public sealed partial class OdtLayoutSource
     /// <summary>Reads a table, or returns null when it declares no usable grid.</summary>
     private PageTable? Table(XElement element)
     {
-        List<Length> columns = Columns(element);
+        string? styleName = element.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
+
+        List<Length> columns = Columns(element, styleName);
         if (columns.Count == 0) return null;
 
         List<PageTableRow> rows = [];
@@ -57,8 +59,6 @@ public sealed partial class OdtLayoutSource
         ReadRows(element, rows, ref headerRows, isHeader: false, depth: 0);
 
         if (rows.Count == 0) return null;
-
-        string? styleName = element.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
 
         return new PageTable
         {
@@ -76,23 +76,25 @@ public sealed partial class OdtLayoutSource
     }
 
     /// <summary>
-    /// The grid's column widths, in order.
+    /// The grid's column widths, in order, with the ones the document did not state resolved.
     /// </summary>
     /// <remarks>
-    /// A column whose style states no width gets nothing here rather than a guess, because a guess would be
-    /// worse than the truth: LibreOffice's own writer always states them, and a document that does not is
-    /// asking for the table to be fitted to the page — which needs the page, and is recorded as a gap
-    /// rather than approximated.
+    /// A column need not state a width, and this is not the exotic case it sounds like — a table written by
+    /// anything other than an office suite usually states none at all, and one written by hand often states
+    /// some. So the widths are collected as <em>drafts</em>, each either an absolute measure or a relative
+    /// weight, and resolved together against the table's own width. Taking a missing width as zero, which is
+    /// what this used to do, gives a column nothing to break its text in.
     /// </remarks>
-    private List<Length> Columns(XElement table)
+    private List<Length> Columns(XElement table, string? tableStyleName)
     {
-        List<Length> widths = [];
+        List<ColumnDraft> drafts = [];
         Collect(table, 0);
-        return widths;
+
+        return Resolved(drafts, TableWidth(tableStyleName));
 
         void Collect(XElement element, int depth)
         {
-            if (depth > 8 || widths.Count >= PageTable.MaxColumns) return;
+            if (depth > 8 || drafts.Count >= PageTable.MaxColumns) return;
 
             foreach (XElement child in element.Elements())
             {
@@ -108,12 +110,12 @@ public sealed partial class OdtLayoutSource
                         break;
 
                     case "table-column":
-                        Length width = ColumnWidth(child);
+                        ColumnDraft draft = ColumnDraftOf(child);
                         int repeat = Repeat(child, "number-columns-repeated");
 
-                        for (int i = 0; i < repeat && widths.Count < PageTable.MaxColumns; i++)
+                        for (int i = 0; i < repeat && drafts.Count < PageTable.MaxColumns; i++)
                         {
-                            widths.Add(width);
+                            drafts.Add(draft);
                         }
 
                         break;
@@ -122,16 +124,243 @@ public sealed partial class OdtLayoutSource
         }
     }
 
-    private Length ColumnWidth(XElement column)
+    /// <summary>
+    /// One column's declared width, before the table's own width settles what it means.
+    /// </summary>
+    /// <param name="Twips">The absolute measure, or the relative weight when <paramref name="IsRelative"/>.</param>
+    /// <param name="IsRelative">
+    /// True when the number is a share of the table rather than a measure of the column.
+    /// </param>
+    private readonly record struct ColumnDraft(long Twips, bool IsRelative);
+
+    /// <summary>
+    /// The smallest width Writer gives a column: <c>MINLAY</c>, twenty-three twips.
+    /// </summary>
+    /// <remarks>
+    /// It matters here for two reasons rather than one. It is the floor every column is clamped to, and it is
+    /// also the <em>weight</em> a column with no stated width gets — so a table of three width-less columns
+    /// arrives as three relative columns of 23, and how those become measures is entirely up to the table.
+    /// </remarks>
+    private const long MinimumColumnTwips = 23;
+
+    /// <summary>One column's draft width, from whichever of the two spellings its style used.</summary>
+    /// <remarks>
+    /// <c>style:column-width</c> is a measure and <c>style:rel-column-width</c> a weight written as
+    /// <c>23*</c>. A column with neither is a relative one of the minimum weight, which is what LibreOffice's
+    /// <c>SwXMLTableColContext_Impl</c> starts from — <c>nWidth = MINLAY; bRelWidth = true</c> — and is the
+    /// reason a table whose columns say nothing still divides itself evenly rather than collapsing.
+    /// </remarks>
+    private ColumnDraft ColumnDraftOf(XElement column)
     {
         string? styleName = column.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
 
-        return OdfWriterUnits.ToCore(
-            OdfValue.ParseLength(
-                _styles.ResolveProperty(
-                    styleName, OdfStyleFamily.TableColumn, OdfPropertyKind.TableColumn,
-                    OdfNamespaces.Style, "column-width").Value))
-            ?? Length.Zero;
+        if (OdfWriterUnits.ToCore(
+                OdfValue.ParseLength(
+                    _styles.ResolveProperty(
+                        styleName, OdfStyleFamily.TableColumn, OdfPropertyKind.TableColumn,
+                        OdfNamespaces.Style, "column-width").Value))
+            is { } stated && stated > Length.Zero)
+        {
+            return new ColumnDraft(Math.Max(stated.Twips, MinimumColumnTwips), IsRelative: false);
+        }
+
+        string? relative = _styles.ResolveProperty(
+            styleName, OdfStyleFamily.TableColumn, OdfPropertyKind.TableColumn,
+            OdfNamespaces.Style, "rel-column-width").Value;
+
+        return new ColumnDraft(
+            Math.Max(RelativeWeight(relative), MinimumColumnTwips), IsRelative: true);
+    }
+
+    /// <summary>A <c>23*</c> relative width as its number, or the minimum when it is not one.</summary>
+    private static long RelativeWeight(string? value)
+        => long.TryParse(
+            value?.TrimEnd('*'),
+            System.Globalization.NumberStyles.Integer,
+            System.Globalization.CultureInfo.InvariantCulture,
+            out long weight)
+            ? weight
+            : MinimumColumnTwips;
+
+    /// <summary>
+    /// The table's own width, and whether it is a measure or a share of the text area.
+    /// </summary>
+    /// <remarks>
+    /// Three cases, and the difference between them decides how the columns resolve. <c>style:width</c> is a
+    /// measure. <c>style:rel-width</c> is a percentage of the text area. Neither means the table fills the
+    /// text area, which is what <c>table:align="margins"</c> asks for and what Writer does regardless of the
+    /// alignment when no width is stated.
+    /// </remarks>
+    private (long Twips, bool IsRelative) TableWidth(string? styleName)
+    {
+        if (TableMeasure(styleName, OdfNamespaces.Style, "width") is { } stated
+            && stated > Length.Zero)
+        {
+            return (stated.Twips, false);
+        }
+
+        string? relative = _styles.ResolveProperty(
+            styleName, OdfStyleFamily.Table, OdfPropertyKind.Table,
+            OdfNamespaces.Style, "rel-width").Value;
+
+        double share = OdfValue.ParsePercentage(relative) ?? 1.0;
+
+        return ((long)Math.Round(_availableWidth.Twips * Math.Clamp(share, 0.0, 1.0)), true);
+    }
+
+    /// <summary>
+    /// Turns the column drafts into measures, the way LibreOffice's own ODF import turns them into measures.
+    /// </summary>
+    /// <param name="drafts">The columns as declared.</param>
+    /// <param name="table">The table's width, and whether that width is a measure or a share.</param>
+    /// <remarks>
+    /// <para>
+    /// Two branches, because the answer genuinely differs and it is measured: the same three width-less
+    /// columns come out <strong>equal</strong> in a table that states no width and <strong>160.6, 107.1 and
+    /// 214.1 pt</strong> in a 17 cm one. The second set is not a mistake in the measurement and not
+    /// content-based sizing — it is what
+    /// <c>SwXMLTableContext::MakeTable</c> (<c>sw/source/filter/xml/xmltbli.cxx</c>) computes, and the ratio
+    /// 3 : 2 : 4 comes out of a quirk worth naming: the loop that converts a relative column to an absolute
+    /// one shrinks the space remaining after each column but keeps dividing by the <em>full</em> sum of the
+    /// weights, so each column gets a third of what is left rather than a third of the whole.
+    /// </para>
+    /// <para>
+    /// A table that states no measure keeps its columns relative through the import and lets layout divide the
+    /// text area between them, which is why that case is a plain proportional division and does not inherit
+    /// the quirk. Both are reproduced rather than picked between, because a document arrives written either
+    /// way and LibreOffice's renders of the two differ by fifty points of column width.
+    /// </para>
+    /// </remarks>
+    private static List<Length> Resolved(List<ColumnDraft> drafts, (long Twips, bool IsRelative) table)
+    {
+        if (drafts.Count == 0) return [];
+
+        List<long> twips = table.IsRelative
+            ? Shares(drafts, table.Twips)
+            : Measures(drafts, table.Twips);
+
+        return [.. twips.Select(value => Length.FromTwips(Math.Max(value, 0)))];
+    }
+
+    /// <summary>
+    /// The columns of a table whose width is a share of the text area: a proportional division.
+    /// </summary>
+    /// <remarks>
+    /// By accumulating the boundaries and truncating each rather than rounding each width, so that the
+    /// widths add up to the table's exactly and the remainder lands where Writer's own division puts it —
+    /// 9638 twips over three equal columns comes out 3212, 3213, 3213 rather than 3213, 3213, 3212. An
+    /// absolute column keeps its measure as its weight, which is how a table mixing the two spellings stays
+    /// in proportion.
+    /// </remarks>
+    private static List<long> Shares(List<ColumnDraft> drafts, long width)
+    {
+        long total = drafts.Sum(draft => draft.Twips);
+        if (total <= 0) return [.. drafts.Select(_ => MinimumColumnTwips)];
+
+        List<long> widths = new(drafts.Count);
+        long cumulative = 0;
+        long previous = 0;
+
+        foreach (ColumnDraft draft in drafts)
+        {
+            cumulative += draft.Twips;
+            long boundary = width * cumulative / total;
+            widths.Add(boundary - previous);
+            previous = boundary;
+        }
+
+        return widths;
+    }
+
+    /// <summary>
+    /// The columns of a table whose width is a measure, following LibreOffice's own two steps.
+    /// </summary>
+    /// <remarks>
+    /// First every relative column becomes absolute — with the shrinking-dividend quirk noted above, which
+    /// is reproduced because it is what the reference renders — and then the whole set is scaled to the
+    /// table's width if the two do not already agree. The scaling has two arms of its own: a set narrower
+    /// than the table shares out the surplus in proportion, and a set wider than it is rebuilt from the
+    /// minimum width upwards, which is the only way a table can shrink without a column vanishing.
+    /// </remarks>
+    private static List<long> Measures(List<ColumnDraft> drafts, long width)
+    {
+        List<long> widths = [.. drafts.Select(draft => draft.Twips)];
+
+        long stated = drafts.Where(draft => !draft.IsRelative).Sum(draft => draft.Twips);
+        long weights = drafts.Where(draft => draft.IsRelative).Sum(draft => draft.Twips);
+        int relativeCount = drafts.Count(draft => draft.IsRelative);
+        long smallestWeight = relativeCount == 0
+            ? 0
+            : drafts.Where(draft => draft.IsRelative).Min(draft => draft.Twips);
+
+        if (relativeCount > 0)
+        {
+            long forRelative = Math.Max(0, width - stated);
+            long surplusWeight = weights - (relativeCount * smallestWeight);
+            long minimum = relativeCount * MinimumColumnTwips;
+            long surplus = Math.Max(0, forRelative - minimum);
+
+            // All at the minimum when there is not room for even that; the minimum plus a share of what is
+            // left when there is room for the minimum but not for the weights; the weights otherwise.
+            bool atMinimum = forRelative <= minimum;
+            bool atMinimumPlusShare =
+                !atMinimum
+                && surplusWeight > 0
+                && smallestWeight > 0
+                && forRelative <= weights * MinimumColumnTwips / smallestWeight;
+
+            int remaining = relativeCount;
+
+            for (int i = 0; i < drafts.Count; i++)
+            {
+                if (!drafts[i].IsRelative) continue;
+
+                long resolved;
+                if (remaining == 1)
+                {
+                    // The last relative column takes whatever is left, which is what keeps the set adding up.
+                    resolved = forRelative;
+                }
+                else if (atMinimum)
+                {
+                    resolved = MinimumColumnTwips;
+                }
+                else if (atMinimumPlusShare)
+                {
+                    resolved = MinimumColumnTwips
+                               + ((drafts[i].Twips - smallestWeight) * surplus / surplusWeight);
+                }
+                else
+                {
+                    resolved = drafts[i].Twips * forRelative / weights;
+                }
+
+                widths[i] = resolved;
+                forRelative -= resolved;
+                stated += resolved;
+                remaining--;
+            }
+        }
+
+        return stated == width || stated <= 0 ? widths : Scaled(widths, stated, width);
+    }
+
+    /// <summary>Scales a set of absolute widths onto the table's width.</summary>
+    private static List<long> Scaled(List<long> widths, long total, long width)
+    {
+        bool growing = total < width;
+        long extra = growing ? width - total : width - (widths.Count * MinimumColumnTwips);
+        long last = growing ? widths[^1] + extra : MinimumColumnTwips + extra;
+
+        for (int i = 0; i < widths.Count - 1; i++)
+        {
+            long share = widths[i] * extra / total;
+            widths[i] = growing ? widths[i] + share : MinimumColumnTwips + share;
+            last -= share;
+        }
+
+        widths[^1] = last;
+        return widths;
     }
 
     /// <summary>

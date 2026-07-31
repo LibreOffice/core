@@ -145,6 +145,66 @@ public sealed record PageTable : PageBlock
     /// </remarks>
     public int HeaderRowCount { get; init; }
 
+    /// <summary>
+    /// True when an interior grid line stops <em>inside</em> the table's outline rather than crossing it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A compatibility flag, and one worth spelling out because it is the only place the four formats' tables
+    /// are drawn differently rather than merely described differently. Writer paints an interior line from the
+    /// outer edge of the outline it meets when the document came from ODF, and from the outline's
+    /// <em>inner</em> edge when it came from Word — a difference of the outline's whole width at each end.
+    /// It hangs off <c>DocumentSettingId::TABLE_ROW_KEEP</c>, which the DOC, DOCX and RTF importers set and
+    /// the ODF one does not, and is applied in <c>SwTabFramePainter::FindStylesForLine</c>
+    /// (<c>sw/source/core/layout/paintfrm.cxx</c>) under a local named <c>bWordTableCell</c>.
+    /// </para>
+    /// <para>
+    /// Measured on the same three-column table in four formats: the outline runs 56.45 to 538.85 pt in every
+    /// one of them, and the interior horizontals run 56.45 to 538.85 from the ODF file against 56.95 to 538.35
+    /// from each of the three Word ones. Half a point of line at each end of each interior line, which is
+    /// visible at any zoom as a notch at the corners or the absence of one.
+    /// </para>
+    /// </remarks>
+    public bool InnerBordersStopAtTheOuterEdge { get; init; }
+
+    /// <summary>
+    /// A left indent as stated by DOCX or RTF, corrected for where each measures a table's edge from.
+    /// </summary>
+    /// <param name="stated">The indent the document gave — DOCX's <c>w:tblInd</c> or RTF's <c>\trleft</c>.</param>
+    /// <param name="rows">
+    /// The table's rows, for the border that decides the correction: the top-left cell's left edge.
+    /// </param>
+    /// <remarks>
+    /// <para>
+    /// Writer positions a table at the <em>middle</em> of its left border and Word at the border's outer
+    /// edge, so an indent that came from Word is half a border too small. LibreOffice's own importer adds it
+    /// back in <c>DomainMapperTableHandler::endTableGetTableStyle</c>: "Writer starts a table in the middle of
+    /// the border, Word starts a table at the left edge of the border, so emulate that by adding half the
+    /// width".
+    /// </para>
+    /// <para>
+    /// Which is also why LibreOffice's DOCX export writes <c>w:tblInd w:w="-5"</c> for a table at the margin
+    /// with a half-point border — minus half a border, so that the round trip lands back where it started. A
+    /// reader taking that at face value puts the table a quarter of a point into the margin.
+    /// </para>
+    /// <para>
+    /// DOC needs none of this and must not have it: WW8 states its column boundaries as <em>grid lines</em> —
+    /// LibreOffice calls the array <c>nCenter</c> — which is already Writer's own convention.
+    /// </para>
+    /// </remarks>
+    public static Length WordLeftIndent(Length stated, IReadOnlyList<PageTableRow> rows)
+    {
+        ArgumentNullException.ThrowIfNull(rows);
+
+        // The top-left cell's own left border, which is what LibreOffice takes: the table's border set is only
+        // the fallback, and a cell restating that side wins.
+        TableBorder border = rows.Count > 0 && rows[0].Cells.Count > 0
+            ? rows[0].Cells[0].Borders.Left
+            : default;
+
+        return stated + (border.Width / 2);
+    }
+
     /// <summary>How wide the table is, which is its columns added up.</summary>
     public Length Width
     {

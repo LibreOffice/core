@@ -91,8 +91,9 @@ public sealed class WordProcessingPages : IPageSequence
         /// <inheritdoc/>
         /// <remarks>
         /// The whole page: its header, its body text — one glyph run per line for a uniform paragraph and
-        /// one per formatting change for a mixed one — its tables, and its footer. Floating frames are the
-        /// one kind of content still missing, being the one kind pagination does not place.
+        /// one per formatting change for a mixed one — its tables, and its footer. A floating frame is
+        /// <em>placed</em>, and the text around it goes where it should, but the frame's own content is not
+        /// drawn yet: a frame holds a flow of its own, which is a second layout at the frame's width.
         /// </remarks>
         public void Draw(IDrawingSink sink) => PageDrawing.Draw(Laid, blocks, sink);
     }

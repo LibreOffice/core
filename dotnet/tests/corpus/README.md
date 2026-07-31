@@ -205,8 +205,10 @@ an earlier version had both and could not be compared at all, because a border t
 either side of each grid line — so 0.05 pt borders make the table 0.1 pt taller per row boundary and shift every
 column edge. One feature per document, as above. Two things about comparing it: LibreOffice's DOCX render fills
 each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
-distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
-per-band `WW8_SHD` array that is not read yet.
+distinct rectangles; and `table-shading.doc` earns its place by being the hardest of the five, since WW8 states
+a shade as a foreground, a background and a pattern index rather than as a colour — the grey has to be blended
+out of black over white at Word's own twenty per cent, so a reader that took the foreground would fill the cell
+black and still be in exactly the right place.
 
 `table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
 the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
@@ -214,8 +216,57 @@ with the text by default, and a distinct one makes it obvious in a rendered page
 checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
 one document could not test either cleanly.
 
-`table-borders.*` exists in all five formats but only the two ODF ones are compared stroke for stroke, and the
-reason is the table's *origin* rather than its borders: each export writes the table's own left edge differently
-relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
-DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
-right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
+`table-borders.*` exists in all five formats and all five are compared stroke for stroke. Getting the last three
+there turned up two rules worth knowing before writing another table document. The first is that **Word and
+Writer measure a table's left edge from different places** — Writer from the middle of the left border, Word from
+its outer edge — so a DOCX or RTF indent is half a border too small, which is also why LibreOffice's own DOCX
+export writes `w:tblInd w:w="-5"` for a table sitting at the margin. DOC needs no such correction, because WW8's
+column boundaries are grid lines already. The second is that **the same table is drawn differently depending on
+which family it came from**: an interior grid line stops at the *inner* edge of the table's outline for a
+Word-family document and crosses to its outer edge for an ODF one, half a point at each end. So the four
+renders of one table legitimately disagree, and a comparison that assumed otherwise would chase a bug that is
+not there.
+
+`table-autofit.fodt` and `table-autofit-stated.fodt` are `table-grid` with the three column widths **removed**,
+and they are a *pair* on purpose: they differ in one attribute — whether the table itself states
+`style:width="17cm"` — and LibreOffice resolves them completely differently. The one that states nothing divides
+the text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt, a
+ratio of 3 : 2 : 4. That second number is not a bug in whatever produced it and not content-based sizing: it
+falls out of `SwXMLTableContext::MakeTable` dividing the space *remaining* after each column by the full sum of
+the column weights. Keep both, because dropping either leaves half the rule untested and the surviving half
+looks arbitrary.
+
+ODF only, and unusually so: these two have no `.odt`, `.docx`, `.doc` or `.rtf` siblings. Converting them would
+defeat them — LibreOffice writes explicit column widths on export, so every other format would arrive with the
+grid already resolved, which is the thing under test. It is also why the flat form is the source: an `.odt`
+would have to be zipped by hand to say as little as this one does.
+
+`wrap-frame.fodt` is a 5 cm by 3 cm frame anchored to a paragraph, one centimetre below that paragraph's top,
+with text flowing beside it. Its geometry is chosen so that **both** edges of the frame's reach fall inside the
+document: three lines above it at the full width, seven beside it, and one below it back at the full width. That
+matters because the cheap wrong answers are edge answers — a reader that narrowed the whole paragraph would
+shorten the first three lines, and one that wrapped only the anchoring paragraph would leave the last four wide.
+
+Two things learnt building it, both worth knowing before writing another. The frame is placed with `svg:y="1cm"`
+rather than at the anchor, because at zero the paragraph above ends *exactly* where the frame begins — and
+LibreOffice counts that as an overlap, so the line above wraps too. It is not a rounding artefact: Writer tests
+with `SwRect::Overlaps`, whose comparisons are `<=` and `>=`. A document sitting on that boundary is a fragile
+test whichever way it is read. And the frame's text box is left **empty**: a frame with text in it contributes
+words of its own to the page, and a comparison of body-text positions would then be comparing two features at
+once.
+
+ODF only, for now — the frame reading is done for ODF and the DOCX, DOC and RTF spellings are still open.
+
+`wrap-frame-text.fodt` is the same document with the frame's text box **filled**, which checks the two things
+the empty one cannot: that the frame's own lines break at the frame's width rather than the page's, and that
+they are inset by its padding. Building it turned up two LibreOffice behaviours worth knowing, because each
+would otherwise read as a bug in whatever produced the file.
+
+Its padding is written as `fo:padding-left` and the other three sides rather than as the `fo:padding`
+shorthand, because **LibreOffice ignores the shorthand on a graphic style**: the same frame written
+`fo:padding="0.15cm"` lays its text against its own edge. `fo:margin` is not like this — there the shorthand
+works, and setting it grows the wrap region on all four sides. And the frame's paragraph names **no style at
+all**, relying on `style:default-style`, because **LibreOffice ignores a paragraph style named inside a
+`draw:text-box`**: a `text:p` there with `text:style-name="Body"` renders in the default font, and a round trip
+through LibreOffice drops the attribute outright. Measured on the word "the" — 14.92 pt wide in the body
+against 14.62 pt in the frame, at different line heights, so a different typeface rather than a different size.

@@ -453,9 +453,6 @@ is read and verified, so what remains is the filling of pages rather than the me
         reason unrelated to where anything went.
       - Every shade before any text, rather than each cell's shade before its own text: a shade is opaque, so a
         cell whose content overflows would otherwise have that overflow painted over by its neighbour's fill.
-- [ ] Cell shading for **DOC**, which is a bigger read than the other three: a per-band `WW8_SHD` array from
-      `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form (`sprmTDefTableNewShd` and its 2nd and
-      3rd parts) carrying full RGB.
 - [x] **Cell borders**, for ODF: read, drawn *consolidated*, and compared against LibreOffice's own strokes —
       axis, position, both ends and thickness, every one within a tenth of a point. What had to be right:
       - **One stroke per grid line, not four per cell.** Five horizontals for a four-row table and one vertical
@@ -473,6 +470,18 @@ is read and verified, so what remains is the filling of pages rather than the me
       - Width and colour, no style: a style is a rasteriser's problem and no two formats agree on the set, while
         a dashed border at the right width in the right place is far closer than none — and the width is the half
         that moves text.
+- [x] **An interior grid line is drawn differently depending on which family the document came from**, and this
+      is the only place in a table where that is true — everywhere else the four formats merely *describe* the
+      same drawing. Writer paints an interior line from the outer edge of the outline it meets when the document
+      came from ODF, and from the outline's **inner** edge when it came from Word: the whole width of the
+      outline further in, at each end. It hangs off `DocumentSettingId::TABLE_ROW_KEEP`, which the DOC, DOCX and
+      RTF importers set and the ODF one does not, and is applied in `SwTabFramePainter::FindStylesForLine`
+      (`sw/source/core/layout/paintfrm.cxx`) under a local named `bWordTableCell`. Measured on the same table in
+      four formats: the outline runs 56.45 to 538.85 pt in every one of them, and the interior horizontals run
+      56.45 to 538.85 from the ODF file against 56.95 to 538.35 from each of the three Word ones. Modelled as
+      `PageTable.InnerBordersStopAtTheOuterEdge`. Only an *outline* pushes a line in — an interior line crossing
+      another interior line passes straight through it, which is why the corpus table's short vertical is inset
+      at its top and overshoots at its bottom.
 - [x] Cell borders for **DOCX and RTF** as well, each with its own trap:
       - **DOCX writes `w:start` and `w:end`, not `w:left` and `w:right`.** OOXML has both — the logical pair is
         the ISO spelling and the physical pair the legacy one — and LibreOffice's export uses the logical names,
@@ -485,17 +494,44 @@ is read and verified, so what remains is the filling of pages rather than the me
         units for one quantity.
       - ODF's own trap, for the record: `none` is a *value* meaning there is no border, so it beats the
         `fo:border` shorthand rather than falling through to it.
-- [ ] The **table's own left edge** in DOCX and RTF, which is what keeps those two out of the border comparison
-      rather than anything about the borders: each export writes the table's origin differently relative to the
-      border, so the whole grid shifts. Measured on the first vertical of the corpus table — 56.70 pt in ODF,
-      56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. A quarter and
-      a third of a point. Their borders are otherwise right: the same nine strokes, extents, widths and colours.
-- [ ] Cell borders and shading for **DOC**. Borders are a `BRC` structure through `sprmTSetBrc`, applied to a
-      *range* of cells rather than to one; shading is the per-band `WW8_SHD` array noted above. Both are bigger
-      reads than the other three formats needed.
-      The grid places text correctly and draws nothing round it, which is the
-      half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
-      resolved border model, and a border's width also eats into the cell's text area.
+- [x] The **table's own left edge** in DOCX and RTF, which was what kept those two out of the border
+      comparison rather than anything about the borders. Not two separate offsets after all but one rule, and
+      LibreOffice states it outright in `DomainMapperTableHandler`: "Writer starts a table in the middle of the
+      border, Word starts a table at the left edge of the border, so emulate that by adding half the width".
+      So a DOCX or RTF indent is half a left border too small — which is also why LibreOffice's own DOCX export
+      writes `w:tblInd w:w="-5"` for a table at the margin with a half-point border, minus half a border so the
+      round trip lands back where it started. `PageTable.WordLeftIndent` adds it back. **DOC must not have it**:
+      WW8 states its column boundaries as grid lines already — LibreOffice calls the array `nCenter` — and the
+      DOC render was exact without it.
+- [x] Cell borders and shading for **DOC**, the largest of the four reads and the only one that has to do
+      arithmetic rather than translation:
+      - **Shading is a pattern, not a colour.** WW8 gives a foreground, a background and an index saying how
+        much of the cell the foreground covers, so twenty per cent black on white is *not* grey in the file. The
+        percentages are neither linear in the index nor evenly spaced and come from
+        `SwWW8Shade::SetShade`'s `eMSGrayScale` table (`ww8par6.cxx`): 0 clear, 1 solid, then 5, 10, 20, 25, 30,
+        40, 50, 60, 70, 75, 80, 90 per cent, twelve hatches all blended at a third, nine undocumented indices at
+        a half, and twenty-seven finer percentages after that. Reading the foreground as the colour gives black
+        where the document says light grey.
+      - **Two spellings, and LibreOffice's export writes both**: `sprmTDefTableShd80` packs a palette-indexed
+        pattern into sixteen bits per cell, `sprmTDefTableShd` gives ten bytes with full `COLORREF`s. The newer
+        wins *per cell* rather than whole, as `SetTabShades` does. And the newer one is split across three
+        sprms whose second and third start at cells **22 and 44** — taking all three from zero shades the first
+        columns three times and the rest never.
+      - **Borders arrive twice too.** Each 20-byte cell descriptor in `sprmTDefTable` carries four `BRC80`
+        codes after two reserved bytes, and `sprmTSetBrc` then overwrites a *range* of cells on the sides a flag
+        byte names — the only border sprm in any of the four formats that is not per cell. It replaces rather
+        than merges, which is how a document turns one edge of one cell off.
+      - **Type 0 and the nil code are different.** "Never stated" is type 0 and "explicitly nothing" is the nil
+        code, and only the former may be filled in by a default. Collapsing both to a zero width loses that.
+      - **A border's drawn width is not its stated width.** `dptLineWidth` is eighths of a point, then
+        `DetermineBorderProperties` corrects the types whose drawn thickness has nothing to do with their
+        nominal one (triple is five times, a wave is the wave's own height), then
+        `editeng::ConvertBorderWidthFromWord` applies the style's multiplier — double is three times, thick
+        twice, and the composites add fixed line and gap widths. A zero width means three quarters of a point.
+      - What is **not** read: `sprmTTableBorders`, the table's own six defaults, which fill in only the sides no
+        cell stated and pick between the outer and interior code by the row's place in the table and the cell's
+        in the row (`ww8par2.cxx`, third pass over the bands). Neither corpus file uses it and a table stating
+        only those gets no borders rather than wrong ones.
 - [x] A table inside a cell, in all four formats. A cell holds *blocks* rather than paragraphs and
       `FlowLayouter` places a table among its lines, so a cell's content is exactly what a header's is —
       which is what made this a small change rather than a second layout path. The subtle part is that a
@@ -534,14 +570,80 @@ is read and verified, so what remains is the filling of pages rather than the me
       coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
       only surfaced when the same value became an exact height and produced a zero-height row.
       `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
-- [ ] Fitting a table to the page when its columns state no widths, and this is a **much bigger item than it
-      reads as** — worth saying so, because the obvious guess is wrong. It is not "divide the text width
-      equally": measured on a three-column table with every column style stripped, LibreOffice produces columns
-      of 160.6, 107.1 and 214.1 pt, sized to their *content*. That is Writer's table auto-layout, the same
-      class of algorithm as CSS's — minimum and maximum content widths per column, then distribution — and it
-      needs the cells' text measured before the grid exists. The readers currently take the declared grid and
-      nothing else, so a width-less table comes out with zero-width columns.
-- [ ] Floating objects and text wrap, including contour wrap
+- [x] Fitting a table to the page when its columns state no widths — and the note that used to stand here was
+      **wrong in its conclusion**, so it is worth saying what it said: that the measured 160.6 / 107.1 /
+      214.1 pt columns were "sized to their *content*", that this was Writer's CSS-like auto-layout, and that
+      it therefore needed every cell measured before the grid existed. None of that is so. It is not
+      content-based at all, and the item was a fraction of the size it looked.
+
+      What it actually is, measured on two documents differing only in whether the table states a width:
+
+      - A table that states **no** width divides the text area **evenly** — 9638 twips over three columns
+        comes out 3212, 3213, 3213. Its columns stay *relative* through LibreOffice's import and layout
+        divides them.
+      - A table that states **17 cm** gives the same three identical columns **3212, 2142 and 4284** twips.
+        A ratio of 3 : 2 : 4 out of three columns that are declared the same, which is not a rounding
+        artefact: `SwXMLTableContext::MakeTable` (`sw/source/filter/xml/xmltbli.cxx`) converts each relative
+        column to an absolute one as `weight × remaining / totalWeight`, shrinking `remaining` after each
+        column while still dividing by the **full** sum of the weights. So each column takes a third of what
+        is left rather than a third of the whole, and the last takes the remainder.
+
+      Both are reproduced rather than picked between, because a document arrives written either way. The other
+      pieces that had to be right: a column with no width is a **relative** one of weight `MINLAY` (23 twips),
+      not an absolute zero — which is what made a width-less table come out with zero-width columns before —
+      and `style:rel-column-width` (`23*`) is the explicit spelling of the same thing. `style:rel-width` on
+      the table is a percentage of the text area. DOCX, DOC and RTF need none of this: all three always write
+      a grid.
+- [x] **Floating frames and text wrap**, for ODF — the first feature here where a line's available width is
+      not a property of its paragraph, which is what made it structural rather than additive:
+      - `Paperless.Text` gained a `LineRoom` delegate: how much room a line has, asked once per line and
+        answered from the line's *position*. Deliberately ignorant of what is in the way — the text library
+        has no notion of a frame, an anchor or a wrap mode, and should not.
+      - The single-face path is **exact**, because every line of such a paragraph is the same height and a
+        line's top is therefore its index times that height — knowable before the lines exist. The mixed-run
+        path cannot be: its heights depend on which runs each line covers, so it fills once against a uniform
+        pitch and again against the real tops. One refinement, not a loop to convergence.
+      - The **paginator** had to change too, and this is the part that is easy to underestimate: it lays every
+        block out once up front, because within a section the width never varies. A frame breaks that — its
+        position is relative to its anchor, so the room depends on where the paragraph landed on a page, which
+        is a pagination result. So a paragraph beside a frame is laid out *again* at the point of use, and the
+        result is kept, since a paragraph split across a page break must not be re-broken half way.
+      - A line is obstructed when its box overlaps the frame's region **inclusively** — a line whose bottom
+        exactly meets a frame's top wraps. Measured, not chosen: Writer tests with `SwRect::Overlaps`, whose
+        comparisons are `<=` and `>=`, and a corpus document that sat on the boundary showed the line wrapped.
+      - The **widest** free run wins rather than the first, which is what sends text down whichever side of a
+        frame has more room and makes two frames narrowing one line compose without a special case.
+      - The wrap margins are part of the region text avoids and not of the frame, so two rectangles are
+        carried: what would be drawn, and what the text keeps clear of.
+      - It also fixed a silent pre-existing bug: a `draw:frame` was walked *into*, so a text box's words were
+        spliced into the middle of the sentence that anchored it.
+- [x] **A frame's own content**, which is a flow at the frame's width — the same shape as a table cell's, so
+      the layout needed no new machinery, only wiring. Two things had to be measured rather than assumed, and
+      both are LibreOffice's own oddities:
+      - **`fo:padding` on a graphic style is ignored; the four sides are honoured.** The same frame written
+        `fo:padding="0.15cm"` lays its text against its own edge and written with `fo:padding-left` and
+        friends insets it by 4.25 pt. `fo:margin` is *not* like this — the shorthand works there. So the two
+        are read differently, deliberately, and the asymmetry is LibreOffice's rather than this reader's.
+      - **A paragraph style named inside a `draw:text-box` is ignored.** A `text:p` in a text box with
+        `text:style-name="Body"` renders in the *default* font, not Carlito: LibreOffice's own round trip
+        drops the attribute outright. The document's `style:default-style` does apply, which is what the
+        corpus document uses so that it says the same thing to both readers. Paperless honours the named
+        style, so a document relying on one will differ from LibreOffice's render — correctly.
+- [ ] The rest of floating frames:
+      - **A frame's picture.** An image needs a decoder, which is the rasteriser's business; the frame is
+        placed and its text drawn, and only the picture is missing.
+      - **A frame's own border and background**, which are on the graphic style beside the wrap and are read
+        for neither.
+      - **`TextWrap.None`**, which is not a narrowing at all: it pushes a line *below* the frame, a vertical
+        decision that belongs where the tops are assigned rather than where the widths are.
+      - **Contour wrap**, where the region is the image's outline rather than its box.
+      - **`Dynamic`**'s threshold: Writer gives up and pushes the line down when the wider side is too narrow
+        to be worth using. Treated as `Parallel` until the threshold is measured.
+      - **Page and character anchors** resolve as paragraph anchors do; `horizontal-rel` and `vertical-rel`
+        are read as "from the paragraph" whatever they say, and the named positions (`left`, `center`,
+        `right`) are not read at all.
+      - **DOCX, DOC and RTF.** Only ODF is read. DOCX has `w:anchor`/`w:inline` with `wp:positionH`, DOC has
+        the Escher anchor record, RTF the `\shp` destinations.
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can
       push the line that cites it onto the next page, which removes the note again. That is a feedback loop

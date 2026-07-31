@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using Paperless.Core.Extraction;
+using Paperless.Core.Graphics;
 
 namespace Paperless.WordProcessing.Ww8;
 
@@ -64,18 +65,112 @@ public sealed partial class Ww8DocumentReader
         {
             if (i >= available) break;
 
-            // The flags are the descriptor's first sixteen bits; the rest is width and borders.
-            ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(
-                span[(descriptorsAt + (i * CellDescriptorSize))..]);
+            ReadOnlySpan<byte> descriptor = span[(descriptorsAt + (i * CellDescriptorSize))..];
+
+            // Twenty bytes: sixteen bits of flags, two reserved, then four four-byte border codes in
+            // WW8's own side order. The two reserved bytes are what makes the newer descriptor twenty
+            // rather than eighteen, and skipping them reads the flags as the top border.
+            ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(descriptor);
 
             cells[i] = new Ww8CellDefinition(
                 IsFirstMerged: (flags & 0x0001) != 0,
                 IsMerged: (flags & 0x0002) != 0,
                 IsVerticallyMerged: (flags & 0x0020) != 0,
-                StartsVerticalMerge: (flags & 0x0040) != 0);
+                StartsVerticalMerge: (flags & 0x0040) != 0,
+                Borders: BordersIn(descriptor));
         }
 
         return new Ww8TableDefinition(edges, cells);
+    }
+
+    /// <summary>
+    /// The four border codes one cell descriptor carries.
+    /// </summary>
+    /// <remarks>
+    /// A cell that states none leaves all four unset, which is not the same as stating that it has none —
+    /// see <see cref="Ww8Border.IsUnstated"/>. Only the newer four-byte form is read: the WW6 descriptor is
+    /// ten bytes with two-byte codes, and a WW6 table gets no borders rather than wrong ones.
+    /// </remarks>
+    private static Ww8CellBorders BordersIn(ReadOnlySpan<byte> descriptor)
+    {
+        const int firstBorder = 4;
+
+        return new Ww8CellBorders(
+            Side(descriptor, 0), Side(descriptor, 1), Side(descriptor, 2), Side(descriptor, 3));
+
+        static Ww8Border Side(ReadOnlySpan<byte> descriptor, int index)
+            => Ww8Border.ReadShort(descriptor[Math.Min(
+                   descriptor.Length, firstBorder + (index * Ww8Border.ShortLength))..])
+               ?? default;
+    }
+
+    /// <summary>Which cell <c>sprmTDefTableShd2nd</c>'s shading starts at.</summary>
+    /// <remarks>
+    /// Twenty-two, which is neither a round number nor a third of Word's sixty-three column limit — it is
+    /// simply how many ten-byte entries fit in the operand before Word has to split it. A reader taking the
+    /// second and third sprms from cell zero shades the first columns three times and the rest never.
+    /// </remarks>
+    private const int SecondShadingCell = 22;
+
+    /// <summary>Which cell <c>sprmTDefTableShd3rd</c>'s shading starts at.</summary>
+    private const int ThirdShadingCell = 44;
+
+    /// <summary>
+    /// Parses a <c>sprmTSetBrc</c> or <c>sprmTSetBrc80</c> operand.
+    /// </summary>
+    /// <param name="operand">The operand: a first cell, a limit, a flag byte, then one border code.</param>
+    /// <param name="isLongForm">
+    /// True for <c>sprmTSetBrc</c>, whose border code is the eight-byte form. The older sprm has the same
+    /// three-byte header and a four-byte code, and a document carries both.
+    /// </param>
+    /// <remarks>
+    /// A range and not a cell, which is what makes this the largest of the four formats' border reads: one
+    /// sprm can set the left edge of every cell in the row, and four of them describe a fully bordered row.
+    /// An entry whose first cell is past its limit is dropped rather than clamped — it names no cells, so
+    /// there is nothing to apply it to.
+    /// </remarks>
+    private static Ww8BorderOverride? ReadBorderOverride(ReadOnlyMemory<byte> operand, bool isLongForm)
+    {
+        const int headerLength = 3;
+
+        ReadOnlySpan<byte> bytes = operand.Span;
+        if (bytes.Length < headerLength) return null;
+
+        int first = bytes[0];
+        int limit = Math.Min((int)bytes[1], MaxTableColumns + 1);
+        if (first >= limit) return null;
+
+        Ww8Border? border = isLongForm
+            ? Ww8Border.ReadLong(bytes[headerLength..])
+            : Ww8Border.ReadShort(bytes[headerLength..]);
+
+        return border is { } stated
+            ? new Ww8BorderOverride(first, limit, bytes[2], stated)
+            : null;
+    }
+
+    /// <summary>
+    /// One shading list laid over another, entry by entry, with the newer entries winning where they say
+    /// anything.
+    /// </summary>
+    /// <remarks>
+    /// The three shading sprms describe disjoint ranges of cells, so in practice each fills in where the
+    /// others were silent — but they are merged rather than concatenated because nothing guarantees a
+    /// document writes them in order, or writes all three.
+    /// </remarks>
+    private static List<Colour?> Overlay(IReadOnlyList<Colour?>? under, List<Colour?> over)
+    {
+        if (under is null) return over;
+
+        List<Colour?> merged = [.. under];
+        while (merged.Count < over.Count) merged.Add(null);
+
+        for (int i = 0; i < over.Count; i++)
+        {
+            if (over[i] is { } stated) merged[i] = stated;
+        }
+
+        return merged;
     }
 
     /// <summary>
@@ -342,6 +437,12 @@ public sealed partial class Ww8DocumentReader
         /// <summary>The gap between the cell's edges and its text, from the row's padding sprms.</summary>
         public Layout.CellPadding Padding { get; set; }
 
+        /// <summary>Its four edges, from the cell descriptor and whatever <c>sprmTSetBrc</c> laid over it.</summary>
+        public Layout.CellBorders Borders { get; set; }
+
+        /// <summary>Its background, or null when the row's shading sprms give it none.</summary>
+        public Colour? Shading { get; set; }
+
         public bool IsHorizontallyMerged { get; set; }
         public bool ContinuesMergeAbove { get; set; }
 
@@ -378,11 +479,13 @@ public sealed partial class Ww8DocumentReader
 /// <param name="StartsVerticalMerge">
 /// The cell is the top of that vertical merge rather than a continuation of it.
 /// </param>
+/// <param name="Borders">Its four border codes, as the descriptor states them.</param>
 public readonly record struct Ww8CellDefinition(
     bool IsFirstMerged,
     bool IsMerged,
     bool IsVerticallyMerged,
-    bool StartsVerticalMerge);
+    bool StartsVerticalMerge,
+    Ww8CellBorders Borders = default);
 
 /// <summary>A table row's geometry, from <c>sprmTDefTable</c>.</summary>
 /// <remarks>

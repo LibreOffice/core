@@ -35,7 +35,10 @@ public static class PageDrawing
     /// they belong to and before the footer, which is where they sit on the sheet, with their separator rule
     /// immediately before them.
     /// <para>
-    /// Floating frames are still missing, being the one kind of page content pagination does not place.
+    /// A floating frame's own text is drawn <em>after</em> the body it sits beside, which is Writer's own
+    /// order for anything but a run-through frame behind the text: a frame overlapping the body should cover
+    /// it rather than be covered. What is still missing is the frame's picture — an image needs a decoder,
+    /// which is the rasteriser's business rather than the layout engine's.
     /// </para>
     /// </remarks>
     /// <param name="page">The page to draw.</param>
@@ -54,6 +57,7 @@ public static class PageDrawing
             DrawFlow(page.Header, sink);
             DrawBody(page, blocks, sink);
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
+            foreach (PlacedFrame frame in page.Frames) DrawFlow(frame.Content, sink);
             DrawSeparator(page.NoteSeparator, sink);
             DrawFlow(page.Notes, sink);
             DrawFlow(page.Footer, sink);
@@ -156,28 +160,123 @@ public static class PageDrawing
     /// <para>
     /// Horizontals before verticals, which matters only for which one wins a join and is free to match.
     /// </para>
+    /// <para>
+    /// The one thing that is <em>not</em> the same in every document is what an interior line does where it
+    /// meets the table's outline — see <see cref="PageTable.InnerBordersStopAtTheOuterEdge"/>.
+    /// </para>
     /// </remarks>
     private static void DrawBorders(PlacedTable table, IDrawingSink sink)
     {
         // Collected per grid line and merged, so that a run of cells agreeing about an edge becomes one
         // stroke. Keyed on the line's own coordinate rounded to a twip, because two cells' shared edge is
         // computed from two different rectangles and can differ in the last EMU.
-        foreach (Edge edge in Edges(table))
+        List<Edge> edges = Edges(table);
+        GridBounds bounds = Bounds(table);
+
+        foreach (Edge edge in edges)
         {
             Stroke stroke = new(Paint.Solid(edge.Border.Colour), edge.Border.Width);
             Length half = edge.Border.Width / 2;
 
+            Length from = edge.From - half;
+            Length to = edge.To + half;
+
+            if (table.Table.InnerBordersStopAtTheOuterEdge && !bounds.IsOuter(edge))
+            {
+                from += CrossingOutline(edges, bounds, edge, edge.From);
+                to -= CrossingOutline(edges, bounds, edge, edge.To);
+            }
+
             GraphicsPath path = edge.IsHorizontal
                 ? new GraphicsPath()
-                    .MoveTo(new DocPoint(edge.From - half, edge.At))
-                    .LineTo(new DocPoint(edge.To + half, edge.At))
+                    .MoveTo(new DocPoint(from, edge.At))
+                    .LineTo(new DocPoint(to, edge.At))
                 : new GraphicsPath()
-                    .MoveTo(new DocPoint(edge.At, edge.From - half))
-                    .LineTo(new DocPoint(edge.At, edge.To + half));
+                    .MoveTo(new DocPoint(edge.At, from))
+                    .LineTo(new DocPoint(edge.At, to));
 
             sink.StrokePath(path, stroke);
         }
     }
+
+    /// <summary>The outermost grid line on each side of a table, which is what makes a line an outer one.</summary>
+    /// <param name="Left">The leftmost column boundary.</param>
+    /// <param name="Right">The rightmost.</param>
+    /// <param name="Top">The topmost row boundary.</param>
+    /// <param name="Bottom">The bottommost.</param>
+    private readonly record struct GridBounds(Length Left, Length Right, Length Top, Length Bottom)
+    {
+        /// <summary>True when a grid line is part of the table's outline rather than an interior one.</summary>
+        public bool IsOuter(Edge edge) => edge.IsHorizontal
+            ? Same(edge.At, Top) || Same(edge.At, Bottom)
+            : Same(edge.At, Left) || Same(edge.At, Right);
+
+        /// <summary>True when a coordinate is one of the two boundaries a line of this axis can end on.</summary>
+        public bool IsBoundary(bool isHorizontal, Length at) => isHorizontal
+            ? Same(at, Left) || Same(at, Right)
+            : Same(at, Top) || Same(at, Bottom);
+    }
+
+    /// <summary>
+    /// A table's outermost grid lines, from the cells that were placed rather than from the table.
+    /// </summary>
+    /// <remarks>
+    /// From the cells, because a table split across a page break has an outline on each page and it is the
+    /// part on <em>this</em> page that its interior lines stop at. Deriving it from the table's own extent
+    /// would put the second page's top boundary on the first page.
+    /// </remarks>
+    private static GridBounds Bounds(PlacedTable table)
+    {
+        if (table.Cells.Count == 0) return default;
+
+        return new GridBounds(
+            table.Cells.Min(cell => cell.Area.X),
+            table.Cells.Max(cell => cell.Area.Right),
+            table.Cells.Min(cell => cell.Area.Y),
+            table.Cells.Max(cell => cell.Area.Bottom));
+    }
+
+    /// <summary>
+    /// How far one end of an interior grid line is pushed in by the outline it runs into, if it runs into one.
+    /// </summary>
+    /// <param name="edges">Every consolidated grid line of the table.</param>
+    /// <param name="bounds">The table's outline.</param>
+    /// <param name="edge">The interior line.</param>
+    /// <param name="end">Which of its two ends, as that end's coordinate along its own axis.</param>
+    /// <remarks>
+    /// The <em>whole</em> width of the outline it meets, not half — which together with the half-width
+    /// overshoot every stroke already has means an interior line starts a quarter of a point <em>inside</em> a
+    /// half-point outline rather than a quarter outside it. Measured on the same table in all three of Word's
+    /// formats: the outline runs 56.45 to 538.85 and the interior horizontals 56.95 to 538.35.
+    /// </remarks>
+    private static Length CrossingOutline(
+        List<Edge> edges, GridBounds bounds, Edge edge, Length end)
+    {
+        if (!bounds.IsBoundary(edge.IsHorizontal, end)) return Length.Zero;
+
+        foreach (Edge crossing in edges)
+        {
+            if (crossing.IsHorizontal == edge.IsHorizontal) continue;
+            if (!Same(crossing.At, end) || !bounds.IsOuter(crossing)) continue;
+
+            // Only the run that actually reaches this line: an outline broken into several strokes by cells
+            // that disagree about it does not push in a line it never touches.
+            if (edge.At < crossing.From || edge.At > crossing.To) continue;
+
+            return crossing.Border.Width;
+        }
+
+        return Length.Zero;
+    }
+
+    /// <summary>
+    /// Whether two coordinates name the same grid line, to the twip.
+    /// </summary>
+    /// <remarks>
+    /// To the twip rather than exactly, for the same reason the grid lines are grouped that way: two cells'
+    /// shared edge is arrived at from two different rectangles and the two can differ in the last EMU.
+    /// </remarks>
+    private static bool Same(Length left, Length right) => left.Twips == right.Twips;
 
     /// <summary>One consolidated grid line: where it sits, how far it runs, and its border.</summary>
     private readonly record struct Edge(

@@ -115,17 +115,57 @@ public static class Ww8SprmReader
         /// </remarks>
         public const ushort RowHeight = 0x9407;
 
+        /// <summary><c>sprmSBkc</c>: how a section starts relative to the one before it.</summary>
+        public const ushort SectionBreakKind = 0x3009;
+
         /// <summary>
-        /// The row's geometry: its column edges and its cells' merge flags.
+        /// The row's geometry: its column edges, and a descriptor per cell carrying its merge flags and its
+        /// four border codes.
         /// </summary>
         /// <remarks>
         /// The one sprm whose operand length is two bytes rather than one, because a table definition
         /// can exceed 255 bytes — see <see cref="Read"/>.
         /// </remarks>
-        /// <summary><c>sprmSBkc</c>: how a section starts relative to the one before it.</summary>
-        public const ushort SectionBreakKind = 0x3009;
-
         public const ushort TableDefinition = 0xD608;
+
+        /// <summary>
+        /// <c>sprmTSetBrc</c>: one border code applied to a range of a row's cells.
+        /// </summary>
+        /// <remarks>
+        /// The one border sprm that names a <em>range</em> rather than a cell: a first cell, a limit, a flag
+        /// byte saying which sides to change, and then a single border code for all of them. It overwrites
+        /// whatever the table definition's own cell descriptors said, which is how a document turns one edge
+        /// of one cell off without restating the rest.
+        /// </remarks>
+        public const ushort SetCellBorder = 0xD62F;
+
+        /// <summary>
+        /// <c>sprmTSetBrc80</c>: the same, with the older four-byte border code.
+        /// </summary>
+        /// <remarks>
+        /// Word writes both forms, the newer one after the older, so the newer must be applied last — which
+        /// it is, since a grpprl is walked in order and each sprm overwrites.
+        /// </remarks>
+        public const ushort SetCellBorder80 = 0xD620;
+
+        /// <summary><c>sprmTDefTableShd</c>: ten bytes of shading per cell, from the first.</summary>
+        public const ushort CellShading = 0xD612;
+
+        /// <summary><c>sprmTDefTableShd2nd</c>: the same, for the cells from the twenty-third.</summary>
+        public const ushort CellShading2nd = 0xD616;
+
+        /// <summary><c>sprmTDefTableShd3rd</c>: the same, for the cells from the forty-fifth.</summary>
+        public const ushort CellShading3rd = 0xD60C;
+
+        /// <summary>
+        /// <c>sprmTDefTableShd80</c>: the older shading form, a packed sixteen-bit pattern per cell.
+        /// </summary>
+        /// <remarks>
+        /// Read as well as the newer form rather than instead of it, because Word writes both and they do
+        /// not always agree: the newer one can state a colour the palette cannot, so it wins wherever it
+        /// says anything at all and this fills in the cells it skipped.
+        /// </remarks>
+        public const ushort CellShading80 = 0xD609;
 
         /// <summary><c>sprmTCellPadding</c>: cell padding for a range of a row's cells.</summary>
         public const ushort CellPadding = 0xD632;

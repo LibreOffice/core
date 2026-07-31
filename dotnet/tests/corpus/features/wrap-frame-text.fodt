@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless text wrap, frame with text</dc:title>
+  <dc:subject>A paragraph-anchored frame holding its own text, for layout comparison</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="Fr1" style:family="graphic">
+   <style:graphic-properties style:wrap="parallel" style:number-wrapped-paragraphs="no-limit"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       fo:margin-left="0.2cm" fo:margin-right="0.2cm"
+       fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:padding-left="0.15cm" fo:padding-right="0.15cm"
+       fo:padding-top="0.15cm" fo:padding-bottom="0.15cm" fo:border="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:styles>
+  <!-- The frame's own paragraph relies on this rather than naming a style, because LibreOffice
+       ignores a paragraph style named inside a draw:text-box and honours the default style. -->
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="0" fo:widows="0" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:default-style>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Preamble line well above the anchored frame.</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="Fr1" draw:name="Box"
+       text:anchor-type="paragraph" svg:x="0cm" svg:y="1cm"
+       svg:width="5cm" svg:height="3cm" draw:z-index="0">
+     <draw:text-box><text:p>Inside the frame, wrapping onto a second line of its own.</text:p></draw:text-box>
+    </draw:frame>Alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray yankee zulu alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey xray yankee zulu alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango.</text:p>
+   <text:p text:style-name="Body">Beside the lower half of the frame, still wrapped.</text:p>
+   <text:p text:style-name="Body">Also beside it, and the last paragraph that is.</text:p>
+   <text:p text:style-name="Body">The last paragraph the frame reaches, by a third of its height.</text:p>
+   <text:p text:style-name="Body">Afterword paragraph clear of the frame, at the full width again.</text:p>
+  </office:text></office:body>
+</office:document>

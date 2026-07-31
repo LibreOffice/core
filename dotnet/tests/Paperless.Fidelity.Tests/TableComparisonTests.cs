@@ -95,6 +95,12 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-nested.docx")]
     [InlineData("table-nested.rtf")]
     [InlineData("table-nested.doc")]
+    // Columns that state no width at all, in the two documents that resolve them differently — and they do
+    // differ, which is the whole point of having both. The table that states no width of its own divides the
+    // text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt.
+    // ODF only, because the other three formats always write a grid.
+    [InlineData("table-autofit.fodt")]
+    [InlineData("table-autofit-stated.fodt")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -186,9 +192,7 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-shading.odt")]
     [InlineData("table-shading.docx")]
     [InlineData("table-shading.rtf")]
-    // DOC is absent from *this* test only: its cell shading is a per-band `WW8_SHD` array from
-    // `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form carrying full RGB — a bigger read than
-    // the other three and still open. Its text is compared above like every other format's.
+    [InlineData("table-shading.doc")]
     public void AShadedCellIsFilledWhereLibreOfficeFillsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -244,14 +248,9 @@ public sealed class TableComparisonTests : IDisposable
     [Theory]
     [InlineData("table-borders.fodt")]
     [InlineData("table-borders.odt")]
-    // DOCX and RTF read their borders correctly — the same nine strokes, the same extents, the same widths and
-    // colours — and are absent here for a smaller reason that is still a real one: each export writes the
-    // table's own left edge differently relative to the border, so the whole grid is offset. Measured, the
-    // first vertical: 56.70 pt in ODF, 56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF
-    // render against 56.70. A quarter and a third of a point, in the origin rather than in the borders.
-    //
-    // DOC is absent for a larger one: WW8 states a border as a `BRC` structure through `sprmTSetBrc`, applied
-    // to a *range* of cells rather than to one, which is a bigger read than the other three and still open.
+    [InlineData("table-borders.docx")]
+    [InlineData("table-borders.rtf")]
+    [InlineData("table-borders.doc")]
     public void ABorderIsStrokedAsOneLinePerGridLine(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

@@ -300,6 +300,14 @@ public sealed class Paginator
         List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
+        List<PlacedFrame> frames = [];
+
+        // A paragraph beside a frame is laid out again, because the room its lines have is not knowable
+        // until the paragraph's place on a page is — the up-front pass above has no page to work from. The
+        // result is kept so that a paragraph split across a page break keeps the lines it was given: the
+        // continuation is not re-broken, for the same reason a section change mid-paragraph is not honoured.
+        Dictionary<int, LaidOutParagraph> reflowed = [];
+
         Length used = Length.Zero;
         int paragraphIndex = 0;
         int lineIndex = 0;
@@ -426,7 +434,6 @@ public sealed class Paginator
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[paragraphIndex];
-            LaidOutParagraph layout = laid[paragraphIndex].Paragraph!;
 
             // A page break before a paragraph that is not already at the top of a page.
             if (lineIndex == 0 && paragraph.Format.StartsNewPage && !pageIsEmpty)
@@ -438,6 +445,13 @@ public sealed class Paginator
             Length spaceAbove = lineIndex == 0
                 ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
                 : Length.Zero;
+
+            if (lineIndex == 0) Reflow(paragraph, paragraphIndex, used + spaceAbove);
+
+            LaidOutParagraph layout =
+                reflowed.TryGetValue(paragraphIndex, out LaidOutParagraph? wrapped)
+                    ? wrapped
+                    : laid[paragraphIndex].Paragraph!;
 
             // The notes those lines would anchor take their room out of the body's, so how many lines fit
             // depends on which notes they cite — and which notes they cite depends on how many fit. Resolved
@@ -548,6 +562,43 @@ public sealed class Paginator
         // Ends the whole page rather than the column, which a section break that is not a column break has
         // to do: in a two-column section EmitPage moves to column two, and a page break that stopped there
         // would put the next section beside the last one instead of after it.
+        // Frames anchored to this paragraph join the page's obstructions, and the paragraph is then laid out
+        // again if anything obstructs it. Both happen here rather than in the up-front pass because both
+        // need the paragraph's top on a page, which only pagination knows.
+        void Reflow(PageParagraph paragraph, int index, Length paragraphTop)
+        {
+            DocRect area = page.ColumnArea(column);
+
+            foreach (PageFrame frame in paragraph.Frames)
+            {
+                DocPoint anchor = new(
+                    area.X + paragraph.Format.StartIndent, area.Y + paragraphTop);
+
+                frames.Add(new PlacedFrame(
+                    frame,
+                    frame.BoundsFrom(anchor),
+                    frame.RegionFrom(anchor),
+                    FlowLayouter.LayOut(
+                        frame.Blocks, frame.ContentAreaFrom(anchor), Length.Zero)));
+            }
+
+            reflowed.Remove(index);
+            if (!frames.Exists(frame => frame.Frame.Obstructs)) return;
+
+            LineRoom room = (top, height) => FlowLayouter.FreeSpace(
+                frames, area, area.Y + paragraphTop + top, area.Y + paragraphTop + top + height);
+
+            ParagraphLayouter layouter = new(paragraph.Face);
+            ParagraphFormat? previous = PreviousFormat(blocks, index);
+
+            reflowed[index] = paragraph.HasRuns
+                ? layouter.Layout(
+                    Measure(paragraph), paragraph.Format, area.Width, paragraph.Language, previous, room)
+                : layouter.Layout(
+                    paragraph.Text, paragraph.Format, paragraph.EmSize, area.Width, paragraph.Language,
+                    previous, paragraph.Shaping, room);
+        }
+
         void FinishPage()
         {
             int before = pages.Count;
@@ -577,13 +628,15 @@ public sealed class Paginator
                     furnitureSet, geometry, page, pageNumber,
                     first: pages.Count == sectionFirstPage),
                 noteArea,
-                Separator(noteArea, page)));
+                Separator(noteArea, page),
+                frames));
 
             pageNumber++;
             column = 0;
             placed = [];
             tables = [];
             notes = [];
+            frames = [];
             used = Length.Zero;
         }
     }
@@ -798,7 +851,8 @@ public sealed class Paginator
         List<PlacedTable> tables,
         (PlacedFlow? Header, PlacedFlow? Footer) furniture,
         PlacedFlow? notes,
-        DocRect? separator = null)
+        DocRect? separator = null,
+        List<PlacedFrame>? frames = null)
         => new()
         {
             Index = index,
@@ -813,6 +867,7 @@ public sealed class Paginator
             Footer = furniture.Footer,
             Notes = notes,
             NoteSeparator = separator,
+            Frames = frames is null ? [] : [.. frames],
         };
 
     private static LaidOutPage EmptyPage(

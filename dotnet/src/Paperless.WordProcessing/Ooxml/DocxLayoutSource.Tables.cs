@@ -65,13 +65,17 @@ public sealed partial class DocxLayoutSource
         ReadRows(element, rows, tablePadding, properties, depth: 0);
         if (rows.Count == 0) return null;
 
+        List<PageTableRow> resolved = Resolved(rows);
+
         return new PageTable
         {
             SectionIndex = _sectionIndex,
             ColumnWidths = columns,
-            Rows = Resolved(rows),
+            Rows = resolved,
             HeaderRowCount = HeadingRows(rows),
-            LeftIndent = Twips(Word.Child(properties, "tblInd")) ?? Length.Zero,
+            LeftIndent = PageTable.WordLeftIndent(
+                Twips(Word.Child(properties, "tblInd")) ?? Length.Zero, resolved),
+            InnerBordersStopAtTheOuterEdge = true,
         };
     }
 
