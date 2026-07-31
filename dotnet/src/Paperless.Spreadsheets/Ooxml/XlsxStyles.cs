@@ -32,9 +32,6 @@ public sealed class XlsxStyles
     /// <summary>Styles for a workbook with no styles part.</summary>
     public static XlsxStyles Empty { get; } = new();
 
-    /// <summary>How many cell formats <c>cellXfs</c> declares.</summary>
-    public int CellFormatCount => _cellFormatIds.Count;
-
     /// <summary>Reads a <c>styleSheet</c> root.</summary>
     public static XlsxStyles Read(XElement? root)
     {

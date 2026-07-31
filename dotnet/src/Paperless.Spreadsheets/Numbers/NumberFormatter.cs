@@ -88,12 +88,10 @@ public static class NumberFormatter
         if (double.IsInfinity(value)) return value > 0 ? "INF" : "-INF";
         if (value == 0) return "0";
 
-        string text = value.ToString("G15", CultureInfo.InvariantCulture);
-
-        // G15 writes "1.2345E+20"; a spreadsheet writes "1.2345E+20" too, but with at least
-        // two exponent digits, which .NET already guarantees. What it does not do is drop the
-        // "+", so the two agree.
-        return text;
+        // "G15" already writes a large or tiny magnitude as "1.2345E+20", with the sign and at
+        // least two exponent digits — which is the same shape a spreadsheet shows, so no
+        // rewriting is needed.
+        return value.ToString("G15", CultureInfo.InvariantCulture);
     }
 
     private static string Render(
@@ -571,7 +569,11 @@ public static class NumberFormatter
         {
             switch (token.Kind)
             {
-                case FormatTokenKind.Literal:
+                // A date format's separators arrive as the same tokens a numeric one uses:
+                // "m/d/yyyy" tokenises its slashes as fraction bars and "m,d" its comma as a
+                // scaling one. In a date they are punctuation, and dropping them turns
+                // 7/30/2026 into 7302026.
+                case FormatTokenKind.Literal or FormatTokenKind.Slash or FormatTokenKind.ScaleComma:
                     output.Append(token.Text);
                     break;
 

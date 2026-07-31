@@ -51,10 +51,11 @@ public sealed class XlsxFile : IDisposable
         Styles = XlsxStyles.Read(LoadRelated("styles", "xl/styles.xml"));
 
         // The 1904 epoch is a workbook-wide switch, and reading it wrong shifts every date in
-        // the file by 1462 days. Two spellings exist: the original date1904 and the ISO
-        // dateCompatibility pair that LibreOffice writes.
+        // the file by 1462 days. date1904 alone decides it: the neighbouring dateCompatibility
+        // attribute only bounds the oldest recognisable date, which is why LibreOffice reads
+        // the two separately (sc/source/filter/oox/workbooksettings.cxx:287).
         XElement? properties = Xlsx.Child(workbook, "workbookPr");
-        DateSystem = Xlsx.Flag(properties, "date1904") || Xlsx.Flag(properties, "dateCompatibility1904")
+        DateSystem = Xlsx.Flag(properties, "date1904")
             ? SpreadsheetDateSystem.Date1904
             : SpreadsheetDateSystem.Date1900;
 
@@ -135,7 +136,15 @@ public sealed class XlsxFile : IDisposable
         if (sheet.PartName is null) return null;
 
         IPackagePart? part = _package.GetPart(sheet.PartName);
-        if (part is null) return null;
+        if (part is null)
+        {
+            _diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Warning, "PL2141",
+                $"Sheet '{sheet.Name}' names the worksheet part '{sheet.PartName}', which the "
+                + "package does not contain, so it has been extracted as empty.",
+                new DiagnosticLocation(sheet.PartName)));
+            return null;
+        }
 
         using Stream content = part.Open();
         XElement? root = OoxmlXml.TryLoad(content, out string? error);
@@ -202,7 +211,9 @@ public sealed class XlsxFile : IDisposable
                 && _workbookRelationships.TryGetValue(relationshipId, out OpcXml.Relationship found)
                 && !found.IsExternal)
             {
-                target = found.Target;
+                // The relationship resolving is not enough: it may name a part the package does
+                // not contain, and then the conventional name is still worth trying.
+                target = _package.GetPart(found.Target)?.Name;
             }
 
             // The conventional name only as a fallback, and numbered by position rather than by

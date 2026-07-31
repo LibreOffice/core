@@ -41,7 +41,10 @@ public static class XlsxReader
         XlsxFile file = XlsxFile.Open(source.Stream, leaveOpen: true);
         try
         {
-            List<Diagnostic> diagnostics = [.. file.Diagnostics];
+            // The file keeps accumulating diagnostics while its sheets are read — a part that
+            // will not parse is only discovered then — so the two lists are joined at the end
+            // rather than copied up front, where everything found during the walk is lost.
+            List<Diagnostic> diagnostics = [];
             ContentDocument content = new()
             {
                 Metadata = OoxmlMetadata.Read(
@@ -78,7 +81,8 @@ public static class XlsxReader
                     "The workbook lists no sheets, so it has no content to extract."));
             }
 
-            return new OoxmlSpreadsheetDocument(format, file, content, diagnostics);
+            return new OoxmlSpreadsheetDocument(
+                format, file, content, [.. file.Diagnostics, .. diagnostics]);
         }
         catch
         {

@@ -87,10 +87,14 @@ public sealed class NumberFormatCode
     /// </remarks>
     public NumberFormatSection SelectFor(double value)
     {
+        // Only the numeric subformats take part; a fourth subformat is for text and never
+        // applies to a number.
+        int numeric = Math.Min(Sections.Count, 3);
+
         bool conditional = false;
-        foreach (NumberFormatSection section in Sections)
+        for (int i = 0; i < numeric; i++)
         {
-            if (section.Condition is null) continue;
+            if (Sections[i].Condition is null) continue;
             conditional = true;
             break;
         }
@@ -98,9 +102,9 @@ public sealed class NumberFormatCode
         if (conditional)
         {
             NumberFormatSection? fallback = null;
-            foreach (NumberFormatSection section in Sections)
+            for (int i = 0; i < numeric; i++)
             {
-                if (section.Kind == NumberFormatKind.Text) continue;
+                NumberFormatSection section = Sections[i];
                 if (section.Condition is { } condition)
                 {
                     if (condition.Matches(value)) return section;
@@ -113,9 +117,6 @@ public sealed class NumberFormatCode
             return fallback ?? Sections[0];
         }
 
-        // Only the numeric subformats take part; a fourth, text-only subformat never applies
-        // to a number.
-        int numeric = Math.Min(Sections.Count, 3);
         if (numeric >= 3 && value == 0) return Sections[2];
         if (numeric >= 2 && value < 0) return Sections[1];
         return Sections[0];
