@@ -2,8 +2,10 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using System.Xml.Linq;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
+using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Model;
 
 namespace Paperless.WordProcessing.OpenDocument;
@@ -24,7 +26,7 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// answer comes from the style tables and not from the body.
 /// </para>
 /// </remarks>
-public sealed class OdtWordDocument : IWordProcessingDocument
+public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly OdfDocument _inner;
 
@@ -55,6 +57,41 @@ public sealed class OdtWordDocument : IWordProcessingDocument
 
     /// <summary>The underlying ODF file: its styles, master pages and remaining parts.</summary>
     public OdfFile File => _inner.File;
+
+    /// <summary>
+    /// Lays the document out into pages.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A second walk over the content, separate from the one that produced <see cref="Content"/>:
+    /// extraction discards the font sizes, indents and spacing layout needs, so re-deriving them from
+    /// the tree is not possible and making extraction carry them would charge every caller for a feature
+    /// most never use.
+    /// </para>
+    /// <para>
+    /// One section's geometry, the first, because ODF has no section list — a paragraph reaches its page
+    /// description through its style's master page, and following that needs the page-break chain, which
+    /// is what this produces. So a document whose masters differ mid-way is laid out wholly on its first
+    /// master's geometry, and the page break at the change is honoured while the geometry after it is
+    /// not.
+    /// </para>
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        XElement? body = _inner.File.Body;
+        if (body is null) return new WordProcessingPages([]);
+
+        OdtLayoutSource source = new(_inner.File.Styles);
+        List<PageParagraph> paragraphs = source.Read(body);
+
+        PaginationOptions pagination = PaginationOptions.Default with
+        {
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Default.MaxPages,
+        };
+
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(paragraphs, Sections[0]));
+    }
 
     /// <inheritdoc/>
     public void Dispose() => _inner.Dispose();

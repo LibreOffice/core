@@ -361,6 +361,21 @@ public sealed class SystemFontResolver : IFontResolver
         return new ResolvedFontFace(reference, face);
     }
 
+    /// <summary>
+    /// Loads a reference as the concrete OpenType face, which is what layout needs.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="LoadFace"/> answers the <see cref="IFontFace"/> a caller supplying its own embedded
+    /// faces can implement, and that interface deliberately exposes only coverage and vertical metrics.
+    /// Measuring and shaping need the tables themselves, so layout asks for this instead — and gets the
+    /// same cached instance, since the bytes belong to the resolver either way.
+    /// </remarks>
+    public OpenTypeFace LoadOpenType(FontReference reference)
+    {
+        ArgumentNullException.ThrowIfNull(reference);
+        return ((ResolvedFontFace)LoadFace(reference)).OpenType;
+    }
+
     private static (string Path, int Index) SplitKey(string faceKey)
     {
         int hash = faceKey.LastIndexOf('#');
