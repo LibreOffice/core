@@ -61,6 +61,20 @@ public sealed class DocxFile : IDisposable
             ?.WithMap(DrawingColourMap.Read(Word.Child(Settings, "clrSchemeMapping")));
 
         FontTable = WordFontTable.Read(LoadRelated("fontTable", "word/fontTable.xml"));
+        if (FontTable.HasEmbeddedFonts)
+        {
+            // Reported rather than loaded. A document that carries its own copy of a face is
+            // exactly the one where matching the family by name gives different metrics, and
+            // therefore different line breaks and a different page count — so a caller comparing
+            // Paperless's pagination against the file's own is entitled to know.
+            _diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Information, "PL2112",
+                "The document embeds its own font files for "
+                + string.Join(
+                    ", ",
+                    FontTable.Fonts.Where(font => font.Embedded.Count > 0).Select(font => font.Name))
+                + ". They are not loaded, so text set in them is measured with a substitute."));
+        }
 
         FootnoteNumbering = ReadNoteNumbering(Word.Child(Settings, "footnotePr"));
         EndnoteNumbering = ReadNoteNumbering(Word.Child(Settings, "endnotePr"));
