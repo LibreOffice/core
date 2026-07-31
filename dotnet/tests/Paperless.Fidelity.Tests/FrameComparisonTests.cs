@@ -223,6 +223,106 @@ public sealed class FrameComparisonTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// Each wrap mode does to the lines beside it what its name says, and only there.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Four frames, far enough apart not to interact, one per mode that the single-frame document cannot
+    /// reach: <c>left</c> at the end margin, <c>none</c> — ODF's top-and-bottom — in the middle,
+    /// <c>run-through</c> at the start margin, and <c>dynamic</c> with a centimetre of room on its left
+    /// and twelve on its right. Each is checked for the one thing that distinguishes it, against the
+    /// engine's own placement of the frame rather than against a coordinate written here, so the document
+    /// can be moved without rewriting the test.
+    /// </para>
+    /// <para>
+    /// This is what caught the one real bug in the wrap walk: a frame that starts <em>after</em> the line's
+    /// own start was treated as no obstacle at all, because the walk broke out of its loop and returned the
+    /// full measure. A frame at the start margin never shows it — the frame covers the line's beginning and
+    /// pushes it along — so <c>frame-wrap.fodt</c> passed throughout with text running under a frame at the
+    /// end margin.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("frame-wrap-modes.fodt")]
+    [InlineData("frame-wrap-modes.odt")]
+    public void EachWrapModeNarrowsItsOwnSide(string fileName)
+    {
+        WordProcessingPages pages = Pages(Corpus.Require(fileName));
+        List<PlacedFrame> frames = [.. pages.Pages.SelectMany(page => page.Frames)];
+
+        frames.Count.ShouldBe(4, $"{fileName}: frames placed");
+
+        foreach (LaidOutPage page in pages.Pages)
+        {
+            foreach (PlacedFrame frame in page.Frames)
+            {
+                List<PlacedLine> beside = [.. page.Lines.Where(line =>
+                    page.BodyArea.Y + line.Top < frame.Area.Bottom
+                    && page.BodyArea.Y + line.Top + line.Box.Height > frame.Area.Y)];
+
+                switch (frame.Frame.Wrap)
+                {
+                    case TextWrap.Left:
+                        // Text on the frame's left, so every line beside it ends before the frame begins —
+                        // which is the case a frame at the start margin can never show.
+                        beside.Count.ShouldBeGreaterThan(2, $"{fileName}: lines beside the left-wrap frame");
+                        foreach (PlacedLine line in beside)
+                        {
+                            (page.BodyArea.X + line.Box.Left + line.Box.Width).Points.ShouldBeLessThanOrEqualTo(
+                                frame.Area.X.Points + TolerancePoints,
+                                $"{fileName}: a line runs into a frame the text should pass on the left of");
+                        }
+
+                        break;
+
+                    case TextWrap.TopAndBottom:
+                        // No text beside it at all: no baseline falls inside the band it occupies. By
+                        // baseline rather than by box, and that is not a weaker test but the right one —
+                        // a line pushed below the frame keeps the top it would have had and carries the
+                        // drop in its height, so that the paginator's running sum stays a plain addition.
+                        // Its box therefore spans the frame by construction and its text does not.
+                        foreach (PlacedLine line in beside)
+                        {
+                            (page.BodyArea.Y + line.Baseline).Points.ShouldBeGreaterThanOrEqualTo(
+                                frame.Area.Bottom.Points,
+                                $"{fileName}: text beside a top-and-bottom frame");
+                        }
+
+                        break;
+
+                    case TextWrap.Through:
+                        // The frame is not there as far as the text is concerned, so the lines it crosses
+                        // start at the margin exactly as the lines above and below it do.
+                        beside.Count.ShouldBeGreaterThan(2, $"{fileName}: lines across the run-through frame");
+                        foreach (PlacedLine line in beside)
+                        {
+                            line.Box.Left.Points.ShouldBe(
+                                0, TolerancePoints,
+                                $"{fileName}: a line moved for a frame the text should run through");
+                        }
+
+                        break;
+
+                    default:
+                        // Dynamic, resolved: a centimetre on the left is under the two Writer needs, twelve
+                        // on the right is over it, so the wrap comes out on the right and the text starts at
+                        // the frame's far edge.
+                        frame.Frame.Wrap.ShouldBe(TextWrap.Optimal, $"{fileName}: the fourth frame's wrap");
+                        beside.Count.ShouldBeGreaterThan(2, $"{fileName}: lines beside the dynamic frame");
+                        foreach (PlacedLine line in beside)
+                        {
+                            (page.BodyArea.X + line.Box.Left).Points.ShouldBeGreaterThanOrEqualTo(
+                                frame.Area.Right.Points - TolerancePoints,
+                                $"{fileName}: a line beside a dynamic frame did not clear it");
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
     /// <summary>One drawn line: which page it is on, where it starts, and where its baseline sits.</summary>
     private readonly record struct Line(int Page, double Left, double Baseline);
 

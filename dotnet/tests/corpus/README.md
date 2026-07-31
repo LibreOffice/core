@@ -246,3 +246,15 @@ Three things about comparing it, all measured:
 
 `frame-wrap.doc` is committed and not compared: reading a DOC's drawings needs the Escher record stream,
 which `Paperless.MsBinary` does not have yet. It lays out as though the frame were not there.
+
+`frame-wrap-modes.fodt` is the second frame document and exists for the modes the first cannot reach: four
+2 cm-tall frames, far enough apart not to interact, one each for `left` at the end margin, `none` — ODF's
+top-and-bottom — in the middle, `run-through` at the start margin, and `dynamic` with a centimetre of room on
+its left and twelve on its right. It is checked against the engine's own placement of each frame rather than
+against LibreOffice's pens, and the reason is worth stating: **the document is one line short of
+LibreOffice's on the top-and-bottom frame**, whose anchor paragraph is also the paragraph it pushes down —
+Writer settles that self-reference one line lower than this does. Everything else in it agrees.
+
+It earned its place immediately. It caught a bug a frame at the *start* margin can never show: a frame that
+begins after the line's own start was treated as no obstacle at all, so text ran straight under a frame at
+the end margin while `frame-wrap.fodt` passed throughout.

@@ -420,6 +420,12 @@ is read and verified, so what remains is the filling of pages rather than the me
       the outline with `SwContourCache::ContourRect` and a `TextRanger`, and asks it *per line* for the
       polygon's extent in that strip — so it is not a different rectangle but a different question, and it
       needs the drawing's own geometry, which for a picture means the raster.
+- [ ] **A top-and-bottom frame anchored to the paragraph it pushes down.** Self-referential, and Writer
+      settles it one line lower than this does: measured on `frame-wrap-modes.fodt`, LibreOffice keeps the
+      anchor paragraph's first line above the frame and starts the band below it, where this drops the
+      whole paragraph. The loop is the frame's position depending on a paragraph whose own position the
+      frame decides, and the bounded relayout converges on the other answer. The three modes that leave a
+      side open have no such degeneracy, since the paragraph does not move.
 - [ ] **Frames anchored in a table cell or a header**, which are dropped: the resolution pass walks the body's
       blocks and takes a frame's page from the line that starts its paragraph, and a cell's paragraphs have no
       such line. A frame in a cell reads correctly and is never placed.

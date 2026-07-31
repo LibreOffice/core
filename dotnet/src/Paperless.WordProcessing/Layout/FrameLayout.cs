@@ -392,12 +392,16 @@ internal sealed class FrameObstacles : ILineObstacles
         {
             Length lineBottom = lineTop + height;
             Length coveredTo = wantedLeft;
+            Length endsAt = wantedRight;
             Length blockedTo = Length.Zero;
             bool blocked = false;
 
-            // Leftwards through the covered stretches, exactly as Writer walks its sorted object list:
-            // the first gap wide enough is the line's, and a frame that starts at or before the line's
-            // own start pushes the start along instead of ending the line early.
+            // Left to right through the covered stretches, exactly as Writer walks its sorted object
+            // list. Two different things can happen and the difference is which side of the line the
+            // frame is on: one that starts at or before the line's own start pushes the start along,
+            // and one that starts after it ends the line early. Treating the second as "no obstacle"
+            // is the mistake that leaves a frame at the end margin with text running under it — the
+            // one wrap side a frame at the start margin never exercises.
             foreach (WrapObstacle obstacle in Sorted())
             {
                 DocRect area = Widen(obstacle, wantedLeft, wantedRight);
@@ -405,16 +409,22 @@ internal sealed class FrameObstacles : ILineObstacles
                 if (area.Bottom <= lineTop || area.Top >= lineBottom) continue;
                 if (area.Right <= coveredTo || area.Left >= wantedRight) continue;
 
-                if (area.Left > coveredTo) break;
+                if (area.Left > coveredTo)
+                {
+                    endsAt = area.Left;
+                    blockedTo = Length.Max(blockedTo, obstacle.Area.Bottom + Inflation);
+                    blocked = true;
+                    break;
+                }
 
                 coveredTo = area.Right;
                 blockedTo = Length.Max(blockedTo, obstacle.Area.Bottom + Inflation);
                 blocked = true;
             }
 
-            if (coveredTo < wantedRight)
+            if (coveredTo < endsAt)
             {
-                return new LineSpace(coveredTo - _left, wantedRight - coveredTo, descent);
+                return new LineSpace(coveredTo - _left, endsAt - coveredTo, descent);
             }
 
             // Nothing left of the line: it drops below whichever frame closed it and tries again, which
