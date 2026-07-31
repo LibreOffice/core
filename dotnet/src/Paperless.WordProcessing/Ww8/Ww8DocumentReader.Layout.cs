@@ -852,8 +852,25 @@ public sealed partial class Ww8DocumentReader
         {
             switch (sprm.Identifier)
             {
-                case LayoutSprms.Justification or LayoutSprms.Justification80:
-                    format = format with { Justification = sprm.Byte };
+                // Which of the two sprms stated it travels with the value, because the two disagree
+                // about what nought and two mean in a right-to-left paragraph — see
+                // Ww8LayoutFormat.IsJustificationAbsolute.
+                case LayoutSprms.Justification:
+                    format = format with
+                    {
+                        Justification = sprm.Byte,
+                        IsJustificationAbsolute = false,
+                    };
+                    break;
+                case LayoutSprms.Justification80:
+                    format = format with
+                    {
+                        Justification = sprm.Byte,
+                        IsJustificationAbsolute = true,
+                    };
+                    break;
+                case LayoutSprms.RightToLeft:
+                    format = format with { IsRightToLeft = sprm.Byte != 0 };
                     break;
 
                 case LayoutSprms.LeftIndent or LayoutSprms.LeftIndent80:
@@ -1000,6 +1017,7 @@ public sealed partial class Ww8DocumentReader
         internal const ushort FirstLineIndent = 0x8460;
         internal const ushort Justification = 0x2461;
         internal const ushort ContextualSpacing = 0x246D;
+        internal const ushort RightToLeft = 0x2441;
 
         internal const ushort Bold = 0x0835;
         internal const ushort Italic = 0x0836;

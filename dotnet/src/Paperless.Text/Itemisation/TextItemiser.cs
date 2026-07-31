@@ -98,30 +98,105 @@ public static class TextItemiser
         ArgumentNullException.ThrowIfNull(items);
 
         List<TextItem> order = [.. items];
-        if (order.Count < 2) return order;
+        ReorderVisually(order, item => item.Level);
+        return order;
+    }
+
+    /// <summary>
+    /// Puts anything carrying bidi levels into the order it is drawn left to right, in place.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Rule L2 itself: from the highest level down to the lowest odd one, reverse every contiguous
+    /// stretch at or above that level. Generic in what it is reordering because the same rule has
+    /// to run over two different things — the itemiser's sub-runs, and the glyph runs a line
+    /// actually draws, which are those sub-runs cut again at every change of font, size or colour.
+    /// Two implementations of L2 would be two chances to disagree about a line that reorders.
+    /// </para>
+    /// <para>
+    /// The parts must be in logical order and must cover a contiguous stretch of one line, which
+    /// is what makes reversing a range the right operation: L2 is defined per line, over the
+    /// levels of the characters on it.
+    /// </para>
+    /// </remarks>
+    /// <param name="parts">The parts, in logical order; reordered in place.</param>
+    /// <param name="levelOf">Each part's embedding level.</param>
+    public static void ReorderVisually<T>(IList<T> parts, Func<T, byte> levelOf)
+    {
+        ArgumentNullException.ThrowIfNull(parts);
+        ArgumentNullException.ThrowIfNull(levelOf);
+
+        if (parts.Count < 2) return;
 
         byte highest = 0;
         byte lowestOdd = byte.MaxValue;
-        foreach (TextItem item in order)
+        foreach (T part in parts)
         {
-            if (item.Level > highest) highest = item.Level;
-            if ((item.Level & 1) != 0 && item.Level < lowestOdd) lowestOdd = item.Level;
+            byte level = levelOf(part);
+            if (level > highest) highest = level;
+            if ((level & 1) != 0 && level < lowestOdd) lowestOdd = level;
         }
 
         for (int level = highest; level >= lowestOdd; level--)
         {
-            for (int i = 0; i < order.Count; i++)
+            for (int i = 0; i < parts.Count; i++)
             {
-                if (order[i].Level < level) continue;
+                if (levelOf(parts[i]) < level) continue;
 
                 int limit = i + 1;
-                while (limit < order.Count && order[limit].Level >= level) limit++;
-                order.Reverse(i, limit - i);
+                while (limit < parts.Count && levelOf(parts[limit]) >= level) limit++;
+                Reverse(parts, i, limit - 1);
                 i = limit;
             }
         }
+    }
 
-        return order;
+    /// <summary>Reverses a range of a list in place, which <see cref="List{T}"/> alone can do.</summary>
+    private static void Reverse<T>(IList<T> parts, int from, int to)
+    {
+        while (from < to)
+        {
+            (parts[from], parts[to]) = (parts[to], parts[from]);
+            from++;
+            to--;
+        }
+    }
+
+    /// <summary>
+    /// True when a paragraph could hold more than one direction, decided without resolving it.
+    /// </summary>
+    /// <remarks>
+    /// The guard that keeps the common case free. A left-to-right paragraph with nothing
+    /// right-to-left in it resolves flat, itemises into one sub-run per formatting run and draws
+    /// exactly as it did before any of this existed — so the whole apparatus is worth skipping
+    /// rather than worth running and finding it had no effect. Conservative in the direction that
+    /// matters: it says yes for anything that <em>might</em> reorder, including the embedding and
+    /// isolate controls, and only says no when every character is left to right or neutral.
+    /// </remarks>
+    /// <param name="text">The paragraph's text.</param>
+    /// <param name="baseDirection">The direction the paragraph is declared to have.</param>
+    public static bool MayReorder(
+        ReadOnlySpan<char> text, BidiDirection baseDirection = BidiDirection.LeftToRight)
+    {
+        if (baseDirection != BidiDirection.LeftToRight) return true;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            int codePoint = char.IsHighSurrogate(text[i]) && i + 1 < text.Length
+                            && char.IsLowSurrogate(text[i + 1])
+                ? char.ConvertToUtf32(text[i], text[i + 1])
+                : text[i];
+
+            if (BidiProperties.ClassOf(codePoint)
+                is BidiClass.R or BidiClass.AL or BidiClass.AN
+                or BidiClass.RLE or BidiClass.RLO or BidiClass.RLI
+                or BidiClass.LRE or BidiClass.LRO or BidiClass.LRI or BidiClass.FSI)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>Adds a range as items, leaving the format control characters out of them.</summary>

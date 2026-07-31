@@ -1457,7 +1457,63 @@ is read and verified, so what remains is the filling of pages rather than the me
       one-page section — the case LibreOffice's own DOC export produces and the one the corpus verifies — and
       not for a longer one. Doing it properly is the footnote feedback loop at section granularity: which page
       is last is not known until the section is full, and reserving the notes' room changes which page that is.
-- [ ] Vertical and RTL writing modes
+- [x] **Right-to-left paragraphs**, read from all four formats and mirrored by the layouter — the
+      levels the itemiser resolves are consumed now, so a mixed Latin/Hebrew line draws its runs in
+      visual order and a right-to-left paragraph starts at the right margin with its indents on the
+      right. The layout half is written up in `Paperless.Text/TODO.md`; what belongs here is that
+      **three of the four formats disagree about what their own alignment words mean**, and each
+      disagreement is one line of code and one measurement:
+      - ODF's `fo:text-align` `left`/`right` are page **sides** and its `start`/`end` are edges, so
+        `left` is the *end* of an `rl-tb` paragraph. Confirmed by LibreOffice's own conversion: the
+        same paragraph exported to OOXML comes back as `w:jc w:val="end"`.
+      - OOXML's are **edges** throughout — `w:jc w:val="left"` is the older spelling of `start` and
+        means the right margin beside `w:bidi`. LibreOffice swaps them on import, "Paragraph
+        justification reverses its meaning in an RTL context"
+        (`sw/source/writerfilter/dmapper/DomainMapper.cxx:2176`).
+      - RTF's `\ql` and `\qr` are sides again, and that is not a guess: writerfilter takes RTF's
+        justification literally where it swaps OOXML's — `bUseLiteralDirection = IsRTFImport()`,
+        `DomainMapper.cxx:1803`.
+      - WW8 carries **both kinds**, which is the trap: `sprmPJc` (0x2461) is bidi-relative and
+        `sprmPJc80` (0x2403) is absolute, so the same byte means opposite edges depending on which
+        sprm stated it. `SwWW8ImplReader::Read_Justify` spells it out —
+        `sw/source/filter/ww8/ww8par6.cxx:4805`, "tdf#121110: Jc80 justify is absolute, not
+        bidi-relative". `Ww8LayoutFormat` carries which one spoke.
+      The indents need no such care in any of them: `fo:margin-left`, `w:ind w:start` and `\li` are
+      all the *start* indent, which is why a paragraph indented 3 cm is drawn 3 cm from the right.
+      `w:rtl` on a run is deliberately **not** read, and that is measured rather than lazy:
+      LibreOffice's importer discards it outright (`case NS_ooxml::LN_EG_RPrBase_rtl: break;`,
+      `DomainMapper.cxx:2511`) and resolves direction from the text against the paragraph's `w:bidi`,
+      so honouring it would put runs where Writer does not.
+- [x] **Right-to-left sections**, which are a different statement from their paragraphs' and do one
+      visible thing: the section fills its **rightmost column first**. Measured — a two-column A4
+      page whose ODF page layout says `style:writing-mode="rl-tb"` has LibreOffice drawing its first
+      line at 319 pt, the right-hand column, with the margins unmoved. Read from `w:sectPr/w:bidi`,
+      the page layout's writing mode, and `sprmSFBiDi` (0x3228, `sw/source/filter/ww8/sprmids.hxx:588`
+      — the paragraph's own `sprmPFBiDi` is 0x2441 at line 429 of the same header, and the two are
+      easy to confuse in a table where every name looks alike).
+      Three formats and not four: **LibreOffice's RTF export drops it**, writing `\cols2` and no
+      `\rtlsect` at all, so a document round-tripped through RTF loses its section direction. The
+      control word is still read, since another producer may write it and LibreOffice's own importer
+      maps it (`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx:653`).
+- [ ] Tabs in a right-to-left paragraph. `TabRuler` measures from the paragraph's start edge and the
+      drawing lays its stretches out left to right, so a tabbed right-to-left line advances the wrong
+      way. It is not a mirror of the line: Writer resolves a tab against the *frame's* direction and
+      keeps the stops where the ruler puts them, so the stretch between two stops reads right to left
+      while the stops themselves march left to right. Nothing in the corpus exercises it yet.
+- [ ] The itemisation is redone per line when a paragraph reorders — `PageDrawing.Pieces` resolves the
+      whole paragraph's bidi for every line it draws, because what reaches a page is a
+      `PageParagraph` and its line boxes rather than the `MeasuredParagraph` the layout built. Cheap
+      today (only paragraphs that could reorder pay, and each is one linear pass) and the obvious fix
+      is to carry the measured paragraph onto the page, which is a bigger change than this was.
+- [ ] Mirroring anything else a right-to-left section might mirror. Only the column order is done,
+      because only the column order was measurable: the margins stayed put in the reference, and
+      whether a table's columns or a page's furniture mirror is untested — a table in a right-to-left
+      section is the case to measure next, since Writer has `sprmTFBiDi` for exactly that.
+- [ ] Vertical writing modes, which are a separate matter and deliberately untouched. Nothing was
+      learned here that shortens them: they are not a mirror but a rotation, so the line box's height
+      becomes its advance and every rectangle in the paginator changes meaning. `style:writing-mode`
+      already reports `tb-rl` and `tb-lr` and both are read as left to right, which draws horizontal
+      text rather than nothing.
 - [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
       per-glyph advances rather than characters — a backend must not re-shape, since layout already
       committed to these advances when it decided where the lines broke. The run carries the resolved
@@ -1504,6 +1560,11 @@ is read and verified, so what remains is the filling of pages rather than the me
       from an ODF document, not Word's 720, so assuming either constant is wrong. It is FIB entry **31**,
       two before the piece table's 33. The same record's `fDontUseHTMLAutoSpacing` now answers whether the
       two paragraph spacings collapse, which was the last thing the DOC path had hard-coded.
+- [ ] A justified **right-to-left** line whose stretch `ManualBreakJustification` removes keeps the
+      position it was given while it was still stretched, so it hangs at the left margin instead of
+      returning to the start edge. It needs three things at once to appear — right to left, justified,
+      and a DOCX carrying `w:doNotExpandShiftReturn` — and closing it means the suppression knowing
+      the room the line was given, which is per line once frames are in play.
 - [ ] A justified line that also holds a tab is left ragged. Writer stops justifying at a centre, right or
       decimal tab and gives each stretch between tabs its own space-add, which is a per-stretch answer where
       the engine has one per line; stretching the blanks anyway would move text out of the columns the tabs
@@ -1536,6 +1597,12 @@ is read and verified, so what remains is the filling of pages rather than the me
     439.45 and it uses 440. Eight of twelve sizes tested agree exactly, four differ by one twip, and no
     single scale factor reproduces the set — so this is left as a per-size constant of at most a twip. It
     shifts every baseline of one size equally and does not accumulate, which is what makes it tolerable.
+  - It aligns a **start-aligned right-to-left paragraph against the left margin**, because the
+    installed reference is 24.2 and `ParagraphAdjust::START` arrived in 26.2. Paperless follows the
+    specification and the newer LibreOffice and puts it against the right, so any comparison of a
+    right-to-left paragraph has to state its alignment physically — `fo:text-align="right"`, `\qr`,
+    `w:jc w:val="start"` — or it is comparing two versions rather than two engines. The corpus
+    document says so in its own comment.
 - [ ] A rasteriser and a PDF writer. `Paperless.Rendering`'s two backends are still stubs; the display
       list they consume is now real, which is the half that had to come first.
 

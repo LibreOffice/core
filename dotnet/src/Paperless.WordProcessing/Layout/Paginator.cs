@@ -763,7 +763,7 @@ public sealed class Paginator
                 0, paragraph.Text.Length, paragraph.Face, paragraph.EmSize, paragraph.Shaping));
         }
 
-        return MeasuredParagraph.Measure(paragraph.Text, runs);
+        return MeasuredParagraph.Measure(paragraph.Text, runs, shaper: null, paragraph.Itemisation);
     }
 
     /// <summary>
@@ -1010,6 +1010,7 @@ public sealed class Paginator
             BodyArea = geometry.TextArea,
             ColumnCount = geometry.Columns,
             ColumnGap = geometry.ColumnGap,
+            IsRightToLeft = geometry.IsRightToLeft,
             Lines = [.. lines],
             Tables = [.. tables],
             Header = furniture.Header,
@@ -1031,6 +1032,7 @@ public sealed class Paginator
             BodyArea = geometry.TextArea,
             ColumnCount = geometry.Columns,
             ColumnGap = geometry.ColumnGap,
+            IsRightToLeft = geometry.IsRightToLeft,
             Lines = [],
             Header = furniture.Header,
             Footer = furniture.Footer,

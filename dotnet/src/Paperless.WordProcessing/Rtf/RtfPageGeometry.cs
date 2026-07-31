@@ -113,6 +113,13 @@ internal sealed class RtfPageGeometry
             // is not treated as absent.
             case "cols":
                 return SetSection(d => d with { Columns = parameter is > 0 and < 64 ? parameter.Value : 1 });
+            // \rtlsect and \ltrsect, the section's own direction: it reverses the order of the
+            // columns and leaves the margins and the paragraphs alone.
+            case "rtlsect":
+                return SetSection(d => d with { IsRightToLeft = true });
+            case "ltrsect":
+                return SetSection(d => d with { IsRightToLeft = false });
+
             case "colsx":
                 return SetSection(d => d with { ColumnGap = Twips(parameter) });
 
@@ -200,6 +207,7 @@ internal sealed class RtfPageGeometry
         int? FooterDistance,
         int Columns,
         int? ColumnGap,
+        bool IsRightToLeft,
         bool Landscape,
         bool Mirrored,
         bool DifferentFirstPage,
@@ -242,6 +250,7 @@ internal sealed class RtfPageGeometry
                     FooterHeight = Gap(footerDistance, bottom),
                     Columns = Columns > 0 ? Columns : 1,
                     ColumnGap = ColumnGap is { } cg ? Length.FromTwips(cg) : Length.Zero,
+                    IsRightToLeft = IsRightToLeft,
                     IsLandscape = Landscape,
                     HasMirroredMargins = Mirrored,
                 },

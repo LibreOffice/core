@@ -2,6 +2,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 
@@ -114,6 +115,34 @@ public sealed record PageParagraph : PageBlock
 
     /// <summary>True when the paragraph's formatting varies across its text.</summary>
     public bool HasRuns => Runs.Count > 0;
+
+    /// <summary>
+    /// The direction its bidi resolution takes as its base.
+    /// </summary>
+    /// <remarks>
+    /// The declared writing mode first and the runs' shaping options after it, which is the rule
+    /// <see cref="MeasuredParagraph"/> applies when it is handed no itemisation of its own. One
+    /// rule rather than two, because measuring a paragraph at one base level and drawing it at
+    /// another puts its sub-runs in an order its own widths do not describe.
+    /// </remarks>
+    public BidiDirection BaseDirection
+        => Format.IsRightToLeft || (HasRuns ? Runs[0].Shaping : Shaping).RightToLeft
+            ? BidiDirection.RightToLeft
+            : BidiDirection.LeftToRight;
+
+    /// <summary>
+    /// How to cut it into sub-runs, or null for the neutral settings.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than a left-to-right instance for the paragraph that needs nothing, so a
+    /// document that says nothing about direction is measured through exactly the path it took
+    /// before writing modes existed — including a caller that says right-to-left on its runs and
+    /// nothing on the paragraph, which is how it had to be said before.
+    /// </remarks>
+    internal ItemisationOptions? Itemisation
+        => Format.IsRightToLeft
+            ? new ItemisationOptions { BaseDirection = BidiDirection.RightToLeft }
+            : null;
 
     /// <summary>
     /// The notes anchored in the paragraph's text, in order.
@@ -387,6 +416,16 @@ public sealed record LaidOutPage
     public Length ColumnGap { get; init; }
 
     /// <summary>
+    /// True when the page's section reads right to left, so that its first column is the rightmost.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the page rather than looked up from the section for the same reason
+    /// <see cref="ColumnArea"/> is: a renderer is handed a page, and a page that had to consult the
+    /// section could disagree with the one that laid the lines out.
+    /// </remarks>
+    public bool IsRightToLeft { get; init; }
+
+    /// <summary>
     /// One column's rectangle, which is what a line's own coordinates are relative to.
     /// </summary>
     /// <remarks>
@@ -403,6 +442,10 @@ public sealed record LaidOutPage
         Length gaps = ColumnGap * (columns - 1);
         Length width = BodyArea.Width - gaps;
         width = width > Length.Zero ? width / columns : BodyArea.Width;
+
+        // The leading edge is the right one in a right-to-left section, so its first column is the
+        // rightmost — see PageGeometry.IsRightToLeft, where it is measured.
+        if (IsRightToLeft) at = columns - 1 - at;
 
         return new DocRect(
             BodyArea.X + ((width + ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);

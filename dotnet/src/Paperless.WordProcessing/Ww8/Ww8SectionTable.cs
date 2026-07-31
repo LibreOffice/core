@@ -133,6 +133,7 @@ internal static class Ww8SectionTable
         Length columnGap = Length.Zero;
         int columns = 1;
         bool landscape = false;
+        bool rightToLeft = false;
         bool titlePage = false;
         int? restartAt = null;
         bool restartsNumbering = false;
@@ -183,6 +184,12 @@ internal static class Ww8SectionTable
                     columnGap = Twips(sprm);
                     break;
 
+                // sprmSFBiDi, one byte: the section reads right to left, which reverses the order
+                // of its columns and nothing else.
+                case Sprms.RightToLeft:
+                    rightToLeft = sprm.Byte != 0;
+                    break;
+
                 case Sprms.Orientation:
                     // Word's DM_PORTRAIT is 1 and DM_LANDSCAPE is 2, so the test is against 2 rather
                     // than against zero.
@@ -225,6 +232,7 @@ internal static class Ww8SectionTable
                 Columns = columns,
                 ColumnGap = columnGap,
                 IsLandscape = landscape,
+                IsRightToLeft = rightToLeft,
             },
 
             Break = sectionBreak,
@@ -284,6 +292,7 @@ internal static class Ww8SectionTable
         internal const ushort FooterDistance = 0xB018;
         internal const ushort PageNumberStart97 = 0x501C;
         internal const ushort Orientation = 0x301D;
+        internal const ushort RightToLeft = 0x3228;
         internal const ushort PageWidth = 0xB01F;
         internal const ushort PageHeight = 0xB020;
         internal const ushort LeftMargin = 0xB021;

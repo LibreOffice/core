@@ -211,14 +211,46 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       UAX #24 itemisation has. Paperless's readers resolve one face per run and never look at the
       CJK or CTL font attributes, so there is nothing yet for this to choose between; it belongs
       with whichever reader starts honouring `w:rFonts/@w:cs` and `style:font-name-complex`.
-- [ ] Drawing right-to-left text. `MeasuredParagraph.Items` carries the levels and
-      `TextItemiser.InVisualOrder` orders them, but nothing in `Paperless.WordProcessing.Layout`
-      consumes either — a mixed-direction paragraph still measures correctly and draws its runs left
-      to right in logical order. `SwTextPainter` is the shape to follow: portions are stored
-      logically and each is given an absolute pen, which is exactly what the PDF export shows.
-- [ ] Aligning a right-to-left paragraph. `TextAlignment.Start` is resolved against the paragraph's
-      writing mode by the layouter, not by this, and `MeasuredParagraph.ParagraphLevel` is the value
-      it would need.
+- [x] Drawing right-to-left text — the levels are consumed now. `PageDrawing` cuts a line's runs at
+      the itemiser's own boundaries, tells each piece its script and direction, and reorders them by
+      rule L2 before laying the pen along them; L2 itself moved into `TextItemiser.ReorderVisually`
+      so that the sub-runs and the glyph runs cannot be reordered by two different implementations.
+      Writer reaches the same place from the other side — it keeps its portions logical and jumps the
+      pen across a bidi portion whose direction differs from its surroundings, `X() ± nMultiWidth` in
+      `SwTextPainter::PaintMultiPortion` (`sw/source/core/text/pormulti.cxx:1630`), then paints the
+      inside with VCL's RTL layout mode. Both are rule L2, so the pens agree.
+      Verified against LibreOffice in `BidiDrawingComparisonTests` over a new corpus document: every
+      portion it draws starts where one of ours does and every line starts where it starts it, both
+      within a quarter point — the same bound the itemisation comparison measured, since the residual
+      is VCL rounding each portion through its reference device.
+      **The no-op stays a no-op, and it is guarded rather than hoped for.** `TextItemiser.MayReorder`
+      is a scan for the bidi classes that could raise a level, and a paragraph that fails it is never
+      itemised at all: the runs are drawn exactly as they were, one per line for plain prose. The
+      comparison asserts it from the other side too — LibreOffice draws the Latin paragraph as one
+      portion, and so must Paperless.
+- [x] Aligning a right-to-left paragraph, in `ParagraphLayouter.LeftOf`. A mirror rather than a
+      special case, which is what Writer does: it lays a right-to-left frame out as though it were
+      left to right and reflects the rectangle when it paints — `SwTextFrame::SwitchLTRtoRTL`,
+      `sw/source/core/text/txtfrm.cxx:682` — so the indents mirror without anything having to know
+      which side they came from. `ParagraphFormat.IsRightToLeft` is the flag; `TextAlignment.Start`
+      is now genuinely the start edge.
+      Measured, because neither half is obvious from the specifications: an ODF paragraph in `rl-tb`
+      with `fo:margin-right="3cm"` is drawn three centimetres in from the **left** margin, and one
+      with `fo:text-indent="2cm"` starts its first line two centimetres in from the right. A
+      justified line is the one case the mirror has to be told about — it has already been stretched
+      to fill its room, so reflecting its alignment offset would push it off the margin by the slack
+      it is about to consume.
+- [ ] L1 at a **line** end rather than at the paragraph's. UAX #9 resets trailing whitespace on every
+      line to the paragraph level, and `BidiParagraph` applies L1 to the paragraph and to segment
+      separators only. It shows on a wrapped right-to-left line whose break falls after a space, and
+      does not show today because a line's trailing spaces are outside `VisibleEnd` and are not drawn.
+      Closing it wants the levels recomputed per line, which means the line filler handing the
+      itemiser its breaks.
+- [ ] A line beside a floating frame in a right-to-left paragraph. The obstacles are asked for room in
+      the paragraph's own start-relative space and the answer is mirrored with everything else, so a
+      frame on the physical left displaces the text as though it were on the right. It wants
+      `ILineObstacles` to be asked in page coordinates, which is the frame layout's half of the
+      question rather than this one's.
 
 ## Line breaking
 
@@ -322,7 +354,17 @@ gaps:
       clamps it at zero starts every list in the wrong place.
 - [x] Alignment: start, end and centre, verified against LibreOffice. Centring is computed from the
       line's own width, so it is also a check on the measurement: a line a point too wide is centred
-      half a point too far left.
+      half a point too far left. Start and end are edges rather than sides, and a right-to-left
+      paragraph swaps which side each is — see the mirror under Itemisation.
+      **A named trap, because it cost an afternoon of contradictory measurements.** The reference
+      binary here is LibreOffice 24.2 and `ParagraphAdjust::START` only exists from 26.2
+      (`offapi/com/sun/star/style/ParagraphAdjust.idl`, "@since LibreOffice 26.2"). Before it, xmloff
+      mapped ODF's `start` and `end` onto plain left and right, so 24.2 renders a *start-aligned*
+      right-to-left paragraph against the **left** margin — and rewrites the attribute on export, so
+      the same document round-tripped through `.odt` comes back saying `end` where it said `right`.
+      The physical spellings mean the same thing in every version, which is why the corpus document
+      uses them and why its round-tripped `.odt` is deliberately not in the corpus. Paperless follows
+      the specification and 26.2: `start` is the start edge.
 - [x] Contextual spacing, which needs **both** paragraphs to ask for it — that is what keeps a list
       tight while still leaving a gap before it.
 - [ ] Justification. `TextAlignment.Justify` and `Distribute` are recorded and the last line is left
