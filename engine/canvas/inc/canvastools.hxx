@@ -387,9 +387,6 @@ namespace canvastools
                         const ::vclcanvas::RenderState& renderState,
                         OutputDevice& rOutDev);
 
-        CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const cpo::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
-                        sal_uInt32& rEmphasisMark);
-
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
 

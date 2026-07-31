@@ -371,13 +371,13 @@ namespace vclcanvas
 
     rtl::Reference< vclcanvas::CanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
-                                                                       const cpo::uno::Sequence< beans::PropertyValue >&     extraFontProperties,
+                                                                       FontEmphasisMark                                  eMark,
                                                                        const geometry::Matrix2D&                        fontMatrix )
     {
         if( mpOutDevProvider && mpDevice )
         {
             // TODO(F2): font properties and font matrix
-            return new CanvasFont(fontRequest, extraFontProperties, fontMatrix,
+            return new CanvasFont(fontRequest, eMark, fontMatrix,
                                    *mpDevice, mpOutDevProvider);
         }
 

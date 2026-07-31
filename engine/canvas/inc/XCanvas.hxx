@@ -54,6 +54,7 @@ class TextLayout;
 class CachedBitmap;
 class XGraphicDevice;
 }
+enum class FontEmphasisMark;
 
 /** Central interface for rendering.<p>
 
@@ -294,14 +295,6 @@ public:
 
         @param aFontRequest
 
-        @param aExtraFontProperties
-        Additional font properties to be applied when selecting this
-        font. Normally, you should not need this parameter. Currently,
-        the following property is recognized:
-
-        -   EmphasisMark: long integer that represents the emphasis mark.
-            @see ::com::sun::star::awt::FontEmphasisMark
-
         @param aFontMatrix
         Font-specific transformation matrix, which affects both the
         glyphs as well as the advancement.
@@ -313,8 +306,7 @@ public:
         if one of the parameters is not within the allowed range.
      */
     virtual rtl::Reference<vclcanvas::CanvasFont>
-    createFont(const ::css::rendering::FontRequest& aFontRequest,
-               const ::cpo::uno::Sequence<::css::beans::PropertyValue>& aExtraFontProperties,
+    createFont(const ::css::rendering::FontRequest& aFontRequest, FontEmphasisMark eEmphasisMark,
                const ::css::geometry::Matrix2D& aFontMatrix)
         = 0;
 

@@ -99,7 +99,7 @@ namespace cppcanvas
 
                     o_rFont = rUnoCanvas->createFont(
                         aFontRequest,
-                        cpo::uno::Sequence< beans::PropertyValue >(),
+                        FontEmphasisMark::NONE,
                         aFontMatrix );
                 }
 

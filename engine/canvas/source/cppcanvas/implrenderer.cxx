@@ -786,18 +786,9 @@ namespace cppcanvas
             }
             aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getHeight();
 
-            if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
-            {
-                cpo::uno::Sequence< beans::PropertyValue > aProperties{ comphelper::makePropertyValue(
-                    u"EmphasisMark"_ustr, sal_uInt32(rFont.GetEmphasisMark())) };
-                return rParms.mrUnoCanvas->createFont(aFontRequest,
-                                                        aProperties,
-                                                        aFontMatrix);
-            }
-
-            return rParms.mrUnoCanvas->createFont( aFontRequest,
-                                                    cpo::uno::Sequence< beans::PropertyValue >(),
-                                                    aFontMatrix );
+            return rParms.mrUnoCanvas->createFont(aFontRequest,
+                                                    rFont.GetEmphasisMark(),
+                                                    aFontMatrix);
         }
 
         // create text effects such as shadow/relief/embossed

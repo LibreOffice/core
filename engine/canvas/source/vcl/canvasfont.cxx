@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const cpo::uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
+                            FontEmphasisMark                                eEmphasisMark,
                             const geometry::Matrix2D&                       rFontMatrix,
                             vclcanvas::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
@@ -65,12 +65,7 @@ namespace vclcanvas
         // adjust to stretched/shrunk font
         vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDevProvider->getOutDev());
 
-        sal_uInt32 nEmphasisMark = 0;
-
-        ::canvastools::extractExtraFontProperties(rExtraFontProperties, nEmphasisMark);
-
-        if (nEmphasisMark)
-            maFont->SetEmphasisMark(FontEmphasisMark(nEmphasisMark));
+        maFont->SetEmphasisMark(eEmphasisMark);
     }
 
     void CanvasFont::disposing(std::unique_lock<std::mutex>& rGuard)

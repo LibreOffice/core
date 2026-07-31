@@ -209,7 +209,7 @@ namespace canvas
 
         virtual rtl::Reference< vclcanvas::CanvasFont >
             createFont( const css::rendering::FontRequest&                                     fontRequest,
-                        const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                        FontEmphasisMark                                                       eMark,
                         const css::geometry::Matrix2D&                                         fontMatrix ) override
         {
             canvastools::verifyArgs(fontRequest,
@@ -221,7 +221,7 @@ namespace canvas
 
             MutexType aGuard( BaseType::m_aMutex );
 
-            return maCanvasHelper.createFont( this, fontRequest, extraFontProperties, fontMatrix );
+            return maCanvasHelper.createFont( this, fontRequest, eMark, fontMatrix );
         }
 
 

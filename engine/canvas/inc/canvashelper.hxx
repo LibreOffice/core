@@ -125,8 +125,7 @@ namespace vclcanvas
         rtl::Reference< vclcanvas::CanvasFont >
             createFont( const vclcanvas::XCanvas*         rCanvas,
                         const css::rendering::FontRequest&     fontRequest,
-                        const cpo::uno::Sequence<
-                            css::beans::PropertyValue >&       extraFontProperties,
+                        FontEmphasisMark eMark,
                         const css::geometry::Matrix2D&         fontMatrix );
 
         void drawText( const vclcanvas::XCanvas*       rCanvas,

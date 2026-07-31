@@ -309,16 +309,6 @@ namespace canvastools
                 rOutDev.SetClipRegion( aClipRegion );
         }
 
-        void extractExtraFontProperties(const cpo::uno::Sequence<beans::PropertyValue>& rExtraFontProperties,
-                        sal_uInt32 &rEmphasisMark)
-        {
-            for(const beans::PropertyValue& rPropVal : rExtraFontProperties)
-            {
-                if (rPropVal.Name == "EmphasisMark")
-                    rPropVal.Value >>= rEmphasisMark;
-            }
-        }
-
         ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
             ::canvastools::UnoPolyPolygon* pPolyImpl =

@@ -58,7 +58,7 @@ namespace vclcanvas
         const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
-                    const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                    FontEmphasisMark                                                       eMark,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
                     vclcanvas::XGraphicDevice&                                             rDevice,
                     const OutDevProviderSharedPtr&                                                      rOutDevProvider );
