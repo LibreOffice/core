@@ -29,7 +29,6 @@
 #include <canvasfont.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::rendering { class XBitmap; }
 namespace vclcanvas { class CachedBitmap; }
 namespace vclcanvas { class CanvasFont; }
 namespace vclcanvas { class XGraphicDevice; }
@@ -287,15 +286,14 @@ namespace canvas
     protected:
         ~BitmapCanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
-        // XBitmap
-        virtual css::geometry::IntegerSize2D getSize(  ) override
+        css::geometry::IntegerSize2D getSize(  )
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maCanvasHelper.getSize();
         }
 
-        virtual bool hasAlpha(  ) override
+        bool hasAlpha(  )
         {
             return true;
         }

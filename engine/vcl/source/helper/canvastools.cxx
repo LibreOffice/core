@@ -23,7 +23,6 @@
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>

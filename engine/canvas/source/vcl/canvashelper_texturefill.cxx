@@ -33,7 +33,6 @@
 #include <basegfx/utils/lerp.hxx>
 #include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>

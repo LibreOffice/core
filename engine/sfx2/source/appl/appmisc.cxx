@@ -22,7 +22,6 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/vectorgraphicdata.hxx>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/uno/Reference.h>

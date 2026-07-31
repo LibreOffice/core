@@ -26,8 +26,6 @@
 
 #include <canvastools.hxx>
 
-#include <com/sun/star/rendering/XBitmap.hpp>
-
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

@@ -21,7 +21,6 @@
 
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 
 #include <rtl/ref.hxx>
 

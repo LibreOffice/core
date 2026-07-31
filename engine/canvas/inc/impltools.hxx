@@ -39,11 +39,6 @@ namespace com::sun::star::geometry
     struct Matrix2D;
 }
 
-namespace com::sun::star::rendering
-{
-    class  XBitmap;
-}
-
 namespace vclcanvas
 {
     struct RenderState;

@@ -32,7 +32,6 @@
 
 namespace com::sun::star::rendering
 {
-class XBitmap;
 class XPolyPolygon2D;
 }
 #include <com/sun/star/uno/XInterface.hpp>

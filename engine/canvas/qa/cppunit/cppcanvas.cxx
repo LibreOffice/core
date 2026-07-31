@@ -15,8 +15,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 
-#include <com/sun/star/rendering/XBitmap.hpp>
-
 #include <vclfactory.hxx>
 #include <canvas.hxx>
 

@@ -18,7 +18,6 @@
  */
 
 
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <RenderState.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/gen.hxx>

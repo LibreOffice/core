@@ -24,7 +24,6 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

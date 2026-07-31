@@ -28,7 +28,6 @@
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/EmfTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XBinaryDataContainer.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
