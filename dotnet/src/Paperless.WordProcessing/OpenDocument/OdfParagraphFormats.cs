@@ -21,13 +21,19 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// <param name="IsItalic">True when the text is italic or oblique.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
 /// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
+/// <param name="Rise">
+/// How far the text is raised above the baseline; negative lowers it. From
+/// <c>style:text-position</c>, which states it as a percentage of the font size — so a superscript is a
+/// rise <em>and</em> a smaller size, and the two are stated in the same attribute but are independent.
+/// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
     int Weight,
     bool IsItalic,
     string? Language,
-    Colour? Colour = null)
+    Colour? Colour = null,
+    Length Rise = default)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -144,8 +150,56 @@ internal static class OdfParagraphFormats
             LanguageTag(
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "language").Value,
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
-            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour());
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
+            RiseIn(styles, cascade));
     }
+
+    /// <summary>
+    /// The baseline shift the cascade asks for, as a length.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>style:text-position</c> carries one or two values: a vertical position and, optionally, a font
+    /// size percentage. The position is a percentage of the font size, or one of the keywords <c>super</c>
+    /// and <c>sub</c> — which LibreOffice takes as ±33%, the automatic values its dialogue offers. A
+    /// percentage is positive upwards, so <c>sub</c> is the negative case rather than a separate one.
+    /// </para>
+    /// <para>
+    /// The size half is deliberately not read here: it belongs to <c>SizeIn</c>, which already walks the
+    /// cascade multiplying percentages, and reading it in two places would apply it twice to a span whose
+    /// style states both.
+    /// </para>
+    /// </remarks>
+    private static Length RiseIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        string? stated = Cascaded(styles, cascade, OdfNamespaces.Style, "text-position").Value;
+        if (string.IsNullOrWhiteSpace(stated)) return Length.Zero;
+
+        string position = stated.Split(' ', StringSplitOptions.RemoveEmptyEntries) is [string first, ..]
+            ? first
+            : stated;
+
+        Length size = SizeIn(styles, cascade);
+
+        return position switch
+        {
+            "super" => size * AutomaticRise / 100.0,
+            "sub" => size * -AutomaticRise / 100.0,
+            _ => OdfValue.ParsePercentage(position) is { } percent
+                ? OdfWriterUnits.ToCore(size * percent / 100.0)
+                : Length.Zero,
+        };
+    }
+
+    /// <summary>
+    /// The rise <c>super</c> and <c>sub</c> mean, as a percentage of the font size.
+    /// </summary>
+    /// <remarks>
+    /// A third, which is what LibreOffice's own character dialogue offers as its automatic value and what
+    /// its ODF import uses for the two keywords. The keywords are the common case by a wide margin, because
+    /// that dialogue is how a superscript is usually applied.
+    /// </remarks>
+    private const double AutomaticRise = 33;
 
     /// <summary>
     /// The family the cascade asks for, deciding the level before the spelling.

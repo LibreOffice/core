@@ -466,16 +466,27 @@ is read and verified, so what remains is the filling of pages rather than the me
       - A note paragraph's line height is its own style's: 12.20 pt for the 10 pt note against 13.42 pt for
         the 11 pt body in the corpus document.
 
-- [ ] Footnote **reading**, which no reader does yet — so the placement above is inert, and every test
-      passes unchanged. `PageParagraph.Notes` is the shape to fill: a note is a body of blocks plus the
-      character offset of its anchor, which all four readers already mark with U+0001.
-- [ ] The **citation**, which turned out to be two separate pieces of work and is why the placement landed
-      before the reading. LibreOffice draws the number twice: once as a superscript run at the anchor in the
-      body, and once at the start of the note's first line — its rendering of the corpus document reads
-      `1Note 2 text alpha bravo charlie.`, with the citation fused to the first word. So a word-for-word
-      comparison of a footnote document needs both, and needs them **renumbered**: LibreOffice ignores
-      `text:note-citation` and numbers the notes itself in document order, which turned the corpus
-      document's citations of 2 and 5 into 1 and 2.
+- [x] Footnote **reading**, for ODF. A note is a body of blocks plus the character offset of its anchor.
+      The bodies are read *after* the citing paragraph's own walk rather than during it, because reading one
+      recurses into the paragraph reader — doing it mid-walk numbers a note cited inside note one as note two.
+- [x] The **citation**, which is two things and neither is in the file. LibreOffice draws the number twice:
+      as a superscript run at the anchor in the sentence, and again at the start of the note's first line,
+      where it fuses with the first word — its rendering reads `1Note 2 text alpha bravo charlie.`. And it
+      **renumbers**, ignoring `text:note-citation` and counting in document order, which turns a document's
+      stated citations of 2 and 5 into 1 and 2. Both are now produced, and the corpus document states 2 and
+      5 deliberately so that a reader taking the file at its word fails.
+- [x] `style:text-position`, which is what makes the citation superscript, and `PageRun.Rise` to carry it.
+      The rise moves the run's origin rather than its glyphs, so the pen along the baseline carries on
+      unchanged — a raised run advances the line as if it were not raised. `super` and `sub` are ±33% of the
+      font size, LibreOffice's automatic values; the size half of the attribute is deliberately left to
+      `SizeIn`, which already walks the cascade multiplying percentages, so that a span stating both does not
+      have it applied twice.
+- [ ] Footnote reading for DOCX, DOC and RTF. The placement is format-independent and the ODF reader shows
+      the shape; what each needs is its own note store — `footnotes.xml`, the WW8 footnote subdocument with
+      its `PlcffndRef`/`PlcffndTxt` pair, and RTF's `\footnote` destination — all of which the extraction
+      passes already read.
+- [ ] Note numbering beyond decimal-from-one. `text:notes-configuration` and its counterparts state a format
+      and a start value, and can restart per page or per section; the counter here is document-wide decimal.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —
       0.1 cm above and below, which is what Writer's `Footnote Separator` frame style ships with — but
       nothing draws the line, and its exact spacing cannot be measured from a text comparison. Same problem

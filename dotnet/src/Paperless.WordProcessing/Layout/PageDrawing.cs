@@ -192,12 +192,15 @@ public static class PageDrawing
                 ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
                 if (shaped.Glyphs.Count == 0) continue;
 
+                // A raised run draws above the baseline and advances along it unchanged, which is why the
+                // rise moves the origin rather than the glyphs: the pen below has to carry on from where an
+                // unraised run would have left it.
                 GlyphRun glyphRun = Build(
                     shaped,
                     text,
                     run.EmSize,
                     run.Font ?? Reference(run.Face),
-                    new DocPoint(pen, baseline),
+                    new DocPoint(pen, baseline - run.Rise),
                     line.Box.SpaceAdd);
 
                 runs.Add((glyphRun, run.EffectiveColour));

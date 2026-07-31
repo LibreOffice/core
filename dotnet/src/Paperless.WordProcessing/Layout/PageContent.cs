@@ -176,6 +176,11 @@ public sealed record PageNote
 /// <param name="Font">The resolved reference, for a backend that has to name the face.</param>
 /// <param name="Colour">The colour it is drawn in.</param>
 /// <param name="Shaping">How it is shaped.</param>
+/// <param name="Rise">
+/// How far the run is raised above the baseline; negative lowers it. What a superscript is, together with
+/// the smaller <paramref name="EmSize"/> that goes with it — the two are independent, and a document can
+/// raise text without shrinking it.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -183,7 +188,8 @@ public readonly record struct PageRun(
     Length EmSize,
     FontReference? Font = null,
     Colour Colour = default,
-    ShapingOptions Shaping = default)
+    ShapingOptions Shaping = default,
+    Length Rise = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;

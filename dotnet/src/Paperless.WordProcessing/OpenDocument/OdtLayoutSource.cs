@@ -263,7 +263,17 @@ public sealed partial class OdtLayoutSource
         return null;
     }
 
-    private PageParagraph? Paragraph(XElement element)
+    /// <summary>
+    /// Reads one paragraph, with an optional prefix its own text does not contain.
+    /// </summary>
+    /// <param name="element">The <c>text:p</c> or <c>text:h</c>.</param>
+    /// <param name="prefix">
+    /// Text to place before the paragraph's own, or null for none. Used for a footnote's citation at the
+    /// start of the note's first paragraph, which LibreOffice draws there and the file does not contain.
+    /// </param>
+    /// <param name="prefixStyle">The character style the prefix takes.</param>
+    private PageParagraph? Paragraph(
+        XElement element, string? prefix = null, OdfStyleReference? prefixStyle = null)
     {
         string? styleName = element
             .Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
@@ -276,8 +286,13 @@ public sealed partial class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new(styleName);
-        walker.Walk(element);
+        RunWalker walker = new(styleName, _noteNumber);
+        walker.Walk(element, prefix, prefixStyle);
+
+        // Notes are numbered across the document, so the counter advances by however many this paragraph
+        // cited — and the bodies are read after the walk, since reading one recurses into this method and
+        // would otherwise renumber from the middle of the paragraph that cites it.
+        _noteNumber += walker.Notes.Count;
 
         return new PageParagraph
         {
@@ -291,8 +306,90 @@ public sealed partial class OdtLayoutSource
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, text, face),
+            Notes = NotesOf(walker.Notes),
             Source = element,
         };
+    }
+
+    /// <summary>The number the next note is cited by, counted across the document.</summary>
+    private int _noteNumber = 1;
+
+    /// <summary>
+    /// Reads each anchored note's body.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// After the citing paragraph's own walk rather than during it, because reading a note's body recurses
+    /// into <see cref="Paragraph"/> — and doing that mid-walk would advance the note counter from inside the
+    /// paragraph that cites the note, numbering a note in the body of note one as note two.
+    /// </para>
+    /// <para>
+    /// The citation is placed at the start of the note's first paragraph, which is where LibreOffice draws
+    /// it and where the file does not have it. An endnote is read the same way and marked, so that a caller
+    /// need not guess later which of its notes collect at the end of the document.
+    /// </para>
+    /// </remarks>
+    private List<PageNote> NotesOf(List<NoteAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageNote> notes = new(anchors.Count);
+
+        foreach (NoteAnchor anchor in anchors)
+        {
+            XElement? body = anchor.Element.Element(XName.Get("note-body", OdfNamespaces.Text));
+            if (body is null) continue;
+
+            string citation = anchor.Number.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            List<PageBlock> blocks = ReadNoteBody(body, citation);
+            if (blocks.Count == 0) continue;
+
+            notes.Add(new PageNote
+            {
+                Blocks = blocks,
+                Offset = anchor.Offset,
+                IsEndnote = anchor.Element
+                    .Attribute(XName.Get("note-class", OdfNamespaces.Text))?.Value == "endnote",
+            });
+        }
+
+        return notes;
+    }
+
+    /// <summary>
+    /// Reads a note's body, putting the citation at the start of its first paragraph.
+    /// </summary>
+    /// <remarks>
+    /// Its own walk rather than <see cref="ReadCell"/>'s, only because the first paragraph takes the
+    /// citation and the rest do not — everything else about it is the same, tables included.
+    /// </remarks>
+    private List<PageBlock> ReadNoteBody(XElement body, string citation)
+    {
+        List<PageBlock> blocks = [];
+        bool first = true;
+
+        foreach (XElement child in body.Elements())
+        {
+            if (child.Name.Namespace == OdfNamespaces.Text
+                && child.Name.LocalName is "p" or "h")
+            {
+                PageParagraph? paragraph = first
+                    ? Paragraph(child, citation)
+                    : Paragraph(child);
+
+                if (paragraph is not null)
+                {
+                    blocks.Add(paragraph);
+                    first = false;
+                }
+
+                continue;
+            }
+
+            Walk(child, blocks, depth: 0);
+        }
+
+        return blocks;
     }
 
     /// <summary>
@@ -324,7 +421,8 @@ public sealed partial class OdtLayoutSource
             if (face != paragraphFace
                 || style.Size != paragraph.Size
                 || style.Colour != paragraph.Colour
-                || style.Language != paragraph.Language)
+                || style.Language != paragraph.Language
+                || style.Rise != paragraph.Rise)
             {
                 varies = true;
             }
@@ -336,7 +434,8 @@ public sealed partial class OdtLayoutSource
                 style.Size,
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
-                new ShapingOptions(Language: style.Language)));
+                new ShapingOptions(Language: style.Language),
+                style.Rise));
         }
 
         return varies ? runs : [];
@@ -363,6 +462,12 @@ public sealed partial class OdtLayoutSource
     /// </param>
     private readonly record struct StyledRange(
         int Start, int Length, OdfStyleReference[] Cascade);
+
+    /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
+    /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
+    /// <param name="Element">The <c>text:note</c> element, whose body is read separately.</param>
+    /// <param name="Number">The number it is cited by, counted across the document.</param>
+    private readonly record struct NoteAnchor(int Offset, XElement Element, int Number);
 
     /// <summary>
     /// Walks a paragraph, building its text and the ranges its spans divide it into.
@@ -391,11 +496,21 @@ public sealed partial class OdtLayoutSource
         private readonly StringBuilder _builder = new();
         private readonly List<OdfStyleReference> _cascade = [];
         private readonly List<StyledRange> _ranges = [];
+        private readonly List<NoteAnchor> _notes = [];
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
-        internal RunWalker(string? paragraphStyleName)
-            => _cascade.Add(new OdfStyleReference(paragraphStyleName, OdfStyleFamily.Paragraph));
+        /// <param name="number">
+        /// The number the next note in this paragraph is cited by. Passed in because notes are numbered
+        /// across the document rather than within a paragraph, so the counter belongs to the source.
+        /// </param>
+        internal RunWalker(string? paragraphStyleName, int number = 1)
+        {
+            _cascade.Add(new OdfStyleReference(paragraphStyleName, OdfStyleFamily.Paragraph));
+            _number = number;
+        }
+
+        private int _number;
 
         /// <summary>The paragraph's text.</summary>
         internal string Text => _builder.ToString();
@@ -403,8 +518,32 @@ public sealed partial class OdtLayoutSource
         /// <summary>The ranges, in order, partitioning the text.</summary>
         internal IReadOnlyList<StyledRange> Ranges => _ranges;
 
+        /// <summary>The notes anchored in the paragraph, with the offsets their citations occupy.</summary>
+        internal List<NoteAnchor> Notes => _notes;
+
         /// <summary>Walks a <c>text:p</c> or <c>text:h</c>.</summary>
-        internal void Walk(XElement paragraph) => Append(paragraph, depth: 0);
+        /// <param name="paragraph">The paragraph element.</param>
+        /// <param name="prefix">
+        /// Text to emit before the paragraph's own, or null for none. What a footnote's citation is at the
+        /// start of the note's first paragraph — emitted here rather than spliced in afterwards, because a
+        /// prefix added later would shift every run's offset and every note anchor by its length.
+        /// </param>
+        /// <param name="prefixStyle">The character style the prefix is drawn in, if any.</param>
+        internal void Walk(
+            XElement paragraph, string? prefix = null, OdfStyleReference? prefixStyle = null)
+        {
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                bool pushed = prefixStyle is { } style && !string.IsNullOrEmpty(style.Name);
+                if (pushed) _cascade.Add(prefixStyle!.Value);
+
+                Emit(prefix);
+
+                if (pushed) _cascade.RemoveAt(_cascade.Count - 1);
+            }
+
+            Append(paragraph, depth: 0);
+        }
 
         private void Append(XElement element, int depth)
         {
@@ -473,8 +612,18 @@ public sealed partial class OdtLayoutSource
                     Emit(LineSeparator.ToString());
                     break;
 
-                case "note" or "annotation" or "annotation-end":
-                    // The anchor occupies a position; its body is a separate flow.
+                case "note":
+                    // A footnote's citation is drawn *in the sentence*, as a superscript, and again at the
+                    // start of the note itself. So the anchor is not a bare placeholder the way a comment's
+                    // is: it carries the citation's own text, under the citation's own character style,
+                    // which is what makes it small and raised.
+                    _notes.Add(new NoteAnchor(_builder.Length, child, _number));
+                    Citation(child);
+                    _number++;
+                    break;
+
+                case "annotation" or "annotation-end":
+                    // A comment's anchor occupies a position and draws nothing; its body is another flow.
                     Emit(AnchorCharacter.ToString());
                     break;
 
@@ -502,6 +651,32 @@ public sealed partial class OdtLayoutSource
                     Append(child, depth + 1);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Emits a note's citation at the anchor, under the citation's own character style.
+        /// </summary>
+        /// <remarks>
+        /// The citation's <em>text</em> comes from the caller rather than from the file: LibreOffice ignores
+        /// <c>text:note-citation</c>'s content and numbers the notes itself in document order, so a document
+        /// stating 2 and 5 renders 1 and 2. The style does come from the file, since that is what makes the
+        /// citation superscript — and a document that declares none gets no rise, which is the honest answer
+        /// rather than a guess at LibreOffice's built-in <c>Footnote Symbol</c>.
+        /// </remarks>
+        private void Citation(XElement note)
+        {
+            XElement? citation = note.Element(XName.Get("note-citation", OdfNamespaces.Text));
+            if (citation is null) return;
+
+            string? styleName = citation
+                .Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
+
+            bool pushed = !string.IsNullOrEmpty(styleName);
+            if (pushed) _cascade.Add(new OdfStyleReference(styleName, OdfStyleFamily.Text));
+
+            Emit(_number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            if (pushed) _cascade.RemoveAt(_cascade.Count - 1);
         }
 
         /// <summary>Appends text under the cascade currently in force.</summary>
