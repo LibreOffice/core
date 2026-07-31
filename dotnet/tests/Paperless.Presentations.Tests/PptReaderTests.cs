@@ -167,21 +167,49 @@ public class PptReaderTests
         using IDocument binary = Open("ppt-features.ppt");
         using IDocument odf = Open("slides-features.odp");
 
+        // Emphasis is part of the comparison, and is the point of it: the PPT title's boldness
+        // is stated nowhere on the slide and comes entirely from the master's TxMasterStyleAtom,
+        // so this is what proves the style sheet is resolved rather than merely parsed.
         static string Normalise(IDocument document)
             => string.Join(
                 "\n",
                 document.Content.Children.OfType<ContentSection>()
-                    .Select(s => $"{s.Kind}:{s.Index}:{s.IsHidden}:{s.GetText().Trim()}"));
+                    .Select(s => $"{s.Kind}:{s.Index}:{s.IsHidden}:{Runs(s)}"));
+
+        static string Runs(ContentSection section)
+            => string.Join(
+                " | ",
+                Descendants(section).OfType<ContentRun>()
+                    .Select(r => (r.Emphasis, Text: r.Text.Trim()))
+                    .Where(r => r.Text.Length > 0)
+                    .Select(r => $"{r.Emphasis}:{r.Text}"));
 
         // The binary file is the ODF one converted by LibreOffice, so any difference is one of
         // the two readers disagreeing about the same deck rather than a difference of content.
         //
-        // Two things are deliberately left out of the comparison because the formats genuinely
-        // differ. A slide has no name in the binary format — ODF's draw:name has no counterpart,
-        // so reporting one would be inventing it. And emphasis is not compared, because a PPT
-        // title states only its colour and takes its boldness from the master's TxMasterStyleAtom,
-        // which is not resolved yet; the TODO tracks it.
+        // One thing is deliberately left out because the formats genuinely differ: a slide has no
+        // name in the binary format, ODF's draw:name having no counterpart, so reporting one
+        // would be inventing it.
         Normalise(binary).ShouldBe(Normalise(odf));
+    }
+
+    [Fact]
+    public void ATitleTakesItsBoldnessFromTheMastersOutlineLevelStyle()
+    {
+        using IDocument document = Open("ppt-features.ppt");
+        List<ContentRun> runs =
+            [.. Descendants(Sections(document, SectionKind.Slide)[0]).OfType<ContentRun>()];
+
+        // The title's own character run states a mask of 0x040000 — its colour, and nothing
+        // else. Everything else, boldness included, is in the master's TxMasterStyleAtom for
+        // instance 0 at outline level 0, whose flags word is 0x0001.
+        runs[0].Text.ShouldBe("Feature deck title");
+        runs[0].Emphasis.ShouldBe(RunEmphasis.Bold);
+
+        // The outline body inherits from instance 1, whose flags are clear, so the inheritance
+        // has to be per text kind rather than one default for the whole master.
+        runs.ShouldContain(r => r.Text.Contains("First outline point", StringComparison.Ordinal)
+                                && r.Emphasis == RunEmphasis.None);
     }
 
     private static IEnumerable<ContentNode> Descendants(ContentNode root)

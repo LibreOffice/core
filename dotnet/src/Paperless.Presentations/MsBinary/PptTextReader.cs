@@ -23,15 +23,23 @@ public sealed record PptTextRun(
 /// <summary>One paragraph's properties, covering <paramref name="Length"/> characters.</summary>
 /// <param name="Length">How many characters the run covers, including its terminating return.</param>
 /// <param name="Depth">The outline level, zero for the first.</param>
-/// <param name="HasBullet">Whether the paragraph carries a bullet.</param>
+/// <param name="HasBullet">
+/// Whether the paragraph carries a bullet, or null when it states nothing and the master's
+/// per-level default decides.
+/// </param>
 /// <param name="BulletCharacter">The bullet's character, when the paragraph states one.</param>
 public readonly record struct PptParagraphRun(
-    int Length, int Depth, bool HasBullet, char? BulletCharacter);
+    int Length, int Depth, bool? HasBullet, char? BulletCharacter);
 
 /// <summary>One character run's emphasis, covering <paramref name="Length"/> characters.</summary>
 /// <param name="Length">How many characters the run covers.</param>
 /// <param name="Emphasis">The emphasis the run states.</param>
-public readonly record struct PptCharacterRun(int Length, RunEmphasis Emphasis);
+/// <param name="Stated">
+/// Which kinds of emphasis the run's mask claims. Everything else falls through to the master's
+/// per-level defaults, which is where a PowerPoint title's boldness normally lives.
+/// </param>
+public readonly record struct PptCharacterRun(
+    int Length, RunEmphasis Emphasis, RunEmphasis Stated);
 
 /// <summary>
 /// Reads the text records inside a shape's client textbox.
@@ -120,14 +128,19 @@ public static class PptTextReader
     /// with the same deck: a bullet is text the reader sees. A symbol-font bullet lives in a
     /// Private Use Area and means nothing outside that font, so it is normalised the same way.
     /// </remarks>
-    public static List<ContentParagraph> ToParagraphs(PptTextRun run)
+    /// <param name="run">The text run to convert.</param>
+    /// <param name="styles">
+    /// The style sheet of the master the run's page belongs to, when one was found. Everything
+    /// the run does not state falls through to it, per outline level — the boldness of a title
+    /// above all, which PowerPoint records once in the master rather than once per slide.
+    /// </param>
+    public static List<ContentParagraph> ToParagraphs(PptTextRun run, PptStyleSheet? styles = null)
     {
         ArgumentNullException.ThrowIfNull(run);
 
         List<ContentParagraph> paragraphs = [];
         EmphasisMap emphasis = new(run.Characters);
 
-        int paragraphIndex = 0;
         int start = 0;
 
         while (start <= run.Text.Length)
@@ -135,22 +148,28 @@ public static class PptTextReader
             int stop = run.Text.IndexOf(ParagraphSeparator, start);
             int length = (stop < 0 ? run.Text.Length : stop) - start;
 
-            PptParagraphRun properties = paragraphIndex < run.Paragraphs.Count
-                ? run.Paragraphs[paragraphIndex]
-                : default;
+            PptParagraphRun properties = PropertiesAt(run.Paragraphs, start);
+
+            PptParagraphLevel level = styles?.Paragraph(run.Kind, properties.Depth) ?? default;
+            RunEmphasis inherited = styles?.Character(run.Kind, properties.Depth).Emphasis
+                                    ?? RunEmphasis.None;
+
+            bool bulleted = properties.HasBullet ?? level.HasBullet;
+            char? marker = properties.BulletCharacter
+                           ?? (level.BulletCharacter != 0 ? (char)level.BulletCharacter : null);
 
             ContentParagraph paragraph = new()
             {
                 // Only outline text is a list: an ordinary text box that happens to inherit a
                 // bullet from the master would otherwise report every line as a list item.
-                ListLevel = properties.HasBullet ? properties.Depth : null,
-                ListMarker = properties.HasBullet && properties.BulletCharacter is { } bullet
+                ListLevel = bulleted ? properties.Depth : null,
+                ListMarker = bulleted && marker is { } bullet
                     ? OutlineNumbers.NormaliseBullet(bullet.ToString())
                     : null,
             };
 
             foreach ((int runStart, int runLength, RunEmphasis runEmphasis)
-                     in emphasis.Slice(start, length))
+                     in emphasis.Slice(start, length, inherited))
             {
                 string slice = run.Text.Substring(runStart, runLength).Replace(LineBreak, '\n');
                 if (slice.Length == 0) continue;
@@ -158,7 +177,6 @@ public static class PptTextReader
             }
 
             paragraphs.Add(paragraph);
-            paragraphIndex++;
 
             if (stop < 0) break;
             start = stop + 1;
@@ -169,6 +187,34 @@ public static class PptTextReader
         if (paragraphs.Count > 1 && paragraphs[^1].Children.Count == 0) paragraphs.RemoveAt(paragraphs.Count - 1);
 
         return paragraphs;
+    }
+
+    /// <summary>
+    /// The paragraph properties covering the character at <paramref name="start"/>.
+    /// </summary>
+    /// <remarks>
+    /// A paragraph property run is <em>not</em> one paragraph. Its count is a character count,
+    /// and a writer is free to cover several paragraphs with one run — LibreOffice clones the
+    /// property set at every carriage return inside the count
+    /// (<c>filter/source/msfilter/svdfppt.cxx:5081-5090</c>). Pairing the <em>n</em>th run with
+    /// the <em>n</em>th paragraph instead loses the depth and the bullet of every paragraph
+    /// after the first such run: <c>sd/qa/unit/data/ppt/hanging-indent.ppt</c> writes two runs
+    /// for three paragraphs and the third came out unindented and unbulleted where LibreOffice
+    /// renders it at level two with a bullet.
+    /// </remarks>
+    private static PptParagraphRun PropertiesAt(IReadOnlyList<PptParagraphRun> runs, int start)
+    {
+        int position = 0;
+
+        foreach (PptParagraphRun run in runs)
+        {
+            position += Math.Max(run.Length, 1);
+            if (start < position) return run;
+        }
+
+        // Past the last run stated, the last one still stands; a writer that under-counts is
+        // commoner than one that over-counts.
+        return runs.Count > 0 ? runs[^1] : default;
     }
 
     /// <summary>Decodes a <c>TextCharsAtom</c>, stopping at the first NUL.</summary>
@@ -234,7 +280,7 @@ public static class PptTextReader
             uint mask = DffRecordBuffer.ReadUInt32(content[position..]);
             position += 4;
 
-            ushort bulletFlags = 0;
+            ushort? bulletFlags = null;
             char? bulletCharacter = null;
 
             if ((mask & 0x0000000F) != 0) bulletFlags = Take16(content, ref position);
@@ -266,7 +312,9 @@ public static class PptTextReader
             paragraphs.Add(new PptParagraphRun(
                 Math.Max(count, 0),
                 Math.Clamp(depth, 0, 8),
-                (bulletFlags & 1) != 0,
+                // A paragraph that names no bullet flags at all leaves the decision to the
+                // master; one that names them and clears bit 0 has turned the bullet off.
+                (mask & 0x00000001) != 0 ? (bulletFlags & 1) != 0 : null,
                 bulletCharacter));
 
             if (count <= 0) break;
@@ -283,19 +331,13 @@ public static class PptTextReader
             uint mask = DffRecordBuffer.ReadUInt32(content[position..]);
             position += 4;
 
-            RunEmphasis emphasis = RunEmphasis.None;
+            ushort flags = 0;
+            short escapement = 0;
 
             // The flags word is present only when the mask's low half asks for something in it,
             // and its bits are the same bits — a mask that names bold but a flags word that does
             // not set it means bold is explicitly off.
-            if ((mask & 0xFFFF) != 0)
-            {
-                ushort flags = Take16(content, ref position);
-                if ((flags & 0x0001) != 0) emphasis |= RunEmphasis.Bold;
-                if ((flags & 0x0002) != 0) emphasis |= RunEmphasis.Italic;
-                if ((flags & 0x0004) != 0) emphasis |= RunEmphasis.Underline;
-                if ((flags & 0x0100) != 0) emphasis |= RunEmphasis.Strikethrough;
-            }
+            if ((mask & 0xFFFF) != 0) flags = Take16(content, ref position);
 
             if ((mask & 0x00010000) != 0) Skip(ref position, 2);   // typeface
             if ((mask & 0x00200000) != 0) Skip(ref position, 2);   // east-asian typeface
@@ -306,14 +348,15 @@ public static class PptTextReader
 
             if ((mask & 0x00080000) != 0)
             {
-                short escapement = unchecked((short)Take16(content, ref position));
-                if (escapement > 0) emphasis |= RunEmphasis.Superscript;
-                else if (escapement < 0) emphasis |= RunEmphasis.Subscript;
+                escapement = unchecked((short)Take16(content, ref position));
             }
 
             if (position > content.Length) break;
 
-            characters.Add(new PptCharacterRun(Math.Max(count, 0), emphasis));
+            characters.Add(new PptCharacterRun(
+                Math.Max(count, 0),
+                PptCharacterStyle.ToEmphasis(flags, escapement),
+                PptCharacterStyle.Stated(mask)));
             if (count <= 0) break;
             covered += count;
         }
@@ -336,11 +379,18 @@ public static class PptTextReader
     private readonly struct EmphasisMap(IReadOnlyList<PptCharacterRun> runs)
     {
         /// <summary>The emphasis-uniform stretches of a range, in order.</summary>
-        public IEnumerable<(int Start, int Length, RunEmphasis Emphasis)> Slice(int start, int length)
+        /// <param name="start">The first character offset of the range.</param>
+        /// <param name="length">How many characters the range covers.</param>
+        /// <param name="inherited">
+        /// The master's emphasis for this paragraph's outline level, which stands wherever a
+        /// run's own mask claims nothing.
+        /// </param>
+        public IEnumerable<(int Start, int Length, RunEmphasis Emphasis)> Slice(
+            int start, int length, RunEmphasis inherited)
         {
             if (runs.Count == 0)
             {
-                if (length > 0) yield return (start, length, RunEmphasis.None);
+                if (length > 0) yield return (start, length, inherited);
                 yield break;
             }
 
@@ -352,14 +402,21 @@ public static class PptTextReader
                 int runEnd = position + run.Length;
                 int from = Math.Max(position, start);
                 int to = Math.Min(runEnd, end);
-                if (to > from) yield return (from, to - from, run.Emphasis);
+                if (to > from) yield return (from, to - from, Resolve(run, inherited));
                 position = runEnd;
                 if (position >= end) yield break;
             }
 
-            // Text past the last stated run keeps no emphasis; a writer that under-counts is
-            // commoner than one that over-counts, and dropping the tail would lose characters.
-            if (position < end) yield return (position, end - position, RunEmphasis.None);
+            // Text past the last stated run keeps the master's emphasis; a writer that
+            // under-counts is commoner than one that over-counts, and dropping the tail would
+            // lose characters.
+            if (position < end) yield return (position, end - position, inherited);
         }
+
+        /// <summary>
+        /// One run's effective emphasis: its own where it claims one, the master's elsewhere.
+        /// </summary>
+        private static RunEmphasis Resolve(PptCharacterRun run, RunEmphasis inherited)
+            => (inherited & ~run.Stated) | (run.Emphasis & run.Stated);
     }
 }

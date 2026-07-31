@@ -29,12 +29,27 @@ internal sealed class PptContentBuilder
     /// reading the instance the format states avoids the guess entirely.
     /// </remarks>
     private const ushort SlideListInstance = 0;
+    private const ushort MasterListInstance = 1;
     private const ushort NotesListInstance = 2;
 
     private readonly DffRecordBuffer _stream;
     private readonly PptPersistDirectory _persist;
     private readonly List<Diagnostic> _diagnostics;
     private readonly EscherDrawingReader _escher;
+
+    /// <summary>The style sheet of each master, by the slide id its persist atom gives it.</summary>
+    private readonly Dictionary<uint, PptStyleSheet> _stylesByMaster = [];
+
+    /// <summary>
+    /// The sheet a page whose master cannot be found falls back to.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's <c>m_pDefaultSheet</c> — the last main master read
+    /// (<c>filter/source/msfilter/svdfppt.cxx:1619</c>). Notes pages reach it by the same route:
+    /// a notes master carries no <c>TxMasterStyleAtom</c> of its own, so their defaults come
+    /// from the main master's notes instance.
+    /// </remarks>
+    private PptStyleSheet? _defaultStyles;
 
     public PptContentBuilder(
         DffRecordBuffer stream, PptPersistDirectory persist, List<Diagnostic> diagnostics)
@@ -70,6 +85,7 @@ internal sealed class PptContentBuilder
         }
 
         List<SlideEntry> slides = [];
+        List<SlideEntry> masters = [];
         List<SlideEntry> notes = [];
 
         // Every writer distinguishes the three lists by instance. A file that leaves them all
@@ -81,11 +97,15 @@ internal sealed class PptContentBuilder
         for (int i = 0; i < lists.Count; i++)
         {
             bool isSlides = byInstance ? instances[i] == SlideListInstance : i == 1;
+            bool isMasters = byInstance ? instances[i] == MasterListInstance : i == 0;
             bool isNotes = byInstance ? instances[i] == NotesListInstance : i == 2;
 
             if (isSlides) slides.AddRange(lists[i]);
+            else if (isMasters) masters.AddRange(lists[i]);
             else if (isNotes) notes.AddRange(lists[i]);
         }
+
+        ReadMasterStyles(document, masters);
 
         Dictionary<uint, SlideEntry> notesBySlide = [];
         foreach (SlideEntry entry in notes) notesBySlide.TryAdd(entry.SlideId, entry);
@@ -163,9 +183,81 @@ internal sealed class PptContentBuilder
             IsHidden = hidden,
         };
 
-        ReadDrawing(container, entry, slide);
+        ReadDrawing(container, entry, slide, StylesFor(container));
         return slide;
     }
+
+    /// <summary>
+    /// Builds one style sheet per main master, and notes which master each is for.
+    /// </summary>
+    /// <remarks>
+    /// A title master states another master's slide id and carries no styles of its own, so it
+    /// is resolved in a second pass — the first cannot, because the list may write a title
+    /// master before the main master it points at.
+    /// </remarks>
+    private void ReadMasterStyles(DffRecordHeader document, List<SlideEntry> masters)
+    {
+        DffRecordHeader? environment = _stream.FirstChild(document, PptRecordTypes.Environment);
+        Dictionary<uint, uint> derived = [];
+
+        foreach (SlideEntry entry in masters)
+        {
+            if (_persist.Resolve(entry.PersistId) is not { } offset) continue;
+            if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) continue;
+
+            // A notes master is in this list too on some files, as a Notes container. It has no
+            // TxMasterStyleAtom, so there is nothing here to read from it.
+            if (header.Type != PptRecordTypes.MainMaster) continue;
+
+            uint parent = MasterIdOf(header) ?? 0;
+            if (parent != 0)
+            {
+                derived[entry.SlideId] = parent;
+                continue;
+            }
+
+            PptStyleSheet sheet = PptStyleSheet.Read(_stream, header, environment);
+            _stylesByMaster[entry.SlideId] = sheet;
+            _defaultStyles = sheet;
+        }
+
+        foreach ((uint child, uint parent) in derived)
+        {
+            if (_stylesByMaster.TryGetValue(parent, out PptStyleSheet? sheet))
+            {
+                _stylesByMaster[child] = sheet;
+            }
+            else if (_defaultStyles is { } fallback)
+            {
+                _stylesByMaster[child] = fallback;
+            }
+        }
+    }
+
+    /// <summary>
+    /// The slide id of the master a page names, or null when the page has no
+    /// <c>SlideAtom</c>.
+    /// </summary>
+    /// <remarks>
+    /// The field is a <em>slide</em> id, not a persist id — masters number themselves from
+    /// <c>0x80000000</c> — so it is matched against the master list's persist atoms rather than
+    /// resolved through the persist directory (<c>svdfppt.cxx:2520</c>). It sits behind a
+    /// four-byte layout geometry and the eight placeholder ids of that layout.
+    /// </remarks>
+    private uint? MasterIdOf(DffRecordHeader page)
+    {
+        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return null;
+
+        ReadOnlySpan<byte> content = _stream.Content(atom);
+        return content.Length >= 16 ? DffRecordBuffer.ReadUInt32(content[12..]) : null;
+    }
+
+    /// <summary>The style sheet a page resolves its unstated formatting against.</summary>
+    private PptStyleSheet? StylesFor(DffRecordHeader page)
+        => MasterIdOf(page) is { } master
+           && _stylesByMaster.TryGetValue(master, out PptStyleSheet? sheet)
+            ? sheet
+            : _defaultStyles;
 
     /// <summary>Reads one notes page, or null when it holds no text.</summary>
     /// <remarks>
@@ -179,7 +271,7 @@ internal sealed class PptContentBuilder
         if (Resolve(entry, PptRecordTypes.Notes) is not { } container) return null;
 
         ContentSection notes = new() { Kind = SectionKind.SlideNotes, Index = index };
-        ReadDrawing(container, entry, notes);
+        ReadDrawing(container, entry, notes, _defaultStyles);
 
         return notes.GetText().Trim().Length > 0 ? notes : null;
     }
@@ -227,7 +319,8 @@ internal sealed class PptContentBuilder
         => content.Length >= 12 && (DffRecordBuffer.ReadUInt16(content[10..]) & 0x0004) != 0;
 
     /// <summary>Reads a page's Escher drawing, adding each shape's text in document order.</summary>
-    private void ReadDrawing(DffRecordHeader page, SlideEntry entry, ContentSection target)
+    private void ReadDrawing(
+        DffRecordHeader page, SlideEntry entry, ContentSection target, PptStyleSheet? styles)
     {
         DffRecordHeader? drawing = _stream.FirstChild(page, PptRecordTypes.Drawing);
         if (drawing is not { } ppDrawing) return;
@@ -237,24 +330,25 @@ internal sealed class PptContentBuilder
 
         foreach (EscherShape shape in _escher.ReadDrawing(drawingContainer))
         {
-            AddShape(shape, entry, target);
+            AddShape(shape, entry, target, styles);
         }
     }
 
     /// <summary>Adds one shape's text, then its children's, keeping document order.</summary>
-    private void AddShape(EscherShape shape, SlideEntry entry, ContentSection target)
+    private void AddShape(
+        EscherShape shape, SlideEntry entry, ContentSection target, PptStyleSheet? styles)
     {
         // The background shape is a fill, not content; the deleted flag marks a record left
         // behind by an undo. Neither belongs in extracted text.
         if (!shape.IsBackground && !shape.IsDeleted && ReadShapeText(shape, entry) is { } run)
         {
-            foreach (ContentParagraph paragraph in PptTextReader.ToParagraphs(run))
+            foreach (ContentParagraph paragraph in PptTextReader.ToParagraphs(run, styles))
             {
                 target.Children.Add(paragraph);
             }
         }
 
-        foreach (EscherShape child in shape.Children) AddShape(child, entry, target);
+        foreach (EscherShape child in shape.Children) AddShape(child, entry, target, styles);
     }
 
     /// <summary>
