@@ -230,7 +230,7 @@ where LibreOffice breaks them, in all four formats, which is what made every pag
 comparison after it meaningful. It was worth as much as expected: nearly every bug found since
 was found because a page comparison put a word a measurable distance from where it belonged.
 
-## Phase 2.5 — Structured text output (Markdown)
+## Phase 2.5 — Structured text output (XHTML, then Markdown)
 
 The step between "what does this document say" and "what does it look like", and it is deliberately
 placed here rather than under rendering: **it needs the content tree and nothing else.** No fonts, no
@@ -243,16 +243,34 @@ It is also what most callers actually want. A retrieval or summarisation pipelin
 lost the heading hierarchy that says what a passage is *about* and the table structure that says which
 number belongs to which column; fed a rendered PDF it has to get it back by inference.
 
-- [ ] A Markdown writer over `ContentNode`, serving all three families through the one tree — which is
-      the payoff of having built one tree for all three in the first place.
+**Two stages, and the order is the point.** A semantic **XHTML** writer over `ContentNode` first, then
+an **XHTML → Markdown** transformation on top of it. Going straight to Markdown is the obvious shape and
+is worse for one concrete reason: LibreOffice exports XHTML for all three families, so stage one can be
+compared against the reference **node for node** — every heading level, every list nesting, every cell's
+row and column — where a direct Markdown writer could only be compared with XHTML at one remove. Stage
+two is then a pure tree transformation with no document parsing in it, testable in complete isolation
+from any office format.
+
+It also puts the lossy step last. Everything Markdown cannot express — row and column spans, nested
+tables — is still present and correct in the XHTML, so only the final hop has to decide what to drop.
+
+- [ ] Stage one: a **semantic** XHTML writer serving all three families through the one tree — which is
+      the payoff of having built a single tree for all three in the first place.
+      **LibreOffice's own XHTML export is an oracle, not a target.** Its output is presentation-oriented,
+      full of inline CSS and `<span>` wrappers; reproducing that would be neither achievable nor useful.
+      Emit `h1`–`h6`, `ul`/`ol`/`li`, `table`/`tr`/`td` with `colspan`/`rowspan`, `em`/`strong`,
+      `a[href]`, plus what only Paperless extracts — slides, speaker notes, sheets, comments, notes — and
+      record every deliberate difference the way the rest of this tree records them.
+- [ ] Stage two: **XHTML → Markdown**, a pure transformation with no dependency on any reader.
 - [ ] **Decide the flavour and record it.** CommonMark has no tables at all, so this is GitHub-Flavored
       Markdown in practice; say so once rather than per feature.
 - [ ] **Escaping, which is the thing that will silently corrupt output.** A document containing a
       literal `*`, `_`, `|` or backtick is ordinary; emitted unescaped it turns neighbouring text into
       emphasis or splits a table row. This needs to be right before anything else is worth checking.
-- [ ] **Tables that Markdown cannot express.** GFM tables have no row or column spans and no nesting,
-      and the corpus is full of both. The choice is an HTML fallback for those tables or a documented
-      flattening, and it should be a stated decision with the loss named, not an accident.
+- [ ] **Tables that Markdown cannot express**, which is now a stage-two question only: GFM tables have
+      no row or column spans and no nesting, and the corpus is full of both, but the XHTML above holds
+      them correctly. The choice is an HTML fallback for those tables or a documented flattening — a
+      stated decision with the loss named, not an accident.
 - [ ] **Per family, the shape questions.** A slide is naturally a heading plus its content, with speaker
       notes as something set apart. A sheet is naturally a table — but a used range of ten thousand rows
       is not a useful one, so there has to be a bound and a way to say it was applied. A document's
@@ -260,7 +278,7 @@ number belongs to which column; fed a rendered PDF it has to get it back by infe
       need a decision rather than silent omission.
 - [ ] Images: the tree records a graphic without decoding it, so there is no target for `![](…)` yet.
       Decide between a reference placeholder and omission, and revisit when raster decode lands.
-- [ ] `paperless extract --format markdown`, alongside the existing text and JSON output.
+- [ ] `paperless extract --format xhtml` and `--format markdown`, alongside the existing text and JSON.
 
 **How this gets verified.** LibreOffice 24.2 has **no Markdown export filter** — `--convert-to md`
 fails outright with "no export filter found" — and the first instinct is therefore that this cannot be
