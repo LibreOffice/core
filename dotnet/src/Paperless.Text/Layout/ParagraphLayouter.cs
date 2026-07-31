@@ -24,13 +24,19 @@ namespace Paperless.Text.Layout;
 /// it, and the last line on a page is allowed to hang this much past the bottom. Recomputing it there
 /// would mean knowing the spacing rule, which is the paragraph's business rather than the page's.
 /// </param>
+/// <param name="SpaceAdd">
+/// How much is added to every blank on this line to justify it, or zero when it is not justified.
+/// Justification stretches a line rather than shifting it, so unlike the other alignments it cannot be
+/// folded into <paramref name="Left"/> — it changes where each word after the first blank sits.
+/// </param>
 public readonly record struct LineBox(
     TextLine Line,
     Length Left,
     Length Top,
     Length Height,
     Length Baseline,
-    Length SpaceAbove)
+    Length SpaceAbove,
+    Length SpaceAdd = default)
 {
     /// <summary>The same line with the space above its text removed, box and all.</summary>
     /// <remarks>
@@ -186,7 +192,10 @@ public sealed class ParagraphLayouter
                 top,
                 height,
                 baseline,
-                spaceAbove));
+                spaceAbove,
+                Justification(
+                    paragraph.Alignment, lines[i], text, available,
+                    isLast: i == lines.Count - 1)));
 
             top += height;
         }
@@ -259,7 +268,10 @@ public sealed class ParagraphLayouter
                 top,
                 height,
                 baseline,
-                spaceAbove));
+                spaceAbove,
+                Justification(
+                    paragraph.Alignment, lines[i], measured.Text, available,
+                    isLast: i == lines.Count - 1)));
 
             top += height;
         }
@@ -354,6 +366,52 @@ public sealed class ParagraphLayouter
     /// paragraph's <em>last</em> line is start-aligned, which is the one place the two justification
     /// modes differ.
     /// </remarks>
+    /// <summary>
+    /// How much a justified line adds to each of its blanks.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The line's slack divided over its blanks, which is <c>SwTextAdjuster::CalcNewBlock</c>
+    /// (<c>sw/source/core/text/itradj.cxx</c>): <c>nSpaceAdd = nGluePortionWidth / nGluePortion</c>, where
+    /// the glue width is the slack and the glue count is the number of blanks. Not over the characters —
+    /// that is what <c>IsOneBlock</c> does for a line with no blanks at all, and it looks quite different.
+    /// </para>
+    /// <para>
+    /// In hundredths of a twip, truncated, because Writer computes it in
+    /// <c>SPACING_PRECISION_FACTOR</c> units and then divides by that factor as a <em>double</em> when it
+    /// builds the kern array. Rounding to whole twips per space instead would drift by up to half a twip
+    /// per blank, which on a ten-blank line is a quarter of a point at the right margin.
+    /// </para>
+    /// <para>
+    /// A line with no blanks is left alone rather than stretched by letter spacing. Writer does stretch it
+    /// — <c>IsOneBlock</c> — but only when the paragraph asks for distributed alignment, and a single
+    /// unbroken word filling a line is rare enough that leaving it short is the better error.
+    /// </para>
+    /// </remarks>
+    private static Length Justification(
+        TextAlignment alignment, TextLine line, string text, Length available, bool isLast)
+    {
+        // The last line of a justified paragraph is not stretched; under distributed alignment it is,
+        // which is the only difference between the two modes.
+        bool justified = alignment == TextAlignment.Distribute
+                         || (alignment == TextAlignment.Justify && !isLast);
+        if (!justified) return Length.Zero;
+
+        Length slack = available - line.Width;
+        if (slack <= Length.Zero) return Length.Zero;
+
+        int blanks = 0;
+        for (int at = line.Start; at < Math.Min(line.VisibleEnd, text.Length); at++)
+        {
+            if (text[at] == ' ') blanks++;
+        }
+
+        if (blanks == 0) return Length.Zero;
+
+        long hundredths = slack.Twips * 100 / blanks;
+        return Length.FromEmu(hundredths * Length.EmuPerTwip / 100);
+    }
+
     private static Length AlignmentOffset(
         TextAlignment alignment, TextLine line, Length available, bool isLast)
     {

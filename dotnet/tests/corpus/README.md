@@ -97,3 +97,17 @@ It is kept rather than trimmed, because stripping it would mean rewriting a prop
 hand and producing a file no real application would emit. It also earns its size: at ~865
 sectors it is the only corpus file that exercises long FAT chains, where every other file's
 streams fit in a handful of sectors.
+
+## Writing a flat-XML corpus document by hand
+
+Two traps, both found the hard way:
+
+- **Declare every style's properties in full.** LibreOffice does not apply
+  `style:parent-style-name` to a hand-written `.fodt`: a style that inherits its font from
+  another silently renders in the application default instead — Liberation Serif 12 pt
+  rather than the Carlito 11 pt the parent asked for. A comparison against such a document
+  is measuring the wrong font, and it looks like a layout bug.
+- **Avoid `fo:text-align-last="justify"` for a line you mean to test.** It selects Writer's
+  one-block path, which distributes the slack over the *letters* as well as the blanks, so
+  the words themselves come out wider. Use a manual `<text:line-break/>` when a justified
+  line's words need to be fixed.

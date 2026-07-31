@@ -78,6 +78,39 @@ public sealed class LineBreaker : ILineBreaker
         return breaks;
     }
 
+    /// <inheritdoc/>
+    public IReadOnlyList<int> FindMandatoryBreaks(ReadOnlySpan<char> text, string? language = null)
+    {
+        List<int> breaks = [];
+        if (text.Length == 0) return breaks;
+
+        Analysis analysis = Analyse(text);
+
+        // LB4 and LB5: break after BK, and after CR, LF or NL — with CR LF counting as one break, which
+        // is why the boundary after a CR followed by an LF is skipped.
+        for (int i = 0; i < analysis.Count; i++)
+        {
+            LineBreakClass here = analysis.Resolved[i];
+            if (here is not (LineBreakClass.BK or LineBreakClass.CR
+                             or LineBreakClass.LF or LineBreakClass.NL))
+            {
+                continue;
+            }
+
+            if (here == LineBreakClass.CR
+                && i + 1 < analysis.Count
+                && analysis.Resolved[i + 1] == LineBreakClass.LF)
+            {
+                continue;
+            }
+
+            int after = i + 1 < analysis.Count ? analysis.Offsets[i + 1] : text.Length;
+            if (after < text.Length) breaks.Add(after);
+        }
+
+        return breaks;
+    }
+
     /// <summary>
     /// The classes of a text's characters, with the resolving rules already applied.
     /// </summary>

@@ -367,6 +367,19 @@ is read and verified, so what remains is the filling of pages rather than the me
       them by vertical position, which puts a 22 pt word on an 11 pt line into a line of its own and
       scrambles the reading order of precisely the documents worth checking.
 
+- [x] **Justification**, which stretches a line rather than shifting it: the slack divided over the line's
+      blanks, in hundredths of a twip and truncated, exactly as `SwTextAdjuster::CalcNewBlock` computes
+      `nGluePortionWidth / nGluePortion`. It lands on each blank's own advance, where Writer's kern array
+      puts it, so a run stays one draw call and its glyph positions stay self-consistent.
+- [x] **Mandatory breaks**, which the line filler previously ignored — it treated every UAX #14 opportunity
+      as optional, so a manual line break in a line that still fitted did nothing at all and two of the
+      document's lines shared one of the page's. `ILineBreaker` now answers which breaks are required, and
+      a required break also has no width: the separator is trimmed from the line's visible text, or the
+      line would stretch by one glyph too little and draw a `.notdef` box at its end.
+- [ ] Tab stops. `ParagraphFormat` carries the stops and the default interval, and a tab is measured as
+      whatever the font gives U+0009 — nothing advances to the next stop yet, so a tabulated line is short
+      by however far the tab should have gone.
+
 ## Known deviations, measured
 
 - Two of LibreOffice's numbers are reproduced by construction rather than derived, and both are recorded
@@ -374,6 +387,17 @@ is read and verified, so what remains is the filling of pages rather than the me
   - Its PDF export adds **two twips** to every pen position horizontally and nothing vertically. With left
     margins of 1 cm, 2.5 cm and 5 cm it lays the body out at 567, 1417 and 2835 twips — its own RTF export
     says so — and its PDF puts the first pen at 28.45, 70.95 and 141.85 pt. Additive, not a scale.
+  - It breaks a **justified** paragraph's lines differently from the same text left ragged. Measured on a
+    corpus document holding both: a line that takes twenty-one words ragged takes nineteen justified,
+    though the ragged line ends well inside the margin. The greedy break the two agree on everywhere else
+    is evidently not what 24.2 does for justified text, and the C++ tree here is a newer version than the
+    installed binary — its word-spacing and shrinking machinery does not describe what 24.2.7 did. So the
+    justification comparison uses lines fixed by a manual break, where the words cannot move, and the
+    break rule itself is left as it is: agreeing with Writer on ragged text and on where justified text
+    *would* break by the same rule.
+  - It measures a line about **0.15%** wider than HarfBuzz does — twelve twips on a 395 pt line. Invisible
+    to a direct comparison, because `pdftotext`'s own quantisation is larger, and visible in justification
+    only because the slack is divided over the blanks: 0.7 twips of stretch each.
   - Its font ascents and line heights differ from scaling the design metrics by **up to one twip**, because
     VCL rounds them through the reference device. For 11 pt Carlito the design metrics give an ascent of
     209.47 twips and it uses 210; at 9 pt they give 171.39 and it uses 171; at 18 pt the line height is

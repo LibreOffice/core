@@ -112,10 +112,14 @@ public static class PageDrawing
                 text,
                 run.EmSize,
                 run.Font ?? Reference(run.Face),
-                new DocPoint(pen, page.BodyArea.Y + line.Baseline));
+                new DocPoint(pen, page.BodyArea.Y + line.Baseline),
+                line.Box.SpaceAdd);
 
             runs.Add((glyphRun, run.EffectiveColour));
-            pen += shaped.Width(run.EmSize);
+
+            // The pen carries the justification with it, or the second run on a stretched line would
+            // start where the first would have ended unjustified and overlap the words before it.
+            pen += Extent(glyphRun);
         }
 
         return runs;
@@ -149,20 +153,34 @@ public static class PageDrawing
             paragraph.Font ?? Reference(paragraph.Face),
             new DocPoint(
                 page.BodyArea.X + line.Box.Left,
-                page.BodyArea.Y + line.Baseline));
+                page.BodyArea.Y + line.Baseline),
+            line.Box.SpaceAdd);
     }
 
     /// <summary>
     /// Builds a glyph run from a shaped stretch of text at an origin.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Each glyph's offset is relative to the run's origin, and the pen accumulates across them — which is
     /// what makes a run one draw call rather than one per glyph. The vertical offset is negated because a
     /// shaper's is up-positive and document space is down-positive; getting that backwards puts every
     /// accent below the letter it belongs to.
+    /// </para>
+    /// <para>
+    /// Justification lands here, on the advance of each blank, which is where Writer puts it too: its kern
+    /// array adds the space to the blank's own entry (<c>SwFntObj::DrawText</c>) rather than shifting the
+    /// words. That keeps a run one draw call and keeps the glyph positions self-consistent, so a backend
+    /// that re-measured would still agree with the line's extent.
+    /// </para>
     /// </remarks>
     private static GlyphRun Build(
-        ShapedText shaped, string text, Length emSize, FontReference font, DocPoint origin)
+        ShapedText shaped,
+        string text,
+        Length emSize,
+        FontReference font,
+        DocPoint origin,
+        Length spaceAdd)
     {
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
@@ -171,6 +189,17 @@ public static class PageDrawing
         foreach (ShapedGlyph glyph in shaped.Glyphs)
         {
             Length advance = shaped.Scale(glyph.Advance, emSize);
+
+            // A blank on a justified line is wider than the font says. Tested on the character the
+            // cluster names rather than on the glyph id, because a glyph id means nothing without the
+            // face and the cluster is what the shaper guarantees.
+            if (spaceAdd != Length.Zero
+                && glyph.Cluster >= 0
+                && glyph.Cluster < text.Length
+                && text[glyph.Cluster] == ' ')
+            {
+                advance += spaceAdd;
+            }
 
             glyphs.Add(new PositionedGlyph(
                 glyph.GlyphId,
@@ -192,6 +221,14 @@ public static class PageDrawing
             Text = text,
             ClusterMap = clusters,
         };
+    }
+
+    /// <summary>How far a run's pen travels: the sum of its advances, justification included.</summary>
+    private static Length Extent(GlyphRun run)
+    {
+        Length total = Length.Zero;
+        foreach (PositionedGlyph glyph in run.Glyphs) total += glyph.Advance;
+        return total;
     }
 
     /// <summary>

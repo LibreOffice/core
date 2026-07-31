@@ -590,8 +590,15 @@ public sealed partial class RtfDocumentReader
 
         if (state is not null)
         {
+            // The layout text differs from the extracted text in one character: a manual line break, which
+            // this reader appends as a newline because that is what an extracted paragraph should hold,
+            // becomes U+2028 for layout — the separator the other three readers use, and the one UAX #14
+            // gives a mandatory break without also reading as the end of a paragraph.
             RecordLayoutParagraph(
-                flow, state, string.Concat(flow.PendingRuns.Select(run => run.Text)));
+                flow,
+                state,
+                string.Concat(flow.PendingRuns.Select(run => run.Text))
+                    .Replace('\n', LayoutLineSeparator));
         }
 
         // Consecutive rows form a table only by being adjacent, so the first paragraph that is not
@@ -600,6 +607,9 @@ public sealed partial class RtfDocumentReader
 
         ResetParagraphState(flow);
     }
+
+    /// <summary>U+2028, the line separator a manual line break becomes for layout.</summary>
+    private const char LayoutLineSeparator = '\u2028';
 
     /// <summary>Starts a fresh colour table, discarding anything a previous one declared.</summary>
     /// <remarks>

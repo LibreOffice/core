@@ -228,6 +228,7 @@ public sealed class LineFiller
         }
 
         IReadOnlyList<int> opportunities = _breaker.FindBreakOpportunities(text, language);
+        HashSet<int> mandatory = [.. _breaker.FindMandatoryBreaks(text, language)];
 
         int lineStart = 0;
         int nextOpportunity = 0;
@@ -261,6 +262,11 @@ public sealed class LineFiller
                 chosenVisibleEnd = visibleEnd;
                 probe++;
 
+                // A required break ends the line whether or not the text would have fitted: a manual
+                // line break is not a suggestion, and running past one would put two of the document's
+                // lines on one of the page's.
+                if (mandatory.Contains(end)) break;
+
                 // The first opportunity is taken whatever it measures: a word too long for the line
                 // gets the line to itself rather than an empty line followed by the same problem.
                 if (width > limit) break;
@@ -286,17 +292,35 @@ public sealed class LineFiller
     }
 
     /// <summary>
-    /// Where a line's visible text ends: past its trailing spaces.
+    /// Where a line's visible text ends: past its trailing spaces and its terminating break.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Only the space characters that can hang past a margin. A tab is not one of them — it advances to
     /// a stop and so has a width the line has to hold — and neither is a non-breaking space, whose
     /// whole purpose is to be part of the text around it.
+    /// </para>
+    /// <para>
+    /// A mandatory break ends the line and takes no room on it, which is Writer's break portion: zero
+    /// width, and no glyph. Leaving it in would put a <c>.notdef</c> box at the end of every line that
+    /// ends in a manual break — and, worse, would count its advance towards the line's width, so a
+    /// justified line would stretch by one glyph too little.
+    /// </para>
     /// </remarks>
     private static int TrimTrailingSpaces(string text, int start, int end)
     {
         int at = Math.Min(end, text.Length);
-        while (at > start && text[at - 1] == ' ') at--;
+        while (at > start && (text[at - 1] == ' ' || EndsLine(text[at - 1]))) at--;
         return at;
     }
+
+    /// <summary>
+    /// True for a character UAX #14 gives a mandatory break: one that ends a line and takes no room on it.
+    /// </summary>
+    /// <remarks>
+    /// All of them, not just the line separator, because the readers do not agree on which to use — ODF's
+    /// and OOXML's manual breaks arrive as U+2028 and RTF's as a newline, and both mean the same thing.
+    /// </remarks>
+    private static bool EndsLine(char character)
+        => character is '\u2028' or '\u2029' or '\n' or '\r' or '\u000B' or '\u000C' or '\u0085';
 }
