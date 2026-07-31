@@ -129,8 +129,26 @@ public sealed partial class Ww8DocumentReader
     public List<Ww8LayoutBlock> ReadLayoutBlocks()
     {
         _layoutNoteNumber = 0;
+        _layoutEndnoteNumber = 0;
         return ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
     }
+
+    /// <summary>
+    /// The next number of a note's class, formatted the way LibreOffice formats that class.
+    /// </summary>
+    /// <remarks>
+    /// Two sequences, not one, and two formats: footnotes count 1, 2, 3 and endnotes i, ii, iii. Both are
+    /// LibreOffice's defaults; the DOP's <c>nFtn</c>/<c>nEdn</c> start values and <c>rncFtn</c>/<c>rncEdn</c>
+    /// restart rules are not read yet, so a document overriding either is numbered by these instead.
+    /// </remarks>
+    /// <param name="isEndnote">True for an endnote.</param>
+    private string CitationOf(bool isEndnote)
+        => isEndnote
+            ? Core.Numbering.OutlineNumbers.Roman(++_layoutEndnoteNumber, upperCase: false)
+            : Core.Numbering.OutlineNumbers.Digits(++_layoutNoteNumber);
+
+    /// <summary>How many endnotes the layout walk has passed.</summary>
+    private int _layoutEndnoteNumber;
 
     /// <summary>How many notes the layout walk has passed, which is what numbers the next one.</summary>
     /// <remarks>
@@ -359,16 +377,23 @@ public sealed partial class Ww8DocumentReader
                     // Word computes it and so does this, which is also why the same character serves both
                     // places — the mark at the head of a note repeats the citing number rather than taking a
                     // fresh one, so only a reference in the body advances the counter.
+                    // Which kind of note this is comes from the reference tables rather than from the text:
+                    // the character is the same U+0002 for both, and the two kinds are numbered by separate
+                    // sequences in different formats. So the lookup happens *before* the number is formatted.
+                    (Ww8Range Text, bool IsEndnote) note = default;
+                    bool found = noteCitation is null
+                        && NoteTexts.TryGetValue(position, out note);
+
                     string citation = noteCitation is { } repeated
                         ? repeated
-                        : Core.Numbering.OutlineNumbers.Digits(++_layoutNoteNumber);
+                        : CitationOf(found && note.IsEndnote);
 
                     // Emitted at the reference's own position, so that the CHPX covering it governs the run.
                     // Word writes the mark with a character style carrying sprmCIss, which is what makes it
                     // superscript — the same arrangement the other three formats have, reached differently.
                     foreach (char digit in citation) Emit(current, positions, digit, position);
 
-                    if (noteCitation is null && NoteTexts.TryGetValue(position, out var note))
+                    if (found)
                     {
                         List<Ww8LayoutBlock> read = ReadNoteBody(note.Text, citation);
                         if (read.Count > 0)

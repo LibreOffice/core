@@ -22,7 +22,9 @@ public sealed class WordProcessingPages : IPageSequence
     {
         ArgumentNullException.ThrowIfNull(pages);
         Blocks = blocks ?? [];
-        _pages = [.. pages.Select(page => new PageView(page, Blocks))];
+        // A page may carry a block list of its own — an endnote page does — and its lines index into that
+        // one rather than into the body's.
+        _pages = [.. pages.Select(page => new PageView(page, page.Blocks ?? Blocks))];
     }
 
     /// <inheritdoc/>

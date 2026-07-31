@@ -115,12 +115,52 @@ public sealed partial class RtfDocumentReader
     private int _footnoteNumber;
     private int _footnoteStart = 1;
 
+    /// <summary>
+    /// True when the note group about to follow is an endnote's, decided by peeking at the bytes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A peek rather than a token, and LibreOffice's own importer does the same thing for the same reason
+    /// (<c>rtfdispatchdestination.cxx</c>: "Check if this is an endnote", reading seven bytes ahead of the
+    /// stream). RTF marks an endnote with a <c>\ftnalt</c> just inside the <c>{\*\footnote …}</c> group, and
+    /// that group comes <em>after</em> the <c>\chftn</c> that cites it — but the citation has to be numbered
+    /// and appended at the <c>\chftn</c>, because the two classes count in separate sequences and are
+    /// formatted differently. A reader working forwards one token at a time cannot know yet.
+    /// </para>
+    /// <para>
+    /// The window is short and the match specific: between the mark and the flag lie only <c>{</c>,
+    /// <c>\*</c>, <c>\footnote</c> and whitespace, so anything further away belongs to another note.
+    /// </para>
+    /// </remarks>
+    private bool NoteAheadIsEndnote()
+    {
+        if (_tokeniser is null) return false;
+
+        int at = _tokeniser.Position;
+        int end = Math.Min(_data.Length, at + NotePeekBytes);
+
+        return end > at && _data.AsSpan(at, end - at).IndexOf("\\ftnalt"u8) >= 0;
+    }
+
+    /// <summary>How far ahead of a note's mark its class flag is looked for, in bytes.</summary>
+    /// <remarks>
+    /// Enough for <c>{\*\footnote\ftnalt</c> with whitespace, and short enough that the next note's flag
+    /// cannot be mistaken for this one's — a note body is never shorter than this.
+    /// </remarks>
+    private const int NotePeekBytes = 32;
+
+    /// <summary>The tokeniser of the read in progress, for the one place a token is not enough.</summary>
+    private RtfTokeniser? _tokeniser;
+
     /// <summary>Where the citation just appended sits, for the note group that follows it.</summary>
     /// <remarks>
     /// Carried on the reader rather than the flow because it crosses between them: the offset belongs to the
     /// citing paragraph, and the group that reads it has already pushed a flow of its own.
     /// </remarks>
     private int _pendingNoteOffset;
+
+    /// <summary>The citation the mark just appended carries, for the note group that follows it.</summary>
+    private string? _pendingNoteCitation;
     private string? _pendingAnnotationAuthor;
     private bool _reportedDepthLimit;
     private bool _reportedEncoding;
@@ -183,6 +223,7 @@ public sealed partial class RtfDocumentReader
         _flows.Add(new Flow(body));
 
         RtfTokeniser tokeniser = new(_data);
+        _tokeniser = tokeniser;
         List<GroupState> stack = [new GroupState()];
         bool nextIsIgnorableDestination = false;
 
@@ -345,7 +386,14 @@ public sealed partial class RtfDocumentReader
             case "footnote":
                 // The reference mark was written just before this group, so the number it took is
                 // the one this note carries — and the offset it left behind is where the note is anchored.
-                BeginNoteFlow(state, CurrentFootnoteCitation(), _pendingNoteOffset);
+                //
+                // Whether it is an endnote is decided by peeking, which is how LibreOffice's own importer
+                // does it (`rtfdispatchdestination.cxx`, "Check if this is an endnote"): RTF says so with a
+                // `\ftnalt` immediately inside the group, and the *citation* is needed now — the two classes
+                // are numbered by separate sequences in different formats, and the anchor's number is
+                // appended before the tokeniser could have reached the flag.
+                BeginNoteFlow(
+                    state, _pendingNoteCitation ?? CurrentFootnoteCitation(), _pendingNoteOffset);
                 return;
             case "annotation":
                 BeginFlow(state, SectionKind.Comment, _pendingAnnotationAuthor);
@@ -705,11 +753,13 @@ public sealed partial class RtfDocumentReader
                 // Where the note is anchored: the offset the citation starts at, taken before it is
                 // appended. The {\*\footnote} group that needs it comes immediately after this word.
                 _pendingNoteOffset = CurrentFlow.LayoutLength;
-                _footnoteNumber++;
-                AppendText(state, CurrentFootnoteCitation());
+                _pendingNoteCitation = NextNoteCitation(NoteAheadIsEndnote());
+                AppendText(state, _pendingNoteCitation);
                 return;
             case "ftnalt":
-                // An endnote, which RTF writes as a footnote whose first control word says otherwise.
+                // An endnote, which RTF writes as a footnote whose first control word says otherwise. The
+                // class was already settled by the peek at `\footnote`; this confirms it for a producer
+                // that writes the flag somewhere the peek could not see.
                 CurrentFlow.IsEndnote = true;
                 return;
             case "chatn" or "chftnsep" or "chftnsepc":
@@ -931,6 +981,31 @@ public sealed partial class RtfDocumentReader
 
     private string CurrentFootnoteCitation()
         => OutlineNumbers.Digits(_footnoteStart + Math.Max(0, _footnoteNumber - 1));
+
+    /// <summary>
+    /// The number the next note of a class is cited by, formatted the way LibreOffice formats that class.
+    /// </summary>
+    /// <remarks>
+    /// Two sequences and two formats: footnotes count 1, 2, 3 and endnotes i, ii, iii. RTF does state both
+    /// outright — <c>\ftnnar</c> and <c>\aftnnrlc</c> are in every file LibreOffice writes — but these are
+    /// the defaults those words name, and reading the words themselves is still to do.
+    /// </remarks>
+    /// <param name="isEndnote">True for an endnote.</param>
+    private string NextNoteCitation(bool isEndnote)
+    {
+        if (!isEndnote)
+        {
+            _footnoteNumber++;
+            return CurrentFootnoteCitation();
+        }
+
+        _endnoteNumber++;
+        return OutlineNumbers.Roman(
+            _endnoteStart + Math.Max(0, _endnoteNumber - 1), upperCase: false);
+    }
+
+    private int _endnoteNumber;
+    private int _endnoteStart = 1;
 
     private DocumentMetadata BuildMetadata()
     {

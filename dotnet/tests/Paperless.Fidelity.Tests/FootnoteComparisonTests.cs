@@ -240,44 +240,13 @@ public sealed class FootnoteComparisonTests : IDisposable
         return 0;
     }
 
-    /// <summary>
-    /// How far two words' verticals may differ and still be one line, in points.
-    /// </summary>
-    /// <remarks>
-    /// Six points, which is more than a superscript's rise and less than a line height — and that gap is the
-    /// whole reason this exists. A citation is raised about two points above its line, so sorting on the
-    /// exact vertical puts it <em>before</em> every word of the line it belongs to, and the comparison then
-    /// fails on word order for a document laid out perfectly. Both sides are grouped into lines first
-    /// instead, and only then ordered across the page.
-    /// </remarks>
-    private const double SameLine = 6;
+    /// <summary>How far two portions' verticals may differ and still be one line, in points.</summary>
+    /// <remarks><see cref="ReadingOrder.SameLinePoints"/>, for the reason given there.</remarks>
+    private const double SameLine = ReadingOrder.SameLinePoints;
 
-    private static List<PdfWord> InReadingOrder(List<PdfWord> words)
-        => InLines(words, word => word.Top, word => word.Left);
+    private static List<PdfWord> InReadingOrder(List<PdfWord> words) => ReadingOrder.Of(words);
 
-    private static List<DrawnWord> InDrawnOrder(List<DrawnWord> words)
-        => InLines(words, word => word.Baseline, word => word.Left);
-
-    /// <summary>Groups words into lines by their vertical, then orders the lines down the page.</summary>
-    private static List<T> InLines<T>(
-        List<T> words, Func<T, double> vertical, Func<T, double> horizontal)
-    {
-        List<T> sorted = [.. words.OrderBy(vertical)];
-        List<List<T>> lines = [];
-
-        foreach (T word in sorted)
-        {
-            if (lines.Count > 0 && vertical(word) - vertical(lines[^1][0]) <= SameLine)
-            {
-                lines[^1].Add(word);
-                continue;
-            }
-
-            lines.Add([word]);
-        }
-
-        return [.. lines.SelectMany(line => line.OrderBy(horizontal))];
-    }
+    private static List<DrawnWord> InDrawnOrder(List<DrawnWord> words) => ReadingOrder.Of(words);
 
     private static List<List<DrawnWord>> Drawn(string path)
         => [.. Rendered(path).Select(DrawnWords.On)];

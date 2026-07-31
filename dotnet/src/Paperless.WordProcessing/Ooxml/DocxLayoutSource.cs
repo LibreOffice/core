@@ -213,13 +213,14 @@ public sealed partial class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new(_noteNumber);
+        RunWalker walker = new(_footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
-        // Notes are numbered across the document, so the counter advances by however many this paragraph
+        // Notes are numbered across the document, so the counters advance by however many this paragraph
         // referenced — and the bodies are read after the walk, since reading one recurses into this method
         // and would otherwise renumber from the middle of the paragraph that references it.
-        _noteNumber += walker.Notes.Count;
+        _footnoteNumber += walker.FootnotesSeen;
+        _endnoteNumber += walker.EndnotesSeen;
 
         return new PageParagraph
         {
@@ -238,8 +239,17 @@ public sealed partial class DocxLayoutSource
         };
     }
 
-    /// <summary>The number the next note is cited by, counted across the document.</summary>
-    private int _noteNumber = 1;
+    /// <summary>The number the next footnote is cited by, counted across the document.</summary>
+    private int _footnoteNumber = 1;
+
+    /// <summary>
+    /// The number the next endnote is cited by, counted separately from the footnotes.
+    /// </summary>
+    /// <remarks>
+    /// Its own counter because the two sequences are independent — a document with two footnotes and two
+    /// endnotes cites 1, 2, i and ii, not 1, 2, iii and iv — and because they are formatted differently.
+    /// </remarks>
+    private int _endnoteNumber = 1;
 
     /// <summary>
     /// Reads each referenced note's body from the document's notes part.
@@ -264,8 +274,7 @@ public sealed partial class DocxLayoutSource
 
             if (!part.TryGetValue(anchor.Id, out XElement? body)) continue;
 
-            string citation = anchor.Number.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            List<PageBlock> blocks = ReadNoteBody(body, citation);
+            List<PageBlock> blocks = ReadNoteBody(body, anchor.Citation);
             if (blocks.Count == 0) continue;
 
             notes.Add(new PageNote
@@ -394,8 +403,8 @@ public sealed partial class DocxLayoutSource
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
     /// <param name="Id">The <c>w:id</c> naming its body in the notes part.</param>
     /// <param name="IsEndnote">True for an endnote, whose body lives in a different part.</param>
-    /// <param name="Number">The number it is cited by, counted across the document.</param>
-    private readonly record struct NoteAnchor(int Offset, string? Id, bool IsEndnote, int Number);
+    /// <param name="Citation">The number it is cited by, counted rather than read, and already formatted.</param>
+    private readonly record struct NoteAnchor(int Offset, string? Id, bool IsEndnote, string Citation);
 
     /// <summary>
     /// Walks a paragraph, building the text as laid out and the ranges its runs divide it into.
@@ -421,11 +430,16 @@ public sealed partial class DocxLayoutSource
     private sealed class RunWalker
     {
         /// <summary>Creates a walker.</summary>
-        /// <param name="number">
-        /// The number the next note it meets is cited by. Passed in because notes are numbered across the
-        /// document rather than within a paragraph, so the counter belongs to the source.
+        /// <param name="footnote">
+        /// The number the next footnote it meets is cited by. Passed in because notes are numbered across the
+        /// document rather than within a paragraph, so the counters belong to the source.
         /// </param>
-        internal RunWalker(int number = 1) => _number = number;
+        /// <param name="endnote">The number the next endnote is cited by, counted separately.</param>
+        internal RunWalker(int footnote = 1, int endnote = 1)
+        {
+            _footnote = footnote;
+            _endnote = endnote;
+        }
 
         /// <summary>How deep a paragraph's element nesting is followed.</summary>
         /// <remarks>
@@ -437,8 +451,15 @@ public sealed partial class DocxLayoutSource
         private readonly StringBuilder _builder = new();
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
-        private int _number;
+        private int _footnote;
+        private int _endnote;
         private XElement? _runProperties;
+
+        /// <summary>How many footnotes this paragraph cited, which advances the source's counter.</summary>
+        internal int FootnotesSeen { get; private set; }
+
+        /// <summary>How many endnotes it cited.</summary>
+        internal int EndnotesSeen { get; private set; }
         private bool _inInstruction;
 
         /// <summary>The paragraph's text, as laid out.</summary>
@@ -499,20 +520,33 @@ public sealed partial class DocxLayoutSource
                         break;
 
                     case "footnoteReference" or "endnoteReference":
+                    {
                         // A note reference carries its citation, which Word draws in the sentence as a
                         // superscript and again at the head of the note. The style comes from the run this
                         // reference sits in, which is what carries w:vertAlign="superscript".
+                        bool isEndnote = Word.Is(child, "endnoteReference");
+                        string number = CitationOf(isEndnote, isEndnote ? _endnote : _footnote);
+
                         _notes.Add(new NoteAnchor(
-                            _builder.Length,
-                            Word.Attribute(child, "id"),
-                            Word.Is(child, "endnoteReference"),
-                            _number));
+                            _builder.Length, Word.Attribute(child, "id"), isEndnote, number));
 
                         _inCitation = true;
-                        Emit(_number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        Emit(number);
                         _inCitation = false;
-                        _number++;
+
+                        if (isEndnote)
+                        {
+                            _endnote++;
+                            EndnotesSeen++;
+                        }
+                        else
+                        {
+                            _footnote++;
+                            FootnotesSeen++;
+                        }
+
                         break;
+                    }
 
                     case "footnoteRef" or "endnoteRef":
                         // The note's own citation, at the place the file marks for it. Marked as a citation
@@ -588,6 +622,20 @@ public sealed partial class DocxLayoutSource
     /// what Word draws rather than what the file happens to state. Applied only when nothing has been said,
     /// so a run that does state a shift keeps it.
     /// </remarks>
+    /// <summary>
+    /// How a note of each class is cited, which is not the same for the two.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's defaults, and they differ: footnotes count 1, 2, 3 and endnotes i, ii, iii — measured on
+    /// a two-endnote document, whose citations render as "i" and "ii" both in the sentence and at the head of
+    /// the note. A section-level <c>w:footnotePr</c> or <c>w:endnotePr</c> can state a format and a start
+    /// value and is not read yet, so a document overriding either is numbered by these defaults instead.
+    /// </remarks>
+    private static string CitationOf(bool isEndnote, int number)
+        => isEndnote
+            ? Core.Numbering.OutlineNumbers.Roman(number, upperCase: false)
+            : Core.Numbering.OutlineNumbers.Digits(number);
+
     private static WordTextStyle AsCitation(WordTextStyle style)
         => style.Escapement.IsNone
             ? style with { Escapement = Layout.Escapement.Superscript }

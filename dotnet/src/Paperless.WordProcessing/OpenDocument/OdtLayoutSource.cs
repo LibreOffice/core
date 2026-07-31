@@ -286,13 +286,14 @@ public sealed partial class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new(styleName, _noteNumber);
+        RunWalker walker = new(styleName, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, prefix, prefixStyle);
 
-        // Notes are numbered across the document, so the counter advances by however many this paragraph
+        // Notes are numbered across the document, so the counters advance by however many this paragraph
         // cited — and the bodies are read after the walk, since reading one recurses into this method and
         // would otherwise renumber from the middle of the paragraph that cites it.
-        _noteNumber += walker.Notes.Count;
+        _footnoteNumber += walker.FootnotesSeen;
+        _endnoteNumber += walker.EndnotesSeen;
 
         return new PageParagraph
         {
@@ -311,8 +312,17 @@ public sealed partial class OdtLayoutSource
         };
     }
 
-    /// <summary>The number the next note is cited by, counted across the document.</summary>
-    private int _noteNumber = 1;
+    /// <summary>The number the next footnote is cited by, counted across the document.</summary>
+    private int _footnoteNumber = 1;
+
+    /// <summary>
+    /// The number the next endnote is cited by, counted separately from the footnotes.
+    /// </summary>
+    /// <remarks>
+    /// Its own counter because the two sequences are independent — a document with two footnotes and two
+    /// endnotes cites 1, 2, i and ii, not 1, 2, iii and iv — and because they are formatted differently.
+    /// </remarks>
+    private int _endnoteNumber = 1;
 
     /// <summary>
     /// Reads each anchored note's body.
@@ -340,16 +350,14 @@ public sealed partial class OdtLayoutSource
             XElement? body = anchor.Element.Element(XName.Get("note-body", OdfNamespaces.Text));
             if (body is null) continue;
 
-            string citation = anchor.Number.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            List<PageBlock> blocks = ReadNoteBody(body, citation);
+            List<PageBlock> blocks = ReadNoteBody(body, anchor.Citation);
             if (blocks.Count == 0) continue;
 
             notes.Add(new PageNote
             {
                 Blocks = blocks,
                 Offset = anchor.Offset,
-                IsEndnote = anchor.Element
-                    .Attribute(XName.Get("note-class", OdfNamespaces.Text))?.Value == "endnote",
+                IsEndnote = IsEndnote(anchor.Element),
             });
         }
 
@@ -498,8 +506,31 @@ public sealed partial class OdtLayoutSource
     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
     /// <param name="Element">The <c>text:note</c> element, whose body is read separately.</param>
-    /// <param name="Number">The number it is cited by, counted across the document.</param>
-    private readonly record struct NoteAnchor(int Offset, XElement Element, int Number);
+    /// <param name="Citation">The number it is cited by, counted across the document and already formatted.</param>
+    private readonly record struct NoteAnchor(int Offset, XElement Element, string Citation);
+
+    /// <summary>True when a <c>text:note</c> is an endnote rather than a footnote.</summary>
+    /// <remarks>
+    /// <c>text:note-class</c>, whose only other value is <c>footnote</c> — and which is worth reading rather
+    /// than inferring, because the two are numbered by different sequences in different formats and placed on
+    /// different pages.
+    /// </remarks>
+    private static bool IsEndnote(XElement note)
+        => note.Attribute(XName.Get("note-class", OdfNamespaces.Text))?.Value == "endnote";
+
+    /// <summary>
+    /// How a note of each class is cited, which is not the same for the two.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's defaults, and they differ: footnotes count 1, 2, 3 and endnotes i, ii, iii — measured on
+    /// a two-endnote document, whose citations render as "i" and "ii" both in the sentence and at the head of
+    /// the note. <c>text:notes-configuration</c> can state a format and a start value per class and is not
+    /// read yet, so a document overriding either is numbered by these defaults instead.
+    /// </remarks>
+    private static string CitationOf(bool isEndnote, int number)
+        => isEndnote
+            ? Core.Numbering.OutlineNumbers.Roman(number, upperCase: false)
+            : Core.Numbering.OutlineNumbers.Digits(number);
 
     /// <summary>
     /// Walks a paragraph, building its text and the ranges its spans divide it into.
@@ -532,17 +563,26 @@ public sealed partial class OdtLayoutSource
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
-        /// <param name="number">
-        /// The number the next note in this paragraph is cited by. Passed in because notes are numbered
-        /// across the document rather than within a paragraph, so the counter belongs to the source.
+        /// <param name="footnote">
+        /// The number the next footnote in this paragraph is cited by. Passed in because notes are numbered
+        /// across the document rather than within a paragraph, so the counters belong to the source.
         /// </param>
-        internal RunWalker(string? paragraphStyleName, int number = 1)
+        /// <param name="endnote">The number the next endnote is cited by, counted separately.</param>
+        internal RunWalker(string? paragraphStyleName, int footnote = 1, int endnote = 1)
         {
             _cascade.Add(new OdfStyleReference(paragraphStyleName, OdfStyleFamily.Paragraph));
-            _number = number;
+            _footnote = footnote;
+            _endnote = endnote;
         }
 
-        private int _number;
+        private int _footnote;
+        private int _endnote;
+
+        /// <summary>How many footnotes this paragraph cited, which is what advances the source's counter.</summary>
+        internal int FootnotesSeen { get; private set; }
+
+        /// <summary>How many endnotes it cited.</summary>
+        internal int EndnotesSeen { get; private set; }
 
         /// <summary>The paragraph's text.</summary>
         internal string Text => _builder.ToString();
@@ -649,10 +689,27 @@ public sealed partial class OdtLayoutSource
                     // start of the note itself. So the anchor is not a bare placeholder the way a comment's
                     // is: it carries the citation's own text, under the citation's own character style,
                     // which is what makes it small and raised.
-                    _notes.Add(new NoteAnchor(_builder.Length, child, _number));
-                    Citation(child);
-                    _number++;
+                {
+                    bool isEndnote = IsEndnote(child);
+                    string citation = CitationOf(
+                        isEndnote, isEndnote ? _endnote : _footnote);
+
+                    _notes.Add(new NoteAnchor(_builder.Length, child, citation));
+                    Citation(child, citation);
+
+                    if (isEndnote)
+                    {
+                        _endnote++;
+                        EndnotesSeen++;
+                    }
+                    else
+                    {
+                        _footnote++;
+                        FootnotesSeen++;
+                    }
+
                     break;
+                }
 
                 case "annotation" or "annotation-end":
                     // A comment's anchor occupies a position and draws nothing; its body is another flow.
@@ -692,10 +749,12 @@ public sealed partial class OdtLayoutSource
         /// The citation's <em>text</em> comes from the caller rather than from the file: LibreOffice ignores
         /// <c>text:note-citation</c>'s content and numbers the notes itself in document order, so a document
         /// stating 2 and 5 renders 1 and 2. The style does come from the file, since that is what makes the
-        /// citation superscript — and a document that declares none gets no rise, which is the honest answer
-        /// rather than a guess at LibreOffice's built-in <c>Footnote Symbol</c>.
+        /// citation superscript — and a document that declares none falls back to an automatic superscript,
+        /// which is what LibreOffice's built-in <c>Footnote Anchor</c> style carries.
         /// </remarks>
-        private void Citation(XElement note)
+        /// <param name="note">The <c>text:note</c> element, for its citation's style.</param>
+        /// <param name="text">The number the citation stands for, counted rather than read.</param>
+        private void Citation(XElement note, string text)
         {
             XElement? citation = note.Element(XName.Get("note-citation", OdfNamespaces.Text));
             if (citation is null) return;
@@ -707,7 +766,7 @@ public sealed partial class OdtLayoutSource
             if (pushed) _cascade.Add(new OdfStyleReference(styleName, OdfStyleFamily.Text));
 
             _inCitation = true;
-            Emit(_number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            Emit(text);
             _inCitation = false;
 
             if (pushed) _cascade.RemoveAt(_cascade.Count - 1);

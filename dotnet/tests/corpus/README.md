@@ -164,3 +164,12 @@ Two things about comparing these:
   box that lands in the right place for the wrong reasons. `PdfTextRuns` reads the pens and the sizes out
   of the content stream, which is what caught the escapement being 33% of the font's *height* rather than
   of its em size.
+
+`endnotes.*` is the same document with its notes turned into endnotes, which changes both halves of the
+behaviour: the notes take no room off the page that cites them, and they collect on a page of their own after
+it. It also changes the *numbering* — LibreOffice cites footnotes 1, 2, 3 and endnotes i, ii, iii — so a reader
+that placed an endnote as a footnote fails on the page count, and one that shared a counter between the two
+fails on the citation text. `endnotes.doc` is again the exception, and again for an upstream reason:
+LibreOffice's WW8 export writes the DOP's `epc` as 0, "collect at the end of the section", and its own import
+then renders the notes in the page-bottom note area instead. `endnotes.rtf` inherits the footnote formatting
+loss described above.

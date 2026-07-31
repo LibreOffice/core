@@ -549,14 +549,38 @@ is read and verified, so what remains is the filling of pages rather than the me
       hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
       records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
-- [ ] Note numbering beyond decimal-from-one. `text:notes-configuration` and its counterparts state a format
-      and a start value, and can restart per page or per section; the counter here is document-wide decimal.
+- [ ] Note numbering beyond the two defaults. Footnotes count 1, 2, 3 and endnotes i, ii, iii, which is what
+      LibreOffice does when the file says nothing — but every format *can* say something:
+      `text:notes-configuration`, a section-level `w:footnotePr`/`w:endnotePr`, RTF's `\ftnnar`/`\aftnnrlc`
+      family, and the DOP's `nFtn`/`nEdn` and `rncFtn`/`rncEdn`. None is read, so a document stating a format,
+      a start value or a per-page restart is numbered by the defaults instead.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —
       0.1 cm above and below, which is what Writer's `Footnote Separator` frame style ships with — but
       nothing draws the line, and its exact spacing cannot be measured from a text comparison. Same problem
       as cell borders, same answer: the rasteriser first.
-- [ ] Endnotes, which collect after the last page rather than at the foot of one. `PageNote.IsEndnote`
-      distinguishes them and the paginator skips them, so they take no room and are not misplaced.
+- [x] **Endnotes**, which are the same thing to read as a footnote and a different thing to place: a footnote
+      takes its room out of the page that cites it, and an endnote takes none at all. Measured — LibreOffice
+      leaves the citing page holding every body paragraph and puts the notes at the top of a fresh page after
+      the last of them, in the body's own text area. So it is an ordinary pagination of an ordinary flow, done
+      by recursion rather than a second implementation: the notes get page breaks, headers and footers exactly
+      as body text does, because on those pages they *are* body text.
+      Three things had to change with it:
+      - `LaidOutPage.Blocks`, because an endnote page's lines index into the endnote flow rather than the
+        body's block list. Without it an endnote page draws the body's first paragraphs at the endnotes' line
+        lengths, which looks like a layout bug and is an indexing one.
+      - **Two numbering sequences, formatted differently.** LibreOffice cites footnotes 1, 2, 3 and endnotes
+        i, ii, iii, and the corpus document renders "i" and "ii" both in the sentence and at the head of the
+        note. A single counter gets both the numbers and the numerals wrong.
+      - In RTF the class is only knowable by **peeking**: the `\ftnalt` that marks an endnote is inside the
+        `{\*\footnote …}` group, which comes *after* the `\chftn` where the citation has to be numbered and
+        appended. LibreOffice's own importer peeks seven bytes ahead for exactly this; the reader now looks in
+        the same short window.
+- [ ] Endnotes collected at the end of a **section** rather than of the document, which is `\aendsec` in RTF,
+      `SwFormatEndAtTextEnd` in Writer, and the DOP's `epc == 0` in DOC. It matters because LibreOffice's WW8
+      export *writes* `epc = 0`: `endnotes.doc` renders its notes in the page-bottom note area of the section's
+      last page — measured at tops 770.35 and 782.55 on a page whose body ends at 699.35, exactly where the
+      same document's footnotes go — while Paperless collects them at the end of the document. So the DOC case
+      is checked structurally rather than against the rendering until this is read.
 - [ ] Vertical and RTL writing modes
 - [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
       per-glyph advances rather than characters — a backend must not re-shape, since layout already

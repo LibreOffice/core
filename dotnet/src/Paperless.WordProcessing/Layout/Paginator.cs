@@ -479,6 +479,12 @@ public sealed class Paginator
 
         if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0) EmitPage();
 
+        // The endnotes, which are the one flow that is not part of any page's body: they collect *after* the
+        // last of them, on pages of their own. Measured — LibreOffice puts a two-endnote document's notes at
+        // the top of a fresh second page, in the body's own text area, and takes nothing off page one.
+        pages.AddRange(
+            EndnotePages(blocks, resolved[^1], pageNumber, pages.Count));
+
         return pages;
 
         // Moves on when the current column is full: to the next column of the same page if there is one,
@@ -788,6 +794,89 @@ public sealed class Paginator
     /// the position its anchor occupies. A paragraph with no notes — nearly all of them — returns an empty
     /// sequence without touching its lines.
     /// </remarks>
+    /// <summary>
+    /// The pages an endnote flow occupies, which follow the body's rather than sitting inside them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A footnote and an endnote are the same thing to read and different things to place: a footnote takes
+    /// its room out of the page that cites it, which is what makes it a feedback loop, and an endnote takes
+    /// none at all — it collects at the end of the document. Measured, on a two-endnote document: LibreOffice
+    /// leaves page one holding every body paragraph, with no note area, and puts both notes at the top of a
+    /// fresh page two in the body's own text area.
+    /// </para>
+    /// <para>
+    /// So this is an ordinary pagination of an ordinary flow, done by recursion rather than by a second
+    /// implementation — the notes get page breaks, headers and footers exactly as body text does, because
+    /// they are body text on those pages. The last section's geometry is what they take, being what the
+    /// document ends in.
+    /// </para>
+    /// </remarks>
+    /// <param name="blocks">The body's blocks, whose paragraphs are searched for endnote anchors.</param>
+    /// <param name="section">The section whose geometry and furniture the endnote pages take.</param>
+    /// <param name="startingNumber">The number the first endnote page prints.</param>
+    /// <param name="alreadyEmitted">How many pages the body used, which bounds how many are left.</param>
+    private List<LaidOutPage> EndnotePages(
+        IReadOnlyList<PageBlock> blocks,
+        PaginatedSection section,
+        int startingNumber,
+        int alreadyEmitted)
+    {
+        List<PageBlock> flow = [];
+        Collect(blocks, depth: 0);
+
+        if (flow.Count == 0 || alreadyEmitted >= _options.MaxPages) return [];
+
+        // A fresh paginator rather than a recursive call on this one, so that the run's own state — the note
+        // height cache, the truncation flag — is not overwritten half way through reporting it. Its page
+        // budget is what this run has left, so a document cannot buy extra pages by ending in endnotes.
+        Paginator notes = new(_options with { MaxPages = _options.MaxPages - alreadyEmitted });
+        List<LaidOutPage> paginated = notes.Paginate(
+            flow, [section with { Section = section.Section with { Break = SectionBreak.NextPage } }],
+            startingNumber);
+
+        if (notes.WasTruncated) WasTruncated = true;
+
+        // Each page carries the flow it was laid out from, because its line indexes count in that list and
+        // not in the body's. Without this an endnote page draws the body's first paragraphs at the endnotes'
+        // line lengths — which looks like a layout bug and is an indexing one.
+        return [.. paginated.Select(
+            (endnotePage, at) => endnotePage with
+            {
+                Index = alreadyEmitted + at,
+                Blocks = flow,
+            })];
+
+        // Depth-first through tables, because a cell can cite an endnote and its notes still collect with
+        // the rest. Endnote bodies are *not* searched: a note inside a note would collect after itself.
+        void Collect(IReadOnlyList<PageBlock> from, int depth)
+        {
+            if (depth > FlowLayouter.MaxNesting) return;
+
+            foreach (PageBlock block in from)
+            {
+                switch (block)
+                {
+                    case PageParagraph paragraph:
+                        foreach (PageNote note in paragraph.Notes)
+                        {
+                            if (note.IsEndnote) flow.AddRange(note.Blocks);
+                        }
+
+                        break;
+
+                    case PageTable table:
+                        foreach (PageTableRow row in table.Rows)
+                        {
+                            foreach (PageTableCell cell in row.Cells) Collect(cell.Blocks, depth + 1);
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
     private static IEnumerable<PageNote> NotesIn(
         PageParagraph paragraph, LaidOutParagraph layout, int from, int count)
     {

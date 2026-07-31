@@ -74,6 +74,39 @@ public sealed class FootnoteReadingTests
     }
 
     [Theory]
+    [InlineData("endnotes.fodt")]
+    [InlineData("endnotes.odt")]
+    [InlineData("endnotes.docx")]
+    [InlineData("endnotes.doc")]
+    [InlineData("endnotes.rtf")]
+    public void AnEndnoteIsMarkedAndNumberedInRomanNumerals(string fileName)
+    {
+        List<PageParagraph> citing = [.. Paragraphs(fileName).Where(p => p.Notes.Count > 0)];
+
+        citing.Count.ShouldBe(2, $"{fileName}: expected two paragraphs to cite a note");
+
+        for (int i = 0; i < citing.Count; i++)
+        {
+            PageNote note = citing[i].Notes.ShouldHaveSingleItem();
+
+            note.IsEndnote.ShouldBeTrue(
+                $"{fileName}: note {i + 1} is an endnote, and placing it as a footnote would take room off "
+                + "the page that cites it");
+
+            // Lower-roman, which is LibreOffice's default for endnotes and *not* what it uses for footnotes.
+            // Measured: a two-endnote document renders "i" and "ii", in the sentence and at the note alike.
+            string expected = i == 0 ? "i" : "ii";
+
+            note.Blocks.ShouldHaveSingleItem().ShouldBeOfType<PageParagraph>().Text.ShouldBe(
+                $"{expected}Endnote {(i == 0 ? 2 : 5)} text alpha bravo charlie.",
+                $"{fileName}: endnote {i + 1} should be cited in lower-roman");
+
+            citing[i].Runs.First(run => run.Start == note.Offset).Length.ShouldBe(
+                expected.Length, $"{fileName}: the anchor's citation should be as long as its numeral");
+        }
+    }
+
+    [Theory]
     [InlineData("footnotes.fodt")]
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]

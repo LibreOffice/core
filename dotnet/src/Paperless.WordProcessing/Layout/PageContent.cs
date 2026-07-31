@@ -291,6 +291,18 @@ public sealed record LaidOutPage
     public required int Index { get; init; }
 
     /// <summary>
+    /// The blocks this page's lines index into, or null for the document's own.
+    /// </summary>
+    /// <remarks>
+    /// Null on almost every page, and the exception is the reason it exists: the endnote pages at the end of a
+    /// document are laid out from a flow assembled out of the notes' bodies rather than from the body's blocks,
+    /// so their <see cref="PlacedLine.ParagraphIndex"/> counts in a different list. A page carrying its own
+    /// list is how that stays correct without every page paying for a copy — and a null here is not "no
+    /// blocks" but "the ones the sequence holds".
+    /// </remarks>
+    public IReadOnlyList<PageBlock>? Blocks { get; init; }
+
+    /// <summary>
     /// The number printed on the page, which is not the index.
     /// </summary>
     /// <remarks>
