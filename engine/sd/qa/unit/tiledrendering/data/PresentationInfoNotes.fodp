@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.3"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:automatic-styles>
+    <!-- A style in the presentation family makes the frames below import as presentation objects,
+         so the notes text ends up in the notes object of the notes page. -->
+    <style:style style:name="pr1" style:family="presentation"/>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties fo:font-weight="bold"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="Slide1">
+        <draw:frame presentation:style-name="pr1" presentation:class="title"
+                    svg:x="1.4cm" svg:y="0.628cm"
+                    svg:width="25.199cm" svg:height="2.629cm">
+          <draw:text-box>
+            <text:p>Slide with notes</text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes>
+          <draw:frame presentation:style-name="pr1" presentation:class="notes"
+                      svg:x="2.1cm" svg:y="14.107cm"
+                      svg:width="16.799cm" svg:height="13.364cm">
+            <draw:text-box>
+              <text:p>First notes paragraph</text:p>
+              <text:p>Second notes paragraph</text:p>
+              <text:p>Plain and <text:span text:style-name="T1">bold</text:span> words</text:p>
+              <text:list>
+                <text:list-item>
+                  <text:p>First bullet item</text:p>
+                </text:list-item>
+                <text:list-item>
+                  <text:p>Second bullet item</text:p>
+                </text:list-item>
+              </text:list>
+            </draw:text-box>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>

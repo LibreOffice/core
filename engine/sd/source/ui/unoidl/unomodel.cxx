@@ -5986,16 +5986,20 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 
                     if (pNotes)
                     {
-                        OUStringBuffer strNotes;
                         OutlinerParaObject* pPara = pNotes->GetOutlinerParaObject();
                         if (pPara)
                         {
                             const EditTextObject& rText = pPara->GetTextObject();
-                            for (sal_Int32 nNote = 0; nNote < rText.GetParagraphCount(); nNote++)
+                            aJsonWriter.put("notes", rText.GetText(LINEEND_LF));
+
+                            OUStringBuffer aNotesHtml;
+                            SdrOutliner* pNotesOutliner = mpDoc->GetInternalOutliner();
+                            if (pNotesOutliner)
                             {
-                                strNotes.append(rText.GetText(nNote));
+                                SdHTMLFilter::ExportTextObject(pNotesOutliner, pPara, aNotesHtml);
+                                aJsonWriter.put("notesHtml", aNotesHtml.makeStringAndClear());
+                                pNotesOutliner->Clear();
                             }
-                            aJsonWriter.put("notes", strNotes.makeStringAndClear());
                         }
                     }
                 }

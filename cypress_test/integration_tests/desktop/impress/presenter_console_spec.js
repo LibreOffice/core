@@ -63,7 +63,11 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 				}
 
 				getNotes() {
-					return "test notes";
+					return "test notes\nbullet one";
+				}
+
+				getNotesHtml() {
+					return "<p>test notes</p>\r\n<ul>\r\n<li>bullet one</li>\r\n</ul>\r\n";
 				}
 
 				slideshowWindowCleanUp() {
@@ -113,6 +117,12 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			elem = fakeConsole._proxyPresenter.document.querySelector('#notes');
 			expect(elem).to.not.equal(null);
 			expect(elem).to.not.equal(undefined);
+
+			// The notes keep their bullet list, and the markup carries no attributes.
+			elem = fakeConsole._notes.querySelector('#notes');
+			expect(elem.querySelectorAll('li')).to.have.lengthOf(1);
+			expect(elem.querySelector('li').textContent).to.equal('bullet one');
+			expect(elem.querySelector('li').attributes).to.have.lengthOf(0);
 
 			var smile = win.document.querySelector('meta[name="previewSmile"]').content;
 			map.fire('tilepreview', {

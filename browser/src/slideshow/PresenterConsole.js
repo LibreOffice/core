@@ -14,7 +14,7 @@
  * PresenterConsole
  */
 
-/* global app SlideShow _ LOUtil */
+/* global app SlideShow _ LOUtil DOMPurify */
 
 class PresenterConsole {
 	constructor(map, presenter) {
@@ -56,6 +56,18 @@ class PresenterConsole {
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1">
 				<title>${sanitizedTitle}</title>
+				<style>
+					/* The notes pane is narrow, so paragraphs and lists sit
+					   closer together than the browser default. */
+					.notes-content p {
+						margin: 0 0 0.4em 0;
+					}
+					.notes-content ul,
+					.notes-content ol {
+						margin: 0 0 0.4em 0;
+						padding-inline-start: 1.2em;
+					}
+				</style>
 			</head>
 			<body>
                                 <header>
@@ -496,6 +508,7 @@ class PresenterConsole {
 
 		elem = this._proxyPresenter.document.createElement('div');
 		elem.id = 'notes';
+		elem.className = 'notes-content';
 		elem.style.height = '100%';
 		elem.style.width = '100%';
 		elem.style.userSelect = 'text'; // Enables text selection
@@ -1481,6 +1494,38 @@ class PresenterConsole {
 		}
 	}
 
+	// Reduces a notes fragment to the structural markup the console renders: paragraphs, line
+	// breaks, lists and character formatting. Every attribute and every other element is dropped,
+	// so the console keeps control of the fonts and the colours of the notes pane. The text of a
+	// dropped element stays. Returns an empty string when there is nothing to render.
+	_sanitizeNotes(html) {
+		if (!html || !DOMPurify.isSupported) return '';
+
+		return DOMPurify.sanitize(html, {
+			ALLOWED_TAGS: [
+				'p',
+				'br',
+				'div',
+				'span',
+				'ul',
+				'ol',
+				'li',
+				'b',
+				'strong',
+				'i',
+				'em',
+				'u',
+				's',
+				'strike',
+				'sub',
+				'sup',
+			],
+			ALLOWED_ATTR: [],
+			ALLOW_DATA_ATTR: false,
+			ALLOW_ARIA_ATTR: false,
+		});
+	}
+
 	_onTransitionEnd(e) {
 		if (!this._proxyPresenter) {
 			return;
@@ -1492,8 +1537,13 @@ class PresenterConsole {
 			let notes = this._presenter.getNotes(e.slide);
 			let notesContentElem = this._notes.querySelector('#notes');
 			notesContentElem.innerText = _('No Notes');
-			if (notes && notes.toLowerCase() !== 'click to add notes'.toLowerCase())
-				notesContentElem.innerText = notes;
+			if (notes && notes.toLowerCase() !== 'click to add notes'.toLowerCase()) {
+				const notesHtml = this._sanitizeNotes(
+					this._presenter.getNotesHtml(e.slide),
+				);
+				if (notesHtml) notesContentElem.innerHTML = notesHtml;
+				else notesContentElem.innerText = notes;
+			}
 		}
 
 		let img = this._slides.querySelector(

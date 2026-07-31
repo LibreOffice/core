@@ -3030,6 +3030,59 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     }
 }
 
+// Notes with several paragraphs keep the paragraph breaks as newlines.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesParagraphs)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoNotes.fodp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    Scheduler::ProcessEventsToIdle();
+
+    OString aString = pXImpressDocument->getPresentationInfo();
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(aString)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("First notes paragraph\nSecond notes paragraph\n"
+                                     "Plain and bold words\n"
+                                     "First bullet item\nSecond bullet item"),
+                         rChild.get_child("notes").get_value<std::string>());
+}
+
+// Notes are also offered as an HTML fragment, so that a presenter view can show the bullet list
+// and the character formatting of the notes.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesHtml)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoNotes.fodp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    Scheduler::ProcessEventsToIdle();
+
+    OString aString = pXImpressDocument->getPresentationInfo();
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(aString)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
+    CPPUNIT_ASSERT(has_child(rChild, "notesHtml"));
+    std::string aNotesHtml = rChild.get_child("notesHtml").get_value<std::string>();
+
+    // The plain paragraphs come out as paragraph elements.
+    CPPUNIT_ASSERT(aNotesHtml.find("<p>First notes paragraph</p>") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<p>Second notes paragraph</p>") != std::string::npos);
+
+    // A bold run inside a paragraph comes out as a bold element.
+    CPPUNIT_ASSERT(aNotesHtml.find("<b>bold</b>") != std::string::npos);
+
+    // The two list items come out as list items inside a list element.
+    CPPUNIT_ASSERT(aNotesHtml.find("<ul>") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<li>First bullet item</li>") != std::string::npos);
+    CPPUNIT_ASSERT(aNotesHtml.find("<li>Second bullet item</li>") != std::string::npos);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");

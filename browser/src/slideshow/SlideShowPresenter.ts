@@ -78,6 +78,9 @@ interface SlideInfo {
 	index: number;
 	name: string;
 	notes: string;
+	// The same notes as an HTML fragment, with paragraphs, lists and character formatting.
+	// Absent when the document engine does not supply it.
+	notesHtml?: string;
 	a11y?: string;
 	empty: boolean;
 	hidden?: boolean;
@@ -425,6 +428,11 @@ class SlideShowPresenter {
 	public getNotes(slide: number) {
 		const info = this.getSlideInfo(slide);
 		return info ? info.notes : null;
+	}
+
+	public getNotesHtml(slide: number): string | null {
+		const info = this.getSlideInfo(slide);
+		return info && info.notesHtml ? info.notesHtml : null;
 	}
 
 	public getVideoRenderer(

@@ -21,6 +21,7 @@
 
 #include "sdfilter.hxx"
 
+class OutlinerParaObject;
 class SdrOutliner;
 
 // SdHTMLFilter
@@ -32,6 +33,12 @@ public:
 
     virtual bool Export() override;
     static void ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml);
+
+    // Appends the paragraphs of a single text object as an HTML fragment. Paragraphs without an
+    // outline level become p elements, paragraphs with one become li elements inside nested ul
+    // elements. Character formatting turns into b, i, u and strike elements.
+    static void ExportTextObject(SdrOutliner* pOutliner, OutlinerParaObject const* pParaObject,
+                                 OUStringBuffer& rHtml);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
