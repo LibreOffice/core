@@ -2531,6 +2531,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testRubyWrapRestPortion)
     assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwRubyPortion')]", 5);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testJustifyWarichu)
+{
+    createSwDoc("justify_warichu.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Both Warichu blocks received their own justification glue portion, proving
+    // CalcAdjustLine correctly stretched content inside the double-line portions.
+    assertXPath(pXmlDoc,
+                "//SwMultiPortion[contains(@symbol, 'SwDoubleLinePortion')]//SwGluePortion", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testCenterFlyWarichuTab)
+{
+    createSwDoc("center_fly_warichu_tab.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The tab inside the Warichu block is correctly resolved on both of its
+    // stacked internal lines despite the fly frame intersecting the paragraph.
+    assertXPath(pXmlDoc,
+                "//SwMultiPortion[contains(@symbol, "
+                "'SwDoubleLinePortion')]//SwFixPortion[@type='PortionType::TabLeft']",
+                2);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

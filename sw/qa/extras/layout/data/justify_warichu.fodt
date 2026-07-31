@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="NarrowPage">
+      <style:page-layout-properties fo:page-width="6cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="0.2cm" fo:margin-right="0.2cm"/>
+    </style:page-layout>
+    <style:style style:name="JustifiedPara" style:family="paragraph">
+      <!-- Force Justified Alignment -->
+      <style:paragraph-properties fo:text-align="justify"/>
+    </style:style>
+    <style:style style:name="Warichu" style:family="text">
+      <!-- Force Asian Two-Lines-in-One (Double Line) -->
+      <style:text-properties style:text-combine="lines"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="NarrowPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <!-- We include a Tab in the first Warichu, and Spaces in the second! -->
+      <text:p text:style-name="JustifiedPara">Force wrap <text:span text:style-name="Warichu">Two<text:tab/>Lines</text:span> and <text:span text:style-name="Warichu">More Spaces</text:span> to stretch the line perfectly.</text:p>
+    </office:text>
+  </office:body>
+</office:document>
