@@ -47,10 +47,12 @@ public sealed class PresentationReader : IDocumentReader
             DocumentFormat.Odp or DocumentFormat.Otp or DocumentFormat.Fodp
                 => new OdpReader().Read(source, format),
 
+            DocumentFormat.Ppt or DocumentFormat.Pot or DocumentFormat.Pps
+                => MsBinary.PptReader.Read(source, format),
+
             // Named in SupportedFormats but not implemented yet.
             DocumentFormat.Pptx or DocumentFormat.Pptm or DocumentFormat.Potx or DocumentFormat.Potm
-                or DocumentFormat.Ppsx or DocumentFormat.Ppsm or DocumentFormat.Ppt
-                or DocumentFormat.Pot or DocumentFormat.Pps or DocumentFormat.Sxi
+                or DocumentFormat.Ppsx or DocumentFormat.Ppsm or DocumentFormat.Sxi
                 or DocumentFormat.Sti
                 => throw new UnsupportedFormatException(
                     format, $"Reading {format} is not implemented yet."),
