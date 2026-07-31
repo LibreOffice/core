@@ -92,6 +92,9 @@ public sealed partial class Ww8DocumentReader
         private readonly List<Ww8CellDraft> _rowCells = [];
         private readonly List<Ww8RowDraft> _rows = [];
 
+        /// <summary>The section the table's rows were in, taken from the paragraphs that made them.</summary>
+        private int _section;
+
         /// <summary>Takes one paragraph, with the properties of the mark that ended it.</summary>
         /// <param name="paragraph">The paragraph.</param>
         /// <param name="format">Its mark's properties.</param>
@@ -121,6 +124,8 @@ public sealed partial class Ww8DocumentReader
                 FinishRow(format);
                 return;
             }
+
+            _section = paragraph.SectionIndex;
 
             if (paragraph.Text.Length > 0 || endsCell) _cell.Add(paragraph);
             if (endsCell) FinishCell();
@@ -188,7 +193,7 @@ public sealed partial class Ww8DocumentReader
             AssignColumns(_rows);
             ResolveVerticalMerges(_rows);
 
-            if (LayoutTableOf(_rows) is { } table) _blocks.Add(new Ww8LayoutBlock(table));
+            if (LayoutTableOf(_rows, _section) is { } table) _blocks.Add(new Ww8LayoutBlock(table));
 
             Reset();
         }
@@ -198,6 +203,7 @@ public sealed partial class Ww8DocumentReader
             _cell.Clear();
             _rowCells.Clear();
             _rows.Clear();
+            _section = 0;
         }
     }
 
@@ -216,7 +222,7 @@ public sealed partial class Ww8DocumentReader
     /// first row's left edge and the column widths are the gaps after it.
     /// </para>
     /// </remarks>
-    private static Ww8LayoutTable? LayoutTableOf(List<Ww8RowDraft> rows)
+    private static Ww8LayoutTable? LayoutTableOf(List<Ww8RowDraft> rows, int section)
     {
         List<int> edges = [.. rows.SelectMany(r => r.Cells).Select(c => c.RightEdge).Distinct().Order()];
         if (edges.Count == 0 || edges[^1] <= 0) return null;
@@ -254,7 +260,8 @@ public sealed partial class Ww8DocumentReader
             widths,
             layoutRows,
             rows.TakeWhile(r => r.IsHeader).Count(),
-            Length.FromTwips(left));
+            Length.FromTwips(left),
+            section);
     }
 
     /// <summary>
@@ -353,11 +360,13 @@ public readonly record struct Ww8LayoutBlock
 /// <param name="Rows">The rows, top to bottom.</param>
 /// <param name="HeaderRowCount">How many rows at the top repeat across a page break.</param>
 /// <param name="LeftIndent">How far the table's left edge sits from the text area's.</param>
+/// <param name="SectionIndex">Which of the document's sections the table sits in.</param>
 public sealed record Ww8LayoutTable(
     IReadOnlyList<Length> ColumnWidths,
     IReadOnlyList<Ww8LayoutRow> Rows,
     int HeaderRowCount,
-    Length LeftIndent);
+    Length LeftIndent,
+    int SectionIndex = 0);
 
 /// <summary>One row of a DOC table.</summary>
 /// <param name="Cells">Its cells, left to right; one covered by a merge above is absent.</param>

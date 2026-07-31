@@ -88,8 +88,10 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     private readonly List<Colour?> _colours = [];
     private readonly Staged _layoutBlocks = new();
-    private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout = [];
-    private readonly Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout = [];
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        _headerLayout = [];
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        _footerLayout = [];
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
     private readonly Dictionary<string, string> _info = new(StringComparer.Ordinal);
@@ -143,15 +145,29 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     public IReadOnlyList<RtfLayoutBlock> LayoutBlocks => _layoutBlocks.Finished();
 
-    /// <summary>The headers' paragraphs, by slot, with the same formatting layout needs.</summary>
+    /// <summary>The headers' paragraphs, by section and slot, with the formatting layout needs.</summary>
     /// <remarks>
     /// Separate from <see cref="LayoutBlocks"/> rather than mixed in with a marker, because a header is
-    /// laid out into its own frame and the body's paragraph index has to keep meaning the body's.
+    /// laid out into its own frame and the body's paragraph index has to keep meaning the body's. Keyed by
+    /// section as well as slot because RTF writes a header in the preamble of the section it belongs to, so
+    /// a document that changes its running head halfway says so by writing a second one.
     /// </remarks>
-    public IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> HeaderLayout => _headerLayout;
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        HeaderLayout => _headerLayout;
 
-    /// <summary>The footers' paragraphs, by slot.</summary>
-    public IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> FooterLayout => _footerLayout;
+    /// <summary>The footers' paragraphs, by section and slot.</summary>
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        FooterLayout => _footerLayout;
+
+    /// <summary>
+    /// How many <c>\sect</c> marks have been seen, which is the section the reader is in.
+    /// </summary>
+    /// <remarks>
+    /// RTF delimits sections by position and marks only their <em>ends</em>: <c>\sect</c> closes one, and
+    /// the last section of a document has none at all — it simply runs out. So counting the marks is the
+    /// whole of it, and a document with no <c>\sect</c> is one section, which is most of them.
+    /// </remarks>
+    private int _sectionIndex;
 
     /// <summary>Reads the document.</summary>
     public ContentDocument Read()
@@ -718,7 +734,17 @@ public sealed partial class RtfDocumentReader
             case "zwj":
                 AppendText(state, "‍");
                 return;
-            case "page" or "column" or "sect" or "sectd" or "softpage":
+            case "sect":
+                // Ends the section, and the paragraph with it. The geometry reader saw this word first and
+                // has already recorded the section that closed here, so what follows belongs to the next.
+                // Not forced: LibreOffice writes \par before \sect, and forcing would add a blank
+                // paragraph at every section boundary — while a producer writing text straight into \sect
+                // still gets its last paragraph closed.
+                FinishParagraph(CurrentFlow, state, force: false);
+                _sectionIndex++;
+                return;
+
+            case "page" or "column" or "sectd" or "softpage":
                 // Breaks move content elsewhere without contributing text.
                 return;
             case "deleted":

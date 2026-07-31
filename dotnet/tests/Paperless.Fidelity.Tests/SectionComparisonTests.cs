@@ -63,6 +63,8 @@ public sealed class SectionComparisonTests : IDisposable
     [InlineData("sections.fodt")]
     [InlineData("sections.odt")]
     [InlineData("sections.docx")]
+    [InlineData("sections.rtf")]
+    [InlineData("sections.doc")]
     public void EveryPageTakesItsOwnSectionsGeometry(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -100,6 +102,8 @@ public sealed class SectionComparisonTests : IDisposable
     [InlineData("sections.fodt")]
     [InlineData("sections.odt")]
     [InlineData("sections.docx")]
+    [InlineData("sections.rtf")]
+    [InlineData("sections.doc")]
     public void EveryPageHoldsTheWordsLibreOfficePutsOnIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

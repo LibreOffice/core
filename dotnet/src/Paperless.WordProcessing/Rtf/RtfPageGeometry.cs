@@ -93,6 +93,18 @@ internal sealed class RtfPageGeometry
             case "lndscpsxn": return SetSection(d => d with { Landscape = flag });
             case "facpgsxn": return SetSection(d => d with { Mirrored = flag });
             case "titlepg": return SetSection(d => d with { DifferentFirstPage = flag });
+
+            // How the section starts. \sbkcol is a column break, which for a single-column section is
+            // where the next column would be — the same page — so it reads as continuous here; modelling
+            // it properly needs columns, which layout does not do yet.
+            case "sbknone" or "sbkcol":
+                return SetSection(d => d with { Break = SectionBreak.Continuous });
+            case "sbkpage":
+                return SetSection(d => d with { Break = SectionBreak.NextPage });
+            case "sbkeven":
+                return SetSection(d => d with { Break = SectionBreak.EvenPage });
+            case "sbkodd":
+                return SetSection(d => d with { Break = SectionBreak.OddPage });
             case "pgnstarts": return SetSection(d => d with { RestartAt = parameter });
 
             // A column count of one is the default and is written explicitly by some producers, so it
@@ -189,7 +201,8 @@ internal sealed class RtfPageGeometry
         bool Landscape,
         bool Mirrored,
         bool DifferentFirstPage,
-        int? RestartAt)
+        int? RestartAt,
+        SectionBreak Break)
     {
         /// <summary>Nothing stated yet, and one column.</summary>
         internal static PageDefaults Initial { get; } = new() { Columns = 1 };
@@ -232,6 +245,7 @@ internal sealed class RtfPageGeometry
                 },
                 RestartPageNumberAt = RestartAt,
                 HasDifferentFirstPage = DifferentFirstPage,
+                Break = Break,
             };
         }
     }

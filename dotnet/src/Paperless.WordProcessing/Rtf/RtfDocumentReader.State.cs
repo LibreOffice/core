@@ -881,7 +881,8 @@ public sealed partial class RtfDocumentReader
             state.Italic,
             state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
             ColourAt(state.ForegroundColourIndex),
-            [.. flow.LayoutRuns]));
+            [.. flow.LayoutRuns],
+            _sectionIndex));
     }
 
     /// <summary>
@@ -954,13 +955,17 @@ public sealed partial class RtfDocumentReader
 
         if (slot is null) return null;
 
-        Dictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> slots =
+        Dictionary<(int, Model.PageFurnitureSlot), List<RtfLayoutParagraph>> slots =
             isHeader ? _headerLayout : _footerLayout;
 
-        if (!slots.TryGetValue(slot.Value, out List<RtfLayoutParagraph>? paragraphs))
+        // Keyed by the section the flow was opened in: RTF writes a header in the preamble of the section
+        // it belongs to, so a document with two running heads has written two headers.
+        (int, Model.PageFurnitureSlot) key = (_sectionIndex, slot.Value);
+
+        if (!slots.TryGetValue(key, out List<RtfLayoutParagraph>? paragraphs))
         {
             paragraphs = [];
-            slots[slot.Value] = paragraphs;
+            slots[key] = paragraphs;
         }
 
         return paragraphs;

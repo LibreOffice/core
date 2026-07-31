@@ -475,7 +475,7 @@ public sealed partial class RtfDocumentReader
     /// indent.
     /// </para>
     /// </remarks>
-    private static RtfLayoutTable? LayoutTableOf(List<RowDraft> rows)
+    private RtfLayoutTable? LayoutTableOf(List<RowDraft> rows)
     {
         List<int> edges = [.. rows.SelectMany(r => r.Cells).Select(c => c.RightEdge).Distinct().Order()];
         if (edges.Count == 0 || edges[^1] <= 0) return null;
@@ -514,7 +514,8 @@ public sealed partial class RtfDocumentReader
             widths,
             layoutRows,
             rows.TakeWhile(r => r.IsHeader).Count(),
-            Length.FromTwips(left));
+            Length.FromTwips(left),
+            _sectionIndex);
     }
 
     private static void ResolveVerticalMerges(List<RowDraft> rows)

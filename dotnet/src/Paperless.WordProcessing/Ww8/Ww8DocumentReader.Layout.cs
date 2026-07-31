@@ -42,7 +42,9 @@ public sealed partial class Ww8DocumentReader
     /// whole paragraph is uniform — the layout source decides whether they are worth carrying, since it is
     /// the only party that can compare two <em>resolved</em> faces rather than two requested families.
     /// </param>
+    /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
     public readonly record struct Ww8LayoutParagraph(
+        int SectionIndex,
         string Text,
         Text.Layout.ParagraphFormat Format,
         string? FamilyName,
@@ -151,11 +153,13 @@ public sealed partial class Ww8DocumentReader
     /// nothing anywhere. Emptiness is the only thing distinguishing the two.
     /// </para>
     /// <para>
-    /// The first section's, to match the geometry the pagination uses — recorded with that limitation
-    /// rather than separately.
+    /// Six stories per section, so the section's own six start six further along for each section before
+    /// it — which is what makes a document with a landscape appendix able to give that appendix its own
+    /// running head.
     /// </para>
     /// </remarks>
-    public Ww8LayoutFurniture ReadLayoutFurniture()
+    /// <param name="section">Which section's furniture to read.</param>
+    public Ww8LayoutFurniture ReadLayoutFurniture(int section = 0)
     {
         List<Ww8Range> stories = [.. SplitSubdocument(Ranges.Headers, Ww8FibTable.HeaderTexts)];
 
@@ -164,7 +168,7 @@ public sealed partial class Ww8DocumentReader
 
         for (int slot = 0; slot < FurnitureSlots.Length; slot++)
         {
-            int story = SeparatorStories + slot;
+            int story = SeparatorStories + (Math.Max(0, section) * FurnitureSlots.Length) + slot;
             if (story >= stories.Count) break;
             if (stories[story].Length <= 0) continue;
 
@@ -358,6 +362,7 @@ public sealed partial class Ww8DocumentReader
         Length size = SizeOf(character);
 
         return new Ww8LayoutParagraph(
+            SectionAt(markPosition),
             text,
             layout.ToParagraphFormat(size) with
             {

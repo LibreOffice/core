@@ -100,12 +100,30 @@ internal static class Ww8SectionTable
         return wordDocument.Slice(start, Math.Min(length, wordDocument.Length - start));
     }
 
+    /// <summary>
+    /// What a <c>sprmSBkc</c> value means.
+    /// </summary>
+    /// <remarks>
+    /// Word's own <c>bkc</c> numbering, which is not the order the concepts are usually listed in: 0 is a
+    /// column break, 1 is continuous, 2 a new page, 3 even and 4 odd. A column break in a single-column
+    /// section lands where the next column would, which is the same page — so it reads as continuous here,
+    /// and modelling it properly needs columns, which layout does not do yet.
+    /// </remarks>
+    private static SectionBreak BreakOf(int bkc) => bkc switch
+    {
+        0 or 1 => SectionBreak.Continuous,
+        3 => SectionBreak.EvenPage,
+        4 => SectionBreak.OddPage,
+        _ => SectionBreak.NextPage,
+    };
+
     private static WritingSection ReadProperties(ReadOnlyMemory<byte> grpprl)
     {
         PageGeometry page = PageGeometry.Default;
         PageMargins margins = PageMargins.Default;
         DocSize size = page.Size;
 
+        SectionBreak sectionBreak = SectionBreak.NextPage;
         Length gutter = Length.Zero;
         Length headerDistance = Length.Zero;
         Length footerDistance = Length.Zero;
@@ -120,6 +138,10 @@ internal static class Ww8SectionTable
         {
             switch (sprm.Identifier)
             {
+                case Ww8SprmReader.Ids.SectionBreakKind:
+                    sectionBreak = BreakOf(sprm.Byte);
+                    break;
+
                 case Sprms.PageWidth:
                     if (Dimension(sprm) is { } width) size = size with { Width = width };
                     break;
@@ -201,6 +223,8 @@ internal static class Ww8SectionTable
                 ColumnGap = columnGap,
                 IsLandscape = landscape,
             },
+
+            Break = sectionBreak,
 
             // The start value only applies when the section says it restarts. A document that carries
             // a stale start value from an earlier edit is common, and honouring it renumbers pages

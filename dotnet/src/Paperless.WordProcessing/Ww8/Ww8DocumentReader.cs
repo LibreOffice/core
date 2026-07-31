@@ -124,11 +124,41 @@ public sealed partial class Ww8DocumentReader
         get
         {
             List<Model.WritingSection> sections = Ww8SectionTable.Read(
-                PlcfOf(Ww8FibTable.SectionDescriptors, Ww8SectionTable.DescriptorSize),
-                _wordDocument);
+                SectionDescriptors, _wordDocument);
 
             return sections.Count > 0 ? sections : [new Model.WritingSection()];
         }
+    }
+
+    /// <summary>
+    /// The <c>PlcfSed</c>, whose positions delimit the sections in character space.
+    /// </summary>
+    /// <remarks>
+    /// Read on demand and cached, because the layout walk asks it once per paragraph: DOC delimits sections
+    /// by position rather than by a marker in the text, so which section a paragraph is in is a lookup
+    /// against this rather than something the walk can count.
+    /// </remarks>
+    private Ww8Plcf SectionDescriptors =>
+        _sectionDescriptors ??= PlcfOf(
+            Ww8FibTable.SectionDescriptors, Ww8SectionTable.DescriptorSize);
+
+    private Ww8Plcf? _sectionDescriptors;
+
+    /// <summary>
+    /// Which section a character position falls in.
+    /// </summary>
+    /// <remarks>
+    /// A <c>PlcfSed</c>'s positions are the section <em>ends</em> in character space, so the lookup is the
+    /// same one a formatting table does — and a position past the last one belongs to the last section,
+    /// which is what a document whose descriptors do not cover its whole text means.
+    /// </remarks>
+    internal int SectionAt(int position)
+    {
+        int count = SectionDescriptors.Count;
+        if (count <= 1) return 0;
+
+        int index = SectionDescriptors.IndexOf(position);
+        return index < 0 ? count - 1 : Math.Min(index, count - 1);
     }
 
     /// <summary>Reads the document.</summary>

@@ -92,8 +92,13 @@ public static class RtfReader
 public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly IReadOnlyList<RtfLayoutBlock> _layoutBlocks;
-    private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _headerLayout;
-    private readonly IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> _footerLayout;
+    private readonly
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        _headerLayout;
+
+    private readonly
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+        _footerLayout;
 
     internal RtfDocument(
         DocumentFormat format,
@@ -101,8 +106,10 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         IReadOnlyList<Diagnostic> diagnostics,
         IReadOnlyList<Model.WritingSection> sections,
         IReadOnlyList<RtfLayoutBlock> layoutBlocks,
-        IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> headerLayout,
-        IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> footerLayout)
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+            headerLayout,
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>>
+            footerLayout)
     {
         Format = format;
         Content = content;
@@ -154,7 +161,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         {
             if (block.Paragraph is { } paragraph)
             {
-                blocks.AddRange(Convert(fonts, [paragraph]));
+                blocks.AddRange(Convert(fonts, [paragraph])
+                    .Select(converted => converted with { SectionIndex = paragraph.SectionIndex }));
                 continue;
             }
 
@@ -169,7 +177,9 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                blocks, Sections[0], furniture: Furniture(fonts)),
+                blocks,
+                [.. Sections.Select((section, index) =>
+                    new PaginatedSection(section, Furniture(fonts, index)))]),
             blocks);
     }
 
@@ -212,6 +222,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         return new PageTable
         {
+            SectionIndex = table.SectionIndex,
             ColumnWidths = table.ColumnWidths,
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
@@ -228,7 +239,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// lookup — and, more to the point, resolves to the identical face object, which is what lets the
     /// measurement caches downstream see them as one font.
     /// </remarks>
-    private PageFurnitureSet? Furniture(LayoutFonts fonts)
+    private PageFurnitureSet? Furniture(LayoutFonts fonts, int section)
     {
         Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
         Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
@@ -239,14 +250,23 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         PageFurnitureSet set = new(headers, footers);
         return set.IsEmpty ? null : set;
 
+        // A section with no header of its own inherits the previous section's, which is what RTF means by
+        // saying nothing: \sectd resets the geometry and leaves the running heads alone, so a document that
+        // writes one header and three \sect marks has that header on all four sections.
         void Fill(
             Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> into,
-            IReadOnlyDictionary<Model.PageFurnitureSlot, List<RtfLayoutParagraph>> from)
+            IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>> from)
         {
-            foreach ((Model.PageFurnitureSlot slot, List<RtfLayoutParagraph> stated) in from)
+            foreach (Model.PageFurnitureSlot slot in Enum.GetValues<Model.PageFurnitureSlot>())
             {
-                List<PageParagraph> converted = Convert(fonts, stated);
-                if (converted.Count > 0) into[slot] = converted;
+                for (int at = section; at >= 0; at--)
+                {
+                    if (!from.TryGetValue((at, slot), out List<RtfLayoutParagraph>? stated)) continue;
+
+                    List<PageParagraph> converted = Convert(fonts, stated);
+                    if (converted.Count > 0) into[slot] = converted;
+                    break;
+                }
             }
         }
     }

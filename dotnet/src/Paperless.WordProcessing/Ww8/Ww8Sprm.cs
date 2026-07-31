@@ -113,6 +113,9 @@ public static class Ww8SprmReader
         /// The one sprm whose operand length is two bytes rather than one, because a table definition
         /// can exceed 255 bytes — see <see cref="Read"/>.
         /// </remarks>
+        /// <summary><c>sprmSBkc</c>: how a section starts relative to the one before it.</summary>
+        public const ushort SectionBreakKind = 0x3009;
+
         public const ushort TableDefinition = 0xD608;
 
         /// <summary><c>sprmTCellPadding</c>: cell padding for a range of a row's cells.</summary>

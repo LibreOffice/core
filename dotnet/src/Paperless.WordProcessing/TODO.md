@@ -324,9 +324,19 @@ is read and verified, so what remains is the filling of pages rather than the me
       page description through its style's `style:master-page-name`, followed up the parent chain, and a
       paragraph naming one *starts a page* on that master. An empty name is not an absent one: ODF writes
       `style:master-page-name=""` to cancel a master a parent style named.
-- [ ] DOC's `sprmSBkc` and RTF's `\sbk*` for the break kind, and their section boundaries — both are read
-      into the geometry list already but every block still reports section zero, so a multi-section DOC or
-      RTF is laid out on its first section's setup.
+- [x] DOC's and RTF's section boundaries, which are as different from each other as either is from ODF's.
+      RTF marks only section *ends* with `\sect` and its last section has none at all, so counting the
+      marks is the whole of it. DOC delimits by position: the `PlcfSed`'s own positions are the section
+      ends in character space, so which section a paragraph is in is a lookup rather than a count. Their
+      break kinds are `\sbk*` and `sprmSBkc`, whose numbering is Word's own — 0 column, 1 continuous, 2
+      page, 3 even, 4 odd, which is not the order the concepts are usually listed in.
+- [x] Furniture per section in all four formats. DOC keeps six header stories *per section*, so a section's
+      own six start six further along for each section before it. RTF writes a header in the preamble of the
+      section it belongs to and a section stating none inherits the previous one's, since `\sectd` resets
+      the geometry and leaves the running heads alone.
+- [ ] A column break as anything but continuous. `\sbkcol` and `sprmSBkc` of 0 mean "start where the next
+      column would", which for a single-column section is the same page and so reads as continuous here.
+      Getting it right needs columns, which layout does not do.
 - [x] **All four formats reach the layout engine**, and all four paginate a five-page document the way
       LibreOffice does — same page count, same words on every page, verified against its own rendering of
       each format. `DocumentPaginationTests` is the test that proves the links are connected rather than

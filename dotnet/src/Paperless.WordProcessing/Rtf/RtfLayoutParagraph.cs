@@ -81,6 +81,7 @@ public readonly record struct RtfLayoutRun(
 /// whole paragraph is uniform — the layout source decides whether they are worth carrying, since it is
 /// the only party that can compare two <em>resolved</em> faces rather than two requested families.
 /// </param>
+/// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -90,7 +91,8 @@ public readonly record struct RtfLayoutParagraph(
     bool IsItalic,
     string? Language,
     Colour? Colour = null,
-    IReadOnlyList<RtfLayoutRun>? Runs = null);
+    IReadOnlyList<RtfLayoutRun>? Runs = null,
+    int SectionIndex = 0);
 
 /// <summary>
 /// One block of an RTF flow as layout sees it: a paragraph or a table, never both.
@@ -130,11 +132,13 @@ public readonly record struct RtfLayoutBlock
 /// <param name="Rows">The rows, top to bottom.</param>
 /// <param name="HeaderRowCount">How many rows at the top repeat across a page break.</param>
 /// <param name="LeftIndent">How far the table's left edge sits from the body area's.</param>
+/// <param name="SectionIndex">Which of the document's sections the table sits in.</param>
 public sealed record RtfLayoutTable(
     IReadOnlyList<Core.Units.Length> ColumnWidths,
     IReadOnlyList<RtfLayoutRow> Rows,
     int HeaderRowCount,
-    Core.Units.Length LeftIndent);
+    Core.Units.Length LeftIndent,
+    int SectionIndex = 0);
 
 /// <summary>One row of an RTF table.</summary>
 /// <param name="Cells">Its cells, left to right; a cell covered by a merge above is absent.</param>

@@ -191,7 +191,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                blocks, Sections[0], furniture: Furniture(fonts)),
+                blocks,
+                [.. Sections.Select((section, index) =>
+                    new PaginatedSection(section, Furniture(fonts, index)))]),
             blocks);
     }
 
@@ -199,14 +201,14 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// The document's headers and footers, ready for the page frames.
     /// </summary>
     /// <remarks>
-    /// The same conversion the body goes through, over the stories the header subdocument holds — see
-    /// <c>Ww8DocumentReader.ReadLayoutFurniture</c> for why the order of those stories is the whole
-    /// mapping. One font cache is shared with the body, so a header in the body's face resolves to the
+    /// The same conversion the body goes through, over the six stories the header subdocument holds for this
+    /// section — see <c>Ww8DocumentReader.ReadLayoutFurniture</c> for why the order of those stories is the
+    /// whole mapping. One font cache is shared with the body, so a header in the body's face resolves to the
     /// identical face object rather than an equal one.
     /// </remarks>
-    private PageFurnitureSet? Furniture(LayoutFonts fonts)
+    private PageFurnitureSet? Furniture(LayoutFonts fonts, int section)
     {
-        Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture();
+        Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture(section);
 
         Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
         Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
@@ -247,7 +249,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         {
             if (block.Paragraph is { } paragraph)
             {
-                blocks.AddRange(Convert(fonts, [paragraph]));
+                blocks.AddRange(Convert(fonts, [paragraph])
+                    .Select(converted => converted with { SectionIndex = paragraph.SectionIndex }));
                 continue;
             }
 
@@ -284,6 +287,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         return new PageTable
         {
+            SectionIndex = table.SectionIndex,
             ColumnWidths = table.ColumnWidths,
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
