@@ -37,21 +37,22 @@ public static class PageDrawing
     /// </para>
     /// </remarks>
     /// <param name="page">The page to draw.</param>
-    /// <param name="paragraphs">The paragraphs the page's body lines index into.</param>
+    /// <param name="blocks">The blocks the page's body lines index into.</param>
     /// <param name="sink">Receives the drawing commands.</param>
     public static void Draw(
-        LaidOutPage page, IReadOnlyList<PageParagraph> paragraphs, IDrawingSink sink)
+        LaidOutPage page, IReadOnlyList<PageBlock> blocks, IDrawingSink sink)
     {
         ArgumentNullException.ThrowIfNull(page);
-        ArgumentNullException.ThrowIfNull(paragraphs);
+        ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sink);
 
         sink.BeginPage(page.Size);
         try
         {
-            DrawFurniture(page.Header, sink);
-            DrawLines(page.BodyArea, page.Lines, paragraphs, sink);
-            DrawFurniture(page.Footer, sink);
+            DrawFlow(page.Header, sink);
+            DrawLines(page.BodyArea, page.Lines, blocks, sink);
+            foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
+            DrawFlow(page.Footer, sink);
         }
         finally
         {
@@ -61,12 +62,25 @@ public static class PageDrawing
         }
     }
 
-    /// <summary>Draws a header or a footer, which is a page's lines in a different rectangle.</summary>
-    private static void DrawFurniture(PlacedFurniture? furniture, IDrawingSink sink)
+    /// <summary>Draws a flow — a header, a footer or a cell — which is lines in their own rectangle.</summary>
+    private static void DrawFlow(PlacedFlow? flow, IDrawingSink sink)
     {
-        if (furniture is null || furniture.IsEmpty) return;
+        if (flow is null || flow.IsEmpty) return;
 
-        DrawLines(furniture.Area, furniture.Lines, furniture.Paragraphs, sink);
+        DrawLines(flow.Area, flow.Lines, flow.Paragraphs, sink);
+    }
+
+    /// <summary>
+    /// Draws a table, which is its cells' text.
+    /// </summary>
+    /// <remarks>
+    /// Text only for now: borders and cell shading are read by the extraction pass but not yet carried into
+    /// layout, so a table currently draws as its words in the right places and nothing round them. That is
+    /// the half a text comparison can verify, and the half every other feature depends on.
+    /// </remarks>
+    private static void DrawTable(PlacedTable table, IDrawingSink sink)
+    {
+        foreach (PlacedTableCell cell in table.Cells) DrawFlow(cell.Content, sink);
     }
 
     /// <summary>
@@ -80,14 +94,13 @@ public static class PageDrawing
     private static void DrawLines(
         DocRect area,
         IReadOnlyList<PlacedLine> lines,
-        IReadOnlyList<PageParagraph> paragraphs,
+        IReadOnlyList<PageBlock> blocks,
         IDrawingSink sink)
     {
         foreach (PlacedLine line in lines)
         {
-            if (line.ParagraphIndex < 0 || line.ParagraphIndex >= paragraphs.Count) continue;
-
-            PageParagraph paragraph = paragraphs[line.ParagraphIndex];
+            if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
+            if (blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
 
             foreach ((GlyphRun run, Colour colour) in RunsIn(area, line, paragraph))
             {

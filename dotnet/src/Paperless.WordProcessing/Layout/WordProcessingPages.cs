@@ -18,11 +18,11 @@ public sealed class WordProcessingPages : IPageSequence
     private readonly List<PageView> _pages;
 
     internal WordProcessingPages(
-        IReadOnlyList<LaidOutPage> pages, IReadOnlyList<PageParagraph>? paragraphs = null)
+        IReadOnlyList<LaidOutPage> pages, IReadOnlyList<PageBlock>? blocks = null)
     {
         ArgumentNullException.ThrowIfNull(pages);
-        Paragraphs = paragraphs ?? [];
-        _pages = [.. pages.Select(page => new PageView(page, Paragraphs))];
+        Blocks = blocks ?? [];
+        _pages = [.. pages.Select(page => new PageView(page, Blocks))];
     }
 
     /// <inheritdoc/>
@@ -35,7 +35,7 @@ public sealed class WordProcessingPages : IPageSequence
     public IReadOnlyList<LaidOutPage> Pages => [.. _pages.Select(page => page.Laid)];
 
     /// <summary>
-    /// The paragraphs the pages were filled from, indexed by <see cref="PlacedLine.ParagraphIndex"/>.
+    /// The blocks the pages were filled from, indexed by <see cref="PlacedLine.ParagraphIndex"/>.
     /// </summary>
     /// <remarks>
     /// Carried rather than left to the caller to rebuild, because a <see cref="PlacedLine"/> holds a
@@ -43,7 +43,15 @@ public sealed class WordProcessingPages : IPageSequence
     /// were. Anything reading a page back — a renderer, or a test comparing words — needs both halves,
     /// and rebuilding the list means re-resolving every style and re-reading every font.
     /// </remarks>
-    public IReadOnlyList<PageParagraph> Paragraphs { get; }
+    public IReadOnlyList<PageBlock> Blocks { get; }
+
+    /// <summary>The body paragraphs among the blocks, for a caller that wants only those.</summary>
+    /// <remarks>
+    /// Filtered rather than index-aligned, so this is <em>not</em> what a
+    /// <see cref="PlacedLine.ParagraphIndex"/> indexes — a document with a table has blocks that are not
+    /// paragraphs, and the indexes would part company at the first one. Use <see cref="Blocks"/> for that.
+    /// </remarks>
+    public IEnumerable<PageParagraph> Paragraphs => Blocks.OfType<PageParagraph>();
 
     /// <summary>
     /// The text of a placed line.
@@ -55,13 +63,13 @@ public sealed class WordProcessingPages : IPageSequence
     /// </remarks>
     public string TextOf(PlacedLine line)
     {
-        if (line.ParagraphIndex < 0 || line.ParagraphIndex >= Paragraphs.Count) return string.Empty;
+        if (line.ParagraphIndex < 0 || line.ParagraphIndex >= Blocks.Count) return string.Empty;
+        if (Blocks[line.ParagraphIndex] is not PageParagraph paragraph) return string.Empty;
 
-        string paragraph = Paragraphs[line.ParagraphIndex].Text;
-        return line.Box.Line.VisibleTextIn(paragraph).ToString();
+        return line.Box.Line.VisibleTextIn(paragraph.Text).ToString();
     }
 
-    private sealed class PageView(LaidOutPage laid, IReadOnlyList<PageParagraph> paragraphs) : IPage
+    private sealed class PageView(LaidOutPage laid, IReadOnlyList<PageBlock> blocks) : IPage
     {
         internal LaidOutPage Laid { get; } = laid;
 
@@ -80,10 +88,10 @@ public sealed class WordProcessingPages : IPageSequence
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The page's body text, as one glyph run per line for a uniform paragraph and one per formatting
-        /// change for a mixed one. Not its furniture: headers, footers and floating frames are not placed
-        /// by pagination yet, so what is drawn is what the page holds.
+        /// The whole page: its header, its body text — one glyph run per line for a uniform paragraph and
+        /// one per formatting change for a mixed one — its tables, and its footer. Floating frames are the
+        /// one kind of content still missing, being the one kind pagination does not place.
         /// </remarks>
-        public void Draw(IDrawingSink sink) => PageDrawing.Draw(Laid, paragraphs, sink);
+        public void Draw(IDrawingSink sink) => PageDrawing.Draw(Laid, blocks, sink);
     }
 }

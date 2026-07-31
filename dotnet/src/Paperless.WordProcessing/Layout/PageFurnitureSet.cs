@@ -26,8 +26,8 @@ public sealed class PageFurnitureSet
 {
     private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> _headers;
     private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> _footers;
-    private readonly Dictionary<PageFurnitureSlot, PlacedFurniture?> _laidOutHeaders = [];
-    private readonly Dictionary<PageFurnitureSlot, PlacedFurniture?> _laidOutFooters = [];
+    private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutHeaders = [];
+    private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutFooters = [];
 
     /// <summary>Creates a set from the paragraphs each slot holds.</summary>
     /// <param name="headers">The headers, by slot; a slot with no entry has no header.</param>
@@ -48,26 +48,33 @@ public sealed class PageFurnitureSet
     /// <param name="geometry">The page's geometry, for the header's area.</param>
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
-    public PlacedFurniture? Header(
+    public PlacedFlow? Header(
         WritingSection section, PageGeometry geometry, int pageNumber, bool isFirstPageOfSection)
         => Resolve(
             _headers, _laidOutHeaders, section, geometry.HeaderArea, pageNumber, isFirstPageOfSection,
             offsetFromTop: Length.Zero);
 
-    /// <summary>The footer a page takes, laid out, or null when it has none.</summary>
+    /// <summary>
+    /// The footer a page takes, laid out, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// Placed by <see cref="PageGeometry.FooterOffset"/>: an offset puts its first line that far below the
+    /// area's top and no offset bottom-aligns it. Both rules are real — see that property for which format
+    /// uses which.
+    /// </remarks>
     /// <param name="section">The section, for its slot rules.</param>
     /// <param name="geometry">The page's geometry, for the footer's area.</param>
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
-    public PlacedFurniture? Footer(
+    public PlacedFlow? Footer(
         WritingSection section, PageGeometry geometry, int pageNumber, bool isFirstPageOfSection)
         => Resolve(
             _footers, _laidOutFooters, section, geometry.FooterArea, pageNumber, isFirstPageOfSection,
             offsetFromTop: geometry.FooterOffset);
 
-    private static PlacedFurniture? Resolve(
+    private static PlacedFlow? Resolve(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> slots,
-        Dictionary<PageFurnitureSlot, PlacedFurniture?> cache,
+        Dictionary<PageFurnitureSlot, PlacedFlow?> cache,
         WritingSection section,
         DocRect area,
         int pageNumber,
@@ -79,9 +86,9 @@ public sealed class PageFurnitureSet
             section.HasDifferentFirstPage, section.HasDifferentEvenPages);
 
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageParagraph>? paragraphs)) return null;
-        if (cache.TryGetValue(slot, out PlacedFurniture? cached)) return cached;
+        if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
-        PlacedFurniture? placed = LayOut(paragraphs, area, offsetFromTop);
+        PlacedFlow? placed = FlowLayouter.LayOut(paragraphs, area, offsetFromTop);
         cache[slot] = placed;
         return placed;
     }
@@ -116,95 +123,5 @@ public sealed class PageFurnitureSet
         }
 
         return PageFurnitureSlot.Default;
-    }
-
-    /// <summary>
-    /// Lays a header's or footer's paragraphs out into its area.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// A header always grows downwards from the top of its own area, so a one-line header sits against the
-    /// top margin and a second line pushes into the gap below. A footer's placement is the document's to
-    /// state, through <see cref="PageGeometry.FooterOffset"/>: an offset puts its first line that far below
-    /// the area's top, and no offset bottom-aligns the whole thing so that its last line rests on the bottom
-    /// margin. Both rules exist because both are real — see that property for which format uses which.
-    /// </para>
-    /// <para>
-    /// Nothing is clipped and nothing paginates: a header taller than its area overflows into the body,
-    /// which is what Writer does with a fixed-height header whose content does not fit. Splitting it across
-    /// pages would be worse — a header is furniture, and furniture does not flow.
-    /// </para>
-    /// </remarks>
-    private static PlacedFurniture? LayOut(
-        IReadOnlyList<PageParagraph> paragraphs, DocRect area, Length? offsetFromTop)
-    {
-        if (paragraphs.Count == 0 || area.Width <= Length.Zero) return null;
-
-        List<PlacedLine> placed = [];
-        Length top = Length.Zero;
-
-        for (int i = 0; i < paragraphs.Count; i++)
-        {
-            PageParagraph paragraph = paragraphs[i];
-            ParagraphLayouter layouter = new(paragraph.Face);
-            ParagraphFormat? previous = i > 0 ? paragraphs[i - 1].Format : null;
-
-            LaidOutParagraph layout = paragraph.HasRuns
-                ? layouter.Layout(
-                    MeasuredParagraph.Measure(
-                        paragraph.Text,
-                        [.. paragraph.Runs.Select(run => run.ToFormattedRun())]),
-                    paragraph.Format,
-                    area.Width,
-                    paragraph.Language,
-                    previous)
-                : layouter.Layout(
-                    paragraph.Text,
-                    paragraph.Format,
-                    paragraph.EmSize,
-                    area.Width,
-                    paragraph.Language,
-                    previous,
-                    paragraph.Shaping);
-
-            top += layout.SpaceBefore;
-
-            for (int line = 0; line < layout.Lines.Count; line++)
-            {
-                LineBox box = layout.Lines[line];
-
-                // The first line loses the leading above its text, exactly as the first line of a page's
-                // body does: the space belongs to the paragraph's upper margin and is dropped at the top
-                // of a frame, and a header is a frame.
-                if (placed.Count == 0) box = box.WithoutSpaceAbove();
-
-                placed.Add(new PlacedLine(i, line, box, top));
-                top += box.Height;
-            }
-
-            top += layout.SpaceAfter;
-        }
-
-        if (placed.Count == 0) return null;
-
-        // Where the block as a whole goes. A stated offset is taken as given even when the content is
-        // taller than the area — an overflowing footer grows downwards past the bottom margin, which is
-        // what Writer does. A bottom-aligned one only shifts when there is room to shift into.
-        Length shift = offsetFromTop ?? (top < area.Height ? area.Height - top : Length.Zero);
-
-        if (shift != Length.Zero)
-        {
-            for (int i = 0; i < placed.Count; i++)
-            {
-                placed[i] = placed[i] with { Top = placed[i].Top + shift };
-            }
-        }
-
-        return new PlacedFurniture
-        {
-            Paragraphs = paragraphs,
-            Lines = placed,
-            Area = area,
-        };
     }
 }

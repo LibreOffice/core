@@ -109,9 +109,9 @@ public sealed class Paginator
     public bool WasTruncated { get; private set; }
 
     /// <summary>
-    /// Paginates a sequence of paragraphs onto one section's page geometry.
+    /// Paginates a sequence of blocks onto one section's page geometry.
     /// </summary>
-    /// <param name="paragraphs">The paragraphs, in document order.</param>
+    /// <param name="blocks">The paragraphs and tables, in document order.</param>
     /// <param name="section">The section whose geometry the pages use.</param>
     /// <param name="startingNumber">
     /// The number to print on the first page, when the section does not restart numbering itself.
@@ -122,12 +122,12 @@ public sealed class Paginator
     /// and over for an answer that cannot change.
     /// </param>
     public List<LaidOutPage> Paginate(
-        IReadOnlyList<PageParagraph> paragraphs,
+        IReadOnlyList<PageBlock> blocks,
         WritingSection? section = null,
         int startingNumber = 1,
         PageFurnitureSet? furniture = null)
     {
-        ArgumentNullException.ThrowIfNull(paragraphs);
+        ArgumentNullException.ThrowIfNull(blocks);
 
         WasTruncated = false;
 
@@ -137,27 +137,37 @@ public sealed class Paginator
         Length bodyWidth = page.ColumnWidth;
 
         List<LaidOutPage> pages = [];
-        if (paragraphs.Count == 0 || bodyHeight <= Length.Zero || bodyWidth <= Length.Zero)
+        if (blocks.Count == 0 || bodyHeight <= Length.Zero || bodyWidth <= Length.Zero)
         {
             pages.Add(EmptyPage(0, startingNumber, page, Furniture(furniture, geometry, page, startingNumber, first: true)));
             return pages;
         }
 
-        // Every paragraph is laid out once, at the section's width. Re-laying one out because it moved
-        // to another page would give the same answer — the width does not change within a section — and
-        // laying out is where the shaping cost is.
-        List<LaidOutParagraph> laid = new(paragraphs.Count);
-        for (int i = 0; i < paragraphs.Count; i++)
+        // Every block is laid out once, at the section's width. Re-laying one out because it moved to
+        // another page would give the same answer — the width does not change within a section — and
+        // laying out is where the shaping cost is. That matters most for a table: a long one crossing
+        // several page breaks would otherwise shape all of its cells once per page it touches.
+        List<LaidBlock> laid = new(blocks.Count);
+        for (int i = 0; i < blocks.Count; i++)
         {
-            PageParagraph paragraph = paragraphs[i];
+            if (blocks[i] is PageTable table)
+            {
+                (List<PlacedTableCell> cells, List<Length> rowHeights) =
+                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero));
+
+                laid.Add(new LaidBlock(null, cells, rowHeights));
+                continue;
+            }
+
+            PageParagraph paragraph = (PageParagraph)blocks[i];
             ParagraphLayouter layouter = new(paragraph.Face);
-            ParagraphFormat? previous = i > 0 ? paragraphs[i - 1].Format : null;
+            ParagraphFormat? previous = PreviousFormat(blocks, i);
 
             // A paragraph with runs is measured across them, so each line is as tall as its own tallest
             // run rather than as the paragraph's font. Without runs the single-face path is not merely a
             // shortcut — it is the common case, and it avoids building a prefix table per run for a
             // paragraph that has one.
-            laid.Add(paragraph.HasRuns
+            laid.Add(new LaidBlock(paragraph.HasRuns
                 ? layouter.Layout(
                     Measure(paragraph),
                     paragraph.Format,
@@ -171,16 +181,17 @@ public sealed class Paginator
                     bodyWidth,
                     paragraph.Language,
                     previous,
-                    paragraph.Shaping));
+                    paragraph.Shaping)));
         }
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
         List<PlacedLine> placed = [];
+        List<PlacedTable> tables = [];
         Length used = Length.Zero;
         int paragraphIndex = 0;
         int lineIndex = 0;
 
-        while (paragraphIndex < paragraphs.Count)
+        while (paragraphIndex < blocks.Count)
         {
             if (pages.Count >= _options.MaxPages)
             {
@@ -188,49 +199,108 @@ public sealed class Paginator
                 break;
             }
 
-            PageParagraph paragraph = paragraphs[paragraphIndex];
-            LaidOutParagraph layout = laid[paragraphIndex];
+            bool pageIsEmpty = placed.Count == 0 && tables.Count == 0;
+
+            if (blocks[paragraphIndex] is PageTable table)
+            {
+                Length before = pageIsEmpty && !_options.KeepsSpacingAtTopOfPage
+                    ? Length.Zero
+                    : table.SpaceBefore;
+
+                int fittedRows = FittedRows(
+                    laid[paragraphIndex].RowHeights, lineIndex, used + before, bodyHeight);
+
+                // Nothing of the table may go here. An empty page would leave the same problem, so a row
+                // taller than a whole page is placed anyway and allowed to overflow.
+                if (fittedRows == 0)
+                {
+                    if (!pageIsEmpty)
+                    {
+                        pages.Add(Page(
+                            pages.Count, pageNumber++, page, placed, tables,
+                            Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
+                        placed = [];
+                        tables = [];
+                        used = Length.Zero;
+                        continue;
+                    }
+
+                    fittedRows = 1;
+                }
+
+                (PlacedTable part, Length height) = PlaceRows(
+                    table, laid[paragraphIndex], lineIndex, fittedRows, page.TextArea,
+                    used + before, repeatHeadings: lineIndex > 0);
+
+                tables.Add(part);
+                used += before + height;
+                lineIndex = part.RowEnd;
+
+                if (lineIndex < laid[paragraphIndex].RowHeights.Count)
+                {
+                    // The table is split: the rest goes on the next page, with its headings repeated.
+                    pages.Add(Page(
+                        pages.Count, pageNumber++, page, placed, tables,
+                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
+                    placed = [];
+                    tables = [];
+                    used = Length.Zero;
+                    continue;
+                }
+
+                used += table.SpaceAfter;
+                paragraphIndex++;
+                lineIndex = 0;
+                continue;
+            }
+
+            PageParagraph paragraph = (PageParagraph)blocks[paragraphIndex];
+            LaidOutParagraph layout = laid[paragraphIndex].Paragraph!;
 
             // A page break before a paragraph that is not already at the top of a page.
-            if (lineIndex == 0 && paragraph.Format.StartsNewPage && placed.Count > 0)
+            if (lineIndex == 0 && paragraph.Format.StartsNewPage && !pageIsEmpty)
             {
                 pages.Add(Page(
                     pages.Count,
                     pageNumber++,
                     page,
                     placed,
+                    tables,
                     Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                 placed = [];
+                tables = [];
                 used = Length.Zero;
                 continue;
             }
 
             Length spaceAbove = lineIndex == 0
-                ? SpaceAbove(paragraphs, laid, paragraphIndex, atTopOfPage: placed.Count == 0)
+                ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: pageIsEmpty)
                 : Length.Zero;
 
             int fitted = Fit(
-                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: placed.Count == 0);
+                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: pageIsEmpty);
             int allowed = Allowed(
-                paragraph.Format, layout.Lines.Count, lineIndex, fitted, placed.Count == 0);
+                paragraph.Format, layout.Lines.Count, lineIndex, fitted, pageIsEmpty);
 
             if (allowed <= 0)
             {
                 // Nothing of this paragraph may go here. An empty page would leave the same problem, so
                 // a paragraph that cannot fit a page of its own is placed anyway and allowed to overflow.
-                if (placed.Count == 0)
+                if (pageIsEmpty)
                 {
                     allowed = Math.Max(1, fitted);
                 }
                 else
                 {
                     pages.Add(Page(
-                    pages.Count,
-                    pageNumber++,
-                    page,
-                    placed,
-                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
+                        pages.Count,
+                        pageNumber++,
+                        page,
+                        placed,
+                        tables,
+                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                     placed = [];
+                    tables = [];
                     used = Length.Zero;
                     continue;
                 }
@@ -243,7 +313,8 @@ public sealed class Paginator
 
                 // The first line on a page loses the leading above its text, box and all: Writer counts
                 // that leading as part of the paragraph's upper space and drops it at the top of a frame.
-                if (placed.Count == 0) box = box.WithoutSpaceAbove();
+                // Only when it really is the page's first content — a line below a table is not.
+                if (pageIsEmpty && placed.Count == 0) box = box.WithoutSpaceAbove();
 
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top));
                 top += box.Height;
@@ -260,8 +331,10 @@ public sealed class Paginator
                     pageNumber++,
                     page,
                     placed,
+                    tables,
                     Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                 placed = [];
+                tables = [];
                 used = Length.Zero;
                 continue;
             }
@@ -273,21 +346,24 @@ public sealed class Paginator
             // Keep-with-next: this paragraph may not end a page its successor does not start. Checked
             // after placing it, because whether the successor fits is only knowable once this one has.
             if (paragraph.Format.KeepWithNext
-                && paragraphIndex < paragraphs.Count
-                && !FirstLineFits(laid[paragraphIndex], used, bodyHeight))
+                && paragraphIndex < blocks.Count
+                && laid[paragraphIndex].Paragraph is { } next
+                && !FirstLineFits(next, used, bodyHeight))
             {
                 MoveTrailingGroupToNextPage(
-                    paragraphs, placed, out List<PlacedLine> moved, out int movedFrom);
+                    blocks, placed, out List<PlacedLine> moved, out int movedFrom);
 
                 if (moved.Count > 0 && movedFrom > 0)
                 {
                     pages.Add(Page(
-                    pages.Count,
-                    pageNumber++,
-                    page,
-                    placed,
-                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
+                        pages.Count,
+                        pageNumber++,
+                        page,
+                        placed,
+                        tables,
+                        Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                     placed = [];
+                    tables = [];
                     used = Length.Zero;
                     paragraphIndex = movedFrom;
                     continue;
@@ -295,13 +371,14 @@ public sealed class Paginator
             }
         }
 
-        if (placed.Count > 0 || pages.Count == 0)
+        if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0)
         {
             pages.Add(Page(
                 pages.Count,
                 pageNumber,
                 page,
                 placed,
+                tables,
                 Furniture(furniture, geometry, page, pageNumber, pages.Count == 0)));
         }
 
@@ -430,21 +507,24 @@ public sealed class Paginator
     /// here on every paragraph boundary and at the top of every page.
     /// </remarks>
     private Length SpaceAbove(
-        IReadOnlyList<PageParagraph> paragraphs,
-        List<LaidOutParagraph> laid,
+        IReadOnlyList<PageBlock> blocks,
+        List<LaidBlock> laid,
         int index,
         bool atTopOfPage)
     {
-        Length before = laid[index].SpaceBefore;
+        Length before = laid[index].Paragraph!.SpaceBefore;
 
         if (atTopOfPage && !_options.KeepsSpacingAtTopOfPage) return Length.Zero;
         if (index == 0 || !_options.CollapsesSpacing) return before;
 
         // Collapsing: the gap is the larger of the two rather than their sum. The previous paragraph's
         // space-after has already been added to the running height, so what is added here is only the
-        // part of space-before that exceeds it.
-        Length after = paragraphs[index - 1].Format.SpaceAfter;
-        Length excess = before - after;
+        // part of space-before that exceeds it. A table before this paragraph collapses nothing, because
+        // its own space-after is a table property rather than a paragraph's and the formats do not
+        // collapse the two against each other.
+        if (blocks[index - 1] is not PageParagraph previous) return before;
+
+        Length excess = before - previous.Format.SpaceAfter;
         return excess > Length.Zero ? excess : Length.Zero;
     }
 
@@ -459,7 +539,7 @@ public sealed class Paginator
     /// broken after all, which is what Writer does rather than looping.
     /// </remarks>
     private static void MoveTrailingGroupToNextPage(
-        IReadOnlyList<PageParagraph> paragraphs,
+        IReadOnlyList<PageBlock> blocks,
         List<PlacedLine> placed,
         out List<PlacedLine> moved,
         out int movedFrom)
@@ -472,9 +552,16 @@ public sealed class Paginator
         int firstOnPage = placed[0].ParagraphIndex;
         int last = placed[^1].ParagraphIndex;
 
-        // Walk back over the chain of paragraphs that each keep with the next.
+        // Walk back over the chain of paragraphs that each keep with the next. A table ends the chain:
+        // keep-with-next is a paragraph property, and a paragraph cannot be kept with a table it does not
+        // know about.
         int first = last;
-        while (first > firstOnPage && paragraphs[first - 1].Format.KeepWithNext) first--;
+        while (first > firstOnPage
+               && blocks[first - 1] is PageParagraph previous
+               && previous.Format.KeepWithNext)
+        {
+            first--;
+        }
 
         // A paragraph that started on an earlier page cannot be moved, and neither can the whole page.
         if (first <= firstOnPage) return;
@@ -493,7 +580,8 @@ public sealed class Paginator
         int number,
         PageGeometry geometry,
         List<PlacedLine> lines,
-        (PlacedFurniture? Header, PlacedFurniture? Footer) furniture)
+        List<PlacedTable> tables,
+        (PlacedFlow? Header, PlacedFlow? Footer) furniture)
         => new()
         {
             Index = index,
@@ -501,6 +589,7 @@ public sealed class Paginator
             Size = geometry.Size,
             BodyArea = geometry.TextArea,
             Lines = [.. lines],
+            Tables = [.. tables],
             Header = furniture.Header,
             Footer = furniture.Footer,
         };
@@ -509,7 +598,7 @@ public sealed class Paginator
         int index,
         int number,
         PageGeometry geometry,
-        (PlacedFurniture? Header, PlacedFurniture? Footer) furniture)
+        (PlacedFlow? Header, PlacedFlow? Footer) furniture)
         => new()
         {
             Index = index,
@@ -531,7 +620,7 @@ public sealed class Paginator
     /// inside the set, because most pages of a document share one header and laying it out again per page
     /// would shape the same text for the same answer.
     /// </remarks>
-    private static (PlacedFurniture? Header, PlacedFurniture? Footer) Furniture(
+    private static (PlacedFlow? Header, PlacedFlow? Footer) Furniture(
         PageFurnitureSet? furniture,
         WritingSection section,
         PageGeometry geometry,
@@ -541,4 +630,137 @@ public sealed class Paginator
             ? (null, null)
             : (furniture.Header(section, geometry, pageNumber, first),
                furniture.Footer(section, geometry, pageNumber, first));
+    /// <summary>
+    /// The format of the nearest preceding paragraph, for the contextual-spacing comparison.
+    /// </summary>
+    /// <remarks>
+    /// Nearest <em>paragraph</em>, not nearest block: contextual spacing suppresses the gap between two
+    /// paragraphs of one style, and a table between them is not one of those. Null when there is no
+    /// preceding paragraph at all, which the layouter reads as "this is the first".
+    /// </remarks>
+    private static ParagraphFormat? PreviousFormat(IReadOnlyList<PageBlock> blocks, int index)
+        => index > 0 && blocks[index - 1] is PageParagraph previous ? previous.Format : null;
+
+    /// <summary>
+    /// How many of a table's remaining rows fit in what is left of the page.
+    /// </summary>
+    /// <remarks>
+    /// A row fits when its whole height does, the same rule a line follows — a row split across a page
+    /// break is a thing Word can do and Writer cannot, and Writer is what this matches. So a row taller
+    /// than the space left moves whole, and one taller than a page overflows rather than being cut.
+    /// </remarks>
+    private static int FittedRows(
+        List<Length> rowHeights, int from, Length used, Length available)
+    {
+        Length room = available - used;
+        int count = 0;
+
+        for (int row = from; row < rowHeights.Count; row++)
+        {
+            if (rowHeights[row] > room) break;
+
+            room -= rowHeights[row];
+            count++;
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Puts a run of a table's rows on the page, repeating its headings when it is a continuation.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The cells were laid out once, relative to the table's own top-left, so placing them is a shift
+    /// rather than a re-layout — which is the point of doing the work up front. The shift differs for the
+    /// repeated headings, because they come from the top of the table and are being drawn part way down
+    /// it, so they are offset separately from the rows that follow.
+    /// </para>
+    /// <para>
+    /// A continuation whose headings would leave no room for a single ordinary row still gets them: the
+    /// alternative is a page holding a heading and nothing else followed by another just like it, which
+    /// does not terminate.
+    /// </para>
+    /// </remarks>
+    /// <param name="table">The table.</param>
+    /// <param name="laid">Its cells and row heights, relative to its own top-left.</param>
+    /// <param name="from">The first row to place.</param>
+    /// <param name="count">How many rows to place.</param>
+    /// <param name="body">The page's body area, which the cells' coordinates end up relative to.</param>
+    /// <param name="top">How far below the body's top the placed part starts.</param>
+    /// <param name="repeatHeadings">True when this is a continuation and the headings come again.</param>
+    private static (PlacedTable Table, Length Height) PlaceRows(
+        PageTable table,
+        LaidBlock laid,
+        int from,
+        int count,
+        DocRect body,
+        Length top,
+        bool repeatHeadings)
+    {
+        List<Length> heights = laid.RowHeights;
+        int end = Math.Min(from + count, heights.Count);
+
+        int headings = repeatHeadings
+            ? Math.Min(Math.Max(table.HeaderRowCount, 0), from)
+            : 0;
+
+        Length headingHeight = Length.Zero;
+        for (int row = 0; row < headings; row++) headingHeight += heights[row];
+
+        Length placedHeight = headingHeight;
+        for (int row = from; row < end; row++) placedHeight += heights[row];
+
+        Length skipped = Length.Zero;
+        for (int row = 0; row < from; row++) skipped += heights[row];
+
+        List<PlacedTableCell> cells = [];
+
+        // The headings first, moved from the top of the table to the top of this part.
+        if (headings > 0)
+        {
+            cells.AddRange(TableLayouter.Offset(
+                laid.Cells.Where(cell => cell.Row < headings),
+                body.X,
+                body.Y + top));
+        }
+
+        // Then the rows themselves, moved up by everything above them and down by where this part starts.
+        cells.AddRange(TableLayouter.Offset(
+            laid.Cells.Where(cell => cell.Row >= from && cell.Row < end),
+            body.X,
+            body.Y + top + headingHeight - skipped));
+
+        return (
+            new PlacedTable
+            {
+                Table = table,
+                Area = new DocRect(
+                    body.X + table.LeftIndent, body.Y + top, table.Width, placedHeight),
+                Cells = cells,
+                FirstRow = from,
+                RowEnd = end,
+            },
+            placedHeight);
+    }
+
+    /// <summary>
+    /// One block after its content has been laid out, whichever kind of block it is.
+    /// </summary>
+    /// <remarks>
+    /// A discriminated pair rather than two parallel lists, because the paginator walks the blocks by
+    /// index and two lists with holes in different places would be one off-by-one away from placing a
+    /// table's rows as a paragraph's lines.
+    /// </remarks>
+    /// <param name="Paragraph">The laid-out paragraph, or null when the block is a table.</param>
+    /// <param name="Cells">A table's cells relative to its own top-left, empty for a paragraph.</param>
+    /// <param name="RowHeights">A table's row heights, empty for a paragraph.</param>
+    private readonly record struct LaidBlock(
+        LaidOutParagraph? Paragraph,
+        List<PlacedTableCell> Cells,
+        List<Length> RowHeights)
+    {
+        /// <summary>Creates the paragraph case.</summary>
+        public LaidBlock(LaidOutParagraph paragraph) : this(paragraph, [], []) { }
+    }
 }

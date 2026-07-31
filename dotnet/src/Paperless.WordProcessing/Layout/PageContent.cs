@@ -8,6 +8,33 @@ using Paperless.Text.Shaping;
 namespace Paperless.WordProcessing.Layout;
 
 /// <summary>
+/// One piece of body-level content waiting to be paginated: a paragraph or a table.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The distinction Writer's own layout draws, and for the same reason: a body frame holds text frames and
+/// table frames side by side, and the two flow differently. A paragraph is a run of lines that can be cut
+/// anywhere a line ends; a table is a grid whose rows are sized by their tallest cell, and whose cells are
+/// each a flow of their own. Neither reduces to the other — flattening a table into its cells' paragraphs
+/// would give the page a height no table has.
+/// </para>
+/// <para>
+/// A closed hierarchy of exactly two cases: sections and floating frames will be pages' business rather
+/// than blocks', because a section changes the page and a floating frame is anchored rather than flowed.
+/// </para>
+/// </remarks>
+public abstract record PageBlock
+{
+    /// <summary>The caller's own reference to whatever this came from.</summary>
+    /// <remarks>
+    /// Pagination reorders nothing but it does split and drop things, so a caller needs to get back from a
+    /// laid-out line to the node it belongs to; carrying an opaque reference is cheaper than making the
+    /// engine know about the document model.
+    /// </remarks>
+    public object? Source { get; init; }
+}
+
+/// <summary>
 /// A paragraph waiting to be paginated: its text, its resolved formatting, and the face it is set in.
 /// </summary>
 /// <remarks>
@@ -17,13 +44,8 @@ namespace Paperless.WordProcessing.Layout;
 /// width it is given — so taking exactly that keeps the engine testable against hand-built input rather
 /// than only against a whole document, and keeps it usable by whichever pass eventually builds it.
 /// </para>
-/// <para>
-/// <see cref="Source"/> is the caller's own handle on where this came from. Pagination reorders nothing
-/// but it does split and drop things, so a caller needs to get back from a laid-out line to the node it
-/// belongs to; carrying an opaque reference is cheaper than making the engine know about the model.
-/// </para>
 /// </remarks>
-public sealed record PageParagraph
+public sealed record PageParagraph : PageBlock
 {
     /// <summary>The paragraph's text, without its terminating mark.</summary>
     public required string Text { get; init; }
@@ -61,9 +83,6 @@ public sealed record PageParagraph
 
     /// <summary>How the text is shaped; the default is what Writer does.</summary>
     public ShapingOptions Shaping { get; init; }
-
-    /// <summary>The caller's own reference to whatever this paragraph came from.</summary>
-    public object? Source { get; init; }
 
     /// <summary>
     /// The paragraph's runs, when its formatting is not uniform.
@@ -149,21 +168,24 @@ public readonly record struct PlacedLine(
 }
 
 /// <summary>
-/// A page's furniture: a header or a footer, laid out into its own area.
+/// A flow of paragraphs laid out into a rectangle of its own: a header, a footer, or a table cell.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Its own paragraph list rather than an index into the body's, because a header is a separate flow: its
-/// paragraphs are not the document's body text and a <see cref="PlacedLine.ParagraphIndex"/> pointing into
-/// the body would name the wrong paragraph. Two pages sharing one header share this whole object.
+/// One type for the three because they are the same thing seen three times — a list of paragraphs, the
+/// lines they broke into, and the rectangle those lines are measured from. What differs is only where the
+/// rectangle is and who decided its width, which is the caller's business rather than the flow's. Sharing
+/// it means one drawing path serves all three, so tabs and per-run formatting cannot drift between a
+/// header and a cell.
 /// </para>
 /// <para>
-/// The area is the rectangle the furniture occupies on the page, so a line's own coordinates stay relative
-/// to it — the same relationship the body's lines have to <see cref="LaidOutPage.BodyArea"/>, which keeps
-/// one drawing path serving all three.
+/// Its own paragraph list rather than an index into the body's, because each of the three <em>is</em> a
+/// separate flow: a header's paragraphs are not the document's body text, and a
+/// <see cref="PlacedLine.ParagraphIndex"/> pointing into the body would name the wrong paragraph. Two
+/// pages sharing one header share this whole object.
 /// </para>
 /// </remarks>
-public sealed record PlacedFurniture
+public sealed record PlacedFlow
 {
     /// <summary>The paragraphs the lines index into.</summary>
     public required IReadOnlyList<PageParagraph> Paragraphs { get; init; }
@@ -209,6 +231,16 @@ public sealed record LaidOutPage
     /// <summary>The lines on the page, in order.</summary>
     public required IReadOnlyList<PlacedLine> Lines { get; init; }
 
+    /// <summary>
+    /// The tables on the page, or the parts of them that landed here.
+    /// </summary>
+    /// <remarks>
+    /// Beside the lines rather than among them, because a table is not a run of lines: its cells sit side
+    /// by side and each carries its own rectangle. A table crossing a page break appears once per page it
+    /// touches, each time with the rows that fit and its headings repeated.
+    /// </remarks>
+    public IReadOnlyList<PlacedTable> Tables { get; init; } = [];
+
     /// <summary>Which section's geometry the page was laid on.</summary>
     public int SectionIndex { get; init; }
 
@@ -218,15 +250,15 @@ public sealed record LaidOutPage
     /// one — and because a page number in a header makes even two pages sharing a slot differ once fields
     /// are resolved.
     /// </remarks>
-    public PlacedFurniture? Header { get; init; }
+    public PlacedFlow? Header { get; init; }
 
     /// <summary>The page's footer, or null when it has none.</summary>
-    public PlacedFurniture? Footer { get; init; }
+    public PlacedFlow? Footer { get; init; }
 
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>
         Lines.Count == 0 ? Length.Zero : Lines[^1].Top + Lines[^1].Box.Height;
 
     /// <summary>True when nothing landed on the page.</summary>
-    public bool IsEmpty => Lines.Count == 0;
+    public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }

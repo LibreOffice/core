@@ -204,7 +204,7 @@ public sealed class DocumentPaginationTests : IDisposable
     /// they were. Reading them twice is cheap next to shaping them once.
     /// </remarks>
     private static IReadOnlyList<PageParagraph> Paragraphs(IDocument document)
-        => Paginate(document).Paragraphs;
+        => [.. Paginate(document).Paragraphs];
 
     /// <summary>The words on each page Paperless produced, in order.</summary>
     /// <remarks>
