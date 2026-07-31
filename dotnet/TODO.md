@@ -14,11 +14,16 @@ behind it.
 
 Two fronts, and they are independent.
 
-**Word processing** is deep into Phase 3's layout half. Footnote placement is done — including
-the feedback loop into pagination, since the note area takes its room out of the body's, so
-adding a note can push the line that cites it onto the next page and thereby remove the note
-again — and notes are read from all four formats. What remains is floating frames with text wrap,
-cell borders and shading, and note numbering *restarts*. Read
+**Word processing** is deep into Phase 3's layout half, and the thing to know before picking it
+up is that **the rasteriser is no longer the blocker it was recorded as**. Everything a word
+processor draws that is not text — a footnote separator, a cell border, a cell shade — is a
+filled or stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in the TestKit read
+them. So those features are verifiable at the same tenth of a point as text, without pixels.
+Footnotes and endnotes are done in all four formats, including the feedback loop into pagination
+that a footnote needs and the separate pages an endnote takes. Cell shading is done in three
+formats and cell borders in two, consolidated the way LibreOffice consolidates them. What
+remains is floating frames with text wrap, the DOC reads for borders and shading, the table
+origin in DOCX and RTF, and note numbering *restarts*. Read
 `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
 warning about borders: they cannot be verified the way everything else in this library has
 been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
@@ -82,7 +87,7 @@ binary.
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Floating frames, cell borders and shading |
+| ❌ | Floating frames with text wrap; cell borders and shading for DOC |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -192,16 +197,22 @@ was found because a page comparison put a word a measurable distance from where 
 
 ## Phase 3 — Rendering
 
-- [ ] Skia raster backend consuming `IDrawingSink`. **The next thing to build**, and not only
-      for its own sake: cell borders, shading and floating-frame outlines cannot be verified
-      against LibreOffice without it, because a word-position comparison cannot see them.
+- [ ] Skia raster backend consuming `IDrawingSink`. Still worth building, but **no longer a
+      prerequisite for anything**, which is a correction: the note here used to say that cell
+      borders, shading and floating-frame outlines could not be verified without it. That was the
+      wrong conclusion from a true premise — a *word-position* comparison cannot see them, but
+      LibreOffice's PDF content stream states every one of them as an explicit path, and
+      `PdfFills` and `PdfStrokes` read those. Borders and shading were verified that way instead.
 - [x] Word-processing page layout: pagination, headers and footers, tables as grids that split
       across pages with repeating heading rows, several sections per document, and columns.
 - [x] Footnote placement, which feeds back into pagination rather than merely adding a note: the
       note area takes its room out of the body's, so a page with notes holds less text, and the
       loop shortens the page until it holds. Endnotes instead take pages of their own after the
-      last body page, numbered i, ii, iii rather than 1, 2, 3. Notes read from all four formats.
-- [ ] The rest of it: floating frames with text wrap, and cell borders and shading.
+      last body page, numbered i, ii, iii rather than 1, 2, 3. Notes read from all four formats,
+      with the separator rule above them drawn and compared.
+- [x] Table cell shading (ODF, DOCX, RTF) and cell borders (ODF, DOCX, RTF), the borders
+      consolidated into one stroke per grid line as LibreOffice writes them.
+- [ ] The rest of it: floating frames with text wrap, and the DOC reads for borders and shading.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.

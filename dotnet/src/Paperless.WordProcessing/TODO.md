@@ -473,11 +473,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       - Width and colour, no style: a style is a rasteriser's problem and no two formats agree on the set, while
         a dashed border at the right width in the right place is far closer than none — and the width is the half
         that moves text.
-- [ ] Cell borders for **DOCX, RTF and DOC**. The model, the consolidation and the comparison are all done and
-      format-independent; what each needs is its own read — `w:tcBorders`, `\clbrdr*` with its own width control
-      word per side, and WW8's `sprmTSetBrc` with the `BRC` structure. The ODF read shows the shape, including
-      the one trap in it: ODF's `none` is a *value* meaning there is no border, so it has to beat the
-      `fo:border` shorthand rather than falling through to it.
+- [x] Cell borders for **DOCX and RTF** as well, each with its own trap:
+      - **DOCX writes `w:start` and `w:end`, not `w:left` and `w:right`.** OOXML has both — the logical pair is
+        the ISO spelling and the physical pair the legacy one — and LibreOffice's export uses the logical names,
+        so a reader that knew only `w:left` finds *no vertical borders at all* and draws five strokes where the
+        reference draws nine. Both are read, logical first.
+      - **`w:sz` is in eighths of a point**, the one OOXML measurement that is neither twips nor half-points.
+      - **RTF states a border in two halves**: `\clbrdrl` and friends *select* a side, and the `\brdrw`,
+        `\brdrcf` and `\brdrnone` words that follow describe whichever was last selected. So the selection is
+        state between control words rather than an argument to one. `\brdrw` is in twips — three formats, three
+        units for one quantity.
+      - ODF's own trap, for the record: `none` is a *value* meaning there is no border, so it beats the
+        `fo:border` shorthand rather than falling through to it.
+- [ ] The **table's own left edge** in DOCX and RTF, which is what keeps those two out of the border comparison
+      rather than anything about the borders: each export writes the table's origin differently relative to the
+      border, so the whole grid shifts. Measured on the first vertical of the corpus table — 56.70 pt in ODF,
+      56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. A quarter and
+      a third of a point. Their borders are otherwise right: the same nine strokes, extents, widths and colours.
+- [ ] Cell borders and shading for **DOC**. Borders are a `BRC` structure through `sprmTSetBrc`, applied to a
+      *range* of cells rather than to one; shading is the per-band `WW8_SHD` array noted above. Both are bigger
+      reads than the other three formats needed.
       The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.

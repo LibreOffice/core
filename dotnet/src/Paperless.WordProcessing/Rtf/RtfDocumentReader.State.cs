@@ -431,6 +431,20 @@ public sealed partial class RtfDocumentReader
         /// <summary>The <c>\clcbpat</c> colour index for the cell being declared, or null for none.</summary>
         public int? PendingCellShading { get; set; }
 
+        /// <summary>
+        /// The borders stated for the cell being declared, in left, right, top, bottom order.
+        /// </summary>
+        /// <remarks>
+        /// RTF states a border in two halves: <c>\clbrdrl</c> and friends *select* a side, and the
+        /// <c>\brdrw</c>, <c>\brdrcf</c> and <c>\brdrnone</c> words that follow describe it. So the selected
+        /// side has to be remembered between the two, which <see cref="PendingBorderSide"/> is for.
+        /// </remarks>
+        public (int Twips, int? ColourIndex, bool IsNone)[] PendingCellBorders { get; } =
+            new (int, int?, bool)[4];
+
+        /// <summary>Which side the border words now apply to, or null when none has been selected.</summary>
+        public int? PendingBorderSide { get; set; }
+
         public bool PendingCellMergesFirst { get; set; }
         public bool PendingCellMerged { get; set; }
         public bool PendingCellVerticalFirst { get; set; }
@@ -457,6 +471,7 @@ public sealed partial class RtfDocumentReader
     /// </param>
     /// <param name="VerticalAlignment">Where the cell's text sits inside its row.</param>
     /// <param name="ShadingColourIndex">Its <c>\clcbpat</c> colour index, or null for none.</param>
+    /// <param name="Borders">Its four borders, in left, right, top, bottom order.</param>
     private readonly record struct CellDefinition(
         int RightEdge,
         bool MergesFirst,
@@ -465,12 +480,16 @@ public sealed partial class RtfDocumentReader
         bool VerticalMerged,
         int?[]? Padding = null,
         Layout.CellVerticalAlignment VerticalAlignment = Layout.CellVerticalAlignment.Top,
-        int? ShadingColourIndex = null);
+        int? ShadingColourIndex = null,
+        (int Twips, int? ColourIndex, bool IsNone)[]? Borders = null);
 
     private sealed class CellDraft
     {
         /// <summary>The colour behind its text, or null when the cell is not shaded.</summary>
         public Colour? Shading { get; set; }
+
+        /// <summary>Its four borders.</summary>
+        public Layout.CellBorders Borders { get; set; }
 
         /// <summary>
         /// The column the cell starts at. Settable because a horizontal merge earlier in the row

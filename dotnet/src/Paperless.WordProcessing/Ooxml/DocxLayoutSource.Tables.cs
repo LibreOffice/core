@@ -62,7 +62,7 @@ public sealed partial class DocxLayoutSource
             Word.Child(properties, "tblCellMar"), DefaultCellPadding);
 
         List<PendingRow> rows = [];
-        ReadRows(element, rows, tablePadding, depth: 0);
+        ReadRows(element, rows, tablePadding, properties, depth: 0);
         if (rows.Count == 0) return null;
 
         return new PageTable
@@ -97,7 +97,11 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>Reads the rows, following the change-tracking wrappers a row can sit inside.</summary>
     private void ReadRows(
-        XElement element, List<PendingRow> rows, CellPadding tablePadding, int depth)
+        XElement element,
+        List<PendingRow> rows,
+        CellPadding tablePadding,
+        XElement? tableProperties,
+        int depth)
     {
         if (depth > 8) return;
 
@@ -107,7 +111,7 @@ public sealed partial class DocxLayoutSource
 
             if (Word.Is(child, "tr"))
             {
-                rows.Add(Row(child, tablePadding));
+                rows.Add(Row(child, tablePadding, tableProperties));
                 continue;
             }
 
@@ -116,12 +120,12 @@ public sealed partial class DocxLayoutSource
             if (Word.Is(child, "sdt") || Word.Is(child, "sdtContent")
                 || Word.Is(child, "customXml") || Word.Is(child, "ins"))
             {
-                ReadRows(child, rows, tablePadding, depth + 1);
+                ReadRows(child, rows, tablePadding, tableProperties, depth + 1);
             }
         }
     }
 
-    private PendingRow Row(XElement element, CellPadding tablePadding)
+    private PendingRow Row(XElement element, CellPadding tablePadding, XElement? tableProperties)
     {
         XElement? properties = Word.Child(element, "trPr");
         List<PendingCell> cells = [];
@@ -143,6 +147,7 @@ public sealed partial class DocxLayoutSource
                     Padding = Padding(Word.Child(cellProperties, "tcMar"), tablePadding),
                     VerticalAlignment = VerticalAlignment(cellProperties),
                     Shading = Shading(cellProperties),
+                    Borders = Borders(cellProperties, tableProperties),
                 },
                 Merge(cellProperties)));
 
@@ -250,6 +255,72 @@ public sealed partial class DocxLayoutSource
 
         return fill is null or "" or "auto" ? null : Hex(fill);
     }
+
+    /// <summary>
+    /// A cell's four borders, its own overriding the table's.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:tblBorders</c> states the table's and <c>w:tcBorders</c> a cell's, and the cell's wins per side
+    /// rather than whole — which is what a table with an outline and one cell with a heavier bottom edge means.
+    /// The table's <c>w:insideH</c> and <c>w:insideV</c> are not read: they describe the *interior* lines, which
+    /// is a per-position rule rather than a per-cell one and needs the cell's place in the grid.
+    /// </remarks>
+    private static CellBorders Borders(XElement? cellProperties, XElement? tableProperties)
+    {
+        XElement? cell = Word.Child(cellProperties, "tcBorders");
+        XElement? table = Word.Child(tableProperties, "tblBorders");
+
+        // `w:start`/`w:end` first and `w:left`/`w:right` as the fallback. OOXML has both — the logical pair is
+        // the ISO spelling and the physical pair the legacy one — and LibreOffice's own export writes the
+        // *logical* names, so a reader that knew only `w:left` finds no vertical borders at all and draws five
+        // strokes where the reference draws nine. The two only differ in a right-to-left table, which nothing
+        // here lays out yet.
+        return new CellBorders(
+            Border(cell, table, "start", "left"),
+            Border(cell, table, "end", "right"),
+            Border(cell, table, "top"),
+            Border(cell, table, "bottom"));
+    }
+
+    /// <summary>
+    /// One border, from the cell's own set or the table's.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:sz</c> is in <em>eighths</em> of a point, which is the one unit in OOXML that is neither twips nor
+    /// half-points — reading it as either gives a border eight or four times too thick. <c>w:val</c> of
+    /// <c>none</c> or <c>nil</c> means there is no border and has to beat the table's, the same way ODF's
+    /// <c>none</c> beats its shorthand.
+    /// </remarks>
+    private static TableBorder Border(
+        XElement? cell, XElement? table, string side, string? legacySide = null)
+    {
+        XElement? stated =
+            Word.Child(cell, side)
+            ?? (legacySide is null ? null : Word.Child(cell, legacySide))
+            ?? Word.Child(table, side)
+            ?? (legacySide is null ? null : Word.Child(table, legacySide));
+
+        if (stated is null) return default;
+
+        if (Word.Attribute(stated, "val") is null or "none" or "nil") return default;
+
+        Length width =
+            int.TryParse(
+                Word.Attribute(stated, "sz"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                out int eighths) && eighths > 0
+                ? Length.FromPoints(eighths / 8.0)
+                : HairlineBorder;
+
+        Colour colour =
+            Word.Attribute(stated, "color") is { } text && text != "auto" && Hex(text) is { } stated_colour
+                ? stated_colour
+                : Colour.Black;
+
+        return new TableBorder(width, colour);
+    }
+
+    /// <summary>The width a border with no usable <c>w:sz</c> is drawn at: half a point.</summary>
+    private static readonly Length HairlineBorder = Length.FromPoints(0.5);
 
     /// <summary>A six-digit RGB colour, or null when the value is not one.</summary>
     private static Colour? Hex(string value)

@@ -763,6 +763,43 @@ public sealed partial class RtfDocumentReader
                 // The unit the matching \clpad takes: 3 is twips and 0 is a "null" the specification
                 // leaves undefined. Only twips is honoured, which is what every producer writes.
                 return;
+            // A border is stated in two halves: these four *select* a side, and the \brdr* words below
+            // describe whichever side was last selected. So the selection is state rather than an argument.
+            case "clbrdrl":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 0;
+                return;
+            case "clbrdrr":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 1;
+                return;
+            case "clbrdrt":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 2;
+                return;
+            case "clbrdrb":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 3;
+                return;
+
+            case "brdrw" or "brdrcf" or "brdrnone" or "brdrtbl":
+            {
+                TableLevel target = DefinitionTarget(CurrentFlow);
+                if (target.PendingBorderSide is not { } at) return;
+
+                (int Twips, int? ColourIndex, bool IsNone) side = target.PendingCellBorders[at];
+
+                target.PendingCellBorders[at] = token.Name switch
+                {
+                    // \brdrw is in twips, unlike OOXML's eighths of a point and ODF's CSS shorthand: one
+                    // quantity, three units, and reading any of them as another is out by a factor.
+                    "brdrw" => (Math.Max(0, token.Parameter ?? 0), side.ColourIndex, side.IsNone),
+                    "brdrcf" => (side.Twips, token.Parameter, side.IsNone),
+
+                    // \brdrnone and \brdrtbl both mean "no border on this side", and both have to beat a
+                    // width stated before them: a producer writes the width and then cancels it.
+                    _ => (0, null, true),
+                };
+
+                return;
+            }
+
             case "clcbpat":
                 // The cell's *background* colour index. \clcfpat is the pattern's foreground and only shows
                 // through a shading percentage, which is not modelled — drawing the background solid is the

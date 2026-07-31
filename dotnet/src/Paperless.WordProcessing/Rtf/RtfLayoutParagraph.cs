@@ -190,6 +190,7 @@ public sealed record RtfLayoutRow(
 /// <param name="VerticalAlignment">Where its text sits when the row is taller than its content.</param>
 /// <param name="Blocks">The blocks inside it, in order — paragraphs, and any table nested in it.</param>
 /// <param name="Shading">The colour behind its text, or null when it is not shaded.</param>
+/// <param name="Borders">Its four borders.</param>
 public sealed record RtfLayoutCell(
     int Column,
     int ColumnSpan,
@@ -197,4 +198,5 @@ public sealed record RtfLayoutCell(
     Layout.CellPadding Padding,
     Layout.CellVerticalAlignment VerticalAlignment,
     IReadOnlyList<RtfLayoutBlock> Blocks,
-    Colour? Shading = null);
+    Colour? Shading = null,
+    Layout.CellBorders Borders = default);

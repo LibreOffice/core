@@ -1,4 +1,5 @@
 using Paperless.Core.Extraction;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.WordProcessing.Layout;
 
@@ -106,7 +107,8 @@ public sealed partial class RtfDocumentReader
             table.PendingCellVerticalMerged,
             [.. table.PendingCellPadding],
             table.PendingCellAlignment,
-            table.PendingCellShading));
+            table.PendingCellShading,
+            [.. table.PendingCellBorders]));
         ClearPendingCellFlags(table);
     }
 
@@ -136,6 +138,35 @@ public sealed partial class RtfDocumentReader
         'l' => 2,
         _ => 3,
     };
+
+    /// <summary>
+    /// A cell's four borders, from the widths and colours its declaration stated.
+    /// </summary>
+    /// <remarks>
+    /// <c>\brdrw</c> is in twips, unlike OOXML's eighths of a point and ODF's CSS shorthand — three formats,
+    /// three units for one quantity. A side selected but given no width still means a border: RTF's own default
+    /// is a hairline, which LibreOffice draws at half a point.
+    /// </remarks>
+    private Layout.CellBorders BordersOf(CellDefinition definition)
+    {
+        (int Twips, int? ColourIndex, bool IsNone)[] stated =
+            definition.Borders ?? new (int, int?, bool)[4];
+
+        return new Layout.CellBorders(
+            Border(stated[0]), Border(stated[1]), Border(stated[2]), Border(stated[3]));
+
+        Layout.TableBorder Border((int Twips, int? ColourIndex, bool IsNone) side)
+        {
+            if (side.IsNone) return default;
+            if (side.Twips <= 0 && side.ColourIndex is null) return default;
+
+            Length width = side.Twips > 0
+                ? Length.FromTwips(side.Twips)
+                : Length.FromPoints(0.5);
+
+            return new Layout.TableBorder(width, ColourAt(side.ColourIndex) ?? Colour.Black);
+        }
+    }
 
     /// <summary>Which side a <c>\trpadd</c> control word sets, which is the side it names.</summary>
     /// <remarks>
@@ -169,6 +200,8 @@ public sealed partial class RtfDocumentReader
         table.PendingCellVerticalMerged = false;
         table.PendingCellAlignment = CellVerticalAlignment.Top;
         table.PendingCellShading = null;
+        table.PendingBorderSide = null;
+        Array.Clear(table.PendingCellBorders);
         Array.Clear(table.PendingCellPadding);
     }
 
@@ -298,6 +331,7 @@ public sealed partial class RtfDocumentReader
             table.RowCells[index].Padding = PaddingOf(definition, table);
             table.RowCells[index].VerticalAlignment = definition.VerticalAlignment;
             table.RowCells[index].Shading = ColourAt(definition.ShadingColourIndex);
+            table.RowCells[index].Borders = BordersOf(definition);
         }
     }
 
@@ -513,7 +547,8 @@ public sealed partial class RtfDocumentReader
                     cell.Padding,
                     cell.VerticalAlignment,
                     [.. cell.LayoutBlocks],
-                    cell.Shading));
+                    cell.Shading,
+                    cell.Borders));
             }
 
             layoutRows.Add(new RtfLayoutRow(

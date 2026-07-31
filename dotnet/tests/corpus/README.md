@@ -213,3 +213,9 @@ the PDF's *stroke* operators rather than its fills. Red rather than black on pur
 with the text by default, and a distinct one makes it obvious in a rendered page which strokes are being
 checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
 one document could not test either cleanly.
+
+`table-borders.*` exists in all five formats but only the two ODF ones are compared stroke for stroke, and the
+reason is the table's *origin* rather than its borders: each export writes the table's own left edge differently
+relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
+DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
+right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
