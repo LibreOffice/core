@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless footnote document</dc:title>
+  <dc:subject>Footnotes at the foot of the page, and the body text they push up</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Note" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="10pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Paragraph 01. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 02.<text:note text:id="ftn2" text:note-class="footnote"><text:note-citation>2</text:note-citation><text:note-body><text:p text:style-name="Note">Note 2 text alpha bravo charlie.</text:p></text:note-body></text:note> kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 03. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 04. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 05.<text:note text:id="ftn5" text:note-class="footnote"><text:note-citation>5</text:note-citation><text:note-body><text:p text:style-name="Note">Note 5 text alpha bravo charlie.</text:p></text:note-body></text:note> kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 06. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 07. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 08. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 09. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 10. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 11. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 12. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+  </office:text></office:body>
+</office:document>

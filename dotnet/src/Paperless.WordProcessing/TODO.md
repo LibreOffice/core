@@ -449,8 +449,30 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read
       time — the readers currently take the declared grid and nothing else.
 - [ ] Floating objects and text wrap, including contour wrap
-- [ ] Footnote placement — footnote area growth changes how much body text fits, which
-      changes pagination, so it must feed back into the page-filling loop
+- [ ] Footnote placement. The one remaining layout feature that changes *pagination* rather than only
+      appearance: the note area grows as notes are anchored, which reduces the body height, which can push
+      the anchoring line to the next page — and that removes the note again. So it is a feedback loop and
+      not a second pass.
+
+      The geometry is measured rather than guessed, from `footnotes.fodt` rendered at A4 with 2 cm margins:
+
+      - **The note area is bottom-aligned in the body text area.** The last note line's box bottom
+        coincides with the body area's bottom to a fiftieth of a point — 785.23 against 785.2. That is
+        exactly what `FlowLayouter` already does with a null `offsetFromTop`, so placing the area needs no
+        new machinery: it is a `PlacedFlow` laid out into the body area with the notes as its blocks.
+      - Note lines break at the **full body width**, not an indented one: the note text starts at the left
+        margin.
+      - Note paragraphs carry their own style, so their line height is their own — 12.20 pt for the 10 pt
+        note against 13.42 pt for the 11 pt body in the corpus document.
+      - The separator line above the area is not measurable from a text comparison, which is the same
+        problem cell borders have and wants the rasteriser first. Writer's default is 25% of the text
+        width; the space above and below it comes from the `Footnote Separator` frame style.
+
+      What is needed beyond that: `PageParagraph.Notes` — a note is anchored at a character offset, which
+      the readers already mark with U+0001 — the readers to collect each note's body as blocks, and the
+      page-filling loop to reduce the available height by the area's height and re-fit when that changes
+      which notes are anchored. `footnotes.fodt` is in the corpus; a document whose notes actually force a
+      break is still to be built, since the present one has room to spare.
 - [x] Columns. Text fills one column top to bottom and flows into the next, and only then to a new page —
       so a `PlacedLine` carries the column it landed in, and *which rectangle its `Top` is measured from*
       is the column's rather than the body's. The top-of-frame rules follow the frame, not the sheet: a
