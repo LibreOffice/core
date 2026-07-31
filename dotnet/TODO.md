@@ -11,6 +11,9 @@ extract. `xlsx`, `pptx`, the legacy `xls` and `ppt`, and CSV do not read at all 
 **A word-processing document now renders to a file**: a PDF with real searchable text and
 subsetted embedded fonts, checked against LibreOffice's own PDF operator for operator, and PNG
 or JPEG at a chosen DPI.
+**And a deck now lays out**: PPTX and ODP produce a page per slide with shapes placed, filled,
+outlined and their text set, compared against LibreOffice's own PDF for the same deck in both
+formats — see Phase 3 and `src/Paperless.Presentations/TODO.md` for what draws and what does not.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
@@ -391,8 +394,31 @@ adding it as an input format would be scope Paperless has said no to.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
-- [ ] Slide rendering: shapes, the placeholder/theme inheritance chain, preset geometries,
-      text bodies with autofit.
+- [x] **Slide layout, for PPTX and ODP.** A deck is an `IPaginatedDocument`, a slide is an
+      `IPage` of the deck's own size, and a shape is placed, filled, outlined and its text laid
+      out through the same `Paperless.Text` engine the word processor uses. Checked against
+      LibreOffice's own PDF for the same deck in both formats: sheet sizes page for page,
+      rectangular fills position **and colour**, and every text run's pen, baseline, size and
+      glyph count — placements to a twentieth of a point, text to a tenth.
+      Three rules were worth the reading, and each is a cascade if wrong.
+      **Flip composes before rotation** (`oox/source/drawingml/shape.cxx:1098-1224`), which only a
+      shape that is not symmetric can prove and which the corpus deck's mirrored-and-rotated
+      triangle does. A group's **`chOff`/`chExt` child space** scales its children, so a group
+      whose child extent is half its extent doubles everything inside it. And **a slide's line
+      height comes from the font size, not from the font**, because the PPTX importer sets
+      `FontIndependentLineSpacing` on every text body
+      (`oox/source/ppt/pptshapecontext.cxx:186`) and EditEngine then makes the ascent one em and
+      the line 1.2 em (`editeng/source/editeng/impedit3.cxx:501,3138`). That last is 1.7 pt on
+      every line of every shape in Liberation Sans, and no word-processing comparison could have
+      found it — Writer never sets the flag.
+- [ ] The rest of slide rendering: pictures, tables, gradients and the other non-solid fills,
+      shadows and the other effects, bullet and number markers, the preset-geometry evaluator
+      beyond the six shapes transcribed by hand, `p:style`'s style-matrix references, and the
+      rung of the inheritance chain that gives an unstated run its size, typeface and colour.
+      Each is written up with its citation and with what would settle it in
+      `src/Paperless.Presentations/TODO.md`. **PPT (binary) does not lay out at all**: its shape
+      tree reads, but a placeholder's rectangle comes from `SlideAtom`'s eight layout placeholder
+      ids and nothing reads those yet.
 - [ ] Raster image decode (via Skia).
 - [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
       no C# prior art — start it early rather than treating it as a tail-end detail.

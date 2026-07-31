@@ -6,6 +6,7 @@ using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Core.Geometry;
 using Paperless.Ooxml;
+using Paperless.Presentations.Layout;
 
 namespace Paperless.Presentations.Ooxml;
 
@@ -171,7 +172,7 @@ public static class PptxReader
 }
 
 /// <summary>An OOXML presentation that has been read.</summary>
-public sealed class PptxDocument : IDocument
+public sealed class PptxDocument : IDocument, IPaginatedDocument
 {
     private readonly PptxFile _file;
 
@@ -206,6 +207,35 @@ public sealed class PptxDocument : IDocument
     /// whether a deck is 4:3 or 16:9 needs no fonts and no rasteriser.
     /// </remarks>
     public DocSize SlideSize => _file.SlideSize;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// <para>
+    /// One page per slide, in <c>p:sldIdLst</c> order, each the deck's own <c>p:sldSz</c>. There
+    /// is nothing to paginate — a slide is told its size and its shapes are told where they go —
+    /// so what this actually costs is resolving each shape's placement, fill and text, which is
+    /// why it is still a deferred method rather than a property.
+    /// </para>
+    /// <para>
+    /// Hidden slides are laid out with the rest and flagged, since a hidden slide is a page of the
+    /// document; <see cref="Layout.LaidOutSlide.IsHidden"/> is how a caller reproducing a viewer's
+    /// output drops them.
+    /// </para>
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        int limit = options?.MaxPages ?? 0;
+        PptxSlideLayout layout = new(_file, new SlideFonts());
+
+        List<LaidOutSlide> slides = [];
+        foreach (PptxSlide slide in _file.Slides)
+        {
+            if (limit > 0 && slides.Count >= limit) break;
+            slides.Add(layout.Layout(slide));
+        }
+
+        return new SlidePages(slides);
+    }
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

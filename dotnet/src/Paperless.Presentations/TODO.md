@@ -42,17 +42,29 @@ ids, which say which master shape a slide placeholder stands in for. Extraction 
 because a PPT text run names its master style directly, in its `TextHeaderAtom`; rendering will,
 for position and fill.
 
+**Done: slide layout, for PPTX and ODP.** A deck is an `IPaginatedDocument` and each slide is an
+`IPage` of the deck's own size; shapes are placed, filled, outlined and their text laid out
+through `Paperless.Text`. Verified against LibreOffice's own PDF for the same deck — placements to
+a twentieth of a point, text pens and baselines to a tenth, fill colours exactly. The whole of
+what is done and what is not is in **Rendering** below. PPT is not laid out at all.
+
 ## Document model
 
-- [ ] Slides, layouts, masters, notes pages, handouts
-- [ ] Shape tree: rectangles, paths, pictures, groups, tables, custom shapes, connectors,
-      placeholders
-- [ ] Shape properties: transform (with flip **before** rotation), fill, line, effects, text
-      body
-- [ ] Text bodies via the shared text layout, with insets, anchoring and autofit
+- [ ] Slides, layouts, masters, notes pages, handouts. **Slides are done**; a notes page and a
+      handout are separate page kinds and neither is produced.
+- [x] Shape tree: rectangles, paths, groups and placeholders, in document order, which is z-order
+      in both vocabularies. Not pictures (no decoder yet), tables or connectors — each has its own
+      entry below.
+- [x] Shape properties: transform (with flip **before** rotation), solid fill, line, text body.
+      Not effects: no shadow, glow, soft edge or reflection is drawn.
+- [x] Text bodies via the shared text layout, with insets and anchoring. `normAutofit`'s
+      `fontScale` and `lnSpcReduction` are applied **as stated in the file** rather than resolved
+      again; `spAutoFit` is not.
 - [x] Slide size (`p:sldSz`, in EMUs already — the one office measurement needing no conversion)
-- [ ] Background fill with inheritance
-- [ ] Presentation styles and outline-level styles
+- [x] Background fill with inheritance: the slide's `p:bg`, then its layout's, then its master's,
+      solid only. ODF resolves the same thing through the drawing-page style's parent chain.
+- [ ] Presentation styles and outline-level styles — see the inheritance chain below, which
+      extraction resolves and rendering does not yet consult for size, face and colour.
 - [ ] Animations and transitions — extract only; do not attempt to render
 
 ## The inheritance chain
@@ -205,7 +217,18 @@ table asserted, not by the corpus.
 
 ### ODP — first
 - [x] `draw:page`, `draw:frame`, `draw:custom-shape` (text; `draw:enhanced-geometry` is rendering)
-- [ ] Master pages; `style:presentation-page-layout`; `presentation:*` attributes
+- [ ] Master pages; `style:presentation-page-layout`; `presentation:*` attributes. The master's
+      `style:page-layout` **is** read, for the slide size, and it must be the one the page's own
+      master names rather than the first in the file: a deck carries at least two and the notes
+      one is A4 portrait in everything LibreOffice writes. The master's own *shapes* are not
+      drawn, which is the same open question the PPTX side has about `showMasterSp`.
+- [ ] **The list style an outline paragraph's indents, spacing and bullet come from.** A
+      `text:list` names a `text:style-name`, and the level is the nesting depth; `OdfListStyle`
+      already parses the levels. Nothing reads them, so `slides-features.odp`'s outline lands
+      17 pt left of the reference with no bullet, and drifts to 9.3 pt low by its third
+      paragraph. The three quantities needed are `fo:margin-left`, `fo:text-indent` and
+      `text:bullet-char` — exactly what the OOXML side gets from `marL`, `indent` and `a:buChar`,
+      through a different resolution.
 - [x] Simpler two-level inheritance than PPTX, which made it the right place to build first
 
 ### PPTX
@@ -408,14 +431,285 @@ Two reference artefacts worth knowing before chasing them:
 
 ## Rendering
 
-- [ ] Slide as a page: background, then shapes in z-order
-- [ ] Shape geometry through the shared preset evaluator
-- [ ] Fills, lines, shadows
-- [ ] Text bodies with anchoring and autofit
-- [ ] Groups with nested transforms
-- [ ] Pictures, including crop and the picture effects worth having
-- [ ] Tables
+- [x] Slide as a page: background, then shapes in z-order. `Layout/SlidePages.cs` and
+      `Layout/SlideDrawing.cs`. A deck that states no background anywhere gets white, because
+      that is what LibreOffice paints — a full-sheet rectangle on every slide of every deck — and
+      a slide that painted nothing would rasterise transparent where a viewer shows paper.
+- [x] Shape geometry: `rect`, `roundRect`, `ellipse`, `triangle`, `rtTriangle` and `diamond`,
+      transcribed from the preset file. Everything else falls back to its bounding rectangle —
+      see below for why that is the right failure and what the real evaluator costs.
+- [x] Solid fills, including themed ones, and lines with width, cap and join. Not shadows, and
+      not gradients: nothing here emits a `GradientPaint`, deliberately.
+- [x] Text bodies with anchoring, insets and the stated autofit scale.
+- [x] Groups with nested transforms, including a child coordinate space that scales.
+- [ ] Pictures, including crop and the picture effects worth having. A `p:pic` is placed and its
+      frame drawn — outline and line, so a missing image is a hole rather than nothing — but no
+      raster is decoded, because nothing in the project decodes one yet
+      (`src/Paperless.Rendering/TODO.md`, "Raster image decode").
+- [ ] Tables. `a:tbl` extracts as a `ContentTable` and is not drawn: a table is a grid of text
+      bodies with per-cell fills and per-edge borders, which is the word processor's
+      `TableLayouter` problem again in a different vocabulary rather than a shape.
 - [ ] Notes pages as separate output pages (optional)
+- [ ] PPT (binary). Nothing lays out. The Escher reader already produces the shape tree and the
+      anchors, but `SlideAtom`'s eight layout placeholder ids — the shape half of the placeholder
+      relationship, recorded as missing in the PPT section above — are what a placeholder's
+      position and fill come from, and without them a PPT title has no rectangle to be in.
+
+### What renders, and what it was measured against
+
+The corpus file is `shape-geometry.pptx` and its converted twin `shape-geometry.odp`, written for
+this and described in `tests/corpus/README.md`. Every offset in it is a round number of inches, so
+a disagreement is a bug rather than a rounding. `Paperless.Presentations.Tests` asserts against
+numbers transcribed from LibreOffice's PDF once and quoted in each test, and needs no LibreOffice
+to run; `Paperless.Fidelity.Tests/SlideRenderComparisonTests` re-derives them, rendering our own
+PDF and comparing sheet sizes, rectangular fills with their colours, and every text run's pen,
+baseline, size and glyph count against LibreOffice's, in both formats.
+
+**What the richer decks measure at, which no test asserts yet.** `deck-features.pptx` and
+`slides-features.odp` are not in the fidelity comparison, because two of their slides render
+incomplete and pinning that would pin the gaps as though they were correct. What they do measure
+is worth writing down, since it is where the next work is:
+
+| | Reference runs | Ours | Agreement, and what is missing |
+|---|---|---|---|
+| `deck-features.pptx` | 21 | 16 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across, 0.55 down inside the ellipse. Six of the reference's runs are the **table** slide, which draws nothing; one of ours is the **hidden** slide, which we lay out and its PDF export omits. |
+| `slides-features.odp` | 14 | 12 | The same slides through ODF. The title and the outline's first line agree to 0.04; the outline then **drifts to 9.3 pt by its third paragraph**, and its text sits at 56.69 where the reference puts it at 73.70. Both have the same cause: an outline paragraph's indents, spacing and bullet come from the `text:list`'s **list style**, and nothing reads it. |
+
+The ODF list style is therefore the single largest remaining item on that path, and it is a
+different resolution from the paragraph cascade rather than more of it: `OdfListStyle` already
+parses the levels, and what is missing is choosing the level from the `text:list` nesting depth
+and reading its `fo:margin-left`/`fo:text-indent` and `text:bullet-char` — the same three
+quantities the OOXML side gets from `marL`, `indent` and `a:buChar`.
+
+**LibreOffice's PDF export is one hundredth of a millimetre small, and one up and left.** Its page
+clip opens `0 0.028 719.971 539.971 re` on a 720 × 540 pt page, its page background is 719.971 pt
+wide, and a rectangle the file puts at 72 pt comes out at 71.972 with a width of 143.971 instead
+of 144. It applies to the sheet as much as to the shapes, so it is the export rounding into the
+drawing layer's own unit rather than a placement difference — 0.0283 pt, comfortably inside the
+tenth of a point everything here is held to. Worth knowing before chasing it: it is present in
+every single number the reference reports.
+
+### The transform, and the measurement that pins its order
+
+`Shape::createAndInsert` (`oox/source/drawingml/shape.cxx:1098-1224`) builds one cumulative matrix
+per shape: scale the unit square to the extent, **mirror at the shape's centre**
+(`lcl_mirrorAtCenter`, `shape.cxx:882`), translate to the offset, map through the parent group's
+child coordinate space (`shape.cxx:1174-1198`), and only then **rotate at the shape's centre**
+(`lcl_RotateAtCenter`, `shape.cxx:910`). `Layout/ShapeTransform.cs` composes exactly that.
+
+**Flip before rotation is observable, and only on a shape that is not symmetric.** A rectangle
+looks identical under either order, which is why the rule is easy to get wrong and hard to notice
+— and why the corpus deck carries an `rtTriangle` with `flipH="1"` and `rot="5400000"` at
+(288 pt, 216 pt) sized 144 × 72. LibreOffice's PDF draws its vertices at (324, 324), (396, 324)
+and (324, 180). Flipping first gives exactly those; rotating first gives (396, 180), (324, 180)
+and (396, 324) — a different triangle in a different corner.
+
+**A group's child space is the thing that makes a group a group.** `a:chOff`/`a:chExt` say what
+coordinates the children are written in, and when they differ from `a:off`/`a:ext` the children
+scale. The deck's group is at 72,72 sized 288 × 144 with a child space of 144 × 72, so its
+children double: a child stated at 0,0 sized 72 × 36 comes out at 71.972–215.943 × 71.972–143.943
+in the reference, and one stated at 72,36 comes out at 215.972–359.943 × 143.972–215.943. A shape
+beside the group is unaffected, which is what says the scale reached the children and not the
+slide.
+
+The formulation here composes the group's own placement on top of the child mapping, rather than
+decomposing the group's matrix into scale, rotation and translation as LibreOffice does. The two
+are the same matrix — the group's placement *is* that decomposition, reassembled — and this way
+round needs no decomposition and no shear term.
+
+### The line height on a slide is not the font's
+
+**The single largest thing that would be wrong without reading the C++.** The PPTX importer sets
+`FontIndependentLineSpacing` on every text body it reads
+(`oox/source/ppt/pptshapecontext.cxx:186`), and EditEngine then takes the line's ascent to be the
+font height outright and its descent to be
+`ImplCalculateFontIndependentLineSpacing(height) − ascent`
+(`editeng/source/editeng/impedit3.cxx:3138-3141`), where that function is
+`fround(height × 12 / 10)` (`impedit3.cxx:501-505`). So the first baseline is **one em** below the
+top of the text area and the next line is **1.2 em** further down, whatever face the text is set
+in.
+
+Measured on slide 3 of the corpus deck, four text boxes of 18 pt Liberation Sans:
+
+| What | Reference | Rule | Font's own metrics |
+|---|---|---|---|
+| First baseline, no insets | 89.972 pt on a shape at 71.972 | 18.000 below the top | 16.295 below |
+| With `lIns=91440 tIns=45720` | 79.172, 237.572 | 72 + 7.2, 216 + 3.6 + 18 | 1.7 pt high |
+| Centred paragraph's pen | 435.969 | 468 − w/2, w from our own shaping | — |
+| `anchor="ctr"` baseline | 259.172 | 216 + (72 − 21.6)/2 + 18 = 259.2 | 1.4 pt high |
+
+Liberation Sans reports an ascent of 0.905 em, so a reader using the font's metrics is 1.705 pt
+high on **every line of every shape** — a cascade, and one that a word-processing comparison would
+never have found because Writer does not set the flag. `SlideTextLayout` therefore takes the line
+*breaks* and the horizontal placement from the shared `ParagraphLayouter` and recomputes only the
+vertical, so the presentation-specific rule stays out of the engine the three families share.
+
+ODF states the same thing per paragraph style as `style:font-independent-line-spacing`, and
+`SlideTextBody.FontIndependentLineSpacing` carries it. A natively authored ODP usually does not set
+it, in which case the face's own metrics decide — which is why the same deck can legitimately lay
+out slightly differently through the two paths.
+
+### Text insets have a default, and it is not zero
+
+`a:bodyPr`'s `lIns` and `rIns` default to 91440 EMU and `tIns`/`bIns` to 45720 — a tenth and a
+twentieth of an inch. Defaulting them to zero moves every line of every text box that states none
+7.2 pt left and 3.6 pt up. ODF has no such implied default and states all four, which is how a
+converted deck agrees with its original: LibreOffice writes the OOXML defaults out explicitly as
+`fo:padding-*`.
+
+### Two ODF traps, both silent
+
+**`draw:transform`'s rotation runs the opposite way from `a:xfrm/@rot`.** The corpus deck's
+30°-clockwise rectangle comes out of LibreOffice's ODF export as
+`rotate (-0.523598775598299) translate (3.515cm 10.33cm)` — the angle negated, because ODF's is
+counter-clockwise in a y-up reading. In the y-down space everything here works in the matrix is
+`[cos, sin; −sin, cos]`, and only that reading puts the shape's centre back at the 5.0795 cm,
+12.6995 cm the OOXML original states.
+
+**A bare number in a `draw:transform` is not a length.** `OdfValue.ParseLength` takes a unitless
+value for hundredths of a millimetre, which is right for ODF's lengths and catastrophic for an
+angle: putting `rotate (-0.5236)` through it rounds to −1 and then means −360 radians, which wraps
+to about −106° and lands the shape in a *plausible-looking* wrong place rather than an obviously
+wrong one. Arguments are therefore parsed per operation — lengths for `translate`, plain numbers
+for `rotate`, `scale` and `skewX`.
+
+**An outline placeholder's paragraphs are not its children.** A `draw:frame` wraps its text in a
+`draw:text-box`, a `draw:custom-shape` holds its `text:p` children directly, and an *outline*
+placeholder wraps every paragraph in a `text:list`/`text:list-item` pair — one level of nesting per
+outline level. Taking only the direct children lost all three lines of `slides-features.odp`'s
+outline while its title read perfectly, which is the shape of failure that looks like a placement
+bug and is not.
+
+**And a shape's paragraph formatting is not on its paragraphs.** LibreOffice's ODF export writes
+it on the shape as `draw:text-style-name` and leaves each `text:p` pointing at an almost empty
+automatic style. A reader consulting only `text:style-name` finds no alignment, no line-height rule
+and no `style:font-independent-line-spacing` — which on `shape-geometry.odp` put every baseline
+1.7 pt high, exactly the font-metrics error above, arrived at by a completely different route.
+
+### Preset geometry: six of a hundred and eighty-seven
+
+`Layout/SlidePresetGeometry.cs` expands `rect` (and the aliases that are literally a rectangle in
+the preset file), `roundRect`, `ellipse`, `triangle`, `rtTriangle` and `diamond`, each transcribed
+from `oox/source/drawingml/customshapes/presetShapeDefinitions.xml`. Anything else draws its
+bounding rectangle: in the right place, in the right colour, with the wrong outline — which is a
+far better failure than drawing nothing, because it is *visible* in a comparison rather than
+silently absent.
+
+- [ ] **The real evaluator.** Each preset is a small program: guide formulas over the bounding box
+      and the adjustment handles, then a path built from the results, with `arcTo`, `quadBezTo` and
+      a dozen operators. LibreOffice compiles the file into data tables and runs one shared engine
+      (`EnhancedCustomShape2d`) that also serves ODF's `draw:enhanced-path` and the legacy binary
+      syntax, which is the right shape for a port: the data is mechanical and the engine is one
+      piece of work that buys all three front ends. `a:custGeom` — a shape whose path the file
+      states outright — needs the same path builder and none of the formula evaluation, so it is
+      the cheaper half and should come first.
+
+The **text** rectangle is carried beside the outline, because for two of the six it is not the
+bounding box: an ellipse's is the box inscribed at 45°, which is
+`ConstructPresetTextRectangle` (`oox/source/drawingml/transform2dcontext.cxx:66-73`) and the reason
+a caption inside a circle does not touch its edge.
+
+### What a shape's fill and line resolve through, and what they do not
+
+Resolved: `a:solidFill` and `a:noFill` on the shape, then on the layout or master placeholder it
+stands in for, with the colour going through the existing `DrawingColour`/`DrawingColourTransforms`
+in `Paperless.Ooxml/DrawingML` — which is what makes `schemeClr accent1` come out `18a303` and
+`accent2` under `lumMod val="60000"`/`lumOff val="40000"` come out `34b3fb`, both confirmed
+against the reference PDF's own `rg` operators. The colour map comes from the slide master's
+`a:clrMap`, so a dark master inverts correctly.
+
+- [ ] **`p:style`'s style-matrix references.** `a:fillRef`, `a:lnRef` and `a:effectRef` index the
+      theme's `a:fmtScheme` — three fill styles, three line styles, three effect styles — with the
+      `phClr` inside each substituted by the colour the reference carries. `DrawingColour` already
+      resolves `phClr` when it is given a placeholder colour, so what is missing is only reading
+      `a:fmtScheme` and indexing it. This is how the whole "Shape Styles" gallery in PowerPoint
+      works, so a deck authored with it renders unfilled today. Not done because no corpus deck
+      uses one: `shape-geometry.pptx` states its fills outright and `deck-features.pptx` writes
+      `<a:fillRef idx="0"/>`, which means none.
+- [ ] **Gradients.** Nothing here emits a `GradientPaint`, and that is deliberate rather than
+      pending: both backends currently draw one as its middle stop or not at all
+      (`src/Paperless.Rendering/TODO.md`), so emitting one would make a wrong picture look like a
+      right one and would be unverifiable besides. `a:gradFill` and ODF's `draw:gradient` should
+      land together with the shading dictionaries and Skia shaders that consume them — the
+      backend TODO names slide fills as exactly the feature that unblocks it, and the producer
+      should not go first.
+- [ ] **Pattern, hatch and picture fills**, for the same reason: `BitmapPaint` draws nothing in
+      either backend, and a hatch has to be resolved into stroked lines by whoever reads it.
+- [ ] **Dash patterns.** `a:prstDash` and `a:custDash` are read as far as being ignored, so a
+      dashed outline draws solid. The `Stroke` record already carries a dash array and both
+      backends honour it, so this is a table of seven preset patterns and nothing else.
+- [ ] **Compound lines and arrowheads.** `cmpd="dbl"`, `a:headEnd`/`a:tailEnd`. A connector with
+      no arrowhead is a visibly different picture, and connectors are the shapes that carry them.
+
+### Text: what the runs know, and the rung of the chain that is missing
+
+A run's own `a:rPr`, the paragraph's `a:defRPr` and the body's own `a:lstStyle` entry for the
+paragraph's level are read, attribute by attribute rather than element by element — the same
+`assignUsed` rule extraction already follows (`oox/source/drawingml/textparagraph.cxx:51-67`).
+
+- [ ] **The rest of the chain, for size, typeface and colour.** The layout placeholder's list
+      style, the master's, `p:txStyles` and the theme's `txDef` are *not* consulted.
+      `PptxTextStyles` already walks precisely that chain for bullets and emphasis, so this is
+      reading three more attributes off elements the walk already visits — the reason it is not
+      done is that no deck in the corpus can tell a correct implementation from a plausible one.
+      Every run in `shape-geometry.pptx` and in `deck-features.pptx` states its size, face and
+      colour outright, because LibreOffice's exporter writes them on every run. The measurement
+      that would settle it has to come from a PowerPoint-authored deck in
+      `sd/qa/unit/data/pptx/`, the same place the emphasis inheritance was settled.
+- [x] **`a:buChar` bullets are drawn, and the hanging indent goes to the marker.** A marker is a
+      run of its own at its own pen, in its own face at its own size — LibreOffice writes it as a
+      separate `/Lbl` block — so it is on `SlideParagraph.Marker` rather than prefixed to the
+      text, which would shift every character offset the runs index by. **The rule that matters:
+      a hanging indent is the room the marker occupies, not a first-line indent.** LibreOffice
+      draws the bullet at `marL + indent` and the paragraph's own first line at `marL`; applying
+      the indent to the text as well puts every bulleted line a whole hanging indent to the left.
+      Measured on `deck-features.pptx`, whose outline states `marL="216000" indent="-216000"` —
+      17.008 pt: the reference draws bullet and text at 56.693/73.701 for the first level and
+      73.701/90.709 for the second, and so do we, to a hundredth of a point.
+- [ ] **`a:buAutoNum` yields no marker at all**, deliberately: numbering needs a counter per
+      outline level carried across the body and restarted where the level rises, and inventing
+      "1." for every item of every list is a worse answer than none. The paragraph still gets its
+      hanging indent, so its text lands where the reference puts it and only the number is
+      absent. `OutlineNumbers` already has every numeral format extraction needs.
+- [ ] **A marker's baseline is 8.2 pt higher in the reference than here.** Measured on
+      `deck-features.pptx`: LibreOffice draws the first outline bullet at 175.72 and its text at
+      183.91, and the third at 254.30 against 262.49 — the same 8.19 pt each time, so it is a
+      rule rather than drift, and the horizontal pens agree exactly. We put the marker on the
+      text's own baseline. Whatever EditEngine does with a 12.6 pt label on a 28 pt line, it is
+      not "same baseline" and it is not "same line top" either, which would be 15.4 pt under the
+      font-independent rule. Worth chasing in `impedit3.cxx`'s label placement when markers get
+      their own comparison.
+- [ ] **`a:spcPct` paragraph spacing.** `a:spcBef`/`a:spcAft` are honoured in points
+      (`a:spcPts`) and ignored as a percentage, because the percentage is of the line height and
+      the line height is not known until the paragraph's runs are. It belongs with the line
+      heights rather than with the reader.
+- [ ] **Character spacing (`spc`) and kerning (`kern`).** `spc` is in hundredths of a point and is
+      not applied; on the corpus deck it is −1, which is a hundredth of a point per character and
+      inside every tolerance here, but a deck that tracks a title tightly would drift visibly.
+- [ ] **`spAutoFit`.** `normAutofit`'s stated `fontScale` and `lnSpcReduction` are applied, which
+      is what LibreOffice does — it honours the value the authoring application arrived at rather
+      than solving the fit again (`oox/source/drawingml/textbodypropertiescontext.cxx:240-243`),
+      and a reader that recomputed would disagree with the reference on every autofitted shape.
+      `spAutoFit` is the other direction — grow the shape to fit the text — and is not applied at
+      all, so a shape sized to its text in the file is drawn at the size the file states.
+- [ ] **Vertical text** (`a:bodyPr/@vert`) and text rotation (`a:txXfrm`, `moTextAreaRotation`).
+- [ ] **Right-to-left text.** Bidi levels are resolved and carried by `MeasuredParagraph` and
+      nothing consumes them here, which is the same open item word processing has.
+
+### Two things the layout deliberately keeps out of the display list
+
+**A shape's outline is emitted already in slide coordinates**, point by point, rather than as a
+path plus a matrix for a backend to apply. An affine map takes a cubic Bezier's control points to
+the control points of the mapped curve exactly, so nothing is lost — and what is gained is that a
+fill's coordinates in our PDF are directly comparable with a fill's coordinates in LibreOffice's,
+which is the whole basis of the comparison. A rotated shape emits rotated coordinates and looks
+like a general path, which is correct and is also why `PdfFills` cannot read it.
+
+**Text is the exception, and has to be.** A `GlyphRun` carries an origin and advances rather than a
+matrix, so a rotated shape's text cannot be baked into slide coordinates. An upright shape's runs
+therefore go into slide coordinates with no matrix at all — the common case, and the one where a
+backend's pens compare directly against the reference's — and a rotated or mirrored one's stay in
+the shape's own space and travel with `PlacedText.Transform`.
 
 ## Open questions
 
