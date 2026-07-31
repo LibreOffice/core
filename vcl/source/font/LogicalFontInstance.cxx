@@ -253,13 +253,8 @@ void LogicalFontInstance::GetFontMetric(FontMetricDataRef const& rxTo)
         }
     }
 
-    auto aPost(GetFontFace()->GetRawFontData(HB_TAG('p', 'o', 's', 't')));
-    if (aPost.size() >= size_t(vcl::POST_isFixedPitch_offset) + 4)
-    {
-        const uint8_t* pFixed = aPost.data() + vcl::POST_isFixedPitch_offset;
-        if (pFixed[0] || pFixed[1] || pFixed[2] || pFixed[3])
-            rxTo->SetPitch(PITCH_FIXED);
-    }
+    if (hb_ot_fetch_bits(GetFontFace()->GetHbFace(), HB_OT_BITS_TAG_IS_FIXED_PITCH))
+        rxTo->SetPitch(PITCH_FIXED);
 }
 
 bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, basegfx::B2DRectangle& rRect,

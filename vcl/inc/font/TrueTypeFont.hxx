@@ -110,20 +110,6 @@ constexpr int OS2_ulUnicodeRange1_offset = 42;
 constexpr int OS2_ulCodePageRange1_offset = 78;
 
 /*
-  Some table post consts
-  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/post
-  TYPE       NAME                       FROM BYTE
-  Fixed      version                    0
-  Fixed      italicAngle                4
-  FWord      underlinePosition          8
-  FWord      underlineThickness        10
-  uint32     isFixedPitch              12
-  ...
-
-*/
-constexpr int POST_isFixedPitch_offset = 12;
-
-/*
   Some table head consts
   cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/head
   TYPE       NAME                       FROM BYTE

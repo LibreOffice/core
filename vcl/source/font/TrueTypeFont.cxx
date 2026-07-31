@@ -48,18 +48,6 @@
 
 namespace vcl
 {
-/*- Data access methods for data stored in big-endian format */
-static sal_uInt32 GetUInt32(const sal_uInt8* ptr, size_t offset)
-{
-    sal_uInt32 t;
-    assert(ptr != nullptr);
-
-    t = (ptr + offset)[0] << 24 | (ptr + offset)[1] << 16 | (ptr + offset)[2] << 8
-        | (ptr + offset)[3];
-
-    return t;
-}
-
 /*- Public functions */
 
 TrueTypeFont::TrueTypeFont(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum)
@@ -144,10 +132,7 @@ sal_uInt32 TrueTypeFont::getTypeFlags() const
 
 FontPitch TrueTypeFont::getFontPitch() const
 {
-    auto aPost = getTable(T_post);
-    if (aPost.size() >= 12 + sizeof(sal_uInt32))
-        return GetUInt32(aPost.data(), POST_isFixedPitch_offset) ? PITCH_FIXED : PITCH_VARIABLE;
-    return PITCH_VARIABLE;
+    return hb_ot_fetch_bits(m_pFace, HB_OT_BITS_TAG_IS_FIXED_PITCH) ? PITCH_FIXED : PITCH_VARIABLE;
 }
 
 FontItalic TrueTypeFont::getFontItalic() const
