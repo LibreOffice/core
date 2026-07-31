@@ -562,8 +562,9 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         RemoveMasterPage(pMPage->GetPageNum());
         if (comphelper::COKit::isActive())
         {
-            DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
-            pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
+            // Destruction removes the pages after the view shell is gone
+            if (auto* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell()))
+                pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
         }
         NotifyKitHasOverviewPage(false);
         mpCanvasPage = nullptr;
