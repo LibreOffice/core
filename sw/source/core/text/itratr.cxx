@@ -1815,7 +1815,7 @@ bool SwTextFrame::IsEmptyWithSplitFly() const
     return true;
 }
 
-SwTwips SwTextNode::GetWidthOfLeadingTabs() const
+gfx::Length SwTextNode::GetWidthOfLeadingTabs() const
 {
     SwTwips nRet = 0;
 
@@ -1854,7 +1854,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
         }
     }
 
-    return nRet;
+    return gfx::Length::twip(nRet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

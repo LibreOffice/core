@@ -1740,7 +1740,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),
                 GetCursor()->GetPoint()->GetNode());
         const SwTwips nWidthOfTabs = pTextNode
-                                     ? pTextNode->GetWidthOfLeadingTabs()
+                                     ? pTextNode->GetWidthOfLeadingTabs().as_twip<SwTwips>()
                                      : 0;
         GetDoc()->getIDocumentContentOperations().RemoveLeadingWhiteSpace(*GetCursor());
 
@@ -1809,7 +1809,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
 
-            const SwTwips nTextNodeIndent = pTextNode->GetAdditionalIndentForStartingNewList();
+            const SwTwips nTextNodeIndent = pTextNode->GetAdditionalIndentForStartingNewList().as_twip<SwTwips>();
             if ( ( nTextNodeIndent + nWidthOfTabs ) != 0 )
             {
                 // #i111172#/fdo#85666
