@@ -145,6 +145,26 @@ public sealed record PageTable : PageBlock
     /// </remarks>
     public int HeaderRowCount { get; init; }
 
+    /// <summary>
+    /// True when the grid lines are joined by Word's rules rather than Writer's own.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A compatibility flag, and it changes the drawing rather than the layout: where Writer runs every
+    /// grid line the full width of the table and lets the ends overlap, Word <em>shortens</em> an inner
+    /// line by the full width of the outer line it meets, so the outline owns the corner outright. On the
+    /// corpus table with its half-point borders the difference is half a point at each end of five of the
+    /// nine strokes — 56.95 to 538.35 against 56.45 to 538.85.
+    /// </para>
+    /// <para>
+    /// LibreOffice spells it <c>DocumentSettingId::TABLE_ROW_KEEP</c>, which its DOC, DOCX and RTF filters
+    /// all set and its ODF filter does not; <c>SwTabFramePainter::FindStylesForLine</c> is where it is
+    /// read. So it belongs to the file's provenance rather than to anything the document says, which is
+    /// why it is a flag on the table and not a property of a border.
+    /// </para>
+    /// </remarks>
+    public bool JoinsBordersLikeWord { get; init; }
+
     /// <summary>How wide the table is, which is its columns added up.</summary>
     public Length Width
     {

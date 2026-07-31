@@ -154,6 +154,11 @@ public static class PageDrawing
     /// borders meet at a corner rather than leaving a notch.
     /// </para>
     /// <para>
+    /// The overshoot is Writer's rule and not Word's, which is what
+    /// <see cref="PageTable.JoinsBordersLikeWord"/> switches: a Word table shortens an inner line by the
+    /// full width of the outer line it meets, so the outline owns the corner outright.
+    /// </para>
+    /// <para>
     /// Horizontals before verticals, which matters only for which one wins a join and is free to match.
     /// </para>
     /// </remarks>
@@ -162,7 +167,10 @@ public static class PageDrawing
         // Collected per grid line and merged, so that a run of cells agreeing about an edge becomes one
         // stroke. Keyed on the line's own coordinate rounded to a twip, because two cells' shared edge is
         // computed from two different rectangles and can differ in the last EMU.
-        foreach (Edge edge in Edges(table))
+        List<Edge> edges = Edges(table);
+        if (table.Table.JoinsBordersLikeWord) edges = WithWordJoins(edges);
+
+        foreach (Edge edge in edges)
         {
             Stroke stroke = new(Paint.Solid(edge.Border.Colour), edge.Border.Width);
             Length half = edge.Border.Width / 2;
@@ -180,8 +188,65 @@ public static class PageDrawing
     }
 
     /// <summary>One consolidated grid line: where it sits, how far it runs, and its border.</summary>
+    /// <param name="IsHorizontal">True when it runs across the page.</param>
+    /// <param name="At">Where it sits on the other axis.</param>
+    /// <param name="From">Where it starts along its own axis.</param>
+    /// <param name="To">Where it ends.</param>
+    /// <param name="Border">Its width and colour.</param>
+    /// <param name="IsOuter">
+    /// True when it is part of the table's outline rather than of its grid, which only Word's join rule
+    /// cares about: the outline keeps its full length and the inner lines give way to it.
+    /// </param>
     private readonly record struct Edge(
-        bool IsHorizontal, Length At, Length From, Length To, TableBorder Border);
+        bool IsHorizontal, Length At, Length From, Length To, TableBorder Border, bool IsOuter = false);
+
+    /// <summary>
+    /// The grid lines with Word's joins applied: an inner line gives way to the outline it meets.
+    /// </summary>
+    /// <remarks>
+    /// By the <em>full</em> width of the outer line rather than half of it, which is what makes the two
+    /// rules differ by a whole border width at each end rather than by nothing. Ported from
+    /// <c>SwTabFramePainter::FindStylesForLine</c>, which adjusts an inner entry's start and end for every
+    /// outer entry it meets there, and does it before the half-width overshoot is added.
+    /// </remarks>
+    private static List<Edge> WithWordJoins(List<Edge> edges)
+    {
+        // Keyed on the coordinate in twips for the same reason the merge is: two cells' shared edge comes
+        // from two rectangles and can differ in the last EMU. The width is the widest outline stroke at
+        // that coordinate, since that is the one whose corner has to be cleared.
+        Dictionary<(bool, long), Length> outline = [];
+        foreach (Edge edge in edges)
+        {
+            if (!edge.IsOuter) continue;
+
+            (bool, long) key = (edge.IsHorizontal, edge.At.Twips);
+            if (!outline.TryGetValue(key, out Length width) || edge.Border.Width > width)
+                outline[key] = edge.Border.Width;
+        }
+
+        List<Edge> joined = new(edges.Count);
+        foreach (Edge edge in edges)
+        {
+            if (edge.IsOuter)
+            {
+                joined.Add(edge);
+                continue;
+            }
+
+            joined.Add(edge with
+            {
+                From = edge.From + Meeting(edge, edge.From),
+                To = edge.To - Meeting(edge, edge.To),
+            });
+        }
+
+        return joined;
+
+        Length Meeting(Edge edge, Length end)
+            => outline.TryGetValue((!edge.IsHorizontal, end.Twips), out Length width)
+                ? width
+                : Length.Zero;
+    }
 
     /// <summary>
     /// A table's grid lines, merged along each line where consecutive cells agree.
@@ -194,20 +259,29 @@ public static class PageDrawing
     private static List<Edge> Edges(PlacedTable table)
     {
         List<Edge> loose = [];
+        int columns = table.Table.ColumnWidths.Count;
 
         foreach (PlacedTableCell cell in table.Cells)
         {
             CellBorders borders = cell.Cell.Borders;
             DocRect area = cell.Area;
 
+            // Which of a cell's edges belong to the table's outline, taken from where the cell sits
+            // rather than from where its rectangle lands: a row whose cells are short of the grid still
+            // has a last cell, and its right edge is still the outline.
+            bool first = cell.Row <= table.FirstRow;
+            bool last = cell.Row + Math.Max(1, cell.Cell.RowSpan) >= table.RowEnd;
+
             if (!borders.Top.IsNone)
-                loose.Add(new Edge(true, area.Y, area.X, area.Right, borders.Top));
+                loose.Add(new Edge(true, area.Y, area.X, area.Right, borders.Top, first));
             if (!borders.Bottom.IsNone)
-                loose.Add(new Edge(true, area.Bottom, area.X, area.Right, borders.Bottom));
+                loose.Add(new Edge(true, area.Bottom, area.X, area.Right, borders.Bottom, last));
             if (!borders.Left.IsNone)
-                loose.Add(new Edge(false, area.X, area.Y, area.Bottom, borders.Left));
+                loose.Add(new Edge(false, area.X, area.Y, area.Bottom, borders.Left,
+                    cell.Cell.Column == 0));
             if (!borders.Right.IsNone)
-                loose.Add(new Edge(false, area.Right, area.Y, area.Bottom, borders.Right));
+                loose.Add(new Edge(false, area.Right, area.Y, area.Bottom, borders.Right,
+                    cell.Cell.ColumnEnd >= columns));
         }
 
         List<Edge> merged = [];
@@ -243,7 +317,13 @@ public static class PageDrawing
         {
             if (runs.Count > 0 && edge.From <= runs[^1].To)
             {
-                if (edge.To > runs[^1].To) runs[^1] = runs[^1] with { To = edge.To };
+                // Outer wins over inner across a merge, which matters for a run that starts as the
+                // outline of one row and continues as the grid line of the next.
+                runs[^1] = runs[^1] with
+                {
+                    To = edge.To > runs[^1].To ? edge.To : runs[^1].To,
+                    IsOuter = runs[^1].IsOuter || edge.IsOuter,
+                };
                 continue;
             }
 
