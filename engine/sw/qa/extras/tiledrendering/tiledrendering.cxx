@@ -227,29 +227,29 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionMultiLine)
 
     OString sPlainText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/plain;charset=utf-8"_ostr);
 
-    CPPUNIT_ASSERT_EQUAL(u8"Heading\n\
-Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:\n\
-\n\
-\n\
-\n\
-\n\
-\n\
-And this is all for Writer shape objects\n\
-Heading on second page"_ostr, sPlainText.trim());
+    CPPUNIT_ASSERT_EQUAL(u8"Heading" SAL_NEWLINE_STRING
+"Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:" SAL_NEWLINE_STRING
+SAL_NEWLINE_STRING
+SAL_NEWLINE_STRING
+SAL_NEWLINE_STRING
+SAL_NEWLINE_STRING
+SAL_NEWLINE_STRING
+"And this is all for Writer shape objects" SAL_NEWLINE_STRING
+"Heading on second page"_ostr, sPlainText.trim());
 
     OString sHtmlText = apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "text/html"_ostr);
 
     int nStart = sHtmlText.indexOf(u8"Heading");
 
-    CPPUNIT_ASSERT(sHtmlText.match(u8"Heading</h2>\n\
-<p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<h1 class=\"western\">And this is all for Writer shape objects</h1>\n\
-<h2 class=\"western\">Heading on second page</h2>", nStart));
+    CPPUNIT_ASSERT(sHtmlText.match(u8"Heading</h2>" SAL_NEWLINE_STRING
+"<p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>" SAL_NEWLINE_STRING
+"<p><br/><br/></p>" SAL_NEWLINE_STRING
+"<p><br/><br/></p>" SAL_NEWLINE_STRING
+"<p><br/><br/></p>" SAL_NEWLINE_STRING
+"<p><br/><br/></p>" SAL_NEWLINE_STRING
+"<p><br/><br/></p>" SAL_NEWLINE_STRING
+"<h1 class=\"western\">And this is all for Writer shape objects</h1>" SAL_NEWLINE_STRING
+"<h2 class=\"western\">Heading on second page</h2>", nStart));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
@@ -2173,7 +2173,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf115088)
     Scheduler::ProcessEventsToIdle();
 
     // Check the resulting text in the document. (it was 1Text\n1\n1\n1)
-    CPPUNIT_ASSERT_EQUAL(u"1\n1Text\n1\n1"_ustr, pXTextDocument->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"1" SAL_NEWLINE_STRING "1Text" SAL_NEWLINE_STRING "1" SAL_NEWLINE_STRING
+                         "1"_ustr, pXTextDocument->getText()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineField)

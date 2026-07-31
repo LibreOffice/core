@@ -199,7 +199,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_snap_to_grid \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter LINUX,$(OS))$(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)),)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \
     CppunitTest_sw_tiledrendering2 \
