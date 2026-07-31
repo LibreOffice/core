@@ -78,6 +78,9 @@ private:
     /** A chart title holding rText as its one run of text. */
     static css::uno::Reference<css::chart2::XTitle> MakeChartTitle(const OUString& rText);
 
+    /** Paints the wall of rDiagram white. */
+    static void WhitenChartWall(const css::uno::Reference<css::chart2::XDiagram>& rDiagram);
+
     /** Puts a chart of rDataRange on the sheet that range is on, at rRectangle
         in hundredths of a millimetre, and hands back its chart document. The
         first cell of every column names the series it heads. */

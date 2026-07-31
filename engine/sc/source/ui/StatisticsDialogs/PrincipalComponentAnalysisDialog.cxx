@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
@@ -33,8 +34,10 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/numformat.hxx>
+#include <tools/color.hxx>
 #include <svl/undo.hxx>
 
+#include <columnspanset.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -57,16 +60,20 @@ namespace
 // at those two cells.
 const SCROW nMeanRow = 0;
 const SCROW nDeviationRow = 1;
-const SCROW nLabelRow = 2;
+
+// Two rows of nothing hold the two above apart from the table below them.
+const SCROW nBlankRows = 2;
+const SCROW nLabelRow = nDeviationRow + 1 + nBlankRows;
 const SCROW nFirstValueRow = nLabelRow + 1;
 
 // Chart sizes and the gap between the two, in hundredths of a millimetre. The
 // correlation circle is square because the circle in it only reads as a circle
-// while both of its axes are drawn at the same scale.
-const sal_Int32 nChartWidth = 12000;
+// while both of its axes are drawn at the same scale, and the chart above it is
+// drawn to the same width.
+const sal_Int32 nCircleChartSide = 13500;
+const sal_Int32 nChartWidth = nCircleChartSide;
 const sal_Int32 nChartHeight = 8000;
 const sal_Int32 nChartGap = 500;
-const sal_Int32 nCircleChartSide = 13500;
 
 OUString FillIn(TranslateId aMessageId, std::u16string_view aVariable, std::u16string_view aValue)
 {
@@ -333,6 +340,9 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     aOutput.writeBoldString(ScResId(STRID_CALC_STD_DEVIATION));
     aOutput.newLine();
 
+    for (SCROW nRow = 0; nRow < nBlankRows; ++nRow)
+        aOutput.newLine();
+
     auto aNumberedLabel = [&aTemplate](TranslateId aTemplateId, SCCOL nColumn) {
         aTemplate.setTemplate(ScResId(aTemplateId));
         aTemplate.applyNumber(u"%NUMBER%", nColumn + 1);
@@ -447,6 +457,13 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
 
     // The chart reads the two share columns together with the header row above
     // them, which names the two things it draws.
+    // Every column is widened to its longest entry before a chart is placed,
+    // because a chart is put where a cell is and widening moves the cells.
+    const SCCOL nLastColumn = nColumnCount + 2 * nRank + 2;
+    std::vector<sc::ColRowSpan> aWrittenColumns{ sc::ColRowSpan(0, nLastColumn) };
+    rDocShell.GetDocFunc().SetWidthOrHeight(true, aWrittenColumns, nOutputTab, SC_SIZE_OPTIMAL,
+                                            STD_EXTRA_WIDTH, true, true);
+
     const ScRange aShareRange(ScAddress(nShareColumn, nLabelRow, nOutputTab),
                               ScAddress(nShareColumn + 1, nFirstValueRow + nRank - 1, nOutputTab));
     if (mbVarianceChart)
@@ -466,9 +483,8 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     }
 
     const SCROW nBlockHeight = std::max<SCROW>(nRowCount, nColumnCount);
-    return ScRange(
-        ScAddress(0, nMeanRow, nOutputTab),
-        ScAddress(nColumnCount + 2 * nRank + 2, nFirstValueRow + nBlockHeight - 1, nOutputTab));
+    return ScRange(ScAddress(0, nMeanRow, nOutputTab),
+                   ScAddress(nLastColumn, nFirstValueRow + nBlockHeight - 1, nOutputTab));
 }
 
 OUString ScPrincipalComponentAnalysisDialog::GetChartName(SCTAB nOutputTab) const
@@ -491,6 +507,18 @@ OUString ScPrincipalComponentAnalysisDialog::GetChartName(SCTAB nOutputTab) cons
         aName = aBaseName + "_" + OUString::number(nSuffix);
     }
     return aName;
+}
+
+void ScPrincipalComponentAnalysisDialog::WhitenChartWall(
+    const css::uno::Reference<css::chart2::XDiagram>& rDiagram)
+{
+    // A wall takes the grey the fill properties start every object off with,
+    // while the area around it is already the colour of the document. Painting
+    // the wall white puts the whole chart on one colour.
+    css::uno::Reference<css::beans::XPropertySet> xWall(rDiagram->getWall(),
+                                                        css::uno::UNO_SET_THROW);
+    xWall->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(css::drawing::FillStyle_SOLID));
+    xWall->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(COL_WHITE)));
 }
 
 css::uno::Reference<css::chart2::XTitle>
@@ -560,6 +588,7 @@ void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
         xTemplate->changeDiagram(xDiagram);
+        WhitenChartWall(xDiagram);
 
         css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
                                                           css::uno::UNO_QUERY_THROW);
@@ -628,6 +657,7 @@ void ScPrincipalComponentAnalysisDialog::AddCorrelationCircleChart(ScDocShell& r
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
         xTemplate->changeDiagram(xDiagram);
+        WhitenChartWall(xDiagram);
 
         css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
                                                           css::uno::UNO_QUERY_THROW);

@@ -23,10 +23,10 @@ aColumns = [
     ("Age", [30, 20, 40, 10, 50]),
 ]
 
-# The mean row, the standard deviation row and the header row come before the
-# standardized values.
-nHeaderRow = 2
-nFirstValueRow = 3
+# The mean row, the standard deviation row, two blank rows and the header row
+# come before the standardized values.
+nHeaderRow = 4
+nFirstValueRow = 5
 
 
 class principalComponentAnalysis(UITestCase):
@@ -96,15 +96,29 @@ class principalComponentAnalysis(UITestCase):
                 get_cell_by_position(document, 1, len(aColumns), 1).getString(),
                 "Standard Deviation")
 
+            # Two rows of nothing hold those two apart from the table below.
+            for nRow in (2, 3):
+                for nColumn in range(len(aColumns) + 1):
+                    self.assertEqual(
+                        get_cell_by_position(document, 1, nColumn, nRow).getString(), "")
+
+            # Every column is wide enough for its longest entry, so none of them
+            # is left at the width a new sheet starts with.
+            oSheet = document.Sheets.getByIndex(1)
+            nDefaultWidth = document.Sheets.getByIndex(0).Columns.getByIndex(0).Width
+            for nColumn in range(len(aColumns) + 9):
+                self.assertNotEqual(oSheet.Columns.getByIndex(nColumn).Width, nDefaultWidth)
+
             # The three parts of the decomposition all read the whole block of
             # standardized values and start on its first row. The left vectors
             # take up one column per component, so the singular values land
             # three columns further right and the right vectors one beyond
             # those.
+            sValueRange = "$A$%d:$C$%d" % (nFirstValueRow + 1, nFirstValueRow + 5)
             for nColumn, nPart in ((3, "1"), (6, "2"), (7, "3")):
                 self.assertEqual(
                     get_cell_by_position(document, 1, nColumn, nFirstValueRow).getFormula(),
-                    "{=MSVD($A$4:$C$8;" + nPart + ")}")
+                    "{=MSVD(" + sValueRange + ";" + nPart + ")}")
 
             # Standardizing leaves every column with a mean of zero and a
             # standard deviation of one.
@@ -177,6 +191,7 @@ class principalComponentAnalysis(UITestCase):
             self.assertEqual(sTitleOf(oChartDocument), "Variance share by component")
 
             oDiagram = oChartDocument.getFirstDiagram()
+            self.assertEqual(oDiagram.Wall.FillColor, 0xFFFFFF)
             aChartTypes = [
                 oChartType.getChartType()
                 for oSystem in oDiagram.getCoordinateSystems()
@@ -227,6 +242,7 @@ class principalComponentAnalysis(UITestCase):
             oCircleDocument = oCircleChart.getEmbeddedObject()
             self.assertEqual(sTitleOf(oCircleDocument), "Correlation circle")
             oCircleDiagram = oCircleDocument.getFirstDiagram()
+            self.assertEqual(oCircleDiagram.Wall.FillColor, 0xFFFFFF)
 
             # Each direction is named after which of the pair of components it
             # is.
