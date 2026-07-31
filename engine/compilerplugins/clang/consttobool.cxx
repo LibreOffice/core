@@ -12,6 +12,7 @@
 #include <cassert>
 #include <limits>
 #include <stack>
+#include <utility>
 
 #include "clang/Basic/Builtins.h"
 
@@ -59,7 +60,7 @@ public:
     {
         if (expr->getOpcode() == UO_LNot)
         {
-            ignoredInAssert_.push(expr->getSubExpr());
+            ignoredInAssert_.push({ expr->getSubExpr(), expr->getOperatorLoc() });
         }
         return true;
     }
@@ -89,7 +90,7 @@ public:
     {
         if (expr->getOpcode() == BO_LAnd)
         {
-            ignoredInAssert_.push(expr->getRHS());
+            ignoredInAssert_.push({ expr->getRHS(), expr->getOperatorLoc() });
         }
         return true;
     }
@@ -141,19 +142,22 @@ public:
             return true;
         }
         auto const l = expr->getExprLoc();
-        if (!ignoredInAssert_.empty() && expr == ignoredInAssert_.top())
+        if (!ignoredInAssert_.empty() && expr == ignoredInAssert_.top().first)
         {
             if (auto const e = dyn_cast<clang::StringLiteral>(sub->IgnoreParenImpCasts()))
             {
                 if (e->isOrdinary()) // somewhat randomly restrict to plain literals
                 {
-                    if (compiler.getSourceManager().isMacroArgExpansion(l)
-                        && Lexer::getImmediateMacroName(l, compiler.getSourceManager(),
-                                                        compiler.getLangOpts())
-                               == "assert")
+                    auto const l1 = ignoredInAssert_.top().second;
+                    if (compiler.getSourceManager().isMacroArgExpansion(l1))
                     {
-                        //TODO: only ignore outermost '!"..."' or '... && "..."'
-                        return true;
+                        auto const name = Lexer::getImmediateMacroName(
+                            l1, compiler.getSourceManager(), compiler.getLangOpts());
+                        if (name == "assert" || name == "LOG_ASSERT_MSG" || name == "LOG_CHECK_RET")
+                        {
+                            //TODO: only ignore outermost '!"..."' or '... && "..."'
+                            return true;
+                        }
                     }
                 }
             }
@@ -243,7 +247,7 @@ public:
     bool preRun() override { return compiler.getLangOpts().CPlusPlus; }
 
 private:
-    std::stack<Expr const*> ignoredInAssert_;
+    std::stack<std::pair<Expr const*, SourceLocation>> ignoredInAssert_;
     unsigned int externCContexts_ = 0;
 
     void run() override

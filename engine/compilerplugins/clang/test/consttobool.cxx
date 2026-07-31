@@ -15,6 +15,9 @@
 
 #pragma clang diagnostic ignored "-Wnull-conversion"
 
+#define STRINGIFY(X) #X
+#define STRING(X) STRINGIFY(X)
+
 enum E
 {
     E0,
@@ -59,6 +62,11 @@ int main()
     if (b)
     {
         assert(!"msg"); // no warnings for `!"msg"`
+    }
+    assert(b && STRING(b)); // no warnings for `&& "msg"`
+    if (b)
+    {
+        assert(!STRING(b)); // no warnings for `!"msg"`
     }
     // expected-error@+1 {{implicit conversion of constant &"msg"[0] of type 'const char *' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     assert("msg");
