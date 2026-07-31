@@ -114,6 +114,50 @@ public sealed record PageParagraph : PageBlock
 
     /// <summary>True when the paragraph's formatting varies across its text.</summary>
     public bool HasRuns => Runs.Count > 0;
+
+    /// <summary>
+    /// The notes anchored in the paragraph's text, in order.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the paragraph because that is where the anchor is: a footnote occupies a character
+    /// position in the sentence that cites it, and its body lives at the foot of whichever page that
+    /// position lands on. Which page that is cannot be known until the paragraph is placed, which is what
+    /// makes notes a pagination matter rather than a reading one.
+    /// </remarks>
+    public IReadOnlyList<PageNote> Notes { get; init; } = [];
+}
+
+/// <summary>
+/// One note anchored in a paragraph: a footnote or an endnote.
+/// </summary>
+/// <remarks>
+/// The body is blocks rather than paragraphs for the same reason a cell's is — a note can contain a table,
+/// and it is laid out by <see cref="FlowLayouter"/> either way.
+/// </remarks>
+public sealed record PageNote
+{
+    /// <summary>The note's body.</summary>
+    public required IReadOnlyList<PageBlock> Blocks { get; init; }
+
+    /// <summary>
+    /// Where its anchor sits in the citing paragraph's text.
+    /// </summary>
+    /// <remarks>
+    /// A character offset, which the readers already mark with U+0001 — the anchor occupies a position and
+    /// has a width but is not text. The offset is what decides which page the note lands on: the page
+    /// holding the <em>line</em> that contains this offset.
+    /// </remarks>
+    public int Offset { get; init; }
+
+    /// <summary>
+    /// True for an endnote, which collects at the end of the document rather than the foot of the page.
+    /// </summary>
+    /// <remarks>
+    /// Distinguished but not yet placed differently: an endnote needs a flow after the last page, which is
+    /// a document-level concern rather than a page-level one. Recorded so that a reader need not guess later
+    /// which of its notes were which.
+    /// </remarks>
+    public bool IsEndnote { get; init; }
 }
 
 /// <summary>
@@ -314,6 +358,17 @@ public sealed record LaidOutPage
 
     /// <summary>The page's footer, or null when it has none.</summary>
     public PlacedFlow? Footer { get; init; }
+
+    /// <summary>
+    /// The footnotes at the foot of the page, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// Bottom-aligned inside <see cref="BodyArea"/> rather than below it, which is measured rather than
+    /// assumed: the last note line's box bottom coincides with the body area's bottom. So the notes take
+    /// their room out of the body's, which is why a page with notes holds less text — and why adding one can
+    /// push the line that cites it onto the next page.
+    /// </remarks>
+    public PlacedFlow? Notes { get; init; }
 
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>

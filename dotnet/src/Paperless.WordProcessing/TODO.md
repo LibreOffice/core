@@ -449,39 +449,39 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read
       time — the readers currently take the declared grid and nothing else.
 - [ ] Floating objects and text wrap, including contour wrap
-- [ ] Footnote placement. The one remaining layout feature that changes *pagination* rather than only
-      appearance: the note area grows as notes are anchored, which reduces the body height, which can push
-      the anchoring line to the next page — and that removes the note again. So it is a feedback loop and
-      not a second pass.
+- [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
+      area takes its room out of the body's, so a page with notes holds less text — and adding a note can
+      push the line that cites it onto the next page, which removes the note again. That is a feedback loop
+      and not a second pass, and the paginator resolves it by trying the unconstrained line count and
+      shortening until it holds: each step removes a line and so can only remove notes, which is why it
+      terminates.
 
       The geometry is measured rather than guessed, from `footnotes.fodt` rendered at A4 with 2 cm margins:
 
-      - **The note area is bottom-aligned in the body text area.** The last note line's box bottom
+      - **The note area is bottom-aligned inside the body text area.** The last note line's box bottom
         coincides with the body area's bottom to a fiftieth of a point — 785.23 against 785.2. That is
-        exactly what `FlowLayouter` already does with a null `offsetFromTop`, so placing the area needs no
-        new machinery: it is a `PlacedFlow` laid out into the body area with the notes as its blocks.
-      - Note lines break at the **full body width**, not an indented one: the note text starts at the left
-        margin.
-      - Note paragraphs carry their own style, so their line height is their own — 12.20 pt for the 10 pt
-        note against 13.42 pt for the 11 pt body in the corpus document.
-      - The separator line above the area is not measurable from a text comparison, which is the same
-        problem cell borders have and wants the rasteriser first. Writer's default is 25% of the text
-        width; the space above and below it comes from the `Footnote Separator` frame style.
+        exactly what `FlowLayouter` does with a null `offsetFromTop`, the rule a Word footer follows, so
+        placing the area needed no new machinery.
+      - Note lines break at the **full body width**, not a column's and not an indented one.
+      - A note paragraph's line height is its own style's: 12.20 pt for the 10 pt note against 13.42 pt for
+        the 11 pt body in the corpus document.
 
-      What is needed beyond that: `PageParagraph.Notes` — a note is anchored at a character offset, which
-      the readers already mark with U+0001 — the readers to collect each note's body as blocks, and the
-      page-filling loop to reduce the available height by the area's height and re-fit when that changes
-      which notes are anchored. `footnotes.fodt` is in the corpus; a document whose notes actually force a
-      break is still to be built, since the present one has room to spare.
-- [x] Columns. Text fills one column top to bottom and flows into the next, and only then to a new page —
-      so a `PlacedLine` carries the column it landed in, and *which rectangle its `Top` is measured from*
-      is the column's rather than the body's. The top-of-frame rules follow the frame, not the sheet: a
-      paragraph at the top of the second column drops its leading exactly as one at the top of a page does,
-      because that is what Writer's rule is about. Verified in all four formats.
-- [ ] Unequal columns. ODF lists them individually and DOCX writes a `w:col` per column; both are read as
-      a count and a first gap, so such a document gets even columns of the right number.
-- [ ] A column *break* — `\column`, `w:br w:type="column"` — which moves to the next column without
-      filling this one. The column machinery is there; nothing reads the break.
+- [ ] Footnote **reading**, which no reader does yet — so the placement above is inert, and every test
+      passes unchanged. `PageParagraph.Notes` is the shape to fill: a note is a body of blocks plus the
+      character offset of its anchor, which all four readers already mark with U+0001.
+- [ ] The **citation**, which turned out to be two separate pieces of work and is why the placement landed
+      before the reading. LibreOffice draws the number twice: once as a superscript run at the anchor in the
+      body, and once at the start of the note's first line — its rendering of the corpus document reads
+      `1Note 2 text alpha bravo charlie.`, with the citation fused to the first word. So a word-for-word
+      comparison of a footnote document needs both, and needs them **renumbered**: LibreOffice ignores
+      `text:note-citation` and numbers the notes itself in document order, which turned the corpus
+      document's citations of 2 and 5 into 1 and 2.
+- [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —
+      0.1 cm above and below, which is what Writer's `Footnote Separator` frame style ships with — but
+      nothing draws the line, and its exact spacing cannot be measured from a text comparison. Same problem
+      as cell borders, same answer: the rasteriser first.
+- [ ] Endnotes, which collect after the last page rather than at the foot of one. `PageNote.IsEndnote`
+      distinguishes them and the paginator skips them, so they take no room and are not misplaced.
 - [ ] Vertical and RTL writing modes
 - [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
       per-glyph advances rather than characters — a backend must not re-shape, since layout already

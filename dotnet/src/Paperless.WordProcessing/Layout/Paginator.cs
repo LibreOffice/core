@@ -68,6 +68,18 @@ public sealed record PaginationOptions
     /// would otherwise fill pages until memory ran out. Reaching it is reported rather than silent.
     /// </remarks>
     public int MaxPages { get; init; } = 20000;
+
+    /// <summary>
+    /// How much room the footnote separator takes above the notes.
+    /// </summary>
+    /// <remarks>
+    /// The rule above a page's footnotes, plus the space around it. Writer's default is a quarter of the
+    /// text width at half a point, with the spacing coming from the <c>Footnote Separator</c> frame style —
+    /// so the <em>line</em> costs almost nothing and the spacing is nearly all of this. The value cannot be
+    /// measured from a text comparison, which sees no lines, so it is a stated default rather than a
+    /// measured one: 0.1 cm above and below, which is what that style ships with.
+    /// </remarks>
+    public Length NoteSeparatorHeight { get; init; } = Length.FromMm100(200);
 }
 
 /// <summary>
@@ -106,6 +118,19 @@ public sealed record PaginatedSection(WritingSection Section, PageFurnitureSet? 
 public sealed class Paginator
 {
     private readonly PaginationOptions _options;
+
+    /// <summary>
+    /// Note heights already worked out, keyed on the note.
+    /// </summary>
+    /// <remarks>
+    /// Cached because narrowing a page's fit asks for the same note's height once per candidate line count,
+    /// and laying a note out is a shaping pass. Keyed on the note itself, which is safe because a reader
+    /// builds each one once — and cleared per run, since the width they were measured at belongs to the run.
+    /// </remarks>
+    private readonly Dictionary<PageNote, Length> _noteHeights = [];
+
+    /// <summary>The width the cached note heights were measured at.</summary>
+    private Length _noteWidth;
 
     /// <summary>Creates a paginator.</summary>
     /// <param name="options">The compatibility choices, or null for Writer's.</param>
@@ -175,6 +200,7 @@ public sealed class Paginator
         ArgumentNullException.ThrowIfNull(sections);
 
         WasTruncated = false;
+        _noteHeights.Clear();
 
         List<PaginatedSection> resolved =
             sections.Count > 0 ? [.. sections] : [new PaginatedSection(new WritingSection())];
@@ -185,6 +211,10 @@ public sealed class Paginator
         PageGeometry page = geometry.Page;
         Length bodyHeight = page.TextHeight;
         Length bodyWidth = page.ColumnWidth;
+
+        // A note breaks at the body's full width rather than a column's, which is what LibreOffice's own
+        // rendering shows: the note area spans the text area even when the body above it is in columns.
+        _noteWidth = page.TextWidth;
 
         List<LaidOutPage> pages = [];
         if (blocks.Count == 0 || bodyHeight <= Length.Zero || bodyWidth <= Length.Zero)
@@ -244,6 +274,7 @@ public sealed class Paginator
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
         int sectionFirstPage = 0;
         int column = 0;
+        List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
         Length used = Length.Zero;
@@ -358,8 +389,24 @@ public sealed class Paginator
                 ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
                 : Length.Zero;
 
+            // The notes those lines would anchor take their room out of the body's, so how many lines fit
+            // depends on which notes they cite — and which notes they cite depends on how many fit. Resolved
+            // by trying the unconstrained answer and shortening until it holds, which terminates because
+            // each step removes a line and so can only remove notes.
             int fitted = Fit(
-                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: columnIsEmpty);
+                layout, lineIndex, used + spaceAbove, bodyHeight - NoteHeight(notes),
+                atTopOfPage: columnIsEmpty);
+
+            while (fitted > 0)
+            {
+                Length room = bodyHeight - NoteHeight(
+                    notes, NotesIn(paragraph, layout, lineIndex, fitted));
+
+                if (Fit(layout, lineIndex, used + spaceAbove, room, columnIsEmpty) >= fitted) break;
+
+                fitted--;
+            }
+
             int allowed = Allowed(
                 paragraph.Format, layout.Lines.Count, lineIndex, fitted, columnIsEmpty);
 
@@ -394,6 +441,8 @@ public sealed class Paginator
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top, column));
                 top += box.Height;
             }
+
+            notes.AddRange(NotesIn(paragraph, layout, lineIndex, allowed));
 
             used = top;
             lineIndex += allowed;
@@ -456,12 +505,14 @@ public sealed class Paginator
                 tables,
                 Furniture(
                     furnitureSet, geometry, page, pageNumber,
-                    first: pages.Count == sectionFirstPage)));
+                    first: pages.Count == sectionFirstPage),
+                NoteArea(notes, page)));
 
             pageNumber++;
             column = 0;
             placed = [];
             tables = [];
+            notes = [];
             used = Length.Zero;
         }
     }
@@ -674,7 +725,8 @@ public sealed class Paginator
         PageGeometry geometry,
         List<PlacedLine> lines,
         List<PlacedTable> tables,
-        (PlacedFlow? Header, PlacedFlow? Footer) furniture)
+        (PlacedFlow? Header, PlacedFlow? Footer) furniture,
+        PlacedFlow? notes)
         => new()
         {
             Index = index,
@@ -687,6 +739,7 @@ public sealed class Paginator
             Tables = [.. tables],
             Header = furniture.Header,
             Footer = furniture.Footer,
+            Notes = notes,
         };
 
     private static LaidOutPage EmptyPage(
@@ -727,6 +780,84 @@ public sealed class Paginator
             ? (null, null)
             : (furniture.Header(section, geometry, pageNumber, first),
                furniture.Footer(section, geometry, pageNumber, first));
+    /// <summary>
+    /// The notes a run of a paragraph's lines anchors.
+    /// </summary>
+    /// <remarks>
+    /// By character offset, since that is what a note anchor is: the note belongs to whichever line contains
+    /// the position its anchor occupies. A paragraph with no notes — nearly all of them — returns an empty
+    /// sequence without touching its lines.
+    /// </remarks>
+    private static IEnumerable<PageNote> NotesIn(
+        PageParagraph paragraph, LaidOutParagraph layout, int from, int count)
+    {
+        if (paragraph.Notes.Count == 0 || count <= 0) yield break;
+
+        int end = Math.Min(from + count, layout.Lines.Count);
+        if (from >= end) yield break;
+
+        int first = layout.Lines[from].Line.Start;
+        int last = layout.Lines[end - 1].Line.End;
+
+        foreach (PageNote note in paragraph.Notes)
+        {
+            // Endnotes collect at the end of the document rather than the foot of a page, so they take no
+            // room here — recorded as a gap rather than placed wrongly.
+            if (note.IsEndnote) continue;
+            if (note.Offset >= first && note.Offset < last) yield return note;
+        }
+    }
+
+    /// <summary>
+    /// How tall the note area is for a set of notes, separator included.
+    /// </summary>
+    /// <remarks>
+    /// Cached per note, because the same note's height is asked for once per candidate line count while the
+    /// fit is being narrowed — and laying a note out is a shaping pass. The cache is keyed on the note
+    /// itself, which is safe because a note is a record the reader built once.
+    /// </remarks>
+    private Length NoteHeight(List<PageNote> placed, IEnumerable<PageNote>? extra = null)
+    {
+        Length total = Length.Zero;
+        int count = 0;
+
+        foreach (PageNote note in extra is null ? placed : placed.Concat(extra))
+        {
+            total += HeightOfNote(note);
+            count++;
+        }
+
+        return count == 0 ? Length.Zero : total + _options.NoteSeparatorHeight;
+    }
+
+    private Length HeightOfNote(PageNote note)
+    {
+        if (_noteHeights.TryGetValue(note, out Length cached)) return cached;
+
+        Length height = FlowLayouter.HeightOf(note.Blocks, _noteWidth);
+        _noteHeights[note] = height;
+        return height;
+    }
+
+    /// <summary>
+    /// The note area, laid out bottom-aligned in the body's own rectangle.
+    /// </summary>
+    /// <remarks>
+    /// Bottom-aligned and inside the body area, both measured rather than assumed: LibreOffice's own
+    /// rendering puts the last note line's box bottom on the body area's bottom edge. So this is the same
+    /// call a Word footer makes — a flow with no stated offset — and the notes take their room out of the
+    /// body's, which is what makes a page with notes hold less text.
+    /// </remarks>
+    private static PlacedFlow? NoteArea(List<PageNote> notes, PageGeometry page)
+    {
+        if (notes.Count == 0) return null;
+
+        List<PageBlock> blocks = [];
+        foreach (PageNote note in notes) blocks.AddRange(note.Blocks);
+
+        return FlowLayouter.LayOut(blocks, page.TextArea, offsetFromTop: null);
+    }
+
     /// <summary>
     /// The format of the nearest preceding paragraph, for the contextual-spacing comparison.
     /// </summary>

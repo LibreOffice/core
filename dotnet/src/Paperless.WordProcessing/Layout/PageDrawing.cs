@@ -31,7 +31,8 @@ public static class PageDrawing
     /// <remarks>
     /// The header first and the footer last, which is reading order and also the order a backend would
     /// prefer — nothing here overlaps, so the order is a convention rather than a correctness matter, but a
-    /// recorded display list reads far better when it matches the page.
+    /// recorded display list reads far better when it matches the page. The footnotes come after the body
+    /// they belong to and before the footer, which is where they sit on the sheet.
     /// <para>
     /// Floating frames are still missing, being the one kind of page content pagination does not place.
     /// </para>
@@ -52,6 +53,7 @@ public static class PageDrawing
             DrawFlow(page.Header, sink);
             DrawBody(page, blocks, sink);
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
+            DrawFlow(page.Notes, sink);
             DrawFlow(page.Footer, sink);
         }
         finally
