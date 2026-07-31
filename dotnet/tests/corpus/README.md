@@ -240,3 +240,19 @@ ODF only, and unusually so: these two have no `.odt`, `.docx`, `.doc` or `.rtf` 
 defeat them — LibreOffice writes explicit column widths on export, so every other format would arrive with the
 grid already resolved, which is the thing under test. It is also why the flat form is the source: an `.odt`
 would have to be zipped by hand to say as little as this one does.
+
+`wrap-frame.fodt` is a 5 cm by 3 cm frame anchored to a paragraph, one centimetre below that paragraph's top,
+with text flowing beside it. Its geometry is chosen so that **both** edges of the frame's reach fall inside the
+document: three lines above it at the full width, seven beside it, and one below it back at the full width. That
+matters because the cheap wrong answers are edge answers — a reader that narrowed the whole paragraph would
+shorten the first three lines, and one that wrapped only the anchoring paragraph would leave the last four wide.
+
+Two things learnt building it, both worth knowing before writing another. The frame is placed with `svg:y="1cm"`
+rather than at the anchor, because at zero the paragraph above ends *exactly* where the frame begins — and
+LibreOffice counts that as an overlap, so the line above wraps too. It is not a rounding artefact: Writer tests
+with `SwRect::Overlaps`, whose comparisons are `<=` and `>=`. A document sitting on that boundary is a fragile
+test whichever way it is read. And the frame's text box is left **empty**: a frame with text in it contributes
+words of its own to the page, and a comparison of body-text positions would then be comparing two features at
+once.
+
+ODF only, for now — the frame reading is done for ODF and the DOCX, DOC and RTF spellings are still open.

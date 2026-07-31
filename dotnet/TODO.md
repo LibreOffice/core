@@ -27,8 +27,10 @@ differently, where an interior grid line stops inside the outline for a Word-fam
 crosses it for an ODF one. A table whose columns state no width now resolves them too, which
 turned out to be a fraction of the item it was recorded as — it is not content-based sizing,
 and the note in `src/Paperless.WordProcessing/TODO.md` explains what it is instead. What
-remains is floating frames with text wrap, note numbering *restarts*, and the vertical and
-right-to-left writing modes. Read that file: its open items each say what is missing and why.
+remains is note numbering *restarts*, the vertical and right-to-left writing modes, and the
+rest of floating frames — the wrap itself is done for ODF, which is the structural half,
+and what is left is the frame's own content and the other three formats' spellings. Read
+that file: its open items each say what is missing and why.
 
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
 spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
@@ -88,7 +90,7 @@ binary.
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Floating frames with text wrap; note-numbering restarts; vertical and RTL text |
+| ❌ | Frame content and the non-ODF frame reads; note-numbering restarts; vertical and RTL text |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -221,7 +223,11 @@ was found because a page comparison put a word a measurable distance from where 
       3 : 2 : 4 split of three identical columns when it states 17 cm. The second is a quirk of
       LibreOffice's own importer rather than content-based sizing, which is what the item here used to
       claim.
-- [ ] The rest of it: floating frames with text wrap, and the vertical and right-to-left writing modes.
+- [x] Floating frames and text wrap for ODF, which needed a seam in `Paperless.Text` — a line's room is
+      now asked for per line rather than being a property of its paragraph — and a change in the paginator,
+      which lays blocks out once up front and cannot for a paragraph whose room depends on where it landed.
+- [ ] The rest of it: a frame's own content, the DOCX/DOC/RTF frame reads, contour wrap, and the vertical
+      and right-to-left writing modes.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.

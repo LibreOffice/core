@@ -125,6 +125,17 @@ public sealed record PageParagraph : PageBlock
     /// makes notes a pagination matter rather than a reading one.
     /// </remarks>
     public IReadOnlyList<PageNote> Notes { get; init; } = [];
+
+    /// <summary>
+    /// The floating frames anchored in this paragraph, in document order.
+    /// </summary>
+    /// <remarks>
+    /// On the paragraph for the same reason a note is: a frame's position is stated relative to its anchor,
+    /// and where the anchor lands is a pagination result rather than a reading one. Unlike a note, a frame
+    /// affects the text <em>around</em> it — the lines of this paragraph and of the paragraphs after it, for
+    /// as far down the page as the frame reaches.
+    /// </remarks>
+    public IReadOnlyList<PageFrame> Frames { get; init; } = [];
 }
 
 /// <summary>
@@ -275,12 +286,29 @@ public sealed record PlacedFlow
     /// <summary>The tables inside the flow, with page-coordinate rectangles.</summary>
     public IReadOnlyList<PlacedTable> Tables { get; init; } = [];
 
+    /// <summary>The floating frames anchored in the flow, with their positions resolved.</summary>
+    public IReadOnlyList<PlacedFrame> Frames { get; init; } = [];
+
     /// <summary>Where the flow sits on the page.</summary>
     public required DocRect Area { get; init; }
 
     /// <summary>True when nothing was laid out.</summary>
     public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }
+
+/// <summary>
+/// A floating frame with its position resolved: where it is on the page, and what the text avoids.
+/// </summary>
+/// <remarks>
+/// Two rectangles rather than one, because they are different: <paramref name="Bounds"/> is the frame itself
+/// and would be drawn, while <paramref name="Region"/> is that grown by the frame's wrap margins and is what
+/// the lines keep clear of. Conflating them puts the text against the frame's edge and draws the frame where
+/// the text should have been.
+/// </remarks>
+/// <param name="Frame">The frame as the document stated it.</param>
+/// <param name="Bounds">Where it sits on the page.</param>
+/// <param name="Region">The area text keeps clear of.</param>
+public readonly record struct PlacedFrame(PageFrame Frame, DocRect Bounds, DocRect Region);
 
 /// <summary>
 /// A page after pagination: how big it is, where its body sits, and which lines landed on it.
@@ -409,6 +437,16 @@ public sealed record LaidOutPage
     /// </para>
     /// </remarks>
     public DocRect? NoteSeparator { get; init; }
+
+    /// <summary>
+    /// The floating frames whose anchors landed on this page, with their positions resolved.
+    /// </summary>
+    /// <remarks>
+    /// On the page rather than reached through the paragraphs, because that is the question a renderer asks:
+    /// a frame is drawn once, on the page its anchor resolved to, and which page that is depends on
+    /// pagination. The same frame is never on two pages.
+    /// </remarks>
+    public IReadOnlyList<PlacedFrame> Frames { get; init; } = [];
 
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>

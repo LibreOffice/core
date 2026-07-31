@@ -1,5 +1,6 @@
 using System.Text;
 using System.Xml.Linq;
+using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
@@ -395,8 +396,112 @@ public sealed partial class OdtLayoutSource
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, text, face),
             Notes = NotesOf(walker.Notes),
+            Frames = FramesOf(walker.Frames),
             Source = element,
         };
+    }
+
+    /// <summary>
+    /// Turns the drawings anchored in a paragraph into frames the layout engine understands.
+    /// </summary>
+    /// <remarks>
+    /// A drawing with no size is dropped rather than placed: ODF lets a shape state its extent by its
+    /// geometry instead of by <c>svg:width</c>, and a frame of no width obstructs nothing, so placing it
+    /// would only risk a division by its own zero somewhere later.
+    /// </remarks>
+    private List<PageFrame> FramesOf(List<FrameAnchorPoint> anchored)
+    {
+        List<PageFrame> frames = [];
+
+        foreach (FrameAnchorPoint point in anchored)
+        {
+            XElement drawing = point.Element;
+
+            DocSize size = new(
+                Measure(drawing, "width") ?? Length.Zero,
+                Measure(drawing, "height") ?? Length.Zero);
+
+            if (size.IsEmpty) continue;
+
+            string? styleName = drawing
+                .Attribute(XName.Get("style-name", OdfNamespaces.Draw))?.Value;
+
+            frames.Add(new PageFrame
+            {
+                Offset = new DocPoint(
+                    Measure(drawing, "x") ?? Length.Zero,
+                    Measure(drawing, "y") ?? Length.Zero),
+                Size = size,
+                Anchor = AnchorOf(drawing),
+                Wrap = WrapOf(styleName),
+                Margins = FrameMargins(styleName),
+            });
+        }
+
+        return frames;
+
+        static Length? Measure(XElement drawing, string name)
+            => OdfWriterUnits.ToCore(
+                OdfValue.ParseLength(
+                    drawing.Attribute(XName.Get(name, OdfNamespaces.SvgCompatible))?.Value));
+    }
+
+    /// <summary>What a drawing's <c>text:anchor-type</c> means to layout.</summary>
+    /// <remarks>
+    /// <c>as-char</c> never reaches here — it is emitted as an anchor character during the walk instead,
+    /// because such a frame sits in the line rather than beside it. <c>frame</c>, ODF's fifth value, anchors
+    /// to the enclosing frame and is treated as a paragraph anchor: this reader has no frame to nest in.
+    /// </remarks>
+    private static FrameAnchor AnchorOf(XElement drawing)
+        => drawing.Attribute(XName.Get("anchor-type", OdfNamespaces.Text))?.Value switch
+        {
+            "char" => FrameAnchor.Character,
+            "page" => FrameAnchor.Page,
+            _ => FrameAnchor.Paragraph,
+        };
+
+    /// <summary>
+    /// How text treats the frame, from the graphic style's <c>style:wrap</c>.
+    /// </summary>
+    /// <remarks>
+    /// ODF's default is <c>parallel</c> and it is written far more often than it is omitted, but the default
+    /// matters: a frame whose style says nothing still pushes text aside, so treating the absence as
+    /// <c>run-through</c> would draw the frame over the text it should have moved.
+    /// </remarks>
+    private TextWrap WrapOf(string? styleName)
+        => _styles.ResolveProperty(
+            styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
+            OdfNamespaces.Style, "wrap").Value switch
+        {
+            "none" => TextWrap.None,
+            "left" => TextWrap.Left,
+            "right" => TextWrap.Right,
+            "dynamic" => TextWrap.Dynamic,
+            "run-through" => TextWrap.Through,
+            _ => TextWrap.Parallel,
+        };
+
+    /// <summary>
+    /// The gap the frame keeps between itself and the text, from its graphic style's margins.
+    /// </summary>
+    /// <remarks>
+    /// <c>fo:margin</c> and its four sides, which on a graphic style mean the wrap distance rather than the
+    /// space around a paragraph. Measured against LibreOffice's own render: a 5 cm frame at the left margin
+    /// with a 0.2 cm right margin pushes text to 204.1 pt, which is 56.7 + 141.73 + 5.67 — so the margin is
+    /// part of the region text avoids and not part of the frame.
+    /// </remarks>
+    private CellPadding FrameMargins(string? styleName)
+    {
+        Length Side(string name)
+            => OdfWriterUnits.ToCore(
+                   OdfValue.ParseLength(
+                       _styles.ResolveProperty(
+                           styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
+                           OdfNamespaces.FoCompatible, name).Value))
+               ?? Length.Zero;
+
+        return new CellPadding(
+            Side("margin-left"), Side("margin-right"), Side("margin-top"), Side("margin-bottom"));
     }
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
@@ -693,6 +798,16 @@ public sealed partial class OdtLayoutSource
         /// <summary>The notes anchored in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
 
+        /// <summary>The drawings anchored in this paragraph that float, in document order.</summary>
+        internal List<FrameAnchorPoint> Frames { get; } = [];
+
+        /// <summary>A drawing's <c>text:anchor-type</c>, defaulting the way ODF defaults it.</summary>
+        /// <remarks>
+        /// <c>paragraph</c> when absent, which is ODF's own default and also the commonest value written.
+        /// </remarks>
+        private static string AnchorTypeOf(XElement drawing)
+            => drawing.Attribute(XName.Get("anchor-type", OdfNamespaces.Text))?.Value ?? "paragraph";
+
         /// <summary>Walks a <c>text:p</c> or <c>text:h</c>.</summary>
         /// <param name="paragraph">The paragraph element.</param>
         /// <param name="prefix">
@@ -731,6 +846,18 @@ public sealed partial class OdtLayoutSource
 
                     case XElement child when child.Name.NamespaceName == OdfNamespaces.Text:
                         AppendTextElement(child, depth);
+                        break;
+
+                    // A drawing is not part of the paragraph's text and must not be walked into: a text box
+                    // holds paragraphs of its own, and descending would splice its words into the middle of
+                    // the sentence that anchors it. What it contributes is a *position* — and only when it
+                    // is anchored as a character, which is the one kind that sits in the line.
+                    case XElement child when child.Name.NamespaceName == OdfNamespaces.Draw
+                                             && child.Name.LocalName
+                                                 is "frame" or "custom-shape" or "g"
+                                                 or "rect" or "line" or "polygon" or "path":
+                        if (AnchorTypeOf(child) == "as-char") Emit(AnchorCharacter.ToString());
+                        else Frames.Add(new FrameAnchorPoint(_builder.Length, child));
                         break;
 
                     case XElement child:
@@ -941,3 +1068,13 @@ public sealed partial class OdtLayoutSource
         }
     }
 }
+
+/// <summary>One drawing found while walking a paragraph, with the offset it was found at.</summary>
+/// <remarks>
+/// The offset is kept even though only a character-anchored frame uses it, because that is the one thing
+/// the walk knows and the resolution cannot recover: by the time the frames are turned into
+/// <see cref="Layout.PageFrame"/>s the paragraph's text is one string and the element's place in it is gone.
+/// </remarks>
+/// <param name="Offset">Where in the paragraph's text the drawing was declared.</param>
+/// <param name="Element">The <c>draw:</c> element itself.</param>
+internal readonly record struct FrameAnchorPoint(int Offset, XElement Element);

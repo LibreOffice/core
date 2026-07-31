@@ -594,7 +594,42 @@ is read and verified, so what remains is the filling of pages rather than the me
       and `style:rel-column-width` (`23*`) is the explicit spelling of the same thing. `style:rel-width` on
       the table is a percentage of the text area. DOCX, DOC and RTF need none of this: all three always write
       a grid.
-- [ ] Floating objects and text wrap, including contour wrap
+- [x] **Floating frames and text wrap**, for ODF — the first feature here where a line's available width is
+      not a property of its paragraph, which is what made it structural rather than additive:
+      - `Paperless.Text` gained a `LineRoom` delegate: how much room a line has, asked once per line and
+        answered from the line's *position*. Deliberately ignorant of what is in the way — the text library
+        has no notion of a frame, an anchor or a wrap mode, and should not.
+      - The single-face path is **exact**, because every line of such a paragraph is the same height and a
+        line's top is therefore its index times that height — knowable before the lines exist. The mixed-run
+        path cannot be: its heights depend on which runs each line covers, so it fills once against a uniform
+        pitch and again against the real tops. One refinement, not a loop to convergence.
+      - The **paginator** had to change too, and this is the part that is easy to underestimate: it lays every
+        block out once up front, because within a section the width never varies. A frame breaks that — its
+        position is relative to its anchor, so the room depends on where the paragraph landed on a page, which
+        is a pagination result. So a paragraph beside a frame is laid out *again* at the point of use, and the
+        result is kept, since a paragraph split across a page break must not be re-broken half way.
+      - A line is obstructed when its box overlaps the frame's region **inclusively** — a line whose bottom
+        exactly meets a frame's top wraps. Measured, not chosen: Writer tests with `SwRect::Overlaps`, whose
+        comparisons are `<=` and `>=`, and a corpus document that sat on the boundary showed the line wrapped.
+      - The **widest** free run wins rather than the first, which is what sends text down whichever side of a
+        frame has more room and makes two frames narrowing one line compose without a special case.
+      - The wrap margins are part of the region text avoids and not of the frame, so two rectangles are
+        carried: what would be drawn, and what the text keeps clear of.
+      - It also fixed a silent pre-existing bug: a `draw:frame` was walked *into*, so a text box's words were
+        spliced into the middle of the sentence that anchored it.
+- [ ] The rest of floating frames:
+      - **The frame's own content.** A frame holds a flow, which is a second layout at the frame's width —
+        the same shape as a table cell's, so the machinery exists; nothing wires it up yet.
+      - **`TextWrap.None`**, which is not a narrowing at all: it pushes a line *below* the frame, a vertical
+        decision that belongs where the tops are assigned rather than where the widths are.
+      - **Contour wrap**, where the region is the image's outline rather than its box.
+      - **`Dynamic`**'s threshold: Writer gives up and pushes the line down when the wider side is too narrow
+        to be worth using. Treated as `Parallel` until the threshold is measured.
+      - **Page and character anchors** resolve as paragraph anchors do; `horizontal-rel` and `vertical-rel`
+        are read as "from the paragraph" whatever they say, and the named positions (`left`, `center`,
+        `right`) are not read at all.
+      - **DOCX, DOC and RTF.** Only ODF is read. DOCX has `w:anchor`/`w:inline` with `wp:positionH`, DOC has
+        the Escher anchor record, RTF the `\shp` destinations.
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can
       push the line that cites it onto the next page, which removes the note again. That is a feedback loop
