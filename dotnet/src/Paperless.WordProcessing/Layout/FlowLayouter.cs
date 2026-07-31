@@ -111,7 +111,16 @@ public static class FlowLayouter
                 DocPoint anchor = new(
                     area.X + paragraph.Format.StartIndent, area.Y + paragraphTop);
 
-                frames.Add(new PlacedFrame(frame, frame.BoundsFrom(anchor), frame.RegionFrom(anchor)));
+                frames.Add(new PlacedFrame(
+                    frame,
+                    frame.BoundsFrom(anchor),
+                    frame.RegionFrom(anchor),
+
+                    // The frame's own text, at the frame's width — the same flow a table cell's content is,
+                    // and nested one deeper so that a frame inside a frame cannot recurse forever.
+                    nesting < MaxNesting
+                        ? LayOut(frame.Blocks, frame.ContentAreaFrom(anchor), Length.Zero, nesting + 1)
+                        : null));
             }
 
             LineRoom? room = Room(frames, area);

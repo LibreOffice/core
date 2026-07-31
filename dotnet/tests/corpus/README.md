@@ -256,3 +256,17 @@ words of its own to the page, and a comparison of body-text positions would then
 once.
 
 ODF only, for now — the frame reading is done for ODF and the DOCX, DOC and RTF spellings are still open.
+
+`wrap-frame-text.fodt` is the same document with the frame's text box **filled**, which checks the two things
+the empty one cannot: that the frame's own lines break at the frame's width rather than the page's, and that
+they are inset by its padding. Building it turned up two LibreOffice behaviours worth knowing, because each
+would otherwise read as a bug in whatever produced the file.
+
+Its padding is written as `fo:padding-left` and the other three sides rather than as the `fo:padding`
+shorthand, because **LibreOffice ignores the shorthand on a graphic style**: the same frame written
+`fo:padding="0.15cm"` lays its text against its own edge. `fo:margin` is not like this — there the shorthand
+works, and setting it grows the wrap region on all four sides. And the frame's paragraph names **no style at
+all**, relying on `style:default-style`, because **LibreOffice ignores a paragraph style named inside a
+`draw:text-box`**: a `text:p` there with `text:style-name="Body"` renders in the default font, and a round trip
+through LibreOffice drops the attribute outright. Measured on the word "the" — 14.92 pt wide in the body
+against 14.62 pt in the frame, at different line heights, so a different typeface rather than a different size.

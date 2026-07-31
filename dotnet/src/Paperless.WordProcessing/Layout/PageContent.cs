@@ -308,7 +308,12 @@ public sealed record PlacedFlow
 /// <param name="Frame">The frame as the document stated it.</param>
 /// <param name="Bounds">Where it sits on the page.</param>
 /// <param name="Region">The area text keeps clear of.</param>
-public readonly record struct PlacedFrame(PageFrame Frame, DocRect Bounds, DocRect Region);
+/// <param name="Content">
+/// Its own text, laid out inside its padding, or null when it holds none. A separate flow because that is
+/// what it is: the lines break at the frame's width and are positioned from the frame's own top.
+/// </param>
+public readonly record struct PlacedFrame(
+    PageFrame Frame, DocRect Bounds, DocRect Region, PlacedFlow? Content = null);
 
 /// <summary>
 /// A page after pagination: how big it is, where its body sits, and which lines landed on it.

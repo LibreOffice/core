@@ -617,9 +617,23 @@ is read and verified, so what remains is the filling of pages rather than the me
         carried: what would be drawn, and what the text keeps clear of.
       - It also fixed a silent pre-existing bug: a `draw:frame` was walked *into*, so a text box's words were
         spliced into the middle of the sentence that anchored it.
+- [x] **A frame's own content**, which is a flow at the frame's width — the same shape as a table cell's, so
+      the layout needed no new machinery, only wiring. Two things had to be measured rather than assumed, and
+      both are LibreOffice's own oddities:
+      - **`fo:padding` on a graphic style is ignored; the four sides are honoured.** The same frame written
+        `fo:padding="0.15cm"` lays its text against its own edge and written with `fo:padding-left` and
+        friends insets it by 4.25 pt. `fo:margin` is *not* like this — the shorthand works there. So the two
+        are read differently, deliberately, and the asymmetry is LibreOffice's rather than this reader's.
+      - **A paragraph style named inside a `draw:text-box` is ignored.** A `text:p` in a text box with
+        `text:style-name="Body"` renders in the *default* font, not Carlito: LibreOffice's own round trip
+        drops the attribute outright. The document's `style:default-style` does apply, which is what the
+        corpus document uses so that it says the same thing to both readers. Paperless honours the named
+        style, so a document relying on one will differ from LibreOffice's render — correctly.
 - [ ] The rest of floating frames:
-      - **The frame's own content.** A frame holds a flow, which is a second layout at the frame's width —
-        the same shape as a table cell's, so the machinery exists; nothing wires it up yet.
+      - **A frame's picture.** An image needs a decoder, which is the rasteriser's business; the frame is
+        placed and its text drawn, and only the picture is missing.
+      - **A frame's own border and background**, which are on the graphic style beside the wrap and are read
+        for neither.
       - **`TextWrap.None`**, which is not a narrowing at all: it pushes a line *below* the frame, a vertical
         decision that belongs where the tops are assigned rather than where the widths are.
       - **Contour wrap**, where the region is the image's outline rather than its box.

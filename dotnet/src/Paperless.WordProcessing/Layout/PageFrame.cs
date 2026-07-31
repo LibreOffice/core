@@ -78,8 +78,9 @@ public enum TextWrap
 /// with it.
 /// </para>
 /// <para>
-/// What is deliberately absent is the frame's <em>content</em>. A frame can hold anything a body can, and
-/// laying that out is a separate flow with its own width; this type is what the text around it needs to know.
+/// Its content is a flow of its own — a frame can hold anything a body can, and it is laid out at the frame's
+/// width by the same <see cref="FlowLayouter"/> a table cell's content goes through. Empty for a frame whose
+/// content is not text, an image above all, which is placed and drawn but has nothing to break into lines.
 /// </para>
 /// </remarks>
 public sealed record PageFrame
@@ -107,6 +108,25 @@ public sealed record PageFrame
     /// </remarks>
     public CellPadding Margins { get; init; }
 
+    /// <summary>
+    /// The blocks inside the frame, in order, or empty when it holds no text.
+    /// </summary>
+    /// <remarks>
+    /// Blocks rather than paragraphs, for the same reason a cell's content is: a frame can hold a table, and
+    /// it goes through the same layout path either way.
+    /// </remarks>
+    public IReadOnlyList<PageBlock> Blocks { get; init; } = [];
+
+    /// <summary>
+    /// The gap between the frame's own edges and its text, which comes out of the width its lines break at.
+    /// </summary>
+    /// <remarks>
+    /// The frame's <c>fo:padding</c>, and not to be confused with <see cref="Margins"/>: padding is inside
+    /// the frame and margin is outside it. Conflating the two puts the frame's own text where the body text
+    /// beside it should be.
+    /// </remarks>
+    public CellPadding Padding { get; init; }
+
     /// <summary>True when the frame takes room from the text rather than being ignored by it.</summary>
     public bool Obstructs => Wrap != TextWrap.Through;
 
@@ -124,4 +144,17 @@ public sealed record PageFrame
     /// <param name="anchor">The anchor's own top-left in page coordinates.</param>
     public DocRect BoundsFrom(DocPoint anchor)
         => new(anchor.X + Offset.X, anchor.Y + Offset.Y, Size.Width, Size.Height);
+
+    /// <summary>The rectangle the frame's own text is laid out in: its bounds less its padding.</summary>
+    /// <param name="anchor">The anchor's own top-left in page coordinates.</param>
+    public DocRect ContentAreaFrom(DocPoint anchor)
+    {
+        DocRect bounds = BoundsFrom(anchor);
+
+        return new DocRect(
+            bounds.X + Padding.Left,
+            bounds.Y + Padding.Top,
+            Length.Max(Length.Zero, bounds.Width - Padding.Horizontal),
+            Length.Max(Length.Zero, bounds.Height - Padding.Vertical));
+    }
 }

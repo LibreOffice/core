@@ -435,6 +435,8 @@ public sealed partial class OdtLayoutSource
                 Anchor = AnchorOf(drawing),
                 Wrap = WrapOf(styleName),
                 Margins = FrameMargins(styleName),
+                Padding = FramePadding(styleName),
+                Blocks = FrameBlocks(drawing),
             });
         }
 
@@ -445,6 +447,37 @@ public sealed partial class OdtLayoutSource
                 OdfValue.ParseLength(
                     drawing.Attribute(XName.Get(name, OdfNamespaces.SvgCompatible))?.Value));
     }
+
+    /// <summary>
+    /// The blocks inside a frame, or empty when it holds no text.
+    /// </summary>
+    /// <remarks>
+    /// Only <c>draw:text-box</c> is walked. A frame's other children — <c>draw:image</c>,
+    /// <c>draw:object</c>, <c>draw:object-ole</c> — have content that is not text, and a frame usually holds
+    /// several as fallbacks for one another, so walking all of them would read the same picture twice. The
+    /// text box is read through the same walk a table cell's content takes, which is what lets a frame hold
+    /// a table.
+    /// </remarks>
+    private List<PageBlock> FrameBlocks(XElement drawing)
+    {
+        XElement? box = drawing.Element(XName.Get("text-box", OdfNamespaces.Draw));
+
+        return box is null ? [] : ReadCell(box);
+    }
+
+    /// <summary>
+    /// The gap between a frame's edges and its own text, from <c>fo:padding-*</c>.
+    /// </summary>
+    /// <remarks>
+    /// The four sides only, and <strong>not</strong> the <c>fo:padding</c> shorthand — which is measured
+    /// rather than an oversight. LibreOffice's ODF import honours the shorthand for a graphic style's
+    /// <em>margins</em> and ignores it for its padding: the same frame written with
+    /// <c>fo:padding="0.15cm"</c> lays its text at the frame's very edge, and written with the four sides
+    /// insets it by 4.25 pt. Honouring the shorthand here would be closer to what ODF says and further from
+    /// every LibreOffice rendering of such a file, which is the wrong trade for this library.
+    /// </remarks>
+    private CellPadding FramePadding(string? styleName)
+        => FrameSides(styleName, "padding", withShorthand: false);
 
     /// <summary>What a drawing's <c>text:anchor-type</c> means to layout.</summary>
     /// <remarks>
@@ -491,17 +524,35 @@ public sealed partial class OdtLayoutSource
     /// part of the region text avoids and not part of the frame.
     /// </remarks>
     private CellPadding FrameMargins(string? styleName)
+        => FrameSides(styleName, "margin", withShorthand: true);
+
+    /// <summary>
+    /// One of a graphic style's four-sided measures, each side falling back to the shorthand.
+    /// </summary>
+    /// <remarks>
+    /// Whether the shorthand counts is the caller's to say, because LibreOffice does not treat the two
+    /// alike — see <see cref="FramePadding"/>. Measured on a frame written both ways: with
+    /// <c>fo:margin="0.2cm"</c> the wrap region grows on all four sides, and with
+    /// <c>fo:padding="0.15cm"</c> nothing happens at all.
+    /// </remarks>
+    /// <param name="styleName">The graphic style's name.</param>
+    /// <param name="property">Either <c>margin</c> or <c>padding</c>.</param>
+    /// <param name="withShorthand">Whether a side with no value of its own falls back to the shorthand.</param>
+    private CellPadding FrameSides(string? styleName, string property, bool withShorthand)
     {
         Length Side(string name)
-            => OdfWriterUnits.ToCore(
-                   OdfValue.ParseLength(
-                       _styles.ResolveProperty(
-                           styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
-                           OdfNamespaces.FoCompatible, name).Value))
+            => Measure($"{property}-{name}")
+               ?? (withShorthand ? Measure(property) : null)
                ?? Length.Zero;
 
-        return new CellPadding(
-            Side("margin-left"), Side("margin-right"), Side("margin-top"), Side("margin-bottom"));
+        Length? Measure(string name)
+            => OdfWriterUnits.ToCore(
+                OdfValue.ParseLength(
+                    _styles.ResolveProperty(
+                        styleName, OdfStyleFamily.Graphic, OdfPropertyKind.Graphic,
+                        OdfNamespaces.FoCompatible, name).Value));
+
+        return new CellPadding(Side("left"), Side("right"), Side("top"), Side("bottom"));
     }
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>

@@ -35,7 +35,10 @@ public static class PageDrawing
     /// they belong to and before the footer, which is where they sit on the sheet, with their separator rule
     /// immediately before them.
     /// <para>
-    /// Floating frames are still missing, being the one kind of page content pagination does not place.
+    /// A floating frame's own text is drawn <em>after</em> the body it sits beside, which is Writer's own
+    /// order for anything but a run-through frame behind the text: a frame overlapping the body should cover
+    /// it rather than be covered. What is still missing is the frame's picture — an image needs a decoder,
+    /// which is the rasteriser's business rather than the layout engine's.
     /// </para>
     /// </remarks>
     /// <param name="page">The page to draw.</param>
@@ -54,6 +57,7 @@ public static class PageDrawing
             DrawFlow(page.Header, sink);
             DrawBody(page, blocks, sink);
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
+            foreach (PlacedFrame frame in page.Frames) DrawFlow(frame.Content, sink);
             DrawSeparator(page.NoteSeparator, sink);
             DrawFlow(page.Notes, sink);
             DrawFlow(page.Footer, sink);

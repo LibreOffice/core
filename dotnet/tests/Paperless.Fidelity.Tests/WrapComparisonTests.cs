@@ -52,6 +52,12 @@ public sealed class WrapComparisonTests : IDisposable
 
     [Theory]
     [InlineData("wrap-frame.fodt")]
+    // The same document with text *in* the frame, which adds two things to check at once: that the frame's own
+    // lines break at the frame's width rather than the page's, and that they are inset by its padding. Its
+    // padding is written as four sides rather than as the `fo:padding` shorthand on purpose — LibreOffice
+    // ignores the shorthand on a graphic style while honouring `fo:margin`, so the shorthand form would test
+    // nothing.
+    [InlineData("wrap-frame-text.fodt")]
     public void TextGoesRoundAFrameWhereLibreOfficePutsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -68,8 +74,14 @@ public sealed class WrapComparisonTests : IDisposable
         List<(double At, double Left, string First)> drawn = LinesOf(
             ReadingOrder.Of(Drawn(path)), word => word.Baseline, word => word.Left, word => word.Text);
 
-        drawn.Count.ShouldBe(
-            rendered.Count, $"{fileName}: laid out {drawn.Count} lines, LibreOffice {rendered.Count}");
+        if (drawn.Count != rendered.Count)
+        {
+            Assert.Fail(
+                $"{fileName}\nMINE:\n"
+                + string.Join("\n", drawn.Select(l => $"  {l.At,8:F1} {l.Left,8:F2} {l.First}"))
+                + "\nREF:\n"
+                + string.Join("\n", rendered.Select(l => $"  {l.At,8:F1} {l.Left,8:F2} {l.First}")));
+        }
 
         for (int i = 0; i < rendered.Count; i++)
         {

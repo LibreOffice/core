@@ -574,7 +574,12 @@ public sealed class Paginator
                 DocPoint anchor = new(
                     area.X + paragraph.Format.StartIndent, area.Y + paragraphTop);
 
-                frames.Add(new PlacedFrame(frame, frame.BoundsFrom(anchor), frame.RegionFrom(anchor)));
+                frames.Add(new PlacedFrame(
+                    frame,
+                    frame.BoundsFrom(anchor),
+                    frame.RegionFrom(anchor),
+                    FlowLayouter.LayOut(
+                        frame.Blocks, frame.ContentAreaFrom(anchor), Length.Zero)));
             }
 
             reflowed.Remove(index);
