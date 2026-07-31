@@ -244,14 +244,10 @@ public sealed class TableComparisonTests : IDisposable
     [Theory]
     [InlineData("table-borders.fodt")]
     [InlineData("table-borders.odt")]
-    // DOCX and RTF read their borders correctly — the same nine strokes, the same extents, the same widths and
-    // colours — and are absent here for a smaller reason that is still a real one: each export writes the
-    // table's own left edge differently relative to the border, so the whole grid is offset. Measured, the
-    // first vertical: 56.70 pt in ODF, 56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF
-    // render against 56.70. A quarter and a third of a point, in the origin rather than in the borders.
-    //
-    // DOC is absent for a larger one: WW8 states a border as a `BRC` structure through `sprmTSetBrc`, applied
-    // to a *range* of cells rather than to one, which is a bigger read than the other three and still open.
+    [InlineData("table-borders.docx")]
+    [InlineData("table-borders.rtf")]
+    // DOC is absent because WW8 states a border as a `BRC` structure through `sprmTSetBrc`, applied to a
+    // *range* of cells rather than to one, which is a bigger read than the other three and still open.
     public void ABorderIsStrokedAsOneLinePerGridLine(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

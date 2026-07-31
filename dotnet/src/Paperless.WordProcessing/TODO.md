@@ -485,11 +485,43 @@ is read and verified, so what remains is the filling of pages rather than the me
         units for one quantity.
       - ODF's own trap, for the record: `none` is a *value* meaning there is no border, so it beats the
         `fo:border` shorthand rather than falling through to it.
-- [ ] The **table's own left edge** in DOCX and RTF, which is what keeps those two out of the border comparison
-      rather than anything about the borders: each export writes the table's origin differently relative to the
-      border, so the whole grid shifts. Measured on the first vertical of the corpus table — 56.70 pt in ODF,
-      56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. A quarter and
-      a third of a point. Their borders are otherwise right: the same nine strokes, extents, widths and colours.
+- [x] The **table's own left edge** in DOCX and RTF, which is what had kept those two out of the border
+      comparison, and — found on the way — a second rule that had nothing to do with the origin. Both are now
+      in the comparison, every stroke within 0.05 pt of LibreOffice's.
+      - **Writer positions a table by the centre of its left border; Word positions it by the border's outer
+        edge.** So a Word-family reader has to add half the first cell's left border to whatever indent the
+        file states. `DomainMapperTableHandler::endTableGetTableStyle`, in the block commented "Table position
+        in Office is computed in 2 different ways" — "Writer starts a table in the middle of the border, Word
+        starts a table at the left edge of the border, so emulate that by adding the half the width". Measured
+        on the corpus table's first vertical: DOCX states `w:tblInd w:w="-5"` with a 0.5 pt border and renders
+        at 56.70 pt where taking the indent literally laid it out at 56.45; RTF states `\trleft0` and renders
+        at 57.00 where it had been laid out at 56.70. A quarter and a third of a point, and the same rule
+        underneath both — RTF's `\trleft` becomes `w:tblInd` in `rtfdocumentimpl.cxx` and the two share
+        dmapper from there. The **third** of a point is the trap: it looks like a different constant and is
+        the same half-border, differing only because RTF's number was 0 where DOCX's was −5.
+      - **Word 2007 to 2010 measured the indent to the cell's *text* instead**, and subtracted rather than
+        added: `tblInd − max(halfBorder, first cell's left padding)`. The same function picks between the two
+        on `compatibilityMode`, which is a `w:compatSetting` in Microsoft's namespace rather than `w:`; 15 and
+        above is the modern rule, and **an absent setting means the old one** (`GetWordCompatibilityMode`
+        returns −1, and every caller asks whether it is below 15). Nested tables always take the modern rule
+        whatever the mode, with the indent floored at zero first. Not academic: the corpus table rewritten to
+        mode 12 renders 3.00 pt further left, because its cells are padded 55 twips.
+      - **A Word table joins its grid lines differently, and that is a *drawing* rule rather than a reading
+        one.** Everywhere else a line overshoots the line it meets by half a width, which is what makes a
+        corner solid. In a Word table an interior line meeting the *outer frame* stops at that frame's inner
+        edge instead and lets the frame cover the join — `SwTabFramePainter::FindStylesForLine`,
+        `paintfrm.cxx`, guarded by `bWordTableCell`, which is the document setting `TableRowKeep` that every
+        Word-family importer switches on and the ODF one never does. Measured: the same table renders its
+        middle horizontals 56.95 to 538.35 from DOCX and 56.45 to 538.85 from ODF. Half a point, invisible on
+        paper and four failing assertions in the stroke comparison — and it is why `PageTable` carries
+        `HasWordBorderJoins`, the one place a table's original format still shows after it has been read.
+        **DOC needs the flag too** when its borders arrive: `ww8par.cxx` sets `TableRowKeep` as well.
+      - Checked past the corpus, since a fix that was really "subtract a quarter point" would pass one
+        document and fail the next: a table indented 567 twips and a bordered table nested inside a cell, both
+        converted to DOCX and RTF, agree with LibreOffice to 0.05 pt. Worth knowing that the corpus does not
+        cover this by itself — every other table document carries an *empty* `w:tcBorders`, so its border
+        width is zero and the origin rule moves nothing. `table-borders.*` is the only file that would notice
+        a regression.
 - [ ] Cell borders and shading for **DOC**. Borders are a `BRC` structure through `sprmTSetBrc`, applied to a
       *range* of cells rather than to one; shading is the per-band `WW8_SHD` array noted above. Both are bigger
       reads than the other three formats needed.

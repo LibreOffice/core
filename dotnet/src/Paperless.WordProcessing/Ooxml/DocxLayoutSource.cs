@@ -51,6 +51,7 @@ public sealed partial class DocxLayoutSource
     private readonly WordStyles _styles;
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
+    private readonly int _compatibilityMode;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
         [];
@@ -72,6 +73,7 @@ public sealed partial class DocxLayoutSource
         _styles = styles;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
+        _compatibilityMode = CompatibilityMode(settings);
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
@@ -199,6 +201,16 @@ public sealed partial class DocxLayoutSource
     /// call rather than being restored with it.
     /// </remarks>
     private int _sectionIndex;
+
+    /// <summary>
+    /// How many tables enclose the one being read, counted while its rows are walked.
+    /// </summary>
+    /// <remarks>
+    /// A field for the same reason <see cref="_sectionIndex"/> is one: a cell's blocks are read by the walk
+    /// that reads a paragraph's, so a nested table is found several calls deep rather than through a
+    /// parameter somebody could pass wrongly. Only the table's own left edge depends on it.
+    /// </remarks>
+    private int _tableDepth;
 
     /// <summary>
     /// Walks the body's block-level children.
@@ -716,6 +728,43 @@ public sealed partial class DocxLayoutSource
            && twips > 0
             ? Length.FromTwips(twips)
             : Length.FromTwips(720);
+
+    /// <summary>
+    /// Which version of Word wrote the file, from <c>w:compat</c>, or <c>-1</c> when it does not say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A single number covering a decade of behaviour changes: 12 is Word 2007, 14 is 2010 and 15 is 2013
+    /// and after. Word writes it as a <c>w:compatSetting</c> named <c>compatibilityMode</c> in the
+    /// Microsoft namespace, which is a URI rather than the <c>w:</c> one — so the name and the URI both
+    /// have to match, and a setting from another vendor's namespace is not this one.
+    /// </para>
+    /// <para>
+    /// Absent stays <c>-1</c> rather than defaulting to 12, following
+    /// <c>SettingsTable::GetWordCompatibilityMode</c>: everything that consults it asks whether the mode is
+    /// <em>below</em> 15, and −1 is, so a file that says nothing gets the older behaviour without the
+    /// reader having to invent a version for it.
+    /// </para>
+    /// </remarks>
+    private static int CompatibilityMode(XElement? settings)
+    {
+        const string wordUri = "http://schemas.microsoft.com/office/word";
+
+        foreach (XElement setting in Word.Children(Word.Child(settings, "compat"), "compatSetting"))
+        {
+            if (Word.Attribute(setting, "name") != "compatibilityMode") continue;
+            if (Word.Attribute(setting, "uri") != wordUri) continue;
+
+            if (int.TryParse(
+                    Word.Attribute(setting, "val"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                    out int mode))
+            {
+                return mode;
+            }
+        }
+
+        return -1;
+    }
 
     private OpenTypeFace? Face(WordTextStyle text)
     {

@@ -145,6 +145,26 @@ public sealed record PageTable : PageBlock
     /// </remarks>
     public int HeaderRowCount { get; init; }
 
+    /// <summary>
+    /// True when the table came from one of the Word formats, which join their grid lines differently.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one place a table's original format still shows after it has been read. Writer keeps it as the
+    /// document setting <c>TableRowKeep</c>, which the Word-family importers switch on and the ODF one
+    /// never does, and its painter reads it back as <c>bWordTableCell</c> —
+    /// <c>SwTabFramePainter::FindStylesForLine</c> in <c>sw/source/core/layout/paintfrm.cxx</c>.
+    /// </para>
+    /// <para>
+    /// What it changes is where an <em>interior</em> grid line stops. Everywhere else a line overshoots the
+    /// line it meets by half a width, so the two make a solid corner; in a Word table an interior line that
+    /// meets the table's outer frame stops at that frame's inner edge instead, leaving the frame to cover
+    /// the join. Half a point on a 0.5 pt border — invisible on paper, and the difference between agreeing
+    /// with a reference rendering and not.
+    /// </para>
+    /// </remarks>
+    public bool HasWordBorderJoins { get; init; }
+
     /// <summary>How wide the table is, which is its columns added up.</summary>
     public Length Width
     {
