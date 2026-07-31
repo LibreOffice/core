@@ -233,6 +233,7 @@ public sealed partial class RtfDocumentReader
     {
         ContentSection body = new() { Kind = SectionKind.Body, Index = 0 };
         _flows.Add(new Flow(body));
+        _marks.OpenParagraph();
 
         RtfTokeniser tokeniser = new(_data);
         _tokeniser = tokeniser;
@@ -303,6 +304,7 @@ public sealed partial class RtfDocumentReader
         // the stream is the one that would have applied to it.
         FinishParagraph(_flows[0], stack[^1]);
         CloseTablesDeeperThan(_flows[0], 0);
+        _marks.CloseParagraph(string.Empty);
 
         ContentDocument document = new() { Metadata = BuildMetadata() };
         document.Children.Add(body);
@@ -415,7 +417,12 @@ public sealed partial class RtfDocumentReader
                 state.Destination = RtfDestination.ColourTable;
                 BeginColourTable();
                 return;
-            case "listtable" or "listoverridetable" or "revtbl" or "rsidtbl"
+            case "revtbl":
+                // Read rather than skipped: \revauth indexes it, so without it a tracked change is
+                // recorded against a number rather than a person.
+                state.Destination = RtfDestination.RevisionTable;
+                return;
+            case "listtable" or "listoverridetable" or "rsidtbl"
                  or "generator" or "filetbl" or "themedata" or "colorschememapping"
                  or "datastore" or "latentstyles" or "xmlnstbl" or "pgptbl":
                 state.Destination = token.Name == "generator"
@@ -437,7 +444,13 @@ public sealed partial class RtfDocumentReader
                 // something Paperless does not open during extraction.
                 state.Destination = RtfDestination.Skip;
                 return;
-            case "bkmkstart" or "bkmkend" or "atnid" or "atnref" or "atndate" or "atnparent"
+            case "bkmkstart":
+                state.Destination = RtfDestination.BookmarkStart;
+                return;
+            case "bkmkend":
+                state.Destination = RtfDestination.BookmarkEnd;
+                return;
+            case "atnid" or "atnref" or "atndate" or "atnparent"
                  or "annotprot" or "xe" or "tc" or "tcn" or "datafield" or "fname" or "ftnsep"
                  or "ftnsepc" or "ftncn" or "aftnsep" or "aftnsepc" or "aftncn" or "nonshppict"
                  or "mmath" or "do" or "shpinst" or "shprslt" or "svb" or "template"
@@ -490,6 +503,7 @@ public sealed partial class RtfDocumentReader
             case "fldrslt":
                 // The cached result, which is what a reader displays.
                 state.Destination = RtfDestination.Body;
+                BeginFieldResult();
                 return;
 
             // ---- list labels
@@ -924,8 +938,24 @@ public sealed partial class RtfDocumentReader
                 // Breaks move content elsewhere without contributing text.
                 return;
             case "deleted":
-                // Text a tracked change removed, which is still in the file.
-                state.Destination = RtfDestination.Skip;
+                // Text a tracked change removed, which is still in the file. Collected rather than
+                // skipped so the change can be recorded; none of it reaches the document.
+                state.Destination = RtfDestination.Deletion;
+                return;
+            case "revised":
+                state.Revised = token.Parameter != 0;
+                return;
+            case "revauth":
+                state.RevisionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttm":
+                state.RevisionDate = unchecked((uint)(token.Parameter ?? 0));
+                return;
+            case "revauthdel":
+                state.DeletionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttmdel":
+                state.DeletionDate = unchecked((uint)(token.Parameter ?? 0));
                 return;
 
             // ---- info fields

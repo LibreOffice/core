@@ -180,10 +180,35 @@ public static class Ww8SprmReader
         /// </summary>
         /// <remarks>
         /// Deleted text is still in the file — that is what makes the change reversible — so emitting
-        /// it invents content the document does not say. The insertion flag needs no handling for the
-        /// same reason: inserted text <em>is</em> content.
+        /// it invents content the document does not say. The insertion flag beside it needs no
+        /// handling for the text, since inserted text <em>is</em> content.
         /// </remarks>
         public const ushort IsDeleted = 0x0800;
+
+        /// <summary>The run was added by a tracked change: <c>sprmCFRMarkIns</c>.</summary>
+        public const ushort IsInserted = 0x0801;
+
+        /// <summary>
+        /// The insertion's author, as an index into <c>SttbfRMark</c>: <c>sprmCIbstRMark</c>.
+        /// </summary>
+        /// <remarks>
+        /// Four sprms carry a revision's identity and none of them is the flag: the author and the
+        /// date sit beside <see cref="IsInserted"/> and <see cref="IsDeleted"/> in the same CHPX, and
+        /// LibreOffice's importer says so outright — "there *must* be a SprmCIbstRMark[Del] and a
+        /// SprmCDttmRMark[Del] pointing to the very same char position as our SprmCFRMark[Del]"
+        /// (<c>ww8par4.cxx</c>, <c>Read_CRevisionMark</c>). The two pairs have separate ids, so
+        /// reading the insertion's author for a deletion names the wrong person.
+        /// </remarks>
+        public const ushort InsertionAuthor = 0x4804;
+
+        /// <summary>The insertion's date, as a packed <c>DTTM</c>: <c>sprmCDttmRMark</c>.</summary>
+        public const ushort InsertionDate = 0x6805;
+
+        /// <summary>The deletion's author: <c>sprmCIbstRMarkDel</c>.</summary>
+        public const ushort DeletionAuthor = 0x4863;
+
+        /// <summary>The deletion's date: <c>sprmCDttmRMarkDel</c>.</summary>
+        public const ushort DeletionDate = 0x6864;
     }
 
     /// <summary>

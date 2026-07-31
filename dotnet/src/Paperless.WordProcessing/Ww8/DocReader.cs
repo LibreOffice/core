@@ -129,6 +129,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         IReadOnlyList<Model.WritingSection> sections,
         Ww8DocumentReader reader)
     {
+        Marks = reader.Marks;
         Format = format;
         _file = file;
         _reader = reader;
@@ -154,6 +155,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Model.WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public Model.WritingMarks Marks { get; }
 
     /// <summary>
     /// The underlying compound file, for callers that need a stream the content tree does not

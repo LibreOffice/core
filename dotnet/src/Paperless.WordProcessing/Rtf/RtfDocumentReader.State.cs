@@ -50,6 +50,25 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>A picture, recorded as a graphic without decoding its bytes.</summary>
         Picture,
+
+        /// <summary>The revision table, whose entries name the authors <c>\revauth</c> indexes.</summary>
+        RevisionTable,
+
+        /// <summary>A bookmark's start, whose text is its name.</summary>
+        BookmarkStart,
+
+        /// <summary>A bookmark's end, which names the same bookmark again.</summary>
+        BookmarkEnd,
+
+        /// <summary>
+        /// Text a tracked change removed: collected rather than dropped, and never emitted.
+        /// </summary>
+        /// <remarks>
+        /// A destination of its own rather than <see cref="Skip"/>, which is what it used to be. The
+        /// extracted document is unchanged — nothing here reaches a paragraph — but the words are the
+        /// whole of a deletion's record, and skipping the group threw them away.
+        /// </remarks>
+        Deletion,
     }
 
     /// <summary>
@@ -99,6 +118,21 @@ public sealed partial class RtfDocumentReader
         public bool Underline { get; set; }
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
+
+        /// <summary>True inside <c>\revised</c>: text a tracked change added.</summary>
+        public bool Revised { get; set; }
+
+        /// <summary>The insertion's author, as an index into the revision table.</summary>
+        public int RevisionAuthor { get; set; }
+
+        /// <summary>The insertion's date, as Word's packed <c>DTTM</c>.</summary>
+        public uint RevisionDate { get; set; }
+
+        /// <summary>The deletion's author, as an index into the revision table.</summary>
+        public int DeletionAuthor { get; set; }
+
+        /// <summary>The deletion's date.</summary>
+        public uint DeletionDate { get; set; }
         public int VerticalPosition { get; set; }
         public int FontIndex { get; set; }
         public int LanguageId { get; set; }
@@ -183,6 +217,11 @@ public sealed partial class RtfDocumentReader
             Underline = Underline,
             Strike = Strike,
             Hidden = Hidden,
+            Revised = Revised,
+            RevisionAuthor = RevisionAuthor,
+            RevisionDate = RevisionDate,
+            DeletionAuthor = DeletionAuthor,
+            DeletionDate = DeletionDate,
             VerticalPosition = VerticalPosition,
             FontIndex = FontIndex,
             LanguageId = LanguageId,
@@ -224,6 +263,7 @@ public sealed partial class RtfDocumentReader
             Underline = false;
             Strike = false;
             Hidden = false;
+            Revised = false;
             VerticalPosition = 0;
             CharacterStyleId = 0;
         }
@@ -597,6 +637,10 @@ public sealed partial class RtfDocumentReader
             case RtfDestination.InfoField:
             case RtfDestination.AnnotationAuthor:
             case RtfDestination.FieldInstruction:
+            case RtfDestination.RevisionTable:
+            case RtfDestination.BookmarkStart:
+            case RtfDestination.BookmarkEnd:
+            case RtfDestination.Deletion:
                 state.Collected.Append(text);
                 return;
 
@@ -608,6 +652,9 @@ public sealed partial class RtfDocumentReader
     private void AppendToParagraph(GroupState state, string text)
     {
         Flow flow = CurrentFlow;
+
+        // Before the text is appended, so the insertion starts at its first character.
+        TrackInsertion(state);
 
         RunEmphasis emphasis = EmphasisOf(state);
         string? styleName = state.CharacterStyleId == 0
@@ -736,6 +783,10 @@ public sealed partial class RtfDocumentReader
     private void FinishParagraph(Flow flow, GroupState? state = null, bool force = false)
     {
         FlushRun(flow);
+
+        CloseInsertion(flow);
+        _marks.CloseParagraph(ParagraphTextIn(flow));
+        _marks.OpenParagraph();
 
         bool hasContent = flow.PendingRuns.Count > 0 || flow.PendingImages.Count > 0;
         if (!hasContent && !force)
@@ -1152,6 +1203,7 @@ public sealed partial class RtfDocumentReader
     private void BeginFlow(GroupState state, SectionKind kind, string? name)
     {
         state.Destination = RtfDestination.Body;
+        _marks.OpenParagraph();
         _flows.Add(new Flow(new ContentSection
         {
             Kind = kind,
@@ -1211,7 +1263,24 @@ public sealed partial class RtfDocumentReader
                 break;
 
             case RtfDestination.FieldInstruction:
-                _fieldHyperlink = FieldInstructions.HyperlinkTarget(state.Collected.ToString()) ?? _fieldHyperlink;
+                _fieldInstruction = state.Collected.ToString();
+                _fieldHyperlink = FieldInstructions.HyperlinkTarget(_fieldInstruction) ?? _fieldHyperlink;
+                break;
+
+            case RtfDestination.RevisionTable:
+                RecordRevisionAuthor(state);
+                break;
+
+            case RtfDestination.BookmarkStart:
+                RecordBookmark(state, start: true);
+                break;
+
+            case RtfDestination.BookmarkEnd:
+                RecordBookmark(state, start: false);
+                break;
+
+            case RtfDestination.Deletion:
+                RecordDeletion(state);
                 break;
 
             case RtfDestination.Picture:
@@ -1220,6 +1289,9 @@ public sealed partial class RtfDocumentReader
                 CurrentFlow.PendingImages.Add(new ContentImage());
                 break;
         }
+
+        // The cached result ends with the group that held it.
+        if (_fieldResultDepth >= 0 && _groupDepth <= _fieldResultDepth) EndFieldResult();
 
         // A field's hyperlink applies only within that field.
         if (_fieldDepth >= 0 && _groupDepth <= _fieldDepth)
@@ -1235,6 +1307,9 @@ public sealed partial class RtfDocumentReader
             FinishParagraph(finished, state);
             CloseTablesDeeperThan(finished, 0);
             _flows.RemoveAt(_flows.Count - 1);
+
+            // Balances the paragraph FinishParagraph left open for text that never came.
+            _marks.CloseParagraph(string.Empty);
 
             if (finished.Target.Children.Count > 0) _hoisted.Add(finished.Target);
 

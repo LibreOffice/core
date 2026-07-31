@@ -1,3 +1,5 @@
+using Paperless.WordProcessing.Model;
+
 namespace Paperless.WordProcessing;
 
 /// <summary>
@@ -56,4 +58,69 @@ public static class FieldInstructions
         string bare = end < 0 ? arguments : arguments[..end];
         return bare.Length == 0 || bare.StartsWith('\\') ? null : bare;
     }
+
+    /// <summary>
+    /// The field's name — its first token — or null when the instruction states none.
+    /// </summary>
+    /// <remarks>
+    /// The name is what the whole instruction is dispatched on, and it is separated from its
+    /// arguments by white space alone. A leading quote is skipped rather than read as part of a name:
+    /// a producer writing <c>"PAGE"</c> means the field, and taking the quote with it names nothing.
+    /// </remarks>
+    public static string? Name(string? instruction)
+    {
+        if (instruction is null) return null;
+
+        ReadOnlySpan<char> text = instruction.AsSpan().Trim();
+        text = text.TrimStart('"');
+
+        int end = text.IndexOfAny(' ', '\t', '\n');
+        if (end >= 0) text = text[..end];
+        text = text.TrimEnd('"');
+
+        return text.Length == 0 ? null : text.ToString();
+    }
+
+    /// <summary>
+    /// What a field instruction computes, as far as the shared vocabulary names it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Dispatched on the instruction's name, which is how all three of the formats that have an
+    /// instruction say what a field is. WW8 additionally records a numeric field type in its field
+    /// PLCF — the table at <c>sw/source/filter/ww8/ww8par5.cxx</c>'s <c>aWW8FieldTab</c>, where 33 is
+    /// <c>PAGE</c>, 37 is <c>PAGEREF</c> and 31 and 32 are <c>DATE</c> and <c>TIME</c> — but the
+    /// instruction text is beside it in the same character stream and says the same thing, so one
+    /// mapping serves all three formats instead of two mappings that could disagree.
+    /// </para>
+    /// <para>
+    /// An unrecognised name is <see cref="WritingFieldKind.Unknown"/> rather than a diagnostic. There
+    /// are dozens of field types, most of them are computed by the writing application and cached, and
+    /// a reader that only wants the cached result loses nothing by not naming them.
+    /// </para>
+    /// </remarks>
+    public static WritingFieldKind KindOf(string? instruction) => Name(instruction)?.ToUpperInvariant() switch
+    {
+        "PAGE" => WritingFieldKind.PageNumber,
+        "NUMPAGES" or "SECTIONPAGES" => WritingFieldKind.PageCount,
+        "DATE" => WritingFieldKind.Date,
+        "TIME" => WritingFieldKind.Time,
+        "CREATEDATE" => WritingFieldKind.CreationDate,
+        "SAVEDATE" or "PRINTDATE" => WritingFieldKind.ModificationDate,
+        "AUTHOR" or "USERNAME" or "LASTSAVEDBY" => WritingFieldKind.Author,
+        "FILENAME" => WritingFieldKind.FileName,
+        "TITLE" => WritingFieldKind.Title,
+        "SUBJECT" => WritingFieldKind.Subject,
+        "KEYWORDS" => WritingFieldKind.Keywords,
+        "COMMENTS" => WritingFieldKind.Description,
+        "STYLEREF" => WritingFieldKind.Chapter,
+        "REF" or "NOTEREF" => WritingFieldKind.Reference,
+        "PAGEREF" => WritingFieldKind.PageReference,
+        Hyperlink => WritingFieldKind.Hyperlink,
+        "SEQ" => WritingFieldKind.Sequence,
+        "SET" or "DOCVARIABLE" or "ASK" => WritingFieldKind.Variable,
+        "TOC" or "INDEX" => WritingFieldKind.TableOfContents,
+        "NUMWORDS" => WritingFieldKind.WordCount,
+        _ => WritingFieldKind.Unknown,
+    };
 }

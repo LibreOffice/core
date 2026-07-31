@@ -66,10 +66,31 @@ public sealed partial class DocxContentReader
     // rather than the result. A stack because fields nest.
     private readonly List<bool> _fieldInstruction = [];
 
+    // Field instructions, one buffer per open field, so that a nested field's code does not land in
+    // its parent's. Parallel to _fieldInstruction, which says which half of each field the walk is in.
+    private readonly List<FieldFrame> _fieldFrames = [];
+
+    private readonly Model.WritingMarkBuilder _marks = new();
+
     private int _footnoteNumber;
     private int _endnoteNumber;
     private int _depth;
     private bool _reportedDepthLimit;
+
+    /// <summary>One open field: the instruction being collected and where its result began.</summary>
+    private sealed class FieldFrame
+    {
+        public StringBuilder Instruction { get; } = new();
+
+        /// <summary>Where the cached result starts, set at the <c>separate</c> marker.</summary>
+        public Model.WritingPosition? ResultStart { get; set; }
+
+        /// <summary>The offset the result starts at, for slicing it back out of the paragraph.</summary>
+        public int ResultOffset { get; set; }
+    }
+
+    /// <summary>The marks the walk recorded: tracked changes, bookmarks and fields.</summary>
+    public Model.WritingMarks Marks => _marks.Build();
 
     /// <summary>Creates a reader over one open document.</summary>
     public DocxContentReader(DocxFile file, List<Diagnostic> diagnostics)
@@ -152,18 +173,32 @@ public sealed partial class DocxContentReader
                 if (Word.Child(element, "sdtContent") is { } sdtContent) ReadBlocks(sdtContent, target);
                 return;
 
-            case "customXml" or "ins" or "moveTo":
-                // Inserted and moved-to content is present in the document; the wrapper is
-                // tracked-change bookkeeping.
+            case "customXml":
                 ReadBlocks(element, target);
+                return;
+
+            case "ins" or "moveTo":
+                // Inserted and moved-to content is present in the document; the wrapper is
+                // tracked-change bookkeeping — which is recorded rather than merely stepped over.
+                RecordInsertion(element, paragraph: null, () => ReadBlocks(element, target));
                 return;
 
             case "del" or "moveFrom":
                 // Deleted and moved-from content is *not* in the document any more. Reading it
-                // would inject text no reader shows.
+                // would inject text no reader shows; recording it keeps the account of who removed
+                // what without putting the words back.
+                RecordDeletion(element, paragraph: null);
                 return;
 
-            case "sectPr" or "bookmarkStart" or "bookmarkEnd" or "proofErr"
+            case "bookmarkStart":
+                RecordBookmarkStart(element, paragraph: null);
+                return;
+
+            case "bookmarkEnd":
+                RecordBookmarkEnd(element, paragraph: null);
+                return;
+
+            case "sectPr" or "proofErr"
                  or "permStart" or "permEnd" or "commentRangeStart" or "commentRangeEnd":
                 return;
 
@@ -198,8 +233,10 @@ public sealed partial class DocxContentReader
             ListMarker = marker,
         };
 
+        _marks.OpenParagraph();
         ReadRuns(paragraph, result, styleId, hyperlink: null);
         FlushPendingRun(result);
+        _marks.CloseParagraph(CurrentText(result));
         return result;
     }
 
@@ -295,17 +332,37 @@ public sealed partial class DocxContentReader
                         ReadRuns(sdtContent, paragraph, paragraphStyleId, hyperlink);
                     break;
 
-                case "smartTag" or "ins" or "moveTo" or "bdo" or "dir":
+                case "smartTag" or "bdo" or "dir":
                     ReadRuns(child, paragraph, paragraphStyleId, hyperlink);
                     break;
+
+                case "ins" or "moveTo":
+                {
+                    XElement wrapper = child;
+                    RecordInsertion(
+                        wrapper,
+                        paragraph,
+                        () => ReadRuns(wrapper, paragraph, paragraphStyleId, hyperlink));
+                    break;
+                }
 
                 // A field whose result is stored inline rather than between fldChar markers.
                 case "fldSimple":
-                    ReadRuns(child, paragraph, paragraphStyleId, hyperlink);
+                    ReadSimpleField(child, paragraph, paragraphStyleId, hyperlink);
                     break;
 
                 case "del" or "moveFrom":
-                    // Deleted text. Present in the file, absent from the document.
+                    // Deleted text. Present in the file, absent from the document — and recorded,
+                    // because the record is the only place the words survive.
+                    RecordDeletion(child, paragraph);
+                    break;
+
+                case "bookmarkStart":
+                    RecordBookmarkStart(child, paragraph);
+                    break;
+
+                case "bookmarkEnd":
+                    RecordBookmarkEnd(child, paragraph);
                     break;
 
                 case "subDoc":
@@ -382,15 +439,17 @@ public sealed partial class DocxContentReader
                     break;
 
                 case "instrText" or "delInstrText":
-                    // The field's code, never its result.
+                    // The field's code, never its result — but collected, because the code is half
+                    // of what a field is and a hyperlink's target is in nothing else.
+                    if (_fieldFrames.Count > 0) _fieldFrames[^1].Instruction.Append(child.Value);
                     break;
 
                 case "delText":
-                    // Text a tracked change removed.
+                    // Text a tracked change removed. Its own w:del wrapper records it.
                     break;
 
                 case "fldChar":
-                    HandleFieldCharacter(child);
+                    HandleFieldCharacter(child, paragraph);
                     break;
 
                 case "footnoteReference":
@@ -457,20 +516,42 @@ public sealed partial class DocxContentReader
     /// <c>separate</c>, the cached result, and <c>end</c>. Fields do nest, so the state is a
     /// stack, and text is emitted only when no enclosing field is still in its instruction half.
     /// </remarks>
-    private void HandleFieldCharacter(XElement fieldCharacter)
+    private void HandleFieldCharacter(XElement fieldCharacter, ContentParagraph paragraph)
     {
         switch (Word.Attribute(fieldCharacter, "fldCharType"))
         {
             case "begin":
                 _fieldInstruction.Add(true);
+                _fieldFrames.Add(new FieldFrame());
                 break;
 
             case "separate":
                 if (_fieldInstruction.Count > 0) _fieldInstruction[^1] = false;
+                if (_fieldFrames.Count > 0)
+                {
+                    FieldFrame frame = _fieldFrames[^1];
+                    frame.ResultOffset = CurrentOffset(paragraph);
+                    frame.ResultStart = _marks.At(frame.ResultOffset);
+                }
                 break;
 
             case "end":
                 if (_fieldInstruction.Count > 0) _fieldInstruction.RemoveAt(_fieldInstruction.Count - 1);
+                if (_fieldFrames.Count > 0)
+                {
+                    FieldFrame frame = _fieldFrames[^1];
+                    _fieldFrames.RemoveAt(_fieldFrames.Count - 1);
+
+                    // A field with no separator has no cached result at all — it is all
+                    // instruction — so its range collapses onto its end rather than covering the
+                    // paragraph from offset zero, which is what an unset result offset would mean.
+                    int end = CurrentOffset(paragraph);
+                    _marks.AddField(
+                        frame.Instruction.ToString(),
+                        frame.ResultStart is null ? null : Slice(paragraph, frame.ResultOffset, end),
+                        frame.ResultStart ?? _marks.At(end),
+                        _marks.At(end));
+                }
                 break;
         }
     }
@@ -612,7 +693,8 @@ public sealed partial class DocxContentReader
         WordCharacterFormat? PendingFormat,
         string? PendingHyperlink,
         string? PendingStyleName,
-        bool[] FieldInstruction);
+        bool[] FieldInstruction,
+        FieldFrame[] FieldFrames);
 
     /// <summary>
     /// Puts the current block context aside so a note, comment or text box can be read as an
@@ -622,7 +704,7 @@ public sealed partial class DocxContentReader
     {
         ReadingState state = new(
             _pendingText.ToString(), _pendingFormat, _pendingHyperlink, _pendingStyleName,
-            [.. _fieldInstruction]);
+            [.. _fieldInstruction], [.. _fieldFrames]);
 
         _pendingText.Clear();
         _pendingFormat = null;
@@ -630,6 +712,7 @@ public sealed partial class DocxContentReader
         _pendingStyleName = null;
         // A field cannot span flows, so the nested flow starts outside any field.
         _fieldInstruction.Clear();
+        _fieldFrames.Clear();
         return state;
     }
 
@@ -642,6 +725,8 @@ public sealed partial class DocxContentReader
         _pendingStyleName = state.PendingStyleName;
         _fieldInstruction.Clear();
         _fieldInstruction.AddRange(state.FieldInstruction);
+        _fieldFrames.Clear();
+        _fieldFrames.AddRange(state.FieldFrames);
     }
 
     // ------------------------------------------------------------------ drawings and shapes

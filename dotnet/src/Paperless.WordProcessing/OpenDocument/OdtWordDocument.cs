@@ -30,10 +30,11 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 {
     private readonly OdfDocument _inner;
 
-    internal OdtWordDocument(OdfDocument inner)
+    internal OdtWordDocument(OdfDocument inner, WritingMarks marks)
     {
         ArgumentNullException.ThrowIfNull(inner);
         _inner = inner;
+        Marks = marks;
         Sections = ReadSections(inner.File.Styles);
     }
 
@@ -54,6 +55,9 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public WritingMarks Marks { get; }
 
     /// <summary>The underlying ODF file: its styles, master pages and remaining parts.</summary>
     public OdfFile File => _inner.File;
