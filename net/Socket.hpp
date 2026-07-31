@@ -1536,14 +1536,19 @@ public:
                         LOGA_TRC(Socket,
                                  "Read closed (0), have " << _inBuffer.size() << " buffered bytes");
                     else // Success.
+#ifdef LOG_SOCKET_DATA
                         LOGA_TRC(Socket,
                                  "Read " << len << " bytes in addition to " << _inBuffer.size()
                                          << " buffered bytes"
-#ifdef LOG_SOCKET_DATA
                                          << (len ? HexUtil::dumpHex(std::string(buf, len), ":\n")
                                                  : std::string())
-#endif
                         );
+#else
+                        LOGA_TRC(Socket,
+                                 "Read " << len << " bytes in addition to " << _inBuffer.size()
+                                         << " buffered bytes"
+                        );
+#endif
                 } while (len < 0 && last_errno == EINTR);
 
                 if (len > 0)
@@ -1778,15 +1783,21 @@ public:
             // Oddly enough, we don't necessarily get POLLHUP after read(2) returns 0.
             const int read = readIncomingData();
             const int last_errno = errno;
+#ifdef LOG_SOCKET_DATA
             LOGA_TRC(Socket, "Incoming data buffer "
                                  << _inBuffer.size() << " bytes, read result: " << read
                                  << ", events: 0x" << std::hex << events << std::dec << " ("
                                  << (closed ? "closed" : "not closed") << ')'
-#ifdef LOG_SOCKET_DATA
                                  << (!_inBuffer.empty() ? HexUtil::dumpHex(_inBuffer, ":\n")
                                                         : std::string())
-#endif
             );
+#else
+            LOGA_TRC(Socket, "Incoming data buffer "
+                                 << _inBuffer.size() << " bytes, read result: " << read
+                                 << ", events: 0x" << std::hex << events << std::dec << " ("
+                                 << (closed ? "closed" : "not closed") << ')'
+            );
+#endif
 
             if (read > 0 && closed)
             {
@@ -1916,15 +1927,20 @@ public:
                              << Util::symbolicErrno(last_errno) << ": "
                              << std::strerror(last_errno) << ')');
                 else // Success.
+#ifdef LOG_SOCKET_DATA
                     LOGA_TRC(Socket,
                              "Wrote "
                                  << len << " bytes of " << _outBuffer.size() << " buffered data"
-#ifdef LOG_SOCKET_DATA
                                  << (len ? HexUtil::dumpHex(std::string(_outBuffer.getBlock(), len),
                                                             ":\n")
                                          : std::string())
-#endif
                     );
+#else
+                    LOGA_TRC(Socket,
+                             "Wrote "
+                                 << len << " bytes of " << _outBuffer.size() << " buffered data"
+                    );
+#endif
             }
             while (len < 0 && last_errno == EINTR);
 

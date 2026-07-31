@@ -652,18 +652,23 @@ void DocumentBroker::pollThread()
                                                  _storageManager.uploadFailureCount() >=
                                                      o3tl::make_unsigned(limStoreFailures)))
                     {
+#if !MOBILEAPP
                         LOG_ERR(
                             "Failed to store the document and reached maximum retry count of "
                             << limStoreFailures
                             << " Save failures: " << _saveManager.saveFailureCount()
                             << ", Upload failures: " << _storageManager.uploadFailureCount()
-#if !MOBILEAPP
                             << ". Giving up"
                             << (_storage && _quarantine && Quarantine::isEnabled()
                                     ? ". The document should be recoverable from the quarantine. "
-                                    : ", but Quarantine is disabled. ")
+                                    : ", but Quarantine is disabled. "));
+#else
+                        LOG_ERR(
+                            "Failed to store the document and reached maximum retry count of "
+                            << limStoreFailures
+                            << " Save failures: " << _saveManager.saveFailureCount()
+                            << ", Upload failures: " << _storageManager.uploadFailureCount());
 #endif // !MOBILEAPP
-                        );
                         stop("storefailed");
                         continue;
                     }
@@ -3866,18 +3871,23 @@ void DocumentBroker::handleDocumentConflict(std::string details)
     if (activeClients == 0)
     {
         // No clients were contacted; we will never resolve this conflict.
+#if !MOBILEAPP
         LOG_WRN(
             "The document [" << _docKey
                              << "] could not be uploaded to storage because there is a newer "
                                 "version there, and no active clients exist to resolve the conflict"
-#if !MOBILEAPP
-                             << (_storage && _quarantine && _quarantine->isEnabled()
+                             << (_storage && _quarantine && Quarantine::isEnabled()
                                      ? ". The document should be recoverable from the quarantine. "
                                      : ", but Quarantine is disabled. ")
-#else
-                             << ". "
-#endif // !MOBILEAPP
                              << "Stopping.");
+#else
+        LOG_WRN(
+            "The document [" << _docKey
+                             << "] could not be uploaded to storage because there is a newer "
+                                "version there, and no active clients exist to resolve the conflict"
+                             << ". "
+                             << "Stopping.");
+#endif // !MOBILEAPP
 
         // Nothing more to do.
         stop("conflict");

@@ -1676,6 +1676,10 @@ private:
         /// The current activity taking place.
         /// Meaningful only when Status is Status::Live, but
         /// we may Save and Upload during Status::Destroying.
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wembedded-directive"
+#endif
         STATE_ENUM(Activity,
                    None, ///< No particular activity.
                    Rename, ///< The document is being renamed.
@@ -1689,6 +1693,9 @@ private:
                    SwitchingToOnline, ///< The document will switch to Online mode.
 #endif // !MOBILEAPP && !WASMAPP
         );
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
         STATE_ENUM(KitDisconnected,
                    No, ///< No, kit is not disconnected

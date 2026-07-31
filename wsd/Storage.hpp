@@ -461,6 +461,10 @@ public:
     /// Must be called at startup to configure.
     static void initialize();
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wembedded-directive"
+#endif
     STATE_ENUM(StorageType,
                Unsupported, ///< An unsupported type.
                Unauthorized, ///< The host is not allowed by the admin.
@@ -472,6 +476,9 @@ public:
                Wopi ///< WOPI-like storage.
 #endif
     );
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
     /// Validates the given URI.
     static StorageType validate(const Poco::URI& uri, bool takeOwnership);
