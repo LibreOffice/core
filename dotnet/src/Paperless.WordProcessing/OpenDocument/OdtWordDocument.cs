@@ -90,7 +90,7 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
         };
 
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(paragraphs, Sections[0]));
+            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
     }
 
     /// <inheritdoc/>

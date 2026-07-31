@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Numbering;
 using Paperless.Text.Encodings;
+using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Rtf;
 
@@ -48,10 +49,19 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     public const int MaxGroupDepth = 256;
 
+    /// <summary>How many paragraphs are recorded for layout before the rest are ignored.</summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a real limit, and it bounds memory rather than time: the
+    /// content walk continues either way, so a document past the cap still extracts in full.
+    /// </remarks>
+    public const int MaxLayoutParagraphs = 200000;
+
     private readonly byte[] _data;
     private readonly List<Diagnostic> _diagnostics;
     private readonly RtfStyles _styles = new();
     private readonly Dictionary<int, int> _fontCharsets = [];
+    private readonly Dictionary<int, string> _fontFamilies = [];
+    private readonly List<RtfLayoutParagraph> _layoutParagraphs = [];
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
     private readonly Dictionary<string, string> _info = new(StringComparer.Ordinal);
@@ -78,6 +88,17 @@ public sealed partial class RtfDocumentReader
 
     /// <summary>The sections' page geometry, valid once <see cref="Read"/> has run.</summary>
     public IReadOnlyList<Model.WritingSection> Sections => _geometry.Sections;
+
+    /// <summary>
+    /// The body's paragraphs with the formatting layout needs, valid once <see cref="Read"/> has run.
+    /// </summary>
+    /// <remarks>
+    /// Collected during the content walk rather than by a second pass, unlike the XML formats. RTF is a
+    /// token stream with no structure to revisit — re-reading it would mean running the whole state
+    /// machine again, including its encoding and destination handling, and the two runs could then
+    /// disagree. So the formatting in force is recorded as each paragraph closes.
+    /// </remarks>
+    public IReadOnlyList<RtfLayoutParagraph> LayoutParagraphs => _layoutParagraphs;
 
     /// <summary>Reads the document.</summary>
     public ContentDocument Read()
@@ -149,8 +170,9 @@ public sealed partial class RtfDocumentReader
             }
         }
 
-        // A document need not end its last paragraph with \par.
-        FinishParagraph(_flows[0]);
+        // A document need not end its last paragraph with \par, and the state in force at the end of
+        // the stream is the one that would have applied to it.
+        FinishParagraph(_flows[0], stack[^1]);
         CloseTablesDeeperThan(_flows[0], 0);
 
         ContentDocument document = new() { Metadata = BuildMetadata() };
@@ -283,6 +305,68 @@ public sealed partial class RtfDocumentReader
                 return;
             case "ilvl":
                 state.ListLevel = token.Parameter ?? 0;
+                return;
+
+            // ---- layout formatting
+            case "fs":
+                // Half-points, as in OOXML: \fs24 is twelve points.
+                state.FontSizeHalfPoints = token.Parameter;
+                return;
+            case "li":
+                state.LeftIndent = token.Parameter;
+                return;
+            case "ri":
+                state.RightIndent = token.Parameter;
+                return;
+            case "fi":
+                state.FirstLineIndent = token.Parameter;
+                return;
+            case "sb":
+                state.SpaceBefore = token.Parameter;
+                return;
+            case "sa":
+                state.SpaceAfter = token.Parameter;
+                return;
+            case "sl":
+                state.LineSpacing = token.Parameter;
+                return;
+            case "slmult":
+                // \slmult1 makes \sl a multiple in two-hundred-and-fortieths of a line; \slmult0 or
+                // its absence makes it twips, whose sign then chooses at-least from exact.
+                state.IsMultipleLineSpacing = token.Parameter is not 0;
+                return;
+            case "ql":
+                state.Alignment = TextAlignment.Start;
+                return;
+            case "qr":
+                state.Alignment = TextAlignment.End;
+                return;
+            case "qc":
+                state.Alignment = TextAlignment.Centre;
+                return;
+            case "qj":
+                state.Alignment = TextAlignment.Justify;
+                return;
+            case "qd":
+                state.Alignment = TextAlignment.Distribute;
+                return;
+            case "keepn":
+                state.KeepWithNext = token.Parameter is not 0;
+                return;
+            case "keep":
+                state.KeepTogether = token.Parameter is not 0;
+                return;
+            case "widctlpar":
+                state.HasWidowControl = true;
+                return;
+            case "nowidctlpar":
+                state.HasWidowControl = false;
+                return;
+            case "pagebb":
+                state.StartsNewPage = token.Parameter is not 0;
+                return;
+            case "contextualspace":
+                state.HasContextualSpacing = token.Parameter is not 0;
                 return;
 
             // ---- paragraph and character state
@@ -487,7 +571,7 @@ public sealed partial class RtfDocumentReader
             case "zwj":
                 AppendText(state, "‍");
                 return;
-            case "page" or "column" or "sect" or "sectd" or "pagebb" or "softpage":
+            case "page" or "column" or "sect" or "sectd" or "softpage":
                 // Breaks move content elsewhere without contributing text.
                 return;
             case "deleted":

@@ -7,6 +7,7 @@ using Paperless.WordProcessing;
 using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Ooxml;
 using Paperless.WordProcessing.OpenDocument;
+using Paperless.WordProcessing.Ww8;
 using Shouldly;
 
 namespace Paperless.Fidelity.Tests;
@@ -51,6 +52,8 @@ public sealed class DocumentPaginationTests : IDisposable
     [InlineData("paginated.fodt")]
     [InlineData("paginated.odt")]
     [InlineData("paginated.docx")]
+    [InlineData("paginated.doc")]
+    [InlineData("paginated.rtf")]
     public void ARealDocumentPaginatesTheWayLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -82,6 +85,8 @@ public sealed class DocumentPaginationTests : IDisposable
     [InlineData("paginated.fodt")]
     [InlineData("paginated.odt")]
     [InlineData("paginated.docx")]
+    [InlineData("paginated.doc")]
+    [InlineData("paginated.rtf")]
     public void EveryParagraphOfTheDocumentLandsOnSomePage(string fileName)
     {
         // Pagination places lines; it must not lose them. A dropped paragraph would look like a
@@ -115,7 +120,7 @@ public sealed class DocumentPaginationTests : IDisposable
         using IDocument document = Open(Corpus.Require("paginated.fodt"));
         WordProcessingPages pages = Paginate(document);
 
-        List<PageParagraph> paragraphs = Paragraphs(document);
+        IReadOnlyList<PageParagraph> paragraphs = Paragraphs(document);
         paragraphs.ShouldContain(
             p => p.Format.KeepWithNext,
             "the corpus document has to contain a keep-with-next paragraph for this to test anything");
@@ -148,8 +153,11 @@ public sealed class DocumentPaginationTests : IDisposable
 
     [Theory]
     [InlineData("paginated.fodt")]
+    [InlineData("paginated.odt")]
     [InlineData("paginated.docx")]
-    public void FontsResolveWithoutSubstitutingSomethingIncompatible(string fileName)
+    [InlineData("paginated.doc")]
+    [InlineData("paginated.rtf")]
+    public void EveryFormatResolvesTheDocumentsOwnFont(string fileName)
     {
         // The corpus document asks for Carlito, which is installed. A substitution here would mean the
         // resolver failed to find an installed family, and every measurement after it would be against
@@ -159,33 +167,17 @@ public sealed class DocumentPaginationTests : IDisposable
             Directory.Exists("/usr/share/fonts"), "no font directory on this machine");
 
         using IDocument document = Open(Corpus.Require(fileName));
+        WordProcessingPages pages = Paginate(document);
 
-        IReadOnlyList<Text.Fonts.FontSubstitution> substitutions = document switch
-        {
-            OdtWordDocument odt => Substitutions(new OdtLayoutSource(odt.File.Styles), odt),
-            OoxmlWordDocument docx => Substitutions(
-                new DocxLayoutSource(docx.File.Styles, docx.File.Settings), docx),
-            _ => [],
-        };
-
-        substitutions
-            .Where(s => !s.IsMetricCompatible)
-            .ShouldBeEmpty($"{fileName}: an incompatible substitution reflows every later page");
-
-        static IReadOnlyList<Text.Fonts.FontSubstitution> Substitutions(object source, IDocument document)
-        {
-            switch (source)
-            {
-                case OdtLayoutSource odf:
-                    odf.Read(((OdtWordDocument)document).File.Body!);
-                    return odf.Substitutions;
-                case DocxLayoutSource ooxml:
-                    ooxml.Read(((OoxmlWordDocument)document).File.Body!);
-                    return ooxml.Substitutions;
-                default:
-                    return [];
-            }
-        }
+        // The document names Carlito, which is installed. Every format has to find it: a resolver that
+        // failed would substitute something with different advance widths, and every measurement after
+        // that would be against the wrong font — so this fails on the font rather than letting the page
+        // comparison fail mysteriously three tests later.
+        pages.Paragraphs.ShouldNotBeEmpty(fileName);
+        pages.Paragraphs
+            .Select(p => p.Face.FamilyName)
+            .Distinct()
+            .ShouldAllBe(name => name == "Carlito", fileName);
     }
 
     // ------------------------------------------------------------------------- the machinery
@@ -211,14 +203,8 @@ public sealed class DocumentPaginationTests : IDisposable
     /// into this list and not the text itself — the paginator places lines and leaves the strings where
     /// they were. Reading them twice is cheap next to shaping them once.
     /// </remarks>
-    private static List<PageParagraph> Paragraphs(IDocument document) => document switch
-    {
-        OdtWordDocument odt => new OdtLayoutSource(odt.File.Styles).Read(odt.File.Body!),
-        OoxmlWordDocument docx =>
-            new DocxLayoutSource(docx.File.Styles, docx.File.Settings).Read(docx.File.Body!),
-        _ => throw new NotSupportedException(
-            $"{document.Format} has no layout source in this test yet."),
-    };
+    private static IReadOnlyList<PageParagraph> Paragraphs(IDocument document)
+        => Paginate(document).Paragraphs;
 
     /// <summary>The words on each page Paperless produced, in order.</summary>
     /// <remarks>
@@ -229,7 +215,6 @@ public sealed class DocumentPaginationTests : IDisposable
     {
         using IDocument document = Open(path);
         WordProcessingPages pages = Paginate(document);
-        List<PageParagraph> paragraphs = Paragraphs(document);
 
         List<List<string>> words = [];
         foreach (LaidOutPage page in pages.Pages)
@@ -237,8 +222,7 @@ public sealed class DocumentPaginationTests : IDisposable
             List<string> onPage = [];
             foreach (PlacedLine line in page.Lines)
             {
-                string text = paragraphs[line.ParagraphIndex].Text;
-                onPage.AddRange(line.Box.Line.VisibleTextIn(text).ToString()
+                onPage.AddRange(pages.TextOf(line)
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries));
             }
             words.Add(onPage);

@@ -1,6 +1,7 @@
 using System.Text;
 using Paperless.Core.Extraction;
 using Paperless.Core.Globalization;
+using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Rtf;
 
@@ -83,6 +84,56 @@ public sealed partial class RtfDocumentReader
         /// <summary>Text collected by a group whose destination is not document content.</summary>
         public StringBuilder Collected { get; } = new();
 
+        // ---- layout formatting
+        //
+        // Nullable where "the document did not say" has to stay distinguishable from "it said zero":
+        // a zero indent is meaningful and a missing one falls back to the style's. The alignment and
+        // the flags are not nullable because RTF states them as toggles that \pard clears.
+
+        /// <summary>The font size in half-points, from <c>\fs</c>.</summary>
+        public int? FontSizeHalfPoints { get; set; }
+
+        /// <summary>The left indent in twips, from <c>\li</c>.</summary>
+        public int? LeftIndent { get; set; }
+
+        /// <summary>The right indent in twips, from <c>\ri</c>.</summary>
+        public int? RightIndent { get; set; }
+
+        /// <summary>The first line's extra indent in twips, from <c>\fi</c>; may be negative.</summary>
+        public int? FirstLineIndent { get; set; }
+
+        /// <summary>The space above the paragraph in twips, from <c>\sb</c>.</summary>
+        public int? SpaceBefore { get; set; }
+
+        /// <summary>The space below it in twips, from <c>\sa</c>.</summary>
+        public int? SpaceAfter { get; set; }
+
+        /// <summary>
+        /// <c>\sl</c>'s value, whose meaning depends on <see cref="IsMultipleLineSpacing"/> and its sign.
+        /// </summary>
+        public int? LineSpacing { get; set; }
+
+        /// <summary>True when <c>\slmult1</c> said the spacing is a multiple rather than twips.</summary>
+        public bool IsMultipleLineSpacing { get; set; }
+
+        /// <summary>The alignment, as one of RTF's four <c>\q</c> words.</summary>
+        public TextAlignment Alignment { get; set; }
+
+        /// <summary>True when the paragraph must stay with the next.</summary>
+        public bool KeepWithNext { get; set; }
+
+        /// <summary>True when it must not split across pages.</summary>
+        public bool KeepTogether { get; set; }
+
+        /// <summary>True when widow and orphan control applies.</summary>
+        public bool HasWidowControl { get; set; }
+
+        /// <summary>True when the paragraph starts a page.</summary>
+        public bool StartsNewPage { get; set; }
+
+        /// <summary>True when spacing between paragraphs of one style is suppressed.</summary>
+        public bool HasContextualSpacing { get; set; }
+
         public GroupState Clone() => new()
         {
             Destination = Destination,
@@ -102,6 +153,20 @@ public sealed partial class RtfDocumentReader
             InTable = InTable,
             UnicodeSkip = UnicodeSkip,
             HyperlinkTarget = HyperlinkTarget,
+            FontSizeHalfPoints = FontSizeHalfPoints,
+            LeftIndent = LeftIndent,
+            RightIndent = RightIndent,
+            FirstLineIndent = FirstLineIndent,
+            SpaceBefore = SpaceBefore,
+            SpaceAfter = SpaceAfter,
+            LineSpacing = LineSpacing,
+            IsMultipleLineSpacing = IsMultipleLineSpacing,
+            Alignment = Alignment,
+            KeepWithNext = KeepWithNext,
+            KeepTogether = KeepTogether,
+            HasWidowControl = HasWidowControl,
+            StartsNewPage = StartsNewPage,
+            HasContextualSpacing = HasContextualSpacing,
             // Deliberately not inherited: a nested group collects its own text, and the
             // stylesheet and font-table bookkeeping belongs to the entry that declared it.
         };
@@ -119,6 +184,12 @@ public sealed partial class RtfDocumentReader
         }
 
         /// <summary>Applies <c>\pard</c>: paragraph formatting back to nothing.</summary>
+        /// <remarks>
+        /// The layout properties are cleared too, which is what makes <c>\pard</c> usable at all: RTF
+        /// writes it before every paragraph and then restates only what differs, so anything left behind
+        /// leaks into the next paragraph. The font size is <em>not</em> cleared, because <c>\fs</c> is
+        /// character formatting and <c>\plain</c> is what resets that.
+        /// </remarks>
         public void ResetParagraph()
         {
             ParagraphStyleId = 0;
@@ -126,6 +197,20 @@ public sealed partial class RtfDocumentReader
             ListId = 0;
             ListLevel = 0;
             InTable = false;
+
+            LeftIndent = null;
+            RightIndent = null;
+            FirstLineIndent = null;
+            SpaceBefore = null;
+            SpaceAfter = null;
+            LineSpacing = null;
+            IsMultipleLineSpacing = false;
+            Alignment = TextAlignment.Start;
+            KeepWithNext = false;
+            KeepTogether = false;
+            HasWidowControl = false;
+            StartsNewPage = false;
+            HasContextualSpacing = false;
         }
     }
 
@@ -292,6 +377,13 @@ public sealed partial class RtfDocumentReader
                 CurrentFlow.ListMarker.Append(text);
                 return;
 
+            case RtfDestination.FontTable:
+                // The family name, which the reader previously discarded because extraction never needs
+                // it — a run's font does not change its text. Layout does need it, and this is the only
+                // place RTF states it.
+                if (state.FontTableIndex is { } fontIndex) RecordFontFamily(fontIndex, text);
+                return;
+
             case RtfDestination.StyleSheet:
             case RtfDestination.InfoField:
             case RtfDestination.AnnotationAuthor:
@@ -386,25 +478,52 @@ public sealed partial class RtfDocumentReader
 
     // ------------------------------------------------------------------- paragraphs
 
+    /// <summary>
+    /// Records a font table entry's family name.
+    /// </summary>
+    /// <remarks>
+    /// Appended rather than assigned, because a name can arrive in several text chunks — an escape or a
+    /// Unicode character in the middle of it splits the run. The entry ends at a semicolon, so anything
+    /// after one belongs to the table's syntax rather than to the name, and a trailing space is the
+    /// delimiter of the control word that preceded it.
+    /// </remarks>
+    private void RecordFontFamily(int index, string text)
+    {
+        string name = _fontFamilies.GetValueOrDefault(index, string.Empty) + text;
+
+        int terminator = name.IndexOf(';', StringComparison.Ordinal);
+        if (terminator >= 0) name = name[..terminator];
+
+        name = name.Trim();
+        if (name.Length > 0) _fontFamilies[index] = name;
+    }
+
     /// <summary>Ends the current paragraph at a <c>\par</c>.</summary>
     private void EmitParagraph(GroupState state)
     {
         if (state.Destination is RtfDestination.Skip or RtfDestination.FontTable
             or RtfDestination.StyleSheet or RtfDestination.Picture) return;
 
-        FinishParagraph(CurrentFlow, force: true);
+        FinishParagraph(CurrentFlow, state, force: true);
     }
 
     /// <summary>
     /// Materialises the half-built paragraph, if there is one.
     /// </summary>
     /// <param name="flow">The flow to finish a paragraph in.</param>
+    /// <param name="state">
+    /// The formatting in force, when the caller has it. RTF states a paragraph's properties
+    /// <em>before</em> its <c>\par</c>, so this is the paragraph's own formatting and not the next
+    /// one's — which is why it is taken at the point the paragraph closes rather than where it began.
+    /// Null where a flow is being closed and no group state applies, in which case the paragraph still
+    /// reaches the content tree and simply is not recorded for layout.
+    /// </param>
     /// <param name="force">
     /// True at an explicit <c>\par</c>, which produces a paragraph even when it is empty — a blank
     /// line is content. False when merely closing a flow, where an empty trailing paragraph is an
     /// artefact of the markup rather than a blank line the document has.
     /// </param>
-    private static void FinishParagraph(Flow flow, bool force = false)
+    private void FinishParagraph(Flow flow, GroupState? state = null, bool force = false)
     {
         FlushRun(flow);
 
@@ -426,12 +545,69 @@ public sealed partial class RtfDocumentReader
         foreach (ContentRun run in flow.PendingRuns) paragraph.Children.Add(run);
         foreach (ContentImage image in flow.PendingImages) paragraph.Children.Add(image);
 
+        if (state is not null)
+        {
+            RecordLayoutParagraph(
+                flow, state, string.Concat(flow.PendingRuns.Select(run => run.Text)));
+        }
+
         // Consecutive rows form a table only by being adjacent, so the first paragraph that is not
         // in one is what closes it — and the table has to land before that paragraph.
         Destination(flow, LevelOf(flow)).Add(paragraph);
 
         ResetParagraphState(flow);
     }
+
+    /// <summary>
+    /// Records a paragraph's layout formatting as it closes.
+    /// </summary>
+    /// <remarks>
+    /// Only the body's, and only outside tables: a header is furniture that a page assembles separately,
+    /// and a table is laid out as a grid rather than as a run of paragraphs. Recording them anyway and
+    /// letting the caller filter would leave the paragraph indexes meaning something different from what
+    /// the pages hold.
+    /// </remarks>
+    private void RecordLayoutParagraph(Flow flow, GroupState state, string text)
+    {
+        if (!ReferenceEquals(flow, _flows[0]) || flow.InTable) return;
+        if (_layoutParagraphs.Count >= MaxLayoutParagraphs) return;
+
+        _layoutParagraphs.Add(new RtfLayoutParagraph(
+            text,
+            new Ww8.Ww8LayoutFormat
+            {
+                Justification = null,
+                LeftIndent = state.LeftIndent,
+                RightIndent = state.RightIndent,
+                FirstLineIndent = state.FirstLineIndent,
+                SpaceBefore = state.SpaceBefore,
+                SpaceAfter = state.SpaceAfter,
+                LineSpacing = state.LineSpacing,
+                IsMultipleLineSpacing = state.IsMultipleLineSpacing,
+                KeepTogether = state.KeepTogether,
+                KeepWithNext = state.KeepWithNext,
+                StartsNewPage = state.StartsNewPage,
+                HasWidowControl = state.HasWidowControl,
+                HasContextualSpacing = state.HasContextualSpacing,
+            }.ToParagraphFormat(SizeOf(state)) with { Alignment = state.Alignment },
+            _fontFamilies.GetValueOrDefault(state.FontIndex),
+            SizeOf(state),
+            state.Bold ? 700 : 400,
+            state.Italic,
+            state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null));
+    }
+
+    /// <summary>
+    /// The em size in force, defaulting to twelve points.
+    /// </summary>
+    /// <remarks>
+    /// Twelve rather than ten, because RTF's own default is <c>\fs24</c> — a document that states no
+    /// size at all is twelve-point text, where an OOXML one relying on its defaults is ten.
+    /// </remarks>
+    private static Core.Units.Length SizeOf(GroupState state)
+        => state.FontSizeHalfPoints is { } halves and > 0 and <= 4000
+            ? Core.Units.Length.FromPoints(halves / 2.0)
+            : Core.Units.Length.FromPoints(12);
 
     private static void ResetParagraphState(Flow flow)
     {
@@ -502,7 +678,7 @@ public sealed partial class RtfDocumentReader
         if (_flows.Count > 1 && CurrentFlow.Depth >= _groupDepth)
         {
             Flow finished = CurrentFlow;
-            FinishParagraph(finished);
+            FinishParagraph(finished, state);
             CloseTablesDeeperThan(finished, 0);
             _flows.RemoveAt(_flows.Count - 1);
 

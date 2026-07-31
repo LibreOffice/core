@@ -3,6 +3,8 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Text.Fonts;
+using Paperless.WordProcessing.Layout;
 
 namespace Paperless.WordProcessing.Rtf;
 
@@ -40,7 +42,8 @@ public static class RtfReader
         RtfDocumentReader reader = new(data, diagnostics);
         ContentDocument content = reader.Read();
 
-        return new RtfDocument(format, content, diagnostics, reader.Sections);
+        return new RtfDocument(
+            format, content, diagnostics, reader.Sections, reader.LayoutParagraphs);
     }
 
     /// <summary>
@@ -84,18 +87,22 @@ public static class RtfReader
 }
 
 /// <summary>An RTF document that has been read.</summary>
-public sealed class RtfDocument : IWordProcessingDocument
+public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 {
+    private readonly IReadOnlyList<RtfLayoutParagraph> _layoutParagraphs;
+
     internal RtfDocument(
         DocumentFormat format,
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
-        IReadOnlyList<Model.WritingSection> sections)
+        IReadOnlyList<Model.WritingSection> sections,
+        IReadOnlyList<RtfLayoutParagraph> layoutParagraphs)
     {
         Format = format;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
+        _layoutParagraphs = layoutParagraphs;
     }
 
     /// <inheritdoc/>
@@ -115,6 +122,76 @@ public sealed class RtfDocument : IWordProcessingDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Model.WritingSection> Sections { get; }
+
+    /// <summary>
+    /// Lays the document out into pages.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The paragraphs were collected during the read rather than by a second pass, because RTF is a token
+    /// stream with nothing to revisit — see <see cref="RtfLayoutParagraph"/>.
+    /// </para>
+    /// <para>
+    /// The two spacings add rather than the larger winning. LibreOffice's RTF importer turns HTML
+    /// auto-spacing on by default — "opt-in for RTF, opt-out for OOXML", as its own comment in
+    /// <c>SettingsTable.cxx</c> puts it — which is the opposite of the DOCX path and the same as ODF's.
+    /// </para>
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        SystemFontResolver fonts = new(SystemFontIndex.Build());
+        Dictionary<(string?, int, bool), OpenTypeFace?> faces = [];
+        List<PageParagraph> paragraphs = [];
+
+        foreach (RtfLayoutParagraph paragraph in _layoutParagraphs)
+        {
+            (string?, int, bool) key =
+                (paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+
+            if (!faces.TryGetValue(key, out OpenTypeFace? face))
+            {
+                face = LoadFace(fonts, paragraph);
+                faces[key] = face;
+            }
+            if (face is null) continue;
+
+            paragraphs.Add(new PageParagraph
+            {
+                Text = paragraph.Text,
+                Face = face,
+                Format = paragraph.Format,
+                EmSize = paragraph.Size,
+                Language = paragraph.Language,
+                Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
+            });
+        }
+
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            CollapsesSpacing = false,
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
+        };
+
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+    }
+
+    /// <summary>The face a paragraph asks for, or null when nothing can be read.</summary>
+    private static OpenTypeFace? LoadFace(
+        SystemFontResolver fonts, RtfLayoutParagraph paragraph)
+    {
+        try
+        {
+            return fonts.LoadOpenType(fonts.Resolve(new FontRequest(
+                paragraph.FamilyName ?? string.Empty, paragraph.Weight, paragraph.IsItalic)));
+        }
+        catch (Exception exception) when (exception is Core.MalformedDocumentException
+                                             or IOException
+                                             or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>

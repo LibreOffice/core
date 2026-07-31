@@ -80,9 +80,10 @@ indexes or resolvable style chains.
       as-character anchor is a hint over a placeholder; the other three need a per-page anchor model.
 - [ ] Tracked changes (redlines) with their author and timestamp. The hint kinds exist and the
       readers currently resolve changes rather than recording them.
-- [ ] Importers that build this model. All four build the extraction tree today; the second pass
-      that builds this one is what layout will need, and is deliberately not written until the layout
-      engine can say which parts of it are load-bearing.
+- [ ] Importers that build this model. All four build the extraction tree today, and all four now also
+      produce the flat paragraph-plus-format sequence the paginator takes — which turned out to be what
+      layout actually needed, and is much less than this model holds. The tree itself still has no
+      importer, and what would use it is the run-level formatting that drawing needs.
 
 ## Importers
 
@@ -98,11 +99,16 @@ Order chosen so each is verifiable before the next gets harder.
       absent from the text without the reader having to skip it — which is why all four formats
       agree. Reading the regions themselves, to report who changed what, is still to do; see
       `Paperless.OpenDocument/TODO.md`.
-- [ ] Layout, which needs the document model below rather than the extraction tree
-
-`OdtReader` builds the extraction tree directly today. The full `SwDoc`-shaped model below is
-for layout, and ODT will need a second pass through it once that exists; the extraction path
-does not need it and must not be made to pay for it.
+- [x] Layout: `OdtLayoutSource` walks `content.xml` a second time and resolves each paragraph's format
+      through the style chain that was already built. The translations that needed care: `fo:line-height`
+      carries a percentage *or* a length and the length means exact; `fo:font-family` is CSS syntax, so a
+      real document says `'Liberation Serif', 'Times New Roman', serif` and passing that whole string to
+      a resolver matches nothing; `style:font-name` names a font-face declaration rather than a family
+      and is what LibreOffice writes most of the time; `fo:keep-with-next` is `always` against `auto`
+      rather than a boolean; and the default size is ten points, not twelve.
+- [x] ODF's own text-for-layout problem: runs of spaces, tabs and line breaks are elements, so taking the
+      descendant text nodes alone loses every one of them — `text:s` above all, which is how any run of
+      two or more spaces is written.
 
 ### DOCX — extraction done
 - [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
@@ -129,7 +135,15 @@ does not need it and must not be made to pay for it.
 - [ ] `settings.xml` compatibility flags — parsed and exposed, nothing reads them yet. They
       genuinely change layout maths, so layout will need a handful of them.
 - [ ] `w:altChunk`: an embedded foreign document, reported as a diagnostic rather than read
-- [ ] `fontTable.xml`, needed for font resolution rather than extraction
+- [x] Layout: `DocxLayoutSource` walks `document.xml` a second time. OOXML's unit traps, each written
+      down where it is read: `w:sz` is half-points, so reading it as points halves every document;
+      `w:spacing`'s `auto` rule counts two-hundred-and-fortieths of a line rather than a percentage;
+      `w:hanging` is a positive number meaning a negative indent; `w:start` and `w:left` are the same
+      attribute under two names; and `w:rFonts` names four families at once, of which Latin text wants
+      the ASCII one. Deleted text and field instructions are skipped, since both are in the file and
+      neither is on the page.
+- [ ] `fontTable.xml`. Not needed for layout after all — `w:rFonts` names the family directly — but it
+      carries the embedded-font relationships and the panose data a substitution could use.
 - [ ] Theme colours for `w:color w:themeColor` references
 
 ### DOC (WW8) — extraction done
@@ -179,6 +193,19 @@ does not need it and must not be made to pay for it.
       leave rather than what they removed. `TrackedChangeTests` pins all four readers agreeing.
 - [x] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
       rather than misread
+- [x] Layout: a second walk over the body range, resolving the layout sprms through the same style chain
+      the content pass uses. The paragraph's properties are found from its **mark's** position, not its
+      first character's — looking up the first character finds the *previous* paragraph's properties and
+      formats the whole document one paragraph out of step.
+- [x] The font table (`SttbfFfn`), which `sprmCRgFtc0` indexes. Two offsets decide whether it reads at
+      all: the first entry starts **four** bytes in, not two, because the count is followed by the string
+      table's extra-data length; and each name sits after PANOSE *and* the twenty-four-byte font
+      signature, so skipping only PANOSE reads the signature as UTF-16 and yields a plausible-looking
+      string of CJK. Starting two bytes early finds no fonts at all, which shows up as every paragraph
+      laid out in a substituted face.
+- [ ] The `Dop`, for `fDontUseHTMLAutoSpacing` — which is what LibreOffice's importer reads into
+      `PARA_SPACE_MAX` and therefore decides whether two paragraphs' spacings add or the larger wins. The
+      DOC path defaults to adding, which matches every document LibreOffice itself wrote.
 - [ ] Escher drawings via `Paperless.MsBinary`. Until then a drawing anchor is not reported as
       an image: telling an embedded picture from a shape needs the record stream, and counting
       every `U+0001` reports a picture for every text box.
@@ -231,6 +258,15 @@ does not need it and must not be made to pay for it.
       document rather than by the corpus.
 - [x] The full LCID table, now generated into `Paperless.Core.Globalization.WindowsLanguages` from
       LibreOffice's `i18nlangtag` data and shared with the DOC reader
+- [x] Layout: the formatting is recorded **as the content walk closes each paragraph**, not by a second
+      pass. RTF is a token stream with nothing to revisit — re-reading it would mean running the whole
+      state machine again, encoding and destinations included, and the two runs could then disagree. The
+      properties themselves translate through the DOC's own `Ww8LayoutFormat`, because RTF states them
+      the same way: twips, a size in half-points, and a `\sl` whose sign and `\slmult` companion choose
+      between a multiple, a minimum and a fixed height.
+- [x] Font family names from the font table, which the reader previously discarded because extraction
+      never needs them — a run's font does not change its text. A name can arrive in several text chunks
+      and ends at a semicolon, so it is accumulated rather than assigned.
 
 ## Layout engine
 
@@ -263,6 +299,20 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Several sections in one document. The paginator takes one section's geometry; carrying a section
       change mid-document needs each paragraph to know which section it is in, which is the gap recorded
       under the document model above.
+- [x] **All four formats reach the layout engine**, and all four paginate a five-page document the way
+      LibreOffice does — same page count, same words on every page, verified against its own rendering of
+      each format. `DocumentPaginationTests` is the test that proves the links are connected rather than
+      each one working alone.
+- [x] The one place the formats genuinely disagree, found by measuring rather than by reading a
+      specification: whether two paragraphs' spacings add or the larger wins. LibreOffice adds for ODF,
+      DOC and RTF, and takes the larger for DOCX — the same source document exported four ways puts its
+      41st line 5.65 pt lower in three of them, which is exactly one paragraph space-after. For DOCX the
+      answer is read from the file (`w:doNotUseHTMLParagraphAutoSpacing`); for DOC it needs the `Dop`.
+- [ ] Per-run formatting. A paragraph is measured wholly in the font its paragraph mark carries, so a
+      paragraph mixing sizes lays out slightly short — the tallest run on a line should set that line's
+      height. This is also what blocks drawing, since a glyph run needs its own font and colour.
+- [ ] Tables. Skipped by every layout source rather than flattened, because a table is laid out as a grid
+      and stacking its cells would give the page a height no table has.
 - [ ] Tables spanning page breaks, with header-row repetition
 - [ ] Floating objects and text wrap, including contour wrap
 - [ ] Footnote placement — footnote area growth changes how much body text fits, which

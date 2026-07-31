@@ -6,6 +6,8 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.MsBinary.PropertySets;
+using Paperless.Text.Fonts;
+using Paperless.WordProcessing.Layout;
 
 namespace Paperless.WordProcessing.Ww8;
 
@@ -81,7 +83,8 @@ public static class DocReader
             Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics);
             ContentDocument content = reader.Read(OlePropertySetReader.Read(file));
 
-            return new Ww8Document(format, file, content, diagnostics, reader.Sections);
+            return new Ww8Document(
+                format, file, content, diagnostics, reader.Sections, reader);
         }
         catch
         {
@@ -112,19 +115,22 @@ public static class DocReader
 }
 
 /// <summary>A legacy binary Word document that has been read.</summary>
-public sealed class Ww8Document : IWordProcessingDocument
+public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly CompoundFile _file;
+    private readonly Ww8DocumentReader _reader;
 
     internal Ww8Document(
         DocumentFormat format,
         CompoundFile file,
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
-        IReadOnlyList<Model.WritingSection> sections)
+        IReadOnlyList<Model.WritingSection> sections,
+        Ww8DocumentReader reader)
     {
         Format = format;
         _file = file;
+        _reader = reader;
         Content = content;
         Diagnostics = diagnostics;
         Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
@@ -153,6 +159,89 @@ public sealed class Ww8Document : IWordProcessingDocument
     /// expose — embedded objects and pictures, above all. Valid until this document is disposed.
     /// </summary>
     public CompoundFile File => _file;
+
+    /// <summary>
+    /// Lays the document out into pages.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A paragraph keeps its space-before at the top of a page, which LibreOffice's WW8 importer sets
+    /// unconditionally (<c>PARA_SPACE_MAX_AT_PAGES</c> in <c>ww8par.cxx</c>). The two spacings
+    /// <em>add</em> rather than the larger winning, which is what a comparison against LibreOffice's own
+    /// rendering of a DOC shows — the opposite of the DOCX path, whose flag is absent by default.
+    /// </para>
+    /// <para>
+    /// The DOC carries its own answer in <c>Dop.fDontUseHTMLAutoSpacing</c>, which the importer reads
+    /// into that same flag; reading it here needs the <c>Dop</c> parsed and is recorded in this library's
+    /// TODO. Until then the default matches every document LibreOffice itself wrote.
+    /// </para>
+    /// <para>
+    /// Table paragraphs are left out, because a table is laid out as a grid and stacking its cells would
+    /// give the page a height no table has.
+    /// </para>
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        List<PageParagraph> paragraphs = [];
+        SystemFontResolver fonts = new(SystemFontIndex.Build());
+        Dictionary<(string?, int, bool), OpenTypeFace?> faces = [];
+
+        foreach (Ww8DocumentReader.Ww8LayoutParagraph paragraph in _reader.ReadLayoutParagraphs())
+        {
+            if (paragraph.IsInTable) continue;
+
+            (string?, int, bool) key = (paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+            if (!faces.TryGetValue(key, out OpenTypeFace? face))
+            {
+                face = LoadFace(fonts, paragraph);
+                faces[key] = face;
+            }
+            if (face is null) continue;
+
+            paragraphs.Add(new PageParagraph
+            {
+                Text = paragraph.Text,
+                Face = face,
+                Format = paragraph.Format,
+                EmSize = paragraph.Size,
+                Language = paragraph.Language,
+                Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
+            });
+        }
+
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            CollapsesSpacing = false,
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
+        };
+
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+    }
+
+    /// <summary>
+    /// Loads the face a paragraph asks for, or null when nothing can be read.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than an exception: a font that cannot be read leaves nothing to measure the paragraph
+    /// with, and a document one paragraph short is a better outcome than an exception thrown out of the
+    /// middle of a layout.
+    /// </remarks>
+    private static OpenTypeFace? LoadFace(
+        SystemFontResolver fonts, Ww8DocumentReader.Ww8LayoutParagraph paragraph)
+    {
+        try
+        {
+            return fonts.LoadOpenType(fonts.Resolve(new FontRequest(
+                paragraph.FamilyName ?? string.Empty, paragraph.Weight, paragraph.IsItalic)));
+        }
+        catch (Exception exception) when (exception is MalformedDocumentException
+                                             or IOException
+                                             or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

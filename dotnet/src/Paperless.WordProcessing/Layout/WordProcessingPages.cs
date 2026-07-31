@@ -17,10 +17,12 @@ public sealed class WordProcessingPages : IPageSequence
 {
     private readonly List<PageView> _pages;
 
-    internal WordProcessingPages(IReadOnlyList<LaidOutPage> pages)
+    internal WordProcessingPages(
+        IReadOnlyList<LaidOutPage> pages, IReadOnlyList<PageParagraph>? paragraphs = null)
     {
         ArgumentNullException.ThrowIfNull(pages);
         _pages = [.. pages.Select(page => new PageView(page))];
+        Paragraphs = paragraphs ?? [];
     }
 
     /// <inheritdoc/>
@@ -31,6 +33,33 @@ public sealed class WordProcessingPages : IPageSequence
 
     /// <summary>The laid-out pages, with the line boxes a renderer needs.</summary>
     public IReadOnlyList<LaidOutPage> Pages => [.. _pages.Select(page => page.Laid)];
+
+    /// <summary>
+    /// The paragraphs the pages were filled from, indexed by <see cref="PlacedLine.ParagraphIndex"/>.
+    /// </summary>
+    /// <remarks>
+    /// Carried rather than left to the caller to rebuild, because a <see cref="PlacedLine"/> holds a
+    /// character range and not the characters: pagination places lines and leaves the strings where they
+    /// were. Anything reading a page back — a renderer, or a test comparing words — needs both halves,
+    /// and rebuilding the list means re-resolving every style and re-reading every font.
+    /// </remarks>
+    public IReadOnlyList<PageParagraph> Paragraphs { get; }
+
+    /// <summary>
+    /// The text of a placed line.
+    /// </summary>
+    /// <remarks>
+    /// Empty when the line's paragraph is out of range, which happens only if a caller built this without
+    /// its paragraphs — worth answering rather than throwing, since a page whose text cannot be recovered
+    /// is still a page with a size and a body area.
+    /// </remarks>
+    public string TextOf(PlacedLine line)
+    {
+        if (line.ParagraphIndex < 0 || line.ParagraphIndex >= Paragraphs.Count) return string.Empty;
+
+        string paragraph = Paragraphs[line.ParagraphIndex].Text;
+        return line.Box.Line.VisibleTextIn(paragraph).ToString();
+    }
 
     private sealed class PageView(LaidOutPage laid) : IPage
     {
