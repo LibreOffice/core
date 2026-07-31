@@ -61,6 +61,11 @@ public static class FlowLayouter
         List<PlacedTable> tables = [];
         Length top = Length.Zero;
 
+        // What the paragraph last placed hands down to the next one's first line. See
+        // <see cref="ParagraphLeading"/>: the leading proportional line spacing adds above a first line
+        // is the previous paragraph's, measured against the height of *its* last line.
+        Length leading = Length.Zero;
+
         for (int i = 0; i < blocks.Count; i++)
         {
             if (blocks[i] is PageTable nested)
@@ -94,6 +99,10 @@ public static class FlowLayouter
                 });
 
                 top += height + nested.SpaceAfter;
+
+                // A table hands no leading down: `GetSpacingValuesOfFrame` reports a line spacing only
+                // for a text frame.
+                leading = Length.Zero;
                 continue;
             }
 
@@ -121,22 +130,25 @@ public static class FlowLayouter
                     previous,
                     paragraph.Shaping);
 
-            top += layout.SpaceBefore;
+            top += layout.SpaceBefore + leading;
 
             for (int line = 0; line < layout.Lines.Count; line++)
             {
-                LineBox box = layout.Lines[line];
-
-                // The first line loses the leading above its text, exactly as the first line of a page's
-                // body does: the space belongs to the paragraph's upper margin and is dropped at the top
-                // of a frame, and each of these three is a frame.
-                if (placed.Count == 0 && tables.Count == 0) box = box.WithoutSpaceAbove();
+                // A paragraph's first line loses the leading above its text — it belongs to the paragraph
+                // above and has just been added to the gap — and so does the flow's first line, which is
+                // the same rule the first line of a page's body follows: the space is part of the upper
+                // margin and is dropped at the top of a frame, and each of these three is a frame.
+                LineBox box = ParagraphLeading.AsDrawn(
+                    layout.Lines[line],
+                    isFirstOfParagraph: line == 0,
+                    isFirstInFrame: placed.Count == 0 && tables.Count == 0);
 
                 placed.Add(new PlacedLine(i, line, box, top));
                 top += box.Height;
             }
 
             top += layout.SpaceAfter;
+            leading = ParagraphLeading.Below(layout);
         }
 
         if (placed.Count == 0 && tables.Count == 0) return null;

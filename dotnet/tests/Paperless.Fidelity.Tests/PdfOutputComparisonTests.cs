@@ -149,20 +149,17 @@ public sealed class PdfOutputComparisonTests : IDisposable
 
         ours.Count.ShouldBe(theirs.Count, $"{fileName}: number of drawn lines");
 
-        // As a pitch rather than an absolute baseline, and the reason is not the one the
-        // word-box comparison has. Here both sides state a real baseline, so an absolute
-        // comparison would be meaningful — and it holds to 0.051 pt everywhere except a line
-        // whose font size changes, where ours sits 1.95 pt higher. Measured on the seven 16 pt
-        // headings of paginated.*: LibreOffice puts 37.200 pt between the last body baseline and
-        // the heading's and 20.450 pt after it, and we put 35.250 and 22.400 — the same 57.650 pt
-        // block, split differently. That is layout's baseline-within-line rule for a line taller
-        // than the body, not this backend's, and it is recorded as a finding in
-        // src/Paperless.Rendering/TODO.md rather than papered over with a bigger tolerance here.
+        // As a pitch rather than an absolute baseline, which is a statement about what this file
+        // is for rather than about what is comparable: both sides state a real baseline, so the
+        // absolute form is meaningful and holds to 0.051 pt over every one of these documents.
+        // ParagraphLeadingComparisonTests asserts it that way, because that is the only form in
+        // which the leading a paragraph hands to the next one is visible at all — a pitch
+        // comparison cancels it. Here the pitch is the right question: this file is checking that
+        // the PDF backend writes the layout it was given.
         int compared = 0;
         for (int i = 1; i < theirs.Count; i++)
         {
             if (theirs[i].PageIndex != theirs[i - 1].PageIndex) continue;
-            if (Math.Abs(theirs[i].FontSize - theirs[i - 1].FontSize) > 0.001) continue;
 
             double drawn = ours[i].Y - ours[i - 1].Y;
             double rendered = theirs[i].Y - theirs[i - 1].Y;

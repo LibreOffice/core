@@ -147,16 +147,13 @@ Each is a place our output differs from LibreOffice's on purpose, with the evide
 
 ## Findings for other libraries
 
-Both surfaced only because the PDF comparison reads the content stream rather than word boxes.
-Neither is fixed here: the layout is `Paperless.WordProcessing`'s.
+Both surfaced only because the PDF comparison reads the content stream rather than word boxes,
+and neither is this library's: the layout is `Paperless.WordProcessing`'s.
 
-- **A 16 pt heading's baseline sits 1.95 pt higher than LibreOffice's**, in all four formats.
-  Measured on the seven headings of `paginated.*`: LibreOffice puts 37.200 pt between the last
-  body baseline and the heading's and 20.450 pt after it; we put 35.250 and 22.400. The block
-  is the same 57.650 pt on both sides, so it does not cascade — the baseline sits differently
-  *within* a line taller than the body. Invisible to `PageDrawingComparisonTests`, which
-  compares only x, and to `BaselinesFallOnLibreOfficesLinePitch`, which skips a pair
-  straddling a size change.
+- **A 16 pt heading's baseline sat 1.95 pt higher than LibreOffice's**, in all four formats.
+  Fixed there: the leading proportional line spacing adds above a paragraph's first line belongs
+  to the paragraph *above* it. The rule, its citations and the before-and-after numbers are in
+  `src/Paperless.WordProcessing/TODO.md`.
 - **`footnotes.rtf` draws its note separator 1.286 pt too high** — 757.465 pt down the page
   against LibreOffice's 758.751, about 26 twips in the height of the note area the RTF reader
   reserves. The other four formats agree to a hundredth of a point on the same document, so it

@@ -598,6 +598,40 @@ is read and verified, so what remains is the filling of pages rather than the me
       text, so putting it below leaves every baseline pitch identical and every paragraph height wrong.
       A 200%-spaced A4 page holds twenty-five lines with the rule and twenty-four without, and every
       break after the first then falls somewhere else.
+- [x] **The leading above a paragraph's first line belongs to the paragraph above it**, in
+      `Layout/ParagraphLeading.cs`. The item above says where the space goes within a line; this says
+      which paragraph is charged for it, and the two are separate questions with different evidence.
+      Writer's answer is stated twice over. `SwTextFormatter::CalcRealHeight` guards the whole
+      inter-line-spacing switch with `if( !IsParaLine() )` and explains itself on the line above:
+      *"Note: for the _first_ line the line spacing of the previous paragraph is applied in
+      SwFlowFrame::CalcUpperSpace()"* (`sw/source/core/text/itrform2.cxx`:2424). And `CalcUpperSpace`
+      adds `nPrevLineSpacing` to the gap in **both** of its branches — the one that sums the two
+      paragraph spacings and the one that takes their maximum (`flowfrm.cxx`:1656 and :1722) — where
+      that value is `GetHeightOfLastLine() × prop / 100 − GetHeightOfLastLine()`
+      (`GetSpacingValuesOfFrame`, `frmtool.cxx`:4064 → `SwTextFrame::GetLineSpace`, `txtfrm.cxx`:3996).
+      So the percentage is taken against the height of the **previous** paragraph's **last** line, not
+      against the paragraph's own first.
+      **Why it survived every comparison this project runs.** Between two paragraphs at the same spacing
+      the two readings give the same answer: the leading one paragraph withholds is the leading the next
+      hands back, so every baseline lands where it did and the block is the same height. It is visible
+      only where the spacing or the size changes across a paragraph boundary, and then only as an
+      *absolute* baseline — a pitch comparison cancels it exactly, and a word box cannot see it at all
+      because a box top already carries the font's ascent. It took the PDF backend reading the content
+      stream to find it.
+      Measured on the seven 16 pt headings of `paginated.*`, in all four formats: LibreOffice puts
+      37.200 pt between the last body baseline and the heading's and 20.450 pt after it, and this engine
+      put 35.250 and 22.400 — the same 57.650 pt block, split 1.95 pt differently, which is 0.15 of the
+      body's 269-twip line. With the rule the heading's baseline lands at 395.300 pt against
+      LibreOffice's 395.301, and every baseline of `paginated.*` in all four formats now agrees
+      absolutely to 0.051 pt, the constant this project already lives with. Nothing else moved: no page
+      break, no line break, no other document in the corpus.
+      Two consequences worth keeping. A paragraph's first line is now stripped of its leading *always*
+      rather than only at the top of a page — the top-of-page rule is the same rule reached a second way,
+      since `CalcUpperSpace` never reaches its line-spacing term when `GetPrevFrameForUpperSpaceCalc_`
+      finds no previous frame, which at the top of a page or a column it does not. And a table hands no
+      leading down: `GetSpacingValuesOfFrame` reports a line spacing only for a text frame.
+      Pinned by `ParagraphLeadingComparisonTests`, which compares absolute baselines rather than pitches
+      and asserts each half of a size change on its own.
 - [x] `PaginationOptions` for the two places Word and Writer disagree and the file says which by a
       compatibility flag rather than by a property: whether a paragraph keeps its space-before at the
       top of a page, and whether space-before collapses against the previous space-after or adds to it.
