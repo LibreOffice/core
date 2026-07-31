@@ -87,6 +87,12 @@ indexes or resolvable style chains.
       four formats: the same three fields, the same kinds, the same ranges and the same results — with
       one difference that is in the file rather than in the reading of it, LibreOffice's ODF export
       caching a page number of **0** where the other three cache 1.
+      Which raises a difference worth naming rather than tolerating, since it is now in
+      `ExtractionComparisonTests.KnownDeviations`: LibreOffice's **text filter** expands `PAGE` to 0,
+      because it runs without a layout. Measured on `bookmark-field.*` — its text export says "Page 0
+      of 1" for the DOCX, the ODT and the RTF while its *rendering* of all four says "Page 1 of 1".
+      Paperless reports the cached result, so it agrees with the page in three of the four; the ODT
+      is the one where the file itself caches 0, and it agrees with the filter there by coincidence.
       WW8's field PLCF is deliberately not read. Its `flt` numbering — `ww8par5.cxx`'s `aWW8FieldTab`,
       where 33 is PAGE, 37 PAGEREF and 31 and 32 DATE and TIME — says the same thing as the instruction
       sitting beside it in the same character stream, and one mapping shared by three formats cannot

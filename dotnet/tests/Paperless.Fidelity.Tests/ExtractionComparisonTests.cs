@@ -104,6 +104,16 @@ public class ExtractionComparisonTests : IDisposable
         // does not say. All four readers agree on this; TrackedChangeTests pins it.
         "revisions.rtf" or "revisions.doc" or "revisions.docx" or "revisions.odt"
             => new HashSet<string>(StringComparer.Ordinal) { "a", "deleted", "phrase" },
+
+        // A page number of zero. The text filter runs without a layout, so it expands PAGE to 0 —
+        // measured: its export of this document says "Page 0 of 1" for the DOCX, the ODT and the
+        // RTF, while its *rendering* of all four says "Page 1 of 1". Paperless reports the result
+        // the file caches, which is 1 in three of the four and therefore agrees with the page rather
+        // than with the filter. The ODT is the exception and passes here by coincidence: LibreOffice's
+        // ODF export caches 0, so the file, the filter and Paperless all say 0 while the page says 1.
+        // The DOC needs no entry at all — LibreOffice's WW8 import keeps the cached 1.
+        "bookmark-field.rtf" or "bookmark-field.docx"
+            => new HashSet<string>(StringComparer.Ordinal) { "0" },
         _ => new HashSet<string>(StringComparer.Ordinal),
     };
 
@@ -118,6 +128,10 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("revisions.doc")]
     [InlineData("revisions.docx")]
     [InlineData("revisions.odt")]
+    [InlineData("bookmark-field.rtf")]
+    [InlineData("bookmark-field.doc")]
+    [InlineData("bookmark-field.docx")]
+    [InlineData("bookmark-field.odt")]
     [InlineData("tables.fodt")]
     [InlineData("tables.odt")]
     [InlineData("tables.doc")]
