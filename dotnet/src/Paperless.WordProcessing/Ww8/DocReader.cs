@@ -81,7 +81,7 @@ public static class DocReader
             Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics);
             ContentDocument content = reader.Read(OlePropertySetReader.Read(file));
 
-            return new Ww8Document(format, file, content, diagnostics);
+            return new Ww8Document(format, file, content, diagnostics, reader.Sections);
         }
         catch
         {
@@ -112,7 +112,7 @@ public static class DocReader
 }
 
 /// <summary>A legacy binary Word document that has been read.</summary>
-public sealed class Ww8Document : IDocument
+public sealed class Ww8Document : IWordProcessingDocument
 {
     private readonly CompoundFile _file;
 
@@ -120,12 +120,14 @@ public sealed class Ww8Document : IDocument
         DocumentFormat format,
         CompoundFile file,
         ContentDocument content,
-        IReadOnlyList<Diagnostic> diagnostics)
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<Model.WritingSection> sections)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
+        Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
     }
 
     /// <inheritdoc/>
@@ -142,6 +144,9 @@ public sealed class Ww8Document : IDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Diagnostic> Diagnostics { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Model.WritingSection> Sections { get; }
 
     /// <summary>
     /// The underlying compound file, for callers that need a stream the content tree does not

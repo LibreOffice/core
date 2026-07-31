@@ -64,6 +64,39 @@ public sealed class OdfStyle
             else
                 _propertySets[kind] = new OdfPropertySet(kind, child);
         }
+
+        HeaderProperties = FurnitureProperties(element, "header-style");
+        FooterProperties = FurnitureProperties(element, "footer-style");
+    }
+
+    /// <summary>
+    /// A page layout's header geometry, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// Held separately from <see cref="PropertySets"/> because a page layout nests these one level
+    /// deeper than everything else: <c>style:header-style</c> and <c>style:footer-style</c> are
+    /// children of the layout, and each holds its own <c>style:header-footer-properties</c>. Both
+    /// resolve to the same <see cref="OdfPropertyKind.HeaderFooter"/>, so putting them in the same
+    /// dictionary would make the footer overwrite the header.
+    /// </remarks>
+    public OdfPropertySet? HeaderProperties { get; }
+
+    /// <summary>A page layout's footer geometry, or null when it has none.</summary>
+    public OdfPropertySet? FooterProperties { get; }
+
+    private static OdfPropertySet? FurnitureProperties(XElement element, string wrapperName)
+    {
+        XElement? wrapper = element
+            .Elements(XName.Get(wrapperName, OdfNamespaces.Style))
+            .FirstOrDefault();
+
+        XElement? properties = wrapper?
+            .Elements(XName.Get("header-footer-properties", OdfNamespaces.Style))
+            .FirstOrDefault();
+
+        return properties is null
+            ? null
+            : new OdfPropertySet(OdfPropertyKind.HeaderFooter, properties);
     }
 
     /// <summary>The style's name, as referenced by <c>*:style-name</c> attributes.</summary>

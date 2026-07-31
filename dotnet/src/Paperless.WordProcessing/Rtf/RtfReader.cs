@@ -40,7 +40,7 @@ public static class RtfReader
         RtfDocumentReader reader = new(data, diagnostics);
         ContentDocument content = reader.Read();
 
-        return new RtfDocument(format, content, diagnostics);
+        return new RtfDocument(format, content, diagnostics, reader.Sections);
     }
 
     /// <summary>
@@ -84,14 +84,18 @@ public static class RtfReader
 }
 
 /// <summary>An RTF document that has been read.</summary>
-public sealed class RtfDocument : IDocument
+public sealed class RtfDocument : IWordProcessingDocument
 {
     internal RtfDocument(
-        DocumentFormat format, ContentDocument content, IReadOnlyList<Diagnostic> diagnostics)
+        DocumentFormat format,
+        ContentDocument content,
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<Model.WritingSection> sections)
     {
         Format = format;
         Content = content;
         Diagnostics = diagnostics;
+        Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
     }
 
     /// <inheritdoc/>
@@ -108,6 +112,9 @@ public sealed class RtfDocument : IDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Diagnostic> Diagnostics { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Model.WritingSection> Sections { get; }
 
     /// <inheritdoc/>
     /// <remarks>

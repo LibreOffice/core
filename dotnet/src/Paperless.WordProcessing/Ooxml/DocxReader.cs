@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Ooxml;
+using Paperless.WordProcessing.Model;
 
 namespace Paperless.WordProcessing.Ooxml;
 
@@ -42,6 +43,7 @@ public static class DocxReader
         try
         {
             List<Diagnostic> diagnostics = [.. file.Diagnostics];
+            List<WritingSection> sections = [];
             ContentDocument content = new()
             {
                 Metadata = OoxmlMetadata.Read(
@@ -68,15 +70,37 @@ public static class DocxReader
                 foreach (ContentNode node in reader.TakeHoisted()) content.Children.Add(node);
 
                 ReadHeadersAndFooters(file, body, reader, content);
+                sections = ReadSections(file, body);
             }
 
-            return new OoxmlWordDocument(format, file, content, diagnostics);
+            return new OoxmlWordDocument(format, file, content, diagnostics, sections);
         }
         catch
         {
             file.Dispose();
             throw;
         }
+    }
+
+    /// <summary>
+    /// Reads every section's page geometry, in document order.
+    /// </summary>
+    /// <remarks>
+    /// A DOCX states a section's properties at its <em>end</em>: each <c>w:sectPr</c> inside a
+    /// paragraph's properties closes the section that paragraph finishes, and the one directly under
+    /// <c>w:body</c> closes the last. So the enumeration is already in document order, and a document
+    /// with no <c>w:sectPr</c> at all still has one section — of default geometry, not of none.
+    /// </remarks>
+    private static List<WritingSection> ReadSections(DocxFile file, XElement body)
+    {
+        List<WritingSection> sections =
+        [
+            .. DocxContentReader.SectionProperties(body)
+                .Select(properties => DocxPageGeometry.Read(properties, file.Settings)),
+        ];
+
+        if (sections.Count == 0) sections.Add(DocxPageGeometry.Read(null, file.Settings));
+        return sections;
     }
 
     /// <summary>
@@ -142,7 +166,7 @@ public static class DocxReader
 }
 
 /// <summary>An OOXML word-processing document that has been read.</summary>
-public sealed class OoxmlWordDocument : IDocument
+public sealed class OoxmlWordDocument : IWordProcessingDocument
 {
     private readonly DocxFile _file;
 
@@ -150,12 +174,14 @@ public sealed class OoxmlWordDocument : IDocument
         DocumentFormat format,
         DocxFile file,
         ContentDocument content,
-        IReadOnlyList<Diagnostic> diagnostics)
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<WritingSection> sections)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
+        Sections = sections.Count > 0 ? sections : [new WritingSection()];
     }
 
     /// <inheritdoc/>
@@ -172,6 +198,9 @@ public sealed class OoxmlWordDocument : IDocument
 
     /// <inheritdoc/>
     public IReadOnlyList<Diagnostic> Diagnostics { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<WritingSection> Sections { get; }
 
     /// <summary>
     /// The underlying package: its styles, numbering, settings and remaining parts.

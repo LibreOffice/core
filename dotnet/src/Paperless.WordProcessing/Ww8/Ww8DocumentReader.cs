@@ -112,6 +112,25 @@ public sealed partial class Ww8DocumentReader
             : Ww8Numbering.Empty;
     }
 
+    /// <summary>
+    /// The document's sections, in document order.
+    /// </summary>
+    /// <remarks>
+    /// A document with no <c>PlcfSed</c> still has one section carrying the defaults, which is what
+    /// Word means by its absence rather than an absence of pages.
+    /// </remarks>
+    public IReadOnlyList<Model.WritingSection> Sections
+    {
+        get
+        {
+            List<Model.WritingSection> sections = Ww8SectionTable.Read(
+                PlcfOf(Ww8FibTable.SectionDescriptors, Ww8SectionTable.DescriptorSize),
+                _wordDocument);
+
+            return sections.Count > 0 ? sections : [new Model.WritingSection()];
+        }
+    }
+
     /// <summary>Reads the document.</summary>
     /// <param name="metadata">
     /// The document's properties, which live in the OLE property sets rather than anywhere this

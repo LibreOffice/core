@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Core.Documents;
 using Paperless.OpenDocument;
 
 namespace Paperless.WordProcessing.OpenDocument;
@@ -17,6 +18,17 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// </remarks>
 public sealed class OdtReader : OdfReader
 {
+    /// <summary>
+    /// Reads a text document, giving it the page geometry a Writer document has.
+    /// </summary>
+    /// <remarks>
+    /// A separate entry point from the inherited <see cref="OdfReader.Read"/> rather than an override,
+    /// because the base returns the family-neutral document all three readers share and this adds
+    /// something only a text document has.
+    /// </remarks>
+    public OdtWordDocument ReadText(DocumentSource source, DocumentFormat format)
+        => new(Read(source, format));
+
     /// <inheritdoc/>
     protected override DocumentFamily Family => DocumentFamily.WordProcessing;
 

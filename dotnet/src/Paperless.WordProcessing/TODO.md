@@ -46,8 +46,33 @@ indexes or resolvable style chains.
 - [x] Tables: rows, cells, spans, nested tables, and the column-edge grid the spans index into
 - [ ] Lists and numbering with multi-level definitions and restart semantics. The four readers each
       compute labels already; the model holds the label but not yet the definitions that produced it.
-- [ ] Sections; page styles; headers and footers as page furniture rather than as flows. The flows
-      exist; which page description uses which does not.
+- [x] **Page geometry**, in `Model/PageGeometry.cs`, read from all four formats and verified against
+      LibreOffice's own rendering. The interesting part is that the formats do not mean the same thing
+      by "top margin": Word's `w:top` is the distance to the first line of *body* text with the header
+      living above it, while ODF's `fo:margin-top` is the distance to the top of the *header*. The model
+      stores the body's, because that is the number pagination needs, and each reader converts — so the
+      ODF reader adds the header's extent where the Word readers take the value as given. Reading ODF's
+      value as the body's margin puts every line on the page too high by the height of a header.
+- [x] The ODF header height, whose two spellings behave differently in a way the attribute names do not
+      suggest: `svg:height` is fixed, honoured exactly, and *absorbs* the spacing below it, while
+      `fo:min-height` makes the height dynamic — LibreOffice maps it to `HeaderIsDynamicHeight` and then
+      sizes the frame to its content, so a header declaring 6 mm around one 12 pt line renders 4.9 mm
+      and the spacing is added on top. Settled by rendering both and measuring, not by reading the
+      specification.
+- [ ] The dynamic-height case exactly. It needs the header's content laid out before the page it sits
+      on is known, so the declared minimum plus spacing is used instead — the same approximation
+      LibreOffice's own DOC exporter falls back to and calls "totally nonoptimum, but the best we can
+      do". It errs towards leaving too much room, so body text starts slightly low rather than
+      overlapping the header.
+- [ ] Which section each paragraph belongs to. DOCX, DOC and RTF all delimit sections by position and
+      the geometry is read in document order; ODF has no section list at all, only master pages and the
+      paragraph styles that reach them, so its sections are the geometries the document *defines*
+      rather than one per page break. Resolving either into "this paragraph is on that page
+      description" needs the page-break chain, which needs layout.
+- [ ] Headers and footers as page furniture rather than as flows. `WritingSection` has the slots and
+      the fallback rules — first page, even page, default, with a default header appearing on a first
+      page that asked for nothing else — but nothing populates them, because the flows are built by the
+      extraction pass and the model pass that would connect them is not written.
 - [ ] Fields — store both the definition and the cached result. The cached result is what a
       reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
 - [ ] Bookmarks and cross-references
@@ -157,9 +182,16 @@ does not need it and must not be made to pay for it.
 - [ ] Escher drawings via `Paperless.MsBinary`. Until then a drawing anchor is not reported as
       an image: telling an embedded picture from a shape needs the record stream, and counting
       every `U+0001` reports a picture for every text box.
-- [ ] Section descriptors (`PlcfSed`): page setup and which header slots a section uses. The
-      stories are read by position today, which is right for extraction and not enough for
-      layout.
+- [x] Section descriptors (`PlcfSed`): the page setup. Two levels of indirection, both easy to get
+      wrong — the PLCF's twelve-byte records hold an offset that points into the *WordDocument* stream
+      rather than the table stream it was read from, and it points at a length-prefixed grpprl rather
+      than a structure. The sprm ids come from LibreOffice's `sprmids.hxx`, which states each operand's
+      size on the same line; two of them invite an off-by-one, since `sprmSCcolumns` holds the column
+      count *minus one* and `sprmSBOrientation` uses Word's `DM_*` numbering where 1 is portrait, so a
+      plain truth test makes every portrait page landscape.
+- [ ] Which header slots a section uses. The stories are read by position today, which is right for
+      extraction; connecting them to the section that names them needs the six-per-section slot
+      indexing the reader already computes to be carried into the model.
 - [x] Nested tables: `sprmPItap` for the depth, and the detail that makes them readable at all —
       only the *outermost* table separates cells with U+0007. A nested table reuses the paragraph
       mark and says what it means with `sprmPFInnerTableCell` and `sprmPFInnerTtp`, so a reader that
@@ -202,7 +234,9 @@ does not need it and must not be made to pay for it.
 
 ## Layout engine
 
-Only after extraction is solid and `Paperless.Text` breaks lines correctly.
+Only after extraction is solid and `Paperless.Text` breaks lines correctly. Line breaking now agrees
+with Writer's — see `Paperless.Text/TODO.md` — and the page geometry every break is measured against
+is read and verified, so what remains is the filling of pages rather than the measuring of lines.
 
 - [ ] Frame hierarchy: page → body/header/footer → text/table/section/floating frames
 - [ ] Pagination: fill a page, split what does not fit, continue

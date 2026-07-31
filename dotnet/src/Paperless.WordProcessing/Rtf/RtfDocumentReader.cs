@@ -55,6 +55,7 @@ public sealed partial class RtfDocumentReader
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
     private readonly Dictionary<string, string> _info = new(StringComparer.Ordinal);
+    private readonly RtfPageGeometry _geometry = new();
 
     private Encoding _documentEncoding = LegacyCodePages.Fallback;
     private int _footnoteNumber;
@@ -74,6 +75,9 @@ public sealed partial class RtfDocumentReader
 
     /// <summary>The metadata read from the document's <c>{\info}</c> group.</summary>
     public DocumentMetadata Metadata { get; private set; } = DocumentMetadata.Empty;
+
+    /// <summary>The sections' page geometry, valid once <see cref="Read"/> has run.</summary>
+    public IReadOnlyList<Model.WritingSection> Sections => _geometry.Sections;
 
     /// <summary>Reads the document.</summary>
     public ContentDocument Read()
@@ -161,6 +165,15 @@ public sealed partial class RtfDocumentReader
     {
         bool ignorable = ignorableDestination;
         ignorableDestination = false;
+
+        // Page geometry is thirty control words that all do the same thing, so it is accumulated
+        // elsewhere and consulted first. Only \sect and \sectd are also structural, and those fall
+        // through to the break handling below.
+        if (_geometry.Handle(token.Name, token.Parameter)
+            && token.Name is not ("sect" or "sectd"))
+        {
+            return;
+        }
 
         switch (token.Name)
         {

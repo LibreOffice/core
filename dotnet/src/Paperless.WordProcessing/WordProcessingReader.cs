@@ -46,7 +46,7 @@ public sealed class WordProcessingReader : IDocumentReader
         return format switch
         {
             DocumentFormat.Odt or DocumentFormat.Ott or DocumentFormat.Fodt
-                => new OdtReader().Read(source, format),
+                => new OdtReader().ReadText(source, format),
 
             DocumentFormat.Docx or DocumentFormat.Docm or DocumentFormat.Dotx or DocumentFormat.Dotm
                 => DocxReader.Read(source, format),

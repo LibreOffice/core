@@ -79,4 +79,17 @@ public sealed class OdfMasterPage
 
     /// <summary>The underlying element, for content Paperless does not model yet.</summary>
     public XElement Element { get; }
+
+    /// <summary>
+    /// True when the master has a header in any of its slots.
+    /// </summary>
+    /// <remarks>
+    /// Any slot, not just the shared one: a master that gives only its first page a header still has a
+    /// header area, and the page geometry has to leave room for it on every page — Writer reserves the
+    /// space whether or not a given page fills it.
+    /// </remarks>
+    public bool HasHeader() => Header is not null || LeftHeader is not null || FirstHeader is not null;
+
+    /// <summary>True when the master has a footer in any of its slots.</summary>
+    public bool HasFooter() => Footer is not null || LeftFooter is not null || FirstFooter is not null;
 }
