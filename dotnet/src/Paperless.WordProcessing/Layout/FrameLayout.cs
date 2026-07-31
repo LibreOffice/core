@@ -217,9 +217,9 @@ internal sealed class FrameResolution
         // And the frames anchored in a flow rather than in the body: a table cell, a header, a footer, a
         // footnote. Writer places all of these the same way, because an anchored object belongs to the
         // *page* however deeply its anchor is nested — which is visible in LibreOffice's own rendering of
-        // `frame-in-flow.fodt`, where a frame anchored in the header hangs into the body area and the
-        // first two body lines wrap round it. So a flow's frames go on the page's list beside the body's
-        // and become obstacles for the body's text, exactly as a body frame does.
+        // `frame-in-header.fodt`, where a frame anchored in the running head hangs past the header area
+        // and the first four body lines divide round it. So a flow's frames go on the page's list beside
+        // the body's and become obstacles for the body's text, exactly as a body frame does.
         for (int index = 0; index < pages.Count; index++)
         {
             foreach (PlacedFlow flow in FlowsOn(pages[index]))
@@ -232,11 +232,10 @@ internal sealed class FrameResolution
                     if (paragraph.Frames.Count == 0) continue;
 
                     // The flow's own rectangle is what a paragraph-, column- or text-area-relative origin
-                    // resolves against inside a flow, and it is exact: LibreOffice draws the cell frame of
-                    // `frame-in-flow.fodt` at 73.70 pt, which is the table's left edge plus the cell's
+                    // resolves against inside a flow, and it is exact: LibreOffice draws the frame of
+                    // `frame-in-cell.fodt` at 73.70 pt, which is the table's left edge plus the cell's
                     // 0.1 cm padding plus the frame's own 0.5 cm offset and nothing else.
-                    PlaceFrames(
-                        paragraph, index, pages[index], flow.Area, flow.Area.Y + line.Top);
+                    PlaceFrames(paragraph, index, pages[index], flow.Area, flow.Area.Y + line.Top);
                 }
             }
         }

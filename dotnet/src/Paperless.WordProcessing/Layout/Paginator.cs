@@ -257,10 +257,11 @@ public sealed class Paginator
         // (`SwObjectFormatter`, `sw/source/core/layout/objectformatter.cxx`); this does the coarser thing
         // of laying the whole document out again, which converges in one further pass whenever the frames
         // stay on the page they started on — the case every real document is.
-        // Asked of the finished pages rather than of the blocks, because a frame need not be anchored in
-        // the body at all: one anchored in a table cell or a header is reached through the flow it landed
-        // in, which only exists once the page has been filled. Scanning the blocks instead returned early
-        // on exactly those documents and left their frames unplaced.
+        //
+        // "Has this document a frame at all" is asked of the finished pages rather than of the blocks,
+        // because a frame need not be anchored in the body: one anchored in a table cell or a header is
+        // reached through the flow it landed in, which exists only once a page has been filled. Scanning
+        // the blocks instead returned early on exactly those documents and left their frames unplaced.
         FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
         if (resolution.IsEmpty) return pages;
 

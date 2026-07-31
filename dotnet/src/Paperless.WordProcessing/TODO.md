@@ -663,9 +663,9 @@ is read and verified, so what remains is the filling of pages rather than the me
       That one flag is what tells whoever stacks boxes to advance once per line rather than once per box, and
       what stops a page break falling between the text left of a frame and the text right of it
       (`Paginator.Fit` counts by line and `WholeLines` backs an orphan or widow count off to a line's start).
-      Two boxes rather than a list of stretches inside one box, because a stretch is a line as far as every
-      consumer is concerned: drawing, notes, markup and extraction each got the second stretch for nothing,
-      where a nested list would have needed each of them taught about it.
+      Two boxes rather than a list of stretches inside one box, because a stretch *is* a line as far as
+      every consumer is concerned: the drawing path, the note anchors and the flow layouter each got the
+      second stretch for nothing, where a nested list would have needed all three taught about it.
       **`ILineObstacles` needed nothing added, which is the point.** Writer's second `CalcFlyWidth` call is
       the same question asked from further along the line (`itrform2.cxx:2911`, called again from
       `BuildPortions` once the pen is past the fly portion), so a continuation is `SpaceFor` with the wanted
