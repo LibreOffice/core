@@ -2600,10 +2600,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the initial position of the object
         tools::Rectangle aRectangle = pRectangleObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(6250L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(7000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(6501L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(6250), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(7000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(6501), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(4501), aRectangle.GetHeight());
 
         // On View2 - Move handle 0 on the shape to a new position - resize
         Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
@@ -2614,10 +2614,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Check the object has a new size
         // Dragging handle 0 moved the top-left corner, so the box grew.
         aRectangle = pRectangleObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(5000L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(6000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(7751L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(5501L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5000), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(7751), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5501), aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2630,10 +2630,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the object is at a different position
         aRectangle = pRectangleObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(6000L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(8000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(7751L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(5501L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(8000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(7751), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5501), aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2676,10 +2676,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the initial position of the object
         tools::Rectangle aRectangle = pTextBoxObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(2250L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(2000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2250), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(4501), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2001), aRectangle.GetHeight());
 
         // On View2 - drag handle 0 of the text box. While view1 is editing
         // this same box, the drag shifts the whole box by the delta instead
@@ -2692,10 +2692,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Check the object has a new position
         // The box moved by the drag delta and kept its size.
         aRectangle = pTextBoxObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(4501), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2001), aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2708,10 +2708,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the object is at a different position
         aRectangle = pTextBoxObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(2000L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(3000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2000), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(3000), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(4501), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2001), aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2754,10 +2754,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the initial position of the table
         tools::Rectangle aRectangle = pTableObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(2919L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(18063L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(14099L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(5999L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2919), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(18063), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(14099), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5999), aRectangle.GetHeight());
 
         // On View2 - relative move the shape to a different position
         pView2->MoveMarkedObj(Size(1000, 2000), /*bCopy=*/false);
@@ -2766,10 +2766,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 
         // Check the object is at a different position
         aRectangle = pTableObject->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL(3919L, aRectangle.TopLeft().X());
-        CPPUNIT_ASSERT_EQUAL(20063L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(14099L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(5999L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(3919), aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(20063), aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(14099), aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5999), aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());

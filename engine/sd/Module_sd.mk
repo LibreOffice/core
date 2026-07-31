@@ -65,6 +65,11 @@ endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
+))
+endif
+
+ifneq ($(filter LINUX,$(OS))$(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)),)
+$(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_tiledrendering \
     CppunitTest_sd_tiledrendering2 \
     CppunitTest_sd_vector_rendering \
