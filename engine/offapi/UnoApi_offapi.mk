@@ -262,9 +262,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/packages/manifest
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/packages/zip,\
 	ZipFileAccess \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/presentation,\
-	TransitionFactory \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rdf,\
 	BlankNode \
 	Literal \
@@ -2799,8 +2796,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/presentation,\
     XSlideShowNavigationListener \
 	XSlideShowView \
 	XSoundReference \
-	XTransition \
-	XTransitionFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/qa,\
 	XDumper \
