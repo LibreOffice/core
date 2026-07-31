@@ -136,8 +136,9 @@ table asserted, not by the corpus.
       "fallback or implement" is answered "extract the text, decline the layout": the words are
       typed by the author and sit in the data model as ordinary DrawingML text bodies, and only
       the *shapes* need the declarative layout-atom program in `layout1.xml` that
-      `oox/source/drawingml/diagram/` executes. Worth 58 files in `sd/qa/unit/data/pptx/` that
-      extracted to nothing before it.
+      `oox/source/drawingml/diagram/` executes. Measured: 64 of the 66 decks in
+      `sd/qa/unit/data/pptx/` carrying a diagram data part now yield text, and the number of
+      decks in that corpus extracting to nothing at all fell from 179 to 121.
 - [ ] `normAutofit` `fontScale` and `lnSpcReduction` — rendering only; they change where the text
       sits, not what it says
 - [ ] **Charts.** Recorded as a graphic, not read. A chart's user text — title, axis titles,
@@ -166,22 +167,24 @@ table asserted, not by the corpus.
 ## Measuring PPTX extraction
 
 The reference is `impress_html_Export`, and it is lossy in ways that make a raw diff alarming.
-Measured over the 45 richest of the 389 decks in `sd/qa/unit/data/pptx/`, **36 contain every line
-the reference produces**; the nine that do not reduce to three named causes, none of them a
-Paperless defect:
+Measured over the 45 richest of the 389 decks in `sd/qa/unit/data/pptx/` (normalising the marker
+spelling, non-breaking spaces and cell separators described below), **37 contain every line the
+reference produces**; the eight that do not reduce to four named causes, none of them a Paperless
+defect:
 
-- **Six decks: `<number>`.** The reference emits its own unresolved page-number placeholder where
+- **Five decks: `<number>`.** The reference emits its own unresolved page-number placeholder where
   the deck has an `a:fld` slide-number field. Paperless emits the cached `a:t` — `1`, `2`, `3` —
   which is what a reader actually saw. The one place the reference is further from the file than
   Paperless is.
-- **Two decks: marker spelling.** LibreOffice's HTML export writes the marker glued to the text
-  and doubles the suffix (`1..Outer, one`); Paperless writes `1. `. It also passes U+F0B7 and
-  U+F06C — Symbol and Wingdings bullets from a Private Use Area — straight through, where
+- **One deck: a Private Use Area bullet.** `tdf169524.pptx`'s markers come out of the reference as
+  U+F06C and U+F02D — Wingdings code points, meaningless outside that font.
   `OutlineNumbers.NormaliseBullet` substitutes U+2022, as the ODP path already does.
-- **One deck: a literal tab inside a run.** `tdf120028.pptx` has a `\t` inside an `a:t`; the
-  export renders it as a run of non-breaking spaces. Paperless keeps the tab.
+- **One deck: marker spelling.** LibreOffice's HTML export writes the marker glued to the text and
+  doubles the suffix (`1..Outer, one`); Paperless writes `1. `.
+- **One deck: a literal tab inside a run.** `tdf120028.pptx` has a `\t` inside an `a:t`; the export
+  renders it as a run of non-breaking spaces. Paperless keeps the tab.
 
-Going the other way, Paperless finds text the reference drops on 20 of the 45 — grouped shapes,
+Going the other way, Paperless finds text the reference drops on **30 of the 45** — grouped shapes,
 plain text boxes, WordArt, SmartArt — which is the same deliberate improvement the ODP path
 makes, not a difference to reconcile. `group.pptx` is the extreme: the reference emits nothing at
 all, Paperless 35 lines, every one of them from the slide's own `p:spTree`.
