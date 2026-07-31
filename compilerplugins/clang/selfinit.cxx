@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include <clang/AST/ParentMapContext.h>
+
 #include "config_clang.h"
 
 #include "plugin.hxx"
@@ -92,7 +94,8 @@ public:
         }
         for (auto const& i : decls_)
         {
-            if (expr->getDecl()->getCanonicalDecl() == i.canonical)
+            if (expr->getDecl()->getCanonicalDecl() == i.canonical
+                && !referencedThroughDeferredLambda(expr, i.current))
             {
                 report(
                     DiagnosticsEngine::Warning,
@@ -109,6 +112,65 @@ public:
 
 private:
     void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+
+    bool referencedThroughDeferredLambda(DeclRefExpr const* ref, VarDecl const* decl)
+    {
+        auto node = DynTypedNode::create(*ref);
+        for (;;)
+        {
+            auto const parents = compiler.getASTContext().getParents(node);
+            if (parents.size() != 1)
+            {
+                return false;
+            }
+            node = parents[0];
+            if (node.get<VarDecl>() == decl)
+            {
+                return false;
+            }
+            if (auto const lambda = node.get<LambdaExpr>())
+            {
+                if (!isImmediatelyInvoked(lambda))
+                {
+                    return true;
+                }
+            }
+            if (node.get<TranslationUnitDecl>() != nullptr)
+            {
+                return false;
+            }
+        }
+    }
+
+    bool isImmediatelyInvoked(LambdaExpr const* lambda)
+    {
+        Stmt const* node = lambda;
+        for (;;)
+        {
+            auto const parents = compiler.getASTContext().getParents(*node);
+            if (parents.size() != 1)
+            {
+                return false;
+            }
+            auto const parent = parents[0].get<Stmt>();
+            if (parent == nullptr)
+            {
+                return false;
+            }
+            if (auto const call = dyn_cast<CXXOperatorCallExpr>(parent))
+            {
+                return call->getOperator() == OO_Call && call->getNumArgs() != 0
+                       && call->getArg(0)->IgnoreImplicit() == lambda;
+            }
+            if (isa<ParenExpr>(parent) || isa<ImplicitCastExpr>(parent)
+                || isa<MaterializeTemporaryExpr>(parent) || isa<CXXBindTemporaryExpr>(parent))
+            {
+                node = parent;
+                continue;
+            }
+            return false;
+        }
+    }
 
     struct Decl
     {
