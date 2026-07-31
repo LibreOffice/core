@@ -127,6 +127,51 @@ public static class Ww8SprmReader
 
         public const ushort TableDefinition = 0xD608;
 
+        /// <summary>
+        /// <c>sprmTSetBrc80</c>: a border applied to a range of a row's cells, in the older BRC form.
+        /// </summary>
+        /// <remarks>
+        /// A range and a side mask rather than one cell and one side, so a table with a uniform grid is
+        /// four of these per row and not four per cell. The <c>80</c> and the plain form both appear in
+        /// the same document; the plain one is applied second and wins, which is why they are read as two
+        /// ids rather than one.
+        /// </remarks>
+        public const ushort SetCellBorder80 = 0xD620;
+
+        /// <summary><c>sprmTSetBrc</c>: the same, with an RGB colour instead of a palette index.</summary>
+        public const ushort SetCellBorder = 0xD62F;
+
+        /// <summary><c>sprmTTableBorders80</c>: the table's six default borders, in the older BRC form.</summary>
+        public const ushort TableBorders80 = 0xD605;
+
+        /// <summary><c>sprmTTableBorders</c>: the same six, with RGB colours.</summary>
+        public const ushort TableBorders = 0xD613;
+
+        /// <summary><c>sprmTDefTableShd80</c>: one two-byte <c>SHD</c> per cell of the row.</summary>
+        public const ushort CellShading80 = 0xD609;
+
+        /// <summary>
+        /// <c>sprmTDefTableShd</c>: ten bytes per cell — a foreground, a background and a pattern.
+        /// </summary>
+        /// <remarks>
+        /// Three sprms rather than one, because a sprm's operand carries a single length byte and
+        /// sixty-three cells of ten bytes do not fit in one: this one starts at cell 0, and the other two
+        /// at cells 22 and 44.
+        /// </remarks>
+        public const ushort CellShading = 0xD612;
+
+        /// <summary><c>sprmTDefTableShd2nd</c>: the same array, from cell 22.</summary>
+        public const ushort CellShadingSecond = 0xD616;
+
+        /// <summary><c>sprmTDefTableShd3rd</c>: the same array, from cell 44.</summary>
+        public const ushort CellShadingThird = 0xD60C;
+
+        /// <summary>Which cell the second of the three shading sprms starts at.</summary>
+        public const int CellShadingSecondStart = 22;
+
+        /// <summary>Which cell the third starts at.</summary>
+        public const int CellShadingThirdStart = 44;
+
         /// <summary><c>sprmTCellPadding</c>: cell padding for a range of a row's cells.</summary>
         public const ushort CellPadding = 0xD632;
 

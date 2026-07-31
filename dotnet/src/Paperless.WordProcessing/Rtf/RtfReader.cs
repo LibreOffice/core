@@ -223,7 +223,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
             LeftIndent = table.LeftIndent,
-            HasWordBorderJoins = true,
+            JoinsBordersLikeWord = true,
         };
     }
 

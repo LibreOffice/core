@@ -64,15 +64,23 @@ public sealed partial class Ww8DocumentReader
         {
             if (i >= available) break;
 
-            // The flags are the descriptor's first sixteen bits; the rest is width and borders.
-            ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(
-                span[(descriptorsAt + (i * CellDescriptorSize))..]);
+            ReadOnlySpan<byte> descriptor =
+                span.Slice(descriptorsAt + (i * CellDescriptorSize), CellDescriptorSize);
+
+            // The flags are the descriptor's first sixteen bits, then two reserved bytes, then the
+            // cell's four borders in WW8's own order — top, left, bottom, right — four bytes each.
+            ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(descriptor);
 
             cells[i] = new Ww8CellDefinition(
                 IsFirstMerged: (flags & 0x0001) != 0,
                 IsMerged: (flags & 0x0002) != 0,
                 IsVerticallyMerged: (flags & 0x0020) != 0,
-                StartsVerticalMerge: (flags & 0x0040) != 0);
+                StartsVerticalMerge: (flags & 0x0040) != 0,
+                Borders: new Ww8CellBorders(
+                    ReadBorder(descriptor[4..], isVersion9: false),
+                    ReadBorder(descriptor[8..], isVersion9: false),
+                    ReadBorder(descriptor[12..], isVersion9: false),
+                    ReadBorder(descriptor[16..], isVersion9: false)));
         }
 
         return new Ww8TableDefinition(edges, cells);
@@ -342,6 +350,18 @@ public sealed partial class Ww8DocumentReader
         /// <summary>The gap between the cell's edges and its text, from the row's padding sprms.</summary>
         public Layout.CellPadding Padding { get; set; }
 
+        /// <summary>The colour behind its text, or null when the row's SHD array leaves it automatic.</summary>
+        public Core.Graphics.Colour? Shading { get; set; }
+
+        /// <summary>
+        /// Its four borders as the document states them, before the table's defaults fill the gaps.
+        /// </summary>
+        /// <remarks>
+        /// Unresolved on purpose: which default a missing side falls back to depends on where the cell
+        /// sits in the whole table, and a row being built does not yet know whether another follows it.
+        /// </remarks>
+        public Ww8CellBorders Borders { get; set; }
+
         public bool IsHorizontallyMerged { get; set; }
         public bool ContinuesMergeAbove { get; set; }
 
@@ -358,6 +378,13 @@ public sealed partial class Ww8DocumentReader
 
         /// <summary>Its declared height in twips, signed: negative means exact rather than a floor.</summary>
         public int HeightTwips { get; init; }
+
+        /// <summary>The table's six default borders, as this row's sprms stated them.</summary>
+        /// <remarks>
+        /// Per row because that is where WW8 states them — every row-end paragraph carries the whole
+        /// table's defaults — and a row that states none leaves its cells' unstated sides bare.
+        /// </remarks>
+        public Ww8TableBorders? DefaultBorders { get; init; }
 
         public List<Ww8CellDraft> Cells { get; } = [];
     }
@@ -378,11 +405,15 @@ public sealed partial class Ww8DocumentReader
 /// <param name="StartsVerticalMerge">
 /// The cell is the top of that vertical merge rather than a continuation of it.
 /// </param>
+/// <param name="Borders">
+/// The four borders the descriptor states, which is the base a <c>sprmTSetBrc</c> then overrides.
+/// </param>
 public readonly record struct Ww8CellDefinition(
     bool IsFirstMerged,
     bool IsMerged,
     bool IsVerticallyMerged,
-    bool StartsVerticalMerge);
+    bool StartsVerticalMerge,
+    Ww8CellBorders Borders = default);
 
 /// <summary>A table row's geometry, from <c>sprmTDefTable</c>.</summary>
 /// <remarks>

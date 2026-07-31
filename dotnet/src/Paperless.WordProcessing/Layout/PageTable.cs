@@ -146,24 +146,31 @@ public sealed record PageTable : PageBlock
     public int HeaderRowCount { get; init; }
 
     /// <summary>
-    /// True when the table came from one of the Word formats, which join their grid lines differently.
+    /// True when the grid lines are joined by Word's rules rather than Writer's own.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The one place a table's original format still shows after it has been read. Writer keeps it as the
-    /// document setting <c>TableRowKeep</c>, which the Word-family importers switch on and the ODF one
-    /// never does, and its painter reads it back as <c>bWordTableCell</c> —
-    /// <c>SwTabFramePainter::FindStylesForLine</c> in <c>sw/source/core/layout/paintfrm.cxx</c>.
+    /// The one place a table's original format still shows after it has been read, and it changes the
+    /// drawing rather than the layout. Everywhere else a grid line overshoots the line it meets by half a
+    /// width, so the two make a solid corner. A Word table instead <em>shortens</em> an interior line by the
+    /// <em>full</em> width of the outer line it meets, so the outline owns the corner outright and the
+    /// interior line stops at the outline's inner edge.
     /// </para>
     /// <para>
-    /// What it changes is where an <em>interior</em> grid line stops. Everywhere else a line overshoots the
-    /// line it meets by half a width, so the two make a solid corner; in a Word table an interior line that
-    /// meets the table's outer frame stops at that frame's inner edge instead, leaving the frame to cover
-    /// the join. Half a point on a 0.5 pt border — invisible on paper, and the difference between agreeing
-    /// with a reference rendering and not.
+    /// Measured on the corpus table's half-point borders: the DOC and DOCX renders both run their middle
+    /// horizontals 56.95 to 538.35 where the ODF one runs them 56.45 to 538.85 — half a point at each end of
+    /// five of the nine strokes. Invisible on paper, and the difference between agreeing with a reference
+    /// rendering and not.
+    /// </para>
+    /// <para>
+    /// LibreOffice spells it <c>DocumentSettingId::TABLE_ROW_KEEP</c>, which its DOC, DOCX and RTF filters
+    /// all set and its ODF filter never does, and reads it back as <c>bWordTableCell</c> in
+    /// <c>SwTabFramePainter::FindStylesForLine</c> (<c>sw/source/core/layout/paintfrm.cxx</c>). So it belongs
+    /// to the file's provenance rather than to anything the document says, which is why it is a flag on the
+    /// table and not a property of a border.
     /// </para>
     /// </remarks>
-    public bool HasWordBorderJoins { get; init; }
+    public bool JoinsBordersLikeWord { get; init; }
 
     /// <summary>How wide the table is, which is its columns added up.</summary>
     public Length Width

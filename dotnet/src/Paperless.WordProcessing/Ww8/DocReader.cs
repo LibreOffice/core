@@ -282,6 +282,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,
                     Padding = cell.Padding,
+                    Shading = cell.Shading,
+                    Borders = cell.Borders,
                 });
             }
 
@@ -301,6 +303,12 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
             LeftIndent = table.LeftIndent,
+
+            // Every DOC is a Word document by definition, so the flag is not read from anything: it is
+            // what LibreOffice's own filter sets on import, and it changes where the inner grid lines
+            // stop. Measured on the corpus table — the reference's inner horizontals run 56.95 to 538.35
+            // where the same table in ODF runs 56.45 to 538.85.
+            JoinsBordersLikeWord = true,
         };
     }
 

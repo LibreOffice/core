@@ -453,9 +453,29 @@ is read and verified, so what remains is the filling of pages rather than the me
         reason unrelated to where anything went.
       - Every shade before any text, rather than each cell's shade before its own text: a shade is opaque, so a
         cell whose content overflows would otherwise have that overflow painted over by its neighbour's fill.
-- [ ] Cell shading for **DOC**, which is a bigger read than the other three: a per-band `WW8_SHD` array from
-      `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form (`sprmTDefTableNewShd` and its 2nd and
-      3rd parts) carrying full RGB.
+- [x] Cell shading for **DOC**, which was a bigger read than the other three because the document states it
+      twice over and the two disagree. Both arrive on the row-end paragraph, indexed by cell:
+      - **`sprmTDefTableShd80` (0xD609)** is two bytes per cell — five bits of foreground palette index, five
+        of background, six of pattern. **`sprmTDefTableShd` (0xD612)** is ten bytes per cell — a `COLORREF`
+        foreground, a `COLORREF` background and a sixteen-bit pattern — and arrives as **three** sprms, the
+        2nd (0xD616) starting at cell 22 and the 3rd (0xD60C) at cell 44, because a sprm's operand carries one
+        length byte and 63 cells of ten bytes do not fit in it. The ids are not in that order, and
+        `sprmTDefTableShdRaw` (0xD670) sits beside them in every file and is *not* read — LibreOffice ignores
+        it too.
+      - **The newer form wins per cell, not per row**, each entry tested against automatic —
+        LibreOffice's `SetTabShades`. Measured on the corpus document: the newer says `#CCCCCC`, which is what
+        it was written with, and the older can only say Word's nearest palette entry, `#C0C0C0`. A pixel
+        comparison would not have noticed; a unit test on the colour does.
+      - **A shade is a *pattern*, and what shows is its background** — the same trap as `w:fill` against
+        `w:color`, but as arithmetic rather than as a choice: the colour is the two blended in the pattern's
+        own proportion, so pattern 0 (clear) is the background alone and pattern 1 (solid) the foreground
+        alone. Reading the foreground shades every ordinary grey cell **black**, because an automatic
+        foreground is black. The whole 62-entry `eMSGrayScale` table is ported, since a 25 % pattern is a real
+        blend and no colour either side states.
+      - A `COLORREF` is `0xTTBBGGRR` — blue first, and the fourth byte a flag rather than an alpha, `0xFF`
+        meaning automatic. Reading it as ARGB gives a transparent black for every automatic colour and swaps
+        red for blue in every other. An automatic *background* under a clear pattern is **no shading**, which
+        is why the value stays nullable all the way to `PageTableCell.Shading`.
 - [x] **Cell borders**, for ODF: read, drawn *consolidated*, and compared against LibreOffice's own strokes —
       axis, position, both ends and thickness, every one within a tenth of a point. What had to be right:
       - **One stroke per grid line, not four per cell.** Five horizontals for a four-row table and one vertical
@@ -506,28 +526,53 @@ is read and verified, so what remains is the filling of pages rather than the me
         returns −1, and every caller asks whether it is below 15). Nested tables always take the modern rule
         whatever the mode, with the indent floored at zero first. Not academic: the corpus table rewritten to
         mode 12 renders 3.00 pt further left, because its cells are padded 55 twips.
-      - **A Word table joins its grid lines differently, and that is a *drawing* rule rather than a reading
-        one.** Everywhere else a line overshoots the line it meets by half a width, which is what makes a
-        corner solid. In a Word table an interior line meeting the *outer frame* stops at that frame's inner
-        edge instead and lets the frame cover the join — `SwTabFramePainter::FindStylesForLine`,
-        `paintfrm.cxx`, guarded by `bWordTableCell`, which is the document setting `TableRowKeep` that every
-        Word-family importer switches on and the ODF one never does. Measured: the same table renders its
-        middle horizontals 56.95 to 538.35 from DOCX and 56.45 to 538.85 from ODF. Half a point, invisible on
-        paper and four failing assertions in the stroke comparison — and it is why `PageTable` carries
-        `HasWordBorderJoins`, the one place a table's original format still shows after it has been read.
-        **DOC needs the flag too** when its borders arrive: `ww8par.cxx` sets `TableRowKeep` as well.
+      - **A Word table also joins its grid lines differently**, which is a *drawing* rule rather than a
+        reading one and was found twice over — once here and once from the DOC side, independently. It has an
+        item of its own below; what matters here is that it is not part of the origin, and that fixing the
+        origin without it still leaves four assertions failing.
       - Checked past the corpus, since a fix that was really "subtract a quarter point" would pass one
         document and fail the next: a table indented 567 twips and a bordered table nested inside a cell, both
         converted to DOCX and RTF, agree with LibreOffice to 0.05 pt. Worth knowing that the corpus does not
         cover this by itself — every other table document carries an *empty* `w:tcBorders`, so its border
         width is zero and the origin rule moves nothing. `table-borders.*` is the only file that would notice
         a regression.
-- [ ] Cell borders and shading for **DOC**. Borders are a `BRC` structure through `sprmTSetBrc`, applied to a
-      *range* of cells rather than to one; shading is the per-band `WW8_SHD` array noted above. Both are bigger
-      reads than the other three formats needed.
-      The grid places text correctly and draws nothing round it, which is the
-      half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
-      resolved border model, and a border's width also eats into the cell's text area.
+- [x] Cell borders for **DOC**, compared against LibreOffice's own strokes like ODF's — the same nine, within
+      0.06 pt on every axis, extent, width and colour. A border reaches a cell three ways and all three had to
+      be read, because a document uses all three at once:
+      - **The twenty-byte cell descriptor inside `sprmTDefTable`** already carries four BRCs: two bytes of
+        flags, two reserved, then top, left, bottom, right, four bytes each. That is the base, and it is what
+        the merge-flag reader was already walking past.
+      - **`sprmTSetBrc` names a *range* of cells and a mask of sides**: `itcFirst`, `itcLim`, a side mask
+        (1 top, 2 left, 4 bottom, 8 right — WW8's order again), then the BRC. So a uniform four-cell row is
+        four sprms, one per side, and not sixteen. `sprmTSetBrc80` (0xD620) carries a 4-byte BRC and
+        `sprmTSetBrc` (0xD62F) an 8-byte one; both appear, and the later wins. A BRC whose type is zero is
+        still a change — it *clears* the descriptor's border rather than being ignored.
+      - **`sprmTTableBorders` (0xD605 old, 0xD613 new) states six defaults**, the outline's four plus the
+        inside horizontal and inside vertical, and fills in any side no cell mentioned. Which of the six
+        depends on where the cell sits. The corpus document does not use it — LibreOffice's export states
+        every cell's four sides — but **Word writes almost nothing else**, so without it a Word-authored table
+        has no borders at all. Untested against a reference for want of a Word-written corpus file.
+      - **`dptLineWidth` is eighths of a point**: four is half a point, ten twips. Four formats, and now
+        three units for one quantity — a length in ODF, eighths in DOCX and DOC, twips in RTF. And the *type*
+        is not only a style: `DetermineBorderProperties` makes a triple line five times its nominal width
+        (three and four-and-a-half at the two smallest sizes) and a wave 45 twips more. Ported. What is not
+        ported is `ConvertBorderWidthFromWord`, which then doubles a thick border and triples a double one
+        for drawing — so a compound style comes out at the width Word *reserves* for it rather than the width
+        LibreOffice draws it.
+      - **A nil BRC is not an absent one.** Nil is 0xFFFF in the two width bytes (0xFFFFFFFF in the newer
+        form) and means "no border here"; type 0 means "nothing said", and only the second falls through to
+        the defaults. `ico` 0 and a `COLORREF` of `0xFF000000` are both Word's automatic, which for a border
+        is **black** and not the text colour — LibreOffice's `GetLineIndex`, "no AUTO for borders as yet".
+- [x] **A Word table joins its grid lines differently from a Writer one**, which is the difference that keeps
+      `table-borders.doc` from matching until it is applied — nothing to do with reading the BRCs. Writer runs
+      every line the full width and lets the ends overlap by half a pen; Word shortens an **inner** line by the
+      **whole** width of the outer line it meets. Measured: the DOC and DOCX renders both run their inner
+      horizontals 56.95 to 538.35 where the ODF render runs them 56.45 to 538.85, and the two inner verticals
+      start 0.5 pt lower. LibreOffice keeps this as `DocumentSettingId::TABLE_ROW_KEEP`, set by all three Word
+      filters and by no other, and reads it in `SwTabFramePainter::FindStylesForLine`. It is now
+      `PageTable.JoinsBordersLikeWord`, set by all three Word-family readers. Worth recording that it was
+      found *twice, independently* — once from the DOCX/RTF side and once from the DOC side — which is the
+      strongest evidence available that it is the rule and not a coincidence of one format's export.
 - [x] A table inside a cell, in all four formats. A cell holds *blocks* rather than paragraphs and
       `FlowLayouter` places a table among its lines, so a cell's content is exactly what a header's is —
       which is what made this a small change rather than a second layout path. The subtle part is that a

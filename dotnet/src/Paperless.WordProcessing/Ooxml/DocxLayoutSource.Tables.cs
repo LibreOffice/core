@@ -90,7 +90,7 @@ public sealed partial class DocxLayoutSource
             Rows = Resolved(rows),
             HeaderRowCount = HeadingRows(rows),
             LeftIndent = LeftEdge(properties, rows, isNested: _tableDepth > 0),
-            HasWordBorderJoins = true,
+            JoinsBordersLikeWord = true,
         };
     }
 

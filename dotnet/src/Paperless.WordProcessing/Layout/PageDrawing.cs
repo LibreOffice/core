@@ -154,10 +154,11 @@ public static class PageDrawing
     /// borders meet at a corner rather than leaving a notch.
     /// </para>
     /// <para>
-    /// The overshoot has one exception, and it is the table's format rather than its geometry that decides
-    /// it: in a Word table an interior line meeting the outer frame stops at the frame's <em>inner</em> edge
-    /// instead. See <see cref="PageTable.HasWordBorderJoins"/> — measured, the same table read from DOCX
-    /// runs its middle horizontals 56.95 to 538.35 where the ODF one runs them 56.45 to 538.85.
+    /// The overshoot is Writer's rule and not Word's, which is what
+    /// <see cref="PageTable.JoinsBordersLikeWord"/> switches: a Word table shortens an interior line by the
+    /// <em>full</em> width of the outer line it meets, so the outline owns the corner outright. Measured, the
+    /// same table read from DOC or DOCX runs its middle horizontals 56.95 to 538.35 where the ODF one runs
+    /// them 56.45 to 538.85.
     /// </para>
     /// <para>
     /// Horizontals before verticals, which matters only for which one wins a join and is free to match.
@@ -169,17 +170,14 @@ public static class PageDrawing
         // stroke. Keyed on the line's own coordinate rounded to a twip, because two cells' shared edge is
         // computed from two different rectangles and can differ in the last EMU.
         List<Edge> edges = Edges(table);
-        Dictionary<(bool IsHorizontal, long At), Length> frame =
-            table.Table.HasWordBorderJoins ? FrameLines(table, edges) : [];
+        if (table.Table.JoinsBordersLikeWord) edges = WithWordJoins(edges);
 
         foreach (Edge edge in edges)
         {
             Stroke stroke = new(Paint.Solid(edge.Border.Colour), edge.Border.Width);
             Length half = edge.Border.Width / 2;
-            bool isFrame = frame.ContainsKey((edge.IsHorizontal, edge.At.Twips));
-
-            Length from = edge.From - Overshoot(edge.From);
-            Length to = edge.To + Overshoot(edge.To);
+            Length from = edge.From - half;
+            Length to = edge.To + half;
 
             GraphicsPath path = edge.IsHorizontal
                 ? new GraphicsPath()
@@ -190,67 +188,69 @@ public static class PageDrawing
                     .LineTo(new DocPoint(edge.At, to));
 
             sink.StrokePath(path, stroke);
-
-            // How far past one of its ends the line runs — half its own width, or, for a Word table's
-            // interior line ending on the frame, half the *frame's* width the other way.
-            Length Overshoot(Length end)
-                => !isFrame && frame.TryGetValue((!edge.IsHorizontal, end.Twips), out Length width)
-                    ? -(width / 2)
-                    : half;
         }
-    }
-
-    /// <summary>
-    /// The grid lines that make up the table's outer frame, by axis and position, with their widths.
-    /// </summary>
-    /// <remarks>
-    /// Taken from the placed cells rather than from the row and column counts, so that a table continuing
-    /// onto a second page has that page's own first row as its top — which is what Writer's painter means by
-    /// outer too, since it asks the <em>frame</em> whether a row is its first rather than asking the table.
-    /// </remarks>
-    private static Dictionary<(bool IsHorizontal, long At), Length> FrameLines(
-        PlacedTable table, List<Edge> edges)
-    {
-        if (table.Cells.Count == 0) return [];
-
-        Length left = table.Cells[0].Area.X;
-        Length right = table.Cells[0].Area.Right;
-        Length top = table.Cells[0].Area.Y;
-        Length bottom = table.Cells[0].Area.Bottom;
-
-        foreach (PlacedTableCell cell in table.Cells)
-        {
-            left = Length.Min(left, cell.Area.X);
-            right = Length.Max(right, cell.Area.Right);
-            top = Length.Min(top, cell.Area.Y);
-            bottom = Length.Max(bottom, cell.Area.Bottom);
-        }
-
-        Dictionary<(bool IsHorizontal, long At), Length> frame = [];
-
-        foreach (Edge edge in edges)
-        {
-            bool outer = edge.IsHorizontal
-                ? edge.At.Twips == top.Twips || edge.At.Twips == bottom.Twips
-                : edge.At.Twips == left.Twips || edge.At.Twips == right.Twips;
-
-            if (!outer) continue;
-
-            (bool, long) key = (edge.IsHorizontal, edge.At.Twips);
-
-            // The widest run wins, for a frame whose cells disagree about their own edge: the interior line
-            // has to clear whichever border is actually drawn over the join.
-            frame[key] = frame.TryGetValue(key, out Length known)
-                ? Length.Max(known, edge.Border.Width)
-                : edge.Border.Width;
-        }
-
-        return frame;
     }
 
     /// <summary>One consolidated grid line: where it sits, how far it runs, and its border.</summary>
+    /// <param name="IsHorizontal">True when it runs across the page.</param>
+    /// <param name="At">Where it sits on the other axis.</param>
+    /// <param name="From">Where it starts along its own axis.</param>
+    /// <param name="To">Where it ends.</param>
+    /// <param name="Border">Its width and colour.</param>
+    /// <param name="IsOuter">
+    /// True when it is part of the table's outline rather than of its grid, which only Word's join rule
+    /// cares about: the outline keeps its full length and the inner lines give way to it.
+    /// </param>
     private readonly record struct Edge(
-        bool IsHorizontal, Length At, Length From, Length To, TableBorder Border);
+        bool IsHorizontal, Length At, Length From, Length To, TableBorder Border, bool IsOuter = false);
+
+    /// <summary>
+    /// The grid lines with Word's joins applied: an inner line gives way to the outline it meets.
+    /// </summary>
+    /// <remarks>
+    /// By the <em>full</em> width of the outer line rather than half of it, which is what makes the two
+    /// rules differ by a whole border width at each end rather than by nothing. Ported from
+    /// <c>SwTabFramePainter::FindStylesForLine</c>, which adjusts an inner entry's start and end for every
+    /// outer entry it meets there, and does it before the half-width overshoot is added.
+    /// </remarks>
+    private static List<Edge> WithWordJoins(List<Edge> edges)
+    {
+        // Keyed on the coordinate in twips for the same reason the merge is: two cells' shared edge comes
+        // from two rectangles and can differ in the last EMU. The width is the widest outline stroke at
+        // that coordinate, since that is the one whose corner has to be cleared.
+        Dictionary<(bool, long), Length> outline = [];
+        foreach (Edge edge in edges)
+        {
+            if (!edge.IsOuter) continue;
+
+            (bool, long) key = (edge.IsHorizontal, edge.At.Twips);
+            if (!outline.TryGetValue(key, out Length width) || edge.Border.Width > width)
+                outline[key] = edge.Border.Width;
+        }
+
+        List<Edge> joined = new(edges.Count);
+        foreach (Edge edge in edges)
+        {
+            if (edge.IsOuter)
+            {
+                joined.Add(edge);
+                continue;
+            }
+
+            joined.Add(edge with
+            {
+                From = edge.From + Meeting(edge, edge.From),
+                To = edge.To - Meeting(edge, edge.To),
+            });
+        }
+
+        return joined;
+
+        Length Meeting(Edge edge, Length end)
+            => outline.TryGetValue((!edge.IsHorizontal, end.Twips), out Length width)
+                ? width
+                : Length.Zero;
+    }
 
     /// <summary>
     /// A table's grid lines, merged along each line where consecutive cells agree.
@@ -263,20 +263,29 @@ public static class PageDrawing
     private static List<Edge> Edges(PlacedTable table)
     {
         List<Edge> loose = [];
+        int columns = table.Table.ColumnWidths.Count;
 
         foreach (PlacedTableCell cell in table.Cells)
         {
             CellBorders borders = cell.Cell.Borders;
             DocRect area = cell.Area;
 
+            // Which of a cell's edges belong to the table's outline, taken from where the cell sits
+            // rather than from where its rectangle lands: a row whose cells are short of the grid still
+            // has a last cell, and its right edge is still the outline.
+            bool first = cell.Row <= table.FirstRow;
+            bool last = cell.Row + Math.Max(1, cell.Cell.RowSpan) >= table.RowEnd;
+
             if (!borders.Top.IsNone)
-                loose.Add(new Edge(true, area.Y, area.X, area.Right, borders.Top));
+                loose.Add(new Edge(true, area.Y, area.X, area.Right, borders.Top, first));
             if (!borders.Bottom.IsNone)
-                loose.Add(new Edge(true, area.Bottom, area.X, area.Right, borders.Bottom));
+                loose.Add(new Edge(true, area.Bottom, area.X, area.Right, borders.Bottom, last));
             if (!borders.Left.IsNone)
-                loose.Add(new Edge(false, area.X, area.Y, area.Bottom, borders.Left));
+                loose.Add(new Edge(false, area.X, area.Y, area.Bottom, borders.Left,
+                    cell.Cell.Column == 0));
             if (!borders.Right.IsNone)
-                loose.Add(new Edge(false, area.Right, area.Y, area.Bottom, borders.Right));
+                loose.Add(new Edge(false, area.Right, area.Y, area.Bottom, borders.Right,
+                    cell.Cell.ColumnEnd >= columns));
         }
 
         List<Edge> merged = [];
@@ -312,7 +321,13 @@ public static class PageDrawing
         {
             if (runs.Count > 0 && edge.From <= runs[^1].To)
             {
-                if (edge.To > runs[^1].To) runs[^1] = runs[^1] with { To = edge.To };
+                // Outer wins over inner across a merge, which matters for a run that starts as the
+                // outline of one row and continues as the grid line of the next.
+                runs[^1] = runs[^1] with
+                {
+                    To = edge.To > runs[^1].To ? edge.To : runs[^1].To,
+                    IsOuter = runs[^1].IsOuter || edge.IsOuter,
+                };
                 continue;
             }
 
