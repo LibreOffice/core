@@ -424,7 +424,7 @@ namespace cool {
 				context,
 				primitive.matrix,
 				primitive.checksum,
-				primitive.crop,
+				primitive.imageRect,
 				primitive.rotation,
 				primitive.alpha,
 				primitive.mirror,
@@ -437,11 +437,9 @@ namespace cool {
 		// the matrix is missing, no lookup is registered, the lookup
 		// has no entry yet, or the image is still decoding.
 		//
-		// When crop is set, the source rectangle is the corresponding
-		// inset region of the image in pixels, and the destination is
-		// the same inset region of the unit square. The matrix was
-		// sized for the original image, so insetting both rectangles
-		// keeps the visible content aligned with the slide bounds.
+		// imageRect is present when the graphic is cropped: the whole
+		// image draws onto that rectangle of the unit square, clipped
+		// to the square.
 		//
 		// rotation is in tenths of a degree and rotates around the
 		// centre of the unit square, which the matrix maps to the
@@ -463,7 +461,7 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
 			checksum: number,
-			crop?: GraphicPrimitive['crop'],
+			imageRect?: GraphicPrimitive['imageRect'],
 			rotation?: number,
 			alpha?: number,
 			mirror?: number,
@@ -521,36 +519,19 @@ namespace cool {
 				context.translate(-0.5, -0.5);
 			}
 
-			if (crop && (crop.left || crop.top || crop.right || crop.bottom)) {
-				// The crop distances and the matrix's column-vector
-				// frame size share slide units, so dividing gives
-				// fractions of the frame.
-				const frameW = Math.hypot(matrix[0], matrix[1]);
-				const frameH = Math.hypot(matrix[2], matrix[3]);
-				const left = (crop.left ?? 0) / frameW;
-				const top = (crop.top ?? 0) / frameH;
-				const right = (crop.right ?? 0) / frameW;
-				const bottom = (crop.bottom ?? 0) / frameH;
-				// The uncropped image spans -left to 1 + right and -top
-				// to 1 + bottom in the frame's unit square, which shows
-				// the part inside it. Draw the overlap, mapped back to
-				// source pixels, since drawImage needs a source
-				// rectangle inside the image.
-				const x0 = Math.max(0, -left);
-				const y0 = Math.max(0, -top);
-				const x1 = Math.min(1, 1 + right);
-				const y1 = Math.min(1, 1 + bottom);
-				if (x0 < x1 && y0 < y1) {
-					const unitW = 1 + left + right;
-					const unitH = 1 + top + bottom;
-					const sx = Math.round(((x0 + left) / unitW) * image.naturalWidth);
-					const sy = Math.round(((y0 + top) / unitH) * image.naturalHeight);
-					const sw = Math.round(((x1 - x0) / unitW) * image.naturalWidth);
-					const sh = Math.round(((y1 - y0) / unitH) * image.naturalHeight);
-					if (sw > 0 && sh > 0) {
-						context.drawImage(image, sx, sy, sw, sh, x0, y0, x1 - x0, y1 - y0);
-					}
-				}
+			if (imageRect) {
+				// The whole image maps onto this rectangle of the
+				// unit square; the clip keeps the frame's part.
+				context.beginPath();
+				context.rect(0, 0, 1, 1);
+				context.clip();
+				context.drawImage(
+					image,
+					imageRect.x,
+					imageRect.y,
+					imageRect.width,
+					imageRect.height,
+				);
 			} else {
 				context.drawImage(image, 0, 0, 1, 1);
 			}

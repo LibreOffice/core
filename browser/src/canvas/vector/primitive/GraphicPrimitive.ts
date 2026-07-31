@@ -26,23 +26,22 @@ namespace cool {
 	/// HTMLImageElement once the cache entry arrives.
 	///
 	/// The raster case also carries optional rendering modifiers:
-	/// crop distances per edge in the destination's units, where a
-	/// positive value cuts that image edge away and a negative one
-	/// adds an empty margin, alpha from 0 to 255 where 255 is
-	/// opaque, rotation in tenths of a degree, a mirror bitfield
-	/// where bit 0 flips horizontally and bit 1 vertically, and a
-	/// drawMode recolour.
+	/// an imageRect present when the graphic is cropped, naming the
+	/// rectangle the whole image maps onto in the frame's unit
+	/// square, alpha from 0 to 255 where 255 is opaque, rotation in
+	/// tenths of a degree, a mirror bitfield where bit 0 flips
+	/// horizontally and bit 1 vertically, and a drawMode recolour.
 	export interface GraphicPrimitive extends Primitive, GraphicResource {
 		type: typeof GraphicPrimitive.type;
 		vector?: boolean;
 		matrix?: number[];
 		width?: number;
 		height?: number;
-		crop?: {
-			left?: number;
-			top?: number;
-			right?: number;
-			bottom?: number;
+		imageRect?: {
+			x: number;
+			y: number;
+			width: number;
+			height: number;
 		};
 		alpha?: number;
 		rotation?: number;

@@ -696,15 +696,17 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphic)
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicCrop)
 {
-    // A raster graphic with crop attributes set. The engine emits a
-    // crop node with the four edge insets converted from 100ths of
-    // mm to twips. The scaled values are positive when the input is
-    // positive.
+    // A cropped raster graphic. The engine emits the rectangle the
+    // whole image maps onto, in fractions of the frame's unit square,
+    // derived from the preferred size alone.
     Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     basegfx::B2DHomMatrix aTransform;
     aTransform.scale(1000.0, 800.0);
 
-    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    Graphic aGraphic{ aBitmap };
+    aGraphic.SetPrefSize(Size(1000, 800));
+    aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+    GraphicObject aGraphicObject{ aGraphic };
     GraphicAttr aAttribute;
     aAttribute.SetCrop(100, 200, 50, 25);
 
@@ -715,11 +717,45 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicCrop)
     auto aJson = writeReference(u"testGraphicCrop", aPrimitives);
 
     assertJsonPath(aJson, "/primitives/0/type", "graphic");
-    assertJsonPathExists(aJson, "/primitives/0/crop");
-    assertJsonPathExists(aJson, "/primitives/0/crop/left");
-    assertJsonPathExists(aJson, "/primitives/0/crop/top");
-    assertJsonPathExists(aJson, "/primitives/0/crop/right");
-    assertJsonPathExists(aJson, "/primitives/0/crop/bottom");
+    assertJsonPathExists(aJson, "/primitives/0/imageRect");
+    assertJsonPathDouble(aJson, "/primitives/0/imageRect/x", -100.0 / 850.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/imageRect/y", -200.0 / 575.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/imageRect/width", 1.0 + 150.0 / 850.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/imageRect/height", 1.0 + 225.0 / 575.0, 1e-9);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicCropRotated)
+{
+    // The same cropped graphic serialised upright and rotated by 45
+    // degrees must produce equal image rectangles.
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    aAttribute.SetCrop(100, 200, 50, 25);
+
+    basegfx::B2DHomMatrix aUpright;
+    aUpright.scale(1000.0, 800.0);
+
+    basegfx::B2DHomMatrix aRotated;
+    aRotated.scale(1000.0, 800.0);
+    aRotated.rotate(M_PI / 4.0);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aUpright, aGraphicObject, aAttribute));
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aRotated, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicCropRotated", aPrimitives);
+
+    for (const char* pField : { "x", "y", "width", "height" })
+    {
+        auto oUpright = aJson.getDouble("/primitives/0/imageRect/" + std::string(pField));
+        auto oRotated = aJson.getDouble("/primitives/1/imageRect/" + std::string(pField));
+        CPPUNIT_ASSERT(oUpright.has_value());
+        CPPUNIT_ASSERT(oRotated.has_value());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(*oUpright, *oRotated, 1e-6);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicRotation)

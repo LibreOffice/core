@@ -579,20 +579,19 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(draw.properties.filter, 'grayscale(1)');
 		});
 
-		it('fills the frame with the surviving part of a cropped graphic', function () {
-			// A positive crop cuts the image's edges away, and what
-			// survives fills the whole frame.
+		it('draws a cropped graphic onto its image rectangle', function () {
+			// The renderer draws the whole image onto the wire
+			// rectangle and clips to the frame's unit square.
 			const primitive = loadVectorRenderingReference('testGraphicCrop')
 				.primitives[0];
 			nodeassert.strictEqual(primitive.type, 'graphic');
-			nodeassert.ok(primitive.crop, 'crop missing');
-			nodeassert.ok(
-				primitive.crop.left > 0 &&
-					primitive.crop.top > 0 &&
-					primitive.crop.right > 0 &&
-					primitive.crop.bottom > 0,
-				'fixture must crop all four edges',
-			);
+			nodeassert.ok(primitive.imageRect, 'imageRect missing');
+			// All four edges cropped: the rectangle overflows the
+			// unit square on every side.
+			nodeassert.ok(primitive.imageRect.x < 0);
+			nodeassert.ok(primitive.imageRect.y < 0);
+			nodeassert.ok(primitive.imageRect.x + primitive.imageRect.width > 1);
+			nodeassert.ok(primitive.imageRect.y + primitive.imageRect.height > 1);
 			nodeassert.strictEqual(typeof primitive.checksum, 'number');
 
 			const cachedImage = new ImageRecorder();
@@ -606,49 +605,24 @@ describe('VectorPrimitiveRenderer', function () {
 
 			const draw = recorder.findCall('drawImage');
 			nodeassert.ok(draw, 'drawImage not called');
-			nodeassert.strictEqual(
-				draw.args.length,
-				9,
-				'expected the 9-argument drawImage form',
-			);
-
-			const m = primitive.matrix;
-			const frameW = Math.hypot(m[0], m[1]);
-			const frameH = Math.hypot(m[2], m[3]);
-			const left = (primitive.crop.left || 0) / frameW;
-			const top = (primitive.crop.top || 0) / frameH;
-			const right = (primitive.crop.right || 0) / frameW;
-			const bottom = (primitive.crop.bottom || 0) / frameH;
-
-			// The uncropped image is 1 + left + right frames wide.
-			const unitW = 1 + left + right;
-			const unitH = 1 + top + bottom;
-			const expectedSx = Math.round((left / unitW) * 100);
-			const expectedSy = Math.round((top / unitH) * 100);
-			const expectedSw = Math.round((1 / unitW) * 100);
-			const expectedSh = Math.round((1 / unitH) * 100);
-
-			nodeassert.strictEqual(draw.args[0], cachedImage);
-			nodeassert.strictEqual(draw.args[1], expectedSx);
-			nodeassert.strictEqual(draw.args[2], expectedSy);
-			nodeassert.strictEqual(draw.args[3], expectedSw);
-			nodeassert.strictEqual(draw.args[4], expectedSh);
-			nodeassert.strictEqual(draw.args[5], 0);
-			nodeassert.strictEqual(draw.args[6], 0);
-			nodeassert.strictEqual(draw.args[7], 1);
-			nodeassert.strictEqual(draw.args[8], 1);
+			nodeassert.deepStrictEqual(draw.args, [
+				cachedImage,
+				primitive.imageRect.x,
+				primitive.imageRect.y,
+				primitive.imageRect.width,
+				primitive.imageRect.height,
+			]);
+			nodeassert.ok(recorder.findCall('clip'), 'clip not called');
 		});
 
-		it('insets a negative-cropped image inside its frame', function () {
-			// Negative left and top crops leave empty margins, so the
-			// image fills only the lower-right quarter of the frame.
-			// The right and bottom crops cut it to two thirds of its
-			// pixel size.
+		it('insets a margined image inside its frame', function () {
+			// An image rectangle inside the unit square leaves the
+			// surrounding frame empty.
 			const primitive = {
 				type: 'graphic',
 				checksum: 7,
 				matrix: [100, 0, 0, 100, 0, 0],
-				crop: { left: -50, top: -50, right: 25, bottom: 25 },
+				imageRect: { x: 0.5, y: 0.5, width: 0.75, height: 0.75 },
 			} as any;
 
 			const cachedImage = new ImageRecorder();
@@ -660,34 +634,8 @@ describe('VectorPrimitiveRenderer', function () {
 
 			const draw = recorder.findCall('drawImage');
 			nodeassert.ok(draw, 'drawImage not called');
-			nodeassert.strictEqual(draw.args[1], 0);
-			nodeassert.strictEqual(draw.args[2], 0);
-			nodeassert.strictEqual(draw.args[3], 67);
-			nodeassert.strictEqual(draw.args[4], 67);
-			nodeassert.strictEqual(draw.args[5], 0.5);
-			nodeassert.strictEqual(draw.args[6], 0.5);
-			nodeassert.strictEqual(draw.args[7], 0.5);
-			nodeassert.strictEqual(draw.args[8], 0.5);
-		});
-
-		it('draws nothing when the crop pushes the image outside the frame', function () {
-			// A negative left crop wider than the frame pushes the
-			// image past its right edge, so nothing is drawn.
-			const primitive = {
-				type: 'graphic',
-				checksum: 7,
-				matrix: [100, 0, 0, 100, 0, 0],
-				crop: { left: -150, top: 0, right: 0, bottom: 0 },
-			} as any;
-
-			const cachedImage = new ImageRecorder();
-			const recorder = new CanvasRecorder();
-			const renderer = new cool.VectorPrimitiveRenderer(
-				() => cachedImage as unknown as HTMLImageElement,
-			);
-			renderer.renderPrimitive(recorder as any, primitive);
-
-			nodeassert.strictEqual(recorder.findCall('drawImage'), undefined);
+			nodeassert.deepStrictEqual(draw.args.slice(1), [0.5, 0.5, 0.75, 0.75]);
+			nodeassert.ok(recorder.findCall('clip'), 'clip not called');
 		});
 
 		it('composes nested colour modifiers inner first', function () {

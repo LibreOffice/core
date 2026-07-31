@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cmath>
 
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <primitive2d/cropprimitive2d.hxx>
@@ -149,8 +150,11 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
     {
         // check for cropping
         // calculate scalings between real image size and logic object size. This
-        // is necessary since the crop values are relative to original bitmap size
-        const basegfx::B2DVector aObjectScale(aTransform * basegfx::B2DVector(1.0, 1.0));
+        // is necessary since the crop values are relative to original bitmap size.
+        // The column lengths are the transform's per-axis scales whatever its rotation.
+        const basegfx::B2DVector aObjectScale(
+            std::hypot(aTransform.get(0, 0), aTransform.get(1, 0)),
+            std::hypot(aTransform.get(0, 1), aTransform.get(1, 1)));
         const basegfx::B2DVector aCropScaleFactor(rGraphicObject.calculateCropScaling(
             aObjectScale.getX(), aObjectScale.getY(), getGraphicAttr().GetLeftCrop(),
             getGraphicAttr().GetTopCrop(), getGraphicAttr().GetRightCrop(),

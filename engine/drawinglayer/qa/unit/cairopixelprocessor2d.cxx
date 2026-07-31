@@ -13,7 +13,10 @@
 #include <algorithm>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
@@ -278,11 +281,72 @@ public:
                                aOutside.GetBlue() < 50);
     }
 
+    // A graphic rotated by exactly 45 degrees lost its crop: the per-axis
+    // object scale came from the transform applied to the vector (1, 1),
+    // whose x component is zero at that angle.
+    void testCropSurvivesRotation()
+    {
+        geometry::ViewInformation2D aView;
+        aView.setUseAntiAliasing(false);
+        std::unique_ptr<processor2d::BaseProcessor2D> pProcessor(
+            processor2d::createPixelProcessor2DFromScratch(aView, 100, 100, /*bUseRGBA=*/true));
+        if (!pProcessor)
+            return;
+
+        // A bitmap with a red left half and a blue right half.
+        Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+        {
+            BitmapScopedWriteAccess aAccess(aBitmap);
+            for (tools::Long nY = 0; nY < 10; ++nY)
+                for (tools::Long nX = 0; nX < 10; ++nX)
+                    aAccess->SetPixel(nY, nX, BitmapColor(nX < 5 ? COL_LIGHTRED : COL_LIGHTBLUE));
+        }
+
+        // A fixed preferred size makes the crop distances independent of
+        // the display's pixel density.
+        Graphic aGraphic(aBitmap);
+        aGraphic.SetPrefSize(Size(1000, 1000));
+        aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        GraphicObject aGraphicObject(aGraphic);
+
+        // Crop the red half away.
+        GraphicAttr aAttribute;
+        aAttribute.SetCrop(500, 0, 0, 0);
+
+        // A 60x60 frame rotated by 45 degrees, centred on the surface.
+        basegfx::B2DHomMatrix aTransform;
+        aTransform.scale(60.0, 60.0);
+        aTransform.rotate(M_PI / 4.0);
+        aTransform.translate(50.0, 50.0 - 30.0 * M_SQRT2);
+
+        primitive2d::Primitive2DContainer aPrimitives{
+            rtl::Reference<primitive2d::GraphicPrimitive2D>(
+                new primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute))
+        };
+
+        pProcessor->process(aPrimitives);
+
+        Bitmap aResult(processor2d::extractBitmapFromBaseProcessor2D(pProcessor));
+        CPPUNIT_ASSERT(!aResult.IsEmpty());
+
+        BitmapScopedReadAccess aAccess(aResult);
+        CPPUNIT_ASSERT(aAccess);
+
+        // The frame point a quarter along its width. With the red half
+        // cropped away the whole frame shows blue.
+        const BitmapColor aQuarter(aAccess->GetColor(Point(39, 39)));
+        CPPUNIT_ASSERT_MESSAGE("rotated crop: quarter-point pixel blue channel high",
+                               aQuarter.GetBlue() > 200);
+        CPPUNIT_ASSERT_MESSAGE("rotated crop: quarter-point pixel red channel low",
+                               aQuarter.GetRed() < 50);
+    }
+
     CPPUNIT_TEST_SUITE(CairoPixelProcessor2DTest);
     CPPUNIT_TEST(testFarDownMaskClipsCorrectly);
     CPPUNIT_TEST(testFarDownShapeFillPaints);
     CPPUNIT_TEST(testFarDownShapeStrokePaints);
     CPPUNIT_TEST(testFarDownShapeHairlinePaints);
+    CPPUNIT_TEST(testCropSurvivesRotation);
     CPPUNIT_TEST_SUITE_END();
 };
 

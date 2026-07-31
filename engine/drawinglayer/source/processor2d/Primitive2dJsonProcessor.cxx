@@ -849,24 +849,24 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const GraphicAttr& rAttributes = rPrimitive.getGraphicAttr();
             if (rAttributes.IsCropped())
             {
-                // The GraphicAttr crop distances are relative to the graphic's preferred size.
-                // Convert them to the object's space, as the primitive's decomposition does,
-                // so they share the matrix's units.
-                const basegfx::B2DVector aObjectScale(rPrimitive.getTransform()
-                                                      * basegfx::B2DVector(1.0, 1.0));
+                // With a unit object scale, calculateCropScaling returns the reciprocal of the
+                // preferred size left after cropping, so each crop distance becomes a fraction
+                // of the frame.
                 const basegfx::B2DVector aCropScale(
                     rPrimitive.getGraphicObject().calculateCropScaling(
-                        aObjectScale.getX(), aObjectScale.getY(), rAttributes.GetLeftCrop(),
-                        rAttributes.GetTopCrop(), rAttributes.GetRightCrop(),
-                        rAttributes.GetBottomCrop()));
+                        1.0, 1.0, rAttributes.GetLeftCrop(), rAttributes.GetTopCrop(),
+                        rAttributes.GetRightCrop(), rAttributes.GetBottomCrop()));
+                const double fLeft(rAttributes.GetLeftCrop() * aCropScale.getX());
+                const double fTop(rAttributes.GetTopCrop() * aCropScale.getY());
+                const double fRight(rAttributes.GetRightCrop() * aCropScale.getX());
+                const double fBottom(rAttributes.GetBottomCrop() * aCropScale.getY());
 
-                auto aCropNode = mrWriter.startNode("crop");
-                mrWriter.put("left", rAttributes.GetLeftCrop() * aCropScale.getX() * mfScaleFactor);
-                mrWriter.put("top", rAttributes.GetTopCrop() * aCropScale.getY() * mfScaleFactor);
-                mrWriter.put("right",
-                             rAttributes.GetRightCrop() * aCropScale.getX() * mfScaleFactor);
-                mrWriter.put("bottom",
-                             rAttributes.GetBottomCrop() * aCropScale.getY() * mfScaleFactor);
+                // The rectangle the whole image maps onto, in the frame's unit square.
+                auto aImageRectNode = mrWriter.startNode("imageRect");
+                mrWriter.put("x", -fLeft);
+                mrWriter.put("y", -fTop);
+                mrWriter.put("width", 1.0 + fLeft + fRight);
+                mrWriter.put("height", 1.0 + fTop + fBottom);
             }
 
             if (rAttributes.IsTransparent())

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
+
 #include <primitive2d/cropprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -69,8 +71,11 @@ namespace drawinglayer::primitive2d
             if(getChildren().empty())
                 return;
 
-            // get original object scale in unit coordinates (no mirroring)
-            const basegfx::B2DVector aObjectScale(basegfx::absolute(getTransformation() * basegfx::B2DVector(1.0, 1.0)));
+            // get original object scale in unit coordinates (no mirroring). The column
+            // lengths are the transformation's per-axis scales whatever its rotation.
+            const basegfx::B2DVector aObjectScale(
+                std::hypot(getTransformation().get(0, 0), getTransformation().get(1, 0)),
+                std::hypot(getTransformation().get(0, 1), getTransformation().get(1, 1)));
 
             // we handle cropping, so when no width or no height, content will be empty,
             // so only do something when we have a width and a height
