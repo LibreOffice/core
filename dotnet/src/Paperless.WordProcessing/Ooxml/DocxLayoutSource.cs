@@ -287,6 +287,7 @@ public sealed partial class DocxLayoutSource
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, properties, text, face),
             Notes = NotesOf(walker.Notes),
+            Frames = FramesOf(walker.Frames),
             Source = element,
         };
     }
@@ -460,6 +461,62 @@ public sealed partial class DocxLayoutSource
     /// <param name="Citation">The number it is cited by, counted rather than read, and already formatted.</param>
     private readonly record struct NoteAnchor(int Offset, string? Id, bool IsEndnote, string Citation);
 
+    /// <summary>One floating frame in a paragraph, with the character offset it is anchored at.</summary>
+    private readonly record struct FrameAnchor(int Offset, XElement Element);
+
+    /// <summary>
+    /// How deeply a frame's own text may hold further frames before the innermost is dropped.
+    /// </summary>
+    /// <remarks>
+    /// A guard on untrusted input: a text frame holds paragraphs, a paragraph holds drawings, and a file
+    /// claiming a hundred levels would read the same walk a hundred deep. Real documents nest one.
+    /// </remarks>
+    private const int MaxFrameNesting = 8;
+
+    /// <summary>How many frames enclose the paragraph currently being read.</summary>
+    private int _frameDepth;
+
+    /// <summary>
+    /// Reads the frames a paragraph anchors, with their own text laid out inside them.
+    /// </summary>
+    /// <remarks>
+    /// A frame's content goes through <see cref="ReadFlow"/> — the same walk a header takes — so a frame
+    /// containing a table or a list needs nothing of its own. The reader therefore re-enters itself, which
+    /// is why the depth is counted.
+    /// </remarks>
+    private List<PageFrame> FramesOf(List<FrameAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageFrame> frames = [];
+
+        foreach (FrameAnchor anchor in anchors)
+        {
+            Func<XElement, IReadOnlyList<PageBlock>>? content =
+                _frameDepth < MaxFrameNesting ? Content : null;
+
+            if (DocxFrames.Read(anchor.Element, content, anchor.Offset) is { } frame)
+            {
+                frames.Add(frame);
+            }
+        }
+
+        return frames;
+
+        IReadOnlyList<PageBlock> Content(XElement box)
+        {
+            _frameDepth++;
+            try
+            {
+                return ReadFlow(box);
+            }
+            finally
+            {
+                _frameDepth--;
+            }
+        }
+    }
+
     /// <summary>
     /// Walks a paragraph, building the text as laid out and the ranges its runs divide it into.
     /// </summary>
@@ -514,6 +571,7 @@ public sealed partial class DocxLayoutSource
         private readonly StringBuilder _builder = new();
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
+        private readonly List<FrameAnchor> _frames = [];
         private int _footnote;
         private int _endnote;
         private XElement? _runProperties;
@@ -533,6 +591,9 @@ public sealed partial class DocxLayoutSource
 
         /// <summary>The notes referenced in the paragraph, with the offsets their citations occupy.</summary>
         internal List<NoteAnchor> Notes => _notes;
+
+        /// <summary>The floating frames anchored in the paragraph, with the offsets they sit at.</summary>
+        internal List<FrameAnchor> Frames => _frames;
 
         /// <summary>Walks a <c>w:p</c>.</summary>
         /// <param name="paragraph">The paragraph element.</param>
@@ -627,7 +688,16 @@ public sealed partial class DocxLayoutSource
 
                         break;
 
-                    case "commentReference" or "drawing" or "pict" or "object":
+                    // A floating frame occupies a position in the paragraph and is not part of it: its
+                    // own text belongs to a rectangle of its own. Recorded with the offset it sits at,
+                    // which is what an anchor is measured in; the anchor character stands for it, as it
+                    // does for every other thing that takes a position and is not text.
+                    case "drawing":
+                        _frames.Add(new FrameAnchor(_builder.Length, child));
+                        Emit(AnchorCharacter.ToString());
+                        break;
+
+                    case "commentReference" or "pict" or "object":
                         Emit(AnchorCharacter.ToString());
                         break;
 

@@ -71,10 +71,21 @@ public sealed class FrameComparisonTests : IDisposable
         }
     }
 
+    /// <param name="fileName">The corpus document.</param>
+    /// <param name="tolerance">
+    /// How far a pen may be from LibreOffice's, in points. A tenth for the two ODF files, which agree
+    /// exactly; three twips for the DOCX, and the extra two are a measured and unexplained difference
+    /// rather than slack. LibreOffice resumes text 3404 twips along where the frame's own geometry ends
+    /// at 3401 — one twip of that is the inclusive rectangle every format shows, and the other two come
+    /// from the wrap margin its OOXML import derives from <c>wp:effectExtent</c>. Adding that extent
+    /// horizontally is right and adding it vertically is wrong, which is why neither is read; the
+    /// measurement is written down beside the reader.
+    /// </param>
     [Theory]
-    [InlineData("frame-wrap.fodt")]
-    [InlineData("frame-wrap.odt")]
-    public void EveryLineStartsWhereLibreOfficeStartsIt(string fileName)
+    [InlineData("frame-wrap.fodt", 0.1)]
+    [InlineData("frame-wrap.odt", 0.1)]
+    [InlineData("frame-wrap.docx", 0.15)]
+    public void EveryLineStartsWhereLibreOfficeStartsIt(string fileName, double tolerance)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
 
@@ -95,9 +106,11 @@ public sealed class FrameComparisonTests : IDisposable
             Close(
                 actual[i].Left,
                 expected[i].Left - PdfPenOffsetPoints,
-                $"{fileName}: line {i + 1} starts at");
+                $"{fileName}: line {i + 1} starts at",
+                tolerance);
 
-            Close(actual[i].Baseline, expected[i].Baseline, $"{fileName}: line {i + 1} baseline");
+            Close(
+                actual[i].Baseline, expected[i].Baseline, $"{fileName}: line {i + 1} baseline", tolerance);
         }
     }
 
@@ -114,6 +127,7 @@ public sealed class FrameComparisonTests : IDisposable
     [Theory]
     [InlineData("frame-wrap.fodt")]
     [InlineData("frame-wrap.odt")]
+    [InlineData("frame-wrap.docx")]
     public void TheWrappedLinesAreIndentedByTheFramesWidth(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -149,6 +163,7 @@ public sealed class FrameComparisonTests : IDisposable
     [Theory]
     [InlineData("frame-wrap.fodt")]
     [InlineData("frame-wrap.odt")]
+    [InlineData("frame-wrap.docx")]
     public void TheFramesOwnTextIsDrawnInsideIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -272,9 +287,9 @@ public sealed class FrameComparisonTests : IDisposable
         return new WordProcessingReader().Read(source);
     }
 
-    private static void Close(double actual, double expected, string what)
+    private static void Close(double actual, double expected, string what, double? tolerance = null)
         => actual.ShouldBe(
             expected,
-            TolerancePoints,
+            tolerance ?? TolerancePoints,
             $"{what}: {actual:0.00} pt against LibreOffice's {expected:0.00} pt");
 }
