@@ -26,6 +26,8 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
+#include <tools/ConfigMigrationAssistant.hpp>
+
 #include <Poco/Crypto/RSAKey.h>
 #include <Poco/Exception.h>
 #include <Poco/File.h>
@@ -130,8 +132,6 @@ std::string Config::SupportKeyString;
 bool Config::SupportKeyStringProvided = false;
 std::uint64_t Config::AnonymizationSalt = 0;
 bool Config::AnonymizationSaltProvided = false;
-
-int MigrateConfig(const std::string&, const std::string&, bool);
 
 void Config::displayHelp()
 {

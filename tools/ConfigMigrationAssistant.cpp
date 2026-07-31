@@ -26,6 +26,8 @@
 #include <Poco/Util/AbstractConfiguration.h>
 #include <Poco/AutoPtr.h>
 
+#include <tools/ConfigMigrationAssistant.hpp>
+
 using Poco::Util::XMLConfiguration;
 
 const std::string NET_POST_ALLOW_HOST = ".net.post_allow.host";
