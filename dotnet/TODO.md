@@ -1,22 +1,21 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 all but the OOXML and legacy spreadsheet and presentation
-formats; Phase 2 complete for word processing; Phase 3's two output backends written and
-verified.** Every word-processing format reads and *lays
-out* — `odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and
-footers, tables, sections and columns all verified against LibreOffice's own rendering to a
-tenth of a point, and everything a table draws — cell borders and shading — now compared
-stroke for stroke and fill for fill in all four. The ODF spreadsheet and presentation formats
-extract. `xlsx`, `pptx`, the legacy `xls` and `ppt`, and CSV do not read at all yet.
-**A word-processing document now renders to a file**: a PDF with real searchable text and
-subsetted embedded fonts, checked against LibreOffice's own PDF operator for operator, and PNG
-or JPEG at a chosen DPI.
-**And a deck now lays out**: PPTX and ODP produce a page per slide with shapes placed, filled,
-outlined and their text set, compared against LibreOffice's own PDF for the same deck in both
-formats — see Phase 3 and `src/Paperless.Presentations/TODO.md` for what draws and what does not.
-**Both backends now paint everything the display list can express**: gradients as shadings and
-shaders, tiled bitmap fills, and pictures decoded through Skia. What is left there is the
-*reading* — nothing in any format's reader emits a gradient or a picture yet.
+Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
+scope for extraction reads except XLSB — `odt ott fodt docx docm dotx dotm doc dot rtf`,
+`ods ots fods xlsx xlsm xltx xltm xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt pot
+pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
+sections, columns, notes and floating frames; spreadsheets through their print setup, which *is*
+their page geometry; presentations a page per slide.
+
+**All three render to PDF**, with real searchable text and subsetted embedded fonts, plus PNG and
+JPEG at a chosen DPI. Measured end to end against LibreOffice's own PDF of the same file: a
+document and a workbook come out with the same page count *and* the same word count from
+`pdftotext` — 41/41 and 2281/2281 — which is the check that catches a PDF whose glyphs land
+correctly but whose text cannot be extracted. Both backends paint everything the display list can
+express: gradients as shadings and shaders, tiled bitmap fills, and pictures decoded through Skia.
+
+There are also two structured-text outputs, XHTML and Markdown, the first compared against
+LibreOffice's own XHTML export node for node.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
