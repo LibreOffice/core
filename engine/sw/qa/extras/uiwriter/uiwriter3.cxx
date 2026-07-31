@@ -197,6 +197,44 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testHTMLInsertClassFromStyleSheet)
+{
+    createSwDoc();
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor{ xTextDocument->getText()->createTextCursor() };
+    xCursor->gotoStart(false);
+
+    // A spreadsheet on the clipboard keeps the cell formatting in a style sheet and lets each cell
+    // refer to it by class name, so this is the shape a pasted table arrives in.
+    sal_Int8 const html[]
+        = "<html><head><style>.xl65 { font-weight:700 }</style></head>"
+          "<body><table><tr><td class=xl65>bold</td></tr></table></body></html>";
+    uno::Reference<io::XInputStream> xStream{ new comphelper::MemoryInputStream{ html,
+                                                                                sizeof(html) } };
+
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "InputStream", cpo::uno::Any(xStream) },
+          { "Hidden", cpo::uno::Any(true) },
+          { "FilterName", cpo::uno::Any(u"HTML (StarWriter)"_ustr) } });
+
+    uno::Reference<document::XDocumentInsertable> xDocInsert{ xCursor, uno::UNO_QUERY };
+    xDocInsert->insertDocumentFromURL(u"private:stream"_ustr, aPropertyValues);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+
+    // The weight reaches the cell text through the class in the style sheet.
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::BOLD,
+        getProperty<float>(getRun(getParagraphOfText(1, xCell), 1, u"bold"_ustr),
+                           u"CharWeight"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
 {
     createSwDoc("tdf151974.odt");

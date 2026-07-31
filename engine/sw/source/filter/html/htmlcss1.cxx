@@ -685,17 +685,16 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                                 SfxItemSet& rItemSet,
                                 SvxCSS1PropertyInfo& rPropInfo )
 {
-    if( !m_bIsNewDoc )
-        return;
-
     CSS1SelectorType eSelType = pSelector->GetType();
     const CSS1Selector *pNext = pSelector->GetNext();
 
     if( CSS1_SELTYPE_ID==eSelType && !pNext )
     {
         InsertId( pSelector->GetString(), rItemSet, rPropInfo );
+        return;
     }
-    else if( CSS1_SELTYPE_CLASS==eSelType && !pNext )
+
+    if( CSS1_SELTYPE_CLASS==eSelType && !pNext )
     {
         OUString aClass( pSelector->GetString() );
         Css1ScriptFlags nScript = GetScriptFromClass( aClass );
@@ -709,8 +708,15 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         {
             InsertClass( aClass, rItemSet, rPropInfo );
         }
+        return;
     }
-    else if( CSS1_SELTYPE_PAGE==eSelType )
+
+    // An id or class rule only fills a map inside this parser. Everything below changes the
+    // document's own styles, so it runs only when this HTML is the whole document.
+    if( !m_bIsNewDoc )
+        return;
+
+    if( CSS1_SELTYPE_PAGE==eSelType )
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO == pNext->GetType() &&
