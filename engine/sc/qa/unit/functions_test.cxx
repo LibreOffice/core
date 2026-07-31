@@ -11,11 +11,16 @@
 #include "functions_test.hxx"
 #include <document.hxx>
 
+#include <comphelper/kit.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/math.hxx>
 
 FunctionsTest::FunctionsTest():
     ScFilterTestBase()
 {
+    // The test documents expect en-US, and no view is here to set the Kit's language
+    comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_ENGLISH_US));
+    comphelper::COKit::setLocale(LanguageTag(LANGUAGE_ENGLISH_US));
 }
 
 bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
