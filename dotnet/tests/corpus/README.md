@@ -102,14 +102,20 @@ overwrite the other.
 The two stems differ for the same reason `deck-features` does: `soffice --convert-to` would have
 had them overwrite each other's output.
 
+### Hand-written PPTX files
+
+| File | Exercises |
+|---|---|
+| `deck-text-style.pptx` | Where the shape's own text style sits in a slide's character chain. Seven text boxes on one slide, each stating the colour at a different rung: only the shape's `p:style/a:fontRef`; the body's `a:lstStyle` *and* the fontRef; the run's own `a:rPr` and the fontRef; a fontRef colour carrying a `lumMod`; nothing at all, so the master's `p:otherStyle`; and a placeholder whose *layout* placeholder carries the fontRef. A theme with a real `a:fontScheme`, so `idx="minor"` resolves to a face. LibreOffice cannot write this: its PPTX export states every property on every run, so no round-tripped deck ever consults the chain |
 
 ### Hand-written DOCX files
 
-Four documents that LibreOffice cannot produce, because what they exercise is something its own
+Five documents that LibreOffice cannot produce, because what they exercise is something its own
 export normalises away. Each is written by a script rather than converted, and each is minimal.
 
 | File | Exercises |
 |---|---|
+| `theme-table.docx` | Themed colours on the parts of a table: six `w:shd` cells whose fill is stated only as `w:themeFill` with a tint or a shade, and five rows whose bottom border is stated only as `w:themeColor` — one of them on the table's `w:tblBorders` rather than the cell's. Beside them, nine inline shapes stating the equivalent DrawingML chain, so the arithmetic stays measurable against LibreOffice even though the elements carrying it are not: LibreOffice resolves neither, leaving the themed shades unpainted and the themed borders black. Its DOCX export round-trips `w:themeFill` through a grab bag but **flattens a themed border to a literal `000000`**, so a converted file loses half of this |
 | `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |

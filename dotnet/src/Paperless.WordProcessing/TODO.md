@@ -349,11 +349,44 @@ Order chosen so each is verifiable before the next gets harder.
       `w:clrSchemeMapping` in `settings.xml` is read as the colour map, since it is `a:clrMap` under
       different attribute names. Every file measured carries the identity, so it moves nothing yet; the
       swapped case is pinned by a unit test instead.
-- [ ] Themed colours on the elements *beside* `w:color`: `w:shd`'s `w:themeFill` and `w:themeColor`,
-      `w:tblBorders`/`w:tcBorders`, and `w:u`'s. `WordThemeColour.Read` already takes the four
-      attribute names as parameters for exactly this, so each is a call site rather than new
-      machinery — what is missing is that `Shading` and `Borders` in `DocxLayoutSource.Tables` are
-      static and have no way to reach the theme.
+- [x] **Themed colours on the table**: `w:shd`'s `w:themeFill`, and `w:tblBorders`/`w:tcBorders`'
+      `w:themeColor`. The recorded blocker was structural rather than a missing parse — `Shading`
+      and `Borders` in `DocxLayoutSource.Tables` were `static` and so could not reach the theme the
+      source already held — and making them instance methods was the whole of the fix.
+      **`w:shd` carries two themed colours and they are not the pair a reader expects.**
+      `w:themeFill` is the *background*, the colour a cell appears in; `w:themeColor` on the same
+      element is the *pattern's foreground*, which shows only through a `w:val` naming a pattern. It
+      is the only element in WordprocessingML with two, and it is why `WordThemeColour.Read` takes
+      the four attribute names as parameters. Resolving the fill from `w:themeColor` compiles,
+      resolves, and paints a believable colour out of the wrong slot.
+      **LibreOffice resolves neither, so the measurement is indirect.** Measured on the new
+      hand-written `theme-table.docx`: of six shaded cells it fills the *one* with a cached
+      `w:fill` and leaves the other five unpainted, and of five bordered rows it strokes the one
+      with a cached `w:color` in that colour and the other four in **black**. `CellColorHandler`
+      takes the colour straight from `w:fill` (`dmapper/CellColorHandler.cxx`:113) and keeps
+      `w:themeFill` only as a grab-bag entry for round-tripping, exactly as `DomainMapper` does with
+      `w:color`. So every themed cell and border in the document is paired with an inline shape
+      stating the equivalent DrawingML chain — a `w:themeFillShade="BF"` is a `lumMod` of 74902 —
+      which LibreOffice *does* resolve, through `oox/source/drawingml/color.cxx`. All eleven agree
+      exactly with the reference: accent1 darkened 25% #376092, lightened 40% #95B3D7, accent3
+      lightened 80% #EBF1DE, background2 darkened 50% #948A54, accent2 #C0504D and darkened 25%
+      #953735, accent4 lightened 60% #CCC1DA, accent5 #4BACC6. Word's own picker labels the first of
+      those 365F91; LibreOffice and Paperless both give 376092, which is the one-unit-per-channel
+      rounding already measured across the 271 combinations in LibreOffice's test data.
+      **The trap that cost the time: a themed border cannot survive a conversion.** LibreOffice's
+      DOCX *export* round-trips `w:shd`'s `w:themeFill` verbatim through the grab bag — down to
+      lower-casing `BF` to `bf` — but writes a themed border out as a literal `w:color="000000"`,
+      losing the reference entirely. A corpus document built by converting one is therefore half a
+      test that looks like a whole one, which is why this file is hand-written.
+      A themed `w:tblBorders` reaches a cell only through the *last* row, and that is the reference's
+      rule rather than this reader's: `w:tblBorders`' `top`, `bottom`, `start` and `end` are the
+      table's outer edges and the interior is `w:insideH`/`w:insideV`, which is still a per-position
+      rule this reader does not have.
+- [ ] Themed colours on `w:u`. The reader is one more call to the same `WordThemeColour.Read`; what
+      is missing is anywhere for the answer to go. `WordCharacterFormat` reports `IsUnderlined` as a
+      flag, `PageRun` carries no decoration at all, and `PageDrawing` strokes no underline — so an
+      underline colour today would be a value nothing could ever be measured against, which is the
+      one kind of reader this project will not add. Three lines the day the renderer draws one.
 
 ### DOC (WW8) — extraction done
 - [x] FIB; the text streams; `0Table` vs `1Table` chosen by `fWhichTblStm`. The FIB's

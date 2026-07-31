@@ -365,22 +365,31 @@ public sealed partial class DocxLayoutSource
     /// The colour behind a cell's text, or null when it has none.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>w:shd</c>'s <c>w:fill</c>, which is the colour, rather than its <c>w:color</c>, which is the pattern's
     /// foreground and only shows through a <c>w:val</c> that is not <c>clear</c> or <c>nil</c>. Word's
     /// <c>auto</c> means "let whatever is behind show", which is not a colour and so is null. The patterns
     /// themselves — <c>pct25</c> and its family — are not modelled: their fill colour is drawn solid, which is
     /// the right colour at the wrong density and much closer than nothing.
+    /// </para>
+    /// <para>
+    /// The fill is themed through <c>w:themeFill</c> rather than through <c>w:themeColor</c>, which on this
+    /// one element means the <em>pattern's foreground</em> instead — the only place in WordprocessingML where
+    /// two themed colours sit on one element, and the reason <see cref="WordThemeColour"/>'s six-argument
+    /// <c>Read</c> takes the four attribute names as parameters. Reading
+    /// the fill from <c>w:themeColor</c> gives a plausible colour from the wrong slot on every shaded cell of
+    /// any table whose shading also states a pattern.
+    /// </para>
     /// </remarks>
-    private static Colour? Shading(XElement? properties)
+    private Colour? Shading(XElement? properties)
     {
         XElement? shade = Word.Child(properties, "shd");
         if (shade is null) return null;
 
         if (Word.Attribute(shade, "val") is "nil") return null;
 
-        string? fill = Word.Attribute(shade, "fill");
-
-        return fill is null or "" or "auto" ? null : Hex(fill);
+        return WordThemeColour.Read(
+            shade, _theme, "fill", "themeFill", "themeFillTint", "themeFillShade");
     }
 
     /// <summary>
@@ -392,7 +401,7 @@ public sealed partial class DocxLayoutSource
     /// The table's <c>w:insideH</c> and <c>w:insideV</c> are not read: they describe the *interior* lines, which
     /// is a per-position rule rather than a per-cell one and needs the cell's place in the grid.
     /// </remarks>
-    private static CellBorders Borders(XElement? cellProperties, XElement? tableProperties)
+    private CellBorders Borders(XElement? cellProperties, XElement? tableProperties)
     {
         XElement? cell = Word.Child(cellProperties, "tcBorders");
         XElement? table = Word.Child(tableProperties, "tblBorders");
@@ -417,8 +426,14 @@ public sealed partial class DocxLayoutSource
     /// half-points — reading it as either gives a border eight or four times too thick. <c>w:val</c> of
     /// <c>none</c> or <c>nil</c> means there is no border and has to beat the table's, the same way ODF's
     /// <c>none</c> beats its shorthand.
+    /// <para>
+    /// The colour is themed the ordinary way — <c>w:color</c> caching what <c>w:themeColor</c> with
+    /// <c>w:themeTint</c>/<c>w:themeShade</c> resolves to — so it goes through the same reader a
+    /// <c>w:color</c> does. Black remains the fallback, because a border whose colour resolves to nothing is
+    /// still a border.
+    /// </para>
     /// </remarks>
-    private static TableBorder Border(
+    private TableBorder Border(
         XElement? cell, XElement? table, string side, string? legacySide = null)
     {
         XElement? stated =
@@ -439,22 +454,14 @@ public sealed partial class DocxLayoutSource
                 : HairlineBorder;
 
         Colour colour =
-            Word.Attribute(stated, "color") is { } text && text != "auto" && Hex(text) is { } stated_colour
-                ? stated_colour
-                : Colour.Black;
+            WordThemeColour.Read(stated, _theme, "color", "themeColor", "themeTint", "themeShade")
+            ?? Colour.Black;
 
         return new TableBorder(width, colour);
     }
 
     /// <summary>The width a border with no usable <c>w:sz</c> is drawn at: half a point.</summary>
     private static readonly Length HairlineBorder = Length.FromPoints(0.5);
-
-    /// <summary>A six-digit RGB colour, or null when the value is not one.</summary>
-    private static Colour? Hex(string value)
-        => value.Length == 6
-           && uint.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb)
-            ? Colour.FromRgb(rgb)
-            : null;
 
     /// <summary>What a cell's <c>w:vMerge</c> says about the vertical merge it is part of.</summary>
     /// <remarks>

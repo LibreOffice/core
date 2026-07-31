@@ -73,11 +73,38 @@ can call it — DOCX does today, through `WordThemeColour`; XLSX's `theme=` inde
       a caller: nothing reads `a:lnRef`/`a:fillRef`/`a:effectRef` yet, and until something does
       there is no colour to pass in.
 - [ ] Format scheme: `fillStyleLst`, `lnStyleLst`, `effectStyleLst`, `bgFillStyleLst`
-- [ ] The font scheme. `DrawingTheme` holds the colour scheme alone, deliberately — a reader
-      asking what `accent1` is should not have to parse three fill styles to find out — but
-      `+mj-lt` and Word's `majorHAnsi` both need it, and `writerfilter`'s `ThemeHandler.cxx` shows
-      the second mapping is not the first: `majorHAnsi` and `majorAscii` both mean the Latin face,
-      and a supplemental typeface for the run's script wins over it.
+- [x] The font scheme, in `DrawingFontScheme`, hung off `DrawingTheme.Fonts` as a non-positional
+      member so that every caller constructing a theme from a colour scheme alone keeps compiling.
+      Six typefaces, major and minor across Latin, East Asian and complex script — and it exists for
+      the *indirection* rather than for the names. `<a:latin typeface="+mn-lt"/>` is a reference,
+      not a family, and a reader taking it literally reports a font called `+mn-lt`, which resolves
+      to nothing: every run of a PowerPoint-authored deck then silently gets a substitute face and a
+      different set of advance widths. `Theme::resolveFont` (`oox/source/drawingml/theme.cxx`:71)
+      recognises exactly the six-character `+mj-lt` shape and nothing else.
+      The smaller trap beside it: every theme Word ships writes `<a:ea typeface=""/>` rather than
+      omitting the element, so testing for the attribute's presence yields two typefaces named ""
+      and hands them to font resolution.
+      What is still open is Word's own spelling of the same idea — `majorHAnsi` and `majorAscii`
+      both mean the Latin face, and a supplemental typeface for the run's script beats it
+      (`writerfilter/dmapper/ThemeHandler.cxx`). That is a `w:rFonts` reader rather than a scheme
+      one, and it needs the per-script supplemental lists this deliberately does not hold.
+- [x] The character properties a run resolves to that the content tree does not carry — colour,
+      size and the three typefaces — in `DrawingCharacterStyle`. Kept apart from the emphasis flags
+      `DrawingTextBody` resolves, because these are the three that need the *theme* to answer and
+      because they are what a renderer wants rather than what an index does.
+      `Resolve` is the whole chain in one place, strongest first: the run's `a:rPr`, the paragraph's
+      `a:defRPr`, the body's `a:lstStyle` for the level, the **shape's own text style**, then each
+      inherited source. That middle rung is the one with no element inside the text body — it comes
+      from `p:style/a:fontRef` — and both extremes give the right answer on every shape that states
+      the colour once, so only a document stating it twice can tell them apart. See
+      `Paperless.Presentations/TODO.md` for the deck that does, and what it measured.
+      `sz` is hundredths of a point, not `w:sz`'s half-points, and the two vocabularies share a
+      package — a DOCX shape holds DrawingML text inside WordprocessingML — so applying one unit to
+      the other is a factor of fifty away.
+      Only `a:solidFill` is read as a colour. A gradient text fill is a real thing DrawingML can
+      express and not one a single colour stands for, so it reads as unstated and falls through
+      rather than being flattened to its first stop, which would be a colour the file never asked
+      for.
 
 ## DrawingML shapes
 
