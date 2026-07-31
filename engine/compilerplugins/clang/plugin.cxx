@@ -101,6 +101,7 @@ bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
     }
     switch (stmt1->getStmtClass()) {
     case Stmt::CXXConstructExprClass:
+    case Stmt::CXXTemporaryObjectExprClass:
         if (cast<CXXConstructExpr>(stmt1)->getConstructor()->getCanonicalDecl()
             != cast<CXXConstructExpr>(stmt2)->getConstructor()->getCanonicalDecl())
         {
@@ -136,6 +137,7 @@ bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
             }
             break;
         }
+    case Stmt::CallExprClass:
     case Stmt::CXXMemberCallExprClass:
     case Stmt::CXXOperatorCallExprClass:
         if (cast<Expr>(stmt1)->getType().getCanonicalType()
@@ -154,6 +156,11 @@ bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
     case Stmt::StringLiteralClass:
         return cast<clang::StringLiteral>(stmt1)->getBytes()
             == cast<clang::StringLiteral>(stmt2)->getBytes();
+    case Stmt::SourceLocExprClass:
+        // Two source_location::current() (or __builtin_LINE etc.) expressions describe the same
+        // default even though each captures its own location, so compare only their kind:
+        return cast<SourceLocExpr>(stmt1)->getIdentKind()
+            == cast<SourceLocExpr>(stmt2)->getIdentKind();
     default:
         // Conservatively assume non-identical for expressions that don't happen for us in practice
         // when compiling the LO code base (and for which the above set of supported classes would
