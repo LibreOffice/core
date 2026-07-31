@@ -82,6 +82,22 @@ public class PptPersistDirectoryTests
     }
 
     [Fact]
+    public void AnIdBeyondWhatTheEditSaysItWroteIsIgnored()
+    {
+        StreamBuilder builder = new();
+
+        // The start id and the count share one word — twenty bits and twelve — so a block
+        // written with the split wrong yields a run of ids far beyond anything the file has.
+        int block = builder.PersistBlock(first: 40, [8, 16]);
+        int edit = builder.UserEdit(previousEdit: 0, persistDirectory: block, documentReference: 1);
+
+        PptPersistDirectory directory = Read(builder, (uint)edit);
+
+        directory.Resolve(40).ShouldBeNull();
+        directory.Count.ShouldBe(0);
+    }
+
+    [Fact]
     public void AStreamWithNoEditAtomAtAllIsReportedRatherThanThrowing()
     {
         StreamBuilder builder = new();

@@ -100,6 +100,15 @@ public sealed class EscherPropertyTable
     public bool Flag(ushort id, bool fallback = false)
         => _entries.TryGetValue(id, out Entry entry) ? entry.Value != 0 : fallback;
 
+    /// <summary>
+    /// Whether the property's value is an index into the blip store rather than a plain number.
+    /// </summary>
+    /// <remarks>
+    /// The distinction is a bit on the entry rather than a property of the identifier, because
+    /// the same property can hold either depending on how the writer stored the picture.
+    /// </remarks>
+    public bool IsBlip(ushort id) => _entries.TryGetValue(id, out Entry entry) && entry.IsBlip;
+
     /// <summary>A complex property's raw bytes, empty when it is absent or not complex.</summary>
     public ReadOnlySpan<byte> Data(ushort id)
         => _entries.TryGetValue(id, out Entry entry) && entry.Data is { } data

@@ -1,6 +1,8 @@
+using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Presentations.MsBinary;
 using Paperless.TestKit;
 using Shouldly;
 
@@ -140,6 +142,19 @@ public class PptReaderTests
     }
 
     [Fact]
+    public void ACompoundFileFromAnotherApplicationIsRejectedByName()
+    {
+        // A mislabelled OLE2 file reaches this reader whenever the caller names the format
+        // itself rather than letting detection decide, so the missing stream has to be said
+        // plainly instead of surfacing as a record walk over a Word document's bytes.
+        MalformedDocumentException wrongApplication = Should.Throw<MalformedDocumentException>(
+            () => PptReader.Read(
+                DocumentSource.FromFile(Corpus.Require("prose-doc.doc")), DocumentFormat.Ppt));
+
+        wrongApplication.Message.ShouldContain("PowerPoint Document");
+    }
+
+    [Fact]
     public void ADeckIsReadWithoutReportingAnythingWrongWithIt()
     {
         using IDocument document = Open("ppt-features.ppt");
@@ -160,6 +175,12 @@ public class PptReaderTests
 
         // The binary file is the ODF one converted by LibreOffice, so any difference is one of
         // the two readers disagreeing about the same deck rather than a difference of content.
+        //
+        // Two things are deliberately left out of the comparison because the formats genuinely
+        // differ. A slide has no name in the binary format — ODF's draw:name has no counterpart,
+        // so reporting one would be inventing it. And emphasis is not compared, because a PPT
+        // title states only its colour and takes its boldness from the master's TxMasterStyleAtom,
+        // which is not resolved yet; the TODO tracks it.
         Normalise(binary).ShouldBe(Normalise(odf));
     }
 

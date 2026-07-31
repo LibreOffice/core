@@ -69,7 +69,7 @@ public sealed class EscherDrawingReader
                     break;
 
                 case EscherRecordTypes.ShapeContainer:
-                    shapes.Add(ReadShape(child, depth: 0));
+                    shapes.Add(ReadShape(child));
                     break;
 
                 default:
@@ -99,7 +99,7 @@ public sealed class EscherDrawingReader
             }
 
             first = false;
-            if (child.Type == EscherRecordTypes.ShapeContainer) shapes.Add(ReadShape(child, depth));
+            if (child.Type == EscherRecordTypes.ShapeContainer) shapes.Add(ReadShape(child));
             else if (child.Type == EscherRecordTypes.ShapeGroupContainer) shapes.Add(ReadGroup(child, depth));
         }
 
@@ -137,12 +137,12 @@ public sealed class EscherDrawingReader
             }
 
             first = false;
-            if (child.Type == EscherRecordTypes.ShapeContainer) children.Add(ReadShape(child, depth + 1));
+            if (child.Type == EscherRecordTypes.ShapeContainer) children.Add(ReadShape(child));
             else if (child.Type == EscherRecordTypes.ShapeGroupContainer) children.Add(ReadGroup(child, depth + 1));
         }
 
         EscherShape shape = own is { } header
-            ? ReadShape(header, depth)
+            ? ReadShape(header)
             : new EscherShape { Flags = EscherShapeAttributes.Group };
 
         return Rebuild(shape, children);
@@ -168,10 +168,8 @@ public sealed class EscherDrawingReader
     };
 
     /// <summary>Reads one <c>SpContainer</c>.</summary>
-    private EscherShape ReadShape(DffRecordHeader container, int depth)
+    private EscherShape ReadShape(DffRecordHeader container)
     {
-        _ = depth;
-
         uint shapeId = 0;
         ushort shapeType = 0;
         EscherShapeAttributes flags = EscherShapeAttributes.None;

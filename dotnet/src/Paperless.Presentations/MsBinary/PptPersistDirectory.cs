@@ -133,6 +133,10 @@ public sealed class PptPersistDirectory
 
         ReadOnlySpan<byte> content = stream.Content(header);
         int position = 0;
+        // One past the highest id the edit says it wrote. LibreOffice allows the same extra
+        // one (svdfppt.cxx:1344 sizes its array at nMaxPersistWritten + 1 and then compares
+        // with <=), and a writer that counts from one rather than zero needs it.
+        uint limit = edit.MaxPersistWritten + 1;
 
         while (position + 4 <= content.Length)
         {
@@ -145,6 +149,11 @@ public sealed class PptPersistDirectory
             for (uint i = 0; i < count && position + 4 <= content.Length; i++, position += 4)
             {
                 uint offset = DffRecordBuffer.ReadUInt32(content[position..]);
+
+                // The edit atom states the highest persist id it wrote, so an entry beyond that
+                // is a miscounted run rather than an object — the count and the start id share
+                // one word and a wrong split produces exactly this.
+                if (first + i > limit) continue;
 
                 // An offset past the end of the stream is a corrupt entry; recording it would
                 // turn a bad directory into a bad slide rather than a missing one.
