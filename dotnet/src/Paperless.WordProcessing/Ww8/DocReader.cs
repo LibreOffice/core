@@ -243,7 +243,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// Recursive through a cell's own blocks, which is what makes a nested table convert by the same code as
     /// a table in the body: by this point the assembler has already put each in the right list.
     /// </remarks>
-    private static List<PageBlock> BlocksOf(LayoutFonts fonts, List<Ww8LayoutBlock> stated)
+    private static List<PageBlock> BlocksOf(LayoutFonts fonts, IReadOnlyList<Ww8LayoutBlock> stated)
     {
         List<PageBlock> blocks = new(stated.Count);
 
@@ -329,10 +329,39 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
                 Runs = RunsOf(fonts, paragraph, face),
+                Notes = NotesOf(fonts, paragraph.Notes),
             });
         }
 
         return paragraphs;
+    }
+
+    /// <summary>The notes anchored in a paragraph, with their bodies converted.</summary>
+    /// <remarks>
+    /// A note whose body converts to nothing is dropped rather than kept empty, because an empty note would
+    /// still reserve the separator's room at the foot of the page and so change where the body's text breaks.
+    /// </remarks>
+    private static List<PageNote> NotesOf(
+        LayoutFonts fonts, IReadOnlyList<Ww8LayoutNote>? stated)
+    {
+        if (stated is null || stated.Count == 0) return [];
+
+        List<PageNote> notes = new(stated.Count);
+
+        foreach (Ww8LayoutNote note in stated)
+        {
+            List<PageBlock> blocks = BlocksOf(fonts, note.Blocks);
+            if (blocks.Count == 0) continue;
+
+            notes.Add(new PageNote
+            {
+                Blocks = blocks,
+                Offset = note.Offset,
+                IsEndnote = note.IsEndnote,
+            });
+        }
+
+        return notes;
     }
 
     /// <summary>
@@ -365,10 +394,16 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             OpenTypeFace face =
                 fonts.Face(run.FamilyName, run.Weight, run.IsItalic) ?? paragraphFace;
 
+            // The escapement is resolved here rather than where it was read, because its rise is a
+            // fraction of the face's height and the face is only known now.
+            Core.Units.Length size = run.Escapement.SizeOf(run.Size);
+            Core.Units.Length rise = run.Escapement.RiseOf(face, run.Size);
+
             if (face != paragraphFace
-                || run.Size != paragraph.Size
+                || size != paragraph.Size
                 || run.Colour != paragraph.Colour
-                || run.Language != paragraph.Language)
+                || run.Language != paragraph.Language
+                || rise != Core.Units.Length.Zero)
             {
                 varies = true;
             }
@@ -377,10 +412,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 run.Start,
                 run.Length,
                 face,
-                run.Size,
+                size,
                 fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
                 run.Colour ?? paragraph.Colour ?? Colour.Black,
-                new Text.Shaping.ShapingOptions(Language: run.Language)));
+                new Text.Shaping.ShapingOptions(Language: run.Language),
+                rise));
         }
 
         return varies ? runs : [];

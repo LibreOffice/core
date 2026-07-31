@@ -62,12 +62,15 @@ public sealed class FootnoteComparisonTests : IDisposable
     [InlineData("footnotes.docx")]
     [InlineData("footnote-pages.odt")]
     [InlineData("footnote-pages.docx")]
+    [InlineData("footnotes.doc")]
+    [InlineData("footnote-pages.doc")]
     // RTF is deliberately absent, and the reason is in LibreOffice rather than here: its RTF import drops the
     // character and paragraph formatting stated inside a `{\*\footnote …}` group and falls back to the
     // document's defaults. A note the file sets in Carlito at 10 pt with no indent renders in Liberation Serif
     // with a 340-twip hanging indent, which moves every word of every note line. Confirmed on a hand-written
     // three-line RTF as well as on the corpus files, so it is not an artefact of how these were exported.
-    // Paperless reads what the file says; `RtfFootnoteTests` checks it structurally instead.
+    // Paperless reads what the file says; `FootnoteReadingTests` checks it structurally instead. DOC has no
+    // such problem — LibreOffice's WW8 import keeps the note's formatting, so both files are compared here.
     public void EveryNoteSitsAtTheFootOfItsOwnPage(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -143,6 +146,7 @@ public sealed class FootnoteComparisonTests : IDisposable
     [InlineData("footnotes.fodt")]
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]
+    [InlineData("footnotes.doc")]
     public void EveryCitationIsSetAndRaisedAsLibreOfficeSetsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

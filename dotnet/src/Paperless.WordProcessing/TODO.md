@@ -525,17 +525,30 @@ is read and verified, so what remains is the filling of pages rather than the me
       anyway, because its file names `FootnoteCharacters` on the run and LibreOffice's import gives that style
       the shift; an RTF gets one because the note-body `\chftn` inherits the `\super` still in force from the
       anchor's group. So all three are right for three different reasons.
-- [ ] Footnote reading for **DOC**. The placement is format-independent and three readers now show the shape;
-      what WW8 needs is its own note store — the footnote subdocument indexed by the
-      `PlcffndRef`/`PlcffndTxt` pair, which the extraction pass already reads. `footnotes.doc` and
-      `footnote-pages.doc` are in the corpus, exported and waiting.
-- [ ] RTF and DOC footnotes cannot be compared against LibreOffice's *rendering*, and the reason is upstream
-      rather than here: LibreOffice's RTF import drops the character and paragraph formatting stated inside a
+- [x] Footnote reading for **DOC**, which turned out the cleanest of the four once the tables were found. Two
+      PLCFs make a note: `PlcffndRef` gives the body positions of the references and `PlcffndTxt` the extents
+      of their texts in the footnote subdocument, with the *n*th reference owning the *n*th text. The endnote
+      pair is the same arrangement over a different subdocument — and that pairing is the *only* thing that
+      tells the two kinds apart, because the reference character in the body is the same U+0002 for both.
+      Three things fell out pleasingly:
+      - The citation is emitted **at the reference's own position** rather than as a synthetic run, so the
+        CHPX covering that character governs it — and Word writes the mark with a character style carrying
+        `sprmCIss`, which is what makes it superscript. No default needed anywhere.
+      - The mark at the head of a note is the same U+0002, so the note body's number needs no separate
+        mechanism: reading a note's range with the citing number in hand is enough, and only a reference in
+        the *body* advances the counter.
+      - A note's text lives in a different subdocument than the body, so a note cannot contain its own
+        reference and the recursion is bounded by the ranges themselves.
+      `sprmCIss` (0x2A48) is now read into `Ww8LayoutFormat.Escapement`; its companion `sprmCHpsPos` (0x4845)
+      states a half-point offset outright and is still unread, so a document using one gets no shift rather
+      than a wrong one.
+- [ ] RTF footnotes cannot be compared against LibreOffice's *rendering*, and the reason is upstream rather
+      than here: LibreOffice's RTF import drops the character and paragraph formatting stated inside a
       `{\*\footnote …}` group and falls back to the document's defaults — a note the file sets in Carlito at
       10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent. Reproduced on a
       hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
-      records the measurement.
+      records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
 - [ ] Note numbering beyond decimal-from-one. `text:notes-configuration` and its counterparts state a format
       and a start value, and can restart per page or per section; the counter here is document-wide decimal.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —

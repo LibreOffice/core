@@ -385,6 +385,22 @@ public readonly record struct Ww8LayoutBlock
     public Ww8LayoutTable? Table { get; }
 }
 
+/// <summary>
+/// A footnote or endnote as layout sees it: where it is cited, and the blocks of its body.
+/// </summary>
+/// <remarks>
+/// The body comes from a different subdocument than the citation, which is what makes WW8's notes easier than
+/// RTF's and harder than ODF's: there is nothing to nest and nothing to buffer, but the two halves are found
+/// by two different tables and matched up by ordinal.
+/// </remarks>
+/// <param name="Offset">Where the citation sits in the citing paragraph's text.</param>
+/// <param name="IsEndnote">True for an endnote, which collects at the end of the document.</param>
+/// <param name="Blocks">The note's body.</param>
+public sealed record Ww8LayoutNote(
+    int Offset,
+    bool IsEndnote,
+    IReadOnlyList<Ww8LayoutBlock> Blocks);
+
 /// <summary>A DOC table as layout sees it: the column grid in twips, and cells holding paragraphs.</summary>
 /// <param name="ColumnWidths">The grid's column widths, left to right.</param>
 /// <param name="Rows">The rows, top to bottom.</param>

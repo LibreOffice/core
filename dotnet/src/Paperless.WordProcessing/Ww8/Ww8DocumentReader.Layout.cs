@@ -43,6 +43,7 @@ public sealed partial class Ww8DocumentReader
     /// the only party that can compare two <em>resolved</em> faces rather than two requested families.
     /// </param>
     /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
+    /// <param name="Notes">The notes anchored in the paragraph's text, or null when it cites none.</param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -54,7 +55,8 @@ public sealed partial class Ww8DocumentReader
         string? Language,
         bool IsInTable,
         Colour? Colour = null,
-        IReadOnlyList<Ww8LayoutRun>? Runs = null);
+        IReadOnlyList<Ww8LayoutRun>? Runs = null,
+        IReadOnlyList<Ww8LayoutNote>? Notes = null);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -73,6 +75,10 @@ public sealed partial class Ww8DocumentReader
     /// <param name="IsItalic">True when the text is italic.</param>
     /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
     /// <param name="Colour">The colour the text is drawn in, or null for the automatic colour.</param>
+    /// <param name="Escapement">
+    /// The superscript or subscript <c>sprmCIss</c> asks for, unresolved — its rise is a fraction of the
+    /// face's height and this reader has no faces.
+    /// </param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -81,7 +87,8 @@ public sealed partial class Ww8DocumentReader
         int Weight,
         bool IsItalic,
         string? Language,
-        Colour? Colour)
+        Colour? Colour,
+        Layout.Escapement Escapement = default)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -116,11 +123,77 @@ public sealed partial class Ww8DocumentReader
     /// Reads the body's paragraphs with the formatting layout needs.
     /// </summary>
     /// <remarks>
-    /// The body range only. The headers and footers are read by <see cref="ReadLayoutFurniture"/> and the
-    /// notes not at all yet, because a page assembles those separately from the run of body paragraphs.
+    /// The body range only. The headers and footers are read by <see cref="ReadLayoutFurniture"/>; a note
+    /// arrives hanging off the paragraph that cites it, since that is what decides which page carries it.
     /// </remarks>
     public List<Ww8LayoutBlock> ReadLayoutBlocks()
-        => ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
+    {
+        _layoutNoteNumber = 0;
+        return ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
+    }
+
+    /// <summary>How many notes the layout walk has passed, which is what numbers the next one.</summary>
+    /// <remarks>
+    /// Its own counter rather than the content pass's, because the two walk the same text independently and
+    /// sharing one would make each run's numbering depend on whether the other had run first.
+    /// </remarks>
+    private int _layoutNoteNumber;
+
+    /// <summary>
+    /// The notes anchored in the paragraph being read, waiting for it to close.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a local because the reference and the paragraph's end are found by the same
+    /// single pass over the text, several characters apart.
+    /// </remarks>
+    private readonly List<Ww8LayoutNote> _pendingNotes = [];
+
+    /// <summary>
+    /// Where each note's text is, by the body position of the reference that cites it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Two PLCFs make this, and both are needed: <c>PlcffndRef</c> gives the body positions of the footnote
+    /// references and <c>PlcffndTxt</c> the extents of their texts, with the <em>n</em>th reference owning
+    /// the <em>n</em>th text. The endnote pair is the same arrangement over a different subdocument, which is
+    /// what tells the two kinds of note apart — the reference character in the body is the same U+0002 for
+    /// both, so nothing in the text says which it is.
+    /// </para>
+    /// <para>
+    /// Built once and cached, because it is walked per reference and a document can have hundreds.
+    /// </para>
+    /// </remarks>
+    private Dictionary<int, (Ww8Range Text, bool IsEndnote)>? _noteTexts;
+
+    /// <inheritdoc cref="_noteTexts"/>
+    private Dictionary<int, (Ww8Range Text, bool IsEndnote)> NoteTexts
+    {
+        get
+        {
+            if (_noteTexts is not null) return _noteTexts;
+
+            _noteTexts = [];
+            Ww8Ranges ranges = Ranges;
+
+            Collect(ranges.Footnotes, Ww8FibTable.FootnoteReferences, Ww8FibTable.FootnoteTexts, false);
+            Collect(ranges.Endnotes, Ww8FibTable.EndnoteReferences, Ww8FibTable.EndnoteTexts, true);
+
+            return _noteTexts;
+
+            void Collect(
+                Ww8Range subdocument, Ww8FibTable references, Ww8FibTable boundaries, bool isEndnote)
+            {
+                // A reference record is a two-byte FRD, and the positions are what matter.
+                Ww8Plcf reference = PlcfOf(references, recordSize: 2);
+                List<Ww8Range> texts = [.. SplitSubdocument(subdocument, boundaries)];
+
+                for (int i = 0; i < reference.Count && i < texts.Count; i++)
+                {
+                    _noteTexts![reference.Positions[i]] = (texts[i], isEndnote);
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// One range's paragraphs only, for a flow that has no room for a table.
@@ -216,7 +289,13 @@ public sealed partial class Ww8DocumentReader
     /// whatever its text says — and wrong for furniture, where nothing to lay out has to stay
     /// distinguishable from one blank line to lay out.
     /// </param>
-    private List<Ww8LayoutBlock> ReadLayoutBlocks(Ww8Range body, bool keepTrailingEmpty)
+    /// <param name="noteCitation">
+    /// The number a note's own mark stands for, when the range being read <em>is</em> a note's — the mark at
+    /// the head of a note repeats the number of the reference that cites it rather than taking a fresh one.
+    /// Null for the body, where each reference advances the counter.
+    /// </param>
+    private List<Ww8LayoutBlock> ReadLayoutBlocks(
+        Ww8Range body, bool keepTrailingEmpty, string? noteCitation = null)
     {
         LayoutTableAssembler assembler = new();
         if (body.Length <= 0) return assembler.Finished();
@@ -274,8 +353,36 @@ public sealed partial class Ww8DocumentReader
                     // wrong only for a document whose fields are unusually long — recorded in the TODO.
                     continue;
 
-                case Special.Picture or Special.DrawnObject or Special.AnnotationReference
-                    or Special.AutoNumberedReference:
+                case Special.AutoNumberedReference:
+                {
+                    // A note's mark, in the body or inside the note itself. WW8 does not store the number:
+                    // Word computes it and so does this, which is also why the same character serves both
+                    // places — the mark at the head of a note repeats the citing number rather than taking a
+                    // fresh one, so only a reference in the body advances the counter.
+                    string citation = noteCitation is { } repeated
+                        ? repeated
+                        : Core.Numbering.OutlineNumbers.Digits(++_layoutNoteNumber);
+
+                    // Emitted at the reference's own position, so that the CHPX covering it governs the run.
+                    // Word writes the mark with a character style carrying sprmCIss, which is what makes it
+                    // superscript — the same arrangement the other three formats have, reached differently.
+                    foreach (char digit in citation) Emit(current, positions, digit, position);
+
+                    if (noteCitation is null && NoteTexts.TryGetValue(position, out var note))
+                    {
+                        List<Ww8LayoutBlock> read = ReadNoteBody(note.Text, citation);
+                        if (read.Count > 0)
+                        {
+                            _pendingNotes.Add(
+                                new Ww8LayoutNote(
+                                    current.Length - citation.Length, note.IsEndnote, read));
+                        }
+                    }
+
+                    continue;
+                }
+
+                case Special.Picture or Special.DrawnObject or Special.AnnotationReference:
                     Emit(current, positions, AnchorCharacter, position);
                     continue;
 
@@ -303,14 +410,45 @@ public sealed partial class Ww8DocumentReader
             Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
 
             assembler.Add(
-                Describe(current.ToString(), positions, body.Start + start, markPosition),
+                Describe(current.ToString(), positions, body.Start + start, markPosition) with
+                {
+                    Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
+                },
                 format,
                 endsCell);
 
             current.Clear();
             positions.Clear();
+            _pendingNotes.Clear();
             emitted++;
         }
+    }
+
+    /// <summary>
+    /// Reads a note's body from the note subdocument.
+    /// </summary>
+    /// <remarks>
+    /// The same walk the body takes, which is what makes a table inside a note work — and the citation is
+    /// handed in rather than counted, because the mark at the head of a note repeats the number of the
+    /// reference that cites it. Recursion is bounded by the ranges themselves: a note's text is in a
+    /// different subdocument than the body, so a note cannot contain its own reference.
+    /// </remarks>
+    /// <param name="range">The note's extent in the note subdocument.</param>
+    /// <param name="citation">The number the note is cited by.</param>
+    private List<Ww8LayoutBlock> ReadNoteBody(Ww8Range range, string citation)
+    {
+        // Saved and restored: the body's own half-built paragraph is still open, and a note read from inside
+        // it must not walk off with the notes that paragraph has collected so far.
+        List<Ww8LayoutNote> outer = [.. _pendingNotes];
+        _pendingNotes.Clear();
+
+        List<Ww8LayoutBlock> blocks =
+            ReadLayoutBlocks(range, keepTrailingEmpty: false, noteCitation: citation);
+
+        _pendingNotes.Clear();
+        _pendingNotes.AddRange(outer);
+
+        return blocks;
     }
 
     /// <summary>
@@ -431,7 +569,8 @@ public sealed partial class Ww8DocumentReader
                 format.IsBold == true ? 700 : 400,
                 format.IsItalic == true,
                 LanguageOf(format),
-                format.Colour);
+                format.Colour,
+                format.Escapement ?? Layout.Escapement.None);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -452,7 +591,8 @@ public sealed partial class Ww8DocumentReader
            && a.Weight == b.Weight
            && a.IsItalic == b.IsItalic
            && string.Equals(a.Language, b.Language, StringComparison.Ordinal)
-           && a.Colour == b.Colour;
+           && a.Colour == b.Colour
+           && a.Escapement == b.Escapement;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -617,6 +757,18 @@ public sealed partial class Ww8DocumentReader
                     };
                     break;
 
+                case LayoutSprms.VerticalPosition:
+                    format = format with
+                    {
+                        Escapement = sprm.Byte switch
+                        {
+                            1 => Layout.Escapement.Superscript,
+                            2 => Layout.Escapement.Subscript,
+                            _ => Layout.Escapement.None,
+                        },
+                    };
+                    break;
+
                 case LayoutSprms.Colour:
                 {
                     // A COLORREF, which is 0x00bbggrr as a little-endian DWORD — so the bytes arrive as
@@ -715,6 +867,16 @@ public sealed partial class Ww8DocumentReader
         internal const ushort Language80 = 0x486D;
         internal const ushort Language = 0x4873;
         internal const ushort ColourIndex = 0x2A42;
+
+        /// <summary>
+        /// <c>sprmCIss</c>: 1 for superscript, 2 for subscript, 0 for neither.
+        /// </summary>
+        /// <remarks>
+        /// The one WW8 spells as a *kind* rather than a distance, which is why it can be read as an
+        /// automatic escapement: the shift and the smaller size both come with it. Its companion
+        /// <c>sprmCHpsPos</c> (0x4845) states a half-point offset outright and is not read yet.
+        /// </remarks>
+        internal const ushort VerticalPosition = 0x2A48;
         internal const ushort Colour = 0x6870;
         internal const ushort TabStops = 0xC60D;
     }

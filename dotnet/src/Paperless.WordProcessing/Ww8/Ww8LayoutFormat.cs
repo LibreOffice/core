@@ -107,6 +107,16 @@ public readonly record struct Ww8LayoutFormat
     public Colour? Colour { get; init; }
 
     /// <summary>
+    /// The superscript or subscript <c>sprmCIss</c> asks for, or null when the run states neither.
+    /// </summary>
+    /// <remarks>
+    /// Unresolved, as everywhere else: the rise is a fraction of the <em>face's</em> height, and this reader
+    /// has no faces. WW8's other spelling, <c>sprmCHpsPos</c>, states a half-point offset outright and is
+    /// not read yet — a document using one gets no shift rather than a wrong one.
+    /// </remarks>
+    public Layout.Escapement? Escapement { get; init; }
+
+    /// <summary>
     /// Translates into the layout engine's own properties.
     /// </summary>
     /// <param name="emSize">

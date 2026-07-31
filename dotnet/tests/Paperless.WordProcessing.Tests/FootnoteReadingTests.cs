@@ -34,6 +34,7 @@ public sealed class FootnoteReadingTests
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]
     [InlineData("footnotes.rtf")]
+    [InlineData("footnotes.doc")]
     public void ANoteHangsOffTheParagraphThatCitesIt(string fileName)
     {
         List<PageParagraph> paragraphs = Paragraphs(fileName);
@@ -77,6 +78,7 @@ public sealed class FootnoteReadingTests
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]
     [InlineData("footnotes.rtf")]
+    [InlineData("footnotes.doc")]
     public void ACitationIsARaisedRunOfItsOwn(string fileName)
     {
         List<PageParagraph> paragraphs = Paragraphs(fileName);
