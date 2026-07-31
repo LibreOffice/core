@@ -1,12 +1,16 @@
 # Paperless — master plan
 
 Status: **Phase 0 complete; Phase 1 all but the OOXML and legacy spreadsheet and presentation
-formats; Phase 2 complete for word processing.** Every word-processing format reads and *lays
+formats; Phase 2 complete for word processing; Phase 3's two output backends written and
+verified.** Every word-processing format reads and *lays
 out* — `odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and
 footers, tables, sections and columns all verified against LibreOffice's own rendering to a
 tenth of a point, and everything a table draws — cell borders and shading — now compared
 stroke for stroke and fill for fill in all four. The ODF spreadsheet and presentation formats
 extract. `xlsx`, `pptx`, the legacy `xls` and `ppt`, and CSV do not read at all yet.
+**A word-processing document now renders to a file**: a PDF with real searchable text and
+subsetted embedded fonts, checked against LibreOffice's own PDF operator for operator, and PNG
+or JPEG at a chosen DPI.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
@@ -103,12 +107,14 @@ binary.
 | ✅ | Note numbering: the sequence, the start value and the *restart rule* read from all four formats. Applying a restart is pagination's half and is still open |
 | ✅ | Tracked changes, bookmarks and fields recorded in the model with their author, timestamp and range, from all four formats — extraction still resolves changes rather than showing marks, which is what LibreOffice's *renderer* does and is now measured rather than assumed |
 | ✅ | Bidi (UAX #9), script itemisation (UAX #24) and mid-run font fallback in `Paperless.Text`, differentially tested against ICU — the library LibreOffice itself resolves bidi with — and against LibreOffice's own PDF portion boundaries |
+| ✅ | **PDF output**: a hand-rolled writer with `hb-subset` font embedding, real searchable text and a `ToUnicode` built from the cluster map — compared against LibreOffice's own PDF *operator for operator*, per line, over ten documents in four formats |
+| ✅ | **Raster output**: PNG and JPEG at a chosen DPI over SkiaSharp, deterministic, and `paperless render` with a format, a page range and a DPI |
 
 | Not started | |
 |---|---|
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
-| ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
+| ❌ | SVG writer; gradients and tiling patterns in either backend; raster image decode |
 | ❌ | Floating frames with text wrap; table auto-layout; RTL text in the layouter |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
@@ -287,12 +293,12 @@ adding it as an input format would be scope Paperless has said no to.
 
 ## Phase 3 — Rendering
 
-- [ ] Skia raster backend consuming `IDrawingSink`. Still worth building, but **no longer a
-      prerequisite for anything**, which is a correction: the note here used to say that cell
-      borders, shading and floating-frame outlines could not be verified without it. That was the
-      wrong conclusion from a true premise — a *word-position* comparison cannot see them, but
-      LibreOffice's PDF content stream states every one of them as an explicit path, and
-      `PdfFills` and `PdfStrokes` read those. Borders and shading were verified that way instead.
+- [x] Skia raster backend consuming `IDrawingSink`. Paths, strokes with dashes, caps, joins and
+      hairlines, positioned glyph runs, transparency groups as offscreen layers, and PNG and JPEG
+      encode at a caller-chosen DPI. It was never a prerequisite for anything, which was a
+      correction made here earlier and holds: a *word-position* comparison cannot see a border,
+      but LibreOffice's PDF content stream states every one as an explicit path and `PdfFills`
+      and `PdfStrokes` read those.
 - [x] Word-processing page layout: pagination, headers and footers, tables as grids that split
       across pages with repeating heading rows, several sections per document, and columns.
 - [x] Footnote placement, which feeds back into pagination rather than merely adding a note: the
@@ -309,6 +315,13 @@ adding it as an input format would be scope Paperless has said no to.
 - [ ] The rest of it: floating frames with text wrap, table auto-layout for a table stating no column
       widths, and RTL text in the layouter — bidi levels are resolved and carried, and nothing consumes
       them yet, so a mixed-direction paragraph measures correctly and still draws in logical order.
+- [ ] **Two layout findings the PDF comparison turned up**, both invisible to a word-box comparison
+      and both waiting on `Paperless.WordProcessing`. A **16 pt heading's baseline sits 1.95 pt
+      higher** than LibreOffice's in all four formats — the block is the same 57.650 pt tall on both
+      sides and the baseline sits differently *within* a line taller than the body, so it does not
+      cascade. And **`footnotes.rtf` draws its note separator 1.286 pt too high**, about 26 twips in
+      the note area the RTF reader reserves, where the other four formats agree to a hundredth of a
+      point on the same document. Measurements in `src/Paperless.Rendering/TODO.md`.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
@@ -317,27 +330,39 @@ adding it as an input format would be scope Paperless has said no to.
 - [ ] Raster image decode (via Skia).
 - [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
       no C# prior art — start it early rather than treating it as a tail-end detail.
-- [ ] **PDF output.** The writer, with subset font embedding (`hb-subset` via HarfBuzzSharp). The
-      reason the display list keeps glyph runs rather than outlines is precisely so this can emit *real
-      searchable text* — glyph ids plus the cluster map give a correct `ToUnicode`, and a PDF of
-      outlines would extract as nothing. This is also the output that can be checked hardest, because
-      the whole fidelity harness already reads LibreOffice's PDFs: `PdfTextRuns`, `PdfFills` and
-      `PdfStrokes` can be pointed at *ours* and the two compared operator for operator.
-- [ ] **Raster output — PNG and JPEG**, at a caller-chosen DPI, from the Skia backend. PNG is the one
-      that matters for testing, being lossless and byte-deterministic, so a checksum is meaningful and
-      golden images can be committed with the LibreOffice version that produced them. JPEG is for
-      callers who want thumbnails and should not be used for any comparison.
-      Verify with the `render-comparison` skill — and read it first, because it explains how to tell a
-      layout bug from a drawing bug, which is what an image diff is worst at. Two references are
-      available and they are not equivalent: LibreOffice exports PNG, JPEG, WebP and SVG **directly**
-      per family (`writer_png_Export`, `calc_png_Export`, `impress_png_Export`), which needs no
-      round-trip — measured, a default `writer_png_Export` of an A4 page comes out 795 x 1124 — while
-      `--convert-to pdf` rasterised by `pdftoppm` gives an exact DPI of your choosing. Prefer the PDF
-      route when the comparison needs a known scale, and the direct export when it needs LibreOffice's
-      own idea of a page image.
+- [x] **PDF output.** Hand-rolled: objects, a classic `xref`, deflated content streams, and simple
+      `/TrueType` fonts subsetted through `hb-subset` — bound directly to the native library, because
+      HarfBuzzSharp's managed binding does not expose the subsetter (verified against 14.2.1.1). Text
+      is real text: glyph ids as one-byte codes with a `ToUnicode` CMap built from the cluster map,
+      which is why the display list keeps glyph runs rather than outlines. `pdftotext` gets the same
+      words out of our PDF as out of LibreOffice's.
+      **And it is checked the way this project checks everything else.** `PdfTextRuns`, `PdfFills`,
+      `PdfStrokes` and `PdfPageSizes` are pointed at *ours* as well as LibreOffice's and the two
+      compared operator for operator, over ten documents in four formats: line counts match exactly,
+      font sizes match exactly, baseline pitch agrees to **0.000 pt**, and the pen differs by exactly
+      the **two twips** LibreOffice's export adds — a deviation that was previously inferred and is
+      now read straight off both content streams. Table borders match stroke for stroke and pen width
+      for pen width; shades and note separators fill for fill; sheet sizes page for page.
+      Detail, and the four places our file deliberately differs, in `src/Paperless.Rendering/TODO.md`.
+- [x] **Raster output — PNG and JPEG**, at a caller-chosen DPI, from the Skia backend. PNG is the one
+      that matters: lossless and deterministic, so a page written twice is byte-identical and a golden
+      image can be committed. JPEG is for thumbnails and a test pins why it must not be compared — a
+      flat fill does not survive the round trip.
+      Verified against `--convert-to pdf` rasterised by `pdftoppm -r 150`, which is the route that
+      gives an exact DPI; the direct `writer_png_Export` gives LibreOffice's own idea of a page image
+      at its own scale (measured, 795 x 1124 for A4) and is the wrong reference when the comparison
+      needs a known one. Two measurements came out of it and both are in
+      `src/Paperless.Rendering/TODO.md`: **the pixel size is the ceiling** of the page size, because
+      poppler takes the ceiling and one pixel of disagreement stops the comparison dead; and **glyphs
+      are drawn from their outlines**, because Skia's glyph cache places a mask at a whole pixel
+      vertically and that alone moved a page's ink a quarter of a point and made the comparison script
+      report a reflow cascade on a page whose layout was exact.
 - [ ] SVG writer.
-- [ ] `paperless render` (to PDF, PNG, JPEG or SVG, with a page range and a DPI) and
-      `paperless convert`.
+- [x] `paperless render` to PDF, PNG or JPEG, with `--format`, `--pages` and `--dpi`. Its output
+      layout is part of the `render-comparison` skill's contract: one input writes `page-1.png`,
+      `page-2.png` … straight into `--outdir`, the same names `pdftoppm` gives the reference; several
+      inputs each get a subdirectory named after the file, as `lo-convert.sh` does.
+      SVG output and `paperless convert` are still to come.
 
 ## Phase 4 — Fidelity
 
@@ -360,6 +385,13 @@ adding it as an input format would be scope Paperless has said no to.
 Recorded rather than reproduced. Where LibreOffice renders a document wrongly, copying the
 defect is explicitly a non-goal; each entry here is a place the comparison harness allows a
 difference on purpose, with the evidence that Paperless is the one following the format.
+
+Per-library lists, each with its measurements: layout's in
+`src/Paperless.WordProcessing/TODO.md` (the two twips LibreOffice's PDF export adds to every
+pen position, the 0.15% it measures a line wider than HarfBuzz, and the twip its font ascents
+differ by), and output's in `src/Paperless.Rendering/TODO.md` (real rather than integer
+`/Widths`, layout tables dropped from embedded subsets, no tagged-PDF structure, and the blank
+at the end of a wrapped line not drawn).
 
 **Footnote numbering with a section-level `w:footnotePr`.** In
 `tests/corpus/features/word-features.docx`, LibreOffice 24.2.7.2 numbers the single footnote 0;
