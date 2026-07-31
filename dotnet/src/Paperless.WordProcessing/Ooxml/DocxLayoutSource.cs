@@ -24,7 +24,7 @@ namespace Paperless.WordProcessing.Ooxml;
 /// a paragraph mixing sizes lays out slightly short until the runs are walked.
 /// </para>
 /// </remarks>
-public sealed class DocxLayoutSource
+public sealed partial class DocxLayoutSource
 {
     /// <summary>How many paragraphs are read before the rest are ignored.</summary>
     public const int MaxParagraphs = 200000;
@@ -71,14 +71,32 @@ public sealed class DocxLayoutSource
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
     public IReadOnlyList<FontSubstitution> Substitutions => _fonts.Substitutions;
 
-    /// <summary>Reads the body's paragraphs, in document order.</summary>
+    /// <summary>Reads the body's blocks — its paragraphs and its tables — in document order.</summary>
     /// <param name="body">The <c>w:body</c> element.</param>
-    public List<PageParagraph> Read(XElement body)
+    public List<PageBlock> Read(XElement body)
     {
         ArgumentNullException.ThrowIfNull(body);
 
+        List<PageBlock> blocks = [];
+        Walk(body, blocks, depth: 0);
+        return blocks;
+    }
+
+    /// <summary>
+    /// Reads a flow's paragraphs only: a header, a footer, or the inside of a cell.
+    /// </summary>
+    /// <param name="element">The element whose block-level children to read.</param>
+    /// <remarks>
+    /// Paragraphs only, because a flow is laid out into a fixed rectangle by <see cref="FlowLayouter"/>,
+    /// which stacks paragraphs and knows nothing of grids. A table inside a header or inside another cell
+    /// is therefore skipped — recorded as a gap in this library's TODO.
+    /// </remarks>
+    public List<PageParagraph> ReadFlow(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+
         List<PageParagraph> paragraphs = [];
-        Walk(body, paragraphs, depth: 0);
+        Walk(element, paragraphs, depth: 0);
         return paragraphs;
     }
 
@@ -86,12 +104,20 @@ public sealed class DocxLayoutSource
     /// Walks the body's block-level children.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>w:sdt</c> — a structured-document tag, which is what a content control is — wraps ordinary
     /// content inside a <c>w:sdtContent</c>, so a walk that stopped at it would lose every paragraph in
-    /// a form. Tables are skipped rather than flattened, because a table is laid out as a grid and
-    /// flattening it would give the page a height no table has.
+    /// a form.
+    /// </para>
+    /// <para>
+    /// Generic in what it fills, which is how one walk serves both the body and a flow. A body takes
+    /// <see cref="PageBlock"/> and so keeps the tables; a header, a footer or a cell takes
+    /// <see cref="PageParagraph"/>, and a table simply does not fit in the list — so it is dropped by the
+    /// type rather than by a flag that could be passed the wrong way round.
+    /// </para>
     /// </remarks>
-    private void Walk(XElement element, List<PageParagraph> into, int depth)
+    private void Walk<T>(XElement element, List<T> into, int depth)
+        where T : PageBlock
     {
         if (depth > 64 || into.Count >= MaxParagraphs) return;
 
@@ -101,7 +127,13 @@ public sealed class DocxLayoutSource
 
             if (Word.Is(child, "p"))
             {
-                if (Paragraph(child) is { } paragraph) into.Add(paragraph);
+                if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
+                continue;
+            }
+
+            if (Word.Is(child, "tbl"))
+            {
+                if (Table(child) is { } table && table is T grid) into.Add(grid);
                 continue;
             }
 

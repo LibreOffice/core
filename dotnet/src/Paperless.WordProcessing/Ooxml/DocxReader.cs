@@ -228,7 +228,7 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         if (body is null) return new WordProcessingPages([]);
 
         DocxLayoutSource source = new(_file.Styles, _file.Settings);
-        List<PageParagraph> paragraphs = source.Read(body);
+        List<PageBlock> blocks = source.Read(body);
 
         // Read from the document rather than assumed per format. LibreOffice's PARA_SPACE_MAX means the
         // two spacings *add*; when it is off the larger wins, which is Word's behaviour. Its OOXML
@@ -248,8 +248,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                paragraphs, Sections[0], furniture: Furniture(source, body)),
-            paragraphs);
+                blocks, Sections[0], furniture: Furniture(source, body)),
+            blocks);
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             if (SlotOf(Word.Attribute(reference, "type")) is not { } slot) continue;
             if (_file.LoadHeaderOrFooter(Word.RelationshipId(reference)) is not { } part) continue;
 
-            List<PageParagraph> paragraphs = source.Read(part);
+            List<PageParagraph> paragraphs = source.ReadFlow(part);
             if (paragraphs.Count == 0) continue;
 
             (isHeader ? headers : footers)[slot] = paragraphs;

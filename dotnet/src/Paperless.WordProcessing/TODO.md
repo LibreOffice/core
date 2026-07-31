@@ -370,8 +370,17 @@ is read and verified, so what remains is the filling of pages rather than the me
       which is Writer's behaviour and not Word's, and the heading rows are placed again at the top of each
       continuation. Because the cells are laid out once relative to the table's own top-left, both are a
       shift rather than a re-layout — a long table is not shaped once per page it touches.
-- [ ] **ODF only so far.** DOCX's `w:tblGrid`/`w:tcW`, DOC's `sprmTDefTable` column edges and RTF's
-      `\cellx` positions are all read by the extraction pass but not yet turned into a layout grid.
+- [x] DOCX's grid, which expresses the same two facts differently from ODF's and so is a separate set of
+      mistakes to avoid. A horizontal merge is `w:gridSpan` with **no placeholder** for the columns it
+      swallows, so the next cell starts at column plus span — the opposite of ODF's covered cells. A
+      vertical merge is `w:vMerge`, a state rather than a count: `restart` opens one and a bare `w:vMerge`
+      continues it, so a row span has to be counted by looking down the following rows and the rows must
+      all be read before any span is known. And cell padding is stated twice, `w:tblCellMar` for the table
+      and `w:tcMar` per cell, overriding **per side** — LibreOffice writes a `w:tcMar` holding only the
+      side that differs, so taking the element as all four zeroes the other three.
+- [ ] DOC's `sprmTDefTable` column edges and RTF's `\cellx` positions. Both readers already resolve the
+      whole grid — columns, spans, row spans, heading rows — for the extraction tree; what is missing is
+      the per-cell *layout* paragraph lists, since both record those only for the body outside tables.
 - [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
