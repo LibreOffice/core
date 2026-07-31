@@ -29,14 +29,33 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
 Hand-rolled deliberately: we need raw table access and our own precedence rules, not a
 library's interpretation of them.
 
-- [ ] sfnt/TTC parsing; `head`, `hhea`, `OS/2`, `post`, `name`, `cmap`, `hmtx`
-- [ ] **Line height derivation.** The precedence between `hhea` ascent/descent, `OS/2`
-      `usWinAscent`/`usWinDescent`, and `OS/2` typo metrics is specific, easy to get wrong,
-      and shifts every baseline on the page when wrong. Follow
-      `research/06-rendering.md` section B exactly, including its per-font override list.
-- [ ] Underline and strikethrough position and thickness
-- [ ] Glyph coverage queries for fallback
-- [ ] Variable fonts: at minimum do not crash; ideally honour the named instance
+- [x] sfnt and TTC parsing; `head`, `hhea`, `OS/2`, `post`, `name`, `cmap`, `hmtx`. A collection
+      holds several faces, so a face is addressed by file *and* index — a reader that assumes one
+      face per file reads the first face of every CJK font on the system.
+- [x] **Line height derivation**, in the documented precedence: `hhea` first but only if its signs
+      are right, then `OS/2`'s `usWin*` because that is what Windows used and what a generation of
+      documents was authored against, unless `fsSelection` bit 7 asks for the typographic metrics
+      instead. Which set was believed is *reported*, because a line-height difference is the most
+      visible way two renderers diverge and knowing the source turns a half-page offset into a
+      one-line answer.
+- [x] Verified end to end against LibreOffice: `LineHeightComparisonTests` has LibreOffice render
+      three single-spaced lines to PDF in each of five fonts, measures the baselines out of the PDF,
+      and compares the pitch with what the reader derived from the same font file. All five agree to
+      within a fortieth of a point, which is the unit noise between hundredths of a millimetre and
+      points.
+- [x] Underline and strikethrough position and thickness, each falling back to a fraction of the em
+      rather than to zero — a zero-thickness line draws nothing at all.
+- [x] Glyph coverage queries for fallback, from `cmap` formats 0, 4, 6 and 12. Format 12 is
+      preferred where a face has both, because preferring format 4 silently loses every character
+      above U+FFFF — which is every emoji.
+- [x] Advance widths, including the repeat past the end of `hmtx`: a CJK font states one width for
+      most of its glyphs, so a reader that returns zero past the table measures a whole Japanese
+      paragraph as empty.
+- [ ] The per-font override lists LibreOffice ships (`FontsUseWinMetrics`,
+      `FontsDontUseUnderlineMetrics`) for the specific fonts known to lie about their own metrics
+- [ ] Variable fonts: at minimum do not crash; ideally honour the named instance. Today the
+      static metrics are read, which is the default instance rather than the requested one.
+- [ ] `kern` and `GPOS` for the pair kerning shaping does not cover
 
 ## Shaping
 
