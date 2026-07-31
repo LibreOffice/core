@@ -21,6 +21,9 @@
     <!-- The structured-text writers, for the xhtml and markdown output formats of `extract`.
          They depend on Paperless.Core alone, so this adds nothing to the tool's footprint. -->
     <ProjectReference Include="..\..\src\Paperless.Markup\Paperless.Markup.csproj" />
+
+    <!-- The rendering backends, for `render`'s pdf, png and jpeg output. -->
+    <ProjectReference Include="..\..\src\Paperless.Rendering\Paperless.Rendering.csproj" />
   </ItemGroup>
 
 </Project>

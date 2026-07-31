@@ -3,7 +3,8 @@
 The `paperless` command. Two audiences: humans inspecting documents, and the comparison
 skills using it as the Paperless side of a side-by-side against LibreOffice.
 
-`identify` works; the rest print usage and are not wired up.
+`identify`, `extract`, `metadata` and `render` work; `convert` and `diagnose` print usage
+and are not wired up.
 
 Argument parsing is hand-rolled and `System.CommandLine` has been dropped. The surface is a
 handful of subcommands with two or three options each, and hand-rolling keeps the tool
@@ -14,11 +15,17 @@ option surface grows enough to make this awkward.
 
 - [x] `identify FILE...` — format, family, container, confidence, media type, flags, and the
       basis for the decision. Text and `--json` output; correct on all 17 corpus formats.
-- [ ] `metadata FILE` — document properties as JSON
-- [ ] `extract FILE` — text, or the content tree as JSON (`--format text|json`)
-- [ ] `render FILE` — pages to PNG. `--dpi`, `--pages`, `--outdir`.
-      **Page naming must match what the comparison scripts expect** (`page-1.png`, ...) or
-      the harness cannot pair pages up.
+- [x] `metadata FILE` — document properties as JSON
+- [x] `extract FILE` — text, or the content tree as JSON (`--format text|json`)
+- [x] `render FILE` — pages to PDF, PNG or JPEG. `--format`, `--dpi`, `--pages`, `--outdir`.
+      Page naming matches what the comparison scripts expect: one input writes `page-1.png`,
+      `page-2.png` … straight into `--outdir`, which is what the `render-comparison` skill's
+      own example points `compare-images.py` at, and the same names `pdftoppm` gives the
+      reference side. Several inputs would collide on those names, so each gets a
+      subdirectory named after the file — the rule `lo-convert.sh` uses for the reference.
+      PDF output is `<stem>.pdf` in the same place.
+      `--format jpeg` exists for thumbnails and the usage text says so: a JPEG page image
+      turns a fidelity question into a question about quantisation.
 - [ ] `convert FILE` — PDF or SVG output
 - [ ] `diagnose FILE` — dump diagnostics, resolved fonts and any substitutions. Most
       valuable command for debugging fidelity: a silent font substitution explains most
@@ -33,7 +40,9 @@ option surface grows enough to make this awkward.
 - [ ] `--json` on the remaining subcommands as they land
 - [ ] `--password` for encrypted documents; also read from an environment variable so
       passwords stay out of shell history
-- [ ] Deterministic output: a fixed PDF creation date option, so output is byte-comparable
+- [ ] Deterministic output: a fixed PDF creation date option, so output is byte-comparable.
+      `PdfRenderOptions.CreationDate` does this and the tests use it; the CLI does not expose
+      it yet, so a PDF written by the tool differs from run to run in exactly one field.
 - [ ] Package as a dotnet tool (`PackAsTool` is already set; `ToolCommandName` is
       `paperless`). Note the assembly is deliberately *not* named `paperless` — a lowercase
       assembly of that name collides case-insensitively with the `Paperless` library project
