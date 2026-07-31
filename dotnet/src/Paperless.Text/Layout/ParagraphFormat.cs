@@ -292,6 +292,37 @@ public sealed record ParagraphFormat
     /// </remarks>
     public Length DefaultTabInterval { get; init; } = Length.FromTwips(720);
 
+    /// <summary>
+    /// The stop a tab at a position advances to.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The first explicit stop strictly beyond the position, or — past the last of them — a left stop at
+    /// the next multiple of <see cref="DefaultTabInterval"/>. Strictly beyond, because a tab always moves:
+    /// a tab landing exactly on a stop advances to the next one rather than nowhere.
+    /// </para>
+    /// <para>
+    /// The multiple is counted from the paragraph's text start, not from the last explicit stop, which is
+    /// what makes the default stops of an untabbed paragraph fall on a regular grid.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">Where the tab is, measured from where the paragraph's text starts.</param>
+    public TabStop NextTabStop(Length position)
+    {
+        foreach (TabStop stop in TabStops)
+        {
+            if (stop.Position > position) return stop;
+        }
+
+        Length interval = DefaultTabInterval > Length.Zero
+            ? DefaultTabInterval
+            : Length.FromTwips(720);
+
+        // The next multiple strictly past the position: an exact multiple advances a whole interval.
+        long steps = (position.Emu / interval.Emu) + 1;
+        return new TabStop(Length.FromEmu(steps * interval.Emu));
+    }
+
     /// <summary>True when the paragraph must stay on the same page as the next one.</summary>
     public bool KeepWithNext { get; init; }
 

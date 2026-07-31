@@ -96,6 +96,7 @@ internal static class WordParagraphFormats
             WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl") ? 2 : 0,
 
             StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId),
+            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs")),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
         };
@@ -202,6 +203,60 @@ internal static class WordParagraphFormats
         if (fromStyle.HasValue) return fromStyle.Element;
 
         return styles.ResolveInDocumentDefaults(runProperty: false, localName).Element;
+    }
+
+    /// <summary>
+    /// The paragraph's tab stops, from a <c>w:tabs</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Taken whole from whichever layer declares the element, because <c>w:tabs</c> is a list and the
+    /// direct formatting replaces the style's rather than adding to it.
+    /// </para>
+    /// <para>
+    /// <c>w:val="clear"</c> is a stop that <em>removes</em> one the style set — Word's way of cancelling an
+    /// inherited stop — so it contributes nothing here. Keeping it as a left stop would put a column
+    /// boundary exactly where the document asked for none.
+    /// </para>
+    /// </remarks>
+    private static List<TabStop> Tabs(XElement? tabs)
+    {
+        List<TabStop> stops = [];
+
+        foreach (XElement tab in Word.Children(tabs, "tab"))
+        {
+            string? kind = Word.Attribute(tab, "val");
+            if (kind == "clear") continue;
+
+            if (Word.Attribute(tab, "pos") is not { } text
+                || !long.TryParse(text, CultureInfo.InvariantCulture, out long twips))
+            {
+                continue;
+            }
+
+            string? leader = Word.Attribute(tab, "leader");
+
+            stops.Add(new TabStop(
+                Length.FromTwips(twips),
+                kind switch
+                {
+                    "center" => TabAlignment.Centre,
+                    "right" or "end" => TabAlignment.Right,
+                    "decimal" => TabAlignment.DecimalSeparator,
+                    _ => TabAlignment.Left,
+                },
+                leader switch
+                {
+                    "dot" => '.',
+                    "hyphen" => '-',
+                    "underscore" => '_',
+                    "middleDot" => '\u00B7',
+                    _ => '\0',
+                }));
+        }
+
+        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
+        return stops;
     }
 
     private static bool IsOn(

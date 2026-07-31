@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
@@ -92,6 +93,8 @@ internal static class OdfParagraphFormats
             OrphanLines = Count(styles, styleName, "orphans"),
             WidowLines = Count(styles, styleName, "widows"),
             StartsNewPage = StartsNewPage(styles, styleName),
+            TabStops = Tabs(styles, styleName),
+            DefaultTabInterval = TabInterval(styles),
         };
     }
 
@@ -331,6 +334,100 @@ internal static class OdfParagraphFormats
         }
 
         return LineSpacingRule.SingleSpaced;
+    }
+
+    /// <summary>
+    /// The paragraph's own tab stops.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// From the innermost style in the chain that declares a <c>style:tab-stops</c>, taken whole rather
+    /// than merged with its parent's: the element is a list, and ODF replaces the list rather than adding
+    /// to it — a paragraph that sets one stop has one stop, not its style's four and one more.
+    /// </para>
+    /// <para>
+    /// The types are ODF's own vocabulary, and <c>char</c> is the one that needs care: it means "align on a
+    /// character", with <c>style:char</c> saying which, so it is only a decimal stop when that character is
+    /// a separator. A <c>char</c> stop naming nothing behaves as a right stop, which is what LibreOffice
+    /// renders — verified against its own output rather than assumed.
+    /// </para>
+    /// </remarks>
+    private static List<TabStop> Tabs(OdfStyles styles, string? styleName)
+    {
+        OdfStyle? current = styles.Find(styleName, OdfStyleFamily.Paragraph);
+        HashSet<string> visited = new(StringComparer.Ordinal);
+
+        for (int depth = 0; current is not null && depth < OdfStyles.MaxParentChainDepth; depth++)
+        {
+            if (current.Properties(OdfPropertyKind.Paragraph)?.Child(OdfNamespaces.Style, "tab-stops")
+                is { } declared)
+            {
+                return ReadStops(declared);
+            }
+
+            if (!visited.Add(current.Name)) break;
+            current = styles.Find(current.ParentStyleName, OdfStyleFamily.Paragraph);
+        }
+
+        return styles.GetDefault(OdfStyleFamily.Paragraph)
+                   ?.Properties(OdfPropertyKind.Paragraph)
+                   ?.Child(OdfNamespaces.Style, "tab-stops") is { } fromDefaults
+            ? ReadStops(fromDefaults)
+            : [];
+
+    }
+
+    private static List<TabStop> ReadStops(XElement element)
+    {
+        List<TabStop> stops = [];
+
+        foreach (XElement stop in element.Elements(XName.Get("tab-stop", OdfNamespaces.Style)))
+        {
+            if (OdfValue.ParseLength(stop.Attribute(XName.Get("position", OdfNamespaces.Style))?.Value)
+                is not { } position)
+            {
+                continue;
+            }
+
+            string? type = stop.Attribute(XName.Get("type", OdfNamespaces.Style))?.Value;
+            string? character = stop.Attribute(XName.Get("char", OdfNamespaces.Style))?.Value;
+            string? leader = stop.Attribute(XName.Get("leader-text", OdfNamespaces.Style))?.Value;
+
+            stops.Add(new TabStop(
+                OdfWriterUnits.ToCore(position),
+                type switch
+                {
+                    "center" or "centre" => TabAlignment.Centre,
+                    "right" => TabAlignment.Right,
+                    "char" when character is "." or "," => TabAlignment.DecimalSeparator,
+                    "char" => TabAlignment.Right,
+                    _ => TabAlignment.Left,
+                },
+                leader is { Length: > 0 } ? leader[0] : '\0'));
+        }
+
+        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
+        return stops;
+    }
+
+    /// <summary>
+    /// The document's default tab interval.
+    /// </summary>
+    /// <remarks>
+    /// A quarter over a centimetre, which is LibreOffice's own default and not the half inch Word uses —
+    /// measured: a tab in a paragraph declaring no stops lands 709 twips along, not 720. The value lives on
+    /// the default paragraph style rather than in a document setting, which is why it is read from there.
+    /// </remarks>
+    private static Length TabInterval(OdfStyles styles)
+    {
+        OdfProperty declared = styles.ResolveFromDefaults(
+            OdfStyleFamily.Paragraph, OdfPropertyKind.Paragraph,
+            OdfNamespaces.Style, "tab-stop-distance");
+
+        return OdfWriterUnits.ToCore(declared.AsLength()) is { } interval
+               && interval > Length.Zero
+            ? interval
+            : Length.FromMillimetres(12.5);
     }
 
     /// <summary>

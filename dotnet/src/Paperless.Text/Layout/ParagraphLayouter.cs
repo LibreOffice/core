@@ -165,7 +165,8 @@ public sealed class ParagraphLayouter
             paragraph.BodyWidth(areaWidth),
             paragraph.FirstLineWidth(areaWidth),
             language,
-            options);
+            options,
+            paragraph);
 
         // Snapped to whole twips before anything else uses it, because that is Writer's layout unit and
         // every later sum inherits the difference: a fifth of a twip per line accumulates over a page to
@@ -242,7 +243,8 @@ public sealed class ParagraphLayouter
             measured,
             paragraph.BodyWidth(areaWidth),
             paragraph.FirstLineWidth(areaWidth),
-            language);
+            language,
+            paragraph);
 
         List<LineBox> boxes = new(lines.Count);
         Length top = Length.Zero;
@@ -399,6 +401,13 @@ public sealed class ParagraphLayouter
 
         Length slack = available - line.Width;
         if (slack <= Length.Zero) return Length.Zero;
+
+        // A tabbed line is left alone. Writer stops justifying the rest of a line at a centre, right or
+        // decimal tab (`bDoNotJustifyTab` in `SwTextAdjuster::CalcNewBlock`) and gives each stretch between
+        // tabs its own space-add, which is a per-stretch answer where this returns one per line. Stretching
+        // the blanks anyway would move the text out of the columns the tabs put it in — a visibly worse
+        // error than leaving a tabbed line ragged, which is what this does instead. Recorded in the TODO.
+        if (TabRuler.HasTab(text, line.Start, line.VisibleEnd)) return Length.Zero;
 
         int blanks = 0;
         for (int at = line.Start; at < Math.Min(line.VisibleEnd, text.Length); at++)

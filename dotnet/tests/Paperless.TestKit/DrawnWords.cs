@@ -29,12 +29,24 @@ public readonly record struct DrawnWord(
 /// </para>
 /// <para>
 /// A run boundary deliberately does not end a word, so a formatting change in the middle of one still
-/// yields the whole word; a change of baseline does, because a line's trailing space is not drawn and two
-/// consecutive lines' glyphs would otherwise run together.
+/// yields the whole word. Three things do end one: a space, a change of baseline — a line's trailing space
+/// is not drawn, so two consecutive lines' glyphs would otherwise run together — and a horizontal gap,
+/// which is what a tab leaves behind, since a tab advances the pen without drawing anything.
 /// </para>
 /// </remarks>
 public static class DrawnWords
 {
+    /// <summary>
+    /// How far two glyphs may be apart, in points, and still belong to one word.
+    /// </summary>
+    /// <remarks>
+    /// Half a point. A tab leaves a gap of at least a whole stop's worth, and the glyphs of a word are
+    /// adjacent by construction — the pen leaves no gap between them at all — so anything between the two
+    /// would do. Half a point is small enough to split a tab and large enough not to split a kerned pair,
+    /// whose spacing is negative rather than positive anyway.
+    /// </remarks>
+    private const double GapEndingAWord = 0.5;
+
     /// <summary>The words on a recorded page, in the order they were drawn.</summary>
     public static List<DrawnWord> On(DrawnPage page)
     {
@@ -50,7 +62,15 @@ public static class DrawnWords
 
             int start = at;
             double baseline = cells[at].Baseline;
-            while (at < cells.Count && cells[at].Chars != " " && cells[at].Baseline == baseline) at++;
+            at++;
+
+            while (at < cells.Count
+                   && cells[at].Chars != " "
+                   && cells[at].Baseline == baseline
+                   && cells[at].Left - cells[at - 1].Right <= GapEndingAWord)
+            {
+                at++;
+            }
 
             words.Add(new DrawnWord(
                 cells[start].Left,

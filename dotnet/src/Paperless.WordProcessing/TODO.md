@@ -376,9 +376,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       document's lines shared one of the page's. `ILineBreaker` now answers which breaks are required, and
       a required break also has no width: the separator is trimmed from the line's visible text, or the
       line would stretch by one glyph too little and draw a `.notdef` box at its end.
-- [ ] Tab stops. `ParagraphFormat` carries the stops and the default interval, and a tab is measured as
-      whatever the font gives U+0009 — nothing advances to the next stop yet, so a tabulated line is short
-      by however far the tab should have gone.
+- [x] **Tab stops**, all four alignments. A tab is the one character whose width is not a property of the
+      font — it is the distance to the next stop — so one walk (`TabRuler`) serves both the measuring and
+      the drawing, and a line is split at its tabs when it is drawn. A left stop puts the following text's
+      start on it, a right stop its end, a centre stop its middle and a decimal stop its separator; a stop
+      that cannot hold what follows is skipped rather than drawn backwards over the column before it.
+- [x] The stops themselves, for ODF and DOCX. Both state them as a list that *replaces* the style's rather
+      than adding to it, so the innermost layer declaring one wins whole. Two per-format traps: ODF's
+      default interval is **1.25 cm**, not the half inch Word uses — measured, a tab in a paragraph with no
+      stops lands 709 twips along — and its `style:type="char"` is only a decimal stop when `style:char`
+      names a separator, behaving as a right stop otherwise, which is what LibreOffice renders.
+- [ ] Tab stops for DOC and RTF. The engine and the two XML readers are done; WW8's `sprmPChgTabsPapx` and
+      RTF's `\tx`/`\tqc`/`\tqr`/`\tqdec` are not read, so a tabbed line in those two formats falls back to
+      the default interval — right for an untabbed paragraph, wrong wherever a document sets its own stops.
+- [ ] A justified line that also holds a tab is left ragged. Writer stops justifying at a centre, right or
+      decimal tab and gives each stretch between tabs its own space-add, which is a per-stretch answer where
+      the engine has one per line; stretching the blanks anyway would move text out of the columns the tabs
+      put it in, which is the more visible error.
+- [ ] A decimal stop aligns on the last `.` or `,` in the stretch rather than on the character the document
+      named. `TabStop` would need to carry it; ODF states it as `style:char` and OOXML does not state it at
+      all, so the two would disagree about a `1.234,56`.
 
 ## Known deviations, measured
 

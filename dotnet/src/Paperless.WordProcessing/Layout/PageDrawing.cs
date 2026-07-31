@@ -1,6 +1,7 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 
 namespace Paperless.WordProcessing.Layout;
@@ -65,18 +66,20 @@ public static class PageDrawing
     }
 
     /// <summary>
-    /// The glyph runs one line draws, one per formatting change on it.
+    /// The glyph runs one line draws: one per formatting change, and one per tab.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// A paragraph with uniform formatting draws one run per line, which is the common case and the cheap
-    /// one. A paragraph with runs draws one per run <em>clipped to the line</em> — a bold phrase crossing a
-    /// line break becomes two runs, one on each line, because a glyph run is one font at one size at one
-    /// position and a line break is a position.
+    /// A paragraph with uniform formatting and no tabs draws one run per line, which is the common case and
+    /// the cheap one. Formatting splits it further — a bold phrase crossing a line break becomes two runs,
+    /// one on each line, because a glyph run is one font at one size at one position and a line break is a
+    /// position — and so do tabs, because the text after a tab starts at a stop rather than where the text
+    /// before it ended.
     /// </para>
     /// <para>
-    /// The pen advances across the line rather than restarting per run, so the second run on a line starts
-    /// where the first ended. Measuring each run from zero would stack them all at the margin.
+    /// Within a stretch the pen advances across the runs rather than restarting per run, so the second run
+    /// of a stretch starts where the first ended. Measuring each from zero would stack them all at the
+    /// margin.
     /// </para>
     /// </remarks>
     public static List<(GlyphRun Run, Colour Colour)> RunsFor(
@@ -87,74 +90,126 @@ public static class PageDrawing
 
         List<(GlyphRun, Colour)> runs = [];
 
-        if (!paragraph.HasRuns)
-        {
-            if (RunFor(page, line, paragraph) is { } single) runs.Add((single, paragraph.Colour));
-            return runs;
-        }
-
         int start = line.Box.Line.Start;
         int end = Math.Min(line.Box.Line.VisibleEnd, paragraph.Text.Length);
-        Length pen = page.BodyArea.X + line.Box.Left;
+        if (end <= start) return runs;
 
-        foreach (PageRun run in paragraph.Runs.OrderBy(r => r.Start))
+        Length lineLeft = page.BodyArea.X + line.Box.Left;
+        Length baseline = page.BodyArea.Y + line.Baseline;
+
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
         {
-            int from = Math.Max(run.Start, start);
-            int to = Math.Min(run.End, end);
-            if (to <= from) continue;
+            if (segment.IsEmpty) continue;
 
-            string text = paragraph.Text[from..to];
-            ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
-            if (shaped.Glyphs.Count == 0) continue;
+            Length pen = lineLeft + segment.Left;
 
-            GlyphRun glyphRun = Build(
-                shaped,
-                text,
-                run.EmSize,
-                run.Font ?? Reference(run.Face),
-                new DocPoint(pen, page.BodyArea.Y + line.Baseline),
-                line.Box.SpaceAdd);
+            foreach (PageRun run in RunsIn(paragraph, segment.Start, segment.End))
+            {
+                string text = paragraph.Text[run.Start..run.End];
+                ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
+                if (shaped.Glyphs.Count == 0) continue;
 
-            runs.Add((glyphRun, run.EffectiveColour));
+                GlyphRun glyphRun = Build(
+                    shaped,
+                    text,
+                    run.EmSize,
+                    run.Font ?? Reference(run.Face),
+                    new DocPoint(pen, baseline),
+                    line.Box.SpaceAdd);
 
-            // The pen carries the justification with it, or the second run on a stretched line would
-            // start where the first would have ended unjustified and overlap the words before it.
-            pen += Extent(glyphRun);
+                runs.Add((glyphRun, run.EffectiveColour));
+
+                // The pen carries the justification with it, or the second run on a stretched line would
+                // start where the first would have ended unjustified and overlap the words before it.
+                pen += Extent(glyphRun);
+            }
         }
 
         return runs;
     }
 
     /// <summary>
-    /// The glyph run for one line of a uniformly formatted paragraph, or null when it has no text.
+    /// The stretches a line is divided into by its tabs, each placed at its stop.
     /// </summary>
     /// <remarks>
-    /// The origin is the start of the baseline, not the top-left of a box — which is what
-    /// <see cref="GlyphRun.Origin"/> means and what every text API expects. Getting it from the line's
-    /// box needs both of the page's own offsets and the line's baseline within its box, and the baseline
-    /// is the part that is not derivable from the height: line spacing puts its extra space above the
-    /// text, so a line's baseline is not a fixed fraction of its box.
+    /// One stretch covering the whole line when there is no tab, which is nearly always — and it goes
+    /// through the same code path so that a tabbed line and an untabbed one cannot drift apart. The
+    /// measurement handed to the ruler is the same one the layout used, so the stops land in the same
+    /// places here as they did when the line's width was decided.
     /// </remarks>
-    public static GlyphRun? RunFor(LaidOutPage page, PlacedLine line, PageParagraph paragraph)
+    private static List<TabbedSegment> Stretches(PageParagraph paragraph, int start, int end)
     {
-        ArgumentNullException.ThrowIfNull(page);
-        ArgumentNullException.ThrowIfNull(paragraph);
+        if (!TabRuler.HasTab(paragraph.Text, start, end))
+        {
+            return [new TabbedSegment(start, end, Length.Zero, Length.Zero)];
+        }
 
-        string text = line.Box.Line.VisibleTextIn(paragraph.Text).ToString();
-        if (text.Length == 0) return null;
+        return TabRuler.Segments(
+            paragraph.Text,
+            start,
+            end,
+            paragraph.Format,
+            (from, to) => WidthBetween(paragraph, from, to));
+    }
 
-        ShapedText shaped = TextShaper.Default.Shape(paragraph.Face, text, paragraph.Shaping);
-        if (shaped.Glyphs.Count == 0) return null;
+    /// <summary>
+    /// The formatting runs covering a stretch, clipped to it, in order.
+    /// </summary>
+    /// <remarks>
+    /// One synthetic run for a uniform paragraph, so the drawing loop does not need two shapes. Ordered by
+    /// position rather than trusted to arrive that way: a run list out of order would draw the line's words
+    /// in the wrong places, and the readers build it from four different formats.
+    /// </remarks>
+    private static List<PageRun> RunsIn(PageParagraph paragraph, int start, int end)
+    {
+        if (!paragraph.HasRuns)
+        {
+            return
+            [
+                new PageRun(
+                    start,
+                    end - start,
+                    paragraph.Face,
+                    paragraph.EmSize,
+                    paragraph.Font,
+                    paragraph.Colour,
+                    paragraph.Shaping),
+            ];
+        }
 
-        return Build(
-            shaped,
-            text,
-            paragraph.EmSize,
-            paragraph.Font ?? Reference(paragraph.Face),
-            new DocPoint(
-                page.BodyArea.X + line.Box.Left,
-                page.BodyArea.Y + line.Baseline),
-            line.Box.SpaceAdd);
+        List<PageRun> clipped = [];
+        foreach (PageRun run in paragraph.Runs.OrderBy(run => run.Start))
+        {
+            int from = Math.Max(run.Start, start);
+            int to = Math.Min(run.End, end);
+            if (to <= from) continue;
+
+            clipped.Add(run with { Start = from, Length = to - from });
+        }
+
+        return clipped;
+    }
+
+    /// <summary>
+    /// The width of a range of a paragraph's text, in whichever faces cover it.
+    /// </summary>
+    /// <remarks>
+    /// Shaped here rather than taken from the layout, because what reaches a page is a
+    /// <see cref="PageParagraph"/> and its line boxes — not the measured paragraph the layout built. The
+    /// two agree because both shape the same text in the same faces with the same options; the cost is one
+    /// extra shaping pass per tabbed stretch, and only tabbed stretches ask.
+    /// </remarks>
+    private static Length WidthBetween(PageParagraph paragraph, int from, int to)
+    {
+        Length total = Length.Zero;
+
+        foreach (PageRun run in RunsIn(paragraph, from, to))
+        {
+            string text = paragraph.Text[run.Start..run.End];
+            total += TextShaper.Default.Shape(run.Face, text, run.Shaping).Width(run.EmSize);
+        }
+
+        return total;
     }
 
     /// <summary>

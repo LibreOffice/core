@@ -152,11 +152,16 @@ public sealed class LineFiller
     /// <param name="availableWidth">The width a line has to fit in.</param>
     /// <param name="firstLineWidth">The width available to the first line, when it differs.</param>
     /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
+    /// <param name="tabs">
+    /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
+    /// so a paragraph without one measures exactly as it would without this parameter.
+    /// </param>
     public List<TextLine> Fill(
         MeasuredParagraph measured,
         Length availableWidth,
         Length? firstLineWidth = null,
-        string? language = null)
+        string? language = null,
+        ParagraphFormat? tabs = null)
     {
         ArgumentNullException.ThrowIfNull(measured);
 
@@ -165,7 +170,8 @@ public sealed class LineFiller
             availableWidth,
             firstLineWidth,
             language,
-            measured.WidthBetween);
+            measured.WidthBetween,
+            tabs);
     }
 
     /// <summary>
@@ -182,13 +188,18 @@ public sealed class LineFiller
     /// <param name="options">
     /// How to shape. The default is what Writer does, so passing nothing gives Writer's line breaks.
     /// </param>
+    /// <param name="tabs">
+    /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
+    /// so a paragraph without one measures exactly as it would without this parameter.
+    /// </param>
     public List<TextLine> Fill(
         string text,
         Length emSize,
         Length availableWidth,
         Length? firstLineWidth = null,
         string? language = null,
-        ShapingOptions? options = null)
+        ShapingOptions? options = null,
+        ParagraphFormat? tabs = null)
     {
         ArgumentNullException.ThrowIfNull(text);
 
@@ -202,7 +213,8 @@ public sealed class LineFiller
             availableWidth,
             firstLineWidth,
             language,
-            (from, to) => shaped.WidthBetween(from, to, emSize));
+            (from, to) => shaped.WidthBetween(from, to, emSize),
+            tabs);
     }
 
     /// <summary>
@@ -218,7 +230,8 @@ public sealed class LineFiller
         Length availableWidth,
         Length? firstLineWidth,
         string? language,
-        Func<int, int, Length> widthBetween)
+        Func<int, int, Length> widthBetween,
+        ParagraphFormat? tabs = null)
     {
         List<TextLine> lines = [];
         if (text.Length == 0)
@@ -253,7 +266,7 @@ public sealed class LineFiller
                 }
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
-                Length width = widthBetween(lineStart, visibleEnd);
+                Length width = Measure(text, lineStart, visibleEnd, widthBetween, tabs);
 
                 if (width > limit && chosen >= 0) break;
 
@@ -277,7 +290,7 @@ public sealed class LineFiller
                 // No opportunity at all past this point, which happens when the text ends without one.
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
-                chosenWidth = widthBetween(lineStart, chosenVisibleEnd);
+                chosenWidth = Measure(text, lineStart, chosenVisibleEnd, widthBetween, tabs);
             }
 
             lines.Add(new TextLine(
@@ -290,6 +303,24 @@ public sealed class LineFiller
 
         return lines;
     }
+
+    /// <summary>
+    /// The width of a candidate line, with its tabs resolved when it has any.
+    /// </summary>
+    /// <remarks>
+    /// A tab's width is where it lands rather than what the font says, so a line holding one cannot be
+    /// measured as a difference of two prefix widths. The check for a tab comes first because nearly every
+    /// line has none, and one that has none must measure exactly as it did before tabs existed.
+    /// </remarks>
+    private static Length Measure(
+        string text,
+        int start,
+        int end,
+        Func<int, int, Length> widthBetween,
+        ParagraphFormat? tabs)
+        => tabs is not null && TabRuler.HasTab(text, start, end)
+            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween)
+            : widthBetween(start, end);
 
     /// <summary>
     /// Where a line's visible text ends: past its trailing spaces and its terminating break.
