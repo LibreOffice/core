@@ -59,14 +59,32 @@ public sealed partial class DocxLayoutSource
     /// <param name="styles">The document's styles, including its <c>w:docDefaults</c>.</param>
     /// <param name="settings">The document's <c>w:settings</c> root, or null.</param>
     /// <param name="fonts">The font resolver, or null to build one over the installed fonts.</param>
+    /// <param name="footnotes">The footnote bodies by <c>w:id</c>, or null for a document with none.</param>
+    /// <param name="endnotes">The endnote bodies by <c>w:id</c>.</param>
     public DocxLayoutSource(
-        WordStyles styles, XElement? settings = null, SystemFontResolver? fonts = null)
+        WordStyles styles,
+        XElement? settings = null,
+        SystemFontResolver? fonts = null,
+        IReadOnlyDictionary<string, XElement>? footnotes = null,
+        IReadOnlyDictionary<string, XElement>? endnotes = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
+        _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
+        _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
     }
+
+    /// <summary>The footnote bodies by <c>w:id</c>, from <c>footnotes.xml</c>.</summary>
+    /// <remarks>
+    /// The parts rather than the whole package, because that is all layout needs of it — and passing the
+    /// package would let this reach for things the extraction pass owns.
+    /// </remarks>
+    private readonly IReadOnlyDictionary<string, XElement> _footnotes;
+
+    /// <summary>The endnote bodies by <c>w:id</c>.</summary>
+    private readonly IReadOnlyDictionary<string, XElement> _endnotes;
 
     /// <summary>The substitutions made while resolving the document's fonts.</summary>
     public IReadOnlyList<FontSubstitution> Substitutions => _fonts.Substitutions;
@@ -179,7 +197,15 @@ public sealed partial class DocxLayoutSource
         }
     }
 
-    private PageParagraph? Paragraph(XElement element)
+    /// <summary>
+    /// Reads one paragraph, with an optional prefix its own text does not contain.
+    /// </summary>
+    /// <param name="element">The <c>w:p</c>.</param>
+    /// <param name="citation">
+    /// The number a <c>w:footnoteRef</c> in this paragraph stands for, or null when it is not a note's. The
+    /// number is not in the file: Word marks the place and counts the notes itself.
+    /// </param>
+    private PageParagraph? Paragraph(XElement element, string? citation = null)
     {
         XElement? properties = Word.Child(element, "pPr");
 
@@ -187,8 +213,13 @@ public sealed partial class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
-        RunWalker walker = new();
-        walker.Walk(element);
+        RunWalker walker = new(_noteNumber);
+        walker.Walk(element, citation);
+
+        // Notes are numbered across the document, so the counter advances by however many this paragraph
+        // referenced — and the bodies are read after the walk, since reading one recurses into this method
+        // and would otherwise renumber from the middle of the paragraph that references it.
+        _noteNumber += walker.Notes.Count;
 
         return new PageParagraph
         {
@@ -202,8 +233,83 @@ public sealed partial class DocxLayoutSource
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, properties, text, face),
+            Notes = NotesOf(walker.Notes),
             Source = element,
         };
+    }
+
+    /// <summary>The number the next note is cited by, counted across the document.</summary>
+    private int _noteNumber = 1;
+
+    /// <summary>
+    /// Reads each referenced note's body from the document's notes part.
+    /// </summary>
+    /// <remarks>
+    /// By <c>w:id</c>, which is what a DOCX gives instead of putting the body at the reference: the note
+    /// lives in <c>footnotes.xml</c> and the sentence holds only its number. The citation is placed at the
+    /// head of the note's first paragraph, which is where Word draws it and where the part does not have it.
+    /// </remarks>
+    private List<PageNote> NotesOf(List<NoteAnchor> anchors)
+    {
+        if (anchors.Count == 0) return [];
+
+        List<PageNote> notes = new(anchors.Count);
+
+        foreach (NoteAnchor anchor in anchors)
+        {
+            if (anchor.Id is null) continue;
+
+            IReadOnlyDictionary<string, XElement> part =
+                anchor.IsEndnote ? _endnotes : _footnotes;
+
+            if (!part.TryGetValue(anchor.Id, out XElement? body)) continue;
+
+            string citation = anchor.Number.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            List<PageBlock> blocks = ReadNoteBody(body, citation);
+            if (blocks.Count == 0) continue;
+
+            notes.Add(new PageNote
+            {
+                Blocks = blocks,
+                Offset = anchor.Offset,
+                IsEndnote = anchor.IsEndnote,
+            });
+        }
+
+        return notes;
+    }
+
+    /// <summary>
+    /// Reads a note's body, putting the citation at the head of its first paragraph.
+    /// </summary>
+    /// <remarks>
+    /// Its own walk rather than <see cref="ReadCell"/>'s, only because the first paragraph takes the
+    /// citation and the rest do not — everything else about it is the same, tables included.
+    /// </remarks>
+    private List<PageBlock> ReadNoteBody(XElement body, string citation)
+    {
+        List<PageBlock> blocks = [];
+        bool first = true;
+
+        foreach (XElement child in body.Elements())
+        {
+            if (Word.Is(child, "p"))
+            {
+                PageParagraph? paragraph = first ? Paragraph(child, citation) : Paragraph(child);
+
+                if (paragraph is not null)
+                {
+                    blocks.Add(paragraph);
+                    first = false;
+                }
+
+                continue;
+            }
+
+            Walk(child, blocks, depth: 0);
+        }
+
+        return blocks;
     }
 
     /// <summary>
@@ -237,12 +343,15 @@ public sealed partial class DocxLayoutSource
                 ? paragraph
                 : WordParagraphFormats.ResolveRun(_styles, paragraphProperties, range.RunProperties);
 
+            if (range.IsCitation) style = AsCitation(style);
+
             OpenTypeFace face = Face(style) ?? paragraphFace;
 
             if (face != paragraphFace
                 || style.Size != paragraph.Size
                 || style.Colour != paragraph.Colour
-                || style.Language != paragraph.Language)
+                || style.Language != paragraph.Language
+                || style.Rise != paragraph.Rise)
             {
                 varies = true;
             }
@@ -254,7 +363,8 @@ public sealed partial class DocxLayoutSource
                 style.Size,
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
-                new ShapingOptions(Language: style.Language)));
+                new ShapingOptions(Language: style.Language),
+                style.Rise));
         }
 
         return varies ? runs : [];
@@ -269,7 +379,18 @@ public sealed partial class DocxLayoutSource
     /// The enclosing <c>w:r</c>'s <c>w:rPr</c>, or null when the run states none — in which case the
     /// paragraph mark's own formatting applies.
     /// </param>
-    private readonly record struct StyledRange(int Start, int Length, XElement? RunProperties);
+    /// <param name="IsCitation">
+    /// True for a note's citation, which Word draws superscript whether the run says so or not.
+    /// </param>
+    private readonly record struct StyledRange(
+        int Start, int Length, XElement? RunProperties, bool IsCitation = false);
+
+    /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
+    /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
+    /// <param name="Id">The <c>w:id</c> naming its body in the notes part.</param>
+    /// <param name="IsEndnote">True for an endnote, whose body lives in a different part.</param>
+    /// <param name="Number">The number it is cited by, counted across the document.</param>
+    private readonly record struct NoteAnchor(int Offset, string? Id, bool IsEndnote, int Number);
 
     /// <summary>
     /// Walks a paragraph, building the text as laid out and the ranges its runs divide it into.
@@ -294,6 +415,13 @@ public sealed partial class DocxLayoutSource
     /// </remarks>
     private sealed class RunWalker
     {
+        /// <summary>Creates a walker.</summary>
+        /// <param name="number">
+        /// The number the next note it meets is cited by. Passed in because notes are numbered across the
+        /// document rather than within a paragraph, so the counter belongs to the source.
+        /// </param>
+        internal RunWalker(int number = 1) => _number = number;
+
         /// <summary>How deep a paragraph's element nesting is followed.</summary>
         /// <remarks>
         /// Hyperlinks, content controls, smart tags and change regions all wrap runs and do nest, but a
@@ -303,6 +431,8 @@ public sealed partial class DocxLayoutSource
 
         private readonly StringBuilder _builder = new();
         private readonly List<StyledRange> _ranges = [];
+        private readonly List<NoteAnchor> _notes = [];
+        private int _number;
         private XElement? _runProperties;
         private bool _inInstruction;
 
@@ -312,8 +442,25 @@ public sealed partial class DocxLayoutSource
         /// <summary>The ranges, in order, partitioning the text.</summary>
         internal IReadOnlyList<StyledRange> Ranges => _ranges;
 
+        /// <summary>The notes referenced in the paragraph, with the offsets their citations occupy.</summary>
+        internal List<NoteAnchor> Notes => _notes;
+
         /// <summary>Walks a <c>w:p</c>.</summary>
-        internal void Walk(XElement paragraph) => Append(paragraph, depth: 0);
+        /// <param name="paragraph">The paragraph element.</param>
+        /// <param name="citation">
+        /// The number a <c>w:footnoteRef</c> in this paragraph stands for, or null when the paragraph is not
+        /// a note's. Unlike ODF, a DOCX marks the place its citation goes: the note's own first paragraph
+        /// contains a <c>w:footnoteRef</c>, inside a run whose character style is what makes the number
+        /// superscript. So the citation is emitted where the file says rather than prepended.
+        /// </param>
+        internal void Walk(XElement paragraph, string? citation = null)
+        {
+            _citation = citation;
+            Append(paragraph, depth: 0);
+        }
+
+        /// <summary>The number a <c>w:footnoteRef</c> stands for, when this paragraph is a note's.</summary>
+        private string? _citation;
 
         private void Append(XElement element, int depth)
         {
@@ -346,8 +493,39 @@ public sealed partial class DocxLayoutSource
                         Emit(LineSeparator.ToString());
                         break;
 
-                    case "footnoteReference" or "endnoteReference" or "commentReference"
-                        or "drawing" or "pict" or "object":
+                    case "footnoteReference" or "endnoteReference":
+                        // A note reference carries its citation, which Word draws in the sentence as a
+                        // superscript and again at the head of the note. The style comes from the run this
+                        // reference sits in, which is what carries w:vertAlign="superscript".
+                        _notes.Add(new NoteAnchor(
+                            _builder.Length,
+                            Word.Attribute(child, "id"),
+                            Word.Is(child, "endnoteReference"),
+                            _number));
+
+                        _inCitation = true;
+                        Emit(_number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        _inCitation = false;
+                        _number++;
+                        break;
+
+                    case "footnoteRef" or "endnoteRef":
+                        // The note's own citation, at the place the file marks for it. Marked as a citation
+                        // so that it falls back to superscript, because the style that should supply it
+                        // usually does not: LibreOffice exports its built-in `Footnote Characters` as an
+                        // *empty* w:rPr and relies on the importer knowing what that style is. A reader
+                        // taking the file at its word draws the number full size on the baseline, where it
+                        // fuses with the note's first word.
+                        if (_citation is not null)
+                        {
+                            _inCitation = true;
+                            Emit(_citation);
+                            _inCitation = false;
+                        }
+
+                        break;
+
+                    case "commentReference" or "drawing" or "pict" or "object":
                         Emit(AnchorCharacter.ToString());
                         break;
 
@@ -379,16 +557,46 @@ public sealed partial class DocxLayoutSource
 
             // Adjacent runs with the same properties merge, which matters because a DOCX splits runs for
             // reasons that are not formatting: a proofing error, a revision id, a bookmark boundary.
-            if (_ranges.Count > 0 && _ranges[^1].RunProperties == _runProperties)
+            if (_ranges.Count > 0
+                && _ranges[^1].IsCitation == _inCitation
+                && _ranges[^1].RunProperties == _runProperties)
             {
                 _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
                 return;
             }
 
             _ranges.Add(new StyledRange(
-                _builder.Length - text.Length, text.Length, _runProperties));
+                _builder.Length - text.Length, text.Length, _runProperties, _inCitation));
         }
+
+        /// <summary>True while a note's citation is being emitted.</summary>
+        private bool _inCitation;
     }
+
+    /// <summary>
+    /// A citation's style, defaulted to superscript when the run does not say so.
+    /// </summary>
+    /// <remarks>
+    /// Word's own <c>FootnoteReference</c> character style sets <c>w:vertAlign="superscript"</c>, and a
+    /// document that has it is read correctly without this. LibreOffice's DOCX export does not always write
+    /// it, and a document whose notes were added by something else may not either — so the default matches
+    /// what Word draws rather than what the file happens to state. Applied only when nothing has been said,
+    /// so a run that does state a shift keeps it.
+    /// </remarks>
+    private static WordTextStyle AsCitation(WordTextStyle style)
+        => style.Rise != Length.Zero
+            ? style
+            : style with
+            {
+                Size = style.Size * CitationSize,
+                Rise = style.Size * CitationRise,
+            };
+
+    /// <summary>How much of the font size a citation is set at.</summary>
+    private const double CitationSize = 0.58;
+
+    /// <summary>How far a citation is raised, as a fraction of the font size.</summary>
+    private const double CitationRise = 0.33;
 
     /// <summary>
     /// The document's default tab interval.

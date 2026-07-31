@@ -227,7 +227,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         XElement? body = _file.Body;
         if (body is null) return new WordProcessingPages([]);
 
-        DocxLayoutSource source = new(_file.Styles, _file.Settings);
+        DocxLayoutSource source = new(
+            _file.Styles, _file.Settings, footnotes: _file.Footnotes, endnotes: _file.Endnotes);
         List<PageBlock> blocks = source.Read(body);
 
         // Read from the document rather than assumed per format. LibreOffice's PARA_SPACE_MAX means the

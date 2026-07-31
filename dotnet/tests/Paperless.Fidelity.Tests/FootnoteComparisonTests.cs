@@ -58,6 +58,10 @@ public sealed class FootnoteComparisonTests : IDisposable
     // thirteen. A reader that placed the notes and forgot to charge the body for them fails on the page
     // count and on every word of page two.
     [InlineData("footnote-pages.fodt")]
+    [InlineData("footnotes.odt")]
+    [InlineData("footnotes.docx")]
+    [InlineData("footnote-pages.odt")]
+    [InlineData("footnote-pages.docx")]
     public void EveryNoteSitsAtTheFootOfItsOwnPage(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

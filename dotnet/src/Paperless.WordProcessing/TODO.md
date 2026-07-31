@@ -481,10 +481,24 @@ is read and verified, so what remains is the filling of pages rather than the me
       font size, LibreOffice's automatic values; the size half of the attribute is deliberately left to
       `SizeIn`, which already walks the cascade multiplying percentages, so that a span stating both does not
       have it applied twice.
-- [ ] Footnote reading for DOCX, DOC and RTF. The placement is format-independent and the ODF reader shows
-      the shape; what each needs is its own note store — `footnotes.xml`, the WW8 footnote subdocument with
-      its `PlcffndRef`/`PlcffndTxt` pair, and RTF's `\footnote` destination — all of which the extraction
-      passes already read.
+- [x] Footnote reading for **DOCX**, whose note store is `footnotes.xml`/`endnotes.xml`, keyed by the `w:id`
+      a `w:footnoteReference` carries. Two things differ from ODF and both were measured:
+      - The note body **marks where its own citation goes**, with a `<w:footnoteRef/>` in its first
+        paragraph, so the number is emitted there rather than prepended. Anywhere else in that paragraph and
+        it would be, since a note can begin with a tab.
+      - That citation is nonetheless **not formatted by the file**. LibreOffice exports the run around it
+        with the character style `FootnoteCharacters` and an *empty* `w:rPr`, leaving the superscript to a
+        built-in style the file never defines. So the citation falls back to the same 58%-size, 33%-rise
+        default the ODF reader applies; a reader taking the file at its word draws the number full size on
+        the baseline, where it fuses with the note's first word and the comparison reads
+        `2Note 5` against LibreOffice's `2 Note 5`.
+      `w:vertAlign` supplies `PageRun.Rise` for the anchor's own citation, which *is* stated — the run in
+      the sentence carries `superscript` properly.
+- [ ] Footnote reading for DOC and RTF. The placement is format-independent and the ODF and DOCX readers
+      show the shape; what each needs is its own note store — the WW8 footnote subdocument with its
+      `PlcffndRef`/`PlcffndTxt` pair, and RTF's `\footnote` destination — both of which the extraction
+      passes already read. `footnotes.doc`/`.rtf` and `footnote-pages.doc`/`.rtf` are in the corpus,
+      exported and waiting, and go into `FootnoteComparisonTests` when their readers land.
 - [ ] Note numbering beyond decimal-from-one. `text:notes-configuration` and its counterparts state a format
       and a start value, and can restart per page or per section; the counter here is document-wide decimal.
 - [ ] The separator rule above the notes. `PaginationOptions.NoteSeparatorHeight` reserves room for it —

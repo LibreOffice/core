@@ -14,9 +14,12 @@ behind it.
 
 Two fronts, and they are independent.
 
-**Word processing** is deep into Phase 3's layout half: what remains is footnote placement
-(which feeds back into pagination, so it changes page breaks and not just appearance), floating
-frames with text wrap, and cell borders and shading. Read
+**Word processing** is deep into Phase 3's layout half. Footnote placement is done — including
+the feedback loop into pagination, since the note area takes its room out of the body's, so
+adding a note can push the line that cites it onto the next page and thereby remove the note
+again — and notes are read from ODF and DOCX. What remains is footnote reading for DOC and RTF
+(the corpus files are exported and waiting), endnotes, floating frames with text wrap, and cell
+borders and shading. Read
 `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
 warning about borders: they cannot be verified the way everything else in this library has
 been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
@@ -73,13 +76,14 @@ binary.
 | ✅ | DOC (WW8) extraction: the piece table, FKP formatting indexes, the eight subdocuments, list labels computed from `LSTF`/`LVL`/`LFO`, tables with the merges LibreOffice writes with no flag |
 | ✅ | Text layout: a hand-rolled OpenType reader, HarfBuzz shaping, UAX #14 line breaking, and paragraph layout with alignment, justification, tabs, indents and line spacing |
 | ✅ | Word-processing page layout: pagination, headers and footers, tables as grids that split across pages with repeating headings, several sections per document, and columns — all four formats, all compared against LibreOffice's own rendering |
+| ✅ | Footnote placement, including the feedback loop into pagination, with notes read from ODF and DOCX |
 
 | Not started | |
 |---|---|
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Footnote placement, floating frames, cell borders and shading |
+| ❌ | Floating frames, cell borders and shading; endnotes |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -194,9 +198,11 @@ was found because a page comparison put a word a measurable distance from where 
       against LibreOffice without it, because a word-position comparison cannot see them.
 - [x] Word-processing page layout: pagination, headers and footers, tables as grids that split
       across pages with repeating heading rows, several sections per document, and columns.
-- [ ] The rest of it: footnote placement — which feeds back into pagination, so it moves page
-      breaks rather than merely adding a note — floating frames with text wrap, and cell borders
-      and shading.
+- [x] Footnote placement, which feeds back into pagination rather than merely adding a note: the
+      note area takes its room out of the body's, so a page with notes holds less text, and the
+      loop shortens the page until it holds. Notes read from ODF and DOCX.
+- [ ] The rest of it: footnote reading for DOC and RTF, endnotes, floating frames with text
+      wrap, and cell borders and shading.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.

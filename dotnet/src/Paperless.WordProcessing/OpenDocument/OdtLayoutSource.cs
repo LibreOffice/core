@@ -416,6 +416,8 @@ public sealed partial class OdtLayoutSource
         foreach (StyledRange range in ranges)
         {
             OdfTextStyle style = range.Cascade.Length <= 1 ? paragraph : Resolve(range.Cascade);
+            if (range.IsCitation) style = AsCitation(style);
+
             OpenTypeFace face = Face(style) ?? paragraphFace;
 
             if (face != paragraphFace
@@ -441,6 +443,38 @@ public sealed partial class OdtLayoutSource
         return varies ? runs : [];
     }
 
+    /// <summary>
+    /// A citation's style, defaulted to superscript when the document names none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice draws a footnote's citation in its built-in <c>Footnote Symbol</c> character style, which
+    /// it does not write into the file — a saved document names no style on <c>text:note-citation</c> at
+    /// all, and LibreOffice's own round trip of a document that <em>did</em> name one drops it. So a reader
+    /// applying only what the file states draws the citation full size and on the baseline, where it fuses
+    /// with the word before it and pushes the rest of the line along by the difference.
+    /// </para>
+    /// <para>
+    /// The two values are the automatic pair the character dialogue offers: raised a third of the font size
+    /// and set at 58% of it. Applied only when the document has said nothing, so a document that does name a
+    /// style keeps it.
+    /// </para>
+    /// </remarks>
+    private static OdfTextStyle AsCitation(OdfTextStyle style)
+        => style.Rise != Core.Units.Length.Zero
+            ? style
+            : style with
+            {
+                Size = style.Size * CitationSize,
+                Rise = style.Size * CitationRise,
+            };
+
+    /// <summary>How much of the font size a citation is set at.</summary>
+    private const double CitationSize = 0.58;
+
+    /// <summary>How far a citation is raised, as a fraction of the font size.</summary>
+    private const double CitationRise = 0.33;
+
     /// <summary>The text style a cascade resolves to, cached because spans repeat their styles.</summary>
     private OdfTextStyle Resolve(OdfStyleReference[] cascade)
     {
@@ -460,8 +494,11 @@ public sealed partial class OdtLayoutSource
     /// <param name="Cascade">
     /// The styles in force, outermost first: the paragraph style, then each enclosing span's.
     /// </param>
+    /// <param name="IsCitation">
+    /// True for a note's citation, which is drawn superscript even when the document names no style for it.
+    /// </param>
     private readonly record struct StyledRange(
-        int Start, int Length, OdfStyleReference[] Cascade);
+        int Start, int Length, OdfStyleReference[] Cascade, bool IsCitation = false);
 
     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
@@ -674,10 +711,15 @@ public sealed partial class OdtLayoutSource
             bool pushed = !string.IsNullOrEmpty(styleName);
             if (pushed) _cascade.Add(new OdfStyleReference(styleName, OdfStyleFamily.Text));
 
+            _inCitation = true;
             Emit(_number.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            _inCitation = false;
 
             if (pushed) _cascade.RemoveAt(_cascade.Count - 1);
         }
+
+        /// <summary>True while the citation's own text is being emitted.</summary>
+        private bool _inCitation;
 
         /// <summary>Appends text under the cascade currently in force.</summary>
         private void Emit(string text)
@@ -686,14 +728,16 @@ public sealed partial class OdtLayoutSource
 
             _builder.Append(text);
 
-            if (_ranges.Count > 0 && SameCascade(_ranges[^1].Cascade))
+            if (_ranges.Count > 0
+                && _ranges[^1].IsCitation == _inCitation
+                && SameCascade(_ranges[^1].Cascade))
             {
                 _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
                 return;
             }
 
             _ranges.Add(new StyledRange(
-                _builder.Length - text.Length, text.Length, [.. _cascade]));
+                _builder.Length - text.Length, text.Length, [.. _cascade], _inCitation));
         }
 
         private bool SameCascade(OdfStyleReference[] other)
