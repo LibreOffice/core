@@ -665,3 +665,4 @@ sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnDrawFormatUngroup
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnHomeInsertSlide'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnHomeDuplicatePage'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnHomePresentationLayout'] button-no-label
+sd/uiconfig/simpress/ui/notebookbar.ui://GtkToolButton[@id='btnToolsAutoCorrectDlg'] button-no-label

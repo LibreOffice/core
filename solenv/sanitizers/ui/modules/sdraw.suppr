@@ -622,3 +622,4 @@ sd/uiconfig/sdraw/ui/notebookbar.ui://GtkMenuToolButton[@id='btn3DXLineStyle'] b
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnHomeInsertPage'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnHomeDuplicatePage'] button-no-label
 sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnHomeDrawingLayout'] button-no-label
+sd/uiconfig/sdraw/ui/notebookbar.ui://GtkToolButton[@id='btnToolsAutoCorrectDlg'] button-no-label

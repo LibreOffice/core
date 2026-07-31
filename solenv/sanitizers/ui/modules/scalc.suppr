@@ -755,3 +755,4 @@ sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnDrawExtrusion3DC
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnDrawExtrusionSurfaceFloater'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnObjectXLineStyle'] button-no-label
 sc/uiconfig/scalc/ui/notebookbar.ui://GtkMenuToolButton[@id='btnMediaAnchorMenu'] button-no-label
+sc/uiconfig/scalc/ui/notebookbar.ui://GtkToolButton[@id='btnToolsAutoCorrectDlg'] button-no-label
