@@ -22,6 +22,7 @@
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
 #include "swtypes.hxx"
+#include <basegfx/units/Length.hxx>
 #include "calbck.hxx"
 #include "nodeoffset.hxx"
 #include "names.hxx"
@@ -277,7 +278,7 @@ public:
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const ReferencesSubtype nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
     void GatherDdeTables(std::vector<SwDDETable*>& rvTables) const;
-    void UpdateDocPos(const SwTwips nDocPos);
+    void UpdateDocPos(const gfx::Length nDocPos);
     virtual void UpdateFields();
 };
 
