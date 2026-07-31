@@ -33,7 +33,7 @@ namespace Paperless.Spreadsheets.MsBinary;
 /// because a workbook that is damaged in its last sheet still has readable earlier ones.
 /// </para>
 /// </remarks>
-internal sealed class BiffStream
+public sealed class BiffRecordReader
 {
     /// <summary>
     /// How many consecutive zero records (id and length both zero) are stepped over before
@@ -55,8 +55,13 @@ internal sealed class BiffStream
     private int _nextRecordPos;
     private int _reportedOverruns;
 
-    public BiffStream(byte[] data, List<Diagnostic> diagnostics)
+    /// <summary>Opens a record stream over a workbook's bytes.</summary>
+    /// <param name="data">The whole <c>Workbook</c> or <c>Book</c> stream.</param>
+    /// <param name="diagnostics">Where damage found while reading is recorded.</param>
+    public BiffRecordReader(byte[] data, List<Diagnostic> diagnostics)
     {
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentNullException.ThrowIfNull(diagnostics);
         _data = data;
         _diagnostics = diagnostics;
     }
@@ -400,6 +405,38 @@ internal sealed class BiffStream
     {
         byte[] bytes = ReadBytes(length);
         return bytes.Length == 0 ? string.Empty : Encoding.GetString(bytes);
+    }
+
+    /// <summary>
+    /// Decodes an RK number: Excel's packed 32-bit encoding for the numbers that do not need
+    /// a full double.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The low two bits are flags and the top thirty are the value. Bit 1 chooses between the
+    /// two encodings: clear, and the thirty bits are the <em>high</em> half of an IEEE double
+    /// whose low half is zero; set, and they are a signed integer. Bit 0 says the decoded
+    /// value is a hundred times too large, which is how two decimal places are stored
+    /// compactly.
+    /// </para>
+    /// <para>
+    /// This is the routine to get wrong quietly. Every combination of the two flags produces
+    /// a plausible number from the same bits, so a reader that treats the integer form as a
+    /// double, or forgets the hundredths flag, yields a workbook full of numbers that are
+    /// merely wrong rather than obviously broken. Ported from
+    /// <c>XclTools::GetDoubleFromRK</c>.
+    /// </para>
+    /// </remarks>
+    public static double RkValue(int encoded)
+    {
+        const int hundredthsFlag = 0x00000001;
+        const int integerFlag = 0x00000002;
+
+        double value = (encoded & integerFlag) != 0
+            ? encoded >> 2
+            : BitConverter.UInt64BitsToDouble((ulong)(uint)(encoded & ~0x00000003) << 32);
+
+        return (encoded & hundredthsFlag) != 0 ? value / 100.0 : value;
     }
 
     private readonly record struct Segment(int Start, int End);

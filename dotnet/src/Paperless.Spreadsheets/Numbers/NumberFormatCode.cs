@@ -593,10 +593,13 @@ public sealed class NumberFormatCode
                 double mantissa = scaled;
                 if (mantissa != 0)
                 {
+                    // The count of integer placeholders is the step the exponent moves in,
+                    // which is what makes "##0.0E+0" engineering notation: three placeholders
+                    // hold the exponent to a multiple of three, so 12345 shows as 12.3E+3
+                    // where "0.00E+00" shows 1.23E+04.
+                    int step = Math.Max(_integerPlaces, 1);
                     power = (int)Math.Floor(Math.Log10(Math.Abs(mantissa)));
-                    // The mantissa's integer part is as wide as the pattern asks for, so
-                    // "##0.0E+0" shows 12.3E+3 where "0.00E+00" shows 1.23E+04.
-                    power -= Math.Max(_integerPlaces, 1) - 1;
+                    power = (int)(Math.Floor((double)power / step) * step);
                     mantissa /= Math.Pow(10, power);
                 }
 
@@ -625,7 +628,12 @@ public sealed class NumberFormatCode
         /// </remarks>
         private void Split(double value, out string integerDigits, out string decimalDigits)
         {
-            string text = Math.Abs(value).ToString(
+            // Rounded away from zero rather than to even: a spreadsheet shows 4.5 under "0"
+            // as 5, and .NET's own "F0" would make it 4.
+            double rounded = Math.Round(
+                Math.Abs(value), Math.Min(_decimalPattern.Length, 15), MidpointRounding.AwayFromZero);
+
+            string text = rounded.ToString(
                 "F" + _decimalPattern.Length.ToString(CultureInfo.InvariantCulture),
                 CultureInfo.InvariantCulture);
 

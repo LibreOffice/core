@@ -16,7 +16,7 @@ namespace Paperless.Spreadsheets.MsBinary;
 /// why they are separate constants rather than one alias.
 /// </para>
 /// </remarks>
-internal static class BiffRecords
+public static class BiffRecords
 {
     // Structure.
     public const ushort Bof2 = 0x0009;
@@ -58,8 +58,8 @@ internal static class BiffRecords
     public const ushort Formula2 = 0x0006;
     public const ushort Formula3 = 0x0206;
     public const ushort Formula4 = 0x0406;
-    public const ushort String2 = 0x0007;
-    public const ushort String = 0x0207;
+    public const ushort FormulaString2 = 0x0007;
+    public const ushort FormulaString = 0x0207;
     public const ushort MulRk = 0x00BD;
     public const ushort MulBlank = 0x00BE;
     public const ushort RString = 0x00D6;
@@ -96,7 +96,7 @@ internal static class BiffRecords
 /// agree and skipped where they do not; LibreOffice supports them fully, and a from-scratch
 /// reader aimed at real files does not need to (<c>research/03-calc.md</c> section D.5).
 /// </remarks>
-internal enum BiffVersion
+public enum BiffVersion
 {
     /// <summary>Excel 5.0/7.0 (95), and the older generations read on the same path.</summary>
     Biff5,

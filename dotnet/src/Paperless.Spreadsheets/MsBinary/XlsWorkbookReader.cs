@@ -42,7 +42,7 @@ internal sealed class XlsWorkbookReader
     /// </remarks>
     public const int MaxConsecutiveEmptyRows = 4096;
 
-    private readonly BiffStream _stream;
+    private readonly BiffRecordReader _stream;
     private readonly List<Diagnostic> _diagnostics;
     private readonly List<string> _sharedStrings = [];
     private readonly List<SheetEntry> _sheets = [];
@@ -55,7 +55,7 @@ internal sealed class XlsWorkbookReader
     public XlsWorkbookReader(byte[] workbook, List<Diagnostic> diagnostics)
     {
         _diagnostics = diagnostics;
-        _stream = new BiffStream(workbook, diagnostics);
+        _stream = new BiffRecordReader(workbook, diagnostics);
     }
 
     /// <summary>The BIFF generation the file turned out to be.</summary>
@@ -512,7 +512,7 @@ internal sealed class XlsWorkbookReader
                     ReadFormula(builder);
                     break;
 
-                case BiffRecords.String or BiffRecords.String2:
+                case BiffRecords.FormulaString or BiffRecords.FormulaString2:
                     ReadFormulaString(builder);
                     break;
 
@@ -600,7 +600,7 @@ internal sealed class XlsWorkbookReader
     private void ReadRk(SheetBuilder builder)
     {
         (int row, int column, int xf) = ReadCellHeader();
-        builder.SetNumber(row, column, xf, RkValue(_stream.ReadInt32()));
+        builder.SetNumber(row, column, xf, BiffRecordReader.RkValue(_stream.ReadInt32()));
     }
 
     private void ReadMulRk(SheetBuilder builder)
@@ -611,41 +611,9 @@ internal sealed class XlsWorkbookReader
         while (_stream.RecordLeft > 2 && _stream.IsValid)
         {
             int xf = _stream.ReadUInt16();
-            builder.SetNumber(row, column, xf, RkValue(_stream.ReadInt32()));
+            builder.SetNumber(row, column, xf, BiffRecordReader.RkValue(_stream.ReadInt32()));
             column++;
         }
-    }
-
-    /// <summary>
-    /// Decodes an RK number: Excel's packed 32-bit encoding for the numbers that do not need
-    /// a full double.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The low two bits are flags and the top thirty are the value. Bit 1 chooses between the
-    /// two encodings: clear, and the thirty bits are the <em>high</em> half of an IEEE double
-    /// whose low half is zero; set, and they are a signed integer. Bit 0 says the decoded
-    /// value is a hundred times too large, which is how two decimal places are stored
-    /// compactly.
-    /// </para>
-    /// <para>
-    /// This is the routine to get wrong quietly. Every combination of the two flags produces
-    /// a plausible number from the same bits, so a reader that treats the integer form as a
-    /// double, or forgets the hundredths flag, yields a workbook full of numbers that are
-    /// merely wrong rather than obviously broken. Ported from
-    /// <c>XclTools::GetDoubleFromRK</c>.
-    /// </para>
-    /// </remarks>
-    public static double RkValue(int encoded)
-    {
-        const int hundredthsFlag = 0x00000001;
-        const int integerFlag = 0x00000002;
-
-        double value = (encoded & integerFlag) != 0
-            ? encoded >> 2
-            : BitConverter.UInt64BitsToDouble((ulong)(uint)(encoded & ~0x00000003) << 32);
-
-        return (encoded & hundredthsFlag) != 0 ? value / 100.0 : value;
     }
 
     private void ReadLabel(SheetBuilder builder, ushort id)
@@ -739,7 +707,7 @@ internal sealed class XlsWorkbookReader
     {
         // BIFF8 writes a 16-bit length here; the older generations an 8-bit one.
         bool eightBitLength = _stream.Version != BiffVersion.Biff8
-                              && _stream.RecordId == BiffRecords.String2;
+                              && _stream.RecordId == BiffRecords.FormulaString2;
         builder.SetExpectedString(_stream.ReadString(eightBitLength));
     }
 
@@ -779,12 +747,20 @@ internal sealed class XlsWorkbookReader
             : new DateTime(1899, 12, 30);
 
     /// <summary>Turns a serial number into the date a spreadsheet shows for it.</summary>
+    /// <remarks>
+    /// The fraction is rounded to the millisecond before it is added. A serial is a binary
+    /// double and half past two is 0.604166666…, so adding it whole leaves a few hundred
+    /// nanoseconds of residue — enough to make a timestamp compare unequal to the one it
+    /// plainly is, and enough to make 14:30 render as 14:29:59 under a seconds format.
+    /// </remarks>
     public DateTime SerialToDateTime(double serial)
     {
         DateTime epoch = EpochFor(serial);
         try
         {
-            return epoch.AddDays(serial);
+            double days = Math.Floor(serial);
+            long milliseconds = (long)Math.Round((serial - days) * 86_400_000.0);
+            return epoch.AddDays(days).AddMilliseconds(milliseconds);
         }
         catch (ArgumentOutOfRangeException)
         {

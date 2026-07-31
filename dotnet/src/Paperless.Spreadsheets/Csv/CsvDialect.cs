@@ -112,7 +112,7 @@ public sealed record CsvDialect
         ReadOnlySpan<byte> bytes, Encoding? fallback)
     {
         if (bytes.StartsWith((ReadOnlySpan<byte>)[0xEF, 0xBB, 0xBF]))
-            return (new UTF8Encoding(false), true, "a UTF-8 byte-order mark.");
+            return (new UTF8Encoding(true), true, "a UTF-8 byte-order mark.");
         if (bytes.StartsWith((ReadOnlySpan<byte>)[0xFF, 0xFE, 0x00, 0x00]))
             return (new UTF32Encoding(false, true), true, "a UTF-32 little-endian byte-order mark.");
         if (bytes.StartsWith((ReadOnlySpan<byte>)[0xFF, 0xFE]))
