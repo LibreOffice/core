@@ -198,6 +198,79 @@ public sealed class ParagraphLayouter
     }
 
     /// <summary>
+    /// Lays a paragraph out across its runs, where each line is as tall as its own tallest run.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The difference from the single-face overload is that the line height is no longer a paragraph-wide
+    /// constant: a 24 pt word in an 11 pt paragraph makes <em>its</em> line taller and leaves the rest
+    /// alone. So the spacing rule is applied per line, against the natural height of the tallest run that
+    /// line touches, rather than once for the whole paragraph.
+    /// </para>
+    /// <para>
+    /// The layouter's own face is not used here — the runs carry theirs. The instance is still needed for
+    /// the break iterator and the fill loop, both of which are face-independent.
+    /// </para>
+    /// </remarks>
+    /// <param name="measured">The paragraph, already shaped run by run.</param>
+    /// <param name="format">Its resolved layout properties.</param>
+    /// <param name="textAreaWidth">The width available before the paragraph's own indents.</param>
+    /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
+    /// <param name="follows">The format of the paragraph above, for contextual spacing.</param>
+    public LaidOutParagraph Layout(
+        MeasuredParagraph measured,
+        ParagraphFormat? format = null,
+        Length? textAreaWidth = null,
+        string? language = null,
+        ParagraphFormat? follows = null)
+    {
+        ArgumentNullException.ThrowIfNull(measured);
+
+        ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
+        Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
+
+        List<TextLine> lines = _filler.Fill(
+            measured,
+            paragraph.BodyWidth(areaWidth),
+            paragraph.FirstLineWidth(areaWidth),
+            language);
+
+        List<LineBox> boxes = new(lines.Count);
+        Length top = Length.Zero;
+
+        for (int i = 0; i < lines.Count; i++)
+        {
+            bool isFirst = i == 0;
+            Length available = isFirst
+                ? paragraph.FirstLineWidth(areaWidth)
+                : paragraph.BodyWidth(areaWidth);
+
+            (Length natural, Length ascent) =
+                measured.HeightOf(lines[i].Start, lines[i].VisibleEnd);
+
+            Length height = paragraph.LineSpacing.Apply(natural);
+            (Length baseline, Length spaceAbove) =
+                BaselineFrom(height, natural, ascent, paragraph.LineSpacing.Mode);
+
+            boxes.Add(new LineBox(
+                lines[i],
+                paragraph.LineStart(isFirst) + AlignmentOffset(
+                    paragraph.Alignment, lines[i], available, isLast: i == lines.Count - 1),
+                top,
+                height,
+                baseline,
+                spaceAbove));
+
+            top += height;
+        }
+
+        return new LaidOutParagraph(
+            boxes,
+            SpaceBetween(follows, paragraph),
+            paragraph.SpaceAfter);
+    }
+
+    /// <summary>
     /// The space above a paragraph, once contextual spacing has had its say.
     /// </summary>
     /// <remarks>
@@ -251,6 +324,16 @@ public sealed class ParagraphLayouter
     /// </remarks>
     private (Length Baseline, Length SpaceAbove) BaselineIn(
         Length height, Length natural, Length emSize, LineSpacingMode mode)
+        => BaselineFrom(
+            height, natural, Length.FromTwips(_metrics.ScaledAscent(emSize).Twips), mode);
+
+    /// <summary>The same rule, against an ascent the caller has already resolved.</summary>
+    /// <remarks>
+    /// Shared with the per-run overload, where the ascent belongs to whichever run made the line tallest
+    /// rather than to the layouter's own face.
+    /// </remarks>
+    private static (Length Baseline, Length SpaceAbove) BaselineFrom(
+        Length height, Length natural, Length ascent, LineSpacingMode mode)
     {
         // Four fifths of the box, in twips and by integer division: CalcRealHeight's (4 * height) / 5.
         if (mode == LineSpacingMode.Exact)
@@ -258,9 +341,7 @@ public sealed class ParagraphLayouter
             return (Length.FromTwips(4 * height.Twips / 5), Length.Zero);
         }
 
-        Length ascent = Length.FromTwips(_metrics.ScaledAscent(emSize).Twips);
         Length extra = height - natural;
-
         return extra > Length.Zero ? (ascent + extra, extra) : (ascent, Length.Zero);
     }
 

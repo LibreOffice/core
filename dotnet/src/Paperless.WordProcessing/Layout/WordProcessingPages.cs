@@ -80,10 +80,9 @@ public sealed class WordProcessingPages : IPageSequence
 
         /// <inheritdoc/>
         /// <remarks>
-        /// The page's body text, as one glyph run per line. Not its furniture: headers, footers and
-        /// floating frames are not placed by pagination yet, so what is drawn is what the page holds.
-        /// Runs carry their own formatting once the run-level pass exists; today a paragraph draws in the
-        /// font its paragraph mark named, which is the same simplification its measurement made.
+        /// The page's body text, as one glyph run per line for a uniform paragraph and one per formatting
+        /// change for a mixed one. Not its furniture: headers, footers and floating frames are not placed
+        /// by pagination yet, so what is drawn is what the page holds.
         /// </remarks>
         public void Draw(IDrawingSink sink) => PageDrawing.Draw(Laid, paragraphs, sink);
     }

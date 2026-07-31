@@ -49,9 +49,11 @@ public static class PageDrawing
                 if (line.ParagraphIndex < 0 || line.ParagraphIndex >= paragraphs.Count) continue;
 
                 PageParagraph paragraph = paragraphs[line.ParagraphIndex];
-                if (RunFor(page, line, paragraph) is not { } run) continue;
 
-                sink.DrawGlyphRun(run, Paint.Solid(paragraph.Colour));
+                foreach ((GlyphRun run, Colour colour) in RunsFor(page, line, paragraph))
+                {
+                    sink.DrawGlyphRun(run, Paint.Solid(colour));
+                }
             }
         }
         finally
@@ -63,7 +65,64 @@ public static class PageDrawing
     }
 
     /// <summary>
-    /// The glyph run for one line, or null when the line has no visible text.
+    /// The glyph runs one line draws, one per formatting change on it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A paragraph with uniform formatting draws one run per line, which is the common case and the cheap
+    /// one. A paragraph with runs draws one per run <em>clipped to the line</em> — a bold phrase crossing a
+    /// line break becomes two runs, one on each line, because a glyph run is one font at one size at one
+    /// position and a line break is a position.
+    /// </para>
+    /// <para>
+    /// The pen advances across the line rather than restarting per run, so the second run on a line starts
+    /// where the first ended. Measuring each run from zero would stack them all at the margin.
+    /// </para>
+    /// </remarks>
+    public static List<(GlyphRun Run, Colour Colour)> RunsFor(
+        LaidOutPage page, PlacedLine line, PageParagraph paragraph)
+    {
+        ArgumentNullException.ThrowIfNull(page);
+        ArgumentNullException.ThrowIfNull(paragraph);
+
+        List<(GlyphRun, Colour)> runs = [];
+
+        if (!paragraph.HasRuns)
+        {
+            if (RunFor(page, line, paragraph) is { } single) runs.Add((single, paragraph.Colour));
+            return runs;
+        }
+
+        int start = line.Box.Line.Start;
+        int end = Math.Min(line.Box.Line.VisibleEnd, paragraph.Text.Length);
+        Length pen = page.BodyArea.X + line.Box.Left;
+
+        foreach (PageRun run in paragraph.Runs.OrderBy(r => r.Start))
+        {
+            int from = Math.Max(run.Start, start);
+            int to = Math.Min(run.End, end);
+            if (to <= from) continue;
+
+            string text = paragraph.Text[from..to];
+            ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
+            if (shaped.Glyphs.Count == 0) continue;
+
+            GlyphRun glyphRun = Build(
+                shaped,
+                text,
+                run.EmSize,
+                run.Font ?? Reference(run.Face),
+                new DocPoint(pen, page.BodyArea.Y + line.Baseline));
+
+            runs.Add((glyphRun, run.EffectiveColour));
+            pen += shaped.Width(run.EmSize);
+        }
+
+        return runs;
+    }
+
+    /// <summary>
+    /// The glyph run for one line of a uniformly formatted paragraph, or null when it has no text.
     /// </summary>
     /// <remarks>
     /// The origin is the start of the baseline, not the top-left of a box — which is what
@@ -83,22 +142,41 @@ public static class PageDrawing
         ShapedText shaped = TextShaper.Default.Shape(paragraph.Face, text, paragraph.Shaping);
         if (shaped.Glyphs.Count == 0) return null;
 
+        return Build(
+            shaped,
+            text,
+            paragraph.EmSize,
+            paragraph.Font ?? Reference(paragraph.Face),
+            new DocPoint(
+                page.BodyArea.X + line.Box.Left,
+                page.BodyArea.Y + line.Baseline));
+    }
+
+    /// <summary>
+    /// Builds a glyph run from a shaped stretch of text at an origin.
+    /// </summary>
+    /// <remarks>
+    /// Each glyph's offset is relative to the run's origin, and the pen accumulates across them — which is
+    /// what makes a run one draw call rather than one per glyph. The vertical offset is negated because a
+    /// shaper's is up-positive and document space is down-positive; getting that backwards puts every
+    /// accent below the letter it belongs to.
+    /// </remarks>
+    private static GlyphRun Build(
+        ShapedText shaped, string text, Length emSize, FontReference font, DocPoint origin)
+    {
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
 
         Length pen = Length.Zero;
         foreach (ShapedGlyph glyph in shaped.Glyphs)
         {
-            Length advance = shaped.Scale(glyph.Advance, paragraph.EmSize);
+            Length advance = shaped.Scale(glyph.Advance, emSize);
 
             glyphs.Add(new PositionedGlyph(
                 glyph.GlyphId,
                 new DocPoint(
-                    pen + shaped.Scale(glyph.OffsetX, paragraph.EmSize),
-
-                    // Negated: a shaper's y offset is up-positive, and document space is down-positive.
-                    // Getting this backwards puts every accent below the letter it belongs to.
-                    -shaped.Scale(glyph.OffsetY, paragraph.EmSize)),
+                    pen + shaped.Scale(glyph.OffsetX, emSize),
+                    -shaped.Scale(glyph.OffsetY, emSize)),
                 advance));
 
             clusters.Add(glyph.Cluster);
@@ -107,11 +185,9 @@ public static class PageDrawing
 
         return new GlyphRun
         {
-            Font = paragraph.Font ?? Reference(paragraph),
-            FontSize = paragraph.EmSize,
-            Origin = new DocPoint(
-                page.BodyArea.X + line.Box.Left,
-                page.BodyArea.Y + line.Baseline),
+            Font = font,
+            FontSize = emSize,
+            Origin = origin,
             Glyphs = glyphs,
             Text = text,
             ClusterMap = clusters,
@@ -126,11 +202,11 @@ public static class PageDrawing
     /// reference. Naming the face's own family is enough for a backend to group runs by font, and it
     /// records no substitution because none was made.
     /// </remarks>
-    private static FontReference Reference(PageParagraph paragraph) => new()
+    private static FontReference Reference(Text.Fonts.OpenTypeFace face) => new()
     {
-        FamilyName = paragraph.Face.FamilyName ?? string.Empty,
-        Weight = paragraph.Face.Weight,
-        IsItalic = paragraph.Face.IsItalic,
-        FaceKey = paragraph.Face.FamilyName ?? string.Empty,
+        FamilyName = face.FamilyName ?? string.Empty,
+        Weight = face.Weight,
+        IsItalic = face.IsItalic,
+        FaceKey = face.FamilyName ?? string.Empty,
     };
 }

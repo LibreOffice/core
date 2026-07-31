@@ -140,6 +140,35 @@ public sealed class LineFiller
     }
 
     /// <summary>
+    /// Breaks a paragraph measured across its runs into lines that fit a width.
+    /// </summary>
+    /// <remarks>
+    /// The same greedy walk as the single-face overload, differing only in where a candidate's width comes
+    /// from — a <see cref="MeasuredParagraph"/> answers across runs where a <see cref="TextMeasurer"/>
+    /// answers for one face. Keeping one algorithm matters more than the sharing: two fillers would break
+    /// lines differently the first time one was changed.
+    /// </remarks>
+    /// <param name="measured">The paragraph, already shaped run by run.</param>
+    /// <param name="availableWidth">The width a line has to fit in.</param>
+    /// <param name="firstLineWidth">The width available to the first line, when it differs.</param>
+    /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
+    public List<TextLine> Fill(
+        MeasuredParagraph measured,
+        Length availableWidth,
+        Length? firstLineWidth = null,
+        string? language = null)
+    {
+        ArgumentNullException.ThrowIfNull(measured);
+
+        return Fill(
+            measured.Text,
+            availableWidth,
+            firstLineWidth,
+            language,
+            measured.WidthBetween);
+    }
+
+    /// <summary>
     /// Breaks a paragraph into lines that fit a width.
     /// </summary>
     /// <param name="text">The paragraph's text, without its terminating mark.</param>
@@ -163,15 +192,40 @@ public sealed class LineFiller
     {
         ArgumentNullException.ThrowIfNull(text);
 
+        ShapingOptions shaping = options ?? new ShapingOptions(Language: language);
+        ShapedText shaped = text.Length == 0
+            ? ShapedText.Empty
+            : _measurer.Shape(text, shaping);
+
+        return Fill(
+            text,
+            availableWidth,
+            firstLineWidth,
+            language,
+            (from, to) => shaped.WidthBetween(from, to, emSize));
+    }
+
+    /// <summary>
+    /// The fill loop itself, over any way of measuring a range.
+    /// </summary>
+    /// <remarks>
+    /// Taking the measurement as a function is what keeps one algorithm serving both the single-face and
+    /// the mixed-run cases. The alternative — two loops — would break lines differently the first time
+    /// either was touched, and the whole point of this code is that it breaks them where Writer does.
+    /// </remarks>
+    private List<TextLine> Fill(
+        string text,
+        Length availableWidth,
+        Length? firstLineWidth,
+        string? language,
+        Func<int, int, Length> widthBetween)
+    {
         List<TextLine> lines = [];
         if (text.Length == 0)
         {
             lines.Add(new TextLine(0, 0, 0, Length.Zero, EndsParagraph: true));
             return lines;
         }
-
-        ShapingOptions shaping = options ?? new ShapingOptions(Language: language);
-        ShapedText shaped = _measurer.Shape(text, shaping);
 
         IReadOnlyList<int> opportunities = _breaker.FindBreakOpportunities(text, language);
 
@@ -198,7 +252,7 @@ public sealed class LineFiller
                 }
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
-                Length width = shaped.WidthBetween(lineStart, visibleEnd, emSize);
+                Length width = widthBetween(lineStart, visibleEnd);
 
                 if (width > limit && chosen >= 0) break;
 
@@ -217,7 +271,7 @@ public sealed class LineFiller
                 // No opportunity at all past this point, which happens when the text ends without one.
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
-                chosenWidth = shaped.WidthBetween(lineStart, chosenVisibleEnd, emSize);
+                chosenWidth = widthBetween(lineStart, chosenVisibleEnd);
             }
 
             lines.Add(new TextLine(

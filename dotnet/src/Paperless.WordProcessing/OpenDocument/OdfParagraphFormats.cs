@@ -1,3 +1,4 @@
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
@@ -6,25 +7,30 @@ using Paperless.Text.Layout;
 namespace Paperless.WordProcessing.OpenDocument;
 
 /// <summary>
-/// The character formatting a paragraph's text is set in.
+/// The character formatting a stretch of a paragraph's text is set in.
 /// </summary>
 /// <remarks>
-/// Only what layout needs, which is less than what drawing will: the face, the size, and the language
-/// the break rules take. Colour and decoration do not change where a line breaks, so they are not
-/// resolved here — and resolving them would mean walking the runs rather than the paragraph, which is
-/// the next pass rather than this one.
+/// What layout needs plus the colour drawing needs. The colour rides along rather than being resolved
+/// separately because both come from one walk of the same style cascade, and matching two sets of ranges
+/// back up afterwards would cost more than carrying the field.
 /// </remarks>
 /// <param name="FamilyName">The family the document asks for, before substitution.</param>
 /// <param name="Size">The em size.</param>
 /// <param name="Weight">The weight on the OpenType 1-1000 scale.</param>
 /// <param name="IsItalic">True when the text is italic or oblique.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
+/// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
     int Weight,
     bool IsItalic,
-    string? Language);
+    string? Language,
+    Colour? Colour = null)
+{
+    /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
+    public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
+}
 
 /// <summary>
 /// Resolves an ODF paragraph style into the layout properties the engine takes.
@@ -46,12 +52,17 @@ public readonly record struct OdfTextStyle(
 /// </remarks>
 internal static class OdfParagraphFormats
 {
-    /// <summary>The em size used when the document states none anywhere in the chain.</summary>
+    /// <summary>
+    /// The em size used when the document states none anywhere in the chain, and the base a percentage is
+    /// taken of.
+    /// </summary>
     /// <remarks>
-    /// Ten points, which is Writer's own default — not twelve. A document relying on the default and
-    /// laid out at twelve breaks its lines in different places from the first paragraph onwards.
+    /// Twelve points, which is the value in Writer's item pool and therefore what a paragraph style with
+    /// no <c>fo:font-size</c> renders at — measured, by laying out a document whose only text properties
+    /// name a family. A document relying on the default and laid out at anything else breaks its lines in
+    /// different places from its first paragraph onwards.
     /// </remarks>
-    private static readonly Length DefaultSize = Length.FromPoints(10);
+    private static readonly Length DefaultSize = Length.FromPoints(12);
 
     /// <summary>Resolves a paragraph style's layout properties.</summary>
     internal static ParagraphFormat Resolve(OdfStyles styles, string? styleName)
@@ -88,36 +99,132 @@ internal static class OdfParagraphFormats
     /// Resolves the character formatting a paragraph's text is set in.
     /// </summary>
     /// <remarks>
-    /// From the paragraph style's own text properties, which is what an unstyled run inherits. A run
-    /// with its own span style overrides this, and resolving that needs the runs — so this is the
-    /// paragraph's baseline rather than the final answer for every character in it.
+    /// From the paragraph style's own text properties, which is what a run with no span style of its own
+    /// is set in — so this is the paragraph's baseline, and <see cref="ResolveText(OdfStyles,
+    /// IReadOnlyList{OdfStyleReference})"/> is what a span inside it resolves through.
     /// </remarks>
     internal static OdfTextStyle ResolveText(OdfStyles styles, string? styleName)
+        => ResolveText(styles, [new OdfStyleReference(styleName, OdfStyleFamily.Paragraph)]);
+
+    /// <summary>
+    /// Resolves the character formatting a cascade of styles produces.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The cascade runs outermost first — the paragraph style, then each enclosing <c>text:span</c>'s
+    /// style — because ODF has no inline formatting and a span's automatic style is how one bold word is
+    /// written. The innermost style that sets a property wins, and only if none does at all do the family
+    /// defaults apply, which is what <see cref="OdfStyles.ResolveProperty(IReadOnlyList{
+    /// OdfStyleReference}, OdfPropertyKind, string, string)"/> implements.
+    /// </para>
+    /// <para>
+    /// Two properties cannot go through that method. The family has two spellings that mean the same item
+    /// to LibreOffice, so an outer <c>fo:font-family</c> must not beat an inner <c>style:font-name</c> —
+    /// the level has to be decided before the spelling. And a percentage size is relative to the enclosing
+    /// level's, so resolving it means walking outwards multiplying rather than taking one value.
+    /// </para>
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="cascade">The style references, outermost first.</param>
+    internal static OdfTextStyle ResolveText(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
     {
         ArgumentNullException.ThrowIfNull(styles);
-
-        string? family = Text(styles, styleName, OdfNamespaces.FoCompatible, "font-family").Value;
-
-        // style:font-name names a font face declaration rather than a family, and LibreOffice writes
-        // that form far more often than fo:font-family — so a reader that only looks at the latter
-        // finds no font at all in most real documents.
-        if (string.IsNullOrWhiteSpace(family)
-            && Text(styles, styleName, OdfNamespaces.Style, "font-name").Value is { } declared
-            && styles.FontFaces.TryGetValue(declared, out OdfFontFace? face))
-        {
-            family = face.FontFamily ?? declared;
-        }
-        family ??= Text(styles, styleName, OdfNamespaces.Style, "font-name").Value;
+        ArgumentNullException.ThrowIfNull(cascade);
 
         return new OdfTextStyle(
-            Unquote(family),
-            Text(styles, styleName, OdfNamespaces.FoCompatible, "font-size").AsLength() ?? DefaultSize,
-            Weight(Text(styles, styleName, OdfNamespaces.FoCompatible, "font-weight").Value),
-            Text(styles, styleName, OdfNamespaces.FoCompatible, "font-style").Value
+            FamilyIn(styles, cascade),
+            SizeIn(styles, cascade),
+            Weight(Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-weight").Value),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-style").Value
                 is "italic" or "oblique",
             LanguageTag(
-                Text(styles, styleName, OdfNamespaces.FoCompatible, "language").Value,
-                Text(styles, styleName, OdfNamespaces.FoCompatible, "country").Value));
+                Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "language").Value,
+                Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour());
+    }
+
+    /// <summary>
+    /// The family the cascade asks for, deciding the level before the spelling.
+    /// </summary>
+    /// <remarks>
+    /// <c>style:font-name</c> names an <c>office:font-face-decls</c> entry rather than a family, and
+    /// LibreOffice writes that form far more often than <c>fo:font-family</c> — so a reader that only
+    /// looks at the latter finds no font at all in most real documents. A declaration that names no
+    /// family at all is still a family name in practice, since producers use the family as the
+    /// declaration's name.
+    /// </remarks>
+    private static string? FamilyIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfStyleReference at = cascade[i];
+
+            if (Unquote(Own(styles, at, OdfNamespaces.FoCompatible, "font-family").Value)
+                is { } direct)
+            {
+                return direct;
+            }
+
+            if (Own(styles, at, OdfNamespaces.Style, "font-name").Value is { } declared)
+            {
+                return FamilyOfDeclaration(styles, declared);
+            }
+        }
+
+        if (Unquote(Defaulted(styles, cascade, OdfNamespaces.FoCompatible, "font-family").Value)
+            is { } fallback)
+        {
+            return fallback;
+        }
+
+        return Defaulted(styles, cascade, OdfNamespaces.Style, "font-name").Value is { } name
+            ? FamilyOfDeclaration(styles, name)
+            : null;
+    }
+
+    private static string? FamilyOfDeclaration(OdfStyles styles, string declared)
+        => styles.FontFaces.TryGetValue(declared, out OdfFontFace? face)
+            ? Unquote(face.FontFamily) ?? Unquote(declared)
+            : Unquote(declared);
+
+    /// <summary>
+    /// The em size the cascade asks for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The innermost level that states a size at all wins, which is ordinary containment inheritance. What
+    /// is not ordinary is the percentage: <c>fo:font-size="150%"</c> is 150% of the <em>item pool's</em>
+    /// twelve points, not of the enclosing text's size and not of the style's parent's either.
+    /// </para>
+    /// <para>
+    /// That is measured, and it is measured because it is surprising. A 150% span inside an 11 pt paragraph
+    /// renders at 18 pt rather than 16.5, and a 150% style whose <c>style:parent-style-name</c> declares
+    /// 20 pt also renders at 18 rather than 30. The cause is where xmloff applies it: a percentage arrives
+    /// as <c>CharPropHeight</c>, and <c>SvxFontHeightItem</c> resolves a proportion against the height the
+    /// item set holds <em>at that moment</em> — which, for a style being built up from nothing, is the pool
+    /// default. The parent chain is resolved later, so it never enters the arithmetic, and nested
+    /// percentages do not compound for the same reason.
+    /// </para>
+    /// </remarks>
+    private static Length SizeIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfProperty stated = Own(styles, cascade[i], OdfNamespaces.FoCompatible, "font-size");
+            if (!stated.HasValue) continue;
+
+            if (stated.AsPercentage() is { } proportion and > 0 and < 100)
+            {
+                return OdfWriterUnits.ToCore(DefaultSize * proportion);
+            }
+
+            if (stated.AsLength() is { } absolute) return OdfWriterUnits.ToCore(absolute);
+        }
+
+        return OdfWriterUnits.ToCore(
+            Defaulted(styles, cascade, OdfNamespaces.FoCompatible, "font-size").AsLength()
+            ?? DefaultSize);
     }
 
     private static OdfProperty Paragraph(
@@ -129,8 +236,35 @@ internal static class OdfParagraphFormats
         => styles.ResolveProperty(
             styleName, OdfStyleFamily.Paragraph, OdfPropertyKind.Text, ns, name);
 
+    /// <summary>A text property resolved through the whole cascade, defaults included.</summary>
+    private static OdfProperty Cascaded(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade, string ns, string name)
+        => styles.ResolveProperty(cascade, OdfPropertyKind.Text, ns, name);
+
+    /// <summary>A text property from one level of the cascade and its parents, defaults excluded.</summary>
+    private static OdfProperty Own(
+        OdfStyles styles, OdfStyleReference at, string ns, string name)
+        => styles.ResolveWithoutDefaults(at.Name, at.Family, OdfPropertyKind.Text, ns, name);
+
+    /// <summary>A text property from the cascade's family defaults alone.</summary>
+    private static OdfProperty Defaulted(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade, string ns, string name)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfProperty found = styles.ResolveFromDefaults(
+                cascade[i].Family, OdfPropertyKind.Text, ns, name);
+            if (found.HasValue) return found;
+        }
+
+        return OdfProperty.Unset;
+    }
+
+    /// <summary>An indent or spacing, on Writer's own whole-twip grid.</summary>
     private static Length Measure(OdfStyles styles, string? styleName, string name)
-        => Paragraph(styles, styleName, OdfNamespaces.FoCompatible, name).AsLength() ?? Length.Zero;
+        => OdfWriterUnits.ToCore(
+               Paragraph(styles, styleName, OdfNamespaces.FoCompatible, name).AsLength())
+           ?? Length.Zero;
 
     private static int Count(OdfStyles styles, string? styleName, string name)
     {
@@ -178,20 +312,23 @@ internal static class OdfParagraphFormats
         if (Paragraph(styles, styleName, OdfNamespaces.Style, "line-height-at-least").AsLength()
             is { } atLeast)
         {
-            return LineSpacingRule.AtLeast(atLeast);
+            return LineSpacingRule.AtLeast(OdfWriterUnits.ToCore(atLeast));
         }
 
         if (Paragraph(styles, styleName, OdfNamespaces.Style, "line-spacing").AsLength()
             is { } leading)
         {
-            return LineSpacingRule.PlusLeading(leading);
+            return LineSpacingRule.PlusLeading(OdfWriterUnits.ToCore(leading));
         }
 
         OdfProperty height = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "line-height");
         if (!height.HasValue || height.Is("normal")) return LineSpacingRule.SingleSpaced;
 
         if (height.AsPercentage() is { } proportion) return LineSpacingRule.Multiple(proportion);
-        if (height.AsLength() is { } exact) return LineSpacingRule.Exactly(exact);
+        if (height.AsLength() is { } exact)
+        {
+            return LineSpacingRule.Exactly(OdfWriterUnits.ToCore(exact));
+        }
 
         return LineSpacingRule.SingleSpaced;
     }

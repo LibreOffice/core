@@ -21,12 +21,11 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// formatting it never reads or layout re-deriving it from a tree that no longer has it.
 /// </para>
 /// <para>
-/// Only the properties that decide where text goes are resolved. A run's colour and its underline do
-/// not move a line break, so they are left to whatever draws the page; a run's <em>size</em> does, and
-/// that is the one piece of per-run formatting this cannot yet honour — the tallest run on a line sets
-/// the line's height, and until the runs are walked a paragraph is measured wholly in its paragraph
-/// style's font. A document whose emphasis is a different size from its body therefore lays out with
-/// slightly short lines.
+/// The spans are walked as well as the paragraph, because ODF has no inline formatting: one bold word is
+/// an automatic style and a <c>text:span</c> pointing at it, so a reader that resolved only the paragraph
+/// style would measure a mixed paragraph wholly in its body font — short lines wherever the emphasis is
+/// larger, and the wrong face wherever it is bolder. A paragraph whose spans resolve to the paragraph's
+/// own formatting carries no runs at all, which keeps plain prose on the cheap single-face path.
 /// </para>
 /// </remarks>
 public sealed class OdtLayoutSource
@@ -66,6 +65,16 @@ public sealed class OdtLayoutSource
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
         [];
+
+    /// <summary>
+    /// Text styles already resolved, keyed by the cascade that produced them.
+    /// </summary>
+    /// <remarks>
+    /// A document has a handful of span styles and thousands of spans referencing them, and resolving one
+    /// walks a parent chain per property. The key is the cascade's names in order, because two spans with
+    /// the same style inside different paragraph styles resolve differently.
+    /// </remarks>
+    private readonly Dictionary<string, OdfTextStyle> _resolved = new(StringComparer.Ordinal);
 
     /// <summary>Creates a source over a document's styles.</summary>
     /// <param name="styles">The document's resolved styles.</param>
@@ -163,59 +172,153 @@ public sealed class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        RunWalker walker = new(styleName);
+        walker.Walk(element);
+
         return new PageParagraph
         {
-            Text = TextOf(element),
+            Text = walker.Text,
             Face = face,
-            Font = _references.GetValueOrDefault(
-                (text.FamilyName, text.Weight, text.IsItalic)),
+            Font = _references.GetValueOrDefault(text.FaceKey),
+            Colour = text.Colour ?? Colour.Black,
             Format = OdfParagraphFormats.Resolve(_styles, styleName),
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
+            Runs = RunsOf(walker.Ranges, text, face),
             Source = element,
         };
     }
 
     /// <summary>
-    /// A paragraph's text, with the things that occupy a position but are not characters left out.
+    /// The paragraph's runs, or nothing when every one of them is the paragraph's own formatting.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// ODF encodes runs of spaces, tabs and line breaks as elements rather than as characters, so a
-    /// reader that took the descendant text nodes alone would lose every one of them — and
-    /// <c>text:s</c> in particular, which is how any run of two or more spaces is written.
+    /// Returning an empty list for a uniform paragraph is not just an optimisation: it puts plain prose
+    /// back on the single-face measuring path, which shapes the whole paragraph in one call rather than
+    /// once per run. A run's boundaries also break shaping context, so a paragraph split into runs it does
+    /// not need would lose a kern pair at each boundary and measure very slightly wide.
     /// </para>
     /// <para>
-    /// A note's or comment's body is inside the paragraph in the file but is not part of its text, so it
-    /// contributes only the anchor character it occupies. Walking into it would put a footnote's whole
-    /// text into the middle of the sentence that cites it.
+    /// A range whose font cannot be loaded falls back to the paragraph's face rather than being dropped:
+    /// its text is still part of the paragraph, and losing it would silently shorten the document.
     /// </para>
     /// </remarks>
-    private static string TextOf(XElement paragraph)
+    private List<PageRun> RunsOf(
+        IReadOnlyList<StyledRange> ranges, OdfTextStyle paragraph, OpenTypeFace paragraphFace)
     {
-        StringBuilder builder = new();
-        Append(paragraph, builder, depth: 0);
-        return builder.ToString();
+        List<PageRun> runs = new(ranges.Count);
+        bool varies = false;
 
-        static void Append(XElement element, StringBuilder builder, int depth)
+        foreach (StyledRange range in ranges)
         {
-            if (depth > 64) return;
+            OdfTextStyle style = range.Cascade.Length <= 1 ? paragraph : Resolve(range.Cascade);
+            OpenTypeFace face = Face(style) ?? paragraphFace;
+
+            if (face != paragraphFace
+                || style.Size != paragraph.Size
+                || style.Colour != paragraph.Colour
+                || style.Language != paragraph.Language)
+            {
+                varies = true;
+            }
+
+            runs.Add(new PageRun(
+                range.Start,
+                range.Length,
+                face,
+                style.Size,
+                _references.GetValueOrDefault(style.FaceKey),
+                style.Colour ?? paragraph.Colour ?? Colour.Black,
+                new ShapingOptions(Language: style.Language)));
+        }
+
+        return varies ? runs : [];
+    }
+
+    /// <summary>The text style a cascade resolves to, cached because spans repeat their styles.</summary>
+    private OdfTextStyle Resolve(OdfStyleReference[] cascade)
+    {
+        string key = string.Join('\n', cascade.Select(reference => reference.Name));
+        if (_resolved.TryGetValue(key, out OdfTextStyle cached)) return cached;
+
+        OdfTextStyle resolved = OdfParagraphFormats.ResolveText(_styles, cascade);
+        _resolved[key] = resolved;
+        return resolved;
+    }
+
+    /// <summary>
+    /// A stretch of a paragraph's text and the style cascade in force over it.
+    /// </summary>
+    /// <param name="Start">Its first character, as an index into the paragraph's text.</param>
+    /// <param name="Length">How many characters it covers.</param>
+    /// <param name="Cascade">
+    /// The styles in force, outermost first: the paragraph style, then each enclosing span's.
+    /// </param>
+    private readonly record struct StyledRange(
+        int Start, int Length, OdfStyleReference[] Cascade);
+
+    /// <summary>
+    /// Walks a paragraph, building its text and the ranges its spans divide it into.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One walk for both, because the ranges are offsets into the text and the text is not a
+    /// concatenation of the element's text nodes: ODF writes runs of spaces, tabs and line breaks as
+    /// elements, so every one of them shifts the offsets of everything after it. Building the text first
+    /// and the ranges from the tree afterwards would mean re-deriving those shifts.
+    /// </para>
+    /// <para>
+    /// Adjacent stretches with the same cascade merge, which is what makes a paragraph split by a
+    /// bookmark or a soft page break still measure as one run.
+    /// </para>
+    /// </remarks>
+    private sealed class RunWalker
+    {
+        /// <summary>How deep a paragraph's inline nesting is followed.</summary>
+        /// <remarks>
+        /// Spans nest legitimately — a bold word inside an italic phrase inside a hyperlink — but a
+        /// generated file can nest indefinitely, and this recurses on untrusted input.
+        /// </remarks>
+        private const int MaxDepth = 64;
+
+        private readonly StringBuilder _builder = new();
+        private readonly List<OdfStyleReference> _cascade = [];
+        private readonly List<StyledRange> _ranges = [];
+
+        /// <summary>Creates a walker over a paragraph with a given style.</summary>
+        /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
+        internal RunWalker(string? paragraphStyleName)
+            => _cascade.Add(new OdfStyleReference(paragraphStyleName, OdfStyleFamily.Paragraph));
+
+        /// <summary>The paragraph's text.</summary>
+        internal string Text => _builder.ToString();
+
+        /// <summary>The ranges, in order, partitioning the text.</summary>
+        internal IReadOnlyList<StyledRange> Ranges => _ranges;
+
+        /// <summary>Walks a <c>text:p</c> or <c>text:h</c>.</summary>
+        internal void Walk(XElement paragraph) => Append(paragraph, depth: 0);
+
+        private void Append(XElement element, int depth)
+        {
+            if (depth > MaxDepth) return;
 
             foreach (XNode node in element.Nodes())
             {
                 switch (node)
                 {
                     case XText textNode:
-                        builder.Append(textNode.Value);
+                        Emit(textNode.Value);
                         break;
 
                     case XElement child when child.Name.NamespaceName == OdfNamespaces.Text:
-                        AppendTextElement(child, builder, depth);
+                        AppendTextElement(child, depth);
                         break;
 
                     case XElement child:
-                        Append(child, builder, depth + 1);
+                        Append(child, depth + 1);
                         break;
 
                     default:
@@ -224,7 +327,22 @@ public sealed class OdtLayoutSource
             }
         }
 
-        static void AppendTextElement(XElement child, StringBuilder builder, int depth)
+        /// <summary>
+        /// Appends one <c>text:</c> element, which is where ODF hides most of a paragraph's characters.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A reader that took the descendant text nodes alone would lose every run of spaces, every tab
+        /// and every line break — and <c>text:s</c> in particular, which is how any run of two or more
+        /// spaces is written.
+        /// </para>
+        /// <para>
+        /// A note's or comment's body is inside the paragraph in the file but is not part of its text, so
+        /// it contributes only the anchor character it occupies. Walking into it would put a footnote's
+        /// whole text into the middle of the sentence that cites it.
+        /// </para>
+        /// </remarks>
+        private void AppendTextElement(XElement child, int depth)
         {
             switch (child.Name.LocalName)
             {
@@ -237,22 +355,22 @@ public sealed class OdtLayoutSource
                     {
                         count = declared;
                     }
-                    builder.Append(' ', count);
+                    Emit(new string(' ', count));
                     break;
 
                 case "tab":
-                    builder.Append('\t');
+                    Emit("\t");
                     break;
 
                 case "line-break":
                     // A line break within a paragraph, which layout has to honour as a forced break —
                     // recorded as the character so the break iterator sees it.
-                    builder.Append(LineSeparator);
+                    Emit(LineSeparator.ToString());
                     break;
 
                 case "note" or "annotation" or "annotation-end":
                     // The anchor occupies a position; its body is a separate flow.
-                    builder.Append(AnchorCharacter);
+                    Emit(AnchorCharacter.ToString());
                     break;
 
                 case "soft-page-break" or "bookmark" or "bookmark-start" or "bookmark-end"
@@ -260,10 +378,54 @@ public sealed class OdtLayoutSource
                     or "change" or "change-start" or "change-end":
                     break;
 
+                // The three elements that carry character formatting of their own. A hyperlink's is a
+                // character style like any other, which is why a link is usually blue and underlined
+                // without anything inside it saying so.
+                case "span" or "a" or "ruby-base":
+                    string? styleName = child
+                        .Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
+
+                    bool pushed = !string.IsNullOrEmpty(styleName);
+                    if (pushed) _cascade.Add(new OdfStyleReference(styleName, OdfStyleFamily.Text));
+
+                    Append(child, depth + 1);
+
+                    if (pushed) _cascade.RemoveAt(_cascade.Count - 1);
+                    break;
+
                 default:
-                    Append(child, builder, depth + 1);
+                    Append(child, depth + 1);
                     break;
             }
+        }
+
+        /// <summary>Appends text under the cascade currently in force.</summary>
+        private void Emit(string text)
+        {
+            if (text.Length == 0) return;
+
+            _builder.Append(text);
+
+            if (_ranges.Count > 0 && SameCascade(_ranges[^1].Cascade))
+            {
+                _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
+                return;
+            }
+
+            _ranges.Add(new StyledRange(
+                _builder.Length - text.Length, text.Length, [.. _cascade]));
+        }
+
+        private bool SameCascade(OdfStyleReference[] other)
+        {
+            if (other.Length != _cascade.Count) return false;
+
+            for (int i = 0; i < other.Length; i++)
+            {
+                if (other[i] != _cascade[i]) return false;
+            }
+
+            return true;
         }
     }
 

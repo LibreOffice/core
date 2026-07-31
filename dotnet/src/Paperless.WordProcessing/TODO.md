@@ -308,11 +308,30 @@ is read and verified, so what remains is the filling of pages rather than the me
       DOC and RTF, and takes the larger for DOCX — the same source document exported four ways puts its
       41st line 5.65 pt lower in three of them, which is exactly one paragraph space-after. For DOCX the
       answer is read from the file (`w:doNotUseHTMLParagraphAutoSpacing`); for DOC it needs the `Dop`.
-- [ ] Per-run formatting. A paragraph is measured and drawn wholly in the font its paragraph mark
-      carries, so a paragraph mixing sizes lays out slightly short — the tallest run on a line should set
-      that line's height — and emphasis inside a paragraph draws in the paragraph's own face. The line
-      filler would need to measure across a run list rather than one face, which is the change that
-      unblocks bold, italic, colour and mixed sizes together.
+- [x] **Per-run formatting**, for ODF. A paragraph carries `PageRun`s when its formatting varies and none
+      when it does not, which keeps plain prose on the single-face path — a paragraph split into runs it
+      does not need loses the shaping context at each boundary and measures very slightly wide. The line
+      filler measures across the runs, the line's height and ascent come from the runs on it, and each run
+      draws with its own face, size and colour.
+- [x] The line's height is the maxima taken three ways, not the tallest run's: `SwLineLayout::CalcLine`
+      accumulates height, ascent and descent independently and finishes with
+      `if (nMaxDescent > Height() - mnAscent) Height(nMaxDescent + mnAscent)`. Taking the tallest run's
+      ascent agrees whenever one run is tallest in every direction — two sizes of one family — and
+      disagrees the moment a line mixes families, since one face can own the ascent and another the descent.
+- [x] ODF measures are rounded to whole twips as they are read, because Writer's core unit is twips and
+      `SvXMLUnitConverter` converts straight into it: 2.5 cm is 1417.32 twips and LibreOffice keeps 1417.
+      The same file read into Calc or Draw keeps 1/100 mm instead, which is why the rounding lives beside
+      the Writer readers rather than in `Paperless.OpenDocument`.
+- [x] Two ODF font-size quirks, both measured rather than read: nothing stating a size renders at **12 pt**
+      (the item pool's default), and `fo:font-size="150%"` is 150% of *that* rather than of the enclosing
+      text or of the style's parent — a 150% span inside an 11 pt paragraph renders at 18 pt, and a 150%
+      style parented on a 20 pt one still renders at 18. A percentage arrives as `CharPropHeight` and
+      `SvxFontHeightItem` resolves it against the height the item set holds at that moment, which for a
+      style being built up from nothing is the pool default; so nested percentages do not compound either.
+- [ ] Per-run formatting for DOCX, DOC and RTF. The three readers resolve a paragraph's formatting but not
+      its runs' — `w:rPr` on a `w:r`, a WW8 CHPX, an RTF control word — so a mixed paragraph in those
+      formats still lays out in its paragraph mark's font. The engine side is done; this is four readers
+      producing the same `PageRun` list.
 - [ ] Tables. Skipped by every layout source rather than flattened, because a table is laid out as a grid
       and stacking its cells would give the page a height no table has.
 - [ ] Tables spanning page breaks, with header-row repetition
@@ -330,6 +349,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       against the last word's right edge, and the baseline pitch against the rendered line pitch. An image
       comparison answers "does it look the same", which is weaker and much harder to attribute — a
       baseline a point out and a wrong glyph look equally different.
+- [x] And, for a mixed-formatting document, against the PDF's own text operators rather than against
+      `pdftotext`'s word boxes. LibreOffice writes one `BT … ET` block per portion — per line, split again
+      at every formatting change — which is exactly what a glyph run is, so the comparison needs no
+      grouping and reads a *baseline* rather than a box top. Word boxes cannot do this: poppler groups
+      them by vertical position, which puts a 22 pt word on an 11 pt line into a line of its own and
+      scrambles the reading order of precisely the documents worth checking.
+
+## Known deviations, measured
+
+- Two of LibreOffice's numbers are reproduced by construction rather than derived, and both are recorded
+  here so a future comparison does not mistake them for bugs:
+  - Its PDF export adds **two twips** to every pen position horizontally and nothing vertically. With left
+    margins of 1 cm, 2.5 cm and 5 cm it lays the body out at 567, 1417 and 2835 twips — its own RTF export
+    says so — and its PDF puts the first pen at 28.45, 70.95 and 141.85 pt. Additive, not a scale.
+  - Its font ascents and line heights differ from scaling the design metrics by **up to one twip**, because
+    VCL rounds them through the reference device. For 11 pt Carlito the design metrics give an ascent of
+    209.47 twips and it uses 210; at 9 pt they give 171.39 and it uses 171; at 18 pt the line height is
+    439.45 and it uses 440. Eight of twelve sizes tested agree exactly, four differ by one twip, and no
+    single scale factor reproduces the set — so this is left as a per-size constant of at most a twip. It
+    shifts every baseline of one size equally and does not accumulate, which is what makes it tolerable.
 - [ ] A rasteriser and a PDF writer. `Paperless.Rendering`'s two backends are still stubs; the display
       list they consume is now real, which is the half that had to come first.
 

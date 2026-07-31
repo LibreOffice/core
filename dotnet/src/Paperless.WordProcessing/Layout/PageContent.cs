@@ -64,6 +64,65 @@ public sealed record PageParagraph
 
     /// <summary>The caller's own reference to whatever this paragraph came from.</summary>
     public object? Source { get; init; }
+
+    /// <summary>
+    /// The paragraph's runs, when its formatting is not uniform.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Empty means uniform: the whole paragraph is measured and drawn in <see cref="Face"/> at
+    /// <see cref="EmSize"/>, which is what a paragraph of plain text is and by far the common case. When
+    /// runs are present they partition the text and each carries its own face, size and colour, and the
+    /// line height becomes the tallest run's on that line rather than the paragraph's.
+    /// </para>
+    /// <para>
+    /// <see cref="Face"/> and <see cref="EmSize"/> stay required even so, because they are the
+    /// paragraph's own — what its mark carries, and what an empty paragraph is as tall as.
+    /// </para>
+    /// </remarks>
+    public IReadOnlyList<PageRun> Runs { get; init; } = [];
+
+    /// <summary>True when the paragraph's formatting varies across its text.</summary>
+    public bool HasRuns => Runs.Count > 0;
+}
+
+/// <summary>
+/// One run of a paragraph: a range of its text with its own formatting.
+/// </summary>
+/// <remarks>
+/// The measurement half and the drawing half of a run travel together here, unlike in
+/// <see cref="FormattedRun"/>, which carries only what changes a width. A colour does not move a line
+/// break but it does decide what a backend is handed, and splitting the two would mean matching them up
+/// again by range.
+/// </remarks>
+/// <param name="Start">The run's first character, as an index into the paragraph's text.</param>
+/// <param name="Length">How many characters it covers.</param>
+/// <param name="Face">The face it is set in.</param>
+/// <param name="EmSize">The em size it is set at.</param>
+/// <param name="Font">The resolved reference, for a backend that has to name the face.</param>
+/// <param name="Colour">The colour it is drawn in.</param>
+/// <param name="Shaping">How it is shaped.</param>
+public readonly record struct PageRun(
+    int Start,
+    int Length,
+    OpenTypeFace Face,
+    Length EmSize,
+    FontReference? Font = null,
+    Colour Colour = default,
+    ShapingOptions Shaping = default)
+{
+    /// <summary>One past the run's last character.</summary>
+    public int End => Start + Length;
+
+    /// <summary>The colour to draw with, black when the run states none.</summary>
+    /// <remarks>
+    /// A <c>default</c> colour is fully transparent black, which would draw nothing — so an unstated
+    /// colour has to mean the document's text colour rather than the struct's default.
+    /// </remarks>
+    public Colour EffectiveColour => Colour.A == 0 ? Core.Graphics.Colour.Black : Colour;
+
+    /// <summary>The measurement half of this run.</summary>
+    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping);
 }
 
 /// <summary>

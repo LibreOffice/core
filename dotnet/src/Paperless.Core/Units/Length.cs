@@ -111,6 +111,16 @@ public readonly struct Length : IEquatable<Length>, IComparable<Length>
     /// <inheritdoc/>
     public override string ToString() => $"{Points:0.###}pt";
 
+    /// <summary>The larger of two lengths.</summary>
+    /// <remarks>
+    /// Layout takes maxima constantly — the tallest run on a line, the widest cell in a column — and
+    /// <c>Math.Max(a.Emu, b.Emu)</c> at each of those sites both reads worse and invites a unit mistake.
+    /// </remarks>
+    public static Length Max(Length a, Length b) => a.Emu >= b.Emu ? a : b;
+
+    /// <summary>The smaller of two lengths.</summary>
+    public static Length Min(Length a, Length b) => a.Emu <= b.Emu ? a : b;
+
     /// <summary>Adds two lengths.</summary>
     public static Length operator +(Length a, Length b) => new(a.Emu + b.Emu);
 

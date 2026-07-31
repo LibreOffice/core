@@ -143,25 +143,34 @@ internal static class OdfPageGeometry
 
         if (OdfValue.ParseLength(properties.Get(OdfNamespaces.SvgCompatible, "height")) is { } fixedHeight)
         {
-            return fixedHeight;
+            return OdfWriterUnits.ToCore(fixedHeight);
         }
 
-        Length declared =
-            OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "min-height"))
+        Length declared = OdfWriterUnits.ToCore(
+            OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "min-height")))
             ?? Core.Units.Length.Zero;
 
         // The margin below a header, or above a footer. Both are written as the side facing the body,
         // so whichever is present is the spacing that separates the furniture from the text.
-        Length spacing =
+        Length spacing = OdfWriterUnits.ToCore(
             OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "margin-bottom"))
-            ?? OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "margin-top"))
+            ?? OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "margin-top")))
             ?? Core.Units.Length.Zero;
 
         return declared + spacing;
     }
 
+    /// <summary>
+    /// A measure from a page layout, on Writer's own grid.
+    /// </summary>
+    /// <remarks>
+    /// Rounded to whole twips at the point it is read, because that is what LibreOffice's import does and
+    /// because everything downstream compares against a layout that was measured that way — a margin
+    /// carrying a third of a twip of extra precision narrows the text area by it on both sides.
+    /// </remarks>
     private static Length? Length(OdfPropertySet? properties, string localName)
-        => OdfValue.ParseLength(properties?.Get(OdfNamespaces.FoCompatible, localName));
+        => OdfWriterUnits.ToCore(
+            OdfValue.ParseLength(properties?.Get(OdfNamespaces.FoCompatible, localName)));
 
     private static Length? Dimension(OdfPropertySet? properties, string localName)
         => Length(properties, localName) is { } value
@@ -224,12 +233,13 @@ internal static class OdfPageGeometry
         if (OdfValue.ParseLength(columns.Attribute(XName.Get("column-gap", OdfNamespaces.FoCompatible))?.Value)
             is { } gap)
         {
-            return gap;
+            return OdfWriterUnits.ToCore(gap);
         }
 
         XElement? first = columns.Elements(XName.Get("column", OdfNamespaces.Style)).FirstOrDefault();
-        return OdfValue.ParseLength(
-                   first?.Attribute(XName.Get("end-indent", OdfNamespaces.FoCompatible))?.Value)
+        return OdfWriterUnits.ToCore(
+                   OdfValue.ParseLength(
+                       first?.Attribute(XName.Get("end-indent", OdfNamespaces.FoCompatible))?.Value))
                ?? Core.Units.Length.Zero;
     }
 }
