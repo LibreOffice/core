@@ -33,8 +33,21 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
 - [ ] Per-locale substitution. Only the neutral `en` table is generated; the per-locale ones differ
       mainly in CJK preference order, and using one locale's answers for another changes which font a
       document renders in. Wants the locale plumbed through the resolver first.
-- [ ] Mid-run fallback when the primary face lacks a glyph. Coverage is queryable; choosing the
-      fallback face and splitting the run is shaping's job and not written yet.
+- [x] Mid-run fallback when the primary face lacks a glyph. The candidate order is **ported from
+      LibreOffice's own generic list** — `ImplInitGenericGlyphFallback`,
+      `vcl/source/font/PhysicalFontCollection.cxx:113` — rather than invented, because the face that
+      draws a missing character decides its advance width and therefore where the line holding it
+      breaks. Anything installed that covers the character is tried after that list, ordered by name
+      so two runs of the same document agree. **Every fallback is reported** on
+      `SystemFontResolver.GlyphFallbacks`, including the characters nothing could draw: a fallback
+      face is chosen for its coverage rather than its metrics, so it is almost never
+      metric-compatible, and without the list there is nothing to tell that apart from a layout bug.
+- [ ] The platform half of the fallback chain. LibreOffice asks fontconfig first, with the missing
+      characters as a charset (`vcl/unx/generic/fontmanager/fontconfig.cxx`), and only falls back to
+      the generic list when that fails. Paperless has only the second half, deliberately — see the
+      fontconfig note above — but it means a machine whose administrator configured a fallback gets
+      Paperless's answer rather than LibreOffice's. Worth revisiting only with a way to read
+      fontconfig's *configuration* rather than to call its matcher.
 
 ## Metrics — hand-rolled OpenType reader
 
@@ -104,19 +117,96 @@ library's interpretation of them.
       and compares line by line — at three em sizes, and with kerning both on and off on both sides.
       Two of the paragraphs are kerning-heavy on purpose, and the test asserts that they really do
       break differently with kerning than without, so the comparison cannot pass by accident.
-- [ ] Script and direction sub-runs. LibreOffice splits a bidi run into script runs and shapes each
-      separately; Paperless shapes the whole run with the script guessed from its text, so a
-      paragraph mixing Latin with a complex script may shape differently. Needs a script property
-      table, which is the same shape of generated artefact as the line-break tables.
-- [ ] Bidi resolution (UBA). `ShapingOptions.RightToLeft` shapes a run in one direction; resolving
-      mixed direction into runs is not written.
 - [ ] Letter spacing and justification adjustments — both adjust advances after shaping, so they
       belong here rather than in the measurer.
 - [ ] Vertical text.
-- [ ] Font fallback mid-run when the primary face lacks a glyph. Coverage is queryable and the
-      resolver can choose a face; splitting the run and shaping each part is the missing piece.
 - [ ] Cache shaped runs across calls. The harfbuzz face and font are cached per face, but a repeated
       word is reshaped; tables and lists repeat text constantly.
+
+## Itemisation — direction, script and face sub-runs
+
+One pass, not three: a paragraph's text becomes a sequence of sub-runs, each with a direction, a
+script and a face, and each shaped separately. `MeasuredParagraph.Measure` does it, resolving the
+bidi algorithm over the **whole paragraph** and only then intersecting with the formatting runs —
+a run boundary is a change of font, not a change of direction, so resolving per run would let a
+bold word inside a Hebrew sentence see the paragraph's direction instead of the sentence's.
+
+**Decided: read the property tables from ICU, not from the UCD.** ICU is the library LibreOffice
+itself resolves bidi and script with, so its tables are the authority for agreeing with Writer
+rather than a defensible second opinion — and it also makes a *differential* possible that the line
+breaker could not have: 7,944 generated cases checked against ICU's own answers. The scripts are
+`generate-itemisation-tables.py` and `generate-bidi-cases.py`; see `scripts/README.md`.
+
+- [x] The `Bidi_Class`, `Bidi_Paired_Bracket` and `Script` tables, generated into
+      `Itemisation/BidiProperties.Tables.cs` and `Itemisation/ScriptProperties.Tables.cs` from ICU 74
+      (Unicode 15.1) through `ctypes`. The Unicode version is written into each file, so a
+      regeneration that moves it shows up in the diff.
+- [x] UAX #9 in full, in the standard's order: P2–P3, X1–X8, X9's removals, X10's isolating run
+      sequences, W1–W7, N0 with the bracket pairs, N1–N2, I1–I2, L1 and L2. Rule by rule rather than
+      as a table, for the reason the line breaker gives: when a level comes out wrong the only useful
+      question is which rule decided it.
+- [x] Bracket pairs (N0). Not optional — without them "‏שלום (abc) עולם" puts the parentheses the
+      wrong way round, which is the most visible bidi bug a reader will meet, because parenthesised
+      Latin inside right-to-left prose is everywhere in technical writing.
+- [x] Script itemisation (UAX #24), ported from `vcl/source/gdi/scrptrun.cxx` — ICU's `ScriptRun`
+      sample as LibreOffice vendored it, with LibreOffice's two adjustments baked into the generated
+      table so the itemiser cannot forget them: a non-spacing mark reports `Zinh` whatever its own
+      script is (tdf#154549), and Katakana reports `Hira` because the three Japanese script codes
+      share one OpenType tag. The bracket stack is the part that looks like an accident and is not: a
+      closing bracket has to take its *opener's* script, or "(Ελληνικά) English" shapes its two
+      halves in different faces.
+- [x] Format control characters are cut out rather than shaped, which is `ImplLayoutArgs::AddRun`
+      splitting on `IsControlChar` (`vcl/source/text/ImplLayoutArgs.cxx`). One departure, recorded
+      as a decision: LibreOffice also removes U+0001–U+001F and Paperless keeps them, because the tab
+      is in that range and its width is resolved by the line filler rather than by the shaper.
+- [x] **The no-op case is a genuine no-op, measured.** A Latin paragraph produces exactly one
+      sub-run and reaches HarfBuzz in the identical call — same `ShapingOptions` instance, no script
+      or direction override — and `ItemisationTests` asserts the glyphs come back glyph for glyph
+      equal to shaping the whole run. That is not pedantry: a paragraph split into runs it does not
+      need loses the shaping context at each boundary and measures very slightly wide, which is
+      enough to move a line break.
+- [x] Verified against LibreOffice, in `Paperless.Fidelity.Tests/BidiItemisationComparisonTests`.
+      LibreOffice emits one `BT … ET` block per portion in *logical* order with an absolute pen, so
+      one reference PDF gives both halves: the glyph counts read cumulatively are the portion
+      boundaries as character offsets, and the pens are the visual order the reordering produced.
+      Every level-run boundary is one of LibreOffice's, and the leftmost pen of each sub-run rises
+      strictly along the visual order — nine paragraphs, six left-to-right and three right-to-left.
+- [x] Verified against ICU differentially: every ordered pair and triple of bidi classes, brackets
+      with each kind of content and context, and prose in Hebrew, Arabic and Latin, at both
+      paragraph directions. Two behaviours were **measured out of ICU rather than read out of the
+      standard**, and both change where a portion boundary falls: the levels of the characters X9
+      removes propagate *backwards* (ICU reports "a RLE b PDF c" as 0 2 2 0 0, giving each control
+      the level of the text it opens or returns to, where the UAX reference propagates forwards and
+      would say 0 0 2 2 0); and a paragraph with nothing right-to-left in it is reported flat rather
+      than having its Arabic numbers raised two levels by I1, which is the difference between one
+      portion and two. The second has a subtle clause found only by measurement — ICU resolves "٠٠"
+      flat but "٠ ٠" as 2 1 2, because a space between two Arabic numbers can itself become
+      right-to-left under N1.
+- [ ] 72 of the 7,944 differential cases hold an *unterminated or leading* embedding, override or
+      isolate, and on those ICU short-circuits to a flat level in a way that could not be
+      characterised without its source — "‫ا" at paragraph level 1 is 1 1 to ICU and 3 3 by the
+      rules, and "‭ا" at level 0 is 0 0 to ICU and 2 2 by the rules. Their *reordering* agrees, which
+      is what renders, so the test holds them to that and not to the levels. It matters little in
+      practice: no format Paperless reads emits an embedding or an isolate, so the characters only
+      arrive when an author typed one. Closing it wants ICU's `ubidi.cpp`, which is not in this tree
+      (`external/icu` is a tarball recipe, not the source).
+- [ ] Writer's *font* script runs, which are a different and coarser partition from the shaper's.
+      `SwScriptInfo` splits a paragraph by `GetScriptClass` — Latin, Asian or Complex, from a block
+      table in `i18nutil/source/utility/scriptclass.cxx:56` — because those choose between a
+      paragraph's Western, Asian and CTL *font attributes*. Measured: a space is `WEAK` there by an
+      explicit special case (bug 102975) and an opening parenthesis is `LATIN` because it is in the
+      Basic Latin block, so "‏שלום (abc) עולם" gets a Writer portion boundary at the bracket that no
+      UAX #24 itemisation has. Paperless's readers resolve one face per run and never look at the
+      CJK or CTL font attributes, so there is nothing yet for this to choose between; it belongs
+      with whichever reader starts honouring `w:rFonts/@w:cs` and `style:font-name-complex`.
+- [ ] Drawing right-to-left text. `MeasuredParagraph.Items` carries the levels and
+      `TextItemiser.InVisualOrder` orders them, but nothing in `Paperless.WordProcessing.Layout`
+      consumes either — a mixed-direction paragraph still measures correctly and draws its runs left
+      to right in logical order. `SwTextPainter` is the shape to follow: portions are stored
+      logically and each is given an absolute pen, which is exactly what the PDF export shows.
+- [ ] Aligning a right-to-left paragraph. `TextAlignment.Start` is resolved against the paragraph's
+      writing mode by the layouter, not by this, and `MeasuredParagraph.ParagraphLevel` is the value
+      it would need.
 
 ## Line breaking
 
