@@ -105,6 +105,35 @@ public class SlideTextPlacementTests
     }
 
     [Fact]
+    public void ABulletsHangingIndentIsTheRoomTheMarkerOccupies()
+    {
+        using IDocument document = new PresentationReader().Read(
+            DocumentSource.FromFile(Corpus.Require("deck-features.pptx")));
+
+        LaidOutSlide slide = ((SlidePages)((IPaginatedDocument)document).Layout()).Slides[0];
+
+        // The outline placeholder, whose paragraphs state marL="216000" indent="-216000" — a
+        // 17.01 pt hanging indent — with an a:buChar at 45% of the run size.
+        PlacedShape outline = slide.Shapes.First(
+            shape => shape.Text is { Runs.Count: > 2 } && shape.Name == "PlaceHolder 2");
+
+        List<GlyphRun> runs = [.. outline.Text!.Runs.Select(run => run.Run)];
+
+        // LibreOffice's PDF draws the first level's bullet at 56.693 and its text at 73.701, and
+        // the second level's at 73.701 and 90.709. Applying the hanging indent to the text as
+        // well as to the marker puts every line 17 pt to the left of that.
+        runs[0].FontSize.Points.ShouldBe(12.6, 0.05);
+        runs[0].Origin.X.Points.ShouldBe(56.69, TolerancePoints);
+        runs[0].Glyphs.Count.ShouldBe(1);
+
+        runs[1].FontSize.Points.ShouldBe(28, 0.05);
+        runs[1].Origin.X.Points.ShouldBe(73.70, TolerancePoints);
+
+        // The nested item, one outline level deeper, which the same rule moves by the same amount.
+        runs[^1].Origin.X.Points.ShouldBe(90.71, TolerancePoints);
+    }
+
+    [Fact]
     public void ARotatedShapesTextTravelsWithItsOwnTransform()
     {
         using IDocument document = new PresentationReader().Read(

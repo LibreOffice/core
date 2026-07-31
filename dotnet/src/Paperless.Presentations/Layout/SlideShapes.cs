@@ -39,8 +39,17 @@ public sealed record LaidOutSlide
     /// </remarks>
     public bool IsHidden { get; init; }
 
-    /// <summary>The background fill, or null when the slide has none of its own.</summary>
-    public Paint? Background { get; init; }
+    /// <summary>
+    /// The background fill.
+    /// </summary>
+    /// <remarks>
+    /// White rather than null when nothing in the slide, its layout or its master states one,
+    /// because that is what a slide is: LibreOffice paints the page colour as a full-sheet
+    /// rectangle on every slide of every deck, and a caller rasterising one that painted nothing
+    /// would get transparency where a viewer shows paper. Null means no background at all, which
+    /// is what an explicit <c>a:noFill</c> asks for.
+    /// </remarks>
+    public Paint? Background { get; init; } = Paint.Solid(Colour.White);
 
     /// <summary>The shapes, back to front.</summary>
     public IReadOnlyList<PlacedShape> Shapes { get; init; } = [];

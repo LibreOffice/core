@@ -126,9 +126,11 @@ internal static class OdfTextBody
             text.ToString(),
             runs,
             Alignment(file, cascade),
-            Length.Zero,
-            Length.Zero,
+            Spacing(file, cascade, "margin-top"),
+            Spacing(file, cascade, "margin-bottom"),
             LineSpacing(file, cascade),
+            Spacing(file, cascade, "margin-left"),
+            Spacing(file, cascade, "text-indent"),
             Language: null);
     }
 
@@ -239,6 +241,22 @@ internal static class OdfTextBody
 
         return family.Trim().Trim('\'', '"');
     }
+
+    /// <summary>
+    /// A paragraph measurement stated as an <c>fo:</c> length, or zero.
+    /// </summary>
+    /// <remarks>
+    /// The indents and the space around a paragraph, which ODF spells as margins on the paragraph
+    /// itself. Not the ones an <em>outline</em> paragraph gets: those come from the list style its
+    /// <c>text:list</c> names, which is a different resolution path and is the open item recorded
+    /// in the TODO.
+    /// </remarks>
+    private static Length Spacing(
+        OdfFile file, IReadOnlyList<OdfStyleReference> cascade, string name)
+        => file.Styles.ResolveProperty(
+               cascade, OdfPropertyKind.Paragraph, OdfNamespaces.FoCompatible, name)
+               .AsLength()
+           ?? Length.Zero;
 
     private static TextAlignment Alignment(OdfFile file, IReadOnlyList<OdfStyleReference> cascade)
     {

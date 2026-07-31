@@ -3,6 +3,7 @@ using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Presentations.Layout;
@@ -168,7 +169,94 @@ internal static class PptxTextBody
             LineSpacing(Drawing.Child(paragraphProperties, "lnSpc")),
             Length.FromEmu(Emu(paragraphProperties, "marL", 0)),
             Length.FromEmu(Emu(paragraphProperties, "indent", 0)),
-            Language(Drawing.Child(paragraph, "r")));
+            Language(Drawing.Child(paragraph, "r")),
+            Marker(paragraphProperties, levelStyle, theme));
+    }
+
+    /// <summary>
+    /// The bullet a paragraph draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The bullet elements are a choice: <c>a:buNone</c>, <c>a:buChar</c> or <c>a:buAutoNum</c>,
+    /// and whichever the paragraph states settles it — so a paragraph with <c>a:buNone</c> has
+    /// cancelled the bullet its level would have given it, and one that states nothing inherits.
+    /// Only the paragraph's own properties and the body's own list style are consulted, which is
+    /// the same rung the character properties reach; the layout and master rungs are the open
+    /// item recorded in the TODO.
+    /// </para>
+    /// <para>
+    /// A Private Use Area character is substituted for U+2022 the way extraction already does.
+    /// Those code points are Wingdings and Symbol positions and mean nothing outside those fonts,
+    /// which are not installed on the machines this runs on.
+    /// </para>
+    /// <para>
+    /// <c>a:buAutoNum</c> yields null rather than a wrong number: numbering needs a counter per
+    /// outline level carried across the body's paragraphs, restarted where the level rises, and
+    /// inventing "1." for every item of every list would be worse than drawing none. The
+    /// paragraph still gets its hanging indent, so its text lands where the reference puts it.
+    /// </para>
+    /// </remarks>
+    private static SlideMarker? Marker(
+        XElement? paragraphProperties, XElement? levelStyle, DrawingTheme? theme)
+    {
+        foreach (XElement? source in (XElement?[])[paragraphProperties, levelStyle])
+        {
+            if (source is null) continue;
+            if (Drawing.Child(source, "buNone") is not null) return null;
+            if (Drawing.Child(source, "buAutoNum") is not null) return null;
+            if (Drawing.Child(source, "buChar") is not { } bullet) continue;
+
+            string? character = Drawing.Attribute(bullet, "char");
+            if (string.IsNullOrEmpty(character)) return null;
+
+            return new SlideMarker(
+                OutlineNumbers.NormaliseBullet(character),
+                Drawing.Attribute(Bullet(source, "buFont", paragraphProperties, levelStyle), "typeface"),
+                Drawing.Number(
+                    Bullet(source, "buSzPct", paragraphProperties, levelStyle), "val") is { } percent
+                    && percent > 0
+                    ? percent / 100000.0
+                    : 1.0,
+                ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme));
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// One of the bullet's satellite properties, from wherever in the chain states it.
+    /// </summary>
+    /// <remarks>
+    /// Separately from the bullet character itself, because a paragraph routinely states the
+    /// character and leaves the font, size and colour to its level — and because the three are
+    /// each their own element rather than attributes of the bullet.
+    /// </remarks>
+    private static XElement? Bullet(
+        XElement source, string name, XElement? paragraphProperties, XElement? levelStyle)
+        => Drawing.Child(source, name)
+           ?? Drawing.Child(paragraphProperties, name)
+           ?? Drawing.Child(levelStyle, name);
+
+    /// <summary>
+    /// The colour a wrapper element holds directly, rather than through an <c>a:solidFill</c>.
+    /// </summary>
+    /// <remarks>
+    /// <c>a:buClr</c> is one: it holds the colour reference outright, where an <c>a:rPr</c> wraps
+    /// it in a fill. Two readers rather than one because the two shapes really do differ, and a
+    /// reader looking for a fill inside a <c>buClr</c> finds nothing and draws a black bullet on a
+    /// deck that asked for a coloured one.
+    /// </remarks>
+    private static Colour? ColourIn(XElement? wrapper, DrawingTheme? theme)
+    {
+        if (wrapper is null) return null;
+
+        foreach (XElement child in wrapper.Elements())
+        {
+            if (DrawingColour.Read(child)?.Resolve(theme) is { } colour) return colour;
+        }
+
+        return null;
     }
 
     private static string? Language(XElement? run)

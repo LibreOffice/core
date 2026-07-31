@@ -116,8 +116,9 @@ internal sealed class PptxSlideLayout
     /// <remarks>
     /// A slide with no <c>p:bg</c> shows its layout's, and a layout with none shows its master's —
     /// which is why nearly every deck states a background exactly once, on the master, and every
-    /// slide in it is that colour. Only a solid fill is resolved; a gradient or a picture
-    /// background is left unpainted rather than approximated, and says so in the TODO.
+    /// slide in it is that colour. A deck that states none anywhere is white, which is what
+    /// LibreOffice paints. Only a solid fill is resolved; a gradient or a picture background is
+    /// left unpainted rather than approximated, and says so in the TODO.
     /// </remarks>
     private static Paint? Background(PptxSlide slide, DrawingTheme? theme)
     {
@@ -133,7 +134,7 @@ internal sealed class PptxSlideLayout
             if (Drawing.Child(properties, "noFill") is not null) return null;
         }
 
-        return null;
+        return Paint.Solid(Colour.White);
     }
 
     private void Walk(

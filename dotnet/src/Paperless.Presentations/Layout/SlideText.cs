@@ -119,6 +119,7 @@ public sealed record SlideTextBody
 /// <param name="StartIndent">Its indent from the start edge.</param>
 /// <param name="FirstLineIndent">The extra indent on its first line, negative for a hanging one.</param>
 /// <param name="Language">A BCP 47 tag, for the language-specific break rules.</param>
+/// <param name="Marker">The bullet or number drawn before it, or null when it has none.</param>
 public sealed record SlideParagraph(
     string Text,
     IReadOnlyList<SlideTextRun> Runs,
@@ -128,7 +129,34 @@ public sealed record SlideParagraph(
     LineSpacingRule LineSpacing = default,
     Length StartIndent = default,
     Length FirstLineIndent = default,
-    string? Language = null);
+    string? Language = null,
+    SlideMarker? Marker = null);
+
+/// <summary>
+/// The bullet or number a paragraph is labelled with.
+/// </summary>
+/// <remarks>
+/// <para>
+/// A marker is drawn as its own glyph run at its own pen, in its own face and usually at its own
+/// size — LibreOffice writes it as a separate <c>/Lbl</c> block in the PDF, and on
+/// <c>deck-features.pptx</c>'s outline that is a 12.6 pt run beside 28 pt text, because
+/// <c>a:buSzPct val="45000"</c> says 45%.
+/// </para>
+/// <para>
+/// It is <em>not</em> part of the paragraph's text, which is why it is here rather than prefixed
+/// to it: a marker does not wrap, does not participate in the line breaking, and would change
+/// every character offset the runs index by if it were spliced in.
+/// </para>
+/// </remarks>
+/// <param name="Text">The characters to draw.</param>
+/// <param name="Typeface">The family it is set in, or null for the paragraph's own.</param>
+/// <param name="Scale">Its size as a fraction of the first run's, one for the same size.</param>
+/// <param name="Colour">Its colour, or null for the first run's.</param>
+public readonly record struct SlideMarker(
+    string Text,
+    string? Typeface = null,
+    double Scale = 1.0,
+    Colour? Colour = null);
 
 /// <summary>One run of a paragraph: a range of its text with its own face, size and colour.</summary>
 /// <param name="Start">The run's first character.</param>

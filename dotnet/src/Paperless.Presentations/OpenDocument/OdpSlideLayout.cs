@@ -136,7 +136,9 @@ internal sealed class OdpSlideLayout
             if (colour.AsColour() is { } resolved) return Paint.Solid(resolved);
         }
 
-        return null;
+        // Nothing anywhere in the chain states one, which is white: the page colour LibreOffice
+        // paints as a full-sheet rectangle on every slide of every deck.
+        return Paint.Solid(Colour.White);
     }
 
     private void Walk(XElement parent, AffineTransform space, List<PlacedShape> shapes, int depth)
@@ -499,17 +501,21 @@ internal sealed class OdpSlideLayout
     }
 
     /// <summary>
-    /// The paragraphs of a shape, whether they hang off it directly or off a <c>draw:text-box</c>.
+    /// The paragraphs of a shape, in document order, however deeply they are wrapped.
     /// </summary>
     /// <remarks>
+    /// Three shapes of the same thing, and a reader that knows only one loses whole shapes' text.
     /// A <c>draw:frame</c> wraps its text in a <c>draw:text-box</c>; a <c>draw:custom-shape</c>
-    /// holds its <c>text:p</c> children itself. Looking only in one place loses the text of every
-    /// shape of the other kind.
+    /// holds its <c>text:p</c> children itself; and an <em>outline</em> placeholder wraps every
+    /// paragraph in a <c>text:list</c>/<c>text:list-item</c> pair, one level of nesting per
+    /// outline level. Measured on <c>slides-features.odp</c>: taking only the direct children lost
+    /// all six lines of slide one's outline while its title read perfectly, which is exactly the
+    /// failure that looks like a placement bug and is not.
     /// </remarks>
     private static IEnumerable<XElement> Paragraphs(XElement element)
     {
         XElement? box = element.Element(XName.Get("text-box", OdfNamespaces.Draw));
-        return (box ?? element).Elements(XName.Get("p", OdfNamespaces.Text));
+        return (box ?? element).Descendants(XName.Get("p", OdfNamespaces.Text));
     }
 
     private static string? Attribute(XElement? element, string ns, string name)

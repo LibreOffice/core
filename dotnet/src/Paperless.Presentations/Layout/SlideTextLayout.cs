@@ -99,15 +99,65 @@ public static class SlideTextLayout
         foreach (Block block in blocks)
         {
             top += block.SpaceBefore;
+
+            bool first = true;
             foreach (PlacedLine line in block.Lines)
             {
+                if (first)
+                {
+                    EmitMarker(placed, block, line, area.X, top, fonts);
+                    first = false;
+                }
+
                 Emit(placed, block, line, area.X, top);
                 top += line.Height;
             }
+
             top += block.SpaceAfter;
         }
 
         return placed;
+    }
+
+    /// <summary>
+    /// Draws a paragraph's bullet or number, on its first line and at its own pen.
+    /// </summary>
+    /// <remarks>
+    /// At <c>marL + indent</c>, which for the usual hanging indent is where the text would have
+    /// started and where the text no longer does. Its own run rather than a prefix on the
+    /// paragraph's, because it is a different face at a different size and it does not wrap.
+    /// </remarks>
+    private static void EmitMarker(
+        List<PlacedGlyphRun> placed,
+        Block block,
+        PlacedLine line,
+        Length areaLeft,
+        Length top,
+        SlideFonts fonts)
+    {
+        if (block.Paragraph.Marker is not { } marker) return;
+        if (marker.Text.Length == 0) return;
+        if (block.Paragraph.Runs.Count == 0) return;
+
+        SlideTextRun first = block.Paragraph.Runs[0];
+        (OpenTypeFace? face, _) = fonts.Resolve(
+            marker.Typeface ?? first.Typeface, first.Weight, first.IsItalic);
+
+        if (face is null) return;
+
+        Length size = marker.Scale is > 0 and not 1.0
+            ? Length.FromEmu((long)Math.Round(first.Size.Emu * marker.Scale))
+            : first.Size;
+
+        ShapedText shaped = TextShaper.Default.Shape(face, marker.Text, default);
+        if (shaped.Glyphs.Count == 0) return;
+
+        Length pen = areaLeft + block.Paragraph.StartIndent + block.Paragraph.FirstLineIndent;
+
+        placed.Add(new PlacedGlyphRun(
+            Build(shaped, marker.Text, size, Reference(face), new DocPoint(pen, top + line.Ascent),
+                  Length.Zero),
+            marker.Colour ?? first.Colour));
     }
 
     /// <summary>
@@ -140,11 +190,17 @@ public static class SlideTextLayout
 
         if (first is null) return null;
 
+        // A hanging indent under a marker is the room the marker occupies, not a first-line
+        // indent: LibreOffice draws the bullet at marL + indent and the paragraph's own first
+        // line at marL. Measured on deck-features.pptx, whose outline states
+        // marL="216000" indent="-216000" — 17.01 pt — and whose reference PDF puts the bullet at
+        // 56.69 pt and the text at 73.70. Applying the indent to the text as well puts every
+        // bulleted line a whole hanging indent to the left of where it belongs.
         ParagraphFormat format = new()
         {
             Alignment = paragraph.Alignment,
             StartIndent = paragraph.StartIndent,
-            FirstLineIndent = paragraph.FirstLineIndent,
+            FirstLineIndent = paragraph.Marker is null ? paragraph.FirstLineIndent : Length.Zero,
             LineSpacing = paragraph.LineSpacing,
         };
 
