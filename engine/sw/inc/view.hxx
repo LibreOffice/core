@@ -30,6 +30,7 @@
 #include <svl/style.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
+#include <basegfx/units/Length.hxx>
 #include "shellid.hxx"
 #include "viewsh.hxx"
 #include "names.hxx"
@@ -272,7 +273,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     /// COKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
-    SwTwips         m_nKitPageUpDownOffset;
+    gfx::Length m_nKitPageUpDownOffset = 0_emu;
 
     SelectCycle m_aSelectCycle;
 
@@ -603,7 +604,7 @@ public:
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(SwTwips nTwips)
     {
-        m_nKitPageUpDownOffset = nTwips;
+        m_nKitPageUpDownOffset = gfx::Length::twip(nTwips);
     }
 
     // hand over Shell
