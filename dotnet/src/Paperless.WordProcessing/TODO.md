@@ -64,11 +64,9 @@ indexes or resolvable style chains.
       LibreOffice's own DOC exporter falls back to and calls "totally nonoptimum, but the best we can
       do". It errs towards leaving too much room, so body text starts slightly low rather than
       overlapping the header.
-- [ ] Which section each paragraph belongs to. DOCX, DOC and RTF all delimit sections by position and
-      the geometry is read in document order; ODF has no section list at all, only master pages and the
-      paragraph styles that reach them, so its sections are the geometries the document *defines*
-      rather than one per page break. Resolving either into "this paragraph is on that page
-      description" needs the page-break chain, which needs layout.
+- [x] Which section each paragraph belongs to, resolved by the layout pass in all four formats — see the
+      layout section below for how differently the four say it. The *model* still records only the
+      geometries, since the extraction tree has no place to hang a section index on.
 - [ ] Headers and footers as page furniture in the *document model*. `WritingSection` has the slots and
       the fallback rules — first page, even page, default, with a default header appearing on a first
       page that asked for nothing else — but nothing populates them, because the flows are built by the
@@ -441,7 +439,16 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Floating objects and text wrap, including contour wrap
 - [ ] Footnote placement — footnote area growth changes how much body text fits, which
       changes pagination, so it must feed back into the page-filling loop
-- [ ] Columns; vertical and RTL writing modes
+- [x] Columns. Text fills one column top to bottom and flows into the next, and only then to a new page —
+      so a `PlacedLine` carries the column it landed in, and *which rectangle its `Top` is measured from*
+      is the column's rather than the body's. The top-of-frame rules follow the frame, not the sheet: a
+      paragraph at the top of the second column drops its leading exactly as one at the top of a page does,
+      because that is what Writer's rule is about. Verified in all four formats.
+- [ ] Unequal columns. ODF lists them individually and DOCX writes a `w:col` per column; both are read as
+      a count and a first gap, so such a document gets even columns of the right number.
+- [ ] A column *break* — `\column`, `w:br w:type="column"` — which moves to the next column without
+      filling this one. The column machinery is there; nothing reads the break.
+- [ ] Vertical and RTL writing modes
 - [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
       per-glyph advances rather than characters — a backend must not re-shape, since layout already
       committed to these advances when it decided where the lines broke. The run carries the resolved

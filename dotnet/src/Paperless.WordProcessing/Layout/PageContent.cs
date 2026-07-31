@@ -165,11 +165,18 @@ public readonly record struct PageRun(
 /// Where the line's box sits on this page, measured from the top of the page's body area — so unlike
 /// <see cref="LineBox.Top"/> this is a position on a page rather than within a paragraph.
 /// </param>
+/// <param name="Column">
+/// Which column of the page it is in, counted from zero. Zero for the single-column text that most
+/// documents are, so the field costs nothing to ignore — but it is what a caller has to consult to know
+/// <em>which</em> rectangle <see cref="Top"/> is measured from, since a second column's lines start again
+/// at the top of the page.
+/// </param>
 public readonly record struct PlacedLine(
     int ParagraphIndex,
     int LineIndex,
     LineBox Box,
-    Length Top)
+    Length Top,
+    int Column = 0)
 {
     /// <summary>The baseline's distance from the top of the body area.</summary>
     public Length Baseline => Top + Box.Baseline;
@@ -237,7 +244,40 @@ public sealed record LaidOutPage
     public required DocSize Size { get; init; }
 
     /// <summary>Where body text goes, in page coordinates.</summary>
+    /// <remarks>
+    /// The whole text area, columns and the gaps between them included. A line's own coordinates are
+    /// relative to <em>its column's</em> rectangle rather than to this — see
+    /// <see cref="ColumnArea"/> — which for the single-column case are the same thing.
+    /// </remarks>
     public required DocRect BodyArea { get; init; }
+
+    /// <summary>How many columns the page's text area is divided into; one for ordinary text.</summary>
+    public int ColumnCount { get; init; } = 1;
+
+    /// <summary>The gap between two columns.</summary>
+    public Length ColumnGap { get; init; }
+
+    /// <summary>
+    /// One column's rectangle, which is what a line's own coordinates are relative to.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the page rather than looked up from the section, because a page is what a renderer is
+    /// handed: recomputing this would mean giving the renderer the section too, and the two could then
+    /// disagree about a page laid out before a geometry change.
+    /// </remarks>
+    /// <param name="column">The column, counted from zero at the leading edge.</param>
+    public DocRect ColumnArea(int column)
+    {
+        int columns = Math.Max(1, ColumnCount);
+        int at = Math.Clamp(column, 0, columns - 1);
+
+        Length gaps = ColumnGap * (columns - 1);
+        Length width = BodyArea.Width - gaps;
+        width = width > Length.Zero ? width / columns : BodyArea.Width;
+
+        return new DocRect(
+            BodyArea.X + ((width + ColumnGap) * at), BodyArea.Y, width, BodyArea.Height);
+    }
 
     /// <summary>The lines on the page, in order.</summary>
     public required IReadOnlyList<PlacedLine> Lines { get; init; }

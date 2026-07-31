@@ -264,6 +264,32 @@ public sealed record PageGeometry
         new(Margins.Left + Gutter, Margins.Top, TextWidth, TextHeight);
 
     /// <summary>
+    /// One column's rectangle on the page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Columns are equal and evenly spaced, which is what <see cref="Columns"/> and
+    /// <see cref="ColumnGap"/> describe and what every format writes for an ordinary two-column stretch.
+    /// Unequal columns exist — ODF lists them individually and DOCX writes a <c>w:col</c> per column — and
+    /// are read as their count and their first gap, so a document using them gets even columns of the right
+    /// number. That is recorded as a gap rather than approximated further.
+    /// </para>
+    /// <para>
+    /// Clamped to the columns that exist, so a caller asking for one past the end gets the last rather than
+    /// a rectangle off the side of the sheet.
+    /// </para>
+    /// </remarks>
+    /// <param name="column">The column, counted from zero at the leading edge.</param>
+    public DocRect ColumnArea(int column)
+    {
+        int at = Math.Clamp(column, 0, Math.Max(0, Columns - 1));
+        Length width = ColumnWidth;
+
+        return new DocRect(
+            Margins.Left + Gutter + ((width + ColumnGap) * at), Margins.Top, width, TextHeight);
+    }
+
+    /// <summary>
     /// The rectangle the header occupies, or an empty one when the page has no header.
     /// </summary>
     /// <remarks>

@@ -50,7 +50,7 @@ public static class PageDrawing
         try
         {
             DrawFlow(page.Header, sink);
-            DrawLines(page.BodyArea, page.Lines, blocks, sink);
+            DrawBody(page, blocks, sink);
             foreach (PlacedTable table in page.Tables) DrawTable(table, sink);
             DrawFlow(page.Footer, sink);
         }
@@ -59,6 +59,32 @@ public static class PageDrawing
             // Always closed, even if a sink throws part way through: a page left open would make the
             // next one nest inside it, turning one bad page into a broken document.
             sink.EndPage();
+        }
+    }
+
+    /// <summary>
+    /// Draws the body's lines, each relative to the rectangle of the column it landed in.
+    /// </summary>
+    /// <remarks>
+    /// Grouped by column rather than looked up per line, because the rectangle is the same for every line of
+    /// a column and computing it per line would divide the body's width by the column count once per line of
+    /// the page. Single-column text — which is nearly everything — takes one group and one lookup.
+    /// </remarks>
+    private static void DrawBody(
+        LaidOutPage page, IReadOnlyList<PageBlock> blocks, IDrawingSink sink)
+    {
+        if (page.ColumnCount <= 1)
+        {
+            DrawLines(page.BodyArea, page.Lines, blocks, sink);
+            return;
+        }
+
+        for (int column = 0; column < page.ColumnCount; column++)
+        {
+            DocRect area = page.ColumnArea(column);
+            int at = column;
+
+            DrawLines(area, [.. page.Lines.Where(line => line.Column == at)], blocks, sink);
         }
     }
 
@@ -130,7 +156,7 @@ public static class PageDrawing
         LaidOutPage page, PlacedLine line, PageParagraph paragraph)
     {
         ArgumentNullException.ThrowIfNull(page);
-        return RunsIn(page.BodyArea, line, paragraph);
+        return RunsIn(page.ColumnArea(line.Column), line, paragraph);
     }
 
     /// <summary>The glyph runs one line draws, relative to whichever area it belongs to.</summary>

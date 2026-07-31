@@ -243,6 +243,7 @@ public sealed class Paginator
 
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
         int sectionFirstPage = 0;
+        int column = 0;
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
         Length used = Length.Zero;
@@ -256,6 +257,14 @@ public sealed class Paginator
                 WasTruncated = true;
                 break;
             }
+
+            // "Nothing here yet", which is what the top-of-frame rules are about — and a frame is a column
+            // rather than a page once there is more than one of them. A paragraph at the top of the second
+            // column drops its leading exactly as one at the top of a page does, because Writer's rule is
+            // about the frame the text flows into and not about the sheet.
+            bool columnIsEmpty =
+                !placed.Any(line => line.Column == column)
+                && !tables.Any(part => part.Column == column);
 
             bool pageIsEmpty = placed.Count == 0 && tables.Count == 0;
 
@@ -294,7 +303,7 @@ public sealed class Paginator
 
             if (blocks[paragraphIndex] is PageTable table)
             {
-                Length before = pageIsEmpty && !_options.KeepsSpacingAtTopOfPage
+                Length before = columnIsEmpty && !_options.KeepsSpacingAtTopOfPage
                     ? Length.Zero
                     : table.SpaceBefore;
 
@@ -305,7 +314,7 @@ public sealed class Paginator
                 // taller than a whole page is placed anyway and allowed to overflow.
                 if (fittedRows == 0)
                 {
-                    if (!pageIsEmpty)
+                    if (!columnIsEmpty)
                     {
                         EmitPage();
                         continue;
@@ -315,8 +324,8 @@ public sealed class Paginator
                 }
 
                 (PlacedTable part, Length height) = PlaceRows(
-                    table, laid[paragraphIndex], lineIndex, fittedRows, page.TextArea,
-                    used + before, repeatHeadings: lineIndex > 0);
+                    table, laid[paragraphIndex], lineIndex, fittedRows, page.ColumnArea(column),
+                    used + before, column, lineIndex > 0);
 
                 tables.Add(part);
                 used += before + height;
@@ -346,19 +355,19 @@ public sealed class Paginator
             }
 
             Length spaceAbove = lineIndex == 0
-                ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: pageIsEmpty)
+                ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
                 : Length.Zero;
 
             int fitted = Fit(
-                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: pageIsEmpty);
+                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: columnIsEmpty);
             int allowed = Allowed(
-                paragraph.Format, layout.Lines.Count, lineIndex, fitted, pageIsEmpty);
+                paragraph.Format, layout.Lines.Count, lineIndex, fitted, columnIsEmpty);
 
             if (allowed <= 0)
             {
-                // Nothing of this paragraph may go here. An empty page would leave the same problem, so
-                // a paragraph that cannot fit a page of its own is placed anyway and allowed to overflow.
-                if (pageIsEmpty)
+                // Nothing of this paragraph may go here. An empty column would leave the same problem, so
+                // a paragraph that cannot fit a column of its own is placed anyway and allowed to overflow.
+                if (columnIsEmpty)
                 {
                     allowed = Math.Max(1, fitted);
                 }
@@ -374,12 +383,15 @@ public sealed class Paginator
             {
                 LineBox box = layout.Lines[lineIndex + i];
 
-                // The first line on a page loses the leading above its text, box and all: Writer counts
+                // The first line in a frame loses the leading above its text, box and all: Writer counts
                 // that leading as part of the paragraph's upper space and drops it at the top of a frame.
-                // Only when it really is the page's first content — a line below a table is not.
-                if (pageIsEmpty && placed.Count == 0) box = box.WithoutSpaceAbove();
+                // Only when it really is the frame's first content — a line below a table is not — and
+                // whether the paragraph *began* here is beside the point: a paragraph carried over from the
+                // previous page drops the leading above its continuation just the same, which at 200% line
+                // spacing is the difference between twenty-five lines on a page and twenty-four.
+                if (columnIsEmpty && i == 0) box = box.WithoutSpaceAbove();
 
-                placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top));
+                placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top, column));
                 top += box.Height;
             }
 
@@ -420,13 +432,22 @@ public sealed class Paginator
 
         return pages;
 
-        // Closes the current page and starts an empty one. A local function because it needs every piece of
-        // the loop's state — which page geometry is in force, which section's furniture, and how far into
-        // the section we are — and threading seven parameters through seven call sites was how the "first
-        // page of the section" test came to read `pages.Count == 0` and be wrong for every section but the
-        // first.
+        // Moves on when the current column is full: to the next column of the same page if there is one,
+        // and to a new page otherwise. A local function because it needs every piece of the loop's state —
+        // which page geometry is in force, which section's furniture, how far into the section we are, and
+        // which column we are filling — and threading that through seven call sites was how the "first page
+        // of the section" test came to read `pages.Count == 0` and be wrong for every section but the first.
         void EmitPage()
         {
+            if (column + 1 < Math.Max(1, page.Columns))
+            {
+                // The page is not finished, only this column of it. The lines already placed stay where
+                // they are — each carries its own column — and the running height starts again at the top.
+                column++;
+                used = Length.Zero;
+                return;
+            }
+
             pages.Add(Page(
                 pages.Count,
                 pageNumber,
@@ -438,6 +459,7 @@ public sealed class Paginator
                     first: pages.Count == sectionFirstPage)));
 
             pageNumber++;
+            column = 0;
             placed = [];
             tables = [];
             used = Length.Zero;
@@ -659,6 +681,8 @@ public sealed class Paginator
             Number = number,
             Size = geometry.Size,
             BodyArea = geometry.TextArea,
+            ColumnCount = geometry.Columns,
+            ColumnGap = geometry.ColumnGap,
             Lines = [.. lines],
             Tables = [.. tables],
             Header = furniture.Header,
@@ -676,6 +700,8 @@ public sealed class Paginator
             Number = number,
             Size = geometry.Size,
             BodyArea = geometry.TextArea,
+            ColumnCount = geometry.Columns,
+            ColumnGap = geometry.ColumnGap,
             Lines = [],
             Header = furniture.Header,
             Footer = furniture.Footer,
@@ -757,8 +783,12 @@ public sealed class Paginator
     /// <param name="laid">Its cells and row heights, relative to its own top-left.</param>
     /// <param name="from">The first row to place.</param>
     /// <param name="count">How many rows to place.</param>
-    /// <param name="body">The page's body area, which the cells' coordinates end up relative to.</param>
-    /// <param name="top">How far below the body's top the placed part starts.</param>
+    /// <param name="body">
+    /// The column the table goes in, which the cells' coordinates end up relative to — the whole body area
+    /// for single-column text, and one column of it otherwise.
+    /// </param>
+    /// <param name="top">How far below that area's top the placed part starts.</param>
+    /// <param name="column">Which column of the page it is, recorded on the result.</param>
     /// <param name="repeatHeadings">True when this is a continuation and the headings come again.</param>
     private static (PlacedTable Table, Length Height) PlaceRows(
         PageTable table,
@@ -767,6 +797,7 @@ public sealed class Paginator
         int count,
         DocRect body,
         Length top,
+        int column,
         bool repeatHeadings)
     {
         List<Length> heights = laid.RowHeights;
@@ -811,6 +842,7 @@ public sealed class Paginator
                 Cells = cells,
                 FirstRow = from,
                 RowEnd = end,
+                Column = column,
             },
             placedHeight);
     }

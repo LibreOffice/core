@@ -215,6 +215,9 @@ public sealed record PlacedTable
     /// <summary>One past the last row of the table on this page.</summary>
     public int RowEnd { get; init; }
 
+    /// <summary>Which column of the page it sits in; zero for single-column text.</summary>
+    public int Column { get; init; }
+
     /// <summary>True when nothing was placed.</summary>
     public bool IsEmpty => Cells.Count == 0;
 }
