@@ -16,11 +16,24 @@
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
+#include "llvm/ADT/SmallVector.h"
+#include "llvm/ADT/Twine.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Path.h"
 
 #include "config_clang.h"
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
+
+inline void make_absolute(llvm::Twine const & current_directory, llvm::SmallVectorImpl<char> & path)
+{
+#if CLANG_VERSION >= 220000
+    llvm::sys::path::make_absolute(current_directory, path);
+#else
+    llvm::sys::fs::make_absolute(current_directory, path);
+#endif
+}
 
 inline std::pair<clang::SourceLocation, clang::SourceLocation> getImmediateExpansionRange(
     clang::SourceManager const & SM, clang::SourceLocation Loc)

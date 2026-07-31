@@ -77,7 +77,7 @@ StringRef makePathnameAbsolute(StringRef pathname)
     }
     else
     {
-        llvm::sys::fs::make_absolute(s_WorkingDirectory, absolute);
+        compat::make_absolute(s_WorkingDirectory, absolute);
     }
     llvm::sys::path::remove_dots(absolute, /*remove_dot_dot=*/true);
     return s_AbsolutePathnames.try_emplace(pathname, std::string(absolute)).first->second;

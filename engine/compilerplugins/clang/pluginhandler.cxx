@@ -23,6 +23,7 @@
 #include <clang/Lex/PPCallbacks.h>
 #include <llvm/ADT/StringExtras.h>
 #include <llvm/Support/TimeProfiler.h>
+#include <llvm/Support/VirtualFileSystem.h>
 
 #if defined _WIN32
 #include <process.h>
@@ -82,7 +83,12 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const std::vector< std
 {
     // The compiler resolves a relative pathname against this, which is empty unless it was given
     // -working-directory, and then means the working directory of the process.
-    setPathnameWorkingDirectory(compiler.getFileSystemOpts().WorkingDir);
+    if (auto const wd = compiler.getVirtualFileSystem().getCurrentWorkingDirectory()) {
+        setPathnameWorkingDirectory(*wd);
+    } else {
+        report(DiagnosticsEngine::Fatal, "cannot determine the working directory: %0")
+            << wd.getError().message();
+    }
     std::set< std::string > rewriters;
     for( std::string const & arg : args )
         {
