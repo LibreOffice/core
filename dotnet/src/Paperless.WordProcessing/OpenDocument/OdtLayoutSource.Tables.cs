@@ -49,8 +49,8 @@ public sealed partial class OdtLayoutSource
     /// <summary>Reads a table, or returns null when it declares no usable grid.</summary>
     private PageTable? Table(XElement element)
     {
-        List<Length> columns = Columns(element);
-        if (columns.Count == 0) return null;
+        List<Length?> declared = Columns(element);
+        if (declared.Count == 0) return null;
 
         List<PageTableRow> rows = [];
         int headerRows = 0;
@@ -60,10 +60,13 @@ public sealed partial class OdtLayoutSource
 
         string? styleName = element.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
 
+        List<Length> columns = [.. declared.Select(width => width ?? Length.Zero)];
+
         return new PageTable
         {
             SectionIndex = _sectionIndex,
             ColumnWidths = columns,
+            ColumnFit = Fit(declared, styleName),
             Rows = rows,
             HeaderRowCount = headerRows,
             LeftIndent = TableMeasure(styleName, OdfNamespaces.FoCompatible, "margin-left")
@@ -76,17 +79,17 @@ public sealed partial class OdtLayoutSource
     }
 
     /// <summary>
-    /// The grid's column widths, in order.
+    /// The grid's column widths, in order, with null for a column whose style states none.
     /// </summary>
     /// <remarks>
-    /// A column whose style states no width gets nothing here rather than a guess, because a guess would be
-    /// worse than the truth: LibreOffice's own writer always states them, and a document that does not is
-    /// asking for the table to be fitted to the page — which needs the page, and is recorded as a gap
-    /// rather than approximated.
+    /// Null rather than zero, because the two are different documents: zero is a column the file asked to
+    /// be invisible and null is one it left to Writer, which then sizes it by
+    /// <see cref="TableColumnFit"/>'s arithmetic. Reading the second as the first is what made a width-less
+    /// table lay out with no columns at all.
     /// </remarks>
-    private List<Length> Columns(XElement table)
+    private List<Length?> Columns(XElement table)
     {
-        List<Length> widths = [];
+        List<Length?> widths = [];
         Collect(table, 0);
         return widths;
 
@@ -108,7 +111,7 @@ public sealed partial class OdtLayoutSource
                         break;
 
                     case "table-column":
-                        Length width = ColumnWidth(child);
+                        Length? width = ColumnWidth(child);
                         int repeat = Repeat(child, "number-columns-repeated");
 
                         for (int i = 0; i < repeat && widths.Count < PageTable.MaxColumns; i++)
@@ -122,7 +125,7 @@ public sealed partial class OdtLayoutSource
         }
     }
 
-    private Length ColumnWidth(XElement column)
+    private Length? ColumnWidth(XElement column)
     {
         string? styleName = column.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
 
@@ -130,8 +133,46 @@ public sealed partial class OdtLayoutSource
             OdfValue.ParseLength(
                 _styles.ResolveProperty(
                     styleName, OdfStyleFamily.TableColumn, OdfPropertyKind.TableColumn,
-                    OdfNamespaces.Style, "column-width").Value))
-            ?? Length.Zero;
+                    OdfNamespaces.Style, "column-width").Value));
+    }
+
+    /// <summary>
+    /// How the columns the file left blank are to be sized, or null when it stated every one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The half of <c>SwXMLTableContext::MakeTable</c> (<c>sw/source/filter/xml/xmltbli.cxx</c>:2467) that
+    /// decides <em>which</em> distribution runs, which turns on the table's horizontal orientation rather
+    /// than on its width. <c>table:align</c> maps onto <c>HoriOrientation</c> through
+    /// <c>aXMLTableAlignMap</c> (<c>sw/source/filter/xml/xmlithlp.cxx</c>:307): left, centre and right are
+    /// real orientations, <c>margins</c> is <c>FULL</c>, and an absent attribute is <c>FULL</c> too.
+    /// </para>
+    /// <para>
+    /// <b>Under <c>FULL</c> the table's stated width is discarded</b> — the importer's own comment is "Even
+    /// if a size is specified, it will be ignored!" — and the table is as wide as the area it sits in. So
+    /// the same three width-less columns come out equal in a table with no <c>table:align</c> and in the
+    /// ratio 3:2:4 in one that says <c>left</c>, on the same page, from the same widths. Measured both ways.
+    /// </para>
+    /// </remarks>
+    /// <param name="declared">The columns, with null for each that stated no width.</param>
+    /// <param name="styleName">The table's own style name.</param>
+    private TableColumnFit? Fit(List<Length?> declared, string? styleName)
+    {
+        if (declared.All(width => width is not null)) return null;
+
+        string? align = _styles.ResolveProperty(
+            styleName, OdfStyleFamily.Table, OdfPropertyKind.Table,
+            OdfNamespaces.Table, "align").Value;
+
+        bool oriented = align is "left" or "center" or "right";
+        Length? width = oriented ? TableMeasure(styleName, OdfNamespaces.Style, "width") : null;
+
+        return new TableColumnFit
+        {
+            IsAuto = [.. declared.Select(column => column is null)],
+            TableWidth = width,
+            Rule = TableWidthRule.OpenDocument,
+        };
     }
 
     /// <summary>

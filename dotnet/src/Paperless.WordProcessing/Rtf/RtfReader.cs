@@ -225,6 +225,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         {
             SectionIndex = table.SectionIndex,
             ColumnWidths = table.ColumnWidths,
+            ColumnFit = table.ColumnFit,
             Rows = rows,
             HeaderRowCount = table.HeaderRowCount,
             LeftIndent = table.LeftIndent,

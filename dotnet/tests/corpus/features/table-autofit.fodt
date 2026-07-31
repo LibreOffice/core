@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless table auto-fit</dc:title>
+  <dc:subject>A table whose columns state no width, for the column-fitting comparison</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="Grid" style:family="table">
+   <style:table-properties style:width="17cm" fo:margin-left="0cm"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="left"/>
+  </style:style>
+  <style:style style:name="Cell" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.1cm" style:vertical-align="top"/>
+  </style:style>
+  <style:style style:name="Roomy" style:family="table-cell">
+   <style:table-cell-properties fo:padding-left="0.6cm" fo:padding-right="0.1cm"
+       fo:padding-top="0.1cm" fo:padding-bottom="0.1cm" style:vertical-align="top"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Preamble before the grid.</text:p>
+   <table:table table:name="Grid" table:style-name="Grid">
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Alpha</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Bravo</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Charlie</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Delta</text:p></table:table-cell>
+     <table:table-cell table:style-name="Roomy" office:value-type="string"><text:p text:style-name="Body">Echo</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Foxtrot kerning advance rasteriser layout ligature separate margin extraction paths</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Golf</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Hotel</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">India</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" table:number-columns-spanned="2" office:value-type="string"><text:p text:style-name="Body">Juliett spanning two</text:p></table:table-cell>
+     <table:covered-table-cell/>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Kilo</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="Body">Afterword following the grid.</text:p>
+  </office:text></office:body>
+</office:document>

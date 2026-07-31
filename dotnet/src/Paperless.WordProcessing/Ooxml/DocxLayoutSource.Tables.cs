@@ -60,8 +60,10 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "tblPr");
 
-        List<Length> columns = Columns(element);
-        if (columns.Count == 0) return null;
+        List<Length?> declared = Columns(element);
+        if (declared.Count == 0) return null;
+
+        List<Length> columns = [.. declared.Select(width => width ?? Length.Zero)];
 
         CellPadding tablePadding = Padding(
             Word.Child(properties, "tblCellMar"), DefaultCellPadding);
@@ -87,6 +89,7 @@ public sealed partial class DocxLayoutSource
         {
             SectionIndex = _sectionIndex,
             ColumnWidths = columns,
+            ColumnFit = Fit(declared, properties),
             Rows = Resolved(rows),
             HeaderRowCount = HeadingRows(rows),
             LeftIndent = LeftEdge(properties, rows, isNested: _tableDepth > 0),
@@ -163,18 +166,60 @@ public sealed partial class DocxLayoutSource
     /// with the grid in real documents, and Word itself lays a fixed table out from the grid — a reader
     /// preferring the cell's width would place two cells of one row at different edges.
     /// </remarks>
-    private static List<Length> Columns(XElement table)
+    private static List<Length?> Columns(XElement table)
     {
-        List<Length> widths = [];
+        List<Length?> widths = [];
 
         foreach (XElement column in Word.Children(Word.Child(table, "tblGrid"), "gridCol"))
         {
             if (widths.Count >= PageTable.MaxColumns) break;
 
-            widths.Add(Twips(column) ?? Length.Zero);
+            // A w:w of zero is how Word writes a column it has not sized, and it is not a zero-width
+            // column: nothing in the format spells that, and the file that means it writes no w:w at all.
+            Length? stated = Twips(column);
+            widths.Add(stated is null || stated <= Length.Zero ? null : stated);
         }
 
         return widths;
+    }
+
+    /// <summary>
+    /// How the columns the file left unsized are to be sized, or null when it sized every one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word's grid never reaches Writer as widths at all. <c>DomainMapperTableManager::endOfRowAction</c>
+    /// turns it into relative <c>TableColumnSeparator</c>s and the table is built with <em>equal</em>
+    /// columns before they are applied, so an unsized column's separator — which comes out at zero — is
+    /// dropped and its divider stays where the equal division put it. See <see cref="TableColumnFit"/>.
+    /// </para>
+    /// <para>
+    /// The table's own width is <c>w:tblW</c> when it states one in twips, and otherwise the grid added up
+    /// (<c>DomainMapperTableManager.cxx</c>:647, "convert sum of grid twip values"). When that is nothing
+    /// either the table is left variable and fills the area it sits in, which is what a
+    /// <c>w:tblW w:w="0" w:type="auto"</c> beside a grid of zeroes means.
+    /// </para>
+    /// </remarks>
+    /// <param name="declared">The grid, with null for each column that stated no width.</param>
+    /// <param name="properties">The <c>w:tblPr</c>.</param>
+    private static TableColumnFit? Fit(List<Length?> declared, XElement? properties)
+    {
+        if (declared.All(width => width is not null)) return null;
+
+        Length? width = Twips(Word.Child(properties, "tblW"));
+        if (width is null || width <= Length.Zero)
+        {
+            Length grid = Length.Zero;
+            foreach (Length? column in declared) grid += column ?? Length.Zero;
+            width = grid > Length.Zero ? grid : null;
+        }
+
+        return new TableColumnFit
+        {
+            IsAuto = [.. declared.Select(column => column is null)],
+            TableWidth = width,
+            Rule = TableWidthRule.Word,
+        };
     }
 
     /// <summary>Reads the rows, following the change-tracking wrappers a row can sit inside.</summary>
