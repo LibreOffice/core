@@ -41,7 +41,7 @@
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <RenderState.hxx>
-#include <com/sun/star/rendering/Texture.hpp>
+#include <Texture.hxx>
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
@@ -226,7 +226,7 @@ namespace canvastools
         int calcGradientStepCount( ::basegfx::B2DHomMatrix&      rTotalTransform,
                                    const vclcanvas::ViewState&   viewState,
                                    const vclcanvas::RenderState& renderState,
-                                   const rendering::Texture&     texture,
+                                   const vclcanvas::Texture&     texture,
                                    int                           nColorSteps )
         {
             // calculate overall texture transformation (directly from

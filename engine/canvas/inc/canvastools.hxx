@@ -52,7 +52,6 @@ namespace com::sun::star::geometry
 
 namespace com::sun::star::rendering
 {
-    struct Texture;
     class XGraphicDevice;
     class XPolyPolygon2D;
 }
@@ -60,6 +59,7 @@ namespace com::sun::star::rendering
 namespace vclcanvas
 {
     struct RenderState;
+    struct Texture;
     struct ViewState;
 }
 
@@ -241,7 +241,7 @@ namespace canvastools
         CANVASTOOLS_DLLPUBLIC int calcGradientStepCount( ::basegfx::B2DHomMatrix&   rTotalTransform,
                                    const ::vclcanvas::ViewState&   viewState,
                                    const ::vclcanvas::RenderState& renderState,
-                                   const css::rendering::Texture&     texture,
+                                   const ::vclcanvas::Texture&     texture,
                                    int                                nColorSteps );
 
         /** A very simplistic map for ASCII strings and arbitrary value

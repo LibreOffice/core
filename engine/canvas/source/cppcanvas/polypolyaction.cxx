@@ -35,6 +35,7 @@
 #include <utility>
 #include "mtftools.hxx"
 #include <XCanvas.hxx>
+#include <Texture.hxx>
 
 using namespace ::com::sun::star;
 
@@ -193,7 +194,7 @@ namespace cppcanvas
             public:
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const OutDevState&               rState,
-                                        const rendering::Texture&        rTexture );
+                                        const vclcanvas::Texture&        rTexture );
 
                 virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
@@ -213,12 +214,12 @@ namespace cppcanvas
 
                 // stroke color is now implicit: the maState.DeviceColor member
                 vclcanvas::RenderState                              maState;
-                const rendering::Texture                            maTexture;
+                const vclcanvas::Texture                            maTexture;
             };
 
             TexturedPolyPolyAction::TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPolyPoly,
                                                             const OutDevState&               rState,
-                                                            const rendering::Texture&        rTexture ) :
+                                                            const vclcanvas::Texture&        rTexture ) :
                 CachedPrimitiveBase( true ),
                 mxPolyPoly( ::canvastools::xPolyPolygonFromB2DPolyPolygon( rPolyPoly) ),
                 maTexture( rTexture )
@@ -237,7 +238,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                cpo::uno::Sequence< rendering::Texture > aSeq { maTexture };
+                std::vector< vclcanvas::Texture > aSeq { maTexture };
 
                 rCachedPrimitive = rCanvas->fillTexturedPolyPolygon( mxPolyPoly,
                                                                   rViewState,
@@ -363,7 +364,7 @@ namespace cppcanvas
 
         std::shared_ptr<Action> PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
                                                                      const OutDevState&                 rState,
-                                                                     const rendering::Texture&          rTexture )
+                                                                     const vclcanvas::Texture&          rTexture )
         {
             return std::make_shared<TexturedPolyPolyAction>( rPoly, rState, rTexture );
         }

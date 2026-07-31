@@ -35,7 +35,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <RenderState.hxx>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
-#include <com/sun/star/rendering/Texture.hpp>
+#include <Texture.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 
@@ -179,7 +179,7 @@ namespace canvastools
             }
         }
 
-        void verifyInput( const rendering::Texture&                 texture,
+        void verifyInput( const vclcanvas::Texture&                 texture,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )

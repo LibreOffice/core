@@ -2839,7 +2839,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	StringContext \
 	StrokeAttributes \
 	TextDirection \
-	Texture \
 	TexturingMode \
 	XBezierPolyPolygon2D \
 	XBitmap \

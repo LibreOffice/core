@@ -27,10 +27,12 @@ namespace basegfx {
 }
 namespace com::sun::star::rendering
 {
-    struct Texture;
     struct StrokeAttributes;
 }
-
+namespace vclcanvas
+{
+    struct Texture;
+}
 
 /* Definition of PolyPolyActionFactory */
 
@@ -54,7 +56,7 @@ namespace cppcanvas
             /// Create texture-filled polygon
             std::shared_ptr<Action> createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                   const OutDevState&,
-                                                  const css::rendering::Texture& );
+                                                  const vclcanvas::Texture& );
 
             /// Create line polygon (always stroked, not filled)
             std::shared_ptr<Action> createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,

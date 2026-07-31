@@ -495,7 +495,7 @@ namespace cppcanvas
 
                 if( xGraphicDevice.is() )
                 {
-                    rendering::Texture aTexture;
+                    vclcanvas::Texture aTexture;
 
                     aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
                     aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
@@ -1553,7 +1553,7 @@ namespace cppcanvas
                                                        "XPATHFILL_SEQ_END",
                                                         MetaActionType::FLOATTRANSPARENT ) )
                                 {
-                                    rendering::Texture aTexture;
+                                    vclcanvas::Texture aTexture;
 
                                     // TODO(F1): the SvtGraphicFill
                                     // can also transport metafiles

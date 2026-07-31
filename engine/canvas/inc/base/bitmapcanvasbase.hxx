@@ -194,7 +194,7 @@ namespace canvas
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                     const ::vclcanvas::ViewState&                             viewState,
                                     const ::vclcanvas::RenderState&                           renderState,
-                                    const cpo::uno::Sequence< css::rendering::Texture >&         textures) override
+                                    const std::vector< vclcanvas::Texture >&           textures) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               __func__,

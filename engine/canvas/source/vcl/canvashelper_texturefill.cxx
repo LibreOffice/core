@@ -484,7 +484,7 @@ namespace vclcanvas
                            const ::tools::PolyPolygon&                     rPoly,
                            const vclcanvas::ViewState&                     viewState,
                            const vclcanvas::RenderState&                   renderState,
-                           const rendering::Texture&                       texture)
+                           const vclcanvas::Texture&                       texture)
         {
             // TODO(T2): It is maybe necessary to lock here, should
             // maGradientPoly someday cease to be const. But then, beware of
@@ -580,11 +580,11 @@ namespace vclcanvas
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const vclcanvas::ViewState&                        viewState,
                                                                                          const vclcanvas::RenderState&                      renderState,
-                                                                                         const cpo::uno::Sequence< rendering::Texture >&         textures )
+                                                                                         const std::vector< vclcanvas::Texture >&         textures )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        ENSURE_ARG_OR_THROW( textures.hasElements(),
+        ENSURE_ARG_OR_THROW( !textures.empty(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         if( mpOutDevProvider )

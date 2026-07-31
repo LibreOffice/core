@@ -40,7 +40,6 @@ namespace com::sun::star::geometry
 namespace com::sun::star::rendering
 {
     struct StrokeAttributes;
-    struct Texture;
     struct FontRequest;
 }
 
@@ -49,6 +48,7 @@ namespace cpo::uno { template <class E> class Sequence; }
 namespace vclcanvas
 {
     struct RenderState;
+    struct Texture;
     struct ViewState;
 }
 
@@ -212,7 +212,7 @@ namespace canvastools
 
             @throws a lang::IllegalArgumentException, if anything is wrong
          */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::Texture&     texture,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const vclcanvas::Texture&     texture,
                           const char*                                   pStr,
                           const css::uno::Reference< css::uno::XInterface >& xIf,
                           ::sal_Int16                                   nArgPos );
@@ -292,6 +292,16 @@ namespace canvastools
          */
         template< typename SequenceContent > void verifyInput(
             const cpo::uno::Sequence< SequenceContent >&                rSequence,
+            const char*                                                 pStr,
+            const css::uno::Reference< css::uno::XInterface >&          xIf,
+            ::sal_Int16                                                 nArgPos )
+        {
+            for (auto& element : rSequence)
+                verifyInput(element, pStr, xIf, nArgPos);
+        }
+
+        template< typename SequenceContent > void verifyInput(
+            const std::vector< SequenceContent >&                rSequence,
             const char*                                                 pStr,
             const css::uno::Reference< css::uno::XInterface >&          xIf,
             ::sal_Int16                                                 nArgPos )

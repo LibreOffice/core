@@ -119,8 +119,8 @@ namespace vclcanvas
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const ::vclcanvas::ViewState&          viewState,
                                      const ::vclcanvas::RenderState&        renderState,
-                                     const cpo::uno::Sequence<
-                                             css::rendering::Texture >&        textures );
+                                     const std::vector<
+                                             vclcanvas::Texture >&        textures );
 
         rtl::Reference< vclcanvas::CanvasFont >
             createFont( const vclcanvas::XCanvas*         rCanvas,

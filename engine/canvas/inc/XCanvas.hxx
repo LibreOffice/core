@@ -27,7 +27,7 @@
 #include "RenderState.hxx"
 #include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
-#include <com/sun/star/rendering/Texture.hpp>
+#include "Texture.hxx"
 #include "ViewState.hxx"
 
 namespace com::sun::star::rendering
@@ -288,7 +288,7 @@ public:
     virtual ::rtl::Reference<::vclcanvas::CachedBitmap> fillTexturedPolyPolygon(
         const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
         const ::vclcanvas::ViewState& aViewState, const ::vclcanvas::RenderState& aRenderState,
-        const ::cpo::uno::Sequence<::css::rendering::Texture>& xTextures)
+        const ::std::vector<::vclcanvas::Texture>& xTextures)
         = 0;
 
     /** Create a suitable font for the specified font description.
