@@ -49,6 +49,27 @@ public sealed record DrawingTextOptions
     /// placeholder a paragraph came from. Null records none.
     /// </summary>
     public string? StyleName { get; init; }
+
+    /// <summary>
+    /// The theme in force, for the properties that cannot be resolved without one.
+    /// </summary>
+    /// <remarks>
+    /// Nothing extraction reports needs it — a bullet and an emphasis flag are stated literally.
+    /// A colour and a typeface are not: both are normally stated as a reference into the theme,
+    /// so <see cref="DrawingCharacterStyle"/> cannot answer at all without this.
+    /// </remarks>
+    public DrawingTheme? Theme { get; init; }
+
+    /// <summary>
+    /// The character properties the shape's own style contributes, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// The rung of the inheritance chain with no element inside the text body: it comes from the
+    /// shape's <c>p:style/a:fontRef</c> and sits between the body's list style and everything the
+    /// shape inherits. See <see cref="DrawingCharacterStyle.Resolve"/> for why that position is
+    /// not a detail.
+    /// </remarks>
+    public DrawingCharacterStyle? ShapeTextStyle { get; init; }
 }
 
 /// <summary>

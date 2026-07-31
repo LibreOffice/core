@@ -20,9 +20,11 @@ of `r:id`s. Text bodies go through a reader shared with the other two OOXML fami
 (`Paperless.Ooxml/DrawingML/DrawingTextBody.cs`), because a text body is identical in a deck, a
 spreadsheet drawing and a Word shape — only the element wrapping it is namespaced per family.
 
-Not yet: the *rendering* half of the inheritance chain — fill, line, size, colour and typeface.
-Extraction resolves the half it can observe: bullets per level, and now emphasis, baseline and
-language per level through the `a:defRPr` chain. Also not yet: charts, and everything below.
+Extraction resolves the half it can observe: bullets per level, and emphasis, baseline and language
+per level through the `a:defRPr` chain. The half it cannot — a run's colour, size and typefaces —
+is resolved too, but into `DrawingCharacterStyle` rather than into the content tree, which carries
+none of them; it is measured against the colours LibreOffice's own PDF draws with. Not yet: a
+shape's fill and line, charts, and everything below.
 
 **Done: PPT extraction** (`ppt`/`pot`/`pps`), via `MsBinary/` here and the Escher reader in
 `Paperless.MsBinary`. Produces the same content tree as the ODF path for the same deck —
@@ -71,16 +73,52 @@ resolved **per text level** for list styles (`lvlXpPr`).
 - [x] Per-level *character* inheritance, as far as extraction can observe it: `defRPr`'s `b`,
       `i`, `u`, `strike`, `baseline` and `lang`, resolved attribute by attribute over the same
       chain the bullet uses. `DrawingTextBody.EmphasisOf` walks it.
-- [ ] Per-level character inheritance of `sz`, the fill colour and the `a:latin`/`a:ea`/`a:cs`
-      typefaces. Deliberately left: nothing in the content tree reports any of them, so there is
-      no measurement that would tell a correct implementation from a plausible one. They change
-      how the text looks and where it sits, not what it says. The walk is already there — adding
-      them is reading three more attributes off the same elements — so this is waiting on the
-      renderer, not on research.
-- [ ] The shape's own text style, which sits between the master's list style and the body's
-      (`oox/source/drawingml/textparagraph.cxx:63`). It comes from the theme's `txDef` and the
-      shape style's `a:fontRef`, so it needs theme resolution; neither property it carries
-      (typeface, colour) is one extraction reports.
+- [x] Per-level character inheritance of `sz`, the fill colour and the `a:latin`/`a:ea`/`a:cs`
+      typefaces, in `Paperless.Ooxml/DrawingML/DrawingCharacterStyle.cs`. The recorded reason for
+      leaving it — that nothing reports these, so no measurement could tell a correct
+      implementation from a plausible one — turned out to be true of the *content tree* and false
+      of the reference: LibreOffice's PDF states a character colour as the fill colour in the
+      graphics state, and `PdfTextRuns` now reads it. So the colour is measured end to end and
+      `ContentRun` is still left alone.
+      The resolved style is deliberately not merged into the content tree. It is what a renderer
+      wants and what an index does not, and adding a colour to `ContentRun` that only one of the
+      three families could fill in would be worse than not having one.
+- [x] **The shape's own text style**, which sits between the master's list style and the body's
+      (`oox/source/drawingml/textparagraph.cxx`:52-67). `DrawingCharacterStyle.FromShapeStyle`
+      reads it and `DrawingCharacterStyle.Resolve` puts it in place.
+      **Where it goes is the entire content of the item.** Both extremes give the right answer on a
+      shape that states the colour once, which is nearly every shape, so the ordering is only
+      visible on a shape that states it twice — hence `deck-text-style.pptx`, whose seven text
+      boxes each state it at a different rung. Measured against LibreOffice's own render, strongest
+      first: the run's `a:rPr`, the paragraph's `a:defRPr`, the body's `a:lstStyle`, **the shape
+      style**, then everything inherited. The five that LibreOffice and Paperless can both answer
+      agree exactly — #4F81BD, #00B050, #9BBB59, #FF7F00 and #953735, the last being accent2 under a
+      `lumMod` of 75%, resolved by the shared chain rather than by a second implementation of it.
+      It carries a typeface as well as a colour: `a:fontRef idx="minor"` is the theme's minor Latin
+      face, which needed the theme's `a:fontScheme` (`DrawingFontScheme`) as well as its colour
+      scheme. That also brings the `+mn-lt` indirection, where a stated typeface is a *reference*
+      rather than a name — a reader taking it literally reports a font family called `+mn-lt` and
+      every run of a PowerPoint-authored deck silently falls back to a substitute
+      (`oox/source/drawingml/theme.cxx`:71).
+      **The named trap, and it looked obviously right: a placeholder does not inherit its shape
+      style.** A slide placeholder takes its geometry, fill, line, effects and master list style
+      from the layout placeholder it stands in for, so taking the `a:fontRef` too seemed free —
+      `applyShapeReference` was already the citation for the rest of it. It does not:
+      `oox/source/drawingml/shape.cxx`:565-587 copies the *resolved* line, fill and effect
+      properties and never touches `maShapeStyleRefs`. Measured on the deck's seventh shape, a
+      placeholder with no style of its own whose layout placeholder states an `a:fontRef` of
+      accent 5 — LibreOffice draws it in plain black in its default face. Inheriting it would have
+      recoloured a placeholder on every deck whose layouts style their placeholders, which is most
+      PowerPoint-authored decks. Half an hour, and the render is what settled it.
+      **A second finding, free: LibreOffice never applies a master's `p:otherStyle` at all.**
+      `SlidePersist::createXShapes` pushes the master text styles into Impress's style families
+      with `for (int i = 0; i < 4; i++)` over a switch whose `case 4` *is* the standard style that
+      `p:otherStyle` parses into (`oox/source/ppt/slidepersist.cxx`:315). The loop stops one short,
+      so the style is read, stored and never used; `case 5`, the subtitle style, is unreachable for
+      the same reason. Paperless does apply it — the deck's sixth shape resolves to the magenta the
+      master states where LibreOffice draws black — and that divergence is not new: the same
+      fallback has always decided the bullet of every non-placeholder shape. It had simply never
+      been measured, and it now is.
 - [ ] Theme default shape/line/text properties (`a:objectDefaults`)
 - [ ] Background inheritance, including `showMasterSp`
 
@@ -177,6 +215,14 @@ table asserted, not by the corpus.
       are a last-ditch fallback only.
 - [x] `sldSz`; slide order from `p:sldIdLst`; hidden slides via `p:sld/@show` (absent means
       shown, so reading it as a presence test hides every slide in every deck)
+- [x] The theme part, reached from the **master** and not from the presentation, with the master's
+      `p:clrMap` applied to it before anyone sees it. PowerPoint writes a theme relationship on the
+      presentation as well, and taking that one gives every slide in the deck the *first* master's
+      colours — right for the single-master deck and wrong for exactly the decks that bothered to
+      have two. The map is joined on here for the same reason `DocxFile` joins `w:clrSchemeMapping`:
+      a scheme without its map answers the wrong question, and a dark master is where that shows.
+      Not read: `p:clrMapOvr/a:overrideClrMapping` on a layout or slide, which would make the map
+      per-slide rather than per-master; nothing measured carries one.
 - [x] Shape tree in document order: `p:sp`, `p:cxnSp`, `p:grpSp` (descended into),
       `p:graphicFrame`, `p:pic`
 - [x] Text bodies, `a:br`, `a:fld` (cached value, not recomputed), tables inside `a:tbl`

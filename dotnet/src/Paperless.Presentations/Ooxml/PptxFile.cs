@@ -6,6 +6,7 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 
 namespace Paperless.Presentations.Ooxml;
 
@@ -273,7 +274,39 @@ internal sealed class PptxFile : IDisposable
             masterPart,
             master,
             notesPart,
-            Load(notesPart));
+            Load(notesPart))
+        {
+            Theme = ThemeOf(masterPart, master),
+        };
+    }
+
+    /// <summary>
+    /// The theme a slide resolves colours and typefaces against, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Reached from the <em>master</em>, not from the presentation: a deck with several masters
+    /// has a theme part per master, and the presentation's own theme relationship — which
+    /// PowerPoint also writes — names only the first. Taking that one gives every slide in the
+    /// deck the first master's colours, which is right for the common single-master deck and
+    /// wrong for exactly the decks that bothered to have two.
+    /// </para>
+    /// <para>
+    /// The master's <c>p:clrMap</c> is applied here rather than left to the caller, because a
+    /// theme without its map answers the wrong question: the map is what makes <c>bg1</c>
+    /// something other than the theme's first light colour, and a dark master is precisely the
+    /// case where the difference shows. A layout or slide may override it with
+    /// <c>p:clrMapOvr/a:overrideClrMapping</c>; nothing measured carries one, so that is left
+    /// unread rather than guessed at.
+    /// </para>
+    /// </remarks>
+    private DrawingTheme? ThemeOf(string? masterPartName, XElement? master)
+    {
+        if (masterPartName is null) return null;
+
+        return DrawingTheme
+            .Read(Load(TargetOfType(masterPartName, "theme")))
+            ?.WithMap(DrawingColourMap.Read(Ppt.Child(master, "clrMap")));
     }
 }
 
@@ -300,6 +333,15 @@ internal sealed record PptxSlide(
     string? NotesPartName,
     XElement? Notes)
 {
+    /// <summary>
+    /// The theme in force on this slide, with its master's colour map already applied.
+    /// </summary>
+    /// <remarks>
+    /// Not a positional member, so that constructing a slide record from its parts alone keeps
+    /// working; it is derived from the master rather than stated beside it.
+    /// </remarks>
+    public DrawingTheme? Theme { get; init; }
+
     /// <summary>
     /// The name the deck gives this slide, or null.
     /// </summary>

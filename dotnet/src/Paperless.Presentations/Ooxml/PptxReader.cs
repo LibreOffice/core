@@ -79,7 +79,8 @@ public static class PptxReader
         if (slide.ShapeTree is { } tree)
         {
             PptxTextStyles styles = new(
-                slide.Layout, slide.Master, file.DefaultTextStyle, isNotesPage: false);
+                slide.Layout, slide.Master, file.DefaultTextStyle, isNotesPage: false,
+                theme: slide.Theme);
             new PptxShapeReader(file, slide.PartName, styles).Read(tree, section);
         }
         else

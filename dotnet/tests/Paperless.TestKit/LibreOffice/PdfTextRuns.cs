@@ -17,13 +17,23 @@ namespace Paperless.TestKit.LibreOffice;
 /// <param name="FontSize">The em size it was shown at, in points.</param>
 /// <param name="FontResource">The PDF resource name of the font, such as <c>F2</c>.</param>
 /// <param name="GlyphCount">How many glyph codes were shown.</param>
+/// <param name="Colour">
+/// The non-stroking colour in force when the run was drawn, as <c>0xRRGGBB</c>.
+/// <para>
+/// Text is <em>filled</em>, not stroked, so it is the same graphics-state colour a shape's fill
+/// uses — which is why this tracks the lower-case operators exactly as <see cref="PdfFills"/>
+/// does. It is the only way to see a character colour in a reference render at all: nothing in
+/// the text layer <c>pdftotext</c> produces carries one.
+/// </para>
+/// </param>
 public readonly record struct PdfTextRun(
     int PageIndex,
     double X,
     double Y,
     double FontSize,
     string FontResource,
-    int GlyphCount);
+    int GlyphCount,
+    uint Colour = 0);
 
 /// <summary>
 /// Reads the text-positioning operators out of a PDF LibreOffice wrote.
@@ -154,9 +164,21 @@ public static class PdfTextRuns
     /// </remarks>
     private static IEnumerable<PdfTextRun> RunsIn(string content, int page, double pageHeight)
     {
+        // The colour belongs to the graphics state, so it is tracked across the stream: the
+        // operator that set it usually sits *outside* the BT block it applies to, and reading
+        // only inside the block reports every run in whatever the initial state was — black.
+        List<(int At, uint Colour)> colours = [.. Colours(content)];
+        int next = 0;
+        uint current = 0;
+
         foreach (Match block in Regex.Matches(
                      content, @"BT\s*(.*?)\s*ET", RegexOptions.Singleline))
         {
+            while (next < colours.Count && colours[next].At < block.Index)
+            {
+                current = colours[next++].Colour;
+            }
+
             string body = block.Groups[1].Value;
 
             Match position = Regex.Match(body, @"([-0-9.]+)\s+([-0-9.]+)\s+Td");
@@ -175,9 +197,54 @@ public static class PdfTextRuns
                 pageHeight - Number(position.Groups[2].Value),
                 Number(font.Groups[2].Value),
                 font.Groups[1].Value,
-                glyphs);
+                glyphs,
+                current);
         }
     }
+
+    /// <summary>
+    /// Every change to the non-stroking colour, with where in the stream it happened.
+    /// </summary>
+    /// <remarks>
+    /// Three operators, because LibreOffice writes all three: <c>rg</c> for RGB, <c>g</c> for
+    /// greyscale — which is what it uses for pure black, so almost every ordinary run — and
+    /// <c>k</c> for CMYK.
+    /// </remarks>
+    private static IEnumerable<(int At, uint Colour)> Colours(string content)
+    {
+        foreach (Match match in Regex.Matches(
+                     content, @"(?:(-?[\d.]+)\s+){1,4}(rg|g|k)(?![A-Za-z])"))
+        {
+            // Tolerant rather than Number's Parse: this scans every content stream of every
+            // corpus document, and a token the pattern accepts but double cannot — "1.2.3" —
+            // must cost one colour rather than the whole comparison.
+            double[] values =
+            [
+                .. match.Groups[1].Captures.Select(capture => double.TryParse(
+                    capture.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double v)
+                    ? v
+                    : 0.0),
+            ];
+
+            uint colour = match.Groups[2].Value switch
+            {
+                "g" when values.Length == 1 => Pack(values[0], values[0], values[0]),
+                "rg" when values.Length == 3 => Pack(values[0], values[1], values[2]),
+                "k" when values.Length == 4 => Pack(
+                    (1 - values[0]) * (1 - values[3]),
+                    (1 - values[1]) * (1 - values[3]),
+                    (1 - values[2]) * (1 - values[3])),
+                _ => 0,
+            };
+
+            yield return (match.Index, colour);
+        }
+    }
+
+    private static uint Pack(double r, double g, double b)
+        => ((uint)Math.Clamp(Math.Round(r * 255), 0, 255) << 16)
+           | ((uint)Math.Clamp(Math.Round(g * 255), 0, 255) << 8)
+           | (uint)Math.Clamp(Math.Round(b * 255), 0, 255);
 
     private static double Number(string value)
         => double.Parse(value, CultureInfo.InvariantCulture);

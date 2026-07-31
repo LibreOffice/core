@@ -102,6 +102,11 @@ overwrite the other.
 The two stems differ for the same reason `deck-features` does: `soffice --convert-to` would have
 had them overwrite each other's output.
 
+### Hand-written PPTX files
+
+| File | Exercises |
+|---|---|
+| `deck-text-style.pptx` | Where the shape's own text style sits in a slide's character chain. Seven text boxes on one slide, each stating the colour at a different rung: only the shape's `p:style/a:fontRef`; the body's `a:lstStyle` *and* the fontRef; the run's own `a:rPr` and the fontRef; a fontRef colour carrying a `lumMod`; nothing at all, so the master's `p:otherStyle`; and a placeholder whose *layout* placeholder carries the fontRef. A theme with a real `a:fontScheme`, so `idx="minor"` resolves to a face. LibreOffice cannot write this: its PPTX export states every property on every run, so no round-tripped deck ever consults the chain |
 
 ### Hand-written DOCX files
 

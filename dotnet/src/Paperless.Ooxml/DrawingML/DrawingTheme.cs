@@ -163,6 +163,15 @@ public sealed class DrawingColourMap
 public sealed record DrawingTheme(DrawingColourScheme? Colours, DrawingColourMap Map)
 {
     /// <summary>
+    /// The font scheme, or null when the part declared none.
+    /// </summary>
+    /// <remarks>
+    /// Not a positional member, so that a caller constructing a theme from a colour scheme alone
+    /// — which is every caller that predates typeface resolution — keeps compiling.
+    /// </remarks>
+    public DrawingFontScheme? Fonts { get; init; }
+
+    /// <summary>
     /// Reads an <c>a:theme</c> root.
     /// </summary>
     /// <remarks>
@@ -178,7 +187,10 @@ public sealed record DrawingTheme(DrawingColourScheme? Colours, DrawingColourMap
         XElement? elements = Drawing.Child(theme, "themeElements");
         return new DrawingTheme(
             DrawingColourScheme.Read(Drawing.Child(elements, "clrScheme")),
-            DrawingColourMap.Identity);
+            DrawingColourMap.Identity)
+        {
+            Fonts = DrawingFontScheme.Read(Drawing.Child(elements, "fontScheme")),
+        };
     }
 
     /// <summary>This theme seen through a colour map.</summary>

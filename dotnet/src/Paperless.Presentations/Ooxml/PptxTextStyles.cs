@@ -35,13 +35,20 @@ internal sealed class PptxTextStyles
     private readonly XElement? _master;
     private readonly XElement? _defaultTextStyle;
     private readonly bool _isNotesPage;
+    private readonly DrawingTheme? _theme;
 
-    public PptxTextStyles(XElement? layout, XElement? master, XElement? defaultTextStyle, bool isNotesPage)
+    public PptxTextStyles(
+        XElement? layout,
+        XElement? master,
+        XElement? defaultTextStyle,
+        bool isNotesPage,
+        DrawingTheme? theme = null)
     {
         _layout = layout;
         _master = master;
         _defaultTextStyle = defaultTextStyle;
         _isNotesPage = isNotesPage;
+        _theme = theme;
     }
 
     /// <summary>
@@ -81,7 +88,38 @@ internal sealed class PptxTextStyles
             ResolveHyperlink = resolveHyperlink,
             InheritedLevelProperties = level =>
                 [.. Chain(direct, inherited, textStyle, level)],
+            Theme = _theme,
+            ShapeTextStyle = ShapeTextStyle(shape),
         };
+    }
+
+    /// <summary>
+    /// The character properties the shape's own <c>p:style</c> contributes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>The shape's own, and only its own.</b> A placeholder inherits nearly everything from
+    /// the layout placeholder it stands in for, so inheriting the style reference too looks
+    /// obviously right — and is wrong. <c>Shape::applyShapeReference</c>
+    /// (<c>oox/source/drawingml/shape.cxx</c>:565-587) copies the shape properties, the
+    /// <em>resolved</em> line, fill and effect properties, the custom-shape geometry and the
+    /// master text list style, and does not touch <c>maShapeStyleRefs</c> — so the
+    /// <c>a:fontRef</c> is not among the things a placeholder acquires.
+    /// </para>
+    /// <para>
+    /// Measured on <c>deck-text-style.pptx</c>, whose seventh shape is a slide placeholder with
+    /// no style of its own whose layout placeholder states an <c>a:fontRef</c> of accent 5:
+    /// LibreOffice draws it in plain black in its default face, not in accent 5 and not in the
+    /// theme's minor font. Inheriting it would have coloured a placeholder on every deck whose
+    /// layouts style their placeholders, which is most PowerPoint-authored decks.
+    /// </para>
+    /// </remarks>
+    private DrawingCharacterStyle? ShapeTextStyle(XElement shape)
+    {
+        if (Ppt.Child(shape, "style") is not { } style) return null;
+
+        DrawingCharacterStyle resolved = DrawingCharacterStyle.FromShapeStyle(style, _theme);
+        return resolved.IsEmpty ? null : resolved;
     }
 
     private IEnumerable<XElement> Chain(
