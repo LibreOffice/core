@@ -93,6 +93,14 @@ public static class PptxReader
         content.Children.Add(section);
 
         if (ReadNotes(file, slide) is { } notes) content.Children.Add(notes);
+
+        // Comments belong to the slide they are on, so they follow it and its notes rather than
+        // collecting at the end of the deck — the order the ODF path produces for the same file,
+        // where an annotation is hoisted out of the page it sits in.
+        foreach (ContentSection comment in PptxComments.Read(file, slide))
+        {
+            content.Children.Add(comment);
+        }
     }
 
     /// <summary>
