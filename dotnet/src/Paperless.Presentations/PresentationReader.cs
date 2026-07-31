@@ -45,8 +45,10 @@ public sealed class PresentationReader : IDocumentReader
 
         return format switch
         {
+            // Wrapped so the deck can be laid out: one OdfDocument serves all three ODF families
+            // and only this one paginates into slides.
             DocumentFormat.Odp or DocumentFormat.Otp or DocumentFormat.Fodp
-                => new OdpReader().Read(source, format),
+                => new OdpDocument(new OdpReader().Read(source, format)),
 
             DocumentFormat.Pptx or DocumentFormat.Pptm or DocumentFormat.Potx or DocumentFormat.Potm
                 or DocumentFormat.Ppsx or DocumentFormat.Ppsm

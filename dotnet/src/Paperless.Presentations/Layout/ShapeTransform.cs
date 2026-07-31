@@ -149,6 +149,35 @@ public static class ShapeTransform
     public static double Radians(int rotationUnits)
         => rotationUnits / RotationUnitsPerDegree * Math.PI / 180.0;
 
+    /// <summary>
+    /// The rectangle a shape occupies on the slide <em>before</em> its own rotation.
+    /// </summary>
+    /// <remarks>
+    /// Not the outline's bounding box, which for a rotated shape is larger than the shape — and
+    /// not the local rectangle either, since a group can scale it. Taken as the placed centre
+    /// plus the lengths the transform gives the box's two edge vectors, so a rotation leaves it
+    /// alone and a scale does not. This is what text layout is measured against and what a
+    /// placement comparison asserts on.
+    /// </remarks>
+    /// <param name="placement">The matrix taking the shape's local box onto the slide.</param>
+    /// <param name="size">The local box's extent.</param>
+    public static DocRect PlacedBounds(AffineTransform placement, DocSize size)
+    {
+        DocPoint centre = Apply(
+            placement,
+            new DocPoint(
+                Length.FromEmu(size.Width.Emu / 2), Length.FromEmu(size.Height.Emu / 2)));
+
+        double width = size.Width.Emu * Math.Sqrt((placement.A * placement.A) + (placement.B * placement.B));
+        double height = size.Height.Emu * Math.Sqrt((placement.C * placement.C) + (placement.D * placement.D));
+
+        return new DocRect(
+            Length.FromEmu(centre.X.Emu - (long)Math.Round(width / 2)),
+            Length.FromEmu(centre.Y.Emu - (long)Math.Round(height / 2)),
+            Length.FromEmu((long)Math.Round(width)),
+            Length.FromEmu((long)Math.Round(height)));
+    }
+
     /// <summary>Applies a transform to a point.</summary>
     public static DocPoint Apply(AffineTransform transform, DocPoint point)
     {

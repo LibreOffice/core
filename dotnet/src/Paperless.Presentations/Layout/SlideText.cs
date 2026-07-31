@@ -83,6 +83,27 @@ public sealed record SlideTextBody
     /// what makes a `wrap="none"` label come out on one line as its author saw it.
     /// </remarks>
     public bool Wraps { get; init; } = true;
+
+    /// <summary>
+    /// Whether the line height comes from the font size rather than from the font's metrics.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// EditEngine's <c>FixedCellHeight</c>, which ODF spells
+    /// <c>style:font-independent-line-spacing</c>. When it is on the ascent is the font height
+    /// outright and the line is 1.2 times it, whatever face the text is set in
+    /// (<c>editeng/source/editeng/impedit3.cxx:501,3138-3141</c>); when it is off the face's own
+    /// ascent and descent decide, as they do in a word processor.
+    /// </para>
+    /// <para>
+    /// True by default because that is what a PPTX gets: the importer sets it on every text body
+    /// it reads (<c>oox/source/ppt/pptshapecontext.cxx:186</c>). A natively authored ODP states
+    /// it per paragraph style and usually does not, which is why the two paths give the same
+    /// deck slightly different baselines and why this is a property of the body rather than a
+    /// constant.
+    /// </para>
+    /// </remarks>
+    public bool FontIndependentLineSpacing { get; init; } = true;
 }
 
 /// <summary>One paragraph of a shape's text.</summary>

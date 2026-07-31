@@ -224,7 +224,7 @@ internal sealed class PptxSlideLayout
         {
             Name = Name(shape),
             Outline = outline,
-            Bounds = Placed(local, space),
+            Bounds = ShapeTransform.PlacedBounds(placement, local.Size),
             Fill = Fill(properties, inherited, theme.Colours),
             Line = Line(properties, inherited, theme.Colours),
             Text = Text(shape, local, preset, adjustment, placement, theme),
@@ -248,16 +248,6 @@ internal sealed class PptxSlideLayout
             [.. PptxPlaceholder.ShapesOf(slide.Master), .. PptxPlaceholder.ShapesOf(slide.Layout)]);
 
         return Ppt.Child(match, "spPr");
-    }
-
-    /// <summary>The shape's rectangle in slide coordinates, before its own rotation.</summary>
-    private static DocRect Placed(DocRect local, AffineTransform space)
-    {
-        DocPoint origin = ShapeTransform.Apply(space, local.Origin);
-        DocPoint far = ShapeTransform.Apply(
-            space, new DocPoint(local.X + local.Width, local.Y + local.Height));
-
-        return DocRect.FromCorners(origin, far);
     }
 
     private static SlideTextBody? BodyOf(XElement shape, SlideTheme theme)

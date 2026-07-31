@@ -156,7 +156,16 @@ public static class SlideTextLayout
         List<PlacedLine> lines = [];
         foreach (LineBox box in laid.Lines)
         {
-            Length em = LargestSize(runs, box.Line.Start, box.Line.VisibleEnd, first);
+            if (!body.FontIndependentLineSpacing)
+            {
+                // The face's own metrics, which the shared layouter has already applied — so a
+                // natively authored ODP lays its text out exactly as a word processor would.
+                lines.Add(new PlacedLine(
+                    box, box.Baseline, Reduced(box.Height, body.LineSpaceReduction)));
+                continue;
+            }
+
+            Length em = LargestSize(runs, box.Line.Start, box.Line.VisibleEnd);
 
             // The rule itself: one em of ascent, 1.2 em of box, then whatever the paragraph's own
             // spacing does to it. A paragraph stating 150% gets 1.5 x 1.2 em, which is what
@@ -180,8 +189,7 @@ public static class SlideTextLayout
     /// makes <em>its</em> line taller and leaves the others alone — which is the same rule the
     /// shared layouter applies to font metrics, restated for a metric that is not the font's.
     /// </remarks>
-    private static Length LargestSize(
-        List<FormattedRun> runs, int start, int end, OpenTypeFace fallback)
+    private static Length LargestSize(List<FormattedRun> runs, int start, int end)
     {
         Length largest = Length.Zero;
 
