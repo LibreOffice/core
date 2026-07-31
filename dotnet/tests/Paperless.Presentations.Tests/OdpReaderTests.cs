@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
@@ -153,9 +154,26 @@ public class OdpReaderTests
     [Fact]
     public void AFormatWithNoReaderYetIsReportedAsUnsupported()
     {
+        // Built here rather than taken from the corpus, and that is the point of the change: this test
+        // used to open `slides-pptx.pptx`, then `slides-ppt.ppt` when PPTX gained a reader, and both now
+        // read. What is left unimplemented is the OpenOffice.org 1.x pair, for which there is no corpus
+        // file — so the fixture is synthesised. An ODF-family package is identified by its `mimetype`
+        // entry, which has to be the archive's first entry and stored rather than deflated, so a few
+        // hundred bytes is a complete and honest example of the format rather than a stub.
+        using MemoryStream archive = new();
+        using (ZipArchive zip = new(archive, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            ZipArchiveEntry mimetype = zip.CreateEntry("mimetype", CompressionLevel.NoCompression);
+            using StreamWriter writer = new(mimetype.Open());
+            writer.Write("application/vnd.sun.xml.impress");
+        }
+
+        archive.Position = 0;
+        using DocumentSource source = DocumentSource.FromStream(archive, "deck.sxi");
+
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("slides-ppt.ppt"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Ppt);
+            () => new PresentationReader().Read(source));
+        unimplemented.Format.ShouldBe(DocumentFormat.Sxi);
         unimplemented.Message.ShouldContain("not implemented yet");
     }
 

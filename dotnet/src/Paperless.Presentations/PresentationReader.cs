@@ -52,9 +52,12 @@ public sealed class PresentationReader : IDocumentReader
                 or DocumentFormat.Ppsx or DocumentFormat.Ppsm
                 => PptxReader.Read(source, format),
 
-            // Named in SupportedFormats but not implemented yet.
             DocumentFormat.Ppt or DocumentFormat.Pot or DocumentFormat.Pps
-                or DocumentFormat.Sxi or DocumentFormat.Sti
+                => MsBinary.PptReader.Read(source, format),
+
+            // Named in SupportedFormats but not implemented yet: the OpenOffice.org 1.x presentation
+            // forms, which are a different namespace set rather than a different container.
+            DocumentFormat.Sxi or DocumentFormat.Sti
                 => throw new UnsupportedFormatException(
                     format, $"Reading {format} is not implemented yet."),
 
