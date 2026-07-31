@@ -703,13 +703,79 @@ is read and verified, so what remains is the filling of pages rather than the me
       coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
       only surfaced when the same value became an exact height and produced a zero-height row.
       `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
-- [ ] Fitting a table to the page when its columns state no widths, and this is a **much bigger item than it
-      reads as** — worth saying so, because the obvious guess is wrong. It is not "divide the text width
-      equally": measured on a three-column table with every column style stripped, LibreOffice produces columns
-      of 160.6, 107.1 and 214.1 pt, sized to their *content*. That is Writer's table auto-layout, the same
-      class of algorithm as CSS's — minimum and maximum content widths per column, then distribution — and it
-      needs the cells' text measured before the grid exists. The readers currently take the declared grid and
-      nothing else, so a width-less table comes out with zero-width columns.
+- [x] **Fitting a table to the page when its columns state no widths** — and the finding is that this item
+      described the wrong algorithm, which is worth more than the code that came of it. The measurement in it
+      was real: a three-column table with every column style stripped renders at 160.6, 107.1 and 214.1 pt.
+      The reading of it was not. **Those widths are not sized to their content, and nothing about them is.**
+      Move the one long paragraph from the third column to the second, or delete it outright, and they do not
+      shift by a twip; do the same to the DOCX spelling and it is equally inert. Writer owns exactly one
+      content-measuring table layout — `SwHTMLTableLayout`, whose `AutoLayoutPass1` calls
+      `SwTextNode::GetMinMaxSize` per cell (`sw/source/core/doc/htmltbl.cxx`:500) — and the only thing that
+      ever installs it is the HTML filter: `SwTable::SetHTMLTableLayout` is called from
+      `sw/source/filter/html/htmltab.cxx`:2469 and from nowhere else in the tree. So a table read from ODF,
+      DOCX, RTF or DOC has no such layout and never measures a character. There is no min/max content width
+      to port, no circularity to resolve, and the cost worry the item opened with does not arise.
+      What does decide the widths is arithmetic on the *declared* grid, and the two families disagree so
+      completely that the same table is a different shape in each. `Layout/TableColumnFit.cs` holds both;
+      `PageTable.ColumnFit` is null for a table that declares its grid, so nothing that states its widths goes
+      anywhere near this.
+      - **ODF, with an orientation and a width: the ratio 3:2:4, and it is a bug being ported deliberately.**
+        A column stating no `style:column-width` arrives as `MINLAY` — 23 twips — flagged *relative*
+        (`xmltbli.cxx`:693). `SwXMLTableContext::MakeTable_`'s absolute branch (`xmltbli.cxx`:2354) then gives
+        each relative column `width × remaining / totalRelative` while decrementing `remaining` and never
+        `totalRelative`, so three equal columns come out 1/3, 2/9, 4/9 and four come out 16:12:9:27. Verified
+        for both: a four-column version renders 120.45, 90.35, 67.75, 203.25 pt, which is 16:12:9:27 of the
+        text width to within a twip. The last relative column takes the remainder outright, which is why one
+        or two columns come out right and three do not — the bug is invisible until the third.
+      - **The same file without `table:align` renders 54 pt differently at the third column**, and that is the
+        trap that cost the most time here: with no alignment the table is `HoriOrientation::FULL`, and
+        `MakeTable` then sets `m_nWidth = MAX_WIDTH` with the importer's own comment "Even if a size is
+        specified, it will be ignored!" (`xmltbli.cxx`:2551). So a *stated* `style:width` is discarded, the
+        relative branch runs instead, and the three columns come out equal. Two documents differing by one
+        attribute, one ratio apart. `table:align`'s mapping is `aXMLTableAlignMap`
+        (`sw/source/filter/xml/xmlithlp.cxx`:307), where `margins` is `FULL` as well.
+      - The relative branch's own subtlety, measured: absolute columns are restated as relative ones pegged so
+        that the *narrowest* of them is worth what the narrowest already-relative column is. So a width-less
+        column beside a 3 cm and a 5 cm one comes out exactly as wide as the 3 cm — 131.9, 131.9, 218.0 pt on
+        A4, predicted from the source and then measured.
+      - **Word states no widths at all — it states relative separators against a table that starts equal.**
+        `DomainMapperTableManager::endOfRowAction` turns the grid into `TableColumnSeparator`s out of 10000
+        (`DomainMapperTableManager.cxx`:735) and the table is built with equal columns before they are
+        applied. `SwTable::NewSetTabCols` then records a divider's move only
+        `if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )` (`swtable.cxx`:1195) — **a separator of zero
+        is dropped, not applied** — so an unsized column's divider stays where the equal division put it. A
+        grid of all zeroes therefore moves nothing and the table is equal; a grid of `0, 2835, 5102` moves
+        only the second divider and renders 160.6, 11.5 and 309.7 pt, where reading the grid proportionally
+        would give 0, 172.1 and 309.7. RTF's `\cellx0` reaches the same code through `rtfdocumentimpl.cxx`
+        and renders identically.
+      - Compared against LibreOffice run for run in `TableAutoLayoutComparisonTests`, every pen within a tenth
+        of a point, plus the widths themselves written down as constants so that a change to the distribution
+        has to argue with a number. The corpus files are **hand-written and have to be**: round-tripping
+        `table-autofit.fodt` through `soffice --convert-to fodt` writes `style:column-width="2.2306in"` where
+        the source said nothing, so a converted file is a fully-declared grid testing nothing.
+- [ ] Two residuals from the fitting above, both measured and both small.
+      - **A `w:gridSpan` row in a width-less table.** Its own separator is zero, so its divider is left where
+        the table's *first* column boundary is and LibreOffice draws the spanning cell **one** column wide
+        rather than two — the last row of `table-autofit.docx` before the spanning row was taken out of it.
+        Paperless's model is one grid and a span per cell, which cannot say "this row's divider is somewhere
+        else", so honouring it means per-row column positions. RTF escapes the whole thing by stating a short
+        row as a row with fewer `\cellx` edges, and ODF gets it right outright.
+      - **The moved divider lands three twips from Writer's.** `NewSetTabCols` converts a divider through the
+        table's stored *wish* width with `lcl_MulDiv64` rather than scaling the separator against the table's
+        width, and the two round apart: 309.85 pt against LibreOffice's 309.7 on `table-autofit-partial.docx`.
+        Only visible on a partly-stated grid, and the test carries a 0.2 pt bound for that one case with the
+        reason written beside it.
+      - That document also exposes something unrelated: an 11.5 pt column is 5.8 pt wide inside its padding,
+        and LibreOffice breaks its text *per character* to fit. Paperless has no emergency character
+        breaking, so it draws one overlong line where the reference draws five — a `Paperless.Text` line
+        breaking matter rather than a table one, which is why that file is compared for its column widths and
+        not for its pens.
+- [ ] **DOC cannot state a width-less table**, so it is the one format the fitting does not cover, and the
+      reason is the format rather than the reader. WW8 keeps a table's geometry in `sprmTDefTable`'s
+      `rgdxaCenter`, an edge list that is not optional and has no "unset" spelling, and LibreOffice's own DOC
+      export always writes real edges — so no corpus file can be produced by conversion either. What a
+      degenerate DOC does today is drop the table, which is what it did before; whether Word's own filter
+      (`ww8par2.cxx`, not dmapper) then divides equally is untested for want of a file to test it with.
 - [ ] Floating objects and text wrap, including contour wrap
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can

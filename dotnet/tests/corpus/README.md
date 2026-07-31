@@ -137,6 +137,43 @@ Two things about writing these by hand, both learned the hard way:
   in the export: top and left are swapped in RTF, deliberately, because that is what Word does. An
   exported corpus file will therefore look wrong to anyone reading the specification.
 
+#### The auto-fit documents
+
+`table-autofit.*` is `table-grid` with the column widths taken away, which is the case a real document
+reaches far more often than it reaches a stated grid. They are **hand-written, and they have to be**:
+LibreOffice's own export puts explicit widths back in, so a file produced by converting one of these is a
+fully-declared grid that tests nothing. Round-tripping `table-autofit.fodt` through `soffice --convert-to
+fodt` writes `style:column-width="2.2306in"` where the source said nothing at all.
+
+There are five, and they deliberately disagree with one another, because LibreOffice does:
+
+| File | What it states | What LibreOffice renders |
+|---|---|---|
+| `table-autofit.fodt` | `style:width="17cm"`, `table:align="left"`, three columns with no width | 160.6, 107.1, 214.1 pt — the ratio 3:2:4 |
+| `table-autofit-full.fodt` | the same without `table:align` | 160.6, 160.6, 160.6 pt — the stated width is *discarded* |
+| `table-autofit-mixed.fodt` | 3 cm, nothing, 5 cm, aligned left | 85.05, 255.15, 141.75 pt |
+| `table-autofit.docx`, `.rtf` | a grid of zeroes / `\cellx0` | 160.6, 160.6, 160.6 pt |
+| `table-autofit-partial.docx` | a grid of `0`, `2835`, `5102` | 160.6, 11.5, 309.7 pt |
+
+None of those numbers depends on a single character of the text — moving the long paragraph from the third
+column to the second, or deleting it, moves nothing. That is worth stating because the shape of the numbers
+invites the opposite conclusion; see `src/Paperless.WordProcessing/Layout/TableColumnFit.cs`.
+
+Two traps in writing them:
+
+- **`table:align` is not cosmetic here.** Without it the table is `HoriOrientation::FULL` and its stated
+  width is ignored, which is a 54 pt difference at the third column between two files differing by one
+  attribute.
+- **The Word-family files have no spanning row** where the ODF ones do, and that is a finding rather than
+  tidiness. A `w:gridSpan` row in a width-less table has its own separator, that separator is zero, and so
+  its divider is left where the table's *first* column boundary is — LibreOffice draws the spanning cell one
+  column wide rather than two. RTF escapes it by stating a short row as a row with fewer `\cellx` edges.
+
+There is **no `.doc`**, and it is not an omission. WW8 states a table's geometry as `sprmTDefTable`'s
+`rgdxaCenter`, an edge list that is not optional, so a DOC cannot say "no widths" the way the other three
+can — and LibreOffice's own DOC export always writes real edges, so one cannot be produced by conversion
+either.
+
 ### Footnote documents
 
 `footnotes.*` and `footnote-pages.*` separate two different things. `footnotes` proves the *placement*: two
