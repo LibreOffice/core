@@ -18,6 +18,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/compbase.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
@@ -25,8 +26,10 @@
 #include <svx/svdpage.hxx>
 #include <sot/exchange.hxx>
 
+#include <gridwin.hxx>
 #include <helper/qahelper.hxx>
 #include <impex.hxx>
+#include <tabvwsh.hxx>
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -421,6 +424,11 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
                           ->createInstanceWithContext(
                               u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, xContext)
                           .queryThrow<datatransfer::clipboard::XClipboard>();
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit keeps a clipboard per view, so name the one this window is to paste from
+        getViewShell()->GetViewData().GetActiveWin()->SetClipboard(xClipboard);
+    }
     xClipboard->setContents(new HTMLTransferable(createFileURL(u"html.clipboard.html")), {});
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
