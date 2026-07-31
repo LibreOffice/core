@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
     <ProjectReference Include="..\..\src\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Rendering\Paperless.Rendering.csproj" />
   </ItemGroup>
 
 </Project>

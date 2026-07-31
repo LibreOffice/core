@@ -1,0 +1,427 @@
+using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
+using Paperless.Core.Units;
+using Paperless.Text.Fonts;
+using SkiaSharp;
+
+namespace Paperless.Rendering.Raster;
+
+/// <summary>
+/// Draws a page's display list onto a Skia canvas.
+/// </summary>
+/// <remarks>
+/// <para>
+/// One page at a time: the canvas is supplied and <see cref="BeginPage"/> only records the
+/// sheet size, because a raster backend has to allocate its surface before it can be
+/// handed a canvas, and it can only do that once it knows how big the page is. So
+/// <see cref="RasterRenderer"/> asks the page for its size, makes the surface, and then
+/// draws into it.
+/// </para>
+/// <para>
+/// Coordinates are converted once, by a scale on the canvas: EMUs to device pixels is
+/// <c>dpi / 914400</c>, and Skia's y axis already grows downwards as a document's does, so
+/// no flip is needed — the opposite of the PDF backend, where every coordinate has to be
+/// subtracted from the page height.
+/// </para>
+/// <para>
+/// Glyphs are drawn from their ids at explicit positions and never re-shaped, which is the
+/// whole point of the display list carrying ids: layout already committed to these advances
+/// when it chose where the line broke, and asking Skia to lay the text out again would
+/// produce a page whose glyphs disagree with its own line breaks.
+/// </para>
+/// </remarks>
+internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
+{
+    private readonly SKCanvas _canvas;
+    private readonly RasterRenderOptions _options;
+    private readonly Dictionary<string, SKTypeface?> _typefaces = new(StringComparer.Ordinal);
+    private readonly List<int> _groups = [];
+    private readonly float _scale;
+
+    /// <summary>Creates a sink drawing onto a canvas at a resolution.</summary>
+    /// <param name="canvas">Where to draw.</param>
+    /// <param name="options">The resolution, antialiasing and background.</param>
+    public SkiaDrawingSink(SKCanvas canvas, RasterRenderOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(canvas);
+        ArgumentNullException.ThrowIfNull(options);
+
+        _canvas = canvas;
+        _options = options;
+        _scale = (float)(options.Dpi / Length.EmuPerInch);
+    }
+
+    /// <summary>Families the display list asked for and Skia could not supply.</summary>
+    /// <remarks>
+    /// Kept rather than thrown, because a missing face is a fidelity problem and not a
+    /// failure: the page still draws, in whatever Skia falls back to, and the caller needs
+    /// to be told which face it is looking at. A silent substitution explains most
+    /// mysterious differences against a reference rendering.
+    /// </remarks>
+    public HashSet<string> MissingFaces { get; } = new(StringComparer.Ordinal);
+
+    /// <inheritdoc/>
+    public void BeginPage(DocSize size) => _canvas.Save();
+
+    /// <inheritdoc/>
+    public void EndPage() => _canvas.Restore();
+
+    /// <inheritdoc/>
+    public void Save() => _canvas.Save();
+
+    /// <inheritdoc/>
+    public void Restore() => _canvas.Restore();
+
+    /// <inheritdoc/>
+    public void Transform(AffineTransform transform)
+    {
+        // Skia's matrix is stated in device space, so the translation converts to pixels while
+        // the linear part does not: scaling a scale factor would square it.
+        _canvas.Concat(new SKMatrix(
+            (float)transform.A, (float)transform.C, (float)(transform.E * _scale),
+            (float)transform.B, (float)transform.D, (float)(transform.F * _scale),
+            0, 0, 1));
+    }
+
+    /// <inheritdoc/>
+    public void ClipPath(GraphicsPath path, FillRule rule = FillRule.NonZero)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        using SKPath skia = Convert(path, rule);
+        _canvas.ClipPath(skia, SKClipOperation.Intersect, _options.Antialias);
+    }
+
+    /// <inheritdoc/>
+    public void FillPath(GraphicsPath path, Paint paint, FillRule rule = FillRule.NonZero)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(paint);
+
+        using SKPath skia = Convert(path, rule);
+        using SKPaint brush = Brush(paint, SKPaintStyle.Fill);
+        _canvas.DrawPath(skia, brush);
+    }
+
+    /// <inheritdoc/>
+    public void StrokePath(GraphicsPath path, Stroke stroke)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(stroke);
+
+        using SKPath skia = Convert(path, FillRule.NonZero);
+        using SKPaint pen = Brush(stroke.Paint, SKPaintStyle.Stroke);
+
+        // A zero width is a hairline — the thinnest the device can draw — which is a real
+        // concept in the office formats and not the same as invisible. Skia spells it the same
+        // way, so it passes straight through; anything else scales like a length.
+        pen.StrokeWidth = (float)(stroke.Width.Emu * _scale);
+        pen.StrokeCap = stroke.Cap switch
+        {
+            LineCap.Round => SKStrokeCap.Round,
+            LineCap.Square => SKStrokeCap.Square,
+            _ => SKStrokeCap.Butt,
+        };
+        pen.StrokeJoin = stroke.Join switch
+        {
+            LineJoin.Round => SKStrokeJoin.Round,
+            LineJoin.Bevel => SKStrokeJoin.Bevel,
+            _ => SKStrokeJoin.Miter,
+        };
+        pen.StrokeMiter = (float)stroke.MiterLimit;
+
+        if (stroke.DashPattern is { Count: > 0 } dashes)
+        {
+            float[] intervals = new float[dashes.Count % 2 == 0 ? dashes.Count : dashes.Count * 2];
+            for (int i = 0; i < intervals.Length; i++)
+            {
+                intervals[i] = (float)(dashes[i % dashes.Count].Emu * _scale);
+            }
+
+            pen.PathEffect = SKPathEffect.CreateDash(intervals, (float)(stroke.DashOffset.Emu * _scale));
+        }
+
+        _canvas.DrawPath(skia, pen);
+        pen.PathEffect?.Dispose();
+    }
+
+    /// <inheritdoc/>
+    public void DrawGlyphRun(GlyphRun run, Paint paint)
+    {
+        ArgumentNullException.ThrowIfNull(run);
+        ArgumentNullException.ThrowIfNull(paint);
+        if (run.Glyphs.Count == 0) return;
+
+        if (TypefaceFor(run.Font) is not { } typeface) return;
+
+        using SKFont font = new(typeface, (float)(run.FontSize.Emu * _scale));
+        font.Subpixel = _options.Antialias;
+        font.Edging = _options.Antialias ? SKFontEdging.Antialias : SKFontEdging.Alias;
+        font.Hinting = SKFontHinting.None;
+
+        ushort[] ids = new ushort[run.Glyphs.Count];
+        SKPoint[] positions = new SKPoint[run.Glyphs.Count];
+
+        for (int i = 0; i < run.Glyphs.Count; i++)
+        {
+            PositionedGlyph glyph = run.Glyphs[i];
+            ids[i] = glyph.GlyphId;
+            positions[i] = new SKPoint(
+                (float)((run.Origin.X + glyph.Offset.X).Emu * _scale),
+                (float)((run.Origin.Y + glyph.Offset.Y).Emu * _scale));
+        }
+
+        using SKPaint brush = Brush(paint, SKPaintStyle.Fill);
+
+        if (_options.GlyphOutlines)
+        {
+            DrawOutlines(font, ids, positions, brush);
+            return;
+        }
+
+        using SKTextBlobBuilder builder = new();
+        builder.AddPositionedRun(ids, font, positions);
+        using SKTextBlob? blob = builder.Build();
+        if (blob is null) return;
+
+        _canvas.DrawText(blob, 0, 0, brush);
+    }
+
+    /// <summary>
+    /// Draws each glyph from its own outline, at its exact position.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Slower than a text blob and the reason it is the default anyway is measured: Skia's
+    /// glyph cache rasterises a mask per glyph and places it at a <em>whole pixel</em>
+    /// vertically — <c>SKFont.Subpixel</c> quantises the horizontal position and nothing
+    /// quantises the vertical. On <c>prose-odt.odt</c> at 150 dpi that moved the page's ink
+    /// centroid down by 0.56 px, a quarter of a point, and made the comparison script report
+    /// a reflow cascade on a page whose layout was exact. A half-pixel error that only ever
+    /// appears in one direction is worse than a slow path: it is indistinguishable from a
+    /// layout bug, which is the one thing an image diff is worst at telling apart.
+    /// </para>
+    /// <para>
+    /// This is not "text as outlines" in the sense the PDF backend forbids. Nothing is lost —
+    /// the display list still carries the glyph ids and the text — it is only how the pixels
+    /// are produced.
+    /// </para>
+    /// </remarks>
+    private void DrawOutlines(SKFont font, ushort[] ids, SKPoint[] positions, SKPaint brush)
+    {
+        for (int i = 0; i < ids.Length; i++)
+        {
+            using SKPath? outline = font.GetGlyphPath(ids[i]);
+            if (outline is null || outline.IsEmpty) continue;
+
+            _canvas.Save();
+            _canvas.Translate(positions[i].X, positions[i].Y);
+            _canvas.DrawPath(outline, brush);
+            _canvas.Restore();
+        }
+    }
+
+    /// <inheritdoc/>
+    public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+        if (image.Pixels.Length < image.Width * image.Height * 4) return;
+
+        SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
+        using SKBitmap bitmap = new();
+
+        byte[] pixels = image.Pixels.ToArray();
+        System.Runtime.InteropServices.GCHandle pin =
+            System.Runtime.InteropServices.GCHandle.Alloc(pixels, System.Runtime.InteropServices.GCHandleType.Pinned);
+
+        try
+        {
+            bitmap.InstallPixels(info, pin.AddrOfPinnedObject(), info.RowBytes);
+
+            using SKPaint brush = new()
+            {
+                IsAntialias = _options.Antialias,
+                Color = SKColors.White.WithAlpha((byte)Math.Clamp(Math.Round(opacity * 255), 0, 255)),
+            };
+
+            _canvas.DrawBitmap(
+                bitmap,
+                Rect(destination),
+                new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.None),
+                brush);
+        }
+        finally
+        {
+            pin.Free();
+        }
+    }
+
+    /// <inheritdoc/>
+    public void BeginTransparencyGroup(double opacity)
+    {
+        using SKPaint brush = new()
+        {
+            Color = SKColors.White.WithAlpha((byte)Math.Clamp(Math.Round(opacity * 255), 0, 255)),
+        };
+
+        // An offscreen layer rather than an alpha on every member, because a group at half
+        // opacity is not the same picture as each of its members at half opacity: the members'
+        // overlaps stay opaque against each other and only the composite fades.
+        _groups.Add(_canvas.SaveLayer(brush));
+    }
+
+    /// <inheritdoc/>
+    public void EndTransparencyGroup()
+    {
+        if (_groups.Count == 0) return;
+
+        _canvas.RestoreToCount(_groups[^1]);
+        _groups.RemoveAt(_groups.Count - 1);
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        foreach (SKTypeface? typeface in _typefaces.Values) typeface?.Dispose();
+        _typefaces.Clear();
+    }
+
+    // ------------------------------------------------------------------------------ helpers
+
+    /// <summary>
+    /// The Skia face behind a resolved reference.
+    /// </summary>
+    /// <remarks>
+    /// Loaded from the file the reference names rather than looked up by family, because
+    /// the reference is the outcome of resolution and asking Skia to resolve it again would
+    /// let a second, differently-tuned font matcher overrule the one layout measured with.
+    /// The family lookup is only the fallback for a reference that names no file.
+    /// </remarks>
+    private SKTypeface? TypefaceFor(FontReference font)
+    {
+        string key = font.FaceKey.Length > 0 ? font.FaceKey : font.FamilyName;
+        if (_typefaces.TryGetValue(key, out SKTypeface? cached)) return cached;
+
+        SKTypeface? typeface = null;
+        (string path, int index) = SplitKey(font.FaceKey);
+
+        if (path.Length > 0 && File.Exists(path)) typeface = SKTypeface.FromFile(path, index);
+        typeface ??= SKTypeface.FromFamilyName(
+            font.FamilyName,
+            font.Weight,
+            (int)SKFontStyleWidth.Normal,
+            font.IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+        if (typeface is null) MissingFaces.Add(font.FamilyName);
+
+        _typefaces[key] = typeface;
+        return typeface;
+    }
+
+    private static (string Path, int Index) SplitKey(string key)
+    {
+        int hash = key.LastIndexOf('#');
+        if (hash <= 0 || !int.TryParse(key[(hash + 1)..], out int index)) return (key, 0);
+
+        return (key[..hash], index);
+    }
+
+    private SKPaint Brush(Paint paint, SKPaintStyle style)
+    {
+        SKPaint brush = new() { IsAntialias = _options.Antialias, Style = style };
+
+        switch (paint)
+        {
+            case SolidPaint solid:
+                brush.Color = new SKColor(solid.Colour.R, solid.Colour.G, solid.Colour.B, solid.Colour.A);
+                break;
+
+            case GradientPaint gradient when gradient.Stops.Count > 0:
+                brush.Shader = Shader(gradient);
+                break;
+
+            default:
+                brush.Color = SKColors.Transparent;
+                break;
+        }
+
+        return brush;
+    }
+
+    /// <summary>
+    /// A gradient as Skia states it.
+    /// </summary>
+    /// <remarks>
+    /// Linear and radial map straight across. Conical and rectangular are LibreOffice's own
+    /// geometries and Skia's sweep gradient is not the same construction, so they are drawn
+    /// as a radial for now; nothing in the display list produces one yet, and reproducing
+    /// <c>basegfx</c>'s gradient arithmetic exactly is recorded as outstanding in this
+    /// library's <c>TODO.md</c> rather than approximated silently.
+    /// </remarks>
+    private SKShader Shader(GradientPaint gradient)
+    {
+        SKColor[] colours = new SKColor[gradient.Stops.Count];
+        float[] offsets = new float[gradient.Stops.Count];
+
+        for (int i = 0; i < gradient.Stops.Count; i++)
+        {
+            GradientStop stop = gradient.Stops[i];
+            colours[i] = new SKColor(stop.Colour.R, stop.Colour.G, stop.Colour.B, stop.Colour.A);
+            offsets[i] = (float)stop.Offset;
+        }
+
+        SKPoint start = Point(gradient.Start);
+        SKPoint end = Point(gradient.End);
+
+        if (gradient.Kind == GradientKind.Linear)
+        {
+            return SKShader.CreateLinearGradient(start, end, colours, offsets, SKShaderTileMode.Clamp);
+        }
+
+        float radius = (float)Math.Sqrt(
+            ((end.X - start.X) * (end.X - start.X)) + ((end.Y - start.Y) * (end.Y - start.Y)));
+
+        return SKShader.CreateRadialGradient(
+            start, radius <= 0 ? 1 : radius, colours, offsets, SKShaderTileMode.Clamp);
+    }
+
+    private SKPath Convert(GraphicsPath path, FillRule rule)
+    {
+        using SKPathBuilder builder = new()
+        {
+            FillType = rule == FillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding,
+        };
+
+        foreach (PathCommand command in path.Commands)
+        {
+            switch (command.Verb)
+            {
+                case PathVerb.MoveTo:
+                    builder.MoveTo(Point(command.Point));
+                    break;
+                case PathVerb.LineTo:
+                    builder.LineTo(Point(command.Point));
+                    break;
+                case PathVerb.CubicTo:
+                    builder.CubicTo(Point(command.Control1), Point(command.Control2), Point(command.Point));
+                    break;
+                case PathVerb.Close:
+                default:
+                    builder.Close();
+                    break;
+            }
+        }
+
+        return builder.Detach();
+    }
+
+    private SKPoint Point(DocPoint point)
+        => new((float)(point.X.Emu * _scale), (float)(point.Y.Emu * _scale));
+
+    private SKRect Rect(DocRect rect) => new(
+        (float)(rect.Left.Emu * _scale),
+        (float)(rect.Top.Emu * _scale),
+        (float)(rect.Right.Emu * _scale),
+        (float)(rect.Bottom.Emu * _scale));
+}

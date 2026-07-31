@@ -57,7 +57,13 @@ public static class PaperlessDocument
             // A reader never takes ownership of a source it was handed, so a document opened
             // from a path has to carry the file handle's lifetime itself. Without this the
             // handle would stay open until the finaliser ran.
-            return new OwnedSourceDocument(Open(source), source);
+            //
+            // Two wrappers rather than one, because callers discover paginability with a type
+            // test and a wrapper that does not implement IPaginatedDocument hides it.
+            IDocument document = Open(source);
+            return document is IPaginatedDocument paginated
+                ? new OwnedPaginatedDocument(paginated, source)
+                : new OwnedSourceDocument(document, source);
         }
         catch
         {
