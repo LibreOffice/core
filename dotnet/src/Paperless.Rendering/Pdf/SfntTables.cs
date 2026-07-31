@@ -114,13 +114,6 @@ internal sealed class SfntTables
         Tables.Sort((a, b) => a.Tag.CompareTo(b.Tag));
     }
 
-    /// <summary>Removes a table when it is present.</summary>
-    public void Remove(string name)
-    {
-        uint tag = Tag(name);
-        Tables.RemoveAll(t => t.Tag == tag);
-    }
-
     /// <summary>
     /// Serialises the tables back into a font file.
     /// </summary>

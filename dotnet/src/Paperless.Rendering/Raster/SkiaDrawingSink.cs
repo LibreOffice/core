@@ -51,15 +51,6 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
         _scale = (float)(options.Dpi / Length.EmuPerInch);
     }
 
-    /// <summary>Families the display list asked for and Skia could not supply.</summary>
-    /// <remarks>
-    /// Kept rather than thrown, because a missing face is a fidelity problem and not a
-    /// failure: the page still draws, in whatever Skia falls back to, and the caller needs
-    /// to be told which face it is looking at. A silent substitution explains most
-    /// mysterious differences against a reference rendering.
-    /// </remarks>
-    public HashSet<string> MissingFaces { get; } = new(StringComparer.Ordinal);
-
     /// <inheritdoc/>
     public void BeginPage(DocSize size) => _canvas.Save();
 
@@ -313,7 +304,10 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
             (int)SKFontStyleWidth.Normal,
             font.IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
 
-        if (typeface is null) MissingFaces.Add(font.FamilyName);
+        // A face Skia cannot supply is not reported here on purpose: substitution happened during
+        // resolution, and `SystemFontResolver.Substitutions` already records what was swapped for
+        // what. Reporting it a second time from a backend would name the family rather than the
+        // request, which is the less useful half of the pair.
 
         _typefaces[key] = typeface;
         return typeface;

@@ -39,9 +39,6 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
     private readonly Dictionary<string, Face> _faces = new(StringComparer.Ordinal);
     private readonly List<Subset> _subsets = [];
 
-    /// <summary>Whether anything has asked for a font at all.</summary>
-    public bool IsEmpty => _subsets.Count == 0;
-
     /// <summary>
     /// The PDF resource name and character code that will draw a glyph.
     /// </summary>
@@ -121,7 +118,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         for (int i = 0; i < _subsets.Count; i++)
         {
             Subset subset = _subsets[i];
-            int id = WriteSubset(writer, subset, i);
+            int id = WriteSubset(writer, subset);
             resources.Append(CultureInfo.InvariantCulture, $"/{subset.Resource} {id} 0 R");
         }
 
@@ -189,7 +186,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
 
     // ----------------------------------------------------------------------------- writing
 
-    private static int WriteSubset(PdfDocumentWriter writer, Subset subset, int ordinal)
+    private static int WriteSubset(PdfDocumentWriter writer, Subset subset)
     {
         OpenTypeFace? opentype = subset.Face.OpenType;
         int upem = opentype?.UnitsPerEm is > 0 ? opentype.UnitsPerEm : 1000;
@@ -217,15 +214,14 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         int toUnicode = writer.Reserve();
         writer.SetStream(toUnicode, string.Empty, Encoding.Latin1.GetBytes(ToUnicode(subset)), compress: false);
 
-        int descriptor = WriteDescriptor(writer, subset, name, upem, ordinal);
+        int descriptor = WriteDescriptor(writer, subset, name, upem);
 
         return writer.Add(
             $"<</Type/Font/Subtype/TrueType/BaseFont/{name}/FirstChar 0/LastChar {last}"
             + $"/Widths{widths}/FontDescriptor {descriptor} 0 R/ToUnicode {toUnicode} 0 R>>");
     }
 
-    private static int WriteDescriptor(
-        PdfDocumentWriter writer, Subset subset, string name, int upem, int ordinal)
+    private static int WriteDescriptor(PdfDocumentWriter writer, Subset subset, string name, int upem)
     {
         OpenTypeFace? opentype = subset.Face.OpenType;
         FontReference reference = subset.Face.Reference;
@@ -269,7 +265,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
             $"<</Type/FontDescriptor/FontName/{name}/Flags {flags}"
             + $"/FontBBox[{xMin} {yMin} {xMax} {yMax}]"
             + $"/ItalicAngle {PdfSyntax.Number(italicAngle)}/Ascent {ascent}/Descent {descent}"
-            + $"/CapHeight {capHeight}/StemV {StemWidth(reference, ordinal)}{fontFile}>>");
+            + $"/CapHeight {capHeight}/StemV {StemWidth(reference)}{fontFile}>>");
     }
 
     /// <summary>
@@ -281,11 +277,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
     /// only so that a bold face does not claim a regular face's stems to a reader that has
     /// to synthesise one.
     /// </remarks>
-    private static int StemWidth(FontReference reference, int ordinal)
-    {
-        _ = ordinal;
-        return reference.Weight >= 600 ? 140 : 80;
-    }
+    private static int StemWidth(FontReference reference) => reference.Weight >= 600 ? 140 : 80;
 
     /// <summary>The face's bounding box in thousandths of an em, from its <c>head</c> table.</summary>
     private static (int XMin, int YMin, int XMax, int YMax) BoundingBox(Face face)
