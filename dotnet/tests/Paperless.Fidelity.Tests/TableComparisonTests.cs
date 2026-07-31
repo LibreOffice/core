@@ -186,9 +186,11 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-shading.odt")]
     [InlineData("table-shading.docx")]
     [InlineData("table-shading.rtf")]
-    // DOC is absent from *this* test only: its cell shading is a per-band `WW8_SHD` array from
-    // `sprmTDefTableShd`, indexed by cell, with a newer three-sprm form carrying full RGB — a bigger read than
-    // the other three and still open. Its text is compared above like every other format's.
+    // DOC states each shade twice over, and the two disagree: `sprmTDefTableShd80`'s palette index resolves to
+    // #C0C0C0 where the newer `sprmTDefTableShd`'s RGB says the #CCCCCC the document was written with. What
+    // this test can see is only that three cells are filled and where — the colour is checked by the unit
+    // tests — but the count is what catches the shade being read off the wrong side of the pattern.
+    [InlineData("table-shading.doc")]
     public void AShadedCellIsFilledWhereLibreOfficeFillsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -250,8 +252,11 @@ public sealed class TableComparisonTests : IDisposable
     // first vertical: 56.70 pt in ODF, 56.70 in the DOCX render against 56.45 laid out, and 57.00 in the RTF
     // render against 56.70. A quarter and a third of a point, in the origin rather than in the borders.
     //
-    // DOC is absent for a larger one: WW8 states a border as a `BRC` structure through `sprmTSetBrc`, applied
-    // to a *range* of cells rather than to one, which is a bigger read than the other three and still open.
+    // DOC is here, and is the one format whose grid lines are joined by *Word's* rule rather than Writer's:
+    // an inner line stops a whole border width short of the outline it meets instead of overshooting it by
+    // half. So its five inner strokes run 56.95 to 538.35 where ODF's run 56.45 to 538.85, and the two are a
+    // point apart end to end. DOCX and RTF are drawn the same way and need it too.
+    [InlineData("table-borders.doc")]
     public void ABorderIsStrokedAsOneLinePerGridLine(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
