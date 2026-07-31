@@ -141,12 +141,71 @@ The three highest-risk areas, in order:
 ```bash
 cd dotnet
 dotnet build Paperless.slnx          # must stay warning-free
-dotnet test  Paperless.slnx
+dotnet test  Paperless.slnx          # ~1100 tests, a few minutes
 ```
 
-The comparison tests in `tests/Paperless.Fidelity.Tests` need an installed LibreOffice and
-skip with a reason when it is missing, so a bare `dotnet test` on a fresh container passes
-while quietly covering nothing. Run `check-env.sh` below before trusting a green run.
+**Do not add `-r`/`--runtime`.** The SDK rejects it on a solution outright —
+`NETSDK1134: Building a solution with a specific RuntimeIdentifier is not supported` — and it
+is unnecessary: `Directory.Build.props` already pins every test and tool project to the host
+RID, computed from the OS and process architecture. Passing `-r linux-x64` to an individual
+project is accepted and does nothing, which is the intended state. Read the comment beside the
+setting before changing it; it records two traps that both look exactly like the property
+having no effect.
+
+That pin is not a tidiness measure. Without it the build resolves SkiaSharp's and
+HarfBuzzSharp's native binaries for **twenty-one** runtime identifiers and copies all of them
+into every output directory — 687 MB per test project, of which the host can run one. A clean
+whole-solution build costs **463 MB with the pin and 6095 MB without it**, which is the
+difference between fitting in a container's disk allowance and exhausting it.
+
+### Running less than everything
+
+A full run rebuilds nothing if the tree is already built, so the cost is the tests themselves —
+and **essentially all of it is `Paperless.Fidelity.Tests`**, which shells out to `soffice` once
+per document. It is also the *only* project that does: the other seven reach LibreOffice not at
+all, so they need none of the setup below and finish in seconds.
+
+| Project | Needs `soffice` | Rough cost |
+|---|---|---|
+| `Paperless.Fidelity.Tests` | yes, 23 files | minutes |
+| everything else | no | seconds |
+
+Those are wall-clock figures on an already-built tree; most of each is the SDK's up-to-date
+check rather than the tests, which is why naming one project is worth doing but naming one
+*test* rarely is.
+
+So when iterating, name the project — and reach for the filter only inside the slow one:
+
+```bash
+dotnet test tests/Paperless.Text.Tests/Paperless.Text.Tests.csproj                # ~10 s
+dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj   # ~15 s
+dotnet test tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj \
+    --filter "FullyQualifiedName~TableComparisonTests"                            # ~45 s
+```
+
+Run the whole solution before committing anyway. The failure this project cares about most is
+the cascade — one wrong measurement moving every line after it — and it surfaces in projects you
+had no reason to think you had touched.
+
+### Before trusting a green run
+
+`Paperless.Fidelity.Tests` needs an installed LibreOffice and **skips with a reason when it is
+missing**, so a bare `dotnet test` on a fresh container reports a green run while that project
+covers nothing at all. A fresh container has none of what it needs. Install it, then confirm
+with `check-env.sh` below:
+
+```bash
+apt-get install -y --no-install-recommends \
+    libreoffice-writer libreoffice-calc libreoffice-impress \
+    fonts-crosextra-carlito fonts-crosextra-caladea fonts-liberation \
+    poppler-utils
+```
+
+`libreoffice-core` alone gives an `soffice` that starts, reports a version and then fails on
+every document — which is why `LibreOfficeRunner.IsAvailable` decides by converting a probe file
+rather than by finding the binary. The fonts are not optional either: without Carlito and
+Caladea every OOXML comparison measures a substituted face and is meaningless. A correct run
+reports **0 skipped**; any other number means part of the suite covered nothing.
 
 Comparing against LibreOffice — use the skills, they encode hard-won details:
 
