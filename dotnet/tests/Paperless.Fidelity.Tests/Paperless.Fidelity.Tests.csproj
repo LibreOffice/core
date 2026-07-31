@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Paperless.TestKit\Paperless.TestKit.csproj" />
     <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
     <ProjectReference Include="..\..\src\Paperless.Rendering\Paperless.Rendering.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Markup\Paperless.Markup.csproj" />
   </ItemGroup>
 
 </Project>
