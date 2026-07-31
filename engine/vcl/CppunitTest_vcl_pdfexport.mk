@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	sal \
 	subsequenttest \
 	test \

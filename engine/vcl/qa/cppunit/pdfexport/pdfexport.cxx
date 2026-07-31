@@ -16,8 +16,10 @@
 
 #include <com/sun/star/view/XPrintable.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
@@ -65,6 +67,15 @@ public:
     PdfExportTest()
         : UnoApiTest(u"/vcl/qa/cppunit/pdfexport/data/"_ustr)
     {
+    }
+
+    void setUp() override
+    {
+        UnoApiTest::setUp();
+        // A view sets the Kit's language, which is what AllSettings answers with while the Kit is
+        // active; a test has no view, so it stands in for one
+        comphelper::COKit::setLanguageTag(LanguageTag(u"en-US"_ustr));
+        comphelper::COKit::setLocale(LanguageTag(u"en-US"_ustr));
     }
 
 #if !defined MACOSX && !defined _WIN32
@@ -1902,7 +1913,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
                 CPPUNIT_ASSERT(pName);
                 OString aFontName = pName->GetValue().copy(7); // skip the subset id
-#if defined _WIN32
+#if defined _WIN32 && !USE_HEADLESS_CODE
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi-Regular"_ostr,
                                              aFontName);
 #else
