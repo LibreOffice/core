@@ -153,6 +153,10 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view 
 sd::slidesorter::SlideSorterViewShell*
 SdUiImpressTest::getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp)
 {
+    // The slide sorter is created in the slide panel, which a unit test with the Kit does not get
+    if (comphelper::COKit::isActive())
+        dispatchCommand(xComp.is() ? xComp : mxComponent, u".uno:LeftPaneImpress"_ustr, {});
+
     auto pXImpressDocument
         = dynamic_cast<SdXImpressDocument*>(xComp.is() ? xComp.get() : mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -2710,6 +2714,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581_undo_hide_show_slide)
 {
     createSdImpressDoc();
 
+    // Hiding and showing a slide are the slide sorter's commands
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+
     // Hide slide and check the number of available undo actions
     dispatchCommand(mxComponent, u".uno:ShowSlide"_ustr, {});
     dispatchCommand(mxComponent, u".uno:HideSlide"_ustr, {});
@@ -2721,7 +2728,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130581_undo_hide_show_slide)
     // Check if there is the correct undo action, i.e., hide slide
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_UNDO_HIDE_SLIDE), pUndoManager->GetUndoActionComment());
-    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
 
     // Check if the page is actually hidden
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -2771,6 +2777,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
 {
     createSdImpressDoc();
+
+    // Moving a slide is the slide sorter's command
+    getSlideSorterViewShell();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
