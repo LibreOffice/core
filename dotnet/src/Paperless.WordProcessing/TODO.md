@@ -87,7 +87,7 @@ indexes or resolvable style chains.
       four formats: the same three fields, the same kinds, the same ranges and the same results — with
       one difference that is in the file rather than in the reading of it, LibreOffice's ODF export
       caching a page number of **0** where the other three cache 1.
-      Which raises a difference worth naming rather than tolerating, since it is now in
+      That surfaced a second difference, named rather than tolerated and now in
       `ExtractionComparisonTests.KnownDeviations`: LibreOffice's **text filter** expands `PAGE` to 0,
       because it runs without a layout. Measured on `bookmark-field.*` — its text export says "Page 0
       of 1" for the DOCX, the ODT and the RTF while its *rendering* of all four says "Page 1 of 1".
@@ -144,6 +144,13 @@ indexes or resolvable style chains.
       produce the flat paragraph-plus-format sequence the paginator takes — which turned out to be what
       layout actually needed, and is much less than this model holds. The tree itself still has no
       importer, and what would use it is the run-level formatting that drawing needs.
+      The marks pass is the closest thing to one, and deliberately not the thing itself: it materialises
+      a `WritingParagraph` only where a mark needs a position to point at, and fills in its text when
+      the paragraph closes. So a document with three bookmarks builds three paragraphs and a document
+      with none builds none, which is what lets it run inside the extraction walk rather than beside it.
+      The document order those paragraphs carry is taken where a paragraph *begins* rather than where it
+      ends, so that a footnote's paragraphs — which finish before the paragraph anchoring them — do not
+      sort in front of it.
 
 ## Importers
 

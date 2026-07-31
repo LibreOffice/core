@@ -939,8 +939,10 @@ public sealed partial class RtfDocumentReader
                 return;
             case "deleted":
                 // Text a tracked change removed, which is still in the file. Collected rather than
-                // skipped so the change can be recorded; none of it reaches the document.
-                state.Destination = RtfDestination.Deletion;
+                // skipped so the change can be recorded; none of it reaches the document. A toggle,
+                // so \deleted0 turns it off and must not send the text to the collector — where the
+                // old code, which only ever switched to Skip, would have dropped it either way.
+                if (token.Parameter != 0) state.Destination = RtfDestination.Deletion;
                 return;
             case "revised":
                 state.Revised = token.Parameter != 0;

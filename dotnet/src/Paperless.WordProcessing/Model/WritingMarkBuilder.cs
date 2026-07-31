@@ -42,7 +42,13 @@ internal sealed class WritingMarkBuilder
     private readonly Dictionary<string, PendingChange> _openChanges = new(StringComparer.Ordinal);
 
     private int _nextOrder;
+
+    // The paragraph that closed most recently, kept so that a mark between two paragraphs — which is
+    // where DOCX puts one that brackets a table — has somewhere to be. Its text as well as its node,
+    // because it may not have been materialised while it was open.
     private WritingParagraph? _lastClosed;
+    private int _lastClosedOrder = -1;
+    private string _lastClosedText = string.Empty;
 
     /// <summary>Whether anything has been recorded, so a caller can skip building an empty set.</summary>
     public bool IsEmpty => _changes.Count == 0 && _bookmarks.Count == 0 && _fields.Count == 0;
@@ -69,13 +75,16 @@ internal sealed class WritingMarkBuilder
         if (_openOrder.Count == 0) return;
 
         WritingParagraph? node = _openNode[^1];
+        _lastClosedOrder = _openOrder[^1];
+        _lastClosedText = text;
+        _lastClosed = node;
+
         _openOrder.RemoveAt(_openOrder.Count - 1);
         _openNode.RemoveAt(_openNode.Count - 1);
 
         if (node is null) return;
 
         node.Append(text);
-        _lastClosed = node;
         FillTextFrom(node);
     }
 
@@ -129,15 +138,23 @@ internal sealed class WritingMarkBuilder
     /// <remarks>
     /// Null when no paragraph is open and none has closed — a mark before the document's first
     /// paragraph, which has nothing to be a position in. A mark <em>between</em> two paragraphs takes
-    /// the end of the one before it, which is where the formats put it: a bookmark declared at block
-    /// level covers from there to wherever its end lands.
+    /// the end of the one just before it, which is where the formats put it: a DOCX declares a
+    /// bookmark at block level around a table, and it covers from there to wherever its end lands.
+    /// The previous paragraph is materialised retrospectively for that, text and all, which is why
+    /// its text is kept for one paragraph after it closes.
     /// </remarks>
     public WritingPosition? At(int offset)
     {
         if (_openOrder.Count > 0)
         {
-            WritingParagraph node = _openNode[^1] ?? Materialise(_openOrder.Count - 1);
+            WritingParagraph node = _openNode[^1] ??= Materialise(_openOrder[^1]);
             return new WritingPosition(node, Math.Max(0, offset));
+        }
+
+        if (_lastClosed is null && _lastClosedOrder >= 0)
+        {
+            _lastClosed = Materialise(_lastClosedOrder);
+            _lastClosed.Append(_lastClosedText);
         }
 
         return _lastClosed is { } previous
@@ -145,11 +162,10 @@ internal sealed class WritingMarkBuilder
             : null;
     }
 
-    /// <summary>Materialises the model paragraph for an open frame, keeping its document order.</summary>
-    private WritingParagraph Materialise(int frame)
+    /// <summary>Materialises a model paragraph, keeping the document order the walk gave it.</summary>
+    private WritingParagraph Materialise(int order)
     {
         WritingParagraph node = new();
-        int order = _openOrder[frame];
 
         // Assigned rather than left to WritingDocument.AssignDocumentOrder, which numbers a whole
         // tree: these paragraphs are the sparse few a mark touched, and their indexes have to be the
@@ -158,7 +174,6 @@ internal sealed class WritingMarkBuilder
         node.DocumentOrderEnd = order + 1;
 
         _paragraphs.Add(node);
-        _openNode[frame] = node;
         return node;
     }
 

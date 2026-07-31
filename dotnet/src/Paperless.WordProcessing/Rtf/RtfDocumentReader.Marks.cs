@@ -86,11 +86,19 @@ public sealed partial class RtfDocumentReader
 
     // --------------------------------------------------------------------- tracked changes
 
-    /// <summary>Records a revision-table entry, whose text ends at a semicolon.</summary>
+    /// <summary>
+    /// Records a revision-table entry, whose text ends at a semicolon.
+    /// </summary>
+    /// <remarks>
+    /// The entries are the table's <em>inner</em> groups, so the outer <c>{\*\revtbl}</c> closes
+    /// last with nothing collected and must not add an entry of its own — the indexes are positional
+    /// and a spurious one at the end is the sort of thing that only shows up in the last author's
+    /// name.
+    /// </remarks>
     private void RecordRevisionAuthor(GroupState state)
     {
-        string name = state.Collected.ToString().TrimEnd(';').Trim();
-        if (name.Length > 0 || _revisionAuthors.Count > 0) _revisionAuthors.Add(name);
+        if (state.Collected.Length == 0) return;
+        _revisionAuthors.Add(state.Collected.ToString().TrimEnd(';').Trim());
     }
 
     private string? RevisionAuthor(int index)
