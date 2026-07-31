@@ -69,10 +69,11 @@ indexes or resolvable style chains.
       paragraph styles that reach them, so its sections are the geometries the document *defines*
       rather than one per page break. Resolving either into "this paragraph is on that page
       description" needs the page-break chain, which needs layout.
-- [ ] Headers and footers as page furniture rather than as flows. `WritingSection` has the slots and
+- [ ] Headers and footers as page furniture in the *document model*. `WritingSection` has the slots and
       the fallback rules — first page, even page, default, with a default header appearing on a first
       page that asked for nothing else — but nothing populates them, because the flows are built by the
-      extraction pass and the model pass that would connect them is not written.
+      extraction pass and the model pass that would connect them is not written. Layout does not wait for
+      this: it reads the furniture itself, through the same walk the body uses.
 - [ ] Fields — store both the definition and the cached result. The cached result is what a
       reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
 - [ ] Bookmarks and cross-references
@@ -292,10 +293,19 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [x] `PaginationOptions` for the two places Word and Writer disagree and the file says which by a
       compatibility flag rather than by a property: whether a paragraph keeps its space-before at the
       top of a page, and whether space-before collapses against the previous space-after or adds to it.
-- [ ] Frame hierarchy: header and footer frames beside the body, and section/floating frames inside it.
-      The page's body area is computed and filled; the furniture areas are known
-      (`HeaderDistance`/`HeaderHeight`) but nothing lays anything out in them, because the flows that
-      would go there are built by the extraction pass.
+- [x] Header and footer frames beside the body, laid out per slot and cached — most pages of a document
+      share one header, and shaping its text again per page would be the largest single cost of
+      paginating a long one. `PageFurnitureSet` holds them, `PageGeometry.HeaderArea`/`FooterArea` say
+      where they go, and `Paginator` places one of each on every page by the section's slot rules.
+      **ODF only so far**: the other three formats' furniture is read into the content tree but not into
+      layout.
+- [x] Where a footer's first line goes, which the two families genuinely disagree about — five points
+      apart on A4, so it is not a rounding matter. Word bottom-aligns the footer: its *last* line sits
+      at `pageHeight - w:footer`, and a second line grows upwards. ODF top-aligns it below the body: its
+      *first* line sits the footer style's own spacing below where body text stops, and a second line
+      grows downwards. `PageGeometry.FooterOffset` carries the ODF answer and null means the Word rule;
+      both were measured against LibreOffice's rendering of the same one-line footer in each format.
+- [ ] Section and floating frames inside the body.
 - [ ] Several sections in one document. The paginator takes one section's geometry; carrying a section
       change mid-document needs each paragraph to know which section it is in, which is the gap recorded
       under the document model above.

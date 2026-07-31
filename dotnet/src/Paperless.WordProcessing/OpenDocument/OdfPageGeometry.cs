@@ -78,6 +78,13 @@ internal static class OdfPageGeometry
             FooterDistance = footerDistance,
             HeaderHeight = headerHeight,
             FooterHeight = footerHeight,
+
+            // ODF's footer is top-aligned below the body rather than bottom-aligned against the page, so
+            // the spacing that separates the two is where its first line goes. Stated only when there is a
+            // footer at all: a page with none should not claim an offset for it.
+            FooterOffset = master?.HasFooter() == true
+                ? FurnitureSpacing(layout?.FooterProperties)
+                : null,
             Columns = ColumnCount(properties),
             ColumnGap = ColumnGap(properties),
             IsLandscape = string.Equals(
@@ -150,15 +157,22 @@ internal static class OdfPageGeometry
             OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "min-height")))
             ?? Core.Units.Length.Zero;
 
-        // The margin below a header, or above a footer. Both are written as the side facing the body,
-        // so whichever is present is the spacing that separates the furniture from the text.
-        Length spacing = OdfWriterUnits.ToCore(
-            OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "margin-bottom"))
-            ?? OdfValue.ParseLength(properties.Get(OdfNamespaces.FoCompatible, "margin-top")))
-            ?? Core.Units.Length.Zero;
-
-        return declared + spacing;
+        return declared + FurnitureSpacing(properties);
     }
+
+    /// <summary>
+    /// The gap between a header or footer and the body text.
+    /// </summary>
+    /// <remarks>
+    /// The margin below a header, or above a footer. Both are written as the side facing the body, so
+    /// whichever is present is the spacing that separates the furniture from the text — which makes one
+    /// lookup with a fallback right for both, and means neither caller has to say which it is asking about.
+    /// </remarks>
+    private static Length FurnitureSpacing(OdfPropertySet? properties)
+        => OdfWriterUnits.ToCore(
+               OdfValue.ParseLength(properties?.Get(OdfNamespaces.FoCompatible, "margin-bottom"))
+               ?? OdfValue.ParseLength(properties?.Get(OdfNamespaces.FoCompatible, "margin-top")))
+           ?? Core.Units.Length.Zero;
 
     /// <summary>
     /// A measure from a page layout, on Writer's own grid.

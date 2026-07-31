@@ -157,6 +157,27 @@ public sealed record PageGeometry
     /// <summary>How much of the bottom margin the footer occupies, its spacing included.</summary>
     public Length FooterHeight { get; init; }
 
+    /// <summary>
+    /// How far below the body's last possible line the footer's first line starts, or null when the
+    /// footer sits on the bottom of the space reserved for it instead.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The two formats genuinely disagree, and the disagreement is visible: rendering the same one-line
+    /// footer through both puts it five points apart on an A4 page. Word's footer is <em>bottom-aligned</em>
+    /// — its last line sits at <c>pageHeight - w:footer</c>, so a footer that grows a second line grows
+    /// upwards into the page. ODF's is <em>top-aligned</em> below the body — its first line sits the footer
+    /// style's own spacing below where body text stops, so a footer that grows a second line grows downwards
+    /// and the bottom margin shrinks.
+    /// </para>
+    /// <para>
+    /// Null rather than zero for the Word case, because zero is a meaningful ODF answer: a footer style with
+    /// no spacing at all does start immediately below the body, which is not the same as hugging the bottom
+    /// of the page.
+    /// </para>
+    /// </remarks>
+    public Length? FooterOffset { get; init; }
+
     /// <summary>How many columns the text area is divided into; one for ordinary text.</summary>
     public int Columns { get; init; } = 1;
 
@@ -211,6 +232,48 @@ public sealed record PageGeometry
     /// <summary>The text area's rectangle on the page.</summary>
     public DocRect TextArea =>
         new(Margins.Left + Gutter, Margins.Top, TextWidth, TextHeight);
+
+    /// <summary>
+    /// The rectangle the header occupies, or an empty one when the page has no header.
+    /// </summary>
+    /// <remarks>
+    /// From the page's top edge by <see cref="HeaderDistance"/>, which is where every format but ODF
+    /// states it — and the reader has already converted ODF's own spelling. Its height is
+    /// <see cref="HeaderHeight"/> less the spacing that separates it from the body, because that spacing
+    /// belongs to the gap rather than to the header: text drawn into it would sit closer to the body than
+    /// the document asked for.
+    /// </remarks>
+    public DocRect HeaderArea
+    {
+        get
+        {
+            Length height = Margins.Top - HeaderDistance;
+            return height > Length.Zero
+                ? new DocRect(Margins.Left + Gutter, HeaderDistance, TextWidth, height)
+                : default;
+        }
+    }
+
+    /// <summary>
+    /// The rectangle the footer occupies, or an empty one when the page has no footer.
+    /// </summary>
+    /// <remarks>
+    /// Measured from the page's <em>bottom</em> edge, because that is how a footer's distance is stated —
+    /// so its top depends on the page's height and not on the body's. It starts where the body's text area
+    /// ends, since the space between the two belongs to neither.
+    /// </remarks>
+    public DocRect FooterArea
+    {
+        get
+        {
+            Length top = Margins.Top + TextHeight;
+            Length height = Size.Height - FooterDistance - top;
+
+            return height > Length.Zero
+                ? new DocRect(Margins.Left + Gutter, top, TextWidth, height)
+                : default;
+        }
+    }
 }
 
 /// <summary>
@@ -269,27 +332,52 @@ public sealed record WritingSection
     /// on its first page.
     /// </remarks>
     public WritingBody? HeaderFor(int pageNumber, bool isFirstPageOfSection)
-        => Furniture(Headers, pageNumber, isFirstPageOfSection);
+        => PageFurnitureSlots.For(
+            Headers, pageNumber, isFirstPageOfSection, HasDifferentFirstPage, HasDifferentEvenPages);
 
     /// <summary>The footer for a page, by the same rules as <see cref="HeaderFor"/>.</summary>
     public WritingBody? FooterFor(int pageNumber, bool isFirstPageOfSection)
-        => Furniture(Footers, pageNumber, isFirstPageOfSection);
+        => PageFurnitureSlots.For(
+            Footers, pageNumber, isFirstPageOfSection, HasDifferentFirstPage, HasDifferentEvenPages);
+}
 
-    private WritingBody? Furniture(
-        IReadOnlyDictionary<PageFurnitureSlot, WritingBody> slots,
+/// <summary>
+/// Which of a section's furniture slots a page uses.
+/// </summary>
+/// <remarks>
+/// Generic in what the slots hold, because two passes ask the same question of different things: the
+/// extraction pass wants the header's content and the layout pass wants its paragraphs. The rule is worth
+/// having in one place — the falling-back is the part that is easy to miss, since a section with only a
+/// default header still has a header on its first page.
+/// </remarks>
+public static class PageFurnitureSlots
+{
+    /// <summary>The slot a page takes, or null when the section fills none of them.</summary>
+    /// <param name="slots">What the section has, by slot.</param>
+    /// <param name="pageNumber">The page's printed number, which is what decides even from odd.</param>
+    /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
+    /// <param name="hasDifferentFirstPage">True when the section asked for a distinct first page.</param>
+    /// <param name="hasDifferentEvenPages">True when the section distinguishes even pages.</param>
+    public static T? For<T>(
+        IReadOnlyDictionary<PageFurnitureSlot, T> slots,
         int pageNumber,
-        bool isFirstPageOfSection)
+        bool isFirstPageOfSection,
+        bool hasDifferentFirstPage,
+        bool hasDifferentEvenPages)
+        where T : class
     {
+        ArgumentNullException.ThrowIfNull(slots);
+
         if (isFirstPageOfSection
-            && HasDifferentFirstPage
-            && slots.TryGetValue(PageFurnitureSlot.First, out WritingBody? first))
+            && hasDifferentFirstPage
+            && slots.TryGetValue(PageFurnitureSlot.First, out T? first))
         {
             return first;
         }
 
-        if (HasDifferentEvenPages
+        if (hasDifferentEvenPages
             && pageNumber % 2 == 0
-            && slots.TryGetValue(PageFurnitureSlot.Even, out WritingBody? even))
+            && slots.TryGetValue(PageFurnitureSlot.Even, out T? even))
         {
             return even;
         }

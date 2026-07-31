@@ -116,10 +116,16 @@ public sealed class Paginator
     /// <param name="startingNumber">
     /// The number to print on the first page, when the section does not restart numbering itself.
     /// </param>
+    /// <param name="furniture">
+    /// The section's headers and footers, or null when it has none. Laid out per slot rather than per page:
+    /// the same header appears on most pages, and laying it out again for each would shape its text over
+    /// and over for an answer that cannot change.
+    /// </param>
     public List<LaidOutPage> Paginate(
         IReadOnlyList<PageParagraph> paragraphs,
         WritingSection? section = null,
-        int startingNumber = 1)
+        int startingNumber = 1,
+        PageFurnitureSet? furniture = null)
     {
         ArgumentNullException.ThrowIfNull(paragraphs);
 
@@ -133,7 +139,7 @@ public sealed class Paginator
         List<LaidOutPage> pages = [];
         if (paragraphs.Count == 0 || bodyHeight <= Length.Zero || bodyWidth <= Length.Zero)
         {
-            pages.Add(EmptyPage(0, startingNumber, page));
+            pages.Add(EmptyPage(0, startingNumber, page, Furniture(furniture, geometry, page, startingNumber, first: true)));
             return pages;
         }
 
@@ -188,7 +194,12 @@ public sealed class Paginator
             // A page break before a paragraph that is not already at the top of a page.
             if (lineIndex == 0 && paragraph.Format.StartsNewPage && placed.Count > 0)
             {
-                pages.Add(Page(pages.Count, pageNumber++, page, placed));
+                pages.Add(Page(
+                    pages.Count,
+                    pageNumber++,
+                    page,
+                    placed,
+                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                 placed = [];
                 used = Length.Zero;
                 continue;
@@ -213,7 +224,12 @@ public sealed class Paginator
                 }
                 else
                 {
-                    pages.Add(Page(pages.Count, pageNumber++, page, placed));
+                    pages.Add(Page(
+                    pages.Count,
+                    pageNumber++,
+                    page,
+                    placed,
+                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                     placed = [];
                     used = Length.Zero;
                     continue;
@@ -239,7 +255,12 @@ public sealed class Paginator
             if (lineIndex < layout.Lines.Count)
             {
                 // The paragraph is split: the rest goes on the next page.
-                pages.Add(Page(pages.Count, pageNumber++, page, placed));
+                pages.Add(Page(
+                    pages.Count,
+                    pageNumber++,
+                    page,
+                    placed,
+                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                 placed = [];
                 used = Length.Zero;
                 continue;
@@ -260,7 +281,12 @@ public sealed class Paginator
 
                 if (moved.Count > 0 && movedFrom > 0)
                 {
-                    pages.Add(Page(pages.Count, pageNumber++, page, placed));
+                    pages.Add(Page(
+                    pages.Count,
+                    pageNumber++,
+                    page,
+                    placed,
+                    Furniture(furniture, geometry, page, pageNumber - 1, pages.Count == 0)));
                     placed = [];
                     used = Length.Zero;
                     paragraphIndex = movedFrom;
@@ -271,7 +297,12 @@ public sealed class Paginator
 
         if (placed.Count > 0 || pages.Count == 0)
         {
-            pages.Add(Page(pages.Count, pageNumber, page, placed));
+            pages.Add(Page(
+                pages.Count,
+                pageNumber,
+                page,
+                placed,
+                Furniture(furniture, geometry, page, pageNumber, pages.Count == 0)));
         }
 
         return pages;
@@ -458,7 +489,11 @@ public sealed class Paginator
     }
 
     private static LaidOutPage Page(
-        int index, int number, PageGeometry geometry, List<PlacedLine> lines)
+        int index,
+        int number,
+        PageGeometry geometry,
+        List<PlacedLine> lines,
+        (PlacedFurniture? Header, PlacedFurniture? Footer) furniture)
         => new()
         {
             Index = index,
@@ -466,9 +501,15 @@ public sealed class Paginator
             Size = geometry.Size,
             BodyArea = geometry.TextArea,
             Lines = [.. lines],
+            Header = furniture.Header,
+            Footer = furniture.Footer,
         };
 
-    private static LaidOutPage EmptyPage(int index, int number, PageGeometry geometry)
+    private static LaidOutPage EmptyPage(
+        int index,
+        int number,
+        PageGeometry geometry,
+        (PlacedFurniture? Header, PlacedFurniture? Footer) furniture)
         => new()
         {
             Index = index,
@@ -476,5 +517,28 @@ public sealed class Paginator
             Size = geometry.Size,
             BodyArea = geometry.TextArea,
             Lines = [],
+            Header = furniture.Header,
+            Footer = furniture.Footer,
         };
+
+    /// <summary>
+    /// The header and footer a page takes, laid out into their areas.
+    /// </summary>
+    /// <remarks>
+    /// The slot rules are the section's — a first page takes the first-page slot only if the section asked
+    /// for one, an even page the even slot, and everything else falls back to the default — so they are
+    /// asked of <see cref="PageFurnitureSlots"/> rather than restated here. The result is cached per slot
+    /// inside the set, because most pages of a document share one header and laying it out again per page
+    /// would shape the same text for the same answer.
+    /// </remarks>
+    private static (PlacedFurniture? Header, PlacedFurniture? Footer) Furniture(
+        PageFurnitureSet? furniture,
+        WritingSection section,
+        PageGeometry geometry,
+        int pageNumber,
+        bool first)
+        => furniture is null
+            ? (null, null)
+            : (furniture.Header(section, geometry, pageNumber, first),
+               furniture.Footer(section, geometry, pageNumber, first));
 }

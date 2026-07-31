@@ -149,6 +149,36 @@ public readonly record struct PlacedLine(
 }
 
 /// <summary>
+/// A page's furniture: a header or a footer, laid out into its own area.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Its own paragraph list rather than an index into the body's, because a header is a separate flow: its
+/// paragraphs are not the document's body text and a <see cref="PlacedLine.ParagraphIndex"/> pointing into
+/// the body would name the wrong paragraph. Two pages sharing one header share this whole object.
+/// </para>
+/// <para>
+/// The area is the rectangle the furniture occupies on the page, so a line's own coordinates stay relative
+/// to it — the same relationship the body's lines have to <see cref="LaidOutPage.BodyArea"/>, which keeps
+/// one drawing path serving all three.
+/// </para>
+/// </remarks>
+public sealed record PlacedFurniture
+{
+    /// <summary>The paragraphs the lines index into.</summary>
+    public required IReadOnlyList<PageParagraph> Paragraphs { get; init; }
+
+    /// <summary>The lines, in order, positioned relative to the area's top.</summary>
+    public required IReadOnlyList<PlacedLine> Lines { get; init; }
+
+    /// <summary>Where the furniture sits on the page.</summary>
+    public required DocRect Area { get; init; }
+
+    /// <summary>True when nothing was laid out.</summary>
+    public bool IsEmpty => Lines.Count == 0;
+}
+
+/// <summary>
 /// A page after pagination: how big it is, where its body sits, and which lines landed on it.
 /// </summary>
 /// <remarks>
@@ -181,6 +211,17 @@ public sealed record LaidOutPage
 
     /// <summary>Which section's geometry the page was laid on.</summary>
     public int SectionIndex { get; init; }
+
+    /// <summary>The page's header, or null when it has none.</summary>
+    /// <remarks>
+    /// Per page rather than per section, because a section's first and even pages can each take a different
+    /// one — and because a page number in a header makes even two pages sharing a slot differ once fields
+    /// are resolved.
+    /// </remarks>
+    public PlacedFurniture? Header { get; init; }
+
+    /// <summary>The page's footer, or null when it has none.</summary>
+    public PlacedFurniture? Footer { get; init; }
 
     /// <summary>How much of the body area the lines used.</summary>
     public Length UsedHeight =>

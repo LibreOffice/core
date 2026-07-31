@@ -90,7 +90,60 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
         };
 
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
+            new Paginator(pagination).Paginate(
+                paragraphs, Sections[0], furniture: Furniture(source)),
+            paragraphs);
+    }
+
+    /// <summary>
+    /// The headers and footers of the master page the body is laid on.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Read through the same walk the body uses, because a header's paragraphs are paragraphs: they resolve
+    /// their styles the same way and measure the same way, and a second walk would be a second place for
+    /// the run and tab handling to be got right.
+    /// </para>
+    /// <para>
+    /// ODF's slots are its own: <c>style:header</c> is the default, <c>style:header-left</c> the even-page
+    /// one — ODF says <em>left</em> where the other formats say even — and <c>style:header-first</c> the
+    /// first page's. A missing left header means the pages share one rather than that left pages have none,
+    /// which is why its absence leaves the slot empty and lets the default apply.
+    /// </para>
+    /// </remarks>
+    private PageFurnitureSet? Furniture(OdtLayoutSource source)
+    {
+        OdfMasterPage? master = _inner.File.Styles.MasterPages.Values
+            .OrderBy(page => page.Name == StandardMasterName ? 0 : 1)
+            .ThenBy(page => page.Name, StringComparer.Ordinal)
+            .FirstOrDefault();
+
+        if (master is null) return null;
+
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+
+        Add(headers, PageFurnitureSlot.Default, master.Header, source);
+        Add(headers, PageFurnitureSlot.Even, master.LeftHeader, source);
+        Add(headers, PageFurnitureSlot.First, master.FirstHeader, source);
+        Add(footers, PageFurnitureSlot.Default, master.Footer, source);
+        Add(footers, PageFurnitureSlot.Even, master.LeftFooter, source);
+        Add(footers, PageFurnitureSlot.First, master.FirstFooter, source);
+
+        PageFurnitureSet set = new(headers, footers);
+        return set.IsEmpty ? null : set;
+    }
+
+    private static void Add(
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> slots,
+        PageFurnitureSlot slot,
+        XElement? element,
+        OdtLayoutSource source)
+    {
+        if (element is null) return;
+
+        List<PageParagraph> paragraphs = source.Read(element);
+        if (paragraphs.Count > 0) slots[slot] = paragraphs;
     }
 
     /// <inheritdoc/>

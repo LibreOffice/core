@@ -26,14 +26,18 @@ namespace Paperless.WordProcessing.Layout;
 public static class PageDrawing
 {
     /// <summary>
-    /// Draws a page's body text into a sink.
+    /// Draws a page into a sink: its header, its body and its footer.
     /// </summary>
     /// <remarks>
-    /// The body only. Headers, footers and floating frames are furniture that pagination does not place
-    /// yet, so a page drawn here is a page of body text — which is what it holds.
+    /// The header first and the footer last, which is reading order and also the order a backend would
+    /// prefer — nothing here overlaps, so the order is a convention rather than a correctness matter, but a
+    /// recorded display list reads far better when it matches the page.
+    /// <para>
+    /// Floating frames are still missing, being the one kind of page content pagination does not place.
+    /// </para>
     /// </remarks>
     /// <param name="page">The page to draw.</param>
-    /// <param name="paragraphs">The paragraphs the page's lines index into.</param>
+    /// <param name="paragraphs">The paragraphs the page's body lines index into.</param>
     /// <param name="sink">Receives the drawing commands.</param>
     public static void Draw(
         LaidOutPage page, IReadOnlyList<PageParagraph> paragraphs, IDrawingSink sink)
@@ -45,23 +49,50 @@ public static class PageDrawing
         sink.BeginPage(page.Size);
         try
         {
-            foreach (PlacedLine line in page.Lines)
-            {
-                if (line.ParagraphIndex < 0 || line.ParagraphIndex >= paragraphs.Count) continue;
-
-                PageParagraph paragraph = paragraphs[line.ParagraphIndex];
-
-                foreach ((GlyphRun run, Colour colour) in RunsFor(page, line, paragraph))
-                {
-                    sink.DrawGlyphRun(run, Paint.Solid(colour));
-                }
-            }
+            DrawFurniture(page.Header, sink);
+            DrawLines(page.BodyArea, page.Lines, paragraphs, sink);
+            DrawFurniture(page.Footer, sink);
         }
         finally
         {
             // Always closed, even if a sink throws part way through: a page left open would make the
             // next one nest inside it, turning one bad page into a broken document.
             sink.EndPage();
+        }
+    }
+
+    /// <summary>Draws a header or a footer, which is a page's lines in a different rectangle.</summary>
+    private static void DrawFurniture(PlacedFurniture? furniture, IDrawingSink sink)
+    {
+        if (furniture is null || furniture.IsEmpty) return;
+
+        DrawLines(furniture.Area, furniture.Lines, furniture.Paragraphs, sink);
+    }
+
+    /// <summary>
+    /// Draws a set of placed lines relative to an area.
+    /// </summary>
+    /// <remarks>
+    /// One path for the body, the header and the footer, because they differ only in which rectangle their
+    /// coordinates are relative to. A header drawn by its own code would be the second place tabs and
+    /// per-run formatting had to be applied, and the two would drift.
+    /// </remarks>
+    private static void DrawLines(
+        DocRect area,
+        IReadOnlyList<PlacedLine> lines,
+        IReadOnlyList<PageParagraph> paragraphs,
+        IDrawingSink sink)
+    {
+        foreach (PlacedLine line in lines)
+        {
+            if (line.ParagraphIndex < 0 || line.ParagraphIndex >= paragraphs.Count) continue;
+
+            PageParagraph paragraph = paragraphs[line.ParagraphIndex];
+
+            foreach ((GlyphRun run, Colour colour) in RunsIn(area, line, paragraph))
+            {
+                sink.DrawGlyphRun(run, Paint.Solid(colour));
+            }
         }
     }
 
@@ -86,6 +117,16 @@ public static class PageDrawing
         LaidOutPage page, PlacedLine line, PageParagraph paragraph)
     {
         ArgumentNullException.ThrowIfNull(page);
+        return RunsIn(page.BodyArea, line, paragraph);
+    }
+
+    /// <summary>The glyph runs one line draws, relative to whichever area it belongs to.</summary>
+    /// <param name="area">The rectangle the line's coordinates are relative to.</param>
+    /// <param name="line">The line.</param>
+    /// <param name="paragraph">Its paragraph.</param>
+    public static List<(GlyphRun Run, Colour Colour)> RunsIn(
+        DocRect area, PlacedLine line, PageParagraph paragraph)
+    {
         ArgumentNullException.ThrowIfNull(paragraph);
 
         List<(GlyphRun, Colour)> runs = [];
@@ -94,8 +135,8 @@ public static class PageDrawing
         int end = Math.Min(line.Box.Line.VisibleEnd, paragraph.Text.Length);
         if (end <= start) return runs;
 
-        Length lineLeft = page.BodyArea.X + line.Box.Left;
-        Length baseline = page.BodyArea.Y + line.Baseline;
+        Length lineLeft = area.X + line.Box.Left;
+        Length baseline = area.Y + line.Baseline;
 
         foreach (TabbedSegment segment in Stretches(paragraph, start, end))
         {
