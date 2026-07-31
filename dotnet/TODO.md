@@ -1,19 +1,30 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 under way.** Everything but the legacy binary formats and
-spreadsheet/presentation OOXML reads: `odt ods odp` with their template and flat-XML variants,
-`docx docm dotx dotm`, and `rtf` — all verified against LibreOffice's own text export.
+Status: **Phase 0 complete; Phase 1 all but the OOXML spreadsheet and presentation formats;
+Phase 2 complete for word processing.** Every word-processing format reads and *lays out* —
+`odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and footers,
+tables, sections and columns all verified against LibreOffice's own rendering to a tenth of a
+point. The ODF spreadsheet and presentation formats extract. `xlsx`, `pptx`, the legacy `xls`
+and `ppt`, and CSV do not read at all yet.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
 
 ## Start here (next session)
 
-Phase 1, next task: **DOC (WW8)**, then `xlsx`/`pptx`, then CSV. Read
-`src/Paperless.WordProcessing/TODO.md` and `research/02-writer.md` section C.2, and
-`research/05-infrastructure.md` sections A and F — the piece table is the thing to get right
-first, because a naive read of a complex file produces scrambled text rather than an obvious
-failure.
+Two fronts, and they are independent.
+
+**Word processing** is deep into Phase 3's layout half: what remains is footnote placement
+(which feeds back into pagination, so it changes page breaks and not just appearance), floating
+frames with text wrap, and cell borders and shading. Read
+`src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
+warning about borders: they cannot be verified the way everything else in this library has
+been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
+is still a stub. That makes the rasteriser the thing to build before the borders, not after.
+
+**The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
+spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
+has the model.
 
 Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
 
@@ -59,12 +70,18 @@ binary.
 | ✅ | `paperless extract` and `paperless metadata`, text and JSON |
 | ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
 
+| ✅ | DOC (WW8) extraction: the piece table, FKP formatting indexes, the eight subdocuments, list labels computed from `LSTF`/`LVL`/`LFO`, tables with the merges LibreOffice writes with no flag |
+| ✅ | Text layout: a hand-rolled OpenType reader, HarfBuzz shaping, UAX #14 line breaking, and paragraph layout with alignment, justification, tabs, indents and line spacing |
+| ✅ | Word-processing page layout: pagination, headers and footers, tables as grids that split across pages with repeating headings, several sections per document, and columns — all four formats, all compared against LibreOffice's own rendering |
+
 | Not started | |
 |---|---|
-| ❌ | `xlsx`/`pptx`, legacy binary and CSV readers |
+| ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
-| ❌ | Text layout: fonts, metrics, shaping, line breaking |
-| ❌ | Layout engines and rendering backends |
+| ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
+| ❌ | Footnote placement, floating frames, cell borders and shading |
+| ❌ | Spreadsheet print layout and slide rendering |
+| ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
 
 ## Ordering principle
@@ -148,28 +165,38 @@ allowing for the reference filters' known omissions (headers, comments, notes, s
 
 The part that decides whether rendering can ever match.
 
-- [ ] **Font resolution and metrics** (`Paperless.Text`). Hand-rolled OpenType table
+- [x] **Font resolution and metrics** (`Paperless.Text`). Hand-rolled OpenType table
       reader — we need raw `hhea`/`OS/2` access and our own precedence rules, per
       `research/06-rendering.md` section B, not a library's opinion of them.
       Reproduce LibreOffice's substitution order. **Report substitutions**: a silent one
       explains most mysterious reflows.
-- [ ] **Shaping** via HarfBuzzSharp — same engine LibreOffice uses, so advances agree.
-- [ ] **Line breaking** (UAX #14), hand-rolled — nothing in the runtime does this. Generate
-      the `Line_Break` and `East_Asian_Width` tables, implement LB1-LB31, verify against
-      Unicode's `LineBreakTest.txt`. LibreOffice's breaks are ICU's, so expect small
-      tailoring differences to surface later.
+- [x] **Shaping** via HarfBuzzSharp — same engine LibreOffice uses, so advances agree.
+- [x] **Line breaking** (UAX #14), hand-rolled — nothing in the runtime does this. Generate
+      the `Line_Break` and `East_Asian_Width` tables, implement LB1-LB31. LibreOffice's breaks
+      are ICU's, and one tailoring difference has surfaced: LibreOffice 24.2 breaks a justified
+      line differently from a ragged one, which is recorded with its measurement in the
+      word-processing TODO.
+- [ ] Verification against Unicode's `LineBreakTest.txt`, which needs the file — not reachable
+      from this container, so the implementation is checked against LibreOffice's own breaks
+      instead.
 - [ ] Bidi and script runs; vertical text.
-- [ ] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
+- [x] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
-**Exit criterion:** for a text-heavy document, Paperless breaks lines at the same places as
-LibreOffice. Until then, page-level comparison is meaningless — every page after the first
-will differ for reasons that have nothing to do with drawing.
+**Exit criterion — met for word processing.** For a text-heavy document Paperless breaks lines
+where LibreOffice breaks them, in all four formats, which is what made every page-level
+comparison after it meaningful. It was worth as much as expected: nearly every bug found since
+was found because a page comparison put a word a measurable distance from where it belonged.
 
 ## Phase 3 — Rendering
 
-- [ ] Skia raster backend consuming `IDrawingSink`.
-- [ ] Word-processing page layout: pagination, headers/footers, footnotes, tables spanning
-      pages, floating frames and text wrap.
+- [ ] Skia raster backend consuming `IDrawingSink`. **The next thing to build**, and not only
+      for its own sake: cell borders, shading and floating-frame outlines cannot be verified
+      against LibreOffice without it, because a word-position comparison cannot see them.
+- [x] Word-processing page layout: pagination, headers and footers, tables as grids that split
+      across pages with repeating heading rows, several sections per document, and columns.
+- [ ] The rest of it: footnote placement — which feeds back into pagination, so it moves page
+      breaks rather than merely adding a note — floating frames with text wrap, and cell borders
+      and shading.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
