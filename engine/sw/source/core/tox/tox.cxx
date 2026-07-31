@@ -378,7 +378,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_AUTHORITIES != m_eType)
     {
         SwFormToken aToken(TOKEN_TAB_STOP);
-        aToken.nTabStopPosition = 0;
+        aToken.nTabStopPosition = 0_emu;
 
         // #i36870# right aligned tab for all
         aToken.cTabFillChar = '.';
@@ -512,7 +512,7 @@ void SwForm::AdjustTabStops( SwDoc const & rDoc ) // #i21237#
                 if ( aIt != aCurrentPattern.end() )
                 {
                     bChanged = true;
-                    aIt->nTabStopPosition = rTab.GetTabPos();
+                    aIt->nTabStopPosition = gfx::Length::twip(rTab.GetTabPos());
                     aIt->eTabAlign =
                         ( nTab == nTabCount - 1
                           && rTab.GetAdjustment() == SvxTabAdjust::Right )
@@ -724,7 +724,7 @@ OUString SwFormToken::GetString() const
     switch (eTokenType)
     {
         case TOKEN_TAB_STOP:
-            sData += OUString::number( nTabStopPosition ) + ","
+            sData += OUString::number( nTabStopPosition.as_twip<SwTwips>() ) + ","
                   +  OUString::number( static_cast< sal_Int32 >(eTabAlign) ) + ","
                   +  OUStringChar(cTabFillChar) + ","
                   +  OUString::number( bWithTab ? 1 : 0 );
@@ -907,7 +907,7 @@ lcl_BuildToken(std::u16string_view sPattern, size_t & nCurPatternPos)
     case TOKEN_TAB_STOP:
         sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 2
         if( !sTmp.empty() )
-            eRet.nTabStopPosition = o3tl::toInt32(sTmp);
+            eRet.nTabStopPosition = gfx::Length::twip(o3tl::toInt32(sTmp));
 
         sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 3
         if( !sTmp.empty() )

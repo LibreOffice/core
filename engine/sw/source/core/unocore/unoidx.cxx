@@ -2713,7 +2713,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 {
                     throw lang::IllegalArgumentException();
                 }
-                aToken.nTabStopPosition = nPosition;
+                aToken.nTabStopPosition = gfx::Length::twip(nPosition);
             }
             else if ( pProperties[j].Name == "TabStopFillCharacter" )
             {
@@ -2950,7 +2950,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 else
                 {
                     pArr[1].Name = u"TabStopPosition"_ustr;
-                    sal_Int32 nPos = convertTwipToMm100(aToken.nTabStopPosition);
+                    sal_Int32 nPos = aToken.nTabStopPosition.as_hmm<sal_Int32>();
                     if(nPos < 0)
                         nPos = 0;
                     pArr[1].Value <<= nPos;

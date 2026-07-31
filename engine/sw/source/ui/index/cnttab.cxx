@@ -1788,7 +1788,9 @@ public:
         }
 
     void SetTabPosition(SwTwips nSet)
-        { m_aFormToken.nTabStopPosition = nSet; }
+    {
+        m_aFormToken.nTabStopPosition = gfx::Length::twip(nSet);
+    }
 
     void SetFillChar( sal_Unicode cSet )
         { m_aFormToken.cTabFillChar = cSet; }
@@ -2449,7 +2451,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
     }
     SwFormToken aInsert(eTokenType);
     aInsert.sCharStyleName = UIName(sCharStyle);
-    aInsert.nTabStopPosition = 0;
+    aInsert.nTabStopPosition = 0_emu;
     aInsert.nChapterFormat = nChapterFormat; // i89791
     m_xTokenWIN->InsertAtSelection(aInsert);
     ModifyHdl(nullptr);
@@ -2585,7 +2587,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     m_xAutoRightCB->set_sensitive(bTabStop);
     if(bTabStop)
     {
-        m_xTabPosMF->set_value(m_xTabPosMF->normalize(rToken.nTabStopPosition), FieldUnit::TWIP);
+        m_xTabPosMF->set_value(m_xTabPosMF->normalize(rToken.nTabStopPosition.as_twip<SwTwips>()), FieldUnit::TWIP);
         m_xAutoRightCB->set_active(SvxTabAdjust::End == rToken.eTabAlign);
         m_xFillCharCB->set_entry_text(OUString(rToken.cTabFillChar));
         m_xTabPosFT->set_sensitive(!m_xAutoRightCB->get_active());

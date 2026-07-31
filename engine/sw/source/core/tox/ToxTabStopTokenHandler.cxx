@@ -53,7 +53,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     if (SvxTabAdjust::End > aToken.eTabAlign) {
         SvxTextLeftMarginItem const& rTextLeftMargin(
             targetNode.SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT));
-        tools::Long nTabPosition = aToken.nTabStopPosition;
+        tools::Long nTabPosition = aToken.nTabStopPosition.as_twip<tools::Long>();
         if (!mTabPositionIsRelativeToParagraphIndent && rTextLeftMargin.ResolveTextLeft({}) != 0)
         {
             nTabPosition -= rTextLeftMargin.ResolveTextLeft({});
