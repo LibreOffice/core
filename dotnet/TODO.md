@@ -230,6 +230,61 @@ where LibreOffice breaks them, in all four formats, which is what made every pag
 comparison after it meaningful. It was worth as much as expected: nearly every bug found since
 was found because a page comparison put a word a measurable distance from where it belonged.
 
+## Phase 2.5 — Structured text output (Markdown)
+
+The step between "what does this document say" and "what does it look like", and it is deliberately
+placed here rather than under rendering: **it needs the content tree and nothing else.** No fonts, no
+line breaking, no rasteriser, no page geometry. Everything it emits — headings, lists with their
+levels, tables, emphasis, links, notes — is already in the tree that `paperless extract` walks, and
+plain text is simply the projection that throws all of it away. So this is the cheapest large gain in
+the project: most of the work is a mapping, not a parser.
+
+It is also what most callers actually want. A retrieval or summarisation pipeline fed flat text has
+lost the heading hierarchy that says what a passage is *about* and the table structure that says which
+number belongs to which column; fed a rendered PDF it has to get it back by inference.
+
+- [ ] A Markdown writer over `ContentNode`, serving all three families through the one tree — which is
+      the payoff of having built one tree for all three in the first place.
+- [ ] **Decide the flavour and record it.** CommonMark has no tables at all, so this is GitHub-Flavored
+      Markdown in practice; say so once rather than per feature.
+- [ ] **Escaping, which is the thing that will silently corrupt output.** A document containing a
+      literal `*`, `_`, `|` or backtick is ordinary; emitted unescaped it turns neighbouring text into
+      emphasis or splits a table row. This needs to be right before anything else is worth checking.
+- [ ] **Tables that Markdown cannot express.** GFM tables have no row or column spans and no nesting,
+      and the corpus is full of both. The choice is an HTML fallback for those tables or a documented
+      flattening, and it should be a stated decision with the loss named, not an accident.
+- [ ] **Per family, the shape questions.** A slide is naturally a heading plus its content, with speaker
+      notes as something set apart. A sheet is naturally a table — but a used range of ten thousand rows
+      is not a useful one, so there has to be a bound and a way to say it was applied. A document's
+      footnotes map onto GFM's `[^1]` syntax; comments and tracked changes have no Markdown at all and
+      need a decision rather than silent omission.
+- [ ] Images: the tree records a graphic without decoding it, so there is no target for `![](…)` yet.
+      Decide between a reference placeholder and omission, and revisit when raster decode lands.
+- [ ] `paperless extract --format markdown`, alongside the existing text and JSON output.
+
+**How this gets verified.** LibreOffice 24.2 has **no Markdown export filter** — `--convert-to md`
+fails outright with "no export filter found" — and the first instinct is therefore that this cannot be
+compared against the reference at all. That is wrong, and wrong in a shape this project has already
+paid for once: the same inference was made about cell borders and the rasteriser, and it was false
+then too. Check what the reference can actually emit before concluding it cannot help.
+
+It emits **XHTML, for all three families** — `XHTML Writer File`, `XHTML Calc File`,
+`XHTML Impress File` — and XHTML carries precisely the structure Markdown needs. Measured on
+`text-features.odt`: one `h1`, two `h2`, one `h3`, two `ul`, two `ol`, twelve `li`, a `table` with
+eight `td`, and eight anchors. Being well-formed XML it can be parsed rather than scraped, so the
+comparison is structural and exact: every heading level, every list nesting, every cell's row and
+column. `HTML (StarWriter)` is the same idea in a looser serialisation and is already used elsewhere
+in this tree — the DOCX toggle rule was verified against it, because bold is visible there.
+
+So the method is the usual one after all. Two things still need checking against the tree rather than
+the reference, because XHTML is a different projection and not a truth: escaping (a literal `*` or `|`
+survives XHTML unremarkably and corrupts Markdown), and whatever decision gets made about spans.
+Parsing the emitted Markdown back with a CommonMark parser is what catches the escaping bugs, which a
+text diff cannot see because every character is still present.
+
+**Non-goal: reading Markdown.** Paperless reads office formats; Markdown is an output projection, and
+adding it as an input format would be scope Paperless has said no to.
+
 ## Phase 3 — Rendering
 
 - [ ] Skia raster backend consuming `IDrawingSink`. Still worth building, but **no longer a
@@ -262,9 +317,27 @@ was found because a page comparison put a word a measurable distance from where 
 - [ ] Raster image decode (via Skia).
 - [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
       no C# prior art — start it early rather than treating it as a tail-end detail.
-- [ ] PDF writer with subset font embedding (`hb-subset` via HarfBuzzSharp).
+- [ ] **PDF output.** The writer, with subset font embedding (`hb-subset` via HarfBuzzSharp). The
+      reason the display list keeps glyph runs rather than outlines is precisely so this can emit *real
+      searchable text* — glyph ids plus the cluster map give a correct `ToUnicode`, and a PDF of
+      outlines would extract as nothing. This is also the output that can be checked hardest, because
+      the whole fidelity harness already reads LibreOffice's PDFs: `PdfTextRuns`, `PdfFills` and
+      `PdfStrokes` can be pointed at *ours* and the two compared operator for operator.
+- [ ] **Raster output — PNG and JPEG**, at a caller-chosen DPI, from the Skia backend. PNG is the one
+      that matters for testing, being lossless and byte-deterministic, so a checksum is meaningful and
+      golden images can be committed with the LibreOffice version that produced them. JPEG is for
+      callers who want thumbnails and should not be used for any comparison.
+      Verify with the `render-comparison` skill — and read it first, because it explains how to tell a
+      layout bug from a drawing bug, which is what an image diff is worst at. Two references are
+      available and they are not equivalent: LibreOffice exports PNG, JPEG, WebP and SVG **directly**
+      per family (`writer_png_Export`, `calc_png_Export`, `impress_png_Export`), which needs no
+      round-trip — measured, a default `writer_png_Export` of an A4 page comes out 795 x 1124 — while
+      `--convert-to pdf` rasterised by `pdftoppm` gives an exact DPI of your choosing. Prefer the PDF
+      route when the comparison needs a known scale, and the direct export when it needs LibreOffice's
+      own idea of a page image.
 - [ ] SVG writer.
-- [ ] `paperless render` and `paperless convert`.
+- [ ] `paperless render` (to PDF, PNG, JPEG or SVG, with a page range and a DPI) and
+      `paperless convert`.
 
 ## Phase 4 — Fidelity
 
