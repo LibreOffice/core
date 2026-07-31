@@ -226,3 +226,17 @@ which family it came from**: an interior grid line stops at the *inner* edge of 
 Word-family document and crosses to its outer edge for an ODF one, half a point at each end. So the four
 renders of one table legitimately disagree, and a comparison that assumed otherwise would chase a bug that is
 not there.
+
+`table-autofit.fodt` and `table-autofit-stated.fodt` are `table-grid` with the three column widths **removed**,
+and they are a *pair* on purpose: they differ in one attribute — whether the table itself states
+`style:width="17cm"` — and LibreOffice resolves them completely differently. The one that states nothing divides
+the text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt, a
+ratio of 3 : 2 : 4. That second number is not a bug in whatever produced it and not content-based sizing: it
+falls out of `SwXMLTableContext::MakeTable` dividing the space *remaining* after each column by the full sum of
+the column weights. Keep both, because dropping either leaves half the rule untested and the surviving half
+looks arbitrary.
+
+ODF only, and unusually so: these two have no `.odt`, `.docx`, `.doc` or `.rtf` siblings. Converting them would
+defeat them — LibreOffice writes explicit column widths on export, so every other format would arrive with the
+grid already resolved, which is the thing under test. It is also why the flat form is the source: an `.odt`
+would have to be zipped by hand to say as little as this one does.

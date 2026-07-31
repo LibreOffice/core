@@ -24,9 +24,11 @@ that a footnote needs and the separate pages an endnote takes. Cell shading and 
 done in **all four**, consolidated the way LibreOffice consolidates them and compared stroke by
 stroke — including the one place a table is *drawn* differently rather than merely described
 differently, where an interior grid line stops inside the outline for a Word-family document and
-crosses it for an ODF one. What remains is floating frames with text wrap, note numbering
-*restarts*, and table auto-fit. Read `src/Paperless.WordProcessing/TODO.md`, whose open items
-each say what is missing and why.
+crosses it for an ODF one. A table whose columns state no width now resolves them too, which
+turned out to be a fraction of the item it was recorded as — it is not content-based sizing,
+and the note in `src/Paperless.WordProcessing/TODO.md` explains what it is instead. What
+remains is floating frames with text wrap, note numbering *restarts*, and the vertical and
+right-to-left writing modes. Read that file: its open items each say what is missing and why.
 
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
 spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
@@ -86,7 +88,7 @@ binary.
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
-| ❌ | Floating frames with text wrap; table auto-fit; note-numbering restarts |
+| ❌ | Floating frames with text wrap; note-numbering restarts; vertical and RTL text |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
 | ❌ | The CLI beyond `identify`, `extract` and `metadata` |
@@ -214,7 +216,12 @@ was found because a page comparison put a word a measurable distance from where 
       one that needed arithmetic rather than translation: it states a shade as a foreground, a
       background and a *pattern index* rather than as a colour, and its borders arrive both in the
       table definition's cell descriptors and as a sprm covering a range of cells.
-- [ ] The rest of it: floating frames with text wrap, and table auto-fit.
+- [x] Column widths for a table that states none, which is ODF's alone to state and needed both of
+      LibreOffice's two answers reproduced — an even division when the table states no width, and a
+      3 : 2 : 4 split of three identical columns when it states 17 cm. The second is a quirk of
+      LibreOffice's own importer rather than content-based sizing, which is what the item here used to
+      claim.
+- [ ] The rest of it: floating frames with text wrap, and the vertical and right-to-left writing modes.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.

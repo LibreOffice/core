@@ -570,13 +570,30 @@ is read and verified, so what remains is the filling of pages rather than the me
       coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
       only surfaced when the same value became an exact height and produced a zero-height row.
       `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
-- [ ] Fitting a table to the page when its columns state no widths, and this is a **much bigger item than it
-      reads as** — worth saying so, because the obvious guess is wrong. It is not "divide the text width
-      equally": measured on a three-column table with every column style stripped, LibreOffice produces columns
-      of 160.6, 107.1 and 214.1 pt, sized to their *content*. That is Writer's table auto-layout, the same
-      class of algorithm as CSS's — minimum and maximum content widths per column, then distribution — and it
-      needs the cells' text measured before the grid exists. The readers currently take the declared grid and
-      nothing else, so a width-less table comes out with zero-width columns.
+- [x] Fitting a table to the page when its columns state no widths — and the note that used to stand here was
+      **wrong in its conclusion**, so it is worth saying what it said: that the measured 160.6 / 107.1 /
+      214.1 pt columns were "sized to their *content*", that this was Writer's CSS-like auto-layout, and that
+      it therefore needed every cell measured before the grid existed. None of that is so. It is not
+      content-based at all, and the item was a fraction of the size it looked.
+
+      What it actually is, measured on two documents differing only in whether the table states a width:
+
+      - A table that states **no** width divides the text area **evenly** — 9638 twips over three columns
+        comes out 3212, 3213, 3213. Its columns stay *relative* through LibreOffice's import and layout
+        divides them.
+      - A table that states **17 cm** gives the same three identical columns **3212, 2142 and 4284** twips.
+        A ratio of 3 : 2 : 4 out of three columns that are declared the same, which is not a rounding
+        artefact: `SwXMLTableContext::MakeTable` (`sw/source/filter/xml/xmltbli.cxx`) converts each relative
+        column to an absolute one as `weight × remaining / totalWeight`, shrinking `remaining` after each
+        column while still dividing by the **full** sum of the weights. So each column takes a third of what
+        is left rather than a third of the whole, and the last takes the remainder.
+
+      Both are reproduced rather than picked between, because a document arrives written either way. The other
+      pieces that had to be right: a column with no width is a **relative** one of weight `MINLAY` (23 twips),
+      not an absolute zero — which is what made a width-less table come out with zero-width columns before —
+      and `style:rel-column-width` (`23*`) is the explicit spelling of the same thing. `style:rel-width` on
+      the table is a percentage of the text area. DOCX, DOC and RTF need none of this: all three always write
+      a grid.
 - [ ] Floating objects and text wrap, including contour wrap
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can

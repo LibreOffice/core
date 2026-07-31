@@ -1,6 +1,7 @@
 using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
 using Paperless.Text.Fonts;
@@ -87,11 +88,16 @@ public sealed partial class OdtLayoutSource
     /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
     /// is numbered. Null leaves both classes on LibreOffice's defaults.
     /// </param>
+    /// <param name="availableWidth">
+    /// How wide the text area is, for a table that states no width and so fills it. Zero leaves such a table
+    /// with columns at Writer's minimum width rather than at nothing.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
-        XElement? stylesRoot = null)
+        XElement? stylesRoot = null,
+        Length availableWidth = default)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
@@ -99,7 +105,19 @@ public sealed partial class OdtLayoutSource
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
         _endnotes = NumberingIn(stylesRoot, "endnote", NoteNumbering.Endnotes);
+        _availableWidth = availableWidth;
     }
+
+    /// <summary>
+    /// How wide the text area is, for a table that states no width of its own.
+    /// </summary>
+    /// <remarks>
+    /// The one piece of page geometry the content walk needs, and it needs it because ODF lets a table say
+    /// "as wide as the text" by saying nothing: such a table fills the text area and divides it between its
+    /// columns. Everything else here is resolution-independent, which is why this arrives as a constructor
+    /// argument rather than the walk being given the section it is in.
+    /// </remarks>
+    private readonly Length _availableWidth;
 
     /// <summary>How the document's footnotes are numbered.</summary>
     private readonly NoteNumbering _footnotes;

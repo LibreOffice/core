@@ -88,7 +88,11 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
                 .Select((master, index) => (master.Name, index))
                 .Where(pair => pair.Name is not null)
                 .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal),
-            stylesRoot: _inner.File.StylesRoot);
+            stylesRoot: _inner.File.StylesRoot,
+
+            // The first section's, matching the note above: this document is laid out wholly on its first
+            // master's geometry, so a table filling "the text area" fills that one's.
+            availableWidth: Sections.Count > 0 ? Sections[0].Page.ColumnWidth : default);
 
         List<PageBlock> blocks = source.Read(body);
 

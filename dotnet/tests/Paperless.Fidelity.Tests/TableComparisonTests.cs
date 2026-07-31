@@ -95,6 +95,12 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-nested.docx")]
     [InlineData("table-nested.rtf")]
     [InlineData("table-nested.doc")]
+    // Columns that state no width at all, in the two documents that resolve them differently — and they do
+    // differ, which is the whole point of having both. The table that states no width of its own divides the
+    // text area evenly; the one that states 17 cm gives its three identical columns 160.6, 107.1 and 214.1 pt.
+    // ODF only, because the other three formats always write a grid.
+    [InlineData("table-autofit.fodt")]
+    [InlineData("table-autofit-stated.fodt")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
