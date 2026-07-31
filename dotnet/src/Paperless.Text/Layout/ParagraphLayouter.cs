@@ -5,9 +5,18 @@ using Paperless.Text.Shaping;
 namespace Paperless.Text.Layout;
 
 /// <summary>
-/// One line of a laid-out paragraph, positioned.
+/// One stretch of a laid-out paragraph's line, positioned.
 /// </summary>
-/// <param name="Line">Which characters the line holds, and how wide its visible text is.</param>
+/// <remarks>
+/// A stretch rather than a line, because a line beside a floating frame that touches neither margin has
+/// text on both sides of it — one baseline, two stretches. Every stretch of a line carries the
+/// <em>line's</em> geometry: the same <see cref="Top"/>, <see cref="Height"/>, <see cref="Baseline"/> and
+/// <see cref="SpaceAbove"/>, differing only in which characters it holds and where it starts across the
+/// page. All but the last have <see cref="SharesLineWithNext"/> set, which is what tells whoever stacks
+/// boxes to advance once per line rather than once per box — and what stops a page break from falling
+/// between two stretches of one line.
+/// </remarks>
+/// <param name="Line">Which characters the stretch holds, and how wide its visible text is.</param>
 /// <param name="Left">
 /// Where the line's text starts, measured from the text area's start edge — so the paragraph's indents
 /// and the line's alignment are already in it.
@@ -29,6 +38,10 @@ namespace Paperless.Text.Layout;
 /// Justification stretches a line rather than shifting it, so unlike the other alignments it cannot be
 /// folded into <paramref name="Left"/> — it changes where each word after the first blank sits.
 /// </param>
+/// <param name="SharesLineWithNext">
+/// True when the box after this one is a further stretch of the <em>same</em> line rather than the next
+/// line down. False for every box of a paragraph that flows round nothing, which is nearly all of them.
+/// </param>
 public readonly record struct LineBox(
     TextLine Line,
     Length Left,
@@ -36,7 +49,8 @@ public readonly record struct LineBox(
     Length Height,
     Length Baseline,
     Length SpaceAbove,
-    Length SpaceAdd = default)
+    Length SpaceAdd = default,
+    bool SharesLineWithNext = false)
 {
     /// <summary>The same line with the space above its text removed, box and all.</summary>
     /// <remarks>
@@ -196,6 +210,13 @@ public sealed class ParagraphLayouter
                 paragraph.LineStart(isFirst),
                 isFirst ? paragraph.FirstLineWidth(areaWidth) : paragraph.BodyWidth(areaWidth));
 
+            // A stretch that shares its line with the next one keeps that line's geometry and does not
+            // advance the pen down the paragraph — the box after it sits on the same baseline. Only when
+            // there really is a box after it: the obstacles are asked whether a further stretch exists
+            // before the filler has decided whether it has text for one, so the paragraph's last box can
+            // be told it has a successor that was never emitted.
+            bool shares = i + 1 < lines.Count && (wrapped?.SharesLineWithNext(i) ?? false);
+
             boxes.Add(new LineBox(
                 lines[i],
                 space.Left + AlignmentOffset(
@@ -206,9 +227,10 @@ public sealed class ParagraphLayouter
                 spaceAbove,
                 Justification(
                     paragraph.Alignment, lines[i], text, space.Width,
-                    isLast: i == lines.Count - 1)));
+                    isLast: i == lines.Count - 1),
+                shares));
 
-            top += height + space.Descent;
+            if (!shares) top += height + space.Descent;
         }
 
         return new LaidOutParagraph(
@@ -273,8 +295,12 @@ public sealed class ParagraphLayouter
                 paragraph.LineStart(isFirst),
                 isFirst ? paragraph.FirstLineWidth(areaWidth) : paragraph.BodyWidth(areaWidth));
 
-            (Length natural, Length ascent) =
-                measured.HeightOf(lines[i].Start, lines[i].VisibleEnd);
+            bool shares = i + 1 < lines.Count && (wrapped?.SharesLineWithNext(i) ?? false);
+
+            // Across every stretch of the line, not just this one: a line whose text left of a frame is
+            // 11 pt and whose text right of it is 24 pt is a 24 pt line, and both stretches sit on the
+            // baseline that gives. Measuring each stretch alone would put the two on different baselines.
+            (Length natural, Length ascent) = BandHeight(measured, lines, wrapped, i);
 
             Length height = paragraph.LineSpacing.Apply(natural);
             (Length baseline, Length spaceAbove) =
@@ -290,9 +316,10 @@ public sealed class ParagraphLayouter
                 spaceAbove,
                 Justification(
                     paragraph.Alignment, lines[i], measured.Text, space.Width,
-                    isLast: i == lines.Count - 1)));
+                    isLast: i == lines.Count - 1),
+                shares));
 
-            top += height + space.Descent;
+            if (!shares) top += height + space.Descent;
         }
 
         // How tall a line already broken is, and — for the one not broken yet — a guess. Writer makes the
@@ -315,6 +342,40 @@ public sealed class ParagraphLayouter
             boxes,
             SpaceBetween(follows, paragraph),
             paragraph.SpaceAfter);
+    }
+
+    /// <summary>
+    /// The natural height and ascent of the whole line a stretch belongs to.
+    /// </summary>
+    /// <remarks>
+    /// A line divided by a floating frame is still one line, so its height is the tallest run on any of
+    /// its stretches and every stretch draws on the baseline that gives. The walk goes both ways from the
+    /// stretch asked about, since the caller reaches the stretches in order and each has to answer for the
+    /// line rather than for itself. Without obstacles there is nothing to walk and this is the single
+    /// measurement it always was.
+    /// </remarks>
+    private static (Length Natural, Length Ascent) BandHeight(
+        MeasuredParagraph measured, List<TextLine> lines, WrappedLines? wrapped, int index)
+    {
+        (Length natural, Length ascent) = measured.HeightOf(lines[index].Start, lines[index].VisibleEnd);
+        if (wrapped is null) return (natural, ascent);
+
+        int first = index;
+        while (first > 0 && wrapped.SharesLineWithNext(first - 1)) first--;
+
+        int last = index;
+        while (last + 1 < lines.Count && wrapped.SharesLineWithNext(last)) last++;
+
+        for (int i = first; i <= last; i++)
+        {
+            if (i == index) continue;
+
+            (Length own, Length up) = measured.HeightOf(lines[i].Start, lines[i].VisibleEnd);
+            natural = Length.Max(natural, own);
+            ascent = Length.Max(ascent, up);
+        }
+
+        return (natural, ascent);
     }
 
     /// <summary>
@@ -472,6 +533,14 @@ public sealed class ParagraphLayouter
     /// running total, because the heights of the lines already broken are only knowable once they are —
     /// a paragraph is a few dozen lines and this path is taken only beside a frame.
     /// </para>
+    /// <para>
+    /// One index here is one <em>stretch</em>, not one line. A frame clear of both margins leaves room on
+    /// both sides of it, so the filler is handed the gap on the left, then the gap on the right at the same
+    /// height, and the two make one line. That is Writer's own shape: <c>CalcFlyWidth</c> is called again
+    /// with the pen already past the fly portion (<c>itrform2.cxx</c>), and it answers for the stretch
+    /// starting there. So a continuation is not a new question — it is the same question asked from
+    /// further along, which is why <see cref="ILineObstacles"/> needs nothing added for it.
+    /// </para>
     /// </remarks>
     private sealed class WrappedLines(
         ILineObstacles obstacles,
@@ -479,45 +548,116 @@ public sealed class ParagraphLayouter
         Length areaWidth,
         Func<int, IReadOnlyList<TextLine>, Length> heightOfLine)
     {
+        /// <summary>
+        /// The narrowest gap worth giving text to, which is Writer's <c>MINLAY</c>.
+        /// </summary>
+        /// <remarks>
+        /// 23 twips — <c>sw/inc/swtypes.hxx</c>, "minimal size for other frames", and the limit
+        /// <c>CalcFlyWidth</c> compares a remaining stretch against before treating the line as full. It
+        /// matters because the filler gives an over-long word the line to itself rather than leaving the
+        /// line empty: without a floor, a two-millimetre gap beside a frame would be handed a whole word,
+        /// which would then be drawn straight across the frame.
+        /// </remarks>
+        private static readonly Length SmallestStretch = Length.FromTwips(23);
+
         private readonly List<LineSpace> _spaces = [];
         private readonly List<Length> _heights = [];
+        private readonly List<bool> _shares = [];
 
-        /// <summary>The width to fill line <paramref name="index"/> to.</summary>
+        /// <summary>The width to fill stretch <paramref name="index"/> to.</summary>
         public Length WidthOfLine(int index, IReadOnlyList<TextLine> broken)
             => At(index, broken).Width;
 
-        /// <summary>The stretch line <paramref name="index"/> gets, resolving it if it is new.</summary>
+        /// <summary>True when the stretch after this one is more of the same line.</summary>
+        public bool SharesLineWithNext(int index) => index < _shares.Count && _shares[index];
+
+        /// <summary>The stretch <paramref name="index"/> gets, resolving it if it is new.</summary>
         public LineSpace At(int index, IReadOnlyList<TextLine> broken)
         {
             while (_spaces.Count <= index)
             {
                 int line = _spaces.Count;
 
+                // Only the stretches that end their line advance the paragraph. The ones before them sit
+                // on the same baseline as the stretch after, so adding their height would leave a blank
+                // line under every frame that text passes on both sides of.
                 Length top = Length.Zero;
                 for (int above = 0; above < line; above++)
                 {
+                    if (_shares[above]) continue;
                     top += _spaces[above].Descent + _heights[above];
                 }
 
-                Length height = heightOfLine(line, broken);
-                bool isFirst = line == 0;
+                bool continues = line > 0 && _shares[line - 1];
 
-                LineSpace wanted = new(
-                    format.LineStart(isFirst),
-                    isFirst ? format.FirstLineWidth(areaWidth) : format.BodyWidth(areaWidth));
+                // The line's own height, which for a continuation is the height its first stretch was
+                // resolved at. Writer guesses the same way and for the same reason — the height depends on
+                // the runs the stretch ends up holding, which is not known until it has been filled.
+                Length height = continues ? _heights[line - 1] : heightOfLine(line, broken);
 
-                _spaces.Add(obstacles.SpaceFor(top, height, wanted));
+                LineSpace wanted = continues
+                    ? Past(_spaces[line - 1], Wanted(BandStart(line)))
+                    : Wanted(line);
+
+                LineSpace space = obstacles.SpaceFor(top, height, wanted);
+
+                _spaces.Add(space);
                 _heights.Add(height);
+                _shares.Add(HasMore(top, height, wanted, space));
             }
 
             // The heights of the lines already broken are now known exactly, so the tops of the lines
-            // after them are too. Refreshing keeps the placing pass and the filling pass in step.
+            // after them are too. Refreshing keeps the placing pass and the filling pass in step. A
+            // continuation keeps its line's height rather than measuring its own share of the text.
             for (int line = 0; line < Math.Min(_heights.Count, broken.Count); line++)
             {
-                _heights[line] = heightOfLine(line, broken);
+                _heights[line] = line > 0 && _shares[line - 1]
+                    ? _heights[line - 1]
+                    : heightOfLine(line, broken);
             }
 
             return _spaces[index];
+        }
+
+        /// <summary>The stretch the paragraph's own indents would have given a line.</summary>
+        private LineSpace Wanted(int line)
+            => new(
+                format.LineStart(line == 0),
+                line == 0 ? format.FirstLineWidth(areaWidth) : format.BodyWidth(areaWidth));
+
+        /// <summary>Which stretch begins the line that stretch <paramref name="line"/> belongs to.</summary>
+        private int BandStart(int line)
+        {
+            int first = line;
+            while (first > 0 && _shares[first - 1]) first--;
+            return first;
+        }
+
+        /// <summary>What is left of a wanted stretch once one has been taken out of its start.</summary>
+        private static LineSpace Past(LineSpace taken, LineSpace wanted)
+        {
+            Length end = taken.Left + taken.Width;
+            return new LineSpace(end, wanted.Left + wanted.Width - end);
+        }
+
+        /// <summary>
+        /// Whether the same line has a further stretch past the one just resolved.
+        /// </summary>
+        /// <remarks>
+        /// Asked of the obstacles from the far edge of the stretch taken, which is exactly what Writer's
+        /// second <c>CalcFlyWidth</c> call does. Two answers are refused: one carrying a descent, since
+        /// that is the line running out of room and dropping rather than continuing beside the frame, and
+        /// one narrower than <see cref="SmallestStretch"/>, since a sliver would be handed a whole word.
+        /// A line that no frame narrowed costs nothing here — the stretch taken reaches the end of the
+        /// stretch wanted, so there is nothing left to ask about.
+        /// </remarks>
+        private bool HasMore(Length top, Length height, LineSpace wanted, LineSpace taken)
+        {
+            LineSpace rest = Past(taken, wanted);
+            if (rest.Width <= SmallestStretch) return false;
+
+            LineSpace next = obstacles.SpaceFor(top, height, rest);
+            return next.Descent == Length.Zero && next.Width > SmallestStretch;
         }
     }
 

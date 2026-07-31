@@ -323,8 +323,98 @@ public sealed class FrameComparisonTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// A frame clear of both margins leaves text on both sides of every line it crosses.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The case the single-frame document cannot reach, and the one that needs a line to be more than one
+    /// stretch of text: a 4 cm frame set 6.5 cm into a 17 cm measure with a <c>parallel</c> wrap leaves
+    /// 6.5 cm free on either side of it, so Writer fills the gap on the left, inserts a fly portion, and
+    /// carries on filling to the right — one baseline, two runs of text. Every other wrap mode, and every
+    /// frame against a margin, has one free interval per line and needs none of this, which is why it went
+    /// unnoticed for as long as it did.
+    /// </para>
+    /// <para>
+    /// Measured rather than asserted from the geometry: LibreOffice starts the right-hand stretch of every
+    /// crossed line at 354.50 pt where the frame's own right edge is at 354.33, and the difference is the
+    /// one twip its inclusive rectangles add plus the tenth of a point its PDF export adds to every pen.
+    /// Line starts alone cannot say this — a line's leftmost pen is the margin whether it has one stretch
+    /// or two, so that comparison passes just as happily with the whole right-hand half of the page
+    /// missing. So each of this engine's second stretches is looked for among the pens LibreOffice used on
+    /// the same line.
+    /// </para>
+    /// <para>
+    /// Membership rather than equality of the two pen lists, and the reason cost an hour: LibreOffice's
+    /// PDF export draws a line's <em>trailing blank</em> as a portion of its own, one glyph wide, out at
+    /// the right margin — so the rightmost pen on an ordinary unwrapped line is 538.45 pt, nowhere near
+    /// where any text begins.
+    /// </para>
+    /// <para>
+    /// ODF only. LibreOffice's own DOCX export of the same document renders it differently in one place —
+    /// the last line of the paragraph above the frame is narrowed in the ODF forms and not in the DOCX —
+    /// because the OOXML import turns on <c>ADD_VERTICAL_FLY_OFFSETS</c>, which changes the rectangle
+    /// <c>CalcFlyWidth</c> intersects. That is a compatibility flag rather than anything about the wrap,
+    /// so the document is kept in the two forms that agree.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("frame-parallel.fodt")]
+    [InlineData("frame-parallel.odt")]
+    public void TextFillsBothSidesOfAFrameThatTouchesNeitherMargin(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        List<Line> expected = Reference(path);
+        List<Line> actual = Drawn(path);
+
+        actual.Count.ShouldBe(
+            expected.Count,
+            $"{fileName}: {actual.Count} lines drawn against {expected.Count} in LibreOffice's own output");
+
+        int divided = 0;
+
+        for (int i = 0; i < expected.Count; i++)
+        {
+            actual[i].Page.ShouldBe(expected[i].Page, $"{fileName}: line {i + 1} page");
+
+            Close(
+                actual[i].Left,
+                expected[i].Left - PdfPenOffsetPoints,
+                $"{fileName}: line {i + 1} starts at");
+
+            Close(
+                actual[i].Baseline, expected[i].Baseline, $"{fileName}: line {i + 1} baseline");
+
+            // Every stretch after the first has to begin at a pen LibreOffice also used on this line.
+            foreach (double pen in actual[i].Pens!.Skip(1))
+            {
+                divided++;
+
+                expected[i].Pens!.ShouldContain(
+                    reference => Math.Abs(reference - PdfPenOffsetPoints - pen) < TolerancePoints,
+                    $"{fileName}: line {i + 1} resumes at {pen:0.00} pt, where LibreOffice drew nothing");
+            }
+        }
+
+        // And the document is only worth having if lines really are divided. Without this the comparison
+        // above is satisfied by an engine that never makes a second stretch at all.
+        divided.ShouldBeInRange(5, 9, $"{fileName}: lines drawn on both sides of the frame");
+    }
+
     /// <summary>One drawn line: which page it is on, where it starts, and where its baseline sits.</summary>
-    private readonly record struct Line(int Page, double Left, double Baseline);
+    /// <param name="Page">Which page it is on.</param>
+    /// <param name="Left">The leftmost pen on the line, which is where the line begins.</param>
+    /// <param name="Baseline">Where its baseline sits.</param>
+    /// <param name="Pens">
+    /// Every pen the line was drawn with, in order. More than one does <em>not</em> mean more than one
+    /// stretch of text: a run ends at each formatting change, and LibreOffice's export draws a line's
+    /// trailing blank as a portion of its own out at the right margin. So this is what a stretch's start
+    /// is checked for membership of, rather than a list to compare position by position.
+    /// </param>
+    private readonly record struct Line(
+        int Page, double Left, double Baseline, IReadOnlyList<double>? Pens = null);
 
     /// <summary>
     /// The body's lines as LibreOffice drew them.
@@ -372,7 +462,10 @@ public sealed class FrameComparisonTests : IDisposable
         => [.. runs
             .GroupBy(run => (run.Page, Baseline: Math.Round(run.Baseline, 2)))
             .Select(group => new Line(
-                group.Key.Page, group.Min(run => run.Left), group.Key.Baseline))
+                group.Key.Page,
+                group.Min(run => run.Left),
+                group.Key.Baseline,
+                [.. group.Select(run => run.Left).Order()]))
             .OrderBy(line => line.Page)
             .ThenBy(line => line.Baseline)];
 

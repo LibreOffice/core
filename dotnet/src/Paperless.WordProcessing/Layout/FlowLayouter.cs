@@ -133,7 +133,12 @@ public static class FlowLayouter
                 if (placed.Count == 0 && tables.Count == 0) box = box.WithoutSpaceAbove();
 
                 placed.Add(new PlacedLine(i, line, box, top));
-                top += box.Height;
+
+                // A box that shares its line with the next leaves the pen where it is: a line beside a
+                // floating frame clear of both margins is two stretches on one baseline, and the line's
+                // height is counted once, at its last stretch. Never true for a flow with no obstacles,
+                // which is every header and footer, so this changes nothing for them.
+                if (!box.SharesLineWithNext) top += box.Height;
             }
 
             top += layout.SpaceAfter;
