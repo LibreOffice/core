@@ -214,7 +214,7 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
 /// Check for user / password set in coolwsd.xml.
 bool isConfigAuthOk(const std::string& userProvidedUsr, const std::string& userProvidedPwd)
 {
-    const std::string& user = ConfigUtil::getString("admin_console.username", std::string());
+    const std::string user = ConfigUtil::getString("admin_console.username", std::string());
 
     // Check for the username
     if (user.empty())
@@ -1067,7 +1067,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
         return true;
     }
-    auto const& subPath = rest.size() > extensionsSegment.size()
+    auto const subPath = rest.size() > extensionsSegment.size()
         ? rest.substr(extensionsSegment.size()) : std::string();
 
     // On-disk root: <ChildRoot>/tmp/sharedpresets/<configId>/extensions/
@@ -1957,12 +1957,12 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
 {
     Poco::Net::HTMLForm form(request, message);
 
-    const std::string& sharedConfigUrl = form.get("sharedConfigUrl", std::string());
-    const std::string& accessToken = form.get("accessToken", std::string());
-    const std::string& type = form.get("type", std::string());
+    const std::string sharedConfigUrl = form.get("sharedConfigUrl", std::string());
+    const std::string accessToken = form.get("accessToken", std::string());
+    const std::string type = form.get("type", std::string());
     bool noAuthHeader = !form.get("noAuthHeader", std::string()).empty();
 
-    const std::string& shortMessage = "Failed to fetch wopi setting config";
+    const std::string shortMessage = "Failed to fetch wopi setting config";
     if (sharedConfigUrl.empty() || accessToken.empty() || type.empty())
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
@@ -1989,7 +1989,7 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
         sharedUri.addQueryParameter("no_auth_header", "1");
     }
 
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(sharedUri.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(sharedUri.toString());
 
     Authorization auth(Authorization::Type::Token, accessToken, noAuthHeader);
     auto httpRequest = StorageConnectionManager::createHttpRequest(sharedUri, auth);
@@ -2151,8 +2151,8 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
 {
     Poco::Net::HTMLForm form(request, message);
 
-    const std::string& fileUrl = form.get("fileUrl", std::string());
-    const std::string& accessToken = form.get("accessToken", std::string());
+    const std::string fileUrl = form.get("fileUrl", std::string());
+    const std::string accessToken = form.get("accessToken", std::string());
     bool noAuthHeader = !form.get("noAuthHeader", std::string()).empty();
 
     if (fileUrl.empty() || accessToken.empty())
@@ -2174,7 +2174,7 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
         return;
     }
 
-    const auto& queryParams = dicUrl.getQueryParameters();
+    const auto queryParams = dicUrl.getQueryParameters();
     bool hasAccessToken = false;
     for (const auto& param : queryParams)
     {
@@ -2194,7 +2194,7 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
         dicUrl.addQueryParameter("no_auth_header", "1");
     }
 
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(dicUrl.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(dicUrl.toString());
     Authorization auth(Authorization::Type::Token, accessToken, noAuthHeader);
     auto httpRequest = StorageConnectionManager::createHttpRequest(dicUrl, auth);
     httpRequest.setVerb(http::Request::VERB_GET);
@@ -2252,16 +2252,16 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 {
     Poco::Net::HTMLForm form(request, message);
 
-    const std::string& provider = form.get("provider", std::string());
-    const std::string& apiKey = form.get("apiKey", std::string());
+    const std::string provider = form.get("provider", std::string());
+    const std::string apiKey = form.get("apiKey", std::string());
     std::string baseUrl = form.get("baseUrl", std::string());
     // With no typed key, the server reads the saved one from viewsetting.json:
     // currentFileUrl locates it, secretField picks the key, accessToken reads it.
-    const std::string& accessToken = form.get("accessToken", std::string());
-    const std::string& currentFileUrl = form.get("currentFileUrl", std::string());
-    const std::string& secretField = form.get("secretField", std::string());
+    const std::string accessToken = form.get("accessToken", std::string());
+    const std::string currentFileUrl = form.get("currentFileUrl", std::string());
+    const std::string secretField = form.get("secretField", std::string());
 
-    const std::string& shortMessage = "Failed to fetch AI models";
+    const std::string shortMessage = "Failed to fetch AI models";
 
     // Restrict the field to the two AI keys so a caller cannot read an arbitrary
     // value out of the stored settings.
@@ -2324,7 +2324,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
 
     std::weak_ptr<StreamSocket> socketWeak(socket);
 
@@ -2463,12 +2463,12 @@ void FileServerRequestHandler::deleteWopiSettingConfigs(const Poco::Net::HTTPReq
 {
     Poco::Net::HTMLForm form(request, message);
 
-    const std::string& sharedConfigUrl = form.get("sharedConfigUrl", std::string());
-    const std::string& accessToken = form.get("accessToken", std::string());
-    const std::string& fileId = form.get("fileId", std::string());
+    const std::string sharedConfigUrl = form.get("sharedConfigUrl", std::string());
+    const std::string accessToken = form.get("accessToken", std::string());
+    const std::string fileId = form.get("fileId", std::string());
     bool noAuthHeader = !form.get("noAuthHeader", std::string()).empty();
 
-    const std::string& shortMessage = "Failed to delete presetfile";
+    const std::string shortMessage = "Failed to delete presetfile";
     if (sharedConfigUrl.empty() || accessToken.empty() || fileId.empty())
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
@@ -2493,7 +2493,7 @@ void FileServerRequestHandler::deleteWopiSettingConfigs(const Poco::Net::HTTPReq
     {
         sharedUri.addQueryParameter("no_auth_header", "1");
     }
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(sharedUri.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(sharedUri.toString());
 
     Authorization auth(Authorization::Type::Token, accessToken, noAuthHeader);
     auto httpRequest = StorageConnectionManager::createHttpRequest(sharedUri, auth);
@@ -2556,7 +2556,7 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
     FilePartHandler partHandler;
     Poco::Net::HTMLForm form(request, message, partHandler);
 
-    const std::string& shortMessage = "Failed to upload preset file.";
+    const std::string shortMessage = "Failed to upload preset file.";
     const std::string& fileName = partHandler.getFileName();
     const std::string& uploadedFilePath = partHandler.getFilePath();
     if (fileName.empty() || uploadedFilePath.empty())
@@ -2565,7 +2565,7 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
                   "No valid file uploaded.");
         return;
     }
-    const std::string& authorizationHeader = request.get("Authorization", "");
+    const std::string authorizationHeader = request.get("Authorization", "");
     if (authorizationHeader.rfind("Bearer ", 0) != 0)
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
@@ -2573,9 +2573,9 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
         return;
     }
 
-    const std::string& token = authorizationHeader.substr(7);
-    const std::string& filePath = form.get("filePath", std::string());
-    const std::string& wopiSettingBaseUrl = form.get("wopiSettingBaseUrl", std::string());
+    const std::string token = authorizationHeader.substr(7);
+    const std::string filePath = form.get("filePath", std::string());
+    const std::string wopiSettingBaseUrl = form.get("wopiSettingBaseUrl", std::string());
     if (filePath.empty() || wopiSettingBaseUrl.empty())
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
@@ -2594,7 +2594,7 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
         return;
     }
 
-    const std::string& fileId = filePath + fileName;
+    const std::string fileId = filePath + fileName;
 
     auto uploadedFileOwnership = partHandler.getFileOwnership();
 
@@ -2610,7 +2610,7 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
 
     wopiUri.addQueryParameter("fileId", fileId);
     wopiUri.addQueryParameter("access_token", token);
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(wopiUri.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(wopiUri.toString());
 
     Authorization auth(Authorization::Type::Token, token, false);
     auto httpRequest = StorageConnectionManager::createHttpRequest(wopiUri, auth);

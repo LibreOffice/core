@@ -361,10 +361,10 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
     }
     else if (tokens.equals(0, "migrate") && tokens.size() > 1)
     {
-        const std::string& docStatus = tokens[1];
-        const std::string& dockey = tokens[2];
-        const std::string& routeToken = tokens[3];
-        const std::string& serverId = tokens[4];
+        const std::string docStatus = tokens[1];
+        const std::string dockey = tokens[2];
+        const std::string routeToken = tokens[3];
+        const std::string serverId = tokens[4];
         if (!dockey.empty() && !routeToken.empty() && !serverId.empty())
         {
             model.setMigratingInfo(dockey, routeToken, serverId);

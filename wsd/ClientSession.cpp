@@ -1622,11 +1622,11 @@ void ClientSession::uploadBrowserSettingsToWopiHost()
         return;
     }
 
-    const std::string& filePath = "/settings/userconfig/browsersetting/browsersetting.json";
+    const std::string filePath = "/settings/userconfig/browsersetting/browsersetting.json";
     uriObject.addQueryParameter("fileId", filePath);
     auth.authorizeURI(uriObject);
 
-    const std::string& uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
 
     auto httpRequest = StorageConnectionManager::createHttpRequest(uriObject, auth);
     httpRequest.setVerb(http::Request::VERB_POST);
@@ -2101,7 +2101,7 @@ void ClientSession::updateBrowserSettingsJSON(const std::string& json)
     const auto& extractedObject = result.extract<Poco::JSON::Object::Ptr>();
     for (const auto& key : extractedObject->getNames())
     {
-        const std::string& value = extractedObject->get(key);
+        const std::string value = extractedObject->get(key);
         std::vector<std::string> vec = Util::splitStringToVector(key, '.');
         if (vec.size() == 2)
         {

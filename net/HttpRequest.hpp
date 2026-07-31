@@ -851,7 +851,7 @@ public:
     /// Only 'Basic' Authentication is supported. Retuns empty pair if not found.
     [[nodiscard]] std::pair<std::string, std::string> getBasicAuth() const
     {
-        const auto& [scheme, param] = getCredentials();
+        const auto [scheme, param] = getCredentials();
         if (Util::iequal(scheme, "Basic"))
         {
             return Util::split(Util::base64Decode(param), ':');

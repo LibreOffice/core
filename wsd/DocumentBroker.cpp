@@ -2362,7 +2362,7 @@ void DocumentBroker::sendBrowserSetting(const std::shared_ptr<ClientSession>& se
     auto browsersetting = session->getBrowserSettingJSON();
     std::ostringstream jsonStream;
     browsersetting->stringify(jsonStream, 2);
-    const std::string& jsonStr = jsonStream.str();
+    const std::string jsonStr = jsonStream.str();
     session->sendTextFrame("browsersetting: " + jsonStr);
     session->setSentBrowserSetting(true);
     LOG_TRC("Sent browsersetting json[" << jsonStr << "] to client with sessionId["
@@ -5035,7 +5035,7 @@ Poco::URI DocumentBroker::getPresetUploadBaseUrl(const Poco::URI& uriObject)
 
 void DocumentBroker::uploadPresetsToWopiHost()
 {
-    const std::string& jailPresetsPath = FileUtil::buildLocalPathToJail(
+    const std::string jailPresetsPath = FileUtil::buildLocalPathToJail(
         COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
 
     const Poco::URI uploadBaseUri = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);

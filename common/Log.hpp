@@ -480,7 +480,7 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
 #define LOG_ASSERT_INTERNAL(condition, message, LOG)                                               \
     do                                                                                             \
     {                                                                                              \
-        auto&& UNIQUE_VAR(cond) = !!(condition);                                                   \
+        auto UNIQUE_VAR(cond) = !!(condition);                                                     \
         if (!UNIQUE_VAR(cond))                                                                     \
         {                                                                                          \
             std::ostringstream UNIQUE_VAR(oss);                                                    \

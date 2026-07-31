@@ -158,7 +158,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         {
             if (redirectLimit > 0)
             {
-                const std::string& location = httpResponse->get("Location");
+                const std::string location = httpResponse->get("Location");
                 LOG_TRC("CollabFileProxy: redirect to ["
                         << Anonymizer::anonymizeUrl(location) << ']');
                 doDownload(poll, Poco::URI(location), redirectLimit - 1);

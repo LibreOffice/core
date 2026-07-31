@@ -650,7 +650,7 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
     {
         if (redirectLimit)
         {
-            const std::string& location = httpResponse->get("Location");
+            const std::string location = httpResponse->get("Location");
             LOG_TRC("WOPI::GetFile redirect to URI [" << Anonymizer::anonymizeUrl(location) << ']');
 
             Poco::URI redirectUriObject(location);

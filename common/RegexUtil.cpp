@@ -58,7 +58,7 @@ bool matchRegex(const std::set<std::string>& set, const std::string& subject)
 
 std::string getValue(const std::map<std::string, std::string>& map, const std::string& subject)
 {
-    if (const auto& it = map.find(subject); it != map.end())
+    if (const auto it = map.find(subject); it != map.end())
     {
         return it->second;
     }

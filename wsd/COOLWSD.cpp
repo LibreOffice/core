@@ -2387,7 +2387,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     // Command Tracing.
     if (ConfigUtil::getConfigValue<bool>(conf, "trace[@enable]", false))
     {
-        const auto& path = ConfigUtil::getConfigValue<std::string>(conf, "trace.path", "");
+        const auto path = ConfigUtil::getConfigValue<std::string>(conf, "trace.path", "");
         const auto recordOutgoing =
             ConfigUtil::getConfigValue<bool>(conf, "trace.outgoing.record", false);
         std::vector<std::string> filters;

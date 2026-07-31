@@ -866,7 +866,7 @@ int main(int argc, char**argv)
     inline std::pair<std::string, std::string>
     split(const std::string&& str, const char delimiter = ' ', bool removeDelim = true)
     {
-        const auto& pair = split(str.data(), str.size(), delimiter, removeDelim);
+        const auto pair = split(str.data(), str.size(), delimiter, removeDelim);
         return std::make_pair(std::string(pair.first), std::string(pair.second));
     }
 

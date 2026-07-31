@@ -82,9 +82,9 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
     }
     else if (tokens.equals(0, "session"))
     {
-        const std::string& sessionId = tokens[1];
+        const std::string sessionId = tokens[1];
         _docKey = tokens[2];
-        const std::string& docId = tokens[3];
+        const std::string docId = tokens[3];
         const std::string url = Uri::decode(_docKey);
         if (Anonymizer::enabled())
         {
