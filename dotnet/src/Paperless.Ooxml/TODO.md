@@ -28,14 +28,56 @@ Reference: `research/04-impress.md` section B (DrawingML in most depth);
 **The single most visible failure mode in PPTX rendering.** A wrong transform chain makes
 every themed shape on every slide the wrong colour at once.
 
-- [ ] Parse `theme1.xml`: colour scheme, font scheme, format scheme
-- [ ] Resolve colour references: `srgbClr`, `schemeClr`, `sysClr`, `prstClr`, `hslClr`,
-      `scrgbClr`
-- [ ] Apply the transform chain **in document order and in the right colour space**:
-      `lumMod`, `lumOff`, `shade`, `tint`, `satMod`, `alpha`, `hueMod`, `inv`, `gray`.
-      Arithmetic is in `research/04-impress.md` section B.
-- [ ] `phClr` placeholder-colour substitution inside style matrix references
+Colour resolution is in `DrawingML/` and is done: `DrawingColour` is the reference,
+`DrawingColourTransforms` the chain, `DrawingTheme` the scheme and the map. All three families
+can call it — DOCX does today, through `WordThemeColour`; XLSX's `theme=` index and PPTX's
+`a:schemeClr` are unblocked and need only their own readers, not a second chain.
+
+- [x] Parse `theme1.xml`'s colour scheme, and locate the part **by relationship** rather than by
+      name. The trap is inside the scheme rather than around it: `dk1` and `lt1` are an
+      `a:sysClr` with a `lastClr` in every theme Word ships, not an `a:srgbClr`, so a reader that
+      handles only `a:srgbClr` silently loses the two slots "text 1" and "background 1" refer to.
+      `lastClr` is preferred to asking the host, since a document must not change colour under a
+      dark desktop theme.
+- [x] Resolve colour references: `srgbClr`, `schemeClr`, `sysClr`, `prstClr`, `hslClr`,
+      `scrgbClr`. The last two go back through the transform chain rather than being converted
+      directly, because `scrgbClr`'s components *are* the chain's CRGB space and `hslClr`'s are
+      its HSL — a second conversion would be a second place to get the gamma wrong.
+      `PresetColours` is transcribed from `color.cxx`'s `constDmlColors`, not from the X11 list it
+      resembles: DrawingML abbreviates (`dkBlue`, `ltGray`, `medPurple`) and at least one value
+      differs, `ltGoldenrodYellow` being `FAFA78` here and `FAFAD2` in X11.
+- [x] Apply the transform chain **in document order and in the right colour space**, ported from
+      `oox/source/drawingml/color.cxx`:723 — the authority because it is what LibreOffice renders
+      with, and every comparison in this project is against LibreOffice's rendering.
+      Two facts carry the whole item and neither is guessable from the element names.
+      **It is not commutative.** `lumMod` then `shade` is a different colour from `shade` then
+      `lumMod`, because the two work in different spaces. Measured on one scheme colour with
+      `lumMod 50%` and `shade 60%` both ways round, LibreOffice paints #3F4E20 and #3E4A23.
+      **`shade` and `tint` carry a gamma round trip.** They act in "CRGB" — thousandths of a
+      percent per component, gamma-decoded with an exponent of **2.3** — rather than on the 8-bit
+      components, so a 50% shade of accent 1 (`4F81BD`) is `3A5F8B` and not the `284560` a plain
+      multiply gives. The specification describes the plain multiply; following it leaves every
+      shaded fill perceptibly too dark while still looking like a plausible colour, which is the
+      failure mode this whole area is about.
+      Verified against LibreOffice's own PDF on `theme-colours.docx`, twelve themed shape fills,
+      every one matching to the byte: both orderings above, `lumMod`/`lumOff`, `satMod`,
+      `a:gray`'s 22/72/6 weights, and the colour map.
+- [x] The `a:clrMap`, which is why "background 1" is not simply the scheme's first colour. Only
+      the twelve document-facing names (`bg1 tx1 bg2 tx2 accent1…6 hlink folHlink`) are mapped;
+      `dk1`/`lt1` address the theme's storage and never move, which is the whole reason both
+      spellings exist — a slide master that swaps light for dark still wants `lt1` to be the light
+      colour. WordprocessingML's `w:clrSchemeMapping` is the same map under different attribute
+      names and normalises onto the same keys.
+- [ ] `phClr` placeholder-colour substitution inside style matrix references. The kind exists
+      (`DrawingColourKind.Placeholder`) and `Resolve` takes the substitute, so what is missing is
+      a caller: nothing reads `a:lnRef`/`a:fillRef`/`a:effectRef` yet, and until something does
+      there is no colour to pass in.
 - [ ] Format scheme: `fillStyleLst`, `lnStyleLst`, `effectStyleLst`, `bgFillStyleLst`
+- [ ] The font scheme. `DrawingTheme` holds the colour scheme alone, deliberately — a reader
+      asking what `accent1` is should not have to parse three fill styles to find out — but
+      `+mj-lt` and Word's `majorHAnsi` both need it, and `writerfilter`'s `ThemeHandler.cxx` shows
+      the second mapping is not the first: `majorHAnsi` and `majorAscii` both mean the Latin face,
+      and a supplemental typeface for the run's script wins over it.
 
 ## DrawingML shapes
 

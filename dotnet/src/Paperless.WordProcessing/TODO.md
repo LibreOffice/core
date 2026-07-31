@@ -250,9 +250,49 @@ Order chosen so each is verifiable before the next gets harder.
       applied and the DOCX comparison runs two twips wider than the ODF one instead.
 - [x] Tables: `w:gridSpan`, and `w:vMerge`'s top-and-continuation encoding turned into a row
       span, which needs the rows drafted before they are materialised
-- [ ] `settings.xml` compatibility flags — parsed and exposed, nothing reads them yet. They
-      genuinely change layout maths, so layout will need a handful of them.
-- [ ] `w:altChunk`: an embedded foreign document, reported as a diagnostic rather than read
+- [x] `settings.xml` compatibility flags, in `WordCompatibility` — and **one** of them, which is the
+      finding rather than a shortfall. `w:compat` carries about eighty flags and which ones matter is a
+      measurement, not a reading of the schema, so each candidate was checked by rendering the same
+      document with and without it and comparing where LibreOffice put the words.
+      `w:doNotExpandShiftReturn` is the one that moves text and is now wired: a justified line ended by
+      a `w:br` stops being stretched, and its last word goes from 538.75 pt — hard against the right
+      margin — to 154.0 pt where the words naturally end. LibreOffice reads the same flag into
+      `DoNotJustifyLinesWithManualBreak` (`DomainMapper_Impl.cxx`:10160). Only the drawing changes, so
+      `ManualBreakJustification` is applied to a finished layout rather than threaded into the line
+      filler, which is what makes it a twenty-line change instead of a change to the break loop.
+      Two more were already wired and are now read through the same type:
+      `w:doNotUseHTMLParagraphAutoSpacing` (whether two paragraphs' spacings add) and the
+      `compatibilityMode` setting (the table-indent rule at 15 and above).
+      **The trap is that a flag can look inert because of the font.** `w:noLeading` turns off external
+      leading and is invisible with Carlito, whose declared line gap is zero — the first measurement of
+      it said "no change". With Liberation Serif at 11 pt it moves the first baseline from 66.95 pt to
+      66.50 pt and every line after it by the same amount again. It is measured and *not* wired,
+      because the line gap enters through `Paperless.Text`'s line-metric derivation, which is shared
+      with the other three readers and both other families; suppressing it needs a metric option there.
+      Measured and genuinely inert, each recorded in `WordCompatibility` with what was tried:
+      `w:suppressTopSpacing` and `w:suppressSpacingAtTopOfPage` (LibreOffice does not read either —
+      neither appears in `SettingsTable::lcl_sprm` — and adding them to a twenty-paragraph document
+      with 20 pt of space-before changed nothing); `w:noColumnBalance`; `w:usePrinterMetrics`; the
+      document-level `w:widowControl` over ten straddle positions of a six-line paragraph; and
+      `compatibilityMode` 14 against 15 on justified text, which lays out identically to the hundredth
+      of a point despite `JustifyLinesWithShrinking` hanging off it.
+- [x] `w:altChunk`, read when the embedded part is a format Paperless reads and reported when it is
+      not. The element is a placeholder with an `r:id` and nothing else, pointing at a *complete file*
+      inside the package, so the reading is exactly "run the reader again on another part and splice
+      the result in": the chunk's body blocks become the host's at the placeholder's position, its
+      notes and comments are hoisted alongside the host's, and its headers and footers are dropped as
+      Word drops them — page furniture belongs to whatever owns the page and a chunk owns none.
+      The format is **sniffed, not taken from the part's content type**. An `altChunk`'s declared type
+      is wrong often enough that Word ignores it too; `alt-chunk.docx` declares its RTF chunk through a
+      loose `Default` extension mapping and its DOCX chunk through an `Override`, and both read the
+      same way because neither declaration is consulted.
+      HTML and plain text — the two content types the element was invented for — are not
+      word-processing formats this library claims, so they keep the diagnostic. That matters more than
+      for most unread constructs: what goes missing is a whole document rather than a property of one.
+      The depth guard is thread-static rather than an instance field, because the recursion does not
+      run through the reader object — a nested chunk is read by a whole new one, built by
+      `WordProcessingReader`, so nothing an instance holds reaches it. A package embedding itself is
+      well-formed, since the relationship is by part name.
 - [x] Layout: `DocxLayoutSource` walks `document.xml` a second time. OOXML's unit traps, each written
       down where it is read: `w:sz` is half-points, so reading it as points halves every document;
       `w:spacing`'s `auto` rule counts two-hundred-and-fortieths of a line rather than a percentage;
@@ -260,9 +300,60 @@ Order chosen so each is verifiable before the next gets harder.
       attribute under two names; and `w:rFonts` names four families at once, of which Latin text wants
       the ASCII one. Deleted text and field instructions are skipped, since both are in the file and
       neither is on the page.
-- [ ] `fontTable.xml`. Not needed for layout after all — `w:rFonts` names the family directly — but it
-      carries the embedded-font relationships and the panose data a substitution could use.
-- [ ] Theme colours for `w:color w:themeColor` references
+- [x] `fontTable.xml`, in `WordFontTable`. Still not needed for layout — `w:rFonts` names the family
+      directly — and nothing here changes a measurement. What it holds that is available nowhere else
+      is the two inputs a *substitution* would take: the embedded-font relationships, and the PANOSE
+      bytes beside `w:altName`, `w:family` and `w:pitch` (which is what LibreOffice's own
+      `dmapper/FontTable.cxx` reads it for). A document embedding its own copy of a face is precisely
+      the one where matching by name gives different metrics, hence different line breaks and a
+      different page count, so that is now a diagnostic (`PL2112`) rather than silence.
+      The bytes are not decoded. An ODTTF is only a TrueType file XORed against the sixteen bytes of
+      its `w:fontKey`, so decoding is cheap — but `w:subsetted="1"`, which is how real files spell it
+      rather than `"true"`, means the face holds only the glyphs the document uses and cannot serve as
+      a substitute for the family. Loading it usefully means loading it *only* for the runs that name
+      it, which is a font-resolution change rather than a reader change.
+      The duplicate-name case is real rather than defensive: LibreOffice's own DOCX export writes two
+      `Symbol` entries into `word-features.docx`, so the by-name index is first-wins instead of an
+      indexer that would throw on that file. Its export also writes no PANOSE at all, which is why the
+      PANOSE coverage is pinned on a hand-written document.
+- [x] **Theme colours**, `w:color w:themeColor` with `w:themeTint`/`w:themeShade`. The resolution
+      itself is DrawingML's and lives in `Paperless.Ooxml/DrawingML` — see `Paperless.Ooxml/TODO.md`
+      for the transform chain and how it was verified. What is Word-specific is here, in
+      `WordThemeColour`, and it is two things.
+      **Word's tint and shade are not DrawingML's tint and shade.** They are hexadecimal bytes acting
+      on *luminance in HSL*, where `a:tint` and `a:shade` act on gamma-decoded components.
+      `w:themeTint="99"` becomes `lumMod` 60000 with `lumOff` 40000, and `w:themeShade="BF"` becomes
+      `lumMod` 74902 with no offset. LibreOffice states this outright — "MS Office uses themeTint and
+      themeShade on the luminance in a HSL color space, see 2.1.72 in [MS-OI29500]. That is different
+      from OOXML specification" (`oox/source/drawingml/fontworkhelpers.cxx`:1588) — and does the
+      conversion at `oox/source/shape/WpsContext.cxx`:424. Reading them as the identically named
+      DrawingML transforms is the trap, because `a:tint` counts *towards* the original from white: 0x99
+      is the Word UI's "lighter 40%" and would come out as a 60% tint, which is much paler, on every
+      themed run in the document at once.
+      **A cached `w:val` beside the reference wins.** It is what LibreOffice renders — `DomainMapper.cxx`:2676
+      puts it straight into `PROP_CHAR_COLOR` and keeps the theme reference only for round-tripping —
+      and it is exact against Word. Measured over the 271 distinct combinations of scheme colour and
+      modifier in the DOCX files of LibreOffice's own test data, resolving from the theme instead
+      reproduces Word's cache exactly 140 times and within one unit per channel 117 more; the residual
+      one unit is LibreOffice's rounding rather than a different answer. The 14 that differ by more are
+      documents whose theme was replaced without Word rewriting the cache — `n779642.docx` has the same
+      `text2` swapped both ways — which is what makes "prefer the cache" a choice rather than an
+      optimisation, since Word itself would show the recomputed colour there.
+      So the theme is the fallback, and not a rare one: `w:val="auto"` beside a `w:themeColor` is what
+      anything other than Word tends to write, and a `w:themeColor` with no `w:val` at all is legal.
+      **A deliberate divergence from LibreOffice, measured on `theme-colours.docx`:** its five themed
+      runs state the reference three ways, and LibreOffice paints the one with a cached `w:val` in the
+      theme colour and the four without one in *black*, because `mnColor` defaults to zero. Paperless
+      resolves them, which is what Word does. That is also why the transform chain is verified through
+      shape fills rather than run colours — a `w:color` cannot be checked against LibreOffice at all.
+      `w:clrSchemeMapping` in `settings.xml` is read as the colour map, since it is `a:clrMap` under
+      different attribute names. Every file measured carries the identity, so it moves nothing yet; the
+      swapped case is pinned by a unit test instead.
+- [ ] Themed colours on the elements *beside* `w:color`: `w:shd`'s `w:themeFill` and `w:themeColor`,
+      `w:tblBorders`/`w:tcBorders`, and `w:u`'s. `WordThemeColour.Read` already takes the four
+      attribute names as parameters for exactly this, so each is a call site rather than new
+      machinery — what is missing is that `Shading` and `Borders` in `DocxLayoutSource.Tables` are
+      static and have no way to reach the theme.
 
 ### DOC (WW8) — extraction done
 - [x] FIB; the text streams; `0Table` vs `1Table` chosen by `fWhichTblStm`. The FIB's
