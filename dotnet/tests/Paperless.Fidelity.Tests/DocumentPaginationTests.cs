@@ -5,6 +5,7 @@ using Paperless.TestKit;
 using Paperless.TestKit.LibreOffice;
 using Paperless.WordProcessing;
 using Paperless.WordProcessing.Layout;
+using Paperless.WordProcessing.Ooxml;
 using Paperless.WordProcessing.OpenDocument;
 using Shouldly;
 
@@ -49,6 +50,7 @@ public sealed class DocumentPaginationTests : IDisposable
     [Theory]
     [InlineData("paginated.fodt")]
     [InlineData("paginated.odt")]
+    [InlineData("paginated.docx")]
     public void ARealDocumentPaginatesTheWayLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -79,6 +81,7 @@ public sealed class DocumentPaginationTests : IDisposable
     [Theory]
     [InlineData("paginated.fodt")]
     [InlineData("paginated.odt")]
+    [InlineData("paginated.docx")]
     public void EveryParagraphOfTheDocumentLandsOnSomePage(string fileName)
     {
         // Pagination places lines; it must not lose them. A dropped paragraph would look like a
@@ -143,8 +146,10 @@ public sealed class DocumentPaginationTests : IDisposable
         first.Size.Height.Millimetres.ShouldBe(297.0, tolerance: 0.1);
     }
 
-    [Fact]
-    public void FontsResolveWithoutSubstitutingSomethingIncompatible()
+    [Theory]
+    [InlineData("paginated.fodt")]
+    [InlineData("paginated.docx")]
+    public void FontsResolveWithoutSubstitutingSomethingIncompatible(string fileName)
     {
         // The corpus document asks for Carlito, which is installed. A substitution here would mean the
         // resolver failed to find an installed family, and every measurement after it would be against
@@ -153,15 +158,34 @@ public sealed class DocumentPaginationTests : IDisposable
         Assert.SkipUnless(
             Directory.Exists("/usr/share/fonts"), "no font directory on this machine");
 
-        using IDocument document = Open(Corpus.Require("paginated.fodt"));
-        OdtWordDocument odt = document.ShouldBeOfType<OdtWordDocument>();
+        using IDocument document = Open(Corpus.Require(fileName));
 
-        OdtLayoutSource source = new(odt.File.Styles);
-        source.Read(odt.File.Body!);
+        IReadOnlyList<Text.Fonts.FontSubstitution> substitutions = document switch
+        {
+            OdtWordDocument odt => Substitutions(new OdtLayoutSource(odt.File.Styles), odt),
+            OoxmlWordDocument docx => Substitutions(
+                new DocxLayoutSource(docx.File.Styles, docx.File.Settings), docx),
+            _ => [],
+        };
 
-        source.Substitutions
+        substitutions
             .Where(s => !s.IsMetricCompatible)
-            .ShouldBeEmpty("an incompatible substitution reflows every later page");
+            .ShouldBeEmpty($"{fileName}: an incompatible substitution reflows every later page");
+
+        static IReadOnlyList<Text.Fonts.FontSubstitution> Substitutions(object source, IDocument document)
+        {
+            switch (source)
+            {
+                case OdtLayoutSource odf:
+                    odf.Read(((OdtWordDocument)document).File.Body!);
+                    return odf.Substitutions;
+                case DocxLayoutSource ooxml:
+                    ooxml.Read(((OoxmlWordDocument)document).File.Body!);
+                    return ooxml.Substitutions;
+                default:
+                    return [];
+            }
+        }
     }
 
     // ------------------------------------------------------------------------- the machinery
@@ -179,11 +203,22 @@ public sealed class DocumentPaginationTests : IDisposable
         return (WordProcessingPages)paginated.Layout();
     }
 
-    private static List<PageParagraph> Paragraphs(IDocument document)
+    /// <summary>
+    /// The paragraphs the document's own layout source produces.
+    /// </summary>
+    /// <remarks>
+    /// Built again rather than taken from the pages, because a <see cref="PlacedLine"/> carries an index
+    /// into this list and not the text itself — the paginator places lines and leaves the strings where
+    /// they were. Reading them twice is cheap next to shaping them once.
+    /// </remarks>
+    private static List<PageParagraph> Paragraphs(IDocument document) => document switch
     {
-        OdtWordDocument odt = document.ShouldBeOfType<OdtWordDocument>();
-        return new OdtLayoutSource(odt.File.Styles).Read(odt.File.Body!);
-    }
+        OdtWordDocument odt => new OdtLayoutSource(odt.File.Styles).Read(odt.File.Body!),
+        OoxmlWordDocument docx =>
+            new DocxLayoutSource(docx.File.Styles, docx.File.Settings).Read(docx.File.Body!),
+        _ => throw new NotSupportedException(
+            $"{document.Format} has no layout source in this test yet."),
+    };
 
     /// <summary>The words on each page Paperless produced, in order.</summary>
     /// <remarks>

@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Ooxml;
+using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Model;
 
 namespace Paperless.WordProcessing.Ooxml;
@@ -166,7 +167,7 @@ public static class DocxReader
 }
 
 /// <summary>An OOXML word-processing document that has been read.</summary>
-public sealed class OoxmlWordDocument : IWordProcessingDocument
+public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocument
 {
     private readonly DocxFile _file;
 
@@ -211,6 +212,37 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument
     /// package. Valid until this document is disposed.
     /// </remarks>
     public DocxFile File => _file;
+
+    /// <summary>
+    /// Lays the document out into pages.
+    /// </summary>
+    /// <remarks>
+    /// One section's geometry, the first, because the paginator takes one — a document that changes page
+    /// setup part way through has its page break honoured and the geometry after it not. Carrying a
+    /// section change needs each paragraph to know which section it is in, which is the gap recorded in
+    /// this library's TODO.
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        XElement? body = _file.Body;
+        if (body is null) return new WordProcessingPages([]);
+
+        DocxLayoutSource source = new(_file.Styles, _file.Settings);
+        List<PageParagraph> paragraphs = source.Read(body);
+
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            MaxPages = options?.MaxPages is > 0
+                ? options.MaxPages
+                : PaginationOptions.Word.MaxPages,
+        };
+
+        // Word's compatibility choices, not Writer's: a DOCX keeps its paragraph spacing at the top of a
+        // page and collapses space-before against the previous space-after. Using Writer's would move
+        // the first baseline of every page after the first.
+        return new WordProcessingPages(
+            new Paginator(pagination).Paginate(paragraphs, Sections[0]));
+    }
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

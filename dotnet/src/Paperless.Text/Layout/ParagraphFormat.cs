@@ -126,25 +126,63 @@ public readonly record struct LineSpacingRule(
         => new(LineSpacingMode.Leading, 1.0, value);
 
     /// <summary>
+    /// The smallest proportion honoured; below it Writer clamps rather than obeying.
+    /// </summary>
+    /// <remarks>
+    /// Fifty per cent. <c>SwTextFormatter::CalcRealHeight</c> raises anything lower to it, with the
+    /// comment that Word will render less "but it's just not readable" — and zero, which a document does
+    /// write, means single spacing rather than none.
+    /// </remarks>
+    public const double MinProportion = 0.5;
+
+    /// <summary>
     /// The height a line gets, given the height its text naturally wants.
     /// </summary>
     /// <remarks>
-    /// Never negative and never zero for a line with text in it: a paragraph whose spacing resolves to
-    /// nothing would stack every line on one baseline, which is worse output than ignoring the
-    /// document.
+    /// <para>
+    /// Computed in <em>whole twips</em>, with integer arithmetic, because that is Writer's layout unit
+    /// and the rounding is observable. An 11 pt line of Carlito is 268.55 twips of text, which Writer
+    /// rounds to 269; 115% spacing then adds <c>15 * 269 / 100</c> truncated to 40, giving 309 twips
+    /// exactly. Keeping the exact value instead gives 308.79, and the two-hundredths of a point per line
+    /// accumulates over a page to nearly half a point — which is enough to fit one line more than Writer
+    /// does and so to move the page break and every one after it.
+    /// </para>
+    /// <para>
+    /// Never zero for a line with text in it: a paragraph whose spacing resolved to nothing would stack
+    /// every line on one baseline, which is worse output than ignoring the document.
+    /// </para>
     /// </remarks>
     public Length Apply(Length naturalHeight)
     {
-        Length height = Mode switch
+        long natural = naturalHeight.Twips;
+
+        long twips = Mode switch
         {
-            LineSpacingMode.Proportional => naturalHeight * Math.Clamp(Proportion, 0.0, MaxProportion),
-            LineSpacingMode.AtLeast => Value > naturalHeight ? Value : naturalHeight,
-            LineSpacingMode.Exact => Value,
-            LineSpacingMode.Leading => naturalHeight + Value,
-            _ => naturalHeight,
+            LineSpacingMode.Proportional => natural + Extra(natural),
+            LineSpacingMode.AtLeast => Math.Max(natural, Value.Twips),
+            LineSpacingMode.Exact => Value.Twips,
+            LineSpacingMode.Leading => natural + Value.Twips,
+            _ => natural,
         };
 
-        return height > Length.Zero ? height : naturalHeight;
+        return twips > 0 ? Length.FromTwips(twips) : Length.FromTwips(natural);
+    }
+
+    /// <summary>
+    /// The extra twips proportional spacing adds, the way Writer computes them.
+    /// </summary>
+    /// <remarks>
+    /// A percentage in whole points of a per cent, applied with integer division so the result truncates
+    /// rather than rounds — <c>nTmp -= 100; nTmp *= baseHeight; nTmp /= 100</c> in
+    /// <c>CalcRealHeight</c>. Rounding instead would be off by a twip on most sizes.
+    /// </remarks>
+    private long Extra(long naturalTwips)
+    {
+        double clamped = Math.Clamp(Proportion, 0.0, MaxProportion);
+        long percent = clamped <= 0 ? 100 : (long)Math.Round(clamped * 100);
+        if (percent < MinProportion * 100) percent = (long)(MinProportion * 100);
+
+        return (percent - 100) * naturalTwips / 100;
     }
 }
 

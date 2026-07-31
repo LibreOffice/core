@@ -19,9 +19,16 @@ public sealed record PaginationOptions
     public static PaginationOptions Default { get; } = new();
 
     /// <summary>
-    /// Word's behaviour: paragraph spacing is kept at the top of a page, and space-before collapses
-    /// against the previous paragraph's space-after rather than adding to it.
+    /// Word's behaviour, which is what an OOXML document expects.
     /// </summary>
+    /// <remarks>
+    /// Established by measurement rather than from the specifications, and worth stating how: the same
+    /// document was exported from LibreOffice to both ODT and DOCX and rendered, and the two paginate
+    /// differently. Its 41st line sits at 762.1 pt on the DOCX's first page and 767.8 pt on the ODT's —
+    /// 5.65 pt apart, which is exactly the one paragraph space-after on that page. So LibreOffice
+    /// <em>adds</em> space-after to space-before for an ODF document and takes the <em>larger</em> for an
+    /// OOXML one, and the difference moves a page break within five pages.
+    /// </remarks>
     public static PaginationOptions Word { get; } = new()
     {
         KeepsSpacingAtTopOfPage = true,
@@ -32,10 +39,12 @@ public sealed record PaginationOptions
     /// Whether a paragraph keeps its space-before when it starts a page.
     /// </summary>
     /// <remarks>
-    /// Writer drops it, so the first line of a page sits at the top margin whatever the paragraph asks
-    /// for; Word keeps it. The flag is <c>AddParaSpacingToTableCells</c>'s neighbour in Writer's
-    /// compatibility settings, and getting it wrong moves the first baseline of every page after the
-    /// first — which then changes how much fits and where the next break falls.
+    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>: it drops the spacing, so the first line of a page sits at
+    /// the top margin whatever the paragraph asks for, while Word keeps it. Getting it wrong moves the
+    /// first baseline of every page after the first, which then changes how much fits and where the next
+    /// break falls. Unlike <see cref="CollapsesSpacing"/> this is not pinned by a comparison yet: the
+    /// corpus document's page tops all fall mid-paragraph or on paragraphs with no space-before, so it
+    /// makes no difference there.
     /// </remarks>
     public bool KeepsSpacingAtTopOfPage { get; init; }
 
@@ -43,9 +52,11 @@ public sealed record PaginationOptions
     /// Whether the space between two paragraphs is the larger of the two rather than their sum.
     /// </summary>
     /// <remarks>
-    /// Word takes the larger, Writer adds them. On a document with both space-after and space-before
-    /// set — which every template does — the two differ on every paragraph boundary, so the error
-    /// accumulates down the page rather than staying local.
+    /// Writer's <c>PARA_SPACE_MAX</c> compatibility flag, and the one difference between the two presets
+    /// that a comparison actually pins down. LibreOffice enables it when it imports an OOXML document and
+    /// leaves it off for a native one, so a paragraph with 0.2 cm of space-after followed by one with
+    /// 0.4 cm of space-before gets 0.4 cm between them in a DOCX and 0.6 cm in an ODT — from the same
+    /// source document, exported both ways. On a five-page document that is one page break.
     /// </remarks>
     public bool CollapsesSpacing { get; init; }
 
@@ -175,8 +186,7 @@ public sealed class Paginator
                 ? SpaceAbove(paragraphs, laid, paragraphIndex, atTopOfPage: placed.Count == 0)
                 : Length.Zero;
 
-            int fitted = Fit(
-                layout, lineIndex, used + spaceAbove, bodyHeight, atTopOfPage: placed.Count == 0);
+            int fitted = Fit(layout, lineIndex, used + spaceAbove, bodyHeight);
             int allowed = Allowed(
                 paragraph.Format, layout.Lines.Count, lineIndex, fitted, placed.Count == 0);
 
@@ -202,12 +212,9 @@ public sealed class Paginator
             {
                 LineBox box = layout.Lines[lineIndex + i];
 
-                // The first line on a page loses the space line spacing puts above its text, so it
-                // sits on the top margin rather than a line's worth below it. Writer does the same for
-                // the first line of a text frame, and the consequence is arithmetic rather than
-                // cosmetic: a 200%-spaced A4 page holds twenty-five lines this way and twenty-four
-                // without, so every page break after the first falls somewhere else.
-                if (placed.Count == 0) box = box.WithoutSpaceAbove();
+                // The first line on a page draws its text at the top margin rather than a line's worth
+                // below it — but keeps its full height, so the lines under it are not lifted.
+                if (placed.Count == 0) box = box.WithTextAtTop();
 
                 placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top));
                 top += box.Height;
@@ -265,22 +272,33 @@ public sealed class Paginator
     /// would put a descender in the bottom margin and, worse, would let a page hold one more line than
     /// Writer gives it — which moves every subsequent break.
     /// </remarks>
-    private static int Fit(
-        LaidOutParagraph layout, int from, Length used, Length available, bool atTopOfPage)
+    /// <summary>
+    /// How many of a paragraph's remaining lines fit in what is left of the page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A line fits when its box does, <em>less the empty space above its text</em>. That allowance looks
+    /// like slack and is not: Writer lets a page's last line hang its leading past the bottom margin,
+    /// because what hangs is whitespace. Testing the full box instead gives the page one line fewer at
+    /// every spacing above single, and a page one line short moves every break after it.
+    /// </para>
+    /// <para>
+    /// The allowance is safe to apply to every line rather than only to the last, because a line that
+    /// needs it <em>becomes</em> the last: the next line's own test then starts from a running height
+    /// already past the margin and fails.
+    /// </para>
+    /// </remarks>
+    private static int Fit(LaidOutParagraph layout, int from, Length used, Length available)
     {
-        Length room = available - used;
+        Length running = used;
         int count = 0;
 
         for (int i = from; i < layout.Lines.Count; i++)
         {
-            // The first line on the page is measured without the space above its text, because that is
-            // what it will be given. Measuring it with the space would make the page hold one line fewer
-            // than Writer gives it, at every spacing above single.
-            LineBox box = atTopOfPage && count == 0 ? layout.Lines[i].WithoutSpaceAbove()
-                                                   : layout.Lines[i];
-            if (box.Height > room) break;
+            LineBox box = layout.Lines[i];
+            if (running + box.Height - box.SpaceAbove > available) break;
 
-            room -= box.Height;
+            running += box.Height;
             count++;
         }
 

@@ -19,10 +19,10 @@ namespace Paperless.Text.Layout;
 /// height, because the space line spacing adds sits above the text rather than being shared around it.
 /// </param>
 /// <param name="SpaceAbove">
-/// How much of the box is empty space above the text. Kept separately because whoever fills pages has
-/// to be able to take it away: the first line at the top of a page loses the space above it, so its
-/// text sits on the top margin rather than a line's worth below it, and recomputing it there would mean
-/// knowing the spacing rule — which is the paragraph's business rather than the page's.
+/// How much of the box is empty space above the text. Kept separately because whoever fills pages needs
+/// it twice: the first line on a page draws its text at the top margin rather than a line's worth below
+/// it, and the last line on a page is allowed to hang this much past the bottom. Recomputing it there
+/// would mean knowing the spacing rule, which is the paragraph's business rather than the page's.
 /// </param>
 public readonly record struct LineBox(
     TextLine Line,
@@ -32,19 +32,24 @@ public readonly record struct LineBox(
     Length Baseline,
     Length SpaceAbove)
 {
-    /// <summary>The same line with the space above its text removed.</summary>
+    /// <summary>The same line with its text moved to the top of its box.</summary>
     /// <remarks>
-    /// What the first line on a page becomes. Writer drops the space above the first line of a text
-    /// frame — the observable consequence is that a 200%-spaced A4 page holds twenty-five lines rather
-    /// than twenty-four, and every page break after the first therefore falls somewhere else.
+    /// <para>
+    /// What the first line on a page becomes: its text sits on the top margin rather than a line's worth
+    /// below it. The box keeps its full height, which is the part that is easy to get wrong — Writer
+    /// advances by the whole line height even for the line whose leading it just suppressed, so shrinking
+    /// the box instead lifts every following line on the page by the same amount. Measured over a page
+    /// of 115%-spaced 11 pt text that is two points, which is enough to fit one line more than Writer
+    /// does and so to move the break.
+    /// </para>
+    /// <para>
+    /// The counterpart is that a page's <em>last</em> line may hang <see cref="SpaceAbove"/> past the
+    /// bottom margin, since what hangs is empty space. The two together are what make a 200%-spaced A4
+    /// page hold twenty-five lines rather than twenty-four.
+    /// </para>
     /// </remarks>
-    public LineBox WithoutSpaceAbove()
-        => this with
-        {
-            Height = Height - SpaceAbove,
-            Baseline = Baseline - SpaceAbove,
-            SpaceAbove = Length.Zero,
-        };
+    public LineBox WithTextAtTop()
+        => this with { Baseline = Baseline - SpaceAbove, SpaceAbove = Length.Zero };
 
     /// <summary>The absolute baseline, given where the paragraph starts.</summary>
     public Length BaselineFrom(Length paragraphTop) => paragraphTop + Top + Baseline;
@@ -153,7 +158,10 @@ public sealed class ParagraphLayouter
             language,
             options);
 
-        Length natural = _metrics.ScaledLineHeight(size);
+        // Snapped to whole twips before anything else uses it, because that is Writer's layout unit and
+        // every later sum inherits the difference: a fifth of a twip per line accumulates over a page to
+        // enough to fit one line more than Writer does.
+        Length natural = Length.FromTwips(_metrics.ScaledLineHeight(size).Twips);
         Length height = paragraph.LineSpacing.Apply(natural);
         (Length baseline, Length spaceAbove) =
             BaselineIn(height, natural, size, paragraph.LineSpacing.Mode);
@@ -241,9 +249,13 @@ public sealed class ParagraphLayouter
     private (Length Baseline, Length SpaceAbove) BaselineIn(
         Length height, Length natural, Length emSize, LineSpacingMode mode)
     {
-        if (mode == LineSpacingMode.Exact) return (height * 0.8, Length.Zero);
+        // Four fifths of the box, in twips and by integer division: CalcRealHeight's (4 * height) / 5.
+        if (mode == LineSpacingMode.Exact)
+        {
+            return (Length.FromTwips(4 * height.Twips / 5), Length.Zero);
+        }
 
-        Length ascent = _metrics.ScaledAscent(emSize);
+        Length ascent = Length.FromTwips(_metrics.ScaledAscent(emSize).Twips);
         Length extra = height - natural;
 
         return extra > Length.Zero ? (ascent + extra, extra) : (ascent, Length.Zero);
