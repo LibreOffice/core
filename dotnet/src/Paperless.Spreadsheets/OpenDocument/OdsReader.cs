@@ -19,6 +19,32 @@ public sealed class OdsReader : OdfReader
     /// <inheritdoc/>
     protected override DocumentFamily Family => DocumentFamily.Spreadsheet;
 
+    /// <summary>
+    /// Reads a spreadsheet, with the print setup a layout needs.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from the inherited <see cref="OdfReader.Read"/> because that one answers with an
+    /// <see cref="OdfDocument"/>, which is the right shape for all three ODF families and knows
+    /// nothing about print ranges. This wraps it in something that can be paginated.
+    /// </remarks>
+    /// <param name="source">The document to read.</param>
+    /// <param name="format">The identified format, recorded on the result.</param>
+    public OdsSpreadsheetDocument ReadSpreadsheet(
+        Core.Documents.DocumentSource source, DocumentFormat format)
+    {
+        OdfDocument document = Read(source, format);
+        try
+        {
+            return new OdsSpreadsheetDocument(
+                document, OdsSpreadsheetDocument.ReadSheets(document));
+        }
+        catch
+        {
+            document.Dispose();
+            throw;
+        }
+    }
+
     /// <inheritdoc/>
     protected override void ReadBody(XElement body, OdfContentReader reader, ContentDocument content)
     {

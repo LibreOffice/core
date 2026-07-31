@@ -1,0 +1,155 @@
+using Paperless.Core.Extraction;
+
+namespace Paperless.Spreadsheets.Layout;
+
+/// <summary>
+/// Everything laying one sheet out needs: its print setup, its geometry, and its cells.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The three readers converge on this. What they read differs completely — ODF states the page
+/// in a <c>style:page-layout</c> and the widths on <c>table:table-column</c>, SpreadsheetML in
+/// <c>pageSetup</c> and <c>cols</c>, BIFF in <c>SETUP</c> and <c>COLINFO</c> — but pagination
+/// asks the same questions of all three, so the questions are asked once here.
+/// </para>
+/// <para>
+/// The cells come from the content tree rather than from a second parse. That is not a
+/// shortcut: the tree already holds every cell's position, its typed value and the text the
+/// number format produced, which is exactly what a page needs to draw, and re-reading the sheet
+/// to get them again would be a second chance to disagree with what was extracted.
+/// </para>
+/// <para>
+/// A class rather than a record, although it is otherwise shaped like one: it memoises its used
+/// range and a cell index, and a record's generated equality would compare those caches — so two
+/// layouts describing the same sheet would stop being equal the moment one of them was drawn.
+/// </para>
+/// </remarks>
+public sealed class SheetLayout
+{
+    /// <summary>The sheet's name, as shown on its tab.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>Its position in the workbook, zero-based.</summary>
+    public int Index { get; init; }
+
+    /// <summary>True when the sheet is hidden, and therefore not printed.</summary>
+    public bool IsHidden { get; init; }
+
+    /// <summary>The sheet's print setup, which is its page geometry.</summary>
+    public SheetPrintSetup Setup { get; init; } = SheetPrintSetup.Default;
+
+    /// <summary>Its column widths and row heights.</summary>
+    public SheetGrid Grid { get; init; } = SheetGrid.Standard;
+
+    /// <summary>The sheet's cells, or null when it holds none.</summary>
+    public ContentTable? Cells { get; init; }
+
+    /// <summary>
+    /// The block of cells the sheet holds, from the sheet's origin.
+    /// </summary>
+    /// <remarks>
+    /// From A1 rather than from the first cell with something in it, which is what
+    /// <c>ScPrintFunc::AdjustPrintArea(true)</c> does: it sets the start to column zero and row
+    /// zero and searches only for the end (<c>printfun.cxx:700</c>). A sheet whose data begins
+    /// at C3 therefore still prints columns A and B, blank — and printing from C3 instead would
+    /// shift every column on every page.
+    /// </remarks>
+    public SheetRange UsedRange
+    {
+        get
+        {
+            if (_usedRange is { } cached) return cached;
+
+            int lastColumn = -1;
+            int lastRow = -1;
+
+            foreach (ContentTableRow row in (Cells?.Children ?? []).OfType<ContentTableRow>())
+            {
+                foreach (ContentTableCell cell in row.Children.OfType<ContentTableCell>())
+                {
+                    // A blank cell carrying only a style is not content. Calc's own used-area
+                    // search does count formatted-but-empty cells; the content tree does not
+                    // record formatting, so this is the narrower of the two answers and is
+                    // recorded in the module's TODO as a known difference.
+                    if (cell.Value is null && cell.GetText().Length == 0) continue;
+
+                    int columnEnd = cell.Column + Math.Max(1, cell.ColumnSpan) - 1;
+                    int rowEnd = cell.Row + Math.Max(1, cell.RowSpan) - 1;
+                    if (columnEnd > lastColumn) lastColumn = columnEnd;
+                    if (rowEnd > lastRow) lastRow = rowEnd;
+                }
+            }
+
+            SheetRange range = new(0, 0, lastColumn, lastRow);
+            _usedRange = range;
+            return range;
+        }
+
+        init => _usedRange = value;
+    }
+
+    private SheetRange? _usedRange;
+
+    /// <summary>
+    /// The block the sheet actually prints: its used range, widened for overflowing text.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Distinct from <see cref="UsedRange"/> because Calc's own print-area search widens the
+    /// range it found before paginating it: a string too wide for its column spills into the
+    /// empty cells beside it and all of it is printed, so the printed area is wider than the
+    /// area holding cells (<c>ScTable::ExtendPrintArea</c>,
+    /// <c>sc/source/core/data/table1.cxx:2127</c>). On <c>xls-features.xls</c> that is the
+    /// difference between three pages and the four LibreOffice prints.
+    /// </para>
+    /// <para>
+    /// Only when the sheet declares no print range of its own. A declared range is honoured as
+    /// written, and Calc agrees: it widens only the axis the search chose, which is neither of
+    /// them once the range came from the file.
+    /// </para>
+    /// </remarks>
+    public SheetRange PrintedRange
+    {
+        get
+        {
+            if (_printedRange is { } cached) return cached;
+
+            SheetRange used = UsedRange;
+            SheetRange printed = used.IsValid && Setup.PrintAreas.Count == 0
+                ? used with { LastColumn = SheetTextOverflow.ExtendedLastColumn(this, used) }
+                : used;
+
+            _printedRange = printed;
+            return printed;
+        }
+    }
+
+    private SheetRange? _printedRange;
+
+    /// <summary>The cell at a position, or null when the sheet has nothing there.</summary>
+    /// <remarks>
+    /// Indexed on first use rather than walked, because a page asks this once per cell in its
+    /// block and the rows are a list: walking would make drawing a page quadratic in the sheet's
+    /// height.
+    /// </remarks>
+    /// <param name="row">The zero-based row.</param>
+    /// <param name="column">The zero-based column.</param>
+    public ContentTableCell? CellAt(int row, int column)
+    {
+        _index ??= BuildIndex();
+        return _index.GetValueOrDefault((row, column));
+    }
+
+    private Dictionary<(int Row, int Column), ContentTableCell>? _index;
+
+    private Dictionary<(int, int), ContentTableCell> BuildIndex()
+    {
+        Dictionary<(int, int), ContentTableCell> index = [];
+        foreach (ContentTableRow row in (Cells?.Children ?? []).OfType<ContentTableRow>())
+        {
+            foreach (ContentTableCell cell in row.Children.OfType<ContentTableCell>())
+                index[(cell.Row, cell.Column)] = cell;
+        }
+        return index;
+    }
+}

@@ -49,7 +49,7 @@ public sealed class SpreadsheetReader : IDocumentReader
         return format switch
         {
             DocumentFormat.Ods or DocumentFormat.Ots or DocumentFormat.Fods
-                => new OdsReader().Read(source, format),
+                => new OdsReader().ReadSpreadsheet(source, format),
 
             DocumentFormat.Xlsx or DocumentFormat.Xlsm or DocumentFormat.Xltx or DocumentFormat.Xltm
                 => Ooxml.XlsxReader.Read(source, format),
