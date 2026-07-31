@@ -274,7 +274,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             {
                 cells.Add(new PageTableCell
                 {
-                    Paragraphs = Convert(fonts, [.. cell.Paragraphs]),
+                    Blocks = Convert(fonts, [.. cell.Paragraphs]),
                     Column = cell.Column,
                     ColumnSpan = cell.ColumnSpan,
                     RowSpan = cell.RowSpan,

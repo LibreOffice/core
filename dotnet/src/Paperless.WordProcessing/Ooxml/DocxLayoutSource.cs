@@ -84,14 +84,33 @@ public sealed partial class DocxLayoutSource
     }
 
     /// <summary>
-    /// Reads a flow's paragraphs only: a header, a footer, or the inside of a cell.
+    /// Reads a table cell's blocks, tables included.
     /// </summary>
-    /// <param name="element">The element whose block-level children to read.</param>
     /// <remarks>
-    /// Paragraphs only, because a flow is laid out into a fixed rectangle by <see cref="FlowLayouter"/>,
-    /// which stacks paragraphs and knows nothing of grids. A table inside a header or inside another cell
-    /// is therefore skipped — recorded as a gap in this library's TODO.
+    /// Unlike <see cref="ReadFlow"/>, which is for a header or a footer, a cell keeps its tables: a table
+    /// inside a cell is how a nested table is written, and <see cref="FlowLayouter"/> lays one out. The two
+    /// differ only in the list they fill, which is what the generic walk is for.
     /// </remarks>
+    /// <param name="element">The cell element.</param>
+    public List<PageBlock> ReadCell(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+
+        List<PageBlock> blocks = [];
+        Walk(element, blocks, depth: 0);
+        return blocks;
+    }
+
+    /// <summary>
+    /// Reads a flow's paragraphs only: a header or a footer.
+    /// </summary>
+    /// <remarks>
+    /// Paragraphs only, unlike <see cref="ReadCell"/>. A header <em>could</em> hold a table — the layouter
+    /// places one either way — but no reader has been shown to need it, and dropping one here is a smaller
+    /// wrong answer than the alternative was: a table stacked into a header as loose paragraphs would give
+    /// the header a height no table has and push the body text down by it.
+    /// </remarks>
+    /// <param name="element">The element whose block-level children to read.</param>
     public List<PageParagraph> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);

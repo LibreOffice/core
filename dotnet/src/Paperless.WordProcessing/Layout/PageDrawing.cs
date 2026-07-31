@@ -93,7 +93,8 @@ public static class PageDrawing
     {
         if (flow is null || flow.IsEmpty) return;
 
-        DrawLines(flow.Area, flow.Lines, flow.Paragraphs, sink);
+        DrawLines(flow.Area, flow.Lines, flow.Blocks, sink);
+        foreach (PlacedTable table in flow.Tables) DrawTable(table, sink);
     }
 
     /// <summary>

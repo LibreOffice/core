@@ -31,12 +31,15 @@ public static class TableLayouter
     /// Where the table's top-left corner goes, in page coordinates. Its left indent is applied here rather
     /// than by the caller, so a caller only has to know where the body area starts.
     /// </param>
+    /// <param name="nesting">
+    /// How many tables enclose this one, so that a file claiming absurd nesting stops rather than recursing.
+    /// </param>
     /// <returns>
     /// The cells with page-coordinate rectangles, and each row's height in order — the caller needs the
     /// heights to decide where the table ends and which rows fit on the page.
     /// </returns>
     public static (List<PlacedTableCell> Cells, List<Length> RowHeights) LayOut(
-        PageTable table, DocPoint origin)
+        PageTable table, DocPoint origin, int nesting = 0)
     {
         ArgumentNullException.ThrowIfNull(table);
 
@@ -57,14 +60,13 @@ public static class TableLayouter
                 Length inner = width - cell.Padding.Horizontal;
                 PlacedFlow? content = inner > Length.Zero
                     ? FlowLayouter.LayOut(
-                        cell.Paragraphs,
+                        cell.Blocks,
                         new DocRect(Length.Zero, Length.Zero, inner, Length.Zero),
-                        Length.Zero)
+                        Length.Zero,
+                        nesting)
                     : null;
 
-                Length text = content is null || content.Lines.Count == 0
-                    ? Length.Zero
-                    : content.Lines[^1].Top + content.Lines[^1].Box.Height;
+                Length text = content is null ? Length.Zero : FlowLayouter.Extent(content);
 
                 int last = Math.Min(row + Math.Max(1, cell.RowSpan), rows) - 1;
                 measured.Add(new Measured(row, last, cell, width, content, text));
@@ -149,13 +151,37 @@ public static class TableLayouter
             moved.Add(cell with
             {
                 Area = Shift(cell.Area, dx, dy),
-                Content = cell.Content is null
-                    ? null
-                    : cell.Content with { Area = Shift(cell.Content.Area, dx, dy) },
+                Content = ShiftFlow(cell.Content, dx, dy),
             });
         }
 
         return moved;
+    }
+
+    /// <summary>
+    /// Moves a cell's whole content: its rectangle, and any table nested inside it.
+    /// </summary>
+    /// <remarks>
+    /// The lines need no attention — they are positioned relative to the flow's rectangle, so moving the
+    /// rectangle takes them along. A nested table is the exception and the reason this exists: its cells
+    /// carry page coordinates rather than flow-relative ones, so they have to be moved by the same amount
+    /// explicitly. Missing that leaves a nested table wherever the pre-layout pass put it — which is near
+    /// the page's top-left corner, since a table is laid out once at the origin and placed later.
+    /// </remarks>
+    private static PlacedFlow? ShiftFlow(PlacedFlow? flow, Length dx, Length dy)
+    {
+        if (flow is null) return null;
+        if (dx == Length.Zero && dy == Length.Zero) return flow;
+
+        return flow with
+        {
+            Area = Shift(flow.Area, dx, dy),
+            Tables = [.. flow.Tables.Select(table => table with
+            {
+                Area = Shift(table.Area, dx, dy),
+                Cells = Offset(table.Cells, dx, dy),
+            })],
+        };
     }
 
     private static DocRect Shift(DocRect area, Length dx, Length dy)
@@ -186,14 +212,20 @@ public static class TableLayouter
                 _ => Length.Zero,
             };
 
-        return cell.Content with
-        {
-            Area = new DocRect(
-                area.X + padding.Left,
-                area.Y + padding.Top + offset,
-                area.Width - padding.Horizontal,
-                height > Length.Zero ? height : Length.Zero),
-        };
+        DocRect placed = new(
+            area.X + padding.Left,
+            area.Y + padding.Top + offset,
+            area.Width - padding.Horizontal,
+            height > Length.Zero ? height : Length.Zero);
+
+        // From the origin the flow was laid out at to where the cell actually is.
+        PlacedFlow moved = ShiftFlow(
+            cell.Content,
+            placed.X - cell.Content.Area.X,
+            placed.Y - cell.Content.Area.Y)!;
+
+        // The height comes from the cell rather than from the content, since the row may be taller.
+        return moved with { Area = placed };
     }
 
     /// <summary>Where each grid column starts, measured from the table's left edge.</summary>

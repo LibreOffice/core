@@ -155,8 +155,13 @@ public sealed record PageTableRow
 /// </remarks>
 public sealed record PageTableCell
 {
-    /// <summary>The paragraphs inside the cell, in order.</summary>
-    public required IReadOnlyList<PageParagraph> Paragraphs { get; init; }
+    /// <summary>The blocks inside the cell, in order.</summary>
+    /// <remarks>
+    /// Blocks rather than paragraphs, because a cell can hold a table — which is how every one of the four
+    /// formats writes a nested table. A cell's content goes through <see cref="FlowLayouter"/>, the same
+    /// path a header takes, so anything a header can hold a cell can hold.
+    /// </remarks>
+    public required IReadOnlyList<PageBlock> Blocks { get; init; }
 
     /// <summary>The grid column the cell starts at, counted from zero.</summary>
     public int Column { get; init; }

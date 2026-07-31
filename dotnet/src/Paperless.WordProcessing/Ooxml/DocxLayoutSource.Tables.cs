@@ -136,7 +136,7 @@ public sealed partial class DocxLayoutSource
             cells.Add(new PendingCell(
                 new PageTableCell
                 {
-                    Paragraphs = ReadFlow(child),
+                    Blocks = ReadCell(child),
                     Column = column,
                     ColumnSpan = span,
                     Padding = Padding(Word.Child(cellProperties, "tcMar"), tablePadding),

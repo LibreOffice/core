@@ -429,9 +429,20 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.
-- [ ] A table inside a cell, and a table inside a header. Both are legal and neither is common; a flow is
-      laid out by `FlowLayouter`, which stacks paragraphs and knows nothing of grids, so a nested table is
-      currently dropped rather than drawn.
+- [x] A table inside a cell, for ODF and DOCX. A cell holds *blocks* rather than paragraphs and
+      `FlowLayouter` places a table among its lines, so a cell's content is exactly what a header's is —
+      which is what made this a small change rather than a second layout path. The subtle part is that a
+      nested table's cells carry page coordinates while a flow's lines carry flow-relative ones, so moving a
+      cell has to move the tables inside it explicitly; forgetting it leaves the inner table near the page's
+      top-left corner, where the pre-layout pass built it.
+- [ ] A table inside a cell for DOC and RTF. Both express nesting through the paragraph rather than the
+      markup — `sprmPItap` and `\itap` give a depth, and an inner table's cells end at paragraph marks
+      rather than at U+0007 — so their layout assemblers work one level at a time and drop the inner table.
+      The extraction pass already nests in both; it is the layout assembler that does not.
+      `table-nested.doc` and `table-nested.rtf` are in the corpus for closing it against.
+- [ ] A table inside a header. The layouter places one; no reader passes one, because `ReadFlow` collects
+      paragraphs only. Dropping it is the smaller wrong answer: stacking a table's cells into a header as
+      loose paragraphs would give the header a height no table has and push the body text down by it.
 - [ ] `w:hRule="exact"`, the one row height that really is a height: it clips its content rather than
       growing. Every other spelling in every format is a floor, which is what `PageTableRow.MinHeight` is.
 - [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read

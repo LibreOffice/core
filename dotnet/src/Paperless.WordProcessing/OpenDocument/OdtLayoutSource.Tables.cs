@@ -202,13 +202,13 @@ public sealed partial class OdtLayoutSource
             int repeat = Repeat(child, "number-columns-repeated");
 
             string? styleName = child.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
-            List<PageParagraph> paragraphs = ReadFlow(child);
+            List<PageBlock> blocks = ReadCell(child);
 
             for (int i = 0; i < repeat && column < PageTable.MaxColumns; i++)
             {
                 cells.Add(new PageTableCell
                 {
-                    Paragraphs = paragraphs,
+                    Blocks = blocks,
                     Column = column,
                     ColumnSpan = span,
                     RowSpan = rowSpan,

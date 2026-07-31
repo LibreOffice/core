@@ -197,25 +197,34 @@ public readonly record struct PlacedLine(
 /// header and a cell.
 /// </para>
 /// <para>
-/// Its own paragraph list rather than an index into the body's, because each of the three <em>is</em> a
+/// Its own block list rather than an index into the body's, because each of the three <em>is</em> a
 /// separate flow: a header's paragraphs are not the document's body text, and a
 /// <see cref="PlacedLine.ParagraphIndex"/> pointing into the body would name the wrong paragraph. Two
 /// pages sharing one header share this whole object.
 /// </para>
+/// <para>
+/// A flow holds tables as well as lines, because all three of the things it models can contain one: a
+/// table inside a cell is how every format writes a nested table, and a table inside a header is how a
+/// two-part running head is usually laid out. What a flow does <em>not</em> do is paginate — a nested table
+/// that outgrows its cell overflows rather than splitting, since a cell belongs to its row.
+/// </para>
 /// </remarks>
 public sealed record PlacedFlow
 {
-    /// <summary>The paragraphs the lines index into.</summary>
-    public required IReadOnlyList<PageParagraph> Paragraphs { get; init; }
+    /// <summary>The blocks the lines index into.</summary>
+    public required IReadOnlyList<PageBlock> Blocks { get; init; }
 
     /// <summary>The lines, in order, positioned relative to the area's top.</summary>
     public required IReadOnlyList<PlacedLine> Lines { get; init; }
 
-    /// <summary>Where the furniture sits on the page.</summary>
+    /// <summary>The tables inside the flow, with page-coordinate rectangles.</summary>
+    public IReadOnlyList<PlacedTable> Tables { get; init; } = [];
+
+    /// <summary>Where the flow sits on the page.</summary>
     public required DocRect Area { get; init; }
 
     /// <summary>True when nothing was laid out.</summary>
-    public bool IsEmpty => Lines.Count == 0;
+    public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }
 
 /// <summary>
