@@ -20,9 +20,9 @@ of `r:id`s. Text bodies go through a reader shared with the other two OOXML fami
 (`Paperless.Ooxml/DrawingML/DrawingTextBody.cs`), because a text body is identical in a deck, a
 spreadsheet drawing and a Word shape — only the element wrapping it is namespaced per family.
 
-Not yet: the *formatting* half of the inheritance chain (extraction needs only enough of it to
-attribute text and resolve bullets; rendering needs fill, line and font), charts, and everything
-below.
+Not yet: the *rendering* half of the inheritance chain — fill, line, size, colour and typeface.
+Extraction resolves the half it can observe: bullets per level, and now emphasis, baseline and
+language per level through the `a:defRPr` chain. Also not yet: charts, and everything below.
 
 **Done: PPT extraction** (`ppt`/`pot`/`pps`), via `MsBinary/` here and the Escher reader in
 `Paperless.MsBinary`. Produces the same content tree as the ODF path for the same deck —
@@ -30,8 +30,15 @@ below.
 identical sections, so a divergence names which reader is wrong. Metadata comes from the OLE
 property sets, not from anything PowerPoint-specific.
 
-Not yet: the placeholder inheritance chain against the master slide (extraction does not need
-it, slide rendering does), and everything below.
+**Done: the master style sheet** (`MsBinary/PptStyleSheet.cs`). A slide states only what differs
+from its master, so the eight-level `TxMasterStyleAtom` set is not a rendering nicety — without it
+a PowerPoint title comes out unemphasised. `ppt-features.ppt` now agrees with `slides-features.odp`
+on emphasis as well as on text, order and the hidden flag.
+
+Not yet: the *shape* half of the placeholder relationship — `SlideAtom`'s eight layout placeholder
+ids, which say which master shape a slide placeholder stands in for. Extraction does not need it
+because a PPT text run names its master style directly, in its `TextHeaderAtom`; rendering will,
+for position and fill.
 
 ## Document model
 
@@ -61,8 +68,19 @@ resolved **per text level** for list styles (`lvlXpPr`).
       `Ooxml/PptxPlaceholders.cs`, ported rung for rung from `oox/source/ppt/pptshape.cxx:715-820`.
 - [x] Per-level paragraph-property inheritance, as far as extraction can observe it (the bullet).
       `Ooxml/PptxTextStyles.cs` builds the chain; `DrawingTextBody` walks it per level.
-- [ ] Per-level *character* inheritance — `defRPr` size, colour, typeface. Needed by rendering,
-      invisible to extraction, so untouched.
+- [x] Per-level *character* inheritance, as far as extraction can observe it: `defRPr`'s `b`,
+      `i`, `u`, `strike`, `baseline` and `lang`, resolved attribute by attribute over the same
+      chain the bullet uses. `DrawingTextBody.EmphasisOf` walks it.
+- [ ] Per-level character inheritance of `sz`, the fill colour and the `a:latin`/`a:ea`/`a:cs`
+      typefaces. Deliberately left: nothing in the content tree reports any of them, so there is
+      no measurement that would tell a correct implementation from a plausible one. They change
+      how the text looks and where it sits, not what it says. The walk is already there — adding
+      them is reading three more attributes off the same elements — so this is waiting on the
+      renderer, not on research.
+- [ ] The shape's own text style, which sits between the master's list style and the body's
+      (`oox/source/drawingml/textparagraph.cxx:63`). It comes from the theme's `txDef` and the
+      shape style's `a:fontRef`, so it needs theme resolution; neither property it carries
+      (typeface, colour) is one extraction reports.
 - [ ] Theme default shape/line/text properties (`a:objectDefaults`)
 - [ ] Background inheritance, including `showMasterSp`
 
@@ -102,6 +120,33 @@ presentation style for that outline level on import. So the chain has to consult
 master placeholder's *paragraphs* as well as its `a:lstStyle`, or a LibreOffice-authored deck
 inherits nothing while a PowerPoint-authored one inherits correctly.
 `PptxTextStyles.FromPlaceholder` does both, `a:lstStyle` first.
+
+**A master placeholder's *character* defaults are somewhere else again, and LibreOffice does not
+read them either.** The same exporter writes the master title's boldness on the demonstration
+paragraph's `a:rPr` and `a:endParaRPr`, not on an `a:pPr/a:defRPr` — and `ApplyMasterTextStyle`
+takes only `TextParagraphProperties::getTextCharacterProperties`, which is the `defRPr`
+(`oox/source/drawingml/textbody.cxx:183`). So a LibreOffice-authored deck's master character
+defaults reach nothing on either side. That is not a loss, because the same exporter also states
+every property on every slide run, but it does mean the corpus cannot test character inheritance:
+`deck-features.pptx`'s master says `b="1"` on its title placeholder's run and the inheritance is
+never consulted. The measurement had to come from PowerPoint-authored files instead.
+
+**Character properties inherit attribute by attribute, not element by element.** A run stating
+`b="1"` and nothing else has not cancelled the italic its level's `defRPr` gives it —
+LibreOffice's `assignUsed` applies the master's list style, then the shape's text style, then the
+body's list style, then the paragraph's `defRPr`, then the run, each overwriting only what it sets
+(`oox/source/drawingml/textparagraph.cxx:51-67`, `textrun.cxx:80`). Merging whole property sets
+gives the right answer on every run that states everything, which is every run LibreOffice writes,
+and the wrong answer on the PowerPoint-authored files where it matters.
+
+Measured over all 389 decks in `sd/qa/unit/data/pptx/`: resolving the chain changed **eight** of
+them, always by gaining emphasis, never by losing text. Every change was checked against
+LibreOffice's own PDF text layer and every one agrees — `bnc904423.pptx`'s three lines, whose
+`p:txStyles` states the boldness once for the whole deck; `ShapeLineProperties.pptx`'s two bold
+lines, where the third line is *not* bold in the reference and Paperless correctly leaves it
+alone; `tdf95932.pptx`, `tdf120028.pptx`, `tdf132282.pptx`, `tdf114848.pptx`,
+`slide-sections.pptx` and `bnc870233_1.pptx`, whose test text is literally labelled "Red, bold"
+and "Blue, italic".
 
 **An empty paragraph draws no bullet and consumes no number.** The blank line an author leaves
 between two items is still an `a:p` and still inherits the level's bullet. Emitting it produced a
@@ -157,9 +202,21 @@ table asserted, not by the corpus.
       judgement: the cache can be stale, and the live values are in an embedded workbook that
       would have to be opened through `Paperless.Spreadsheets` — a dependency this library does
       not have and should not acquire for extraction). Decide when the chart renderer forces it.
-- [ ] Comments (`p:cmLst` in a `comments` part, authors in `commentAuthors.xml`). Cheap, and the
-      content tree already has `SectionKind.Comment` for them; not done because no corpus deck
-      has one and an unmeasured reader is a guess.
+- [x] Comments — `p:cmLst` in a part reached by relationship **from the slide**, and the author
+      names in a second part reached from the *presentation*. `Ooxml/PptxComments.cs`. It was
+      cheap once there was a deck to measure against, and building that deck
+      (`comment-deck.pptx`) is what refuted the guess: a comment does not carry its author's
+      name, it carries an id. It also carries no runs — a two-paragraph comment is one `p:text`
+      with a newline in it. An id resolving to nobody leaves the name null; LibreOffice invents
+      "Anonymous" (`oox/source/ppt/comments.cxx:70`), which would claim the file said something
+      it did not. Measured against the three decks in `sd/qa/unit/data/pptx/` that carry a
+      comment list — `pres-with-notes.pptx`, `tdf89064.pptx`, `tdf91060.pptx`: authors resolve on
+      all three, including `tdf89064.pptx`, whose author really is called "Anonymous".
+- [ ] PowerPoint 365's "modern" comments, in `ppt/comments/modernComment_*.xml` under a `p188:`
+      vocabulary with the authors in `ppt/authors.xml`. LibreOffice 24.2 does not read them
+      either, and a deck carrying them also carries the legacy `p:cmLst` for compatibility, so
+      nothing observable is lost today. Worth revisiting when a deck appears that has only the
+      modern form.
 - [ ] Embedded fonts (`p:embeddedFontLst`) — rendering only.
 - [ ] `p:custShowLst`; header/footer visibility (`p:hf`) — neither adds text.
 
@@ -179,15 +236,20 @@ table asserted, not by the corpus.
       record recognised as the group rather than as a phantom empty shape in front of it
 - [ ] `TextSpecInfoAtom` — per-run language and spelling state. Read only far enough to be
       skipped. Extraction does not need it; `ContentRun.Language` would.
-- [ ] Master/slide relationships. `SlideAtom` states a master persist id and the layout's eight
-      placeholder ids, and the masters' `TxMasterStyleAtom` records hold the per-outline-level
-      character and paragraph defaults. Everything a slide does *not* state falls through to
-      them, which is why `ppt-features.ppt` reports its title as unemphasised where the ODF
-      deck reports it bold: the title's own `StyleTextPropAtom` states a mask of `0x040000`,
-      colour alone, and the boldness lives in the master's `TxMasterStyleAtom` instance 0. The
-      equality test against the ODF deck compares text, order and the hidden flag, and passes;
-      it deliberately does not compare emphasis for this reason. Building the eight-level style
-      sheet is the next piece of work here and is what rendering will need anyway.
+- [x] Master style sheets (`MsBinary/PptStyleSheet.cs`). A slide's `SlideAtom` names a master by
+      **slide** id — masters number themselves from `0x80000000`, so the field is matched against
+      the master list's persist atoms and not resolved through the persist directory
+      (`svdfppt.cxx:2520`) — and that master's `TxMasterStyleAtom` records hold the per-level
+      character and paragraph defaults. `ppt-features.ppt`'s title states a mask of `0x040000`,
+      its colour and nothing else; its boldness is instance 0's level-0 flags word. The equality
+      test against the ODF deck now compares emphasis as well as text, order and the hidden flag.
+      What is *not* done here: the eight layout placeholder ids in the same atom, which rendering
+      needs for position and fill.
+- [ ] The rest of what the style sheet already parses. `PptCharacterLevel` carries the font index,
+      size, colour and escapement because the record cannot be walked without decoding them; only
+      the flags word is used. Colour is a raw `0xTTBBGGRR` where a non-zero top byte means a
+      **colour-scheme index** rather than a literal, so it needs the page's `ColorSchemeAtom` —
+      which is per slide, not per master, and is the reason it was not resolved here.
 - [ ] The `Environment` container's `FontCollection`, so a run's `cfTypeface` index resolves to
       a face name rather than to nothing.
 - [ ] `OutlineTextRefAtom` is implemented but has **no corpus coverage**, and cannot get any
@@ -203,6 +265,46 @@ table asserted, not by the corpus.
       nothing here checks it yet, so an encrypted deck reads as a tree of garbage rather than
       raising `PasswordRequiredException`. LibreOffice does not check it either; its PPT filter
       simply fails later, which is why there is no C++ line to cite for the second value.
+
+### What the master style sheet cost, and what it bought
+
+**The first level of a `TxMasterStyleAtom` uses a different field order from every later level.**
+`PPTParaSheet::Read` has two branches on a `bFirst` flag (`svdfppt.cxx:3925-4010`): on the first
+level, alignment is mask bit `0x0F00` and the tab-stop array is `0x200000`; on every later one
+they are `0x0800` and `0x100000`, with `0x200000` becoming a two-byte text direction. So the two
+layouts differ in **size**, not merely in meaning, and reading every level the later way consumes
+ten bytes too few on a level-0 record that states tab stops — after which the character mask is
+read out of the middle of the tab-stop array and the boldness that comes back is whatever the
+bytes happened to say. That cost the most time here. The check that catches it in one line: the
+levels must consume the record's declared length exactly, and a Python walk of
+`ppt-features.ppt`'s eight atoms consuming 270, 270, 270, 270, 222, 222, 222, 222 of 270×4 and
+222×4 was what confirmed the layout before a line of C# was written.
+
+**Two more, cheaper but equally silent.** The four instances above `TextInShape` prefix *every*
+level with an unexplained word and never take the first-level layout (`svdfppt.cxx:4253-4260`).
+And a level inherits from the level above it only for the five low instances
+(`svdfppt.cxx:4247`); the four high ones are initialised as a copy of the body or title sheet at
+the moment their atom is met, which is why the atoms have to be read in the order the file writes
+them rather than gathered into a map first.
+
+**Two bugs in the existing reader fell out of measuring the result** over the 33 binary decks in
+`sd/qa/unit/data/`:
+
+- **A paragraph property run is not one paragraph.** Its count is a *character* count, and a
+  writer may cover several paragraphs with one run; LibreOffice clones the property set at every
+  carriage return inside the count (`svdfppt.cxx:5081-5090`). Pairing the *n*th run with the
+  *n*th paragraph lost the depth and the bullet of every paragraph after such a run.
+  `hanging-indent.ppt` and `tdf166030.ppt` each write two runs for three paragraphs, and their
+  third paragraph came out unindented and unbulleted where LibreOffice renders it at level two
+  with a bullet. Both now match.
+- **A bullet the paragraph does not state falls through to the master.** The mask's low four bits
+  are the *bullet flags*; a paragraph whose mask does not include bit 0 has said nothing about
+  whether it draws one. `fdo68594.ppt` gained the four bullets it was missing (the reference PDF
+  shows five, Paperless had one) and `indent_multiple_spacings.ppt` its three.
+
+Net effect over those 33 decks: 172 changed lines, all of them gains, none a loss of text. The
+emphasis changes were checked against LibreOffice's own PDF — `tdf168786.ppt`'s rows of
+underscores are `LiberationSans-Bold` in the reference and were being reported unemphasised.
 
 ### What PPT extraction was measured against
 
@@ -275,8 +377,20 @@ Two reference artefacts worth knowing before chasing them:
       shows; confirm against the reference.
 - [ ] Are connectors worth routing properly, or is a straight line acceptable initially?
 - [ ] Should a master's *non-placeholder* shapes — a logo, a running strapline — be extracted?
-      They are genuinely visible on every slide, and neither the ODP path nor this one reads
-      them, on the grounds that repeating a master's text once per slide is worse than losing it
-      once. `showMasterSp` on the slide and on the layout decides visibility, so the machinery to
-      do it properly exists; what is missing is a decision about what a caller indexing a mixed
-      corpus actually wants.
+      Half of this is now measured, and it is the half that was in doubt. **They are visible.**
+      LibreOffice's own PDF export renders `master-slides.pptx`'s "Copyright © SUSE",
+      `cshapes.pptx`'s "© Novell, Inc. All rights reserved." and `tdf149865.pptx`'s
+      "Copyright © SUSE 2021" onto the slide, and Paperless reports none of the three: that text
+      is simply lost, not deferred.
+      **And they are rare.** Scanning all 389 decks in `sd/qa/unit/data/pptx/` for a master
+      `p:sp` with no `p:ph` and non-empty `a:t`: six decks match, and three of those carry only
+      the `‹#›` slide-number glyph. Four have real strapline text — the three above plus
+      `slide-sections.pptx`, whose master strapline LibreOffice renders on exactly one of its
+      seven pages, so even "visible on every slide" is not reliably true.
+      So the trade is now numbers rather than intuition: extracting costs a repeated line on
+      ~1% of decks, not extracting loses a line on the same ~1%. That is small enough either way
+      that the deciding factor should be what a caller wants, and the remaining question is only
+      that. `showMasterSp` on the slide and on the layout decides visibility, and neither of the
+      four decks states it, so it is not the discriminator it looks like — the machinery is there
+      but real files leave it at its default and rely on the shape being off-slide or invisible
+      instead.

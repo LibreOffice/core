@@ -215,6 +215,17 @@ public sealed partial class OdfContentReader
                     return;
             }
         }
+        else if (ns == OdfNamespaces.OfficeExt && name == "annotation")
+        {
+            // A comment on a slide. ODF's own office:annotation belongs inside a paragraph or a
+            // cell, so Impress writes its page-level comments in OpenOffice.org's extension
+            // namespace instead (xmloff/source/draw/sdxmlexp.cxx:2647) and reads either back
+            // (ximppage.cxx:278). Recognising only the ODF-namespaced one is not a silent loss:
+            // the fallback below descends into it, and every slide comment's text lands in the
+            // slide's own paragraphs where nothing distinguishes it from the slide.
+            HoistAnnotation(element);
+            return;
+        }
         else if (ns == OdfNamespaces.Presentation)
         {
             // presentation:notes and presentation:settings are handled by the presentation

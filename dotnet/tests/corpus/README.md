@@ -95,7 +95,12 @@ The stem is `deck-features` rather than `slides-features` because `soffice --con
 output after the input stem alone: converting both from a shared stem would have made one silently
 overwrite the other.
 
-| `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, and emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order |
+| `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order, and a title whose boldness is stated nowhere on the slide because it lives in the master's `TxMasterStyleAtom` |
+| `annotated-slides.odp` | ODP | Two slides, the first carrying two review comments by two different authors, the first comment having two paragraphs. It exists because no other corpus deck has a comment at all: Impress writes a page-level comment as `officeooo:annotation` in the OpenOffice.org extension namespace rather than as ODF's own `office:annotation`, and a reader that knows only the latter does not lose the text — it files it as slide content, where nothing tells it apart |
+| `comment-deck.pptx` | PPTX | The same deck converted, so slide comments are covered through PresentationML as well. Adds what only PPTX has: a `comments` part reached by relationship *from the slide*, a `commentAuthors.xml` reached from the presentation, a comment that names only an author **id**, and a two-paragraph comment carried as a single `p:text` with a newline in it |
+
+The two stems differ for the same reason `deck-features` does: `soffice --convert-to` would have
+had them overwrite each other's output.
 
 ### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 

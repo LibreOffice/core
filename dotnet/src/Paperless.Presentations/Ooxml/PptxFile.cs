@@ -40,6 +40,8 @@ internal sealed class PptxFile : IDisposable
     private readonly Dictionary<string, Dictionary<string, OpcXml.Relationship>> _relationships =
         new(StringComparer.Ordinal);
 
+    private Dictionary<string, string>? _commentAuthors;
+
     private PptxFile(OpcPackage package, IPackagePart mainPart, XElement presentation)
     {
         _package = package;
@@ -74,6 +76,17 @@ internal sealed class PptxFile : IDisposable
 
     /// <summary>The deck's slides, in presentation order.</summary>
     public IReadOnlyList<PptxSlide> Slides { get; }
+
+    /// <summary>
+    /// The deck's comment authors, by the id a comment refers to them with.
+    /// </summary>
+    /// <remarks>
+    /// One list for the whole deck, in a part of its own: a comment on a slide states only an
+    /// id, so without this every comment in the deck is anonymous. Read once and only when
+    /// asked for, because most decks have no comments and then the part is absent.
+    /// </remarks>
+    public IReadOnlyDictionary<string, string> CommentAuthors
+        => _commentAuthors ??= PptxComments.ReadAuthors(this);
 
     /// <summary>The package, for reaching image and media parts.</summary>
     public IPackage Package => _package;
