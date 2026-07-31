@@ -198,6 +198,10 @@ internal sealed class PdfContentSink(
         Colour colour = Flatten(paint);
         if (colour.IsTransparent) return;
 
+        // Before anything is written, because the pen corrections below are computed against the
+        // widths the file will state and this is what supplies them when the face did not load.
+        fonts.Observe(run);
+
         string?[] texts = ClusterTexts(run);
         double size = run.FontSize.Points;
 
