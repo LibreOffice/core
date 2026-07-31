@@ -581,7 +581,8 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             endPoint == "localizations.json" ||
             endPoint == "uno-localizations.json")
         {
-            accessDetails = preprocessFile(request, response, requestDetails, message, socket);
+            accessDetails = preprocessFile(request, response, requestDetails, message,
+                                           endPoint == "cool.html" /* noCache */, socket);
             return true;
         }
 
@@ -1448,7 +1449,7 @@ void FileServerRequestHandler::replaceServiceRoot(const HTTPRequest& request,
 
 FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::preprocessFile(
     const HTTPRequest& request, http::Response& httpResponse, const RequestDetails& requestDetails,
-    std::istream& message, const std::shared_ptr<StreamSocket>& socket)
+    std::istream& message, bool noCache, const std::shared_ptr<StreamSocket>& socket)
 {
     const ServerURL cnxDetails(requestDetails);
 
@@ -1768,8 +1769,15 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     }
 
     httpResponse.set("Last-Modified", Util::getHttpTimeNow());
-    httpResponse.set("Cache-Control", "max-age=11059200");
-    httpResponse.set("ETag", COOLWSD_VERSION_HASH);
+    if (noCache) // critical to serve cool.html each time
+    {
+        httpResponse.set("Cache-Control", "no-store");
+    }
+    else
+    {
+        httpResponse.set("Cache-Control", "max-age=11059200");
+        httpResponse.set("ETag", COOLWSD_VERSION_HASH);
+    }
 
     httpResponse.add("X-Content-Type-Options", "nosniff");
     httpResponse.add("X-XSS-Protection", "1; mode=block");
