@@ -198,10 +198,10 @@ m4_ifelse(MOBILEAPP, [true],
         <progress id="mobile-progress-bar" class="progress-bar" value="0" max="99"></progress>
       </div>
 
-      <input id="insertgraphic" aria-labelledby="menu-insertgraphic" type="file" accept="image/*" tabindex="-1">
-      <input id="insertmultimedia" aria-labelledby="menu-insertmultimedia" type="file" accept="audio/*, video/*" tabindex="-1">
-      <input id="selectbackground" aria-labelledby="menu-selectbackground" type="file" accept="image/*" tabindex="-1">
-      <input id="comparedocuments" aria-labelledby="menu-comparedocuments" type="file" accept="application/*" tabindex="-1">
+      <input id="insertgraphic" aria-hidden="true" type="file" accept="image/*" tabindex="-1">
+      <input id="insertmultimedia" aria-hidden="true" type="file" accept="audio/*, video/*" tabindex="-1">
+      <input id="selectbackground" aria-hidden="true" type="file" accept="image/*" tabindex="-1">
+      <input id="comparedocuments" aria-hidden="true" type="file" accept="application/*" tabindex="-1">
     </dialog>
 
     <div id="main-document-content">
