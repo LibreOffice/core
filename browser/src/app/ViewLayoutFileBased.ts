@@ -230,6 +230,11 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 			const columnCount = Math.ceil((localX2 - startX) / tileSize);
 			const rowCount = Math.ceil((localY2 - startY) / tileSize);
 
+			// The rectangles sit at part indexes, while tiles are keyed by
+			// part number.
+			const part = app.map._docLayer.getPartFromIndex(i);
+			if (part < 0) continue;
+
 			this.pushTileGrid(
 				startX,
 				startY,
@@ -237,7 +242,7 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 				rowCount,
 				zoom,
 				tileSize,
-				i,
+				part,
 				added,
 			);
 		}

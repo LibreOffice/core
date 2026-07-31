@@ -31,7 +31,7 @@ class PreloadMapSection extends CanvasSectionObject {
 		var ctx = docLayer._painter._paintContext();
 
 		var zoom = Math.round(app.map.getZoom());
-		var part = docLayer._selectedPart;
+		var partIndex = docLayer._selectedPart;
 		var tileRanges = ctx.paneBoundsList.map(
 			RenderManager.pxBoundsToTileRange,
 			RenderManager,
@@ -80,11 +80,13 @@ class PreloadMapSection extends CanvasSectionObject {
 		tileRange.min.y = tileRange.min.y - Math.floor(viewHeight * enlargeY);
 		tileRange.max.y = tileRange.max.y + Math.floor(viewHeight * enlargeY);
 
+		// The bounds carry the part number tiles are keyed by, resolved from
+		// the index. An index outside the document gets the invalid part -1.
 		var preParts = (numParts - 1) / 2;
 		var partBounds = new Array(numParts);
 		for (var i = 0; i < partBounds.length; ++i) {
 			partBounds[i] = new cool.Bounds(tileRange.min, tileRange.max);
-			partBounds[i].part = part + i - preParts;
+			partBounds[i].part = docLayer.getPartFromIndex(partIndex + i - preParts);
 		}
 
 		// current view should be bigger vertically at least
@@ -142,7 +144,7 @@ class PreloadMapSection extends CanvasSectionObject {
 				}
 			}
 			// view rectangle
-			if (range.part == part) {
+			if (range.part == docLayer.getSelectedPart()) {
 				// viewport in tiles - not that accurate.
 				canvas.strokeStyle = 'rgba(0, 0, 0, 0.5)';
 				canvas.lineWidth = 1.0;

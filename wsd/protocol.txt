@@ -246,6 +246,24 @@ selectclientpart part=<partNumber>
 
     Informs the server that the client changed the selection state of <partNumber>.
 
+Part numbers of a presentation or drawing document are the pages' stable
+unique ids, not indexes into the page list. The ids carry no order:
+adjacent pages do not hold adjacent numbers, and arithmetic on an id
+never yields another page. To reach a neighbouring page, find the page's
+position in the status message's page list and take the id listed next to
+it. The status message lists each page's id under the name hash, in
+document order; a page keeps its id for the whole document session when
+other pages are moved, inserted or deleted. Because the tile cache keys carry the part number, the cached
+tiles of a page stay valid when the page order changes. The ids of the
+pages a mode addresses come from that mode's page list: the standard
+pages, the master pages or the notes pages. Every message that names a
+part uses these ids for such documents - the tile, tilecombine,
+setclientpart and selectclientpart requests, and the tile:, delta:,
+invalidatetiles:, setpart:, curpart: and status: (selectedpart) responses.
+The exceptions are the load message's part option and the getslide
+message, which keep indexes. Text and spreadsheet documents use plain
+part indexes throughout.
+
 moveselectedclientparts position=<positionNumber>
 
     Moves the selected parts to a new position.
@@ -259,7 +277,7 @@ status
 
 styles
 
-tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [id=<id>] [oldwid=<wireId>] [uniqueid=<slideUniqueId>]
+tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [id=<id>] [oldwid=<wireId>]
 
     Parameters are numbers except wireId which is an opaque string
     identifier unique to this tile.
@@ -269,13 +287,11 @@ tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<y
     for anything else. It is only useful to JS part and will break it
     if not returned in the response.
 
-    A preview request of a presentation or drawing document also
-    carries uniqueid, the unique id of the slide the preview asks
-    for, as listed for each slide in the status message under the
-    name hash. The slide is rendered from whichever part index it
-    holds at render time, so the picture is of that slide even if
-    the parts were renumbered after the request was sent. A preview
-    naming a slide that no longer exists is not rendered.
+    For a presentation or drawing document the part number is the
+    page's stable unique id. The page is rendered from whichever index
+    it holds at render time, so the picture is of that page even if
+    the pages were reordered after the request was sent. A request
+    naming a page that no longer exists is not rendered.
 
 tilecombine <parameters>
 
@@ -672,7 +688,8 @@ invalidatetiles: part=<partNumber> x=<x> y=<y> width=<width> height=<height> wid
 
     All parameters are numbers. Tells the client to invalidate any
     cached tiles for the document area specified (in twips), at any
-    zoom level.
+    zoom level. For a presentation or drawing document the part number
+    is the page's stable unique id, matching the part the tiles carry.
 
 invalidatetiles: EMPTY, <partNumber>, <mode>, wid=<wid>
 
@@ -709,6 +726,11 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
 
     Same as status: but issued whenever the document parts have updated significantly.
     status: implies document loading (deprecated, use loaded: instead). statusupdate: is just an update.
+
+    For a presentation or drawing document the selectedpart field of the
+    JSON payload carries the current page's stable unique id, and each
+    entry of the parts array carries its page's id under the name hash,
+    in document order.
 
 styles: {"styleFamily": ["styles in family"], etc. }
 
@@ -766,11 +788,6 @@ tile: part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<
 <binaryPngImage>
 
     The parameters from the corresponding 'tile' command.
-
-    A preview response of a presentation or drawing document also
-    carries uniqueid=<number>, the unique id of the slide the image
-    shows, as listed for each slide in the status message under the
-    name hash.
 
     WireId is a monotonically incrementing, unique reference to a
     state of the document on the server, and can be included by

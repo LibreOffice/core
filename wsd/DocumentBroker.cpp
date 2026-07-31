@@ -5342,12 +5342,6 @@ void DocumentBroker::handleTileRequest(const StringVector &tokens, bool forceKey
 
     TileDesc tile = TileDesc::parse(tokens);
     tile.setCanonicalViewId(session->getCanonicalViewId());
-
-    // Only a preview names a slide by unique id. The field has no meaning on ordinary tiles,
-    // so a value arriving on one is dropped.
-    if (!tile.isPreview())
-        tile.setUniqueId(0);
-
     tile.setVersion(++_tileVersion);
     const std::string tileMsg = tile.serialize();
     LOG_TRC("Tile request for " << tileMsg);

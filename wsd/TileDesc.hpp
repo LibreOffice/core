@@ -97,7 +97,6 @@ public:
         , _id(id)
         , _oldWireId(0)
         , _wireId(0)
-        , _uniqueId(0)
     {
         if (_canonicalViewId <= CanonicalViewId::Invalid ||
             _part < 0 ||
@@ -136,10 +135,6 @@ public:
     bool isForcedKeyFrame() const { return getOldWireId() == 0; }
     void setWireId(TileWireId id) { _wireId = id; }
     TileWireId getWireId() const { return _wireId; }
-    // The stable unique id of the slide a preview tile shows. Zero on
-    // non-preview tiles and when the document has no per-part identifiers.
-    uint64_t getUniqueId() const { return _uniqueId; }
-    void setUniqueId(uint64_t uniqueId) { _uniqueId = uniqueId; }
 
     bool operator==(const TileDesc& other) const
     {
@@ -302,8 +297,6 @@ public:
         if (_id >= 0)
         {
             oss << " id=" << _id;
-            if (_uniqueId != 0)
-                oss << " uniqueid=" << _uniqueId;
         }
 
         if (_imgSize > 0)
@@ -377,14 +370,11 @@ public:
 
         TileWireId oldWireId = 0;
         TileWireId wireId = 0;
-        uint64_t uniqueId = 0;
         for (std::size_t i = 0; i < tokens.size(); ++i)
         {
             if (tokens.getUInt32(i, "oldwid", oldWireId))
                 ;
             else if (tokens.getUInt32(i, "wid", wireId))
-                ;
-            else if (tokens.getUInt64(i, "uniqueid", uniqueId))
                 ;
             else
             {
@@ -403,7 +393,6 @@ public:
                         pairs[imgsize], pairs[id]);
         result.setOldWireId(oldWireId);
         result.setWireId(wireId);
-        result.setUniqueId(uniqueId);
 
         return result;
     }
@@ -429,7 +418,6 @@ private:
     int _id;
     TileWireId _oldWireId;
     TileWireId _wireId;
-    uint64_t _uniqueId;
 };
 
 /// One or more tile header.

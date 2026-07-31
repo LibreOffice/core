@@ -117,7 +117,7 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			var smile = win.document.querySelector('meta[name="previewSmile"]').content;
 			map.fire('tilepreview', {
 				id : '2000',
-				part : 1,
+				partIndex : 1,
 				tile: { src: smile }
 			});
 

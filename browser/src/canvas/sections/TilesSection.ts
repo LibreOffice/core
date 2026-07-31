@@ -180,7 +180,13 @@ export class TilesSection extends CanvasSectionObject {
 				activeLayout && activeLayout.type === 'ViewLayoutFileBased'
 					? (activeLayout as ViewLayoutFileBased)
 					: null;
-			const docRect = layout && layout.documentRectangles[tile.coords.part];
+			// The layout rectangles sit at part indexes, while the tile names
+			// its part by part number.
+			const partIndex = this.sectionProperties.docLayer.getIndexFromPart(
+				tile.coords.part,
+			);
+			const docRect =
+				layout && partIndex >= 0 && layout.documentRectangles[partIndex];
 			if (docRect) {
 				// tile.coords.x/y are page-local pixels. Set the tile position
 				// in twips by combining docRect.y1 (exact twips) with the
@@ -219,10 +225,15 @@ export class TilesSection extends CanvasSectionObject {
 					);
 					return;
 				}
-			} else {
+			} else if (partIndex >= 0) {
 				// Fallback before the layout has built rectangles.
 				const partHeightPixels = Math.round((this.sectionProperties.docLayer._partHeightTwips + this.sectionProperties.docLayer._spaceBetweenParts) * app.twipsToPixels);
-				tilePos.pY = tile.coords.part * partHeightPixels + tile.coords.y;
+				tilePos.pY = partIndex * partHeightPixels + tile.coords.y;
+			} else {
+				// The tile belongs to a page that is gone.
+				window.app.console.log(
+					'Skip painting the tile of a gone page: ' + tile.coords.key());
+				return;
 			}
 		}
 
@@ -283,7 +294,7 @@ export class TilesSection extends CanvasSectionObject {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public haveAllTilesInView(zoom?: number, part?: number, mode?: number, ctx?: any): boolean {
 		zoom = zoom || Math.round(this.map.getZoom());
-		part = part || this.sectionProperties.docLayer._selectedPart;
+		part = part || this.sectionProperties.docLayer.getSelectedPart();
 		ctx = ctx || this.sectionProperties.tsManager._paintContext();
 
 		var allTilesFetched = true;
@@ -599,7 +610,7 @@ export class TilesSection extends CanvasSectionObject {
 		}
 
 		var zoom = Math.round(this.map.getZoom());
-		var part = this.sectionProperties.docLayer._selectedPart;
+		var part = this.sectionProperties.docLayer.getSelectedPart();
 		var mode = app.activeDocument.activeModes[0];
 
 		if (this.sectionProperties.tsManager.waitForTiles()) {
@@ -744,7 +755,10 @@ export class TilesSection extends CanvasSectionObject {
 						var layout = app.activeDocument.activeLayout;
 						if (layout && layout.type === 'ViewLayoutFileBased') {
 							var ratio = RenderManager.tileSize * relScale / app.tile.size.y;
-							var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(coords.part, ratio);
+							// The layout rectangles sit at part indexes, while
+							// the tile names its part by part number.
+							var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(
+								app.map._docLayer.getIndexFromPart(coords.part), ratio);
 							if (rect) {
 								tilePos.x = rect.x + tilePos.x;
 								tilePos.y = rect.y + tilePos.y;
@@ -931,7 +945,7 @@ export class TilesSection extends CanvasSectionObject {
 		var ctx = this.sectionProperties.tsManager._paintContext();
 		var docLayer = this.sectionProperties.docLayer;
 		var zoom = Math.round(this.map.getZoom());
-		var part = docLayer._selectedPart;
+		var part = docLayer.getSelectedPart();
 		var mode = app.activeDocument.activeModes[0];
 		var splitPos = ctx.splitPos;
 
@@ -1037,7 +1051,10 @@ export class TilesSection extends CanvasSectionObject {
 					var layout = app.activeDocument.activeLayout;
 					if (layout && layout.type === 'ViewLayoutFileBased') {
 						var ratio = RenderManager.tileSize * relScale / app.tile.size.y;
-						var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(tile.coords.part, ratio);
+						// The layout rectangles sit at part indexes, while the
+						// tile names its part by part number.
+						var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(
+							app.map._docLayer.getIndexFromPart(tile.coords.part), ratio);
 						if (rect) {
 							tileCoords.x = rect.x + tileCoords.x;
 							tileCoords.y = rect.y + tileCoords.y;

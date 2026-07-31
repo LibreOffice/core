@@ -85,11 +85,11 @@ window.L.Map.include({
 			return;
 		}
 
-		var notifyServer = function (part) {
+		var notifyServer = function () {
 			// If this wasn't triggered from the server,
 			// then notify the server of the change.
 			if (!external)
-				app.socket.sendMessage('setclientpart part=' + part);
+				app.socket.sendMessage('setclientpart part=' + docLayer.getSelectedPart());
 		};
 
 		if (app.file.fileBasedView) {
@@ -99,7 +99,7 @@ window.L.Map.include({
 			// notifyServer with a stale guess. Run only its UI side effects.
 			docLayer._preview._scrollToPart(docLayer._selectedPart);
 			docLayer.highlightCurrentPart(docLayer._selectedPart);
-			notifyServer(part);
+			notifyServer();
 			return;
 		}
 
@@ -110,7 +110,7 @@ window.L.Map.include({
 			app.socket.sendMessage('resetselection');
 		}
 
-		notifyServer(docLayer._selectedPart);
+		notifyServer();
 
 		this.fire('updateparts', {
 			selectedPart: docLayer._selectedPart,
@@ -152,7 +152,8 @@ window.L.Map.include({
 			// If this wasn't triggered from the server,
 			// then notify the server of the change.
 			if (!external) {
-				app.socket.sendMessage('selectclientpart part=' + part + ' how=' + how);
+				app.socket.sendMessage('selectclientpart part=' +
+					this._docLayer.getPartFromIndex(part) + ' how=' + how);
 			}
 		}
 	},
@@ -261,16 +262,14 @@ window.L.Map.include({
 				RenderManager.requestThumbnail(id, part, maxWidth, maxHeight);
 			} else {
 				var mode = app.activeDocument.activeModes[0];
-				// The slide list carries each slide's unique id under its
-				// legacy name, hash. The unique id names the slide this
-				// preview asks for, wherever that slide sits by the time it
-				// is rendered.
-				const partList = app.impress && app.impress.partList;
-				const slideId = partList && partList[part] ? partList[part].hash : undefined;
+				// The request names the part by its part number, so it
+				// follows the page wherever it sits by the time it is
+				// rendered. An index no part holds names nothing to render.
+				const partNumber = docLayer.getPartFromIndex(part);
+				if (partNumber < 0) return {width: maxWidth, height: maxHeight};
 				this._addPreviewToQueue(part, id, 'tile ' +
 								'nviewid=0' + ' ' +
-								'part=' + String(part) + ' ' +
-								(slideId !== undefined ? 'uniqueid=' + String(slideId) + ' ' : '') +
+								'part=' + String(partNumber) + ' ' +
 								'mode=' + String(mode) + ' ' +
 								'width=' + String(maxWidth * app.roundedDpiScale) + ' ' +
 								'height=' + String(maxHeight * app.roundedDpiScale) + ' ' +
@@ -299,9 +298,13 @@ window.L.Map.include({
 			tilePosY: tilePosY, tileWidth: tileWidth, tileHeight: tileHeight, autoUpdate: autoUpdate, invalid: false};
 
 		var mode = app.activeDocument.activeModes[0];
+		// The request names the part by its part number. An index no part
+		// holds names nothing to render.
+		const partNumber = this._docLayer.getPartFromIndex(part);
+		if (partNumber < 0) return;
 		this._addPreviewToQueue(part, id, 'tile ' +
 							'nviewid=0' + ' ' +
-							'part=' + part + ' ' +
+							'part=' + partNumber + ' ' +
 							((mode !== 0) ? ('mode=' + mode + ' ') : '') +
 							'width=' + width * app.roundedDpiScale + ' ' +
 							'height=' + height * app.roundedDpiScale + ' ' +

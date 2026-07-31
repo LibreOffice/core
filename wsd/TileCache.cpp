@@ -304,12 +304,6 @@ Tile TileCache::lookupTile(const TileDesc& tile)
 
     Tile ret = findTile(tile);
 
-    // A request that names a slide by its unique id matches only an entry rendered from that
-    // slide. An entry at the same index that names another slide is left over from before the
-    // parts were renumbered, so it is not returned.
-    if (ret && tile.getUniqueId() != 0 && ret->_uniqueId != tile.getUniqueId())
-        ret = Tile();
-
     if (UnitWSD::isUnitTesting())
         UNITWSD_CALL(lookupTile(tile.getPart(), tile.getEditMode(), tile.getWidth(), tile.getHeight(),
                                 tile.getTilePosX(), tile.getTilePosY(), tile.getTileWidth(),
@@ -329,8 +323,6 @@ void TileCache::saveTileAndNotify(const TileDesc& desc, const char *data, const 
     // Ignore if we can't save the tile, things will work anyway, but slower.
     // An error indication is supposed to be sent to all users in that case.
     Tile tile = saveDataToCache(desc, data, size);
-    if (tile && desc.getUniqueId() != 0)
-        tile->_uniqueId = desc.getUniqueId();
     if (!_dontCache)
         LOG_TRC("Saved cache tile: " << cacheFileName(desc) << " of size " << size << " bytes");
     else

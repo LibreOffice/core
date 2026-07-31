@@ -1500,14 +1500,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._map._processPreviewQueue();
 			if (!this._previewInitialized)
 				return;
-			if (e.uniqueId === undefined)
+			if (e.part === undefined)
 				return;
-			// The response names the slide it rendered, so the image lands on
+			// The response names the part it rendered, so the image lands on
 			// that slide wherever it now sits, even if the parts were
 			// renumbered while the request was under way. A slide deleted in
 			// the meantime has no preview left, so its image is dropped.
 			const tile = this._previewTiles.find(function (candidate) {
-				return candidate.hash === e.uniqueId;
+				return candidate.hash === e.part;
 			});
 			if (tile) {
 				tile.placeholderName = null;

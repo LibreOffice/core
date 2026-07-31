@@ -409,7 +409,7 @@ class VectorManager extends RenderManagerBase {
 	/// Render to an offscreen canvas and trigger rendering of the thumbnail.
 	private _renderAndFire(
 		id: cool.PreviewId,
-		part: number,
+		partIndex: number,
 		maxWidth: number,
 		maxHeight: number,
 		data: cool.VectorPrimitivesData,
@@ -417,7 +417,7 @@ class VectorManager extends RenderManagerBase {
 		if (data.slideWidth <= 0 || data.slideHeight <= 0) return;
 
 		this._renderedPreviews.set(id, {
-			part: part,
+			part: partIndex,
 			maxWidth: maxWidth,
 			maxHeight: maxHeight,
 		});
@@ -441,17 +441,17 @@ class VectorManager extends RenderManagerBase {
 		previewImage.height = maxHeight;
 		previewImage.src = canvas.toDataURL('image/png');
 
+		// A vector preview renders locally at fire time, so the slide now at
+		// this index is the one the image shows. The part list carries each
+		// slide's part number under its legacy name, hash.
 		app.map.fire('tilepreview', {
 			tile: previewImage,
 			id: id,
 			width: maxWidth,
 			height: maxHeight,
-			part: part,
+			part: app.impress.partList?.[partIndex]?.hash,
+			partIndex: partIndex,
 			mode: 0,
-			// A vector preview renders locally at fire time, so the slide now
-			// at this index is the one the image shows. The slide list
-			// carries each slide's unique id under its legacy name, hash.
-			uniqueId: app.impress.partList?.[part]?.hash,
 			docType: this._docLayer._docType,
 		});
 	}

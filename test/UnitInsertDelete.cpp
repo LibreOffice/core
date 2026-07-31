@@ -141,8 +141,12 @@ UnitBase::TestResult UnitInsertDelete::testInsertDelete()
         TST_LOG("Deleting 10 slides.");
         for (size_t it = 1; it <= 10; it++)
         {
-            // Explicitly delete the nth slide.
-            helpers::sendTextFrame(socket, "setclientpart part=" + std::to_string(it), testname);
+            // Explicitly delete the nth slide, named by its unique id. Past the
+            // end of the shrinking list, stay on the last slide, which is where
+            // an out-of-range index used to be clamped.
+            const std::size_t partIndex = std::min(it, currentPartHashes.size() - 1);
+            helpers::sendTextFrame(socket, "setclientpart part=" + currentPartHashes[partIndex],
+                                   testname);
             helpers::sendTextFrame(socket, "uno .uno:DeletePage", testname);
             response = helpers::getResponseString(socket, "status:", testname);
             LOK_ASSERT_MESSAGE("did not receive a status: message as expected",

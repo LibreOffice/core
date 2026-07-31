@@ -505,7 +505,7 @@ class BitmapTileManager extends RenderManagerBase {
 			updated = true;
 		}
 
-		const part = this._docLayer._selectedPart;
+		const part = this._docLayer.getSelectedPart();
 		if (this._preFetchPart !== part) {
 			this._preFetchPart = part;
 			updated = true;
@@ -885,6 +885,7 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	private sortFileBasedQueue(queue: any) {
+		const docLayer = app.map._docLayer;
 		for (var i = 0; i < queue.length - 1; i++) {
 			for (var j = i + 1; j < queue.length; j++) {
 				var a = queue[i];
@@ -900,7 +901,11 @@ class BitmapTileManager extends RenderManagerBase {
 						switchTiles = false;
 					}
 				} else {
-					switchTiles = a.part > b.part;
+					// Part numbers carry no order, so compare the parts by
+					// their current indexes.
+					switchTiles =
+						docLayer.getIndexFromPart(a.part) >
+						docLayer.getIndexFromPart(b.part);
 				}
 
 				if (switchTiles) {
@@ -929,9 +934,12 @@ class BitmapTileManager extends RenderManagerBase {
 	private initPreFetchPartTiles() {
 		if (!this.checkDocLayer()) return;
 
-		const targetPart = this._docLayer._selectedPart + app.map._partsDirection;
+		const targetIndex = this._docLayer._selectedPart + app.map._partsDirection;
 
-		if (targetPart < 0 || targetPart >= this._docLayer._parts) return;
+		if (targetIndex < 0 || targetIndex >= this._docLayer._parts) return;
+
+		const targetPart = this._docLayer.getPartFromIndex(targetIndex);
+		if (targetPart < 0) return;
 
 		// check existing timeout and clear it before the new one
 		if (this._partTilePreFetcher) clearTimeout(this._partTilePreFetcher);
@@ -1040,12 +1048,13 @@ class BitmapTileManager extends RenderManagerBase {
 	private sendTileCombineRequest(tileCombineQueue: Array<TileCoordData>) {
 		if (tileCombineQueue.length <= 0) return;
 
-		// Sort into buckets of consistent part & mode.
+		// Sort into buckets of consistent part & mode. The key is a string:
+		// part numbers can be slide unique ids, which are too wide to pack into
+		// the bits of a number next to the mode.
 		const partMode: any = {};
 		for (var i = 0; i < tileCombineQueue.length; ++i) {
 			const coords = tileCombineQueue[i];
-			// mode is a small number - give it 8 bits
-			const pmKey = (coords.part << 8) + coords.mode;
+			const pmKey = coords.part + ':' + coords.mode;
 			if (partMode[pmKey] === undefined) partMode[pmKey] = [];
 			partMode[pmKey].push(coords);
 		}
@@ -1131,7 +1140,7 @@ class BitmapTileManager extends RenderManagerBase {
 	private updateTileDistance(tile: Tile, zoom: number) {
 		if (
 			tile.coords.z !== zoom ||
-			tile.coords.part !== app.map._docLayer._selectedPart ||
+			tile.coords.part !== app.map._docLayer.getSelectedPart() ||
 			!app.activeDocument.isModeActive(tile.coords.mode)
 		)
 			tile.distanceFromView = Number.MAX_SAFE_INTEGER;
@@ -1228,7 +1237,7 @@ class BitmapTileManager extends RenderManagerBase {
 						i * this.tileSize,
 						j * this.tileSize,
 						zoom,
-						app.map._docLayer._selectedPart,
+						app.map._docLayer.getSelectedPart(),
 						app.activeDocument.activeModes[0],
 					);
 
@@ -1265,11 +1274,11 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	private removeIrrelevantsFromCoordsQueue(coordsQueue: Array<TileCoordData>) {
-		const part: number = app.map._docLayer._selectedPart;
+		const selectedPart: number = app.map._docLayer.getSelectedPart();
 
 		for (let i = coordsQueue.length - 1; i > 0; i--) {
 			if (
-				coordsQueue[i].part !== part ||
+				coordsQueue[i].part !== selectedPart ||
 				!app.activeDocument.isModeActive(coordsQueue[i].mode) ||
 				!this.tileNeedsFetch(coordsQueue[i].key())
 			) {
@@ -1437,7 +1446,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 		if (
 			app.map._docLayer._debug.tileInvalidationsOn &&
-			part === app.map._docLayer._selectedPart
+			part === app.map._docLayer.getSelectedPart()
 		) {
 			app.map._docLayer._debug.addTileInvalidationRectangle(
 				invalidatedRectangle.toArray(),
@@ -1458,7 +1467,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 		var interval = 250;
 		var idleTime = 750;
-		this._preFetchPart = this._docLayer._selectedPart;
+		this._preFetchPart = this._docLayer.getSelectedPart();
 		this._preFetchMode = app.activeDocument.activeModes;
 		this._preFetchIdle = setTimeout(
 			window.L.bind(function () {
@@ -1524,6 +1533,8 @@ class BitmapTileManager extends RenderManagerBase {
 				Math.floor((app.activeDocument.fileSize.y - 1) / app.tile.size.y),
 			),
 		);
+
+		if (this._preFetchPart < 0) return;
 
 		var tilesToFetch = maxTilesToFetch; // total tile limit per call of preFetchTiles()
 		var doneAllPanes = true;
@@ -1722,16 +1733,21 @@ class BitmapTileManager extends RenderManagerBase {
 
 		// a rather different code-path with a png; should have its own msg perhaps.
 		if (tileMsgObj.id !== undefined) {
-			app.map.fire('tilepreview', {
-				tile: img,
-				id: tileMsgObj.id,
-				width: tileMsgObj.width,
-				height: tileMsgObj.height,
-				part: tileMsgObj.part,
-				mode: tileMsgObj.mode !== undefined ? tileMsgObj.mode : 0,
-				uniqueId: tileMsgObj.uniqueId,
-				docType: app.map._docLayer._docType,
-			});
+			// The response names its part by part number, the way previews
+			// are requested. The event also carries the index the part holds
+			// now. The preview of a gone page fires no event.
+			const partIndex = app.map._docLayer.getIndexFromPart(tileMsgObj.part);
+			if (partIndex >= 0)
+				app.map.fire('tilepreview', {
+					tile: img,
+					id: tileMsgObj.id,
+					width: tileMsgObj.width,
+					height: tileMsgObj.height,
+					part: tileMsgObj.part,
+					partIndex: partIndex,
+					mode: tileMsgObj.mode !== undefined ? tileMsgObj.mode : 0,
+					docType: app.map._docLayer._docType,
+				});
 			this.queueAcknowledgement(tileMsgObj);
 			return;
 		}
@@ -2220,9 +2236,12 @@ class BitmapTileManager extends RenderManagerBase {
 				const endY =
 					Math.floor((localY2 - 1) / app.tile.size.pY) * app.tile.size.pY;
 
+				const part = app.map._docLayer.getPartFromIndex(i);
+				if (part < 0) continue;
+
 				for (let j = startX; j <= endX; j += app.tile.size.pX) {
 					for (let k = startY; k <= endY; k += app.tile.size.pY) {
-						queue.push(new TileCoordData(j, k, zoom, i, mode));
+						queue.push(new TileCoordData(j, k, zoom, part, mode));
 					}
 				}
 			}

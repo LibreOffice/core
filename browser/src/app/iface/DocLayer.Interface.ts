@@ -77,6 +77,16 @@ interface DocLayerInterface {
 	scrollToPos(pos: InternPointLike): void;
 
 	_selectedPart: number;
+	// The part number of the part at the given index: the number the tiles
+	// of that part are keyed by. For a presentation or drawing document the
+	// part number is the page's stable unique id; for other document types
+	// it is the index itself. Part numbers carry no order, so arithmetic on
+	// them never yields another part. Go through the index for that.
+	getPartFromIndex(index: number): number;
+	// The current index of the part with the given part number, or -1 when
+	// no part carries it.
+	getIndexFromPart(part: number): number;
+	getSelectedPart(): number;
 	_oleCSelections: CSelections;
 	_shapeGridOffset: cool.SimplePoint;
 	getFiledBasedViewVerticalOffset(): number;

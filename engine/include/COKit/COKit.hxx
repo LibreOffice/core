@@ -1990,6 +1990,9 @@ struct COKitDocumentClass
     /// @see kit::Document::getPartUniqueId().
     unsigned long long (*getPartUniqueId)(COKitDocument* pThis, int nPart, int nMode);
 
+    /// @see kit::Document::getPartIndex().
+    int (*getPartIndex)(COKitDocument* pThis, int nPart, int nMode);
+
 };
 
 /*
@@ -2075,13 +2078,16 @@ public:
         return mpDoc->pClass->getPartPageRectangles(mpDoc);
     }
 
-    /// Get the current part of the document.
+    /// Get the current part number of the document. For a presentation or
+    /// drawing document a part number is the page's stable unique identifier;
+    /// for other document types it is the part's index.
     int getPart()
     {
         return mpDoc->pClass->getPart(mpDoc);
     }
 
-    /// Set the current part of the document.
+    /// Set the current part of the document by its part number. The part
+    /// number of a page that is gone selects nothing.
     void setPart(int nPart)
     {
         mpDoc->pClass->setPart(mpDoc, nPart);
@@ -2110,6 +2116,18 @@ public:
     unsigned long long getPartUniqueId(int nPart, int nMode)
     {
         return mpDoc->pClass->getPartUniqueId(mpDoc, nPart, nMode);
+    }
+
+    /**
+     * Get the index the part with the given part number holds now. For a
+     * presentation or drawing document a part number is the page's stable
+     * unique identifier, and the result is the position of that page in the
+     * part list nMode selects; -1 when no page carries that number any more.
+     * For other document types the part number is the index itself.
+     */
+    int getPartIndex(int nPart, int nMode)
+    {
+        return mpDoc->pClass->getPartIndex(mpDoc, nPart, nMode);
     }
 
     void setPartMode(COKitPartMode eMode)
@@ -2615,7 +2633,10 @@ public:
     /**
      * Renders a subset of the document's part to a pre-allocated buffer.
      *
-     * @param nPart the part number of the document of which the tile is painted.
+     * @param nPart the part number of the document of which the tile is painted. For a
+     * presentation or drawing document that is the page's stable unique identifier, resolved to
+     * the index the page holds when it paints; the part number of a page that is gone paints
+     * nothing.
      * @see paintTile.
      */
     void paintPartTile(unsigned char* pBuffer,
@@ -2735,7 +2756,7 @@ public:
         return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
     }
 
-    /// Set a part's selection mode.
+    /// Set a part's selection mode, naming the part by its part number.
     /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
     void selectPart(int nPart, int nSelect)
     {

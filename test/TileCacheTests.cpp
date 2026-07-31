@@ -71,7 +71,6 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testDesc);
     CPPUNIT_TEST(testSimple);
-    CPPUNIT_TEST(testPreviewUniqueId);
     CPPUNIT_TEST(testSimpleCombine);
     CPPUNIT_TEST(testTileSubscription);
     CPPUNIT_TEST(testSize);
@@ -110,7 +109,6 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
 
     void testDesc();
     void testSimple();
-    void testPreviewUniqueId();
     void testSimpleCombine();
     void testTileSubscription();
     void testSize();
@@ -267,46 +265,6 @@ void TileCacheTests::testSimple()
     // No Cache
     tileData = tc.lookupTile(tile);
     LOK_ASSERT_MESSAGE("found tile when none was expected", !tileData || !tileData->isValid());
-}
-
-// A cached preview is served only for the slide it was rendered from. An entry left at an index
-// another slide holds now, after the parts were renumbered, forces a fresh render instead.
-void TileCacheTests::testPreviewUniqueId()
-{
-    constexpr std::string_view testname = __func__;
-
-    if (isStandalone())
-    {
-        if (!UnitWSD::init(UnitWSD::UnitType::Wsd, ""))
-            throw std::runtime_error("Failed to load wsd unit test library.");
-    }
-
-    TileCache tc("doc.odp", std::chrono::system_clock::time_point());
-
-    // A preview tile of part 0, rendered from the slide with unique id 42.
-    TileDesc preview(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, 0);
-    preview.setUniqueId(42);
-
-    const int size = 1024;
-    std::vector<char> data = genRandomData(size);
-    data[0] = 'Z'; // compressed pixels.
-    tc.saveTileAndNotify(preview, data.data(), size);
-
-    // An ordinary tile carries no unique id and is served whatever the slot holds.
-    TileDesc plain(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, -1);
-    Tile tileData = tc.lookupTile(plain);
-    LOK_ASSERT_MESSAGE("expected the cached preview", tileData && tileData->isValid());
-
-    // A request naming the slide the entry was rendered from is served it.
-    tileData = tc.lookupTile(preview);
-    LOK_ASSERT_MESSAGE("expected the cached preview of the same slide",
-                       tileData && tileData->isValid());
-
-    // A request naming another slide is not served the entry.
-    TileDesc otherSlide(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, 0);
-    otherSlide.setUniqueId(43);
-    tileData = tc.lookupTile(otherSlide);
-    LOK_ASSERT_MESSAGE("a preview of another slide must not be served", !tileData);
 }
 
 void TileCacheTests::testSimpleCombine()
@@ -657,9 +615,17 @@ void TileCacheTests::testImpressTiles()
         std::shared_ptr<http::WebSocketSession> socket
             = loadDocAndGetSession(_socketPoll, "setclientpart.odp", _uri, testname);
 
+        // A presentation names its parts by their stable unique ids, listed in
+        // the status message.
+        sendTextFrame(socket, "status", testname);
+        const auto status = assertResponseString(socket, "status:", testname);
+        const std::vector<std::string> partIds = parsePartUniqueIds(status.substr(7));
+        LOK_ASSERT_MESSAGE("expected part unique ids in the status", !partIds.empty());
+
         sendTextFrame(socket,
-                      "tile nviewid=0 part=0 width=180 height=135 tileposx=0 tileposy=0 "
-                      "tilewidth=15875 tileheight=11906 id=0",
+                      "tile nviewid=0 part=" + partIds[0] +
+                          " width=180 height=135 tileposx=0 tileposy=0 "
+                          "tilewidth=15875 tileheight=11906 id=0",
                       testname);
         getTileMessage(socket, testname);
 
@@ -1279,13 +1245,20 @@ void TileCacheTests::testTileInvalidatePartImpress()
     std::shared_ptr<http::WebSocketSession> socket1
         = loadDocAndGetSession(_socketPoll, _uri, documentURL, testname1);
 
-    sendTextFrame(socket1, "setclientpart part=2", testname1);
+    // A presentation names its parts by their stable unique ids, listed in the
+    // status message in document order.
+    sendTextFrame(socket1, "status", testname1);
+    const auto status = assertResponseString(socket1, "status:", testname1);
+    const std::vector<std::string> partIds = parsePartUniqueIds(status.substr(7));
+    LOK_ASSERT(partIds.size() > 5);
+
+    sendTextFrame(socket1, "setclientpart part=" + partIds[2], testname1);
     assertResponseString(socket1, "setpart:", testname1);
     sendTextFrame(socket1, "mouse type=buttondown x=1500 y=1500 count=1 buttons=1 modifier=0", testname1);
 
     std::shared_ptr<http::WebSocketSession> socket2
         = loadDocAndGetSession(_socketPoll, _uri, documentURL, testname2);
-    sendTextFrame(socket2, "setclientpart part=5", testname2);
+    sendTextFrame(socket2, "setclientpart part=" + partIds[5], testname2);
     assertResponseString(socket2, "setpart:", testname2);
     sendTextFrame(socket2, "mouse type=buttondown x=1500 y=1500 count=1 buttons=1 modifier=0", testname2);
 
@@ -1299,12 +1272,12 @@ void TileCacheTests::testTileInvalidatePartImpress()
         const auto response1 = assertResponseString(socket1, "invalidatetiles:", testname1);
         int value1;
         getPartFromInvalidateMessage(response1, value1);
-        LOK_ASSERT_EQUAL(2, value1);
+        LOK_ASSERT_EQUAL(NumUtil::stoi(partIds[2]), value1);
 
         const auto response2 = assertResponseString(socket2, "invalidatetiles:", testname2);
         int value2;
         getPartFromInvalidateMessage(response2, value2);
-        LOK_ASSERT_EQUAL(5, value2);
+        LOK_ASSERT_EQUAL(NumUtil::stoi(partIds[5]), value2);
     }
 
     socket1->asyncShutdown();
@@ -1341,12 +1314,23 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
         LOK_ASSERT(docHeight > 0);
     }
 
+    // A presentation names its parts by their stable unique ids, listed in the
+    // status message in document order; a spreadsheet goes by plain indexes.
+    std::vector<std::string> partIds;
     if (docType == "presentation")
     {
-        // request tiles
+        partIds = parsePartUniqueIds(response.substr(7));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(10), partIds.size());
+
+        // request tiles; the selected part of the status already names the
+        // current page the way tiles do.
         TST_LOG("Requesting Impress tiles.");
         requestTiles(socket, docType, currentPart, docWidth, docHeight, testname);
     }
+
+    const auto partName = [&](int index) {
+        return docType == "presentation" ? partIds[index] : std::to_string(index);
+    };
 
     // random setclientpart
     std::vector<int> parts = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -1356,18 +1340,17 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
     int requests = 0;
     for (int it : parts)
     {
-        if (currentPart != it)
+        const std::string target = partName(it);
+        if (std::to_string(currentPart) != target)
         {
             // change part
-            std::ostringstream oss;
-            oss << "setclientpart part=" << it;
-            sendTextFrame(socket, oss.str(), testname);
+            sendTextFrame(socket, "setclientpart part=" + target, testname);
             // Wait for the change to take effect otherwise we get invalidatetile
             // which removes our next tile request subscription (expecting us to
             // issue a new tile request as a response, which a real client would do).
             assertResponseString(socket, "setpart:", testname);
 
-            requestTiles(socket, docType, it, docWidth, docHeight, testname);
+            requestTiles(socket, docType, NumUtil::stoi(target), docWidth, docHeight, testname);
 
             if (++requests >= 3)
             {
@@ -1377,7 +1360,7 @@ void TileCacheTests::checkTiles(std::shared_ptr<http::WebSocketSession>& socket,
             }
         }
 
-        currentPart = it;
+        currentPart = NumUtil::stoi(target);
     }
 }
 

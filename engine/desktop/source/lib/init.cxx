@@ -60,6 +60,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <limits>
 #include <memory>
 #include <iostream>
 #include <mutex>
@@ -79,6 +80,7 @@
 #include <vcl/idletask.hxx>
 #include <vcl/kit.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
@@ -1314,6 +1316,7 @@ static void doc_postWindow(COKitDocument* pThis, unsigned nKitWindowId,
 
 static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
 static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, int nMode);
+static int doc_getPartIndex(COKitDocument* pThis, int nPart, int nMode);
 
 static bool doc_insertCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary,
@@ -1382,6 +1385,53 @@ ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
+}
+
+// Whether the boundary names this document's parts by their stable page unique ids rather than
+// by page-list indexes: the case for presentation and drawing documents, which always hold at
+// least one page.
+bool partsAreUniqueIds(ITiledRenderable* pDoc)
+{
+    return pDoc && pDoc->getPartUniqueId(0, 0) != 0;
+}
+
+// The part number the boundary names the part at nIndex by: the page's stable unique id. The
+// mode selects the page list the index addresses. Returns -1 when no page holds that index or
+// the id does not fit in a part number; the ids count up from 1, one step per object the
+// process creates, so a real document session stays far below that limit.
+int partNumberFromIndex(ITiledRenderable* pDoc, int nIndex, int nMode)
+{
+    if (nIndex < 0)
+        return -1;
+
+    const sal_uInt64 nUniqueId = pDoc->getPartUniqueId(nIndex, nMode);
+    if (nUniqueId == 0 || nUniqueId > o3tl::make_unsigned(std::numeric_limits<int>::max()))
+    {
+        SAL_WARN_IF(nUniqueId != 0, "kit",
+                    "The unique id " << nUniqueId << " of part " << nIndex
+                                     << " does not fit in a part number");
+        return -1;
+    }
+
+    return static_cast<int>(nUniqueId);
+}
+
+// The index the part with the given part number holds now in the given mode's page list, or -1
+// when no page carries that number any more.
+int partIndexFromNumber(ITiledRenderable* pDoc, int nPart, int nMode)
+{
+    if (nPart <= 0)
+        return -1;
+
+    // Past the last page of the mode's list the lookup returns zero.
+    for (int nIndex = 0;; ++nIndex)
+    {
+        const sal_uInt64 nUniqueId = pDoc->getPartUniqueId(nIndex, nMode);
+        if (nUniqueId == 0)
+            return -1;
+        if (nUniqueId == o3tl::make_unsigned(nPart))
+            return nIndex;
+    }
 }
 
 /*
@@ -1584,6 +1634,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 
         m_pDocumentClass->getPartInfo = doc_getPartInfo;
         m_pDocumentClass->getPartUniqueId = doc_getPartUniqueId;
+        m_pDocumentClass->getPartIndex = doc_getPartIndex;
 
         m_pDocumentClass->insertCertificate = doc_insertCertificate;
         m_pDocumentClass->addCertificate = doc_addCertificate;
@@ -1774,6 +1825,27 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( COKitCallbackType eType, i
 
 void CallbackFlushHandler::viewCallback(COKitCallbackType eType, const OString& pPayload)
 {
+    // A SET_PART payload carries the page-list index of the page the view switched to, while the
+    // boundary names parts of a presentation or drawing document by their stable page unique
+    // ids. Translate when queueing, while the page still holds that index.
+    if (eType == COKitCallbackType::SET_PART)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(m_pDocument);
+        if (partsAreUniqueIds(pDoc))
+        {
+            const int nPart =
+                partNumberFromIndex(pDoc, pPayload.toInt32(), pDoc->getEditMode());
+            if (nPart < 0)
+            {
+                SAL_INFO("kit", "Skipping SET_PART for the gone part " << pPayload);
+                return;
+            }
+            CallbackData callbackData(OString::number(nPart));
+            queue(eType, callbackData);
+            return;
+        }
+    }
+
     CallbackData callbackData(pPayload);
     queue(eType, callbackData);
 }
@@ -1827,6 +1899,22 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
 
 void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
+    // The invalidation carries the page-list index of the invalidated page, while the boundary
+    // names parts of a presentation or drawing document by their stable page unique ids.
+    // Translate when queueing, while the page still holds that index, so the queued rectangles
+    // merge under a key that survives page renumbering. A negative part stands for every part
+    // and passes through.
+    if (nPart >= 0)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(m_pDocument);
+        if (partsAreUniqueIds(pDoc))
+        {
+            nPart = partNumberFromIndex(pDoc, nPart, nMode);
+            if (nPart < 0)
+                return;
+        }
+    }
+
     tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
 
     tools::Rectangle aRect;
@@ -4267,10 +4355,21 @@ static int doc_getPart (COKitDocument* pThis)
         return 0;
     }
 
-    return pDoc->getPart();
+    const int nIndex = pDoc->getPart();
+
+    // The boundary names parts of a presentation or drawing document by their stable page
+    // unique ids. An id too wide for a part number leaves the index in place.
+    if (partsAreUniqueIds(pDoc))
+    {
+        const int nPart = partNumberFromIndex(pDoc, nIndex, pDoc->getEditMode());
+        if (nPart >= 0)
+            return nPart;
+    }
+
+    return nIndex;
 }
 
-static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
+static void doc_setPartIndexImpl(COKitDocument* pThis, int nPartIndex, bool bAllowChangeFocus = true)
 {
     comphelper::ProfileZone aZone("doc_setPart");
 
@@ -4284,7 +4383,34 @@ static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFo
         return;
     }
 
-    pDoc->setPart( nPart, bAllowChangeFocus );
+    pDoc->setPart( nPartIndex, bAllowChangeFocus );
+}
+
+static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
+{
+    SolarMutexGuard aGuard;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return;
+    }
+
+    // The boundary names parts of a presentation or drawing document by their stable page
+    // unique ids. The part number of a page that is gone selects nothing.
+    if (partsAreUniqueIds(pDoc))
+    {
+        const int nIndex = partIndexFromNumber(pDoc, nPart, pDoc->getEditMode());
+        if (nIndex < 0)
+        {
+            SAL_INFO("kit", "setPart names the gone part " << nPart);
+            return;
+        }
+        nPart = nIndex;
+    }
+
+    doc_setPartIndexImpl(pThis, nPart, bAllowChangeFocus);
 }
 
 static void doc_setPart(COKitDocument* pThis, int nPart)
@@ -4322,6 +4448,25 @@ static unsigned long long doc_getPartUniqueId(COKitDocument* pThis, int nPart, i
     return pDoc->getPartUniqueId(nPart, nMode);
 }
 
+static int doc_getPartIndex(COKitDocument* pThis, int nPart, int nMode)
+{
+    comphelper::ProfileZone aZone("doc_getPartIndex");
+
+    SolarMutexGuard aGuard;
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return -1;
+    }
+
+    // A document whose part numbers are page-list indexes needs no lookup.
+    if (!partsAreUniqueIds(pDoc))
+        return nPart;
+
+    return partIndexFromNumber(pDoc, nPart, nMode);
+}
+
 static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
 {
     SolarMutexGuard aGuard;
@@ -4332,6 +4477,19 @@ static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
+    }
+
+    // The boundary names parts of a presentation or drawing document by their stable page
+    // unique ids. The part number of a page that is gone selects nothing.
+    if (partsAreUniqueIds(pDoc))
+    {
+        const int nIndex = partIndexFromNumber(pDoc, nPart, pDoc->getEditMode());
+        if (nIndex < 0)
+        {
+            SAL_INFO("kit", "selectPart names the gone part " << nPart);
+            return;
+        }
+        nPart = nIndex;
     }
 
     pDoc->selectPart( nPart, nSelect );
@@ -4665,7 +4823,7 @@ inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int 
 }
 
 inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRenderable* pDoc, const SfxViewShell* pCurrentViewShell,
-    const std::string_view &sCurrentViewRenderState, const int nPart, const int nMode)
+    const std::string_view &sCurrentViewRenderState, const int nPartIndex, const int nMode)
 {
     // The painted tile belongs to a single document. When several documents
     // live in one process, other documents may have a view sitting on the
@@ -4679,7 +4837,7 @@ inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRendera
 
         if (!bIsInEdit && pViewShell != pCurrentViewShell && pViewShell->GetDocId() == aThisDocId)
         {
-            if (pViewShell->getPart() == nPart && pViewShell->getEditMode() == nMode)
+            if (pViewShell->getPart() == nPartIndex && pViewShell->getEditMode() == nMode)
             {
                 OString sNewRenderState = pDoc->getViewRenderState(pViewShell);
 
@@ -4723,6 +4881,22 @@ static void doc_paintPartTile(COKitDocument* pThis,
     if (!pDoc)
         return;
 
+    // The boundary names parts of a presentation or drawing document by their stable page unique
+    // ids. Resolve the requested part number to the index the page holds when it paints, so the
+    // pixels are of the requested page even if the pages were renumbered after the request was
+    // sent; the solar mutex is held for the whole call, so the index stays valid throughout. A
+    // page that is gone has nothing to paint.
+    int nPartIndex = nPart;
+    if (partsAreUniqueIds(pDoc))
+    {
+        nPartIndex = partIndexFromNumber(pDoc, nPart, nMode);
+        if (nPartIndex < 0)
+        {
+            SAL_INFO("kit", "paintPartTile names the gone part " << nPart);
+            return;
+        }
+    }
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     int nOrigViewId = doc_getView(pThis);
@@ -4757,9 +4931,9 @@ static void doc_paintPartTile(COKitDocument* pThis,
 
         // Check if just switching to another view is enough, that has less side-effects.
         // Render state is sometimes empty, don't risk it.
-        if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
+        if ((nPartIndex != pDoc->getPart() || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
         {
-            nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
+            nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPartIndex, nMode);
 
             if (nViewId == -1)
                 nViewId = nOrigViewId; // Couldn't find an alternative view.
@@ -4774,8 +4948,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
             // If we are here, we couldn't find an alternative view. We need to check the part and mode.
             if (!isText)
             {
-                nOrigPart = doc_getPart(pThis);
-                if (nPart != nOrigPart)
+                nOrigPart = pDoc->getPart();
+                if (nPartIndex != nOrigPart)
                 {
                     if (SdrView* pSaveView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
                     {
@@ -4783,7 +4957,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                         for (size_t i = 0; i < rMarks.GetMarkCount(); ++i)
                             aSavedMarkedObjects.push_back(rMarks.GetMark(i)->GetMarkedSdrObj());
                     }
-                    doc_setPartImpl(pThis, nPart, false);
+                    doc_setPartIndexImpl(pThis, nPartIndex, false);
                 }
             }
 
@@ -4794,7 +4968,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
 
         if (!isText)
         {
-            bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
+            bPaintTextEdit = (nPartIndex == nOrigPart && nMode == nOrigEditMode);
             pDoc->setPaintTextEdit(bPaintTextEdit);
         }
 
@@ -4813,9 +4987,9 @@ static void doc_paintPartTile(COKitDocument* pThis,
 
             if (!isText)
             {
-                if (nPart != nOrigPart)
+                if (nPartIndex != nOrigPart)
                 {
-                    doc_setPartImpl(pThis, nOrigPart, false);
+                    doc_setPartIndexImpl(pThis, nOrigPart, false);
                     // Re-apply the selections cleared during the view page switching.
                     if (!aSavedMarkedObjects.empty())
                     {

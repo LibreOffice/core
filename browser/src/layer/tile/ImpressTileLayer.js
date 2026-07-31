@@ -424,10 +424,14 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_onSetPartMsg: function (textMsg) {
-		var part = parseInt(textMsg.match(/\d+/g)[0]);
-		if (part !== this._selectedPart) {
+		// The server names the slide by its part number. Find the index of
+		// the slide carrying that part. A part this view does not know yet
+		// selects nothing. The status that follows carries the selection.
+		const part = parseInt(textMsg.match(/\d+/g)[0]);
+		const partIndex = this.getIndexFromPart(part);
+		if (partIndex >= 0 && partIndex !== this._selectedPart) {
 			this._map.deselectAll(); // Deselect all first. This is a single selection.
-			this._map.setPart(part, true);
+			this._map.setPart(partIndex, true);
 		}
 		// Fire 'setpart' even when the local _selectedPart was already updated
 		// synchronously by Parts.js setPart (fileBasedView path), so listeners
@@ -437,6 +441,40 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			parts: this._parts,
 			docType: this._docType
 		});
+	},
+
+	// The part number of a presentation or drawing page is the page's stable
+	// unique id, carried as hash in the part list, so the tile keys survive
+	// when slides are moved, inserted or deleted.
+	getPartFromIndex: function (index) {
+		const list = app.impress.partList;
+		if (list && index >= 0 && index < list.length)
+			return list[index].hash;
+		return -1;
+	},
+
+	// The map from each slide's part number to the index the slide holds in
+	// the given part list. The part list is replaced as a whole when the
+	// parts change, so the map stays valid as long as the list it was built
+	// from is the current one, and is rebuilt when another list arrives.
+	_slideIndexByPart: function (list) {
+		if (this._slideIndexCacheSource !== list) {
+			this._slideIndexCacheSource = list;
+			this._slideIndexCache = new Map();
+			for (let i = 0; i < list.length; i++) {
+				if (!this._slideIndexCache.has(list[i].hash))
+					this._slideIndexCache.set(list[i].hash, i);
+			}
+		}
+		return this._slideIndexCache;
+	},
+
+	getIndexFromPart: function (part, partsInfo) {
+		const list = Array.isArray(partsInfo) ? partsInfo : app.impress.partList;
+		if (!list)
+			return -1;
+		const index = this._slideIndexByPart(list).get(part);
+		return index === undefined ? -1 : index;
 	},
 
 	_onStatusMsg: function (textMsg) {
@@ -509,9 +547,15 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				app.activeDocument.setActiveViewID(this._viewId);
 				app.console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
 				if (app.socket._reconnecting) {
-					app.socket.sendMessage('setclientpart part=' + this._selectedPart);
+					app.socket.sendMessage('setclientpart part=' + this.getSelectedPart());
 				} else {
-					this._selectedPart = statusJSON.selectedpart;
+					// The status names the selected slide by its part number.
+					// Find the index of the slide carrying that part. The
+					// part info of this status is the authority. A partstatus
+					// carries no part info, so fall back to the current list.
+					const selectedIndex = this.getIndexFromPart(statusJSON.selectedpart, statusJSON.parts);
+					if (selectedIndex >= 0)
+						this._selectedPart = selectedIndex;
 				}
 			}
 

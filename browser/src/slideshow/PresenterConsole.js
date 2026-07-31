@@ -1639,7 +1639,7 @@ class PresenterConsole {
 		}
 
 		const nextSlideIndex = this._getNextVisibleSlide(this._currentIndex);
-		if (nextSlideIndex === e.part) {
+		if (nextSlideIndex === e.partIndex) {
 			let next =
 				this._proxyPresenter.document.querySelector('#next-presentation');
 			if (next) {
@@ -1647,10 +1647,10 @@ class PresenterConsole {
 			}
 		}
 
-		this._previews[e.part] = e.tile.src;
-		this._lastIndex = e.part;
+		this._previews[e.partIndex] = e.tile.src;
+		this._lastIndex = e.partIndex;
 
-		let img = this._slides.querySelector(`#preview-slide-${e.part}`);
+		let img = this._slides.querySelector(`#preview-slide-${e.partIndex}`);
 		if (img) {
 			img.src = e.tile.src;
 			img.width = e.width;

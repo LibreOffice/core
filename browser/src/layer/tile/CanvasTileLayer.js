@@ -1326,6 +1326,25 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
+	// The part number of the part at the given index: the number the tiles
+	// of that part are keyed by. For a presentation or drawing document the
+	// part number is the page's stable unique id; for other document types
+	// it is the index itself. Part numbers carry no order, so arithmetic on
+	// them never yields another part. Go through the index for that.
+	getPartFromIndex: function (index) {
+		return index;
+	},
+
+	// The current index of the part with the given part number, or -1 when
+	// no part carries it.
+	getIndexFromPart: function (part) {
+		return part;
+	},
+
+	getSelectedPart: function () {
+		return this.getPartFromIndex(this._selectedPart);
+	},
+
 	_onInvalidateTilesMsg: function (textMsg) {
 		const command = app.socket.parseServerCmd(textMsg);
 		if (command.x === undefined || command.y === undefined || command.part === undefined) {
@@ -1334,7 +1353,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			command.y = parseInt(strTwips[1]);
 			command.width = parseInt(strTwips[2]);
 			command.height = parseInt(strTwips[3]);
-			command.part = this._selectedPart;
+			command.part = this.getSelectedPart();
 		}
 
 		if (isNaN(command.mode))
@@ -1344,15 +1363,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		RenderManager.overlapInvalidatedRectangleWithView(command.part, command.mode, command.wireId, invalidArea, textMsg);
 
 		if (this.isImpress() || this.isDraw()) {
-			if (command.part === this._selectedPart &&
+			// The message names the part by its part number, the way tiles
+			// are keyed. The preview bookkeeping and the part events work
+			// with the index the part holds now. The part number of a gone
+			// page matches no index and updates nothing.
+			const partIndex = this.getIndexFromPart(command.part);
+			if (partIndex >= 0 && partIndex === this._selectedPart &&
 				app.activeDocument.isModeActive(command.mode) &&
-				command.part !== this._lastValidPart) {
+				partIndex !== this._lastValidPart) {
 				this._map.fire('updatepart', {part: this._lastValidPart, docType: this._docType});
-				this._lastValidPart = command.part;
-				this._map.fire('updatepart', {part: command.part, docType: this._docType});
+				this._lastValidPart = partIndex;
+				this._map.fire('updatepart', {part: partIndex, docType: this._docType});
 			}
 
-			const preview = this._map._docPreviews ? this._map._docPreviews[command.part] : null;
+			const preview = this._map._docPreviews && partIndex >= 0 ? this._map._docPreviews[partIndex] : null;
 			if (preview) { preview.invalid = true; }
 
 			// A vector-rendered view has no tiles. A change inside a
@@ -1360,11 +1384,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// there is nothing to fetch for it. An invalidation without a
 			// rectangle (width covers everything) has no pushed delta and
 			// may be a structural change, so drop the cached part and
-			// re-fetch it in full. Without a part, drop every part.
+			// re-fetch it in full. Without a part, drop every part. The
+			// vector cache is keyed by part index.
 			if (isNaN(command.part))
 				RenderManager.clearAllParts();
-			else if (command.width === Number.MAX_SAFE_INTEGER)
-				RenderManager.clearCachedPart(command.part);
+			else if (command.width === Number.MAX_SAFE_INTEGER && partIndex >= 0)
+				RenderManager.clearCachedPart(partIndex);
 
 			const topLeftTwips = new cool.Point(command.x, command.y);
 			const offset = new cool.Point(command.width, command.height);
@@ -1417,7 +1442,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				var mode = parseInt(commaargs.length > 1 ? commaargs[1] : '');
 
 				mode = (isNaN(mode) ? app.activeDocument.activeModes[0] : mode);
-				msg += 'part=' + (isNaN(part) ? this._selectedPart : part)
+				msg += 'part=' + (isNaN(part) ? this.getSelectedPart() : part)
 					+ ((mode && mode !== 0) ? (' mode=' + mode) : '')
 					+ ' ';
 			}
@@ -4358,14 +4383,19 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		var found = false;
 
 		for (var i = 0; i < queue.length; i++) {
+			// The queue coords name their part by part number. The geometry
+			// below works with the index the part holds now.
+			const partIndex = this.getIndexFromPart(queue[i].part);
+			if (partIndex < 0)
+				continue;
 			for (var j = 0; j < parts.length; j++) {
-				if (parts[j].part === queue[i].part) {
+				if (parts[j].part === partIndex) {
 					found = true;
 					break;
 				}
 			}
 			if (!found)
-				parts.push({part: queue[i].part});
+				parts.push({part: partIndex});
 			found = false;
 		}
 
@@ -4444,7 +4474,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var partToSelect = this._getMostVisiblePart(queue);
 			if (this._selectedPart !== partToSelect) {
 				this._selectedPart = partToSelect;
-				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
+				app.socket.sendMessage('setclientpart part=' + this.getSelectedPart());
 				this._map.fire('setpart', {
 					selectedPart: this._selectedPart,
 					parts: this._parts,

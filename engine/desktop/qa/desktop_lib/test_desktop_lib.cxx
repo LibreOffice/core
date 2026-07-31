@@ -2547,8 +2547,11 @@ void DesktopKitTest::testPaintPartTile()
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
 //    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
 
-    // Go to the second slide in the second view.
-    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+    // Go to the second slide in the second view. The boundary names a slide by
+    // its part number, the page's stable unique id.
+    const int nSecondSlide
+        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 1, 0));
+    pDocument->m_pDocumentClass->setPart(pDocument, nSecondSlide);
 
     // Switch back to the first view and start typing.
     pDocument->m_pDocumentClass->setView(pDocument, nView1);
@@ -2560,7 +2563,7 @@ void DesktopKitTest::testPaintPartTile()
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
     unsigned char pPixels[256 * 256 * 4];
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 0, 256, 256, 0, 0, 256, 256);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, nSecondSlide, 0, 256, 256, 0, 0, 256, 256);
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
@@ -2672,8 +2675,13 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     pDocument->m_pDocumentClass->createView(pDocument);
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
 
-    // Go to the second slide in the second view
-    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+    // Go to the second slide in the second view. The boundary names a slide by
+    // its part number, the page's stable unique id.
+    const int nFirstSlide
+        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 0, 0));
+    const int nSecondSlide
+        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 1, 0));
+    pDocument->m_pDocumentClass->setPart(pDocument, nSecondSlide);
 
     // Set to dark scheme
     {
@@ -2696,11 +2704,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
 
     // Both parts should be painted with dark scheme
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     Color aPixel(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
@@ -2708,11 +2716,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     pDocument->m_pDocumentClass->setView(pDocument, nView1);
 
     // Both parts should be painted with light scheme
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 }

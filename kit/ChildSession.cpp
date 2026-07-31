@@ -110,7 +110,7 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
     , _jailRoot(jailRoot)
     , _docManager(&docManager)
     , _viewId(-1)
-    , _currentPart(-1)
+    , _currentPartUniqueId(-1)
     , _isDocLoaded(false)
     , _copyToClipboard(false)
     , _canonicalViewId(CanonicalViewId::Invalid)
@@ -232,8 +232,12 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         getLOKitDocument()->setView(_viewId);
 
         int curPart = 0;
+        int curMode = 0;
         if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
+        {
             curPart = getLOKitDocument()->getPart();
+            curMode = getLOKitDocument()->getEditMode();
+        }
 
         // Notify all views about updated view info
         _docManager->notifyViewInfo();
@@ -249,7 +253,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         // the rectangle to invalidate; invalidating everything is sub-optimal
         if (_stateRecorder.isInvalidate())
         {
-            const std::string payload = "0, 0, 1000000000, 1000000000, " + std::to_string(curPart);
+            const std::string payload = "0, 0, 1000000000, 1000000000, " +
+                std::to_string(curPart) + ", " + std::to_string(curMode);
             loKitCallback(COKitCallbackType::INVALIDATE_TILES, payload);
         }
 
@@ -1152,11 +1157,16 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     _docType = LOKitHelper::getDocumentTypeAsString(getLOKitDocument()->get());
     if (_docType != "text" && part != -1)
     {
+        // The load option names the part by its index in document order, while
+        // the document boundary names parts of a presentation or drawing
+        // document by their stable page unique ids. Resolve the index to the
+        // part number before selecting it.
+        const uint64_t uniqueId = getLOKitDocument()->getPartUniqueId(part, 0);
+        if (uniqueId != 0 && uniqueId <= static_cast<uint64_t>(INT_MAX))
+            part = static_cast<int>(uniqueId);
         getLOKitDocument()->setPart(part);
-        _currentPart = part;
     }
-    else
-        _currentPart = getLOKitDocument()->getPart();
+    _currentPartUniqueId = getLOKitDocument()->getPart();
 
     // Respond by the document status
     LOG_DBG("Sending status after loading view " << _viewId);
@@ -1423,7 +1433,7 @@ TilePrioritizer::Priority ChildSession::getTilePriority(const TileDesc &tile) co
         return TilePrioritizer::Priority::LOWEST;
 
     // different part less interesting than session's current part
-    if (tile.getPart() != _currentPart)
+    if (tile.getPart() != _currentPartUniqueId)
         return TilePrioritizer::Priority::LOW;
 
     // most important to render things close to the cursor fast
@@ -3395,11 +3405,15 @@ bool ChildSession::setClientPart(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT && part != getLOKitDocument()->getPart())
-    {
+    if (getLOKitDocument()->getDocumentType() == COKitDocumentType::TEXT)
+        return true;
+
+    if (part != getLOKitDocument()->getPart())
         getLOKitDocument()->setPart(part);
-        _currentPart = part;
-    }
+
+    // The part number of a gone page selects nothing in the document, so the
+    // part read back is the one actually shown.
+    _currentPartUniqueId = getLOKitDocument()->getPart();
 
     return true;
 }
@@ -3942,19 +3956,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
                               " height=" + std::to_string(height) +
                               " wid=" + std::to_string(getCurrentWireId()));
             }
-            else if (tokens.size() == 2 && tokens.equals(0, "EMPTY"))
+            else if ((tokens.size() == 2 || tokens.size() == 3) && tokens.equals(0, "EMPTY"))
             {
-                // without mode: "EMPTY, <part>, 0"
-                const std::string part = (_docType != "text" ? tokens[1].c_str() : "0"); // Writer renders everything as part 0.
-                sendTextFrame("invalidatetiles: EMPTY, " + part + ", 0" + " wid=" + std::to_string(getCurrentWireId()));
-            }
-            else if (tokens.size() == 3 && tokens.equals(0, "EMPTY"))
-            {
-                // with mode:    "EMPTY, <part>, <mode>"
-                const std::string part = (_docType != "text" ? tokens[1].c_str() : "0"); // Writer renders everything as part 0.
-                const std::string mode = tokens[2];
-                sendTextFrame("invalidatetiles: EMPTY, " + part + ", " + mode +
-                              " wid=" + std::to_string(getCurrentWireId()));
+                // "EMPTY, <part>" or "EMPTY, <part>, <mode>"
+                const int part = (_docType != "text" ? std::atoi(tokens[1].c_str()) : 0); // Writer renders everything as part 0.
+                const int mode = (tokens.size() == 3 ? std::atoi(tokens[2].c_str()) : 0);
+                sendTextFrame("invalidatetiles: EMPTY, " + std::to_string(part) + ", " +
+                              std::to_string(mode) + " wid=" + std::to_string(getCurrentWireId()));
             }
             else
             {
@@ -4046,13 +4054,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         break;
     case COKitCallbackType::SET_PART:
     {
-        int part;
-        StringVector tokens(StringVector::tokenize(payload, ','));
-        if (getTokenInteger(tokens[1], "part", part) &&
-            getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
-            _currentPart = part;
+        // The payload is the part number of the part the view switched to.
+        int part = 0;
+        if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT &&
+            COOLProtocol::stringToInteger(payload, part))
+            _currentPartUniqueId = part;
 
-        sendTextFrame("setpart: " + payload);
+        sendTextFrame("setpart: part=" + payload);
         break;
     }
     case COKitCallbackType::UNO_COMMAND_RESULT:
