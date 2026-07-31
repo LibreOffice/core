@@ -179,3 +179,9 @@ eight, so its notes are cited VIII and IX. All five formats survived the export 
 which makes this the one note document comparable in every one of them. It catches two mistakes that look
 alike and are not: ignoring the format gives 8 and 9, and taking ODF's `text:start-value` for the first
 number rather than for an offset gives VII and VIII.
+
+`header-table.fodt` puts a two-column table in the header, which is what a table in a header is *for*: a
+two-part running head, one cell hard left and another hard right on one line. It also has a header whose
+height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame cannot hold a table — so the
+document exercises the dynamic-height path at the same time, and the body's first baseline moves with the
+header's real height.

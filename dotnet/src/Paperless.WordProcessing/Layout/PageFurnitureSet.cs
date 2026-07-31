@@ -24,20 +24,20 @@ namespace Paperless.WordProcessing.Layout;
 /// </remarks>
 public sealed class PageFurnitureSet
 {
-    private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> _headers;
-    private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> _footers;
+    private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> _headers;
+    private readonly Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> _footers;
     private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutHeaders = [];
     private readonly Dictionary<PageFurnitureSlot, PlacedFlow?> _laidOutFooters = [];
 
-    /// <summary>Creates a set from the paragraphs each slot holds.</summary>
+    /// <summary>Creates a set from the blocks each slot holds.</summary>
     /// <param name="headers">The headers, by slot; a slot with no entry has no header.</param>
     /// <param name="footers">The footers, by slot.</param>
     public PageFurnitureSet(
-        IReadOnlyDictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>>? headers = null,
-        IReadOnlyDictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>>? footers = null)
+        IReadOnlyDictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>>? headers = null,
+        IReadOnlyDictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>>? footers = null)
     {
-        _headers = headers is null ? [] : new Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>>(headers);
-        _footers = footers is null ? [] : new Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>>(footers);
+        _headers = headers is null ? [] : new Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>>(headers);
+        _footers = footers is null ? [] : new Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>>(footers);
     }
 
     /// <summary>True when the set holds nothing, so a page needs no furniture at all.</summary>
@@ -73,7 +73,7 @@ public sealed class PageFurnitureSet
             offsetFromTop: geometry.FooterOffset);
 
     private static PlacedFlow? Resolve(
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> slots,
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         Dictionary<PageFurnitureSlot, PlacedFlow?> cache,
         WritingSection section,
         DocRect area,
@@ -85,10 +85,10 @@ public sealed class PageFurnitureSet
             slots, pageNumber, isFirstPageOfSection,
             section.HasDifferentFirstPage, section.HasDifferentEvenPages);
 
-        if (!slots.TryGetValue(slot, out IReadOnlyList<PageParagraph>? paragraphs)) return null;
+        if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
         if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
-        PlacedFlow? placed = FlowLayouter.LayOut(paragraphs, area, offsetFromTop);
+        PlacedFlow? placed = FlowLayouter.LayOut(blocks, area, offsetFromTop);
         cache[slot] = placed;
         return placed;
     }
@@ -102,7 +102,7 @@ public sealed class PageFurnitureSet
     /// cache on a list that two slots could share.
     /// </remarks>
     private static PageFurnitureSlot ChosenSlot(
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> slots,
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         int pageNumber,
         bool isFirstPageOfSection,
         bool hasDifferentFirstPage,

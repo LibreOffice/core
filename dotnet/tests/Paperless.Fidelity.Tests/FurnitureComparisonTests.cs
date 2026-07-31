@@ -68,6 +68,11 @@ public sealed class FurnitureComparisonTests : IDisposable
     [InlineData("furniture.docx")]
     [InlineData("furniture.rtf")]
     [InlineData("furniture.doc")]
+    // A two-part running head, which is what a table in a header is *for*: one cell hard left and another
+    // hard right, on one line. It is also the case where dropping the table looks harmless and is not — its
+    // two paragraphs would stack as loose lines, giving the header a height no table has and pushing the body
+    // text down by the difference on every page of the document.
+    [InlineData("header-table.fodt")]
     public void EveryPageDrawsItsHeaderAndFooterWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -142,6 +147,7 @@ public sealed class FurnitureComparisonTests : IDisposable
     [InlineData("furniture.docx")]
     [InlineData("furniture.rtf")]
     [InlineData("furniture.doc")]
+    [InlineData("header-table.fodt")]
     public void AHeaderPushesTheBodyDown(string fileName)
     {
         string path = Corpus.Require(fileName);

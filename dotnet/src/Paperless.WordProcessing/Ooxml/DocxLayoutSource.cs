@@ -161,22 +161,23 @@ public sealed partial class DocxLayoutSource
     }
 
     /// <summary>
-    /// Reads a flow's paragraphs only: a header or a footer.
+    /// Reads a flow's blocks: a header's or a footer's.
     /// </summary>
     /// <remarks>
-    /// Paragraphs only, unlike <see cref="ReadCell"/>. A header <em>could</em> hold a table — the layouter
-    /// places one either way — but no reader has been shown to need it, and dropping one here is a smaller
-    /// wrong answer than the alternative was: a table stacked into a header as loose paragraphs would give
-    /// the header a height no table has and push the body text down by it.
+    /// The same walk a cell takes, tables included, because a table is how a two-part running head is usually
+    /// laid out — one cell hard left, another hard right — and <see cref="FlowLayouter"/> places one either
+    /// way. Dropping the table instead is not the harmless simplification it looks like: its paragraphs would
+    /// stack as loose lines, giving the header a height no table has and pushing the body text down by the
+    /// difference on every page.
     /// </remarks>
     /// <param name="element">The element whose block-level children to read.</param>
-    public List<PageParagraph> ReadFlow(XElement element)
+    public List<PageBlock> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
 
-        List<PageParagraph> paragraphs = [];
-        Walk(element, paragraphs, depth: 0);
-        return paragraphs;
+        List<PageBlock> blocks = [];
+        Walk(element, blocks, depth: 0);
+        return blocks;
     }
 
     /// <summary>

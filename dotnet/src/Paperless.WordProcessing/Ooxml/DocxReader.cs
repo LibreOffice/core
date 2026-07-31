@@ -294,8 +294,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
     /// </remarks>
     private PageFurnitureSet? Furniture(DocxLayoutSource source, XElement sectionProperties)
     {
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         foreach (XElement reference in sectionProperties.Elements())
         {
@@ -305,10 +305,10 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             if (SlotOf(Word.Attribute(reference, "type")) is not { } slot) continue;
             if (_file.LoadHeaderOrFooter(Word.RelationshipId(reference)) is not { } part) continue;
 
-            List<PageParagraph> paragraphs = source.ReadFlow(part);
-            if (paragraphs.Count == 0) continue;
+            List<PageBlock> blocks = source.ReadFlow(part);
+            if (blocks.Count == 0) continue;
 
-            (isHeader ? headers : footers)[slot] = paragraphs;
+            (isHeader ? headers : footers)[slot] = blocks;
         }
 
         PageFurnitureSet set = new(headers, footers);

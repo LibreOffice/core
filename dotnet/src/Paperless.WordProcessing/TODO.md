@@ -441,9 +441,17 @@ is read and verified, so what remains is the filling of pages rather than the me
       while a paragraph mark means whichever level its own sprms name, and `sprmPFInnerTableCell` implies at
       least level two whatever the depth sprm says. Both assemblers now keep one open table per level and
       append a finished inner one to the cell of the level enclosing it, innermost first.
-- [ ] A table inside a header. The layouter places one; no reader passes one, because `ReadFlow` collects
-      paragraphs only. Dropping it is the smaller wrong answer: stacking a table's cells into a header as
-      loose paragraphs would give the header a height no table has and push the body text down by it.
+- [x] A table inside a header, for **ODF and DOCX**. `PageFurnitureSet` holds blocks rather than paragraphs
+      and `ReadFlow` takes the same walk a cell does, so the layouter — which could always place one — is
+      finally given one. What it buys is the two-part running head: one cell hard left and another hard right,
+      on one line, which is how a running head is usually built. Dropping the table is not the harmless
+      simplification it looks like, and that is the measured part: its paragraphs would stack as loose lines,
+      giving the header a height no table has and pushing the body text down by the difference on **every**
+      page. Verified against LibreOffice on `header-table.fodt`, positions and body offset alike.
+- [ ] A table inside a header for **RTF and DOC**. Both readers record furniture as a list of *paragraphs*
+      during the content walk — `FurnitureList` and `ReadLayoutFurniture` — so a table in a header is dropped
+      before the block list is built. The change is in the recording rather than in the layout: everything
+      downstream already takes blocks.
 - [ ] `w:hRule="exact"`, the one row height that really is a height: it clips its content rather than
       growing. Every other spelling in every format is a floor, which is what `PageTableRow.MinHeight` is.
 - [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read

@@ -234,8 +234,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// </remarks>
     private PageFurnitureSet? Furniture(LayoutFonts fonts, int section)
     {
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         Fill(headers, _headerLayout);
         Fill(footers, _footerLayout);
@@ -247,7 +247,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         // saying nothing: \sectd resets the geometry and leaves the running heads alone, so a document that
         // writes one header and three \sect marks has that header on all four sections.
         void Fill(
-            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> into,
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
             IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), List<RtfLayoutParagraph>> from)
         {
             foreach (Model.PageFurnitureSlot slot in Enum.GetValues<Model.PageFurnitureSlot>())

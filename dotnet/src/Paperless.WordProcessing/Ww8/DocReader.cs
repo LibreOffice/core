@@ -210,8 +210,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     {
         Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture(section);
 
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         Fill(headers, stated.Headers);
         Fill(footers, stated.Footers);
@@ -220,7 +220,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         return set.IsEmpty ? null : set;
 
         void Fill(
-            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageParagraph>> into,
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
             IReadOnlyDictionary<Model.PageFurnitureSlot,
                 List<Ww8DocumentReader.Ww8LayoutParagraph>> from)
         {

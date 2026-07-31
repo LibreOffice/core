@@ -126,8 +126,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     {
         if (master is null) return null;
 
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> headers = [];
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> footers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         Add(headers, PageFurnitureSlot.Default, master.Header, source);
         Add(headers, PageFurnitureSlot.Even, master.LeftHeader, source);
@@ -141,15 +141,15 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     }
 
     private static void Add(
-        Dictionary<PageFurnitureSlot, IReadOnlyList<PageParagraph>> slots,
+        Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
         PageFurnitureSlot slot,
         XElement? element,
         OdtLayoutSource source)
     {
         if (element is null) return;
 
-        List<PageParagraph> paragraphs = source.ReadFlow(element);
-        if (paragraphs.Count > 0) slots[slot] = paragraphs;
+        List<PageBlock> blocks = source.ReadFlow(element);
+        if (blocks.Count > 0) slots[slot] = blocks;
     }
 
     /// <inheritdoc/>
