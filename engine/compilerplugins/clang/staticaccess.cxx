@@ -44,6 +44,37 @@ bool isStatic(ValueDecl const * decl, bool * memberEnumerator) {
     return true;
 }
 
+bool isIdExpression(Expr const * expr) {
+    if (isa<DeclRefExpr>(expr)) {
+        return true;
+    }
+    // A non-static data member named without an explicit this-> is written as a plain identifier
+    // too:
+    if (auto const member = dyn_cast<MemberExpr>(expr)) {
+        if (auto const base = dyn_cast<CXXThisExpr>(member->getBase()->IgnoreImpCasts())) {
+            return base->isImplicit();
+        }
+    }
+    return false;
+}
+
+bool isFromStdNamespace(QualType type) {
+    auto const record = type->getAsCXXRecordDecl();
+    if (record == nullptr) {
+        return false;
+    }
+    // Walk out to the enclosing std, so that a type in a nested namespace like std::chrono still
+    // counts (isInStdNamespace would only match a type directly in std):
+    for (auto context = record->getDeclContext(); context != nullptr;
+         context = context->getParent())
+    {
+        if (context->isStdNamespace()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 class StaticAccess:
     public loplugin::FilteringPlugin<StaticAccess>
 {
@@ -64,6 +95,13 @@ bool StaticAccess::VisitMemberExpr(MemberExpr const * expr) {
     auto decl = expr->getMemberDecl();
     bool me;
     if (!isStatic(decl, &me)) {
+        return true;
+    }
+    // Accessing a static member of a std type through an id-expression is an accepted idiom (e.g.,
+    // foo.npos for std::string::npos):
+    if (isIdExpression(expr->getBase()->IgnoreImpCasts())
+        && isFromStdNamespace(expr->getBase()->getType()))
+    {
         return true;
     }
     auto const loc = expr->getExprLoc();

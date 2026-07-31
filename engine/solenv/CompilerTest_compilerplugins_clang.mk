@@ -83,6 +83,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/simplifydynamiccast \
     compilerplugins/clang/test/simplifypointertobool \
     compilerplugins/clang/test/singlevalfields \
+    compilerplugins/clang/test/staticaccess \
     compilerplugins/clang/test/staticconstexpr \
     compilerplugins/clang/test/staticconstfield \
     compilerplugins/clang/test/staticdynamic \
