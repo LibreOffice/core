@@ -295,6 +295,20 @@ public enum Ww8FibTable
     /// <summary>Comment authors.</summary>
     AnnotationOwners = 36,
 
+    /// <summary>
+    /// The body's shape anchors: <c>PlcSpaMom</c>, a PLCF of 26-byte <c>FSPA</c> records.
+    /// </summary>
+    /// <remarks>
+    /// Forty rather than any number the C++ header's byte offsets suggest, for the reason
+    /// <see cref="BookmarkStarts"/> records: this enumeration indexes the FIB's array in the order
+    /// <c>WW8Fib::WW8Fib</c> reads it (<c>ww8scan.cxx:6112</c>), where <c>fcPlcfdoaMom</c> and its
+    /// three siblings occupy 38 to 41, immediately before the comment bookmark tables.
+    /// </remarks>
+    DrawingAnchors = 40,
+
+    /// <summary>Shape anchors in headers and footers: <c>PlcSpaHdr</c>.</summary>
+    HeaderDrawingAnchors = 41,
+
     /// <summary>Endnote reference positions.</summary>
     EndnoteReferences = 46,
 

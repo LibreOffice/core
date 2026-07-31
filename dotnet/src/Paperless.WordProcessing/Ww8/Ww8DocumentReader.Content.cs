@@ -162,18 +162,27 @@ public sealed partial class Ww8DocumentReader
                     continue;
 
                 case Special.Picture:
-                    // Only outside a field. A SHAPE or INCLUDEPICTURE field's cached result uses this
-                    // same character for its anchor, so counting every one of them reports a picture
-                    // for every shape in the document — and the shape's own text has already arrived
-                    // as a frame section.
-                    if (state.InFieldInstruction || state.FieldDepth > 0) continue;
+                    // Not every U+0001 is a picture: Word writes an *inline shape* with the same
+                    // character, and what tells the two apart is the mapping mode of the PICF that
+                    // the run's sprmCPicLocation points at. A shape's own text has already arrived as
+                    // a frame section, so reporting an image for one would be a second record of the
+                    // same thing as well as a wrong one.
+                    // A field's instruction is code rather than content, so it is skipped whatever it
+                    // holds; a field's cached *result* is not, which is why the depth is not tested.
+                    if (state.InFieldInstruction) continue;
+                    if (!IsEmbeddedPicture(position)) continue;
                     FlushRun(state);
                     state.PendingImages.Add(new ContentImage());
                     continue;
 
                 case Special.DrawnObject:
-                    // A drawing anchor, not a picture. Telling an embedded image from a shape needs
-                    // the Escher record stream, which extraction does not read.
+                    // A drawing anchor. Whether it is an image depends on what the shape is, which the
+                    // FSPA at this position and the Escher drawing decide between them — a floating
+                    // picture is a shape too, of type mso_sptPictureFrame.
+                    if (state.InFieldInstruction) continue;
+                    if (!IsDrawnPicture(position)) continue;
+                    FlushRun(state);
+                    state.PendingImages.Add(new ContentImage());
                     continue;
 
                 default:

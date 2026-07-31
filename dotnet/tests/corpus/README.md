@@ -384,8 +384,30 @@ Three things about comparing it, all measured:
   vertically over and above the file's zeros, so `frame-wrap.rtf` is compared for its wrap and not for the
   position of the text inside the frame.
 
-`frame-wrap.doc` is committed and not compared: reading a DOC's drawings needs the Escher record stream,
-which `Paperless.MsBinary` does not have yet. It lays out as though the frame were not there.
+`frame-wrap.doc` is compared too, in `DocFrameComparisonTests` rather than beside the other three, because
+LibreOffice's DOC export did not keep the document unchanged and the differences are the interesting part.
+It gave the text box a **0.75 pt blue outline** that the ODF source explicitly asked it not to have, and it
+wrote no `dxWrapDist*` properties at all. Both change where the text goes, by measurable amounts:
+
+- The shape's rectangle is 2267 x 1692 twips at the paragraph's top-left, and LibreOffice draws its right
+  edge at 170.05 pt — exactly the 3401 twips the `FSPA` states.
+- The body text resumes at 179.55 pt, which is 3591 twips. The 190-twip gap is **181** of drawing-layer
+  default wrap distance (114935 EMU, `ww8par.cxx:1001` — not the RTF import's 0.2 cm), plus **half the
+  15-twip line**, plus the 2 twips the same document's ODF form also shows. Word states a shape's rectangle
+  as the path its outline runs along; Writer keeps text clear of the bounding box the stroke straddles.
+- One consequence to know before editing this document: the DOC wraps **seven** lines where the ODF wraps
+  eight, because those same fractions of a twip put the fourth line's box just clear of the frame's top. The
+  two formats agree about the rule and disagree about one line by 0.14 pt, so a change that moves the frame
+  by a twip can legitimately move a whole line.
+
+`picture-anchor.fodt` exists for the one question the frame documents cannot answer: whether a special
+character is an image. It holds an inline 2 x 2 px PNG and a floating text box, and its `.doc` form is the
+discriminating case, because LibreOffice's DOC export writes **both** as records that look alike. The picture
+is a U+0001 whose `PICF` states mapping mode `0x64`, meaning "an Escher shape follows"; the text box is a
+`SHAPE` field whose cached result is a U+0008 for the shape *and* a U+0001 for a picture frame with no
+properties at all. So neither the character, nor the mapping mode, nor the shape type separates them — only
+the `pib` property naming an actual blip does. A reader that answers "picture" to everything and one that
+answers "shape" to everything each pass half of this document.
 
 `frame-wrap-modes.fodt` is the second frame document and exists for the modes the first cannot reach: four
 2 cm-tall frames, far enough apart not to interact, one each for `left` at the end margin, `none` — ODF's

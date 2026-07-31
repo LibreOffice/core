@@ -142,6 +142,18 @@ public static class EscherPropertyIds
     /// <summary>The host's identifier for the shape's text.</summary>
     public const ushort TextId = 128;
 
+    /// <summary>The inset between the shape's left edge and its own text, in EMUs.</summary>
+    public const ushort TextInsetLeft = 129;
+
+    /// <summary>The inset between the shape's top edge and its own text, in EMUs.</summary>
+    public const ushort TextInsetTop = 130;
+
+    /// <summary>The inset between the shape's right edge and its own text, in EMUs.</summary>
+    public const ushort TextInsetRight = 131;
+
+    /// <summary>The inset between the shape's bottom edge and its own text, in EMUs.</summary>
+    public const ushort TextInsetBottom = 132;
+
     /// <summary>The blip to display, as an index into the blip store.</summary>
     public const ushort Picture = 260;
 
@@ -151,14 +163,26 @@ public static class EscherPropertyIds
     /// <summary>The shape's foreground fill colour.</summary>
     public const ushort FillColour = 385;
 
-    /// <summary>Whether the shape is filled at all.</summary>
-    public const ushort Filled = 447;
+    /// <summary>
+    /// Whether the shape is filled at all — a <em>boolean</em> property, so read it with
+    /// <see cref="EscherPropertyTable.Boolean"/> rather than <see cref="EscherPropertyTable.Value"/>.
+    /// </summary>
+    /// <remarks>
+    /// 443 rather than the group identifier 447 the entry is actually written under. Naming the
+    /// group here instead would make <c>Value(Filled)</c> compile and return the whole group's
+    /// thirty-two bits, which is non-zero for a shape that states any fill property at all.
+    /// </remarks>
+    public const ushort Filled = 443;
 
     /// <summary>The line colour.</summary>
     public const ushort LineColour = 448;
 
+    /// <summary>The line's thickness in EMUs; 9525, a point in EMUs, when it states none.</summary>
+    public const ushort LineWidth = 459;
+
+    /// <inheritdoc cref="Filled"/>
     /// <summary>Whether the shape has an outline at all.</summary>
-    public const ushort Lined = 511;
+    public const ushort Lined = 508;
 
     /// <summary>The master shape this one inherits from.</summary>
     public const ushort MasterShape = 769;
@@ -169,6 +193,66 @@ public static class EscherPropertyIds
     /// <summary>The shape's alternative text.</summary>
     public const ushort AlternativeText = 897;
 
-    /// <summary>Whether the shape is hidden.</summary>
+    /// <summary>How far text must stay clear of the shape on its left, in EMUs.</summary>
+    /// <remarks>
+    /// Word's, and the four are the only place a floating shape's wrap spacing is recorded — the
+    /// <c>FSPA</c> carries the rectangle and the wrap mode but no distances. A shape stating none
+    /// does not get zero; see the host's reader for the default it takes.
+    /// </remarks>
+    public const ushort WrapDistanceLeft = 900;
+
+    /// <inheritdoc cref="WrapDistanceLeft"/>
+    public const ushort WrapDistanceTop = 901;
+
+    /// <inheritdoc cref="WrapDistanceLeft"/>
+    public const ushort WrapDistanceRight = 902;
+
+    /// <inheritdoc cref="WrapDistanceLeft"/>
+    public const ushort WrapDistanceBottom = 903;
+
+    /// <summary>How the shape sits inside its horizontal origin: an offset, or an edge to align to.</summary>
+    /// <remarks>
+    /// One of the four properties Word writes into the <em>tertiary</em> table
+    /// (<see cref="EscherRecordTypes.TertiaryShapeProperties"/>) rather than the shape's own, which
+    /// is why that table is reported separately. <c>msdffimp.cxx:5216</c> reads all four as raw
+    /// six-byte entries under the identifiers 0x038F to 0x0392.
+    /// </remarks>
+    public const ushort HorizontalPosition = 911;
+
+    /// <summary>What the shape's horizontal position is measured from.</summary>
+    /// <inheritdoc cref="HorizontalPosition"/>
+    public const ushort HorizontalRelation = 912;
+
+    /// <summary>How the shape sits inside its vertical origin.</summary>
+    /// <inheritdoc cref="HorizontalPosition"/>
+    public const ushort VerticalPosition = 913;
+
+    /// <summary>What the shape's vertical position is measured from.</summary>
+    /// <inheritdoc cref="HorizontalPosition"/>
+    public const ushort VerticalRelation = 914;
+
+    /// <summary>Whether the shape is hidden. A boolean property; see <see cref="Filled"/>.</summary>
     public const ushort Hidden = 958;
+}
+
+/// <summary>
+/// The built-in shape types an <c>msofbtSp</c> record's instance names, for the handful a reader
+/// has to tell apart before it can draw anything.
+/// </summary>
+/// <remarks>
+/// <c>MSO_SPT</c> in <c>include/svx/msdffdef.hxx:276</c> runs to some two hundred entries, nearly
+/// all of them preset geometries that belong with the preset-geometry evaluator rather than here.
+/// These three are the ones that change what a shape <em>is</em>: a picture frame holds a raster, a
+/// text box holds a story, and everything else is drawn.
+/// </remarks>
+public static class EscherShapeTypes
+{
+    /// <summary>A plain rectangle, which is also what a shape with no type at all is drawn as.</summary>
+    public const ushort Rectangle = 1;
+
+    /// <summary>A frame whose content is the blip its <c>pib</c> property names.</summary>
+    public const ushort PictureFrame = 75;
+
+    /// <summary>A box whose content is text the host stores elsewhere.</summary>
+    public const ushort TextBox = 202;
 }

@@ -254,6 +254,16 @@ public static class Ww8SprmReader
 
         /// <summary>The deletion's date: <c>sprmCDttmRMarkDel</c>.</summary>
         public const ushort DeletionDate = 0x6864;
+
+        /// <summary>
+        /// Where the run's picture is: <c>sprmCPicLocation</c>, a byte offset into the picture stream.
+        /// </summary>
+        /// <remarks>
+        /// Into the <c>Data</c> stream when the document has one and into <c>WordDocument</c> when it
+        /// does not, which is the trap: the offset is stated the same way either way, so looking in
+        /// the wrong stream finds a structure that parses and describes something else.
+        /// </remarks>
+        public const ushort PictureLocation = 0x6A03;
     }
 
     /// <summary>
