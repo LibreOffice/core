@@ -120,22 +120,91 @@ public sealed class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        RunWalker walker = new();
+        walker.Walk(element);
+
         return new PageParagraph
         {
-            Text = TextOf(element),
+            Text = walker.Text,
             Face = face,
-            Font = _references.GetValueOrDefault(
-                (text.FamilyName, text.Weight, text.IsItalic)),
+            Font = _references.GetValueOrDefault(text.FaceKey),
+            Colour = text.Colour ?? Colour.Black,
             Format = WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval),
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
+            Runs = RunsOf(walker.Ranges, properties, text, face),
             Source = element,
         };
     }
 
     /// <summary>
-    /// A paragraph's text, as laid out rather than as stored.
+    /// The paragraph's runs, or nothing when every one of them is the paragraph's own formatting.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Returning an empty list for a uniform paragraph is not only an optimisation: it puts plain prose
+    /// back on the single-face path, which shapes the whole paragraph in one call. A run boundary also
+    /// breaks shaping context, so a paragraph split into runs it does not need loses a kern pair at each
+    /// boundary and measures very slightly wide — and a DOCX splits runs for reasons that have nothing to
+    /// do with formatting, a spell-check marker or a revision id being enough.
+    /// </para>
+    /// <para>
+    /// A range whose font cannot be loaded falls back to the paragraph's face rather than being dropped:
+    /// its text is still part of the paragraph, and losing it would silently shorten the document.
+    /// </para>
+    /// </remarks>
+    private List<PageRun> RunsOf(
+        IReadOnlyList<StyledRange> ranges,
+        XElement? paragraphProperties,
+        WordTextStyle paragraph,
+        OpenTypeFace paragraphFace)
+    {
+        List<PageRun> runs = new(ranges.Count);
+        bool varies = false;
+
+        foreach (StyledRange range in ranges)
+        {
+            WordTextStyle style = range.RunProperties is null
+                ? paragraph
+                : WordParagraphFormats.ResolveRun(_styles, paragraphProperties, range.RunProperties);
+
+            OpenTypeFace face = Face(style) ?? paragraphFace;
+
+            if (face != paragraphFace
+                || style.Size != paragraph.Size
+                || style.Colour != paragraph.Colour
+                || style.Language != paragraph.Language)
+            {
+                varies = true;
+            }
+
+            runs.Add(new PageRun(
+                range.Start,
+                range.Length,
+                face,
+                style.Size,
+                _references.GetValueOrDefault(style.FaceKey),
+                style.Colour ?? paragraph.Colour ?? Colour.Black,
+                new ShapingOptions(Language: style.Language)));
+        }
+
+        return varies ? runs : [];
+    }
+
+    /// <summary>
+    /// A stretch of a paragraph's text and the run properties in force over it.
+    /// </summary>
+    /// <param name="Start">Its first character, as an index into the paragraph's text.</param>
+    /// <param name="Length">How many characters it covers.</param>
+    /// <param name="RunProperties">
+    /// The enclosing <c>w:r</c>'s <c>w:rPr</c>, or null when the run states none — in which case the
+    /// paragraph mark's own formatting applies.
+    /// </param>
+    private readonly record struct StyledRange(int Start, int Length, XElement? RunProperties);
+
+    /// <summary>
+    /// Walks a paragraph, building the text as laid out and the ranges its runs divide it into.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -149,23 +218,42 @@ public sealed class DocxLayoutSource
     /// <c>w:tab</c> and <c>w:br</c> are elements rather than characters, as in ODF, and dropping them
     /// silently closes up the space they occupy.
     /// </para>
+    /// <para>
+    /// The ranges come from the same walk rather than from a second pass, because they are offsets into
+    /// that text and the text is not a concatenation of the paragraph's <c>w:t</c> values — every tab,
+    /// break and anchor shifts everything after it, and every skipped deletion shifts it back.
+    /// </para>
     /// </remarks>
-    private static string TextOf(XElement paragraph)
+    private sealed class RunWalker
     {
-        StringBuilder builder = new();
-        bool inInstruction = false;
-        Append(paragraph, builder, ref inInstruction, depth: 0);
-        return builder.ToString();
+        /// <summary>How deep a paragraph's element nesting is followed.</summary>
+        /// <remarks>
+        /// Hyperlinks, content controls, smart tags and change regions all wrap runs and do nest, but a
+        /// generated file can nest indefinitely and this recurses on untrusted input.
+        /// </remarks>
+        private const int MaxDepth = 64;
 
-        static void Append(XElement element, StringBuilder builder, ref bool inInstruction, int depth)
+        private readonly StringBuilder _builder = new();
+        private readonly List<StyledRange> _ranges = [];
+        private XElement? _runProperties;
+        private bool _inInstruction;
+
+        /// <summary>The paragraph's text, as laid out.</summary>
+        internal string Text => _builder.ToString();
+
+        /// <summary>The ranges, in order, partitioning the text.</summary>
+        internal IReadOnlyList<StyledRange> Ranges => _ranges;
+
+        /// <summary>Walks a <c>w:p</c>.</summary>
+        internal void Walk(XElement paragraph) => Append(paragraph, depth: 0);
+
+        private void Append(XElement element, int depth)
         {
-            if (depth > 64) return;
+            if (depth > MaxDepth) return;
 
             foreach (XElement child in element.Elements())
             {
-                string name = child.Name.LocalName;
-
-                switch (name)
+                switch (child.Name.LocalName)
                 {
                     case "del" or "delText" or "instrText":
                         // Deleted text and field instructions are in the file and not on the page.
@@ -174,35 +262,63 @@ public sealed class DocxLayoutSource
                     case "fldChar":
                         // "separate" ends the instruction and starts the result; "end" closes the field.
                         string? type = Word.Attribute(child, "fldCharType");
-                        if (type == "begin") inInstruction = true;
-                        else if (type is "separate" or "end") inInstruction = false;
+                        if (type == "begin") _inInstruction = true;
+                        else if (type is "separate" or "end") _inInstruction = false;
                         break;
 
-                    case "t" when !inInstruction:
-                        builder.Append(child.Value);
+                    case "t" when !_inInstruction:
+                        Emit(child.Value);
                         break;
 
-                    case "tab" when !inInstruction:
-                        builder.Append('\t');
+                    case "tab" when !_inInstruction:
+                        Emit("\t");
                         break;
 
-                    case "br" when !inInstruction:
-                        builder.Append(LineSeparator);
+                    case "br" when !_inInstruction:
+                        Emit(LineSeparator.ToString());
                         break;
 
                     case "footnoteReference" or "endnoteReference" or "commentReference"
                         or "drawing" or "pict" or "object":
-                        builder.Append(AnchorCharacter);
+                        Emit(AnchorCharacter.ToString());
                         break;
 
                     case "pPr" or "bookmarkStart" or "bookmarkEnd" or "proofErr" or "rPr":
                         break;
 
+                    case "r":
+                        // The one element that carries character formatting. Runs do not nest, but this
+                        // saves and restores anyway so that a malformed file cannot lose the outer state.
+                        XElement? outer = _runProperties;
+                        _runProperties = Word.Child(child, "rPr");
+                        Append(child, depth + 1);
+                        _runProperties = outer;
+                        break;
+
                     default:
-                        Append(child, builder, ref inInstruction, depth + 1);
+                        Append(child, depth + 1);
                         break;
                 }
             }
+        }
+
+        /// <summary>Appends text under the run properties currently in force.</summary>
+        private void Emit(string text)
+        {
+            if (text.Length == 0) return;
+
+            _builder.Append(text);
+
+            // Adjacent runs with the same properties merge, which matters because a DOCX splits runs for
+            // reasons that are not formatting: a proofing error, a revision id, a bookmark boundary.
+            if (_ranges.Count > 0 && _ranges[^1].RunProperties == _runProperties)
+            {
+                _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
+                return;
+            }
+
+            _ranges.Add(new StyledRange(
+                _builder.Length - text.Length, text.Length, _runProperties));
         }
     }
 
@@ -222,7 +338,7 @@ public sealed class DocxLayoutSource
 
     private OpenTypeFace? Face(WordTextStyle text)
     {
-        (string? Family, int Weight, bool Italic) key = (text.FamilyName, text.Weight, text.IsItalic);
+        (string? Family, int Weight, bool Italic) key = text.FaceKey;
         if (_faces.TryGetValue(key, out OpenTypeFace? cached)) return cached;
 
         OpenTypeFace? face = null;

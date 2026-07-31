@@ -78,6 +78,9 @@ public sealed class MixedRunComparisonTests : IDisposable
 
     [Theory]
     [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.rtf")]
+    [InlineData("mixed-runs.doc")]
     public void EveryRunIsDrawnWhereLibreOfficeDrawsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
@@ -232,6 +235,9 @@ public sealed class MixedRunComparisonTests : IDisposable
 
     [Theory]
     [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.rtf")]
+    [InlineData("mixed-runs.doc")]
     public void AMixedParagraphIsDrawnAsSeveralRuns(string fileName)
     {
         string path = Corpus.Require(fileName);

@@ -436,9 +436,16 @@ public sealed partial class Ww8DocumentReader
         // rather than while applying it: the sprm naming the style sits inside the same grpprl as the
         // direct formatting, so a single pass would apply the style's properties over the direct ones
         // that were meant to override them.
-        foreach (ReadOnlyMemory<byte> inherited in
-                 _styles.ResolveCharacterChain(CharacterStyleIndexIn(direct)))
-            format = ApplyCharacterSprms(format, inherited);
+        //
+        // Index zero is skipped rather than resolved. WW8 keeps paragraph and character styles in one
+        // table and istd 0 is *Normal*, so resolving it here would lay a paragraph style over the run —
+        // which for emphasis is harmless and for anything with a value is not.
+        if (CharacterStyleIndexIn(direct) is var characterStyle and not 0)
+        {
+            foreach (ReadOnlyMemory<byte> inherited in
+                     _styles.ResolveCharacterChain(characterStyle))
+                format = ApplyCharacterSprms(format, inherited);
+        }
 
         format = ApplyCharacterSprms(format, direct);
 
@@ -453,8 +460,9 @@ public sealed partial class Ww8DocumentReader
     /// The character style a grpprl names, or zero when it names none.
     /// </summary>
     /// <remarks>
-    /// Style zero is <c>Default Paragraph Font</c>, which sets nothing — so treating "no style named"
-    /// and "style zero" alike costs nothing and saves the caller a nullable.
+    /// Zero means none. It is not <c>Default Paragraph Font</c>, which is what the name suggests: WW8
+    /// keeps paragraph and character styles in one table and istd 0 is <em>Normal</em>, so a caller must
+    /// treat zero as "the run names no character style" rather than resolving it.
     /// </remarks>
     private static ushort CharacterStyleIndexIn(ReadOnlyMemory<byte> grpprl)
     {

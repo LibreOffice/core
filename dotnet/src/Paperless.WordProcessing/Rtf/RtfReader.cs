@@ -3,6 +3,7 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Core.Graphics;
 using Paperless.Text.Fonts;
 using Paperless.WordProcessing.Layout;
 
@@ -139,30 +140,26 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
     {
-        SystemFontResolver fonts = new(SystemFontIndex.Build());
-        Dictionary<(string?, int, bool), OpenTypeFace?> faces = [];
+        LayoutFonts fonts = new();
         List<PageParagraph> paragraphs = [];
 
         foreach (RtfLayoutParagraph paragraph in _layoutParagraphs)
         {
-            (string?, int, bool) key =
-                (paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
-
-            if (!faces.TryGetValue(key, out OpenTypeFace? face))
-            {
-                face = LoadFace(fonts, paragraph);
-                faces[key] = face;
-            }
+            OpenTypeFace? face = fonts.Face(
+                paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
             if (face is null) continue;
 
             paragraphs.Add(new PageParagraph
             {
                 Text = paragraph.Text,
                 Face = face,
+                Font = fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic),
+                Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
+                Runs = RunsOf(fonts, paragraph, face),
             });
         }
 
@@ -176,21 +173,54 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             new Paginator(pagination).Paginate(paragraphs, Sections[0]), paragraphs);
     }
 
-    /// <summary>The face a paragraph asks for, or null when nothing can be read.</summary>
-    private static OpenTypeFace? LoadFace(
-        SystemFontResolver fonts, RtfLayoutParagraph paragraph)
+    /// <summary>
+    /// The paragraph's runs, or nothing when every one of them is the paragraph's own formatting.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Returning an empty list for a uniform paragraph puts plain prose back on the single-face path,
+    /// which shapes the whole paragraph in one call. That is not only cheaper: a run boundary breaks the
+    /// shaping context, so a paragraph split into runs it does not need loses a kern pair at every
+    /// boundary and measures very slightly wide.
+    /// </para>
+    /// <para>
+    /// This is also the earliest point at which the question can be answered, because two runs asking for
+    /// different families can resolve to the same face — an RTF naming <c>Calibri</c> in one run and
+    /// <c>Carlito</c> in the next is one face on a Linux machine, and splitting there would be splitting
+    /// on nothing.
+    /// </para>
+    /// </remarks>
+    private static List<PageRun> RunsOf(
+        LayoutFonts fonts, RtfLayoutParagraph paragraph, OpenTypeFace paragraphFace)
     {
-        try
+        IReadOnlyList<RtfLayoutRun> stated = paragraph.Runs ?? [];
+        List<PageRun> runs = new(stated.Count);
+        bool varies = false;
+
+        foreach (RtfLayoutRun run in stated)
         {
-            return fonts.LoadOpenType(fonts.Resolve(new FontRequest(
-                paragraph.FamilyName ?? string.Empty, paragraph.Weight, paragraph.IsItalic)));
+            OpenTypeFace face =
+                fonts.Face(run.FamilyName, run.Weight, run.IsItalic) ?? paragraphFace;
+
+            if (face != paragraphFace
+                || run.Size != paragraph.Size
+                || run.Colour != paragraph.Colour
+                || run.Language != paragraph.Language)
+            {
+                varies = true;
+            }
+
+            runs.Add(new PageRun(
+                run.Start,
+                run.Length,
+                face,
+                run.Size,
+                fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
+                run.Colour ?? paragraph.Colour ?? Colour.Black,
+                new Text.Shaping.ShapingOptions(Language: run.Language)));
         }
-        catch (Exception exception) when (exception is Core.MalformedDocumentException
-                                             or IOException
-                                             or UnauthorizedAccessException)
-        {
-            return null;
-        }
+
+        return varies ? runs : [];
     }
 
     /// <inheritdoc/>

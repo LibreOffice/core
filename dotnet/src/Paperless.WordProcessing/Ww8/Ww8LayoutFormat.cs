@@ -1,3 +1,4 @@
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Layout;
 
@@ -82,6 +83,17 @@ public readonly record struct Ww8LayoutFormat
 
     /// <summary>The Windows language id, from <c>sprmCRgLid0</c>.</summary>
     public int? LanguageId { get; init; }
+
+    /// <summary>
+    /// The text colour, or null for the automatic colour.
+    /// </summary>
+    /// <remarks>
+    /// WW8 states it two ways and a document can carry either. <c>sprmCIco</c> is an index into a fixed
+    /// seventeen-entry palette whose first entry is "automatic"; <c>sprmCCv</c> is a full COLORREF, which
+    /// is <em>BGR</em> rather than RGB. Reading the latter without swapping the outer bytes turns every
+    /// red word blue.
+    /// </remarks>
+    public Colour? Colour { get; init; }
 
     /// <summary>
     /// Translates into the layout engine's own properties.

@@ -1,5 +1,6 @@
 using System.Text;
 using Paperless.Core.Globalization;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 
 namespace Paperless.WordProcessing.Ww8;
@@ -33,6 +34,12 @@ public sealed partial class Ww8DocumentReader
     /// True when the paragraph is inside a table. Tables are laid out as grids rather than as a run of
     /// paragraphs, so a caller filling pages skips these rather than stacking them.
     /// </param>
+    /// <param name="Colour">The colour the paragraph's mark carries, or null for the automatic colour.</param>
+    /// <param name="Runs">
+    /// The stretches its character formatting divides it into, in order. Always populated, even where the
+    /// whole paragraph is uniform — the layout source decides whether they are worth carrying, since it is
+    /// the only party that can compare two <em>resolved</em> faces rather than two requested families.
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         string Text,
         Text.Layout.ParagraphFormat Format,
@@ -41,7 +48,40 @@ public sealed partial class Ww8DocumentReader
         int Weight,
         bool IsItalic,
         string? Language,
-        bool IsInTable);
+        bool IsInTable,
+        Colour? Colour = null,
+        IReadOnlyList<Ww8LayoutRun>? Runs = null);
+
+    /// <summary>
+    /// One stretch of a paragraph's text and the character formatting in force over it.
+    /// </summary>
+    /// <remarks>
+    /// A CHPX covers a range of the file rather than of the paragraph, and one paragraph can span several
+    /// — that is how WW8 stores a bold word. The ranges here are into the paragraph's <em>text</em>, which
+    /// is not the same thing: an optional hyphen and a field marker occupy a character position in the file
+    /// and none on the page, so each shifts everything after it.
+    /// </remarks>
+    /// <param name="Start">Its first character, as an index into the paragraph's text.</param>
+    /// <param name="Length">How many characters it covers.</param>
+    /// <param name="FamilyName">The family the document names, or null when it names none.</param>
+    /// <param name="Size">The em size.</param>
+    /// <param name="Weight">The weight on the OpenType 1-1000 scale.</param>
+    /// <param name="IsItalic">True when the text is italic.</param>
+    /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
+    /// <param name="Colour">The colour the text is drawn in, or null for the automatic colour.</param>
+    public readonly record struct Ww8LayoutRun(
+        int Start,
+        int Length,
+        string? FamilyName,
+        Length Size,
+        int Weight,
+        bool IsItalic,
+        string? Language,
+        Colour? Colour)
+    {
+        /// <summary>One past the run's last character.</summary>
+        public int End => Start + Length;
+    }
 
     /// <summary>The document's font table, read on demand.</summary>
     private Ww8FontTable? _fonts;
@@ -69,6 +109,11 @@ public sealed partial class Ww8DocumentReader
         if (text.Length == 0) return paragraphs;
 
         StringBuilder current = new();
+
+        // The source position of each character in `current`. A paragraph's text is not a slice of the
+        // file's — optional hyphens and field markers are dropped — so a run's range cannot be recovered
+        // from the offsets afterwards and has to be carried alongside.
+        List<int> positions = [];
         int start = 0;
 
         for (int index = 0; index < text.Length && paragraphs.Count < MaxLayoutParagraphs; index++)
@@ -79,8 +124,10 @@ public sealed partial class Ww8DocumentReader
             switch (character)
             {
                 case ParagraphMark:
-                    paragraphs.Add(Describe(current.ToString(), body.Start + start, position));
+                    paragraphs.Add(
+                        Describe(current.ToString(), positions, body.Start + start, position));
                     current.Clear();
+                    positions.Clear();
                     start = index + 1;
                     continue;
 
@@ -88,27 +135,31 @@ public sealed partial class Ww8DocumentReader
                     // A cell or row boundary. The paragraph before it belongs to a table, which this
                     // pass does not lay out, so it is closed and marked rather than dropped — a caller
                     // that skips it still counts the paragraphs the same way.
-                    paragraphs.Add(Describe(current.ToString(), body.Start + start, position));
+                    paragraphs.Add(
+                        Describe(current.ToString(), positions, body.Start + start, position));
                     current.Clear();
+                    positions.Clear();
                     start = index + 1;
                     continue;
 
                 case Special.SectionMark:
-                    paragraphs.Add(Describe(current.ToString(), body.Start + start, position));
+                    paragraphs.Add(
+                        Describe(current.ToString(), positions, body.Start + start, position));
                     current.Clear();
+                    positions.Clear();
                     start = index + 1;
                     continue;
 
                 case Special.LineBreak:
-                    current.Append(LineSeparator);
+                    Emit(current, positions, LineSeparator, position);
                     continue;
 
                 case Special.Tab:
-                    current.Append('\t');
+                    Emit(current, positions, '\t', position);
                     continue;
 
                 case Special.NonBreakingHyphen:
-                    current.Append(NonBreakingHyphen);
+                    Emit(current, positions, NonBreakingHyphen, position);
                     continue;
 
                 case Special.OptionalHyphen:
@@ -123,21 +174,40 @@ public sealed partial class Ww8DocumentReader
 
                 case Special.Picture or Special.DrawnObject or Special.AnnotationReference
                     or Special.AutoNumberedReference:
-                    current.Append(AnchorCharacter);
+                    Emit(current, positions, AnchorCharacter, position);
                     continue;
 
                 default:
-                    if (character >= ' ' || character == '') current.Append(character);
+                    if (character >= ' ' || character == '')
+                    {
+                        Emit(current, positions, character, position);
+                    }
                     continue;
             }
         }
 
         if (current.Length > 0 || paragraphs.Count == 0)
         {
-            paragraphs.Add(Describe(current.ToString(), body.Start + start, body.End - 1));
+            paragraphs.Add(
+                Describe(current.ToString(), positions, body.Start + start, body.End - 1));
         }
 
         return paragraphs;
+    }
+
+    /// <summary>
+    /// Appends one character, recording where in the file it came from.
+    /// </summary>
+    /// <remarks>
+    /// The pairing is what lets a CHPX's file range become a range of the paragraph's text. Appending to
+    /// the builder directly anywhere would silently desynchronise the two and misattribute a run's
+    /// formatting to the text beside it.
+    /// </remarks>
+    private static void Emit(
+        StringBuilder text, List<int> positions, char character, int position)
+    {
+        text.Append(character);
+        positions.Add(position);
     }
 
     /// <summary>
@@ -160,20 +230,18 @@ public sealed partial class Ww8DocumentReader
     /// mark that ends it. Looking up the first character instead finds the <em>previous</em> paragraph's
     /// properties, which is a mistake that produces a document formatted one paragraph out of step.
     /// </remarks>
-    private Ww8LayoutParagraph Describe(string text, int start, int markPosition)
+    private Ww8LayoutParagraph Describe(
+        string text, List<int> positions, int start, int markPosition)
     {
         Ww8LayoutFormat layout = ResolveLayoutFormat(markPosition);
         Ww8ParagraphFormat paragraph = ResolveParagraphFormat(markPosition);
 
-        // The run properties at the paragraph's first character, which is what its text is mostly set
-        // in. A paragraph whose runs differ in size is measured in this one; the tallest run should set
-        // the line's height, and that needs the runs walked.
+        // The run properties at the paragraph's mark, which is what its mark carries and what an empty
+        // paragraph is as tall as. The text's own formatting comes from the runs below.
         Ww8LayoutFormat character = ResolveCharacterLayout(
             Math.Min(Math.Max(start, 0), Math.Max(markPosition, 0)));
 
-        Length size = character.FontSizeHalfPoints is { } halves and > 0 and <= 4000
-            ? Length.FromPoints(halves / 2.0)
-            : Length.FromPoints(10);
+        Length size = SizeOf(character);
 
         return new Ww8LayoutParagraph(
             text,
@@ -182,11 +250,104 @@ public sealed partial class Ww8DocumentReader
             size,
             character.IsBold == true ? 700 : 400,
             character.IsItalic == true,
-            character.LanguageId is { } id and > 0 and <= ushort.MaxValue
-                ? WindowsLanguages.TagOf((ushort)id)
-                : null,
-            paragraph.IsInTable);
+            LanguageOf(character),
+            paragraph.IsInTable,
+            character.Colour,
+            ReadRuns(text, positions, markPosition));
     }
+
+    /// <summary>
+    /// The stretches a paragraph's character formatting divides its text into.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Walked by position rather than by reading the CHPX table's own boundaries, because those are file
+    /// offsets and a paragraph's text is not a slice of the file: the piece table can move between
+    /// eight-bit and sixteen-bit pieces mid-paragraph, and this pass drops characters. So the cost is one
+    /// piece lookup per character — but only one CHPX decode per actual run, because the table reports the
+    /// byte range each entry covers and a position still inside it reuses the last answer.
+    /// </para>
+    /// <para>
+    /// The paragraph style's character half is resolved once, outside the walk: it is constant within a
+    /// paragraph, and it is the half that makes a heading's runs large and bold.
+    /// </para>
+    /// </remarks>
+    private List<Ww8LayoutRun> ReadRuns(string text, List<int> positions, int markPosition)
+    {
+        List<Ww8LayoutRun> runs = [];
+        if (text.Length == 0 || positions.Count == 0) return runs;
+
+        Ww8LayoutFormat inherited = CharacterStyleFormat(markPosition);
+        int count = Math.Min(text.Length, positions.Count);
+
+        ReadOnlyMemory<byte> properties = default;
+        int cachedFrom = 0;
+        int cachedTo = 0;
+        bool cached = false;
+
+        for (int index = 0; index < count; index++)
+        {
+            int byteOffset = _pieces.FileOffsetOf(positions[index]);
+
+            if (!cached || byteOffset < cachedFrom || byteOffset >= cachedTo)
+            {
+                (properties, cachedFrom, cachedTo) =
+                    _characterProperties.FindWithRange(byteOffset);
+                cached = true;
+
+                // A table with no entry for this offset reports an empty range, which would make every
+                // character a fresh lookup. Treating the one character as the range stops that.
+                if (cachedTo <= cachedFrom) cachedTo = cachedFrom + 1;
+            }
+
+            Ww8LayoutFormat format = ApplyCharacterException(inherited, properties);
+            Ww8LayoutRun run = new(
+                index,
+                1,
+                format.FontIndex is { } font ? Fonts.Name(font) : null,
+                SizeOf(format),
+                format.IsBold == true ? 700 : 400,
+                format.IsItalic == true,
+                LanguageOf(format),
+                format.Colour);
+
+            if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
+            {
+                runs[^1] = runs[^1] with { Length = runs[^1].Length + 1 };
+                continue;
+            }
+
+            runs.Add(run);
+        }
+
+        return runs;
+    }
+
+    /// <summary>True when two runs' formatting is identical, whatever their ranges.</summary>
+    private static bool MatchesFormatting(Ww8LayoutRun a, Ww8LayoutRun b)
+        => string.Equals(a.FamilyName, b.FamilyName, StringComparison.Ordinal)
+           && a.Size == b.Size
+           && a.Weight == b.Weight
+           && a.IsItalic == b.IsItalic
+           && string.Equals(a.Language, b.Language, StringComparison.Ordinal)
+           && a.Colour == b.Colour;
+
+    /// <summary>
+    /// The em size a character format states, defaulting to ten points.
+    /// </summary>
+    /// <remarks>
+    /// Ten rather than twelve, because that is what Word's own default is for a document whose stylesheet
+    /// states none. The bound rejects the absurd rather than the merely large: 4000 half-points is 2000 pt.
+    /// </remarks>
+    private static Length SizeOf(Ww8LayoutFormat format)
+        => format.FontSizeHalfPoints is { } halves and > 0 and <= 4000
+            ? Length.FromPoints(halves / 2.0)
+            : Length.FromPoints(10);
+
+    private static string? LanguageOf(Ww8LayoutFormat format)
+        => format.LanguageId is { } id and > 0 and <= ushort.MaxValue
+            ? WindowsLanguages.TagOf((ushort)id)
+            : null;
 
     /// <summary>
     /// The layout sprms in force on a paragraph, style chain first and its own last.
@@ -215,19 +376,61 @@ public sealed partial class Ww8DocumentReader
     /// pass does for emphasis.
     /// </remarks>
     private Ww8LayoutFormat ResolveCharacterLayout(int position)
+        => ApplyCharacterException(
+            CharacterStyleFormat(position),
+            _characterProperties.Find(_pieces.FileOffsetOf(position)));
+
+    /// <summary>
+    /// Applies one CHPX over an inherited format: its character style first, then its own sprms.
+    /// </summary>
+    /// <remarks>
+    /// The two halves cannot be applied in one pass, because the sprm naming the character style sits
+    /// inside the same grpprl as the direct formatting — so a single pass would lay the style's properties
+    /// over the direct ones that were meant to override them.
+    /// <para>
+    /// Skipping the style half entirely is worse than a subtle ordering bug, and it is the mistake that is
+    /// easy to make: LibreOffice's own DOC export writes emphasis as a character style rather than as
+    /// direct sprms, so a reader that only decodes the exception finds a document with no bold in it at
+    /// all.
+    /// </para>
+    /// </remarks>
+    private Ww8LayoutFormat ApplyCharacterException(
+        Ww8LayoutFormat inherited, ReadOnlyMemory<byte> exception)
     {
-        int byteOffset = _pieces.FileOffsetOf(position);
-        ReadOnlyMemory<byte> direct = _characterProperties.Find(byteOffset);
+        Ww8LayoutFormat format = inherited;
 
-        ushort styleIndex = ParagraphStyleIndexAt(position);
+        // Index zero is not "no character style" — in WW8 the stylesheet is one table and istd 0 is
+        // *Normal*, a paragraph style. Resolving its chain here would lay the document's default font size
+        // over the paragraph style's own, so every run of an 11 pt paragraph would come out at 12.
+        if (CharacterStyleIndexIn(exception) is var styleIndex and not 0)
+        {
+            foreach (ReadOnlyMemory<byte> fromStyle in _styles.ResolveCharacterChain(styleIndex))
+            {
+                format = ApplyLayoutSprms(format, fromStyle);
+            }
+        }
 
+        return ApplyLayoutSprms(format, exception);
+    }
+
+    /// <summary>
+    /// The character formatting a position's paragraph style contributes, without its direct formatting.
+    /// </summary>
+    /// <remarks>
+    /// Separated out because it is constant within a paragraph while the direct formatting is not, so a
+    /// run walk resolves this once and layers each CHPX over it — rather than re-walking the style chain
+    /// for every run.
+    /// </remarks>
+    private Ww8LayoutFormat CharacterStyleFormat(int position)
+    {
         Ww8LayoutFormat format = default;
-        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveCharacterChain(styleIndex))
+        foreach (ReadOnlyMemory<byte> inherited in
+                 _styles.ResolveCharacterChain(ParagraphStyleIndexAt(position)))
         {
             format = ApplyLayoutSprms(format, inherited);
         }
 
-        return ApplyLayoutSprms(format, direct);
+        return format;
     }
 
     /// <summary>
@@ -282,6 +485,31 @@ public sealed partial class Ww8DocumentReader
                                 .ReadUInt16LittleEndian(operand[2..]) != 0,
                         };
                     }
+                    break;
+                }
+
+                case LayoutSprms.ColourIndex:
+                    format = format with
+                    {
+                        Colour = sprm.Byte < IcoPalette.Length ? IcoPalette[sprm.Byte] : null,
+                    };
+                    break;
+
+                case LayoutSprms.Colour:
+                {
+                    // A COLORREF, which is 0x00bbggrr as a little-endian DWORD — so the bytes arrive as
+                    // red, green, blue, flag, and taking them in that order is the same swap
+                    // LibreOffice's own BGRToRGB performs. All four set is COL_AUTO, the automatic
+                    // colour, which is not the same thing as opaque white.
+                    ReadOnlySpan<byte> operand = sprm.Operand.Span;
+                    bool automatic = operand.Length >= 4 && operand[..4] is [0xFF, 0xFF, 0xFF, 0xFF];
+
+                    format = format with
+                    {
+                        Colour = operand.Length >= 3 && !automatic
+                            ? Colour.FromRgb((uint)((operand[0] << 16) | (operand[1] << 8) | operand[2]))
+                            : null,
+                    };
                     break;
                 }
 
@@ -357,5 +585,37 @@ public sealed partial class Ww8DocumentReader
         internal const ushort FontIndex = 0x4A4F;
         internal const ushort Language80 = 0x486D;
         internal const ushort Language = 0x4873;
+        internal const ushort ColourIndex = 0x2A42;
+        internal const ushort Colour = 0x6870;
     }
+
+    /// <summary>
+    /// The seventeen colours a <c>sprmCIco</c> index names.
+    /// </summary>
+    /// <remarks>
+    /// Copied from <c>SwWW8ImplReader::GetCol</c> (<c>sw/source/filter/ww8/ww8par6.cxx</c>), whose order is
+    /// not the obvious one: index 2 is <em>light</em> blue and index 9 is blue, so the palette runs bright
+    /// colours first and dark ones second. Index 0 is the automatic colour and is null rather than black,
+    /// so the document's own default applies.
+    /// </remarks>
+    private static readonly Colour?[] IcoPalette =
+    [
+        null,
+        Colour.FromRgb(0x000000),
+        Colour.FromRgb(0x0000FF),
+        Colour.FromRgb(0x00FFFF),
+        Colour.FromRgb(0x00FF00),
+        Colour.FromRgb(0xFF00FF),
+        Colour.FromRgb(0xFF0000),
+        Colour.FromRgb(0xFFFF00),
+        Colour.FromRgb(0xFFFFFF),
+        Colour.FromRgb(0x000080),
+        Colour.FromRgb(0x008080),
+        Colour.FromRgb(0x008000),
+        Colour.FromRgb(0x800080),
+        Colour.FromRgb(0x800000),
+        Colour.FromRgb(0x808000),
+        Colour.FromRgb(0x808080),
+        Colour.FromRgb(0xC0C0C0),
+    ];
 }

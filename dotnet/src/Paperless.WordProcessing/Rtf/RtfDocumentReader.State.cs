@@ -1,6 +1,7 @@
 using System.Text;
 using Paperless.Core.Extraction;
 using Paperless.Core.Globalization;
+using Paperless.Core.Graphics;
 using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Rtf;
@@ -22,6 +23,9 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>The font table, read for its character sets.</summary>
         FontTable,
+
+        /// <summary>The colour table, read so that a run can be drawn in its own colour.</summary>
+        ColourTable,
 
         /// <summary>The stylesheet, read for style names and outline levels.</summary>
         StyleSheet,
@@ -61,6 +65,15 @@ public sealed partial class RtfDocumentReader
         public RtfDestination Destination { get; set; }
         public bool Bold { get; set; }
         public bool Italic { get; set; }
+
+        /// <summary>
+        /// The <c>\cf</c> index into the colour table, or null for the automatic colour.
+        /// </summary>
+        /// <remarks>
+        /// An index rather than a colour, because <c>\cf</c> can precede the <c>\colortbl</c> in a
+        /// malformed file and because the table is a document-level thing while this is group state.
+        /// </remarks>
+        public int? ForegroundColourIndex { get; set; }
         public bool Underline { get; set; }
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
@@ -139,6 +152,7 @@ public sealed partial class RtfDocumentReader
             Destination = Destination,
             Bold = Bold,
             Italic = Italic,
+            ForegroundColourIndex = ForegroundColourIndex,
             Underline = Underline,
             Strike = Strike,
             Hidden = Hidden,
@@ -176,6 +190,7 @@ public sealed partial class RtfDocumentReader
         {
             Bold = false;
             Italic = false;
+            ForegroundColourIndex = null;
             Underline = false;
             Strike = false;
             Hidden = false;
@@ -231,6 +246,24 @@ public sealed partial class RtfDocumentReader
 
         public List<ContentRun> PendingRuns { get; } = [];
         public StringBuilder PendingText { get; } = new();
+
+        /// <summary>
+        /// The paragraph's runs as <em>layout</em> divides them, which is not how content does.
+        /// </summary>
+        /// <remarks>
+        /// A separate list because the two split on different things. A content run splits on the coarse
+        /// emphasis flags, a character style and a hyperlink; a layout run splits on anything that moves a
+        /// glyph or changes its colour — the font index, the size, the weight, the slant, the language.
+        /// A size change alone splits one and not the other.
+        /// </remarks>
+        public List<RtfLayoutRun> LayoutRuns { get; } = [];
+
+        /// <summary>How many characters of the paragraph have been appended so far.</summary>
+        /// <remarks>
+        /// Tracked rather than derived, because a layout run's offsets are into the paragraph's whole text
+        /// and that text is only concatenated once the paragraph closes.
+        /// </remarks>
+        public int LayoutLength { get; set; }
         public RunEmphasis PendingEmphasis { get; set; }
         public string? PendingStyleName { get; set; }
         public string? PendingLanguage { get; set; }
@@ -377,6 +410,15 @@ public sealed partial class RtfDocumentReader
                 CurrentFlow.ListMarker.Append(text);
                 return;
 
+            case RtfDestination.ColourTable:
+                // A colour table's entries are separated by semicolons in its text; the components
+                // themselves are control words, so the text carries only the delimiters.
+                foreach (char character in text)
+                {
+                    if (character == ';') EndColourTableEntry();
+                }
+                return;
+
             case RtfDestination.FontTable:
                 // The family name, which the reader previously discarded because extraction never needs
                 // it — a run's font does not change its text. Layout does need it, and this is the only
@@ -424,6 +466,7 @@ public sealed partial class RtfDocumentReader
         flow.PendingLanguage = language;
         flow.PendingHyperlink = hyperlink;
         flow.PendingText.Append(text);
+        RecordLayoutRun(flow, state, text.Length);
 
         // The paragraph's own properties are whatever was in force when its text was written.
         flow.StyleName ??= state.ParagraphStyleId == 0
@@ -558,6 +601,112 @@ public sealed partial class RtfDocumentReader
         ResetParagraphState(flow);
     }
 
+    /// <summary>Starts a fresh colour table, discarding anything a previous one declared.</summary>
+    /// <remarks>
+    /// A document has one, but a malformed one can open a second, and the entries are positional — so
+    /// appending to the old table would shift every <c>\cf</c> after it.
+    /// </remarks>
+    private void BeginColourTable()
+    {
+        _colours.Clear();
+        ResetColourComponents();
+    }
+
+    /// <summary>Records one component of the colour table entry being built.</summary>
+    private void SetColourComponent(string name, int value)
+    {
+        int component = Math.Clamp(value, 0, 255);
+
+        switch (name)
+        {
+            case "red": _colourRed = component; break;
+            case "green": _colourGreen = component; break;
+            case "blue": _colourBlue = component; break;
+            default: return;
+        }
+
+        _colourStated = true;
+    }
+
+    /// <summary>
+    /// Closes a colour table entry at its semicolon.
+    /// </summary>
+    /// <remarks>
+    /// The semicolon is the delimiter, not the components — an entry with no <c>\red</c>/<c>\green</c>/
+    /// <c>\blue</c> at all is the "automatic" colour, and it still occupies an index. Dropping it would
+    /// shift every colour in the document by one.
+    /// </remarks>
+    private void EndColourTableEntry()
+    {
+        if (_colours.Count < MaxColours)
+        {
+            _colours.Add(_colourStated
+                ? Colour.FromRgb((uint)((_colourRed << 16) | (_colourGreen << 8) | _colourBlue))
+                : null);
+        }
+
+        ResetColourComponents();
+    }
+
+    private void ResetColourComponents()
+    {
+        _colourRed = 0;
+        _colourGreen = 0;
+        _colourBlue = 0;
+        _colourStated = false;
+    }
+
+    /// <summary>
+    /// The colour a <c>\cf</c> index names, or null when it names none.
+    /// </summary>
+    /// <remarks>
+    /// Zero-based, as the specification numbers the table. An index past the end is a producer error and
+    /// resolves to nothing rather than to black, so the document's own default applies — as does an index
+    /// naming an entry that stated no components, which is what <c>\cf0</c> usually is.
+    /// </remarks>
+    private Colour? ColourAt(int? index)
+        => index is { } at && at >= 0 && at < _colours.Count ? _colours[at] : null;
+
+    /// <summary>
+    /// Records the character formatting in force over a stretch of the paragraph's text.
+    /// </summary>
+    /// <remarks>
+    /// Appended as the text is, because RTF has nothing to revisit: the state machine's current group is
+    /// the only place the formatting exists, and by the time the paragraph closes it holds whatever the
+    /// last run set. Consecutive stretches with identical formatting merge, which matters because RTF
+    /// restates properties freely — a producer writes <c>\f0\fs22</c> before every run whether or not
+    /// anything changed, and each restatement would otherwise break the shaping context.
+    /// </remarks>
+    private void RecordLayoutRun(Flow flow, GroupState state, int length)
+    {
+        if (length <= 0) return;
+
+        RtfLayoutRun run = new(
+            flow.LayoutLength,
+            length,
+            _fontFamilies.GetValueOrDefault(state.FontIndex),
+            SizeOf(state),
+            state.Bold ? 700 : 400,
+            state.Italic,
+            state.LanguageId is > 0 and <= ushort.MaxValue
+                ? WindowsLanguages.TagOf((ushort)state.LanguageId)
+                : null,
+            ColourAt(state.ForegroundColourIndex));
+
+        flow.LayoutLength += length;
+
+        if (flow.LayoutRuns.Count > 0 && flow.LayoutRuns[^1].MatchesFormatting(run))
+        {
+            flow.LayoutRuns[^1] = flow.LayoutRuns[^1] with
+            {
+                Length = flow.LayoutRuns[^1].Length + length,
+            };
+            return;
+        }
+
+        flow.LayoutRuns.Add(run);
+    }
+
     /// <summary>
     /// Records a paragraph's layout formatting as it closes.
     /// </summary>
@@ -594,7 +743,9 @@ public sealed partial class RtfDocumentReader
             SizeOf(state),
             state.Bold ? 700 : 400,
             state.Italic,
-            state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null));
+            state.LanguageId > 0 ? WindowsLanguages.TagOf((ushort)state.LanguageId) : null,
+            ColourAt(state.ForegroundColourIndex),
+            [.. flow.LayoutRuns]));
     }
 
     /// <summary>
@@ -611,6 +762,8 @@ public sealed partial class RtfDocumentReader
 
     private static void ResetParagraphState(Flow flow)
     {
+        flow.LayoutRuns.Clear();
+        flow.LayoutLength = 0;
         flow.PendingRuns.Clear();
         flow.PendingImages.Clear();
         flow.ListMarker.Clear();

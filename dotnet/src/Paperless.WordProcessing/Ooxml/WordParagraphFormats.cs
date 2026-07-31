@@ -1,22 +1,29 @@
 using System.Globalization;
 using System.Xml.Linq;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Layout;
 
 namespace Paperless.WordProcessing.Ooxml;
 
-/// <summary>The character formatting a paragraph's text is set in.</summary>
+/// <summary>The character formatting a stretch of a paragraph's text is set in.</summary>
 /// <param name="FamilyName">The family the document asks for, before substitution.</param>
 /// <param name="Size">The em size.</param>
 /// <param name="Weight">The weight on the OpenType 1-1000 scale.</param>
 /// <param name="IsItalic">True when the text is italic.</param>
 /// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
+/// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
     int Weight,
     bool IsItalic,
-    string? Language);
+    string? Language,
+    Colour? Colour = null)
+{
+    /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
+    public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
+}
 
 /// <summary>
 /// Resolves a DOCX paragraph's properties into the layout properties the engine takes.
@@ -106,25 +113,76 @@ internal static class WordParagraphFormats
     {
         ArgumentNullException.ThrowIfNull(styles);
 
+        // A paragraph's mark carries its own run properties, and they are what a run with no properties
+        // of its own inherits.
+        return ResolveRun(styles, paragraphProperties, Word.Child(paragraphProperties, "rPr"));
+    }
+
+    /// <summary>
+    /// Resolves the character formatting of one run inside a paragraph.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The run's own <c>w:rPr</c> and the character style its <c>w:rStyle</c> names, layered over the
+    /// paragraph style — which is what <see cref="WordStyles.ResolveRunProperty"/> takes, toggle rule
+    /// included. That rule is the reason this cannot be done property-set by property-set: bold set by
+    /// both the paragraph style and the character style comes out <em>off</em>, so the two layers have to
+    /// be visible to the resolver at the same time.
+    /// </para>
+    /// <para>
+    /// Note what is <em>not</em> here: a run in OOXML does not nest, so there is no cascade to walk. A
+    /// hyperlink wraps runs rather than formatting them, and the blue underline comes from the
+    /// <c>Hyperlink</c> character style that each of those runs names itself.
+    /// </para>
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="paragraphProperties">The paragraph's <c>w:pPr</c>, for its <c>w:pStyle</c>.</param>
+    /// <param name="runProperties">The run's own <c>w:rPr</c>, or null.</param>
+    internal static WordTextStyle ResolveRun(
+        WordStyles styles, XElement? paragraphProperties, XElement? runProperties)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
+        string? characterStyleId = Word.Attribute(Word.Child(runProperties, "rStyle"), "val");
 
-        // A paragraph's mark carries its own run properties, and they are what the paragraph's text
-        // inherits when no run overrides them.
-        XElement? runProperties = Word.Child(paragraphProperties, "rPr");
-
-        WordProperty fonts = styles.ResolveRunProperty("rFonts", runProperties, styleId, null);
-        WordProperty size = styles.ResolveRunProperty("sz", runProperties, styleId, null);
-        WordProperty bold = styles.ResolveRunProperty("b", runProperties, styleId, null);
-        WordProperty italic = styles.ResolveRunProperty("i", runProperties, styleId, null);
-        WordProperty language = styles.ResolveRunProperty("lang", runProperties, styleId, null);
+        WordProperty fonts = styles.ResolveRunProperty("rFonts", runProperties, styleId, characterStyleId);
+        WordProperty size = styles.ResolveRunProperty("sz", runProperties, styleId, characterStyleId);
+        WordProperty bold = styles.ResolveRunProperty("b", runProperties, styleId, characterStyleId);
+        WordProperty italic = styles.ResolveRunProperty("i", runProperties, styleId, characterStyleId);
+        WordProperty language =
+            styles.ResolveRunProperty("lang", runProperties, styleId, characterStyleId);
+        WordProperty colour = styles.ResolveRunProperty("color", runProperties, styleId, characterStyleId);
 
         return new WordTextStyle(
             Family(fonts.Element),
             HalfPoints(size.Element) ?? DefaultSize,
             bold.IsOn ? 700 : 400,
             italic.IsOn,
-            Word.Attribute(language.Element, "val"));
+            Word.Attribute(language.Element, "val"),
+            TextColour(colour.Element));
+    }
+
+    /// <summary>
+    /// A run's colour, or null when it has none of its own.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:val="auto"</c> is not a colour — it means "let the application choose so the text stays
+    /// readable", which for body text on white is black, so it resolves to nothing here and lets the
+    /// document's own default apply. A theme colour (<c>w:themeColor</c>) is not resolved yet, and is
+    /// treated the same way rather than guessed at.
+    /// </remarks>
+    private static Colour? TextColour(XElement? element)
+    {
+        string? value = Word.Attribute(element, "val");
+        if (string.IsNullOrEmpty(value) || value == "auto") return null;
+
+        ReadOnlySpan<char> digits = value.AsSpan().TrimStart('#');
+        return digits.Length == 6
+               && uint.TryParse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb)
+            ? Colour.FromRgb(rgb)
+            : null;
     }
 
     /// <summary>

@@ -328,10 +328,21 @@ is read and verified, so what remains is the filling of pages rather than the me
       style parented on a 20 pt one still renders at 18. A percentage arrives as `CharPropHeight` and
       `SvxFontHeightItem` resolves it against the height the item set holds at that moment, which for a
       style being built up from nothing is the pool default; so nested percentages do not compound either.
-- [ ] Per-run formatting for DOCX, DOC and RTF. The three readers resolve a paragraph's formatting but not
-      its runs' — `w:rPr` on a `w:r`, a WW8 CHPX, an RTF control word — so a mixed paragraph in those
-      formats still lays out in its paragraph mark's font. The engine side is done; this is four readers
-      producing the same `PageRun` list.
+- [x] **Per-run formatting for all four formats.** Each reader states runs its own way and each produces
+      the same `PageRun` list: an ODF `text:span` cascade, a `w:rPr` on a `w:r` with the toggle rule, a WW8
+      CHPX with its character style, and RTF's loose control words snapshotted as the text is appended.
+      Verified against LibreOffice run by run for the same document exported four ways.
+- [x] Every format's run colour, which meant new readers in two of them: RTF's `\colortbl` and `\cf`, and
+      WW8's `sprmCIco` palette and `sprmCCv` COLORREF. Both had a trap. The RTF table is zero-based and its
+      conventional first entry is the *automatic* colour rather than black, so an off-by-one draws a
+      red word silver. And a COLORREF is `0x00bbggrr`, so the outer bytes have to be swapped —
+      LibreOffice does it with `BGRToRGB`.
+- [x] Two WW8 bugs the run walk exposed, both in code the content pass shares. A run's character style is
+      named by a sprm *inside* its CHPX, so a reader that decodes only the exception finds no emphasis at
+      all in a document LibreOffice wrote — its DOC export states emphasis as a character style. And
+      `istd` 0 is *Normal*, not "no character style": WW8 keeps paragraph and character styles in one
+      table, so resolving index zero as a run's style lays the document's default font size over the
+      paragraph's own and turns every run of an 11 pt paragraph into a 12 pt one.
 - [ ] Tables. Skipped by every layout source rather than flattened, because a table is laid out as a grid
       and stacking its cells would give the page a height no table has.
 - [ ] Tables spanning page breaks, with header-row repetition

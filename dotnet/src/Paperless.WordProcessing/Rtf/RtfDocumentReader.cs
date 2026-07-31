@@ -3,6 +3,7 @@ using System.Text;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
+using Paperless.Core.Graphics;
 using Paperless.Core.Numbering;
 using Paperless.Text.Encodings;
 using Paperless.Text.Layout;
@@ -56,11 +57,29 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     public const int MaxLayoutParagraphs = 200000;
 
+    /// <summary>How many colour table entries are kept.</summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a real limit: a document uses a handful, and \cf indexes
+    /// past the table resolve to no colour anyway.
+    /// </remarks>
+    public const int MaxColours = 4096;
+
     private readonly byte[] _data;
     private readonly List<Diagnostic> _diagnostics;
     private readonly RtfStyles _styles = new();
     private readonly Dictionary<int, int> _fontCharsets = [];
     private readonly Dictionary<int, string> _fontFamilies = [];
+
+    /// <summary>
+    /// The colour table, in declaration order, zero-based as <c>\cf</c> indexes it.
+    /// </summary>
+    /// <remarks>
+    /// An entry is null when it stated no components at all, which is the "automatic" colour rather than
+    /// black: a <c>\colortbl</c> conventionally opens with a bare semicolon for exactly that, and
+    /// LibreOffice's own export writes one. Dropping the empty entry instead of storing it would shift
+    /// every colour in the document by one — which is a silver word where a red one belongs.
+    /// </remarks>
+    private readonly List<Colour?> _colours = [];
     private readonly List<RtfLayoutParagraph> _layoutParagraphs = [];
     private readonly List<Flow> _flows = [];
     private readonly List<ContentNode> _hoisted = [];
@@ -68,6 +87,10 @@ public sealed partial class RtfDocumentReader
     private readonly RtfPageGeometry _geometry = new();
 
     private Encoding _documentEncoding = LegacyCodePages.Fallback;
+    private int _colourRed;
+    private int _colourGreen;
+    private int _colourBlue;
+    private bool _colourStated;
     private int _footnoteNumber;
     private int _footnoteStart = 1;
     private string? _pendingAnnotationAuthor;
@@ -226,7 +249,13 @@ public sealed partial class RtfDocumentReader
             case "fonttbl":
                 state.Destination = RtfDestination.FontTable;
                 return;
-            case "colortbl" or "listtable" or "listoverridetable" or "revtbl" or "rsidtbl"
+            case "colortbl":
+                // Read rather than skipped, because a run's colour is the one piece of character
+                // formatting that reaches a page without changing where anything sits.
+                state.Destination = RtfDestination.ColourTable;
+                BeginColourTable();
+                return;
+            case "listtable" or "listoverridetable" or "revtbl" or "rsidtbl"
                  or "generator" or "filetbl" or "themedata" or "colorschememapping"
                  or "datastore" or "latentstyles" or "xmlnstbl" or "pgptbl":
                 state.Destination = token.Name == "generator"
@@ -462,6 +491,15 @@ public sealed partial class RtfDocumentReader
                 return;
             case "lang" or "langnp":
                 state.LanguageId = token.Parameter ?? 0;
+                return;
+
+            // ---- colours
+            case "red" or "green" or "blue":
+                if (state.Destination == RtfDestination.ColourTable)
+                    SetColourComponent(token.Name, token.Parameter ?? 0);
+                return;
+            case "cf":
+                state.ForegroundColourIndex = token.Parameter is { } index and >= 0 ? index : null;
                 return;
 
             // ---- tables

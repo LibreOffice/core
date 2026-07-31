@@ -25,10 +25,14 @@ namespace Paperless.WordProcessing.Tests;
 /// </remarks>
 public sealed class MixedRunTests
 {
-    [Fact]
-    public void ASpanBecomesARunWithItsOwnFace()
+    [Theory]
+    [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.doc")]
+    [InlineData("mixed-runs.rtf")]
+    public void ASpanBecomesARunWithItsOwnFace(string fileName)
     {
-        PageParagraph paragraph = ParagraphStartingWith("One.");
+        PageParagraph paragraph = ParagraphStartingWith(fileName, "One.");
 
         paragraph.HasRuns.ShouldBeTrue("a paragraph with a bold span is not uniform");
 
@@ -46,10 +50,14 @@ public sealed class MixedRunTests
         paragraph.Face.Weight.ShouldBeLessThan(600);
     }
 
-    [Fact]
-    public void ALargerSpanKeepsItsOwnSize()
+    [Theory]
+    [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.doc")]
+    [InlineData("mixed-runs.rtf")]
+    public void ALargerSpanKeepsItsOwnSize(string fileName)
     {
-        PageParagraph paragraph = ParagraphStartingWith("Two.");
+        PageParagraph paragraph = ParagraphStartingWith(fileName, "Two.");
 
         RunFor(paragraph, "twentytwo").EmSize.ShouldBe(Length.FromPoints(22));
 
@@ -60,10 +68,14 @@ public sealed class MixedRunTests
         paragraph.Runs[^1].EmSize.ShouldBe(Length.FromPoints(11));
     }
 
-    [Fact]
-    public void ARelativeSizeIsAFractionOfTheEnclosingSize()
+    [Theory]
+    [InlineData("mixed-runs.fodt")]
+    public void ARelativeSizeIsAFractionOfTheDefaultSize(string fileName)
     {
-        PageParagraph paragraph = ParagraphStartingWith("Seven.");
+        // ODF only: the percentage is an ODF spelling, and every export of this document resolves it to
+        // an absolute 24 pt on the way out — which is itself worth knowing, since it means a round trip
+        // through any other format loses the relativity.
+        PageParagraph paragraph = ParagraphStartingWith(fileName, "Seven.");
 
         // 200% of the item pool's twelve points — not 200 pt, and not twice the paragraph's eleven. ODF
         // writes the percentage in the same attribute as an absolute length, so the unit decides the
@@ -78,10 +90,14 @@ public sealed class MixedRunTests
         nested.Face.Weight.ShouldBeGreaterThanOrEqualTo(600);
     }
 
-    [Fact]
-    public void AColouredSpanCarriesItsColour()
+    [Theory]
+    [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.doc")]
+    [InlineData("mixed-runs.rtf")]
+    public void AColouredSpanCarriesItsColour(string fileName)
     {
-        PageParagraph paragraph = ParagraphStartingWith("Six.");
+        PageParagraph paragraph = ParagraphStartingWith(fileName, "Six.");
 
         PageRun coloured = RunFor(paragraph, "coloured");
         coloured.EffectiveColour.ShouldBe(Colour.FromRgb(0xC9211E));
@@ -91,13 +107,19 @@ public sealed class MixedRunTests
         paragraph.Runs[0].EffectiveColour.ShouldBe(Colour.Black);
     }
 
-    [Fact]
-    public void AUniformParagraphCarriesNoRuns()
+    [Theory]
+    [InlineData("mixed-runs.fodt")]
+    [InlineData("mixed-runs.docx")]
+    [InlineData("mixed-runs.doc")]
+    [InlineData("mixed-runs.rtf")]
+    public void AUniformParagraphCarriesNoRuns(string fileName)
     {
         // Not merely an optimisation. A paragraph split into runs it does not need loses the shaping
         // context at each boundary, so a kern pair straddling one would not apply and the line would
-        // measure very slightly wide — which eventually moves a break.
-        ParagraphStartingWith("Eight.").HasRuns.ShouldBeFalse();
+        // measure very slightly wide — which eventually moves a break. Every format states runs its own
+        // way and every one of them restates formatting that has not changed, so this is the assertion
+        // that each reader collapses those rather than passing them on.
+        ParagraphStartingWith(fileName, "Eight.").HasRuns.ShouldBeFalse();
     }
 
     private static PageRun RunFor(PageParagraph paragraph, string word)
@@ -110,9 +132,9 @@ public sealed class MixedRunTests
             .ShouldHaveSingleItem();
     }
 
-    private static PageParagraph ParagraphStartingWith(string prefix)
+    private static PageParagraph ParagraphStartingWith(string fileName, string prefix)
     {
-        string path = Corpus.Require("mixed-runs.fodt");
+        string path = Corpus.Require(fileName);
 
         using FileStream stream = File.OpenRead(path);
         using DocumentSource source = DocumentSource.FromStream(stream, Path.GetFileName(path));
