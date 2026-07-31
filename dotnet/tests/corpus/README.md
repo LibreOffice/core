@@ -68,6 +68,23 @@ require LibreOffice to be installed. Produced by LibreOffice 24.2.7.2.
 | `slides-ppt.ppt` | PPT | OLE2; `PowerPoint Document` stream; **large multi-sector stream** |
 | `slides-pptx.pptx` | PPTX | OPC presentation content type |
 
+`features/` — one document per cluster of features under test, hand-authored as flat ODF and
+then converted by LibreOffice 24.2.7.2 so that the committed file is one LibreOffice itself
+wrote. That matters: LibreOffice normalises what it reads, and the details it adds are exactly
+the ones a reader has to cope with — it rewrites a doubly-styled run as a span nested inside a
+span, caches a footnote's *recomputed* citation, replaces an authored bullet with a symbol-font
+code point in a Private Use Area, and pads every spreadsheet row out to the sheet's full width.
+
+| File | Format | Exercises |
+|---|---|---|
+| `text-features.odt` | ODT | Three heading levels; bold/italic/underline/strikethrough/superscript spans, including nested ones; a named character style; a run in another language; `text:s`/`text:tab`/`text:line-break`; a hyperlink; a footnote; a comment; bulleted and numbered lists with nesting, a continuation paragraph and letter numbering; a table with a header row, a column span and an empty cell; an anchored text box; a page break; a title field; a bookmark; a page header and footer; full `meta.xml` including user-defined properties of three types |
+| `text-features-flat.fodt` | FODT | The same document in flat form, so the packaged and flat paths can be asserted to extract identically |
+| `sheet-features.ods` | ODS | Three sheets, one hidden; float, currency, percentage, date, time, boolean and numeric-looking-string cells; formulas including `SUM`; a `#DIV/0!` error result; a row span with a covered cell; a blank row inside the used range; a cell comment; `meta:table-count` as the sheet count |
+| `word-features.docx` | DOCX | The same document as `text-features.odt`, converted — so it covers the same features through a different vocabulary. Adds what only OOXML has: parts located by relationship, `mc:AlternateContent` writing the text box twice, a `w:fldChar` field with its instruction and cached result, `w:vMerge`-free `w:gridSpan` spans, footnote citations the file does not cache, and metadata split across `core.xml`, `app.xml` and `custom.xml` |
+| `word-features.dotx` | DOTX | The same content as a template, so the template content type is exercised end to end |
+| `word-features.rtf` | RTF | The same document again, in the one format with no container. Adds what only RTF has: `\'hh` escapes in a declared code page, `\uN` with a code-page fallback to skip, a `{\listtext}` group holding the rendered list label, a `HYPERLINK` field instruction, and a merged table cell expressed purely by its `\cellx` edge |
+| `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
+
 ### Why `slides-ppt.ppt` is 460 kB
 
 96% of it is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation` property set
@@ -80,3 +97,125 @@ It is kept rather than trimmed, because stripping it would mean rewriting a prop
 hand and producing a file no real application would emit. It also earns its size: at ~865
 sectors it is the only corpus file that exercises long FAT chains, where every other file's
 streams fit in a handful of sectors.
+
+## Writing a flat-XML corpus document by hand
+
+Two traps, both found the hard way:
+
+- **Declare every style's properties in full.** LibreOffice does not apply
+  `style:parent-style-name` to a hand-written `.fodt`: a style that inherits its font from
+  another silently renders in the application default instead — Liberation Serif 12 pt
+  rather than the Carlito 11 pt the parent asked for. A comparison against such a document
+  is measuring the wrong font, and it looks like a layout bug.
+- **Avoid `fo:text-align-last="justify"` for a line you mean to test.** It selects Writer's
+  one-block path, which distributes the slack over the *letters* as well as the blanks, so
+  the words themselves come out wider. Use a manual `<text:line-break/>` when a justified
+  line's words need to be fixed.
+
+### Table layout documents
+
+`table-grid.*` and `table-pages.*` exist to separate the several measurements a table needs, so a failure
+names the one that is wrong rather than "the table is out".
+
+`table-grid` has three columns of three *different* widths, which catches a reader that divided the
+table's width equally — and that is not a hypothetical: LibreOffice itself does exactly that when it
+cannot resolve a column style. One cell has a much larger left padding than the others, so padding cannot
+be confused with the column edge. One holds enough text to wrap twice, which proves the width the text
+breaks in and makes its row taller than its neighbours. The last row spans two columns, the one case where
+a cell's width is not a column's.
+
+`table-pages` is sixty rows and a `table:table-header-rows`, long enough to cross a page break. It is what
+proves the heading row is placed again on the continuation and that the split falls between rows rather
+than through one.
+
+Two things about writing these by hand, both learned the hard way:
+
+- A table's **column and cell styles must be automatic styles**. Declared in `office:styles`, LibreOffice
+  ignores them and divides the table's width equally between its columns — which renders without complaint
+  and is not the document you wrote.
+- LibreOffice's own RTF export writes a cell's left padding as `\clpadt`, not `\clpadl`. That is not a bug
+  in the export: top and left are swapped in RTF, deliberately, because that is what Word does. An
+  exported corpus file will therefore look wrong to anyone reading the specification.
+
+### Footnote documents
+
+`footnotes.*` and `footnote-pages.*` separate two different things. `footnotes` proves the *placement*: two
+notes, cited from two paragraphs, sitting at the foot of page one. `footnote-pages` proves the
+*reservation*, which is the half that changes pagination — its notes are long and sit near a page end, so
+page one holds twelve paragraphs where without them it would hold thirteen. A reader that placed the notes
+and forgot to charge the body for them passes the first and fails the second on every word of page two.
+
+Both state their citations as **2 and 5** deliberately. LibreOffice renumbers, counting in document order
+and ignoring what the file says, so a reader taking the file at its word draws "2" where LibreOffice draws
+"1". A corpus document whose citations were already 1 and 2 could not tell the two readers apart.
+
+Two things about comparing these:
+
+- **The RTF pair cannot be compared against LibreOffice's rendering, and the reason is upstream.**
+  LibreOffice's RTF import drops the character and paragraph formatting stated inside a
+  `{\*\footnote …}` group and falls back to the document's defaults: a note the file sets in Carlito at
+  10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent, which moves every word
+  of every note line. Reproduced on a hand-written three-line RTF as well as on the exported corpus files,
+  so it is not an artefact of how these were made. Paperless reads what the file says, so
+  `FootnoteComparisonTests` skips RTF and `FootnoteReadingTests` checks the notes structurally instead.
+- **The citation's size and rise need a content-stream comparison, not a word-box one.** A raised run's
+  box top sits above its baseline by the font's ascent, so `pdftotext -bbox` cannot separate a rise from a
+  size change — and a full-size citation on the baseline fuses with the note's first word into a single
+  box that lands in the right place for the wrong reasons. `PdfTextRuns` reads the pens and the sizes out
+  of the content stream, which is what caught the escapement being 33% of the font's *height* rather than
+  of its em size.
+
+`endnotes.*` is the same document with its notes turned into endnotes, which changes both halves of the
+behaviour: the notes take no room off the page that cites them, and they collect on a page of their own after
+it. It also changes the *numbering* — LibreOffice cites footnotes 1, 2, 3 and endnotes i, ii, iii — so a reader
+that placed an endnote as a footnote fails on the page count, and one that shared a counter between the two
+fails on the citation text. `endnotes.doc` is the odd one out, and deliberately kept: LibreOffice's WW8 export writes the DOP's `epc` as 0,
+"collect at the end of the section", so its notes render in the page-bottom note area on one page rather than
+on a second page of their own. That makes it the corpus's only case of a note whose *class* and *position*
+disagree, which is exactly what `NotePlacement` exists for — so it is compared like the rest rather than
+excused. `endnotes.rtf` inherits the footnote formatting loss described above and is checked structurally.
+
+`note-numbering.*` is the footnote document with a `text:notes-configuration` asking for upper roman from
+eight, so its notes are cited VIII and IX. All five formats survived the export with the sequence intact,
+which makes this the one note document comparable in every one of them. It catches two mistakes that look
+alike and are not: ignoring the format gives 8 and 9, and taking ODF's `text:start-value` for the first
+number rather than for an offset gives VII and VIII.
+
+`header-table.fodt` puts a two-column table in the header, which is what a table in a header is *for*: a
+two-part running head, one cell hard left and another hard right on one line. It also has a header whose
+height is `fo:min-height` rather than `svg:height`, because a fixed 0.6 cm frame cannot hold a table — so the
+document exercises the dynamic-height path at the same time, and the body's first baseline moves with the
+header's real height.
+
+`table-exact-row.*` is `table-grid` with its second row given an *exact* height of 0.8 cm — less than its
+content needs. LibreOffice renders that row 22.70 pt tall rather than growing it to 32.60, so every row below
+it moves up, which is what makes the difference visible in a word-position comparison at all. The row style
+has to be an **automatic** style for LibreOffice to honour it, per the warning above: declared in
+`office:styles` it is ignored and the row grows, which is exactly the answer a reader with no exact-height
+support gives — so the corpus file would have passed for the wrong reason.
+
+`section-columns.*` is three sections in one document — two columns, then one with a `\sbkcol` break, then two
+again with `\sbkpage` — and it is hand-written rather than exported, because ODF cannot state a section break
+at all and so cannot be the source. LibreOffice renders it as three pages. Two things make it worth having:
+a reader treating a column break as continuous gets one page, and a reader that ends the *column* rather than
+the page when a section breaks gets two, with section two beside section one.
+
+`table-shading.*` is `table-grid` with its first row's cells shaded grey and **no borders**, which is the point:
+an earlier version had both and could not be compared at all, because a border takes space — half its width
+either side of each grid line — so 0.05 pt borders make the table 0.1 pt taller per row boundary and shift every
+column edge. One feature per document, as above. Two things about comparing it: LibreOffice's DOCX render fills
+each shaded cell *twice* at identical coordinates where its ODF render fills it once, so the comparison is of
+distinct rectangles; and `table-shading.doc` is compared for its text only, since WW8 cell shading is a
+per-band `WW8_SHD` array that is not read yet.
+
+`table-borders.fodt` is `table-grid` with a uniform 0.5 pt red border on every cell, and it is compared through
+the PDF's *stroke* operators rather than its fills. Red rather than black on purpose: a border shares its colour
+with the text by default, and a distinct one makes it obvious in a rendered page which strokes are being
+checked. It is a separate document from `table-shading` because a border takes space and a shade does not, so
+one document could not test either cleanly.
+
+`table-borders.*` exists in all five formats but only the two ODF ones are compared stroke for stroke, and the
+reason is the table's *origin* rather than its borders: each export writes the table's own left edge differently
+relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
+DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
+right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.

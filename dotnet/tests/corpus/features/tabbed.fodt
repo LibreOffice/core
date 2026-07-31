@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Plain" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm"
+       fo:line-height="100%" fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito"
+       fo:font-size="11pt" fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Left" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm"
+       fo:line-height="100%" fo:orphans="0" fo:widows="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="3cm" style:type="left"/>
+     <style:tab-stop style:position="7cm" style:type="left"/>
+     <style:tab-stop style:position="11cm" style:type="left"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito"
+       fo:font-size="11pt" fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Mixed" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm"
+       fo:line-height="100%" fo:orphans="0" fo:widows="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="4cm" style:type="center"/>
+     <style:tab-stop style:position="9cm" style:type="right"/>
+     <style:tab-stop style:position="14cm" style:type="char" style:char="."/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito"
+       fo:font-size="11pt" fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Plain">Aa<text:tab/>Bb<text:tab/>Cc<text:tab/>Dd</text:p>
+   <text:p text:style-name="Plain">Ee<text:tab/>Ff<text:tab/>Gg<text:tab/>Hh</text:p>
+   <text:p text:style-name="Plain">Ii<text:tab/>Jj<text:tab/>Kk<text:tab/>Ll</text:p>
+   <text:p text:style-name="Left">Alpha<text:tab/>Beta<text:tab/>Gamma<text:tab/>Delta</text:p>
+   <text:p text:style-name="Left">Considerably<text:tab/>longer<text:tab/>entries<text:tab/>here</text:p>
+   <text:p text:style-name="Left">One<text:tab/>Two<text:tab/>Three<text:tab/>Four</text:p>
+   <text:p text:style-name="Mixed">Widths<text:tab/>Centred<text:tab/>Right<text:tab/>12.5</text:p>
+   <text:p text:style-name="Mixed">Longer entry<text:tab/>Middle<text:tab/>Ending<text:tab/>1234.75</text:p>
+   <text:p text:style-name="Mixed">Third<text:tab/>Mid<text:tab/>End<text:tab/>9.125</text:p>
+ </office:text></office:body>
+</office:document>

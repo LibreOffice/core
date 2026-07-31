@@ -20,12 +20,12 @@ namespace Paperless.Cli;
 /// </remarks>
 internal static class Program
 {
-    private const int ExitSuccess = 0;
-    private const int ExitFailure = 1;
-    private const int ExitUsage = 2;
+    internal const int ExitSuccess = 0;
+    internal const int ExitFailure = 1;
+    internal const int ExitUsage = 2;
 
     /// <summary>Exit code 65, <c>EX_DATAERR</c>: the input was not a supported document.</summary>
-    private const int ExitUnsupportedFormat = 65;
+    internal const int ExitUnsupportedFormat = 65;
 
     private static int Main(string[] args)
     {
@@ -37,6 +37,8 @@ internal static class Program
         return command switch
         {
             "identify" => Identify(rest),
+            "extract" => ExtractCommand.Extract(rest),
+            "metadata" => ExtractCommand.Metadata(rest),
             "version" => PrintVersion(),
             _ => Unknown(command),
         };
@@ -204,10 +206,12 @@ internal static class Program
 
             Commands:
               identify FILE...   Report each file's real format, determined from its content
+              extract  FILE...   Extract text, tables and structure
+              metadata FILE...   Report the document's metadata
               version            Print the version
               help               Print this message
 
-            Not yet implemented: extract, metadata, render, convert, diagnose.
+            Not yet implemented: render, convert, diagnose.
             See dotnet/TODO.md for the plan.
             """);
     }
@@ -231,7 +235,7 @@ internal static class Program
             """);
     }
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    internal static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,

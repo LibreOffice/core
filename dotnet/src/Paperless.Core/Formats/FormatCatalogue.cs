@@ -62,41 +62,42 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // ---- Word processing: OOXML --------------------------------------------------
         New(DocumentFormat.Docx, DocumentFamily.WordProcessing, ContainerKind.Zip, "docx",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "Word 2007-365"),
+            "Word 2007-365", read: true),
         New(DocumentFormat.Docm, DocumentFamily.WordProcessing, ContainerKind.Zip, "docm",
             "application/vnd.ms-word.document.macroEnabled.12",
-            "Word 2007-365 (macro-enabled)", macros: true),
+            "Word 2007-365 (macro-enabled)", macros: true, read: true),
         New(DocumentFormat.Dotx, DocumentFamily.WordProcessing, ContainerKind.Zip, "dotx",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
-            "Word 2007-365 Template", template: true),
+            "Word 2007-365 Template", template: true, read: true),
         New(DocumentFormat.Dotm, DocumentFamily.WordProcessing, ContainerKind.Zip, "dotm",
             "application/vnd.ms-word.template.macroEnabledTemplate.12",
-            "Word 2007-365 Template (macro-enabled)", template: true, macros: true),
+            "Word 2007-365 Template (macro-enabled)", template: true, macros: true, read: true),
 
         // ---- Word processing: legacy binary ------------------------------------------
         // Macro-capable: WW8 stores VBA in a Macros/ storage inside the same OLE2 file.
         New(DocumentFormat.Doc, DocumentFamily.WordProcessing, ContainerKind.Ole2CompoundFile,
-            "doc", "application/msword", "Word 97-2003", macros: true),
+            "doc", "application/msword", "Word 97-2003", macros: true, read: true),
         New(DocumentFormat.Dot, DocumentFamily.WordProcessing, ContainerKind.Ole2CompoundFile,
-            "dot", "application/msword", "Word 97-2003 Template", template: true, macros: true),
+            "dot", "application/msword", "Word 97-2003 Template", template: true, macros: true,
+            read: true),
 
         // ---- Word processing: other ---------------------------------------------------
         New(DocumentFormat.Rtf, DocumentFamily.WordProcessing, ContainerKind.PlainText, "rtf",
-            "application/rtf", "Rich Text Format"),
+            "application/rtf", "Rich Text Format", read: true),
         New(DocumentFormat.WordXml2003, DocumentFamily.WordProcessing, ContainerKind.Xml, "xml",
             "text/xml", "Word 2003 XML"),
 
         // ---- Word processing: ODF -----------------------------------------------------
         New(DocumentFormat.Odt, DocumentFamily.WordProcessing, ContainerKind.Zip, "odt",
-            "application/vnd.oasis.opendocument.text", "ODF Text Document"),
+            "application/vnd.oasis.opendocument.text", "ODF Text Document", read: true),
         New(DocumentFormat.Ott, DocumentFamily.WordProcessing, ContainerKind.Zip, "ott",
             "application/vnd.oasis.opendocument.text-template", "ODF Text Document Template",
-            template: true),
+            template: true, read: true),
         // The non-flat extension is also registered for the flat type in LibreOffice, so
         // that a mislabelled '.odt' still gets the flat filter offered as a candidate.
         New(DocumentFormat.Fodt, DocumentFamily.WordProcessing, ContainerKind.Xml, "fodt",
             "application/vnd.oasis.opendocument.text-flat-xml", "ODF Text Document (flat XML)",
-            alternates: ["xml"]),
+            read: true, alternates: ["xml"]),
         New(DocumentFormat.Sxw, DocumentFamily.WordProcessing, ContainerKind.Zip, "sxw",
             "application/vnd.sun.xml.writer", "OpenOffice.org 1.x Writer"),
         New(DocumentFormat.Stw, DocumentFamily.WordProcessing, ContainerKind.Zip, "stw",
@@ -141,13 +142,13 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Spreadsheet: ODF ---------------------------------------------------------
         New(DocumentFormat.Ods, DocumentFamily.Spreadsheet, ContainerKind.Zip, "ods",
-            "application/vnd.oasis.opendocument.spreadsheet", "ODF Spreadsheet"),
+            "application/vnd.oasis.opendocument.spreadsheet", "ODF Spreadsheet", read: true),
         New(DocumentFormat.Ots, DocumentFamily.Spreadsheet, ContainerKind.Zip, "ots",
             "application/vnd.oasis.opendocument.spreadsheet-template",
-            "ODF Spreadsheet Template", template: true),
+            "ODF Spreadsheet Template", template: true, read: true),
         New(DocumentFormat.Fods, DocumentFamily.Spreadsheet, ContainerKind.Xml, "fods",
             "application/vnd.oasis.opendocument.spreadsheet-flat-xml",
-            "ODF Spreadsheet (flat XML)"),
+            "ODF Spreadsheet (flat XML)", read: true),
         New(DocumentFormat.Sxc, DocumentFamily.Spreadsheet, ContainerKind.Zip, "sxc",
             "application/vnd.sun.xml.calc", "OpenOffice.org 1.x Calc"),
         New(DocumentFormat.Stc, DocumentFamily.Spreadsheet, ContainerKind.Zip, "stc",
@@ -188,13 +189,13 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Presentation: ODF --------------------------------------------------------
         New(DocumentFormat.Odp, DocumentFamily.Presentation, ContainerKind.Zip, "odp",
-            "application/vnd.oasis.opendocument.presentation", "ODF Presentation"),
+            "application/vnd.oasis.opendocument.presentation", "ODF Presentation", read: true),
         New(DocumentFormat.Otp, DocumentFamily.Presentation, ContainerKind.Zip, "otp",
             "application/vnd.oasis.opendocument.presentation-template",
-            "ODF Presentation Template", template: true),
+            "ODF Presentation Template", template: true, read: true),
         New(DocumentFormat.Fodp, DocumentFamily.Presentation, ContainerKind.Xml, "fodp",
             "application/vnd.oasis.opendocument.presentation-flat-xml",
-            "ODF Presentation (flat XML)"),
+            "ODF Presentation (flat XML)", read: true),
         New(DocumentFormat.Sxi, DocumentFamily.Presentation, ContainerKind.Zip, "sxi",
             "application/vnd.sun.xml.impress", "OpenOffice.org 1.x Impress"),
         New(DocumentFormat.Sti, DocumentFamily.Presentation, ContainerKind.Zip, "sti",
@@ -211,6 +212,7 @@ public sealed class FormatCatalogue : IFormatCatalogue
         string displayName,
         bool template = false,
         bool macros = false,
+        bool read = false,
         string[]? alternates = null) => new()
         {
             Format = format,
@@ -222,8 +224,9 @@ public sealed class FormatCatalogue : IFormatCatalogue
             IsTemplate = template,
             CanCarryMacros = macros,
             AlternateExtensions = alternates ?? [],
-            // Flipped on per format as readers land. This is what `paperless identify`
-            // reports, so an optimistic value here is worse than a missing feature.
-            IsReadSupported = false,
+            // Set per format as readers land, and only once the format genuinely reads. This
+            // is what `paperless identify` reports, so an optimistic value here is worse than
+            // a missing feature.
+            IsReadSupported = read,
         };
 }

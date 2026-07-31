@@ -95,6 +95,16 @@ public enum SectionKind
 
     /// <summary>A comment or annotation.</summary>
     Comment,
+
+    /// <summary>
+    /// The text inside a floating frame, text box or shape.
+    /// </summary>
+    /// <remarks>
+    /// A separate kind because such text is its own flow rather than part of the paragraph it
+    /// is anchored in. Splicing it into that paragraph would run two unrelated sentences
+    /// together, so it is kept as its own section.
+    /// </remarks>
+    Frame,
 }
 
 /// <summary>A paragraph of text.</summary>
@@ -118,9 +128,19 @@ public sealed class ContentParagraph : ContentNode
     /// <summary>The rendered list marker, e.g. "3." or a bullet character.</summary>
     public string? ListMarker { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Appends the list marker, the paragraph's text, and a newline.
+    /// </summary>
+    /// <remarks>
+    /// The marker is included because it is text a reader sees: a numbered list reads as
+    /// "1." followed by the item, and omitting it loses the numbering entirely, since the
+    /// number exists nowhere in the document's runs. Callers wanting marker-free text can
+    /// read the <see cref="ContentRun"/> children directly, where the marker never appears.
+    /// </remarks>
     protected internal override void AppendText(System.Text.StringBuilder builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+        if (ListMarker is { Length: > 0 } marker) builder.Append(marker).Append(' ');
         base.AppendText(builder);
         builder.Append('\n');
     }
@@ -193,6 +213,27 @@ public sealed class ContentTableRow : ContentNode
 {
     /// <summary>The zero-based row index within the table.</summary>
     public int Index { get; init; }
+
+    /// <summary>
+    /// Appends the row as tab-separated cells followed by a newline.
+    /// </summary>
+    /// <remarks>
+    /// A row is one line, not one line per cell. Letting each cell's paragraph contribute
+    /// its own newline would turn a four-column row into four lines and make the extracted
+    /// text of any table unusable — and tab-separated is what both LibreOffice's Writer text
+    /// filter and its CSV export produce, so it is also the form a reference comparison
+    /// expects.
+    /// </remarks>
+    protected internal override void AppendText(System.Text.StringBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        for (int i = 0; i < Children.Count; i++)
+        {
+            if (i > 0) builder.Append('\t');
+            Children[i].AppendText(builder);
+        }
+        builder.Append('\n');
+    }
 }
 
 /// <summary>
@@ -214,9 +255,17 @@ public sealed class ContentTableCell : ContentNode
 
     /// <summary>
     /// The cell's underlying value for spreadsheet cells: a <see cref="double"/>,
-    /// <see cref="string"/>, <see cref="bool"/>, <see cref="DateTime"/>, or a
-    /// <see cref="CellError"/>. Null for word-processing table cells.
+    /// <see cref="string"/>, <see cref="bool"/>, <see cref="DateTime"/>,
+    /// <see cref="TimeSpan"/>, or a <see cref="CellError"/>. Null for word-processing
+    /// table cells.
     /// </summary>
+    /// <remarks>
+    /// <see cref="TimeSpan"/> rather than a time-of-day <see cref="DateTime"/> because a
+    /// spreadsheet does not distinguish the two: a cell holding 14:30 and a cell holding an
+    /// elapsed 14 hours 30 minutes are the same stored number, and only the number format
+    /// says which was meant. Reporting a <see cref="DateTime"/> would invent a date the file
+    /// does not contain.
+    /// </remarks>
     /// <remarks>
     /// This is the unformatted value. The children hold the <em>displayed</em> text,
     /// which for a spreadsheet is the value run through its number format — the two
@@ -229,6 +278,18 @@ public sealed class ContentTableCell : ContentNode
     /// syntax. Null when the cell is not a formula.
     /// </summary>
     public string? Formula { get; init; }
+
+    /// <summary>
+    /// Appends the cell's text without the trailing newline its last paragraph contributes,
+    /// so that <see cref="ContentTableRow"/> can join cells onto one line.
+    /// </summary>
+    protected internal override void AppendText(System.Text.StringBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        int start = builder.Length;
+        base.AppendText(builder);
+        while (builder.Length > start && builder[^1] == '\n') builder.Length--;
+    }
 }
 
 /// <summary>A spreadsheet error value.</summary>

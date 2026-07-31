@@ -8,11 +8,20 @@ Reference: `research/04-impress.md` section B (DrawingML in most depth);
 
 ## Foundations
 
-- [ ] Namespace handling for **both** ECMA-376 1st edition and ISO/IEC 29500 strict. Real
-      files use both, sometimes mixed in one package, so accept either everywhere.
-- [ ] `mc:AlternateContent`: pick the highest-fidelity branch understood, fall back
-      otherwise. Getting this wrong silently drops content that the file *does* provide.
+- [x] Namespace handling for **both** ECMA-376 1st edition and ISO/IEC 29500 strict. Done by
+      rewriting strict names to their transitional equivalents once, at load
+      (`OoxmlXml.Normalise`), rather than checking two URIs at every comparison — which is the
+      version of this that gets forgotten in one place and yields a silently empty document.
+- [x] `mc:AlternateContent`: pick the highest-fidelity branch understood, fall back
+      otherwise. Done, and resolved in place at load so nothing downstream sees the element. A
+      choice wins only when every namespace its `Requires` names is one Paperless can read,
+      because the fallback exists precisely for the case where the choice cannot be. Walking
+      both branches is the bug this prevents: a text box's text extracted twice.
+- [x] Metadata from all three `docProps` parts (`OoxmlMetadata`), shared by all three families.
 - [ ] A streaming XML reader over parts — `XmlReader`, not a DOM. Some parts are very large.
+      Currently every part is loaded as an `XDocument`, which is what makes the
+      namespace-and-compatibility normalisation above a single pass; revisit if a real file
+      makes it hurt.
 
 ## Theme and colour
 

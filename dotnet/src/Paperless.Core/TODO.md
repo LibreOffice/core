@@ -28,7 +28,9 @@ added here is inherited by every consumer.
 
 ### Format catalogue
 
-- [ ] **Keep `IsReadSupported` honest as readers land.** Every entry is currently `false`.
+- [x] **Keep `IsReadSupported` honest as readers land.** True for the nine ODF formats that
+      genuinely read; false everywhere else. `FormatCatalogueTests` enumerates the readable
+      set explicitly, so marking a format readable stays a deliberate edit.
       This is what `paperless identify` reports, so flipping one before a reader actually
       works would make the tool lie about what it can do.
 

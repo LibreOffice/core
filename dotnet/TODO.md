@@ -1,31 +1,65 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete.** The container layer works and `paperless identify` correctly
-names all 17 corpus formats. No document content is readable yet — that is Phase 1.
+Status: **Phase 0 complete; Phase 1 all but the OOXML spreadsheet and presentation formats;
+Phase 2 complete for word processing.** Every word-processing format reads and *lays out* —
+`odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and footers,
+tables, sections and columns all verified against LibreOffice's own rendering to a tenth of a
+point. The ODF spreadsheet and presentation formats extract. `xlsx`, `pptx`, the legacy `xls`
+and `ppt`, and CSV do not read at all yet.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
 
 ## Start here (next session)
 
-Phase 1, first task: **ODF extraction** (`odt`/`ods`/`odp`). Read
-`src/Paperless.OpenDocument/TODO.md` and `research/02-writer.md` section D first.
+Two fronts, and they are independent.
 
-ODF before OOXML is deliberate: it is XML, well-specified, and it builds the
-style-resolution machinery OOXML needs afterwards. It is also where the
-`extraction-comparison` skill starts paying off, since LibreOffice's own text export gives
-an immediate oracle.
+**Word processing** is deep into Phase 3's layout half, and the thing to know before picking it
+up is that **the rasteriser is no longer the blocker it was recorded as**. Everything a word
+processor draws that is not text — a footnote separator, a cell border, a cell shade — is a
+filled or stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in the TestKit read
+them. So those features are verifiable at the same tenth of a point as text, without pixels.
+Footnotes and endnotes are done in all four formats, including the feedback loop into pagination
+that a footnote needs and the separate pages an endnote takes. Cell shading is done in three
+formats and cell borders in two, consolidated the way LibreOffice consolidates them. What
+remains is floating frames with text wrap, the DOC reads for borders and shading, the table
+origin in DOCX and RTF, and note numbering *restarts*. Read
+`src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
+warning about borders: they cannot be verified the way everything else in this library has
+been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
+is still a stub. That makes the rasteriser the thing to build before the borders, not after.
+
+**The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
+spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
+has the model.
+
+Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
+
+- **Keep "set here", "inherited" and "defaulted" apart.** `OdfPropertyOrigin` and
+  `WordPropertyOrigin` are what make hard formatting distinguishable from an inherited style —
+  and in DOCX the toggle rule is *impossible* to implement without knowing which layer set a
+  value, which is the concrete payoff for not collapsing the three cases.
+- **One content walker per family group, not per format.** `OdfContentReader` serves all three
+  ODF families because the text content model is shared; DrawingML text bodies are similarly
+  shared across DOCX, XLSX and PPTX, so `Paperless.Ooxml` is where that belongs.
+- **Normalise the input once, at load.** Strict-versus-transitional namespaces and
+  `mc:AlternateContent` are both handled in `OoxmlXml.Normalise` rather than at every point that
+  walks the tree. The bug that prevents — a text box extracted twice — is invisible until a
+  diff.
 
 Before trusting any comparison, run
 `.claude/skills/libreoffice-reference/scripts/check-env.sh`. **A fresh container will not
 have the LibreOffice application modules, poppler-utils, or the Carlito/Caladea fonts** — the
-script prints the exact `apt-get` lines.
+script prints the exact `apt-get` lines. `libreoffice-core` alone gives an `soffice` that
+starts, reports a version and then fails on every document, which is why
+`LibreOfficeRunner.IsAvailable` decides by converting a probe file rather than by finding the
+binary.
 
 ## Where things stand
 
 | Done | |
 |---|---|
-| ✅ | Solution: 12 libraries + CLI + 8 test projects, warning-free on .NET 10, 128 tests passing |
+| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 280 tests passing |
 | ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
 | ✅ | `FormatCatalogue`: all 43 formats described |
 | ✅ | Content-based format identification, verified on all 17 corpus formats |
@@ -36,14 +70,27 @@ script prints the exact `apt-get` lines.
 | ✅ | Six research documents (~6000 lines) covering the LibreOffice implementation |
 | ✅ | Four comparison skills with verified working scripts |
 | ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
+| ✅ | ODF extraction: `odt ods odp ott ots otp fodt fods fodp`, with style resolution, metadata, text, lists, tables, notes, comments, frames and shape text |
+| ✅ | DOCX extraction: `docx docm dotx dotm`, with the §17.7.3 toggle rule, numbering, fields, tracked changes, tables with vertical merges, notes, comments, headers/footers and text boxes |
+| ✅ | RTF extraction: byte-level tokeniser, destination skipping, `\ansicpg`/`\fcharset`/`\uN` encoding, flows, fields, and tables whose merges carry no flag |
+| ✅ | Legacy code pages (`Paperless.Text.Encodings.LegacyCodePages`), shared by RTF and the legacy binary readers to come |
+| ✅ | `paperless extract` and `paperless metadata`, text and JSON |
+| ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
+
+| ✅ | DOC (WW8) extraction: the piece table, FKP formatting indexes, the eight subdocuments, list labels computed from `LSTF`/`LVL`/`LFO`, tables with the merges LibreOffice writes with no flag |
+| ✅ | Text layout: a hand-rolled OpenType reader, HarfBuzz shaping, UAX #14 line breaking, and paragraph layout with alignment, justification, tabs, indents and line spacing |
+| ✅ | Word-processing page layout: pagination, headers and footers, tables as grids that split across pages with repeating headings, several sections per document, and columns — all four formats, all compared against LibreOffice's own rendering |
+| ✅ | Footnotes and endnotes: read from all four formats, placed with the feedback loop into pagination that a footnote needs and the pages of their own that an endnote takes, with the escapement rule measured off LibreOffice's PDF content stream |
 
 | Not started | |
 |---|---|
-| ❌ | Every format reader — no document content is parsed yet |
+| ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
-| ❌ | Text layout: fonts, metrics, shaping, line breaking |
-| ❌ | Layout engines and rendering backends |
-| ❌ | The CLI beyond `identify` |
+| ❌ | Rendering backends: `Paperless.Rendering`'s rasteriser and PDF writer are stubs |
+| ❌ | Floating frames with text wrap; cell borders and shading for DOC |
+| ❌ | Spreadsheet print layout and slide rendering |
+| ❌ | Vector import (WMF/EMF/EMF+/SVG) |
+| ❌ | The CLI beyond `identify`, `extract` and `metadata` |
 
 ## Ordering principle
 
@@ -82,25 +129,41 @@ Nothing else can be verified until these work.
       prohibited throughout (XXE).
 - [x] **`paperless identify`** end to end. Done: text and `--json` output, correct on all 17
       corpus formats, with sysexits-style exit codes.
-- [ ] **Corpus and fidelity harness wiring**. Commit `tests/corpus/minimal/`, implement
-      `LibreOfficeRunner`, get one comparison running end to end even though it fails.
+- [x] **Corpus and fidelity harness wiring**. Done: `tests/corpus/minimal/` and
+      `tests/corpus/features/` are committed; `LibreOfficeRunner` drives headless `soffice`
+      with a private profile, batched conversions and an availability probe that survives a
+      `libreoffice-core`-only install; `TextComparer` normalises the way the
+      `extraction-comparison` skill documents. `OdfExtractionComparisonTests` runs the whole
+      ODF corpus against LibreOffice and skips with a reason when it is absent.
 
 ## Phase 1 — Extraction, all formats
 
 Per format: metadata, then text, then tables/structure.
 
-- [ ] ODF text/spreadsheet/presentation (`odt ods odp` + template and flat variants).
-      **Start here**: XML, well-specified, and it exercises the shared style-resolution
-      machinery that OOXML also needs.
-- [ ] OOXML (`docx xlsx pptx` + variants). Shared theme/relationship handling in
-      `Paperless.Ooxml` first.
+- [x] ODF text/spreadsheet/presentation (`odt ods odp` + template and flat variants). Done:
+      the three-container style resolution with set-here/inherited/defaulted kept apart,
+      `meta.xml`, the shared text walk, and tables shared between Writer tables and Calc
+      sheets. The minimal corpus matches LibreOffice's text filter exactly; the features
+      corpus accounts for every difference (see `src/Paperless.OpenDocument/TODO.md`).
+      Remaining ODF gaps are tracked there — tracked changes, number-format application,
+      embedded objects, and the OpenOffice.org 1.x namespaces.
+- [ ] OOXML (`docx xlsx pptx` + variants). Shared handling in `Paperless.Ooxml` first — done:
+      namespace normalisation, `mc:AlternateContent` resolution and `docProps` metadata.
+      - [x] `docx docm dotx dotm`. The interesting part was ECMA-376 §17.7.3's toggle rule; see
+            `src/Paperless.WordProcessing/TODO.md`.
+      - [ ] `xlsx` and `pptx`.
 - [ ] Legacy binary (`doc xls ppt`). Hardest. Needs the record-stream reader, sprm/BIFF
       decoding, the WW8 piece table, and codepage handling.
-- [ ] RTF, CSV.
+- [x] RTF. The two things worth knowing: an unknown `\*` destination must be skipped whole, and
+      LibreOffice writes a horizontally merged table cell with no merge flag at all — the span
+      comes from the column grid.
+- [ ] CSV.
 - [ ] `xlsb` (import only — LibreOffice cannot write it, so test files need Excel).
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
-- [ ] `paperless extract` and `paperless metadata`.
+- [x] `paperless extract` and `paperless metadata`, in text and JSON. The output layout is
+      part of the `extraction-comparison` skill's contract: `--outdir DIR` writes
+      `<stem>.txt` per input.
 
 **Exit criterion:** extraction matches LibreOffice's text export across the whole corpus,
 allowing for the reference filters' known omissions (headers, comments, notes, shape text
@@ -110,28 +173,46 @@ allowing for the reference filters' known omissions (headers, comments, notes, s
 
 The part that decides whether rendering can ever match.
 
-- [ ] **Font resolution and metrics** (`Paperless.Text`). Hand-rolled OpenType table
+- [x] **Font resolution and metrics** (`Paperless.Text`). Hand-rolled OpenType table
       reader — we need raw `hhea`/`OS/2` access and our own precedence rules, per
       `research/06-rendering.md` section B, not a library's opinion of them.
       Reproduce LibreOffice's substitution order. **Report substitutions**: a silent one
       explains most mysterious reflows.
-- [ ] **Shaping** via HarfBuzzSharp — same engine LibreOffice uses, so advances agree.
-- [ ] **Line breaking** (UAX #14), hand-rolled — nothing in the runtime does this. Generate
-      the `Line_Break` and `East_Asian_Width` tables, implement LB1-LB31, verify against
-      Unicode's `LineBreakTest.txt`. LibreOffice's breaks are ICU's, so expect small
-      tailoring differences to surface later.
+- [x] **Shaping** via HarfBuzzSharp — same engine LibreOffice uses, so advances agree.
+- [x] **Line breaking** (UAX #14), hand-rolled — nothing in the runtime does this. Generate
+      the `Line_Break` and `East_Asian_Width` tables, implement LB1-LB31. LibreOffice's breaks
+      are ICU's, and one tailoring difference has surfaced: LibreOffice 24.2 breaks a justified
+      line differently from a ragged one, which is recorded with its measurement in the
+      word-processing TODO.
+- [ ] Verification against Unicode's `LineBreakTest.txt`, which needs the file — not reachable
+      from this container, so the implementation is checked against LibreOffice's own breaks
+      instead.
 - [ ] Bidi and script runs; vertical text.
-- [ ] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
+- [x] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
-**Exit criterion:** for a text-heavy document, Paperless breaks lines at the same places as
-LibreOffice. Until then, page-level comparison is meaningless — every page after the first
-will differ for reasons that have nothing to do with drawing.
+**Exit criterion — met for word processing.** For a text-heavy document Paperless breaks lines
+where LibreOffice breaks them, in all four formats, which is what made every page-level
+comparison after it meaningful. It was worth as much as expected: nearly every bug found since
+was found because a page comparison put a word a measurable distance from where it belonged.
 
 ## Phase 3 — Rendering
 
-- [ ] Skia raster backend consuming `IDrawingSink`.
-- [ ] Word-processing page layout: pagination, headers/footers, footnotes, tables spanning
-      pages, floating frames and text wrap.
+- [ ] Skia raster backend consuming `IDrawingSink`. Still worth building, but **no longer a
+      prerequisite for anything**, which is a correction: the note here used to say that cell
+      borders, shading and floating-frame outlines could not be verified without it. That was the
+      wrong conclusion from a true premise — a *word-position* comparison cannot see them, but
+      LibreOffice's PDF content stream states every one of them as an explicit path, and
+      `PdfFills` and `PdfStrokes` read those. Borders and shading were verified that way instead.
+- [x] Word-processing page layout: pagination, headers and footers, tables as grids that split
+      across pages with repeating heading rows, several sections per document, and columns.
+- [x] Footnote placement, which feeds back into pagination rather than merely adding a note: the
+      note area takes its room out of the body's, so a page with notes holds less text, and the
+      loop shortens the page until it holds. Endnotes instead take pages of their own after the
+      last body page, numbered i, ii, iii rather than 1, 2, 3. Notes read from all four formats,
+      with the separator rule above them drawn and compared.
+- [x] Table cell shading (ODF, DOCX, RTF) and cell borders (ODF, DOCX, RTF), the borders
+      consolidated into one stroke per grid line as LibreOffice writes them.
+- [ ] The rest of it: floating frames with text wrap, and the DOC reads for borders and shading.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
@@ -152,10 +233,26 @@ will differ for reasons that have nothing to do with drawing.
       Rasterised output is byte-deterministic, so checksums are meaningful.
 - [ ] Performance: extraction should be well under a second for typical files.
 - [ ] Fuzz the readers. Malformed office files are a classic attack surface and the readers
-      are pure parsing code over untrusted input.
+      are pure parsing code over untrusted input. `OdfLenientReadTests` covers the cases a
+      fuzzer finds first — a truncated part, a malformed part, a missing part, an XXE, an
+      absurd repeat count, a cyclic style chain, nesting deep enough to overflow a stack —
+      but that is a floor, not a substitute for actual fuzzing.
 - [ ] Public API review, then a first release.
 
 ---
+
+## Known deviations from LibreOffice
+
+Recorded rather than reproduced. Where LibreOffice renders a document wrongly, copying the
+defect is explicitly a non-goal; each entry here is a place the comparison harness allows a
+difference on purpose, with the evidence that Paperless is the one following the format.
+
+**Footnote numbering with a section-level `w:footnotePr`.** In
+`tests/corpus/features/word-features.docx`, LibreOffice 24.2.7.2 numbers the single footnote 0;
+Paperless numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
+LibreOffice's: removing the section-level `w:footnotePr` from the same file makes LibreOffice
+render 1, and on a minimal DOCX with one footnote and no footnote properties at all the two
+agree on 1. Allowed by name in `ExtractionComparisonTests.KnownDeviations`.
 
 ## Settled decisions
 

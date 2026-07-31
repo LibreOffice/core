@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="HeadTable" style:family="table">
+   <style:table-properties style:width="16.5cm" table:align="left"/>
+  </style:style>
+  <style:style style:name="HeadColA" style:family="table-column">
+   <style:table-column-properties style:column-width="11cm"/>
+  </style:style>
+  <style:style style:name="HeadColB" style:family="table-column">
+   <style:table-column-properties style:column-width="5.5cm"/>
+  </style:style>
+  <style:style style:name="HeadCell" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0cm" fo:border="none"/>
+  </style:style>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="0.6cm" fo:margin-bottom="0.4cm"/>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties svg:height="0.6cm" fo:margin-top="0.4cm"/>
+   </style:footer-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Furniture" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="9pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL">
+   <style:header>
+    <table:table table:name="Head" table:style-name="HeadTable">
+     <table:table-column table:style-name="HeadColA"/>
+     <table:table-column table:style-name="HeadColB"/>
+     <table:table-row>
+      <table:table-cell table:style-name="HeadCell" office:value-type="string">
+       <text:p text:style-name="Furniture">Headword alpha beta gamma</text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="HeadCell" office:value-type="string">
+       <text:p text:style-name="Furniture">Chapter seven</text:p>
+      </table:table-cell>
+     </table:table-row>
+    </table:table>
+   </style:header>
+   <style:footer>
+    <text:p text:style-name="Furniture">Footword delta epsilon zeta</text:p>
+   </style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Paragraph 1. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 2. layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser.</text:p>
+   <text:p text:style-name="Body">Paragraph 3. separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common.</text:p>
+   <text:p text:style-name="Body">Paragraph 4. library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction.</text:p>
+   <text:p text:style-name="Body">Paragraph 5. rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic.</text:p>
+   <text:p text:style-name="Body">Paragraph 6. filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline.</text:p>
+   <text:p text:style-name="Body">Paragraph 7. pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement.</text:p>
+   <text:p text:style-name="Body">Paragraph 8. advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning.</text:p>
+   <text:p text:style-name="Body">Paragraph 9. ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout.</text:p>
+   <text:p text:style-name="Body">Paragraph 10. margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate.</text:p>
+   <text:p text:style-name="Body">Paragraph 11. paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library.</text:p>
+   <text:p text:style-name="Body">Paragraph 12. together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering.</text:p>
+   <text:p text:style-name="Body">Paragraph 13. compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling.</text:p>
+   <text:p text:style-name="Body">Paragraph 14. glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination.</text:p>
+   <text:p text:style-name="Body">Paragraph 15. rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance.</text:p>
+   <text:p text:style-name="Body">Paragraph 16. common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature.</text:p>
+   <text:p text:style-name="Body">Paragraph 17. extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin.</text:p>
+   <text:p text:style-name="Body">Paragraph 18. arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths.</text:p>
+   <text:p text:style-name="Body">Paragraph 19. baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together.</text:p>
+   <text:p text:style-name="Body">Paragraph 20. measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds.</text:p>
+   <text:p text:style-name="Body">Paragraph 21. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 22. layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser.</text:p>
+   <text:p text:style-name="Body">Paragraph 23. separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common.</text:p>
+   <text:p text:style-name="Body">Paragraph 24. library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction.</text:p>
+   <text:p text:style-name="Body">Paragraph 25. rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic.</text:p>
+   <text:p text:style-name="Body">Paragraph 26. filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline.</text:p>
+   <text:p text:style-name="Body">Paragraph 27. pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement.</text:p>
+   <text:p text:style-name="Body">Paragraph 28. advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning.</text:p>
+ </office:text></office:body>
+</office:document>

@@ -4,8 +4,17 @@ namespace Paperless.OpenDocument.Styles;
 /// The ODF style families. A style's family determines which properties it may carry
 /// and what it may be applied to.
 /// </summary>
+/// <remarks>
+/// The family is part of a style's identity, not a description of it: two styles in the
+/// same document may share a name if their families differ, and a parent reference only
+/// ever resolves within one family. LibreOffice keeps a separate format pool per family
+/// for exactly this reason (<c>include/xmloff/families.hxx</c>).
+/// </remarks>
 public enum OdfStyleFamily
 {
+    /// <summary>Not a family Paperless recognises.</summary>
+    Unknown = 0,
+
     /// <summary>Paragraph styles.</summary>
     Paragraph,
 
@@ -38,40 +47,66 @@ public enum OdfStyleFamily
 
     /// <summary>List styles.</summary>
     List,
+
+    /// <summary>Chart styles.</summary>
+    Chart,
+
+    /// <summary>Ruby styles (CJK annotation text).</summary>
+    Ruby,
+
+    /// <summary>
+    /// Page layouts: the page size, margins and header/footer geometry a master page
+    /// points at. Written as <c>style:page-layout</c> rather than as a
+    /// <c>style:style</c>, but it participates in resolution the same way.
+    /// </summary>
+    PageLayout,
 }
 
-/// <summary>
-/// Resolves the effective formatting of an ODF object by walking its style chain.
-/// </summary>
-/// <remarks>
-/// <para>
-/// ODF splits styles three ways and all three participate in resolution:
-/// <c>office:styles</c> holds named styles the user can see, <c>office:automatic-styles</c>
-/// holds generated one-off styles standing in for direct formatting, and
-/// <c>office:master-styles</c> holds page and slide masters.
-/// </para>
-/// <para>
-/// Resolution walks <c>style:parent-style-name</c> upwards, then falls back to the
-/// family's defaults from <c>style:default-style</c>. This is the same
-/// resolve-through-a-parent-chain semantics LibreOffice implements with
-/// <c>SfxItemSet</c>, described in <c>dotnet/research/05-infrastructure.md</c>
-/// section E — a property is either set here, inherited, or defaulted, and the
-/// three cases must stay distinguishable rather than collapsing into "has a value".
-/// </para>
-/// </remarks>
-public interface IOdfStyleResolver
+/// <summary>Maps between <see cref="OdfStyleFamily"/> and the names ODF writes.</summary>
+public static class OdfStyleFamilies
 {
-    /// <summary>
-    /// Resolves one property for a named style, following the parent chain and then
-    /// the family defaults. Returns null when nothing in the chain sets it.
-    /// </summary>
-    /// <param name="styleName">The style to start from.</param>
-    /// <param name="family">The style's family.</param>
-    /// <param name="propertyNamespace">The property attribute's namespace URI.</param>
-    /// <param name="propertyName">The property attribute's local name.</param>
-    string? ResolveProperty(
-        string styleName,
-        OdfStyleFamily family,
-        string propertyNamespace,
-        string propertyName);
+    /// <summary>Parses a <c>style:family</c> attribute value.</summary>
+    /// <returns>
+    /// <see cref="OdfStyleFamily.Unknown"/> for an unrecognised or absent value, so that a
+    /// style using a family from a later ODF version is still parsed and retrievable
+    /// rather than discarded.
+    /// </returns>
+    public static OdfStyleFamily Parse(string? family) => family switch
+    {
+        "paragraph" => OdfStyleFamily.Paragraph,
+        "text" => OdfStyleFamily.Text,
+        "section" => OdfStyleFamily.Section,
+        "table" => OdfStyleFamily.Table,
+        "table-column" => OdfStyleFamily.TableColumn,
+        "table-row" => OdfStyleFamily.TableRow,
+        "table-cell" => OdfStyleFamily.TableCell,
+        "graphic" => OdfStyleFamily.Graphic,
+        "presentation" => OdfStyleFamily.Presentation,
+        "drawing-page" => OdfStyleFamily.DrawingPage,
+        "list-style" or "list" => OdfStyleFamily.List,
+        "chart" => OdfStyleFamily.Chart,
+        "ruby" => OdfStyleFamily.Ruby,
+        "page-layout" => OdfStyleFamily.PageLayout,
+        _ => OdfStyleFamily.Unknown,
+    };
+
+    /// <summary>The <c>style:family</c> attribute value for a family.</summary>
+    public static string ToAttributeValue(this OdfStyleFamily family) => family switch
+    {
+        OdfStyleFamily.Paragraph => "paragraph",
+        OdfStyleFamily.Text => "text",
+        OdfStyleFamily.Section => "section",
+        OdfStyleFamily.Table => "table",
+        OdfStyleFamily.TableColumn => "table-column",
+        OdfStyleFamily.TableRow => "table-row",
+        OdfStyleFamily.TableCell => "table-cell",
+        OdfStyleFamily.Graphic => "graphic",
+        OdfStyleFamily.Presentation => "presentation",
+        OdfStyleFamily.DrawingPage => "drawing-page",
+        OdfStyleFamily.List => "list-style",
+        OdfStyleFamily.Chart => "chart",
+        OdfStyleFamily.Ruby => "ruby",
+        OdfStyleFamily.PageLayout => "page-layout",
+        _ => "unknown",
+    };
 }

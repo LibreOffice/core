@@ -30,6 +30,17 @@ public interface IDocument : IDisposable
     DocumentMetadata Metadata { get; }
 
     /// <summary>
+    /// The document's text, tables and structure as a format-independent tree.
+    /// </summary>
+    /// <remarks>
+    /// Populated when the document is read rather than on demand: parsing the file is the
+    /// work, and a reader that has parsed it has already produced this. The expensive,
+    /// deferred step is <see cref="IPaginatedDocument.Layout"/>, which is why that is a
+    /// method and this is a property.
+    /// </remarks>
+    Extraction.ContentDocument Content { get; }
+
+    /// <summary>
     /// Non-fatal problems encountered while reading. Paperless is deliberately
     /// lenient — real-world files violate their own specifications constantly —
     /// so a successful read can still report diagnostics.

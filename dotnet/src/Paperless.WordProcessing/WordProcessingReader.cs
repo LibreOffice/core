@@ -1,5 +1,11 @@
+using Paperless.Containers;
+using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Formats;
+using Paperless.WordProcessing.OpenDocument;
+using Paperless.WordProcessing.Ooxml;
+using Paperless.WordProcessing.Rtf;
+using Paperless.WordProcessing.Ww8;
 
 namespace Paperless.WordProcessing;
 
@@ -32,5 +38,32 @@ public sealed class WordProcessingReader : IDocumentReader
     ];
 
     /// <inheritdoc/>
-    public IDocument Read(DocumentSource source) => throw new NotImplementedException();
+    public IDocument Read(DocumentSource source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        DocumentFormat format = SourceIdentification.Resolve(source);
+
+        return format switch
+        {
+            DocumentFormat.Odt or DocumentFormat.Ott or DocumentFormat.Fodt
+                => new OdtReader().ReadText(source, format),
+
+            DocumentFormat.Docx or DocumentFormat.Docm or DocumentFormat.Dotx or DocumentFormat.Dotm
+                => DocxReader.Read(source, format),
+
+            DocumentFormat.Rtf => RtfReader.Read(source, format),
+
+            DocumentFormat.Doc or DocumentFormat.Dot => DocReader.Read(source, format),
+
+            // Named in SupportedFormats but not implemented yet. Distinguishing "we will
+            // support this" from "this is not a word-processing document" matters to callers
+            // deciding whether to retry with another reader.
+            DocumentFormat.WordXml2003 or DocumentFormat.Sxw or DocumentFormat.Stw
+                => throw new UnsupportedFormatException(
+                    format, $"Reading {format} is not implemented yet."),
+
+            _ => throw new UnsupportedFormatException(
+                format, $"{format} is not a word-processing format."),
+        };
+    }
 }

@@ -1,5 +1,8 @@
+using Paperless.Containers;
+using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Formats;
+using Paperless.Presentations.OpenDocument;
 
 namespace Paperless.Presentations;
 
@@ -34,5 +37,25 @@ public sealed class PresentationReader : IDocumentReader
     ];
 
     /// <inheritdoc/>
-    public IDocument Read(DocumentSource source) => throw new NotImplementedException();
+    public IDocument Read(DocumentSource source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        DocumentFormat format = SourceIdentification.Resolve(source);
+
+        return format switch
+        {
+            DocumentFormat.Odp or DocumentFormat.Otp or DocumentFormat.Fodp
+                => new OdpReader().Read(source, format),
+
+            // Named in SupportedFormats but not implemented yet.
+            DocumentFormat.Pptx or DocumentFormat.Pptm or DocumentFormat.Potx or DocumentFormat.Potm
+                or DocumentFormat.Ppsx or DocumentFormat.Ppsm or DocumentFormat.Ppt
+                or DocumentFormat.Pot or DocumentFormat.Pps or DocumentFormat.Sxi
+                or DocumentFormat.Sti
+                => throw new UnsupportedFormatException(
+                    format, $"Reading {format} is not implemented yet."),
+
+            _ => throw new UnsupportedFormatException(format, $"{format} is not a presentation format."),
+        };
+    }
 }

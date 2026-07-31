@@ -144,6 +144,10 @@ dotnet build Paperless.slnx          # must stay warning-free
 dotnet test  Paperless.slnx
 ```
 
+The comparison tests in `tests/Paperless.Fidelity.Tests` need an installed LibreOffice and
+skip with a reason when it is missing, so a bare `dotnet test` on a fresh container passes
+while quietly covering nothing. Run `check-env.sh` below before trusting a green run.
+
 Comparing against LibreOffice — use the skills, they encode hard-won details:
 
 | Skill | Use for |
