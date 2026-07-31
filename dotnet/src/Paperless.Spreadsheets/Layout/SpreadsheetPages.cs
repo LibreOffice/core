@@ -47,8 +47,28 @@ public sealed class SheetPage : IPage
     /// </remarks>
     public string? Label => Sheet.Name;
 
+    /// <summary>
+    /// How many pages the whole printout has, which is what a header's <c>&amp;N</c> stands for.
+    /// </summary>
+    /// <remarks>
+    /// A property of the job rather than of the page, and not knowable until every sheet has
+    /// been paginated — which is why it is set afterwards rather than passed to the constructor.
+    /// Calc keeps it in <c>ScHeaderFieldData::nTotalPages</c> and fills it in the same way.
+    /// </remarks>
+    public int PageCount { get; internal set; } = 1;
+
     /// <inheritdoc/>
-    public void Draw(IDrawingSink sink) => _drawing.Draw(sink);
+    public void Draw(IDrawingSink sink) => _drawing.Draw(sink, HeaderContext());
+
+    /// <summary>What this page's header and footer fields stand for.</summary>
+    private SheetHeaderContext HeaderContext() => new()
+    {
+        PageNumber = Number,
+        PageCount = PageCount,
+        SheetName = Sheet.Name,
+        FileName = Sheet.FileName,
+        FilePath = Sheet.FileName,
+    };
 }
 
 /// <summary>
@@ -85,6 +105,10 @@ public sealed class SpreadsheetPages : IPageSequence
 
         Sheets = sheets;
         _pages = Build(sheets, options ?? LayoutOptions.Default);
+
+        // The total is only knowable once every sheet has been paginated, and a header holding
+        // "&N" needs it, so it is stamped on afterwards rather than threaded through the loop.
+        foreach (SheetPage page in _pages) page.PageCount = _pages.Count;
     }
 
     /// <summary>The sheets the pages were laid out from, printed or not.</summary>
@@ -168,12 +192,6 @@ public sealed class SpreadsheetPages : IPageSequence
 /// </remarks>
 internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement placement)
 {
-    /// <summary>One centimetre, the width of the printed row headings.</summary>
-    private static readonly Length HeadingWidth = Length.FromTwips(567);
-
-    /// <summary>12.8 points, the height of the printed column headings.</summary>
-    private static readonly Length HeadingHeight = Length.FromTwips(256);
-
     /// <summary>
     /// How far below a row's top the text sits, as a fraction of the row's height.
     /// </summary>
@@ -195,9 +213,22 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     private static readonly Length CellMargin = Length.FromTwips(20);
 
     private readonly double _scale = Math.Max(1, placement.ZoomPercentage) / 100.0;
+    private readonly SheetPageDecoration _decoration = new(sheet, placement);
 
-    /// <summary>Draws the page: its grid if it prints one, then every cell's text.</summary>
-    public void Draw(IDrawingSink sink)
+    /// <summary>
+    /// Draws the page: what is painted behind the cells, their text, and the page's furniture.
+    /// </summary>
+    /// <remarks>
+    /// The order is <c>ScPrintFunc</c>'s (<c>printfun.cxx:1679-1695</c> and <c>:2344-2404</c>):
+    /// backgrounds, borders, cell text, the grid, the headings and the frame round them. Each
+    /// step covers part of the one before it, so the order is correctness rather than taste —
+    /// a background painted after a border would erase half of it.
+    /// </remarks>
+    /// <param name="sink">Receives the drawing commands.</param>
+    /// <param name="context">
+    /// What a header's fields stand for on this page, or null when nothing needs them.
+    /// </param>
+    public void Draw(IDrawingSink sink, SheetHeaderContext? context = null)
     {
         ArgumentNullException.ThrowIfNull(sink);
 
@@ -208,7 +239,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             List<PlacedColumn> columns = Columns(origin.X);
             List<PlacedRow> rows = Rows(origin.Y);
 
-            if (sheet.Setup.PrintsGrid) DrawGrid(columns, rows, sink);
+            _decoration.DrawBackgrounds(columns, rows, sink);
+            _decoration.DrawBorders(columns, rows, sink);
 
             foreach (PlacedRow row in rows)
             {
@@ -223,12 +255,30 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
                     DrawCell(text, cell, column, row, sink);
                 }
             }
+
+            _decoration.DrawGrid(columns, rows, sink);
+            _decoration.DrawHeadings(HeadingOrigin, columns, rows, sink);
+            _decoration.DrawHeaderAndFooter(context ?? new SheetHeaderContext(), sink);
         }
         finally
         {
             // Always closed, even when a sink throws: a page left open would make the next one
             // nest inside it, turning one bad page into a broken document.
             sink.EndPage();
+        }
+    }
+
+    /// <summary>Where the block starts including its heading strips, which the frame encloses.</summary>
+    private DocPoint HeadingOrigin
+    {
+        get
+        {
+            DocPoint body = BodyOrigin;
+            if (!sheet.Setup.PrintsHeadings) return body;
+
+            return new DocPoint(
+                body.X - (SheetPageDecoration.HeadingWidth * _scale),
+                body.Y - (SheetPageDecoration.HeadingHeight * _scale));
         }
     }
 
@@ -248,8 +298,18 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             SheetPrintSetup setup = sheet.Setup;
             DocRect area = setup.PrintableArea;
 
-            Length x = area.X + (setup.PrintsHeadings ? HeadingWidth : Length.Zero);
-            Length y = area.Y + (setup.PrintsHeadings ? HeadingHeight : Length.Zero);
+            // The heading strips are scaled with the sheet, which is what Calc does —
+            // nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX (printfun.cxx:2205) — even though
+            // pagination subtracts them unscaled, because pagination measures in document
+            // twips and this measures on the paper.
+            Length x = area.X
+                       + (setup.PrintsHeadings
+                           ? SheetPageDecoration.HeadingWidth * _scale
+                           : Length.Zero);
+            Length y = area.Y
+                       + (setup.PrintsHeadings
+                           ? SheetPageDecoration.HeadingHeight * _scale
+                           : Length.Zero);
 
             if (setup.CentresHorizontally)
             {
@@ -324,27 +384,6 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         }
     }
 
-    private static void DrawGrid(List<PlacedColumn> columns, List<PlacedRow> rows, IDrawingSink sink)
-    {
-        if (columns.Count == 0 || rows.Count == 0) return;
-
-        Length right = columns[^1].X + columns[^1].Width;
-        Length bottom = rows[^1].Y + rows[^1].Height;
-        Stroke stroke = new(Paint.Solid(Colour.FromRgb(0xB0B0B0)), Length.FromTwips(1));
-
-        Length top = rows[0].Y;
-        foreach (PlacedColumn column in columns) Line(column.X, top, column.X, bottom);
-        Line(right, top, right, bottom);
-
-        foreach (PlacedRow row in rows) Line(columns[0].X, row.Y, right, row.Y);
-        Line(columns[0].X, bottom, right, bottom);
-
-        void Line(Length x1, Length y1, Length x2, Length y2)
-            => sink.StrokePath(
-                new GraphicsPath().MoveTo(new DocPoint(x1, y1)).LineTo(new DocPoint(x2, y2)),
-                stroke);
-    }
-
     private void DrawCell(
         string text, ContentTableCell cell, PlacedColumn column, PlacedRow row, IDrawingSink sink)
     {
@@ -363,8 +402,4 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         Length baseline = row.Y + (row.Height * BaselineFraction);
         sink.DrawGlyphRun(run.At(new DocPoint(x, baseline)), Paint.Solid(Colour.Black));
     }
-
-    private readonly record struct PlacedColumn(int Column, Length X, Length Width);
-
-    private readonly record struct PlacedRow(int Row, Length Y, Length Height);
 }

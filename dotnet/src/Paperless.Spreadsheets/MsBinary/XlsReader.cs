@@ -59,7 +59,10 @@ public static class XlsReader
                                   "The compound file has neither a Workbook nor a Book stream, "
                                   + "so it is not an Excel workbook.");
 
-            XlsWorkbookReader reader = new(workbook, diagnostics);
+            XlsWorkbookReader reader = new(workbook, diagnostics)
+            {
+                FileName = source.FileName ?? string.Empty,
+            };
             List<ContentSection> sheets = reader.Read();
 
             if (reader.IsEncrypted)

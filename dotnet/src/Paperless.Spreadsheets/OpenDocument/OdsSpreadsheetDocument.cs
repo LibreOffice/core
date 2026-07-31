@@ -71,7 +71,7 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
     /// <c>OdfReader.ReadBody</c> instead would put spreadsheet-only state on the reader all
     /// three families share.
     /// </remarks>
-    internal static List<SheetLayout> ReadSheets(OdfDocument document)
+    internal static List<SheetLayout> ReadSheets(OdfDocument document, string? fileName = null)
     {
         List<SheetLayout> sheets = [];
         XElement? body = document.File.Body;
@@ -97,6 +97,8 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
                 Setup = setup,
                 Grid = grid,
                 Cells = section?.Children.OfType<ContentTable>().FirstOrDefault(),
+                Formatting = OdsCellDecoration.Read(document.File.Styles, table),
+                FileName = fileName ?? string.Empty,
             });
 
             index++;

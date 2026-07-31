@@ -39,6 +39,9 @@ public static class BiffRecords
     public const ushort Xf4 = 0x0443;
     public const ushort Xf = 0x00E0;
 
+    /// <summary>The colours a workbook redefines; its table starts at palette index 8.</summary>
+    public const ushort Palette = 0x0092;
+
     // Sheet structure.
     public const ushort Dimensions2 = 0x0000;
     public const ushort Dimensions = 0x0200;

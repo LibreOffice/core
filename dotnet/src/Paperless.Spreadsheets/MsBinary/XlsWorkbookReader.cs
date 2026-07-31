@@ -1,5 +1,6 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
+using Paperless.Core.Graphics;
 using Paperless.Spreadsheets.Layout;
 using Paperless.Spreadsheets.Numbers;
 using Paperless.Text.Encodings;
@@ -54,6 +55,8 @@ internal sealed class XlsWorkbookReader
     private readonly Dictionary<int, List<SheetRange>> _printAreas = [];
     private readonly Dictionary<int, SheetRange> _repeatColumns = [];
     private readonly Dictionary<int, SheetRange> _repeatRows = [];
+    private readonly XlsDecorationTable _decoration = new();
+    private XlsSheetDecoration _sheetDecoration = new();
     private XlsSheetPrintState _page = new();
     private bool _reportedFormat;
     private bool _reportedSstIndex;
@@ -66,6 +69,9 @@ internal sealed class XlsWorkbookReader
 
     /// <summary>How many sheets the workbook declares, hidden ones included.</summary>
     public int SheetCount => _sheets.Count;
+
+    /// <summary>The document's own file name, for the <c>&amp;F</c> header field.</summary>
+    public string FileName { get; set; } = string.Empty;
 
     /// <summary>True when the workbook counts days from 1904 rather than from 1900.</summary>
     public bool Uses1904Epoch { get; private set; }
@@ -156,6 +162,10 @@ internal sealed class XlsWorkbookReader
 
                 case BiffRecords.Xf or BiffRecords.Xf2 or BiffRecords.Xf3 or BiffRecords.Xf4:
                     ReadXf();
+                    break;
+
+                case BiffRecords.Palette:
+                    ReadPalette();
                     break;
 
                 case BiffPageRecords.Name:
@@ -312,6 +322,7 @@ internal sealed class XlsWorkbookReader
             ushort used = _stream.Version == BiffVersion.Biff8 ? _stream.ReadUInt16() : alignment;
 
             xf = MakeXf(numberFormat, typeProtection, used);
+            ReadXfDecoration(xf.IsCellXf, used);
         }
         else
         {
@@ -348,6 +359,79 @@ internal sealed class XlsWorkbookReader
                 ParentIndex = (ushort)((typeProtection >> 4) & 0x0FFF),
             };
         }
+    }
+
+    /// <summary>
+    /// Reads the borders and the fill that follow an <c>XF</c>'s number format.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// BIFF5 and BIFF8 lay the same information out differently and neither is guessable: BIFF8
+    /// writes two border dwords then a two-byte area word, and hides the <em>fill pattern</em>
+    /// in the second border dword rather than in the area word; BIFF5 writes the area dword
+    /// first and puts one of the four edges — the bottom — inside it. Both are transcribed from
+    /// <c>XclImpXF::ReadXF5</c> and <c>ReadXF8</c>
+    /// (<c>sc/source/filter/excel/xistyle.cxx:1201</c> and <c>:1225</c>).
+    /// </para>
+    /// <para>
+    /// The "states it" flags follow the same inversion the number format does: in a cell XF a
+    /// set bit means the XF states the attribute, and in a style XF a cleared bit does
+    /// (<c>XclImpXF::SetUsedFlags</c>, <c>xistyle.cxx:1466</c>). Border is bit 3 of the
+    /// six-bit field and area bit 4.
+    /// </para>
+    /// </remarks>
+    private void ReadXfDecoration(bool isCellXf, ushort used)
+    {
+        const int borderBit = 0x08;
+        const int areaBit = 0x10;
+
+        int flags = (used >> 10) & 0x3F;
+        bool border = isCellXf == ((flags & borderBit) != 0);
+        bool area = isCellXf == ((flags & areaBit) != 0);
+
+        if (_stream.Version == BiffVersion.Biff8)
+        {
+            if (_stream.RecordLeft < 10) return;
+
+            uint border1 = _stream.ReadUInt32();
+            uint border2 = _stream.ReadUInt32();
+            ushort fill = _stream.ReadUInt16();
+            _decoration.Add(XlsXfDecoration.FromBiff8(border1, border2, fill, border, area));
+        }
+        else
+        {
+            if (_stream.RecordLeft < 8) return;
+
+            uint fill = _stream.ReadUInt32();
+            uint lines = _stream.ReadUInt32();
+            _decoration.Add(XlsXfDecoration.FromBiff5(fill, lines, border, area));
+        }
+    }
+
+    /// <summary>
+    /// Reads a <c>PALETTE</c> record: the colours the workbook redefines.
+    /// </summary>
+    /// <remarks>
+    /// Each entry is four bytes of red, green, blue and a padding byte — not the BGR order the
+    /// rest of the format uses for colours packed into bit fields.
+    /// </remarks>
+    private void ReadPalette()
+    {
+        if (_stream.RecordLeft < 2) return;
+
+        int count = _stream.ReadUInt16();
+        List<Colour> colours = [];
+
+        for (int at = 0; at < count && _stream.RecordLeft >= 4; at++)
+        {
+            byte red = (byte)_stream.ReadByte();
+            byte green = (byte)_stream.ReadByte();
+            byte blue = (byte)_stream.ReadByte();
+            _stream.ReadByte();
+            colours.Add(new Colour(red, green, blue));
+        }
+
+        _decoration.SetPalette(colours.Count, colours);
     }
 
     /// <summary>
@@ -402,6 +486,7 @@ internal sealed class XlsWorkbookReader
     {
         SheetBuilder builder = new(this, sheet.Name);
         _page = new XlsSheetPrintState();
+        _sheetDecoration = new XlsSheetDecoration();
 
         if (StartSubstream(sheet))
         {
@@ -447,6 +532,8 @@ internal sealed class XlsWorkbookReader
             Setup = _page.ToSetup(),
             Grid = _page.ToGrid(),
             Cells = table,
+            Formatting = _sheetDecoration.Resolve(_decoration),
+            FileName = FileName,
         });
 
         return section;
@@ -910,10 +997,14 @@ internal sealed class XlsWorkbookReader
         int first = _stream.ReadUInt16();
         int last = _stream.ReadUInt16();
         int width = _stream.ReadUInt16();
-        _stream.ReadUInt16();
+
+        // The field after the width is the run's XF index, which is what formats the cells no
+        // record was written for — a column filled yellow in a sheet with nothing in it.
+        int xf = _stream.ReadUInt16();
         ushort options = _stream.ReadUInt16();
 
         _page.AddColumns(first, last, width, (options & 0x0001) != 0);
+        _sheetDecoration.SetColumns(first, last, xf);
     }
 
     /// <summary>
@@ -936,6 +1027,12 @@ internal sealed class XlsWorkbookReader
         ushort flags = _stream.ReadUInt16();
 
         _page.AddRow(row, height, (flags & 0x0020) != 0);
+
+        // fGhostDirty, bit 7, is what makes the ixfe in the next word mean anything: without it
+        // the field is present but inert, and a reader that honoured it anyway would paint
+        // whole rows Excel leaves plain.
+        if ((flags & 0x0080) != 0 && _stream.RecordLeft >= 2)
+            _sheetDecoration.SetRow(row, _stream.ReadUInt16() & 0x0FFF);
     }
 
     /// <summary>
@@ -1161,6 +1258,12 @@ internal sealed class XlsWorkbookReader
 
             if (!cells.ContainsKey(column)) _cellCount++;
             cells[column] = cell;
+
+            // A blank cell's XF is the whole point of the record: BIFF writes BLANK and
+            // MULBLANK for cells that hold nothing but a fill or a border, so recording the
+            // format only for cells with content would lose most of a formatted sheet.
+            owner._sheetDecoration.SetCell(row, column, cell.Xf);
+
             if (!cell.IsEmpty) CheckExtent(row, column);
         }
 

@@ -85,9 +85,16 @@ public class SheetPaginationTests
         sales.Setup.TopMargin.Twips.ShouldBe(1134);
         sales.Setup.PageSize.Width.Twips.ShouldBe(11906);
 
-        // The header band is 0.75 cm of declared minimum height plus its 0.25 cm gap to the
-        // first row, which is what puts the first row of cells at 78 points down the page.
-        sales.Setup.HeaderHeight.Twips.ShouldBe(567);
+        // The header band is the 0.75 cm the page layout declares, and its 0.25 cm gap to the
+        // first row is *inside* that rather than added to it: Calc's aHdr.nHeight is
+        // ATTR_PAGE_SIZE's height and aHdr.nDistance is subtracted from it to get the rectangle
+        // the header text is laid out in (lcl_FillHFParam, printfun.cxx:664, and PrintHF,
+        // printfun.cxx:1808). That is what puts the first row of cells at the 78 points down
+        // the page this test always claimed: 1134 + 425 twips is 77.95 pt, where 1134 + 567
+        // would be 85.05. Measured on sheet-decor-ods.ods, LibreOffice clips its header text to
+        // a rectangle 14.099 pt tall and starts the first row 21.11 pt below the top margin.
+        sales.Setup.HeaderHeight.Twips.ShouldBe(425);
+        sales.Setup.HeaderGap.Twips.ShouldBe(142);
     }
 
     [Fact]
@@ -301,7 +308,16 @@ public class SheetPaginationTests
 
         sales.Setup.HeaderText.ShouldNotBeNullOrEmpty();
         sales.Setup.TopMargin.Inches.ShouldBe(0.7875, 0.001);
-        (sales.Setup.TopMargin + sales.Setup.HeaderHeight).Inches.ShouldBe(1.0528, 0.001);
+
+        // The sum is 1.0828 in and not the file's own 1.0528, because a BIFF header band has a
+        // floor the OOXML one does not: the BIFF filter never puts an ATTR_PAGE_SIZE on the
+        // header's item set, only a distance (XclImpPageSettings::Finalize,
+        // sc/source/filter/excel/xipage.cxx:310-331), so nManHeight stays at the 0.75 cm a
+        // fresh page style carries (ScStyleSheet::GetItemSet, stlsheet.cxx:184) and
+        // UpdateHFHeight will not go below it. Measured on this very file: LibreOffice puts the
+        // first cell's baseline 86.63 pt down the page, which is a band of 20.25 pt — nearer
+        // the 21.26 the floor gives than the 19.1 the margins alone would.
+        (sales.Setup.TopMargin + sales.Setup.HeaderHeight).Inches.ShouldBe(1.0828, 0.001);
 
         // A COLINFO of 2953 256ths of a character at 111 twips a digit, which is 1280.4 — and
         // 1279, not 1280, because LibreOffice's conversion takes half a twip off before

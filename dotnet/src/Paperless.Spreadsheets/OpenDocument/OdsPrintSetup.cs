@@ -103,14 +103,22 @@ internal static class OdsPrintSetup
             RightMargin = Margin(page, "margin-right") ?? setup.RightMargin,
             TopMargin = Margin(page, "margin-top") ?? setup.TopMargin,
             BottomMargin = Margin(page, "margin-bottom") ?? setup.BottomMargin,
-            HeaderHeight = BandHeight(layout?.HeaderProperties, master?.Header, "margin-bottom"),
-            FooterHeight = BandHeight(layout?.FooterProperties, master?.Footer, "margin-top"),
+            HeaderHeight = BandHeight(layout?.HeaderProperties, master?.Header),
+            FooterHeight = BandHeight(layout?.FooterProperties, master?.Footer),
+            HeaderGap = BandGap(layout?.HeaderProperties, master?.Header, "margin-bottom"),
+            FooterGap = BandGap(layout?.FooterProperties, master?.Footer, "margin-top"),
+            HeaderLeftMargin = BandMargin(layout?.HeaderProperties, page, "margin-left"),
+            HeaderRightMargin = BandMargin(layout?.HeaderProperties, page, "margin-right"),
+            FooterLeftMargin = BandMargin(layout?.FooterProperties, page, "margin-left"),
+            FooterRightMargin = BandMargin(layout?.FooterProperties, page, "margin-right"),
             PageOrder = string.Equals(
                 Get(page, OdfNamespaces.Style, "print-page-order"), "ltr", StringComparison.Ordinal)
                 ? PagePrintOrder.AcrossThenDown
                 : PagePrintOrder.DownThenAcross,
             HeaderText = Displayed(master?.Header)?.Value,
             FooterText = Displayed(master?.Footer)?.Value,
+            Header = OdsCellDecoration.ReadBand(Displayed(master?.Header)),
+            Footer = OdsCellDecoration.ReadBand(Displayed(master?.Footer)),
             PrintsGrid = prints.Contains("grid"),
             PrintsHeadings = prints.Contains("headers"),
             CentresHorizontally = centring is "horizontal" or "both",
@@ -128,37 +136,79 @@ internal static class OdsPrintSetup
     }
 
     /// <summary>
-    /// The height of a header or footer band, or zero when the master page has none.
+    /// The whole height of a header or footer band, or zero when the master page has none.
     /// </summary>
     /// <remarks>
-    /// The declared height plus the gap to the body, which together are Calc's
-    /// <c>aHdr.nHeight</c>. Calc recomputes it from the header's actual text when the layout
-    /// asks for dynamic spacing — but only ever <em>upwards</em>: <c>UpdateHFHeight</c> floors
-    /// the result at the declared height (<c>printfun.cxx:846</c>). A one-line header in a
-    /// ten-point font measures well under the 0.75 cm LibreOffice declares, so the declared
-    /// value is the answer for every file it writes, and a header of several lines is the case
-    /// this under-measures — recorded in the module's TODO rather than guessed at.
+    /// <para>
+    /// The declared height <em>alone</em>, because the gap to the body is already inside it.
+    /// Calc's <c>aHdr.nHeight</c> comes straight from <c>ATTR_PAGE_SIZE</c> — the declared
+    /// height — and <c>aHdr.nDistance</c> is subtracted from it to get the rectangle the text is
+    /// laid out in (<c>lcl_FillHFParam</c>, <c>printfun.cxx:664</c>, and <c>PrintHF</c>,
+    /// <c>printfun.cxx:1808</c>). Adding the gap on top double-counts it.
+    /// </para>
+    /// <para>
+    /// Measured, that is a quarter of a centimetre — 7.09 pt — on every page of every file
+    /// LibreOffice writes, since it writes <c>fo:min-height="0.75cm"</c> with
+    /// <c>fo:margin-bottom="0.25cm"</c>. On <c>sheet-decor-ods.ods</c> LibreOffice puts the top
+    /// of the first printed row 21.11 pt below the top margin, not 28.35 pt.
+    /// </para>
+    /// <para>
+    /// The dynamic case is the one this still under-measures. <c>UpdateHFHeight</c> recomputes
+    /// the band from the header's own text and takes the larger of that and the declared height
+    /// (<c>printfun.cxx:846-856</c>), so a header whose single line is taller than the declared
+    /// band grows it — measured at 18.13 pt against a declared 17.1 pt on
+    /// <c>sheet-decor-xlsx.xlsx</c>, a difference of one point. Reproducing it needs the header
+    /// font's metrics here, which the readers do not have; it is recorded in the module's TODO.
+    /// </para>
     /// </remarks>
-    private static Length BandHeight(OdfPropertySet? properties, XElement? content, string gap)
+    private static Length BandHeight(OdfPropertySet? properties, XElement? content)
     {
-        if (properties is null || content is null) return Length.Zero;
+        if (properties is null || !IsDisplayed(content)) return Length.Zero;
 
-        // style:display="false" is how a master page switches a band off while keeping the
-        // element, so its presence is not enough — and a page layout is free to keep declaring a
-        // height for a header that is not printed.
-        if (string.Equals(
-                content.Attribute(XName.Get("display", OdfNamespaces.Style))?.Value, "false",
-                StringComparison.Ordinal))
-        {
-            return Length.Zero;
-        }
-
-        Length height = Measure(properties, OdfNamespaces.SvgCompatible, "height")
-                        ?? Measure(properties, OdfNamespaces.FoCompatible, "min-height")
-                        ?? Length.Zero;
-
-        return height + (Measure(properties, OdfNamespaces.FoCompatible, gap) ?? Length.Zero);
+        return Measure(properties, OdfNamespaces.SvgCompatible, "height")
+               ?? Measure(properties, OdfNamespaces.FoCompatible, "min-height")
+               ?? Length.Zero;
     }
+
+    /// <summary>The gap inside the band between its text and the body.</summary>
+    private static Length BandGap(OdfPropertySet? properties, XElement? content, string gap)
+        => properties is null || !IsDisplayed(content)
+            ? Length.Zero
+            : Measure(properties, OdfNamespaces.FoCompatible, gap) ?? Length.Zero;
+
+    /// <summary>
+    /// A band's own left or right margin, which falls back to the page's rather than to zero.
+    /// </summary>
+    /// <remarks>
+    /// The fallback is not a guess: a <c>style:header-footer-properties</c> that states no
+    /// <c>fo:margin-left</c> leaves Calc's <c>ATTR_LRSPACE</c> inherited from the page style, so
+    /// <c>rParam.nLeft</c> comes out as the page's own left margin and the header is indented
+    /// twice. Measured on <c>sheet-decor-ods.ods</c>, whose header states no margins: the header
+    /// text is clipped to 113.4 pt … 481.85 pt on a page whose margins are 56.7 pt — two
+    /// centimetres of page margin and two more the header inherited.
+    /// </remarks>
+    private static Length BandMargin(OdfPropertySet? properties, OdfPropertySet? page, string name)
+    {
+        if (properties is null) return Length.Zero;
+
+        return Measure(properties, OdfNamespaces.FoCompatible, name)
+               ?? Margin(page, name)
+               ?? Length.Zero;
+    }
+
+    /// <summary>
+    /// True when a master page's band is switched on.
+    /// </summary>
+    /// <remarks>
+    /// <c>style:display="false"</c> is how a master page switches a band off while keeping the
+    /// element, so the element's presence is not enough — and a page layout is free to keep
+    /// declaring a height for a header that is not printed.
+    /// </remarks>
+    private static bool IsDisplayed(XElement? content)
+        => content is not null
+           && !string.Equals(
+               content.Attribute(XName.Get("display", OdfNamespaces.Style))?.Value, "false",
+               StringComparison.Ordinal);
 
     private static (PrintScaleMode Mode, int Percentage, int Count, int Wide, int Tall) ReadScale(
         OdfPropertySet? page)

@@ -92,6 +92,8 @@ public static class XlsxReader
                     Setup = setup,
                     Grid = grid,
                     Cells = table,
+                    Formatting = XlsxCellDecoration.Read(file.StylesRoot, file.ThemeRoot, worksheet),
+                    FileName = source.FileName ?? string.Empty,
                 });
 
                 // Comments belong to the sheet that holds them, so they land immediately after

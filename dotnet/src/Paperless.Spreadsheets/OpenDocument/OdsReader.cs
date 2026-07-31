@@ -32,11 +32,13 @@ public sealed class OdsReader : OdfReader
     public OdsSpreadsheetDocument ReadSpreadsheet(
         Core.Documents.DocumentSource source, DocumentFormat format)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         OdfDocument document = Read(source, format);
         try
         {
             return new OdsSpreadsheetDocument(
-                document, OdsSpreadsheetDocument.ReadSheets(document));
+                document, OdsSpreadsheetDocument.ReadSheets(document, source.FileName));
         }
         catch
         {
