@@ -360,9 +360,28 @@ is read and verified, so what remains is the filling of pages rather than the me
       `istd` 0 is *Normal*, not "no character style": WW8 keeps paragraph and character styles in one
       table, so resolving index zero as a run's style lays the document's default font size over the
       paragraph's own and turns every run of an 11 pt paragraph into a 12 pt one.
-- [ ] Tables. Skipped by every layout source rather than flattened, because a table is laid out as a grid
-      and stacking its cells would give the page a height no table has.
-- [ ] Tables spanning page breaks, with header-row repetition
+- [x] Tables as grids. `PageTable` is a block beside `PageParagraph`, and a cell is a `PlacedFlow` — the
+      same type a header is, because a cell is the same thing: paragraphs stacked in a rectangle whose
+      width decides their line breaks. `TableLayouter` resolves the circularity in two passes, since a
+      cell's height needs its width, a row's height needs its cells, and a cell's rectangle needs the row
+      heights. A cell spanning rows charges its height to the *last* row it covers, so a merge does not
+      make its first row as tall as itself.
+- [x] Tables spanning page breaks, with header-row repetition. A row moves whole rather than being cut,
+      which is Writer's behaviour and not Word's, and the heading rows are placed again at the top of each
+      continuation. Because the cells are laid out once relative to the table's own top-left, both are a
+      shift rather than a re-layout — a long table is not shaped once per page it touches.
+- [ ] **ODF only so far.** DOCX's `w:tblGrid`/`w:tcW`, DOC's `sprmTDefTable` column edges and RTF's
+      `\cellx` positions are all read by the extraction pass but not yet turned into a layout grid.
+- [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
+      half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
+      resolved border model, and a border's width also eats into the cell's text area.
+- [ ] A table inside a cell, and a table inside a header. Both are legal and neither is common; a flow is
+      laid out by `FlowLayouter`, which stacks paragraphs and knows nothing of grids, so a nested table is
+      currently dropped rather than drawn.
+- [ ] `w:hRule="exact"`, the one row height that really is a height: it clips its content rather than
+      growing. Every other spelling in every format is a floor, which is what `PageTableRow.MinHeight` is.
+- [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read
+      time — the readers currently take the declared grid and nothing else.
 - [ ] Floating objects and text wrap, including contour wrap
 - [ ] Footnote placement — footnote area growth changes how much body text fits, which
       changes pagination, so it must feed back into the page-filling loop

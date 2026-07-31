@@ -82,7 +82,7 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
         if (body is null) return new WordProcessingPages([]);
 
         OdtLayoutSource source = new(_inner.File.Styles);
-        List<PageParagraph> paragraphs = source.Read(body);
+        List<PageBlock> blocks = source.Read(body);
 
         PaginationOptions pagination = PaginationOptions.Default with
         {
@@ -91,8 +91,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                paragraphs, Sections[0], furniture: Furniture(source)),
-            paragraphs);
+                blocks, Sections[0], furniture: Furniture(source)),
+            blocks);
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     {
         if (element is null) return;
 
-        List<PageParagraph> paragraphs = source.Read(element);
+        List<PageParagraph> paragraphs = source.ReadFlow(element);
         if (paragraphs.Count > 0) slots[slot] = paragraphs;
     }
 

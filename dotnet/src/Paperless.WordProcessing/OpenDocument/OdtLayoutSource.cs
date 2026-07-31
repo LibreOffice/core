@@ -28,7 +28,7 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// own formatting carries no runs at all, which keeps plain prose on the cheap single-face path.
 /// </para>
 /// </remarks>
-public sealed class OdtLayoutSource
+public sealed partial class OdtLayoutSource
 {
     /// <summary>
     /// How many paragraphs are read before the rest are ignored.
@@ -95,15 +95,34 @@ public sealed class OdtLayoutSource
     public IReadOnlyList<FontSubstitution> Substitutions => _fonts.Substitutions;
 
     /// <summary>
-    /// Reads the body's paragraphs, in document order.
+    /// Reads the body's blocks — its paragraphs and its tables — in document order.
     /// </summary>
     /// <param name="body">The <c>office:text</c> element.</param>
-    public List<PageParagraph> Read(XElement body)
+    public List<PageBlock> Read(XElement body)
     {
         ArgumentNullException.ThrowIfNull(body);
 
+        List<PageBlock> blocks = [];
+        Walk(body, blocks, depth: 0);
+        return blocks;
+    }
+
+    /// <summary>
+    /// Reads a flow's paragraphs only: a header, a footer, or the inside of a cell.
+    /// </summary>
+    /// <param name="element">The element whose block-level children to read.</param>
+    /// <remarks>
+    /// Paragraphs only because a flow is laid out into a fixed rectangle by
+    /// <see cref="FlowLayouter"/>, which stacks paragraphs and knows nothing of grids. A table inside a
+    /// header or inside another table is therefore skipped rather than drawn — recorded as a gap in this
+    /// library's TODO, since both are legal and neither is common.
+    /// </remarks>
+    public List<PageParagraph> ReadFlow(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+
         List<PageParagraph> paragraphs = [];
-        Walk(body, paragraphs, depth: 0);
+        Walk(element, paragraphs, depth: 0);
         return paragraphs;
     }
 
@@ -113,16 +132,21 @@ public sealed class OdtLayoutSource
     /// <remarks>
     /// <para>
     /// Sections, lists and the change-tracking wrappers are transparent: their children are body-level
-    /// content and a walk that stopped at them would lose whole chapters of a real document. A table's
-    /// cells are not walked here, because a table is laid out as a grid rather than as a run of
-    /// paragraphs and needs the row heights first.
+    /// content and a walk that stopped at them would lose whole chapters of a real document.
+    /// </para>
+    /// <para>
+    /// Generic in what it fills, which is how one walk serves both the body and a flow. A body takes
+    /// <see cref="PageBlock"/> and so keeps the tables; a header, a footer or a cell takes
+    /// <see cref="PageParagraph"/>, and a table simply does not fit in the list — so it is dropped by the
+    /// type rather than by a flag that could be passed the wrong way round.
     /// </para>
     /// <para>
     /// A <c>text:h</c> is a paragraph as far as layout is concerned. Its outline level changes which
     /// style it resolves through, which the style chain already handles.
     /// </para>
     /// </remarks>
-    private void Walk(XElement element, List<PageParagraph> into, int depth)
+    private void Walk<T>(XElement element, List<T> into, int depth)
+        where T : PageBlock
     {
         // Deep nesting is legal — a list inside a section inside a change region — but a file can nest
         // indefinitely, and this recurses on untrusted input.
@@ -137,7 +161,7 @@ public sealed class OdtLayoutSource
 
             if (ns == OdfNamespaces.Text && name is "p" or "h")
             {
-                if (Paragraph(child) is { } paragraph) into.Add(paragraph);
+                if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
                 continue;
             }
 
@@ -156,8 +180,10 @@ public sealed class OdtLayoutSource
 
             if (ns == OdfNamespaces.Table && name == "table")
             {
-                // Tables are laid out as grids, not as a run of paragraphs. Skipped rather than
-                // flattened, because flattening would give the page a height that no table has.
+                // A table goes in whole, as a grid. It is dropped when the caller is filling a flow's
+                // paragraph list, which cannot hold one — a table inside a header or inside another table
+                // is legal and not laid out yet.
+                if (Table(child) is { } table && table is T grid) into.Add(grid);
                 continue;
             }
         }
