@@ -68,6 +68,19 @@ class RedundantStatic
             if (!loplugin::TypeCheck(decl->getType()).ConstNonVolatile()) {
                 return true;
             }
+            auto loc = decl->getBeginLoc();
+            while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+                loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+            }
+            if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
+                auto const name = Lexer::getImmediateMacroName(
+                    loc, compiler.getSourceManager(), compiler.getLangOpts());
+                if (name == "STATE_ENUM") {
+                    // That macro contains a `static`, but is also often used at class scope (where
+                    // that `static` is required), so filter it out:
+                    return true;
+                }
+            }
             report(
                 DiagnosticsEngine::Warning,
                 "non-inline variable of non-volatile const-qualified type is redundantly marked as"
