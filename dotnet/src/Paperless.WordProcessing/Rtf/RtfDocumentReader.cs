@@ -473,8 +473,32 @@ public sealed partial class RtfDocumentReader
                 return;
             case "shptxt" or "txbxtext":
                 // A shape's or text box's own text flow, which is not part of the paragraph it
-                // is anchored in.
-                BeginFlow(state, SectionKind.Frame, null);
+                // is anchored in — and, when a shape is open, a block list of its own, so that the
+                // frame is laid out in its rectangle rather than dropped.
+                BeginFrameFlow(state);
+                return;
+
+            // ---- shapes
+            case "shp":
+                // The one place a group's *first* control word opens something this reader keeps: the
+                // shape's properties and its text both arrive inside it, and the geometry words below are
+                // dispatched whatever destination is in force, since they mean nothing anywhere else.
+                BeginShape();
+                return;
+            case "shpleft" or "shptop" or "shpright" or "shpbottom" or "shpwr" or "shpwrk":
+                if (_shape is not null) _shape.Set(token.Name, token.Parameter ?? 0);
+                return;
+            case "shpbxpage" or "shpbxmargin" or "shpbxcolumn" or "shpbxignore":
+                if (_shape is not null && token.Name != "shpbxignore") _shape.HorizontalOrigin = token.Name;
+                return;
+            case "shpbypage" or "shpbymargin" or "shpbypara" or "shpbyignore":
+                if (_shape is not null && token.Name != "shpbyignore") _shape.VerticalOrigin = token.Name;
+                return;
+            case "sn":
+                state.Destination = RtfDestination.ShapePropertyName;
+                return;
+            case "sv":
+                state.Destination = RtfDestination.ShapePropertyValue;
                 return;
 
             // ---- fields

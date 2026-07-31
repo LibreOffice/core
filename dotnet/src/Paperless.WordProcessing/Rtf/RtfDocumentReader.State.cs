@@ -50,6 +50,12 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>A picture, recorded as a graphic without decoding its bytes.</summary>
         Picture,
+
+        /// <summary>A shape property's name, from <c>{\sn …}</c>.</summary>
+        ShapePropertyName,
+
+        /// <summary>A shape property's value, from <c>{\sv …}</c>.</summary>
+        ShapePropertyValue,
     }
 
     /// <summary>
@@ -346,6 +352,18 @@ public sealed partial class RtfDocumentReader
         /// the one that cited it.
         /// </remarks>
         public List<RtfLayoutNote> PendingNotes { get; } = [];
+
+        /// <summary>
+        /// The floating frames anchored in the paragraph being read, waiting for it to close.
+        /// </summary>
+        /// <remarks>
+        /// The same arrangement the notes are in and for the same reason: a <c>{\shp}</c> group sits inside
+        /// the sentence it is anchored in, so the shape is finished before the paragraph is.
+        /// </remarks>
+        public List<RtfLayoutFrame> PendingFrames { get; } = [];
+
+        /// <summary>A shape's own text, collected while its <c>{\shptxt}</c> flow is open.</summary>
+        public Staged? FrameBlocks { get; init; }
 
         /// <summary>
         /// Text to put in front of the next layout paragraph, which is a note's own citation.
@@ -916,7 +934,7 @@ public sealed partial class RtfDocumentReader
         // slot. A shape's text flow has nowhere, and its paragraphs are dropped.
         Staged? destination = ReferenceEquals(flow, _flows[0])
             ? _layoutBlocks
-            : flow.NoteBlocks ?? FurnitureList(flow);
+            : flow.NoteBlocks ?? flow.FrameBlocks ?? FurnitureList(flow);
 
         if (flow.InTable)
         {
@@ -986,7 +1004,8 @@ public sealed partial class RtfDocumentReader
             ColourAt(state.ForegroundColourIndex),
             runs,
             _sectionIndex,
-            flow.PendingNotes.Count == 0 ? null : [.. flow.PendingNotes]);
+            flow.PendingNotes.Count == 0 ? null : [.. flow.PendingNotes],
+            flow.PendingFrames.Count == 0 ? null : [.. flow.PendingFrames]);
 
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);
@@ -1135,6 +1154,7 @@ public sealed partial class RtfDocumentReader
         flow.LayoutRuns.Clear();
         flow.LayoutLength = 0;
         flow.PendingNotes.Clear();
+        flow.PendingFrames.Clear();
         flow.PendingRuns.Clear();
         flow.PendingImages.Clear();
         flow.ListMarker.Clear();
@@ -1161,6 +1181,188 @@ public sealed partial class RtfDocumentReader
         {
             Depth = _groupDepth,
         });
+    }
+
+    /// <summary>
+    /// Starts a shape's own text flow, which collects blocks for the shape's rectangle.
+    /// </summary>
+    /// <remarks>
+    /// A flow like any other for extraction — its text is hoisted into a section of its own, since a text
+    /// box's words are not part of the sentence it floats beside — with a block list added so that layout
+    /// has something to put inside the frame. Without the list a frame narrows every line correctly and
+    /// then draws nothing, which is the failure that looks like a drawing bug and is a reading one.
+    /// </remarks>
+    private void BeginFrameFlow(GroupState state)
+    {
+        state.Destination = RtfDestination.Body;
+        _flows.Add(new Flow(new ContentSection
+        {
+            Kind = SectionKind.Frame,
+            Index = _hoisted.Count,
+        })
+        {
+            Depth = _groupDepth,
+            FrameBlocks = new Staged(),
+        });
+    }
+
+    /// <summary>
+    /// Opens a shape, which stays open until its group closes.
+    /// </summary>
+    /// <remarks>
+    /// One at a time, and deliberately: RTF can nest a shape inside a shape's text and the rectangles
+    /// would then be relative to each other, which nothing here resolves. An inner shape replaces the
+    /// outer one rather than corrupting it, so the inner frame is placed and the outer is lost — the
+    /// less confusing of the two failures, since the inner one is what the reader was last told about.
+    /// </remarks>
+    private void BeginShape()
+    {
+        _shape = new ShapeBuilder
+        {
+            Depth = _groupDepth,
+            Offset = CurrentFlow.LayoutLength,
+        };
+    }
+
+    /// <summary>The shape being read, or null when none is open.</summary>
+    private ShapeBuilder? _shape;
+
+    /// <summary>
+    /// The name half of the <c>{\sp{\sn …}{\sv …}}</c> pair currently being read.
+    /// </summary>
+    /// <remarks>
+    /// Held between two sibling groups rather than passed, because that is how RTF writes an Escher
+    /// property: the name and the value are separate destinations inside one <c>{\sp}</c>, and the value
+    /// arrives with nothing to say which property it belongs to.
+    /// </remarks>
+    private string? _shapeProperty;
+
+    /// <summary>
+    /// A shape while its group is open: the numbers RTF states in its own syntax, and its text.
+    /// </summary>
+    /// <remarks>
+    /// Mutable and short-lived, unlike the record it becomes, because RTF states a shape as a stream of
+    /// loose control words with no group boundary between the parts — there is nothing to construct from
+    /// until the closing brace.
+    /// </remarks>
+    private sealed class ShapeBuilder
+    {
+        public int Depth { get; init; }
+
+        public int Offset { get; init; }
+
+        public int Left { get; private set; }
+
+        public int Top { get; private set; }
+
+        public int Right { get; private set; }
+
+        public int Bottom { get; private set; }
+
+        /// <summary>Around by default, which is what a shape stating no <c>\shpwr</c> gets.</summary>
+        public int Wrap { get; private set; } = 1;
+
+        public int WrapSide { get; private set; }
+
+        public string? HorizontalOrigin { get; set; }
+
+        public string? VerticalOrigin { get; set; }
+
+        public IReadOnlyList<RtfLayoutBlock> Blocks { get; set; } = [];
+
+        /// <summary>
+        /// Whether the shape stated its own distance from text on any side.
+        /// </summary>
+        /// <remarks>
+        /// The distinction that matters, because LibreOffice's RTF import supplies a default of 0.2 cm on
+        /// every side when the shape states none — measured, and it is not a rounding: the corpus
+        /// document's wrapped lines start 114 twips past the shape's own right edge with the property
+        /// absent and 1 twip past it with the property present and zero. So "stated zero" and "said
+        /// nothing" are two different answers and cannot share a field.
+        /// </remarks>
+        public bool StatesWrapDistance { get; private set; }
+
+        public Core.Geometry.Margins WrapDistance { get; private set; }
+
+        /// <summary>
+        /// One <c>{\sp}</c> property, of the handful that decide where a shape goes.
+        /// </summary>
+        /// <remarks>
+        /// The values are Escher's, so the distances are EMUs and the two <c>posrel</c> properties are
+        /// small enumerations: 0 is the margin, 1 the page, 2 the column or paragraph, and 3 the character
+        /// or line. They are what <c>\shpbxignore</c> defers to, and LibreOffice's own export writes that
+        /// pair on every shape — so a reader that only understood <c>\shpbx*</c> would find no origin at
+        /// all on a file LibreOffice wrote.
+        /// </remarks>
+        public void SetProperty(string name, string value)
+        {
+            if (!int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int number))
+            {
+                return;
+            }
+
+            Core.Units.Length distance = Core.Units.Length.FromTwips(Core.Units.Length.FromEmu(number).Twips);
+
+            switch (name)
+            {
+                case "dxWrapDistLeft":
+                    WrapDistance = WrapDistance with { Left = distance };
+                    StatesWrapDistance = true;
+                    break;
+                case "dyWrapDistTop":
+                    WrapDistance = WrapDistance with { Top = distance };
+                    StatesWrapDistance = true;
+                    break;
+                case "dxWrapDistRight":
+                    WrapDistance = WrapDistance with { Right = distance };
+                    StatesWrapDistance = true;
+                    break;
+                case "dyWrapDistBottom":
+                    WrapDistance = WrapDistance with { Bottom = distance };
+                    StatesWrapDistance = true;
+                    break;
+                case "posrelh":
+                    HorizontalOrigin ??= number switch
+                    {
+                        0 => "shpbxmargin",
+                        1 => "shpbxpage",
+                        _ => "shpbxcolumn",
+                    };
+                    break;
+                case "posrelv":
+                    VerticalOrigin ??= number switch
+                    {
+                        0 => "shpbymargin",
+                        1 => "shpbypage",
+                        _ => "shpbypara",
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>Records one of the six control words that carry a number.</summary>
+        public void Set(string name, int value)
+        {
+            switch (name)
+            {
+                case "shpleft": Left = value; break;
+                case "shptop": Top = value; break;
+                case "shpright": Right = value; break;
+                case "shpbottom": Bottom = value; break;
+                case "shpwr": Wrap = value; break;
+                case "shpwrk": WrapSide = value; break;
+                default: break;
+            }
+        }
+
+        /// <summary>The frame this describes, for the paragraph it is anchored in.</summary>
+        public RtfLayoutFrame Build()
+            => new(
+                Offset, Left, Top, Right, Bottom, Wrap, WrapSide,
+                HorizontalOrigin, VerticalOrigin, Blocks,
+                StatesWrapDistance ? WrapDistance : null);
     }
 
     /// <summary>
@@ -1214,6 +1416,14 @@ public sealed partial class RtfDocumentReader
                 _fieldHyperlink = FieldInstructions.HyperlinkTarget(state.Collected.ToString()) ?? _fieldHyperlink;
                 break;
 
+            case RtfDestination.ShapePropertyName:
+                _shapeProperty = state.Collected.ToString().Trim();
+                break;
+
+            case RtfDestination.ShapePropertyValue when _shape is not null && _shapeProperty is not null:
+                _shape.SetProperty(_shapeProperty, state.Collected.ToString().Trim());
+                break;
+
             case RtfDestination.Picture:
                 // Recorded so a caller knows a graphic is there. The bytes are not decoded during
                 // extraction, and nothing in RTF gives a picture a name or alternative text.
@@ -1228,6 +1438,18 @@ public sealed partial class RtfDocumentReader
             _fieldDepth = -1;
         }
 
+        // A shape ends with its group, and hands itself to the paragraph it is anchored in — which is
+        // still open, since the {\shp} group sits inside the sentence. Its own {\shptxt} flow closed at
+        // an earlier brace, so its blocks are already in hand.
+        if (_shape is { } shape && shape.Depth >= _groupDepth)
+        {
+            _shape = null;
+            if (shape.Right > shape.Left && shape.Bottom > shape.Top)
+            {
+                CurrentFlow.PendingFrames.Add(shape.Build());
+            }
+        }
+
         // A nested flow ends with its group.
         if (_flows.Count > 1 && CurrentFlow.Depth >= _groupDepth)
         {
@@ -1240,6 +1462,13 @@ public sealed partial class RtfDocumentReader
 
             // A note hands its body to the paragraph that cited it, which is still open: the citing
             // paragraph's own \par has not been read yet, since the note group sits inside the sentence.
+            // A shape's text flow hands its blocks to the shape that opened it, which is still open: the
+            // {\shptxt} group is inside the {\shp} group, exactly as a note's body is inside the sentence.
+            if (finished.FrameBlocks is { } inside && _shape is not null)
+            {
+                _shape.Blocks = inside.Finished();
+            }
+
             if (finished.NoteBlocks is { } body)
             {
                 List<RtfLayoutBlock> blocks = body.Finished();

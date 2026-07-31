@@ -329,11 +329,117 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
                 Runs = RunsOf(fonts, paragraph, face),
                 Notes = NotesOf(fonts, paragraph.Notes),
+                Frames = FramesOf(fonts, paragraph.Frames),
             });
         }
 
         return paragraphs;
     }
+
+    /// <summary>
+    /// The floating frames anchored in a paragraph, with the file's own numbers turned into a rectangle.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// RTF's shape coordinates are twips relative to whatever <c>\shpbx*</c> and <c>\shpby*</c> name, and
+    /// the pair that matters is the one that is <em>absent</em>: <c>\shpbxignore</c> says to ignore those
+    /// words and take the origin from a <c>posrelh</c> shape property instead, which lives in the
+    /// <c>{\*\shpinst}</c> destination this reader skips. So a shape written that way — which is every
+    /// shape LibreOffice's own export writes — falls back to the column and the paragraph, the two origins
+    /// a floating frame in body text nearly always has.
+    /// </para>
+    /// <para>
+    /// <c>\shpwr</c>'s numbering is RTF's own and two of its five values invite a swap: 3 is
+    /// <em>through</em>, meaning a rectangular hole the text flows into, and 5 is <em>none</em>, meaning
+    /// the shape is ignored. Reading 3 as "ignore it" leaves a frame with text running across it.
+    /// </para>
+    /// </remarks>
+    private static List<PageFrame> FramesOf(
+        LayoutFonts fonts, IReadOnlyList<RtfLayoutFrame>? stated)
+    {
+        if (stated is null || stated.Count == 0) return [];
+
+        List<PageFrame> frames = new(stated.Count);
+
+        foreach (RtfLayoutFrame frame in stated)
+        {
+            List<PageBlock> blocks = Convert(fonts, frame.Blocks);
+
+            frames.Add(new PageFrame
+            {
+                Size = new Core.Geometry.DocSize(
+                    Core.Units.Length.FromTwips(frame.Right - frame.Left),
+                    Core.Units.Length.FromTwips(frame.Bottom - frame.Top)),
+                Anchor = FrameAnchor.Paragraph,
+                AnchorOffset = frame.Offset,
+                Wrap = WrapOf(frame),
+                HorizontalOrigin = frame.HorizontalOrigin switch
+                {
+                    "shpbxpage" => FrameHorizontalOrigin.Page,
+                    "shpbxmargin" => FrameHorizontalOrigin.PageMargin,
+                    _ => FrameHorizontalOrigin.Column,
+                },
+                HorizontalAlignment = FrameHorizontalAlignment.Offset,
+                HorizontalOffset = Core.Units.Length.FromTwips(frame.Left),
+                VerticalOrigin = frame.VerticalOrigin switch
+                {
+                    "shpbypage" => FrameVerticalOrigin.Page,
+                    "shpbymargin" => FrameVerticalOrigin.PageMargin,
+                    _ => FrameVerticalOrigin.Paragraph,
+                },
+                VerticalAlignment = FrameVerticalAlignment.Offset,
+                VerticalOffset = Core.Units.Length.FromTwips(frame.Top),
+                Spacing = frame.WrapDistance ?? DefaultShapeWrapDistance,
+                IsImage = blocks.Count == 0,
+                Blocks = blocks,
+            });
+        }
+
+        return frames;
+    }
+
+    /// <summary>
+    /// How far text stays clear of a shape that states no distance of its own.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's, measured rather than taken from the specification — which gives 0.125 inch for the
+    /// horizontal pair and nothing for the vertical. Rendering the corpus RTF with the properties absent
+    /// puts the wrapped lines 114 twips past the shape's own right edge and narrows one line more at the
+    /// top; adding <c>{\sp{\sn dxWrapDistLeft}{\sv 0}}</c> and its three siblings to the same file moves
+    /// them back to the shape's edge and gives back the line. 114 twips is 0.2 cm to within a twip, and it
+    /// is applied on all four sides.
+    /// </remarks>
+    /// <summary>0.2 cm on Writer's own whole-twip grid, which is 113 twips rather than 113.4.</summary>
+    /// <remarks>
+    /// Snapped here rather than left exact, because every other measurement the engine holds already is
+    /// and the difference lands on the wrapped lines' start: 113.4 twips puts them 0.02 pt past where
+    /// LibreOffice puts them, and 113 puts them exactly on it. Declared before the margins that use it,
+    /// because a static field initialiser runs in declaration order and reading it early gives zero.
+    /// </remarks>
+    private static readonly Core.Units.Length DefaultWrapTwips =
+        Core.Units.Length.FromTwips(Core.Units.Length.FromMm100(200).Twips);
+
+    private static readonly Core.Geometry.Margins DefaultShapeWrapDistance = new(
+        DefaultWrapTwips, DefaultWrapTwips, DefaultWrapTwips, DefaultWrapTwips);
+
+    /// <summary>The wrap <c>\shpwr</c> and <c>\shpwrk</c> together ask for.</summary>
+    /// <remarks>
+    /// Two words for one answer: the first says what kind of hole the text leaves and the second which
+    /// side of it the text may use. Only the kinds that leave a hole consult the side, since "through" and
+    /// "top and bottom" have no sides to choose between.
+    /// </remarks>
+    private static TextWrap WrapOf(RtfLayoutFrame frame) => frame.Wrap switch
+    {
+        4 => TextWrap.TopAndBottom,
+        5 => TextWrap.Through,
+        _ => frame.WrapSide switch
+        {
+            1 => TextWrap.Left,
+            2 => TextWrap.Right,
+            3 => TextWrap.Optimal,
+            _ => TextWrap.Both,
+        },
+    };
 
     /// <summary>The notes anchored in a paragraph, with their bodies converted.</summary>
     /// <remarks>

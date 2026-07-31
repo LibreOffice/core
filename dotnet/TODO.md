@@ -21,9 +21,14 @@ filled or stroked path in LibreOffice's PDF, and `PdfFills` and `PdfStrokes` in 
 them. So those features are verifiable at the same tenth of a point as text, without pixels.
 Footnotes and endnotes are done in all four formats, including the feedback loop into pagination
 that a footnote needs and the separate pages an endnote takes. Cell shading is done in three
-formats and cell borders in two, consolidated the way LibreOffice consolidates them. What
-remains is floating frames with text wrap, the DOC reads for borders and shading, the table
-origin in DOCX and RTF, and note numbering *restarts*. Read
+formats and cell borders in two, consolidated the way LibreOffice consolidates them. Floating
+frames read from ODF, DOCX and RTF and the body text wraps round them, which needed a second
+circularity resolved: a frame's position depends on where its anchor paragraph landed and that
+paragraph's lines depend on the hole the frame makes in them, so pagination became a bounded loop.
+What remains is contour wrap, two stretches of text on one line (which a `parallel` wrap round a
+frame touching neither margin needs), DOC's drawings — which want `Paperless.MsBinary`'s Escher
+reader, not a translation — the DOC reads for borders and shading, the table origin in DOCX and
+RTF, and note numbering *restarts*. Read
 `src/Paperless.WordProcessing/TODO.md`, whose open items each say what is missing and why. One
 warning about borders: they cannot be verified the way everything else in this library has
 been, because a word-position comparison cannot see them and `Paperless.Rendering`'s rasteriser
