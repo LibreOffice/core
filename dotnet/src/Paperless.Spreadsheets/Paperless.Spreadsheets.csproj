@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- The width-dependent General rendering and the two device-unit roundings are decisions no
+         document demonstrates one at a time — a cell shows one string, and the roundings differ
+         by a hundredth of a millimetre each — so the tests reach them directly. -->
+    <InternalsVisibleTo Include="Paperless.Spreadsheets.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
     <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
     <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />

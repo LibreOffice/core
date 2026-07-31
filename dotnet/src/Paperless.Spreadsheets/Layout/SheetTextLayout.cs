@@ -123,7 +123,10 @@ internal static class SheetTextLayout
         {
             sink.Save();
             sink.ClipPath(Rectangle(new DocRect(
-                placement.Left, cell.Box.Y, placement.Right - placement.Left, cell.Box.Height)));
+                placement.Left,
+                placement.Top,
+                placement.Right - placement.Left,
+                placement.Bottom - placement.Top)));
         }
 
         try
@@ -151,9 +154,17 @@ internal static class SheetTextLayout
 
     private readonly record struct PlacedLine(SheetTextRun Run, Length X, Length Baseline);
 
+    /// <summary>Where a cell's lines ended up, and what has to be cut off around them.</summary>
+    /// <param name="Lines">The placed lines.</param>
+    /// <param name="Clipped">True when the text still runs past what it was given.</param>
+    /// <param name="Left">The left edge of the room it was given, neighbours included.</param>
+    /// <param name="Right">The right edge of the same.</param>
+    /// <param name="Top">The top of the clip, which is the cell's or the text's, whichever is higher.</param>
+    /// <param name="Bottom">Its bottom, likewise.</param>
     private readonly record struct Placement(
-        List<PlacedLine> Lines, Length Height, bool Clipped = false,
-        Length Left = default, Length Right = default);
+        List<PlacedLine> Lines, bool Clipped = false,
+        Length Left = default, Length Right = default,
+        Length Top = default, Length Bottom = default);
 
     private static Placement Place(in SheetTextContext context, in SheetCellText cell, SheetFace face)
     {
@@ -188,7 +199,7 @@ internal static class SheetTextLayout
 
         string text = cell.Text;
         SheetTextRun? run = SheetText.Shape(text, face, size);
-        if (run is null) return new Placement([], Length.Zero);
+        if (run is null) return new Placement([]);
 
         Area area = OutputArea(
             context, cell, horizontal, run.Width + totalMargin, isValue || fills || shrinks || breaks);
@@ -216,7 +227,7 @@ internal static class SheetTextLayout
         List<SheetTextRun> lines = breaks
             ? Wrap(text, face, size, available)
             : [run];
-        if (lines.Count == 0) return new Placement([], Length.Zero);
+        if (lines.Count == 0) return new Placement([]);
 
         Length lineHeight = face.LineHeightAt(size);
         Length ascent = face.AscentAt(size);
@@ -235,7 +246,15 @@ internal static class SheetTextLayout
             baseline += lineHeight;
         }
 
-        return new Placement(placed, textHeight, area.IsClipped, area.Left, area.Right);
+        // The clip never cuts the text vertically. Calc does not clip a printed cell's height
+        // either unless the row's height was set by hand ("no vertical clipping when printing
+        // cells with optimal height", output2.cxx:2093), and a wrapped cell taller than its row is
+        // exactly the case that would lose a line to it.
+        Length textTop = Length.Min(cell.Box.Y, placed[0].Baseline - ascent);
+        Length textBottom = Length.Max(
+            cell.Box.Y + cell.Box.Height, placed[^1].Baseline + (lineHeight - ascent));
+
+        return new Placement(placed, area.IsClipped, area.Left, area.Right, textTop, textBottom);
     }
 
     /// <summary>
