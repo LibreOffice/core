@@ -106,6 +106,13 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
         leftLoc = left->getArg(1)->getBeginLoc();
     }
 
+    auto const & SM = compiler.getSourceManager();
+    if (SM.getFileID(SM.getSpellingLoc(leftLoc))
+        != SM.getFileID(SM.getSpellingLoc(expr->getArg(1)->getBeginLoc())))
+    {
+        return true;
+    }
+
     // We add an extra " " in the TOOLS_WARN_EXCEPTION macro, which triggers this plugin
     if (loplugin::isSamePathname(
             getFilenameOfLocation(
