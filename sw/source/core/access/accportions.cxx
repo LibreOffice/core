@@ -25,6 +25,7 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <i18npool/breakiterator.hxx>
 #include <txttypes.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // for portion replacement in Special()
 #include <viewopt.hxx>
@@ -43,11 +44,7 @@ using i18n::Boundary;
 // 'portion type' for terminating portions
 #define POR_TERMINATE PortionType::NONE
 
-// portion attributes
-#define PORATTR_SPECIAL     1
-#define PORATTR_READONLY    2
-#define PORATTR_GRAY        4
-#define PORATTR_TERM        128
+template<> struct o3tl::typed_flags<PortionAttribute> : o3tl::is_typed_flags<PortionAttribute, 135> {};
 
 /// returns the index of the first position whose value is smaller
 /// or equal, and whose following value is equal or larger
@@ -98,7 +95,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     m_aAccessiblePositions.push_back( m_aBuffer.getLength() );
 
     // store portion attributes
-    sal_uInt8 nAttr = IsGrayPortionType(nType) ? PORATTR_GRAY : 0;
+    PortionAttribute nAttr = IsGrayPortionType(nType) ? PortionAttribute::Gray : PortionAttribute::Zero;
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
@@ -182,10 +179,10 @@ void SwAccessiblePortionData::Special(
     m_aAccessiblePositions.push_back( m_aBuffer.getLength() );
 
     // store portion attributes
-    sal_uInt8 nAttr = PORATTR_SPECIAL;
-    if( IsGrayPortionType(nType) )      nAttr |= PORATTR_GRAY;
-    if (nLength == TextFrameIndex(0))   nAttr |= PORATTR_READONLY;
-    if( nType == POR_TERMINATE )        nAttr |= PORATTR_TERM;
+    PortionAttribute nAttr = PortionAttribute::Special;
+    if( IsGrayPortionType(nType) )      nAttr |= PortionAttribute::Gray;
+    if (nLength == TextFrameIndex(0))   nAttr |= PortionAttribute::Readonly;
+    if( nType == POR_TERMINATE )        nAttr |= PortionAttribute::Term;
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
@@ -227,16 +224,16 @@ void SwAccessiblePortionData::Finish()
 }
 
 bool SwAccessiblePortionData::IsPortionAttrSet(
-    size_t nPortionNo, sal_uInt8 nAttr ) const
+    size_t nPortionNo, PortionAttribute nAttr ) const
 {
     OSL_ENSURE( nPortionNo < m_aPortionAttrs.size(),
                 "Illegal portion number" );
-    return (m_aPortionAttrs[nPortionNo] & nAttr) != 0;
+    return (m_aPortionAttrs[nPortionNo] & nAttr) != PortionAttribute::Zero;
 }
 
 bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
 {
-    return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
+    return IsPortionAttrSet(nPortionNo, PortionAttribute::Special);
 }
 
 bool SwAccessiblePortionData::IsGrayPortionType( PortionType nType ) const
@@ -679,7 +676,7 @@ bool SwAccessiblePortionData::GetEditableRange(
 
     for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor++ )
     {
-        bIsEditable &= ! IsPortionAttrSet(nPor, PORATTR_READONLY);
+        bIsEditable &= ! IsPortionAttrSet(nPor, PortionAttribute::Readonly);
     }
 
     return bIsEditable;
@@ -709,7 +706,7 @@ bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
 {
 //    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
     return IsPortionAttrSet( FindBreak( m_aAccessiblePositions, nPos ),
-                             PORATTR_GRAY );
+                             PortionAttribute::Gray);
 }
 
 sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos) const
