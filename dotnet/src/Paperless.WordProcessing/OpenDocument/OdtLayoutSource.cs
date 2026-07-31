@@ -436,6 +436,12 @@ public sealed partial class OdtLayoutSource
                 IsEndnote = IsEndnote(anchor.Element),
                 Placement = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Placement,
                 Restart = (IsEndnote(anchor.Element) ? _endnotes : _footnotes).Restart,
+                Numbering = IsEndnote(anchor.Element) ? _endnotes : _footnotes,
+
+                // ODF's note body does not carry its own number at all, so the reader prepends it and the
+                // offset is nought by construction.
+                Citation = anchor.Citation,
+                BodyOffset = 0,
             });
         }
 

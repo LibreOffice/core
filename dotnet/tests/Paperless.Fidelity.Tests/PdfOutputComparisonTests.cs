@@ -149,20 +149,17 @@ public sealed class PdfOutputComparisonTests : IDisposable
 
         ours.Count.ShouldBe(theirs.Count, $"{fileName}: number of drawn lines");
 
-        // As a pitch rather than an absolute baseline, and the reason is not the one the
-        // word-box comparison has. Here both sides state a real baseline, so an absolute
-        // comparison would be meaningful — and it holds to 0.051 pt everywhere except a line
-        // whose font size changes, where ours sits 1.95 pt higher. Measured on the seven 16 pt
-        // headings of paginated.*: LibreOffice puts 37.200 pt between the last body baseline and
-        // the heading's and 20.450 pt after it, and we put 35.250 and 22.400 — the same 57.650 pt
-        // block, split differently. That is layout's baseline-within-line rule for a line taller
-        // than the body, not this backend's, and it is recorded as a finding in
-        // src/Paperless.Rendering/TODO.md rather than papered over with a bigger tolerance here.
+        // As a pitch rather than an absolute baseline, which is a statement about what this file
+        // is for rather than about what is comparable: both sides state a real baseline, so the
+        // absolute form is meaningful and holds to 0.051 pt over every one of these documents.
+        // ParagraphLeadingComparisonTests asserts it that way, because that is the only form in
+        // which the leading a paragraph hands to the next one is visible at all — a pitch
+        // comparison cancels it. Here the pitch is the right question: this file is checking that
+        // the PDF backend writes the layout it was given.
         int compared = 0;
         for (int i = 1; i < theirs.Count; i++)
         {
             if (theirs[i].PageIndex != theirs[i - 1].PageIndex) continue;
-            if (Math.Abs(theirs[i].FontSize - theirs[i - 1].FontSize) > 0.001) continue;
 
             double drawn = ours[i].Y - ours[i - 1].Y;
             double rendered = theirs[i].Y - theirs[i - 1].Y;
@@ -220,12 +217,13 @@ public sealed class PdfOutputComparisonTests : IDisposable
     [InlineData("footnotes.odt")]
     [InlineData("footnotes.docx")]
     [InlineData("footnotes.doc")]
-    // footnotes.rtf is left out, and what it is left out for is a layout finding rather than a
-    // drawing one: its note separator is drawn 757.465 pt down the page where LibreOffice puts it
-    // at 758.751, a difference of 1.286 pt — about 26 twips — in the height of the note area the
-    // RTF reader reserves. The other four formats agree with LibreOffice to a hundredth of a
-    // point on the same document, so this is the RTF reader's alone. Recorded in
-    // src/Paperless.Rendering/TODO.md; not fixed here because the layout is another library's.
+    // footnotes.rtf is left out, and what it is left out for is LibreOffice's rather than ours:
+    // its RTF import loses the face the note paragraph states — the file says Carlito both
+    // directly and through the style it names, and LibreOffice sets the notes in Liberation
+    // Serif, 13 twips a line shorter at ten point. The note area is bottom-aligned, so its top
+    // and the rule above it start two lines' worth higher: 758.751 pt against our 757.465, which
+    // is 1.286 of the 1.30 the shorter lines account for. NoteSeparatorComparisonTests pins that
+    // attribution and will fail if it stops holding, at which point this file rejoins the list.
     [InlineData("table-shading.fodt")]
     [InlineData("table-shading.odt")]
     [InlineData("table-shading.docx")]

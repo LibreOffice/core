@@ -101,13 +101,15 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Default.MaxPages,
         };
 
+        Paginator paginator = new(pagination);
+
         return new WordProcessingPages(
-            new Paginator(pagination).Paginate(
+            paginator.Paginate(
                 blocks,
                 [.. masters.Select((master, index) => new PaginatedSection(
                     index < Sections.Count ? Sections[index] : Sections[^1],
                     Furniture(source, master)))]),
-            blocks);
+            paginator.Blocks ?? blocks);
     }
 
     /// <summary>

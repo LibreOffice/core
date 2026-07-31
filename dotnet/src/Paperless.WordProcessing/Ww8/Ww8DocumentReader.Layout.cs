@@ -422,7 +422,13 @@ public sealed partial class Ww8DocumentReader
                                         : DocumentProperties.FootnoteNumbering.Placement,
                                     note.IsEndnote
                                         ? DocumentProperties.EndnoteNumbering.Restart
-                                        : DocumentProperties.FootnoteNumbering.Restart));
+                                        : DocumentProperties.FootnoteNumbering.Restart)
+                                {
+                                    Numbering = note.IsEndnote
+                                        ? DocumentProperties.EndnoteNumbering
+                                        : DocumentProperties.FootnoteNumbering,
+                                    Citation = citation,
+                                });
                         }
                     }
 

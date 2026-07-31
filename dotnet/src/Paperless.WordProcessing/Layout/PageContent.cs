@@ -184,6 +184,38 @@ public sealed record PageNote
     /// its position within its page, and which page it is on is what filling the page decides.
     /// </remarks>
     public NoteRestart Restart { get; init; }
+
+    /// <summary>
+    /// How this note's class is numbered, for a pagination pass that has to number it again.
+    /// </summary>
+    /// <remarks>
+    /// The sequence and the start value, which <see cref="Restart"/> alone cannot supply: a per-page restart
+    /// says the count begins again and this says what the count is written in. Defaults to the footnote
+    /// sequence, which is what a note whose reader states nothing renders as.
+    /// </remarks>
+    public NoteNumbering Numbering { get; init; } = NoteNumbering.Footnotes;
+
+    /// <summary>
+    /// The citation this note carries as it was read, in document order.
+    /// </summary>
+    /// <remarks>
+    /// Kept so that a renumbering pass can find it again. It sits in the citing paragraph's text at
+    /// <see cref="Offset"/> and in the note body's first paragraph at <see cref="BodyOffset"/>, in both cases
+    /// exactly this many characters long — LibreOffice draws a note's number twice and the readers emit it
+    /// twice, so both have to be rewritten or the sentence and the note disagree about which note it is.
+    /// </remarks>
+    public string Citation { get; init; } = "";
+
+    /// <summary>
+    /// Where the citation sits in the first block of <see cref="Blocks"/>.
+    /// </summary>
+    /// <remarks>
+    /// Zero in three of the four formats, which prepend it, and not in DOCX: the note body marks where its own
+    /// number goes with a <c>w:footnoteRef</c>, and a note beginning with a tab puts it at one rather than at
+    /// nought. Recorded rather than searched for, because searching a note's text for the string "1" finds
+    /// whatever the note happens to say first.
+    /// </remarks>
+    public int BodyOffset { get; init; }
 }
 
 /// <summary>

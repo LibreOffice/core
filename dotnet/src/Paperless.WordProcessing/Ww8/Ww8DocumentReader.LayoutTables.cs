@@ -495,7 +495,14 @@ public sealed record Ww8LayoutNote(
     bool IsEndnote,
     IReadOnlyList<Ww8LayoutBlock> Blocks,
     Layout.NotePlacement Placement = Layout.NotePlacement.PageBottom,
-    Layout.NoteRestart Restart = Layout.NoteRestart.Never);
+    Layout.NoteRestart Restart = Layout.NoteRestart.Never)
+{
+    /// <summary>How the note's class is numbered, for a pagination pass that numbers it again.</summary>
+    public Layout.NoteNumbering Numbering { get; init; } = Layout.NoteNumbering.Footnotes;
+
+    /// <summary>The citation as it was read, which sits at <see cref="Offset"/> and at the note's head.</summary>
+    public string Citation { get; init; } = "";
+}
 
 /// <summary>
 /// A floating shape as layout sees it: the two records that describe it, and its own text.

@@ -423,6 +423,16 @@ public sealed partial class RtfDocumentReader
         /// <summary>Where this note's citation sits in the paragraph that cites it.</summary>
         public int NoteOffset { get; init; }
 
+        /// <summary>
+        /// The note's citation, kept after <see cref="LayoutPrefix"/> has been consumed.
+        /// </summary>
+        /// <remarks>
+        /// The prefix is cleared the moment the note's first paragraph takes it, which is the right thing
+        /// for a prefix and the wrong thing for a record: a renumbering pass runs long after and needs to
+        /// know what the note was cited as in order to find it again.
+        /// </remarks>
+        public string NoteCitation { get; init; } = "";
+
         /// <summary>True when this flow is an endnote's rather than a footnote's.</summary>
         /// <remarks>
         /// Settable rather than fixed at construction because RTF says so a token late: an endnote is a
@@ -1443,6 +1453,7 @@ public sealed partial class RtfDocumentReader
             Depth = _groupDepth,
             NoteBlocks = new Staged(),
             NoteOffset = offset,
+            NoteCitation = citation,
             LayoutPrefix = citation,
         });
     }
@@ -1555,7 +1566,15 @@ public sealed partial class RtfDocumentReader
                             finished.IsEndnote,
                             blocks,
                             (finished.IsEndnote ? _endnotes : _footnotes).Placement,
-                            (finished.IsEndnote ? _endnotes : _footnotes).Restart));
+                            (finished.IsEndnote ? _endnotes : _footnotes).Restart)
+                        {
+                            Numbering = finished.IsEndnote ? _endnotes : _footnotes,
+
+                            // The flow's own prefix, which is where the note's copy of its number came
+                            // from: RTF repeats the `\chftn` inside the group and extraction drops it, so
+                            // the head of the note carries the prefix and nothing else.
+                            Citation = finished.NoteCitation,
+                        });
                 }
             }
         }

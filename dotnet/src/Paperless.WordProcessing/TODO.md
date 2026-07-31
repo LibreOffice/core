@@ -641,6 +641,40 @@ is read and verified, so what remains is the filling of pages rather than the me
       text, so putting it below leaves every baseline pitch identical and every paragraph height wrong.
       A 200%-spaced A4 page holds twenty-five lines with the rule and twenty-four without, and every
       break after the first then falls somewhere else.
+- [x] **The leading above a paragraph's first line belongs to the paragraph above it**, in
+      `Layout/ParagraphLeading.cs`. The item above says where the space goes within a line; this says
+      which paragraph is charged for it, and the two are separate questions with different evidence.
+      Writer's answer is stated twice over. `SwTextFormatter::CalcRealHeight` guards the whole
+      inter-line-spacing switch with `if( !IsParaLine() )` and explains itself on the line above:
+      *"Note: for the _first_ line the line spacing of the previous paragraph is applied in
+      SwFlowFrame::CalcUpperSpace()"* (`sw/source/core/text/itrform2.cxx`:2424). And `CalcUpperSpace`
+      adds `nPrevLineSpacing` to the gap in **both** of its branches — the one that sums the two
+      paragraph spacings and the one that takes their maximum (`flowfrm.cxx`:1656 and :1722) — where
+      that value is `GetHeightOfLastLine() × prop / 100 − GetHeightOfLastLine()`
+      (`GetSpacingValuesOfFrame`, `frmtool.cxx`:4064 → `SwTextFrame::GetLineSpace`, `txtfrm.cxx`:3996).
+      So the percentage is taken against the height of the **previous** paragraph's **last** line, not
+      against the paragraph's own first.
+      **Why it survived every comparison this project runs.** Between two paragraphs at the same spacing
+      the two readings give the same answer: the leading one paragraph withholds is the leading the next
+      hands back, so every baseline lands where it did and the block is the same height. It is visible
+      only where the spacing or the size changes across a paragraph boundary, and then only as an
+      *absolute* baseline — a pitch comparison cancels it exactly, and a word box cannot see it at all
+      because a box top already carries the font's ascent. It took the PDF backend reading the content
+      stream to find it.
+      Measured on the seven 16 pt headings of `paginated.*`, in all four formats: LibreOffice puts
+      37.200 pt between the last body baseline and the heading's and 20.450 pt after it, and this engine
+      put 35.250 and 22.400 — the same 57.650 pt block, split 1.95 pt differently, which is 0.15 of the
+      body's 269-twip line. With the rule the heading's baseline lands at 395.300 pt against
+      LibreOffice's 395.301, and every baseline of `paginated.*` in all four formats now agrees
+      absolutely to 0.051 pt, the constant this project already lives with. Nothing else moved: no page
+      break, no line break, no other document in the corpus.
+      Two consequences worth keeping. A paragraph's first line is now stripped of its leading *always*
+      rather than only at the top of a page — the top-of-page rule is the same rule reached a second way,
+      since `CalcUpperSpace` never reaches its line-spacing term when `GetPrevFrameForUpperSpaceCalc_`
+      finds no previous frame, which at the top of a page or a column it does not. And a table hands no
+      leading down: `GetSpacingValuesOfFrame` reports a line spacing only for a text frame.
+      Pinned by `ParagraphLeadingComparisonTests`, which compares absolute baselines rather than pitches
+      and asserts each half of a size change on its own.
 - [x] `PaginationOptions` for the two places Word and Writer disagree and the file says which by a
       compatibility flag rather than by a property: whether a paragraph keeps its space-before at the
       top of a page, and whether space-before collapses against the previous space-after or adds to it.
@@ -1275,6 +1309,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       hand-written three-line RTF, so it is not an artefact of the corpus export. Paperless reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
       records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
+      **Bisected, since the sentence above was too broad to be true.** A note stating `\f1` with nothing else
+      keeps its face; the same note with a `\sN` in front of it loses the style's font *and* the direct one.
+      So the trigger is the style reference, not the group: three hand-written RTFs differing only in whether
+      the note paragraph names a style, rendered by the same `soffice`. `footnotes.rtf` names `\s26`, whose
+      own definition is `\f4\fs20` — Carlito at ten point — and restates `\f4\fs20` directly beside it, and
+      LibreOffice renders neither. What it renders instead is its built-in Footnote style, which is `\s27` in
+      that file: `\fi-340\li340\fs20` with the font inherited from `Normal`, which is `\f3`, Liberation Serif.
+      The size survives; only the face and the indent are lost.
+      This is what made `footnotes.rtf`'s **note separator** look like a bug of ours, and it is not one. The
+      rule is drawn from where the notes landed — 0.1 cm above the first note's line box — and the note area
+      is bottom-aligned in the body's rectangle, so a shorter note line raises the whole area and the rule
+      with it. Liberation Serif is 11.55 pt a line at ten point where Carlito is 12.20, 13 twips; two notes,
+      26 twips, 1.30 pt — against the 1.286 pt the rule differs by, the remainder being the sub-twip rounding
+      of the bottom alignment. Every input to the separator's arithmetic other than the note height is
+      identical, and the other four formats of the same document agree with LibreOffice to a hundredth of a
+      point. `NoteSeparatorComparisonTests` pins both halves: that LibreOffice's RTF rendering draws the
+      notes in a font resource its own body does not use while its ODF rendering of the same document uses
+      one throughout, and that the separator's whole disagreement is accounted for by the shorter lines.
+      It fails if either stops being true — including if LibreOffice fixes its import, at which point
+      `footnotes.rtf` can rejoin the fill comparison.
 - [x] **Note numbering the document states**, in `NoteNumbering`: the sequence and the start value, per class,
       read from all four formats. The defaults stay what LibreOffice does when a file says nothing — footnotes
       1, 2, 3 and endnotes i, ii, iii. What each format says and how it lies:
@@ -1311,7 +1365,7 @@ is read and verified, so what remains is the filling of pages rather than the me
       - **RTF's endnote set is one word short rather than a mirror.** `\ftnrstcont`, `\ftnrestart` and
         `\ftnrstpg` have `a`-prefixed twins for only the first two: there is no `\aftnrstpg`, because an endnote
         does not restart per page. A reader assuming the mirror would be inventing a keyword.
-- [ ] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
+- [x] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
       genuinely circular: a note's number under a restart is its position within its page, the citation's width
       depends on that number, and where the citing line breaks depends on the width. **Writer has an answer and
       it is not a fixed point**, which is the correction to the note that used to stand here:
@@ -1328,6 +1382,32 @@ is read and verified, so what remains is the filling of pages rather than the me
       re-lay out once, and stop. The corpus document deliberately holds four notes to a page so that every
       citation stays one digit wide — the numbering can be got right before the width feedback is, and a second
       document with ten notes on a page is what would exercise the rest.
+      **Done, in `Layout/NoteRenumbering.cs`, exactly that shape.** What writing it turned up:
+      - **A renumbering is a text edit, not a number.** The number is nowhere in this engine as a number: all
+        four readers emit it into the text twice, as a superscript at the anchor and again at the head of the
+        note, because that is what LibreOffice draws. So the pass rewrites paragraphs — text, runs, frame
+        anchors and the offsets of the notes after it — which is also why the width feedback is real rather
+        than theoretical, and why doing it once and stopping is the only terminating answer.
+      - **`PageNote` had to learn three things** it did not carry: the class's whole `NoteNumbering` (the
+        restart alone cannot say what sequence to write the new number in), the citation as read, and where
+        that citation sits inside the note's own body. The last is not zero in DOCX and is in the other three:
+        ODF and RTF have no number in the note at all and the reader prepends it, WW8 puts it at the U+0002
+        that heads the note's range, and a DOCX marks the place with a `w:footnoteRef` — which a note
+        beginning with a tab puts at one. Searching the note's text for the citation instead would find
+        whatever the note happens to say first.
+      - **The rewritten blocks have to reach the caller**, which is the part that would have been silently
+        half-right: pagination indexes lines into a block list the reader still holds, so rewriting the
+        paragraphs and returning the old list draws the numbering the document was read with. Each page now
+        names its own list and `Paginator.Blocks` reports it, so both halves agree.
+      - Guarded on `NoteRenumbering.Applies`, so every document whose notes do not restart per page — which
+        is all of the corpus but one — pays a single walk over its blocks and takes no second pagination.
+      Verified against LibreOffice in all four formats: `NoteRestartComparisonTests` asserts page one citing
+      1, 2, 3, 4 and page two citing 1, 2, 3, 4 again, at the anchor *and* at the head of the note, and then
+      that the text drawn is character for character LibreOffice's. Before the pass, page two cited 5, 6, 7, 8.
+      What is still open is the width feedback the corpus deliberately does not exercise: a page whose tenth
+      note becomes its first goes from `10` to `1` and the citing line rebreaks. The single re-layout picks
+      that up; whether a *second* renumbering would then be needed is precisely what Writer refuses to chase,
+      so the behaviour is right and the case is untested for want of a document with ten notes on a page.
 - [x] **The separator rule above the notes**, drawn and compared — and the interesting part is that it turned
       out to be comparable at all. The old note here said it could not be, that it needed the rasteriser first
       because a text comparison sees no lines. That was the wrong conclusion from a true premise: `pdftotext`
