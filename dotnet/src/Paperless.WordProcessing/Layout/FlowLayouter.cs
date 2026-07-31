@@ -107,7 +107,9 @@ public static class FlowLayouter
                 ? layouter.Layout(
                     MeasuredParagraph.Measure(
                         paragraph.Text,
-                        [.. paragraph.Runs.Select(run => run.ToFormattedRun())]),
+                        [.. paragraph.Runs.Select(run => run.ToFormattedRun())],
+                        shaper: null,
+                        paragraph.Itemisation),
                     paragraph.Format,
                     area.Width,
                     paragraph.Language,

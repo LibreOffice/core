@@ -196,17 +196,17 @@ public sealed class ParagraphLayouter
                 paragraph.LineStart(isFirst),
                 isFirst ? paragraph.FirstLineWidth(areaWidth) : paragraph.BodyWidth(areaWidth));
 
+            Length spaceAdd = Justification(
+                paragraph.Alignment, lines[i], text, space.Width, isLast: i == lines.Count - 1);
+
             boxes.Add(new LineBox(
                 lines[i],
-                space.Left + AlignmentOffset(
-                    paragraph.Alignment, lines[i], space.Width, isLast: i == lines.Count - 1),
+                LeftOf(paragraph, lines[i], space, areaWidth, spaceAdd, isLast: i == lines.Count - 1),
                 top,
                 height + space.Descent,
                 baseline + space.Descent,
                 spaceAbove,
-                Justification(
-                    paragraph.Alignment, lines[i], text, space.Width,
-                    isLast: i == lines.Count - 1)));
+                spaceAdd));
 
             top += height + space.Descent;
         }
@@ -280,17 +280,18 @@ public sealed class ParagraphLayouter
             (Length baseline, Length spaceAbove) =
                 BaselineFrom(height, natural, ascent, paragraph.LineSpacing.Mode);
 
+            Length spaceAdd = Justification(
+                paragraph.Alignment, lines[i], measured.Text, space.Width,
+                isLast: i == lines.Count - 1);
+
             boxes.Add(new LineBox(
                 lines[i],
-                space.Left + AlignmentOffset(
-                    paragraph.Alignment, lines[i], space.Width, isLast: i == lines.Count - 1),
+                LeftOf(paragraph, lines[i], space, areaWidth, spaceAdd, isLast: i == lines.Count - 1),
                 top,
                 height + space.Descent,
                 baseline + space.Descent,
                 spaceAbove,
-                Justification(
-                    paragraph.Alignment, lines[i], measured.Text, space.Width,
-                    isLast: i == lines.Count - 1)));
+                spaceAdd));
 
             top += height + space.Descent;
         }
@@ -519,6 +520,51 @@ public sealed class ParagraphLayouter
 
             return _spaces[index];
         }
+    }
+
+    /// <summary>
+    /// Where a line's text starts, measured from the text area's <em>left</em> edge.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one place a right-to-left paragraph differs from a left-to-right one, and it is a
+    /// mirror rather than a special case: the room the line was given — indents included — is
+    /// reflected in the text area, and the line is placed against the far side of it. That is
+    /// Writer's own shape, which lays a right-to-left frame out as though it were left to right
+    /// and reflects the rectangle when it paints (<c>SwTextFrame::SwitchLTRtoRTL</c>,
+    /// <c>sw/source/core/text/txtfrm.cxx:682</c>), so the indents mirror without anything having
+    /// to know which side they came from.
+    /// </para>
+    /// <para>
+    /// Measured, because the two halves of the mirror are not both obvious. An ODF paragraph in
+    /// <c>rl-tb</c> with <c>fo:margin-right="3cm"</c> is drawn three centimetres from the
+    /// <em>left</em> margin — its end indent — and one with <c>fo:text-indent="2cm"</c> starts its
+    /// first line two centimetres in from the right.
+    /// </para>
+    /// <para>
+    /// A justified line is the exception the mirror needs told about: it has already been stretched
+    /// to fill the room, so it has no slack to be pushed across and starts at the reflected left
+    /// edge. Reflecting its alignment offset anyway would move it right by the slack it is about to
+    /// consume and run it off the margin.
+    /// </para>
+    /// </remarks>
+    private static Length LeftOf(
+        ParagraphFormat paragraph,
+        TextLine line,
+        LineSpace space,
+        Length areaWidth,
+        Length spaceAdd,
+        bool isLast)
+    {
+        Length offset = AlignmentOffset(paragraph.Alignment, line, space.Width, isLast);
+        if (!paragraph.IsRightToLeft) return space.Left + offset;
+
+        Length beyond = areaWidth - space.Left - space.Width;
+        Length slack = space.Width - line.Width;
+        if (slack < Length.Zero) slack = Length.Zero;
+
+        return (beyond > Length.Zero ? beyond : Length.Zero)
+               + (spaceAdd != Length.Zero ? Length.Zero : slack - offset);
     }
 
     private static Length AlignmentOffset(

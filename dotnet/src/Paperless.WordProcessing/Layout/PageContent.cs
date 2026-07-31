@@ -2,6 +2,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 
@@ -114,6 +115,34 @@ public sealed record PageParagraph : PageBlock
 
     /// <summary>True when the paragraph's formatting varies across its text.</summary>
     public bool HasRuns => Runs.Count > 0;
+
+    /// <summary>
+    /// The direction its bidi resolution takes as its base.
+    /// </summary>
+    /// <remarks>
+    /// The declared writing mode first and the runs' shaping options after it, which is the rule
+    /// <see cref="MeasuredParagraph"/> applies when it is handed no itemisation of its own. One
+    /// rule rather than two, because measuring a paragraph at one base level and drawing it at
+    /// another puts its sub-runs in an order its own widths do not describe.
+    /// </remarks>
+    public BidiDirection BaseDirection
+        => Format.IsRightToLeft || (HasRuns ? Runs[0].Shaping : Shaping).RightToLeft
+            ? BidiDirection.RightToLeft
+            : BidiDirection.LeftToRight;
+
+    /// <summary>
+    /// How to cut it into sub-runs, or null for the neutral settings.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than a left-to-right instance for the paragraph that needs nothing, so a
+    /// document that says nothing about direction is measured through exactly the path it took
+    /// before writing modes existed — including a caller that says right-to-left on its runs and
+    /// nothing on the paragraph, which is how it had to be said before.
+    /// </remarks>
+    internal ItemisationOptions? Itemisation
+        => Format.IsRightToLeft
+            ? new ItemisationOptions { BaseDirection = BidiDirection.RightToLeft }
+            : null;
 
     /// <summary>
     /// The notes anchored in the paragraph's text, in order.

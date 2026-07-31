@@ -25,6 +25,31 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>The alignment, as <c>sprmPJc</c>'s value.</summary>
     public int? Justification { get; init; }
 
+    /// <summary>
+    /// True when the alignment came from <c>sprmPJc80</c>, whose sides are physical.
+    /// </summary>
+    /// <remarks>
+    /// The two sprms carry the same four values and mean different things by them, which is the sort
+    /// of difference that is invisible until a document is right to left. <c>sprmPJc</c> (0x2461) is
+    /// bidi-relative — zero is the paragraph's start edge — and <c>sprmPJc80</c> (0x2403) is
+    /// absolute, so zero is the left margin whichever way the paragraph reads. LibreOffice's own
+    /// reader spells the distinction out in <c>SwWW8ImplReader::Read_Justify</c>
+    /// (<c>sw/source/filter/ww8/ww8par6.cxx:4805</c>, "tdf#121110: Jc80 justify is absolute, not
+    /// bidi-relative"), and RTF sets this too, since its <c>\ql</c> and <c>\qr</c> are physical for
+    /// the same reason.
+    /// </remarks>
+    public bool IsJustificationAbsolute { get; init; }
+
+    /// <summary>
+    /// True when the paragraph reads right to left, from <c>sprmPFBiDi</c>.
+    /// </summary>
+    /// <remarks>
+    /// 0x2441, one byte (<c>sw/source/filter/ww8/sprmids.hxx:429</c>). RTF's <c>\rtlpar</c> is the
+    /// same statement and lands here too, which is why this is on the shared format rather than in
+    /// either reader.
+    /// </remarks>
+    public bool? IsRightToLeft { get; init; }
+
     /// <summary>The left indent in twips.</summary>
     public int? LeftIndent { get; init; }
 
@@ -127,9 +152,12 @@ public readonly record struct Ww8LayoutFormat
     {
         bool widows = HasWidowControl ?? false;
 
+        bool rightToLeft = IsRightToLeft ?? false;
+
         return new ParagraphFormat
         {
-            Alignment = Alignment(Justification),
+            IsRightToLeft = rightToLeft,
+            Alignment = Alignment(Justification, IsJustificationAbsolute && rightToLeft),
             TabStops = TabStops ?? [],
             StartIndent = Twips(LeftIndent),
             EndIndent = Twips(RightIndent),
@@ -154,14 +182,17 @@ public readonly record struct Ww8LayoutFormat
     /// <remarks>
     /// Word's own order: 0 left, 1 centre, 2 right, 3 justified. There are further values for the
     /// distributed and Thai variants, and treating an unknown one as left is what Word does with them.
+    /// The two ends swap when the value is <em>physical</em> and the paragraph is right to left —
+    /// see <see cref="IsJustificationAbsolute"/> — because the left margin is then the paragraph's
+    /// end rather than its start.
     /// </remarks>
-    private static TextAlignment Alignment(int? justification) => justification switch
+    private static TextAlignment Alignment(int? justification, bool swapEnds) => justification switch
     {
         1 => TextAlignment.Centre,
-        2 => TextAlignment.End,
+        2 => swapEnds ? TextAlignment.Start : TextAlignment.End,
         3 => TextAlignment.Justify,
         4 => TextAlignment.Distribute,
-        _ => TextAlignment.Start,
+        _ => swapEnds ? TextAlignment.End : TextAlignment.Start,
     };
 
     /// <summary>

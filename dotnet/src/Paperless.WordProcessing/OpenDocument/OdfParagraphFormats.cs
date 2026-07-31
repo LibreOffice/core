@@ -77,9 +77,18 @@ internal static class OdfParagraphFormats
     {
         ArgumentNullException.ThrowIfNull(styles);
 
+        bool rightToLeft = IsRightToLeft(styles, styleName);
+
         return new ParagraphFormat
         {
-            Alignment = Alignment(styles, styleName),
+            IsRightToLeft = rightToLeft,
+            Alignment = Alignment(styles, styleName, rightToLeft),
+
+            // The start and end indents, which is what ODF's margins are: measured from the
+            // paragraph's own start edge, so fo:margin-left is at the *right* of a right-to-left
+            // paragraph. Measured — one with fo:margin-right="3cm" is drawn three centimetres in
+            // from the left margin, and LibreOffice's own RTF export writes that same indent as
+            // \li1701.
             StartIndent = Measure(styles, styleName, "margin-left"),
             EndIndent = Measure(styles, styleName, "margin-right"),
             FirstLineIndent = Measure(styles, styleName, "text-indent"),
@@ -330,18 +339,30 @@ internal static class OdfParagraphFormats
     /// The alignment, with ODF's own vocabulary rather than CSS's.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>start</c> and <c>end</c> rather than left and right, because ODF states the reading direction
     /// and not the page side — though it permits <c>left</c> and <c>right</c> too, and producers write
     /// them. Justified text is <c>justify</c>, and whether its last line is stretched as well is a
     /// separate attribute (<c>style:justify-single-word</c> is a different question again).
+    /// </para>
+    /// <para>
+    /// The two vocabularies mean different things in a right-to-left paragraph and both are in use, so
+    /// the physical pair is folded onto the logical one here rather than carried further: <c>left</c>
+    /// is the <em>end</em> edge of a right-to-left paragraph. Measured, and confirmed by LibreOffice's
+    /// own conversion — the same paragraph exported to OOXML comes back as <c>w:jc w:val="end"</c>
+    /// beside <c>w:bidi</c>.
+    /// </para>
     /// </remarks>
-    private static TextAlignment Alignment(OdfStyles styles, string? styleName)
+    private static TextAlignment Alignment(
+        OdfStyles styles, string? styleName, bool rightToLeft)
     {
         OdfProperty align = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "text-align");
 
         return align.Value switch
         {
-            "end" or "right" => TextAlignment.End,
+            "end" => TextAlignment.End,
+            "right" => rightToLeft ? TextAlignment.Start : TextAlignment.End,
+            "left" => rightToLeft ? TextAlignment.End : TextAlignment.Start,
             "center" or "centre" => TextAlignment.Centre,
             "justify" => Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "text-align-last")
                     .Is("justify")
@@ -350,6 +371,27 @@ internal static class OdfParagraphFormats
             _ => TextAlignment.Start,
         };
     }
+
+    /// <summary>
+    /// Whether the paragraph reads right to left, from <c>style:writing-mode</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF states a writing mode rather than a direction, so this reads the two horizontal ones and
+    /// leaves the vertical modes alone: <c>rl-tb</c> is the right-to-left paragraph every Hebrew and
+    /// Arabic document is made of, and <c>tb-rl</c> and <c>tb-lr</c> are vertical text, which is a
+    /// separate matter and not yet laid out at all. <c>page</c> means "whatever the page says", which
+    /// resolves to left to right for every page geometry Paperless reads.
+    /// </para>
+    /// <para>
+    /// Through the style chain like everything else here, which is not incidental: LibreOffice's own
+    /// export puts the writing mode on the <em>style</em> and leaves the paragraph bare, so a reader
+    /// looking only at the paragraph's own automatic style finds nothing at all.
+    /// </para>
+    /// </remarks>
+    private static bool IsRightToLeft(OdfStyles styles, string? styleName)
+        => Paragraph(styles, styleName, OdfNamespaces.Style, "writing-mode").Value
+            is "rl-tb" or "rl";
 
     /// <summary>
     /// The line spacing, from whichever of ODF's three attributes the chain resolves.

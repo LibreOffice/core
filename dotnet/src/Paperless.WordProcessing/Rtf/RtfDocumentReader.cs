@@ -635,11 +635,23 @@ public sealed partial class RtfDocumentReader
                 // its absence makes it twips, whose sign then chooses at-least from exact.
                 state.IsMultipleLineSpacing = token.Parameter is not 0;
                 return;
+            // \ql and \qr name a page side rather than a reading edge — LibreOffice's own importer
+            // takes RTF's justification literally where it swaps OOXML's
+            // (`bUseLiteralDirection = IsRTFImport()`,
+            // sw/source/writerfilter/dmapper/DomainMapper.cxx:1803) — so they are recorded as the
+            // sides they are and folded onto the start and end edges once \rtlpar is known, which
+            // a file is free to write after them.
             case "ql":
                 state.Alignment = TextAlignment.Start;
                 return;
             case "qr":
                 state.Alignment = TextAlignment.End;
+                return;
+            case "rtlpar":
+                state.IsRightToLeft = true;
+                return;
+            case "ltrpar":
+                state.IsRightToLeft = false;
                 return;
             case "qc":
                 state.Alignment = TextAlignment.Centre;

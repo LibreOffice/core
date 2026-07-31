@@ -708,7 +708,7 @@ public sealed class Paginator
                 0, paragraph.Text.Length, paragraph.Face, paragraph.EmSize, paragraph.Shaping));
         }
 
-        return MeasuredParagraph.Measure(paragraph.Text, runs);
+        return MeasuredParagraph.Measure(paragraph.Text, runs, shaper: null, paragraph.Itemisation);
     }
 
     /// <summary>
