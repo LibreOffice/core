@@ -13,6 +13,7 @@
 #include <string_view>
 
 #include <config_fonts.h>
+#include <config_vclplug.h>
 #include <osl/process.h>
 
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
@@ -4427,8 +4428,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageRotate180)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf144222)
 {
-// Assume Windows has the font for U+4E2D
-#ifdef _WIN32
+// Assume Windows has the font for U+4E2D. USE_HEADLESS_CODE means fontconfig, which finds
+// only the bundled fonts, as on Linux.
+#if defined _WIN32 && !USE_HEADLESS_CODE
     loadFromFile(u"tdf144222.ods");
     save(TestFilter::PDF_WRITER);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

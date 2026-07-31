@@ -13,6 +13,7 @@
 #include <string_view>
 
 #include <config_fonts.h>
+#include <config_vclplug.h>
 
 #include <com/sun/star/view/XPrintable.hpp>
 
@@ -2123,9 +2124,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName1)
 {
-// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || defined _WIN32
+#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
     loadFromFile(u"variable-font-psname-1.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -2166,9 +2167,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName1)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
 {
-// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || defined _WIN32
+#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
     loadFromFile(u"variable-font-psname-2.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -2211,9 +2212,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
 // corresponding to the different opsz values.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testOpticalSizing)
 {
-// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// Embedding variable fonts does not work with fontconfig, only the default instance is enumerated
 // https://bugs.documentfoundation.org/show_bug.cgi?id=155853
-#if defined MACOSX || defined _WIN32
+#if defined MACOSX || (defined _WIN32 && !USE_HEADLESS_CODE)
     loadFromFile(u"testOpticalSizing.odt");
     save(TestFilter::PDF_WRITER);
 
