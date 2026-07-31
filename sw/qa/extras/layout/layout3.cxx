@@ -2427,7 +2427,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenTextFieldExpansion)
                 1);
 }
 
-#if !defined(_WIN32) //FIXME
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDoubleLineBrackets)
 {
     // Trigger SwDoubleLinePortion initialization for Asian "Two Lines in One" layout.
@@ -2435,13 +2434,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDoubleLineBrackets)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // Assert that the layout engine successfully processed the Double Line Portion
-    assertXPath(pXmlDoc, "//SwMultiPortion[@symbol='19SwDoubleLinePortion']", 1);
+    // Assert that the layout engine successfully created the Double Line Portion
+    // for the full "Hello World" run.
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwDoubleLinePortion')]", 1);
 
-    // Verify the Double Line Portion contains exactly 2 SwLineLayout children
-    assertXPath(pXmlDoc, "//SwMultiPortion[@symbol='19SwDoubleLinePortion']/SwLineLayout", 2);
+    // Verify it correctly split the content into its 2 stacked SwLineLayout rows
+    // ("Hello " / "World"), confirming the two-lines-in-one layout was built.
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwDoubleLinePortion')]/SwLineLayout",
+                2);
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHardBlankOverflow)
 {
