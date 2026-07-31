@@ -19,6 +19,10 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 	meson \
 ))
 
+# Hide HarfBuzz symbols.
+harfbuzz_cpp_args = $(if $(filter-out MSC,$(COM)),-fvisibility=hidden) \
+	$(if $(ENABLE_DBGUTIL)$(ENABLE_DEBUG),,$(if $(call gb_Module__symbols_enabled,harfbuzz),$(gb_DEBUGINFO_FLAGS)))
+
 # We cannot use environment vars inside the meson cross-build file,
 # so we're going to have to generate one on-the-fly.
 # mungle variables into python list format
@@ -54,8 +58,8 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/graphite$(if $(SYSTEM_ICU),,$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/icu)" \
 		PYTHONWARNINGS= \
 		$(MESON) setup --wrap-mode nofallback builddir \
-			-Ddefault_library=static -Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release \
-			$(if $(call gb_Module__symbols_enabled,harfbuzz),$(addsuffix "$(strip $(gb_DEBUGINFO_FLAGS))",-Dc_args= -Dcpp_args=)))) \
+			-Ddefault_library=static -Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release)) \
+			$(addsuffix "$(strip $(harfbuzz_cpp_args))",-Dc_args= -Dcpp_args=) \
 			-Dauto_features=disabled \
 			-Dcpp_std=$(subst c++29,c++26,$(subst c++2d,c++26,$(subst -std:,,$(subst -std=,,$(filter -std%,$(CXXFLAGS_CXX11)))))) \
 			-Dtests=disabled \
