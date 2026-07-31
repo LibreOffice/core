@@ -115,6 +115,12 @@ public static class Ww8SprmReader
         /// </remarks>
         public const ushort TableDefinition = 0xD608;
 
+        /// <summary><c>sprmTCellPadding</c>: cell padding for a range of a row's cells.</summary>
+        public const ushort CellPadding = 0xD632;
+
+        /// <summary><c>sprmTCellPaddingDefault</c>: the padding every cell of a row starts from.</summary>
+        public const ushort CellPaddingDefault = 0xD634;
+
         /// <summary>The paragraph's outline level, which is what makes it a heading.</summary>
         public const ushort OutlineLevel = 0x2640;
 

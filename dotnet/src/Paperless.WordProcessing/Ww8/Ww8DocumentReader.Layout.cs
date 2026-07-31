@@ -117,8 +117,22 @@ public sealed partial class Ww8DocumentReader
     /// The body range only. The headers and footers are read by <see cref="ReadLayoutFurniture"/> and the
     /// notes not at all yet, because a page assembles those separately from the run of body paragraphs.
     /// </remarks>
-    public List<Ww8LayoutParagraph> ReadLayoutParagraphs()
-        => ReadLayoutParagraphs(Ranges.Body, keepTrailingEmpty: true);
+    public List<Ww8LayoutBlock> ReadLayoutBlocks()
+        => ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
+
+    /// <summary>
+    /// One range's paragraphs only, for a flow that has no room for a table.
+    /// </summary>
+    /// <remarks>
+    /// A header, a footer or a cell is laid out by <c>FlowLayouter</c>, which stacks paragraphs and knows
+    /// nothing of grids — so a table inside one is dropped. Filtered from the block walk rather than read by
+    /// a walk of its own, because a second walk would be a second place for the run and tab handling to be
+    /// got right.
+    /// </remarks>
+    private List<Ww8LayoutParagraph> ReadLayoutParagraphs(Ww8Range range, bool keepTrailingEmpty)
+        => [.. ReadLayoutBlocks(range, keepTrailingEmpty)
+            .Where(block => block.Paragraph is not null)
+            .Select(block => block.Paragraph!.Value)];
 
     /// <summary>
     /// The first section's headers and footers, with the formatting layout needs.
@@ -198,14 +212,15 @@ public sealed partial class Ww8DocumentReader
     /// whatever its text says — and wrong for furniture, where nothing to lay out has to stay
     /// distinguishable from one blank line to lay out.
     /// </param>
-    private List<Ww8LayoutParagraph> ReadLayoutParagraphs(Ww8Range body, bool keepTrailingEmpty)
+    private List<Ww8LayoutBlock> ReadLayoutBlocks(Ww8Range body, bool keepTrailingEmpty)
     {
-        List<Ww8LayoutParagraph> paragraphs = [];
-        if (body.Length <= 0) return paragraphs;
+        LayoutTableAssembler assembler = new();
+        if (body.Length <= 0) return assembler.Finished();
 
         string text = _pieces.ReadText(body.Start, body.End, _diagnostics);
-        if (text.Length == 0) return paragraphs;
+        if (text.Length == 0) return assembler.Finished();
 
+        int emitted = 0;
         StringBuilder current = new();
 
         // The source position of each character in `current`. A paragraph's text is not a slice of the
@@ -214,37 +229,22 @@ public sealed partial class Ww8DocumentReader
         List<int> positions = [];
         int start = 0;
 
-        for (int index = 0; index < text.Length && paragraphs.Count < MaxLayoutParagraphs; index++)
+        for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
             char character = text[index];
             int position = body.Start + index;
 
             switch (character)
             {
-                case ParagraphMark:
-                    paragraphs.Add(
-                        Describe(current.ToString(), positions, body.Start + start, position));
-                    current.Clear();
-                    positions.Clear();
+                case ParagraphMark or Special.SectionMark:
+                    Close(position, endsCell: false);
                     start = index + 1;
                     continue;
 
                 case CellMark:
-                    // A cell or row boundary. The paragraph before it belongs to a table, which this
-                    // pass does not lay out, so it is closed and marked rather than dropped — a caller
-                    // that skips it still counts the paragraphs the same way.
-                    paragraphs.Add(
-                        Describe(current.ToString(), positions, body.Start + start, position));
-                    current.Clear();
-                    positions.Clear();
-                    start = index + 1;
-                    continue;
-
-                case Special.SectionMark:
-                    paragraphs.Add(
-                        Describe(current.ToString(), positions, body.Start + start, position));
-                    current.Clear();
-                    positions.Clear();
+                    // A cell boundary — or a row's, which only the paragraph's own sprmPFTtp
+                    // distinguishes. The assembler decides; the character alone cannot.
+                    Close(position, endsCell: true);
                     start = index + 1;
                     continue;
 
@@ -284,13 +284,29 @@ public sealed partial class Ww8DocumentReader
             }
         }
 
-        if (current.Length > 0 || (keepTrailingEmpty && paragraphs.Count == 0))
+        if (current.Length > 0 || (keepTrailingEmpty && emitted == 0))
         {
-            paragraphs.Add(
-                Describe(current.ToString(), positions, body.Start + start, body.End - 1));
+            Close(body.End - 1, endsCell: false);
         }
 
-        return paragraphs;
+        return assembler.Finished();
+
+        // One paragraph, handed to the assembler with the properties of the mark that ended it — which is
+        // what says whether it was in a table, whether the mark closed a row, and what that row's columns
+        // are. Resolved once here rather than twice, since Describe needs the same lookup.
+        void Close(int markPosition, bool endsCell)
+        {
+            Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
+
+            assembler.Add(
+                Describe(current.ToString(), positions, body.Start + start, markPosition),
+                format,
+                endsCell);
+
+            current.Clear();
+            positions.Clear();
+            emitted++;
+        }
     }
 
     /// <summary>

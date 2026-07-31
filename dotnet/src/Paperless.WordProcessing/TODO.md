@@ -390,8 +390,21 @@ is read and verified, so what remains is the filling of pages rather than the me
       through, so the two spellings of one quantity disagree about which side is which. Caught by
       measurement: LibreOffice exports 0.6 cm of left padding as `\clpadt340` and then renders it on the
       left.
-- [ ] DOC's `sprmTDefTable` column edges. The extraction pass resolves the whole grid already; layout
-      needs the per-cell paragraph lists, as RTF did.
+- [x] DOC's `sprmTDefTable` edges, reusing the extraction pass's own `AssignColumns` and
+      `ResolveVerticalMerges` — a cell draft now carries both a content list and a layout list, so the hard
+      part is resolved once and whichever walk built the draft fills its own half.
+- [x] **A PAPX whose `cb` is zero is `2 × cb'` bytes, not `2 × cb' − 1`.** A non-zero `cb` means
+      `2 × cb − 1`, which is always odd, so a grpprl of *even* length must use the second form — which is
+      half of them. Subtracting one there as well loses the PAPX's last byte, and a sprm walk that is one
+      byte short at the end silently drops whichever sprm was last. Nothing looks corrupt: every sprm
+      before it decodes perfectly and the document merely lacks one property. It cost a table cell its
+      padding, and was found only because that cell's text was 14 points from where LibreOffice put it.
+- [x] `sprmTCellPadding` and `sprmTCellPaddingDefault`, whose six-byte operands look identical and are
+      not. The fourth byte is an `Fts` size type in the specific form, which must be 3, and nothing at all
+      in the default form — LibreOffice's `ProcessSpacing` skips it as "unknown" and never tests it, so
+      requiring 3 there rejects every default a real document writes. Each entry states one value and the
+      sides it applies to, so a uniform table carries **four** of them; keeping only the last leaves three
+      sides at Word's 108 twips.
 - [ ] Cell borders and shading. The grid places text correctly and draws nothing round it, which is the
       half a word-box comparison can check; borders need the sink's line and rectangle primitives and a
       resolved border model, and a border's width also eats into the cell's text area.

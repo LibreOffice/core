@@ -324,8 +324,21 @@ public sealed partial class Ww8DocumentReader
     {
         public List<ContentNode> Content { get; } = [];
 
+        /// <summary>
+        /// The cell's paragraphs with the formatting layout needs, beside the content nodes.
+        /// </summary>
+        /// <remarks>
+        /// One draft type serving two walks, which is what lets the column grid, the spans and the vertical
+        /// merges be resolved once — <c>AssignColumns</c> and <c>ResolveVerticalMerges</c> care only about
+        /// the edges. Whichever walk built the draft fills its own list and leaves the other empty.
+        /// </remarks>
+        public List<Ww8LayoutParagraph> LayoutParagraphs { get; } = [];
+
         /// <summary>The cell's right edge in twips, which is what places it in the grid.</summary>
         public int RightEdge { get; set; }
+
+        /// <summary>The gap between the cell's edges and its text, from the row's padding sprms.</summary>
+        public Layout.CellPadding Padding { get; set; }
 
         public bool IsHorizontallyMerged { get; set; }
         public bool ContinuesMergeAbove { get; set; }

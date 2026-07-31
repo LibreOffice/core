@@ -67,6 +67,7 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-grid.odt")]
     [InlineData("table-grid.docx")]
     [InlineData("table-grid.rtf")]
+    [InlineData("table-grid.doc")]
     public void EveryCellHoldsItsTextWhereLibreOfficeDoes(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

@@ -389,6 +389,20 @@ public sealed partial class Ww8DocumentReader
                     format = format with { TableDepth = sprm.DoubleWord };
                     break;
 
+                case Ww8SprmReader.Ids.CellPaddingDefault or Ww8SprmReader.Ids.CellPadding:
+                    if (ReadCellPadding(
+                            sprm.Operand,
+                            isDefault: sprm.Identifier == Ww8SprmReader.Ids.CellPaddingDefault)
+                        is { } padding)
+                    {
+                        format = format with
+                        {
+                            CellPaddings = [.. format.CellPaddings ?? [], padding],
+                        };
+                    }
+
+                    break;
+
                 case Ww8SprmReader.Ids.IsInnerTableCell:
                     format = format with { IsInnerTableCell = sprm.Byte != 0 };
                     break;
@@ -604,6 +618,24 @@ public readonly record struct Ww8ParagraphFormat
     public bool IsTableHeaderRow { get; init; }
 
     /// <summary>
+    /// The cell padding the row declares, as the entries the document stated.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A list rather than four values, because each entry names <em>one value and the sides it applies
+    /// to</em> — so a row whose four sides differ carries four entries, and one whose second cell differs
+    /// carries a fifth. LibreOffice's own export writes exactly four for a uniform table, one per side,
+    /// which is what makes keeping only the last of them a bug that leaves three sides at Word's default.
+    /// </para>
+    /// <para>
+    /// Both spellings land here: <c>sprmTCellPaddingDefault</c> as an entry covering every cell, and
+    /// <c>sprmTCellPadding</c> as one covering a range. The range form wins where both apply, which is what
+    /// <see cref="Ww8CellPadding.CellLimit"/> distinguishes them by.
+    /// </para>
+    /// </remarks>
+    public IReadOnlyList<Ww8CellPadding>? CellPaddings { get; init; }
+
+    /// <summary>
     /// The row's geometry, when its row-end paragraph declares one.
     /// </summary>
     /// <remarks>
@@ -611,6 +643,45 @@ public readonly record struct Ww8ParagraphFormat
     /// flags live in the properties of the paragraph whose mark ends the row, not with its cells.
     /// </remarks>
     public Ww8TableDefinition? TableDefinition { get; init; }
+
+}
+
+/// <summary>
+/// One <c>sprmTCellPadding</c> or <c>sprmTCellPaddingDefault</c>: a value, the sides it applies to, and
+/// the cells it applies to.
+/// </summary>
+/// <remarks>
+/// One structure for both because the two sprms have the same six-byte operand and differ only in how the
+/// first two bytes read — the default form names cell zero and means all of them, and the specific form
+/// names a half-open range. Both state a single value for however many sides the bits select, which is why
+/// a row with four different paddings carries four of these.
+/// </remarks>
+/// <param name="FirstCell">The first cell it applies to.</param>
+/// <param name="CellLimit">One past the last, or zero when it applies to every cell.</param>
+/// <param name="Sides">
+/// Which sides it sets, as WW8's own bits: 1 top, 2 left, 4 bottom, 8 right. Note the order — top before
+/// left — which is neither the order the sides are usually written in nor the order OOXML uses.
+/// </param>
+/// <param name="Twips">The value.</param>
+public readonly record struct Ww8CellPadding(int FirstCell, int CellLimit, int Sides, int Twips)
+{
+    /// <summary>The bit that selects the top.</summary>
+    public const int Top = 1 << 0;
+
+    /// <summary>The bit that selects the left.</summary>
+    public const int Left = 1 << 1;
+
+    /// <summary>The bit that selects the bottom.</summary>
+    public const int Bottom = 1 << 2;
+
+    /// <summary>The bit that selects the right.</summary>
+    public const int Right = 1 << 3;
+
+    /// <summary>True when this entry applies to the cell at an index.</summary>
+    public bool Covers(int cell) => CellLimit <= 0 || (cell >= FirstCell && cell < CellLimit);
+
+    /// <summary>The value for a side, or null when this entry does not set that side.</summary>
+    public int? For(int side) => (Sides & side) != 0 ? Twips : null;
 }
 
 /// <summary>Character formatting resolved from sprms.</summary>

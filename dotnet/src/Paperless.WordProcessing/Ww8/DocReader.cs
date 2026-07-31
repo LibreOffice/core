@@ -181,7 +181,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     public IPageSequence Layout(LayoutOptions? options = null)
     {
         LayoutFonts fonts = new();
-        List<PageParagraph> paragraphs = Convert(fonts, _reader.ReadLayoutParagraphs());
+        List<PageBlock> blocks = BlocksOf(fonts, _reader.ReadLayoutBlocks());
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
@@ -191,8 +191,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         return new WordProcessingPages(
             new Paginator(pagination).Paginate(
-                paragraphs, Sections[0], furniture: Furniture(fonts)),
-            paragraphs);
+                blocks, Sections[0], furniture: Furniture(fonts)),
+            blocks);
     }
 
     /// <summary>
@@ -231,12 +231,72 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         }
     }
 
+    /// <summary>
+    /// Turns the recorded blocks into the layout engine's own.
+    /// </summary>
+    /// <remarks>
+    /// A shallow conversion: the column grid, the spans and the vertical merges were resolved during the
+    /// read, from the same <c>sprmTDefTable</c> edges the extraction tree used, so all that happens here is
+    /// that each paragraph gets its face resolved — the one thing the reader cannot do, having no fonts.
+    /// </remarks>
+    private static List<PageBlock> BlocksOf(LayoutFonts fonts, List<Ww8LayoutBlock> stated)
+    {
+        List<PageBlock> blocks = new(stated.Count);
+
+        foreach (Ww8LayoutBlock block in stated)
+        {
+            if (block.Paragraph is { } paragraph)
+            {
+                blocks.AddRange(Convert(fonts, [paragraph]));
+                continue;
+            }
+
+            if (block.Table is { } table && Grid(fonts, table) is { } grid) blocks.Add(grid);
+        }
+
+        return blocks;
+    }
+
+    /// <summary>A recorded table as the layout engine's own, or null when it has no usable grid.</summary>
+    private static PageTable? Grid(LayoutFonts fonts, Ww8LayoutTable table)
+    {
+        if (table.ColumnWidths.Count == 0 || table.Rows.Count == 0) return null;
+
+        List<PageTableRow> rows = new(table.Rows.Count);
+
+        foreach (Ww8LayoutRow row in table.Rows)
+        {
+            List<PageTableCell> cells = new(row.Cells.Count);
+            foreach (Ww8LayoutCell cell in row.Cells)
+            {
+                cells.Add(new PageTableCell
+                {
+                    Paragraphs = Convert(fonts, [.. cell.Paragraphs]),
+                    Column = cell.Column,
+                    ColumnSpan = cell.ColumnSpan,
+                    RowSpan = cell.RowSpan,
+                    Padding = cell.Padding,
+                });
+            }
+
+            rows.Add(new PageTableRow { Cells = cells, IsHeader = row.IsHeader });
+        }
+
+        return new PageTable
+        {
+            ColumnWidths = table.ColumnWidths,
+            Rows = rows,
+            HeaderRowCount = table.HeaderRowCount,
+            LeftIndent = table.LeftIndent,
+        };
+    }
+
     /// <summary>Turns recorded paragraphs into the layout engine's own, resolving each one's face.</summary>
     /// <remarks>
-    /// Table paragraphs are left out, because a table is laid out as a grid and stacking its cells would
-    /// give the page a height no table has. A paragraph whose family resolves to nothing is dropped too:
-    /// there is nothing to measure it with, and a machine missing its fonts should fail the comparison
-    /// tests rather than quietly produce a page of guesses.
+    /// A paragraph whose family resolves to nothing at all is dropped: there is nothing to measure it with,
+    /// and a machine missing its fonts should fail the comparison tests rather than quietly produce a page
+    /// of guesses. Table paragraphs are <em>not</em> filtered here — the reader keeps them inside the table
+    /// block they belong to, so the body's list holds none and a cell's list holds nothing else.
     /// </remarks>
     private static List<PageParagraph> Convert(
         LayoutFonts fonts, List<Ww8DocumentReader.Ww8LayoutParagraph> stated)
@@ -245,8 +305,6 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         foreach (Ww8DocumentReader.Ww8LayoutParagraph paragraph in stated)
         {
-            if (paragraph.IsInTable) continue;
-
             OpenTypeFace? face = fonts.Face(
                 paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
             if (face is null) continue;

@@ -143,10 +143,17 @@ public sealed class Ww8FormattingTable
 
         if (words == 0)
         {
+            // The two forms do not measure the same way, and the difference is one byte. A non-zero cb
+            // means 2*cb - 1 bytes, which is always odd; a grpprl of even length therefore has to use this
+            // form, where a second count follows and means 2*cb' bytes exactly. Subtracting one here as
+            // well loses the last byte of every even-length PAPX — which is half of them — and a walk that
+            // is one byte short at the end drops whatever sprm was last. That is not a visible corruption:
+            // the sprms before it decode perfectly, so the document merely lacks one property. It cost a
+            // cell's padding in a table before it was found.
             if (at + 1 >= PageSize) return default;
             words = span[at + 1];
             start = at + 2;
-            length = (words * 2) - 1;
+            length = words * 2;
         }
         else
         {
