@@ -111,7 +111,10 @@ internal static class Ww8SectionTable
     /// </remarks>
     private static SectionBreak BreakOf(int bkc) => bkc switch
     {
-        0 or 1 => SectionBreak.Continuous,
+        // Word's own numbering, and zero is not continuous: it is "start in the next column", which for a
+        // single-column section lands on the same page and so behaves as continuous without being it.
+        0 => SectionBreak.NewColumn,
+        1 => SectionBreak.Continuous,
         3 => SectionBreak.EvenPage,
         4 => SectionBreak.OddPage,
         _ => SectionBreak.NextPage,

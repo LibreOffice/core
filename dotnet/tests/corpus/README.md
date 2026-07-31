@@ -192,3 +192,9 @@ it moves up, which is what makes the difference visible in a word-position compa
 has to be an **automatic** style for LibreOffice to honour it, per the warning above: declared in
 `office:styles` it is ignored and the row grows, which is exactly the answer a reader with no exact-height
 support gives — so the corpus file would have passed for the wrong reason.
+
+`section-columns.*` is three sections in one document — two columns, then one with a `\sbkcol` break, then two
+again with `\sbkpage` — and it is hand-written rather than exported, because ODF cannot state a section break
+at all and so cannot be the source. LibreOffice renders it as three pages. Two things make it worth having:
+a reader treating a column break as continuous gets one page, and a reader that ends the *column* rather than
+the page when a section breaks gets two, with section two beside section one.

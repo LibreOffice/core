@@ -332,9 +332,22 @@ is read and verified, so what remains is the filling of pages rather than the me
       own six start six further along for each section before it. RTF writes a header in the preamble of the
       section it belongs to and a section stating none inherits the previous one's, since `\sectd` resets
       the geometry and leaves the running heads alone.
-- [ ] A column break as anything but continuous. `\sbkcol` and `sprmSBkc` of 0 mean "start where the next
-      column would", which for a single-column section is the same page and so reads as continuous here.
-      Getting it right needs columns, which layout does not do.
+- [x] **A column section break**, `SectionBreak.NewColumn`: RTF's `\sbkcol`, OOXML's `nextColumn` and
+      `sprmSBkc` of 0, which previously all read as continuous. The rule is Word's rather than the obvious one,
+      and LibreOffice's own importer states it outright: *"Word 2013+ seems to treat a section column break as
+      a page break all the time. It always acts like a page break if there are no columns, or a different
+      number of columns"* (`dmapper/PropertyMap.cxx`). So the kind becomes a page break unless the section has
+      two or more columns and the same count as the one before it. Measured: a three-section document whose
+      middle section is `\sbkcol` renders as three pages, where reading the kind as continuous gives one.
+      The one case that stays a true column break follows **Word rather than LibreOffice**, deliberately:
+      LibreOffice's own code marks that branch broken (tdf#135343, "completely broken, producing a no-column
+      section that starts on a new page"), so it cannot be compared against and matching it would mean
+      reproducing a bug it has a ticket for.
+      Two pre-existing bugs surfaced with it, both about ending a page in a multi-column section rather than
+      ending a column — the difference is invisible until a section is only part way through its columns:
+      a section *break* would put the next section beside the last one instead of after it, and the final
+      flush would advance to column two and never write the last page at all. A document ending part way
+      through column one of a two-column section silently lost its last page.
 - [x] **All four formats reach the layout engine**, and all four paginate a five-page document the way
       LibreOffice does — same page count, same words on every page, verified against its own rendering of
       each format. `DocumentPaginationTests` is the test that proves the links are connected rather than
@@ -467,8 +480,13 @@ is read and verified, so what remains is the filling of pages rather than the me
       coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
       only surfaced when the same value became an exact height and produced a zero-height row.
       `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
-- [ ] Fitting a table to the page when its columns state no widths, which needs the page width at read
-      time — the readers currently take the declared grid and nothing else.
+- [ ] Fitting a table to the page when its columns state no widths, and this is a **much bigger item than it
+      reads as** — worth saying so, because the obvious guess is wrong. It is not "divide the text width
+      equally": measured on a three-column table with every column style stripped, LibreOffice produces columns
+      of 160.6, 107.1 and 214.1 pt, sized to their *content*. That is Writer's table auto-layout, the same
+      class of algorithm as CSS's — minimum and maximum content widths per column, then distribution — and it
+      needs the cells' text measured before the grid exists. The readers currently take the declared grid and
+      nothing else, so a width-less table comes out with zero-width columns.
 - [ ] Floating objects and text wrap, including contour wrap
 - [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
       area takes its room out of the body's, so a page with notes holds less text — and adding a note can

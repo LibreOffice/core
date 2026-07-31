@@ -79,6 +79,16 @@ public enum SectionBreak
 
     /// <summary>The section starts on the next odd-numbered page.</summary>
     OddPage,
+
+    /// <summary>
+    /// The section starts where the next column would, which is a new page only when there is no next column.
+    /// </summary>
+    /// <remarks>
+    /// Meaningless without columns, which is why it reads as continuous in a single-column section and why it
+    /// went unmodelled while layout laid every section out one column wide. In a multi-column section it is
+    /// the break that fills the rest of a column with nothing — a heading forced to the top of column two.
+    /// </remarks>
+    NewColumn,
 }
 
 /// <summary>

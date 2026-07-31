@@ -94,11 +94,13 @@ internal sealed class RtfPageGeometry
             case "facpgsxn": return SetSection(d => d with { Mirrored = flag });
             case "titlepg": return SetSection(d => d with { DifferentFirstPage = flag });
 
-            // How the section starts. \sbkcol is a column break, which for a single-column section is
-            // where the next column would be — the same page — so it reads as continuous here; modelling
-            // it properly needs columns, which layout does not do yet.
-            case "sbknone" or "sbkcol":
+            // How the section starts. \sbknone is the continuous one; \sbkcol starts where the next column
+            // would, which for a single-column section is the same page and so behaves as continuous without
+            // being it — and in a multi-column section is the break that fills the rest of a column.
+            case "sbknone":
                 return SetSection(d => d with { Break = SectionBreak.Continuous });
+            case "sbkcol":
+                return SetSection(d => d with { Break = SectionBreak.NewColumn });
             case "sbkpage":
                 return SetSection(d => d with { Break = SectionBreak.NextPage });
             case "sbkeven":

@@ -55,6 +55,7 @@ internal static class DocxPageGeometry
             Break = Word.Attribute(Word.Child(sectionProperties, "type"), "val") switch
             {
                 "continuous" => SectionBreak.Continuous,
+                "nextColumn" => SectionBreak.NewColumn,
                 "evenPage" => SectionBreak.EvenPage,
                 "oddPage" => SectionBreak.OddPage,
                 _ => SectionBreak.NextPage,

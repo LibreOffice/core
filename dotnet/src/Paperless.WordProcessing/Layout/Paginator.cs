@@ -306,19 +306,46 @@ public sealed class Paginator
             int blockSection = SectionOf(blocks[paragraphIndex], resolved.Count);
             if (blockSection != sectionIndex && lineIndex == 0)
             {
-                if (resolved[blockSection].Section.Break != SectionBreak.Continuous)
+                SectionBreak kind = resolved[blockSection].Section.Break;
+
+                // A column break only *is* one when the columns line up. Word 2013 and later treat it as a
+                // page break whenever they do not — no previous section, fewer than two columns, or a
+                // different count than before — and LibreOffice's own importer says so in as many words:
+                // "Word 2013+ seems to treat a section column break as a page break all the time"
+                // (`dmapper/PropertyMap.cxx`). Its remaining column-break branch it documents as broken
+                // (tdf#135343, "completely broken, producing a no-column section that starts on a new page"),
+                // so that one case follows Word rather than LibreOffice and cannot be compared against it.
+                bool intoTheSameColumns =
+                    kind == SectionBreak.NewColumn
+                    && resolved[blockSection].Section.Page.Columns > 1
+                    && resolved[blockSection].Section.Page.Columns == page.Columns;
+
+                if (kind == SectionBreak.NewColumn && !intoTheSameColumns) kind = SectionBreak.NextPage;
+
+                if (kind != SectionBreak.Continuous)
                 {
-                    if (!pageIsEmpty) EmitPage();
+                    // A column break fills the rest of the *column*, which is what EmitPage does when the
+                    // page has another column left. Every other break has to fill the rest of the *page*,
+                    // columns and all — so it keeps going until a page is actually emitted, which is what
+                    // FinishPage is for. A break on an empty column or an empty page has nothing to fill and
+                    // must not skip one.
+                    if (intoTheSameColumns)
+                    {
+                        if (!columnIsEmpty) EmitPage();
+                    }
+                    else if (!pageIsEmpty)
+                    {
+                        FinishPage();
+                    }
 
                     // An even- or odd-page break leaves a blank page when the parity is already wrong. The
                     // filler belongs to the section that ended, so it is emitted before the geometry
                     // changes — which is also what puts the old section's header on it.
-                    SectionBreak kind = resolved[blockSection].Section.Break;
                     while (kind is SectionBreak.EvenPage or SectionBreak.OddPage
                            && pageNumber % 2 == 0 != (kind == SectionBreak.EvenPage)
                            && pages.Count < _options.MaxPages)
                     {
-                        EmitPage();
+                        FinishPage();
                     }
                 }
 
@@ -477,7 +504,10 @@ public sealed class Paginator
             }
         }
 
-        if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0) EmitPage();
+        // FinishPage rather than EmitPage, because the last page has to be *emitted*: in a multi-column
+        // section EmitPage moves to the next column when there is one, so a document ending part way through
+        // column one of a two-column section would advance to column two and never write the page at all.
+        if (placed.Count > 0 || tables.Count > 0 || pages.Count == 0) FinishPage();
 
         // The endnotes, which are the one flow that is not part of any page's body: they collect *after* the
         // last of them, on pages of their own. Measured — LibreOffice puts a two-endnote document's notes at
@@ -492,6 +522,15 @@ public sealed class Paginator
         // which page geometry is in force, which section's furniture, how far into the section we are, and
         // which column we are filling — and threading that through seven call sites was how the "first page
         // of the section" test came to read `pages.Count == 0` and be wrong for every section but the first.
+        // Ends the whole page rather than the column, which a section break that is not a column break has
+        // to do: in a two-column section EmitPage moves to column two, and a page break that stopped there
+        // would put the next section beside the last one instead of after it.
+        void FinishPage()
+        {
+            int before = pages.Count;
+            while (pages.Count == before && pages.Count < _options.MaxPages) EmitPage();
+        }
+
         void EmitPage()
         {
             if (column + 1 < Math.Max(1, page.Columns))
