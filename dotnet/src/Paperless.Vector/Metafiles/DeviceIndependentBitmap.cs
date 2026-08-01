@@ -9,10 +9,10 @@ namespace Paperless.Vector.Metafiles;
 /// </summary>
 /// <remarks>
 /// <para>
-/// <b>Nothing here decodes a pixel.</b> A DIB is a Windows BMP without its fourteen-byte file
-/// header: the header is the only thing a BMP has that a DIB does not. So the whole job is to
-/// measure the DIB — how long the header is, how big the colour table is, where the bits start
-/// — and hand back the same bytes with a file header in front, as
+/// <b>The ordinary path decodes no pixel.</b> A DIB is a Windows BMP without its fourteen-byte
+/// file header: the header is the only thing a BMP has that a DIB does not. So the whole job is
+/// to measure the DIB — how long the header is, how big the colour table is, where the bits
+/// start — and hand back the same bytes with a file header in front, as
 /// <c>RasterImage.Encoded</c>. That is exactly what <c>RasterImage.Encoded</c> exists for, and
 /// it keeps <c>Paperless.Vector</c> free of a codec, in the same way <c>Svg/</c> hands out
 /// embedded PNGs undecoded.
@@ -21,6 +21,15 @@ namespace Paperless.Vector.Metafiles;
 /// It also means a malformed DIB costs nothing: the measurement is a dozen integer reads, and
 /// the decoder that eventually looks at the pixels is the rasteriser's, which is hardened and
 /// already handles everything else in the document.
+/// </para>
+/// <para>
+/// <b><see cref="ReadPixels"/> is the one exception, and it needs no codec either.</b> Two
+/// bitmaps have to be combined for the records that express transparency — a mask and its image,
+/// or a DIB with a real alpha channel — and combining needs the values. An uncompressed DIB is
+/// not an encoded format: <c>BI_RGB</c> and <c>BI_BITFIELDS</c> are a stride, a channel order
+/// and a palette, so answering straight RGBA is arithmetic over a byte array rather than a
+/// decode. The compressed forms — run-length, and a DIB wrapping a whole JPEG or PNG — answer
+/// null, because those genuinely would need one.
 /// </para>
 /// </remarks>
 public static class DeviceIndependentBitmap

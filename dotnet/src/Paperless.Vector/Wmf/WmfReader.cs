@@ -59,6 +59,7 @@ internal sealed class WmfReader
     private readonly DisplayList _list = new();
     private readonly MetafilePainter _painter;
     private readonly List<byte> _embeddedEmf = [];
+    private PendingBlit? _pending;
 
     private int _position;
     private bool _failed;
@@ -234,6 +235,7 @@ internal sealed class WmfReader
         }
 
         ReplayRecords();
+        FlushBlit();
         _painter.Finish();
 
         Extent = new DocSize(
@@ -658,6 +660,15 @@ internal sealed class WmfReader
             }
             else
             {
+                // The blit deferral only ever has to see the next record, and only a blit can be
+                // its partner — so anything else settles it before it is read.
+                if (_pending is not null && (WmfRecordType)function is not (WmfRecordType.DibBitBlt
+                    or WmfRecordType.DibStretchBlt
+                    or WmfRecordType.StretchDib))
+                {
+                    FlushBlit();
+                }
+
                 Record((WmfRecordType)function, size, (int)next);
             }
 
@@ -1476,13 +1487,15 @@ internal sealed class WmfReader
             return;
         }
 
-        if (DeviceIndependentBitmap.Read(Span(end)) is not { } bitmap)
+        ReadOnlyMemory<byte> payload = Payload(end);
+
+        if (DeviceIndependentBitmap.Read(payload.Span) is not { } bitmap)
         {
             Warn("PL6031", "A WMF carried a bitmap in a form Paperless cannot read.");
             return;
         }
 
-        Blit(bitmap, destination, sourceX, sourceY, sourceWidth, sourceHeight, rop);
+        Blit(bitmap, payload, destination, sourceX, sourceY, sourceWidth, sourceHeight, rop);
     }
 
     private void DeviceBlt(WmfRecordType function, uint size, int end)
@@ -1518,7 +1531,15 @@ internal sealed class WmfReader
             return;
         }
 
-        Blit(bitmap, destination, sourceX, sourceY, destWidth, destHeight, 0x00CC0020);
+        Blit(
+            bitmap,
+            ReadOnlyMemory<byte>.Empty,
+            destination,
+            sourceX,
+            sourceY,
+            destWidth,
+            destHeight,
+            RasterOperations.SourceCopy);
     }
 
     /// <summary>
@@ -1542,13 +1563,23 @@ internal sealed class WmfReader
 
         if (width == 0 || height == 0) return;
 
-        if (DeviceIndependentBitmap.Read(Span(end)) is not { } bitmap)
+        ReadOnlyMemory<byte> payload = Payload(end);
+
+        if (DeviceIndependentBitmap.Read(payload.Span) is not { } bitmap)
         {
             Warn("PL6031", "A WMF carried a bitmap in a form Paperless cannot read.");
             return;
         }
 
-        Blit(bitmap, MapRect((destX, destY, destX + width, destY + height)), sourceX, sourceY, width, height, 0x00CC0020);
+        Blit(
+            bitmap,
+            payload,
+            MapRect((destX, destY, destX + width, destY + height)),
+            sourceX,
+            sourceY,
+            width,
+            height,
+            RasterOperations.SourceCopy);
     }
 
     /// <summary>
@@ -1564,6 +1595,7 @@ internal sealed class WmfReader
     /// </remarks>
     private void Blit(
         DeviceIndependentBitmap.Result bitmap,
+        ReadOnlyMemory<byte> data,
         DocRect destination,
         int sourceX,
         int sourceY,
@@ -1571,48 +1603,97 @@ internal sealed class WmfReader
         int sourceHeight,
         uint rop)
     {
-        const uint SourceCopy = 0x00CC0020;
-        const uint Blackness = 0x00000042;
-        const uint Whiteness = 0x00FF0062;
+        Queue(new PendingBlit(data, bitmap, destination, rop, (sourceX, sourceY, sourceWidth, sourceHeight)));
+    }
 
-        if (rop is Blackness or Whiteness)
+    /// <summary>Holds one blit back, so a mask and its image can be seen as a pair.</summary>
+    /// <remarks>
+    /// <b>The transparent bitmap idiom is the one ternary raster operation worth resolving.</b>
+    /// A WMF has no record that says "transparent": a producer says it by blitting a monochrome
+    /// mask with <c>SRCAND</c> and then the colour image with <c>SRCPAINT</c> to the same
+    /// rectangle. The two together are one bitmap with an alpha channel, and merging them needs
+    /// nothing from the page — only the two sources. See <see cref="RasterOperations"/>.
+    /// </remarks>
+    private void Queue(PendingBlit blit)
+    {
+        if (_pending is { } waiting)
         {
-            _painter.FillBackground(destination);
+            if (waiting.PairsWith(blit, out bool invert) && Merge(waiting, blit, invert)) return;
+
+            FlushBlit();
+        }
+
+        _pending = blit;
+    }
+
+    private bool Merge(PendingBlit mask, PendingBlit image, bool invertMask)
+    {
+        if (DeviceIndependentBitmap.ReadPixels(mask.Data.Span) is not { } maskPixels) return false;
+        if (DeviceIndependentBitmap.ReadPixels(image.Data.Span) is not { } imagePixels) return false;
+
+        _pending = null;
+
+        Place(
+            RasterOperations.Merge(imagePixels, maskPixels, invertMask),
+            imagePixels.Width,
+            imagePixels.Height,
+            image.Destination,
+            image.Source);
+
+        return true;
+    }
+
+    private void FlushBlit()
+    {
+        if (_pending is not { } blit) return;
+
+        _pending = null;
+
+        if (blit.Operation is RasterOperations.Blackness or RasterOperations.Whiteness)
+        {
+            _painter.FillBackground(blit.Destination);
             return;
         }
 
-        if (rop != SourceCopy)
+        if (blit.Operation is RasterOperations.DestinationCopy) return;
+
+        if (blit.Operation != RasterOperations.SourceCopy)
         {
-            // Every other ternary operation combines the source with what is already on the page,
-            // which a display list has no way to read back. Drawing the source alone is what
-            // LibreOffice falls back to as well, and it is right for the commonest of them.
+            // Every other ternary operation combines the source with what is already on the
+            // page, which a display list has no way to read back. Drawing the source alone is
+            // what LibreOffice falls back to as well, and it is right for the commonest of them.
             Warn(
                 "PL6033",
-                $"A WMF blitted with raster operation 0x{rop:X8}; the source was drawn without it.");
+                $"A WMF blitted with raster operation 0x{blit.Operation:X8}; the source was drawn "
+                    + "without it.");
         }
 
-        bool crops = sourceWidth > 0
-            && sourceHeight > 0
-            && (sourceX != 0 || sourceY != 0 || sourceWidth != bitmap.Width || sourceHeight != bitmap.Height)
-            && sourceX + sourceWidth <= bitmap.Width
-            && sourceY + sourceHeight <= bitmap.Height;
+        Place(blit.Bitmap.Image, blit.Bitmap.Width, blit.Bitmap.Height, blit.Destination, blit.Source);
+    }
 
-        if (!crops)
+    /// <summary>
+    /// Places a bitmap, expressing a source rectangle as a scale plus a clip.
+    /// </summary>
+    /// <remarks>
+    /// <b>Cropping without a codec.</b> An unmerged image is still encoded — nothing in this
+    /// library has looked at a pixel — so a source rectangle cannot be cut out of it. Placing the
+    /// whole image scaled so that the wanted part lands exactly on the destination, and clipping
+    /// to the destination, is the same picture and needs no decode.
+    /// </remarks>
+    private void Place(
+        RasterImage image,
+        int width,
+        int height,
+        DocRect destination,
+        (int X, int Y, int Width, int Height) source)
+    {
+        if (!SourceRectangle.Crops(source, width, height))
         {
-            _painter.DrawImage(bitmap.Image, destination);
+            _painter.DrawImage(image, destination);
             return;
         }
 
-        double scaleX = (double)destination.Width.Emu / sourceWidth;
-        double scaleY = (double)destination.Height.Emu / sourceHeight;
-
-        DocRect whole = new(
-            destination.X - Length.FromEmu((long)Math.Round(sourceX * scaleX)),
-            destination.Y - Length.FromEmu((long)Math.Round(sourceY * scaleY)),
-            Length.FromEmu((long)Math.Round(bitmap.Width * scaleX)),
-            Length.FromEmu((long)Math.Round(bitmap.Height * scaleY)));
-
-        _painter.DrawImage(bitmap.Image, whole, destination);
+        _painter.DrawImage(image, SourceRectangle.Whole(destination, source, width, height), destination);
     }
 
     /// <summary>
@@ -1810,6 +1891,13 @@ internal sealed class WmfReader
     {
         if (!_reported.Add(code + message)) return;
         _diagnostics.Add(new Diagnostic(DiagnosticSeverity.Warning, code, message));
+    }
+
+    private ReadOnlyMemory<byte> Payload(int end)
+    {
+        int from = Math.Clamp(_position, 0, _bytes.Length);
+        int to = Math.Clamp(end, from, _bytes.Length);
+        return _bytes.AsMemory(from, to - from);
     }
 
     private ReadOnlySpan<byte> Span(int end)
