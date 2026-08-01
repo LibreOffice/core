@@ -64,6 +64,13 @@ internal sealed class EmfPlusReader
     private bool _multipartOpen;
     private ushort _multipartFlags;
 
+    // The only referent "the current pen" and "the current brush" can have in a format that has
+    // no record for either: whatever the previous drawing record used. Nothing but
+    // EmfPlusStrokeFillPath reads these.
+    private uint? _lastPen;
+    private EmfPlusBrush? _lastBrush;
+    private Colour? _lastColour;
+
     /// <summary>
     /// Creates a reader seeded with the enclosing EMF's header fields.
     /// </summary>
@@ -345,11 +352,7 @@ internal sealed class EmfPlusReader
             }
 
             case EmfPlusRecordType.StrokeFillPath:
-                // The record names a path and nothing else: the pen and brush are the ones a
-                // preceding record left current, which EMF+ has no state for and this reader
-                // therefore does not track. Drawing it with an arbitrary slot would be worse than
-                // not drawing it.
-                Warn("PL6037", "An EMF+ filled and stroked a path in one record, which was not drawn.");
+                StrokeFillPath(flags);
                 break;
 
             case EmfPlusRecordType.FillRegion:
@@ -641,10 +644,17 @@ internal sealed class EmfPlusReader
             }
 
             case EmfPlusObjectType.ImageAttributes:
+            {
+                EmfPlusImageAttributes attributes = new();
+                attributes.Read(stream);
+                _objects[slot] = attributes;
+                break;
+            }
+
             case EmfPlusObjectType.CustomLineCap:
-                // Both are read for their slot and nothing else: image attributes are colour and
-                // gamma adjustments that would need the pixels, and a custom line cap is a line
-                // decoration the drawing model has no place for.
+                // Read for its slot and nothing else: what is left after DrawCaps is the
+                // adjustable-arrow form, which states a width, a height and a middle inset rather
+                // than a path.
                 _objects[slot] = null;
                 break;
 
@@ -815,7 +825,9 @@ internal sealed class EmfPlusReader
 
         if ((flags & 0x8000) != 0)
         {
-            _painter.FillWith(path, Paint.Solid(EmfPlusBrush.Argb(brushOrColour)), rule);
+            Colour colour = EmfPlusBrush.Argb(brushOrColour);
+            (_lastBrush, _lastColour) = (null, colour);
+            _painter.FillWith(path, Paint.Solid(colour), rule);
             return;
         }
 
@@ -826,6 +838,8 @@ internal sealed class EmfPlusReader
 
     private void FillWithBrush(GraphicsPath path, EmfPlusBrush brush, FillRule rule)
     {
+        (_lastBrush, _lastColour) = (brush, null);
+
         switch (brush.Type)
         {
             case EmfPlusBrushType.Hatch:
@@ -880,10 +894,57 @@ internal sealed class EmfPlusReader
         }
     }
 
+    /// <summary>
+    /// Fills and strokes one path in a single record, using whatever pen and brush the file last
+    /// drew with.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>This record is enumerated by [MS-EMFPLUS] and specified nowhere in it.</b> It is in the
+    /// <c>RecordType</c> enumeration (2.1.1.1) with the sentence <i>"closes any open figures in a
+    /// path, strokes the outline of the path by using the current pen, and fills its interior by
+    /// using the current brush"</i>, and it is <em>absent</em> from the drawing-record table in
+    /// section 2.3.4 that lists all twenty-one records with a defined layout. So there is no
+    /// documented field naming the path, the pen or the brush, and nothing to port — LibreOffice
+    /// reaches the same place and leaves a bare <c>//TODO</c>
+    /// (<c>drawinglayer/source/tools/emfphelperdata.hxx:89</c>).
+    /// </para>
+    /// <para>
+    /// What is done here is the reading every other record supports and nothing beyond it: the
+    /// flags' low byte is an object slot in every EMF+ record that names an object, and "current"
+    /// is taken to mean the pen and brush the previous drawing record used, which is the only
+    /// referent those words can have in a format with no pen or brush state. When the slot holds
+    /// something that is not a path, nothing is drawn and <c>PL6037</c> is raised, exactly as
+    /// before — so a file this guess does not fit is no worse off than it was.
+    /// </para>
+    /// </remarks>
+    private void StrokeFillPath(ushort flags)
+    {
+        if (_objects[flags & 0xFF] is not EmfPlusPath path)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path in one record, which named no path.");
+            return;
+        }
+
+        GraphicsPath geometry = path.ToPath(Map, close: true);
+
+        if (_lastBrush is { } brush) FillWithBrush(geometry, brush, FillRule.NonZero);
+        else if (_lastColour is { } colour) _painter.FillWith(geometry, Paint.Solid(colour), FillRule.NonZero);
+
+        if (_lastPen is { } pen) StrokeWithPen(geometry, pen);
+
+        if (_lastBrush is null && _lastColour is null && _lastPen is null)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path before any pen or brush had been used.");
+        }
+    }
+
     private void Stroke(GraphicsPath path, ushort flags) => StrokeWithPen(path, flags & 0xFFu);
 
     private void StrokeWithPen(GraphicsPath path, uint index)
     {
+        _lastPen = index & 0xFF;
+
         if (_objects[(int)(index & 0xFF)] is not EmfPlusPen pen) return;
 
         double pixels = ToPixels(pen.Width, pen.Unit, horizontal: true);
@@ -1669,8 +1730,15 @@ internal sealed class EmfPlusReader
 
     private void Image(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
     {
-        stream.Skip(4);                 // the image-attributes slot, which needs the pixels
+        uint attributesSlot = stream.U32();
         int sourceUnit = stream.I32();
+
+        // 0xFFFFFFFF is how a producer says "no attributes"; anything else is a slot, and the
+        // object there is 24 bytes of wrap mode and edge colour rather than the colour matrix the
+        // GDI+ API class of the same name carries. See EmfPlusImageAttributes.
+        EmfPlusImageAttributes? attributes = attributesSlot == 0xFFFFFFFF
+            ? null
+            : _objects[(int)(attributesSlot & 0xFF)] as EmfPlusImageAttributes;
 
         if (_objects[flags & 0xFF] is not EmfPlusImage image) return;
         if (image.Image is null && image.MetafileBytes.IsEmpty) return;
@@ -1755,7 +1823,15 @@ internal sealed class EmfPlusReader
             Length.FromEmu((long)Math.Round(image.Width / sw * Unit)),
             Length.FromEmu((long)Math.Round(image.Height / sh * Unit)));
 
-        _painter.DrawTransformedImage(raster, placement, whole);
+        // A source rectangle reaching outside the bitmap leaves part of the destination with no
+        // pixel to take a colour from, and the wrap mode says what goes there. Clamping states a
+        // flat colour, which is a fill under the image and needs nothing new; the four tiling
+        // modes would need the bitmap repeated, which the placement square cannot express — see
+        // TODO.md for what that is worth, measured.
+        bool overhangs = sx < 0 || sy < 0 || sx + sw > image.Width || sy + sh > image.Height;
+        Colour? edge = attributes is { Clamps: true } && overhangs ? attributes.ClampColour : null;
+
+        _painter.DrawTransformedImage(raster, placement, whole, edge: edge);
     }
 
     /// <summary>
@@ -1847,7 +1923,8 @@ internal sealed class EmfPlusReader
 
         if (_text.Layout(text, resolved, origin, TextAlignment.Baseline, advances) is not { } laid) return;
 
-        _painter.DrawGlyphRun(laid.Run, Rotation(), Paint.Solid(TextColour(flags, brush)));
+        Paint text_paint = Paint.Solid(TextColour(flags, brush));
+        foreach (GlyphRun run in laid.Runs) _painter.DrawGlyphRun(run, Rotation(), text_paint);
     }
 
     /// <summary>
@@ -1923,12 +2000,15 @@ internal sealed class EmfPlusReader
             (double px, double py) = Apply(matrix, xs[at], ys[at]);
             DocPoint origin = Map(px, py);
 
-            (GlyphRun Run, Length Width)? laid = characters
+            (IReadOnlyList<GlyphRun> Runs, Length Width)? laid = characters
                 ? _text.Layout(new string([.. codes.Skip(at).Take(run).Select(code => (char)code)]),
                     resolved, origin, TextAlignment.Baseline, advances)
                 : _text.LayoutGlyphs([.. codes.Skip(at).Take(run)], resolved, origin, TextAlignment.Baseline, advances);
 
-            if (laid is { } placed) _painter.DrawGlyphRun(placed.Run, rotation, paint);
+            if (laid is { } placed)
+            {
+                foreach (GlyphRun one in placed.Runs) _painter.DrawGlyphRun(one, rotation, paint);
+            }
 
             at += run;
         }
@@ -1988,22 +2068,45 @@ internal sealed class EmfPlusReader
 
     private static EmfPlusCombineMode Combine(ushort flags) => (EmfPlusCombineMode)((flags >> 8) & 0x0F);
 
-    private void ClipRectangle(DocRect rect, EmfPlusCombineMode mode)
+    private void ClipRectangle(DocRect rect, EmfPlusCombineMode mode) => ClipRectangles([rect], mode);
+
+    /// <summary>
+    /// Combines a rectangle set into the clip, in any of GDI+'s six modes.
+    /// </summary>
+    /// <remarks>
+    /// All six are exact while the clip stays rectangular, because rectangle sets are closed
+    /// under every one of them. <c>Complement</c> is the one to read twice: it keeps the part of
+    /// the <em>new</em> region that is not in the existing one, the operands the other way round
+    /// from <c>Exclude</c> (<c>emfphelperdata.cxx:1547-1558</c>).
+    /// </remarks>
+    private void ClipRectangles(IReadOnlyList<DocRect> rectangles, EmfPlusCombineMode mode)
     {
         _context.Clip = _context.Clip.Clone();
 
         switch (mode)
         {
             case EmfPlusCombineMode.Replace:
-                _context.Clip.Replace([rect]);
+                _context.Clip.Replace(rectangles);
                 break;
 
             case EmfPlusCombineMode.Intersect:
-                _context.Clip.Intersect(rect);
+                _context.Clip.Intersect(rectangles);
                 break;
 
             case EmfPlusCombineMode.Exclude:
-                _context.Clip.Exclude(rect);
+                _context.Clip.Exclude(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Union:
+                _context.Clip.Union(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Xor:
+                _context.Clip.SymmetricDifference(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Complement:
+                _context.Clip.Complement(rectangles);
                 break;
 
             default:
@@ -2044,6 +2147,15 @@ internal sealed class EmfPlusReader
                 _context.Clip.Reset();
             }
 
+            return;
+        }
+
+        // A region of rectangles alone combines exactly in every mode; one carrying a path does
+        // so only where the clip is being replaced or narrowed, which is the same boundary the
+        // rectangle algebra draws everywhere else.
+        if (region.Shapes.Count == 0 && region.Rectangles is { } only)
+        {
+            ClipRectangles(only, mode);
             return;
         }
 

@@ -383,6 +383,16 @@ boxes, and neither is this library's: the layout is `Paperless.WordProcessing`'s
   nothing is embedded. This library now recovers the *metrics* from the run's own advances —
   see "Known deviations" for what that fixed and what it measured — but not the embedding, which
   only the callers can.
+- **`Paperless.Vector` was going to need `RasterImageDecoder` and does not, and the reason is
+  worth keeping.** The one case standing between that library and a codec dependency was EMF+
+  image attributes, recorded there as "a colour matrix, a gamma, a chroma key and a colour remap
+  table". Those are fields of GDI+'s `ImageAttributes` **API class**; the object a metafile
+  actually serialises is [MS-EMFPLUS] 2.2.1.5, which is twenty-four bytes of wrap mode, clamp
+  colour and object clamp — the colour adjustments are applied by the producer before the bitmap
+  is written. So nothing there ever needed pixels, no `ProjectReference` was added, and the rule
+  that a reader must not pay for a rasteriser holds without an exception. **The general form:
+  when a gap is described in terms of an API's capabilities, check what the file format writes
+  down before sizing the work.**
 - **Two ODF gradient mappings, for whoever reads `draw:gradient`.** Its `draw:start-color` on a
   `radial` gradient paints the *outer* edge, and the radial's outer radius is half the shape's
   **diagonal** — `Gradient::GetBoundRect` builds a square of side `hypot(w, h)`

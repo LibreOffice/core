@@ -274,7 +274,7 @@ public class EmfDrawingTests
     }
 
     [Fact]
-    public void ARegionUnionedWithTheClipIsReportedRatherThanApproximated()
+    public void ARegionUnionedWithTheClipIsExactBecauseARegionIsRectangles()
     {
         const int Or = 2;
 
@@ -286,6 +286,56 @@ public class EmfDrawingTests
             .Rectangle(0, 0, 4000, 4000)
             .Decode();
 
+        // This was reported as unexpressible and is not: a union reads the clip's own area, and
+        // while that area is a rectangle set the answer is another rectangle set.
+        image.Diagnostics.ShouldNotContain(d => d.Code == "PL6034");
+
+        Recorder recorder = Draw(image);
+        recorder.Clips[^1].X.Millimetres.ShouldBe(0.0, 0.01);
+        recorder.Clips[^1].Width.Millimetres.ShouldBe(30.0, 0.01);
+    }
+
+    [Fact]
+    public void ARegionXoredWithTheClipIsExactAndDropsTheOverlap()
+    {
+        const int Xor = 3;
+
+        VectorImage image = Page()
+            .SolidBrush(1, 0, 0, 0)
+            .Select(1)
+            .Record(EmfFunction.IntersectClipRect, 0, 0, 20 * Mm, 10 * Mm)
+            .ClipRegion(Xor, (10 * Mm, 0, 30 * Mm, 10 * Mm))
+            .Rectangle(0, 0, 4000, 4000)
+            .Decode();
+
+        image.Diagnostics.ShouldNotContain(d => d.Code == "PL6034");
+
+        // 0–20 xor 10–30 is 0–10 and 20–30, so the middle 10 mm is clipped away and the outer
+        // extent stays 30 mm. A test asserting only the extent would pass for a plain union.
+        Recorder recorder = Draw(image);
+        recorder.Clips[^1].X.Millimetres.ShouldBe(0.0, 0.01);
+        recorder.Clips[^1].Width.Millimetres.ShouldBe(30.0, 0.01);
+    }
+
+    [Fact]
+    public void APathXoredWithTheClipIsStillReportedBecauseItsAreaIsNotRectangles()
+    {
+        const int Xor = 3;
+
+        VectorImage image = Page()
+            .SolidBrush(1, 0, 0, 0)
+            .Select(1)
+            .Record(EmfFunction.BeginPath)
+            .Record(EmfFunction.MoveToEx, 0, 0)
+            .Record(EmfFunction.LineTo, 10 * Mm, 0)
+            .Record(EmfFunction.LineTo, 10 * Mm, 10 * Mm)
+            .Record(EmfFunction.CloseFigure)
+            .Record(EmfFunction.EndPath)
+            .Record(EmfFunction.SelectClipPath, Xor)
+            .Rectangle(0, 0, 4000, 4000)
+            .Decode();
+
+        // The one case the rectangle algebra cannot reach, and the reason PL6034 still exists.
         image.Diagnostics.ShouldContain(d => d.Code == "PL6034");
     }
 

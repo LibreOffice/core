@@ -153,6 +153,18 @@ internal sealed class SvgPictureTranslator
 
     // ------------------------------------------------------------------------------ geometry
 
+    /// <summary>
+    /// Clips to a rectangle, or reports the subtraction no SVG can ask for.
+    /// </summary>
+    /// <remarks>
+    /// <b>The difference branch is a guard rather than a gap.</b> SVG has no clip-subtraction
+    /// operator — <c>clip-path</c> intersects, and a <c>mask</c> is a mask — and
+    /// <c>Svg.SceneGraph</c> 5.1.1 agrees: all nineteen of its <c>ClipRect</c>/<c>ClipPath</c>
+    /// call sites pass <c>SKClipOperation.Intersect</c> and none constructs
+    /// <c>Difference</c>. It stays because the enum is the shim's, so a library upgrade could
+    /// begin emitting one, and a silently ignored subtraction would over-draw with nothing to
+    /// say why.
+    /// </remarks>
     private void Clip(SKRect rect, SKClipOperation operation)
     {
         if (operation == SKClipOperation.Difference)
@@ -206,7 +218,7 @@ internal sealed class SvgPictureTranslator
             {
                 Clip(clips[0].Clip, SKClipOperation.Intersect);
             }
-            else if (clips.Any(element => element.Clip is not null))
+            else if (clips.Any(element => HasGeometry(element.Clip)))
             {
                 Report("PL6023", "An SVG clipped one member of a clip-path union; Paperless clipped none of them.");
             }
@@ -214,6 +226,22 @@ internal sealed class SvgPictureTranslator
 
         Clip(clip.Clip, SKClipOperation.Intersect);
     }
+
+    /// <summary>
+    /// True when a nested clip actually carries geometry.
+    /// </summary>
+    /// <remarks>
+    /// <b>Not <c>Clip is not null</c>, which is always true.</b>
+    /// <c>SvgSceneClipCompiler.AddVisualPathClip</c> gives every <c>PathClip</c> a
+    /// <c>Clip = new ClipPath { Clip = new ClipPath() }</c> whether or not the element bore a
+    /// <c>clip-path</c> attribute, and only fills it in if one was there. Testing the reference
+    /// therefore reported a clip on a union member for <em>every</em> <c>clipPath</c> with more
+    /// than one child: three of the 126 files in <c>svgio</c>'s conformance suite, none of which
+    /// has a per-member clip at all. This is the library's own <c>HasClipGeometry</c>
+    /// predicate, which is what the compiler itself uses to decide whether a clip is empty.
+    /// </remarks>
+    private static bool HasGeometry(ClipPath? clip)
+        => clip is not null && (clip.Clips is { Count: > 0 } || HasGeometry(clip.Clip));
 
     private static SKMatrix? Combine(SKMatrix? inner, SKMatrix? outer) => (inner, outer) switch
     {

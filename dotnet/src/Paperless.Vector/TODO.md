@@ -66,14 +66,15 @@ Collapsing them is the classic wrongly-scaled metafile.
   built, in `Metafiles/`**; see *Shared groundwork* below.
 - **No path arithmetic.** `ClipPath` intersects and nothing unions, subtracts or offsets.
   The SVG translator gets away with expressing a union as one path of several subpaths under
-  the non-zero rule; a *region* turns out to get away with it too, because a GDI region is a
-  scan list of disjoint rectangles and disjoint subpaths are their own union under either
-  rule. Subtraction turned out to be reachable too, once the rectangular part of a clip was
-  kept apart from the arbitrary part: a rectangle minus a rectangle is at most four
-  rectangles, and subtraction distributes over intersection. What is left is *union* and
-  *symmetric difference* with the clip itself as an operand, which need the clip's own area;
-  those raise `PL6034` and leave the clip as it was, drawing too much rather than too
-  little.
+  the non-zero rule; a *region* gets away with the whole of it, because a GDI region **is** a
+  scan list of rectangles and rectangle sets are closed under every one of the five combine
+  modes. `Metafiles/RectangleRegion.cs` is that algebra — a y-band sweep over integer
+  coordinates, no flattening and no tolerance — so intersection, exclusion, union, symmetric
+  difference and complement are all exact. What is left is an operation whose operand or whose
+  standing clip is an arbitrary *path*: `SelectClipPath` with `RGN_XOR`, EMF+ `SetClipPath`
+  with a union or a complement. Those raise `PL6034` and leave the clip as it was, drawing too
+  much rather than too little. *Region XOR and complement, and the general polygon boolean
+  under them* below has the measurement that decided how far to go.
 - **No stroked text.** `DrawGlyphRun` takes one paint. SVG's `fill="none" stroke="red"` text
   is filled in the stroke's colour with a `PL6015` diagnostic. Neither metafile family needs
   more: GDI has no stroked text at all, and EMF+ `DrawString` and `DrawDriverString` both
@@ -117,9 +118,13 @@ like a hole until you notice that a clip held as an ordered *list* of paths to i
 needs no path arithmetic at all: replaying the list **is** the intersection, and the sink
 does the work. Everything GDI expresses by intersecting — `IntersectClipRect`, selecting a
 region, an `ETO_CLIPPED` text rectangle — then lands exactly, with no approximation
-anywhere. `Metafiles/MetafileClip.cs`. Only subtraction is left over, and it is reported
-(`PL6034`) rather than approximated. **`ExtSelectClipRgn` with `RGN_AND` and `RGN_COPY` will
-need nothing new; only `RGN_DIFF` and `RGN_XOR` will.**
+anywhere. `Metafiles/MetafileClip.cs`. **The list is only half of it, and the half this
+paragraph originally got wrong is the other one:** keeping the rectangular part of the clip as a
+*region* rather than as one more thing to intersect makes subtraction, union, symmetric
+difference and complement exact too, because a GDI region is rectangles and rectangle sets are
+closed under all of them (`Metafiles/RectangleRegion.cs`). So `ExtSelectClipRgn` needed nothing
+new in **any** of its five modes, where this note predicted `RGN_DIFF` and `RGN_XOR` would.
+`PL6034` is left for an arbitrary path as the operand of a union, an XOR or a complement.
 
 **But the clip has to be emitted lazily, with a restore and a save.** A metafile's clip is
 *device state* — it changes when a record says so and stays changed — while a sink's clip is
@@ -240,17 +245,24 @@ decoration is a filled path: `EmfPlusReader.DrawCaps`. `PL6038` retired with the
 
 **Measure against LibreOffice, but do not assume LibreOffice is right.** The method works —
 WMF reached `mae 0.0000` and EMF `0.0001` on LibreOffice's own exports — and it found real
-bugs in this reader. It also found three places where LibreOffice's PDF export drops or
-mis-draws what its own importer produced, and on each of those a raw `ink_ratio` reads as a
-defect here when it is not:
+bugs in this reader. It also found five places where the reference renders something its own
+source says it should not, and on each of those a raw `ink_ratio` reads as a defect here when
+it is not.
 
-| File | What LibreOffice does | Measured |
-|---|---|---|
-| `TestEmfPlusFillClosedCurveWinding.emf` | fills a winding-rule star **even-odd**, leaving the pentagon hole its own test name says should be solid | `ink_ratio 1.431` |
-| `TestEmfPlusFillRectsWithTextureBrush.emf` | draws the outline and not the texture, though its unit test asserts the texture is in the primitive tree | `ink_ratio 24.3` |
-| `TestEmfPlusSetPageTransform.emf` | draws the label and neither of the two filled rectangles its unit test asserts | `ink_ratio 144` |
-| `TestEmfPlusDrawLineWithDash.emf` | applies every `RotateWorldTransform` **last**, whatever the record's pre-multiply flag says | `mae 0.0662` |
-| `TestEmfPlusBrushPathGradientMultiSurroundColor.emf` | draws only the ramp from the centre to `surround[0]`, so a star with a red, a green and a blue point comes out with no red or green pixel anywhere | `mae 0.0113` |
+**Read the "which side" column before the number.** The five are not one kind of thing, and
+telling them apart is what the reference-version check buys: **the installed `soffice` here is
+24.2.7.2 and the source tree beside it is 27.2.0.0.alpha0+**, roughly a three-year gap, so a
+file can differ because the *binary* predates a fix that the code we port from already has.
+Each row below was confirmed on LibreOffice's **PNG** export as well as its PDF, so none of
+them is a PDF-export artefact.
+
+| File | What the reference does | Which side | Measured |
+|---|---|---|---|
+| `TestEmfPlusFillClosedCurveWinding.emf` | fills a winding-rule star **even-odd**, leaving the pentagon hole its own test name says should be solid | **version skew** — `emfphelperdata.cxx:2025` calls `convertWindingToEvenOdd` for exactly this flag, and 24.2.7.2 has no such call. Ours draws the solid star, which is what the current source draws and what GDI+ draws. | `ink_ratio 1.431` |
+| `TestEmfPlusFillRectsWithTextureBrush.emf` | draws the outline and not the texture | **defect** — its own unit test (`EmfImportTest.cxx:218-243`) asserts seventeen `fillgraphic/group/transform` nodes and reads pixel rows out of them, so the texture is in the primitive tree and neither export path draws it | `ink_ratio 24.3` |
+| `TestEmfPlusSetPageTransform.emf` | draws the label and a single speck, and none of the three filled rectangles | **defect** — `EmfImportTest.cxx:1346-1361` asserts `#4080c0` at height 1620 and `#00eeee`/`#ee00ee` at height 2457 | `ink_ratio 144` |
+| `TestEmfPlusDrawLineWithDash.emf` | applies every `RotateWorldTransform` **last**, whatever the record's pre-multiply flag says | **defect, still present** — the `// Skipping flags & 0x2000` comment is at `emfphelperdata.cxx:2614` in the 27.2 tree too, so this is not a skew | `mae 0.0662` |
+| `TestEmfPlusBrushPathGradientMultiSurroundColor.emf` | draws only the ramp from the centre to `surround[0]`, so a star with a red, a green and a blue point comes out with no red or green pixel anywhere | **version skew** — tdf#143031's mesh is in the tree and not in 24.2.7.2 | `mae 0.0113` |
 
 So read the diff image before believing a number. A high `ink_ratio` with a low
 `mean_abs_error` — the first three above — means the two renderers disagree about a *small*
@@ -435,11 +447,15 @@ end of a *legitimate* file — not a malformed one.
       a stride, a channel order and a palette, so merging it is arithmetic. One blit is held
       back so the pair can be seen; the compressed forms answer null and fall back to drawing
       the source alone.
-- [x] **`ExcludeClipRect`, closed when EMF arrived.** A rectangle minus a rectangle is at most
-      four rectangles, and subtraction distributes over intersection — so keeping the
-      rectangular part of a clip apart from the arbitrary part makes an exclusion exact even
-      under a non-rectangular clip path, with no general path arithmetic anywhere.
-      `PL6034` now means only union and symmetric difference with the clip as an operand.
+- [x] **`ExcludeClipRect`, closed when EMF arrived and made cheaper since.** Subtraction
+      distributes over intersection, so keeping the rectangular part of a clip apart from the
+      arbitrary part makes an exclusion exact even under a non-rectangular clip path, with no
+      general path arithmetic anywhere. It is now a band sweep rather than a rectangle-at-a-time
+      cut (`Metafiles/RectangleRegion.cs`), which matters only for the adversarial case — four
+      hundred exclusions no longer quadruple their way to the rectangle cap. **A WMF cannot raise
+      `PL6034` at all** any more: it has no `ExtSelectClipRgn`, its `SelectClipRegion` replaces,
+      and every other clip record it writes is exact. The diagnostic remains reachable only
+      through the rectangle cap.
 - [ ] **A hatched brush is a solid fill in LibreOffice.** Measured: LibreOffice paints a WMF
       `HS_DIAGCROSS` brush as a solid fill of the hatch colour, on **both** its PDF and its
       PNG export paths; Windows paints lines. Lines are what is drawn here, because that is
@@ -483,9 +499,12 @@ for `.wmf` at all, so neither the name nor the declared type identifies it.
       arrays and the record's own page-to-device scale factors.
 - [x] Bitmaps: `StretchDIBits`, `SetDIBitsToDevice`, `BitBlt`, `StretchBlt`, `AlphaBlend`
       with both kinds of transparency, and `TransparentBlt`.
-- [x] Clipping: `ExtSelectClipRgn`, `IntersectClipRect`, `ExcludeClipRect`, `OffsetClipRgn`
-      and `SelectClipPath` — and the clip gained exact rectangle algebra here, which
-      retroactively closed WMF's `ExcludeClipRect` as well.
+- [x] Clipping: `ExtSelectClipRgn` in **all five** combine modes, `IntersectClipRect`,
+      `ExcludeClipRect`, `OffsetClipRgn` and `SelectClipPath` — the clip gained exact rectangle
+      algebra here, which retroactively closed WMF's `ExcludeClipRect` as well, and then closed
+      `RGN_OR` and `RGN_XOR` too once that algebra became a real region rather than a running
+      intersection. Only `SelectClipPath` with `RGN_OR` or `RGN_XOR` is left, because a path is
+      not a rectangle set; `PL6034`.
 - [x] Pens: geometric against cosmetic, the five predefined dash styles and a user dash
       array, caps and joins.
 - [x] **The EMF a WMF is hiding.** A WMF now replays the complete EMF its escape records
@@ -548,8 +567,8 @@ anything.
       draws nothing.
 - [x] The object table — 256 slots named by the flags word's low byte, overwritten in place,
       with no create, no delete and no handle arithmetic. Brushes, pens, paths, regions,
-      images, fonts and string formats are read; image attributes and custom line caps
-      consume their slot and nothing else.
+      images, fonts, string formats and image attributes are read; only a custom line cap
+      consumes its slot and nothing else.
 - [x] `FillRects`, `DrawRects`, `FillPolygon`, `DrawLines`, `FillEllipse`, `DrawEllipse`,
       `FillPie`, `DrawPie`, `DrawArc`, `FillPath`, `DrawPath`, `FillRegion`, `DrawBeziers`,
       `DrawCurve`, `DrawClosedCurve`, `FillClosedCurve` and `Clear`.
@@ -573,7 +592,9 @@ anything.
 - [x] `SetWorldTransform`, `ResetWorldTransform`, `Multiply`/`Translate`/`Scale`/`Rotate`
       with the post-multiply flag honoured on each, and `SetPageTransform` with its unit.
 - [x] `Save`/`Restore` and `BeginContainer`/`BeginContainerNoParams`/`EndContainer`.
-- [x] `ResetClip`, `SetClipRect`, `SetClipPath`, `SetClipRegion` and `OffsetClip`.
+- [x] `ResetClip`, `SetClipRect`, `SetClipPath`, `SetClipRegion` and `OffsetClip` — with all
+      six combine modes exact wherever the operands are rectangles, which is what a region
+      ordinarily is, and `PL6034` only for a path under a union, an XOR or a complement.
 - [x] `DrawImage` and `DrawImagePoints`, including the parallelogram destination and a source
       rectangle, for both an encoded image and a GDI+ native bitmap.
 
@@ -606,6 +627,16 @@ what LibreOffice draws for every style it does not recognise.
 | `mae` ≤ 0.0002 | 10 | `TestEmfPlusSave`, `TestDrawLine`, `tdf143031_BrushPathGrad`, `TestEmfPlusDrawPathWithCustomCap` and `TestEmfPlusFillClosedCurve` all at **0.0000** |
 | 0.0002 < `mae` ≤ 0.002 | 8 | `TestEmfPlusGetDC` 0.0018 |
 | `mae` > 0.002 | 9 | `TestEmfPlusDrawLineWithDash` 0.0662; each of the nine is named in *Not done* below or in the LibreOffice table above |
+
+**The bands are unchanged by the region algebra, the image attributes and the itemiser, and that
+is the result rather than a disappointment.** Re-measured file by file after all three: every one
+of the twenty-seven is identical to the fourth decimal except `TestAlignRtlReading`, whose
+`ink_ratio` went **0.166 → 0.672** on the font itemiser. Nothing moved on the region work because
+the one file that uses a non-trivial combine mode draws nothing under it — see *Region XOR and
+complement* — and nothing moved on the attributes because every file that states them states
+`WrapModeTile` with a half-pixel overhang. **A change that closes a record and moves no number is
+still worth making when the number is measured over files that do not exercise it**; the mistake
+would be to conclude from a flat table that nothing was closed.
 
 **What the paint work and the caps moved, on the same twenty-seven files.** The bands barely
 changed and that is the point: what moved was the *pictures*, and three of the six are files
@@ -711,33 +742,46 @@ bits 8-11 are a clip combine mode. There is no single mask that is right twice.
       `createAreaGeometryForLineStartEnd`'s, so a diamond is LibreOffice's diamond. `PL6038` now
       means only the *adjustable arrow* form of a custom cap, which states a width, a height and
       a middle inset and no path at all — the same one LibreOffice reads and does not use.
-- [ ] **Image attributes.** A colour matrix, a gamma, a chroma key and a colour remap table,
-      all of which need the pixels of a JPEG or a PNG rather than of an uncompressed DIB — so
-      this is the one remaining case that a codec here would buy, and the reason the
-      *pixels* open question is answered "no" rather than "never". The object's slot is
-      cleared so that a stale object of another kind cannot be drawn through it, and the
-      image is drawn unadjusted.
-- [ ] **`EmfPlusStrokeFillPath`.** It names a path and nothing else: the pen and brush are
-      whatever a preceding record left current, which EMF+ has no state for and this reader
-      does not track. `PL6037`, and nothing is drawn — better than drawing it with an
-      arbitrary slot.
-- [ ] **Region symmetric difference and complement, and what closing them would take.**
-      Measured rather than guessed, because the answer decides whether it is worth starting.
-      Intersection and rectangular exclusion are exact in the clip's rectangles-and-shapes form,
-      and union of two rectangle sets is too — overlapping rectangles are still their own union
-      under the non-zero rule. What is left is **XOR and complement with an arbitrary path as an
-      operand**, and both need the same one thing: a general polygon boolean over Bézier
-      subpaths. There is no way to fake it, because the result's *edges* are new curves that
-      neither operand states.
-      **The size of it, from `emfpregion.cxx`'s own dependencies:** a Bézier-aware
-      Greiner–Hormann or Vatti implementation is roughly what `basegfx`'s
-      `basegfx/source/polygon/b2dpolypolygoncutter.cxx` is — about 1200 lines — plus
-      adaptive flattening and a crossover-point solver it leans on. That is a *third* of this
-      whole library and it buys two operations that appear in none of the twenty-seven reference
-      files. **So: do not start it for the metafiles.** The case that would justify it is SVG's,
-      where the same arithmetic closes `PL6012` (difference clips) and `PL6023` (a clip on one
-      member of a union) as well — three diagnostics for one body of work, and the decision
-      should be made there, on real documents, rather than here.
+- [x] **Image attributes, which turned out to need no pixels at all — and the note above was
+      wrong about what they are.** "A colour matrix, a gamma, a chroma key and a colour remap
+      table" describes GDI+'s `ImageAttributes` **API class**. The object a metafile carries is
+      [MS-EMFPLUS] 2.2.1.5 and is twenty-four bytes: `Version`, `Reserved1`, `WrapMode`,
+      `ClampColor`, `ObjectClamp`, `Reserved2`. The colour adjustments are applied by the
+      producer *before* the bitmap is written, so they are already in the pixels and never in
+      the file. **No codec, and no `Paperless.Rendering` reference, is needed or was added.**
+      What the object actually decides is the edge: what fills the part of a destination whose
+      source rectangle reaches outside the bitmap. `WrapModeClamp` states a flat colour, which
+      is a fill under the image in its own placement and needs nothing new; that is honoured.
+      The four tiling modes would need the bitmap repeated, which the placement square cannot
+      express — and that is worth almost nothing, measured. There are **four** image-draw records
+      in all the EMF+ files in the tree; two name an attributes object and two name none, and
+      **all four state a source rectangle that reaches outside the bitmap**. Three of them do so
+      by exactly half a pixel (`-0.5`), which is the GDI+ idiom for "the whole bitmap" rather
+      than a request for anything, and both readable attributes objects name `WrapModeTile`.
+      Repeating an edge pixel over half a pixel is below the antialiasing floor of every
+      comparison in this file. `TestDrawImagePointsTypeBitmap` is the one that overhangs
+      properly — `(-100, -100, 300, 250)` on a smaller bitmap — and it names no attributes at
+      all, so the wrap mode does not arise there either.
+- [x] **`EmfPlusStrokeFillPath`, drawn on the only reading the specification permits.** The
+      record is in [MS-EMFPLUS] 2.1.1.1's `RecordType` enumeration with one sentence — *"closes
+      any open figures in a path, strokes the outline of the path by using the current pen, and
+      fills its interior by using the current brush"* — and it is **absent from section 2.3.4's
+      table of drawing records**, the one that gives all twenty-one records with a defined
+      layout. There is no documented Flags bit assignment, no `ObjectID` and no `RecordData`, so
+      there is nothing to port; LibreOffice reaches the same place and leaves a bare `//TODO`
+      (`drawinglayer/source/tools/emfphelperdata.hxx:89`). What is done is the reading every
+      other record supports and nothing beyond it: the flags' low byte is an object slot, and
+      "current" means the pen and brush the previous drawing record used, because a format with
+      no pen or brush state gives those words no other referent. **Measured: 0 occurrences in
+      the 50 EMF+ files in the tree**, so this is insurance rather than fidelity. `PL6037` now
+      means the slot held no path, or nothing had been drawn yet.
+- [x] **Region union, symmetric difference and complement — closed by a rectangle algebra,
+      *not* by the polygon boolean that was thought to be needed.** See *Region XOR and
+      complement, and the general polygon boolean under them* below for the measurement. The
+      short version: a GDI region is a rectangle list by definition, rectangle sets are closed
+      under all five combine modes, and `Metafiles/RectangleRegion.cs` does them in about 150
+      lines of integer band sweep. `PL6034` now means only an arbitrary *path* as an operand of
+      a union, an XOR or a complement.
 - [ ] **`TestEmfPlusDrawLineWithDash` is at `mae 0.0662`, and it is not the dash phase.** That is
       what it was recorded as and the attribution was wrong; see the LibreOffice table above.
       The dash lengths are right, the offset is applied where LibreOffice ignores it — worth
@@ -745,10 +789,143 @@ bits 8-11 are a clip combine mode. There is no single mask that is right twice.
       last whatever the record's flag says. Ours follows the flag, as it does for `Translate`,
       `Scale` and `Multiply` and as LibreOffice itself does for those three. Nothing to do here
       unless a real document turns up that needs LibreOffice's answer.
-- [ ] **Arabic text draws as its Latin characters only.** `TestAlignRtlReading` measures
-      `ink_ratio 0.166`. This is font resolution rather than EMF+ — the same string through a
-      GDI `ExtTextOutW` would do the same — but it is where it was found, so it is recorded
-      here.
+- [x] **Arabic text drew as its Latin characters only, and the cause was font fallback rather
+      than shaping.** `TestAlignRtlReading` measured `ink_ratio 0.166`. It is not an EMF+ file
+      at all in the part that matters — its EMF+ stream is a header, a `GetDC` and an end, and
+      the text comes through GDI `EMR_EXTTEXTOUTW` — so the fix is in the shared
+      `MetafileTextEngine`. Measured before touching anything: the record asks for **Noto Sans
+      Arabic**, this machine has none, the resolver substitutes Liberation Sans, and **35 of the
+      45 shaped glyphs came back `.notdef`**. Turning on right-to-left shaping alone changed
+      nothing — the same 35. So the string now goes through the two itemisers body text goes
+      through: `TextItemiser` for the bidi levels and script runs, with the record's own
+      `TA_RTLREADING` bit as the base direction, then `FontItemiser` for coverage, which is what
+      finds a face that has the letters. One `GlyphRun` per resulting segment.
+      **`ink_ratio 0.166 → 0.672`, `shifted 21 → 6`, `mae 0.0045 → 0.0043`**, and every other
+      one of the twenty-seven files unchanged to the digit — which is the measurement that
+      matters, because itemising a Latin-only string must be a no-op and now demonstrably is.
+      What is left is that the fallback face is not the one LibreOffice substituted, which is a
+      statement about this machine's font set rather than about the reader.
+
+---
+
+## Region XOR and complement, and the general polygon boolean under them
+
+**This is the section a maintainer reaching for `b2dpolypolygoncutter.cxx` should read first.**
+The previous note here declined the port for the metafiles and said the decision belonged with
+SVG, on real documents. It has now been made there, and the answer is in two halves: build the
+rectangle algebra, which is small and exact and closes the whole of `ExtSelectClipRgn`; decline
+the Bézier boolean, which is large and buys nothing measurable.
+
+### What was built, and why it is not the 1200 lines
+
+`Metafiles/RectangleRegion.cs`, about 150 lines. **A GDI region is a scan list of rectangles by
+definition** — that is what an `RGNDATA` *is* — and rectangle sets are closed under union,
+intersection, difference and symmetric difference. So a y-band sweep answers all five combine
+modes exactly: every distinct horizontal edge cuts a band, within a band the problem is
+one-dimensional over x intervals, and bands with identical intervals coalesce back together.
+Every comparison is `Length` integer arithmetic, so no tolerance appears anywhere — which is
+the second reason this is cheap where a curve boolean is not: a crossover solver over flattened
+Béziers has to decide when two nearly coincident edges are the same edge, and this never asks.
+
+What it closed:
+
+| Where | Before | Now |
+|---|---|---|
+| EMF `ExtSelectClipRgn`, all five modes | `RGN_OR` and `RGN_XOR` raised `PL6034` | exact |
+| EMF `RGN_AND` with a multi-rectangle region | one path of subpaths — exact, but it made the clip non-rectangular, so the *next* `RGN_OR` could not be | rectangles, so the clip stays combinable |
+| EMF+ `SetClipRect`, all six modes | union, XOR and complement raised `PL6034` | exact |
+| EMF+ `SetClipRegion` with a rectangle-only region | union, XOR and complement raised it | exact |
+| The EMF+ region *tree* (`emfpregion.cxx`'s node kinds 2, 3, 5) | marked the region approximate | exact while both children are rectangles |
+| `ExcludeClipRect` under repetition | subtracting one rectangle at a time quadruples the count; five exclusions reach the 1024 cap on a clip that is two rectangles | the sweep never emits a rectangle an operand did not imply; the cap's real shape is *n* bars against *n* bars giving *n*² |
+
+**Complement is the one to read twice.** It keeps the part of the *new* region that is not in
+the existing clip — the operands the other way round from exclude, which is
+`solvePolygonOperationDiff(right, left)` at `emfphelperdata.cxx:1553-1558`. It is a separate
+member on `MetafileClip` rather than an argument to `Exclude`, because as an argument it would
+be silently backwards half the time.
+
+### What was declined, and the arithmetic
+
+What the rectangle algebra cannot reach is an operation whose operand — or whose standing clip —
+is an **arbitrary path**: `SelectClipPath` with `RGN_XOR`, EMF+ `SetClipPath` with a union or a
+complement, SVG's clip on one member of a union. Those need a general polygon boolean over
+Bézier subpaths, which is `basegfx/source/polygon/b2dpolypolygoncutter.cxx` — **1 253 lines**,
+plus the adaptive flattening and crossover solver in `b2dpolygontools.cxx` (3 648 lines) that it
+leans on. Against `Paperless.Vector`'s own size that is a third of the library.
+
+Here is what it would buy, counted rather than guessed.
+
+**SVG, which is where the decision was said to belong.** Two passes over the same corpus:
+`VectorImages.Decode` over **64 121** files, counting the diagnostics they actually raise, and an
+XML structural pass over the **56 394** of those that are uncompressed `.svg` and parse, counting
+the constructs that *could* need a boolean whether or not the translator noticed. The corpus is
+LibreOffice's own icon themes (44 678), `/usr/share`'s installed themes — Humanity, ubuntu-mono,
+Adwaita, hicolor — and `svgio`'s conformance suite (126): three independent sets of producers,
+and 153 files that could not be read at all.
+
+| Construct | Files or elements |
+|---|---|
+| files using `<clipPath>` at all | 1 466 (2.6 %) |
+| `clipPath` elements with more than one child | **6** |
+| ...with an `evenodd` child *and* more than one child, where collapsing the union to one path under one rule would be unsound | **0** |
+| ...with a child bearing its own `clip-path` — the true `PL6023` | **2 elements, both in one file**: `masking-path-07-b.svg`, a W3C conformance test vendored into `svgio`'s data |
+| files needing a difference clip (`PL6012`) | **0, and it is unreachable** |
+
+**`PL6012` is not rare, it is impossible.** SVG has no clip-subtraction operator: `clip-path`
+intersects and a `mask` is a mask. Decompiling `Svg.SceneGraph` 5.1.1 confirms it — all
+nineteen of its `ClipRect`/`ClipPath` call sites pass `SKClipOperation.Intersect`, and
+`Difference` (which is `0` in `ShimSkiaSharp`'s enum, not `1`) is constructed nowhere. The
+branch stays as a guard against a library upgrade; the *gap* is closed.
+
+**The metafiles**, over the 173 WMF and EMF files in the tree:
+
+| Record | Counts |
+|---|---|
+| EMF `EMR_EXTSELECTCLIPRGN` | 187 `RGN_COPY`, 5 `RGN_AND`, **0** OR/XOR/DIFF |
+| EMF `EMR_SELECTCLIPPATH` | 1 COPY, 15 AND, **1 XOR** — in `vcl/qa/cppunit/graphicfilter/data/emf/fail/slow-moveclip-1.emf`, a directory named `fail`, i.e. a fuzz regression rather than a document |
+| EMF+ clip combine modes | 109 replace/intersect, **8** union/XOR/exclude/complement |
+
+**And the eight are all in one file, which draws nothing under them.** The previous note said
+region XOR "appears in none of the 27 EMF+ reference files"; that was wrong, and correcting it
+strengthens the conclusion rather than weakening it.
+`TestEmfPlusBrushPathGradientMultiSurroundColor.emf` walks `SetClipRect` and `SetClipPath`
+through combine modes 0 to 5 in sequence — records 71 to 97 of its stream. **Records 71 to 97
+contain no drawing record at all.** The last `FillPath` is record 70. So the one file in the
+corpus that exercises every combine mode sets those clips and then ends, and not one pixel of
+its rendering depends on any of them. Its `mae 0.0113` is the path-gradient version skew in the
+table above and nothing to do with clipping.
+
+### So, stated as a refusal
+
+**1 253 lines plus a flattener and a crossover solver, to serve: one W3C conformance SVG, one
+fuzz-corpus EMF, and eight records in one file that draws nothing through them.** Nothing in
+64 121 real pictures needs it. `PL6012` is retired as unreachable, `PL6023` and `PL6034` remain
+open with that meaning and that measurement, and this is **declined, measured** rather than
+deferred. Reopen it if a real document turns up — the diagnostics exist so that one can be
+found, which is the whole reason for reporting rather than approximating.
+
+**A second trap, in the algebra rather than in the measurement.** The band sweep replaced a
+subtract-one-rectangle-at-a-time loop, and the obvious way to write it — rescan both operands
+for every band — is *slower* than what it replaced on the one input that matters.
+`EmfSafetyTests.ExcludingHundredsOfRectanglesDoesNotMultiplyWithoutBound` builds four hundred
+diagonal `ExcludeClipRect` records: eight hundred bands over a thousand rectangles is 3 × 10⁸
+comparisons, the decode ran past `VectorLimits`' own wall-clock cap, and the picture came back
+**empty**. The symptom is `IsEmpty` on a file whose clip is obviously finite, which reads as a
+clip bug and is a complexity one. The fix is an active set: sort each operand by its top edge
+once and carry a cursor, because a rectangle either spans a band or misses it. That took the
+whole `Paperless.Vector.Tests` project from 14 s back to 3 s as a side effect.
+
+**A trap in the measurement, and it is the opposite of the one expected.** A histogram showing
+*exactly one* of every combine mode in a single file looks like a parser that lost sync — an EMF+
+stream is spread across several `EMR_COMMENT` records, an object larger than one record continues
+into the next with the top flag bit set, and a scanner that parses each comment payload
+independently will read continuation bytes as record headers. So the count was rebuilt by
+concatenating every payload into one stream and parsing that once, which is the correct way and
+which did fix three genuinely truncated files elsewhere in the tree. **It gave the same answer:
+the file really does exercise all six modes.** What settled the question was not the histogram at
+all but dumping the record *sequence* and noticing that the last drawing record is number 70 and
+the clip records run from 71 to 97. **Count records to decide whether a feature is used; read the
+sequence to decide whether it is used for anything.**
 
 ---
 
@@ -898,11 +1075,26 @@ thing in the tree to emit an encoded image into a sink.
       a tile mode and PDF as a lengthened shading axis. `PL6021` retired.
 - [ ] **Non-scaling strokes** (`vector-effect`). Scaled with the shape, `PL6022`.
 - [ ] **Blend modes other than normal.** Composited normally, `PL6017`.
-- [ ] **Difference clips.** `IDrawingSink.ClipPath` only intersects. `PL6012`.
-- [ ] **A clip on one member of a clip-path union.** The union is expressed as one path,
-      so a clip belonging to a single member cannot be scoped to it — intersecting it
-      would clip the other members away. Honoured when there is only one member, `PL6023`
-      otherwise. Real path operations would fix this and `PL6012` together.
+- [x] **Difference clips — closed as unreachable, measured.** SVG has no clip-subtraction
+      operator, and `Svg.SceneGraph` 5.1.1 passes `SKClipOperation.Intersect` at all nineteen of
+      its clip call sites and constructs `Difference` nowhere. `PL6012` stays in the code as a
+      guard against a library upgrade quietly starting to emit one; it is not a gap. See
+      *Region XOR and complement* above.
+- [ ] **A clip on one member of a clip-path union.** The union is expressed as one path, so a
+      clip belonging to a single member cannot be scoped to it — intersecting it would clip the
+      other members away. Honoured when there is only one member, `PL6023` otherwise.
+      **Declined, measured: 2 elements in 1 file out of 56 394**, and that file is a W3C
+      conformance test. A general polygon boolean would fix it; *Region XOR and complement*
+      above has the arithmetic against.
+      **A real bug was found here while measuring, and it was in the report rather than in the
+      clip.** The test was `element.Clip is not null`, which is *always* true:
+      `SvgSceneClipCompiler.AddVisualPathClip` gives every member a
+      `Clip = new ClipPath { Clip = new ClipPath() }` whether or not the element bore a
+      `clip-path` attribute, and fills it in only if one was there. So every `clipPath` with
+      more than one child reported `PL6023` — three of `svgio`'s 126 files, none of which has a
+      per-member clip at all. Testing the library's own `HasClipGeometry` predicate instead takes
+      the corpus incidence to its true value of one file, and `SvgClipUnionTests` pins both
+      directions.
 - [ ] **The library's viewport rounding**, in the one case `SvgViewport.Impose` cannot fix:
       both dimensions absolute with a ratio that disagrees with the view box's, where
       letterboxing is *intended*. The letterbox then sits up to 0.04 % out.
@@ -950,9 +1142,15 @@ thing in the tree to emit an encoded image into a sink.
       decode, and no codec dependency follows. That is enough for the WMF transparent-bitmap
       idiom, for `AlphaBlend`'s `AC_SRC_ALPHA`, for `TransparentBlt` and for EMF+'s native
       bitmaps. The compressed forms answer null and fall back to drawing the source
-      undecoded. What is *still* out of reach is anything needing the pixels of a **JPEG or
-      PNG** — EMF+ image attributes are the only such case left — and that would need a real
-      codec here or a sink extension, so the answer stands.
+      undecoded. **The one case that was thought still to need a codec turned out not to be
+      one.** EMF+ image attributes were recorded here as "a colour matrix, a gamma, a chroma key
+      and a colour remap table"; that describes GDI+'s `ImageAttributes` **API class**, and the
+      object a metafile carries ([MS-EMFPLUS] 2.2.1.5) is twenty-four bytes of wrap mode, clamp
+      colour and object clamp. The colour adjustments are applied by the producer before the
+      bitmap is written, so they are already in the pixels. So the answer is no longer "no,
+      except for one case" — it is **no, with no case left**, and `Paperless.Rendering` was not
+      referenced. The lesson is the same one the `MeshPaint` entry teaches from the other side:
+      *read what the file format serialises, not what the API that wrote it can express.*
 - [x] **Which representation of a dual-format file to replay.** Settled twice with the same
       answer, and the answer is `emfio`'s rather than one reasoned from first principles: a
       WMF replays the complete EMF its escape records carry, and an EMF stops replaying its
