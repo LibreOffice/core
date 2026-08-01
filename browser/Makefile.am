@@ -548,6 +548,10 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorModifiedImages.ts \
 	src/canvas/vector/VectorScratchCanvases.ts \
 	src/canvas/vector/VectorResourceWalker.ts \
+	src/canvas/vector/prediction/TextRuns.ts \
+	src/canvas/vector/prediction/CaretLookup.ts \
+	src/canvas/vector/prediction/ParagraphWrap.ts \
+	src/canvas/vector/prediction/TextEdit.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorLineGeometryExtractor.ts \

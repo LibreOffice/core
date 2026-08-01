@@ -51,6 +51,16 @@ namespace cool {
 		/// Set when the face is not itself bold or italic, so the reader adds it.
 		syntheticBold?: boolean;
 		syntheticItalic?: boolean;
+		/// 0-based index of the paragraph this portion belongs to.
+		paragraph?: number;
+		/// Alignment of the paragraph this portion belongs to.
+		align?: 'left' | 'right' | 'center' | 'justify';
+		/// Height and ascent of the line this portion sits on, in twips.
+		lineHeight?: number;
+		lineAscent?: number;
+		/// Size of the area the text wraps within, in twips.
+		textAreaWidth?: number;
+		textAreaHeight?: number;
 	}
 
 	export namespace TextSimplePortionPrimitive {
