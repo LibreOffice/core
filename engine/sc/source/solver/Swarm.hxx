@@ -15,6 +15,11 @@
 #include <random>
 #include <limits>
 
+namespace sc
+{
+/** One candidate solution in the swarm: its current position and
+ *  velocity, and the best position it has visited so far.
+ */
 struct Particle
 {
     Particle(size_t nDimensionality)
@@ -187,5 +192,7 @@ private:
         return bBestChanged;
     }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

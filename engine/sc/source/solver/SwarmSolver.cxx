@@ -59,6 +59,8 @@ class XComponentContext;
 
 using namespace css;
 
+namespace sc
+{
 namespace
 {
 struct Bound
@@ -129,10 +131,6 @@ enum
     PROP_ALGORITHM,
 };
 
-} // end anonymous namespace
-
-namespace
-{
 class SwarmSolver
     : public comphelper::OPropertyContainerImplHelper<
           comphelper::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>,
@@ -328,7 +326,6 @@ public:
     double clampVariable(size_t nVarIndex, double fValue);
     double boundVariable(size_t nVarIndex, double fValue);
 };
-}
 
 uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPosition)
 {
@@ -349,7 +346,7 @@ uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPos
 // outside the document. Access through the spreadsheet UNO objects used to throw
 // on a missing sheet. Direct ScDocument access does not, so validate here to keep
 // an invalid variable cell an error rather than a silently ignored write.
-static ScAddress lcl_cellAddress(const ScDocument& rDocument, const table::CellAddress& rPosition)
+ScAddress lcl_cellAddress(const ScDocument& rDocument, const table::CellAddress& rPosition)
 {
     if (rPosition.Sheet < 0 || rPosition.Sheet >= rDocument.GetTableCount())
         throw uno::RuntimeException(u"solver: cell address is outside the document"_ustr);
@@ -635,8 +632,6 @@ bool SwarmSolver::isSolutionFeasible(std::vector<double> const& rSolution)
     return !doesViolateConstraints();
 }
 
-namespace
-{
 template <typename SwarmAlgorithm> class SwarmRunner
 {
 private:
@@ -706,7 +701,6 @@ public:
         return mrAlgorithm.getResult();
     }
 };
-}
 
 void SAL_CALL SwarmSolver::solve()
 {
@@ -837,11 +831,15 @@ void SAL_CALL SwarmSolver::solve()
     }
 }
 
+} // end anonymous namespace
+
+} // namespace sc
+
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Calc_SwarmSolver_get_implementation(uno::XComponentContext*,
                                                       cpo::uno::Sequence<cpo::uno::Any> const&)
 {
-    return cppu::acquire(new SwarmSolver());
+    return cppu::acquire(new sc::SwarmSolver());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
