@@ -44,15 +44,16 @@ indexes or resolvable style chains.
       would take one style's parent from the other's chain. Cycle-guarded; the family's defaults lead
       a chain that does not reach them.
 - [x] Tables: rows, cells, spans, nested tables, and the column-edge grid the spans index into
-- [ ] Lists and numbering with multi-level definitions and restart semantics. The four readers each
-      compute labels already; the model holds the label but not yet the definitions that produced it.
-      **This is now the single largest remaining gap in the whole-corpus render sweep**, and it is one bug
-      seen five times rather than five bugs: `PageParagraph` has no place for a label, so `Paginator` never
-      measures one and `PageDrawing` never draws one. LibreOffice draws `1.`, `a)` and `◦`; we draw the
-      item's text alone. Measured — it is six words a page on `word-features.{doc,docx,dotx,rtf}` (149–150
-      against 154–155) and the whole of the five-word gap on `text-features.{odt,fodt}` (149/154). The two
-      documents agreeing across four formats and two packagings is what says it is one feature and not a
-      reader defect.
+- [x] Lists and numbering with multi-level definitions and restart semantics — **for extraction and now
+      for layout too**. The definitions themselves still live in each reader rather than in the model, which
+      is the part of this item that is deliberately unfinished: nothing above the readers has yet needed to
+      ask what a list is, only what it draws.
+      This was the largest group in the whole-corpus sweep and it was one bug seen six times, not six bugs.
+      Every reader computed the label already and none of them had anywhere to put it: `PageParagraph`
+      carried no label, so `Paginator` measured none and `PageDrawing` drew none. All six rows closed
+      together — `text-features.{odt,fodt}` 149/154 → 154/154 and `word-features.{doc,docx,dotx,rtf}`
+      149–150/154–155 → 154–155/154–155. What it cost is described under the layout engine's
+      **list labels** item, which is where the fix is.
 - [x] **Page geometry**, in `Model/PageGeometry.cs`, read from all four formats and verified against
       LibreOffice's own rendering. The interesting part is that the formats do not mean the same thing
       by "top margin": Word's `w:top` is the distance to the first line of *body* text with the header
@@ -232,7 +233,21 @@ Order chosen so each is verifiable before the next gets harder.
       document saved flat, where the pretty-printer's newlines separate them — which is why
       `text-features.odt` rendered 152 words and `text-features-flat.fodt` 155 against the same reference's
       154, and why a *disagreement between two packagings of one document* was the sharper clue than either
-      number. Both are now 149, and the whole of the remaining five is the list labels below.
+      number. Both went to 149, and the whole of the remaining five was the list labels; both are now 154.
+- [x] **The list level's indents, which are not the paragraph's.** ODF is the one format of the four whose
+      list paragraphs carry no indent of their own: `List_20_Bullet` states none, and the quarter inch every
+      item is set in comes from the level's `style:list-level-properties`. So `text-features.odt` laid its
+      whole list out flush with the left margin at 56.7 pt where LibreOffice draws the text at 74.8 and the
+      label at 56.8. Read in `OpenDocument/OdtLayoutSource.Lists.cs`.
+      **ODF says the geometry two ways and the attribute names conceal it.** The label-alignment mode has
+      `fo:margin-left` and `fo:text-indent` inside a `style:list-level-label-alignment` child, which is what
+      a reader looks for because those are the names a paragraph style uses. The older
+      label-width-and-position mode — which is what LibreOffice writes for levels 1 and 2 of its own
+      `ListBullet` and `ListNumber` styles, and therefore what this document uses — says
+      `text:space-before` and `text:min-label-width` instead, and the mapping is
+      `left-margin = space + width, first-line = -width` (`xmloff/source/style/xmlnumi.cxx:433`). Reading
+      only the first spelling leaves every list in a LibreOffice-written `.odt` at the margin, and the file
+      contains no attribute whose absence says so.
 
 ### DOCX — extraction done
 - [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
@@ -680,6 +695,39 @@ Only after extraction is solid and `Paperless.Text` breaks lines correctly. Line
 with Writer's — see `Paperless.Text/TODO.md` — and the page geometry every break is measured against
 is read and verified, so what remains is the filling of pages rather than the measuring of lines.
 
+- [x] **List labels**, in `Layout/ListLabel.cs`, `Layout/PageContent.cs` and `Layout/PageDrawing.cs`, with
+      one reader-side file each in `OpenDocument/OdtLayoutSource.Lists.cs` and
+      `Ooxml/DocxLayoutSource.Lists.cs` and a few lines apiece in the DOC and RTF paths.
+      **The bug was that nothing above the readers had anywhere to put a label.** All four readers had been
+      computing `1.`, `a)` and `◦` correctly since they were written — extraction reported them and the
+      corpus tests pinned them — but `PageParagraph` carried only text, so a label could not be measured or
+      drawn even in principle. That is why the shortfall appeared six times at once across four formats and
+      two packagings and why all six closed in one change: 197 of 223 sweep rows matched before, 203 after.
+      **Why the label is beside the paragraph's text and not in it.** Writer makes the label a *portion* at
+      the head of the first line (`SwTextFormatter::NewNumberPortion`, `sw/source/core/text/txtfld.cxx:506`)
+      so that it takes part in the line's measurement. Doing that here would mean splicing characters into
+      `PageParagraph.Text`, and every offset a paragraph carries — its notes, its frames, its bookmarks — is
+      counted against that string, so a label of two characters would rebase all of them. Instead the label
+      hangs beside the text and pays for itself through `PageParagraph.Format`, whose getter widens the
+      declared first-line indent by the label's advance. That single place is deliberate: five separate call
+      sites lay a paragraph out, and one measuring against a different first-line indent from the one it is
+      drawn against puts a paragraph's own words in two places.
+      **The advance is `SwNumberPortion::Format` (`sw/source/core/text/porfld.cxx:607`) reduced to its
+      result**: in label-width-and-position mode the portion stretches to the paragraph's left margin, which
+      is the negated hanging indent; in label-alignment mode it is the label's own width with a tab carrying
+      the text on to the level's stop; and in both the floor is `m_nFixWidth + m_nMinDist`, which is what
+      stops `viii.` from being written over by the text it labels.
+      **The trap, and it cost an hour.** `text-features.odt`'s "Continuation paragraph of item two" is the
+      second `text:p` of a list item: it draws no label but it is still *in* the list. Giving it the level's
+      indents whole put it at 56.7 pt where LibreOffice draws 74.8 — hanging into the space where a number
+      it does not have would have gone. `SwTextNode::GetFirstLineOfsWithNum`
+      (`sw/source/core/txtnode/ndtxt.cxx:3469`) applies the numbering's first-line offset only to a node
+      that `IsCountedInList`, while `GetLeftMarginWithNum` applies the left margin unconditionally — so an
+      unlabelled paragraph in a list takes half of its level's geometry and not the other half. The same
+      shape catches DOCX's `w:numId="0"` continuation paragraphs, and the fix is one line in each reader.
+      Measured on `text-features.odt` against LibreOffice's own PDF: level-one labels at 56.7 against 56.8
+      and their text at 74.7 against 74.8; level two at 74.7/92.7 against 74.8/92.8. The remaining tenth of
+      a point is the page's left margin, which was already off by that much before any of this.
 - [x] **Pagination**: fill a page, split what does not fit, continue. Verified against LibreOffice on a
       sixty-paragraph document at three line spacings, comparing which paragraph starts each page — the
       assertion that catches every upstream measurement error, since a wrong advance width moves a line
@@ -973,6 +1021,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       `PageDrawing.OffsetOnLine` for exactly this — and the work is routing character-anchored frames
       through the per-line walk rather than the per-paragraph one, which every frame-wrap test would then
       have to be re-measured against.
+      **Attempted and reverted, because routing alone makes the document worse rather than better, and the
+      measurements are worth keeping.** Resolving `Character` and `Line` from the anchor's own line puts the
+      box at 134.01 pt where LibreOffice draws 134.00 — the horizontal half is settled and cheap. What is
+      not settled is what the text does next. LibreOffice draws the whole sentence on *one* line —
+      "Before the box." at 56.80 and "After the box." at 306.54, which is the shape's own right edge plus a
+      space — so the box is set *within* the line, taking room on it. `FrameObstacles.SpaceFor` cannot
+      express that: an obstacle starting after a line's own start *ends the line early*
+      (`Layout/FrameLayout.cs`, "one that starts after it ends the line early"), which is right for a
+      paragraph-anchored frame and wrong here. So placing the frame correctly moved "After the box." on top
+      of the box's own text and took `word-features.doc` from 154 words to 151.
+      The obvious escape is not one: making it an as-character frame instead — which is what
+      `SwWW8ImplReader::IsInlineEscherHack` does for a shape inside a `SHAPE` field, and this document's
+      shape *is* inside one (verified by tracing the field stack in the WW8 layout walk) — restores the word
+      count and puts the box at 134.01, but hangs it off the baseline and pushes the anchor line from
+      455.51 down to 477.71. LibreOffice's own DOC render keeps that line at 455.51 while its DOCX render of
+      the same document *does* push it to 478.36. So LibreOffice's DOC import does **not** take the inline
+      hack here and its DOCX import does, and the difference is not the `SHAPE` field. Whatever the reason,
+      the answer is a frame that is floating, anchored at a character, and set within its anchor's line —
+      which needs `Paperless.Text`'s line filler to split a line around a mid-line obstacle rather than end
+      it, and that is a change to shared code that this item should not make in passing.
 - [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
       it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and

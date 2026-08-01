@@ -461,10 +461,31 @@ public static class PageDrawing
 
         int start = line.Box.Line.Start;
         int end = Math.Min(line.Box.Line.VisibleEnd, paragraph.Text.Length);
-        if (end <= start) return runs;
 
         Length lineLeft = area.X + line.Box.Left;
         Length baseline = area.Y + line.Baseline;
+
+        // Before the text and before the empty-line exit, because an item with no words still has a
+        // number: an empty list paragraph draws its label and nothing else, which is what LibreOffice
+        // does and what a list being typed into looks like.
+        if (line.StartsParagraph && paragraph.Label is { Text.Length: > 0 } label)
+        {
+            ShapedText shapedLabel = TextShaper.Default.Shape(label.Face, label.Text, label.Shaping);
+            if (shapedLabel.Glyphs.Count > 0)
+            {
+                runs.Add((
+                    Build(
+                        shapedLabel,
+                        label.Text,
+                        label.EmSize,
+                        label.Font ?? Reference(label.Face),
+                        new DocPoint(lineLeft - paragraph.LabelAdvance, baseline),
+                        Length.Zero),
+                    label.Colour.A == 0 ? Colour.Black : label.Colour));
+            }
+        }
+
+        if (end <= start) return runs;
 
         foreach (TabbedSegment segment in Stretches(paragraph, start, end))
         {

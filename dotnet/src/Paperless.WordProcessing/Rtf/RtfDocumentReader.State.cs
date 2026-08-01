@@ -1092,7 +1092,11 @@ public sealed partial class RtfDocumentReader
             runs,
             _sectionIndex,
             flow.PendingNotes.Count == 0 ? null : [.. flow.PendingNotes],
-            flow.PendingFrames.Count == 0 ? null : [.. flow.PendingFrames]);
+            flow.PendingFrames.Count == 0 ? null : [.. flow.PendingFrames],
+            // Trimmed, because the group holds the tab that follows the label as well as the label —
+            // and an outline level that shows no number writes the group with nothing but that tab,
+            // which trims to nothing rather than to a label made of whitespace.
+            flow.ListMarker.ToString().Trim() is { Length: > 0 } marker ? marker : null);
 
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);

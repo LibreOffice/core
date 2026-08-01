@@ -251,7 +251,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 
         DocxLayoutSource source = new(
             _file.Styles, _file.Settings, footnotes: _file.Footnotes, endnotes: _file.Endnotes,
-            theme: _file.Theme, pictures: new DocxPictures(_file, _laidOut));
+            theme: _file.Theme, pictures: new DocxPictures(_file, _laidOut),
+            numbering: _file.Numbering);
         List<PageBlock> blocks = source.Read(body);
 
         // The compatibility options, of which two reach pagination. Which ones those are was

@@ -21,6 +21,7 @@ public sealed class WordNumberingLevel
         Suffix = Word.Value(element, "suff");
         IsLegalNumbering = Word.Child(element, "isLgl") is not null;
         RunProperties = Word.Child(element, "rPr");
+        ParagraphProperties = Word.Child(element, "pPr");
     }
 
     /// <summary>The zero-based level this definition applies to.</summary>
@@ -67,6 +68,16 @@ public sealed class WordNumberingLevel
 
     /// <summary>The label's own character formatting, which carries the bullet's font.</summary>
     public XElement? RunProperties { get; }
+
+    /// <summary>
+    /// The level's own <c>w:pPr</c>, which carries where the label and the text it labels sit.
+    /// </summary>
+    /// <remarks>
+    /// Only two things in it are read: <c>w:ind</c>, whose <c>w:start</c> and <c>w:hanging</c> are the
+    /// text's indent and the label's hanging distance, and the <c>w:tab w:val="num"</c> the label's own
+    /// tab aims at. Extraction needs neither, which is why it was unread until layout wanted it.
+    /// </remarks>
+    public XElement? ParagraphProperties { get; }
 }
 
 /// <summary>

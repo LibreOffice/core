@@ -50,6 +50,14 @@ public sealed partial class Ww8DocumentReader
     /// character position and nothing else — and because which page a shape lands on is decided by
     /// where its anchor paragraph lands, which is a pagination result rather than a property.
     /// </param>
+    /// <param name="ListMarker">
+    /// The label this item draws, or null when it draws none.
+    /// <para>
+    /// Computed rather than read: WW8 stores the template and the counters and never the rendered label,
+    /// which is why it has to be produced by a walk in document order and why the same paragraph must not
+    /// be described twice.
+    /// </para>
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -63,7 +71,8 @@ public sealed partial class Ww8DocumentReader
         Colour? Colour = null,
         IReadOnlyList<Ww8LayoutRun>? Runs = null,
         IReadOnlyList<Ww8LayoutNote>? Notes = null,
-        IReadOnlyList<Ww8LayoutFrame>? Frames = null);
+        IReadOnlyList<Ww8LayoutFrame>? Frames = null,
+        string? ListMarker = null);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -137,6 +146,11 @@ public sealed partial class Ww8DocumentReader
     {
         _layoutNoteNumber = 0;
         _layoutEndnoteNumber = 0;
+
+        // The body is where the document's lists start counting, and the numbering is the same instance
+        // the extraction pass advances — so it is reset rather than assumed clean.
+        _numbering.ResetCounters();
+
         return ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
     }
 
@@ -270,6 +284,10 @@ public sealed partial class Ww8DocumentReader
             int story = SeparatorStories + (Math.Max(0, section) * FurnitureSlots.Length) + slot;
             if (story >= stories.Count) break;
             if (stories[story].Length <= 0) continue;
+
+            // Each flow numbers its own lists: a numbered paragraph in a running head does not continue
+            // the body's count.
+            _numbering.ResetCounters();
 
             // Blocks rather than paragraphs, so a table in a running head survives: a two-part running head
             // is a two-cell table, and stacking its cells as loose paragraphs would give the header a height
@@ -686,8 +704,29 @@ public sealed partial class Ww8DocumentReader
             LanguageOf(character),
             paragraph.IsInTable,
             character.Colour,
-            ReadRuns(text, positions, markPosition));
+            ReadRuns(text, positions, markPosition),
+            ListMarker: LabelAt(paragraph));
     }
+
+    /// <summary>
+    /// The label a paragraph's list level draws, advancing that level's counter.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A side effect, so it belongs where a paragraph is described exactly once — which is why it is here
+    /// rather than beside <see cref="ResolveParagraphFormat"/>, whose result is asked for freely.
+    /// </para>
+    /// <para>
+    /// An <c>ilfo</c> of zero means the paragraph is not in a list at all, which is how a continuation
+    /// paragraph inside an item is written. Its indents still come from its own <c>sprmPDxaLeft</c> and
+    /// <c>sprmPDxaLeft1</c>, which Word writes onto every list paragraph, so nothing further is needed to
+    /// line it up under the item above it.
+    /// </para>
+    /// </remarks>
+    private string? LabelAt(Ww8ParagraphFormat paragraph)
+        => paragraph.ListNumber > 0
+            ? _numbering.Advance(paragraph.ListNumber, paragraph.ListLevel ?? 0)
+            : null;
 
     /// <summary>
     /// The stretches a paragraph's character formatting divides its text into.
