@@ -849,30 +849,44 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `tdf137691_dataTable.pptx` went **68 words against 80 to 80/80**. All four `c:dTable` flags
       default to **false**, not to `!bMSO2007Doc` — `DataTableModel` initialises each to false
       outright — so the rule that governs the `c:show*` family does not carry across.
-- [ ] **The OOXML plot rectangle is still about a point out, and it is now the largest thing left
-      that is not a proxy artefact.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own
-      size (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
-- [ ] **A scatter chart draws no trendline, and that is now most of what is left.** `c:trendline`
-      with `c:dispEq` and `c:dispRSqr` writes `f(x) = 0.0174728496577696 x + 0.60719095698364` and
-      `R² = 0.999989640055375` onto `tdf127720.pptx`, which is 12 of that deck's remaining error and
-      the whole of `trendline.ods`'s chart residual. `RegressionCurveHelper` and
-      `RegressionCurveCalculator` are what to port. A doughnut still draws as a pie, losing the
-      hole.
-- [x] **Radar, bubble, stock and of-pie draw; surface declines, and the count is why.** The order
-      was set by counting the corpus first rather than by the brief's order. Over every chart part
-      in `chart2/qa/extras/data/` — 351 OOXML plot groups and 219 ODF `chart:class` attributes —
-      the five stand at **of-pie 5, bubble 3 + 1, stock 1 + 3, radar 2 + 0, surface 0 + 0**
-      (OOXML + ODF). Surface is not rare, it is *absent*; and it is absent from LibreOffice's
-      renderer too, which has no `SurfaceChart` in `chart2/source/view/charttypes/` and substitutes
-      "a deep 3D bar chart from all surface charts" in the importer instead
+- [x] **The plot rectangle: measured over 100 charts rather than one, halved, and the error was
+      not where three runs had looked.** The harness, the numbers and what is left are below,
+      under "The plot-rectangle harness exists"; this stub is the entry it replaces.
+- [x] **Radar, bubble, stock and of-pie draw, and so does surface — as the bar chart the
+      reference substitutes for it.** The order was set by counting the corpus first rather than
+      by the brief's order. Over every chart part in `chart2/qa/extras/data/` — 351 OOXML plot
+      groups and 219 ODF `chart:class` attributes — the five stand at **of-pie 5, bubble 3 + 1,
+      stock 1 + 3, radar 2 + 0, surface 0 + 0** (OOXML + ODF).
+      **Surface was declined on that count and the decision was wrong, which is worth keeping
+      rather than quietly replacing.** The three reasons given were: no corpus file; LibreOffice
+      has no `SurfaceChart` in `chart2/source/view/charttypes/` and substitutes "a deep 3D bar
+      chart from all surface charts" in the importer instead
       (`oox/source/drawingml/chart/typegroupconverter.cxx:198-199, 217-218`), its chart2 service
-      spelled `"com.sun.star.chart2.ColumnChartType"` with the comment `// Todo` at `:79`. So a
-      surface chart draws **nothing**: there is no file to measure against, the reference is itself
-      a substitution, and the projection is genuinely three-dimensional where this engine maps two
-      fractions onto a rectangle. An absent picture reads as a missing feature; one drawn as bars
-      reads as a layout bug, which is the rule the SmartArt evaluator was built on.
+      spelled `"com.sun.star.chart2.ColumnChartType"` with the comment `// Todo` at `:79`; and the
+      projection is genuinely three-dimensional. All three are true. The conclusion does not
+      follow, because the standard here is *matches the reference* and the reference's answer **is**
+      that substitution. **"There is no corpus file" is a reason to make one, not a reason to
+      stop**: renaming the plot group in `chart2/qa/extras/data/pptx/chart.pptx` to
+      `c:surfaceChart` and converting it with `soffice` gives a PDF of **25 words** — a legend of
+      three series, four category names and a value axis labelled `0 1 … 10`. Declining drew
+      **0** of them, the slide's only shape being the chart frame; reading it as a bar chart draws
+      **21**, the four missing being tick labels a three-dimensional wall auto-scales differently
+      (`0 1 … 10` where the flat one lands on `0 2 … 12`). What a flat engine loses is the
+      projection, not the data.
       The geometry is `Paperless.Core/Charts/ChartLayout.Plots.cs` and the model additions are
       `ChartPlotTypes.cs`; both readers gained the element and class names and nothing else moved.
+- [x] **A doughnut has its hole, and the hole's size is not in the file.** `c:doughnutChart` and
+      ODF's `chart:class="chart:ring"` set `ChartPlot.Rings` rather than making a `Kind` of their
+      own, because everything else about a doughnut is a pie — the wedges, the colours per point,
+      the legend of categories, the label placement. `PieChart`'s constructor sets
+      `m_fRadiusOffset = 1.0` for a ring chart and nothing else (`PieChart.cxx:212-216`), which
+      puts ring *k* of *n* between `k/(n+1)` and `(k+1)/(n+1)` of the outer radius, so a
+      single-ring doughnut's hole is at exactly half. **`c:holeSize` is parsed into `mnHoleSize`
+      and then read by nothing at all**, exactly as `c:bubbleScale` is, so honouring it would be a
+      disagreement with the reference rather than a refinement of it. Drawing a doughnut as a pie
+      — which is what it did through three chart merges — loses the hole *and* draws every ring
+      over the last, so only the outermost series is visible: a plausible pie of the right
+      colours.
 - [x] **Radar: a polar category axis, and the ring count is a constant.** `NetChart` over a
       `PolarPlottingPositionHelper`. Category *i* of *n* sits at `90° − i × 360/n` — twelve
       o'clock, clockwise, the same convention a pie uses — and the polygon **closes**, joining the
@@ -998,35 +1012,118 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       implemented, and it is the entire residual of two decks: `bnc889755.pptx` draws sixteen month
       names turned a quarter turn, and `tdf106217.pptx` draws **eight category names in our render
       and none in the reference** because they do not fit. Both look like data bugs and are layout.
-- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it just doubled.**
-      `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
-      (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
-      (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
-      (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
-      title (a flat 420 below, 450 to the left). Two of the three feedback passes are now in —
-      the tick count is re-derived from the rectangle, and the rectangle is re-derived from a
-      *rotated* label arrangement — but the third is not: LibreOffice measures the **actual**
-      bounding box of everything the axes drew (`ShapeFactory::getRectangleOfShape` on
-      `mxDiagramWithAxesShapes`) and hands it to `VDiagram::adjustInnerSize`
-      (`chart2/source/view/diagram/VDiagram.cxx:653-700`), which grows the inner rectangle by the
-      slack and shifts it so the consumed rect meets the available one. Measured on
-      `chart-bar-deck.pptx`, unchanged by this run: plot area **1.291 pt left of, 0.776 pt above,
-      0.500 pt narrower and 0.761 pt taller** than the reference's 106.526 / 116.844 / 500.967 /
-      241.993 — the bottom edge agrees to **0.015 pt**, so the error is entirely in the three
-      reservations and not in the composition.
-- [ ] **Two things to know before attempting it, both measured on this run and both cost time.**
-      *One*: the naive fix — reserving the label's *shape* rather than its text, since
-      `ShapeFactory::createText` gives every chart text 0.18/0.30 × fontHeight of inset —
-      overshoots. On `chart-bar-deck.pptx` it moves the left edge from 1.29 pt short to 2.3 pt
-      long, so the discrepancy is not simply the missing insets and guessing at it is worse than
-      leaving it. *Two*: **deriving the rectangle from rendered PDFs does not work as an oracle.**
-      A script that takes the longest horizontal and vertical strokes as the plot rectangle agrees
-      with the axis to a hundredth on `chart-bar-deck` and picks up legend borders, series
-      polylines and error bars on half of `chart2/qa/extras/data/pptx/` — mean "error" 19 pt over
-      28 decks, most of it comparing different marks. The oracle that does work is
-      `chart:coordinate-region`, and using it needs a harness that composes an ODF chart with its
-      stated rectangle *suppressed* and a font-accurate measurer; that harness does not exist yet
-      and is the first thing to build.
+- [x] **The plot-rectangle harness exists, and it is worth more than the fix it found.** Build it
+      before touching the geometry again; rebuilding it costs an hour and everything below was
+      measured with it.
+      *What it does*: for every `.odp`, `.ods` and `.odt` in `chart2/qa/extras/data/`, open the
+      package, find each `Object N/content.xml` holding a `chart:chart`, read it with
+      `OdfChartPlot.Read`, compose it with `plot with { PlotArea = null }` — its stated rectangle
+      **suppressed** — into a frame of the chart's own `svg:width` × `svg:height`, and compare
+      what `ChartLayout` computes against what the file states. A font-accurate measurer is
+      required and is thirty lines: `SlideChart`'s own `Measurer`, copied.
+      *What makes it two oracles rather than one*: an ODF chart states **both** rectangles.
+      `chart:coordinate-region` is the inner one and `chart:plot-area`'s own
+      `svg:x`…`svg:height` is `maRemainingSpace` — the diagram's available rectangle, after the
+      page margin, the main title, the legend and the axis titles and before any axis label. So a
+      discrepancy can be attributed to one half or the other instead of only being a number, which
+      is what `ChartDrawing.DiagramArea` exists to expose. That split is what settled where the
+      error was: of the 100 charts that state both rectangles, **none** had the available one
+      right to within a point, and its mean error on the right edge was 37.7 pt against a
+      residual of 1.1 in the reservations on the charts where it happened to be right.
+      **The trap, and it invalidated three runs' worth of measurement: a corpus file's stated
+      rectangle is not necessarily LibreOffice's own answer.** These files come from Excel, from
+      old LibreOffice versions and from hand editing, and the exporter writes back whatever
+      rectangle the diagram was carrying. `chart2/qa/extras/data/odp/chart.odp` states a plot area
+      at 0.77 cm; convert it to `.odp` with `soffice` and the same file states **0.32 cm**, which
+      is exactly two per cent of its 16 cm width and exactly what we compute. **Round-trip the
+      corpus through `soffice` first** — `soffice --headless --convert-to ods --outdir …`, one
+      chunk of ten at a time, two files needing a second attempt — and measure against the output.
+      Doing so alone moved the measured error from 56.3 pt to 49.2 pt without a line of code
+      changing.
+- [x] **The plot rectangle: 66.97 pt of mean four-edge error to 33.43 pt over 100 charts, and it
+      was never the label reservations.** Three runs looked for it there, on the strength of one
+      file. Over the round-tripped corpus the mean absolute error per edge was **left 14.6, top
+      4.7, right 37.7, bottom 9.9** — the right edge alone was more than the other three together,
+      and 74 of the 100 charts put their legend on the right. It is now **left 5.8, top 4.5, right
+      14.2, bottom 9.0**; charts with all four edges inside 10 pt went from **21 to 49**, inside
+      5 pt from 11 to 34, and the diagram's available rectangle is right within a point on 16
+      where it was right on none.
+- [x] **What the right edge actually was, in three parts.** *One*, the legend's width was an
+      estimate — a key of 0.7 line heights, a gap of 0.4 and the widest name — where
+      `lcl_placeLegendEntries` (`VLegend.cxx:263-320, 507-640`) has padding of
+      `max(1 mm, 0.33 em)` on each side, a key of `0.6 em`, a gap of `max(1 mm, 0.22 em)`, and the
+      name's text **shape** with its two `0.18 em` insets. *Two*, **a line chart's key is a flat
+      800 hundredths of a millimetre**, not a fraction of the font:
+      `getPreferredLegendKeyAspectRatio` returns `(1000, 1000)` for a filled series and
+      `(800, -1)` for one that draws a line, and a negative height means the width is absolute
+      (`VSeriesPlotter.cxx:2538-2582`, `VLegend.cxx:976-984`) — 22.7 pt against 6.0 at ten point.
+      *Three*, **the entries wrap into columns**: a side legend is `ChartLegendExpansion_HIGH`,
+      which fits as many rows as the space allows and then starts another column, and reading
+      `tdf146463.ods`'s fourteen series as one column put the right edge 120 pt out.
+- [x] **Two ODF reader defects the harness found, and between them they were most of the error.**
+      Both are silent: they leave a model in which every part is plausible.
+      *One*: **a series finds its column of the `local-table` by the range the table itself
+      states, not by the column letter.** Calc writes a `draw:g/svg:desc` inside one cell of every
+      column naming the sheet range it was copied from — `SchXMLTableContext`'s column
+      descriptions, which `SchXMLTableHelper::applyTableToInternalDataProvider` matches each
+      series' stated range against. Reading the letter is right exactly when the charted range
+      starts at column B, which the corpus deck does; `labelString.ods` charts `Sheet1.D6:D8`
+      against a two-column table, so the letter said column four and the series came out
+      **nameless** — and a nameless series contributes no legend entry, so the legend vanished and
+      took its whole width out of the reservation. *Two*: `chart:series-source="rows"` transposes
+      the table, and 13 of the corpus' 107 ODF charts state it; reading one upright turns the
+      series names into categories and leaves every series unnamed. Fixing the two took the mean
+      right-edge error from 28.1 pt to 14.6 and the charts inside 10 pt from 33 to 49.
+- [x] **`VDiagram::adjustInnerSize` was named as the missing pass, and it is not missing — it is
+      the formula we already have.** Worth writing down so it is not chased a fourth time.
+      `reduceToMinimumSize` shrinks the inner rectangle to `size/2.2`, the axes draw their widest
+      labels round it, `ShapeFactory::getRectangleOfShape` measures the union, and
+      `adjustInnerSize` (`VDiagram.cxx:653-700`) grows the inner rectangle by
+      `available − consumed` and shifts it by `consumed.minX − available.minX`. Substitute
+      `consumed = inner + reservations` and the whole pass reduces to
+      **`inner = available shrunk by the reservations on each side`**, which is exactly what
+      `PlotAreaOf` computes analytically. What the pass buys is that the reservations are
+      *measured* rather than predicted; it cannot fix a reservation that is predicted correctly,
+      and it cannot fix an available rectangle that is wrong. Ours were the latter.
+- [ ] **The chart labels are drawn in Liberation Serif and LibreOffice draws them in Liberation
+      Sans.** This is now the largest single remaining error and it is **not in this library**.
+      `SlideChart.Measurer.Body` and `SheetChart`'s equivalent build a `SlideTextRun` with a
+      **null** family, which `SystemFontResolver` substitutes to Liberation Serif;
+      `pdffonts` on LibreOffice's own PDF for `chart-bar-deck.odp` reports one face,
+      `BAAAAA+LiberationSans`, and chart2's default is `DefaultFontType::LATIN_SPREADSHEET`
+      (`CharacterProperties::AddDefaultsToMap`, `chart2/source/tools/CharacterProperties.cxx:373`).
+      Measured on `chart-bar-deck.odp` against its own stated region: the left edge is **1.29 pt
+      short in Serif and 0.44 pt long in Sans**, so the wrong face is 1.73 pt of the 1.29 that
+      three runs spent looking for in the label geometry. Fixing it needs the family to reach the
+      measurer, which means `IChartTextMeasurer.Measure` gaining a face and both family call
+      sites changing — `Paperless.Presentations` and `Paperless.Spreadsheets`, neither of which is
+      `Core/Charts`'. **Do this before any further plot-rectangle work**, or the geometry will be
+      fitted to compensate for it.
+- [ ] **`bestFit` wraps a pie's data label to fit inside its wedge, and that is the whole of
+      `tdf146756_bestFit.pptx`'s remaining 11 words.** Read the two extractions side by side
+      before starting: the reference draws `Mon itor, troub lesho ot and rem ediat e, 24.8 %`
+      where we draw `Monitor, troubleshoot and remediate, 24.8%` — the same label, broken across a
+      column two or three characters wide, and `pdftotext` counts each fragment as a word. So the
+      11 is not eleven missing labels; it is three labels wrapped, plus the two slide numbers the
+      deck's masters carry and we do not. `PieChart::performLabelBestFitInnerPlacement`
+      (`chart2/source/view/charttypes/PieChart.cxx:1961-2060`) is the port: it takes the wedge's
+      bisecting ray, the pie radius less a 2.5% border offset, and shrinks the label's bounding
+      box until it fits inside the sector — wrapping, not scaling. Worth doing for the picture
+      rather than for the count, and worth knowing that the count will move by more than the
+      fidelity does.
+- [ ] **What is left in the plot rectangle, characterised rather than guessed.** With the
+      available rectangle right within a point — 16 of the 100 — the residual reservations are
+      **left 3.3, top 0.1, right 3.3, bottom 7.0 pt**, so the bottom, which is the category
+      labels, is where to look next.
+      And one pattern recurs across a third of the corpus that is not understood: on charts with
+      **no axis titles at all**, LibreOffice's available rectangle is 450 hundredths of a
+      millimetre further right, 420 higher off the bottom and one extra page margin in from the
+      right than the composition predicts — the exact gaps `lcl_createTitle` uses for the Y and X
+      axis titles (`ChartView.cxx:1069-1072`). `stepped_lines.ods` is the cleanest case: a
+      10.001 × 8.001 cm chart whose stated plot area is 0.65 cm from the left where two per cent
+      is 0.20. Either those titles exist and are empty, or something else claims the same
+      constants; `lcl_createTitle` returns before touching the remaining space on an empty string,
+      so the first explanation does not survive a reading and the second has not been found.
 - [x] **The free oracle was two-thirds unread, and the corpus deck is what hid it.**
       `coordinate-region` is written under **two** namespaces: it began as a LibreOffice extension
       and was standardised later, so a file writes `chart:coordinate-region` or

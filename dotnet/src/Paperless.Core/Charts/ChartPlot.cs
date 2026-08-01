@@ -545,6 +545,30 @@ public sealed partial record ChartPlot
     public (double X, double Y, double Width, double Height)? PlotAreaFraction { get; init; }
 
     /// <summary>
+    /// Whether a pie is drawn as concentric rings — a doughnut — rather than as one filled disc.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>c:doughnutChart</c>, ODF's <c>chart:class="chart:ring"</c>. A flag rather than a
+    /// <see cref="Kind"/> of its own because everything else about a doughnut is a pie: the
+    /// wedges, the colours per point, the legend of categories, the label placement. What changes
+    /// is the radius each series occupies and, through
+    /// <c>getAvailablePosAndSizeForDiagram</c>'s test on the chart type, the page margin — a pie
+    /// gets a flat 350 and a doughnut the ordinary two per cent.
+    /// </para>
+    /// <para>
+    /// <strong>The hole is always half the radius, whatever the file says.</strong>
+    /// <c>PieChart</c>'s constructor sets <c>m_fRadiusOffset = 1.0</c> for a ring chart and
+    /// nothing else (<c>PieChart.cxx:212-216</c>), which puts ring <em>k</em> of <em>n</em>
+    /// between <c>k/(n+1)</c> and <c>(k+1)/(n+1)</c> of the outer radius — so a single-ring
+    /// doughnut has a hole at exactly half. OOXML's <c>c:holeSize</c> is parsed into
+    /// <c>mnHoleSize</c> and then read by nothing at all, exactly as <c>c:bubbleScale</c> is, so
+    /// honouring it would be a disagreement with the reference rather than a refinement of it.
+    /// </para>
+    /// </remarks>
+    public bool Rings { get; init; }
+
+    /// <summary>
     /// The chart's own coordinate space, when the file states one.
     /// </summary>
     /// <remarks>

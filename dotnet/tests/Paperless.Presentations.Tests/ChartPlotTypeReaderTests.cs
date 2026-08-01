@@ -257,30 +257,41 @@ public class ChartPlotTypeReaderTests
     // -------------------------------------------------------------- surface
 
     /// <summary>
-    /// A surface chart reads as nothing at all, and its frame stays empty.
+    /// A surface chart reads as a <em>bar</em> chart, because that is what the reference draws.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Deliberate, and the discipline is the SmartArt evaluator's: a plot type that is not
-    /// implemented draws nothing rather than approximately, because an absent picture reads as a
-    /// missing feature and a wrong one reads as a layout bug.
+    /// This test asserted the opposite until the reference was actually consulted, and the
+    /// correction is worth keeping rather than quietly replacing. The three reasons given for
+    /// drawing nothing were: there is not one surface chart in the whole of
+    /// <c>chart2/qa/extras/data/</c>; LibreOffice has no <c>SurfaceChart</c> and substitutes
+    /// "a deep 3D bar chart from all surface charts"; and the projection is genuinely
+    /// three-dimensional where this engine maps two fractions onto a rectangle. All three are
+    /// true. The conclusion was not, because the standard here is "matches the reference" and the
+    /// reference's answer <em>is</em> that substitution — <c>SERVICE_CHART2_SURFACE</c> is spelled
+    /// <c>"com.sun.star.chart2.ColumnChartType"</c>
+    /// (<c>oox/source/drawingml/chart/typegroupconverter.cxx:79, 198-199</c>).
     /// </para>
     /// <para>
-    /// Three reasons it is not implemented. There is not one surface chart in the whole of
-    /// <c>chart2/qa/extras/data/</c> — zero of 351 OOXML plot groups and zero of 219 ODF
-    /// <c>chart:class</c> attributes — so there is nothing to measure against. LibreOffice has no
-    /// <c>SurfaceChart</c> either and substitutes "a deep 3D bar chart from all surface charts"
-    /// (<c>typegroupconverter.cxx:198-199</c>), so even the reference is a substitution. And the
-    /// projection is genuinely three-dimensional, where this engine maps two fractions onto a
-    /// rectangle.
+    /// Measured rather than assumed: a <c>c:surfaceChart</c> made by renaming the plot group in
+    /// <c>chart2/qa/extras/data/pptx/chart.pptx</c> converts through <c>soffice</c> to a PDF of
+    /// 25 words — a legend of three series, four category names and a value axis labelled
+    /// <c>0 1 … 10</c>. Drawing nothing gave 0 of those, since the slide's only shape is the chart
+    /// frame; drawing it as a bar chart gives 21, the four missing being tick labels a
+    /// three-dimensional wall scales differently. **"There is no corpus file" is a reason to make
+    /// one, not a reason to stop.**
     /// </para>
     /// </remarks>
     [Theory]
     [InlineData("surfaceChart")]
     [InlineData("surface3DChart")]
-    public void ASurfaceChartDrawsNothingRatherThanSomethingElse(string element)
+    public void ASurfaceChartReadsAsTheBarChartTheReferenceSubstitutes(string element)
     {
-        Read($"<c:plotArea><c:{element}><c:ser>{Values(1, 2, 3)}</c:ser></c:{element}></c:plotArea>")
-            .ShouldBeNull();
+        ChartPlot plot = Read(
+            $"<c:plotArea><c:{element}><c:ser>{Values(1, 2, 3)}</c:ser></c:{element}></c:plotArea>")
+            .ShouldNotBeNull();
+
+        plot.Kind.ShouldBe(ChartPlotKind.Bar);
+        plot.Series.Count.ShouldBe(1);
     }
 }
