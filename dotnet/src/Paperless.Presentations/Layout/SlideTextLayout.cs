@@ -221,7 +221,7 @@ public static class SlideTextLayout
         if (block.Paragraph.Runs.Count == 0) return;
 
         SlideTextRun first = block.Paragraph.Runs[0];
-        (OpenTypeFace? face, _) = fonts.Resolve(
+        (OpenTypeFace? face, FontReference? reference) = fonts.Resolve(
             marker.Typeface ?? first.Typeface, first.Weight, first.IsItalic);
 
         if (face is null) return;
@@ -250,8 +250,8 @@ public static class SlideTextLayout
         }
 
         placed.Add(new PlacedGlyphRun(
-            Build(shaped, marker.Text, size, Reference(face), new DocPoint(pen, baseline),
-                  Length.Zero),
+            Build(shaped, marker.Text, size, reference ?? Reference(face),
+                  new DocPoint(pen, baseline), Length.Zero),
             marker.Colour ?? first.Colour));
     }
 
@@ -267,7 +267,7 @@ public static class SlideTextLayout
         SlideParagraph paragraph, SlideTextBody body, Length width, SlideFonts fonts)
     {
         List<FormattedRun> runs = [];
-        List<Colour> colours = [];
+        List<RunStyle> styles = [];
         OpenTypeFace? first = null;
 
         foreach (SlideTextRun run in paragraph.Runs)
@@ -280,7 +280,7 @@ public static class SlideTextLayout
             Length size = Scaled(run.Size, body.FontScale);
 
             runs.Add(new FormattedRun(run.Start, run.Length, face, size));
-            colours.Add(run.Colour);
+            styles.Add(new RunStyle(run.Colour, reference, face));
         }
 
         if (first is null) return null;
@@ -347,7 +347,7 @@ public static class SlideTextLayout
         foreach (PlacedLine line in lines) total += line.Height;
 
         return new Block(
-            paragraph, measured, colours, lines, total + paragraph.SpaceBefore + paragraph.SpaceAfter);
+            paragraph, measured, styles, lines, total + paragraph.SpaceBefore + paragraph.SpaceAfter);
     }
 
     /// <summary>
@@ -489,7 +489,9 @@ public static class SlideTextLayout
             if (shaped.Glyphs.Count == 0) continue;
 
             GlyphRun glyphs = Build(
-                shaped, text, run.EmSize, Reference(run.Face), new DocPoint(pen, baseline),
+                shaped, text, run.EmSize,
+                block.FontFor(run.Start, run.Face) ?? Reference(run.Face),
+                new DocPoint(pen, baseline),
                 line.Box.SpaceAdd);
 
             placed.Add(new PlacedGlyphRun(glyphs, block.ColourAt(run.Start)));
@@ -552,6 +554,17 @@ public static class SlideTextLayout
         };
     }
 
+    /// <summary>
+    /// A reference for a face that did not come through a resolver.
+    /// </summary>
+    /// <remarks>
+    /// The last resort, and it names the family because that is all an
+    /// <see cref="OpenTypeFace"/> knows: it is a parsed table directory with no memory of the file
+    /// it was read out of. A backend given this can group runs by font and can measure them, but
+    /// it cannot open the face — so a PDF built from it references the family and embeds no font
+    /// program. Everything laid out here reaches <see cref="Emit"/> with
+    /// <see cref="RunStyle.Font"/> set instead; see the remark on that.
+    /// </remarks>
     private static FontReference Reference(OpenTypeFace face) => new()
     {
         FamilyName = face.FamilyName ?? string.Empty,
@@ -560,11 +573,42 @@ public static class SlideTextLayout
         FaceKey = face.FamilyName ?? string.Empty,
     };
 
+    /// <summary>
+    /// What a run carries that changes how it is drawn but not how wide it is.
+    /// </summary>
+    /// <param name="Colour">The colour it is drawn in.</param>
+    /// <param name="Font">
+    /// The reference the run's face was resolved through, whose <c>FaceKey</c> is the font file's
+    /// own path.
+    /// </param>
+    /// <param name="Face">
+    /// The face that reference names, kept so that a sub-run drawn in a <em>different</em> face
+    /// cannot be embedded from it. See <see cref="Block.FontFor"/>.
+    /// </param>
+    /// <remarks>
+    /// <para>
+    /// The font reference travels here rather than on <see cref="FormattedRun"/> for the same
+    /// reason the colour does: <see cref="MeasuredParagraph"/> keeps only what changes a
+    /// measurement, and which file a face was loaded from moves no line break.
+    /// </para>
+    /// <para>
+    /// It has to travel <em>somewhere</em>, though, and that is the whole of this fix. Rebuilding
+    /// the reference from the face — <c>FaceKey = face.FamilyName</c>, which is what
+    /// <see cref="Reference"/> still does for hand-built input — hands the PDF writer a key
+    /// <c>FileFontProvider</c> cannot open, so every deck rendered to PDF referenced its faces and
+    /// embedded none of them. Measured with <c>pdffonts</c> on <c>deck-features.pptx</c>: both
+    /// <c>LiberationSans</c> and <c>OpenSymbol</c> reported <c>emb no</c>, while the same
+    /// document's text extracted at 43 of 43 words matching LibreOffice — which is exactly why no
+    /// existing check could see it.
+    /// </para>
+    /// </remarks>
+    private readonly record struct RunStyle(Colour Colour, FontReference? Font, OpenTypeFace? Face);
+
     /// <summary>One paragraph, measured and broken.</summary>
     private sealed record Block(
         SlideParagraph Paragraph,
         MeasuredParagraph Measured,
-        IReadOnlyList<Colour> Colours,
+        IReadOnlyList<RunStyle> Styles,
         IReadOnlyList<PlacedLine> Lines,
         Length Height)
     {
@@ -578,15 +622,45 @@ public static class SlideTextLayout
         /// <see cref="MeasuredParagraph"/> keeps only what changes a measurement — a colour does
         /// not move a line break, so it travels with whatever draws the text.
         /// </remarks>
-        public Colour ColourAt(int index)
+        public Colour ColourAt(int index) => StyleAt(index).Colour;
+
+        /// <summary>
+        /// The resolved reference for a sub-run, or null when nothing here can name its face.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Matched on the face and not only on the position. The runs a caller measures are cut
+        /// further before they are drawn — by direction, by script, and by <c>FontItemiser</c>
+        /// where the run's own face has no glyph for a character — and only the last of those
+        /// changes the face. A reference handed to a sub-run drawn in a face it does not name
+        /// would embed <em>the wrong font file</em>, which is worse than embedding none: the
+        /// glyph indices the shaper produced belong to the other face, so the page would draw
+        /// confidently wrong letters.
+        /// </para>
+        /// <para>
+        /// Reference equality is the right test because the face cache hands back one instance
+        /// per resolved request, and <c>FontItemiser</c> passes the primary face straight through
+        /// when it does not substitute. Nothing in this library turns glyph fallback on today, so
+        /// the guard costs a pointer comparison and buys the invariant outright.
+        /// </para>
+        /// </remarks>
+        /// <param name="index">A character the sub-run covers.</param>
+        /// <param name="face">The face the sub-run will actually be shaped and drawn in.</param>
+        public FontReference? FontFor(int index, OpenTypeFace face)
         {
-            for (int i = 0; i < Paragraph.Runs.Count && i < Colours.Count; i++)
+            RunStyle style = StyleAt(index);
+            return ReferenceEquals(style.Face, face) ? style.Font : null;
+        }
+
+        private RunStyle StyleAt(int index)
+        {
+            for (int i = 0; i < Paragraph.Runs.Count && i < Styles.Count; i++)
             {
                 if (index >= Paragraph.Runs[i].Start && index < Paragraph.Runs[i].End)
-                    return Colours[i];
+                    return Styles[i];
             }
 
-            return Colours.Count > 0 ? Colours[0] : Colour.Black;
+            return Styles.Count > 0 ? Styles[0] : new RunStyle(Colour.Black, null, null);
         }
     }
 

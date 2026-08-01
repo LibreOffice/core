@@ -30,6 +30,26 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
 - [x] **Every substitution is reported**, with whether it was metric-compatible — the difference
       between a page that looks slightly different and a document whose every later page is wrong.
 - [x] Faces cached on `FaceKey`, so disposing one view of a face does not invalidate another.
+- [x] **`FaceKey` is a path, and that makes this library the only place a face can be turned back
+      into bytes.** `InstalledFace.FaceKey` is the font file, plus `#n` for a face inside a
+      collection (`Fonts/SystemFontResolver.cs:22`), and it is what `FileFontProvider` opens to
+      embed a face in a PDF. **An `OpenTypeFace` cannot reproduce it**: it is the parsed table
+      directory and holds no path, so a caller handed only a face can name the family and nothing
+      more. Three layouters did exactly that and their PDFs referenced faces they carried no bytes
+      for — `deck-features.pptx` rasterised as a page of empty boxes while extracting 43 of 43
+      words and matching LibreOffice. If a helper somewhere cannot see a `FontReference`, thread
+      the resolution's own to it; do not rebuild one. The account is in
+      `src/Paperless.Rendering/TODO.md` under "Font embedding is a contract with the callers", and
+      `tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` fails if it happens again.
+- [ ] **A fallback face has no key either.** `IGlyphFallbackResolver.FallbackFor` answers with an
+      `OpenTypeFace`, so a sub-run `FontItemiser` cuts onto a fallback face has no reference of its
+      own and must not inherit the primary's: embedding a *different* file is worse than embedding
+      none, because the glyph indices the shaper produced belong to the other face and the page
+      would draw confidently wrong letters. `SlideTextLayout.Block.FontFor` refuses to hand a
+      reference to a sub-run whose face is not the one it names, which makes the sub-run
+      unembedded rather than wrong. It costs nothing today — no code in `src/` sets
+      `ItemisationOptions.GlyphFallback`, only tests do — and the honest fix when something does is
+      for this interface to answer with a reference rather than a face.
 - [ ] Per-locale substitution. Only the neutral `en` table is generated; the per-locale ones differ
       mainly in CJK preference order, and using one locale's answers for another changes which font a
       document renders in. Wants the locale plumbed through the resolver first.

@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
@@ -88,13 +89,15 @@ public sealed partial class DocxLayoutSource
             return (null, format with { FirstLineIndent = ownFirstLine });
         }
 
+        (OpenTypeFace labelFace, FontReference? labelFont) = LabelFace(definition, text, face);
+
         PageLabel label = PageLabel.Measured(
-            drawn, LabelFace(definition, text, face), text.Size,
-            new ShapingOptions(Language: text.Language));
+            drawn, labelFace, text.Size, new ShapingOptions(Language: text.Language));
 
         return (
             label with
             {
+                Font = labelFont,
                 Colour = text.Colour ?? Core.Graphics.Colour.Black,
                 Follow = follow,
                 TabStop = tabStop,
@@ -151,15 +154,30 @@ public sealed partial class DocxLayoutSource
     /// character through a font that has no such glyph — and the font is unlikely to be installed in any
     /// case. A level naming a font for an ordinary character keeps it.
     /// </remarks>
-    private OpenTypeFace LabelFace(
+    /// <returns>
+    /// The face and the reference it was resolved through. Both, because the reference cannot be
+    /// recovered from the face afterwards \u2014 an <see cref="OpenTypeFace"/> is a parsed table
+    /// directory and does not carry the path it was read from, and the path is the only thing a
+    /// PDF can turn back into an embedded font program. A label drawn from a family-named
+    /// reference is referenced and not embedded, which is what <c>pdffonts</c> reported for
+    /// <c>word-features.docx</c>'s <c>LiberationSerif</c> and <c>OpenSymbol</c> labels while every
+    /// body face in the same file embedded.
+    /// </returns>
+    private (OpenTypeFace Face, FontReference? Font) LabelFace(
         WordNumberingLevel definition, WordTextStyle text, OpenTypeFace face)
     {
-        if (definition.LevelText is [>= '\uE000' and <= '\uF8FF']) return face;
+        FontReference? own = _references.GetValueOrDefault(text.FaceKey);
+
+        if (definition.LevelText is [>= '\uE000' and <= '\uF8FF']) return (face, own);
 
         string? family = Word.Attribute(Word.Child(definition.RunProperties, "rFonts"), "ascii");
-        if (family is not { Length: > 0 }) return face;
+        if (family is not { Length: > 0 }) return (face, own);
 
-        return Face(text with { FamilyName = family }) ?? face;
+        WordTextStyle named = text with { FamilyName = family };
+
+        return Face(named) is { } resolved
+            ? (resolved, _references.GetValueOrDefault(named.FaceKey))
+            : (face, own);
     }
 
     /// <summary>The position of a level's <c>w:tab w:val="num"</c>, or null when it states none.</summary>

@@ -869,6 +869,47 @@ decomposing the group's matrix into scale, rotation and translation as LibreOffi
 are the same matrix — the group's placement *is* that decomposition, reassembled — and this way
 round needs no decomposition and no shear term.
 
+### A deck's PDF referenced its faces and embedded none of them
+
+**Every deck rendered to PDF was a page of tofu, and every check passed.** `pdffonts` on our own
+`deck-features.pptx`: `AAAAAA+LiberationSans … emb no`, `BAAAAA+OpenSymbol … emb no`. Rasterised
+by poppler, the file is empty boxes end to end. `pdftotext` gets all 43 words and matches
+LibreOffice 43/43, the page count is right, and `SlideRenderComparisonTests` compares pens and
+sizes rather than glyph shapes — so nothing pointed at the deck could see it. It is a purely
+visual defect with no numerical symptom, which is why it survived for as long as this library
+could render at all.
+
+**Why the key could not be rebuilt.** `SystemFontResolver` returns a `FontReference` whose
+`FaceKey` is the font *file's* path (`InstalledFace.FaceKey`), and `FileFontProvider` opens
+exactly that to get the bytes a `/FontFile2` needs. `SlideTextLayout.Reference(face)` rebuilt the
+reference from the `OpenTypeFace` with `FaceKey = face.FamilyName` — not out of laziness: an
+`OpenTypeFace` is a parsed table directory and has no memory of the file it was read out of, so a
+family name was the only key that helper could produce. `SlideFonts.Resolve` had returned
+`(Face, Reference)` all along and both call sites threw the reference away.
+
+**Where it travels now.** On `RunStyle`, beside the colour, looked up by character position the
+way `ColourAt` already was. That is this file's own idiom and it is the right one: `FormattedRun`
+in `Paperless.Text` states that it carries only what changes a *measurement*, and which file a
+face came from moves no line break. `EmitMarker` keeps its own — an outline bullet resolves on a
+separate path from the runs, so a fix to `Emit` alone would have left every bullet in every deck
+unembedded while the body text looked cured.
+
+**Measured.** Fourteen presentation files went from one or two unembedded faces each to none,
+with every page count and every word count unchanged, and the deck's rasterised page is now
+indistinguishable from `soffice --convert-to pdf` of the same file. A **chart's** labels came
+with it for free — `SlideChart` lays them out through `SlideTextLayout` — so `chart-bar-deck.pptx`
+was fixed without touching anything under `Core/Charts`.
+
+**A second bug went with it.** The deck now writes three Liberation Sans subsets where it wrote
+one. Keyed on the family name, regular, bold and italic — which are three separate *files* —
+collapsed onto one catalogue entry, and bold text was drawn with the regular face's glyph indices.
+Invisible while nothing was embedded, because the reader was substituting its own faces anyway.
+
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` holds all of it, including a named
+assertion for the bullet and one for the substituted case: `deck-features.pptx` asks for **Arial**
+and **Symbol**, neither installed here, and an embedded *substitute* is the correct answer when
+the original's bytes are not on the machine.
+
 ### The line height on a slide is not the font's
 
 **The single largest thing that would be wrong without reading the C++.** The PPTX importer sets
