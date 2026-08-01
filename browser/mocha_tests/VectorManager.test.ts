@@ -224,4 +224,24 @@ describe('VectorManager', function () {
 		);
 		(app as any).socket.sendMessage = function () {};
 	});
+
+	// A graphics-memory reclaim drops the cached parts and tells the
+	// listeners, so views re-fetch on their next paint.
+	it('drops cached parts and notifies on graphics memory reclaim', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			version: 1,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [{ id: 11, primitives: [] }],
+		});
+
+		let notified = 0;
+		manager.onVectorChanged(() => notified++);
+		manager.reclaimGraphicsMemory();
+
+		nodeassert.ok(notified > 0, 'listeners hear about the drop');
+		nodeassert.strictEqual(manager.requestPart(0), undefined);
+	});
 });

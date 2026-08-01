@@ -383,6 +383,16 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
+	/// Drop the decoded bitmaps and the primitive trees that reference
+	/// them, so the next paint re-fetches what it draws. The loaded
+	/// fonts stay registered, since they are few and small.
+	reclaimGraphicsMemory(): void {
+		this._bitmaps.clear();
+		this._cache.clear();
+		this._inFlightParts.clear();
+		this._fireChanged();
+	}
+
 	/// Drop all cached data for all parts.
 	discardAllCache(): void {
 		this._cache.clear();
