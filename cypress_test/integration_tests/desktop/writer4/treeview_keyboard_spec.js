@@ -136,11 +136,29 @@ describe(['tagdesktop'], 'Treeview keyboard navigation', { testIsolation: false 
 	// leave sections open, and file order is the only thing keeping these two above.
 	it('Type-ahead search jumps to matching entry', function () {
 		// Start from an entry that carries a name: the tree also holds page divider
-		// rows, and their text is empty.
-		visibleEntries().first().click();
-		cy.then(function () {
-			return helper.processToIdle(win);
-		});
+		// rows, and their text is empty. Core sends the content tree again on its own
+		// after the earlier keyboard moves, and a resend that replaces the rows in
+		// the middle of the click can put the click on a different row, or on no row
+		// at all. The state is read once the click has settled and the click is
+		// repeated if no named row holds the focus.
+		function clickFirstEntryWhileUnfocused(attemptsLeft) {
+			visibleEntries().first().click();
+			cy.then(function () {
+				return helper.processToIdle(win);
+			});
+
+			cy.cGet('#contenttree').then(function ($tree) {
+				var focused = $tree.find('.ui-treeview-entry:focus');
+				if (focused.length > 0 && focused.text().trim().length > 0)
+					return;
+
+				expect(attemptsLeft, 'attempts left to focus a named entry').to.be.greaterThan(0);
+
+				clickFirstEntryWhileUnfocused(attemptsLeft - 1);
+			});
+		}
+
+		clickFirstEntryWhileUnfocused(3);
 
 		// Type 't' to jump to next entry starting with 'T'.
 		cy.realPress('t');
@@ -148,10 +166,11 @@ describe(['tagdesktop'], 'Treeview keyboard navigation', { testIsolation: false 
 			return helper.processToIdle(win);
 		});
 
-		// The focused entry should start with 'T'.
+		// The focused entry should start with 'T'. The first cell of a section row
+		// holds its icon and carries no text, so the text of the whole row is read.
 		cy.cGet('#contenttree').then(function ($tree) {
 			var focused = $tree.find('.ui-treeview-entry:focus');
-			var name = focused.find('.ui-treeview-cell-text').first().text();
+			var name = focused.text().trim();
 
 			expect(name, 'focused entry, class ' + focused.attr('class')).to.match(/^T/);
 		});
