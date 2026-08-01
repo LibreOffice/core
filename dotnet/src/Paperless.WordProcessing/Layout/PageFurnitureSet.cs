@@ -48,11 +48,20 @@ public sealed class PageFurnitureSet
     /// <param name="geometry">The page's geometry, for the header's area.</param>
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
+    /// <param name="collapsesSpacing">
+    /// Whether the paragraphs of the running head collapse their spacing against one another rather than
+    /// adding it — see <see cref="FlowLayouter.LayOut"/>. A header is a frame like any other and Writer
+    /// measures the gap above its paragraphs with the same method it uses in the body.
+    /// </param>
     public PlacedFlow? Header(
-        WritingSection section, PageGeometry geometry, int pageNumber, bool isFirstPageOfSection)
+        WritingSection section,
+        PageGeometry geometry,
+        int pageNumber,
+        bool isFirstPageOfSection,
+        bool collapsesSpacing = false)
         => Resolve(
             _headers, _laidOutHeaders, section, geometry.HeaderArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: Length.Zero);
+            offsetFromTop: Length.Zero, collapsesSpacing);
 
     /// <summary>
     /// The footer a page takes, laid out, or null when it has none.
@@ -66,11 +75,16 @@ public sealed class PageFurnitureSet
     /// <param name="geometry">The page's geometry, for the footer's area.</param>
     /// <param name="pageNumber">The page's printed number.</param>
     /// <param name="isFirstPageOfSection">True for the section's own first page.</param>
+    /// <param name="collapsesSpacing">As <see cref="Header"/>'s.</param>
     public PlacedFlow? Footer(
-        WritingSection section, PageGeometry geometry, int pageNumber, bool isFirstPageOfSection)
+        WritingSection section,
+        PageGeometry geometry,
+        int pageNumber,
+        bool isFirstPageOfSection,
+        bool collapsesSpacing = false)
         => Resolve(
             _footers, _laidOutFooters, section, geometry.FooterArea, pageNumber, isFirstPageOfSection,
-            offsetFromTop: geometry.FooterOffset);
+            offsetFromTop: geometry.FooterOffset, collapsesSpacing);
 
     private static PlacedFlow? Resolve(
         Dictionary<PageFurnitureSlot, IReadOnlyList<PageBlock>> slots,
@@ -79,7 +93,8 @@ public sealed class PageFurnitureSet
         DocRect area,
         int pageNumber,
         bool isFirstPageOfSection,
-        Length? offsetFromTop)
+        Length? offsetFromTop,
+        bool collapsesSpacing)
     {
         PageFurnitureSlot slot = ChosenSlot(
             slots, pageNumber, isFirstPageOfSection,
@@ -88,7 +103,8 @@ public sealed class PageFurnitureSet
         if (!slots.TryGetValue(slot, out IReadOnlyList<PageBlock>? blocks)) return null;
         if (cache.TryGetValue(slot, out PlacedFlow? cached)) return cached;
 
-        PlacedFlow? placed = FlowLayouter.LayOut(blocks, area, offsetFromTop);
+        PlacedFlow? placed = FlowLayouter.LayOut(
+            blocks, area, offsetFromTop, collapsesSpacing: collapsesSpacing);
         cache[slot] = placed;
         return placed;
     }

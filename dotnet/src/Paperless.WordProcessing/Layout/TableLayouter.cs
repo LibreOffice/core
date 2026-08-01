@@ -40,12 +40,21 @@ public static class TableLayouter
     /// engine has ever laid out; it is read only by one that left a column without a width and so has to be
     /// fitted to what it sits in. See <see cref="PageTable.ColumnFit"/>.
     /// </param>
+    /// <param name="collapsesSpacing">
+    /// Whether the paragraphs inside a cell collapse their spacing against one another rather than adding
+    /// it — see <see cref="FlowLayouter.LayOut"/>. It decides a cell's height, and so a row's, so passing
+    /// the document's answer matters as much here as it does in the body.
+    /// </param>
     /// <returns>
     /// The cells with page-coordinate rectangles, and each row's height in order — the caller needs the
     /// heights to decide where the table ends and which rows fit on the page.
     /// </returns>
     public static (List<PlacedTableCell> Cells, List<Length> RowHeights) LayOut(
-        PageTable table, DocPoint origin, int nesting = 0, Length? available = null)
+        PageTable table,
+        DocPoint origin,
+        int nesting = 0,
+        Length? available = null,
+        bool collapsesSpacing = false)
     {
         ArgumentNullException.ThrowIfNull(table);
 
@@ -69,7 +78,8 @@ public static class TableLayouter
                         cell.Blocks,
                         new DocRect(Length.Zero, Length.Zero, inner, Length.Zero),
                         Length.Zero,
-                        nesting)
+                        nesting,
+                        collapsesSpacing)
                     : null;
 
                 Length text = content is null ? Length.Zero : FlowLayouter.Extent(content);
