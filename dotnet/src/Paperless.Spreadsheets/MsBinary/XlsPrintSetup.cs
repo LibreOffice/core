@@ -232,12 +232,19 @@ internal sealed class XlsSheetPrintState
     }
 
     /// <summary>Records a <c>ROW</c>, whose height is in twips.</summary>
-    public void AddRow(int row, int twips, bool hidden)
+    /// <param name="row">The zero-based row.</param>
+    /// <param name="twips">Its height.</param>
+    /// <param name="hidden">Whether the row is hidden.</param>
+    /// <param name="manualHeight">
+    /// <c>fUnsynced</c>: the height was set by hand and is not to be recomputed.
+    /// </param>
+    public void AddRow(int row, int twips, bool hidden, bool manualHeight = true)
     {
         if (row < 0) return;
 
         _rows.Add(new SheetSizeRun(
-            row, row, twips > 0 ? Length.FromTwips(twips) : _defaultRowHeight, hidden));
+            row, row, twips > 0 ? Length.FromTwips(twips) : _defaultRowHeight, hidden,
+            !manualHeight));
     }
 
     /// <summary>The sheet's print areas, from its <c>Print_Area</c> built-in name.</summary>

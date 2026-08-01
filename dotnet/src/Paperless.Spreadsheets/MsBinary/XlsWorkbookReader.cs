@@ -1218,7 +1218,9 @@ internal sealed class XlsWorkbookReader
         _stream.Skip(4);
         ushort flags = _stream.ReadUInt16();
 
-        _page.AddRow(row, height, (flags & 0x0020) != 0);
+        // fUnsynced, bit 6: the height does not match the font, meaning a user set it. Without it
+        // the height is Excel's own measurement and Calc recomputes it on load.
+        _page.AddRow(row, height, (flags & 0x0020) != 0, (flags & 0x0040) != 0);
 
         // The trailing ixfe is the row's default cell format, and it only applies when the
         // record says so: fGhostDirty, bit 7 of grbit, is what makes the field mean anything.

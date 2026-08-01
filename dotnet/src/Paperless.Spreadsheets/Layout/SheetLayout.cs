@@ -38,7 +38,17 @@ public sealed class SheetLayout
     /// <summary>The sheet's print setup, which is its page geometry.</summary>
     public SheetPrintSetup Setup { get; init; } = SheetPrintSetup.Default;
 
-    /// <summary>Its column widths and row heights.</summary>
+    /// <summary>
+    /// Its column widths and row heights, exactly as the file states them.
+    /// </summary>
+    /// <remarks>
+    /// A row that asks for an optimal height is <em>not</em> recomputed here, although Calc
+    /// recomputes one on load and although the runs carry
+    /// <see cref="SheetSizeRun.IsOptimalSize"/> so that a reader can tell which rows those are.
+    /// The reason is measured and is recorded in the module's TODO: Calc's own measurement of a
+    /// cell for that purpose is coarser than the one it draws with, so reproducing the formula
+    /// with an accurate measurement disagrees with the height the file already holds.
+    /// </remarks>
     public SheetGrid Grid { get; init; } = SheetGrid.Standard;
 
     /// <summary>The sheet's cells, or null when it holds none.</summary>
