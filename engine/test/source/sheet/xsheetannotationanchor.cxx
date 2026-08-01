@@ -15,6 +15,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/kit.hxx>
 #include <cppunit/TestAssert.h>
 
 using namespace css;
@@ -33,6 +34,10 @@ void XSheetAnnotationAnchor::testGetAnnotation()
     CPPUNIT_ASSERT_MESSAGE("Unable to check: getIsVisible()", !xAnnotation->getIsVisible());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to check: getPosition()", table::CellAddress(0, 2, 3),
                                  xAnnotation->getPosition());
+
+    // Showing a note caption is a no-op with the Kit, the client showing comments itself
+    if (comphelper::COKit::isActive())
+        return;
 
     xAnnotation->setIsVisible(false);
     CPPUNIT_ASSERT_MESSAGE("Unable to setIsVisible() to false", !xAnnotation->getIsVisible());

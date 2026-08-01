@@ -58,7 +58,8 @@ void XSheetAnnotation::testGetIsVisible()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     bool isVisible = aSheetAnnotation->getIsVisible();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong visible state", isVisible);
+    // Import shows no note caption with the Kit, the client showing comments itself
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong visible state", !comphelper::COKit::isActive(), isVisible);
 }
 void XSheetAnnotation::testSetIsVisible()
 {
