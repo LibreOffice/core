@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using Paperless.Containers;
 using Paperless.Containers.Ooxml;
+using Paperless.Core.Charts;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Graphics;
 using Paperless.Ooxml;
@@ -9,7 +10,8 @@ using Paperless.Ooxml.DrawingML;
 namespace Paperless.WordProcessing.Ooxml;
 
 /// <summary>
-/// Resolves an <c>a:blip</c>'s <c>r:embed</c> into the bytes of a package part.
+/// Resolves the parts a <c>w:drawing</c> points at: an <c>a:blip</c>'s <c>r:embed</c> into picture
+/// bytes, and a <c>c:chart</c>'s <c>r:id</c> into a chart.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -42,6 +44,7 @@ public sealed class DocxPictures
     private readonly DocxFile _file;
     private readonly List<Diagnostic>? _diagnostics;
     private readonly Dictionary<string, FramePicture> _byPart = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, DocxChart> _chartsByPart = new(StringComparer.Ordinal);
 
     /// <summary>Creates a resolver over an open package.</summary>
     /// <param name="file">The package, for its parts and their relationships.</param>
@@ -124,6 +127,117 @@ public sealed class DocxPictures
         return FramePicture.None;
     }
 
+    /// <summary>
+    /// The chart a <c>w:drawing</c> holds, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Resolved here rather than in a reader of its own because the two indirections are the same ones a
+    /// picture takes and the second of them is the trap: <c>c:chart/@r:id</c> is scoped to the part the
+    /// drawing sits in, so a chart in a header resolves against <c>header1.xml</c>'s relationships and
+    /// not <c>document.xml</c>'s. That is exactly what <see cref="Scope"/> already tracks. It is also
+    /// why a spreadsheet's version of this resolves against the <em>drawing</em> part: a Writer drawing
+    /// is inline in the story, and a Calc one is not.
+    /// </para>
+    /// <para>
+    /// <strong>The theme comes from the document and a themed chart draws nothing without it.</strong> A
+    /// chart part may state <c>a:schemeClr val="accent1"</c> rather than an <c>a:srgbClr</c>, and
+    /// resolving one needs <c>word/theme/theme1.xml</c> — which <see cref="DocxFile.Theme"/> has already
+    /// read for the run colours. Passing null instead leaves every series with no fill and draws a plot
+    /// area with its axes and not one mark on it, and every chart LibreOffice's own export writes states
+    /// <c>a:srgbClr</c>, which is how a corpus of round-tripped files hides it.
+    /// </para>
+    /// <para>
+    /// Cached per part beside the pictures, because <c>testMultiplechartembeddings.docx</c> is the shape
+    /// this exists for: several frames, and nothing stops two of them naming one chart part.
+    /// </para>
+    /// </remarks>
+    public DocxChart Chart(XElement drawing)
+    {
+        ArgumentNullException.ThrowIfNull(drawing);
+
+        XElement? data = drawing
+            .Descendants(XName.Get("graphicData", OoxmlNamespaces.DrawingML))
+            .FirstOrDefault();
+
+        if (data is null) return default;
+        if (data.Attribute("uri")?.Value != DrawingChart.ChartUri) return default;
+
+        string? relationshipId = data
+            .Element(XName.Get("chart", OoxmlNamespaces.DrawingMLChart))
+            ?.Attribute(XName.Get("id", OoxmlNamespaces.Relationships))?.Value;
+
+        if (relationshipId is null) return default;
+        if (_file.Package is not OpcPackage package) return default;
+
+        OpcXml.Relationship? found = null;
+        foreach (OpcXml.Relationship relationship in package.GetRelationships(Scope))
+        {
+            if (!string.Equals(relationship.Id, relationshipId, StringComparison.Ordinal)) continue;
+
+            found = relationship;
+            break;
+        }
+
+        if (found is not { IsExternal: false } target) return default;
+        if (_chartsByPart.TryGetValue(target.Target, out DocxChart cached)) return cached;
+
+        DocxChart chart = LoadChart(package, target.Target);
+        _chartsByPart[target.Target] = chart;
+        return chart;
+    }
+
+    /// <summary>The chart a package part holds, or nothing when the part is missing or unreadable.</summary>
+    private DocxChart LoadChart(OpcPackage package, string partName)
+    {
+        if (package.GetPart(partName) is not { } part)
+        {
+            _diagnostics?.Add(new Diagnostic(
+                DiagnosticSeverity.Warning, "PL2376",
+                $"A chart names the package part '{partName}', which the package does not hold, "
+                + "so the frame stays empty.",
+                new DiagnosticLocation(partName)));
+            return default;
+        }
+
+        XElement? chartSpace;
+        using (Stream content = part.Open()) chartSpace = OoxmlXml.TryLoad(content, out _);
+        if (chartSpace is null) return default;
+
+        return new DocxChart(
+            DrawingChartPlot.Read(chartSpace, _file.Theme), LabelFamily(chartSpace));
+    }
+
+    /// <summary>
+    /// The family a chart part's text is set in.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The first literal <c>a:latin/@typeface</c> anywhere in the part, then the theme's minor latin
+    /// face, then Calibri. Anything beginning with a plus — <c>+mn-lt</c>, <c>+mj-lt</c> — is a
+    /// <em>reference</em> to the theme rather than a name, so taking it as one asks the resolver for a
+    /// family no system has and every label is measured in a fallback.
+    /// </para>
+    /// <para>
+    /// Counted over <c>chart2/qa/extras/data/docx/</c>'s 69 chart parts: 36 name no face at all, 22
+    /// name <c>+mn-lt</c>, and 11 state a real one — six Arial, two Calibri, two Times New Roman. So
+    /// both halves of this are exercised by the corpus, and neither alone covers a sixth of it.
+    /// </para>
+    /// </remarks>
+    private string? LabelFamily(XElement chartSpace)
+    {
+        foreach (XElement latin in chartSpace.Descendants(XName.Get("latin", OoxmlNamespaces.DrawingML)))
+        {
+            string? typeface = latin.Attribute("typeface")?.Value;
+            if (string.IsNullOrWhiteSpace(typeface)) continue;
+            if (typeface[0] == '+') continue;
+
+            return typeface;
+        }
+
+        return _file.Theme?.Fonts?.MinorLatin ?? "Calibri";
+    }
+
     /// <summary>The picture a relationship id names, or nothing when it names none that can be drawn.</summary>
     private FramePicture Embedded(string relationshipId)
     {
@@ -178,3 +292,12 @@ public sealed class DocxPictures
         return EmbeddedPicture.Read(buffer.ToArray(), part.MediaType, partName, _diagnostics);
     }
 }
+
+/// <summary>What a chart part yielded: the chart itself and the face its text is set in.</summary>
+/// <remarks>
+/// The two together because they come out of one part and are read in one pass, and because the face
+/// cannot be recovered from the chart afterwards — <c>ChartPlot</c> carries type sizes and no family.
+/// </remarks>
+/// <param name="Plot">The chart, or null when the part holds none that can be drawn.</param>
+/// <param name="Family">The family its labels are set in, or null when the part named none.</param>
+public readonly record struct DocxChart(ChartPlot? Plot, string? Family);

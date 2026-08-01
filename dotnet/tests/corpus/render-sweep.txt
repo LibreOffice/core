@@ -7,7 +7,7 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 223 of 231 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 226 of 234 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
 #
@@ -26,21 +26,18 @@
 # and word-features.{doc,docx,dotx,rtf} 149–150/154–155 → 154–155/154–155. See the
 # numbering item in `src/Paperless.WordProcessing/TODO.md` for what the bug was.
 #
-# The six chart rows now match: bars, gridlines, lines, pies and areas all draw, and a
-# spreadsheet's chart draws too. See `dotnet/TODO.md` Phase 3.5 for what each of the six
-# measures and for the three defects the spreadsheet forms found. They stayed matching
-# through data labels, formatted ticks, a secondary axis, a real scatter, trendlines and
-# their equations, rotated and thinned axis labels, and a data table below the plot — none
-# of which this corpus exercises, which is why the deck set in `chart2/qa/extras/data/pptx/`
-# is the chart oracle and these six rows are only the regression guard. That guard has now
-# earned its keep twice: every one of those features changes the plot rectangle, and six
-# rows that are all bar charts with labels that fit is exactly the case that must not move.
-# through data labels, formatted ticks, a secondary axis and a real scatter — none of which
-# this corpus exercises, which is why the deck set in `chart2/qa/extras/data/pptx/` is the
-# chart oracle and these six rows are only the regression guard. They stayed matching through
-# radar, bubble, stock and of-pie too, and for the same reason: not one of the six is any of
-# those, and neither is any of the 38 decks or 9 ODPs. The files that exercise the five plot
-# types are in `chart2/qa/extras/data/`'s `docx/`, `xlsx/`, `ods/` and `odt/` directories.
+# The nine chart rows now match: bars, gridlines, lines, pies and areas all draw, a
+# spreadsheet's chart draws, and now a *text document's* does too — the three
+# `chart-bar-text.{docx,fodt,odt}` rows are new with the Writer seam and are 41/41 each,
+# with their tick labels within half a point of the reference's. See `dotnet/TODO.md`
+# Phase 3.5 for what each of the nine measures and for the three defects the spreadsheet
+# forms found. The six older rows stayed matching through data labels, formatted ticks, a
+# secondary axis, a real scatter, trendlines and their equations, rotated and thinned axis
+# labels, a data table below the plot, and radar, bubble, stock and of-pie — none of which
+# this corpus exercises, which is why the sets in `chart2/qa/extras/data/` are the chart
+# oracle and these rows are only the regression guard. That guard has earned its keep
+# three times now: every one of those features changes the plot rectangle, and rows that
+# are all bar charts with labels that fit are exactly the case that must not move.
 #
 # The six *picture* rows now match, and they moved together for the same reason the labels
 # did — one missing seam rather than six bugs. `Paperless.Vector` imported WMF, EMF, EMF+
@@ -254,6 +251,9 @@ chart-bar-deck.pptx                1/1         20/20         OK
 chart-bar-sheet.fods               1/1         34/34         OK
 chart-bar-sheet.ods                1/1         34/34         OK
 chart-bar-sheet.xlsx               1/1         29/29         OK
+chart-bar-text.docx                1/1         41/41         OK
+chart-bar-text.fodt                1/1         41/41         OK
+chart-bar-text.odt                 1/1         41/41         OK
 emf-picture.docx                   1/1         2/2           OK
 emf-picture.odt                    1/1         2/2           OK
 odp-shape-paths.fodp               2/2         6/6           OK

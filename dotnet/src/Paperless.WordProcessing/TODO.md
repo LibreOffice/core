@@ -1117,6 +1117,33 @@ is read and verified, so what remains is the filling of pages rather than the me
       the answer is a frame that is floating, anchored at a character, and set within its anchor's line —
       which needs `Paperless.Text`'s line filler to split a line around a mid-line obstacle rather than end
       it, and that is a change to shared code that this item should not make in passing.
+- [x] **A frame can hold a chart, which is the third thing after a picture and a display list.** Writer was
+      the one family that never drew one, and what was missing was not a reader: `DrawingChart` and
+      `OdfChart` are family-blind by design and both already worked. `PageFrame` gained `Chart` and
+      `ChartFontFamily`, `Layout/FrameChart.cs` paints a laid-out `ChartPlot` straight into the sink the
+      way `SheetChart` does, and `PageDrawing.DrawFrame` gained one branch. `DocxPictures` resolves
+      `c:chart/@r:id` against the part the drawing sits in and `OdfPictures` calls `OdfChart.Locate`.
+      Measured over LibreOffice's `chart2/qa/extras/data/docx/` and `odt/`, 82 documents: total absolute
+      word error **3689 → 1348** and exact matches **0 → 27**; before it, every one of the 82 drew a
+      chart of no words at all.
+      **The order of a frame's children is what an ODT gets wrong first.** ODF writes a chart as a
+      `draw:object` followed by a `draw:image` of it, alternatives in decreasing order of preference, and
+      the reader must ask for the object first — looking at the picture first is exactly what recorded
+      every chart in every ODS as a plain picture and then painted nothing, all 82 of those replacement
+      streams being `VCLMTF`. `chart-bar-text.odt` carries 22 kB of one and is the corpus's guard for it.
+      **The face is per family and cannot ride on the model.** `ChartPlot` carries type sizes and no
+      family. Measured with `pdffonts` on LibreOffice's own PDFs, `odt/chart.odt` embeds Liberation Sans
+      and `docx/chart.docx` embeds Carlito from the same chart, because an OOXML chart takes the theme's
+      minor latin face and an ODF chart the office default — so the family sits on `PageFrame` beside the
+      plot, read as the first literal `a:latin/@typeface` in the chart part, then the theme's minor latin,
+      then Calibri. **A typeface beginning with a plus is a reference and not a name**: of the 69 DOCX
+      chart parts, 22 say `+mn-lt` and 11 state a real face, so taking `+mn-lt` as a family would measure
+      a third of the set in a fallback.
+      **The trap that cost the time here is not in the code.** `chart2/qa/extras/data/` lives in the
+      LibreOffice checkout and *not* in the `dotnet` worktree, so every sweep must be run with the
+      checkout as the working directory; run from `dotnet/` the shell glob does not expand, the CLI is
+      handed a path that does not exist, and the sweep prints a clean table of `0/0` rows that reads as a
+      catastrophic regression. It happened twice in one session.
 - [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
       it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and

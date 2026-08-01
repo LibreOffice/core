@@ -149,12 +149,24 @@ public static class PageDrawing
     /// <c>svgBlip</c>. A decode that comes back empty falls through to the raster, which is what that
     /// fallback is written into the file for.
     /// </para>
+    /// <para>
+    /// <strong>A chart wins over both, and that ordering is the whole of the ODT case.</strong> ODF
+    /// stores a chart as a <c>draw:object</c> followed by a <c>draw:image</c> of it — a picture of the
+    /// chart for a reader that cannot embed one — so a frame holding a chart usually holds a replacement
+    /// picture too. Every one LibreOffice writes is a <c>VCLMTF</c> StarView metafile, which nothing
+    /// here decodes, so the fall-through costs nothing today; drawing the composed chart is still the
+    /// right answer whatever the fallback turns out to be, because it is live geometry rather than a
+    /// snapshot taken at some other size.
+    /// </para>
     /// </remarks>
     private static void DrawFrame(PlacedFrame frame, IDrawingSink sink)
     {
         if (frame.Frame.Fill is { } fill) Fill(frame.Area, fill, sink);
 
-        if (frame.Frame.Vector is { } vector && !vector.Value.IsEmpty) vector.Value.Draw(sink, frame.Area);
+        if (frame.Frame.Chart is { } chart)
+            FrameChart.Draw(sink, chart, frame.Area, frame.Frame.ChartFontFamily);
+        else if (frame.Frame.Vector is { } vector && !vector.Value.IsEmpty)
+            vector.Value.Draw(sink, frame.Area);
         else if (frame.Frame.Image is { } image) sink.DrawImage(image, frame.Area);
 
         DrawFlow(frame.Content, sink);

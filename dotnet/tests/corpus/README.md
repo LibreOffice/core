@@ -154,12 +154,17 @@ had them overwrite each other's output.
 | `chart-bar-sheet.fods` | The same chart over a **sheet's own cells**: `A1:C5` holds the data and the series say `chart:values-cell-range-address="Revenue.B2:Revenue.B5"`. The local table is written anyway, as a cache, so this is the case where a live range genuinely exists and the cache is preferred regardless. Hand-written flat, header and footer off |
 | `chart-bar-sheet.ods` | The same workbook packaged, so the chart is again `Object 1/content.xml` and the frame is anchored inside a `table:table-cell` — the anchoring that decides where a chart can go in the content tree, since a cell cannot hold a table |
 | `chart-bar-sheet.xlsx` | And again as SpreadsheetML: `xl/charts/chart1.xml` reached through `xl/drawings/drawing1.xml`, two relationship hops from the sheet, with `c:f` naming real ranges (`Revenue!$B$2:$B$5`) beside the caches that repeat their values |
+| `chart-bar-text.fodt` | The same chart in a **text document**, hand-written flat, anchored to a paragraph between two sentences so that the frame has body text above and below it. The route Writer takes to a chart is a third one again: neither a slide's graphic frame nor a sheet's cell anchor, but `draw:frame`/`draw:object` inside a `text:p` |
+| `chart-bar-text.odt` | The same document packaged, so the chart is `Object 1/content.xml` **and** the frame carries an `ObjectReplacements/Object 1` beside it — 22 kB of `VCLMTF`, which nothing here decodes. It is the file that pins the order of a frame's children: the `draw:object` must be looked at before the `draw:image`, or the chart is recorded as a picture and painted as nothing |
+| `chart-bar-text.docx` | And again as WordprocessingML: `word/charts/chart1.xml` reached by `c:chart/@r:id` from a `w:drawing`'s `a:graphicData`, resolved against **`document.xml`'s** relationships rather than a drawing part's — the one structural difference from the XLSX route. It is also the corpus's only file where the chart's labels are set in the theme's minor face (Calibri, hence Carlito) rather than in Liberation Sans |
 
-All six extract to the same title, axis titles, series and numbers, through two vocabularies that
-share no element name. None of them is *drawn*: Paperless renders 0 words on the deck's page and
-the sheet's 14 cell words on the workbook's, against the 20 and 29–34 LibreOffice draws, because a
-chart is recorded and not painted. That is the deviation Phase 3.5 records, and the sweep entries
-for these six exist to keep it visible rather than to be fixed by accident.
+All nine extract to the same title, axis titles, series and numbers, through two vocabularies that
+share no element name, and all nine are now *drawn*: every row matches LibreOffice on pages and
+words. The three text rows are 41/41 each, and their tick labels land within half a point of the
+reference's — `180` at 91.26 pt against 92.15, `Q4` at 308.62 against 308.87 in the ODT. So the
+group's job has changed from recording a deviation to guarding against one: nine rows in three
+families, all bar charts whose labels fit, which is exactly the shape that must not move when the
+plot rectangle changes.
 
 Both ODP rendering files are 4:3-free: the page is the 28 × 15.75 cm Impress defaults to. That is not a preference —
 **LibreOffice ignores a hand-written `style:page-layout` in a flat ODP** and substitutes its own

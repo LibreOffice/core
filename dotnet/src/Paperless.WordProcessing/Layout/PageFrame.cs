@@ -1,3 +1,4 @@
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -258,6 +259,40 @@ public sealed record PageFrame
     /// </para>
     /// </remarks>
     public Lazy<VectorImage>? Vector { get; init; }
+
+    /// <summary>
+    /// The chart the frame holds, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The third thing a frame's rectangle can be filled with, beside <see cref="Image"/> and
+    /// <see cref="Vector"/>, and it is a <em>model</em> rather than a picture: the marks are composed
+    /// into the rectangle at drawing time by <c>Paperless.Core.Charts</c>, exactly as a slide's and a
+    /// sheet's are. Nothing about the wrap depends on it, which is why it sits beside the picture
+    /// rather than replacing it — a chart frame whose part could not be read still reserves its room.
+    /// </para>
+    /// <para>
+    /// A DOCX states one as a <c>w:drawing</c> whose <c>a:graphicData</c> names the chart namespace and
+    /// carries a relationship to a <c>c:chartSpace</c> part; an ODT as a <c>draw:frame</c> holding a
+    /// <c>draw:object</c> whose sub-document root is a <c>chart:chart</c>. Both arrive here as one
+    /// <see cref="ChartPlot"/>, so <c>PageDrawing</c> has one case rather than two.
+    /// </para>
+    /// </remarks>
+    public ChartPlot? Chart { get; init; }
+
+    /// <summary>
+    /// The family a chart's labels are set in, or null for the drawing code's own default.
+    /// </summary>
+    /// <remarks>
+    /// Beside <see cref="Chart"/> rather than inside it, because <see cref="ChartPlot"/> carries type
+    /// <em>sizes</em> and no family — the decks and workbooks it was built for each have one obvious
+    /// answer and Writer does not. Measured with <c>pdffonts</c> on LibreOffice's own PDFs:
+    /// <c>chart2/qa/extras/data/odt/chart.odt</c> draws its chart in Liberation Sans and
+    /// <c>docx/chart.docx</c> draws the same chart in Carlito, because an OOXML chart's text takes the
+    /// theme's minor latin face and an ODF chart's takes the office default. Measuring both in one face
+    /// leaves every label the wrong width, which moves the plot area rather than only the ink.
+    /// </remarks>
+    public string? ChartFontFamily { get; init; }
 
     /// <summary>What the frame was called in the document, for diagnostics.</summary>
     public string? Name { get; init; }
