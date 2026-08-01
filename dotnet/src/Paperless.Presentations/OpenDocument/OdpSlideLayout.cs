@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
 
@@ -156,6 +157,11 @@ internal sealed class OdpSlideLayout
                     Walk(element, Space(element, space), shapes, depth + 1);
                     break;
 
+                case "frame"
+                    when element.Element(XName.Get("table", OdfNamespaces.Table)) is { } table:
+                    shapes.AddRange(Table(element, table, space));
+                    break;
+
                 case "custom-shape":
                 case "rect":
                 case "ellipse":
@@ -176,6 +182,85 @@ internal sealed class OdpSlideLayout
 
     private static AffineTransform Space(XElement group, AffineTransform space)
         => Transform(group) is { } own ? AffineTransform.Concat(own, space) : space;
+
+    /// <summary>
+    /// The shapes a <c>draw:frame</c> holding a <c>table:table</c> draws.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Straight through <see cref="SlideTable.Place"/>, which is the whole point: a table on a
+    /// slide is one filled-and-texted shape per cell followed by one stroke per consolidated grid
+    /// line whichever filter read it, because LibreOffice decomposes the same <c>SdrTableObj</c>
+    /// either way (<c>svx/source/table/viewcontactoftableobj.cxx:202-204</c>). What ODF supplies
+    /// is the grid model and a delegate for the cell text; nothing here lays a table out.
+    /// </para>
+    /// <para>
+    /// A frame carrying a table also carries a <c>draw:image</c> — LibreOffice writes a rendered
+    /// preview of the table beside it, <c>Pictures/TablePreview1.svm</c>, for applications that
+    /// cannot draw one. Drawing that as well would put a second copy of the table on the slide,
+    /// so the frame's own shape is not placed at all when it holds a table.
+    /// </para>
+    /// </remarks>
+    private List<PlacedShape> Table(XElement frame, XElement table, AffineTransform space)
+    {
+        DocSize size = new(
+            Measure(frame, OdfNamespaces.SvgCompatible, "width"),
+            Measure(frame, OdfNamespaces.SvgCompatible, "height"));
+
+        if (size.IsEmpty) return [];
+
+        return SlideTable.Place(
+            OdfTableGeometry.Read(_file, table),
+            size,
+            AffineTransform.Concat(Placement(frame), space),
+            cell => CellBody(cell),
+            _fonts,
+            Attribute(frame, OdfNamespaces.Draw, "name"));
+    }
+
+    /// <summary>
+    /// One cell's text body, with the cell's own margins, alignment and line-height rule.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The paragraphs are the cell element's own <c>text:p</c> children, and the cascade the shape
+    /// one uses does not apply: a cell's text resolves through its <c>table-cell</c> style rather
+    /// than through the frame's graphic style, which carries nothing about the table.
+    /// </para>
+    /// <para>
+    /// <c>FontIndependentLineSpacing</c> is off for the same measured reason it is off on the
+    /// OOXML side: LibreOffice 24.2.7.2 draws a table cell's first baseline at the face's own
+    /// ascent, not at one em, whatever <c>tablecellcontext.cxx:61</c> sets. Leaving it on puts
+    /// every cell's text 1.7 pt low in an 18 pt face.
+    /// </para>
+    /// </remarks>
+    private SlideTextBody? CellBody(DrawingTableCellBox cell)
+    {
+        if (cell.TextBody is not { } element) return null;
+
+        List<OdfStyleReference> cascade =
+        [
+            new(element.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value,
+                OdfStyleFamily.TableCell),
+        ];
+
+        SlideTextBody body = OdfTextBody.Read(
+            _file, element.Descendants(XName.Get("p", OdfNamespaces.Text)), cascade);
+
+        if (body.Paragraphs.Count == 0) return null;
+
+        return body with
+        {
+            Insets = cell.Margins,
+            Anchor = cell.Anchor switch
+            {
+                "middle" or "center" => TextAnchor.Middle,
+                "bottom" => TextAnchor.Bottom,
+                _ => TextAnchor.Top,
+            },
+            FontIndependentLineSpacing = false,
+        };
+    }
 
     private PlacedShape? Shape(XElement element, AffineTransform space)
     {
