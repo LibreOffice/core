@@ -445,7 +445,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             }
 
             PageFrame? built = Ww8Frames.Build(
-                frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks));
+                frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks),
+                frame.IsSetInLine);
             if (built is not null)
             {
                 frames.Add(built with { Image = frame.Picture.Raster, Vector = frame.Picture.Vector });

@@ -54,7 +54,11 @@ public class FormatCatalogueTests
             DocumentFormat.Rtf,
             DocumentFormat.Ods, DocumentFormat.Ots, DocumentFormat.Fods,
             DocumentFormat.Xlsx, DocumentFormat.Xlsm, DocumentFormat.Xltx, DocumentFormat.Xltm,
+            DocumentFormat.Xls, DocumentFormat.Xlt, DocumentFormat.Xlsb, DocumentFormat.Csv,
             DocumentFormat.Odp, DocumentFormat.Otp, DocumentFormat.Fodp,
+            DocumentFormat.Pptx, DocumentFormat.Pptm, DocumentFormat.Potx, DocumentFormat.Potm,
+            DocumentFormat.Ppsx, DocumentFormat.Ppsm,
+            DocumentFormat.Ppt, DocumentFormat.Pot, DocumentFormat.Pps,
         ];
 
         Assert.Equal(

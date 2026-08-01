@@ -167,16 +167,17 @@ public class OdfChartPlotTypeTests
     }
 
     /// <summary>
-    /// <c>chart:surface</c> still reads as nothing, and that is the decision rather than the gap.
+    /// <c>chart:surface</c> reads as a bar chart, which is the substitution the reference makes.
     /// </summary>
     /// <remarks>
     /// There is no <c>chart:class="chart:surface"</c> anywhere in
-    /// <c>chart2/qa/extras/data/</c>'s 219 ODF chart classes, LibreOffice substitutes a 3-D bar
-    /// chart for one rather than projecting a surface, and this engine has no 3-D projection at
-    /// all. A frame that draws nothing reads as a missing feature; one drawn as bars reads as a
-    /// layout bug.
+    /// <c>chart2/qa/extras/data/</c>'s 219 ODF chart classes, so nothing here is measured; what
+    /// is measured is the OOXML side, where a synthesised <c>c:surfaceChart</c> converts through
+    /// <c>soffice</c> to a bar chart of 25 words. Both vocabularies reach the same
+    /// <c>ColumnChartType</c> in chart2, so both read the same way — see
+    /// <c>Paperless.Ooxml.DrawingML.DrawingChartPlot.KindOf</c> for the measurement.
     /// </remarks>
     [Fact]
-    public void ASurfaceChartStillDrawsNothing()
-        => Read("chart:surface").ShouldBeNull();
+    public void ASurfaceChartReadsAsTheBarChartTheReferenceSubstitutes()
+        => Read("chart:surface").ShouldNotBeNull().Kind.ShouldBe(ChartPlotKind.Bar);
 }

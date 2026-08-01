@@ -235,9 +235,11 @@ internal sealed class FrameResolution
                 if (frame.AnchorOffset >= line.Box.Line.End && !line.Box.Line.EndsParagraph) continue;
                 if (frame.AnchorOffset > line.Box.Line.End) continue;
 
+                // Its top is the baseline less however much of it stands above one: the whole height for an
+                // ordinary inline picture, and nought for a shape that hangs below the line instead.
                 DocRect placedAt = new(
                     area.X + line.Box.Left + PageDrawing.OffsetOnLine(paragraph, line, frame.AnchorOffset),
-                    area.Y + line.Baseline - frame.Size.Height,
+                    area.Y + line.Baseline - (frame.InlineAscent ?? frame.Size.Height),
                     frame.Size.Width,
                     frame.Size.Height);
 

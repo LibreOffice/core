@@ -118,7 +118,20 @@ internal static class XlsxDrawings
         XElement? picture = Child(anchor, DrawingNamespace, "pic");
         XElement? frame = Child(anchor, DrawingNamespace, "graphicFrame");
 
-        if (picture is null && frame is null) return null;
+        // A shape, a connector or a group. Nothing here draws one — the painter skips any drawing
+        // carrying neither picture nor chart — but the *anchor* still counts, because Calc's print
+        // area is the bounding box of every object on the drawing layer and a shape is an object
+        // like any other (`GroupShapeContext::createShapeContext` takes sp, cxnSp, grpSp,
+        // graphicFrame and pic alike, `sc/source/filter/oox/drawingfragment.cxx:198`). Dropping
+        // them meant a sheet whose only content was a shape had no printed block at all and
+        // produced *no pages*: `paperless render` failed outright with "the page range selects
+        // none of the 0 pages" on 20 of the 55 workbooks in `sc/qa` and `chart2/qa` that hold one,
+        // against LibreOffice's one or two pages for each.
+        XElement? shape = Child(anchor, DrawingNamespace, "sp")
+                          ?? Child(anchor, DrawingNamespace, "cxnSp")
+                          ?? Child(anchor, DrawingNamespace, "grpSp");
+
+        if (picture is null && frame is null && shape is null) return null;
 
         SheetDrawing drawing = new()
         {
@@ -129,10 +142,14 @@ internal static class XlsxDrawings
             Position = Position(Child(anchor, DrawingNamespace, "pos")),
         };
 
-        XElement? properties = Child(
-            Child(picture ?? frame, DrawingNamespace, picture is not null ? "nvPicPr" : "nvGraphicFramePr"),
-            DrawingNamespace,
-            "cNvPr");
+        // Each shape kind wraps its cNvPr in a differently named non-visual container, and they
+        // are searched in turn rather than selected, because a group's is nvGrpSpPr and a
+        // connector's is nvCxnSpPr and the wrong guess reads no name and no hidden flag.
+        XElement? properties = FirstChild(
+            picture ?? frame ?? shape,
+            "nvPicPr", "nvGraphicFramePr", "nvSpPr", "nvCxnSpPr", "nvGrpSpPr") is { } container
+                ? Child(container, DrawingNamespace, "cNvPr")
+                : null;
 
         drawing = drawing with
         {
@@ -157,6 +174,9 @@ internal static class XlsxDrawings
 
             return drawing with { IsChart = true, Chart = Plot(data, package, images, theme) };
         }
+
+        // A shape carries no image and no chart, so it reaches the print area and stops there.
+        if (picture is null) return drawing;
 
         // `BlipReference.Choose` rather than `r:embed` read straight off the blip: since Office 2016
         // one `a:blip` may name an SVG in an `asvg:svgBlip` extension beside the raster, and the
@@ -282,6 +302,17 @@ internal static class XlsxDrawings
 
     private static XElement? Child(XElement? parent, string ns, string name)
         => parent?.Element(XName.Get(name, ns));
+
+    /// <summary>The first of several alternative children, in the spreadsheet drawing namespace.</summary>
+    private static XElement? FirstChild(XElement? parent, params string[] names)
+    {
+        if (parent is null) return null;
+
+        foreach (string name in names)
+            if (parent.Element(XName.Get(name, DrawingNamespace)) is { } found) return found;
+
+        return null;
+    }
 
     private static string? Attribute(XElement? element, string name)
         => element?.Attribute(name)?.Value;

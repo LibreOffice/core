@@ -141,6 +141,10 @@ public static class DrawingChartPlot
             Categories = categories,
             Series = series,
             Kind = kind,
+
+            // A doughnut is a pie of concentric rings; the element name is the whole of the file's
+            // statement, since c:holeSize reaches nothing in the reference. See ChartPlot.Rings.
+            Rings = group.Name.LocalName == "doughnutChart",
             Direction = Value(Child(group, "barDir")) == "bar"
                 ? ChartBarDirection.Bar
                 : ChartBarDirection.Column,
@@ -258,22 +262,33 @@ public static class DrawingChartPlot
     /// <para>
     /// The 3-D variants map onto their flat counterparts, because what this model carries — the
     /// series, the fills, the scale — is the same in both and a flat drawing of a 3-D chart is
-    /// nearer the reference than nothing. A doughnut is drawn as a pie, losing its hole.
+    /// nearer the reference than nothing. A doughnut keeps its hole; see
+    /// <see cref="ChartPlot.Rings"/>.
     /// </para>
     /// <para>
-    /// <strong><c>c:surfaceChart</c> and <c>c:surface3DChart</c> are the two that stay null, and
-    /// deliberately.</strong> A surface is a height field drawn through a real 3-D projection and
-    /// there is no such projection here; LibreOffice's own importer does not have one either and
-    /// substitutes "a deep 3D bar chart from all surface charts"
-    /// (<c>oox/source/drawingml/chart/typegroupconverter.cxx:198-199, 217-218</c>), so even the
-    /// reference is a substitution. There is also not one surface chart in the whole of
-    /// <c>chart2/qa/extras/data/</c> to measure against. See the remarks on
-    /// <c>ChartLayout.Plots.cs</c> for the full reasoning.
+    /// <strong><c>c:surfaceChart</c> and <c>c:surface3DChart</c> are bar charts, because that is
+    /// what the reference draws.</strong> An earlier version left them unread on the reasoning
+    /// that a surface is a height field needing a real 3-D projection, that LibreOffice has no
+    /// <c>SurfaceChart</c> either, and that the corpus has none to measure. The first two are true
+    /// and the conclusion drawn from them was wrong: <c>SERVICE_CHART2_SURFACE</c> is spelled
+    /// <c>"com.sun.star.chart2.ColumnChartType"</c> with the comment <c>// Todo</c>
+    /// (<c>oox/source/drawingml/chart/typegroupconverter.cxx:79</c>) and the type-group switch
+    /// forces <c>mnGrouping = XML_standard</c> under "create a deep 3D bar chart from surface
+    /// charts" (<c>:198-199, 217-218</c>) — so the reference's answer to a surface chart is a bar
+    /// chart. Measured on a <c>c:surfaceChart</c> made by renaming the plot group in
+    /// <c>chart2/qa/extras/data/pptx/chart.pptx</c>: LibreOffice's PDF draws a legend of three
+    /// series, four category names and a value axis labelled <c>0 1 … 10</c> — 25 words, against
+    /// the <em>nothing</em> a slide whose only shape is the chart frame contributes when the type
+    /// is unread. So the substitution is reachable and it is not a picture of nothing. Reading it
+    /// as a bar chart gives 21 of those 25; the four that are missing are the tick labels, because
+    /// a three-dimensional wall auto-scales to <c>0 1 … 10</c> where the flat one lands on
+    /// <c>0 2 … 12</c>. What a flat engine loses is the projection, not the data.
     /// </para>
     /// </remarks>
     private static ChartPlotKind? KindOf(string localName) => localName switch
     {
         "barChart" or "bar3DChart" => ChartPlotKind.Bar,
+        "surfaceChart" or "surface3DChart" => ChartPlotKind.Bar,
         "lineChart" or "line3DChart" => ChartPlotKind.Line,
         "pieChart" or "pie3DChart" or "doughnutChart" => ChartPlotKind.Pie,
         "areaChart" or "area3DChart" => ChartPlotKind.Area,

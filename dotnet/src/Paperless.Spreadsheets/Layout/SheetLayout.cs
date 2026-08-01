@@ -152,21 +152,29 @@ public sealed class SheetLayout
     private SheetRange? _usedRange;
 
     /// <summary>
-    /// The block the sheet actually prints: its used range, widened for overflowing text.
+    /// The block the sheet actually prints: its used range, widened for the drawings floating
+    /// over it and then for overflowing text.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Distinct from <see cref="UsedRange"/> because Calc's own print-area search widens the
-    /// range it found before paginating it: a string too wide for its column spills into the
-    /// empty cells beside it and all of it is printed, so the printed area is wider than the
-    /// area holding cells (<c>ScTable::ExtendPrintArea</c>,
-    /// <c>sc/source/core/data/table1.cxx:2127</c>). On <c>xls-features.xls</c> that is the
-    /// difference between three pages and the four LibreOffice prints.
+    /// Distinct from <see cref="UsedRange"/> because Calc's own print-area search widens the range
+    /// it found twice before paginating it, and the two widenings are different rules applied in a
+    /// fixed order. <c>ScDocument::GetPrintArea</c> takes the maximum of the cells' own extent and
+    /// the drawing layer's bounding box (<c>sc/source/core/data/documen2.cxx:644-664</c>), so a
+    /// chart anchored right of the last cell adds the columns it covers — see
+    /// <see cref="SheetDrawingArea"/>. Only then does <c>ScTable::ExtendPrintArea</c> widen it
+    /// again for a string too wide for its column, which spills into the empty cells beside it and
+    /// is printed whole (<c>sc/source/core/data/table1.cxx:2127</c>). On
+    /// <c>xls-features.xls</c> the second of those is the difference between three pages and the
+    /// four LibreOffice prints.
     /// </para>
     /// <para>
-    /// Only when the sheet declares no print range of its own. A declared range is honoured as
-    /// written, and Calc agrees: it widens only the axis the search chose, which is neither of
-    /// them once the range came from the file.
+    /// The text widening applies only when the sheet declares no print range of its own. A declared
+    /// range is honoured as written, and Calc agrees: it widens only the axis the search chose,
+    /// which is neither of them once the range came from the file. The drawing widening is applied
+    /// either way, because a declared whole-column range is cut back to this range and Calc cuts it
+    /// back to the drawing-widened one (<c>AdjustPrintArea(false)</c>,
+    /// <c>printfun.cxx:735-741</c>).
     /// </para>
     /// </remarks>
     public SheetRange PrintedRange
@@ -175,7 +183,7 @@ public sealed class SheetLayout
         {
             if (_printedRange is { } cached) return cached;
 
-            SheetRange used = UsedRange;
+            SheetRange used = SheetDrawingArea.Extend(UsedRange, Drawings, Grid);
             SheetRange printed = used.IsValid && Setup.PrintAreas.Count == 0
                 ? used with { LastColumn = SheetTextOverflow.ExtendedLastColumn(this, used) }
                 : used;

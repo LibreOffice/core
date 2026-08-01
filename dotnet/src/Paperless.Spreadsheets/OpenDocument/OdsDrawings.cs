@@ -56,6 +56,8 @@ internal static class OdsDrawings
         List<SheetDrawing> drawings = [];
         int row = 0;
 
+        ReadSheetShapes(file, table, drawings);
+
         foreach (XElement rowElement in Rows(table))
         {
             int repeat = Repeat(rowElement, "number-rows-repeated");
@@ -73,6 +75,40 @@ internal static class OdsDrawings
         }
 
         return drawings.Count == 0 ? SheetDrawings.Empty : new SheetDrawings(drawings);
+    }
+
+    /// <summary>
+    /// The drawings fastened to the sheet rather than to a cell: <c>table:shapes</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF has two containers for a sheet's drawings and they mean different anchors.
+    /// A <c>draw:frame</c> inside a <c>table:table-cell</c> is anchored to that cell and its
+    /// <c>svg:x</c>/<c>svg:y</c> are measured from the cell's corner; a <c>draw:frame</c> inside
+    /// <c>table:shapes</c> — the table's own first child, before the columns — is anchored to the
+    /// <em>sheet</em>, and its <c>svg:x</c>/<c>svg:y</c> are measured from the table's origin.
+    /// LibreOffice keeps the same distinction on the way back out: <c>ScXMLExport</c> writes a
+    /// page-anchored object into <c>table:shapes</c> and a cell-anchored one into the cell
+    /// (<c>sc/source/filter/xml/xmlexprt.cxx</c>, <c>WriteShapes</c>), and its importer routes the
+    /// container through <c>ScXMLTableShapeContext</c> with no cell address at all.
+    /// </para>
+    /// <para>
+    /// Walking only the cells is what made this invisible: every ODS LibreOffice writes from a
+    /// chart pasted onto a cell puts the frame in the cell, so the whole corpus took the first
+    /// route. <c>chart2/qa/extras/data/ods/tdf166428_Low_High_StockChart_LO248.ods</c> takes the
+    /// second, and its stock chart was read into a correct <c>ChartPlot</c> that then had nowhere
+    /// to go — 24 words rendered against LibreOffice's 60, all of the difference being the chart.
+    /// </para>
+    /// </remarks>
+    private static void ReadSheetShapes(OdfFile file, XElement table, List<SheetDrawing> drawings)
+    {
+        XElement? shapes = table.Element(XName.Get("shapes", OdfNamespaces.Table));
+        if (shapes is null) return;
+
+        foreach (XElement frame in shapes.Elements(XName.Get("frame", OdfNamespaces.Draw)))
+        {
+            if (Read(file, frame, 0, 0, sheetAnchored: true) is { } drawing) drawings.Add(drawing);
+        }
     }
 
     private static void ReadCells(
@@ -98,17 +134,20 @@ internal static class OdsDrawings
         }
     }
 
-    private static SheetDrawing? Read(OdfFile file, XElement frame, int row, int column)
+    private static SheetDrawing? Read(
+        OdfFile file, XElement frame, int row, int column, bool sheetAnchored = false)
     {
         XElement? image = frame.Element(XName.Get("image", OdfNamespaces.Draw));
         XElement? objectFrame = frame.Element(XName.Get("object", OdfNamespaces.Draw));
 
+        Length x = OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "x")) ?? Length.Zero;
+        Length y = OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "y")) ?? Length.Zero;
+
         SheetDrawing drawing = new()
         {
-            Anchor = SheetAnchorKind.OneCell,
-            From = new SheetCellPoint(
-                column, OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "x")) ?? Length.Zero,
-                row, OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "y")) ?? Length.Zero),
+            Anchor = sheetAnchored ? SheetAnchorKind.Absolute : SheetAnchorKind.OneCell,
+            From = new SheetCellPoint(column, x, row, y),
+            Position = new DocPoint(x, y),
             Extent = new DocSize(
                 OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "width")) ?? Length.Zero,
                 OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "height")) ?? Length.Zero),
@@ -116,7 +155,10 @@ internal static class OdsDrawings
             Description = Description(frame),
         };
 
-        if (EndCell(Attribute(frame, OdfNamespaces.Table, "end-cell-address")) is { } end)
+        // A sheet-anchored frame states no end cell — it is not fastened to the grid at all — so
+        // the two-cell reading below is not even attempted for one.
+        if (!sheetAnchored
+            && EndCell(Attribute(frame, OdfNamespaces.Table, "end-cell-address")) is { } end)
         {
             drawing = drawing with
             {

@@ -1,9 +1,9 @@
 # Paperless — master plan
 
 Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
-scope for extraction reads except XLSB — `odt ott fodt docx docm dotx dotm doc dot rtf`,
-`ods ots fods xlsx xlsm xltx xltm xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt pot
-pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
+scope for extraction reads — `odt ott fodt docx docm dotx dotm doc dot rtf`,
+`ods ots fods xlsx xlsm xltx xltm xlsb xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt
+pot pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
 sections, columns, notes and floating frames; spreadsheets through their print setup, which *is*
 their page geometry; presentations a page per slide.
 
@@ -204,7 +204,16 @@ Per format: metadata, then text, then tables/structure.
       LibreOffice writes a horizontally merged table cell with no merge flag at all — the span
       comes from the column grid.
 - [ ] CSV.
-- [ ] `xlsb` (import only — LibreOffice cannot write it, so test files need Excel).
+- [x] `xlsb` — BIFF12 records inside an OPC package, in `src/Paperless.Spreadsheets/Xlsb/`.
+      Import only, because LibreOffice cannot write it, so there is no corpus fixture and never
+      will be: the evidence is the ten files in `sc/qa/unit/data/xlsb/`, **eight of which now
+      match LibreOffice exactly** on page count and `pdftotext` words, plus 17 unit tests that
+      assemble workbooks record by record. The two that differ are pivot tables LibreOffice
+      rebuilds from their caches rather than reading, which is a difference in what the two
+      programs *do* rather than in what either reads. The shape of the work is worth knowing
+      before starting anything similar: **only the spreadsheet parts are binary.** Everything
+      DrawingML — drawings, charts, theme, images — is the same XML an XLSX holds, so
+      `XlsxDrawings` and `XlsxCharts` serve both paths unchanged.
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
 - [x] `paperless extract` and `paperless metadata`, in text and JSON. The output layout is
@@ -840,30 +849,44 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `tdf137691_dataTable.pptx` went **68 words against 80 to 80/80**. All four `c:dTable` flags
       default to **false**, not to `!bMSO2007Doc` — `DataTableModel` initialises each to false
       outright — so the rule that governs the `c:show*` family does not carry across.
-- [ ] **The OOXML plot rectangle is still about a point out, and it is now the largest thing left
-      that is not a proxy artefact.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own
-      size (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
-- [ ] **A scatter chart draws no trendline, and that is now most of what is left.** `c:trendline`
-      with `c:dispEq` and `c:dispRSqr` writes `f(x) = 0.0174728496577696 x + 0.60719095698364` and
-      `R² = 0.999989640055375` onto `tdf127720.pptx`, which is 12 of that deck's remaining error and
-      the whole of `trendline.ods`'s chart residual. `RegressionCurveHelper` and
-      `RegressionCurveCalculator` are what to port. A doughnut still draws as a pie, losing the
-      hole.
-- [x] **Radar, bubble, stock and of-pie draw; surface declines, and the count is why.** The order
-      was set by counting the corpus first rather than by the brief's order. Over every chart part
-      in `chart2/qa/extras/data/` — 351 OOXML plot groups and 219 ODF `chart:class` attributes —
-      the five stand at **of-pie 5, bubble 3 + 1, stock 1 + 3, radar 2 + 0, surface 0 + 0**
-      (OOXML + ODF). Surface is not rare, it is *absent*; and it is absent from LibreOffice's
-      renderer too, which has no `SurfaceChart` in `chart2/source/view/charttypes/` and substitutes
-      "a deep 3D bar chart from all surface charts" in the importer instead
+- [x] **The plot rectangle: measured over 100 charts rather than one, halved, and the error was
+      not where three runs had looked.** The harness, the numbers and what is left are below,
+      under "The plot-rectangle harness exists"; this stub is the entry it replaces.
+- [x] **Radar, bubble, stock and of-pie draw, and so does surface — as the bar chart the
+      reference substitutes for it.** The order was set by counting the corpus first rather than
+      by the brief's order. Over every chart part in `chart2/qa/extras/data/` — 351 OOXML plot
+      groups and 219 ODF `chart:class` attributes — the five stand at **of-pie 5, bubble 3 + 1,
+      stock 1 + 3, radar 2 + 0, surface 0 + 0** (OOXML + ODF).
+      **Surface was declined on that count and the decision was wrong, which is worth keeping
+      rather than quietly replacing.** The three reasons given were: no corpus file; LibreOffice
+      has no `SurfaceChart` in `chart2/source/view/charttypes/` and substitutes "a deep 3D bar
+      chart from all surface charts" in the importer instead
       (`oox/source/drawingml/chart/typegroupconverter.cxx:198-199, 217-218`), its chart2 service
-      spelled `"com.sun.star.chart2.ColumnChartType"` with the comment `// Todo` at `:79`. So a
-      surface chart draws **nothing**: there is no file to measure against, the reference is itself
-      a substitution, and the projection is genuinely three-dimensional where this engine maps two
-      fractions onto a rectangle. An absent picture reads as a missing feature; one drawn as bars
-      reads as a layout bug, which is the rule the SmartArt evaluator was built on.
+      spelled `"com.sun.star.chart2.ColumnChartType"` with the comment `// Todo` at `:79`; and the
+      projection is genuinely three-dimensional. All three are true. The conclusion does not
+      follow, because the standard here is *matches the reference* and the reference's answer **is**
+      that substitution. **"There is no corpus file" is a reason to make one, not a reason to
+      stop**: renaming the plot group in `chart2/qa/extras/data/pptx/chart.pptx` to
+      `c:surfaceChart` and converting it with `soffice` gives a PDF of **25 words** — a legend of
+      three series, four category names and a value axis labelled `0 1 … 10`. Declining drew
+      **0** of them, the slide's only shape being the chart frame; reading it as a bar chart draws
+      **21**, the four missing being tick labels a three-dimensional wall auto-scales differently
+      (`0 1 … 10` where the flat one lands on `0 2 … 12`). What a flat engine loses is the
+      projection, not the data.
       The geometry is `Paperless.Core/Charts/ChartLayout.Plots.cs` and the model additions are
       `ChartPlotTypes.cs`; both readers gained the element and class names and nothing else moved.
+- [x] **A doughnut has its hole, and the hole's size is not in the file.** `c:doughnutChart` and
+      ODF's `chart:class="chart:ring"` set `ChartPlot.Rings` rather than making a `Kind` of their
+      own, because everything else about a doughnut is a pie — the wedges, the colours per point,
+      the legend of categories, the label placement. `PieChart`'s constructor sets
+      `m_fRadiusOffset = 1.0` for a ring chart and nothing else (`PieChart.cxx:212-216`), which
+      puts ring *k* of *n* between `k/(n+1)` and `(k+1)/(n+1)` of the outer radius, so a
+      single-ring doughnut's hole is at exactly half. **`c:holeSize` is parsed into `mnHoleSize`
+      and then read by nothing at all**, exactly as `c:bubbleScale` is, so honouring it would be a
+      disagreement with the reference rather than a refinement of it. Drawing a doughnut as a pie
+      — which is what it did through three chart merges — loses the hole *and* draws every ring
+      over the last, so only the outermost series is visible: a plausible pie of the right
+      colours.
 - [x] **Radar: a polar category axis, and the ring count is a constant.** `NetChart` over a
       `PolarPlottingPositionHelper`. Category *i* of *n* sits at `90° − i × 360/n` — twelve
       o'clock, clockwise, the same convention a pie uses — and the polygon **closes**, joining the
@@ -954,51 +977,153 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       area came out with its axes and not one mark on it. `XlsxFile.ThemeRoot` was already loaded
       for the cell decoration; threading it through is four lines and it took `barOfPieChart.xlsx`
       from 11 drawn marks to 20.
-- [ ] **Two gaps found while measuring the five, both outside the chart engine and both worth
-      naming.** *One*: an ODS `draw:frame` inside `table:shapes` — a sheet-anchored rather than
-      cell-anchored drawing — is never read, because `OdsDrawings` walks `draw:frame` inside
-      `table:table-cell` only. `ods/tdf166428_Low_High_StockChart_LO248.ods` is one, so its stock
-      chart is read correctly and then never reaches a page: 24 words against the reference's 60,
-      all of the difference being the chart. *Two*: a chart anchored past the right-hand page break
-      of a workbook lands on a second page we do not produce — every one of the five OOXML chart
-      files here renders one page against LibreOffice's two — which is why
-      `xlsx/bubble_chart_simple.xlsx` still measures 5 words against 26 with a correct chart
-      composed behind it. Neither is plot-type geometry; both are the sheet drawing path.
+- [x] **Two gaps found while measuring the five, both outside the chart engine and both fixed in
+      the sheet drawing path rather than in charts.** *One*: an ODS `draw:frame` inside
+      `table:shapes` — a sheet-anchored rather than cell-anchored drawing — was never read, because
+      `OdsDrawings` walked `draw:frame` inside `table:table-cell` only.
+      `ods/tdf166428_Low_High_StockChart_LO248.ods` is one, so its stock chart read correctly and
+      never reached a page: **24 words against the reference's 60, now 57/60**. *Two*: a chart
+      anchored past the right-hand page break landed on a page the sheet paginator never produced,
+      because the printed block was taken from the cells alone. Calc takes the *maximum* of the
+      cells' extent and the drawing layer's bounding box — `ScTable::GetPrintArea` never asks the
+      drawing layer but `ScDocument::GetPrintArea` maxes its answer against
+      `ScDrawLayer::GetPrintArea`'s (`sc/source/core/data/documen2.cxx:644-664`), and
+      `AdjustPrintArea` calls the document's. `Layout/SheetDrawingArea.cs` is that port: **all
+      seven chart workbooks in `chart2/qa/extras/data/xlsx/` went from one page to the two
+      LibreOffice prints**, and `bubble_chart_simple.xlsx` from 5 words to 20 of 26.
+- [x] **And the same defect had a much larger form, found by re-measuring rather than by
+      reasoning.** The print-area rule only helps a drawing the reader kept, and `XlsxDrawings`
+      kept a picture and a graphic frame and dropped every `xdr:sp`, `xdr:cxnSp` and `xdr:grpSp`
+      on the ground that nothing can paint one. Calc's drawing layer keeps them all
+      (`GroupShapeContext::createShapeContext`, `sc/source/filter/oox/drawingfragment.cxx:198`), so
+      a sheet whose only content was a shape had no printed block and produced **no pages at
+      all** — `paperless render` failed with "the page range selects none of the 0 pages". Over
+      the **55** workbooks in `sc/qa/unit/data/xlsx/` and `chart2/qa/extras/data/xlsx/` holding a
+      sheet shape: **27 rendered nothing, now 1**, and exact page-and-word matches went **7 → 15**,
+      twelve of them chart workbooks gaining the second or the third and fourth page. Two
+      corrections came with it, both recorded with their measurements in
+      `src/Paperless.Spreadsheets/TODO.md`: a `cNvPr hidden="1"` shape **does** widen the print
+      area (only `SC_LAYER_HIDDEN`, which holds unpinned comment captions and nothing else, is
+      skipped), and Calc **drops a page nothing lands on**, which is what keeps a shape 516 rows
+      down from costing ten sheets of paper.
 - [ ] **Rotated, staggered and dropped axis labels.** When labels would collide LibreOffice
       staggers them, then rotates them, then draws every *n*th, then draws none
       (`VCartesianAxis::createTextShapes` and `autoStaggeringOfLabels`). None of that is
       implemented, and it is the entire residual of two decks: `bnc889755.pptx` draws sixteen month
       names turned a quarter turn, and `tdf106217.pptx` draws **eight category names in our render
       and none in the reference** because they do not fit. Both look like data bugs and are layout.
-- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it just doubled.**
-      `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
-      (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
-      (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
-      (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
-      title (a flat 420 below, 450 to the left). Two of the three feedback passes are now in —
-      the tick count is re-derived from the rectangle, and the rectangle is re-derived from a
-      *rotated* label arrangement — but the third is not: LibreOffice measures the **actual**
-      bounding box of everything the axes drew (`ShapeFactory::getRectangleOfShape` on
-      `mxDiagramWithAxesShapes`) and hands it to `VDiagram::adjustInnerSize`
-      (`chart2/source/view/diagram/VDiagram.cxx:653-700`), which grows the inner rectangle by the
-      slack and shifts it so the consumed rect meets the available one. Measured on
-      `chart-bar-deck.pptx`, unchanged by this run: plot area **1.291 pt left of, 0.776 pt above,
-      0.500 pt narrower and 0.761 pt taller** than the reference's 106.526 / 116.844 / 500.967 /
-      241.993 — the bottom edge agrees to **0.015 pt**, so the error is entirely in the three
-      reservations and not in the composition.
-- [ ] **Two things to know before attempting it, both measured on this run and both cost time.**
-      *One*: the naive fix — reserving the label's *shape* rather than its text, since
-      `ShapeFactory::createText` gives every chart text 0.18/0.30 × fontHeight of inset —
-      overshoots. On `chart-bar-deck.pptx` it moves the left edge from 1.29 pt short to 2.3 pt
-      long, so the discrepancy is not simply the missing insets and guessing at it is worse than
-      leaving it. *Two*: **deriving the rectangle from rendered PDFs does not work as an oracle.**
-      A script that takes the longest horizontal and vertical strokes as the plot rectangle agrees
-      with the axis to a hundredth on `chart-bar-deck` and picks up legend borders, series
-      polylines and error bars on half of `chart2/qa/extras/data/pptx/` — mean "error" 19 pt over
-      28 decks, most of it comparing different marks. The oracle that does work is
-      `chart:coordinate-region`, and using it needs a harness that composes an ODF chart with its
-      stated rectangle *suppressed* and a font-accurate measurer; that harness does not exist yet
-      and is the first thing to build.
+- [x] **The plot-rectangle harness exists, and it is worth more than the fix it found.** Build it
+      before touching the geometry again; rebuilding it costs an hour and everything below was
+      measured with it.
+      *What it does*: for every `.odp`, `.ods` and `.odt` in `chart2/qa/extras/data/`, open the
+      package, find each `Object N/content.xml` holding a `chart:chart`, read it with
+      `OdfChartPlot.Read`, compose it with `plot with { PlotArea = null }` — its stated rectangle
+      **suppressed** — into a frame of the chart's own `svg:width` × `svg:height`, and compare
+      what `ChartLayout` computes against what the file states. A font-accurate measurer is
+      required and is thirty lines: `SlideChart`'s own `Measurer`, copied.
+      *What makes it two oracles rather than one*: an ODF chart states **both** rectangles.
+      `chart:coordinate-region` is the inner one and `chart:plot-area`'s own
+      `svg:x`…`svg:height` is `maRemainingSpace` — the diagram's available rectangle, after the
+      page margin, the main title, the legend and the axis titles and before any axis label. So a
+      discrepancy can be attributed to one half or the other instead of only being a number, which
+      is what `ChartDrawing.DiagramArea` exists to expose. That split is what settled where the
+      error was: of the 100 charts that state both rectangles, **none** had the available one
+      right to within a point, and its mean error on the right edge was 37.7 pt against a
+      residual of 1.1 in the reservations on the charts where it happened to be right.
+      **The trap, and it invalidated three runs' worth of measurement: a corpus file's stated
+      rectangle is not necessarily LibreOffice's own answer.** These files come from Excel, from
+      old LibreOffice versions and from hand editing, and the exporter writes back whatever
+      rectangle the diagram was carrying. `chart2/qa/extras/data/odp/chart.odp` states a plot area
+      at 0.77 cm; convert it to `.odp` with `soffice` and the same file states **0.32 cm**, which
+      is exactly two per cent of its 16 cm width and exactly what we compute. **Round-trip the
+      corpus through `soffice` first** — `soffice --headless --convert-to ods --outdir …`, one
+      chunk of ten at a time, two files needing a second attempt — and measure against the output.
+      Doing so alone moved the measured error from 56.3 pt to 49.2 pt without a line of code
+      changing.
+- [x] **The plot rectangle: 66.97 pt of mean four-edge error to 33.43 pt over 100 charts, and it
+      was never the label reservations.** Three runs looked for it there, on the strength of one
+      file. Over the round-tripped corpus the mean absolute error per edge was **left 14.6, top
+      4.7, right 37.7, bottom 9.9** — the right edge alone was more than the other three together,
+      and 74 of the 100 charts put their legend on the right. It is now **left 5.8, top 4.5, right
+      14.2, bottom 9.0**; charts with all four edges inside 10 pt went from **21 to 49**, inside
+      5 pt from 11 to 34, and the diagram's available rectangle is right within a point on 16
+      where it was right on none.
+- [x] **What the right edge actually was, in three parts.** *One*, the legend's width was an
+      estimate — a key of 0.7 line heights, a gap of 0.4 and the widest name — where
+      `lcl_placeLegendEntries` (`VLegend.cxx:263-320, 507-640`) has padding of
+      `max(1 mm, 0.33 em)` on each side, a key of `0.6 em`, a gap of `max(1 mm, 0.22 em)`, and the
+      name's text **shape** with its two `0.18 em` insets. *Two*, **a line chart's key is a flat
+      800 hundredths of a millimetre**, not a fraction of the font:
+      `getPreferredLegendKeyAspectRatio` returns `(1000, 1000)` for a filled series and
+      `(800, -1)` for one that draws a line, and a negative height means the width is absolute
+      (`VSeriesPlotter.cxx:2538-2582`, `VLegend.cxx:976-984`) — 22.7 pt against 6.0 at ten point.
+      *Three*, **the entries wrap into columns**: a side legend is `ChartLegendExpansion_HIGH`,
+      which fits as many rows as the space allows and then starts another column, and reading
+      `tdf146463.ods`'s fourteen series as one column put the right edge 120 pt out.
+- [x] **Two ODF reader defects the harness found, and between them they were most of the error.**
+      Both are silent: they leave a model in which every part is plausible.
+      *One*: **a series finds its column of the `local-table` by the range the table itself
+      states, not by the column letter.** Calc writes a `draw:g/svg:desc` inside one cell of every
+      column naming the sheet range it was copied from — `SchXMLTableContext`'s column
+      descriptions, which `SchXMLTableHelper::applyTableToInternalDataProvider` matches each
+      series' stated range against. Reading the letter is right exactly when the charted range
+      starts at column B, which the corpus deck does; `labelString.ods` charts `Sheet1.D6:D8`
+      against a two-column table, so the letter said column four and the series came out
+      **nameless** — and a nameless series contributes no legend entry, so the legend vanished and
+      took its whole width out of the reservation. *Two*: `chart:series-source="rows"` transposes
+      the table, and 13 of the corpus' 107 ODF charts state it; reading one upright turns the
+      series names into categories and leaves every series unnamed. Fixing the two took the mean
+      right-edge error from 28.1 pt to 14.6 and the charts inside 10 pt from 33 to 49.
+- [x] **`VDiagram::adjustInnerSize` was named as the missing pass, and it is not missing — it is
+      the formula we already have.** Worth writing down so it is not chased a fourth time.
+      `reduceToMinimumSize` shrinks the inner rectangle to `size/2.2`, the axes draw their widest
+      labels round it, `ShapeFactory::getRectangleOfShape` measures the union, and
+      `adjustInnerSize` (`VDiagram.cxx:653-700`) grows the inner rectangle by
+      `available − consumed` and shifts it by `consumed.minX − available.minX`. Substitute
+      `consumed = inner + reservations` and the whole pass reduces to
+      **`inner = available shrunk by the reservations on each side`**, which is exactly what
+      `PlotAreaOf` computes analytically. What the pass buys is that the reservations are
+      *measured* rather than predicted; it cannot fix a reservation that is predicted correctly,
+      and it cannot fix an available rectangle that is wrong. Ours were the latter.
+- [ ] **The chart labels are drawn in Liberation Serif and LibreOffice draws them in Liberation
+      Sans.** This is now the largest single remaining error and it is **not in this library**.
+      `SlideChart.Measurer.Body` and `SheetChart`'s equivalent build a `SlideTextRun` with a
+      **null** family, which `SystemFontResolver` substitutes to Liberation Serif;
+      `pdffonts` on LibreOffice's own PDF for `chart-bar-deck.odp` reports one face,
+      `BAAAAA+LiberationSans`, and chart2's default is `DefaultFontType::LATIN_SPREADSHEET`
+      (`CharacterProperties::AddDefaultsToMap`, `chart2/source/tools/CharacterProperties.cxx:373`).
+      Measured on `chart-bar-deck.odp` against its own stated region: the left edge is **1.29 pt
+      short in Serif and 0.44 pt long in Sans**, so the wrong face is 1.73 pt of the 1.29 that
+      three runs spent looking for in the label geometry. Fixing it needs the family to reach the
+      measurer, which means `IChartTextMeasurer.Measure` gaining a face and both family call
+      sites changing — `Paperless.Presentations` and `Paperless.Spreadsheets`, neither of which is
+      `Core/Charts`'. **Do this before any further plot-rectangle work**, or the geometry will be
+      fitted to compensate for it.
+- [ ] **`bestFit` wraps a pie's data label to fit inside its wedge, and that is the whole of
+      `tdf146756_bestFit.pptx`'s remaining 11 words.** Read the two extractions side by side
+      before starting: the reference draws `Mon itor, troub lesho ot and rem ediat e, 24.8 %`
+      where we draw `Monitor, troubleshoot and remediate, 24.8%` — the same label, broken across a
+      column two or three characters wide, and `pdftotext` counts each fragment as a word. So the
+      11 is not eleven missing labels; it is three labels wrapped, plus the two slide numbers the
+      deck's masters carry and we do not. `PieChart::performLabelBestFitInnerPlacement`
+      (`chart2/source/view/charttypes/PieChart.cxx:1961-2060`) is the port: it takes the wedge's
+      bisecting ray, the pie radius less a 2.5% border offset, and shrinks the label's bounding
+      box until it fits inside the sector — wrapping, not scaling. Worth doing for the picture
+      rather than for the count, and worth knowing that the count will move by more than the
+      fidelity does.
+- [ ] **What is left in the plot rectangle, characterised rather than guessed.** With the
+      available rectangle right within a point — 16 of the 100 — the residual reservations are
+      **left 3.3, top 0.1, right 3.3, bottom 7.0 pt**, so the bottom, which is the category
+      labels, is where to look next.
+      And one pattern recurs across a third of the corpus that is not understood: on charts with
+      **no axis titles at all**, LibreOffice's available rectangle is 450 hundredths of a
+      millimetre further right, 420 higher off the bottom and one extra page margin in from the
+      right than the composition predicts — the exact gaps `lcl_createTitle` uses for the Y and X
+      axis titles (`ChartView.cxx:1069-1072`). `stepped_lines.ods` is the cleanest case: a
+      10.001 × 8.001 cm chart whose stated plot area is 0.65 cm from the left where two per cent
+      is 0.20. Either those titles exist and are empty, or something else claims the same
+      constants; `lcl_createTitle` returns before touching the remaining space on an empty string,
+      so the first explanation does not survive a reading and the second has not been found.
 - [x] **The free oracle was two-thirds unread, and the corpus deck is what hid it.**
       `coordinate-region` is written under **two** namespaces: it began as a LibreOffice extension
       and was standardised later, so a file writes `chart:coordinate-region` or
@@ -1091,14 +1216,96 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `DataSourceCxContext` (`datasourcecontext.cxx:379-429`) is the shape to port when it is
       worth it; LibreOffice's own support is partial and its `cx:externalData` handler is a
       `return nullptr; // TODO`.
-- [ ] **A DOCX chart needs a hook in `Paperless.WordProcessing`.** `DrawingChart` is family-blind
-      and the chart part is reached identically — `wp:inline`/`wp:anchor` → `a:graphic` →
-      `a:graphicData[@uri = DrawingChart.ChartUri]` → `c:chart/@r:id` against the *document* part
-      — so the reader is done and only the call site is missing. Left deliberately: that library
-      had another agent in it. The ODT side already works, because it goes through
-      `OdfContentReader` like every other ODF family — which is exactly the measurement that says
-      how much the hook is worth: **12 of the 13** `.odt` chart documents in
-      `chart2/qa/extras/data/` now extract, against **8 of the 69** `.docx` ones, unchanged.
+- [x] **Writer draws a chart now, and it was the largest remaining hole.** The prediction above
+      was right about the DOCX call site and understated the rest: extraction needed one hook and
+      *rendering* needed a third case in `PageFrame` beside `Image` and `Vector`. Both are in.
+      `PageFrame.Chart` carries a `ChartPlot` and `PageFrame.ChartFontFamily` the face it is set
+      in; `Layout/FrameChart.cs` paints a laid-out chart straight into the sink, exactly as
+      `SheetChart` does, and `PageDrawing.DrawFrame` gained one branch. The readers are the two
+      that already existed — `DocxPictures.Chart` resolves `c:chart/@r:id` and calls
+      `DrawingChartPlot.Read`, `OdfPictures.Chart` calls `OdfChart.Locate` and `OdfChartPlot.Read`.
+      Measured over LibreOffice's own `chart2/qa/extras/data/docx/` and `odt/`, `pdftotext` word
+      counts against `soffice --convert-to pdf`, 82 documents: total absolute word error
+      **3671 → 1390**, exact matches **0 → 10**. The DOCX set went 3276 → 1254 with 7 exact of 69;
+      the ODT set 395 → 136 with 3 exact of 13. Before this, **every one of the 82 drew a chart of
+      no words at all** bar the six whose pages carry body text.
+      **The exact-match figure is a correction and the reason for it is worth keeping.** This item
+      first claimed 3689 → 1348 with **0 → 27**, and only the totals reproduced — 3671 and 1390 on a
+      fresh run, which is ordinary drift between two conversions of the same 82 files. Re-measured
+      with the two reference sets kept in separate directories, 10 documents match exactly, not 27.
+      `docx/` and `odt/` **both hold a file called `chart`**, and `soffice --convert-to pdf` names
+      its output after the input stem, so converting both sets into one directory leaves a single
+      `chart.pdf` and every row after it compared against whichever survived. The corpus sweep's
+      header warns about this for the nine such pairs it holds; this is a tenth, in a directory
+      nobody had thought of as a corpus. Per-format output directories, always, including for the
+      reference side.
+- [x] **Extraction was half-done and the DOCX half was the missing call site.** `chart.odt`
+      extracted its whole four-by-three table and `chart.docx` — the same chart — extracted
+      nothing, because `OdfContentReader`'s `draw:object` case already served ODT and nothing in
+      the DOCX walk looked at `a:graphicData/@uri`. `DocxContentReader.ReadChart` is that walk, and
+      it hoists the chart to a section of its own for the same reason a text box is hoisted: it
+      holds a table, and a table cannot be spliced into the anchoring paragraph.
+- [x] **A Writer chart is composed in its frame, where a sheet's is composed at its own size and
+      stretched — and the difference is in the files rather than in the code.** An ODT's
+      `draw:object` states no size beside the `draw:frame`'s and a DOCX's `c:chart` relationship
+      carries no extent at all, so `wp:extent` is the whole of it; a sheet's `draw:object` does
+      state one (`svg:width="12cm"`), which is what gives `SheetChart` a stretch to fold in. So
+      `FrameChart` has no `ChartLabel.Stretch` path and never needed one.
+- [x] **The label face differs by family, and it cannot ride on the model.** `ChartPlot` carries
+      type sizes and no family, which is right for the two decks and the two workbooks it was built
+      for and wrong for Writer: measured with `pdffonts` on LibreOffice's own PDFs,
+      `odt/chart.odt` embeds Liberation Sans and `docx/chart.docx` embeds Carlito, from the same
+      chart, because an OOXML chart's text takes the theme's minor latin face — Calibri there — and
+      an ODF chart's takes the office default. So the family sits on `PageFrame` beside the plot
+      and is read per part: the first literal `a:latin/@typeface` in the chart part, then the
+      theme's minor latin, then Calibri. **Anything beginning with a plus is a reference and not a
+      name** — counted over the 69 DOCX chart parts, 36 name no face, 22 name `+mn-lt`, and 11
+      state a real one (six Arial, two Calibri, two Times New Roman), so both halves of the rule
+      are exercised and neither alone covers a sixth of the set.
+- [x] **Three corpus documents, `chart-bar-text.{fodt,odt,docx}`**, the same chart the deck and the
+      sheet carry, anchored to a paragraph with body text above and below it. All three are 41/41
+      words on one page against LibreOffice, and their tick labels land within half a point of the
+      reference's — `180` at 91.26 pt against 92.15, `Q4` at 308.62 against 308.87 in the ODT. The
+      packaged `.odt` is the one that pins the order of a frame's children: it carries 22 kB of
+      `ObjectReplacements/Object 1` beside the object, and looking at the `draw:image` first is
+      exactly what recorded every chart in every ODS as a picture and then painted nothing.
+- [ ] **What Writer still gets wrong, and one of it is the seam after all.** Of the 1390 words of
+      residual error, re-measured: `testchartoleobjectembeddings.docx` alone is 510 of them
+      (23975 against 24485, a very long document), then `clustered-bar-chart-labels.docx`
+      (72 against 250), `testMultipleChart.docx` and `testMultiplechartembeddings.docx`
+      (26 against 134, one page against two), `testEmptyCharts.odt` (0 against 42, five charts with
+      no series at all, where LibreOffice still draws a default 0…1 axis), `Bar_horizontal_cone.docx`
+      (18 against 56) and `tdf108022.odt` (86 against 114). Four rows overshoot instead —
+      `FDO75975.docx` 100 against 40, `testChartDataTable.docx` 99 against 53,
+      `tdf170215_nullDate.docx` 77 against 46, `DisplayUnits.docx` 63 against 34 — which is the
+      shape of drawing labels the reference thins, suppresses or writes as glyph outlines.
+      Nearly all of that is plot geometry and belongs in `Core/Charts`. **The two `testMultiple…`
+      rows are not**, and the earlier reading of them as "the second chart is on a page we do not
+      produce" had the causality backwards. Both documents hold three inline charts in *one
+      paragraph with no text*, so all three `InlineObject`s take the boundary 0, none of their
+      widths reaches the prefix table, and the three draw on top of each other on one page. It is a
+      question about how a line's extent counts objects sitting at its end boundary — written up
+      under floating frames in `src/Paperless.WordProcessing/TODO.md`, since the fix is in the line
+      filler rather than in any chart.
+- [ ] **A `.doc` and an `.rtf` chart draw nothing, and neither is read.** WW8 stores a chart as an
+      OLE2 storage reached through an `sprmCPicLocation` into the `Data` stream, and RTF as
+      `{\object\objemb}` with an `\objdata` hex payload; both are Excel-or-chart OLE servers
+      rather than either vocabulary this engine reads. No corpus document has one, and
+      `chart2/qa/extras/data/doc/` holds three files, so the measurement to make first is what
+      those three are.
+- [x] **A DOC's picture-in-a-line is decided by a field, not by the picture — and that closed two
+      long-standing Writer defects at once.** Not a chart item, but it was found beside these and
+      the two open Writer layout defects turned out to be one cause. WW8 writes a picture set in a
+      line as the pair `U+0008 U+0001` with a full `FSPA` on the first, so it looks floating; the
+      only contradiction is a byte in the `PlcFld` saying the pair sits inside a `SHAPE` field, and
+      `SwWW8ImplReader::IsInlineEscherHack` is exactly that test. `Ww8FieldTypes` reads the table
+      and the layout walk keeps a stack of open field types. This fixed `vector-picture-text.doc`,
+      whose three pictures reserved no room and drew over the paragraphs after them, *and*
+      `word-features.doc`, whose text box drew at 56.70 pt where LibreOffice draws 134.00 —
+      both now agree with LibreOffice's own PDF to within 1.7 pt. Two details in
+      `src/Paperless.WordProcessing/TODO.md`: the vertical orientation is the half
+      `ProcessEscherAlign` does *not* replace, and the anchor characters shape to real width unless
+      they are dropped the way LibreOffice drops them.
 
 ### SmartArt
 
@@ -1160,6 +1367,57 @@ arrive as blip *fills* on ordinary shapes.
       for the reason it existed: half an evaluation puts nodes in wrong places and reads as a
       layout bug rather than as a missing feature. What still differs, and why, is in
       `src/Paperless.Presentations/TODO.md`.
+      **Text run counts now match on 31 of the 37**, counting a rotated run — the five that did
+      not before are unchanged, and `smartart-font-size.pptx` joined them because its wrap differs
+      by one line at 37 pt and the fit reads the wrong height off it.
+      `contDir="revDir"` is now known to be *reached* — `sd/qa/unit/data/pptx/tdf84205.pptx` is
+      the only file in the whole tree that states it, and stripping its baked drawing puts it on
+      the evaluated path with a 3 by 3 grid over nine children, agreeing with LibreOffice to
+      0.037 pt — and still not known to be *right*, because replacing the branch with the
+      same-direction one leaves that render byte-identical.
+- [x] **Shrink-to-fit, which was the whole of the remaining text divergence.** A diagram's `tx`
+      algorithm turns `TextFitToSizeType_AUTOFIT` on for every node whose text the author did not
+      format, so a `primFontSz` of 65 pt is an *upper bound* rather than a size, and it reaches
+      ordinary slide shapes too through `a:normAutofit`. Ported into
+      `Paperless.Presentations/Layout/SlideAutofit.cs` from
+      `SdrTextObj::autoFitTextForCompatibility`, and verified on a probe deck of **227 plain text
+      boxes**: 225 come out at the size LibreOffice draws. Over the 37 unbaked diagram decks the
+      summed size error against the reference falls from **1202.2 pt to 327.5 pt**.
+      **Port from the version that wrote the reference, not from the tree you have open.** This
+      checkout is 27.2 alpha and the installed `soffice` is 24.2.7.2, and the two do not share an
+      algorithm: 24.2 bisects a font scale ten times keeping the closest fit at or above one,
+      while master walks a fixed table of twelve scale levels (`impedit3.cxx`,
+      `constScaleLevels`). Both are in `svx`/`editeng` under names close enough to read as the
+      same code. Fetch the tag.
+      **Two units decide more than the search does.** A scaled size is rounded to a whole point
+      and then to a whole hundredth of a millimetre — 27 pt is 953, and its line is 1.2 × 953 =
+      1144 rather than 1143.6 — and the search compares candidates by how close to one their fit
+      is, so a single hundredth of a millimetre breaks ties that are exact in points. The line
+      height had been going through `LineSpacingRule.Apply`, which computes in **whole twips**
+      because that is Writer's unit; a twip is 0.05 pt against the draw layer's 0.028, and three
+      of the probe boxes turned on that alone. And the grid the bisection snaps to comes from the
+      shape's *default* character height, not from any run's: a fixed 12 pt agrees on 225 of the
+      227 where the largest run's size agrees on 210.
+- [x] **`autoTxRot`**, so a cycle's labels stay readable while its nodes turn. All 48 labels of
+      `smartart-autoTxRot.pptx` agree with the reference on pen, size and angle to 0.100 pt.
+      **The instrument had to be fixed before the feature could be seen at all**: a rotated run is
+      a `Tm` in the reference's content stream where an upright one is a `Td`, and the run reader
+      read only `Td`, so the deck reported the same 48-against-7 both before the change and after
+      it. Resolving each text block's matrix against the graphics state is what made the
+      comparison mean anything — and it is worth remembering that a count that does not move is
+      not evidence until you know the counter can see the thing.
+- [x] **A master's and a layout's non-placeholder shapes are drawn.** An Impress master page is a
+      PPTX master and a PPTX layout *merged into one* — one `SlidePersist` per layout, both
+      fragments imported into it, one `createXShapes` over the pair
+      (`presentationfragmenthandler.cxx:246-296`) — so a logo on either is drawn under every slide
+      using that layout. Rare and not negligible: 6 of the 389 decks in `sd/qa/unit/data/pptx`
+      carry such a shape with text and Paperless lost the text on all of them.
+      **`showMasterSp` looked like the discriminator and is not.** None of the six states it. The
+      file that made it look like a visibility question, `slide-sections.pptx`, parks its master's
+      three text boxes off the page — y = 6 959 601 on a 6 858 000 slide, x = −2 250 002,
+      x = −950 805 — so they are drawn into nothing, and the seventh page differs only because it
+      is the only slide using the layout that carries the on-page one. There was no rule to find,
+      and three passes over this question spent their time looking for it.
 - [ ] **A DOCX or XLSX diagram needs a hook in its own reader.** The same shape as the chart item
       and left for the same reason: those libraries had other agents in them. Worth 8 documents in
       `sw/qa` and 2 in `sc/qa`, all with baked drawings.
