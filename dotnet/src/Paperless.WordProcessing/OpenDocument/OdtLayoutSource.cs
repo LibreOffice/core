@@ -206,9 +206,7 @@ public sealed partial class OdtLayoutSource
         ArgumentNullException.ThrowIfNull(body);
 
         _sectionIndex = 0;
-        List<PageBlock> blocks = [];
-        Walk(body, blocks, depth: 0);
-        return blocks;
+        return WalkBlocks(body);
     }
 
     /// <summary>
@@ -223,10 +221,7 @@ public sealed partial class OdtLayoutSource
     public List<PageBlock> ReadCell(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
-
-        List<PageBlock> blocks = [];
-        Walk(element, blocks, depth: 0);
-        return blocks;
+        return WalkBlocks(element);
     }
 
     /// <summary>
@@ -243,10 +238,48 @@ public sealed partial class OdtLayoutSource
     public List<PageBlock> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+        return WalkBlocks(element);
+    }
 
-        List<PageBlock> blocks = [];
-        Walk(element, blocks, depth: 0);
-        return blocks;
+    /// <summary>
+    /// Walks one element's block-level children, and settles any frame it found outside a paragraph.
+    /// </summary>
+    /// <remarks>
+    /// The one entry point all three public walks share, because the pending list must not cross
+    /// between them: a text box's own flow is read from inside <see cref="FramesOf"/>, so a frame the
+    /// body left pending would otherwise be handed to the first paragraph <em>inside</em> a frame.
+    /// Saved and restored rather than merely cleared, for the same reason.
+    /// </remarks>
+    private List<PageBlock> WalkBlocks(XElement element)
+    {
+        List<XElement>? outer = _looseFrames;
+        _looseFrames = null;
+
+        try
+        {
+            List<PageBlock> blocks = [];
+            Walk(element, blocks, depth: 0);
+
+            // A body whose last element is a frame — or whose only paragraph came before it — still
+            // has to draw it, so whatever is left over goes onto the last paragraph read. A walk that
+            // found no paragraph at all drops it, which is the one case ODF gives nothing to hang on.
+            if (_looseFrames is { Count: > 0 })
+            {
+                for (int at = blocks.Count - 1; at >= 0; at--)
+                {
+                    if (blocks[at] is not PageParagraph last) continue;
+
+                    blocks[at] = WithLooseFrames(last);
+                    break;
+                }
+            }
+
+            return blocks;
+        }
+        finally
+        {
+            _looseFrames = outer;
+        }
     }
 
     /// <summary>
@@ -284,7 +317,23 @@ public sealed partial class OdtLayoutSource
 
             if (ns == OdfNamespaces.Text && name is "p" or "h")
             {
-                if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
+                if (Paragraph(child) is { } paragraph && WithLooseFrames(paragraph) is T block)
+                {
+                    into.Add(block);
+                }
+
+                continue;
+            }
+
+            // A frame at block level rather than inside a paragraph. ODF allows it for a page-anchored
+            // shape, and LibreOffice writes it that way whenever a picture was placed by Draw's rules
+            // rather than typed into the text — `emf-picture.odt`'s whole body is one such frame and an
+            // empty paragraph. A frame belongs to a paragraph in this model, so it is held and given to
+            // the next one; the anchor it carries is what decides where it actually lands, and for a page
+            // anchor that is the page, not the paragraph.
+            if (OdfFrames.IsFrame(child))
+            {
+                (_looseFrames ??= []).Add(child);
                 continue;
             }
 
@@ -327,6 +376,35 @@ public sealed partial class OdtLayoutSource
                 continue;
             }
         }
+    }
+
+    /// <summary>
+    /// Frames seen at block level, waiting for a paragraph to hang from.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than an empty list in the overwhelmingly common case, which is a document that has
+    /// none: every frame typed into text is inside its <c>text:p</c> and never comes near this.
+    /// </remarks>
+    private List<XElement>? _looseFrames;
+
+    /// <summary>
+    /// A paragraph with any block-level frames seen before it attached to it.
+    /// </summary>
+    /// <remarks>
+    /// Before the paragraph's own frames rather than after, which is z-order: the file listed them
+    /// first. The pending list is cleared whether or not any of them read as a frame, so a shape this
+    /// reader declines cannot attach itself to every later paragraph in the document.
+    /// </remarks>
+    private PageParagraph WithLooseFrames(PageParagraph paragraph)
+    {
+        if (_looseFrames is not { Count: > 0 } loose) return paragraph;
+
+        List<PageFrame> frames = FramesOf([.. loose.Select(frame => new FrameAnchor(0, frame))]);
+        _looseFrames = null;
+
+        return frames.Count == 0
+            ? paragraph
+            : paragraph with { Frames = [.. frames, .. paragraph.Frames] };
     }
 
     /// <summary>

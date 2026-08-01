@@ -968,13 +968,72 @@ is read and verified, so what remains is the filling of pages rather than the me
       LibreOffice separates `GraphicDescriptor` (`vcl/source/filter/graphicfilter2.cxx:63`) out to do.
       Sniffing rather than believing the label matters in all four: a `.png` part holding a JPEG is common,
       OPC requires a content type and producers still get it wrong, and RTF's own exporters mislabel blips.
-- [ ] **An EMF or WMF blip draws nothing.** Recognised by name and declined with a `Diagnostic` (PL2370)
-      rather than treated as a broken file, and the frame keeps its room so the lines after it do not move.
-      `emf-picture.{docx,odt}` and `wmf-picture.{docx,odt}` render 0/2 and 6/8 words against the reference.
-      `Paperless.Vector` now imports both WMF and EMF, so the missing part is only the wiring: the readers
-      would hand the bytes to the vector importer and replay them into the same `IDrawingSink`, which needs
-      a seam that does not exist yet — `PageFrame.Image` is a raster and there is nowhere to put a display
-      list. SVG is the same shape and the same wait (`svg-picture.{docx,odt}`, 7/8).
+- [x] **An EMF, WMF, EMF+ or SVG blip draws.** `PageFrame` gained a `Lazy<VectorImage>?` beside its
+      `RasterImage?` and `PageDrawing` prefers it; `EmbeddedPicture.Read` answers a `FramePicture`, which
+      is the pair, and all four front ends thread that one value instead of two nullable fields. `PL2370`
+      survives with a narrower meaning — a vector format Paperless has *no decoder for*, which today is a
+      PICT and a StarView metafile and nothing else.
+      **It needed nothing in `Paperless.Core`, and the reason is worth stating rather than an interface
+      being written.** `VectorImage` already is the abstraction a frame wants: `Draw(IDrawingSink, DocRect)`
+      plus an intrinsic size, immutable and replayable, decoded once. A Core interface would have had
+      exactly those two members and one implementation, on the far side of a dependency the layering
+      already permits — `Paperless.Vector` sits beside `Paperless.Text` under Core and above nothing that
+      reads a document, and this library already referenced it.
+      Measured, both PDFs rasterised at `pdftoppm -r 150` and compared with `render-comparison`:
+
+      | Fixture | Before | After |
+      |---|---|---|
+      | `svg-picture.odt` / `.docx` | 7/8 words | **8/8**, `mae 0.0007` / `0.0009`, `ink_ratio 1.028` / `1.025` |
+      | `wmf-picture.odt` / `.docx` | 6/8 words | **8/8**, `mae 0.0005` / `0.0007`, `ink_ratio 1.003` / `1.001` |
+      | `emf-picture.odt` / `.docx` | 0/2 words | **2/2**, `mae 0.0037`, `ink_ratio 1.208` |
+      | `vector-picture-text.rtf` | new | 9/9, `mae 0.0044`, `ink_ratio 1.080` |
+
+      The EMF rows' `ink_ratio` is not a defect here and the diff image says so: the residue is the
+      gradient bar and the dashed polyline that `emf-shapes.emf` states and **LibreOffice's own EMF import
+      does not draw** — checked by converting the bare `.emf` with `soffice` and getting the same missing
+      bar. The WMF rows are the ones to watch for a regression, because `1.001` leaves nowhere to hide.
+- [x] **The vector is decoded when something draws it, not when the document is read**, and the
+      measurement is the reason. On this tree the *first* `VectorImages.Decode` in a process costs
+      **1044 ms** for a WMF carrying one text run, 381 ms for an EMF+ and 67 ms for a text-free EMF,
+      against **0.08–0.21 ms** once warm — nearly all of the first one is resolving and loading faces
+      through `Paperless.Text`. DOCX and ODT read their pictures only when a layout source asks, but **RTF
+      and DOC read theirs while parsing the document**, which is the extraction path, so an eager decode
+      there would have put a second of font work on a caller that wanted the words. A `Lazy<VectorImage>`
+      is the whole of the fix: it defers, it caches, and the per-part caches the readers already keep mean
+      a logo on forty pages still decodes once. `VectorFrameTests.NothingIsDecodedWhileTheDocumentIsRead`
+      pins it with `IsValueCreated`.
+- [x] **A DOCX `a:blip` may carry an SVG beside its raster, and the SVG is what to draw.**
+      `BlipReference.Choose` is now called instead of reading `r:embed`: an `asvg:svgBlip` inside the
+      `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension names the vector and `r:embed` the fallback.
+      Both are kept — `PageFrame.Image` beside `PageFrame.Vector` is *only* this case — so a decode that
+      comes back empty draws the raster rather than nothing, which is what the fallback is in the file
+      for. Measured on `svg-picture.docx`: 769 bytes of SVG against a 3 803-byte PNG.
+- [x] **A DOC's metafile blip is deflate-compressed and the raster ones are not**, which is the single
+      thing that made the Escher path work. `Ww8Blips` used to drop a vector blip's bytes; it now reads
+      the **34-byte `OfficeArtMetafileHeader`** — `cbSize`, `rcBounds`, `ptSize`, `cbSave`, `compression`,
+      `filter` — and inflates what follows. A raster blip has *one* tag byte in the same place.
+      `SvxMSDffManager::GetBLIPDirect` sets its ZCodec for the EMF, WMF and PICT cases and for no other
+      (`msdffimp.cxx:6518-6549`) and does it unconditionally, never reading the `compression` byte; the
+      byte is honoured here because the format states it and `0xFE` legitimately means stored, with a
+      fall-back to the raw bytes when the stream will not inflate. Measured on LibreOffice's own DOC
+      export: 892 bytes of EMF arrive as 262 bytes of deflate behind the header, so a reader that skipped
+      the header and not the compression finds neither a placeable magic nor a `METAHEADER` and declines
+      the picture as an unrecognised blob — which reads as a corrupt document and is not one.
+- [ ] **A DOC's as-character metafile picture comes back floating, and reserves no room on its line.**
+      Found by `vector-picture-text.doc`, which is LibreOffice's own DOC export of three as-character
+      pictures: the WMF, the EMF and the SVG all *decode and draw*, and all three overlap the paragraphs
+      around them because none of them reaches `FrameAnchor.AsCharacter`. It is not about the pictures.
+      The same document with **rasters** in the same three places lays out exactly right, and so does a
+      single as-character metafile; the `Data` stream of the metafile version holds one valid `PICF`
+      (`cb=118`, `mm=0x64`) where the raster version holds one per picture, so LibreOffice writes the
+      other two somewhere this reader finds only through the `FSPA` table — and a floating frame with
+      `Wrap.Through` moves no text. The row still reads OK in the sweep (1/1 pages, 13/13 words), which
+      is exactly the kind of thing a word count cannot see, so it is written down here instead.
+- [ ] **LibreOffice's RTF export rasterises every picture.** Measured on the same source: converting it to
+      `.rtf` writes `\pngblip` for the WMF and for the EMF, where the DOC export keeps both byte for byte.
+      So `vector-picture-text.rtf` is **hand-written**, with `\wmetafile8` and `\emfblip` and the two
+      metafiles as hex — a fixture that went through LibreOffice would exercise neither control word. Both
+      words are then ignored anyway: the sniff decides, because RTF exporters mislabel blips routinely.
 - [ ] **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than a
       matrix, so `a:xfrm/@rot`, `draw:transform="rotate(…)"` and DOC's `sprmPicRotation` are recorded and
       not applied. Deliberate: changing the IR for it would touch every backend and every family, and the

@@ -1002,6 +1002,35 @@ crossed by them.
 backend wants pixels calls `RasterImageDecoder.Ensure`. That is the layering rule rather than a
 convenience — a reader that decoded would put a codec in the extraction path.
 
+**A metafile draws too, and it is deferred by a different mechanism for the same reason.**
+`SheetDrawing` gained a `Lazy<VectorImage>?` beside its `RasterImage?`, and both readers sniff the
+bytes with `VectorImages.For` before wrapping them. It needed nothing in `Paperless.Core`:
+`VectorImage` is already `Draw(IDrawingSink, DocRect)` plus an intrinsic size, and this library
+already referenced `Paperless.Vector`. A `Lazy` rather than an eager decode because the decoder
+*is* reachable from here — measured on this tree, the first `VectorImages.Decode` in a process
+costs **1044 ms** for a WMF with one text run against 0.21 ms once warm, nearly all of it resolving
+faces through `Paperless.Text`, and a caller after cell values must not pay it.
+`SheetVectorPictureTests.NothingIsDecodedUntilSomethingAsksForThePicture` asserts `IsValueCreated`
+is false after a full layout.
+
+**The part name is a lie and the bytes are not.** `vector-picture-sheet.xlsx` is LibreOffice's own
+export of `vector-picture-sheet.ods` and it writes the EMF into **`xl/media/image2.wmf`**, with
+`[Content_Types].xml` declaring nothing useful for either extension. An EMF+ would be less
+distinguishable still — it *is* an EMF, same `EMR_HEADER`, same signature, with no signature of its
+own anywhere. So `VectorImages.For` sniffs and the declared type is not consulted at all.
+
+**The `svgBlip` extension reaches spreadsheets too**, which was not obvious: the same
+`{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension Word and PowerPoint write appears on an
+`xdr:pic`'s `a:blip`, naming an SVG beside the PNG on `r:embed`. `BlipReference.Choose` is what
+`XlsxDrawings` now calls, and the raster is kept beside the vector so an empty decode falls back to
+it rather than to nothing. ODF needs no such step — a `draw:frame` lists alternatives as sibling
+`draw:image` children and the first drawable one wins.
+
+**Measured**, both PDFs rasterised at `pdftoppm -r 150`: `vector-picture-sheet.ods` `mae 0.0059`
+and `.xlsx` `mae 0.0104`, 10/10 words and 1/1 pages on both. The residual ink is `emf-shapes.emf`'s
+gradient bar, which LibreOffice's own EMF import does not draw — verified by converting the bare
+`.emf` with `soffice`.
+
 **A named trap, and it cost an hour of looking in the wrong place.** The anchor arithmetic was
 right on the first run and the page came out blank, because four guards in `Paperless.Rendering`
 asked `image.Width <= 0` before drawing — the right question only for an image that has *already*
@@ -1016,10 +1045,12 @@ Not yet, and why:
   use — `MSODRAWINGGROUP` (0x00EB) in the workbook globals holds the BLIP store and `MSODRAWING`
   (0x00EC) in each sheet substream holds the shapes, with the client anchor in the `OBJ` record
   (`sc/source/filter/excel/xiescher.cxx`). What is missing is not the anchor arithmetic, which is
-  shared with the two formats above, but a **BLIP store reader**: nothing in
-  `Paperless.MsBinary/Escher/` extracts a picture's bytes out of an `F007` entry yet, and neither
-  the DOC nor the PPT path needs one either. It belongs in `Escher/` when it is written, because
-  all three families read the same store.
+  shared with the two formats above, but a **BLIP store reader**. That is now half-written and in
+  the wrong library: `Paperless.WordProcessing/Ww8/Ww8Blips.cs` reads an `F007` entry, follows its
+  `foDelay`, tolerates the one-or-two-checksum rule and — since the vector wiring — inflates a
+  metafile out of its `OfficeArtMetafileHeader`. None of that is DOC-specific. Moving it into
+  `Paperless.MsBinary/Escher/` is what buys XLS and PPT pictures at once, and the metafile half is
+  the part that would be most annoying to write twice.
 - **A drawing belongs to the page holding its top-left cell.** Calc positions the drawing layer in
   document coordinates and clips it per page, so a picture straddling a page break appears on both
   pages, cut. Anchoring it to one page is the same answer for everything that does not straddle.

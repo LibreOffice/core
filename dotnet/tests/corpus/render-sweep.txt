@@ -7,14 +7,18 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 203 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 223 of 231 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
 #
-# Of the twenty that do not match, five are deliberate:
+# **Write to a per-format output directory.** `soffice --convert-to` and `paperless render`
+# both name their output after the input *stem*, so `word-features.doc` and
+# `word-features.docx` both become `word-features.pdf` and one silently overwrites the
+# other. It has cost two agents an hour each. There are now nine such pairs.
+#
+# Of the eight that do not match, three are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
 #                             the changes. Settled and measured; see the marks item.
-#   svg-picture.{odt,docx}    the SVG decoder exists but is not wired into the readers yet.
 #
 # The list-label group is closed. It had been the largest, one bug seen six times —
 # LibreOffice draws `1.`, `a)` and `◦` and we drew none — and all six rows moved together
@@ -26,10 +30,26 @@
 # spreadsheet's chart draws too. See `dotnet/TODO.md` Phase 3.5 for what each of the six
 # measures and for the three defects the spreadsheet forms found.
 #
-# Also open: an EMF or WMF blip draws nothing (emf-picture.*, wmf-picture.*),
-# `alt-chunk.docx` does not read its imported part, `frame-in-cell.{odt,fodt}` loses one
-# word, `table-autofit-partial.docx` fits its columns differently, and
+# The six *picture* rows now match, and they moved together for the same reason the labels
+# did — one missing seam rather than six bugs. `Paperless.Vector` imported WMF, EMF, EMF+
+# and SVG and no reader emitted one, so a frame kept its room and drew nothing (PL2370):
+#   svg-picture.{odt,docx}    7/8 → 8/8   the missing word is the "PAPERLESS" wordmark
+#                                          *inside* the SVG, which decodes to a real GlyphRun
+#   wmf-picture.{odt,docx}    6/8 → 8/8
+#   emf-picture.{odt,docx}    0/2 → 2/2
+# Eight rows are new with it: vector-picture-{deck.odp,deck.pptx,sheet.ods,sheet.xlsx,
+# text.doc,text.rtf} give each family its own route to the bytes, and the two
+# slide-diagram rows arrived with the SmartArt work. See the wiring section in
+# `src/Paperless.Vector/TODO.md` for what the seam turned out to be.
+#
+# Also open: `alt-chunk.docx` does not read its imported part, `frame-in-cell.{odt,fodt}`
+# loses one word, `table-autofit-partial.docx` fits its columns differently, and
 # `sheet-rich-text.fods` draws two words the reference does not.
+#
+# A row reading OK is a statement about pages and words and nothing else.
+# `vector-picture-text.doc` matches on both and still lays out wrongly: its three
+# as-character pictures come back floating and reserve no room on their lines. Recorded in
+# `src/Paperless.WordProcessing/TODO.md` because this file cannot see it.
 #
 FILE                               PAGES o/r   WORDS o/r     VERDICT
 bookmark-field.odt                 1/1         24/24         OK
@@ -52,7 +72,7 @@ page-geometry.odt                  1/1         32/32         OK
 paginated.odt                      5/5         1974/1974     OK
 revisions.odt                      1/1         16/19         WORDS
 sections.odt                       3/3         744/744       OK
-svg-picture.odt                    1/1         7/8           WORDS
+svg-picture.odt                    1/1         8/8           OK
 tabbed.odt                         1/1         37/37         OK
 table-borders.odt                  1/1         30/30         OK
 table-exact-row.odt                1/1         30/30         OK
@@ -85,7 +105,7 @@ picture-anchor.docx                1/1         19/19         OK
 revisions.docx                     1/1         16/19         WORDS
 section-columns.docx               3/3         26/26         OK
 sections.docx                      3/3         744/744       OK
-svg-picture.docx                   1/1         7/8           WORDS
+svg-picture.docx                   1/1         8/8           OK
 tabbed.docx                        1/1         37/37         OK
 table-autofit-partial.docx         1/1         29/37         WORDS
 table-autofit.docx                 1/1         26/26         OK
@@ -222,8 +242,8 @@ chart-bar-deck.pptx                1/1         20/20         OK
 chart-bar-sheet.fods               1/1         34/34         OK
 chart-bar-sheet.ods                1/1         34/34         OK
 chart-bar-sheet.xlsx               1/1         29/29         OK
-emf-picture.docx                   1/1         0/2           WORDS
-emf-picture.odt                    1/1         0/2           WORDS
+emf-picture.docx                   1/1         2/2           OK
+emf-picture.odt                    1/1         2/2           OK
 odp-shape-paths.fodp               2/2         6/6           OK
 paint-fills.fodp                   2/2         0/0           OK
 picture-anchor.odt                 1/1         19/19         OK
@@ -236,8 +256,16 @@ picture-flow.rtf                   1/1         190/190       OK
 sheet-cell-text.fods               2/2         47/47         OK
 sheet-ooxml-template.xltx          3/3         77/77         OK
 sheet-rich-text.fods               3/3         49/47         WORDS
-wmf-picture.docx                   1/1         6/8           WORDS
-wmf-picture.odt                    1/1         6/8           WORDS
+slide-diagram-baked.pptx           1/1         3/3           OK
+slide-diagram-evaluated.pptx       1/1         3/3           OK
+vector-picture-deck.odp            1/1         7/7           OK
+vector-picture-deck.pptx           1/1         7/7           OK
+vector-picture-sheet.ods           1/1         10/10         OK
+vector-picture-sheet.xlsx          1/1         10/10         OK
+vector-picture-text.doc            1/1         13/13         OK
+vector-picture-text.rtf            1/1         9/9           OK
+wmf-picture.docx                   1/1         8/8           OK
+wmf-picture.odt                    1/1         8/8           OK
 word-features.dotx                 2/2         155/155       OK
 prose-doc.doc                      1/1         41/41         OK
 prose-docx.docx                    1/1         41/41         OK

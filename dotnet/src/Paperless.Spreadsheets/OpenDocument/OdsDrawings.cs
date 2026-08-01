@@ -6,6 +6,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.Spreadsheets.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Spreadsheets.OpenDocument;
 
@@ -146,12 +147,16 @@ internal static class OdsDrawings
 
             // A chart of a kind the engine does not draw falls back to the replacement picture,
             // which is better than nothing wherever a backend can decode one.
-            return chart.Chart is null && image is not null
-                ? chart with { Image = Load(file, image) }
-                : chart;
+            if (chart.Chart is not null || image is null) return chart;
+
+            (RasterImage? fallback, Lazy<VectorImage>? drawn) = Load(file, image);
+            return chart with { Image = fallback, Vector = drawn };
         }
 
-        return image is null ? null : drawing with { Image = Load(file, image) };
+        if (image is null) return null;
+
+        (RasterImage? raster, Lazy<VectorImage>? vector) = Load(file, image);
+        return drawing with { Image = raster, Vector = vector };
     }
 
     /// <summary>
@@ -179,42 +184,56 @@ internal static class OdsDrawings
         return OdfChartPlot.Read(chart, new OdfChartStyles(chart.AncestorsAndSelf().Last()));
     }
 
-    private static RasterImage? Load(OdfFile file, XElement image)
+    /// <summary>
+    /// A <c>draw:image</c>'s picture, told apart into a raster and a metafile.
+    /// </summary>
+    /// <remarks>
+    /// <c>draw:mime-type</c> is passed on as a hint and the bytes decide, because ODF's own exporters
+    /// disagree with themselves: LibreOffice writes <c>image/x-emf</c> for a file it stored under a
+    /// <c>.emf</c> name and <c>image/x-wmf</c> for one it stored under <c>.wmf</c>, and neither name
+    /// nor type tells an EMF+ from the EMF that carries it. A vector is left undecoded until something
+    /// draws it; see <c>SheetDrawing.Vector</c> for what that costs otherwise.
+    /// </remarks>
+    private static (RasterImage? Raster, Lazy<VectorImage>? Vector) Load(OdfFile file, XElement image)
     {
+        string? mediaType = Attribute(image, OdfNamespaces.Draw, "mime-type");
+
         if (Attribute(image, OdfNamespaces.XLink, "href") is { Length: > 0 } href)
         {
             // A path with a scheme points outside the package; Paperless does not fetch those.
-            if (href.Contains("://", StringComparison.Ordinal)) return null;
+            if (href.Contains("://", StringComparison.Ordinal)) return default;
 
             string part = href.StartsWith("./", StringComparison.Ordinal) ? href[2..] : href;
             using Stream? content = file.OpenPart(part);
-            if (content is null) return null;
+            if (content is null) return default;
 
             using MemoryStream buffer = new();
             content.CopyTo(buffer);
-            return buffer.Length == 0
-                ? null
-                : RasterImage.Encoded(
-                    buffer.ToArray(), Attribute(image, OdfNamespaces.Draw, "mime-type"));
+            return buffer.Length == 0 ? default : Drawable(buffer.ToArray(), mediaType);
         }
 
         XElement? data = image.Element(XName.Get("binary-data", OdfNamespaces.Office));
-        if (data is null) return null;
+        if (data is null) return default;
 
         try
         {
             byte[] bytes = Convert.FromBase64String(data.Value);
-            return bytes.Length == 0
-                ? null
-                : RasterImage.Encoded(bytes, Attribute(image, OdfNamespaces.Draw, "mime-type"));
+            return bytes.Length == 0 ? default : Drawable(bytes, mediaType);
         }
         catch (FormatException)
         {
             // Base64 a writer mangled is a picture that cannot be drawn, not a document that
             // cannot be read.
-            return null;
+            return default;
         }
     }
+
+    /// <summary>Which of the two kinds some picture bytes are.</summary>
+    private static (RasterImage? Raster, Lazy<VectorImage>? Vector) Drawable(
+        ReadOnlyMemory<byte> bytes, string? mediaType)
+        => VectorImages.For(bytes.Span) is not null
+            ? (null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+            : (RasterImage.Encoded(bytes, mediaType), null);
 
     /// <summary>
     /// A <c>table:end-cell-address</c>: a sheet name, a dot, and an A1 reference.

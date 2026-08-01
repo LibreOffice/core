@@ -119,7 +119,7 @@ public sealed partial class RtfDocumentReader
         (int width, int height) = picture.Twips;
         if (width <= 0 || height <= 0) return;
 
-        RasterImage? image = EmbeddedPicture.Read(
+        FramePicture image = EmbeddedPicture.Read(
             picture.Bytes, picture.Kind is null ? null : "\\" + picture.Kind, "\\pict", _diagnostics);
 
         // A picture inside a shape's `pib` or `fillBlip` property belongs to that shape and is not a
@@ -128,7 +128,7 @@ public sealed partial class RtfDocumentReader
         // second, and taking whichever arrived last would let the fill overwrite the frame.
         if (_shape is { } shape && _shapeProperty is "pib" or "fillBlip")
         {
-            if (_shapeProperty == "pib" || shape.Picture is null) shape.Picture = image;
+            if (_shapeProperty == "pib" || shape.Picture.IsEmpty) shape.Picture = image;
             return;
         }
 

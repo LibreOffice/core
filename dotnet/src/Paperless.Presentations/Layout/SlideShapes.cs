@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.Layout;
 
@@ -131,7 +132,8 @@ public sealed record PlacedShape
 /// </summary>
 /// <param name="Image">
 /// The picture, normally still encoded — a reader hands the file's own bytes on and whichever
-/// backend wants pixels decodes them, so that extraction never pays for a codec.
+/// backend wants pixels decodes them, so that extraction never pays for a codec. Null when the
+/// picture is a vector and there is no raster fallback beside it.
 /// </param>
 /// <param name="Destination">
 /// Where the <em>undisturbed</em> picture goes. A cropped picture's rectangle is larger than
@@ -139,7 +141,26 @@ public sealed record PlacedShape
 /// that has clipping and no crop.
 /// </param>
 /// <param name="Opacity">A uniform opacity multiplier from 0 to 1.</param>
-public sealed record PlacedPicture(RasterImage Image, DocRect Destination, double Opacity = 1.0);
+public sealed record PlacedPicture(RasterImage? Image, DocRect Destination, double Opacity = 1.0)
+{
+    /// <summary>
+    /// The picture as a display list — an SVG, a WMF, an EMF or an EMF+ — or null when it is a
+    /// raster.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Decoded on first use rather than while the slide is read, which is what keeps a deck whose
+    /// master carries a metafile logo from paying the font stack's start-up cost on a caller that
+    /// only wanted the words. Measured: the first decode in a process is 1044 ms for a WMF with
+    /// text and 0.2 ms once warm.
+    /// </para>
+    /// <para>
+    /// <see cref="Image"/> may be set beside it, and then means the raster fallback of a
+    /// DrawingML <c>svgBlip</c> — what PowerPoint shows to a consumer that cannot read SVG.
+    /// </para>
+    /// </remarks>
+    public Lazy<VectorImage>? Vector { get; init; }
+}
 
 /// <summary>
 /// A shape's text after layout: glyph runs, and the transform that puts them on the slide.

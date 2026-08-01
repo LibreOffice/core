@@ -1478,7 +1478,7 @@ public sealed partial class RtfDocumentReader
         /// back floating. So a reader that looked only for a bare <c>{\pict}</c> in the run would find
         /// no picture at all in any RTF LibreOffice wrote, while finding every one Word wrote.
         /// </remarks>
-        public Core.Graphics.RasterImage? Picture { get; set; }
+        public FramePicture Picture { get; set; }
 
         /// <summary>The frame this describes, for the paragraph it is anchored in.</summary>
         public RtfLayoutFrame Build()

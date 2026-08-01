@@ -413,7 +413,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                     AnchorOffset = frame.Offset,
                     Wrap = TextWrap.Through,
                     IsImage = true,
-                    Image = frame.Picture,
+                    Image = frame.Picture.Raster,
+                    Vector = frame.Picture.Vector,
                 });
 
                 continue;
@@ -447,7 +448,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 VerticalOffset = Core.Units.Length.FromTwips(frame.Top),
                 Spacing = frame.WrapDistance ?? DefaultShapeWrapDistance,
                 IsImage = blocks.Count == 0,
-                Image = frame.Picture,
+                Image = frame.Picture.Raster,
+                Vector = frame.Picture.Vector,
                 Blocks = blocks,
             });
         }

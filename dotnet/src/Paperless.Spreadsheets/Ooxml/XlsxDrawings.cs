@@ -9,6 +9,7 @@ using Paperless.Core.Units;
 using Paperless.Ooxml;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Spreadsheets.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Spreadsheets.Ooxml;
 
@@ -152,15 +153,24 @@ internal static class XlsxDrawings
             return drawing with { IsChart = true, Chart = Plot(data, package, images) };
         }
 
-        return drawing with
+        // `BlipReference.Choose` rather than `r:embed` read straight off the blip: since Office 2016
+        // one `a:blip` may name an SVG in an `asvg:svgBlip` extension beside the raster, and the
+        // vector is the one to draw. The raster is kept beside it, so a decode that comes back empty
+        // still leaves the picture the file put there for exactly that.
+        XElement? blip = Child(Child(picture, DrawingNamespace, "blipFill"), MainNamespace, "blip");
+        BlipReference.Choice choice = BlipReference.Choose(blip);
+
+        (RasterImage? raster, Lazy<VectorImage>? vector) = Load(package, images, choice.RelationshipId);
+
+        if (choice.IsVector && choice.FallbackRelationshipId is { } fallback)
         {
-            Image = Load(
-                package,
-                images,
-                Attribute(
-                    Child(Child(picture, DrawingNamespace, "blipFill"), MainNamespace, "blip"),
-                    XName.Get("embed", RelationshipNamespace))),
-        };
+            (RasterImage? spare, Lazy<VectorImage>? _) = Load(package, images, fallback);
+            if (vector is null) return drawing with { Image = spare };
+
+            raster = spare;
+        }
+
+        return drawing with { Image = raster, Vector = vector };
     }
 
     /// <summary>
@@ -200,27 +210,40 @@ internal static class XlsxDrawings
     }
 
     /// <summary>
-    /// Loads a picture's bytes, encoded.
+    /// Loads a picture's bytes, encoded, and says which kind of picture they are.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <see cref="RasterImage.Encoded"/> and no decoding: the bytes are a PNG or a JPEG in the
     /// package and the only thing that can turn them into pixels is a codec, which lives in the
     /// rendering library. A reader that decoded would drag one into the extraction path.
+    /// </para>
+    /// <para>
+    /// A metafile is deferred the same way and for a sharper reason — it <em>can</em> be decoded from
+    /// here, and doing it eagerly would put the font stack's start-up cost on a caller that only
+    /// wanted cell values. <c>VectorImages.For</c> decides which of the two a part is, from the bytes:
+    /// the part name and the declared content type are both a producer's choice and neither
+    /// distinguishes an EMF from a WMF, let alone an EMF+ from an EMF.
+    /// </para>
     /// </remarks>
-    private static RasterImage? Load(
+    private static (RasterImage? Raster, Lazy<VectorImage>? Vector) Load(
         OpcPackage package, Dictionary<string, OpcXml.Relationship> images, string? id)
     {
-        if (id is null || !images.TryGetValue(id, out OpcXml.Relationship relationship)) return null;
-        if (relationship.IsExternal) return null;
-        if (package.GetPart(relationship.Target) is not { } part) return null;
+        if (id is null || !images.TryGetValue(id, out OpcXml.Relationship relationship)) return default;
+        if (relationship.IsExternal) return default;
+        if (package.GetPart(relationship.Target) is not { } part) return default;
 
         using Stream content = part.Open();
         using MemoryStream buffer = new();
         content.CopyTo(buffer);
 
-        return buffer.Length == 0
-            ? null
-            : RasterImage.Encoded(buffer.ToArray(), part.MediaType);
+        if (buffer.Length == 0) return default;
+
+        ReadOnlyMemory<byte> bytes = buffer.ToArray();
+
+        return VectorImages.For(bytes.Span) is not null
+            ? (null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+            : (RasterImage.Encoded(bytes, part.MediaType), null);
     }
 
     private static SheetCellPoint Point(XElement? element)

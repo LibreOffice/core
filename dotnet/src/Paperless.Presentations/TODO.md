@@ -714,6 +714,37 @@ Two reference artefacts worth knowing before chasing them:
       emits `RasterImage.Encoded` and a backend decodes when it wants pixels, which is what keeps
       this library free of a `ProjectReference` on `Paperless.Rendering` and therefore keeps
       `paperless extract` free of a codec it never uses.
+- [x] **Vector pictures — WMF, EMF, EMF+ and SVG — draw.** `PlacedPicture` gained a
+      `Lazy<VectorImage>?` beside its now-nullable `RasterImage?`, and `SlideDrawing.DrawPicture`
+      prefers it under the same clip a raster gets. It needed **nothing in `Paperless.Core`**:
+      `VectorImage` is already `Draw(IDrawingSink, DocRect)` plus an intrinsic size, immutable and
+      replayable, and this library already referenced `Paperless.Vector` — an interface with one
+      implementation across a dependency that is already legal buys nothing.
+      **Deferred, and the measurement is why.** The first `VectorImages.Decode` in a process costs
+      **1044 ms** for a WMF carrying one text run, 381 ms for an EMF+ and 67 ms for a text-free
+      EMF, against 0.08–0.21 ms once warm — nearly all of the first is resolving faces through
+      `Paperless.Text`. Slide layout is not the extraction path, so eager would have been harmless
+      *here*; the `Lazy` is uniform with the other two families, whose RTF and DOC readers do read
+      pictures while parsing, and it costs nothing.
+      **The part name says nothing.** `vector-picture-deck.pptx` is LibreOffice's own export of
+      `vector-picture-deck.odp` and it writes the EMF into `ppt/media/image2.wmf`; an EMF+ would be
+      less distinguishable still, since it *is* an EMF with the same header and no signature of its
+      own. `VectorImages.For` reads the bytes and the declared type is not consulted.
+      **`BlipReference.Choose` replaces reading `r:embed`**, because a `p:pic`'s `a:blip` may carry
+      an `asvg:svgBlip` in the `{96DAC541-…}` extension beside the raster. Both are kept, so an
+      empty decode falls back to the raster the file put there for exactly that. ODF needs no such
+      step: a `draw:frame` lists alternatives as sibling `draw:image` children, first drawable wins.
+      **Measured**, both PDFs at `pdftoppm -r 150`: `vector-picture-deck.odp` `mae 0.0085` and
+      `.pptx` `mae 0.0086`, 7/7 words and 1/1 pages on both, with all three pictures at their
+      frames. The residual ink is `emf-shapes.emf`'s gradient bar, which LibreOffice's own EMF
+      import does not draw — checked by converting the bare `.emf` with `soffice`.
+      **The trap, and it is the one the seam's author named.** `VectorImage.Draw` stretches the
+      picture's whole *frame* onto the destination and clips to it, not the extent of its ink.
+      Taking the ink makes a logo with margins several times too large and clipped, which reads as
+      a mapping bug in the decoder and is not one;
+      `SlideVectorPictureTests.APictureIsStretchedByItsFrameRatherThanByItsInk` measures it on the
+      SVG, whose rounded rectangle sits at x = 2 in a 200-unit view box and must land 0.8 mm into
+      an 80 mm destination rather than at its edge.
 
 - [x] **ODF's `draw:enhanced-geometry` through that same evaluator**, so an ODP shape draws its
       own path rather than the preset its `draw:type` names — which matters because ODF is

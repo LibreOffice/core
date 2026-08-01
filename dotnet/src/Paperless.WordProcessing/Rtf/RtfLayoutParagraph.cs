@@ -177,8 +177,8 @@ public sealed record RtfLayoutFrame(
     /// </remarks>
     public bool IsInline { get; init; }
 
-    /// <summary>The picture the frame holds, still encoded, or null when it holds none.</summary>
-    public Core.Graphics.RasterImage? Picture { get; init; }
+    /// <summary>The picture the frame holds, or nothing when it holds none.</summary>
+    public FramePicture Picture { get; init; }
 }
 
 /// <summary>

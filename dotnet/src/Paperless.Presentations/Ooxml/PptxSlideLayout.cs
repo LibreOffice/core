@@ -7,6 +7,7 @@ using Paperless.Ooxml;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.Ooxml;
 
@@ -36,7 +37,7 @@ internal sealed partial class PptxSlideLayout
     private readonly PptxFile _file;
     private readonly SlideFonts _fonts;
     private readonly Dictionary<string, SlideTheme> _themes = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, RasterImage?> _images = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, PptxPicture> _images = new(StringComparer.Ordinal);
 
     /// <summary>
     /// The part each synthesised SmartArt shape tree came from, by the tree's own identity.
@@ -663,8 +664,26 @@ internal sealed partial class PptxSlideLayout
     private PlacedPicture? Picture(XElement shape, PptxSlide slide, DocRect bounds)
     {
         if (!Ppt.Is(shape, "pic")) return null;
-        if (DrawingFill.ReadBlip(Ppt.Child(shape, "blipFill")) is not { } blip) return null;
-        if (Image(blip.EmbedId, PartOf(shape, slide)) is not { } image) return null;
+
+        XElement? fill = Ppt.Child(shape, "blipFill");
+        if (DrawingFill.ReadBlip(fill) is not { } blip) return null;
+
+        // `BlipReference.Choose` rather than `blip.EmbedId`, because one `a:blip` may carry an
+        // `asvg:svgBlip` in an extension beside the raster in `r:embed` — the vector is what
+        // PowerPoint draws and the raster is what it shows a consumer that cannot.
+        BlipReference.Choice choice = BlipReference.Choose(Drawing.Child(fill, "blip"));
+        string? part = PartOf(shape, slide);
+
+        PptxPicture picture = Loaded(choice.RelationshipId ?? blip.EmbedId, part);
+
+        if (choice.IsVector && choice.FallbackRelationshipId is { } fallback)
+        {
+            picture = picture.Vector is null
+                ? Loaded(fallback, part)
+                : picture with { Raster = Loaded(fallback, part).Raster };
+        }
+
+        if (picture.IsEmpty) return null;
 
         DocRect area = blip.FillRect.IsWhole
             ? bounds
@@ -677,7 +696,8 @@ internal sealed partial class PptxSlideLayout
             blip.SourceRect.Right, blip.SourceRect.Bottom);
 
         return destination is { } placed
-            ? new PlacedPicture(image, placed, Math.Clamp(blip.Opacity, 0, 1))
+            ? new PlacedPicture(picture.Raster, placed, Math.Clamp(blip.Opacity, 0, 1))
+              { Vector = picture.Vector }
             : null;
     }
 
@@ -825,24 +845,58 @@ internal sealed partial class PptxSlideLayout
     /// logo on its master would otherwise read and copy the same JPEG once per slide.
     /// </para>
     /// </remarks>
-    private RasterImage? Image(string? embedId, string? partName)
-    {
-        if (embedId is null || partName is null) return null;
-        if (_file.Relationship(partName, embedId) is not { IsExternal: false } relationship) return null;
-        if (_images.TryGetValue(relationship.Target, out RasterImage? cached)) return cached;
+    private RasterImage? Image(string? embedId, string? partName) => Loaded(embedId, partName).Raster;
 
-        RasterImage? image = null;
+    /// <summary>
+    /// The picture an <c>r:embed</c> names, raster or vector, cached by part name.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Which of the two it is comes from the bytes.</b> Nothing else can say: LibreOffice writes a
+    /// genuine EMF into a part named <c>.wmf</c>, an EMF+ has no signature of its own anywhere, and
+    /// <c>[Content_Types].xml</c> is a producer's claim rather than a fact. <c>VectorImages.For</c> is
+    /// the registry that knows which formats have a decoder, so it is what decides.
+    /// </para>
+    /// <para>
+    /// A part that is not a vector becomes a <see cref="RasterImage.Encoded"/> whether or not it sniffs
+    /// as a raster this library knows, which is deliberate: a TIFF is a real picture some backend may
+    /// grow a codec for, and declining it here would lose the bytes rather than the drawing.
+    /// </para>
+    /// </remarks>
+    private PptxPicture Loaded(string? embedId, string? partName)
+    {
+        if (embedId is null || partName is null) return default;
+        if (_file.Relationship(partName, embedId) is not { IsExternal: false } relationship) return default;
+        if (_images.TryGetValue(relationship.Target, out PptxPicture cached)) return cached;
+
+        PptxPicture picture = default;
         if (_file.Package.GetPart(relationship.Target) is { } part)
         {
             using Stream content = part.Open();
             using MemoryStream buffer = new();
             content.CopyTo(buffer);
 
-            if (buffer.Length > 0) image = RasterImage.Encoded(buffer.ToArray(), part.MediaType);
+            if (buffer.Length > 0)
+            {
+                ReadOnlyMemory<byte> bytes = buffer.ToArray();
+
+                picture = VectorImages.For(bytes.Span) is not null
+                    ? new PptxPicture(null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+                    : new PptxPicture(RasterImage.Encoded(bytes, part.MediaType), null);
+            }
         }
 
-        _images[relationship.Target] = image;
-        return image;
+        _images[relationship.Target] = picture;
+        return picture;
+    }
+
+    /// <summary>One package part's picture: a raster, or a vector decoded when something draws it.</summary>
+    /// <param name="Raster">The encoded bytes, when they are not a vector this library reads.</param>
+    /// <param name="Vector">The deferred decode, when they are.</param>
+    private readonly record struct PptxPicture(RasterImage? Raster, Lazy<VectorImage>? Vector)
+    {
+        /// <summary>True when the part held nothing drawable.</summary>
+        public bool IsEmpty => Raster is null && Vector is null;
     }
 
     private static Paint? SolidFill(XElement parent, DrawingTheme? theme, Colour? placeholder)
