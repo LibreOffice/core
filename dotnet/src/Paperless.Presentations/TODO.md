@@ -222,13 +222,28 @@ table asserted, not by the corpus.
       master names rather than the first in the file: a deck carries at least two and the notes
       one is A4 portrait in everything LibreOffice writes. The master's own *shapes* are not
       drawn, which is the same open question the PPTX side has about `showMasterSp`.
-- [ ] **The list style an outline paragraph's indents, spacing and bullet come from.** A
-      `text:list` names a `text:style-name`, and the level is the nesting depth; `OdfListStyle`
-      already parses the levels. Nothing reads them, so `slides-features.odp`'s outline lands
-      17 pt left of the reference with no bullet, and drifts to 9.3 pt low by its third
-      paragraph. The three quantities needed are `fo:margin-left`, `fo:text-indent` and
-      `text:bullet-char` — exactly what the OOXML side gets from `marL`, `indent` and `a:buChar`,
-      through a different resolution.
+- [x] **The list style an outline paragraph's indents, spacing and bullet come from.** A
+      `text:list` names a `text:style-name` and the level is the nesting depth, so the level is
+      counted from the `text:p`'s ancestors and the style resolved innermost-first — LibreOffice
+      writes the name on the outermost list of a run and leaves the nested ones bare.
+      **The two quantities are not `fo:margin-left` and `fo:text-indent`.** Those belong to ODF
+      1.2's *label-alignment* mode, which is what Writer gets; a presentation's list style uses
+      the older *label-width-and-position* mode, whose `text:space-before` and
+      `text:min-label-width` say where the marker goes and where the text goes. The text starts
+      at their sum and the marker at the space alone, which is exactly PresentationML's `marL`
+      and `marL + indent`. Measured on `slides-features.odp`, whose level 1 states no space and a
+      0.6 cm label: bullet at 56.693 and text at 73.701, 17.008 pt apart, and so it now draws.
+      A numbered level still yields no marker, for the reason `a:buAutoNum` does not.
+- [x] **The per-level presentation outline styles**, `<master>-outline1` … `-outline9`. They are
+      chained parent to child and a shape's own `presentation:style-name` inherits from level one,
+      so nothing in the shape's cascade points at level two and a reader that follows only the
+      shape resolves every level against level one's properties. `OdfTextBody` finds the base name
+      by walking the shape's presentation-style parents for one ending `-outline<digit>` and
+      substitutes the paragraph's own level. What it carries is the font size per level and the
+      space above a paragraph: `slides-features.odp`'s `Default-outline2` states
+      `fo:margin-top="0.4cm"` and nothing else, and without it the deck's third outline paragraph
+      sat **11.23 pt** above where LibreOffice draws it — a drift that grows with every level-two
+      paragraph and looks exactly like a line-height bug.
 - [x] Simpler two-level inheritance than PPTX, which made it the right place to build first
 
 ### PPTX
@@ -451,8 +466,8 @@ Two reference artefacts worth knowing before chasing them:
       shapes — one per visible cell with its fill and its text, then one per consolidated grid
       line with only a pen — so nothing in the display list knows a table happened and the binary
       PPT path can reuse every line of it. Measured stroke for stroke against the reference; see
-      **Tables on a slide** below. Not for ODP, whose `table:table` inside a `draw:frame` is a
-      different vocabulary and is not read at all yet.
+      **Tables on a slide** below. **And for ODP**, through the same `SlideTable.Place`: the ODF
+      side supplies a grid model and a delegate for the cell text and nothing else.
 - [ ] Notes pages as separate output pages (optional)
 - [ ] PPT (binary). Nothing lays out. The Escher reader already produces the shape tree and the
       anchors, but `SlideAtom`'s eight layout placeholder ids — the shape half of the placeholder

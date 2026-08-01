@@ -240,7 +240,7 @@ internal static class PptxTextBody
 
                 return Marked(
                     DrawingTextBody.AutoNumber(number, slot, counters, counting),
-                    source, paragraphProperties, levelStyle, theme);
+                    source, paragraphProperties, levelStyle, theme, isSymbol: false);
             }
 
             if (Drawing.Child(source, "buChar") is not { } bullet) continue;
@@ -265,7 +265,8 @@ internal static class PptxTextBody
         XElement source,
         XElement? paragraphProperties,
         XElement? levelStyle,
-        DrawingTheme? theme)
+        DrawingTheme? theme,
+        bool isSymbol = true)
         => new(
                 text,
                 Drawing.Attribute(Bullet(source, "buFont", paragraphProperties, levelStyle), "typeface"),
@@ -274,7 +275,8 @@ internal static class PptxTextBody
                     && percent > 0
                     ? percent / 100000.0
                     : 1.0,
-                ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme));
+                ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme),
+                isSymbol);
 
     /// <summary>
     /// One of the bullet's satellite properties, from wherever in the chain states it.

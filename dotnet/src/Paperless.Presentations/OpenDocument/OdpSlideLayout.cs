@@ -104,9 +104,25 @@ internal sealed class OdpSlideLayout
         OdfStyle style, OdfPropertyKind kind, string ns, string name)
         => _file.Styles.ResolveProperty(style.Name, style.Family, kind, ns, name);
 
-    private static bool IsHidden(XElement page)
-        => Attribute(page, OdfNamespaces.Draw, "style-name") is not null
-           && Attribute(page, OdfNamespaces.Presentation, "class") == "hidden";
+    /// <summary>
+    /// Whether a slide is skipped during a presentation, and therefore not exported.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The flag is <c>presentation:visibility</c> on the page's drawing-page style, not
+    /// an attribute on the page.</strong> Reading it as <c>presentation:class="hidden"</c> — which
+    /// is a placeholder's kind and never a page's — makes every slide of every deck visible, and
+    /// the only symptom is one page too many: <c>slides-features.odp</c> came out at three pages
+    /// against LibreOffice's two. Extraction had this right all along
+    /// (<c>OdfContentReader.IsDrawingPageHidden</c>) and layout did not, which is exactly the kind
+    /// of divergence two readers of one format produce.
+    /// </remarks>
+    private bool IsHidden(XElement page)
+        => _file.Styles.ResolveProperty(
+            Attribute(page, OdfNamespaces.Draw, "style-name"),
+            OdfStyleFamily.DrawingPage,
+            OdfPropertyKind.DrawingPage,
+            OdfNamespaces.Presentation,
+            "visibility").Is("hidden");
 
     /// <summary>
     /// The slide's background: its own drawing-page style, then the master's.
