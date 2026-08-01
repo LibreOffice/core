@@ -18,7 +18,9 @@
 #include <com/sun/star/text/XAutoTextContainer.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -46,6 +48,8 @@ public:
     virtual void setUp() override
     {
         UnoApiTest::setUp();
+        // $(vlang) names the autotext directory, and no view is here to set the Kit's language
+        comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_ENGLISH_US));
         mxDesktop.set(frame::Desktop::create(m_xContext));
     }
 

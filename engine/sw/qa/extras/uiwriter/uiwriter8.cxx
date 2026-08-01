@@ -21,9 +21,11 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
 #include <editeng/adjustitem.hxx>
@@ -58,6 +60,8 @@ public:
     SwUiWriterTest8()
         : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {
+        // $(vlang) names the autotext directory, and no view is here to set the Kit's language
+        comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_ENGLISH_US));
     }
 };
 
