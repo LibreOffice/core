@@ -688,16 +688,31 @@ function getUndoCount(win) {
 }
 
 // Undo every change, undoing as many steps as core reports on the stack.
+// A step can still land on the stack while the earlier ones are being
+// undone, for example from a click whose change reached core late, so the
+// count is read again after undoing and the round is repeated until it
+// reports zero.
 function undoAll() {
 	cy.log('>> undoAll - start');
 
-	cy.getFrameWindow().then(function(win) {
-		helper.processToIdle(win);
+	function undoWhilePending(win, attemptsLeft) {
 		getUndoCount(win).then(function(count) {
+			if (count === 0)
+				return;
+
+			expect(attemptsLeft, 'rounds left to empty the undo stack').to.be.greaterThan(0);
+
 			for (var i = 0; i < count; i++)
 				win.app.map.sendUnoCommand('.uno:Undo');
 			helper.processToIdle(win);
+
+			undoWhilePending(win, attemptsLeft - 1);
 		});
+	}
+
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+		undoWhilePending(win, 3);
 	});
 
 	// Every step has been undone, so the undo stack is empty. Core answers for
