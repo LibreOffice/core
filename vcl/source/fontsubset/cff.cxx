@@ -1720,7 +1720,7 @@ void CffContext::readDictOp()
                 break;
         }
     }
-    else if ((c >= 32) || (c == 28))
+    else if ((c >= 32 && c != 255) || (c == 28))
     {
         //      --mpReadPtr;
         read2push();
