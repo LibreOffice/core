@@ -94,6 +94,7 @@ using namespace vcl::pdf;
 
 namespace filter
 {
+class PDFDocument;
 class PDFObjectElement;
 }
 
@@ -283,6 +284,7 @@ class GlyphEmit
     std::vector<ColorLayer>         m_aColorLayers;
     Bitmap                          m_aColorBitmap;
     tools::Rectangle                m_aRect;
+    std::unique_ptr<filter::PDFDocument> m_pColorPaint;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -308,6 +310,12 @@ public:
         rRect = m_aRect;
         return m_aColorBitmap;
     }
+
+    void setColorPaint(std::unique_ptr<filter::PDFDocument> pPaint)
+    {
+        m_pColorPaint = std::move(pPaint);
+    }
+    const std::unique_ptr<filter::PDFDocument>& getColorPaint() const { return m_pColorPaint; }
 
     void addCode( sal_Ucs i_cCode )
     {

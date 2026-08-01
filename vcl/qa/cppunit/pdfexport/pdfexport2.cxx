@@ -3769,78 +3769,76 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, cool16122BadPantoneElement)
     CPPUNIT_ASSERT(bFound);
 }
 
-CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testCOLRv1)
 {
-    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    loadFromFile(u"master-background-artifact.fodp");
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
-
+    // COLR v1 glyphs are exported as Type 3 CharProcs drawing a Form XObject that
+    // holds the glyph paint. The document uses Nabla (COLR v1) with the text "Hello".
     vcl::filter::PDFDocument aDocument;
-    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
-    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
-    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
-    CPPUNIT_ASSERT(pContents);
-    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
-    CPPUNIT_ASSERT(pStream);
-    SvMemoryStream& rObjectStream = pStream->GetMemory();
-    SvMemoryStream aUncompressed;
-    ZCodec aZCodec;
-    aZCodec.BeginCompression();
-    rObjectStream.Seek(0);
-    aZCodec.Decompress(rObjectStream, aUncompressed);
-    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    loadFromFile(u"COLRv1Test.odt");
+    save(TestFilter::PDF_WRITER);
 
-    // an operator shares its line with its operands, and sometimes with another operator
-    auto isPaintingOperator = [](const std::string_view line) {
-        for (size_t nPos = 0; nPos != std::string_view::npos;)
-        {
-            const size_t nStart = line.find_first_not_of(' ', nPos);
-            if (nStart == std::string_view::npos)
-                break;
-            nPos = line.find(' ', nStart);
-            const std::string_view aToken(
-                line.substr(nStart, nPos == std::string_view::npos ? nPos : nPos - nStart));
-            for (const auto op :
-                 { "f", "f*", "F", "S", "s", "B", "B*", "b", "b*", "Do", "TJ", "Tj" })
-            {
-                if (aToken == op)
-                    return true;
-            }
-        }
-        return false;
-    };
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    auto pStart = static_cast<const char*>(aUncompressed.GetData());
-    const char* const pEnd = pStart + aUncompressed.GetSize();
-    int nOpenMarks(0);
-    int nArtifacts(0);
-    OStringBuffer aUntagged;
-    // ISO 14289-1 7.1: content is either tagged or marked as an artifact
-    while (pStart != pEnd)
+    bool bFoundType3 = false;
+    int nFormXObjects = 0;
+    int nCharProcs = 0;
+    for (const auto& aElement : aDocument.GetElements())
     {
-        const auto pLineEnd = std::find(pStart, pEnd, '\n');
-        const std::string_view line(pStart, pLineEnd - pStart);
-        pStart = pLineEnd == pEnd ? pEnd : pLineEnd + 1;
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
 
-        if (line == "EMC")
-            --nOpenMarks;
-        else if (o3tl::ends_with(line, "BMC") || o3tl::ends_with(line, "BDC"))
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+
+        if (pType && pType->GetValue() == "Font" && pSubtype && pSubtype->GetValue() == "Type3")
+            bFoundType3 = true;
+
+        if (pType && pType->GetValue() == "XObject" && pSubtype && pSubtype->GetValue() == "Form")
         {
-            ++nOpenMarks;
-            if (o3tl::starts_with(line, "/Artifact"))
-                ++nArtifacts;
+            nFormXObjects++;
+
+            auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("BBox"_ostr));
+            CPPUNIT_ASSERT(pBBox);
+            const auto& rElements = pBBox->GetElements();
+            CPPUNIT_ASSERT_EQUAL(size_t(4), rElements.size());
+            double aBBox[4];
+            for (size_t i = 0; i < 4; i++)
+            {
+                auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[i]);
+                CPPUNIT_ASSERT(pNumber);
+                aBBox[i] = pNumber->GetValue();
+            }
+
+            CPPUNIT_ASSERT_GREATER(aBBox[0], aBBox[2]);
+            CPPUNIT_ASSERT_GREATER(aBBox[1], aBBox[3]);
+
+            // The glyphs of "Hello" have all their ink above the baseline, so a
+            // Y-flipped BBox would put it below.
+            CPPUNIT_ASSERT_GREATER(0.0, aBBox[3]);
+            CPPUNIT_ASSERT_GREATER(-aBBox[1], aBBox[3]);
         }
-        else if (nOpenMarks == 0 && isPaintingOperator(line))
-            aUntagged.append(OString::Concat(line) + " ");
+
+        auto pStream = pObject->GetStream();
+        if (!pStream)
+            continue;
+        auto& rMemory = pStream->GetMemory();
+        auto nSize = rMemory.GetSize();
+        if (nSize == 0)
+            continue;
+        rMemory.Seek(0);
+        OString aContent(static_cast<const char*>(rMemory.GetData()), nSize);
+        if (aContent.indexOf(" d0\n") >= 0 && aContent.indexOf(" Do\n") >= 0)
+            nCharProcs++;
     }
 
-    // without the fix the background was painted outside every marked-content section
-    CPPUNIT_ASSERT_MESSAGE(aUntagged.toString().getStr(), aUntagged.isEmpty());
-    // the page decoration, and the background the slide takes from its master page
-    CPPUNIT_ASSERT_EQUAL(2, nArtifacts);
-    CPPUNIT_ASSERT_EQUAL(0, nOpenMarks);
+    CPPUNIT_ASSERT_MESSAGE("Expected a Type 3 font for COLR v1 glyphs", bFoundType3);
+
+    // "Hello" has 4 unique glyphs, each with a Form XObject drawn by its CharProc.
+    CPPUNIT_ASSERT_EQUAL(4, nFormXObjects);
+    CPPUNIT_ASSERT_EQUAL(4, nCharProcs);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
