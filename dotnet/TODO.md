@@ -512,9 +512,9 @@ to draw something the file already contains a picture of.
 ### Charts
 
 - [x] **Read the chart model** — `Paperless.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
-      and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from four places:
+      and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from three call sites:
       `PptxShapeReader.ReadChart`, `XlsxCharts` (two relationship hops, sheet → drawing → chart),
-      and `OdfContentReader.ReadChart` for ODP, ODS and ODT at once. `barChart`, `lineChart`,
+      and `OdfContentReader.ReadChart`, which serves ODP, ODS and ODT at once. `barChart`, `lineChart`,
       `pieChart`, `scatterChart` and `areaChart` are covered by matching the `…Chart` suffix on
       `CT_PlotArea`'s element group, so the 3-D, doughnut, radar, bubble, stock and of-pie
       variants read too — a `c:ser` is the same element in all of them.
@@ -578,10 +578,12 @@ to draw something the file already contains a picture of.
       the right numbers against the wrong labels, which no assertion about counts or totals
       catches. The array is sized from `c:ptCount` and each point placed at its own index;
       `DrawingChartTests.ASparsePointIndexLeavesAGapRatherThanShiftingEverythingAfterIt` is the
-      guard. LibreOffice does the same thing for the same reason —
-      `mrModel.maData[mnPtIndex]`, `datasourcecontext.cxx:150-177` — and
-      `chart2/qa/extras/data/pptx/sparse-chart.pptx` exists because someone got it wrong there
-      too.
+      guard, and LibreOffice does the same thing for the same reason —
+      `mrModel.maData[mnPtIndex]`, `datasourcecontext.cxx:150-177`. Confirmed on a real file:
+      `chart2/qa/extras/data/pptx/sparse-chart.pptx` extracts as `Category 1` → (blank, −2.4),
+      `Category 2` → (2.5, blank), `Category 3` → (3.5, blank), `Category 4` → (blank, −2.8),
+      which is a chart the document-order reading would have turned into two dense columns of the
+      same four numbers against the wrong labels.
 - [ ] **`cx:` chartex is not read.** The 2014 vocabulary funnel, waterfall, treemap and histogram
       charts use puts its data in `cx:chartData/cx:data/cx:numDim` rather than in `c:ser`, under a
       different `graphicData` URI, and a frame carrying one falls through to being recorded as a
