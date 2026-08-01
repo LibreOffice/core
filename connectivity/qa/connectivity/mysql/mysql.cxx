@@ -20,6 +20,11 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/propertysequence.hxx>
@@ -29,6 +34,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
@@ -57,6 +64,7 @@ public:
     void testNumericConversionPrepared();
     void testPreparedStmtIsAfterLast();
     void testGetStringFromBlobColumn();
+    void testTdf149434DottedDatabaseName();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
@@ -69,6 +77,7 @@ public:
     CPPUNIT_TEST(testNumericConversionPrepared);
     CPPUNIT_TEST(testPreparedStmtIsAfterLast);
     CPPUNIT_TEST(testGetStringFromBlobColumn);
+    CPPUNIT_TEST(testTdf149434DottedDatabaseName);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -82,6 +91,7 @@ void MysqlTestDriver::tearDown()
         CPPUNIT_ASSERT(xStatement.is());
         xStatement->executeUpdate(u"DROP TABLE IF EXISTS myTestTable"_ustr);
         xStatement->executeUpdate(u"DROP TABLE IF EXISTS otherTable"_ustr);
+        xStatement->executeUpdate(u"DROP DATABASE IF EXISTS `tdf149434.test.schema`"_ustr);
     }
     test::BootstrapFixture::tearDown();
 }
@@ -510,6 +520,55 @@ void MysqlTestDriver::testGetStringFromBlobColumn()
     CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xRow->getString(4));
 
     xStatement->executeUpdate(u"DROP TABLE IF EXISTS myTestTable"_ustr);
+}
+
+void MysqlTestDriver::testTdf149434DottedDatabaseName()
+{
+    if (m_sUrl.isEmpty())
+        return;
+
+    // Retrieve connection and create sql statement
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+
+    // Drop and create database using dots in its name including a test table
+    static constexpr OUString sDottedSchema = u"tdf149434.test.schema"_ustr;
+    xStatement->executeUpdate("DROP DATABASE IF EXISTS `" + sDottedSchema + "`");
+    xStatement->executeUpdate("CREATE DATABASE `" + sDottedSchema + "`");
+    xStatement->executeUpdate("CREATE TABLE `" + sDottedSchema
+                              + "`.tdf149434TestTable (id INTEGER PRIMARY KEY)");
+
+    // Retrieve table definition using the composed name
+    Reference<XDataDefinitionSupplier> xDDSupplier(m_xDriver, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("driver does not support XDataDefinitionSupplier", xDDSupplier.is());
+    Reference<XTablesSupplier> xTablesSupplier
+        = xDDSupplier->getDataDefinitionByConnection(xConnection);
+    CPPUNIT_ASSERT_MESSAGE("cannot get tables supplier", xTablesSupplier.is());
+    Reference<XNameAccess> xTables = xTablesSupplier->getTables();
+    CPPUNIT_ASSERT_MESSAGE("cannot get tables container", xTables.is());
+    OUString sComposedName = sDottedSchema + ".tdf149434TestTable";
+    CPPUNIT_ASSERT_MESSAGE("dotted-schema table not found in tables container",
+                           xTables->hasByName(sComposedName));
+
+    // Without the fix in place, this test would have failed with
+    // - An uncaught exception of type com.sun.star.container.NoSuchElementException
+    // i.e. the composed name was split at the first instead of the last dot
+    uno::Any aTable;
+    CPPUNIT_ASSERT_NO_THROW(aTable = xTables->getByName(sComposedName));
+
+    Reference<XNamed> xNamed(aTable, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("table object does not implement XNamed", xNamed.is());
+    CPPUNIT_ASSERT_EQUAL(u"tdf149434TestTable"_ustr, xNamed->getName());
+
+    Reference<XPropertySet> xTableProps(aTable, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("table object does not implement XPropertySet", xTableProps.is());
+    OUString sSchemaName;
+    xTableProps->getPropertyValue(u"SchemaName"_ustr) >>= sSchemaName;
+    CPPUNIT_ASSERT_EQUAL(sDottedSchema, sSchemaName);
+
+    xStatement->executeUpdate("DROP DATABASE `" + sDottedSchema + "`");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MysqlTestDriver);
