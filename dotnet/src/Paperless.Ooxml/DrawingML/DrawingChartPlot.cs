@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -57,22 +58,45 @@ public static class DrawingChartPlot
         XElement? plotArea = Child(chart, "plotArea");
         if (plotArea is null) return null;
 
-        XElement? group = null;
+        // Every drawable group, in document order. A chart part may hold several sharing one pair
+        // of axes — a column chart with a line over it is a c:barChart and a c:lineChart side by
+        // side — and taking only the first loses whole series.
+        List<XElement> groups = [];
+        List<ChartPlotKind> kinds = [];
+
         foreach (XElement candidate in plotArea.Elements())
         {
             if (candidate.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
-            if (candidate.Name.LocalName is not ("barChart" or "bar3DChart")) continue;
-            group = candidate;
-            break;
+            if (KindOf(candidate.Name.LocalName) is not { } matched) continue;
+            groups.Add(candidate);
+            kinds.Add(matched);
         }
 
-        if (group is null) return null;
+        if (groups.Count == 0) return null;
 
-        (List<ChartSeries> series, string?[] categories) = ReadSeries(group, theme);
+        List<ChartSeries> series = [];
+        string?[] categories = [];
+
+        for (int at = 0; at < groups.Count; at++)
+        {
+            (List<ChartSeries> read, string?[] labels) = ReadSeries(groups[at], kinds[at], theme);
+            if (categories.Length == 0 && labels.Length > 0) categories = labels;
+            series.AddRange(read);
+        }
+
         if (series.Count == 0) return null;
 
+        // The bar group decides the shape of the category axis and the bar arithmetic, so where
+        // there is one it is the chart's own kind whatever came first in the file; that is
+        // SeriesPlotterContainer's own rule, which ORs shifted-category positioning over every
+        // chart type present (SeriesPlotterContainer.cxx:372-373).
+        int primary = kinds.IndexOf(ChartPlotKind.Bar);
+        if (primary < 0) primary = 0;
+
+        XElement group = groups[primary];
+        ChartPlotKind kind = kinds[primary];
+
         string? grouping = Value(Child(group, "grouping"));
-        DocRect? manual = ManualLayout(Child(plotArea, "layout"));
 
         return new ChartPlot
         {
@@ -81,6 +105,7 @@ public static class DrawingChartPlot
             ValueAxisTitle = AxisTitle(plotArea, "valAx"),
             Categories = categories,
             Series = series,
+            Kind = kind,
             Direction = Value(Child(group, "barDir")) == "bar"
                 ? ChartBarDirection.Bar
                 : ChartBarDirection.Column,
@@ -96,21 +121,20 @@ public static class DrawingChartPlot
             Legend = LegendOf(Child(chart, "legend")),
             Background = FillOf(Child(chartSpace, "spPr"), theme),
             PlotBackground = FillOf(Child(plotArea, "spPr"), theme),
+            ValueGrid = GridOf(plotArea, "valAx", theme),
+            CategoryGrid = GridOf(plotArea, "catAx", theme) ?? GridOf(plotArea, "dateAx", theme),
             TitleSize = SizeOf(Child(chart, "title")) ?? Length.FromPoints(13),
             AxisTitleSize = AxisTitleSizeOf(plotArea) ?? Length.FromPoints(9),
             LabelSize = AxisLabelSizeOf(plotArea) ?? Length.FromPoints(10),
-            PlotArea = manual,
-
-            // Only set beside a manual layout, because it is the space that layout's fractions
-            // were expressed in. An OOXML chart otherwise has no coordinate space of its own —
-            // the frame is the space — so leaving it null is what makes the computed path use
-            // the frame directly.
-            Space = manual is null ? null : UnitSquare,
+            // Fractions of the frame, and no Space: an OOXML chart has no coordinate space of
+            // its own — the frame is the space — which is what keeps it out of the stretch an
+            // ODF chart goes through.
+            PlotAreaFraction = ManualLayout(Child(plotArea, "layout")),
         };
     }
 
     /// <summary>
-    /// The plot rectangle a <c>c:manualLayout</c> states, as a fraction of the frame.
+    /// The plot rectangle a <c>c:manualLayout</c> states, as fractions of the frame.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -128,7 +152,7 @@ public static class DrawingChartPlot
     /// wrong as it would have been.
     /// </para>
     /// </remarks>
-    private static DocRect? ManualLayout(XElement? layout)
+    private static (double X, double Y, double Width, double Height)? ManualLayout(XElement? layout)
     {
         XElement? manual = Child(layout, "manualLayout");
         if (manual is null) return null;
@@ -139,26 +163,65 @@ public static class DrawingChartPlot
         if (Number(Child(manual, "w")) is not { } width) return null;
         if (Number(Child(manual, "h")) is not { } height) return null;
 
-        // The fractions are of the chart *frame*, which the layout maps through Space. Expressing
-        // them against a notional unit square keeps this reader from needing to know the frame.
-        return new DocRect(
-            Length.FromEmu((long)(x * UnitSpace)),
-            Length.FromEmu((long)(y * UnitSpace)),
-            Length.FromEmu((long)(width * UnitSpace)),
-            Length.FromEmu((long)(height * UnitSpace)));
+        return (x, y, width, height);
     }
 
-    /// <summary>The notional space a fractional manual layout is expressed in.</summary>
+    /// <summary>
+    /// Which geometry an element of <c>CT_PlotArea</c>'s group means, or null when it is not one.
+    /// </summary>
     /// <remarks>
-    /// One inch, chosen only because it is exactly representable in EMUs and large enough that a
-    /// fraction keeps five decimal places of resolution. <see cref="ChartPlot.Space"/> is set to
-    /// the same square, so the layout scales it onto the real frame.
+    /// <para>
+    /// Matched by name and not by the <c>…Chart</c> suffix the content reader uses. That suffix
+    /// match takes any group, which drew a pie with the bar engine: measured over LibreOffice's own
+    /// <c>chart2/qa/extras/data/pptx/</c>, it put <em>82 words</em> of category and value-axis
+    /// labels onto <c>PieChartWithAutomaticLayout_SizeAndPosition.pptx</c> against a reference
+    /// that draws one.
+    /// </para>
+    /// <para>
+    /// The 3-D variants map onto their flat counterparts, because what this model carries — the
+    /// series, the fills, the scale — is the same in both and a flat drawing of a 3-D chart is
+    /// nearer the reference than nothing. A doughnut is drawn as a pie, losing its hole; a radar,
+    /// a bubble, a stock and an of-pie chart are not drawn at all, and their frames stay empty
+    /// rather than being drawn as something they are not.
+    /// </para>
     /// </remarks>
-    private const long UnitSpace = 914400;
+    private static ChartPlotKind? KindOf(string localName) => localName switch
+    {
+        "barChart" or "bar3DChart" => ChartPlotKind.Bar,
+        "lineChart" or "line3DChart" => ChartPlotKind.Line,
+        "pieChart" or "pie3DChart" or "doughnutChart" => ChartPlotKind.Pie,
+        "areaChart" or "area3DChart" => ChartPlotKind.Area,
+        "scatterChart" => ChartPlotKind.Scatter,
+        _ => null,
+    };
 
-    /// <summary>The square a fractional manual layout is expressed in.</summary>
-    public static DocSize UnitSquare { get; } =
-        new(Length.FromEmu(UnitSpace), Length.FromEmu(UnitSpace));
+    /// <summary>
+    /// The colour an axis' major gridlines are drawn in, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:majorGridlines</c> is usually empty, so its presence is the whole of the file's
+    /// statement and the colour is a default: <c>0xB3B3B3</c>, which chart2 sets on
+    /// <c>GridProperties</c> (<c>chart2/source/model/main/GridProperties.cxx:64-66</c>). A stated
+    /// <c>a:ln/a:noFill</c> means no gridline at all, which is how a chart turns one off without
+    /// removing the element.
+    /// </remarks>
+    private static Colour? GridOf(XElement plotArea, string axis, DrawingTheme? theme)
+    {
+        foreach (XElement candidate in Children(plotArea, axis))
+        {
+            if (Child(candidate, "majorGridlines") is not { } grid) continue;
+
+            XElement? properties = Child(grid, "spPr");
+            if (Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is not null) return null;
+
+            return LineOf(properties, theme) ?? DefaultGrid;
+        }
+
+        return null;
+    }
+
+    /// <summary>chart2's own gridline colour, gray30.</summary>
+    private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
 
     /// <summary>What the value axis states about its scale.</summary>
     /// <remarks>
@@ -197,7 +260,7 @@ public static class DrawingChartPlot
             };
 
     private static (List<ChartSeries> Series, string?[] Categories) ReadSeries(
-        XElement group, DrawingTheme? theme)
+        XElement group, ChartPlotKind kind, DrawingTheme? theme)
     {
         List<ChartSeries> series = [];
         string?[] categories = [];
@@ -216,10 +279,38 @@ public static class DrawingChartPlot
                 numbers,
                 FillOf(properties, theme),
                 LineOf(properties, theme),
-                LineWidthOf(properties)));
+                LineWidthOf(properties),
+                PointFills(element, numbers.Length, theme),
+                kind));
         }
 
         return (series, categories);
+    }
+
+    /// <summary>
+    /// The per-point fills a series states, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:dPt</c>, each carrying a <c>c:idx</c> and its own <c>c:spPr</c>. Only a pie normally
+    /// has them, and without them every wedge is the series' one colour — which reads as a broken
+    /// renderer rather than as an unread element.
+    /// </remarks>
+    private static Colour?[]? PointFills(XElement series, int count, DrawingTheme? theme)
+    {
+        Colour?[]? fills = null;
+
+        foreach (XElement point in Children(series, "dPt"))
+        {
+            int index = Drawing.Number(Child(point, "idx"), "val") ?? -1;
+            if (index < 0 || index >= Math.Max(count, MaxPointCount)) continue;
+            if (FillOf(Child(point, "spPr"), theme) is not { } fill) continue;
+
+            fills ??= new Colour?[Math.Max(count, index + 1)];
+            if (index >= fills.Length) continue;
+            fills[index] = fill;
+        }
+
+        return fills;
     }
 
     /// <summary>A shape property bag's solid fill, or null when it has none.</summary>

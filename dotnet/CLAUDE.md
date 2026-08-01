@@ -93,6 +93,13 @@ abstractions everything else agrees on: units, geometry, colour, the format cata
 document model, and the drawing IR. A dependency added here is inherited by every
 consumer.
 
+`Core/Charts` is the test of that rule and shows where the line falls. A chart's *model* and its
+*layout* — `ChartPlot`, `ChartScale`, `ChartLayout` — are geometry over the abstractions Core
+already holds, so they belong here; the readers that turn a `c:chartSpace` or a `chart:chart` into
+that model parse XML and stay in `Paperless.Ooxml` and `Paperless.OpenDocument`. Putting the model
+one layer up instead is what forced the ODF reader into `Paperless.Presentations`, where a
+spreadsheet could not reach it.
+
 ## Key design decisions, and why
 
 **All lengths are EMUs, in a `Length` struct.** 914400 per inch divides evenly by twips

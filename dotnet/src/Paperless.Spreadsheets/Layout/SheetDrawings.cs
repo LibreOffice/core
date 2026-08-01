@@ -1,3 +1,4 @@
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -46,11 +47,11 @@ public enum SheetAnchorKind
 /// extraction path, which every caller pays for and almost none wants.
 /// </para>
 /// <para>
-/// <strong>A chart is recorded and not drawn.</strong> Its series, axes and formatting live in
-/// their own part and their own vocabulary, and reproducing a chart is a project of its own; but
-/// dropping it would make "there is a chart here" indistinguishable from "there is nothing here".
-/// So <see cref="IsChart"/> is set, <see cref="Image"/> is null, and nothing is painted — which is
-/// what the presentations reader does with a <c>p:graphicFrame</c> it cannot draw.
+/// <strong>A chart carries a model rather than a picture.</strong> <see cref="IsChart"/> says a
+/// frame holds one; <see cref="Chart"/> holds what it takes to draw, when the chart is of a kind
+/// the layout engine draws. The two are separate because they answer different questions: a chart
+/// of an undrawn kind still sets the flag, so "there is a chart here" stays distinguishable from
+/// "there is nothing here" even where the picture is missing.
 /// </para>
 /// </remarks>
 public sealed record SheetDrawing
@@ -81,8 +82,19 @@ public sealed record SheetDrawing
     /// <summary>Its alternative text or description, where the file records one.</summary>
     public string? Description { get; init; }
 
-    /// <summary>True when the drawing is a chart, which is recorded rather than painted.</summary>
+    /// <summary>True when the drawing is a chart, whether or not it can be drawn.</summary>
     public bool IsChart { get; init; }
+
+    /// <summary>
+    /// The chart's model, ready to lay out, or null when the frame holds no drawable chart.
+    /// </summary>
+    /// <remarks>
+    /// Read in the same pass as the anchor, because the anchor is what gives the chart a rectangle
+    /// and there is no second walk of the drawing part on the rendering path. Null both for a frame
+    /// that is not a chart at all and for a chart whose type the engine does not draw — a doughnut,
+    /// say — which is why <see cref="IsChart"/> is not simply this being non-null.
+    /// </remarks>
+    public ChartPlot? Chart { get; init; }
 
     /// <summary>True when the drawing is hidden and therefore not printed.</summary>
     public bool IsHidden { get; init; }

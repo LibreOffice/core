@@ -1,4 +1,5 @@
 using Paperless.Core;
+using Paperless.Core.Charts;
 using Paperless.Core.Documents;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;

@@ -352,6 +352,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Font = fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic),
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
+                Label = Label(paragraph, face),
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
@@ -363,6 +364,34 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         return paragraphs;
     }
+
+    /// <summary>
+    /// The label a list item draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// In the item's own face and size. WW8 does state a label's character formatting — the level's
+    /// <c>grpprlChpx</c> — and it is not read: the only thing it usually carries is a symbol font for a
+    /// bullet, whose code point <see cref="Ww8Numbering"/> has already normalised to U+2022, so keeping
+    /// the font would draw a real bullet through a face with no glyph for it.
+    /// </para>
+    /// <para>
+    /// <see cref="LabelFollow.Nothing"/> because Word writes the level's geometry onto the paragraph as
+    /// well: <c>sprmPDxaLeft</c> and <c>sprmPDxaLeft1</c> give the same hanging indent the level does, and
+    /// <see cref="PageLabel.Advance"/> fills a hanging indent already.
+    /// </para>
+    /// </remarks>
+    private static PageLabel? Label(
+        Ww8DocumentReader.Ww8LayoutParagraph paragraph, OpenTypeFace face)
+        => paragraph.ListMarker is { Length: > 0 } marker
+            ? PageLabel.Measured(
+                marker, face, paragraph.Size,
+                new Text.Shaping.ShapingOptions(Language: paragraph.Language)) with
+            {
+                Colour = paragraph.Colour ?? Colour.Black,
+                Follow = LabelFollow.Nothing,
+            }
+            : null;
 
     /// <summary>
     /// The floating shapes anchored in a paragraph, as frames the layout engine can place.

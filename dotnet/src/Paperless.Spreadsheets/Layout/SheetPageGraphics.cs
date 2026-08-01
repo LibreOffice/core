@@ -5,7 +5,7 @@ using Paperless.Core.Units;
 namespace Paperless.Spreadsheets.Layout;
 
 /// <summary>
-/// Places and paints the pictures anchored on one page.
+/// Places and paints the pictures and charts anchored on one page.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -55,11 +55,13 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
 
         foreach (SheetDrawing drawing in sheet.Drawings.Items)
         {
-            if (drawing.IsHidden || drawing.Image is not { } image) continue;
+            if (drawing.IsHidden) continue;
+            if (drawing.Image is null && drawing.Chart is null) continue;
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
 
-            sink.DrawImage(image, box);
+            if (drawing.Image is { } image) sink.DrawImage(image, box);
+            else if (drawing.Chart is { } chart) SheetChart.Draw(sink, chart, box, scale);
         }
     }
 
@@ -84,11 +86,11 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
                 SheetDeviceUnits.Snap(drawing.Extent.Height) * scale);
         }
 
-        if (!columns.TryGetValue(drawing.From.Column, out PlacedColumn anchorColumn)) return null;
-        if (!rows.TryGetValue(drawing.From.Row, out PlacedRow anchorRow)) return null;
+        if (ColumnX(drawing.From.Column, columns) is not { } columnX) return null;
+        if (RowY(drawing.From.Row, rows) is not { } rowY) return null;
 
-        Length x = anchorColumn.X + (SheetDeviceUnits.Snap(drawing.From.ColumnOffset) * scale);
-        Length y = anchorRow.Y + (SheetDeviceUnits.Snap(drawing.From.RowOffset) * scale);
+        Length x = columnX + (SheetDeviceUnits.Snap(drawing.From.ColumnOffset) * scale);
+        Length y = rowY + (SheetDeviceUnits.Snap(drawing.From.RowOffset) * scale);
 
         if (drawing.Anchor == SheetAnchorKind.OneCell)
         {
@@ -109,6 +111,74 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
             sheet.Grid.Rows);
 
         return new DocRect(x, y, right * scale, bottom * scale);
+    }
+
+    /// <summary>
+    /// Where a column starts on the page, continuing past the last one the page prints.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A drawing may be anchored outside the print area, and Calc still prints it.</strong>
+    /// The print area is computed from the <em>cells</em> — <c>ScTable::GetPrintArea</c>
+    /// (<c>sc/source/core/data/table1.cxx:657</c>) tests data, notes, sparklines and attributes and
+    /// never asks the drawing layer — but the drawing layer is then painted in document
+    /// coordinates and clipped to the paper, not to the used range
+    /// (<c>PrintDrawingLayer(SC_LAYER_FRONT)</c>, <c>printfun.cxx:1699</c>). So a chart anchored
+    /// three rows below the last number prints, and looking its anchor up in the page's own placed
+    /// rows finds nothing.
+    /// </para>
+    /// <para>
+    /// Measured: <c>chart-bar-sheet.ods</c> holds four rows of data in <c>A1:C5</c> and anchors its
+    /// chart in row 7, so every row the chart needs is outside the used range and the whole picture
+    /// was dropped. Walking on from the last printed column or row through the grid — snapped per
+    /// index, as <see cref="Edge"/> does — puts it where Calc puts it.
+    /// </para>
+    /// </remarks>
+    private Length? ColumnX(int column, Dictionary<int, PlacedColumn> columns)
+    {
+        if (columns.TryGetValue(column, out PlacedColumn placed)) return placed.X;
+
+        int last = -1;
+        Length x = Length.Zero;
+
+        foreach (PlacedColumn candidate in columns.Values)
+        {
+            if (candidate.Column <= last) continue;
+            last = candidate.Column;
+            x = candidate.Right;
+        }
+
+        if (last < 0 || column <= last) return null;
+
+        for (int at = last + 1; at < column; at++)
+            x += SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * scale;
+
+        return x;
+    }
+
+    /// <summary>Where a row starts on the page, continuing past the last one it prints.</summary>
+    /// <remarks>See <see cref="ColumnX"/>; the reason is the same and it is the row axis that
+    /// the corpus exercises.</remarks>
+    private Length? RowY(int row, Dictionary<int, PlacedRow> rows)
+    {
+        if (rows.TryGetValue(row, out PlacedRow placed)) return placed.Y;
+
+        int last = -1;
+        Length y = Length.Zero;
+
+        foreach (PlacedRow candidate in rows.Values)
+        {
+            if (candidate.Row <= last) continue;
+            last = candidate.Row;
+            y = candidate.Bottom;
+        }
+
+        if (last < 0 || row <= last) return null;
+
+        for (int at = last + 1; at < row; at++)
+            y += SheetDeviceUnits.Snap(sheet.Grid.Rows.PrintedSizeAt(at)) * scale;
+
+        return y;
     }
 
     /// <summary>

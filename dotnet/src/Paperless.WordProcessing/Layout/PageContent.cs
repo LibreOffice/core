@@ -84,8 +84,57 @@ public sealed record PageParagraph : PageBlock
     /// </remarks>
     public Colour Colour { get; init; } = Colour.Black;
 
-    /// <summary>Its resolved layout properties.</summary>
-    public ParagraphFormat Format { get; init; } = ParagraphFormat.Default;
+    /// <summary>
+    /// Its resolved layout properties, with room made on the first line for a list label.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The only formatting anything downstream should measure against.</strong> A list label is
+    /// drawn beside the paragraph's text rather than spliced into it — see <see cref="PageLabel"/> — so
+    /// something has to hold the first line's text back far enough to leave room, and it is this: the
+    /// declared first-line indent, which for a list is negative, widened by the label's own advance.
+    /// Writer arrives at the same first line by making the label a portion within it
+    /// (<c>SwNumberPortion::Format</c>, <c>sw/source/core/text/porfld.cxx:607</c>).
+    /// </para>
+    /// <para>
+    /// Adjusted here rather than at each of the five places that lay a paragraph out, because a paragraph
+    /// measured against one first-line indent and drawn against another puts its own words in two
+    /// different places. <see cref="DeclaredFormat"/> is what the reader actually said, and the label
+    /// hangs at <em>its</em> <see cref="ParagraphFormat.LineStart"/>.
+    /// </para>
+    /// </remarks>
+    public ParagraphFormat Format
+    {
+        get => Label is null
+            ? _format
+            : _format with { FirstLineIndent = _format.FirstLineIndent + LabelAdvance };
+        init => _format = value;
+    }
+
+    private readonly ParagraphFormat _format = ParagraphFormat.Default;
+
+    /// <summary>The formatting as the reader stated it, before the label was allowed for.</summary>
+    /// <remarks>
+    /// Where the label's own pen sits, and what a test asserting a reader's work should compare against
+    /// rather than the widened <see cref="Format"/>.
+    /// </remarks>
+    public ParagraphFormat DeclaredFormat => _format;
+
+    /// <summary>
+    /// The label this paragraph draws in front of its first line, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// Null for the overwhelming majority of paragraphs, and for the continuation paragraphs of a
+    /// multi-paragraph list item as well: ODF gives the label to the first <c>text:p</c> of a
+    /// <c>text:list-item</c> only, and the other three formats say the same thing by putting no list
+    /// instance on the paragraph. Such a paragraph keeps the level's indents and draws nothing.
+    /// </remarks>
+    public PageLabel? Label { get; init; }
+
+    /// <summary>How far the label pushes the first line's text along, or zero when there is none.</summary>
+    internal Length LabelAdvance
+        => Label?.Advance(-_format.FirstLineIndent, _format.StartIndent + _format.FirstLineIndent)
+           ?? Length.Zero;
 
     /// <summary>The em size the text is set at.</summary>
     public Length EmSize { get; init; } = Length.FromPoints(12);
