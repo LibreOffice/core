@@ -227,7 +227,11 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+
+        // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
+        // undecoded one reports no size until a codec has looked at it. Testing the size here
+        // dropped every `RasterImage.Encoded` silently.
+        if (destination.IsEmpty || (!image.IsDecoded && image.EncodedBytes.IsEmpty)) return;
         if (Image(image) is not { } drawable) return;
 
         using (drawable)
