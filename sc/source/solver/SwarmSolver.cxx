@@ -47,7 +47,7 @@
 #include <scresid.hxx>
 
 #include "DifferentialEvolution.hxx"
-#include "ParticelSwarmOptimization.hxx"
+#include "ParticleSwarmOptimization.hxx"
 #include "DEPSOSolver.hxx"
 
 #include "strings.hrc"

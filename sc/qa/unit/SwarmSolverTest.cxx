@@ -17,7 +17,7 @@
 
 #include <test/unoapi_test.hxx>
 
-#include <ParticelSwarmOptimization.hxx>
+#include <ParticleSwarmOptimization.hxx>
 
 #include <cmath>
 
