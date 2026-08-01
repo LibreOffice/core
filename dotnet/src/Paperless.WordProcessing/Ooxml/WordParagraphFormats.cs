@@ -33,6 +33,26 @@ public readonly record struct WordTextStyle(
 }
 
 /// <summary>
+/// Which of a list level's indents a paragraph takes from the level rather than from itself.
+/// </summary>
+/// <remarks>
+/// Writer's <c>::sw::ListLevelIndents</c>. Two flags rather than one answer because the two margins are
+/// separate items there — a style stating only a left indent leaves the level's hanging one in force.
+/// </remarks>
+[Flags]
+internal enum ListLevelIndents
+{
+    /// <summary>Neither: the paragraph's own indents stand.</summary>
+    No = 0,
+
+    /// <summary>The level's <c>w:hanging</c> or <c>w:firstLine</c> applies.</summary>
+    FirstLine = 1,
+
+    /// <summary>The level's <c>w:start</c> or <c>w:left</c> applies.</summary>
+    LeftMargin = 2,
+}
+
+/// <summary>
 /// Resolves a DOCX paragraph's properties into the layout properties the engine takes.
 /// </summary>
 /// <remarks>
@@ -117,23 +137,96 @@ internal static class WordParagraphFormats
     }
 
     /// <summary>
-    /// Whether a paragraph or its style chain states an indent of its own.
+    /// Which of a list level's two indents a paragraph will actually take.
     /// </summary>
     /// <remarks>
-    /// The question a list level has to ask before applying its own indents, because a hard-set indent
-    /// beats the list — Writer's <c>SwTextNode::AreListLevelIndentsApplicable</c>, which walks the same
-    /// two layers this does and returns false as soon as either sets the item.
+    /// <para>
+    /// The port of Writer's <c>SwTextNode::AreListLevelIndentsApplicableImpl</c>
+    /// (<c>sw/source/core/txtnode/ndtxt.cxx:4851</c>), asked separately for each of its two items —
+    /// <c>RES_MARGIN_TEXTLEFT</c> and <c>RES_MARGIN_FIRSTLINE</c> — because OOXML writes both into one
+    /// <c>w:ind</c> and a level that states only a hanging indent must not lose it to a style that
+    /// states only a left one.
+    /// </para>
+    /// <para>
+    /// The rule has three arms, and the middle one is the one that is easy to miss: an indent set
+    /// <em>hard on the paragraph</em> beats the list, but a numbering rule applied <em>directly to the
+    /// paragraph</em> beats the style chain's indents. Only when the numbering arrives through a style
+    /// does the chain get a say, and then it is a race — whichever of the two the walk meets first, an
+    /// indent or the style carrying the numbering, decides.
+    /// </para>
+    /// <para>
+    /// Getting the middle arm wrong is what glues a list label to its item's first word: Word's own
+    /// <c>ListParagraph</c> style states <c>w:ind w:left</c> and no hanging, so a paragraph with a direct
+    /// <c>w:numPr</c> whose level asks for <c>w:hanging="360"</c> ends up with no hanging at all, and the
+    /// label is drawn where the text starts.
+    /// </para>
     /// </remarks>
     /// <param name="styles">The document's styles.</param>
     /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
-    internal static bool DeclaresIndent(WordStyles styles, XElement? paragraphProperties)
+    internal static ListLevelIndents ListLevelIndentsApplicable(
+        WordStyles styles, XElement? paragraphProperties)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
+        return Applicable(styles, paragraphProperties, LeftAttributes, ListLevelIndents.LeftMargin)
+               | Applicable(
+                   styles, paragraphProperties, FirstLineAttributes, ListLevelIndents.FirstLine);
+    }
+
+    /// <summary>The <c>w:ind</c> attributes that set Writer's <c>RES_MARGIN_TEXTLEFT</c>.</summary>
+    private static readonly string[] LeftAttributes = ["start", "left"];
+
+    /// <summary>The ones that set <c>RES_MARGIN_FIRSTLINE</c>.</summary>
+    private static readonly string[] FirstLineAttributes = ["hanging", "firstLine"];
+
+    /// <summary>One item's answer, which is the whole of the ported rule.</summary>
+    private static ListLevelIndents Applicable(
+        WordStyles styles, XElement? paragraphProperties, string[] attributes, ListLevelIndents item)
+    {
+        // A hard-set indent on the paragraph beats the list, whatever else is true.
+        if (Sets(Word.Child(paragraphProperties, "ind"), attributes)) return ListLevelIndents.No;
+
+        // A numbering rule applied directly to the paragraph beats the style chain's indents. A
+        // w:numId of zero is "not numbered" rather than a reference, so it does not count as one.
+        if (Word.Value(Word.Child(paragraphProperties, "numPr"), "numId") is { } numId
+            && numId != "0")
+        {
+            return item;
+        }
+
+        // Otherwise the numbering came through a style, and the walk decides: an indent met before the
+        // style that carries the numbering wins, and the numbering wins if it is met first.
         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
 
-        return Layer(styles, paragraphProperties, styleId, "ind") is not null;
+        for (int depth = 0; depth < WordStyles.MaxBasedOnDepth; depth++)
+        {
+            if (styles.Find(styleId, WordStyleType.Paragraph) is not { } style) break;
+
+            if (Sets(Word.Child(style.ParagraphProperties, "ind"), attributes))
+            {
+                return ListLevelIndents.No;
+            }
+
+            if (Word.Child(style.ParagraphProperties, "numPr") is not null) return item;
+
+            styleId = style.BasedOn;
+        }
+
+        return item;
+    }
+
+    /// <summary>True when a <c>w:ind</c> states any of the attributes one margin item is made of.</summary>
+    private static bool Sets(XElement? indent, string[] attributes)
+    {
+        if (indent is null) return false;
+
+        foreach (string attribute in attributes)
+        {
+            if (Word.Attribute(indent, attribute) is not null) return true;
+        }
+
+        return false;
     }
 
     /// <summary>
