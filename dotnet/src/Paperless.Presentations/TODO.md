@@ -377,20 +377,73 @@ table asserted, not by the corpus.
       `tdf127393` 0→42 of 46, `tdf127811` 0→17 of 19. Exact matches went 15 → 14, which is the
       metric behaving worse than the drawing: `stacked-non-stacked-mix-y-axis.pptx` moved from a
       lucky 75/75 to 76/75 while gaining two series it had been dropping.
-- [ ] **What a chart still does not draw**: data labels (`c:dLbls`); a secondary value axis; a
-      scatter chart's real X scale, which is drawn as evenly spaced categories; markers; and
-      formatted tick labels, which need a number formatter that lives above `Paperless.Core`. The
-      plot rectangle for an OOXML chart is about a point out — LibreOffice's second layout pass now
-      re-derives the *tick count* from the composed rectangle but not the rectangle from the
-      laid-out labels — with `chart:coordinate-region` in every ODF chart as a free oracle to score
-      it against.
-- [ ] **A non-square stretch is applied to positions and not to glyphs.** An embedded chart whose
-      frame is not its own stated size is composed at its own size and stretched (see
-      `ChartLayout.Stretch`), which is what LibreOffice does; but a glyph run carries one em size,
-      so text is scaled by the vertical factor alone and comes out `sx/sy` too wide. It costs
-      nothing on a deck, where the frame and the chart agree, and 12% on `chart-bar-sheet.ods`.
-      Fixing it means a non-uniform transform round each run, which this library expresses as a
-      `PlacedText` matrix and a sheet expresses as a sink transform.
+- [x] **Data labels, formatted ticks, a secondary axis, a real scatter and a deleted axis all
+      draw.** Over `chart2/qa/extras/data/pptx/`'s 38 decks the total absolute word error fell
+      **234 → 128** and the exact matches went **14 → 19**; the ODP set went from 6 of 9 and an
+      error of 31 to **8 of 9 and an error of 6**. Everything that decides what is drawn is in
+      `Paperless.Core.Charts`; this library gained one anchor case in `SlideChart.Text` and the
+      horizontal-stretch transform beside it. What each piece bought, measured:
+      *number formats on ticks* took `percentage-number-formats.pptx` from 29/35 to 35/35 and
+      `tdf105517.pptx`'s axis from `1200000` to `1,200,000`; *data labels* took `tdf122765.pptx`
+      from 19/40 to 40/40 and `tdf125444.pptx` from 0/15 to 15/15; *a deleted axis* — `c:delete`,
+      which nothing read — took `tdf116163.pptx` from 10/5 to 5/5 and `tdf105517.pptx` from 22/8
+      to 8/8; *the scatter X scale* took `tdf127720.pptx` from 12/28 to 16/28.
+- [x] **The non-square stretch reaches the glyphs now, through `ChartLabel.Stretch`.** A glyph run
+      carries one em and an embedded chart is scaled by two factors, so the em takes the vertical
+      one and the residual `sx/sy` rides on the label for the consumer to fold into a transform —
+      a `PlacedText` matrix here, a sink transform on a sheet. Measured on `chart-bar-sheet.ods`
+      against LibreOffice's PDF: the chart's title measured **70.4 pt against a reference 62.1**
+      and now measures **63.7**, so 13% too wide became 2.5%. It costs a deck nothing, the factor
+      there being exactly 1 and both consumers taking their unstretched path.
+- [x] **Trendlines, rotated axis labels and a data table all draw, and the deck set fell
+      128 → 79 with 21 of 38 exact.** Everything that decides what is drawn is in
+      `Paperless.Core.Charts` — `ChartRegression`, `ChartAxisLabels`, `ChartDataTable` — and this
+      library gained nothing at all: a rotated chart label already goes through the same
+      `SlideChart.Text` path the value-axis title has always used, which is the payoff for having
+      put rotation on `ChartLabel` rather than special-casing the one caller that had it.
+      Measured, deck by deck: `tdf127720.pptx` 16/28 → **28/28** on its equation,
+      `tdf137691_dataTable.pptx` 68/80 → **80/80** on its table, `bnc889755.pptx` 35/89 →
+      **84/89** on sixteen month names turned 45°.
+- [x] **A deck can measure LibreOffice's PDF writer instead of its layout, and it took a content
+      stream to see it.** `tdf106217.pptx` was recorded here as drawing "eight category names in
+      our render and none in the reference, because they do not fit". The reference draws all
+      eight, rotated, as filled glyph **outlines** — `pdftotext` reads none of them — and our
+      render now matches its picture crop-for-crop while its word count *rises* from 15 to 39
+      against a reference 7. `bnc889755.pptx` is the same trap the other way up: its 89 words are
+      16 labels, for which the writer emits one `Tj` per glyph. **A word count is a proxy and the
+      content stream says what the proxy is measuring**; both readings would have been settled by
+      one `zlib.decompress`.
+- [ ] **The OOXML plot rectangle is still about a point out**, and the third layout pass is what is
+      missing: the tick count is re-derived from the rectangle and the rectangle from a rotated
+      label arrangement, but neither from the *drawn* bounding box, which is
+      `VDiagram::adjustInnerSize`. Measured on `chart-bar-deck.pptx` and unchanged by this run:
+      1.291 pt left, 0.776 pt high, 0.500 pt narrow, 0.761 pt tall, with the bottom edge exact to
+      0.015 pt. See `dotnet/TODO.md` Phase 3.5 for the two dead ends already ruled out.
+- [ ] **What a chart still does not draw**: radar, bubble, stock, surface and of-pie; a doughnut
+      still draws as a pie, losing the hole; and a data label that does not fit is not wrapped —
+      `tdf146756_bestFit.pptx`'s 11 remaining words are labels the reference breaks onto more
+      lines than we do.
+- [ ] **The OOXML plot rectangle is still about a point out**, and the second layout pass still
+      re-derives only the *tick count* from the composed rectangle rather than the rectangle from
+      the laid-out labels. The oracle got twice as big while this was open: see the
+      `chartooo:coordinate-region` note in `dotnet/TODO.md` Phase 3.5.
+- [ ] **What a chart still does not draw**: a trendline and its equation (`c:trendline`,
+      `c:dispEq`, `c:dispRSqr` — `tdf127720.pptx` and `trendline.ods` are most of what is left on
+      each set); a data table below the plot (`tdf137691_dataTable.pptx`, 12 words); rotated and
+      staggered axis labels, which LibreOffice falls back to when they would collide and which is
+      the whole of `bnc889755.pptx`'s residual; and label *dropping*, which it falls back to after
+      that — `tdf106217.pptx` draws eight category names in our render and none in the reference,
+      because they do not fit.
+- [x] **Radar, bubble, stock and of-pie draw now; surface declines.** All of it is in
+      `Paperless.Core.Charts` — `ChartLayout.Plots.cs` for the geometry, `ChartPlotTypes.cs` for
+      the model — and this library gained nothing at all: a radar's web is `ChartLine`, its polygon
+      and a bubble are `ChartShape`, a candle's box is `ChartBox`, and `SlideChart` already turned
+      each of those into a `PlacedShape`. **The deck set is unchanged at 128 with 19 exact of 38,
+      and the ODP set at 6 with 8 exact of 9, because neither set contains one of the five types**
+      — counted: of the 38 decks and 9 ODPs, every chart is a bar, line, pie, area or scatter. The
+      five live in `docx/`, `xlsx/`, `ods/` and `odt/`, which is worth knowing before choosing the
+      deck set as the oracle for the next chart feature. See `dotnet/TODO.md` Phase 3.5 for the
+      corpus counts, the ported constants and the three named traps.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the
@@ -564,10 +617,12 @@ stated lengths. The fix is in `Paperless.MsBinary`, so DOC and XLS get it too.
 a paragraph's upper space only when it is not the first and its lower space only when it is not
 the last (`ImpEditEngine::CalcHeight`, `editeng/source/editeng/impedit2.cxx:4791-4802`). Worth
 0.125 pt on the corpus deck — one master unit — which is the difference between agreeing with the
-reference and nearly agreeing. Applied in `PptTextBody` rather than in `SlideTextLayout`, because
-the rule is EditEngine's rather than this format's and moving it to the shared layouter would
-shift every PPTX and ODP baseline in the same commit. **It belongs in the shared layouter and is
-not there yet**; the other two paths still add both.
+reference and nearly agreeing. It was applied in `PptTextBody` first, because the shift it would
+cause on the other two families wanted its own measurement rather than being a side effect of a
+binary-format fix; **it is now in `SlideTextLayout` and serves all three**, measured on the PPTX
+side by `a:spcPct` (see the text-chain item), which is what made it visible there at all.
+`PptTextBody` still zeroes the outer two before handing them over, which is redundant and
+harmless — the layouter would skip them anyway.
 
 **LibreOffice's own PPT export writes no shape names.** The property table it emits carries no
 `wzName`, so every shape in a converted deck is anonymous and a test has to address them by index.
@@ -712,6 +767,37 @@ Two reference artefacts worth knowing before chasing them:
       emits `RasterImage.Encoded` and a backend decodes when it wants pixels, which is what keeps
       this library free of a `ProjectReference` on `Paperless.Rendering` and therefore keeps
       `paperless extract` free of a codec it never uses.
+- [x] **Vector pictures — WMF, EMF, EMF+ and SVG — draw.** `PlacedPicture` gained a
+      `Lazy<VectorImage>?` beside its now-nullable `RasterImage?`, and `SlideDrawing.DrawPicture`
+      prefers it under the same clip a raster gets. It needed **nothing in `Paperless.Core`**:
+      `VectorImage` is already `Draw(IDrawingSink, DocRect)` plus an intrinsic size, immutable and
+      replayable, and this library already referenced `Paperless.Vector` — an interface with one
+      implementation across a dependency that is already legal buys nothing.
+      **Deferred, and the measurement is why.** The first `VectorImages.Decode` in a process costs
+      **1044 ms** for a WMF carrying one text run, 381 ms for an EMF+ and 67 ms for a text-free
+      EMF, against 0.08–0.21 ms once warm — nearly all of the first is resolving faces through
+      `Paperless.Text`. Slide layout is not the extraction path, so eager would have been harmless
+      *here*; the `Lazy` is uniform with the other two families, whose RTF and DOC readers do read
+      pictures while parsing, and it costs nothing.
+      **The part name says nothing.** `vector-picture-deck.pptx` is LibreOffice's own export of
+      `vector-picture-deck.odp` and it writes the EMF into `ppt/media/image2.wmf`; an EMF+ would be
+      less distinguishable still, since it *is* an EMF with the same header and no signature of its
+      own. `VectorImages.For` reads the bytes and the declared type is not consulted.
+      **`BlipReference.Choose` replaces reading `r:embed`**, because a `p:pic`'s `a:blip` may carry
+      an `asvg:svgBlip` in the `{96DAC541-…}` extension beside the raster. Both are kept, so an
+      empty decode falls back to the raster the file put there for exactly that. ODF needs no such
+      step: a `draw:frame` lists alternatives as sibling `draw:image` children, first drawable wins.
+      **Measured**, both PDFs at `pdftoppm -r 150`: `vector-picture-deck.odp` `mae 0.0085` and
+      `.pptx` `mae 0.0086`, 7/7 words and 1/1 pages on both, with all three pictures at their
+      frames. The residual ink is `emf-shapes.emf`'s gradient bar, which LibreOffice's own EMF
+      import does not draw — checked by converting the bare `.emf` with `soffice`.
+      **The trap, and it is the one the seam's author named.** `VectorImage.Draw` stretches the
+      picture's whole *frame* onto the destination and clips to it, not the extent of its ink.
+      Taking the ink makes a logo with margins several times too large and clipped, which reads as
+      a mapping bug in the decoder and is not one;
+      `SlideVectorPictureTests.APictureIsStretchedByItsFrameRatherThanByItsInk` measures it on the
+      SVG, whose rounded rectangle sits at x = 2 in a 200-unit view box and must land 0.8 mm into
+      an 80 mm destination rather than at its edge.
 
 - [x] **ODF's `draw:enhanced-geometry` through that same evaluator**, so an ODP shape draws its
       own path rather than the preset its `draw:type` names — which matters because ODF is
@@ -746,12 +832,12 @@ Two reference artefacts worth knowing before chasing them:
       shapes — `slides-ppt.ppt`'s master carries a footer and a slide-number placeholder that
       LibreOffice draws onto every slide and Paperless draws on none, which is the same open
       question the other two paths have and is why that deck's text runs are not compared.
-- [ ] **Paragraph spacing above the first paragraph and below the last**, in the *shared*
-      layouter. EditEngine adds neither (`editeng/source/editeng/impedit2.cxx:4791-4802`), the
-      binary path compensates for it in `PptTextBody`, and the PPTX and ODP paths still add both.
-      It is worth 0.125 pt on the corpus deck and more on a deck that spaces its outline
-      generously; the reason it was not moved is that doing so shifts every baseline of the other
-      two families at once, which wants its own measurement rather than being a side effect.
+- [x] **Paragraph spacing above the first paragraph and below the last**, in the *shared*
+      layouter. EditEngine adds neither (`editeng/source/editeng/impedit2.cxx:4791-4802`), and
+      the rule now lives in `SlideTextLayout.Measure`/`Place` for all three families rather than
+      only in `PptTextBody`. It moved when `a:spcPct` landed, because that is what made the rule
+      measurable on PPTX: on `tdf125551.pptx` every diagram label was 5.6 pt out of place without
+      it and 0.028 pt with it. No row of the presentation render sweep moved.
 - [ ] **A shape's own `TextRulerAtom`**, which states per-shape indents and tab stops and overrides
       the master's per-level ones. Read as far as being skipped. Nothing in the corpus states one
       that differs from its master, so it cannot be told apart from correct today.
@@ -835,6 +921,47 @@ The formulation here composes the group's own placement on top of the child mapp
 decomposing the group's matrix into scale, rotation and translation as LibreOffice does. The two
 are the same matrix — the group's placement *is* that decomposition, reassembled — and this way
 round needs no decomposition and no shear term.
+
+### A deck's PDF referenced its faces and embedded none of them
+
+**Every deck rendered to PDF was a page of tofu, and every check passed.** `pdffonts` on our own
+`deck-features.pptx`: `AAAAAA+LiberationSans … emb no`, `BAAAAA+OpenSymbol … emb no`. Rasterised
+by poppler, the file is empty boxes end to end. `pdftotext` gets all 43 words and matches
+LibreOffice 43/43, the page count is right, and `SlideRenderComparisonTests` compares pens and
+sizes rather than glyph shapes — so nothing pointed at the deck could see it. It is a purely
+visual defect with no numerical symptom, which is why it survived for as long as this library
+could render at all.
+
+**Why the key could not be rebuilt.** `SystemFontResolver` returns a `FontReference` whose
+`FaceKey` is the font *file's* path (`InstalledFace.FaceKey`), and `FileFontProvider` opens
+exactly that to get the bytes a `/FontFile2` needs. `SlideTextLayout.Reference(face)` rebuilt the
+reference from the `OpenTypeFace` with `FaceKey = face.FamilyName` — not out of laziness: an
+`OpenTypeFace` is a parsed table directory and has no memory of the file it was read out of, so a
+family name was the only key that helper could produce. `SlideFonts.Resolve` had returned
+`(Face, Reference)` all along and both call sites threw the reference away.
+
+**Where it travels now.** On `RunStyle`, beside the colour, looked up by character position the
+way `ColourAt` already was. That is this file's own idiom and it is the right one: `FormattedRun`
+in `Paperless.Text` states that it carries only what changes a *measurement*, and which file a
+face came from moves no line break. `EmitMarker` keeps its own — an outline bullet resolves on a
+separate path from the runs, so a fix to `Emit` alone would have left every bullet in every deck
+unembedded while the body text looked cured.
+
+**Measured.** Fourteen presentation files went from one or two unembedded faces each to none,
+with every page count and every word count unchanged, and the deck's rasterised page is now
+indistinguishable from `soffice --convert-to pdf` of the same file. A **chart's** labels came
+with it for free — `SlideChart` lays them out through `SlideTextLayout` — so `chart-bar-deck.pptx`
+was fixed without touching anything under `Core/Charts`.
+
+**A second bug went with it.** The deck now writes three Liberation Sans subsets where it wrote
+one. Keyed on the family name, regular, bold and italic — which are three separate *files* —
+collapsed onto one catalogue entry, and bold text was drawn with the regular face's glyph indices.
+Invisible while nothing was embedded, because the reader was substituting its own faces anyway.
+
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` holds all of it, including a named
+assertion for the bullet and one for the substituted case: `deck-features.pptx` asks for **Arial**
+and **Symbol**, neither installed here, and an embedded *substitute* is the correct answer when
+the original's bytes are not on the machine.
 
 ### The line height on a slide is not the font's
 
@@ -1436,10 +1563,28 @@ paragraph's level are read, attribute by attribute rather than element by elemen
       (`outliner.cxx:918`). Caught by `slide-shape-features.pptx`, whose `a:buAutoNum` list
       LibreOffice draws at 89.972 and centring would put at 89.036 — so `SlideMarker.IsSymbol`
       exists and says why.
-- [ ] **`a:spcPct` paragraph spacing.** `a:spcBef`/`a:spcAft` are honoured in points
-      (`a:spcPts`) and ignored as a percentage, because the percentage is of the line height and
-      the line height is not known until the paragraph's runs are. It belongs with the line
-      heights rather than with the reader.
+- [x] **`a:spcPct` paragraph spacing, and the two spacings that are never applied.** The
+      percentage is a fraction of the paragraph's own **character height**, not of the line
+      height, which is what the name suggests and what reading it as a line-spacing rule would
+      give. LibreOffice resolves it at import against the tallest run in the paragraph and stores
+      an absolute margin (`TextSpacing::toMargin`, `oox/inc/drawingml/textspacing.hxx:54`, reached
+      from `textparagraphproperties.cxx:438` with the `nCharHeight` maximum taken at
+      `textparagraph.cxx:131`), so `PptxTextBody.Spacing` does the same — including the
+      truncation to hundredths of a point before the value leaves points.
+      It matters far more than its size because **324 of the 324** `a:pPr` in the corpus's baked
+      diagram drawings state their spacing as a percentage and none in points: on `tdf93830.pptx`
+      the worst text baseline was 14.4 pt out and is now 0.03.
+      **The rule that came with it, and that had been invisible while every spacing resolved to
+      zero: the first paragraph's space-before and the last paragraph's space-after are not
+      applied at all** — `ImpEditEngine::CalcHeight` guards the upper with `if (nPortion)` and
+      the lower with `if (nPortion != lastIndex())` under its own comment "not in the last"
+      (`editeng/source/editeng/impedit2.cxx:4792-4802`). Paragraph spacing is a gap *between*
+      paragraphs and never padding inside the box, which is why `SlideTextLayout.Measure`
+      subtracts the outer two from the total. Missing it makes every single-paragraph node taller
+      than its text: on `tdf125551.pptx`, whose diagram labels each state `spcAft` of 35% on
+      32 pt, each label was drawn 5.6 pt — half of the 11.2 the trailing spacing added — above
+      where LibreOffice draws it, and the file agreed to 0.028 pt once the rule was in.
+      `SlideParagraphSpacingTests` covers both halves.
 - [ ] **Character spacing (`spc`) and kerning (`kern`).** `spc` is in hundredths of a point and is
       not applied; on the corpus deck it is −1, which is a hundredth of a point per character and
       inside every tolerance here, but a deck that tracks a title tightly would drift visibly.
@@ -1541,11 +1686,7 @@ to a tenth of a point. And all ten real SmartArt decks in `sd/qa/unit/data/pptx`
 `n819614.pptx`, 111 shapes with 55 `a:custGeom` and 51 gradients — match the reference on page and
 word count.
 
-**What is left on the baked path.** `a:spcPct` paragraph spacing, which is the recorded
-`spcBef`/`spcAft` item and not a diagram bug — but diagrams use nothing else: **324 of the 324**
-`a:pPr` in the corpus's baked drawings state their spacing as a percentage and none states it in
-points, so a multi-paragraph node's lines come out tighter than the reference (`tdf93830.pptx` is
-the clearest case). And on the baked path the colour transform is still not consulted: LibreOffice
+**What is left on the baked path.** The colour transform is still not consulted: LibreOffice
 pulls `node0`'s text fill out of `colors1.xml` and applies it as the `fontRef` colour for every
 node (`diagram.cxx:674-682`, `applyFontRefColor`), which the baked tree already resolves into each
 run for every file measured — but a file that left a run's colour unstated would take ours from the
@@ -1563,7 +1704,8 @@ hand precisely so this path is what gets tested. All 37 drew as nothing.
 `forEach`, `choose`/`if`/`else`, `layoutNode`, `alg`, `constr`, `rule`, `shape` — whose input is
 `data1.xml`. It is walked twice: once to create one shape per (layout node, iteration) pair, once
 to size and place them innermost-last. The port is
-`PptxDiagramData` → `PptxDiagramAtoms` → `PptxDiagramEvaluator` → `PptxDiagramAlgorithms` →
+`PptxDiagramData` → `PptxDiagramAtoms` → `PptxDiagramEvaluator` →
+`PptxDiagramAlgorithms`/`PptxDiagramGeometry` →
 `PptxDiagramStyles` → `PptxDiagramShapeTree`/`PptxDiagramText`, from
 `oox/source/drawingml/diagram/{datamodelcontext,layoutnodecontext,layoutatomvisitorbase,layoutatomvisitors,diagramlayoutatoms}.cxx`
 and `svx/source/diagram/datamodel_svx.cxx`.
@@ -1577,33 +1719,80 @@ shapes as there are presentation points whose `presName` is `textNode`, indexed 
 
 **What evaluates, and what it was measured against.**
 
-| Algorithm | State | Measured on |
-|---|---|---|
-| `lin` | ported whole, including rules and the shrink pass | 18 of the 20 |
-| `composite` | ported whole, including the vertical centring | 15 of the 20 |
-| `sp` | ported (it only throws the text away again) | 20 of the 20 |
-| `tx` | size, insets, anchor, bullets, alignment | 20 of the 20 |
-| `conn` | preset substitution and the centre-preserving resize | 1 of the 20 |
-| `snake`, `cycle`, `hierRoot`/`hierChild`, `pyra` | **not ported** | — |
+| Algorithm | Where | Decks naming it | Worst shape on those decks |
+|---|---|---|---|
+| `tx` | `PptxDiagramAlgorithms` | 37 | 0.080 pt |
+| `sp` | `PptxDiagramAlgorithms` | 32 | 0.080 pt |
+| `composite` | `PptxDiagramAlgorithms` | 23 | 0.080 pt |
+| `lin` | `PptxDiagramAlgorithms` | 18 | 0.069 pt |
+| `conn` | `PptxDiagramAlgorithms` | 7 | 0.080 pt |
+| `snake` | `PptxDiagramGeometry` | 7 | 0.076 pt |
+| `cycle` | `PptxDiagramGeometry` | 5 | 0.064 pt |
+| `hierRoot`/`hierChild` | `PptxDiagramGeometry` | 4 | 0.080 pt |
+| `pyra` | `PptxDiagramGeometry` | 1 | 0.041 pt |
+
+A deck usually names several, so the columns do not add up and the worst figure for one algorithm
+is the worst shape on any deck that names it rather than a shape that algorithm placed. The one
+number that is attributable is `pyra`'s: `smartart-pyramid-1child.pptx` is the only deck that uses
+it, and its single filled shape is 0.041 pt out.
 
 The measurement is `soffice --convert-to pdf` over all 37 decks against `paperless render` over
-the same, comparing every filled path's bounding box. **20 evaluate and all 20 agree with the
-reference** — 19 of them draw between 1 and 10 filled shapes each, every one within 0.07 pt, and
-the twentieth (`tdf169781.pptx`) evaluates to no shapes, as LibreOffice's does. The worst single
-shape in the set is 0.069 pt out and the median file's worst is 0.038, which is not a tolerance
-tuned to fit but LibreOffice quantising to hundredths of a millimetre (0.0283 pt) twice, once on
-the offset and once on the extent. `slide-diagram-evaluated.pptx` is the committed fixture and
+the same, pairing every filled path's bounding box one for one. **All 37 evaluate and all 37 agree
+with the reference**: 36 draw between 1 and 48 filled shapes each, every shape has a partner
+within **0.080 pt**, and the thirty-seventh (`tdf169781.pptx`) evaluates to no shapes, as
+LibreOffice's does. That worst figure is LibreOffice quantising to hundredths of a millimetre
+(0.0283 pt) once per nesting level rather than a tolerance tuned to fit — it comes from
+`smartart-org-chart2.pptx`, whose `hierRoot`/`hierChild` alternation is three levels deep, where
+every flat deck stops at 0.069, two quantisations. `slide-diagram-evaluated.pptx` is the
+committed fixture and
 `SlideDiagramLayoutComparisonTests` is the standing check; its three boxes land at 72, 252 and
 432 pt across a 540 pt frame, 54 pt down from the top because the composite centres what its
-constraints did not fill.
+constraints did not fill. `SlideDiagramGeometryTests` pins the four geometric algorithms'
+arithmetic directly, because that arithmetic is integer and truncating and is what regresses.
 
-**A diagram naming an algorithm that is not ported is declined whole**, so it draws nothing rather
-than approximately. That is deliberate: half-evaluating a `snake` leaves every node at the origin
-on top of every other, which reads as a bug in the shapes rather than as an unimplemented
-algorithm, and it would move files in the render sweep that today draw nothing honestly. The 17
-declined are the `snake` (7 decks), `cycle` (5), `hierRoot`/`hierChild` (4) and `pyra` (1) ones.
+**The decline stays, for the algorithms nobody has written.** A diagram naming an algorithm the
+evaluator does not implement still draws nothing rather than approximately: half-evaluating a
+layout leaves every node at the origin on top of every other, which reads as a bug in the shapes
+rather than as an unimplemented feature. Nothing in `sd/qa` reaches it any more — the ten names in
+`Supported` are every `dgm:alg/@type` those 37 decks state — but `lin1D`, the `sibTrans`-only
+variants and the several algorithms LibreOffice itself does not implement would.
 
-**Four traps, and the one that cost an afternoon.**
+**What the geometric four cost, and why none of it could be derived.** They ignore the constraint
+machinery almost entirely and place children on constants that are LibreOffice's own choices, not
+the file's: a snake's grid is searched for against an aspect ratio of **0.54** ("diagram should not
+spill outside, earlier it was 0.6"), a hierarchy's gaps are **0.1** of a box across and **0.3**
+down with a **0.1** indent for an only child, a pyramid's step is **0.32**. Picking better numbers
+would guarantee disagreement, so they are ported line for line —
+`SnakeAlg::layoutShapeChildren` and `PyraAlg::layoutShapeChildren` at
+`diagramlayoutatoms.cxx:110` and `:428`, and the `XML_cycle` and `XML_hierChild`/`XML_hierRoot`
+cases of `AlgAtom::layoutShape` at `:1193` and `:1262`.
+
+**Six traps. The first two came with the geometric algorithms; the last is still the one that cost
+an afternoon.**
+
+*A compound assignment of a double to an `awt::Point` truncates the sum, not the addend.* This is
+the one to know before reading any of `PptxDiagramGeometry`. LibreOffice steps a snake with
+`aCurrPos.X += nIncX * (aCurrSize.Width + fSpace * aCurrSize.Width)`, and in C++ that is
+`X = (sal_Int32)(X + …)`. The obvious C# transcription `x += (int)(…)` truncates the addend
+instead, and the two differ **only when the addend is negative** — so a left-to-right snake agrees
+exactly and a `grDir="tR"` one drifts by one EMU per column. That is not a hypothetical: eight of
+the nine snake layouts in the corpus contain a `grDir="tR"` branch. Every compound assignment in
+that file therefore casts the whole sum, and the right-to-left case is pinned by its own test.
+
+*Several shapes can stand for one presentation point, and only the last of them is laid out.* A
+`forEach` whose iteration count is one — `sibTransForEach` in every cycle layout, `cnt="1"` with a
+`ptType` that is not `node` — resets the loop counter to zero on each pass of the loop *outside*
+it, so a five-node cycle creates five `sibTrans` shapes all standing for the first `sibTrans`
+point. The map from point to shape keeps the last, so only that one runs the `conn` algorithm
+that turns the `conn` placeholder into an arrow. LibreOffice draws all five as arrows anyway,
+because `Shape`'s copy constructor takes `mpCustomShapePropertiesPtr` **by reference**
+(`oox/source/drawingml/shape.cxx:210`, under its own comment "cloned shape shares all properties
+by reference, don't change them!"). `DiagramGeometry` is that sharing, made deliberate: the
+*sub-type* stays per shape, so the cycle still sees four unlaid-out children as connectors, while
+the drawn preset is the template's and changes for all five at once. Giving each clone its own
+preset drew four of `smartart-cycle.pptx`'s five connectors as plain rectangles: every box was in
+the right place and four of the five outlines were the wrong shape, which is exactly the failure
+that reads as a geometry bug and is not one. The five node ellipses agreed throughout.
 
 *A layout node with no `dgm:shape` produces no shape at all.* Not an empty group — nothing.
 `vertical-bracket-list.pptx` has `<dgm:layoutNode name="spH"><dgm:alg type="sp"/></dgm:layoutNode>`
@@ -1649,15 +1838,29 @@ that reads a slide's.
 **What still differs, measured.**
 
 - [ ] **LibreOffice shrinks a node's text to fit and Paperless does not**, which is the whole of
-      the remaining text divergence. The `tx` algorithm can state a font size through a
-      `primFontSz` constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
-      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. On the 20 decks
-      that draw: **ten agree on every run's position and size**, and on the other ten the sizes
-      diverge where the fit bites — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
+      the remaining text divergence and is now the only thing standing between the evaluated path
+      and full agreement. The `tx` algorithm can state a font size through a `primFontSz`
+      constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
+      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. Across the 37
+      decks, **30 draw the same number of text runs as the reference**, and where the sizes
+      diverge it is the fit biting — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
       against 27.014 on `smartart-vertical-block-list.pptx`, 18 against 9.014 on
       `smartart-autofit-sync.pptx`. Where LibreOffice does *not* shrink, the constraint's size is
       reproduced exactly: `smartart-chevron.pptx` draws at 64.998 pt in both. Matching it means
       porting `SdrTextObj`'s fit search, which is a layout-engine change rather than a reader one.
+- [ ] **The snake's reversing continuation is ported and never exercised.** `contDir="revDir"` —
+      the branch that makes alternate rows run backwards, which is what the word "snake" refers to
+      — appears in no layout definition in the corpus: every one of the nine snake layouts states
+      `sameDir` or nothing. It is transcribed from `diagramlayoutatoms.cxx:388-425` and is the one
+      part of these four algorithms with no measurement behind it. A file that uses it should be
+      checked against the reference before the code is trusted.
+- [ ] **`autoTxRot` is read and ignored, so a cycle's labels do not turn with their nodes.**
+      `smartart-autoTxRot.pptx` places all 48 of its filled shapes within 0.043 pt of the
+      reference and then draws every label upright, where LibreOffice rotates each to face along
+      the ring (`grav` and `upr`, `diagramlayoutatoms.cxx:1740-1760`). It is a text transform on a
+      shape that is already in the right place, so it is a small change on a path that has no
+      other consumer — the slide layouter would need a rotated text frame that is not the shape's
+      own rotation.
 - [ ] **A text node whose constraints resolve to a zero-sized box is dropped.** `smartart-cnt.pptx`
       constrains `ThreeNodes_1_text`'s left and right edges against a sibling's `l`, which no
       constraint ever sets, so both fall back to the absolute-value branch and both come out 0.

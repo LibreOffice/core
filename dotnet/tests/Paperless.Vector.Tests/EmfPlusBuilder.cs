@@ -107,14 +107,21 @@ internal sealed class EmfPlusBuilder
     /// <param name="rect">The gradient's extent, in world units.</param>
     /// <param name="from">The colour at the start.</param>
     /// <param name="to">The colour at the end.</param>
+    /// <param name="wrapMode">
+    /// The GDI+ wrap mode: 0 tile, 1 tile-flip-x, 2 tile-flip-y, 3 tile-flip-xy, 4 clamp.
+    /// </param>
     public EmfPlusBuilder LinearBrush(
-        int slot, (float X, float Y, float Width, float Height) rect, uint from, uint to)
+        int slot,
+        (float X, float Y, float Width, float Height) rect,
+        uint from,
+        uint to,
+        int wrapMode = 0)
     {
         byte[] data = new byte[48];
         BinaryPrimitives.WriteUInt32LittleEndian(data, 0xDBC01002);
         BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(4), 4);        // linear gradient
         BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(8), 0);        // no optional data
-        BinaryPrimitives.WriteInt32LittleEndian(data.AsSpan(12), 0);        // wrap mode
+        BinaryPrimitives.WriteInt32LittleEndian(data.AsSpan(12), wrapMode);
         BinaryPrimitives.WriteSingleLittleEndian(data.AsSpan(16), rect.X);
         BinaryPrimitives.WriteSingleLittleEndian(data.AsSpan(20), rect.Y);
         BinaryPrimitives.WriteSingleLittleEndian(data.AsSpan(24), rect.Width);
@@ -125,6 +132,54 @@ internal sealed class EmfPlusBuilder
         BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(44), to);
 
         return Object(slot, 0x100, data);
+    }
+
+    /// <summary>
+    /// Appends a path gradient brush object whose boundary is stated as bare points.
+    /// </summary>
+    /// <remarks>
+    /// The bare-point form rather than the path form, because it is what a boundary-only brush
+    /// writes and because it carries no point-type array — which is the reading a decoder is
+    /// most likely to get wrong, and the one this exercises.
+    /// </remarks>
+    /// <param name="slot">Which object slot.</param>
+    /// <param name="centre">The brush's centre, in world units.</param>
+    /// <param name="centreColour">The colour at the centre.</param>
+    /// <param name="boundary">The boundary points, in world units.</param>
+    /// <param name="surround">One colour per boundary point, or a single colour for all of them.</param>
+    /// <param name="wrapMode">The GDI+ wrap mode; 4 is clamp.</param>
+    public EmfPlusBuilder PathGradientBrush(
+        int slot,
+        (float X, float Y) centre,
+        uint centreColour,
+        (float X, float Y)[] boundary,
+        uint[] surround,
+        int wrapMode = 4)
+    {
+        ArgumentNullException.ThrowIfNull(boundary);
+        ArgumentNullException.ThrowIfNull(surround);
+
+        List<byte> data = [];
+
+        Add32(data, 0xDBC01002);
+        Add32(data, 3);                                                     // path gradient
+        Add32(data, 0);                                                     // no optional data
+        Add32(data, (uint)wrapMode);
+        Add32(data, centreColour);
+        AddSingle(data, centre.X);
+        AddSingle(data, centre.Y);
+
+        Add32(data, (uint)surround.Length);
+        foreach (uint colour in surround) Add32(data, colour);
+
+        Add32(data, (uint)boundary.Length);
+        foreach ((float x, float y) in boundary)
+        {
+            AddSingle(data, x);
+            AddSingle(data, y);
+        }
+
+        return Object(slot, 0x100, data.ToArray());
     }
 
     /// <summary>

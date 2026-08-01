@@ -62,6 +62,8 @@ internal static class OdfFrames
 
         XElement? box = element.Element(XName.Get("text-box", OdfNamespaces.Draw));
         XElement? image = element.Element(XName.Get("image", OdfNamespaces.Draw));
+        FramePicture picture =
+            image is not null && pictures is not null ? pictures.Read(element) : FramePicture.None;
 
         return new PageFrame
         {
@@ -81,7 +83,8 @@ internal static class OdfFrames
             BorderColour = style.BorderColour,
             BorderWidth = style.BorderWidth,
             IsImage = image is not null,
-            Image = image is not null && pictures is not null ? pictures.Read(element) : null,
+            Image = picture.Raster,
+            Vector = picture.Vector,
             Name = element.Attribute(XName.Get("name", OdfNamespaces.Draw))?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

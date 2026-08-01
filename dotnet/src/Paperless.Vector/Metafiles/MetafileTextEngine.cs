@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Encodings;
 using Paperless.Text.Fonts;
+using Paperless.Text.Itemisation;
 using Paperless.Text.Shaping;
 
 namespace Paperless.Vector.Metafiles;
@@ -121,13 +122,26 @@ public sealed class MetafileTextEngine
     }
 
     /// <summary>The advance width of a string in the given font.</summary>
+    /// <remarks>
+    /// Segmented exactly as <see cref="Layout"/> segments it, because the two are compared: an
+    /// EMF+ <c>DrawString</c> aligns inside its own layout rectangle by subtracting this width
+    /// from it, and a width measured in one face against a run drawn in three would offset the
+    /// whole string. Left to right, because nothing that asks for a width states a direction and
+    /// a sum of advances does not depend on one.
+    /// </remarks>
     public Length Measure(string? text, MetafileFont font)
     {
         ArgumentNullException.ThrowIfNull(font);
 
         if (string.IsNullOrEmpty(text) || Face(font) is not { } face) return Length.Zero;
 
-        return _shaper.Shape(face.Face, text).Width(font.Size);
+        Length width = Length.Zero;
+        foreach (Segment segment in Segments(text, font, face, rightToLeft: false))
+        {
+            width += segment.Shaped.Width(font.Size);
+        }
+
+        return width;
     }
 
     /// <summary>
@@ -143,8 +157,34 @@ public sealed class MetafileTextEngine
     /// is how a metafile records the result of <em>its</em> text layout, and a decoder that
     /// re-measures substitutes its own.
     /// </param>
-    /// <returns>The run and the width it occupied, or null when there is nothing to draw.</returns>
-    public (GlyphRun Run, Length Width)? Layout(
+    /// <returns>The runs and the width they occupied, or null when there is nothing to draw.</returns>
+    /// <remarks>
+    /// <para>
+    /// <b>Several runs rather than one, because a metafile names one font for text that may need
+    /// several faces.</b> A GDI text record states a family, a weight and a slant and then a
+    /// string; nothing says what script the string is in, and nothing says which face can draw
+    /// it. Shaping the whole string in the one resolved face is what a decoder does first and it
+    /// is wrong as soon as the requested family is missing: measured on
+    /// <c>TestAlignRtlReading.emf</c>, which asks for Noto Sans Arabic and gets Liberation Sans
+    /// on a machine without it, <b>35 of the 45 glyphs came back <c>.notdef</c></b> and the
+    /// picture measured <c>ink_ratio 0.166</c> against LibreOffice's.
+    /// </para>
+    /// <para>
+    /// So the string goes through the same two itemisers body text goes through and for the same
+    /// reasons: <c>TextItemiser</c> for the bidi levels and the script runs, because HarfBuzz
+    /// gives a different answer for a run tagged with the wrong direction; then
+    /// <c>FontItemiser</c> for coverage, because the resolved face may have none. The base
+    /// direction is the record's own <c>TA_RTLREADING</c> bit, which is the only thing a metafile
+    /// says about direction at all.
+    /// </para>
+    /// <para>
+    /// <b>The DX array is sliced with the segments rather than abandoned.</b> It is per character
+    /// in the record's logical order, so a segment takes the slice its own characters index —
+    /// which keeps a producer's spacing exactly where the string needed only one face, the case
+    /// every Latin metafile is.
+    /// </para>
+    /// </remarks>
+    public (IReadOnlyList<GlyphRun> Runs, Length Width)? Layout(
         string? text,
         MetafileFont font,
         DocPoint reference,
@@ -156,20 +196,48 @@ public sealed class MetafileTextEngine
         if (string.IsNullOrEmpty(text) || font.Size <= Length.Zero) return null;
         if (Face(font) is not { } face) return null;
 
-        ShapedText shaped = _shaper.Shape(face.Face, text);
-        if (shaped.Glyphs.Count == 0) return null;
+        bool rightToLeft = (alignment & TextAlignment.RightToLeftReading) != 0;
 
-        List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
-        List<int> clusters = new(shaped.Glyphs.Count);
+        List<Segment> segments = Segments(text, font, face, rightToLeft);
+        if (segments.Count == 0) return null;
 
-        Length width = advances is { Count: > 0 }
-            ? Place(shaped, font, advances, glyphs, clusters)
-            : Place(shaped, font, glyphs, clusters);
+        List<(GlyphRun Run, Length Width)> placed = new(segments.Count);
+        Length total = Length.Zero;
+
+        foreach (Segment segment in segments)
+        {
+            List<PositionedGlyph> glyphs = new(segment.Shaped.Glyphs.Count);
+            List<int> clusters = new(segment.Shaped.Glyphs.Count);
+
+            IReadOnlyList<Length>? slice = Slice(advances, segment.Start, segment.Length);
+
+            Length width = slice is not null
+                ? Place(segment.Shaped, font, slice, glyphs, clusters)
+                : Place(segment.Shaped, font, glyphs, clusters);
+
+            if (glyphs.Count == 0) continue;
+
+            GlyphRun run = new()
+            {
+                Font = segment.Reference,
+                FontSize = font.Size,
+                Origin = DocPoint.Origin,           // filled in once the total width is known
+                Glyphs = glyphs,
+                Text = text[segment.Start..(segment.Start + segment.Length)],
+                ClusterMap = clusters,
+                IsRightToLeft = segment.IsRightToLeft,
+            };
+
+            placed.Add((run, width));
+            total += width;
+        }
+
+        if (placed.Count == 0) return null;
 
         Length x = (alignment & TextAlignmentMask.Horizontal) switch
         {
-            TextAlignment.Centre => reference.X - (width / 2.0),
-            TextAlignment.Right => reference.X - width,
+            TextAlignment.Centre => reference.X - (total / 2.0),
+            TextAlignment.Right => reference.X - total,
             _ => reference.X,
         };
 
@@ -185,18 +253,84 @@ public sealed class MetafileTextEngine
         else if ((alignment & TextAlignment.Bottom) != 0) y = reference.Y - metrics.ScaledDescent(font.Size);
         else y = reference.Y + metrics.ScaledAscent(font.Size);
 
-        GlyphRun run = new()
-        {
-            Font = face.Reference,
-            FontSize = font.Size,
-            Origin = new DocPoint(x, y),
-            Glyphs = glyphs,
-            Text = text,
-            ClusterMap = clusters,
-            IsRightToLeft = (alignment & TextAlignment.RightToLeftReading) != 0,
-        };
+        List<GlyphRun> runs = new(placed.Count);
+        Length pen = x;
 
-        return (run, width);
+        foreach ((GlyphRun run, Length width) in placed)
+        {
+            runs.Add(run with { Origin = new DocPoint(pen, y) });
+            pen += width;
+        }
+
+        return (runs, total);
+    }
+
+    /// <summary>One stretch of a record's text with a single direction, script and face.</summary>
+    private readonly record struct Segment(
+        int Start, int Length, bool IsRightToLeft, ShapedText Shaped, FontReference Reference);
+
+    /// <summary>
+    /// Cuts a record's string into the stretches a shaper can take, in the order they are drawn.
+    /// </summary>
+    /// <remarks>
+    /// The segments come back in <em>visual</em> order, so a caller can lay them left to right
+    /// with a running pen. Inside a right-to-left item the coverage split has to be reversed as
+    /// well: <c>FontItemiser</c> answers in logical order, and an Arabic phrase whose digits fall
+    /// to one face and whose letters fall to another would otherwise be drawn with the two halves
+    /// swapped — which looks like a shaping bug and is a sequencing one.
+    /// </remarks>
+    private List<Segment> Segments(string text, MetafileFont font, ResolvedFace face, bool rightToLeft)
+    {
+        List<Segment> segments = [];
+
+        List<TextItem> items = TextItemiser.InVisualOrder(TextItemiser.Itemise(
+            text, rightToLeft ? BidiDirection.RightToLeft : BidiDirection.LeftToRight));
+
+        foreach (TextItem item in items)
+        {
+            List<FaceRun> faces = FontItemiser.Split(text, item.Start, item.Length, face.Face, _resolver);
+            if (item.IsRightToLeft) faces.Reverse();
+
+            foreach (FaceRun run in faces)
+            {
+                // A fallback face is re-resolved by family through the same cache the primary
+                // came from, so that the glyph ids and the FontReference a backend embeds are
+                // guaranteed to come from one file. Taking the fallback resolver's face object
+                // and the resolver's reference separately is how a run ends up drawn with one
+                // font's indices and another font's outlines.
+                ResolvedFace drawn = face;
+
+                if (run.IsFallback && run.Face.FamilyName is { Length: > 0 } family)
+                {
+                    drawn = _faces.GetOrAdd((family, font.Weight, font.IsItalic), Load) ?? face;
+                }
+
+                ShapedText shaped = _shaper.Shape(
+                    drawn.Face,
+                    text.AsSpan(run.Start, run.Length),
+                    new ShapingOptions(Script: item.Script, RightToLeft: item.IsRightToLeft));
+
+                if (shaped.Glyphs.Count == 0) continue;
+
+                segments.Add(new Segment(
+                    run.Start, run.Length, item.IsRightToLeft, shaped, drawn.Reference));
+            }
+        }
+
+        return segments;
+    }
+
+    /// <summary>The slice of a DX array a segment's own characters index, or null when there is none.</summary>
+    private static IReadOnlyList<Length>? Slice(IReadOnlyList<Length>? advances, int start, int length)
+    {
+        if (advances is not { Count: > 0 }) return null;
+        if (start == 0 && length >= advances.Count) return advances;
+        if (start >= advances.Count) return null;
+
+        int take = Math.Min(length, advances.Count - start);
+        Length[] slice = new Length[take];
+        for (int i = 0; i < take; i++) slice[i] = advances[start + i];
+        return slice;
     }
 
     /// <summary>
@@ -225,7 +359,7 @@ public sealed class MetafileTextEngine
     /// <param name="alignment">The text-alignment word in force.</param>
     /// <param name="advances">Per-glyph advances in EMUs, already mapped, or null for the font's own.</param>
     /// <returns>The run and the width it occupied, or null when there is nothing to draw.</returns>
-    public (GlyphRun Run, Length Width)? LayoutGlyphs(
+    public (IReadOnlyList<GlyphRun> Runs, Length Width)? LayoutGlyphs(
         IReadOnlyList<ushort> glyphs,
         MetafileFont font,
         DocPoint reference,
@@ -286,7 +420,11 @@ public sealed class MetafileTextEngine
             IsRightToLeft = (alignment & TextAlignment.RightToLeftReading) != 0,
         };
 
-        return (run, pen);
+        // One run, always: a glyph-index record has already been shaped by the producer, so
+        // there is no itemisation to do — no script to infer, no direction to apply, and no
+        // fallback possible, because the indices name glyphs in the face the record selected and
+        // in no other.
+        return ((GlyphRun[])[run], pen);
     }
 
     /// <summary>

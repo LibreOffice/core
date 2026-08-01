@@ -1649,20 +1649,33 @@ internal sealed class EmfReader
                 else _context.Clip.Replace(path, _context.FillRule);
                 break;
 
+            // A multi-rectangle region intersects as rectangles rather than as one path of
+            // disjoint subpaths, though both are exact, because only the rectangle form leaves
+            // the clip rectangular — and a later RGN_OR or RGN_XOR is exact only if it is.
             case RegionCombineMode.And:
-                if (rectangles is { Count: 1 }) _context.Clip.Intersect(rectangles[0]);
-                else _context.Clip.Intersect(path, rectangles is null ? _context.FillRule : FillRule.NonZero);
+                if (rectangles is not null) _context.Clip.Intersect(rectangles);
+                else _context.Clip.Intersect(path, _context.FillRule);
                 break;
 
             case RegionCombineMode.Diff:
-                if (rectangles is not null) foreach (DocRect rect in rectangles) _context.Clip.Exclude(rect);
+                if (rectangles is not null) _context.Clip.Exclude(rectangles);
+                else _context.Clip.MarkUnsupported();
+                break;
+
+            case RegionCombineMode.Or:
+                if (rectangles is not null) _context.Clip.Union(rectangles);
+                else _context.Clip.MarkUnsupported();
+                break;
+
+            case RegionCombineMode.Xor:
+                if (rectangles is not null) _context.Clip.SymmetricDifference(rectangles);
                 else _context.Clip.MarkUnsupported();
                 break;
 
             default:
-                // Union and symmetric difference of the clip with a region need the clip's own
-                // area as an operand, which a list of intersections does not hold. Leaving the
-                // clip alone draws too much rather than too little, which loses no content.
+                // An arbitrary path as the operand of a union, a symmetric difference or a
+                // complement is the one case left, and it needs a general polygon boolean.
+                // Leaving the clip alone draws too much rather than too little.
                 _context.Clip.MarkUnsupported();
                 break;
         }
@@ -2317,7 +2330,10 @@ internal sealed class EmfReader
 
         if (_text.Layout(text, font, reference, alignment, advances) is not { } laid) return;
 
-        _painter.DrawGlyphRun(laid.Run, (font.Escapement * Math.PI / 1800.0) + extra);
+        foreach (GlyphRun run in laid.Runs)
+        {
+            _painter.DrawGlyphRun(run, (font.Escapement * Math.PI / 1800.0) + extra);
+        }
         AdvanceCurrentPosition(alignment, laid.Width);
     }
 
@@ -2340,7 +2356,10 @@ internal sealed class EmfReader
 
         if (_text.LayoutGlyphs(glyphs, font, reference, alignment, advances) is not { } laid) return;
 
-        _painter.DrawGlyphRun(laid.Run, (font.Escapement * Math.PI / 1800.0) + extra);
+        foreach (GlyphRun run in laid.Runs)
+        {
+            _painter.DrawGlyphRun(run, (font.Escapement * Math.PI / 1800.0) + extra);
+        }
         AdvanceCurrentPosition(alignment, laid.Width);
     }
 

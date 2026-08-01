@@ -1,7 +1,7 @@
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 using Shouldly;
 
-namespace Paperless.Spreadsheets.Tests;
+namespace Paperless.Core.Tests;
 
 /// <summary>
 /// Tests the Excel number-format code engine directly.

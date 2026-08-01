@@ -777,6 +777,29 @@ rather than a rendering one, which is why nothing that looked at pixels or posit
 have caught it, and "text stays glyph runs so PDF output can be real searchable text" is the stated
 reason the drawing IR is shaped the way it is. Both sides now give 2 281.
 
+**And the other half of that defect, which the widths fix hid for a while.** Recovering the
+`/Widths` from the run made the spacing right and the extraction right, and it did nothing at all
+about the embedding: a face whose file never loaded is still a face the PDF has no bytes for.
+`pdffonts` on `sheet-features.ods` reported the two cell faces `emb yes` and the header's third
+face `emb no`, in a file whose every word extracted correctly — which is exactly why the
+page-and-word sweep could not see it and neither could any operator comparison, since a reference
+and an embedding are not a pen position.
+
+The furniture path is where it lived. `SheetFace` had carried the resolver's own reference from
+the beginning, so **cell text was never affected**; `SheetBandText` resolved its face and then
+rebuilt the reference with `FaceKey = face.FamilyName`, which is a family name where
+`FileFontProvider` expects a path. That helper draws every header, every footer and — through
+`SheetChart` — **every chart label**, so one unembedded reference covered the furniture of every
+sheet in the corpus and the labels of every spreadsheet chart.
+
+Why it could not be built from what the helper had: an `OpenTypeFace` is a parsed table directory
+and does not know the file it came out of. `Load()` now returns the face and the reference it
+resolved through as one `Lazy<(OpenTypeFace?, FontReference?)>`, which is the same shape
+`SheetFace` uses and for the same reason. Eight spreadsheet files went from one unembedded face
+each to none, with no page count and no word count moving.
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` holds it, over `sheet-features.ods`,
+`sheet-ooxml-features.xlsx`, `xls-features.xls` and `chart-bar-sheet.xlsx`.
+
 **Deliberate deviations, all narrow.**
 
 - **A rotated cell is drawn but not compared.** Calc turns the text about the cell's bottom-left
@@ -1002,6 +1025,35 @@ crossed by them.
 backend wants pixels calls `RasterImageDecoder.Ensure`. That is the layering rule rather than a
 convenience — a reader that decoded would put a codec in the extraction path.
 
+**A metafile draws too, and it is deferred by a different mechanism for the same reason.**
+`SheetDrawing` gained a `Lazy<VectorImage>?` beside its `RasterImage?`, and both readers sniff the
+bytes with `VectorImages.For` before wrapping them. It needed nothing in `Paperless.Core`:
+`VectorImage` is already `Draw(IDrawingSink, DocRect)` plus an intrinsic size, and this library
+already referenced `Paperless.Vector`. A `Lazy` rather than an eager decode because the decoder
+*is* reachable from here — measured on this tree, the first `VectorImages.Decode` in a process
+costs **1044 ms** for a WMF with one text run against 0.21 ms once warm, nearly all of it resolving
+faces through `Paperless.Text`, and a caller after cell values must not pay it.
+`SheetVectorPictureTests.NothingIsDecodedUntilSomethingAsksForThePicture` asserts `IsValueCreated`
+is false after a full layout.
+
+**The part name is a lie and the bytes are not.** `vector-picture-sheet.xlsx` is LibreOffice's own
+export of `vector-picture-sheet.ods` and it writes the EMF into **`xl/media/image2.wmf`**, with
+`[Content_Types].xml` declaring nothing useful for either extension. An EMF+ would be less
+distinguishable still — it *is* an EMF, same `EMR_HEADER`, same signature, with no signature of its
+own anywhere. So `VectorImages.For` sniffs and the declared type is not consulted at all.
+
+**The `svgBlip` extension reaches spreadsheets too**, which was not obvious: the same
+`{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension Word and PowerPoint write appears on an
+`xdr:pic`'s `a:blip`, naming an SVG beside the PNG on `r:embed`. `BlipReference.Choose` is what
+`XlsxDrawings` now calls, and the raster is kept beside the vector so an empty decode falls back to
+it rather than to nothing. ODF needs no such step — a `draw:frame` lists alternatives as sibling
+`draw:image` children and the first drawable one wins.
+
+**Measured**, both PDFs rasterised at `pdftoppm -r 150`: `vector-picture-sheet.ods` `mae 0.0059`
+and `.xlsx` `mae 0.0104`, 10/10 words and 1/1 pages on both. The residual ink is `emf-shapes.emf`'s
+gradient bar, which LibreOffice's own EMF import does not draw — verified by converting the bare
+`.emf` with `soffice`.
+
 **A named trap, and it cost an hour of looking in the wrong place.** The anchor arithmetic was
 right on the first run and the page came out blank, because four guards in `Paperless.Rendering`
 asked `image.Width <= 0` before drawing — the right question only for an image that has *already*
@@ -1016,10 +1068,12 @@ Not yet, and why:
   use — `MSODRAWINGGROUP` (0x00EB) in the workbook globals holds the BLIP store and `MSODRAWING`
   (0x00EC) in each sheet substream holds the shapes, with the client anchor in the `OBJ` record
   (`sc/source/filter/excel/xiescher.cxx`). What is missing is not the anchor arithmetic, which is
-  shared with the two formats above, but a **BLIP store reader**: nothing in
-  `Paperless.MsBinary/Escher/` extracts a picture's bytes out of an `F007` entry yet, and neither
-  the DOC nor the PPT path needs one either. It belongs in `Escher/` when it is written, because
-  all three families read the same store.
+  shared with the two formats above, but a **BLIP store reader**. That is now half-written and in
+  the wrong library: `Paperless.WordProcessing/Ww8/Ww8Blips.cs` reads an `F007` entry, follows its
+  `foDelay`, tolerates the one-or-two-checksum rule and — since the vector wiring — inflates a
+  metafile out of its `OfficeArtMetafileHeader`. None of that is DOC-specific. Moving it into
+  `Paperless.MsBinary/Escher/` is what buys XLS and PPT pictures at once, and the metafile half is
+  the part that would be most annoying to write twice.
 - **A drawing belongs to the page holding its top-left cell.** Calc positions the drawing layer in
   document coordinates and clips it per page, so a picture straddling a page break appears on both
   pages, cut. Anchoring it to one page is the same answer for everything that does not straddle.
@@ -1029,10 +1083,33 @@ Not yet, and why:
 - **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
   `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
   rectangle clipped to the frame's outline rather than a new IR primitive.
-- **A chart's own tick labels are unformatted, and a rotated one in a chart is the only rotated
-  text a sheet draws.** Both are chart-wide rather than spreadsheet-specific; see
-  `dotnet/TODO.md` Phase 3.5. The formatter this family owns is the one the chart engine wants and
-  cannot reach, which is the layering question left open.
+- **A chart's tick labels are formatted now, and the formatter is no longer this family's.** The
+  number-format engine moved from `Paperless.Spreadsheets/Numbers/` down into
+  `Paperless.Core/Numbers/`, beside `Core/Charts`, which is what a chart composed in Core needed to
+  write `1,200,000` on an axis instead of `1200000`. Nothing about this family's use of it changed
+  but the namespace: it is pure computation over a format code with no external dependencies, so
+  Core keeps its zero-dependency rule. `NumberFormatterTests` went with it to
+  `Paperless.Core.Tests`; `NumberFormatCodeTests` stayed here, because half of what it asserts is
+  which built-in code an XLSX style index stands for. ODF reaches the same engine through
+  `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` tree into a
+  format code exactly as `xmloff`'s own import does. See `dotnet/TODO.md` Phase 3.5.
+- **A rotated label in a chart is no longer only the value-axis title.** A crowded category axis now
+  turns its labels 45° — `ChartAxisLabels` in `Paperless.Core.Charts`, a port of
+  `VCartesianAxis::createTextShapes` — and `Layout/SheetChart.cs` needed no change for it: the sink
+  transform it already built for the axis title carries any angle. Chart-wide rather than
+  spreadsheet-specific, and this is the second time putting rotation on `ChartLabel` rather than on
+  the one caller that had it has cost the consumers nothing.
+- **Trendlines draw, and `trendline.ods` is still not an oracle.** `chart:regression-curve` and
+  `chart:mean-value` are read in `Paperless.OpenDocument/OdfChartPlot.cs` and fitted by
+  `Paperless.Core/Charts/ChartRegression.cs`, a port of `chart2/source/tools/`'s seven calculators.
+  ODF states more than OOXML does and one thing it states is free: `chart:equation/@svg:x` and
+  `@svg:y` give the equation's position outright, in the same coordinate space
+  `chart:coordinate-region` uses, so an ODF chart needs no equivalent of `VSeriesPlotter`'s default
+  placement at the curve's own corner. The 59-workbook error is unchanged at ~2176 and still is not
+  a chart measurement: it is the *spreadsheet's* uncomputed formulas, which is why the deck set in
+  `chart2/qa/extras/data/pptx/` is the honest one. See `dotnet/TODO.md` Phase 3.5.
+- **A data table under a chart is OOXML-only.** `c:dTable` has no ODF counterpart at all, so an ODS
+  chart never draws one and `ChartPlot.DataTable` is always null on this family's ODF path.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
@@ -1124,6 +1201,19 @@ deliberate — extraction must not pay for the anchors.
 of it. Only the geometry and the model moved — nothing that parses XML — so Core still has zero
 external dependencies.
 
+**And the number formatter followed it down, for the same reason and with the same test.**
+`Numbers/` — `NumberFormatCode`, `NumberFormatSection`, `NumberFormatter`, `BuiltInNumberFormats`,
+`SpreadsheetDate` — is now `Paperless.Core/Numbers/`. Every one of those files imported
+`System.Globalization` and `System.Text` and nothing else, so the move costs Core nothing; what it
+buys is that a chart composed in Core can write `1,200,000` on an axis. This family's readers
+changed by one `using` each.
+
+**A sheet's chart type is stretched properly now.** `SheetChart.Text` folds `ChartLabel.Stretch`
+into a sink transform, so a chart composed at its stated 12 × 7 cm and drawn into a frame 0.625 as
+wide and 0.709 as tall gets type at the right width rather than `sx/sy` too wide. Measured against
+LibreOffice's PDF for `chart-bar-sheet.ods`: the title measured **70.4 pt against a reference 62.1**
+and now measures **63.7**.
+
 **Three defects a deck could never have found, and each looked like something else.**
 
 - **The replacement picture wins if you look for it first.** An ODS `draw:frame` holding a chart
@@ -1158,6 +1248,33 @@ the face's own — ascent plus descent plus the gap, 1.1499 em in Liberation San
 drops the gap (`ScDrawStringsVars`, `output2.cxx:734`). `ChartLineHeightAt` is the one method added
 for it. The print zoom is applied to the *type* as well as the rectangle, because a chart laid out
 at 100% type in a 50% rectangle reserves twice the room its labels need.
+
+**The workbook's theme reaches a chart part now, and it was the difference between a picture and an
+empty plot area.** `XlsxDrawings.Plot` called `DrawingChartPlot.Read` with no theme, and the comment
+beside it recorded that as harmless because "every chart in the corpus states its fills as
+`a:srgbClr`". That is true of every chart LibreOffice wrote and false of charts Excel wrote.
+Measured on `chart2/qa/extras/data/xlsx/bubble_chart_simple.xlsx`, whose three series state
+`a:schemeClr val="accent1|2|3"` with `a:ln/a:noFill`: every bubble resolved to no fill and no
+outline, so the plot area came out with its axes, its legend and not one mark on it — which reads
+as an unimplemented chart type and was an unresolved colour. `XlsxFile.ThemeRoot` was already being
+loaded for `XlsxCellDecoration`; threading it through `XlsxDrawings.Read` is four lines, and it took
+`barOfPieChart.xlsx` from 11 drawn marks to 20. Over the whole 154-file `xlsx/` set the total
+absolute word error went **2599 → 2547** with exact matches **8 → 9**.
+
+**A sheet-anchored ODS drawing is still not read, and it hides a whole chart.** `OdsDrawings` walks
+`draw:frame` inside `table:table-cell` only, so a frame in `table:shapes` — the sheet-level shapes
+container, positioned by `svg:x`/`svg:y` against the sheet rather than by a cell — never becomes a
+`SheetDrawing`. `chart2/qa/extras/data/ods/tdf166428_Low_High_StockChart_LO248.ods` writes its stock
+chart exactly that way: the chart is read into a correct `ChartPlot` and then has nowhere to go, and
+the file measures **24 words against LibreOffice's 60**, all of the difference being the chart. It
+is the same shape of defect as the `ObjectReplacements` one above — the chart engine is not
+involved, the drawing never arrives — which is why it is recorded here and not in the chart section.
+
+**A chart anchored past the right-hand page break lands on a page we do not produce.** Every one of
+the five OOXML chart files measured for the plot-type work renders one page against LibreOffice's
+two, and `xlsx/bubble_chart_simple.xlsx` — anchored at column 11, well right of its four cells —
+still measures 5 words against 26 with a complete chart composed behind it. Sheet pagination, not
+charts.
 
 Left open here:
 

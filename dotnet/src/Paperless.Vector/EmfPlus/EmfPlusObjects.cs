@@ -279,6 +279,15 @@ internal sealed class EmfPlusPen : EmfPlusBrush
     /// <summary>A custom dash array, as multiples of the pen width.</summary>
     public double[]? DashPattern { get; private set; }
 
+    /// <summary>The outline of a custom start cap, in the cap's own space.</summary>
+    public EmfPlusPath? CustomStartCap { get; private set; }
+
+    /// <summary>The outline of a custom end cap, in the cap's own space.</summary>
+    public EmfPlusPath? CustomEndCap { get; private set; }
+
+    /// <summary>What a custom cap scales its own width by, on top of the pen's width.</summary>
+    public double CustomCapScale { get; private set; } = 1.0;
+
     /// <summary>Reads a pen, then the brush it ends with.</summary>
     /// <param name="stream">The cursor, positioned at the pen's version field.</param>
     public void ReadPen(EmfPlusStream stream)
@@ -345,19 +354,67 @@ internal sealed class EmfPlusPen : EmfPlusBrush
             stream.Skip(Math.Min(count * 4, stream.Remaining));
         }
 
-        if ((PenData & EmfPlusPenData.CustomStartCap) != 0)
-        {
-            int length = stream.I32();
-            stream.Skip(Math.Clamp(length, 0, stream.Remaining));
-        }
-
-        if ((PenData & EmfPlusPenData.CustomEndCap) != 0)
-        {
-            int length = stream.I32();
-            stream.Skip(Math.Clamp(length, 0, stream.Remaining));
-        }
+        if ((PenData & EmfPlusPenData.CustomStartCap) != 0) CustomStartCap = ReadCustomCap(stream);
+        if ((PenData & EmfPlusPenData.CustomEndCap) != 0) CustomEndCap = ReadCustomCap(stream);
 
         Read(stream);
+    }
+
+    /// <summary>
+    /// Reads an <c>EmfPlusCustomLineCap</c> and answers the outline it decorates a line end with.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Ported from <c>EMFPCustomLineCap::Read</c>
+    /// (<c>drawinglayer/source/tools/emfpcustomlinecap.cxx</c>). Only the <em>default</em> form
+    /// carries a path; the adjustable-arrow form states a width, a height and a middle inset
+    /// instead, which LibreOffice also reads and does not use.
+    /// </para>
+    /// <para>
+    /// <b>The record's own length field is what makes this safe to get wrong.</b> A custom cap is
+    /// the last thing before the pen's brush, so a misread of its interior would move the brush
+    /// and the line would come out whatever the next float looks like as a colour. Seeking to the
+    /// stated end rather than trusting the parse keeps that contained to the cap.
+    /// </para>
+    /// </remarks>
+    private EmfPlusPath? ReadCustomCap(EmfPlusStream stream)
+    {
+        int length = stream.I32();
+        int at = stream.Offset;
+        EmfPlusPath? outline = null;
+
+        stream.Skip(4);                 // the cap's own version
+        uint type = stream.U32();
+
+        if (type == 0)
+        {
+            uint flags = stream.U32();
+            stream.Skip(4);             // base cap
+            stream.Skip(4);             // base inset
+            stream.Skip(12);            // the cap's own stroke start, end and join
+            stream.Skip(4);             // miter limit
+            CustomCapScale = stream.F32();
+            stream.Skip(16);            // the fill and stroke hot spots
+
+            // The fill path when there is one, else the line path: both describe the same
+            // decoration and only one is drawn.
+            if ((flags & 0x01) != 0) outline = ReadCapPath(stream);
+            if ((flags & 0x02) != 0) outline ??= ReadCapPath(stream);
+        }
+
+        if (length > 0) stream.SeekTo((long)at + length);
+        return outline;
+    }
+
+    /// <summary>Reads one of a custom cap's two paths.</summary>
+    private static EmfPlusPath? ReadCapPath(EmfPlusStream stream)
+    {
+        stream.Skip(4);                 // the path's length, which the caller's bound covers
+        stream.Skip(4);                 // the path's own version
+        int points = stream.I32();
+        uint flags = stream.U32();
+
+        return EmfPlusPath.Read(stream, points, flags, withTypes: true);
     }
 
     /// <summary>The dash array a style word asks for, as multiples of the pen width.</summary>
@@ -389,11 +446,35 @@ internal sealed class EmfPlusPen : EmfPlusBrush
         _ => LineCap.Butt,
     };
 
-    /// <summary>True when the pen asks for a cap the drawing model cannot draw.</summary>
+    /// <summary>
+    /// True when the pen asks for a cap that is a <em>decoration</em> rather than a way of
+    /// finishing the stroke, so a shape has to be drawn at the line's ends as well.
+    /// </summary>
+    /// <remarks>
+    /// Seven of GDI+'s ten caps are decorations: the triangle, the four anchors and a custom
+    /// path. <c>0x10</c> — <c>NoAnchor</c> — is in the anchor range and draws nothing, so it is
+    /// excluded here rather than producing an empty decoration at every line end.
+    /// </remarks>
     public bool HasCustomCap
-        => (PenData & (EmfPlusPenData.CustomStartCap | EmfPlusPenData.CustomEndCap)) != 0
-            || (StartCap & 0xF0) != 0
-            || (EndCap & 0xF0) != 0;
+        => CustomStartCap is not null
+            || CustomEndCap is not null
+            || Decorates(StartCap)
+            || Decorates(EndCap);
+
+    private static bool Decorates(int code) => code is 3 or 0x11 or 0x12 or 0x13 or 0x14;
+
+    /// <summary>
+    /// True when the pen names a custom cap that carried no outline, so nothing can be drawn
+    /// for it.
+    /// </summary>
+    /// <remarks>
+    /// The adjustable-arrow form of an <c>EmfPlusCustomLineCap</c> states a width, a height and
+    /// a middle inset instead of a path. LibreOffice reads the same fields and does not use them
+    /// either.
+    /// </remarks>
+    public bool HasUndrawnCap
+        => ((PenData & EmfPlusPenData.CustomStartCap) != 0 && CustomStartCap is null)
+            || ((PenData & EmfPlusPenData.CustomEndCap) != 0 && CustomEndCap is null);
 }
 
 /// <summary>An EMF+ font: a size, a unit, four style bits and a family name.</summary>
@@ -437,6 +518,58 @@ internal sealed class EmfPlusFont : EmfPlusObject
         int length = stream.I32();
 
         if (length is > 0 and < 0x4000) Family = stream.Utf16(length);
+    }
+}
+
+/// <summary>
+/// An EMF+ image attributes object: a wrap mode, an edge colour and a clamping rule.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <b>Twenty-four bytes, and none of them are pixels.</b> This was recorded here as the one
+/// remaining case that would need a codec — "a colour matrix, a gamma, a chroma key and a colour
+/// remap table" — and that describes GDI+'s <c>ImageAttributes</c> <em>API class</em>, not the
+/// object a metafile carries. [MS-EMFPLUS] 2.2.1.5 gives the serialised form as
+/// <c>Version</c>, <c>Reserved1</c>, <c>WrapMode</c>, <c>ClampColor</c>, <c>ObjectClamp</c>,
+/// <c>Reserved2</c>: the colour adjustments are applied by the producer before the bitmap is
+/// written and never appear in the file at all.
+/// </para>
+/// <para>
+/// What is left is what happens at the <em>edge</em> when the source rectangle reaches outside
+/// the bitmap, which producers do constantly by half a pixel — measured, three of the four
+/// <c>DrawImage</c> records in the reference corpus state a source origin of −0.5.
+/// <c>WrapModeClamp</c> paints <see cref="ClampColour"/> there; the four tiling modes repeat the
+/// bitmap. See <c>src/Paperless.Vector/TODO.md</c> for which of those is honoured and what the
+/// other is worth.
+/// </para>
+/// </remarks>
+internal sealed class EmfPlusImageAttributes : EmfPlusObject
+{
+    /// <summary>The wrap mode: 0–3 tile with optional flips, 4 clamps to <see cref="ClampColour"/>.</summary>
+    public int WrapMode { get; private set; }
+
+    /// <summary>The colour outside the bitmap when the wrap mode clamps.</summary>
+    public Colour ClampColour { get; private set; }
+
+    /// <summary>True when the edge is filled with a flat colour rather than repeated.</summary>
+    public bool Clamps => WrapMode == 4;
+
+    /// <summary>Reads the object.</summary>
+    /// <param name="stream">The cursor, positioned at the version field.</param>
+    public void Read(EmfPlusStream stream)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        stream.Skip(4);                 // version
+        stream.Skip(4);                 // reserved
+        WrapMode = (int)stream.U32();
+        ClampColour = EmfPlusBrush.Argb(stream.U32());
+
+        // ObjectClamp and the second reserved word decide whether the clamp applies to the
+        // drawing's rectangle or to the bitmap, which is a distinction only a resampler can act
+        // on; they are read to keep the cursor honest and then dropped.
+        stream.Skip(4);
+        stream.Skip(4);
     }
 }
 
@@ -524,6 +657,23 @@ internal sealed class EmfPlusImage : EmfPlusObject
     /// <summary>True when the record held a metafile rather than a bitmap.</summary>
     public bool IsMetafile => Type == 2;
 
+    /// <summary>
+    /// The nested picture's own bytes, when the record held a metafile.
+    /// </summary>
+    /// <remarks>
+    /// Kept undecoded, exactly as an encoded bitmap is. Which decoder reads them is
+    /// <c>VectorImages</c>'s question and not this one's: the record's own type field names a
+    /// WMF, an EMF or an EMF+, and all three are already sniffed by content, so believing the
+    /// field would only add a way to be wrong.
+    /// </remarks>
+    public ReadOnlyMemory<byte> MetafileBytes { get; private set; }
+
+    /// <summary>
+    /// The nested picture once it has been decoded, so a picture drawn on forty pages costs one
+    /// decode — the same reason <see cref="VectorImage"/> is a display list rather than a replay.
+    /// </summary>
+    public VectorImage? Nested { get; set; }
+
     /// <summary>Reads an image object.</summary>
     /// <param name="stream">The cursor, positioned at the image's version field.</param>
     public void Read(EmfPlusStream stream)
@@ -535,7 +685,10 @@ internal sealed class EmfPlusImage : EmfPlusObject
 
         if (Type == 2)
         {
-            stream.Skip(8);             // metafile type and size
+            stream.Skip(8);             // the metafile's own type and size, which the bytes repeat
+
+            ReadOnlySpan<byte> nested = stream.Rest();
+            if (!nested.IsEmpty) MetafileBytes = nested.ToArray();
             return;
         }
 
@@ -751,64 +904,78 @@ internal sealed class EmfPlusRegion : EmfPlusObject
         }
     }
 
+    /// <summary>
+    /// One node of a region tree, combining its two children.
+    /// </summary>
+    /// <remarks>
+    /// <b>Every mode is exact while both children are rectangles, which is what a region
+    /// ordinarily is.</b> <see cref="RectangleRegion"/>'s band sweep is closed over rectangle
+    /// sets, so <c>Or</c>, <c>Xor</c> and <c>Complement</c> need nothing that <c>And</c> and
+    /// <c>Exclude</c> did not already have. Only a child carrying an arbitrary <em>path</em>
+    /// falls back to reporting the result approximate: this type's rectangles and shapes are a
+    /// union and an intersection respectively, and a union with a path operand cannot be pushed
+    /// into either.
+    /// </remarks>
     private static EmfPlusRegion Combine(EmfPlusRegion left, uint mode, EmfPlusRegion right)
     {
         EmfPlusRegion result = new() { IsApproximate = left.IsApproximate || right.IsApproximate };
 
-        switch (mode)
+        // Intersection is the one mode a path operand survives, because the shape lists are
+        // themselves intersected and appending to them is the whole operation.
+        if (mode == 1)
         {
-            case 1:                     // and: exact, because intersection is what the clip does
-                result.Rectangles = Intersect(left.Rectangles, right.Rectangles);
-                result.Shapes.AddRange(left.Shapes);
-                result.Shapes.AddRange(right.Shapes);
-                return result;
-
-            case 2:                     // or
-                if (left.IsInfinite || right.IsInfinite) return result;
-
-                if (left.Shapes.Count == 0 && right.Shapes.Count == 0
-                    && left.Rectangles is not null && right.Rectangles is not null)
-                {
-                    // Overlapping rectangles are still their own union under the non-zero rule,
-                    // so no arithmetic is needed and none is lost.
-                    result.Rectangles = [.. left.Rectangles, .. right.Rectangles];
-                    return result;
-                }
-
-                result.IsApproximate = true;
-                result.Rectangles = left.Rectangles;
-                result.Shapes.AddRange(left.Shapes);
-                return result;
-
-            case 4:                     // exclude: left minus right
-                if (right.Shapes.Count == 0 && right.Rectangles is { Count: > 0 })
-                {
-                    List<DocRect> from = left.Rectangles ?? [Infinite];
-                    foreach (DocRect cut in right.Rectangles) from = Subtract(from, cut);
-
-                    result.Rectangles = from;
-                    result.Shapes.AddRange(left.Shapes);
-                    return result;
-                }
-
-                if (right.IsEmpty)
-                {
-                    result.Rectangles = left.Rectangles;
-                    result.Shapes.AddRange(left.Shapes);
-                    return result;
-                }
-
-                result.IsApproximate = true;
-                result.Rectangles = left.Rectangles;
-                result.Shapes.AddRange(left.Shapes);
-                return result;
-
-            default:                    // xor and complement
-                result.IsApproximate = true;
-                result.Rectangles = mode == 5 ? right.Rectangles : left.Rectangles;
-                result.Shapes.AddRange(mode == 5 ? right.Shapes : left.Shapes);
-                return result;
+            result.Rectangles = left.Rectangles is null ? right.Rectangles
+                : right.Rectangles is null ? left.Rectangles
+                : [.. RectangleRegion.Combine(left.Rectangles, right.Rectangles, RegionOp.Intersect)];
+            result.Shapes.AddRange(left.Shapes);
+            result.Shapes.AddRange(right.Shapes);
+            return result;
         }
+
+        if (left.Shapes.Count == 0 && right.Shapes.Count == 0)
+        {
+            List<DocRect> a = left.Rectangles ?? [Infinite];
+            List<DocRect> b = right.Rectangles ?? [Infinite];
+
+            switch (mode)
+            {
+                case 2 when left.IsInfinite || right.IsInfinite:
+                    return result;      // a union with everything is everything
+
+                case 2:
+                    result.Rectangles = [.. RectangleRegion.Combine(a, b, RegionOp.Union)];
+                    return result;
+
+                case 3:
+                    result.Rectangles = [.. RectangleRegion.Combine(a, b, RegionOp.SymmetricDifference)];
+                    return result;
+
+                case 4:
+                    result.Rectangles = [.. RectangleRegion.Combine(a, b, RegionOp.Difference)];
+                    return result;
+
+                case 5:
+                    result.Rectangles = [.. RectangleRegion.Combine(b, a, RegionOp.Difference)];
+                    return result;
+
+                default:
+                    break;
+            }
+        }
+
+        // Excluding nothing is the identity however the left side is expressed, which is worth
+        // keeping because an empty right child is how a producer writes "no change".
+        if (mode == 4 && right.IsEmpty)
+        {
+            result.Rectangles = left.Rectangles;
+            result.Shapes.AddRange(left.Shapes);
+            return result;
+        }
+
+        result.IsApproximate = true;
+        result.Rectangles = mode == 5 ? right.Rectangles : left.Rectangles;
+        result.Shapes.AddRange(mode == 5 ? right.Shapes : left.Shapes);
+        return result;
     }
 
     private static readonly DocRect Infinite = new(
@@ -816,55 +983,6 @@ internal sealed class EmfPlusRegion : EmfPlusObject
         Core.Units.Length.FromEmu(-1L << 40),
         Core.Units.Length.FromEmu(1L << 41),
         Core.Units.Length.FromEmu(1L << 41));
-
-    private static List<DocRect>? Intersect(List<DocRect>? left, List<DocRect>? right)
-    {
-        if (left is null) return right;
-        if (right is null) return left;
-
-        List<DocRect> result = [];
-
-        foreach (DocRect a in left)
-        {
-            foreach (DocRect b in right)
-            {
-                Core.Units.Length x = Core.Units.Length.Max(a.Left, b.Left);
-                Core.Units.Length y = Core.Units.Length.Max(a.Top, b.Top);
-                Core.Units.Length r = Core.Units.Length.Min(a.Right, b.Right);
-                Core.Units.Length s = Core.Units.Length.Min(a.Bottom, b.Bottom);
-
-                if (r > x && s > y) result.Add(new DocRect(x, y, r - x, s - y));
-            }
-        }
-
-        return result;
-    }
-
-    private static List<DocRect> Subtract(List<DocRect> from, DocRect cut)
-    {
-        List<DocRect> result = [];
-
-        foreach (DocRect rect in from)
-        {
-            Core.Units.Length x = Core.Units.Length.Max(rect.Left, cut.Left);
-            Core.Units.Length y = Core.Units.Length.Max(rect.Top, cut.Top);
-            Core.Units.Length r = Core.Units.Length.Min(rect.Right, cut.Right);
-            Core.Units.Length s = Core.Units.Length.Min(rect.Bottom, cut.Bottom);
-
-            if (r <= x || s <= y)
-            {
-                result.Add(rect);
-                continue;
-            }
-
-            if (y > rect.Top) result.Add(new DocRect(rect.Left, rect.Top, rect.Width, y - rect.Top));
-            if (s < rect.Bottom) result.Add(new DocRect(rect.Left, s, rect.Width, rect.Bottom - s));
-            if (x > rect.Left) result.Add(new DocRect(rect.Left, y, x - rect.Left, s - y));
-            if (r < rect.Right) result.Add(new DocRect(r, y, rect.Right - r, s - y));
-        }
-
-        return result;
-    }
 
     /// <summary>The region as one path, for a record that fills it.</summary>
     /// <remarks>

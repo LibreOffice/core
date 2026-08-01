@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.IO.Compression;
 using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 
@@ -55,8 +56,33 @@ internal static class Ww8Blips
     /// <summary>The <c>msofbtBlip</c> record types that hold a raster.</summary>
     private static bool IsRaster(ushort type) => type is 0xF01D or 0xF01E or 0xF01F or 0xF02A;
 
-    /// <summary>The ones that hold a vector picture this library cannot yet draw.</summary>
+    /// <summary>The ones that hold a metafile: EMF, WMF and Macintosh PICT.</summary>
     private static bool IsVector(ushort type) => type is 0xF01A or 0xF01B or 0xF01C;
+
+    /// <summary>
+    /// The two whose bytes are worth extracting, which is the two Paperless has a decoder for.
+    /// </summary>
+    /// <remarks>
+    /// PICT shares the metafile header and is left with no bytes on purpose: nothing here reads one,
+    /// and a blip with no bytes keeps the named <c>PL2370</c> diagnostic — "a PICT picture was found"
+    /// — where handing on bytes nothing can sniff would degrade it to "in no format this library
+    /// recognises", which is true of every corrupt blob and says less.
+    /// </remarks>
+    private static bool IsReadableMetafile(ushort type) => type is 0xF01A or 0xF01B;
+
+    /// <summary>
+    /// The <c>OfficeArtMetafileHeader</c> that precedes a metafile blip's bytes.
+    /// </summary>
+    /// <remarks>
+    /// Thirty-four bytes — <c>cbSize</c>, an <c>rcBounds</c>, a <c>ptSize</c> in EMUs, <c>cbSave</c>,
+    /// and the compression and filter bytes — where a raster blip has a single one-byte tag. Getting
+    /// the two confused is not a subtle failure: thirty-three bytes of header in front of a metafile
+    /// puts a <c>D7 CD C6 9A</c> where nothing looks for one.
+    /// </remarks>
+    private const int MetafileHeaderSize = 34;
+
+    /// <summary>Where the <c>compression</c> byte sits inside that header.</summary>
+    private const int MetafileCompressionAt = 32;
 
     /// <summary>Whether a record type is a blip of any kind, raster or vector.</summary>
     /// <remarks>
@@ -194,7 +220,7 @@ internal static class Ww8Blips
         int skip = (blip.Instance & 1) != 0 ? UidSize * 2 : UidSize;
         if (content.Length <= skip) return null;
 
-        if (IsVector(blip.Type)) return new Ww8Blip(blip.Type, default);
+        if (IsReadableMetafile(blip.Type)) return new Ww8Blip(blip.Type, Metafile(content[skip..]));
         if (!IsRaster(blip.Type)) return new Ww8Blip(blip.Type, default);
 
         // A one-byte tag follows the checksums on every raster blip. MS-ODRAW calls it `bTag` and gives
@@ -210,6 +236,54 @@ internal static class Ww8Blips
         return blip.Type == 0xF01F
             ? new Ww8Blip(blip.Type, WithFileHeader(data))
             : new Ww8Blip(blip.Type, data.ToArray());
+    }
+
+    /// <summary>
+    /// The metafile inside a blip, past its header and inflated where the header says it is deflated.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A metafile blip is compressed and a raster blip is not</strong>, which is the whole of
+    /// why this exists. <c>SvxMSDffManager::GetBLIPDirect</c> sets <c>bZCodecCompression</c> for the
+    /// EMF, WMF and PICT cases and for no other (<c>msdffimp.cxx:6518-6549</c>), and it does so
+    /// <em>unconditionally</em> — it never reads the <c>compression</c> byte the header carries. The
+    /// byte is honoured here because the format states it and <c>0xFE</c> legitimately means "stored";
+    /// a stream that will not inflate falls back to its own bytes, so a producer that writes the byte
+    /// wrongly still draws.
+    /// </para>
+    /// <para>
+    /// Measured on LibreOffice's own DOC export of a WMF drawing: a 426-byte metafile arrives as 262
+    /// bytes of deflate behind the thirty-four-byte header, so a reader that skipped the header and
+    /// not the compression finds neither a placeable magic nor a <c>METAHEADER</c> and declines the
+    /// picture as an unrecognised blob.
+    /// </para>
+    /// </remarks>
+    private static ReadOnlyMemory<byte> Metafile(ReadOnlySpan<byte> content)
+    {
+        if (content.Length <= MetafileHeaderSize) return default;
+
+        byte compression = content[MetafileCompressionAt];
+        ReadOnlySpan<byte> data = content[MetafileHeaderSize..];
+
+        // 0x00 is deflate and 0xFE is stored; nothing else is defined, and an undefined value is
+        // treated as deflate because that is what every producer writes.
+        if (compression == 0xFE) return data.ToArray();
+
+        try
+        {
+            using MemoryStream source = new(data.ToArray(), writable: false);
+            using ZLibStream inflate = new(source, CompressionMode.Decompress);
+            using MemoryStream buffer = new();
+            inflate.CopyTo(buffer);
+
+            return buffer.Length == 0 ? data.ToArray() : buffer.ToArray();
+        }
+        catch (InvalidDataException)
+        {
+            // A blip whose bytes are not deflate after all. Leniency rule: hand on what is there and
+            // let the sniffer decline it, rather than losing the picture and the diagnostic with it.
+            return data.ToArray();
+        }
     }
 
     /// <summary>The blip record at an offset in a stream, when that stream holds one there.</summary>
@@ -266,9 +340,9 @@ internal static class Ww8Blips
 /// <c>0xF01A</c> and <c>0xF01B</c> for EMF and WMF.
 /// </param>
 /// <param name="Bytes">
-/// The picture, ready for a decoder, or empty for a blip whose format this library does not draw. Empty
-/// is not the same as absent: the entry exists, the shape that indexes it is a picture, and the frame
-/// reserves its room — see the diagnostic <see cref="Ww8DocumentReader"/> raises for one.
+/// The picture, ready for a decoder, or empty for a blip whose bytes could not be reached. A metafile
+/// arrives inflated and with its <c>OfficeArtMetafileHeader</c> already stripped, so what is here is
+/// always a whole file of its own format — which is what lets one sniffer serve all four front ends.
 /// </param>
 internal readonly record struct Ww8Blip(ushort RecordType, ReadOnlyMemory<byte> Bytes)
 {

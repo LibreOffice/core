@@ -153,6 +153,18 @@ internal sealed class SvgPictureTranslator
 
     // ------------------------------------------------------------------------------ geometry
 
+    /// <summary>
+    /// Clips to a rectangle, or reports the subtraction no SVG can ask for.
+    /// </summary>
+    /// <remarks>
+    /// <b>The difference branch is a guard rather than a gap.</b> SVG has no clip-subtraction
+    /// operator — <c>clip-path</c> intersects, and a <c>mask</c> is a mask — and
+    /// <c>Svg.SceneGraph</c> 5.1.1 agrees: all nineteen of its <c>ClipRect</c>/<c>ClipPath</c>
+    /// call sites pass <c>SKClipOperation.Intersect</c> and none constructs
+    /// <c>Difference</c>. It stays because the enum is the shim's, so a library upgrade could
+    /// begin emitting one, and a silently ignored subtraction would over-draw with nothing to
+    /// say why.
+    /// </remarks>
     private void Clip(SKRect rect, SKClipOperation operation)
     {
         if (operation == SKClipOperation.Difference)
@@ -206,7 +218,7 @@ internal sealed class SvgPictureTranslator
             {
                 Clip(clips[0].Clip, SKClipOperation.Intersect);
             }
-            else if (clips.Any(element => element.Clip is not null))
+            else if (clips.Any(element => HasGeometry(element.Clip)))
             {
                 Report("PL6023", "An SVG clipped one member of a clip-path union; Paperless clipped none of them.");
             }
@@ -214,6 +226,22 @@ internal sealed class SvgPictureTranslator
 
         Clip(clip.Clip, SKClipOperation.Intersect);
     }
+
+    /// <summary>
+    /// True when a nested clip actually carries geometry.
+    /// </summary>
+    /// <remarks>
+    /// <b>Not <c>Clip is not null</c>, which is always true.</b>
+    /// <c>SvgSceneClipCompiler.AddVisualPathClip</c> gives every <c>PathClip</c> a
+    /// <c>Clip = new ClipPath { Clip = new ClipPath() }</c> whether or not the element bore a
+    /// <c>clip-path</c> attribute, and only fills it in if one was there. Testing the reference
+    /// therefore reported a clip on a union member for <em>every</em> <c>clipPath</c> with more
+    /// than one child: three of the 126 files in <c>svgio</c>'s conformance suite, none of which
+    /// has a per-member clip at all. This is the library's own <c>HasClipGeometry</c>
+    /// predicate, which is what the compiler itself uses to decide whether a clip is empty.
+    /// </remarks>
+    private static bool HasGeometry(ClipPath? clip)
+        => clip is not null && (clip.Clips is { Count: > 0 } || HasGeometry(clip.Clip));
 
     private static SKMatrix? Combine(SKMatrix? inner, SKMatrix? outer) => (inner, outer) switch
     {
@@ -453,10 +481,9 @@ internal sealed class SvgPictureTranslator
                     radial.LocalMatrix);
 
             case TwoPointConicalGradientShader conical:
-                // SVG's focal-point radial gradient. The display list has no focus, so the
-                // outer circle is used and the focus is lost — visible only as a gradient
-                // that is centred when it should be off-centre.
-                Report("PL6018", "An SVG used a radial gradient with a focal point; Paperless centred it.");
+                // SVG's fx/fy radial gradient. The two circles are stated as an outer circle
+                // and a focus, which is the form PDF's /ShadingType 3 and Skia's two-point
+                // conical shader both take — so nothing is approximated and PL6018 is gone.
                 return Gradient(
                     GradientKind.Radial,
                     conical.Colors,
@@ -464,7 +491,8 @@ internal sealed class SvgPictureTranslator
                     conical.End,
                     new SKPoint(conical.End.X + conical.EndRadius, conical.End.Y),
                     conical.Mode,
-                    conical.LocalMatrix);
+                    conical.LocalMatrix,
+                    Same(conical.Start, conical.End) ? null : conical.Start);
 
             case PictureShader:
                 Report("PL6019", "An SVG filled a shape with a pattern; Paperless left it unfilled.");
@@ -479,20 +507,18 @@ internal sealed class SvgPictureTranslator
         }
     }
 
-    private GradientPaint Gradient(
+    private static bool Same(SKPoint a, SKPoint b) => a.X == b.X && a.Y == b.Y;
+
+    private static GradientPaint Gradient(
         GradientKind kind,
         SKColorF[]? colours,
         float[]? offsets,
         SKPoint start,
         SKPoint end,
         SKShaderTileMode mode,
-        SKMatrix? local)
+        SKMatrix? local,
+        SKPoint? focus = null)
     {
-        if (mode != SKShaderTileMode.Clamp)
-        {
-            Report("PL6021", $"An SVG gradient repeated with '{mode}'; Paperless clamped it.");
-        }
-
         List<GradientStop> stops = [];
         for (int i = 0; i < (colours?.Length ?? 0); i++)
         {
@@ -505,12 +531,24 @@ internal sealed class SvgPictureTranslator
 
         if (stops.Count == 0) stops.Add(new GradientStop(0, Colour.Transparent));
 
+        // SVG's spreadMethod, which the shim carries as a Skia tile mode and both backends
+        // state natively — Skia as the same tile mode, PDF by lengthening the shading's axis
+        // over as many periods as the shape spans.
+        SpreadMethod spread = mode switch
+        {
+            SKShaderTileMode.Mirror => SpreadMethod.Reflect,
+            SKShaderTileMode.Repeat => SpreadMethod.Repeat,
+            _ => SpreadMethod.Pad,
+        };
+
         return new GradientPaint(
             kind,
             stops,
             ShimGeometry.Point(start),
             ShimGeometry.Point(end),
-            local is { } matrix ? ShimGeometry.Transform(matrix) : AffineTransform.Identity);
+            local is { } matrix ? ShimGeometry.Transform(matrix) : AffineTransform.Identity,
+            spread,
+            focus is { } point ? ShimGeometry.Point(point) : null);
     }
 
     private Stroke? Pen(SKPaint paint)

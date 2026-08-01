@@ -99,12 +99,13 @@ internal static class PptTextBody
 
         // EditEngine adds a paragraph's space above only when it is not the first, and its space
         // below only when it is not the last (ImpEditEngine::CalcHeight,
-        // editeng/source/editeng/impedit2.cxx:4791-4802). Applied here rather than in the shared
-        // layouter, which the other two families also drive: the rule is EditEngine's rather than
-        // this format's, and moving it there would shift every PPTX and ODP baseline in the same
-        // commit as the PPT ones. Recorded in the TODO as a shared-layout item.
-        // Worth 0.125 pt on the corpus deck, which is exactly one master unit — small, and the
-        // difference between "agrees with the reference" and "nearly agrees".
+        // editeng/source/editeng/impedit2.cxx:4791-4802). Worth 0.125 pt on the corpus deck,
+        // exactly one master unit — small, and the difference between "agrees with the reference"
+        // and "nearly agrees".
+        //
+        // SlideTextLayout now applies the same rule for all three families, so this is redundant
+        // rather than load-bearing. It stays because it makes the body this reader hands over say
+        // what it means: the outer two spacings are not part of the text's height.
         paragraphs[0] = paragraphs[0] with { SpaceBefore = Length.Zero };
         paragraphs[^1] = paragraphs[^1] with { SpaceAfter = Length.Zero };
 

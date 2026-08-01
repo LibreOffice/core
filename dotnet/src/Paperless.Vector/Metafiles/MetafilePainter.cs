@@ -273,8 +273,18 @@ public sealed class MetafilePainter
     /// null draws the whole image over the whole square.
     /// </param>
     /// <param name="opacity">A uniform opacity.</param>
+    /// <param name="edge">
+    /// A colour to paint over the whole square first, for a source rectangle that reaches outside
+    /// the image under a wrap mode that clamps. It goes inside the same save as the image so that
+    /// it lands under exactly the placement the image lands on, which is the only reason it is a
+    /// parameter here rather than a separate fill at the call site.
+    /// </param>
     public void DrawTransformedImage(
-        RasterImage image, AffineTransform placement, DocRect? source = null, double opacity = 1.0)
+        RasterImage image,
+        AffineTransform placement,
+        DocRect? source = null,
+        double opacity = 1.0,
+        Colour? edge = null)
     {
         ArgumentNullException.ThrowIfNull(image);
 
@@ -288,6 +298,8 @@ public sealed class MetafilePainter
 
         _sink.Save();
         _sink.Transform(placement);
+
+        if (edge is { } colour) _sink.FillPath(GraphicsPath.Rectangle(square), Paint.Solid(colour));
 
         if (source is { } whole)
         {
@@ -304,6 +316,45 @@ public sealed class MetafilePainter
 
     /// <summary>The side of the square <see cref="DrawTransformedImage"/> places an image in.</summary>
     public const long PlacementUnit = 1 << 16;
+
+    /// <summary>
+    /// Replays a picture carried <em>inside</em> this one, into the same placement square an
+    /// image would have gone in.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A metafile may carry a whole further metafile where a bitmap would go, and every
+    /// destination form — a rectangle, a parallelogram, a source rectangle — is already
+    /// expressed as the transform that maps the placement square onto the page. So a nested
+    /// picture is drawn exactly as an image is: the same square, the same transform, and the
+    /// picture's own view box stretched onto it. Nothing about the destination has to know that
+    /// what it contains is a display list rather than pixels, which is the point.
+    /// </para>
+    /// <para>
+    /// It goes through the painter rather than straight to the sink so the clip is emitted first
+    /// — a nested picture is clipped by the outer picture's clip like anything else — and so the
+    /// nesting costs a command against the budget even when the picture itself is empty.
+    /// </para>
+    /// </remarks>
+    /// <param name="picture">The decoded nested picture.</param>
+    /// <param name="placement">Maps the placement square onto the page.</param>
+    public void DrawNestedPicture(VectorImage picture, AffineTransform placement)
+    {
+        ArgumentNullException.ThrowIfNull(picture);
+
+        if (_context.IsNoOperation) return;
+        if (!_budget.ChargeCommand()) return;
+
+        DocRect square = new(
+            Length.Zero, Length.Zero, Length.FromEmu(PlacementUnit), Length.FromEmu(PlacementUnit));
+
+        EnsureClip();
+
+        _sink.Save();
+        _sink.Transform(placement);
+        picture.Draw(_sink, square);
+        _sink.Restore();
+    }
 
     /// <summary>Draws a glyph run, rotating it when the font asks for an escapement.</summary>
     /// <param name="run">The positioned glyphs.</param>

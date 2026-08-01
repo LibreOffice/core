@@ -16,6 +16,14 @@
     <ProjectReference Include="..\Paperless.TestKit\Paperless.TestKit.csproj" />
     <ProjectReference Include="..\..\src\Paperless.Rendering\Paperless.Rendering.csproj" />
     <ProjectReference Include="..\..\src\Paperless.WordProcessing\Paperless.WordProcessing.csproj" />
+
+    <!--
+      The umbrella package, for PdfFontEmbeddingTests: whether a PDF embeds a font program for
+      every face it references is a question about all three families at once, and it was answered
+      wrongly for two of them for as long as this project could only open word-processing
+      documents here.
+    -->
+    <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
   </ItemGroup>
 
 </Project>

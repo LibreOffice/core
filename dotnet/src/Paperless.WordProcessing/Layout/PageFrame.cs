@@ -1,6 +1,7 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Vector;
 
 namespace Paperless.WordProcessing.Layout;
 
@@ -216,11 +217,11 @@ public sealed record PageFrame
 
     /// <summary>True when the frame holds a picture rather than text.</summary>
     /// <remarks>
-    /// Separate from <see cref="Image"/>, because the two answer different questions. This is what the
-    /// document <em>declared</em> the frame to be, which is what the wrap and the extraction tree go by;
-    /// the other is whether bytes were found and are a raster this library can hand a backend. A
-    /// <c>\wmetafile</c>, an EMF blip and a picture whose package part is missing all set this and leave
-    /// that null.
+    /// Separate from <see cref="Image"/> and <see cref="Vector"/>, because they answer different
+    /// questions. This is what the document <em>declared</em> the frame to be, which is what the wrap
+    /// and the extraction tree go by; the others are whether bytes were found and what kind they turned
+    /// out to be. A picture whose package part is missing, and a PICT nobody here decodes, both set this
+    /// and leave the other two null.
     /// </remarks>
     public bool IsImage { get; init; }
 
@@ -234,6 +235,29 @@ public sealed record PageFrame
     /// for them, and one that only wants to pass a JPEG through to <c>DCTDecode</c> never decodes at all.
     /// </remarks>
     public RasterImage? Image { get; init; }
+
+    /// <summary>
+    /// The vector picture the frame holds — an SVG, a WMF, an EMF or an EMF+ — or null when it holds
+    /// none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A display list rather than pixels, and it needed nothing in <c>Paperless.Core</c>:
+    /// <c>VectorImage</c> already is the abstraction a frame wants — <c>Draw(IDrawingSink, DocRect)</c>
+    /// plus an intrinsic size, immutable and replayable — and the layering already permits this library
+    /// to name it. A Core interface would have had those two members and one implementation.
+    /// </para>
+    /// <para>
+    /// <strong>Not decoded until something draws.</strong> See <see cref="FramePicture"/> for the
+    /// measurement that decided it; RTF and DOC read their pictures on the extraction path, where a
+    /// second of font resolution would be paid by a caller that only wanted the words.
+    /// </para>
+    /// <para>
+    /// <see cref="Image"/> may be set beside this, and means the raster fallback of a DrawingML
+    /// <c>svgBlip</c> — what a consumer that cannot read SVG would have shown. Nothing else sets both.
+    /// </para>
+    /// </remarks>
+    public Lazy<VectorImage>? Vector { get; init; }
 
     /// <summary>What the frame was called in the document, for diagnostics.</summary>
     public string? Name { get; init; }

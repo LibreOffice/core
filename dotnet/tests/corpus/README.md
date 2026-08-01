@@ -203,6 +203,22 @@ it exercises one record type out of the twenty that matter. 426 bytes.
 | `wmf-picture.odt` | The same metafile inside an ODF package at 8 × 6 cm, which settles the question the fixture was built for: **LibreOffice keeps the metafile rather than rasterising it**, and writes a 9 685-byte PNG preview beside it — twenty times the size and fixed at one resolution, which is exactly what decoding avoids |
 | `wmf-picture.docx` | The same document converted. The `a:blip` has no SVG alternative, so its own `r:embed` *is* the picture and `BlipReference.Choose` has to leave it alone; nothing declares a media type, so the seam has to find the decoder from the first four bytes |
 
+### Documents whose pictures are vectors, one per family
+
+Added when the vector seam was wired into the readers, so that each family has a document proving
+its own route to the bytes. Every one holds the *same three pictures* — `wmf-shapes.wmf`,
+`emf-shapes.emf` and `svg-picture.odt`'s `logo.svg` — because a difference between two rows is then
+a difference between two readers and nothing else.
+
+| File | Exercises |
+|---|---|
+| `vector-picture-deck.odp` | Three `draw:frame`s on one slide, each a `draw:image` naming a package entry with a `draw:mime-type` beside it. LibreOffice's own packaging keeps all three: 426 bytes of WMF, 892 of EMF and 769 of SVG, with PNG previews beside them that decoding avoids |
+| `vector-picture-deck.pptx` | LibreOffice's own export of it, and the file that settles the sniffing argument for a deck: the **EMF is written into `ppt/media/image2.wmf`** and `[Content_Types].xml` names no useful type, so only the bytes identify it. Its third `a:blip` also carries the `asvg:svgBlip` extension beside a PNG on `r:embed`, which is the only case where a shape holds both a vector and a raster |
+| `vector-picture-sheet.ods` | The same three anchored to three cells, so the anchor arithmetic and the picture path are exercised together |
+| `vector-picture-sheet.xlsx` | Its export. Same two lessons — `xl/media/image2.wmf` holds the EMF, and the `svgBlip` extension reaches spreadsheets too, which was not obvious |
+| `vector-picture-text.rtf` | **Hand-written**, because LibreOffice's RTF export rasterises: converting the same source to `.rtf` writes `\pngblip` for both metafiles. This one states `\wmetafile8` and `\emfblip` with the two metafiles as hex — and both control words are then ignored, since the sniff is what decides |
+| `vector-picture-text.doc` | LibreOffice's own DOC export, and the only coverage of the Escher blip route. A metafile blip is a 34-byte `OfficeArtMetafileHeader` followed by a **deflate stream** where a raster blip has one tag byte, so the 892-byte EMF arrives as 262 bytes of compressed data. DOC has no blip type for SVG, so the third picture comes back a PNG. **Known defect:** its three as-character pictures come back floating and reserve no room on their lines — the row still matches on pages and words, which is exactly why it is recorded here |
+
 ### EMF and EMF+ metafiles
 
 | File | Exercises |

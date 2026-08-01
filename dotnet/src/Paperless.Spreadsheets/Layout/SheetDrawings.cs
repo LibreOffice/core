@@ -2,6 +2,7 @@ using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Vector;
 
 namespace Paperless.Spreadsheets.Layout;
 
@@ -75,6 +76,24 @@ public sealed record SheetDrawing
 
     /// <summary>The picture, still encoded, or null when there is nothing to paint.</summary>
     public RasterImage? Image { get; init; }
+
+    /// <summary>
+    /// The picture as a display list — an SVG, a WMF, an EMF or an EMF+ — or null when it is a raster.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One or the other, never both, for every source but a DrawingML <c>svgBlip</c>: that one names an
+    /// SVG and a raster fallback on the same <c>a:blip</c>, and both are kept so an empty decode still
+    /// leaves a picture on the sheet.
+    /// </para>
+    /// <para>
+    /// Decoded when something draws it and not while the sheet is read. That is the same rule as
+    /// <see cref="RasterImage.Encoded"/>'s and for a sharper reason: the first metafile decode in a
+    /// process costs about a second of font resolution, which a caller asking only for cell values must
+    /// not pay.
+    /// </para>
+    /// </remarks>
+    public Lazy<VectorImage>? Vector { get; init; }
 
     /// <summary>The shape's name, as the file records it.</summary>
     public string? Name { get; init; }

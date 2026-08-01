@@ -64,6 +64,13 @@ internal sealed class EmfPlusReader
     private bool _multipartOpen;
     private ushort _multipartFlags;
 
+    // The only referent "the current pen" and "the current brush" can have in a format that has
+    // no record for either: whatever the previous drawing record used. Nothing but
+    // EmfPlusStrokeFillPath reads these.
+    private uint? _lastPen;
+    private EmfPlusBrush? _lastBrush;
+    private Colour? _lastColour;
+
     /// <summary>
     /// Creates a reader seeded with the enclosing EMF's header fields.
     /// </summary>
@@ -345,11 +352,7 @@ internal sealed class EmfPlusReader
             }
 
             case EmfPlusRecordType.StrokeFillPath:
-                // The record names a path and nothing else: the pen and brush are the ones a
-                // preceding record left current, which EMF+ has no state for and this reader
-                // therefore does not track. Drawing it with an arbitrary slot would be worse than
-                // not drawing it.
-                Warn("PL6037", "An EMF+ filled and stroked a path in one record, which was not drawn.");
+                StrokeFillPath(flags);
                 break;
 
             case EmfPlusRecordType.FillRegion:
@@ -571,12 +574,16 @@ internal sealed class EmfPlusReader
                 pen.ReadPen(stream);
                 _objects[slot] = pen;
 
-                if (pen.HasCustomCap)
+                // A cap that decorates is drawn as a filled outline at the line's ends, so
+                // PL6038 is left for the one form that states no path at all: an adjustable
+                // arrow, whose width, height and middle inset LibreOffice also reads and does
+                // not use (emfpcustomlinecap.cxx, "no test document").
+                if (pen.HasUndrawnCap)
                 {
                     Warn(
                         "PL6038",
-                        "An EMF+ pen asked for an arrow or a custom line cap, which the drawing "
-                            + "model cannot express; the line was drawn without it.");
+                        "An EMF+ pen asked for an adjustable arrow cap, which states no outline; "
+                            + "the line was drawn without it.");
                 }
 
                 break;
@@ -637,10 +644,17 @@ internal sealed class EmfPlusReader
             }
 
             case EmfPlusObjectType.ImageAttributes:
+            {
+                EmfPlusImageAttributes attributes = new();
+                attributes.Read(stream);
+                _objects[slot] = attributes;
+                break;
+            }
+
             case EmfPlusObjectType.CustomLineCap:
-                // Both are read for their slot and nothing else: image attributes are colour and
-                // gamma adjustments that would need the pixels, and a custom line cap is a line
-                // decoration the drawing model has no place for.
+                // Read for its slot and nothing else: what is left after DrawCaps is the
+                // adjustable-arrow form, which states a width, a height and a middle inset rather
+                // than a path.
                 _objects[slot] = null;
                 break;
 
@@ -811,7 +825,9 @@ internal sealed class EmfPlusReader
 
         if ((flags & 0x8000) != 0)
         {
-            _painter.FillWith(path, Paint.Solid(EmfPlusBrush.Argb(brushOrColour)), rule);
+            Colour colour = EmfPlusBrush.Argb(brushOrColour);
+            (_lastBrush, _lastColour) = (null, colour);
+            _painter.FillWith(path, Paint.Solid(colour), rule);
             return;
         }
 
@@ -822,6 +838,8 @@ internal sealed class EmfPlusReader
 
     private void FillWithBrush(GraphicsPath path, EmfPlusBrush brush, FillRule rule)
     {
+        (_lastBrush, _lastColour) = (brush, null);
+
         switch (brush.Type)
         {
             case EmfPlusBrushType.Hatch:
@@ -848,31 +866,27 @@ internal sealed class EmfPlusReader
                 return;
 
             case EmfPlusBrushType.LinearGradient:
-            {
-                GradientPaint gradient = Linear(brush);
-
-                // A GDI+ gradient repeats or mirrors outside its own rectangle and
-                // GradientPaint has no spread method at all, so a brush whose rectangle is
-                // short against the shape comes out as one ramp and then flat colour where the
-                // file asked for stripes. It is only reported when the shape actually reaches
-                // past the ramp, because a gradient that covers what it fills looks the same
-                // under every wrap mode. The same gap the SVG side records as PL6021.
-                if (brush.WrapMode != WrapClamp && Repeats(path, gradient))
-                {
-                    Warn(
-                        "PL6041",
-                        "An EMF+ gradient brush repeated outside its own rectangle, which the "
-                            + "drawing model cannot express; one ramp was drawn and then held "
-                            + "at its end colour.");
-                }
-
-                _painter.FillWith(path, gradient, rule);
+                _painter.FillWith(path, Linear(brush), rule);
                 return;
-            }
 
             case EmfPlusBrushType.PathGradient:
-                _painter.FillWith(path, Radial(brush), rule);
+            {
+                Paint sweep = PathGradient(brush);
+
+                // Outside the boundary the sweep has no triangles, and GDI+ does not leave that
+                // unpainted: the centre-to-edge parameter clamps at 1 and the pure edge colour is
+                // used, which is LibreOffice's second rasterisation pass (emfphelperdata.cxx,
+                // "the pixel is outside its closest triangle"). A flat undercoat of the edge
+                // colour states the same thing without a rasteriser, and it matters more than it
+                // sounds — see the trap in this library's TODO.md.
+                if (sweep is MeshPaint && !Covers(brush, path))
+                {
+                    _painter.FillWith(path, Paint.Solid(EdgeColour(brush)), rule);
+                }
+
+                _painter.FillWith(path, sweep, rule);
                 return;
+            }
 
             default:
                 _painter.FillWith(path, Paint.Solid(brush.Colour), rule);
@@ -880,10 +894,57 @@ internal sealed class EmfPlusReader
         }
     }
 
+    /// <summary>
+    /// Fills and strokes one path in a single record, using whatever pen and brush the file last
+    /// drew with.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>This record is enumerated by [MS-EMFPLUS] and specified nowhere in it.</b> It is in the
+    /// <c>RecordType</c> enumeration (2.1.1.1) with the sentence <i>"closes any open figures in a
+    /// path, strokes the outline of the path by using the current pen, and fills its interior by
+    /// using the current brush"</i>, and it is <em>absent</em> from the drawing-record table in
+    /// section 2.3.4 that lists all twenty-one records with a defined layout. So there is no
+    /// documented field naming the path, the pen or the brush, and nothing to port — LibreOffice
+    /// reaches the same place and leaves a bare <c>//TODO</c>
+    /// (<c>drawinglayer/source/tools/emfphelperdata.hxx:89</c>).
+    /// </para>
+    /// <para>
+    /// What is done here is the reading every other record supports and nothing beyond it: the
+    /// flags' low byte is an object slot in every EMF+ record that names an object, and "current"
+    /// is taken to mean the pen and brush the previous drawing record used, which is the only
+    /// referent those words can have in a format with no pen or brush state. When the slot holds
+    /// something that is not a path, nothing is drawn and <c>PL6037</c> is raised, exactly as
+    /// before — so a file this guess does not fit is no worse off than it was.
+    /// </para>
+    /// </remarks>
+    private void StrokeFillPath(ushort flags)
+    {
+        if (_objects[flags & 0xFF] is not EmfPlusPath path)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path in one record, which named no path.");
+            return;
+        }
+
+        GraphicsPath geometry = path.ToPath(Map, close: true);
+
+        if (_lastBrush is { } brush) FillWithBrush(geometry, brush, FillRule.NonZero);
+        else if (_lastColour is { } colour) _painter.FillWith(geometry, Paint.Solid(colour), FillRule.NonZero);
+
+        if (_lastPen is { } pen) StrokeWithPen(geometry, pen);
+
+        if (_lastBrush is null && _lastColour is null && _lastPen is null)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path before any pen or brush had been used.");
+        }
+    }
+
     private void Stroke(GraphicsPath path, ushort flags) => StrokeWithPen(path, flags & 0xFFu);
 
     private void StrokeWithPen(GraphicsPath path, uint index)
     {
+        _lastPen = index & 0xFF;
+
         if (_objects[(int)(index & 0xFF)] is not EmfPlusPen pen) return;
 
         double pixels = ToPixels(pen.Width, pen.Unit, horizontal: true);
@@ -910,6 +971,221 @@ internal sealed class EmfPlusReader
             pen.MiterLimit,
             dashes,
             dashes is null ? Length.Zero : width * pen.DashOffset));
+
+        DrawCaps(path, pen, width);
+    }
+
+    /// <summary>
+    /// Draws the line decorations a pen asks for at the ends of every figure it strokes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Seven of GDI+'s ten line caps are decorations rather than caps.</b> A triangle, a
+    /// square, round or diamond <em>anchor</em>, an arrow anchor and a custom path are shapes
+    /// planted at the end of a line, not ways of finishing the stroke — <see cref="LineCap"/>
+    /// expresses the other three and can express none of these. They need nothing new in the
+    /// drawing model all the same, because a decoration is a filled path: an outline stated in a
+    /// unit space, scaled to the pen's width, turned to face along the line and filled in the
+    /// pen's colour.
+    /// </para>
+    /// <para>
+    /// The unit outlines and their width multipliers are
+    /// <c>EmfPlusHelperData::CreateLineEnd</c>'s
+    /// (<c>drawinglayer/source/tools/emfphelperdata.cxx:532-593</c>), so a diamond is the diamond
+    /// LibreOffice draws rather than one chosen here. The placement rule is
+    /// <c>createAreaGeometryForLineStartEnd</c>'s
+    /// (<c>basegfx/source/polygon/b2dlinegeometry.cxx:38</c>): centre the outline on x, put its
+    /// leading edge at y = 0, scale so its <em>width</em> is the stated one, then dock it — the
+    /// built-in caps straddle the endpoint, a custom cap sits wholly inside the line.
+    /// </para>
+    /// </remarks>
+    private void DrawCaps(GraphicsPath path, EmfPlusPen pen, Length width)
+    {
+        if (!pen.HasCustomCap) return;
+
+        foreach ((DocPoint at, double dx, double dy, bool start) in Ends(path))
+        {
+            int code = start ? pen.StartCap : pen.EndCap;
+            EmfPlusPath? custom = start ? pen.CustomStartCap : pen.CustomEndCap;
+
+            GraphicsPath? decoration = custom is not null
+                ? Decoration(
+                    CustomOutline(custom),
+                    at,
+                    dx,
+                    dy,
+                    // A custom cap states its own width in its outline, and the mapping's x
+                    // scale is what turns it into one — where the pen's width goes through the
+                    // y scale. Mixing the two axes looks like an oversight and is not one to
+                    // depart from: measured on TestEmfPlusDrawPathWithCustomCap, whose world
+                    // transform is anisotropic, using the y scale for both draws an arrow head
+                    // 17 px across where LibreOffice draws 28 — ink_ratio 0.673 against 1.035.
+                    width * (pen.CustomCapScale * CustomWidth(custom) * _scaleX / _scaleY),
+                    dock: 0)
+                : CapOutline(code) is { } outline
+                    ? Decoration(outline, at, dx, dy, width * CapWidth(code), dock: 0.5)
+                    : null;
+
+            if (decoration is not null)
+            {
+                _painter.FillWith(decoration, Paint.Solid(pen.Colour), FillRule.NonZero);
+            }
+        }
+    }
+
+    /// <summary>Every figure's two ends, with the outward direction of the line there.</summary>
+    /// <remarks>
+    /// A figure of one point has no direction and is skipped. A closed figure still has two ends
+    /// here, because GDI+ decorates the first and last point of the figure it was given rather
+    /// than noticing that they coincide.
+    /// </remarks>
+    private static IEnumerable<(DocPoint At, double Dx, double Dy, bool Start)> Ends(GraphicsPath path)
+    {
+        List<DocPoint> figure = [];
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.MoveTo)
+            {
+                foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+                figure = [command.Point];
+                continue;
+            }
+
+            if (command.Verb == PathVerb.Close) continue;
+
+            figure.Add(command.Point);
+        }
+
+        foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+
+        static IEnumerable<(DocPoint, double, double, bool)> EndsOf(List<DocPoint> points)
+        {
+            if (points.Count < 2) yield break;
+
+            if (Direction(points[1], points[0]) is { } first)
+            {
+                yield return (points[0], first.Dx, first.Dy, true);
+            }
+
+            if (Direction(points[^2], points[^1]) is { } last)
+            {
+                yield return (points[^1], last.Dx, last.Dy, false);
+            }
+        }
+
+        static (double Dx, double Dy)? Direction(DocPoint from, DocPoint to)
+        {
+            double dx = to.X.Emu - from.X.Emu;
+            double dy = to.Y.Emu - from.Y.Emu;
+            double length = Math.Sqrt((dx * dx) + (dy * dy));
+
+            return length <= 0 ? null : (dx / length, dy / length);
+        }
+    }
+
+    /// <summary>Places a unit outline at a line end, facing outwards.</summary>
+    private static GraphicsPath? Decoration(
+        (double X, double Y)[] outline,
+        DocPoint at,
+        double dx,
+        double dy,
+        Length width,
+        double dock)
+    {
+        if (outline.Length < 3 || width <= Length.Zero) return null;
+
+        double left = outline[0].X, right = outline[0].X;
+        double top = outline[0].Y, bottom = outline[0].Y;
+
+        foreach ((double x, double y) in outline)
+        {
+            left = Math.Min(left, x);
+            right = Math.Max(right, x);
+            top = Math.Min(top, y);
+            bottom = Math.Max(bottom, y);
+        }
+
+        if (right - left <= 0) return null;
+
+        double centre = (left + right) / 2;
+        double scale = width.Emu / (right - left);
+        double length = (bottom - top) * scale;
+
+        GraphicsPath shape = new();
+
+        for (int i = 0; i < outline.Length; i++)
+        {
+            double x = (outline[i].X - centre) * scale;
+            double y = ((outline[i].Y - top) * scale) - (length * dock);
+
+            DocPoint point = new(
+                Length.FromEmu(at.X.Emu + (long)((x * -dy) - (y * dx))),
+                Length.FromEmu(at.Y.Emu + (long)((x * dx) - (y * dy))));
+
+            if (i == 0) shape.MoveTo(point);
+            else shape.LineTo(point);
+        }
+
+        return shape.Close();
+    }
+
+    /// <summary>The unit outline of a built-in cap, or null when the stroke draws it itself.</summary>
+    private static (double X, double Y)[]? CapOutline(int code) => code switch
+    {
+        3 => [(-1, 1), (1, 1), (1, 0), (0, -1), (-1, 0)],
+        0x11 => [(-1, -1), (1, -1), (1, 1), (-1, 1)],
+        0x12 => Circle(),
+        0x13 => [(0, -1), (1, 0), (0.5, 0.5), (0.5, 1), (-0.5, 1), (-0.5, 0.5), (-1, 0)],
+        0x14 => [(0, -1), (1, 1), (-1, 1)],
+        _ => null,
+    };
+
+    /// <summary>How wide a built-in cap is, as a multiple of the pen's width.</summary>
+    private static double CapWidth(int code) => code switch
+    {
+        0x11 => 1.5,
+        0x12 or 0x13 or 0x14 => 2.0,
+        _ => 1.0,
+    };
+
+    private static (double X, double Y)[] Circle()
+    {
+        (double X, double Y)[] points = new (double, double)[16];
+        for (int i = 0; i < points.Length; i++)
+        {
+            double angle = i * 2 * Math.PI / points.Length;
+            points[i] = (Math.Cos(angle), Math.Sin(angle));
+        }
+
+        return points;
+    }
+
+    /// <summary>
+    /// A custom cap's own outline, turned to face the way the built-in ones do.
+    /// </summary>
+    /// <remarks>
+    /// The half-turn is LibreOffice's — <c>EMFPCustomLineCap::ReadPath</c> rotates the polygon by
+    /// π as it reads it — because a custom cap states its outline with the line running in +y and
+    /// every other cap here states it with the line running in −y.
+    /// </remarks>
+    private static (double X, double Y)[] CustomOutline(EmfPlusPath cap)
+    {
+        List<(double X, double Y)> points = new(cap.Count);
+        for (int i = 0; i < cap.Count; i++)
+        {
+            (double x, double y) = cap.Raw(i);
+            points.Add((-x, -y));
+        }
+
+        return [.. points];
+    }
+
+    /// <summary>A custom cap's own width, which its outline states rather than the pen.</summary>
+    private static double CustomWidth(EmfPlusPath cap)
+    {
+        (double left, _, double right, _) = cap.RawBounds();
+        return Math.Max(right - left, 1e-6);
     }
 
     private void FillRegion(EmfPlusRegion region, ushort flags, uint brushOrColour)
@@ -984,35 +1260,6 @@ internal sealed class EmfPlusReader
         _ => 0.50,
     };
 
-    /// <summary>True when a shape reaches past the end of the gradient that fills it.</summary>
-    private static bool Repeats(GraphicsPath path, GradientPaint gradient)
-    {
-        double dx = gradient.End.X.Emu - gradient.Start.X.Emu;
-        double dy = gradient.End.Y.Emu - gradient.Start.Y.Emu;
-        double span = Math.Sqrt((dx * dx) + (dy * dy));
-
-        if (span <= 0) return true;
-
-        double left = double.MaxValue;
-        double top = double.MaxValue;
-        double right = double.MinValue;
-        double bottom = double.MinValue;
-
-        foreach (PathCommand command in path.Commands)
-        {
-            if (command.Verb == PathVerb.Close) continue;
-
-            left = Math.Min(left, command.Point.X.Emu);
-            right = Math.Max(right, command.Point.X.Emu);
-            top = Math.Min(top, command.Point.Y.Emu);
-            bottom = Math.Max(bottom, command.Point.Y.Emu);
-        }
-
-        if (right < left) return false;
-
-        return Math.Max(right - left, bottom - top) > span * 1.01;
-    }
-
     private static Colour Blend(Colour foreground, Colour background, double factor)
     {
         double f = Math.Clamp(factor, 0, 1);
@@ -1067,29 +1314,345 @@ internal sealed class EmfPlusReader
             Stops(brush),
             Map(sx, sy),
             Map(ex, ey),
-            AffineTransform.Identity);
+            AffineTransform.Identity,
+            Spread(brush.WrapMode));
     }
 
     /// <summary>
-    /// A path gradient brush, as the nearest radial gradient.
+    /// A GDI+ wrap mode as a <see cref="SpreadMethod"/>.
+    /// </summary>
+    /// <remarks>
+    /// <b>Four of the five tiling modes collapse into two here, and that is exact rather than
+    /// lossy.</b> GDI+ names <c>Tile</c>, <c>TileFlipX</c>, <c>TileFlipY</c>, <c>TileFlipXY</c>
+    /// and <c>Clamp</c>, and the flips say which axis a mirrored copy is reflected about. A
+    /// gradient's colour varies along <em>one</em> axis — the brush rectangle's x, before the
+    /// brush transform — so a flip in y produces a copy indistinguishable from the original and
+    /// only the x flip is visible. <c>Tile</c> and <c>TileFlipY</c> are therefore both a repeat,
+    /// and <c>TileFlipX</c> and <c>TileFlipXY</c> both a reflect. A texture brush, whose picture
+    /// does vary in both, keeps its own reading of the same field.
+    /// </remarks>
+    private static SpreadMethod Spread(int wrapMode) => wrapMode switch
+    {
+        1 or 3 => SpreadMethod.Reflect,
+        4 => SpreadMethod.Pad,
+        _ => SpreadMethod.Repeat,
+    };
+
+    /// <summary>
+    /// A path gradient brush, as a fan of Gouraud-shaded triangles about its centre.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <b>This is the one brush the drawing model genuinely cannot state.</b> A GDI+ path gradient
-    /// runs from one centre colour out to a colour <em>per boundary vertex</em>, Gouraud-shaded
-    /// between them — a star with three surround colours has three coloured points and no radial
-    /// gradient anywhere in it. <c>GradientPaint</c> has one ramp and one centre, so what is drawn
-    /// is the ramp from the centre colour to the first surround colour over the boundary's own
-    /// bounding ellipse.
+    /// <b>This is what a GDI+ path gradient actually is</b>, and it is why
+    /// <c>Paperless.Core</c> grew a <see cref="MeshPaint"/>. The brush names a centre colour and
+    /// a colour <em>per vertex of an arbitrary boundary</em> — a star with three surround
+    /// colours is three coloured points and no radial ramp anywhere in it — and no number of
+    /// <see cref="GradientStop"/>s says that, because a ramp has one colour at each end however
+    /// many stops sit between them. Partitioning the boundary into triangles
+    /// <c>(centre, V(i), V(i+1))</c> and interpolating the three corner colours across each is
+    /// the same construction LibreOffice uses (<c>emfphelperdata.cxx</c>, the
+    /// <c>BrushTypePathGradient</c> branch), except that LibreOffice Gouraud-shades it into a
+    /// 256-pixel bitmap and uses that as a texture, which needs a rasteriser, and both of our
+    /// backends state the triangles directly.
     /// </para>
     /// <para>
-    /// That is exact whenever the surround colours are all the same, which is the common case and
-    /// the one that reads as a radial gradient in the first place. When they are not, the shape is
-    /// right and the colours around its edge are not, and <c>PL6040</c> says so. LibreOffice
-    /// renders the general case by triangulating the boundary and Gouraud-shading each triangle
-    /// into a 256-pixel bitmap used as a texture; doing the same here would mean rasterising in a
-    /// library arranged not to.
+    /// <b>Rings, and when more than one is needed.</b> With a plain centre-to-edge ramp one ring
+    /// of triangles is <em>exact</em>: barycentric interpolation across a triangle is linear, and
+    /// so is the ramp. A blend-factor curve or a preset-colour list makes the ramp non-linear in
+    /// the radius, which a triangle cannot bend, so the fan is subdivided into concentric rings
+    /// and the curve sampled at each. One ring for the linear case keeps the common brush at
+    /// three vertices a segment.
     /// </para>
+    /// <para>
+    /// A boundary of fewer than three points has no interior to fan and cannot carry a colour per
+    /// vertex either; that falls back to the bounding-ellipse ramp this used to draw for
+    /// everything, with <c>PL6040</c>.
+    /// </para>
+    /// </remarks>
+    private Paint PathGradient(EmfPlusBrush brush)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return Radial(brush);
+
+        (double cx, double cy) = Apply(brush.Transform, brush.FirstPoint.X, brush.FirstPoint.Y);
+        DocPoint centre = Map(cx, cy);
+
+        Colour[] edge = new Colour[boundary.Count];
+        Colour[] surround = brush.SurroundColours is { Length: > 0 } named
+            ? named
+            : [brush.SecondColour];
+
+        for (int i = 0; i < edge.Length; i++) edge[i] = surround[i % surround.Length];
+
+        // A colour curve replaces the centre-to-edge mix outright; a factor curve only bends it.
+        // Both are non-linear in the radius, so both need rings; neither present is the linear
+        // case one ring states exactly.
+        bool curved = brush.PresetPositions is { Length: > 0 } || brush.BlendPositions is { Length: > 0 };
+        int rings = curved ? 12 : 1;
+
+        List<MeshVertex> vertices = new((boundary.Count * rings) + 1)
+        {
+            new MeshVertex(centre, Compose(brush, 0, brush.Colour)),
+        };
+
+        for (int ring = 1; ring <= rings; ring++)
+        {
+            double t = (double)ring / rings;
+
+            for (int i = 0; i < boundary.Count; i++)
+            {
+                vertices.Add(new MeshVertex(
+                    new DocPoint(
+                        Length.FromEmu(centre.X.Emu + (long)((boundary[i].X.Emu - centre.X.Emu) * t)),
+                        Length.FromEmu(centre.Y.Emu + (long)((boundary[i].Y.Emu - centre.Y.Emu) * t))),
+                    Compose(brush, t, edge[i])));
+            }
+        }
+
+        List<MeshTriangle> triangles = new(boundary.Count * ((2 * rings) - 1));
+
+        for (int i = 0; i < boundary.Count; i++)
+        {
+            int next = (i + 1) % boundary.Count;
+
+            triangles.Add(new MeshTriangle(0, 1 + i, 1 + next));
+
+            for (int ring = 2; ring <= rings; ring++)
+            {
+                int inner = 1 + ((ring - 2) * boundary.Count);
+                int outer = 1 + ((ring - 1) * boundary.Count);
+
+                triangles.Add(new MeshTriangle(inner + i, outer + i, outer + next));
+                triangles.Add(new MeshTriangle(inner + i, outer + next, inner + next));
+            }
+        }
+
+        return new MeshPaint(vertices, triangles);
+    }
+
+    /// <summary>
+    /// Whether a brush's boundary encloses everything a path covers, so nothing outside the
+    /// sweep is drawn.
+    /// </summary>
+    /// <remarks>
+    /// Asked of the two bounding boxes rather than of the polygons, which is the conservative
+    /// direction: a concave boundary can leave parts of its own box unswept, so a "yes" here can
+    /// still be wrong at a notch. It costs an undercoat that is then painted over.
+    /// </remarks>
+    private bool Covers(EmfPlusBrush brush, GraphicsPath path)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return false;
+
+        Length left = boundary[0].X, right = boundary[0].X;
+        Length top = boundary[0].Y, bottom = boundary[0].Y;
+
+        foreach (DocPoint point in boundary)
+        {
+            left = Length.Min(left, point.X);
+            right = Length.Max(right, point.X);
+            top = Length.Min(top, point.Y);
+            bottom = Length.Max(bottom, point.Y);
+        }
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+            if (command.Point.X < left || command.Point.X > right) return false;
+            if (command.Point.Y < top || command.Point.Y > bottom) return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// The colour a path gradient shows outside its own boundary: the mean of its surround
+    /// colours, or its second colour when it names none.
+    /// </summary>
+    private static Colour EdgeColour(EmfPlusBrush brush)
+    {
+        if (brush.SurroundColours is not { Length: > 0 } surround) return brush.SecondColour;
+        if (surround.Length == 1) return surround[0];
+
+        long r = 0, g = 0, b = 0, a = 0;
+        foreach (Colour colour in surround)
+        {
+            r += colour.R;
+            g += colour.G;
+            b += colour.B;
+            a += colour.A;
+        }
+
+        return new Colour(
+            (byte)(r / surround.Length),
+            (byte)(g / surround.Length),
+            (byte)(b / surround.Length),
+            (byte)(a / surround.Length));
+    }
+
+    /// <summary>
+    /// The brush boundary as a closed polygon of document points, flattened.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Only the first figure, because a path gradient sweeps one boundary and a brush carrying
+    /// several has no defined centre for the rest — which is what LibreOffice takes as well
+    /// (<c>getB2DPolygon(0)</c>).
+    /// </para>
+    /// <para>
+    /// <b>Curves must be flattened before the fan is built, not after.</b> A Bézier ellipse
+    /// states four cardinal points and eight control points; fanning its <em>on-curve</em> points
+    /// alone gives four triangles meeting at the centre — a diamond, not an ellipse — and nothing
+    /// about the resulting picture suggests that curves were the cause.
+    /// </para>
+    /// </remarks>
+    private List<DocPoint>? Boundary(EmfPlusBrush brush)
+    {
+        if (brush.Boundary is not { Count: > 0 } boundary) return null;
+
+        GraphicsPath outline = boundary.ToPath(
+            (x, y) =>
+            {
+                (double px, double py) = Apply(brush.Transform, x, y);
+                return Map(px, py);
+            },
+            close: true);
+
+        List<DocPoint> points = [];
+        DocPoint at = default;
+        bool started = false;
+
+        foreach (PathCommand command in outline.Commands)
+        {
+            switch (command.Verb)
+            {
+                case PathVerb.MoveTo when started:
+                    // A second figure begins; the first is the boundary.
+                    return Deduplicate(points);
+
+                case PathVerb.MoveTo:
+                    started = true;
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.LineTo:
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.CubicTo:
+                    for (int step = 1; step <= CurveSteps; step++)
+                    {
+                        points.Add(OnCurve(at, command.Control1, command.Control2, command.Point,
+                            (double)step / CurveSteps));
+                    }
+
+                    at = command.Point;
+                    break;
+
+                case PathVerb.Close:
+                default:
+                    break;
+            }
+        }
+
+        return Deduplicate(points);
+    }
+
+    /// <summary>How many straight segments one Bézier of a gradient boundary becomes.</summary>
+    /// <remarks>
+    /// Fixed rather than adaptive, because the boundary of a brush is small — a rounded
+    /// rectangle or an ellipse — and sixteen segments put the error of a quarter-ellipse under a
+    /// thousandth of its radius, well below what a mesh vertex is quantised to anyway.
+    /// </remarks>
+    private const int CurveSteps = 16;
+
+    private static DocPoint OnCurve(DocPoint a, DocPoint b, DocPoint c, DocPoint d, double t)
+    {
+        double u = 1 - t;
+        double w0 = u * u * u, w1 = 3 * u * u * t, w2 = 3 * u * t * t, w3 = t * t * t;
+
+        return new DocPoint(
+            Length.FromEmu((long)((w0 * a.X.Emu) + (w1 * b.X.Emu) + (w2 * c.X.Emu) + (w3 * d.X.Emu))),
+            Length.FromEmu((long)((w0 * a.Y.Emu) + (w1 * b.Y.Emu) + (w2 * c.Y.Emu) + (w3 * d.Y.Emu))));
+    }
+
+    /// <summary>Drops a repeated closing point, which would fan a zero-width triangle.</summary>
+    private static List<DocPoint> Deduplicate(List<DocPoint> points)
+    {
+        while (points.Count >= 2 && points[0] == points[^1]) points.RemoveAt(points.Count - 1);
+
+        return points;
+    }
+
+    /// <summary>
+    /// The colour a path gradient takes at parameter <paramref name="t"/> on the way from its
+    /// centre to a boundary vertex of colour <paramref name="edge"/>.
+    /// </summary>
+    /// <remarks>
+    /// The three spellings are mutually exclusive and their precedence is LibreOffice's: a preset
+    /// colour list replaces the mix outright, a blend-factor curve remaps <paramref name="t"/>
+    /// before it, and neither present leaves the mix linear.
+    /// </remarks>
+    private static Colour Compose(EmfPlusBrush brush, double t, Colour edge)
+    {
+        if (brush.PresetPositions is { Length: > 0 } positions && brush.PresetColours is { } colours)
+        {
+            return SampleColour(positions, colours, t);
+        }
+
+        double factor = brush.BlendPositions is { Length: > 0 } blend && brush.BlendFactors is { } factors
+            ? SampleFactor(blend, factors, t)
+            : t;
+
+        return Blend(edge, brush.Colour, factor);
+    }
+
+    /// <summary>Linear interpolation over a sorted position/value curve, clamped at both ends.</summary>
+    private static double SampleFactor(double[] positions, double[] values, double t)
+    {
+        int count = Math.Min(positions.Length, values.Length);
+        if (count == 0) return t;
+        if (t <= positions[0]) return values[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return values[i - 1] + ((values[i] - values[i - 1]) * f);
+        }
+
+        return values[count - 1];
+    }
+
+    /// <summary>Linear interpolation over a sorted position/colour curve, clamped at both ends.</summary>
+    private static Colour SampleColour(double[] positions, Colour[] colours, double t)
+    {
+        int count = Math.Min(positions.Length, colours.Length);
+        if (count == 0) return Colour.Transparent;
+        if (t <= positions[0]) return colours[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return Blend(colours[i], colours[i - 1], f);
+        }
+
+        return colours[count - 1];
+    }
+
+    /// <summary>
+    /// A path gradient whose boundary is too degenerate to fan, as the nearest radial gradient.
+    /// </summary>
+    /// <remarks>
+    /// Fewer than three boundary points is a malformed brush: there is no interior to partition
+    /// and nowhere for a colour per vertex to sit. The ramp over the boundary's own bounding
+    /// ellipse is what this reader drew for every path gradient before the mesh existed, so it
+    /// stays as the fallback rather than nothing being drawn, with <c>PL6040</c> saying so.
     /// </remarks>
     private GradientPaint Radial(EmfPlusBrush brush)
     {
@@ -1111,19 +1674,10 @@ internal sealed class EmfPlusReader
             ry = Length.Max(bounds.Height / 2.0, Length.FromEmu(1));
         }
 
-        if (brush.SurroundColours is { Length: > 1 } surround)
-        {
-            foreach (Colour colour in surround)
-            {
-                if (colour == surround[0]) continue;
-
-                Warn(
-                    "PL6040",
-                    "An EMF+ path gradient named a different colour at each boundary point, which "
-                        + "the drawing model cannot express; one ramp was drawn instead.");
-                break;
-            }
-        }
+        Warn(
+            "PL6040",
+            "An EMF+ path gradient stated a boundary of fewer than three points, which has no "
+                + "interior to shade; a ramp over its bounding ellipse was drawn instead.");
 
         double squash = ry.Emu / (double)rx.Emu;
 
@@ -1176,10 +1730,18 @@ internal sealed class EmfPlusReader
 
     private void Image(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
     {
-        stream.Skip(4);                 // the image-attributes slot, which needs the pixels
+        uint attributesSlot = stream.U32();
         int sourceUnit = stream.I32();
 
-        if (_objects[flags & 0xFF] is not EmfPlusImage image || image.Image is not { } raster) return;
+        // 0xFFFFFFFF is how a producer says "no attributes"; anything else is a slot, and the
+        // object there is 24 bytes of wrap mode and edge colour rather than the colour matrix the
+        // GDI+ API class of the same name carries. See EmfPlusImageAttributes.
+        EmfPlusImageAttributes? attributes = attributesSlot == 0xFFFFFFFF
+            ? null
+            : _objects[(int)(attributesSlot & 0xFF)] as EmfPlusImageAttributes;
+
+        if (_objects[flags & 0xFF] is not EmfPlusImage image) return;
+        if (image.Image is null && image.MetafileBytes.IsEmpty) return;
 
         // [MS-EMFPLUS] 2.3.4.8 allows only a pixel source rectangle, and every producer writes one.
         if (sourceUnit != (int)EmfPlusUnit.Pixel) return;
@@ -1231,6 +1793,18 @@ internal sealed class EmfPlusReader
             new AffineTransform(dw / Unit, shearY / Unit, shearX / Unit, dh / Unit, dx, dy),
             Emu(_map));
 
+        // A nested metafile goes into the same placement square a bitmap would, so the
+        // destination arithmetic above is shared entirely. It is decoded here rather than when
+        // the object was read because a picture that is never drawn should cost nothing, which
+        // is the same reason a bitmap arrives undecoded.
+        if (image.Image is null)
+        {
+            if (Nested(image) is { } nested) _painter.DrawNestedPicture(nested, placement);
+            return;
+        }
+
+        RasterImage raster = image.Image;
+
         bool cropped = sw > 0 && sh > 0 && image.Width > 0 && image.Height > 0
             && (sx != 0 || sy != 0 || Math.Abs(sw - image.Width) > 0.5 || Math.Abs(sh - image.Height) > 0.5);
 
@@ -1249,7 +1823,51 @@ internal sealed class EmfPlusReader
             Length.FromEmu((long)Math.Round(image.Width / sw * Unit)),
             Length.FromEmu((long)Math.Round(image.Height / sh * Unit)));
 
-        _painter.DrawTransformedImage(raster, placement, whole);
+        // A source rectangle reaching outside the bitmap leaves part of the destination with no
+        // pixel to take a colour from, and the wrap mode says what goes there. Clamping states a
+        // flat colour, which is a fill under the image and needs nothing new; the four tiling
+        // modes would need the bitmap repeated, which the placement square cannot express — see
+        // TODO.md for what that is worth, measured.
+        bool overhangs = sx < 0 || sy < 0 || sx + sw > image.Width || sy + sh > image.Height;
+        Colour? edge = attributes is { Clamps: true } && overhangs ? attributes.ClampColour : null;
+
+        _painter.DrawTransformedImage(raster, placement, whole, edge: edge);
+    }
+
+    /// <summary>
+    /// The picture an image object carries as a whole further metafile, decoded once.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Re-entering the decoder from inside itself needs a bound, and the budget is the wrong
+    /// one.</b> A budget is spent as work is done; a picture nested a thousand deep that draws
+    /// almost nothing at each level never spends any of it. <see cref="MetafileBudget.Nested"/>
+    /// counts the quantity that actually grows and answers null when none is left, which is why
+    /// the guard lives there rather than here.
+    /// </para>
+    /// <para>
+    /// <b>Which decoder reads it is <c>VectorImages</c>'s question.</b> The image record names
+    /// a WMF, an EMF or an EMF+, and all three are sniffed by content already — so a nested EMF+
+    /// re-enters this very reader through the ordinary front door, with no second entry point
+    /// and nothing here that knows which format it handed on.
+    /// </para>
+    /// </remarks>
+    private VectorImage? Nested(EmfPlusImage image)
+    {
+        if (image.Nested is not null) return image.Nested;
+        if (image.MetafileBytes.IsEmpty) return null;
+
+        if (_budget.Nested is not { } limits)
+        {
+            Warn(
+                "PL6039",
+                "An EMF+ carried a metafile as an image more deeply than Paperless will follow; "
+                    + "the nested picture was not drawn.");
+            return null;
+        }
+
+        image.Nested = VectorImages.Decode(image.MetafileBytes, limits);
+        return image.Nested.Content.Commands.Count > 0 ? image.Nested : null;
     }
 
     // ---------------------------------------------------------------- text
@@ -1305,7 +1923,8 @@ internal sealed class EmfPlusReader
 
         if (_text.Layout(text, resolved, origin, TextAlignment.Baseline, advances) is not { } laid) return;
 
-        _painter.DrawGlyphRun(laid.Run, Rotation(), Paint.Solid(TextColour(flags, brush)));
+        Paint text_paint = Paint.Solid(TextColour(flags, brush));
+        foreach (GlyphRun run in laid.Runs) _painter.DrawGlyphRun(run, Rotation(), text_paint);
     }
 
     /// <summary>
@@ -1381,12 +2000,15 @@ internal sealed class EmfPlusReader
             (double px, double py) = Apply(matrix, xs[at], ys[at]);
             DocPoint origin = Map(px, py);
 
-            (GlyphRun Run, Length Width)? laid = characters
+            (IReadOnlyList<GlyphRun> Runs, Length Width)? laid = characters
                 ? _text.Layout(new string([.. codes.Skip(at).Take(run).Select(code => (char)code)]),
                     resolved, origin, TextAlignment.Baseline, advances)
                 : _text.LayoutGlyphs([.. codes.Skip(at).Take(run)], resolved, origin, TextAlignment.Baseline, advances);
 
-            if (laid is { } placed) _painter.DrawGlyphRun(placed.Run, rotation, paint);
+            if (laid is { } placed)
+            {
+                foreach (GlyphRun one in placed.Runs) _painter.DrawGlyphRun(one, rotation, paint);
+            }
 
             at += run;
         }
@@ -1446,22 +2068,45 @@ internal sealed class EmfPlusReader
 
     private static EmfPlusCombineMode Combine(ushort flags) => (EmfPlusCombineMode)((flags >> 8) & 0x0F);
 
-    private void ClipRectangle(DocRect rect, EmfPlusCombineMode mode)
+    private void ClipRectangle(DocRect rect, EmfPlusCombineMode mode) => ClipRectangles([rect], mode);
+
+    /// <summary>
+    /// Combines a rectangle set into the clip, in any of GDI+'s six modes.
+    /// </summary>
+    /// <remarks>
+    /// All six are exact while the clip stays rectangular, because rectangle sets are closed
+    /// under every one of them. <c>Complement</c> is the one to read twice: it keeps the part of
+    /// the <em>new</em> region that is not in the existing one, the operands the other way round
+    /// from <c>Exclude</c> (<c>emfphelperdata.cxx:1547-1558</c>).
+    /// </remarks>
+    private void ClipRectangles(IReadOnlyList<DocRect> rectangles, EmfPlusCombineMode mode)
     {
         _context.Clip = _context.Clip.Clone();
 
         switch (mode)
         {
             case EmfPlusCombineMode.Replace:
-                _context.Clip.Replace([rect]);
+                _context.Clip.Replace(rectangles);
                 break;
 
             case EmfPlusCombineMode.Intersect:
-                _context.Clip.Intersect(rect);
+                _context.Clip.Intersect(rectangles);
                 break;
 
             case EmfPlusCombineMode.Exclude:
-                _context.Clip.Exclude(rect);
+                _context.Clip.Exclude(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Union:
+                _context.Clip.Union(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Xor:
+                _context.Clip.SymmetricDifference(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Complement:
+                _context.Clip.Complement(rectangles);
                 break;
 
             default:
@@ -1502,6 +2147,15 @@ internal sealed class EmfPlusReader
                 _context.Clip.Reset();
             }
 
+            return;
+        }
+
+        // A region of rectangles alone combines exactly in every mode; one carrying a path does
+        // so only where the clip is being replaced or narrowed, which is the same boundary the
+        // rectangle algebra draws everywhere else.
+        if (region.Shapes.Count == 0 && region.Rectangles is { } only)
+        {
+            ClipRectangles(only, mode);
             return;
         }
 

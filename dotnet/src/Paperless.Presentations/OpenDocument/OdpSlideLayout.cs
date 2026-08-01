@@ -8,6 +8,7 @@ using Paperless.OpenDocument.Styles;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.OpenDocument;
 
@@ -832,7 +833,11 @@ internal sealed partial class OdpSlideLayout
         if (element.Name.LocalName != "frame") return null;
 
         XElement? image = element.Element(XName.Get("image", OdfNamespaces.Draw));
-        return _fills.Picture(image) is { } picture ? new PlacedPicture(picture, bounds) : null;
+        (RasterImage? raster, Lazy<VectorImage>? vector) = _fills.Drawable(image);
+
+        return raster is null && vector is null
+            ? null
+            : new PlacedPicture(raster, bounds) { Vector = vector };
     }
 
     /// <summary>

@@ -63,6 +63,7 @@ internal static class DocxFrames
         if (width <= Length.Zero || height <= Length.Zero) return null;
 
         XElement? box = Descendant(placed, "txbxContent");
+        FramePicture picture = box is null && pictures is not null ? pictures.Read(placed) : FramePicture.None;
         (Length x, FrameHorizontalOrigin horigin, FrameHorizontalAlignment halign) = Horizontal(anchor);
         (Length y, FrameVerticalOrigin vorigin, FrameVerticalAlignment valign) = Vertical(anchor);
 
@@ -80,7 +81,8 @@ internal static class DocxFrames
             VerticalOffset = y,
             Spacing = Spacing(placed),
             IsImage = box is null,
-            Image = box is null && pictures is not null ? pictures.Read(placed) : null,
+            Image = picture.Raster,
+            Vector = picture.Vector,
             Name = Child(placed, "docPr")?.Attribute("name")?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

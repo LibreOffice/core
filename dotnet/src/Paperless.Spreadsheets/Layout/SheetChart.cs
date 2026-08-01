@@ -140,19 +140,41 @@ internal static class SheetChart
             return;
         }
 
+        // A non-square stretch leaves a residual horizontal factor a glyph run's single em cannot
+        // carry, so it goes onto the sink instead: the run is placed at 1/stretch of where it goes
+        // and drawn under a horizontal scale, which lands it exactly where it would have been and
+        // that much wider. chart-bar-sheet.ods is stretched 0.625 across and 0.709 down, so every
+        // word of it was 12% too wide before this.
+        double stretch = double.IsFinite(label.Stretch) && label.Stretch > 0.0 ? label.Stretch : 1.0;
+        Length width = run.Width * stretch;
+
         Length x = label.Anchor switch
         {
-            ChartLabelAnchor.RightMiddle => label.At.X - run.Width,
+            ChartLabelAnchor.RightMiddle => label.At.X - width,
             ChartLabelAnchor.LeftMiddle => label.At.X,
-            _ => label.At.X - (run.Width / 2),
+            _ => label.At.X - (width / 2),
         };
 
-        // CentreTop puts the label's *top* at the point; the other three centre it on the point.
-        Length top = label.Anchor == ChartLabelAnchor.CentreTop
-            ? label.At.Y
-            : label.At.Y - (line / 2);
+        // CentreTop puts the label's *top* at the point and CentreBottom its bottom; the other
+        // three centre it on the point.
+        Length top = label.Anchor switch
+        {
+            ChartLabelAnchor.CentreTop => label.At.Y,
+            ChartLabelAnchor.CentreBottom => label.At.Y - line,
+            _ => label.At.Y - (line / 2),
+        };
 
-        sink.DrawGlyphRun(run.At(new DocPoint(x, top + ascent)), Paint.Solid(label.Colour));
+        if (stretch == 1.0)
+        {
+            sink.DrawGlyphRun(run.At(new DocPoint(x, top + ascent)), Paint.Solid(label.Colour));
+            return;
+        }
+
+        sink.Save();
+        sink.Transform(AffineTransform.Scale(stretch, 1.0));
+        sink.DrawGlyphRun(
+            run.At(new DocPoint(x / stretch, top + ascent)), Paint.Solid(label.Colour));
+        sink.Restore();
     }
 
     /// <summary>

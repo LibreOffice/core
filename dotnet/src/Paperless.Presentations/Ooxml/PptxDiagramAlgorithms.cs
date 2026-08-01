@@ -64,6 +64,19 @@ internal static class PptxDiagramAlgorithms
             case "conn":
                 Connector(atom, shape);
                 break;
+            case "snake":
+                PptxDiagramGeometry.Snake(atom, shape, constraints);
+                break;
+            case "cycle":
+                PptxDiagramGeometry.Cycle(atom, shape);
+                break;
+            case "hierRoot":
+            case "hierChild":
+                PptxDiagramGeometry.Hierarchy(atom, shape);
+                break;
+            case "pyra":
+                PptxDiagramGeometry.Pyramid(shape);
+                break;
             case "tx":
                 Text(atom, shape, constraints);
                 break;
@@ -541,13 +554,21 @@ internal static class PptxDiagramAlgorithms
             string begin = atom.Parameter("begSty", "");
             string end = atom.Parameter("endSty", "");
 
-            shape.PresetType = route == "bend"
+            string substitute = route == "bend"
                 ? ""
                 : begin == "arr" && end == "arr"
                     ? "leftRightArrow"
                     : begin == "arr"
                         ? "leftArrow"
                         : "rightArrow";
+
+            // The sub-type is this shape's; the geometry belongs to the template, so every other
+            // clone of the same dgm:shape draws the arrow too. LibreOffice's shape copy shares
+            // its custom-shape properties by reference and gets the same result by accident —
+            // see DiagramGeometry, and smartart-cycle.pptx, where four of five connectors are
+            // never reached by this algorithm and are drawn as arrows regardless.
+            shape.PresetType = substitute;
+            shape.Geometry.PresetType = substitute;
         }
 
         Dictionary<string, Dictionary<string, int>> properties = new(StringComparer.Ordinal);

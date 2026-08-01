@@ -186,39 +186,40 @@ public sealed partial class Ww8DocumentReader
     private Dictionary<int, Ww8Blip>? _blips;
 
     /// <summary>
-    /// The picture a shape's <c>pib</c> names, or null when it names none this library can draw.
+    /// The picture a shape's <c>pib</c> names, or nothing when it names none this library can draw.
     /// </summary>
     /// <remarks>
     /// <c>pib</c> is one-based and zero means "no picture", so the lookup and the emptiness test are the
-    /// same question. A blip whose format is vector leaves a diagnostic and no picture: the frame keeps
-    /// its room, which is what stops a metafile from moving every line after it.
+    /// same question. A blip with no bytes leaves a diagnostic and no picture: the frame keeps its room,
+    /// which is what stops a missing picture from moving every line after it.
     /// </remarks>
-    private RasterImage? PictureOf(EscherShape? shape)
+    private FramePicture PictureOf(EscherShape? shape)
     {
-        if (shape is null) return null;
+        if (shape is null) return FramePicture.None;
 
         uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
-        if (pib == 0 || !Blips.TryGetValue((int)pib, out Ww8Blip blip)) return null;
+        if (pib == 0 || !Blips.TryGetValue((int)pib, out Ww8Blip blip)) return FramePicture.None;
 
         return blip.Bytes.IsEmpty
             ? Declined(blip)
             : EmbeddedPicture.Read(blip.Bytes, blip.Kind, "blip " + pib, _diagnostics);
     }
 
-    /// <summary>Records that a blip was found whose format this library does not draw.</summary>
+    /// <summary>Records that a blip was found whose bytes could not be reached.</summary>
     /// <remarks>
-    /// Always null, so that it reads as the answer at the call site. The blip store deliberately keeps
+    /// Always empty, so that it reads as the answer at the call site. The blip store deliberately keeps
     /// the entry with no bytes rather than dropping it: the frame still reserves its room, which is what
-    /// stops a metafile from moving every line after it, and the diagnostic says which format it was.
+    /// stops a missing picture from moving every line after it, and the diagnostic says which format it
+    /// was.
     /// </remarks>
-    private RasterImage? Declined(Ww8Blip blip)
+    private FramePicture Declined(Ww8Blip blip)
     {
         _diagnostics.Add(new Diagnostic(
             DiagnosticSeverity.Information, "PL2370",
-            $"A {blip.Kind} picture was found and has not been drawn: vector import is not "
-            + "implemented, so the frame reserves its room and stays empty."));
+            $"A {blip.Kind} picture was found and has not been drawn: its bytes could not be read out "
+            + "of the blip store, so the frame reserves its room and stays empty."));
 
-        return null;
+        return FramePicture.None;
     }
 
     /// <summary>
@@ -270,9 +271,9 @@ public sealed partial class Ww8DocumentReader
         if (!IsPictureShape(shape)) return null;
 
         _inlinePictures ??= new DffRecordBuffer(_pictures);
-        RasterImage? image = PictureOf(shape);
+        FramePicture image = PictureOf(shape);
 
-        if (image is null
+        if (image.IsEmpty
             && _inlinePictures.TryReadHeader(shapeAt, out DffRecordHeader container)
             && Ww8Blips.Inline(_inlinePictures, _inlinePictures.EndOf(container)) is { } own)
         {

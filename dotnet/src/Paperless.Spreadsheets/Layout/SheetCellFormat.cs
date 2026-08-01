@@ -170,15 +170,15 @@ public sealed record SheetCellFormat
     /// has no column width.
     /// </para>
     /// </remarks>
-    public Numbers.NumberFormatKind NumberFormatKind { get; init; } = Numbers.NumberFormatKind.General;
+    public Core.Numbers.NumberFormatKind NumberFormatKind { get; init; } = Core.Numbers.NumberFormatKind.General;
 
     /// <summary>True when the cell's number format is <c>General</c>, which is the default.</summary>
-    public bool HasGeneralFormat => NumberFormatKind == Numbers.NumberFormatKind.General;
+    public bool HasGeneralFormat => NumberFormatKind == Core.Numbers.NumberFormatKind.General;
 
     /// <summary>
     /// True when the cell's format is a plain number rather than a date, a time or text.
     /// </summary>
     /// <remarks><c>General</c> counts: it is <c>SvNumFormatType::NUMBER</c> in Calc too.</remarks>
     public bool HasPlainNumberFormat =>
-        NumberFormatKind is Numbers.NumberFormatKind.General or Numbers.NumberFormatKind.Number;
+        NumberFormatKind is Core.Numbers.NumberFormatKind.General or Core.Numbers.NumberFormatKind.Number;
 }

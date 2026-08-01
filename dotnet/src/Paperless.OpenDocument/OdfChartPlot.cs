@@ -93,6 +93,30 @@ public static class OdfChartPlot
 
         OdfChartTable table = OdfChartTable.Read(chart);
 
+        // The plot area's own style carries the labels every series inherits, which is where
+        // LibreOffice writes "label every point of this chart" — chart:data-label-number on the
+        // plot area rather than on each series.
+        string? areaStyle = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
+        ChartDataLabel? areaLabel = LabelOf(areaStyle, styles, kind, null);
+
+        // ODF orders a stock plot's series open, LOW, HIGH, close — the reverse of OOXML's middle
+        // pair — and drops the open when the chart is not a Japanese candlestick
+        // (xmloff/source/chart/SchXMLChartContext.cxx:1051-1085, whose own comment reads "with
+        // japanese candlesticks: open, low, high, close; otherwise: low, high, close"). See
+        // ChartStockRole; reading one vocabulary's order into the other inverts every whisker
+        // whose high and low are not already in the right places.
+        string? plotStyleName = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
+        bool japanese = styles.Flag(plotStyleName, "japanese-candle-stick") ?? false;
+
+        ChartStockRole[] stockRoles = japanese
+            ?
+            [
+                ChartStockRole.Open, ChartStockRole.Low, ChartStockRole.High, ChartStockRole.Close,
+            ]
+            : [ChartStockRole.Low, ChartStockRole.High, ChartStockRole.Close];
+
+        int stockRole = 0;
+
         List<ChartSeries> plotted = [];
         foreach (XElement element in series)
         {
@@ -105,6 +129,12 @@ public static class OdfChartPlot
             // a combination chart: the same chart:plot-area holds a chart:series
             // chart:class="chart:bar" beside a chart:series chart:class="chart:line". Reading it
             // per series is all a combination chart needs here.
+            ChartPlotKind own = KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind;
+
+            ChartStockRole role = ChartStockRole.None;
+            if (own is ChartPlotKind.Stock && stockRole < stockRoles.Length)
+                role = stockRoles[stockRole++];
+
             plotted.Add(new ChartSeries(
                 table.LabelOf(Attribute(element, OdfNamespaces.Chart, "label-cell-address")),
                 values,
@@ -112,7 +142,14 @@ public static class OdfChartPlot
                 styles.Line(style),
                 styles.LineWidth(style),
                 PointFills(element, values.Count, styles),
-                KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind));
+                own)
+            {
+                Marker = MarkerOf(style, styles, own),
+                Label = LabelOf(style, styles, own, areaLabel),
+                PointLabels = PointLabelsOf(element, values.Count, styles, own, areaLabel),
+                Trendlines = TrendlinesOf(element, styles),
+                StockRole = role,
+            });
         }
 
         XElement? categories = null;
@@ -146,6 +183,15 @@ public static class OdfChartPlot
             Overlap = styles.Number(plotStyle, "overlap") ?? 0.0,
             IsStacked = styles.Flag(plotStyle, "stacked") ?? false,
             ValueScale = ScaleOf(valueAxis, styles),
+            ValueFormat = styles.Format(Attribute(valueAxis, OdfNamespaces.Chart, "style-name")),
+            CategoryFormat = styles.Format(Attribute(categoryAxis, OdfNamespaces.Chart, "style-name")),
+            CategoryAxisText = AxisTextOf(
+                Attribute(categoryAxis, OdfNamespaces.Chart, "style-name"), styles),
+
+            // chart:visible="false" is ODF's c:delete: an axis that is present in the file so that
+            // its scale and its grid survive a round trip, and drawn as nothing.
+            ValueAxisVisible = Visible(valueAxis, styles),
+            CategoryAxisVisible = Visible(categoryAxis, styles),
             Legend = LegendOf(Child(chart, OdfNamespaces.Chart, "legend")),
             Background = styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name")),
             PlotBackground = styles.Fill(
@@ -162,7 +208,36 @@ public static class OdfChartPlot
                 ?? Length.FromPoints(10),
             PlotArea = Region(plotArea),
             Space = SpaceOf(chart),
+
+            // chart:filled-radar is the only radar class that fills; chart:radar draws a stroked
+            // polygon and takes its markers from the series' own chart:symbol-type, which is what
+            // makes ODF's two classes cover OOXML's three c:radarStyle values.
+            RadarStyle = Filled(Attribute(chart, OdfNamespaces.Chart, "class"))
+                ? ChartRadarStyle.Filled
+                : ChartRadarStyle.Standard,
+
+            // chart:stock-range-line is ODF's c:hiLowLines and chart:japanese-candle-stick is its
+            // c:upDownBars; the two markers are the gain and loss fills.
+            HasHighLowLines = Child(plotArea, OdfNamespaces.Chart, "stock-range-line") is not null,
+            HasUpDownBars = japanese,
+            StockGainFill = styles.Fill(Attribute(
+                Child(plotArea, OdfNamespaces.Chart, "stock-gain-marker"),
+                OdfNamespaces.Chart,
+                "style-name")),
+            StockLossFill = styles.Fill(Attribute(
+                Child(plotArea, OdfNamespaces.Chart, "stock-loss-marker"),
+                OdfNamespaces.Chart,
+                "style-name")),
         };
+    }
+
+    /// <summary>Whether a <c>chart:class</c> is the filled radar rather than the stroked one.</summary>
+    private static bool Filled(string? stated)
+    {
+        if (stated is null) return false;
+
+        int colon = stated.IndexOf(':', StringComparison.Ordinal);
+        return (colon >= 0 ? stated[(colon + 1)..] : stated) == "filled-radar";
     }
 
     /// <summary>
@@ -172,8 +247,9 @@ public static class OdfChartPlot
     /// The prefix is written in full — <c>chart:bar</c> — because the attribute holds a QName and
     /// the <c>chart</c> prefix is bound in every document LibreOffice writes; the bare form is
     /// accepted too, for a writer that bound a different prefix. A ring is drawn as a circle,
-    /// losing its hole; <c>chart:radar</c>, <c>chart:stock</c>, <c>chart:bubble</c> and
-    /// <c>chart:surface</c> yield null and draw nothing at all.
+    /// losing its hole. <c>chart:surface</c> is the one that stays null and draws nothing at all,
+    /// deliberately — see the remarks on <c>ChartLayout.Plots.cs</c> for the reasoning and for the
+    /// count that settled it.
     /// </remarks>
     private static ChartPlotKind? KindOf(string? stated)
     {
@@ -190,6 +266,9 @@ public static class OdfChartPlot
             "circle" or "ring" => ChartPlotKind.Pie,
             "area" => ChartPlotKind.Area,
             "scatter" => ChartPlotKind.Scatter,
+            "radar" or "filled-radar" => ChartPlotKind.Radar,
+            "bubble" => ChartPlotKind.Bubble,
+            "stock" => ChartPlotKind.Stock,
             _ => null,
         };
     }
@@ -219,6 +298,305 @@ public static class OdfChartPlot
 
     /// <summary>chart2's own gridline colour, gray30.</summary>
     private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
+
+    /// <summary>Whether an axis is drawn — <c>chart:visible="false"</c> says it is not.</summary>
+    private static bool Visible(XElement? axis, OdfChartStyles styles)
+        => axis is null
+           || styles.Flag(Attribute(axis, OdfNamespaces.Chart, "style-name"), "visible") != false;
+
+    /// <summary>
+    /// What a series' style says its data labels show, or null for none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF folds the four OOXML flags into two attributes: <c>chart:data-label-number</c>, whose
+    /// values are <c>none</c>, <c>value</c>, <c>percentage</c> and <c>value-and-percentage</c>,
+    /// and <c>chart:data-label-text</c>, a boolean meaning the category name
+    /// (<c>xmloff/source/chart/SchXMLSeriesHelper</c> and <c>PropertyMap.hxx</c>'s
+    /// <c>Label</c> mapping). There is no separate "series name" flag, which is why nothing here
+    /// sets <see cref="ChartDataLabel.ShowSeries"/>.
+    /// </para>
+    /// <para>
+    /// A style that states neither attribute inherits the level above rather than defaulting to
+    /// showing nothing, which is how a plot area saying <c>chart:data-label-number="value"</c>
+    /// labels every series under it.
+    /// </para>
+    /// </remarks>
+    private static ChartDataLabel? LabelOf(
+        string? style, OdfChartStyles styles, ChartPlotKind kind, ChartDataLabel? inherited)
+    {
+        string? number = styles.Text(style, "data-label-number");
+        bool? text = styles.Flag(style, "data-label-text");
+        string? position = styles.Text(style, "label-position");
+
+        if (number is null && text is null && position is null) return inherited;
+
+        bool value = number switch
+        {
+            "value" or "value-and-percentage" => true,
+            null => inherited?.ShowValue ?? false,
+            _ => false,
+        };
+
+        bool percent = number switch
+        {
+            "percentage" or "value-and-percentage" => kind == ChartPlotKind.Pie,
+            null => inherited?.ShowPercent ?? false,
+            _ => false,
+        };
+
+        return new ChartDataLabel
+        {
+            ShowValue = value,
+            ShowPercent = percent,
+            ShowCategory = text ?? inherited?.ShowCategory ?? false,
+            ValueFormat = styles.Format(style) ?? inherited?.ValueFormat,
+            Separator = percent && !value ? "\n" : inherited?.Separator ?? "; ",
+            Placement = PlacementOf(position) ?? inherited?.Placement,
+        };
+    }
+
+    /// <summary>The per-point label overrides a series states, or null.</summary>
+    /// <remarks>
+    /// <c>chart:data-point</c> in order, honouring <c>chart:repeated</c> exactly as the fills do —
+    /// a pie whose eight wedges are all default writes one element and not eight.
+    /// </remarks>
+    private static ChartDataLabel?[]? PointLabelsOf(
+        XElement series,
+        int count,
+        OdfChartStyles styles,
+        ChartPlotKind kind,
+        ChartDataLabel? inherited)
+    {
+        ChartDataLabel?[]? labels = null;
+        int at = 0;
+
+        foreach (XElement point in Children(series, OdfNamespaces.Chart, "data-point"))
+        {
+            int repeat = 1;
+            if (int.TryParse(
+                    Attribute(point, OdfNamespaces.Chart, "repeated"),
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture,
+                    out int stated))
+            {
+                repeat = Math.Clamp(stated, 1, MaxPoints);
+            }
+
+            string? style = Attribute(point, OdfNamespaces.Chart, "style-name");
+            ChartDataLabel? own = LabelOf(style, styles, kind, inherited);
+
+            for (int copy = 0; copy < repeat && at < MaxPoints; copy++, at++)
+            {
+                if (own is null || ReferenceEquals(own, inherited)) continue;
+
+                labels ??= new ChartDataLabel?[Math.Max(count, at + 1)];
+                if (at >= labels.Length) continue;
+                labels[at] = own;
+            }
+        }
+
+        return labels;
+    }
+
+    private static ChartLabelPlacement? PlacementOf(string? stated) => stated switch
+    {
+        "outside" => ChartLabelPlacement.Outside,
+        "inside" => ChartLabelPlacement.Inside,
+        "center" => ChartLabelPlacement.Centre,
+        "near-origin" => ChartLabelPlacement.NearOrigin,
+        "top" => ChartLabelPlacement.Top,
+        "bottom" => ChartLabelPlacement.Bottom,
+        "left" => ChartLabelPlacement.Left,
+        "right" => ChartLabelPlacement.Right,
+        "avoid-overlap" => ChartLabelPlacement.BestFit,
+        _ => null,
+    };
+
+    /// <summary>
+    /// What marker a series draws.
+    /// </summary>
+    /// <remarks>
+    /// <c>chart:symbol-type</c> is <c>none</c>, <c>automatic</c> or <c>named-symbol</c>, and only
+    /// the last carries a <c>chart:symbol-name</c>. A scatter chart whose style states nothing
+    /// gets one anyway, for the same reason its OOXML counterpart does: without markers a scatter
+    /// series that states no line draws nothing at all.
+    /// </remarks>
+    private static ChartMarker MarkerOf(string? style, OdfChartStyles styles, ChartPlotKind kind)
+    {
+        string? type = styles.Text(style, "symbol-type");
+
+        if (type is null)
+            return kind == ChartPlotKind.Scatter ? ChartMarker.Square : ChartMarker.None;
+
+        if (type == "none") return ChartMarker.None;
+        if (type != "named-symbol") return ChartMarker.Square;
+
+        return styles.Text(style, "symbol-name") switch
+        {
+            "circle" => ChartMarker.Circle,
+            "diamond" => ChartMarker.Diamond,
+            "arrow-up" or "arrow-down" or "arrow-left" or "arrow-right" => ChartMarker.Triangle,
+            "plus" => ChartMarker.Cross,
+            "asterisk" or "x" => ChartMarker.Star,
+            _ => ChartMarker.Square,
+        };
+    }
+
+    /// <summary>
+    /// What an axis' style says about how its labels are set.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF states three of the four and defaults the fourth. <c>chart:text-overlap</c> and
+    /// <c>chart:label-arrangement</c> are chart properties; the rotation is
+    /// <c>style:rotation-angle</c> on the axis' <em>text</em> properties, in whole degrees
+    /// anticlockwise, which is the direction ODF and this model already agree on and OOXML does
+    /// not. Line breaking has no ODF attribute at all, so it stays at chart2's own model default
+    /// of false (<c>Axis.cxx:239</c>) — which is the opposite of what OOXML's importer sets, and
+    /// it is why an ODF axis can reach the rotation path without a label having to wrap first.
+    /// </para>
+    /// <para>
+    /// The arrangement defaults to <c>ChartAxisArrangeOrderType_AUTO</c> (<c>Axis.cxx:242</c>),
+    /// which is <see cref="ChartLabelStagger.Auto"/> — so an ODF axis may stagger where an OOXML
+    /// one may not. In practice it rarely does; see <see cref="ChartAxisLabels"/> for why the
+    /// route to staggering is nearly closed.
+    /// </para>
+    /// </remarks>
+    private static ChartAxisText AxisTextOf(string? style, OdfChartStyles styles)
+    {
+        double degrees = styles.Rotation(style) ?? 0.0;
+        degrees -= 360.0 * Math.Floor(degrees / 360.0);
+
+        return new ChartAxisText(
+            degrees * Math.PI / 180.0,
+            OverlapAllowed: styles.Flag(style, "text-overlap") ?? false,
+            LineBreakAllowed: false,
+            Stagger: styles.Text(style, "label-arrangement") switch
+            {
+                "side-by-side" => ChartLabelStagger.SideBySide,
+                "stagger-even" => ChartLabelStagger.Even,
+                "stagger-odd" => ChartLabelStagger.Odd,
+                _ => ChartLabelStagger.Auto,
+            });
+    }
+
+    /// <summary>
+    /// The trendlines a series carries, or null when it carries none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>chart:regression-curve</c> plus, for the mean line, <c>chart:mean-value</c>. Everything
+    /// about the fit is on the curve's <em>style</em> —
+    /// <c>chart:regression-type</c>, <c>-max-degree</c>, <c>-period</c>, <c>-moving-type</c>,
+    /// <c>-extrapolate-forward</c>, <c>-extrapolate-backward</c>, <c>-force-intercept</c>,
+    /// <c>-intercept-value</c> — and only the two display flags are on the element, on its child
+    /// <c>chart:equation</c>. That child's absence means neither is shown, which is the opposite
+    /// of OOXML's rule and is why the two readers cannot share a default.
+    /// </para>
+    /// <para>
+    /// <strong>ODF bakes the equation's position into the file, exactly as it bakes the plot
+    /// rectangle.</strong> <c>chart:equation/@svg:x</c> and <c>@svg:y</c> are in the chart's own
+    /// coordinate space — the same space <c>chart:coordinate-region</c> uses — so an ODF chart
+    /// needs no equivalent of <c>VSeriesPlotter</c>'s default placement at all.
+    /// </para>
+    /// </remarks>
+    private static List<ChartTrendline>? TrendlinesOf(
+        XElement series, OdfChartStyles styles)
+    {
+        List<ChartTrendline>? trendlines = null;
+
+        foreach (XElement element in Children(series, OdfNamespaces.Chart, "regression-curve"))
+        {
+            string? style = Attribute(element, OdfNamespaces.Chart, "style-name");
+            XElement? equation = Child(element, OdfNamespaces.Chart, "equation");
+
+            bool forced = styles.Flag(style, "regression-force-intercept") ?? false;
+
+            trendlines ??= [];
+            trendlines.Add(new ChartTrendline
+            {
+                Kind = RegressionKindOf(styles.Text(style, "regression-type")),
+                Order = (int)(styles.Number(style, "regression-max-degree") ?? 2.0),
+                Period = (int)(styles.Number(style, "regression-period") ?? 2.0),
+                Moving = styles.Text(style, "regression-moving-type") switch
+                {
+                    "central" => ChartMovingAverage.Central,
+                    "averaged-abscissa" => ChartMovingAverage.AveragedAbscissa,
+                    _ => ChartMovingAverage.Prior,
+                },
+                Forward = styles.Number(style, "regression-extrapolate-forward") ?? 0.0,
+                Backward = styles.Number(style, "regression-extrapolate-backward") ?? 0.0,
+                Intercept = forced
+                    ? styles.Number(style, "regression-intercept-value") ?? 0.0
+                    : null,
+                ShowEquation = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-equation")) ?? false,
+                ShowRSquared = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-r-square")) ?? false,
+                Name = styles.Text(style, "regression-name"),
+                Line = styles.Line(style),
+                LineWidth = styles.LineWidth(style),
+                EquationAt = EquationAt(equation),
+            });
+        }
+
+        // chart:mean-value is a horizontal line at the series' average and not a regression at
+        // all, which is exactly why RegressionCurveHelper::isMeanValueLine is tested before every
+        // degree and period is read in VSeriesPlotter::createRegressionCurvesShapes.
+        foreach (XElement element in Children(series, OdfNamespaces.Chart, "mean-value"))
+        {
+            string? style = Attribute(element, OdfNamespaces.Chart, "style-name");
+            XElement? equation = Child(element, OdfNamespaces.Chart, "equation");
+
+            trendlines ??= [];
+            trendlines.Add(new ChartTrendline
+            {
+                Kind = ChartTrendlineKind.Mean,
+                ShowEquation = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-equation")) ?? false,
+                ShowRSquared = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-r-square")) ?? false,
+                Line = styles.Line(style),
+                LineWidth = styles.LineWidth(style),
+                EquationAt = EquationAt(equation),
+            });
+        }
+
+        return trendlines;
+    }
+
+    /// <summary>Where <c>chart:equation</c> states the label goes, or null.</summary>
+    private static (Length X, Length Y)? EquationAt(XElement? equation)
+    {
+        if (OdfValue.ParseLength(Attribute(equation, OdfNamespaces.SvgCompatible, "x"))
+            is not { } x)
+        {
+            return null;
+        }
+
+        return OdfValue.ParseLength(Attribute(equation, OdfNamespaces.SvgCompatible, "y"))
+            is { } y
+            ? (x, y)
+            : null;
+    }
+
+    /// <summary>The six spellings of <c>chart:regression-type</c>.</summary>
+    /// <remarks>
+    /// <c>XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE</c> in
+    /// <c>xmloff/source/chart/PropertyMaps.cxx:1018-1032</c>, which maps each to the same six
+    /// <c>com.sun.star.chart2.*RegressionCurve</c> services OOXML's <c>c:trendlineType</c> does —
+    /// so the two vocabularies differ only in spelling, and <c>power</c> is the one word both use.
+    /// </remarks>
+    private static ChartTrendlineKind RegressionKindOf(string? stated) => stated switch
+    {
+        "polynomial" => ChartTrendlineKind.Polynomial,
+        "exponential" => ChartTrendlineKind.Exponential,
+        "logarithmic" => ChartTrendlineKind.Logarithmic,
+        "power" => ChartTrendlineKind.Power,
+        "moving-average" => ChartTrendlineKind.MovingAverage,
+        _ => ChartTrendlineKind.Linear,
+    };
 
     /// <summary>
     /// The per-point fills a series states, or null when it states none.
@@ -264,16 +642,30 @@ public static class OdfChartPlot
     /// The inner plot rectangle the file states, or null when it states none.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>chart:coordinate-region</c> rather than <c>chart:plot-area</c>'s own
     /// <c>svg:x</c>…<c>svg:height</c>: the plot area's rectangle is the <em>outer</em> one, which
     /// includes the axis labels and the ticks, and using it puts the bars where the labels go.
     /// Measured on <c>chart-bar-deck.odp</c>, whose plot area is 1.451, 1.395, 18.481 × 9.384 cm
     /// and whose coordinate region is 2.258, 1.594, 17.674 × 8.538 — a difference of 0.8 cm on
     /// the left edge, which on a 22 cm chart is 3.7% of its width.
+    /// </para>
+    /// <para>
+    /// <strong>And it is written under either of two namespaces.</strong> The element began as a
+    /// LibreOffice extension and 47 of the 71 charts in <c>chart2/qa/extras/data/</c> that state
+    /// one still write it that way; the corpus deck uses the standardised spelling, so reading only
+    /// that one looked entirely correct and quietly sent two ODF charts in three through the OOXML
+    /// heuristic.
+    /// </para>
     /// </remarks>
     private static DocRect? Region(XElement plotArea)
     {
-        XElement? region = Child(plotArea, OdfNamespaces.Chart, "coordinate-region");
+        // Both spellings, and the extension one is the commoner: 47 of the 71 charts in
+        // chart2/qa/extras/data/ that state a coordinate region at all write it as
+        // chartooo:coordinate-region. See OdfNamespaces.ChartExtension.
+        XElement? region = Child(plotArea, OdfNamespaces.Chart, "coordinate-region")
+                           ?? Child(plotArea, OdfNamespaces.ChartExtension, "coordinate-region");
+
         if (region is null) return null;
 
         Length? x = OdfValue.ParseLength(Attribute(region, OdfNamespaces.SvgCompatible, "x"));

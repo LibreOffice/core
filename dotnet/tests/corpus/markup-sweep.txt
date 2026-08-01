@@ -1,0 +1,22 @@
+# Structured-text sweep: XHTML and Markdown, every family and every reader
+#
+# `paperless extract --format xhtml` and `--format markdown` over one feature document
+# per family per reader path, counting the structure that survives the projection.
+#
+# Stage one is a semantic XHTML writer over the shared ContentNode tree, compared against
+# LibreOffice's own XHTML export node for node — every heading level, list nesting depth,
+# cell row, column, colspan, rowspan and hyperlink target agree exactly across eleven
+# documents in five formats. Stage two is a pure XHTML -> GFM transformation that reads no
+# document at all. `Paperless.Markup` has 259 tests, including a Markdig round trip over 32
+# hazard strings, which is what catches the escaping bugs a text diff cannot see because
+# every character is still present.
+#
+# H = headings, LIST = list items, TBL = table rows, LINK = inline links.
+
+FILE                 XHTML    MD       H    LIST TBL  LINK
+text-features.odt    4241     1516     4    8    0    1
+sheet-features.ods   3551     1922     3    0    2    0
+deck-features.pptx   2407     459      4    3    4    0
+word-features.docx   4311     1513     4    8    0    1
+xls-features.xls     18817    12210    4    0    62   0
+ppt-features.ppt     1277     331      3    3    0    0

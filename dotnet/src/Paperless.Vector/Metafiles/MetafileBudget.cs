@@ -46,6 +46,29 @@ public sealed class MetafileBudget
     /// <param name="limits">The caps; null uses <see cref="VectorLimits.Default"/>.</param>
     public MetafileBudget(VectorLimits? limits = null) => _limits = limits ?? VectorLimits.Default;
 
+    /// <summary>
+    /// The caps a picture carried <em>inside</em> this one decodes under, or null when no
+    /// nesting is left.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A metafile can carry a whole further metafile as an image, and re-entering the decoder
+    /// from inside itself needs a bound the budget cannot supply: a budget is spent as work is
+    /// done, and a picture nested a thousand deep that draws almost nothing at each level never
+    /// spends any of it. Depth is the quantity that grows, so depth is what has to be counted —
+    /// and <see cref="VectorLimits.MaxNestingDepth"/> is already the knob for it.
+    /// </para>
+    /// <para>
+    /// The nested decode gets a budget of its own rather than sharing this one, which is the
+    /// deliberate weaker half. Sharing would mean a picture drawn twice at two sizes getting a
+    /// fraction of an allowance the second time and coming out as a prefix of itself — which
+    /// reads as a decoding bug rather than as a limit.
+    /// </para>
+    /// </remarks>
+    public VectorLimits? Nested => _limits.MaxNestingDepth <= 0
+        ? null
+        : _limits with { MaxNestingDepth = _limits.MaxNestingDepth - 1 };
+
     /// <summary>True once any cap has been reached, so what was decoded is a prefix.</summary>
     public bool IsExhausted { get; private set; }
 

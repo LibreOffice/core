@@ -44,7 +44,13 @@ internal static class PptxDiagramShapeTree
         if (background is not null && background.Elements().Any())
         {
             tree.Add(Shape(
-                new DiagramShape { PresetType = "rect", Width = diagram.Width, Height = diagram.Height },
+                new DiagramShape
+                {
+                    PresetType = "rect",
+                    Geometry = { PresetType = "rect" },
+                    Width = diagram.Width,
+                    Height = diagram.Height,
+                },
                 0,
                 0,
                 styles,

@@ -30,11 +30,11 @@ namespace Paperless.Fidelity.Tests;
 /// <para>
 /// <strong>What the wider corpus says about this.</strong> Run over the 37 decks in
 /// LibreOffice's <c>sd/qa/unit/data/pptx</c> that carry a diagram with no usable baked drawing,
-/// the evaluator draws 20 and declines 17 for naming an algorithm it does not implement. On all
-/// 20 every filled shape agrees with LibreOffice's own rendering to within 0.07 pt, which is the
-/// quantisation of LibreOffice's internal hundredth of a millimetre and not a disagreement. The
-/// text agrees exactly on the ten where LibreOffice does not shrink it to fit; see
-/// <c>src/Paperless.Presentations/TODO.md</c> for the autofit divergence.
+/// the evaluator now draws all 37 — 36 with shapes and one (<c>tdf169781.pptx</c>) with none, as
+/// LibreOffice's does. Every filled path pairs with one of LibreOffice's to within 0.080 pt,
+/// which is three roundings of its internal hundredth of a millimetre and not a disagreement.
+/// Text run counts match on 30 of the 37; the rest is autofit, and
+/// <c>src/Paperless.Presentations/TODO.md</c> has the measurement.
 /// </para>
 /// </remarks>
 public sealed class SlideDiagramLayoutComparisonTests : IDisposable

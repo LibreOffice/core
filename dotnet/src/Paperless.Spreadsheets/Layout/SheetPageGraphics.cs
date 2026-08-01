@@ -56,11 +56,16 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
         foreach (SheetDrawing drawing in sheet.Drawings.Items)
         {
             if (drawing.IsHidden) continue;
-            if (drawing.Image is null && drawing.Chart is null) continue;
+            if (drawing.Image is null && drawing.Vector is null && drawing.Chart is null) continue;
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
 
-            if (drawing.Image is { } image) sink.DrawImage(image, box);
+            // The vector before the raster, since a shape carrying both means the DrawingML `svgBlip`
+            // case where the raster is the fallback. `VectorImage.Draw` maps the picture's own frame
+            // onto the box and clips to it — the same stretch `DrawImage` gives a raster, and not the
+            // extent of the picture's ink, which would put a logo with margins outside its anchor.
+            if (drawing.Vector is { } vector && !vector.Value.IsEmpty) vector.Value.Draw(sink, box);
+            else if (drawing.Image is { } image) sink.DrawImage(image, box);
             else if (drawing.Chart is { } chart) SheetChart.Draw(sink, chart, box, scale);
         }
     }

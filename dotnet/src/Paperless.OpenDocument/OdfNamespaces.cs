@@ -48,6 +48,22 @@ public static class OdfNamespaces
     /// <summary>The <c>chart</c> namespace.</summary>
     public const string Chart = "urn:oasis:names:tc:opendocument:xmlns:chart:1.0";
 
+    /// <summary>
+    /// LibreOffice's chart extension namespace, spelled <c>chartooo</c>.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The exact plot rectangle is written in this namespace about twice as often as in
+    /// the standard one.</strong> <c>coordinate-region</c> was a LibreOffice extension before it
+    /// was standardised, and which spelling a file uses depends on the ODF version the writer was
+    /// set to. Counted over the 71 charts in <c>chart2/qa/extras/data/</c>'s <c>.odp</c>,
+    /// <c>.ods</c> and <c>.odt</c> documents that state one at all: <strong>24 are
+    /// <c>chart:coordinate-region</c> and 47 are <c>chartooo:coordinate-region</c></strong>.
+    /// Reading only the first left two ODF charts in three falling back to the OOXML layout
+    /// heuristic while the file held the answer to the hundredth of a millimetre — and the corpus
+    /// deck, which uses the standard spelling, hid it completely.
+    /// </remarks>
+    public const string ChartExtension = "http://openoffice.org/2010/chart";
+
     /// <summary>The <c>form</c> namespace, holding control definitions.</summary>
     public const string Form = "urn:oasis:names:tc:opendocument:xmlns:form:1.0";
 

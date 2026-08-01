@@ -233,26 +233,39 @@ public sealed class EmfPlusDrawingTests
         gradient.End.X.Millimetres.ShouldBe(30, 0.01);
     }
 
-    [Fact]
-    public void AGradientThatRepeatsPastItsOwnRectangleSaysSo()
+    [Theory]
+    [InlineData(0, SpreadMethod.Repeat)]
+    [InlineData(1, SpreadMethod.Reflect)]
+    [InlineData(2, SpreadMethod.Repeat)]
+    [InlineData(3, SpreadMethod.Reflect)]
+    [InlineData(4, SpreadMethod.Pad)]
+    public void AGradientCarriesItsWrapModeAsASpreadMethod(int wrapMode, SpreadMethod expected)
     {
-        VectorImage covering = Build(new EmfPlusBuilder()
+        // Four of GDI+'s five wrap modes collapse into two, and that is exact rather than
+        // lossy: the flips name an axis, and a ramp varies along only one of them, so a flip
+        // in y produces a copy of the ramp indistinguishable from the original.
+        Recorder sink = Draw(new EmfPlusBuilder()
             .Header()
-            .LinearBrush(1, (0, 0, 4000, 4000), Red, Blue)
+            .LinearBrush(1, (0, 0, 400, 400), Red, Blue, wrapMode)
             .FillRectsWithBrush(1, (0, 0, 4000, 4000))
             .End());
 
+        GradientPaint gradient = sink.Fills.ShouldHaveSingleItem().Paint.ShouldBeOfType<GradientPaint>();
+        gradient.Spread.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void AGradientNoLongerReportsThatItCannotRepeat()
+    {
+        // PL6041 retired when GradientPaint grew a SpreadMethod. The same gap the SVG side
+        // recorded as PL6021, which retired with it.
         VectorImage repeating = Build(new EmfPlusBuilder()
             .Header()
             .LinearBrush(1, (0, 0, 400, 400), Red, Blue)
             .FillRectsWithBrush(1, (0, 0, 4000, 4000))
             .End());
 
-        // A gradient that covers what it fills looks the same under every wrap mode, so the
-        // diagnostic is scoped to the shape that actually reaches past the ramp — otherwise it
-        // would fire on nearly every gradient in every file.
-        covering.Diagnostics.ShouldNotContain(diagnostic => diagnostic.Code == "PL6041");
-        repeating.Diagnostics.ShouldContain(diagnostic => diagnostic.Code == "PL6041");
+        repeating.Diagnostics.ShouldNotContain(diagnostic => diagnostic.Code == "PL6041");
     }
 
     // ---------------------------------------------------------------- pens
@@ -307,15 +320,21 @@ public sealed class EmfPlusDrawingTests
     }
 
     [Fact]
-    public void ACustomLineCapIsReportedRatherThanApproximated()
+    public void AnAnchorCapIsDrawnRatherThanReported()
     {
-        VectorImage image = Build(new EmfPlusBuilder()
+        Recorder sink = Draw(new EmfPlusBuilder()
             .Header()
             .Pen(1, Red, 100, startCap: 0x14)             // an arrow anchor
             .DrawLines(1, [(0, 0), (1000, 0)])
             .End());
 
-        image.Diagnostics.ShouldContain(diagnostic => diagnostic.Code == "PL6038");
+        // A decoration is a filled path, so PL6038 retired for every cap that states an
+        // outline. An arrow anchor is twice the pen's width across and straddles the end, so a
+        // 1 mm pen makes a 2 mm head reaching 1 mm back past the line's first point.
+        DocRect head = sink.Fills.ShouldHaveSingleItem().Bounds;
+
+        head.Height.Millimetres.ShouldBe(2, 0.05);
+        head.X.Millimetres.ShouldBe(-1, 0.05);
     }
 
     // ---------------------------------------------------------------- transforms

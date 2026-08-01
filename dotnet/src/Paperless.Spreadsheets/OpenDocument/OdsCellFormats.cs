@@ -392,21 +392,21 @@ internal static class OdsCellFormats
         /// all is <c>General</c>, which is what makes a too-narrow number re-render itself shorter
         /// instead of showing hashes.
         /// </remarks>
-        private Numbers.NumberFormatKind FormatKind(string styleName)
+        private Core.Numbers.NumberFormatKind FormatKind(string styleName)
         {
             string? name = DataStyleName(styleName);
-            if (name is null) return Numbers.NumberFormatKind.General;
+            if (name is null) return Core.Numbers.NumberFormatKind.General;
 
             return styles.FindDataStyle(name)?.Kind switch
             {
                 OdfDataStyleKind.Number or OdfDataStyleKind.Percentage
-                    or OdfDataStyleKind.Currency => Numbers.NumberFormatKind.Number,
-                OdfDataStyleKind.Date or OdfDataStyleKind.Time => Numbers.NumberFormatKind.DateTime,
-                OdfDataStyleKind.Text => Numbers.NumberFormatKind.Text,
+                    or OdfDataStyleKind.Currency => Core.Numbers.NumberFormatKind.Number,
+                OdfDataStyleKind.Date or OdfDataStyleKind.Time => Core.Numbers.NumberFormatKind.DateTime,
+                OdfDataStyleKind.Text => Core.Numbers.NumberFormatKind.Text,
 
                 // A boolean style is a number format in Calc too, and an unrecognised one is
                 // still a stated format — which is what the ### rule turns on.
-                _ => Numbers.NumberFormatKind.Number,
+                _ => Core.Numbers.NumberFormatKind.Number,
             };
         }
 

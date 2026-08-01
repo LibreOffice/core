@@ -46,7 +46,7 @@ public sealed class OdfPictures
     }
 
     /// <summary>
-    /// The picture a <c>draw:frame</c> holds, or null when it holds none this can draw.
+    /// The picture a <c>draw:frame</c> holds, or nothing when it holds none this can draw.
     /// </summary>
     /// <remarks>
     /// The first <c>draw:image</c> child only. A <c>draw:frame</c> may carry several children as
@@ -54,12 +54,12 @@ public sealed class OdfPictures
     /// <c>draw:image</c> of it as a fallback is how ODF stores a chart — and the first one that can be
     /// drawn is the one LibreOffice takes.
     /// </remarks>
-    public RasterImage? Read(XElement frame)
+    public FramePicture Read(XElement frame)
     {
         ArgumentNullException.ThrowIfNull(frame);
 
         XElement? image = frame.Element(XName.Get("image", OdfNamespaces.Draw));
-        if (image is null) return null;
+        if (image is null) return FramePicture.None;
 
         string? mediaType = image.Attribute(XName.Get("mime-type", OdfNamespaces.Draw))?.Value;
         string? href = image.Attribute(XName.Get("href", OdfNamespaces.XLink))?.Value;
@@ -70,7 +70,7 @@ public sealed class OdfPictures
         }
 
         XElement? data = image.Element(XName.Get("binary-data", OdfNamespaces.Office));
-        if (data is null) return null;
+        if (data is null) return FramePicture.None;
 
         byte[]? bytes = Base64(data.Value);
         if (bytes is null)
@@ -78,14 +78,14 @@ public sealed class OdfPictures
             _diagnostics?.Add(new Diagnostic(
                 DiagnosticSeverity.Warning, "PL2372",
                 "A picture's office:binary-data is not valid base64, so the frame stays empty."));
-            return null;
+            return FramePicture.None;
         }
 
         return EmbeddedPicture.Read(bytes, mediaType, "office:binary-data", _diagnostics);
     }
 
     /// <summary>
-    /// The bytes of a package entry an href names, or null when the package has no such entry.
+    /// The bytes of a package entry an href names, or nothing when the package has no such entry.
     /// </summary>
     /// <remarks>
     /// A linked picture — one whose href is a <c>file:</c> or <c>http:</c> URL rather than a package
@@ -93,12 +93,12 @@ public sealed class OdfPictures
     /// system beside it, and LibreOffice's own behaviour for one that cannot be reached is the same
     /// empty frame.
     /// </remarks>
-    private RasterImage? FromPackage(string href, string? mediaType)
+    private FramePicture FromPackage(string href, string? mediaType)
     {
-        if (_file is null) return null;
+        if (_file is null) return FramePicture.None;
 
         string entry = href.StartsWith("./", StringComparison.Ordinal) ? href[2..] : href;
-        if (entry.Length == 0 || entry.Contains("://", StringComparison.Ordinal)) return null;
+        if (entry.Length == 0 || entry.Contains("://", StringComparison.Ordinal)) return FramePicture.None;
 
         using Stream? part = _file.OpenPart(entry);
         if (part is null)
@@ -108,7 +108,7 @@ public sealed class OdfPictures
                 $"A picture names the package entry '{entry}', which the package does not hold, "
                 + "so the frame stays empty.",
                 new DiagnosticLocation(entry)));
-            return null;
+            return FramePicture.None;
         }
 
         using MemoryStream buffer = new();

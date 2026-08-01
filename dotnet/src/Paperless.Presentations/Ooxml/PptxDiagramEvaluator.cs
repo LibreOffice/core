@@ -48,21 +48,32 @@ internal sealed class PptxDiagramEvaluator
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <c>lin</c> and <c>composite</c> between them are the commonest by a wide margin — of the
-    /// 37 decks in <c>sd/qa/unit/data/pptx</c> with no baked drawing, 20 use only these five —
-    /// and they are also the two that carry the constraint machinery, so everything else is a
-    /// smaller increment on top rather than a separate subsystem.
+    /// <c>lin</c> and <c>composite</c> in <see cref="PptxDiagramAlgorithms"/> are the commonest by
+    /// a wide margin — 18 and 23 of the 37 decks in <c>sd/qa/unit/data/pptx</c> with no baked
+    /// drawing name them — and they are also the two that carry the constraint machinery, which is
+    /// why they came first and why everything else is a smaller increment on top.
     /// </para>
     /// <para>
-    /// <c>snake</c>, <c>cycle</c>, <c>pyra</c>, <c>hierRoot</c> and <c>hierChild</c> are not
-    /// here. Each is a different geometry with its own hand-tuned constants in LibreOffice —
-    /// <c>snake</c> alone is 330 lines that search for a grid — and none of them can be checked
-    /// by the same measurement, so they are separate work rather than four more cases in a
-    /// switch.
+    /// <c>snake</c>, <c>cycle</c>, <c>pyra</c>, <c>hierRoot</c> and <c>hierChild</c> are the
+    /// second half, in <see cref="PptxDiagramGeometry"/>. They place their children by geometry
+    /// rather than by constraint, on constants that are LibreOffice's own choices rather than
+    /// anything the file states, which is why they are ported line for line and not derived. With
+    /// them, all 37 of those decks evaluate and every filled path agrees with LibreOffice's own
+    /// rendering to within 0.080 pt.
+    /// </para>
+    /// <para>
+    /// The set is still a set rather than a formality. Nothing in that corpus reaches the decline
+    /// any more, but <c>lin1D</c>, the <c>sibTrans</c>-only variants and the several algorithms
+    /// LibreOffice itself does not implement all would, and they have to keep declining the whole
+    /// diagram: half an evaluation puts nodes in wrong places and reads as a layout bug rather
+    /// than as a missing feature.
     /// </para>
     /// </remarks>
-    private static readonly HashSet<string> Supported =
-        new(StringComparer.Ordinal) { "lin", "composite", "sp", "tx", "conn" };
+    private static readonly HashSet<string> Supported = new(StringComparer.Ordinal)
+    {
+        "lin", "composite", "sp", "tx", "conn",
+        "snake", "cycle", "hierRoot", "hierChild", "pyra",
+    };
 
     private readonly DiagramData _data;
     private readonly DiagramLayoutNodeAtom _root;
@@ -383,6 +394,7 @@ internal sealed class PptxDiagramEvaluator
             {
                 IsGroup = !template.HasType,
                 PresetType = template.PresetType,
+                Geometry = template.Geometry,
                 HideGeometry = template.HideGeometry,
                 DiagramRotation = template.Rotation * PerDegree,
                 ZOrderOffset = template.ZOrderOffset,
