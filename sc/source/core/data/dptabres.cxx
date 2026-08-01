@@ -3247,7 +3247,7 @@ void ScDPResultDimension::LateInitFrom(
 
 tools::Long ScDPResultDimension::GetSize(tools::Long nMeasure) const
 {
-    tools::Long nMemberCount = maMemberArray.size();
+    tools::Long nMemberCount = GetMemberCount();
     if (!nMemberCount)
         return 0;
 
@@ -3310,7 +3310,7 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
                                                 tools::Long nStart, tools::Long nMeasure )
 {
     tools::Long nPos = nStart;
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
 
     for (tools::Long i=0; i<nCount; i++)
     {
@@ -3341,7 +3341,7 @@ void ScDPResultDimension::FillDataResults(
     aFilterStack.pushDimName(GetName(), bIsDataLayout);
 
     tools::Long nMemberMeasure = nMeasure;
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
     for (tools::Long i=0; i<nCount; i++)
     {
         tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
@@ -3366,7 +3366,7 @@ void ScDPResultDimension::UpdateDataResults(const ScDPResultMember* pRefMember,
                                             tools::Long nMeasure) const
 {
     tools::Long nMemberMeasure = nMeasure;
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
     for (tools::Long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pMember;
@@ -3387,7 +3387,7 @@ void ScDPResultDimension::UpdateDataResults(const ScDPResultMember* pRefMember,
 
 void ScDPResultDimension::SortMembers(ScDPResultMember* pRefMember)
 {
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
 
     if ( bSortByData )
     {
@@ -3416,7 +3416,7 @@ void ScDPResultDimension::SortMembers(ScDPResultMember* pRefMember)
 
 void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
 {
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
 
     // handle children first, before changing the visible state
 
@@ -3476,7 +3476,7 @@ void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
 
 void ScDPResultDimension::ResetResults()
 {
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
     for (tools::Long i=0; i<nCount; i++)
     {
         // sort order doesn't matter
@@ -3496,7 +3496,7 @@ void ScDPResultDimension::UpdateRunningTotals(ScDPResultMember* pRefMember, tool
 {
     const ScDPResultMember* pMember;
     tools::Long nMemberMeasure = nMeasure;
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
     for (tools::Long i=0; i<nCount; i++)
     {
         tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
@@ -3534,7 +3534,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
     ScDPDataMember* pColMember = nullptr;
 
     bool bFirstExisting = ( pRelativePos == nullptr && pName == nullptr );
-    tools::Long nMemberCount = maMemberArray.size();
+    tools::Long nMemberCount = GetMemberCount();
     tools::Long nMemberIndex = 0;      // unsorted
     tools::Long nDirection = 1;        // forward if no relative position is used
     if ( pRelativePos )
@@ -3780,7 +3780,7 @@ ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n)
 
 ScDPResultDimension* ScDPResultDimension::GetFirstChildDimension() const
 {
-    if ( !maMemberArray.empty() )
+    if (GetMemberCount())
         return maMemberArray[0]->GetChildDimension();
     else
         return nullptr;
@@ -4396,7 +4396,7 @@ bool LateInitParams::IsEnd( size_t nPos ) const
 
 void ScDPResultDimension::CheckShowEmpty( bool bShow )
 {
-    tools::Long nCount = maMemberArray.size();
+    tools::Long nCount = GetMemberCount();
 
     for (tools::Long i=0; i<nCount; i++)
     {
