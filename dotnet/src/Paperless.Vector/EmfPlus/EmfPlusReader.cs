@@ -652,6 +652,9 @@ internal sealed class EmfPlusReader
 
     // ---------------------------------------------------------------- shapes
 
+    /// <summary>The wrap mode that does not repeat, which is the only one a paint can state.</summary>
+    private const int WrapClamp = 4;
+
     private void Rectangles(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
     {
         bool fill = type == EmfPlusRecordType.FillRects;
@@ -845,8 +848,27 @@ internal sealed class EmfPlusReader
                 return;
 
             case EmfPlusBrushType.LinearGradient:
-                _painter.FillWith(path, Linear(brush), rule);
+            {
+                GradientPaint gradient = Linear(brush);
+
+                // A GDI+ gradient repeats or mirrors outside its own rectangle and
+                // GradientPaint has no spread method at all, so a brush whose rectangle is
+                // short against the shape comes out as one ramp and then flat colour where the
+                // file asked for stripes. It is only reported when the shape actually reaches
+                // past the ramp, because a gradient that covers what it fills looks the same
+                // under every wrap mode. The same gap the SVG side records as PL6021.
+                if (brush.WrapMode != WrapClamp && Repeats(path, gradient))
+                {
+                    Warn(
+                        "PL6041",
+                        "An EMF+ gradient brush repeated outside its own rectangle, which the "
+                            + "drawing model cannot express; one ramp was drawn and then held "
+                            + "at its end colour.");
+                }
+
+                _painter.FillWith(path, gradient, rule);
                 return;
+            }
 
             case EmfPlusBrushType.PathGradient:
                 _painter.FillWith(path, Radial(brush), rule);
@@ -962,6 +984,35 @@ internal sealed class EmfPlusReader
         _ => 0.50,
     };
 
+    /// <summary>True when a shape reaches past the end of the gradient that fills it.</summary>
+    private static bool Repeats(GraphicsPath path, GradientPaint gradient)
+    {
+        double dx = gradient.End.X.Emu - gradient.Start.X.Emu;
+        double dy = gradient.End.Y.Emu - gradient.Start.Y.Emu;
+        double span = Math.Sqrt((dx * dx) + (dy * dy));
+
+        if (span <= 0) return true;
+
+        double left = double.MaxValue;
+        double top = double.MaxValue;
+        double right = double.MinValue;
+        double bottom = double.MinValue;
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+
+            left = Math.Min(left, command.Point.X.Emu);
+            right = Math.Max(right, command.Point.X.Emu);
+            top = Math.Min(top, command.Point.Y.Emu);
+            bottom = Math.Max(bottom, command.Point.Y.Emu);
+        }
+
+        if (right < left) return false;
+
+        return Math.Max(right - left, bottom - top) > span * 1.01;
+    }
+
     private static Colour Blend(Colour foreground, Colour background, double factor)
     {
         double f = Math.Clamp(factor, 0, 1);
@@ -988,8 +1039,7 @@ internal sealed class EmfPlusReader
 
         if (tile.Width <= Length.Zero || tile.Height <= Length.Zero) return null;
 
-        const int Clamp = 4;
-        return new BitmapPaint(image, tile, DocPoint.Origin, Stretch: brush.WrapMode == Clamp);
+        return new BitmapPaint(image, tile, DocPoint.Origin, Stretch: brush.WrapMode == WrapClamp);
     }
 
     /// <summary>

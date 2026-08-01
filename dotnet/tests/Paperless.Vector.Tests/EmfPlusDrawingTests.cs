@@ -233,6 +233,28 @@ public sealed class EmfPlusDrawingTests
         gradient.End.X.Millimetres.ShouldBe(30, 0.01);
     }
 
+    [Fact]
+    public void AGradientThatRepeatsPastItsOwnRectangleSaysSo()
+    {
+        VectorImage covering = Build(new EmfPlusBuilder()
+            .Header()
+            .LinearBrush(1, (0, 0, 4000, 4000), Red, Blue)
+            .FillRectsWithBrush(1, (0, 0, 4000, 4000))
+            .End());
+
+        VectorImage repeating = Build(new EmfPlusBuilder()
+            .Header()
+            .LinearBrush(1, (0, 0, 400, 400), Red, Blue)
+            .FillRectsWithBrush(1, (0, 0, 4000, 4000))
+            .End());
+
+        // A gradient that covers what it fills looks the same under every wrap mode, so the
+        // diagnostic is scoped to the shape that actually reaches past the ramp — otherwise it
+        // would fire on nearly every gradient in every file.
+        covering.Diagnostics.ShouldNotContain(diagnostic => diagnostic.Code == "PL6041");
+        repeating.Diagnostics.ShouldContain(diagnostic => diagnostic.Code == "PL6041");
+    }
+
     // ---------------------------------------------------------------- pens
 
     [Fact]
