@@ -25,6 +25,7 @@
     <Project Path="tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj" />
     <Project Path="tests/Paperless.TestKit/Paperless.TestKit.csproj" />
     <Project Path="tests/Paperless.Text.Tests/Paperless.Text.Tests.csproj" />
+    <Project Path="tests/Paperless.Vector.Tests/Paperless.Vector.Tests.csproj" />
     <Project Path="tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">

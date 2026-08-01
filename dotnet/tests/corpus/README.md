@@ -141,6 +141,13 @@ combination that tells the two transform orders apart.
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
 
+### SVG picture documents
+
+| File | Exercises |
+|---|---|
+| `svg-picture.odt` | An `image/svg+xml` inside an ODF package, referenced by a `draw:image` whose `xlink:href` names `Pictures/logo.svg`, inside a 4 × 2 cm frame that matches the picture's own intrinsic size. The SVG itself is 769 bytes and covers what the translation has to get right: a `viewBox` mapping, a rounded rectangle, a linear gradient in object-bounding-box units, a `clipPath`, an elliptical arc, a partly transparent fill, and centre-anchored text |
+| `svg-picture.docx` | The same document converted, which is what makes it worth committing: **LibreOffice keeps the SVG rather than rasterising it.** The `a:blip` names a 3 803-byte `word/media/image3.png` on `r:embed` and the original 769-byte `word/media/image2.svg` on an `asvg:svgBlip` inside the `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension — the same shape PowerPoint 365 writes. A reader that stops at `r:embed` draws the raster fallback; preferring the extension is the whole point of vector import |
+
 ### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 
 96% of `slides-ppt.ppt` is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation`
