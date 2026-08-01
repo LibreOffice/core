@@ -11,6 +11,7 @@
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
+#include <comphelper/kit.hxx>
 #include <cppunit/TestAssert.h>
 
 using namespace css;
@@ -20,6 +21,10 @@ namespace apitest
 {
 void XViewPane::testFirstVisibleColumn()
 {
+    // The Kit pins the first visible cell to A1, a client holding the scroll position itself
+    if (comphelper::COKit::isActive())
+        return;
+
     sal_Int32 nCol = 5;
     uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
     xViewPane->setFirstVisibleColumn(nCol);
@@ -28,6 +33,10 @@ void XViewPane::testFirstVisibleColumn()
 
 void XViewPane::testFirstVisibleRow()
 {
+    // The Kit pins the first visible cell to A1, a client holding the scroll position itself
+    if (comphelper::COKit::isActive())
+        return;
+
     sal_Int32 nRow = 3;
     uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
     xViewPane->setFirstVisibleRow(nRow);
@@ -36,6 +45,10 @@ void XViewPane::testFirstVisibleRow()
 
 void XViewPane::testVisibleRange()
 {
+    // The Kit pins the first visible cell to A1, a client holding the scroll position itself
+    if (comphelper::COKit::isActive())
+        return;
+
     constexpr sal_Int32 nCol = 5;
     constexpr sal_Int32 nRow = 3;
     uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
