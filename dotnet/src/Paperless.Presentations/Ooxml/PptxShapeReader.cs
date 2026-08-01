@@ -93,11 +93,11 @@ internal sealed class PptxShapeReader
     /// </summary>
     /// <remarks>
     /// The frame is a generic wrapper and <c>a:graphicData/@uri</c> is the only thing that says
-    /// what is inside it. Only the table is read as content here; a chart's series and a
-    /// diagram's synthesised shapes live in their own parts and their own vocabularies, and
-    /// re-executing a SmartArt layout algorithm to recover its text is a project of its own. So
-    /// they are recorded as graphics rather than dropped, which keeps "there is something here"
-    /// distinguishable from "there is nothing here".
+    /// what is inside it. A table and a chart are read as content; a diagram's synthesised
+    /// shapes live in their own vocabulary and re-executing a SmartArt layout algorithm to
+    /// recover them is a project of its own. Whatever is left is recorded as a graphic rather
+    /// than dropped, which keeps "there is something here" distinguishable from "there is
+    /// nothing here".
     /// </remarks>
     private void ReadGraphicFrame(XElement frame, ContentNode target)
     {
@@ -112,6 +112,7 @@ internal sealed class PptxShapeReader
             return;
         }
 
+        if (uri == DrawingChart.ChartUri && ReadChart(data!, target)) return;
         if (uri == DiagramUri && ReadDiagram(data!, target)) return;
 
         target.Children.Add(new ContentImage
@@ -119,6 +120,40 @@ internal sealed class PptxShapeReader
             AlternativeText = Description(frame),
             MediaType = uri,
         });
+    }
+
+    /// <summary>
+    /// Reads an embedded chart's content from the part the frame points at.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The frame holds nothing but <c>c:chart/@r:id</c>; the chart is a part of its own,
+    /// <c>/ppt/charts/chartN.xml</c> by convention and by relationship in fact. Its title, axis
+    /// titles, series names and cached values are real user text, so the frame becomes the
+    /// section <see cref="DrawingChart"/> builds instead of the bare
+    /// <see cref="ContentImage"/> it used to.
+    /// </para>
+    /// <para>
+    /// The chart's own <c>a:graphicData</c> is not the only route to one: a deck may also carry
+    /// <c>cx:chart</c> — the 2014 "chartex" vocabulary that funnel, waterfall and treemap charts
+    /// use — under a different URI, with its data in <c>cx:chartData</c> rather than
+    /// <c>c:ser</c>. Those still fall through to the graphic below, deliberately: they are rare,
+    /// their data model is a different shape, and LibreOffice's own support for them is partial.
+    /// </para>
+    /// </remarks>
+    private bool ReadChart(XElement data, ContentNode target)
+    {
+        XName chart = XName.Get("chart", OoxmlNamespaces.DrawingMLChart);
+        string? relationshipId = data.Element(chart)
+            ?.Attribute(XName.Get("id", OoxmlNamespaces.Relationships))?.Value;
+
+        if (_file.Relationship(_partName, relationshipId) is not { IsExternal: false } relationship)
+            return false;
+        if (_file.Load(relationship.Target) is not { } chartSpace) return false;
+        if (DrawingChart.Read(chartSpace) is not { } section) return false;
+
+        target.Children.Add(section);
+        return true;
     }
 
     /// <summary>The <c>a:graphicData</c> URI that identifies a SmartArt diagram.</summary>

@@ -120,6 +120,36 @@ internal sealed class XlsCellFormats
         };
     }
 
+    /// <summary>
+    /// Puts one <c>FONT</c> record's whole face over a cell's format, for a rich-text run.
+    /// </summary>
+    /// <remarks>
+    /// A replacement rather than a delta, which is where BIFF differs from SpreadsheetML: a
+    /// formatting run inside an <c>SST</c> string names a complete <c>FONT</c> record, so it
+    /// restates the family, the size, the weight, the posture and the colour whether or not it
+    /// changes any of them. Reading it as a delta would leave a run bold merely because its cell
+    /// was. Only the alignment and the number format stay the cell's, because a font record states
+    /// neither.
+    /// </remarks>
+    /// <param name="cellFormat">What the cell resolved to.</param>
+    /// <param name="fontIndex">The run's <c>FONT</c> index, with the hole at four already in it.</param>
+    public SheetCellFormat ApplyFont(SheetCellFormat cellFormat, int fontIndex)
+    {
+        ArgumentNullException.ThrowIfNull(cellFormat);
+
+        if (fontIndex < 0 || fontIndex >= _fonts.Count) return cellFormat;
+
+        BiffFont font = _fonts[fontIndex];
+        return cellFormat with
+        {
+            FontFamily = font.Name.Length == 0 ? cellFormat.FontFamily : font.Name,
+            FontSize = font.Height,
+            FontWeight = font.Weight,
+            IsItalic = font.IsItalic,
+            Colour = ColourAt(font.ColourIndex),
+        };
+    }
+
     /// <summary>The index that means "whatever the window's text colour is", which prints black.</summary>
     private const int AutomaticColour = 0x7FFF;
 

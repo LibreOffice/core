@@ -244,7 +244,14 @@ public sealed record DrawingTableCellBox
     /// <summary>Its background, or null when it states none.</summary>
     public Colour? Fill { get; init; }
 
-    /// <summary>Its <c>a:txBody</c>, left unread so that each family reads it its own way.</summary>
+    /// <summary>
+    /// The element its text lives in, left unread so that each family reads it its own way.
+    /// </summary>
+    /// <remarks>
+    /// An <c>a:txBody</c> from PresentationML, and the <c>table:table-cell</c> itself from ODF,
+    /// which has no wrapper — the two vocabularies agree on nothing below this point, which is
+    /// exactly why the reading is a delegate rather than a method here.
+    /// </remarks>
     public XElement? TextBody { get; init; }
 
     /// <summary>Its left edge, or null when it draws none.</summary>

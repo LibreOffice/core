@@ -135,4 +135,12 @@ Legacy but still needed: older files, and comment/annotation shapes in current o
 - [ ] Image parts: media types, and the `blip` `embed`/`link` distinction
 - [ ] SmartArt (`dgm:`) — **decide** whether to use the pre-rendered drawing fallback the
       file carries (cheap, probably sufficient) or implement diagram layout (large)
-- [ ] Charts (`c:`) — open question in the master TODO; embedded charts are common
+- [x] Charts (`c:`) — `DrawingML/DrawingChart.cs`, reading `c:chartSpace` into a section of
+      paragraphs and one table. Family-blind on purpose: the chart part is identical whether the
+      graphic frame pointing at it is on a slide, a worksheet or a page of a Word document, so the
+      three family readers supply only the relationship hop and none of the vocabulary. Values
+      come from `c:numCache`/`c:strCache` and never from the workbook `c:f` names — the reasoning,
+      the LibreOffice citations and the measurements are in the master TODO's Phase 3.5
+- [ ] Charts (`cx:`) — the 2014 "chartex" vocabulary funnel, waterfall, treemap and histogram
+      charts use, whose data is `cx:chartData/cx:data` rather than `c:ser`. Exactly one file in
+      LibreOffice's own 192-document OOXML chart corpus uses it, which is why it waits

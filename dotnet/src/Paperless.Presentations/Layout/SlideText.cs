@@ -152,11 +152,25 @@ public sealed record SlideParagraph(
 /// <param name="Typeface">The family it is set in, or null for the paragraph's own.</param>
 /// <param name="Scale">Its size as a fraction of the first run's, one for the same size.</param>
 /// <param name="Colour">Its colour, or null for the first run's.</param>
+/// <param name="IsSymbol">
+/// Whether it is a fixed character rather than a generated number, which decides where it sits
+/// vertically.
+/// <para>
+/// <strong>The two are placed by different rules and the difference is a point.</strong>
+/// <c>Outliner::StripBullet</c> branches on <c>SVX_NUM_CHAR_SPECIAL</c>: a symbol is drawn from
+/// the bullet <em>area's</em> bottom, which centres it against the line's text, and anything else
+/// is drawn at <c>nFirstLineMaxAscent</c>, which is the text's own baseline
+/// (<c>editeng/source/outliner/outliner.cxx:918</c>). Measured on
+/// <c>slide-shape-features.pptx</c>, whose list is <c>a:buAutoNum</c>: LibreOffice draws its
+/// first number at 89.972 and centring it would put it at 89.036.
+/// </para>
+/// </param>
 public readonly record struct SlideMarker(
     string Text,
     string? Typeface = null,
     double Scale = 1.0,
-    Colour? Colour = null);
+    Colour? Colour = null,
+    bool IsSymbol = true);
 
 /// <summary>One run of a paragraph: a range of its text with its own face, size and colour.</summary>
 /// <param name="Start">The run's first character.</param>

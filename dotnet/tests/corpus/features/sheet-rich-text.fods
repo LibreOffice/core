@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;"
+                     style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;"
+                     style:font-family-generic="roman" style:font-pitch="variable"/>
+  </office:font-face-decls>
+
+  <office:styles>
+    <style:default-style style:family="table-cell">
+      <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/>
+    </style:default-style>
+  </office:styles>
+
+  <office:automatic-styles>
+    <!-- No header and no footer, so that every baseline is the cell's own: Calc's default
+         0.75 cm band is recomputed from its text and would shift every row on the page. -->
+    <style:page-layout style:name="pm-plain">
+      <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in"
+                                    style:print-orientation="portrait"
+                                    fo:margin-top="0.7875in" fo:margin-bottom="0.7875in"
+                                    fo:margin-left="0.7875in" fo:margin-right="0.7875in"
+                                    style:writing-mode="lr-tb"/>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+
+    <style:style style:name="co-wide" style:family="table-column">
+      <style:table-column-properties fo:break-before="auto" style:column-width="2.2in"/>
+    </style:style>
+    <style:style style:name="co-narrow" style:family="table-column">
+      <style:table-column-properties fo:break-before="auto" style:column-width="0.7in"/>
+    </style:style>
+    <style:style style:name="ro-normal" style:family="table-row">
+      <style:table-row-properties style:row-height="0.28in" style:use-optimal-row-height="false"
+                                  fo:break-before="auto"/>
+    </style:style>
+    <style:style style:name="ro-tall" style:family="table-row">
+      <style:table-row-properties style:row-height="0.7in" style:use-optimal-row-height="false"
+                                  fo:break-before="auto"/>
+    </style:style>
+
+    <!-- Cell styles. The rich runs below are deltas over these, which is the whole point:
+         a span that states only fo:font-weight must keep the cell's family and colour. -->
+    <style:style style:name="ce-plain" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="start"/>
+    </style:style>
+    <style:style style:name="ce-blue" style:family="table-cell" style:parent-style-name="Default">
+      <style:paragraph-properties fo:text-align="start"/>
+      <style:text-properties fo:color="#204080"/>
+    </style:style>
+    <style:style style:name="ce-wrap" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="top"/>
+      <style:paragraph-properties fo:text-align="start"/>
+    </style:style>
+    <style:style style:name="ce-rot45" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:rotation-angle="45"/>
+    </style:style>
+    <style:style style:name="ce-rot90" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:rotation-angle="90"/>
+    </style:style>
+
+    <!-- Character styles the spans name. -->
+    <style:style style:name="T-bold" style:family="text">
+      <style:text-properties fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="T-italic" style:family="text">
+      <style:text-properties fo:font-style="italic"/>
+    </style:style>
+    <style:style style:name="T-red14" style:family="text">
+      <style:text-properties fo:color="#c00000" fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="T-serif" style:family="text">
+      <style:text-properties style:font-name="Liberation Serif" fo:font-family="&apos;Liberation Serif&apos;"/>
+    </style:style>
+    <style:style style:name="T-small" style:family="text">
+      <style:text-properties fo:font-size="7pt"/>
+    </style:style>
+
+    <style:style style:name="gr-badge" style:family="graphic">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"
+                                style:vertical-pos="from-top" style:vertical-rel="paragraph"
+                                style:horizontal-pos="from-left" style:horizontal-rel="paragraph"/>
+    </style:style>
+  </office:automatic-styles>
+
+  <office:master-styles>
+    <style:master-page style:name="Default" style:page-layout-name="pm-plain">
+      <style:header style:display="false"/>
+      <style:footer style:display="false"/>
+    </style:master-page>
+  </office:master-styles>
+
+  <office:body>
+    <office:spreadsheet>
+      <!-- Rich text. Every cell mixes at least two formats, and the point of each row is
+           which property changes: weight, posture, size and colour together, family, and a
+           size change small enough to leave the line height to the surrounding text. -->
+      <table:table table:name="Rich" table:style-name="Default">
+        <table:table-column table:style-name="co-wide"/>
+        <table:table-column table:style-name="co-wide"/>
+
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p>One <text:span text:style-name="T-bold">bold</text:span> word here</text:p>
+          </table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p>An <text:span text:style-name="T-italic">italic</text:span> word too</text:p>
+          </table:table-cell>
+        </table:table-row>
+
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p>Big <text:span text:style-name="T-red14">RED</text:span> middle</text:p>
+          </table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-blue">
+            <text:p>Blue cell with <text:span text:style-name="T-bold">bold kept blue</text:span></text:p>
+          </table:table-cell>
+        </table:table-row>
+
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p>Sans then <text:span text:style-name="T-serif">serif</text:span> then sans</text:p>
+          </table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p>Ends <text:span text:style-name="T-small">small</text:span></text:p>
+          </table:table-cell>
+        </table:table-row>
+
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell office:value-type="string" table:style-name="ce-wrap">
+            <text:p>A <text:span text:style-name="T-bold">wrapping</text:span> cell whose <text:span text:style-name="T-red14">breaks</text:span> depend on its runs</text:p>
+          </table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-plain">
+            <text:p><text:span text:style-name="T-bold">Starts</text:span> bold</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+
+      <!-- Turned text on its own sheet: a rotated run is written with a text matrix rather
+           than an absolute pen, so comparing it against a reference compares matrices. The
+           second row asks for an optimal height, which is what a rotated cell makes taller. -->
+      <table:table table:name="Turned" table:style-name="Default">
+        <table:table-column table:style-name="co-narrow" table:number-columns-repeated="3"/>
+
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell office:value-type="string" table:style-name="ce-rot45"><text:p>Slanted heading</text:p></table:table-cell>
+          <table:table-cell office:value-type="string" table:style-name="ce-rot90"><text:p>Upright heading</text:p></table:table-cell>
+          <table:table-cell office:value-type="string"><text:p>Flat</text:p></table:table-cell>
+        </table:table-row>
+      </table:table>
+
+      <!-- A picture anchored to a cell. Small, three-banded and dark-edged, so a flip, a
+           crop or a wrong scale is visible at a glance rather than plausible. -->
+      <table:table table:name="Picture" table:style-name="Default">
+        <table:table-column table:style-name="co-narrow" table:number-columns-repeated="4"/>
+
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell office:value-type="string"><text:p>Logo below</text:p></table:table-cell>
+          <table:table-cell table:number-columns-repeated="3"/>
+        </table:table-row>
+
+        <table:table-row table:style-name="ro-tall">
+          <table:table-cell>
+            <draw:frame draw:style-name="gr-badge" draw:name="Badge" table:end-cell-address="Picture.C3"
+                        svg:x="0.08in" svg:y="0.05in" svg:width="1.28in" svg:height="0.8in">
+              <draw:image>
+                <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAIAAABj86gYAAAALUlEQVR42mMQoDFgGPoWHFBQwIM+
+EAIKDgfwo1ELRi0YtWDUgpFhwWiFQwgAAGiQDo7RP7UgAAAAAElFTkSuQmCC</office:binary-data>
+              </draw:image>
+            </draw:frame>
+          </table:table-cell>
+          <table:table-cell table:number-columns-repeated="3"/>
+        </table:table-row>
+
+        <table:table-row table:style-name="ro-normal">
+          <table:table-cell table:number-columns-repeated="3"/>
+          <table:table-cell office:value-type="string"><text:p>End</text:p></table:table-cell>
+        </table:table-row>
+      </table:table>
+    </office:spreadsheet>
+  </office:body>
+</office:document>

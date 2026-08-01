@@ -9,7 +9,21 @@ namespace Paperless.Spreadsheets.Layout;
 /// <param name="Last">The last index it covers, inclusive.</param>
 /// <param name="Size">The width of each column, or the height of each row, in the run.</param>
 /// <param name="IsHidden">True when every column or row in the run is hidden.</param>
-public readonly record struct SheetSizeRun(int First, int Last, Length Size, bool IsHidden)
+/// <param name="IsOptimalSize">
+/// True when the size is the authoring application's own computation rather than something a
+/// user set, so a reader is free to recompute it from what the cells hold.
+/// <para>
+/// Calc calls the opposite of this <c>CRFlags::ManualSize</c> and honours it on load: a row
+/// without it is recomputed by <c>ScDocRowHeightUpdater</c> before anything is drawn, so the
+/// height in the file is a cache rather than a statement. All three formats carry the flag —
+/// ODF's <c>style:use-optimal-row-height</c>, SpreadsheetML's <c>customHeight</c> and BIFF's
+/// <c>fUnsynced</c> — and the default when a file states nothing is "not manual", which is why
+/// a hand-written sheet gets rows sized by its content and one LibreOffice wrote does not
+/// change.
+/// </para>
+/// </param>
+public readonly record struct SheetSizeRun(
+    int First, int Last, Length Size, bool IsHidden, bool IsOptimalSize = false)
 {
     /// <summary>How many columns or rows the run covers.</summary>
     public int Count => Last >= First ? Last - First + 1 : 0;
@@ -68,6 +82,20 @@ public sealed class SheetAxis
     {
         int at = Find(index);
         return at >= 0 && _runs[at].IsHidden;
+    }
+
+    /// <summary>
+    /// True when the stated size is the application's own computation rather than a user's.
+    /// </summary>
+    /// <remarks>
+    /// True for anything no run covers, because a row a file never mentions has no manual height
+    /// by definition. See <see cref="SheetSizeRun.IsOptimalSize"/>.
+    /// </remarks>
+    /// <param name="index">The zero-based column or row index.</param>
+    public bool IsOptimalSize(int index)
+    {
+        int at = Find(index);
+        return at < 0 || _runs[at].IsOptimalSize;
     }
 
     /// <summary>
@@ -213,7 +241,8 @@ public sealed class SheetAxis
             if (merged.Count > 0)
             {
                 SheetSizeRun last = merged[^1];
-                if (last.Last + 1 == run.First && last.Size == run.Size && last.IsHidden == run.IsHidden)
+                if (last.Last + 1 == run.First && last.Size == run.Size
+                    && last.IsHidden == run.IsHidden && last.IsOptimalSize == run.IsOptimalSize)
                 {
                     merged[^1] = last with { Last = run.Last };
                     continue;

@@ -5,9 +5,11 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
+using Paperless.Core.Geometry;
 using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.PropertySets;
 using Paperless.MsBinary.Records;
+using Paperless.Presentations.Layout;
 
 namespace Paperless.Presentations.MsBinary;
 
@@ -74,7 +76,7 @@ public static class PptReader
             };
 
             new PptContentBuilder(stream, persist, diagnostics).Build(content);
-            return new PptDocument(format, file, content, diagnostics);
+            return new PptDocument(format, file, content, diagnostics, stream, persist);
         }
         catch
         {
@@ -119,21 +121,27 @@ public static class PptReader
     }
 }
 
-/// <summary>A legacy binary PowerPoint presentation that has been read.</summary>
-public sealed class PptDocument : IDocument
+/// <summary>A legacy binary PowerPoint presentation that has been read, and can be laid out.</summary>
+public sealed class PptDocument : IPaginatedDocument
 {
     private readonly CompoundFile _file;
+    private readonly DffRecordBuffer _stream;
+    private readonly PptPersistDirectory _persist;
 
     internal PptDocument(
         DocumentFormat format,
         CompoundFile file,
         ContentDocument content,
-        IReadOnlyList<Diagnostic> diagnostics)
+        IReadOnlyList<Diagnostic> diagnostics,
+        DffRecordBuffer stream,
+        PptPersistDirectory persist)
     {
         Format = format;
         _file = file;
         Content = content;
         Diagnostics = diagnostics;
+        _stream = stream;
+        _persist = persist;
     }
 
     /// <inheritdoc/>
@@ -156,6 +164,42 @@ public sealed class PptDocument : IDocument
     /// expose — the picture store above all. Valid until this document is disposed.
     /// </summary>
     public CompoundFile File => _file;
+
+    /// <summary>
+    /// The deck's slide size, without laying anything out.
+    /// </summary>
+    /// <remarks>
+    /// Reported alongside the other two readers' for the same reason: deciding whether a deck is
+    /// 4:3 or 16:9 needs no fonts and no rasteriser, so it should not cost a layout.
+    /// </remarks>
+    public DocSize SlideSize
+    {
+        get
+        {
+            IPageSequence pages = Layout(new LayoutOptions { MaxPages = 1 });
+            return pages.Count > 0 ? pages[0].Size : default;
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// One page per slide, all of them the size the <c>DocumentAtom</c> states — a deck has one
+    /// slide size and every slide is it, so pagination has nothing to decide. Hidden slides are
+    /// laid out and flagged rather than dropped; LibreOffice's own PDF export leaves them out, so
+    /// a comparison against it has to skip them explicitly, which is visible where a silently
+    /// shorter sequence would not be.
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        List<Diagnostic> diagnostics = [];
+        List<LaidOutSlide> slides =
+            new PptSlideLayout(_stream, _persist, new SlideFonts(), diagnostics).Layout();
+
+        int limit = options?.MaxPages ?? 0;
+        if (limit > 0 && slides.Count > limit) slides = [.. slides.Take(limit)];
+
+        return new SlidePages(slides);
+    }
 
     /// <inheritdoc/>
     public void Dispose() => _file.Dispose();

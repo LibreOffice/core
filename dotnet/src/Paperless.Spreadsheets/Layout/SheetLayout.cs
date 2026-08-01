@@ -38,7 +38,17 @@ public sealed class SheetLayout
     /// <summary>The sheet's print setup, which is its page geometry.</summary>
     public SheetPrintSetup Setup { get; init; } = SheetPrintSetup.Default;
 
-    /// <summary>Its column widths and row heights.</summary>
+    /// <summary>
+    /// Its column widths and row heights, exactly as the file states them.
+    /// </summary>
+    /// <remarks>
+    /// A row that asks for an optimal height is <em>not</em> recomputed here, although Calc
+    /// recomputes one on load and although the runs carry
+    /// <see cref="SheetSizeRun.IsOptimalSize"/> so that a reader can tell which rows those are.
+    /// The reason is measured and is recorded in the module's TODO: Calc's own measurement of a
+    /// cell for that purpose is coarser than the one it draws with, so reproducing the formula
+    /// with an accurate measurement disagrees with the height the file already holds.
+    /// </remarks>
     public SheetGrid Grid { get; init; } = SheetGrid.Standard;
 
     /// <summary>The sheet's cells, or null when it holds none.</summary>
@@ -74,6 +84,26 @@ public sealed class SheetLayout
     /// yields <see cref="SheetCellFormats.Empty"/> and every cell draws in the default face.
     /// </remarks>
     public SheetCellFormats Formats { get; init; } = SheetCellFormats.Empty;
+
+    /// <summary>
+    /// The cells whose text is not all in one format, if any.
+    /// </summary>
+    /// <remarks>
+    /// Beside <see cref="Formats"/> rather than inside it because the two have opposite shapes: a
+    /// cell format is shared by thousands of cells and is pooled, while a rich cell's portions
+    /// belong to that cell alone and almost no cell has any. See <see cref="SheetRichText"/>.
+    /// </remarks>
+    public SheetRichText RichText { get; init; } = SheetRichText.Empty;
+
+    /// <summary>
+    /// The pictures and charts anchored on the sheet, back to front.
+    /// </summary>
+    /// <remarks>
+    /// Beside the cells because a drawing is not in one: it is fastened to the grid by a cell and
+    /// an offset and floats over whatever is under it, so it belongs to the sheet rather than to
+    /// any cell. See <see cref="SheetDrawings"/>.
+    /// </remarks>
+    public SheetDrawings Drawings { get; init; } = SheetDrawings.Empty;
 
     /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
@@ -171,16 +201,70 @@ public sealed class SheetLayout
         return _index.GetValueOrDefault((row, column));
     }
 
+    /// <summary>
+    /// True when a position lies inside a merged block, as its origin or covered by it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Asked of the <em>position</em> rather than of the cell, because the cells a merge covers
+    /// are not in the tree at all: a reader keeps the block's origin and drops the rest, so
+    /// <see cref="CellAt"/> answers null for them and a test of "is there a cell here" cannot tell
+    /// a covered position from an empty one. Calc keeps the distinction in an attribute —
+    /// <c>ATTR_MERGE</c> on the origin and <c>ATTR_MERGE_FLAG</c>'s overlapped bit on the rest —
+    /// and <c>ScOutputData::IsAvailable</c> (<c>sc/source/ui/view/output2.cxx:1178-1191</c>) reads
+    /// both to decide whether a neighbour's long string may run through.
+    /// </para>
+    /// <para>
+    /// A list of ranges walked linearly rather than a set of covered positions, because a merge is
+    /// <em>stated</em> as a range and expanding one is unbounded: a sheet may merge a whole
+    /// column, which is a million positions to record and one range to test. Sheets carry few
+    /// merges, and the case of none — nearly every sheet — costs a count check.
+    /// </para>
+    /// </remarks>
+    /// <param name="row">The zero-based row.</param>
+    /// <param name="column">The zero-based column.</param>
+    public bool IsMerged(int row, int column)
+    {
+        _index ??= BuildIndex();
+        if (_merges is not { Count: > 0 } merges) return false;
+
+        foreach (SheetRange merge in merges)
+        {
+            if (row >= merge.FirstRow && row <= merge.LastRow
+                && column >= merge.FirstColumn && column <= merge.LastColumn)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private Dictionary<(int Row, int Column), ContentTableCell>? _index;
+    private List<SheetRange>? _merges;
 
     private Dictionary<(int, int), ContentTableCell> BuildIndex()
     {
         Dictionary<(int, int), ContentTableCell> index = [];
+        List<SheetRange> merges = [];
+
         foreach (ContentTableRow row in (Cells?.Children ?? []).OfType<ContentTableRow>())
         {
             foreach (ContentTableCell cell in row.Children.OfType<ContentTableCell>())
+            {
                 index[(cell.Row, cell.Column)] = cell;
+
+                int columns = Math.Max(1, cell.ColumnSpan);
+                int rows = Math.Max(1, cell.RowSpan);
+                if (columns > 1 || rows > 1)
+                {
+                    merges.Add(new SheetRange(
+                        cell.Column, cell.Row, cell.Column + columns - 1, cell.Row + rows - 1));
+                }
+            }
         }
+
+        _merges = merges;
         return index;
     }
 }

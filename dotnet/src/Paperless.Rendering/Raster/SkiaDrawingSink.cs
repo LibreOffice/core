@@ -227,7 +227,10 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+        // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
+        // undecoded one reports no size until a codec has looked at it. Testing the size here
+        // dropped every `RasterImage.Encoded` silently — laying out correctly and drawing nothing.
+        if (Empty(image) || destination.IsEmpty) return;
         if (Image(image) is not { } drawable) return;
 
         using (drawable)
@@ -406,7 +409,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// </remarks>
     private SKShader? Shader(BitmapPaint bitmap, DocRect region)
     {
-        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return null;
+        if (Empty(bitmap.Image)) return null;
         if (Image(bitmap.Image) is not { } image) return null;
 
         try
@@ -432,6 +435,18 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
             image.Dispose();
         }
     }
+
+    /// <summary>
+    /// True when an image has nothing to draw: neither pixels nor bytes to decode into some.
+    /// </summary>
+    /// <remarks>
+    /// Not <c>Width &lt;= 0</c>, which asks the same question only of an image that has already
+    /// been decoded. A reader emits <see cref="RasterImage.Encoded"/> and leaves the dimensions
+    /// at zero until a codec has seen the bytes, so testing the width here discards every
+    /// picture every reader emits — silently, and only in the backends.
+    /// </remarks>
+    private static bool Empty(RasterImage image)
+        => image.Pixels.IsEmpty && image.EncodedBytes.IsEmpty;
 
     /// <summary>
     /// A display-list image as an immutable Skia one.

@@ -31,6 +31,14 @@ Every file must have a **unique stem**: `soffice --convert-to` names output afte
 stem alone, so `a.docx` and `a.xlsx` both become `a.pdf` and one silently disappears. Name
 files for what they contain and which format they are — `table-merged.docx`.
 
+**A second `soffice --convert-to` into the same directory can produce nothing and say nothing.**
+Converting one source into two formats back to back — `--convert-to odp` then `--convert-to pptx`
+— printed its usual `convert … using filter : …` line for the first and, for the second, only
+`Warning: failed to launch javaldx` and no output file at all. Exit status 0 both times. The fix
+is a **fresh `--outdir` per conversion**; the same command that had produced nothing produced the
+file immediately when pointed at a new directory. Always `ls` the output before believing a
+conversion happened, and never infer success from the exit code.
+
 ## Reference output
 
 ```bash
@@ -95,6 +103,9 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `sheet-cell-text.fods` | FODS | How a cell's text is *drawn*, which the print-setup workbooks say nothing about. One sheet of six rows: the three stated horizontal alignments plus the two General cases (a string goes left, a number right); top, middle and bottom in a 43 pt row, with an indent beside them; a wrapping cell that needs three lines; four fonts — bold, 14 pt italic, 12 pt red, and a serif family — and a shrink-to-fit cell that comes out at 87% of ten point; the same twelve-digit number twice in a 43 pt column, once under `General` so it re-renders as `1.2E+11` and once under a fixed format so it shows `###`; a 48-character string overflowing four empty columns; the same string blocked by a neighbour, so it is clipped to 23 characters; and a right-aligned string overflowing to the *left*. Rotation sits on a second sheet, because a turned run is written with a text matrix rather than an absolute pen and the harness reads only the latter. **Hand-written, with the header and footer switched off**: Calc recomputes a dynamic band's height from the text in it, which Paperless does not do yet, and on a workbook with a header that is 1.3 pt of vertical offset on every row — enough to swamp everything the file is for |
 | `sheet-cell-text.xlsx` | XLSX | The same sheet converted, so the same alignment, wrapping, indent and rotation have to come out of `styles.xml`'s `fonts` and `cellXfs/alignment` instead. Note the indent: SpreadsheetML counts levels of *three space widths in the workbook's default font* where BIFF counts a flat 200 twips a level, so the same 0.28 in indent survives as 16.5 pt here and 20 pt in the XLS, and both are right |
 | `sheet-cell-text.xls` | XLS | And again out of BIFF's `FONT`, `XF`, `PALETTE`, `ROW` and `COLINFO`. LibreOffice's own BIFF reading of this file differs from its reading of the other two by a 21-twip page margin and columns 0.06% narrower, which is why the fidelity test compares what is drawn here rather than where |
+| `sheet-rich-text.fods` | FODS | Three sheets, for the three things a cell can hold that its own format does not describe. **Rich text**: eight cells that change format part-way through — a bold word, an italic one, a fourteen-point red one in the middle of ten-point black, a bold half of a blue cell that must *stay* blue, a serif word between two sans ones, a seven-point tail, a wrapping cell whose break depends on measuring each run in its own face, and a cell whose *first* word is bold, which is the one that separates the three formats' semantics. **Turned text** on a second sheet, for the same reason `sheet-cell-text` puts it there. And a **picture** on a third, anchored to B2 with an offset and ending at C3 — the frame states `svg:width="1.28in"` and the end address says 1.3201 in, and LibreOffice believes the end address, which is what makes the file a test of the anchor rather than of a stated size. Hand-written, header and footer off |
+| `sheet-rich-text.xlsx` | XLSX | The same three sheets converted, so the runs have to come out of `sharedStrings.xml`'s `r`/`rPr` elements and the picture out of an `xdr:twoCellAnchor` into `xl/media/`. The conversion is what makes the rich-text semantics testable: LibreOffice writes the *cell's* `fontId` as the bold one for a cell whose first word is bold, then writes the second run with an `rPr` that names a size and a font and no `b` — so a reader that treats `rPr` as a delta leaves the whole cell bold, and LibreOffice's own rendering does not |
+| `sheet-rich-text.xls` | XLS | And again out of BIFF's `SST` formatting runs, which name a whole `FONT` record rather than a delta and state a start with no length, and its Escher drawing records — which are not read yet, so the picture sheet is blank here |
 | `csv-semicolon.csv` | CSV | Semicolon separator with a decimal comma inside the fields, so frequency alone chooses wrongly; quoted fields containing a separator, a line break and a doubled quote; CRLF endings |
 | `csv-latin1.csv` | CSV | Windows-1252 bytes that are not valid UTF-8, so the encoding fallback is what makes the accents come out right |
 | `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
@@ -106,6 +117,7 @@ overwrite the other.
 
 | `ppt-features.ppt` | PPT | `slides-features.odp` converted, so the same deck is covered through the binary vocabulary. Adds what only PPT has: a persist directory reached through the `UserEditAtom` chain, three `SlideListWithText` lists told apart by their record instance, the hidden flag buried ten bytes into a transition atom, an Escher shape tree whose group's first shape container is the group itself, emphasis in a `StyleTextPropAtom` whose optional fields are not stored in bit order, and a title whose boldness is stated nowhere on the slide because it lives in the master's `TxMasterStyleAtom` |
 | `shape-geometry.pptx` | PPTX | Four slides of nothing but placed shapes, hand-written so that every offset and extent is a round number of inches and every fill is stated rather than inherited. Slide 1: five rectangles at known EMU offsets — a literal fill, a `schemeClr accent1` fill, an `accent2` fill under `lumMod`/`lumOff`, an outline with no fill, and one rotated 30°. Slide 2: a group whose `chExt` is half its `ext`, so a child's coordinates are doubled on the way out, beside an ungrouped shape for comparison. Slide 3: four text bodies covering zero insets, the OOXML default insets, centred alignment and middle anchoring. Slide 4: four `rtTriangle`s — plain, `flipH`, `flipV`, and `flipH` with `rot="5400000"` — which is the only shape in the corpus that tells flip-before-rotate apart from rotate-before-flip, since a rectangle looks identical under either order |
+| `shape-geometry-ppt.ppt` | PPT | The same deck converted again, so the same placements are covered through the binary vocabulary. Adds what only PPT has: an eight-byte client anchor in master units of a 576th of an inch whose fields are in the order top, left, right, bottom; a group mapped by the union of its children's child anchors rather than by the `msofbtSpgr` rectangle it is named after; a rotation in 16.16 fixed-point degrees with the anchor stated as the box the shape occupies *after* a quarter turn; and fills, lines and text insets in an Escher property table where the two booleans that decide whether a shape is drawn at all are packed bits of another property. **Its fourth slide is broken in LibreOffice, not here.** The PPTX-to-PPT export writes every preset shape as a vertex array whose coordinates reference a formula table and writes the geometry box those formulas are evaluated in as zero, so its own importer collapses all four triangles to a point and its PDF draws `72 468 m 72 468 l 72 468 l h f*` four times. That is why the conversion of a deck must always be checked for whether the export kept the geometry or resolved it — here it did neither |
 | `shape-geometry.odp` | ODP | The same deck converted, so the same placements are covered through ODF's vocabulary. Adds what only ODF has: `svg:x`/`svg:y`/`svg:width`/`svg:height` in centimetres, a `draw:transform="rotate (…) translate (…)"` whose angle runs the other way from OOXML's `rot`, a `draw:g` whose children carry absolute coordinates rather than a child coordinate space, and fills and strokes reached through a `draw:style-name` rather than stated on the shape |
 | `paint-fills.fodp` | FODP | Two slides of nothing but fills, hand-written so every rectangle is a round number of centimetres. Slide 1: a `linear` gradient at angle 0, an `axial` one at 90°, a `radial` one, and a `bitmap` fill repeating an 8×8 checkerboard on a one-centimetre tile. Slide 2: an embedded 16×12 PNG in an 8×6 cm frame. The images are carried as `<office:binary-data>` inside `<draw:fill-image>` and `<draw:image>`, which is what LibreOffice reads — a `data:` URI in `xlink:href` is accepted and then silently ignored, and the shape falls back to its default blue. It is the reference for gradients and pictures in both rendering backends, and the file that shows LibreOffice writes **no** shading dictionary for a shape gradient |
 | `paint-fills-pptx.pptx` | PPTX | The same slides converted, so the same fills are covered through DrawingML. All three gradients survive as `a:gradFill` — two `a:lin` and one `a:path` — and the tile as `a:blipFill` with `a:tile`, which is what makes it worth committing: the export could have resolved them to flat colours and did not |
@@ -122,6 +134,35 @@ had them overwrite each other's output.
 | `deck-text-style.pptx` | Where the shape's own text style sits in a slide's character chain. Seven text boxes on one slide, each stating the colour at a different rung: only the shape's `p:style/a:fontRef`; the body's `a:lstStyle` *and* the fontRef; the run's own `a:rPr` and the fontRef; a fontRef colour carrying a `lumMod`; nothing at all, so the master's `p:otherStyle`; and a placeholder whose *layout* placeholder carries the fontRef. A theme with a real `a:fontScheme`, so `idx="minor"` resolves to a face. LibreOffice cannot write this: its PPTX export states every property on every run, so no round-tripped deck ever consults the chain |
 | `slide-table-grid.pptx` | What a table on a slide draws, which nothing else in the corpus states: a cell's fill, its four `a:tcPr` edges and its `marL`…`marB` margins. Two slides, every column 2.5 inch and every stated row 1 inch, so the grid lands on whole points. Slide 1 is a three by three grid whose outer edges are two points and whose inner ones are one, plus three junctions where the two cells meeting there **disagree** — a red edge against a grey one of the same width (the later cell wins), a grey against a green of the same width (the later cell wins), and a three-point orange against a one-point grey (the wider wins). Slide 2 adds a `gridSpan` and its `hMerge` marker, a `rowSpan` and its `vMerge`, top, centre and bottom anchoring, and a row stating `h="0"` whose height is therefore whatever its wrapping cell's two lines need. LibreOffice cannot write this: its own PPTX export writes `a:noFill` on every edge of every cell |
 | `slide-shape-features.pptx` | Preset geometry beyond a rectangle, dashes, arrowheads and automatic numbering — four things LibreOffice's own PPTX export keeps rather than resolves, which is why the file is hand-written and then checked against what the export did with it. Slide 1 is six presets whose edges are all straight (`hexagon`, `pentagon`, `chevron`, `parallelogram`, `trapezoid`, `plus`), so every vertex is comparable; slide 2 is five built out of arcs plus `star5`, including a `pie` with a 240° sweep on a 3:2 box, which is the only shape in the corpus that tells an ellipse's *parameter* apart from its *direction*. Slide 3 is a connector with a medium `triangle` head and a large `stealth` tail, and three dashed lines — `dash`, `sysDashDot` and `lgDashDot` — at three different widths, since a preset dash's lengths are multiples of the pen. Slide 4 is a two-level `a:buAutoNum` list, `arabicPeriod` over `alphaLcParenR`, whose inner numbering restarts when the outer level advances |
+
+### ODP files for rendering
+
+| File | Exercises |
+|---|---|
+| `odp-table-grid.odp` | `slide-table-grid.pptx` put through `soffice --convert-to odp`, so the same table is described in two vocabularies that share no element name. It is the only way to measure the border-width conversion: the OOXML importer halves a stated width and the exporter writes the halved number out, so an ODF reader that halves again draws every rule at 0.42 pt where the reference draws 0.85009. It also carries what LibreOffice writes and the specification does not point at — the cell fill, padding and vertical alignment in `loext:graphic-properties` and the four borders in `style:paragraph-properties` |
+| `odp-shape-paths.fodp` | ODF's own `draw:enhanced-path` command letters, none of which a converted file can carry: anything reaching ODF through an OOXML import comes out as an `ooxml-` preset whose path is `M L C Z N`. Six shapes on a 28 × 15.75 cm page, each 6 × 4.5 cm with a 21600-unit view box so every vertex is a round fraction of a centimetre — a chevron whose notch is a `draw:equation` over a `draw:modifiers` value, a whole ellipse as one `U`, a `U` with a 240° sweep (which is what tells an arc's *stated* radii from its *scaled* ones), four quarter ellipses as `X` and `Y`, two `G` arcs, and two polygons in one subpath so the inner one is a hole. Slide 2 is a hand-written table whose three columns are three different widths, whose first cell spans two of them with a `table:covered-table-cell` beside it, and whose outer rules are three times its inner ones. **It suppresses the master's footer and slide-number placeholders** in its drawing-page style: without `presentation:display-footer="false"` and its two siblings, Impress draws an empty placeholder on every page and the reference PDF gains two text runs of a single space that no reader would reproduce |
+
+### The chart documents
+
+| File | Exercises |
+|---|---|
+| `chart-bar-deck.fodp` | A bar chart on a slide, hand-written flat so that the chart's whole sub-document is inline in the `draw:object` and readable without unzipping anything. Title "Regional revenue", axis titles "Quarter" and "Units", two named series (North, South) and four labelled categories (Q1…Q4) over sixteen numbers. The frame carries no `draw:image` replacement, because a flat file has nowhere to put a metafile — which is what makes it the file that catches a renderer descending into the embedded document and drawing its `text:p`s as slide text |
+| `chart-bar-deck.odp` | The same deck converted, so the chart is a **packaged sub-document**: `Object 1/content.xml` reached by `xlink:href="./Object 1"`, with `ObjectReplacements/Object 1` — a 22 kB baked GDI metafile of the chart — beside it. That replacement is the thing Phase 3.5 expects to draw one day, and it is also why a frame's `draw:image` sibling must not be reported as a second graphic when the object was read |
+| `chart-bar-deck.pptx` | And again as DrawingML: `ppt/charts/chart1.xml` reached by `c:chart/@r:id` from the slide's `a:graphicData`. Its `c:f` elements say `label 0`, `categories` and `0` — LibreOffice's export invents names because a deck has no workbook to point at — while the `c:strCache` and `c:numCache` beside them hold the real values, which is the clearest statement in the corpus of why the cache is what gets read |
+| `chart-bar-sheet.fods` | The same chart over a **sheet's own cells**: `A1:C5` holds the data and the series say `chart:values-cell-range-address="Revenue.B2:Revenue.B5"`. The local table is written anyway, as a cache, so this is the case where a live range genuinely exists and the cache is preferred regardless. Hand-written flat, header and footer off |
+| `chart-bar-sheet.ods` | The same workbook packaged, so the chart is again `Object 1/content.xml` and the frame is anchored inside a `table:table-cell` — the anchoring that decides where a chart can go in the content tree, since a cell cannot hold a table |
+| `chart-bar-sheet.xlsx` | And again as SpreadsheetML: `xl/charts/chart1.xml` reached through `xl/drawings/drawing1.xml`, two relationship hops from the sheet, with `c:f` naming real ranges (`Revenue!$B$2:$B$5`) beside the caches that repeat their values |
+
+All six extract to the same title, axis titles, series and numbers, through two vocabularies that
+share no element name. None of them is *drawn*: Paperless renders 0 words on the deck's page and
+the sheet's 14 cell words on the workbook's, against the 20 and 29–34 LibreOffice draws, because a
+chart is recorded and not painted. That is the deviation Phase 3.5 records, and the sweep entries
+for these six exist to keep it visible rather than to be fixed by accident.
+
+Both ODP rendering files are 4:3-free: the page is the 28 × 15.75 cm Impress defaults to. That is not a preference —
+**LibreOffice ignores a hand-written `style:page-layout` in a flat ODP** and substitutes its own
+default, so a file stating 25.4 × 19.05 cm renders at 28 × 15.75 and every measurement taken from
+it is against the wrong page. State the size Impress will actually use.
 
 ### Hand-written DOCX files
 
@@ -140,6 +181,25 @@ combination that tells the two transform orders apart.
 | `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
+
+### SVG picture documents
+
+| File | Exercises |
+|---|---|
+| `svg-picture.odt` | An `image/svg+xml` inside an ODF package, referenced by a `draw:image` whose `xlink:href` names `Pictures/logo.svg`, inside a 4 × 2 cm frame that matches the picture's own intrinsic size. The SVG itself is 769 bytes and covers what the translation has to get right: a `viewBox` mapping, a rounded rectangle, a linear gradient in object-bounding-box units, a `clipPath`, an elliptical arc, a partly transparent fill, and centre-anchored text |
+| `svg-picture.docx` | The same document converted, which is what makes it worth committing: **LibreOffice keeps the SVG rather than rasterising it.** The `a:blip` names a 3 803-byte `word/media/image3.png` on `r:embed` and the original 769-byte `word/media/image2.svg` on an `asvg:svgBlip` inside the `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension — the same shape PowerPoint 365 writes. A reader that stops at `r:embed` draws the raster fallback; preferring the extension is the whole point of vector import |
+
+### WMF picture documents
+
+Hand-built rather than exported, because a metafile LibreOffice writes is 36 filled polygons
+and nothing else — it converts every ellipse, arc and stroke to a polygon on the way out, so
+it exercises one record type out of the twenty that matter. 426 bytes.
+
+| File | Exercises |
+|---|---|
+| `wmf-shapes.wmf` | The metafile itself, with a placeable header stating 2540 logical units to the inch so that one unit is exactly 1/100 mm and an assertion can name the millimetre it expects. Covers the placeable header, `SetWindowOrg`/`SetWindowExt`, pen and brush creation with handle reuse, `SelectObject`, `Rectangle`, `Ellipse`, `Pie`, `Polyline`, `CreateFontIndirect`, `SetTextColor`, `SetTextAlign` and `TextOut`. Correct output is 80 × 60 mm holding four fills, five strokes and the run "Paperless WMF" |
+| `wmf-picture.odt` | The same metafile inside an ODF package at 8 × 6 cm, which settles the question the fixture was built for: **LibreOffice keeps the metafile rather than rasterising it**, and writes a 9 685-byte PNG preview beside it — twenty times the size and fixed at one resolution, which is exactly what decoding avoids |
+| `wmf-picture.docx` | The same document converted. The `a:blip` has no SVG alternative, so its own `r:embed` *is* the picture and `BlipReference.Choose` has to leave it alone; nothing declares a media type, so the seam has to find the decoder from the first four bytes |
 
 ### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 
@@ -165,6 +225,9 @@ conversion profile makes the same deck 18 kB instead of 464 kB, which is how
 size: at ~865 sectors it is the only corpus file that exercises long FAT chains, where every
 other file's streams fit in a handful of sectors.
 
+`shape-geometry-ppt.ppt` was produced the same way and is 24 kB rather than 618 kB, which is
+the whole difference between a corpus file worth committing and one that is not.
+
 ### The XLS feature workbook has no cached formula results in its source
 
 `xls-features.xls` was authored as a flat ODF spreadsheet and converted, like the rest of
@@ -189,6 +252,17 @@ Two traps, both found the hard way:
   one-block path, which distributes the slack over the *letters* as well as the blanks, so
   the words themselves come out wider. Use a manual `<text:line-break/>` when a justified
   line's words need to be fixed.
+- **A flat ODP's `style:page-layout` is ignored, and Impress substitutes its own default.**
+  `odp-shape-paths.fodp` states 28 × 15.75 cm because that is what LibreOffice renders whatever
+  the file says; an earlier draft asking for 25.4 × 19.05 came out at 28 × 15.75 anyway, and every
+  coordinate measured from the reference was against a page 3.6 cm shorter than the one the test
+  expected. State the size Impress will actually use, and check with
+  `pdfinfo | grep "Page size"` before trusting a single number.
+- **Impress draws its master's footer, date and slide-number placeholders even when they are
+  empty**, as a text run of one space per placeholder per page. `presentation:display-footer`,
+  `presentation:display-page-number` and `presentation:display-date-time`, all `"false"` on the
+  page's drawing-page style, are what stop it — otherwise a text comparison against the reference
+  is two runs a page adrift for a reason that has nothing to do with the document.
 
 ### Table layout documents
 

@@ -30,6 +30,17 @@ public static class OoxmlNamespaces
     /// <summary>DrawingML word-processing anchoring.</summary>
     public const string DrawingMLWordprocessing = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing";
 
+    /// <summary>
+    /// DrawingML charts: the vocabulary of <c>/ppt/charts/chartN.xml</c> and
+    /// <c>/xl/charts/chartN.xml</c>.
+    /// </summary>
+    /// <remarks>
+    /// The same string is also the <c>a:graphicData/@uri</c> that identifies a chart inside a
+    /// graphic frame, which is why <see cref="DrawingML.DrawingChart.ChartUri"/> is defined as
+    /// this constant rather than repeated.
+    /// </remarks>
+    public const string DrawingMLChart = "http://schemas.openxmlformats.org/drawingml/2006/chart";
+
     /// <summary>OPC relationships.</summary>
     public const string Relationships = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 
@@ -86,6 +97,7 @@ public static class OoxmlNamespaces
             ["http://purl.oclc.org/ooxml/spreadsheetml/main"] = SpreadsheetML,
             ["http://purl.oclc.org/ooxml/presentationml/main"] = PresentationML,
             ["http://purl.oclc.org/ooxml/drawingml/main"] = DrawingML,
+            ["http://purl.oclc.org/ooxml/drawingml/chart"] = DrawingMLChart,
             ["http://purl.oclc.org/ooxml/drawingml/spreadsheetDrawing"] = DrawingMLSpreadsheet,
             ["http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing"] = DrawingMLWordprocessing,
             ["http://purl.oclc.org/ooxml/officeDocument/relationships"] = Relationships,
