@@ -1,0 +1,256 @@
+using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
+using Paperless.Core.Units;
+
+namespace Paperless.Ooxml.DrawingML;
+
+/// <summary>Which way a bar chart's bars run.</summary>
+public enum ChartBarDirection
+{
+    /// <summary>Vertical bars growing up from a horizontal category axis — <c>c:barDir val="col"</c>.</summary>
+    Column = 0,
+
+    /// <summary>Horizontal bars growing right from a vertical category axis — <c>val="bar"</c>.</summary>
+    Bar,
+}
+
+/// <summary>Where the legend sits relative to the plot area.</summary>
+public enum ChartLegendPosition
+{
+    /// <summary>No legend at all.</summary>
+    None = 0,
+
+    /// <summary>To the right — OOXML <c>r</c>, ODF <c>end</c>. The default both write.</summary>
+    Right,
+
+    /// <summary>To the left — <c>l</c>, <c>start</c>.</summary>
+    Left,
+
+    /// <summary>Above — <c>t</c>, <c>top</c>.</summary>
+    Top,
+
+    /// <summary>Below — <c>b</c>, <c>bottom</c>.</summary>
+    Bottom,
+}
+
+/// <summary>
+/// One series of a chart, ready to draw: its name, its colours and its numbers.
+/// </summary>
+/// <param name="Name">The series' label, as the legend and any data label show it.</param>
+/// <param name="Values">
+/// The cached values, one per category and indexed by category. Null is a genuine gap — a
+/// category the series has no value for — and is skipped rather than drawn as zero, which is
+/// what <c>c:dispBlanksAs val="gap"</c> asks for and what LibreOffice does by default.
+/// </param>
+/// <param name="Fill">The bar or marker fill, or null when the file states none.</param>
+/// <param name="Line">The outline colour, or null for none.</param>
+/// <param name="LineWidth">The outline width; zero means a hairline, which is what OOXML's
+/// <c>a:ln w="0"</c> means and what LibreOffice draws as the thinnest line the device has.</param>
+public sealed record ChartSeries(
+    string? Name,
+    IReadOnlyList<double?> Values,
+    Colour? Fill = null,
+    Colour? Line = null,
+    Length LineWidth = default);
+
+/// <summary>
+/// A chart reduced to what drawing it needs, in neither vocabulary.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <strong>Why a second model beside <see cref="DrawingChart"/>.</strong> That one answers "what
+/// words does this chart contain", which is a content-tree question and needs no geometry at
+/// all. This one answers "where does every mark go", which needs the axis scaling, the plot
+/// rectangle, the fills and the bar arithmetic and needs none of the content tree. Merging them
+/// would make every extraction pay for geometry it never looks at, which the project's
+/// extraction/rendering split exists to prevent.
+/// </para>
+/// <para>
+/// <strong>Both vocabularies reach this shape, and one of them brings the answer with it.</strong>
+/// ODF writes <c>chart:plot-area/chart:coordinate-region</c> — the exact inner plot rectangle
+/// LibreOffice last computed — into the file. OOXML writes nothing of the kind unless the author
+/// dragged the plot area, in which case it is <c>c:plotArea/c:layout/c:manualLayout</c>. So
+/// <see cref="PlotArea"/> is set from the file when the file says, and computed when it does
+/// not; see <see cref="ChartLayout"/> for what the computation costs in accuracy.
+/// </para>
+/// </remarks>
+public sealed record ChartPlot
+{
+    /// <summary>The chart's title, or null when it states none.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>The category axis' title, or null.</summary>
+    public string? CategoryAxisTitle { get; init; }
+
+    /// <summary>The value axis' title, or null.</summary>
+    public string? ValueAxisTitle { get; init; }
+
+    /// <summary>The category labels, in order. Empty for a chart with no category axis.</summary>
+    public IReadOnlyList<string?> Categories { get; init; } = [];
+
+    /// <summary>The series, in the order the file states them, which is drawing order.</summary>
+    public IReadOnlyList<ChartSeries> Series { get; init; } = [];
+
+    /// <summary>Which way the bars run.</summary>
+    public ChartBarDirection Direction { get; init; }
+
+    /// <summary>
+    /// The gap between category slots, as a percentage of one bar's width.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:gapWidth</c>, ODF <c>chart:gap-width</c>. 100 is the value both formats default to
+    /// and the one the corpus chart states: a category slot then holds <em>n</em> bars plus one
+    /// bar's width of gap, so a two-series clustered chart divides its slot into three.
+    /// </remarks>
+    public double GapWidth { get; init; } = 100.0;
+
+    /// <summary>
+    /// How much adjacent bars in a category overlap, as a percentage of a bar's width.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:overlap</c>. Zero for a clustered chart, 100 for a stacked one — a stacked chart
+    /// draws its series in the same slot, which is exactly a full overlap.
+    /// </remarks>
+    public double Overlap { get; init; }
+
+    /// <summary>Whether the series are stacked on top of one another.</summary>
+    public bool IsStacked { get; init; }
+
+    /// <summary>What the value axis states, before the automatic parts are resolved.</summary>
+    public ChartScaleRequest ValueScale { get; init; }
+
+    /// <summary>Where the legend goes.</summary>
+    public ChartLegendPosition Legend { get; init; } = ChartLegendPosition.None;
+
+    /// <summary>The chart area's own fill, or null when it states none.</summary>
+    public Colour? Background { get; init; }
+
+    /// <summary>
+    /// The size the main title is set at.
+    /// </summary>
+    /// <remarks>
+    /// Read from the file rather than assumed, because it decides how much room the title is
+    /// given at the top of the chart and therefore where the plot area starts. Measured on
+    /// <c>chart-bar-deck.pptx</c>, whose <c>c:title</c> states <c>sz="1300"</c>: assuming a
+    /// 10 pt title instead reserves 3.5 pt too little and moves every bar's base down by that
+    /// much. Thirteen points is LibreOffice's own default for a chart title
+    /// (<c>chart2/source/model/main/Title.cxx</c>), which is why it is the fallback.
+    /// </remarks>
+    public Length TitleSize { get; init; } = Length.FromPoints(13);
+
+    /// <summary>The size the axis titles are set at; LibreOffice's default is 9 pt.</summary>
+    public Length AxisTitleSize { get; init; } = Length.FromPoints(9);
+
+    /// <summary>The size the axis labels and legend entries are set at; the default is 10 pt.</summary>
+    public Length LabelSize { get; init; } = Length.FromPoints(10);
+
+    /// <summary>The plot area's fill — DrawingML's wall — or null.</summary>
+    public Colour? PlotBackground { get; init; }
+
+    /// <summary>
+    /// The inner plot rectangle the file states, relative to the chart frame, or null.
+    /// </summary>
+    /// <remarks>
+    /// ODF's <c>chart:coordinate-region</c>, which is the *inner* rectangle — the axes' extent,
+    /// excluding their labels — and is therefore directly the rectangle a bar is measured
+    /// against. Measured on <c>chart-bar-deck.odp</c>: the file states
+    /// <c>svg:x="2.258cm" svg:y="1.594cm" svg:width="17.674cm" svg:height="8.538cm"</c> and
+    /// LibreOffice's own PDF draws the plot area at 2258, 1594, 17672, 8537 in hundredths of a
+    /// millimetre — the same rectangle to within the rounding of a centimetre-formatted
+    /// attribute. So when this is set, no layout heuristic is involved at all.
+    /// </remarks>
+    public DocRect? PlotArea { get; init; }
+
+    /// <summary>
+    /// The chart's own coordinate space, when the file states one.
+    /// </summary>
+    /// <remarks>
+    /// ODF's <c>chart:chart/@svg:width</c> and <c>@svg:height</c> — 22 cm by 12 cm for the corpus
+    /// deck — which is the space <see cref="PlotArea"/>, and every other stated position, is
+    /// expressed in. It is not usually the size of the frame the chart is drawn into, so the two
+    /// are related by a scale rather than by equality. Null for OOXML, which states no such
+    /// thing: its <c>c:manualLayout</c> is in fractions of the frame instead.
+    /// </remarks>
+    public DocSize? Space { get; init; }
+
+    /// <summary>True when there is nothing at all to draw.</summary>
+    public bool IsEmpty => Series.Count == 0 && Title is null;
+
+    /// <summary>
+    /// The smallest and largest value any series contributes to the value axis.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For an unstacked chart this is the plain minimum and maximum over every point, which is
+    /// what <c>VDataSeriesGroup::calculateYMinAndMaxForCategory</c> reduces to when each series
+    /// sits in its own slot (<c>VSeriesPlotter.cxx</c>). For a stacked one the maximum is the
+    /// per-category <em>sum</em>, because that is how tall the column is — taking the largest
+    /// single value instead would put an axis at 168 under a stack that reaches 289.
+    /// </para>
+    /// <para>
+    /// Positives and negatives are summed separately, as LibreOffice does
+    /// (<c>isSeparateStackingForDifferentSigns</c>, true for every Y axis), so a category
+    /// holding +50 and −30 contributes 50 and −30 rather than 20 and 20.
+    /// </para>
+    /// </remarks>
+    public (double? Minimum, double? Maximum) ValueRange()
+    {
+        double minimum = double.PositiveInfinity;
+        double maximum = double.NegativeInfinity;
+
+        if (IsStacked)
+        {
+            int categories = 0;
+            foreach (ChartSeries series in Series) categories = Math.Max(categories, series.Values.Count);
+
+            for (int at = 0; at < categories; at++)
+            {
+                double positive = 0.0;
+                double negative = 0.0;
+                bool any = false;
+
+                foreach (ChartSeries series in Series)
+                {
+                    if (at >= series.Values.Count) continue;
+                    if (series.Values[at] is not { } value || !double.IsFinite(value)) continue;
+
+                    any = true;
+                    if (value >= 0.0) positive += value; else negative += value;
+                }
+
+                if (!any) continue;
+                minimum = Math.Min(minimum, negative);
+                maximum = Math.Max(maximum, positive);
+            }
+        }
+        else
+        {
+            foreach (ChartSeries series in Series)
+            {
+                foreach (double? point in series.Values)
+                {
+                    if (point is not { } value || !double.IsFinite(value)) continue;
+                    minimum = Math.Min(minimum, value);
+                    maximum = Math.Max(maximum, value);
+                }
+            }
+        }
+
+        return double.IsInfinity(minimum)
+            ? (null, null)
+            : (minimum, maximum);
+    }
+
+    /// <summary>How many categories the chart plots.</summary>
+    /// <remarks>
+    /// The larger of the stated labels and the longest series, because a chart may plot four
+    /// numbers under three labels — the fourth category then has no label but still has a bar,
+    /// which is what the reference draws.
+    /// </remarks>
+    public int CategoryCount()
+    {
+        int count = Categories.Count;
+        foreach (ChartSeries series in Series) count = Math.Max(count, series.Values.Count);
+        return count;
+    }
+}

@@ -27,7 +27,7 @@ namespace Paperless.Presentations.Ooxml;
 /// written in, so descending means composing a matrix rather than merely recursing.
 /// </para>
 /// </remarks>
-internal sealed class PptxSlideLayout
+internal sealed partial class PptxSlideLayout
 {
     /// <summary>How deep a group nest is followed before it is abandoned.</summary>
     /// <remarks>The same bound extraction uses; a pathological nesting costs stack, not correctness.</remarks>
@@ -276,12 +276,14 @@ internal sealed class PptxSlideLayout
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
-                // A graphic frame is a table, a chart, a diagram or an embedded object. A table
-                // draws from its own model and a diagram from the shape tree the authoring
-                // application baked beside its layout definition. A chart has no geometry here
-                // yet and drawing its frame would put an empty rectangle where the reference
-                // draws a picture.
+                // A graphic frame is a table, a chart, a diagram or an embedded object. Three of
+                // the four now draw: a table from its own model, a chart from the plot the reader
+                // built, and a diagram from the shape tree the authoring application baked beside
+                // its layout definition. An embedded object still has no geometry here, and
+                // drawing its frame would put an empty rectangle where the reference draws a
+                // picture.
                 shapes.AddRange(Table(element, theme, space));
+                shapes.AddRange(Chart(element, slide, theme, space));
                 Diagram(element, slide, theme, space, shapes, depth);
             }
             else if (Ppt.Is(element, "pic"))

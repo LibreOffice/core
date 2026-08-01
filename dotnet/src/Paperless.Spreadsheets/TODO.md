@@ -1029,9 +1029,12 @@ Not yet, and why:
 - **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
   `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
   rectangle clipped to the frame's outline rather than a new IR primitive.
-- **Charts are read but not drawn.** `IsChart` on the drawing is unchanged and still paints
-  nothing, so "there is a chart here" stays distinguishable from "there is nothing here" on the
-  page; the chart's *content* now arrives by a separate route. See the section below.
+- **Charts are read but not drawn — and this is now the only family where that is true.**
+  `IsChart` on the drawing is unchanged and still paints nothing; the chart's *content* arrives by
+  a separate route. Measured after the presentation family started drawing charts:
+  `chart-bar-sheet.{ods,fods,xlsx}` render **14 words against LibreOffice's 34, 34 and 29**, where
+  all three forms of `chart-bar-deck` now match at 20/20. See "Drawing a sheet's chart" below for
+  what is missing and the one decision it runs into.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
@@ -1106,6 +1109,35 @@ numbers; `SheetChartTests.TheCacheAgreesWithTheSheetItReferences` reads both and
 match, so a divergence fails a test instead of producing a plausible chart. Resolving the range
 instead would need the formula engine and the number formatter — and would disagree with what Calc
 draws the moment a cache is stale, which is the case the rule exists for.
+
+## Drawing a sheet's chart, and the decision it runs into
+
+**The engine is done and family-blind; the wiring is not.** `ChartScale`, `ChartPlot`,
+`ChartLayout` and `DrawingChartPlot` in `Paperless.Ooxml/DrawingML/` take a chart part and a frame
+rectangle and give back every mark it draws — plot area, bars, axes, ticks, labels, legend — with
+LibreOffice's own automatic axis scale ported step for step. `Paperless.Presentations` consumes
+them through `Layout/SlideChart.cs` and every bar in `chart-bar-deck.odp` lands within 0.06 pt of
+LibreOffice's. Nothing in any of that is presentation-specific.
+
+**What stops a sheet reusing it is the shape of this family's drawing path, not the engine.** A
+slide's layout produces `PlacedShape` values and a backend walks them; a sheet's
+`SheetPageGraphics.Draw` paints straight into an `IDrawingSink`, and its only drawing primitive
+today is `DrawImage`. A chart needs `FillPath`, `StrokePath` and — the awkward one —
+`DrawGlyphRun`, which means resolving faces and shaping text inside the graphics pass. So the work
+is: carry the `ChartPlot` on `SheetDrawing` beside `Image`, read it in `Ooxml/XlsxDrawings.cs` and
+`OpenDocument/OdsDrawings.cs` where `IsChart` is already set, and add a `SheetChart` that emits a
+laid-out chart to the sink. The anchor arithmetic that gives it a rectangle is already there and
+already tested.
+
+**The Core-shaped decision, stated so the next person does not rediscover it.** `ChartPlot` lives
+in `Paperless.Ooxml` because that is where the OOXML chart reader is — and `Paperless.OpenDocument`
+cannot see it, the two being siblings with no reference between them. So the ODF chart-to-model
+reader had to go in a *family* library (`Paperless.Presentations/OpenDocument/OdfChartPlot.cs`),
+and a spreadsheet needs the same reader again. **The right home is `Paperless.Core`**, beside the
+rest of the drawing IR, which would let one ODF reader serve both families and put `ChartLayout`
+where `Paperless.OpenDocument` can reach it. That was not worth a Core change with four agents
+building against it; it is worth doing before the second family is wired, because otherwise the
+duplication is what gets copied.
 
 Not yet, and why:
 
