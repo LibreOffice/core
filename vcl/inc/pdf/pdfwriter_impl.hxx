@@ -281,7 +281,7 @@ class GlyphEmit
     sal_uInt8                       m_nSubsetGlyphID;
     sal_Int32                       m_nGlyphWidth;
     std::vector<ColorLayer>         m_aColorLayers;
-    font::RawFontData               m_aColorBitmap;
+    Bitmap                          m_aColorBitmap;
     tools::Rectangle                m_aRect;
 
 public:
@@ -298,12 +298,12 @@ public:
     void addColorLayer(ColorLayer aLayer) { m_aColorLayers.push_back(aLayer); }
     const std::vector<ColorLayer>& getColorLayers() const { return m_aColorLayers; }
 
-    void setColorBitmap(font::RawFontData aData, tools::Rectangle aRect)
+    void setColorBitmap(Bitmap aBitmap, tools::Rectangle aRect)
     {
-        m_aColorBitmap = aData;
+        m_aColorBitmap = std::move(aBitmap);
         m_aRect = aRect;
     }
-    const font::RawFontData& getColorBitmap(tools::Rectangle& rRect) const
+    const Bitmap& getColorBitmap(tools::Rectangle& rRect) const
     {
         rRect = m_aRect;
         return m_aColorBitmap;
