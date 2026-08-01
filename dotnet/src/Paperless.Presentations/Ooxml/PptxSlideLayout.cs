@@ -36,6 +36,7 @@ internal sealed class PptxSlideLayout
     private readonly PptxFile _file;
     private readonly SlideFonts _fonts;
     private readonly Dictionary<string, SlideTheme> _themes = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, RasterImage?> _images = new(StringComparer.Ordinal);
 
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
@@ -60,7 +61,7 @@ internal sealed class PptxSlideLayout
             Size = _file.SlideSize,
             Name = slide.Name,
             IsHidden = slide.IsHidden,
-            Background = Background(slide, theme.Colours),
+            Background = Background(slide, theme),
             Shapes = shapes,
         };
     }
@@ -117,10 +118,9 @@ internal sealed class PptxSlideLayout
     /// A slide with no <c>p:bg</c> shows its layout's, and a layout with none shows its master's —
     /// which is why nearly every deck states a background exactly once, on the master, and every
     /// slide in it is that colour. A deck that states none anywhere is white, which is what
-    /// LibreOffice paints. Only a solid fill is resolved; a gradient or a picture background is
-    /// left unpainted rather than approximated, and says so in the TODO.
+    /// LibreOffice paints.
     /// </remarks>
-    private static Paint? Background(PptxSlide slide, DrawingTheme? theme)
+    private Paint? Background(PptxSlide slide, SlideTheme theme)
     {
         foreach (XElement? part in (XElement?[])[slide.Root, slide.Layout, slide.Master])
         {
@@ -130,11 +130,46 @@ internal sealed class PptxSlideLayout
             XElement? properties = Ppt.Child(background, "bgPr");
             if (properties is null) continue;
 
-            if (SolidFill(properties, theme, placeholder: null) is { } fill) return fill;
+            // The whole sheet, so the fill's box is the slide and its placement is the identity —
+            // a background has no a:xfrm and cannot be rotated.
+            FillContext context =
+                new(slide, theme.Colours, _file.SlideSize, AffineTransform.Identity);
+
+            if (Fill(properties, inherited: null, context) is { } fill) return fill;
             if (Drawing.Child(properties, "noFill") is not null) return null;
         }
 
         return Paint.Solid(Colour.White);
+    }
+
+    /// <summary>
+    /// What a fill needs beyond the element stating it: where the shape is, and what resolves
+    /// its colours and its relationships.
+    /// </summary>
+    /// <param name="Slide">The slide, for the parts a relationship could be declared on.</param>
+    /// <param name="Theme">The colour scheme, for a themed stop.</param>
+    /// <param name="Size">The shape's own box, before placement.</param>
+    /// <param name="Placement">The matrix taking that box onto the slide.</param>
+    private readonly record struct FillContext(
+        PptxSlide Slide, DrawingTheme? Theme, DocSize Size, AffineTransform Placement);
+
+    /// <summary>
+    /// Which part an element was read from, which is the part whose relationships its
+    /// <c>r:embed</c> resolves against.
+    /// </summary>
+    /// <remarks>
+    /// Derived from the element rather than passed down, because a fill can arrive from any of
+    /// three parts and only the element knows which: a placeholder with no fill of its own takes
+    /// the layout's or the master's, and each declares its own relationships. Resolving a
+    /// master's <c>rId2</c> against the slide's relationships finds a different picture, or none.
+    /// </remarks>
+    private static string? PartOf(XElement element, PptxSlide slide)
+    {
+        XElement root = element.AncestorsAndSelf().Last();
+
+        if (ReferenceEquals(root, slide.Layout)) return slide.LayoutPartName;
+        if (ReferenceEquals(root, slide.Master)) return slide.MasterPartName;
+        return slide.PartName;
     }
 
     private void Walk(
@@ -164,9 +199,11 @@ internal sealed class PptxSlideLayout
             }
             else if (Ppt.Is(element, "pic"))
             {
-                // A picture's pixels need a decoder nothing in the layout path has yet, so what is
-                // placed is its frame: the outline and any line it carries, which is what makes a
-                // missing image visible as a hole rather than as nothing at all.
+                // A picture is a shape with a picture in it: the same p:spPr states its transform,
+                // its geometry, its fill and its line, and the p:blipFill beside them says what to
+                // draw inside. A picture part that will not resolve leaves the frame — the outline
+                // and any line it carries — which is what makes a missing image visible as a hole
+                // rather than as nothing at all.
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
         }
@@ -332,12 +369,16 @@ internal sealed class PptxSlideLayout
             placement,
             own?.Outline ?? SlidePresetGeometry.Outline(preset, local.Size, adjustment));
 
+        FillContext fills = new(slide, theme.Colours, local.Size, placement);
+        DocRect bounds = ShapeTransform.PlacedBounds(placement, local.Size);
+
         return new PlacedShape
         {
             Name = Name(shape),
             Outline = outline,
-            Bounds = ShapeTransform.PlacedBounds(placement, local.Size),
-            Fill = Fill(properties, inherited, theme.Colours),
+            Bounds = bounds,
+            Fill = Fill(properties, inherited, fills),
+            Picture = Picture(shape, slide, bounds),
             Line = Line(properties, inherited, theme.Colours),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
@@ -407,21 +448,231 @@ internal sealed class PptxSlideLayout
     /// A shape's fill: its own, then its placeholder's.
     /// </summary>
     /// <remarks>
-    /// Only <c>a:solidFill</c> and <c>a:noFill</c> are resolved. A gradient, a picture or a
-    /// pattern fill is left unpainted rather than approximated by one of its stops — the backends
-    /// do not draw a gradient yet and inventing a colour here would make a wrong answer look like
-    /// a right one. Recorded in the TODO, with what it would take.
+    /// Four of DrawingML's six kinds. <c>a:pattFill</c> is left unpainted — it resolves into a
+    /// tiled bitmap the reader would have to synthesise rather than read — and a fill inherited
+    /// from the theme's style matrix (<c>a:fillRef</c>) is a separate lookup that nothing
+    /// measured needs yet. Both are in the TODO.
     /// </remarks>
-    private static Paint? Fill(XElement? properties, XElement? inherited, DrawingTheme? theme)
+    private Paint? Fill(XElement? properties, XElement? inherited, in FillContext context)
     {
         foreach (XElement? source in (XElement?[])[properties, inherited])
         {
             if (source is null) continue;
             if (Drawing.Child(source, "noFill") is not null) return null;
-            if (SolidFill(source, theme, placeholder: null) is { } fill) return fill;
+            if (SolidFill(source, context.Theme, placeholder: null) is { } fill) return fill;
+            if (Gradient(Drawing.Child(source, "gradFill"), context) is { } gradient) return gradient;
+            if (Bitmap(Drawing.Child(source, "blipFill"), source, context) is { } bitmap) return bitmap;
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// The picture a <c>p:pic</c> draws, or null for any other shape.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A picture's blip fill is a <c>p:blipFill</c> — PresentationML's own element, with
+    /// DrawingML inside it — and not the <c>a:blipFill</c> a shape's <c>p:spPr</c> would carry.
+    /// A reader looking for the drawing namespace here finds nothing and draws an empty frame,
+    /// which looks exactly like a missing picture part.
+    /// </para>
+    /// <para>
+    /// <c>a:srcRect</c> becomes a larger destination rectangle rather than a crop, because the
+    /// drawing model has clipping and no crop and the two are the same thing — see
+    /// <see cref="SlideImages.Uncropped"/>. The clip is the shape's outline, applied by
+    /// <see cref="SlideDrawing"/>, which also handles the picture-inside-a-preset-shape case for
+    /// free.
+    /// </para>
+    /// <para>
+    /// The destination is the shape's placed rectangle, which is right for every picture that is
+    /// not rotated. <c>DrawImage</c> takes a rectangle and not a matrix, so a rotated picture is
+    /// drawn upright inside its rotated clip; recorded in the TODO rather than approximated.
+    /// </para>
+    /// </remarks>
+    private PlacedPicture? Picture(XElement shape, PptxSlide slide, DocRect bounds)
+    {
+        if (!Ppt.Is(shape, "pic")) return null;
+        if (DrawingFill.ReadBlip(Ppt.Child(shape, "blipFill")) is not { } blip) return null;
+        if (Image(blip.EmbedId, PartOf(shape, slide)) is not { } image) return null;
+
+        DocRect area = blip.FillRect.IsWhole
+            ? bounds
+            : SlideImages.Inset(
+                bounds, blip.FillRect.Left, blip.FillRect.Top,
+                blip.FillRect.Right, blip.FillRect.Bottom);
+
+        DocRect? destination = SlideImages.Uncropped(
+            area, blip.SourceRect.Left, blip.SourceRect.Top,
+            blip.SourceRect.Right, blip.SourceRect.Bottom);
+
+        return destination is { } placed
+            ? new PlacedPicture(image, placed, Math.Clamp(blip.Opacity, 0, 1))
+            : null;
+    }
+
+    /// <summary>
+    /// An <c>a:gradFill</c>, resolved against the box it fills.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>A path gradient's stop 0 is at the centre, and a linear one's is at the start of its
+    /// ramp.</b> That is not obvious from the file and is the mapping most easily got backwards:
+    /// LibreOffice <em>reverses</em> the stop list for a path gradient
+    /// (<c>fillproperties.cxx:544</c>) before handing it to a model whose first stop paints the
+    /// outer edge, so the two reversals cancel and DrawingML's own order is already
+    /// centre-outwards. ODF says the opposite and needs the swap; see
+    /// <see cref="OpenDocument.OdpSlideLayout"/>.
+    /// </para>
+    /// <para>
+    /// <c>a:path path="shape"</c> — a gradient following a custom outline — is drawn as a
+    /// rectangular one, which is what LibreOffice does with it too: its comment says
+    /// "XML_rect or XML_shape, but the latter is not implemented".
+    /// </para>
+    /// </remarks>
+    private static Paint? Gradient(XElement? element, in FillContext context)
+    {
+        if (DrawingFill.ReadGradient(element) is not { Stops.Count: > 0 } gradient) return null;
+
+        List<GradientStop> stops = [];
+        foreach (DrawingGradientStop stop in gradient.Stops)
+        {
+            if (stop.Colour.Resolve(context.Theme, placeholder: null) is not { } colour) continue;
+            stops.Add(new GradientStop(stop.Position, colour));
+        }
+
+        if (stops.Count == 0) return null;
+
+        (DocRect box, AffineTransform space) = GradientSpace(context);
+
+        if (gradient.Path is null)
+        {
+            double radians = (gradient.Angle ?? 0) * Math.PI / 180.0;
+            return SlideGradients.Linear(box, Math.Cos(radians), Math.Sin(radians), stops)
+                with { Transform = space };
+        }
+
+        // a:fillToRect states the inner rectangle the gradient converges on; its centre is what
+        // LibreOffice keeps, as (MAX_PERCENT + l - r) / 2 (fillproperties.cxx:531-536).
+        DocPoint centre = new(
+            box.Left + (box.Width * ((1 + gradient.FillToRect.Left - gradient.FillToRect.Right) / 2)),
+            box.Top + (box.Height * ((1 + gradient.FillToRect.Top - gradient.FillToRect.Bottom) / 2)));
+
+        GradientKind kind = gradient.Path == "circle"
+            ? GradientKind.Radial
+            : GradientKind.Rectangular;
+
+        return SlideGradients.Centred(kind, box, centre, stops) with { Transform = space };
+    }
+
+    /// <summary>
+    /// An <c>a:blipFill</c> used as a shape's fill: a tiled or stretched bitmap.
+    /// </summary>
+    /// <remarks>
+    /// A tile's size is the picture's <em>natural</em> size scaled by <c>a:tile/@sx</c> and
+    /// <c>@sy</c>, which is why the reader has to know how large the picture is without decoding
+    /// it — see <see cref="SlideImages.NaturalSize"/>. Measured on
+    /// <c>paint-fills-pptx.pptx</c>: LibreOffice's own export of a one-centimetre checkerboard
+    /// writes <c>sx="471698"</c> over an 8-pixel image, which is one centimetre only if those
+    /// eight pixels are 8/96 of an inch.
+    /// </remarks>
+    private BitmapPaint? Bitmap(XElement? element, XElement source, in FillContext context)
+    {
+        if (DrawingFill.ReadBlip(element) is not { } blip) return null;
+        if (Image(blip.EmbedId, PartOf(source, context.Slide)) is not { } image) return null;
+
+        (DocRect box, _) = GradientSpace(context);
+
+        if (!blip.Tile) return new BitmapPaint(image, box.Size, box.Origin, Stretch: true);
+
+        DocSize natural = SlideImages.NaturalSize(image.EncodedBytes.Span) ?? box.Size;
+        DocSize tile = new(natural.Width * blip.TileScaleX, natural.Height * blip.TileScaleY);
+        if (tile.Width <= Length.Zero || tile.Height <= Length.Zero) return null;
+
+        (int horizontal, int vertical) = TileAnchor(blip.TileAlign);
+        DocPoint origin = SlideImages.TileOrigin(box, tile, horizontal, vertical);
+
+        return new BitmapPaint(
+            image,
+            tile,
+            new DocPoint(
+                origin.X + Length.FromEmu(blip.TileOffsetX),
+                origin.Y + Length.FromEmu(blip.TileOffsetY)),
+            Stretch: false);
+    }
+
+    /// <summary>
+    /// <c>a:tile/@algn</c> as a pair of −1/0/+1 edges.
+    /// </summary>
+    /// <remarks>
+    /// The schema's default is <c>tl</c> and LibreOffice's own export writes <c>ctr</c>, which
+    /// is the value that matters: a centred grid keeps the tiling symmetric about the shape when
+    /// the shape's size is not a whole number of tiles, and anchoring it top-left instead moves
+    /// every tile by up to half a tile.
+    /// </remarks>
+    private static (int Horizontal, int Vertical) TileAnchor(string align) => align switch
+    {
+        "tl" => (-1, -1),
+        "t" => (0, -1),
+        "tr" => (1, -1),
+        "l" => (-1, 0),
+        "ctr" => (0, 0),
+        "r" => (1, 0),
+        "bl" => (-1, 1),
+        "b" => (0, 1),
+        "br" => (1, 1),
+        _ => (-1, -1),
+    };
+
+    /// <summary>
+    /// The box a fill is computed in, and the matrix taking it to the slide.
+    /// </summary>
+    /// <remarks>
+    /// The same split <see cref="Text"/> makes and for the same reason. An upright shape's fill
+    /// is stated in slide coordinates outright, so a shading's numbers land in a backend's output
+    /// directly comparable with a reference renderer's; a rotated or scaled one keeps its own box
+    /// and travels with the matrix, which a <c>GradientPaint</c> carries and a backend applies as
+    /// one more <c>cm</c> or one more local matrix.
+    /// </remarks>
+    private static (DocRect Box, AffineTransform Space) GradientSpace(in FillContext context)
+        => IsUpright(context.Placement)
+            ? (new DocRect(ShapeTransform.Apply(context.Placement, DocPoint.Origin), context.Size),
+               AffineTransform.Identity)
+            : (new DocRect(DocPoint.Origin, context.Size), context.Placement);
+
+    /// <summary>
+    /// The bytes of an image part named by an <c>r:embed</c>, still encoded.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Nothing here decodes.</b> <c>RasterImage.Encoded</c> carries the file's own bytes and
+    /// whichever backend wants pixels decodes them, which is what keeps
+    /// <c>Paperless.Presentations</c> free of a dependency on the rasteriser — and therefore
+    /// keeps <c>paperless extract</c> free of a codec it never uses.
+    /// </para>
+    /// <para>
+    /// Cached by part name because one picture serves every slide that shows it: a deck with a
+    /// logo on its master would otherwise read and copy the same JPEG once per slide.
+    /// </para>
+    /// </remarks>
+    private RasterImage? Image(string? embedId, string? partName)
+    {
+        if (embedId is null || partName is null) return null;
+        if (_file.Relationship(partName, embedId) is not { IsExternal: false } relationship) return null;
+        if (_images.TryGetValue(relationship.Target, out RasterImage? cached)) return cached;
+
+        RasterImage? image = null;
+        if (_file.Package.GetPart(relationship.Target) is { } part)
+        {
+            using Stream content = part.Open();
+            using MemoryStream buffer = new();
+            content.CopyTo(buffer);
+
+            if (buffer.Length > 0) image = RasterImage.Encoded(buffer.ToArray(), part.MediaType);
+        }
+
+        _images[relationship.Target] = image;
+        return image;
     }
 
     private static Paint? SolidFill(XElement parent, DrawingTheme? theme, Colour? placeholder)
