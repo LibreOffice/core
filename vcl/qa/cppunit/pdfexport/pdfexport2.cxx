@@ -7029,6 +7029,78 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDropCapPaint)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(114.53, aRect.at(4).getMinX(), /*delta*/ 2.0);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testCOLRv1)
+{
+    // COLR v1 glyphs are exported as Type 3 CharProcs drawing a Form XObject that
+    // holds the glyph paint. The document uses Nabla (COLR v1) with the text "Hello".
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"COLRv1Test.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    bool bFoundType3 = false;
+    int nFormXObjects = 0;
+    int nCharProcs = 0;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+
+        if (pType && pType->GetValue() == "Font" && pSubtype && pSubtype->GetValue() == "Type3")
+            bFoundType3 = true;
+
+        if (pType && pType->GetValue() == "XObject" && pSubtype && pSubtype->GetValue() == "Form")
+        {
+            nFormXObjects++;
+
+            auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("BBox"_ostr));
+            CPPUNIT_ASSERT(pBBox);
+            const auto& rElements = pBBox->GetElements();
+            CPPUNIT_ASSERT_EQUAL(size_t(4), rElements.size());
+            double aBBox[4];
+            for (size_t i = 0; i < 4; i++)
+            {
+                auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[i]);
+                CPPUNIT_ASSERT(pNumber);
+                aBBox[i] = pNumber->GetValue();
+            }
+
+            CPPUNIT_ASSERT_GREATER(aBBox[0], aBBox[2]);
+            CPPUNIT_ASSERT_GREATER(aBBox[1], aBBox[3]);
+
+            // The glyphs of "Hello" have all their ink above the baseline, so a
+            // Y-flipped BBox would put it below.
+            CPPUNIT_ASSERT_GREATER(0.0, aBBox[3]);
+            CPPUNIT_ASSERT_GREATER(-aBBox[1], aBBox[3]);
+        }
+
+        auto pStream = pObject->GetStream();
+        if (!pStream)
+            continue;
+        auto& rMemory = pStream->GetMemory();
+        auto nSize = rMemory.GetSize();
+        if (nSize == 0)
+            continue;
+        rMemory.Seek(0);
+        OString aContent(static_cast<const char*>(rMemory.GetData()), nSize);
+        if (aContent.indexOf(" d0\n") >= 0 && aContent.indexOf(" Do\n") >= 0)
+            nCharProcs++;
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Expected a Type 3 font for COLR v1 glyphs", bFoundType3);
+
+    // "Hello" has 4 unique glyphs, each with a Form XObject drawn by its CharProc.
+    CPPUNIT_ASSERT_EQUAL(4, nFormXObjects);
+    CPPUNIT_ASSERT_EQUAL(4, nCharProcs);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
