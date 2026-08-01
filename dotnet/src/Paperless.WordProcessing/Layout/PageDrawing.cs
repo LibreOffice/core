@@ -136,12 +136,26 @@ public static class PageDrawing
     /// picture whose bytes could not be found draws as it always did: its background and its border, and
     /// a hole where the pixels would have gone.
     /// </para>
+    /// <para>
+    /// <strong>A vector picture is stretched onto the frame by its own view box, not by its ink.</strong>
+    /// <c>VectorImage.Draw</c> maps the picture's whole frame onto the destination and clips to it, which
+    /// is the mapping LibreOffice uses for a <c>Graphic</c> on an <c>SdrObject</c>'s logic rectangle. This
+    /// is the one call a reader gets wrong first: taking the extent of what the picture actually paints
+    /// instead makes a logo with margins come out several times too large and clipped, which reads as a
+    /// mapping bug in the decoder and is not one.
+    /// </para>
+    /// <para>
+    /// The vector wins over the raster where a frame has both, which happens only for a DrawingML
+    /// <c>svgBlip</c>. A decode that comes back empty falls through to the raster, which is what that
+    /// fallback is written into the file for.
+    /// </para>
     /// </remarks>
     private static void DrawFrame(PlacedFrame frame, IDrawingSink sink)
     {
         if (frame.Frame.Fill is { } fill) Fill(frame.Area, fill, sink);
 
-        if (frame.Frame.Image is { } image) sink.DrawImage(image, frame.Area);
+        if (frame.Frame.Vector is { } vector && !vector.Value.IsEmpty) vector.Value.Draw(sink, frame.Area);
+        else if (frame.Frame.Image is { } image) sink.DrawImage(image, frame.Area);
 
         DrawFlow(frame.Content, sink);
 

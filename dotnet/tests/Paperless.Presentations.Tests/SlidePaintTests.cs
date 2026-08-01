@@ -130,8 +130,10 @@ public class SlidePaintTests
         PlacedPicture picture = Shape(document, slide: 1, index: 0).Picture.ShouldNotBeNull();
 
         picture.Opacity.ShouldBe(1.0);
-        picture.Image.IsDecoded.ShouldBeFalse();
-        picture.Image.EncodedBytes.Length.ShouldBeGreaterThan(0);
+
+        RasterImage raster = picture.Image.ShouldNotBeNull();
+        raster.IsDecoded.ShouldBeFalse();
+        raster.EncodedBytes.Length.ShouldBeGreaterThan(0);
 
         picture.Destination.Left.Millimetres.ShouldBe(40, 0.05);
         picture.Destination.Top.Millimetres.ShouldBe(30, 0.05);

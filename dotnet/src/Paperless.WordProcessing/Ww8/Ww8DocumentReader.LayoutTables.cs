@@ -535,8 +535,8 @@ public sealed record Ww8LayoutFrame(
     /// </remarks>
     public bool IsInline { get; init; }
 
-    /// <summary>The picture the shape's <c>pib</c> names, still encoded, or null when it names none.</summary>
-    public Core.Graphics.RasterImage? Picture { get; init; }
+    /// <summary>The picture the shape's <c>pib</c> names, or nothing when it names none.</summary>
+    public FramePicture Picture { get; init; }
 }
 
 /// <summary>A DOC table as layout sees it: the column grid in twips, and cells holding paragraphs.</summary>

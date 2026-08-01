@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.OpenDocument;
 
@@ -112,7 +113,41 @@ internal sealed class OdpFills
     /// </para>
     /// </remarks>
     /// <param name="element">A <c>draw:image</c> or <c>draw:fill-image</c>.</param>
-    public RasterImage? Picture(XElement? element)
+    public RasterImage? Picture(XElement? element) => Bytes(element) is { } found
+        ? RasterImage.Encoded(found.Bytes, found.MediaType)
+        : null;
+
+    /// <summary>
+    /// The same picture, but told apart into a raster and a vector.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Separate from <see cref="Picture"/> because the two callers want different things. A
+    /// <c>draw:fill-image</c> becomes a <c>BitmapPaint</c>, which tiles pixels and has no form
+    /// for a display list; a <c>draw:image</c> inside a <c>draw:frame</c> is a picture placed
+    /// once, and that one can be a metafile. Giving the fill path a vector it cannot use would
+    /// lose the fill altogether.
+    /// </para>
+    /// <para>
+    /// <b>Sniffed rather than believed.</b> <c>draw:mime-type</c> is right far more often in ODF
+    /// than a DOCX part name is, and it is still only a claim; the bytes are what
+    /// <c>VectorImages.For</c> reads.
+    /// </para>
+    /// </remarks>
+    /// <param name="element">A <c>draw:image</c>.</param>
+    public (RasterImage? Raster, Lazy<VectorImage>? Vector) Drawable(XElement? element)
+    {
+        if (Bytes(element) is not { } found) return default;
+
+        ReadOnlyMemory<byte> bytes = found.Bytes;
+
+        return VectorImages.For(bytes.Span) is not null
+            ? (null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+            : (RasterImage.Encoded(bytes, found.MediaType), null);
+    }
+
+    /// <summary>The bytes an element names, inline or as a package part, with its declared type.</summary>
+    private (ReadOnlyMemory<byte> Bytes, string? MediaType)? Bytes(XElement? element)
     {
         if (element is null) return null;
 
@@ -122,7 +157,9 @@ internal sealed class OdpFills
             try
             {
                 byte[] bytes = Convert.FromBase64String(inline.Value);
-                return bytes.Length == 0 ? null : RasterImage.Encoded(bytes);
+                return bytes.Length == 0
+                    ? null
+                    : (bytes, Attribute(element, OdfNamespaces.Draw, "mime-type"));
             }
             catch (FormatException)
             {
@@ -141,7 +178,7 @@ internal sealed class OdpFills
 
         return buffer.Length == 0
             ? null
-            : RasterImage.Encoded(buffer.ToArray(), _file.Package?.GetPart(part)?.MediaType);
+            : (buffer.ToArray(), _file.Package?.GetPart(part)?.MediaType);
     }
 
     /// <summary>

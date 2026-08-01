@@ -101,7 +101,22 @@ public static class SlideDrawing
         try
         {
             sink.ClipPath(shape.Outline);
-            sink.DrawImage(picture.Image, picture.Destination, picture.Opacity);
+
+            // The vector wins where a shape has both, which is the DrawingML `svgBlip` case and
+            // nothing else; an empty decode falls back to the raster the file put there for it.
+            //
+            // `VectorImage.Draw` stretches the picture's own *frame* onto the destination and not
+            // the extent of its ink, which is the same rule `DrawImage` follows for a raster and
+            // is why a crop is expressed here as a larger destination plus a clip rather than as
+            // anything the picture knows about.
+            if (picture.Vector is { } vector && !vector.Value.IsEmpty)
+            {
+                vector.Value.Draw(sink, picture.Destination);
+            }
+            else if (picture.Image is { } image)
+            {
+                sink.DrawImage(image, picture.Destination, picture.Opacity);
+            }
         }
         finally
         {

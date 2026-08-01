@@ -1,5 +1,6 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Graphics;
+using Paperless.Vector;
 
 namespace Paperless.WordProcessing;
 
@@ -20,7 +21,8 @@ namespace Paperless.WordProcessing;
 /// <strong>Nothing here decodes.</strong> The bytes go into <see cref="RasterImage.Encoded"/> and stop;
 /// whichever backend wants pixels asks <c>RasterImageDecoder.Ensure</c> for them. A reader that decoded
 /// would put a codec on the extraction path, which the layering forbids — <c>Paperless.Rendering</c> is
-/// below nothing that reads a document.
+/// below nothing that reads a document. A metafile is deferred for the same reason and by a different
+/// mechanism, because its decoder <em>is</em> reachable from here: see <see cref="FramePicture"/>.
 /// </para>
 /// <para>
 /// The signature table is deliberately a near-duplicate of <c>RasterImageDecoder.Sniff</c>'s rather than
@@ -28,47 +30,66 @@ namespace Paperless.WordProcessing;
 /// referencing it from here would create exactly the dependency the previous paragraph exists to avoid.
 /// The two lists are allowed to differ, and one difference is intended: this one also recognises the
 /// vector formats, which the decoder has no reason to name because it cannot decode any of them.
+/// <see cref="Vector"/> is now asked only after <c>VectorImages.For</c> has declined, so in a healthy
+/// document its only answer is a format Paperless has no decoder for.
 /// </para>
 /// </remarks>
 internal static class EmbeddedPicture
 {
     /// <summary>
-    /// The picture some bytes hold, or null when they are not one a raster backend can draw.
+    /// The picture some bytes hold, or <see cref="FramePicture.None"/> when they hold none this can draw.
     /// </summary>
     /// <remarks>
-    /// A metafile, an unrecognised blob and an empty part all give null, and the first two also leave a
-    /// <see cref="Diagnostic"/> behind. Null rather than an exception in every case: a picture that
-    /// cannot be drawn is a page that still has its text, its tables and every other shape on it, which
-    /// is the leniency rule the whole library reads by.
+    /// <para>
+    /// <strong>Raster first, then vector, and the order is not arbitrary.</strong> The raster signatures
+    /// are fixed bytes at offset zero and claim only what they are; the SVG sniff scans the first five
+    /// hundred bytes for a root element and would, on a pathological file, claim a raster carrying that
+    /// text in a comment. Asking the cheaper and stricter question first costs nothing and removes the
+    /// case.
+    /// </para>
+    /// <para>
+    /// An unrecognised blob and an empty part both give nothing, and the first leaves a
+    /// <see cref="Diagnostic"/> behind. <c>PL2370</c> survives with a narrower meaning: it is now a
+    /// vector format Paperless has <em>no decoder for</em> — a PICT or a StarView metafile — rather than
+    /// "vector import is not implemented". Nothing rather than an exception in every case: a picture
+    /// that cannot be drawn is a page that still has its text, its tables and every other shape on it,
+    /// which is the leniency rule the whole library reads by.
+    /// </para>
     /// </remarks>
     /// <param name="bytes">The picture exactly as the document stored it.</param>
     /// <param name="declaredMediaType">What the document said it was, where it said anything.</param>
     /// <param name="where">What to call the picture in a diagnostic: a part name, a frame name.</param>
     /// <param name="diagnostics">Where to record a picture that will not draw, or null to say nothing.</param>
-    public static RasterImage? Read(
+    public static FramePicture Read(
         ReadOnlyMemory<byte> bytes,
         string? declaredMediaType,
         string? where,
         List<Diagnostic>? diagnostics)
     {
-        if (bytes.IsEmpty) return null;
+        if (bytes.IsEmpty) return FramePicture.None;
 
         if (Raster(bytes.Span) is { } mediaType)
         {
             (int width, int height) = Dimensions(bytes.Span);
 
-            return RasterImage.Encoded(bytes, mediaType) with { Width = width, Height = height };
+            return FramePicture.Of(
+                RasterImage.Encoded(bytes, mediaType) with { Width = width, Height = height });
         }
+
+        // Sniffed by the decoder registry rather than by the table below, because that registry is the
+        // only thing that knows which formats have a decoder — an EMF+ has no signature of its own at
+        // all, and LibreOffice writes a genuine EMF into a part named `.wmf`.
+        if (VectorImages.For(bytes.Span) is not null) return FramePicture.OfVector(bytes);
 
         if (Vector(bytes.Span) is { } vector)
         {
             diagnostics?.Add(new Diagnostic(
                 DiagnosticSeverity.Information, "PL2370",
-                $"A {vector} picture was found and has not been drawn: vector import is not "
-                + "implemented, so the frame reserves its room and stays empty.",
+                $"A {vector} picture was found and has not been drawn: Paperless has no decoder for "
+                + "that format, so the frame reserves its room and stays empty.",
                 where is null ? null : new DiagnosticLocation(where)));
 
-            return null;
+            return FramePicture.None;
         }
 
         diagnostics?.Add(new Diagnostic(
@@ -78,7 +99,7 @@ internal static class EmbeddedPicture
             + (declaredMediaType is null ? "" : $" The document declared them as '{declaredMediaType}'."),
             where is null ? null : new DiagnosticLocation(where)));
 
-        return null;
+        return FramePicture.None;
     }
 
     /// <summary>
@@ -241,10 +262,16 @@ internal static class EmbeddedPicture
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Recognised so that a metafile can be declined by name rather than as an unreadable blob, which is
-    /// the difference between "not implemented yet" and "this document is broken". Real <c>.docx</c> and
-    /// <c>.doc</c> files embed these constantly — every chart, every pasted Visio drawing, every clip-art
-    /// arrow — so the message a caller gets for one is worth getting right.
+    /// Recognised so that a metafile can be declined <em>by name</em> rather than as an unreadable blob,
+    /// which is the difference between "no decoder for that" and "this document is broken". Real
+    /// <c>.docx</c> and <c>.doc</c> files embed these constantly — every chart, every pasted Visio
+    /// drawing, every clip-art arrow — so the message a caller gets for one is worth getting right.
+    /// </para>
+    /// <para>
+    /// It is asked only <em>after</em> <c>VectorImages.For</c> has declined, so in a healthy document
+    /// the only answer it ever gives is <c>SVM</c>. The overlap is kept on purpose: this table's tests
+    /// are looser than a decoder's, so a WMF whose header a decoder rejects is still declined here as a
+    /// WMF, and the diagnostic names the format rather than shrugging.
     /// </para>
     /// <para>
     /// EMF is identified by its type <em>and</em> its signature, at offsets 0 and 40, because the leading

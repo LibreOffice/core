@@ -961,79 +961,171 @@ thing in the tree to emit an encoded image into a sink.
       made once, in front of the record loop. See *EMF+ → The rule that had to be settled
       first*.
 
-## Wiring it into the readers
+## Wiring it into the readers — done
 
-`Paperless.Ooxml.DrawingML.BlipReference.Choose` picks the SVG over the raster fallback for a
-DrawingML `a:blip`, and `VectorImages` decodes whatever bytes a reader fetches. **Neither is
-called from a reader yet**, because the three picture-drawing paths were being written in
-parallel with this and a shared edit would have collided. What is left is one hook per
-family, each a few lines:
+**Every family draws an embedded vector picture.** The wiring turned out to be smaller than the
+list below predicted and to need one thing the list did not mention. What follows is what it
+actually was, kept because the next format added here will follow the same three lines.
 
-1. Where a picture's relationship id is resolved, call `BlipReference.Choose(blip)` rather
-   than reading `r:embed` directly. `Paperless.Presentations.Ooxml.PptxShapeReader.ReadPicture`
-   and `Paperless.WordProcessing.Ooxml.DocxContentReader` both read `r:embed` today.
-2. Where the bytes become something drawable, try `VectorImages.For(bytes)` first and fall
-   back to `RasterImage.Encoded` — and if the vector decode comes back empty, fall back to
-   `Choice.FallbackRelationshipId`, which is exactly what it is for.
-3. ODF needs no selection step: a `draw:image` whose target is `image/svg+xml` *is* the
-   vector, so only step 2 applies. `VectorImages.IsVectorMediaType` answers the media-type
-   half for a reader that has the declared type before it has the bytes.
+### What each family gained
 
-`tests/corpus/features/svg-picture.odt` and `.docx` are the fixtures for both, and
-`CorpusSvgTests` already reads them the way a reader would.
+Three properties and one call, and no new abstraction anywhere:
 
-**WMF changes nothing about the shape of that hook, which is the point of the seam** — but it
-does raise the stakes, because a WMF has no `BlipReference` alternative to choose between and
-no SVG-style declared media type to sniff for. It is simply a picture, and the only thing
-that says so is its first four bytes. So step 2 is the whole of it: `VectorImages.For(bytes)`
-before `RasterImage.Encoded`, for every picture, in every family.
-`tests/corpus/features/wmf-picture.odt` and `.docx` are the fixtures — both packages keep the
-426-byte metafile rather than rasterising it, the ODT alongside a 9 685-byte PNG preview that
-is exactly what decoding avoids — and `CorpusWmfTests` reads them the way a reader would.
-**The legacy binary families matter more here than they do for SVG**: DOC, XLS and PPT store
-a WMF as the presentation of every embedded OLE object, so the Escher path in
-`Paperless.MsBinary` is where most real WMFs in a corpus will actually be found.
+| Family | Where the picture lands | Where the bytes are sniffed |
+|---|---|---|
+| `Paperless.WordProcessing` | `PageFrame.Vector`, a `Lazy<VectorImage>?` beside `PageFrame.Image` | `EmbeddedPicture.Read`, which now answers a `FramePicture` — the pair — so all four front ends thread one value instead of two nullable fields |
+| `Paperless.Presentations` | `PlacedPicture.Vector`, beside a now-nullable `Image` | `PptxSlideLayout.Loaded` and `OdpFills.Drawable` |
+| `Paperless.Spreadsheets` | `SheetDrawing.Vector` | `XlsxDrawings.Load` and `OdsDrawings.Load` |
 
-**EMF and EMF+ change nothing again, and the DOCX fixture settles the sniffing argument in
-its sharpest form.** LibreOffice writes a genuine EMF into `word/media/image1.wmf`, and
-`[Content_Types].xml` declares no type for `.wmf` at all — so neither the part name nor the
-declared type identifies the format, and only the bytes do. An EMF+ file is even less
-distinguishable: it *is* an EMF, with the same `EMR_HEADER` and the same signature, and the
-EMF+ inside it has no signature of its own anywhere. Nothing in the hook has to know that,
-which is the whole point of putting the decision behind `VectorImages.For`.
+`PageDrawing.DrawFrame`, `SlideDrawing.DrawPicture` and `SheetPageGraphics.Draw` each gained one
+branch: the vector if it decodes to something, else the raster. That is the whole of the drawing
+side.
 
-### The frame seam, and why it needs nothing new
+**The two-line sniff is written out five times and that is deliberate.** `VectorImages.For(bytes)`
+then `new Lazy<VectorImage>(() => VectorImages.Decode(bytes))` appears in each of the five readers,
+because there is nowhere above `Paperless.Vector` that all three families can see: `Paperless.Core`
+cannot name `VectorImage`, and `Paperless.Ooxml`, `Paperless.OpenDocument` and `Paperless.MsBinary`
+are one per file family rather than one per document family. A helper in any of them would have an
+ODF reader depending on the OOXML library. Two lines duplicated beats that; a *third* thing to
+duplicate would not, and the place to put it then is a new Core-only library beside
+`Paperless.Markup`, which exists for exactly this shape of problem.
+
+### The Core abstraction was still not needed, and this is the confirmation
+
+The section below predicted it and the wiring bore it out. `VectorImage` *is* the abstraction a
+frame wants — `Draw(IDrawingSink, DocRect)` plus `IntrinsicSize`, immutable, decoded once — and the
+layering already permits every family to name it, because all three already carried a
+`ProjectReference` on `Paperless.Vector` for `Paperless.Ooxml`'s sake. **Not one line of
+`Paperless.Core` changed**, and the interface that was not written would have had two members and
+one implementation.
+
+### What the prediction missed: it has to be *lazy*, and the number is why
+
+The seam said "decoded once". It did not say *when*, and when turns out to be the load-bearing
+half. Measured on this tree with a throwaway console over `Paperless.Vector`:
+
+| Picture | First decode in the process | Warm |
+|---|---|---|
+| `wmf-shapes.wmf` (one text run) | **1043.9 ms** | 0.21 ms |
+| `emfplus-shapes.emf` | 381.3 ms | 0.13 ms |
+| `emf-shapes.emf` (no text) | 67.0 ms | 0.08 ms |
+
+Nearly all of the first is `Paperless.Text` resolving and loading faces. **DOCX, ODT, PPTX, XLSX
+and ODS read their pictures only when a layout source asks for one — but RTF and DOC read theirs
+while parsing the document**, which is the extraction path, so decoding there would have put a
+second of font work on a caller that wanted the words and nothing else. A `Lazy<VectorImage>` is
+the whole fix: it defers, it caches its answer, and the per-part caches the readers already keep
+mean a logo on forty slides still decodes once. Three tests assert `IsValueCreated` is false after
+a full layout, one per family, because nothing else can see the difference.
+
+### What each format taught the wiring
+
+- **The part name and the declared type are both worthless, in the sharpest possible form.**
+  LibreOffice's own OOXML export writes a genuine EMF into `word/media/image1.wmf`,
+  `ppt/media/image2.wmf` and `xl/media/image2.wmf`, and `[Content_Types].xml` declares nothing
+  usable for `.wmf` at all. `VectorImages.For` is the only thing consulted.
+- **`BlipReference.Choose` is now called by all three OOXML readers** rather than `r:embed` being
+  read directly, and the `asvg:svgBlip` extension turns up in every one of the three — including
+  the spreadsheet, which was not obvious. The raster is kept *beside* the vector rather than
+  discarded, so an empty decode falls back to what the file put there for that; it is the only
+  case where a frame holds both.
+- **ODF needed no selection step, as predicted.** A `draw:frame` lists alternatives as sibling
+  `draw:image` children and the first drawable one wins, which is already what the readers did.
+- **A DOC's metafile blip is deflate-compressed and a raster blip is not.** This was the one real
+  piece of work. `Ww8Blips` used to drop a vector blip's bytes; it now reads the 34-byte
+  `OfficeArtMetafileHeader` and inflates what follows, where a raster blip has a single tag byte in
+  the same place. `SvxMSDffManager::GetBLIPDirect` sets its ZCodec for the EMF, WMF and PICT cases
+  and no other (`msdffimp.cxx:6518-6549`). Measured: 892 bytes of EMF arrive as 262 bytes of
+  deflate, so a reader that skipped the header without inflating finds no placeable magic and no
+  `METAHEADER` and declines the picture as an unrecognised blob — which reads as a corrupt document
+  and is not one.
+- **LibreOffice's RTF export rasterises every picture** — `\pngblip` for both metafiles where its
+  DOC export keeps them byte for byte — so `vector-picture-text.rtf` is hand-written with
+  `\wmetafile8` and `\emfblip`. Both control words are then ignored anyway; the sniff decides.
+- **DOC has no blip type for SVG**, so LibreOffice's own export rasterises it while keeping the WMF
+  and EMF. A vector picture survives a round trip through three of the four word-processing formats
+  and not through that one.
+
+### What it measures
+
+Six sweep rows moved and five are new. Pages/words against `soffice --convert-to pdf`, with
+`mean_abs_error` from `pdftoppm -r 150` through `render-comparison`'s `compare-images.py`:
+
+| File | Words before | Words after | `mae` | `ink_ratio` |
+|---|---|---|---|---|
+| `svg-picture.odt` | 7/8 | **8/8** | 0.0007 | 1.028 |
+| `svg-picture.docx` | 7/8 | **8/8** | 0.0009 | 1.025 |
+| `wmf-picture.odt` | 6/8 | **8/8** | 0.0005 | 1.003 |
+| `wmf-picture.docx` | 6/8 | **8/8** | 0.0007 | 1.001 |
+| `emf-picture.odt` | 0/2 | **2/2** | 0.0037 | 1.208 |
+| `emf-picture.docx` | 0/2 | **2/2** | 0.0037 | 1.208 |
+| `vector-picture-deck.odp` | new | 7/7 | 0.0085 | 1.043 |
+| `vector-picture-deck.pptx` | new | 7/7 | 0.0086 | 1.043 |
+| `vector-picture-sheet.ods` | new | 10/10 | 0.0059 | 1.051 |
+| `vector-picture-sheet.xlsx` | new | 10/10 | 0.0104 | 1.055 |
+| `vector-picture-text.rtf` | new | 9/9 | 0.0044 | 1.080 |
+
+**The `ink_ratio` above 1 is the same three EMF differences everywhere, and none of them is a
+defect here.** `emf-shapes.emf` states an `EMR_GRADIENTFILL` bar, a dashed polyline and an outlined
+ellipse; LibreOffice draws no bar, a thin solid line and no outline. Checked the way the section
+above says to check such a thing — by converting the bare `.emf` with `soffice` and looking, rather
+than by believing the number — and LibreOffice's own EMF import drops all three. The WMF rows at
+`1.001` and `1.003` are the ones a regression would show up in first.
+
+### What is left
+
+- **The DOC as-character metafile picture comes back floating.** `vector-picture-text.doc` decodes
+  and draws all three of its pictures and lays out none of them: they overlap the paragraphs around
+  them, because none reaches `FrameAnchor.AsCharacter` and a floating frame with `Wrap.Through`
+  moves no text. It is not about the pictures — the same document with rasters in the same three
+  places is exact, and so is a single as-character metafile. The `Data` stream of the metafile
+  version holds one valid `PICF` where the raster version holds one per picture. The sweep row
+  still reads OK on pages and words, which is why it is written down. Belongs to
+  `Paperless.WordProcessing`'s DOC reader.
+- **XLS and PPT still read no pictures at all**, vector or raster, because nothing extracts bytes
+  out of an Escher `F007` entry outside `Paperless.WordProcessing/Ww8/Ww8Blips.cs`. That file is now
+  the only complete blip-store reader in the tree, metafile inflation included, and moving it into
+  `Paperless.MsBinary/Escher/` is what buys both.
+- **A rotated vector picture** turns with its frame no better than a raster does: all three
+  families place a picture by a rectangle. The vector path could in principle do better —
+  `VectorImage.Draw` already emits a `Transform` — but making it differ from the raster path would
+  be worse than the shared limitation.
+
+### The frame seam, and why it needed nothing new
 
 **A `PageFrame.Image` is a `RasterImage`, and a decoded vector picture is a display list**, so a
-word-processing frame holding an EMF, a WMF or an SVG has nowhere to put what it decoded and
-draws nothing (`PL2370`, raised in `Paperless.WordProcessing/EmbeddedPicture.cs`). That is the
-last missing piece of the wiring above and it was worth asking whether it needs an abstraction
-in `Paperless.Core` — a picture interface a frame could hold without knowing which library
-produced it.
+word-processing frame holding an EMF, a WMF or an SVG had nowhere to put what it decoded and drew
+nothing (`PL2370`, raised in `Paperless.WordProcessing/EmbeddedPicture.cs`). That was the last
+missing piece of the wiring above and it was worth asking whether it needed an abstraction in
+`Paperless.Core` — a picture interface a frame could hold without knowing which library produced it.
 
-**It does not, and the reason is worth stating rather than the interface being written.**
+**It did not, and the reason is worth stating rather than the interface being written.**
 `VectorImage` already *is* that abstraction: `Draw(IDrawingSink, DocRect)` plus an
-`IntrinsicSize`, immutable, replayable, decoded once. A Core interface would have exactly those
-two members and one implementation, and the layering already permits the direct reference —
-arrows point at dependencies and `Paperless.Vector` sits beside `Paperless.Text` under Core,
-above nothing that reads a document. **An interface with one implementation on the far side of a
-dependency that is already legal buys nothing and costs a name.**
+`IntrinsicSize`, immutable, replayable, decoded once. A Core interface would have had exactly those
+two members and one implementation, and the layering already permitted the direct reference —
+arrows point at dependencies and `Paperless.Vector` sits beside `Paperless.Text` under Core, above
+nothing that reads a document. **An interface with one implementation on the far side of a
+dependency that is already legal buys nothing and costs a name.** Built, and `Paperless.Core` did
+not change.
 
-So the wiring is three lines per family, and none of them is here:
-
-1. A `ProjectReference` on `Paperless.Vector` from whichever library builds the frame.
-2. Beside `PageFrame.Image`, a `VectorImage?` — one or the other, never both.
-3. Where `EmbeddedPicture.Read` today answers null for a vector and raises `PL2370`, call
-   `VectorImages.Decode(bytes)` instead and keep the result. It already sniffs by content, which
-   is the only thing that identifies these formats; `PL2370` then means an *empty* decode rather
-   than an unimplemented one.
-
-**The seam is proven rather than asserted**, because the library has a caller of its own that
-uses exactly it: an EMF+ image object that carries a whole further metafile is decoded with
+**The seam was proven rather than asserted**, because the library had a caller of its own that used
+exactly it: an EMF+ image object carrying a whole further metafile is decoded with
 `VectorImages.Decode` and drawn into a destination rectangle with
-`MetafilePainter.DrawNestedPicture` — one decode, one display list, one `Draw` into a rectangle
-a transform maps. `EmfPlusNestedMetafileTests` pins it, including the part a reader will get
-wrong first: **it is the nested picture's whole *frame* that is stretched onto the destination,
-not its ink.** A 10 mm square inside an 80 mm frame drawn into a 20 mm destination lands at
-2.5 mm. Taking the ink instead makes the picture four times too large and clipped, which looks
-like a mapping bug in the decoder and is not one.
+`MetafilePainter.DrawNestedPicture` — one decode, one display list, one `Draw` into a rectangle a
+transform maps. `EmfPlusNestedMetafileTests` pins it, including the part a reader gets wrong first:
+**it is the nested picture's whole *frame* that is stretched onto the destination, not its ink.**
+A 10 mm square inside an 80 mm frame drawn into a 20 mm destination lands at 2.5 mm. Taking the ink
+instead makes the picture four times too large and clipped, which looks like a mapping bug in the
+decoder and is not one.
+
+**That trap is now pinned from the reader side too**, in three tests that measure it on a real
+document rather than on a fixture built to show it:
+`VectorFrameTests.TheFramesWholePictureIsStretchedOntoItRatherThanItsInk` asserts the ink starts
+*inside* the frame and is narrower than it for all seven word-processing fixtures;
+`SlideVectorPictureTests` measures the SVG's rounded rectangle, which sits at x = 2 in a 200-unit
+view box and must land 0.8 mm into an 80 mm destination rather than at its edge; and
+`SheetVectorPictureTests` draws the WMF at its view-box size and again at half of it and asserts the
+ink halves exactly. All three need a sink that *composes* transforms rather than counting them,
+which is why `Paperless.TestKit.PlacedDrawingSink` now exists beside `RecordingDrawingSink` — the
+layout one counts, because layout emits no transform that matters, and a picture is nothing but
+transforms.

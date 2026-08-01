@@ -425,7 +425,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                     AnchorOffset = frame.Offset,
                     Wrap = TextWrap.Through,
                     IsImage = true,
-                    Image = frame.Picture,
+                    Image = frame.Picture.Raster,
+                    Vector = frame.Picture.Vector,
                 });
 
                 continue;
@@ -433,7 +434,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
             PageFrame? built = Ww8Frames.Build(
                 frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks));
-            if (built is not null) frames.Add(built with { Image = frame.Picture });
+            if (built is not null)
+            {
+                frames.Add(built with { Image = frame.Picture.Raster, Vector = frame.Picture.Vector });
+            }
         }
 
         return frames;
