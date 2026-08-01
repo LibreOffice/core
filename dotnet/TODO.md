@@ -518,6 +518,17 @@ to draw something the file already contains a picture of.
       `pieChart`, `scatterChart` and `areaChart` are covered by matching the `…Chart` suffix on
       `CT_PlotArea`'s element group, so the 3-D, doughnut, radar, bubble, stock and of-pie
       variants read too — a `c:ser` is the same element in all of them.
+      Measured against LibreOffice's own `chart2/qa/extras/data/`, counting documents that extract
+      to anything at all, before and after: `pptx` **8 → 37** of 38, `odp` **0 → 9** of 9, `odt`
+      **2 → 12** of 13, `xlsx` **151 → 153** of 154. And against LibreOffice's *rendering* of our
+      own six chart documents — the only oracle that can see a chart at all, since the Writer text
+      filter, the Calc CSV filter and `impress_html_Export` all drop one entirely — where every
+      word the reference draws as content is also extracted, in all six. The differences both ways
+      are accounted for by name and there are exactly two kinds. Paperless reports the eight cached
+      values the reference does not, because the chart has no `c:dLbls` and LibreOffice draws them
+      as bar *lengths*; the reference draws the value axis' ticks (`0 20 … 180` for the ODF pair,
+      `0 50 … 200` for the round-tripped PPTX) which are in no file and which only an axis-scale
+      algorithm can produce.
 - [x] **Where a chart lands in the content tree**, and why it needed no new node kind. A chart is
       a title and a table of numbers, which is what `ContentSection`, `ContentParagraph` and
       `ContentTable` already are. So: a `SectionKind.Frame` section whose `Name` is the chart's
@@ -580,7 +591,9 @@ to draw something the file already contains a picture of.
       `a:graphicData[@uri = DrawingChart.ChartUri]` → `c:chart/@r:id` against the *document* part
       — so the reader is done and only the call site is missing. Left deliberately: that library
       had another agent in it. The ODT side already works, because it goes through
-      `OdfContentReader` like every other ODF family.
+      `OdfContentReader` like every other ODF family — which is exactly the measurement that says
+      how much the hook is worth: **12 of the 13** `.odt` chart documents in
+      `chart2/qa/extras/data/` now extract, against **8 of the 69** `.docx` ones, unchanged.
 
 ### SmartArt
 

@@ -1088,7 +1088,11 @@ it by *containment* — the `draw:frame` is a child of the `table:table-cell` it
 placing the chart where it was found would put a whole `ContentTable` inside a `ContentTableCell`,
 a shape nothing else in the tree produces. Both readers therefore hoist it to a sibling section
 immediately after the sheet, which is exactly where a cell comment already goes, and the two
-families come out identical.
+families come out identical. Measured on LibreOffice's own `chart2/qa/extras/data/xlsx`: **151 →
+153** of its 154 workbooks extract to something. A small movement, and expected — a workbook
+carrying a chart also carries the cells behind it, so unlike a deck it was never empty. The
+comparison worth having on this family is the one `SheetChartTests` makes instead: the cache
+against the range it names.
 
 **Three relationship hops, and the middle one is easy to get wrong.** The sheet declares
 `…/drawing`; the drawing part declares `…/chart` per graphic frame; and `c:chart/@r:id` inside the

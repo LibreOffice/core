@@ -308,10 +308,21 @@ table asserted, not by the corpus.
       whose header row is the series names and whose first column is the categories. Measured on
       `chart-bar-deck.{fodp,odp,pptx}` — one hand-written deck and LibreOffice's two conversions
       of it — which extract to **byte-identical text** through two vocabularies sharing no
-      element name; and on LibreOffice's own `chart2/qa/extras/data/`, where **37 of the 38
-      PPTX** decks and **all 9 ODP** ones now yield text. The one that does not is
-      `funnel-pp1.pptx`, whose chart is `chartEx1.xml` in the `cx:` vocabulary, recorded in the
-      master TODO.
+      element name; and on LibreOffice's own `chart2/qa/extras/data/`, counted before and after on
+      the same command — how many documents extract to anything at all:
+
+      | corpus | before | after |
+      |---|---|---|
+      | `pptx` (38) | 8 | **37** |
+      | `odp` (9) | 0 | **9** |
+      | `odt` (13) | 2 | **12** |
+      | `xlsx` (154) | 151 | **153** |
+      | `docx` (69) | 8 | 8 — no reader hook, see the master TODO |
+
+      Twenty-nine of those decks and every one of the ODPs previously extracted to *nothing at
+      all*, which is unsurprising once said out loud: a document written to test a chart holds a
+      chart and nothing else. The one PPTX still empty is `funnel-pp1.pptx`, whose chart is
+      `chartEx1.xml` in the `cx:` vocabulary.
 - [x] **The cache question is settled: prefer the cache, never open the workbook.** The judgement
       the old entry deferred turns out to be LibreOffice's own settled answer rather than a
       trade-off — `DataSequenceConverter::createDataSequence`
