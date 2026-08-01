@@ -103,9 +103,26 @@ internal sealed class OdpSlideLayout
         OdfStyle style, OdfPropertyKind kind, string ns, string name)
         => _file.Styles.ResolveProperty(style.Name, style.Family, kind, ns, name);
 
-    private static bool IsHidden(XElement page)
-        => Attribute(page, OdfNamespaces.Draw, "style-name") is not null
-           && Attribute(page, OdfNamespaces.Presentation, "class") == "hidden";
+    /// <summary>
+    /// Whether the slide is skipped during a show.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The flag is a property of the page's drawing-page style, not an attribute of the
+    /// page.</strong> ODF states it as <c>presentation:visibility="hidden"</c> inside
+    /// <c>style:drawing-page-properties</c>, so it has to be resolved through the style chain
+    /// exactly as the fill is; the extraction path has always done that
+    /// (<c>OdfContentReader.IsDrawingPageHidden</c>) and this one was looking for a
+    /// <c>presentation:class</c> attribute that no writer emits, so every ODP laid out as though
+    /// none of its slides were hidden. Caught by comparing the same deck's layout through the ODF
+    /// and binary paths, where the PPT side flagged a slide the ODF side did not.
+    /// </remarks>
+    private bool IsHidden(XElement page)
+        => _file.Styles.ResolveProperty(
+            Attribute(page, OdfNamespaces.Draw, "style-name"),
+            OdfStyleFamily.DrawingPage,
+            OdfPropertyKind.DrawingPage,
+            OdfNamespaces.Presentation,
+            "visibility").Is("hidden");
 
     /// <summary>
     /// The slide's background: its own drawing-page style, then the master's.
