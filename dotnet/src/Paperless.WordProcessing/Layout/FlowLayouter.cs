@@ -112,13 +112,9 @@ public static class FlowLayouter
                 ? before.Format
                 : null;
 
-            LaidOutParagraph layout = paragraph.HasRuns
+            LaidOutParagraph layout = paragraph.HasRuns || paragraph.HasInlineObjects
                 ? layouter.Layout(
-                    MeasuredParagraph.Measure(
-                        paragraph.Text,
-                        [.. paragraph.Runs.Select(run => run.ToFormattedRun())],
-                        shaper: null,
-                        paragraph.Itemisation),
+                    paragraph.Measure(),
                     paragraph.Format,
                     area.Width,
                     paragraph.Language,

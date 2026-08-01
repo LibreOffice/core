@@ -396,12 +396,13 @@ public sealed class Paginator
             // A paragraph with runs is measured across them, so each line is as tall as its own tallest
             // run rather than as the paragraph's font. Without runs the single-face path is not merely a
             // shortcut — it is the common case, and it avoids building a prefix table per run for a
-            // paragraph that has one.
+            // paragraph that has one. An inline picture takes the same road as runs do, because it is the
+            // prefix table that carries the room it takes on its line.
             ILineObstacles? obstacles = _obstacles?.Invoke(i);
 
-            LaidOutParagraph laidOut = paragraph.HasRuns
+            LaidOutParagraph laidOut = paragraph.HasRuns || paragraph.HasInlineObjects
                 ? layouter.Layout(
-                    Measure(paragraph),
+                    paragraph.Measure(),
                     paragraph.Format,
                     width,
                     paragraph.Language,
@@ -744,27 +745,6 @@ public sealed class Paginator
     /// </remarks>
     private static int SectionOf(PageBlock block, int sections)
         => Math.Clamp(block.SectionIndex, 0, Math.Max(0, sections - 1));
-
-    /// <summary>
-    /// Shapes a paragraph's runs, ready for measuring across them.
-    /// </summary>
-    /// <remarks>
-    /// The paragraph's own face and size close any gap the runs leave, so a paragraph whose runs do not
-    /// cover all of its text still measures every character — a document that formats its text and leaves
-    /// its paragraph mark unmentioned is normal rather than malformed.
-    /// </remarks>
-    private static MeasuredParagraph Measure(PageParagraph paragraph)
-    {
-        List<FormattedRun> runs = [.. paragraph.Runs.Select(run => run.ToFormattedRun())];
-
-        if (runs.Count == 0)
-        {
-            runs.Add(new FormattedRun(
-                0, paragraph.Text.Length, paragraph.Face, paragraph.EmSize, paragraph.Shaping));
-        }
-
-        return MeasuredParagraph.Measure(paragraph.Text, runs, shaper: null, paragraph.Itemisation);
-    }
 
     /// <summary>
     /// How many of a paragraph's remaining lines fit in what is left of the page.

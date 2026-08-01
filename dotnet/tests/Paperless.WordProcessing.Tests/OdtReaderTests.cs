@@ -3,6 +3,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.TestKit;
+using Paperless.WordProcessing.Layout;
 using Shouldly;
 
 namespace Paperless.WordProcessing.Tests;
@@ -49,6 +50,53 @@ public class OdtReaderTests
 
         flat.Format.ShouldBe(DocumentFormat.Fodt);
         flat.Content.GetText().ShouldBe(packaged.Content.GetText());
+    }
+
+    /// <summary>
+    /// The two packagings do not merely extract alike: they lay out alike, line for line.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The stronger half of the assertion above, and the one that catches what extraction cannot. A layout
+    /// walk that descends somewhere it should not is invisible in extracted text — extraction has its own
+    /// walk and gets it right — and invisible in a packaged <c>.odt</c> too, where the elements abut and
+    /// the stray words fuse into their neighbours. It shows up only when the same document is saved flat
+    /// and the pretty-printer's newlines separate them.
+    /// </para>
+    /// <para>
+    /// That is exactly how the comment bug surfaced: <c>office:annotation</c> is in the <c>office:</c>
+    /// namespace and the layout walk's case for it was under <c>text:</c>, where it could never fire, so
+    /// the walk descended into the comment and spliced its author, its timestamp and its body into the
+    /// sentence. The packaged form rendered 152 words and the flat form 155 against the same reference's
+    /// 154 — a *disagreement between two spellings of one document*, which is a sharper signal than either
+    /// number on its own.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void PackagedAndFlatFormsOfTheSameDocumentLayOutIdentically()
+    {
+        using IDocument packaged = Open("text-features.odt");
+        using IDocument flat = Open("text-features-flat.fodt");
+
+        WordProcessingPages left = (WordProcessingPages)((IPaginatedDocument)packaged).Layout();
+        WordProcessingPages right = (WordProcessingPages)((IPaginatedDocument)flat).Layout();
+
+        left.Pages.Count.ShouldBe(right.Pages.Count);
+
+        for (int page = 0; page < left.Pages.Count; page++)
+        {
+            List<string> here = [.. left.Pages[page].Lines.Select(left.TextOf)];
+            List<string> there = [.. right.Pages[page].Lines.Select(right.TextOf)];
+
+            here.ShouldBe(there, $"page {page + 1} of the same document, packaged and flat");
+        }
+
+        // And neither draws the comment, which is where the two used to part company. Its body is in both
+        // files and belongs on neither page: LibreOffice's own PDF export leaves it out entirely.
+        left.Pages
+            .SelectMany(page => page.Lines)
+            .Select(left.TextOf)
+            .ShouldNotContain(text => text.Contains("Alan Turing", StringComparison.Ordinal));
     }
 
     [Fact]

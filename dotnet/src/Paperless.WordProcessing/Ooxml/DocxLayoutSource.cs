@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Fonts;
+using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 using Paperless.WordProcessing.Layout;
 
@@ -304,6 +305,12 @@ public sealed partial class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        // Taken before the walk and put back after it, because the walk can set a *new* one. What is
+        // read here was left by the paragraph before this one; what the walk leaves belongs to the
+        // paragraph after.
+        bool breaksPage = _pageBreakPending;
+        _pageBreakPending = false;
+
         RunWalker walker = new(CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
@@ -318,14 +325,17 @@ public sealed partial class DocxLayoutSource
         _footnoteNumber += walker.FootnotesSeen;
         _endnoteNumber += walker.EndnotesSeen;
 
-        return new PageParagraph
+        ParagraphFormat format =
+            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
+
+        PageParagraph read = new()
         {
             SectionIndex = _sectionIndex,
             Text = walker.Text,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval),
+            Format = breaksPage ? format with { StartsNewPage = true } : format,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
@@ -334,7 +344,19 @@ public sealed partial class DocxLayoutSource
             Frames = FramesOf(walker.Frames),
             Source = element,
         };
+
+        // After the note bodies and the text boxes above, which recurse into this method and share the
+        // field. Writer ignores a page break inside either — `DomainMapper.cxx:4376` applies a deferred
+        // one only when it is not in a footnote, a shape or a comment — and overwriting here is what
+        // makes that true here too: whatever a nested flow left behind is replaced by this paragraph's
+        // own answer, so a break inside a caption cannot push the paragraph after the caption's frame.
+        _pageBreakPending = walker.BreaksPage;
+
+        return read;
     }
+
+    /// <summary>Whether the paragraph read next begins a page, because the one before ended with a break.</summary>
+    private bool _pageBreakPending;
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
     private int _footnoteNumber;
@@ -645,6 +667,16 @@ public sealed partial class DocxLayoutSource
 
         /// <summary>How many endnotes it cited.</summary>
         internal int EndnotesSeen { get; private set; }
+
+        /// <summary>True when a <c>w:br w:type="page"</c> was passed, so the next paragraph starts a page.</summary>
+        /// <remarks>
+        /// The next one and not this one, which is the whole of why it is reported rather than acted on:
+        /// a page break is written at the point in the text where the page ends, and the layout model
+        /// says "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c>
+        /// has, and the same shape the DOC and RTF forms of a document state directly.
+        /// </remarks>
+        internal bool BreaksPage { get; private set; }
+
         private bool _inInstruction;
 
         /// <summary>The paragraph's text, as laid out.</summary>
@@ -706,8 +738,15 @@ public sealed partial class DocxLayoutSource
                         Emit("\t");
                         break;
 
+                    // A `w:br` is three things wearing one name and only one of them is a line break.
+                    // `w:type="page"` moves everything after it to the next page and contributes no
+                    // character at all: LibreOffice turns it back into the DOC's own U+000C
+                    // (`OOXMLBreakHandler::~OOXMLBreakHandler`, `writerfilter/ooxml/Handler.cxx:246`)
+                    // and then *defers* it, applying it to the paragraph that follows as
+                    // `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`).
                     case "br" when !_inInstruction:
-                        Emit(LineSeparator.ToString());
+                        if (Word.Attribute(child, "type") == "page") BreaksPage = true;
+                        else Emit(LineSeparator.ToString());
                         break;
 
                     case "footnoteReference" or "endnoteReference":

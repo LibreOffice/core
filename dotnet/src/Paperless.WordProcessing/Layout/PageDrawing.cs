@@ -472,8 +472,24 @@ public static class PageDrawing
 
             Length pen = lineLeft + segment.Left;
 
+            // The as-character objects on this stretch, in position order, consumed as the pen reaches
+            // them. An object contributes no glyphs — the frame is drawn separately, by `DrawFrame` at
+            // the rectangle `FrameLayout` hung it at — so all the text pass owes it is the room it takes.
+            int nextObject = 0;
+            List<InlineObject> onStretch = paragraph.HasInlineObjects
+                ? [.. paragraph.InlineObjects
+                    .Where(one => one.Offset >= segment.Start && one.Offset < segment.End)
+                    .OrderBy(one => one.Offset)]
+                : [];
+
             foreach (PageRun run in InVisualOrder(paragraph, segment.Start, segment.End))
             {
+                while (nextObject < onStretch.Count && onStretch[nextObject].Offset <= run.Start)
+                {
+                    pen += onStretch[nextObject].Width;
+                    nextObject++;
+                }
+
                 string text = paragraph.Text[run.Start..run.End];
                 ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
                 if (shaped.Glyphs.Count == 0) continue;
@@ -536,17 +552,18 @@ public static class PageDrawing
     {
         if (!paragraph.HasRuns)
         {
-            return
-            [
-                new PageRun(
-                    start,
-                    end - start,
-                    paragraph.Face,
-                    paragraph.EmSize,
-                    paragraph.Font,
-                    paragraph.Colour,
-                    paragraph.Shaping),
-            ];
+            return AroundObjects(
+                paragraph,
+                [
+                    new PageRun(
+                        start,
+                        end - start,
+                        paragraph.Face,
+                        paragraph.EmSize,
+                        paragraph.Font,
+                        paragraph.Colour,
+                        paragraph.Shaping),
+                ]);
         }
 
         List<PageRun> clipped = [];
@@ -559,7 +576,40 @@ public static class PageDrawing
             clipped.Add(run with { Start = from, Length = to - from });
         }
 
-        return clipped;
+        return AroundObjects(paragraph, clipped);
+    }
+
+    /// <summary>
+    /// The runs cut at every as-character object's boundary, so the pen has somewhere to jump.
+    /// </summary>
+    /// <remarks>
+    /// The same cut <see cref="MeasuredParagraph"/> makes before it shapes, and it has to be the same one:
+    /// the pen advances by what it draws, so text after a picture starts where the run before the picture
+    /// ended plus the picture's width — and a run drawn across the boundary would draw the whole sentence
+    /// from one origin and put the words after the picture underneath it.
+    /// </remarks>
+    private static List<PageRun> AroundObjects(PageParagraph paragraph, List<PageRun> runs)
+    {
+        if (!paragraph.HasInlineObjects) return runs;
+
+        List<PageRun> cut = [];
+
+        foreach (PageRun run in runs)
+        {
+            int at = run.Start;
+
+            foreach (InlineObject one in paragraph.InlineObjects.OrderBy(one => one.Offset))
+            {
+                if (one.Offset <= at || one.Offset >= run.End) continue;
+
+                cut.Add(run with { Start = at, Length = one.Offset - at });
+                at = one.Offset;
+            }
+
+            if (at < run.End) cut.Add(run with { Start = at, Length = run.End - at });
+        }
+
+        return cut;
     }
 
     /// <summary>
@@ -690,6 +740,15 @@ public static class PageDrawing
     private static Length WidthBetween(PageParagraph paragraph, int from, int to)
     {
         Length total = Length.Zero;
+
+        // The as-character objects the range crosses, on the same half-open rule the prefix table uses —
+        // an object at `from` belongs to this range and one at `to` to the next. So the tab stop a line
+        // with a picture before it reaches is the stop the layout measured, and the picture's own left
+        // edge, which is asked for as the width up to its own offset, does not include itself.
+        foreach (InlineObject one in paragraph.InlineObjects)
+        {
+            if (one.Offset >= from && one.Offset < to) total += one.Width;
+        }
 
         // The same pieces the stretch will be drawn in, unordered — a width is a sum and does not
         // care which way round they go, but it does care that they were shaped the same way, or a

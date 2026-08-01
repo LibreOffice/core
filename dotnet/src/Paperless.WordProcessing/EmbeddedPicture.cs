@@ -94,16 +94,12 @@ internal static class EmbeddedPicture
     /// bytes — and it is the one property of a picture that costs nothing.
     /// </para>
     /// <para>
-    /// <strong>It is also what the raster backends currently require.</strong> Both
-    /// <c>SkiaDrawingSink.DrawImage</c> and <c>PdfContentSink.DrawImage</c> open with
-    /// <c>if (image.Width &lt;= 0 || image.Height &lt;= 0) return;</c> and then decode, so an image
-    /// carrying only its encoded bytes is dropped by the guard before the decoder beneath it is ever
-    /// reached. Filling the size in here is not the fix for that — the guard is wrong and belongs to
-    /// <c>Paperless.Rendering</c> — but it is honest work in its own right and the frames draw with it.
-    /// </para>
-    /// <para>
-    /// Zeroes for anything whose header this does not read, which is a picture that draws once the
-    /// guard above is corrected and not before.
+    /// It is <em>not</em> what makes a picture draw, and that distinction was worth a wrong diagnosis
+    /// once. Both <c>SkiaDrawingSink.DrawImage</c> and <c>PdfContentSink.DrawImage</c> used to open with
+    /// <c>if (image.Width &lt;= 0 || image.Height &lt;= 0) return;</c> and then decode, which dropped every
+    /// <c>RasterImage.Encoded</c> before the decoder beneath it was reached — laying out correctly and
+    /// drawing nothing. Both now test emptiness rather than size, so a picture whose header this does not
+    /// read still draws; the zeroes it returns for one cost only the answer to "how large is it".
     /// </para>
     /// </remarks>
     public static (int Width, int Height) Dimensions(ReadOnlySpan<byte> bytes)

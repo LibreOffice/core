@@ -223,6 +223,80 @@ public class ItemisationTests
         measured.WidthBetween(0, Text.Length).ShouldBe(measured.Width);
     }
 
+    /// <summary>
+    /// An inline object widens every prefix past its boundary and none at or before it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The whole of the width rule, and the two consequences worth pinning are its edges. A range ending
+    /// at the boundary does not pay for the object, so a picture too wide for the room left on a line moves
+    /// to the next line whole rather than hanging off the margin; a range starting there does pay, so it
+    /// arrives on that next line with its width intact.
+    /// </para>
+    /// <para>
+    /// A boundary rather than a character because three of the four word-processing formats put no
+    /// character in the text for an inline picture — see <c>InlineObject</c>.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AnInlineObjectWidensThePrefixesPastItsBoundary()
+    {
+        OpenTypeFace face = Carlito();
+        const string Text = "before after";
+        const int Boundary = 7;
+
+        List<FormattedRun> runs = [new FormattedRun(0, Text.Length, face, Length.FromPoints(11))];
+        Length picture = Length.FromMillimetres(10);
+
+        MeasuredParagraph plain = MeasuredParagraph.Measure(Text, runs);
+        MeasuredParagraph withPicture = MeasuredParagraph.Measure(
+            Text, runs, objects: [new InlineObject(Boundary, picture, picture)]);
+
+        withPicture.Width.ShouldBe(plain.Width + picture);
+
+        // At and before the boundary, nothing has changed.
+        withPicture.WidthBetween(0, Boundary).ShouldBe(plain.WidthBetween(0, Boundary));
+
+        // Past it, everything has moved along by exactly the object.
+        withPicture.WidthBetween(0, Boundary + 1)
+            .ShouldBe(plain.WidthBetween(0, Boundary + 1) + picture);
+
+        // A range starting at the boundary carries the object, which is what puts a picture that moved to
+        // the next line at the head of that line rather than nowhere.
+        withPicture.WidthBetween(Boundary, Text.Length)
+            .ShouldBe(plain.WidthBetween(Boundary, Text.Length) + picture);
+    }
+
+    /// <summary>
+    /// An inline object raises the line's ascent to its own height and nothing else.
+    /// </summary>
+    /// <remarks>
+    /// It rests its bottom on the baseline, so only the ascent grows; the height then follows from
+    /// <c>Max(height, ascent + descent)</c>, which is <c>SwLineLayout::CalcLine</c>'s own rule and was
+    /// already there for a run taller than its line. The text's descent survives, which is the part a
+    /// reader who simply set the height would lose.
+    /// </remarks>
+    [Fact]
+    public void AnInlineObjectRaisesTheLinesAscentAndKeepsItsDescent()
+    {
+        OpenTypeFace face = Carlito();
+        const string Text = "before after";
+
+        List<FormattedRun> runs = [new FormattedRun(0, Text.Length, face, Length.FromPoints(11))];
+        Length tall = Length.FromMillimetres(10);
+
+        (Length plainHeight, Length plainAscent) =
+            MeasuredParagraph.Measure(Text, runs).HeightOf(0, Text.Length);
+
+        (Length height, Length ascent) = MeasuredParagraph.Measure(
+                Text, runs, objects: [new InlineObject(7, tall, tall)])
+            .HeightOf(0, Text.Length);
+
+        plainAscent.ShouldBeLessThan(tall);
+        ascent.ShouldBe(tall);
+        height.ShouldBe(tall + (plainHeight - plainAscent));
+    }
+
     [Fact]
     public void AControlCharacterTakesNoWidth()
     {

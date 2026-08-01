@@ -1,5 +1,6 @@
 using Paperless.Core.Documents;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 using Paperless.TestKit;
 using Paperless.WordProcessing.Layout;
 using Shouldly;
@@ -97,11 +98,24 @@ public sealed class PictureReadingTests
     /// An inline picture hangs where its anchor character sits, not at the paragraph's corner.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Measured against LibreOffice's own PDF of <c>picture-anchor.fodt</c>, which draws the picture at
     /// 183.35 pt — the text area's 56.7 plus the width of "An inline picture follows: " — and puts its
     /// bottom edge on the line's baseline. Before an as-character frame was hung on its line it was
     /// placed against an origin like a floating one, which put every inline picture at the start margin
     /// on top of the paragraph's first words.
+    /// </para>
+    /// <para>
+    /// The second assertion is the one worth explaining, because the obvious way to write it is wrong.
+    /// "An as-character frame is never an obstacle" is a rule about <em>layout</em>, and asserting it on
+    /// <c>Frame.Wrap</c> asserts instead that no document ever states a wrap on one — which LibreOffice's
+    /// own <c>.odt</c> export of this very file does: its <c>fr2</c> automatic style inherits
+    /// <c>style:wrap="dynamic"</c> from the built-in <c>Graphics</c> style, on a frame anchored
+    /// <c>as-char</c>. Writer records that and ignores it — <c>SwTextFly::GetTop</c> asserts outright that
+    /// it is never called for a <c>SwFlyInContentFrame</c>
+    /// (<c>sw/source/core/text/txtfly.cxx:777</c>) — and so do we, so the reader stays faithful and the
+    /// rule is tested where it lives: text on both sides of the picture, on one line.
+    /// </para>
     /// </remarks>
     [Theory]
     [InlineData("picture-anchor.fodt")]
@@ -110,13 +124,22 @@ public sealed class PictureReadingTests
     [InlineData("picture-anchor.doc")]
     public void AnInlinePictureHangsAtItsAnchorOnTheLine(string name)
     {
-        PlacedFrame inline = Frames(name)
+        using IDocument document = Open(name);
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+        LaidOutPage page = pages.Pages[0];
+
+        PlacedFrame inline = page.Frames
             .Where(frame => frame.Frame.Anchor == FrameAnchor.AsCharacter)
             .ShouldHaveSingleItem();
 
         inline.Area.X.Points.ShouldBe(183.35, 0.05, "LibreOffice draws it at 183.35 pt");
-        inline.Frame.Wrap.ShouldBe(
-            TextWrap.Through, "an as-character frame is part of the text, never an obstacle");
+
+        PlacedLine line = page.Lines.First(candidate => candidate.ParagraphIndex == 0);
+        Length left = page.BodyArea.X + line.Box.Left;
+
+        inline.Area.X.ShouldBeGreaterThan(left, "the sentence starts before the picture");
+        (left + line.Box.Width).ShouldBeGreaterThan(
+            inline.Area.Right, "and carries on after it, on the same line");
     }
 
     /// <summary>
@@ -161,6 +184,57 @@ public sealed class PictureReadingTests
             first[0].Box.Left, "the floating picture pushes the text past its right edge");
 
         inline.Area.Width.ShouldBe(inline.Frame.Size.Width);
+    }
+
+    /// <summary>
+    /// An inline picture takes its own width off the line and pushes the words after it along.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Measured against LibreOffice's PDF of <c>picture-anchor.fodt</c>, where "follows:" ends at 180.328,
+    /// the picture runs 183.35 to 211.70, and "and" starts at 214.80 — a space, the picture's whole
+    /// centimetre, and a space. Before the line knew about the picture, "and" started at 186.34: the frame
+    /// was placed correctly and the sentence was drawn straight through it.
+    /// </para>
+    /// <para>
+    /// Asserted on the first line's own width rather than on a glyph position, because that is where the
+    /// picture is charged: the width is a sum of prefix widths, and the object widens every prefix past the
+    /// boundary it occupies. The two spellings of the same document are both here because they arrive at
+    /// the offset differently — the flat one from a <c>draw:frame</c> between two text nodes, the packaged
+    /// one from the same element after LibreOffice has rewritten the paragraph.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("picture-anchor.fodt")]
+    [InlineData("picture-anchor.odt")]
+    [InlineData("picture-anchor.docx")]
+    public void AnInlinePictureWidensTheLineItSitsOn(string name)
+    {
+        using IDocument document = Open(name);
+        WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+        LaidOutPage page = pages.Pages[0];
+
+        PlacedFrame inline = page.Frames
+            .Where(frame => frame.Frame.Anchor == FrameAnchor.AsCharacter)
+            .ShouldHaveSingleItem();
+
+        PlacedLine withPicture = page.Lines.First(line => line.ParagraphIndex == 0);
+        PlacedLine without = page.Lines.First(line => line.ParagraphIndex == 1);
+
+        // The second paragraph's sentence is "A text box follows: and that was it too." and the first's is
+        // the same shape with a picture in it, so the difference between the two line widths is the
+        // picture and the four characters the sentences differ by — near enough that the picture's
+        // centimetre has to be in there, and nowhere near it if the line ignored the frame.
+        (withPicture.Box.Width - without.Box.Width).Points.ShouldBeGreaterThan(
+            20.0, "the line paid for the picture's 28.35 pt");
+
+        // And the line grew to hold it: an as-character object rests on the baseline, so the ascent is at
+        // least its height. LibreOffice puts the first baseline 28.35 pt below the text area's top.
+        (withPicture.Baseline - withPicture.Top).Points.ShouldBeGreaterThanOrEqualTo(
+            inline.Frame.Size.Height.Points, "the ascent grew to the picture's height");
+
+        (without.Top - withPicture.Top).Points.ShouldBe(
+            31.46, 0.1, "and LibreOffice's second line starts 31.46 pt below the first's");
     }
 
     /// <summary>
