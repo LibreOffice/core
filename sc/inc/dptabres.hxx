@@ -439,7 +439,7 @@ public:
 
     virtual ScDPAggData* GetColTotal(tools::Long nMeasure) = 0;
 
-    void FillVisibilityData(ScDPResultVisibilityData& rData) const;
+    void FillVisibilityData(ScDPResultVisibilityData& rData);
 };
 
 class ScDPResultMemberSlim : public ScDPResultMember
@@ -885,9 +885,9 @@ public:
     tools::Long                GetAutoMeasure() const  { return nAutoMeasure; }
     tools::Long                GetAutoCount() const    { return nAutoCount; }
 
-    ScDPResultDimension* GetFirstChildDimension() const;
+    ScDPResultDimension* GetFirstChildDimension();
 
-    void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
+    void FillVisibilityData(ScDPResultVisibilityData& rData);
 
     // Called by an ScDPResultMemberSlim which has already been promoted
     // but something with an older pointer calls one of its member functions

@@ -1974,7 +1974,7 @@ ScDPAggData* ScDPResultMemberFull::GetColTotal(tools::Long nMeasure)
     return lcl_GetChildTotal(pColTotal.get(), nMeasure);
 }
 
-void ScDPResultMember::FillVisibilityData(ScDPResultVisibilityData& rData) const
+void ScDPResultMember::FillVisibilityData(ScDPResultVisibilityData& rData)
 {
     if (GetChildDimension())
         GetChildDimension()->FillVisibilityData(rData);
@@ -3257,13 +3257,13 @@ tools::Long ScDPResultDimension::GetSize(tools::Long nMeasure) const
         OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                     "DataLayout dimension twice?");
         //  repeat first member...
-        nTotal = nMemberCount * maMemberArray[0]->GetSize(0);   // all measures have equal size
+        nTotal = nMemberCount * GetMember(0)->GetSize(0); // all measures have equal size
     }
     else
     {
         //  add all members
         for (tools::Long nMem=0; nMem<nMemberCount; nMem++)
-            nTotal += maMemberArray[nMem]->GetSize(nMeasure);
+            nTotal += GetMember(nMem)->GetSize(nMeasure);
     }
     return nTotal;
 }
@@ -3316,14 +3316,14 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
     {
         tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
 
-        ScDPResultMember* pMember = maMemberArray[nSorted].get();
+        ScDPResultMember* pMember = GetMember(nSorted);
         //  in data layout dimension, use first member with different measures/names
         if ( bIsDataLayout )
         {
             bool bTotalResult = false;
             OUString aMbrName = pResultData->GetMeasureDimensionName( nSorted );
             OUString aMbrCapt = pResultData->GetMeasureString( nSorted, false, SUBTOTAL_FUNC_NONE, bTotalResult );
-            maMemberArray[0]->FillMemberResults( pSequences, nPos, nSorted, false, &aMbrName, &aMbrCapt );
+            GetMember(0)->FillMemberResults(pSequences, nPos, nSorted, false, &aMbrName, &aMbrCapt);
         }
         else if ( pMember->IsVisible() )
         {
@@ -3351,11 +3351,11 @@ void ScDPResultDimension::FillDataResults(
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
-            pMember = maMemberArray[0].get();
+            pMember = GetMember(0);
             nMemberMeasure = nSorted;
         }
         else
-            pMember = maMemberArray[nSorted].get();
+            pMember = GetMember(nSorted);
 
         if ( pMember->IsVisible() )
             pMember->FillDataResults(pRefMember, rFilterCxt, rSequence, nMemberMeasure);
@@ -3374,11 +3374,11 @@ void ScDPResultDimension::UpdateDataResults(const ScDPResultMember* pRefMember,
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
-            pMember = maMemberArray[0].get();
+            pMember = GetMember(0);
             nMemberMeasure = i;
         }
         else
-            pMember = maMemberArray[i].get();
+            pMember = GetMember(i);
 
         if ( pMember->IsVisible() )
             pMember->UpdateDataResults( pRefMember, nMemberMeasure );
@@ -3408,7 +3408,7 @@ void ScDPResultDimension::SortMembers(ScDPResultMember* pRefMember)
     tools::Long nLoopCount = bIsDataLayout ? std::min<tools::Long>(1, nCount) : nCount;
     for (tools::Long i=0; i<nLoopCount; i++)
     {
-        ScDPResultMember* pMember = maMemberArray[i].get();
+        ScDPResultMember* pMember = GetMember(i);
         if ( pMember->IsVisible() )
             pMember->SortMembers( pRefMember );
     }
@@ -3424,7 +3424,7 @@ void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
     tools::Long nLoopCount = bIsDataLayout ? 1 : nCount;
     for (tools::Long i=0; i<nLoopCount; i++)
     {
-        ScDPResultMember* pMember = maMemberArray[i].get();
+        ScDPResultMember* pMember = GetMember(i);
         if ( pMember->IsVisible() )
             pMember->DoAutoShow( pRefMember );
     }
@@ -3446,7 +3446,7 @@ void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
     // look for equal values to the last included one
 
     tools::Long nIncluded = nAutoCount;
-    const ScDPResultMember* pMember1 = maMemberArray[aAutoOrder[nIncluded - 1]].get();
+    const ScDPResultMember* pMember1 = GetMember(aAutoOrder[nIncluded - 1]);
     const ScDPDataMember* pDataMember1 = pMember1->IsVisible() ? pMember1->GetDataRoot() : nullptr;
     bool bContinue = true;
     while ( bContinue )
@@ -3454,7 +3454,7 @@ void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
         bContinue = false;
         if ( nIncluded < nCount )
         {
-            const ScDPResultMember* pMember2 = maMemberArray[aAutoOrder[nIncluded]].get();
+            const ScDPResultMember* pMember2 = GetMember(aAutoOrder[nIncluded]);
             const ScDPDataMember* pDataMember2 = pMember2->IsVisible() ? pMember2->GetDataRoot() : nullptr;
 
             if ( lcl_IsEqual( pDataMember1, pDataMember2, nAutoMeasure ) )
@@ -3469,7 +3469,7 @@ void ScDPResultDimension::DoAutoShow(ScDPResultMember* pRefMember)
 
     for (nPos = nIncluded; nPos < nCount; nPos++)
     {
-        ScDPResultMember* pMember = maMemberArray[aAutoOrder[nPos]].get();
+        ScDPResultMember* pMember = GetMember(aAutoOrder[nPos]);
         pMember->SetAutoHidden();
     }
 }
@@ -3480,7 +3480,7 @@ void ScDPResultDimension::ResetResults()
     for (tools::Long i=0; i<nCount; i++)
     {
         // sort order doesn't matter
-        ScDPResultMember* pMember = maMemberArray[bIsDataLayout ? 0 : i].get();
+        ScDPResultMember* pMember = GetMember(bIsDataLayout ? 0 : i);
         pMember->ResetResults();
     }
 }
@@ -3505,11 +3505,11 @@ void ScDPResultDimension::UpdateRunningTotals(ScDPResultMember* pRefMember, tool
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
-            pMember = maMemberArray[0].get();
+            pMember = GetMember(0);
             nMemberMeasure = nSorted;
         }
         else
-            pMember = maMemberArray[nSorted].get();
+            pMember = GetMember(nSorted);
 
         if ( pMember->IsVisible() )
         {
@@ -3548,14 +3548,14 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
     {
         // search for named member
 
-        const ScDPResultMember* pRowMember = maMemberArray[GetSortedIndex(nMemberIndex)].get();
+        const ScDPResultMember* pRowMember = GetMember(GetSortedIndex(nMemberIndex));
 
         //TODO: use ScDPItemData, as in ScDPDimension::IsValidPage?
         while ( pRowMember && pRowMember->GetName() != *pName )
         {
             ++nMemberIndex;
             if ( nMemberIndex < nMemberCount )
-                pRowMember = maMemberArray[GetSortedIndex(nMemberIndex)].get();
+                pRowMember = GetMember(GetSortedIndex(nMemberIndex));
             else
                 pRowMember = nullptr;
         }
@@ -3564,7 +3564,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
     bool bContinue = true;
     while ( bContinue && nMemberIndex >= 0 && nMemberIndex < nMemberCount )
     {
-        const ScDPResultMember* pRowMember = maMemberArray[GetSortedIndex(nMemberIndex)].get();
+        const ScDPResultMember* pRowMember = GetMember(GetSortedIndex(nMemberIndex));
 
         // get child members by given indexes
 
@@ -3778,22 +3778,23 @@ ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n)
     return maMemberArray[n].get();
 }
 
-ScDPResultDimension* ScDPResultDimension::GetFirstChildDimension() const
+ScDPResultDimension* ScDPResultDimension::GetFirstChildDimension()
 {
     if (GetMemberCount())
-        return maMemberArray[0]->GetChildDimension();
+        return GetMember(0)->GetChildDimension();
     else
         return nullptr;
 }
 
-void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) const
+void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData)
 {
     if (IsDataLayout())
         return;
 
-    for (const auto& rxMember : maMemberArray)
+    tools::Long nCount = GetMemberCount();
+    for (tools::Long i = 0; i < nCount; i++)
     {
-        ScDPResultMember* pMember = rxMember.get();
+        ScDPResultMember* pMember = GetMember(i);
         if (pMember->IsValid())
         {
             ScDPItemData aItem(pMember->FillItemData());
@@ -4400,7 +4401,7 @@ void ScDPResultDimension::CheckShowEmpty( bool bShow )
 
     for (tools::Long i=0; i<nCount; i++)
     {
-        ScDPResultMember* pMember = maMemberArray.at(i).get();
+        ScDPResultMember* pMember = GetMember(i);
         pMember->CheckShowEmpty(bShow);
     }
 
