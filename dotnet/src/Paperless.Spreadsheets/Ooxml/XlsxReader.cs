@@ -103,6 +103,7 @@ public static class XlsxReader
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,
+                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName),
                     FileName = source.FileName ?? string.Empty,
                 });
 

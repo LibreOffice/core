@@ -101,6 +101,7 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
                 Formatting = OdsCellDecoration.Read(document.File.Styles, table),
                 Formats = formats,
                 RichText = rich,
+                Drawings = OdsDrawings.Read(document.File, table),
                 FileName = fileName ?? string.Empty,
             });
 

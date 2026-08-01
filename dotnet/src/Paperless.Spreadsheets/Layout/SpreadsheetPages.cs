@@ -201,15 +201,18 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 {
     private readonly double _scale = Math.Max(1, placement.ZoomPercentage) / 100.0;
     private readonly SheetPageDecoration _decoration = new(sheet, placement);
+    private readonly SheetPageGraphics _graphics =
+        new(sheet, Math.Max(1, placement.ZoomPercentage) / 100.0);
 
     /// <summary>
     /// Draws the page: what is painted behind the cells, their text, and the page's furniture.
     /// </summary>
     /// <remarks>
-    /// The order is <c>ScPrintFunc</c>'s (<c>printfun.cxx:1679-1695</c> and <c>:2344-2404</c>):
-    /// backgrounds, borders, cell text, the grid, the headings and the frame round them. Each
-    /// step covers part of the one before it, so the order is correctness rather than taste —
-    /// a background painted after a border would erase half of it.
+    /// The order is <c>ScPrintFunc</c>'s (<c>printfun.cxx:1679-1713</c> and <c>:2344-2404</c>):
+    /// backgrounds, borders, cell text, the grid, the drawing layer, the headings and the frame
+    /// round them. Each step covers part of the one before it, so the order is correctness rather
+    /// than taste — a background painted after a border would erase half of it, and a picture
+    /// painted before the grid would be crossed by it.
     /// </remarks>
     /// <param name="sink">Receives the drawing commands.</param>
     /// <param name="context">
@@ -244,6 +247,11 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             }
 
             _decoration.DrawGrid(columns, rows, sink);
+
+            // After the grid and before the headings, which is Calc's own order: a picture is on
+            // the front drawing layer and covers the gridlines under it (printfun.cxx:1695-1703).
+            _graphics.Draw(sink, columns, rows);
+
             _decoration.DrawHeadings(HeadingOrigin, columns, rows, sink);
             _decoration.DrawHeaderAndFooter(context ?? new SheetHeaderContext(), sink);
         }

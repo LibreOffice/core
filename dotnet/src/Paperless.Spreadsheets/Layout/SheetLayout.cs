@@ -96,6 +96,16 @@ public sealed class SheetLayout
     public SheetRichText RichText { get; init; } = SheetRichText.Empty;
 
     /// <summary>
+    /// The pictures and charts anchored on the sheet, back to front.
+    /// </summary>
+    /// <remarks>
+    /// Beside the cells because a drawing is not in one: it is fastened to the grid by a cell and
+    /// an offset and floats over whatever is under it, so it belongs to the sheet rather than to
+    /// any cell. See <see cref="SheetDrawings"/>.
+    /// </remarks>
+    public SheetDrawings Drawings { get; init; } = SheetDrawings.Empty;
+
+    /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
     /// </summary>
     /// <remarks>
