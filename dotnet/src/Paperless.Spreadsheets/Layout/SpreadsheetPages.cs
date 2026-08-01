@@ -431,15 +431,27 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// The context a cell's text is laid out in: the zoom, the neighbours, the column widths.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The widths come from the sheet's grid rather than from the page's placed columns, because a
     /// string may spill past the last column on the page and Calc measures the spill against the
     /// document (<c>mpDoc-&gt;GetColWidth</c> in <c>GetOutputArea</c>). Using the page's columns
     /// would stop the overflow at the page boundary and draw a shorter string on the last column
     /// of every page.
+    /// </para>
+    /// <para>
+    /// A neighbour is free only when it is both empty <em>and</em> outside every merge.
+    /// <c>ScOutputData::IsAvailable</c> (<c>sc/source/ui/view/output2.cxx:1178-1191</c>) asks two
+    /// questions and the second is the one a content tree cannot answer on its own: the cells a
+    /// merge covers are dropped by every reader, so they look exactly like empty ones. Overflowing
+    /// through them draws a string that Calc cuts short — measured on <c>sheet-features.ods</c>,
+    /// where the reference shortens "Second row of pair" to "Second row of p" at the edge of the
+    /// two-row merge beside it and Paperless drew all of it.
+    /// </para>
     /// </remarks>
     private SheetTextContext Context => new(
         _scale,
-        (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column)),
+        (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column))
+                         && !sheet.IsMerged(row, column),
         column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale);
 
     /// <summary>
