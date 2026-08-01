@@ -900,4 +900,36 @@ void SwTextAdjuster::CalcDropRepaint()
         rRepaint.Bottom( nBottom );
 }
 
+namespace
+{
+// GetAdjusted() is protected, and adjusts the iterator's current line only
+class SwLineAdjuster : public SwTextCursor
+{
+public:
+    SwLineAdjuster(SwTextFrame* pFrame, SwTextSizeInfo* pInf)
+        : SwTextCursor(pFrame, pInf)
+    {
+    }
+
+    void AdjustLines()
+    {
+        Top();
+        do
+            GetAdjusted();
+        while (NextLine());
+    }
+};
+}
+
+void SwTextFrame::AdjustFormattedLines()
+{
+    if (!HasPara())
+        return;
+
+    SwFrameSwapper aSwapper(this, true);
+    SwTextSizeInfo aInf(this);
+    SwLineAdjuster aLine(this, &aInf);
+    aLine.AdjustLines();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

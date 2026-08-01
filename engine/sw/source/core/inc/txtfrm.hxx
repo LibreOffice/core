@@ -342,6 +342,9 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     /// Like GetDrawObjs(), but limit to fly frames which are allowed to split.
     std::vector<SwFlyAtContentFrame*> GetSplitFlyDrawObjs() const;
 
+    /// Carry out the line adjustment that formatting left to the first painter or cursor
+    void AdjustFormattedLines();
+
 public:
 
     virtual const SvxFormatBreakItem& GetBreakItem() const override;

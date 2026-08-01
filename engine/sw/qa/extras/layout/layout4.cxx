@@ -978,7 +978,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf57187_Tdf158900)
     // It uses the "second check if everything fits to line" return path in SwTextGuess::Guess.
     // Check that the spaces are put into a Hole portion, thus not participating in layout.
     // Without the fix, this would fail: there were only 2 portions, no Hole portion.
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*", 3);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*", 4);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[1]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[1]", "length", u"11");
@@ -988,11 +988,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf57187_Tdf158900)
                 u"101");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[3]", "type",
                 u"PortionType::Break");
+    // The paragraph is justified, so the dump also carries the margin that adjustment adds
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]/*[4]", "type",
+                u"PortionType::Margin");
 
     // tdf#158900: Check that the break after a long line with trailing spaces is kept on same line.
     // Without the fix in place, this would fail: the line had only text and hole portions,
     // and the break was on a separate third line
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*", 4);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*", 5);
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[1]", "type",
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[2]", "type",
@@ -1005,6 +1008,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf57187_Tdf158900)
                 u"false");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[4]", "type",
                 u"PortionType::Break");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]/*[5]", "type",
+                u"PortionType::Margin");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testLayoutDumpAdjustsLines)
+{
+    // A line gets its adjustment when something first paints it or asks it for a cursor position,
+    // so the dump used to report the lines of this justified paragraph as the formatter left them,
+    // without the margin portion, until something else had read the layout.
+    createSwDoc("space+break.fodt");
+    xmlDocUniquePtr pBeforePaint = parseLayoutDump();
+    getSwDocShell()->GetPreviewMetaFile();
+    xmlDocUniquePtr pAfterPaint = parseLayoutDump();
+
+    static constexpr OString sMargins = "/root/page/body/txt/SwParaPortion/SwLineLayout/"
+                                        "SwGluePortion[@type='PortionType::Margin']"_ostr;
+    assertXPath(pBeforePaint, sMargins, 5);
+    assertXPath(pAfterPaint, sMargins, 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf168777_BlankBeforeFly)

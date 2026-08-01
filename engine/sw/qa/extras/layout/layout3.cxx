@@ -576,8 +576,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164905)
     pViewShell->Reformat();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // This was 9 (resulting broken ToC layout)
-    assertXPath(pXmlDoc, "//SwGluePortion", 3);
+    // The ToC is there, so that the count below cannot pass by matching nothing
+    assertXPath(pXmlDoc, "/root/page/body/section[2]", 1);
+    // This was 6 in the ToC (resulting broken ToC layout)
+    assertXPath(pXmlDoc, "/root/page/body/section[2]//SwGluePortion", 0);
     // For example, it was an unnecessary glue portion here
     assertXPath(pXmlDoc,
                 "/root/page/body/section[2]/txt[1]/SwParaPortion/SwLineLayout/SwGluePortion", 0);

@@ -882,6 +882,18 @@ void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
         (void)xmlTextWriterWriteString( writer,
                 reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
     }
+    // The portions are gone once the line has left the text cache and nothing painted the frame
+    // since, and a line is only justified when first painted or asked for a cursor position.
+    // Restore both here, so the dump describes the same layout whatever has read it so far. Both
+    // measure, which needs the shell's output device, and a frame that is formatting right now
+    // keeps what it has: a dump is no reason to reenter the formatter.
+    if (!IsLocked() && getRootFrame()->GetCurrShell())
+    {
+        SwTextFrame* pThis = const_cast<SwTextFrame*>(this);
+        pThis->GetFormatted();
+        pThis->AdjustFormattedLines();
+    }
+
     if (const SwParaPortion* pPara = GetPara())
     {
         (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
