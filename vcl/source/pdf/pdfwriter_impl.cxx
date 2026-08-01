@@ -1695,15 +1695,10 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             }
 
             tools::Rectangle aRect;
-            const auto& rBitmapData = rGlyph.getColorBitmap(aRect);
-            if (!rBitmapData.empty())
+            const auto& rBitmap = rGlyph.getColorBitmap(aRect);
+            if (!rBitmap.IsEmpty())
             {
-                SvMemoryStream aStream(const_cast<uint8_t*>(rBitmapData.data()), rBitmapData.size(),
-                                       StreamMode::READ);
-                vcl::PngImageReader aReader(aStream);
-
-                Bitmap aBitmap = aReader.read();
-                const BitmapEmit& rBitmapEmit = createBitmapEmit(aBitmap, Graphic(),
+                const BitmapEmit& rBitmapEmit = createBitmapEmit(rBitmap, Graphic(),
                                                                  aUsedBitmaps, aResourceDict,
                                                                  aOutputStreams);
 
@@ -5604,6 +5599,26 @@ void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
     }
 }
 
+namespace
+{
+// Decode the color bitmap of a glyph, or an empty bitmap if it has none or it
+// can't be decoded, in which case the glyph is drawn as a non-color one.
+Bitmap decodeColorBitmap(const vcl::font::PhysicalFontFace* pFace, sal_GlyphId nGlyphId,
+                         tools::Rectangle& rRect)
+{
+    auto aData = pFace->GetGlyphColorBitmap(nGlyphId, rRect);
+    if (aData.empty())
+        return {};
+
+    SvMemoryStream aStream(const_cast<uint8_t*>(aData.data()), aData.size(), StreamMode::READ);
+    Bitmap aBitmap = vcl::PngImageReader(aStream).read();
+    if (aBitmap.IsEmpty())
+        SAL_WARN("vcl.pdfwriter", "Failed to decode the color bitmap of glyph " << nGlyphId);
+
+    return aBitmap;
+}
+}
+
 void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFace,
                                   const LogicalFontInstance* pFont,
@@ -5612,64 +5627,70 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
 {
     if (pFace->IsColorFont())
     {
-        // Font has colors, check if this glyph has color layers or bitmap.
-        tools::Rectangle aRect;
-        auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
-        auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty())
+        // Look the glyph up without inserting a subset, as only color glyphs need one.
+        if (auto itFont = m_aType3Fonts.find(pFace); itFont != m_aType3Fonts.end())
         {
-            auto& rSubset = m_aType3Fonts[pFace];
-            auto it = rSubset.m_aMapping.find(nFontGlyphId);
-            if (it != rSubset.m_aMapping.end())
+            auto it = itFont->second.m_aMapping.find(nFontGlyphId);
+            if (it != itFont->second.m_aMapping.end())
             {
                 nMappedFontObject = it->second.m_nFontID;
                 nMappedGlyph = it->second.m_nSubsetGlyphID;
+                return;
             }
-            else
+        }
+
+        tools::Rectangle aRect;
+        std::vector<vcl::font::ColorLayer> aLayers;
+        Bitmap aBitmap;
+        // A glyph whose bitmap can't be decoded is left to the non-color path below.
+        aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
+        if (aLayers.empty())
+            aBitmap = decodeColorBitmap(pFace, nFontGlyphId, aRect);
+        if (!aLayers.empty() || !aBitmap.IsEmpty())
+        {
+            auto& rSubset = m_aType3Fonts[pFace];
+            // create new subset if necessary
+            if (rSubset.m_aSubsets.empty()
+                || (rSubset.m_aSubsets.back().m_aMapping.size() > 254))
             {
-                // create new subset if necessary
-                if (rSubset.m_aSubsets.empty()
-                    || (rSubset.m_aSubsets.back().m_aMapping.size() > 254))
-                {
-                    rSubset.m_aSubsets.emplace_back(m_nNextFID++);
-                }
-
-                // copy font id
-                nMappedFontObject = rSubset.m_aSubsets.back().m_nFontID;
-                // create new glyph in subset
-                sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(
-                    rSubset.m_aSubsets.back().m_aMapping.size() + 1);
-                nMappedGlyph = nNewId;
-
-                // add new glyph to emitted font subset
-                auto& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[nFontGlyphId];
-                rNewGlyphEmit.setGlyphId(nNewId);
-                rNewGlyphEmit.setGlyphWidth(nGlyphWidth);
-                for (const auto nCode : rCodeUnits)
-                    rNewGlyphEmit.addCode(nCode);
-
-                // add color layers to the glyphs
-                if (!aLayers.empty())
-                {
-                    for (const auto& aLayer : aLayers)
-                    {
-                        sal_uInt8 nLayerGlyph;
-                        sal_Int32 nLayerFontID;
-                        registerSimpleGlyph(aLayer.nGlyphIndex, pFace, pFont, rCodeUnits,
-                                            nGlyphWidth, nLayerGlyph, nLayerFontID);
-
-                        rNewGlyphEmit.addColorLayer(
-                            { nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
-                    }
-                }
-                else if (!aBitmap.empty())
-                    rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
-
-                // add new glyph to font mapping
-                Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
-                rNewGlyph.m_nFontID = nMappedFontObject;
-                rNewGlyph.m_nSubsetGlyphID = nNewId;
+                rSubset.m_aSubsets.emplace_back(m_nNextFID++);
             }
+
+            // copy font id
+            nMappedFontObject = rSubset.m_aSubsets.back().m_nFontID;
+            // create new glyph in subset
+            sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(
+                rSubset.m_aSubsets.back().m_aMapping.size() + 1);
+            nMappedGlyph = nNewId;
+
+            // add new glyph to emitted font subset
+            auto& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[nFontGlyphId];
+            rNewGlyphEmit.setGlyphId(nNewId);
+            rNewGlyphEmit.setGlyphWidth(nGlyphWidth);
+            for (const auto nCode : rCodeUnits)
+                rNewGlyphEmit.addCode(nCode);
+
+            // add color layers to the glyphs
+            if (!aLayers.empty())
+            {
+                for (const auto& aLayer : aLayers)
+                {
+                    sal_uInt8 nLayerGlyph;
+                    sal_Int32 nLayerFontID;
+                    registerSimpleGlyph(aLayer.nGlyphIndex, pFace, pFont, rCodeUnits,
+                                        nGlyphWidth, nLayerGlyph, nLayerFontID);
+
+                    rNewGlyphEmit.addColorLayer(
+                        { nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
+                }
+            }
+            else if (!aBitmap.IsEmpty())
+                rNewGlyphEmit.setColorBitmap(std::move(aBitmap), aRect);
+
+            // add new glyph to font mapping
+            Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
+            rNewGlyph.m_nFontID = nMappedFontObject;
+            rNewGlyph.m_nSubsetGlyphID = nNewId;
             return;
         }
     }
