@@ -72,7 +72,10 @@ public static class TableLayouter
                         nesting)
                     : null;
 
-                Length text = content is null ? Length.Zero : FlowLayouter.Extent(content);
+                // The advance rather than the ink: a cell is as tall as its content plus the space after
+                // its last paragraph, which is what `AddParaSpacingToTableCells` — on for every Word
+                // document — makes Writer do. See `PlacedFlow.Advance`.
+                Length text = content is null ? Length.Zero : content.Advance;
 
                 int last = Math.Min(row + Math.Max(1, cell.RowSpan), rows) - 1;
                 measured.Add(new Measured(row, last, cell, width, content, text));

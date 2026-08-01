@@ -458,6 +458,20 @@ public sealed record PlacedFlow
     /// <summary>Where the flow sits on the page.</summary>
     public required DocRect Area { get; init; }
 
+    /// <summary>
+    /// How far the flow advanced in all — the <em>last</em> block's own lower spacing included.
+    /// </summary>
+    /// <remarks>
+    /// Different from where the ink stops, which is what <see cref="FlowLayouter.Extent"/> reports, and
+    /// the difference is a table cell's whole point. Writer's
+    /// <c>SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell</c> adds the last frame's lower spacing to the
+    /// cell under the <c>AddParaSpacingToTableCells</c> setting, which both the DOC and the DOCX
+    /// importers switch on — so in a Word document every cell is as tall as its content plus the space
+    /// after its final paragraph. Sizing rows from the ink instead makes each one short by that spacing,
+    /// which on a long table is many pages.
+    /// </remarks>
+    public Length Advance { get; init; }
+
     /// <summary>True when nothing was laid out.</summary>
     public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }

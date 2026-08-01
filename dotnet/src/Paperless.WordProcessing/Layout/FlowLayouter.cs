@@ -186,6 +186,7 @@ public static class FlowLayouter
             Lines = placed,
             Tables = tables,
             Area = area,
+            Advance = top,
         };
     }
 
