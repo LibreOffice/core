@@ -62,55 +62,94 @@ internal static class WordParagraphFormats
     /// <summary>The <c>auto</c> line rule's unit: a line is two hundred and forty of them.</summary>
     private const double LineUnitsPerLine = 240.0;
 
+    /// <summary>The twips <c>w:beforeAutospacing</c>/<c>w:afterAutospacing</c> stand for.</summary>
+    /// <remarks>
+    /// Fourteen points — the HTML browser margin Word inherited, and the figure LibreOffice's importer
+    /// substitutes in <c>DomainMapper.cxx</c>'s <c>LN_CT_Spacing_beforeAutospacing</c>. The value is a
+    /// constant rather than anything derived from the text: it is a browser's paragraph margin, not a
+    /// typographic measure.
+    /// </remarks>
+    internal static readonly Length HtmlAutoSpacing = Length.FromTwips(280);
+
+    /// <summary>The same, for a document that switched HTML auto spacing off.</summary>
+    /// <remarks>
+    /// <c>w:doNotUseHTMLParagraphAutoSpacing</c> does not mean "no spacing" — it means five points,
+    /// which is the literal <c>w:before="100"</c> such files also carry.
+    /// </remarks>
+    internal static readonly Length WordAutoSpacing = Length.FromTwips(100);
+
     /// <summary>Resolves a paragraph's layout properties.</summary>
     /// <param name="styles">The document's styles.</param>
     /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
     /// <param name="defaultTabInterval">The document's <c>w:defaultTabStop</c>.</param>
+    /// <param name="autoSpacing">
+    /// What <c>w:beforeAutospacing</c> and <c>w:afterAutospacing</c> resolve to, which the document's
+    /// compatibility settings decide. Null takes <see cref="HtmlAutoSpacing"/>, the ordinary case.
+    /// </param>
+    /// <param name="tableStyle">
+    /// The <c>w:pPr</c> chain of the table style the paragraph sits in, or null outside a table.
+    /// </param>
     internal static ParagraphFormat Resolve(
-        WordStyles styles, XElement? paragraphProperties, Length defaultTabInterval)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        Length defaultTabInterval,
+        Length? autoSpacing = null,
+        IReadOnlyList<XElement>? tableStyle = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
 
-        XElement? indent = Layer(styles, paragraphProperties, styleId, "ind");
-        XElement? spacing = Layer(styles, paragraphProperties, styleId, "spacing");
+        // Attribute by attribute rather than element by element: see WordStyles.ParagraphPropertyLayers.
+        List<XElement> indent =
+            styles.ParagraphPropertyLayers("ind", paragraphProperties, styleId, tableStyle);
+        List<XElement> spacings =
+            styles.ParagraphPropertyLayers("spacing", paragraphProperties, styleId, tableStyle);
+
+        Length auto = autoSpacing ?? HtmlAutoSpacing;
 
         return new ParagraphFormat
         {
             Alignment = Alignment(Word.Attribute(
-                Layer(styles, paragraphProperties, styleId, "jc"), "val")),
+                Layer(styles, paragraphProperties, styleId, "jc", tableStyle), "val")),
 
             // w:bidi, which OOXML states on the paragraph and not on its runs. w:rtl on a run is
             // deliberately not read: LibreOffice's own importer discards it —
             // `case NS_ooxml::LN_EG_RPrBase_rtl: break;`,
             // sw/source/writerfilter/dmapper/DomainMapper.cxx:2511 — and resolves direction from
             // the text against this instead, so honouring it would put runs where Writer does not.
-            IsRightToLeft = IsOn(styles, paragraphProperties, styleId, "bidi"),
+            IsRightToLeft = IsOn(styles, paragraphProperties, styleId, "bidi", tableStyle),
 
             // w:start and w:left are the same attribute under two names: the first is the
             // reading-direction form ECMA-376 standardised on and the second is what Word 2007 wrote
             // and what most files in existence still carry.
-            StartIndent = Twips(indent, "start") ?? Twips(indent, "left") ?? Length.Zero,
-            EndIndent = Twips(indent, "end") ?? Twips(indent, "right") ?? Length.Zero,
+            StartIndent = Across(indent, "start", "left") ?? Length.Zero,
+            EndIndent = Across(indent, "end", "right") ?? Length.Zero,
             FirstLineIndent = FirstLine(indent),
 
-            SpaceBefore = Twips(spacing, "before") ?? Length.Zero,
-            SpaceAfter = Twips(spacing, "after") ?? Length.Zero,
-            HasContextualSpacing = IsOn(styles, paragraphProperties, styleId, "contextualSpacing"),
-            LineSpacing = Spacing(spacing),
+            SpaceBefore = AutoOr(spacings, "beforeAutospacing", "before", auto),
+            SpaceAfter = AutoOr(spacings, "afterAutospacing", "after", auto),
+            HasContextualSpacing =
+                IsOn(styles, paragraphProperties, styleId, "contextualSpacing", tableStyle),
 
-            KeepWithNext = IsOn(styles, paragraphProperties, styleId, "keepNext"),
-            KeepTogether = IsOn(styles, paragraphProperties, styleId, "keepLines"),
+            // The one part of w:spacing that is *not* attribute-wise: line and lineRule are a pair, and
+            // LibreOffice maps them onto one UNO struct that a layer either replaces whole or leaves
+            // alone. So the innermost layer mentioning either decides both.
+            LineSpacing = Spacing(spacings.Find(
+                s => Word.Attribute(s, "line") is not null
+                     || Word.Attribute(s, "lineRule") is not null)),
+
+            KeepWithNext = IsOn(styles, paragraphProperties, styleId, "keepNext", tableStyle),
+            KeepTogether = IsOn(styles, paragraphProperties, styleId, "keepLines", tableStyle),
 
             // Word states widow control as one flag rather than two counts, and it means two of each —
             // which is why a document with it on sometimes has a visibly short page.
-            OrphanLines = IsOn(styles, paragraphProperties, styleId, "widowControl") ? 2 : 0,
-            WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl") ? 2 : 0,
+            OrphanLines = IsOn(styles, paragraphProperties, styleId, "widowControl", tableStyle) ? 2 : 0,
+            WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl", tableStyle) ? 2 : 0,
 
-            StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId),
-            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs")),
+            StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId, tableStyle),
+            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs", tableStyle)),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
         };
@@ -233,15 +272,16 @@ internal static class WordParagraphFormats
     /// for its style's — it is an overlay, and each child of it overrides only its counterpart.
     /// </remarks>
     private static XElement? Layer(
-        WordStyles styles, XElement? paragraphProperties, string? styleId, string localName)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        string? styleId,
+        string localName,
+        IReadOnlyList<XElement>? tableStyle = null)
     {
-        if (Word.Child(paragraphProperties, localName) is { } direct) return direct;
+        List<XElement> layers = styles.ParagraphPropertyLayers(
+            localName, paragraphProperties, styleId, tableStyle);
 
-        WordProperty fromStyle = styles.ResolveInStyleChain(
-            styleId, WordStyleType.Paragraph, runProperty: false, localName);
-        if (fromStyle.HasValue) return fromStyle.Element;
-
-        return styles.ResolveInDocumentDefaults(runProperty: false, localName).Element;
+        return layers.Count > 0 ? layers[0] : null;
     }
 
     /// <summary>
@@ -299,16 +339,13 @@ internal static class WordParagraphFormats
     }
 
     private static bool IsOn(
-        WordStyles styles, XElement? paragraphProperties, string? styleId, string localName)
-    {
-        if (Word.Child(paragraphProperties, localName) is { } direct) return Word.IsOn(direct);
-
-        WordProperty fromStyle = styles.ResolveInStyleChain(
-            styleId, WordStyleType.Paragraph, runProperty: false, localName);
-        if (fromStyle.HasValue) return fromStyle.IsOn;
-
-        return styles.ResolveInDocumentDefaults(runProperty: false, localName).IsOn;
-    }
+        WordStyles styles,
+        XElement? paragraphProperties,
+        string? styleId,
+        string localName,
+        IReadOnlyList<XElement>? tableStyle = null)
+        => Layer(styles, paragraphProperties, styleId, localName, tableStyle) is { } found
+           && Word.IsOn(found);
 
     /// <summary>
     /// The alignment, from <c>w:jc</c>.
@@ -339,11 +376,75 @@ internal static class WordParagraphFormats
     /// as a positive number under a different name. Reading <c>w:hanging</c> without negating it indents
     /// a numbered list's first line instead of outdenting it, which puts every number in the wrong place.
     /// </remarks>
-    private static Length FirstLine(XElement? indent)
+    /// <remarks>
+    /// The two are one property, so the innermost layer naming either settles it — a paragraph whose
+    /// own <c>w:ind</c> states <c>w:firstLine</c> must not have its style's <c>w:hanging</c> applied on
+    /// top of it, and vice versa.
+    /// </remarks>
+    private static Length FirstLine(List<XElement> indent)
     {
-        if (Twips(indent, "hanging") is { } hanging) return -hanging;
-        return Twips(indent, "firstLine") ?? Length.Zero;
+        foreach (XElement layer in indent)
+        {
+            if (Twips(layer, "hanging") is { } hanging) return -hanging;
+            if (Twips(layer, "firstLine") is { } first) return first;
+        }
+
+        return Length.Zero;
     }
+
+    /// <summary>
+    /// The first of several attribute spellings of one property, taken from the innermost layer naming
+    /// any of them.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:start</c> and <c>w:left</c> are the same property under two names: the first is the
+    /// reading-direction form ECMA-376 standardised on, the second is what Word 2007 wrote and what most
+    /// files in existence still carry. A layer stating either has settled the property, so the search
+    /// must not carry on outwards looking for the other spelling.
+    /// </remarks>
+    private static Length? Across(List<XElement> layers, params string[] names)
+    {
+        foreach (XElement layer in layers)
+        {
+            foreach (string name in names)
+            {
+                if (Twips(layer, name) is { } value) return value;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// A paragraph margin, with <c>w:beforeAutospacing</c>/<c>w:afterAutospacing</c> taking priority.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The auto flag is not a hint that some value elsewhere should be used — it <em>replaces</em> the
+    /// margin the same <c>w:spacing</c> states, which is why files carry <c>w:before="100"
+    /// w:beforeAutospacing="1"</c> and lay out with fourteen points rather than five. LibreOffice's
+    /// importer inserts the literal value with overwrite off and the auto value over it.
+    /// </para>
+    /// <para>
+    /// A flag explicitly switched off (<c>w:beforeAutospacing="0"</c>) states nothing at all: it leaves
+    /// the layer's own <c>w:before</c>, and where there is none the search continues outwards.
+    /// </para>
+    /// </remarks>
+    private static Length AutoOr(
+        List<XElement> layers, string autoName, string name, Length autoSpacing)
+    {
+        foreach (XElement layer in layers)
+        {
+            if (Word.Attribute(layer, autoName) is { } flag && IsSwitchedOn(flag)) return autoSpacing;
+            if (Twips(layer, name) is { } value) return value;
+        }
+
+        return Length.Zero;
+    }
+
+    /// <summary>An OOXML on/off attribute, which real files spell three ways.</summary>
+    private static bool IsSwitchedOn(string value)
+        => value is not ("0" or "false" or "off");
 
     /// <summary>
     /// The line spacing, from <c>w:spacing</c>'s value and rule together.
@@ -381,8 +482,11 @@ internal static class WordParagraphFormats
     /// which is the opposite of what its position in the file suggests.
     /// </remarks>
     private static bool StartsNewPage(
-        WordStyles styles, XElement? paragraphProperties, string? styleId)
-        => IsOn(styles, paragraphProperties, styleId, "pageBreakBefore");
+        WordStyles styles,
+        XElement? paragraphProperties,
+        string? styleId,
+        IReadOnlyList<XElement>? tableStyle)
+        => IsOn(styles, paragraphProperties, styleId, "pageBreakBefore", tableStyle);
 
     /// <summary>
     /// A measurement in twips, signed, or null when the attribute is absent.

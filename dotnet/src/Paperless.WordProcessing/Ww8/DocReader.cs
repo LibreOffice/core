@@ -204,11 +204,17 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         Paginator paginator = new(pagination);
 
+        List<PaginatedSection> sections = new(Sections.Count);
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
+
+        for (int i = 0; i < Sections.Count; i++)
+        {
+            sections.Add(new PaginatedSection(Sections[i], Furniture(fonts, i, headers, footers)));
+        }
+
         return new WordProcessingPages(
-            paginator.Paginate(
-                blocks,
-                [.. Sections.Select((section, index) =>
-                    new PaginatedSection(section, Furniture(fonts, index)))]),
+            paginator.Paginate(blocks, sections),
             paginator.Blocks ?? blocks);
     }
 
@@ -216,17 +222,37 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// The document's headers and footers, ready for the page frames.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The same conversion the body goes through, over the six stories the header subdocument holds for this
     /// section — see <c>Ww8DocumentReader.ReadLayoutFurniture</c> for why the order of those stories is the
     /// whole mapping. One font cache is shared with the body, so a header in the body's face resolves to the
     /// identical face object rather than an equal one.
+    /// </para>
+    /// <para>
+    /// A slot whose story is empty is <em>inherited</em> from the section before it, not dropped. That is
+    /// what "link to previous" is on the wire: Word writes a section's header story only when the section
+    /// unlinks it, so in a document where one running head covers twenty sections nineteen of the stories
+    /// are a bare paragraph mark. LibreOffice reaches the same place through
+    /// <c>SwWW8ImplReader::CopyPageDescHdFt</c>, reached from <c>Read_HdFt</c> whenever the story is
+    /// shorter than two characters (<c>ww8par.cxx</c>). Dropping the slot instead leaves every section
+    /// after the first with no running head at all, and a page with no header is a page that holds more
+    /// lines — so the document silently paginates short.
+    /// </para>
     /// </remarks>
-    private PageFurnitureSet? Furniture(LayoutFonts fonts, int section)
+    /// <param name="fonts">The font cache shared with the body.</param>
+    /// <param name="section">Which section's furniture to read.</param>
+    /// <param name="headers">
+    /// The headers in force, by slot, carried across the sections and updated in place: what this section
+    /// states replaces a slot, and what it leaves empty keeps whatever the section before it had.
+    /// </param>
+    /// <param name="footers">The footers in force, by the same rule.</param>
+    private PageFurnitureSet? Furniture(
+        LayoutFonts fonts,
+        int section,
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers,
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers)
     {
         Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture(section);
-
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
-        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
 
         Fill(headers, stated.Headers);
         Fill(footers, stated.Footers);
