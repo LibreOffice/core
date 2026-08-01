@@ -161,6 +161,8 @@ public static class SlideChart
         DocPoint corner = label.Anchor switch
         {
             ChartLabelAnchor.CentreTop => new DocPoint(label.At.X - box.Width / 2, label.At.Y),
+            ChartLabelAnchor.CentreBottom =>
+                new DocPoint(label.At.X - box.Width / 2, label.At.Y - box.Height),
             ChartLabelAnchor.RightMiddle =>
                 new DocPoint(label.At.X - box.Width, label.At.Y - box.Height / 2),
             ChartLabelAnchor.LeftMiddle => new DocPoint(label.At.X, label.At.Y - box.Height / 2),

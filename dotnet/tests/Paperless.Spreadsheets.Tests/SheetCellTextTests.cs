@@ -2,7 +2,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 using Paperless.TestKit;
 using Shouldly;
 

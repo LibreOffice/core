@@ -475,7 +475,7 @@ internal static class XlsxCellFormats
             ? record.Alignment
             : parent.Value.Alignment;
 
-        Numbers.NumberFormatCode code = styles.FormatFor(index);
+        Core.Numbers.NumberFormatCode code = styles.FormatFor(index);
 
         return new SheetCellFormat
         {
@@ -492,7 +492,7 @@ internal static class XlsxCellFormats
             RotationDegrees = Rotation(alignment.Rotation),
             IsStacked = alignment.Stacked,
             NumberFormatKind = code.IsGeneral || code.Sections.Count == 0
-                ? Numbers.NumberFormatKind.General
+                ? Core.Numbers.NumberFormatKind.General
                 : code.Sections[0].Kind,
         };
     }

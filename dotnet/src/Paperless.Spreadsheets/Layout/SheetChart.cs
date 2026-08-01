@@ -147,10 +147,14 @@ internal static class SheetChart
             _ => label.At.X - (run.Width / 2),
         };
 
-        // CentreTop puts the label's *top* at the point; the other three centre it on the point.
-        Length top = label.Anchor == ChartLabelAnchor.CentreTop
-            ? label.At.Y
-            : label.At.Y - (line / 2);
+        // CentreTop puts the label's *top* at the point and CentreBottom its bottom; the other
+        // three centre it on the point.
+        Length top = label.Anchor switch
+        {
+            ChartLabelAnchor.CentreTop => label.At.Y,
+            ChartLabelAnchor.CentreBottom => label.At.Y - line,
+            _ => label.At.Y - (line / 2),
+        };
 
         sink.DrawGlyphRun(run.At(new DocPoint(x, top + ascent)), Paint.Solid(label.Colour));
     }

@@ -93,6 +93,12 @@ public static class OdfChartPlot
 
         OdfChartTable table = OdfChartTable.Read(chart);
 
+        // The plot area's own style carries the labels every series inherits, which is where
+        // LibreOffice writes "label every point of this chart" — chart:data-label-number on the
+        // plot area rather than on each series.
+        string? areaStyle = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
+        ChartDataLabel? areaLabel = LabelOf(areaStyle, styles, kind, null);
+
         List<ChartSeries> plotted = [];
         foreach (XElement element in series)
         {
@@ -105,6 +111,8 @@ public static class OdfChartPlot
             // a combination chart: the same chart:plot-area holds a chart:series
             // chart:class="chart:bar" beside a chart:series chart:class="chart:line". Reading it
             // per series is all a combination chart needs here.
+            ChartPlotKind own = KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind;
+
             plotted.Add(new ChartSeries(
                 table.LabelOf(Attribute(element, OdfNamespaces.Chart, "label-cell-address")),
                 values,
@@ -112,7 +120,12 @@ public static class OdfChartPlot
                 styles.Line(style),
                 styles.LineWidth(style),
                 PointFills(element, values.Count, styles),
-                KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind));
+                own)
+            {
+                Marker = MarkerOf(style, styles, own),
+                Label = LabelOf(style, styles, own, areaLabel),
+                PointLabels = PointLabelsOf(element, values.Count, styles, own, areaLabel),
+            });
         }
 
         XElement? categories = null;
@@ -146,6 +159,13 @@ public static class OdfChartPlot
             Overlap = styles.Number(plotStyle, "overlap") ?? 0.0,
             IsStacked = styles.Flag(plotStyle, "stacked") ?? false,
             ValueScale = ScaleOf(valueAxis, styles),
+            ValueFormat = styles.Format(Attribute(valueAxis, OdfNamespaces.Chart, "style-name")),
+            CategoryFormat = styles.Format(Attribute(categoryAxis, OdfNamespaces.Chart, "style-name")),
+
+            // chart:visible="false" is ODF's c:delete: an axis that is present in the file so that
+            // its scale and its grid survive a round trip, and drawn as nothing.
+            ValueAxisVisible = Visible(valueAxis, styles),
+            CategoryAxisVisible = Visible(categoryAxis, styles),
             Legend = LegendOf(Child(chart, OdfNamespaces.Chart, "legend")),
             Background = styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name")),
             PlotBackground = styles.Fill(
@@ -219,6 +239,150 @@ public static class OdfChartPlot
 
     /// <summary>chart2's own gridline colour, gray30.</summary>
     private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
+
+    /// <summary>Whether an axis is drawn — <c>chart:visible="false"</c> says it is not.</summary>
+    private static bool Visible(XElement? axis, OdfChartStyles styles)
+        => axis is null
+           || styles.Flag(Attribute(axis, OdfNamespaces.Chart, "style-name"), "visible") != false;
+
+    /// <summary>
+    /// What a series' style says its data labels show, or null for none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF folds the four OOXML flags into two attributes: <c>chart:data-label-number</c>, whose
+    /// values are <c>none</c>, <c>value</c>, <c>percentage</c> and <c>value-and-percentage</c>,
+    /// and <c>chart:data-label-text</c>, a boolean meaning the category name
+    /// (<c>xmloff/source/chart/SchXMLSeriesHelper</c> and <c>PropertyMap.hxx</c>'s
+    /// <c>Label</c> mapping). There is no separate "series name" flag, which is why nothing here
+    /// sets <see cref="ChartDataLabel.ShowSeries"/>.
+    /// </para>
+    /// <para>
+    /// A style that states neither attribute inherits the level above rather than defaulting to
+    /// showing nothing, which is how a plot area saying <c>chart:data-label-number="value"</c>
+    /// labels every series under it.
+    /// </para>
+    /// </remarks>
+    private static ChartDataLabel? LabelOf(
+        string? style, OdfChartStyles styles, ChartPlotKind kind, ChartDataLabel? inherited)
+    {
+        string? number = styles.Text(style, "data-label-number");
+        bool? text = styles.Flag(style, "data-label-text");
+        string? position = styles.Text(style, "label-position");
+
+        if (number is null && text is null && position is null) return inherited;
+
+        bool value = number switch
+        {
+            "value" or "value-and-percentage" => true,
+            null => inherited?.ShowValue ?? false,
+            _ => false,
+        };
+
+        bool percent = number switch
+        {
+            "percentage" or "value-and-percentage" => kind == ChartPlotKind.Pie,
+            null => inherited?.ShowPercent ?? false,
+            _ => false,
+        };
+
+        return new ChartDataLabel
+        {
+            ShowValue = value,
+            ShowPercent = percent,
+            ShowCategory = text ?? inherited?.ShowCategory ?? false,
+            ValueFormat = styles.Format(style) ?? inherited?.ValueFormat,
+            Separator = percent && !value ? "\n" : inherited?.Separator ?? "; ",
+            Placement = PlacementOf(position) ?? inherited?.Placement,
+        };
+    }
+
+    /// <summary>The per-point label overrides a series states, or null.</summary>
+    /// <remarks>
+    /// <c>chart:data-point</c> in order, honouring <c>chart:repeated</c> exactly as the fills do —
+    /// a pie whose eight wedges are all default writes one element and not eight.
+    /// </remarks>
+    private static ChartDataLabel?[]? PointLabelsOf(
+        XElement series,
+        int count,
+        OdfChartStyles styles,
+        ChartPlotKind kind,
+        ChartDataLabel? inherited)
+    {
+        ChartDataLabel?[]? labels = null;
+        int at = 0;
+
+        foreach (XElement point in Children(series, OdfNamespaces.Chart, "data-point"))
+        {
+            int repeat = 1;
+            if (int.TryParse(
+                    Attribute(point, OdfNamespaces.Chart, "repeated"),
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture,
+                    out int stated))
+            {
+                repeat = Math.Clamp(stated, 1, MaxPoints);
+            }
+
+            string? style = Attribute(point, OdfNamespaces.Chart, "style-name");
+            ChartDataLabel? own = LabelOf(style, styles, kind, inherited);
+
+            for (int copy = 0; copy < repeat && at < MaxPoints; copy++, at++)
+            {
+                if (own is null || ReferenceEquals(own, inherited)) continue;
+
+                labels ??= new ChartDataLabel?[Math.Max(count, at + 1)];
+                if (at >= labels.Length) continue;
+                labels[at] = own;
+            }
+        }
+
+        return labels;
+    }
+
+    private static ChartLabelPlacement? PlacementOf(string? stated) => stated switch
+    {
+        "outside" => ChartLabelPlacement.Outside,
+        "inside" => ChartLabelPlacement.Inside,
+        "center" => ChartLabelPlacement.Centre,
+        "near-origin" => ChartLabelPlacement.NearOrigin,
+        "top" => ChartLabelPlacement.Top,
+        "bottom" => ChartLabelPlacement.Bottom,
+        "left" => ChartLabelPlacement.Left,
+        "right" => ChartLabelPlacement.Right,
+        "avoid-overlap" => ChartLabelPlacement.BestFit,
+        _ => null,
+    };
+
+    /// <summary>
+    /// What marker a series draws.
+    /// </summary>
+    /// <remarks>
+    /// <c>chart:symbol-type</c> is <c>none</c>, <c>automatic</c> or <c>named-symbol</c>, and only
+    /// the last carries a <c>chart:symbol-name</c>. A scatter chart whose style states nothing
+    /// gets one anyway, for the same reason its OOXML counterpart does: without markers a scatter
+    /// series that states no line draws nothing at all.
+    /// </remarks>
+    private static ChartMarker MarkerOf(string? style, OdfChartStyles styles, ChartPlotKind kind)
+    {
+        string? type = styles.Text(style, "symbol-type");
+
+        if (type is null)
+            return kind == ChartPlotKind.Scatter ? ChartMarker.Square : ChartMarker.None;
+
+        if (type == "none") return ChartMarker.None;
+        if (type != "named-symbol") return ChartMarker.Square;
+
+        return styles.Text(style, "symbol-name") switch
+        {
+            "circle" => ChartMarker.Circle,
+            "diamond" => ChartMarker.Diamond,
+            "arrow-up" or "arrow-down" or "arrow-left" or "arrow-right" => ChartMarker.Triangle,
+            "plus" => ChartMarker.Cross,
+            "asterisk" or "x" => ChartMarker.Star,
+            _ => ChartMarker.Square,
+        };
+    }
 
     /// <summary>
     /// The per-point fills a series states, or null when it states none.
