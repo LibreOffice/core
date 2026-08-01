@@ -542,7 +542,11 @@ to draw something the file already contains a picture of.
       `ContentTable` has `HeaderRowCount` and no counterpart, so ODF's
       `table:table-header-columns` is read and dropped. That was not worth a Core change with
       three agents building against it, and the layout it would state is the one the table
-      already has.
+      already has. The projections needed no change either: `XhtmlWriter` already emits
+      `data-name` on a section, so a chart comes out as
+      `<aside class="frame" data-name="Regional revenue">` holding the table. The Markdown writer
+      labels every frame "Text frame", which is now sometimes a chart — cosmetic, and in
+      `Paperless.Markup`, which this work did not touch.
 - [x] **The numbers come from the cache. Decision made, ported, measured.** LibreOffice does the
       same and only that: `DoubleSequenceContext::onCharacters`
       (`oox/source/drawingml/chart/datasourcecontext.cxx:107-181`) puts `c:pt/c:v` into the model
