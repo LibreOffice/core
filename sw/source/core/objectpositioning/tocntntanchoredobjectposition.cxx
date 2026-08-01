@@ -55,9 +55,7 @@ SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject&
       mpVertPosOrientFrame( nullptr ),
       mbAnchorToChar ( false ),
       mpToCharOrientFrame( nullptr ),
-      mpToCharRect( nullptr ),
-      // #i22341#
-      mnToCharTopOfLine( 0 )
+      mpToCharRect( nullptr )
 {}
 
 SwToContentAnchoredObjectPosition::~SwToContentAnchoredObjectPosition()
@@ -79,7 +77,7 @@ const SwRect* SwToContentAnchoredObjectPosition::ToCharRect() const
 }
 
 // #i22341#
-SwTwips SwToContentAnchoredObjectPosition::ToCharTopOfLine() const
+gfx::Length SwToContentAnchoredObjectPosition::ToCharTopOfLine() const
 {
     return mnToCharTopOfLine;
 }
@@ -230,7 +228,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
             mpToCharRect = &(GetAnchoredObj().GetLastCharRect());
             // #i22341# - get top of line, in which the anchor character is.
-            mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine().as_twip<SwTwips>();
+            mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine();
             pOrientFrame = &(const_cast<SwTextFrame&>(rAnchorTextFrame).GetFrameAtOfst(
                 rAnchorTextFrame.MapModelToViewPos(*rAnch.GetContentAnchor())));
             mpToCharOrientFrame = pOrientFrame;
@@ -557,7 +555,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 }
                 else
                 {
-                    nVertOffsetToFrameAnchorPos = aRectFnSet.YDiff( ToCharTopOfLine(),
+                    nVertOffsetToFrameAnchorPos = aRectFnSet.YDiff(ToCharTopOfLine().as_twip<SwTwips>(),
                                                                     nTopOfOrient );
                 }
                 nRelPosY = nVertOffsetToFrameAnchorPos - aVert.GetPos();

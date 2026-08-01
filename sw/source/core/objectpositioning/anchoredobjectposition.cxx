@@ -163,9 +163,9 @@ const SwRect* SwAnchoredObjectPosition::ToCharRect() const
 }
 
 // #i22341#
-SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
+gfx::Length SwAnchoredObjectPosition::ToCharTopOfLine() const
 {
-    return 0;
+    return 0_emu;
 }
 
 namespace
@@ -393,7 +393,7 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
             if ( IsAnchoredToChar() )
             {
                 nHeight = 0;
-                nOffset = aRectFnSet.YDiff( ToCharTopOfLine(), nVertOrientTop );
+                nOffset = aRectFnSet.YDiff( ToCharTopOfLine().as_twip<SwTwips>(), nVertOrientTop );
             }
             else
             {

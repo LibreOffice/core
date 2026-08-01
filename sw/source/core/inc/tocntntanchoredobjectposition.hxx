@@ -41,13 +41,13 @@ namespace objectpositioning
             bool          mbAnchorToChar;
             const SwFrame*  mpToCharOrientFrame;
             const SwRect* mpToCharRect;
-            SwTwips       mnToCharTopOfLine;
+            gfx::Length mnToCharTopOfLine = 0_emu;
 
             virtual bool IsAnchoredToChar() const override;
             virtual const SwFrame* ToCharOrientFrame() const override;
             virtual const SwRect* ToCharRect() const override;
             // #i22341#
-            virtual SwTwips ToCharTopOfLine() const override;
+            virtual gfx::Length ToCharTopOfLine() const override;
 
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrame()> to
             // the needed type
