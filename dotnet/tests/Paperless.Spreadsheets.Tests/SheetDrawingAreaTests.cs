@@ -59,16 +59,33 @@ public sealed class SheetDrawingAreaTests
         SheetDrawingArea.Extend(used, drawings, Grid).ShouldBe(used);
     }
 
+    /// <summary>
+    /// A hidden drawing paints nothing and still moves the page break.
+    /// </summary>
+    /// <remarks>
+    /// This reads backwards and is nevertheless the rule. <c>ScDrawLayer::GetPrintArea</c> skips an
+    /// object only when it sits on <c>SC_LAYER_HIDDEN</c> (<c>drwlayer.cxx:1408</c>), and that
+    /// layer holds exactly one kind of thing: the caption of a comment nobody has pinned open
+    /// (<c>sc/source/core/data/postit.cxx:84</c>). A shape whose <c>cNvPr</c> says
+    /// <c>hidden="1"</c> is not on it — <c>oox</c> gives that shape <c>Visible = false</c> and
+    /// <c>Printable = false</c> and leaves it on the standard layer (<c>shape.cxx:1436-1442</c>) —
+    /// and the line immediately above the layer test admits as much: <c>//TODO: test Flags
+    /// (hidden?)</c>. So the flag is read, <c>SheetPageGraphics</c> honours it, and the print area
+    /// does not. Measured on <c>sc/qa/unit/data/xlsb/universal-content.xlsb</c>, whose only drawing
+    /// is a hidden comment shape reaching column 12 and row 50: one page here against
+    /// LibreOffice's four, and 11 words against 20, until this stopped skipping it.
+    /// </remarks>
     [Fact]
-    public void AHiddenDrawingIsNotPrintedAndDoesNotWiden()
+    public void AHiddenDrawingStillWidensThePrintedBlock()
     {
         SheetRange used = new(0, 0, 2, 4);
         SheetDrawings drawings = new(
             [Anchored(from: 11, to: 18, fromRow: 10, toRow: 24) with { IsHidden = true }]);
 
-        // "#i104716# don't include hidden note objects" — the bounding box is taken after the
-        // layer test, so a hidden object costs no columns (drwlayer.cxx:1408).
-        SheetDrawingArea.Extend(used, drawings, Grid).ShouldBe(used);
+        SheetRange extended = SheetDrawingArea.Extend(used, drawings, Grid);
+
+        extended.LastColumn.ShouldBe(18);
+        extended.LastRow.ShouldBe(24);
     }
 
     [Fact]

@@ -194,6 +194,23 @@ Traps that cost time, recorded so they are not rediscovered:
   whole-row reference with no column letters. In BIFF that is stored against sheet limits of 255
   columns and 65 535 rows, so the "spans the whole sheet" test has to be made against *those*
   limits and then widened, not against Calc's.
+- **A blank page is not printed, and that is a rule rather than a nicety.** The printed block runs
+  from A1 to the far corner of whatever the sheet reaches, so a sheet whose only content sits five
+  hundred rows down paginates to ten sheets of paper of which nine are white. Calc drops those:
+  `ScPrintPageRangesProvider` discards a whole band of rows when `ScDocument::IsPrintEmpty` holds
+  across it, and `lcl_SetHidden` then hides the individual pages inside a band that survived
+  (`printfun.cxx:3174, :3138`), both asking the same question of the same kind of block — so one
+  test per page gives the same answer as their two passes. `Layout/SheetEmptyPages.cs` is that
+  port, applied between `SheetPagination.Paginate` and the page list.
+  **Three things keep a page and only one of them is cells** (`documen9.cxx:449-484`): a cell with
+  something in it; a border anywhere in the block, because "we want to print sheets with borders
+  even if there is no cell content"; and any drawing whose bounding rectangle *overlaps* the
+  block, through `HasAnyDraw`, which walks the whole drawing page rather than the objects anchored
+  inside it. Measured on `sc/qa/unit/data/xlsx/singlecontrol.xlsx`, a sheet with no cells at all
+  and one form control anchored at row 516: **10 pages before this, 1 after, and LibreOffice
+  prints 1.** No corpus row moved — every corpus spreadsheet is small and dense, so not one of
+  them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
+  turned up with 516 empty rows.
 
 Deliberate deviations from the port, both narrow:
 
@@ -405,8 +422,76 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
 - [ ] Tables, autofilters, pivot caches (extraction only)
 
 ### XLSB
-- [ ] BIFF12 records inside an OPC package. Same logical model as XLSX, binary encoding.
-- [ ] **Import only** — LibreOffice cannot write XLSB, so test files must come from Excel.
+- [x] BIFF12 records inside an OPC package, in `Xlsb/`. Same logical model as XLSX, binary
+      encoding — and the split is worth stating precisely, because half of an XLSB is not binary
+      at all. The **package** is OPC and identical: parts, content types, a workbook part naming
+      every other part by relationship. The **spreadsheet** parts are BIFF12: `workbook.bin`,
+      `sheet1.bin`, `sharedStrings.bin`, `styles.bin`. Everything DrawingML — the drawing part,
+      the chart space, the theme, the images — is *the same XML an XLSX holds*, because DrawingML
+      has no binary encoding, so `Ooxml/XlsxDrawings.cs` and `Ooxml/XlsxCharts.cs` serve both
+      paths unchanged and only the part name comes out of BIFF12.
+- [x] Cells: all three families — `CELL_*` naming its column, `MULTCELL_*` continuing from the
+      previous one, `FORMULA_*` naming it and carrying a token array after the cached result. The
+      cached result is read and the tokens are not decoded, so an XLSB cell carries a null
+      `Formula`, like an XLS cell and unlike an XLSX one.
+- [x] `SST` and rich strings, `NUMFMT`/`CELLXFS`, `MERGECELLS`, `SHEETFORMATPR`, `COL`, `ROW`,
+      `PAGEMARGINS`, `PAGESETUP`, `PRINTOPTIONS`, `HEADERFOOTER`, `BRK`, the 1904 epoch,
+      hidden sheets
+- [ ] Cell fonts, fills and borders. `Xlsb/XlsbStyles.cs` reads `styles.bin` only as far as the
+      number format each `CELLXFS` entry names; the fonts-and-alignment half that
+      `Ooxml/XlsxCellFormats.cs` and `XlsxCellDecoration` take from `styles.xml` has no binary
+      counterpart yet, so an XLSB draws in the default face with no fills and no borders.
+- [ ] Comments (`comments1.bin`), which the XLSX path already reads from XML
+- [x] **Import only** — LibreOffice cannot write XLSB, so test files must come from Excel. The
+      ten in `sc/qa/unit/data/xlsb/` are the whole supply on this machine, and they are what the
+      reader was measured against; the record-level cover is `XlsbReaderTests`, which assembles
+      workbooks byte by byte, because a real file cannot say *which* record a regression broke.
+
+**Measured, `paperless render` against `soffice --convert-to pdf`, page counts and `pdftotext`
+word counts, over all ten files:** **eight match exactly.** The two that do not are understood:
+
+| file | ours | LibreOffice |
+| --- | --- | --- |
+| `pivot-table/calcfields.xlsb` | 4 pages, 151 words | 2 pages, 108 words |
+| `pivottable_error_item_filter.xlsb` | 1 page, 24 words | 1 page, 23 words |
+
+`calcfields` is not a reader defect, and that is worth knowing before someone "fixes" it:
+LibreOffice **rebuilds** a pivot table from its cache on import and writes its own result over the
+cells, dropping the five calculated fields Excel had already written into them. We read the cells
+as the file states them, which is what Excel shows; the extra pages follow from the extra columns.
+The single remaining word is the same thing on a smaller table.
+
+**Traps. Every one of these desynchronises the rest of the part rather than spoiling one field,
+so the symptom appears a long way from the cause:**
+
+- **A record identifier is one byte below 0x80 and two above it.** The identifier and the size
+  share one variable-length encoding (`lclReadRecordHeader`,
+  `oox/source/core/recordparser.cxx:255`), so a reader assuming a fixed width reads the second
+  byte of the first wide identifier as a length and never finds a cell again. `SHEETFORMATPR` is
+  0x01E5 and sits near the top of every worksheet part.
+- **A string count of −1 means "no string", not "a string of length −1"**
+  (`BiffHelper::readString`, `sc/source/filter/oox/biffhelper.cxx:86`). Read unsigned it asks for
+  four billion characters.
+- **`XF` is one identifier used inside both `CELLSTYLEXFS` and `CELLXFS`**, and only the container
+  distinguishes them (`stylesfragment.cxx:302`). A flat walk shifts every cell format's index by
+  however many named styles the workbook has — which reads as a number-format bug and is a
+  parsing one.
+- **The flag byte before a string is present for `SI` and `CELL_RSTRING` and absent for
+  `CELL_STRING`**: `importCellString` passes `bRich = false` and `importCellRString` passes true
+  (`sheetdatacontext.cxx:551, :574`). This cost time. One byte out of phase and every character
+  after it comes back a CJK ideograph, because the halves of each UTF-16 unit swap — `cached`
+  reads as `挀愀挀栀攀搀`, which looks like an encoding bug and is an offset bug.
+- **A `BinRange` is the row pair before the column pair** (`addressconverter.cxx:59`), the reverse
+  of how a range is spoken. Read in the spoken order it gives a plausible range that is wrong on
+  every block that is not square.
+- **Widths are 256ths of a digit and heights are twips**, where the XML states a fraction of a
+  digit and points (`worksheetfragment.cxx:800, :827`). The XML's scales give columns 256 times
+  too wide — one column to a page — and rows twenty times too tall.
+- **`BIFF12_PAGESETUP_INVALID` is the flag that makes `paperSize` count.** `mbValidSettings` is
+  its negation, and the paper size is applied only when `mbValidSettings` is *false*
+  (`pagesettings.cxx:271, :935`) — so the flag whose name says the settings are invalid is the
+  one that says to use them, and a sheet stating no `PAGESETUP` at all keeps the application's
+  own paper because `mbValidSettings` is constructed true.
 
 ### XLS (BIFF8)
 - [x] Substreams; the `BOF`/`EOF` structure. A sheet is found by the offset its `BOUNDSHEET`
@@ -1062,6 +1147,33 @@ display list held the picture, `Ensure` would have decoded it, and nothing reach
 calling `Ensure`. Fixed on the slide-pictures branch (`fa666554d`) rather than here; the symptom to
 recognise is a placement that measures correctly and paints nothing at all.
 
+**A shape is not drawn and is still an object, and leaving it out cost whole files.** An
+`xdr:sp`, `xdr:cxnSp` or `xdr:grpSp` was dropped by `XlsxDrawings` on the reasonable ground that
+nothing here can paint one. But Calc's print area is the bounding box of *every object on the
+drawing layer* and a shape is an object like any other — `GroupShapeContext::createShapeContext`
+takes `sp`, `cxnSp`, `grpSp`, `graphicFrame` and `pic` alike
+(`sc/source/filter/oox/drawingfragment.cxx:198`) — so dropping them meant a sheet whose only
+content was a shape had **no printed block at all and produced no pages**: `paperless render`
+failed outright with *"the page range selects none of the 0 pages"*. Measured over the **55**
+workbooks in `sc/qa/unit/data/xlsx/` and `chart2/qa/extras/data/xlsx/` that hold a sheet shape:
+**27 rendered nothing, now 1** (`forcepoint107.xlsx`, which LibreOffice also declines), and exact
+page-and-word matches went **7 → 15**. Twelve of the chart workbooks went from one page to the two
+LibreOffice prints, or two to four. The anchor is read and the `cNvPr` is read; nothing else is,
+and `SheetPageGraphics` skips any drawing carrying neither picture nor chart, so a shape reaches
+the print area and stops there.
+
+**"Hidden" means two unrelated things and only one of them is a shape.** The print area skips an
+object only when it sits on `SC_LAYER_HIDDEN` (`ScDrawLayer::GetPrintArea`, `drwlayer.cxx:1408`),
+and that layer holds exactly one kind of thing: the caption of a comment nobody has pinned open
+(`sc/source/core/data/postit.cxx:84`). A shape whose `cNvPr` says `hidden="1"` is *not* on it —
+`oox` gives that shape `Visible = false` and `Printable = false` and leaves it on the standard
+layer (`oox/source/drawingml/shape.cxx:1436-1442`) — and the line immediately above the layer test
+admits as much: `//TODO: test Flags (hidden?)`. So the flag is read, the painter honours it, and
+the print area does not. Reading `#i104716# don't include hidden note objects` as though it were
+about the flag rather than about the layer is the mistake, and it is worth `sc/qa/unit/data/xlsb/
+universal-content.xlsb`: its only drawing is a hidden comment shape reaching column 12 and row 50,
+**1 page and 11 words here against LibreOffice's 4 and 20**, now 4/4 and 20/20.
+
 Not yet, and why:
 
 - **BIFF drawings are not read.** The route is the same shared Escher reader the DOC and PPT work
@@ -1112,6 +1224,16 @@ Not yet, and why:
   chart never draws one and `ChartPlot.DataTable` is always null on this family's ODF path.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
+- **A shape's own text is not drawn**, which is now the largest remaining gap on any sheet holding
+  one. A shape reaches its page and paints nothing, so `sc/qa/unit/data/xlsx/tdf119565.xlsx`
+  renders its one correct page with 0 words against LibreOffice's 29 — all 29 of them inside
+  `xdr:sp/xdr:txBody`. The body is DrawingML's ordinary `a:p`/`a:r`, the same vocabulary the deck
+  path already lays out, so this is a wiring job rather than a new reader; what it needs is a
+  laid-out text block inside a `DocRect` that this family does not yet have a route to.
+- **`FormatCatalogue` still reports XLSB as not readable.** `IsReadSupported` is what
+  `paperless identify` prints and the flag was deliberately left alone, because that list is in
+  `Paperless.Core`, another agent is working there, and it is already stale for XLS, CSV, PPT and
+  PPTX besides — so it wants one deliberate pass rather than one format bolted on.
 
 ## The row height a rotated cell asks for, and why it is not recomputed
 
@@ -1151,6 +1273,14 @@ already depends on measuring text once, in `ScTable::ExtendPrintArea`, and that 
 because the extension is **by whole columns** — being within a column's width of LibreOffice's
 answer gives the same page. A row height is a length, so a 5.8% error is a 5.8% error, and there is
 no quantum to hide it in.
+
+**The XLSB reader reads the flag too**, so all four readers now fill `SheetSizeRun.IsOptimalSize`
+and the decision above covers the whole family: BIFF12's `ROW` states it as
+`BIFF12_ROW_CUSTOMHEIGHT` (0x2000), whose *absence* is the optimal-height case
+(`sheetdatacontext.cxx:432`). That is the same polarity as SpreadsheetML's `customHeight` and the
+opposite of BIFF8's `fUnsynced`, which is worth checking against the source rather than inferring
+from the neighbouring format. Nothing else about the decision changed: what unblocks it is still
+Calc's own coarse measurement, and nothing here has it yet.
 
 ## Done: a chart's content, out of the cache
 

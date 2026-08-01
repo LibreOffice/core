@@ -56,10 +56,16 @@ internal static class SheetDrawingArea
 
         foreach (SheetDrawing drawing in drawings.Items)
         {
-            // "#i104716# don't include hidden note objects" — a hidden object is on
-            // SC_LAYER_HIDDEN and is skipped before the bounding box is taken (drwlayer.cxx:1408).
-            if (drawing.IsHidden) continue;
-
+            // Every object counts, hidden or not. This is the one place where "hidden" has to be
+            // read carefully: `ScDrawLayer::GetPrintArea` skips an object only when it is on
+            // `SC_LAYER_HIDDEN` (drwlayer.cxx:1408), and that layer holds exactly one thing — the
+            // caption of a comment the user has not pinned open (postit.cxx:84). It is *not*
+            // where a shape with `cNvPr hidden="1"` goes; that becomes an ordinary object with its
+            // Visible property false, and the line above the layer test says so in as many words:
+            // `//TODO: test Flags (hidden?)`. So a hidden shape paints nothing and still moves the
+            // page break, which is what `sc/qa/unit/data/xlsb/universal-content.xlsb` shows: its
+            // only drawing is a hidden comment shape spanning to column 12, and LibreOffice prints
+            // four pages for it where we printed one.
             (long edgeRight, long edgeBottom) = Edges(drawing, grid);
             if (edgeRight > right) right = edgeRight;
             if (edgeBottom > bottom) bottom = edgeBottom;

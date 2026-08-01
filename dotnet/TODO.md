@@ -1,9 +1,9 @@
 # Paperless — master plan
 
 Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
-scope for extraction reads except XLSB — `odt ott fodt docx docm dotx dotm doc dot rtf`,
-`ods ots fods xlsx xlsm xltx xltm xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt pot
-pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
+scope for extraction reads — `odt ott fodt docx docm dotx dotm doc dot rtf`,
+`ods ots fods xlsx xlsm xltx xltm xlsb xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt
+pot pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
 sections, columns, notes and floating frames; spreadsheets through their print setup, which *is*
 their page geometry; presentations a page per slide.
 
@@ -204,7 +204,16 @@ Per format: metadata, then text, then tables/structure.
       LibreOffice writes a horizontally merged table cell with no merge flag at all — the span
       comes from the column grid.
 - [ ] CSV.
-- [ ] `xlsb` (import only — LibreOffice cannot write it, so test files need Excel).
+- [x] `xlsb` — BIFF12 records inside an OPC package, in `src/Paperless.Spreadsheets/Xlsb/`.
+      Import only, because LibreOffice cannot write it, so there is no corpus fixture and never
+      will be: the evidence is the ten files in `sc/qa/unit/data/xlsb/`, **eight of which now
+      match LibreOffice exactly** on page count and `pdftotext` words, plus 17 unit tests that
+      assemble workbooks record by record. The two that differ are pivot tables LibreOffice
+      rebuilds from their caches rather than reading, which is a difference in what the two
+      programs *do* rather than in what either reads. The shape of the work is worth knowing
+      before starting anything similar: **only the spreadsheet parts are binary.** Everything
+      DrawingML — drawings, charts, theme, images — is the same XML an XLSX holds, so
+      `XlsxDrawings` and `XlsxCharts` serve both paths unchanged.
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
 - [x] `paperless extract` and `paperless metadata`, in text and JSON. The output layout is
@@ -954,16 +963,35 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       area came out with its axes and not one mark on it. `XlsxFile.ThemeRoot` was already loaded
       for the cell decoration; threading it through is four lines and it took `barOfPieChart.xlsx`
       from 11 drawn marks to 20.
-- [ ] **Two gaps found while measuring the five, both outside the chart engine and both worth
-      naming.** *One*: an ODS `draw:frame` inside `table:shapes` — a sheet-anchored rather than
-      cell-anchored drawing — is never read, because `OdsDrawings` walks `draw:frame` inside
-      `table:table-cell` only. `ods/tdf166428_Low_High_StockChart_LO248.ods` is one, so its stock
-      chart is read correctly and then never reaches a page: 24 words against the reference's 60,
-      all of the difference being the chart. *Two*: a chart anchored past the right-hand page break
-      of a workbook lands on a second page we do not produce — every one of the five OOXML chart
-      files here renders one page against LibreOffice's two — which is why
-      `xlsx/bubble_chart_simple.xlsx` still measures 5 words against 26 with a correct chart
-      composed behind it. Neither is plot-type geometry; both are the sheet drawing path.
+- [x] **Two gaps found while measuring the five, both outside the chart engine and both fixed in
+      the sheet drawing path rather than in charts.** *One*: an ODS `draw:frame` inside
+      `table:shapes` — a sheet-anchored rather than cell-anchored drawing — was never read, because
+      `OdsDrawings` walked `draw:frame` inside `table:table-cell` only.
+      `ods/tdf166428_Low_High_StockChart_LO248.ods` is one, so its stock chart read correctly and
+      never reached a page: **24 words against the reference's 60, now 57/60**. *Two*: a chart
+      anchored past the right-hand page break landed on a page the sheet paginator never produced,
+      because the printed block was taken from the cells alone. Calc takes the *maximum* of the
+      cells' extent and the drawing layer's bounding box — `ScTable::GetPrintArea` never asks the
+      drawing layer but `ScDocument::GetPrintArea` maxes its answer against
+      `ScDrawLayer::GetPrintArea`'s (`sc/source/core/data/documen2.cxx:644-664`), and
+      `AdjustPrintArea` calls the document's. `Layout/SheetDrawingArea.cs` is that port: **all
+      seven chart workbooks in `chart2/qa/extras/data/xlsx/` went from one page to the two
+      LibreOffice prints**, and `bubble_chart_simple.xlsx` from 5 words to 20 of 26.
+- [x] **And the same defect had a much larger form, found by re-measuring rather than by
+      reasoning.** The print-area rule only helps a drawing the reader kept, and `XlsxDrawings`
+      kept a picture and a graphic frame and dropped every `xdr:sp`, `xdr:cxnSp` and `xdr:grpSp`
+      on the ground that nothing can paint one. Calc's drawing layer keeps them all
+      (`GroupShapeContext::createShapeContext`, `sc/source/filter/oox/drawingfragment.cxx:198`), so
+      a sheet whose only content was a shape had no printed block and produced **no pages at
+      all** — `paperless render` failed with "the page range selects none of the 0 pages". Over
+      the **55** workbooks in `sc/qa/unit/data/xlsx/` and `chart2/qa/extras/data/xlsx/` holding a
+      sheet shape: **27 rendered nothing, now 1**, and exact page-and-word matches went **7 → 15**,
+      twelve of them chart workbooks gaining the second or the third and fourth page. Two
+      corrections came with it, both recorded with their measurements in
+      `src/Paperless.Spreadsheets/TODO.md`: a `cNvPr hidden="1"` shape **does** widen the print
+      area (only `SC_LAYER_HIDDEN`, which holds unpinned comment captions and nothing else, is
+      skipped), and Calc **drops a page nothing lands on**, which is what keeps a shape 516 rows
+      down from costing ten sheets of paper.
 - [ ] **Rotated, staggered and dropped axis labels.** When labels would collide LibreOffice
       staggers them, then rotates them, then draws every *n*th, then draws none
       (`VCartesianAxis::createTextShapes` and `autoStaggeringOfLabels`). None of that is

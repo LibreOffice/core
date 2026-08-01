@@ -162,8 +162,13 @@ public sealed class SpreadsheetPages : IPageSequence
 
             if (sheet.Setup.FirstPageNumber > 0) number = sheet.Setup.FirstPageNumber;
 
-            foreach (SheetPagePlacement placement in
-                     SheetPagination.Paginate(sheet.Setup, sheet.Grid, sheet.PrintedRange))
+            // Paginated, then thinned. The two are separate because Calc keeps them separate: the
+            // page grid is decided by geometry alone, and only afterwards is each page asked
+            // whether anything lands on it (`bSkipEmpty`, printfun.cxx:3174). Numbering follows the
+            // thinning — a dropped page takes its number with it.
+            foreach (SheetPagePlacement placement in SheetEmptyPages.Occupied(
+                         sheet,
+                         SheetPagination.Paginate(sheet.Setup, sheet.Grid, sheet.PrintedRange)))
             {
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 

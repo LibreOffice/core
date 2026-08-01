@@ -63,6 +63,15 @@
 # as-character pictures come back floating and reserve no room on their lines. Recorded in
 # `src/Paperless.WordProcessing/TODO.md` because this file cannot see it.
 #
+# **Every spreadsheet here is small and dense, and two whole classes of defect hide in that.**
+# Not one of these workbooks has a page with nothing on it, and not one carries a bare
+# `xdr:sp` — so this sweep was blind to a sheet whose only content is a shape producing *no
+# pages at all*, and blind to Calc dropping the blank pages between A1 and content five hundred
+# rows down. Both turned up in `sc/qa/unit/data/xlsx/` instead, where 27 of 55 shape-bearing
+# workbooks rendered nothing; both are fixed; and every spreadsheet row below stayed exactly
+# where it was through the fix, which is the useful thing this file had to say about it. See
+# `src/Paperless.Spreadsheets/TODO.md`.
+#
 FILE                               PAGES o/r   WORDS o/r     VERDICT
 bookmark-field.odt                 1/1         24/24         OK
 columns.odt                        2/2         1008/1008     OK
