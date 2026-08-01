@@ -270,7 +270,7 @@ public static class SlideTextLayout
             Length natural = Length.FromEmu((long)Math.Round(em.Emu * LineHeightFactor));
             Length height = Reduced(paragraph.LineSpacing.Apply(natural), body.LineSpaceReduction);
 
-            lines.Add(new PlacedLine(box, em, height));
+            lines.Add(new PlacedLine(box, Ascent(em, natural, height, paragraph.LineSpacing), height));
         }
 
         Length total = Length.Zero;
@@ -324,6 +324,48 @@ public static class SlideTextLayout
     /// </remarks>
     private static Length Rounded(Length metric)
         => Length.FromMm100((long)Math.Round((double)metric.Emu / Length.EmuPerMm100));
+
+    /// <summary>
+    /// Where the baseline sits inside a line whose height proportional spacing has changed.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One em under the plain font-independent rule, and <strong>not</strong> one em as soon as a
+    /// paragraph states a proportional line spacing other than 100%: EditEngine moves the baseline
+    /// with the box rather than leaving it where the font would put it. Below 100% the new ascent
+    /// is <c>round(lineHeight × proportion × 0.8)</c> and the old one is kept if it is already
+    /// smaller; above it the ascent grows by exactly the height the line gained
+    /// (<c>editeng/source/editeng/impedit3.cxx:1553-1580</c>).
+    /// </para>
+    /// <para>
+    /// The four-fifths is not derivable from anything; it is a constant EditEngine took from
+    /// Writer's line formatter and it decides the first baseline of every shape in a deck that
+    /// tightens its spacing. Measured on <c>ppt-features.ppt</c>, whose paragraphs all state 93%:
+    /// the reference puts the 40 pt title's baseline 35.7 pt below the text top, where one em
+    /// would be 40 and <c>1.2 × 40 × 0.93 × 0.8</c> is 35.71.
+    /// </para>
+    /// <para>
+    /// Guarded on the proportion so that it costs nothing for the two families whose corpus decks
+    /// state none: <see cref="LineSpacingRule.SingleSpaced"/> is exactly 100% and takes neither
+    /// branch.
+    /// </para>
+    /// </remarks>
+    private static Length Ascent(Length em, Length natural, Length height, LineSpacingRule spacing)
+    {
+        if (spacing.Mode != LineSpacingMode.Proportional || spacing.Proportion == 1.0) return em;
+
+        if (spacing.Proportion < 1.0)
+        {
+            Length reduced = Length.FromEmu(
+                (long)Math.Round(natural.Emu * spacing.Proportion * ShortSpacingAscent));
+            return Length.Min(em, reduced);
+        }
+
+        return em + (height - natural);
+    }
+
+    /// <summary>The fraction of a tightened line EditEngine puts above the baseline.</summary>
+    private const double ShortSpacingAscent = 0.8;
 
     /// <summary>The largest em size among the runs a line touches.</summary>
     /// <remarks>
