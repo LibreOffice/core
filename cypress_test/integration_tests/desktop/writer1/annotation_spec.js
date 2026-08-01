@@ -78,6 +78,55 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		});
 	});
 
+	it('Insert emits Inserted_Comment postMessage of type annotation', function() {
+		// Capture host messages before inserting so the notification is recorded.
+		cy.getFrameWindow().then(win => {
+			cy.stub(win.parent, 'postMessage').as('postMessage');
+		});
+
+		desktopHelper.insertComment();
+
+		// The host is told a plain comment was inserted, with the engine id.
+		cy.get('@postMessage').should(stub => {
+			const found = stub.getCalls().some(call => {
+				const msg = JSON.parse(call.args[0]);
+				return msg.MessageId === 'Inserted_Comment'
+					&& msg.Values && msg.Values.Id !== undefined
+					&& msg.Values.Type === 'annotation'
+					&& msg.Values.Parent === '0';
+			});
+			expect(found, "Inserted_Comment of type annotation was not posted").to.be.true;
+		});
+	});
+
+	it('Reply emits Inserted_Comment postMessage of type reply', function() {
+		desktopHelper.insertComment();
+		cy.cGet('#annotation-content-area-1').should('contain', 'some text0');
+
+		// Capture host messages before replying so the notification is recorded.
+		cy.getFrameWindow().then(win => {
+			cy.stub(win.parent, 'postMessage').as('postMessage');
+		});
+
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-1').type('some reply text');
+		cy.cGet('#annotation-reply-1').click();
+		cy.cGet('#annotation-content-area-2').should('contain', 'some reply text');
+
+		// A reply is reported as type reply and points at its parent.
+		cy.get('@postMessage').should(stub => {
+			const found = stub.getCalls().some(call => {
+				const msg = JSON.parse(call.args[0]);
+				return msg.MessageId === 'Inserted_Comment'
+					&& msg.Values && msg.Values.Id !== undefined
+					&& msg.Values.Type === 'reply'
+					&& msg.Values.Parent !== '0';
+			});
+			expect(found, "Inserted_Comment of type reply was not posted").to.be.true;
+		});
+	});
+
 	it('Action_ResolveComment postMessage resolves a comment', function() {
 		desktopHelper.insertComment();
 

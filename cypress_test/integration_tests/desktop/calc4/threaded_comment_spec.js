@@ -261,6 +261,37 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 		cy.cGet('#comment-container-1').should('not.exist');
 	});
 
+	it('Insert emits Inserted_Comment postMessage of type threaded', function() {
+		// Capture host messages before inserting so the notification is recorded.
+		cy.getFrameWindow().then(win => {
+			cy.stub(win.parent, 'postMessage').as('postMessage');
+		});
+
+		// Insert a threaded comment as the current user.
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#insert-insert-threaded-comment').click();
+		cy.cGet('#comment-container-new').should('exist');
+		cy.cGet('.cool-annotation').last().find('#annotation-modify-textarea-new')
+			.should('exist');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.type('test threaded comment', {force: true});
+		cy.cGet('.cool-annotation').last().find('[value="Save"]').click({force: true});
+		cy.cGet('#comment-container-1').should('exist');
+
+		// A spreadsheet comment is threaded, so the host is told type threaded
+		// with the engine id.
+		cy.get('@postMessage').should(stub => {
+			const found = stub.getCalls().some(call => {
+				const msg = JSON.parse(call.args[0]);
+				return msg.MessageId === 'Inserted_Comment'
+					&& msg.Values && msg.Values.Id !== undefined
+					&& msg.Values.Type === 'threaded';
+			});
+			expect(found, "Inserted_Comment of type threaded was not posted").to.be.true;
+		});
+	});
+
 	it('saves a new comment when Ctrl+Enter is pressed', function() {
 		// Click the "Insert Comment" button on the Insert tab.
 		cy.cGet('#Insert-tab-label').click();

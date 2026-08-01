@@ -196,6 +196,15 @@ export type CommentPlacementPick = {
 	docBR: { x: number; y: number } | null;
 };
 
+export type InsertedComment = {
+	id: string;
+	author: string;
+	dateTime: string;
+	text?: string;
+	parent?: string;
+	threaded?: string;
+};
+
 export class CommentSection extends CanvasSectionObject {
 	backgroundColor: string = app.sectionContainer.getClearColor();
 	expand: string[] = ['bottom'];
@@ -2019,6 +2028,27 @@ export class CommentSection extends CanvasSectionObject {
 		return obj.comment.author === this.map._viewInfo[this.map._docLayer._viewId].username;
 	}
 
+	private notifyCommentInserted(data: InsertedComment): void {
+		const parent = data.parent ? data.parent : '0';
+		const type =
+			parent !== '0'
+				? 'reply'
+				: data.threaded === 'true'
+					? 'threaded'
+					: 'annotation';
+		this.map.fire('postMessage', {
+			msgId: 'Inserted_Comment',
+			args: {
+				Id: data.id,
+				Type: type,
+				Parent: parent,
+				Author: data.author,
+				DateTime: data.dateTime,
+				Text: data.text,
+			},
+		});
+	}
+
 	public onACKComment (obj: any): void {
 		var id;
 
@@ -2093,6 +2123,9 @@ export class CommentSection extends CanvasSectionObject {
 				annotation = this.add(obj.comment);
 				if (app.map._docLayer._docType === 'spreadsheet')
 					annotation.hide();
+
+				if (this.actionPerformedByCurrentUser(obj))
+					this.notifyCommentInserted(annotation.sectionProperties.data);
 
 				var autoSavedComment = CommentSection.autoSavedComment;
 				if (autoSavedComment) {
