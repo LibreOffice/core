@@ -41,6 +41,7 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.LayoutInflater;
@@ -85,6 +86,7 @@ import java.util.concurrent.BlockingQueue;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -102,6 +104,7 @@ public class LOActivity extends AppCompatActivity {
     private static final String ASSETS_EXTRACTED_GIT_COMMIT = "ASSETS_EXTRACTED_GIT_COMMIT";
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 777;
     private static final String KEY_ENABLE_SHOW_DEBUG_INFO = "ENABLE_SHOW_DEBUG_INFO";
+    private static final String KEY_ALL_FILES_ACCESS_DECLINED = "ALL_FILES_ACCESS_DECLINED";
 
     private static final String KEY_PROVIDER_ID = "providerID";
     private static final String KEY_DOCUMENT_URI = "documentUri";
@@ -114,6 +117,12 @@ public class LOActivity extends AppCompatActivity {
     public static final String NIGHT_MODE_KEY = "NIGHT_MODE";
 
     private File mTempFile = null;
+
+    /// The actual file path of the document, when the app can write it directly.
+    private volatile File mResolvedFile = null;
+
+    /// True once the user has been asked for access to all files for the document being opened.
+    private boolean mAllFilesAccessAsked = false;
 
     private int providerId;
     private Activity mActivity;
@@ -175,6 +184,7 @@ public class LOActivity extends AppCompatActivity {
     public static final int REQUEST_SAVEAS_EPUB = 512;
     public static final int REQUEST_EXPORT_FILE = 513;
     public static final int REQUEST_COPY = 600;
+    public static final int REQUEST_ALL_FILES_ACCESS = 601;
 
     /** Broadcasting event for passing info back to the shell. */
     public static final String LO_ACTIVITY_BROADCAST = "LOActivityBroadcast";
@@ -403,6 +413,7 @@ public class LOActivity extends AppCompatActivity {
     /** Actual initialization of the UI. */
     private void initUI() {
         isDocDebuggable = sPrefs.getBoolean(KEY_ENABLE_SHOW_DEBUG_INFO, false) && BuildConfig.DEBUG;
+        mResolvedFile = null;
 
         if (getIntent().getData() != null) {
 
@@ -411,13 +422,18 @@ public class LOActivity extends AppCompatActivity {
 
                 // The launching app did not grant write access, so we were
                 // handed a read-only copy and cannot save changes back to the
-                // original. This is the sending app's choice and there is no
-                // way to upgrade the grant from here, so tell the user where
-                // the restriction comes from and point them at the copy flow.
+                // original. Ask for "All files access" permission to edit the
+                // underlying file.
                 if ((getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0) {
-                    isDocEditable = false;
-                    Log.d(TAG, "Disabled editing: Read-only");
-                    Toast.makeText(this, getResources().getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+                    mResolvedFile = resolveWritableFile(getIntent().getData());
+                    if (mResolvedFile == null) {
+                        isDocEditable = false;
+                        Log.d(TAG, "Disabled editing: Read-only");
+                        if (!canAllFilesAccessHelp())
+                            showReadOnlyToast();
+                    } else {
+                        Log.i(TAG, "Editing enabled, saving back to " + mResolvedFile);
+                    }
                 }
 
                 // turns out that on ChromeOS, it is not possible to save back
@@ -557,6 +573,151 @@ public class LOActivity extends AppCompatActivity {
                 loadDocument();
             }
         }
+    }
+
+    /** True when "All files access" permission can help edit the document. */
+    private boolean canAllFilesAccessHelp() {
+        if (mAllFilesAccessAsked || Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
+            return false;
+
+        if (sPrefs.getBoolean(KEY_ALL_FILES_ACCESS_DECLINED, false))
+            return false;
+
+        if (isDocEditable || !canDocumentBeExported())
+            return false;
+
+        Uri uri = getIntent().getData();
+        if (uri == null || !ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()))
+            return false;
+
+        if ((getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0)
+            return false;
+
+        return !Environment.isExternalStorageManager() && resolveSaveTarget(uri) != null;
+    }
+
+    /** Offer the user access to all files, so the document can be saved where it is stored. */
+    private void askForAllFilesAccess() {
+        mAllFilesAccessAsked = true;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.all_files_access_title));
+        builder.setMessage(getString(R.string.all_files_access_message));
+        builder.setPositiveButton(getString(R.string.all_files_access_grant),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                            showAllFilesAccessSettings();
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.view_only),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showReadOnlyToast();
+                    }
+                });
+        builder.setNeutralButton(getString(R.string.do_not_ask_again),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sPrefs.edit().putBoolean(KEY_ALL_FILES_ACCESS_DECLINED, true).apply();
+                        showReadOnlyToast();
+                    }
+                });
+        builder.setCancelable(true);
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                showReadOnlyToast();
+            }
+        });
+        builder.show();
+    }
+
+    /** Tell the user that the document stays as it is, whatever they do to it here. */
+    private void showReadOnlyToast() {
+        Toast.makeText(this, getResources().getString(R.string.temp_file_saving_disabled),
+                Toast.LENGTH_LONG).show();
+    }
+
+    /** Open the system screen where the user turns access to all files on for this app. */
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void showAllFilesAccessSettings() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                Uri.parse("package:" + getPackageName()));
+        try {
+            startActivityForResult(intent, REQUEST_ALL_FILES_ACCESS);
+        } catch (ActivityNotFoundException e) {
+            Log.i(TAG, "no per-app screen for access to all files: " + e.getMessage());
+            try {
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
+                        REQUEST_ALL_FILES_ACCESS);
+            } catch (ActivityNotFoundException e2) {
+                Log.i(TAG, "no screen for access to all files at all: " + e2.getMessage());
+            }
+        }
+    }
+
+    /** The place in the filesystem where saving could work, if the app may write it. */
+    private File resolveSaveTarget(Uri uri) {
+        File file = UriPathResolver.resolve(this, uri);
+        if (file == null)
+            return null;
+
+        // Access to all files stops at the private directory of another app.
+        String path = file.getAbsolutePath();
+        if (path.contains("/Android/data/") || path.contains("/Android/obb/"))
+            return null;
+
+        return file;
+    }
+
+    /** True when the URI and the file describe one and the same document. */
+    private boolean isSameFileAsUri(Uri uri, File file) {
+        String[] projection = new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE};
+        try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor == null || !cursor.moveToFirst())
+                return false;
+
+            int nameColumn = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            if (nameColumn < 0 || cursor.isNull(nameColumn)
+                    || !cursor.getString(nameColumn).equals(file.getName()))
+                return false;
+
+            // A provider that keeps the size of the document to itself leaves the name of the
+            // file as the only thing the two can be compared by.
+            int sizeColumn = cursor.getColumnIndex(OpenableColumns.SIZE);
+            if (sizeColumn < 0 || cursor.isNull(sizeColumn))
+                return true;
+
+            return cursor.getLong(sizeColumn) == file.length();
+        } catch (Exception e) {
+            Log.i(TAG, "no name and size for " + uri + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /** The document as a file this app can write, or null when the save has to go elsewhere. */
+    private File resolveWritableFile(Uri uri) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || !Environment.isExternalStorageManager())
+            return null;
+
+        File file = resolveSaveTarget(uri);
+        if (file == null || !file.isFile() || !file.canWrite())
+            return null;
+
+        // The new content is written beside the document before it is put in place, so the
+        // directory has to take a new file as well.
+        File directory = file.getParentFile();
+        if (directory == null || !directory.canWrite())
+            return null;
+
+        if (!isSameFileAsUri(uri, file)) {
+            return null;
+        }
+
+        return file;
     }
 
     @Override
@@ -699,6 +860,11 @@ public class LOActivity extends AppCompatActivity {
         if (!isDocEditable || mTempFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
+        if (mResolvedFile != null) {
+            copyTempBackToFile();
+            return;
+        }
+
         final ContentResolver contentResolver = getContentResolver();
         try {
             Thread copyThread = new Thread(new Runnable() {
@@ -753,6 +919,60 @@ public class LOActivity extends AppCompatActivity {
         }
     }
 
+    /** Copy the temp file back to the document. */
+    private void copyTempBackToFile() {
+        final File resolvedFile = mResolvedFile;
+        if (resolvedFile == null)
+            return;
+
+        File newContent = new File(resolvedFile.getParentFile(), "." + resolvedFile.getName() + ".part");
+        try {
+            long bytes = 0;
+            try (InputStream inputStream = new FileInputStream(mTempFile)) {
+                int len = inputStream.available();
+                if (len <= 0)
+                    return;
+
+                try (FileOutputStream outputStream = new FileOutputStream(newContent)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, length);
+                        bytes += length;
+                    }
+                    outputStream.flush();
+                    outputStream.getFD().sync();
+                }
+            }
+
+            if (!newContent.renameTo(resolvedFile)) {
+                Log.e(TAG, "failed to put the new content in place of " + resolvedFile);
+                newContent.delete();
+                reportSaveToFileFailed();
+                return;
+            }
+
+            Log.i(TAG, "Success copying " + bytes + " bytes from " + mTempFile + " to " + resolvedFile);
+
+            // Make the system read the file again to update meta data.
+            MediaScannerConnection.scanFile(this, new String[]{resolvedFile.getAbsolutePath()}, null, null);
+        } catch (Exception e) {
+            Log.e(TAG, "copyTempBackToFile: " + e.getMessage());
+            newContent.delete();
+            reportSaveToFileFailed();
+        }
+    }
+
+    /** Tell the user that the document still holds the content it had before this save. */
+    private void reportSaveToFileFailed() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(LOActivity.this, getString(R.string.failed_to_save_file), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -802,6 +1022,18 @@ public class LOActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == REQUEST_ALL_FILES_ACCESS) {
+            mResolvedFile = resolveWritableFile(getIntent().getData());
+            if (mResolvedFile != null) {
+                isDocEditable = true;
+                callFakeWebsocketOnMessage("mobile: editmode");
+                Log.i(TAG, "Editing enabled, saving back to " + mResolvedFile);
+            } else {
+                showReadOnlyToast();
+            }
+            return;
+        }
+
         if (resultCode != RESULT_OK) {
             if (requestCode == REQUEST_SELECT_IMAGE_FILE) {
                 valueCallback.onReceiveValue(null);
@@ -934,6 +1166,7 @@ public class LOActivity extends AppCompatActivity {
                         assert (_tempFile != null);
                         mTempFile = _tempFile;
                         getIntent().setData(intent.getData());
+                        mResolvedFile = null;
                         /** add the document to recents */
                         addIntentToRecents(intent);
                         callFakeWebsocketOnMessage("mobile: editmode");
@@ -1311,6 +1544,13 @@ public class LOActivity extends AppCompatActivity {
             case "hideProgressbar": {
                 if (mProgressDialog != null)
                     mProgressDialog.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (canAllFilesAccessHelp())
+                            askForAllFilesAccess();
+                    }
+                });
                 return false;
             }
             case "loadwithpassword": {
