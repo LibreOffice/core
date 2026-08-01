@@ -251,13 +251,33 @@ internal static class PptxTextBody
             if (string.IsNullOrEmpty(character)) return null;
 
             return Marked(
-                OutlineNumbers.NormaliseBullet(character),
+                OutlineNumbers.NormaliseBullet(FirstCodePoint(character)),
                 source, paragraphProperties, levelStyle, theme);
         }
 
         counting[slot] = false;
         return null;
     }
+
+    /// <summary>
+    /// The first code point of a bullet character, which is all of it a bullet may be.
+    /// </summary>
+    /// <remarks>
+    /// <c>a:buChar/@char</c> is an <c>ST_Char</c>: one character, and real files break that.
+    /// <c>sd/qa/unit/data/pptx/bnc862510_5.pptx</c> writes
+    /// <c>&lt;a:buChar char="••"/&gt;</c> in a SmartArt shape, and drawing what it says puts a
+    /// second bullet where the reference draws the text's first letter — 22.5 pt of overlap on a
+    /// 40 pt line, because the hanging indent goes to <c>marL</c> whatever the marker's width
+    /// turned out to be. LibreOffice keeps the whole string through its import
+    /// (<c>textparagraphproperties.cxx:326</c>) and truncates where the numbering rule is built:
+    /// <c>aFmt.SetBulletChar(aStr.iterateCodePoints(…))</c>,
+    /// <c>editeng/source/uno/unonrule.cxx:320</c>. A code point rather than a UTF-16 unit, so an
+    /// astral bullet survives.
+    /// </remarks>
+    private static string FirstCodePoint(string character)
+        => char.IsHighSurrogate(character[0]) && character.Length > 1
+            ? character[..2]
+            : character[..1];
 
     /// <summary>A marker's text with the font, size and colour the chain gives it.</summary>
     private static SlideMarker Marked(

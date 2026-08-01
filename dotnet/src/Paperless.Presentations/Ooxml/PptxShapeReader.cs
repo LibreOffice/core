@@ -113,7 +113,7 @@ internal sealed class PptxShapeReader
         }
 
         if (uri == DrawingChart.ChartUri && ReadChart(data!, target)) return;
-        if (uri == DiagramUri && ReadDiagram(data!, target)) return;
+        if (uri == PptxDiagram.Uri && ReadDiagram(data!, target)) return;
 
         target.Children.Add(new ContentImage
         {
@@ -156,9 +156,6 @@ internal sealed class PptxShapeReader
         return true;
     }
 
-    /// <summary>The <c>a:graphicData</c> URI that identifies a SmartArt diagram.</summary>
-    private const string DiagramUri = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
-
     /// <summary>
     /// Reads the text of a SmartArt diagram from its data model.
     /// </summary>
@@ -181,20 +178,21 @@ internal sealed class PptxShapeReader
     /// diagram measured, and reconstructing a tree from <c>dgm:cxnLst</c> to reorder text is
     /// work the extracted output would not visibly benefit from.
     /// </para>
+    /// <para>
+    /// The data model is still the right source for extraction even now that
+    /// <see cref="PptxDiagram"/> reads the <em>baked</em> shape tree for rendering, and the two
+    /// disagree on purpose. The baked tree is what the author sees, so it repeats a node's text
+    /// wherever the layout drew it and adds text the layout generated; the data model is what the
+    /// author typed, once each. An index wants the second.
+    /// </para>
     /// </remarks>
     private bool ReadDiagram(XElement data, ContentNode target)
     {
-        XName relIds = XName.Get("relIds", DiagramUri);
-        string? dataModelId = data.Element(relIds)
-            ?.Attribute(XName.Get("dm", OoxmlNamespaces.Relationships))?.Value;
-
-        if (_file.Relationship(_partName, dataModelId) is not { IsExternal: false } relationship)
-            return false;
-        if (_file.Load(relationship.Target) is not { } model) return false;
+        if (PptxDiagram.DataModel(_file, _partName, data) is not { } model) return false;
 
         int before = target.Children.Count;
-        foreach (XElement point in model.Element(XName.Get("ptLst", DiagramUri))
-                                       ?.Elements(XName.Get("pt", DiagramUri)) ?? [])
+        foreach (XElement point in model.Element(XName.Get("ptLst", PptxDiagram.Uri))
+                                       ?.Elements(XName.Get("pt", PptxDiagram.Uri)) ?? [])
         {
             // "doc" is the diagram itself, "pres" is a generated presentation node, and the two
             // transition types are the connectors between points. None of them carries text a
@@ -202,7 +200,7 @@ internal sealed class PptxShapeReader
             string? type = point.Attribute("type")?.Value;
             if (type is "doc" or "pres" or "parTrans" or "sibTrans") continue;
 
-            XElement? body = point.Element(XName.Get("t", DiagramUri));
+            XElement? body = point.Element(XName.Get("t", PptxDiagram.Uri));
             if (DrawingTextBody.IsEmpty(body)) continue;
 
             DrawingTextBody.Read(body!, target, new DrawingTextOptions

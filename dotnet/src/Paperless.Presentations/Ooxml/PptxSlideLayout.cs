@@ -38,6 +38,17 @@ internal sealed class PptxSlideLayout
     private readonly Dictionary<string, SlideTheme> _themes = new(StringComparer.Ordinal);
     private readonly Dictionary<string, RasterImage?> _images = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// The part each synthesised SmartArt shape tree came from, by the tree's own identity.
+    /// </summary>
+    /// <remarks>
+    /// Keyed by reference, because a diagram's tree is built rather than loaded and so is not
+    /// any of the three parts <see cref="PartOf"/> otherwise recognises — and its relationships
+    /// are its own. See the remarks there for what goes wrong without it.
+    /// </remarks>
+    private readonly Dictionary<XElement, string> _diagrams =
+        new(ReferenceEqualityComparer.Instance);
+
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
         _file = file;
@@ -158,18 +169,90 @@ internal sealed class PptxSlideLayout
     /// <c>r:embed</c> resolves against.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Derived from the element rather than passed down, because a fill can arrive from any of
-    /// three parts and only the element knows which: a placeholder with no fill of its own takes
-    /// the layout's or the master's, and each declares its own relationships. Resolving a
+    /// four parts and only the element knows which: a placeholder with no fill of its own takes
+    /// the layout's or the master's, each declares its own relationships, and a SmartArt
+    /// diagram's baked shapes come from a fourth part with relationships of its own. Resolving a
     /// master's <c>rId2</c> against the slide's relationships finds a different picture, or none.
+    /// </para>
+    /// <para>
+    /// The diagram case is the one that fails <em>quietly</em>, because the ids collide rather
+    /// than run out: in <c>sd/qa/unit/data/pptx/smartart-picture-strip.pptx</c> the drawing
+    /// part's <c>rId1</c> is <c>image1.png</c> and the slide's is <c>slideLayout1.xml</c>.
+    /// </para>
     /// </remarks>
-    private static string? PartOf(XElement element, PptxSlide slide)
+    private string? PartOf(XElement element, PptxSlide slide)
     {
         XElement root = element.AncestorsAndSelf().Last();
 
+        if (_diagrams.TryGetValue(root, out string? diagram)) return diagram;
         if (ReferenceEquals(root, slide.Layout)) return slide.LayoutPartName;
         if (ReferenceEquals(root, slide.Master)) return slide.MasterPartName;
         return slide.PartName;
+    }
+
+    /// <summary>
+    /// Draws a SmartArt diagram from the shape tree the authoring application baked into the
+    /// package beside the layout definition that generated it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Why the baked tree and not the layout algorithms.</strong> Measured over every
+    /// OOXML document in the LibreOffice tree carrying a <c>dgm:relIds</c> — 89 of them — the
+    /// 48 that came from a real authoring application split 42 with a usable baked drawing, 3
+    /// with an empty one and 3 with none, so 88% of real diagrams are already laid out in the
+    /// file. The other 41 are LibreOffice's own <c>smartart-*.pptx</c> fixtures, deliberately
+    /// stripped so that its layout-atom evaluator is what gets tested; all 23 of those with no
+    /// drawing part declare <c>&lt;AppVersion&gt;12.0000&lt;/AppVersion&gt;</c> and none of the
+    /// 63 with one does, which is a single authoring pass rather than a distribution.
+    /// Evaluating <c>layout1.xml</c> instead is the largest subsystem in LibreOffice's PPTX
+    /// importer and would produce a diagram that differs from the reference; reading the baked
+    /// tree reuses the slide layouter entire.
+    /// </para>
+    /// <para>
+    /// <strong>The frame's transform is a group's, not a shape's.</strong> The baked shapes'
+    /// <c>a:off</c> are in the diagram's own space, measured from the frame's top-left corner,
+    /// so the frame maps a child coordinate space exactly as a <c>p:grpSp</c> does — with no
+    /// <c>a:chOff</c> or <c>a:chExt</c>, which is the absent case
+    /// <see cref="ShapeTransform.GroupSpace"/> already answers with a factor of one. LibreOffice
+    /// states the same thing from the other end at
+    /// <c>oox/source/drawingml/diagram/diagram.cxx:131</c>,
+    /// <c>pParentShape-&gt;setChildSize(pParentShape-&gt;getSize())</c>: a child space the same
+    /// size as the frame, so the mapping is the frame's offset and nothing else.
+    /// </para>
+    /// </remarks>
+    private void Diagram(
+        XElement frame,
+        PptxSlide slide,
+        SlideTheme theme,
+        AffineTransform space,
+        List<PlacedShape> shapes,
+        int depth)
+    {
+        if (depth >= MaxGroupDepth) return;
+
+        XElement? graphic = Drawing.Child(Drawing.Child(frame, "graphic"), "graphicData");
+        if (Drawing.Attribute(graphic, "uri") != PptxDiagram.Uri) return;
+        if (PartOf(frame, slide) is not { } part) return;
+        if (PptxDiagram.Baked(_file, part, graphic!) is not { } baked) return;
+
+        XElement? transform = Ppt.Child(frame, "xfrm");
+        DocRect local = Bounds(transform);
+        if (local.Width <= Length.Zero || local.Height <= Length.Zero) return;
+
+        _diagrams[baked.ShapeTree] = baked.PartName;
+
+        AffineTransform inside = ShapeTransform.GroupSpace(
+            local,
+            childOrigin: default,
+            childExtent: default,
+            ShapeTransform.Radians(Rotation(transform)),
+            Drawing.Flag(transform, "flipH") ?? false,
+            Drawing.Flag(transform, "flipV") ?? false,
+            space);
+
+        Walk(baked.ShapeTree, slide, theme, inside, shapes, depth + 1);
     }
 
     private void Walk(
@@ -192,10 +275,13 @@ internal sealed class PptxSlideLayout
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
-                // A graphic frame is a table, a chart, a diagram or an embedded object. Only the
-                // table is drawn; the rest have no geometry here yet and drawing their frame would
-                // put an empty rectangle where the reference draws a picture.
+                // A graphic frame is a table, a chart, a diagram or an embedded object. A table
+                // draws from its own model and a diagram from the shape tree the authoring
+                // application baked beside its layout definition. A chart has no geometry here
+                // yet and drawing its frame would put an empty rectangle where the reference
+                // draws a picture.
                 shapes.AddRange(Table(element, theme, space));
+                Diagram(element, slide, theme, space, shapes, depth);
             }
             else if (Ppt.Is(element, "pic"))
             {
@@ -382,10 +468,51 @@ internal sealed class PptxSlideLayout
             Line = Line(properties, inherited, theme.Colours),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
-            Text = Text(shape, local, own?.TextRectangle
-                        ?? SlidePresetGeometry.TextRectangle(preset, local.Size, adjustment),
+            Text = Text(shape, local, TextRectangle(shape, local, own, preset, adjustment),
                         placement, theme),
         };
+    }
+
+    /// <summary>
+    /// The rectangle a shape's text is laid out in, in the shape's own coordinates.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Normally the geometry's: a preset states where its text goes, and a <c>a:custGeom</c>
+    /// states its own <c>a:rect</c>. A SmartArt shape states it a third way and overrides both —
+    /// <c>dsp:txXfrm</c>, an offset and extent in the <em>diagram's</em> coordinates rather than
+    /// the shape's, which is why the shape's own offset comes off it here.
+    /// </para>
+    /// <para>
+    /// Taking it at face value is a deliberate departure from LibreOffice, which cannot.
+    /// <c>Transform2DContext</c> (<c>oox/source/drawingml/transform2dcontext.cxx:299-391</c>)
+    /// says so in its own comment — "We cannot change the text area rectangle directly, because
+    /// currently we depend on the geometry definition of the preset. As workaround we change the
+    /// indents to move and scale the text block" — and its <c>ConstructPresetTextRectangle</c>
+    /// hand-implements the text rectangle for a short list of presets and gives up on the rest,
+    /// dropping the <c>dsp:txXfrm</c> entirely. Nothing here depends on the preset: the text
+    /// rectangle is a parameter of text layout, so the file's own answer is usable as stated.
+    /// 298 of the 481 baked shapes in LibreOffice's corpus carry one.
+    /// </para>
+    /// </remarks>
+    private static DocRect TextRectangle(
+        XElement shape,
+        DocRect local,
+        CustomShapeGeometry.Geometry? custom,
+        string? preset,
+        Dictionary<string, double>? adjustment)
+    {
+        if (Ppt.Child(shape, "txXfrm") is { } stated)
+        {
+            DocRect area = Bounds(stated);
+            if (area.Width > Length.Zero && area.Height > Length.Zero)
+            {
+                return new DocRect(area.X - local.X, area.Y - local.Y, area.Width, area.Height);
+            }
+        }
+
+        return custom?.TextRectangle
+               ?? SlidePresetGeometry.TextRectangle(preset, local.Size, adjustment);
     }
 
     /// <summary>
