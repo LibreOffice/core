@@ -777,6 +777,29 @@ rather than a rendering one, which is why nothing that looked at pixels or posit
 have caught it, and "text stays glyph runs so PDF output can be real searchable text" is the stated
 reason the drawing IR is shaped the way it is. Both sides now give 2 281.
 
+**And the other half of that defect, which the widths fix hid for a while.** Recovering the
+`/Widths` from the run made the spacing right and the extraction right, and it did nothing at all
+about the embedding: a face whose file never loaded is still a face the PDF has no bytes for.
+`pdffonts` on `sheet-features.ods` reported the two cell faces `emb yes` and the header's third
+face `emb no`, in a file whose every word extracted correctly — which is exactly why the
+page-and-word sweep could not see it and neither could any operator comparison, since a reference
+and an embedding are not a pen position.
+
+The furniture path is where it lived. `SheetFace` had carried the resolver's own reference from
+the beginning, so **cell text was never affected**; `SheetBandText` resolved its face and then
+rebuilt the reference with `FaceKey = face.FamilyName`, which is a family name where
+`FileFontProvider` expects a path. That helper draws every header, every footer and — through
+`SheetChart` — **every chart label**, so one unembedded reference covered the furniture of every
+sheet in the corpus and the labels of every spreadsheet chart.
+
+Why it could not be built from what the helper had: an `OpenTypeFace` is a parsed table directory
+and does not know the file it came out of. `Load()` now returns the face and the reference it
+resolved through as one `Lazy<(OpenTypeFace?, FontReference?)>`, which is the same shape
+`SheetFace` uses and for the same reason. Eight spreadsheet files went from one unembedded face
+each to none, with no page count and no word count moving.
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` holds it, over `sheet-features.ods`,
+`sheet-ooxml-features.xlsx`, `xls-features.xls` and `chart-bar-sheet.xlsx`.
+
 **Deliberate deviations, all narrow.**
 
 - **A rotated cell is drawn but not compared.** Calc turns the text about the cell's bottom-left

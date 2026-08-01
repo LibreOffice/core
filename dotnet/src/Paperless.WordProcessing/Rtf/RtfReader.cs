@@ -326,14 +326,17 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
             if (face is null) continue;
 
+            FontReference? font = fonts.Reference(
+                paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+
             paragraphs.Add(new PageParagraph
             {
                 Text = paragraph.Text,
                 Face = face,
-                Font = fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic),
+                Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
-                Label = Label(paragraph, face),
+                Label = Label(paragraph, face, font),
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
@@ -361,13 +364,21 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// <see cref="PageLabel.Advance"/> already fills a hanging indent. Reading the tab as well would need
     /// the <c>\tx</c> stop the list happens to have set, and would put the text in the same place.
     /// </para>
+    /// <para>
+    /// The paragraph's reference goes with it, since the face is the paragraph's. A label left
+    /// without one is drawn from a reference naming only a family, which no font provider can open
+    /// — <c>word-features.rtf</c> rendered with its labels' <c>LiberationSans</c> at <c>emb no</c>
+    /// while every other face in the file embedded.
+    /// </para>
     /// </remarks>
-    private static PageLabel? Label(RtfLayoutParagraph paragraph, OpenTypeFace face)
+    private static PageLabel? Label(
+        RtfLayoutParagraph paragraph, OpenTypeFace face, FontReference? font)
         => paragraph.ListMarker is { Length: > 0 } marker
             ? PageLabel.Measured(
                 marker, face, paragraph.Size,
                 new Text.Shaping.ShapingOptions(Language: paragraph.Language)) with
             {
+                Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
                 Follow = LabelFollow.Nothing,
             }

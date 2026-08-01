@@ -728,6 +728,23 @@ is read and verified, so what remains is the filling of pages rather than the me
       Measured on `text-features.odt` against LibreOffice's own PDF: level-one labels at 56.7 against 56.8
       and their text at 74.7 against 74.8; level two at 74.7/92.7 against 74.8/92.8. The remaining tenth of
       a point is the page's left margin, which was already off by that much before any of this.
+      **A second trap, found much later and only by looking at the rendered PDF's fonts.** A label
+      is the one piece of a word-processing page whose `FontReference` is built somewhere other
+      than the run walk — it carries its own face, so it carries its own reference — and three of
+      the four readers never set it. `PageLabel.Font` existed and only `OdtLayoutSource.Lists` filled
+      it in; DOCX, DOC and RTF left it null, so `PageDrawing` fell back to
+      `Reference(label.Face)`, which names the face's *family* where `FileFontProvider` expects the
+      resolver's key — the font file's path. The consequence is invisible to everything this file
+      records: the label is in the right place, in the right size, with the right glyph advances,
+      and the PDF carries **no font program for it at all**. Measured with `pdffonts` on
+      `word-features.docx`: six faces `emb yes` and the labels' `LiberationSerif` and `OpenSymbol`
+      `emb no`; the same two on `.dotx`, `LiberationSerif` on `.doc`, `LiberationSans` on `.rtf`.
+      A reader draws those as tofu or as whatever it happens to have under the name. The fix is
+      one line per reader — DOC and RTF set the label in the paragraph's own face and already had
+      its reference to hand; DOCX's `LabelFace` may resolve a *different* family for a bullet
+      level, so it now returns the face and the reference together. Held by
+      `tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs`, whose `AListLabelIsDrawnFromAnEmbeddedFace`
+      runs over all four readers with ODT as the control that already passed.
 - [x] **Pagination**: fill a page, split what does not fit, continue. Verified against LibreOffice on a
       sixty-paragraph document at three line spacings, comparing which paragraph starts each page — the
       assertion that catches every upstream measurement error, since a wrong advance width moves a line

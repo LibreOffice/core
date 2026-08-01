@@ -306,6 +306,80 @@ only visible on one axis.
       expressed
 - [ ] Embed images as data URIs; never emit external references
 
+## Font embedding is a contract with the callers, and it went unmet for two families
+
+Worth reading before building anything that produces a `FontReference`, because for a long time
+this backend held up its end and nothing else did.
+
+**The key is a path.** `SystemFontResolver` answers a `FontRequest` with a `FontReference` whose
+`FaceKey` is `InstalledFace.FaceKey` — the font file, plus `#n` for a face inside a collection
+(`Fonts/SystemFontResolver.cs:22`). `FileFontProvider` opens exactly that, `PdfFontCatalogue`
+subsets what it opened and writes it as a `/FontFile2` on the descriptor. Give it anything else
+and the chain stops at the first link: no bytes, no descriptor entry, and a PDF that *names* a
+face it does not carry.
+
+**Why the callers could not simply build one.** The layouters hold an `OpenTypeFace`, which is a
+parsed table directory. It knows its family, its weight and its slant and it has no memory
+whatever of the file it was read out of — so `new FontReference { FaceKey = face.FamilyName }`
+was not laziness, it was the only key those three helpers could produce from what they were
+handed. The reference has to be *carried* from the resolution, and each family now does:
+
+| Family | Where the key was lost | Where it comes from now |
+|---|---|---|
+| Presentations | `SlideTextLayout.Reference(face)`, on every run and every outline bullet | `SlideFonts.Resolve` already returned `(Face, Reference)` and the reference was discarded. It now travels on `RunStyle`, beside the colour, which is where this file already puts what changes the drawing and not the measurement. |
+| Spreadsheets | `SheetBandText.Describe()`, on every header, footer and chart label | `Load()` returns the face *and* the reference it resolved through, as one `Lazy`. Cell text was never affected: `SheetFace` had carried the reference all along. |
+| Word processing | The list label in the DOCX, DOC and RTF readers | `PageLabel.Font`, which already existed and which only the ODT reader filled in. The body text was never affected. |
+
+**What it looked like.** `pdffonts` on our own output, `deck-features.pptx`:
+
+```
+AAAAAA+LiberationSans  TrueType  WinAnsi  emb no     ← before
+BAAAAA+OpenSymbol      TrueType  WinAnsi  emb no
+```
+```
+AAAAAA+LiberationSans  TrueType  WinAnsi  emb yes    ← after
+BAAAAA+OpenSymbol      TrueType  WinAnsi  emb yes
+CAAAAA+LiberationSans  TrueType  WinAnsi  emb yes
+DAAAAA+LiberationSans  TrueType  WinAnsi  emb yes
+```
+
+Across the corpus: **41 unembedded faces in 33 files, now 0**, with every page count and every
+`pdftotext` word count byte-for-byte unchanged — because the text was always right. Rasterised
+by poppler, the *before* PDF of that deck is a page of empty boxes; the *after* is
+indistinguishable from `soffice --convert-to pdf` of the same file.
+
+**Three faces where there had been one, and that is a second bug going with it.** The deck now
+writes three Liberation Sans subsets. Before, `FaceKey` was the family name, so regular, bold and
+italic — which live in *different files* — collapsed onto one catalogue entry and every one of
+them was drawn with the first face's glyph indices. Nothing noticed, because the face was not
+embedded and the reader was substituting its own anyway. Keying on the path separates them by
+construction.
+
+**The instrument that was missing, and it is the durable part of this.**
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` renders a corpus document per family
+*and per reader*, walks every `/Type/Font` object in the bytes to its `/FontDescriptor`, and
+asserts the descriptor carries a `/FontFile2`. It fails 16 of its 18 cases against the code as it
+stood — the two that pass are the ODT control, which was already right. Three things about its
+shape are deliberate:
+
+- **Descriptor by descriptor, not a count of embedded programs.** A count would pass a file that
+  embedded one face twice and another not at all, and would need revising every time a corpus
+  document's faces changed.
+- **Per reader, not per family.** DOC, DOCX and RTF each build their list labels in their own
+  reader; ODT built its correctly and the other three did not. A per-family sweep would have
+  called word processing clean.
+- **Rendered into memory, never to a file.** `word-features.doc` and `word-features.docx` both
+  render to `word-features.pdf`; a test that never names a file cannot silently measure one of
+  them twice. That trap has cost three agents an hour each and is warned about at the top of
+  `tests/corpus/render-sweep.txt` as well.
+
+**The general shape of the defect is worth remembering more than the defect.** Every check
+pointed at a rendered document asked *where the ink went* — page counts, pen positions, glyph
+counts, extracted words. A face that is referenced and not embedded moves none of them. When a
+backend's output has a property that no existing measurement is a function of, that property will
+be wrong and will stay wrong; the fix is an assertion about the property, not a sharper version of
+the measurements.
+
 ## Known deviations, measured
 
 Each is a place our output differs from LibreOffice's on purpose, with the evidence.
@@ -353,7 +427,8 @@ Each is a place our output differs from LibreOffice's on purpose, with the evide
   With the run's own advances the same file extracts as 2281. This is a fallback and not the fix:
   the face is still not embedded, and the callers that build the reference this way —
   `SheetText.Describe`, `SlideTextLayout.Reference`, `PageDrawing.Reference` — should carry the
-  resolver's own key.
+  resolver's own key. **They now do; see "Font embedding is a contract with the callers" below.**
+  The fallback stays, because a caller driving the display list by hand still has no key to give.
 - **A blank at the end of a wrapped line is not drawn.** LibreOffice draws it as a run of its
   own — eleven extra one-glyph runs on `paginated.fodt`, each at the right-hand end of a line
   it has already drawn. The glyph occupies the margin and marks nothing.
@@ -374,15 +449,12 @@ boxes, and neither is this library's: the layout is `Paperless.WordProcessing`'s
   it — starts two lines' worth higher. The evidence and the bisection are in
   `src/Paperless.WordProcessing/TODO.md`; `NoteSeparatorComparisonTests` pins the attribution and
   `PdfOutputComparisonTests` still leaves that one file out of the fill comparison.
-- **Three layouters throw the resolver's face key away**, which costs their PDFs their embedded
-  fonts. `SystemFontResolver.Resolve` returns a `FontReference` whose `FaceKey` is the font
-  file's path, and `Paperless.Spreadsheets`' `SheetText.Describe`,
-  `Paperless.Presentations`' `SlideTextLayout.Reference` and `Paperless.WordProcessing`'s
-  `PageDrawing.Reference` each rebuild the reference from the `OpenTypeFace` with
-  `FaceKey = FamilyName`. `FileFontProvider` reads that key as a path, so nothing loads and
-  nothing is embedded. This library now recovers the *metrics* from the run's own advances —
-  see "Known deviations" for what that fixed and what it measured — but not the embedding, which
-  only the callers can.
+- ~~**Three layouters throw the resolver's face key away**~~ — **settled**, in all three families
+  plus the three word-processing readers whose list labels had the same hole. Diagnosed here and
+  fixed by the callers, which is the only place it could be fixed: this library recovered the
+  *metrics* from the run's own advances and could never have recovered the *bytes*. The whole
+  account, the before-and-after `pdffonts` and the test that now holds it are under "Font
+  embedding is a contract with the callers" above.
 - **`Paperless.Vector` was going to need `RasterImageDecoder` and does not, and the reason is
   worth keeping.** The one case standing between that library and a codec dependency was EMF+
   image attributes, recorded there as "a colour matrix, a gamma, a chroma key and a colour remap
