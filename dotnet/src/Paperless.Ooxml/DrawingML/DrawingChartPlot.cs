@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
+using Paperless.Core.Numbers;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 
@@ -74,12 +75,19 @@ public static class DrawingChartPlot
 
         if (groups.Count == 0) return null;
 
+        // Which c:valAx is the primary and which the secondary, by axis id. A scatter chart states
+        // two c:valAx over one pair of ids and neither is a secondary axis; a combination chart
+        // with two scales states two pairs, and a group's c:axId is what says which pair it uses.
+        ChartAxes axes = ChartAxes.Read(plotArea, groups);
+
         List<ChartSeries> series = [];
         string?[] categories = [];
 
         for (int at = 0; at < groups.Count; at++)
         {
-            (List<ChartSeries> read, string?[] labels) = ReadSeries(groups[at], kinds[at], theme);
+            (List<ChartSeries> read, string?[] labels) =
+                ReadSeries(groups[at], kinds[at], theme, axes.IndexOf(groups[at]));
+
             if (categories.Length == 0 && labels.Length > 0) categories = labels;
             series.AddRange(read);
         }
@@ -101,8 +109,8 @@ public static class DrawingChartPlot
         return new ChartPlot
         {
             Title = TitleText(Child(chart, "title")),
-            CategoryAxisTitle = AxisTitle(plotArea, "catAx") ?? AxisTitle(plotArea, "dateAx"),
-            ValueAxisTitle = AxisTitle(plotArea, "valAx"),
+            CategoryAxisTitle = TitleText(Child(axes.Category, "title")),
+            ValueAxisTitle = TitleText(Child(axes.Value, "title")),
             Categories = categories,
             Series = series,
             Kind = kind,
@@ -117,12 +125,22 @@ public static class DrawingChartPlot
             GapWidth = Number(Child(group, "gapWidth")) ?? 100.0,
             Overlap = Number(Child(group, "overlap")) ?? 0.0,
             IsStacked = grouping is "stacked" or "percentStacked",
-            ValueScale = ScaleOf(plotArea),
+            ValueScale = ScaleOf(axes.Value),
+            ValueFormat = FormatOf(axes.Value),
+            CategoryFormat = FormatOf(axes.Category),
+            SecondaryValueScale = axes.Secondary is null ? null : ScaleOf(axes.Secondary),
+            SecondaryValueFormat = FormatOf(axes.Secondary),
+            SecondaryValueAxisTitle = TitleText(Child(axes.Secondary, "title")),
+            DomainScale = ScaleOf(axes.Domain),
+            DomainFormat = FormatOf(axes.Domain),
+            ValueAxisVisible = Shown(axes.Value),
+            SecondaryAxisVisible = Shown(axes.Secondary),
+            CategoryAxisVisible = Shown(axes.Domain ?? axes.Category),
             Legend = LegendOf(Child(chart, "legend")),
             Background = FillOf(Child(chartSpace, "spPr"), theme),
             PlotBackground = FillOf(Child(plotArea, "spPr"), theme),
-            ValueGrid = GridOf(plotArea, "valAx", theme),
-            CategoryGrid = GridOf(plotArea, "catAx", theme) ?? GridOf(plotArea, "dateAx", theme),
+            ValueGrid = GridOf(axes.Value, theme),
+            CategoryGrid = GridOf(axes.Category, theme) ?? GridOf(axes.Domain, theme),
             TitleSize = SizeOf(Child(chart, "title")) ?? Length.FromPoints(13),
             AxisTitleSize = AxisTitleSizeOf(plotArea) ?? Length.FromPoints(9),
             LabelSize = AxisLabelSizeOf(plotArea) ?? Length.FromPoints(10),
@@ -205,34 +223,57 @@ public static class DrawingChartPlot
     /// <c>a:ln/a:noFill</c> means no gridline at all, which is how a chart turns one off without
     /// removing the element.
     /// </remarks>
-    private static Colour? GridOf(XElement plotArea, string axis, DrawingTheme? theme)
+    private static Colour? GridOf(XElement? axis, DrawingTheme? theme)
     {
-        foreach (XElement candidate in Children(plotArea, axis))
-        {
-            if (Child(candidate, "majorGridlines") is not { } grid) continue;
+        if (Child(axis, "majorGridlines") is not { } grid) return null;
 
-            XElement? properties = Child(grid, "spPr");
-            if (Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is not null) return null;
+        XElement? properties = Child(grid, "spPr");
+        if (Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is not null) return null;
 
-            return LineOf(properties, theme) ?? DefaultGrid;
-        }
+        return LineOf(properties, theme) ?? DefaultGrid;
+    }
 
-        return null;
+    /// <summary>
+    /// An axis' number format, or null when it states none or states <c>General</c>.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:numFmt/@formatCode</c>. <c>General</c> reads as null rather than as a format code
+    /// because that is what it means: <c>ObjectFormatter::convertNumberFormat</c> asks the number
+    /// formats supplier for its standard index instead of converting the string
+    /// (<c>oox/source/drawingml/chart/objectformatter.cxx:1132</c>). <c>@sourceLinked</c> is not
+    /// consulted here — the source's own format is a cell format in a workbook this reader cannot
+    /// reach, and what the axis states is the only thing available; LibreOffice reaches the same
+    /// place for an axis anyway, its own comment recording that "Setting
+    /// LinkNumberFormatToSource does not really work, at least not for axis".
+    /// </remarks>
+    /// <summary>
+    /// Whether an axis is drawn — <c>c:delete val="1"</c> says it is not.
+    /// </summary>
+    /// <remarks>
+    /// An absent axis is drawn, which is what a chart part with no <c>c:catAx</c> at all means for
+    /// a pie; an absent <c>c:delete</c> is also drawn, because the schema's default is
+    /// <c>false</c>. So the only thing that hides one is an explicit <c>1</c>.
+    /// </remarks>
+    private static bool Shown(XElement? axis)
+        => axis is null || Number(Child(axis, "delete")) is not 1.0;
+
+    private static NumberFormatCode? FormatOf(XElement? axis)
+    {
+        if (Drawing.Attribute(Child(axis, "numFmt"), "formatCode") is not { Length: > 0 } code)
+            return null;
+
+        if (string.Equals(code, "General", StringComparison.OrdinalIgnoreCase)) return null;
+
+        NumberFormatCode parsed = NumberFormatCode.Parse(code);
+        return parsed.IsGeneral ? null : parsed;
     }
 
     /// <summary>chart2's own gridline colour, gray30.</summary>
     private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
 
-    /// <summary>What the value axis states about its scale.</summary>
-    /// <remarks>
-    /// From the first <c>c:valAx</c>, which is the primary one. A chart with a secondary value
-    /// axis states a second, and its series are not drawn against this scale — but nothing here
-    /// draws a secondary axis yet, so reading the first is what matches what is drawn.
-    /// </remarks>
-    private static ChartScaleRequest ScaleOf(XElement plotArea)
+    /// <summary>What one axis states about its scale.</summary>
+    private static ChartScaleRequest ScaleOf(XElement? axis)
     {
-        XElement? axis = null;
-        foreach (XElement candidate in Children(plotArea, "valAx")) { axis = candidate; break; }
         if (axis is null) return default;
 
         XElement? scaling = Child(axis, "scaling");
@@ -242,6 +283,123 @@ public static class DrawingChartPlot
             Number(Child(scaling, "max")),
             Number(Child(axis, "majorUnit")),
             Value(Child(scaling, "orientation")) == "maxMin");
+    }
+
+    /// <summary>
+    /// Which <c>c:*Ax</c> plays which role, and which plot group is measured against which.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A chart part names its axes by number and not by position.</strong> Every plot
+    /// group lists a pair (or a triple, in 3-D) of <c>c:axId</c>, and every axis states its own
+    /// <c>c:axId</c>; the pairing is what says which value axis a group is drawn against. Taking
+    /// "the first <c>c:valAx</c>" instead is right only for a chart with one, and a chart with two
+    /// is exactly the case the secondary axis exists for.
+    /// </para>
+    /// <para>
+    /// <strong>A scatter chart has two <c>c:valAx</c> and no secondary axis.</strong> Both its
+    /// dimensions are numeric, so the vocabulary spells the X axis <c>c:valAx</c> too and the two
+    /// are told apart by <c>c:crossAx</c>: the X axis is the one the <em>other</em> axis crosses,
+    /// and it is the one whose id appears first in the group's <c>c:axId</c> list
+    /// (<c>oox/source/drawingml/chart/typegroupconverter.cxx</c> pairs them in that order).
+    /// Reading the second as a secondary axis draws a chart with two value axes and no X scale at
+    /// all, which is the trap this type costs an hour to.
+    /// </para>
+    /// </remarks>
+    private sealed class ChartAxes
+    {
+        /// <summary>The primary value axis, or null.</summary>
+        public XElement? Value { get; private init; }
+
+        /// <summary>The secondary value axis, or null when there is one scale.</summary>
+        public XElement? Secondary { get; private init; }
+
+        /// <summary>The category or date axis, or null.</summary>
+        public XElement? Category { get; private init; }
+
+        /// <summary>A scatter chart's X axis, or null for a category chart.</summary>
+        public XElement? Domain { get; private init; }
+
+        private readonly Dictionary<XElement, int> _byGroup = [];
+
+        /// <summary>Which value axis a plot group is measured against: 0 or 1.</summary>
+        public int IndexOf(XElement group) => _byGroup.GetValueOrDefault(group, 0);
+
+        public static ChartAxes Read(XElement plotArea, List<XElement> groups)
+        {
+            List<XElement> value = [];
+            XElement? category = null;
+
+            foreach (XElement axis in plotArea.Elements())
+            {
+                if (axis.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
+
+                switch (axis.Name.LocalName)
+                {
+                    case "valAx": value.Add(axis); break;
+                    case "catAx" or "dateAx" or "serAx": category ??= axis; break;
+                    default: break;
+                }
+            }
+
+            // A scatter chart is the two-valAx case that is not a secondary axis. Its groups list
+            // the X axis' id first, so the axis matching that id is the domain and the other is
+            // the value axis.
+            bool scatter = category is null && value.Count >= 2 && groups.Count > 0;
+
+            ChartAxes axes = new()
+            {
+                Category = category,
+                Domain = scatter ? Matching(value, First(groups[0])) ?? value[0] : null,
+            };
+
+            List<XElement> remaining = [];
+            foreach (XElement axis in value)
+                if (!ReferenceEquals(axis, axes.Domain)) remaining.Add(axis);
+
+            if (remaining.Count == 0) remaining = value;
+
+            ChartAxes resolved = new()
+            {
+                Category = category,
+                Domain = axes.Domain,
+                Value = remaining.Count > 0 ? remaining[0] : null,
+                Secondary = remaining.Count > 1 ? remaining[1] : null,
+            };
+
+            if (resolved.Secondary is { } second && IdOf(second) is { } secondId)
+            {
+                foreach (XElement group in groups)
+                {
+                    foreach (XElement id in Children(group, "axId"))
+                    {
+                        if (Value(id) != secondId) continue;
+                        resolved._byGroup[group] = 1;
+                        break;
+                    }
+                }
+            }
+
+            return resolved;
+        }
+
+        private static string? First(XElement group)
+        {
+            foreach (XElement id in Children(group, "axId")) return Value(id);
+            return null;
+        }
+
+        private static string? IdOf(XElement axis) => Value(Child(axis, "axId"));
+
+        private static XElement? Matching(List<XElement> axes, string? id)
+        {
+            if (id is null) return null;
+
+            foreach (XElement axis in axes)
+                if (IdOf(axis) == id) return axis;
+
+            return null;
+        }
     }
 
     private static ChartLegendPosition LegendOf(XElement? legend)
@@ -260,19 +418,44 @@ public static class DrawingChartPlot
             };
 
     private static (List<ChartSeries> Series, string?[] Categories) ReadSeries(
-        XElement group, ChartPlotKind kind, DrawingTheme? theme)
+        XElement group, ChartPlotKind kind, DrawingTheme? theme, int axisIndex)
     {
         List<ChartSeries> series = [];
         string?[] categories = [];
+
+        // c:scatterStyle decides whether a scatter series draws its line, its markers or both.
+        // "marker" alone is the case that matters: drawing the line and not the markers leaves an
+        // empty plot area, because the file asked for no line.
+        string? scatterStyle = Value(Child(group, "scatterStyle"));
+        bool scatterLine = kind != ChartPlotKind.Scatter || scatterStyle != "marker";
+
+        // A group's own c:dLbls is the default every series in it inherits.
+        ChartDataLabel? groupLabel = LabelOf(Child(group, "dLbls"), null, kind);
 
         foreach (XElement element in Children(group, "ser"))
         {
             (string?[] labels, _) = ReadSequence(Child(element, "cat") ?? Child(element, "xVal"));
             if (categories.Length == 0 && labels.Length > 0) categories = labels;
 
-            (_, double?[] numbers) = ReadSequence(Child(element, "val") ?? Child(element, "yVal"));
+            XElement? valueSource = Child(element, "val") ?? Child(element, "yVal");
+            (_, double?[] numbers) = ReadSequence(valueSource);
+
+            // The format the *data* carries, which is what a label showing a value falls back to
+            // when it states none of its own — VSeriesPlotter's detectNumberFormatKey, which asks
+            // the data sequence rather than the axis. Measured on tdf105517.pptx: its one visible
+            // label reads 220,000 in the reference and 220000 without this, the grouping coming
+            // from a c:formatCode of "#,##0" inside the c:numCache and from nowhere else.
+            NumberFormatCode? sourceFormat = CacheFormat(valueSource);
+
+            double?[]? domain = null;
+            if (kind == ChartPlotKind.Scatter && Child(element, "xVal") is { } xVal)
+            {
+                (_, double?[] xs) = ReadSequence(xVal);
+                if (xs.Length > 0) domain = xs;
+            }
 
             XElement? properties = Child(element, "spPr");
+            XElement? seriesLabels = Child(element, "dLbls");
 
             series.Add(new ChartSeries(
                 DrawingChartText.Label(Child(element, "tx")),
@@ -281,11 +464,279 @@ public static class DrawingChartPlot
                 LineOf(properties, theme),
                 LineWidthOf(properties),
                 PointFills(element, numbers.Length, theme),
-                kind));
+                kind)
+            {
+                XValues = domain,
+                Marker = MarkerOf(Child(element, "marker"), kind, scatterStyle),
+                HasLine = scatterLine
+                          && Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is null,
+                Label = WithSource(LabelOf(seriesLabels, groupLabel, kind), sourceFormat),
+                PointLabels = PointLabelsOf(
+                    seriesLabels, numbers.Length, groupLabel, kind, sourceFormat),
+                AxisIndex = axisIndex,
+            });
         }
 
         return (series, categories);
     }
+
+    /// <summary>
+    /// What marker a series draws, or none.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:marker/c:symbol</c>. Absent means <c>auto</c> for a scatter chart — which draws one —
+    /// and none for a line chart, which is the asymmetry that makes a scatter chart look empty if
+    /// it is treated like a line chart with no markers stated. <c>c:scatterStyle val="line"</c> or
+    /// <c>"smooth"</c> turns them off again.
+    /// </remarks>
+    private static ChartMarker MarkerOf(XElement? marker, ChartPlotKind kind, string? scatterStyle)
+    {
+        string? symbol = Value(Child(marker, "symbol"));
+
+        if (symbol is null)
+        {
+            return kind == ChartPlotKind.Scatter && scatterStyle is not ("line" or "smooth")
+                ? ChartMarker.Square
+                : ChartMarker.None;
+        }
+
+        return symbol switch
+        {
+            "none" => ChartMarker.None,
+            "circle" => ChartMarker.Circle,
+            "diamond" => ChartMarker.Diamond,
+            "triangle" => ChartMarker.Triangle,
+            "x" => ChartMarker.Star,
+            "plus" => ChartMarker.Cross,
+            "star" => ChartMarker.Star,
+            _ => ChartMarker.Square,
+        };
+    }
+
+    /// <summary>
+    /// One level of <c>c:dLbls</c>, resolved against the level above it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An unstated flag means "true", not "false".</strong>
+    /// <c>SeriesConverter::convertDataLabel</c> reads each of the five as
+    /// <c>value_or( !bMSO2007Doc )</c> (<c>seriesconverter.cxx:139-144</c>) — so on anything but a
+    /// file Excel 2007 wrote, a <c>c:dLbls</c> that states nothing shows everything. The
+    /// ubiquitous "no labels" form Excel writes is not silence but six explicit zeroes, which is
+    /// why defaulting to false looks right on every file that has them and loses every label on
+    /// the files that do not.
+    /// </para>
+    /// <para>
+    /// <c>c:delete val="1"</c> is the other spelling of "nothing here", and it wins over the
+    /// inherited level rather than falling through to it.
+    /// </para>
+    /// </remarks>
+    private static ChartDataLabel? LabelOf(
+        XElement? labels, ChartDataLabel? inherited, ChartPlotKind kind)
+    {
+        if (labels is null) return inherited;
+
+        // A deleted label is an empty label and not an absent one. Returning null here made
+        // ChartSeries.LabelAt fall back to the series' label for exactly the points the file had
+        // switched off — tdf105517.pptx deletes ten of a series' eleven and the eleventh is the
+        // only label the reference draws.
+        if (Number(Child(labels, "delete")) is 1.0) return Deleted;
+
+        bool value = Flag(labels, "showVal") ?? inherited?.ShowValue ?? true;
+
+        // A percentage is a pie's business and nobody else's: bShowPercent is ANDed with
+        // meTypeCategory == TYPECATEGORY_PIE (seriesconverter.cxx:141). Honouring it on a column
+        // chart puts a second number on every bar of several corpus decks.
+        bool percent = kind == ChartPlotKind.Pie
+                       && (Flag(labels, "showPercent") ?? inherited?.ShowPercent ?? true);
+        bool category = Flag(labels, "showCatName") ?? inherited?.ShowCategory ?? true;
+        bool name = Flag(labels, "showSerName") ?? inherited?.ShowSeries ?? true;
+
+        // The stated format goes to whichever of the two properties the label will use, which is
+        // the percentage one whenever a percentage is shown and the format is not source-linked.
+        XElement? numFmt = Child(labels, "numFmt");
+        string? code = Drawing.Attribute(numFmt, "formatCode");
+        bool sourceLinked = Drawing.Attribute(numFmt, "sourceLinked") is "1" or "true";
+        bool asPercent = percent && !sourceLinked && code is { Length: > 0 };
+        bool general = code is null
+                       || string.Equals(code, "General", StringComparison.OrdinalIgnoreCase);
+
+        NumberFormatCode? Parsed(string? text)
+            => text is { Length: > 0 } ? NumberFormatCode.Parse(text) : null;
+
+        string? separator = Child(labels, "separator")?.Value;
+        List<ChartLabelPart>? custom = CustomLabel(Child(Child(labels, "tx"), "rich"));
+
+        return new ChartDataLabel
+        {
+            ShowValue = value,
+            ShowPercent = percent,
+            ShowCategory = category,
+            ShowSeries = name,
+            ValueFormat = asPercent || general
+                ? inherited?.ValueFormat
+                : Parsed(code),
+            PercentFormat = asPercent
+                ? Parsed(general ? "0%" : code)
+                : inherited?.PercentFormat,
+
+            // "; " unless a percentage is shown without a value, which Office writes on its own
+            // line (seriesconverter.cxx:168-172).
+            Separator = separator ?? (percent && !value ? "\n" : inherited?.Separator ?? "; "),
+            Placement = PlacementOf(Value(Child(labels, "dLblPos"))) ?? inherited?.Placement,
+
+            // TitleText takes the element that *holds* a c:tx, not the c:tx itself. Handing it
+            // the child instead silently returned null for every custom label in the corpus —
+            // CustomDataLabel_tdf115107.pptx draws five of them and none appeared.
+            Text = custom is null ? TitleText(labels) ?? inherited?.Text : null,
+            Parts = custom ?? inherited?.Parts,
+        };
+    }
+
+    /// <summary>The per-point labels a <c>c:dLbls</c> overrides, or null when it overrides none.</summary>
+    private static readonly ChartDataLabel Deleted = new();
+
+    private static ChartDataLabel?[]? PointLabelsOf(
+        XElement? labels,
+        int count,
+        ChartDataLabel? inherited,
+        ChartPlotKind kind,
+        NumberFormatCode? source)
+    {
+        if (labels is null) return null;
+
+        ChartDataLabel? seriesLevel = LabelOf(labels, inherited, kind);
+        ChartDataLabel?[]? points = null;
+
+        foreach (XElement point in Children(labels, "dLbl"))
+        {
+            int index = Drawing.Number(Child(point, "idx"), "val") ?? -1;
+            if (index < 0 || index >= MaxPointCount) continue;
+
+            points ??= new ChartDataLabel?[Math.Max(count, index + 1)];
+            if (index >= points.Length) continue;
+
+            points[index] = WithSource(LabelOf(point, seriesLevel, kind), source);
+        }
+
+        return points;
+    }
+
+    /// <summary>
+    /// A custom label's runs, or null when the label states no template.
+    /// </summary>
+    /// <remarks>
+    /// A <c>c:rich</c> whose runs are all literal is left to <see cref="TitleText"/>, because a
+    /// plain string needs no resolution; only a body holding at least one <c>a:fld</c> becomes a
+    /// template. A field's <c>@type</c> is what says which value it stands for — its own
+    /// <c>a:t</c> is a localised placeholder such as <c>[WARTOŚĆ]</c>, and drawing that verbatim
+    /// is what five of <c>CustomDataLabel_tdf115107.pptx</c>'s labels did before this.
+    /// </remarks>
+    private static List<ChartLabelPart>? CustomLabel(XElement? rich)
+    {
+        if (rich is null) return null;
+
+        List<ChartLabelPart> parts = [];
+        bool anyField = false;
+        bool first = true;
+
+        foreach (XElement paragraph in rich.Elements(Drawing.Name("p")))
+        {
+            if (!first) parts.Add(new ChartLabelPart(ChartLabelField.NewLine, "\n"));
+            first = false;
+
+            foreach (XElement run in paragraph.Elements())
+            {
+                if (run.Name.NamespaceName != OoxmlNamespaces.DrawingML) continue;
+
+                switch (run.Name.LocalName)
+                {
+                    case "r":
+                        parts.Add(new ChartLabelPart(
+                            ChartLabelField.Literal, run.Element(Drawing.Name("t"))?.Value ?? ""));
+                        break;
+
+                    case "br":
+                        parts.Add(new ChartLabelPart(ChartLabelField.NewLine, "\n"));
+                        break;
+
+                    case "fld":
+                    {
+                        string text = run.Element(Drawing.Name("t"))?.Value ?? "";
+                        ChartLabelField field = run.Attribute("type")?.Value switch
+                        {
+                            "VALUE" => ChartLabelField.Value,
+                            "CATEGORYNAME" => ChartLabelField.Category,
+                            "SERIESNAME" => ChartLabelField.Series,
+                            "PERCENTAGE" => ChartLabelField.Percentage,
+                            "CELLRANGE" => ChartLabelField.CellRange,
+                            _ => ChartLabelField.Literal,
+                        };
+
+                        // A CELLREF field is a placeholder LibreOffice itself does not resolve
+                        // ("TODO: for now doesn't show placeholder", VSeriesPlotter.cxx:541), so
+                        // it contributes nothing rather than its own bracketed name.
+                        if (field == ChartLabelField.Literal
+                            && run.Attribute("type")?.Value is "CELLREF")
+                        {
+                            anyField = true;
+                            break;
+                        }
+
+                        if (field != ChartLabelField.Literal) anyField = true;
+                        parts.Add(new ChartLabelPart(field, text));
+                        break;
+                    }
+
+                    default: break;
+                }
+            }
+        }
+
+        return anyField ? parts : null;
+    }
+
+    /// <summary>A label given the data's own format where it states none.</summary>
+    private static ChartDataLabel? WithSource(ChartDataLabel? label, NumberFormatCode? source)
+        => label is null || source is null || label.ValueFormat is not null
+            ? label
+            : label with { ValueFormat = source };
+
+    /// <summary>
+    /// The format code a cached numeric sequence carries, or null.
+    /// </summary>
+    /// <remarks><c>c:numCache/c:formatCode</c>, an element rather than an attribute.</remarks>
+    private static NumberFormatCode? CacheFormat(XElement? source)
+    {
+        XElement? cache = Child(Child(source, "numRef"), "numCache") ?? Child(source, "numLit");
+        if (Child(cache, "formatCode")?.Value is not { Length: > 0 } code) return null;
+        if (string.Equals(code, "General", StringComparison.OrdinalIgnoreCase)) return null;
+
+        NumberFormatCode parsed = NumberFormatCode.Parse(code);
+        return parsed.IsGeneral ? null : parsed;
+    }
+
+    private static ChartLabelPlacement? PlacementOf(string? stated) => stated switch
+    {
+        "outEnd" => ChartLabelPlacement.Outside,
+        "inEnd" => ChartLabelPlacement.Inside,
+        "ctr" => ChartLabelPlacement.Centre,
+        "inBase" => ChartLabelPlacement.NearOrigin,
+        "t" => ChartLabelPlacement.Top,
+        "b" => ChartLabelPlacement.Bottom,
+        "l" => ChartLabelPlacement.Left,
+        "r" => ChartLabelPlacement.Right,
+        "bestFit" => ChartLabelPlacement.BestFit,
+        _ => null,
+    };
+
+    private static bool? Flag(XElement? parent, string localName)
+        => Value(Child(parent, localName)) switch
+        {
+            "1" or "true" => true,
+            "0" or "false" => false,
+            _ => null,
+        };
 
     /// <summary>
     /// The per-point fills a series states, or null when it states none.
@@ -410,14 +861,6 @@ public static class DrawingChartPlot
             if (!axis.Name.LocalName.EndsWith("Ax", StringComparison.Ordinal)) continue;
             if (SizeOf(Child(axis, "txPr")) is { } size) return size;
         }
-
-        return null;
-    }
-
-    private static string? AxisTitle(XElement plotArea, string localName)
-    {
-        foreach (XElement axis in Children(plotArea, localName))
-            if (TitleText(Child(axis, "title")) is { Length: > 0 } text) return text;
 
         return null;
     }

@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Paperless.Spreadsheets.Numbers;
+namespace Paperless.Core.Numbers;
 
 /// <summary>
 /// A parsed Excel-style number-format code — <c>#,##0.00</c>, <c>yyyy-mm-dd</c>,

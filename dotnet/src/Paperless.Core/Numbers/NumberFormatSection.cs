@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Paperless.Spreadsheets.Numbers;
+namespace Paperless.Core.Numbers;
 
 /// <summary>
 /// One semicolon-separated subformat of a <see cref="NumberFormatCode"/>, parsed into the

@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 
 namespace Paperless.Spreadsheets.Ooxml;
 

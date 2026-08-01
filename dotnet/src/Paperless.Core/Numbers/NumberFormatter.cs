@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace Paperless.Spreadsheets.Numbers;
+namespace Paperless.Core.Numbers;
 
 /// <summary>
 /// Renders a stored cell value as the text a spreadsheet application would display for it.

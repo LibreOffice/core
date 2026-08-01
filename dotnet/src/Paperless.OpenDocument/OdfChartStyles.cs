@@ -1,6 +1,8 @@
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
+using Paperless.Core.Numbers;
 using Paperless.Core.Units;
+using Paperless.OpenDocument.Styles;
 
 namespace Paperless.OpenDocument;
 
@@ -28,6 +30,9 @@ public sealed class OdfChartStyles
 {
     private readonly Dictionary<string, XElement> _styles = new(StringComparer.Ordinal);
 
+    /// <summary>The <c>number:*-style</c> data styles the sub-document declares, by name.</summary>
+    private readonly Dictionary<string, XElement> _dataStyles = new(StringComparer.Ordinal);
+
     /// <summary>Indexes every <c>style:style</c> in a chart sub-document.</summary>
     /// <param name="document">The chart's <c>office:document</c> or <c>office:document-content</c>.</param>
     public OdfChartStyles(XElement? document)
@@ -40,6 +45,20 @@ public sealed class OdfChartStyles
                 continue;
 
             _styles.TryAdd(name, style);
+        }
+
+        foreach (XElement format in document.Descendants())
+        {
+            if (format.Name.NamespaceName != OdfNamespaces.Number) continue;
+            if (!format.Name.LocalName.EndsWith("-style", StringComparison.Ordinal)) continue;
+
+            if (format.Attribute(XName.Get("name", OdfNamespaces.Style))?.Value
+                is not { Length: > 0 } name)
+            {
+                continue;
+            }
+
+            _dataStyles.TryAdd(name, format);
         }
     }
 
@@ -112,10 +131,36 @@ public sealed class OdfChartStyles
     /// </remarks>
     public bool IsVertical(string? name) => Flag(name, "vertical") ?? false;
 
+    /// <summary>A textual chart property, such as <c>chart:data-label-number</c>.</summary>
+    public string? Text(string? name, string property)
+        => Attribute(Properties(name, "chart-properties"), OdfNamespaces.Chart, property);
+
     /// <summary>The font size a style states, or null when it states none.</summary>
     public Length? FontSize(string? name)
         => OdfValue.ParseLength(
             Attribute(Properties(name, "text-properties"), OdfNamespaces.FoCompatible, "font-size"));
+
+    /// <summary>
+    /// The number format a style names through <c>style:data-style-name</c>, or null.
+    /// </summary>
+    /// <remarks>
+    /// The ODF counterpart of an axis' <c>c:numFmt</c>, and the reason a chart sub-document
+    /// carries <c>number:number-style</c> elements of its own at all. Compiled to a format code by
+    /// <see cref="OdfNumberFormat"/>, which is what lets both vocabularies feed one engine —
+    /// <c>Paperless.Core.Numbers</c> — instead of ODF needing a formatter of its own.
+    /// </remarks>
+    /// <param name="name">The style's name.</param>
+    public NumberFormatCode? Format(string? name)
+    {
+        if (name is null || !_styles.TryGetValue(name, out XElement? style)) return null;
+
+        string? data = style.Attribute(XName.Get("data-style-name", OdfNamespaces.Style))?.Value;
+        if (data is not { Length: > 0 }) return null;
+
+        return _dataStyles.TryGetValue(data, out XElement? format)
+            ? OdfNumberFormat.Parse(format)
+            : null;
+    }
 
     private XElement? Properties(string? name, string kind)
     {

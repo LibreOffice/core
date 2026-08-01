@@ -1,4 +1,4 @@
-namespace Paperless.Spreadsheets.Numbers;
+namespace Paperless.Core.Numbers;
 
 /// <summary>
 /// The number formats a spreadsheet has without recording them.

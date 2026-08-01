@@ -377,20 +377,35 @@ table asserted, not by the corpus.
       `tdf127393` 0→42 of 46, `tdf127811` 0→17 of 19. Exact matches went 15 → 14, which is the
       metric behaving worse than the drawing: `stacked-non-stacked-mix-y-axis.pptx` moved from a
       lucky 75/75 to 76/75 while gaining two series it had been dropping.
-- [ ] **What a chart still does not draw**: data labels (`c:dLbls`); a secondary value axis; a
-      scatter chart's real X scale, which is drawn as evenly spaced categories; markers; and
-      formatted tick labels, which need a number formatter that lives above `Paperless.Core`. The
-      plot rectangle for an OOXML chart is about a point out — LibreOffice's second layout pass now
-      re-derives the *tick count* from the composed rectangle but not the rectangle from the
-      laid-out labels — with `chart:coordinate-region` in every ODF chart as a free oracle to score
-      it against.
-- [ ] **A non-square stretch is applied to positions and not to glyphs.** An embedded chart whose
-      frame is not its own stated size is composed at its own size and stretched (see
-      `ChartLayout.Stretch`), which is what LibreOffice does; but a glyph run carries one em size,
-      so text is scaled by the vertical factor alone and comes out `sx/sy` too wide. It costs
-      nothing on a deck, where the frame and the chart agree, and 12% on `chart-bar-sheet.ods`.
-      Fixing it means a non-uniform transform round each run, which this library expresses as a
-      `PlacedText` matrix and a sheet expresses as a sink transform.
+- [x] **Data labels, formatted ticks, a secondary axis, a real scatter and a deleted axis all
+      draw.** Over `chart2/qa/extras/data/pptx/`'s 38 decks the total absolute word error fell
+      **234 → 128** and the exact matches went **14 → 19**; the ODP set went from 6 of 9 and an
+      error of 31 to **8 of 9 and an error of 6**. Everything that decides what is drawn is in
+      `Paperless.Core.Charts`; this library gained one anchor case in `SlideChart.Text` and the
+      horizontal-stretch transform beside it. What each piece bought, measured:
+      *number formats on ticks* took `percentage-number-formats.pptx` from 29/35 to 35/35 and
+      `tdf105517.pptx`'s axis from `1200000` to `1,200,000`; *data labels* took `tdf122765.pptx`
+      from 19/40 to 40/40 and `tdf125444.pptx` from 0/15 to 15/15; *a deleted axis* — `c:delete`,
+      which nothing read — took `tdf116163.pptx` from 10/5 to 5/5 and `tdf105517.pptx` from 22/8
+      to 8/8; *the scatter X scale* took `tdf127720.pptx` from 12/28 to 16/28.
+- [x] **The non-square stretch reaches the glyphs now, through `ChartLabel.Stretch`.** A glyph run
+      carries one em and an embedded chart is scaled by two factors, so the em takes the vertical
+      one and the residual `sx/sy` rides on the label for the consumer to fold into a transform —
+      a `PlacedText` matrix here, a sink transform on a sheet. Measured on `chart-bar-sheet.ods`
+      against LibreOffice's PDF: the chart's title measured **70.4 pt against a reference 62.1**
+      and now measures **63.7**, so 13% too wide became 2.5%. It costs a deck nothing, the factor
+      there being exactly 1 and both consumers taking their unstretched path.
+- [ ] **The OOXML plot rectangle is still about a point out**, and the second layout pass still
+      re-derives only the *tick count* from the composed rectangle rather than the rectangle from
+      the laid-out labels. The oracle got twice as big while this was open: see the
+      `chartooo:coordinate-region` note in `dotnet/TODO.md` Phase 3.5.
+- [ ] **What a chart still does not draw**: a trendline and its equation (`c:trendline`,
+      `c:dispEq`, `c:dispRSqr` — `tdf127720.pptx` and `trendline.ods` are most of what is left on
+      each set); a data table below the plot (`tdf137691_dataTable.pptx`, 12 words); rotated and
+      staggered axis labels, which LibreOffice falls back to when they would collide and which is
+      the whole of `bnc889755.pptx`'s residual; and label *dropping*, which it falls back to after
+      that — `tdf106217.pptx` draws eight category names in our render and none in the reference,
+      because they do not fit. Radar, bubble, stock, surface and of-pie still draw nothing.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the

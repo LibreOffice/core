@@ -637,6 +637,15 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       the drawing layer is painted in document coordinates and clipped to the paper
       (`printfun.cxx:1699`). `SheetPageGraphics` now walks on through the grid past the last printed
       row or column.
+- [x] **A non-square stretch reaches the glyphs now.** A glyph run carries one em and a stretched
+      chart has two factors, so the em takes the vertical one and the residual `sx/sy` rides on
+      `ChartLabel.Stretch` for each consumer to fold into its own transform — a `PlacedText` matrix
+      on a slide, a sink transform on a sheet. Both place the run at `1/stretch` of where it goes
+      and scale, which is origin-independent and so does not care that a sheet's frame is at a
+      non-zero page offset. Measured on `chart-bar-sheet.ods` against LibreOffice's PDF: the title
+      measured **70.4 pt against a reference 62.1 pt** and now measures **63.7**, so 13% too wide
+      became 2.5%. A deck pays nothing: the factor there is exactly 1 and both consumers take their
+      unstretched path.
 - [x] **An embedded chart is rendered at its own size and stretched into its frame, not
       re-composed — and that is what decides the tick count.** `chart-bar-sheet.ods` states
       `svg:width="12cm" svg:height="7cm"` and sits in a frame 2.952 in by 1.9547 in. In
@@ -645,9 +654,8 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       height ratio is 0.708. So the type is stretched with everything else, by two different
       factors. Composing in the frame instead gives an axis 77 pt long, room for six intervals and
       ticks of `0 50 … 200`; composing at 12 × 7 cm gives 108.8 pt, room for nine, and `0 20 … 180`,
-      which is what the reference draws. `ChartLayout.Stretch` does the mapping. What cannot follow
-      is the type: a glyph run carries one em size, so text is scaled by the vertical factor alone
-      and comes out `sx/sy` too wide — 12% on this chart.
+      which is what the reference draws. `ChartLayout.Stretch` does the mapping, and the residual
+      the em cannot carry rides on `ChartLabel.Stretch` — see the item above.
 - [x] **LibreOffice's second layout pass, narrowed to the thing it actually changes.**
       `VCartesianAxis::estimateMaximumAutoMainIncrementCount` (`VCartesianAxis.cxx:1559-1618`)
       divides the axis' own length by the largest label measured so far and clamps the result into
@@ -678,45 +686,117 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       carries each series' own geometry and `ChartLayout` draws them back to front — areas, bars,
       lines. Measured on `stacked-non-stacked-mix-y-axis.pptx`, whose third chart holds one area
       series and two bar series: drawing the first group alone gave one series of the three.
-- [ ] **The score on LibreOffice's own chart corpus, and what it is now made of.** Over the 38 decks
-      in `chart2/qa/extras/data/pptx/`, comparing `pdftotext` word counts against
-      `soffice --convert-to pdf`: **14 match exactly, against 15 before**, and the total absolute
-      word error fell from **354 to 234**. The exact-match count is the misleading half of that pair
-      — `stacked-non-stacked-mix-y-axis.pptx` went from a lucky 75/75 to 76/75 — and the error total
-      is the honest one: five decks went from drawing **nothing** to near parity (`tdf127393` 0→42
-      of 46, `tdf127811` 0→17 of 19, `tdf122765` 0→19 of 40, `tdf127720` 0→12 of 28, `tdf105517`
-      0→12 of 8). The ODP set is 6 of 9. What the residual is made of, by inspection: **number
-      formats** (`1,200,000` drawn as `1200000`, `25%` as `0.25`) on at least six decks, **data
-      labels** (`c:dLbls`) on four, a **data table** below the plot on one, and **label staggering
-      and truncation**, which LibreOffice does when labels would collide and this does not. None of
-      it is an axis-scale error.
-- [ ] **No data labels, no secondary axis, no number formats on a tick.** Data labels need `c:dLbls`
-      and a number formatter — the only one Paperless has lives in `Paperless.Spreadsheets`, above
-      `Paperless.Core`, so a formatter reachable from the chart engine is the same layering question
-      the tick labels raise. A tick is written in its shortest round-trip form, which is right for
-      every whole-number scale in the corpus and wrong for a currency or percentage axis. A secondary
-      value axis needs a second scale and a per-series axis index.
-- [ ] **A scatter chart is drawn as a line chart with evenly spaced points.** Its X values are a
-      second numeric series with a scale of their own (`c:xVal` against `c:yVal`), and what is drawn
-      instead spaces the points along the category axis — right whenever the X values are evenly
-      spaced and wrong in proportion to how unevenly they are not. Markers are not drawn at all.
-      Doughnut and ring charts draw as pies, losing the hole; radar, bubble, stock, surface and
-      of-pie draw nothing, which leaves the frame empty rather than filling it with the wrong
-      picture.
-- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it is still
-      free.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
+- [x] **The score on LibreOffice's own chart corpus, twice measured.** Over the 38 decks in
+      `chart2/qa/extras/data/pptx/`, comparing `pdftotext` word counts against
+      `soffice --convert-to pdf`: total absolute word error **354 → 234 → 128**, exact matches
+      **15 → 14 → 19**. The ODP set went **6 of 9 with an error of 31 → 8 of 9 with an error of 6**.
+      The three big movers on the deck set were number formats on ticks
+      (`percentage-number-formats` 29/35 → 35/35), data labels (`tdf122765` 19/40 → 40/40,
+      `tdf125444` 0/15 → 15/15) and a *deleted* axis (`tdf116163` 10/5 → 5/5, `tdf105517` 22/8 →
+      8/8), which nothing had read at all. **`.ods` and `.odt` are not a chart oracle** and the
+      measurement says why: over the 59 workbooks the error is 2176, and reading one apart —
+      `trendline.ods` — shows the difference is the chart's trendline equation and the
+      *spreadsheet's* uncomputed formulas, not the chart's marks. A deck is nearly all chart and a
+      workbook is nearly all cells, which is what makes the deck set the honest one.
+- [x] **Data labels, in both vocabularies, including the ones that are templates.** `c:dLbls`
+      nests three deep — the plot group's, the series', the point's — and each level's unstated
+      flags inherit from the level above. **The default is `true`, not `false`**:
+      `SeriesConverter::convertDataLabel` reads each flag as `value_or( !bMSO2007Doc )`
+      (`oox/source/drawingml/chart/seriesconverter.cxx:139-144`), and the ubiquitous "no labels"
+      form Excel writes is not silence but six explicit zeroes — so defaulting to false looks right
+      on every file that has them and loses every label on the files that do not. Three more rules
+      are ports rather than guesses: a percentage is shown by a **pie and nothing else**
+      (`:141`, ANDed with `TYPECATEGORY_PIE`); the separator is `"; "` unless a percentage is shown
+      without a value, when it is a newline (`:168-172`); and the file's one `c:numFmt` lands in the
+      **percentage** format rather than the value format whenever a percentage is shown, with
+      `General` substituted by `0%` (`objectformatter.cxx:1118-1148`). That last one is what makes
+      `percentage-number-formats.pptx`'s first pie point read `8.2; 59%` and not `8.2; 0.585714…`.
+      A custom label is a **template and not a string**: `c:dLbl/c:tx/c:rich` holds literal runs and
+      `a:fld` runs whose `@type` is `VALUE`, `CATEGORYNAME`, `SERIESNAME` or `PERCENTAGE`, and whose
+      own text is a *localised placeholder* — `CustomDataLabel_tdf115107.pptx` draws `[WARTOŚĆ]` if
+      you take the run's text, which is what its five labels did before `ChartLabelPart` existed.
+      ODF folds the five flags into two attributes, `chart:data-label-number` (`none`, `value`,
+      `percentage`, `value-and-percentage`) and the boolean `chart:data-label-text`, and states them
+      on whichever style is nearest — usually the **plot area's**, not each series'.
+- [x] **Number formats on ticks and labels, and the layering settled by moving the engine down.**
+      `Paperless.Spreadsheets/Numbers/` is now `Paperless.Core/Numbers/`. The reasoning in the
+      brief holds and was checked rather than assumed: all five files imported
+      `System.Globalization` and `System.Text` and **nothing else**, and the only consumers were
+      inside `Paperless.Spreadsheets` itself, so the move costs Core nothing and its zero-dependency
+      rule survives intact. `ChartDataLabel.Write` is the one method that needed it, and it is the
+      whole of what a tick label is. **`General` is not a format code** and must not be parsed as
+      one: `convertNumberFormat` asks the number formats supplier for its *standard index* instead
+      (`objectformatter.cxx:1132`), so a stated `General` reads as null and falls through to
+      `NumberFormatter.General`. A value label with no format of its own takes the **data's**, from
+      `c:numCache/c:formatCode` — `VSeriesPlotter::getLabelTextForValue` asks the series through
+      `detectNumberFormatKey`, not the axis — which is where `tdf105517.pptx`'s `220,000` gets its
+      grouping. ODF reaches the same engine through
+      `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` element
+      tree into a format code exactly as `xmloff/source/style/xmlnumfi.cxx` does before handing it
+      to `SvNumberFormatter`.
+- [x] **A secondary value axis, paired by axis id rather than by position.** Every plot group lists
+      the `c:axId` of the axes it uses and every axis states its own, so the pairing is what says
+      which value axis a group is measured against; a series carries its group's `AxisIndex` and
+      `ChartLayout` resolves a second `ChartScaleResult` and draws it on the far side of the plot
+      area, with its own labels and no gridlines of its own. **The trap, named, and it cost the
+      most time on this run**: a *scatter* chart also has two `c:valAx` and neither is a secondary
+      axis. Both its dimensions are numeric, so the vocabulary spells the X axis `c:valAx` too, and
+      the group's **first** `c:axId` is which one it is. Reading the second as a secondary axis
+      draws a chart with two value axes, no X scale and every point in the wrong place — and it
+      looks like a plausible chart, which is why the fix is a test
+      (`DrawingChartPlotLabelTests.AScatterChartsFirstValueAxisIsItsDomainAndNotASecondaryAxis`)
+      rather than a comment.
+- [x] **A scatter chart's real X scale and its markers.** `c:xVal` becomes
+      `ChartSeries.XValues` and the fraction across the plot area is `domain.Fraction(x)` instead of
+      the point's index. The domain scale is resolved with `expandToZero: false`, because
+      `isExpandWideValuesToZero` tests `nDimensionIndex == 1` (`VSeriesPlotter.cxx:1742-1746`) and
+      an X axis is dimension 0 — so a domain running 20 to 120 keeps its minimum near 20 where a
+      value axis would be pulled to zero. Markers are seven path shapes;
+      `c:scatterStyle val="marker"` draws them **and no line**, which is the case that makes an
+      unread marker the difference between a picture and an empty plot area.
+      `tdf127720.pptx` went 12/28 → 16/28, the residual there being its trendline equation.
+- [x] **A deleted axis was the largest single thing nothing read.** `c:catAx/c:delete val="1"`,
+      ODF's `chart:visible="false"`: an axis kept in the file so its scale and its grid survive a
+      round trip, and drawn as nothing. Two halves and only one shows in a word count — it draws no
+      line, no ticks and no labels, *and* it reserves no room, so the plot area grows into what its
+      labels would have taken and every bar is the right height. Its gridlines survive, because
+      `c:majorGridlines` hangs off the axis model rather than its view.
+- [ ] **A scatter chart draws no trendline, and that is now most of what is left.** `c:trendline`
+      with `c:dispEq` and `c:dispRSqr` writes `f(x) = 0.0174728496577696 x + 0.60719095698364` and
+      `R² = 0.999989640055375` onto `tdf127720.pptx`, which is 12 of that deck's remaining error and
+      the whole of `trendline.ods`'s chart residual. `RegressionCurveHelper` and
+      `RegressionCurveCalculator` are what to port. Radar, bubble, stock, surface and of-pie still
+      draw nothing; a doughnut still draws as a pie, losing the hole.
+- [ ] **Rotated, staggered and dropped axis labels.** When labels would collide LibreOffice
+      staggers them, then rotates them, then draws every *n*th, then draws none
+      (`VCartesianAxis::createTextShapes` and `autoStaggeringOfLabels`). None of that is
+      implemented, and it is the entire residual of two decks: `bnc889755.pptx` draws sixteen month
+      names turned a quarter turn, and `tdf106217.pptx` draws **eight category names in our render
+      and none in the reference** because they do not fit. Both look like data bugs and are layout.
+- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it just doubled.**
+      `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
       (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
       (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
       (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
-      title (a flat 420 below, 450 to the left). The second pass now re-derives the *tick count*
-      from the rectangle, which was the part that changed what is drawn; it does not re-derive the
+      title (a flat 420 below, 450 to the left). The second pass re-derives the *tick count* from
+      the rectangle, which was the part that changed what is drawn; it does not re-derive the
       rectangle from the laid-out labels, which is the rest of
-      `ChartView::impl_createDiagramAndContent`. Measured on `chart-bar-deck.pptx` against the
-      reference before that change: plot area 1.29 pt left of, 0.75 pt below, 0.50 pt narrower and
-      0.76 pt taller — 0.2% of the frame's width, and the entire residual, because the bars *inside*
-      the rectangle are in the reference's proportions to a fortieth of a point. **The oracle is
-      free**: LibreOffice writes the answer into every ODF chart, so a heuristic can be scored
-      against `chart:coordinate-region` over all 81 ODF chart documents without converting one.
+      `ChartView::impl_createDiagramAndContent`. Measured on `chart-bar-deck.pptx`: plot area
+      1.29 pt left of, 0.75 pt below, 0.50 pt narrower and 0.76 pt taller than the reference's —
+      0.2% of the frame's width, and the entire residual, because the bars *inside* the rectangle
+      are in the reference's proportions to a fortieth of a point.
+- [x] **The free oracle was two-thirds unread, and the corpus deck is what hid it.**
+      `coordinate-region` is written under **two** namespaces: it began as a LibreOffice extension
+      and was standardised later, so a file writes `chart:coordinate-region` or
+      `chartooo:coordinate-region` depending on the ODF version the writer was set to. Counted over
+      the 71 charts in `chart2/qa/extras/data/`'s `.odp`, `.ods` and `.odt` documents that state one
+      at all: **24 standard, 47 extension**. `chart-bar-deck.odp` writes the standard spelling, so
+      reading only that one matched the corpus perfectly while sending two ODF charts in three
+      through the OOXML heuristic — including every one of the 59 workbooks. `OdfNamespaces.ChartExtension`
+      is the fix and it is four lines. The general lesson is the same shape as the `VCLMTF` one
+      above: **a corpus of one file cannot tell you which of two spellings a format uses**, and a
+      `grep -o '<[a-z]*:coordinate-region'` over the reference corpus would have settled it in a
+      second.
 - [x] **Read the chart model** — `Paperless.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
       and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from three call sites:
       `PptxShapeReader.ReadChart`, `XlsxCharts` (two relationship hops, sheet → drawing → chart),

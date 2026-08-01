@@ -1,7 +1,7 @@
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 
 namespace Paperless.Spreadsheets.MsBinary;
 

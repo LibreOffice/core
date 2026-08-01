@@ -1,3 +1,4 @@
+using Paperless.Core.Numbers;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -37,6 +38,39 @@ public enum ChartPlotKind
 
     /// <summary>Markers at (x, y) — <c>c:scatterChart</c>, <c>chart:scatter</c>.</summary>
     Scatter,
+}
+
+/// <summary>What shape a series draws at each of its points.</summary>
+/// <remarks>
+/// <c>c:marker/c:symbol</c>, ODF's <c>chart:symbol-type</c> and <c>chart:symbol-name</c>. The
+/// seven shapes here are what <c>DataPointSymbolSupplier</c> draws
+/// (<c>chart2/source/view/main/DataPointSymbolSupplier.cxx</c>) reduced to the ones a path can
+/// express directly; the rest of OOXML's list — <c>dot</c>, <c>dash</c>, <c>picture</c> — falls
+/// back to <see cref="Square"/> rather than to nothing, because a marker in the wrong shape is
+/// nearer the reference than a plot area with no marks in it.
+/// </remarks>
+public enum ChartMarker
+{
+    /// <summary>No marker — <c>c:symbol val="none"</c>.</summary>
+    None = 0,
+
+    /// <summary>A filled square, which is <c>auto</c>'s first shape.</summary>
+    Square,
+
+    /// <summary>A filled circle.</summary>
+    Circle,
+
+    /// <summary>A filled diamond.</summary>
+    Diamond,
+
+    /// <summary>A filled upward triangle.</summary>
+    Triangle,
+
+    /// <summary>A stroked cross.</summary>
+    Cross,
+
+    /// <summary>A stroked saltire.</summary>
+    Star,
 }
 
 /// <summary>Where the legend sits relative to the plot area.</summary>
@@ -89,6 +123,74 @@ public sealed record ChartSeries(
     IReadOnlyList<Colour?>? PointFills = null,
     ChartPlotKind? Kind = null)
 {
+    /// <summary>
+    /// The X values a scatter series states, one per point, or null for every other chart type.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:xVal</c> against <c>c:yVal</c>, ODF's second <c>chart:domain</c>. These are a numeric
+    /// dimension with a scale of their own rather than category indices, which is the whole
+    /// difference between a scatter chart and a line chart: spacing the points evenly along the
+    /// category axis instead is right only when the X values happen to be evenly spaced. Measured
+    /// on <c>chart2/qa/extras/data/pptx/tdf127720.pptx</c>, whose X runs 0 to 120 in irregular
+    /// steps and whose reference draws a value axis labelled <c>0 20 40 60 80 100 120</c> where an
+    /// evenly-spaced reading draws the four category names it does not have.
+    /// </remarks>
+    public IReadOnlyList<double?>? XValues { get; init; }
+
+    /// <summary>
+    /// Whether the series draws a marker at each point, and which one.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:marker/c:symbol</c>. A scatter chart with <c>c:scatterStyle val="lineMarker"</c> draws
+    /// both; one with <c>val="marker"</c> draws markers alone and no line at all, which is what
+    /// makes an unread marker the difference between a picture and an empty plot area.
+    /// </remarks>
+    public ChartMarker Marker { get; init; } = ChartMarker.None;
+
+    /// <summary>Whether the series joins its points with a line.</summary>
+    /// <remarks>
+    /// False for a scatter chart whose <c>c:scatterStyle</c> is <c>marker</c>, and for a line
+    /// series whose <c>a:ln</c> states <c>a:noFill</c>.
+    /// </remarks>
+    public bool HasLine { get; init; } = true;
+
+    /// <summary>The label every point of this series carries, or null for none.</summary>
+    public ChartDataLabel? Label { get; init; }
+
+    /// <summary>
+    /// A label per point where the file overrides the series', or null where it does not.
+    /// </summary>
+    /// <remarks><c>c:dLbl</c> inside <c>c:dLbls</c>, addressed by <c>c:idx</c>.</remarks>
+    public IReadOnlyList<ChartDataLabel?>? PointLabels { get; init; }
+
+    /// <summary>
+    /// Which value axis this series is measured against — 0 for the primary, 1 for the secondary.
+    /// </summary>
+    /// <remarks>
+    /// A chart part states it indirectly: each plot group lists the <c>c:axId</c> of the pair of
+    /// axes it uses, and the group whose ids match the second <c>c:valAx</c> is on the secondary
+    /// axis. Every series in a group shares the group's axes, so this is a property of the group
+    /// carried onto the series — which is how one <c>ChartPlot</c> can hold both.
+    /// </remarks>
+    public int AxisIndex { get; init; }
+
+    /// <summary>The label for one point: its own where the file states one, the series' otherwise.</summary>
+    /// <param name="index">The point's index.</param>
+    public ChartDataLabel? LabelAt(int index)
+        => PointLabels is { } labels && index >= 0 && index < labels.Count && labels[index] is { } own
+            ? own
+            : Label;
+
+    /// <summary>The sum of the absolute values, which is what a percentage label divides by.</summary>
+    public double Total()
+    {
+        double total = 0.0;
+        foreach (double? point in Values)
+            if (point is { } value && double.IsFinite(value)) total += Math.Abs(value);
+
+        return total;
+    }
+
     /// <summary>
     /// The fill one point is drawn in: its own where the file states one, the series' otherwise.
     /// </summary>
@@ -150,6 +252,32 @@ public sealed record ChartPlot
     /// <summary>Which way the bars run.</summary>
     public ChartBarDirection Direction { get; init; }
 
+    /// <summary>
+    /// Whether the value axis is drawn at all.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:valAx/c:delete val="1"</c>, ODF's absence of a <c>chart:axis</c> for the dimension. A
+    /// deleted axis draws no line, no ticks and — the part a word count sees — no labels, and it
+    /// reserves no room for them either, so the plot area grows to fill what it would have taken.
+    /// Its gridlines survive, because <c>c:majorGridlines</c> is a separate property that chart2
+    /// keeps on the axis model rather than on its view. Measured on
+    /// <c>chart2/qa/extras/data/pptx/tdf116163.pptx</c>, whose value axis is deleted: drawing it
+    /// anyway adds the five words <c>20.0 15.0 10.0 5.0 0.0</c> to a reference that draws five
+    /// category names and nothing else.
+    /// </remarks>
+    public bool ValueAxisVisible { get; init; } = true;
+
+    /// <summary>Whether the category axis — or a scatter chart's X axis — is drawn.</summary>
+    /// <remarks>
+    /// <c>c:catAx/c:delete</c>. See <see cref="ValueAxisVisible"/>; measured on
+    /// <c>tdf105517.pptx</c> and <c>tdf106217.pptx</c>, which between them draw twelve category
+    /// names the reference does not.
+    /// </remarks>
+    public bool CategoryAxisVisible { get; init; } = true;
+
+    /// <summary>Whether the secondary value axis is drawn.</summary>
+    public bool SecondaryAxisVisible { get; init; } = true;
+
     /// <summary>Whether the chart has a pair of axes at all.</summary>
     /// <remarks>
     /// A pie has neither, so it gets no axis lines, no ticks, no gridlines and — the part that
@@ -183,14 +311,21 @@ public sealed record ChartPlot
         }
     }
 
-    /// <summary>The series drawn as one kind, in file order.</summary>
+    /// <summary>The series drawn as one kind against one value axis, in file order.</summary>
     /// <param name="kind">The geometry.</param>
-    public List<ChartSeries> SeriesOf(ChartPlotKind kind)
+    /// <param name="axis">
+    /// The value axis: 0 for the primary, 1 for the secondary, or −1 for either.
+    /// </param>
+    public List<ChartSeries> SeriesOf(ChartPlotKind kind, int axis = -1)
     {
         List<ChartSeries> matched = [];
 
         foreach (ChartSeries series in Series)
-            if ((series.Kind ?? Kind) == kind) matched.Add(series);
+        {
+            if ((series.Kind ?? Kind) != kind) continue;
+            if (axis >= 0 && series.AxisIndex != axis) continue;
+            matched.Add(series);
+        }
 
         return matched;
     }
@@ -219,6 +354,57 @@ public sealed record ChartPlot
 
     /// <summary>What the value axis states, before the automatic parts are resolved.</summary>
     public ChartScaleRequest ValueScale { get; init; }
+
+    /// <summary>
+    /// What a secondary value axis states, or null when the chart has only one.
+    /// </summary>
+    /// <remarks>
+    /// A chart part with two <c>c:valAx</c> puts some plot groups on each, and the two carry
+    /// scales of their own — which is the point of the feature: a revenue series in millions and
+    /// a margin series in percent share a category axis and nothing else. The series that belong
+    /// to it are those whose <see cref="ChartSeries.AxisIndex"/> is 1.
+    /// </remarks>
+    public ChartScaleRequest? SecondaryValueScale { get; init; }
+
+    /// <summary>The secondary value axis' title, or null.</summary>
+    public string? SecondaryValueAxisTitle { get; init; }
+
+    /// <summary>How the secondary axis' ticks are written, or null for the general format.</summary>
+    public NumberFormatCode? SecondaryValueFormat { get; init; }
+
+    /// <summary>Whether any series is measured against a secondary value axis.</summary>
+    public bool HasSecondaryAxis
+    {
+        get
+        {
+            if (SecondaryValueScale is null) return false;
+
+            foreach (ChartSeries series in Series)
+                if (series.AxisIndex == 1) return true;
+
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// How the value axis' ticks are written, or null for the general format.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:valAx/c:numFmt/@formatCode</c>, ODF's <c>style:data-style-name</c> on the axis' style.
+    /// A code of <c>General</c> reads as null, because <c>General</c> is not a format code but a
+    /// request for the number formatter's standard index
+    /// (<c>oox/source/drawingml/chart/objectformatter.cxx:1132</c>).
+    /// </remarks>
+    public NumberFormatCode? ValueFormat { get; init; }
+
+    /// <summary>
+    /// How the category axis' labels are written, or null to draw the cached text as it stands.
+    /// </summary>
+    /// <remarks>
+    /// Only a date or a numeric category axis has one; a text axis' labels are already strings.
+    /// See <see cref="ChartDataLabel.WriteCategory"/> for what it costs to miss.
+    /// </remarks>
+    public NumberFormatCode? CategoryFormat { get; init; }
 
     /// <summary>Where the legend goes.</summary>
     public ChartLegendPosition Legend { get; init; } = ChartLegendPosition.None;
@@ -304,6 +490,19 @@ public sealed record ChartPlot
     /// </remarks>
     public DocSize? Space { get; init; }
 
+    /// <summary>
+    /// What a scatter chart's X axis states about its scale, before the automatic parts resolve.
+    /// </summary>
+    /// <remarks>
+    /// The first <c>c:valAx</c> of a scatter chart is its <em>X</em> axis, not its value axis —
+    /// both dimensions are numeric, so the vocabulary uses the same element twice and tells them
+    /// apart by <c>c:crosses</c> and by which axis each <c>c:axId</c> pair names.
+    /// </remarks>
+    public ChartScaleRequest DomainScale { get; init; }
+
+    /// <summary>How a scatter chart's X ticks are written, or null for the general format.</summary>
+    public NumberFormatCode? DomainFormat { get; init; }
+
     /// <summary>True when there is nothing at all to draw.</summary>
     public bool IsEmpty => Series.Count == 0 && Title is null;
 
@@ -324,15 +523,23 @@ public sealed record ChartPlot
     /// holding +50 and −30 contributes 50 and −30 rather than 20 and 20.
     /// </para>
     /// </remarks>
-    public (double? Minimum, double? Maximum) ValueRange()
+    /// <param name="axis">
+    /// Which value axis to measure: 0 for the primary, 1 for the secondary, −1 for every series
+    /// whichever axis it is on. A chart with no secondary axis has every series on axis 0, so the
+    /// default is the whole chart either way.
+    /// </param>
+    public (double? Minimum, double? Maximum) ValueRange(int axis = -1)
     {
         double minimum = double.PositiveInfinity;
         double maximum = double.NegativeInfinity;
 
+        bool Included(ChartSeries series) => axis < 0 || series.AxisIndex == axis;
+
         if (IsStacked)
         {
             int categories = 0;
-            foreach (ChartSeries series in Series) categories = Math.Max(categories, series.Values.Count);
+            foreach (ChartSeries series in Series)
+                if (Included(series)) categories = Math.Max(categories, series.Values.Count);
 
             for (int at = 0; at < categories; at++)
             {
@@ -342,6 +549,7 @@ public sealed record ChartPlot
 
                 foreach (ChartSeries series in Series)
                 {
+                    if (!Included(series)) continue;
                     if (at >= series.Values.Count) continue;
                     if (series.Values[at] is not { } value || !double.IsFinite(value)) continue;
 
@@ -358,6 +566,8 @@ public sealed record ChartPlot
         {
             foreach (ChartSeries series in Series)
             {
+                if (!Included(series)) continue;
+
                 foreach (double? point in series.Values)
                 {
                     if (point is not { } value || !double.IsFinite(value)) continue;

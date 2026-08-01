@@ -1,4 +1,4 @@
-namespace Paperless.Spreadsheets.Numbers;
+namespace Paperless.Core.Numbers;
 
 /// <summary>Which epoch a workbook counts its date serials from.</summary>
 /// <remarks>

@@ -100,6 +100,20 @@ that model parse XML and stay in `Paperless.Ooxml` and `Paperless.OpenDocument`.
 one layer up instead is what forced the ODF reader into `Paperless.Presentations`, where a
 spreadsheet could not reach it.
 
+`Core/Numbers` came down for the same reason and by the same test, and it is worth stating as a
+rule rather than as a second exception. **The question is not "who uses it" but "what does it
+depend on".** The number-format engine — parsing `#,##0.00` and rendering a double through it —
+began in `Paperless.Spreadsheets` because a cell is what wanted it, and a chart's axis composed in
+`Core/Charts` then could not reach it; every tick was written in its shortest round-trip form, which
+is right for a whole-number scale and wrong for every currency, percentage and date axis. The move
+was safe because the engine is pure computation over a string: its five files import
+`System.Globalization` and `System.Text` and nothing else, so Core's zero-dependency rule is intact.
+Read it as: **a thing belongs in Core when it depends on nothing above Core, whatever it was written
+for.** What did *not* move is the reading — `XlsxStyles`, `OdsCellFormats` and
+`OdfNumberFormat` parse markup and stay in their own libraries, the last of them compiling an ODF
+`number:*-style` element tree into a format code exactly as `xmloff` does before handing it to one
+formatter.
+
 ## Key design decisions, and why
 
 **All lengths are EMUs, in a `Length` struct.** 914400 per inch divides evenly by twips

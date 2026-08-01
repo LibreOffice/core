@@ -1060,10 +1060,18 @@ Not yet, and why:
 - **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
   `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
   rectangle clipped to the frame's outline rather than a new IR primitive.
-- **A chart's own tick labels are unformatted, and a rotated one in a chart is the only rotated
-  text a sheet draws.** Both are chart-wide rather than spreadsheet-specific; see
-  `dotnet/TODO.md` Phase 3.5. The formatter this family owns is the one the chart engine wants and
-  cannot reach, which is the layering question left open.
+- **A chart's tick labels are formatted now, and the formatter is no longer this family's.** The
+  number-format engine moved from `Paperless.Spreadsheets/Numbers/` down into
+  `Paperless.Core/Numbers/`, beside `Core/Charts`, which is what a chart composed in Core needed to
+  write `1,200,000` on an axis instead of `1200000`. Nothing about this family's use of it changed
+  but the namespace: it is pure computation over a format code with no external dependencies, so
+  Core keeps its zero-dependency rule. `NumberFormatterTests` went with it to
+  `Paperless.Core.Tests`; `NumberFormatCodeTests` stayed here, because half of what it asserts is
+  which built-in code an XLSX style index stands for. ODF reaches the same engine through
+  `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` tree into a
+  format code exactly as `xmloff`'s own import does. See `dotnet/TODO.md` Phase 3.5.
+- **A rotated label in a chart is the only rotated text a sheet draws**, and it still is. Chart-wide
+  rather than spreadsheet-specific.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
@@ -1154,6 +1162,19 @@ deliberate — extraction must not pay for the anchors.
 `Paperless.OpenDocument`, so one ODF reader serves ODP, ODS and ODT and this family needed no copy
 of it. Only the geometry and the model moved — nothing that parses XML — so Core still has zero
 external dependencies.
+
+**And the number formatter followed it down, for the same reason and with the same test.**
+`Numbers/` — `NumberFormatCode`, `NumberFormatSection`, `NumberFormatter`, `BuiltInNumberFormats`,
+`SpreadsheetDate` — is now `Paperless.Core/Numbers/`. Every one of those files imported
+`System.Globalization` and `System.Text` and nothing else, so the move costs Core nothing; what it
+buys is that a chart composed in Core can write `1,200,000` on an axis. This family's readers
+changed by one `using` each.
+
+**A sheet's chart type is stretched properly now.** `SheetChart.Text` folds `ChartLabel.Stretch`
+into a sink transform, so a chart composed at its stated 12 × 7 cm and drawn into a frame 0.625 as
+wide and 0.709 as tall gets type at the right width rather than `sx/sy` too wide. Measured against
+LibreOffice's PDF for `chart-bar-sheet.ods`: the title measured **70.4 pt against a reference 62.1**
+and now measures **63.7**.
 
 **Three defects a deck could never have found, and each looked like something else.**
 

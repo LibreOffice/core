@@ -3,7 +3,7 @@ using Paperless.Core.Extraction;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 using Paperless.Text.Encodings;
 
 namespace Paperless.Spreadsheets.MsBinary;

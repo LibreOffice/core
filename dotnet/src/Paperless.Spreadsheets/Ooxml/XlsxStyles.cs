@@ -1,5 +1,5 @@
 using System.Xml.Linq;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 
 namespace Paperless.Spreadsheets.Ooxml;
 

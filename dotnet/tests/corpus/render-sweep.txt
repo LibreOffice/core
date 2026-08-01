@@ -28,7 +28,10 @@
 #
 # The six chart rows now match: bars, gridlines, lines, pies and areas all draw, and a
 # spreadsheet's chart draws too. See `dotnet/TODO.md` Phase 3.5 for what each of the six
-# measures and for the three defects the spreadsheet forms found.
+# measures and for the three defects the spreadsheet forms found. They stayed matching
+# through data labels, formatted ticks, a secondary axis and a real scatter — none of which
+# this corpus exercises, which is why the deck set in `chart2/qa/extras/data/pptx/` is the
+# chart oracle and these six rows are only the regression guard.
 #
 # The six *picture* rows now match, and they moved together for the same reason the labels
 # did — one missing seam rather than six bugs. `Paperless.Vector` imported WMF, EMF, EMF+
