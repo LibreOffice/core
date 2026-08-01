@@ -273,11 +273,9 @@ internal sealed class OdpSlideLayout
         AffineTransform placement = AffineTransform.Concat(Placement(element), space);
 
         XElement? geometry = element.Element(XName.Get("enhanced-geometry", OdfNamespaces.Draw));
-        string? preset = Preset(element, geometry);
+        CustomShapeGeometry.Geometry outline = Geometry(element, geometry, size);
 
-        GraphicsPath local = Mirrored(
-            SlidePresetGeometry.Outline(preset, size), geometry, size);
-
+        GraphicsPath local = Mirrored(outline.Outline, geometry, size);
         IReadOnlyList<OdfStyleReference> cascade = StyleCascade(element);
 
         return new PlacedShape
@@ -287,8 +285,42 @@ internal sealed class OdpSlideLayout
             Bounds = ShapeTransform.PlacedBounds(placement, size),
             Fill = Fill(cascade),
             Line = Line(cascade),
-            Text = Text(element, size, preset, placement, cascade),
+            Text = Text(element, outline.TextRectangle, placement, cascade),
         };
+    }
+
+    /// <summary>
+    /// A shape's outline and text rectangle: its own <c>draw:enhanced-path</c> first.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The file's own path beats the preset name, always.</strong> ODF is self-describing
+    /// here in a way DrawingML is not — a <c>draw:custom-shape</c> carries the whole geometry
+    /// program, not a name to look up — and that is what LibreOffice draws: the <c>draw:type</c> is
+    /// consulted only for a handful of special cases in <c>CreateSubPath</c> and never for the
+    /// path itself. Preferring the name would answer correctly for the dozen presets whose ODF and
+    /// DrawingML spellings we happen to have mapped and would draw a bounding rectangle for the
+    /// other hundred and seventy, including every one LibreOffice's own drawing toolbar produces.
+    /// </para>
+    /// <para>
+    /// The name is still the fallback, and it has two jobs: a <c>draw:rect</c>, <c>draw:ellipse</c>
+    /// or <c>draw:circle</c> carries no enhanced geometry at all, and a <c>draw:custom-shape</c>
+    /// whose path is malformed is better drawn as its preset than as nothing.
+    /// </para>
+    /// </remarks>
+    private static CustomShapeGeometry.Geometry Geometry(
+        XElement element, XElement? geometry, DocSize size)
+    {
+        if (geometry is not null && OdfEnhancedGeometry.Read(geometry, size) is { } stated)
+        {
+            return stated;
+        }
+
+        string? preset = Preset(element, geometry);
+
+        return new CustomShapeGeometry.Geometry(
+            SlidePresetGeometry.Outline(preset, size),
+            SlidePresetGeometry.TextRectangle(preset, size));
     }
 
     /// <summary>
@@ -563,8 +595,7 @@ internal sealed class OdpSlideLayout
 
     private PlacedText? Text(
         XElement element,
-        DocSize size,
-        string? preset,
+        DocRect rectangle,
         AffineTransform placement,
         IReadOnlyList<OdfStyleReference> cascade)
     {
@@ -572,7 +603,6 @@ internal sealed class OdpSlideLayout
             _file, Paragraphs(element), [.. cascade, TextStyle(element)]);
         if (body.Paragraphs.Count == 0) return null;
 
-        DocRect rectangle = SlidePresetGeometry.TextRectangle(preset, size);
         bool upright = placement.A == 1 && placement.B == 0 && placement.C == 0 && placement.D == 1;
 
         DocRect area = upright
