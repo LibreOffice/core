@@ -248,7 +248,7 @@ internal sealed class WmfReader
         {
             Warn(
                 "PL6034",
-                "A WMF excluded an area from its clip, which cannot be expressed; more of the "
+                "A WMF combined clipping regions in a way that cannot be expressed; more of the "
                     + "picture may be visible than the file intended.");
         }
 
@@ -1437,7 +1437,7 @@ internal sealed class WmfReader
         // GDI states the escapement anticlockwise in tenths of a degree, and document space is
         // y-down, so a positive escapement is a positive rotation about the origin here too.
         double radians = _context.Font.Escapement * Math.PI / 1800.0;
-        _painter.DrawGlyphRun(laid.Run, radians);
+        foreach (GlyphRun run in laid.Runs) _painter.DrawGlyphRun(run, radians);
 
         if ((_context.TextAlignment & TextAlignment.UpdateCurrentPosition) != 0)
         {

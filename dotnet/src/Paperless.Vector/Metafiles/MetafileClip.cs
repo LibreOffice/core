@@ -20,20 +20,23 @@ namespace Paperless.Vector.Metafiles;
 /// <para>
 /// <b>Subtraction is the operation that list cannot express, and it is expressible anyway
 /// because a GDI region is rectangles.</b> <c>ExcludeClipRect</c> and <c>ExtSelectClipRgn</c>
-/// with <c>RGN_DIFF</c> both subtract a set of rectangles, and a rectangle minus a rectangle is
-/// at most four rectangles — no general path arithmetic, just integer comparisons. Better, it
-/// distributes: subtracting <em>R</em> from (rectangles ∩ paths) is (rectangles − <em>R</em>) ∩
-/// paths, so an exclusion stays exact even when a non-rectangular clip path is also in force.
-/// That is why the rectangular part is kept apart from the arbitrary part rather than everything
-/// being one list, and it is what closes the gap WMF left open.
+/// with <c>RGN_DIFF</c> both subtract a set of rectangles, and rectangle sets are closed under
+/// subtraction — no general path arithmetic, just integer comparisons. Better, it distributes:
+/// subtracting <em>R</em> from (rectangles ∩ paths) is (rectangles − <em>R</em>) ∩ paths, so an
+/// exclusion stays exact even when a non-rectangular clip path is also in force. That is why the
+/// rectangular part is kept apart from the arbitrary part rather than everything being one list,
+/// and it is what closes the gap WMF left open.
 /// </para>
 /// <para>
-/// What is still out of reach is <em>union</em> and <em>symmetric difference</em> with the clip
-/// as an operand — <c>RGN_OR</c> and <c>RGN_XOR</c> — because those need the clip's own area,
-/// which an intersection list does not hold, and because a union with a non-rectangular clip
-/// path is not a rectangle set. Those are reported through
-/// <see cref="HasUnsupportedOperation"/> and the clip is left as it was, which draws too much
-/// rather than too little.
+/// <b>Union, symmetric difference and complement follow from the same observation, once the
+/// rectangular part is a real region rather than a running intersection.</b> A GDI region
+/// <em>is</em> a scan list of rectangles, and rectangle sets are closed under every one of the
+/// five combine modes, so <see cref="RectangleRegion"/> answers all of them exactly with a band
+/// sweep over integer coordinates — no flattening, no crossover solver, no tolerance. What
+/// remains genuinely out of reach is an operation whose operand or whose existing clip is an
+/// arbitrary <em>path</em>: <c>SelectClipPath</c> with <c>RGN_XOR</c>, EMF+ <c>SetClipPath</c>
+/// with a union or a complement. Those need a general polygon boolean, are reported through
+/// <see cref="HasUnsupportedOperation"/>, and leave the clip as it was.
 /// </para>
 /// <para>
 /// A metafile's clip is device state, not a scope: it changes when a record says so and stays
@@ -46,13 +49,14 @@ namespace Paperless.Vector.Metafiles;
 public sealed class MetafileClip
 {
     /// <summary>
-    /// How many rectangles a subtraction may produce before the result is approximated.
+    /// How many rectangles a combine may produce before the result is abandoned.
     /// </summary>
     /// <remarks>
-    /// Each exclusion can quadruple the count, so an adversarial file of a few hundred
-    /// <c>ExcludeClipRect</c> records would otherwise allocate without bound. Past the cap the
-    /// exclusions stop being applied and the clip is reported as approximate, which draws too
-    /// much — the same direction every other unexpressible clip operation errs in.
+    /// A band sweep can still be made to grow: <em>n</em> horizontal bars combined with
+    /// <em>n</em> vertical ones is a grid of <em>n</em>² pieces, so an adversarial file of a few
+    /// hundred clip records would otherwise allocate without bound. Past the cap the operation
+    /// stops being applied and the clip is reported as approximate, which draws too much — the
+    /// same direction every other unexpressible clip operation errs in.
     /// </remarks>
     public const int MaxRectangles = 1024;
 
@@ -87,6 +91,18 @@ public sealed class MetafileClip
     /// <summary>True when nothing is clipped.</summary>
     public bool IsEmpty => _shapes.Count == 0 && _rectangles is null;
 
+    /// <summary>
+    /// True when the clip is a rectangle set, so a union, a symmetric difference or a complement
+    /// against another rectangle set is exact.
+    /// </summary>
+    /// <remarks>
+    /// The distinction the whole region question turns on. Intersection and exclusion never need
+    /// it — they distribute over the shape list — but the three operations that read the clip's
+    /// own area do, because the area of "this path intersected with that one" is not something a
+    /// rectangle sweep can produce.
+    /// </remarks>
+    public bool IsRectangular => _shapes.Count == 0;
+
     /// <summary>How many paths the clip intersects.</summary>
     public int Count => _shapes.Count + (_rectangles is null ? 0 : 1);
 
@@ -104,15 +120,17 @@ public sealed class MetafileClip
     }
 
     /// <summary>Intersects the clip with a rectangle, exactly.</summary>
-    public void Intersect(DocRect rect)
-        => _rectangles = _rectangles is null ? [rect] : Intersect(_rectangles, [rect]);
+    public void Intersect(DocRect rect) => Intersect([rect]);
 
-    /// <summary>Intersects the clip with a set of disjoint rectangles, exactly.</summary>
+    /// <summary>Intersects the clip with a set of rectangles, exactly.</summary>
     /// <param name="rectangles">The region's scan list.</param>
     public void Intersect(IReadOnlyList<DocRect> rectangles)
     {
         ArgumentNullException.ThrowIfNull(rectangles);
-        _rectangles = _rectangles is null ? [.. rectangles] : Intersect(_rectangles, rectangles);
+
+        Store(_rectangles is null
+            ? RectangleRegion.Normalise(rectangles)
+            : RectangleRegion.Combine(_rectangles, rectangles, RegionOp.Intersect));
     }
 
     /// <summary>
@@ -123,18 +141,74 @@ public sealed class MetafileClip
     /// removing an area from the intersection of several shapes is the same as removing it from
     /// any one of them.
     /// </remarks>
-    public void Exclude(DocRect rect)
+    public void Exclude(DocRect rect) => Exclude([rect]);
+
+    /// <summary>Subtracts a set of rectangles, which <c>RGN_DIFF</c> against a region asks for.</summary>
+    /// <param name="rectangles">The region's scan list.</param>
+    public void Exclude(IReadOnlyList<DocRect> rectangles)
     {
-        if (rect.IsEmpty) return;
+        ArgumentNullException.ThrowIfNull(rectangles);
+        Store(RectangleRegion.Combine(_rectangles ?? [Bounds], rectangles, RegionOp.Difference));
+    }
 
-        DocRect[] from = _rectangles ?? [Bounds];
-        DocRect[] result = Subtract(from, rect);
+    /// <summary>
+    /// Widens the clip to include a set of rectangles, as <c>RGN_OR</c> asks.
+    /// </summary>
+    /// <remarks>
+    /// Exact only when <see cref="IsRectangular"/>, because a union reads the clip's own area and
+    /// the area of an intersection list is not a rectangle set. An unbounded clip already
+    /// contains everything, so the union with one is the identity rather than a special case.
+    /// </remarks>
+    public void Union(IReadOnlyList<DocRect> rectangles)
+    {
+        ArgumentNullException.ThrowIfNull(rectangles);
 
-        if (result.Length > MaxRectangles)
-        {
-            MarkUnsupported();
-            return;
-        }
+        if (!IsRectangular) { MarkUnsupported(); return; }
+        if (_rectangles is null) return;
+
+        Store(RectangleRegion.Combine(_rectangles, rectangles, RegionOp.Union));
+    }
+
+    /// <summary>
+    /// Keeps what is in the clip or in a set of rectangles but not in both, as <c>RGN_XOR</c> asks.
+    /// </summary>
+    /// <remarks>Exact only when <see cref="IsRectangular"/>, for the same reason a union is.</remarks>
+    public void SymmetricDifference(IReadOnlyList<DocRect> rectangles)
+    {
+        ArgumentNullException.ThrowIfNull(rectangles);
+
+        if (!IsRectangular) { MarkUnsupported(); return; }
+
+        Store(RectangleRegion.Combine(_rectangles ?? [Bounds], rectangles, RegionOp.SymmetricDifference));
+    }
+
+    /// <summary>
+    /// Replaces the clip with the part of a set of rectangles that is <em>not</em> in it, which is
+    /// GDI+'s <c>CombineModeComplement</c>.
+    /// </summary>
+    /// <remarks>
+    /// The one combine mode whose operands are the other way round —
+    /// <c>emfphelperdata.cxx:1553-1558</c> spells it <c>solvePolygonOperationDiff(right, left)</c>
+    /// — so it is a separate member rather than an argument to <see cref="Exclude(DocRect)"/>,
+    /// where the order would be easy to get silently backwards.
+    /// </remarks>
+    /// <param name="rectangles">The new region.</param>
+    public void Complement(IReadOnlyList<DocRect> rectangles)
+    {
+        ArgumentNullException.ThrowIfNull(rectangles);
+
+        if (!IsRectangular) { MarkUnsupported(); return; }
+
+        Store(RectangleRegion.Combine(rectangles, _rectangles ?? [Bounds], RegionOp.Difference));
+    }
+
+    private void Store(DocRect[] result)
+    {
+        // Past the cap the operation is abandoned rather than approximated, which draws too much
+        // — the same direction every other unexpressible clip operation errs in. The band sweep
+        // makes this far harder to reach than the rectangle-at-a-time subtraction it replaced,
+        // because it never emits a rectangle an operand did not imply.
+        if (result.Length > MaxRectangles) { MarkUnsupported(); return; }
 
         _rectangles = result;
     }
@@ -150,13 +224,13 @@ public sealed class MetafileClip
     }
 
     /// <summary>Replaces the clip with a region's scan list, which stays exact under subtraction.</summary>
-    /// <param name="rectangles">The disjoint rectangles.</param>
+    /// <param name="rectangles">The region's rectangles; they need not be disjoint.</param>
     public void Replace(IReadOnlyList<DocRect> rectangles)
     {
         ArgumentNullException.ThrowIfNull(rectangles);
 
         _shapes.Clear();
-        _rectangles = [.. rectangles];
+        _rectangles = RectangleRegion.Normalise(rectangles);
     }
 
     /// <summary>Records that an operation could not be honoured.</summary>
@@ -283,59 +357,5 @@ public sealed class MetafileClip
         }
 
         foreach ((GraphicsPath path, FillRule rule) in _shapes) sink.ClipPath(path, rule);
-    }
-
-    private static DocRect[] Intersect(IReadOnlyList<DocRect> left, IReadOnlyList<DocRect> right)
-    {
-        List<DocRect> result = [];
-
-        foreach (DocRect a in left)
-        {
-            foreach (DocRect b in right)
-            {
-                Length x = Length.Max(a.Left, b.Left);
-                Length y = Length.Max(a.Top, b.Top);
-                Length r = Length.Min(a.Right, b.Right);
-                Length s = Length.Min(a.Bottom, b.Bottom);
-
-                if (r > x && s > y) result.Add(new DocRect(x, y, r - x, s - y));
-            }
-        }
-
-        return [.. result];
-    }
-
-    /// <summary>
-    /// Every rectangle with one rectangle taken out of it, which is at most four each.
-    /// </summary>
-    /// <remarks>
-    /// The four pieces are the band above, the band below, and the two columns beside — cut in
-    /// that order so that no two of them overlap, which is what keeps the result a set of
-    /// disjoint rectangles and therefore keeps the next operation exact.
-    /// </remarks>
-    private static DocRect[] Subtract(IReadOnlyList<DocRect> from, DocRect cut)
-    {
-        List<DocRect> result = [];
-
-        foreach (DocRect rect in from)
-        {
-            Length x = Length.Max(rect.Left, cut.Left);
-            Length y = Length.Max(rect.Top, cut.Top);
-            Length r = Length.Min(rect.Right, cut.Right);
-            Length s = Length.Min(rect.Bottom, cut.Bottom);
-
-            if (r <= x || s <= y)
-            {
-                result.Add(rect);
-                continue;
-            }
-
-            if (y > rect.Top) result.Add(new DocRect(rect.Left, rect.Top, rect.Width, y - rect.Top));
-            if (s < rect.Bottom) result.Add(new DocRect(rect.Left, s, rect.Width, rect.Bottom - s));
-            if (x > rect.Left) result.Add(new DocRect(rect.Left, y, x - rect.Left, s - y));
-            if (r < rect.Right) result.Add(new DocRect(r, y, rect.Right - r, s - y));
-        }
-
-        return [.. result];
     }
 }

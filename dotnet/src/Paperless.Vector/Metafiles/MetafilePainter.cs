@@ -273,8 +273,18 @@ public sealed class MetafilePainter
     /// null draws the whole image over the whole square.
     /// </param>
     /// <param name="opacity">A uniform opacity.</param>
+    /// <param name="edge">
+    /// A colour to paint over the whole square first, for a source rectangle that reaches outside
+    /// the image under a wrap mode that clamps. It goes inside the same save as the image so that
+    /// it lands under exactly the placement the image lands on, which is the only reason it is a
+    /// parameter here rather than a separate fill at the call site.
+    /// </param>
     public void DrawTransformedImage(
-        RasterImage image, AffineTransform placement, DocRect? source = null, double opacity = 1.0)
+        RasterImage image,
+        AffineTransform placement,
+        DocRect? source = null,
+        double opacity = 1.0,
+        Colour? edge = null)
     {
         ArgumentNullException.ThrowIfNull(image);
 
@@ -288,6 +298,8 @@ public sealed class MetafilePainter
 
         _sink.Save();
         _sink.Transform(placement);
+
+        if (edge is { } colour) _sink.FillPath(GraphicsPath.Rectangle(square), Paint.Solid(colour));
 
         if (source is { } whole)
         {

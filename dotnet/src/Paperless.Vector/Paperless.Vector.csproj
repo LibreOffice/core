@@ -17,6 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+      The rectangle-set algebra under the clip is internal because nothing outside this library
+      should be combining regions, but its correctness is the kind a test through a whole
+      metafile cannot attribute: a band coalesced one row too far shows up as a picture drawn
+      slightly too wide, which reads as a mapping bug.
+    -->
+    <InternalsVisibleTo Include="Paperless.Vector.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
     <!--
       SVG text is resolved and shaped by Paperless.Text rather than by the SVG library's own
