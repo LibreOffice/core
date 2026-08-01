@@ -91,7 +91,12 @@ public static class OdfChartPlot
         List<XElement> series = [.. Children(plotArea, OdfNamespaces.Chart, "series")];
         if (series.Count == 0) return null;
 
-        OdfChartTable table = OdfChartTable.Read(chart);
+        // chart:series-source lives on the plot area's own style and says which way round the
+        // local table is; see OdfChartTable.
+        string? sourceStyle = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
+        bool seriesInRows = styles.Text(sourceStyle, "series-source") == "rows";
+
+        OdfChartTable table = OdfChartTable.Read(chart, seriesInRows);
 
         // The plot area's own style carries the labels every series inherits, which is where
         // LibreOffice writes "label every point of this chart" — chart:data-label-number on the
@@ -136,7 +141,9 @@ public static class OdfChartPlot
                 role = stockRoles[stockRole++];
 
             plotted.Add(new ChartSeries(
-                table.LabelOf(Attribute(element, OdfNamespaces.Chart, "label-cell-address")),
+                table.LabelOf(
+                    Attribute(element, OdfNamespaces.Chart, "label-cell-address"),
+                    Attribute(element, OdfNamespaces.Chart, "values-cell-range-address")),
                 values,
                 styles.Fill(style) ?? DefaultSeriesFill,
                 styles.Line(style),
@@ -173,6 +180,7 @@ public static class OdfChartPlot
             Categories = table.Categories,
             Series = plotted,
             Kind = kind,
+            Rings = IsRing(Attribute(chart, OdfNamespaces.Chart, "class")),
 
             // chart:bar is ODF's name for a *horizontal* bar chart and chart:bar with
             // chart:vertical="false" is the column one — the opposite of what the names suggest.
@@ -246,10 +254,11 @@ public static class OdfChartPlot
     /// <remarks>
     /// The prefix is written in full — <c>chart:bar</c> — because the attribute holds a QName and
     /// the <c>chart</c> prefix is bound in every document LibreOffice writes; the bare form is
-    /// accepted too, for a writer that bound a different prefix. A ring is drawn as a circle,
-    /// losing its hole. <c>chart:surface</c> is the one that stays null and draws nothing at all,
-    /// deliberately — see the remarks on <c>ChartLayout.Plots.cs</c> for the reasoning and for the
-    /// count that settled it.
+    /// accepted too, for a writer that bound a different prefix. A ring keeps its hole — see
+    /// <see cref="ChartPlot.Rings"/>, which <see cref="IsRing"/> sets — and <c>chart:surface</c>
+    /// is read as a bar chart, which is the substitution LibreOffice's own importer makes for it;
+    /// <c>Paperless.Ooxml.DrawingML.DrawingChartPlot.KindOf</c> carries the measurement that
+    /// settled that.
     /// </remarks>
     private static ChartPlotKind? KindOf(string? stated)
     {
@@ -261,7 +270,7 @@ public static class OdfChartPlot
 
         return kind switch
         {
-            "bar" => ChartPlotKind.Bar,
+            "bar" or "surface" => ChartPlotKind.Bar,
             "line" => ChartPlotKind.Line,
             "circle" or "ring" => ChartPlotKind.Pie,
             "area" => ChartPlotKind.Area,
@@ -271,6 +280,19 @@ public static class OdfChartPlot
             "stock" => ChartPlotKind.Stock,
             _ => null,
         };
+    }
+
+    /// <summary>Whether a <c>chart:class</c> is the doughnut one.</summary>
+    /// <remarks>
+    /// ODF spells it <c>chart:ring</c> and states nothing about the hole's size, which suits the
+    /// reference exactly: <c>PieChart</c> derives every ring's radius from the ring count alone.
+    /// See <see cref="ChartPlot.Rings"/>.
+    /// </remarks>
+    private static bool IsRing(string? stated)
+    {
+        if (stated is null) return false;
+        int colon = stated.IndexOf(':', StringComparison.Ordinal);
+        return (colon >= 0 ? stated[(colon + 1)..] : stated) == "ring";
     }
 
     /// <summary>
@@ -736,20 +758,45 @@ public static class OdfChartPlot
     /// The <c>local-table</c> a chart sub-document carries, read once per chart.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The values come from here rather than from the sheet a
     /// <c>chart:values-cell-range-address</c> may point at, for exactly the reason
     /// <see cref="OdfChart"/> documents: <c>SchXMLTableContext</c> fills LibreOffice's internal
     /// data provider from the parsed table and only swaps in a live one afterwards, so the table
     /// is what the reference draws.
+    /// </para>
+    /// <para>
+    /// <strong>Which cell a series' range points at is written in the table, not deducible from
+    /// the address.</strong> Calc writes a <c>draw:g/svg:desc</c> inside one cell of every column,
+    /// holding the sheet range that column was copied from — <c>SchXMLTableContext</c>'s
+    /// <c>maRowDescriptions</c>/<c>maColumnDescriptions</c>, which
+    /// <c>SchXMLTableHelper::applyTableToInternalDataProvider</c> then uses to map a series'
+    /// stated range onto a column of the local table. Reading the column <em>letter</em> instead
+    /// works only when the chart's data happens to start in column B, which is the common case
+    /// and is why it survived so long: <c>labelString.ods</c> charts <c>Sheet1.D6:Sheet1.D8</c>
+    /// against a two-column local table, so the letter said column 4 and the series came out
+    /// nameless. Measured over the round-tripped ODF corpus, the legend those missing names
+    /// silently emptied was worth a mean <strong>26 pt</strong> on the plot rectangle's right
+    /// edge.
+    /// </para>
     /// </remarks>
     private sealed class OdfChartTable
     {
         private List<string?> _headers = [];
         private List<List<double?>> _columns = [];
+        private Dictionary<string, int> _byRange = [];
 
         public IReadOnlyList<string?> Categories { get; private init; } = [];
 
-        public static OdfChartTable Read(XElement chart)
+        /// <param name="chart">The <c>chart:chart</c> element.</param>
+        /// <param name="rows">
+        /// Whether the plot area states <c>chart:series-source="rows"</c>, which transposes the
+        /// whole table: the header row then holds the categories and each data row is one series,
+        /// named by its own first cell. Thirteen of the corpus' 107 ODF charts state it, and
+        /// reading one of them as columns turns the series names into categories and leaves every
+        /// series nameless — the model looks plausible and every part of it is wrong.
+        /// </param>
+        public static OdfChartTable Read(XElement chart, bool rows)
         {
             OdfChartTable table = new();
             List<string?> categories = [];
@@ -763,11 +810,13 @@ public static class OdfChartPlot
 
             if (local is null) return new OdfChartTable { Categories = categories };
 
-            bool header = true;
+            // The whole grid first, because the transposed reading needs the columns and the
+            // upright one needs the rows.
+            List<List<Cell>> grid = [];
+
             foreach (XElement row in Rows(local))
             {
-                List<string?> text = [];
-                List<double?> numbers = [];
+                List<Cell> cells = [];
 
                 foreach (XElement cell in row.Elements(XName.Get("table-cell", OdfNamespaces.Table)))
                 {
@@ -778,29 +827,54 @@ public static class OdfChartPlot
                         ? parsed
                         : null;
 
-                    string? shown = CellText(cell);
+                    Cell one = new(CellText(cell), number, RangeOf(cell));
 
-                    for (int at = 0; at < repeat && text.Count < MaxPoints; at++)
+                    for (int at = 0; at < repeat && cells.Count < MaxPoints; at++) cells.Add(one);
+                }
+
+                grid.Add(cells);
+                if (grid.Count >= MaxPoints) break;
+            }
+
+            if (grid.Count == 0) return new OdfChartTable { Categories = categories };
+
+            int width = 0;
+            foreach (List<Cell> row in grid) width = Math.Max(width, row.Count);
+
+            if (rows)
+            {
+                // Series in rows: the header row is the categories, each later row is a series.
+                for (int at = 1; at < grid[0].Count; at++) categories.Add(grid[0][at].Text);
+
+                for (int row = 1; row < grid.Count; row++)
+                {
+                    table._headers.Add(grid[row].Count > 0 ? grid[row][0].Text : null);
+
+                    List<double?> values = [];
+                    for (int at = 1; at < grid[row].Count; at++) values.Add(grid[row][at].Number);
+                    table._columns.Add(values);
+
+                    if (Marker(grid, row, width) is { } range) table._byRange[range] = row - 1;
+                }
+            }
+            else
+            {
+                for (int at = 1; at < grid[0].Count; at++) table._headers.Add(grid[0][at].Text);
+
+                for (int row = 1; row < grid.Count; row++)
+                {
+                    categories.Add(grid[row].Count > 0 ? grid[row][0].Text : null);
+
+                    for (int at = 1; at < grid[row].Count; at++)
                     {
-                        text.Add(shown);
-                        numbers.Add(number);
+                        while (table._columns.Count < at) table._columns.Add([]);
+                        table._columns[at - 1].Add(grid[row][at].Number);
                     }
                 }
 
-                if (header)
+                for (int column = 1; column < width; column++)
                 {
-                    // The header row is an empty corner cell followed by one label per series.
-                    for (int at = 1; at < text.Count; at++) table._headers.Add(text[at]);
-                    header = false;
-                    continue;
-                }
-
-                categories.Add(text.Count > 0 ? text[0] : null);
-
-                for (int at = 1; at < numbers.Count; at++)
-                {
-                    while (table._columns.Count < at) table._columns.Add([]);
-                    table._columns[at - 1].Add(numbers[at]);
+                    if (Column(grid, column) is { } range) table._byRange[range] = column - 1;
                 }
             }
 
@@ -809,33 +883,53 @@ public static class OdfChartPlot
                 Categories = categories,
                 _headers = table._headers,
                 _columns = table._columns,
+                _byRange = table._byRange,
             };
+
+            static string? Column(List<List<Cell>> grid, int column)
+            {
+                foreach (List<Cell> row in grid)
+                {
+                    if (column < row.Count && row[column].Range is { Length: > 0 } range)
+                        return range;
+                }
+
+                return null;
+            }
+
+            static string? Marker(List<List<Cell>> grid, int row, int width)
+            {
+                for (int at = 0; at < grid[row].Count && at < width; at++)
+                {
+                    if (grid[row][at].Range is { Length: > 0 } range) return range;
+                }
+
+                return null;
+            }
         }
 
+        /// <summary>One cell of the local table: what it shows, what it is, and where it came from.</summary>
+        private readonly record struct Cell(string? Text, double? Number, string? Range);
+
         /// <summary>
-        /// A series' name, from the header cell its <c>chart:label-cell-address</c> names.
+        /// A series' name, from the header cell its range names.
         /// </summary>
-        /// <remarks>
-        /// The address is <c>local-table.$B$1</c>, whose column letter is what identifies the
-        /// series. Parsing the letter rather than the whole address is enough because a chart's
-        /// local table always puts the labels in row 1 and the values below them — which is the
-        /// layout <see cref="OdfChart"/> already relies on, from the other direction.
-        /// </remarks>
-        public string? LabelOf(string? address)
+        public string? LabelOf(string? label, string? values)
         {
-            int column = ColumnOf(address);
-            return column >= 1 && column - 1 < _headers.Count ? _headers[column - 1] : null;
+            int column = ColumnOf(label ?? values, values);
+            return column >= 0 && column < _headers.Count ? _headers[column] : null;
         }
 
         /// <summary>A series' values, from the column its range address names.</summary>
         public List<double?> ValuesOf(string? address)
         {
-            int column = ColumnOf(address);
-            return column >= 1 && column - 1 < _columns.Count ? _columns[column - 1] : [];
+            int column = ColumnOf(address, address);
+            return column >= 0 && column < _columns.Count ? _columns[column] : [];
         }
 
         /// <summary>
-        /// The zero-based column a range address names, in either of the two forms ODF writes.
+        /// The zero-based series a range address names: by the marker the table itself carries,
+        /// and by the column letter when there is none.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -849,13 +943,18 @@ public static class OdfChartPlot
         /// naming: everything textual was correct and only the numbers were missing.
         /// </para>
         /// <para>
-        /// So: take the range's first cell, drop the sheet or table name at the last dot before it,
-        /// ignore any dollars, and read the column letters.
+        /// The letter is only the fallback, because it is right by accident: it agrees with the
+        /// table's own column numbering exactly when the charted range starts at column B. The
+        /// marker Calc writes beside each column is the real answer and is tried first — see the
+        /// remarks on <see cref="OdfChartTable"/> for what reading the letter alone cost.
         /// </para>
         /// </remarks>
-        private static int ColumnOf(string? address)
+        private int ColumnOf(string? address, string? values)
         {
             if (address is null) return -1;
+
+            if (_byRange.TryGetValue(address, out int mapped)) return mapped;
+            if (values is not null && _byRange.TryGetValue(values, out mapped)) return mapped;
 
             int colon = address.IndexOf(':', StringComparison.Ordinal);
             ReadOnlySpan<char> first = colon < 0 ? address : address.AsSpan(0, colon);
@@ -877,7 +976,26 @@ public static class OdfChartPlot
                 any = true;
             }
 
-            return any ? column - 1 : -1;
+            return any ? column - 2 : -1;
+        }
+
+        /// <summary>The sheet range a cell states it was copied from, or null.</summary>
+        /// <remarks>
+        /// <c>draw:g/svg:desc</c>, written by Calc beside the paragraph. It is the only thing in
+        /// the file that ties a series' stated range to a column of the local table.
+        /// </remarks>
+        private static string? RangeOf(XElement cell)
+        {
+            foreach (XElement group in cell.Elements(XName.Get("g", OdfNamespaces.Draw)))
+            {
+                foreach (XElement description in group.Elements(
+                             XName.Get("desc", OdfNamespaces.SvgCompatible)))
+                {
+                    if (description.Value is { Length: > 0 } text) return text;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -113,12 +113,30 @@ public readonly record struct ChartShape(
 /// The paths — wedges, polylines and areas — drawn after <paramref name="Boxes"/> and before
 /// <paramref name="Labels"/>, which is where the reference draws them.
 /// </param>
+/// <param name="DiagramArea">
+/// The <em>outer</em> rectangle the diagram was laid out in — what is left of the frame once the
+/// page margin, the main title and the legend have been taken off, and before the axes' own
+/// labels are reserved out of it.
+/// </param>
+/// <remarks>
+/// <strong><paramref name="DiagramArea"/> is here because it is the seam the plot rectangle
+/// splits along, and because ODF states it.</strong> LibreOffice's composition is two
+/// independent halves — <c>getAvailablePosAndSizeForDiagram</c> plus <c>lcl_createTitle</c> and
+/// <c>lcl_createLegend</c> produce <c>maRemainingSpace</c>, and only then does
+/// <c>VDiagram::adjustInnerSize</c> shrink that by whatever the axis labels turned out to
+/// occupy. An ODF chart writes <em>both</em> rectangles: <c>chart:plot-area</c>'s own
+/// <c>svg:x</c>…<c>svg:height</c> is the first and <c>chart:coordinate-region</c> is the second,
+/// so subtracting them gives the four label reservations LibreOffice itself arrived at. Carrying
+/// the outer rectangle out of the layout is what lets a measurement say which of the two halves
+/// a discrepancy is in, rather than only that the plot rectangle is a point out.
+/// </remarks>
 public sealed record ChartDrawing(
     DocRect PlotArea,
     IReadOnlyList<ChartBox> Boxes,
     IReadOnlyList<ChartLine> Lines,
     IReadOnlyList<ChartLabel> Labels,
-    IReadOnlyList<ChartShape> Shapes);
+    IReadOnlyList<ChartShape> Shapes,
+    DocRect DiagramArea = default);
 
 /// <summary>
 /// Measures a single line of chart text, so that layout can reserve room for it.
@@ -206,6 +224,39 @@ public static partial class ChartLayout
     /// chart that is not square.
     /// </remarks>
     private const double PageMargin = 0.02;
+
+    /// <summary>The margin round a pie chart, which is a flat length rather than a fraction.</summary>
+    /// <remarks>
+    /// <c>constPageLayoutFixedDistance = 350</c> hundredths of a millimetre, applied instead of
+    /// <see cref="PageMargin"/> and only when the first chart type is
+    /// <c>CHART2_SERVICE_NAME_CHARTTYPE_PIE</c> — "Only pie chart uses fixed size margins"
+    /// (<c>ChartView.cxx:919, 935-940</c>). A doughnut is a chart type of its own and keeps the
+    /// proportional margin, which is why <see cref="ChartPlot.Rings"/> gates this.
+    /// </remarks>
+    private static readonly Length PieMargin = Length.FromMm100(350);
+
+    /// <summary>The gap between the legend and the diagram, left or right.</summary>
+    /// <remarks>
+    /// <para>
+    /// <c>lcl_getLegendLeftRightMargin</c> returns a flat <c>210</c> hundredths of a millimetre
+    /// and <c>lcl_getLegendTopBottomMargin</c> a flat <c>185</c>
+    /// (<c>chart2/source/view/main/VLegend.cxx:662-671</c>, both under "#i109336# Improve auto
+    /// positioning in chart"). <c>lcl_calculatePositionAndRemainingSpace</c> takes the legend's
+    /// own width <em>plus that margin</em> off the remaining space (<c>:752-784</c>).
+    /// </para>
+    /// <para>
+    /// <strong>It is not the page margin, and using the page margin costs 6.5 pt on a
+    /// 623 pt frame.</strong> Measured on <c>chart-bar-deck.pptx</c>, whose chart is composed at
+    /// 623.622 × 340.157: two per cent of that width is 12.472 against the legend's own 5.953, so
+    /// the plot rectangle's right edge came out 6.519 pt short of the reference's — which was most
+    /// of the 1.79 pt that edge was out by even after the legend's own width was corrected.
+    /// </para>
+    /// </remarks>
+    private static readonly Length LegendMarginX = Length.FromMm100(210);
+
+    /// <summary>The gap between the legend and the diagram, above or below.</summary>
+    /// <remarks><c>VLegend.cxx:668-671</c>; see <see cref="LegendMarginX"/>.</remarks>
+    private static readonly Length LegendMarginY = Length.FromMm100(185);
 
     /// <summary>The colour LibreOffice draws an axis, its ticks and its labels in.</summary>
     private static readonly Colour AxisColour = Colour.Black;
@@ -343,7 +394,8 @@ public static partial class ChartLayout
         foreach (ChartShape shape in drawing.Shapes)
             shapes.Add(shape with { Path = Stretched(shape.Path), LineWidth = shape.LineWidth * sy });
 
-        return new ChartDrawing(Box(drawing.PlotArea), boxes, lines, labels, shapes);
+        return new ChartDrawing(
+            Box(drawing.PlotArea), boxes, lines, labels, shapes, Box(drawing.DiagramArea));
 
         GraphicsPath Stretched(GraphicsPath path)
         {
@@ -584,7 +636,8 @@ public static partial class ChartLayout
         AddTitles(plot, frame, area, measurer, labels);
         AddLegend(plot, frame, area, measurer, boxes, labels);
 
-        return new ChartDrawing(area, boxes, lines, labels, shapes);
+        return new ChartDrawing(
+            area, boxes, lines, labels, shapes, DiagramAreaOf(plot, frame, measurer));
     }
 
     /// <summary>How many points a fitted curve is sampled at.</summary>
@@ -886,6 +939,106 @@ public static partial class ChartLayout
     }
 
     /// <summary>
+    /// The rectangle the diagram <em>and its axes</em> are laid out in: the frame less the page
+    /// margin, the main title, the legend and the axis titles, and before any axis <em>label</em>
+    /// is reserved out of it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is <c>CreateShapeParam2D::maRemainingSpace</c> at the moment
+    /// <c>VDiagram::createShapes</c> is handed it, and it is worth having as a value of its own
+    /// because <strong>an ODF chart states it</strong>: <c>chart:plot-area</c>'s own
+    /// <c>svg:x</c>…<c>svg:height</c> is this rectangle and the <c>chart:coordinate-region</c>
+    /// inside it is the inner one, so a file gives both halves of the composition separately and
+    /// a discrepancy can be attributed to one of them. Measured over the 98 charts in
+    /// <c>chart2/qa/extras/data/</c>'s ODF documents that state both: splitting them apart is what
+    /// showed that the error was in this rectangle — the legend's width — and not in the label
+    /// reservations everyone had been looking at.
+    /// </para>
+    /// <para>
+    /// <strong>The order is title, legend, axis titles, and only then the page margin.</strong>
+    /// <c>ChartView::createShapes2D</c> (<c>:1934-1975</c>) starts from the whole page and lets
+    /// <c>lcl_createTitle</c>, <c>lcl_createLegend</c> and <c>createAxisTitleShapes2D</c> each
+    /// subtract what they took; <c>getAvailablePosAndSizeForDiagram</c> (<c>:921-943</c>) applies
+    /// the two per cent afterwards, on all four sides. Every term here is additive on a distinct
+    /// edge, so composing them in the other order gives the same rectangle — but the axis titles
+    /// belong <em>here</em> and not among the label reservations, which is where they used to be:
+    /// they come off before the diagram exists, so they cannot be part of what the diagram's own
+    /// second pass measures.
+    /// </para>
+    /// <para>
+    /// <strong>A pie's margin is a flat 350, not two per cent.</strong>
+    /// <c>constPageLayoutFixedDistance</c>, under the comment "Only pie chart uses fixed size
+    /// margins" (<c>ChartView.cxx:919, 935-940</c>), and it is gated on the chart type being pie
+    /// rather than on the chart having no axes — a doughnut is a different chart type and keeps the
+    /// proportional margin.
+    /// </para>
+    /// </remarks>
+    private static DocRect DiagramAreaOf(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    {
+        Length marginX = plot.Kind is ChartPlotKind.Pie or ChartPlotKind.OfPie && !plot.Rings
+            ? PieMargin
+            : frame.Width * PageMargin;
+        Length marginY = plot.Kind is ChartPlotKind.Pie or ChartPlotKind.OfPie && !plot.Rings
+            ? PieMargin
+            : frame.Height * PageMargin;
+
+        Length left = frame.X + marginX;
+        Length top = frame.Y + marginY;
+        Length right = frame.Right - marginX;
+        Length bottom = frame.Bottom - marginY;
+
+        // The main title's own distance is always the two per cent, even on a pie: the flat 350
+        // belongs to `getAvailablePosAndSizeForDiagram` alone and `lcl_createTitle` reads
+        // `constPageLayoutDistancePercentage` directly (`ChartView.cxx:1058-1061`). Adding the
+        // pie's margin twice puts a titled pie 8 pt low on a 12 cm chart.
+        if (plot.Title is { Length: > 0 } title)
+        {
+            top += Shape(measurer, title, plot.TitleSize).Height
+                   + (frame.Height * PageMargin) + TitleGap;
+        }
+
+        // The legend is laid out against what the titles left of the *page*, before the two per
+        // cent is taken off — the margin is applied last (`getAvailablePosAndSizeForDiagram`),
+        // and the room the legend has to wrap its entries into columns is the larger rectangle.
+        LegendBox legend = Legend(plot, LegendSpace(plot, frame, measurer), measurer);
+
+        switch (plot.Legend)
+        {
+            case ChartLegendPosition.Right: right -= legend.Width + LegendMarginX; break;
+            case ChartLegendPosition.Left: left += legend.Width + LegendMarginX; break;
+            case ChartLegendPosition.Top: top += legend.Height + LegendMarginY; break;
+            case ChartLegendPosition.Bottom: bottom -= legend.Height + LegendMarginY; break;
+            default: break;
+        }
+
+        // The axis titles, which are laid out against the page and not against the diagram. The
+        // one that goes at the bottom is whichever axis runs horizontally — the category axis on
+        // a column chart, the value axis on a bar chart — because the alignment is a property of
+        // the position (`TITLE_AT_STANDARD_X_AXIS_POSITION` is always `ALIGN_BOTTOM`) rather than
+        // of the axis.
+        if (plot.HasAxes)
+        {
+            bool columns = plot.Direction == ChartBarDirection.Column;
+
+            string? beside = columns ? plot.ValueAxisTitle : plot.CategoryAxisTitle;
+            string? below = columns ? plot.CategoryAxisTitle : plot.ValueAxisTitle;
+
+            if (below is { Length: > 0 } under)
+                bottom -= Shape(measurer, under, plot.AxisTitleSize).Height + CategoryTitleGap;
+            if (beside is { Length: > 0 } side)
+                left += Shape(measurer, side, plot.AxisTitleSize).Height + ValueTitleGap;
+
+            if (plot.SecondaryValueAxisTitle is { Length: > 0 } second && plot.SecondaryAxisVisible)
+                right -= Shape(measurer, second, plot.AxisTitleSize).Height + ValueTitleGap;
+        }
+
+        return right <= left || bottom <= top
+            ? DocRect.Empty
+            : new DocRect(left, top, right - left, bottom - top);
+    }
+
+    /// <summary>
     /// The inner plot rectangle: stated by the file when it states one, computed otherwise.
     /// </summary>
     /// <remarks>
@@ -920,30 +1073,16 @@ public static partial class ChartLayout
                 frame.Height * fraction.Height);
         }
 
-        // The computed path, which is what every OOXML chart takes. Start from the frame less
-        // the proportional page margin, then take away the title, the legend and the axes'
-        // labels and titles in that order — ChartView.cxx:920-990 for the margin,
-        // lcl_createTitle for the title, lcl_createLegend for the legend.
-        Length marginX = frame.Width * PageMargin;
-        Length marginY = frame.Height * PageMargin;
+        // The computed path, which is what every OOXML chart takes: the outer rectangle, then the
+        // axes' labels and titles out of it — AXIS2D_TICKLENGTH and AXIS2D_TICKLABELSPACING for
+        // the gaps, ChartView.cxx:1070-1077 for the axis titles.
+        DocRect area = DiagramAreaOf(plot, frame, measurer);
+        if (area.Width <= Length.Zero || area.Height <= Length.Zero) return DocRect.Empty;
 
-        Length left = frame.X + marginX;
-        Length top = frame.Y + marginY;
-        Length right = frame.Right - marginX;
-        Length bottom = frame.Bottom - marginY;
-
-        if (plot.Title is { Length: > 0 } title)
-            top += Shape(measurer, title, plot.TitleSize).Height + marginY + TitleGap;
-
-        Length legend = LegendWidth(plot, measurer);
-        switch (plot.Legend)
-        {
-            case ChartLegendPosition.Right: right -= legend + marginX; break;
-            case ChartLegendPosition.Left: left += legend + marginX; break;
-            case ChartLegendPosition.Top: top += LegendHeight(plot, measurer) + marginY; break;
-            case ChartLegendPosition.Bottom: bottom -= LegendHeight(plot, measurer) + marginY; break;
-            default: break;
-        }
+        Length left = area.Left;
+        Length top = area.Top;
+        Length right = area.Right;
+        Length bottom = area.Bottom;
 
         // A chart with no axes — a pie — reserves nothing for labels it does not draw, and what is
         // left after the title and the legend is the whole diagram.
@@ -969,7 +1108,7 @@ public static partial class ChartLayout
 
             return right <= left || bottom <= top
                 ? DocRect.Empty
-                : new DocRect(left, top, right - left, bottom - top);
+                : Squared(plot, new DocRect(left, top, right - left, bottom - top));
         }
 
         bool columns = plot.Direction == ChartBarDirection.Column;
@@ -1015,25 +1154,29 @@ public static partial class ChartLayout
             left += valueLabel + valueSpace;
             bottom -= categoryHeight + categorySpace;
 
-            if (plot.ValueAxisTitle is { Length: > 0 } valueTitle)
-                left += Shape(measurer, valueTitle, plot.AxisTitleSize).Height + ValueTitleGap;
-            if (plot.CategoryAxisTitle is { Length: > 0 } categoryTitle)
-                bottom -= Shape(measurer, categoryTitle, plot.AxisTitleSize).Height + CategoryTitleGap;
-
             // A secondary value axis is drawn on the far side of the plot area and reserves its
-            // own labels there, which is the whole of what makes room for it.
+            // own labels there, which is the whole of what makes room for it. Its *title* was
+            // taken off in DiagramAreaOf, with the other three.
             if (secondary is { } second && plot.SecondaryAxisVisible)
             {
                 right -= WidestValueLabel(
                              second, plot.SecondaryValueFormat, plot.LabelSize, measurer)
                          + TickLength + LabelSpacing;
-
-                if (plot.SecondaryValueAxisTitle is { Length: > 0 } secondTitle)
-                    right -= Shape(measurer, secondTitle, plot.AxisTitleSize).Height + ValueTitleGap;
             }
-            else if (domain is not null)
+
+            // On an unshifted axis the first and the last label are centred on the plot area's own
+            // corners, so half of each hangs outside it — and the left edge takes whichever of
+            // that and the value labels is the deeper. See EndLabelOverhang.
+            (Length firstLabel, Length lastLabel) =
+                arranged is { } ends && !IsPlain(ends)
+                    ? (Length.Zero, Length.Zero)
+                    : EndLabelOverhang(plot, domain, categories, measurer);
+
+            if (area.Left + firstLabel > left) left = area.Left + firstLabel;
+
+            if (secondary is null || !plot.SecondaryAxisVisible)
             {
-                right -= categoryLabel / 2;
+                if (area.Right - lastLabel < right) right = area.Right - lastLabel;
             }
 
             // The topmost value label is centred on the axis' top, so half of it sticks out
@@ -1044,11 +1187,6 @@ public static partial class ChartLayout
         {
             left += categoryLabel + categorySpace;
             bottom -= valueHeight + valueSpace;
-
-            if (plot.CategoryAxisTitle is { Length: > 0 } categoryTitle)
-                left += Shape(measurer, categoryTitle, plot.AxisTitleSize).Height + ValueTitleGap;
-            if (plot.ValueAxisTitle is { Length: > 0 } valueTitle)
-                bottom -= Shape(measurer, valueTitle, plot.AxisTitleSize).Height + CategoryTitleGap;
 
             // The last value label is centred on the axis' right end, so half of it overhangs.
             right -= valueLabel / 2;
@@ -1937,13 +2075,41 @@ public static partial class ChartLayout
     {
         if (plot.Series.Count == 0) return;
 
-        ChartSeries series = plot.Series[0];
+        DocPoint pieCentre = new(area.X + area.Width / 2, area.Y + area.Height / 2);
+        Length outer = area.Width < area.Height ? area.Width / 2 : area.Height / 2;
+        if (outer <= Length.Zero) return;
 
+        // A doughnut is one ring per series, innermost first; a pie is the first series alone.
+        // Ring k of n runs from k/(n+1) to (k+1)/(n+1) of the outer radius, which is
+        // PiePositionHelper::getInnerAndOuterRadius with PieChart's m_fRadiusOffset of 1 — a
+        // half-radius hole for the single-ring case. See ChartPlot.Rings.
+        int rings = plot.Rings ? plot.Series.Count : 1;
+
+        for (int ring = 0; ring < rings; ring++)
+        {
+            AddRing(
+                plot,
+                plot.Series[ring],
+                pieCentre,
+                plot.Rings ? outer * ((ring + 1) / (double)(rings + 1)) : Length.Zero,
+                plot.Rings ? outer * ((ring + 2) / (double)(rings + 1)) : outer,
+                shapes,
+                labels);
+        }
+    }
+
+    /// <summary>One ring of wedges: a whole pie when the inner radius is zero.</summary>
+    private static void AddRing(
+        ChartPlot plot,
+        ChartSeries series,
+        DocPoint centre,
+        Length hole,
+        Length radius,
+        List<ChartShape> shapes,
+        List<ChartLabel> labels)
+    {
         double total = series.Total();
         if (!(total > 0.0)) return;
-
-        DocPoint centre = new(area.X + area.Width / 2, area.Y + area.Height / 2);
-        Length radius = area.Width < area.Height ? area.Width / 2 : area.Height / 2;
         if (radius <= Length.Zero) return;
 
         double start = Math.PI / 2;
@@ -1956,7 +2122,9 @@ public static partial class ChartLayout
             if (sweep <= 0.0) { continue; }
 
             shapes.Add(new ChartShape(
-                Wedge(centre, radius, start, -sweep),
+                hole > Length.Zero
+                    ? Annulus(centre, hole, radius, start, -sweep)
+                    : Wedge(centre, radius, start, -sweep),
                 series.FillAt(at),
                 series.Line,
                 series.LineWidth));
@@ -1980,11 +2148,15 @@ public static partial class ChartLayout
 
                 if (text is { Length: > 0 })
                 {
+                    // On a ring the fraction runs across the ring rather than from the centre,
+                    // so a "centred" label lands in the band and not in the hole.
+                    Length along = hole + (radius - hole) * reach;
+
                     labels.Add(new ChartLabel(
                         text,
                         new DocPoint(
-                            centre.X + radius * (reach * Math.Cos(middle)),
-                            centre.Y - radius * (reach * Math.Sin(middle))),
+                            centre.X + along * Math.Cos(middle),
+                            centre.Y - along * Math.Sin(middle)),
                         ChartLabelAnchor.Centre,
                         plot.LabelSize,
                         AxisColour));
@@ -2044,6 +2216,58 @@ public static partial class ChartLayout
         // The y term is negated because a document's y axis points down and an angle's does not.
         DocPoint On(double at)
             => new(centre.X + radius * Math.Cos(at), centre.Y - radius * Math.Sin(at));
+    }
+
+    /// <summary>
+    /// One segment of a ring: out along a radius, round the outer arc, back in, and round the
+    /// inner arc the other way.
+    /// </summary>
+    /// <remarks>
+    /// A doughnut's wedge, and the only structural difference from <see cref="Wedge"/> is that the
+    /// two radial edges stop at the hole rather than meeting at the centre. Drawing it as a filled
+    /// wedge instead — which is what a doughnut did before <see cref="ChartPlot.Rings"/> existed —
+    /// loses the hole and, on a chart of several series, draws every ring on top of the last so
+    /// only the outermost is visible.
+    /// </remarks>
+    private static GraphicsPath Annulus(
+        DocPoint centre, Length hole, Length radius, double start, double sweep)
+    {
+        GraphicsPath path = new();
+        path.MoveTo(At(hole, start));
+        path.LineTo(At(radius, start));
+        Arc(radius, start, sweep);
+        path.LineTo(At(hole, start + sweep));
+        Arc(hole, start + sweep, -sweep);
+        path.Close();
+        return path;
+
+        DocPoint At(Length r, double angle)
+            => new(centre.X + r * Math.Cos(angle), centre.Y - r * Math.Sin(angle));
+
+        void Arc(Length r, double from, double turn)
+        {
+            int segments = Math.Max(1, (int)Math.Ceiling(Math.Abs(turn) / (Math.PI / 2)));
+            double step = turn / segments;
+            double handle = 4.0 / 3.0 * Math.Tan(step / 4.0);
+            double angle = from;
+
+            for (int at = 0; at < segments; at++)
+            {
+                DocPoint a = At(r, angle);
+                DocPoint b = At(r, angle + step);
+
+                path.CubicTo(
+                    new DocPoint(
+                        a.X - r * (handle * Math.Sin(angle)),
+                        a.Y - r * (handle * Math.Cos(angle))),
+                    new DocPoint(
+                        b.X + r * (handle * Math.Sin(angle + step)),
+                        b.Y + r * (handle * Math.Cos(angle + step))),
+                    b);
+
+                angle += step;
+            }
+        }
     }
 
     /// <summary>
@@ -2291,12 +2515,12 @@ public static partial class ChartLayout
     /// The legend: one key and one name per series.
     /// </summary>
     /// <remarks>
-    /// Placed against the plot area's vertical centre for a side legend and its horizontal centre
-    /// for a top or bottom one, which is <c>VLegend::createShapes</c>'s
-    /// <c>LegendExpansion::HIGH</c> and <c>WIDE</c> reduced to the single column and single row
-    /// they produce for a handful of series. A legend with more series than fit in one column is
-    /// wrapped by LibreOffice into several; this draws one column and lets it run, which is
-    /// wrong only for a chart with more series than the plot area is tall.
+    /// The grid comes from <see cref="Legend"/>, so what is drawn and what was reserved cannot
+    /// disagree: entries are dealt across each row and then down, which is the order
+    /// <c>lcl_placeLegendEntries</c> fills its columns in (<c>VLegend.cxx:570-620</c>). A side
+    /// legend is centred on the frame's vertical middle and set against its far edge, a top or
+    /// bottom one centred horizontally — <c>lcl_getDefaultPosition</c>'s <c>LINE_END</c> anchored
+    /// <c>RIGHT</c> at one legend margin from the page edge, and so on for the other three.
     /// </remarks>
     private static void AddLegend(
         ChartPlot plot,
@@ -2311,39 +2535,69 @@ public static partial class ChartLayout
         List<(string Name, Colour? Fill, Colour? Line, Length Width)> named = Entries(plot);
         if (named.Count == 0) return;
 
-        Length line = measurer.Measure("0", plot.LabelSize).Height;
-        Length key = line * 0.7;
-        Length gap = line * 0.4;
+        DocRect space = LegendSpace(plot, frame, measurer);
+        LegendBox box = Legend(plot, space, measurer);
+        if (box.Columns <= 0 || box.Rows <= 0) return;
 
         bool vertical = plot.Legend is ChartLegendPosition.Left or ChartLegendPosition.Right;
 
-        Length top = vertical
-            ? area.Y + area.Height / 2 - line * named.Count / 2
+        // A side legend is centred on the page; a top or bottom one is set one legend margin
+        // inside what the titles left — lcl_getDefaultPosition's PAGE_START measures its distance
+        // from the remaining space's own top rather than from the page's (VLegend.cxx:693-716).
+        Length originY = vertical
+            ? frame.Y + (frame.Height - box.Height) / 2
             : plot.Legend == ChartLegendPosition.Top
-                ? frame.Y + frame.Height * PageMargin
-                : frame.Bottom - frame.Height * PageMargin - line;
+                ? space.Top + LegendMarginY
+                : space.Bottom - LegendMarginY - box.Height;
 
-        Length left = plot.Legend switch
+        Length originX = plot.Legend switch
         {
-            ChartLegendPosition.Right => area.Right + measurer.Measure("0", plot.LabelSize).Width,
-            ChartLegendPosition.Left => frame.X + frame.Width * PageMargin,
-            _ => area.X + area.Width / 2 - LegendWidth(plot, measurer) / 2,
+            ChartLegendPosition.Right => frame.Right - LegendMarginX - box.Width,
+            ChartLegendPosition.Left => frame.X + LegendMarginX,
+            _ => frame.X + (frame.Width - box.Width) / 2,
         };
 
-        foreach ((string name, Colour? fill, Colour? outline, Length width) in named)
+        // Each column is as wide as its own widest name, so the columns are walked rather than
+        // stepped by a constant.
+        Length columnX = originX + box.PaddingX;
+
+        for (int column = 0; column < box.Columns; column++)
         {
-            boxes.Add(new ChartBox(
-                Rectangle(left, top + (line - key) / 2, key, key), fill, outline, width));
+            Length widest = Length.Zero;
 
-            labels.Add(new ChartLabel(
-                name,
-                new DocPoint(left + key + gap, top + line / 2),
-                ChartLabelAnchor.LeftMiddle,
-                plot.LabelSize,
-                AxisColour));
+            for (int row = 0; row < box.Rows; row++)
+            {
+                int at = column + (row * box.Columns);
+                if (at >= named.Count) break;
 
-            if (vertical) top += line;
-            else left += key + gap + measurer.Measure(name, plot.LabelSize).Width + gap * 2;
+                (string name, Colour? fill, Colour? outline, Length width) = named[at];
+                Length rowY = originY + box.PaddingY + (box.RowHeight * row);
+
+                boxes.Add(new ChartBox(
+                    Rectangle(
+                        columnX,
+                        rowY + (box.RowHeight - box.Key.Height) / 2,
+                        box.Key.Width,
+                        box.Key.Height),
+                    fill,
+                    outline,
+                    width));
+
+                labels.Add(new ChartLabel(
+                    name,
+                    new DocPoint(
+                        columnX + box.Key.Width + box.KeyGap + (plot.LabelSize * TextShapeInsetX),
+                        rowY + (box.RowHeight / 2)),
+                    ChartLabelAnchor.LeftMiddle,
+                    plot.LabelSize,
+                    AxisColour));
+
+                Length shape = Shape(measurer, name, plot.LabelSize).Width;
+                if (shape > widest) widest = shape;
+            }
+
+            columnX += box.Key.Width + box.KeyGap + widest
+                       + Larger(Millimetre, plot.LabelSize * 0.66);
         }
     }
 
@@ -2412,34 +2666,203 @@ public static partial class ChartLayout
         return entries;
     }
 
-    /// <summary>How wide a vertical legend is, keys and names together.</summary>
-    private static Length LegendWidth(ChartPlot plot, IChartTextMeasurer measurer)
+    /// <summary>
+    /// A legend's size and the grid it arranges its entries in.
+    /// </summary>
+    /// <param name="Width">The whole legend's width, padding included.</param>
+    /// <param name="Height">The whole legend's height, padding included.</param>
+    /// <param name="Columns">How many columns the entries were dealt into.</param>
+    /// <param name="Rows">How many rows.</param>
+    /// <param name="Key">The symbol's extent, square unless a line key widens it.</param>
+    /// <param name="KeyGap">The gap between a symbol and the name beside it.</param>
+    /// <param name="PaddingX">The margin inside the legend's left and right edges.</param>
+    /// <param name="PaddingY">The margin inside its top and bottom edges.</param>
+    /// <param name="RowHeight">One entry's height, insets included.</param>
+    private readonly record struct LegendBox(
+        Length Width,
+        Length Height,
+        int Columns,
+        int Rows,
+        DocSize Key,
+        Length KeyGap,
+        Length PaddingX,
+        Length PaddingY,
+        Length RowHeight);
+
+    /// <summary>
+    /// How much room the legend takes, ported from <c>lcl_placeLegendEntries</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>chart2/source/view/main/VLegend.cxx:263-320, 507-640</c>. Every length is a fraction of
+    /// the legend's own font height with a one-millimetre floor — padding <c>0.33</c>, the gap
+    /// between columns <c>0.66</c>, the gap between a key and its name <c>0.22</c>, and the key
+    /// itself <c>0.6</c> square — all under the comment "#i109336# Improve auto positioning in
+    /// chart". The name's width is the text <em>shape's</em>, so it carries
+    /// <see cref="TextShapeInsetX"/> twice like every other chart text.
+    /// </para>
+    /// <para>
+    /// <strong>This is the largest single term in the plot rectangle, and it is not the label
+    /// reservations everyone had been looking at.</strong> Measured over the 100 charts in
+    /// <c>chart2/qa/extras/data/</c>'s ODF documents that state a coordinate region after a round
+    /// trip through <c>soffice</c>: the mean error on the right edge was <strong>28.5 pt</strong>
+    /// against 6.5 on the left and 4.3 on the top, and the right edge is where a legend goes on
+    /// 88 of them. The estimate it replaces — a key of <c>0.7</c> line heights, a gap of
+    /// <c>0.4</c>, and the widest name — had no padding at all and no second column.
+    /// </para>
+    /// <para>
+    /// <strong>A line chart's key is 800 hundredths of a millimetre wide whatever the font
+    /// is.</strong> <c>VSeriesPlotter::getPreferredLegendKeyAspectRatio</c>
+    /// (<c>VSeriesPlotter.cxx:2538-2582</c>) returns <c>(1000, 1000)</c> — a square — for a filled
+    /// series, and <c>(800, -1)</c> for one that draws a line, <c>(1600, -1)</c> when the line is
+    /// dashed. A negative height means the width is absolute rather than a ratio
+    /// (<c>VLegend.cxx:976-984</c>), so a line chart's key is 22.7 pt where a bar chart's is
+    /// 0.6 em — 17 pt of difference on a legend, which is most of a whole reservation.
+    /// </para>
+    /// <para>
+    /// <strong>And the entries wrap into columns.</strong> A side legend is
+    /// <c>ChartLegendExpansion_HIGH</c>: it fits as many rows as the space allows and then starts
+    /// another column (<c>:507-525</c>), so a chart of fourteen series against a short frame is
+    /// two or three columns wide rather than one. <c>tdf146463.ods</c> is that chart, and reading
+    /// it as one column put the plot rectangle's right edge 120 pt out.
+    /// </para>
+    /// </remarks>
+    private static LegendBox Legend(ChartPlot plot, DocRect available, IChartTextMeasurer measurer)
     {
-        if (plot.Legend == ChartLegendPosition.None) return Length.Zero;
+        if (plot.Legend == ChartLegendPosition.None) return default;
 
-        Length line = measurer.Measure("0", plot.LabelSize).Height;
+        List<(string Name, Colour? Fill, Colour? Line, Length Width)> named = Entries(plot);
+        if (named.Count == 0) return default;
+
+        Length font = plot.LabelSize;
+        Length paddingX = Larger(Millimetre, font * 0.33);
+        Length offsetX = Larger(Millimetre, font * 0.66);
+        Length paddingY = Larger(Millimetre, font * 0.20);
+        Length offsetY = Larger(Millimetre, font * 0.20);
+        Length keyGap = Larger(Millimetre, font * 0.22);
+
+        Length keyHeight = font * 0.6;
+        Length keyWidth = Larger(keyHeight, LineKeyWidth(plot));
+
         Length widest = Length.Zero;
-        int count = 0;
+        Length tallest = Length.Zero;
+        List<Length> widths = new(named.Count);
 
-        foreach ((string name, _, _, _) in Entries(plot))
+        foreach ((string name, _, _, _) in named)
         {
-            count++;
-            Length width = measurer.Measure(name, plot.LabelSize).Width;
-            if (width > widest) widest = width;
+            DocSize shape = Shape(measurer, name, font);
+            widths.Add(shape.Width);
+            if (shape.Width > widest) widest = shape.Width;
+            if (shape.Height > tallest) tallest = shape.Height;
         }
 
-        if (count == 0) return Length.Zero;
+        Length entryWidth = offsetX + keyWidth + keyGap + widest;
+        Length entryHeight = offsetY + tallest;
 
-        bool vertical = plot.Legend is ChartLegendPosition.Left or ChartLegendPosition.Right;
-        Length one = line * 0.7 + line * 0.4 + widest;
-        return vertical ? one : one * count;
+        int columns, rows;
+
+        if (plot.Legend is ChartLegendPosition.Left or ChartLegendPosition.Right)
+        {
+            // HIGH: as many rows as fit, then a second column.
+            long fit = entryHeight <= Length.Zero
+                ? 0
+                : (available.Height - paddingY * 2.0).Emu / entryHeight.Emu;
+
+            columns = fit <= 0 ? 0 : (int)Math.Ceiling(named.Count / (double)fit);
+            rows = columns == 0 ? 0 : (int)Math.Ceiling(named.Count / (double)columns);
+        }
+        else
+        {
+            // WIDE: as many columns as fit, then a second row.
+            long fit = entryWidth <= Length.Zero
+                ? 0
+                : (available.Width - paddingX * 2.0).Emu / entryWidth.Emu;
+
+            rows = fit <= 0 ? 0 : (int)Math.Ceiling(named.Count / (double)fit);
+            columns = rows == 0 ? 0 : (int)Math.Ceiling(named.Count / (double)rows);
+        }
+
+        if (rows <= 0 || columns <= 0) return default;
+
+        // Each column is as wide as its own widest entry — the entries are dealt across the row
+        // and then down, so column c holds entries c, c + columns, c + 2 × columns …
+        Length total = Length.Zero;
+        for (int column = 0; column < columns; column++)
+        {
+            Length column_ = Length.Zero;
+            for (int row = 0; row < rows; row++)
+            {
+                int at = column + (row * columns);
+                if (at >= widths.Count) break;
+                if (widths[at] > column_) column_ = widths[at];
+            }
+
+            total += keyWidth + keyGap + column_;
+        }
+
+        return new LegendBox(
+            (paddingX * 2.0) + total + (offsetX * (columns - 1)),
+            (paddingY * 2.0) + (tallest * rows) + (offsetY * (rows - 1)),
+            columns,
+            rows,
+            new DocSize(keyWidth, keyHeight),
+            keyGap,
+            paddingX,
+            paddingY,
+            tallest);
     }
 
-    /// <summary>How tall a horizontal legend is.</summary>
-    private static Length LegendHeight(ChartPlot plot, IChartTextMeasurer measurer)
-        => LegendWidth(plot, measurer) > Length.Zero
-            ? measurer.Measure("0", plot.LabelSize).Height
-            : Length.Zero;
+    /// <summary>
+    /// The rectangle the legend is fitted into: the frame less the main title, and nothing else.
+    /// </summary>
+    /// <remarks>
+    /// <c>lcl_createLegend</c> is handed <c>maRemainingSpace</c> as it stands after the two
+    /// titles and before <c>getAvailablePosAndSizeForDiagram</c> applies the page margin
+    /// (<c>ChartView.cxx:1934-1968</c>), so the legend has the whole page less the title to wrap
+    /// its entries into. It decides only how many rows fit before a second column starts, so it
+    /// changes nothing on a legend of a handful of entries and everything on one of fourteen.
+    /// </remarks>
+    private static DocRect LegendSpace(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    {
+        Length top = frame.Y;
+
+        if (plot.Title is { Length: > 0 } title)
+        {
+            top += Shape(measurer, title, plot.TitleSize).Height
+                   + (frame.Height * PageMargin) + TitleGap;
+        }
+
+        return top >= frame.Bottom
+            ? DocRect.Empty
+            : new DocRect(frame.X, top, frame.Width, frame.Bottom - top);
+    }
+
+    /// <summary>One millimetre, the floor under every one of the legend's spacings.</summary>
+    /// <remarks><c>VLegend.cxx:287-292</c>'s repeated <c>std::max( 100.0, … )</c>.</remarks>
+    private static readonly Length Millimetre = Length.FromMm100(100);
+
+    /// <summary>
+    /// The flat width a legend key takes when the series it stands for draws a line.
+    /// </summary>
+    /// <remarks>
+    /// 800 hundredths of a millimetre, or 1600 when any line is dashed — the dashed case is not
+    /// distinguished here because no `ChartSeries` carries a dash pattern yet, and the undashed
+    /// figure is the one the corpus exercises. See <see cref="Legend"/>.
+    /// </remarks>
+    private static Length LineKeyWidth(ChartPlot plot)
+    {
+        foreach (ChartSeries series in plot.Series)
+        {
+            ChartPlotKind kind = series.Kind ?? plot.Kind;
+            bool draws = kind is ChartPlotKind.Line or ChartPlotKind.Scatter or ChartPlotKind.Radar;
+            if (draws && series.HasLine && series.Line is not null) return Length.FromMm100(800);
+        }
+
+        return Length.Zero;
+    }
+
+    /// <summary>The larger of two lengths.</summary>
+    private static Length Larger(Length one, Length other) => one > other ? one : other;
 
     /// <summary>The width of the widest value-axis label.</summary>
     private static Length WidestValueLabel(
@@ -2476,6 +2899,98 @@ public static partial class ChartLayout
         }
 
         return widest;
+    }
+
+    /// <summary>
+    /// How far the first and the last label on a horizontal category or domain axis stick out
+    /// past the plot rectangle's own edges.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Only an <em>unshifted</em> axis has an overhang, and that is the whole rule.</strong>
+    /// A shifted axis — a column or bar chart's — puts category <em>n</em> in the middle of the
+    /// <em>n</em>th slot, so its first and last labels sit half a slot inside the rectangle and
+    /// only overhang when a label is wider than its own slot. An unshifted axis, which is what a
+    /// line, area, scatter, bubble or stock chart has, puts the first point <em>on</em> the left
+    /// edge and the last <em>on</em> the right, and their labels are centred there — so half of
+    /// each hangs outside, and <c>ShapeFactory::getRectangleOfShape</c> reports it as consumed.
+    /// </para>
+    /// <para>
+    /// Measured over the 98 charts in <c>chart2/qa/extras/data/</c>'s ODF documents that state
+    /// both rectangles: every bar chart among them reserves <em>nothing</em> to the right of its
+    /// plot area, and every line and scatter chart reserves between 2.66 and 25.5 pt — which is
+    /// half its last label and nothing else. Reserving the widest label rather than the last one
+    /// is wrong on any axis whose longest name is in the middle.
+    /// </para>
+    /// </remarks>
+    private static (Length First, Length Last) EndLabelOverhang(
+        ChartPlot plot,
+        ChartScaleResult? domain,
+        int categories,
+        IChartTextMeasurer measurer)
+    {
+        if (!plot.CategoryAxisVisible || plot.ShiftedCategories || categories <= 0)
+            return (Length.Zero, Length.Zero);
+
+        string first, last;
+
+        if (domain is { } across)
+        {
+            double[] ticks = [.. across.MajorTicks()];
+            if (ticks.Length == 0) return (Length.Zero, Length.Zero);
+            first = ChartDataLabel.Write(ticks[0], plot.DomainFormat);
+            last = ChartDataLabel.Write(ticks[^1], plot.DomainFormat);
+        }
+        else
+        {
+            int end = Math.Min(categories, plot.Categories.Count) - 1;
+            if (end < 0) return (Length.Zero, Length.Zero);
+            first = ChartDataLabel.WriteCategory(plot.Categories[0], plot.CategoryFormat) ?? "";
+            last = ChartDataLabel.WriteCategory(plot.Categories[end], plot.CategoryFormat) ?? "";
+        }
+
+        return (measurer.Measure(first, plot.LabelSize).Width / 2,
+                measurer.Measure(last, plot.LabelSize).Width / 2);
+    }
+
+    /// <summary>
+    /// Constrains a plot rectangle to the aspect ratio its chart type demands, centring it in the
+    /// room it was given.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>VDiagram::adjustPosAndSize_2d</c> (<c>VDiagram.cxx:101-118</c>): when the preferred
+    /// aspect ratio has a positive X <em>and</em> a positive Y the rectangle is not stretched to
+    /// fill, it is scaled to the smaller of the two factors and centred —
+    /// <c>calculateNewSizeRespectingAspectRatio</c> plus
+    /// <c>calculateTopLeftPositionToCenterObject</c>. Which types demand one is a one-line answer
+    /// per plotter: <c>PieChart</c> and <c>NetChart</c> return <c>(1, 1, 1)</c>, and every other
+    /// two-dimensional plotter returns <c>(-1, -1, -1)</c>, which means "arbitrary"
+    /// (<c>BarChart.cxx:127</c>, <c>AreaChart.cxx:121</c>, <c>BubbleChart.cxx:134</c>,
+    /// <c>CandleStickChart.cxx:60</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Missing this is the single largest error in the whole plot rectangle, and it looks
+    /// like nothing.</strong> A pie drawn in a wide rectangle is still a circle, because the wedge
+    /// geometry takes the smaller dimension anyway — but it is a circle in the wrong
+    /// <em>place</em>, up to half the slack to the left of where the reference draws it. Over the
+    /// eight pies in the ODF corpus the left edge was out by between 66 and 135 pt, more than a
+    /// third of the total error over all 98 charts, and every one of them fell to under a tenth of
+    /// a point.
+    /// </para>
+    /// </remarks>
+    private static DocRect Squared(ChartPlot plot, DocRect area)
+    {
+        if (plot.Kind is not (ChartPlotKind.Pie or ChartPlotKind.OfPie or ChartPlotKind.Radar))
+            return area;
+        if (area.Width <= Length.Zero || area.Height <= Length.Zero) return area;
+
+        Length side = area.Width < area.Height ? area.Width : area.Height;
+        return new DocRect(
+            area.X + (area.Width - side) / 2,
+            area.Y + (area.Height - side) / 2,
+            side,
+            side);
     }
 
     /// <summary>A rectangle from its edges, never negative in either direction.</summary>
