@@ -29,7 +29,7 @@ namespace Paperless.Presentations.OpenDocument;
 /// OOXML's. Both are handled below with the measurement that pinned them down.
 /// </para>
 /// </remarks>
-internal sealed class OdpSlideLayout
+internal sealed partial class OdpSlideLayout
 {
     /// <summary>How deep a <c>draw:g</c> nest is followed before it is abandoned.</summary>
     private const int MaxGroupDepth = 32;
@@ -221,6 +221,14 @@ internal sealed class OdpSlideLayout
                 case "frame"
                     when element.Element(XName.Get("table", OdfNamespaces.Table)) is { } table:
                     shapes.AddRange(Table(element, table, space));
+                    break;
+
+                // A frame holding an embedded chart draws the chart rather than the frame. It is
+                // matched before the general shape case for the same reason a table is: both
+                // produce a run of shapes rather than one, and falling through would draw the
+                // frame's own empty rectangle over them.
+                case "frame" when Chart(element, space) is { Count: > 0 } chart:
+                    shapes.AddRange(chart);
                     break;
 
                 case "custom-shape":
