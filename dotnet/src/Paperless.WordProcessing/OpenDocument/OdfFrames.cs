@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -65,6 +66,11 @@ internal static class OdfFrames
         FramePicture picture =
             image is not null && pictures is not null ? pictures.Read(element) : FramePicture.None;
 
+        // The chart before the picture, because a frame holding one holds both: ODF lists a frame's
+        // children as alternatives in decreasing order of preference, and a chart is written as a
+        // draw:object followed by a draw:image of it for a reader that cannot embed one.
+        ChartPlot? chart = pictures?.Chart(element);
+
         return new PageFrame
         {
             Size = new DocSize(frameWidth, frameHeight),
@@ -82,9 +88,10 @@ internal static class OdfFrames
             Fill = style.Fill,
             BorderColour = style.BorderColour,
             BorderWidth = style.BorderWidth,
-            IsImage = image is not null,
+            IsImage = image is not null && chart is null,
             Image = picture.Raster,
             Vector = picture.Vector,
+            Chart = chart,
             Name = element.Attribute(XName.Get("name", OdfNamespaces.Draw))?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

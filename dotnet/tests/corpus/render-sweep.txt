@@ -7,14 +7,32 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 223 of 231 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 226 of 234 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
 #
 # **Write to a per-format output directory.** `soffice --convert-to` and `paperless render`
 # both name their output after the input *stem*, so `word-features.doc` and
 # `word-features.docx` both become `word-features.pdf` and one silently overwrites the
-# other. It has cost two agents an hour each. There are now nine such pairs.
+# other. It has cost two agents an hour each. There are now nine such pairs. The rule holds
+# outside this directory too: `chart2/qa/extras/data/docx/` and `odt/` both hold a `chart`,
+# and collapsing their references into one directory is the likeliest source of an
+# exact-match count that later did not reproduce. See the charts item in
+# `src/Paperless.WordProcessing/TODO.md`.
+#
+# **Do not rebuild while a sweep is running.** The sweep takes the better part of an hour,
+# almost all of it in `soffice`, and it invokes the CLI from `bin/` on every file — so a
+# `dotnet build` part-way through swaps the binary underneath it and the rows rendered
+# before the swap describe a build that no longer exists. Either finish the sweep first or
+# render into a copy of the binary.
+#
+# **Count the words with `wc -w`, not with a language's own word split.** The rows here are
+# `pdftotext FILE - | wc -w`, which splits on ASCII whitespace. Python's `str.split()` also
+# splits on U+00A0 and the other Unicode spaces, and a document whose two renderings differ
+# in where a non-breaking space falls then reads as a word-count regression that does not
+# exist. It cost a whole sweep: ten rows came back one to twelve words long — every one of
+# them a DOCX, none reproducible when re-counted with `wc` on the very same PDFs, and
+# `theme-colours.docx` reported 29 words against 17 when both files hold 17.
 #
 # Of the eight that do not match, three are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
@@ -26,21 +44,18 @@
 # and word-features.{doc,docx,dotx,rtf} 149–150/154–155 → 154–155/154–155. See the
 # numbering item in `src/Paperless.WordProcessing/TODO.md` for what the bug was.
 #
-# The six chart rows now match: bars, gridlines, lines, pies and areas all draw, and a
-# spreadsheet's chart draws too. See `dotnet/TODO.md` Phase 3.5 for what each of the six
-# measures and for the three defects the spreadsheet forms found. They stayed matching
-# through data labels, formatted ticks, a secondary axis, a real scatter, trendlines and
-# their equations, rotated and thinned axis labels, and a data table below the plot — none
-# of which this corpus exercises, which is why the deck set in `chart2/qa/extras/data/pptx/`
-# is the chart oracle and these six rows are only the regression guard. That guard has now
-# earned its keep twice: every one of those features changes the plot rectangle, and six
-# rows that are all bar charts with labels that fit is exactly the case that must not move.
-# through data labels, formatted ticks, a secondary axis and a real scatter — none of which
-# this corpus exercises, which is why the deck set in `chart2/qa/extras/data/pptx/` is the
-# chart oracle and these six rows are only the regression guard. They stayed matching through
-# radar, bubble, stock and of-pie too, and for the same reason: not one of the six is any of
-# those, and neither is any of the 38 decks or 9 ODPs. The files that exercise the five plot
-# types are in `chart2/qa/extras/data/`'s `docx/`, `xlsx/`, `ods/` and `odt/` directories.
+# The nine chart rows now match: bars, gridlines, lines, pies and areas all draw, a
+# spreadsheet's chart draws, and now a *text document's* does too — the three
+# `chart-bar-text.{docx,fodt,odt}` rows are new with the Writer seam and are 41/41 each,
+# with their tick labels within half a point of the reference's. See `dotnet/TODO.md`
+# Phase 3.5 for what each of the nine measures and for the three defects the spreadsheet
+# forms found. The six older rows stayed matching through data labels, formatted ticks, a
+# secondary axis, a real scatter, trendlines and their equations, rotated and thinned axis
+# labels, a data table below the plot, and radar, bubble, stock and of-pie — none of which
+# this corpus exercises, which is why the sets in `chart2/qa/extras/data/` are the chart
+# oracle and these rows are only the regression guard. That guard has earned its keep
+# three times now: every one of those features changes the plot rectangle, and rows that
+# are all bar charts with labels that fit are exactly the case that must not move.
 #
 # The six *picture* rows now match, and they moved together for the same reason the labels
 # did — one missing seam rather than six bugs. `Paperless.Vector` imported WMF, EMF, EMF+
@@ -58,10 +73,15 @@
 # loses one word, `table-autofit-partial.docx` fits its columns differently, and
 # `sheet-rich-text.fods` draws two words the reference does not.
 #
-# A row reading OK is a statement about pages and words and nothing else.
-# `vector-picture-text.doc` matches on both and still lays out wrongly: its three
-# as-character pictures come back floating and reserve no room on their lines. Recorded in
-# `src/Paperless.WordProcessing/TODO.md` because this file cannot see it.
+# A row reading OK is a statement about pages and words and nothing else, and this file has
+# just had that demonstrated on it. `vector-picture-text.doc` read 1/1 and 13/13 through the
+# whole of a defect that had all three of its as-character pictures come back floating,
+# reserving no room and drawing over the paragraph after each; `word-features.doc` read 2/2
+# and 154/154 while its text box drew at 56.70 pt where LibreOffice draws 134.00, on top of
+# the sentence it belongs after. Both are fixed and neither row moved by a single word.
+# The check that did see them is a position comparison against LibreOffice's own PDF, word
+# by word — which is what the two items in `src/Paperless.WordProcessing/TODO.md` record,
+# and why they were written down there rather than here.
 #
 # **Every spreadsheet here is small and dense, and two whole classes of defect hide in that.**
 # Not one of these workbooks has a page with nothing on it, and not one carries a bare
@@ -263,6 +283,9 @@ chart-bar-deck.pptx                1/1         20/20         OK
 chart-bar-sheet.fods               1/1         34/34         OK
 chart-bar-sheet.ods                1/1         34/34         OK
 chart-bar-sheet.xlsx               1/1         29/29         OK
+chart-bar-text.docx                1/1         41/41         OK
+chart-bar-text.fodt                1/1         41/41         OK
+chart-bar-text.odt                 1/1         41/41         OK
 emf-picture.docx                   1/1         2/2           OK
 emf-picture.odt                    1/1         2/2           OK
 odp-shape-paths.fodp               2/2         6/6           OK

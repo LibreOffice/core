@@ -64,8 +64,18 @@ public static class Ww8Frames
     /// <param name="shape">The shape it names, or null when the drawing does not hold it.</param>
     /// <param name="offset">Where the anchor sits in its paragraph's text.</param>
     /// <param name="blocks">The shape's own text, already laid out into blocks.</param>
+    /// <param name="setInLine">
+    /// True when a <c>SHAPE</c> field around the anchor says the shape is set in the line rather than
+    /// floating beside it — <c>SwWW8ImplReader::IsInlineEscherHack</c>. It changes the anchor and the
+    /// wrap and nothing else, because that is all <c>ProcessEscherAlign</c> changes: the size, the
+    /// insets, the fill and the line all still come from the same two records.
+    /// </param>
     public static PageFrame? Build(
-        Ww8ShapeAnchor anchor, EscherShape? shape, int offset, IReadOnlyList<PageBlock> blocks)
+        Ww8ShapeAnchor anchor,
+        EscherShape? shape,
+        int offset,
+        IReadOnlyList<PageBlock> blocks,
+        bool setInLine = false)
     {
         if (anchor.Width <= 0 || anchor.Height <= 0) return null;
         if (shape is not null && (shape.IsDeleted || shape.Properties.Boolean(EscherPropertyIds.Hidden)))
@@ -101,12 +111,18 @@ public static class Ww8Frames
         {
             Size = new DocSize(Length.FromTwips(anchor.Width), Length.FromTwips(anchor.Height)),
 
-            // Always to a character. Word has no paragraph anchor for a drawing — the FSPA names a
-            // character position and nothing else — so LibreOffice's importer makes every floating
-            // shape FLY_AT_CHAR unconditionally (ww8graf.cxx:2356).
-            Anchor = FrameAnchor.Character,
+            // Always to a character, unless a SHAPE field says the shape is set in the line. Word has
+            // no paragraph anchor for a drawing — the FSPA names a character position and nothing else
+            // — so every floating shape is FLY_AT_CHAR and the one alternative is FLY_AS_CHAR
+            // (ww8graf.cxx:2355).
+            Anchor = setInLine ? FrameAnchor.AsCharacter : FrameAnchor.Character,
             AnchorOffset = offset,
-            Wrap = WrapOf(anchor),
+
+            // An as-character frame takes room on its line instead of moving text around itself, so it
+            // is never an obstacle. Stated here rather than left to WrapOf because the FSPA's own wrap
+            // is still whatever the shape was given before the field made it inline, and honouring it
+            // would have the frame both occupy the line and push it aside.
+            Wrap = setInLine ? TextWrap.Through : WrapOf(anchor),
             HorizontalOrigin = horizontal switch
             {
                 Ww8ShapeOrigin.PageMargin => FrameHorizontalOrigin.PageMargin,
@@ -139,6 +155,7 @@ public static class Ww8Frames
                 _ => FrameVerticalAlignment.Offset,
             },
             VerticalOffset = Length.FromTwips(anchor.Top),
+            InlineAscent = setInLine ? InlineAscent(anchor, vertical, host) : null,
             Spacing = WrapSpacing(properties, lineWidth),
             Padding = TextInsets(properties),
             Fill = properties.Boolean(EscherPropertyIds.Filled, fallback: true)
@@ -233,6 +250,49 @@ public static class Ww8Frames
     /// move, the hole in the text merely gets bigger.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// How much of a shape set in a line stands above that line's baseline.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one thing <c>ProcessEscherAlign</c> does <em>not</em> replace for the inline case. It forces
+    /// the horizontal orientation to <c>CENTER</c>/<c>FRAME</c> and leaves the vertical exactly as the
+    /// two records state it (<c>ww8graf.cxx:2436-2439</c>), and Writer then reads that vertical back out
+    /// as a position relative to the baseline: <c>SwAsCharAnchoredObjectPosition::GetRelPosToBase</c>
+    /// returns the stated offset for <c>VertOrientation::NONE</c> and <c>SwFlyCntPortion::SetBase</c>
+    /// turns a negative one into an ascent and a non-negative one into nought.
+    /// </para>
+    /// <para>
+    /// So the case this exists for is the common one and the answer is nought. A shape a <c>SHAPE</c>
+    /// field made inline states <c>posrelv</c> 3 — relative to the line — and <c>posv</c> 0, which
+    /// <c>aToLineVertOriTab</c> maps to <c>NONE</c>, and its <c>FSPA</c> states a top of nought; the
+    /// offset is negated for that pair (<c>ww8graf.cxx</c>, "Below line in word is a positive value")
+    /// and nought negated is nought. Both DOC documents in the corpus that have one say exactly this.
+    /// Measured on <c>word-features.doc</c>: LibreOffice keeps the anchor line's baseline at 455.51 and
+    /// draws the box's own first line at 466.71, below it, where resting the box on the baseline put the
+    /// sentence at 477.71 and the box's text at 454.41.
+    /// </para>
+    /// <para>
+    /// Any other vertical orientation falls back to null — the whole height above the baseline — because
+    /// no document to hand states one and a guessed rule is worse than the rule every other format uses.
+    /// The alignments Writer resolves against the line's own ascent and descent (<c>LINE_TOP</c>,
+    /// <c>LINE_CENTER</c>, <c>LINE_BOTTOM</c>) cannot be answered here at all: they need the line, and
+    /// this runs before there is one.
+    /// </para>
+    /// </remarks>
+    private static Length? InlineAscent(
+        Ww8ShapeAnchor anchor, Ww8ShapeOrigin vertical, EscherPropertyTable host)
+    {
+        if (vertical != Ww8ShapeOrigin.Character) return null;
+        if (host.Value(EscherPropertyIds.VerticalPosition) != 0) return null;
+
+        // Word measures downwards from the line and Writer upwards from the baseline, so the sign flips;
+        // a shape above the line therefore has a positive ascent and one below it a negative offset that
+        // leaves nothing above the baseline at all.
+        Length above = Length.FromTwips(-anchor.Top);
+        return above < Length.Zero ? Length.Zero : above;
+    }
+
     private static Margins WrapSpacing(EscherPropertyTable properties, Length lineWidth)
     {
         Length half = Length.FromTwips(lineWidth.Twips / 2);

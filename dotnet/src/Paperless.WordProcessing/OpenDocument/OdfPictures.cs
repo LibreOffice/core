@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Graphics;
 using Paperless.OpenDocument;
@@ -82,6 +83,43 @@ public sealed class OdfPictures
         }
 
         return EmbeddedPicture.Read(bytes, mediaType, "office:binary-data", _diagnostics);
+    }
+
+    /// <summary>
+    /// The chart a <c>draw:frame</c> holds, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>draw:object</c> is the wrapper for every embedded ODF document — a chart, a formula, a
+    /// nested spreadsheet — so "is this a chart" can only be answered by opening it, which is what
+    /// <see cref="OdfChart.Locate"/> does. One call covers both shapes an embedded chart takes: a
+    /// packaged document's <c>Object 1/content.xml</c> reached by <c>xlink:href</c>, and a flat
+    /// <c>.fodt</c>'s inlined <c>office:document</c>.
+    /// </para>
+    /// <para>
+    /// <strong>The object is looked at before the image beside it.</strong> ODF writes a chart as a
+    /// <c>draw:object</c> followed by a <c>draw:image</c> of it — alternatives in decreasing order of
+    /// preference — and this is the same order-of-children trap that made every chart in every ODS read
+    /// as a plain picture and then paint nothing, all 82 of those replacement streams being
+    /// <c>VCLMTF</c>. So the caller asks for the chart first and falls back to <see cref="Read"/>.
+    /// </para>
+    /// <para>
+    /// The styles are the chart sub-document's own — <c>ch1</c>, <c>ch2</c>, … in its own
+    /// <c>office:automatic-styles</c> — and not the text document's, so they are read from whichever
+    /// root the chart was found under.
+    /// </para>
+    /// </remarks>
+    public ChartPlot? Chart(XElement frame)
+    {
+        ArgumentNullException.ThrowIfNull(frame);
+
+        if (_file is null) return null;
+
+        XElement? embedded = frame.Element(XName.Get("object", OdfNamespaces.Draw));
+        if (embedded is null) return null;
+        if (OdfChart.Locate(embedded, _file) is not { } chart) return null;
+
+        return OdfChartPlot.Read(chart, new OdfChartStyles(chart.AncestorsAndSelf().Last()));
     }
 
     /// <summary>

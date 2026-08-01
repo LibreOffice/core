@@ -6,6 +6,7 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
 using Paperless.Core.Numbering;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 
 namespace Paperless.WordProcessing.Ooxml;
 
@@ -734,10 +735,17 @@ public sealed partial class DocxContentReader
     /// paragraphs, and splicing them into the anchoring paragraph would join two unrelated
     /// sentences and split that paragraph in two at the anchor point. So anything with text
     /// becomes a <see cref="SectionKind.Frame"/> section instead.
+    /// <para>
+    /// A chart is the third case and is hoisted for the same reason a text box is: its title, its axis
+    /// titles and its cached numbers are a section holding a table, and splicing a table into the
+    /// anchoring paragraph is not expressible.
+    /// </para>
     /// </remarks>
     private void ReadAnchoredContent(XElement drawing, ContentParagraph paragraph)
     {
         if (!EnterDepth()) return;
+
+        if (ReadChart(drawing)) return;
 
         ContentSection frame = new()
         {
@@ -764,6 +772,53 @@ public sealed partial class DocxContentReader
             FlushPendingRun(paragraph);
             foreach (ContentImage image in images) paragraph.Children.Add(image);
         }
+    }
+
+    /// <summary>
+    /// Reads an embedded chart, hoisting it to a section of its own.
+    /// </summary>
+    /// <returns>True when the drawing really was a chart and has been recorded.</returns>
+    /// <remarks>
+    /// <para>
+    /// The frame holds nothing but <c>c:chart/@r:id</c>; the chart is a part of its own,
+    /// <c>word/charts/chartN.xml</c> by convention and by relationship in fact. Its title, axis titles,
+    /// series names and cached values are real user text, so the drawing becomes the section
+    /// <see cref="DrawingChart"/> builds rather than the bare <see cref="ContentImage"/> it used to —
+    /// which is the same section the ODF reader produces, so a caller indexing a mixed corpus never
+    /// branches on which family a chart came from.
+    /// </para>
+    /// <para>
+    /// <strong>The chart reader was already family-blind and this was the missing call site.</strong>
+    /// Before it, <c>chart2/qa/extras/data/docx/chart.docx</c> extracted to nothing at all while the
+    /// same chart as <c>odt/chart.odt</c> extracted its whole four-by-three table, because
+    /// <c>OdfContentReader</c>'s <c>draw:object</c> case already served ODT and nothing in the DOCX walk
+    /// looked at <c>a:graphicData/@uri</c>.
+    /// </para>
+    /// </remarks>
+    private bool ReadChart(XElement drawing)
+    {
+        XElement? data = drawing
+            .Descendants(XName.Get("graphicData", OoxmlNamespaces.DrawingML))
+            .FirstOrDefault();
+
+        if (data is null) return false;
+        if (data.Attribute("uri")?.Value != DrawingChart.ChartUri) return false;
+
+        string? id = data
+            .Element(XName.Get("chart", OoxmlNamespaces.DrawingMLChart))
+            ?.Attribute(XName.Get("id", OoxmlNamespaces.Relationships))?.Value;
+
+        if (_file.Relationship(id) is not { IsExternal: false } relationship) return false;
+        if (_file.Package.GetPart(relationship.Target) is not { } part) return false;
+
+        XElement? chartSpace;
+        using (Stream content = part.Open()) chartSpace = OoxmlXml.TryLoad(content, out _);
+
+        if (chartSpace is null) return false;
+        if (DrawingChart.Read(chartSpace) is not { } section) return false;
+
+        _hoisted.Add(section);
+        return true;
     }
 
     /// <summary>
