@@ -4,7 +4,9 @@ Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG.
 
 **Decided: full support for all four.** Not a subset, and no rasterise-via-LibreOffice
 shortcut. SVG reuses an existing library (see below); WMF, EMF and EMF+ are ours to write,
-because nothing exists in C# for them.
+because nothing exists in C# for them. **SVG and WMF are done**, and the shared metafile
+groundwork WMF was built on — `Metafiles/` — is what EMF and EMF+ start from rather than
+from a blank file.
 
 That makes this the largest single body of work in the project, so it is worth being clear
 why it earns that. Office documents embed these constantly — pasted clip art, chart and
@@ -20,102 +22,345 @@ specifications cold.
 
 ## The seam, and what a metafile implementer has to supply
 
-**Read this first.** SVG is done, and it exists as much to settle the shape of this seam as
-to draw SVG. Everything below is what WMF, EMF and EMF+ plug into.
+**Read this first.** SVG settled the shape of this seam and WMF was the first format to plug
+a stateful command stream into it. Everything below is what EMF and EMF+ plug into, and
+*What the first metafile format taught* is the section written for whoever does them next.
 
 ### What a decoded vector image is
 
 Not pixels, and not a live replay. `IVectorImageDecoder.Decode` answers a `VectorImage`:
 
-| Piece | What it is | SVG | EMF |
-|---|---|---|---|
-| `Content` | A `DisplayList` — recorded `IDrawingSink` calls, replayable | the translated command list | the replayed records |
-| `ViewBox` | The rect of `Content`'s coordinates that fills the destination, **in EMUs** | the viewport, converted at 9525 EMU per user unit | `rclBounds`, or the window rect once the mapping mode is applied |
-| `IntrinsicSize` | The physical size the picture asks for when nothing imposes one | `width`/`height` against the CSS inch | `szlMillimeters` |
+| Piece | What it is | SVG | WMF | EMF |
+|---|---|---|---|---|
+| `Content` | A `DisplayList` — recorded `IDrawingSink` calls, replayable | the translated command list | the replayed records, already mapped to EMUs | the replayed records |
+| `ViewBox` | The rect of `Content`'s coordinates that fills the destination, **in EMUs** | the viewport, converted at 9525 EMU per user unit | the viewport extent, which the mapping has already resolved | `rclBounds`, or the window rect once the mapping mode is applied |
+| `IntrinsicSize` | The physical size the picture asks for when nothing imposes one | `width`/`height` against the CSS inch | the window extent against the placeable header's units-per-inch | `szlMillimeters` |
 
 `DisplayList` is itself an `IDrawingSink`, so a decoder writes to the same interface a
 backend implements and needs no second output path. Recording rather than drawing straight
 through is what makes one decode serve a logo that appears on forty slides, and what makes
 the commands countable for `VectorLimits`.
 
-**Keeping `ViewBox` and `IntrinsicSize` apart is the point.** For SVG they usually coincide;
-for EMF they will not, because an EMF states its logical coordinate space and its physical
-extent independently. Collapsing them is the classic wrongly-scaled metafile.
+**Keeping `ViewBox` and `IntrinsicSize` apart is the point.** For SVG they usually coincide,
+and for WMF they always do — because every coordinate is mapped to 1/100 mm as it is read, so
+the space the commands are in *is* the physical one. For EMF they will not, because an EMF
+states its logical coordinate space (`rclBounds`, device units) and its physical extent
+(`rclFrame`, 1/100 mm) independently. **Anything that quietly generalises from WMF's answer
+is a bug waiting for the first EMF**, and collapsing the two is the classic wrongly-scaled
+metafile.
 
 ### What the seam does not give you
 
 - **No device context.** `Save`/`Restore`/`Transform` on the sink are a clip-and-transform
   stack, nothing more. There is no selected pen, brush, font or palette, no mapping mode and
-  no current position, because `IDrawingSink` is deliberately stateless per draw call. The
-  DC is the metafile implementer's to build, once, shared between WMF and EMF — see
-  *Shared groundwork* below.
+  no current position, because `IDrawingSink` is deliberately stateless per draw call. The DC
+  is the metafile implementer's to build, once, shared between WMF and EMF — **it is built,
+  in `Metafiles/`**; see *Shared groundwork* below.
 - **No path arithmetic.** `ClipPath` intersects and nothing unions, subtracts or offsets.
   The SVG translator gets away with expressing a union as one path of several subpaths under
-  the non-zero rule; a region record cannot, and `ExtSelectClipRgn` with `RGN_DIFF` will
-  need real path operations or an honest diagnostic.
+  the non-zero rule; a *region* turns out to get away with it too, because a GDI region is a
+  scan list of disjoint rectangles and disjoint subpaths are their own union under either
+  rule. Only subtraction is genuinely out of reach: `ExcludeClipRect` and `ExtSelectClipRgn`
+  with `RGN_DIFF` need real path operations or an honest diagnostic, and today raise
+  `PL6034`.
 - **No stroked text.** `DrawGlyphRun` takes one paint. SVG's `fill="none" stroke="red"` text
   is filled in the stroke's colour with a `PL6015` diagnostic; EMF+ `DrawDriverString` with
   a pen will want the same compromise, or an extension to Core.
 
 ### What a decoder owes
 
-1. **Convert to EMUs once, at the boundary.** `Svg/ShimGeometry.cs` is the worked example: a
-   single `EmuPerPixel` constant, one `Emu(double)`, and nothing downstream that knows what
-   unit the source used. A scale factor applied in two places is a scale factor applied
-   twice, and that is the commonest way vector import comes out at the wrong size.
+1. **Convert to EMUs once, at the boundary.** `Svg/ShimGeometry.cs` and
+   `Metafiles/MetafileMapping.Emu` are the two worked examples: one constant, one function,
+   and nothing downstream that knows what unit the source used. A scale factor applied in two
+   places is a scale factor applied twice, and that is the commonest way vector import comes
+   out at the wrong size.
 2. **Honour `VectorLimits`.** Charge every recorded command, check the clock on every one,
-   cap path segments and nesting depth. `Svg/SvgPictureTranslator.cs` shows the pattern: a
-   `Charge()` that returns false and sets `IsTruncated` rather than throwing.
+   cap path segments, records and nesting depth. `Svg/SvgPictureTranslator.cs` and
+   `Metafiles/MetafileBudget.cs` show the pattern: a charge that returns false and sets
+   `IsTruncated` rather than throwing.
 3. **Resolve nothing outside the document.** No URL, no file path, whatever the format
-   allows. WMF's `ESCAPE` records and EMF's comment payloads are where this will come up.
+   allows. WMF's `ESCAPE` records are the metafile analogue of the SVG `href` that turned out
+   to read `/etc/passwd`: an open extension point in an attacker-supplied file. Two payloads
+   are read there and both name only bytes inside their own record; everything else in an
+   escape is ignored, and `WmfSafetyTests` asserts it. EMF's comment payloads are next.
 4. **Never throw for malformed input.** A picture that cannot be read is a document to draw
    *without* that picture: return `VectorImage.Empty` with a diagnostic. Diagnostic codes
    `PL60xx` belong to this library.
 5. **Register in `VectorImages`** and sniff by content in `CanDecode`. Nothing that calls
    `VectorImages.Decode` changes when a format is added, which is the point of the seam.
 
+### What the first metafile format taught
+
+**Read this before starting EMF.** The groundwork below exists and works; what follows is
+what it turned out to need that was not obvious from the seam, and it is the most valuable
+thing WMF leaves behind. Every point cost something to find.
+
+**The clip wants to be a list of intersections, not a region.** This is the discovery with
+the most leverage. `IDrawingSink.ClipPath` intersects and offers nothing else, which looks
+like a hole until you notice that a clip held as an ordered *list* of paths to intersect
+needs no path arithmetic at all: replaying the list **is** the intersection, and the sink
+does the work. Everything GDI expresses by intersecting — `IntersectClipRect`, selecting a
+region, an `ETO_CLIPPED` text rectangle — then lands exactly, with no approximation
+anywhere. `Metafiles/MetafileClip.cs`. Only subtraction is left over, and it is reported
+(`PL6034`) rather than approximated. **`ExtSelectClipRgn` with `RGN_AND` and `RGN_COPY` will
+need nothing new; only `RGN_DIFF` and `RGN_XOR` will.**
+
+**But the clip has to be emitted lazily, with a restore and a save.** A metafile's clip is
+*device state* — it changes when a record says so and stays changed — while a sink's clip is
+a *scope* that only ever narrows. The only way to widen a sink's clip is to restore. So the
+painter keeps exactly one save level open for the clip and, when the clip has changed since
+the last drawing call, restores and saves again (`Metafiles/MetafilePainter.cs`,
+`EnsureClip`). Doing it lazily rather than on every clip record matters because files set
+the clip far more often than they draw through it. This is `MtfTools::UpdateClipRegion`
+(`emfio/source/reader/mtftools.cxx:1254-1289`) and it is not obvious from either side.
+
+**Map at read time, so the display list holds no logical coordinates.** Every point goes
+through `MetafileMapping` as the record is read and the recorded commands are already in
+EMUs. That is why `ViewBox` and `IntrinsicSize` coincide for WMF — the coordinate space the
+commands are in *is* the physical one — and it is also why the two must stay apart for EMF,
+whose `rclBounds` is in device units and `rclFrame` in 1/100 mm, stated independently. The
+intermediate unit throughout is 1/100 mm, because that is what every conversion factor in
+`ImplMap` is expressed in, which makes the port checkable line by line; 914400/2540 = 360 is
+exact, so nothing is lost turning it into EMUs at the one boundary
+(`MetafileMapping.Emu`).
+
+**A pen's width and a font's size are mapped when the object is *created*, not when it is
+used.** GDI states them in logical units and freezes them at creation
+(`mtftools.cxx:1027-1035`), so a file that changes the window extent between creating a pen
+and drawing with it will disagree with any decoder that maps late. `MetafilePen.Width` and
+`MetafileFont.Size` are therefore already in EMUs.
+
+**The device context needed eight fields beyond the obvious four.** Pen, brush, font and
+palette are the easy part. The ones that are load-bearing and easy to miss: a flag for
+*whether a brush has ever been selected* (until one has, GDI fills with the **background**
+colour, not with the default white brush — i57205); the current position in **logical**
+units, because a mapping record may intervene between the `MoveTo` and the `LineTo`; the
+polygon fill mode, which is the sink's `FillRule`; the background mode, which decides whether
+hatch gaps and text cells are painted; the text-alignment word; the arc direction; and a
+no-op flag for `R2_NOP`. All in `Metafiles/MetafileDeviceContext.cs`.
+
+**`SaveDC`/`RestoreDC` is not the sink's `Save`/`Restore` and cannot be built on it.**
+`RestoreDC` takes a *signed* argument: negative counts back, positive names a specific saved
+state. WMF writes both spellings, sometimes in one file, and treating a positive value as a
+count discards states a later record still expects. It also saves the mapping and the
+selected objects, which the sink's stack knows nothing about — while *not* saving the object
+table, because GDI objects belong to the device and a `RestoreDC` does not un-create a brush.
+
+**Nothing in `Paperless.Core` had to change.** Not the sink, not `Paint`, not `GraphicsPath`.
+The two gaps the seam already records — no path arithmetic, no stroked text — are the only
+two WMF ran into, and both were expressible as an honest diagnostic. Two things that looked
+like they would need Core and did not: a hatch brush became stroked lines clipped to the
+shape (`Paint`'s own remarks already prescribe this), and a DIB became `RasterImage.Encoded`
+by prepending fourteen bytes of BMP file header — a DIB *is* a BMP without one, so nothing
+here decodes a pixel (`Metafiles/DeviceIndependentBitmap.cs`). **A source rectangle survives
+the same way**: rather than cropping, place the whole image scaled so the wanted part lands
+on the destination and clip to the destination. Same picture, no codec.
+
+**Text needs three things the seam does not hint at.** GDI's point may be any of nine
+positions, so resolving it needs the run's *measured* width and the face's ascent — a
+decoder that ignores the alignment word draws every centred label half a string too far
+right. The DX array is cumulative in the file and per-glyph in `GlyphRun`, and must be lined
+up through the cluster map rather than by position. And a rotated baseline has nowhere to
+live on `GlyphRun`, so it becomes a `Transform` about the run's own origin — which keeps the
+run one run, so a PDF backend still emits real searchable text.
+
 ---
 
 ## Shared groundwork
 
-Still to do, and still before any individual metafile format.
+Done, and shared with EMF and EMF+ when they arrive. `src/Paperless.Vector/Metafiles/`.
 
-- [ ] A device-context model: current transform, clip stack, and the selected pen/brush/
-      font/palette state. All three metafile formats are stateful command streams over
-      essentially this same model, so build it once. **The seam gives you none of this** —
-      see above.
-- [ ] A graphics-object table with correct handle-reuse and delete semantics — real files
-      reuse handles aggressively and leak others.
-- [ ] Mapping-mode and window/viewport arithmetic. **The most common source of
-      wrongly-scaled or mirrored output**, and it is shared between WMF and EMF. The
-      `ViewBox`/`IntrinsicSize` split above is where its answer lands.
-- [x] **Bounded replay: a record count and time cap.** Done, on the seam rather than per
-      format: `VectorLimits` caps bytes, commands, path segments, nesting depth, expanded
-      source nodes and wall-clock time. A metafile decoder inherits the type and has only to
-      charge against it.
+- [x] **A device-context model**: mapping, clip, selected pen/brush/font/palette, the drawing
+      modes and the save stack. `MetafileDeviceContext.cs`, ported from `MtfTools`
+      (`emfio/source/reader/mtftools.cxx:3043-3160` for the save stack). See *What the first
+      metafile format taught* above for what it needed beyond the obvious.
+- [x] **A graphics-object table** with handle reuse and delete semantics.
+      `GraphicsObjectTable.cs`. WMF never states a handle when it creates an object — the
+      handle is the index of the *lowest free slot* — so a decoder that appends assigns
+      different handles from the producer as soon as the file deletes anything, and every
+      later `SelectObject` picks the wrong pen. A `_lowestFree` cursor keeps creation from
+      being a linear scan, which is a denial of service on untrusted input rather than merely
+      a slow decode. Deleting a handle twice, deleting one that was never created, and
+      selecting one that was never created are all tolerated: real files do all three.
+- [x] **Mapping-mode and window/viewport arithmetic.** `MetafileMapping.cs`, a straight port
+      of `MtfTools::ImplMap` (`mtftools.cxx:541-626`). Five of the eight modes flip the y
+      axis, so a decoder that ignores the mode does not merely draw at the wrong size — it
+      draws upside down. `MapSizeMm100` is a separate path from `MapPointMm100` because the
+      window origin, the viewport origin and the frame offset are translations and must not
+      be applied to a distance.
+- [x] **Bounded replay: a record count and time cap.** `VectorLimits` caps bytes, commands,
+      path segments, nesting depth, expanded source nodes, wall-clock time and — added for
+      the metafiles — `MaxRecords`. **A record cap and a command cap bound different things**
+      and both are needed: most metafile records emit no drawing command at all, so a file of
+      ten million `SaveDC`s stays under any command cap while still costing ten million
+      parses; conversely one hatch fill emits a stroke per line. `MetafileBudget.cs` charges
+      both plus the clock, and `MetafileBudget.Plausible` refuses a stated count before it
+      allocates — the cheapest guard there is, and the one that catches the commonest attack,
+      a record claiming 400 000 points inside a 200-byte file.
 
-## WMF
+## WMF — done
 
-Oldest and smallest. Good first target — it exercises the shared groundwork on the simplest
-of the three.
+`Wmf/WmfImageDecoder.cs` + `Wmf/WmfReader.cs`, ported record by record from
+`emfio/source/reader/wmfreader.cxx`. Registered in `VectorImages`; sniffed by content, so a
+WMF stored under an `.emf` part name is decoded anyway.
 
-- [ ] Placeable header (`D7 CD C6 9A`) and the bare metafile header
-- [ ] Object records: pen, brush, font, palette, region creation and selection
-- [ ] Drawing records: `TextOut`, `ExtTextOut`, `Polygon`, `PolyPolygon`, `Polyline`,
-      `Rectangle`, `RoundRect`, `Ellipse`, `Arc`, `Chord`, `Pie`, `LineTo`/`MoveTo`
-- [ ] Bitmap records: `StretchDIBits`, `SetDIBitsToDevice`, `BitBlt`, `StretchBlt` — a DIB
-      can go through as decoded pixels or as `RasterImage.Encoded`; both draw, and neither
-      needs a codec in this library
-- [ ] Clipping and region records
-- [ ] `ESCAPE` records, which is where some producers hide EMF payloads
+### What draws
+
+- [x] **Placeable header** (`D7 CD C6 9A`) and the bare metafile header, including the
+      `0x00010000`/`0x0009` spelling a memory metafile writes.
+- [x] Object records: pen, brush, font, palette and **region** — region scan lists are read
+      into a path, which `emfio` does not do at all (`wmfreader.cxx:1246-1251` creates a
+      placeholder and warns), so a WMF that clips through a region draws unclipped there and
+      here does not.
+- [x] Drawing records: `TextOut`, `ExtTextOut`, `Polygon`, `PolyPolygon`, `Polyline`,
+      `Rectangle`, `RoundRect`, `Ellipse`, `Arc`, `Chord`, `Pie`, `LineTo`/`MoveTo`,
+      `SetPixel`, `PatBlt`, `FillRegion`/`PaintRegion`.
+- [x] Bitmap records: `StretchDIB`, `DIBBitBlt`, `DIBStretchBlt`, **`SetDIBitsToDevice`**
+      (which `emfio` does not implement either), and `BitBlt`/`StretchBlt` for the monochrome
+      device-dependent form. A DIB goes through as `RasterImage.Encoded` — a DIB is a BMP
+      without its fourteen-byte file header, so re-wrapping it needs no codec here.
+- [x] Clipping: `IntersectClipRect`, `OffsetClipRgn`, `SelectClipRegion`, and the
+      `ETO_CLIPPED` rectangle on a text record, which is scoped to that record alone.
+- [x] `ESCAPE`: the `WMFC` comment that carries a chunk of a complete EMF is **detected and
+      reported** (`PL6030`) rather than replayed, and the private Unicode text escape is
+      drawn, with the count of following legacy records honoured so nothing double-strikes.
+- [x] Text through `Paperless.Text` — the same substitution table and the same HarfBuzz as
+      body text — with the code page taken from the selected font's character-set byte, all
+      nine alignment positions, per-character DX arrays and baseline escapement.
+- [x] Hatch brushes as stroked lines clipped to the shape, and pattern brushes as a
+      `BitmapPaint` tile.
+
+### The rules, and what they were measured against
+
+**The placeable header's bounding rectangle is a decoy.** It is read and then discarded in
+favour of a scan of the records, which is what `emfio` does too (`wmfreader.cxx:1580`
+overwrites it unconditionally). The window records win, the viewport records are the
+fallback, and the extent of everything drawn is the last resort — and that last resort is not
+a repair for broken files, since plenty of real metafiles state no window and are meant to be
+measured. What the header supplies that the records cannot is the **units-per-inch** field,
+and that is the half that is kept.
+
+**The logical coordinate space and the physical extent are stated independently**, which is
+the `ViewBox`/`IntrinsicSize` split in its WMF form. The window records give the coordinate
+space; units-per-inch turns it into millimetres. Deriving either from the other gives a
+picture that is the right shape and the wrong size. Measured on LibreOffice's own WMF export:
+a placeable header of 2540 units to the inch with an 8000 × 6000 window is 80.00 × 60.00 mm,
+and it renders at exactly that.
+
+**An anisotropic placeable metafile ignores its own resolution when it exceeds its window.**
+Undocumented, and load-bearing: honouring 1440 units to the inch for a 100-unit window would
+make the picture 1.8 mm across. Other office suites ignore it and so does LibreOffice
+(`wmfreader.cxx:2142-2156`); the fallback is `max(width, height)` units to the inch.
+
+**Fidelity, by rasterising our PDF and LibreOffice's with the same rasteriser so antialiasing
+cancels** (`pdftoppm -r 150`, then `render-comparison`'s `compare-images.py`). Both PDFs place
+the same metafile at the same size on the same A4 page:
+
+| Picture | `mean_abs_error` | Note |
+|---|---|---|
+| LibreOffice's own WMF export of a drawing: 38 filled polygons, 2 poly-polygons, a clip | **0.0000** | `differing=0.0001`, `shifted=0` — antialiasing level |
+| rectangle, ellipse, pie, polyline, one text run, five pen widths | **0.0002** | `ink_ratio=1.003`, `shifted=0` |
+| the same with one hatched brush added | 0.0047 | 18 % less ink; see the hatch note below |
+
+**A WMF is 78 % EMF, in the file LibreOffice itself writes.** Measured: a 16 700-byte WMF
+exported by LibreOffice 24.2 carries **12 964 bytes of a complete EMF** inside two `ESCAPE`
+comment records. Replaying both would draw the whole picture twice, so the WMF records are
+what get drawn and `PL6030` says what was left on the table. When the EMF reader lands, this
+is the switch to flip — and the choice must be made *once* for the whole file, for the same
+reason the EMF+ dual-mode note below gives.
+
+### Traps, each of which cost time
+
+**`TA_BASELINE` is 0x0018 in the specification and 0x0010 in reality.** [MS-WMF] 2.1.2.3 has
+it wrong, `emfio` says so in a comment (`inc/mtftools.hxx:184-186`), and producers that
+believed the specification write 0x0018 — which is `TA_BASELINE | TA_BOTTOM`. A masked field
+comparison then matches *neither* and falls through to top alignment. Measured: a
+baseline-aligned run asked for at y = 6.00 mm was drawn at **y = 9.62 mm**, the face's entire
+ascent lower. The fix is to test the bits in priority order rather than to compare the
+masked field, which is what `MtfTools::DrawText` does (`mtftools.cxx:2016-2021`). Nothing
+about the symptom looks like an alignment bug; it looks like a mapping bug, because the whole
+run is displaced.
+
+**An arc's ends are points on a ray, and the ray's angle is not the ellipse's parameter.**
+GDI names an arc's ends by points that need not lie on the ellipse: the point names the ray
+from the centre that the end sits on. Converting has to go through the ellipse's own
+parameter, `atan2(rx·sin θ, ry·cos θ)` — `ImplGetParameter`,
+`tools/source/generic/poly.cxx:60-67`. Measured on a 4:1 ellipse: a ray at 45° crosses at
+parameter 1.326 rad = **76°**, so using the ray's angle puts the end of the arc 31° away,
+about a twelfth of the way round. It is invisible on a circle, which is what makes it a trap:
+every test with a circular arc passes.
+
+**The arc parameter is measured with y upwards.** GDI's default arc direction is
+anticlockwise in the *logical* space, and the parameterisation is
+`(cx + rx·cos t, cy − ry·sin t)`. Both signs have to survive the port together; getting one
+of them wrong mirrors every arc, and a symmetric test picture cannot see it. A degenerate
+start point — a file naming the ellipse's own centre as an arc end — makes `atan2(0, 0)`
+answer 0, and LibreOffice and this decoder then disagree about which 45° of the ellipse is
+meant. Not worth chasing; it is a malformed record either way.
+
+**A blit record with no bitmap is told apart from one with a bitmap by its size alone.**
+There is no flag. The record's high byte is its original 16-bit parameter count, so a record
+exactly three words longer than that has nothing after its parameters
+(`wmfreader.cxx:919`). Reading the bitmap that is not there is how a decoder walks off the
+end of a *legitimate* file — not a malformed one.
+
+### Not done, and why
+
+- [ ] **Ternary raster operations other than `SRCCOPY`.** `PATINVERT`, `SRCAND`, `SRCINVERT`
+      and the rest combine the source with what is already on the page, which a display list
+      cannot read back. The source is drawn alone and `PL6033` is raised, which is what
+      LibreOffice falls back to as well. `BLACKNESS` and `WHITENESS` are honoured exactly.
+- [ ] **The transparent-bitmap idiom.** A monochrome mask blitted with `SRCAND` followed by a
+      colour image with `SRCPAINT` is how a WMF says "transparent", and merging the two into
+      one alpha bitmap is what `MtfTools::ResolveBitmapActions` (`mtftools.cxx:2557`) exists
+      for. It needs pixels, and pixels need a codec. Today both are drawn in order, so the
+      transparent area comes out black. **This is the strongest single argument for letting
+      `Paperless.Vector` see decoded pixels**, and it should be weighed against the
+      dependency the whole library was arranged to avoid.
+- [ ] **`ExcludeClipRect`.** Subtraction, which `ClipPath` cannot express. The excluded area
+      is left unclipped — drawing too much rather than too little, which loses no content —
+      and `PL6034` says so. Real path operations would fix this and the SVG side's `PL6012`
+      together.
+- [ ] **A hatched brush is a solid fill in LibreOffice.** Measured: LibreOffice paints a WMF
+      `HS_DIAGCROSS` brush as a solid fill of the hatch colour, on **both** its PDF and its
+      PNG export paths; Windows paints lines. Lines are what is drawn here, because that is
+      what GDI does and what Word and PowerPoint show — at the cost of `mae 0.0047` and 18 %
+      less ink against the reference on a picture with one hatched shape in it. Switching to
+      LibreOffice's answer is one branch in `MetafilePainter.Fill`, so this is a decision
+      rather than a limitation. Assess against real clip art before changing it.
+- [ ] **Device-dependent bitmaps deeper than one bit.** `BitBlt`/`StretchBlt` with an inline
+      24- or 32-bit DDB. `emfio` reads them (`wmfreader.cxx:963`); they are rare because
+      almost everything writes `STRETCHDIB` instead, and reading them means building a BMP
+      header from the device's own format. `PL6031`.
+- [ ] **`FloodFill`, `ExtFloodFill`, `InvertRegion`, `FrameRegion`, `DrawText`.** The three
+      fills need to read the page back; the other two are rare enough not to have been seen.
+      `PL6031`.
+- [ ] **A pattern brush's tile size is assumed to be 96 pixels to the inch.** A GDI pattern
+      brush tiles in *device* pixels and a display list has none, so something has to choose.
+      96 is what the rest of Paperless assumes a nominal pixel is; a pattern-filled shape will
+      therefore be right in colour and possibly wrong in scale.
 
 ## EMF
 
+**Start from `Metafiles/`, not from a blank file.** The device context, the object table, the
+clip, the mapping, the budget, the text engine, the DIB reader and the painter are all
+already there and all already have EMF in them — `MetafileMapping` carries the world
+transform and the `GM_ADVANCED` flag, `GraphicsObjectTable.Set` exists for EMF's
+handle-stating create records, and `MetafileDeviceContext.SelectStock` handles the top-bit
+stock-object convention. Read *What the first metafile format taught* above first; it is the
+part of this file written for whoever does EMF.
+
 - [ ] Header, bounds, frame, and the reference-device fields that set the coordinate scale.
       `rclFrame` is in 1/100 mm and gives `IntrinsicSize`; `rclBounds` is in device units and
-      gives `ViewBox`
-- [ ] Path construction (`BeginPath`/`EndPath`/`StrokePath`/`FillPath`/`StrokeAndFillPath`)
-- [ ] World-transform records (`SetWorldTransform`, `ModifyWorldTransform`)
+      gives `ViewBox`. **This is the case the seam's split exists for**: for WMF the two
+      coincide and for EMF they will not, so anything that quietly assumes WMF's answer is a
+      bug waiting for the first EMF
+- [ ] Path construction (`BeginPath`/`EndPath`/`StrokePath`/`FillPath`/`StrokeAndFillPath`).
+      The one piece of state WMF did not need and the device context therefore does not yet
+      have: a current path that drawing records append to rather than draw
+- [ ] World-transform records (`SetWorldTransform`, `ModifyWorldTransform`). The state is
+      already there — `MetafileMapping.World` and `IsAdvanced` — and `ImplMap` already applies
+      it; only the records are missing
 - [ ] Text: `EMR_EXTTEXTOUTW`/`A`, including per-glyph DX arrays — honour the DX array
       rather than re-measuring, or text spacing drifts from what the producer intended.
       `PositionedGlyph.Advance` is per-glyph precisely so a DX array survives
@@ -323,6 +568,19 @@ thing in the tree to emit an encoded image into a sink.
 - [ ] A picture drawn at several sizes re-uses one `DisplayList`, which is right for geometry
       and indifferent to hinting. Nothing depends on it yet; it will matter when a thumbnail
       and a print rendering share a cache.
+- [ ] **Should `Paperless.Vector` be allowed to see decoded pixels?** It is arranged not to,
+      and that has held: a DIB becomes `RasterImage.Encoded` for the price of a fourteen-byte
+      header, and a source rectangle becomes a scale plus a clip. The one thing it costs is
+      the WMF transparent-bitmap idiom — a monochrome mask and a colour image blitted with
+      complementary raster operations, which needs the two combined into one alpha bitmap and
+      therefore needs pixels. Today the transparent area comes out black. **Decide this once,
+      because EMF's `AlphaBlend` and `TransparentBlt` and EMF+'s image attributes all want the
+      same thing**, and the answer is either a codec dependency here or an extension to the
+      sink that lets a backend do the compositing.
+- [ ] **Which representation of a dual-format file to replay** — a WMF hiding an EMF, an EMF
+      hiding EMF+. Both are the same question and it has the same answer: choose once for the
+      whole file and never switch mid-stream. Today WMF always replays its own records and
+      reports the EMF it found; that is only defensible until the EMF reader exists.
 
 ## Wiring it into the readers
 
@@ -344,3 +602,15 @@ family, each a few lines:
 
 `tests/corpus/features/svg-picture.odt` and `.docx` are the fixtures for both, and
 `CorpusSvgTests` already reads them the way a reader would.
+
+**WMF changes nothing about the shape of that hook, which is the point of the seam** — but it
+does raise the stakes, because a WMF has no `BlipReference` alternative to choose between and
+no SVG-style declared media type to sniff for. It is simply a picture, and the only thing
+that says so is its first four bytes. So step 2 is the whole of it: `VectorImages.For(bytes)`
+before `RasterImage.Encoded`, for every picture, in every family.
+`tests/corpus/features/wmf-picture.odt` and `.docx` are the fixtures — both packages keep the
+426-byte metafile rather than rasterising it, the ODT alongside a 9 685-byte PNG preview that
+is exactly what decoding avoids — and `CorpusWmfTests` reads them the way a reader would.
+**The legacy binary families matter more here than they do for SVG**: DOC, XLS and PPT store
+a WMF as the presentation of every embedded OLE object, so the Escher path in
+`Paperless.MsBinary` is where most real WMFs in a corpus will actually be found.

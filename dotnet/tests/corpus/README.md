@@ -164,6 +164,18 @@ combination that tells the two transform orders apart.
 | `svg-picture.odt` | An `image/svg+xml` inside an ODF package, referenced by a `draw:image` whose `xlink:href` names `Pictures/logo.svg`, inside a 4 × 2 cm frame that matches the picture's own intrinsic size. The SVG itself is 769 bytes and covers what the translation has to get right: a `viewBox` mapping, a rounded rectangle, a linear gradient in object-bounding-box units, a `clipPath`, an elliptical arc, a partly transparent fill, and centre-anchored text |
 | `svg-picture.docx` | The same document converted, which is what makes it worth committing: **LibreOffice keeps the SVG rather than rasterising it.** The `a:blip` names a 3 803-byte `word/media/image3.png` on `r:embed` and the original 769-byte `word/media/image2.svg` on an `asvg:svgBlip` inside the `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension — the same shape PowerPoint 365 writes. A reader that stops at `r:embed` draws the raster fallback; preferring the extension is the whole point of vector import |
 
+### WMF picture documents
+
+Hand-built rather than exported, because a metafile LibreOffice writes is 36 filled polygons
+and nothing else — it converts every ellipse, arc and stroke to a polygon on the way out, so
+it exercises one record type out of the twenty that matter. 426 bytes.
+
+| File | Exercises |
+|---|---|
+| `wmf-shapes.wmf` | The metafile itself, with a placeable header stating 2540 logical units to the inch so that one unit is exactly 1/100 mm and an assertion can name the millimetre it expects. Covers the placeable header, `SetWindowOrg`/`SetWindowExt`, pen and brush creation with handle reuse, `SelectObject`, `Rectangle`, `Ellipse`, `Pie`, `Polyline`, `CreateFontIndirect`, `SetTextColor`, `SetTextAlign` and `TextOut`. Correct output is 80 × 60 mm holding four fills, five strokes and the run "Paperless WMF" |
+| `wmf-picture.odt` | The same metafile inside an ODF package at 8 × 6 cm, which settles the question the fixture was built for: **LibreOffice keeps the metafile rather than rasterising it**, and writes a 9 685-byte PNG preview beside it — twenty times the size and fixed at one resolution, which is exactly what decoding avoids |
+| `wmf-picture.docx` | The same document converted. The `a:blip` has no SVG alternative, so its own `r:embed` *is* the picture and `BlipReference.Choose` has to leave it alone; nothing declares a media type, so the seam has to find the decoder from the first four bytes |
+
 ### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 
 96% of `slides-ppt.ppt` is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation`

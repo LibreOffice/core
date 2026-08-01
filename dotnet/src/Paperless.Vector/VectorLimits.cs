@@ -49,6 +49,20 @@ public sealed record VectorLimits
     public int MaxPathSegments { get; init; } = 4_000_000;
 
     /// <summary>
+    /// Largest number of records to read from a metafile command stream.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from <see cref="MaxCommands"/> rather than redundant with it, because the two
+    /// bound different things. Most metafile records emit no drawing command at all — every
+    /// <c>SelectObject</c>, every mapping change, every <c>SaveDC</c> — so a file of ten million
+    /// state records stays under any command cap while still costing ten million parses.
+    /// Conversely one record can emit thousands of commands, which is why capping records alone
+    /// is not enough either. The largest real embedded metafile seen in an office document runs
+    /// to a few tens of thousands of records, so a million is far past anything legitimate.
+    /// </remarks>
+    public int MaxRecords { get; init; } = 1_000_000;
+
+    /// <summary>
     /// Largest nesting depth of saved states and nested pictures. Guards the recursive walk
     /// of a nested command list against a stack overflow, which is not catchable.
     /// </summary>

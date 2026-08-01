@@ -1,4 +1,5 @@
 using Paperless.Vector.Svg;
+using Paperless.Vector.Wmf;
 
 namespace Paperless.Vector;
 
@@ -13,13 +14,15 @@ namespace Paperless.Vector;
 /// unremarkable. The declared type is used only to break a tie.
 /// </para>
 /// <para>
-/// SVG is the only entry today. WMF, EMF and EMF+ register here as they arrive, and nothing
-/// that calls this has to change when they do — which is the point of the seam.
+/// SVG and WMF are the entries today. EMF and EMF+ register here as they arrive, and nothing
+/// that calls this has to change when they do — which is the point of the seam. Order matters
+/// only where two decoders would claim the same bytes, which none of these do: the signatures
+/// are a placeable magic, a metafile header, an <c>EMR_HEADER</c> and an XML root.
 /// </para>
 /// </remarks>
 public static class VectorImages
 {
-    private static readonly IVectorImageDecoder[] Registered = [new SvgImageDecoder()];
+    private static readonly IVectorImageDecoder[] Registered = [new SvgImageDecoder(), new WmfImageDecoder()];
 
     /// <summary>Every decoder Paperless has.</summary>
     public static IReadOnlyList<IVectorImageDecoder> Decoders => Registered;
