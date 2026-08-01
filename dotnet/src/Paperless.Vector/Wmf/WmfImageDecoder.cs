@@ -57,7 +57,10 @@ public sealed class WmfImageDecoder : IVectorImageDecoder
 
         try
         {
-            if (!reader.Read()) return VectorImage.Empty with { Diagnostics = diagnostics };
+            if (!reader.Read())
+            {
+                return VectorImage.Empty with { Diagnostics = diagnostics, IsTruncated = reader.IsTruncated };
+            }
         }
         catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
         {
@@ -70,7 +73,10 @@ public sealed class WmfImageDecoder : IVectorImageDecoder
             return VectorImage.Empty with { Diagnostics = diagnostics };
         }
 
-        if (reader.Extent.IsEmpty) return VectorImage.Empty with { Diagnostics = diagnostics };
+        if (reader.Extent.IsEmpty)
+        {
+            return VectorImage.Empty with { Diagnostics = diagnostics, IsTruncated = reader.IsTruncated };
+        }
 
         return new VectorImage
         {

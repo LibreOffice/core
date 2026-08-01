@@ -141,7 +141,15 @@ internal sealed class WmfReader
         return type is 1 or 2 && headerWords == 9 && version is 0x0100 or 0x0300 && sizeWords >= 9;
     }
 
-    /// <summary>Reads the whole file. False when nothing could be drawn at all.</summary>
+    /// <summary>
+    /// Reads the whole file. False only when the headers could not be read.
+    /// </summary>
+    /// <remarks>
+    /// A file that parses but draws nothing is not a failure: a metafile cut short by a work
+    /// limit, or one that is genuinely empty, still has a size and still has diagnostics worth
+    /// carrying back. Reporting it as a failure would drop <see cref="IsTruncated"/> on the
+    /// floor and make a truncated decode indistinguishable from an unreadable one.
+    /// </remarks>
     public bool Read()
     {
         _context.Mapping.SetMode(MappingMode.Anisotropic);
@@ -182,7 +190,7 @@ internal sealed class WmfReader
                     + "capable consumer to prefer, was not.");
         }
 
-        return _list.Count > 0;
+        return true;
     }
 
     // ---------------------------------------------------------------- headers
