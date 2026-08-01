@@ -803,7 +803,7 @@ void SwView::Execute(SfxRequest &rReq)
                     {   // xmlsec05: message box for wrong password
                         std::shared_ptr<weld::MessageDialog> xInfoBox(
                             Application::CreateMessageDialog(
-                                nullptr, VclMessageType::Info, VclButtonsType::Ok,
+                                GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
                                 SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
                         xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
                         break;
