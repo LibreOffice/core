@@ -355,7 +355,9 @@ public sealed partial class DocxLayoutSource
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = breaksPage ? format with { StartsNewPage = true } : format,
+            Format = breaksPage || walker.BreaksPageHere
+                ? format with { StartsNewPage = true }
+                : format,
             Label = label,
             EmSize = text.Size,
             Language = text.Language,
@@ -689,14 +691,26 @@ public sealed partial class DocxLayoutSource
         /// <summary>How many endnotes it cited.</summary>
         internal int EndnotesSeen { get; private set; }
 
-        /// <summary>True when a <c>w:br w:type="page"</c> was passed, so the next paragraph starts a page.</summary>
+        /// <summary>Where in the text the last <c>w:br w:type="page"</c> fell, or −1 for none.</summary>
+        private int _pageBreakAt = -1;
+
+        /// <summary>
+        /// True when a <c>w:br w:type="page"</c> ended the paragraph, so the <em>next</em> one starts a page.
+        /// </summary>
         /// <remarks>
-        /// The next one and not this one, which is the whole of why it is reported rather than acted on:
-        /// a page break is written at the point in the text where the page ends, and the layout model
-        /// says "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c>
-        /// has, and the same shape the DOC and RTF forms of a document state directly.
+        /// A page break is written at the point in the text where the page ends, and the layout model says
+        /// "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c> has, and
+        /// the same shape the DOC and RTF forms state directly. Which paragraph it lands on is decided by
+        /// what follows the break rather than by the paragraph boundary: LibreOffice defers the break and
+        /// applies it at the next run of text (<c>DomainMapper::lcl_utext</c>, which calls
+        /// <c>deferBreak(PAGE_BREAK)</c> for U+000C and inserts <c>BreakType_PAGE_BEFORE</c> into the
+        /// <em>current</em> paragraph context on the next text it sees). So a break with text after it in
+        /// the same paragraph breaks before that paragraph, and only one with nothing after it carries over.
         /// </remarks>
-        internal bool BreaksPage { get; private set; }
+        internal bool BreaksPage => _pageBreakAt >= 0 && _pageBreakAt >= _builder.Length;
+
+        /// <summary>True when the break fell before this paragraph's own text, so this one starts a page.</summary>
+        internal bool BreaksPageHere => _pageBreakAt >= 0 && _pageBreakAt < _builder.Length;
 
         private bool _inInstruction;
 
@@ -766,7 +780,7 @@ public sealed partial class DocxLayoutSource
                     // and then *defers* it, applying it to the paragraph that follows as
                     // `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`).
                     case "br" when !_inInstruction:
-                        if (Word.Attribute(child, "type") == "page") BreaksPage = true;
+                        if (Word.Attribute(child, "type") == "page") _pageBreakAt = _builder.Length;
                         else Emit(LineSeparator.ToString());
                         break;
 
