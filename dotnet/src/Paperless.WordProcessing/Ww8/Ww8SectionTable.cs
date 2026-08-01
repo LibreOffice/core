@@ -104,19 +104,29 @@ internal static class Ww8SectionTable
     /// What a <c>sprmSBkc</c> value means.
     /// </summary>
     /// <remarks>
-    /// Word's own <c>bkc</c> numbering, which is not the order the concepts are usually listed in: 0 is a
-    /// column break, 1 is continuous, 2 a new page, 3 even and 4 odd. A column break in a single-column
-    /// section lands where the next column would, which is the same page — so it reads as continuous here,
-    /// and modelling it properly needs columns, which layout does not do yet.
+    /// <para>
+    /// Word's own <c>bkc</c> numbering, from [MS-DOC] 2.9.4: 0 continuous, 1 new column, 2 new page,
+    /// 3 even page, 4 odd page. LibreOffice reads it the same way — <c>wwSection::IsContinuous()</c> in
+    /// <c>sw/source/filter/ww8/ww8par.hxx</c> is <c>maSep.bkc == 0</c>, and <c>InsertSegments()</c> takes
+    /// the column-break branch only for <c>bkc == 1</c>.
+    /// </para>
+    /// <para>
+    /// The two easily swap, and swapping them is expensive rather than cosmetic: a continuous break is by
+    /// far the commonest kind — it is what a document uses to change column count or margins mid-page —
+    /// and reading it as a column break puts a page break in the middle of every one of them, which then
+    /// shifts every page after it.
+    /// </para>
     /// </remarks>
     private static SectionBreak BreakOf(int bkc) => bkc switch
     {
-        // Word's own numbering, and zero is not continuous: it is "start in the next column", which for a
-        // single-column section lands on the same page and so behaves as continuous without being it.
-        0 => SectionBreak.NewColumn,
-        1 => SectionBreak.Continuous,
+        0 => SectionBreak.Continuous,
+        1 => SectionBreak.NewColumn,
         3 => SectionBreak.EvenPage,
         4 => SectionBreak.OddPage,
+
+        // Two means a new page, and so does anything a file states that Word does not define: the
+        // default a section descriptor with no sprmSBkc at all takes is 2 (`ww8scan.cxx`, WW8_SEP's
+        // constructor).
         _ => SectionBreak.NextPage,
     };
 
