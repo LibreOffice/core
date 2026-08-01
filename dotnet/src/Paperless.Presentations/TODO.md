@@ -1519,15 +1519,141 @@ to a tenth of a point. And all ten real SmartArt decks in `sd/qa/unit/data/pptx`
 `n819614.pptx`, 111 shapes with 55 `a:custGeom` and 51 gradients — match the reference on page and
 word count.
 
-**What is left.** `a:spcPct` paragraph spacing, which is the recorded `spcBef`/`spcAft` item and
-not a diagram bug — but diagrams use nothing else: **324 of the 324** `a:pPr` in the corpus's baked
-drawings state their spacing as a percentage and none states it in points, so a multi-paragraph
-node's lines come out tighter than the reference (`tdf93830.pptx` is the clearest case). The
-layout-atom evaluator, deliberately not attempted. And the colour transform is not consulted at
-all: LibreOffice pulls `node0`'s text fill out of `colors1.xml` and applies it as the `fontRef`
-colour for every node (`diagram.cxx:674-682`, `applyFontRefColor`), which the baked tree already
-resolves into each run for every file measured — but a file that left a run's colour unstated
-would take ours from the theme and LibreOffice's from the colour transform.
+**What is left on the baked path.** `a:spcPct` paragraph spacing, which is the recorded
+`spcBef`/`spcAft` item and not a diagram bug — but diagrams use nothing else: **324 of the 324**
+`a:pPr` in the corpus's baked drawings state their spacing as a percentage and none states it in
+points, so a multi-paragraph node's lines come out tighter than the reference (`tdf93830.pptx` is
+the clearest case). And on the baked path the colour transform is still not consulted: LibreOffice
+pulls `node0`'s text fill out of `colors1.xml` and applies it as the `fontRef` colour for every
+node (`diagram.cxx:674-682`, `applyFontRefColor`), which the baked tree already resolves into each
+run for every file measured — but a file that left a run's colour unstated would take ours from the
+theme and LibreOffice's from the colour transform. (The *evaluated* path does read the colour
+transform; it has to, because nothing else says what colour a node is.)
+
+### The layout-atom evaluator: what runs, measured against what
+
+**Why it had to exist at all, in one number.** 66 of the decks in `sd/qa/unit/data/pptx` carry a
+diagram and **37 of them have no usable baked drawing** — Office 2007 wrote none because the
+drawing vocabulary's namespace is dated 2008, and LibreOffice's own fixtures had theirs removed by
+hand precisely so this path is what gets tested. All 37 drew as nothing.
+
+`layout1.xml` is not a description of a diagram; it is a small declarative program —
+`forEach`, `choose`/`if`/`else`, `layoutNode`, `alg`, `constr`, `rule`, `shape` — whose input is
+`data1.xml`. It is walked twice: once to create one shape per (layout node, iteration) pair, once
+to size and place them innermost-last. The port is
+`PptxDiagramData` → `PptxDiagramAtoms` → `PptxDiagramEvaluator` → `PptxDiagramAlgorithms` →
+`PptxDiagramStyles` → `PptxDiagramShapeTree`/`PptxDiagramText`, from
+`oox/source/drawingml/diagram/{datamodelcontext,layoutnodecontext,layoutatomvisitorbase,layoutatomvisitors,diagramlayoutatoms}.cxx`
+and `svx/source/diagram/datamodel_svx.cxx`.
+
+**The trick that makes it tractable**, and the thing worth knowing before reading any of it: the
+evaluator never has to decide *how many* of anything to make. The authoring application already
+ran the program once and wrote its answer into the data model as `type="pres"` points, each named
+after the `dgm:layoutNode` that produced it. A layout node called `textNode` gets exactly as many
+shapes as there are presentation points whose `presName` is `textNode`, indexed by the enclosing
+`forEach`'s counter. Everything else — connections, depths, style indices — is a lookup.
+
+**What evaluates, and what it was measured against.**
+
+| Algorithm | State | Measured on |
+|---|---|---|
+| `lin` | ported whole, including rules and the shrink pass | 18 of the 20 |
+| `composite` | ported whole, including the vertical centring | 15 of the 20 |
+| `sp` | ported (it only throws the text away again) | 20 of the 20 |
+| `tx` | size, insets, anchor, bullets, alignment | 20 of the 20 |
+| `conn` | preset substitution and the centre-preserving resize | 1 of the 20 |
+| `snake`, `cycle`, `hierRoot`/`hierChild`, `pyra` | **not ported** | — |
+
+The measurement is `soffice --convert-to pdf` over all 37 decks against `paperless render` over
+the same, comparing every filled path's bounding box. **20 evaluate and all 20 agree with the
+reference** — 19 of them draw between 1 and 10 filled shapes each, every one within 0.07 pt, and
+the twentieth (`tdf169781.pptx`) evaluates to no shapes, as LibreOffice's does. The worst single
+shape in the set is 0.069 pt out and the median file's worst is 0.038, which is not a tolerance
+tuned to fit but LibreOffice quantising to hundredths of a millimetre (0.0283 pt) twice, once on
+the offset and once on the extent. `slide-diagram-evaluated.pptx` is the committed fixture and
+`SlideDiagramLayoutComparisonTests` is the standing check; its three boxes land at 72, 252 and
+432 pt across a 540 pt frame, 54 pt down from the top because the composite centres what its
+constraints did not fill.
+
+**A diagram naming an algorithm that is not ported is declined whole**, so it draws nothing rather
+than approximately. That is deliberate: half-evaluating a `snake` leaves every node at the origin
+on top of every other, which reads as a bug in the shapes rather than as an unimplemented
+algorithm, and it would move files in the render sweep that today draw nothing honestly. The 17
+declined are the `snake` (7 decks), `cycle` (5), `hierRoot`/`hierChild` (4) and `pyra` (1) ones.
+
+**Four traps, and the one that cost an afternoon.**
+
+*A layout node with no `dgm:shape` produces no shape at all.* Not an empty group — nothing.
+`vertical-bracket-list.pptx` has `<dgm:layoutNode name="spH"><dgm:alg type="sp"/></dgm:layoutNode>`
+with no shape element, and giving it an empty group hands the linear algorithm a fourth child to
+place, which moves everything after it left by exactly the 9.6 pt the spacer's own constraint
+asked for. The walk still descends into such a node, with the parent unchanged
+(`layoutatomvisitors.cxx:112`).
+
+*`dgm:shape/@rot` rotates the geometry inside the box, not the box.* LibreOffice applies it to the
+unit square **before** scaling — "Special for SmartArt import. Rotate diagram's shape around
+object's center before sizing", `oox/source/drawingml/shape.cxx:1099-1105` — so the bounding box
+does not change. Emitting it as an `a:xfrm/@rot` instead turns
+`smartart-vertical-block-list.pptx`'s 307.2 × 82.6 pt band into an 82.6 × 307.2 pt column about
+the same centre: 112 pt out in both directions, and it looks like a layout bug rather than a
+transform bug. A half turn is a flip in both directions and is emitted that way; a quarter turn is
+not expressible and is dropped.
+
+*A margin constraint's factor is converted from points to millimetres before it multiplies a
+width in EMUs.* `convertPointToMms`, `include/oox/drawingml/drawingmltypes.hxx:199`, reached from
+the `tx` algorithm. Read as a plain fraction of the width, the corpus's commonest case — factor
+0.3 on a 341 pt box — gives 102 pt of inset where LibreOffice gives 36, and the label lands
+somewhere else entirely.
+
+*The depth-zero branch of `setupShape` is unreachable, and reading it as though it runs is the one
+that cost the afternoon.* `LayoutNode::setupShape` (`diagramlayoutatoms.cxx:1906`) has a branch
+for `mnDepth == 0` that replaces the shape's **geometry** as well as its fill — which would throw
+away the preset the layout definition asked for, so every node would come out a plain rectangle.
+It never runs: the map holding the depths stores a computed zero as −1
+(`datamodel_svx.cxx:989`, `mnDepth = nDepth != 0 ? nDepth : -1`), so every entry is −1 or one or
+more, and the shallowest-depth branch below it — fill and line only — is the one that fires.
+
+**Colour needs both diagram parts, and neither is enough.** The quick style says *which* of the
+theme's three fill styles a labelled node uses (`a:fillRef idx="1"`); the colour transform says
+what the `phClr` those theme styles are written in terms of stands for, cycling a list by the
+presentation point's own `presStyleIdx`. Read the quick style alone and every node is the theme's
+first accent. Measured over the 66 diagram decks: of 3 919 `a:fillRef` in their quick styles,
+3 098 are index 1, 487 are index 0 (no fill) and 334 are 2 or 3 — and the first entry of
+`a:fillStyleLst` is `solidFill(phClr)` in **every** theme in the corpus. The substitution is done
+by cloning the theme's element and replacing each `a:schemeClr val="phClr"`, so a gradient's stop
+list, a `lumMod`/`lumOff` pair and a line's width all survive it and are read by the same code
+that reads a slide's.
+
+**What still differs, measured.**
+
+- [ ] **LibreOffice shrinks a node's text to fit and Paperless does not**, which is the whole of
+      the remaining text divergence. The `tx` algorithm can state a font size through a
+      `primFontSz` constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
+      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. On the 20 decks
+      that draw: **ten agree on every run's position and size**, and on the other ten the sizes
+      diverge where the fit bites — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
+      against 27.014 on `smartart-vertical-block-list.pptx`, 18 against 9.014 on
+      `smartart-autofit-sync.pptx`. Where LibreOffice does *not* shrink, the constraint's size is
+      reproduced exactly: `smartart-chevron.pptx` draws at 64.998 pt in both. Matching it means
+      porting `SdrTextObj`'s fit search, which is a layout-engine change rather than a reader one.
+- [ ] **A text node whose constraints resolve to a zero-sized box is dropped.** `smartart-cnt.pptx`
+      constrains `ThreeNodes_1_text`'s left and right edges against a sibling's `l`, which no
+      constraint ever sets, so both fall back to the absolute-value branch and both come out 0.
+      LibreOffice keeps the shape and draws its three labels stacked on the frame's top-left
+      corner at 9 pt; we draw none. Its five filled shapes match exactly. Arguably ours is the
+      better rendering, which is why this is recorded rather than fixed.
+- [ ] **A run may be split where LibreOffice keeps one.** `smartart-accent-process.pptx` draws
+      seven text runs to the reference's six, with every shared run within 0.9 pt. Font
+      fallback splitting a run is a shared text-chain behaviour, not a diagram one.
+- [ ] **The `presOf` element of a layout node is not read**, only the data model's `presOf`
+      connections. LibreOffice does the same and says so (`layoutnodecontext.cxx:279`, "TODO"),
+      so an `axis`/`ptType`/`st`/`cnt` on a `dgm:presOf` changes nothing in either.
+- [ ] **`ConditionAtom`'s `depth`, `pos`, `revPos`, `posEven` and `posOdd` functions return
+      true**, as LibreOffice's do. True rather than false is load-bearing: a `choose` takes its
+      first matching branch, so defaulting to true takes the first, while defaulting to false
+      falls through every branch to the `else` and lays the diagram out as its degenerate case.
+      It is also why a list's trailing gap disappears — the `revPos == 1` test that guards it
+      matches for every node, not just the last.
 
 ### A bullet character is one character, and files say otherwise
 

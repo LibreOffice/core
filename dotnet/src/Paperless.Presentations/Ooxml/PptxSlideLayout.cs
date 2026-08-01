@@ -123,6 +123,22 @@ internal sealed partial class PptxSlideLayout
     }
 
     /// <summary>
+    /// The slide's theme part as XML, which a diagram's style references index into directly.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="SlideTheme"/> holds a resolved colour scheme and a typeface, which is all a
+    /// shape needs; a diagram also needs <c>a:fmtScheme</c>, whose three fill styles and three
+    /// line styles its quick style names by index and whose <c>phClr</c> its colour transform
+    /// substitutes. That is a format matrix rather than a colour, so it is taken from the part
+    /// rather than added to the cached theme — and the part itself is already cached by
+    /// <see cref="PptxFile.Load"/>, so asking twice costs a dictionary lookup.
+    /// </remarks>
+    private XElement? ThemePart(PptxSlide slide)
+        => slide.MasterPartName is { } master
+            ? _file.Load(_file.TargetOfType(master, "theme"))
+            : null;
+
+    /// <summary>
     /// The slide's background, taken from the slide, then its layout, then its master.
     /// </summary>
     /// <remarks>
@@ -236,11 +252,27 @@ internal sealed partial class PptxSlideLayout
         XElement? graphic = Drawing.Child(Drawing.Child(frame, "graphic"), "graphicData");
         if (Drawing.Attribute(graphic, "uri") != PptxDiagram.Uri) return;
         if (PartOf(frame, slide) is not { } part) return;
-        if (PptxDiagram.Baked(_file, part, graphic!) is not { } baked) return;
 
         XElement? transform = Ppt.Child(frame, "xfrm");
         DocRect local = Bounds(transform);
         if (local.Width <= Length.Zero || local.Height <= Length.Zero) return;
+
+        // The baked drawing first, and the layout-atom evaluator only when there is none. The
+        // baked tree is what the authoring application itself drew, so preferring it keeps a
+        // modern file independent of the evaluator agreeing with PowerPoint; LibreOffice decides
+        // the same way in one line — diagram.cxx:701, bCreate = getExtDrawings().empty().
+        if ((PptxDiagram.Baked(_file, part, graphic!)
+             ?? PptxDiagram.Evaluated(
+                 _file,
+                 part,
+                 graphic!,
+                 ThemePart(slide),
+                 theme.Colours,
+                 (int)local.Width.Emu,
+                 (int)local.Height.Emu)) is not { } baked)
+        {
+            return;
+        }
 
         _diagrams[baked.ShapeTree] = baked.PartName;
 

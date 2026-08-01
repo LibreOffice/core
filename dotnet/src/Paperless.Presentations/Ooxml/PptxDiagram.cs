@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using Paperless.Containers.Ooxml;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 
 namespace Paperless.Presentations.Ooxml;
 
@@ -72,13 +73,75 @@ internal static class PptxDiagram
 
     /// <summary>The diagram's data model part, which holds the author's text.</summary>
     public static XElement? DataModel(PptxFile file, string partName, XElement graphicData)
+        => Part(file, partName, graphicData, "dm");
+
+    /// <summary>One of the four parts a <c>dgm:relIds</c> names, loaded, or null.</summary>
+    private static XElement? Part(
+        PptxFile file, string partName, XElement graphicData, string attribute)
     {
         string? id = graphicData.Element(XName.Get("relIds", Uri))
-            ?.Attribute(XName.Get("dm", OoxmlNamespaces.Relationships))?.Value;
+            ?.Attribute(XName.Get(attribute, OoxmlNamespaces.Relationships))?.Value;
 
         return file.Relationship(partName, id) is { IsExternal: false } relationship
             ? file.Load(relationship.Target)
             : null;
+    }
+
+    /// <summary>
+    /// Evaluates the layout definition, for a diagram whose baked drawing is absent or empty.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is the path LibreOffice takes when <c>getExtDrawings()</c> is empty
+    /// (<c>diagram.cxx:701</c>), and it is not a rare one: Office 2007 wrote no baked drawing at
+    /// all because the vocabulary's namespace is dated 2008, and 37 of the 66 diagram-bearing
+    /// decks in <c>sd/qa/unit/data/pptx</c> have none — every one of which draws as nothing
+    /// without this.
+    /// </para>
+    /// <para>
+    /// The result is the same kind of tree the baked path produces, so both feed the ordinary
+    /// slide layouter and a difference between the two is a difference in the evaluation rather
+    /// than in the drawing. Returns null when the layout definition names an algorithm the
+    /// evaluator does not implement; see <see cref="PptxDiagramEvaluator"/> for why declining
+    /// beats approximating.
+    /// </para>
+    /// </remarks>
+    /// <param name="file">The package.</param>
+    /// <param name="partName">The part carrying the <c>dgm:relIds</c>, which resolves its ids.</param>
+    /// <param name="graphicData">The <c>a:graphicData</c> holding the <c>dgm:relIds</c>.</param>
+    /// <param name="themePart">The <c>a:theme</c> root, whose format scheme the styles index.</param>
+    /// <param name="theme">The theme as a colour model.</param>
+    /// <param name="width">The frame's width in EMUs.</param>
+    /// <param name="height">The frame's height in EMUs.</param>
+    public static BakedDrawing? Evaluated(
+        PptxFile file,
+        string partName,
+        XElement graphicData,
+        XElement? themePart,
+        DrawingTheme? theme,
+        int width,
+        int height)
+    {
+        if (DataModel(file, partName, graphicData) is not { } model) return null;
+
+        DiagramData data = DiagramData.Read(model);
+
+        XElement? definition = Part(file, partName, graphicData, "lo");
+        if (PptxDiagramEvaluator.Evaluate(data, definition, width, height) is not { } diagram)
+        {
+            return null;
+        }
+
+        PptxDiagramStyles styles = PptxDiagramStyles.Read(
+            Part(file, partName, graphicData, "qs"),
+            Part(file, partName, graphicData, "cs"),
+            themePart,
+            theme);
+
+        XElement? background = model.Element(XName.Get("bg", Uri));
+        if (PptxDiagramShapeTree.Build(diagram, styles, background) is not { } tree) return null;
+
+        return new BakedDrawing(tree, partName);
     }
 
     /// <summary>

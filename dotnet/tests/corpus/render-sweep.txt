@@ -7,9 +7,13 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 197 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 199 of 225 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
+#
+# The two `slide-diagram-*.pptx` rows are new to this sweep and are the two halves of
+# SmartArt: the baked `diagramDrawing` a modern Office writes, and the layout definition
+# evaluated because there is none. Both match, 3/3 words on one page.
 #
 # Of the twenty-six that do not match, five are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
@@ -210,6 +214,8 @@ deck-features.pptx                 3/3         43/43         OK
 deck-text-style.pptx               1/1         14/14         OK
 paint-fills-pptx.pptx              2/2         0/0           OK
 shape-geometry.pptx                4/4         9/9           OK
+slide-diagram-baked.pptx           1/1         3/3           OK
+slide-diagram-evaluated.pptx       1/1         3/3           OK
 slide-shape-features.pptx          4/4         16/16         OK
 slide-table-grid.pptx              2/2         25/25         OK
 ppt-features.ppt                   2/2         32/32         OK

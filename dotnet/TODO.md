@@ -783,16 +783,25 @@ arrive as blip *fills* on ordinary shapes.
       corpus deck (`slide-diagram-baked.pptx`) to a tenth of a point on fills, outlines,
       connector vertices and label pens, and on all ten real SmartArt decks in
       `sd/qa/unit/data/pptx` for page and word count. PPTX only; see below.
-- [ ] **Evaluating the layout algorithms, for the 25 documents with no baked drawing.**
-      `oox/source/drawingml/diagram/` is 6.7 kLOC and `svx/source/diagram/` another 2.3 kLOC, and
-      it is what LibreOffice falls back to — `diagram.cxx:701`,
-      `bCreate = pShape->getExtDrawings().empty()`, then `createShapeHierarchyFromModel(pShape,
-      bCreate)`, whose comment reads "if false - just create the BackgroundShape". It does produce
-      a real diagram: `smartart-org-chart.pptx` has an emptied drawing part and LibreOffice still
-      draws eleven nodes, which come out of a PPTX→ODP conversion as 14 `draw:custom-shape` in 13
-      `draw:g`. Deliberately not attempted. It would serve documents that are, in this corpus,
-      entirely LibreOffice's own fixtures plus Office 2007 files, and it would produce a diagram
-      that differs from the reference rather than agreeing with it.
+- [x] **Evaluating the layout atoms, for the documents with no baked drawing** — five algorithms
+      of the nine, and the five that carry the corpus. `PptxDiagramData`, `PptxDiagramAtoms`,
+      `PptxDiagramEvaluator`, `PptxDiagramAlgorithms`, `PptxDiagramStyles`,
+      `PptxDiagramShapeTree` and `PptxDiagramText` in `Paperless.Presentations/Ooxml/`, reached
+      from `PptxSlideLayout.Diagram` only when `PptxDiagram.Baked` declines — the same one-line
+      decision LibreOffice makes at `diagram.cxx:701`,
+      `bCreate = pShape->getExtDrawings().empty()`.
+      **Measured over the 37 decks in `sd/qa/unit/data/pptx` with no usable baked drawing: 20 now
+      draw, and on all 20 every filled shape agrees with LibreOffice's own PDF to within
+      0.07 pt** — the quantisation of its internal hundredth of a millimetre rather than a
+      disagreement. The other 17 name an algorithm the evaluator does not implement and are
+      declined whole, so they draw nothing, as they did before, rather than approximately. What
+      still differs, and why, is in `src/Paperless.Presentations/TODO.md`.
+- [ ] **The four remaining algorithms: `snake`, `cycle`, `hierRoot`/`hierChild`, `pyra`.** They
+      are exactly what the 17 declined decks use, and each is a different geometry with its own
+      hand-tuned constants rather than another case in the constraint solver — `snake` alone is
+      330 lines searching for a grid. The hierarchy pair is the closest: it needs only the
+      vertical-shape count, which is already ported (`getVerticalShapesCount`) and unused until
+      they land.
 - [ ] **A DOCX or XLSX diagram needs a hook in its own reader.** The same shape as the chart item
       and left for the same reason: those libraries had other agents in them. Worth 8 documents in
       `sw/qa` and 2 in `sc/qa`, all with baked drawings.
