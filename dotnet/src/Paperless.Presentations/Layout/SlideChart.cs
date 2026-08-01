@@ -216,6 +216,19 @@ public static class SlideChart
     /// there are few of them, so measuring each twice — once to reserve room, once to place it —
     /// costs nothing worth caching.
     /// </remarks>
+    /// <summary>The face a chart's own text is set in, which is not the deck's.</summary>
+    /// <remarks>
+    /// A chart is not a slide shape and does not inherit the slide's typeface: chart2 gives its
+    /// text <c>DefaultFontType::LATIN_SPREADSHEET</c>, which resolves to Liberation Sans on this
+    /// machine, and <c>pdffonts</c> on LibreOffice's own PDF of a chart deck reports exactly that.
+    /// Leaving the run's face null substitutes the generic serif instead — which is not merely a
+    /// different-looking label, because the axis labels' <em>width</em> is what reserves the plot
+    /// area. Measured on <c>chart-bar-deck.odp</c>: the plot's left edge is 1.29 pt short in the
+    /// serif and 0.44 pt long in Liberation Sans, so the wrong face was 1.73 pt of an error that
+    /// three separate attempts hunted for in the label geometry.
+    /// </remarks>
+    private const string ChartFace = "Liberation Sans";
+
     private sealed class Measurer(SlideFonts fonts) : IChartTextMeasurer
     {
         public DocSize Measure(string text, Length size)
@@ -265,7 +278,7 @@ public static class SlideChart
             [
                 new SlideParagraph(
                     text,
-                    [new SlideTextRun(0, text.Length, null, size, 400, false, colour)],
+                    [new SlideTextRun(0, text.Length, ChartFace, size, 400, false, colour)],
                     TextAlignment.Start),
             ],
         };

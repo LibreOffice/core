@@ -122,14 +122,14 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // write it, so test files have to come from Excel.
         New(DocumentFormat.Xlsb, DocumentFamily.Spreadsheet, ContainerKind.Zip, "xlsb",
             "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
-            "Excel 2007-365 Binary", macros: true),
+            "Excel 2007-365 Binary", macros: true, read: true),
 
         // ---- Spreadsheet: legacy binary -----------------------------------------------
         New(DocumentFormat.Xls, DocumentFamily.Spreadsheet, ContainerKind.Ole2CompoundFile,
-            "xls", "application/vnd.ms-excel", "Excel 97-2003", macros: true),
+            "xls", "application/vnd.ms-excel", "Excel 97-2003", macros: true, read: true),
         New(DocumentFormat.Xlt, DocumentFamily.Spreadsheet, ContainerKind.Ole2CompoundFile,
             "xlt", "application/vnd.ms-excel", "Excel 97-2003 Template",
-            template: true, macros: true),
+            template: true, macros: true, read: true),
         New(DocumentFormat.Xls5, DocumentFamily.Spreadsheet, ContainerKind.Ole2CompoundFile,
             "xls", "application/vnd.ms-excel", "Excel 5.0/95", macros: true),
 
@@ -137,7 +137,7 @@ public sealed class FormatCatalogue : IFormatCatalogue
         New(DocumentFormat.ExcelXml2003, DocumentFamily.Spreadsheet, ContainerKind.Xml, "xml",
             "text/xml", "Excel 2003 XML"),
         New(DocumentFormat.Csv, DocumentFamily.Spreadsheet, ContainerKind.PlainText, "csv",
-            "text/csv", "Text CSV", alternates: ["tsv", "tab"]),
+            "text/csv", "Text CSV", alternates: ["tsv", "tab"], read: true),
         New(DocumentFormat.Dif, DocumentFamily.Spreadsheet, ContainerKind.PlainText, "dif",
             "text/plain", "Data Interchange Format"),
 
@@ -159,34 +159,34 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // ---- Presentation: OOXML ------------------------------------------------------
         New(DocumentFormat.Pptx, DocumentFamily.Presentation, ContainerKind.Zip, "pptx",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "PowerPoint 2007-365"),
+            "PowerPoint 2007-365", read: true),
         New(DocumentFormat.Pptm, DocumentFamily.Presentation, ContainerKind.Zip, "pptm",
             "application/vnd.ms-powerpoint.presentation.macroEnabled.12",
-            "PowerPoint 2007-365 (macro-enabled)", macros: true),
+            "PowerPoint 2007-365 (macro-enabled)", macros: true, read: true),
         New(DocumentFormat.Potx, DocumentFamily.Presentation, ContainerKind.Zip, "potx",
             "application/vnd.openxmlformats-officedocument.presentationml.template",
-            "PowerPoint 2007-365 Template", template: true),
+            "PowerPoint 2007-365 Template", template: true, read: true),
         New(DocumentFormat.Potm, DocumentFamily.Presentation, ContainerKind.Zip, "potm",
             "application/vnd.ms-powerpoint.template.macroEnabled.12",
-            "PowerPoint 2007-365 Template (macro-enabled)", template: true, macros: true),
+            "PowerPoint 2007-365 Template (macro-enabled)", template: true, macros: true, read: true),
         New(DocumentFormat.Ppsx, DocumentFamily.Presentation, ContainerKind.Zip, "ppsx",
             "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
-            "PowerPoint 2007-365 Show"),
+            "PowerPoint 2007-365 Show", read: true),
         // '.ppsm' is not a registered extension anywhere in LibreOffice's type registry
-        // (see research doc section 10), but the content type exists and Excel/PowerPoint
+        // (see research doc section 10, read: true), but the content type exists and Excel/PowerPoint
         // do produce such files, so Paperless recognises it by content type.
         New(DocumentFormat.Ppsm, DocumentFamily.Presentation, ContainerKind.Zip, "ppsm",
             "application/vnd.ms-powerpoint.slideshow.macroEnabled.12",
-            "PowerPoint 2007-365 Show (macro-enabled)", macros: true),
+            "PowerPoint 2007-365 Show (macro-enabled)", macros: true, read: true),
 
         // ---- Presentation: legacy binary ----------------------------------------------
         New(DocumentFormat.Ppt, DocumentFamily.Presentation, ContainerKind.Ole2CompoundFile,
-            "ppt", "application/vnd.ms-powerpoint", "PowerPoint 97-2003", macros: true),
+            "ppt", "application/vnd.ms-powerpoint", "PowerPoint 97-2003", macros: true, read: true),
         New(DocumentFormat.Pot, DocumentFamily.Presentation, ContainerKind.Ole2CompoundFile,
             "pot", "application/vnd.ms-powerpoint", "PowerPoint 97-2003 Template",
-            template: true, macros: true),
+            template: true, macros: true, read: true),
         New(DocumentFormat.Pps, DocumentFamily.Presentation, ContainerKind.Ole2CompoundFile,
-            "pps", "application/vnd.ms-powerpoint", "PowerPoint 97-2003 Show", macros: true),
+            "pps", "application/vnd.ms-powerpoint", "PowerPoint 97-2003 Show", macros: true, read: true),
 
         // ---- Presentation: ODF --------------------------------------------------------
         New(DocumentFormat.Odp, DocumentFamily.Presentation, ContainerKind.Zip, "odp",
