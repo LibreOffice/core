@@ -62,8 +62,7 @@ public static class XlsxReader
             // The workbook's cell formats, read once. Only layout looks at them, and only the
             // fonts-and-alignment half of styles.xml is read here — the number formats extraction
             // needs are already resolved on file.Styles.
-            IReadOnlyList<SheetCellFormat> cellFormats =
-                XlsxCellFormats.Read(file.StyleSheet, file.Styles);
+            XlsxCellFormatTable cellFormats = XlsxCellFormats.Read(file.StyleSheet, file.Styles);
 
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
@@ -90,6 +89,9 @@ public static class XlsxReader
                 (SheetPrintSetup setup, SheetGrid grid) = XlsxPrintSetup.Read(
                     worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows);
 
+                (SheetCellFormats formats, SheetRichText rich) =
+                    XlsxSheetFormats.Read(worksheet, cellFormats, file);
+
                 layouts.Add(new SheetLayout
                 {
                     Name = entry.Name,
@@ -99,7 +101,9 @@ public static class XlsxReader
                     Grid = grid,
                     Cells = table,
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
-                    Formats = XlsxSheetFormats.Read(worksheet, cellFormats),
+                    Formats = formats,
+                    RichText = rich,
+                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName),
                     FileName = source.FileName ?? string.Empty,
                 });
 

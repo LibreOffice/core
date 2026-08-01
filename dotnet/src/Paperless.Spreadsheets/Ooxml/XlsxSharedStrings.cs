@@ -8,13 +8,14 @@ namespace Paperless.Spreadsheets.Ooxml;
 /// </summary>
 /// <remarks>
 /// Excel pools every distinct string in the workbook here and stores only the index in the cell,
-/// which is why a sheet full of text can hold no text at all. Rich text is flattened: a string
-/// split into runs by formatting is one string to a reader, and extraction discards the
-/// formatting anyway.
+/// which is why a sheet full of text can hold no text at all. Rich text is flattened for
+/// extraction: a string split into runs by formatting is one string to a reader, and its runs are
+/// kept beside the text — as character offsets rather than as formats — for whoever draws it.
 /// </remarks>
 public sealed class XlsxSharedStrings
 {
     private readonly List<string> _strings = [];
+    private readonly Dictionary<int, IReadOnlyList<XlsxRichRun>> _runs = [];
 
     private XlsxSharedStrings()
     {
@@ -43,10 +44,21 @@ public sealed class XlsxSharedStrings
         if (root is null) return table;
 
         foreach (XElement item in Xlsx.Children(root, "si"))
+        {
+            // The runs are recorded only for the strings that have any, so a workbook whose text
+            // is all one format carries an empty dictionary rather than one entry per string.
+            if (XlsxRichRuns.Read(item) is { } runs) table._runs[table._strings.Count] = runs;
             table._strings.Add(ReadRichString(item));
+        }
 
         return table;
     }
+
+    /// <summary>
+    /// The formatting runs of the string at an index, or null when it is all one format.
+    /// </summary>
+    /// <param name="index">The shared string index a cell states.</param>
+    internal IReadOnlyList<XlsxRichRun>? RunsAt(int index) => _runs.GetValueOrDefault(index);
 
     /// <summary>
     /// Flattens an <c>si</c>, <c>is</c> or comment <c>text</c> element to plain text.

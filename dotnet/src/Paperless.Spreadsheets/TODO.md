@@ -398,7 +398,10 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
 - [ ] Threaded comments (`threadedComments`). Excel writes them *in addition* to the legacy
       part rather than instead of it, so reading the legacy one alone loses nothing today —
       but it loses the reply threading and the resolved-state flag.
-- [ ] Drawing anchors: `oneCellAnchor`, `twoCellAnchor`, `absoluteAnchor`
+- [x] Drawing anchors: `oneCellAnchor`, `twoCellAnchor`, `absoluteAnchor` — `Ooxml/XlsxDrawings.cs`,
+      reached through the *worksheet's* own `drawing` relationship and never by part name.
+      `editAs` is read past deliberately: it says how a drawing behaves when the sheet is
+      **edited**, and the rectangle it occupies on a printed page is the same either way
 - [ ] Tables, autofilters, pivot caches (extraction only)
 
 ### XLSB
@@ -442,8 +445,11 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
       lives in the drawing layer's `TXO` records, so it needs the MS-ODRAW reader that the
       PPT work owns — this is the one piece of cell extraction that is blocked on somebody
       else's module rather than on effort here.
-- [ ] Rich-text runs inside a cell. The `SST` string's formatting runs are read far enough to
-      skip past them; splitting a cell into several `ContentRun`s needs the `FONT` table.
+- [x] Rich-text runs inside a cell, for **rendering** — `BiffRecordReader.ReadUnicodeString`
+      returns them and `XlsWorkbookReader.BuildRichText` pairs them into portions. A BIFF run
+      states a start and no length, so a portion reaches to the next run's start and the
+      characters before the first keep the cell's own font. Extraction is unchanged: splitting a
+      cell into several `ContentRun`s is a different question and the tree records no font
 
 **Two differences from LibreOffice's rendering, both deliberate.** A boolean cell shows as
 `TRUE` here and as `1` in Calc, which has no boolean cell type and imports the cell with the
@@ -521,7 +527,9 @@ number-formatted.
       `OpenDocument/OdsCellFormats.cs`. See the section below
 - [x] Overflow into adjacent empty cells; `###` when a number does not fit, and the
       `General`-shrunk form that is drawn *instead* of hashes when the format allows it
-- [ ] Rich text within a cell
+- [x] **Rich text within a cell** — the portions are `Layout/SheetRichText.cs`, read by
+      `Ooxml/XlsxRichRuns.cs`, `OpenDocument/OdsCellFormats.cs` and `MsBinary/XlsWorkbookReader.cs`,
+      and drawn one glyph run per portion by `Layout/SheetTextLayout.cs`. See the section below
 - [x] **Cell backgrounds, cell borders, the printed grid and the row and column headings** —
       in `Layout/SheetPageDecoration.cs`, read into `Layout/SheetDecoration.cs` by
       `Ooxml/XlsxCellDecoration.cs`, `OpenDocument/OdsCellDecoration.cs` and
@@ -530,7 +538,9 @@ number-formatted.
 - [x] Repeated rows/columns; scale-to-pages; page order
 - [x] **Header and footer text**: the field language is `Layout/SheetHeaderFooter.cs` and the
       placement is `SheetPageDecoration.DrawHeaderAndFooter`
-- [ ] Drawing objects and charts anchored to cells
+- [x] **Pictures anchored to cells** — `Layout/SheetDrawings.cs` and `Layout/SheetPageGraphics.cs`,
+      read by `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs`. A chart is recorded and
+      not drawn. BIFF is not read yet; see the section below
 
 ### What the decoration path draws, and the rules it draws by
 
@@ -751,9 +761,10 @@ reason the drawing IR is shaped the way it is. Both sides now give 2 281.
   and the reading of the angle is asserted without rendering. Stacked text (Excel's rotation 255,
   ODF's `style:direction="ttb"`) draws one character per line, centred.
 - **A rotated cell does not make its row taller**, and rotated text is not clipped against its
-  neighbours. Both need the rotated bounding box fed back into the row, which is a change to
-  pagination rather than to drawing (`ScColumn::GetNeededSize`'s rotation branch,
-  `sc/source/core/data/column2.cxx:517`).
+  neighbours. The row-height half was implemented, measured and backed out; the measurement is
+  below under "the row height a rotated cell asks for". The clip is Calc's own — its PDF carries a
+  `re W* n` round the printed block before the turned glyphs — but it changes no glyph in the
+  content stream, only which of them are visible, so nothing any comparison here reads would move.
 - **Justified and distributed alignment place from the left and are not stretched.** They force
   wrapping, which is the part that changes where the lines fall; the stretch would need the
   space-distribution the word processor's justification already does, through a `MeasuredParagraph`
@@ -766,11 +777,6 @@ reason the drawing IR is shaped the way it is. Both sides now give 2 281.
 
 Not yet, and why:
 
-- **Rich text inside a cell is drawn in the cell's own font.** A SpreadsheetML `inlineStr` with
-  several `r` elements, an ODF cell with spans, and a BIFF `SST` string with formatting runs all
-  carry per-character formatting that is read past rather than read. Drawing it needs the cell to
-  become a `MeasuredParagraph` of several `FormattedRun`s rather than one shaped string — which the
-  shared layouter already supports, so the work is in the three readers rather than here.
 - **A wrapping cell does not make its row taller.** Calc's rows are as tall as the file says unless
   the row asks for an optimal height, in which case Calc recomputes it from the text
   (`ScColumn::GetNeededSize`). Every file LibreOffice writes stores the computed height, so this
@@ -858,6 +864,188 @@ margin by the zoom before the device multiplies it back (`printfun.cxx:2104`).
 
 **What it cost, end to end.** The suite is 1 865 passing, 0 failed, 0 skipped — mainline's 1 836
 plus cell text's 29, with nothing dropped from either half. `sheet-print-xlsx.xlsx` still renders to
-14 pages against LibreOffice's 14, and `pdftotext` still reads 2 281 words and 13 269 non-whitespace
-characters from both, which is the check that catches a PDF whose glyphs land correctly but whose
-text will not come back out.
+14 pages against LibreOffice's 14, and `pdftotext` still reads 2 281 words from both, which is the
+check that catches a PDF whose glyphs land correctly but whose text will not come back out. (The
+character count recorded here as 13 269 measures 13 255 on both sides today; see the rich-text
+section below.)
+
+## Done: rich text in a cell
+
+`Layout/SheetRichText.cs` holds the portions a cell's text is split into; `Layout/SheetText.cs`
+shapes one segment per portion and `Layout/SheetTextLayout.cs` draws one glyph run per segment. The
+readers are `Ooxml/XlsxRichRuns.cs` (with `XlsxSheetFormats`), `OpenDocument/OdsCellFormats.cs` and
+`MsBinary/XlsWorkbookReader.cs` over `BiffRecordReader.ReadUnicodeString`.
+
+**What is measured.** `sheet-rich-text.{fods,xlsx}` agrees with LibreOffice 24.2.7.2's own PDF on
+all **24 portions** of its rich sheet: same count, same glyph counts, same em sizes, same colours,
+positions within **0.25 pt**. `sheet-rich-text.xls` agrees on the count and the em sizes.
+`sheet-print-xlsx.xlsx` is unchanged at 14/14 pages, 2 281/2 281 words and 13 255/13 255
+non-whitespace characters against `soffice` — that last number is 13 255 rather than the 13 269
+written down earlier, and *both* sides give 13 255 today, so the earlier figure was counted
+differently rather than lost.
+
+**The three formats state a run three different ways, and each is read as it is stated.** This is
+the whole of the reader work and it is not a detail:
+
+- **ODF's `text:span` is a delta over the cell's own text properties.** A span stating only
+  `fo:font-weight` keeps the cell's family, size and colour, because that is what ODF style
+  inheritance means. The spans are flattened in the same walk that counts the columns, mirroring
+  `OdfContentReader`'s whitespace collapsing exactly — a mismatch there shifts every offset in the
+  cell silently, so the text this counts is handed to `SheetRichText` and compared against what is
+  drawn.
+- **BIFF's formatting run names a whole `FONT` record**, so it restates the family, size, weight,
+  posture and colour whether or not it changes any of them. It states a *start* and no length, so a
+  portion reaches to the next run's start and the characters before the first keep the cell's own
+  font.
+- **SpreadsheetML's `rPr` is a complete font over the workbook's default, not a delta over the
+  cell's** — and this one is measured rather than read off the schema. Saving a cell whose first
+  word is bold, LibreOffice writes the *cell's* `fontId` as the bold one and then writes the second
+  run with an `rPr` that states a size and a name and no `b`; its own rendering draws that run
+  **regular**. Its importer says why: a portion's font is built from the theme's default font model
+  with every "used" flag already set (`Font::Font(rHelper, bDxf=false)`,
+  `sc/source/filter/oox/stylesbuffer.cxx:584`) and the `rPr` overwrites what it names, so the
+  cell's font never enters the portion (`RichStringPortion::convert`,
+  `sc/source/filter/oox/richstring.cxx:109-118`). **This is the trap that cost the most time here.**
+  Reading `rPr` as a delta is the obvious reading, it is what the other two formats do, and it
+  leaves the whole cell bold — which looks like a font-resolution bug and is not one.
+
+Rules the layouter gained, each measurable in the reference:
+
+- **A line is as tall as its tallest portion**, and the block's height is the sum of its lines
+  rather than a pitch times a count. A fourteen-point word in a ten-point cell pushes the line's
+  baseline down; for a cell in one face the two arithmetics give the same number, which is why
+  nothing already measured moved.
+- **A wrapping rich cell breaks against its own runs**, through `ParagraphLayouter`'s run-aware
+  overload over a `MeasuredParagraph`. A bold word is wider than the same characters set regular,
+  so breaking against the cell's font alone moves the break by a word — the corpus cell breaks
+  after "breaks" in both renderers and after "whose" if measured in one face.
+- **A shortened or shrunk rich cell keeps its portions lined up with its characters**, because
+  every re-shape is a *range of the cell's text at a percentage of its size* rather than a
+  substring handed round. Threading that percentage through is not cosmetic: without it a cell that
+  shrinks and is then clipped comes back at full size and keeps a different number of characters.
+
+**Concatenating separately shaped portions is exactly right here and would not be in a word
+processor.** Cell text is unkerned (`output2.cxx:405-409`), so there is no pair adjustment to lose
+across a portion boundary — checked on Liberation Sans, whose `GPOS` and legacy `kern` tables have
+no pair for any boundary in the corpus document, so shaping the portions together would give the
+same widths.
+
+Not yet, and why:
+
+- **A rich cell's portion widths are LibreOffice's to within 0.25 pt and not 0.1 pt.** A rich cell
+  goes through EditEngine in Calc and through the same shaper as any other cell here, and the two
+  measure a *portion* differently. LibreOffice's portion widths are always a whole hundredth of a
+  millimetre — `One ` in ten-point Liberation Sans is exactly 762 of them, 21.600 pt, against the
+  765.29 the font's own advances give — so the pen drifts, 0.09 pt after one portion and 0.21 pt
+  after four. Four models of that quantisation were measured against ten portions of the corpus
+  document and none reproduces it: per-character truncation to whole hundredths is the closest at
+  0.057 pt against our 0.09, per-character truncation to whole twips reproduces `One ` exactly and
+  nothing else, and rounding in either unit is worse than truncating. One portion comes out
+  *wider* in LibreOffice than the font's advances allow, which no rounding rule explains and
+  hinting would. The plain path has no such difference and still agrees to 0.006 pt.
+- **A rich cell's underline, strikethrough and escapement are read past.** All three formats state
+  them per run and the drawing IR has no underline, so a superscript footnote marker inside a cell
+  draws on the baseline at full size.
+- **Extraction still reports a rich cell as one `ContentRun`.** The portions are a rendering
+  structure; splitting the content tree would need `ContentRun` to carry a font, which it
+  deliberately does not.
+
+## Done: pictures anchored to a sheet
+
+`Layout/SheetDrawings.cs` is the model and `Layout/SheetPageGraphics.cs` places and paints;
+`Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs` read the two formats.
+
+**Measured**: the corpus picture lands within **0.028 pt** across, **0.011 pt** down and
+**0.028 pt** of width, and its height is exact, against LibreOffice's own PDF — from the flat ODF
+source and from the SpreadsheetML export alike, compared as image-XObject placements with
+`PdfPaints.ReadImageDraws`.
+
+**The anchor is the whole of the work.** A drawing is fastened to the grid by a cell and an offset,
+so it cannot be placed until the column widths are known, and a two-cell anchor's size is the span
+between its corners rather than anything the file states as a length. That is measurable rather
+than theoretical: the corpus frame states `svg:width="1.28in"` and ends at C3, and LibreOffice
+draws 1.3201 in — the two columns it crosses less its own start offset — and rewrites the attribute
+to match when it saves. So an ODF frame carrying a `table:end-cell-address` is read as a two-cell
+anchor and one without it as a one-cell anchor, which is the distinction the attribute exists to
+make. The span goes through `SheetDeviceUnits` per column, like everything else on the page, or a
+picture two columns wide would not line up with the column it ends in.
+
+**Drawn after the grid**, which is Calc's own order: the front drawing layer runs after
+`DrawGrid` (`printfun.cxx:1695-1703`), so a logo covers the gridlines under it rather than being
+crossed by them.
+
+**Nothing is decoded.** `RasterImage.Encoded` carries the bytes the file stored and whichever
+backend wants pixels calls `RasterImageDecoder.Ensure`. That is the layering rule rather than a
+convenience — a reader that decoded would put a codec in the extraction path.
+
+**A named trap, and it cost an hour of looking in the wrong place.** The anchor arithmetic was
+right on the first run and the page came out blank, because four guards in `Paperless.Rendering`
+asked `image.Width <= 0` before drawing — the right question only for an image that has *already*
+been decoded, and an encoded one has zero for both dimensions until a codec has seen it. The
+display list held the picture, `Ensure` would have decoded it, and nothing reached the point of
+calling `Ensure`. Fixed on the slide-pictures branch (`fa666554d`) rather than here; the symptom to
+recognise is a placement that measures correctly and paints nothing at all.
+
+Not yet, and why:
+
+- **BIFF drawings are not read.** The route is the same shared Escher reader the DOC and PPT work
+  use — `MSODRAWINGGROUP` (0x00EB) in the workbook globals holds the BLIP store and `MSODRAWING`
+  (0x00EC) in each sheet substream holds the shapes, with the client anchor in the `OBJ` record
+  (`sc/source/filter/excel/xiescher.cxx`). What is missing is not the anchor arithmetic, which is
+  shared with the two formats above, but a **BLIP store reader**: nothing in
+  `Paperless.MsBinary/Escher/` extracts a picture's bytes out of an `F007` entry yet, and neither
+  the DOC nor the PPT path needs one either. It belongs in `Escher/` when it is written, because
+  all three families read the same store.
+- **A drawing belongs to the page holding its top-left cell.** Calc positions the drawing layer in
+  document coordinates and clips it per page, so a picture straddling a page break appears on both
+  pages, cut. Anchoring it to one page is the same answer for everything that does not straddle.
+- **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than
+  a matrix, so `xdr:spPr/a:xfrm/@rot` and ODF's `draw:transform` are read past. Recorded rather
+  than fixed: four agents are building against that IR at once.
+- **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
+  `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
+  rectangle clipped to the frame's outline rather than a new IR primitive.
+- **Charts are recorded and not drawn**, which is deliberate and is what the presentations reader
+  does with a graphic frame it cannot draw: `IsChart` is set and nothing is painted, so "there is a
+  chart here" stays distinguishable from "there is nothing here".
+- **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
+  `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
+
+## The row height a rotated cell asks for, and why it is not recomputed
+
+All three formats say whether a row's height was set by a user or computed by the writer — ODF's
+`style:use-optimal-row-height`, SpreadsheetML's `customHeight` and BIFF's `fUnsynced` — and Calc
+honours it on load, recomputing every non-manual row before anything is drawn
+(`ScDocRowHeightUpdater`). The flag **is** read, into `SheetSizeRun.IsOptimalSize`, by all three
+readers. The recomputation is not shipped, and the reason is a measurement rather than an estimate.
+
+The formula is two lines: `height = textHeight × |cos θ| + textWidth × |sin θ|`, then the cell's top
+and bottom margins (`ScColumn::GetNeededSize`, `sc/source/core/data/column2.cxx:517-546`).
+Reproducing it exactly still gives the wrong answer, because the measurement it consumes is not the
+one Calc draws with. Five probe documents, each one rotated cell in a row asking for an optimal
+height, read back out of the ODS LibreOffice saved:
+
+| cell | LibreOffice | from the font's advances |
+| --- | --- | --- |
+| ten capital `X` at 90° | 68.65 pt | 68.70 pt |
+| `Upright heading` at 90° | 68.65 pt | 72.65 pt |
+| `Upright heading` at 45° | 56.69 pt | — |
+| the same text twice over at 90° | 135.81 pt | — |
+
+The first row says the formula and the margins are right. The second says the *measurement* is not:
+Calc's row-height path collapses two strings 4 pt apart onto the same height, while its printed
+output advances the pen by the font's exact widths — checked against the per-character `Tm`
+matrices in its own PDF, where `S` in `Slanted heading` advances 7.229 pt against the font's 7.227.
+
+So recomputing would replace a correct number with one 5.8% too large on **every file LibreOffice
+wrote**, because there the stored height *is* the height Calc computed, and it would move every row
+below it. It is only an improvement on a hand-written sheet whose stated height is a stale cache,
+which is the corpus's flat ODF sources and nothing a user has. Shipping it needs Calc's own coarse
+measurement reproduced first, and that is the same missing piece as the dynamic header band's:
+`UpdateHFHeight` measures through the same kind of reference device.
+
+The premise this was checked against is worth writing down because it does not survive: pagination
+already depends on measuring text once, in `ScTable::ExtendPrintArea`, and that is survivable
+because the extension is **by whole columns** — being within a column's width of LibreOffice's
+answer gives the same page. A row height is a length, so a 5.8% error is a 5.8% error, and there is
+no quantum to hide it in.

@@ -38,7 +38,17 @@ public sealed class SheetLayout
     /// <summary>The sheet's print setup, which is its page geometry.</summary>
     public SheetPrintSetup Setup { get; init; } = SheetPrintSetup.Default;
 
-    /// <summary>Its column widths and row heights.</summary>
+    /// <summary>
+    /// Its column widths and row heights, exactly as the file states them.
+    /// </summary>
+    /// <remarks>
+    /// A row that asks for an optimal height is <em>not</em> recomputed here, although Calc
+    /// recomputes one on load and although the runs carry
+    /// <see cref="SheetSizeRun.IsOptimalSize"/> so that a reader can tell which rows those are.
+    /// The reason is measured and is recorded in the module's TODO: Calc's own measurement of a
+    /// cell for that purpose is coarser than the one it draws with, so reproducing the formula
+    /// with an accurate measurement disagrees with the height the file already holds.
+    /// </remarks>
     public SheetGrid Grid { get; init; } = SheetGrid.Standard;
 
     /// <summary>The sheet's cells, or null when it holds none.</summary>
@@ -74,6 +84,26 @@ public sealed class SheetLayout
     /// yields <see cref="SheetCellFormats.Empty"/> and every cell draws in the default face.
     /// </remarks>
     public SheetCellFormats Formats { get; init; } = SheetCellFormats.Empty;
+
+    /// <summary>
+    /// The cells whose text is not all in one format, if any.
+    /// </summary>
+    /// <remarks>
+    /// Beside <see cref="Formats"/> rather than inside it because the two have opposite shapes: a
+    /// cell format is shared by thousands of cells and is pooled, while a rich cell's portions
+    /// belong to that cell alone and almost no cell has any. See <see cref="SheetRichText"/>.
+    /// </remarks>
+    public SheetRichText RichText { get; init; } = SheetRichText.Empty;
+
+    /// <summary>
+    /// The pictures and charts anchored on the sheet, back to front.
+    /// </summary>
+    /// <remarks>
+    /// Beside the cells because a drawing is not in one: it is fastened to the grid by a cell and
+    /// an offset and floats over whatever is under it, so it belongs to the sheet rather than to
+    /// any cell. See <see cref="SheetDrawings"/>.
+    /// </remarks>
+    public SheetDrawings Drawings { get; init; } = SheetDrawings.Empty;
 
     /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.

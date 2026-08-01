@@ -247,7 +247,12 @@ internal static class XlsxPrintSetup
             Length? height = Points(Xlsx.Attribute(row, "ht"));
             if (height is null && !hidden) continue;
 
-            rows.Add(new SheetSizeRun(index - 1, index - 1, height ?? defaultHeight, hidden));
+            // customHeight is the flag that says the height came from a user rather than from
+            // the writer's own measurement, and LibreOffice writes it explicitly false on every
+            // ordinary row.
+            rows.Add(new SheetSizeRun(
+                index - 1, index - 1, height ?? defaultHeight, hidden,
+                !Xlsx.Flag(row, "customHeight")));
         }
 
         return new SheetGrid(
