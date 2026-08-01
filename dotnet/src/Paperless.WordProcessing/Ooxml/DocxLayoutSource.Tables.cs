@@ -73,6 +73,13 @@ public sealed partial class DocxLayoutSource
         // Counted around the rows rather than around this table's own properties, because a cell's blocks
         // are read while the rows are, and a table inside one of them is what makes this table an enclosing
         // level. See LeftEdge for the one thing the count decides.
+        //
+        // The table style is set for the same stretch and for the same reason: it is the paragraphs in the
+        // cells that take its w:pPr, and a nested table's own style replaces it rather than adding to it —
+        // a nested table naming none takes Word's TableNormal, which states nothing, and not the style of
+        // the table it sits in.
+        string? enclosingStyle = _tableStyleId;
+        _tableStyleId = Word.Attribute(Word.Child(properties, "tblStyle"), "val");
         _tableDepth++;
         try
         {
@@ -81,6 +88,7 @@ public sealed partial class DocxLayoutSource
         finally
         {
             _tableDepth--;
+            _tableStyleId = enclosingStyle;
         }
 
         if (rows.Count == 0) return null;

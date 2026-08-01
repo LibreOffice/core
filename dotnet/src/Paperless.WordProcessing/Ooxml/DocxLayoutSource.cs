@@ -342,7 +342,7 @@ public sealed partial class DocxLayoutSource
         _endnoteNumber += walker.EndnotesSeen;
 
         ParagraphFormat format =
-            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
+            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval, _tableStyleId);
 
         // After the walk, because reading a note body or a text box re-enters this method and a list
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.
@@ -377,6 +377,16 @@ public sealed partial class DocxLayoutSource
 
         return read;
     }
+
+    /// <summary>
+    /// The <c>w:tblStyle</c> of the table whose cells are being read, or null outside a table.
+    /// </summary>
+    /// <remarks>
+    /// A table style's <c>w:pPr</c> applies to every paragraph in the table's cells (§17.7.2), and
+    /// <c>Table Grid</c> — the style nearly every Word table names — states "no space after, single
+    /// spacing", cancelling a document default of "10 pt after, 1.15 lines" for everything inside it.
+    /// </remarks>
+    private string? _tableStyleId;
 
     /// <summary>Whether the paragraph read next begins a page, because the one before ended with a break.</summary>
     private bool _pageBreakPending;

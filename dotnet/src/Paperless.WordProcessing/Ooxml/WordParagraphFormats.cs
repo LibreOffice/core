@@ -66,28 +66,37 @@ internal static class WordParagraphFormats
     /// <param name="styles">The document's styles.</param>
     /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
     /// <param name="defaultTabInterval">The document's <c>w:defaultTabStop</c>.</param>
+    /// <param name="tableStyleId">
+    /// The <c>w:tblStyle</c> of the table this paragraph sits in a cell of, or null when it is not in one.
+    /// A table style carries a <c>w:pPr</c>, and §17.7.2 puts it between the document defaults and the
+    /// paragraph style — which is how <c>Table Grid</c>, the style nearly every Word table uses, cancels a
+    /// document default of "10 pt after, 1.15 lines" for everything inside a table.
+    /// </param>
     internal static ParagraphFormat Resolve(
-        WordStyles styles, XElement? paragraphProperties, Length defaultTabInterval)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        Length defaultTabInterval,
+        string? tableStyleId = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
 
-        XElement? indent = Layer(styles, paragraphProperties, styleId, "ind");
-        XElement? spacing = Layer(styles, paragraphProperties, styleId, "spacing");
+        XElement? indent = Layer(styles, paragraphProperties, styleId, tableStyleId, "ind");
+        XElement? spacing = Layer(styles, paragraphProperties, styleId, tableStyleId, "spacing");
 
         return new ParagraphFormat
         {
             Alignment = Alignment(Word.Attribute(
-                Layer(styles, paragraphProperties, styleId, "jc"), "val")),
+                Layer(styles, paragraphProperties, styleId, tableStyleId, "jc"), "val")),
 
             // w:bidi, which OOXML states on the paragraph and not on its runs. w:rtl on a run is
             // deliberately not read: LibreOffice's own importer discards it —
             // `case NS_ooxml::LN_EG_RPrBase_rtl: break;`,
             // sw/source/writerfilter/dmapper/DomainMapper.cxx:2511 — and resolves direction from
             // the text against this instead, so honouring it would put runs where Writer does not.
-            IsRightToLeft = IsOn(styles, paragraphProperties, styleId, "bidi"),
+            IsRightToLeft = IsOn(styles, paragraphProperties, styleId, tableStyleId, "bidi"),
 
             // w:start and w:left are the same attribute under two names: the first is the
             // reading-direction form ECMA-376 standardised on and the second is what Word 2007 wrote
@@ -98,19 +107,19 @@ internal static class WordParagraphFormats
 
             SpaceBefore = Twips(spacing, "before") ?? Length.Zero,
             SpaceAfter = Twips(spacing, "after") ?? Length.Zero,
-            HasContextualSpacing = IsOn(styles, paragraphProperties, styleId, "contextualSpacing"),
+            HasContextualSpacing = IsOn(styles, paragraphProperties, styleId, tableStyleId, "contextualSpacing"),
             LineSpacing = Spacing(spacing),
 
-            KeepWithNext = IsOn(styles, paragraphProperties, styleId, "keepNext"),
-            KeepTogether = IsOn(styles, paragraphProperties, styleId, "keepLines"),
+            KeepWithNext = IsOn(styles, paragraphProperties, styleId, tableStyleId, "keepNext"),
+            KeepTogether = IsOn(styles, paragraphProperties, styleId, tableStyleId, "keepLines"),
 
             // Word states widow control as one flag rather than two counts, and it means two of each —
             // which is why a document with it on sometimes has a visibly short page.
-            OrphanLines = IsOn(styles, paragraphProperties, styleId, "widowControl") ? 2 : 0,
-            WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl") ? 2 : 0,
+            OrphanLines = IsOn(styles, paragraphProperties, styleId, tableStyleId, "widowControl") ? 2 : 0,
+            WidowLines = IsOn(styles, paragraphProperties, styleId, tableStyleId, "widowControl") ? 2 : 0,
 
-            StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId),
-            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs")),
+            StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId, tableStyleId),
+            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, tableStyleId, "tabs")),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
 
@@ -138,7 +147,7 @@ internal static class WordParagraphFormats
         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
 
-        return Layer(styles, paragraphProperties, styleId, "ind") is not null;
+        return Layer(styles, paragraphProperties, styleId, tableStyleId: null, "ind") is not null;
     }
 
     /// <summary>
@@ -238,13 +247,26 @@ internal static class WordParagraphFormats
     /// for its style's — it is an overlay, and each child of it overrides only its counterpart.
     /// </remarks>
     private static XElement? Layer(
-        WordStyles styles, XElement? paragraphProperties, string? styleId, string localName)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        string? styleId,
+        string? tableStyleId,
+        string localName)
     {
         if (Word.Child(paragraphProperties, localName) is { } direct) return direct;
 
         WordProperty fromStyle = styles.ResolveInStyleChain(
             styleId, WordStyleType.Paragraph, runProperty: false, localName);
         if (fromStyle.HasValue) return fromStyle.Element;
+
+        // The table style sits under the paragraph style and over the document defaults (§17.7.2), so it
+        // is consulted only once the paragraph's own chain has declined the property.
+        if (tableStyleId is not null)
+        {
+            WordProperty fromTable = styles.ResolveInStyleChain(
+                tableStyleId, WordStyleType.Table, runProperty: false, localName);
+            if (fromTable.HasValue) return fromTable.Element;
+        }
 
         return styles.ResolveInDocumentDefaults(runProperty: false, localName).Element;
     }
@@ -304,13 +326,24 @@ internal static class WordParagraphFormats
     }
 
     private static bool IsOn(
-        WordStyles styles, XElement? paragraphProperties, string? styleId, string localName)
+        WordStyles styles,
+        XElement? paragraphProperties,
+        string? styleId,
+        string? tableStyleId,
+        string localName)
     {
         if (Word.Child(paragraphProperties, localName) is { } direct) return Word.IsOn(direct);
 
         WordProperty fromStyle = styles.ResolveInStyleChain(
             styleId, WordStyleType.Paragraph, runProperty: false, localName);
         if (fromStyle.HasValue) return fromStyle.IsOn;
+
+        if (tableStyleId is not null)
+        {
+            WordProperty fromTable = styles.ResolveInStyleChain(
+                tableStyleId, WordStyleType.Table, runProperty: false, localName);
+            if (fromTable.HasValue) return fromTable.IsOn;
+        }
 
         return styles.ResolveInDocumentDefaults(runProperty: false, localName).IsOn;
     }
@@ -386,8 +419,8 @@ internal static class WordParagraphFormats
     /// which is the opposite of what its position in the file suggests.
     /// </remarks>
     private static bool StartsNewPage(
-        WordStyles styles, XElement? paragraphProperties, string? styleId)
-        => IsOn(styles, paragraphProperties, styleId, "pageBreakBefore");
+        WordStyles styles, XElement? paragraphProperties, string? styleId, string? tableStyleId)
+        => IsOn(styles, paragraphProperties, styleId, tableStyleId, "pageBreakBefore");
 
     /// <summary>
     /// A measurement in twips, signed, or null when the attribute is absent.
