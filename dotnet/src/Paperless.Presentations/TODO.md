@@ -405,7 +405,17 @@ table asserted, not by the corpus.
       staggered axis labels, which LibreOffice falls back to when they would collide and which is
       the whole of `bnc889755.pptx`'s residual; and label *dropping*, which it falls back to after
       that — `tdf106217.pptx` draws eight category names in our render and none in the reference,
-      because they do not fit. Radar, bubble, stock, surface and of-pie still draw nothing.
+      because they do not fit.
+- [x] **Radar, bubble, stock and of-pie draw now; surface declines.** All of it is in
+      `Paperless.Core.Charts` — `ChartLayout.Plots.cs` for the geometry, `ChartPlotTypes.cs` for
+      the model — and this library gained nothing at all: a radar's web is `ChartLine`, its polygon
+      and a bubble are `ChartShape`, a candle's box is `ChartBox`, and `SlideChart` already turned
+      each of those into a `PlacedShape`. **The deck set is unchanged at 128 with 19 exact of 38,
+      and the ODP set at 6 with 8 exact of 9, because neither set contains one of the five types**
+      — counted: of the 38 decks and 9 ODPs, every chart is a bar, line, pie, area or scatter. The
+      five live in `docx/`, `xlsx/`, `ods/` and `odt/`, which is worth knowing before choosing the
+      deck set as the oracle for the next chart feature. See `dotnet/TODO.md` Phase 3.5 for the
+      corpus counts, the ported constants and the three named traps.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the

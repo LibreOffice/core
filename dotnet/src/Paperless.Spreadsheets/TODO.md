@@ -1234,6 +1234,33 @@ drops the gap (`ScDrawStringsVars`, `output2.cxx:734`). `ChartLineHeightAt` is t
 for it. The print zoom is applied to the *type* as well as the rectangle, because a chart laid out
 at 100% type in a 50% rectangle reserves twice the room its labels need.
 
+**The workbook's theme reaches a chart part now, and it was the difference between a picture and an
+empty plot area.** `XlsxDrawings.Plot` called `DrawingChartPlot.Read` with no theme, and the comment
+beside it recorded that as harmless because "every chart in the corpus states its fills as
+`a:srgbClr`". That is true of every chart LibreOffice wrote and false of charts Excel wrote.
+Measured on `chart2/qa/extras/data/xlsx/bubble_chart_simple.xlsx`, whose three series state
+`a:schemeClr val="accent1|2|3"` with `a:ln/a:noFill`: every bubble resolved to no fill and no
+outline, so the plot area came out with its axes, its legend and not one mark on it — which reads
+as an unimplemented chart type and was an unresolved colour. `XlsxFile.ThemeRoot` was already being
+loaded for `XlsxCellDecoration`; threading it through `XlsxDrawings.Read` is four lines, and it took
+`barOfPieChart.xlsx` from 11 drawn marks to 20. Over the whole 154-file `xlsx/` set the total
+absolute word error went **2599 → 2547** with exact matches **8 → 9**.
+
+**A sheet-anchored ODS drawing is still not read, and it hides a whole chart.** `OdsDrawings` walks
+`draw:frame` inside `table:table-cell` only, so a frame in `table:shapes` — the sheet-level shapes
+container, positioned by `svg:x`/`svg:y` against the sheet rather than by a cell — never becomes a
+`SheetDrawing`. `chart2/qa/extras/data/ods/tdf166428_Low_High_StockChart_LO248.ods` writes its stock
+chart exactly that way: the chart is read into a correct `ChartPlot` and then has nowhere to go, and
+the file measures **24 words against LibreOffice's 60**, all of the difference being the chart. It
+is the same shape of defect as the `ObjectReplacements` one above — the chart engine is not
+involved, the drawing never arrives — which is why it is recorded here and not in the chart section.
+
+**A chart anchored past the right-hand page break lands on a page we do not produce.** Every one of
+the five OOXML chart files measured for the plot-type work renders one page against LibreOffice's
+two, and `xlsx/bubble_chart_simple.xlsx` — anchored at column 11, well right of its four cells —
+still measures 5 words against 26 with a complete chart composed behind it. Sheet pagination, not
+charts.
+
 Left open here:
 
 - **A glyph run cannot be stretched non-uniformly.** The frame-to-chart mapping scales positions by

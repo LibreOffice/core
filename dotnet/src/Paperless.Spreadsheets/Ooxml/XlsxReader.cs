@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
@@ -64,6 +65,11 @@ public static class XlsxReader
             // needs are already resolved on file.Styles.
             XlsxCellFormatTable cellFormats = XlsxCellFormats.Read(file.StyleSheet, file.Styles);
 
+            // The workbook's theme, read once. A chart part that states an a:schemeClr needs it
+            // and every other drawing does not, which is why it was missing: nothing in a
+            // spreadsheet's drawing path asked for a theme until a chart did.
+            DrawingTheme? theme = DrawingTheme.Read(file.ThemeRoot);
+
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
                 ContentSection section = new()
@@ -103,7 +109,7 @@ public static class XlsxReader
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,
-                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName),
+                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName, theme),
                     FileName = source.FileName ?? string.Empty,
                 });
 

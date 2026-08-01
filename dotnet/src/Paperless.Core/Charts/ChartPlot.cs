@@ -38,6 +38,26 @@ public enum ChartPlotKind
 
     /// <summary>Markers at (x, y) — <c>c:scatterChart</c>, <c>chart:scatter</c>.</summary>
     Scatter,
+
+    /// <summary>
+    /// A closed polygon on a polar category axis — <c>c:radarChart</c>, <c>chart:radar</c>.
+    /// </summary>
+    Radar,
+
+    /// <summary>
+    /// Circles at (x, y) sized by a third number — <c>c:bubbleChart</c>, <c>chart:bubble</c>.
+    /// </summary>
+    Bubble,
+
+    /// <summary>
+    /// High/low whiskers and open/close marks — <c>c:stockChart</c>, <c>chart:stock</c>.
+    /// </summary>
+    Stock,
+
+    /// <summary>
+    /// A pie whose tail becomes a second pie or a bar — <c>c:ofPieChart</c>.
+    /// </summary>
+    OfPie,
 }
 
 /// <summary>What shape a series draws at each of its points.</summary>
@@ -114,7 +134,7 @@ public enum ChartLegendPosition
 /// writes a <c>c:barChart</c> and a <c>c:lineChart</c> sharing one pair of axes — and it is what
 /// lets all of them be drawn instead of only the first.
 /// </param>
-public sealed record ChartSeries(
+public sealed partial record ChartSeries(
     string? Name,
     IReadOnlyList<double?> Values,
     Colour? Fill = null,
@@ -229,7 +249,7 @@ public sealed record ChartSeries(
 /// not; see <see cref="ChartLayout"/> for what the computation costs in accuracy.
 /// </para>
 /// </remarks>
-public sealed record ChartPlot
+public sealed partial record ChartPlot
 {
     /// <summary>The chart's title, or null when it states none.</summary>
     public string? Title { get; init; }
@@ -284,7 +304,14 @@ public sealed record ChartPlot
     /// matters most for a word count — no tick labels, which is the eighty-one words the first
     /// version of the reader invented for <c>PieChartWithAutomaticLayout_SizeAndPosition.pptx</c>.
     /// </remarks>
-    public bool HasAxes => Kind is not ChartPlotKind.Pie;
+    /// <remarks>
+    /// An of-pie chart is a pie and has none either. A <em>radar</em> chart has two axes and
+    /// neither of them is a pair of straight lines — its category axis is angular and its value
+    /// axis is a radius — so it is excluded here and draws its own web and spokes in
+    /// <c>ChartLayout</c>'s radar half instead.
+    /// </remarks>
+    public bool HasAxes
+        => Kind is not (ChartPlotKind.Pie or ChartPlotKind.OfPie or ChartPlotKind.Radar);
 
     /// <summary>
     /// Whether the category axis is divided into slots rather than marked at points.
@@ -302,10 +329,15 @@ public sealed record ChartPlot
     {
         get
         {
-            if (Kind is ChartPlotKind.Bar) return true;
+            // A candlestick is measured against a BarPositionHelper — CandleStickChart places
+            // each candle with getScaledSlotPos and sizes it with getScaledSlotWidth
+            // (CandleStickChart.cxx:160-180) — so a stock chart's categories are slots exactly as
+            // a bar chart's are, and its whiskers stand in the middle of each rather than on the
+            // plot area's edges.
+            if (Kind is ChartPlotKind.Bar or ChartPlotKind.Stock) return true;
 
             foreach (ChartSeries series in Series)
-                if (series.Kind is ChartPlotKind.Bar) return true;
+                if (series.Kind is ChartPlotKind.Bar or ChartPlotKind.Stock) return true;
 
             return false;
         }

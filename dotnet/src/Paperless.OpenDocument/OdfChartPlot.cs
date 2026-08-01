@@ -99,6 +99,24 @@ public static class OdfChartPlot
         string? areaStyle = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
         ChartDataLabel? areaLabel = LabelOf(areaStyle, styles, kind, null);
 
+        // ODF orders a stock plot's series open, LOW, HIGH, close — the reverse of OOXML's middle
+        // pair — and drops the open when the chart is not a Japanese candlestick
+        // (xmloff/source/chart/SchXMLChartContext.cxx:1051-1085, whose own comment reads "with
+        // japanese candlesticks: open, low, high, close; otherwise: low, high, close"). See
+        // ChartStockRole; reading one vocabulary's order into the other inverts every whisker
+        // whose high and low are not already in the right places.
+        string? plotStyleName = Attribute(plotArea, OdfNamespaces.Chart, "style-name");
+        bool japanese = styles.Flag(plotStyleName, "japanese-candle-stick") ?? false;
+
+        ChartStockRole[] stockRoles = japanese
+            ?
+            [
+                ChartStockRole.Open, ChartStockRole.Low, ChartStockRole.High, ChartStockRole.Close,
+            ]
+            : [ChartStockRole.Low, ChartStockRole.High, ChartStockRole.Close];
+
+        int stockRole = 0;
+
         List<ChartSeries> plotted = [];
         foreach (XElement element in series)
         {
@@ -113,6 +131,10 @@ public static class OdfChartPlot
             // per series is all a combination chart needs here.
             ChartPlotKind own = KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind;
 
+            ChartStockRole role = ChartStockRole.None;
+            if (own is ChartPlotKind.Stock && stockRole < stockRoles.Length)
+                role = stockRoles[stockRole++];
+
             plotted.Add(new ChartSeries(
                 table.LabelOf(Attribute(element, OdfNamespaces.Chart, "label-cell-address")),
                 values,
@@ -125,6 +147,7 @@ public static class OdfChartPlot
                 Marker = MarkerOf(style, styles, own),
                 Label = LabelOf(style, styles, own, areaLabel),
                 PointLabels = PointLabelsOf(element, values.Count, styles, own, areaLabel),
+                StockRole = role,
             });
         }
 
@@ -182,7 +205,36 @@ public static class OdfChartPlot
                 ?? Length.FromPoints(10),
             PlotArea = Region(plotArea),
             Space = SpaceOf(chart),
+
+            // chart:filled-radar is the only radar class that fills; chart:radar draws a stroked
+            // polygon and takes its markers from the series' own chart:symbol-type, which is what
+            // makes ODF's two classes cover OOXML's three c:radarStyle values.
+            RadarStyle = Filled(Attribute(chart, OdfNamespaces.Chart, "class"))
+                ? ChartRadarStyle.Filled
+                : ChartRadarStyle.Standard,
+
+            // chart:stock-range-line is ODF's c:hiLowLines and chart:japanese-candle-stick is its
+            // c:upDownBars; the two markers are the gain and loss fills.
+            HasHighLowLines = Child(plotArea, OdfNamespaces.Chart, "stock-range-line") is not null,
+            HasUpDownBars = japanese,
+            StockGainFill = styles.Fill(Attribute(
+                Child(plotArea, OdfNamespaces.Chart, "stock-gain-marker"),
+                OdfNamespaces.Chart,
+                "style-name")),
+            StockLossFill = styles.Fill(Attribute(
+                Child(plotArea, OdfNamespaces.Chart, "stock-loss-marker"),
+                OdfNamespaces.Chart,
+                "style-name")),
         };
+    }
+
+    /// <summary>Whether a <c>chart:class</c> is the filled radar rather than the stroked one.</summary>
+    private static bool Filled(string? stated)
+    {
+        if (stated is null) return false;
+
+        int colon = stated.IndexOf(':', StringComparison.Ordinal);
+        return (colon >= 0 ? stated[(colon + 1)..] : stated) == "filled-radar";
     }
 
     /// <summary>
@@ -192,8 +244,9 @@ public static class OdfChartPlot
     /// The prefix is written in full — <c>chart:bar</c> — because the attribute holds a QName and
     /// the <c>chart</c> prefix is bound in every document LibreOffice writes; the bare form is
     /// accepted too, for a writer that bound a different prefix. A ring is drawn as a circle,
-    /// losing its hole; <c>chart:radar</c>, <c>chart:stock</c>, <c>chart:bubble</c> and
-    /// <c>chart:surface</c> yield null and draw nothing at all.
+    /// losing its hole. <c>chart:surface</c> is the one that stays null and draws nothing at all,
+    /// deliberately — see the remarks on <c>ChartLayout.Plots.cs</c> for the reasoning and for the
+    /// count that settled it.
     /// </remarks>
     private static ChartPlotKind? KindOf(string? stated)
     {
@@ -210,6 +263,9 @@ public static class OdfChartPlot
             "circle" or "ring" => ChartPlotKind.Pie,
             "area" => ChartPlotKind.Area,
             "scatter" => ChartPlotKind.Scatter,
+            "radar" or "filled-radar" => ChartPlotKind.Radar,
+            "bubble" => ChartPlotKind.Bubble,
+            "stock" => ChartPlotKind.Stock,
             _ => null,
         };
     }

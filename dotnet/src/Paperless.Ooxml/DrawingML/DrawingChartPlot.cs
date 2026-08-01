@@ -106,6 +106,29 @@ public static class DrawingChartPlot
 
         string? grouping = Value(Child(group, "grouping"));
 
+        // The stock group, wherever it is in the part — its whisker and candle settings live on
+        // it, not on whichever group happens to be the chart's own kind. testStockChart.docx puts
+        // a c:barChart for the volume series before its c:stockChart, so "the first group" and
+        // "the stock group" are two different elements there.
+        XElement? stock = null;
+        XElement? ofPie = null;
+        XElement? radar = null;
+        XElement? bubble = null;
+
+        for (int at = 0; at < groups.Count; at++)
+        {
+            switch (kinds[at])
+            {
+                case ChartPlotKind.Stock: stock ??= groups[at]; break;
+                case ChartPlotKind.OfPie: ofPie ??= groups[at]; break;
+                case ChartPlotKind.Radar: radar ??= groups[at]; break;
+                case ChartPlotKind.Bubble: bubble ??= groups[at]; break;
+                default: break;
+            }
+        }
+
+        XElement? upDown = Child(stock, "upDownBars");
+
         return new ChartPlot
         {
             Title = TitleText(Child(chart, "title")),
@@ -122,7 +145,9 @@ public static class DrawingChartPlot
             // importer defaults them to 100 and 0 (oox/source/drawingml/chart/typegroupmodel.cxx)
             // and every file the corpus holds states them. 100 is used here so that a part that
             // omits them agrees with the reference rather than with the specification.
-            GapWidth = Number(Child(group, "gapWidth")) ?? 100.0,
+            // A candlestick has no c:gapWidth of its own: what sizes its box is the one inside
+            // c:upDownBars, 150 in the corpus file.
+            GapWidth = Number(Child(group, "gapWidth")) ?? Number(Child(upDown, "gapWidth")) ?? 100.0,
             Overlap = Number(Child(group, "overlap")) ?? 0.0,
             IsStacked = grouping is "stacked" or "percentStacked",
             ValueScale = ScaleOf(axes.Value),
@@ -148,6 +173,35 @@ public static class DrawingChartPlot
             // its own — the frame is the space — which is what keeps it out of the stretch an
             // ODF chart goes through.
             PlotAreaFraction = ManualLayout(Child(plotArea, "layout")),
+
+            RadarStyle = Value(Child(radar, "radarStyle")) switch
+            {
+                "filled" => ChartRadarStyle.Filled,
+                "marker" => ChartRadarStyle.Marker,
+                _ => ChartRadarStyle.Standard,
+            },
+
+            OfPieType = Value(Child(ofPie, "ofPieType")) == "bar"
+                ? ChartOfPieType.Bar
+                : ChartOfPieType.Pie,
+
+            // Only auto and pos reach chart2 at all; every other c:splitType falls through to the
+            // positional split, which is what TypeGroupConverter does with them
+            // (typegroupconverter.cxx:474-481).
+            SplitType = Value(Child(ofPie, "splitType")) == "pos"
+                ? ChartSplitType.Position
+                : ChartSplitType.Auto,
+            SplitPosition = (int)Math.Clamp(Number(Child(ofPie, "splitPos")) ?? 2.0, 1.0, 4096.0),
+
+            BubbleScale = Math.Clamp(Number(Child(bubble, "bubbleScale")) ?? 100.0, 0.0, 300.0),
+            BubbleSizeRepresents = Value(Child(bubble, "sizeRepresents")) == "w"
+                ? ChartBubbleSize.Width
+                : ChartBubbleSize.Area,
+
+            HasHighLowLines = Child(stock, "hiLowLines") is not null,
+            HasUpDownBars = upDown is not null,
+            StockGainFill = FillOf(Child(Child(upDown, "upBars"), "spPr"), theme),
+            StockLossFill = FillOf(Child(Child(upDown, "downBars"), "spPr"), theme),
         };
     }
 
@@ -198,9 +252,17 @@ public static class DrawingChartPlot
     /// <para>
     /// The 3-D variants map onto their flat counterparts, because what this model carries — the
     /// series, the fills, the scale — is the same in both and a flat drawing of a 3-D chart is
-    /// nearer the reference than nothing. A doughnut is drawn as a pie, losing its hole; a radar,
-    /// a bubble, a stock and an of-pie chart are not drawn at all, and their frames stay empty
-    /// rather than being drawn as something they are not.
+    /// nearer the reference than nothing. A doughnut is drawn as a pie, losing its hole.
+    /// </para>
+    /// <para>
+    /// <strong><c>c:surfaceChart</c> and <c>c:surface3DChart</c> are the two that stay null, and
+    /// deliberately.</strong> A surface is a height field drawn through a real 3-D projection and
+    /// there is no such projection here; LibreOffice's own importer does not have one either and
+    /// substitutes "a deep 3D bar chart from all surface charts"
+    /// (<c>oox/source/drawingml/chart/typegroupconverter.cxx:198-199, 217-218</c>), so even the
+    /// reference is a substitution. There is also not one surface chart in the whole of
+    /// <c>chart2/qa/extras/data/</c> to measure against. See the remarks on
+    /// <c>ChartLayout.Plots.cs</c> for the full reasoning.
     /// </para>
     /// </remarks>
     private static ChartPlotKind? KindOf(string localName) => localName switch
@@ -210,6 +272,10 @@ public static class DrawingChartPlot
         "pieChart" or "pie3DChart" or "doughnutChart" => ChartPlotKind.Pie,
         "areaChart" or "area3DChart" => ChartPlotKind.Area,
         "scatterChart" => ChartPlotKind.Scatter,
+        "radarChart" => ChartPlotKind.Radar,
+        "bubbleChart" => ChartPlotKind.Bubble,
+        "stockChart" => ChartPlotKind.Stock,
+        "ofPieChart" => ChartPlotKind.OfPie,
         _ => null,
     };
 
@@ -428,9 +494,25 @@ public static class DrawingChartPlot
         // empty plot area, because the file asked for no line.
         string? scatterStyle = Value(Child(group, "scatterStyle"));
         bool scatterLine = kind != ChartPlotKind.Scatter || scatterStyle != "marker";
+        string? radarStyle = Value(Child(group, "radarStyle"));
 
         // A group's own c:dLbls is the default every series in it inherits.
         ChartDataLabel? groupLabel = LabelOf(Child(group, "dLbls"), null, kind);
+
+        // Which of a stock plot's four numbers each of its series carries, by position. Four
+        // series are open, high, low, close and three are high, low, close — which is
+        // TypeGroupConverter's own "int nRoleIdx = (aSeries.size() == 3) ? 1 : 0" over the roles
+        // values-first, values-max, values-min, values-last
+        // (oox/source/drawingml/chart/typegroupconverter.cxx:517-527). ODF orders the middle pair
+        // the other way round; see ChartStockRole.
+        ChartStockRole[] stockRoles =
+        [
+            ChartStockRole.Open, ChartStockRole.High, ChartStockRole.Low, ChartStockRole.Close,
+        ];
+
+        int stockRole = kind != ChartPlotKind.Stock
+            ? -1
+            : Children(group, "ser").Count() == 3 ? 1 : 0;
 
         foreach (XElement element in Children(group, "ser"))
         {
@@ -448,10 +530,20 @@ public static class DrawingChartPlot
             NumberFormatCode? sourceFormat = CacheFormat(valueSource);
 
             double?[]? domain = null;
-            if (kind == ChartPlotKind.Scatter && Child(element, "xVal") is { } xVal)
+            if (kind is ChartPlotKind.Scatter or ChartPlotKind.Bubble
+                && Child(element, "xVal") is { } xVal)
             {
                 (_, double?[] xs) = ReadSequence(xVal);
                 if (xs.Length > 0) domain = xs;
+            }
+
+            // The bubble's third dimension. c:bubbleSize is a sequence like any other and is the
+            // only thing that makes a bubble chart more than a scatter chart with round markers.
+            double?[]? sizes = null;
+            if (kind == ChartPlotKind.Bubble && Child(element, "bubbleSize") is { } bubbleSize)
+            {
+                (_, double?[] read) = ReadSequence(bubbleSize);
+                if (read.Length > 0) sizes = read;
             }
 
             XElement? properties = Child(element, "spPr");
@@ -467,14 +559,21 @@ public static class DrawingChartPlot
                 kind)
             {
                 XValues = domain,
-                Marker = MarkerOf(Child(element, "marker"), kind, scatterStyle),
+                Marker = MarkerOf(Child(element, "marker"), kind, scatterStyle, radarStyle),
                 HasLine = scatterLine
                           && Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is null,
                 Label = WithSource(LabelOf(seriesLabels, groupLabel, kind), sourceFormat),
                 PointLabels = PointLabelsOf(
                     seriesLabels, numbers.Length, groupLabel, kind, sourceFormat),
                 AxisIndex = axisIndex,
+                SizeValues = sizes,
+                InvertIfNegative = Flag(element, "invertIfNegative") ?? false,
+                StockRole = stockRole >= 0 && stockRole < stockRoles.Length
+                    ? stockRoles[stockRole]
+                    : ChartStockRole.None,
             });
+
+            if (stockRole >= 0) stockRole++;
         }
 
         return (series, categories);
@@ -487,17 +586,22 @@ public static class DrawingChartPlot
     /// <c>c:marker/c:symbol</c>. Absent means <c>auto</c> for a scatter chart — which draws one —
     /// and none for a line chart, which is the asymmetry that makes a scatter chart look empty if
     /// it is treated like a line chart with no markers stated. <c>c:scatterStyle val="line"</c> or
-    /// <c>"smooth"</c> turns them off again.
+    /// <c>"smooth"</c> turns them off again, and <c>c:radarStyle val="marker"</c> turns them on
+    /// for a radar chart the same way — which is the whole difference between that style and
+    /// <c>standard</c>, both of which draw a stroked polygon.
     /// </remarks>
-    private static ChartMarker MarkerOf(XElement? marker, ChartPlotKind kind, string? scatterStyle)
+    private static ChartMarker MarkerOf(
+        XElement? marker, ChartPlotKind kind, string? scatterStyle, string? radarStyle)
     {
         string? symbol = Value(Child(marker, "symbol"));
 
         if (symbol is null)
         {
-            return kind == ChartPlotKind.Scatter && scatterStyle is not ("line" or "smooth")
-                ? ChartMarker.Square
-                : ChartMarker.None;
+            bool automatic =
+                (kind == ChartPlotKind.Scatter && scatterStyle is not ("line" or "smooth"))
+                || (kind == ChartPlotKind.Radar && radarStyle == "marker");
+
+            return automatic ? ChartMarker.Square : ChartMarker.None;
         }
 
         return symbol switch
