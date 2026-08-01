@@ -202,6 +202,15 @@ it exercises one record type out of the twenty that matter. 426 bytes.
 | `wmf-picture.odt` | The same metafile inside an ODF package at 8 × 6 cm, which settles the question the fixture was built for: **LibreOffice keeps the metafile rather than rasterising it**, and writes a 9 685-byte PNG preview beside it — twenty times the size and fixed at one resolution, which is exactly what decoding avoids |
 | `wmf-picture.docx` | The same document converted. The `a:blip` has no SVG alternative, so its own `r:embed` *is* the picture and `BlipReference.Choose` has to leave it alone; nothing declares a media type, so the seam has to find the decoder from the first four bytes |
 
+### EMF and EMF+ metafiles
+
+| File | Exercises |
+|---|---|
+| `emf-shapes.emf` | Hand-built, stating a frame of 8000 × 6000 hundredths of a millimetre against a reference device of 8000 × 6000 pixels to 80 × 60 mm — so one logical unit is exactly 1/100 mm and an assertion can name the millimetre it expects |
+| `emf-paths.emf` | LibreOffice's own EMF export, which is almost entirely path records, and whose `rclFrame` of 190 × 277 mm disagrees with its 718 × 1047 pixel reference device — the case the `ViewBox`/`IntrinsicSize` split exists for |
+| `wmf-embedded-emf.wmf` | An 18 276-byte WMF LibreOffice writes, carrying 14 032 bytes of *the same picture again* as a complete EMF inside its escape records: the dual-format question in its WMF form |
+| `emfplus-shapes.emf` | **Hand-built because nothing on a Linux machine can write EMF+.** LibreOffice reads it — `emfio`'s whole EMF+ path exists for that — but the producers are GDI+, PowerPoint and Visio. An EMF+ *Dual* file: the picture is stated once in EMF+ records and once in GDI records that must **not** be replayed, which is the property a regression would silently double. Covers the header's dual flag, solid, hatch and linear-gradient brushes, a path with a Bézier segment, a dashed pen, an ellipse and a pie under a saved transform, `DrawString` through a centring string format, and a clip narrowed and then reset. 1 068 bytes; correct output is 80 × 60 mm with no shape in `#C06030` |
+
 ### Why `slides-ppt.ppt` is 460 kB and `ppt-features.ppt` is 18 kB
 
 96% of `slides-ppt.ppt` is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation`

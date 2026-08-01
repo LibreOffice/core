@@ -4,6 +4,7 @@ using Paperless.Core.Diagnostics;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Vector.EmfPlus;
 using Paperless.Vector.Metafiles;
 
 namespace Paperless.Vector.Emf;
@@ -62,6 +63,10 @@ internal sealed class EmfReader
     private PendingBlit? _pending;
     private DocRect _frame;
     private (int Left, int Top, int Right, int Bottom) _bounds;
+    private (int Left, int Top, int Right, int Bottom) _frameUnits;
+    private (int X, int Y) _devicePixels = (100, 100);
+    private (int X, int Y) _deviceMillimetres = (1, 1);
+    private EmfPlusReader? _plus;
 
     /// <summary>Creates a reader over an enhanced metafile's bytes.</summary>
     /// <param name="bytes">The whole file.</param>
@@ -268,6 +273,9 @@ internal sealed class EmfReader
             : DocRect.Empty;
 
         _bounds = (boundsLeft, boundsTop, boundsRight, boundsBottom);
+        _frameUnits = (frameLeft, frameTop, frameRight, frameBottom);
+        _devicePixels = (_context.Mapping.ReferencePixelsX, _context.Mapping.ReferencePixelsY);
+        _deviceMillimetres = (_context.Mapping.ReferenceMillimetresX, _context.Mapping.ReferenceMillimetresY);
 
         _context.Mapping.FrameOffsetX = frameLeft;
         _context.Mapping.FrameOffsetY = frameTop;
@@ -307,11 +315,91 @@ internal sealed class EmfReader
                 FlushBlit();
             }
 
-            Record(record, start, (int)next);
+            if (record == EmfRecordType.Comment) Comment((int)next);
+            else if (Replays(record)) Record(record, start, (int)next);
+
             Seek((int)next);
 
             if (record == EmfRecordType.Eof) break;
         }
+    }
+
+    /// <summary>
+    /// Whether a GDI record is drawn, given what the EMF+ stream has said so far.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>This is the dual-mode decision, and it is made per record because the format makes it
+    /// per record.</b> A file may carry a GDI description and a GDI+ description of the same
+    /// drawing, and replaying both draws everything twice. LibreOffice's rule
+    /// (<c>emfreader.cxx:955-963</c>) is the one ported here, and it has three parts:
+    /// </para>
+    /// <list type="number">
+    /// <item><description>
+    /// Before any EMF+ record has been seen, GDI records are drawn. A file that carries no EMF+ at
+    /// all is therefore untouched by any of this, and one whose EMF+ starts late still draws what
+    /// came before.
+    /// </description></item>
+    /// <item><description>
+    /// Once an EMF+ record has been seen, GDI records are <em>not</em> drawn — whether or not the
+    /// header called the file dual. An EMF+ Only file's GDI half is a "this needs GDI+" notice,
+    /// and a dual file's is the same picture again.
+    /// </description></item>
+    /// <item><description>
+    /// Except immediately after an <c>EmfPlusGetDC</c>, which exists precisely to hand the device
+    /// context back for records GDI+ has no form for; and except <c>EMR_EOF</c>, which is
+    /// structural rather than drawing.
+    /// </description></item>
+    /// </list>
+    /// <para>
+    /// The choice is therefore made once, in front of the record loop, and never mid-stream — the
+    /// requirement the WMF note in <c>TODO.md</c> states — with the hand-back as the one bracket
+    /// the format itself defines.
+    /// </para>
+    /// </remarks>
+    private bool Replays(EmfRecordType record)
+    {
+        if (_plus is null) return true;
+        if (_plus.WantsDeviceContext) return true;
+
+        return record == EmfRecordType.Eof;
+    }
+
+    /// <summary>
+    /// Reads an <c>EMR_COMMENT</c>, which is where an EMF+ stream lives.
+    /// </summary>
+    /// <remarks>
+    /// A comment is opaque to a consumer that does not understand it, which makes it the most
+    /// attacker-controllable part of a metafile: every field here is checked against the record's
+    /// own extent rather than believed. The data size counts the four-byte identifier that follows
+    /// it, which is the off-by-four every reader of this record has to get right
+    /// (<c>emfreader.cxx:935-938</c>).
+    /// </remarks>
+    private void Comment(int end)
+    {
+        uint dataSize = U32();
+        if (_failed || dataSize < 4) return;
+
+        long available = Math.Min(dataSize, (uint)Math.Max(end - _position, 0));
+        if (available < 4) return;
+
+        uint identifier = U32();
+        if (identifier != CommentEmfPlus) return;
+
+        int length = (int)(available - 4);
+        if (length <= 0) return;
+
+        _plus ??= new EmfPlusReader(
+            _context,
+            _painter,
+            _budget,
+            _text,
+            _diagnostics,
+            _frameUnits,
+            _devicePixels,
+            _deviceMillimetres);
+
+        _plus.Process(_bytes, _position, length);
     }
 
     private void Record(EmfRecordType type, int start, int end)

@@ -97,7 +97,7 @@ public sealed class MetafilePainter
                     _sink.FillPath(path, Paint.Solid(_context.BackgroundColour), _context.FillRule);
                 }
 
-                Hatch(path, brush);
+                Hatch(path, brush, _context.FillRule);
                 break;
 
             case BrushStyle.Pattern:
@@ -148,14 +148,60 @@ public sealed class MetafilePainter
     /// </remarks>
     /// <param name="path">The shape.</param>
     /// <param name="paint">What to fill it with.</param>
-    public void FillWith(GraphicsPath path, Paint paint)
+    /// <param name="rule">
+    /// Which rule decides the inside, or null for the device context's. EMF+ states it per record
+    /// rather than as device state, so it cannot always come from the context.
+    /// </param>
+    public void FillWith(GraphicsPath path, Paint paint, FillRule? rule = null)
     {
         ArgumentNullException.ThrowIfNull(path);
 
         if (_context.IsNoOperation) return;
         if (!ApplyClip(path)) return;
 
-        _sink.FillPath(path, paint, _context.FillRule);
+        _sink.FillPath(path, paint, rule ?? _context.FillRule);
+    }
+
+    /// <summary>
+    /// Strokes a shape with a stroke the record supplies rather than with the selected pen.
+    /// </summary>
+    /// <remarks>
+    /// The counterpart of <see cref="FillWith"/>, and EMF+ is the reason both exist: every EMF+
+    /// drawing record names its own pen or brush by slot, so there is no selected object to read.
+    /// </remarks>
+    /// <param name="path">The shape.</param>
+    /// <param name="stroke">What to stroke it with.</param>
+    public void StrokeWith(GraphicsPath path, Stroke stroke)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(stroke);
+
+        if (_context.IsNoOperation) return;
+        if (!ApplyClip(path)) return;
+
+        _sink.StrokePath(path, stroke);
+    }
+
+    /// <summary>
+    /// Fills a shape with hatch lines of a stated colour, without touching the selected brush.
+    /// </summary>
+    /// <remarks>
+    /// A GDI+ hatch is opaque — it states both a foreground and a background colour — so a caller
+    /// paints the background first and then calls this. A GDI hatch takes its background from the
+    /// device context instead, which is why the background is not painted here.
+    /// </remarks>
+    /// <param name="path">The shape the lines are clipped to.</param>
+    /// <param name="colour">The lines' colour.</param>
+    /// <param name="style">Which of the six line hatches.</param>
+    /// <param name="rule">Which rule decides the inside, or null for the device context's.</param>
+    public void FillHatch(GraphicsPath path, Colour colour, HatchStyle style, FillRule? rule = null)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        if (_context.IsNoOperation) return;
+        if (!ApplyClip(path)) return;
+
+        Hatch(path, new MetafileBrush(BrushStyle.Hatched, colour, style), rule ?? _context.FillRule);
     }
 
     /// <summary>Fills a rectangle with the background colour, as an opaque text record does.</summary>
@@ -204,13 +250,72 @@ public sealed class MetafilePainter
         }
     }
 
+    /// <summary>
+    /// Draws a raster image under an arbitrary transform.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The form EMF+ needs and GDI never does: a GDI blit names an axis-aligned destination
+    /// rectangle, while an EMF+ <c>DrawImagePoints</c> names three corners of a parallelogram, and
+    /// any EMF+ image at all may be drawn under a rotated world transform. A rectangle cannot say
+    /// either, so the placement becomes a transform and the image is drawn into a square under it.
+    /// </para>
+    /// <para>
+    /// The square is <see cref="PlacementUnit"/> EMUs on a side rather than one, because
+    /// <c>DocRect</c> is stated in whole EMUs and a source rectangle expressed as a fraction of a
+    /// one-EMU square would round away to nothing.
+    /// </para>
+    /// </remarks>
+    /// <param name="image">The image.</param>
+    /// <param name="placement">Maps the placement square onto the page.</param>
+    /// <param name="source">
+    /// Where the whole image goes inside the placement square, for a record that draws part of it;
+    /// null draws the whole image over the whole square.
+    /// </param>
+    /// <param name="opacity">A uniform opacity.</param>
+    public void DrawTransformedImage(
+        RasterImage image, AffineTransform placement, DocRect? source = null, double opacity = 1.0)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+
+        if (_context.IsNoOperation) return;
+        if (!_budget.ChargeCommand()) return;
+
+        EnsureClip();
+
+        DocRect square = new(
+            Length.Zero, Length.Zero, Length.FromEmu(PlacementUnit), Length.FromEmu(PlacementUnit));
+
+        _sink.Save();
+        _sink.Transform(placement);
+
+        if (source is { } whole)
+        {
+            _sink.ClipPath(GraphicsPath.Rectangle(square));
+            _sink.DrawImage(image, whole, opacity);
+        }
+        else
+        {
+            _sink.DrawImage(image, square, opacity);
+        }
+
+        _sink.Restore();
+    }
+
+    /// <summary>The side of the square <see cref="DrawTransformedImage"/> places an image in.</summary>
+    public const long PlacementUnit = 1 << 16;
+
     /// <summary>Draws a glyph run, rotating it when the font asks for an escapement.</summary>
     /// <param name="run">The positioned glyphs.</param>
     /// <param name="radians">
     /// The baseline's rotation about the run's origin, positive anticlockwise. Non-zero
     /// escapements are common in charts, where every axis label is rotated.
     /// </param>
-    public void DrawGlyphRun(GlyphRun run, double radians)
+    /// <param name="paint">
+    /// What to draw the text in, or null for the device context's text colour. EMF+ names a brush
+    /// on the record rather than keeping a text colour in the device state.
+    /// </param>
+    public void DrawGlyphRun(GlyphRun run, double radians, Paint? paint = null)
     {
         ArgumentNullException.ThrowIfNull(run);
 
@@ -218,10 +323,11 @@ public sealed class MetafilePainter
         if (!_budget.ChargeCommand()) return;
 
         EnsureClip();
+        paint ??= Paint.Solid(_context.TextColour);
 
         if (radians == 0)
         {
-            _sink.DrawGlyphRun(run, Paint.Solid(_context.TextColour));
+            _sink.DrawGlyphRun(run, paint);
             return;
         }
 
@@ -241,7 +347,7 @@ public sealed class MetafilePainter
             cos,
             ox - (ox * cos) - (oy * sin),
             oy + (ox * sin) - (oy * cos)));
-        _sink.DrawGlyphRun(run, Paint.Solid(_context.TextColour));
+        _sink.DrawGlyphRun(run, paint);
         _sink.Restore();
     }
 
@@ -276,7 +382,7 @@ public sealed class MetafilePainter
     /// read time". This is the second of those, and it is the better one here: a tiled bitmap
     /// would need a rasteriser, whereas lines stay resolution-independent and print sharp.
     /// </remarks>
-    private void Hatch(GraphicsPath path, MetafileBrush brush)
+    private void Hatch(GraphicsPath path, MetafileBrush brush, FillRule rule)
     {
         DocRect bounds = Bounds(path);
         if (bounds.IsEmpty) return;
@@ -285,7 +391,7 @@ public sealed class MetafilePainter
         Length spacing = Length.FromMm100(HatchSpacingMm100);
 
         _sink.Save();
-        _sink.ClipPath(path, _context.FillRule);
+        _sink.ClipPath(path, rule);
 
         switch (brush.Hatch)
         {

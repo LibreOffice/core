@@ -4,9 +4,10 @@ Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG.
 
 **Decided: full support for all four.** Not a subset, and no rasterise-via-LibreOffice
 shortcut. SVG reuses an existing library (see below); WMF, EMF and EMF+ are ours to write,
-because nothing exists in C# for them. **SVG and WMF are done**, and the shared metafile
-groundwork WMF was built on — `Metafiles/` — is what EMF and EMF+ start from rather than
-from a blank file.
+because nothing exists in C# for them. **All four are done.** The shared metafile groundwork
+in `Metafiles/` is what the second and third formats were built on rather than a blank file,
+and *What the three metafile formats taught* below is the section written for whoever
+maintains them.
 
 That makes this the largest single body of work in the project, so it is worth being clear
 why it earns that. Office documents embed these constantly — pasted clip art, chart and
@@ -23,18 +24,23 @@ specifications cold.
 ## The seam, and what a metafile implementer has to supply
 
 **Read this first.** SVG settled the shape of this seam and WMF was the first format to plug
-a stateful command stream into it. Everything below is what EMF and EMF+ plug into, and
-*What the first metafile format taught* is the section written for whoever does them next.
+a stateful command stream into it; EMF and EMF+ plugged into the same one without changing
+it, which is the strongest evidence the seam is in the right place. *What the three metafile
+formats taught* is the section written for whoever maintains them.
 
 ### What a decoded vector image is
 
 Not pixels, and not a live replay. `IVectorImageDecoder.Decode` answers a `VectorImage`:
 
-| Piece | What it is | SVG | WMF | EMF |
+| Piece | What it is | SVG | WMF | EMF and EMF+ |
 |---|---|---|---|---|
 | `Content` | A `DisplayList` — recorded `IDrawingSink` calls, replayable | the translated command list | the replayed records, already mapped to EMUs | the replayed records |
-| `ViewBox` | The rect of `Content`'s coordinates that fills the destination, **in EMUs** | the viewport, converted at 9525 EMU per user unit | the viewport extent, which the mapping has already resolved | `rclBounds`, or the window rect once the mapping mode is applied |
-| `IntrinsicSize` | The physical size the picture asks for when nothing imposes one | `width`/`height` against the CSS inch | the window extent against the placeable header's units-per-inch | `szlMillimeters` |
+| `ViewBox` | The rect of `Content`'s coordinates that fills the destination, **in EMUs** | the viewport, converted at 9525 EMU per user unit | the viewport extent, which the mapping has already resolved | the frame's own size, since the mapping subtracts the frame origin |
+| `IntrinsicSize` | The physical size the picture asks for when nothing imposes one | `width`/`height` against the CSS inch | the window extent against the placeable header's units-per-inch | `rclFrame`, falling back to `rclBounds` through `szlDevice`/`szlMillimeters` |
+
+**EMF+ has no row of its own because it has no file of its own.** It rides inside an EMF's
+comment records, so the header question, the seam and the registration are all the EMF
+decoder's; see *EMF+* below.
 
 `DisplayList` is itself an `IDrawingSink`, so a decoder writes to the same interface a
 backend implements and needs no second output path. Recording rather than drawing straight
@@ -43,29 +49,35 @@ the commands countable for `VectorLimits`.
 
 **Keeping `ViewBox` and `IntrinsicSize` apart is the point.** For SVG they usually coincide,
 and for WMF they always do — because every coordinate is mapped to 1/100 mm as it is read, so
-the space the commands are in *is* the physical one. For EMF they will not, because an EMF
-states its logical coordinate space (`rclBounds`, device units) and its physical extent
-(`rclFrame`, 1/100 mm) independently. **Anything that quietly generalises from WMF's answer
-is a bug waiting for the first EMF**, and collapsing the two is the classic wrongly-scaled
-metafile.
+the space the commands are in *is* the physical one. For EMF the two are computed from
+different header fields and neither is derived from the other: `rclBounds` is the logical
+space in device units, `rclFrame` the physical extent in 1/100 mm, and `szlDevice` against
+`szlMillimeters` the scale relating them. They then agree *numerically*, because the mapping
+subtracts the frame origin — but a file whose bounds disagree with its frame about the scale
+gets both right here where a decoder that derived one from the other gets one of them wrong.
+Collapsing them is the classic wrongly-scaled metafile.
 
 ### What the seam does not give you
 
 - **No device context.** `Save`/`Restore`/`Transform` on the sink are a clip-and-transform
   stack, nothing more. There is no selected pen, brush, font or palette, no mapping mode and
   no current position, because `IDrawingSink` is deliberately stateless per draw call. The DC
-  is the metafile implementer's to build, once, shared between WMF and EMF — **it is built,
-  in `Metafiles/`**; see *Shared groundwork* below.
+  is the metafile implementer's to build, once, shared by all three metafile formats — **it is
+  built, in `Metafiles/`**; see *Shared groundwork* below.
 - **No path arithmetic.** `ClipPath` intersects and nothing unions, subtracts or offsets.
   The SVG translator gets away with expressing a union as one path of several subpaths under
   the non-zero rule; a *region* turns out to get away with it too, because a GDI region is a
   scan list of disjoint rectangles and disjoint subpaths are their own union under either
-  rule. Only subtraction is genuinely out of reach: `ExcludeClipRect` and `ExtSelectClipRgn`
-  with `RGN_DIFF` need real path operations or an honest diagnostic, and today raise
-  `PL6034`.
+  rule. Subtraction turned out to be reachable too, once the rectangular part of a clip was
+  kept apart from the arbitrary part: a rectangle minus a rectangle is at most four
+  rectangles, and subtraction distributes over intersection. What is left is *union* and
+  *symmetric difference* with the clip itself as an operand, which need the clip's own area;
+  those raise `PL6034` and leave the clip as it was, drawing too much rather than too
+  little.
 - **No stroked text.** `DrawGlyphRun` takes one paint. SVG's `fill="none" stroke="red"` text
-  is filled in the stroke's colour with a `PL6015` diagnostic; EMF+ `DrawDriverString` with
-  a pen will want the same compromise, or an extension to Core.
+  is filled in the stroke's colour with a `PL6015` diagnostic. Neither metafile family needs
+  more: GDI has no stroked text at all, and EMF+ `DrawString` and `DrawDriverString` both
+  name a *brush* rather than a pen — so SVG is still the only caller this costs anything.
 
 ### What a decoder owes
 
@@ -82,18 +94,22 @@ metafile.
    allows. WMF's `ESCAPE` records are the metafile analogue of the SVG `href` that turned out
    to read `/etc/passwd`: an open extension point in an attacker-supplied file. Two payloads
    are read there and both name only bytes inside their own record; everything else in an
-   escape is ignored, and `WmfSafetyTests` asserts it. EMF's comment payloads are next.
+   escape is ignored, and `WmfSafetyTests` asserts it. An EMF comment is the same hole one
+   layer down — a whole EMF+ record stream that no validator, scanner or thumbnailer has
+   looked at — and `EmfPlusSafetyTests` asserts the same invariants over it.
 4. **Never throw for malformed input.** A picture that cannot be read is a document to draw
    *without* that picture: return `VectorImage.Empty` with a diagnostic. Diagnostic codes
    `PL60xx` belong to this library.
 5. **Register in `VectorImages`** and sniff by content in `CanDecode`. Nothing that calls
    `VectorImages.Decode` changes when a format is added, which is the point of the seam.
 
-### What the first metafile format taught
+### What the three metafile formats taught
 
-**Read this before starting EMF.** The groundwork below exists and works; what follows is
-what it turned out to need that was not obvious from the seam, and it is the most valuable
-thing WMF leaves behind. Every point cost something to find.
+**Read this before changing anything in `Metafiles/`, `Wmf/`, `Emf/` or `EmfPlus/`.** The
+groundwork below exists and works; what follows is what it turned out to need that was not
+obvious from the seam. The first eight points are WMF's, found while it was the only format;
+the last group is what EMF and EMF+ added, and closes the section. Every point cost something
+to find.
 
 **The clip wants to be a list of intersections, not a region.** This is the discovery with
 the most leverage. `IDrawingSink.ClipPath` intersects and offers nothing else, which looks
@@ -164,6 +180,64 @@ up through the cluster map rather than by position. And a rotated baseline has n
 live on `GlyphRun`, so it becomes a `Transform` about the run's own origin — which keeps the
 run one run, so a PDF backend still emits real searchable text.
 
+### And what the other two added, which closes this section
+
+**Three formats, one device context, and the sharing is the reason all three fit.** WMF, EMF
+and EMF+ are a 16-bit, a 32-bit and a wholly different command stream, and they share
+`MetafileDeviceContext`, `MetafileClip`, `MetafilePainter`, `MetafileBudget`,
+`MetafileTextEngine` and `DeviceIndependentBitmap` without any of them branching on format.
+The two things they do **not** share are worth stating, because a maintainer's instinct will
+be to unify them and both attempts would be wrong:
+
+- **The mapping.** WMF and EMF share `MetafileMapping` because both are GDI: eight mapping
+  modes, a window, a viewport and a world transform. EMF+ has none of that — a world
+  transform, a page transform with a unit, and the reference device — so it carries its own
+  four-stage composition (`EmfPlusReader.Remap`). Forcing it through `ImplMap` would mean
+  adding a ninth pseudo-mode that no GDI file ever uses.
+- **The object table.** `GraphicsObjectTable` implements GDI's lowest-free-slot rule and its
+  delete semantics because WMF states no handle at creation. EMF+ names a slot on every
+  record, has no create and no delete, and simply overwrites — 256 slots, indexed by the
+  flags word's low byte. Sharing the table would mean giving GDI's rule an exemption that
+  swallows it.
+
+**A format that carries another format is the rule rather than the exception, and the
+decision must be made once, in front of the record loop.** A WMF carries a whole EMF in its
+escape records; an EMF carries EMF+ in its comment records; an EMF+ image object can carry a
+whole further metafile. In every case replaying both descriptions draws the picture twice,
+and switching part-way produces a picture that is coherent nowhere. `EmfReader.Replays` is
+where the EMF/EMF+ decision lives and it is three lines; getting it *stated* took reading
+`emfreader.cxx:955-963` rather than reasoning about it, because the rule is not the obvious
+one — see the EMF+ section.
+
+**`Paperless.Core` never had to change, across all three.** Not the sink, not `Paint`, not
+`GraphicsPath`, not `GlyphRun`. Six things looked as though they would and did not: a hatch
+became stroked lines clipped to the shape; a DIB became `RasterImage.Encoded` by prepending
+fourteen bytes of BMP header; a source rectangle became a scale plus a clip; a constant
+source alpha became the sink's own opacity; a transparent-bitmap idiom became straight RGBA
+arithmetic over an uncompressed DIB, which is not a decode; and an EMF+ parallelogram
+destination became a `Transform` plus a fixed-size placement square. The two that genuinely
+exceed the drawing model are named in *Not done* below, and both are **gradients**: a GDI+
+path gradient wants a colour per boundary vertex where `GradientPaint` has one ramp, and
+every GDI+ gradient wants a spread mode where `GradientPaint` has none. Neither is a metafile
+problem — the SVG side records the same two gaps as `PL6018` and `PL6021` — which is the
+argument for fixing them in Core rather than per format.
+
+**Measure against LibreOffice, but do not assume LibreOffice is right.** The method works —
+WMF reached `mae 0.0000` and EMF `0.0001` on LibreOffice's own exports — and it found real
+bugs in this reader. It also found three places where LibreOffice's PDF export drops or
+mis-draws what its own importer produced, and on each of those a raw `ink_ratio` reads as a
+defect here when it is not:
+
+| File | What LibreOffice does | Measured |
+|---|---|---|
+| `TestEmfPlusFillClosedCurveWinding.emf` | fills a winding-rule star **even-odd**, leaving the pentagon hole its own test name says should be solid | `ink_ratio 1.431` |
+| `TestEmfPlusFillRectsWithTextureBrush.emf` | draws the outline and not the texture, though its unit test asserts the texture is in the primitive tree | `ink_ratio 24.3` |
+| `TestEmfPlusSetPageTransform.emf` | draws the label and neither of the two filled rectangles its unit test asserts | `ink_ratio 144` |
+
+So read the diff image before believing a number. A high `ink_ratio` with a low
+`mean_abs_error` — all three above — means the two renderers disagree about a *small* area,
+and it is as likely to be theirs as ours.
+
 ---
 
 ## Shared groundwork
@@ -221,8 +295,9 @@ WMF stored under an `.emf` part name is decoded anyway.
       without its fourteen-byte file header, so re-wrapping it needs no codec here.
 - [x] Clipping: `IntersectClipRect`, `OffsetClipRgn`, `SelectClipRegion`, and the
       `ETO_CLIPPED` rectangle on a text record, which is scoped to that record alone.
-- [x] `ESCAPE`: the `WMFC` comment that carries a chunk of a complete EMF is **detected and
-      reported** (`PL6030`) rather than replayed, and the private Unicode text escape is
+- [x] `ESCAPE`: the `WMFC` comment that carries a chunk of a complete EMF is **reassembled
+      and replayed** rather than reported (`PL6030` remains for the file that carries only
+      part of one), and the private Unicode text escape is
       drawn, with the count of following legacy records honoured so nothing double-strikes.
 - [x] Text through `Paperless.Text` — the same substitution table and the same HarfBuzz as
       body text — with the code page taken from the selected font's character-set byte, all
@@ -264,10 +339,11 @@ the same metafile at the same size on the same A4 page:
 
 **A WMF is 78 % EMF, in the file LibreOffice itself writes.** Measured: a 16 700-byte WMF
 exported by LibreOffice 24.2 carries **12 964 bytes of a complete EMF** inside two `ESCAPE`
-comment records. Replaying both would draw the whole picture twice, so the WMF records are
-what get drawn and `PL6030` says what was left on the table. When the EMF reader lands, this
-is the switch to flip — and the choice must be made *once* for the whole file, for the same
-reason the EMF+ dual-mode note below gives.
+comment records, and an 18 276-byte one carries 14 032 bytes byte for byte identical to what
+the same drawing exports to as an EMF on its own. Replaying both would draw the whole picture
+twice. **The switch has since been flipped**: a WMF that carries a complete EMF replays the
+EMF, decided once in front of the record loop, which is the same rule and the same reason as
+the EMF/EMF+ decision below.
 
 ### Traps, each of which cost time
 
@@ -288,7 +364,9 @@ parameter, `atan2(rx·sin θ, ry·cos θ)` — `ImplGetParameter`,
 `tools/source/generic/poly.cxx:60-67`. Measured on a 4:1 ellipse: a ray at 45° crosses at
 parameter 1.326 rad = **76°**, so using the ray's angle puts the end of the arc 31° away,
 about a twelfth of the way round. It is invisible on a circle, which is what makes it a trap:
-every test with a circular arc passes.
+every test with a circular arc passes. **EMF+ states its arcs as angles instead**, and those
+angles *are* the ellipse's parameter — so none of this conversion applies there, and the two
+arc implementations look wrongly duplicated until you notice why.
 
 **The arc parameter is measured with y upwards.** GDI's default arc direction is
 anticlockwise in the *logical* space, and the parameterisation is
@@ -310,17 +388,19 @@ end of a *legitimate* file — not a malformed one.
       and the rest combine the source with what is already on the page, which a display list
       cannot read back. The source is drawn alone and `PL6033` is raised, which is what
       LibreOffice falls back to as well. `BLACKNESS` and `WHITENESS` are honoured exactly.
-- [ ] **The transparent-bitmap idiom.** A monochrome mask blitted with `SRCAND` followed by a
-      colour image with `SRCPAINT` is how a WMF says "transparent", and merging the two into
-      one alpha bitmap is what `MtfTools::ResolveBitmapActions` (`mtftools.cxx:2557`) exists
-      for. It needs pixels, and pixels need a codec. Today both are drawn in order, so the
-      transparent area comes out black. **This is the strongest single argument for letting
-      `Paperless.Vector` see decoded pixels**, and it should be weighed against the
-      dependency the whole library was arranged to avoid.
-- [ ] **`ExcludeClipRect`.** Subtraction, which `ClipPath` cannot express. The excluded area
-      is left unclipped — drawing too much rather than too little, which loses no content —
-      and `PL6034` says so. Real path operations would fix this and the SVG side's `PL6012`
-      together.
+- [x] **The transparent-bitmap idiom, closed when EMF arrived.** A monochrome mask blitted
+      with `SRCAND` followed by a colour image with `SRCPAINT` is how a WMF says
+      "transparent", and merging the two into one alpha bitmap is what
+      `MtfTools::ResolveBitmapActions` (`mtftools.cxx:2557`) exists for. It looked as though
+      it needed a codec and it does not: an **uncompressed** DIB is not an encoded format but
+      a stride, a channel order and a palette, so merging it is arithmetic. One blit is held
+      back so the pair can be seen; the compressed forms answer null and fall back to drawing
+      the source alone.
+- [x] **`ExcludeClipRect`, closed when EMF arrived.** A rectangle minus a rectangle is at most
+      four rectangles, and subtraction distributes over intersection — so keeping the
+      rectangular part of a clip apart from the arbitrary part makes an exclusion exact even
+      under a non-rectangular clip path, with no general path arithmetic anywhere.
+      `PL6034` now means only union and symmetric difference with the clip as an operand.
 - [ ] **A hatched brush is a solid fill in LibreOffice.** Measured: LibreOffice paints a WMF
       `HS_DIAGCROSS` brush as a solid fill of the hatch colour, on **both** its PDF and its
       PNG export paths; Windows paints lines. Lines are what is drawn here, because that is
@@ -340,58 +420,245 @@ end of a *legitimate* file — not a malformed one.
       96 is what the rest of Paperless assumes a nominal pixel is; a pattern-filled shape will
       therefore be right in colour and possibly wrong in scale.
 
-## EMF
+## EMF — done
 
-**Start from `Metafiles/`, not from a blank file.** The device context, the object table, the
-clip, the mapping, the budget, the text engine, the DIB reader and the painter are all
-already there and all already have EMF in them — `MetafileMapping` carries the world
-transform and the `GM_ADVANCED` flag, `GraphicsObjectTable.Set` exists for EMF's
-handle-stating create records, and `MetafileDeviceContext.SelectStock` handles the top-bit
-stock-object convention. Read *What the first metafile format taught* above first; it is the
-part of this file written for whoever does EMF.
+`Emf/EmfImageDecoder.cs` + `Emf/EmfReader.cs`, ported record by record from
+`emfio/source/reader/emfreader.cxx` onto the groundwork WMF built. Registered in
+`VectorImages`; sniffed by content, which is load-bearing rather than tidy — LibreOffice
+writes a genuine EMF into `word/media/image1.wmf` and `[Content_Types].xml` declares no type
+for `.wmf` at all, so neither the name nor the declared type identifies it.
 
-- [ ] Header, bounds, frame, and the reference-device fields that set the coordinate scale.
-      `rclFrame` is in 1/100 mm and gives `IntrinsicSize`; `rclBounds` is in device units and
-      gives `ViewBox`. **This is the case the seam's split exists for**: for WMF the two
-      coincide and for EMF they will not, so anything that quietly assumes WMF's answer is a
-      bug waiting for the first EMF
-- [ ] Path construction (`BeginPath`/`EndPath`/`StrokePath`/`FillPath`/`StrokeAndFillPath`).
-      The one piece of state WMF did not need and the device context therefore does not yet
-      have: a current path that drawing records append to rather than draw
-- [ ] World-transform records (`SetWorldTransform`, `ModifyWorldTransform`). The state is
-      already there — `MetafileMapping.World` and `IsAdvanced` — and `ImplMap` already applies
-      it; only the records are missing
-- [ ] Text: `EMR_EXTTEXTOUTW`/`A`, including per-glyph DX arrays — honour the DX array
-      rather than re-measuring, or text spacing drifts from what the producer intended.
-      `PositionedGlyph.Advance` is per-glyph precisely so a DX array survives
-- [ ] `EMR_SMALLTEXTOUT`, and the glyph-index variants that bypass character mapping
-- [ ] Bitmap records: `StretchDIBits`, `AlphaBlend`, `TransparentBlt`, `BitBlt`
-- [ ] Clipping: `ExtSelectClipRgn`, `IntersectClipRect`, `OffsetClipRgn`
-- [ ] Gradient fill (`EMR_GRADIENTFILL`)
-- [ ] Pen styles: geometric vs cosmetic, dash patterns, caps and joins
+### What draws
 
-## EMF+
+- [x] The header, and the four independent quantities in it. `rclFrame` is the physical
+      extent in 1/100 mm, `rclBounds` the logical space in device units, and `szlDevice`
+      against `szlMillimeters` the scale that relates them; none is derivable from another,
+      and the frame's origin is subtracted from every mapped point.
+- [x] Path construction — `BeginPath`/`EndPath`/`StrokePath`/`FillPath`/`StrokeAndFillPath`
+      and `CloseFigure` — through `MetafilePath`, the one piece of state WMF did not need.
+- [x] World-transform records, `SetWorldTransform` and `ModifyWorldTransform` in all four of
+      its modes.
+- [x] Drawing records including `PolyDraw`, `AngleArc`, `ArcTo`, the 16-bit forms of every
+      polygon record, and `EMR_GRADIENTFILL` in both rectangle modes.
+- [x] Text: `ExtTextOutW`/`A`, `PolyTextOut`, `SmallTextOut`, glyph-index runs, per-glyph DX
+      arrays and the record's own page-to-device scale factors.
+- [x] Bitmaps: `StretchDIBits`, `SetDIBitsToDevice`, `BitBlt`, `StretchBlt`, `AlphaBlend`
+      with both kinds of transparency, and `TransparentBlt`.
+- [x] Clipping: `ExtSelectClipRgn`, `IntersectClipRect`, `ExcludeClipRect`, `OffsetClipRgn`
+      and `SelectClipPath` — and the clip gained exact rectangle algebra here, which
+      retroactively closed WMF's `ExcludeClipRect` as well.
+- [x] Pens: geometric against cosmetic, the five predefined dash styles and a user dash
+      array, caps and joins.
+- [x] **The EMF a WMF is hiding.** A WMF now replays the complete EMF its escape records
+      carry, decided once in front of the record loop.
 
-Roughly fifty record types, carried inside `EMR_COMMENT` records.
+### What it was measured against
 
-- [ ] `EmfPlusRecord` dispatch and `EmfPlusHeader` handling
-- [ ] **Dual-mode files.** Many EMF+ files also carry an equivalent EMF representation for
-      older consumers. Decide *once* which interpretation to replay and follow it
-      consistently — replaying both double-draws everything, and switching mid-stream
-      produces incoherent output. LibreOffice's handling of this is the reference.
-- [ ] Object table: pens, brushes, paths, images, fonts, string formats, image attributes,
-      custom line caps
-- [ ] Brush types: solid, hatch, texture, path gradient, linear gradient. Path gradients are
-      the awkward one and are common in real clip art.
-- [ ] Path and point record forms, including the compressed and relative point encodings
-- [ ] Drawing records: `DrawLines`, `DrawPath`, `FillPath`, `DrawString`, `DrawImage`,
-      `DrawImagePoints`, `FillRects`, `FillPolygon`, `DrawCurve`, `DrawBeziers`
-- [ ] Text via `DrawString` with `EmfPlusStringFormat` — alignment, wrapping, trimming
-- [ ] Colour matrix and image-attribute effects
-- [ ] Transform records, and the container save/restore records
-      (`Save`/`Restore`/`BeginContainer`/`EndContainer`)
-- [ ] Anti-aliasing and pixel-offset modes, insofar as they change geometry rather than just
-      quality
+Measured when EMF landed, both PDFs rasterised at `pdftoppm -r 150`:
+
+| Picture | `mean_abs_error` | Note |
+|---|---|---|
+| LibreOffice's own EMF export of a four-shape drawing | **0.0001** | `differing=0.0007`, `shifted=0` |
+| a plain blit, the transparent-mask idiom and an `AC_SRC_ALPHA` `AlphaBlend` | **0.0000** | `differing=0.0000` — identical |
+
+And the dual-format measurement that settled the WMF question: an 18 276-byte WMF
+LibreOffice writes carries **14 032 bytes of EMF**, byte for byte the EMF the same drawing
+exports to on its own.
+
+## EMF+ — done
+
+`EmfPlus/EmfPlusReader.cs` and its three companions, ported from
+`drawinglayer/source/tools/emfphelperdata.cxx` and the seven files beside it, with the
+record dispatch in `emfio/source/reader/emfreader.cxx` deciding which description is
+replayed.
+
+**Nothing registers in `VectorImages` and nothing new is sniffed**, because EMF+ is not a
+file format: it has no header on disk, no signature and no extension of its own. It is a
+second description of the same drawing, carried in `EMR_COMMENT_EMFPLUS` records inside an
+ordinary EMF, so the EMF decoder is what finds it and the seam does not change at all.
+
+### The rule that had to be settled first
+
+**Which of the two descriptions to replay is `emfreader.cxx:955-963`, and it is not the
+obvious rule.** The obvious rule is "if the header says dual, prefer EMF+", and it is wrong
+in both directions. What LibreOffice does, and what `EmfReader.Replays` now does:
+
+1. **Before any EMF+ record has been seen, GDI records are drawn.** A file carrying no EMF+
+   at all is untouched by any of this, and one whose EMF+ starts late still draws what came
+   before it.
+2. **Once one has been seen, GDI records are not drawn — whether or not the header called the
+   file dual.** This is the half that surprises. An EMF+ *Only* file still carries GDI
+   records, and they are a "this needs GDI+" notice rather than a drawing; a *Dual* file's
+   are the same picture again. The dual flag turns out to gate nothing in the decision.
+3. **Except immediately after `EmfPlusGetDC`**, which exists precisely to hand the device
+   context back for the records GDI+ has no form for, and which lasts until the next comment.
+   And except `EMR_EOF`, which is structural.
+
+So the choice is made once, in front of the record loop, never mid-stream — the requirement
+the WMF note above states — with the hand-back as the one bracket the format itself defines.
+Because the two readers share one `MetafileDeviceContext` and one `MetafilePainter`, a
+bracketed GDI record draws under the EMF+ clip, which is what makes the hand-back mean
+anything.
+
+### What draws
+
+- [x] Record framing, the header, and the multi-part **continuation** form: an object larger
+      than one record repeats with the top flag bit set, and each part after its four-byte
+      total-size field is appended until a record arrives that is not part of the same
+      object. A reader that parses each fragment alone reads the first as a whole object and
+      draws nothing.
+- [x] The object table — 256 slots named by the flags word's low byte, overwritten in place,
+      with no create, no delete and no handle arithmetic. Brushes, pens, paths, regions,
+      images, fonts and string formats are read; image attributes and custom line caps
+      consume their slot and nothing else.
+- [x] `FillRects`, `DrawRects`, `FillPolygon`, `DrawLines`, `FillEllipse`, `DrawEllipse`,
+      `FillPie`, `DrawPie`, `DrawArc`, `FillPath`, `DrawPath`, `FillRegion`, `DrawBeziers`,
+      `DrawCurve`, `DrawClosedCurve`, `FillClosedCurve` and `Clear`.
+- [x] `EmfPlusPath` with its point-type array, in all three point encodings — float,
+      compressed 16-bit and **relative**.
+- [x] Brushes: solid, hatch, texture, linear gradient and path gradient, with blend-factor and
+      preset-colour ramps on both gradients.
+- [x] Pens, including all thirteen optional fields of the pen-data blob, the five predefined
+      dash styles and a custom dash array.
+- [x] `DrawString` with `EmfPlusFont` and `EmfPlusStringFormat` — alignment, line alignment,
+      margins and tracking — and `DrawDriverString` in both its character and glyph-index
+      forms, split into one run per shared baseline.
+- [x] `SetWorldTransform`, `ResetWorldTransform`, `Multiply`/`Translate`/`Scale`/`Rotate`
+      with the post-multiply flag honoured on each, and `SetPageTransform` with its unit.
+- [x] `Save`/`Restore` and `BeginContainer`/`BeginContainerNoParams`/`EndContainer`.
+- [x] `ResetClip`, `SetClipRect`, `SetClipPath`, `SetClipRegion` and `OffsetClip`.
+- [x] `DrawImage` and `DrawImagePoints`, including the parallelogram destination and a source
+      rectangle, for both an encoded image and a GDI+ native bitmap.
+
+### The rules, and what they were measured against
+
+**A world unit is a device pixel until something says otherwise, and the chain is four
+stages.** World transform, then the page transform's scale and unit, then the reference
+device's `szlMillimeters` against `szlDevice`, then the frame origin — composed into one
+matrix whenever any of them changes (`EmfPlusHelperData::mappingChanged`). The reference
+device is the only thing in the whole file that says how big a pixel is, exactly as it is for
+an EMF in `MM_TEXT`.
+
+**A pen's width is in the space the world transform maps *from*, and it scales.** Unlike a
+GDI cosmetic pen, which is one device pixel whatever the picture's scale. A width of zero
+means the thinnest line the device draws, which has no device-independent value; 0.18 world
+units and 0.05 pixels are LibreOffice's two substitutes and they are what is used here.
+
+**An EMF+ hatch is opaque and a GDI hatch is not.** GDI+ states both colours on the brush, so
+the background is painted and then the lines; GDI takes its background from the device
+context and paints it only when the background mode is opaque. Twenty of the fifty-three GDI+
+hatch styles are one of GDI's six at a different weight, and those are drawn as lines; the
+twelve percentage styles are dot screens with no line form at all and are blended, which is
+what LibreOffice draws for every style it does not recognise.
+
+**Fidelity, against LibreOffice 24.2's rendering of all twenty-seven EMF+ files in
+`emfio/qa/cppunit/emf/data`**, both PDFs rasterised with `pdftoppm -r 150`:
+
+| Band | Files | Worst in band |
+|---|---|---|
+| `mae` ≤ 0.0002 | 10 | `TestEmfPlusSave`, `TestDrawLine`, `tdf143031_BrushPathGrad` and `TestEmfPlusFillClosedCurve` all at **0.0000** |
+| 0.0002 < `mae` ≤ 0.002 | 8 | `TestEmfPlusGetDC` 0.0018 |
+| `mae` > 0.002 | 9 | `TestEmfPlusDrawLineWithDash` 0.0662; each of the nine is named in *Not done* below or in the LibreOffice table above |
+
+And on the committed fixture, which is the only file here that LibreOffice has never
+written: `mae 0.0010`, `ink_ratio 1.011`. That measurement is worth more than its number —
+it is what proves `emfplus-shapes.emf` is a *valid* EMF+ rather than only one this reader
+can read.
+
+### Traps, each of which cost time
+
+**The relative point encoding is a delta chain, and LibreOffice does not accumulate it.**
+`EmfPlusPointR` packs each coordinate into one or two bytes as an `EmfPlusInteger7` or
+`EmfPlusInteger15`, and each is a delta from the previous point — the first from (0, 0).
+`emfppath.cxx`'s `0x800` branch pushes the delta itself, so a path written that way draws in
+LibreOffice as a small cluster near the origin. Nothing about such a file looks wrong until
+the geometry does, and the encoding is chosen by producers precisely because it is compact,
+so it appears in the files that are hardest to eyeball. The sign is the second half of the
+trap: it lives in **bit 6** of the first byte in both widths, so a seven-bit value is
+sign-extended from there and not from bit 7.
+
+**A pen's thirteen optional fields are positional, and the brush sits after all of them.**
+Each flag bit names a field present only when the bit is set, read in bit order, and a pen
+ends with a whole brush. Skipping a set bit or reading an unset one moves the brush, and the
+line comes out whatever the dash array's first float looks like as a colour — which is a
+plausible colour, not an obviously wrong one. `APensOptionalFieldsArePositional` exists to
+catch exactly that: it sets three of the thirteen and asserts the colour.
+
+**The measurement harness cost more time than any record did.** LibreOffice converts a bare
+metafile by opening it in Draw, on an A4 page with 10 mm margins, and **fitting it inside the
+printable area preserving its aspect ratio**. Until the harness reproduced that placement, a
+1300 × 800 mm EMF+ measured `mae 0.7540` with `ink_ratio 18.4` — which reads exactly like a
+catastrophic mapping bug in the reader, and was not one:
+`TestEmfPlusBrushPathGradientMultiSurroundColor` went to `mae 0.0017` with no change to any
+reader code at all. Two other files improved by more than 0.1 on the same fix and five more
+by more than 0.01. **A fidelity number is a statement about two renderings, and the harness
+is half of it.**
+
+**A record's flags word is three fields at once.** The low byte is an object slot, bit 15
+says "this is a colour rather than a brush index", bit 14 says the points are compressed,
+bit 13 means winding *or* post-multiply *or* close-the-figure depending on the record, and
+bits 8-11 are a clip combine mode. There is no single mask that is right twice.
+
+### Not done, and why
+
+- [ ] **A path gradient's colour per boundary vertex.** GDI+ runs a path gradient from one
+      centre colour out to a colour *per vertex of the boundary*, Gouraud-shaded between
+      them — a star with three surround colours has three coloured points and no radial
+      gradient anywhere in it. `GradientPaint` has one ramp and one centre, so what is drawn
+      is the ramp from the centre colour to the first surround colour over the boundary's own
+      bounding ellipse, with `PL6040` when the surround colours differ. That is exact for the
+      common case, and `tdf143031_BrushPathGrad` measures **0.0000** because of it.
+      LibreOffice's answer is to triangulate the boundary and Gouraud-shade each triangle into
+      a 256-pixel bitmap used as a texture; doing that here means rasterising in a library
+      arranged not to. **What it would take in Core:** a `Paint` kind carrying a triangle mesh
+      with per-vertex colours, which PDF has natively (a type 4 or 5 shading) and Skia has as
+      `SkVertices` — so both backends could state it, and it would also close SVG's `PL6018`
+      focal radial if the mesh form allowed a focus.
+- [ ] **A gradient's spread mode.** Every GDI+ gradient has a wrap mode — tile, tile-flip-X,
+      tile-flip-Y, tile-flip-XY or clamp — and `GradientPaint` has none. A brush whose
+      rectangle is small against the shape it fills therefore comes out as one ramp and then
+      flat colour where the file asked for stripes; measured on `TestLinearGradient`,
+      `differing 0.1702` at `ink_ratio 1.000` — every pixel is painted and the pattern is
+      wrong. `PL6041`, and **the same gap the SVG side records as `PL6021`**, which is the
+      argument for a `SpreadMethod` on `GradientPaint` rather than a per-format workaround.
+- [ ] **A metafile carried as an image.** An `EmfPlusImage` may hold a whole WMF or EMF, and
+      `DrawImagePoints` then places it under a transform. It is recognised and reported
+      (`PL6039`) rather than replayed, because replaying it means re-entering the decoder from
+      inside itself and the recursion has to be bounded by something other than the budget,
+      which is already shared. Measured: `TestEmfPlusDrawImagePointsWithMetafile` draws
+      nothing where LibreOffice draws the nested picture, `ink_ratio 0.000`.
+- [ ] **Custom, triangular and anchor line caps.** GDI+ names ten cap types and `LineCap`
+      expresses three of them; the other seven are triangles, diamonds, arrow heads and
+      anchors — line *decorations*, which the drawing model has no place for at all — and a
+      custom cap is a whole path with its own scale. Reported as `PL6038` and the line is
+      drawn without them. Measured: `TestEmfPlusDrawPathWithCustomCap` at `mae 0.0001`
+      but `ink_ratio 0.538`, which is what a missing arrow head costs on a picture that is
+      mostly arrow head.
+- [ ] **Image attributes.** A colour matrix, a gamma, a chroma key and a colour remap table,
+      all of which need the pixels of a JPEG or a PNG rather than of an uncompressed DIB — so
+      this is the one remaining case that a codec here would buy, and the reason the
+      *pixels* open question is answered "no" rather than "never". The object's slot is
+      cleared so that a stale object of another kind cannot be drawn through it, and the
+      image is drawn unadjusted.
+- [ ] **`EmfPlusStrokeFillPath`.** It names a path and nothing else: the pen and brush are
+      whatever a preceding record left current, which EMF+ has no state for and this reader
+      does not track. `PL6037`, and nothing is drawn — better than drawing it with an
+      arbitrary slot.
+- [ ] **Region union, symmetric difference and complement.** A region is a binary tree of set
+      operations; intersection and rectangular exclusion stay exact in the clip's
+      rectangles-and-shapes form, and union of two rectangle sets does too, because
+      overlapping rectangles are still their own union under the non-zero rule. The other
+      three need real polygon arithmetic, which `emfpregion.cxx` has and this does not. Marked
+      approximate rather than approximated silently.
+- [ ] **The dash *phase* differs from LibreOffice's.** Measured on
+      `TestEmfPlusDrawLineWithDash`: `mae 0.0662` on a picture that is nothing but dashes,
+      with `ink_ratio 1.011` — the same amount of ink in slightly different places. The dash
+      lengths are right (they are the pen width times the file's own array); the offset is
+      applied and LibreOffice ignores it. Not run down.
+- [ ] **Arabic text draws as its Latin characters only.** `TestAlignRtlReading` measures
+      `ink_ratio 0.166`. This is font resolution rather than EMF+ — the same string through a
+      GDI `ExtTextOutW` would do the same — but it is where it was found, so it is recorded
+      here.
 
 ---
 
@@ -522,8 +789,10 @@ thing in the tree to emit an encoded image into a sink.
       missing picture.
 - [ ] **Pattern fills** (`<pattern>`, `PictureShader` in the shim). `BitmapPaint` exists but
       wants a `RasterImage`, and producing one means rasterising the tile. The honest
-      alternative is a paint that carries a `DisplayList` tile; that is a Core change and
-      should wait until EMF+ texture brushes want the same thing. `PL6019`, and the shape is
+      alternative is a paint that carries a `DisplayList` tile; that is a Core change and was
+      to wait until EMF+ texture brushes wanted the same thing. **They did not**: an EMF+
+      texture brush carries a raster image, so it goes through as an ordinary `BitmapPaint`
+      tile and nothing new was needed. So this remains SVG's alone. `PL6019`, and the shape is
       left unfilled.
 - [ ] **Text as a clip path or mask.** Needs glyph outlines, which live in
       `Paperless.Rendering`. `PL6005`, and the clip is empty — deliberately the safer wrong
@@ -562,25 +831,36 @@ thing in the tree to emit an encoded image into a sink.
       load-bearing, because the library resolves `text-anchor` from it *before* emitting the
       draw — a `text-anchor="middle"` run at `x="150"` came out at `x=120` for a 60-unit
       measurement.
-- [ ] EMF+ path gradients have no direct `GradientPaint` equivalent and will need
-      decomposing. Establish how faithful that has to be before building it; the band
-      decomposition in `Paperless.Rendering.Fills.Gradients` is the precedent.
+- [x] **EMF+ path gradients have no direct `GradientPaint` equivalent.** Answered by
+      building it and measuring: the ramp from the centre colour to the first surround colour
+      over the boundary's bounding ellipse is *exact* whenever the surround colours agree,
+      which is the case that reads as a radial gradient in the first place —
+      `tdf143031_BrushPathGrad` measures `mae 0.0000`. It is wrong at the edges when they do
+      not, and says so (`PL6040`). What the general case needs is not a decomposition into
+      bands but a **triangle mesh with per-vertex colours**, which is what GDI+ actually
+      draws and what both backends could state natively: a PDF type 4 or 5 shading, and
+      Skia's `SkVertices`. That is a `Paint` kind in Core, and it would close SVG's `PL6018`
+      at the same time. See *EMF+ → Not done*.
 - [ ] A picture drawn at several sizes re-uses one `DisplayList`, which is right for geometry
       and indifferent to hinting. Nothing depends on it yet; it will matter when a thumbnail
       and a print rendering share a cache.
-- [ ] **Should `Paperless.Vector` be allowed to see decoded pixels?** It is arranged not to,
-      and that has held: a DIB becomes `RasterImage.Encoded` for the price of a fourteen-byte
-      header, and a source rectangle becomes a scale plus a clip. The one thing it costs is
-      the WMF transparent-bitmap idiom — a monochrome mask and a colour image blitted with
-      complementary raster operations, which needs the two combined into one alpha bitmap and
-      therefore needs pixels. Today the transparent area comes out black. **Decide this once,
-      because EMF's `AlphaBlend` and `TransparentBlt` and EMF+'s image attributes all want the
-      same thing**, and the answer is either a codec dependency here or an extension to the
-      sink that lets a backend do the compositing.
-- [ ] **Which representation of a dual-format file to replay** — a WMF hiding an EMF, an EMF
-      hiding EMF+. Both are the same question and it has the same answer: choose once for the
-      whole file and never switch mid-stream. Today WMF always replays its own records and
-      reports the EMF it found; that is only defensible until the EMF reader exists.
+- [x] **Should `Paperless.Vector` be allowed to see decoded pixels?** Settled by EMF, and
+      EMF+ needed nothing further. The distinction that resolves it: an **uncompressed** DIB
+      or a GDI+ native bitmap is not an encoded format at all — it is a stride, a channel
+      order and a palette, so turning one into straight RGBA is arithmetic rather than a
+      decode, and no codec dependency follows. That is enough for the WMF transparent-bitmap
+      idiom, for `AlphaBlend`'s `AC_SRC_ALPHA`, for `TransparentBlt` and for EMF+'s native
+      bitmaps. The compressed forms answer null and fall back to drawing the source
+      undecoded. What is *still* out of reach is anything needing the pixels of a **JPEG or
+      PNG** — EMF+ image attributes are the only such case left — and that would need a real
+      codec here or a sink extension, so the answer stands.
+- [x] **Which representation of a dual-format file to replay.** Settled twice with the same
+      answer, and the answer is `emfio`'s rather than one reasoned from first principles: a
+      WMF replays the complete EMF its escape records carry, and an EMF stops replaying its
+      GDI records the moment an EMF+ record appears — whether or not the header calls it
+      dual, with `EmfPlusGetDC` as the one bracket that hands control back. Both decisions are
+      made once, in front of the record loop. See *EMF+ → The rule that had to be settled
+      first*.
 
 ## Wiring it into the readers
 
@@ -614,3 +894,11 @@ is exactly what decoding avoids — and `CorpusWmfTests` reads them the way a re
 **The legacy binary families matter more here than they do for SVG**: DOC, XLS and PPT store
 a WMF as the presentation of every embedded OLE object, so the Escher path in
 `Paperless.MsBinary` is where most real WMFs in a corpus will actually be found.
+
+**EMF and EMF+ change nothing again, and the DOCX fixture settles the sniffing argument in
+its sharpest form.** LibreOffice writes a genuine EMF into `word/media/image1.wmf`, and
+`[Content_Types].xml` declares no type for `.wmf` at all — so neither the part name nor the
+declared type identifies the format, and only the bytes do. An EMF+ file is even less
+distinguishable: it *is* an EMF, with the same `EMR_HEADER` and the same signature, and the
+EMF+ inside it has no signature of its own anywhere. Nothing in the hook has to know that,
+which is the whole point of putting the decision behind `VectorImages.For`.
