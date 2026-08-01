@@ -37,6 +37,7 @@ public sealed class MetafileTextEngine
     private readonly SystemFontResolver _resolver;
     private readonly ITextShaper _shaper;
     private readonly ConcurrentDictionary<(string Family, int Weight, bool Italic), ResolvedFace?> _faces = new();
+    private readonly ConcurrentDictionary<string, Dictionary<ushort, char>> _reverse = new();
 
     /// <summary>Creates an engine over a font resolver and a shaper.</summary>
     /// <param name="resolver">Resolves family names; null uses the shared system resolver.</param>
@@ -197,6 +198,124 @@ public sealed class MetafileTextEngine
 
         return (run, width);
     }
+
+    /// <summary>
+    /// Places glyphs a record states by index rather than by character.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>An <c>ETO_GLYPH_INDEX</c> run has already been shaped by the producer</b>, and
+    /// re-shaping it would be wrong twice over: the indices are the producer's own choice of
+    /// glyph, and the characters they came from are not in the record at all. So they go into
+    /// the run as they stand — which is exactly what <c>GlyphRun</c> carries, so nothing is lost.
+    /// LibreOffice instead converts them to outlines (<c>emfreader.cxx:2119-2123</c>, tdf#168107)
+    /// because its metafile actions cannot express a glyph index; ours can.
+    /// </para>
+    /// <para>
+    /// What is lost is the text, and with it extraction and a PDF's <c>ToUnicode</c> map. It is
+    /// recovered by inverting the face's own character map, which is the same table the producer
+    /// used to build the indices in the first place. A glyph reached through a substitution or a
+    /// ligature will not invert, and those characters are simply absent from
+    /// <see cref="GlyphRun.Text"/> rather than guessed at.
+    /// </para>
+    /// </remarks>
+    /// <param name="glyphs">The glyph indices, in visual order.</param>
+    /// <param name="font">The selected font.</param>
+    /// <param name="reference">The point the record states, already mapped.</param>
+    /// <param name="alignment">The text-alignment word in force.</param>
+    /// <param name="advances">Per-glyph advances in EMUs, already mapped, or null for the font's own.</param>
+    /// <returns>The run and the width it occupied, or null when there is nothing to draw.</returns>
+    public (GlyphRun Run, Length Width)? LayoutGlyphs(
+        IReadOnlyList<ushort> glyphs,
+        MetafileFont font,
+        DocPoint reference,
+        TextAlignment alignment,
+        IReadOnlyList<Length>? advances = null)
+    {
+        ArgumentNullException.ThrowIfNull(glyphs);
+        ArgumentNullException.ThrowIfNull(font);
+
+        if (glyphs.Count == 0 || font.Size <= Length.Zero) return null;
+        if (Face(font) is not { } face) return null;
+
+        Dictionary<ushort, char> characters = Reverse(face);
+        List<PositionedGlyph> placed = new(glyphs.Count);
+        List<int> clusters = new(glyphs.Count);
+        StringBuilder text = new(glyphs.Count);
+
+        double scale = (double)font.Size.Emu / face.Face.UnitsPerEm;
+        Length pen = Length.Zero;
+
+        for (int i = 0; i < glyphs.Count; i++)
+        {
+            Length advance = advances is { Count: > 0 } && i < advances.Count
+                ? advances[i]
+                : Length.FromEmu((long)Math.Round(face.Face.AdvanceOf(glyphs[i]) * scale));
+
+            if (advances is null && font.WidthScale > 0) advance *= font.WidthScale;
+
+            clusters.Add(text.Length);
+            if (characters.TryGetValue(glyphs[i], out char character)) text.Append(character);
+
+            placed.Add(new PositionedGlyph(glyphs[i], new DocPoint(pen, Length.Zero), advance));
+            pen += advance;
+        }
+
+        Length x = (alignment & TextAlignmentMask.Horizontal) switch
+        {
+            TextAlignment.Centre => reference.X - (pen / 2.0),
+            TextAlignment.Right => reference.X - pen,
+            _ => reference.X,
+        };
+
+        LineMetrics metrics = LineSpacing.Resolve(face.Face);
+
+        Length y;
+        if ((alignment & TextAlignment.Baseline) != 0) y = reference.Y;
+        else if ((alignment & TextAlignment.Bottom) != 0) y = reference.Y - metrics.ScaledDescent(font.Size);
+        else y = reference.Y + metrics.ScaledAscent(font.Size);
+
+        GlyphRun run = new()
+        {
+            Font = face.Reference,
+            FontSize = font.Size,
+            Origin = new DocPoint(x, y),
+            Glyphs = placed,
+            Text = text.ToString(),
+            ClusterMap = clusters,
+            IsRightToLeft = (alignment & TextAlignment.RightToLeftReading) != 0,
+        };
+
+        return (run, pen);
+    }
+
+    /// <summary>
+    /// The face's character map, inverted, so a glyph index can be named in the extracted text.
+    /// </summary>
+    /// <remarks>
+    /// <c>CharacterMap</c> answers only in the forward direction, so the inverse is built by
+    /// asking it about every code point in the Basic Multilingual Plane's assigned range once
+    /// per face and caching the answer. That is about sixty thousand dictionary probes, which is
+    /// under a millisecond and happens only for the files that actually use glyph indices.
+    /// </remarks>
+    private Dictionary<ushort, char> Reverse(ResolvedFace face)
+        => _reverse.GetOrAdd(face.Reference.FaceKey, _ =>
+        {
+            Dictionary<ushort, char> map = [];
+
+            for (int codePoint = 0x20; codePoint < 0xFFFE; codePoint++)
+            {
+                if (codePoint is >= 0xD800 and <= 0xDFFF) continue;
+
+                ushort glyph = face.Face.Characters.GlyphFor(codePoint);
+
+                // The first code point that reaches a glyph wins, so that ASCII beats the
+                // compatibility duplicates that map to the same glyph further up.
+                if (glyph != 0) map.TryAdd(glyph, (char)codePoint);
+            }
+
+            return map;
+        });
 
     /// <summary>Places glyphs at the advances the font gives them.</summary>
     private static Length Place(

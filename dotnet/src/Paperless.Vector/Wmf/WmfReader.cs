@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Text;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Geometry;
@@ -61,6 +62,7 @@ internal sealed class WmfReader
 
     private int _position;
     private bool _failed;
+    private bool _scanning;
     private int _unitsPerInch = 96;
     private int _skipRecords;
     private int _emfChunks;
@@ -139,6 +141,73 @@ internal sealed class WmfReader
         // but both turn up embedded. The version is 0x0100 or 0x0300. The size is in words and
         // must at least reach the header.
         return type is 1 or 2 && headerWords == 9 && version is 0x0100 or 0x0300 && sizeWords >= 9;
+    }
+
+    /// <summary>
+    /// Walks the records looking only for a complete embedded EMF, without drawing anything.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>A dual-format file has to be decided once, before either representation is replayed.</b>
+    /// A WMF that carries an EMF carries the <em>whole</em> picture twice: replaying both draws
+    /// everything twice, and switching between them part way through produces a picture that is
+    /// coherent in neither. So the choice is made here, in front of the record loop, from
+    /// nothing but whether the escapes reassemble into a complete EMF — which is cheap, because
+    /// this pass reads no drawing record at all.
+    /// </para>
+    /// <para>
+    /// Measured on LibreOffice 24.2's own export of a four-shape drawing: an 18 276-byte WMF
+    /// carrying 14 032 bytes of EMF, 77 % of the file, and byte-for-byte the same EMF the same
+    /// drawing exports to on its own.
+    /// </para>
+    /// </remarks>
+    /// <returns>The reassembled EMF, or null when the file carries none or an incomplete one.</returns>
+    public byte[]? ScanForEmbeddedEmf()
+    {
+        if (_bytes.Length < 18) return null;
+
+        _scanning = true;
+        _failed = false;
+        _emfChunks = 0;
+        _emfChunkTotal = 0;
+        _embeddedEmf.Clear();
+
+        Seek(BinaryPrimitives.ReadUInt32LittleEndian(_bytes) == PlaceableKey ? 40 : 18);
+
+        while (!_failed)
+        {
+            int recordStart = _position;
+            uint size = U32();
+            ushort function = U16();
+
+            if (_failed || size < 3 || function == (ushort)WmfRecordType.Eof) break;
+            if (!_budget.ChargeRecord()) break;
+
+            long next = recordStart + ((long)size * 2);
+            if (next > _bytes.Length) break;
+
+            if ((WmfRecordType)function == WmfRecordType.Escape) Escape(size, (int)next);
+
+            Seek((int)next);
+        }
+
+        _scanning = false;
+        _failed = false;
+        _skipRecords = 0;
+        Seek(0);
+
+        bool complete = _emfChunkTotal > 0
+            && _emfChunks >= _emfChunkTotal
+            && _embeddedEmf.Count > 0
+            && Emf.EmfReader.Looks(CollectionsMarshal.AsSpan(_embeddedEmf));
+
+        byte[]? found = complete ? [.. _embeddedEmf] : null;
+
+        _emfChunks = 0;
+        _emfChunkTotal = 0;
+        _embeddedEmf.Clear();
+
+        return found;
     }
 
     /// <summary>
@@ -800,12 +869,16 @@ internal sealed class WmfReader
                 break;
 
             case WmfRecordType.IntersectClipRect:
+                _context.Clip = _context.Clip.Clone();
                 _context.Clip.Intersect(MapRect(ReadRect()));
                 break;
 
             case WmfRecordType.ExcludeClipRect:
-                Skip(8);
-                _context.Clip.MarkUnsupported();
+                // Exact since the clip gained rectangle algebra for EMF's region records: a
+                // rectangle taken out of a set of rectangles is a set of rectangles, and it
+                // distributes over whatever else the clip is intersecting.
+                _context.Clip = _context.Clip.Clone();
+                _context.Clip.Exclude(MapRect(ReadRect()));
                 break;
 
             case WmfRecordType.OffsetClipRgn:
@@ -1587,7 +1660,7 @@ internal sealed class WmfReader
 
         if (magic == UnicodeEscapeMagic && length >= 14)
         {
-            UnicodeEscape(end);
+            if (!_scanning) UnicodeEscape(end);
             return;
         }
 

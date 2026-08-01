@@ -161,11 +161,13 @@ public class MetafileGroundworkTests
     }
 
     [Fact]
-    public void TheClipIsAListOfIntersectionsSoTheSinkDoesTheArithmetic()
+    public void ArbitraryClipShapesAreAListOfIntersectionsSoTheSinkDoesTheArithmetic()
     {
         MetafileClip clip = new();
-        clip.Intersect(new DocRect(Length.Zero, Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10)));
-        clip.Intersect(new DocRect(Length.FromMillimetres(5), Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10)));
+        clip.Intersect(GraphicsPath.Rectangle(new DocRect(
+            Length.Zero, Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10))));
+        clip.Intersect(GraphicsPath.Rectangle(new DocRect(
+            Length.FromMillimetres(5), Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10))));
 
         clip.Count.ShouldBe(2);
 
@@ -173,9 +175,29 @@ public class MetafileGroundworkTests
         recorder.Save();
         clip.Apply(recorder);
 
-        // Two clip calls, not one intersected rectangle: IDrawingSink.ClipPath intersects, so
+        // Two clip calls, not one intersected shape: IDrawingSink.ClipPath intersects, so
         // replaying the list *is* the intersection and no path arithmetic is needed.
         recorder.Clips.Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public void RectangularClipsAreIntersectedExactlyRatherThanStacked()
+    {
+        MetafileClip clip = new();
+        clip.Intersect(new DocRect(Length.Zero, Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10)));
+        clip.Intersect(new DocRect(Length.FromMillimetres(5), Length.Zero, Length.FromMillimetres(10), Length.FromMillimetres(10)));
+
+        // One rectangle, computed: a rectangle set is closed under intersection, and holding it
+        // that way is what lets the *next* record subtract from it exactly.
+        clip.Count.ShouldBe(1);
+
+        Recorder recorder = new();
+        recorder.Save();
+        clip.Apply(recorder);
+
+        recorder.Clips.ShouldHaveSingleItem();
+        recorder.Clips[0].X.Millimetres.ShouldBe(5.0, 0.001);
+        recorder.Clips[0].Width.Millimetres.ShouldBe(5.0, 0.001);
     }
 
     [Fact]
