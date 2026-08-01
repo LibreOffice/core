@@ -203,3 +203,6 @@ gdb.txt
 # xml unit tests sometimes leave these lying around
 **/secmod.db
 .vs
+# Agent worktrees. Transient checkouts of this repo created for parallel work —
+# committing them would nest the repository inside itself.
+/.claude/worktrees/
