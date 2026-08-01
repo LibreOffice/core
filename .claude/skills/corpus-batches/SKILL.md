@@ -196,6 +196,26 @@ Near-equal failure rates across formats mean the cause is downstream of the read
 by symptom. Sharply unequal rates mean the readers really are the problem, and splitting by
 format is both safe and natural.
 
+### How many agents actually fit
+
+Each agent worktree costs **about 2.8 GB once built** — the checkout plus a full solution
+build per worktree. Four concurrent agents is roughly the ceiling on a container with a
+12–20 GB writable allowance, and the failure mode is not a warning but `No space left on
+device` in the middle of somebody's build.
+
+Check before dispatching a fifth, and free the rendered PDFs from finished comparison runs
+first — those are large and disposable, while the TSV they produced is small and is the
+part worth keeping:
+
+```sh
+du -sh .claude/worktrees/* ; df -h /
+rm -rf <outdir>/ours <outdir>/ref <outdir>/prof* <outdir>/t?   # keep rows.tsv
+```
+
+CPU is the softer limit: agents are mostly waiting on model calls, and the bursts are
+builds and renders. On four cores, four agents plus a background sweep pushed load average
+to ~8 and roughly halved sweep throughput, but nothing failed.
+
 ### Merging several agents into one branch
 
 Merge one agent at a time, and **re-verify after each merge, not once at the end**. The
