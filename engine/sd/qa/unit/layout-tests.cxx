@@ -8,6 +8,7 @@
  */
 #include "sdmodeltestbase.hxx"
 
+#include <comphelper/kit.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/compatflags.hxx>
@@ -107,6 +108,16 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
 
     // The position of the rotated text depends on the calculated text size. This depends on
     // rendering, so it differs a bit on different platforms. Hence rather big delta here.
+
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font instead of the map mode, so the translation is in the text
+        // position, and the two deltas add up
+        assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 0);
+        assertXPathDoubleValue(pXmlDoc, "//textarray", "x", 331.0 + 4760.0, 6.0);
+        assertXPathDoubleValue(pXmlDoc, "//textarray", "y", 9420.0 - 2250.0, 13.0);
+        return;
+    }
 
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
@@ -626,6 +637,16 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
 {
     createSdImpressDoc("pptx/tdf128206.pptx");
     xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font instead of the map mode, so the translation is in the text
+        // position, and the two deltas add up
+        assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 0);
+        assertXPathDoubleValue(pXmlDoc, "//textarray", "x", 14416.0 - 11031.0, 6.0);
+        assertXPathDoubleValue(pXmlDoc, "//textarray", "y", 1658.0 + 3617.0, 6.0);
+        return;
+    }
 
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
