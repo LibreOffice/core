@@ -279,6 +279,15 @@ internal sealed class EmfPlusPen : EmfPlusBrush
     /// <summary>A custom dash array, as multiples of the pen width.</summary>
     public double[]? DashPattern { get; private set; }
 
+    /// <summary>The outline of a custom start cap, in the cap's own space.</summary>
+    public EmfPlusPath? CustomStartCap { get; private set; }
+
+    /// <summary>The outline of a custom end cap, in the cap's own space.</summary>
+    public EmfPlusPath? CustomEndCap { get; private set; }
+
+    /// <summary>What a custom cap scales its own width by, on top of the pen's width.</summary>
+    public double CustomCapScale { get; private set; } = 1.0;
+
     /// <summary>Reads a pen, then the brush it ends with.</summary>
     /// <param name="stream">The cursor, positioned at the pen's version field.</param>
     public void ReadPen(EmfPlusStream stream)
@@ -345,19 +354,67 @@ internal sealed class EmfPlusPen : EmfPlusBrush
             stream.Skip(Math.Min(count * 4, stream.Remaining));
         }
 
-        if ((PenData & EmfPlusPenData.CustomStartCap) != 0)
-        {
-            int length = stream.I32();
-            stream.Skip(Math.Clamp(length, 0, stream.Remaining));
-        }
-
-        if ((PenData & EmfPlusPenData.CustomEndCap) != 0)
-        {
-            int length = stream.I32();
-            stream.Skip(Math.Clamp(length, 0, stream.Remaining));
-        }
+        if ((PenData & EmfPlusPenData.CustomStartCap) != 0) CustomStartCap = ReadCustomCap(stream);
+        if ((PenData & EmfPlusPenData.CustomEndCap) != 0) CustomEndCap = ReadCustomCap(stream);
 
         Read(stream);
+    }
+
+    /// <summary>
+    /// Reads an <c>EmfPlusCustomLineCap</c> and answers the outline it decorates a line end with.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Ported from <c>EMFPCustomLineCap::Read</c>
+    /// (<c>drawinglayer/source/tools/emfpcustomlinecap.cxx</c>). Only the <em>default</em> form
+    /// carries a path; the adjustable-arrow form states a width, a height and a middle inset
+    /// instead, which LibreOffice also reads and does not use.
+    /// </para>
+    /// <para>
+    /// <b>The record's own length field is what makes this safe to get wrong.</b> A custom cap is
+    /// the last thing before the pen's brush, so a misread of its interior would move the brush
+    /// and the line would come out whatever the next float looks like as a colour. Seeking to the
+    /// stated end rather than trusting the parse keeps that contained to the cap.
+    /// </para>
+    /// </remarks>
+    private EmfPlusPath? ReadCustomCap(EmfPlusStream stream)
+    {
+        int length = stream.I32();
+        int at = stream.Offset;
+        EmfPlusPath? outline = null;
+
+        stream.Skip(4);                 // the cap's own version
+        uint type = stream.U32();
+
+        if (type == 0)
+        {
+            uint flags = stream.U32();
+            stream.Skip(4);             // base cap
+            stream.Skip(4);             // base inset
+            stream.Skip(12);            // the cap's own stroke start, end and join
+            stream.Skip(4);             // miter limit
+            CustomCapScale = stream.F32();
+            stream.Skip(16);            // the fill and stroke hot spots
+
+            // The fill path when there is one, else the line path: both describe the same
+            // decoration and only one is drawn.
+            if ((flags & 0x01) != 0) outline = ReadCapPath(stream);
+            if ((flags & 0x02) != 0) outline ??= ReadCapPath(stream);
+        }
+
+        if (length > 0) stream.SeekTo((long)at + length);
+        return outline;
+    }
+
+    /// <summary>Reads one of a custom cap's two paths.</summary>
+    private static EmfPlusPath? ReadCapPath(EmfPlusStream stream)
+    {
+        stream.Skip(4);                 // the path's length, which the caller's bound covers
+        stream.Skip(4);                 // the path's own version
+        int points = stream.I32();
+        uint flags = stream.U32();
+
+        return EmfPlusPath.Read(stream, points, flags, withTypes: true);
     }
 
     /// <summary>The dash array a style word asks for, as multiples of the pen width.</summary>
@@ -389,11 +446,35 @@ internal sealed class EmfPlusPen : EmfPlusBrush
         _ => LineCap.Butt,
     };
 
-    /// <summary>True when the pen asks for a cap the drawing model cannot draw.</summary>
+    /// <summary>
+    /// True when the pen asks for a cap that is a <em>decoration</em> rather than a way of
+    /// finishing the stroke, so a shape has to be drawn at the line's ends as well.
+    /// </summary>
+    /// <remarks>
+    /// Seven of GDI+'s ten caps are decorations: the triangle, the four anchors and a custom
+    /// path. <c>0x10</c> — <c>NoAnchor</c> — is in the anchor range and draws nothing, so it is
+    /// excluded here rather than producing an empty decoration at every line end.
+    /// </remarks>
     public bool HasCustomCap
-        => (PenData & (EmfPlusPenData.CustomStartCap | EmfPlusPenData.CustomEndCap)) != 0
-            || (StartCap & 0xF0) != 0
-            || (EndCap & 0xF0) != 0;
+        => CustomStartCap is not null
+            || CustomEndCap is not null
+            || Decorates(StartCap)
+            || Decorates(EndCap);
+
+    private static bool Decorates(int code) => code is 3 or 0x11 or 0x12 or 0x13 or 0x14;
+
+    /// <summary>
+    /// True when the pen names a custom cap that carried no outline, so nothing can be drawn
+    /// for it.
+    /// </summary>
+    /// <remarks>
+    /// The adjustable-arrow form of an <c>EmfPlusCustomLineCap</c> states a width, a height and
+    /// a middle inset instead of a path. LibreOffice reads the same fields and does not use them
+    /// either.
+    /// </remarks>
+    public bool HasUndrawnCap
+        => ((PenData & EmfPlusPenData.CustomStartCap) != 0 && CustomStartCap is null)
+            || ((PenData & EmfPlusPenData.CustomEndCap) != 0 && CustomEndCap is null);
 }
 
 /// <summary>An EMF+ font: a size, a unit, four style bits and a family name.</summary>
@@ -524,6 +605,23 @@ internal sealed class EmfPlusImage : EmfPlusObject
     /// <summary>True when the record held a metafile rather than a bitmap.</summary>
     public bool IsMetafile => Type == 2;
 
+    /// <summary>
+    /// The nested picture's own bytes, when the record held a metafile.
+    /// </summary>
+    /// <remarks>
+    /// Kept undecoded, exactly as an encoded bitmap is. Which decoder reads them is
+    /// <c>VectorImages</c>'s question and not this one's: the record's own type field names a
+    /// WMF, an EMF or an EMF+, and all three are already sniffed by content, so believing the
+    /// field would only add a way to be wrong.
+    /// </remarks>
+    public ReadOnlyMemory<byte> MetafileBytes { get; private set; }
+
+    /// <summary>
+    /// The nested picture once it has been decoded, so a picture drawn on forty pages costs one
+    /// decode — the same reason <see cref="VectorImage"/> is a display list rather than a replay.
+    /// </summary>
+    public VectorImage? Nested { get; set; }
+
     /// <summary>Reads an image object.</summary>
     /// <param name="stream">The cursor, positioned at the image's version field.</param>
     public void Read(EmfPlusStream stream)
@@ -535,7 +633,10 @@ internal sealed class EmfPlusImage : EmfPlusObject
 
         if (Type == 2)
         {
-            stream.Skip(8);             // metafile type and size
+            stream.Skip(8);             // the metafile's own type and size, which the bytes repeat
+
+            ReadOnlySpan<byte> nested = stream.Rest();
+            if (!nested.IsEmpty) MetafileBytes = nested.ToArray();
             return;
         }
 

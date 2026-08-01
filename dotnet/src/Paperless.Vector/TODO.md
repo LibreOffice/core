@@ -209,18 +209,34 @@ where the EMF/EMF+ decision lives and it is three lines; getting it *stated* too
 `emfreader.cxx:955-963` rather than reasoning about it, because the rule is not the obvious
 one — see the EMF+ section.
 
-**`Paperless.Core` never had to change, across all three.** Not the sink, not `Paint`, not
-`GraphicsPath`, not `GlyphRun`. Six things looked as though they would and did not: a hatch
-became stroked lines clipped to the shape; a DIB became `RasterImage.Encoded` by prepending
-fourteen bytes of BMP header; a source rectangle became a scale plus a clip; a constant
-source alpha became the sink's own opacity; a transparent-bitmap idiom became straight RGBA
-arithmetic over an uncompressed DIB, which is not a decode; and an EMF+ parallelogram
-destination became a `Transform` plus a fixed-size placement square. The two that genuinely
-exceed the drawing model are named in *Not done* below, and both are **gradients**: a GDI+
-path gradient wants a colour per boundary vertex where `GradientPaint` has one ramp, and
-every GDI+ gradient wants a spread mode where `GradientPaint` has none. Neither is a metafile
-problem — the SVG side records the same two gaps as `PL6018` and `PL6021` — which is the
-argument for fixing them in Core rather than per format.
+**`Paperless.Core` changed exactly once, and only where two formats asked for the same thing.**
+Six things looked as though they would need it and did not: a hatch became stroked lines clipped
+to the shape; a DIB became `RasterImage.Encoded` by prepending fourteen bytes of BMP header; a
+source rectangle became a scale plus a clip; a constant source alpha became the sink's own
+opacity; a transparent-bitmap idiom became straight RGBA arithmetic over an uncompressed DIB,
+which is not a decode; and an EMF+ parallelogram destination became a `Transform` plus a
+fixed-size placement square. **Three did need it, and the test that decided each was the same:
+does a second format ask for it too.** All three were gradients, all three were recorded twice
+— once here and once by SVG — and all three now live in `Paperless.Core/Graphics/Paint.cs`:
+
+| What | Why it could not be worked round | What it retired |
+|---|---|---|
+| `MeshPaint` — vertices with a colour each, plus index triples | A `GradientPaint` has one colour at each *end* however many stops sit between; a GDI+ path gradient states one at every vertex of an arbitrary boundary. No ramp says that. | `PL6040` |
+| `SpreadMethod` on `GradientPaint` | Both backends tile natively and the IR could not ask them to | `PL6041`, SVG's `PL6021` |
+| `Focus` on `GradientPaint` | PDF's `/ShadingType 3` and Skia's two-point conical both take two circles; the IR could only state one | SVG's `PL6018` |
+
+**Why a mesh and not something Skia- or PDF-shaped.** Both backends have a native form and the
+two agree on exactly this much: a PDF type 4 shading is a stream of triangles carrying a
+coordinate and a colour per vertex, and Skia's `SkVertices` is a position array, a colour array
+and an index array. Vertices plus index triples is their intersection, so neither backend
+reconstructs anything and Core gains no dependency. A patch mesh — PDF type 6 or 7 — would have
+carried curved edges that Skia cannot draw, and a bitmap would have needed a rasteriser in a
+library arranged not to have one.
+
+**A seventh thing that looked like a Core change and was not: the caps.** Seven of GDI+'s ten
+line caps are *decorations* rather than caps — a triangle, four anchors and a custom path planted
+at a line's end — and `LineCap` expresses none of them. They needed nothing new, because a
+decoration is a filled path: `EmfPlusReader.DrawCaps`. `PL6038` retired with them.
 
 **Measure against LibreOffice, but do not assume LibreOffice is right.** The method works —
 WMF reached `mae 0.0000` and EMF `0.0001` on LibreOffice's own exports — and it found real
@@ -233,10 +249,33 @@ defect here when it is not:
 | `TestEmfPlusFillClosedCurveWinding.emf` | fills a winding-rule star **even-odd**, leaving the pentagon hole its own test name says should be solid | `ink_ratio 1.431` |
 | `TestEmfPlusFillRectsWithTextureBrush.emf` | draws the outline and not the texture, though its unit test asserts the texture is in the primitive tree | `ink_ratio 24.3` |
 | `TestEmfPlusSetPageTransform.emf` | draws the label and neither of the two filled rectangles its unit test asserts | `ink_ratio 144` |
+| `TestEmfPlusDrawLineWithDash.emf` | applies every `RotateWorldTransform` **last**, whatever the record's pre-multiply flag says | `mae 0.0662` |
+| `TestEmfPlusBrushPathGradientMultiSurroundColor.emf` | draws only the ramp from the centre to `surround[0]`, so a star with a red, a green and a blue point comes out with no red or green pixel anywhere | `mae 0.0113` |
 
 So read the diff image before believing a number. A high `ink_ratio` with a low
-`mean_abs_error` — all three above — means the two renderers disagree about a *small* area,
-and it is as likely to be theirs as ours.
+`mean_abs_error` — the first three above — means the two renderers disagree about a *small*
+area, and it is as likely to be theirs as ours.
+
+**The two additions to that table are the two most expensive measurements in this file**, and
+both are cases where matching LibreOffice would have meant being wrong:
+
+- **The rotation.** `emfphelperdata.cxx:2606-2621` reads the angle, logs the post-multiply
+  flag, and then says *"Skipping flags & 0x2000 — for rotation transformation there is no
+  difference between post and pre multiply"*. That is false whenever the world transform is not
+  a uniform scale, which is exactly what this file states, and LibreOffice honours the same flag
+  correctly on `Translate`, `Scale` and `Multiply` five lines away. The symptom is a *fan* of
+  rays whose first few match exactly and whose angles then drift apart — which reads as a dash
+  problem, because the file is nothing but dashes, and is not one. Adopting LibreOffice's
+  shortcut takes this file from **`mae 0.0651` to `0.0034`** and was not done.
+- **The path gradient.** LibreOffice 24.2 renders one, and the tree beside it renders another:
+  the mesh implementation in `emfphelperdata.cxx`'s `BrushTypePathGradient` branch is what
+  tdf#143031 added, and its unit test says in as many words *"Without the fix, an empty or
+  flat-coloured fill primitive was emitted"*. The reference `soffice` here is 24.2.7.2 and emits
+  the flat one. So the number went **up** when the mesh landed, and the picture got right.
+
+**Check which LibreOffice wrote the reference before attributing a regression to yourself.**
+`soffice --version` against `git log` on the file you ported from costs a minute and is the
+difference between a real defect and a fixed bug measured backwards.
 
 ---
 
@@ -517,9 +556,17 @@ anything.
 - [x] `EmfPlusPath` with its point-type array, in all three point encodings — float,
       compressed 16-bit and **relative**.
 - [x] Brushes: solid, hatch, texture, linear gradient and path gradient, with blend-factor and
-      preset-colour ramps on both gradients.
+      preset-colour ramps on both gradients, and every wrap mode on both.
+- [x] **A path gradient as the fan of Gouraud triangles it is** — `(centre, V(i), V(i+1))` with
+      the centre colour and the two surround colours at its corners — through Core's
+      `MeshPaint`. One ring of triangles where the ramp is linear, because barycentric
+      interpolation across a triangle is; twelve when a blend curve or a preset colour list bends
+      it, which a triangle cannot.
 - [x] Pens, including all thirteen optional fields of the pen-data blob, the five predefined
-      dash styles and a custom dash array.
+      dash styles, a custom dash array, and **the seven line caps that are decorations rather
+      than caps**: triangle, the four anchors and a custom cap's own path.
+- [x] **A metafile carried as an image**, replayed into the same placement square a bitmap goes
+      in and bounded by `VectorLimits.MaxNestingDepth` rather than by the shared budget.
 - [x] `DrawString` with `EmfPlusFont` and `EmfPlusStringFormat` — alignment, line alignment,
       margins and tracking — and `DrawDriverString` in both its character and glyph-index
       forms, split into one run per shared baseline.
@@ -556,9 +603,26 @@ what LibreOffice draws for every style it does not recognise.
 
 | Band | Files | Worst in band |
 |---|---|---|
-| `mae` ≤ 0.0002 | 10 | `TestEmfPlusSave`, `TestDrawLine`, `tdf143031_BrushPathGrad` and `TestEmfPlusFillClosedCurve` all at **0.0000** |
+| `mae` ≤ 0.0002 | 10 | `TestEmfPlusSave`, `TestDrawLine`, `tdf143031_BrushPathGrad`, `TestEmfPlusDrawPathWithCustomCap` and `TestEmfPlusFillClosedCurve` all at **0.0000** |
 | 0.0002 < `mae` ≤ 0.002 | 8 | `TestEmfPlusGetDC` 0.0018 |
 | `mae` > 0.002 | 9 | `TestEmfPlusDrawLineWithDash` 0.0662; each of the nine is named in *Not done* below or in the LibreOffice table above |
+
+**What the paint work and the caps moved, on the same twenty-seven files.** The bands barely
+changed and that is the point: what moved was the *pictures*, and three of the six are files
+whose `mae` was already small because the shape was right and the colours were not.
+
+| File | Before | After | Why |
+|---|---|---|---|
+| `TestLinearGradient` | `mae 0.0523`, `differing 0.1702` | **`mae 0.0017`** | `SpreadMethod`. Every pixel was painted before and the pattern was wrong — one ramp then flat colour where the file asked for stripes |
+| `TestEmfPlusDrawImagePointsWithMetafile` | `mae 0.0289`, `ink_ratio 0.000` | **`mae 0.0105`**, `ink_ratio 1.006` | the nested metafile is replayed; a 7 px vertical offset is what is left |
+| `TestEmfPlusDrawPathWithCustomCap` | `mae 0.0001`, `ink_ratio 0.538` | **`mae 0.0000`**, `ink_ratio 1.035` | the arrow head is drawn |
+| `TestEmfPlusBrushPathGradientWithBlendColors` | `mae 0.0193` | **`mae 0.0129`** | the mesh honours the preset colour curve per vertex |
+| `TestEmfPlusDrawLineWithCaps` | `mae 0.0008`, `ink_ratio 0.932` | **`mae 0.0004`**, `ink_ratio 0.977` | the anchors are drawn |
+| `TestEmfPlusBrushPathGradientMultiSurroundColor` | `mae 0.0017` | `mae 0.0113` | **deliberately worse** — see the LibreOffice table above |
+
+`tdf143031_BrushPathGrad` stayed at **0.0000** through all of it, which is the measurement that
+mattered most: it is the file the old bounding-ellipse ramp was exact on, so it is the one a
+mesh could most easily have broken.
 
 And on the committed fixture, which is the only file here that LibreOffice has never
 written: `mae 0.0010`, `ink_ratio 1.011`. That measurement is worth more than its number —
@@ -594,6 +658,22 @@ reader code at all. Two other files improved by more than 0.1 on the same fix an
 by more than 0.01. **A fidelity number is a statement about two renderings, and the harness
 is half of it.**
 
+**A path gradient's boundary need not be anywhere near the shape it fills, and the shape is
+still painted.** `tdf143031_BrushPathGrad` states a boundary at 77–148 mm and fills a shape at
+1–11 mm. GDI+ does not leave the uncovered part blank: outside the sweep the centre-to-edge
+parameter clamps at 1 and the pure edge colour is used, which is LibreOffice's second
+rasterisation pass. Without that undercoat the mesh landed off the shape and drew **nothing** —
+`ink_ratio 0.000` on a file the old code measured `0.0000` on. Nothing about a blank shape says
+"the boundary is elsewhere"; it reads as a mesh that failed to build.
+
+**A custom cap's width goes through the mapping's *x* scale where the pen's width goes through
+its *y* scale.** Mixing the axes looks like an oversight in `EMFPPlusDrawPolygon` and is not one
+to depart from: on `TestEmfPlusDrawPathWithCustomCap`, whose world transform is anisotropic,
+using the y scale for both draws an arrow head 17 px across where LibreOffice draws 28 —
+`ink_ratio 0.673` against 1.035, with `mae` unchanged at 0.0001 either way, because the head is
+a small part of a large page. **A cap is the one place a `mae` cannot see the defect**; the ink
+ratio is what caught it.
+
 **A record's flags word is three fields at once.** The low byte is an object slot, bit 15
 says "this is a colour rather than a brush index", bit 14 says the points are compressed,
 bit 13 means winding *or* post-multiply *or* close-the-figure depending on the record, and
@@ -601,39 +681,36 @@ bits 8-11 are a clip combine mode. There is no single mask that is right twice.
 
 ### Not done, and why
 
-- [ ] **A path gradient's colour per boundary vertex.** GDI+ runs a path gradient from one
-      centre colour out to a colour *per vertex of the boundary*, Gouraud-shaded between
-      them — a star with three surround colours has three coloured points and no radial
-      gradient anywhere in it. `GradientPaint` has one ramp and one centre, so what is drawn
-      is the ramp from the centre colour to the first surround colour over the boundary's own
-      bounding ellipse, with `PL6040` when the surround colours differ. That is exact for the
-      common case, and `tdf143031_BrushPathGrad` measures **0.0000** because of it.
-      LibreOffice's answer is to triangulate the boundary and Gouraud-shade each triangle into
-      a 256-pixel bitmap used as a texture; doing that here means rasterising in a library
-      arranged not to. **What it would take in Core:** a `Paint` kind carrying a triangle mesh
-      with per-vertex colours, which PDF has natively (a type 4 or 5 shading) and Skia has as
-      `SkVertices` — so both backends could state it, and it would also close SVG's `PL6018`
-      focal radial if the mesh form allowed a focus.
-- [ ] **A gradient's spread mode.** Every GDI+ gradient has a wrap mode — tile, tile-flip-X,
-      tile-flip-Y, tile-flip-XY or clamp — and `GradientPaint` has none. A brush whose
-      rectangle is small against the shape it fills therefore comes out as one ramp and then
-      flat colour where the file asked for stripes; measured on `TestLinearGradient`,
-      `differing 0.1702` at `ink_ratio 1.000` — every pixel is painted and the pattern is
-      wrong. `PL6041`, and **the same gap the SVG side records as `PL6021`**, which is the
-      argument for a `SpreadMethod` on `GradientPaint` rather than a per-format workaround.
-- [ ] **A metafile carried as an image.** An `EmfPlusImage` may hold a whole WMF or EMF, and
-      `DrawImagePoints` then places it under a transform. It is recognised and reported
-      (`PL6039`) rather than replayed, because replaying it means re-entering the decoder from
-      inside itself and the recursion has to be bounded by something other than the budget,
-      which is already shared. Measured: `TestEmfPlusDrawImagePointsWithMetafile` draws
-      nothing where LibreOffice draws the nested picture, `ink_ratio 0.000`.
-- [ ] **Custom, triangular and anchor line caps.** GDI+ names ten cap types and `LineCap`
-      expresses three of them; the other seven are triangles, diamonds, arrow heads and
-      anchors — line *decorations*, which the drawing model has no place for at all — and a
-      custom cap is a whole path with its own scale. Reported as `PL6038` and the line is
-      drawn without them. Measured: `TestEmfPlusDrawPathWithCustomCap` at `mae 0.0001`
-      but `ink_ratio 0.538`, which is what a missing arrow head costs on a picture that is
-      mostly arrow head.
+- [x] **A path gradient's colour per boundary vertex — closed by `MeshPaint`.** The boundary is
+      partitioned into `(centre, V(i), V(i+1))` and each triangle carries the centre colour and
+      two surround colours at its corners, which is what GDI+ draws and what
+      `emfphelperdata.cxx`'s `BrushTypePathGradient` branch draws into a 256-pixel texture. Both
+      backends state the triangles directly instead. `PL6040` now means only a boundary of fewer
+      than three points, which has no interior to shade and no place for a colour per vertex —
+      a malformed brush, and the one case that still falls back to the bounding-ellipse ramp.
+- [x] **A gradient's spread mode — closed by `SpreadMethod`.** Four of GDI+'s five wrap modes
+      collapse into two and that is exact rather than lossy: the flips name an axis and a ramp
+      varies along one of them, so a flip in y is a copy indistinguishable from the original.
+      `PL6041` and SVG's `PL6021` retired together.
+- [x] **A metafile carried as an image.** It is replayed: `EmfPlusImage` keeps the nested bytes
+      undecoded, `VectorImages.Decode` picks the decoder by sniffing them, and
+      `MetafilePainter.DrawNestedPicture` puts the display list in the same placement square a
+      bitmap goes in — so the parallelogram destination, the transform and the clip are shared
+      entirely with the bitmap path. **The bound is `VectorLimits.MaxNestingDepth`, not the
+      budget**, and that distinction is the whole of the problem: a budget is spent as work is
+      done, and a picture nested a thousand deep that draws almost nothing at each level never
+      spends any of it. `MetafileBudget.Nested` hands down one less level and answers null when
+      there is none left; `PL6039` now means only that. Measured:
+      `TestEmfPlusDrawImagePointsWithMetafile` went from `ink_ratio 0.000` to **1.006**, `mae`
+      0.0289 to 0.0105 — a 7 px vertical offset in the nested picture's own placement is what
+      remains.
+- [x] **Custom, triangular and anchor line caps.** Seven of the ten are decorations rather than
+      caps and none of them needed anything new: a decoration is a filled path, stated in a unit
+      space, scaled to the pen's width and turned to face along the line. The outlines and their
+      multipliers are `CreateLineEnd`'s and the docking rule is
+      `createAreaGeometryForLineStartEnd`'s, so a diamond is LibreOffice's diamond. `PL6038` now
+      means only the *adjustable arrow* form of a custom cap, which states a width, a height and
+      a middle inset and no path at all — the same one LibreOffice reads and does not use.
 - [ ] **Image attributes.** A colour matrix, a gamma, a chroma key and a colour remap table,
       all of which need the pixels of a JPEG or a PNG rather than of an uncompressed DIB — so
       this is the one remaining case that a codec here would buy, and the reason the
@@ -644,17 +721,30 @@ bits 8-11 are a clip combine mode. There is no single mask that is right twice.
       whatever a preceding record left current, which EMF+ has no state for and this reader
       does not track. `PL6037`, and nothing is drawn — better than drawing it with an
       arbitrary slot.
-- [ ] **Region union, symmetric difference and complement.** A region is a binary tree of set
-      operations; intersection and rectangular exclusion stay exact in the clip's
-      rectangles-and-shapes form, and union of two rectangle sets does too, because
-      overlapping rectangles are still their own union under the non-zero rule. The other
-      three need real polygon arithmetic, which `emfpregion.cxx` has and this does not. Marked
-      approximate rather than approximated silently.
-- [ ] **The dash *phase* differs from LibreOffice's.** Measured on
-      `TestEmfPlusDrawLineWithDash`: `mae 0.0662` on a picture that is nothing but dashes,
-      with `ink_ratio 1.011` — the same amount of ink in slightly different places. The dash
-      lengths are right (they are the pen width times the file's own array); the offset is
-      applied and LibreOffice ignores it. Not run down.
+- [ ] **Region symmetric difference and complement, and what closing them would take.**
+      Measured rather than guessed, because the answer decides whether it is worth starting.
+      Intersection and rectangular exclusion are exact in the clip's rectangles-and-shapes form,
+      and union of two rectangle sets is too — overlapping rectangles are still their own union
+      under the non-zero rule. What is left is **XOR and complement with an arbitrary path as an
+      operand**, and both need the same one thing: a general polygon boolean over Bézier
+      subpaths. There is no way to fake it, because the result's *edges* are new curves that
+      neither operand states.
+      **The size of it, from `emfpregion.cxx`'s own dependencies:** a Bézier-aware
+      Greiner–Hormann or Vatti implementation is roughly what `basegfx`'s
+      `basegfx/source/polygon/b2dpolypolygoncutter.cxx` is — about 1200 lines — plus
+      adaptive flattening and a crossover-point solver it leans on. That is a *third* of this
+      whole library and it buys two operations that appear in none of the twenty-seven reference
+      files. **So: do not start it for the metafiles.** The case that would justify it is SVG's,
+      where the same arithmetic closes `PL6012` (difference clips) and `PL6023` (a clip on one
+      member of a union) as well — three diagnostics for one body of work, and the decision
+      should be made there, on real documents, rather than here.
+- [ ] **`TestEmfPlusDrawLineWithDash` is at `mae 0.0662`, and it is not the dash phase.** That is
+      what it was recorded as and the attribution was wrong; see the LibreOffice table above.
+      The dash lengths are right, the offset is applied where LibreOffice ignores it — worth
+      `0.0011` — and the remaining `0.062` is LibreOffice applying every `RotateWorldTransform`
+      last whatever the record's flag says. Ours follows the flag, as it does for `Translate`,
+      `Scale` and `Multiply` and as LibreOffice itself does for those three. Nothing to do here
+      unless a real document turns up that needs LibreOffice's answer.
 - [ ] **Arabic text draws as its Latin characters only.** `TestAlignRtlReading` measures
       `ink_ratio 0.166`. This is font resolution rather than EMF+ — the same string through a
       GDI `ExtTextOutW` would do the same — but it is where it was found, so it is recorded
@@ -797,9 +887,15 @@ thing in the tree to emit an encoded image into a sink.
 - [ ] **Text as a clip path or mask.** Needs glyph outlines, which live in
       `Paperless.Rendering`. `PL6005`, and the clip is empty — deliberately the safer wrong
       answer, since an unclipped shape paints over its neighbours.
-- [ ] **Focal-point radial gradients** (`fx`/`fy`). `GradientPaint` has no focus; the
-      gradient is centred, `PL6018`.
-- [ ] **`spreadMethod` other than `pad`.** Clamped, `PL6021`.
+- [x] **Focal-point radial gradients** (`fx`/`fy`), closed when EMF+ needed a spread. A focus is
+      the inner circle of the two-circle form PDF's `/ShadingType 3` and Skia's two-point conical
+      shader both already took, so it cost a nullable `DocPoint` on `GradientPaint` and no second
+      code path in either backend. **The mesh was the recorded answer and turned out to be the
+      wrong one**: a mesh approximates a focal radial with piecewise-linear colour and the
+      two-circle form states it exactly, so the mesh took the path gradient and the focus took
+      this. `PL6018` retired.
+- [x] **`spreadMethod` other than `pad`.** `SpreadMethod` on `GradientPaint`, which Skia takes as
+      a tile mode and PDF as a lengthened shading axis. `PL6021` retired.
 - [ ] **Non-scaling strokes** (`vector-effect`). Scaled with the shape, `PL6022`.
 - [ ] **Blend modes other than normal.** Composited normally, `PL6017`.
 - [ ] **Difference clips.** `IDrawingSink.ClipPath` only intersects. `PL6012`.
@@ -831,16 +927,19 @@ thing in the tree to emit an encoded image into a sink.
       load-bearing, because the library resolves `text-anchor` from it *before* emitting the
       draw — a `text-anchor="middle"` run at `x="150"` came out at `x=120` for a 60-unit
       measurement.
-- [x] **EMF+ path gradients have no direct `GradientPaint` equivalent.** Answered by
-      building it and measuring: the ramp from the centre colour to the first surround colour
-      over the boundary's bounding ellipse is *exact* whenever the surround colours agree,
-      which is the case that reads as a radial gradient in the first place —
-      `tdf143031_BrushPathGrad` measures `mae 0.0000`. It is wrong at the edges when they do
-      not, and says so (`PL6040`). What the general case needs is not a decomposition into
-      bands but a **triangle mesh with per-vertex colours**, which is what GDI+ actually
-      draws and what both backends could state natively: a PDF type 4 or 5 shading, and
-      Skia's `SkVertices`. That is a `Paint` kind in Core, and it would close SVG's `PL6018`
-      at the same time. See *EMF+ → Not done*.
+- [x] **EMF+ path gradients have no direct `GradientPaint` equivalent.** Answered twice. First by
+      building the nearest ramp and measuring it: from the centre colour to the first surround
+      colour over the boundary's bounding ellipse is *exact* whenever the surround colours agree,
+      which is the case that reads as a radial gradient in the first place. Then by building the
+      real thing — Core's `MeshPaint`, a triangle per boundary segment with a colour at each
+      corner, which is what GDI+ draws and what a PDF type 4 shading and Skia's `SkVertices` both
+      state natively. `tdf143031_BrushPathGrad` measures `0.0000` under both, which is what makes
+      the second safe to prefer.
+      **What the mesh did *not* close, against the expectation recorded here:** SVG's focal
+      radial. A mesh would approximate it and the two-circle form both backends already had
+      states it exactly, so `PL6018` retired through a `Focus` on `GradientPaint` instead. The
+      lesson is worth the line: *"both backends could express it"* is necessary and not
+      sufficient — ask which of the forms they have is the **exact** one.
 - [ ] A picture drawn at several sizes re-uses one `DisplayList`, which is right for geometry
       and indifferent to hinting. Nothing depends on it yet; it will matter when a thumbnail
       and a print rendering share a cache.
@@ -902,3 +1001,39 @@ declared type identifies the format, and only the bytes do. An EMF+ file is even
 distinguishable: it *is* an EMF, with the same `EMR_HEADER` and the same signature, and the
 EMF+ inside it has no signature of its own anywhere. Nothing in the hook has to know that,
 which is the whole point of putting the decision behind `VectorImages.For`.
+
+### The frame seam, and why it needs nothing new
+
+**A `PageFrame.Image` is a `RasterImage`, and a decoded vector picture is a display list**, so a
+word-processing frame holding an EMF, a WMF or an SVG has nowhere to put what it decoded and
+draws nothing (`PL2370`, raised in `Paperless.WordProcessing/EmbeddedPicture.cs`). That is the
+last missing piece of the wiring above and it was worth asking whether it needs an abstraction
+in `Paperless.Core` — a picture interface a frame could hold without knowing which library
+produced it.
+
+**It does not, and the reason is worth stating rather than the interface being written.**
+`VectorImage` already *is* that abstraction: `Draw(IDrawingSink, DocRect)` plus an
+`IntrinsicSize`, immutable, replayable, decoded once. A Core interface would have exactly those
+two members and one implementation, and the layering already permits the direct reference —
+arrows point at dependencies and `Paperless.Vector` sits beside `Paperless.Text` under Core,
+above nothing that reads a document. **An interface with one implementation on the far side of a
+dependency that is already legal buys nothing and costs a name.**
+
+So the wiring is three lines per family, and none of them is here:
+
+1. A `ProjectReference` on `Paperless.Vector` from whichever library builds the frame.
+2. Beside `PageFrame.Image`, a `VectorImage?` — one or the other, never both.
+3. Where `EmbeddedPicture.Read` today answers null for a vector and raises `PL2370`, call
+   `VectorImages.Decode(bytes)` instead and keep the result. It already sniffs by content, which
+   is the only thing that identifies these formats; `PL2370` then means an *empty* decode rather
+   than an unimplemented one.
+
+**The seam is proven rather than asserted**, because the library has a caller of its own that
+uses exactly it: an EMF+ image object that carries a whole further metafile is decoded with
+`VectorImages.Decode` and drawn into a destination rectangle with
+`MetafilePainter.DrawNestedPicture` — one decode, one display list, one `Draw` into a rectangle
+a transform maps. `EmfPlusNestedMetafileTests` pins it, including the part a reader will get
+wrong first: **it is the nested picture's whole *frame* that is stretched onto the destination,
+not its ink.** A 10 mm square inside an 80 mm frame drawn into a 20 mm destination lands at
+2.5 mm. Taking the ink instead makes the picture four times too large and clipped, which looks
+like a mapping bug in the decoder and is not one.

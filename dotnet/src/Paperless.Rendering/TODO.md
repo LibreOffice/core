@@ -5,9 +5,18 @@ Backends consuming `IDrawingSink`: PDF, Skia raster, SVG.
 Reference: `research/06-rendering.md` sections A, E and G.
 
 Status: **the PDF writer and the Skia rasteriser both write files**, and the PDF one is
-compared against LibreOffice's own PDF operator for operator. **Both now paint every fill the
-display list can express** — solid, gradient and tiled bitmap — and a Skia-backed decoder turns
-an encoded picture into a `RasterImage`. SVG is still a stub, and so is vector import.
+compared against LibreOffice's own PDF operator for operator. **Both paint every fill the
+display list can express** — solid, gradient, tiled bitmap and coloured triangle mesh, with a
+spread and a focus on the gradient — and a Skia-backed decoder turns an encoded picture into a
+`RasterImage`. The SVG *writer* is still a stub.
+
+**The mesh is the newest of the four and the only one added for a format rather than for a
+document model.** A GDI+ path-gradient brush states a colour at every vertex of an arbitrary
+boundary, which no stop list says at any length, and both backends turn out to have a native
+form that agrees with the other on exactly "vertices with colours, plus index triples": a PDF
+`/ShadingType 4` and Skia's `SKVertices`. That agreement is what let `MeshPaint` go into
+`Paperless.Core` without either backend leaking into it — see `Graphics/Paint.cs`, and
+`src/Paperless.Vector/TODO.md` for what it retired.
 
 ## How this library is verified, and why it is verified that way
 
@@ -31,6 +40,14 @@ pages every existing comparison reports, so nothing about `PdfFills`, `PdfStroke
 — which is worth doing rather than guessing, because a shading dictionary contains the string
 `/ShadingType`, so picking the resource list as "the dictionary mentioning `/Shading`" silently
 selects the last shading in the file and every lookup then returns nothing.
+
+**A trap the mesh sprang, in the test reader rather than in the writer.** `PdfFile.ContentStreams`
+finds a page's content *by elimination* — a deflated stream with no `/Length1` and no `/Subtype`
+— which held for every stream this backend wrote until a `/ShadingType 4` arrived. A mesh
+shading is a stream, is deflated, and states neither, so the first mesh silently made every
+`ContentStreams().ShouldHaveSingleItem()` in the file fail on a page whose content was correct.
+The rule now excludes `/ShadingType` too. **Any future stream that is neither text nor a picture
+will do the same**, and the failure names the assertion rather than the cause.
 
 That is why the file is shaped the way it is, and each of these would otherwise be a free
 choice:
@@ -87,6 +104,38 @@ LibreOffice reaches the same conclusion and writes its own.
       PDF of `tests/corpus/features/paint-fills.fodp`, whose one checkerboard rectangle comes out
       as `re W* n` and 47 `q … cm /Im10 Do Q` groups over a single 8×8 XObject. A
       `/PatternType 1` tiling pattern would state the same picture and inherit no transform.
+- [x] **Triangle meshes as `/ShadingType 4`.** A free-form Gouraud triangle mesh: a stream of
+      vertices, each an edge flag, a packed coordinate pair and a colour, with flag 0 starting a
+      fresh triangle. Painted as a clip and an `sh` exactly as a gradient is, because a mesh is a
+      *fill* — a GDI+ path-gradient brush's boundary and the shape it fills need not be the same
+      polygon, so the triangles are painted where they lie and the path decides how much shows.
+      Three decisions worth keeping:
+      **type 4 and not 5**, because a fan built from a boundary is not a lattice and type 5's
+      `/VerticesPerRow` would have to be invented;
+      **every triangle written as three flag-0 vertices**, rather than as a strip or a fan,
+      which triples nothing that matters — consecutive fans share no edge — and removes the one
+      thing a reader can get wrong about the format;
+      and **`/BitsPerFlag 8`, `/BitsPerCoordinate 32`, `/BitsPerComponent 8`**, which make a
+      vertex 1 + 4 + 4 + 3 bytes so the "each vertex begins on a byte boundary" rule holds by
+      construction rather than by padding. Sixteen-bit coordinates would have quantised a
+      page-wide mesh to a fifteenth of a millimetre, visible as a ragged boundary on the very
+      shape the paint exists to draw. `/Decode` spends the whole 32-bit range on the mesh's own
+      bounding box rather than on the page.
+- [x] **A mesh with a translucent vertex takes the same luminosity soft mask a fading gradient
+      does** — a second `/ShadingType 4` in `DeviceGray` whose grey level is each vertex's alpha.
+      Sharing `PdfContentSink.SoftMask` between the two is what stops a faded mesh and a faded
+      gradient disagreeing; a shading has no alpha channel and there is only one way to say so.
+- [x] **A repeating gradient as a lengthened axis.** PDF has no tiling for `sh`: `/Extend` clamps
+      the shading's parameter and cannot repeat it ([PDF 32000-1] 8.7.4.5.3 computes `t` from a
+      parameter already clipped to 0..1). So a repeat is spelled by extending the *axis* over as
+      many whole periods as the shape spans, widening `/Domain` to match, and stitching one copy
+      of the ramp per period — with `/Encode [1 0]` on alternate periods for a reflect, which is
+      how PDF states a mirrored copy without a second function object. `Fills.Gradients.Periods`
+      counts the periods and is the only part of `SpreadMethod` either backend needed to share,
+      because Skia states the same thing as a tile mode and repeats for nothing.
+- [x] **A focal radial as the two circles `/ShadingType 3` already took.** The inner circle
+      collapsed to a point at the focus rather than at the centre. Exact, not an approximation,
+      which is why `GradientPaint.Focus` is a coordinate rather than a mesh.
 - [x] **Soft masks (`ExtGState` `/SMask`) for a gradient whose stops fade.** A shading's colour
       space is `DeviceRGB` and it has no alpha, so a fade is a second shading in `DeviceGray`
       with each stop's alpha as its grey level, painted into a `/Group << /S /Transparency /CS
@@ -120,7 +169,17 @@ LibreOffice reaches the same conclusion and writes its own.
       the shader's local matrix, which is also all an elliptical gradient needs. The stops go
       through the same normalisation the PDF backend uses rather than straight into Skia, which
       tolerates more than PDF's stitching function does; normalising in one place is what stops
-      two backends drawing different pictures from one list.
+      two backends drawing different pictures from one list. A `SpreadMethod` is the shader's
+      tile mode and a `Focus` makes it a two-point conical, both for nothing.
+- [x] **Triangle meshes as `SKVertices`**, drawn inside the path as a clip so the two backends
+      agree by construction. Two details that are not optional:
+      **`SKBlendMode.Dst` with a shaderless paint**, because `drawVertices` blends the per-vertex
+      colours *with the paint's shader* and a mode that reads the source — `Modulate`, the usual
+      choice — multiplies them by whatever a shaderless paint supplies and can black the mesh
+      out; and **antialiasing off for the triangles**, because adjacent fan triangles share an
+      edge exactly and two antialiased edges composited over each other leave a seam of the
+      background along every one — a hundred-vertex boundary would be a hundred pale spokes. The
+      mesh's own outline is antialiased by the clip instead.
 - [x] **Tiled and stretched `BitmapPaint`** as a repeating image shader whose local matrix
       places one cell of the grid `Fills.Tiles` computes — the same grid the PDF backend walks
       tile by tile, so the two agree by construction rather than by inspection. A stretched paint
@@ -192,10 +251,10 @@ picture agree with LibreOffice's, and both are invisible until the colours are c
 
 ### What is left, and why
 
-- [ ] **A focal radial gradient.** PDF's `/ShadingType 3` takes two circles with different
-      centres and DrawingML's `a:path`/`a:fillToRect` states one, but `GradientPaint` has a
-      single `Start`, so both circles are written concentric. Adding a focus to the IR is a Core
-      change and not worth making until a reader has a `fillToRect` to put in it.
+- [x] **A focal radial gradient**, closed when SVG's `fx`/`fy` and EMF+'s path gradient wanted
+      Core changes at the same time. `GradientPaint.Focus` is the inner circle's centre; PDF
+      writes the two circles it always could and Skia takes a two-point conical shader. Both are
+      exact. DrawingML's `a:fillToRect` now has somewhere to go when a reader reads one.
 - [ ] **`GradientKind.Conical` and `GradientKind.Rectangular` are bands, not shaders.** Skia's
       sweep gradient would draw a conical one natively and PDF has nothing for either, and using
       the shader in one backend and bands in the other would make a shape's colours depend on
@@ -203,9 +262,15 @@ picture agree with LibreOffice's, and both are invisible until the colours are c
       (`Gradient::GetMetafileSteps`, `gradient.cxx:336`) — the shorter side in 1/100 mm, clamped
       by the largest channel difference. Nothing emits either kind yet; LibreOffice's own
       `awt::GradientStyle` has no conical at all, so it can only arrive from EMF+ or SVG.
-- [ ] **A gradient *stroke* is drawn as its middle stop and a bitmap stroke as nothing.** There
-      is no gradient pen operator in PDF and LibreOffice's writer has none either. A glyph run is
-      the same case: text is shown in the current fill colour.
+- [ ] **A gradient *stroke* is drawn as its middle stop, a mesh stroke as the mean of its
+      vertices, and a bitmap stroke as nothing.** There is no gradient pen operator in PDF and
+      LibreOffice's writer has none either. A glyph run is the same case: text is shown in the
+      current fill colour.
+- [ ] **A mesh's triangles are painted in the order stated and may overlap.** Nothing sorts
+      them, nothing merges them, and neither backend is asked to: a fan built from a concave
+      boundary is neither convex nor consistently wound, and a mesh that overlaps itself is a
+      mesh whose later triangles win. That is what both a type 4 shading and `SkVertices` do, so
+      the agreement is free — but a producer that expected blending would get painting.
 - [ ] **A tiled fill stops at 8192 tiles.** A one-point tile over an A4 page is half a million
       image draws. At the cap the grid is drawn as far as it goes and the rest is left unpainted,
       which is visible and therefore reportable, unlike stretching the tile.

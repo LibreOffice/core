@@ -305,6 +305,45 @@ public sealed class MetafilePainter
     /// <summary>The side of the square <see cref="DrawTransformedImage"/> places an image in.</summary>
     public const long PlacementUnit = 1 << 16;
 
+    /// <summary>
+    /// Replays a picture carried <em>inside</em> this one, into the same placement square an
+    /// image would have gone in.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A metafile may carry a whole further metafile where a bitmap would go, and every
+    /// destination form — a rectangle, a parallelogram, a source rectangle — is already
+    /// expressed as the transform that maps the placement square onto the page. So a nested
+    /// picture is drawn exactly as an image is: the same square, the same transform, and the
+    /// picture's own view box stretched onto it. Nothing about the destination has to know that
+    /// what it contains is a display list rather than pixels, which is the point.
+    /// </para>
+    /// <para>
+    /// It goes through the painter rather than straight to the sink so the clip is emitted first
+    /// — a nested picture is clipped by the outer picture's clip like anything else — and so the
+    /// nesting costs a command against the budget even when the picture itself is empty.
+    /// </para>
+    /// </remarks>
+    /// <param name="picture">The decoded nested picture.</param>
+    /// <param name="placement">Maps the placement square onto the page.</param>
+    public void DrawNestedPicture(VectorImage picture, AffineTransform placement)
+    {
+        ArgumentNullException.ThrowIfNull(picture);
+
+        if (_context.IsNoOperation) return;
+        if (!_budget.ChargeCommand()) return;
+
+        DocRect square = new(
+            Length.Zero, Length.Zero, Length.FromEmu(PlacementUnit), Length.FromEmu(PlacementUnit));
+
+        EnsureClip();
+
+        _sink.Save();
+        _sink.Transform(placement);
+        picture.Draw(_sink, square);
+        _sink.Restore();
+    }
+
     /// <summary>Draws a glyph run, rotating it when the font asks for an escapement.</summary>
     /// <param name="run">The positioned glyphs.</param>
     /// <param name="radians">
