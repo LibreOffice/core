@@ -16,6 +16,8 @@
 
 #include <vector>
 
+namespace sc
+{
 // A hybrid of particle swarm optimization and differential evolution that
 // alternates between the two from one generation to the next over a single
 // swarm. An even generation runs one full particle swarm generation: inertia
@@ -64,5 +66,7 @@ public:
     int getLastChange() const { return maSwarm.getLastChange(); }
     double getBestFitness() const { return maSwarm.getBestFitness(); }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

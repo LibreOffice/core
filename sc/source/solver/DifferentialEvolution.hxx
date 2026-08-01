@@ -15,6 +15,8 @@
 
 #include <vector>
 
+namespace sc
+{
 // Standalone differential evolution solver: a swarm driven by the differential
 // evolution engine every generation, mutating around a random member.
 template <typename DataProvider> class DifferentialEvolutionSolver
@@ -42,5 +44,7 @@ public:
     int getLastChange() const { return maSwarm.getLastChange(); }
     double getBestFitness() const { return maSwarm.getBestFitness(); }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

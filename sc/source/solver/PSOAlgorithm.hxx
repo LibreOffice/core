@@ -15,6 +15,8 @@
 #include <vector>
 #include <random>
 
+namespace sc
+{
 // One particle swarm generation, a reusable engine any swarm-based solver can
 // drive. Each call advances the bound swarm by one generation: every particle's
 // velocity is pulled by inertia toward its own best and the swarm's best, then
@@ -71,5 +73,7 @@ public:
         rParticle.mCurrentFitness = rDataProvider.calculateFitness(rParticle.mPosition);
     }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

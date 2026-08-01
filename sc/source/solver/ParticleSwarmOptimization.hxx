@@ -15,6 +15,8 @@
 
 #include <vector>
 
+namespace sc
+{
 // Standalone particle swarm solver: a swarm driven by the particle swarm engine
 // every generation.
 template <typename DataProvider> class ParticleSwarmOptimizationSolver
@@ -38,5 +40,7 @@ public:
     int getLastChange() const { return maSwarm.getLastChange(); }
     double getBestFitness() const { return maSwarm.getBestFitness(); }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

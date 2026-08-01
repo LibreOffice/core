@@ -16,6 +16,8 @@
 #include <vector>
 #include <random>
 
+namespace sc
+{
 // Where a mutated value that lands outside a variable's bounds is sent. Clamp
 // pins it to the nearest bound. Wrap folds it back into the range, keeping its
 // offset from the lower bound.
@@ -138,5 +140,7 @@ public:
         }
     }
 };
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
