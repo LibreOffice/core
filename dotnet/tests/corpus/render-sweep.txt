@@ -7,7 +7,7 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 164 of 184 match exactly. Of the twenty that do not, five are deliberate:
+# 165 of 185 match exactly. Of the twenty that do not, five are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
 #                             the changes. Settled and measured; see the marks item.
 #   svg-picture.{odt,docx}    the SVG decoder exists but is not wired into the readers yet.
@@ -199,6 +199,7 @@ deck-features.pptx                 3/3         43/43         OK
 deck-text-style.pptx               1/1         14/14         OK
 paint-fills-pptx.pptx              2/2         0/0           OK
 shape-geometry.pptx                4/4         9/9           OK
+slide-diagram-baked.pptx           1/1         3/3           OK
 slide-shape-features.pptx          4/4         16/16         OK
 slide-table-grid.pptx              2/2         25/25         OK
 ppt-features.ppt                   2/2         32/32         OK
