@@ -1164,6 +1164,11 @@ function assertFocus(selectorType, selector) {
 function getBlinkingCursorPosition(aliasName) {
 	cy.log('>> getBlinkingCursorPosition - start');
 
+	// sample the cursor only after it has settled
+	cy.getFrameWindow().then(function(win) {
+		return processToIdle(win);
+	});
+
 	var cursorSelector = '.cursor-overlay .blinking-cursor';
 	cy.cGet(cursorSelector).then(function(cursor) {
 		var boundRect = cursor[0].getBoundingClientRect();

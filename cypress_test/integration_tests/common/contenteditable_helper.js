@@ -1,4 +1,6 @@
-/* global cy expect*/
+/* global cy expect require */
+
+var helper = require('./helper');
 
 function _checkSelectionStart(value) {
 	cy.get('@clipboard').should(($c) => {
@@ -19,6 +21,11 @@ function type(text, times = 1) {
 	for (var i = 0; i < times; ++i) {
 		input += text;
 	}
+
+	// type against a settled mirror, not one still catching up on replies
+	cy.getFrameWindow().then(function (win) {
+		return helper.processToIdle(win);
+	});
 
 	cy.get('@clipboard').type(input, {delay: 10, force: true});
 
