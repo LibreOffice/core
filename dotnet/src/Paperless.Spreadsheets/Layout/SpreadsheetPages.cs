@@ -176,6 +176,16 @@ public sealed class SpreadsheetPages : IPageSequence
     }
 }
 
+/// <summary>One run of columns placed together, and where it starts.</summary>
+/// <remarks>
+/// A page has one or two: the repeated columns, when the sheet declares any, and its own. They
+/// are separate because Calc prints them as separate blocks, so each has its own first column —
+/// and it is the first column of a block that decides whose spill reaches into it.
+/// </remarks>
+/// <param name="First">The band's first column, hidden or not.</param>
+/// <param name="Left">Where the band starts, scaled.</param>
+internal readonly record struct ColumnBand(int First, Length Left);
+
 /// <summary>
 /// Places and draws the cells of one page.
 /// </summary>
@@ -226,7 +236,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         try
         {
             DocPoint origin = BodyOrigin;
-            List<PlacedColumn> columns = Columns(origin.X);
+            List<PlacedColumn> columns = Columns(origin.X, out List<ColumnBand> bands);
             List<PlacedRow> rows = Rows(origin.Y);
 
             _decoration.DrawBackgrounds(columns, rows, sink);
@@ -234,6 +244,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 
             foreach (PlacedRow row in rows)
             {
+                foreach (ColumnBand band in bands) DrawLeadIn(band, row, sink);
+
                 foreach (PlacedColumn column in columns)
                 {
                     ContentTableCell? cell = sheet.CellAt(row.Row, column.Column);
@@ -352,19 +364,33 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// 72 pt column at 66% comes out at exactly 47.52 pt rather than at the 47.5087 that snapping
     /// the scaled value gives. See <see cref="SheetDeviceUnits"/>.
     /// </remarks>
-    private List<PlacedColumn> Columns(Length left)
+    private List<PlacedColumn> Columns(Length left) => Columns(left, out _);
+
+    /// <inheritdoc cref="Columns(Length)"/>
+    /// <param name="left">Where the block starts.</param>
+    /// <param name="bands">
+    /// Receives where each band of columns begins, which is what a lead-in needs: Calc prints a
+    /// page's repeated columns and its own columns as two separate <c>ScPrintFunc::PrintArea</c>
+    /// calls (<c>printfun.cxx:2312</c> and <c>:2330</c>), each with its own first column, and each
+    /// therefore with its own left-hand neighbour to look back at.
+    /// </param>
+    private List<PlacedColumn> Columns(Length left, out List<ColumnBand> bands)
     {
         List<PlacedColumn> placed = [];
+        List<ColumnBand> starts = [];
         Length offset = Length.Zero;
 
         if (placement.RepeatColumns is { IsValid: true } repeat)
             Append(repeat.FirstColumn, repeat.LastColumn);
 
         Append(placement.Cells.FirstColumn, placement.Cells.LastColumn);
+        bands = starts;
         return placed;
 
         void Append(int first, int last)
         {
+            starts.Add(new ColumnBand(first, left + (offset * _scale)));
+
             for (int column = first; column <= last; column++)
             {
                 if (sheet.Grid.Columns.IsHidden(column)) continue;
@@ -415,6 +441,79 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         _scale,
         (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column)),
         column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale);
+
+    /// <summary>
+    /// Draws the cell left of a band whose text reaches into it, at the place it really is.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The half of Calc's string output that a page's own columns cannot supply.
+    /// <c>ScOutputData::LayoutStrings</c> starts its column loop <em>one before</em> the block's
+    /// first column — <c>if (mnX1 &gt; 0) --nLoopStartX; // start before mnX1 for rest of long text
+    /// to the left</c> (<c>sc/source/ui/view/output2.cxx:1541-1543</c>) — and that extra iteration
+    /// resolves to the nearest cell with text at or left of <c>mnX1</c>
+    /// (<c>output2.cxx:1638-1656</c>). Without it a sheet whose only content is one column of long
+    /// strings draws <em>nothing at all</em> on its second horizontal page, because no cell on that
+    /// page holds anything: the text there is entirely another column's spill.
+    /// </para>
+    /// <para>
+    /// The cell is placed at its true position, which is off the left of the block, and the text
+    /// then overflows rightwards under the ordinary rules — <see cref="Context"/> already measures
+    /// that against the document grid rather than against the page, which is what makes the two
+    /// halves of one string line up across the break.
+    /// </para>
+    /// <para>
+    /// It cannot draw a cell twice on one page. The walk starts at the band's own first column, so
+    /// a band whose first column holds text yields that column and the <c>&lt; first</c> test
+    /// rejects it; only a column strictly left of the band — and therefore not among the band's
+    /// placed columns — is ever drawn this way. A cell in two <em>bands</em> of the same page, or
+    /// on two pages, is Calc's behaviour and not a fault: each page draws the part of the string
+    /// that falls on it.
+    /// </para>
+    /// </remarks>
+    private void DrawLeadIn(ColumnBand band, PlacedRow row, IDrawingSink sink)
+    {
+        if (band.First <= 0) return;
+
+        // Calc walks back from mnX1 itself, so a band whose own first column holds text stops
+        // there and no lead-in is drawn (output2.cxx:1644-1646).
+        int at = band.First;
+        while (at > 0 && SheetTextLayout.IsAvailable(sheet.CellAt(row.Row, at))) at--;
+        if (at >= band.First) return;
+
+        ContentTableCell? cell = sheet.CellAt(row.Row, at);
+        if (cell is null || SheetTextLayout.IsAvailable(cell)) return;
+        if (sheet.Grid.Columns.IsHidden(at)) return;
+
+        string text = cell.GetText();
+        if (text.Length == 0) return;
+
+        // A merge anywhere between the two suppresses the lead-in: Calc asks
+        // HasAttrib(Merged | Overlapped) over exactly that span (output2.cxx:1652), because a
+        // merged block's own origin is what draws its text and it may be neither of these cells.
+        for (int between = at; between <= band.First; between++)
+        {
+            if (sheet.CellAt(row.Row, between) is { } spanning
+                && (spanning.ColumnSpan > 1 || spanning.RowSpan > 1))
+            {
+                return;
+            }
+        }
+
+        Length back = Length.Zero;
+        for (int column = at; column < band.First; column++)
+            back += SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column));
+
+        DrawCell(
+            text,
+            cell,
+            new PlacedColumn(
+                at,
+                band.Left - (back * _scale),
+                SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * _scale),
+            row,
+            sink);
+    }
 
     private void DrawCell(
         string text, ContentTableCell cell, PlacedColumn column, PlacedRow row, IDrawingSink sink)
