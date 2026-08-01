@@ -1382,6 +1382,87 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 			{ type: 'separator', id: 'layout-aligndown-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
+				'id': 'layout-distribute',
+				'name':_('Distribute'),
+				'accessibility': { focusBack: true, combination: 'DI', de: null },
+				'children' : [
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'layout-distribute-horz-left',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzLeft'),
+										'command': '.uno:DistributeHorzLeft',
+										'accessibility': { focusBack: true, combination: 'DL', de: null }
+									},
+									{
+										'id': 'layout-distribute-horz-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzCenter'),
+										'command': '.uno:DistributeHorzCenter',
+										'accessibility': { focusBack: true, combination: 'DC', de: null }
+									},
+									{
+										'id': 'layout-distribute-horz-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzDistance'),
+										'command': '.uno:DistributeHorzDistance',
+										'accessibility': { focusBack: true, combination: 'DS', de: null }
+									},
+									{
+										'id': 'layout-distribute-horz-right',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzRight'),
+										'command': '.uno:DistributeHorzRight',
+										'accessibility': { focusBack: true, combination: 'DR', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'layout-distribute-vert-top',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertTop'),
+										'command': '.uno:DistributeVertTop',
+										'accessibility': { focusBack: true, combination: 'DT', de: null }
+									},
+									{
+										'id': 'layout-distribute-vert-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertCenter'),
+										'command': '.uno:DistributeVertCenter',
+										'accessibility': { focusBack: true, combination: 'DM', de: null }
+									},
+									{
+										'id': 'layout-distribute-vert-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertDistance'),
+										'command': '.uno:DistributeVertDistance',
+										'accessibility': { focusBack: true, combination: 'DV', de: null }
+									},
+									{
+										'id': 'layout-distribute-vert-bottom',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertBottom'),
+										'command': '.uno:DistributeVertBottom',
+										'accessibility': { focusBack: true, combination: 'DB', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
+			},
+			{ type: 'separator', id: 'layout-distributevertbottom-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
 				'id': 'layout-arrange',
 				'name':_('Arrange'),
 				'accessibility': { focusBack: true, combination: 'FO', de: null },

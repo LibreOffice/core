@@ -2724,6 +2724,87 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				]
 			},
 			{ type: 'separator', id: 'shape-aligndown-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'shape-distribute',
+				'name':_('Distribute'),
+				'accessibility': { focusBack: true, combination: 'DI', de: null },
+				'children' : [
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'shape-distribute-horz-left',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzLeft'),
+										'command': '.uno:DistributeHorzLeft',
+										'accessibility': { focusBack: true, combination: 'DL', de: null }
+									},
+									{
+										'id': 'shape-distribute-horz-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzCenter'),
+										'command': '.uno:DistributeHorzCenter',
+										'accessibility': { focusBack: true, combination: 'DC', de: null }
+									},
+									{
+										'id': 'shape-distribute-horz-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzDistance'),
+										'command': '.uno:DistributeHorzDistance',
+										'accessibility': { focusBack: true, combination: 'DS', de: null }
+									},
+									{
+										'id': 'shape-distribute-horz-right',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzRight'),
+										'command': '.uno:DistributeHorzRight',
+										'accessibility': { focusBack: true, combination: 'DR', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'shape-distribute-vert-top',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertTop'),
+										'command': '.uno:DistributeVertTop',
+										'accessibility': { focusBack: true, combination: 'DT', de: null }
+									},
+									{
+										'id': 'shape-distribute-vert-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertCenter'),
+										'command': '.uno:DistributeVertCenter',
+										'accessibility': { focusBack: true, combination: 'DM', de: null }
+									},
+									{
+										'id': 'shape-distribute-vert-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertDistance'),
+										'command': '.uno:DistributeVertDistance',
+										'accessibility': { focusBack: true, combination: 'DV', de: null }
+									},
+									{
+										'id': 'shape-distribute-vert-bottom',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertBottom'),
+										'command': '.uno:DistributeVertBottom',
+										'accessibility': { focusBack: true, combination: 'DB', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
+			},
+			{ type: 'separator', id: 'shape-distributevertbottom-break', orientation: 'vertical' },
 						{
 				'type': 'overflowgroup',
 				'id': 'shape-arrange',
@@ -3037,6 +3118,87 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				]
 			},
 			{ type: 'separator', id: 'picture-aligndown-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'picture-distribute',
+				'name':_('Distribute'),
+				'accessibility': { focusBack: true, combination: 'DI', de: null },
+				'children' : [
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'picture-distribute-horz-left',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzLeft'),
+										'command': '.uno:DistributeHorzLeft',
+										'accessibility': { focusBack: true, combination: 'DL', de: null }
+									},
+									{
+										'id': 'picture-distribute-horz-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzCenter'),
+										'command': '.uno:DistributeHorzCenter',
+										'accessibility': { focusBack: true, combination: 'DC', de: null }
+									},
+									{
+										'id': 'picture-distribute-horz-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzDistance'),
+										'command': '.uno:DistributeHorzDistance',
+										'accessibility': { focusBack: true, combination: 'DS', de: null }
+									},
+									{
+										'id': 'picture-distribute-horz-right',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeHorzRight'),
+										'command': '.uno:DistributeHorzRight',
+										'accessibility': { focusBack: true, combination: 'DR', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'picture-distribute-vert-top',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertTop'),
+										'command': '.uno:DistributeVertTop',
+										'accessibility': { focusBack: true, combination: 'DT', de: null }
+									},
+									{
+										'id': 'picture-distribute-vert-center',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertCenter'),
+										'command': '.uno:DistributeVertCenter',
+										'accessibility': { focusBack: true, combination: 'DM', de: null }
+									},
+									{
+										'id': 'picture-distribute-vert-distance',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertDistance'),
+										'command': '.uno:DistributeVertDistance',
+										'accessibility': { focusBack: true, combination: 'DV', de: null }
+									},
+									{
+										'id': 'picture-distribute-vert-bottom',
+										'type': 'toolitem',
+										'text': _UNO('.uno:DistributeVertBottom'),
+										'command': '.uno:DistributeVertBottom',
+										'accessibility': { focusBack: true, combination: 'DB', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
+			},
+			{ type: 'separator', id: 'picture-distributevertbottom-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'picture-arrange',
