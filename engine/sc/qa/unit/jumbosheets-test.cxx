@@ -12,6 +12,7 @@
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/svdpage.hxx>
 
@@ -306,6 +307,10 @@ void ScJumboSheetsTest::testTdf147509()
 
 void ScJumboSheetsTest::testTdf133033()
 {
+    // With the Kit, MoveCursorAbs caps the cursor at MAXTILEDROW, below a jumbo sheet's last row
+    if (comphelper::COKit::isActive())
+        return;
+
     createScDoc();
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
