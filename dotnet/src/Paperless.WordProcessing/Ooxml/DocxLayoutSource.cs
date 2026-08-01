@@ -54,6 +54,9 @@ public sealed partial class DocxLayoutSource
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
     private readonly int _compatibilityMode;
+
+    /// <summary>What <c>w:beforeAutospacing</c> and <c>w:afterAutospacing</c> stand for here.</summary>
+    private readonly Length _autoSpacing;
     private readonly DrawingTheme? _theme;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -93,6 +96,9 @@ public sealed partial class DocxLayoutSource
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
         _compatibilityMode = CompatibilityMode(settings);
+        _autoSpacing = WordCompatibility.Read(settings).DoNotUseHtmlParagraphAutoSpacing
+            ? WordParagraphFormats.WordAutoSpacing
+            : WordParagraphFormats.HtmlAutoSpacing;
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
@@ -257,6 +263,17 @@ public sealed partial class DocxLayoutSource
     private int _tableDepth;
 
     /// <summary>
+    /// The <c>w:pPr</c> chain of the table style enclosing the paragraph being read, or null in the body.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a parameter because a cell's content is read by the same recursive walk the
+    /// body uses, and threading it through every overload would touch a dozen signatures for one value
+    /// that changes only when a table is entered. Saved and restored around each table, so a nested table
+    /// takes its own style and the outer one resumes after it.
+    /// </remarks>
+    private IReadOnlyList<XElement>? _tableStyle;
+
+    /// <summary>
     /// Walks the body's block-level children.
     /// </summary>
     /// <remarks>
@@ -342,7 +359,8 @@ public sealed partial class DocxLayoutSource
         _endnoteNumber += walker.EndnotesSeen;
 
         ParagraphFormat format =
-            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
+            WordParagraphFormats.Resolve(
+                _styles, properties, _defaultTabInterval, _autoSpacing, _tableStyle);
 
         // After the walk, because reading a note body or a text box re-enters this method and a list
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.

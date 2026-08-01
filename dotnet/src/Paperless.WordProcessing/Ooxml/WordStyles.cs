@@ -296,6 +296,95 @@ public sealed class WordStyles
         return WordProperty.Unset;
     }
 
+    /// <summary>
+    /// Every layer that states one <c>w:pPr</c> child, innermost first: the paragraph's own, then its
+    /// style chain, then the document defaults.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For the property elements that are <em>bags of attributes</em> rather than single values —
+    /// <c>w:spacing</c> and <c>w:ind</c> — the whole element is not the unit of inheritance. Word, and
+    /// LibreOffice's importer with it, maps each attribute to its own property (<c>w:before</c> to
+    /// <c>PARA_TOP_MARGIN</c>, <c>w:left</c> to <c>PARA_LEFT_MARGIN</c>, and so on), so a paragraph that
+    /// states only <c>w:line</c> still inherits its style's <c>w:before</c>.
+    /// </para>
+    /// <para>
+    /// Taking the innermost element whole instead silently zeroes every attribute that element omits,
+    /// which loses paragraph spacing wherever a paragraph overrides one attribute of its style's
+    /// <c>w:spacing</c> — the ordinary case, and one that shortens every page it appears on.
+    /// </para>
+    /// </remarks>
+    /// <param name="localName">The property element's local name, e.g. <c>spacing</c>.</param>
+    /// <param name="directParagraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
+    /// <param name="paragraphStyleId">The paragraph style in force, or null.</param>
+    /// <param name="tableStyle">
+    /// The <c>w:pPr</c> chain of the table style the paragraph sits inside, innermost first, or null for
+    /// a paragraph that is not in a table. §17.7.2's hierarchy puts the table style <em>below</em> the
+    /// paragraph styles and above the document defaults, which is where it goes here.
+    /// </param>
+    public List<XElement> ParagraphPropertyLayers(
+        string localName,
+        XElement? directParagraphProperties,
+        string? paragraphStyleId,
+        IReadOnlyList<XElement>? tableStyle = null)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(localName);
+
+        List<XElement> layers = [];
+
+        if (Word.Child(directParagraphProperties, localName) is { } direct) layers.Add(direct);
+
+        WordStyle? current = Find(paragraphStyleId, WordStyleType.Paragraph);
+        HashSet<string> visited = new(StringComparer.Ordinal);
+
+        for (int depth = 0; current is not null && depth < MaxBasedOnDepth; depth++)
+        {
+            if (Word.Child(current.ParagraphProperties, localName) is { } found) layers.Add(found);
+            if (!visited.Add(current.StyleId)) break;
+            current = Find(current.BasedOn, WordStyleType.Paragraph);
+        }
+
+        if (tableStyle is not null)
+        {
+            foreach (XElement properties in tableStyle)
+            {
+                if (Word.Child(properties, localName) is { } fromTable) layers.Add(fromTable);
+            }
+        }
+
+        if (Word.Child(DefaultParagraphProperties, localName) is { } fallback) layers.Add(fallback);
+
+        return layers;
+    }
+
+    /// <summary>
+    /// A table style's <c>w:pPr</c> elements, its own first and then its <c>w:basedOn</c> chain.
+    /// </summary>
+    /// <remarks>
+    /// A table style carries paragraph formatting for the paragraphs in its cells, and the one Word
+    /// writes for nearly every table — <c>Table Grid</c> — sets <c>w:spacing w:after="0"
+    /// w:line="240"</c>. That is what makes table text compact, so ignoring it leaves every cell
+    /// paragraph carrying the document default's space-after and 1.08 line spacing instead, which makes
+    /// each row a few points too tall and a long table pages too long.
+    /// </remarks>
+    /// <param name="tableStyleId">The <c>w:tblStyle</c> the table names, or null.</param>
+    public List<XElement> TableStyleParagraphProperties(string? tableStyleId)
+    {
+        List<XElement> chain = [];
+
+        WordStyle? current = Find(tableStyleId, WordStyleType.Table);
+        HashSet<string> visited = new(StringComparer.Ordinal);
+
+        for (int depth = 0; current is not null && depth < MaxBasedOnDepth; depth++)
+        {
+            if (current.ParagraphProperties is { } properties) chain.Add(properties);
+            if (!visited.Add(current.StyleId)) break;
+            current = Find(current.BasedOn, WordStyleType.Table);
+        }
+
+        return chain;
+    }
+
     /// <summary>Resolves a property from <c>w:docDefaults</c> alone.</summary>
     public WordProperty ResolveInDocumentDefaults(bool runProperty, string localName)
     {
