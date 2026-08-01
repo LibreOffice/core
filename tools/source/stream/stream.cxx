@@ -780,6 +780,8 @@ void SvStream::DetectEncoding(size_t maxBytes)
             { "ISO-8859-6", RTL_TEXTENCODING_ISO_8859_6 },
             { "ISO-8859-7", RTL_TEXTENCODING_ISO_8859_7 },
             { "ISO-8859-8", RTL_TEXTENCODING_ISO_8859_8 },
+            // for tdf#171097 (see https://en.wikipedia.org/wiki/ISO-8859-8-I)
+            { "ISO-8859-8-I", RTL_TEXTENCODING_ISO_8859_8 },
             { "ISO-8859-9", RTL_TEXTENCODING_ISO_8859_9 },
             { "windows-1250", RTL_TEXTENCODING_MS_1250 },
             { "windows-1251", RTL_TEXTENCODING_MS_1251 },
