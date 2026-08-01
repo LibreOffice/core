@@ -523,11 +523,9 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     // If the font has CFF2 table, we need to downgrade it to CFF, as we can’t embed CFF2 in PDF.
     flags |= HB_SUBSET_FLAGS_DOWNGRADE_CFF2;
 
-#if HB_VERSION_ATLEAST(14, 3, 0)
     // Make the charset of CID-keyed CFF fonts identity, so that the CIDs of the
-    // subset are its glyph IDs and we don’t have to read them from the charset.
+    // subset are its glyph IDs.
     flags |= HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET;
-#endif
 
     hb_subset_input_set_flags(pInput, flags);
 
@@ -651,16 +649,6 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         const char* pCffData = hb_blob_get_data(pCFFBlob, &nCffLen);
         if (!pCffData || !nCffLen)
             return false;
-
-#if !HB_VERSION_ATLEAST(14, 3, 0)
-        // Old HarfBuzz keeps the original CIDs of CID-keyed fonts, so we have
-        // to read them out of the charset ourselves.
-        if (!ReadCFFGlyphCIDs(reinterpret_cast<const sal_uInt8*>(pCffData), nCffLen, rInfo.m_aCIDs))
-        {
-            SAL_WARN("vcl.fonts.cff", "Failed to read CIDs of subsetted CFF font");
-            return false;
-        }
-#endif
 
         rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pCffData),
                           reinterpret_cast<const sal_uInt8*>(pCffData) + nCffLen);
