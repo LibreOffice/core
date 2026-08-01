@@ -168,4 +168,30 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(data.version, 2);
 		nodeassert.strictEqual(data.masterPage.length, 1);
 	});
+
+	// Discarding the whole cache forgets every part, so the next use
+	// starts a fresh fetch.
+	it('drops all cached parts when the cache is discarded', function () {
+		const sent: string[] = [];
+		(app as any).socket.sendMessage = (message: string) => sent.push(message);
+
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			version: 1,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [{ id: 11, primitives: [] }],
+		});
+		manager.discardAllCache();
+
+		nodeassert.strictEqual(manager.requestPart(0), undefined);
+		nodeassert.ok(
+			sent.some(
+				(message) => message.indexOf('.uno:VectorPrimitives?part=0') >= 0,
+			),
+			'the dropped part is fetched afresh',
+		);
+		(app as any).socket.sendMessage = function () {};
+	});
 });

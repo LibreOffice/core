@@ -349,7 +349,7 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	/// Drop all cached data for all parts.
-	clearCache(): void {
+	discardAllCache(): void {
 		this._cache.clear();
 		this._inFlightParts.clear();
 		this._pendingPreviews.clear();
