@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;

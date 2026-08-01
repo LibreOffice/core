@@ -99,8 +99,8 @@ Not yet, and why:
   consequence: dates in January and February 1900 agree with an XLS render and are one day
   later than an XLSX one. Nothing real is affected; recorded so it is not mistaken for a bug.
 - **Pivot caches and defined names.** Still not reached. Drawings are, for layout
-  (`Ooxml/XlsxDrawings.cs`, `OpenDocument/OdsDrawings.cs`), and charts are, for content — see
-  the chart section below.
+  (`Ooxml/XlsxDrawings.cs`, `OpenDocument/OdsDrawings.cs`), and charts are, for both content and
+  layout — see the two chart sections below.
 - **The sparse typed cell storage below**, which extraction does not need and layout will.
 
 ## Done: print setup and pagination
@@ -539,8 +539,8 @@ number-formatted.
 - [x] **Header and footer text**: the field language is `Layout/SheetHeaderFooter.cs` and the
       placement is `SheetPageDecoration.DrawHeaderAndFooter`
 - [x] **Pictures anchored to cells** — `Layout/SheetDrawings.cs` and `Layout/SheetPageGraphics.cs`,
-      read by `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs`. A chart is recorded and
-      not drawn. BIFF is not read yet; see the section below
+      read by `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs`. A chart is read into a
+      `ChartPlot` and drawn by `Layout/SheetChart.cs`; see the chart section. BIFF is not read yet
 
 ### What the decoration path draws, and the rules it draws by
 
@@ -1029,12 +1029,10 @@ Not yet, and why:
 - **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
   `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
   rectangle clipped to the frame's outline rather than a new IR primitive.
-- **Charts are read but not drawn — and this is now the only family where that is true.**
-  `IsChart` on the drawing is unchanged and still paints nothing; the chart's *content* arrives by
-  a separate route. Measured after the presentation family started drawing charts:
-  `chart-bar-sheet.{ods,fods,xlsx}` render **14 words against LibreOffice's 34, 34 and 29**, where
-  all three forms of `chart-bar-deck` now match at 20/20. See "Drawing a sheet's chart" below for
-  what is missing and the one decision it runs into.
+- **A chart's own tick labels are unformatted, and a rotated one in a chart is the only rotated
+  text a sheet draws.** Both are chart-wide rather than spreadsheet-specific; see
+  `dotnet/TODO.md` Phase 3.5. The formatter this family owns is the one the chart engine wants and
+  cannot reach, which is the layering question left open.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
@@ -1110,34 +1108,63 @@ match, so a divergence fails a test instead of producing a plausible chart. Reso
 instead would need the formula engine and the number formatter — and would disagree with what Calc
 draws the moment a cache is stale, which is the case the rule exists for.
 
-## Drawing a sheet's chart, and the decision it runs into
+## Done: a sheet's chart is drawn
 
-**The engine is done and family-blind; the wiring is not.** `ChartScale`, `ChartPlot`,
-`ChartLayout` and `DrawingChartPlot` in `Paperless.Ooxml/DrawingML/` take a chart part and a frame
-rectangle and give back every mark it draws — plot area, bars, axes, ticks, labels, legend — with
-LibreOffice's own automatic axis scale ported step for step. `Paperless.Presentations` consumes
-them through `Layout/SlideChart.cs` and every bar in `chart-bar-deck.odp` lands within 0.06 pt of
-LibreOffice's. Nothing in any of that is presentation-specific.
+**All three forms match the reference now.** `chart-bar-sheet.{ods,fods,xlsx}` went from **14 words
+against 34, 34 and 29** to **34/34, 34/34 and 29/29**. `SheetDrawing` carries a `ChartPlot` beside
+its `Image`; `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs` read it in the same pass as
+the anchor, because the anchor is what gives the chart a rectangle and the rendering path walks the
+drawing part exactly once; and `Layout/SheetChart.cs` paints a laid-out chart straight into the
+`IDrawingSink`. `XlsxCharts` still walks the part a second time for the content tree, which is
+deliberate — extraction must not pay for the anchors.
 
-**What stops a sheet reusing it is the shape of this family's drawing path, not the engine.** A
-slide's layout produces `PlacedShape` values and a backend walks them; a sheet's
-`SheetPageGraphics.Draw` paints straight into an `IDrawingSink`, and its only drawing primitive
-today is `DrawImage`. A chart needs `FillPath`, `StrokePath` and — the awkward one —
-`DrawGlyphRun`, which means resolving faces and shaping text inside the graphics pass. So the work
-is: carry the `ChartPlot` on `SheetDrawing` beside `Image`, read it in `Ooxml/XlsxDrawings.cs` and
-`OpenDocument/OdsDrawings.cs` where `IsChart` is already set, and add a `SheetChart` that emits a
-laid-out chart to the sink. The anchor arithmetic that gives it a rectangle is already there and
-already tested.
+**The Core move is what made it possible, and it is done.** `ChartPlot`, `ChartScale` and
+`ChartLayout` are in `Paperless.Core.Charts`; `OdfChartPlot` and `OdfChartStyles` came down into
+`Paperless.OpenDocument`, so one ODF reader serves ODP, ODS and ODT and this family needed no copy
+of it. Only the geometry and the model moved — nothing that parses XML — so Core still has zero
+external dependencies.
 
-**The Core-shaped decision, stated so the next person does not rediscover it.** `ChartPlot` lives
-in `Paperless.Ooxml` because that is where the OOXML chart reader is — and `Paperless.OpenDocument`
-cannot see it, the two being siblings with no reference between them. So the ODF chart-to-model
-reader had to go in a *family* library (`Paperless.Presentations/OpenDocument/OdfChartPlot.cs`),
-and a spreadsheet needs the same reader again. **The right home is `Paperless.Core`**, beside the
-rest of the drawing IR, which would let one ODF reader serve both families and put `ChartLayout`
-where `Paperless.OpenDocument` can reach it. That was not worth a Core change with four agents
-building against it; it is worth doing before the second family is wired, because otherwise the
-duplication is what gets copied.
+**Three defects a deck could never have found, and each looked like something else.**
+
+- **The replacement picture wins if you look for it first.** An ODS `draw:frame` holding a chart
+  carries `draw:image xlink:href="./ObjectReplacements/Object 1"` *beside* the `draw:object`.
+  `OdsDrawings` tested for the image first, so every chart in every ODS LibreOffice has ever
+  written was recorded as a plain picture — and then painted as nothing, because all 82 of those
+  streams are `VCLMTF` and no decoder here reads StarView metafiles. An ODP frame carries the
+  object alone, so the deck path never saw it. **This is the named trap**: the symptom was "a
+  spreadsheet chart draws nothing", which reads as a missing feature and was a wrong `if` order.
+- **`a:graphic` is DrawingML's, not the spreadsheet drawing's.** `XlsxDrawings` looked the element
+  up in the `spreadsheetDrawing` namespace, found nothing, and therefore never set `IsChart` on any
+  XLSX graphic frame at all. Invisible until something downstream needed the flag.
+- **A chart is anchored below the used range and Calc prints it anyway.** `chart-bar-sheet.ods` has
+  four rows of data in `A1:C5` and anchors its chart in row 7. The print area is computed from the
+  *cells* — `ScTable::GetPrintArea` (`sc/source/core/data/table1.cxx:657`) tests data, notes,
+  sparklines and attributes and never asks the drawing layer — but the drawing layer is then painted
+  in document coordinates and clipped to the paper, not to the used range
+  (`PrintDrawingLayer(SC_LAYER_FRONT)`, `printfun.cxx:1699`). `SheetPageGraphics` now continues
+  through the grid past the last printed row or column, snapped per index as the two-cell anchor's
+  own edge already was.
+
+**The chart is composed at its own stated size and stretched into the frame.** Measured: the chart
+document states `svg:width="12cm" svg:height="7cm"` and the frame is 2.952 in by 1.9547 in, and in
+LibreOffice's PDF the chart's 13 pt title measures **62.1 pt wide against 99.4 pt for the same title
+in the same chart's `.xlsx` form** — 0.625, the width ratio exactly — with a height ratio of 0.708.
+Composing in the frame instead would give an axis 77 pt long, room for six tick intervals, and
+`0 50 … 200`; composing at 12 × 7 cm gives 108.8 pt, room for nine, and `0 20 … 180`, which is what
+the reference draws.
+
+**Text is measured and drawn by `SheetBandText`, not by the cell engine.** A chart's line height is
+the face's own — ascent plus descent plus the gap, 1.1499 em in Liberation Sans — where a cell's
+drops the gap (`ScDrawStringsVars`, `output2.cxx:734`). `ChartLineHeightAt` is the one method added
+for it. The print zoom is applied to the *type* as well as the rectangle, because a chart laid out
+at 100% type in a 50% rectangle reserves twice the room its labels need.
+
+Left open here:
+
+- **A glyph run cannot be stretched non-uniformly.** The frame-to-chart mapping scales positions by
+  `sx` and `sy` and the em size by `sy` alone, so text comes out `sx/sy` too wide — 12% on
+  `chart-bar-sheet.ods`. Fixing it means a transform round each run.
+- **BIFF charts** are still not read; see below.
 
 Not yet, and why:
 

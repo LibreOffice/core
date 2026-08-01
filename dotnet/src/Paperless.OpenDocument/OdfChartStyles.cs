@@ -1,9 +1,8 @@
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
-using Paperless.OpenDocument;
 
-namespace Paperless.Presentations.OpenDocument;
+namespace Paperless.OpenDocument;
 
 /// <summary>
 /// The automatic styles a chart sub-document declares, indexed by name.
@@ -25,7 +24,7 @@ namespace Paperless.Presentations.OpenDocument;
 /// properties and miss the parent's, which loses a colour rather than a position.
 /// </para>
 /// </remarks>
-internal sealed class OdfChartStyles
+public sealed class OdfChartStyles
 {
     private readonly Dictionary<string, XElement> _styles = new(StringComparer.Ordinal);
 
@@ -71,6 +70,18 @@ internal sealed class OdfChartStyles
         return OdfValue.ParseColour(Attribute(graphic, OdfNamespaces.SvgCompatible, "stroke-color"))
             ?? Colour.Black;
     }
+
+    /// <summary>
+    /// Whether a style asks for a stroke at all.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Line"/> cannot answer this: it returns null both for "no stroke" and for
+    /// "no graphic properties whatever", and those mean opposite things to a gridline — the first
+    /// turns it off and the second leaves it at chart2's default grey.
+    /// </remarks>
+    /// <param name="name">The style's name.</param>
+    public bool HasStroke(string? name)
+        => Attribute(Properties(name, "graphic-properties"), OdfNamespaces.Draw, "stroke") != "none";
 
     /// <summary>The outline width, zero for a hairline.</summary>
     public Length LineWidth(string? name)

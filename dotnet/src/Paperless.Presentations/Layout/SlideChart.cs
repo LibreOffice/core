@@ -1,3 +1,4 @@
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -82,6 +83,22 @@ public static class SlideChart
                 Outline = ShapeTransform.Apply(placement, path),
                 Bounds = DocRect.Empty,
                 Line = Pen(line.Colour, line.Width),
+            });
+        }
+
+        // The free-form marks — a pie's wedges, a line's polyline, an area's region — after the
+        // axes and before the text, which is where the reference draws them.
+        foreach (ChartShape shape in drawing.Shapes)
+        {
+            if (shape.Path.Commands.Count == 0) continue;
+
+            shapes.Add(new PlacedShape
+            {
+                Name = name,
+                Outline = ShapeTransform.Apply(placement, shape.Path),
+                Bounds = DocRect.Empty,
+                Fill = shape.Fill is { } fill ? Paint.Solid(fill) : null,
+                Line = shape.Line is { } line ? Pen(line, shape.LineWidth) : null,
             });
         }
 

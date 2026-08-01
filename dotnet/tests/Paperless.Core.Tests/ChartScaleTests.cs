@@ -1,7 +1,7 @@
-using Paperless.Ooxml.DrawingML;
+using Paperless.Core.Charts;
 using Shouldly;
 
-namespace Paperless.Presentations.Tests;
+namespace Paperless.Core.Tests;
 
 /// <summary>
 /// Checks the automatic axis scale against LibreOffice's own, which is the number every other

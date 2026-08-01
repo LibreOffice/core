@@ -337,13 +337,20 @@ table asserted, not by the corpus.
 - [x] **A chart is drawn now, in all three forms, and the three decks match the reference.**
       `chart-bar-deck.pptx`, `.odp` and `.fodp` rendered **0 words against LibreOffice's 20**; all
       three now render 20 on one page. The engine is family-blind and lives in
-      `Paperless.Ooxml/DrawingML/` — `ChartScale`, `ChartPlot`, `ChartLayout`, `DrawingChartPlot` —
-      and this library contributes `Layout/SlideChart.cs`, which turns a laid-out chart into a run
-      of ordinary `PlacedShape` exactly as `SlideTable` does, plus one reader and one layout half
-      per family: `OpenDocument/OdfChartPlot.cs`, `OpenDocument/OdfChartStyles.cs`,
-      `Ooxml/PptxSlideLayoutChart.cs`, `OpenDocument/OdpSlideLayoutChart.cs`. The two shape walks
-      each gained one word (`sealed` → `sealed partial`) and one case; nothing else in the library
-      changed.
+      `Paperless.Core/Charts/` — `ChartScale`, `ChartPlot`, `ChartLayout` — with the OOXML reader
+      `DrawingChartPlot` in `Paperless.Ooxml` and the ODF one, `OdfChartPlot`/`OdfChartStyles`, in
+      `Paperless.OpenDocument`. This library contributes `Layout/SlideChart.cs`, which turns a
+      laid-out chart into a run of ordinary `PlacedShape` exactly as `SlideTable` does, plus one
+      layout half per family: `Ooxml/PptxSlideLayoutChart.cs`,
+      `OpenDocument/OdpSlideLayoutChart.cs`. The two shape walks each gained one word
+      (`sealed` → `sealed partial`) and one case; nothing else in the library changed.
+
+      **Both readers used to live here and neither should have.** `OdfChartPlot` sat in
+      `OpenDocument/` only because `ChartPlot` was defined in `Paperless.Ooxml`, which
+      `Paperless.OpenDocument` — its sibling — cannot see, so the type it had to return was
+      unnameable one layer down. Moving the model and the layout into `Paperless.Core.Charts` let
+      the reader follow, and one ODF reader now serves ODP, ODS and ODT instead of one copy per
+      family.
 
       **The ticks were the interesting part and the reason given for them was wrong.** They are
       not in the file, and the note here said LibreOffice picks 0…180 for the ODF pair and 0…200
@@ -362,13 +369,28 @@ table asserted, not by the corpus.
       are the face's 1.1499 em. Reusing the default put every chart label 0.15 pt too tall, which
       accumulated through the title and both axis titles into 8 pt of misplaced plot area — a
       whole-chart error produced by a per-label rounding, and invisible in any single label.
-- [ ] **What a chart still does not draw**, in the order the corpus wants it: gridlines (cheapest,
-      the tick values are already in hand); line, pie, scatter and area series (`DrawingChartPlot`
-      reads the first `…Chart` group only, so a combination chart draws its bars and drops its
-      line); data labels; a secondary value axis; and formatted tick labels, which need a number
-      formatter that lives above `Paperless.Ooxml`. The plot rectangle for an OOXML chart is 1.3 pt
-      out and the fix is LibreOffice's second layout pass — with `chart:coordinate-region` in every
-      ODF chart as a free oracle to score it against.
+- [x] **Gridlines, line, pie and area draw, and every plot group is drawn rather than the first.**
+      All of it is in `Paperless.Core.Charts`; this library gained only the `ChartShape` loop in
+      `SlideChart`, which turns a path into a `PlacedShape` exactly as it already turned a rectangle
+      into one. Measured over `chart2/qa/extras/data/pptx/`'s 38 decks: total absolute word error
+      **354 → 234**, with five decks going from drawing nothing at all to near parity —
+      `tdf127393` 0→42 of 46, `tdf127811` 0→17 of 19. Exact matches went 15 → 14, which is the
+      metric behaving worse than the drawing: `stacked-non-stacked-mix-y-axis.pptx` moved from a
+      lucky 75/75 to 76/75 while gaining two series it had been dropping.
+- [ ] **What a chart still does not draw**: data labels (`c:dLbls`); a secondary value axis; a
+      scatter chart's real X scale, which is drawn as evenly spaced categories; markers; and
+      formatted tick labels, which need a number formatter that lives above `Paperless.Core`. The
+      plot rectangle for an OOXML chart is about a point out — LibreOffice's second layout pass now
+      re-derives the *tick count* from the composed rectangle but not the rectangle from the
+      laid-out labels — with `chart:coordinate-region` in every ODF chart as a free oracle to score
+      it against.
+- [ ] **A non-square stretch is applied to positions and not to glyphs.** An embedded chart whose
+      frame is not its own stated size is composed at its own size and stretched (see
+      `ChartLayout.Stretch`), which is what LibreOffice does; but a glyph run carries one em size,
+      so text is scaled by the vertical factor alone and comes out `sx/sy` too wide. It costs
+      nothing on a deck, where the frame and the chart agree, and 12% on `chart-bar-sheet.ods`.
+      Fixing it means a non-uniform transform round each run, which this library expresses as a
+      `PlacedText` matrix and a sheet expresses as a sink transform.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the
