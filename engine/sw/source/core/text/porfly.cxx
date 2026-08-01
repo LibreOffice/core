@@ -406,7 +406,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     {
         // GetRelPosY returns the relative position to baseline (if 0, the
         // upper border of the FlyCnt if on the baseline of a line)
-        SwTwips nRelPos = aObjPositioning.GetRelPosY();
+        SwTwips nRelPos = aObjPositioning.GetRelPosY().as_twip<SwTwips>();
         if ( nRelPos < 0 )
         {
             mnAscent = -nRelPos;
