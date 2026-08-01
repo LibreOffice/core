@@ -603,12 +603,70 @@ to draw something the file already contains a picture of.
 
 ### SmartArt
 
-- [x] **Text** already reads, from `dgm:pt/dgm:t` in the diagram data part.
-- [ ] **Drawing.** Same question as charts and the same likely answer: a SmartArt shape carries a
-      `dgm:relIds` pointing at a `diagramDrawing.xml` — a *baked* shape tree with real geometry —
-      as well as the layout definition that generated it. LibreOffice reads the baked drawing.
-      Evaluating the layout algorithms instead is a large piece of work for output that would
-      differ from the reference, so establish what the baked part gives before considering it.
+**The measurement first, because it is the opposite of the chart one.** Over every OOXML document
+in the LibreOffice tree carrying a `dgm:relIds` — 86 of them, across `oox/qa`, `sd/qa`, `sw/qa`,
+`sc/qa`, `svx/qa` and `chart2/qa`: **46 carry a `diagramDrawing` part with at least one `dsp:sp`
+in it**, 15 carry the part with the shapes taken out, and 25 carry no part. That reads as 53%
+until the 40 without one are looked at, and every one of them is a LibreOffice *import fixture*
+— 38 under `sd/qa/unit/data/pptx`, 33 of them literally named `smartart-*.pptx`, plus two in
+`sw/qa`. The split that matters is by authoring application:
+
+| Wrote the file | Usable baked drawing | Emptied | Absent |
+|---|---|---|---|
+| Office 2010 or later (`AppVersion` 14, 15, 16) | 46 | 15 | 1 |
+| Office 2007 (`AppVersion` 12.0000) | 0 | 0 | 24 |
+
+The 16 exceptions in the first row are all hand-stripped and say so: 15 have a `drawing1.xml` of
+**exactly 436 bytes**, a `dsp:spTree` holding nothing but its `dsp:nvGrpSpPr`, and the sixteenth
+(`smartart-autoTxRot.pptx`) kept its `dsp:dataModelExt/@relId` pointing at a part no longer in the
+package. Somebody removed them so that LibreOffice's layout-atom evaluator is what gets tested.
+Office 2007 wrote none at all, which is not a distribution either — the drawing vocabulary's own
+namespace is `…/office/drawing/**2008**/diagram`, so a 2007-era file predates the feature.
+
+**So the hypothesis holds here where it failed for charts, and reading the baked tree was
+enough.** It is a DrawingML shape tree under `dsp:` rather than `p:`, and renaming it is the whole
+port — LibreOffice does the same substitution in one line (`pptshapegroupcontext.cxx:60-61`) and
+then runs its ordinary slide parser over the result. That buys the 187 presets, `a:custGeom`,
+gradients, bitmap fills, dashes and arrowheads at once, which is what a diagram needs: the 469
+baked shapes in the corpus hold 403 `a:prstGeom`, 66 `a:custGeom`, 64 `a:gradFill` and 16
+`a:blipFill` between them, and **no `dsp:grpSp` and no `dsp:pic` at all** — a diagram's pictures
+arrive as blip *fills* on ordinary shapes.
+
+- [x] **Text** already reads, from `dgm:pt/dgm:t` in the diagram data part, and still does. The
+      two paths disagree on purpose: the baked tree repeats a node's text wherever the layout drew
+      it and adds text the layout generated, while the data model is what the author typed, once
+      each. An index wants the second.
+- [x] **Drawing, from the baked tree** — `Paperless.Presentations/Ooxml/PptxDiagram.cs`, reached
+      from `PptxSlideLayout.Diagram`. Verified against LibreOffice's own PDF on a hand-written
+      corpus deck (`slide-diagram-baked.pptx`) to a tenth of a point on fills, outlines,
+      connector vertices and label pens, and on all ten real SmartArt decks in
+      `sd/qa/unit/data/pptx` for page and word count. PPTX only; see below.
+- [ ] **Evaluating the layout algorithms, for the 25 documents with no baked drawing.**
+      `oox/source/drawingml/diagram/` is 6.7 kLOC and `svx/source/diagram/` another 2.3 kLOC, and
+      it is what LibreOffice falls back to — `diagram.cxx:701`,
+      `bCreate = pShape->getExtDrawings().empty()`, then `createShapeHierarchyFromModel(pShape,
+      bCreate)`, whose comment reads "if false - just create the BackgroundShape". It does produce
+      a real diagram: `smartart-org-chart.pptx` has an emptied drawing part and LibreOffice still
+      draws eleven nodes, which come out of a PPTX→ODP conversion as 14 `draw:custom-shape` in 13
+      `draw:g`. Deliberately not attempted. It would serve documents that are, in this corpus,
+      entirely LibreOffice's own fixtures plus Office 2007 files, and it would produce a diagram
+      that differs from the reference rather than agreeing with it.
+- [ ] **A DOCX or XLSX diagram needs a hook in its own reader.** The same shape as the chart item
+      and left for the same reason: those libraries had other agents in them. Worth 8 documents in
+      `sw/qa` and 2 in `sc/qa`, all with baked drawings.
+- [ ] **`a:spcPct` paragraph spacing is the one visible gap left**, and it is not a diagram bug —
+      it is the recorded `spcBef`/`spcAft`-as-a-percentage item under the text chain. It shows up
+      here because diagrams use nothing else: **324 of the 324** `a:pPr` in the corpus's baked
+      drawings state their spacing as a percentage and **none** states it in points, so a
+      multi-paragraph node draws its lines tighter than the reference. `tdf93830.pptx` is the
+      clearest case.
+
+**ODF has no equivalent, and does not need one.** Scanning 3,852 `.od*`/`.fod*` files in the tree
+for any diagram markup finds 32 hits and every one is the word "Diagram" in a `draw:name`. There
+is no SmartArt vocabulary in ODF: LibreOffice flattens a diagram to a `draw:g` of ordinary
+`draw:custom-shape` on export, measured by converting two SmartArt decks to ODP — 37 custom shapes
+for `tdf125551.pptx`, 14 for `smartart-org-chart.pptx`, and zero `dgm`, `dsp` or "smartart" tokens
+in either `content.xml`. So the ODF path already draws diagrams, as shapes, and always did.
 
 ## Phase 4 — Fidelity
 
@@ -746,8 +804,12 @@ Each of these should be resolved with a spike, not by guessing.
 1. **Formula recalculation.** Trust cached results, or recalculate? Cached matches what a
    reference renderer shows; recalculating is correct when the cache is stale. Currently a
    `LayoutOptions` flag, defaulting to trusting the cache. Confirm that is right.
-2. **SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
-   implement layout? The fallback is far cheaper and probably sufficient.
+2. ~~**SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
+   implement layout?~~ **Settled by measurement, and the guess "probably sufficient" was right
+   for a reason nobody had stated: 46 of the 86 diagram documents in the LibreOffice tree carry a
+   usable baked drawing, and every one of the 40 that do not is a LibreOffice import fixture or an
+   Office 2007 file — the `dsp` vocabulary is dated 2008.** The fallback is read; the layout
+   algorithms are not implemented. See Phase 3.5.
 3. **Charts.** Out of scope as a standalone application, but charts are embedded in real
    documents constantly. Render them, or draw a placeholder? Needs a decision.
 

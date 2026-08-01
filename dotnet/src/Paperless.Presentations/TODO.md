@@ -297,6 +297,9 @@ table asserted, not by the corpus.
       `oox/source/drawingml/diagram/` executes. Measured: 64 of the 66 decks in
       `sd/qa/unit/data/pptx/` carrying a diagram data part now yield text, and the number of
       decks in that corpus extracting to nothing at all fell from 179 to 121.
+- [x] SmartArt **drawing**, from the baked shape tree — `Ooxml/PptxDiagram.cs`, drawn by
+      `PptxSlideLayout.Diagram`. See **A diagram is five parts, and the fifth is the one worth
+      having** under Rendering for the measurement that chose it and the traps it cost.
 - [ ] `normAutofit` `fontScale` and `lnSpcReduction` — rendering only; they change where the text
       sits, not what it says
 - [x] **Charts are read**, in both vocabularies: `PptxShapeReader.ReadChart` resolves
@@ -1400,6 +1403,117 @@ paragraph's level are read, attribute by attribute rather than element by elemen
 - [ ] **Vertical text** (`a:bodyPr/@vert`) and text rotation (`a:txXfrm`, `moTextAreaRotation`).
 - [ ] **Right-to-left text.** Bidi levels are resolved and carried by `MeasuredParagraph` and
       nothing consumes them here, which is the same open item word processing has.
+
+### A diagram is five parts, and the fifth is the one worth having
+
+**The measurement, before the design.** A `dgm:relIds` names four parts — `r:dm` the data model,
+`r:lo` the layout definition, `r:qs` the quick style, `r:cs` the colour transform. None of them is
+a drawing. The fifth part, `diagrams/drawingN.xml`, is a `dsp:spTree` holding the diagram *already
+laid out*, one shape per node with real geometry, and it is reached only through the data model's
+`dgm:extLst/a:ext/dsp:dataModelExt/@relId`.
+
+Over every OOXML document in the LibreOffice tree carrying a `dgm:relIds` — 86 of them — **46 have
+that part with at least one `dsp:sp` in it**, 15 have it emptied, and 25 do not have it. All 40
+without a usable one are LibreOffice's own import fixtures, and the real split is by authoring
+application: of the 62 written by Office 2010 or later, 46 carry a usable baked drawing and the
+other 16 all show it removed by hand — 15 have a `drawing1.xml` of exactly **436 bytes**, a
+`dsp:spTree` holding nothing but its `dsp:nvGrpSpPr`. Office 2007 wrote none, 0 of 24, because the
+vocabulary's namespace is `…/office/drawing/**2008**/diagram` and the file predates it.
+
+So the answer to "fallback or implement" is the *opposite* of the chart answer, where 58 of 81 ODF
+documents ship a baked metafile and 0 of 192 OOXML ones do. Here the baked drawing is what a real
+authoring application always writes, and evaluating `layout1.xml` instead is 6.7 kLOC in
+`oox/source/drawingml/diagram/` plus 2.3 kLOC in `svx/source/diagram/` for output that would
+differ from the reference. LibreOffice makes the same choice in one line: `diagram.cxx:701`,
+`bCreate = pShape->getExtDrawings().empty()`.
+
+**The port is a rename.** `dsp:sp`, `dsp:spPr`, `dsp:txBody` and their siblings are the *same
+elements* as `p:sp`, `p:spPr` and `p:txBody` under a different namespace, and everything inside
+them — `a:xfrm`, `a:prstGeom`, `a:solidFill`, `a:ln`, `a:p` — is already DrawingML and is left
+alone. LibreOffice makes the substitution in one line too
+(`oox/source/ppt/pptshapegroupcontext.cxx:60-61`) and then runs its ordinary slide parser over the
+result. Renaming buys the whole slide layouter at once, which is what a diagram needs: the 469
+baked shapes in LibreOffice's corpus hold 403 `a:prstGeom`, 66 `a:custGeom`, 64 `a:gradFill` and
+16 `a:blipFill` between them, and **no `dsp:grpSp` and no `dsp:pic` at all** — a diagram's
+pictures arrive as blip *fills* on ordinary shapes, so the picture path is never entered.
+
+**Four traps, three of them silent.**
+
+*The drawing's relationship is declared on the slide, not on the data part.* The data part carries
+the id and the slide resolves it. `ppt/diagrams/_rels/data1.xml.rels` usually does not exist at
+all, and where it does its ids **collide** with the slide's rather than running out: in
+`sd/qa/unit/data/pptx/smartart-picture-strip.pptx` the drawing's `rId1` is `image1.png` and the
+slide's `rId1` is `slideLayout1.xml`. Resolving against the wrong part does not fail — it finds
+something else. LibreOffice resolves against `rRelations`, the relations of the part being
+imported (`diagram.cxx:608-624`).
+
+*But an `r:embed` inside the drawing resolves against the drawing part.* The opposite direction,
+and the reason `PptxSlideLayout` had to grow a fourth case in `PartOf`: a fill can now arrive from
+the slide, the layout, the master or a diagram drawing, and only the element knows which. The
+diagram's tree is *built* rather than loaded, so it is not any part `PartOf` recognised; it is
+keyed by reference identity instead.
+
+*A drawing part can be present and empty.* This is why LibreOffice counts `dsp:sp` rather than
+trusting the relationship — `DiagramShapeCounter`, `diagram.cxx:521-556`, and "Ignore ext drawings
+which don't actually have any shapes". A reader that took the part's existence as the answer would
+draw `smartart-org-chart.pptx`'s eleven-node organisation chart as nothing at all, where declining
+the part at least leaves the door open to the evaluator.
+
+*The frame's transform is a group's, not a shape's.* The baked shapes' `a:off` are in the
+diagram's own space, measured from the frame's top-left corner, so the frame maps a child
+coordinate space exactly as a `p:grpSp` does — with no `a:chOff` or `a:chExt`, which is the absent
+case `ShapeTransform.GroupSpace` already answers with a factor of one.
+`diagram.cxx:131`, `pParentShape->setChildSize(pParentShape->getSize())`, says the same thing from
+the other end.
+
+**`dsp:txXfrm`, and the one place this deliberately departs from LibreOffice.** A baked shape may
+state its text area as an offset and extent in the *diagram's* coordinates, overriding both the
+preset's built-in rectangle and a `custGeom`'s `a:rect`. Paperless honours it directly, because a
+text rectangle is a parameter of its text layout. LibreOffice cannot: `Transform2DContext`
+(`oox/source/drawingml/transform2dcontext.cxx:296-391`) says in its own comment that it "cannot
+change the text area rectangle directly, because currently we depend on the geometry definition of
+the preset", and works around it by turning the difference between the two rectangles into four
+indents — which needs a preset text rectangle, and `ConstructPresetTextRectangle` hand-implements
+one for **fourteen** presets and returns false for the rest, dropping the `dsp:txXfrm` entirely.
+
+Measured, so the size of the divergence is known rather than assumed: of the 469 baked shapes,
+286 carry a `dsp:txXfrm` and **273 of those — 95% — use one of the fourteen**, where LibreOffice's
+indents land the text block on exactly the stated rectangle and the two agree. The other 13 are
+where Paperless will put a label where PowerPoint does and LibreOffice will not;
+`sd/qa/unit/data/pptx/tdf149551_SmartArt_Gear.pptx` is one, on a `gear9`, and the visible effect is
+that its 20 pt "Three" fits on one line for LibreOffice and wraps for us.
+
+**What it was measured against.** `slide-diagram-baked.pptx`, hand-written because nothing can
+generate one — LibreOffice cannot author SmartArt, only preserve what it imported through the
+interop grab bag, though it does preserve it faithfully: converting `tdf125551.pptx` to PPTX again
+keeps all twenty diagram parts and 23 `dsp:sp`. `SlideDiagramComparisonTests` compares fills,
+connector vertices, the stroked connector's pen and the labels' pens against LibreOffice's own PDF
+to a tenth of a point. And all ten real SmartArt decks in `sd/qa/unit/data/pptx` — including
+`n819614.pptx`, 111 shapes with 55 `a:custGeom` and 51 gradients — match the reference on page and
+word count.
+
+**What is left.** `a:spcPct` paragraph spacing, which is the recorded `spcBef`/`spcAft` item and
+not a diagram bug — but diagrams use nothing else: **324 of the 324** `a:pPr` in the corpus's baked
+drawings state their spacing as a percentage and none states it in points, so a multi-paragraph
+node's lines come out tighter than the reference (`tdf93830.pptx` is the clearest case). The
+layout-atom evaluator, deliberately not attempted. And the colour transform is not consulted at
+all: LibreOffice pulls `node0`'s text fill out of `colors1.xml` and applies it as the `fontRef`
+colour for every node (`diagram.cxx:674-682`, `applyFontRefColor`), which the baked tree already
+resolves into each run for every file measured — but a file that left a run's colour unstated
+would take ours from the theme and LibreOffice's from the colour transform.
+
+### A bullet character is one character, and files say otherwise
+
+Found in a SmartArt shape and fixed in the shared PPTX text reader, so it is recorded here rather
+than in the diagram section: `a:buChar/@char` is an `ST_Char` — one character — and real files
+break that. `sd/qa/unit/data/pptx/bnc862510_5.pptx` writes `<a:buChar char="••"/>`, and drawing
+what it says puts a second bullet where the reference draws the text's first letter, because the
+hanging indent goes to `marL` whatever the marker's width turned out to be: 22.5 pt of overlap on
+a 40 pt line. LibreOffice keeps the whole string through its import
+(`textparagraphproperties.cxx:326`) and truncates where the numbering rule is built —
+`aFmt.SetBulletChar(aStr.iterateCodePoints(…))`, `editeng/source/uno/unonrule.cxx:320`. A code
+point rather than a UTF-16 unit, so an astral bullet survives. No corpus document exercises it;
+the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the reference file above.
 
 ### Small differences that are measured and not yet closed
 
