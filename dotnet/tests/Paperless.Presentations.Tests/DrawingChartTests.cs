@@ -201,7 +201,9 @@ public class DrawingChartTests
             """));
 
         // Excel writes the levels innermost first, so the outer group is the last c:lvl and a
-        // point it does not restate belongs to the group above it.
+        // point it does not restate belongs to the group above it. This is the shape of the only
+        // real file that carries one — chart2/qa/extras/data/docx/testMultilevelCategoryAxis.docx,
+        // whose second c:lvl states 2011 at idx 0 and 2012 at idx 2 over four categories.
         Rows(chart.ShouldNotBeNull().Children.OfType<ContentTable>().Single())
             .ShouldBe(["|North", "2024 Q1|1", "Q2|2"]);
     }
