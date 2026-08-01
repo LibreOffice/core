@@ -39,7 +39,7 @@ internal static class ShimGeometry
     /// <c>o3tl::Length::px</c> is defined as "15 twip (96 ppi)"
     /// (<c>include/o3tl/unit_conversion.hxx:44</c>) and <c>svgio</c> converts every other unit
     /// into px through it (<c>svgio/source/svgreader/SvgNumber.cxx:41-54</c>) before scaling
-    /// the finished picture by px→1/100 mm (<c>svgsvgnode.cxx:676</c>). 914400/96 is exact, so
+    /// the finished picture by px→1/100 mm (<c>svgsvgnode.cxx:677</c>). 914400/96 is exact, so
     /// no rounding enters here at all.
     /// </remarks>
     public const double EmuPerPixel = Length.EmuPerInch / 96.0;

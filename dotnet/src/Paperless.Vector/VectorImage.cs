@@ -17,9 +17,9 @@ namespace Paperless.Vector;
 /// rectangle passed to <see cref="Draw(IDrawingSink, DocRect)"/> is how big the
 /// <em>document</em> says the frame is.
 /// Conflating any two of them is the classic wrongly-scaled-or-mirrored metafile bug, and the
-/// metafile formats will arrive here with exactly the same three quantities: an EMF's frame
-/// rectangle is a view box, its reference-device fields give an intrinsic size, and the
-/// <c>a:ext</c> on the shape holding it gives the destination.
+/// metafile formats will arrive here with exactly the same three quantities: an EMF's
+/// <c>rclBounds</c> is a view box, its <c>rclFrame</c> and reference-device fields give an
+/// intrinsic size, and the <c>a:ext</c> on the shape holding it gives the destination.
 /// </para>
 /// <para>
 /// <b>The document's extent wins.</b> <see cref="Draw(IDrawingSink, DocRect)"/> stretches <see cref="ViewBox"/> onto
@@ -102,7 +102,7 @@ public sealed record VectorImage
 
         // Clipped to the frame because the source formats say so and because the alternative
         // is a picture that paints over its neighbours: SVG clips to its outermost viewport
-        // (svgio/source/svgreader/svgsvgnode.cxx:632) and an EMF is bounded by its frame.
+        // (svgio/source/svgreader/svgsvgnode.cxx:634) and an EMF is bounded by its frame.
         sink.ClipPath(GraphicsPath.Rectangle(destination));
 
         sink.Transform(new AffineTransform(

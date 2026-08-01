@@ -50,12 +50,15 @@ public sealed class SvgImageDecoder : IVectorImageDecoder
         // Gzip: a .svgz, which every producer that writes one leaves compressed in the package.
         if (data[0] == 0x1F && data[1] == 0x8B) return true;
 
-        // Otherwise look for the root element in the first stretch of the file, past whatever
-        // byte-order mark, XML declaration, doctype and comments precede it. Sniffing rather
-        // than trusting the declared media type is the tree's rule for whole documents and
-        // holds just as well for the pictures inside them.
+        // Sniffing rather than trusting the declared media type is the tree's rule for whole
+        // documents and holds just as well for the pictures inside them. Two steps, because
+        // one is not enough: the file has to *begin* as XML, or a PNG with "<svg" in a text
+        // chunk would be claimed; and the root element or the namespace has to appear early,
+        // past whatever declaration, doctype and comments precede it.
         int length = Math.Min(data.Length, 4096);
-        string head = Decode(data[..length]);
+        string head = Decode(data[..length]).TrimStart();
+
+        if (!head.StartsWith('<')) return false;
 
         return head.Contains("<svg", StringComparison.OrdinalIgnoreCase)
             || head.Contains("http://www.w3.org/2000/svg", StringComparison.Ordinal);

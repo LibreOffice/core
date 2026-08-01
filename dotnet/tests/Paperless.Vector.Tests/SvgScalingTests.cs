@@ -50,7 +50,7 @@ public sealed class SvgScalingTests
     public void OneStatedDimensionTakesTheOtherFromTheViewBoxRatio()
     {
         // The case where the vetted library and LibreOffice disagree, and LibreOffice wins.
-        // svgsvgnode.cxx:504-514 derives the missing height as fW / fViewBoxRatio; the
+        // svgsvgnode.cxx:504-516 derives the missing height as fW / fViewBoxRatio; the
         // library instead keeps the view box's own height, which would letterbox the drawing
         // into half the frame. Measured on LibreOffice 24.2: a width="200" viewBox="0 0 400
         // 100" SVG rendered with a content area of 624 x 156 px at 300 dpi — aspect 4.000,
@@ -74,7 +74,7 @@ public sealed class SvgScalingTests
     public void PercentageDimensionsAreTreatedAsAbsentAtTheRoot()
     {
         // There is no parent viewport to resolve them against, so LibreOffice treats
-        // "absolute" and "usable" as the same question (svgsvgnode.cxx:499-500).
+        // "absolute" and "usable" as the same question (svgsvgnode.cxx:504-505).
         VectorImage image = Decode("""<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 400 100"><rect width="1" height="1"/></svg>""");
 
         image.IntrinsicSize.Width.Emu.ShouldBe(400 * 9525);
@@ -135,7 +135,7 @@ public sealed class SvgScalingTests
     public void AZeroWidthImageRendersNothing()
     {
         // "Svg defines that a negative value is an error and that 0.0 disables rendering"
-        // — svgsvgnode.cxx:479-482.
+        // — svgsvgnode.cxx:487-489.
         VectorImage image = Decode("""<svg xmlns="http://www.w3.org/2000/svg" width="0" height="100"><rect width="10" height="10"/></svg>""");
 
         image.IsEmpty.ShouldBeTrue();

@@ -232,6 +232,18 @@ public sealed class SvgSafetyTests
     }
 
     [Fact]
+    public void ARasterMentioningSvgIsNotClaimedAsOne()
+    {
+        // A reader asks for a vector decoder before it falls back to a raster, so a PNG with
+        // "<svg" in a text chunk would be decoded as an SVG, fail, and draw nothing. The
+        // bytes have to *begin* as XML, not merely contain the word somewhere.
+        byte[] png = [.. Convert.FromBase64String(Png), .. Encoding.ASCII.GetBytes("tEXtComment<svg width=\"1\">")];
+
+        Decoder.CanDecode(png).ShouldBeFalse();
+        VectorImages.For(png).ShouldBeNull();
+    }
+
+    [Fact]
     public void TruncatedXmlIsADiagnosticRatherThanAnException()
     {
         VectorImage image = Decode("""<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="1" heig""");

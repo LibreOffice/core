@@ -13,7 +13,7 @@ namespace Paperless.Vector.Svg;
 /// and the interesting case is when only one of the first two is given. For
 /// <c>&lt;svg width="100" viewBox="0 0 200 50"&gt;</c>, LibreOffice derives the missing
 /// height from the view box's aspect ratio and gets a 100×25 viewport
-/// (<c>svgio/source/svgreader/svgsvgnode.cxx:504-514</c>: <c>fH = fW / fViewBoxRatio</c>).
+/// (<c>svgio/source/svgreader/svgsvgnode.cxx:504-516</c>: <c>fH = fW / fViewBoxRatio</c>).
 /// <c>Svg.SceneGraph</c> 5.1.1 instead keeps the view box's own height and gets 100×50 —
 /// measured, not inferred.
 /// </para>
@@ -24,15 +24,9 @@ namespace Paperless.Vector.Svg;
 /// </para>
 /// <para>
 /// Rather than re-implementing the view-box mapping, the computed viewport is written back
-/// onto the document as absolute pixel <c>width</c> and <c>height</c> before the scene is
-/// compiled. The library then produces exactly the mapping LibreOffice would, and its own
-/// rule never runs.
-/// </para>
-/// <para>
-/// One accepted divergence remains: the library rounds its viewport to whole pixels
-/// (100 mm came back as 378 px rather than 377.9528). That is 1.3 parts in ten thousand, and
-/// it only affects the picture at all when the rounding changes the aspect ratio, because the
-/// frame's extent is what the drawing is finally stretched onto.
+/// onto the document before the scene is compiled. The library then produces exactly the
+/// mapping LibreOffice would, and its own rule never runs. <see cref="Impose"/> explains why
+/// what is written back is not simply the physical size in pixels.
 /// </para>
 /// </remarks>
 internal static class SvgViewport
@@ -56,7 +50,7 @@ internal static class SvgViewport
         ArgumentNullException.ThrowIfNull(fragment);
 
         // "Svg defines that a negative value is an error and that 0.0 disables rendering"
-        // — svgsvgnode.cxx:479-482.
+        // — svgsvgnode.cxx:487-489.
         if (IsSet(fragment.Width) && fragment.Width.Value <= 0) return null;
         if (IsSet(fragment.Height) && fragment.Height.Value <= 0) return null;
 
@@ -137,7 +131,7 @@ internal static class SvgViewport
     /// <remarks>
     /// A percentage at the root has nothing to resolve against — there is no parent viewport —
     /// which is why LibreOffice treats "absolute" and "usable" as the same question here
-    /// (<c>svgsvgnode.cxx:499-500</c>).
+    /// (<c>svgsvgnode.cxx:504-505</c>).
     /// </remarks>
     private static double? Absolute(SvgUnit unit)
     {

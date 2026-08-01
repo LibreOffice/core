@@ -198,7 +198,18 @@ internal sealed class SvgPictureTranslator
 
             if (combined.Commands.Count > 0) _list.ClipPath(combined, rule);
 
-            foreach (PathClip element in clips) Clip(element.Clip, SKClipOperation.Intersect);
+            // A clip on one member of a union clips only that member, and the sink has no way
+            // to say so — intersecting it globally would clip the other members away as well.
+            // With a single member there is nothing to get wrong, so that case is honoured and
+            // the rest is reported rather than silently over-clipped.
+            if (clips.Count == 1)
+            {
+                Clip(clips[0].Clip, SKClipOperation.Intersect);
+            }
+            else if (clips.Any(element => element.Clip is not null))
+            {
+                Report("PL6023", "An SVG clipped one member of a clip-path union; Paperless clipped none of them.");
+            }
         }
 
         Clip(clip.Clip, SKClipOperation.Intersect);
