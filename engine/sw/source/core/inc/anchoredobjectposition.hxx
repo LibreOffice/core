@@ -22,6 +22,7 @@
 
 #include <fmtornt.hxx>
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include "frame.hxx"
 #include <nodeoffset.hxx>
 
@@ -116,7 +117,7 @@ namespace objectpositioning
         virtual const SwFrame* ToCharOrientFrame() const;
         virtual const SwRect* ToCharRect() const;
         // #i22341#
-        virtual SwTwips ToCharTopOfLine() const;
+        virtual gfx::Length ToCharTopOfLine() const;
 
         /** helper method to determine top of a frame for the vertical object
             positioning
