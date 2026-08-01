@@ -11,6 +11,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
+#include <comphelper/kit.hxx>
 #include <cppunit/TestAssert.h>
 #include <rtl/ustring.hxx>
 
@@ -47,7 +48,10 @@ void XSheetAnnotation::testGetDate()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aDate = aSheetAnnotation->getDate();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", u"01/17/2013 00:00:00"_ustr, aDate);
+    // Import keeps the ISO 8601 date with the Kit, the client formatting it itself
+    const OUString aExpected
+        = comphelper::COKit::isActive() ? u"2013-01-17T00:00:00"_ustr : u"01/17/2013 00:00:00"_ustr;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", aExpected, aDate);
 }
 void XSheetAnnotation::testGetIsVisible()
 {
