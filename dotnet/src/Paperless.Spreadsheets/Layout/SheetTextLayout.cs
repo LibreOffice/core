@@ -246,6 +246,17 @@ internal static class SheetTextLayout
         Area area = OutputArea(
             context, cell, horizontal, run.Width + totalMargin, isValue || fills || shrinks || breaks);
 
+        // A turned or stacked cell never reaches this path in Calc at all. `aVars.IsRotated()` or
+        // a stacked orientation sets bUseEditEngine before GetOutputArea is even called
+        // (output2.cxx:1800-1803), so DrawStrings skips the cell and `DrawEdit`/`DrawRotated` draw
+        // it — and none of what follows is theirs: the EditEngine path neither shrinks a string to
+        // fit, nor hashes a number, nor drops the characters it cannot show. It turns the text
+        // about the cell's bottom-left corner and lets it run out of the cell, which is the whole
+        // point of a 45-degree column heading. Measured on `sheet-rich-text.xlsx`: the reference
+        // draws all fifteen characters of "Slanted heading" and Paperless drew eleven, and on the
+        // .xls — whose columns LibreOffice's BIFF import makes a shade narrower — nine.
+        if (format.IsRotated) area = area.Unclipped();
+
         Length available = cell.Box.Width - totalMargin;
 
         if (shrinks && area.IsClipped && available > Length.Zero && run.Width > Length.Zero)

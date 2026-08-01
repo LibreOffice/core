@@ -127,6 +127,45 @@ public sealed class MetafileMapping
     public static Length Emu(double mm100)
         => Length.FromEmu((long)Math.Round(Math.Clamp(mm100 * EmuPerMm100, -1e17, 1e17)));
 
+    /// <summary>
+    /// Sets the window origin, which in EMF also settles the viewport when the file has not.
+    /// </summary>
+    /// <remarks>
+    /// A plain assignment would lose the half of <c>MtfTools::SetWinOrg</c> that matters: it
+    /// marks the window as stated, which is what stops a later <c>SetMapMode(MM_TEXT)</c> from
+    /// overwriting the window extent, and for EMF it runs <see cref="SetViewportFromWindow"/>
+    /// (<c>mtftools.cxx:2848-2857</c>).
+    /// </remarks>
+    /// <param name="x">The logical x of the window's top-left corner.</param>
+    /// <param name="y">The logical y.</param>
+    /// <param name="deriveViewport">True for EMF, whose window records also settle the viewport.</param>
+    public void SetWindowOrigin(int x, int y, bool deriveViewport = false)
+    {
+        WindowOriginX = x;
+        WindowOriginY = y;
+        if (deriveViewport) SetViewportFromWindow();
+        IsWindowExtentSet = true;
+    }
+
+    /// <summary>
+    /// Derives a viewport extent from the window, for an EMF that never states one.
+    /// </summary>
+    /// <remarks>
+    /// <c>MtfTools::SetDevByWin</c> (<c>mtftools.cxx:2865-2878</c>). The shift by four bits is
+    /// GDI's 28.4 fixed-point convention showing through, and the whole function is a guess for
+    /// incompletely defined files — which is why it applies only while the file has stated no
+    /// viewport of its own, and only in the isotropic mode.
+    /// </remarks>
+    public void SetViewportFromWindow()
+    {
+        if (IsViewportExtentSet || Mode != MappingMode.Isotropic) return;
+
+        long x = (long)WindowExtentX + WindowOriginX;
+        long y = (long)WindowExtentY - WindowOriginY;
+
+        SetViewportExtent(Clamp(x / 16.0), Clamp(-y / 16.0), stated: false);
+    }
+
     /// <summary>Sets the window extent, ignoring a zero one as GDI does.</summary>
     /// <remarks>
     /// Only <see cref="MappingMode.Isotropic"/> and <see cref="MappingMode.Anisotropic"/> take
@@ -134,13 +173,17 @@ public sealed class MetafileMapping
     /// no-op (<c>MtfTools::SetWinExt</c>, <c>mtftools.cxx:2880</c>). Applying it anyway is one
     /// of the two ways a metric-mode picture ends up at an arbitrary scale.
     /// </remarks>
-    public void SetWindowExtent(int width, int height)
+    /// <param name="width">The width in logical units.</param>
+    /// <param name="height">The height in logical units.</param>
+    /// <param name="deriveViewport">True for EMF, whose window records also settle the viewport.</param>
+    public void SetWindowExtent(int width, int height, bool deriveViewport = false)
     {
         if (width == 0 || height == 0) return;
         if (Mode is not (MappingMode.Isotropic or MappingMode.Anisotropic)) return;
 
         WindowExtentX = width;
         WindowExtentY = height;
+        if (deriveViewport) SetViewportFromWindow();
         IsWindowExtentSet = true;
     }
 
@@ -203,6 +246,33 @@ public sealed class MetafileMapping
             WindowExtentY = Clamp((double)ReferenceMillimetresY * 100);
         }
     }
+
+    /// <summary>
+    /// The factor <c>ImplScale</c> stands a logical unit at when a file is too incompletely
+    /// defined to be mapped.
+    /// </summary>
+    /// <remarks>
+    /// Undocumented, and named that way in LibreOffice too:
+    /// <c>UNDOCUMENTED_WIN_RCL_RELATION</c> (<c>emfio/inc/mtftools.hxx:331</c>). It applies to
+    /// the region records of an EMF that states a window but never a viewport, where nothing
+    /// else says what a logical unit is worth.
+    /// </remarks>
+    public const int UndocumentedWindowRectangleRelation = 32;
+
+    /// <summary>
+    /// True when a region's coordinates have to be guessed at rather than mapped.
+    /// </summary>
+    /// <remarks>
+    /// <c>MtfTools::SetClipPath</c> (<c>mtftools.cxx:1161-1167</c>) chooses between
+    /// <c>ImplScale</c> and <c>ImplMap</c> on exactly this condition.
+    /// </remarks>
+    public bool ScalesRatherThanMaps
+        => !IsViewportExtentSet && Mode is MappingMode.Isotropic or MappingMode.Anisotropic;
+
+    /// <summary>Stands a logical point at <see cref="UndocumentedWindowRectangleRelation"/>.</summary>
+    public DocPoint ScalePoint(double x, double y) => new(
+        Emu((x * UndocumentedWindowRectangleRelation) - FrameOffsetX),
+        Emu((y * UndocumentedWindowRectangleRelation) - FrameOffsetY));
 
     /// <summary>Maps a logical point to a document point.</summary>
     public DocPoint MapPoint(double x, double y)
