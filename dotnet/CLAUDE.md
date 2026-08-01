@@ -265,8 +265,8 @@ their LibreOffice rendering demands of a renderer and cut into batches of at mos
 
 ```
 words/batch-001 … batch-021     doc  docx     202 documents
-slides/batch-001 … batch-017    ppt  pptx     169 documents
-sheets/batch-001 … batch-018    xls  xlsx     170 documents   (deferred; worked last)
+slides/batch-001 … batch-017    ppt  pptx     165 documents
+sheets/batch-001 … batch-018    xls  xlsx     174 documents   (deferred; worked last)
 ```
 
 Per-family tracks, because a single global ordering front-loads the easy end almost

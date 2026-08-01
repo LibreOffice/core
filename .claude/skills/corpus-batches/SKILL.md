@@ -20,8 +20,8 @@ documents proves only that the clean path works.
 
 ```
 words/batch-001 … batch-021     doc  docx     202 documents
-slides/batch-001 … batch-017    ppt  pptx     169 documents
-sheets/batch-001 … batch-018    xls  xlsx     170 documents
+slides/batch-001 … batch-017    ppt  pptx     165 documents
+sheets/batch-001 … batch-018    xls  xlsx     174 documents
 ```
 
 `MANIFEST.tsv` records the score that placed every document; `DUPLICATES.tsv` records every
@@ -47,6 +47,13 @@ test files. The absolute bands in `pdf-complexity.py` (`01-low` under 25, and so
 set against generated documents; measured across this corpus the 10th percentile is already
 95 and the median is 347. **Ordering is by rank, so the bands do not affect batching** — but
 do not read a band label as a difficulty claim on real files.
+
+**The ordering has since validated itself.** Sweeping all 21 words batches produced a match
+rate that falls almost monotonically with batch number — 9/10 and 8/10 in the first
+batches, 0/10 and 1/10 in the last three. The score is computed from LibreOffice's own
+output and knows nothing about Paperless, so that gradient is evidence the metric measures
+real difficulty rather than an artefact of how the corpus was assembled. It also means a
+batch number is a usable progress estimate: reaching batch *n* is worth more than *n*/21.
 
 ### 2. Ten documents per batch
 
