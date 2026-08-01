@@ -404,7 +404,7 @@ internal sealed class PdfContentSink(
     /// </remarks>
     private void FillBitmap(GraphicsPath path, BitmapPaint bitmap, FillRule rule)
     {
-        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return;
+        if (Empty(bitmap.Image)) return;
         if (Fills.Gradients.Bounds(path) is not { } bounds || bounds.IsEmpty) return;
 
         string name = ImageName(bitmap.Image);
@@ -424,6 +424,18 @@ internal sealed class PdfContentSink(
         _content.Append("Q\n");
     }
 
+    /// <summary>
+    /// True when an image has nothing to draw: neither pixels nor bytes to decode into some.
+    /// </summary>
+    /// <remarks>
+    /// Not <c>Width &lt;= 0</c>, which asks the same question only of an image that has already
+    /// been decoded. A reader emits <see cref="RasterImage.Encoded"/> and leaves the dimensions
+    /// at zero until a codec has seen the bytes, so testing the width here discards every
+    /// picture every reader emits — silently, and only in the backends.
+    /// </remarks>
+    private static bool Empty(RasterImage image)
+        => image.Pixels.IsEmpty && image.EncodedBytes.IsEmpty;
+
     /// <summary>The resource name of an image, written once however many times it is drawn.</summary>
     private string ImageName(RasterImage image)
     {
@@ -438,7 +450,7 @@ internal sealed class PdfContentSink(
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+        if (Empty(image) || destination.IsEmpty) return;
 
         string name = ImageName(image);
         if (name.Length == 0) return;
