@@ -535,6 +535,19 @@ public sealed record Ww8LayoutFrame(
     /// </remarks>
     public bool IsInline { get; init; }
 
+    /// <summary>
+    /// True for a shape whose <c>FSPA</c> says it floats and whose <c>SHAPE</c> field says otherwise.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from <see cref="IsInline"/>, and the distinction is why both exist. An inline picture
+    /// has no <c>FSPA</c> at all, so its rectangle is synthesised from the <c>PICF</c>; this one has a
+    /// full <c>FSPA</c> — a wrap, two origins and a rectangle — of which only the size is then used,
+    /// because <c>ProcessEscherAlign</c> replaces the horizontal orientation with
+    /// <c>CENTER</c>/<c>FRAME</c> for exactly this case (<c>ww8graf.cxx:2436</c>) and an as-character
+    /// frame takes its position from the line rather than from a coordinate.
+    /// </remarks>
+    public bool IsSetInLine { get; init; }
+
     /// <summary>The picture the shape's <c>pib</c> names, or nothing when it names none.</summary>
     public FramePicture Picture { get; init; }
 }

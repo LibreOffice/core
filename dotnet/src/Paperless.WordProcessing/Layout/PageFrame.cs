@@ -201,6 +201,25 @@ public sealed record PageFrame
     /// <summary>Where the anchoring character sits in the paragraph's text, for a character anchor.</summary>
     public int AnchorOffset { get; init; }
 
+    /// <summary>
+    /// How much of an as-character frame sits above the baseline, or null for all of it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Null is the ordinary inline picture, which rests its bottom on the baseline, and is the default so
+    /// that the three readers that had no vertical rule to state keep the numbers they were measured
+    /// against. Zero is the other end: the frame hangs entirely below the line and raises its descent
+    /// instead, which is what Writer does for a fly whose position relative to the baseline comes back at
+    /// nought or more (<c>SwFlyCntPortion::SetBase</c>).
+    /// </para>
+    /// <para>
+    /// Only DOC sets it, and only for a shape a <c>SHAPE</c> field made as-character: those state a
+    /// vertical orientation of <c>TEXT_LINE</c> with no offset, which resolves to nought. Ignored for
+    /// every other anchor, since only an as-character frame has a baseline to be measured from.
+    /// </para>
+    /// </remarks>
+    public Length? InlineAscent { get; init; }
+
     /// <summary>A text frame's own content, empty for an image.</summary>
     public IReadOnlyList<PageBlock> Blocks { get; init; } = [];
 

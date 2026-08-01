@@ -1101,9 +1101,19 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `DrawingChartPlot.Read`, `OdfPictures.Chart` calls `OdfChart.Locate` and `OdfChartPlot.Read`.
       Measured over LibreOffice's own `chart2/qa/extras/data/docx/` and `odt/`, `pdftotext` word
       counts against `soffice --convert-to pdf`, 82 documents: total absolute word error
-      **3689 → 1348**, exact matches **0 → 27**. The DOCX set went 3294 → 1212 with 24 exact of 69;
+      **3671 → 1390**, exact matches **0 → 10**. The DOCX set went 3276 → 1254 with 7 exact of 69;
       the ODT set 395 → 136 with 3 exact of 13. Before this, **every one of the 82 drew a chart of
       no words at all** bar the six whose pages carry body text.
+      **The exact-match figure is a correction and the reason for it is worth keeping.** This item
+      first claimed 3689 → 1348 with **0 → 27**, and only the totals reproduced — 3671 and 1390 on a
+      fresh run, which is ordinary drift between two conversions of the same 82 files. Re-measured
+      with the two reference sets kept in separate directories, 10 documents match exactly, not 27.
+      `docx/` and `odt/` **both hold a file called `chart`**, and `soffice --convert-to pdf` names
+      its output after the input stem, so converting both sets into one directory leaves a single
+      `chart.pdf` and every row after it compared against whichever survived. The corpus sweep's
+      header warns about this for the nine such pairs it holds; this is a tenth, in a directory
+      nobody had thought of as a corpus. Per-format output directories, always, including for the
+      reference side.
 - [x] **Extraction was half-done and the DOCX half was the missing call site.** `chart.odt`
       extracted its whole four-by-three table and `chart.docx` — the same chart — extracted
       nothing, because `OdfContentReader`'s `draw:object` case already served ODT and nothing in
@@ -1134,23 +1144,43 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       packaged `.odt` is the one that pins the order of a frame's children: it carries 22 kB of
       `ObjectReplacements/Object 1` beside the object, and looking at the `draw:image` first is
       exactly what recorded every chart in every ODS as a picture and then painted nothing.
-- [ ] **What Writer still gets wrong, and none of it is the seam.** Of the 1348 words of residual
-      error, the largest single rows are `clustered-bar-chart-labels.docx` (65 against 243),
-      `testMultipleChart.docx` and `testMultiplechartembeddings.docx` (25 against 134, and one page
-      against two — the second chart is on a page we do not produce), `testEmptyCharts.odt`
-      (0 against 42, five charts with no series at all, where LibreOffice still draws a default
-      0…1 axis), and `tdf108022.odt` (86 against 114). Four rows overshoot instead —
-      `FDO75975.docx` 99 against 40, `testChartDataTable.docx` 98 against 53,
-      `tdf170215_nullDate.docx` 77 against 46, `DisplayUnits.docx` 62 against 34 — which is the
-      shape of drawing labels the reference thins, suppresses or writes as glyph outlines. All of
-      it is plot geometry rather than the word-processing side, so it belongs to whoever is next in
-      `Core/Charts`.
+- [ ] **What Writer still gets wrong, and one of it is the seam after all.** Of the 1390 words of
+      residual error, re-measured: `testchartoleobjectembeddings.docx` alone is 510 of them
+      (23975 against 24485, a very long document), then `clustered-bar-chart-labels.docx`
+      (72 against 250), `testMultipleChart.docx` and `testMultiplechartembeddings.docx`
+      (26 against 134, one page against two), `testEmptyCharts.odt` (0 against 42, five charts with
+      no series at all, where LibreOffice still draws a default 0…1 axis), `Bar_horizontal_cone.docx`
+      (18 against 56) and `tdf108022.odt` (86 against 114). Four rows overshoot instead —
+      `FDO75975.docx` 100 against 40, `testChartDataTable.docx` 99 against 53,
+      `tdf170215_nullDate.docx` 77 against 46, `DisplayUnits.docx` 63 against 34 — which is the
+      shape of drawing labels the reference thins, suppresses or writes as glyph outlines.
+      Nearly all of that is plot geometry and belongs in `Core/Charts`. **The two `testMultiple…`
+      rows are not**, and the earlier reading of them as "the second chart is on a page we do not
+      produce" had the causality backwards. Both documents hold three inline charts in *one
+      paragraph with no text*, so all three `InlineObject`s take the boundary 0, none of their
+      widths reaches the prefix table, and the three draw on top of each other on one page. It is a
+      question about how a line's extent counts objects sitting at its end boundary — written up
+      under floating frames in `src/Paperless.WordProcessing/TODO.md`, since the fix is in the line
+      filler rather than in any chart.
 - [ ] **A `.doc` and an `.rtf` chart draw nothing, and neither is read.** WW8 stores a chart as an
       OLE2 storage reached through an `sprmCPicLocation` into the `Data` stream, and RTF as
       `{\object\objemb}` with an `\objdata` hex payload; both are Excel-or-chart OLE servers
       rather than either vocabulary this engine reads. No corpus document has one, and
       `chart2/qa/extras/data/doc/` holds three files, so the measurement to make first is what
       those three are.
+- [x] **A DOC's picture-in-a-line is decided by a field, not by the picture — and that closed two
+      long-standing Writer defects at once.** Not a chart item, but it was found beside these and
+      the two open Writer layout defects turned out to be one cause. WW8 writes a picture set in a
+      line as the pair `U+0008 U+0001` with a full `FSPA` on the first, so it looks floating; the
+      only contradiction is a byte in the `PlcFld` saying the pair sits inside a `SHAPE` field, and
+      `SwWW8ImplReader::IsInlineEscherHack` is exactly that test. `Ww8FieldTypes` reads the table
+      and the layout walk keeps a stack of open field types. This fixed `vector-picture-text.doc`,
+      whose three pictures reserved no room and drew over the paragraphs after them, *and*
+      `word-features.doc`, whose text box drew at 56.70 pt where LibreOffice draws 134.00 —
+      both now agree with LibreOffice's own PDF to within 1.7 pt. Two details in
+      `src/Paperless.WordProcessing/TODO.md`: the vertical orientation is the half
+      `ProcessEscherAlign` does *not* replace, and the anchor characters shape to real width unless
+      they are dropped the way LibreOffice drops them.
 
 ### SmartArt
 

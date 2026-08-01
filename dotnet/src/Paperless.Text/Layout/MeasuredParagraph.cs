@@ -57,17 +57,43 @@ public readonly record struct FormattedRun(
 /// citation, a bookmark, a comment's anchor.
 /// </para>
 /// <para>
-/// <see cref="Height"/> is the line's business rather than the object's: an as-character object rests its
-/// bottom on the baseline, so the line's ascent has to grow to at least this. Measured against
+/// <see cref="Height"/> is the line's business rather than the object's: an as-character object usually
+/// rests its bottom on the baseline, so the line's ascent has to grow to at least this. Measured against
 /// LibreOffice's PDF of <c>picture-anchor.fodt</c>, whose 1 cm picture on a 12 pt line gives an ascent of
 /// 28.35 pt where the text alone would give 10.69, and a line 31.46 pt tall where the text alone gives
 /// 13.8.
 /// </para>
+/// <para>
+/// <strong>Usually, but not always, which is what <see cref="Ascent"/> is for.</strong> Writer's
+/// as-character fly is placed by <c>SwFlyCntPortion::SetBase</c> (<c>sw/source/core/text/porfly.cxx</c>),
+/// which asks <c>SwAsCharAnchoredObjectPosition</c> for a position <em>relative to the baseline</em> and
+/// then splits it: a negative one becomes the portion's ascent, and a position of nought or more leaves
+/// the ascent at nought and lets the object hang below the line instead. Resting on the baseline is only
+/// the case where that position is the object's own height. A shape whose vertical orientation is
+/// <c>TEXT_LINE</c> with no offset — which is what WW8 writes for a picture set in a line — comes back
+/// with nought, and treating it like a picture raises the baseline of the line it sits on by the whole
+/// height of the shape. Measured on <c>word-features.doc</c>: LibreOffice keeps the anchor line at
+/// 455.51 and draws the box's own text 11.2 pt <em>below</em> it, where resting the box on the baseline
+/// put that line at 477.71.
+/// </para>
 /// </remarks>
 /// <param name="Offset">The boundary it occupies, as an index into the paragraph's text.</param>
 /// <param name="Width">How far it moves the text after it along the line.</param>
-/// <param name="Height">How tall it is, measured up from the baseline.</param>
-public readonly record struct InlineObject(int Offset, Length Width, Length Height);
+/// <param name="Height">How tall it is.</param>
+/// <param name="Ascent">
+/// How much of it sits above the baseline, or null for all of it — which is the ordinary inline picture
+/// and the reason this is the default rather than a value every caller has to state. The rest hangs below
+/// and grows the line's descent, so a line box is always tall enough to hold the whole object either way.
+/// </param>
+public readonly record struct InlineObject(
+    int Offset, Length Width, Length Height, Length? Ascent = null)
+{
+    /// <summary>How much of the object sits above the baseline, with the default resolved.</summary>
+    public Length AboveBaseline => Ascent ?? Height;
+
+    /// <summary>How much of it hangs below, which is what the line's descent has to hold.</summary>
+    public Length BelowBaseline => Length.Max(Length.Zero, Height - AboveBaseline);
+}
 
 /// <summary>
 /// A shaped run, positioned within its paragraph.
@@ -409,12 +435,13 @@ public sealed class MeasuredParagraph
             Accumulate(_runs[0], ref height, ref ascent, ref descent);
         }
 
-        // An as-character object rests its bottom on the baseline, so it raises the ascent and nothing
-        // else — the descent below the baseline is still the text's. The `Max(height, ascent + descent)`
-        // below then grows the box to hold it, which is the same rule `SwLineLayout::CalcLine` applies to
-        // a run taller than the line and reaches the measured answer exactly: a 1 cm picture on a 12 pt
-        // Liberation Serif line gives ascent 28.35 and height 31.46, where LibreOffice's own PDF of
-        // `picture-anchor.fodt` puts the second line's baseline 31.46 pt below the first's.
+        // An as-character object divides at the baseline: the part above raises the ascent and the part
+        // below raises the descent, which for the ordinary inline picture is the whole of it above and
+        // nothing below. The `Max(height, ascent + descent)` below then grows the box to hold it, which is
+        // the same rule `SwLineLayout::CalcLine` applies to a run taller than the line and reaches the
+        // measured answer exactly: a 1 cm picture on a 12 pt Liberation Serif line gives ascent 28.35 and
+        // height 31.46, where LibreOffice's own PDF of `picture-anchor.fodt` puts the second line's
+        // baseline 31.46 pt below the first's.
         foreach (InlineObject one in _objects)
         {
             bool within = start <= one.Offset && one.Offset < end;
@@ -424,7 +451,8 @@ public sealed class MeasuredParagraph
             // and an RTF one always looks like this because RTF appends no character for a picture.
             if (!within && !(start == end && one.Offset == start)) continue;
 
-            ascent = Length.Max(ascent, one.Height);
+            ascent = Length.Max(ascent, one.AboveBaseline);
+            descent = Length.Max(descent, one.BelowBaseline);
         }
 
         return (Length.Max(height, ascent + descent), ascent);

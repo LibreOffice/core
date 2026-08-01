@@ -14,7 +14,25 @@
 # **Write to a per-format output directory.** `soffice --convert-to` and `paperless render`
 # both name their output after the input *stem*, so `word-features.doc` and
 # `word-features.docx` both become `word-features.pdf` and one silently overwrites the
-# other. It has cost two agents an hour each. There are now nine such pairs.
+# other. It has cost two agents an hour each. There are now nine such pairs. The rule holds
+# outside this directory too: `chart2/qa/extras/data/docx/` and `odt/` both hold a `chart`,
+# and collapsing their references into one directory is the likeliest source of an
+# exact-match count that later did not reproduce. See the charts item in
+# `src/Paperless.WordProcessing/TODO.md`.
+#
+# **Do not rebuild while a sweep is running.** The sweep takes the better part of an hour,
+# almost all of it in `soffice`, and it invokes the CLI from `bin/` on every file — so a
+# `dotnet build` part-way through swaps the binary underneath it and the rows rendered
+# before the swap describe a build that no longer exists. Either finish the sweep first or
+# render into a copy of the binary.
+#
+# **Count the words with `wc -w`, not with a language's own word split.** The rows here are
+# `pdftotext FILE - | wc -w`, which splits on ASCII whitespace. Python's `str.split()` also
+# splits on U+00A0 and the other Unicode spaces, and a document whose two renderings differ
+# in where a non-breaking space falls then reads as a word-count regression that does not
+# exist. It cost a whole sweep: ten rows came back one to twelve words long — every one of
+# them a DOCX, none reproducible when re-counted with `wc` on the very same PDFs, and
+# `theme-colours.docx` reported 29 words against 17 when both files hold 17.
 #
 # Of the eight that do not match, three are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
@@ -55,10 +73,15 @@
 # loses one word, `table-autofit-partial.docx` fits its columns differently, and
 # `sheet-rich-text.fods` draws two words the reference does not.
 #
-# A row reading OK is a statement about pages and words and nothing else.
-# `vector-picture-text.doc` matches on both and still lays out wrongly: its three
-# as-character pictures come back floating and reserve no room on their lines. Recorded in
-# `src/Paperless.WordProcessing/TODO.md` because this file cannot see it.
+# A row reading OK is a statement about pages and words and nothing else, and this file has
+# just had that demonstrated on it. `vector-picture-text.doc` read 1/1 and 13/13 through the
+# whole of a defect that had all three of its as-character pictures come back floating,
+# reserving no room and drawing over the paragraph after each; `word-features.doc` read 2/2
+# and 154/154 while its text box drew at 56.70 pt where LibreOffice draws 134.00, on top of
+# the sentence it belongs after. Both are fixed and neither row moved by a single word.
+# The check that did see them is a position comparison against LibreOffice's own PDF, word
+# by word — which is what the two items in `src/Paperless.WordProcessing/TODO.md` record,
+# and why they were written down there rather than here.
 #
 FILE                               PAGES o/r   WORDS o/r     VERDICT
 bookmark-field.odt                 1/1         24/24         OK
