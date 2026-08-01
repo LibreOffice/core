@@ -344,10 +344,25 @@ public sealed partial class Ww8DocumentReader
         List<int> positions = [];
         int start = 0;
 
+        // How many fields deep the walk is inside an *instruction*. A field's text holds both halves —
+        // the instruction and the cached result — separated by a U+0014, and only the second is shown.
+        int instruction = 0;
+
         for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
             char character = text[index];
             int position = body.Start + index;
+
+            // Everything between a field's start and its separator is its instruction and is not drawn.
+            // Not a refinement: LibreOffice's own DOC export writes a picture as a SHAPE field, so
+            // keeping the instruction puts the literal word "SHAPE" into the sentence — measured on
+            // `picture-flow.doc`, where it made our word count 191 against the reference's 190. The
+            // markers themselves are handled below and carry no width either way.
+            if (instruction > 0 && character is not (Special.FieldBegin or Special.FieldSeparator
+                or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
+            {
+                continue;
+            }
 
             switch (character)
             {
@@ -378,11 +393,20 @@ public sealed partial class Ww8DocumentReader
                 case Special.OptionalHyphen:
                     continue;
 
-                case Special.FieldBegin or Special.FieldSeparator or Special.FieldEnd:
-                    // A field's instruction and its result are both in the text; the content pass
-                    // distinguishes them. For measurement the markers themselves have no width and the
-                    // instruction is not shown, but skipping only the markers is close enough here and
-                    // wrong only for a document whose fields are unusually long — recorded in the TODO.
+                case Special.FieldBegin:
+                    // Nested fields are legal and Word writes them — a hyperlink around a cross
+                    // reference is two — so this counts rather than toggling.
+                    instruction++;
+                    continue;
+
+                case Special.FieldSeparator:
+                    // The instruction ends and the cached result begins. A field with no separator has
+                    // no result, and its instruction stays hidden until its end.
+                    if (instruction > 0) instruction--;
+                    continue;
+
+                case Special.FieldEnd:
+                    if (instruction > 0) instruction--;
                     continue;
 
                 case Special.AutoNumberedReference:
@@ -489,12 +513,20 @@ public sealed partial class Ww8DocumentReader
         // table inside a text box work without a second path.
         void CollectFrame(int position, int offset)
         {
-            if (Drawings.IsEmpty) return;
-            if (Drawings.AnchorAt(position) is not { } anchor) return;
+            if (Drawings.AnchorAt(position) is not { } anchor)
+            {
+                // No FSPA, which for a U+0001 means an inline picture: its run states a
+                // sprmCPicLocation instead, and nothing in the anchor table mentions it at all.
+                if (InlinePicture(position, offset) is { } inline) _pendingFrames.Add(inline);
+                return;
+            }
 
             MsBinary.Escher.EscherShape? shape = Drawings.Shape(anchor.ShapeId);
             _pendingFrames.Add(
-                new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor)));
+                new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor))
+                {
+                    Picture = PictureOf(shape),
+                });
         }
     }
 

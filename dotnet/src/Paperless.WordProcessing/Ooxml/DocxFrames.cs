@@ -38,10 +38,15 @@ internal static class DocxFrames
     /// <param name="drawing">The <c>w:drawing</c> element.</param>
     /// <param name="content">How to read a text frame's own paragraphs, or null to skip them.</param>
     /// <param name="anchorOffset">Where in the paragraph's text the drawing sits.</param>
+    /// <param name="pictures">
+    /// How to resolve an <c>a:blip</c>'s <c>r:embed</c> into bytes, or null to record the frame's
+    /// geometry without them — which is all the wrap ever needed.
+    /// </param>
     public static PageFrame? Read(
         XElement drawing,
         Func<XElement, IReadOnlyList<PageBlock>>? content,
-        int anchorOffset)
+        int anchorOffset,
+        DocxPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(drawing);
 
@@ -75,6 +80,7 @@ internal static class DocxFrames
             VerticalOffset = y,
             Spacing = Spacing(placed),
             IsImage = box is null,
+            Image = box is null && pictures is not null ? pictures.Read(placed) : null,
             Name = Child(placed, "docPr")?.Attribute("name")?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

@@ -679,7 +679,22 @@ public sealed partial class RtfDocumentReader
             case RtfDestination.BookmarkStart:
             case RtfDestination.BookmarkEnd:
             case RtfDestination.Deletion:
+
+            // The two halves of an Escher property, whose text is the whole of what they say: a
+            // property's name and its value are both written as the *text* of their group and never as
+            // control words. Their absence from this list is why no <c>{\sp}</c> pair ever reached a
+            // shape — <c>CloseGroup</c> read <c>Collected</c> for each and found it empty, so every
+            // shape was given a property named "" with the value "", and the wrap distances, the
+            // origins and the picture all silently took their defaults.
+            case RtfDestination.ShapePropertyName:
+            case RtfDestination.ShapePropertyValue:
                 state.Collected.Append(text);
+                return;
+
+            case RtfDestination.Picture:
+                // A picture's payload is hexadecimal by default, and it is text as far as the tokeniser
+                // is concerned — two ASCII characters per byte, wrapped wherever the producer chose.
+                AppendPictureHex(text);
                 return;
 
             default:
@@ -1448,12 +1463,28 @@ public sealed partial class RtfDocumentReader
             }
         }
 
+        /// <summary>
+        /// The picture the shape carries, from its <c>pib</c> or <c>fillBlip</c> property.
+        /// </summary>
+        /// <remarks>
+        /// A shape rather than a run of text is where LibreOffice's own RTF export puts a picture: it
+        /// writes <c>{\field{\*\fldinst SHAPE }{\fldrslt{\shp …}}}</c> with <c>shapeType 75</c> and
+        /// the bitmap inside <c>{\sp{\sn pib}{\sv {\pict …}}}</c>, and it does that for an
+        /// <em>as-character</em> picture too — the round trip loses the anchoring and the picture comes
+        /// back floating. So a reader that looked only for a bare <c>{\pict}</c> in the run would find
+        /// no picture at all in any RTF LibreOffice wrote, while finding every one Word wrote.
+        /// </remarks>
+        public Core.Graphics.RasterImage? Picture { get; set; }
+
         /// <summary>The frame this describes, for the paragraph it is anchored in.</summary>
         public RtfLayoutFrame Build()
             => new(
                 Offset, Left, Top, Right, Bottom, Wrap, WrapSide,
                 HorizontalOrigin, VerticalOrigin, Blocks,
-                StatesWrapDistance ? WrapDistance : null);
+                StatesWrapDistance ? WrapDistance : null)
+            {
+                Picture = Picture,
+            };
     }
 
     /// <summary>
@@ -1537,6 +1568,7 @@ public sealed partial class RtfDocumentReader
                 // Recorded so a caller knows a graphic is there. The bytes are not decoded during
                 // extraction, and nothing in RTF gives a picture a name or alternative text.
                 CurrentFlow.PendingImages.Add(new ContentImage());
+                EndPicture();
                 break;
         }
 

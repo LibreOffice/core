@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using Paperless.Core.Diagnostics;
+using Paperless.Core.Graphics;
 using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 
@@ -166,5 +168,139 @@ public sealed partial class Ww8DocumentReader
     /// </para>
     /// </remarks>
     private bool IsDrawnPicture(int position) => IsPictureShape(Drawings.ShapeAt(position));
+
+    /// <summary>
+    /// The document's blip store, read once and kept.
+    /// </summary>
+    /// <remarks>
+    /// From the same Office Art blob the shapes come from, since the store is the first record inside
+    /// the drawing group container. Read separately from <see cref="Ww8Drawings"/> rather than through
+    /// it, because the two answer different questions and a document can have one without the other:
+    /// a file whose only picture is inline has a blip store and an empty anchor table.
+    /// </remarks>
+    private Dictionary<int, Ww8Blip> Blips =>
+        _blips ??= _fib.Has(Ww8FibTable.DrawingInformation)
+            ? Ww8Blips.Read(Slice(Ww8FibTable.DrawingInformation).ToArray(), _pictures, _wordDocument)
+            : [];
+
+    private Dictionary<int, Ww8Blip>? _blips;
+
+    /// <summary>
+    /// The picture a shape's <c>pib</c> names, or null when it names none this library can draw.
+    /// </summary>
+    /// <remarks>
+    /// <c>pib</c> is one-based and zero means "no picture", so the lookup and the emptiness test are the
+    /// same question. A blip whose format is vector leaves a diagnostic and no picture: the frame keeps
+    /// its room, which is what stops a metafile from moving every line after it.
+    /// </remarks>
+    private RasterImage? PictureOf(EscherShape? shape)
+    {
+        if (shape is null) return null;
+
+        uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
+        if (pib == 0 || !Blips.TryGetValue((int)pib, out Ww8Blip blip)) return null;
+
+        return blip.Bytes.IsEmpty
+            ? Declined(blip)
+            : EmbeddedPicture.Read(blip.Bytes, blip.Kind, "blip " + pib, _diagnostics);
+    }
+
+    /// <summary>Records that a blip was found whose format this library does not draw.</summary>
+    /// <remarks>
+    /// Always null, so that it reads as the answer at the call site. The blip store deliberately keeps
+    /// the entry with no bytes rather than dropping it: the frame still reserves its room, which is what
+    /// stops a metafile from moving every line after it, and the diagnostic says which format it was.
+    /// </remarks>
+    private RasterImage? Declined(Ww8Blip blip)
+    {
+        _diagnostics.Add(new Diagnostic(
+            DiagnosticSeverity.Information, "PL2370",
+            $"A {blip.Kind} picture was found and has not been drawn: vector import is not "
+            + "implemented, so the frame reserves its room and stays empty."));
+
+        return null;
+    }
+
+    /// <summary>
+    /// The inline picture at a character position, as a frame set in the run of text.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The other half of <see cref="IsEmbeddedPicture"/>, walking the same two structures for the bytes
+    /// rather than for the classification: <c>sprmCPicLocation</c> gives an offset into the picture
+    /// stream, the <c>PICF</c> there gives the rectangle, and the <c>SpContainer</c> after it gives the
+    /// <c>pib</c>.
+    /// </para>
+    /// <para>
+    /// The rectangle is <c>dxaGoal</c> and <c>dyaGoal</c> scaled by <c>mx</c> and <c>my</c>, which are
+    /// in <strong>tenths of a percent</strong> — <c>WW8_PIC</c>, <c>ww8struc.hxx:457</c>. A reader
+    /// taking them as whole percent draws every picture ten times too large, and one ignoring them
+    /// draws a resized picture at its original size, which is the more common defect because the
+    /// unscaled case is what every hand-made test file has.
+    /// </para>
+    /// </remarks>
+    private Ww8LayoutFrame? InlinePicture(int position, int offset)
+    {
+        if (PictureLocation(position) is not { } at) return null;
+        if (at < 0 || at > _pictures.Length - MinimumPictureLength) return null;
+
+        ReadOnlySpan<byte> picture = _pictures.AsSpan(at);
+        if (BinaryPrimitives.ReadInt32LittleEndian(picture) < MinimumPictureLength) return null;
+
+        int header = BinaryPrimitives.ReadUInt16LittleEndian(picture[4..]);
+        short mappingMode = BinaryPrimitives.ReadInt16LittleEndian(picture[6..]);
+        if (mappingMode is not (InlineShapeMappingMode or NamedInlineShapeMappingMode)) return null;
+
+        int width = Scaled(
+            BinaryPrimitives.ReadInt16LittleEndian(picture[0x1C..]),
+            BinaryPrimitives.ReadUInt16LittleEndian(picture[0x20..]));
+        int height = Scaled(
+            BinaryPrimitives.ReadInt16LittleEndian(picture[0x1E..]),
+            BinaryPrimitives.ReadUInt16LittleEndian(picture[0x22..]));
+
+        if (width <= 0 || height <= 0) return null;
+
+        int shapeAt = at + header;
+        if (mappingMode == NamedInlineShapeMappingMode && shapeAt < _pictures.Length)
+        {
+            shapeAt += 1 + _pictures[shapeAt];
+        }
+
+        EscherShape? shape = InlineShape(shapeAt);
+        if (!IsPictureShape(shape)) return null;
+
+        _inlinePictures ??= new DffRecordBuffer(_pictures);
+        RasterImage? image = PictureOf(shape);
+
+        if (image is null
+            && _inlinePictures.TryReadHeader(shapeAt, out DffRecordHeader container)
+            && Ww8Blips.Inline(_inlinePictures, _inlinePictures.EndOf(container)) is { } own)
+        {
+            image = own.Bytes.IsEmpty
+                ? Declined(own)
+                : EmbeddedPicture.Read(own.Bytes, own.Kind, "inline blip", _diagnostics);
+        }
+
+        return new Ww8LayoutFrame(
+            new Ww8ShapeAnchor(
+                position, 0, 0, 0, width, height, IsHeaderAnchor: false,
+                Ww8ShapeOrigin.Text, Ww8ShapeOrigin.Text,
+                Wrap: 3, WrapSide: 0, IsPageRelative: false, IsBelowText: false),
+            shape,
+            offset,
+            [])
+        {
+            IsInline = true,
+            Picture = image,
+        };
+    }
+
+    /// <summary>A <c>PICF</c> goal measurement with its scaling factor applied.</summary>
+    /// <remarks>
+    /// A thousand rather than a hundred: <c>mx</c> and <c>my</c> are "supplied by user in .1% units",
+    /// so an unscaled picture states 1000 and not 100.
+    /// </remarks>
+    private static int Scaled(int goal, int perMille)
+        => perMille == 0 ? goal : (int)((long)goal * perMille / 1000);
 }
 

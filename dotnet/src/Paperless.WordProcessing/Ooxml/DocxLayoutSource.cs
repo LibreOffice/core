@@ -65,16 +65,22 @@ public sealed partial class DocxLayoutSource
     /// <param name="footnotes">The footnote bodies by <c>w:id</c>, or null for a document with none.</param>
     /// <param name="endnotes">The endnote bodies by <c>w:id</c>.</param>
     /// <param name="theme">The document's theme, for themed run colours, or null.</param>
+    /// <param name="pictures">
+    /// How to reach the bytes an <c>a:blip</c> names, or null to lay the document out with its picture
+    /// frames empty — which is what a caller who wants only measurements should pay for.
+    /// </param>
     public DocxLayoutSource(
         WordStyles styles,
         XElement? settings = null,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, XElement>? footnotes = null,
         IReadOnlyDictionary<string, XElement>? endnotes = null,
-        DrawingTheme? theme = null)
+        DrawingTheme? theme = null,
+        DocxPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        Pictures = pictures;
         _theme = theme;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
@@ -84,6 +90,16 @@ public sealed partial class DocxLayoutSource
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
         _endnoteNumbering = NumberingIn(settings, "endnotePr", NoteNumbering.Endnotes);
     }
+
+    /// <summary>
+    /// How a picture's bytes are reached, or null when this source was built without a package.
+    /// </summary>
+    /// <remarks>
+    /// Exposed rather than private because its <see cref="DocxPictures.Scope"/> has to follow the walk:
+    /// relationship ids are numbered from one in every part, so whoever hands this source a header to
+    /// read must say which part it came from first.
+    /// </remarks>
+    public DocxPictures? Pictures { get; }
 
     /// <summary>The footnote bodies by <c>w:id</c>, from <c>footnotes.xml</c>.</summary>
     /// <remarks>
@@ -543,7 +559,7 @@ public sealed partial class DocxLayoutSource
             Func<XElement, IReadOnlyList<PageBlock>>? content =
                 _frameDepth < MaxFrameNesting ? Content : null;
 
-            if (DocxFrames.Read(anchor.Element, content, anchor.Offset) is { } frame)
+            if (DocxFrames.Read(anchor.Element, content, anchor.Offset, Pictures) is { } frame)
             {
                 frames.Add(frame);
             }

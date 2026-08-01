@@ -226,7 +226,14 @@ internal sealed class FrameResolution
             {
                 if (frame.Anchor != FrameAnchor.AsCharacter) continue;
                 if (frame.AnchorOffset < line.Box.Line.Start) continue;
-                if (frame.AnchorOffset >= line.Box.Line.End) continue;
+
+                // One past the last character belongs to the *next* line, except on the last line of
+                // the paragraph, where there is no next one. That is not an edge case worth skipping:
+                // RTF appends nothing to the text for a picture, so a paragraph holding only a picture
+                // is an empty paragraph with an anchor at offset zero and a line running 0 to 0 — the
+                // most ordinary way for a document to carry a logo.
+                if (frame.AnchorOffset >= line.Box.Line.End && !line.Box.Line.EndsParagraph) continue;
+                if (frame.AnchorOffset > line.Box.Line.End) continue;
 
                 DocRect placedAt = new(
                     area.X + line.Box.Left + PageDrawing.OffsetOnLine(paragraph, line, frame.AnchorOffset),

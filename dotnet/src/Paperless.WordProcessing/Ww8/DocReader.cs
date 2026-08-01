@@ -382,9 +382,29 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         foreach (Ww8LayoutFrame frame in stated)
         {
+            // An inline picture has no origin to be placed against and no wrap to obey: it hangs on
+            // the line where its anchor character sits. So it skips Ww8Frames.Build entirely, whose
+            // whole subject is the FSPA an inline picture does not have.
+            if (frame.IsInline)
+            {
+                frames.Add(new PageFrame
+                {
+                    Size = new Core.Geometry.DocSize(
+                        Core.Units.Length.FromTwips(frame.Anchor.Width),
+                        Core.Units.Length.FromTwips(frame.Anchor.Height)),
+                    Anchor = FrameAnchor.AsCharacter,
+                    AnchorOffset = frame.Offset,
+                    Wrap = TextWrap.Through,
+                    IsImage = true,
+                    Image = frame.Picture,
+                });
+
+                continue;
+            }
+
             PageFrame? built = Ww8Frames.Build(
                 frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks));
-            if (built is not null) frames.Add(built);
+            if (built is not null) frames.Add(built with { Image = frame.Picture });
         }
 
         return frames;
