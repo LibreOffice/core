@@ -76,6 +76,13 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 			});
 		});
 
+		// The arrow key above sends the new value to core, and core answers with the
+		// formatted value. Wait for that round trip to settle, so the answer does not
+		// land in the field on top of the text typed below.
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
 		// Typing a value with the locale's decimal separator is accepted
 		cy.cGet('#leftmf-input').focus();
 		cy.cGet('#leftmf-input').clear();
