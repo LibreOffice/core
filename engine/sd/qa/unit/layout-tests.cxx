@@ -6,6 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <sal/config.h>
+
+#include <config_vclplug.h>
+
 #include "sdmodeltestbase.hxx"
 
 #include <comphelper/kit.hxx>
@@ -368,7 +373,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"0");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"400");
-#ifndef _WIN32 // FIXME: Windows seems to differ in text layouting
+#if !defined _WIN32 || USE_HEADLESS_CODE // FIXME: Windows seems to differ in text layouting
     assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first",
                            114.087, 0.001);
     assertXPathDoubleValue(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last",

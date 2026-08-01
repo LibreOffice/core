@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <config_vclplug.h>
+
 #include <test/unoapi_test.hxx>
 
 #include <comphelper/scopeguard.hxx>
@@ -187,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     CPPUNIT_ASSERT(pImportedObject);
 
     // Check the object position
-#if !defined _WIN32
+#if !defined _WIN32 || USE_HEADLESS_CODE
     CPPUNIT_ASSERT_EQUAL(Point(2004, 1980), pImportedObject->GetLogicRect().GetPos());
 #else
     // need to check why windows appears to be different
@@ -195,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
 #endif
 
     // Check the object size
-#if !defined _WIN32
+#if !defined _WIN32 || USE_HEADLESS_CODE
     CPPUNIT_ASSERT_EQUAL(Size(2165, 508), pImportedObject->GetLogicRect().GetSize());
 #else
     // need to check why windows appears to be different

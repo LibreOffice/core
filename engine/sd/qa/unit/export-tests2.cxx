@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <config_vclplug.h>
+
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
@@ -573,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
     xmlDocUniquePtr pXml = parseLayout();
     sal_Int32 x = getXPath(pXml, "//textarray[1]", "x").toInt32();
     // was 2028 originally
-#if !defined _WIN32
+#if !defined _WIN32 || USE_HEADLESS_CODE
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2003, x, 0);
 #else
     // need to check why windows appears to be different
