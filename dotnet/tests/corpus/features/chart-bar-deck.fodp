@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties presentation:display-footer="false"
+       presentation:display-page-number="false" presentation:display-date-time="false"
+       draw:fill="none"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="revenue" draw:style-name="dp1">
+    <draw:frame draw:style-name="gr1" draw:name="revenue chart" draw:layer="layout"
+        svg:x="1.5cm" svg:y="1.5cm" svg:width="22cm" svg:height="12cm">
+     <draw:object>
+      <office:document
+        xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+        xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+        xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+        xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+        xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+        xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+        xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+        xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        office:version="1.3"
+        office:mimetype="application/vnd.oasis.opendocument.chart">
+       <office:automatic-styles>
+        <style:style style:name="ch1" style:family="chart">
+         <style:chart-properties chart:auto-position="true" chart:auto-size="true"/>
+        </style:style>
+        <style:style style:name="chAxis" style:family="chart">
+         <style:chart-properties chart:display-label="true" chart:logarithmic="false"
+             chart:reverse-direction="false" text:line-break="false"/>
+        </style:style>
+       </office:automatic-styles>
+       <office:body>
+        <office:chart>
+         <chart:chart svg:width="22cm" svg:height="12cm" chart:class="chart:bar"
+             chart:style-name="ch1">
+          <chart:title><text:p>Regional revenue</text:p></chart:title>
+          <chart:legend chart:legend-position="end"/>
+          <chart:plot-area chart:style-name="ch1" chart:data-source-has-labels="both">
+           <chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="chAxis">
+            <chart:title><text:p>Quarter</text:p></chart:title>
+            <chart:categories table:cell-range-address="local-table.$A$2:.$A$5"/>
+           </chart:axis>
+           <chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="chAxis">
+            <chart:title><text:p>Units</text:p></chart:title>
+           </chart:axis>
+           <chart:series chart:values-cell-range-address="local-table.$B$2:.$B$5"
+               chart:label-cell-address="local-table.$B$1" chart:class="chart:bar">
+            <chart:data-point chart:repeated="4"/>
+           </chart:series>
+           <chart:series chart:values-cell-range-address="local-table.$C$2:.$C$5"
+               chart:label-cell-address="local-table.$C$1" chart:class="chart:bar">
+            <chart:data-point chart:repeated="4"/>
+           </chart:series>
+           <chart:wall/>
+           <chart:floor/>
+          </chart:plot-area>
+          <table:table table:name="local-table">
+           <table:table-header-columns>
+            <table:table-column/>
+           </table:table-header-columns>
+           <table:table-columns>
+            <table:table-column table:number-columns-repeated="2"/>
+           </table:table-columns>
+           <table:table-header-rows>
+            <table:table-row>
+             <table:table-cell><text:p/></table:table-cell>
+             <table:table-cell office:value-type="string"><text:p>North</text:p></table:table-cell>
+             <table:table-cell office:value-type="string"><text:p>South</text:p></table:table-cell>
+            </table:table-row>
+           </table:table-header-rows>
+           <table:table-rows>
+            <table:table-row>
+             <table:table-cell office:value-type="string"><text:p>Q1</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="120"><text:p>120</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="88"><text:p>88</text:p></table:table-cell>
+            </table:table-row>
+            <table:table-row>
+             <table:table-cell office:value-type="string"><text:p>Q2</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="95"><text:p>95</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="132"><text:p>132</text:p></table:table-cell>
+            </table:table-row>
+            <table:table-row>
+             <table:table-cell office:value-type="string"><text:p>Q3</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="143"><text:p>143</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="101"><text:p>101</text:p></table:table-cell>
+            </table:table-row>
+            <table:table-row>
+             <table:table-cell office:value-type="string"><text:p>Q4</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="168"><text:p>168</text:p></table:table-cell>
+             <table:table-cell office:value-type="float" office:value="121"><text:p>121</text:p></table:table-cell>
+            </table:table-row>
+           </table:table-rows>
+          </table:table>
+         </chart:chart>
+        </office:chart>
+       </office:body>
+      </office:document>
+     </draw:object>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

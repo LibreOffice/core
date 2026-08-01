@@ -653,6 +653,30 @@ file's margins alone would give and matches LibreOffice's 21.11 pt to within 0.1
       `nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX` on the paper (`printfun.cxx:2205`) while
       `CalcPages` subtracts the unscaled constant in document twips. The two agree; it is worth
       knowing they are different numbers before changing either
+- [ ] **A cell's overflow stops at a horizontal page break**, so the second page of a
+      horizontally-split sheet draws nothing at all when everything on it is spill. Measured on
+      `xls-features.xls`, whose `Strings` sheet is one column of 180-character strings over 48
+      rows and which splits into two horizontal pages: page 3 is **1213 words in both**, and page
+      4 is **3 in ours against 1011 in the reference** — the three being the `&A` header and the
+      `&P` footer, so not one cell reaches it. It is not the reader (`paperless extract` returns
+      all 48 rows) and not pagination (four A4 pages either way). It is that
+      `SpreadsheetPages.DrawCell` is driven by the *placed columns of the page*: a cell in column
+      A is drawn only on the page whose column band contains A, so the part of its string that
+      spills into the next band is never drawn there. `SheetTextContext` already measures the
+      spill against the document grid rather than against the page — see the remark on it, which
+      exists for exactly this — which is why page 3's clipped string is right. The missing half is
+      that Calc *also* draws, on each page, the cells left of the band whose text reaches into it:
+      `ScOutputData::LayoutStringsImpl` walks back over the left neighbours before it decides an
+      output area (`sc/source/ui/view/output2.cxx:1595-2290`). The fix is a per-page lead-in of
+      the columns left of the band, drawn for their overflow alone. **Not chart-related**: that
+      sheet holds no drawing at all
+- [ ] **Two smaller word-count differences from the same whole-corpus sweep**, neither a cascade:
+      `sheet-features.ods` renders **46 words against the reference's 45** — one *more*, the
+      direction that usually means a cell the reference suppresses rather than one we invent — and
+      `sheet-rich-text.xlsx` and `.xls` render **47 and 46 against 49**. The `.ods` of that same
+      rich-text document matches exactly, so those two are in the importers rather than in the
+      layout all three share
+
 ## Done: cell text
 
 `Layout/SheetTextLayout.cs`, a port of `ScOutputData::LayoutStringsImpl`
