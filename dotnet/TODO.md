@@ -612,13 +612,32 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       fortieth of a point. **The oracle for fixing it is free**: LibreOffice writes the answer into
       every ODF chart, so the heuristic can be scored against `chart:coordinate-region` over all 81
       ODF chart documents without converting a single one.
-- [ ] **Only bars, and only the first plot group.** A chart part may hold several `…Chart` groups —
-      a column chart with a line over it writes a `c:barChart` and a `c:lineChart` sharing an axis
-      — and `DrawingChartPlot` reads the first and draws it. Line, pie, scatter and area draw
-      nothing, and stacking is modelled but untested against a reference. The order to add them in
-      is the corpus': `barChart` is the commonest by a wide margin, then `lineChart` and `pieChart`.
-      `DrawingChart` still reads *every* group, so the content tree holds all the numbers whatever
-      gets drawn — a chart type that is not drawn loses its picture and not its data.
+- [x] **Only bars, matched by name, because "the first plot group" drew pies as bars.** The first
+      version took the first `…Chart` element in the plot area — the same suffix match
+      `DrawingChart` uses to read *any* chart type — and drew it with the bar engine. Measured over
+      LibreOffice's own `chart2/qa/extras/data/pptx/`, comparing `pdftotext` word counts against
+      `soffice --convert-to pdf` on all 38 decks: **12 matched exactly**, and the failures included
+      `PieChartWithAutomaticLayout_SizeAndPosition.pptx` at **82 words against the reference's 1** —
+      eighty-one words of category and value-axis labels invented for a chart that has no axes.
+      Matching `c:barChart`/`c:bar3DChart` and ODF's `chart:class="chart:bar"` by name took it to
+      **15 of 38**, and every remaining failure is an undercount rather than an overcount. The word
+      count on some pie and line decks *fell* — `tdf146756_bestFit` from 40/41 to 4/41 — which is
+      the improvement it looks least like: those were bars drawn over a pie, with the right words in
+      the wrong picture.
+- [ ] **Line, pie, scatter and area draw nothing**, and a part holding several groups draws its bars
+      and drops its line. Stacking is modelled but untested against a reference. The order to add
+      them in is the corpus': `barChart` is the commonest by a wide margin, then `lineChart` and
+      `pieChart`. `DrawingChart` still reads *every* group of every type, so the content tree holds
+      all the numbers whatever gets drawn — a chart type that is not drawn loses its picture and not
+      its data.
+- [ ] **A whole-corpus accuracy number, and what it is made of.** 15 of the 38 PPTX chart decks in
+      `chart2/qa/extras/data/pptx/` match LibreOffice on word count; 47 of 47 `.odp` and `.pptx`
+      chart documents render without an exception and 42 of 43 render text. The 23 that do not match
+      are, by inspection: charts of a type not drawn; data labels (`c:dLbls`), which are words in the
+      reference and nothing here; a data table below the plot (`tdf137691_dataTable`, 50 against 80);
+      and number formats (`percentage-number-formats`, whose ticks read `0.25` where the reference
+      reads `25%`). None of them is an axis-scale error, which is the class this work was most at
+      risk of and the one hardest to see.
 - [ ] **No gridlines, no data labels, no secondary axis.** `c:majorGridlines` is read past;
       `ChartLayout` has the tick values in hand and drawing a line across the plot at each is a
       dozen lines, so this is the cheapest item left. Data labels need `c:dLbls` and a number

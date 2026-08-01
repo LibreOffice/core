@@ -18,12 +18,22 @@ namespace Paperless.Ooxml.DrawingML;
 /// looks at an <c>a:solidFill</c>. Extraction is the common case and must not pay for geometry.
 /// </para>
 /// <para>
-/// <strong>What is not read, and why nothing pretends otherwise.</strong> Only the first
-/// <c>…Chart</c> group in the plot area is plotted. A chart part may hold several — a column
-/// chart with a line series over it writes a <c>c:barChart</c> and a <c>c:lineChart</c> sharing
-/// an axis — and drawing the first alone is visibly incomplete rather than subtly wrong, which
-/// is the failure mode to prefer. <see cref="DrawingChart"/> still reads every group, so the
-/// content tree holds all the numbers whatever gets drawn.
+/// <strong>Only a bar or column chart, and everything else reads as null.</strong> The layout
+/// engine draws rectangles against a category axis and a value axis; a pie chart has neither,
+/// and a chart part is not obliged to say so in any way a suffix match can see. Matching
+/// <c>c:barChart</c> and <c>c:bar3DChart</c> by name rather than taking the first
+/// <c>…Chart</c> group is what stops a pie being drawn as eight bars under two axes that do not
+/// exist. Measured over LibreOffice's own <c>chart2/qa/extras/data/pptx/</c>: the loose match
+/// drew <em>82 words</em> of axis labels onto
+/// <c>PieChartWithAutomaticLayout_SizeAndPosition.pptx</c>, against a reference that draws one.
+/// </para>
+/// <para>
+/// A part holding several groups — a column chart with a line series over it writes a
+/// <c>c:barChart</c> and a <c>c:lineChart</c> sharing an axis — draws its bars and drops its
+/// line. That is visibly incomplete rather than subtly wrong, which is the failure mode to
+/// prefer. <see cref="DrawingChart"/> still reads every group of every type, so the content tree
+/// holds all the numbers whatever gets drawn: a chart type that is not drawn loses its picture
+/// and not its data.
 /// </para>
 /// </remarks>
 public static class DrawingChartPlot
@@ -51,7 +61,7 @@ public static class DrawingChartPlot
         foreach (XElement candidate in plotArea.Elements())
         {
             if (candidate.Name.NamespaceName != OoxmlNamespaces.DrawingMLChart) continue;
-            if (!candidate.Name.LocalName.EndsWith("Chart", StringComparison.Ordinal)) continue;
+            if (candidate.Name.LocalName is not ("barChart" or "bar3DChart")) continue;
             group = candidate;
             break;
         }

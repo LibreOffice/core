@@ -83,6 +83,14 @@ internal static class OdfChartPlot
         XElement? plotArea = Child(chart, OdfNamespaces.Chart, "plot-area");
         if (plotArea is null) return null;
 
+        // Only a bar or column chart, for the reason DrawingChartPlot documents: the layout
+        // engine draws rectangles against two axes, and a pie chart has neither. ODF states the
+        // type twice — on chart:chart and again on each chart:series — and either will do, since
+        // LibreOffice writes them to agree. A chart:class this does not draw yields null and the
+        // frame goes back to drawing nothing, which is what it did before charts were drawn.
+        string? kind = Attribute(chart, OdfNamespaces.Chart, "class");
+        if (kind is not ("chart:bar" or "bar")) return null;
+
         List<XElement> series = [.. Children(plotArea, OdfNamespaces.Chart, "series")];
         if (series.Count == 0) return null;
 
