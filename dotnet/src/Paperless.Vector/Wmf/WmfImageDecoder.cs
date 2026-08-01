@@ -1,5 +1,6 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Geometry;
+using Paperless.Vector.Emf;
 using Paperless.Vector.Metafiles;
 
 namespace Paperless.Vector.Wmf;
@@ -54,6 +55,37 @@ public sealed class WmfImageDecoder : IVectorImageDecoder
         }
 
         WmfReader reader = new(data.ToArray(), caps, diagnostics, _text);
+
+        // Decided once, before either representation is replayed: see WmfReader.ScanForEmbeddedEmf.
+        try
+        {
+            if (reader.ScanForEmbeddedEmf() is { } embedded)
+            {
+                VectorImage inner = new EmfImageDecoder().Decode(embedded, caps);
+
+                if (!inner.IsEmpty)
+                {
+                    diagnostics.Add(new Diagnostic(
+                        DiagnosticSeverity.Information,
+                        "PL6030",
+                        $"A WMF of {data.Length} bytes carried a complete {embedded.Length}-byte EMF in "
+                            + "its escape records, which is the rendering its producer expected a capable "
+                            + "consumer to prefer; the EMF was drawn and the WMF records were not."));
+
+                    return inner with { Diagnostics = [.. diagnostics, .. inner.Diagnostics] };
+                }
+            }
+        }
+        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        {
+            // A hidden EMF that will not read is a reason to fall back to the WMF records, not a
+            // reason to lose the picture.
+            diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Warning,
+                "PL6030",
+                $"A WMF's embedded EMF could not be read ({exception.Message}); the WMF records were "
+                    + "drawn instead."));
+        }
 
         try
         {

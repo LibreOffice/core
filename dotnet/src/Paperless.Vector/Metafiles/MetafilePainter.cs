@@ -132,10 +132,30 @@ public sealed class MetafilePainter
         ArgumentNullException.ThrowIfNull(path);
 
         if (_context.IsNoOperation) return;
-        if (_context.Pen.ToStroke() is not { } stroke) return;
+        if (_context.Pen.ToStroke(_context.MiterLimit) is not { } stroke) return;
         if (!ApplyClip(path)) return;
 
         _sink.StrokePath(path, stroke);
+    }
+
+    /// <summary>
+    /// Fills a shape with a paint the record supplies rather than with the selected brush.
+    /// </summary>
+    /// <remarks>
+    /// <c>EMR_GRADIENTFILL</c> is the reason this exists: it names its own colours and ignores
+    /// whatever brush is selected, so it needs the clip, the budget and the no-op flag without
+    /// the brush resolution the rest of <see cref="Fill"/> does.
+    /// </remarks>
+    /// <param name="path">The shape.</param>
+    /// <param name="paint">What to fill it with.</param>
+    public void FillWith(GraphicsPath path, Paint paint)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        if (_context.IsNoOperation) return;
+        if (!ApplyClip(path)) return;
+
+        _sink.FillPath(path, paint, _context.FillRule);
     }
 
     /// <summary>Fills a rectangle with the background colour, as an opaque text record does.</summary>
@@ -157,7 +177,12 @@ public sealed class MetafilePainter
     /// placed so that the wanted part lands on the destination, and this hides the rest. It is
     /// how a source rectangle survives without a codec to crop with.
     /// </param>
-    public void DrawImage(RasterImage image, DocRect destination, DocRect? clipTo = null)
+    /// <param name="opacity">
+    /// A uniform opacity, which is how a constant source alpha survives without decoding a
+    /// pixel: <c>AlphaBlend</c>'s <c>SrcConstantAlpha</c> is exactly this, and the sink already
+    /// takes it.
+    /// </param>
+    public void DrawImage(RasterImage image, DocRect destination, DocRect? clipTo = null, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
 
@@ -170,12 +195,12 @@ public sealed class MetafilePainter
         {
             _sink.Save();
             _sink.ClipPath(GraphicsPath.Rectangle(window));
-            _sink.DrawImage(image, destination);
+            _sink.DrawImage(image, destination, opacity);
             _sink.Restore();
         }
         else
         {
-            _sink.DrawImage(image, destination);
+            _sink.DrawImage(image, destination, opacity);
         }
     }
 

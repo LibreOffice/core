@@ -37,6 +37,16 @@ internal sealed class Recorder : IDrawingSink
     /// <summary>Every glyph run, with its origin in final coordinates.</summary>
     public List<(string Text, DocPoint Origin, Length Size, string Family, Paint Paint)> Runs { get; } = [];
 
+    /// <summary>
+    /// The runs themselves, for a test that has to see the glyphs rather than the string.
+    /// </summary>
+    /// <remarks>
+    /// EMF states text by glyph index as well as by character, and honouring the DX array is
+    /// per-glyph — neither of which is visible in <see cref="Runs"/>, which keeps only what a
+    /// placement assertion needs.
+    /// </remarks>
+    public List<GlyphRun> GlyphRuns { get; } = [];
+
     /// <summary>Every image, with its destination in final coordinates.</summary>
     public List<(RasterImage Image, DocRect Destination, double Opacity)> Images { get; } = [];
 
@@ -93,7 +103,10 @@ internal sealed class Recorder : IDrawingSink
 
     /// <inheritdoc/>
     public void DrawGlyphRun(GlyphRun run, Paint paint)
-        => Runs.Add((run.Text, Map(run.Origin), run.FontSize, run.Font.FamilyName, paint));
+    {
+        Runs.Add((run.Text, Map(run.Origin), run.FontSize, run.Font.FamilyName, paint));
+        GlyphRuns.Add(run);
+    }
 
     /// <inheritdoc/>
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)

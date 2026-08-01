@@ -44,6 +44,20 @@ public sealed class MetafileDeviceContext
     /// <summary>The handle table. Shared by every saved state, because GDI objects are the device's.</summary>
     public GraphicsObjectTable Objects { get; } = new();
 
+    /// <summary>
+    /// The path being built between <c>BeginPath</c> and <c>EndPath</c>.
+    /// </summary>
+    /// <remarks>
+    /// Saved and restored with the rest of the context, which <c>MtfTools::Push</c> does too
+    /// (<c>mtftools.cxx:3075</c>) — cheaply, because <see cref="MetafilePath.Clone"/> shares the
+    /// path until one of the copies is written to. WMF has no record that builds one, so this
+    /// stays empty there.
+    /// </remarks>
+    public MetafilePath Path { get; set; } = new();
+
+    /// <summary>The miter limit a geometric pen joins corners with.</summary>
+    public double MiterLimit { get; set; } = 10.0;
+
     /// <summary>The selected pen.</summary>
     public MetafilePen Pen { get; set; } = MetafilePen.Default;
 
@@ -278,6 +292,8 @@ public sealed class MetafileDeviceContext
         private readonly (double X, double Y) _position;
         private readonly bool _arcClockwise;
         private readonly bool _noOperation;
+        private readonly MetafilePath _path;
+        private readonly double _miterLimit;
 
         public SavedState(MetafileDeviceContext context)
         {
@@ -296,6 +312,8 @@ public sealed class MetafileDeviceContext
             _position = context.CurrentPosition;
             _arcClockwise = context.IsArcDirectionClockwise;
             _noOperation = context.IsNoOperation;
+            _path = context.Path.Clone();
+            _miterLimit = context.MiterLimit;
         }
 
         public void RestoreTo(MetafileDeviceContext context)
@@ -315,6 +333,8 @@ public sealed class MetafileDeviceContext
             context.CurrentPosition = _position;
             context.IsArcDirectionClockwise = _arcClockwise;
             context.IsNoOperation = _noOperation;
+            context.Path = _path;
+            context.MiterLimit = _miterLimit;
         }
     }
 }

@@ -50,9 +50,14 @@ public sealed record MetafilePen(
     public bool IsNull => (Style & PenStyle.StyleMask) == PenStyle.Null || Colour.IsTransparent;
 
     /// <summary>The pen as a <see cref="Stroke"/>, or null when it strokes nothing.</summary>
-    public Stroke? ToStroke() => IsNull
+    /// <param name="miterLimit">
+    /// The limit past which a mitred join is bevelled. It is device-context state in GDI —
+    /// <c>EMR_SETMITERLIMIT</c> sets it, not the pen record — so it is supplied by the caller
+    /// rather than stored here.
+    /// </param>
+    public Stroke? ToStroke(double miterLimit = 10.0) => IsNull
         ? null
-        : new Stroke(Paint.Solid(Colour), Width, Cap, Join, 10.0, DashPattern);
+        : new Stroke(Paint.Solid(Colour), Width, Cap, Join, miterLimit, DashPattern);
 
     /// <summary>
     /// The dash pattern a GDI style word asks for, at a given dot length.
