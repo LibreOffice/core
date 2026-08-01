@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Unit tests for vector image import: the decode seam, SVG translation, scaling rules and the limits that bound untrusted input.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Paperless.Vector\Paperless.Vector.csproj" />
+    <!-- The Skia and PDF backends, so a decoded picture can be checked by what it draws
+         rather than only by what it recorded. -->
+    <ProjectReference Include="..\..\src\Paperless.Rendering\Paperless.Rendering.csproj" />
+    <!-- The DrawingML side of choosing a picture's vector rendering over its raster fallback. -->
+    <ProjectReference Include="..\..\src\Paperless.Ooxml\Paperless.Ooxml.csproj" />
+  </ItemGroup>
+
+</Project>

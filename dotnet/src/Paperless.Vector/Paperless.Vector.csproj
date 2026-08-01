@@ -18,6 +18,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <!--
+      SVG text is resolved and shaped by Paperless.Text rather than by the SVG library's own
+      font path, so a wordmark inside a picture and the paragraph beside it agree about what
+      a family name means. No consumer gains a dependency by this: every reader already
+      references Paperless.Text, and Paperless.Rendering does the same for the same reason.
+    -->
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
   </ItemGroup>
 
 </Project>

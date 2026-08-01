@@ -450,6 +450,9 @@ internal sealed class PdfContentSink(
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
+        // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
+        // undecoded one reports no size until a codec has looked at it. Testing the size here
+        // dropped every `RasterImage.Encoded` silently — laying out correctly and drawing nothing.
         if (Empty(image) || destination.IsEmpty) return;
 
         string name = ImageName(image);
