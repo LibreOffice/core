@@ -98,9 +98,9 @@ Not yet, and why:
   the two readers is worth more than matching each LibreOffice filter separately. The
   consequence: dates in January and February 1900 agree with an XLS render and are one day
   later than an XLSX one. Nothing real is affected; recorded so it is not mistaken for a bug.
-- **Drawings, charts, pivot caches and defined names.** None is reached yet;
-  `oneCellAnchor`/`twoCellAnchor` will want the shared DrawingML text-body reader in
-  `Paperless.Ooxml` that the PPTX work is building.
+- **Pivot caches and defined names.** Still not reached. Drawings are, for layout
+  (`Ooxml/XlsxDrawings.cs`, `OpenDocument/OdsDrawings.cs`), and charts are, for content — see
+  the chart section below.
 - **The sparse typed cell storage below**, which extraction does not need and layout will.
 
 ## Done: print setup and pagination
@@ -1029,9 +1029,9 @@ Not yet, and why:
 - **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
   `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
   rectangle clipped to the frame's outline rather than a new IR primitive.
-- **Charts are recorded and not drawn**, which is deliberate and is what the presentations reader
-  does with a graphic frame it cannot draw: `IsChart` is set and nothing is painted, so "there is a
-  chart here" stays distinguishable from "there is nothing here".
+- **Charts are read but not drawn.** `IsChart` on the drawing is unchanged and still paints
+  nothing, so "there is a chart here" stays distinguishable from "there is nothing here" on the
+  page; the chart's *content* now arrives by a separate route. See the section below.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
@@ -1073,3 +1073,44 @@ already depends on measuring text once, in `ScTable::ExtendPrintArea`, and that 
 because the extension is **by whole columns** — being within a column's width of LibreOffice's
 answer gives the same page. A row height is a length, so a 5.8% error is a 5.8% error, and there is
 no quantum to hide it in.
+
+## Done: a chart's content, out of the cache
+
+`Ooxml/XlsxCharts.cs` for SpreadsheetML and `Paperless.OpenDocument/OdfChart.cs` for ODF, both
+producing the section shape `Paperless.Ooxml/DrawingML/DrawingChart.cs` documents: a
+`SectionKind.Frame` section whose `Name` is the chart's title, the title and each titled axis as
+paragraphs, then one `ContentTable` with the series across the header row and the categories down
+the first column. Read into `SheetChartTests` against `chart-bar-sheet.{fods,ods,xlsx}`.
+
+**A chart follows its sheet, it does not sit inside it**, and the reason is the anchor rather than
+taste. SpreadsheetML anchors a drawing by address, so a chart could have gone anywhere; ODF anchors
+it by *containment* — the `draw:frame` is a child of the `table:table-cell` it is fastened to — so
+placing the chart where it was found would put a whole `ContentTable` inside a `ContentTableCell`,
+a shape nothing else in the tree produces. Both readers therefore hoist it to a sibling section
+immediately after the sheet, which is exactly where a cell comment already goes, and the two
+families come out identical.
+
+**Three relationship hops, and the middle one is easy to get wrong.** The sheet declares
+`…/drawing`; the drawing part declares `…/chart` per graphic frame; and `c:chart/@r:id` inside the
+frame resolves against the **drawing** part, not the sheet. Resolving it against the sheet finds
+nothing in most workbooks and finds the wrong part in one whose sheet happens to declare an `rId1`
+of its own.
+
+**The cache is preferred even where the live range is right there.** `chart-bar-sheet.xlsx` states
+`c:f = Revenue!$B$2:$B$5` over cells in the same workbook, and its `c:numCache` repeats those eight
+numbers; `SheetChartTests.TheCacheAgreesWithTheSheetItReferences` reads both and asserts they
+match, so a divergence fails a test instead of producing a plausible chart. Resolving the range
+instead would need the formula engine and the number formatter — and would disagree with what Calc
+draws the moment a cache is stale, which is the case the rule exists for.
+
+Not yet, and why:
+
+- **BIFF charts.** A chart in an XLS lives in a `Chart` substream of its own, reached from the
+  `OBJ`/`MSODRAWING` pair, with its series in `SERIES` (0x1003), `AI` (0x1051) and the `SIINDEX`
+  block rather than in anything resembling a cache. It needs the Escher work the pictures item
+  above is already waiting on, and then a fourth chart reader rather than a third: the BIFF chart
+  records are not a serialisation of the same model.
+- **`xl/charts/chartN.xml` is opened a second time.** `XlsxDrawings` walks the drawing part for
+  layout and `XlsxCharts` walks it again for content, because extraction must not pay for the
+  anchor arithmetic and a caller that never asks for content never opens a chart part. The parts
+  are cached by the package, so the cost is a second parse of one small XML document per chart.

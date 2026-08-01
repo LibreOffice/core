@@ -511,21 +511,76 @@ to draw something the file already contains a picture of.
 
 ### Charts
 
-- [ ] **Read the chart model** — `c:chart` in DrawingML, `chart:chart` in ODF — well enough to
-      report its title, axis titles, series names and categories. Extraction wants this and it is
-      cheap; the presentations reader already records a chart as a graphic and can stop doing so.
-- [ ] **Decide where the numbers come from, and record the decision.** `c:strRef`/`c:numRef` name
-      a range in an *embedded workbook*, with a `c:strCache`/`c:numCache` beside them holding what
-      the authoring application last computed. Reaching the live values means
-      `Paperless.Presentations` depending on `Paperless.Spreadsheets`, which the layering forbids
-      and which extraction should not need. The cache is what a reference renderer draws, so
-      prefer it — the same rule already settled for formula results and field results. Say so
-      once rather than per chart type.
+- [x] **Read the chart model** — `Paperless.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
+      and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from four places:
+      `PptxShapeReader.ReadChart`, `XlsxCharts` (two relationship hops, sheet → drawing → chart),
+      and `OdfContentReader.ReadChart` for ODP, ODS and ODT at once. `barChart`, `lineChart`,
+      `pieChart`, `scatterChart` and `areaChart` are covered by matching the `…Chart` suffix on
+      `CT_PlotArea`'s element group, so the 3-D, doughnut, radar, bubble, stock and of-pie
+      variants read too — a `c:ser` is the same element in all of them.
+- [x] **Where a chart lands in the content tree**, and why it needed no new node kind. A chart is
+      a title and a table of numbers, which is what `ContentSection`, `ContentParagraph` and
+      `ContentTable` already are. So: a `SectionKind.Frame` section whose `Name` is the chart's
+      title; that title again as the first paragraph, because `GetText` never visits a name and
+      an indexer must still see it; a paragraph per titled axis in the part's own order; and one
+      table with `HeaderRowCount = 1` whose header row is an empty corner cell followed by the
+      series names, and whose later rows are a category label followed by that category's value
+      in each series. The corner cell is empty because the file says nothing about it — ODF's own
+      local table writes the same empty cell, which is the strongest evidence the layout is the
+      format's rather than ours. The one thing the tree cannot say is *header column*:
+      `ContentTable` has `HeaderRowCount` and no counterpart, so ODF's
+      `table:table-header-columns` is read and dropped. That was not worth a Core change with
+      three agents building against it, and the layout it would state is the one the table
+      already has.
+- [x] **The numbers come from the cache. Decision made, ported, measured.** LibreOffice does the
+      same and only that: `DoubleSequenceContext::onCharacters`
+      (`oox/source/drawingml/chart/datasourcecontext.cxx:107-181`) puts `c:pt/c:v` into the model
+      and `c:f` into `maFormula`, and `DataSequenceConverter::createDataSequence`
+      (`datasourceconverter.cxx:42-96`) builds the sequence from the cached `maData` alone — the
+      formula is carried only so that export can write it back. ODF reaches the same place from
+      the other end: `SchXMLTableContext` fills the internal data provider from the parsed
+      `local-table` and only swaps in a live one afterwards if every range address resolved
+      (`xmloff/source/chart/SchXMLTableContext.cxx:85-150`). **The measurement that settles it**:
+      `chart-bar-sheet.xlsx`'s series say `c:f = Revenue!$B$2:$B$5` — a real, resolvable range in
+      the same workbook — and its `c:numCache` repeats the same eight numbers; `SheetChartTests`
+      asserts the two agree, so a divergence becomes a failure rather than a plausible chart. A
+      reference with **no** cache yields the series' name and no values; nothing is fetched and
+      nothing is invented.
 - [ ] **Drawing a chart is a layout engine**, not a reader: plot area, axis scales and tick
-      selection, gridlines, series geometry per type, legend placement, data labels. Before
-      writing one, measure how often the embedded metafile fallback is present and whether
-      LibreOffice draws it — if it does, drawing the fallback is both cheaper and closer to the
-      reference.
+      selection, gridlines, series geometry per type, legend placement, data labels. The
+      measurement this item asked for is now made, and it splits by family. **ODF ships the baked
+      fallback and OOXML does not**: 58 of the 81 `.odp`/`.ods`/`.odt` documents in
+      `chart2/qa/extras/data/` carry an `ObjectReplacements/Object N` GDI metafile — 22 kB of one
+      for our own `chart-bar-deck.odp` — while **0 of 192** `.pptx`/`.xlsx` ones carry any EMF or
+      WMF at all. So drawing the fallback buys ODF and buys nothing for OOXML, and a chart layout
+      engine is still needed for two of the three families. Reading the fallback first is still
+      right — it is free once `emfio/` lands — but it is not the whole answer the SmartArt item's
+      is.
+- [x] **The trap, named, because it produces a chart that still looks right.** `c:pt/@idx` is
+      *sparse*. A chart over a range with a blank in it writes `<c:ptCount val="6"/>` and five
+      `c:pt` whose indices skip the blank one, so reading the points in document order slides
+      every value after the gap onto the wrong category — and the result is a plausible table of
+      the right numbers against the wrong labels, which no assertion about counts or totals
+      catches. The array is sized from `c:ptCount` and each point placed at its own index;
+      `DrawingChartTests.ASparsePointIndexLeavesAGapRatherThanShiftingEverythingAfterIt` is the
+      guard. LibreOffice does the same thing for the same reason —
+      `mrModel.maData[mnPtIndex]`, `datasourcecontext.cxx:150-177` — and
+      `chart2/qa/extras/data/pptx/sparse-chart.pptx` exists because someone got it wrong there
+      too.
+- [ ] **`cx:` chartex is not read.** The 2014 vocabulary funnel, waterfall, treemap and histogram
+      charts use puts its data in `cx:chartData/cx:data/cx:numDim` rather than in `c:ser`, under a
+      different `graphicData` URI, and a frame carrying one falls through to being recorded as a
+      graphic. Measured: exactly **1 of the 38** decks in `chart2/qa/extras/data/pptx/`
+      (`funnel-pp1.pptx`, whose part is `ppt/charts/chartEx1.xml`) and none of the 154 workbooks.
+      `DataSourceCxContext` (`datasourcecontext.cxx:379-429`) is the shape to port when it is
+      worth it; LibreOffice's own support is partial and its `cx:externalData` handler is a
+      `return nullptr; // TODO`.
+- [ ] **A DOCX chart needs a hook in `Paperless.WordProcessing`.** `DrawingChart` is family-blind
+      and the chart part is reached identically — `wp:inline`/`wp:anchor` → `a:graphic` →
+      `a:graphicData[@uri = DrawingChart.ChartUri]` → `c:chart/@r:id` against the *document* part
+      — so the reader is done and only the call site is missing. Left deliberately: that library
+      had another agent in it. The ODT side already works, because it goes through
+      `OdfContentReader` like every other ODF family.
 
 ### SmartArt
 

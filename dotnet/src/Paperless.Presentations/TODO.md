@@ -299,13 +299,43 @@ table asserted, not by the corpus.
       decks in that corpus extracting to nothing at all fell from 179 to 121.
 - [ ] `normAutofit` `fontScale` and `lnSpcReduction` — rendering only; they change where the text
       sits, not what it says
-- [ ] **Charts.** Recorded as a graphic, not read. A chart's user text — title, axis titles,
-      series names, category labels — is real content, but it lives in a separate vocabulary in
-      its own part, split between `c:tx/c:rich` (a DrawingML text body, so easy) and
-      `c:strRef/c:strCache` (a cached copy of a spreadsheet range, which is the part needing
-      judgement: the cache can be stale, and the live values are in an embedded workbook that
-      would have to be opened through `Paperless.Spreadsheets` — a dependency this library does
-      not have and should not acquire for extraction). Decide when the chart renderer forces it.
+- [x] **Charts are read**, in both vocabularies: `PptxShapeReader.ReadChart` resolves
+      `c:chart/@r:id` from the frame's `a:graphicData` and hands the part to
+      `Paperless.Ooxml/DrawingML/DrawingChart.cs`, and an ODP chart arrives through
+      `OdfContentReader.ReadChart` and `Paperless.OpenDocument/OdfChart.cs` without this library
+      knowing about it at all. The chart becomes a `SectionKind.Frame` section: its title as
+      `Name` *and* as the first paragraph, a paragraph per titled axis, then one `ContentTable`
+      whose header row is the series names and whose first column is the categories. Measured on
+      `chart-bar-deck.{fodp,odp,pptx}` — one hand-written deck and LibreOffice's two conversions
+      of it — which extract to **byte-identical text** through two vocabularies sharing no
+      element name; and on LibreOffice's own `chart2/qa/extras/data/`, where **37 of the 38
+      PPTX** decks and **all 9 ODP** ones now yield text. The one that does not is
+      `funnel-pp1.pptx`, whose chart is `chartEx1.xml` in the `cx:` vocabulary, recorded in the
+      master TODO.
+- [x] **The cache question is settled: prefer the cache, never open the workbook.** The judgement
+      the old entry deferred turns out to be LibreOffice's own settled answer rather than a
+      trade-off — `DataSequenceConverter::createDataSequence`
+      (`oox/source/drawingml/chart/datasourceconverter.cxx:42-96`) builds every sequence from the
+      parsed `c:numCache`/`c:strCache` and keeps `c:f` only so that export can write it back. The
+      "cache can be stale" worry is real and is not ours to fix: a stale cache is exactly what
+      Impress draws, so reporting anything else would disagree with the reference on purpose. The
+      layering never comes under pressure.
+- [ ] **A chart is still not drawn**, which is now the only reason a deck holding one renders
+      differently from the reference. Measured: `chart-bar-deck.pptx`, `.odp` and `.fodp` all
+      render **0 words against LibreOffice's 20** — the title, two axis titles, two series names,
+      four category labels and ten value-axis ticks. The ticks are the interesting part of that
+      list: they are not in the file. LibreOffice picks 0…180 by twenties for the ODF pair and
+      0…200 by fifties for the PPTX after a round trip, from the same data, so a renderer needs an
+      axis-scale algorithm before it can draw a single label — see the master TODO's note on the
+      baked metafile, which exists for the ODP and does not for the PPTX.
+- [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
+      chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
+      of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the
+      `draw:object`. `chart-bar-deck.fodp` rendered the chart's title, axis titles and all fifteen
+      local-table cells as a stack of paragraphs, **18 words**, where the packaged `.odp` of the
+      same deck drew none. It predates the chart work: verified by rendering the same file from
+      the pre-change sources, which produce the same 18 words. Any inline formula or spreadsheet
+      object had the same fault
 - [x] Comments — `p:cmLst` in a part reached by relationship **from the slide**, and the author
       names in a second part reached from the *presentation*. `Ooxml/PptxComments.cs`. It was
       cheap once there was a deck to measure against, and building that deck
