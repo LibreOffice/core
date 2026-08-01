@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 
 namespace Paperless.Vector.Metafiles;
 
@@ -82,6 +83,53 @@ public sealed class MetafileClip
 
     /// <summary>A copy, for the save stack.</summary>
     public MetafileClip Clone() => new([.. _shapes], HasUnsupportedOperation);
+
+    /// <summary>
+    /// A copy moved by an offset, as <c>OffsetClipRgn</c> asks for.
+    /// </summary>
+    /// <remarks>
+    /// Rebuilt rather than transformed, because a path carries no transform of its own and the
+    /// sink's would apply to the drawing as well as to the clip. Offsetting a clip is rare enough
+    /// that rebuilding it costs nothing measurable.
+    /// </remarks>
+    public MetafileClip Translate(Length dx, Length dy)
+    {
+        List<(GraphicsPath, FillRule)> moved = new(_shapes.Count);
+
+        foreach ((GraphicsPath path, FillRule rule) in _shapes)
+        {
+            GraphicsPath copy = new();
+
+            foreach (PathCommand command in path.Commands)
+            {
+                switch (command.Verb)
+                {
+                    case PathVerb.MoveTo:
+                        copy.MoveTo(command.Point.Offset(dx, dy));
+                        break;
+
+                    case PathVerb.LineTo:
+                        copy.LineTo(command.Point.Offset(dx, dy));
+                        break;
+
+                    case PathVerb.CubicTo:
+                        copy.CubicTo(
+                            command.Control1.Offset(dx, dy),
+                            command.Control2.Offset(dx, dy),
+                            command.Point.Offset(dx, dy));
+                        break;
+
+                    default:
+                        copy.Close();
+                        break;
+                }
+            }
+
+            moved.Add((copy, rule));
+        }
+
+        return new MetafileClip(moved, HasUnsupportedOperation);
+    }
 
     /// <summary>
     /// True when two clips would produce the same sink calls.

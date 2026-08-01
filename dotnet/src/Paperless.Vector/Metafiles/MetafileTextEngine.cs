@@ -174,12 +174,15 @@ public sealed class MetafileTextEngine
 
         LineMetrics metrics = LineSpacing.Resolve(face.Face);
 
-        Length y = (alignment & TextAlignmentMask.Vertical) switch
-        {
-            TextAlignment.Bottom => reference.Y - metrics.ScaledDescent(font.Size),
-            TextAlignment.Baseline => reference.Y,
-            _ => reference.Y + metrics.ScaledAscent(font.Size),
-        };
+        // Tested a bit at a time in priority order rather than as a masked field, because
+        // [MS-WMF] 2.1.2.3 gives TA_BASELINE as 0x0018 where it is really 0x0010 — and producers
+        // that believed the specification write 0x0018, which a field comparison matches neither
+        // as baseline nor as bottom (emfio/inc/mtftools.hxx:184-186, and MtfTools::DrawText's
+        // own test at mtftools.cxx:2016-2021).
+        Length y;
+        if ((alignment & TextAlignment.Baseline) != 0) y = reference.Y;
+        else if ((alignment & TextAlignment.Bottom) != 0) y = reference.Y - metrics.ScaledDescent(font.Size);
+        else y = reference.Y + metrics.ScaledAscent(font.Size);
 
         GlyphRun run = new()
         {

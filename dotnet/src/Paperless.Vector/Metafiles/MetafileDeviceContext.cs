@@ -39,7 +39,7 @@ public sealed class MetafileDeviceContext
     public MetafileMapping Mapping { get; } = new();
 
     /// <summary>The clipping region in force.</summary>
-    public MetafileClip Clip { get; private set; } = new();
+    public MetafileClip Clip { get; set; } = new();
 
     /// <summary>The handle table. Shared by every saved state, because GDI objects are the device's.</summary>
     public GraphicsObjectTable Objects { get; } = new();
