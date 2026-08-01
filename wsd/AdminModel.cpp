@@ -43,7 +43,7 @@
 
 namespace
 {
-std::ostream& print(std::ostream& oss, const std::string_view prefix, const std::string_view name,
+std::ostream& printName(std::ostream& oss, const std::string_view prefix, const std::string_view name,
                     const std::string_view suffix)
 {
     oss << prefix << (prefix.empty() ? "" : "_") << name << (suffix.empty() ? "" : "_") << suffix;
@@ -54,7 +54,7 @@ std::string concat(const std::string_view prefix, const std::string_view name,
                    const std::string_view suffix)
 {
     std::ostringstream oss;
-    print(oss, prefix, name, suffix);
+    printName(oss, prefix, name, suffix);
     return oss.str();
 }
 
@@ -1084,10 +1084,10 @@ public:
 
     void Print(std::ostream& oss, const std::string_view prefix, const std::string_view unit) const
     {
-        print(oss, prefix, "total", unit) << ' ' << _total << '\n';
-        print(oss, prefix, "average", unit) << ' ' << getIntAverage() << '\n';
-        print(oss, prefix, "min", unit) << ' ' << getMin() << '\n';
-        print(oss, prefix, "max", unit) << ' ' << getMax() << '\n';
+        printName(oss, prefix, "total", unit) << ' ' << _total << '\n';
+        printName(oss, prefix, "average", unit) << ' ' << getIntAverage() << '\n';
+        printName(oss, prefix, "min", unit) << ' ' << getMin() << '\n';
+        printName(oss, prefix, "max", unit) << ' ' << getMax() << '\n';
     }
 
 private:
