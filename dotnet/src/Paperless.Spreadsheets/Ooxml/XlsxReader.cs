@@ -111,6 +111,12 @@ public static class XlsxReader
                 // it rather than at the end of the workbook.
                 foreach (ContentSection comment in reader.ReadComments(entry))
                     content.Children.Add(comment);
+
+                // A chart follows its sheet for the same reason, and cannot go inside it: the
+                // sheet section holds exactly one table, and a chart is another one. The ODS
+                // path puts it in the same place.
+                foreach (ContentSection chart in XlsxCharts.Read(file.Package, entry.PartName))
+                    content.Children.Add(chart);
             }
 
             if (file.Sheets.Count == 0)

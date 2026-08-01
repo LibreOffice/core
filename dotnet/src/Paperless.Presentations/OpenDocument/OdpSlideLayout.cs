@@ -876,6 +876,7 @@ internal sealed class OdpSlideLayout
     /// The paragraphs of a shape, in document order, however deeply they are wrapped.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Three shapes of the same thing, and a reader that knows only one loses whole shapes' text.
     /// A <c>draw:frame</c> wraps its text in a <c>draw:text-box</c>; a <c>draw:custom-shape</c>
     /// holds its <c>text:p</c> children itself; and an <em>outline</em> placeholder wraps every
@@ -883,11 +884,41 @@ internal sealed class OdpSlideLayout
     /// outline level. Measured on <c>slides-features.odp</c>: taking only the direct children lost
     /// all three lines of slide one's outline while its title read perfectly, which is exactly the
     /// failure that looks like a placement bug and is not.
+    /// </para>
+    /// <para>
+    /// <strong>An embedded document's paragraphs are not the frame's.</strong> A packaged file
+    /// keeps an object in a directory of its own and this walk never sees it; a <em>flat</em> one
+    /// inlines the whole <c>office:document</c> inside the <c>draw:object</c>, so a descendant
+    /// search picks up every <c>text:p</c> in it. Measured on <c>chart-bar-deck.fodp</c>: the
+    /// chart's title, its axis titles and all fifteen cells of its local table came out as the
+    /// frame's own text — eighteen words stacked as paragraphs where LibreOffice draws a bar
+    /// chart — while the same deck as <c>.odp</c> drew nothing. The chart is still not drawn;
+    /// that is the recorded deviation, and drawing its markup instead was not a lesser one.
+    /// </para>
     /// </remarks>
     private static IEnumerable<XElement> Paragraphs(XElement element)
     {
         XElement? box = element.Element(XName.Get("text-box", OdfNamespaces.Draw));
-        return (box ?? element).Descendants(XName.Get("p", OdfNamespaces.Text));
+        XElement root = box ?? element;
+
+        foreach (XElement paragraph in root.Descendants(XName.Get("p", OdfNamespaces.Text)))
+        {
+            if (!IsEmbedded(paragraph, root)) yield return paragraph;
+        }
+    }
+
+    /// <summary>True when a paragraph sits inside a document embedded within the shape.</summary>
+    private static bool IsEmbedded(XElement paragraph, XElement root)
+    {
+        for (XElement? at = paragraph.Parent; at is not null && at != root; at = at.Parent)
+        {
+            if (at.Name.NamespaceName == OdfNamespaces.Office
+                && at.Name.LocalName is "document" or "document-content")
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static string? Attribute(XElement? element, string ns, string name)

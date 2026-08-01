@@ -31,6 +31,14 @@ Every file must have a **unique stem**: `soffice --convert-to` names output afte
 stem alone, so `a.docx` and `a.xlsx` both become `a.pdf` and one silently disappears. Name
 files for what they contain and which format they are — `table-merged.docx`.
 
+**A second `soffice --convert-to` into the same directory can produce nothing and say nothing.**
+Converting one source into two formats back to back — `--convert-to odp` then `--convert-to pptx`
+— printed its usual `convert … using filter : …` line for the first and, for the second, only
+`Warning: failed to launch javaldx` and no output file at all. Exit status 0 both times. The fix
+is a **fresh `--outdir` per conversion**; the same command that had produced nothing produced the
+file immediately when pointed at a new directory. Always `ls` the output before believing a
+conversion happened, and never infer success from the exit code.
+
 ## Reference output
 
 ```bash
@@ -134,7 +142,24 @@ had them overwrite each other's output.
 | `odp-table-grid.odp` | `slide-table-grid.pptx` put through `soffice --convert-to odp`, so the same table is described in two vocabularies that share no element name. It is the only way to measure the border-width conversion: the OOXML importer halves a stated width and the exporter writes the halved number out, so an ODF reader that halves again draws every rule at 0.42 pt where the reference draws 0.85009. It also carries what LibreOffice writes and the specification does not point at — the cell fill, padding and vertical alignment in `loext:graphic-properties` and the four borders in `style:paragraph-properties` |
 | `odp-shape-paths.fodp` | ODF's own `draw:enhanced-path` command letters, none of which a converted file can carry: anything reaching ODF through an OOXML import comes out as an `ooxml-` preset whose path is `M L C Z N`. Six shapes on a 28 × 15.75 cm page, each 6 × 4.5 cm with a 21600-unit view box so every vertex is a round fraction of a centimetre — a chevron whose notch is a `draw:equation` over a `draw:modifiers` value, a whole ellipse as one `U`, a `U` with a 240° sweep (which is what tells an arc's *stated* radii from its *scaled* ones), four quarter ellipses as `X` and `Y`, two `G` arcs, and two polygons in one subpath so the inner one is a hole. Slide 2 is a hand-written table whose three columns are three different widths, whose first cell spans two of them with a `table:covered-table-cell` beside it, and whose outer rules are three times its inner ones. **It suppresses the master's footer and slide-number placeholders** in its drawing-page style: without `presentation:display-footer="false"` and its two siblings, Impress draws an empty placeholder on every page and the reference PDF gains two text runs of a single space that no reader would reproduce |
 
-Both are 4:3-free: the page is the 28 × 15.75 cm Impress defaults to. That is not a preference —
+### The chart documents
+
+| File | Exercises |
+|---|---|
+| `chart-bar-deck.fodp` | A bar chart on a slide, hand-written flat so that the chart's whole sub-document is inline in the `draw:object` and readable without unzipping anything. Title "Regional revenue", axis titles "Quarter" and "Units", two named series (North, South) and four labelled categories (Q1…Q4) over sixteen numbers. The frame carries no `draw:image` replacement, because a flat file has nowhere to put a metafile — which is what makes it the file that catches a renderer descending into the embedded document and drawing its `text:p`s as slide text |
+| `chart-bar-deck.odp` | The same deck converted, so the chart is a **packaged sub-document**: `Object 1/content.xml` reached by `xlink:href="./Object 1"`, with `ObjectReplacements/Object 1` — a 22 kB baked GDI metafile of the chart — beside it. That replacement is the thing Phase 3.5 expects to draw one day, and it is also why a frame's `draw:image` sibling must not be reported as a second graphic when the object was read |
+| `chart-bar-deck.pptx` | And again as DrawingML: `ppt/charts/chart1.xml` reached by `c:chart/@r:id` from the slide's `a:graphicData`. Its `c:f` elements say `label 0`, `categories` and `0` — LibreOffice's export invents names because a deck has no workbook to point at — while the `c:strCache` and `c:numCache` beside them hold the real values, which is the clearest statement in the corpus of why the cache is what gets read |
+| `chart-bar-sheet.fods` | The same chart over a **sheet's own cells**: `A1:C5` holds the data and the series say `chart:values-cell-range-address="Revenue.B2:Revenue.B5"`. The local table is written anyway, as a cache, so this is the case where a live range genuinely exists and the cache is preferred regardless. Hand-written flat, header and footer off |
+| `chart-bar-sheet.ods` | The same workbook packaged, so the chart is again `Object 1/content.xml` and the frame is anchored inside a `table:table-cell` — the anchoring that decides where a chart can go in the content tree, since a cell cannot hold a table |
+| `chart-bar-sheet.xlsx` | And again as SpreadsheetML: `xl/charts/chart1.xml` reached through `xl/drawings/drawing1.xml`, two relationship hops from the sheet, with `c:f` naming real ranges (`Revenue!$B$2:$B$5`) beside the caches that repeat their values |
+
+All six extract to the same title, axis titles, series and numbers, through two vocabularies that
+share no element name. None of them is *drawn*: Paperless renders 0 words on the deck's page and
+the sheet's 14 cell words on the workbook's, against the 20 and 29–34 LibreOffice draws, because a
+chart is recorded and not painted. That is the deviation Phase 3.5 records, and the sweep entries
+for these six exist to keep it visible rather than to be fixed by accident.
+
+Both ODP rendering files are 4:3-free: the page is the 28 × 15.75 cm Impress defaults to. That is not a preference —
 **LibreOffice ignores a hand-written `style:page-layout` in a flat ODP** and substitutes its own
 default, so a file stating 25.4 × 19.05 cm renders at 28 × 15.75 and every measurement taken from
 it is against the wrong page. State the size Impress will actually use.
