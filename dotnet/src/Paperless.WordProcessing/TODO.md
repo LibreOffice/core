@@ -1021,6 +1021,26 @@ is read and verified, so what remains is the filling of pages rather than the me
       `PageDrawing.OffsetOnLine` for exactly this — and the work is routing character-anchored frames
       through the per-line walk rather than the per-paragraph one, which every frame-wrap test would then
       have to be re-measured against.
+      **Attempted and reverted, because routing alone makes the document worse rather than better, and the
+      measurements are worth keeping.** Resolving `Character` and `Line` from the anchor's own line puts the
+      box at 134.01 pt where LibreOffice draws 134.00 — the horizontal half is settled and cheap. What is
+      not settled is what the text does next. LibreOffice draws the whole sentence on *one* line —
+      "Before the box." at 56.80 and "After the box." at 306.54, which is the shape's own right edge plus a
+      space — so the box is set *within* the line, taking room on it. `FrameObstacles.SpaceFor` cannot
+      express that: an obstacle starting after a line's own start *ends the line early*
+      (`Layout/FrameLayout.cs`, "one that starts after it ends the line early"), which is right for a
+      paragraph-anchored frame and wrong here. So placing the frame correctly moved "After the box." on top
+      of the box's own text and took `word-features.doc` from 154 words to 151.
+      The obvious escape is not one: making it an as-character frame instead — which is what
+      `SwWW8ImplReader::IsInlineEscherHack` does for a shape inside a `SHAPE` field, and this document's
+      shape *is* inside one (verified by tracing the field stack in the WW8 layout walk) — restores the word
+      count and puts the box at 134.01, but hangs it off the baseline and pushes the anchor line from
+      455.51 down to 477.71. LibreOffice's own DOC render keeps that line at 455.51 while its DOCX render of
+      the same document *does* push it to 478.36. So LibreOffice's DOC import does **not** take the inline
+      hack here and its DOCX import does, and the difference is not the `SHAPE` field. Whatever the reason,
+      the answer is a frame that is floating, anchored at a character, and set within its anchor's line —
+      which needs `Paperless.Text`'s line filler to split a line around a mid-line obstacle rather than end
+      it, and that is a change to shared code that this item should not make in passing.
 - [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
       it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and
