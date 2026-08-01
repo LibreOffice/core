@@ -1,4 +1,4 @@
-namespace Paperless.Ooxml.DrawingML;
+namespace Paperless.Core.Charts;
 
 /// <summary>
 /// What a chart states about one axis' scale, before anything is computed.
@@ -129,15 +129,15 @@ public static class ChartScale
     /// </summary>
     /// <remarks>
     /// <c>lcl_getMaximumAutoIncrementCount</c> returns 10 for every axis type but a date axis
-    /// (<c>ScaleAutomatism.cxx:42-48</c>), and <c>VCartesianAxis</c> only ever lowers it, from
-    /// the axis' length in relation to a label's height. Ten is therefore the value that
-    /// reproduces a chart drawn at a comfortable size, which is every chart in the corpus; a
-    /// chart squeezed so small that its labels would collide gets fewer ticks from LibreOffice
-    /// and the same ten from this, which is a difference in tick *count* on a chart whose labels
-    /// are illegible either way. See <c>VCartesianAxis::estimateMaximumAutoMainIncrementCount</c>
-    /// (<c>VCartesianAxis.cxx:1559</c>).
+    /// (<c>ScaleAutomatism.cxx:43-49</c>), and <c>ScaleAutomatism::setMaximumAutoMainIncrementCount</c>
+    /// clamps whatever the axis asks for into <c>[2, 10]</c> (<c>:143-151</c>). So ten is the most
+    /// an axis ever gets and two the fewest.
     /// </remarks>
-    private const int MaximumAutoIntervalCount = 10;
+    public const int MaximumAutoIntervalCount = 10;
+
+    /// <summary>The fewest automatic intervals an axis is given, whatever its size.</summary>
+    /// <remarks><c>ScaleAutomatism.cxx:145-146</c>, commented <c>#i82006</c>.</remarks>
+    public const int MinimumAutoIntervalCount = 2;
 
     /// <summary>
     /// Resolves a value axis' scale from what the file states and what the data holds.
@@ -152,12 +152,22 @@ public static class ChartScale
     /// <c>isExpandWideValuesToZero</c>. True for the value axis of every plotter in
     /// <c>VSeriesPlotter</c>'s default, which is what a bar, line, area or column chart gets.
     /// </param>
+    /// <param name="maximumIntervals">
+    /// The most automatic intervals the axis may have, clamped into
+    /// <c>[<see cref="MinimumAutoIntervalCount"/>, <see cref="MaximumAutoIntervalCount"/>]</c>.
+    /// <see cref="ChartLayout"/> derives it from the axis' length once it has measured a label;
+    /// a caller with no geometry passes nothing and gets ten, which is LibreOffice's first pass.
+    /// </param>
     public static ChartScaleResult Resolve(
         ChartScaleRequest request,
         double? dataMinimum,
         double? dataMaximum,
-        bool expandToZero = true)
+        bool expandToZero = true,
+        int maximumIntervals = MaximumAutoIntervalCount)
     {
+        int automaticIntervals = Math.Clamp(
+            maximumIntervals, MinimumAutoIntervalCount, MaximumAutoIntervalCount);
+
         // A chart whose cache holds no numbers still has an axis, and LibreOffice's own
         // ExplicitScaleData is constructed as [0, 10] for exactly this case
         // (ScaleAutomatism.cxx:63-64). Drawing 0..10 is what the reference draws.
@@ -227,8 +237,8 @@ public static class ChartScale
 
         bool autoDistance = request.MajorUnit is not { } stated || !(stated > 0.0);
         double distance = autoDistance ? 0.0 : request.MajorUnit!.Value;
-        int maximumIntervals = autoDistance
-            ? MaximumAutoIntervalCount
+        int intervalCeiling = autoDistance
+            ? automaticIntervals
             : ChartScaleResult.MaximumTickCount;
 
         double magnitude = 0.0;
@@ -248,7 +258,7 @@ public static class ChartScale
             {
                 if (!haveNormalised)
                 {
-                    double raw = (temporaryMaximum - temporaryMinimum) / maximumIntervals;
+                    double raw = (temporaryMaximum - temporaryMinimum) / intervalCeiling;
 
                     if (raw <= 1.0e-307)
                     {
@@ -317,13 +327,13 @@ public static class ChartScale
             }
 
             double intervals = Math.Floor((axisMaximum - axisMinimum) / distance);
-            if (!(intervals > maximumIntervals)) break;
+            if (!(intervals > intervalCeiling)) break;
 
             // A stated distance that produces too many intervals is discarded rather than
             // honoured, which is what stops a c:majorUnit of 0.001 over a range of 200 from
             // asking for two hundred thousand gridlines.
             autoDistance = true;
-            maximumIntervals = MaximumAutoIntervalCount;
+            intervalCeiling = automaticIntervals;
         }
 
         return swapped

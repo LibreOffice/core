@@ -2,10 +2,12 @@ using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Containers;
 using Paperless.Containers.Ooxml;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
@@ -73,6 +75,10 @@ internal static class XlsxDrawings
 
             if (root is null) continue;
 
+            // Indexed once per drawing part and shared by both hops out of it: a picture's
+            // r:embed and a chart's r:id are both resolved against the *drawing*, never against
+            // the sheet, which is the mistake that finds nothing in most workbooks and the wrong
+            // part in one whose sheet happens to declare an rId1 of its own.
             Dictionary<string, OpcXml.Relationship> images = [];
             foreach (OpcXml.Relationship image in opc.GetRelationships(part.Name))
                 images[image.Id] = image;
@@ -133,14 +139,17 @@ internal static class XlsxDrawings
 
         if (frame is not null)
         {
-            string? uri = Attribute(
-                Child(Child(frame, DrawingNamespace, "graphic"), MainNamespace, "graphicData"),
-                "uri");
+            // Both elements are DrawingML's, not the spreadsheet drawing's: a graphic frame's
+            // content is <a:graphic><a:graphicData uri="…"> in the *main* namespace. Looking the
+            // outer one up in the spreadsheetDrawing namespace finds nothing, which read every
+            // chart in every workbook as a frame of unknown kind — the flag never got set and no
+            // chart could be drawn. It is invisible until something downstream needs the flag.
+            XElement? data =
+                Child(Child(frame, MainNamespace, "graphic"), MainNamespace, "graphicData");
 
-            // Recorded and not painted: a chart's series and axes live in their own part and
-            // reproducing one is a project of its own, but dropping it would make a sheet with a
-            // chart indistinguishable from a sheet without.
-            return drawing with { IsChart = uri == ChartUri };
+            if (Attribute(data, "uri") != ChartUri) return drawing;
+
+            return drawing with { IsChart = true, Chart = Plot(data, package, images) };
         }
 
         return drawing with
@@ -152,6 +161,42 @@ internal static class XlsxDrawings
                     Child(Child(picture, DrawingNamespace, "blipFill"), MainNamespace, "blip"),
                     XName.Get("embed", RelationshipNamespace))),
         };
+    }
+
+    /// <summary>
+    /// The chart a graphic frame points at, laid out later, or null when it cannot be drawn.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Read here rather than in a pass of its own because the anchor arithmetic in this file is
+    /// what gives the chart a rectangle, and the rendering path walks the drawing part exactly
+    /// once. <c>XlsxCharts</c> still walks it a second time for the content tree, which is
+    /// deliberate: extraction must not pay for the anchors, and a caller that never asks for
+    /// content never opens a chart part.
+    /// </para>
+    /// <para>
+    /// <strong>No theme.</strong> A chart part may state <c>a:schemeClr</c>, which needs the
+    /// workbook's <c>xl/theme/theme1.xml</c> to resolve; the sheet reader does not load one, so a
+    /// themed fill reads as null and the bar draws as an outline. Every chart in the corpus states
+    /// its fills as <c>a:srgbClr</c>, which is what LibreOffice's own export writes.
+    /// </para>
+    /// </remarks>
+    private static ChartPlot? Plot(
+        XElement? data,
+        OpcPackage package,
+        Dictionary<string, OpcXml.Relationship> parts)
+    {
+        string? id = Attribute(
+            Child(data, OoxmlNamespaces.DrawingMLChart, "chart"),
+            XName.Get("id", RelationshipNamespace));
+
+        if (id is null || !parts.TryGetValue(id, out OpcXml.Relationship chart)) return null;
+        if (chart.IsExternal || package.GetPart(chart.Target) is not { } chartPart) return null;
+
+        XElement? chartSpace;
+        using (Stream content = chartPart.Open()) chartSpace = OoxmlXml.TryLoad(content, out _);
+
+        return chartSpace is null ? null : DrawingChartPlot.Read(chartSpace);
     }
 
     /// <summary>

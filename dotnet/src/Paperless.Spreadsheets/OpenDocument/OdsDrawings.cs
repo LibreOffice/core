@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -127,12 +128,55 @@ internal static class OdsDrawings
             };
         }
 
-        // An embedded object is a chart, a formula or another document: recorded so that "there is
-        // something here" stays distinguishable from "there is nothing here", and not painted.
-        if (image is null)
-            return objectFrame is null ? null : drawing with { IsChart = true };
+        // An embedded object is a chart, a formula or another document. The flag is set for all of
+        // them, so that "there is something here" stays distinguishable from "there is nothing
+        // here"; only a chart of a drawable kind also carries a model.
+        //
+        // **The object is looked at before the picture, and the order is what makes a sheet's
+        // chart draw.** A frame holding an object carries a *replacement* picture beside it —
+        // `draw:image xlink:href="./ObjectReplacements/Object 1"` — which is what an application
+        // that cannot open the object shows instead. Reading the picture first found one on every
+        // chart in every ODS LibreOffice has ever written, recorded the frame as a plain picture,
+        // and then painted nothing, because all 82 of those streams are `VCLMTF` and no decoder
+        // here reads StarView metafiles. A deck never hit it: an ODP frame carries the object
+        // alone.
+        if (objectFrame is not null)
+        {
+            SheetDrawing chart = drawing with { IsChart = true, Chart = Plot(file, objectFrame) };
 
-        return drawing with { Image = Load(file, image) };
+            // A chart of a kind the engine does not draw falls back to the replacement picture,
+            // which is better than nothing wherever a backend can decode one.
+            return chart.Chart is null && image is not null
+                ? chart with { Image = Load(file, image) }
+                : chart;
+        }
+
+        return image is null ? null : drawing with { Image = Load(file, image) };
+    }
+
+    /// <summary>
+    /// The chart a <c>draw:object</c> holds, or null when it holds something else.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One reader for both shapes an embedded chart takes — a packaged sheet's
+    /// <c>Object 1/content.xml</c> reached by <c>xlink:href</c>, and a flat sheet's inlined
+    /// <c>office:document</c> — because <see cref="OdfChart.Locate"/> already hides the
+    /// difference. This is the same call the ODP layout makes, which is what the move of
+    /// <see cref="OdfChartPlot"/> down into <c>Paperless.OpenDocument</c> bought: before it, a
+    /// sheet would have needed a second copy of the reader.
+    /// </para>
+    /// <para>
+    /// The styles are the chart sub-document's own — <c>ch1</c>, <c>ch2</c>, … in its own
+    /// <c>office:automatic-styles</c> — and not the workbook's, so they are read from whichever
+    /// root the chart was found under.
+    /// </para>
+    /// </remarks>
+    private static ChartPlot? Plot(OdfFile file, XElement objectFrame)
+    {
+        if (OdfChart.Locate(objectFrame, file) is not { } chart) return null;
+
+        return OdfChartPlot.Read(chart, new OdfChartStyles(chart.AncestorsAndSelf().Last()));
     }
 
     private static RasterImage? Load(OdfFile file, XElement image)

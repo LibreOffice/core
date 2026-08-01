@@ -7,11 +7,11 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 197 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 203 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
 #
-# Of the twenty-six that do not match, five are deliberate:
+# Of the twenty that do not match, five are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
 #                             the changes. Settled and measured; see the marks item.
 #   svg-picture.{odt,docx}    the SVG decoder exists but is not wired into the readers yet.
@@ -24,10 +24,14 @@
 # across four formats and one packaging is the useful part: it is one missing feature and
 # not five unrelated defects.
 #
-# Also open: an EMF or WMF blip draws nothing (emf-picture.*, wmf-picture.*), a chart's
-# own labels are not drawn (chart-bar-*), `alt-chunk.docx` does not read its imported
-# part, `frame-in-cell.{odt,fodt}` loses one word, `table-autofit-partial.docx` fits its
-# columns differently, and `sheet-rich-text.fods` draws two words the reference does not.
+# The six chart rows now match: bars, gridlines, lines, pies and areas all draw, and a
+# spreadsheet's chart draws too. See `dotnet/TODO.md` Phase 3.5 for what each of the six
+# measures and for the three defects the spreadsheet forms found.
+#
+# Also open: an EMF or WMF blip draws nothing (emf-picture.*, wmf-picture.*),
+# `alt-chunk.docx` does not read its imported part, `frame-in-cell.{odt,fodt}` loses one
+# word, `table-autofit-partial.docx` fits its columns differently, and
+# `sheet-rich-text.fods` draws two words the reference does not.
 #
 FILE                               PAGES o/r   WORDS o/r     VERDICT
 bookmark-field.odt                 1/1         24/24         OK
@@ -214,12 +218,12 @@ slide-shape-features.pptx          4/4         16/16         OK
 slide-table-grid.pptx              2/2         25/25         OK
 ppt-features.ppt                   2/2         32/32         OK
 shape-geometry-ppt.ppt             4/4         9/9           OK
-chart-bar-deck.fodp                1/1         0/20          WORDS
-chart-bar-deck.odp                 1/1         0/20          WORDS
-chart-bar-deck.pptx                1/1         0/20          WORDS
-chart-bar-sheet.fods               1/1         14/34         WORDS
-chart-bar-sheet.ods                1/1         14/34         WORDS
-chart-bar-sheet.xlsx               1/1         14/29         WORDS
+chart-bar-deck.fodp                1/1         20/20         OK
+chart-bar-deck.odp                 1/1         20/20         OK
+chart-bar-deck.pptx                1/1         20/20         OK
+chart-bar-sheet.fods               1/1         34/34         OK
+chart-bar-sheet.ods                1/1         34/34         OK
+chart-bar-sheet.xlsx               1/1         29/29         OK
 emf-picture.docx                   1/1         0/2           WORDS
 emf-picture.odt                    1/1         0/2           WORDS
 odp-shape-paths.fodp               2/2         6/6           OK

@@ -64,6 +64,22 @@ internal static class SheetBandText
             ? metrics.ScaledAscent(size) + metrics.ScaledDescent(size)
             : size * 1.15;
 
+    /// <summary>
+    /// How tall one line of a <em>chart's</em> text is, at a size.
+    /// </summary>
+    /// <remarks>
+    /// Ascent plus descent plus the line gap, which is the face's own line height and not
+    /// <see cref="LineHeightAt"/>'s. The two differ because a chart is not laid out by Calc: its
+    /// labels are made by <c>chart2</c>'s view as plain text shapes, which take the face's metrics
+    /// whole, where a cell's height comes from <c>ScDrawStringsVars</c> and drops the gap
+    /// (<c>sc/source/ui/view/output2.cxx:734</c>). Liberation Sans is 1.1499 em here against
+    /// 1.1494 there, and the difference compounds through the insets that place the plot area
+    /// rather than showing up in any one label.
+    /// </remarks>
+    /// <param name="size">The em size.</param>
+    public static Length ChartLineHeightAt(Length size)
+        => Metrics.Value is { } metrics ? metrics.ScaledLineHeight(size) : size * 1.15;
+
     /// <summary>Shapes one line, or null when there is no face to shape it with.</summary>
     /// <param name="text">The text.</param>
     /// <param name="size">The em size.</param>

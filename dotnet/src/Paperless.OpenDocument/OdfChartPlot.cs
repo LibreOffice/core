@@ -1,19 +1,18 @@
 using System.Globalization;
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
-using Paperless.Ooxml.DrawingML;
-using Paperless.OpenDocument;
 
-namespace Paperless.Presentations.OpenDocument;
+namespace Paperless.OpenDocument;
 
 /// <summary>
 /// Reads an ODF <c>chart:chart</c> sub-document into the model a renderer draws.
 /// </summary>
 /// <remarks>
 /// <para>
-/// The ODF counterpart to <see cref="DrawingChartPlot"/>, producing the same
+/// The ODF counterpart to <c>DrawingChartPlot</c> in <c>Paperless.Ooxml</c>, producing the same
 /// <see cref="ChartPlot"/> so that a chart is drawn by one engine whichever family it came from.
 /// </para>
 /// <para>
@@ -27,16 +26,16 @@ namespace Paperless.Presentations.OpenDocument;
 /// which every OOXML chart has to go through, is not used at all here.
 /// </para>
 /// <para>
-/// <strong>Where this lives, and why it is not where it belongs.</strong> The natural home is
-/// <c>Paperless.OpenDocument</c>, beside <see cref="OdfChart"/>. It cannot go there:
-/// <see cref="ChartPlot"/> is defined in <c>Paperless.Ooxml</c> and the two libraries sit at the
-/// same layer with no reference between them. The model wants to be in <c>Paperless.Core</c>
-/// beside the rest of the drawing IR, which is a Core change that was not worth making with
-/// three other agents building against it. Until then this reader is duplicated per family
-/// rather than shared, which is the cost recorded in the TODO.
+/// <strong>Where this lives, and why it moved here.</strong> It began in
+/// <c>Paperless.Presentations</c>, because <see cref="ChartPlot"/> was defined in
+/// <c>Paperless.Ooxml</c> and <c>Paperless.OpenDocument</c> — a sibling with no reference to it —
+/// could not name the type it had to return. That put an ODF reader in a family library and left
+/// a spreadsheet needing a second copy of it. Moving the model and the layout engine into
+/// <c>Paperless.Core.Charts</c>, which is where the rest of the drawing IR already lives, let
+/// this reader come down beside <see cref="OdfChart"/> and serve ODP, ODS and ODT from one place.
 /// </para>
 /// </remarks>
-internal static class OdfChartPlot
+public static class OdfChartPlot
 {
     /// <summary>How many series or categories are read from one chart.</summary>
     /// <remarks>
@@ -83,13 +82,11 @@ internal static class OdfChartPlot
         XElement? plotArea = Child(chart, OdfNamespaces.Chart, "plot-area");
         if (plotArea is null) return null;
 
-        // Only a bar or column chart, for the reason DrawingChartPlot documents: the layout
-        // engine draws rectangles against two axes, and a pie chart has neither. ODF states the
-        // type twice — on chart:chart and again on each chart:series — and either will do, since
-        // LibreOffice writes them to agree. A chart:class this does not draw yields null and the
-        // frame goes back to drawing nothing, which is what it did before charts were drawn.
-        string? kind = Attribute(chart, OdfNamespaces.Chart, "class");
-        if (kind is not ("chart:bar" or "bar")) return null;
+        // ODF states the type twice — on chart:chart and again on each chart:series — and either
+        // will do, since LibreOffice writes them to agree. A chart:class this does not draw yields
+        // null and the frame goes back to drawing nothing, which is what it did before charts were
+        // drawn, rather than being drawn as some other type.
+        if (KindOf(Attribute(chart, OdfNamespaces.Chart, "class")) is not { } kind) return null;
 
         List<XElement> series = [.. Children(plotArea, OdfNamespaces.Chart, "series")];
         if (series.Count == 0) return null;
@@ -101,12 +98,21 @@ internal static class OdfChartPlot
         {
             string? style = Attribute(element, OdfNamespaces.Chart, "style-name");
 
+            List<double?> values =
+                table.ValuesOf(Attribute(element, OdfNamespaces.Chart, "values-cell-range-address"));
+
+            // ODF states the type on each series as well as on the chart, which is how it writes
+            // a combination chart: the same chart:plot-area holds a chart:series
+            // chart:class="chart:bar" beside a chart:series chart:class="chart:line". Reading it
+            // per series is all a combination chart needs here.
             plotted.Add(new ChartSeries(
                 table.LabelOf(Attribute(element, OdfNamespaces.Chart, "label-cell-address")),
-                table.ValuesOf(Attribute(element, OdfNamespaces.Chart, "values-cell-range-address")),
+                values,
                 styles.Fill(style) ?? DefaultSeriesFill,
                 styles.Line(style),
-                styles.LineWidth(style)));
+                styles.LineWidth(style),
+                PointFills(element, values.Count, styles),
+                KindOf(Attribute(element, OdfNamespaces.Chart, "class")) ?? kind));
         }
 
         XElement? categories = null;
@@ -129,6 +135,7 @@ internal static class OdfChartPlot
             ValueAxisTitle = TextOf(Child(valueAxis, OdfNamespaces.Chart, "title")),
             Categories = table.Categories,
             Series = plotted,
+            Kind = kind,
 
             // chart:bar is ODF's name for a *horizontal* bar chart and chart:bar with
             // chart:vertical="false" is the column one — the opposite of what the names suggest.
@@ -143,6 +150,8 @@ internal static class OdfChartPlot
             Background = styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name")),
             PlotBackground = styles.Fill(
                 Attribute(Child(plotArea, OdfNamespaces.Chart, "wall"), OdfNamespaces.Chart, "style-name")),
+            ValueGrid = GridOf(valueAxis, styles),
+            CategoryGrid = GridOf(categoryAxis, styles),
             TitleSize = styles.FontSize(
                 Attribute(Child(chart, OdfNamespaces.Chart, "title"), OdfNamespaces.Chart, "style-name"))
                 ?? Length.FromPoints(13),
@@ -154,6 +163,101 @@ internal static class OdfChartPlot
             PlotArea = Region(plotArea),
             Space = SpaceOf(chart),
         };
+    }
+
+    /// <summary>
+    /// What geometry a <c>chart:class</c> means, or null for one that is not drawn.
+    /// </summary>
+    /// <remarks>
+    /// The prefix is written in full — <c>chart:bar</c> — because the attribute holds a QName and
+    /// the <c>chart</c> prefix is bound in every document LibreOffice writes; the bare form is
+    /// accepted too, for a writer that bound a different prefix. A ring is drawn as a circle,
+    /// losing its hole; <c>chart:radar</c>, <c>chart:stock</c>, <c>chart:bubble</c> and
+    /// <c>chart:surface</c> yield null and draw nothing at all.
+    /// </remarks>
+    private static ChartPlotKind? KindOf(string? stated)
+    {
+        string? kind = stated;
+        if (kind is null) return null;
+
+        int colon = kind.IndexOf(':', StringComparison.Ordinal);
+        if (colon >= 0) kind = kind[(colon + 1)..];
+
+        return kind switch
+        {
+            "bar" => ChartPlotKind.Bar,
+            "line" => ChartPlotKind.Line,
+            "circle" or "ring" => ChartPlotKind.Pie,
+            "area" => ChartPlotKind.Area,
+            "scatter" => ChartPlotKind.Scatter,
+            _ => null,
+        };
+    }
+
+    /// <summary>
+    /// The colour an axis' major gridlines are drawn in, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// A <c>chart:grid chart:class="major"</c> inside the axis, whose style states the stroke.
+    /// A grid whose style states none takes chart2's own default, <c>0xB3B3B3</c>
+    /// (<c>chart2/source/model/main/GridProperties.cxx:64-66</c>), and one whose style states
+    /// <c>draw:stroke="none"</c> is not drawn.
+    /// </remarks>
+    private static Colour? GridOf(XElement? axis, OdfChartStyles styles)
+    {
+        foreach (XElement grid in Children(axis, OdfNamespaces.Chart, "grid"))
+        {
+            if (Attribute(grid, OdfNamespaces.Chart, "class") is { } stated && stated != "major")
+                continue;
+
+            string? style = Attribute(grid, OdfNamespaces.Chart, "style-name");
+            return styles.HasStroke(style) ? styles.Line(style) ?? DefaultGrid : null;
+        }
+
+        return null;
+    }
+
+    /// <summary>chart2's own gridline colour, gray30.</summary>
+    private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
+
+    /// <summary>
+    /// The per-point fills a series states, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <c>chart:data-point</c>, in order, each optionally carrying <c>chart:repeated</c> — which
+    /// is how a pie whose eight wedges are all default writes one element rather than eight, and
+    /// how a pie with one recoloured wedge writes three. Only a pie normally states any.
+    /// </remarks>
+    private static Colour?[]? PointFills(XElement series, int count, OdfChartStyles styles)
+    {
+        Colour?[]? fills = null;
+        int at = 0;
+
+        foreach (XElement point in Children(series, OdfNamespaces.Chart, "data-point"))
+        {
+            int repeat = 1;
+            if (int.TryParse(
+                    Attribute(point, OdfNamespaces.Chart, "repeated"),
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture,
+                    out int stated))
+            {
+                repeat = Math.Clamp(stated, 1, MaxPoints);
+            }
+
+            Colour? fill = styles.Fill(Attribute(point, OdfNamespaces.Chart, "style-name"));
+
+            for (int copy = 0; copy < repeat && at < MaxPoints; copy++, at++)
+            {
+                if (fill is null) continue;
+
+                fills ??= new Colour?[Math.Max(count, at + 1)];
+                if (at >= fills.Length) continue;
+                fills[at] = fill;
+            }
+        }
+
+        return fills;
     }
 
     /// <summary>
@@ -282,7 +386,7 @@ internal static class OdfChartPlot
                         ? parsed
                         : null;
 
-                    string? shown = cell.Value.Length == 0 ? null : cell.Value;
+                    string? shown = CellText(cell);
 
                     for (int at = 0; at < repeat && text.Count < MaxPoints; at++)
                     {
@@ -338,23 +442,69 @@ internal static class OdfChartPlot
             return column >= 1 && column - 1 < _columns.Count ? _columns[column - 1] : [];
         }
 
-        /// <summary>The zero-based column a <c>local-table.$B$2:.$B$5</c> address names.</summary>
+        /// <summary>
+        /// The zero-based column a range address names, in either of the two forms ODF writes.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// <strong>A deck writes one form and a spreadsheet writes the other, and only the first
+        /// has dollars in it.</strong> A chart with no live data names its own table —
+        /// <c>local-table.$B$2:.$B$5</c> — and a chart over real cells names them:
+        /// <c>Revenue.B2:Revenue.B5</c>. Reading the address by finding a <c>$</c> works for every
+        /// deck and for no spreadsheet, so a sheet's chart resolved every series to no column,
+        /// plotted nothing, and drew an axis of 0–15 from the empty-data default while its title,
+        /// its categories and its legend all came out right. That is the shape of failure worth
+        /// naming: everything textual was correct and only the numbers were missing.
+        /// </para>
+        /// <para>
+        /// So: take the range's first cell, drop the sheet or table name at the last dot before it,
+        /// ignore any dollars, and read the column letters.
+        /// </para>
+        /// </remarks>
         private static int ColumnOf(string? address)
         {
             if (address is null) return -1;
 
-            int at = address.IndexOf('$', StringComparison.Ordinal);
-            if (at < 0) return -1;
+            int colon = address.IndexOf(':', StringComparison.Ordinal);
+            ReadOnlySpan<char> first = colon < 0 ? address : address.AsSpan(0, colon);
+
+            int dot = first.LastIndexOf('.');
+            ReadOnlySpan<char> cell = dot < 0 ? first : first[(dot + 1)..];
 
             int column = 0;
-            for (int index = at + 1; index < address.Length; index++)
+            bool any = false;
+
+            foreach (char character in cell)
             {
-                char character = char.ToUpperInvariant(address[index]);
-                if (character is < 'A' or > 'Z') break;
-                column = column * 26 + (character - 'A' + 1);
+                if (character == '$') continue;
+
+                char upper = char.ToUpperInvariant(character);
+                if (upper is < 'A' or > 'Z') break;
+
+                column = (column * 26) + (upper - 'A' + 1);
+                any = true;
             }
 
-            return column - 1;
+            return any ? column - 1 : -1;
+        }
+
+        /// <summary>
+        /// A local-table cell's text, from its own paragraphs alone.
+        /// </summary>
+        /// <remarks>
+        /// Not <c>XElement.Value</c>. A chart written by Calc puts a
+        /// <c>draw:g/svg:desc</c> beside the paragraph holding the address the cell came from, and
+        /// the whole-subtree value concatenates the two — a category read as
+        /// <c>Q1Revenue.A2:Revenue.A5</c>, drawn under the bars exactly like that.
+        /// </remarks>
+        private static string? CellText(XElement cell)
+        {
+            System.Text.StringBuilder joined = new();
+
+            foreach (XElement paragraph in cell.Elements(XName.Get("p", OdfNamespaces.Text)))
+                joined.Append(paragraph.Value);
+
+            return joined.Length == 0 ? null : joined.ToString();
         }
 
         private static IEnumerable<XElement> Rows(XElement table)

@@ -2,7 +2,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 
-namespace Paperless.Ooxml.DrawingML;
+namespace Paperless.Core.Charts;
 
 /// <summary>How a chart label sits against the point it is placed at.</summary>
 public enum ChartLabelAnchor
@@ -59,17 +59,41 @@ public readonly record struct ChartLine(
     DocPoint From, DocPoint To, Colour Colour, Length Width = default);
 
 /// <summary>
+/// One free-form mark — a line chart's polyline, an area's filled region, a pie's wedge.
+/// </summary>
+/// <remarks>
+/// A path rather than a rectangle because those three cannot be expressed as one, and a path
+/// rather than three shapes because a renderer treats them identically: fill it, stroke it, or
+/// both. <see cref="GraphicsPath"/> lives in <c>Paperless.Core.Graphics</c>, so producing one here
+/// costs the layout nothing it did not already depend on.
+/// </remarks>
+/// <param name="Path">The outline, already closed where it should be.</param>
+/// <param name="Fill">Its fill, or null when it is a stroke only — which is a line chart.</param>
+/// <param name="Line">Its outline colour, or null for none.</param>
+/// <param name="LineWidth">The outline's width; zero is a hairline.</param>
+public readonly record struct ChartShape(
+    GraphicsPath Path,
+    Colour? Fill,
+    Colour? Line = null,
+    Length LineWidth = default);
+
+/// <summary>
 /// A chart laid out: every mark it draws, in paint order, in the frame's coordinates.
 /// </summary>
 /// <param name="PlotArea">The inner plot rectangle — the axes' extent, labels excluded.</param>
 /// <param name="Boxes">The filled and outlined rectangles, back to front.</param>
 /// <param name="Lines">The axes, ticks and gridlines.</param>
 /// <param name="Labels">The text.</param>
+/// <param name="Shapes">
+/// The paths — wedges, polylines and areas — drawn after <paramref name="Boxes"/> and before
+/// <paramref name="Labels"/>, which is where the reference draws them.
+/// </param>
 public sealed record ChartDrawing(
     DocRect PlotArea,
     IReadOnlyList<ChartBox> Boxes,
     IReadOnlyList<ChartLine> Lines,
-    IReadOnlyList<ChartLabel> Labels);
+    IReadOnlyList<ChartLabel> Labels,
+    IReadOnlyList<ChartShape> Shapes);
 
 /// <summary>
 /// Measures a single line of chart text, so that layout can reserve room for it.
@@ -206,12 +230,121 @@ public static class ChartLayout
         ArgumentNullException.ThrowIfNull(plot);
         ArgumentNullException.ThrowIfNull(measurer);
 
+        if (frame.Width <= Length.Zero || frame.Height <= Length.Zero)
+            return new ChartDrawing(DocRect.Empty, [], [], [], []);
+
+        // A chart with a coordinate space of its own is composed at its own size and the whole
+        // picture is then stretched into the frame. See Stretch.
+        if (plot.Space is not { } space
+            || space.Width <= Length.Zero
+            || space.Height <= Length.Zero
+            || (space.Width == frame.Width && space.Height == frame.Height))
+        {
+            return Compose(plot, frame, measurer);
+        }
+
+        DocRect own = new(Length.Zero, Length.Zero, space.Width, space.Height);
+        return Stretch(Compose(plot, own, measurer), own, frame);
+    }
+
+    /// <summary>
+    /// Stretches a chart composed at its own size onto the frame that displays it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An embedded chart is rendered at its own size and scaled, not re-laid-out.</strong>
+    /// Measured on <c>chart-bar-sheet.ods</c>, whose chart document states <c>svg:width="12cm"</c>
+    /// by <c>svg:height="7cm"</c> and whose frame on the sheet is 2.952 in by 1.9547 in — a scale
+    /// of 0.625 across and 0.709 down. In LibreOffice's own PDF the chart's 13 pt title measures
+    /// 62.1 pt wide against the 99.4 pt the same title measures in the same chart's
+    /// <c>.xlsx</c> form, which is 0.625 exactly; its height ratio is 0.708. So the type is
+    /// stretched with everything else, by two different factors, and the chart is <em>not</em>
+    /// re-composed for the smaller frame.
+    /// </para>
+    /// <para>
+    /// <strong>Which is what decides the tick count, so it is not cosmetic.</strong> Composing
+    /// <c>chart-bar-sheet.ods</c> in its frame gives an axis 77 pt long, which has room for six
+    /// intervals and lands on <c>0 50 … 200</c>; composing it at its own 12 × 7 cm gives one
+    /// 108.8 pt long, room for nine, and <c>0 20 … 180</c> — which is what the reference draws.
+    /// </para>
+    /// <para>
+    /// <strong>The one thing that cannot follow.</strong> A glyph run carries one em size, so text
+    /// is scaled by the vertical factor alone and comes out <c>sx/sy</c> too wide or too narrow —
+    /// 12% on this chart. Reproducing it exactly needs a non-uniform transform round each run,
+    /// which the two consumers express differently; recorded in the family TODOs.
+    /// </para>
+    /// </remarks>
+    private static ChartDrawing Stretch(ChartDrawing drawing, DocRect from, DocRect frame)
+    {
+        double sx = (double)frame.Width.Emu / from.Width.Emu;
+        double sy = (double)frame.Height.Emu / from.Height.Emu;
+
+        DocPoint At(DocPoint point)
+            => new(frame.X + point.X * sx, frame.Y + point.Y * sy);
+
+        DocRect Box(DocRect rectangle)
+            => new(
+                frame.X + rectangle.X * sx,
+                frame.Y + rectangle.Y * sy,
+                rectangle.Width * sx,
+                rectangle.Height * sy);
+
+        List<ChartBox> boxes = new(drawing.Boxes.Count);
+        foreach (ChartBox box in drawing.Boxes)
+            boxes.Add(box with { Bounds = Box(box.Bounds), LineWidth = box.LineWidth * sy });
+
+        List<ChartLine> lines = new(drawing.Lines.Count);
+        foreach (ChartLine line in drawing.Lines)
+            lines.Add(line with { From = At(line.From), To = At(line.To), Width = line.Width * sy });
+
+        List<ChartLabel> labels = new(drawing.Labels.Count);
+        foreach (ChartLabel label in drawing.Labels)
+            labels.Add(label with { At = At(label.At), Size = label.Size * sy });
+
+        List<ChartShape> shapes = new(drawing.Shapes.Count);
+        foreach (ChartShape shape in drawing.Shapes)
+            shapes.Add(shape with { Path = Stretched(shape.Path), LineWidth = shape.LineWidth * sy });
+
+        return new ChartDrawing(Box(drawing.PlotArea), boxes, lines, labels, shapes);
+
+        GraphicsPath Stretched(GraphicsPath path)
+        {
+            GraphicsPath moved = new();
+
+            foreach (PathCommand command in path.Commands)
+            {
+                switch (command.Verb)
+                {
+                    case PathVerb.MoveTo: moved.MoveTo(At(command.Point)); break;
+                    case PathVerb.LineTo: moved.LineTo(At(command.Point)); break;
+                    case PathVerb.CubicTo:
+                        moved.CubicTo(At(command.Control1), At(command.Control2), At(command.Point));
+                        break;
+                    default: moved.Close(); break;
+                }
+            }
+
+            return moved;
+        }
+    }
+
+    /// <summary>Back to front, which is the order a combination chart's groups are painted in.</summary>
+    private static readonly ChartPlotKind[] DrawingOrder =
+    [
+        ChartPlotKind.Area,
+        ChartPlotKind.Bar,
+        ChartPlotKind.Line,
+        ChartPlotKind.Scatter,
+        ChartPlotKind.Pie,
+    ];
+
+    /// <summary>Composes a chart in the coordinates it is measured in.</summary>
+    private static ChartDrawing Compose(ChartPlot plot, DocRect frame, IChartTextMeasurer measurer)
+    {
         List<ChartBox> boxes = [];
         List<ChartLine> lines = [];
         List<ChartLabel> labels = [];
-
-        if (frame.Width <= Length.Zero || frame.Height <= Length.Zero)
-            return new ChartDrawing(DocRect.Empty, boxes, lines, labels);
+        List<ChartShape> shapes = [];
 
         if (plot.Background is { } background)
             boxes.Add(new ChartBox(frame, background));
@@ -222,19 +355,135 @@ public static class ChartLayout
 
         DocRect area = PlotAreaOf(plot, frame, scale, categories, measurer);
         if (area.Width <= Length.Zero || area.Height <= Length.Zero)
-            return new ChartDrawing(DocRect.Empty, boxes, lines, labels);
-
-        if (plot.PlotBackground is { } wall) boxes.Add(new ChartBox(area, wall));
+            return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
 
         bool columns = plot.Direction == ChartBarDirection.Column;
 
-        AddValueAxis(plot, area, scale, columns, lines, labels);
-        AddCategoryAxis(plot, area, categories, columns, lines, labels);
-        AddBars(plot, area, scale, categories, columns, boxes);
+        // LibreOffice's second pass, narrowed to the one thing it changes here. How many ticks an
+        // axis may have is decided from how long that axis turned out and how tall — or wide — a
+        // label turned out, and neither is known until the labels have been laid out once. So the
+        // first pass runs at ten intervals, the count is re-derived from the rectangle it produced,
+        // and the scale and the rectangle are computed again if it came out lower.
+        if (plot.HasAxes)
+        {
+            int fitting = IntervalsThatFit(plot, area, columns, scale, measurer);
+            if (fitting < ChartScale.MaximumAutoIntervalCount)
+            {
+                scale = ChartScale.Resolve(
+                    plot.ValueScale, dataMinimum, dataMaximum, maximumIntervals: fitting);
+
+                area = PlotAreaOf(plot, frame, scale, categories, measurer);
+                if (area.Width <= Length.Zero || area.Height <= Length.Zero)
+                    return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
+            }
+        }
+
+        if (plot.PlotBackground is { } wall) boxes.Add(new ChartBox(area, wall));
+
+        if (plot.HasAxes)
+        {
+            AddValueAxis(plot, area, scale, columns, lines, labels);
+            AddCategoryAxis(plot, area, categories, columns, lines, labels);
+        }
+
+        // Every plot group is drawn, not only the first, and the order is back to front: areas
+        // fill, bars sit on them, lines go over both. A part holding a c:barChart and a
+        // c:lineChart over one pair of axes is an ordinary combination chart, and drawing only
+        // the first group loses whole series — measured on
+        // stacked-non-stacked-mix-y-axis.pptx, whose third chart holds one area series and two
+        // bar series and came out with one of the three.
+        foreach (ChartPlotKind kind in DrawingOrder)
+        {
+            List<ChartSeries> subset = plot.SeriesOf(kind);
+            if (subset.Count == 0) continue;
+
+            ChartPlot part = plot with { Series = subset };
+
+            switch (kind)
+            {
+                case ChartPlotKind.Pie: AddWedges(part, area, shapes); break;
+                case ChartPlotKind.Area: AddAreas(part, area, scale, categories, columns, shapes); break;
+                case ChartPlotKind.Line:
+                case ChartPlotKind.Scatter:
+                    AddLines(part, area, scale, categories, columns, shapes);
+                    break;
+                default: AddBars(part, area, scale, categories, columns, boxes); break;
+            }
+        }
+
         AddTitles(plot, frame, area, measurer, labels);
         AddLegend(plot, frame, area, measurer, boxes, labels);
 
-        return new ChartDrawing(area, boxes, lines, labels);
+        return new ChartDrawing(area, boxes, lines, labels, shapes);
+    }
+
+    /// <summary>
+    /// How many major intervals the value axis has room for, once its length is known.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>VCartesianAxis::estimateMaximumAutoMainIncrementCount</c>
+    /// (<c>chart2/source/view/axes/VCartesianAxis.cxx:1559-1618</c>): the axis line's own length
+    /// divided by the largest label shape measured so far — its <em>height</em> for a vertical
+    /// axis and its <em>width</em> for a horizontal one — and ten whenever nothing has been
+    /// measured yet, which is what makes the first pass ten.
+    /// </para>
+    /// <para>
+    /// <strong>The text, not the shape it sits in.</strong> Every other reservation in this file
+    /// uses <see cref="Shape"/>, which adds <c>ShapeFactory</c>'s insets; this one must not, and
+    /// the corpus pins it down from both sides. <c>chart-bar-sheet.xlsx</c> draws its axis 54.6 pt
+    /// long and LibreOffice labels it <c>0 50 … 200</c>: that is four intervals, which
+    /// <c>54.6 / 11.5</c> gives and <c>54.6 / 17.5</c> does not — 17.5 gives three, and three
+    /// forces the interval to 100. <c>chart-bar-sheet.ods</c> draws its axis 108.8 pt long and is
+    /// labelled <c>0 20 … 180</c>: nine intervals, which <c>108.8 / 11.5</c> gives and
+    /// <c>108.8 / 17.5</c> does not.
+    /// </para>
+    /// <para>
+    /// <strong>And it is what separates a chart from a smaller copy of the same chart.</strong>
+    /// <c>chart-bar-deck.odp</c> and <c>chart-bar-sheet.ods</c> hold the same eight numbers,
+    /// peaking at 168, and LibreOffice labels the deck <c>0 20 … 180</c> over an axis 242 pt long
+    /// and the sheet's <c>.xlsx</c> form <c>0 50 … 200</c> over one 55 pt long. Reproducing the
+    /// deck without this and reusing it draws every bar 10% too tall against ticks that read
+    /// perfectly plausibly.
+    /// </para>
+    /// </remarks>
+    private static int IntervalsThatFit(
+        ChartPlot plot,
+        DocRect area,
+        bool columns,
+        ChartScaleResult scale,
+        IChartTextMeasurer measurer)
+    {
+        // A stated interval is honoured whatever fits; only the automatic one is re-derived.
+        if (plot.ValueScale.MajorUnit is { } stated && stated > 0.0)
+            return ChartScale.MaximumAutoIntervalCount;
+
+        Length available;
+        Length needed;
+
+        if (columns)
+        {
+            available = area.Height;
+            needed = measurer.Measure("0", plot.LabelSize).Height;
+        }
+        else
+        {
+            available = area.Width;
+            needed = Length.Zero;
+
+            foreach (double tick in scale.MajorTicks())
+            {
+                Length width = measurer.Measure(Format(tick), plot.LabelSize).Width;
+                if (width > needed) needed = width;
+            }
+        }
+
+        if (needed <= Length.Zero) return ChartScale.MaximumAutoIntervalCount;
+
+        return Math.Clamp(
+            (int)(available.Emu / needed.Emu),
+            ChartScale.MinimumAutoIntervalCount,
+            ChartScale.MaximumAutoIntervalCount);
     }
 
     /// <summary>
@@ -247,7 +496,20 @@ public static class ChartLayout
         int categories,
         IChartTextMeasurer measurer)
     {
-        if (plot.PlotArea is { } stated) return Map(stated, plot.Space, frame);
+        // Absolute, in the chart's own coordinates — ODF's chart:coordinate-region, which is
+        // already in whatever space Place composed in.
+        if (plot.PlotArea is { } stated)
+            return new DocRect(frame.X + stated.X, frame.Y + stated.Y, stated.Width, stated.Height);
+
+        // Fractions of the frame — OOXML's c:manualLayout, which states no space of its own.
+        if (plot.PlotAreaFraction is { } fraction)
+        {
+            return new DocRect(
+                frame.X + frame.Width * fraction.X,
+                frame.Y + frame.Height * fraction.Y,
+                frame.Width * fraction.Width,
+                frame.Height * fraction.Height);
+        }
 
         // The computed path, which is what every OOXML chart takes. Start from the frame less
         // the proportional page margin, then take away the title, the legend and the axes'
@@ -272,6 +534,15 @@ public static class ChartLayout
             case ChartLegendPosition.Top: top += LegendHeight(plot, measurer) + marginY; break;
             case ChartLegendPosition.Bottom: bottom -= LegendHeight(plot, measurer) + marginY; break;
             default: break;
+        }
+
+        // A chart with no axes — a pie — reserves nothing for labels it does not draw, and what is
+        // left after the title and the legend is the whole diagram.
+        if (!plot.HasAxes)
+        {
+            return right <= left || bottom <= top
+                ? DocRect.Empty
+                : new DocRect(left, top, right - left, bottom - top);
         }
 
         bool columns = plot.Direction == ChartBarDirection.Column;
@@ -315,32 +586,6 @@ public static class ChartLayout
             : new DocRect(left, top, right - left, bottom - top);
     }
 
-    /// <summary>
-    /// Maps a rectangle stated in the chart's own space onto the frame it is drawn in.
-    /// </summary>
-    /// <remarks>
-    /// ODF states its geometry in the chart document's own <c>svg:width</c> by
-    /// <c>svg:height</c> — 22 cm by 12 cm for the corpus deck — and the frame that displays it
-    /// is whatever the containing document made it. The two are usually equal, because the
-    /// container writes the object's size from the chart's; they are not equal when the frame
-    /// has been resized without reopening the chart, and then everything must scale together or
-    /// the plot area lands outside the frame.
-    /// </remarks>
-    private static DocRect Map(DocRect stated, DocSize? space, DocRect frame)
-    {
-        if (space is not { } size || size.Width <= Length.Zero || size.Height <= Length.Zero)
-            return new DocRect(frame.X + stated.X, frame.Y + stated.Y, stated.Width, stated.Height);
-
-        double scaleX = (double)frame.Width.Emu / size.Width.Emu;
-        double scaleY = (double)frame.Height.Emu / size.Height.Emu;
-
-        return new DocRect(
-            frame.X + stated.X * scaleX,
-            frame.Y + stated.Y * scaleY,
-            stated.Width * scaleX,
-            stated.Height * scaleY);
-    }
-
     /// <summary>The value axis: its line, its ticks, its gridlines and its labels.</summary>
     private static void AddValueAxis(
         ChartPlot plot,
@@ -367,6 +612,13 @@ public static class ChartLayout
                 // A fraction of 0 is the axis minimum, which is the *bottom* of a column
                 // chart's plot area — hence the subtraction rather than an addition.
                 Length y = area.Bottom - area.Height * along;
+
+                if (plot.ValueGrid is { } grid)
+                {
+                    lines.Add(new ChartLine(
+                        new DocPoint(area.Left, y), new DocPoint(area.Right, y), grid));
+                }
+
                 lines.Add(new ChartLine(
                     new DocPoint(area.Left - TickLength, y), new DocPoint(area.Left, y), AxisColour));
                 labels.Add(new ChartLabel(
@@ -379,6 +631,13 @@ public static class ChartLayout
             else
             {
                 Length x = area.Left + area.Width * along;
+
+                if (plot.ValueGrid is { } grid)
+                {
+                    lines.Add(new ChartLine(
+                        new DocPoint(x, area.Top), new DocPoint(x, area.Bottom), grid));
+                }
+
                 lines.Add(new ChartLine(
                     new DocPoint(x, area.Bottom), new DocPoint(x, area.Bottom + TickLength), AxisColour));
                 labels.Add(new ChartLabel(
@@ -389,8 +648,6 @@ public static class ChartLayout
                     AxisColour));
             }
         }
-
-        _ = plot;
     }
 
     /// <summary>
@@ -420,19 +677,37 @@ public static class ChartLayout
 
         if (categories <= 0) return;
 
-        for (int at = 0; at <= categories; at++)
+        // A shifted axis is divided into slots, so n categories give n + 1 boundaries; an
+        // unshifted one is marked at n points, the first and last on the plot area's own edges.
+        int ticks = plot.ShiftedCategories ? categories : categories - 1;
+
+        for (int at = 0; at <= ticks; at++)
         {
-            double along = (double)at / categories;
+            double along = ticks == 0 ? 0.0 : (double)at / ticks;
 
             if (columns)
             {
                 Length x = area.Left + area.Width * along;
+
+                if (plot.CategoryGrid is { } grid)
+                {
+                    lines.Add(new ChartLine(
+                        new DocPoint(x, area.Top), new DocPoint(x, area.Bottom), grid));
+                }
+
                 lines.Add(new ChartLine(
                     new DocPoint(x, area.Bottom), new DocPoint(x, area.Bottom + TickLength), AxisColour));
             }
             else
             {
                 Length y = area.Bottom - area.Height * along;
+
+                if (plot.CategoryGrid is { } grid)
+                {
+                    lines.Add(new ChartLine(
+                        new DocPoint(area.Left, y), new DocPoint(area.Right, y), grid));
+                }
+
                 lines.Add(new ChartLine(
                     new DocPoint(area.Left - TickLength, y), new DocPoint(area.Left, y), AxisColour));
             }
@@ -443,7 +718,7 @@ public static class ChartLayout
             if (at >= plot.Categories.Count) continue;
             if (plot.Categories[at] is not { Length: > 0 } text) continue;
 
-            double centre = (at + 0.5) / categories;
+            double centre = CategoryAt(plot, at, categories);
 
             labels.Add(columns
                 ? new ChartLabel(
@@ -464,6 +739,274 @@ public static class ChartLayout
                     AxisColour));
         }
     }
+
+    /// <summary>
+    /// Where a category sits along the axis, 0 at the plot area's start and 1 at its end.
+    /// </summary>
+    /// <remarks>
+    /// The middle of its slot on a shifted axis and the tick itself on an unshifted one; see
+    /// <see cref="ChartPlot.ShiftedCategories"/> for which chart type gets which. A single
+    /// category on an unshifted axis has nowhere to be but the middle, which is what LibreOffice
+    /// draws and what the division would otherwise make a division by zero.
+    /// </remarks>
+    private static double CategoryAt(ChartPlot plot, int index, int categories)
+    {
+        if (categories <= 0) return 0.5;
+        if (plot.ShiftedCategories) return (index + 0.5) / categories;
+        return categories == 1 ? 0.5 : (double)index / (categories - 1);
+    }
+
+    /// <summary>
+    /// A line or scatter chart: one polyline per series through its points.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>VSeriesPlotter</c>'s line plotter joins consecutive points and <em>breaks the line at a
+    /// gap</em> rather than bridging it — a category a series has no value for ends the current
+    /// run and starts a new one (<c>AreaChart::createShapes</c>'s
+    /// <c>PolyPolygonShapeInfo</c> handling of <c>bIsVisible</c>). Bridging instead draws a
+    /// straight segment across the hole, which is the one thing a reader cannot tell from a real
+    /// value.
+    /// </para>
+    /// <para>
+    /// A scatter chart is drawn the same way here and is the weaker of the two: its X values are a
+    /// second numeric series with a scale of their own, and what is drawn instead spaces the
+    /// points evenly along the category axis. That is right whenever the X values are evenly
+    /// spaced, which is most of the corpus, and wrong in proportion to how unevenly they are not.
+    /// Recorded in the family TODOs.
+    /// </para>
+    /// </remarks>
+    private static void AddLines(
+        ChartPlot plot,
+        DocRect area,
+        ChartScaleResult scale,
+        int categories,
+        bool columns,
+        List<ChartShape> shapes)
+    {
+        if (categories <= 0) return;
+
+        foreach (ChartSeries series in plot.Series)
+        {
+            GraphicsPath path = new();
+            bool open = false;
+
+            for (int at = 0; at < categories; at++)
+            {
+                if (at >= series.Values.Count
+                    || series.Values[at] is not { } value
+                    || !double.IsFinite(value))
+                {
+                    open = false;
+                    continue;
+                }
+
+                DocPoint point = Point(area, CategoryAt(plot, at, categories), scale.Fraction(value), columns);
+
+                if (open) path.LineTo(point);
+                else path.MoveTo(point);
+
+                open = true;
+            }
+
+            if (path.Commands.Count < 2) continue;
+
+            // Stroked in the series' fill when it states no line of its own, because that is what
+            // both formats mean by a line series' colour: OOXML puts it on a:ln and ODF on the
+            // series' stroke, and a series that states only a fill is drawn in that fill.
+            shapes.Add(new ChartShape(
+                path, null, series.Line ?? series.Fill ?? Colour.Black, series.LineWidth));
+        }
+    }
+
+    /// <summary>
+    /// An area chart: one filled region per series, from the baseline up to its points.
+    /// </summary>
+    /// <remarks>
+    /// Stacked areas pile onto a running total per category exactly as stacked bars do, so the
+    /// lower edge of a series is the upper edge of the one below it rather than the baseline.
+    /// Unstacked areas are drawn in file order and overlap, which is what LibreOffice draws and
+    /// what makes a later series hide an earlier one — the reason a real area chart is usually
+    /// stacked.
+    /// </remarks>
+    private static void AddAreas(
+        ChartPlot plot,
+        DocRect area,
+        ChartScaleResult scale,
+        int categories,
+        bool columns,
+        List<ChartShape> shapes)
+    {
+        if (categories <= 0) return;
+
+        double baseline = Math.Clamp(scale.Fraction(0.0), 0.0, 1.0);
+        double[] running = new double[categories];
+        double[] previous = new double[categories];
+
+        for (int at = 0; at < categories; at++) previous[at] = baseline;
+
+        foreach (ChartSeries series in plot.Series)
+        {
+            List<DocPoint> upper = [];
+            List<DocPoint> lower = [];
+
+            for (int at = 0; at < categories; at++)
+            {
+                double value = at < series.Values.Count && series.Values[at] is { } stated
+                               && double.IsFinite(stated)
+                    ? stated
+                    : 0.0;
+
+                double top;
+
+                if (plot.IsStacked)
+                {
+                    running[at] += value;
+                    top = scale.Fraction(running[at]);
+                }
+                else
+                {
+                    top = scale.Fraction(value);
+                }
+
+                double across = CategoryAt(plot, at, categories);
+                upper.Add(Point(area, across, top, columns));
+                lower.Add(Point(area, across, plot.IsStacked ? previous[at] : baseline, columns));
+            }
+
+            if (upper.Count < 2) continue;
+
+            GraphicsPath path = new();
+            path.MoveTo(upper[0]);
+            for (int at = 1; at < upper.Count; at++) path.LineTo(upper[at]);
+            for (int at = lower.Count - 1; at >= 0; at--) path.LineTo(lower[at]);
+            path.Close();
+
+            shapes.Add(new ChartShape(path, series.Fill, series.Line, series.LineWidth));
+
+            if (plot.IsStacked)
+            {
+                for (int at = 0; at < categories; at++) previous[at] = scale.Fraction(running[at]);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A pie chart: one wedge per category of the first series.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A pie plots one series and colours it per point.</strong> Where a bar chart's
+    /// colours belong to the series, a pie's belong to the points — <c>c:dPt</c>, ODF's
+    /// <c>chart:data-point</c> — and the legend names the categories rather than the series. Only
+    /// the first series is drawn, which is what a pie of several series means to every application
+    /// but Excel's "pie of pie".
+    /// </para>
+    /// <para>
+    /// <strong>The first wedge starts at twelve o'clock and they run clockwise.</strong>
+    /// <c>PieChart::createShapes</c> begins at <c>fAngleDegree = 90</c> and subtracts, which is
+    /// what both formats' default <c>firstSliceAng="0"</c> means. Starting at three o'clock, which
+    /// is what a naive polar conversion gives, turns every wedge a quarter turn and is the kind of
+    /// error that looks like a data ordering bug.
+    /// </para>
+    /// <para>
+    /// The circle is inscribed in the plot area, its radius the smaller half-extent, which is
+    /// <c>PolarPlottingPositionHelper</c>'s unit circle mapped through the diagram's rectangle.
+    /// </para>
+    /// </remarks>
+    private static void AddWedges(ChartPlot plot, DocRect area, List<ChartShape> shapes)
+    {
+        if (plot.Series.Count == 0) return;
+
+        ChartSeries series = plot.Series[0];
+
+        double total = 0.0;
+        foreach (double? point in series.Values)
+            if (point is { } value && double.IsFinite(value)) total += Math.Abs(value);
+
+        if (!(total > 0.0)) return;
+
+        DocPoint centre = new(area.X + area.Width / 2, area.Y + area.Height / 2);
+        Length radius = area.Width < area.Height ? area.Width / 2 : area.Height / 2;
+        if (radius <= Length.Zero) return;
+
+        double start = Math.PI / 2;
+
+        for (int at = 0; at < series.Values.Count; at++)
+        {
+            if (series.Values[at] is not { } value || !double.IsFinite(value)) continue;
+
+            double sweep = Math.Abs(value) / total * (2 * Math.PI);
+            if (sweep <= 0.0) { continue; }
+
+            shapes.Add(new ChartShape(
+                Wedge(centre, radius, start, -sweep),
+                series.FillAt(at),
+                series.Line,
+                series.LineWidth));
+
+            start -= sweep;
+        }
+    }
+
+    /// <summary>
+    /// One wedge, as a path: a radius out, an arc, and a radius back.
+    /// </summary>
+    /// <remarks>
+    /// The arc is split into segments of at most a quarter turn and each is the standard cubic
+    /// approximation, whose control handles are <c>4/3 × tan(θ/4) × r</c> from the end points along
+    /// the tangents. One cubic for a whole half-circle is visibly flat at the sides; a quarter is
+    /// accurate to a thousandth of the radius, which is below anything a page can show.
+    /// </remarks>
+    private static GraphicsPath Wedge(DocPoint centre, Length radius, double start, double sweep)
+    {
+        GraphicsPath path = new();
+        path.MoveTo(centre);
+        path.LineTo(On(start));
+
+        int segments = Math.Max(1, (int)Math.Ceiling(Math.Abs(sweep) / (Math.PI / 2)));
+        double step = sweep / segments;
+        double handle = 4.0 / 3.0 * Math.Tan(step / 4.0);
+
+        double angle = start;
+
+        for (int at = 0; at < segments; at++)
+        {
+            DocPoint from = On(angle);
+            DocPoint to = On(angle + step);
+
+            // P1 = P0 + k·r·T(θ0) and P2 = P3 − k·r·T(θ1), where T is the tangent d/dθ of the
+            // parametrisation — which in a y-down space is (−sin θ, −cos θ) rather than
+            // (−sin θ, cos θ). Getting that one sign wrong bends every arc the wrong way and
+            // draws a pie as a pinwheel, which is what it looks like and not what it is.
+            path.CubicTo(
+                new DocPoint(
+                    from.X - radius * (handle * Math.Sin(angle)),
+                    from.Y - radius * (handle * Math.Cos(angle))),
+                new DocPoint(
+                    to.X + radius * (handle * Math.Sin(angle + step)),
+                    to.Y + radius * (handle * Math.Cos(angle + step))),
+                to);
+
+            angle += step;
+        }
+
+        path.LineTo(centre);
+        path.Close();
+        return path;
+
+        // The y term is negated because a document's y axis points down and an angle's does not.
+        DocPoint On(double at)
+            => new(centre.X + radius * Math.Cos(at), centre.Y - radius * Math.Sin(at));
+    }
+
+    /// <summary>
+    /// A point in the plot area from its two fractions, whichever way round the axes are.
+    /// </summary>
+    private static DocPoint Point(DocRect area, double across, double up, bool columns)
+        => columns
+            ? new DocPoint(area.Left + area.Width * across, area.Bottom - area.Height * up)
+            : new DocPoint(area.Left + area.Width * up, area.Bottom - area.Height * across);
 
     /// <summary>
     /// The bars.
@@ -634,10 +1177,7 @@ public static class ChartLayout
     {
         if (plot.Legend == ChartLegendPosition.None) return;
 
-        List<ChartSeries> named = [];
-        foreach (ChartSeries series in plot.Series)
-            if (series.Name is { Length: > 0 }) named.Add(series);
-
+        List<(string Name, Colour? Fill, Colour? Line, Length Width)> named = Entries(plot);
         if (named.Count == 0) return;
 
         Length line = measurer.Measure("0", plot.LabelSize).Height;
@@ -659,24 +1199,59 @@ public static class ChartLayout
             _ => area.X + area.Width / 2 - LegendWidth(plot, measurer) / 2,
         };
 
-        foreach (ChartSeries series in named)
+        foreach ((string name, Colour? fill, Colour? outline, Length width) in named)
         {
             boxes.Add(new ChartBox(
-                Rectangle(left, top + (line - key) / 2, key, key),
-                series.Fill,
-                series.Line,
-                series.LineWidth));
+                Rectangle(left, top + (line - key) / 2, key, key), fill, outline, width));
 
             labels.Add(new ChartLabel(
-                series.Name!,
+                name,
                 new DocPoint(left + key + gap, top + line / 2),
                 ChartLabelAnchor.LeftMiddle,
                 plot.LabelSize,
                 AxisColour));
 
             if (vertical) top += line;
-            else left += key + gap + measurer.Measure(series.Name!, plot.LabelSize).Width + gap * 2;
+            else left += key + gap + measurer.Measure(name, plot.LabelSize).Width + gap * 2;
         }
+    }
+
+    /// <summary>
+    /// What the legend lists: the series, or a pie's categories.
+    /// </summary>
+    /// <remarks>
+    /// <strong>A pie's legend names its categories.</strong> It plots one series, so listing the
+    /// series would give a legend of one entry beside a picture of eight wedges;
+    /// <c>VLegend</c> takes its entries from the plotter, and <c>PieChart</c> supplies one per
+    /// point with that point's own colour (<c>VSeriesPlotter::createLegendEntries</c>'s
+    /// <c>bIsPie</c> branch). Getting this wrong is worth several words of a word count and the
+    /// whole legend of a picture.
+    /// </remarks>
+    private static List<(string Name, Colour? Fill, Colour? Line, Length Width)> Entries(
+        ChartPlot plot)
+    {
+        List<(string, Colour?, Colour?, Length)> entries = [];
+
+        if (plot.Kind == ChartPlotKind.Pie)
+        {
+            ChartSeries? first = plot.Series.Count > 0 ? plot.Series[0] : null;
+
+            for (int at = 0; at < plot.Categories.Count; at++)
+            {
+                if (plot.Categories[at] is not { Length: > 0 } name) continue;
+                entries.Add((name, first?.FillAt(at), first?.Line, first?.LineWidth ?? Length.Zero));
+            }
+
+            return entries;
+        }
+
+        foreach (ChartSeries series in plot.Series)
+        {
+            if (series.Name is not { Length: > 0 } name) continue;
+            entries.Add((name, series.Fill, series.Line, series.LineWidth));
+        }
+
+        return entries;
     }
 
     /// <summary>How wide a vertical legend is, keys and names together.</summary>
@@ -688,9 +1263,8 @@ public static class ChartLayout
         Length widest = Length.Zero;
         int count = 0;
 
-        foreach (ChartSeries series in plot.Series)
+        foreach ((string name, _, _, _) in Entries(plot))
         {
-            if (series.Name is not { Length: > 0 } name) continue;
             count++;
             Length width = measurer.Measure(name, plot.LabelSize).Width;
             if (width > widest) widest = width;
@@ -744,7 +1318,7 @@ public static class ChartLayout
     /// <remarks>
     /// The axis' <c>c:numFmt</c> is deliberately not applied. Doing so needs a number formatter,
     /// and the only one Paperless has lives in <c>Paperless.Spreadsheets</c>, above this library
-    /// — the same layering that keeps <see cref="DrawingChart"/> from resolving a
+    /// — the same layering that keeps <c>DrawingChart</c> from resolving a
     /// <c>c:f</c> against its own workbook. What is drawn instead is the shortest round-trip
     /// form, which is what "General" produces for every whole-number scale in the corpus and
     /// what LibreOffice draws for one.
