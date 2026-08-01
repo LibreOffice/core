@@ -315,6 +315,33 @@ public sealed record ParagraphFormat
     public Length DefaultTabInterval { get; init; } = Length.FromTwips(720);
 
     /// <summary>
+    /// Whether the tab stops are measured from the paragraph's own indent rather than from the text area.
+    /// </summary>
+    /// <remarks>
+    /// Writer's <c>TABS_RELATIVE_TO_INDENT</c>, and another compatibility flag rather than a property: the
+    /// same stop at 12 cm means twelve centimetres into an indented paragraph in an ODF document and twelve
+    /// centimetres into the <em>page</em> in a Word one. Both importers say so outright — <c>ww8par.cxx</c>
+    /// and <c>writerfilter</c>'s <c>DomainMapper</c> each set it to false, and the registry default for a
+    /// native document is true — so it defaults to Writer's answer and every Word-family reader turns it
+    /// off. Getting it wrong shifts a tabbed column by the indent, which on a dotted table of contents is
+    /// the difference between one line and three.
+    /// </remarks>
+    public bool TabsRelativeToIndent { get; init; } = true;
+
+    /// <summary>
+    /// Where the paragraph's tab stops are measured from, relative to the text area's start edge.
+    /// </summary>
+    public Length TabOrigin => TabsRelativeToIndent ? StartIndent : Length.Zero;
+
+    /// <summary>
+    /// Where a line's start edge sits relative to <see cref="TabOrigin"/>, which is negative inside a
+    /// hanging indent.
+    /// </summary>
+    /// <param name="isFirstLine">True for the paragraph's first line, which is the only one that hangs.</param>
+    public Length TabLineOffset(bool isFirstLine)
+        => LineStart(isFirstLine) - TabOrigin;
+
+    /// <summary>
     /// The stop a tab at a position advances to.
     /// </summary>
     /// <remarks>
@@ -327,14 +354,32 @@ public sealed record ParagraphFormat
     /// The multiple is counted from the paragraph's text start, not from the last explicit stop, which is
     /// what makes the default stops of an untabbed paragraph fall on a regular grid.
     /// </para>
+    /// <para>
+    /// A tab still inside a hanging indent is the exception, and it is not a small one: it advances to the
+    /// paragraph's own indent whatever stops the paragraph declares, which is what makes
+    /// "<c>1.1</c> ⇥ <c>Purpose</c>" in a table of contents set the title against the indent instead of
+    /// throwing it at a right-aligned leader stop by the margin and wrapping the line. Writer states the
+    /// rule in as many words in <c>SwTextFormatter::NewTabPortion</c>
+    /// (<c>sw/source/core/text/txttab.cxx</c>): "the new tab portion is inside the hanging indent … a tab
+    /// stop at the left margin is allowed … the determined next tab stop is beyond the left margin".
+    /// </para>
     /// </remarks>
-    /// <param name="position">Where the tab is, measured from where the paragraph's text starts.</param>
+    /// <param name="position">Where the tab is, measured from <see cref="TabOrigin"/>.</param>
     public TabStop NextTabStop(Length position)
     {
+        // The paragraph's own indent, in the same coordinates as the stops. A tab before it is inside the
+        // hanging indent, and only the first line of a paragraph with a negative first-line indent has
+        // anything before it at all.
+        Length indent = TabsRelativeToIndent ? Length.Zero : StartIndent;
+
         foreach (TabStop stop in TabStops)
         {
-            if (stop.Position > position) return stop;
+            if (stop.Position <= position) continue;
+
+            return position < indent && stop.Position > indent ? new TabStop(indent) : stop;
         }
+
+        if (position < indent) return new TabStop(indent);
 
         Length interval = DefaultTabInterval > Length.Zero
             ? DefaultTabInterval

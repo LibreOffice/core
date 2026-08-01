@@ -283,7 +283,8 @@ public sealed class LineFiller
                 }
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
-                Length width = Measure(text, lineStart, visibleEnd, widthBetween, tabs);
+                Length width = Measure(
+                    text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0);
 
                 if (width > limit && chosen >= 0) break;
 
@@ -307,7 +308,8 @@ public sealed class LineFiller
                 // No opportunity at all past this point, which happens when the text ends without one.
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
-                chosenWidth = Measure(text, lineStart, chosenVisibleEnd, widthBetween, tabs);
+                chosenWidth = Measure(
+                    text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0);
             }
 
             lines.Add(new TextLine(
@@ -334,9 +336,10 @@ public sealed class LineFiller
         int start,
         int end,
         Func<int, int, Length> widthBetween,
-        ParagraphFormat? tabs)
+        ParagraphFormat? tabs,
+        bool isFirstLine)
         => tabs is not null && TabRuler.HasTab(text, start, end)
-            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween)
+            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween, isFirstLine)
             : widthBetween(start, end);
 
     /// <summary>

@@ -1082,6 +1082,10 @@ public sealed partial class RtfDocumentReader
                 Alignment = AlignmentOf(state),
                 TabStops = [.. state.TabStops.OrderBy(stop => stop.Position.Emu)],
                 DefaultTabInterval = _defaultTabInterval,
+
+                // As for DOCX: writerfilter's DomainMapper clears TABS_RELATIVE_TO_INDENT for every
+                // document it maps, and RTF goes through the same mapper.
+                TabsRelativeToIndent = false,
             },
             _fontFamilies.GetValueOrDefault(state.FontIndex),
             SizeOf(state),

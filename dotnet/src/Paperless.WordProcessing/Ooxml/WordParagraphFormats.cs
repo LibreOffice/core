@@ -113,6 +113,11 @@ internal static class WordParagraphFormats
             TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs")),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
+
+            // Word measures its tab stops from the text area rather than from the paragraph's indent:
+            // writerfilter's DomainMapper sets TABS_RELATIVE_TO_INDENT to false on every document it
+            // maps, citing #i24363#.
+            TabsRelativeToIndent = false,
         };
     }
 

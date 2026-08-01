@@ -60,12 +60,18 @@ public static class TabRuler
     /// <param name="end">Where the line's visible text ends.</param>
     /// <param name="format">The paragraph's stops and default interval.</param>
     /// <param name="widthBetween">Measures a range of the text, tabs excluded.</param>
+    /// <param name="isFirstLine">
+    /// True for the paragraph's first line. It decides where the line's left edge sits relative to the
+    /// stops, which differs by the first-line indent — and a hanging one puts the edge <em>before</em> the
+    /// stops' own origin, which is the case <see cref="ParagraphFormat.NextTabStop"/> treats specially.
+    /// </param>
     public static List<TabbedSegment> Segments(
         string text,
         int start,
         int end,
         ParagraphFormat format,
-        Func<int, int, Length> widthBetween)
+        Func<int, int, Length> widthBetween,
+        bool isFirstLine = true)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(format);
@@ -73,7 +79,12 @@ public static class TabRuler
 
         int last = Math.Min(end, text.Length);
         List<TabbedSegment> segments = [];
-        Length pen = Length.Zero;
+
+        // Where this line's left edge is in the coordinates the stops are stated in. The pen is kept in
+        // those coordinates throughout and converted back only when a segment is recorded, since a stop's
+        // position means nothing until the two agree on where zero is.
+        Length origin = format.TabLineOffset(isFirstLine);
+        Length pen = origin;
         int at = start;
 
         // The first stretch begins at the line's left edge; every later one begins at a stop.
@@ -89,7 +100,7 @@ public static class TabRuler
                 ? Place(stop, pen, width, text, at, stretchEnd, widthBetween)
                 : pen;
 
-            segments.Add(new TabbedSegment(at, stretchEnd, left, width));
+            segments.Add(new TabbedSegment(at, stretchEnd, left - origin, width));
             pen = left + width;
 
             if (stretchEnd >= last) break;
@@ -108,14 +119,18 @@ public static class TabRuler
     /// <param name="end">Where the measured text ends.</param>
     /// <param name="format">The paragraph's stops and default interval.</param>
     /// <param name="widthBetween">Measures a range of the text, tabs excluded.</param>
+    /// <param name="isFirstLine">As <see cref="Segments"/>'s.</param>
     public static Length WidthOf(
         string text,
         int start,
         int end,
         ParagraphFormat format,
-        Func<int, int, Length> widthBetween)
+        Func<int, int, Length> widthBetween,
+        bool isFirstLine = true)
     {
-        List<TabbedSegment> segments = Segments(text, start, end, format, widthBetween);
+        List<TabbedSegment> segments =
+            Segments(text, start, end, format, widthBetween, isFirstLine);
+
         return segments.Count == 0 ? Length.Zero : segments[^1].Right;
     }
 

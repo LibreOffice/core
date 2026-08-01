@@ -513,7 +513,7 @@ public static class PageDrawing
 
         if (end <= start) return runs;
 
-        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end, line.StartsParagraph))
         {
             if (segment.IsEmpty) continue;
 
@@ -572,7 +572,8 @@ public static class PageDrawing
     /// measurement handed to the ruler is the same one the layout used, so the stops land in the same
     /// places here as they did when the line's width was decided.
     /// </remarks>
-    private static List<TabbedSegment> Stretches(PageParagraph paragraph, int start, int end)
+    private static List<TabbedSegment> Stretches(
+        PageParagraph paragraph, int start, int end, bool isFirstLine)
     {
         if (!TabRuler.HasTab(paragraph.Text, start, end))
         {
@@ -584,7 +585,8 @@ public static class PageDrawing
             start,
             end,
             paragraph.Format,
-            (from, to) => WidthBetween(paragraph, from, to));
+            (from, to) => WidthBetween(paragraph, from, to),
+            isFirstLine);
     }
 
     /// <summary>
@@ -765,7 +767,7 @@ public static class PageDrawing
         int end = Math.Min(line.Box.Line.End, paragraph.Text.Length);
         int position = Math.Clamp(at, start, end);
 
-        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end, line.StartsParagraph))
         {
             if (position > segment.End) continue;
 
