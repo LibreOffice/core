@@ -331,14 +331,41 @@ table asserted, not by the corpus.
       "cache can be stale" worry is real and is not ours to fix: a stale cache is exactly what
       Impress draws, so reporting anything else would disagree with the reference on purpose. The
       layering never comes under pressure.
-- [ ] **A chart is still not drawn**, which is now the only reason a deck holding one renders
-      differently from the reference. Measured: `chart-bar-deck.pptx`, `.odp` and `.fodp` all
-      render **0 words against LibreOffice's 20** — the title, two axis titles, two series names,
-      four category labels and ten value-axis ticks. The ticks are the interesting part of that
-      list: they are not in the file. LibreOffice picks 0…180 by twenties for the ODF pair and
-      0…200 by fifties for the PPTX after a round trip, from the same data, so a renderer needs an
-      axis-scale algorithm before it can draw a single label — see the master TODO's note on the
-      baked metafile, which exists for the ODP and does not for the PPTX.
+- [x] **A chart is drawn now, in all three forms, and the three decks match the reference.**
+      `chart-bar-deck.pptx`, `.odp` and `.fodp` rendered **0 words against LibreOffice's 20**; all
+      three now render 20 on one page. The engine is family-blind and lives in
+      `Paperless.Ooxml/DrawingML/` — `ChartScale`, `ChartPlot`, `ChartLayout`, `DrawingChartPlot` —
+      and this library contributes `Layout/SlideChart.cs`, which turns a laid-out chart into a run
+      of ordinary `PlacedShape` exactly as `SlideTable` does, plus one reader and one layout half
+      per family: `OpenDocument/OdfChartPlot.cs`, `OpenDocument/OdfChartStyles.cs`,
+      `Ooxml/PptxSlideLayoutChart.cs`, `OpenDocument/OdpSlideLayoutChart.cs`. The two shape walks
+      each gained one word (`sealed` → `sealed partial`) and one case; nothing else in the library
+      changed.
+
+      **The ticks were the interesting part and the reason given for them was wrong.** They are
+      not in the file, and the note here said LibreOffice picks 0…180 for the ODF pair and 0…200
+      for the round-tripped PPTX "from the same data", so the scale must come from the part.
+      Measured on the corpus pair: **both draw 0…180 by twenties**, and the PPTX's
+      `c:valAx/c:scaling` states no minimum, maximum or major unit whatever. The scale comes from
+      the *algorithm*, which is why `ChartScale` is a step-for-step port of
+      `ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear` rather than a plausible
+      rounding rule.
+
+      **The trap that cost the most time, and it is in this library.** A slide shape's text is
+      1.2 em per line because the PPTX importer sets EditEngine's `FixedCellHeight` on every body
+      it reads (`oox/source/ppt/pptshapecontext.cxx:186`) — and `SlideTextBody` defaults
+      `FontIndependentLineSpacing` to true for exactly that reason. A chart's labels are *not*
+      slide shapes: `chart2`'s own view builds plain text shapes and sets no such flag, so they
+      are the face's 1.1499 em. Reusing the default put every chart label 0.15 pt too tall, which
+      accumulated through the title and both axis titles into 8 pt of misplaced plot area — a
+      whole-chart error produced by a per-label rounding, and invisible in any single label.
+- [ ] **What a chart still does not draw**, in the order the corpus wants it: gridlines (cheapest,
+      the tick values are already in hand); line, pie, scatter and area series (`DrawingChartPlot`
+      reads the first `…Chart` group only, so a combination chart draws its bars and drops its
+      line); data labels; a secondary value axis; and formatted tick labels, which need a number
+      formatter that lives above `Paperless.Ooxml`. The plot rectangle for an OOXML chart is 1.3 pt
+      out and the fix is LibreOffice's second layout pass — with `chart:coordinate-region` in every
+      ODF chart as a free oracle to score it against.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the

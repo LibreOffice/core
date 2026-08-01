@@ -496,12 +496,13 @@ adding it as an input format would be scope Paperless has said no to.
 Three things office documents embed constantly that a renderer currently draws as nothing.
 They are grouped because they share a dependency and an ordering, not because they are alike.
 
-**Vector metafiles come first, and everything else waits on them**, for a reason worth stating
-once: a chart, a SmartArt diagram and an OLE object all ship a *baked metafile fallback* beside
-their live model. LibreOffice itself draws the fallback in several of these cases rather than
-re-laying out the model. So WMF/EMF/EMF+ is not only the largest item — it is the one that makes
-the other two partly free, and doing them in the other order means writing a chart layout engine
-to draw something the file already contains a picture of.
+**The ordering assumption above was wrong for charts, and the correction is measured.** The plan
+said a chart, a SmartArt diagram and an OLE object all ship a *baked metafile fallback* beside
+their live model, that LibreOffice draws the fallback, and that WMF/EMF/EMF+ therefore makes the
+other two partly free. For charts neither half survives contact with the corpus — see the
+measurement at the head of the Charts section. It may still hold for SmartArt and OLE, which is
+why the paragraph stands rather than being deleted; it does not hold for charts, which needed the
+layout engine after all.
 
 - [ ] **WMF, EMF, EMF+** — see `src/Paperless.Vector/TODO.md`, which holds the plan and orders it
       WMF first because it exercises the shared device-context groundwork on the simplest of the
@@ -511,6 +512,129 @@ to draw something the file already contains a picture of.
 
 ### Charts
 
+**The fallback measurement, first, because it decided everything after it.** Phase 3.5 assumed a
+chart could largely be drawn by replaying the baked metafile that ships beside the live model, as
+LibreOffice does. Counted over LibreOffice's own `chart2/qa/extras/data/`, both halves of that are
+false:
+
+| | documents | carry a replayable chart picture |
+|---|---|---|
+| `.odp` + `.ods` + `.odt` | 81 | **0** — 58 carry an `ObjectReplacements` stream, and all 82 streams are SVM |
+| `.pptx` + `.xlsx` | 192 | **0** — 4 carry a `.wmf`, and all four are `docProps/thumbnail.wmf` |
+
+The ODF number is the correction that matters, because the reading agent's count of 58 was right
+and its conclusion from it was not. **Every one of those 82 streams begins with the six bytes
+`VCLMTF`** — StarView Metafile, LibreOffice's own `GDIMetaFile` serialisation, read by
+`vcl/source/filter/svm/SvmReader.cxx:113` and written by `SvmWriter.cxx:58`. It is neither WMF nor
+EMF. `Paperless.Vector` imports WMF and EMF, so replaying an ODF chart fallback needs a *third*
+metafile reader — a whole new format, not a free ride on `emfio/`. The OOXML number confirms the
+reading agent's: the four hits are whole-document preview thumbnails, and not one of the 192
+carries a picture of a chart. So the shortcut is dead in both families and a layout engine was the
+only route.
+
+**And ODF carries something better than a picture anyway.** Every `chart:plot-area` LibreOffice
+writes holds a `chart:coordinate-region` — the *inner* plot rectangle, four numbers.
+`chart-bar-deck.odp` states `svg:x="2.258cm" svg:y="1.594cm" svg:width="17.674cm"
+svg:height="8.538cm"`; LibreOffice's own PDF for the same file draws the wall at 2258, 1594,
+17672, 8537 hundredths of a millimetre. Reading four attributes gets what 22 kB of SVM would have,
+exactly, and it is the reason an ODF chart needs no layout heuristic at all.
+
+- [x] **Bars are drawn, in all three presentation forms, and measured against LibreOffice.**
+      `ChartScale`, `ChartPlot`, `ChartLayout` and `DrawingChartPlot` in
+      `Paperless.Ooxml/DrawingML/`; `SlideChart` in `Paperless.Presentations/Layout/`;
+      `OdfChartPlot`, `OdfChartStyles` and one layout half per family beside them. A chart becomes
+      a run of ordinary `PlacedShape` — a fill per bar, a stroke per axis and tick, a glyph run per
+      label — exactly as `SlideTable` does, so nothing in the display list knows a chart happened.
+      Measured against LibreOffice's PDF for `chart-bar-deck`:
+      **every ODP bar within 0.06 pt** of the reference's, and **every PPTX bar within 2 pt** on a
+      623 pt frame. All three forms now match the reference on page and word count, 20/20, where
+      before the chart drew nothing.
+- [x] **The automatic axis scale, ported step for step, and it is the part that decides
+      everything.** `ChartScale.Resolve` is
+      `ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear`
+      (`chart2/source/view/axes/ScaleAutomatism.cxx:738-964`) rather than a reimplementation,
+      because an axis that runs 0–180 where the reference runs 0–200 puts every bar at the wrong
+      height while looking entirely reasonable: the bars stay in proportion, the labels stay round,
+      and nothing downstream can tell. **The trap, named**: the corpus chart's data minimum is 88,
+      not 0 — no series contains a zero — and taking the range as [88, 168] gives an axis from 80
+      to 170, on which a bar of 120 is 44% tall instead of 67%. Step 2 is what prevents it: *a
+      positive minimum below five sixths of the maximum becomes zero* (`ScaleAutomatism.cxx:787-795`),
+      gated on `isExpandWideValuesToZero`, which `VSeriesPlotter` returns true from for every Y
+      axis (`VSeriesPlotter.cxx:1742-1746`). 88/168 is 0.524, so the axis starts at zero, the
+      interval is `(168−0)/10 = 16.8` snapped up the 1-2-5 ladder to 20, and the maximum rounds out
+      to 180 — which is exactly the ten ticks LibreOffice draws, 26.888 pt apart.
+- [x] **The brief's own example was about a different file, and the correction is worth keeping.**
+      "LibreOffice draws ticks at `0 20 … 180`, and `0 50 … 200` after a PPTX round trip — the same
+      data, different ticks, because the chart part changed" — not for the corpus pair. Both
+      `chart-bar-deck.odp` and `chart-bar-deck.pptx` draw `0 20 … 180`, and the PPTX's
+      `c:valAx/c:scaling` states no `c:min`, no `c:max` and no `c:majorUnit` at all. **So the scale
+      here comes from the numbers, through the algorithm, and not from the file.** A file that
+      *does* state them is honoured exactly, and `ChartScaleTests` asserts both halves —
+      but the common case, and the one the corpus exercises, is the computed one.
+- [x] **Bar geometry.** A category slot is the plot area over the category count; a bar is
+      `slot / (series + gapWidth/100 − overlap/100 × (series−1))`, which is
+      `CategoryPositionHelper::getScaledSlotWidth`
+      (`chart2/source/view/charttypes/CategoryPositionHelper.cxx:37-45`) with
+      `setOuterDistance(gapWidth/100)` and `setInnerDistance(−overlap/100)` from `BarChart.cxx:78-80`.
+      Measured: the reference's slot is 125.242 pt, its bar 41.754, and `125.242/3` is 41.747.
+- [x] **A chart's text is measured by the face's metrics and drawn in a shape with insets.** Two
+      corrections that between them moved the computed plot area by 8 pt. A slide shape's text body
+      gets EditEngine's `FixedCellHeight` from the PPTX importer, so a line is 1.2 em whatever face
+      it is in — but a chart's labels are not slide shapes; `chart2`'s view makes plain text shapes
+      and sets no such flag, so their line height is the face's own 1.1499 em. And every one of
+      those shapes gets insets of `0.18 × fontHeight` horizontally and `0.30 × fontHeight`
+      vertically (`ShapeFactory::createText`, `chart2/source/view/main/ShapeFactory.cxx:2279-2299`,
+      commented "#i109336# Improve auto positioning in chart"), so what the composition reserves is
+      the *shape's* size and not the text's.
+- [x] **An unstyled ODF series is not colourless, and without the default it draws nothing.**
+      `chart-bar-deck.odp`'s series style `ch9` carries a `style:chart-properties` and a
+      `style:text-properties` and no `style:graphic-properties` whatever — no fill, no stroke. The
+      first version drew the axes, the ticks and the labels and not one bar, which reads as a data
+      bug and is not. ODF's chart import defaults the colour: `ColorPropertySet` is constructed
+      with `m_nDefaultColor( 0x0099ccff )  // blue 8`
+      (`xmloff/source/chart/ColorPropertySet.cxx:81`), and LibreOffice's PDF paints ten rectangles
+      in `0.6 0.8 1`. Not the drawing layer's `COL_DEFAULT_SHAPE_FILLING`, which is `0x729FCF`
+      (`include/svx/xdef.hxx:85`) and would have been the wrong blue. The same chart as `.pptx`
+      states `99ccff` on every series explicitly, because that is what LibreOffice wrote when it
+      converted the file — which is how a default became visible in one family and invisible in the
+      other.
+- [ ] **The OOXML plot rectangle is computed and is 1.3 pt out; the second pass is what is
+      missing.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
+      (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
+      (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
+      (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
+      title (a flat 420 below, 450 to the left). What it does not do is LibreOffice's *second*
+      pass, in which the labels are laid out, measured and the whole diagram re-laid-out around
+      them until it settles (`ChartView::impl_createDiagramAndContent`). Measured on
+      `chart-bar-deck.pptx` against the reference: plot area 1.29 pt left of, 0.75 pt below,
+      0.50 pt narrower and 0.76 pt taller — 0.2% of the frame's width, and it is the entire
+      residual, because the bars *inside* the rectangle are in the reference's proportions to a
+      fortieth of a point. **The oracle for fixing it is free**: LibreOffice writes the answer into
+      every ODF chart, so the heuristic can be scored against `chart:coordinate-region` over all 81
+      ODF chart documents without converting a single one.
+- [ ] **Only bars, and only the first plot group.** A chart part may hold several `…Chart` groups —
+      a column chart with a line over it writes a `c:barChart` and a `c:lineChart` sharing an axis
+      — and `DrawingChartPlot` reads the first and draws it. Line, pie, scatter and area draw
+      nothing, and stacking is modelled but untested against a reference. The order to add them in
+      is the corpus': `barChart` is the commonest by a wide margin, then `lineChart` and `pieChart`.
+      `DrawingChart` still reads *every* group, so the content tree holds all the numbers whatever
+      gets drawn — a chart type that is not drawn loses its picture and not its data.
+- [ ] **No gridlines, no data labels, no secondary axis.** `c:majorGridlines` is read past;
+      `ChartLayout` has the tick values in hand and drawing a line across the plot at each is a
+      dozen lines, so this is the cheapest item left. Data labels need `c:dLbls` and a number
+      formatter — the only one Paperless has lives in `Paperless.Spreadsheets`, above
+      `Paperless.Ooxml`, which is the same layering wall that stops `DrawingChart` resolving a
+      `c:f`. A secondary value axis needs a second scale and a per-series axis index.
+- [ ] **Axis tick labels are drawn unformatted.** `c:numFmt`/`number:number-style` is not applied,
+      for the layering reason above, so a tick is written in its shortest round-trip form. That is
+      right for every whole-number scale in the corpus and wrong for a currency or percentage axis,
+      which will read `0.25` where the reference reads `25%`.
+- [ ] **A chart in a spreadsheet is still not drawn**, which is now the only family that renders one
+      as nothing. Measured: `chart-bar-sheet.{ods,fods,xlsx}` come out 14 words against the
+      reference's 34, 34 and 29, where the three decks now match at 20/20. The model and the layout
+      engine are family-blind and done; what is missing is the wiring, and it is a different shape
+      from the deck's — see `src/Paperless.Spreadsheets/TODO.md` for why, and for the one
+      Core-shaped decision it runs into.
 - [x] **Read the chart model** — `Paperless.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
       and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from three call sites:
       `PptxShapeReader.ReadChart`, `XlsxCharts` (two relationship hops, sheet → drawing → chart),
@@ -561,16 +685,15 @@ to draw something the file already contains a picture of.
       asserts the two agree, so a divergence becomes a failure rather than a plausible chart. A
       reference with **no** cache yields the series' name and no values; nothing is fetched and
       nothing is invented.
-- [ ] **Drawing a chart is a layout engine**, not a reader: plot area, axis scales and tick
-      selection, gridlines, series geometry per type, legend placement, data labels. The
-      measurement this item asked for is now made, and it splits by family. **ODF ships the baked
-      fallback and OOXML does not**: 58 of the 81 `.odp`/`.ods`/`.odt` documents in
-      `chart2/qa/extras/data/` carry an `ObjectReplacements/Object N` GDI metafile — 22 kB of one
-      for our own `chart-bar-deck.odp` — while **0 of 192** `.pptx`/`.xlsx` ones carry any EMF or
-      WMF at all. So drawing the fallback buys ODF and buys nothing for OOXML, and a chart layout
-      engine is still needed for two of the three families. Reading the fallback first is still
-      right — it is free once `emfio/` lands — but it is not the whole answer the SmartArt item's
-      is.
+- [x] **"Drawing the fallback buys ODF" — it does not, and this is the correction the section now
+      leads with.** The count was right: 58 of the 81 `.odp`/`.ods`/`.odt` documents in
+      `chart2/qa/extras/data/` carry an `ObjectReplacements/Object N`, 22 kB of one for our own
+      `chart-bar-deck.odp`. What was not checked is what is *in* them. All 82 streams begin
+      `VCLMTF`: SVM, LibreOffice's internal `GDIMetaFile` serialisation, which is not a format
+      `Paperless.Vector` reads or is going to. "GDI metafile" is the phrase that hid it — a
+      `GDIMetaFile` is not a Windows metafile, and the two are related only by the name. The
+      general lesson is cheap to state and was not cheap to find: **a container's presence is not
+      a format, and one `head -c 6` would have settled it before the plan was written.**
 - [x] **The trap, named, because it produces a chart that still looks right.** `c:pt/@idx` is
       *sparse*. A chart over a range with a blank in it writes `<c:ptCount val="6"/>` and five
       `c:pt` whose indices skip the blank one, so reading the points in document order slides
