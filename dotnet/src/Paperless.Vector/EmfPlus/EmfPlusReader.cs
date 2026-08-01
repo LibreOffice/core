@@ -848,31 +848,27 @@ internal sealed class EmfPlusReader
                 return;
 
             case EmfPlusBrushType.LinearGradient:
-            {
-                GradientPaint gradient = Linear(brush);
-
-                // A GDI+ gradient repeats or mirrors outside its own rectangle and
-                // GradientPaint has no spread method at all, so a brush whose rectangle is
-                // short against the shape comes out as one ramp and then flat colour where the
-                // file asked for stripes. It is only reported when the shape actually reaches
-                // past the ramp, because a gradient that covers what it fills looks the same
-                // under every wrap mode. The same gap the SVG side records as PL6021.
-                if (brush.WrapMode != WrapClamp && Repeats(path, gradient))
-                {
-                    Warn(
-                        "PL6041",
-                        "An EMF+ gradient brush repeated outside its own rectangle, which the "
-                            + "drawing model cannot express; one ramp was drawn and then held "
-                            + "at its end colour.");
-                }
-
-                _painter.FillWith(path, gradient, rule);
+                _painter.FillWith(path, Linear(brush), rule);
                 return;
-            }
 
             case EmfPlusBrushType.PathGradient:
-                _painter.FillWith(path, Radial(brush), rule);
+            {
+                Paint sweep = PathGradient(brush);
+
+                // Outside the boundary the sweep has no triangles, and GDI+ does not leave that
+                // unpainted: the centre-to-edge parameter clamps at 1 and the pure edge colour is
+                // used, which is LibreOffice's second rasterisation pass (emfphelperdata.cxx,
+                // "the pixel is outside its closest triangle"). A flat undercoat of the edge
+                // colour states the same thing without a rasteriser, and it matters more than it
+                // sounds — see the trap in this library's TODO.md.
+                if (sweep is MeshPaint && !Covers(brush, path))
+                {
+                    _painter.FillWith(path, Paint.Solid(EdgeColour(brush)), rule);
+                }
+
+                _painter.FillWith(path, sweep, rule);
                 return;
+            }
 
             default:
                 _painter.FillWith(path, Paint.Solid(brush.Colour), rule);
@@ -984,35 +980,6 @@ internal sealed class EmfPlusReader
         _ => 0.50,
     };
 
-    /// <summary>True when a shape reaches past the end of the gradient that fills it.</summary>
-    private static bool Repeats(GraphicsPath path, GradientPaint gradient)
-    {
-        double dx = gradient.End.X.Emu - gradient.Start.X.Emu;
-        double dy = gradient.End.Y.Emu - gradient.Start.Y.Emu;
-        double span = Math.Sqrt((dx * dx) + (dy * dy));
-
-        if (span <= 0) return true;
-
-        double left = double.MaxValue;
-        double top = double.MaxValue;
-        double right = double.MinValue;
-        double bottom = double.MinValue;
-
-        foreach (PathCommand command in path.Commands)
-        {
-            if (command.Verb == PathVerb.Close) continue;
-
-            left = Math.Min(left, command.Point.X.Emu);
-            right = Math.Max(right, command.Point.X.Emu);
-            top = Math.Min(top, command.Point.Y.Emu);
-            bottom = Math.Max(bottom, command.Point.Y.Emu);
-        }
-
-        if (right < left) return false;
-
-        return Math.Max(right - left, bottom - top) > span * 1.01;
-    }
-
     private static Colour Blend(Colour foreground, Colour background, double factor)
     {
         double f = Math.Clamp(factor, 0, 1);
@@ -1067,29 +1034,345 @@ internal sealed class EmfPlusReader
             Stops(brush),
             Map(sx, sy),
             Map(ex, ey),
-            AffineTransform.Identity);
+            AffineTransform.Identity,
+            Spread(brush.WrapMode));
     }
 
     /// <summary>
-    /// A path gradient brush, as the nearest radial gradient.
+    /// A GDI+ wrap mode as a <see cref="SpreadMethod"/>.
+    /// </summary>
+    /// <remarks>
+    /// <b>Four of the five tiling modes collapse into two here, and that is exact rather than
+    /// lossy.</b> GDI+ names <c>Tile</c>, <c>TileFlipX</c>, <c>TileFlipY</c>, <c>TileFlipXY</c>
+    /// and <c>Clamp</c>, and the flips say which axis a mirrored copy is reflected about. A
+    /// gradient's colour varies along <em>one</em> axis — the brush rectangle's x, before the
+    /// brush transform — so a flip in y produces a copy indistinguishable from the original and
+    /// only the x flip is visible. <c>Tile</c> and <c>TileFlipY</c> are therefore both a repeat,
+    /// and <c>TileFlipX</c> and <c>TileFlipXY</c> both a reflect. A texture brush, whose picture
+    /// does vary in both, keeps its own reading of the same field.
+    /// </remarks>
+    private static SpreadMethod Spread(int wrapMode) => wrapMode switch
+    {
+        1 or 3 => SpreadMethod.Reflect,
+        4 => SpreadMethod.Pad,
+        _ => SpreadMethod.Repeat,
+    };
+
+    /// <summary>
+    /// A path gradient brush, as a fan of Gouraud-shaded triangles about its centre.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <b>This is the one brush the drawing model genuinely cannot state.</b> A GDI+ path gradient
-    /// runs from one centre colour out to a colour <em>per boundary vertex</em>, Gouraud-shaded
-    /// between them — a star with three surround colours has three coloured points and no radial
-    /// gradient anywhere in it. <c>GradientPaint</c> has one ramp and one centre, so what is drawn
-    /// is the ramp from the centre colour to the first surround colour over the boundary's own
-    /// bounding ellipse.
+    /// <b>This is what a GDI+ path gradient actually is</b>, and it is why
+    /// <c>Paperless.Core</c> grew a <see cref="MeshPaint"/>. The brush names a centre colour and
+    /// a colour <em>per vertex of an arbitrary boundary</em> — a star with three surround
+    /// colours is three coloured points and no radial ramp anywhere in it — and no number of
+    /// <see cref="GradientStop"/>s says that, because a ramp has one colour at each end however
+    /// many stops sit between them. Partitioning the boundary into triangles
+    /// <c>(centre, V(i), V(i+1))</c> and interpolating the three corner colours across each is
+    /// the same construction LibreOffice uses (<c>emfphelperdata.cxx</c>, the
+    /// <c>BrushTypePathGradient</c> branch), except that LibreOffice Gouraud-shades it into a
+    /// 256-pixel bitmap and uses that as a texture, which needs a rasteriser, and both of our
+    /// backends state the triangles directly.
     /// </para>
     /// <para>
-    /// That is exact whenever the surround colours are all the same, which is the common case and
-    /// the one that reads as a radial gradient in the first place. When they are not, the shape is
-    /// right and the colours around its edge are not, and <c>PL6040</c> says so. LibreOffice
-    /// renders the general case by triangulating the boundary and Gouraud-shading each triangle
-    /// into a 256-pixel bitmap used as a texture; doing the same here would mean rasterising in a
-    /// library arranged not to.
+    /// <b>Rings, and when more than one is needed.</b> With a plain centre-to-edge ramp one ring
+    /// of triangles is <em>exact</em>: barycentric interpolation across a triangle is linear, and
+    /// so is the ramp. A blend-factor curve or a preset-colour list makes the ramp non-linear in
+    /// the radius, which a triangle cannot bend, so the fan is subdivided into concentric rings
+    /// and the curve sampled at each. One ring for the linear case keeps the common brush at
+    /// three vertices a segment.
     /// </para>
+    /// <para>
+    /// A boundary of fewer than three points has no interior to fan and cannot carry a colour per
+    /// vertex either; that falls back to the bounding-ellipse ramp this used to draw for
+    /// everything, with <c>PL6040</c>.
+    /// </para>
+    /// </remarks>
+    private Paint PathGradient(EmfPlusBrush brush)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return Radial(brush);
+
+        (double cx, double cy) = Apply(brush.Transform, brush.FirstPoint.X, brush.FirstPoint.Y);
+        DocPoint centre = Map(cx, cy);
+
+        Colour[] edge = new Colour[boundary.Count];
+        Colour[] surround = brush.SurroundColours is { Length: > 0 } named
+            ? named
+            : [brush.SecondColour];
+
+        for (int i = 0; i < edge.Length; i++) edge[i] = surround[i % surround.Length];
+
+        // A colour curve replaces the centre-to-edge mix outright; a factor curve only bends it.
+        // Both are non-linear in the radius, so both need rings; neither present is the linear
+        // case one ring states exactly.
+        bool curved = brush.PresetPositions is { Length: > 0 } || brush.BlendPositions is { Length: > 0 };
+        int rings = curved ? 12 : 1;
+
+        List<MeshVertex> vertices = new((boundary.Count * rings) + 1)
+        {
+            new MeshVertex(centre, Compose(brush, 0, brush.Colour)),
+        };
+
+        for (int ring = 1; ring <= rings; ring++)
+        {
+            double t = (double)ring / rings;
+
+            for (int i = 0; i < boundary.Count; i++)
+            {
+                vertices.Add(new MeshVertex(
+                    new DocPoint(
+                        Length.FromEmu(centre.X.Emu + (long)((boundary[i].X.Emu - centre.X.Emu) * t)),
+                        Length.FromEmu(centre.Y.Emu + (long)((boundary[i].Y.Emu - centre.Y.Emu) * t))),
+                    Compose(brush, t, edge[i])));
+            }
+        }
+
+        List<MeshTriangle> triangles = new(boundary.Count * ((2 * rings) - 1));
+
+        for (int i = 0; i < boundary.Count; i++)
+        {
+            int next = (i + 1) % boundary.Count;
+
+            triangles.Add(new MeshTriangle(0, 1 + i, 1 + next));
+
+            for (int ring = 2; ring <= rings; ring++)
+            {
+                int inner = 1 + ((ring - 2) * boundary.Count);
+                int outer = 1 + ((ring - 1) * boundary.Count);
+
+                triangles.Add(new MeshTriangle(inner + i, outer + i, outer + next));
+                triangles.Add(new MeshTriangle(inner + i, outer + next, inner + next));
+            }
+        }
+
+        return new MeshPaint(vertices, triangles);
+    }
+
+    /// <summary>
+    /// Whether a brush's boundary encloses everything a path covers, so nothing outside the
+    /// sweep is drawn.
+    /// </summary>
+    /// <remarks>
+    /// Asked of the two bounding boxes rather than of the polygons, which is the conservative
+    /// direction: a concave boundary can leave parts of its own box unswept, so a "yes" here can
+    /// still be wrong at a notch. It costs an undercoat that is then painted over.
+    /// </remarks>
+    private bool Covers(EmfPlusBrush brush, GraphicsPath path)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return false;
+
+        Length left = boundary[0].X, right = boundary[0].X;
+        Length top = boundary[0].Y, bottom = boundary[0].Y;
+
+        foreach (DocPoint point in boundary)
+        {
+            left = Length.Min(left, point.X);
+            right = Length.Max(right, point.X);
+            top = Length.Min(top, point.Y);
+            bottom = Length.Max(bottom, point.Y);
+        }
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+            if (command.Point.X < left || command.Point.X > right) return false;
+            if (command.Point.Y < top || command.Point.Y > bottom) return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// The colour a path gradient shows outside its own boundary: the mean of its surround
+    /// colours, or its second colour when it names none.
+    /// </summary>
+    private static Colour EdgeColour(EmfPlusBrush brush)
+    {
+        if (brush.SurroundColours is not { Length: > 0 } surround) return brush.SecondColour;
+        if (surround.Length == 1) return surround[0];
+
+        long r = 0, g = 0, b = 0, a = 0;
+        foreach (Colour colour in surround)
+        {
+            r += colour.R;
+            g += colour.G;
+            b += colour.B;
+            a += colour.A;
+        }
+
+        return new Colour(
+            (byte)(r / surround.Length),
+            (byte)(g / surround.Length),
+            (byte)(b / surround.Length),
+            (byte)(a / surround.Length));
+    }
+
+    /// <summary>
+    /// The brush boundary as a closed polygon of document points, flattened.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Only the first figure, because a path gradient sweeps one boundary and a brush carrying
+    /// several has no defined centre for the rest — which is what LibreOffice takes as well
+    /// (<c>getB2DPolygon(0)</c>).
+    /// </para>
+    /// <para>
+    /// <b>Curves must be flattened before the fan is built, not after.</b> A Bézier ellipse
+    /// states four cardinal points and eight control points; fanning its <em>on-curve</em> points
+    /// alone gives four triangles meeting at the centre — a diamond, not an ellipse — and nothing
+    /// about the resulting picture suggests that curves were the cause.
+    /// </para>
+    /// </remarks>
+    private List<DocPoint>? Boundary(EmfPlusBrush brush)
+    {
+        if (brush.Boundary is not { Count: > 0 } boundary) return null;
+
+        GraphicsPath outline = boundary.ToPath(
+            (x, y) =>
+            {
+                (double px, double py) = Apply(brush.Transform, x, y);
+                return Map(px, py);
+            },
+            close: true);
+
+        List<DocPoint> points = [];
+        DocPoint at = default;
+        bool started = false;
+
+        foreach (PathCommand command in outline.Commands)
+        {
+            switch (command.Verb)
+            {
+                case PathVerb.MoveTo when started:
+                    // A second figure begins; the first is the boundary.
+                    return Deduplicate(points);
+
+                case PathVerb.MoveTo:
+                    started = true;
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.LineTo:
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.CubicTo:
+                    for (int step = 1; step <= CurveSteps; step++)
+                    {
+                        points.Add(OnCurve(at, command.Control1, command.Control2, command.Point,
+                            (double)step / CurveSteps));
+                    }
+
+                    at = command.Point;
+                    break;
+
+                case PathVerb.Close:
+                default:
+                    break;
+            }
+        }
+
+        return Deduplicate(points);
+    }
+
+    /// <summary>How many straight segments one Bézier of a gradient boundary becomes.</summary>
+    /// <remarks>
+    /// Fixed rather than adaptive, because the boundary of a brush is small — a rounded
+    /// rectangle or an ellipse — and sixteen segments put the error of a quarter-ellipse under a
+    /// thousandth of its radius, well below what a mesh vertex is quantised to anyway.
+    /// </remarks>
+    private const int CurveSteps = 16;
+
+    private static DocPoint OnCurve(DocPoint a, DocPoint b, DocPoint c, DocPoint d, double t)
+    {
+        double u = 1 - t;
+        double w0 = u * u * u, w1 = 3 * u * u * t, w2 = 3 * u * t * t, w3 = t * t * t;
+
+        return new DocPoint(
+            Length.FromEmu((long)((w0 * a.X.Emu) + (w1 * b.X.Emu) + (w2 * c.X.Emu) + (w3 * d.X.Emu))),
+            Length.FromEmu((long)((w0 * a.Y.Emu) + (w1 * b.Y.Emu) + (w2 * c.Y.Emu) + (w3 * d.Y.Emu))));
+    }
+
+    /// <summary>Drops a repeated closing point, which would fan a zero-width triangle.</summary>
+    private static List<DocPoint> Deduplicate(List<DocPoint> points)
+    {
+        while (points.Count >= 2 && points[0] == points[^1]) points.RemoveAt(points.Count - 1);
+
+        return points;
+    }
+
+    /// <summary>
+    /// The colour a path gradient takes at parameter <paramref name="t"/> on the way from its
+    /// centre to a boundary vertex of colour <paramref name="edge"/>.
+    /// </summary>
+    /// <remarks>
+    /// The three spellings are mutually exclusive and their precedence is LibreOffice's: a preset
+    /// colour list replaces the mix outright, a blend-factor curve remaps <paramref name="t"/>
+    /// before it, and neither present leaves the mix linear.
+    /// </remarks>
+    private static Colour Compose(EmfPlusBrush brush, double t, Colour edge)
+    {
+        if (brush.PresetPositions is { Length: > 0 } positions && brush.PresetColours is { } colours)
+        {
+            return SampleColour(positions, colours, t);
+        }
+
+        double factor = brush.BlendPositions is { Length: > 0 } blend && brush.BlendFactors is { } factors
+            ? SampleFactor(blend, factors, t)
+            : t;
+
+        return Blend(edge, brush.Colour, factor);
+    }
+
+    /// <summary>Linear interpolation over a sorted position/value curve, clamped at both ends.</summary>
+    private static double SampleFactor(double[] positions, double[] values, double t)
+    {
+        int count = Math.Min(positions.Length, values.Length);
+        if (count == 0) return t;
+        if (t <= positions[0]) return values[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return values[i - 1] + ((values[i] - values[i - 1]) * f);
+        }
+
+        return values[count - 1];
+    }
+
+    /// <summary>Linear interpolation over a sorted position/colour curve, clamped at both ends.</summary>
+    private static Colour SampleColour(double[] positions, Colour[] colours, double t)
+    {
+        int count = Math.Min(positions.Length, colours.Length);
+        if (count == 0) return Colour.Transparent;
+        if (t <= positions[0]) return colours[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return Blend(colours[i], colours[i - 1], f);
+        }
+
+        return colours[count - 1];
+    }
+
+    /// <summary>
+    /// A path gradient whose boundary is too degenerate to fan, as the nearest radial gradient.
+    /// </summary>
+    /// <remarks>
+    /// Fewer than three boundary points is a malformed brush: there is no interior to partition
+    /// and nowhere for a colour per vertex to sit. The ramp over the boundary's own bounding
+    /// ellipse is what this reader drew for every path gradient before the mesh existed, so it
+    /// stays as the fallback rather than nothing being drawn, with <c>PL6040</c> saying so.
     /// </remarks>
     private GradientPaint Radial(EmfPlusBrush brush)
     {
@@ -1111,19 +1394,10 @@ internal sealed class EmfPlusReader
             ry = Length.Max(bounds.Height / 2.0, Length.FromEmu(1));
         }
 
-        if (brush.SurroundColours is { Length: > 1 } surround)
-        {
-            foreach (Colour colour in surround)
-            {
-                if (colour == surround[0]) continue;
-
-                Warn(
-                    "PL6040",
-                    "An EMF+ path gradient named a different colour at each boundary point, which "
-                        + "the drawing model cannot express; one ramp was drawn instead.");
-                break;
-            }
-        }
+        Warn(
+            "PL6040",
+            "An EMF+ path gradient stated a boundary of fewer than three points, which has no "
+                + "interior to shade; a ramp over its bounding ellipse was drawn instead.");
 
         double squash = ry.Emu / (double)rx.Emu;
 

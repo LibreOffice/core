@@ -453,10 +453,9 @@ internal sealed class SvgPictureTranslator
                     radial.LocalMatrix);
 
             case TwoPointConicalGradientShader conical:
-                // SVG's focal-point radial gradient. The display list has no focus, so the
-                // outer circle is used and the focus is lost — visible only as a gradient
-                // that is centred when it should be off-centre.
-                Report("PL6018", "An SVG used a radial gradient with a focal point; Paperless centred it.");
+                // SVG's fx/fy radial gradient. The two circles are stated as an outer circle
+                // and a focus, which is the form PDF's /ShadingType 3 and Skia's two-point
+                // conical shader both take — so nothing is approximated and PL6018 is gone.
                 return Gradient(
                     GradientKind.Radial,
                     conical.Colors,
@@ -464,7 +463,8 @@ internal sealed class SvgPictureTranslator
                     conical.End,
                     new SKPoint(conical.End.X + conical.EndRadius, conical.End.Y),
                     conical.Mode,
-                    conical.LocalMatrix);
+                    conical.LocalMatrix,
+                    Same(conical.Start, conical.End) ? null : conical.Start);
 
             case PictureShader:
                 Report("PL6019", "An SVG filled a shape with a pattern; Paperless left it unfilled.");
@@ -479,20 +479,18 @@ internal sealed class SvgPictureTranslator
         }
     }
 
-    private GradientPaint Gradient(
+    private static bool Same(SKPoint a, SKPoint b) => a.X == b.X && a.Y == b.Y;
+
+    private static GradientPaint Gradient(
         GradientKind kind,
         SKColorF[]? colours,
         float[]? offsets,
         SKPoint start,
         SKPoint end,
         SKShaderTileMode mode,
-        SKMatrix? local)
+        SKMatrix? local,
+        SKPoint? focus = null)
     {
-        if (mode != SKShaderTileMode.Clamp)
-        {
-            Report("PL6021", $"An SVG gradient repeated with '{mode}'; Paperless clamped it.");
-        }
-
         List<GradientStop> stops = [];
         for (int i = 0; i < (colours?.Length ?? 0); i++)
         {
@@ -505,12 +503,24 @@ internal sealed class SvgPictureTranslator
 
         if (stops.Count == 0) stops.Add(new GradientStop(0, Colour.Transparent));
 
+        // SVG's spreadMethod, which the shim carries as a Skia tile mode and both backends
+        // state natively — Skia as the same tile mode, PDF by lengthening the shading's axis
+        // over as many periods as the shape spans.
+        SpreadMethod spread = mode switch
+        {
+            SKShaderTileMode.Mirror => SpreadMethod.Reflect,
+            SKShaderTileMode.Repeat => SpreadMethod.Repeat,
+            _ => SpreadMethod.Pad,
+        };
+
         return new GradientPaint(
             kind,
             stops,
             ShimGeometry.Point(start),
             ShimGeometry.Point(end),
-            local is { } matrix ? ShimGeometry.Transform(matrix) : AffineTransform.Identity);
+            local is { } matrix ? ShimGeometry.Transform(matrix) : AffineTransform.Identity,
+            spread,
+            focus is { } point ? ShimGeometry.Point(point) : null);
     }
 
     private Stroke? Pen(SKPaint paint)

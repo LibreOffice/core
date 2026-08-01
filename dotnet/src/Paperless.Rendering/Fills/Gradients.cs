@@ -265,6 +265,84 @@ internal static class Gradients
         }
     }
 
+    /// <summary>
+    /// How many whole periods of a repeating ramp lie before its start and after its end
+    /// before the shape it fills is covered.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Only the PDF backend asks. Skia states <see cref="SpreadMethod"/> as a shader tile mode
+    /// and repeats for nothing, whereas PDF's <c>sh</c> has no tiling at all: a shading's
+    /// <c>/Extend</c> clamps the parameter and cannot repeat it ([PDF 32000-1] 8.7.4.5.3
+    /// computes <c>t</c> from a parameter already clipped to 0..1). The only way to spell a
+    /// repeat is to <em>lengthen the axis</em> over as many periods as the shape needs and
+    /// give the function a domain to match, which is what this counts.
+    /// </para>
+    /// <para>
+    /// Counted in gradient space, so the caller must pass the extent already carried back
+    /// through <see cref="GradientPaint.Transform"/> — the shading is painted inside that
+    /// transform, so a rotated ramp's period count is a question about the untransformed box.
+    /// </para>
+    /// </remarks>
+    /// <param name="gradient">The gradient.</param>
+    /// <param name="extent">The box to cover, in gradient space.</param>
+    /// <returns>Periods needed before the ramp's start and after its end, each at least zero.</returns>
+    public static (int Before, int After) Periods(GradientPaint gradient, DocRect extent)
+    {
+        ArgumentNullException.ThrowIfNull(gradient);
+
+        if (gradient.Spread == SpreadMethod.Pad) return (0, 0);
+
+        double x0 = gradient.Start.X.Emu, y0 = gradient.Start.Y.Emu;
+        double x1 = gradient.End.X.Emu, y1 = gradient.End.Y.Emu;
+
+        double lowest = 0, highest = 1;
+
+        if (gradient.Kind == GradientKind.Linear)
+        {
+            double dx = x1 - x0, dy = y1 - y0;
+            double squared = (dx * dx) + (dy * dy);
+            if (squared <= 0) return (0, 0);
+
+            foreach ((Length px, Length py) in Corners(extent))
+            {
+                double s = (((px.Emu - x0) * dx) + ((py.Emu - y0) * dy)) / squared;
+                lowest = Math.Min(lowest, s);
+                highest = Math.Max(highest, s);
+            }
+        }
+        else
+        {
+            // A radial ramp starts at its own centre, so nothing lies before it however large
+            // the shape is; only the outward direction can need more periods.
+            double radius = Math.Sqrt(((x1 - x0) * (x1 - x0)) + ((y1 - y0) * (y1 - y0)));
+            if (radius <= 0) return (0, 0);
+
+            highest = Math.Max(1, Radius(gradient.Start, extent) / radius);
+        }
+
+        return (
+            Math.Clamp((int)Math.Ceiling(-lowest), 0, MaximumPeriods),
+            Math.Clamp((int)Math.Ceiling(highest - 1), 0, MaximumPeriods));
+    }
+
+    /// <summary>
+    /// The most periods either side of a repeating ramp that will be written.
+    /// </summary>
+    /// <remarks>
+    /// Each period is one more sub-function in the shading's stitching function, so an
+    /// unbounded count is an unbounded PDF from a gradient whose ramp is a rounding error
+    /// wide. Beyond this the remaining space is left to <c>/Extend</c>, which is the wrong
+    /// colour but a bounded amount of it.
+    /// </remarks>
+    private const int MaximumPeriods = 64;
+
+    private static IEnumerable<(Length X, Length Y)> Corners(DocRect bounds) =>
+    [
+        (bounds.Left, bounds.Top), (bounds.Right, bounds.Top),
+        (bounds.Left, bounds.Bottom), (bounds.Right, bounds.Bottom),
+    ];
+
     /// <summary>The furthest any corner of a rectangle lies from a point.</summary>
     public static double Radius(DocPoint centre, DocRect bounds)
     {
@@ -340,7 +418,7 @@ internal static class Gradients
     /// to draw through it, so the rectangle comes back unchanged and the bands are clipped
     /// away by the caller's path.
     /// </remarks>
-    private static DocRect Untransformed(DocRect bounds, AffineTransform transform)
+    public static DocRect Untransformed(DocRect bounds, AffineTransform transform)
     {
         double determinant = (transform.A * transform.D) - (transform.B * transform.C);
         if (Math.Abs(determinant) < 1e-12) return bounds;
