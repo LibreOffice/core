@@ -246,7 +246,8 @@ namespace FileUtil
                 if (entry.is_directory())
                     fs::create_directories(targetPath);
                 else if (entry.is_regular_file())
-                    FileUtil::copy(entry.path().string(), targetPath.string(), log, false);
+                    FileUtil::copy(entry.path().string<char>(), targetPath.string<char>(),
+                                   log, false);
             }
         }
         catch (const std::exception& ex)
