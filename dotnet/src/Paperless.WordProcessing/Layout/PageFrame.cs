@@ -216,11 +216,24 @@ public sealed record PageFrame
 
     /// <summary>True when the frame holds a picture rather than text.</summary>
     /// <remarks>
-    /// Recorded rather than drawn: decoding the raster is a separate unstarted item, and the wrap — which
-    /// is what moves text — depends only on the rectangle. So an image frame reserves its room correctly
-    /// and draws whatever placeholder the sink is given.
+    /// Separate from <see cref="Image"/>, because the two answer different questions. This is what the
+    /// document <em>declared</em> the frame to be, which is what the wrap and the extraction tree go by;
+    /// the other is whether bytes were found and are a raster this library can hand a backend. A
+    /// <c>\wmetafile</c>, an EMF blip and a picture whose package part is missing all set this and leave
+    /// that null.
     /// </remarks>
     public bool IsImage { get; init; }
+
+    /// <summary>
+    /// The picture the frame holds, still in the bytes the file stored, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// Built with <see cref="RasterImage.Encoded"/> and never decoded here: a reader that decoded would
+    /// pull a codec into the extraction path, which the layering forbids and which is the reason the IR
+    /// carries encoded bytes at all. Whichever backend wants pixels asks <c>RasterImageDecoder.Ensure</c>
+    /// for them, and one that only wants to pass a JPEG through to <c>DCTDecode</c> never decodes at all.
+    /// </remarks>
+    public RasterImage? Image { get; init; }
 
     /// <summary>What the frame was called in the document, for diagnostics.</summary>
     public string? Name { get; init; }

@@ -61,6 +61,7 @@ public sealed partial class OdtLayoutSource
     private const char AnchorCharacter = '\u0001';
 
     private readonly OdfStyles _styles;
+    private readonly OdfPictures? _pictures;
     private readonly SystemFontResolver _fonts;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -87,14 +88,20 @@ public sealed partial class OdtLayoutSource
     /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
     /// is numbered. Null leaves both classes on LibreOffice's defaults.
     /// </param>
+    /// <param name="pictures">
+    /// How to reach the bytes behind a <c>draw:image</c>, or null to lay the document out with its
+    /// picture frames empty — which is what a caller who wants only measurements should pay for.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
-        XElement? stylesRoot = null)
+        XElement? stylesRoot = null,
+        OdfPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _pictures = pictures;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
@@ -630,7 +637,7 @@ public sealed partial class OdtLayoutSource
                 ? Content
                 : null;
 
-            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset) is { } frame)
+            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset, _pictures) is { } frame)
             {
                 frames.Add(frame);
             }

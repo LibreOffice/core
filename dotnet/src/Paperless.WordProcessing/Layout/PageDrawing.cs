@@ -129,14 +129,19 @@ public static class PageDrawing
     /// a border runs through the centre of its own line, so half of it overlaps whatever is inside.
     /// </para>
     /// <para>
-    /// An image frame draws nothing but its background and border. The raster is a separate matter and the
-    /// wrap, which is what moves text, never depended on it — so a picture reserves exactly the right room
-    /// and leaves a hole where its pixels will go.
+    /// A picture goes between the two, for the same reason its own text would: it covers the background
+    /// and the border is drawn over its edge. The image is handed over exactly as the reader found it —
+    /// still the file's own bytes — because the backend is what has a codec, and a PDF backend given a
+    /// JPEG passes it through to <c>DCTDecode</c> without ever decoding it. A frame the document called a
+    /// picture whose bytes could not be found draws as it always did: its background and its border, and
+    /// a hole where the pixels would have gone.
     /// </para>
     /// </remarks>
     private static void DrawFrame(PlacedFrame frame, IDrawingSink sink)
     {
         if (frame.Frame.Fill is { } fill) Fill(frame.Area, fill, sink);
+
+        if (frame.Frame.Image is { } image) sink.DrawImage(image, frame.Area);
 
         DrawFlow(frame.Content, sink);
 
@@ -633,6 +638,44 @@ public static class PageDrawing
         }
 
         return pieces;
+    }
+
+    /// <summary>
+    /// How far along a line a character position sits, measured from where the line's text starts.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// What an as-character anchor needs: an inline picture hangs at the position its anchor character
+    /// occupies, and that position is a sum of glyph advances rather than anything pagination recorded.
+    /// Answered through the same stretches and the same shaping the line will be <em>drawn</em> with, so
+    /// that the picture cannot land somewhere the words around it disagree with — which is the failure
+    /// re-measuring in a second way would produce, and it would be invisible in every document without a
+    /// tab in it.
+    /// </para>
+    /// <para>
+    /// A position on a later stretch of a tabbed line carries that stretch's own start, so a picture after
+    /// a tab hangs at the stop rather than where the text before the tab ended.
+    /// </para>
+    /// </remarks>
+    /// <param name="paragraph">The paragraph the line belongs to.</param>
+    /// <param name="line">The line, whose own range bounds the answer.</param>
+    /// <param name="at">The character position, as an index into the paragraph's text.</param>
+    internal static Length OffsetOnLine(PageParagraph paragraph, PlacedLine line, int at)
+    {
+        ArgumentNullException.ThrowIfNull(paragraph);
+
+        int start = line.Box.Line.Start;
+        int end = Math.Min(line.Box.Line.End, paragraph.Text.Length);
+        int position = Math.Clamp(at, start, end);
+
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        {
+            if (position > segment.End) continue;
+
+            return segment.Left + WidthBetween(paragraph, segment.Start, position);
+        }
+
+        return Length.Zero;
     }
 
     /// <summary>
