@@ -32,6 +32,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
+#include <span>
 #include <vector>
 
 namespace com::sun::star::sheet { struct DataResult; }
@@ -776,9 +777,15 @@ class ScDPResultDimension
 {
 public:
     typedef std::vector<std::unique_ptr<ScDPResultMember>> MemberArray;
+    typedef std::unique_ptr<std::span<ScDPResultMemberSlim>> MemberSlimArray;
+
 private:
     const ScDPResultData*   pResultData;
+    // Used when we allocate a full set of Slim
+    MemberSlimArray mpaMemberSlimArray;
+    // Used both in non-Slim cases and after Slim get promoted
     MemberArray             maMemberArray;
+
     // Used during 'Promote' of ScDPResultMember
     ScDPDimension* mpDimension;
     ScDPLevel* mpLevel;

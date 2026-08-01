@@ -45,6 +45,7 @@
 #include <algorithm>
 #include <limits>
 #include <memory>
+#include <span>
 #include <unordered_map>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
@@ -3007,19 +3008,19 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
     return bInclude;
 }
 
-ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
-    pResultData( pData ),
-    mpDimension(nullptr),
-    mpLevel(nullptr),
-    nSortMeasure( 0 ),
-    bIsDataLayout( false ),
-    bSortByData( false ),
-    bSortAscending( false ),
-    bAutoShow( false ),
-    bAutoTopItems( false ),
-    bInitialized( false ),
-    nAutoMeasure( 0 ),
-    nAutoCount( 0 )
+ScDPResultDimension::ScDPResultDimension(const ScDPResultData* pData)
+    : pResultData(pData)
+    , mpDimension(nullptr)
+    , mpLevel(nullptr)
+    , nSortMeasure(0)
+    , bIsDataLayout(false)
+    , bSortByData(false)
+    , bSortAscending(false)
+    , bAutoShow(false)
+    , bAutoTopItems(false)
+    , bInitialized(false)
+    , nAutoMeasure(0)
+    , nAutoCount(0)
 {
 }
 
@@ -3766,15 +3767,27 @@ void ScDPResultDimension::Dump(int nIndent) const
 
 tools::Long ScDPResultDimension::GetMemberCount() const
 {
+    if (mpaMemberSlimArray != nullptr)
+    {
+        return mpaMemberSlimArray->size();
+    }
     return maMemberArray.size();
 }
 
 const ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n) const
 {
+    if (mpaMemberSlimArray != nullptr)
+    {
+        return &(*mpaMemberSlimArray)[n];
+    }
     return maMemberArray[n].get();
 }
 ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n)
 {
+    if (mpaMemberSlimArray != nullptr)
+    {
+        return &(*mpaMemberSlimArray)[n];
+    }
     return maMemberArray[n].get();
 }
 
