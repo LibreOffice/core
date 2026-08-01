@@ -428,16 +428,30 @@ public static class OdfChartPlot
     /// The inner plot rectangle the file states, or null when it states none.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>chart:coordinate-region</c> rather than <c>chart:plot-area</c>'s own
     /// <c>svg:x</c>…<c>svg:height</c>: the plot area's rectangle is the <em>outer</em> one, which
     /// includes the axis labels and the ticks, and using it puts the bars where the labels go.
     /// Measured on <c>chart-bar-deck.odp</c>, whose plot area is 1.451, 1.395, 18.481 × 9.384 cm
     /// and whose coordinate region is 2.258, 1.594, 17.674 × 8.538 — a difference of 0.8 cm on
     /// the left edge, which on a 22 cm chart is 3.7% of its width.
+    /// </para>
+    /// <para>
+    /// <strong>And it is written under either of two namespaces.</strong> The element began as a
+    /// LibreOffice extension and 47 of the 71 charts in <c>chart2/qa/extras/data/</c> that state
+    /// one still write it that way; the corpus deck uses the standardised spelling, so reading only
+    /// that one looked entirely correct and quietly sent two ODF charts in three through the OOXML
+    /// heuristic.
+    /// </para>
     /// </remarks>
     private static DocRect? Region(XElement plotArea)
     {
-        XElement? region = Child(plotArea, OdfNamespaces.Chart, "coordinate-region");
+        // Both spellings, and the extension one is the commoner: 47 of the 71 charts in
+        // chart2/qa/extras/data/ that state a coordinate region at all write it as
+        // chartooo:coordinate-region. See OdfNamespaces.ChartExtension.
+        XElement? region = Child(plotArea, OdfNamespaces.Chart, "coordinate-region")
+                           ?? Child(plotArea, OdfNamespaces.ChartExtension, "coordinate-region");
+
         if (region is null) return null;
 
         Length? x = OdfValue.ParseLength(Attribute(region, OdfNamespaces.SvgCompatible, "x"));

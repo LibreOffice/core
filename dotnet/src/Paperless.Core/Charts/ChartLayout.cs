@@ -42,13 +42,27 @@ public enum ChartLabelAnchor
 /// turn — which both formats state, OOXML as <c>a:bodyPr rot="-5400000"</c> and ODF as
 /// <c>style:rotation-angle="90"</c>.
 /// </param>
+/// <param name="Stretch">
+/// An extra horizontal scale applied to the glyphs, 1 for text drawn at its natural width.
+/// </param>
+/// <remarks>
+/// <strong><paramref name="Stretch"/> exists because a glyph run carries one em and a
+/// non-square stretch has two.</strong> An embedded chart is composed at its own size and scaled
+/// into its frame by <c>(sx, sy)</c>; the positions take both, and <paramref name="Size"/> can
+/// only take one, so the type came out <c>sx/sy</c> too wide or too narrow — 12% on
+/// <c>chart-bar-sheet.ods</c>, whose 12 × 7 cm chart sits in a frame 0.625 as wide and 0.709 as
+/// tall. Carrying the residual here and letting each consumer put it into its own transform is
+/// what closes that, and it costs a chart that is not stretched nothing at all: the factor is
+/// exactly 1 and both consumers take their unstretched path.
+/// </remarks>
 public readonly record struct ChartLabel(
     string Text,
     DocPoint At,
     ChartLabelAnchor Anchor,
     Length Size,
     Colour Colour,
-    double Rotation = 0.0);
+    double Rotation = 0.0,
+    double Stretch = 1.0);
 
 /// <summary>One filled rectangle — a bar, a legend key, the plot area's wall.</summary>
 /// <param name="Bounds">Where it goes.</param>
@@ -279,10 +293,12 @@ public static class ChartLayout
     /// 108.8 pt long, room for nine, and <c>0 20 … 180</c> — which is what the reference draws.
     /// </para>
     /// <para>
-    /// <strong>The one thing that cannot follow.</strong> A glyph run carries one em size, so text
-    /// is scaled by the vertical factor alone and comes out <c>sx/sy</c> too wide or too narrow —
-    /// 12% on this chart. Reproducing it exactly needs a non-uniform transform round each run,
-    /// which the two consumers express differently; recorded in the family TODOs.
+    /// <strong>The one thing that cannot follow the em, and where it goes instead.</strong> A
+    /// glyph run carries one em size, so the type is scaled by the vertical factor alone and the
+    /// residual <c>sx/sy</c> — 12% on this chart — is carried on
+    /// <see cref="ChartLabel.Stretch"/> for each consumer to fold into its own transform. Dropping
+    /// it, which is what this did at first, draws every word of a stretched chart
+    /// <c>sx/sy</c> too wide against a reference that is exact.
     /// </para>
     /// </remarks>
     private static ChartDrawing Stretch(ChartDrawing drawing, DocRect from, DocRect frame)
@@ -308,9 +324,20 @@ public static class ChartLayout
         foreach (ChartLine line in drawing.Lines)
             lines.Add(line with { From = At(line.From), To = At(line.To), Width = line.Width * sy });
 
+        // The em follows the vertical factor because that is what a line height is; the residual
+        // sx/sy goes onto the label as a horizontal scale for the consumer to apply.
+        double residual = sy == 0.0 ? 1.0 : sx / sy;
+
         List<ChartLabel> labels = new(drawing.Labels.Count);
         foreach (ChartLabel label in drawing.Labels)
-            labels.Add(label with { At = At(label.At), Size = label.Size * sy });
+        {
+            labels.Add(label with
+            {
+                At = At(label.At),
+                Size = label.Size * sy,
+                Stretch = label.Stretch * residual,
+            });
+        }
 
         List<ChartShape> shapes = new(drawing.Shapes.Count);
         foreach (ChartShape shape in drawing.Shapes)

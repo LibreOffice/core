@@ -157,10 +157,21 @@ public static class OdfNumberFormat
         if (decimals > 0) code.Append('.').Append('0', decimals);
     }
 
-    /// <summary>A literal, quoted so that its letters are not read as directives.</summary>
+    /// <summary>
+    /// A literal, quoted so that its letters are not read as directives.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The per cent sign is the exception, and quoting it costs a factor of a hundred.</strong>
+    /// ODF has no per cent directive: a <c>number:percentage-style</c> is a <c>number:number</c>
+    /// followed by a <c>number:text</c> holding <c>%</c>, and it is that sign in the compiled code
+    /// that tells the engine to multiply by a hundred. Quoted, it is decoration — <c>0.05</c>
+    /// renders as <c>0.1%</c> instead of <c>5.0%</c>, which reads as a rounding bug and is not one.
+    /// </remarks>
     private static void Literal(StringBuilder code, string? text)
     {
         if (text is not { Length: > 0 }) return;
+
+        if (text == "%") { code.Append('%'); return; }
 
         code.Append('"');
         foreach (char character in text)

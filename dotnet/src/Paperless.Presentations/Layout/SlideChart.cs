@@ -154,24 +154,34 @@ public static class SlideChart
         DocSize measured = new Measurer(fonts).Measure(label.Text, label.Size);
         if (measured.Width <= Length.Zero) return null;
 
+        // A non-square stretch leaves a residual horizontal factor the em cannot carry. The text
+        // is laid out at 1/stretch of where it goes and the factor is put into the transform, so
+        // that the glyphs land exactly where they would have and are that much wider — which is
+        // origin-independent, unlike scaling about the frame's own corner.
+        double stretch = double.IsFinite(label.Stretch) && label.Stretch > 0.0 ? label.Stretch : 1.0;
+
         // The rectangle the text is laid out in, before rotation. Its width is the measured
         // width plus a hair, because a line broken at exactly its own measured width can wrap.
         DocSize box = new(measured.Width * 1.05 + Length.FromPoints(1), measured.Height);
+        Length effective = measured.Width * stretch;
 
         DocPoint corner = label.Anchor switch
         {
-            ChartLabelAnchor.CentreTop => new DocPoint(label.At.X - box.Width / 2, label.At.Y),
+            ChartLabelAnchor.CentreTop => new DocPoint(label.At.X - effective / 2, label.At.Y),
             ChartLabelAnchor.CentreBottom =>
-                new DocPoint(label.At.X - box.Width / 2, label.At.Y - box.Height),
+                new DocPoint(label.At.X - effective / 2, label.At.Y - box.Height),
             ChartLabelAnchor.RightMiddle =>
-                new DocPoint(label.At.X - box.Width, label.At.Y - box.Height / 2),
+                new DocPoint(label.At.X - effective, label.At.Y - box.Height / 2),
             ChartLabelAnchor.LeftMiddle => new DocPoint(label.At.X, label.At.Y - box.Height / 2),
-            _ => new DocPoint(label.At.X - box.Width / 2, label.At.Y - box.Height / 2),
+            _ => new DocPoint(label.At.X - effective / 2, label.At.Y - box.Height / 2),
         };
 
         SlideTextBody body = Measurer.Body(label.Text, label.Size, label.Colour);
 
-        AffineTransform transform = placement;
+        AffineTransform transform = stretch == 1.0
+            ? placement
+            : AffineTransform.Concat(AffineTransform.Scale(stretch, 1.0), placement);
+
         DocRect area;
 
         if (label.Rotation != 0.0)
@@ -190,7 +200,7 @@ public static class SlideChart
         }
         else
         {
-            area = new DocRect(corner.X, corner.Y, box.Width, box.Height);
+            area = new DocRect(corner.X / stretch, corner.Y, box.Width, box.Height);
         }
 
         List<PlacedGlyphRun> runs = SlideTextLayout.Place(body, area, fonts);
