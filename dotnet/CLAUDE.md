@@ -188,9 +188,24 @@ dotnet test tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj \
     --filter "FullyQualifiedName~TableComparisonTests"                            # ~45 s
 ```
 
-Run the whole solution before committing anyway. The failure this project cares about most is
-the cascade — one wrong measurement moving every line after it — and it surfaces in projects you
-had no reason to think you had touched.
+Run every project before committing anyway. The failure this project cares about most is the
+cascade — one wrong measurement moving every line after it — and it surfaces in projects you had
+no reason to think you had touched.
+
+### A truncated run reports success
+
+**Check the count, not just the colour.** Under heavy load the test host can die part-way and
+still print `Passed! - Failed: 0`, having silently dropped the tests it never reached. Measured
+on one commit with several parallel builds running: the fidelity project reported **470 passed**
+on one run and **353 passed** on the next, both `Failed: 0`, against **471 discovered**
+(`dotnet test --list-tests`). Nothing had changed between them.
+
+This is worse than a failure, because it looks like a pass. Two habits make it safe:
+
+- Compare the passed count against the previous known-good count for that project. A drop with
+  zero failures is a truncated run, not a fixed test.
+- `dotnet test Paperless.slnx` is the most likely to truncate and the least likely to say so —
+  it has also been OOM-killed outright. Run the projects individually and total them yourself.
 
 ### Before trusting a green run
 
