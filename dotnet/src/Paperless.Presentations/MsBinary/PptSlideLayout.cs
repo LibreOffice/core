@@ -8,6 +8,7 @@ using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.MsBinary;
 
@@ -67,25 +68,40 @@ internal sealed class PptSlideLayout
     private readonly List<Diagnostic> _diagnostics;
     private readonly SlideFonts _fonts;
     private readonly EscherDrawingReader _escher;
+    private readonly byte[] _pictures;
 
     private readonly Dictionary<uint, PptStyleSheet> _stylesByMaster = [];
     private readonly Dictionary<uint, PptColourScheme> _schemesByMaster = [];
     private readonly Dictionary<uint, Paint?> _backgroundsByMaster = [];
+    private readonly Dictionary<int, PptPicture> _decoded = [];
 
     private PptStyleSheet? _defaultStyles;
     private PptFontTable _fontTable = PptFontTable.Empty;
+    private Dictionary<int, EscherBlip>? _blips;
 
+    /// <param name="stream">The <c>PowerPoint Document</c> stream.</param>
+    /// <param name="persist">The persist directory, which says which version of each object is current.</param>
+    /// <param name="fonts">The font stack layout measures with.</param>
+    /// <param name="diagnostics">Where anything unreadable is recorded.</param>
+    /// <param name="pictures">
+    /// The compound file's <c>Pictures</c> stream, which is this format's blip delay stream — a
+    /// PPT's <c>msofbtBSE</c> entries carry a <c>foDelay</c> into it and hold no bytes themselves.
+    /// Empty for a deck with no pictures, and for a caller that has none to give: the deck then
+    /// draws every frame empty, which is what it did before this stream was passed at all.
+    /// </param>
     public PptSlideLayout(
         DffRecordBuffer stream,
         PptPersistDirectory persist,
         SlideFonts fonts,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        byte[]? pictures = null)
     {
         _stream = stream;
         _persist = persist;
         _fonts = fonts;
         _diagnostics = diagnostics;
         _escher = new EscherDrawingReader(stream, diagnostics);
+        _pictures = pictures ?? [];
     }
 
     /// <summary>Lays every slide out, in presentation order.</summary>
@@ -96,6 +112,7 @@ internal sealed class PptSlideLayout
 
         DocSize size = SlideSize(pages);
         _fontTable = PptFontTable.Read(_stream, pages.Environment);
+        _blips = ReadBlips(pages);
         ReadMasters(pages);
 
         for (int index = 0; index < pages.Slides.Count; index++)
@@ -139,6 +156,96 @@ internal sealed class PptSlideLayout
     /// <summary>Converts a master-unit length to a <see cref="Length"/>.</summary>
     private static Length Units(long units)
         => Length.FromEmu(units * Length.EmuPerInch / MasterUnitsPerInch);
+
+    /// <summary>
+    /// The deck's blip store: every picture, indexed by the <c>pib</c> a shape carries.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A PPT keeps its drawing group in a <c>PPDrawingGroup</c> record inside the document
+    /// container, and the group's first child is the <c>OfficeArtBStoreContainer</c> — the same
+    /// structure a DOC keeps at <c>fcDggInfo</c>, which is why one reader serves both. The
+    /// entries here are always the <c>foDelay</c> form: PowerPoint writes the picture bytes into
+    /// the compound file's <c>Pictures</c> stream and leaves the entry at its bare thirty-six
+    /// bytes. LibreOffice hands <c>SdrPowerPointImport</c> exactly that stream as its BLIP stream
+    /// (<c>sd/source/filter/ppt/pptin.cxx:216</c>, <c>maPictureStream</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Why the omission was expensive.</strong> A metafile blip in a PPT is zlib-deflated
+    /// behind its <c>OfficeArtMetafileHeader</c>, so a deck's pasted tables, charts and org
+    /// diagrams are invisible to any search of the file for their own text — which is what makes
+    /// "the reference draws words our reader cannot even find" look like a text bug rather than a
+    /// missing picture. Twelve of the thirteen worst text losses in the slides corpus were this.
+    /// </para>
+    /// </remarks>
+    private Dictionary<int, EscherBlip> ReadBlips(PptPages pages)
+    {
+        if (_stream.FirstChild(pages.Document, PptRecordTypes.DrawingGroup) is not { } group)
+            return [];
+
+        foreach (DffRecordHeader child in _stream.Children(group))
+        {
+            if (child.Type != EscherRecordTypes.DrawingGroupContainer) continue;
+
+            return EscherBlips.Read(_stream, child, _pictures, []);
+        }
+
+        return [];
+    }
+
+    /// <summary>
+    /// The picture a shape's <c>pib</c> names, decoded once per store entry.
+    /// </summary>
+    /// <remarks>
+    /// <c>pib</c> is one-based and zero means "no picture", so the lookup and the emptiness test
+    /// are the same question. Which of raster and vector a blip is comes from its bytes rather
+    /// than from its record type, for the reason <see cref="Ooxml.PptxSlideLayout"/> gives at
+    /// length: a producer writing a genuine EMF into a <c>WMF</c> blip is ordinary, and the
+    /// decoder registry is the only thing that knows what it can read.
+    /// </remarks>
+    private PptPicture PictureOf(EscherShape shape)
+    {
+        uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
+        if (pib == 0 || _blips is null) return default;
+        if (_decoded.TryGetValue((int)pib, out PptPicture cached)) return cached;
+        if (!_blips.TryGetValue((int)pib, out EscherBlip blip)) return default;
+
+        PptPicture picture = default;
+        if (!blip.Bytes.IsEmpty)
+        {
+            ReadOnlyMemory<byte> bytes = blip.Bytes;
+            picture = VectorImages.For(bytes.Span) is not null
+                ? new PptPicture(null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+                : new PptPicture(RasterImage.Encoded(bytes, MediaType(blip.RecordType)), null);
+        }
+
+        _decoded[(int)pib] = picture;
+        return picture;
+    }
+
+    /// <summary>
+    /// What a blip record type says its bytes are, for a backend choosing a decoder.
+    /// </summary>
+    /// <remarks>
+    /// The record type is the only honest label a binary Office file gives a picture — there is
+    /// no file name and no content type — and it is a hint rather than a fact: a decoder still
+    /// sniffs. Null for the types that are not rasters, which never reach here.
+    /// </remarks>
+    private static string? MediaType(ushort recordType) => recordType switch
+    {
+        0xF01D or 0xF02A => "image/jpeg",
+        0xF01E => "image/png",
+        0xF01F => "image/bmp",
+        0xF029 => "image/tiff",
+        _ => null,
+    };
+
+    /// <summary>One blip store entry's picture: a raster, or a vector decoded when something draws it.</summary>
+    private readonly record struct PptPicture(RasterImage? Raster, Lazy<VectorImage>? Vector)
+    {
+        /// <summary>True when the entry held nothing drawable.</summary>
+        public bool IsEmpty => Raster is null && Vector is null;
+    }
 
     /// <summary>
     /// Reads what each master supplies to the slides under it: styles, colours and background.
@@ -458,15 +565,45 @@ internal sealed class PptSlideLayout
                 : null)
             ?? SlidePresetGeometry.Outline(preset, local.Size, Guides(adjustment));
 
+        DocRect bounds = ShapeTransform.PlacedBounds(placement, local.Size);
+
         return new PlacedShape
         {
             Name = shape.Name,
             Outline = ShapeTransform.Apply(placement, outline),
-            Bounds = ShapeTransform.PlacedBounds(placement, local.Size),
+            Bounds = bounds,
             Fill = Fill(shape, context.Scheme),
             Line = Line(shape, context.Scheme),
+            Picture = Picture(shape, bounds),
             Text = Text(shape, context, local, preset, adjustment, placement),
         };
+    }
+
+    /// <summary>
+    /// The picture a shape draws, in the rectangle the shape occupies.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Any shape may carry one, not only a picture frame.</strong> Escher has no separate
+    /// picture element: a <c>pib</c> is a property like a fill colour, so a rounded rectangle with
+    /// a photograph in it is one shape with both. <c>SvxMSDffManager::ImportShape</c> reads it the
+    /// same way — the graphic is fetched whenever the property is present
+    /// (<c>msdffimp.cxx:4693</c>) — which is why this is asked of every shape rather than of a
+    /// type.
+    /// </para>
+    /// <para>
+    /// The destination is the shape's placed rectangle, with no crop applied.
+    /// <c>cropFromTop</c> and its three siblings are recorded in the TODO rather than
+    /// approximated; a cropped picture drawn whole is the right picture in the right place at the
+    /// wrong scale, where dropping it is a hole.
+    /// </para>
+    /// </remarks>
+    private PlacedPicture? Picture(EscherShape shape, DocRect bounds)
+    {
+        PptPicture picture = PictureOf(shape);
+        return picture.IsEmpty
+            ? null
+            : new PlacedPicture(picture.Raster, bounds) { Vector = picture.Vector };
     }
 
     /// <summary>
