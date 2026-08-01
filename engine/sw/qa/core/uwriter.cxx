@@ -210,16 +210,17 @@ void SwDocTest::testFileNameFields()
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
     OUString sFileURL = aTempFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    SfxMedium aDstMed(sFileURL, StreamMode::STD_READWRITE);
+    // The shell deletes the medium it is given, so it needs one of its own
+    auto pDstMed = std::make_unique<SfxMedium>(sFileURL, StreamMode::STD_READWRITE);
 
     auto pFilter = std::make_shared<SfxFilter>(
         "Text",
         OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), OUString(),
         "TEXT", OUString() );
-    aDstMed.SetFilter(pFilter);
+    pDstMed->SetFilter(pFilter);
 
-    m_xDocShRef->DoSaveAs(aDstMed);
-    m_xDocShRef->DoSaveCompleted(&aDstMed);
+    m_xDocShRef->DoSaveAs(*pDstMed);
+    m_xDocShRef->DoSaveCompleted(pDstMed.release());
 
     const INetURLObject &rUrlObj = m_xDocShRef->GetMedium()->GetURLObject();
 
