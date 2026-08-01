@@ -39,7 +39,10 @@
 #include <editeng/charhiddenitem.hxx>
 
 #include <sfx2/docfilt.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 
 #include <xmloff/odffields.hxx>
 
@@ -233,9 +236,17 @@ void SwDocTest::testFileNameFields()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
+    // The Kit presents the document as one in a Documents toplevel directory, the real path being
+    // of no use to a client
+    const bool bJailed = comphelper::COKit::isActive();
+    const OUString aJailedDir = "/" + SfxResId(STR_GID_DOCUMENT);
+
     {
         OUString sResult(aNameField.Expand(SwFileNameFormat::PathName));
-        OUString sExpected(rUrlObj.GetFull());
+        OUString sExpected(
+            bJailed ? aJailedDir + "/"
+                          + rUrlObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset)
+                    : rUrlObj.GetFull());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
@@ -243,7 +254,7 @@ void SwDocTest::testFileNameFields()
         OUString sResult(aNameField.Expand(SwFileNameFormat::Path));
         INetURLObject aTemp(rUrlObj);
         aTemp.removeSegment();
-        OUString sExpected(aTemp.PathToFileName());
+        OUString sExpected(bJailed ? aJailedDir : aTemp.PathToFileName());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
