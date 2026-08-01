@@ -218,6 +218,15 @@ internal sealed class DiagramShapeAtom : DiagramAtom
     /// <summary>The preset geometry as stated, whether or not it is drawn.</summary>
     public string PresetType { get; set; } = "";
 
+    /// <summary>
+    /// The drawn geometry every shape cloned from this template shares.
+    /// </summary>
+    /// <remarks>
+    /// One object per <c>dgm:shape</c> element, handed to each clone rather than copied — see
+    /// <see cref="DiagramGeometry"/> for why the sharing is the port rather than an oversight.
+    /// </remarks>
+    public DiagramGeometry Geometry { get; } = new();
+
     /// <summary>True when the element states <c>hideGeom="1"</c>.</summary>
     public bool HideGeometry { get; set; }
 
@@ -324,6 +333,7 @@ internal static class PptxDiagramLayout
                     {
                         HasType = preset.Length != 0,
                         PresetType = preset,
+                        Geometry = { PresetType = preset },
                         HideGeometry = hidden,
                         Rotation = (int)Number(child.Attribute("rot")?.Value),
                         ZOrderOffset = (int)Number(child.Attribute("zOrderOff")?.Value),

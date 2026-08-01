@@ -172,12 +172,20 @@ internal static class PptxTextBody
                 Drawing.Child(paragraph, "endParaRPr"), defaults, 0, 0, theme, defaultTypeface));
         }
 
+        // The size a percentage spacing is a percentage of: the tallest run in the paragraph, as
+        // LibreOffice takes it (textparagraph.cxx:131, `nCharHeight = std::max(...)`).
+        Length tallest = Length.Zero;
+        foreach (SlideTextRun run in runs)
+        {
+            if (run.Size > tallest) tallest = run.Size;
+        }
+
         return new SlideParagraph(
             text.ToString(),
             runs,
             Alignment(Drawing.Attribute(paragraphProperties, "algn")),
-            Spacing(Drawing.Child(paragraphProperties, "spcBef")),
-            Spacing(Drawing.Child(paragraphProperties, "spcAft")),
+            Spacing(Drawing.Child(paragraphProperties, "spcBef"), tallest),
+            Spacing(Drawing.Child(paragraphProperties, "spcAft"), tallest),
             LineSpacing(Drawing.Child(paragraphProperties, "lnSpc")),
             Length.FromEmu(Emu(paragraphProperties, "marL", 0)),
             Length.FromEmu(Emu(paragraphProperties, "indent", 0)),
@@ -418,17 +426,46 @@ internal static class PptxTextBody
     /// A <c>a:spcBef</c>/<c>a:spcAft</c> value, which is either points or a percentage.
     /// </summary>
     /// <remarks>
-    /// Only <c>a:spcPts</c> is honoured, in hundredths of a point. <c>a:spcPct</c> is a percentage
-    /// of the line height, which is not known until the paragraph's runs are — so resolving it
-    /// belongs with the line heights rather than here, and it is recorded in the TODO rather than
-    /// approximated against a size the paragraph may not use.
+    /// <para>
+    /// <c>a:spcPts</c> states hundredths of a point outright. <c>a:spcPct</c> states thousandths
+    /// of a per cent <em>of the paragraph's own character height</em> — not of the line height,
+    /// which is what the name suggests and what reading it as a line-spacing rule would give.
+    /// LibreOffice resolves it at import against the tallest run in the paragraph and stores the
+    /// result as an absolute margin (<c>TextSpacing::toMargin</c>,
+    /// <c>oox/inc/drawingml/textspacing.hxx:54</c>, reached from
+    /// <c>textparagraphproperties.cxx:438</c>), so it is resolved here for the same reason: by
+    /// the time the layouter sees a paragraph it has one spacing, not a rule.
+    /// </para>
+    /// <para>
+    /// <strong>The percentage form is the only one real files use.</strong> Of the 324
+    /// <c>a:pPr</c> in the baked diagram drawings of LibreOffice's <c>sd/qa</c> corpus, all 324
+    /// state their spacing as a percentage and none in points — so ignoring it set every
+    /// multi-paragraph node's lines tighter than the reference.
+    /// </para>
     /// </remarks>
-    private static Length Spacing(XElement? spacing)
+    /// <param name="spacing">The <c>a:spcBef</c> or <c>a:spcAft</c> element.</param>
+    /// <param name="characterHeight">The tallest run in the paragraph, which a percentage scales.</param>
+    private static Length Spacing(XElement? spacing, Length characterHeight)
     {
-        int? points = Drawing.Number(Drawing.Child(spacing, "spcPts"), "val");
-        return points is { } value && value > 0
-            ? Length.FromEmu(value * Length.EmuPerPoint / 100)
-            : Length.Zero;
+        if (Drawing.Number(Drawing.Child(spacing, "spcPts"), "val") is { } points && points > 0)
+        {
+            return Length.FromEmu(points * Length.EmuPerPoint / 100);
+        }
+
+        if (Drawing.Number(Drawing.Child(spacing, "spcPct"), "val") is not { } percent
+            || percent <= 0)
+        {
+            return Length.Zero;
+        }
+
+        // A paragraph with no run of its own is spaced against twelve points, the size
+        // LibreOffice falls back to when the paragraph style states no character height.
+        double size = characterHeight > Length.Zero ? characterHeight.Points : 12.0;
+
+        // Hundredths of a point, truncated exactly where LibreOffice truncates: the product is
+        // cast to an integer before it leaves points.
+        int hundredths = (int)(size * percent / 1000.0);
+        return Length.FromEmu(hundredths * Length.EmuPerPoint / 100);
     }
 
     /// <summary>A <c>a:lnSpc</c>, as a percentage of the line height or as an exact height.</summary>

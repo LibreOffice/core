@@ -80,9 +80,11 @@ public static class SlideTextLayout
             _ => Length.Zero,
         };
 
-        foreach (Block block in blocks)
+        for (int index = 0; index < blocks.Count; index++)
         {
-            top += block.SpaceBefore;
+            Block block = blocks[index];
+
+            if (index != 0) top += block.SpaceBefore;
 
             bool first = true;
             foreach (PlacedLine line in block.Lines)
@@ -97,7 +99,7 @@ public static class SlideTextLayout
                 top += line.Height;
             }
 
-            top += block.SpaceAfter;
+            if (index != blocks.Count - 1) top += block.SpaceAfter;
         }
 
         return placed;
@@ -124,7 +126,21 @@ public static class SlideTextLayout
         return Measure(body, width, fonts).Total;
     }
 
-    /// <summary>Breaks every paragraph of a body and totals their heights.</summary>
+    /// <summary>
+    /// Breaks every paragraph of a body and totals their heights.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The outer two spacings do not count.</strong> A paragraph's space-before is not
+    /// applied to the first paragraph of a body and its space-after is not applied to the last —
+    /// <c>ImpEditEngine::CalcHeight</c>, <c>editeng/source/editeng/impedit2.cxx:4792-4802</c>,
+    /// which guards the upper with <c>if (nPortion)</c> and the lower with
+    /// <c>if (nPortion != lastIndex())</c> under the comment "not in the last". Paragraph
+    /// spacing is therefore a gap <em>between</em> paragraphs and never padding inside the box.
+    /// Applying it at the ends as well grows the block, and a middle-anchored node then draws its
+    /// only line off centre: on <c>tdf125551.pptx</c>, whose diagram paragraphs each state
+    /// <c>spcAft</c> of 35% on 32 pt text, every label moved 5.6 pt — half of the 11.2 pt that
+    /// the trailing space added — until this matched LibreOffice.
+    /// </remarks>
     private static (List<Block> Blocks, Length Total) Measure(
         SlideTextBody body, Length available, SlideFonts fonts)
     {
@@ -144,6 +160,12 @@ public static class SlideTextLayout
 
             total += block.Height;
             blocks.Add(block);
+        }
+
+        if (blocks.Count != 0)
+        {
+            total -= blocks[0].SpaceBefore;
+            total -= blocks[^1].SpaceAfter;
         }
 
         return (blocks, total);

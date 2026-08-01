@@ -846,34 +846,41 @@ arrive as blip *fills* on ordinary shapes.
       corpus deck (`slide-diagram-baked.pptx`) to a tenth of a point on fills, outlines,
       connector vertices and label pens, and on all ten real SmartArt decks in
       `sd/qa/unit/data/pptx` for page and word count. PPTX only; see below.
-- [x] **Evaluating the layout atoms, for the documents with no baked drawing** — five algorithms
-      of the nine, and the five that carry the corpus. `PptxDiagramData`, `PptxDiagramAtoms`,
-      `PptxDiagramEvaluator`, `PptxDiagramAlgorithms`, `PptxDiagramStyles`,
-      `PptxDiagramShapeTree` and `PptxDiagramText` in `Paperless.Presentations/Ooxml/`, reached
-      from `PptxSlideLayout.Diagram` only when `PptxDiagram.Baked` declines — the same one-line
-      decision LibreOffice makes at `diagram.cxx:701`,
-      `bCreate = pShape->getExtDrawings().empty()`.
-      **Measured over the 37 decks in `sd/qa/unit/data/pptx` with no usable baked drawing: 20 now
-      draw, and on all 20 every filled shape agrees with LibreOffice's own PDF to within
-      0.07 pt** — the quantisation of its internal hundredth of a millimetre rather than a
-      disagreement. The other 17 name an algorithm the evaluator does not implement and are
-      declined whole, so they draw nothing, as they did before, rather than approximately. What
-      still differs, and why, is in `src/Paperless.Presentations/TODO.md`.
-- [ ] **The four remaining algorithms: `snake`, `cycle`, `hierRoot`/`hierChild`, `pyra`.** They
-      are exactly what the 17 declined decks use, and each is a different geometry with its own
-      hand-tuned constants rather than another case in the constraint solver — `snake` alone is
-      330 lines searching for a grid. The hierarchy pair is the closest: it needs only the
-      vertical-shape count, which is already ported (`getVerticalShapesCount`) and unused until
-      they land.
+- [x] **Evaluating the layout atoms, for the documents with no baked drawing** —
+      `PptxDiagramData`, `PptxDiagramAtoms`, `PptxDiagramEvaluator`, `PptxDiagramAlgorithms`,
+      `PptxDiagramGeometry`, `PptxDiagramStyles`, `PptxDiagramShapeTree` and `PptxDiagramText` in
+      `Paperless.Presentations/Ooxml/`, reached from `PptxSlideLayout.Diagram` only when
+      `PptxDiagram.Baked` declines — the same one-line decision LibreOffice makes at
+      `diagram.cxx:701`, `bCreate = pShape->getExtDrawings().empty()`.
+- [x] **All nine algorithms evaluate, and the whole unbaked corpus agrees.** `lin`, `composite`,
+      `sp`, `tx` and `conn` landed first and carried 20 of the 37 decks in `sd/qa/unit/data/pptx`
+      with no usable baked drawing; `snake`, `cycle`, `hierRoot`/`hierChild` and `pyra` in
+      `PptxDiagramGeometry.cs` carry the other 17.
+      **All 37 now evaluate: 36 draw, and every filled path's bounding box agrees one for one with
+      LibreOffice's own PDF to within 0.080 pt; the thirty-seventh (`tdf169781.pptx`) evaluates to
+      no shapes, as LibreOffice's does.** That worst figure is three roundings of LibreOffice's
+      internal hundredth of a millimetre (0.0283 pt) rather than a tuned tolerance — a
+      three-level org chart quantises once per nesting level. Per algorithm, worst shape across
+      its own decks: `snake` 0.076 pt over 7 decks, `cycle` 0.064 over 5, the hierarchy pair
+      0.080 over 4, `pyra` 0.041 over 1. The decline stays for anything else a file might name,
+      for the reason it existed: half an evaluation puts nodes in wrong places and reads as a
+      layout bug rather than as a missing feature. What still differs, and why, is in
+      `src/Paperless.Presentations/TODO.md`.
 - [ ] **A DOCX or XLSX diagram needs a hook in its own reader.** The same shape as the chart item
       and left for the same reason: those libraries had other agents in them. Worth 8 documents in
       `sw/qa` and 2 in `sc/qa`, all with baked drawings.
-- [ ] **`a:spcPct` paragraph spacing is the one visible gap left**, and it is not a diagram bug —
-      it is the recorded `spcBef`/`spcAft`-as-a-percentage item under the text chain. It shows up
-      here because diagrams use nothing else: **324 of the 324** `a:pPr` in the corpus's baked
-      drawings state their spacing as a percentage and **none** states it in points, so a
-      multi-paragraph node draws its lines tighter than the reference. `tdf93830.pptx` is the
-      clearest case.
+- [x] **`a:spcPct` paragraph spacing**, which was the last visible gap and is not a diagram bug —
+      it is the recorded `spcBef`/`spcAft`-as-a-percentage item under the text chain, and it
+      surfaced here because diagrams use nothing else: **324 of the 324** `a:pPr` in the corpus's
+      baked drawings state their spacing as a percentage and **none** states it in points.
+      Resolved at read time against the paragraph's tallest run, where LibreOffice resolves it
+      (`TextSpacing::toMargin`, `oox/inc/drawingml/textspacing.hxx:54`), because by the time a
+      layouter sees a paragraph it has one spacing rather than a rule. On `tdf93830.pptx` the
+      worst text baseline went from **14.4 pt out to 0.03 pt** and every run now agrees. It
+      brought a second rule with it that had been invisible while every spacing resolved to zero,
+      recorded in `src/Paperless.Presentations/TODO.md`: **the first paragraph's space-before and
+      the last paragraph's space-after are never applied**, so paragraph spacing is a gap between
+      paragraphs and never padding inside the box.
 
 **ODF has no equivalent, and does not need one.** Scanning 3,852 `.od*`/`.fod*` files in the tree
 for any diagram markup finds 32 hits and every one is the word "Diagram" in a `draw:name`. There

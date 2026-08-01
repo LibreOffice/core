@@ -11,6 +11,36 @@ namespace Paperless.Presentations.Ooxml;
 internal readonly record struct DiagramTextParagraph(XElement Paragraph, int Level);
 
 /// <summary>
+/// The drawn geometry of every shape cloned from one <c>dgm:shape</c>, shared between them.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <strong>It is shared on purpose, and the sharing is visible in the output.</strong> A
+/// <c>dgm:layoutNode</c> inside a <c>forEach</c> whose iteration count is one produces several
+/// shapes for the <em>same</em> presentation point — a five-node cycle makes five
+/// <c>sibTrans</c> shapes, all standing for the first one — and only the last of them is in the
+/// map the layouting walk looks shapes up in, so only the last runs the <c>conn</c> algorithm
+/// that turns the placeholder into an arrow. LibreOffice draws all five as arrows anyway,
+/// because <c>Shape</c>'s copy constructor takes <c>mpCustomShapePropertiesPtr</c> by reference
+/// (<c>oox/source/drawingml/shape.cxx:210</c>, under the comment "cloned shape shares all
+/// properties by reference, don't change them!") and the <c>conn</c> algorithm changes exactly
+/// that. Giving each clone its own preset instead draws four of five connectors as plain
+/// rectangles on <c>smartart-cycle.pptx</c>.
+/// </para>
+/// <para>
+/// The <em>sub-type</em> is not shared, and the difference matters: it is per shape in
+/// LibreOffice too, so a connector the <c>conn</c> algorithm never reached still reads as a
+/// connector to the cycle and hierarchy algorithms that ask "is this child a <c>conn</c>" while
+/// drawing as the arrow its sibling turned into.
+/// </para>
+/// </remarks>
+internal sealed class DiagramGeometry
+{
+    /// <summary>The preset actually drawn, which the <c>conn</c> algorithm may replace.</summary>
+    public string PresetType { get; set; } = "";
+}
+
+/// <summary>
 /// A shape the layout-atom evaluator produced, before it becomes PresentationML.
 /// </summary>
 /// <remarks>
@@ -34,8 +64,17 @@ internal sealed class DiagramShape
     /// <summary>The <c>dgm:layoutNode</c> name that made it, which constraints refer to.</summary>
     public string InternalName { get; set; } = "";
 
-    /// <summary>The preset geometry as the layout definition stated it.</summary>
+    /// <summary>
+    /// The shape's sub-type: the preset geometry the layout definition stated, per shape.
+    /// </summary>
+    /// <remarks>
+    /// What an algorithm asks when it wants to know whether a child is a connector. Not what is
+    /// drawn — see <see cref="Geometry"/>, which the clones of one <c>dgm:shape</c> share.
+    /// </remarks>
     public string PresetType { get; set; } = "";
+
+    /// <summary>The drawn geometry, shared with every other clone of the same template.</summary>
+    public DiagramGeometry Geometry { get; set; } = new();
 
     /// <summary>True when the layout definition asked for the geometry not to be drawn.</summary>
     public bool HideGeometry { get; set; }
@@ -51,7 +90,7 @@ internal sealed class DiagramShape
     public bool IsGroup { get; set; }
 
     /// <summary>The preset actually drawn, which is nothing for a group or a hidden geometry.</summary>
-    public string DrawnPreset => IsGroup || HideGeometry ? "" : PresetType;
+    public string DrawnPreset => IsGroup || HideGeometry ? "" : Geometry.PresetType;
 
     /// <summary>Offset from the parent shape's top-left corner, in EMUs.</summary>
     public int X { get; set; }

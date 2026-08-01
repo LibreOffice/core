@@ -564,10 +564,12 @@ stated lengths. The fix is in `Paperless.MsBinary`, so DOC and XLS get it too.
 a paragraph's upper space only when it is not the first and its lower space only when it is not
 the last (`ImpEditEngine::CalcHeight`, `editeng/source/editeng/impedit2.cxx:4791-4802`). Worth
 0.125 pt on the corpus deck — one master unit — which is the difference between agreeing with the
-reference and nearly agreeing. Applied in `PptTextBody` rather than in `SlideTextLayout`, because
-the rule is EditEngine's rather than this format's and moving it to the shared layouter would
-shift every PPTX and ODP baseline in the same commit. **It belongs in the shared layouter and is
-not there yet**; the other two paths still add both.
+reference and nearly agreeing. It was applied in `PptTextBody` first, because the shift it would
+cause on the other two families wanted its own measurement rather than being a side effect of a
+binary-format fix; **it is now in `SlideTextLayout` and serves all three**, measured on the PPTX
+side by `a:spcPct` (see the text-chain item), which is what made it visible there at all.
+`PptTextBody` still zeroes the outer two before handing them over, which is redundant and
+harmless — the layouter would skip them anyway.
 
 **LibreOffice's own PPT export writes no shape names.** The property table it emits carries no
 `wzName`, so every shape in a converted deck is anonymous and a test has to address them by index.
@@ -746,12 +748,12 @@ Two reference artefacts worth knowing before chasing them:
       shapes — `slides-ppt.ppt`'s master carries a footer and a slide-number placeholder that
       LibreOffice draws onto every slide and Paperless draws on none, which is the same open
       question the other two paths have and is why that deck's text runs are not compared.
-- [ ] **Paragraph spacing above the first paragraph and below the last**, in the *shared*
-      layouter. EditEngine adds neither (`editeng/source/editeng/impedit2.cxx:4791-4802`), the
-      binary path compensates for it in `PptTextBody`, and the PPTX and ODP paths still add both.
-      It is worth 0.125 pt on the corpus deck and more on a deck that spaces its outline
-      generously; the reason it was not moved is that doing so shifts every baseline of the other
-      two families at once, which wants its own measurement rather than being a side effect.
+- [x] **Paragraph spacing above the first paragraph and below the last**, in the *shared*
+      layouter. EditEngine adds neither (`editeng/source/editeng/impedit2.cxx:4791-4802`), and
+      the rule now lives in `SlideTextLayout.Measure`/`Place` for all three families rather than
+      only in `PptTextBody`. It moved when `a:spcPct` landed, because that is what made the rule
+      measurable on PPTX: on `tdf125551.pptx` every diagram label was 5.6 pt out of place without
+      it and 0.028 pt with it. No row of the presentation render sweep moved.
 - [ ] **A shape's own `TextRulerAtom`**, which states per-shape indents and tab stops and overrides
       the master's per-level ones. Read as far as being skipped. Nothing in the corpus states one
       that differs from its master, so it cannot be told apart from correct today.
@@ -1436,10 +1438,28 @@ paragraph's level are read, attribute by attribute rather than element by elemen
       (`outliner.cxx:918`). Caught by `slide-shape-features.pptx`, whose `a:buAutoNum` list
       LibreOffice draws at 89.972 and centring would put at 89.036 — so `SlideMarker.IsSymbol`
       exists and says why.
-- [ ] **`a:spcPct` paragraph spacing.** `a:spcBef`/`a:spcAft` are honoured in points
-      (`a:spcPts`) and ignored as a percentage, because the percentage is of the line height and
-      the line height is not known until the paragraph's runs are. It belongs with the line
-      heights rather than with the reader.
+- [x] **`a:spcPct` paragraph spacing, and the two spacings that are never applied.** The
+      percentage is a fraction of the paragraph's own **character height**, not of the line
+      height, which is what the name suggests and what reading it as a line-spacing rule would
+      give. LibreOffice resolves it at import against the tallest run in the paragraph and stores
+      an absolute margin (`TextSpacing::toMargin`, `oox/inc/drawingml/textspacing.hxx:54`, reached
+      from `textparagraphproperties.cxx:438` with the `nCharHeight` maximum taken at
+      `textparagraph.cxx:131`), so `PptxTextBody.Spacing` does the same — including the
+      truncation to hundredths of a point before the value leaves points.
+      It matters far more than its size because **324 of the 324** `a:pPr` in the corpus's baked
+      diagram drawings state their spacing as a percentage and none in points: on `tdf93830.pptx`
+      the worst text baseline was 14.4 pt out and is now 0.03.
+      **The rule that came with it, and that had been invisible while every spacing resolved to
+      zero: the first paragraph's space-before and the last paragraph's space-after are not
+      applied at all** — `ImpEditEngine::CalcHeight` guards the upper with `if (nPortion)` and
+      the lower with `if (nPortion != lastIndex())` under its own comment "not in the last"
+      (`editeng/source/editeng/impedit2.cxx:4792-4802`). Paragraph spacing is a gap *between*
+      paragraphs and never padding inside the box, which is why `SlideTextLayout.Measure`
+      subtracts the outer two from the total. Missing it makes every single-paragraph node taller
+      than its text: on `tdf125551.pptx`, whose diagram labels each state `spcAft` of 35% on
+      32 pt, each label was drawn 5.6 pt — half of the 11.2 the trailing spacing added — above
+      where LibreOffice draws it, and the file agreed to 0.028 pt once the rule was in.
+      `SlideParagraphSpacingTests` covers both halves.
 - [ ] **Character spacing (`spc`) and kerning (`kern`).** `spc` is in hundredths of a point and is
       not applied; on the corpus deck it is −1, which is a hundredth of a point per character and
       inside every tolerance here, but a deck that tracks a title tightly would drift visibly.
@@ -1541,11 +1561,7 @@ to a tenth of a point. And all ten real SmartArt decks in `sd/qa/unit/data/pptx`
 `n819614.pptx`, 111 shapes with 55 `a:custGeom` and 51 gradients — match the reference on page and
 word count.
 
-**What is left on the baked path.** `a:spcPct` paragraph spacing, which is the recorded
-`spcBef`/`spcAft` item and not a diagram bug — but diagrams use nothing else: **324 of the 324**
-`a:pPr` in the corpus's baked drawings state their spacing as a percentage and none states it in
-points, so a multi-paragraph node's lines come out tighter than the reference (`tdf93830.pptx` is
-the clearest case). And on the baked path the colour transform is still not consulted: LibreOffice
+**What is left on the baked path.** The colour transform is still not consulted: LibreOffice
 pulls `node0`'s text fill out of `colors1.xml` and applies it as the `fontRef` colour for every
 node (`diagram.cxx:674-682`, `applyFontRefColor`), which the baked tree already resolves into each
 run for every file measured — but a file that left a run's colour unstated would take ours from the
@@ -1563,7 +1579,8 @@ hand precisely so this path is what gets tested. All 37 drew as nothing.
 `forEach`, `choose`/`if`/`else`, `layoutNode`, `alg`, `constr`, `rule`, `shape` — whose input is
 `data1.xml`. It is walked twice: once to create one shape per (layout node, iteration) pair, once
 to size and place them innermost-last. The port is
-`PptxDiagramData` → `PptxDiagramAtoms` → `PptxDiagramEvaluator` → `PptxDiagramAlgorithms` →
+`PptxDiagramData` → `PptxDiagramAtoms` → `PptxDiagramEvaluator` →
+`PptxDiagramAlgorithms`/`PptxDiagramGeometry` →
 `PptxDiagramStyles` → `PptxDiagramShapeTree`/`PptxDiagramText`, from
 `oox/source/drawingml/diagram/{datamodelcontext,layoutnodecontext,layoutatomvisitorbase,layoutatomvisitors,diagramlayoutatoms}.cxx`
 and `svx/source/diagram/datamodel_svx.cxx`.
@@ -1577,33 +1594,80 @@ shapes as there are presentation points whose `presName` is `textNode`, indexed 
 
 **What evaluates, and what it was measured against.**
 
-| Algorithm | State | Measured on |
-|---|---|---|
-| `lin` | ported whole, including rules and the shrink pass | 18 of the 20 |
-| `composite` | ported whole, including the vertical centring | 15 of the 20 |
-| `sp` | ported (it only throws the text away again) | 20 of the 20 |
-| `tx` | size, insets, anchor, bullets, alignment | 20 of the 20 |
-| `conn` | preset substitution and the centre-preserving resize | 1 of the 20 |
-| `snake`, `cycle`, `hierRoot`/`hierChild`, `pyra` | **not ported** | — |
+| Algorithm | Where | Decks naming it | Worst shape on those decks |
+|---|---|---|---|
+| `tx` | `PptxDiagramAlgorithms` | 37 | 0.080 pt |
+| `sp` | `PptxDiagramAlgorithms` | 32 | 0.080 pt |
+| `composite` | `PptxDiagramAlgorithms` | 23 | 0.080 pt |
+| `lin` | `PptxDiagramAlgorithms` | 18 | 0.069 pt |
+| `conn` | `PptxDiagramAlgorithms` | 7 | 0.080 pt |
+| `snake` | `PptxDiagramGeometry` | 7 | 0.076 pt |
+| `cycle` | `PptxDiagramGeometry` | 5 | 0.064 pt |
+| `hierRoot`/`hierChild` | `PptxDiagramGeometry` | 4 | 0.080 pt |
+| `pyra` | `PptxDiagramGeometry` | 1 | 0.041 pt |
+
+A deck usually names several, so the columns do not add up and the worst figure for one algorithm
+is the worst shape on any deck that names it rather than a shape that algorithm placed. The one
+number that is attributable is `pyra`'s: `smartart-pyramid-1child.pptx` is the only deck that uses
+it, and its single filled shape is 0.041 pt out.
 
 The measurement is `soffice --convert-to pdf` over all 37 decks against `paperless render` over
-the same, comparing every filled path's bounding box. **20 evaluate and all 20 agree with the
-reference** — 19 of them draw between 1 and 10 filled shapes each, every one within 0.07 pt, and
-the twentieth (`tdf169781.pptx`) evaluates to no shapes, as LibreOffice's does. The worst single
-shape in the set is 0.069 pt out and the median file's worst is 0.038, which is not a tolerance
-tuned to fit but LibreOffice quantising to hundredths of a millimetre (0.0283 pt) twice, once on
-the offset and once on the extent. `slide-diagram-evaluated.pptx` is the committed fixture and
+the same, pairing every filled path's bounding box one for one. **All 37 evaluate and all 37 agree
+with the reference**: 36 draw between 1 and 48 filled shapes each, every shape has a partner
+within **0.080 pt**, and the thirty-seventh (`tdf169781.pptx`) evaluates to no shapes, as
+LibreOffice's does. That worst figure is LibreOffice quantising to hundredths of a millimetre
+(0.0283 pt) once per nesting level rather than a tolerance tuned to fit — it comes from
+`smartart-org-chart2.pptx`, whose `hierRoot`/`hierChild` alternation is three levels deep, where
+every flat deck stops at 0.069, two quantisations. `slide-diagram-evaluated.pptx` is the
+committed fixture and
 `SlideDiagramLayoutComparisonTests` is the standing check; its three boxes land at 72, 252 and
 432 pt across a 540 pt frame, 54 pt down from the top because the composite centres what its
-constraints did not fill.
+constraints did not fill. `SlideDiagramGeometryTests` pins the four geometric algorithms'
+arithmetic directly, because that arithmetic is integer and truncating and is what regresses.
 
-**A diagram naming an algorithm that is not ported is declined whole**, so it draws nothing rather
-than approximately. That is deliberate: half-evaluating a `snake` leaves every node at the origin
-on top of every other, which reads as a bug in the shapes rather than as an unimplemented
-algorithm, and it would move files in the render sweep that today draw nothing honestly. The 17
-declined are the `snake` (7 decks), `cycle` (5), `hierRoot`/`hierChild` (4) and `pyra` (1) ones.
+**The decline stays, for the algorithms nobody has written.** A diagram naming an algorithm the
+evaluator does not implement still draws nothing rather than approximately: half-evaluating a
+layout leaves every node at the origin on top of every other, which reads as a bug in the shapes
+rather than as an unimplemented feature. Nothing in `sd/qa` reaches it any more — the ten names in
+`Supported` are every `dgm:alg/@type` those 37 decks state — but `lin1D`, the `sibTrans`-only
+variants and the several algorithms LibreOffice itself does not implement would.
 
-**Four traps, and the one that cost an afternoon.**
+**What the geometric four cost, and why none of it could be derived.** They ignore the constraint
+machinery almost entirely and place children on constants that are LibreOffice's own choices, not
+the file's: a snake's grid is searched for against an aspect ratio of **0.54** ("diagram should not
+spill outside, earlier it was 0.6"), a hierarchy's gaps are **0.1** of a box across and **0.3**
+down with a **0.1** indent for an only child, a pyramid's step is **0.32**. Picking better numbers
+would guarantee disagreement, so they are ported line for line —
+`SnakeAlg::layoutShapeChildren` and `PyraAlg::layoutShapeChildren` at
+`diagramlayoutatoms.cxx:110` and `:428`, and the `XML_cycle` and `XML_hierChild`/`XML_hierRoot`
+cases of `AlgAtom::layoutShape` at `:1193` and `:1262`.
+
+**Six traps. The first two came with the geometric algorithms; the last is still the one that cost
+an afternoon.**
+
+*A compound assignment of a double to an `awt::Point` truncates the sum, not the addend.* This is
+the one to know before reading any of `PptxDiagramGeometry`. LibreOffice steps a snake with
+`aCurrPos.X += nIncX * (aCurrSize.Width + fSpace * aCurrSize.Width)`, and in C++ that is
+`X = (sal_Int32)(X + …)`. The obvious C# transcription `x += (int)(…)` truncates the addend
+instead, and the two differ **only when the addend is negative** — so a left-to-right snake agrees
+exactly and a `grDir="tR"` one drifts by one EMU per column. That is not a hypothetical: eight of
+the nine snake layouts in the corpus contain a `grDir="tR"` branch. Every compound assignment in
+that file therefore casts the whole sum, and the right-to-left case is pinned by its own test.
+
+*Several shapes can stand for one presentation point, and only the last of them is laid out.* A
+`forEach` whose iteration count is one — `sibTransForEach` in every cycle layout, `cnt="1"` with a
+`ptType` that is not `node` — resets the loop counter to zero on each pass of the loop *outside*
+it, so a five-node cycle creates five `sibTrans` shapes all standing for the first `sibTrans`
+point. The map from point to shape keeps the last, so only that one runs the `conn` algorithm
+that turns the `conn` placeholder into an arrow. LibreOffice draws all five as arrows anyway,
+because `Shape`'s copy constructor takes `mpCustomShapePropertiesPtr` **by reference**
+(`oox/source/drawingml/shape.cxx:210`, under its own comment "cloned shape shares all properties
+by reference, don't change them!"). `DiagramGeometry` is that sharing, made deliberate: the
+*sub-type* stays per shape, so the cycle still sees four unlaid-out children as connectors, while
+the drawn preset is the template's and changes for all five at once. Giving each clone its own
+preset drew four of `smartart-cycle.pptx`'s five connectors as plain rectangles: every box was in
+the right place and four of the five outlines were the wrong shape, which is exactly the failure
+that reads as a geometry bug and is not one. The five node ellipses agreed throughout.
 
 *A layout node with no `dgm:shape` produces no shape at all.* Not an empty group — nothing.
 `vertical-bracket-list.pptx` has `<dgm:layoutNode name="spH"><dgm:alg type="sp"/></dgm:layoutNode>`
@@ -1649,15 +1713,29 @@ that reads a slide's.
 **What still differs, measured.**
 
 - [ ] **LibreOffice shrinks a node's text to fit and Paperless does not**, which is the whole of
-      the remaining text divergence. The `tx` algorithm can state a font size through a
-      `primFontSz` constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
-      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. On the 20 decks
-      that draw: **ten agree on every run's position and size**, and on the other ten the sizes
-      diverge where the fit bites — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
+      the remaining text divergence and is now the only thing standing between the evaluated path
+      and full agreement. The `tx` algorithm can state a font size through a `primFontSz`
+      constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
+      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. Across the 37
+      decks, **30 draw the same number of text runs as the reference**, and where the sizes
+      diverge it is the fit biting — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
       against 27.014 on `smartart-vertical-block-list.pptx`, 18 against 9.014 on
       `smartart-autofit-sync.pptx`. Where LibreOffice does *not* shrink, the constraint's size is
       reproduced exactly: `smartart-chevron.pptx` draws at 64.998 pt in both. Matching it means
       porting `SdrTextObj`'s fit search, which is a layout-engine change rather than a reader one.
+- [ ] **The snake's reversing continuation is ported and never exercised.** `contDir="revDir"` —
+      the branch that makes alternate rows run backwards, which is what the word "snake" refers to
+      — appears in no layout definition in the corpus: every one of the nine snake layouts states
+      `sameDir` or nothing. It is transcribed from `diagramlayoutatoms.cxx:388-425` and is the one
+      part of these four algorithms with no measurement behind it. A file that uses it should be
+      checked against the reference before the code is trusted.
+- [ ] **`autoTxRot` is read and ignored, so a cycle's labels do not turn with their nodes.**
+      `smartart-autoTxRot.pptx` places all 48 of its filled shapes within 0.043 pt of the
+      reference and then draws every label upright, where LibreOffice rotates each to face along
+      the ring (`grav` and `upr`, `diagramlayoutatoms.cxx:1740-1760`). It is a text transform on a
+      shape that is already in the right place, so it is a small change on a path that has no
+      other consumer — the slide layouter would need a rotated text frame that is not the shape's
+      own rotation.
 - [ ] **A text node whose constraints resolve to a zero-sized box is dropped.** `smartart-cnt.pptx`
       constrains `ThreeNodes_1_text`'s left and right edges against a sibling's `l`, which no
       constraint ever sets, so both fall back to the absolute-value branch and both come out 0.
