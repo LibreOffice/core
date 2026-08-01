@@ -29,6 +29,9 @@ class RenderManager {
 		const wantVector = RenderManager.wantsVector(docType);
 		const haveVector = RenderManager._instance instanceof VectorManager;
 		if (!RenderManager._instance || wantVector !== haveVector) {
+			// The replaced manager releases everything it holds, such as
+			// the font faces it registered on the document.
+			if (RenderManager._instance) RenderManager._instance.discardAllCache();
 			RenderManager._instance = wantVector
 				? new VectorManager()
 				: new BitmapTileManager();
