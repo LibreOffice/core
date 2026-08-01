@@ -22,6 +22,7 @@
 
 #include "anchoredobjectposition.hxx"
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include <swrect.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -78,7 +79,7 @@ namespace objectpositioning
 
         // calculated data for object position
         Point       maAnchorPos;
-        SwTwips     mnRelPos;
+        gfx::Length mnRelPos = 0_emu;
         SwRect      maObjBoundRect;
         // line alignment relative to line height
         sw::LineAlign   mnLineAlignment;
@@ -145,7 +146,7 @@ namespace objectpositioning
         const Point& GetAnchorPos() const { return maAnchorPos;}
 
         // calculated relative position to base line for object position type AS_CHAR
-        SwTwips GetRelPosY() const { return mnRelPos;}
+        gfx::Length GetRelPosY() const { return mnRelPos; }
 
         // determined object rectangle including spacing for object position type AS_CHAR
         const SwRect& GetObjBoundRectInclSpacing() const { return maObjBoundRect;}

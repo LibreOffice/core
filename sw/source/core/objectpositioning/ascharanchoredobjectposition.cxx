@@ -52,7 +52,6 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
       mnLineDescent( _nLineDescent ),
       mnLineAscentInclObjs( _nLineAscentInclObjs ),
       mnLineDescentInclObjs( _nLineDescentInclObjs ),
-      mnRelPos ( 0 ),
       mnLineAlignment ( sw::LineAlign::NONE )
 {}
 
@@ -318,7 +317,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
     // keep calculated values
     maAnchorPos = aAnchorPos;
-    mnRelPos = nRelPos;
+    mnRelPos = gfx::Length::twip(nRelPos);
     maObjBoundRect = aObjBoundRect;
 }
 
