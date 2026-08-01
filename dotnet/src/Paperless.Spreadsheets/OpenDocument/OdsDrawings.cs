@@ -105,11 +105,11 @@ internal static class OdsDrawings
         {
             Anchor = SheetAnchorKind.OneCell,
             From = new SheetCellPoint(
-                column, Measure(Attribute(frame, OdfNamespaces.SvgCompatible, "x")) ?? Length.Zero,
-                row, Measure(Attribute(frame, OdfNamespaces.SvgCompatible, "y")) ?? Length.Zero),
+                column, OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "x")) ?? Length.Zero,
+                row, OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "y")) ?? Length.Zero),
             Extent = new DocSize(
-                Measure(Attribute(frame, OdfNamespaces.SvgCompatible, "width")) ?? Length.Zero,
-                Measure(Attribute(frame, OdfNamespaces.SvgCompatible, "height")) ?? Length.Zero),
+                OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "width")) ?? Length.Zero,
+                OdfValue.ParseLength(Attribute(frame, OdfNamespaces.SvgCompatible, "height")) ?? Length.Zero),
             Name = Attribute(frame, OdfNamespaces.Draw, "name"),
             Description = Description(frame),
         };
@@ -121,9 +121,9 @@ internal static class OdsDrawings
                 Anchor = SheetAnchorKind.TwoCell,
                 To = new SheetCellPoint(
                     end.Column,
-                    Measure(Attribute(frame, OdfNamespaces.Table, "end-x")) ?? Length.Zero,
+                    OdfValue.ParseLength(Attribute(frame, OdfNamespaces.Table, "end-x")) ?? Length.Zero,
                     end.Row,
-                    Measure(Attribute(frame, OdfNamespaces.Table, "end-y")) ?? Length.Zero),
+                    OdfValue.ParseLength(Attribute(frame, OdfNamespaces.Table, "end-y")) ?? Length.Zero),
             };
         }
 
@@ -238,32 +238,4 @@ internal static class OdsDrawings
            && count > 0
             ? count
             : 1;
-
-    /// <summary>An ODF length, in any of the units the format allows.</summary>
-    private static Length? Measure(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value)) return null;
-
-        string text = value.Trim();
-        int at = 0;
-        while (at < text.Length && (char.IsAsciiDigit(text[at]) || text[at] is '-' or '+' or '.')) at++;
-        if (at == 0) return null;
-
-        if (!double.TryParse(
-                text[..at], NumberStyles.Float, CultureInfo.InvariantCulture, out double number))
-        {
-            return null;
-        }
-
-        return text[at..].Trim().ToLowerInvariant() switch
-        {
-            "cm" => Length.FromMillimetres(number * 10),
-            "mm" => Length.FromMillimetres(number),
-            "in" => Length.FromInches(number),
-            "pt" => Length.FromPoints(number),
-            "pc" => Length.FromPoints(number * 12),
-            "px" => Length.FromPixels(number, 96),
-            _ => Length.FromPoints(number),
-        };
-    }
 }
