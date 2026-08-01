@@ -115,6 +115,11 @@ bool lcl_SearchMember(const std::vector<std::unique_ptr<ScDPResultMember>>& list
                                 [](const auto& m) { return m->GetOrder(); });
 }
 
+bool lcl_SearchMember(const std::span<ScDPResultMemberSlim>& list, SCROW nOrder, SCROW& rIndex)
+{
+    return lcl_SearchMemberCore(list, nOrder, rIndex, [](const auto& m) { return m.GetOrder(); });
+}
+
 class FilterStack
 {
     std::vector<ScDPResultFilter>& mrFilters;
@@ -3042,6 +3047,35 @@ ScDPResultDimension::~ScDPResultDimension()
 ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 {
     SCROW nIndex;
+
+    // If we have Slim's search them first
+    if (mpaMemberSlimArray != nullptr)
+    {
+        if (bIsDataLayout)
+        {
+            if (!mpaMemberSlimArray->empty())
+            {
+                ScDPResultMemberSlim* pSlimMember = &(*mpaMemberSlimArray)[0];
+                return pSlimMember;
+            }
+        }
+        else
+        {
+            if (lcl_SearchMember(*mpaMemberSlimArray, iData, nIndex))
+            {
+                ScDPResultMemberSlim* pSlimMember = &(*mpaMemberSlimArray)[nIndex];
+                if (pSlimMember->IsNamedItem(iData))
+                    return pSlimMember;
+            }
+        }
+        auto pResultIter = std::ranges::find_if(
+            *mpaMemberSlimArray, [iData](const auto& m) { return m.IsNamedItem(iData); });
+        if (pResultIter != mpaMemberSlimArray->end())
+        {
+            return &*pResultIter;
+        }
+    }
+
     if( bIsDataLayout )
     {
         SAL_WARN_IF(maMemberArray.empty(), "sc.core", "MemberArray is empty");
