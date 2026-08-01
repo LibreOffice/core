@@ -288,8 +288,25 @@ public sealed partial class OdtLayoutSource
                 continue;
             }
 
+            if (ns == OdfNamespaces.Text && name == "list")
+            {
+                // Transparent to the block list and not to the walk: the nesting *is* the level, so the
+                // depth has to be counted here or every list item reads as a level-one item.
+                (int, OdfListStyle?) outer = EnterList(child);
+                Walk(child, into, depth + 1);
+                LeaveList(outer);
+                continue;
+            }
+
+            if (ns == OdfNamespaces.Text && name is "list-item" or "list-header")
+            {
+                BeginListItem(child, numbered: name == "list-item");
+                Walk(child, into, depth + 1);
+                continue;
+            }
+
             if (ns == OdfNamespaces.Text
-                && name is "list" or "list-item" or "list-header" or "section" or "index-body"
+                && name is "section" or "index-body"
                     or "table-of-content" or "alphabetical-index" or "illustration-index"
                     or "table-index" or "object-index" or "user-index" or "bibliography"
                     or "tracked-changes" or "deletion" or "insertion")
@@ -368,6 +385,11 @@ public sealed partial class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        // Taken before anything recurses, because a list item's label belongs to its first paragraph and
+        // reading a note body or a text box below re-enters this method.
+        bool wantsLabel = _labelPending;
+        _labelPending = false;
+
         RunWalker walker = new(styleName, CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, prefix, prefixStyle);
 
@@ -377,6 +399,17 @@ public sealed partial class OdtLayoutSource
         _footnoteNumber += walker.FootnotesSeen;
         _endnoteNumber += walker.EndnotesSeen;
 
+        (PageLabel? label, ParagraphFormat format) =
+            ListFormatting(OdfParagraphFormats.Resolve(_styles, styleName), text, face, wantsLabel);
+
+        // The nested flows are read with the list suspended: a paragraph inside this one's footnote or
+        // text box is not an item of the list this paragraph is in, and would otherwise take its indents.
+        (int, OdfListStyle?) outerList = (_listLevel, _listStyle);
+        (_listLevel, _listStyle) = (0, null);
+        IReadOnlyList<PageNote> notes = NotesOf(walker.Notes);
+        IReadOnlyList<PageFrame> frames = FramesOf(walker.Frames);
+        (_listLevel, _listStyle) = outerList;
+
         return new PageParagraph
         {
             SectionIndex = _sectionIndex,
@@ -384,13 +417,14 @@ public sealed partial class OdtLayoutSource
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = OdfParagraphFormats.Resolve(_styles, styleName),
+            Format = format,
+            Label = label,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, text, face),
-            Notes = NotesOf(walker.Notes),
-            Frames = FramesOf(walker.Frames),
+            Notes = notes,
+            Frames = frames,
             Source = element,
         };
     }
@@ -999,15 +1033,24 @@ public sealed partial class OdtLayoutSource
     /// means walking the substitution chain and reading a font file. Null only when nothing at all could
     /// be loaded, which means the machine has no usable fonts rather than that the document is bad.
     /// </remarks>
-    private OpenTypeFace? Face(OdfTextStyle text)
+    private OpenTypeFace? Face(OdfTextStyle text) => Face(text.FamilyName, text.Weight, text.IsItalic);
+
+    /// <summary>
+    /// The face one family request resolves to, through the same cache.
+    /// </summary>
+    /// <remarks>
+    /// Taken apart from <see cref="OdfTextStyle"/> because a list level names a family of its own — a
+    /// symbol font, for a bullet — while taking its weight and slant from the item's text.
+    /// </remarks>
+    private OpenTypeFace? Face(string? family, int weight, bool italic)
     {
-        (string? Family, int Weight, bool Italic) key = (text.FamilyName, text.Weight, text.IsItalic);
+        (string? Family, int Weight, bool Italic) key = (family, weight, italic);
         if (_faces.TryGetValue(key, out OpenTypeFace? cached)) return cached;
 
         try
         {
             FontReference reference = _fonts.Resolve(new FontRequest(
-                text.FamilyName ?? string.Empty, text.Weight, text.IsItalic));
+                family ?? string.Empty, weight, italic));
 
             OpenTypeFace face = _fonts.LoadOpenType(reference);
             _faces[key] = face;

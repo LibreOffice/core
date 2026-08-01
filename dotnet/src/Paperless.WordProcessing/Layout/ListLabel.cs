@@ -1,0 +1,190 @@
+using Paperless.Core.Graphics;
+using Paperless.Core.Units;
+using Paperless.Text.Fonts;
+using Paperless.Text.Layout;
+using Paperless.Text.Shaping;
+
+namespace Paperless.WordProcessing.Layout;
+
+/// <summary>
+/// What closes the gap between a list label and the text it labels.
+/// </summary>
+/// <remarks>
+/// ODF says it in <c>text:label-followed-by</c> and OOXML in <c>w:suff</c>; the two agree on all three
+/// values, which is why one enumeration serves both. The older ODF spelling — <c>text:min-label-width</c>
+/// with no follower at all — is <see cref="Nothing"/> with a minimum gap, since a fixed label width is a
+/// tab stop expressed as a distance.
+/// </remarks>
+public enum LabelFollow
+{
+    /// <summary>A tab to the level's own stop: <c>listtab</c>, and <c>w:suff</c>'s default.</summary>
+    ListTab = 0,
+
+    /// <summary>A single space.</summary>
+    Space,
+
+    /// <summary>Nothing at all: the text abuts the label.</summary>
+    Nothing,
+}
+
+/// <summary>
+/// The label a numbered or bulleted paragraph draws in front of its first line.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Writer builds one of these as a <em>portion</em> at the head of the first line
+/// (<c>SwTextFormatter::NewNumberPortion</c>, <c>sw/source/core/text/txtfld.cxx:506</c>), so the label
+/// takes part in the line's measurement and pushes the text along. Modelling it as a portion here would
+/// mean splicing characters into the paragraph's text, and every offset the paragraph carries — its
+/// notes, its frames, its bookmarks — is counted against that string. So the label sits beside the text
+/// instead, and pays for itself by widening the first line's indent: see
+/// <see cref="PageParagraph.Format"/>.
+/// </para>
+/// <para>
+/// The label is <em>not</em> in <see cref="PageParagraph.Text"/> for the same reason, which is also why
+/// it carries its own face and size. A bullet level names a symbol font that the item's own text does
+/// not use, and a numbered level can name a character style; both are properties of the level rather
+/// than of the paragraph.
+/// </para>
+/// </remarks>
+public sealed record PageLabel
+{
+    /// <summary>The label as it is drawn: <c>1.</c>, <c>a)</c>, <c>•</c>.</summary>
+    public required string Text { get; init; }
+
+    /// <summary>The face it is set in, which is the level's rather than the paragraph's.</summary>
+    public required OpenTypeFace Face { get; init; }
+
+    /// <summary>The em size it is set at.</summary>
+    public required Length EmSize { get; init; }
+
+    /// <summary>Its advance width, measured once by <see cref="Measured"/>.</summary>
+    /// <remarks>
+    /// Stored rather than derived, because <see cref="PageParagraph.Format"/> consults it for every line
+    /// of every paragraph the paginator fits and shaping two characters that often is measurable. It is
+    /// the one field a caller must not set by hand.
+    /// </remarks>
+    public Length Width { get; init; }
+
+    /// <summary>The resolved reference, for a backend that has to name the face it draws with.</summary>
+    public FontReference? Font { get; init; }
+
+    /// <summary>The colour it is drawn in.</summary>
+    public Colour Colour { get; init; } = Colour.Black;
+
+    /// <summary>How it is shaped.</summary>
+    public ShapingOptions Shaping { get; init; }
+
+    /// <summary>What closes the gap to the text.</summary>
+    public LabelFollow Follow { get; init; }
+
+    /// <summary>
+    /// Where the text after a <see cref="LabelFollow.ListTab"/> lands, from the text area's start edge.
+    /// </summary>
+    /// <remarks>
+    /// ODF's <c>text:list-tab-stop-position</c> and OOXML's <c>w:tab w:val="num"</c>. Writer reads it
+    /// into the line's own tab information rather than the paragraph's stops
+    /// (<c>SwTextNode::GetListTabStopPosition</c>, <c>sw/source/core/txtnode/ndtxt.cxx:4914</c>), which is
+    /// what keeps a list tab from also catching the tabs in the item's prose.
+    /// </remarks>
+    public Length TabStop { get; init; }
+
+    /// <summary>
+    /// The least distance between the label's end and the text, whatever the mode.
+    /// </summary>
+    /// <remarks>
+    /// Writer's <c>nMinDist</c>, which is <c>SvxNumberFormat::GetCharTextDistance</c> — ODF's
+    /// <c>text:min-label-distance</c> — and is forced to zero in label-alignment mode
+    /// (<c>txtfld.cxx:537</c>). Zero for nearly every document.
+    /// </remarks>
+    public Length MinimumGap { get; init; }
+
+    /// <summary>
+    /// Builds a label, measuring its width in the face it is drawn in.
+    /// </summary>
+    /// <remarks>
+    /// The one way to make one, so that <see cref="Width"/> cannot disagree with <see cref="Text"/>. The
+    /// readers call it because they are where the level's face and size are resolved; nothing below them
+    /// shapes.
+    /// </remarks>
+    /// <param name="text">The label as it is drawn.</param>
+    /// <param name="face">The face to set it in.</param>
+    /// <param name="emSize">The size to set it at.</param>
+    /// <param name="shaping">How to shape it.</param>
+    public static PageLabel Measured(
+        string text, OpenTypeFace face, Length emSize, ShapingOptions shaping = default)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+        ArgumentNullException.ThrowIfNull(face);
+
+        return new PageLabel
+        {
+            Text = text,
+            Face = face,
+            EmSize = emSize,
+            Shaping = shaping,
+            Width = text.Length == 0
+                ? Length.Zero
+                : TextShaper.Default.Shape(face, text, shaping).Width(emSize),
+        };
+    }
+
+    /// <summary>
+    /// How far the first line's text starts to the right of the label's own pen.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The whole of <c>SwNumberPortion::Format</c> (<c>sw/source/core/text/porfld.cxx:607</c>) reduced to
+    /// its result: the number portion's width, which is what separates the label from the text. In
+    /// label-width-and-position mode the portion stretches to the paragraph's left margin — Writer's
+    /// <c>nDiff = rInf.Left() - rInf.First()</c>, which is the negated hanging indent — and in
+    /// label-alignment mode it is the label's own width, with the tab that follows carrying the text on
+    /// to the level's stop.
+    /// </para>
+    /// <para>
+    /// The floor is <c>m_nFixWidth + m_nMinDist</c> in both modes, which is what stops a label wider than
+    /// the space allowed for it from being written over by the text it labels.
+    /// </para>
+    /// </remarks>
+    /// <param name="hangingIndent">
+    /// How far the first line hangs back from the paragraph's left margin — the negated
+    /// <see cref="ParagraphFormat.FirstLineIndent"/>, and where the label's pen therefore sits relative
+    /// to where the text would otherwise start.
+    /// </param>
+    /// <param name="lineStart">
+    /// Where the label's pen sits, from the text area's start edge, so that a
+    /// <see cref="LabelFollow.ListTab"/> stop stated in the same frame of reference can be compared
+    /// against it.
+    /// </param>
+    public Length Advance(Length hangingIndent, Length lineStart)
+    {
+        // The label plus whatever the level insists on: the portion is never narrower than this, so a
+        // long label pushes the text rather than colliding with it.
+        Length floor = Width + MinimumGap;
+
+        Length wanted = Follow switch
+        {
+            // A tab stop before the label's end has already been passed, and Writer's tab code then falls
+            // through to the paragraph's left margin — which for a hanging indent is exactly the hanging
+            // distance. Taking the larger of the two says both at once.
+            LabelFollow.ListTab => Max(TabStop - lineStart, hangingIndent),
+
+            // No stop to aim at, so the space is the paragraph's own: the hanging indent is the room the
+            // document set aside for the label, and Writer fills it.
+            LabelFollow.Space or LabelFollow.Nothing => hangingIndent,
+
+            _ => hangingIndent,
+        };
+
+        // A space is a real character rather than a distance, so it is added to the floor rather than
+        // competing with it — "1. " is wider than "1." even where the level left no room.
+        if (Follow == LabelFollow.Space) floor += SpaceWidth();
+
+        return Max(Max(wanted, floor), Length.Zero);
+    }
+
+    /// <summary>The width of one space in the label's own face, for <see cref="LabelFollow.Space"/>.</summary>
+    private Length SpaceWidth() => TextShaper.Default.Shape(Face, " ", Shaping).Width(EmSize);
+
+    private static Length Max(Length left, Length right) => left > right ? left : right;
+}

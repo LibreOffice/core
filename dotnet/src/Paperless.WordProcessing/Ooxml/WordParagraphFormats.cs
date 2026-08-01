@@ -117,6 +117,26 @@ internal static class WordParagraphFormats
     }
 
     /// <summary>
+    /// Whether a paragraph or its style chain states an indent of its own.
+    /// </summary>
+    /// <remarks>
+    /// The question a list level has to ask before applying its own indents, because a hard-set indent
+    /// beats the list — Writer's <c>SwTextNode::AreListLevelIndentsApplicable</c>, which walks the same
+    /// two layers this does and returns false as soon as either sets the item.
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
+    internal static bool DeclaresIndent(WordStyles styles, XElement? paragraphProperties)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
+                          ?? styles.DefaultStyleId(WordStyleType.Paragraph);
+
+        return Layer(styles, paragraphProperties, styleId, "ind") is not null;
+    }
+
+    /// <summary>
     /// Resolves the character formatting a paragraph's text is set in.
     /// </summary>
     /// <remarks>

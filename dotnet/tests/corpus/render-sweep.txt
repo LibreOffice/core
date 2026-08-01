@@ -7,22 +7,20 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 197 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# 203 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
 # needs an explicit input filter for one and produces nothing without it, so a row for a
 # CSV would measure the invocation rather than the reader.
 #
-# Of the twenty-six that do not match, five are deliberate:
+# Of the twenty that do not match, five are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
 #                             the changes. Settled and measured; see the marks item.
 #   svg-picture.{odt,docx}    the SVG decoder exists but is not wired into the readers yet.
 #
-# The largest remaining group is one bug seen five times: LibreOffice draws a list's own
-# label — `1.`, `a)`, `◦` — and we draw none, which is six words a page on the two feature
-# documents. It is the whole of the gap on text-features.{odt,fodt} (149/154) and most of
-# it on word-features.{doc,docx,dotx,rtf}; see the numbering item in
-# `src/Paperless.WordProcessing/TODO.md`. The two documents agreeing with each other
-# across four formats and one packaging is the useful part: it is one missing feature and
-# not five unrelated defects.
+# The list-label group is closed. It had been the largest, one bug seen six times —
+# LibreOffice draws `1.`, `a)` and `◦` and we drew none — and all six rows moved together
+# because all six were the one missing feature: text-features.{odt,fodt} 149/154 → 154/154
+# and word-features.{doc,docx,dotx,rtf} 149–150/154–155 → 154–155/154–155. See the
+# numbering item in `src/Paperless.WordProcessing/TODO.md` for what the bug was.
 #
 # Also open: an EMF or WMF blip draws nothing (emf-picture.*, wmf-picture.*), a chart's
 # own labels are not drawn (chart-bar-*), `alt-chunk.docx` does not read its imported
@@ -59,7 +57,7 @@ table-nested.odt                   1/1         26/26         OK
 table-pages.odt                    2/2         378/378       OK
 table-shading.odt                  1/1         30/30         OK
 tables.odt                         1/1         41/41         OK
-text-features.odt                  2/2         149/154       WORDS
+text-features.odt                  2/2         154/154       OK
 alt-chunk.docx                     1/1         10/21         WORDS
 bidi-columns.docx                  1/1         40/40         OK
 bidi-drawing.docx                  1/1         13/13         OK
@@ -96,7 +94,7 @@ table-shading.docx                 1/1         30/30         OK
 tables.docx                        1/1         41/41         OK
 theme-colours.docx                 1/1         17/17         OK
 theme-table.docx                   1/1         22/22         OK
-word-features.docx                 2/2         150/155       WORDS
+word-features.docx                 2/2         155/155       OK
 bidi-columns.doc                   1/1         40/40         OK
 bidi-drawing.doc                   1/1         13/13         OK
 bookmark-field.doc                 1/1         24/24         OK
@@ -125,7 +123,7 @@ table-nested.doc                   1/1         26/26         OK
 table-pages.doc                    2/2         378/378       OK
 table-shading.doc                  1/1         30/30         OK
 tables.doc                         1/1         41/41         OK
-word-features.doc                  2/2         149/154       WORDS
+word-features.doc                  2/2         154/154       OK
 bidi-drawing.rtf                   1/1         13/13         OK
 bookmark-field.rtf                 1/1         24/24         OK
 columns.rtf                        2/2         1008/1008     OK
@@ -153,7 +151,7 @@ table-nested.rtf                   1/1         26/26         OK
 table-pages.rtf                    2/2         374/374       OK
 table-shading.rtf                  1/1         30/30         OK
 tables.rtf                         1/1         41/41         OK
-word-features.rtf                  2/2         150/155       WORDS
+word-features.rtf                  2/2         155/155       OK
 bidi-columns.fodt                  1/1         40/40         OK
 bidi-drawing.fodt                  1/1         13/13         OK
 bidi.fodt                          1/1         20/20         OK
@@ -187,7 +185,7 @@ table-nested.fodt                  1/1         26/26         OK
 table-pages.fodt                   2/2         378/378       OK
 table-shading.fodt                 1/1         30/30         OK
 tables.fodt                        1/1         41/41         OK
-text-features-flat.fodt            2/2         149/154       WORDS
+text-features-flat.fodt            2/2         154/154       OK
 sheet-decor-ods.ods                1/1         30/30         OK
 sheet-features.ods                 2/2         45/45         OK
 sheet-print-ods.ods                14/14       2281/2281     OK
@@ -236,7 +234,7 @@ sheet-ooxml-template.xltx          3/3         77/77         OK
 sheet-rich-text.fods               3/3         49/47         WORDS
 wmf-picture.docx                   1/1         6/8           WORDS
 wmf-picture.odt                    1/1         6/8           WORDS
-word-features.dotx                 2/2         150/155       WORDS
+word-features.dotx                 2/2         155/155       OK
 prose-doc.doc                      1/1         41/41         OK
 prose-docx.docx                    1/1         41/41         OK
 prose-fodt.fodt                    1/1         41/41         OK

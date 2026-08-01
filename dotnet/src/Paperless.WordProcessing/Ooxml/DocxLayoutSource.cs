@@ -70,6 +70,11 @@ public sealed partial class DocxLayoutSource
     /// How to reach the bytes an <c>a:blip</c> names, or null to lay the document out with its picture
     /// frames empty — which is what a caller who wants only measurements should pay for.
     /// </param>
+    /// <param name="numbering">
+    /// The document's <c>numbering.xml</c>, or null for a document with no lists. Its counters are
+    /// advanced by this walk, which is why <see cref="Read"/> and <see cref="ReadFlow"/> reset them: a
+    /// caller sharing one instance with the extraction pass must not have the two interleave.
+    /// </param>
     public DocxLayoutSource(
         WordStyles styles,
         XElement? settings = null,
@@ -77,10 +82,12 @@ public sealed partial class DocxLayoutSource
         IReadOnlyDictionary<string, XElement>? footnotes = null,
         IReadOnlyDictionary<string, XElement>? endnotes = null,
         DrawingTheme? theme = null,
-        DocxPictures? pictures = null)
+        DocxPictures? pictures = null,
+        WordNumbering? numbering = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _numbering = numbering ?? new WordNumbering();
         Pictures = pictures;
         _theme = theme;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
@@ -177,6 +184,11 @@ public sealed partial class DocxLayoutSource
         ArgumentNullException.ThrowIfNull(body);
 
         _sectionIndex = 0;
+
+        // The body is where the document's lists start counting. Reset rather than assumed clean,
+        // because the numbering may be the same instance the extraction pass already walked.
+        _numbering.ResetCounters();
+
         List<PageBlock> blocks = [];
         Walk(body, blocks, depth: 0);
         return blocks;
@@ -214,6 +226,10 @@ public sealed partial class DocxLayoutSource
     public List<PageBlock> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+
+        // Each flow numbers its own lists: a numbered paragraph in a footer does not continue the
+        // body's count, which is the same rule the extraction reader applies between flows.
+        _numbering.ResetCounters();
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
@@ -328,6 +344,10 @@ public sealed partial class DocxLayoutSource
         ParagraphFormat format =
             WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
 
+        // After the walk, because reading a note body or a text box re-enters this method and a list
+        // counter advanced from inside a nested flow would number the paragraph after it wrongly.
+        (PageLabel? label, format) = ListFormatting(properties, format, text, face);
+
         PageParagraph read = new()
         {
             SectionIndex = _sectionIndex,
@@ -336,6 +356,7 @@ public sealed partial class DocxLayoutSource
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
             Format = breaksPage ? format with { StartsNewPage = true } : format,
+            Label = label,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),

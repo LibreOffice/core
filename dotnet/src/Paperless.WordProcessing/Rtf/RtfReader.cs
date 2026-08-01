@@ -333,6 +333,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 Font = fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic),
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
+                Label = Label(paragraph, face),
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
@@ -344,6 +345,33 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         return paragraphs;
     }
+
+    /// <summary>
+    /// The label a list item draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// In the item's own face and size, because that is what the file says: the <c>{\listtext}</c> group
+    /// opens with <c>\pard\plain</c> and then states nothing, so the label inherits whatever the paragraph
+    /// is set in. The other three formats put the label's formatting in the numbering definition instead.
+    /// </para>
+    /// <para>
+    /// <see cref="LabelFollow.Nothing"/> rather than a tab, even though the group ends with one: RTF
+    /// writes the same distance twice — as the tab and as the paragraph's <c>\fi</c> hanging indent — and
+    /// <see cref="PageLabel.Advance"/> already fills a hanging indent. Reading the tab as well would need
+    /// the <c>\tx</c> stop the list happens to have set, and would put the text in the same place.
+    /// </para>
+    /// </remarks>
+    private static PageLabel? Label(RtfLayoutParagraph paragraph, OpenTypeFace face)
+        => paragraph.ListMarker is { Length: > 0 } marker
+            ? PageLabel.Measured(
+                marker, face, paragraph.Size,
+                new Text.Shaping.ShapingOptions(Language: paragraph.Language)) with
+            {
+                Colour = paragraph.Colour ?? Colour.Black,
+                Follow = LabelFollow.Nothing,
+            }
+            : null;
 
     /// <summary>
     /// The floating frames anchored in a paragraph, with the file's own numbers turned into a rectangle.
