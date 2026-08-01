@@ -21,8 +21,10 @@
 #include <vcl/metaact.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -61,6 +63,8 @@ public:
     SwCoreTextTest()
         : SwModelTestBase(u"/sw/qa/core/text/data/"_ustr)
     {
+        // $(vlang) names the autotext directory, and no view is here to set the Kit's language
+        comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_ENGLISH_US));
     }
 };
 

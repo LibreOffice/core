@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_text, \
     cppu \
     cppuhelper \
     editeng \
+    i18nlangtag \
     sal \
     sfx \
     subsequenttest \
