@@ -1160,6 +1160,57 @@ arrive as blip *fills* on ordinary shapes.
       for the reason it existed: half an evaluation puts nodes in wrong places and reads as a
       layout bug rather than as a missing feature. What still differs, and why, is in
       `src/Paperless.Presentations/TODO.md`.
+      **Text run counts now match on 31 of the 37**, counting a rotated run — the five that did
+      not before are unchanged, and `smartart-font-size.pptx` joined them because its wrap differs
+      by one line at 37 pt and the fit reads the wrong height off it.
+      `contDir="revDir"` is now known to be *reached* — `sd/qa/unit/data/pptx/tdf84205.pptx` is
+      the only file in the whole tree that states it, and stripping its baked drawing puts it on
+      the evaluated path with a 3 by 3 grid over nine children, agreeing with LibreOffice to
+      0.037 pt — and still not known to be *right*, because replacing the branch with the
+      same-direction one leaves that render byte-identical.
+- [x] **Shrink-to-fit, which was the whole of the remaining text divergence.** A diagram's `tx`
+      algorithm turns `TextFitToSizeType_AUTOFIT` on for every node whose text the author did not
+      format, so a `primFontSz` of 65 pt is an *upper bound* rather than a size, and it reaches
+      ordinary slide shapes too through `a:normAutofit`. Ported into
+      `Paperless.Presentations/Layout/SlideAutofit.cs` from
+      `SdrTextObj::autoFitTextForCompatibility`, and verified on a probe deck of **227 plain text
+      boxes**: 225 come out at the size LibreOffice draws. Over the 37 unbaked diagram decks the
+      summed size error against the reference falls from **1202.2 pt to 327.5 pt**.
+      **Port from the version that wrote the reference, not from the tree you have open.** This
+      checkout is 27.2 alpha and the installed `soffice` is 24.2.7.2, and the two do not share an
+      algorithm: 24.2 bisects a font scale ten times keeping the closest fit at or above one,
+      while master walks a fixed table of twelve scale levels (`impedit3.cxx`,
+      `constScaleLevels`). Both are in `svx`/`editeng` under names close enough to read as the
+      same code. Fetch the tag.
+      **Two units decide more than the search does.** A scaled size is rounded to a whole point
+      and then to a whole hundredth of a millimetre — 27 pt is 953, and its line is 1.2 × 953 =
+      1144 rather than 1143.6 — and the search compares candidates by how close to one their fit
+      is, so a single hundredth of a millimetre breaks ties that are exact in points. The line
+      height had been going through `LineSpacingRule.Apply`, which computes in **whole twips**
+      because that is Writer's unit; a twip is 0.05 pt against the draw layer's 0.028, and three
+      of the probe boxes turned on that alone. And the grid the bisection snaps to comes from the
+      shape's *default* character height, not from any run's: a fixed 12 pt agrees on 225 of the
+      227 where the largest run's size agrees on 210.
+- [x] **`autoTxRot`**, so a cycle's labels stay readable while its nodes turn. All 48 labels of
+      `smartart-autoTxRot.pptx` agree with the reference on pen, size and angle to 0.100 pt.
+      **The instrument had to be fixed before the feature could be seen at all**: a rotated run is
+      a `Tm` in the reference's content stream where an upright one is a `Td`, and the run reader
+      read only `Td`, so the deck reported the same 48-against-7 both before the change and after
+      it. Resolving each text block's matrix against the graphics state is what made the
+      comparison mean anything — and it is worth remembering that a count that does not move is
+      not evidence until you know the counter can see the thing.
+- [x] **A master's and a layout's non-placeholder shapes are drawn.** An Impress master page is a
+      PPTX master and a PPTX layout *merged into one* — one `SlidePersist` per layout, both
+      fragments imported into it, one `createXShapes` over the pair
+      (`presentationfragmenthandler.cxx:246-296`) — so a logo on either is drawn under every slide
+      using that layout. Rare and not negligible: 6 of the 389 decks in `sd/qa/unit/data/pptx`
+      carry such a shape with text and Paperless lost the text on all of them.
+      **`showMasterSp` looked like the discriminator and is not.** None of the six states it. The
+      file that made it look like a visibility question, `slide-sections.pptx`, parks its master's
+      three text boxes off the page — y = 6 959 601 on a 6 858 000 slide, x = −2 250 002,
+      x = −950 805 — so they are drawn into nothing, and the seventh page differs only because it
+      is the only slide using the layout that carries the on-page one. There was no rule to find,
+      and three passes over this question spent their time looking for it.
 - [ ] **A DOCX or XLSX diagram needs a hook in its own reader.** The same shape as the chart item
       and left for the same reason: those libraries had other agents in them. Worth 8 documents in
       `sw/qa` and 2 in `sc/qa`, all with baked drawings.

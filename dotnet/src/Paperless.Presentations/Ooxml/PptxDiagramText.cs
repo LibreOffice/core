@@ -55,12 +55,27 @@ internal static class PptxDiagramText
             "anchor",
             shape.TextAnchor switch { "t" => "t", "b" => "b", _ => "ctr" });
 
+        if (shape.TextRotation != 0)
+        {
+            properties.SetAttributeValue("rot", Number(shape.TextRotation));
+        }
+
         if (shape.HasTextInsets)
         {
             properties.SetAttributeValue("lIns", Number(shape.TextInsets.Left));
             properties.SetAttributeValue("tIns", Number(shape.TextInsets.Top));
             properties.SetAttributeValue("rIns", Number(shape.TextInsets.Right));
             properties.SetAttributeValue("bIns", Number(shape.TextInsets.Bottom));
+        }
+
+        if (shape.AutoFitText)
+        {
+            // EG_TextAutofit is a choice, so whatever the author's body asked for goes: the tx
+            // algorithm sets the property outright rather than merging with it.
+            properties.Elements(Drawing.Name("noAutofit")).Remove();
+            properties.Elements(Drawing.Name("spAutoFit")).Remove();
+            properties.Elements(Drawing.Name("normAutofit")).Remove();
+            properties.Add(new XElement(Drawing.Name("normAutofit")));
         }
 
         return properties;

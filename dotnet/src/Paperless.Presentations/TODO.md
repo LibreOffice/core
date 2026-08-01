@@ -70,9 +70,11 @@ the two files are the same deck in vocabularies that share nothing.
       is z-order in both vocabularies. Tables and connectors have their own entries below.
 - [x] Shape properties: transform (with flip **before** rotation), solid fill, line, text body.
       Not effects: no shadow, glow, soft edge or reflection is drawn.
-- [x] Text bodies via the shared text layout, with insets and anchoring. `normAutofit`'s
-      `fontScale` and `lnSpcReduction` are applied **as stated in the file** rather than resolved
-      again; `spAutoFit` is not.
+- [x] Text bodies via the shared text layout, with insets and anchoring, including
+      **shrink-to-fit**: a body stating `a:normAutofit` has its size solved from scratch, because
+      the reference reads the stated `fontScale` into a field it never reads again and searches
+      for its own answer. `spAutoFit` — grow the shape to its text rather than the text to the
+      shape — is still not applied. Text turned inside its shape by `a:bodyPr/@rot` is.
 - [x] Slide size (`p:sldSz`, in EMUs already — the one office measurement needing no conversion)
 - [x] Background fill with inheritance: the slide's `p:bg`, then its layout's, then its master's,
       solid only. ODF resolves the same thing through the drawing-page style's parent chain.
@@ -300,8 +302,8 @@ table asserted, not by the corpus.
 - [x] SmartArt **drawing**, from the baked shape tree — `Ooxml/PptxDiagram.cs`, drawn by
       `PptxSlideLayout.Diagram`. See **A diagram is five parts, and the fifth is the one worth
       having** under Rendering for the measurement that chose it and the traps it cost.
-- [ ] `normAutofit` `fontScale` and `lnSpcReduction` — rendering only; they change where the text
-      sits, not what it says
+- [x] `normAutofit` — rendering only; it changes where the text sits, not what it says. Solved
+      rather than read: `Layout/SlideAutofit.cs`
 - [x] **Charts are read**, in both vocabularies: `PptxShapeReader.ReadChart` resolves
       `c:chart/@r:id` from the frame's `a:graphicData` and hands the part to
       `Paperless.Ooxml/DrawingML/DrawingChart.cs`, and an ODP chart arrives through
@@ -1588,12 +1590,16 @@ paragraph's level are read, attribute by attribute rather than element by elemen
 - [ ] **Character spacing (`spc`) and kerning (`kern`).** `spc` is in hundredths of a point and is
       not applied; on the corpus deck it is −1, which is a hundredth of a point per character and
       inside every tolerance here, but a deck that tracks a title tightly would drift visibly.
-- [ ] **`spAutoFit`.** `normAutofit`'s stated `fontScale` and `lnSpcReduction` are applied, which
-      is what LibreOffice does — it honours the value the authoring application arrived at rather
-      than solving the fit again (`oox/source/drawingml/textbodypropertiescontext.cxx:240-243`),
-      and a reader that recomputed would disagree with the reference on every autofitted shape.
-      `spAutoFit` is the other direction — grow the shape to fit the text — and is not applied at
+- [ ] **`spAutoFit`.** The other direction — grow the shape to fit the text — and not applied at
       all, so a shape sized to its text in the file is drawn at the size the file states.
+      `a:normAutofit` *is* now applied, and the note this bullet used to carry was wrong in a way
+      worth recording: it said LibreOffice honours the `fontScale` the authoring application
+      arrived at (`oox/source/drawingml/textbodypropertiescontext.cxx:240-243`), and it does read
+      it there — into `TextBodyProperties::mnFontScale`, which nothing reads again. The fit is
+      always solved afresh, against LibreOffice's own metrics rather than PowerPoint's, which on a
+      corpus rendered in Carlito and Caladea is a different answer on every autofitted shape.
+      **A field that is written and never read is not the same as a value that is honoured**, and
+      only following the field to its consumers tells the two apart.
 - [ ] **Vertical text** (`a:bodyPr/@vert`) and text rotation (`a:txXfrm`, `moTextAreaRotation`).
 - [ ] **Right-to-left text.** Bidi levels are resolved and carried by `MeasuredParagraph` and
       nothing consumes them here, which is the same open item word processing has.
@@ -1837,30 +1843,65 @@ that reads a slide's.
 
 **What still differs, measured.**
 
-- [ ] **LibreOffice shrinks a node's text to fit and Paperless does not**, which is the whole of
-      the remaining text divergence and is now the only thing standing between the evaluated path
-      and full agreement. The `tx` algorithm can state a font size through a `primFontSz`
-      constraint, and LibreOffice then turns on `TextFitToSizeType_AUTOFIT`
-      (`diagramlayoutatoms.cxx:1723-1728`) unless the author formatted the text. Across the 37
-      decks, **30 draw the same number of text runs as the reference**, and where the sizes
-      diverge it is the fit biting — 65 pt against 49.011 pt on `smartart-maxdepth.pptx`, 65
-      against 27.014 on `smartart-vertical-block-list.pptx`, 18 against 9.014 on
-      `smartart-autofit-sync.pptx`. Where LibreOffice does *not* shrink, the constraint's size is
-      reproduced exactly: `smartart-chevron.pptx` draws at 64.998 pt in both. Matching it means
-      porting `SdrTextObj`'s fit search, which is a layout-engine change rather than a reader one.
-- [ ] **The snake's reversing continuation is ported and never exercised.** `contDir="revDir"` —
-      the branch that makes alternate rows run backwards, which is what the word "snake" refers to
-      — appears in no layout definition in the corpus: every one of the nine snake layouts states
-      `sameDir` or nothing. It is transcribed from `diagramlayoutatoms.cxx:388-425` and is the one
-      part of these four algorithms with no measurement behind it. A file that uses it should be
-      checked against the reference before the code is trusted.
-- [ ] **`autoTxRot` is read and ignored, so a cycle's labels do not turn with their nodes.**
-      `smartart-autoTxRot.pptx` places all 48 of its filled shapes within 0.043 pt of the
-      reference and then draws every label upright, where LibreOffice rotates each to face along
-      the ring (`grav` and `upr`, `diagramlayoutatoms.cxx:1740-1760`). It is a text transform on a
-      shape that is already in the right place, so it is a small change on a path that has no
-      other consumer — the slide layouter would need a rotated text frame that is not the shape's
-      own rotation.
+- [x] **A node's text is shrunk to fit** — `Layout/SlideAutofit.cs`, a port of
+      `SdrTextObj::autoFitTextForCompatibility` as **LibreOffice 24.2.7.2** has it. The `tx`
+      algorithm turns `TextFitToSizeType_AUTOFIT` on for every node whose text the author did not
+      format (`diagramlayoutatoms.cxx:1723-1728`), which is what makes a `primFontSz` of 65 an
+      *upper bound* rather than a size. Verified on a probe deck of **227 plain text boxes** —
+      one shape per box height from 8 to 100 pt at 25, 32 and 40 pt, one line and two, in four
+      faces — where Paperless now draws the reference's size on **225**. See the two entries below
+      for what it did to the diagram decks, which is less than the probe suggests and for a reason
+      that is not the fit's. Across the 37, pairing every drawn run with the reference's nearest,
+      the summed size error falls from **1202.2 pt to 327.5 pt** and the worst single run from
+      39.0 pt to 26.0.
+- [ ] **The snake's reversing continuation runs and still cannot be verified.**
+      `contDir="revDir"` — the branch that makes alternate rows run backwards, which is what the
+      word "snake" refers to — is stated by exactly one file in the whole of `sd/qa`, `oox/qa`,
+      `sw/qa`, `sc/qa` and `chart2/qa`: `sd/qa/unit/data/pptx/tdf84205.pptx`, twice, in both arms
+      of the same `choose`. That deck has a baked drawing, so the evaluator never sees it in
+      normal use; stripping the drawing part the way LibreOffice's own fixtures are stripped puts
+      it on the evaluated path, and there **`SnakeReversing` is reached, with a 3 by 3 grid over
+      nine children**, and the render agrees with LibreOffice's to **0.037 pt** on every filled
+      shape. That still verifies nothing: **replacing the branch with the same-direction one
+      leaves the render byte-identical**, because only three of the nine children carry a drawn
+      shape and the reversal does not move those three. So the code is now known to be
+      *reachable* and still not known to be *right*, which is a different and smaller gap than
+      before — and closing it needs a file this corpus does not contain.
+- [x] **`autoTxRot` turns a cycle's labels with their nodes.** Resolved in the `tx` algorithm to
+      a whole number of quarter turns (`diagramlayoutatoms.cxx:1730-1760`), emitted as
+      `a:bodyPr/@rot`, and read back by the ordinary text-body reader — so it reaches the layouter
+      down the path an authored deck's `@rot` would. A quarter turn transposes the text rectangle
+      about its own centre before the lines are broken, because the lines then run down the shape;
+      breaking them at the untransposed width and rotating afterwards is a different paragraph
+      rather than the same one turned. All 48 labels of `smartart-autoTxRot.pptx` — the same
+      five-node cycle three times, for `upr`, `none` and `grav` — now agree with the reference on
+      pen, em size and angle to **0.100 pt**.
+      **The measuring instrument had to change first, and that is the lesson.** A rotated run is a
+      `Tm` in the reference's content stream where an upright one is a `Td`, and `PdfTextRuns`
+      reads only `Td`. So the deck reported 48 runs against the reference's 7 both before the
+      change and after it, and the count was not evidence either way: the 41 rotated ones were
+      invisible to the reader. Resolving each block's full text matrix against the graphics state
+      is what made the comparison mean anything.
+- [ ] **The fit lands one or two steps high on a diagram node, and the box is why.** The search
+      is verified on plain text boxes to 225 of 227; on the diagram decks it fires in the right
+      direction and stops short. `smartart-vertical-block-list.pptx` draws 30 pt where the
+      reference draws 27, and 65 where it draws 56; `smartart-font-size.pptx` draws 37 to 36;
+      `smartart-org-chart.pptx` 15 to 16. The search is not the suspect — the box it is given is.
+      For that deck's tallest node Paperless measures a text box **85.948 pt** tall, and for
+      LibreOffice to shrink 65 pt to 56 there its box must be under **66.98**; for the two-line
+      node ours is 71.349 and its must be under 65.78. Nearly 20 pt on one shape is not rounding,
+      and it is the same quantity the `dsp:txXfrm` note above is about. Fix the rectangle before
+      touching the search again.
+      One consequence is visible in the reference and worth knowing, because it is a free check on
+      the grid: a bullet is drawn at the search's *unrounded* candidate size while its text is
+      drawn at the rounded one, so `smartart-vertical-block-list.pptx` shows 27.099 pt beside
+      27.014 — 27.1 and 27 — in the same paragraph.
+- [ ] **A wrap that differs makes the fit differ.** `smartart-font-size.pptx` regressed from
+      matching the reference's run count to 5 against 6: at 37 pt we fit 12 and 13 glyphs on two
+      lines where LibreOffice needs three, so the height the search compares is two lines' worth
+      rather than three and 37 looks like a fit. The size is one grid step from the reference's
+      36. This is a line-breaking difference surfacing through the fit rather than a fit bug, and
+      it is the one row of the 37 that moved the wrong way.
 - [ ] **A text node whose constraints resolve to a zero-sized box is dropped.** `smartart-cnt.pptx`
       constrains `ThreeNodes_1_text`'s left and right edges against a sibling's `l`, which no
       constraint ever sets, so both fall back to the absolute-value branch and both come out 0.
@@ -1933,21 +1974,30 @@ the shape's own space and travel with `PlacedText.Transform`.
 - [ ] Render animations' final state or initial state? Initial matches what a static export
       shows; confirm against the reference.
 - [ ] Are connectors worth routing properly, or is a straight line acceptable initially?
-- [ ] Should a master's *non-placeholder* shapes — a logo, a running strapline — be extracted?
-      Half of this is now measured, and it is the half that was in doubt. **They are visible.**
-      LibreOffice's own PDF export renders `master-slides.pptx`'s "Copyright © SUSE",
-      `cshapes.pptx`'s "© Novell, Inc. All rights reserved." and `tdf149865.pptx`'s
-      "Copyright © SUSE 2021" onto the slide, and Paperless reports none of the three: that text
-      is simply lost, not deferred.
-      **And they are rare.** Scanning all 389 decks in `sd/qa/unit/data/pptx/` for a master
-      `p:sp` with no `p:ph` and non-empty `a:t`: six decks match, and three of those carry only
-      the `‹#›` slide-number glyph. Four have real strapline text — the three above plus
-      `slide-sections.pptx`, whose master strapline LibreOffice renders on exactly one of its
-      seven pages, so even "visible on every slide" is not reliably true.
-      So the trade is now numbers rather than intuition: extracting costs a repeated line on
-      ~1% of decks, not extracting loses a line on the same ~1%. That is small enough either way
-      that the deciding factor should be what a caller wants, and the remaining question is only
-      that. `showMasterSp` on the slide and on the layout decides visibility, and neither of the
-      four decks states it, so it is not the discriminator it looks like — the machinery is there
-      but real files leave it at its default and rely on the shape being off-slide or invisible
-      instead.
+- [x] **A master's and a layout's *non-placeholder* shapes are drawn, and the rule is simpler
+      than the evidence looked.** An Impress master page is a PPTX master and a PPTX layout
+      *merged into one*: `presentationfragmenthandler.cxx:246-296` makes one `SlidePersist` per
+      **layout**, imports the master fragment into it, then imports the layout fragment into the
+      same one, and calls `createXShapes` once over the pair. So everything on either that is not
+      a placeholder is drawn under every slide using that layout. Placeholders are excluded because
+      on the Impress side they are presentation objects rather than background objects — drawing
+      them would put "Click to edit Master title style" on every slide of every deck.
+      **`showMasterSp` is real and is almost never the reason a strapline is invisible.** On the
+      slide it clears `IsBackgroundObjectsVisible` and hides both parts' shapes
+      (`slidefragmenthandler.cxx:96-98`); on the layout it hides only what the master contributed,
+      because the layout fragment is imported after the master's and `hideShapesAsMasterShapes`
+      marks whatever is already there (`slidepersist.cxx:399-411`). But **none of the six decks in
+      `sd/qa/unit/data/pptx` whose master carries a non-placeholder shape with text states it**,
+      and the file that made it look like a visibility question does not need it:
+      `slide-sections.pptx`'s master strapline is drawn on none of its seven pages and its
+      *layout's* on the seventh, and the reason is that the master's three text boxes sit at
+      y = 6 959 601 on a 6 858 000 slide and at x = −2 250 002 and x = −950 805. They are drawn,
+      into nothing. **The discriminator is the shape's position and there was no rule to find** —
+      which is worth a line here because looking for the flag that produces "visible on one page
+      of seven" is what the previous three passes over this spent their time on.
+      Verified against LibreOffice's own PDF: `master-slides.pptx`'s "Copyright © SUSE",
+      `cshapes.pptx`'s Novell strapline and `tdf149865.pptx`'s "Copyright © SUSE 2021" now draw,
+      and `slide-sections.pptx` draws its layout strapline on page 7 and nothing on the other six,
+      exactly as the reference does. `slide-master-shapes.pptx` is the committed fixture and
+      `SlideMasterShapeComparisonTests` the standing check; all 27 presentation rows of the render
+      sweep are unchanged.

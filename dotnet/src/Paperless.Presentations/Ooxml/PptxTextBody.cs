@@ -81,7 +81,9 @@ internal static class PptxTextBody
             Paragraphs = paragraphs,
             Insets = Insets(properties),
             Anchor = Anchor(Drawing.Attribute(properties, "anchor")),
+            Rotation = Rotation(properties),
             Wraps = Drawing.Attribute(properties, "wrap") != "none",
+            AutoFit = autofit is not null,
             FontScale = Thousandth(autofit, "fontScale", 1.0),
             LineSpaceReduction = Thousandth(autofit, "lnSpcReduction", 0.0),
         };
@@ -102,6 +104,23 @@ internal static class PptxTextBody
         Length.FromEmu(Emu(properties, "tIns", 45720)),
         Length.FromEmu(Emu(properties, "rIns", 91440)),
         Length.FromEmu(Emu(properties, "bIns", 45720)));
+
+    /// <summary>
+    /// The turn <c>a:bodyPr/@rot</c> asks for, in radians clockwise.
+    /// </summary>
+    /// <remarks>
+    /// Sixtieth-thousandths of a degree, clockwise, like every other DrawingML angle — and unlike
+    /// ODF's, which runs the other way. The attribute is what a SmartArt <c>autoTxRot</c>
+    /// resolves to, so the diagram evaluator writes it and this reads it back through the same
+    /// path an authored deck's would take.
+    /// </remarks>
+    private static double Rotation(XElement? properties)
+    {
+        int units = Drawing.Number(properties, "rot") ?? 0;
+        return units == 0
+            ? 0
+            : units / ShapeTransform.RotationUnitsPerDegree * Math.PI / 180.0;
+    }
 
     private static TextAnchor Anchor(string? anchor) => anchor switch
     {

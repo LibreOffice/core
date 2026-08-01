@@ -62,6 +62,8 @@ internal sealed partial class PptxSlideLayout
         SlideTheme theme = ThemeFor(slide);
         List<PlacedShape> shapes = [];
 
+        InheritedShapes(slide, theme, shapes);
+
         if (slide.ShapeTree is { } tree)
         {
             Walk(tree, slide, theme, AffineTransform.Identity, shapes, depth: 0);
@@ -76,6 +78,58 @@ internal sealed partial class PptxSlideLayout
             Background = Background(slide, theme),
             Shapes = shapes,
         };
+    }
+
+    /// <summary>
+    /// Draws the shapes the slide inherits from its layout and its master, under its own.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An Impress master page is a PPTX master and a PPTX layout merged into one, and
+    /// everything on it that is not a placeholder is drawn under every slide that uses that
+    /// layout.</strong> The merge is literal:
+    /// <c>oox/source/ppt/presentationfragmenthandler.cxx:246-296</c> makes one
+    /// <c>SlidePersist</c> per <em>layout</em>, imports the master fragment into it, then imports
+    /// the layout fragment into the same one, and calls <c>createXShapes</c> once over the pair.
+    /// So a logo on the master and a strapline on the layout are the same kind of thing by the
+    /// time anything is drawn, and both belong here.
+    /// </para>
+    /// <para>
+    /// Placeholders are excluded because on the Impress side they are presentation objects rather
+    /// than background objects: a master's "Click to edit Master title style" is a prompt shown in
+    /// master view, and drawing it would put that sentence on every slide of every deck. A slide's
+    /// own placeholder already resolves its rectangle and formatting through the same two parts,
+    /// by matching type and index rather than by being drawn twice.
+    /// </para>
+    /// <para>
+    /// <strong><c>showMasterSp</c> is real and is almost never the reason a strapline is
+    /// invisible.</strong> On the slide it clears <c>IsBackgroundObjectsVisible</c> and hides both
+    /// parts' shapes (<c>slidefragmenthandler.cxx:96-98</c>); on the layout it hides only what the
+    /// master contributed, because the layout fragment is imported after the master's and
+    /// <c>hideShapesAsMasterShapes</c> marks whatever is already there
+    /// (<c>slidepersist.cxx:399-411</c>). But of the six decks in
+    /// <c>sd/qa/unit/data/pptx/</c> whose master carries a non-placeholder shape with text, not
+    /// one states the attribute. The apparent counter-example is
+    /// <c>slide-sections.pptx</c>, whose master strapline LibreOffice draws on none of its seven
+    /// pages while it draws its layout's on the seventh: the master's three text boxes are at
+    /// y = 6 959 601 on a 6 858 000 slide and at x = −2 250 002 and x = −950 805, so they are
+    /// simply parked off the page. They <em>are</em> drawn, into nothing. Reading that as a
+    /// visibility rule and hunting for the flag that produces it costs an afternoon; the
+    /// discriminator is the shape's position, and there is no rule to find.
+    /// </para>
+    /// </remarks>
+    private void InheritedShapes(PptxSlide slide, SlideTheme theme, List<PlacedShape> shapes)
+    {
+        if (!Ppt.Flag(slide.Root, "showMasterSp", whenAbsent: true)) return;
+
+        bool masterShown = Ppt.Flag(slide.Layout, "showMasterSp", whenAbsent: true);
+
+        foreach (XElement? part in (XElement?[])[masterShown ? slide.Master : null, slide.Layout])
+        {
+            if (Ppt.Child(Ppt.Child(part, "cSld"), "spTree") is not { } tree) continue;
+
+            Walk(tree, slide, theme, AffineTransform.Identity, shapes, depth: 0, background: true);
+        }
     }
 
     /// <summary>
@@ -289,23 +343,34 @@ internal sealed partial class PptxSlideLayout
         Walk(baked.ShapeTree, slide, theme, inside, shapes, depth + 1);
     }
 
+    /// <summary>
+    /// Walks a shape tree in document order, which is z-order, composing group spaces as it goes.
+    /// </summary>
+    /// <remarks>
+    /// <c>background</c> is true when the tree is a master's or a layout's rather than the
+    /// slide's, which excludes its placeholders — see <see cref="InheritedShapes"/>.
+    /// </remarks>
     private void Walk(
         XElement parent,
         PptxSlide slide,
         SlideTheme theme,
         AffineTransform space,
         List<PlacedShape> shapes,
-        int depth)
+        int depth,
+        bool background = false)
     {
         foreach (XElement element in parent.Elements())
         {
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))
             {
+                if (background && PptxPlaceholder.Read(element, slide.Master) is not null) continue;
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
             {
-                Walk(element, slide, theme, GroupSpace(element, space), shapes, depth + 1);
+                Walk(
+                    element, slide, theme, GroupSpace(element, space), shapes, depth + 1,
+                    background);
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
@@ -595,6 +660,11 @@ internal sealed partial class PptxSlideLayout
     {
         if (BodyOf(shape, theme) is not { } body) return null;
 
+        // A body that turns its own text can never be upright, whatever the shape does: the runs
+        // have to travel with a matrix, because a glyph run carries an origin and advances rather
+        // than one of its own.
+        if (body.Rotation != 0) return Turned(body, rectangle, placement);
+
         // An upright shape's text goes straight into slide coordinates, which keeps the pens a
         // backend writes directly comparable with a reference renderer's. A rotated or mirrored
         // one cannot: a glyph run carries an origin and advances, not a matrix, so its runs stay
@@ -609,6 +679,50 @@ internal sealed partial class PptxSlideLayout
         if (runs.Count == 0) return null;
 
         return new PlacedText(runs, upright ? AffineTransform.Identity : placement);
+    }
+
+    /// <summary>
+    /// Lays a body out in a text frame turned inside its shape, and gives it the matrix.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>a:bodyPr/@rot</c>, and what a SmartArt <c>autoTxRot</c> resolves to. The turn is about
+    /// the text rectangle's own centre and the shape itself does not move, so the only thing the
+    /// layout sees is a different rectangle: a quarter turn transposes it — the lines now run down
+    /// the shape and break at its height — and a half turn leaves it as it was. Laying out in the
+    /// untransposed rectangle and rotating afterwards breaks the lines at the wrong width, which
+    /// is a different paragraph rather than the same one turned.
+    /// </para>
+    /// <para>
+    /// Anything nearer a quarter turn than not transposes, which is exact for the four angles
+    /// <c>autoTxRot</c> produces and is the only defensible rule for an angle between them.
+    /// </para>
+    /// </remarks>
+    private PlacedText? Turned(SlideTextBody body, DocRect rectangle, AffineTransform placement)
+    {
+        double centreX = rectangle.X.Emu + (rectangle.Width.Emu / 2.0);
+        double centreY = rectangle.Y.Emu + (rectangle.Height.Emu / 2.0);
+
+        bool quarter = Math.Abs(Math.Sin(body.Rotation)) > Math.Abs(Math.Cos(body.Rotation));
+
+        DocRect area = quarter
+            ? new DocRect(
+                Length.FromEmu((long)(centreX - (rectangle.Height.Emu / 2.0))),
+                Length.FromEmu((long)(centreY - (rectangle.Width.Emu / 2.0))),
+                rectangle.Height,
+                rectangle.Width)
+            : rectangle;
+
+        List<PlacedGlyphRun> runs = SlideTextLayout.Place(body, area, _fonts);
+        if (runs.Count == 0) return null;
+
+        AffineTransform turn = AffineTransform.Concat(
+            AffineTransform.Concat(
+                AffineTransform.Translation(-centreX, -centreY),
+                AffineTransform.Rotation(body.Rotation)),
+            AffineTransform.Translation(centreX, centreY));
+
+        return new PlacedText(runs, AffineTransform.Concat(turn, placement));
     }
 
     /// <summary>True when a placement is a pure translation, so text needs no matrix.</summary>
