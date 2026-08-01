@@ -198,6 +198,12 @@ public static class DrawingChart
         }
         rows = Math.Max(rows, categories.Length);
 
+        // A trailing run of rows with nothing in them is padding, not data: c:ptCount counts
+        // the range the chart was drawn over, and a range extended past the last filled cell —
+        // or an absurd count in a hostile file — would otherwise become that many empty rows.
+        // An interior gap is kept, because it is a category whose value is genuinely missing.
+        while (rows > 0 && IsBlank(series, categories, rows - 1)) rows--;
+
         ContentTable table = new() { ColumnCount = series.Count + 1, HeaderRowCount = 1 };
 
         ContentTableRow header = new() { Index = 0 };
@@ -248,6 +254,20 @@ public static class DrawingChart
         }
 
         return table;
+    }
+
+    /// <summary>True when no series and no category label says anything about a row.</summary>
+    private static bool IsBlank(List<Series> series, string?[] categories, int row)
+    {
+        if (row < categories.Length && categories[row] is { Length: > 0 }) return false;
+
+        foreach (Series one in series)
+        {
+            if (row >= one.Values.Length) continue;
+            if (one.Values[row] is { Text: { Length: > 0 } } or { Number: not null }) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
