@@ -81,16 +81,16 @@ internal static class XlsxDrawings
             {
                 if (anchor.Name.NamespaceName != DrawingNamespace) continue;
 
-                SheetAnchorKind kind = anchor.Name.LocalName switch
+                SheetAnchorKind? kind = anchor.Name.LocalName switch
                 {
                     "twoCellAnchor" => SheetAnchorKind.TwoCell,
                     "oneCellAnchor" => SheetAnchorKind.OneCell,
                     "absoluteAnchor" => SheetAnchorKind.Absolute,
-                    _ => (SheetAnchorKind)(-1),
+                    _ => null,
                 };
 
-                if ((int)kind < 0) continue;
-                if (ReadAnchor(anchor, kind, opc, images) is { } drawing) drawings.Add(drawing);
+                if (kind is not { } anchored) continue;
+                if (ReadAnchor(anchor, anchored, opc, images) is { } drawing) drawings.Add(drawing);
             }
         }
 
