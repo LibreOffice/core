@@ -61,6 +61,7 @@ public sealed partial class OdtLayoutSource
     private const char AnchorCharacter = '\u0001';
 
     private readonly OdfStyles _styles;
+    private readonly OdfPictures? _pictures;
     private readonly SystemFontResolver _fonts;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -87,14 +88,20 @@ public sealed partial class OdtLayoutSource
     /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
     /// is numbered. Null leaves both classes on LibreOffice's defaults.
     /// </param>
+    /// <param name="pictures">
+    /// How to reach the bytes behind a <c>draw:image</c>, or null to lay the document out with its
+    /// picture frames empty — which is what a caller who wants only measurements should pay for.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
-        XElement? stylesRoot = null)
+        XElement? stylesRoot = null,
+        OdfPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _pictures = pictures;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
@@ -630,7 +637,7 @@ public sealed partial class OdtLayoutSource
                 ? Content
                 : null;
 
-            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset) is { } frame)
+            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset, _pictures) is { } frame)
             {
                 frames.Add(frame);
             }
@@ -792,6 +799,21 @@ public sealed partial class OdtLayoutSource
                         AppendTextElement(child, depth);
                         break;
 
+                    // A comment's anchor occupies a position and draws nothing; its body is another flow,
+                    // and LibreOffice's own PDF export leaves it out of the page entirely.
+                    //
+                    // Matched here rather than beside the other anchors because a comment is
+                    // `office:annotation` and not `text:annotation` — the one paragraph-level element ODF
+                    // puts outside the text namespace. A case for it under `AppendTextElement` never
+                    // fires, so the walk below descended into the comment and spliced its author, its
+                    // timestamp and its body into the sentence it is anchored in. Silent in a packaged
+                    // `.odt`, where the elements abut and the words fuse into their neighbours; visible in
+                    // the same document saved flat, where the pretty-printer's newlines separate them.
+                    case XElement child when child.Name.NamespaceName == OdfNamespaces.Office
+                                             && child.Name.LocalName is "annotation" or "annotation-end":
+                        Emit(AnchorCharacter.ToString());
+                        break;
+
                     // A floating frame is *in* the paragraph and is not part of it: its own text belongs
                     // to a rectangle of its own, and walking into it would splice a caption into the
                     // middle of the sentence the frame is anchored in. Recorded with the offset it sits
@@ -820,9 +842,10 @@ public sealed partial class OdtLayoutSource
         /// spaces is written.
         /// </para>
         /// <para>
-        /// A note's or comment's body is inside the paragraph in the file but is not part of its text, so
-        /// it contributes only the anchor character it occupies. Walking into it would put a footnote's
-        /// whole text into the middle of the sentence that cites it.
+        /// A note's body is inside the paragraph in the file but is not part of its text, so it
+        /// contributes only the citation it occupies. Walking into it would put a footnote's whole text
+        /// into the middle of the sentence that cites it. A comment's body is the same case in the
+        /// <c>office:</c> namespace, and is handled by the caller for that reason.
         /// </para>
         /// </remarks>
         private void AppendTextElement(XElement child, int depth)
@@ -876,11 +899,6 @@ public sealed partial class OdtLayoutSource
 
                     break;
                 }
-
-                case "annotation" or "annotation-end":
-                    // A comment's anchor occupies a position and draws nothing; its body is another flow.
-                    Emit(AnchorCharacter.ToString());
-                    break;
 
                 case "soft-page-break" or "bookmark" or "bookmark-start" or "bookmark-end"
                     or "reference-mark" or "reference-mark-start" or "reference-mark-end"

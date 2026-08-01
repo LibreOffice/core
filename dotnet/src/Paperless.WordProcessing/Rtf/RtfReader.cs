@@ -372,6 +372,25 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         foreach (RtfLayoutFrame frame in stated)
         {
+            // An inline picture is not placed against an origin at all: it hangs on the line at the
+            // offset it was written at, and the wrap words a shape carries do not apply to it.
+            if (frame.IsInline)
+            {
+                frames.Add(new PageFrame
+                {
+                    Size = new Core.Geometry.DocSize(
+                        Core.Units.Length.FromTwips(frame.Right - frame.Left),
+                        Core.Units.Length.FromTwips(frame.Bottom - frame.Top)),
+                    Anchor = FrameAnchor.AsCharacter,
+                    AnchorOffset = frame.Offset,
+                    Wrap = TextWrap.Through,
+                    IsImage = true,
+                    Image = frame.Picture,
+                });
+
+                continue;
+            }
+
             List<PageBlock> blocks = Convert(fonts, frame.Blocks);
 
             frames.Add(new PageFrame
@@ -400,6 +419,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 VerticalOffset = Core.Units.Length.FromTwips(frame.Top),
                 Spacing = frame.WrapDistance ?? DefaultShapeWrapDistance,
                 IsImage = blocks.Count == 0,
+                Image = frame.Picture,
                 Blocks = blocks,
             });
         }

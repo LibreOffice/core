@@ -297,6 +297,16 @@ public sealed partial class RtfDocumentReader
                 case RtfTokenKind.Text:
                     AppendText(state, Decode(token.Bytes.Span, state));
                     break;
+
+                case RtfTokenKind.Binary:
+                    // Only a picture's. A \bin inside an embedded object or a private destination is
+                    // data this library does not read, and the tokeniser has already stepped over it —
+                    // which is the whole point of the token existing.
+                    if (state.Destination == RtfDestination.Picture)
+                    {
+                        AppendPictureBinary(token.Bytes.Span);
+                    }
+                    break;
             }
         }
 
@@ -327,6 +337,10 @@ public sealed partial class RtfDocumentReader
         {
             return;
         }
+
+        // A picture's own vocabulary, which only means anything inside a {\pict} — \picw is not a page
+        // property and \pich is not a paragraph one, and both share their prefix with nothing else.
+        if (HandlePictureWord(token)) return;
 
         switch (token.Name)
         {
@@ -463,6 +477,7 @@ public sealed partial class RtfDocumentReader
                 return;
             case "pict":
                 state.Destination = RtfDestination.Picture;
+                BeginPicture();
                 return;
             case "object" or "objdata" or "result":
                 // An embedded object: its data is binary and its \result is a rendering of

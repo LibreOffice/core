@@ -154,7 +154,21 @@ public sealed record RtfLayoutFrame(
     string? HorizontalOrigin,
     string? VerticalOrigin,
     IReadOnlyList<RtfLayoutBlock> Blocks,
-    Core.Geometry.Margins? WrapDistance = null);
+    Core.Geometry.Margins? WrapDistance = null)
+{
+    /// <summary>
+    /// True when this is a <c>{\pict}</c> in the run of text rather than a <c>{\shp}</c> beside it.
+    /// </summary>
+    /// <remarks>
+    /// One record for both because the two really are one thing to layout — a rectangle anchored in a
+    /// paragraph — and they differ only in what the rectangle is measured from. A shape states a
+    /// position; an inline picture has none, and hangs where its offset in the text puts it.
+    /// </remarks>
+    public bool IsInline { get; init; }
+
+    /// <summary>The picture the frame holds, still encoded, or null when it holds none.</summary>
+    public Core.Graphics.RasterImage? Picture { get; init; }
+}
 
 /// <summary>
 /// A footnote or endnote as layout sees it: where it is cited, and the blocks of its body.

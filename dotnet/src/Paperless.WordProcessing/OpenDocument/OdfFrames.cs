@@ -39,11 +39,16 @@ internal static class OdfFrames
     /// is what an image needs and all the wrap ever depends on.
     /// </param>
     /// <param name="anchorOffset">Where in the paragraph's text the frame is anchored.</param>
+    /// <param name="pictures">
+    /// How to reach the bytes behind a <c>draw:image</c>, or null to record the frame's geometry without
+    /// them — which is all the wrap ever needed and what a caller measuring a document should pay for.
+    /// </param>
     public static PageFrame? Read(
         XElement element,
         OdfStyles styles,
         Func<XElement, IReadOnlyList<PageBlock>>? content,
-        int anchorOffset)
+        int anchorOffset,
+        OdfPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(element);
         ArgumentNullException.ThrowIfNull(styles);
@@ -76,6 +81,7 @@ internal static class OdfFrames
             BorderColour = style.BorderColour,
             BorderWidth = style.BorderWidth,
             IsImage = image is not null,
+            Image = image is not null && pictures is not null ? pictures.Read(element) : null,
             Name = element.Attribute(XName.Get("name", OdfNamespaces.Draw))?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

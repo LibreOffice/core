@@ -177,6 +177,11 @@ internal sealed class FrameResolution
 
             foreach (PageFrame frame in paragraph.Frames)
             {
+                // An as-character frame is not placed against an origin at all — it hangs on a line, at
+                // the position its anchor character occupies. That needs the line rather than the
+                // paragraph, so it is done by the walk below.
+                if (frame.Anchor == FrameAnchor.AsCharacter) continue;
+
                 DocRect area = FrameLayout.Place(
                     frame, geometry, origin, anchorTop, rightHandPage: page.Number % 2 == 1);
 
@@ -206,12 +211,75 @@ internal sealed class FrameResolution
             }
         }
 
+        // One line's as-character frames, hung on the line rather than placed against an origin.
+        //
+        // Writer's `SwFlyCntPortion`: an as-character frame is a portion of the line's own text, so it
+        // sits where the character it replaces sits and its bottom rests on the baseline. Measured
+        // against LibreOffice's PDF of `picture-anchor.fodt`, whose first line's baseline is at 756.839
+        // and whose picture's bottom edge is at 756.889 — one twip below it, which is the same inclusive
+        // rectangle that gives `FrameObstacles` its inflation. The horizontal position is 183.35, which
+        // is the text's own 56.8 plus the width of "An inline picture follows: " and nothing else.
+        void HangInline(
+            PageParagraph paragraph, int pageIndex, DocRect area, PlacedLine line)
+        {
+            foreach (PageFrame frame in paragraph.Frames)
+            {
+                if (frame.Anchor != FrameAnchor.AsCharacter) continue;
+                if (frame.AnchorOffset < line.Box.Line.Start) continue;
+
+                // One past the last character belongs to the *next* line, except on the last line of
+                // the paragraph, where there is no next one. That is not an edge case worth skipping:
+                // RTF appends nothing to the text for a picture, so a paragraph holding only a picture
+                // is an empty paragraph with an anchor at offset zero and a line running 0 to 0 — the
+                // most ordinary way for a document to carry a logo.
+                if (frame.AnchorOffset >= line.Box.Line.End && !line.Box.Line.EndsParagraph) continue;
+                if (frame.AnchorOffset > line.Box.Line.End) continue;
+
+                DocRect placedAt = new(
+                    area.X + line.Box.Left + PageDrawing.OffsetOnLine(paragraph, line, frame.AnchorOffset),
+                    area.Y + line.Baseline - frame.Size.Height,
+                    frame.Size.Width,
+                    frame.Size.Height);
+
+                frames++;
+                signature.Add(placedAt.X.Emu);
+                signature.Add(placedAt.Y.Emu);
+                signature.Add(placedAt.Width.Emu);
+                signature.Add(placedAt.Height.Emu);
+
+                if (!byPage.TryGetValue(pageIndex, out List<PlacedFrame>? placed))
+                {
+                    byPage[pageIndex] = placed = [];
+                }
+
+                // Never an obstacle, whatever the document says its wrap is. An as-character frame is
+                // part of the text rather than something the text flows around, which is why Writer
+                // gives it a portion and not an entry in `SwTextFly`'s object list.
+                placed.Add(new PlacedFrame(frame, placedAt, Content(frame, placedAt)));
+            }
+        }
+
         for (int index = 0; index < blocks.Count; index++)
         {
             if (blocks[index] is not PageParagraph paragraph || paragraph.Frames.Count == 0) continue;
             if (!placements.TryGetValue(index, out Placement placement)) continue;
 
             PlaceFrames(paragraph, placement.Index, placement.Page, placement.Column, placement.Top);
+        }
+
+        for (int index = 0; index < pages.Count; index++)
+        {
+            LaidOutPage page = pages[index];
+            IReadOnlyList<PageBlock> own = page.Blocks ?? blocks;
+
+            foreach (PlacedLine line in page.Lines)
+            {
+                if (line.ParagraphIndex < 0 || line.ParagraphIndex >= own.Count) continue;
+                if (own[line.ParagraphIndex] is not PageParagraph paragraph) continue;
+                if (paragraph.Frames.Count == 0) continue;
+
+                HangInline(paragraph, index, page.ColumnArea(line.Column), line);
+            }
         }
 
         // And the frames anchored in a flow rather than in the body: a table cell, a header, a footer, a
@@ -226,10 +294,16 @@ internal sealed class FrameResolution
             {
                 foreach (PlacedLine line in flow.Lines)
                 {
-                    if (!line.StartsParagraph) continue;
                     if (line.ParagraphIndex < 0 || line.ParagraphIndex >= flow.Blocks.Count) continue;
                     if (flow.Blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
                     if (paragraph.Frames.Count == 0) continue;
+
+                    // An inline picture in a header or a cell hangs on whichever of the flow's lines holds
+                    // its anchor, which need not be the paragraph's first — unlike a floating frame, whose
+                    // origin is the paragraph and which is therefore placed only once.
+                    HangInline(paragraph, index, flow.Area, line);
+
+                    if (!line.StartsParagraph) continue;
 
                     // The flow's own rectangle is what a paragraph-, column- or text-area-relative origin
                     // resolves against inside a flow, and it is exact: LibreOffice draws the frame of

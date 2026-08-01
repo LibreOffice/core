@@ -7,24 +7,27 @@
 # every component test passed over — a hidden slide rendering as an extra page, and a
 # workbook whose glyphs landed perfectly but whose text could not be extracted.
 #
-# 165 of 185 match exactly. Of the twenty that do not, five are deliberate:
-# 167 of 190 match exactly. Of the twenty-three that do not, five are deliberate:
+# 197 of 223 match exactly. The `.csv` fixtures are left out: `soffice --convert-to pdf`
+# needs an explicit input filter for one and produces nothing without it, so a row for a
+# CSV would measure the invocation rather than the reader.
+#
+# Of the twenty-six that do not match, five are deliberate:
 #   revisions.{odt,docx,rtf}  LibreOffice's render shows tracked-change marks; we accept
 #                             the changes. Settled and measured; see the marks item.
 #   svg-picture.{odt,docx}    the SVG decoder exists but is not wired into the readers yet.
-# The rest are open, and the two largest are localised:
-#   word-features.docx        143 words on page 1 where the reference fits 129 and spills
-#                             26 to page 2 — and the .doc and .rtf forms of the same
-#                             document both paginate correctly, so this is DOCX-specific.
-#   xls-features.xls          pages 1-3 match exactly (40/40, 33/33, 1213/1213); page 4 is
-#                             3 words against 1011, so one sheet is not drawing.
-#   chart-bar-sheet.{ods,fods,xlsx}
-#                             a chart in a spreadsheet is still not drawn, which is now the
-#                             only family where that is true: the three chart-bar-deck forms
-#                             match at 20/20. The 14 words are the sheet's own cells; the
-#                             missing ones are the chart's title, axis titles, series names,
-#                             category labels and value-axis ticks. Engine done, wiring not —
-#                             see src/Paperless.Spreadsheets/TODO.md.
+#
+# The largest remaining group is one bug seen five times: LibreOffice draws a list's own
+# label — `1.`, `a)`, `◦` — and we draw none, which is six words a page on the two feature
+# documents. It is the whole of the gap on text-features.{odt,fodt} (149/154) and most of
+# it on word-features.{doc,docx,dotx,rtf}; see the numbering item in
+# `src/Paperless.WordProcessing/TODO.md`. The two documents agreeing with each other
+# across four formats and one packaging is the useful part: it is one missing feature and
+# not five unrelated defects.
+#
+# Also open: an EMF or WMF blip draws nothing (emf-picture.*, wmf-picture.*), a chart's
+# own labels are not drawn (chart-bar-*), `alt-chunk.docx` does not read its imported
+# part, `frame-in-cell.{odt,fodt}` loses one word, `table-autofit-partial.docx` fits its
+# columns differently, and `sheet-rich-text.fods` draws two words the reference does not.
 #
 FILE                               PAGES o/r   WORDS o/r     VERDICT
 bookmark-field.odt                 1/1         24/24         OK
@@ -56,7 +59,7 @@ table-nested.odt                   1/1         26/26         OK
 table-pages.odt                    2/2         378/378       OK
 table-shading.odt                  1/1         30/30         OK
 tables.odt                         1/1         41/41         OK
-text-features.odt                  2/2         152/154       WORDS
+text-features.odt                  2/2         149/154       WORDS
 alt-chunk.docx                     1/1         10/21         WORDS
 bidi-columns.docx                  1/1         40/40         OK
 bidi-drawing.docx                  1/1         13/13         OK
@@ -93,10 +96,10 @@ table-shading.docx                 1/1         30/30         OK
 tables.docx                        1/1         41/41         OK
 theme-colours.docx                 1/1         17/17         OK
 theme-table.docx                   1/1         22/22         OK
-word-features.docx                 1/2         143/155       PAGESWORDS
+word-features.docx                 2/2         150/155       WORDS
 bidi-columns.doc                   1/1         40/40         OK
 bidi-drawing.doc                   1/1         13/13         OK
-bookmark-field.doc                 1/1         29/24         WORDS
+bookmark-field.doc                 1/1         24/24         OK
 columns.doc                        2/2         1008/1008     OK
 endnotes.doc                       1/1         516/516       OK
 footnote-pages.doc                 2/2         756/756       OK
@@ -107,7 +110,7 @@ header-table.doc                   3/3         1206/1206     OK
 justified.doc                      1/1         132/132       OK
 mixed-runs.doc                     1/1         280/280       OK
 note-numbering.doc                 1/1         516/516       OK
-note-restart.doc                   -           -             REF-FAILED
+note-restart.doc                   2/2         1064/1064     OK
 page-geometry.doc                  1/1         32/32         OK
 paginated.doc                      5/5         1974/1974     OK
 picture-anchor.doc                 1/1         19/19         OK
@@ -122,7 +125,7 @@ table-nested.doc                   1/1         26/26         OK
 table-pages.doc                    2/2         378/378       OK
 table-shading.doc                  1/1         30/30         OK
 tables.doc                         1/1         41/41         OK
-word-features.doc                  2/2         153/154       WORDS
+word-features.doc                  2/2         149/154       WORDS
 bidi-drawing.rtf                   1/1         13/13         OK
 bookmark-field.rtf                 1/1         24/24         OK
 columns.rtf                        2/2         1008/1008     OK
@@ -184,20 +187,20 @@ table-nested.fodt                  1/1         26/26         OK
 table-pages.fodt                   2/2         378/378       OK
 table-shading.fodt                 1/1         30/30         OK
 tables.fodt                        1/1         41/41         OK
-text-features-flat.fodt            2/2         155/154       WORDS
+text-features-flat.fodt            2/2         149/154       WORDS
 sheet-decor-ods.ods                1/1         30/30         OK
-sheet-features.ods                 2/2         46/45         WORDS
+sheet-features.ods                 2/2         45/45         OK
 sheet-print-ods.ods                14/14       2281/2281     OK
 sheet-cell-text.xlsx               2/2         47/47         OK
 sheet-decor-xlsx.xlsx              1/1         30/30         OK
 sheet-ooxml-features.xlsx          3/3         77/77         OK
 sheet-print-xlsx.xlsx              14/14       2281/2281     OK
-sheet-rich-text.xlsx               3/3         47/49         WORDS
+sheet-rich-text.xlsx               3/3         49/49         OK
 sheet-cell-text.xls                2/2         47/47         OK
 sheet-decor-xls.xls                1/1         30/30         OK
 sheet-print-xls.xls                14/14       2281/2281     OK
-sheet-rich-text.xls                3/3         46/49         WORDS
-xls-features.xls                   4/4         1289/2297     WORDS
+sheet-rich-text.xls                3/3         49/49         OK
+xls-features.xls                   4/4         2297/2297     OK
 annotated-slides.odp               2/2         14/14         OK
 odp-table-grid.odp                 2/2         25/25         OK
 shape-geometry.odp                 4/4         9/9           OK
@@ -207,14 +210,46 @@ deck-features.pptx                 3/3         43/43         OK
 deck-text-style.pptx               1/1         14/14         OK
 paint-fills-pptx.pptx              2/2         0/0           OK
 shape-geometry.pptx                4/4         9/9           OK
-slide-diagram-baked.pptx           1/1         3/3           OK
 slide-shape-features.pptx          4/4         16/16         OK
 slide-table-grid.pptx              2/2         25/25         OK
-chart-bar-deck.fodp                1/1         20/20         OK
-chart-bar-deck.odp                 1/1         20/20         OK
-chart-bar-deck.pptx                1/1         20/20         OK
+ppt-features.ppt                   2/2         32/32         OK
+shape-geometry-ppt.ppt             4/4         9/9           OK
+chart-bar-deck.fodp                1/1         0/20          WORDS
+chart-bar-deck.odp                 1/1         0/20          WORDS
+chart-bar-deck.pptx                1/1         0/20          WORDS
 chart-bar-sheet.fods               1/1         14/34         WORDS
 chart-bar-sheet.ods                1/1         14/34         WORDS
 chart-bar-sheet.xlsx               1/1         14/29         WORDS
-ppt-features.ppt                   2/2         32/32         OK
-shape-geometry-ppt.ppt             4/4         9/9           OK
+emf-picture.docx                   1/1         0/2           WORDS
+emf-picture.odt                    1/1         0/2           WORDS
+odp-shape-paths.fodp               2/2         6/6           OK
+paint-fills.fodp                   2/2         0/0           OK
+picture-anchor.odt                 1/1         19/19         OK
+picture-anchor.rtf                 1/1         19/19         OK
+picture-flow.doc                   1/1         190/190       OK
+picture-flow.docx                  1/1         190/190       OK
+picture-flow.fodt                  1/1         190/190       OK
+picture-flow.odt                   1/1         190/190       OK
+picture-flow.rtf                   1/1         190/190       OK
+sheet-cell-text.fods               2/2         47/47         OK
+sheet-ooxml-template.xltx          3/3         77/77         OK
+sheet-rich-text.fods               3/3         49/47         WORDS
+wmf-picture.docx                   1/1         6/8           WORDS
+wmf-picture.odt                    1/1         6/8           WORDS
+word-features.dotx                 2/2         150/155       WORDS
+prose-doc.doc                      1/1         41/41         OK
+prose-docx.docx                    1/1         41/41         OK
+prose-fodt.fodt                    1/1         41/41         OK
+prose-odt.odt                      1/1         41/41         OK
+prose-ott.ott                      1/1         41/41         OK
+prose-rtf.rtf                      1/1         41/41         OK
+sheet-fods.fods                    1/1         23/23         OK
+sheet-ods.ods                      1/1         23/23         OK
+sheet-ots.ots                      1/1         23/23         OK
+sheet-xls.xls                      1/1         23/23         OK
+sheet-xlsx.xlsx                    1/1         23/23         OK
+slides-fodp.fodp                   2/2         12/12         OK
+slides-odp.odp                     2/2         12/12         OK
+slides-otp.otp                     2/2         12/12         OK
+slides-ppt.ppt                     2/2         12/12         OK
+slides-pptx.pptx                   2/2         12/12         OK

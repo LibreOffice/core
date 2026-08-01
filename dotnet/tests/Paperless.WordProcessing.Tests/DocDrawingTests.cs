@@ -215,7 +215,12 @@ public sealed class DocDrawingTests
         using IDocument document = Open("picture-anchor.doc");
         WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
 
-        PageFrame frame = pages.Pages[0].Frames.ShouldHaveSingleItem().Frame;
+        // The floating one. The page also carries the document's inline picture, which is placed by
+        // hanging it on its line rather than against an origin and so has no alignment to check.
+        PageFrame frame = pages.Pages[0].Frames
+            .Select(placed => placed.Frame)
+            .Where(candidate => candidate.Anchor != FrameAnchor.AsCharacter)
+            .ShouldHaveSingleItem();
 
         frame.HorizontalAlignment.ShouldBe(FrameHorizontalAlignment.Centre);
         frame.VerticalAlignment.ShouldBe(FrameVerticalAlignment.Top);

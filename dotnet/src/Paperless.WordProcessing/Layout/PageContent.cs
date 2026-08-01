@@ -166,6 +166,55 @@ public sealed record PageParagraph : PageBlock
     /// two-pass affair; see <see cref="Paginator"/>.
     /// </remarks>
     public IReadOnlyList<PageFrame> Frames { get; init; } = [];
+
+    /// <summary>
+    /// The as-character frames among <see cref="Frames"/>: room <em>on</em> a line rather than beside it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Derived rather than stored, because a frame states one thing and layout needs it twice — an
+    /// as-character frame is placed by hanging it on its line, and the <em>same</em> frame is what makes
+    /// that line wider and taller. Deriving keeps the two from disagreeing, which they would the first
+    /// time a reader set one and forgot the other.
+    /// </para>
+    /// <para>
+    /// Empty for a paragraph with no inline frame, which is nearly all of them, and that is what lets the
+    /// paginator keep taking the cheaper single-face measurement for those.
+    /// </para>
+    /// </remarks>
+    public IReadOnlyList<InlineObject> InlineObjects =>
+        HasInlineObjects
+            ? [.. Frames
+                .Where(frame => frame.Anchor == FrameAnchor.AsCharacter)
+                .Select(frame => new InlineObject(
+                    frame.AnchorOffset, frame.Size.Width, frame.Size.Height))]
+            : [];
+
+    /// <summary>True when an as-character frame is set in the paragraph's text.</summary>
+    public bool HasInlineObjects
+        => Frames.Count > 0 && Frames.Any(frame => frame.Anchor == FrameAnchor.AsCharacter);
+
+    /// <summary>
+    /// Shapes the paragraph's runs, ready for measuring across them.
+    /// </summary>
+    /// <remarks>
+    /// Here rather than in the paginator because the body, a header, a table cell and a text box all need
+    /// the same answer, and they used to arrive at it separately — the flow layouter's copy passed
+    /// <see cref="Runs"/> straight through, so a uniform paragraph reaching the run path measured as
+    /// nothing at all. The paragraph's own face and size close any gap the runs leave, so a document that
+    /// formats its text and leaves its paragraph mark unmentioned is normal rather than malformed.
+    /// </remarks>
+    internal MeasuredParagraph Measure()
+    {
+        List<FormattedRun> runs = [.. Runs.Select(run => run.ToFormattedRun())];
+
+        if (runs.Count == 0)
+        {
+            runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
+        }
+
+        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects);
+    }
 }
 
 /// <summary>

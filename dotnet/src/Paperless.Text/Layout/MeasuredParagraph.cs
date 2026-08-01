@@ -40,6 +40,36 @@ public readonly record struct FormattedRun(
 }
 
 /// <summary>
+/// Something set <em>in</em> a line that is not text: an as-character picture or frame.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Writer's <c>SwFlyCntPortion</c> — a portion of the line, so it takes room <em>on</em> the line rather
+/// than room <em>from</em> it the way a floating frame does. The two are worth keeping apart because they
+/// are opposite: a floating frame narrows the lines beside it and never moves them along, and this one
+/// moves the text after it along and never narrows anything.
+/// </para>
+/// <para>
+/// The offset is the boundary the object occupies, so it sits immediately before the character at that
+/// index and the text from there on is pushed along by <see cref="Width"/>. That is why it is a boundary
+/// and not a character: three of the four word-processing formats put no character in the text for an
+/// inline picture at all, and inventing one would shift every offset a reader recorded — a note's
+/// citation, a bookmark, a comment's anchor.
+/// </para>
+/// <para>
+/// <see cref="Height"/> is the line's business rather than the object's: an as-character object rests its
+/// bottom on the baseline, so the line's ascent has to grow to at least this. Measured against
+/// LibreOffice's PDF of <c>picture-anchor.fodt</c>, whose 1 cm picture on a 12 pt line gives an ascent of
+/// 28.35 pt where the text alone would give 10.69, and a line 31.46 pt tall where the text alone gives
+/// 13.8.
+/// </para>
+/// </remarks>
+/// <param name="Offset">The boundary it occupies, as an index into the paragraph's text.</param>
+/// <param name="Width">How far it moves the text after it along the line.</param>
+/// <param name="Height">How tall it is, measured up from the baseline.</param>
+public readonly record struct InlineObject(int Offset, Length Width, Length Height);
+
+/// <summary>
 /// A shaped run, positioned within its paragraph.
 /// </summary>
 /// <param name="Run">The run's own range and formatting.</param>
@@ -72,15 +102,22 @@ public sealed class MeasuredParagraph
     private readonly MeasuredRun[] _runs;
     private readonly long[] _prefixEmu;
     private readonly TextItem[] _items;
+    private readonly InlineObject[] _objects;
 
     private MeasuredParagraph(
-        string text, MeasuredRun[] runs, long[] prefixEmu, TextItem[] items, byte paragraphLevel)
+        string text,
+        MeasuredRun[] runs,
+        long[] prefixEmu,
+        TextItem[] items,
+        byte paragraphLevel,
+        InlineObject[] objects)
     {
         Text = text;
         _runs = runs;
         _prefixEmu = prefixEmu;
         _items = items;
         ParagraphLevel = paragraphLevel;
+        _objects = objects;
     }
 
     /// <summary>The paragraph's text.</summary>
@@ -129,17 +166,23 @@ public sealed class MeasuredParagraph
     /// formatting run either way, and shaped in exactly the calls it was shaped in before sub-runs
     /// existed.
     /// </param>
+    /// <param name="objects">
+    /// The as-character pictures and frames set in the text, or null for a paragraph with none — which is
+    /// nearly every paragraph, and the path every one of them took before inline objects existed.
+    /// </param>
     public static MeasuredParagraph Measure(
         string text,
         IReadOnlyList<FormattedRun> runs,
         ITextShaper? shaper = null,
-        ItemisationOptions? itemisation = null)
+        ItemisationOptions? itemisation = null,
+        IReadOnlyList<InlineObject>? objects = null)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(runs);
 
         ITextShaper engine = shaper ?? TextShaper.Default;
-        List<FormattedRun> formatted = Normalise(text, runs);
+        InlineObject[] inline = Inline(text, objects);
+        List<FormattedRun> formatted = Split(Normalise(text, runs), inline);
         ItemisationOptions options = itemisation ?? DefaultItemisation(formatted);
 
         // The bidi algorithm is resolved over the whole paragraph, never per formatting run: a run
@@ -183,8 +226,76 @@ public sealed class MeasuredParagraph
             if (prefix[i] < prefix[i - 1]) prefix[i] = prefix[i - 1];
         }
 
+        // Each object widens every prefix *past* the boundary it occupies and none at or before it, which
+        // is what makes it sit between two characters rather than replace one. The consequence worth
+        // stating: a line that ends at the boundary does not pay for the object and a line that starts
+        // there does, so a picture too wide for the room left on a line moves to the next line whole.
+        foreach (InlineObject one in inline)
+        {
+            for (int i = one.Offset + 1; i <= text.Length; i++) prefix[i] += one.Width.Emu;
+        }
+
         return new MeasuredParagraph(
-            text, [.. measured], prefix, [.. items], bidi.ParagraphLevel);
+            text, [.. measured], prefix, [.. items], bidi.ParagraphLevel, inline);
+    }
+
+    /// <summary>
+    /// The inline objects, clamped into the text and put in order.
+    /// </summary>
+    /// <remarks>
+    /// Sorted because the drawing pen walks them alongside the runs and expects to meet them in position
+    /// order, and clamped because the offsets come from a document: a frame anchored past the end of the
+    /// paragraph it claims to be in is a repair rather than a reason to throw.
+    /// </remarks>
+    private static InlineObject[] Inline(string text, IReadOnlyList<InlineObject>? objects)
+    {
+        if (objects is null || objects.Count == 0) return [];
+
+        List<InlineObject> kept = [];
+
+        foreach (InlineObject one in objects)
+        {
+            if (one.Width <= Length.Zero && one.Height <= Length.Zero) continue;
+
+            kept.Add(one with { Offset = Math.Clamp(one.Offset, 0, text.Length) });
+        }
+
+        kept.Sort(static (left, right) => left.Offset.CompareTo(right.Offset));
+        return [.. kept];
+    }
+
+    /// <summary>
+    /// Cuts the runs at every inline object's boundary, so that none is shaped across one.
+    /// </summary>
+    /// <remarks>
+    /// A picture between two words breaks the shaping context exactly as a run boundary does — Writer
+    /// makes it a portion of its own for that reason — and cutting here rather than only where the line is
+    /// drawn is what keeps the two agreeing. A run shaped whole and drawn in halves measures very slightly
+    /// differently, which is enough to move a line break; see the remark on
+    /// <c>PageDrawing.InVisualOrder</c>, which pays the same cost for the same reason.
+    /// </remarks>
+    private static List<FormattedRun> Split(List<FormattedRun> runs, InlineObject[] objects)
+    {
+        if (objects.Length == 0) return runs;
+
+        List<FormattedRun> cut = [];
+
+        foreach (FormattedRun run in runs)
+        {
+            int at = run.Start;
+
+            foreach (InlineObject one in objects)
+            {
+                if (one.Offset <= at || one.Offset >= run.End) continue;
+
+                cut.Add(run with { Start = at, Length = one.Offset - at });
+                at = one.Offset;
+            }
+
+            if (at < run.End) cut.Add(run with { Start = at, Length = run.End - at });
+        }
+
+        return cut;
     }
 
     /// <summary>
@@ -296,6 +407,24 @@ public sealed class MeasuredParagraph
         if (height == Length.Zero && _runs.Length > 0)
         {
             Accumulate(_runs[0], ref height, ref ascent, ref descent);
+        }
+
+        // An as-character object rests its bottom on the baseline, so it raises the ascent and nothing
+        // else — the descent below the baseline is still the text's. The `Max(height, ascent + descent)`
+        // below then grows the box to hold it, which is the same rule `SwLineLayout::CalcLine` applies to
+        // a run taller than the line and reaches the measured answer exactly: a 1 cm picture on a 12 pt
+        // Liberation Serif line gives ascent 28.35 and height 31.46, where LibreOffice's own PDF of
+        // `picture-anchor.fodt` puts the second line's baseline 31.46 pt below the first's.
+        foreach (InlineObject one in _objects)
+        {
+            bool within = start <= one.Offset && one.Offset < end;
+
+            // A paragraph whose whole content is a picture is an empty paragraph with an object at nought
+            // and a line running nought to nought — the most ordinary way for a document to carry a logo,
+            // and an RTF one always looks like this because RTF appends no character for a picture.
+            if (!within && !(start == end && one.Offset == start)) continue;
+
+            ascent = Length.Max(ascent, one.Height);
         }
 
         return (Length.Max(height, ascent + descent), ascent);
