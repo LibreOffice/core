@@ -257,6 +257,33 @@ Comparing against LibreOffice — use the skills, they encode hard-won details:
 | `extraction-comparison` | Comparing extracted text; also the right first step for a visual bug |
 | `paperless-corpus` | Building and curating test documents |
 
+### The sample corpus
+
+`theolivenbaum/sample-files` holds 541 real-world documents — collected from the open web
+and kept as found, mislabelled extensions and malformed markup included — ordered by what
+their LibreOffice rendering demands of a renderer and cut into batches of at most ten:
+
+```
+words/batch-001 … batch-021     doc  docx     202 documents
+slides/batch-001 … batch-017    ppt  pptx     169 documents
+sheets/batch-001 … batch-018    xls  xlsx     170 documents   (deferred; worked last)
+```
+
+Per-family tracks, because a single global ordering front-loads the easy end almost
+entirely with word processing and leaves the other two families idle for forty batches.
+Three tracks let three workers run in parallel and never touch the same file.
+
+```sh
+.claude/skills/render-comparison/scripts/batch-check.sh /workspace/sample-files 'words/batch-003' out 3
+.claude/skills/render-comparison/scripts/batch-check.sh /workspace/sample-files 'words/batch-00[1-2]' out 3
+```
+
+**Both of those runs are the workflow, and the second is not optional.** Make the current
+batch match, then re-prove every earlier batch in the track. This is the cascade rule
+again in corpus form: a fix aimed at batch *n* routinely breaks batch *n−4* in a way that
+looks nothing like the change, and advancing on the first condition alone is how a corpus
+rots from the front.
+
 Verify the environment before trusting any comparison:
 
 ```bash
