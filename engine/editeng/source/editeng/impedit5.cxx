@@ -878,16 +878,6 @@ EditView* ImpEditEngine::RemoveView( EditView* pView )
     return pRemoved;
 }
 
-void ImpEditEngine::RemoveView(size_t nIndex)
-{
-    if (nIndex >= maEditViews.size())
-        return;
-
-    EditView* pView = maEditViews[nIndex];
-    if ( pView )
-        RemoveView( pView );
-}
-
 bool ImpEditEngine::HasView( EditView* pView ) const
 {
     return std::find(maEditViews.begin(), maEditViews.end(), pView) != maEditViews.end();

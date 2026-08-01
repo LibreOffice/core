@@ -273,7 +273,7 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
             if (!pWin || pWin->isDisposed() || pWin->GetOutDev() != pOutputDevice)
                 continue;
 
-            pOutliner->RemoveView(nView);
+            pOutliner->RemoveView(pOutlinerView);
             delete pOutlinerView;
         }
     });
@@ -1417,7 +1417,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             // remember old cursor
             if (mpTextEditOutliner->GetViewCount() != 0)
             {
-                mpTextEditOutliner->RemoveView(static_cast<size_t>(0));
+                mpTextEditOutliner->RemoveView(mpTextEditOutliner->GetView(0));
             }
 
             // Determine EditArea via TakeTextEditArea.
@@ -1532,7 +1532,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                         if (pOtherWin && !pOtherWin->isDisposed())
                         {
                             OutlinerView* pOutlView = ImpMakeOutlinerView(pOtherWin, nullptr);
-                            mpTextEditOutliner->InsertView(pOutlView, static_cast<sal_uInt16>(i));
+                            mpTextEditOutliner->InsertView(pOutlView);
                         }
                     }
                 }
@@ -1893,7 +1893,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 pWin = pRawWin;
                 aRect = pOLV->GetOutputArea();
             }
-            pTEOutliner->RemoveView(i);
+            pTEOutliner->RemoveView(pOLV);
             if (!mbTextEditDontDelete || i != 0)
             {
                 // may not own the zeroth one
@@ -2634,7 +2634,7 @@ void SdrObjEditView::DeleteDeviceFromPaintView(OutputDevice& rOldDev)
             OutlinerView* pOLV = mpTextEditOutliner->GetView(i);
             if (pOLV && pOLV->GetWindow() == rOldDev.GetOwnerWindow())
             {
-                mpTextEditOutliner->RemoveView(i);
+                mpTextEditOutliner->RemoveView(pOLV);
                 delete pOLV;
             }
         }

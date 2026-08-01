@@ -662,9 +662,8 @@ public:
 
     void            SetAddExtLeading( bool b );
 
-    size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
+    size_t          InsertView( OutlinerView* pView, size_t nIndex = EE_APPEND );
     void            RemoveView( OutlinerView const * pView );
-    void            RemoveView( size_t nIndex );
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 

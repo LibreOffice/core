@@ -51,7 +51,6 @@
 #include <editeng/StripPortionsHelper.hxx>
 
 #include <memory>
-using std::advance;
 
 
 // Outliner
@@ -1197,21 +1196,13 @@ Outliner::~Outliner()
 
 size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
 {
-    size_t ActualIndex;
-
-    if ( nIndex >= aViewList.size() )
-    {
-        aViewList.push_back( pView );
-        ActualIndex = aViewList.size() - 1;
-    }
-    else
-    {
-        ViewList::iterator it = aViewList.begin();
-        advance( it, nIndex );
-        ActualIndex = nIndex;
-    }
-    pEditEngine->InsertView(  pView->pEditView.get(), nIndex );
-    return ActualIndex;
+    size_t nActualIndex = std::min( nIndex, aViewList.size() );
+    aViewList.insert( aViewList.begin() + nActualIndex, pView );
+    pEditEngine->InsertView( pView->pEditView.get(), nActualIndex );
+    SAL_WARN_IF(aViewList.size() != pEditEngine->GetViewCount(), "editeng",
+                "mismatch in view counts between outliner and editengine: " << aViewList.size()
+                    << " vs " << pEditEngine->GetViewCount());
+    return nActualIndex;
 }
 
 void Outliner::RemoveView( OutlinerView const * pView )
@@ -1222,23 +1213,11 @@ void Outliner::RemoveView( OutlinerView const * pView )
         pView->pEditView->HideCursor(); // HACK
         pEditEngine->RemoveView(  pView->pEditView.get() );
         aViewList.erase( it );
+        SAL_WARN_IF(aViewList.size() != pEditEngine->GetViewCount(), "editeng",
+                    "mismatch in view counts between outliner and editengine: "
+                        << aViewList.size() << " vs " << pEditEngine->GetViewCount());
     }
 }
-
-void Outliner::RemoveView( size_t nIndex )
-{
-    EditView* pEditView = pEditEngine->GetView( nIndex );
-    pEditView->HideCursor(); // HACK
-
-    pEditEngine->RemoveView( nIndex );
-
-    {
-        ViewList::iterator it = aViewList.begin();
-        advance( it, nIndex );
-        aViewList.erase( it );
-    }
-}
-
 
 OutlinerView* Outliner::GetView( size_t nIndex ) const
 {

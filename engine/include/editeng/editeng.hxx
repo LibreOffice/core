@@ -226,7 +226,6 @@ public:
 
     void            InsertView(EditView* pEditView, size_t nIndex = EE_APPEND);
     EditView*       RemoveView( EditView* pEditView );
-    SAL_DLLPRIVATE void            RemoveView(size_t nIndex);
     EditView*       GetView(size_t nIndex = 0) const;
     size_t          GetViewCount() const;
     bool            HasView( EditView* pView ) const;

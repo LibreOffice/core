@@ -956,7 +956,6 @@ public:
     const ViewsType& GetEditViews() const { return maEditViews; }
     void InsertView(EditView* pEditView, size_t nIndex);
     EditView* RemoveView( EditView* pView );
-    void RemoveView(size_t nIndex);
     bool HasView( EditView* pView ) const;
 
     void SetValidPaperSize( const Size& rSz );

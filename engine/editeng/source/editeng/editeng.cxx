@@ -203,11 +203,6 @@ EditView* EditEngine::RemoveView( EditView* pView )
     return getImpl().RemoveView(pView);
 }
 
-void EditEngine::RemoveView(size_t nIndex)
-{
-    getImpl().RemoveView(nIndex);
-}
-
 EditView* EditEngine::GetView(size_t nIndex) const
 {
     return getImpl().GetEditViews()[nIndex];
