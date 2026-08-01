@@ -69,23 +69,7 @@ public static class SlideTextLayout
         List<PlacedGlyphRun> placed = [];
         if (body.Paragraphs.Count == 0) return placed;
 
-        // wrap="none" is expressed as an effectively unbounded width rather than as clipping,
-        // which is what keeps an unwrapped label on the single line its author saw.
-        Length width = body.Wraps && area.Width > Length.Zero
-            ? area.Width
-            : Length.FromEmu(int.MaxValue);
-
-        List<Block> blocks = [];
-        Length total = Length.Zero;
-
-        foreach (SlideParagraph paragraph in body.Paragraphs)
-        {
-            Block? block = Measure(paragraph, body, width, fonts);
-            if (block is null) continue;
-
-            total += block.Height;
-            blocks.Add(block);
-        }
+        (List<Block> blocks, Length total) = Measure(body, area.Width, fonts);
 
         if (blocks.Count == 0) return placed;
 
@@ -117,6 +101,52 @@ public static class SlideTextLayout
         }
 
         return placed;
+    }
+
+    /// <summary>
+    /// How tall a body's text is once broken to a width, insets excluded.
+    /// </summary>
+    /// <remarks>
+    /// The measurement a table row needs and nothing else does: a row's stated <c>a:tr/@h</c> is a
+    /// <em>minimum</em>, and LibreOffice grows the row to its tallest cell's content
+    /// (<c>svx/source/table/tablelayouter.cxx:1026-1029</c>). Sharing the measurement with
+    /// <see cref="Place"/> rather than approximating it is the point: a row that grows must grow
+    /// by exactly what the text then occupies, or the cell's own baselines land somewhere else.
+    /// </remarks>
+    /// <param name="body">The text body.</param>
+    /// <param name="width">The width available for the lines, inside the insets.</param>
+    /// <param name="fonts">The face cache.</param>
+    public static Length Height(SlideTextBody body, Length width, SlideFonts fonts)
+    {
+        ArgumentNullException.ThrowIfNull(body);
+        ArgumentNullException.ThrowIfNull(fonts);
+
+        return Measure(body, width, fonts).Total;
+    }
+
+    /// <summary>Breaks every paragraph of a body and totals their heights.</summary>
+    private static (List<Block> Blocks, Length Total) Measure(
+        SlideTextBody body, Length available, SlideFonts fonts)
+    {
+        // wrap="none" is expressed as an effectively unbounded width rather than as clipping,
+        // which is what keeps an unwrapped label on the single line its author saw.
+        Length width = body.Wraps && available > Length.Zero
+            ? available
+            : Length.FromEmu(int.MaxValue);
+
+        List<Block> blocks = [];
+        Length total = Length.Zero;
+
+        foreach (SlideParagraph paragraph in body.Paragraphs)
+        {
+            Block? block = Measure(paragraph, body, width, fonts);
+            if (block is null) continue;
+
+            total += block.Height;
+            blocks.Add(block);
+        }
+
+        return (blocks, total);
     }
 
     /// <summary>
@@ -214,10 +244,21 @@ public static class SlideTextLayout
         {
             if (!body.FontIndependentLineSpacing)
             {
-                // The face's own metrics, which the shared layouter has already applied — so a
-                // natively authored ODP lays its text out exactly as a word processor would.
+                // The face's own metrics — but its ascent and descent only, with no external
+                // leading. EditEngine adds the leading only when IsAddExtLeading() is on, which is
+                // a Writer compatibility flag and off in Impress
+                // (editeng/source/editeng/impedit3.cxx:3131-3136). Liberation Sans declares a line
+                // gap of 67/2048, so keeping it makes an 18 pt line 20.70 pt where LibreOffice
+                // draws 20.15 — half a point per line, measured on the wrapping cell of
+                // slide-table-grid.pptx, whose four reference baselines are 20.154 pt apart.
+                (Length ascent, Length metric) = FaceHeight(runs, box.Line.Start, box.Line.VisibleEnd);
+
                 lines.Add(new PlacedLine(
-                    box, box.Baseline, Reduced(box.Height, body.LineSpaceReduction)));
+                    box,
+                    ascent > Length.Zero ? ascent : box.Baseline,
+                    Reduced(
+                        paragraph.LineSpacing.Apply(metric > Length.Zero ? metric : box.Height),
+                        body.LineSpaceReduction)));
                 continue;
             }
 
@@ -238,6 +279,51 @@ public static class SlideTextLayout
         return new Block(
             paragraph, measured, colours, lines, total + paragraph.SpaceBefore + paragraph.SpaceAfter);
     }
+
+    /// <summary>
+    /// The tallest ascent and the tallest ascent-plus-descent among the runs a line touches.
+    /// </summary>
+    /// <remarks>
+    /// Per run rather than per paragraph, for the same reason <see cref="LargestSize"/> is: a
+    /// bigger word on a line makes that line taller and leaves the others alone. Both quantities
+    /// come from the same face resolution the shared layouter uses, so the only difference from
+    /// its answer is the line gap.
+    /// </remarks>
+    private static (Length Ascent, Length Height) FaceHeight(
+        List<FormattedRun> runs, int start, int end)
+    {
+        Length ascent = Length.Zero;
+        Length height = Length.Zero;
+
+        foreach (FormattedRun run in runs)
+        {
+            bool touches = run.Start < end && start < run.End;
+            bool contains = start == end && run.Covers(start);
+            if (!touches && !contains) continue;
+
+            LineMetrics metrics = LineSpacing.Resolve(run.Face);
+            Length up = Rounded(metrics.ScaledAscent(run.EmSize));
+            Length down = Rounded(metrics.ScaledDescent(run.EmSize));
+
+            ascent = Length.Max(ascent, up);
+            height = Length.Max(height, up + down);
+        }
+
+        return (ascent, height);
+    }
+
+    /// <summary>
+    /// A metric rounded to a whole hundredth of a millimetre, which is the unit VCL keeps it in.
+    /// </summary>
+    /// <remarks>
+    /// <c>FontMetricData::ImplCalcLineSpacing</c> ends <c>mnAscent = round(fAscent)</c> in the
+    /// device's own logical unit (<c>vcl/source/font/fontmetric.cxx:538-540</c>), and Impress's
+    /// reference device is in 1/100 mm — so an 18 pt Liberation Sans line is 575 + 135 units and
+    /// not 574.79 + 134.55. Worth a tenth of a point over four lines, which is the difference
+    /// between agreeing with the reference and not.
+    /// </remarks>
+    private static Length Rounded(Length metric)
+        => Length.FromMm100((long)Math.Round((double)metric.Emu / Length.EmuPerMm100));
 
     /// <summary>The largest em size among the runs a line touches.</summary>
     /// <remarks>

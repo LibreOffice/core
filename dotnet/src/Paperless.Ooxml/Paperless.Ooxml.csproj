@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!--
+      The 187 DrawingML preset shape definitions, reduced from LibreOffice's own
+      presetShapeDefinitions.xml. Data rather than code because it *is* data: each preset is a
+      list of guide formulas and a list of path commands, and transcribing them into C# would be
+      110 kB of literals no one could diff against the file they came from.
+    -->
+    <EmbeddedResource Include="DrawingML\PresetShapeGeometry.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
     <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
     <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />

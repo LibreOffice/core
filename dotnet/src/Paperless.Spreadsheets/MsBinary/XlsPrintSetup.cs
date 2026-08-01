@@ -249,6 +249,36 @@ internal sealed class XlsSheetPrintState
     /// <summary>The rows repeated on every page.</summary>
     public SheetRange? RepeatRows { get; set; }
 
+    /// <summary>
+    /// The height of a header or footer band, floored at Calc's own default.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The floor is the whole point and it is BIFF-only. The BIFF filter never puts an
+    /// <c>ATTR_PAGE_SIZE</c> on the header's item set: it sets the band <em>dynamic</em> and
+    /// writes only the distance to the body (<c>XclImpPageSettings::Finalize</c>,
+    /// <c>sc/source/filter/excel/xipage.cxx:310-331</c>). So <c>nManHeight</c> — the minimum
+    /// <c>UpdateHFHeight</c> will not go below — stays at whatever a fresh page style has, which
+    /// is 0.5 cm of text plus a 0.25 cm gap (<c>ScStyleSheet::GetItemSet</c>,
+    /// <c>sc/source/core/data/stlsheet.cxx:184</c>). The OOXML filter is different: it writes an
+    /// explicit height, so its band can be shorter than this.
+    /// </para>
+    /// <para>
+    /// Measured, that is four points a page. <c>sheet-decor-xls.xls</c> states a 1.025 in top
+    /// margin and a 0.7875 in header margin — 17.1 pt between them — and LibreOffice still puts
+    /// the first printed row 21.11 pt below the top margin, because 0.75 cm is 21.26 pt and
+    /// wins.
+    /// </para>
+    /// </remarks>
+    private static Length Band(double inches)
+    {
+        Length stated = Length.FromInches(Math.Max(0, inches));
+        return Length.Max(stated, DefaultBandHeight);
+    }
+
+    /// <summary>Calc's default header and footer band: 0.5 cm of text and a 0.25 cm gap.</summary>
+    private static readonly Length DefaultBandHeight = Length.FromTwips(425);
+
     /// <summary>The accumulated setup, resolved.</summary>
     public SheetPrintSetup ToSetup()
     {
@@ -272,14 +302,15 @@ internal sealed class XlsSheetPrintState
             RightMargin = Length.FromInches(_rightMargin),
             TopMargin = Length.FromInches(hasHeader ? _headerMargin : _topMargin),
             BottomMargin = Length.FromInches(hasFooter ? _footerMargin : _bottomMargin),
-            HeaderHeight = hasHeader
-                ? Length.FromInches(Math.Max(0, _topMargin - _headerMargin))
-                : Length.Zero,
-            FooterHeight = hasFooter
-                ? Length.FromInches(Math.Max(0, _bottomMargin - _footerMargin))
-                : Length.Zero,
+            HeaderHeight = hasHeader ? Band(_topMargin - _headerMargin) : Length.Zero,
+            FooterHeight = hasFooter ? Band(_bottomMargin - _footerMargin) : Length.Zero,
             HeaderText = _header,
             FooterText = _footer,
+
+            // BIFF's HEADER and FOOTER records carry the same &-code language SpreadsheetML
+            // does, which is not a coincidence: the OOXML spelling was inherited from it.
+            Header = _header is null ? null : SheetHeaderFooter.ParseCodes(_header),
+            Footer = _footer is null ? null : SheetHeaderFooter.ParseCodes(_footer),
             ScaleMode = _fitsToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
             ScalePercentage = _scale,
             FitToPagesWide = Math.Max(0, _fitToWidth),

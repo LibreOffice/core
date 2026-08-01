@@ -15,23 +15,46 @@ namespace Paperless.Presentations.Layout;
 /// equivalent here, which is why this is an adapter and not an engine.
 /// </para>
 /// <para>
-/// Hidden slides are kept. They are pages of the document, and dropping them here would make the
-/// index a caller sees disagree with the index the file states; whether to render one is a
-/// question about output rather than about layout, and <see cref="LaidOutSlide.IsHidden"/> is
-/// what answers it. LibreOffice's own PDF export leaves them out, so a comparison against it has
-/// to skip them explicitly — which is visible, where a silently shorter sequence would not be.
+/// <strong>A hidden slide is laid out and is not a page.</strong> The two halves of that pull in
+/// opposite directions and both are settled by measurement: extraction reports a hidden slide and
+/// flags it, because a caller indexing a corpus wants its words, while LibreOffice's own PDF
+/// export leaves it out — <c>deck-features.pptx</c> has four slides and its reference PDF has
+/// three pages. So <see cref="Slides"/> holds every slide the deck states, in the deck's own
+/// order, and the page sequence holds the shown ones. A renderer that produced a page per slide
+/// would disagree with the reference on the page <em>count</em> of every deck with a hidden
+/// slide, which is a difference no per-shape comparison notices.
+/// </para>
+/// <para>
+/// LibreOffice's raster export is no second opinion on this and was checked: <c>--convert-to
+/// png</c> and <c>--convert-to jpg</c> both write exactly one file for a deck, the first slide,
+/// so the PDF export is the only reference that has an opinion about which slides are pages.
+/// </para>
+/// <para>
+/// A hidden slide still consumes a slide <em>number</em>: LibreOffice's page numbers come from
+/// the position in <c>SdPage</c>'s own list, which a hidden page stays in, and a deck's
+/// <c>a:fld</c> slide-number fields carry the cached value the authoring application computed the
+/// same way. So skipping a hidden page here does not renumber the ones after it.
 /// </para>
 /// </remarks>
 public sealed class SlidePages : IPageSequence
 {
+    private readonly List<LaidOutSlide> _slides;
     private readonly List<SlideView> _pages;
 
     /// <summary>Creates a sequence over slides that have been laid out.</summary>
-    /// <param name="slides">The slides, in presentation order.</param>
+    /// <param name="slides">The slides, in presentation order, hidden ones included.</param>
     public SlidePages(IReadOnlyList<LaidOutSlide> slides)
     {
         ArgumentNullException.ThrowIfNull(slides);
-        _pages = [.. slides.Select(slide => new SlideView(slide))];
+
+        _slides = [.. slides];
+        _pages = [];
+
+        foreach (LaidOutSlide slide in _slides)
+        {
+            if (slide.IsHidden) continue;
+            _pages.Add(new SlideView(slide, _pages.Count));
+        }
     }
 
     /// <inheritdoc/>
@@ -40,15 +63,26 @@ public sealed class SlidePages : IPageSequence
     /// <inheritdoc/>
     public IPage this[int index] => _pages[index];
 
-    /// <summary>The laid-out slides, with the shapes a renderer or a test needs.</summary>
-    public IReadOnlyList<LaidOutSlide> Slides => [.. _pages.Select(page => page.Slide)];
+    /// <summary>
+    /// Every laid-out slide, hidden ones included, with the shapes a renderer or a test needs.
+    /// </summary>
+    /// <remarks>
+    /// Indexed by the deck's own slide order rather than by page, so a test naming
+    /// <c>Slides[3]</c> names the deck's fourth slide whether or not the third is shown.
+    /// </remarks>
+    public IReadOnlyList<LaidOutSlide> Slides => _slides;
 
-    private sealed class SlideView(LaidOutSlide slide) : IPage
+    private sealed class SlideView(LaidOutSlide slide, int index) : IPage
     {
         internal LaidOutSlide Slide { get; } = slide;
 
         /// <inheritdoc/>
-        public int Index => Slide.Index;
+        /// <remarks>
+        /// The position in the page sequence, not the slide's position in the deck: the two differ
+        /// by every hidden slide before it, and a page's index has to agree with the index a caller
+        /// asked for it by.
+        /// </remarks>
+        public int Index => index;
 
         /// <inheritdoc/>
         public DocSize Size => Slide.Size;

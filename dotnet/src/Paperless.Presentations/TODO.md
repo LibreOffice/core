@@ -435,9 +435,10 @@ Two reference artefacts worth knowing before chasing them:
       `Layout/SlideDrawing.cs`. A deck that states no background anywhere gets white, because
       that is what LibreOffice paints — a full-sheet rectangle on every slide of every deck — and
       a slide that painted nothing would rasterise transparent where a viewer shows paper.
-- [x] Shape geometry: `rect`, `roundRect`, `ellipse`, `triangle`, `rtTriangle` and `diamond`,
-      transcribed from the preset file. Everything else falls back to its bounding rectangle —
-      see below for why that is the right failure and what the real evaluator costs.
+- [x] Shape geometry: **all 187 presets**, evaluated rather than transcribed, and `a:custGeom`
+      through the same path builder. A name that is not a preset still falls back to its bounding
+      rectangle. See below for what the evaluator had to get right that six hand-written shapes
+      never showed.
 - [x] Solid fills, including themed ones, and lines with width, cap and join. Not shadows, and
       not gradients: nothing here emits a `GradientPaint`, deliberately.
 - [x] Text bodies with anchoring, insets and the stated autofit scale.
@@ -446,9 +447,12 @@ Two reference artefacts worth knowing before chasing them:
       frame drawn — outline and line, so a missing image is a hole rather than nothing — but no
       raster is decoded, because nothing in the project decodes one yet
       (`src/Paperless.Rendering/TODO.md`, "Raster image decode").
-- [ ] Tables. `a:tbl` extracts as a `ContentTable` and is not drawn: a table is a grid of text
-      bodies with per-cell fills and per-edge borders, which is the word processor's
-      `TableLayouter` problem again in a different vocabulary rather than a shape.
+- [x] Tables, for PPTX. A `p:graphicFrame` holding an `a:tbl` becomes a run of ordinary placed
+      shapes — one per visible cell with its fill and its text, then one per consolidated grid
+      line with only a pen — so nothing in the display list knows a table happened and the binary
+      PPT path can reuse every line of it. Measured stroke for stroke against the reference; see
+      **Tables on a slide** below. Not for ODP, whose `table:table` inside a `draw:frame` is a
+      different vocabulary and is not read at all yet.
 - [ ] Notes pages as separate output pages (optional)
 - [ ] PPT (binary). Nothing lays out. The Escher reader already produces the shape tree and the
       anchors, but `SlideAtom`'s eight layout placeholder ids — the shape half of the placeholder
@@ -457,22 +461,34 @@ Two reference artefacts worth knowing before chasing them:
 
 ### What renders, and what it was measured against
 
-The corpus file is `shape-geometry.pptx` and its converted twin `shape-geometry.odp`, written for
-this and described in `tests/corpus/README.md`. Every offset in it is a round number of inches, so
-a disagreement is a bug rather than a rounding. `Paperless.Presentations.Tests` asserts against
-numbers transcribed from LibreOffice's PDF once and quoted in each test, and needs no LibreOffice
-to run; `Paperless.Fidelity.Tests/SlideRenderComparisonTests` re-derives them, rendering our own
-PDF and comparing sheet sizes, rectangular fills with their colours, and every text run's pen,
-baseline, size and glyph count against LibreOffice's, in both formats.
+Three corpus decks, each hand-written so that every offset is a round number of inches and a
+disagreement is a bug rather than a rounding, and each with two tests: one in
+`Paperless.Presentations.Tests` asserting against numbers transcribed from LibreOffice's PDF once
+and quoted in place, needing no LibreOffice at all, and one in `Paperless.Fidelity.Tests` that
+re-derives them.
 
-**What the richer decks measure at, which no test asserts yet.** `deck-features.pptx` and
-`slides-features.odp` are not in the fidelity comparison, because two of their slides render
-incomplete and pinning that would pin the gaps as though they were correct. What they do measure
-is worth writing down, since it is where the next work is:
+| Deck | What it pins | Comparison |
+|---|---|---|
+| `shape-geometry.pptx`, `shape-geometry.odp` | placement, groups, flip before rotation, text insets, anchoring | `SlideRenderComparisonTests` |
+| `slide-table-grid.pptx` | the grid, cell fills, cell text, border priority, a grown row | `SlideTableComparisonTests` |
+| `slide-shape-features.pptx` | twelve presets, three dash patterns, two arrowheads, a two-level numbered list | `SlideShapeGeometryComparisonTests` |
+
+`Paperless.TestKit`'s readers grew one for this: `PdfPaths` reads a filled path of *any* shape,
+where `PdfFills` reads only axis-parallel rectangles. It compares **on-curve points only** — the
+destinations of `m`, `l` and `c` — because neither writer chooses the same number of cubics per
+arc and the control points are therefore incomparable, while the points a curve passes through
+are. So a straight-edged preset compares vertex for vertex and a curved one by those points and
+its bounding box. `PdfStrokes` grew a dash array for the same reason: a preset dash states no
+lengths anywhere else.
+
+**What the richer decks measure at.** `deck-features.pptx` now draws every run the reference
+does — 21 against 21, on three pages against three — so its table slide and its page count are in
+the comparison. What keeps the *whole* of it out is one thing rather than four: its bullet markers
+sit 8.19 pt below where LibreOffice draws them, which is the label-placement item below.
 
 | | Reference runs | Ours | Agreement, and what is missing |
 |---|---|---|---|
-| `deck-features.pptx` | 21 | 16 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across, 0.55 down inside the ellipse. Six of the reference's runs are the **table** slide, which draws nothing; one of ours is the **hidden** slide, which we lay out and its PDF export omits. |
+| `deck-features.pptx` | 21 | 21 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across, 0.55 down inside the ellipse. The table slide's six runs now agree to 0.015. What is still out is the **marker baseline**, 8.19 pt high on every bulleted line. |
 | `slides-features.odp` | 14 | 12 | The same slides through ODF. The title and the outline's first line agree to 0.04; the outline then **drifts to 9.3 pt by its third paragraph**, and its text sits at 56.69 where the reference puts it at 73.70. Both have the same cause: an outline paragraph's indents, spacing and bullet come from the `text:list`'s **list style**, and nothing reads it. |
 
 The ODF list style is therefore the single largest remaining item on that path, and it is a
@@ -549,6 +565,25 @@ ODF states the same thing per paragraph style as `style:font-independent-line-sp
 it, in which case the face's own metrics decide — which is why the same deck can legitimately lay
 out slightly differently through the two paths.
 
+**And when the face's metrics do decide, they are its ascent and descent and *not* its line gap.**
+EditEngine adds the external leading only under `IsAddExtLeading()`, which is a Writer
+compatibility flag and off in Impress (`impedit3.cxx:3131-3136`). Liberation Sans declares a line
+gap of 67/2048, so keeping it makes an 18 pt line 20.70 pt where LibreOffice draws 20.15 — half a
+point per line, which the shared `ParagraphLayouter` legitimately includes because a word
+processor wants it. `SlideTextLayout` therefore computes the height itself in this branch too,
+from `LineSpacing.Resolve`, and rounds the ascent and the descent to whole hundredths of a
+millimetre before adding them, because `FontMetricData::ImplCalcLineSpacing` ends
+`mnAscent = round(fAscent)` in the device's own unit (`vcl/source/font/fontmetric.cxx:538-540`)
+and Impress's reference device is in 1/100 mm.
+
+- [ ] **A residual 0.028 pt per line.** With both rules applied an 18 pt Liberation Sans line is
+      20.126 pt here and 20.154 in the reference — one unit of 1/100 mm, every line. It is under
+      the tolerance for one line and reaches it at four, so a cell wrapping onto four lines has
+      its last baseline 0.08 pt out and the table's bottom rule 0.11. Where the extra unit comes
+      from is not settled: 575 + 135 is what `round(1854/2048 × 635)` and `round(434/2048 × 635)`
+      give, and the reference behaves as though it had 576 + 135. Worth one more look at how VCL
+      scales an `hb_position_t` before it rounds.
+
 ### Text insets have a default, and it is not zero
 
 `a:bodyPr`'s `lIns` and `rIns` default to 91440 EMU and `tIns`/`bIns` to 45720 — a tenth and a
@@ -586,28 +621,142 @@ automatic style. A reader consulting only `text:style-name` finds no alignment, 
 and no `style:font-independent-line-spacing` — which on `shape-geometry.odp` put every baseline
 1.7 pt high, exactly the font-metrics error above, arrived at by a completely different route.
 
-### Preset geometry: six of a hundred and eighty-seven
+### Preset geometry: all hundred and eighty-seven, evaluated
 
-`Layout/SlidePresetGeometry.cs` expands `rect` (and the aliases that are literally a rectangle in
-the preset file), `roundRect`, `ellipse`, `triangle`, `rtTriangle` and `diamond`, each transcribed
-from `oox/source/drawingml/customshapes/presetShapeDefinitions.xml`. Anything else draws its
-bounding rectangle: in the right place, in the right colour, with the wrong outline — which is a
-far better failure than drawing nothing, because it is *visible* in a comparison rather than
-silently absent.
+`Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs` runs the program each preset is: the
+adjustment handles take their defaults from `a:avLst`, the `a:gdLst` formulas are evaluated in
+order over the bounding box and those handles, and `a:pathLst` is walked into a `GraphicsPath`.
+`a:custGeom` — a shape whose guides and paths the file states itself — goes through the same
+evaluator, which is why it cost nothing extra. `Layout/SlidePresetGeometry.cs` is now an adapter.
 
-- [ ] **The real evaluator.** Each preset is a small program: guide formulas over the bounding box
-      and the adjustment handles, then a path built from the results, with `arcTo`, `quadBezTo` and
-      a dozen operators. LibreOffice compiles the file into data tables and runs one shared engine
-      (`EnhancedCustomShape2d`) that also serves ODF's `draw:enhanced-path` and the legacy binary
-      syntax, which is the right shape for a port: the data is mechanical and the engine is one
-      piece of work that buys all three front ends. `a:custGeom` — a shape whose path the file
-      states outright — needs the same path builder and none of the formula evaluation, so it is
-      the cheaper half and should come first.
+**The definitions are data, and are kept as data.** `PresetShapeGeometry.txt` is LibreOffice's own
+`presetShapeDefinitions.xml` reduced to the adjustments, the guides, the text rectangle and the
+paths — one line per element, 110 kB against the source's 539 kB, embedded as a resource. Ported
+into C# literals it would be unreviewable and undiffable against the file it came from; as a text
+table a change to either is a diff against the other.
 
-The **text** rectangle is carried beside the outline, because for two of the six it is not the
-bounding box: an ellipse's is the box inscribed at 45°, which is
-`ConstructPresetTextRectangle` (`oox/source/drawingml/transform2dcontext.cxx:66-73`) and the reason
-a caption inside a circle does not touch its edge.
+**The named trap, and it cost an hour: an `a:arcTo` angle is a direction, not an ellipse
+parameter.** The command states two radii and two angles and no end point, so the arc starts at
+the current point and the centre is wherever the start angle puts it. What the angle *names* is
+the ray from that centre; the point drawn is where the ray crosses the ellipse, and for
+`x = a·cos t, y = b·sin t` that is `tan t = (a/b)·tan θ` — `lcl_getNormalizedCircleAngleRad`
+(`svx/source/customshapes/EnhancedCustomShape2d.cxx:2040-2057`). It is invisible on every circular
+arc, which is every rounded corner in the preset file, and invisible again at multiples of 90°,
+which LibreOffice special-cases outright. So all six of the hand-transcribed shapes agreed without
+it and the seventh did not: `pie` with a 240° sweep on a 3:2 box ends its arc at 249° in parameter
+terms, and the reference draws that end 7.6 pt from where the stated angle alone puts it.
+
+**A second one, cheaper: split an arc at the quadrant boundaries, not into equal parts.** Three
+eighty-degree cubics cover a 240° sweep perfectly well as a curve and never pass through 180°, so
+the shape's own leftmost point is never on the path and its bounding box comes out narrower than
+the shape. `createPolygonFromEllipseSegment` splits at the quadrants, and so does this.
+
+Measured on `slide-shape-features.pptx`, against LibreOffice's own PDF:
+
+| | Reference | Ours |
+|---|---|---|
+| `hexagon`, `chevron`, `parallelogram`, `plus` | six to twelve vertices each | identical to 0.03 pt |
+| `pentagon`, `trapezoid`, `star5` | guides needing `sin`, `cos` and `at2` | within 0.06 pt |
+| `roundRect`, `ellipse`, `donut`, `moon` | arcs | on-curve points and box within 0.06 pt |
+| `pie`, 240° on a 3:2 box | arc ends at 394.583, 465.619 | 394.603, 465.597 |
+
+- [ ] **A subpath's own fill modifier.** `a:path/@fill` takes `lighten`, `lightenLess`, `darken`,
+      `darkenLess` and `none`, and the reduced table carries all of them; nothing acts on them.
+      What that costs is exactly the shapes that are drawn as a solid with a shaded face — `can`,
+      `cube`, `bevel`. Measured on a `can` filled `4F81BD`: LibreOffice draws the body in that
+      colour and the lid as a *second* filled path in `95B3D7`, which is the fill blended 40%
+      towards white. Reproducing it means a preset producing more than one `PlacedShape`, which
+      is a change to the shape of the output rather than to the evaluator, and `can` was taken
+      back out of the corpus deck rather than pinned as though the single-colour answer were
+      right.
+- [ ] **`a:path/@stroke="false"`** — a subpath that is filled and not outlined. Same table entry,
+      same reason, and it matters for the callout presets, whose tail is a separate unstroked
+      subpath.
+- [ ] **Preset text rectangles beyond the shape's own.** `a:rect` is honoured, which covers the
+      presets that state one. The ones that do not get the bounding box, which is what LibreOffice
+      falls back to as well.
+
+The **text** rectangle is carried beside the outline because for many presets it is not the
+bounding box: an ellipse's is the box inscribed at 45°, a rounded rectangle's is inset by the
+corner radius, and a callout's excludes its tail. That is why a caption inside a circle does not
+touch its edge.
+
+### Tables on a slide
+
+A table is not a shape with a table inside it. LibreOffice decomposes an `SdrTableObj` into one
+filled-and-texted primitive per cell and then, *separately*, the grid's border lines — cells
+first and borders after, "to get the correct overlapping"
+(`svx/source/table/viewcontactoftableobj.cxx:202-204`). `Layout/SlideTable.cs` produces exactly
+that: a run of `PlacedShape`, one per visible cell and one per consolidated grid line. Nothing in
+the display list knows a table happened, which is what keeps `SlideDrawing` unchanged and what
+lets the binary PPT path reuse all of it.
+
+**One stroke per grid line, and the order is not "all horizontals then all verticals".** The
+cells are walked row-major and each contributes its top edge, its bottom if it is on the last row,
+its left, and its right if it is on the last column
+(`svx/source/dialog/framelinkarray.cxx:1487-1530`); collinear neighbours that agree merge into
+whichever appeared first. So a three-row table emits its top rule, then the verticals crossing its
+first row, then the next horizontal, and so on. Measured on `slide-table-grid.pptx`: twelve
+strokes on the first slide and nine on the second, in that order on both sides, every coordinate
+within 0.045 pt.
+
+**A grid line runs past its own end by half the width of the line *crossing* it, not half its
+own.** That is the rule the word processor's `PageDrawing` states as "overshoots by half its own
+width", which is true only because a Writer table's borders are usually all the same width. Here
+they are not: `slide-table-grid.pptx`'s one-point grey horizontals run 71.121 to 612.879 on a
+table spanning 72 to 612 — 0.879 at each end, half of the *two-point* outer verticals they meet —
+while its three-point orange vertical is extended by 0.425, half of the one-point horizontals
+crossing it. The general rule is `getExtends`
+(`svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx:310-395`), which intersects the
+border's two offset edges with every style at the junction and takes the nearest crossing; for
+single lines meeting at a right angle that reduces to half the perpendicular width, which is every
+junction a table has.
+
+**A grid position takes one pen, and which one is `TableLayouter::HasPriority`**
+(`svx/source/table/tablelayouter.cxx:944-978`): the wider wins, a tie goes to whichever cell was
+written later — under a row-major walk, the one below or to the right — and a cell stating no edge
+never displaces one that does. All three are in the corpus deck and all three are drawn: a red
+right edge loses to the later cell's grey left edge of the same width, a grey loses to a green
+the same way, and a one-point grey loses to a three-point orange.
+
+**The named trap, and it is a 15% error that looks like a rounding: a border's width is not the
+width the file states.** It travels EMU → 1/100 mm → a `BorderLine2.LineWidth` that is *halved*
+(`oox/source/drawingml/table/tablecell.cxx:99-101`) → an `SvxBorderLine` that the table's view
+contact then rescales as though it were in *twips*
+(`svx/source/table/viewcontactoftableobj.cxx:176-180`). Both conversions are integer and they do
+not cancel: a stated `w="12700"` — one point — comes out of the reference's PDF as a pen of
+**0.85009 pt**, a stated two points as 1.75008 and three as 2.65006. `DrawingTableGeometry.BorderWidth`
+reproduces the chain rather than correcting it, because the reference is what the comparison is
+against.
+
+**A cell's text is inset by `a:tcPr`'s margins and not by its body's `a:bodyPr`.** Measurable
+rather than arguable: `deck-features.pptx`'s table states `lIns="0" tIns="0"` on every cell body,
+and LibreOffice still draws the first column's text 7.2 pt in from the table's left edge — the
+default `marL` of 91440 EMU.
+
+**And a cell's line height is the face's, where a slide shape's is the em.** This is the one place
+the current C++ and the installed LibreOffice disagree: `tablecellcontext.cxx:61` sets
+`FontIndependentLineSpacing` on every cell text body it creates, and LibreOffice 24.2.7.2 does not
+draw as though it had. Measured on `deck-features.pptx`'s first cell — 18 pt Arial, substituted by
+Liberation Sans, in a cell whose top edge its own PDF puts at 170.079 pt — the baseline is 19.93 pt
+below that edge. Take off the 3.6 pt top margin and the ascent is 16.33 pt, which is 0.907 em: the
+font's, where the em rule would give 18.00. So the cell body carries
+`FontIndependentLineSpacing = false` and says why.
+
+- [ ] **Table styles.** `a:tblPr/@firstRow` and the `tableStyles.xml` part it bands against are
+      not read, so a PowerPoint-authored table styled from the gallery draws unfilled and
+      unbordered. It costs nothing on a LibreOffice-written file, whose export states an explicit
+      `a:lnL`…`a:lnB` and an explicit fill on every cell — which is also why no corpus deck can
+      measure it, and why the corpus deck for tables is hand-written.
+- [ ] **Diagonal cell borders**, `a:lnTlToBr`/`a:lnBlToTr`. Read as far as being ignored. The
+      border array carries them (`GetCellStyleTLBR`) and nothing in the corpus has one.
+- [ ] **ODP tables**, which are `table:table` inside a `draw:frame` and share none of this
+      vocabulary. `SlideTable.Place` takes the grid and a delegate for the text body, so an ODF
+      reader would need the geometry model and nothing else.
+- [ ] **A row taller than its frame.** Rows grow to their text and columns are stretched to the
+      frame's width, which is the asymmetry `LayoutTableWidth`/`LayoutTableHeight` has; a table
+      whose rows overflow the frame overflows it here too, which is what a viewer shows and what
+      the reference draws.
 
 ### What a shape's fill and line resolve through, and what they do not
 
@@ -635,11 +784,22 @@ against the reference PDF's own `rg` operators. The colour map comes from the sl
       should not go first.
 - [ ] **Pattern, hatch and picture fills**, for the same reason: `BitmapPaint` draws nothing in
       either backend, and a hatch has to be resolved into stroked lines by whoever reads it.
-- [ ] **Dash patterns.** `a:prstDash` and `a:custDash` are read as far as being ignored, so a
-      dashed outline draws solid. The `Stroke` record already carries a dash array and both
-      backends honour it, so this is a table of seven preset patterns and nothing else.
-- [ ] **Compound lines and arrowheads.** `cmpd="dbl"`, `a:headEnd`/`a:tailEnd`. A connector with
-      no arrowhead is a visibly different picture, and connectors are the shapes that carry them.
+- [x] **Preset dash patterns.** All ten of `a:prstDash`, in `Layout/SlideDashes.cs`. They are
+      not a table of lengths: a preset states a *count* of dots and dashes with each length as a
+      percentage of the pen, and `XDash::CreateDotDashArray` lays them out dots first then
+      dashes, each followed by one gap — so `dashDot` draws long, gap, short, gap, which is the
+      opposite order from its name. Measured on `slide-shape-features.pptx`: `dash` on a stated
+      three-point pen comes out `[12.0187 9.01402]` in the reference and `[12.0189 9.0142]` here.
+- [ ] **`a:custDash`.** The stop list is read as far as being ignored. LibreOffice cannot
+      represent more than two distinct lengths either — `lclConvertCustomDash` folds the list into
+      one "dots" length and one "dashes" length and then guesses which named ODF style it was
+      (`lineproperties.cxx:91-140`) — so a faithful port has to reproduce the guessing as well as
+      the folding, and nothing in the corpus carries one.
+- [x] **Arrowheads.** `a:headEnd`/`a:tailEnd`, all five marker types, in
+      `Layout/SlideLineEnds.cs`. A marker is a *filled polygon* beside the shaft rather than a
+      property of the stroke, which is why the display list needed no new record.
+- [ ] **Compound lines.** `cmpd="dbl"`, `"thickThin"`, `"tri"`. A double line is two strokes with
+      a gap, and the widths are fractions of the stated one; nothing in the corpus carries one.
 
 ### Text: what the runs know, and the rung of the chain that is missing
 
@@ -695,6 +855,22 @@ paragraph's level are read, attribute by attribute rather than element by elemen
 - [ ] **Vertical text** (`a:bodyPr/@vert`) and text rotation (`a:txXfrm`, `moTextAreaRotation`).
 - [ ] **Right-to-left text.** Bidi levels are resolved and carried by `MeasuredParagraph` and
       nothing consumes them here, which is the same open item word processing has.
+
+### Small differences that are measured and not yet closed
+
+- [ ] **A wrapped line is one glyph shorter here than in the reference.** LibreOffice draws the
+      space a line broke at as part of that line's run; the shared layouter stops at the last
+      *visible* character (`LineBox.VisibleEnd`). Nothing is visibly missing — it is a space at
+      the end of a line — but a glyph-count comparison sees it, and
+      `SlideTableComparisonTests` accepts one fewer for exactly this reason rather than comparing
+      sets and hiding it.
+- [ ] **A shape's line join.** We write a mitre where LibreOffice writes a round join on a
+      connector (`0 J 1 j` against our `0 J 0 j`). Invisible on a straight line, visible on a
+      bent connector's corner.
+- [ ] **The fill rule.** Our PDF writer fills with `f` where LibreOffice uses `f*`. It agrees on
+      every preset with a hole — `donut`, `frame` — because the preset file winds the inner
+      subpath the other way precisely so that both rules give the same answer, but a `custGeom`
+      whose author did not would differ. That belongs to `Paperless.Rendering`.
 
 ### Two things the layout deliberately keeps out of the display list
 

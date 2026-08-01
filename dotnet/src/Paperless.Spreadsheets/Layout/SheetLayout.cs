@@ -45,6 +45,37 @@ public sealed class SheetLayout
     public ContentTable? Cells { get; init; }
 
     /// <summary>
+    /// What is painted behind and around the cells: their fills and their borders.
+    /// </summary>
+    /// <remarks>
+    /// Beside the cells rather than on them, because the two are stored separately in all three
+    /// formats and for the same reason: a fill applied to a whole column belongs to sixteen
+    /// thousand cells that do not exist. It also keeps extraction from paying for any of it —
+    /// the content tree is unchanged, and a caller that only wants text never looks here.
+    /// </remarks>
+    public SheetFormatting Formatting { get; init; } = SheetFormatting.Empty;
+
+    /// <summary>The document's own file name, for the <c>&amp;F</c> header field.</summary>
+    /// <remarks>
+    /// Carried on the sheet because the field is resolved while a page is drawn and nothing
+    /// else in the layout knows where the document came from. Empty when it was read from a
+    /// stream with no name, which is what a header holding <c>&amp;F</c> then prints.
+    /// </remarks>
+    public string FileName { get; init; } = string.Empty;
+
+    /// <summary>
+    /// The formats its cells are drawn in, kept apart from the cells themselves.
+    /// </summary>
+    /// <remarks>
+    /// Separate because a spreadsheet stores it separately: formatting is a run-length structure
+    /// keyed by row rather than a property of a cell, and a sheet with one uniformly-formatted
+    /// million-cell region stays cheap only while that holds. Extraction never reads it — a font
+    /// changes nothing about what a cell says — so a reader that has not been taught to fill it in
+    /// yields <see cref="SheetCellFormats.Empty"/> and every cell draws in the default face.
+    /// </remarks>
+    public SheetCellFormats Formats { get; init; } = SheetCellFormats.Empty;
+
+    /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
     /// </summary>
     /// <remarks>

@@ -1,19 +1,21 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 all but the OOXML and legacy spreadsheet and presentation
-formats; Phase 2 complete for word processing; Phase 3's two output backends written and
-verified.** Every word-processing format reads and *lays
-out* — `odt ott fodt`, `docx docm dotx dotm`, `doc dot` and `rtf` — with pages, headers and
-footers, tables, sections and columns all verified against LibreOffice's own rendering to a
-tenth of a point, and everything a table draws — cell borders and shading — now compared
-stroke for stroke and fill for fill in all four. The ODF spreadsheet and presentation formats
-extract. `xlsx`, `pptx`, the legacy `xls` and `ppt`, and CSV do not read at all yet.
-**A word-processing document now renders to a file**: a PDF with real searchable text and
-subsetted embedded fonts, checked against LibreOffice's own PDF operator for operator, and PNG
-or JPEG at a chosen DPI.
-**And a deck now lays out**: PPTX and ODP produce a page per slide with shapes placed, filled,
-outlined and their text set, compared against LibreOffice's own PDF for the same deck in both
-formats — see Phase 3 and `src/Paperless.Presentations/TODO.md` for what draws and what does not.
+Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
+scope for extraction reads except XLSB — `odt ott fodt docx docm dotx dotm doc dot rtf`,
+`ods ots fods xlsx xlsm xltx xltm xls csv`, `odp otp fodp pptx pptm potx potm ppsx ppsm ppt pot
+pps`. All three families **paginate**: word processing with pages, headers, footers, tables,
+sections, columns, notes and floating frames; spreadsheets through their print setup, which *is*
+their page geometry; presentations a page per slide.
+
+**All three render to PDF**, with real searchable text and subsetted embedded fonts, plus PNG and
+JPEG at a chosen DPI. Measured end to end against LibreOffice's own PDF of the same file: a
+document and a workbook come out with the same page count *and* the same word count from
+`pdftotext` — 41/41 and 2281/2281 — which is the check that catches a PDF whose glyphs land
+correctly but whose text cannot be extracted. Both backends paint everything the display list can
+express: gradients as shadings and shaders, tiled bitmap fills, and pictures decoded through Skia.
+
+There are also two structured-text outputs, XHTML and Markdown, the first compared against
+LibreOffice's own XHTML export node for node.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
@@ -124,12 +126,13 @@ binary.
 | ✅ | Bidi (UAX #9), script itemisation (UAX #24) and mid-run font fallback in `Paperless.Text`, differentially tested against ICU — the library LibreOffice itself resolves bidi with — and against LibreOffice's own PDF portion boundaries |
 | ✅ | **PDF output**: a hand-rolled writer with `hb-subset` font embedding, real searchable text and a `ToUnicode` built from the cluster map — compared against LibreOffice's own PDF *operator for operator*, per line, over ten documents in four formats |
 | ✅ | **Raster output**: PNG and JPEG at a chosen DPI over SkiaSharp, deterministic, and `paperless render` with a format, a page range and a DPI |
+| ✅ | **Gradients, tiled bitmap fills and raster image decode**, in both backends: axial and radial shadings with stitched ramps and luminosity soft masks in PDF, the matching Skia shaders, one shared band decomposition for the two kinds neither can state, and a Skia-backed decoder feeding the display list's `RasterImage` |
 
 | Not started | |
 |---|---|
 | ❌ | `xlsx`/`pptx`, `xls`/`ppt` and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
-| ❌ | SVG writer; gradients and tiling patterns in either backend; raster image decode |
+| ❌ | SVG writer |
 | ❌ | Floating frames with text wrap; table auto-layout; RTL text in the layouter |
 | ❌ | Spreadsheet print layout and slide rendering |
 | ❌ | Vector import (WMF/EMF/EMF+/SVG) |
@@ -411,7 +414,11 @@ adding it as an input format would be scope Paperless has said no to.
       the line 1.2 em (`editeng/source/editeng/impedit3.cxx:501,3138`). That last is 1.7 pt on
       every line of every shape in Liberation Sans, and no word-processing comparison could have
       found it — Writer never sets the flag.
-- [ ] The rest of slide rendering: pictures, tables, gradients and the other non-solid fills,
+- [ ] The rest of slide rendering: pictures, tables, gradients and the other non-solid fills —
+      **the backends now draw all three, so what is left is the reading**, and the two mappings
+      worth not rediscovering are recorded in `src/Paperless.Rendering/TODO.md`: ODF's
+      `draw:start-color` on a radial gradient paints the *outer* edge, and a radial's outer
+      radius is half the shape's **diagonal** rather than half its width —
       shadows and the other effects, bullet and number markers, the preset-geometry evaluator
       beyond the six shapes transcribed by hand, `p:style`'s style-matrix references, and the
       rung of the inheritance chain that gives an unstated run its size, typeface and colour.
@@ -419,7 +426,35 @@ adding it as an input format would be scope Paperless has said no to.
       `src/Paperless.Presentations/TODO.md`. **PPT (binary) does not lay out at all**: its shape
       tree reads, but a placeholder's rectangle comes from `SlideAtom`'s eight layout placeholder
       ids and nothing reads those yet.
-- [ ] Raster image decode (via Skia).
+- [x] **Gradients and bitmap fills, in both backends.** A linear gradient is a PDF axial
+      shading (`/ShadingType 2`) and a Skia linear shader; a radial or elliptical one is
+      `/ShadingType 3` and a radial shader, the ellipse's squash carried by the gradient's own
+      transform. The ramp is one exponential function per pair of stops, stitched with a
+      `/FunctionType 3` beyond two — which is what `a:gsLst` and ODF 1.3's
+      `loext:gradient-stop` can state and a two-colour attribute cannot. A gradient whose stops
+      fade gets a luminosity soft mask, since a shading has no alpha channel and Skia's shader
+      does, and one display list must not give two pictures. Conical and rectangular have a
+      native form in neither backend, so both expand them through **one shared band
+      decomposition** ported from `Gradient::AddGradientActions`. A tiled bitmap is one image
+      draw per tile inside a clip in PDF and a repeating image shader in Skia, both laid on the
+      same grid.
+      **The two sides do not state a gradient the same way and cannot be made to**, so the
+      comparison is picture for picture rather than operator for operator: Impress decomposes
+      every shape gradient into flat bands before its PDF writer sees it — `"tdf#150551 for PDF
+      export, use the decomposition"`, `vclmetafileprocessor2d.cxx` — so its shading writer is
+      unreachable from a slide and its PDF of `tests/corpus/features/paint-fills.fodp` holds no
+      shading at all, in 91602 bytes of page-one content stream against our 2570. Measured at
+      150 dpi, per channel: our raster against its rendering, **0.0016**; our PDF against its
+      PDF read by the same rasteriser, **0.0007**, and **0.0000** — identical, pixel for pixel —
+      on the picture page.
+- [x] **Raster image decode (via Skia).** `RasterImageDecoder` in `Paperless.Rendering` turns
+      encoded bytes into the display list's `RasterImage`, sniffing PNG, JPEG, GIF, BMP, WebP and
+      ICO **by content** so a mislabelled part still passes a JPEG through to `DCTDecode`. It is
+      public and lives beside the backends because `Paperless.Core` must stay dependency-free and
+      Skia already carries the codecs LibreOffice reaches for (`research/06-rendering.md` §D.1).
+      **A family library that wants it needs a `ProjectReference` on `Paperless.Rendering` that
+      none of them has yet** — one line each, and the reason `p:pic`, `w:drawing` and a sheet's
+      logo are still unpainted.
 - [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
       no C# prior art — start it early rather than treating it as a tail-end detail.
 - [x] **PDF output.** Hand-rolled: objects, a classic `xref`, deflated content streams, and simple

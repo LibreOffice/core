@@ -438,8 +438,26 @@ public static class DrawingTextBody
         return null;
     }
 
-    private static string AutoNumber(XElement autoNumber, int level, int[] counters, bool[] counting)
+    /// <summary>
+    /// The next number in an <c>a:buAutoNum</c> run, advancing the counters.
+    /// </summary>
+    /// <remarks>
+    /// Public because rendering needs the same answer from a second walk over the same tree, and
+    /// two implementations of "what number is this item" would drift the moment one of them met a
+    /// nested list. The caller owns the two arrays — one per outline level, nine of each — so the
+    /// state belongs to the text body being read rather than to this type.
+    /// </remarks>
+    /// <param name="autoNumber">The <c>a:buAutoNum</c> element.</param>
+    /// <param name="level">The paragraph's zero-based outline level.</param>
+    /// <param name="counters">The current number at each level.</param>
+    /// <param name="counting">Whether each level is inside a run of numbering.</param>
+    public static string AutoNumber(
+        XElement autoNumber, int level, int[] counters, bool[] counting)
     {
+        ArgumentNullException.ThrowIfNull(autoNumber);
+        ArgumentNullException.ThrowIfNull(counters);
+        ArgumentNullException.ThrowIfNull(counting);
+
         if (counting[level])
         {
             counters[level]++;

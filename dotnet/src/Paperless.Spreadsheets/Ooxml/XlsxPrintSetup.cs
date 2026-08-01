@@ -116,6 +116,13 @@ internal static class XlsxPrintSetup
             FooterHeight = footerBand,
             HeaderText = headerText,
             FooterText = footerText,
+
+            // The band's own margins are zero here and not inherited, unlike ODF's: SpreadsheetML
+            // states no header margin of its own, so the header runs the full width between the
+            // page margins — measured at 56.7 pt to 538.55 pt on sheet-decor-xlsx.xlsx, exactly
+            // the page's own margins, where the ODS twin indents by a further two centimetres.
+            Header = headerText is null ? null : SheetHeaderFooter.ParseCodes(headerText),
+            Footer = footerText is null ? null : SheetHeaderFooter.ParseCodes(footerText),
             ScaleMode = mode,
             ScalePercentage = percentage,
             FitToPagesWide = wide,

@@ -48,7 +48,9 @@ public sealed class XlsxFile : IDisposable
 
         SharedStrings = XlsxSharedStrings.Read(
             LoadRelated("sharedStrings", "xl/sharedStrings.xml"));
-        Styles = XlsxStyles.Read(LoadRelated("styles", "xl/styles.xml"));
+        StyleSheet = LoadRelated("styles", "xl/styles.xml");
+        Styles = XlsxStyles.Read(StyleSheet);
+        ThemeRoot = LoadRelated("theme", "xl/theme/theme1.xml");
 
         // The 1904 epoch is a workbook-wide switch, and reading it wrong shifts every date in
         // the file by 1462 days. date1904 alone decides it: the neighbouring dateCompatibility
@@ -76,6 +78,23 @@ public sealed class XlsxFile : IDisposable
 
     /// <summary>The number formats each cell format names.</summary>
     public XlsxStyles Styles { get; }
+
+    /// <summary>
+    /// The <c>styleSheet</c> root, for readers that need more of it than extraction does.
+    /// </summary>
+    /// <remarks>
+    /// Kept as the element rather than folded into <see cref="Styles"/> because everything past
+    /// the number formats — fonts, fills, borders — belongs to rendering, and rendering wants
+    /// different subsets of it in different places. Cell text reads the <c>fonts</c> and the
+    /// alignment on each <c>xf</c>, decoration reads the <c>fills</c> and the <c>borders</c>
+    /// beside them, and both walk this one element: opening the part twice would be a second
+    /// chance for the two readers to disagree about the same file, and it would keep
+    /// <see cref="XlsxStyles"/> from staying the extraction-sized thing it is.
+    /// </remarks>
+    public XElement? StyleSheet { get; }
+
+    /// <summary>The <c>theme</c> root, for the colours a fill names by index.</summary>
+    public XElement? ThemeRoot { get; }
 
     /// <summary>Which epoch this workbook counts date serials from.</summary>
     public SpreadsheetDateSystem DateSystem { get; }

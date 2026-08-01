@@ -1,5 +1,7 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
+using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
 using Paperless.Spreadsheets.Numbers;
 using Paperless.Text.Encodings;
@@ -48,12 +50,18 @@ internal sealed class XlsWorkbookReader
     private readonly List<string> _sharedStrings = [];
     private readonly List<SheetEntry> _sheets = [];
     private readonly List<XfRecord> _formats = [];
+    private readonly XlsCellFormats _cellFormats = new();
+    private readonly Dictionary<int, SheetCellFormat> _resolvedFormats = [];
+    private readonly Dictionary<int, int> _rowFormats = [];
+    private readonly Dictionary<int, int> _columnFormats = [];
     private readonly Dictionary<int, string> _formatCodes = [];
     private readonly Dictionary<int, NumberFormatCode> _parsedFormats = [];
     private readonly List<SheetLayout> _layouts = [];
     private readonly Dictionary<int, List<SheetRange>> _printAreas = [];
     private readonly Dictionary<int, SheetRange> _repeatColumns = [];
     private readonly Dictionary<int, SheetRange> _repeatRows = [];
+    private readonly XlsDecorationTable _decoration = new();
+    private XlsSheetDecoration _sheetDecoration = new();
     private XlsSheetPrintState _page = new();
     private bool _reportedFormat;
     private bool _reportedSstIndex;
@@ -66,6 +74,9 @@ internal sealed class XlsWorkbookReader
 
     /// <summary>How many sheets the workbook declares, hidden ones included.</summary>
     public int SheetCount => _sheets.Count;
+
+    /// <summary>The document's own file name, for the <c>&amp;F</c> header field.</summary>
+    public string FileName { get; set; } = string.Empty;
 
     /// <summary>True when the workbook counts days from 1904 rather than from 1900.</summary>
     public bool Uses1904Epoch { get; private set; }
@@ -156,6 +167,14 @@ internal sealed class XlsWorkbookReader
 
                 case BiffRecords.Xf or BiffRecords.Xf2 or BiffRecords.Xf3 or BiffRecords.Xf4:
                     ReadXf();
+                    break;
+
+                case BiffRecords.Font or BiffRecords.Font34:
+                    ReadFont();
+                    break;
+
+                case BiffRecords.Palette:
+                    ReadPalette();
                     break;
 
                 case BiffPageRecords.Name:
@@ -302,27 +321,42 @@ internal sealed class XlsWorkbookReader
 
         if (_stream.Version == BiffVersion.Biff8 || _stream.RecordId == BiffRecords.Xf)
         {
-            _stream.ReadUInt16(); // Font index; the content tree records no fonts.
+            ushort fontIndex = _stream.ReadUInt16();
             ushort numberFormat = _stream.ReadUInt16();
             ushort typeProtection = _stream.ReadUInt16();
             ushort alignment = _stream.ReadUInt16();
 
             // Where the "attribute used" bits live moved between BIFF5 and BIFF8: BIFF5 keeps
             // them in the alignment field, BIFF8 in a misc field that BIFF5 does not have.
-            ushort used = _stream.Version == BiffVersion.Biff8 ? _stream.ReadUInt16() : alignment;
+            bool biff8 = _stream.Version == BiffVersion.Biff8;
+            ushort used = biff8 ? _stream.ReadUInt16() : alignment;
 
-            xf = MakeXf(numberFormat, typeProtection, used);
+            xf = MakeXf(numberFormat, typeProtection, used) with
+            {
+                FontIndex = fontIndex,
+                Alignment = biff8
+                    ? XlsCellFormats.Align8(alignment, used)
+                    : XlsCellFormats.Align5(alignment),
+            };
+
+            // The borders and the fill come after the alignment in the same record, so they are
+            // read here rather than in a second pass: the stream is already positioned on them.
+            ReadXfDecoration(xf.IsCellXf, used);
         }
         else
         {
             // BIFF3/BIFF4 pack font and format into single bytes, and disagree with each
             // other about which field holds the parent index. Only the number format matters
             // here, and that is in the same place in both.
-            _stream.ReadByte();
+            byte fontIndex = _stream.ReadByte();
             ushort numberFormat = _stream.ReadByte();
             ushort typeProtection = _stream.ReadUInt16();
             ushort alignment = _stream.ReadUInt16();
-            xf = MakeXf(numberFormat, typeProtection, alignment);
+            xf = MakeXf(numberFormat, typeProtection, alignment) with
+            {
+                FontIndex = fontIndex,
+                Alignment = XlsCellFormats.Align5(alignment),
+            };
         }
 
         _formats.Add(xf);
@@ -348,6 +382,179 @@ internal sealed class XlsWorkbookReader
                 ParentIndex = (ushort)((typeProtection >> 4) & 0x0FFF),
             };
         }
+    }
+
+    /// <summary>
+    /// Reads the borders and the fill that follow an <c>XF</c>'s number format.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// BIFF5 and BIFF8 lay the same information out differently and neither is guessable: BIFF8
+    /// writes two border dwords then a two-byte area word, and hides the <em>fill pattern</em>
+    /// in the second border dword rather than in the area word; BIFF5 writes the area dword
+    /// first and puts one of the four edges — the bottom — inside it. Both are transcribed from
+    /// <c>XclImpXF::ReadXF5</c> and <c>ReadXF8</c>
+    /// (<c>sc/source/filter/excel/xistyle.cxx:1201</c> and <c>:1225</c>).
+    /// </para>
+    /// <para>
+    /// The "states it" flags follow the same inversion the number format does: in a cell XF a
+    /// set bit means the XF states the attribute, and in a style XF a cleared bit does
+    /// (<c>XclImpXF::SetUsedFlags</c>, <c>xistyle.cxx:1466</c>). Border is bit 3 of the
+    /// six-bit field and area bit 4.
+    /// </para>
+    /// </remarks>
+    private void ReadXfDecoration(bool isCellXf, ushort used)
+    {
+        const int borderBit = 0x08;
+        const int areaBit = 0x10;
+
+        int flags = (used >> 10) & 0x3F;
+        bool border = isCellXf == ((flags & borderBit) != 0);
+        bool area = isCellXf == ((flags & areaBit) != 0);
+
+        if (_stream.Version == BiffVersion.Biff8)
+        {
+            if (_stream.RecordLeft < 10) return;
+
+            uint border1 = _stream.ReadUInt32();
+            uint border2 = _stream.ReadUInt32();
+            ushort fill = _stream.ReadUInt16();
+            _decoration.Add(XlsXfDecoration.FromBiff8(border1, border2, fill, border, area));
+        }
+        else
+        {
+            if (_stream.RecordLeft < 8) return;
+
+            uint fill = _stream.ReadUInt32();
+            uint lines = _stream.ReadUInt32();
+            _decoration.Add(XlsXfDecoration.FromBiff5(fill, lines, border, area));
+        }
+    }
+
+    /// <summary>
+    /// Reads a <c>FONT</c> record.
+    /// </summary>
+    /// <remarks>
+    /// The layout is the same from BIFF5 on bar the name's encoding: height, flags, colour index,
+    /// weight, escapement, underline, family, character set, one reserved byte, then a
+    /// length-prefixed name (<c>XclImpFont::ReadFontData5</c>,
+    /// <c>sc/source/filter/excel/xistyle.cxx:439</c>). BIFF2–4 have no colour or weight field and
+    /// carry bold as a flag, which is why the short form is read separately.
+    /// </remarks>
+    private void ReadFont()
+    {
+        if (_stream.RecordLeft < 4) return;
+
+        int height = _stream.ReadUInt16();
+        ushort flags = _stream.ReadUInt16();
+        bool italic = (flags & 0x0002) != 0;
+
+        int weight = (flags & 0x0001) != 0 ? BoldWeight : NormalWeight;
+        int colour = AutomaticColourIndex;
+
+        if (_stream.RecordLeft >= 10)
+        {
+            colour = _stream.ReadUInt16();
+            weight = _stream.ReadUInt16();
+            _stream.Skip(2);                    // escapement
+            _stream.Skip(4);                    // underline, family, character set, reserved
+        }
+
+        string name = _stream.RecordLeft > 0
+            ? _stream.Version == BiffVersion.Biff8
+                ? _stream.ReadString(eightBitLength: true)
+                : _stream.ReadByteString(_stream.ReadByte())
+            : string.Empty;
+
+        _cellFormats.AddFont(new BiffFont(
+            name,
+            Length.FromTwips(height),
+            weight is >= 100 and <= 1000 ? weight : NormalWeight,
+            italic,
+            colour));
+    }
+
+    /// <summary>BIFF's own weights, which are the only two any writer emits.</summary>
+    private const int NormalWeight = 400;
+
+    /// <inheritdoc cref="NormalWeight"/>
+    private const int BoldWeight = 700;
+
+    /// <summary>The colour index meaning "the window's text colour", which prints black.</summary>
+    private const int AutomaticColourIndex = 0x7FFF;
+
+    /// <summary>
+    /// Reads a <c>PALETTE</c> record: the colours the workbook redefines, from index eight up.
+    /// </summary>
+    /// <remarks>
+    /// Each entry is four bytes of red, green, blue and a padding byte — not the BGR order the
+    /// rest of the format uses for colours packed into bit fields.
+    /// </remarks>
+    private void ReadPalette()
+    {
+        if (_stream.RecordLeft < 2) return;
+
+        int count = _stream.ReadUInt16();
+        List<Colour> colours = new(count);
+
+        for (int at = 0; at < count && _stream.RecordLeft >= 4; at++)
+        {
+            byte red = _stream.ReadByte();
+            byte green = _stream.ReadByte();
+            byte blue = _stream.ReadByte();
+            _stream.ReadByte();
+            colours.Add(new Colour(red, green, blue));
+        }
+
+        // One record, two consumers: a font's colour index and a fill's resolve against the
+        // same table, so both are handed it rather than either re-reading the record.
+        _decoration.SetPalette(colours.Count, colours);
+        _cellFormats.SetPalette(colours);
+    }
+
+    /// <summary>
+    /// One sheet's per-cell text formats, from the XF index every cell record carries.
+    /// </summary>
+    /// <remarks>
+    /// BIFF is the one format where this costs nothing extra: every cell record already states
+    /// its <c>ixfe</c>, and <c>ROW</c> and <c>COLINFO</c> already state the defaults, so the map
+    /// falls out of the same pass that read the cells rather than needing a second walk.
+    /// </remarks>
+    private SheetCellFormats BuildFormats(SheetBuilder builder)
+    {
+        SheetCellFormats.Builder formats = new();
+        Dictionary<int, int> pooled = [];
+
+        foreach ((int row, int column, int xf) in builder.CellFormats())
+        {
+            formats.SetCell(row, column, Pool(xf));
+        }
+
+        foreach ((int row, int xf) in _rowFormats) formats.SetRow(row, Pool(xf));
+        foreach ((int column, int xf) in _columnFormats) formats.SetColumn(column, Pool(xf));
+
+        return formats.Build();
+
+        int Pool(int xf)
+        {
+            if (pooled.TryGetValue(xf, out int index)) return index;
+
+            index = formats.Intern(CellFormatOf(xf));
+            pooled[xf] = index;
+            return index;
+        }
+    }
+
+    /// <summary>The text format an XF index resolves to, resolved once per index.</summary>
+    private SheetCellFormat CellFormatOf(int xfIndex)
+    {
+        if (_resolvedFormats.TryGetValue(xfIndex, out SheetCellFormat? cached)) return cached;
+
+        XfRecord xf = xfIndex >= 0 && xfIndex < _formats.Count ? _formats[xfIndex] : default;
+        SheetCellFormat format = _cellFormats.Resolve(xf.FontIndex, xf.Alignment, FormatOf(xfIndex));
+
+        _resolvedFormats[xfIndex] = format;
+        return format;
     }
 
     /// <summary>
@@ -402,6 +609,9 @@ internal sealed class XlsWorkbookReader
     {
         SheetBuilder builder = new(this, sheet.Name);
         _page = new XlsSheetPrintState();
+        _sheetDecoration = new XlsSheetDecoration();
+        _rowFormats.Clear();
+        _columnFormats.Clear();
 
         if (StartSubstream(sheet))
         {
@@ -447,6 +657,9 @@ internal sealed class XlsWorkbookReader
             Setup = _page.ToSetup(),
             Grid = _page.ToGrid(),
             Cells = table,
+            Formatting = _sheetDecoration.Resolve(_decoration),
+            Formats = BuildFormats(builder),
+            FileName = FileName,
         });
 
         return section;
@@ -910,10 +1123,20 @@ internal sealed class XlsWorkbookReader
         int first = _stream.ReadUInt16();
         int last = _stream.ReadUInt16();
         int width = _stream.ReadUInt16();
-        _stream.ReadUInt16();
+
+        // The field after the width is the run's XF index, which is what formats the cells no
+        // record was written for — a column filled yellow, or set in a font, in a sheet with
+        // nothing in it.
+        int xf = _stream.ReadUInt16();
         ushort options = _stream.ReadUInt16();
 
         _page.AddColumns(first, last, width, (options & 0x0001) != 0);
+        _sheetDecoration.SetColumns(first, last, xf);
+
+        for (int column = first; column <= last && column <= SheetAddress.MaxColumn; column++)
+        {
+            _columnFormats[column] = xf;
+        }
     }
 
     /// <summary>
@@ -936,6 +1159,18 @@ internal sealed class XlsWorkbookReader
         ushort flags = _stream.ReadUInt16();
 
         _page.AddRow(row, height, (flags & 0x0020) != 0);
+
+        // The trailing ixfe is the row's default cell format, and it only applies when the
+        // record says so: fGhostDirty, bit 7 of grbit, is what makes the field mean anything.
+        // Without it the field is present but inert, and a reader that honoured it anyway would
+        // paint whole rows Excel leaves plain. Only the low twelve bits are the XF index; the
+        // top four are flags.
+        if ((flags & 0x0080) != 0 && _stream.RecordLeft >= 2)
+        {
+            int xf = _stream.ReadUInt16() & 0x0FFF;
+            _sheetDecoration.SetRow(row, xf);
+            _rowFormats[row] = xf;
+        }
     }
 
     /// <summary>
@@ -1060,9 +1295,15 @@ internal sealed class XlsWorkbookReader
         Other,
     }
 
-    private readonly struct XfRecord
+    private readonly record struct XfRecord
     {
         public ushort NumberFormatIndex { get; init; }
+
+        /// <summary>Which <c>FONT</c> record the XF names.</summary>
+        public ushort FontIndex { get; init; }
+
+        /// <summary>Its alignment fields, already decoded for the version in hand.</summary>
+        public BiffAlignment Alignment { get; init; }
 
         public bool IsCellXf { get; init; }
 
@@ -1086,6 +1327,15 @@ internal sealed class XlsWorkbookReader
         private (int Row, int Column, int Xf)? _pendingString;
 
         public string SheetName => sheetName;
+
+        /// <summary>Every cell's position and XF index, for the format map.</summary>
+        public IEnumerable<(int Row, int Column, int Xf)> CellFormats()
+        {
+            foreach ((int row, SortedDictionary<int, Cell> cells) in _rows)
+            {
+                foreach ((int column, Cell cell) in cells) yield return (row, column, cell.Xf);
+            }
+        }
 
         /// <summary>Records what DIMENSIONS says the sheet's used range is.</summary>
         /// <remarks>
@@ -1161,6 +1411,12 @@ internal sealed class XlsWorkbookReader
 
             if (!cells.ContainsKey(column)) _cellCount++;
             cells[column] = cell;
+
+            // A blank cell's XF is the whole point of the record: BIFF writes BLANK and
+            // MULBLANK for cells that hold nothing but a fill or a border, so recording the
+            // format only for cells with content would lose most of a formatted sheet.
+            owner._sheetDecoration.SetCell(row, column, cell.Xf);
+
             if (!cell.IsEmpty) CheckExtent(row, column);
         }
 

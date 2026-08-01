@@ -228,14 +228,69 @@ public sealed record SheetPrintSetup
 
     /// <summary>The header text, in the format's own field syntax, or null.</summary>
     /// <remarks>
-    /// Kept as written rather than parsed, because pagination needs only the band's height and
-    /// that is already resolved into <see cref="HeaderHeight"/>. Rendering the text needs the
-    /// <c>&amp;P</c>/<c>&amp;D</c> field language, which is a separate piece of work.
+    /// Kept as written as well as parsed, because the raw string is what the file said and a
+    /// caller reporting on a workbook may want it. <see cref="Header"/> is what drawing uses.
     /// </remarks>
     public string? HeaderText { get; init; }
 
     /// <summary>The footer text, in the format's own field syntax, or null.</summary>
     public string? FooterText { get; init; }
+
+    /// <summary>The header's three parts with their fields identified, or null when it has none.</summary>
+    /// <remarks>
+    /// Beside <see cref="HeaderText"/> rather than instead of it. Only the parsed form knows
+    /// that <c>&amp;P</c> is a page number rather than two characters, and only it keeps the
+    /// left, centre and right parts apart — which matters because Calc draws the three into the
+    /// <em>same</em> rectangle with three different alignments rather than as one line.
+    /// </remarks>
+    public SheetHeaderFooter? Header { get; init; }
+
+    /// <summary>The footer's three parts, or null when the sheet has no footer.</summary>
+    public SheetHeaderFooter? Footer { get; init; }
+
+    /// <summary>
+    /// The gap between the header's text and the first printed row.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Inside <see cref="HeaderHeight"/> rather than added to it, which is the detail that costs
+    /// a reader a quarter of a centimetre on every page if it is read the other way round.
+    /// Calc's <c>aHdr.nHeight</c> is the whole band and <c>aHdr.nDistance</c> is a part of it:
+    /// the text is laid out into a rectangle <c>nHeight - nDistance</c> tall at the very top of
+    /// the band and the gap is what is left below it (<c>ScPrintFunc::PrintHF</c>,
+    /// <c>sc/source/ui/view/printfun.cxx:1808</c>).
+    /// </para>
+    /// <para>
+    /// Measured on <c>sheet-decor-ods.ods</c>, whose header declares 0.75 cm with a 0.25 cm
+    /// margin below it: LibreOffice clips the header text to a rectangle 14.099 pt tall
+    /// starting exactly at the top margin, and puts the top of the first printed row 21.11 pt
+    /// below that margin. So the band is 0.75 cm in total and its text gets 0.5 cm of it.
+    /// </para>
+    /// </remarks>
+    public Length HeaderGap { get; init; } = Length.FromTwips(142);
+
+    /// <summary>The gap between the last printed row and the footer's text.</summary>
+    public Length FooterGap { get; init; } = Length.FromTwips(142);
+
+    /// <summary>The rectangle the header's text is drawn into.</summary>
+    /// <remarks>
+    /// Its own left and right margins, which are not the page's:
+    /// <c>nLineStartX = aPageRect.Left() + rParam.nLeft</c> (<c>printfun.cxx:1800</c>). ODF
+    /// states them on <c>style:header-footer-properties</c>, and a header that states none
+    /// inherits the page style's — which is why <c>sheet-decor-ods.ods</c> puts its header
+    /// between 113.4 pt and 481.85 pt on a page whose own margins are 56.7 pt: two centimetres
+    /// of page margin plus two centimetres the header inherited.
+    /// </remarks>
+    public Length HeaderLeftMargin { get; init; }
+
+    /// <summary>The header's own right margin, measured from the page's right margin inwards.</summary>
+    public Length HeaderRightMargin { get; init; }
+
+    /// <summary>The footer's own left margin.</summary>
+    public Length FooterLeftMargin { get; init; }
+
+    /// <summary>The footer's own right margin.</summary>
+    public Length FooterRightMargin { get; init; }
 
     /// <summary>The rectangle the sheet's cells are printed into, headings included.</summary>
     /// <remarks>

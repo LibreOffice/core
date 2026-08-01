@@ -72,6 +72,59 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
     }
 
     /// <summary>
+    /// Records what a run says its glyphs advance by, for a face whose file could not be read.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Call before drawing a run. It does nothing for the ordinary case, where the face's own
+    /// file loaded and its <c>hmtx</c> table is the authority. It matters when the file did
+    /// not load — a <see cref="FontReference.FaceKey"/> that names a family rather than a
+    /// path, which is what a caller building a reference by hand produces — because the
+    /// alternative is a <c>/Widths</c> array of zeros.
+    /// </para>
+    /// <para>
+    /// Zeros are not merely untidy. Every glyph then sits a full advance away from where the
+    /// stated widths put the pen, so <see cref="PdfContentSink"/> corrects each one with a
+    /// <c>TJ</c> adjustment of the whole advance — measured at <c>-722</c> thousandths
+    /// between adjacent glyphs on <c>sheet-print-xlsx.xlsx</c>. The page still <em>looks</em>
+    /// right, which is why no operator comparison caught it, but an adjustment that large is
+    /// how a PDF spells a word break: <c>pdftotext</c> got 13255 words out of that file's
+    /// fourteen pages against LibreOffice's 2281, one per character. "Real searchable text"
+    /// is the stated reason the display list carries glyph runs rather than outlines, so a
+    /// width the file does not know is better taken from the run than left at zero.
+    /// </para>
+    /// <para>
+    /// The first advance seen for a glyph wins and a later one never revises it, because the
+    /// content stream is written in one pass: by the time a second run states a wider blank —
+    /// which is what justification produces — the pen adjustments of the first have already
+    /// been computed against the earlier number, and changing the width afterwards would move
+    /// every glyph the first run drew. The wider occurrence is corrected with a <c>TJ</c>
+    /// instead, which is the same mechanism a justified line already uses when the widths are
+    /// exact.
+    /// </para>
+    /// <para>
+    /// This is a fallback and not a fix for the caller. A face whose file did not load is also
+    /// not <em>embedded</em>, so the reader supplies its own glyph shapes; only the metrics and
+    /// the word breaks are recovered here.
+    /// </para>
+    /// </remarks>
+    public void Observe(GlyphRun run)
+    {
+        ArgumentNullException.ThrowIfNull(run);
+
+        Face face = FaceFor(run.Font);
+        if (face.OpenType is not null || run.FontSize.Emu <= 0) return;
+
+        foreach (PositionedGlyph glyph in run.Glyphs)
+        {
+            if (glyph.Advance.Emu <= 0 || face.Measured.ContainsKey(glyph.GlyphId)) continue;
+
+            face.Measured[glyph.GlyphId] = Math.Round(
+                glyph.Advance.Emu * 1000.0 / run.FontSize.Emu, 4, MidpointRounding.AwayFromZero);
+        }
+    }
+
+    /// <summary>
     /// A glyph's advance in thousandths of an em, exactly as the <c>/Widths</c> array will
     /// state it.
     /// </summary>
@@ -97,11 +150,9 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         ArgumentNullException.ThrowIfNull(font);
 
         Face face = FaceFor(font);
-        if (face.OpenType is not { } opentype) return 0;
         if (face.Widths.TryGetValue(glyphId, out double cached)) return cached;
 
-        int upem = opentype.UnitsPerEm > 0 ? opentype.UnitsPerEm : 1000;
-        double width = Math.Round(opentype.AdvanceOf(glyphId) * 1000.0 / upem, 4, MidpointRounding.AwayFromZero);
+        double width = face.WidthOf(glyphId);
         face.Widths[glyphId] = width;
         return width;
     }
@@ -118,7 +169,7 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         for (int i = 0; i < _subsets.Count; i++)
         {
             Subset subset = _subsets[i];
-            int id = WriteSubset(writer, subset);
+            int id = WriteSubset(writer, subset, this);
             resources.Append(CultureInfo.InvariantCulture, $"/{subset.Resource} {id} 0 R");
         }
 
@@ -186,7 +237,13 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
 
     // ----------------------------------------------------------------------------- writing
 
-    private static int WriteSubset(PdfDocumentWriter writer, Subset subset)
+    /// <remarks>
+    /// The widths come back through <see cref="Width"/> rather than being recomputed here,
+    /// so the array in the file states exactly the numbers the content stream placed its
+    /// glyphs against. Two derivations of the same value would differ the moment one of them
+    /// falls back to a measured advance.
+    /// </remarks>
+    private static int WriteSubset(PdfDocumentWriter writer, Subset subset, PdfFontCatalogue catalogue)
     {
         OpenTypeFace? opentype = subset.Face.OpenType;
         int upem = opentype?.UnitsPerEm is > 0 ? opentype.UnitsPerEm : 1000;
@@ -195,15 +252,8 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         StringBuilder widths = new("[");
         for (int code = 0; code <= last; code++)
         {
-            double width = opentype is null
-                ? 0
-                : Math.Round(
-                    opentype.AdvanceOf(subset.GlyphsByCode[code]) * 1000.0 / upem,
-                    4,
-                    MidpointRounding.AwayFromZero);
-
             if (code > 0) widths.Append(' ');
-            widths.Append(PdfSyntax.Number(width));
+            widths.Append(PdfSyntax.Number(catalogue.Width(subset.Face.Reference, subset.GlyphsByCode[code])));
         }
 
         widths.Append(']');
@@ -384,6 +434,21 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         public OpenTypeFace? OpenType { get; } = opentype;
 
         public Dictionary<ushort, double> Widths { get; } = [];
+
+        /// <summary>
+        /// Advances taken off the display list, for a face whose own file could not be read.
+        /// Empty in the ordinary case, where <see cref="OpenType"/> is the authority.
+        /// </summary>
+        public Dictionary<ushort, double> Measured { get; } = [];
+
+        /// <summary>A glyph's advance in thousandths of an em, from the file or from the run.</summary>
+        public double WidthOf(ushort glyphId)
+        {
+            if (OpenType is not { } opentype) return Measured.GetValueOrDefault(glyphId);
+
+            int upem = opentype.UnitsPerEm > 0 ? opentype.UnitsPerEm : 1000;
+            return Math.Round(opentype.AdvanceOf(glyphId) * 1000.0 / upem, 4, MidpointRounding.AwayFromZero);
+        }
 
         /// <summary>Where each glyph of this face ended up: which PDF font, and at which code.</summary>
         public Dictionary<ushort, (Subset Subset, byte Code)> Placed { get; } = [];
