@@ -320,15 +320,21 @@ public sealed class EmfPlusDrawingTests
     }
 
     [Fact]
-    public void ACustomLineCapIsReportedRatherThanApproximated()
+    public void AnAnchorCapIsDrawnRatherThanReported()
     {
-        VectorImage image = Build(new EmfPlusBuilder()
+        Recorder sink = Draw(new EmfPlusBuilder()
             .Header()
             .Pen(1, Red, 100, startCap: 0x14)             // an arrow anchor
             .DrawLines(1, [(0, 0), (1000, 0)])
             .End());
 
-        image.Diagnostics.ShouldContain(diagnostic => diagnostic.Code == "PL6038");
+        // A decoration is a filled path, so PL6038 retired for every cap that states an
+        // outline. An arrow anchor is twice the pen's width across and straddles the end, so a
+        // 1 mm pen makes a 2 mm head reaching 1 mm back past the line's first point.
+        DocRect head = sink.Fills.ShouldHaveSingleItem().Bounds;
+
+        head.Height.Millimetres.ShouldBe(2, 0.05);
+        head.X.Millimetres.ShouldBe(-1, 0.05);
     }
 
     // ---------------------------------------------------------------- transforms

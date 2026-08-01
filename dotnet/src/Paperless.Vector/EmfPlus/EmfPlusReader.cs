@@ -571,12 +571,16 @@ internal sealed class EmfPlusReader
                 pen.ReadPen(stream);
                 _objects[slot] = pen;
 
-                if (pen.HasCustomCap)
+                // A cap that decorates is drawn as a filled outline at the line's ends, so
+                // PL6038 is left for the one form that states no path at all: an adjustable
+                // arrow, whose width, height and middle inset LibreOffice also reads and does
+                // not use (emfpcustomlinecap.cxx, "no test document").
+                if (pen.HasUndrawnCap)
                 {
                     Warn(
                         "PL6038",
-                        "An EMF+ pen asked for an arrow or a custom line cap, which the drawing "
-                            + "model cannot express; the line was drawn without it.");
+                        "An EMF+ pen asked for an adjustable arrow cap, which states no outline; "
+                            + "the line was drawn without it.");
                 }
 
                 break;
@@ -906,6 +910,221 @@ internal sealed class EmfPlusReader
             pen.MiterLimit,
             dashes,
             dashes is null ? Length.Zero : width * pen.DashOffset));
+
+        DrawCaps(path, pen, width);
+    }
+
+    /// <summary>
+    /// Draws the line decorations a pen asks for at the ends of every figure it strokes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Seven of GDI+'s ten line caps are decorations rather than caps.</b> A triangle, a
+    /// square, round or diamond <em>anchor</em>, an arrow anchor and a custom path are shapes
+    /// planted at the end of a line, not ways of finishing the stroke — <see cref="LineCap"/>
+    /// expresses the other three and can express none of these. They need nothing new in the
+    /// drawing model all the same, because a decoration is a filled path: an outline stated in a
+    /// unit space, scaled to the pen's width, turned to face along the line and filled in the
+    /// pen's colour.
+    /// </para>
+    /// <para>
+    /// The unit outlines and their width multipliers are
+    /// <c>EmfPlusHelperData::CreateLineEnd</c>'s
+    /// (<c>drawinglayer/source/tools/emfphelperdata.cxx:532-593</c>), so a diamond is the diamond
+    /// LibreOffice draws rather than one chosen here. The placement rule is
+    /// <c>createAreaGeometryForLineStartEnd</c>'s
+    /// (<c>basegfx/source/polygon/b2dlinegeometry.cxx:38</c>): centre the outline on x, put its
+    /// leading edge at y = 0, scale so its <em>width</em> is the stated one, then dock it — the
+    /// built-in caps straddle the endpoint, a custom cap sits wholly inside the line.
+    /// </para>
+    /// </remarks>
+    private void DrawCaps(GraphicsPath path, EmfPlusPen pen, Length width)
+    {
+        if (!pen.HasCustomCap) return;
+
+        foreach ((DocPoint at, double dx, double dy, bool start) in Ends(path))
+        {
+            int code = start ? pen.StartCap : pen.EndCap;
+            EmfPlusPath? custom = start ? pen.CustomStartCap : pen.CustomEndCap;
+
+            GraphicsPath? decoration = custom is not null
+                ? Decoration(
+                    CustomOutline(custom),
+                    at,
+                    dx,
+                    dy,
+                    // A custom cap states its own width in its outline, and the mapping's x
+                    // scale is what turns it into one — where the pen's width goes through the
+                    // y scale. Mixing the two axes looks like an oversight and is not one to
+                    // depart from: measured on TestEmfPlusDrawPathWithCustomCap, whose world
+                    // transform is anisotropic, using the y scale for both draws an arrow head
+                    // 17 px across where LibreOffice draws 28 — ink_ratio 0.673 against 1.035.
+                    width * (pen.CustomCapScale * CustomWidth(custom) * _scaleX / _scaleY),
+                    dock: 0)
+                : CapOutline(code) is { } outline
+                    ? Decoration(outline, at, dx, dy, width * CapWidth(code), dock: 0.5)
+                    : null;
+
+            if (decoration is not null)
+            {
+                _painter.FillWith(decoration, Paint.Solid(pen.Colour), FillRule.NonZero);
+            }
+        }
+    }
+
+    /// <summary>Every figure's two ends, with the outward direction of the line there.</summary>
+    /// <remarks>
+    /// A figure of one point has no direction and is skipped. A closed figure still has two ends
+    /// here, because GDI+ decorates the first and last point of the figure it was given rather
+    /// than noticing that they coincide.
+    /// </remarks>
+    private static IEnumerable<(DocPoint At, double Dx, double Dy, bool Start)> Ends(GraphicsPath path)
+    {
+        List<DocPoint> figure = [];
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.MoveTo)
+            {
+                foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+                figure = [command.Point];
+                continue;
+            }
+
+            if (command.Verb == PathVerb.Close) continue;
+
+            figure.Add(command.Point);
+        }
+
+        foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+
+        static IEnumerable<(DocPoint, double, double, bool)> EndsOf(List<DocPoint> points)
+        {
+            if (points.Count < 2) yield break;
+
+            if (Direction(points[1], points[0]) is { } first)
+            {
+                yield return (points[0], first.Dx, first.Dy, true);
+            }
+
+            if (Direction(points[^2], points[^1]) is { } last)
+            {
+                yield return (points[^1], last.Dx, last.Dy, false);
+            }
+        }
+
+        static (double Dx, double Dy)? Direction(DocPoint from, DocPoint to)
+        {
+            double dx = to.X.Emu - from.X.Emu;
+            double dy = to.Y.Emu - from.Y.Emu;
+            double length = Math.Sqrt((dx * dx) + (dy * dy));
+
+            return length <= 0 ? null : (dx / length, dy / length);
+        }
+    }
+
+    /// <summary>Places a unit outline at a line end, facing outwards.</summary>
+    private static GraphicsPath? Decoration(
+        (double X, double Y)[] outline,
+        DocPoint at,
+        double dx,
+        double dy,
+        Length width,
+        double dock)
+    {
+        if (outline.Length < 3 || width <= Length.Zero) return null;
+
+        double left = outline[0].X, right = outline[0].X;
+        double top = outline[0].Y, bottom = outline[0].Y;
+
+        foreach ((double x, double y) in outline)
+        {
+            left = Math.Min(left, x);
+            right = Math.Max(right, x);
+            top = Math.Min(top, y);
+            bottom = Math.Max(bottom, y);
+        }
+
+        if (right - left <= 0) return null;
+
+        double centre = (left + right) / 2;
+        double scale = width.Emu / (right - left);
+        double length = (bottom - top) * scale;
+
+        GraphicsPath shape = new();
+
+        for (int i = 0; i < outline.Length; i++)
+        {
+            double x = (outline[i].X - centre) * scale;
+            double y = ((outline[i].Y - top) * scale) - (length * dock);
+
+            DocPoint point = new(
+                Length.FromEmu(at.X.Emu + (long)((x * -dy) - (y * dx))),
+                Length.FromEmu(at.Y.Emu + (long)((x * dx) - (y * dy))));
+
+            if (i == 0) shape.MoveTo(point);
+            else shape.LineTo(point);
+        }
+
+        return shape.Close();
+    }
+
+    /// <summary>The unit outline of a built-in cap, or null when the stroke draws it itself.</summary>
+    private static (double X, double Y)[]? CapOutline(int code) => code switch
+    {
+        3 => [(-1, 1), (1, 1), (1, 0), (0, -1), (-1, 0)],
+        0x11 => [(-1, -1), (1, -1), (1, 1), (-1, 1)],
+        0x12 => Circle(),
+        0x13 => [(0, -1), (1, 0), (0.5, 0.5), (0.5, 1), (-0.5, 1), (-0.5, 0.5), (-1, 0)],
+        0x14 => [(0, -1), (1, 1), (-1, 1)],
+        _ => null,
+    };
+
+    /// <summary>How wide a built-in cap is, as a multiple of the pen's width.</summary>
+    private static double CapWidth(int code) => code switch
+    {
+        0x11 => 1.5,
+        0x12 or 0x13 or 0x14 => 2.0,
+        _ => 1.0,
+    };
+
+    private static (double X, double Y)[] Circle()
+    {
+        (double X, double Y)[] points = new (double, double)[16];
+        for (int i = 0; i < points.Length; i++)
+        {
+            double angle = i * 2 * Math.PI / points.Length;
+            points[i] = (Math.Cos(angle), Math.Sin(angle));
+        }
+
+        return points;
+    }
+
+    /// <summary>
+    /// A custom cap's own outline, turned to face the way the built-in ones do.
+    /// </summary>
+    /// <remarks>
+    /// The half-turn is LibreOffice's — <c>EMFPCustomLineCap::ReadPath</c> rotates the polygon by
+    /// π as it reads it — because a custom cap states its outline with the line running in +y and
+    /// every other cap here states it with the line running in −y.
+    /// </remarks>
+    private static (double X, double Y)[] CustomOutline(EmfPlusPath cap)
+    {
+        List<(double X, double Y)> points = new(cap.Count);
+        for (int i = 0; i < cap.Count; i++)
+        {
+            (double x, double y) = cap.Raw(i);
+            points.Add((-x, -y));
+        }
+
+        return [.. points];
+    }
+
+    /// <summary>A custom cap's own width, which its outline states rather than the pen.</summary>
+    private static double CustomWidth(EmfPlusPath cap)
+    {
+        (double left, _, double right, _) = cap.RawBounds();
+        return Math.Max(right - left, 1e-6);
     }
 
     private void FillRegion(EmfPlusRegion region, ushort flags, uint brushOrColour)
