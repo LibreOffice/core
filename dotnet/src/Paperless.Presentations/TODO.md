@@ -229,19 +229,41 @@ table asserted, not by the corpus.
 ## Importers
 
 ### ODP — first
-- [x] `draw:page`, `draw:frame`, `draw:custom-shape` (text; `draw:enhanced-geometry` is rendering)
+- [x] `draw:page`, `draw:frame`, `draw:custom-shape`, and `draw:enhanced-geometry` for rendering
+- [x] `table:table` inside a `draw:frame`, through the layouter PPTX already uses
+- [x] A slide is hidden by `presentation:visibility` on its **drawing-page style** and not by an
+      attribute on the page. Layout had read `presentation:class="hidden"`, which is a
+      placeholder's kind and never a page's, so every deck came out one page too long — three
+      against LibreOffice's two on `slides-features.odp`. Extraction had always had it right
+      (`OdfContentReader.IsDrawingPageHidden`), which is the shape of bug two readers of one
+      format produce and the reason the page count is now asserted on both paths.
 - [ ] Master pages; `style:presentation-page-layout`; `presentation:*` attributes. The master's
       `style:page-layout` **is** read, for the slide size, and it must be the one the page's own
       master names rather than the first in the file: a deck carries at least two and the notes
       one is A4 portrait in everything LibreOffice writes. The master's own *shapes* are not
       drawn, which is the same open question the PPTX side has about `showMasterSp`.
-- [ ] **The list style an outline paragraph's indents, spacing and bullet come from.** A
-      `text:list` names a `text:style-name`, and the level is the nesting depth; `OdfListStyle`
-      already parses the levels. Nothing reads them, so `slides-features.odp`'s outline lands
-      17 pt left of the reference with no bullet, and drifts to 9.3 pt low by its third
-      paragraph. The three quantities needed are `fo:margin-left`, `fo:text-indent` and
-      `text:bullet-char` — exactly what the OOXML side gets from `marL`, `indent` and `a:buChar`,
-      through a different resolution.
+- [x] **The list style an outline paragraph's indents, spacing and bullet come from.** A
+      `text:list` names a `text:style-name` and the level is the nesting depth, so the level is
+      counted from the `text:p`'s ancestors and the style resolved innermost-first — LibreOffice
+      writes the name on the outermost list of a run and leaves the nested ones bare.
+      **The two quantities are not `fo:margin-left` and `fo:text-indent`.** Those belong to ODF
+      1.2's *label-alignment* mode, which is what Writer gets; a presentation's list style uses
+      the older *label-width-and-position* mode, whose `text:space-before` and
+      `text:min-label-width` say where the marker goes and where the text goes. The text starts
+      at their sum and the marker at the space alone, which is exactly PresentationML's `marL`
+      and `marL + indent`. Measured on `slides-features.odp`, whose level 1 states no space and a
+      0.6 cm label: bullet at 56.693 and text at 73.701, 17.008 pt apart, and so it now draws.
+      A numbered level still yields no marker, for the reason `a:buAutoNum` does not.
+- [x] **The per-level presentation outline styles**, `<master>-outline1` … `-outline9`. They are
+      chained parent to child and a shape's own `presentation:style-name` inherits from level one,
+      so nothing in the shape's cascade points at level two and a reader that follows only the
+      shape resolves every level against level one's properties. `OdfTextBody` finds the base name
+      by walking the shape's presentation-style parents for one ending `-outline<digit>` and
+      substitutes the paragraph's own level. What it carries is the font size per level and the
+      space above a paragraph: `slides-features.odp`'s `Default-outline2` states
+      `fo:margin-top="0.4cm"` and nothing else, and without it the deck's third outline paragraph
+      sat **11.23 pt** above where LibreOffice draws it — a drift that grows with every level-two
+      paragraph and looks exactly like a line-height bug.
 - [x] Simpler two-level inheritance than PPTX, which made it the right place to build first
 
 ### PPTX
@@ -597,6 +619,15 @@ Two reference artefacts worth knowing before chasing them:
       emits `RasterImage.Encoded` and a backend decodes when it wants pixels, which is what keeps
       this library free of a `ProjectReference` on `Paperless.Rendering` and therefore keeps
       `paperless extract` free of a codec it never uses.
+
+- [x] **ODF's `draw:enhanced-geometry` through that same evaluator**, so an ODP shape draws its
+      own path rather than the preset its `draw:type` names — which matters because ODF is
+      self-describing here and its type names are LibreOffice's own hundred and eighty rather
+      than DrawingML's. `OpenDocument/OdfEnhancedGeometry.cs` reads the notation and
+      `CustomShapeGeometry.Evaluate` draws it; see **The same shapes in ODF** below for exactly
+      what was shared and what was not.
+- [x] Solid fills, including themed ones, and lines with width, cap and join. Not shadows, and
+      not gradients: nothing here emits a `GradientPaint`, deliberately.
 - [x] Text bodies with anchoring, insets and the stated autofit scale.
 - [x] Groups with nested transforms, including a child coordinate space that scales.
 - [ ] Picture *effects*: `a:effectLst` (shadow, glow, reflection, soft edge), `a:duotone`,
@@ -614,8 +645,8 @@ Two reference artefacts worth knowing before chasing them:
       shapes — one per visible cell with its fill and its text, then one per consolidated grid
       line with only a pen — so nothing in the display list knows a table happened and the binary
       PPT path can reuse every line of it. Measured stroke for stroke against the reference; see
-      **Tables on a slide** below. Not for ODP, whose `table:table` inside a `draw:frame` is a
-      different vocabulary and is not read at all yet.
+      **Tables on a slide** below. **And for ODP**, through the same `SlideTable.Place`: the ODF
+      side supplies a grid model and a delegate for the cell text and nothing else.
 - [ ] Notes pages as separate output pages (optional)
 - [x] PPT (binary), through `MsBinary/PptSlideLayout.cs` into the same `LaidOutSlide` the other
       two produce. What is *not* done on this path alone: a picture's raster, and a master's own
@@ -644,7 +675,18 @@ re-derives them.
 |---|---|---|
 | `shape-geometry.pptx`, `shape-geometry.odp` | placement, groups, flip before rotation, text insets, anchoring | `SlideRenderComparisonTests` |
 | `slide-table-grid.pptx` | the grid, cell fills, cell text, border priority, a grown row | `SlideTableComparisonTests` |
+| `odp-table-grid.odp` | the same table through ODF, and against the PPTX it was converted from | `OdpTableComparisonTests` |
 | `slide-shape-features.pptx` | twelve presets, three dash patterns, two arrowheads, a two-level numbered list | `SlideShapeGeometryComparisonTests` |
+| `odp-shape-paths.fodp` | six ODF-native enhanced paths and a hand-written table | `OdpShapePathComparisonTests` |
+| `deck-features.pptx`, `slides-features.odp` | an outline's markers and their text, in both families | `OutlineMarkerComparisonTests` |
+
+Two of those are new and neither could have been a conversion. `odp-table-grid.odp` **is** a
+conversion — of `slide-table-grid.pptx` — and that is the point of it: the same table described in
+two vocabularies that share no element name, so a run of strokes agreeing on both is a run the
+grid model produced rather than one either reader arrived at. `odp-shape-paths.fodp` is the
+opposite and is hand-written for the reason `slide-shape-features.pptx` is: everything reaching
+ODF through an OOXML import comes out as an `ooxml-` preset whose path is five straight commands,
+so a converted file exercises none of ODF's own fifteen extra command letters.
 
 `Paperless.TestKit`'s readers grew one for this: `PdfPaths` reads a filled path of *any* shape,
 where `PdfFills` reads only axis-parallel rectangles. It compares **on-curve points only** — the
@@ -654,21 +696,16 @@ are. So a straight-edged preset compares vertex for vertex and a curved one by t
 its bounding box. `PdfStrokes` grew a dash array for the same reason: a preset dash states no
 lengths anywhere else.
 
-**What the richer decks measure at.** `deck-features.pptx` now draws every run the reference
-does — 21 against 21, on three pages against three — so its table slide and its page count are in
-the comparison. What keeps the *whole* of it out is one thing rather than four: its bullet markers
-sit 8.19 pt below where LibreOffice draws them, which is the label-placement item below.
+**What the richer decks measure at, and they are both in the comparison now.**
 
-| | Reference runs | Ours | Agreement, and what is missing |
+| | Reference runs | Ours | Agreement, and what is left |
 |---|---|---|---|
-| `deck-features.pptx` | 21 | 21 | Titles, bullets and outline text land exactly — pens to a hundredth of a point, baselines to 0.04 — and the group and text-box slide to 0.04 across, 0.55 down inside the ellipse. The table slide's six runs now agree to 0.015. What is still out is the **marker baseline**, 8.19 pt high on every bulleted line. |
-| `slides-features.odp` | 14 | 12 | The same slides through ODF. The title and the outline's first line agree to 0.04; the outline then **drifts to 9.3 pt by its third paragraph**, and its text sits at 56.69 where the reference puts it at 73.70. Both have the same cause: an outline paragraph's indents, spacing and bullet come from the `text:list`'s **list style**, and nothing reads it. |
+| `deck-features.pptx` | 21 | 21 | Every run, on three pages against three. Titles, bullets and outline text to **0.033 pt**; the table slide's six to 0.042. The one number outside a twentieth of a point is the ellipse's text on slide 2, 0.536 down and 0.045 across, which is the shape's own text rectangle rather than anything about the text. |
+| `slides-features.odp` | 14 | 14 | The same slides through ODF, on two pages against two. The outline's bullets and text agree to **0.109 pt**, the worst of it on the third paragraph and all of it the recorded 0.028 pt-per-line residual accumulating. |
 
-The ODF list style is therefore the single largest remaining item on that path, and it is a
-different resolution from the paragraph cascade rather than more of it: `OdfListStyle` already
-parses the levels, and what is missing is choosing the level from the `text:list` nesting depth
-and reading its `fo:margin-left`/`fo:text-indent` and `text:bullet-char` — the same three
-quantities the OOXML side gets from `marL`, `indent` and `a:buChar`.
+Both of those were out of the comparison for the same reason and it turned out to be one rule
+rather than two: a bullet is not drawn on its paragraph's baseline. See **A bullet is centred on
+the line's text** below.
 
 **LibreOffice's PDF export is one hundredth of a millimetre small, and one up and left.** Its page
 clip opens `0 0.028 719.971 539.971 re` on a 720 × 540 pt page, its page background is 719.971 pt
@@ -765,7 +802,7 @@ twentieth of an inch. Defaulting them to zero moves every line of every text box
 converted deck agrees with its original: LibreOffice writes the OOXML defaults out explicitly as
 `fo:padding-*`.
 
-### Two ODF traps, both silent
+### ODF traps, all of them silent
 
 **`draw:transform`'s rotation runs the opposite way from `a:xfrm/@rot`.** The corpus deck's
 30°-clockwise rectangle comes out of LibreOffice's ODF export as
@@ -802,6 +839,16 @@ it on the shape as `draw:text-style-name` and leaves each `text:p` pointing at a
 automatic style. A reader consulting only `text:style-name` finds no alignment, no line-height rule
 and no `style:font-independent-line-spacing` — which on `shape-geometry.odp` put every baseline
 1.7 pt high, exactly the font-metrics error above, arrived at by a completely different route.
+
+**A slide's hidden flag is on its drawing-page *style*.** `presentation:visibility="hidden"`,
+resolved through the style's parent chain — not an attribute on the `draw:page`. Reading
+`presentation:class` instead, which is a placeholder's kind and never a page's, made every deck
+one page longer than LibreOffice's export.
+
+**A `draw:frame` holding a table also holds a picture of it.** LibreOffice writes
+`Pictures/TablePreview1.svm` beside the `table:table` for applications that cannot draw one, so a
+reader that places the frame's shape as well as its table puts a second copy of the table on the
+slide. The frame's own shape is therefore not placed at all when it holds a table.
 
 ### Preset geometry: all hundred and eighty-seven, evaluated
 
@@ -862,6 +909,98 @@ The **text** rectangle is carried beside the outline because for many presets it
 bounding box: an ellipse's is the box inscribed at 45°, a rounded rectangle's is inset by the
 corner radius, and a callout's excludes its tail. That is why a caption inside a circle does not
 touch its edge.
+
+### The same shapes in ODF, and how much of the evaluator was shared
+
+**The answer to "how much can be shared" is: everything below the syntax, and none of the
+syntax.** LibreOffice converts every DrawingML preset into a `draw:enhanced-geometry` on import
+and back again on export, so the two vocabularies describe exactly one set of shapes — and they
+share not one character of notation.
+
+| | DrawingML | ODF |
+|---|---|---|
+| A guide | `<a:gd fmla="*/ w 3 4"/>` — prefix, seventeen operators | `<draw:equation draw:formula="logwidth*3/4"/>` — infix, ten functions and four arithmetic operators |
+| Its operands | guide names resolved against a table built **in order** | `$n` modifiers and `?name` equations, in **any** order |
+| Its trigonometry | sixtieth-thousandths of a degree | radians |
+| A path | one element per command, six commands | one command-letter string, twenty-one letters |
+| Its coordinates | the shape's own EMUs | a `svg:viewBox` space, always |
+
+So the split is: `OdfEnhancedGeometry` reads ODF's notation and resolves every operand to a
+number, and `CustomShapeGeometry.Evaluate` — now public — draws it. **There is one path emitter,
+not two.** Nothing about the geometry is duplicated: the eccentric angle a stated arc angle means,
+the quadrant split that keeps an ellipse's leftmost point on the path, the cubic control distance.
+LibreOffice makes the same split in the same place — its two parsers meet at
+`EnhancedCustomShapeParameter` and only `EnhancedCustomShape2d::CreateSubPath` draws.
+
+What that cost in `Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs`, exactly, and it is the whole
+of the change to that file: `Evaluate` became public; the arc body moved out into an
+`EllipseSegment` that takes a stated centre; the eccentric conversion now takes the stated radii
+rather than the scaled ones (see the trap below); and `PresetVerb` gained **two** members,
+`AngleEllipse` and `AngleEllipseTo`, for the one kind of command ODF has and DrawingML has not —
+an arc about a centre the file names rather than one derived from the current point, which is what
+lets a whole ellipse be a single `U`.
+
+Two verbs for twenty-one letters, because the rest need none. `M L C Q Z` are five DrawingML
+already has; `G` **is** `a:arcTo`, in whole degrees rather than sixtieth-thousandths, so the
+conversion happens at the boundary and not in the evaluator; `N` ends a subpath, which is a split
+into `PresetPath`s rather than a command; `A B W V X Y` each reduce to an `AngleEllipseTo` once
+their centre, radii and angles have been worked out from the points they state — which the ODF
+reader can do precisely because it has resolved every operand to a number by then; and
+`F S H I J K` are the subpath fill and stroke modifiers, skipped here exactly as `a:path/@fill`
+is skipped on the OOXML side.
+
+**Its assembly is now the wrong name for it rather than the wrong place.** `CustomShapeGeometry`
+is what `EnhancedCustomShape2d` is — the one evaluator both vocabularies reach — and it lives in
+`Paperless.Ooxml`. Moving it to `Paperless.Core` beside `GraphicsPath` would say that honestly and
+was deliberately not done here: the 110 kB preset table it carries really is DrawingML's, and two
+other front ends were being built against the file at the same time.
+
+**A shape's own path beats its `draw:type`, always.** ODF is self-describing where DrawingML is
+not — a `draw:custom-shape` carries the whole geometry program rather than a name to look up —
+and that is what LibreOffice draws; the type is consulted for a handful of special cases in
+`CreateSubPath` and never for the path itself. Preferring the name answered correctly for the
+dozen presets whose two spellings had been mapped by hand and drew a bounding rectangle for the
+other hundred and seventy, including every shape LibreOffice's own drawing toolbar produces. The
+name is still the fallback, and it has two jobs: a `draw:rect` or `draw:ellipse` carries no
+enhanced geometry at all, and a malformed path is better drawn as its preset than as nothing.
+
+**The named trap, and it cost the best part of an hour: an arc's angle is converted against the
+radii the file states, not the ones it is drawn with.** The angle names a ray from the centre and
+the point drawn is where that ray crosses the ellipse, `tan t = (a/b)·tan θ` — and LibreOffice
+passes `lcl_getNormalizedCircleAngleRad` the *unscaled* `fWR`/`fHR`, with only `fScaledWR` and
+`fScaledHR` reaching `createPolygonFromEllipseSegment`
+(`EnhancedCustomShape2d.cxx:2226-2227,2325-2327`). No DrawingML preset states a subpath
+coordinate space, so scaled and unscaled were the same number and the distinction had never
+shown; **every** ODF path states one. Measured on a 240° sweep of a square `svg:viewBox` in a
+6 × 4.5 cm shape: converting the scaled radii ends the arc 9.33 pt away and drops the bounding
+box 3.31 pt, and LibreOffice's own PDF puts the end at x = 623.622 — exactly half a radius left
+of the centre, which is the *unconverted* answer and what settled it.
+
+**A second, cheaper: `Z` and `N` are not the same end.** `Z` closes a polygon and a following `M`
+starts another inside the same object, which is what makes a hole; `N` ends the object, and
+`CreateSubPath` is called once per `N` and builds one `SdrPathObj` each time — so two subpaths
+separated by `N` are two separate filled shapes and do not interact. Measured both ways on
+`odp-shape-paths.fodp`: one `N` renders with a hole and two render solid.
+
+- [ ] **The bounding-box arcs `A`, `B`, `W` and `V`.** Drawn, as ellipse segments through the
+      shared emitter, and *not* pinned against the reference — because LibreOffice draws them as a
+      **polyline**. `tools::Polygon`'s arc constructor emits between 16 and 256 straight segments,
+      the count a function of the radii (`tools/source/generic/poly.cxx:260-266`). Cubics are the
+      same ellipse and pass through the same quadrant points, so a bounding box agrees and a
+      vertex-for-vertex comparison cannot. They are rare: over the 225 ODP and FODP files in
+      `sd/qa/unit/data/`, `M L Z N` appear in 165–195 files each and `C` in 35, `U` in 18, `X` and
+      `Y` in 16, `F` and `S` in 8, while `B` appears in 6, `W` in 4, `V` in 1 and `A` in none.
+- [ ] **`F`, `S` and `H`/`I`/`J`/`K`** — a subpath that is unfilled or unstroked, and the four
+      shading modifiers. Parsed as far as being skipped, which is exactly where the OOXML side
+      leaves `a:path/@fill` and `@stroke`: both need a preset to produce more than one
+      `PlacedShape`, which is a change to the shape of the output rather than to the evaluator.
+- [ ] **`hasstroke` and `hasfill` are answered "yes".** They are the shape's real line and fill
+      state in `GetEnumFunc`, and exist so that a shape can shrink its outline by half a pen
+      width. Threading the resolved stroke into the geometry would make the outline depend on the
+      style, and nothing in the corpus states one.
+- [ ] **`draw:handle`, `draw:glue-point*` and `draw:extrusion-*`.** Read as far as being skipped.
+      The handles matter only for interactive editing; the extrusion is `EnhancedCustomShape3d`
+      and is a renderer of its own.
 
 ### Tables on a slide
 
@@ -932,13 +1071,45 @@ font's, where the em rule would give 18.00. So the cell body carries
       measure it, and why the corpus deck for tables is hand-written.
 - [ ] **Diagonal cell borders**, `a:lnTlToBr`/`a:lnBlToTr`. Read as far as being ignored. The
       border array carries them (`GetCellStyleTLBR`) and nothing in the corpus has one.
-- [ ] **ODP tables**, which are `table:table` inside a `draw:frame` and share none of this
-      vocabulary. `SlideTable.Place` takes the grid and a delegate for the text body, so an ODF
-      reader would need the geometry model and nothing else.
+- [x] **ODP tables**, which are `table:table` inside a `draw:frame` and share none of this
+      vocabulary. `SlideTable.Place` took the grid and a delegate for the text body, and that is
+      all the ODF side supplies: `OdfTableGeometry` produces the same `DrawingTableBox` and
+      nothing lays a table out twice. What ODF spells differently is everything else — a column's
+      width is in a `table-column` style, a covered cell is a `table:covered-table-cell` element
+      rather than a real cell carrying a merge flag, a run of identical rows is written once with
+      `table:number-rows-repeated`, and the rows may be wrapped in `table:table-header-rows`.
+      **The two traps, both silent.** A draw table's cell properties are in three property sets
+      and the borders are in the one nobody would guess: the fill, padding and vertical alignment
+      are *graphic* properties and the four borders are *paragraph* properties, because
+      `XMLTableImport` chains `CreateParaExtPropMapper` onto the cell mapper
+      (`xmloff/source/table/XMLTableImport.cxx:256-258`) and that map states `fo:border-left`
+      against `style:paragraph-properties` (`xmloff/source/text/txtprmap.cxx:427-431`). Looking in
+      `style:table-cell-properties`, where the specification's own cell map puts them and where
+      Writer and Calc do put them, finds an unbordered table on every deck LibreOffice has written.
+      And the stated width is **already halved**: the OOXML importer's `/2` has been applied by
+      the time the exporter writes the file, so `w="12700"` comes back as
+      `fo:border-left="0.48pt"` and halving again draws every rule at 0.42 pt where the reference
+      draws 0.85009. Only the twips rescale is shared, and `OdfTableGeometry.BorderWidth` applies
+      exactly that. Measured on `odp-table-grid.odp`: twelve strokes then nine, in the reference's
+      own order, every coordinate inside a tenth of a point and every pen identical between the
+      two front ends.
 - [ ] **A row taller than its frame.** Rows grow to their text and columns are stretched to the
       frame's width, which is the asymmetry `LayoutTableWidth`/`LayoutTableHeight` has; a table
       whose rows overflow the frame overflows it here too, which is what a viewer shows and what
       the reference draws.
+- [ ] **ODF's table template**, `table:template-name` with its `table:first-row` and
+      `table:body` cell-style references, and the `table:use-*-styles` flags beside it. It is the
+      ODF spelling of `a:tblPr/@firstRow` and it is unread for the same reason and with the same
+      consequence: a table styled from Impress's gallery and left alone draws unfilled and
+      unbordered. It costs *less* than the OOXML one in practice, because LibreOffice writes the
+      resolved cell style onto every cell as well — `sd/qa/unit/data/tdf99396.odp` names
+      `table:style-name="gray3"` on the cell and `gray3` is a real named style with a parent
+      chain, so the fill resolves without the template ever being consulted. What it would cost
+      is a table whose cells name nothing at all.
+- [ ] **A merged cell's own edges, in ODF.** A `table:covered-table-cell` may carry a
+      `table:style-name` and its borders are ignored here, as they are in the reference: the grid
+      position takes the pen of the cell that spans it. Worth confirming against a file that
+      states a different edge on the covered cell, which nothing in the corpus does.
 
 ### What a shape's fill and line resolve through, and what they do not
 
@@ -1140,19 +1311,38 @@ paragraph's level are read, attribute by attribute rather than element by elemen
       Measured on `deck-features.pptx`, whose outline states `marL="216000" indent="-216000"` —
       17.008 pt: the reference draws bullet and text at 56.693/73.701 for the first level and
       73.701/90.709 for the second, and so do we, to a hundredth of a point.
-- [ ] **`a:buAutoNum` yields no marker at all**, deliberately: numbering needs a counter per
-      outline level carried across the body and restarted where the level rises, and inventing
-      "1." for every item of every list is a worse answer than none. The paragraph still gets its
-      hanging indent, so its text lands where the reference puts it and only the number is
-      absent. `OutlineNumbers` already has every numeral format extraction needs.
-- [ ] **A marker's baseline is 8.2 pt higher in the reference than here.** Measured on
-      `deck-features.pptx`: LibreOffice draws the first outline bullet at 175.72 and its text at
-      183.91, and the third at 254.30 against 262.49 — the same 8.19 pt each time, so it is a
-      rule rather than drift, and the horizontal pens agree exactly. We put the marker on the
-      text's own baseline. Whatever EditEngine does with a 12.6 pt label on a 28 pt line, it is
-      not "same baseline" and it is not "same line top" either, which would be 15.4 pt under the
-      font-independent rule. Worth chasing in `impedit3.cxx`'s label placement when markers get
-      their own comparison.
+- [ ] **A numbered ODF list level yields no marker.** `a:buAutoNum` does produce one — the
+      counters are carried across the body by `DrawingTextBody.AutoNumber`, so the two readers
+      cannot number a nested list two different ways — and the ODF side deliberately does not
+      follow yet: `OdfTextBody.Marker` emits a bullet and nothing else. What it needs is the same
+      counter walk against `text:list` nesting rather than against `a:pPr/@lvl`, plus
+      `text:start-value` and the `text:continue-numbering` flag, and no corpus deck has a numbered
+      outline in ODF to measure it on. The paragraph still gets its indents, so only the number is
+      absent.
+- [x] **A bullet is centred on the line's text, not sat on its baseline.** It was 8.19 pt out on
+      `deck-features.pptx` and 6.72 on `slides-features.odp`, and it is one rule:
+      `Outliner::ImpCalcBulletArea` puts the bullet's box at
+      `firstLineHeight − firstLineTextHeight/2 − bulletHeight/2` below the paragraph's top and
+      `Outliner::StripBullet` draws it from that box's bottom less the bullet font's descent —
+      which is the box's top plus the bullet's *ascent*
+      (`editeng/source/outliner/outliner.cxx:1464-1467,946-955`). So the offset from the text's
+      baseline is `lineHeight − textHeight/2 + (markerAscent − markerDescent)/2 − lineAscent`,
+      and under single spacing that is just aligning the two faces' half-way marks.
+      Arithmetic, in hundredths of a millimetre, for the two decks that had drifted:
+      `deck-features.pptx`'s 28 pt outline under the font-independent rule is
+      `1186 − 593 + 106.5 − 988 = −288.5`, which is 8.176 pt above the text where LibreOffice
+      draws 8.19; `slides-features.odp`'s same-sized outline under the face's own metrics is
+      `1103 − 551.5 + 106.5 − 894 = −236`, 6.690 pt where LibreOffice draws 6.718.
+      **The bullet's own metrics carry most of it and they come from a font neither file names.**
+      A StarBats or a Wingdings bullet is not installed and substitutes to *OpenSymbol*, whose
+      hhea ascent and descent of 1420 and −442 on a 2048 em make `(ascent − descent)/2` come to
+      106.5 for a 12.6 pt marker in both files — which is why the same constant appears twice
+      above and why the rule could be confirmed rather than fitted.
+      **And a generated number is placed the other way**, at the text's own baseline: the same
+      function branches on `SVX_NUM_CHAR_SPECIAL` and only a symbol gets the centring
+      (`outliner.cxx:918`). Caught by `slide-shape-features.pptx`, whose `a:buAutoNum` list
+      LibreOffice draws at 89.972 and centring would put at 89.036 — so `SlideMarker.IsSymbol`
+      exists and says why.
 - [ ] **`a:spcPct` paragraph spacing.** `a:spcBef`/`a:spcAft` are honoured in points
       (`a:spcPts`) and ignored as a percentage, because the percentage is of the line height and
       the line height is not known until the paragraph's runs are. It belongs with the line
@@ -1185,6 +1375,10 @@ paragraph's level are read, attribute by attribute rather than element by elemen
       every preset with a hole — `donut`, `frame` — because the preset file winds the inner
       subpath the other way precisely so that both rules give the same answer, but a `custGeom`
       whose author did not would differ. That belongs to `Paperless.Rendering`.
+- [ ] **An axis-parallel rectangle is written as `re`.** LibreOffice writes four `l` operators for
+      the same shape, so `PdfPaths` reads the reference's table-cell backgrounds and none of ours.
+      Nothing is drawn differently — `PdfFills` reads exactly our form and the two agree — but it
+      is why `OdpShapePathComparisonTests` compares only the slide that carries no table.
 
 ### Two things the layout deliberately keeps out of the display list
 

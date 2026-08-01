@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.OpenDocument;
 using Paperless.OpenDocument.Styles;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
 
@@ -122,17 +123,18 @@ internal sealed class OdpSlideLayout
         => _file.Styles.ResolveProperty(style.Name, style.Family, kind, ns, name);
 
     /// <summary>
-    /// Whether the slide is skipped during a show.
+    /// Whether the slide is skipped during a show, and therefore not exported.
     /// </summary>
     /// <remarks>
-    /// <strong>The flag is a property of the page's drawing-page style, not an attribute of the
-    /// page.</strong> ODF states it as <c>presentation:visibility="hidden"</c> inside
-    /// <c>style:drawing-page-properties</c>, so it has to be resolved through the style chain
-    /// exactly as the fill is; the extraction path has always done that
-    /// (<c>OdfContentReader.IsDrawingPageHidden</c>) and this one was looking for a
-    /// <c>presentation:class</c> attribute that no writer emits, so every ODP laid out as though
-    /// none of its slides were hidden. Caught by comparing the same deck's layout through the ODF
-    /// and binary paths, where the PPT side flagged a slide the ODF side did not.
+    /// <strong>The flag is <c>presentation:visibility</c> on the page's drawing-page style, not an
+    /// attribute on the page.</strong> It has to be resolved through the style chain exactly as the
+    /// fill is. Reading it as a <c>presentation:class</c> attribute — which is a placeholder's kind
+    /// and never a page's — makes every slide of every deck visible, and the only symptom is one
+    /// page too many: <c>slides-features.odp</c> came out at three pages against LibreOffice's two.
+    /// Extraction had this right all along (<c>OdfContentReader.IsDrawingPageHidden</c>) and layout
+    /// did not, which is exactly the kind of divergence two readers of one format produce.
+    /// Found twice independently: once by comparing the same deck through the ODF and binary paths,
+    /// where the PPT side flagged a slide the ODF side did not, and once by the page count.
     /// </remarks>
     private bool IsHidden(XElement page)
         => _file.Styles.ResolveProperty(
@@ -216,6 +218,11 @@ internal sealed class OdpSlideLayout
                     Walk(element, Space(element, space), shapes, depth + 1);
                     break;
 
+                case "frame"
+                    when element.Element(XName.Get("table", OdfNamespaces.Table)) is { } table:
+                    shapes.AddRange(Table(element, table, space));
+                    break;
+
                 case "custom-shape":
                 case "rect":
                 case "ellipse":
@@ -237,6 +244,85 @@ internal sealed class OdpSlideLayout
     private static AffineTransform Space(XElement group, AffineTransform space)
         => Transform(group) is { } own ? AffineTransform.Concat(own, space) : space;
 
+    /// <summary>
+    /// The shapes a <c>draw:frame</c> holding a <c>table:table</c> draws.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Straight through <see cref="SlideTable.Place"/>, which is the whole point: a table on a
+    /// slide is one filled-and-texted shape per cell followed by one stroke per consolidated grid
+    /// line whichever filter read it, because LibreOffice decomposes the same <c>SdrTableObj</c>
+    /// either way (<c>svx/source/table/viewcontactoftableobj.cxx:202-204</c>). What ODF supplies
+    /// is the grid model and a delegate for the cell text; nothing here lays a table out.
+    /// </para>
+    /// <para>
+    /// A frame carrying a table also carries a <c>draw:image</c> — LibreOffice writes a rendered
+    /// preview of the table beside it, <c>Pictures/TablePreview1.svm</c>, for applications that
+    /// cannot draw one. Drawing that as well would put a second copy of the table on the slide,
+    /// so the frame's own shape is not placed at all when it holds a table.
+    /// </para>
+    /// </remarks>
+    private List<PlacedShape> Table(XElement frame, XElement table, AffineTransform space)
+    {
+        DocSize size = new(
+            Measure(frame, OdfNamespaces.SvgCompatible, "width"),
+            Measure(frame, OdfNamespaces.SvgCompatible, "height"));
+
+        if (size.IsEmpty) return [];
+
+        return SlideTable.Place(
+            OdfTableGeometry.Read(_file, table),
+            size,
+            AffineTransform.Concat(Placement(frame), space),
+            cell => CellBody(cell),
+            _fonts,
+            Attribute(frame, OdfNamespaces.Draw, "name"));
+    }
+
+    /// <summary>
+    /// One cell's text body, with the cell's own margins, alignment and line-height rule.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The paragraphs are the cell element's own <c>text:p</c> children, and the cascade the shape
+    /// one uses does not apply: a cell's text resolves through its <c>table-cell</c> style rather
+    /// than through the frame's graphic style, which carries nothing about the table.
+    /// </para>
+    /// <para>
+    /// <c>FontIndependentLineSpacing</c> is off for the same measured reason it is off on the
+    /// OOXML side: LibreOffice 24.2.7.2 draws a table cell's first baseline at the face's own
+    /// ascent, not at one em, whatever <c>tablecellcontext.cxx:61</c> sets. Leaving it on puts
+    /// every cell's text 1.7 pt low in an 18 pt face.
+    /// </para>
+    /// </remarks>
+    private SlideTextBody? CellBody(DrawingTableCellBox cell)
+    {
+        if (cell.TextBody is not { } element) return null;
+
+        List<OdfStyleReference> cascade =
+        [
+            new(element.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value,
+                OdfStyleFamily.TableCell),
+        ];
+
+        SlideTextBody body = OdfTextBody.Read(
+            _file, element.Descendants(XName.Get("p", OdfNamespaces.Text)), cascade);
+
+        if (body.Paragraphs.Count == 0) return null;
+
+        return body with
+        {
+            Insets = cell.Margins,
+            Anchor = cell.Anchor switch
+            {
+                "middle" or "center" => TextAnchor.Middle,
+                "bottom" => TextAnchor.Bottom,
+                _ => TextAnchor.Top,
+            },
+            FontIndependentLineSpacing = false,
+        };
+    }
+
     private PlacedShape? Shape(XElement element, AffineTransform space)
     {
         DocSize size = new(
@@ -248,11 +334,9 @@ internal sealed class OdpSlideLayout
         AffineTransform placement = AffineTransform.Concat(Placement(element), space);
 
         XElement? geometry = element.Element(XName.Get("enhanced-geometry", OdfNamespaces.Draw));
-        string? preset = Preset(element, geometry);
+        CustomShapeGeometry.Geometry outline = Geometry(element, geometry, size);
 
-        GraphicsPath local = Mirrored(
-            SlidePresetGeometry.Outline(preset, size), geometry, size);
-
+        GraphicsPath local = Mirrored(outline.Outline, geometry, size);
         IReadOnlyList<OdfStyleReference> cascade = StyleCascade(element);
         DocRect bounds = ShapeTransform.PlacedBounds(placement, size);
 
@@ -276,8 +360,42 @@ internal sealed class OdpSlideLayout
             Fill = fill,
             Picture = Picture(element, bounds),
             Line = Line(cascade),
-            Text = Text(element, size, preset, placement, cascade),
+            Text = Text(element, outline.TextRectangle, placement, cascade),
         };
+    }
+
+    /// <summary>
+    /// A shape's outline and text rectangle: its own <c>draw:enhanced-path</c> first.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The file's own path beats the preset name, always.</strong> ODF is self-describing
+    /// here in a way DrawingML is not — a <c>draw:custom-shape</c> carries the whole geometry
+    /// program, not a name to look up — and that is what LibreOffice draws: the <c>draw:type</c> is
+    /// consulted only for a handful of special cases in <c>CreateSubPath</c> and never for the
+    /// path itself. Preferring the name would answer correctly for the dozen presets whose ODF and
+    /// DrawingML spellings we happen to have mapped and would draw a bounding rectangle for the
+    /// other hundred and seventy, including every one LibreOffice's own drawing toolbar produces.
+    /// </para>
+    /// <para>
+    /// The name is still the fallback, and it has two jobs: a <c>draw:rect</c>, <c>draw:ellipse</c>
+    /// or <c>draw:circle</c> carries no enhanced geometry at all, and a <c>draw:custom-shape</c>
+    /// whose path is malformed is better drawn as its preset than as nothing.
+    /// </para>
+    /// </remarks>
+    private static CustomShapeGeometry.Geometry Geometry(
+        XElement element, XElement? geometry, DocSize size)
+    {
+        if (geometry is not null && OdfEnhancedGeometry.Read(geometry, size) is { } stated)
+        {
+            return stated;
+        }
+
+        string? preset = Preset(element, geometry);
+
+        return new CustomShapeGeometry.Geometry(
+            SlidePresetGeometry.Outline(preset, size),
+            SlidePresetGeometry.TextRectangle(preset, size));
     }
 
     /// <summary>
@@ -734,8 +852,7 @@ internal sealed class OdpSlideLayout
 
     private PlacedText? Text(
         XElement element,
-        DocSize size,
-        string? preset,
+        DocRect rectangle,
         AffineTransform placement,
         IReadOnlyList<OdfStyleReference> cascade)
     {
@@ -743,7 +860,6 @@ internal sealed class OdpSlideLayout
             _file, Paragraphs(element), [.. cascade, TextStyle(element)]);
         if (body.Paragraphs.Count == 0) return null;
 
-        DocRect rectangle = SlidePresetGeometry.TextRectangle(preset, size);
         bool upright = placement.A == 1 && placement.B == 0 && placement.C == 0 && placement.D == 1;
 
         DocRect area = upright

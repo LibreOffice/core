@@ -124,6 +124,18 @@ had them overwrite each other's output.
 | `slide-table-grid.pptx` | What a table on a slide draws, which nothing else in the corpus states: a cell's fill, its four `a:tcPr` edges and its `marL`…`marB` margins. Two slides, every column 2.5 inch and every stated row 1 inch, so the grid lands on whole points. Slide 1 is a three by three grid whose outer edges are two points and whose inner ones are one, plus three junctions where the two cells meeting there **disagree** — a red edge against a grey one of the same width (the later cell wins), a grey against a green of the same width (the later cell wins), and a three-point orange against a one-point grey (the wider wins). Slide 2 adds a `gridSpan` and its `hMerge` marker, a `rowSpan` and its `vMerge`, top, centre and bottom anchoring, and a row stating `h="0"` whose height is therefore whatever its wrapping cell's two lines need. LibreOffice cannot write this: its own PPTX export writes `a:noFill` on every edge of every cell |
 | `slide-shape-features.pptx` | Preset geometry beyond a rectangle, dashes, arrowheads and automatic numbering — four things LibreOffice's own PPTX export keeps rather than resolves, which is why the file is hand-written and then checked against what the export did with it. Slide 1 is six presets whose edges are all straight (`hexagon`, `pentagon`, `chevron`, `parallelogram`, `trapezoid`, `plus`), so every vertex is comparable; slide 2 is five built out of arcs plus `star5`, including a `pie` with a 240° sweep on a 3:2 box, which is the only shape in the corpus that tells an ellipse's *parameter* apart from its *direction*. Slide 3 is a connector with a medium `triangle` head and a large `stealth` tail, and three dashed lines — `dash`, `sysDashDot` and `lgDashDot` — at three different widths, since a preset dash's lengths are multiples of the pen. Slide 4 is a two-level `a:buAutoNum` list, `arabicPeriod` over `alphaLcParenR`, whose inner numbering restarts when the outer level advances |
 
+### ODP files for rendering
+
+| File | Exercises |
+|---|---|
+| `odp-table-grid.odp` | `slide-table-grid.pptx` put through `soffice --convert-to odp`, so the same table is described in two vocabularies that share no element name. It is the only way to measure the border-width conversion: the OOXML importer halves a stated width and the exporter writes the halved number out, so an ODF reader that halves again draws every rule at 0.42 pt where the reference draws 0.85009. It also carries what LibreOffice writes and the specification does not point at — the cell fill, padding and vertical alignment in `loext:graphic-properties` and the four borders in `style:paragraph-properties` |
+| `odp-shape-paths.fodp` | ODF's own `draw:enhanced-path` command letters, none of which a converted file can carry: anything reaching ODF through an OOXML import comes out as an `ooxml-` preset whose path is `M L C Z N`. Six shapes on a 28 × 15.75 cm page, each 6 × 4.5 cm with a 21600-unit view box so every vertex is a round fraction of a centimetre — a chevron whose notch is a `draw:equation` over a `draw:modifiers` value, a whole ellipse as one `U`, a `U` with a 240° sweep (which is what tells an arc's *stated* radii from its *scaled* ones), four quarter ellipses as `X` and `Y`, two `G` arcs, and two polygons in one subpath so the inner one is a hole. Slide 2 is a hand-written table whose three columns are three different widths, whose first cell spans two of them with a `table:covered-table-cell` beside it, and whose outer rules are three times its inner ones. **It suppresses the master's footer and slide-number placeholders** in its drawing-page style: without `presentation:display-footer="false"` and its two siblings, Impress draws an empty placeholder on every page and the reference PDF gains two text runs of a single space that no reader would reproduce |
+
+Both are 4:3-free: the page is the 28 × 15.75 cm Impress defaults to. That is not a preference —
+**LibreOffice ignores a hand-written `style:page-layout` in a flat ODP** and substitutes its own
+default, so a file stating 25.4 × 19.05 cm renders at 28 × 15.75 and every measurement taken from
+it is against the wrong page. State the size Impress will actually use.
+
 ### Hand-written DOCX files
 
 Five documents that LibreOffice cannot produce, because what they exercise is something its own
@@ -200,6 +212,17 @@ Two traps, both found the hard way:
   one-block path, which distributes the slack over the *letters* as well as the blanks, so
   the words themselves come out wider. Use a manual `<text:line-break/>` when a justified
   line's words need to be fixed.
+- **A flat ODP's `style:page-layout` is ignored, and Impress substitutes its own default.**
+  `odp-shape-paths.fodp` states 28 × 15.75 cm because that is what LibreOffice renders whatever
+  the file says; an earlier draft asking for 25.4 × 19.05 came out at 28 × 15.75 anyway, and every
+  coordinate measured from the reference was against a page 3.6 cm shorter than the one the test
+  expected. State the size Impress will actually use, and check with
+  `pdfinfo | grep "Page size"` before trusting a single number.
+- **Impress draws its master's footer, date and slide-number placeholders even when they are
+  empty**, as a text run of one space per placeholder per page. `presentation:display-footer`,
+  `presentation:display-page-number` and `presentation:display-date-time`, all `"false"` on the
+  page's drawing-page style, are what stop it — otherwise a text comparison against the reference
+  is two runs a page adrift for a reason that has nothing to do with the document.
 
 ### Table layout documents
 
