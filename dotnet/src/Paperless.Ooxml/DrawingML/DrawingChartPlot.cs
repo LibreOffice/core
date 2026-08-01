@@ -109,7 +109,11 @@ public static class DrawingChartPlot
         return new ChartPlot
         {
             Title = TitleText(Child(chart, "title")),
-            CategoryAxisTitle = TitleText(Child(axes.Category, "title")),
+            // A scatter chart's horizontal axis is its domain and not its category axis, and its
+            // title hangs off that element — so reading only c:catAx loses it entirely. The same
+            // fallback CategoryAxisVisible already takes, and tdf127720.pptx is what shows it:
+            // "Dissolved Oxygen (%)" is three words the reference draws and this did not.
+            CategoryAxisTitle = TitleText(Child(axes.Domain ?? axes.Category, "title")),
             ValueAxisTitle = TitleText(Child(axes.Value, "title")),
             Categories = categories,
             Series = series,
@@ -128,6 +132,8 @@ public static class DrawingChartPlot
             ValueScale = ScaleOf(axes.Value),
             ValueFormat = FormatOf(axes.Value),
             CategoryFormat = FormatOf(axes.Category),
+            CategoryAxisText = AxisTextOf(axes.Domain ?? axes.Category),
+            DataTable = DataTableOf(Child(plotArea, "dTable"), theme),
             SecondaryValueScale = axes.Secondary is null ? null : ScaleOf(axes.Secondary),
             SecondaryValueFormat = FormatOf(axes.Secondary),
             SecondaryValueAxisTitle = TitleText(Child(axes.Secondary, "title")),
@@ -267,6 +273,79 @@ public static class DrawingChartPlot
         NumberFormatCode parsed = NumberFormatCode.Parse(code);
         return parsed.IsGeneral ? null : parsed;
     }
+
+    /// <summary>
+    /// What an axis states about how its labels are set.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A rotation outside ±90° reads as none at all.</strong>
+    /// <c>ObjectFormatter::convertTextRotation</c> throws away anything outside
+    /// <c>[-5400000, 5400000]</c> — "MS Office UI allows values only in range of [-90,90]" —
+    /// before negating and normalising into <c>[0, 360)</c>
+    /// (<c>oox/source/drawingml/chart/objectformatter.cxx:1085-1093</c>). Both
+    /// <c>bnc889755.pptx</c> and <c>tdf106217.pptx</c> state <c>rot="-60000000"</c>, which is a
+    /// thousand degrees and reads as zero — so their labels are turned by the layout and not by
+    /// the file, which is the whole point of the exercise and is invisible if the clamp is missed.
+    /// </para>
+    /// <para>
+    /// The other three follow from the same attribute in
+    /// <c>AxisConverter::convertFromModel</c> (<c>axisconverter.cxx:348-368</c>): overlap is
+    /// allowed only where the file states a rotation of exactly zero, wrapping is allowed unless a
+    /// non-zero rotation is in force, and staggering is turned off outright — "do not stagger
+    /// labels in two lines" — which is why an OOXML axis rotates where an ODF one might stagger.
+    /// </para>
+    /// <para>
+    /// <strong>A <c>c:dateAx</c> gets none of that, and it is the difference between two decks
+    /// that look identical.</strong> Those three lines live in the <c>else</c> of a test on
+    /// <c>bDateAxis</c> (<c>axisconverter.cxx:348</c>), so a date axis keeps chart2's own model
+    /// defaults instead — no overlap, <em>no</em> wrapping, arrangement automatic
+    /// (<c>chart2/source/model/main/Axis.cxx:239-242</c>). Wrapping off is what lets a date axis
+    /// turn its labels 45° the moment they collide, where a category axis must first find a label
+    /// that does not fit even broken. <c>bnc889755.pptx</c> and <c>tdf106217.pptx</c> state the
+    /// same out-of-range rotation, hold labels of much the same width, and reach the same 45° by
+    /// two different routes — the first because it is a <c>c:dateAx</c>, the second because
+    /// "Netherlands" is one word too wide for its slot.
+    /// </para>
+    /// </remarks>
+    private static ChartAxisText AxisTextOf(XElement? axis)
+    {
+        XElement? body = Drawing.Child(Child(axis, "txPr"), "bodyPr");
+        int? stated = Drawing.Number(body, "rot");
+
+        double rotation = stated is { } turns and >= -5400000 and <= 5400000
+            ? -turns / 60000.0
+            : 0.0;
+
+        rotation -= 360.0 * Math.Floor(rotation / 360.0);
+
+        bool date = axis is not null && Is(axis, "dateAx");
+
+        return new ChartAxisText(
+            rotation * Math.PI / 180.0,
+            OverlapAllowed: !date && stated is 0,
+            LineBreakAllowed: !date && rotation is 0.0 or 90.0 or 270.0,
+            Stagger: date ? ChartLabelStagger.Auto : ChartLabelStagger.SideBySide);
+    }
+
+    /// <summary>
+    /// The data table under the plot, or null when the chart has none.
+    /// </summary>
+    /// <remarks>
+    /// All four flags default to <c>false</c> here and not to <c>!bMSO2007Doc</c>: unlike the
+    /// <c>c:show*</c> family beside them, <c>DataTableContext</c> reads each as
+    /// <c>getBool(XML_val, false)</c> and <c>DataTableModel</c> initialises each to false
+    /// (<c>oox/source/drawingml/chart/datatablecontext.cxx:48-62</c>).
+    /// </remarks>
+    private static ChartDataTable? DataTableOf(XElement? table, DrawingTheme? theme)
+        => table is null
+            ? null
+            : new ChartDataTable(
+                Flag(table, "showHorzBorder") ?? false,
+                Flag(table, "showVertBorder") ?? false,
+                Flag(table, "showOutline") ?? false,
+                Flag(table, "showKeys") ?? false,
+                LineOf(Child(table, "spPr"), theme) ?? DefaultGrid);
 
     /// <summary>chart2's own gridline colour, gray30.</summary>
     private static readonly Colour DefaultGrid = Colour.FromRgb(0xB3B3B3);
@@ -474,11 +553,86 @@ public static class DrawingChartPlot
                 PointLabels = PointLabelsOf(
                     seriesLabels, numbers.Length, groupLabel, kind, sourceFormat),
                 AxisIndex = axisIndex,
+                Trendlines = TrendlinesOf(element, theme),
             });
         }
 
         return (series, categories);
     }
+
+    /// <summary>
+    /// The trendlines a series carries, or null when it carries none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An unstated <c>c:dispEq</c> or <c>c:dispRSqr</c> means "show it".</strong>
+    /// <c>TrendlineModel</c>'s constructor is <c>mbDispEquation( !bMSO2007Doc )</c>
+    /// (<c>oox/source/drawingml/chart/seriesmodel.cxx:86-92</c>) and
+    /// <c>TrendlineContext</c> reads each flag as <c>getBool( XML_val, !bMSO2007Doc )</c>
+    /// (<c>seriescontext.cxx:307-312</c>). It is the same rule the five data-label flags follow,
+    /// and it is the reason both are stated here as <c>?? true</c> rather than <c>?? false</c>:
+    /// the file Excel writes when it means "no equation" carries an explicit <c>val="0"</c>.
+    /// </para>
+    /// <para>
+    /// <c>c:intercept</c> is <em>presence</em> and not a value —
+    /// <c>ForceIntercept</c> is <c>mfIntercept.has_value()</c> — so a stated intercept of zero
+    /// forces the fit through the origin where an absent one leaves it free.
+    /// </para>
+    /// </remarks>
+    private static List<ChartTrendline>? TrendlinesOf(
+        XElement series, DrawingTheme? theme)
+    {
+        List<ChartTrendline>? trendlines = null;
+
+        foreach (XElement element in Children(series, "trendline"))
+        {
+            XElement? properties = Child(element, "spPr");
+
+            trendlines ??= [];
+            trendlines.Add(new ChartTrendline
+            {
+                Kind = TrendlineKindOf(Value(Child(element, "trendlineType"))),
+                Order = Drawing.Number(Child(element, "order"), "val") ?? 2,
+                Period = Drawing.Number(Child(element, "period"), "val") ?? 2,
+                Forward = Real(Child(element, "forward")) ?? 0.0,
+                Backward = Real(Child(element, "backward")) ?? 0.0,
+                Intercept = Child(element, "intercept") is { } intercept
+                    ? Real(intercept) ?? 0.0
+                    : null,
+                ShowEquation = Flag(element, "dispEq") ?? true,
+                ShowRSquared = Flag(element, "dispRSqr") ?? true,
+                Name = Child(element, "name")?.Value,
+                Line = LineOf(properties, theme),
+                LineWidth = LineWidthOf(properties),
+            });
+        }
+
+        return trendlines;
+    }
+
+    /// <summary>The six spellings of <c>c:trendlineType</c>.</summary>
+    /// <remarks>
+    /// <c>TrendlineConverter::convertFromModel</c> maps each to a
+    /// <c>com.sun.star.chart2.*RegressionCurve</c> service
+    /// (<c>oox/source/drawingml/chart/seriesconverter.cxx:684-706</c>); the default when the
+    /// element is absent is <c>linear</c>, as <c>TrendlineModel</c>'s constructor states.
+    /// </remarks>
+    private static ChartTrendlineKind TrendlineKindOf(string? stated) => stated switch
+    {
+        "poly" => ChartTrendlineKind.Polynomial,
+        "exp" => ChartTrendlineKind.Exponential,
+        "log" => ChartTrendlineKind.Logarithmic,
+        "power" => ChartTrendlineKind.Power,
+        "movingAvg" => ChartTrendlineKind.MovingAverage,
+        _ => ChartTrendlineKind.Linear,
+    };
+
+    /// <summary>A <c>@val</c> read as a real number, or null when the element states none.</summary>
+    private static double? Real(XElement? element)
+        => Value(element) is { } text
+           && double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out double v)
+            ? v
+            : null;
 
     /// <summary>
     /// What marker a series draws, or none.

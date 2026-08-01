@@ -395,17 +395,34 @@ table asserted, not by the corpus.
       against LibreOffice's PDF: the chart's title measured **70.4 pt against a reference 62.1**
       and now measures **63.7**, so 13% too wide became 2.5%. It costs a deck nothing, the factor
       there being exactly 1 and both consumers taking their unstretched path.
-- [ ] **The OOXML plot rectangle is still about a point out**, and the second layout pass still
-      re-derives only the *tick count* from the composed rectangle rather than the rectangle from
-      the laid-out labels. The oracle got twice as big while this was open: see the
-      `chartooo:coordinate-region` note in `dotnet/TODO.md` Phase 3.5.
-- [ ] **What a chart still does not draw**: a trendline and its equation (`c:trendline`,
-      `c:dispEq`, `c:dispRSqr` — `tdf127720.pptx` and `trendline.ods` are most of what is left on
-      each set); a data table below the plot (`tdf137691_dataTable.pptx`, 12 words); rotated and
-      staggered axis labels, which LibreOffice falls back to when they would collide and which is
-      the whole of `bnc889755.pptx`'s residual; and label *dropping*, which it falls back to after
-      that — `tdf106217.pptx` draws eight category names in our render and none in the reference,
-      because they do not fit. Radar, bubble, stock, surface and of-pie still draw nothing.
+- [x] **Trendlines, rotated axis labels and a data table all draw, and the deck set fell
+      128 → 79 with 21 of 38 exact.** Everything that decides what is drawn is in
+      `Paperless.Core.Charts` — `ChartRegression`, `ChartAxisLabels`, `ChartDataTable` — and this
+      library gained nothing at all: a rotated chart label already goes through the same
+      `SlideChart.Text` path the value-axis title has always used, which is the payoff for having
+      put rotation on `ChartLabel` rather than special-casing the one caller that had it.
+      Measured, deck by deck: `tdf127720.pptx` 16/28 → **28/28** on its equation,
+      `tdf137691_dataTable.pptx` 68/80 → **80/80** on its table, `bnc889755.pptx` 35/89 →
+      **84/89** on sixteen month names turned 45°.
+- [x] **A deck can measure LibreOffice's PDF writer instead of its layout, and it took a content
+      stream to see it.** `tdf106217.pptx` was recorded here as drawing "eight category names in
+      our render and none in the reference, because they do not fit". The reference draws all
+      eight, rotated, as filled glyph **outlines** — `pdftotext` reads none of them — and our
+      render now matches its picture crop-for-crop while its word count *rises* from 15 to 39
+      against a reference 7. `bnc889755.pptx` is the same trap the other way up: its 89 words are
+      16 labels, for which the writer emits one `Tj` per glyph. **A word count is a proxy and the
+      content stream says what the proxy is measuring**; both readings would have been settled by
+      one `zlib.decompress`.
+- [ ] **The OOXML plot rectangle is still about a point out**, and the third layout pass is what is
+      missing: the tick count is re-derived from the rectangle and the rectangle from a rotated
+      label arrangement, but neither from the *drawn* bounding box, which is
+      `VDiagram::adjustInnerSize`. Measured on `chart-bar-deck.pptx` and unchanged by this run:
+      1.291 pt left, 0.776 pt high, 0.500 pt narrow, 0.761 pt tall, with the bottom edge exact to
+      0.015 pt. See `dotnet/TODO.md` Phase 3.5 for the two dead ends already ruled out.
+- [ ] **What a chart still does not draw**: radar, bubble, stock, surface and of-pie; a doughnut
+      still draws as a pie, losing the hole; and a data label that does not fit is not wrapped —
+      `tdf146756_bestFit.pptx`'s 11 remaining words are labels the reference breaks onto more
+      lines than we do.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the

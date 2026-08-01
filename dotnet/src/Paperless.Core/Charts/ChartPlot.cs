@@ -158,6 +158,17 @@ public sealed record ChartSeries(
     public ChartDataLabel? Label { get; init; }
 
     /// <summary>
+    /// The trendlines fitted to this series, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:ser/c:trendline</c>, of which a series may carry several — a linear fit and a moving
+    /// average over the same points is an ordinary chart. ODF's counterparts are
+    /// <c>chart:regression-curve</c> and <c>chart:mean-value</c>, which hang off the series in the
+    /// same way.
+    /// </remarks>
+    public IReadOnlyList<ChartTrendline>? Trendlines { get; init; }
+
+    /// <summary>
     /// A label per point where the file overrides the series', or null where it does not.
     /// </summary>
     /// <remarks><c>c:dLbl</c> inside <c>c:dLbls</c>, addressed by <c>c:idx</c>.</remarks>
@@ -398,6 +409,17 @@ public sealed record ChartPlot
     public NumberFormatCode? ValueFormat { get; init; }
 
     /// <summary>
+    /// What the file says about how the category axis' labels are set.
+    /// </summary>
+    /// <remarks>
+    /// The rotation, whether they may overlap, whether they may wrap and whether they may be
+    /// staggered — four things that between them decide whether a crowded axis draws sixteen
+    /// month names turned a quarter turn, eight of sixteen upright, or all sixteen on top of one
+    /// another. Resolved by <see cref="ChartAxisLabels"/>, which is where the rules live.
+    /// </remarks>
+    public ChartAxisText CategoryAxisText { get; init; }
+
+    /// <summary>
     /// How the category axis' labels are written, or null to draw the cached text as it stands.
     /// </summary>
     /// <remarks>
@@ -411,6 +433,18 @@ public sealed record ChartPlot
 
     /// <summary>The chart area's own fill, or null when it states none.</summary>
     public Colour? Background { get; init; }
+
+    /// <summary>
+    /// The table of numbers drawn under the plot, or null when the chart has none.
+    /// </summary>
+    /// <remarks>
+    /// <c>c:plotArea/c:dTable</c>. It is not a decoration: the plot rectangle gives up the room it
+    /// takes, and the category axis stops drawing its own labels because the table's header row is
+    /// them — <c>m_bDisplayLabels = false</c> whenever <c>m_bDisplayDataTable</c> is set on
+    /// dimension 0 (<c>chart2/source/view/axes/VAxisProperties.cxx:336-343</c>). Drawing both is
+    /// the mistake it invites, and it shows as every category name twice.
+    /// </remarks>
+    public ChartDataTable? DataTable { get; init; }
 
     /// <summary>
     /// The size the main title is set at.

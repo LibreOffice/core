@@ -402,11 +402,43 @@ public static class ChartLayout
             ? ChartScale.Resolve(plot.SecondaryValueScale!.Value, secondMinimum, secondMaximum)
             : null;
 
-        DocRect area = PlotAreaOf(plot, frame, scale, secondary, domain, categories, measurer);
+        DocRect area = PlotAreaOf(
+            plot, frame, scale, secondary, domain, categories, measurer, null);
+
         if (area.Width <= Length.Zero || area.Height <= Length.Zero)
             return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
 
         bool columns = plot.Direction == ChartBarDirection.Column;
+
+        // Whether the category labels fit, and what to do about it if they do not. This is the
+        // other half of LibreOffice's outer loop: the arrangement is decided from the rectangle
+        // the labels were reserved room in, and a rotated or staggered arrangement is deeper than
+        // an upright one, so the rectangle has to be composed again around it. One refinement is
+        // enough — the second arrangement is over an axis that is shorter by the labels' own
+        // depth, and a third pass has never changed it on the corpus.
+        ChartAxisLabelLayout? arranged = null;
+
+        if (plot.HasAxes && columns && plot.CategoryAxisVisible
+            && domain is null && plot.DataTable is null)
+        {
+            arranged = ArrangeCategories(plot, area, categories, measurer);
+
+            if (arranged is { } first && !IsPlain(first))
+            {
+                area = PlotAreaOf(
+                    plot, frame, scale, secondary, domain, categories, measurer, arranged);
+
+                if (area.Width <= Length.Zero || area.Height <= Length.Zero)
+                    return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
+
+                arranged = ArrangeCategories(plot, area, categories, measurer);
+                area = PlotAreaOf(
+                    plot, frame, scale, secondary, domain, categories, measurer, arranged);
+
+                if (area.Width <= Length.Zero || area.Height <= Length.Zero)
+                    return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
+            }
+        }
 
         // LibreOffice's second pass, narrowed to the one thing it changes here. How many ticks an
         // axis may have is decided from how long that axis turned out and how tall — or wide — a
@@ -428,7 +460,9 @@ public static class ChartLayout
                         maximumIntervals: fitting);
                 }
 
-                area = PlotAreaOf(plot, frame, scale, secondary, domain, categories, measurer);
+                area = PlotAreaOf(
+                    plot, frame, scale, secondary, domain, categories, measurer, arranged);
+
                 if (area.Width <= Length.Zero || area.Height <= Length.Zero)
                     return new ChartDrawing(DocRect.Empty, boxes, lines, labels, shapes);
             }
@@ -447,7 +481,10 @@ public static class ChartLayout
             }
 
             if (domain is { } across) AddDomainAxis(plot, area, across, columns, lines, labels);
-            else AddCategoryAxis(plot, area, categories, columns, lines, labels);
+            else AddCategoryAxis(
+                    plot, area, categories, columns, arranged, measurer, lines, labels);
+
+            AddDataTable(plot, frame, area, categories, columns, measurer, lines, labels);
         }
 
         // Every plot group is drawn, not only the first, and the order is back to front: areas
@@ -491,10 +528,218 @@ public static class ChartLayout
             }
         }
 
+        // The trendlines go over every series and under the titles, which is the order
+        // ChartView adds the regression group in — after the series shapes and into the same
+        // diagram group.
+        for (int axis = 0; axis <= 1; axis++)
+        {
+            if (axis == 1 && secondary is null) continue;
+
+            AddTrendlines(
+                plot,
+                frame,
+                area,
+                axis == 1 ? secondary!.Value : scale,
+                domain,
+                categories,
+                columns,
+                axis,
+                shapes,
+                labels);
+        }
+
         AddTitles(plot, frame, area, measurer, labels);
         AddLegend(plot, frame, area, measurer, boxes, labels);
 
         return new ChartDrawing(area, boxes, lines, labels, shapes);
+    }
+
+    /// <summary>How many points a fitted curve is sampled at.</summary>
+    /// <remarks>
+    /// <c>nPointCount = 100 * fPointScale</c> in
+    /// <c>VSeriesPlotter::createRegressionCurvesShapes</c> (<c>VSeriesPlotter.cxx:1363</c>), where
+    /// the scale is the extrapolated range over the axis' range and is clamped to 1000. A hundred
+    /// samples over a curve a few hundred points wide puts a vertex every two or three points,
+    /// which is finer than the rounding the reference's own coordinates carry.
+    /// </remarks>
+    private const int CurveSamples = 100;
+
+    /// <summary>
+    /// The trendlines of every series measured against one value axis.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A category chart's X values are 1, 2, 3 … and not 0, 1, 2.</strong>
+    /// <c>VDataSeries::getAllX</c> synthesises them when the series states none —
+    /// "first category (index 0) matches with real number 1.0"
+    /// (<c>chart2/source/view/main/VDataSeries.cxx:760-772</c>) — and the fit is over those, so a
+    /// linear trendline over four categories has its intercept at x = 0, one whole category to the
+    /// left of the first bar. Fitting over indices instead moves the intercept by the slope and
+    /// writes a different equation for the same picture.
+    /// </para>
+    /// <para>
+    /// <strong>The curve is clipped to the plot area rather than allowed outside it.</strong>
+    /// <c>Clipping::clipPolygonAtRectangle</c> against the scaled logic rectangle
+    /// (<c>VSeriesPlotter.cxx:1421</c>) — which is what makes <c>c:forward</c> safe: a trendline
+    /// extrapolated ten categories past the data stops at the wall. Clipping each segment against
+    /// the fraction interval [0, 1] in both dimensions is the same operation once the point has
+    /// been mapped, and it costs no geometry of its own.
+    /// </para>
+    /// </remarks>
+    private static void AddTrendlines(
+        ChartPlot plot,
+        DocRect frame,
+        DocRect area,
+        ChartScaleResult scale,
+        ChartScaleResult? domain,
+        int categories,
+        bool columns,
+        int axis,
+        List<ChartShape> shapes,
+        List<ChartLabel> labels)
+    {
+        foreach (ChartSeries series in plot.Series)
+        {
+            if (series.AxisIndex != axis) continue;
+            if (series.Trendlines is not { Count: > 0 } trendlines) continue;
+
+            IReadOnlyList<double?> xs = XValuesOf(series, categories);
+            if (xs.Count == 0) continue;
+
+            foreach (ChartTrendline trendline in trendlines)
+            {
+                ChartRegression fit = ChartRegression.Fit(trendline, xs, series.Values);
+                if (!fit.IsUsable) continue;
+
+                (double? minimum, double? maximum) = Extent(xs);
+                if (minimum is not { } from || maximum is not { } to) continue;
+
+                bool mean = trendline.Kind == ChartTrendlineKind.Mean;
+                if (!mean)
+                {
+                    from -= trendline.Backward;
+                    to += trendline.Forward;
+                }
+
+                double span = domain is { } across ? across.Span : Math.Max(1.0, categories);
+                double stretch = span == 0.0 ? 1.0 : (to - from) / span;
+                int samples = (int)(CurveSamples * Math.Min(Math.Abs(stretch), 1000.0));
+
+                GraphicsPath path = new();
+                bool open = false;
+                DocPoint? first = null;
+
+                foreach ((double x, double y) in fit.Curve(from, to, samples))
+                {
+                    if (!double.IsFinite(x) || !double.IsFinite(y))
+                    {
+                        open = false;
+                        continue;
+                    }
+
+                    double alongFraction = FractionAlong(plot, domain, x, categories);
+                    double upFraction = scale.Fraction(y);
+
+                    if (alongFraction is < 0.0 or > 1.0 || upFraction is < 0.0 or > 1.0)
+                    {
+                        open = false;
+                        continue;
+                    }
+
+                    DocPoint point = Point(area, alongFraction, upFraction, columns);
+                    first ??= point;
+
+                    if (open) path.LineTo(point);
+                    else path.MoveTo(point);
+
+                    open = true;
+                }
+
+                if (path.Commands.Count >= 2)
+                {
+                    shapes.Add(new ChartShape(
+                        path,
+                        null,
+                        trendline.Line ?? series.Line ?? series.Fill ?? Colour.Black,
+                        trendline.LineWidth));
+                }
+
+                if (fit.Equation(trendline, plot.ValueFormat) is not { Length: > 0 } equation)
+                    continue;
+
+                // ODF states where the equation goes; OOXML states nothing, so it falls back to
+                // the curve's own top-left, which is what aDefaultPos is.
+                DocPoint at = trendline.EquationAt is { } stated
+                    ? new DocPoint(frame.X + stated.X, frame.Y + stated.Y)
+                    : first ?? new DocPoint(area.Left, area.Top);
+
+                foreach (string line in equation.Split('\n'))
+                {
+                    if (line.Length == 0) continue;
+                    labels.Add(new ChartLabel(
+                        line, at, ChartLabelAnchor.LeftMiddle, plot.LabelSize, AxisColour));
+                    at = new DocPoint(at.X, at.Y + plot.LabelSize * ChartLineHeight);
+                }
+            }
+        }
+    }
+
+    /// <summary>A chart's line height as a multiple of the em.</summary>
+    /// <remarks>
+    /// A chart's text shapes are not slide shapes: <c>chart2</c>'s view makes plain text shapes
+    /// and sets no <c>FixedCellHeight</c>, so a line is the face's own 1.1499 em rather than
+    /// EditEngine's flat 1.2. Only the equation needs it here, being the one piece of chart text
+    /// that is more than one line.
+    /// </remarks>
+    private const double ChartLineHeight = 1.1499;
+
+    /// <summary>
+    /// The X values a trendline is fitted over: the series' own, or 1, 2, 3 … per category.
+    /// </summary>
+    private static IReadOnlyList<double?> XValuesOf(ChartSeries series, int categories)
+    {
+        if (series.XValues is { Count: > 0 } stated) return stated;
+
+        int count = Math.Max(series.Values.Count, categories);
+        double?[] indices = new double?[count];
+        for (int at = 0; at < count; at++) indices[at] = at + 1;
+        return indices;
+    }
+
+    /// <summary>The smallest and largest finite value in a sequence.</summary>
+    private static (double? Minimum, double? Maximum) Extent(IReadOnlyList<double?> values)
+    {
+        double minimum = double.PositiveInfinity;
+        double maximum = double.NegativeInfinity;
+
+        foreach (double? point in values)
+        {
+            if (point is not { } value || !double.IsFinite(value)) continue;
+            minimum = Math.Min(minimum, value);
+            maximum = Math.Max(maximum, value);
+        }
+
+        return double.IsInfinity(minimum) ? (null, null) : (minimum, maximum);
+    }
+
+    /// <summary>
+    /// Where a fitted X sits across the plot area, on either kind of horizontal axis.
+    /// </summary>
+    /// <remarks>
+    /// A scatter chart's is its domain scale's fraction. A category chart's follows from
+    /// <see cref="ChartPlot.ShiftedCategories"/>: on a shifted axis category <em>n</em> occupies
+    /// the slot from <c>(n−1)/count</c> to <c>n/count</c>, so <c>x = n</c> falls at its centre;
+    /// on an unshifted one the categories are points and <c>x = n</c> falls at
+    /// <c>(n−1)/(count−1)</c>. Both agree with <see cref="CategoryAt"/> at integer <em>x</em>,
+    /// which is the check that the trendline and the bars it crosses are in the same space.
+    /// </remarks>
+    private static double FractionAlong(
+        ChartPlot plot, ChartScaleResult? domain, double x, int categories)
+    {
+        if (domain is { } across) return across.Fraction(x);
+        if (categories <= 0) return 0.5;
+        if (plot.ShiftedCategories) return (x - 0.5) / categories;
+        return categories == 1 ? 0.5 : (x - 1.0) / (categories - 1);
     }
 
     /// <summary>
@@ -605,6 +850,13 @@ public static class ChartLayout
     /// <summary>
     /// The inner plot rectangle: stated by the file when it states one, computed otherwise.
     /// </summary>
+    /// <remarks>
+    /// The <c>arranged</c> parameter is how the category labels came out when they needed
+    /// rotating, thinning or staggering: the room reserved under the axis is then the
+    /// arrangement's own depth rather than one line. It is null both on the first pass, before
+    /// anything has been arranged, and for every axis whose labels fit as they are — which is what
+    /// keeps the reservation on an ordinary chart exactly what it was.
+    /// </remarks>
     private static DocRect PlotAreaOf(
         ChartPlot plot,
         DocRect frame,
@@ -612,7 +864,8 @@ public static class ChartLayout
         ChartScaleResult? secondary,
         ChartScaleResult? domain,
         int categories,
-        IChartTextMeasurer measurer)
+        IChartTextMeasurer measurer,
+        ChartAxisLabelLayout? arranged)
     {
         // Absolute, in the chart's own coordinates — ODF's chart:coordinate-region, which is
         // already in whatever space Place composed in.
@@ -686,8 +939,20 @@ public static class ChartLayout
 
         Length valueSpace = plot.ValueAxisVisible ? TickLength + LabelSpacing : Length.Zero;
         Length categorySpace = plot.CategoryAxisVisible ? TickLength + LabelSpacing : Length.Zero;
-        Length categoryHeight = plot.CategoryAxisVisible ? labelHeight : Length.Zero;
         Length valueHeight = plot.ValueAxisVisible ? labelHeight : Length.Zero;
+
+        // Upright labels reserve one line of *text*, which is what every measurement in this file
+        // was fitted against and what the six corpus charts still agree with. Rotated, thinned or
+        // staggered labels reserve their arrangement's own depth instead — the rotated shape's
+        // height, insets included, which is what LibreOffice reserves and is several times a line
+        // on an axis of long names turned 45°.
+        Length categoryHeight = plot.DataTable is not null
+            ? DataTableHeight(plot, measurer)
+            : !plot.CategoryAxisVisible
+                ? Length.Zero
+                : arranged is { } layout && !IsPlain(layout)
+                    ? layout.Reserved
+                    : labelHeight;
 
         if (columns)
         {
@@ -922,6 +1187,8 @@ public static class ChartLayout
         DocRect area,
         int categories,
         bool columns,
+        ChartAxisLabelLayout? arranged,
+        IChartTextMeasurer measurer,
         List<ChartLine> lines,
         List<ChartLabel> labels)
     {
@@ -986,7 +1253,169 @@ public static class ChartLayout
             }
         }
 
-        if (!plot.CategoryAxisVisible) return;
+        // A data table's header row *is* the category labels, so the axis draws none of its own —
+        // VAxisProperties.cxx:336-343 turns DisplayLabels off outright. Drawing both is what puts
+        // every category name on the page twice.
+        if (!plot.CategoryAxisVisible || plot.DataTable is not null) return;
+
+        ChartAxisLabelLayout layout =
+            arranged ?? new ChartAxisLabelLayout(0.0, 1, false, Length.Zero);
+
+        int rhythm = Math.Max(1, layout.Rhythm);
+        double cosine = Math.Abs(Math.Cos(layout.Rotation));
+        double sine = Math.Abs(Math.Sin(layout.Rotation));
+
+        for (int at = 0; at < categories; at++)
+        {
+            if (at >= plot.Categories.Count) continue;
+
+            // Thinned out: every nth label survives and the rest are simply not drawn, which is
+            // removeShapesAtWrongRhythm. Tick zero always survives, so an axis never ends up with
+            // no labels at all however crowded it is.
+            if (at % rhythm != 0) continue;
+
+            if (ChartDataLabel.WriteCategory(plot.Categories[at], plot.CategoryFormat)
+                is not { Length: > 0 } text)
+            {
+                continue;
+            }
+
+            double centre = CategoryAt(plot, at, categories);
+
+            if (!columns)
+            {
+                labels.Add(new ChartLabel(
+                    text,
+                    new DocPoint(
+                        area.Left - TickLength - LabelSpacing,
+                        area.Bottom - area.Height * centre),
+                    ChartLabelAnchor.RightMiddle,
+                    plot.LabelSize,
+                    AxisColour));
+
+                continue;
+            }
+
+            Length x = area.Left + area.Width * centre;
+            Length top = area.Bottom + TickLength + LabelSpacing;
+
+            // The second row of a staggered axis sits one row below the first.
+            if (layout.Staggered && at / rhythm % 2 == 1) top += layout.Reserved / 2;
+
+            if (layout.Rotation == 0.0)
+            {
+                labels.Add(new ChartLabel(
+                    text, new DocPoint(x, top), ChartLabelAnchor.CentreTop,
+                    plot.LabelSize, AxisColour));
+
+                continue;
+            }
+
+            // A rotated label is placed by the centre of its rotated bounding box, because that is
+            // the only thing a glyph run — which carries an origin and advances, not a matrix —
+            // can be positioned by after the fact. Measured against LibreOffice's own PDF for
+            // bnc889755.pptx: its rotated labels' boxes are centred on the tick horizontally and
+            // start at the tick-to-text distance below the axis, which is exactly this.
+            DocSize box = Shape(measurer, text, plot.LabelSize);
+            Length depth = box.Width * sine + box.Height * cosine;
+
+            labels.Add(new ChartLabel(
+                text,
+                new DocPoint(x, top + depth / 2),
+                ChartLabelAnchor.Centre,
+                plot.LabelSize,
+                AxisColour,
+                layout.Rotation));
+        }
+    }
+
+    /// <summary>How tall the data table is: one row per series plus the header row.</summary>
+    /// <remarks>
+    /// A cell's text distances are the same <c>0.18</c>/<c>0.30 × fontHeight</c> every other piece
+    /// of chart text gets — <c>DataTableView::setCellCharAndParagraphProperties</c> computes them
+    /// with the identical two constants (<c>DataTableView.cxx:171-180</c>) — so a row is exactly
+    /// one <see cref="Shape"/> tall and nothing new needs measuring.
+    /// </remarks>
+    private static Length DataTableHeight(ChartPlot plot, IChartTextMeasurer measurer)
+        => Shape(measurer, "0", plot.LabelSize).Height * (plot.Series.Count + 1);
+
+    /// <summary>
+    /// The table of numbers under the plot: its grid, its header row and one row per series.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>DataTableView::createShapes</c> (<c>chart2/source/view/main/DataTableView.cxx:246-540</c>)
+    /// reduced to what a display list needs. Its columns are the category slots — the flag chart2
+    /// calls <c>m_bDataTableAlignAxisValuesWithColumns</c>, true for dimension 0, means the column
+    /// width <em>is</em> the axis step — and its one extra column, on the left, holds the series
+    /// names in the room the value axis' labels already occupy.
+    /// </para>
+    /// <para>
+    /// <strong>The header row is the category axis' labels and not a copy of them.</strong> See
+    /// <see cref="AddCategoryAxis"/>: the axis stops drawing labels the moment a table appears, so
+    /// the names are written once, here.
+    /// </para>
+    /// </remarks>
+    private static void AddDataTable(
+        ChartPlot plot,
+        DocRect frame,
+        DocRect area,
+        int categories,
+        bool columns,
+        IChartTextMeasurer measurer,
+        List<ChartLine> lines,
+        List<ChartLabel> labels)
+    {
+        if (plot.DataTable is not { } table) return;
+        if (!columns || categories <= 0 || plot.Series.Count == 0) return;
+
+        Length row = Shape(measurer, "0", plot.LabelSize).Height;
+        Length top = area.Bottom;
+        Length column = area.Width / categories;
+
+        // The header column reaches back over the room the value axis' labels take, which is where
+        // LibreOffice puts it: the table starts at the axis' own start and its row headers hang to
+        // the left of it.
+        Length left = frame.X + frame.Width * PageMargin;
+        if (left > area.Left) left = area.Left;
+
+        int rows = plot.Series.Count + 1;
+        Length bottom = top + row * rows;
+
+        if (table.Outline)
+        {
+            lines.Add(new ChartLine(
+                new DocPoint(left, top), new DocPoint(area.Right, top), table.Line));
+            lines.Add(new ChartLine(
+                new DocPoint(left, bottom), new DocPoint(area.Right, bottom), table.Line));
+            lines.Add(new ChartLine(
+                new DocPoint(left, top), new DocPoint(left, bottom), table.Line));
+            lines.Add(new ChartLine(
+                new DocPoint(area.Right, top), new DocPoint(area.Right, bottom), table.Line));
+        }
+
+        if (table.HorizontalBorders)
+        {
+            for (int at = 1; at < rows; at++)
+            {
+                Length y = top + row * at;
+                lines.Add(new ChartLine(
+                    new DocPoint(left, y), new DocPoint(area.Right, y), table.Line));
+            }
+        }
+
+        if (table.VerticalBorders)
+        {
+            lines.Add(new ChartLine(
+                new DocPoint(area.Left, top), new DocPoint(area.Left, bottom), table.Line));
+
+            for (int at = 1; at < categories; at++)
+            {
+                Length x = area.Left + column * at;
+                lines.Add(new ChartLine(
+                    new DocPoint(x, top), new DocPoint(x, bottom), table.Line));
+            }
+        }
 
         for (int at = 0; at < categories; at++)
         {
@@ -997,27 +1426,91 @@ public static class ChartLayout
                 continue;
             }
 
-            double centre = CategoryAt(plot, at, categories);
+            labels.Add(new ChartLabel(
+                text,
+                new DocPoint(area.Left + column * (at + 0.5), top + row / 2),
+                ChartLabelAnchor.Centre,
+                plot.LabelSize,
+                AxisColour));
+        }
 
-            labels.Add(columns
-                ? new ChartLabel(
-                    text,
-                    new DocPoint(
-                        area.Left + area.Width * centre,
-                        area.Bottom + TickLength + LabelSpacing),
-                    ChartLabelAnchor.CentreTop,
-                    plot.LabelSize,
-                    AxisColour)
-                : new ChartLabel(
-                    text,
-                    new DocPoint(
-                        area.Left - TickLength - LabelSpacing,
-                        area.Bottom - area.Height * centre),
-                    ChartLabelAnchor.RightMiddle,
+        for (int series = 0; series < plot.Series.Count; series++)
+        {
+            Length middle = top + row * (series + 1) + row / 2;
+            ChartSeries plotted = plot.Series[series];
+
+            if (table.Keys && plotted.Fill is { } key)
+            {
+                // The key is a filled square of 0.6 of the font height
+                // (DataTableView.cxx:364), drawn here as a stroke of that width so that it needs
+                // no box of its own.
+                Length side = plot.LabelSize * 0.6;
+
+                lines.Add(new ChartLine(
+                    new DocPoint(left + side / 4, middle),
+                    new DocPoint(left + side * 1.25, middle),
+                    key,
+                    side));
+            }
+
+            if (plotted.Name is { Length: > 0 } name)
+            {
+                Length indent = table.Keys ? plot.LabelSize * 1.1 : plot.LabelSize * 0.18;
+                labels.Add(new ChartLabel(
+                    name,
+                    new DocPoint(left + indent, middle),
+                    ChartLabelAnchor.LeftMiddle,
                     plot.LabelSize,
                     AxisColour));
+            }
+
+            for (int at = 0; at < categories; at++)
+            {
+                if (at >= plotted.Values.Count) continue;
+                if (plotted.Values[at] is not { } value || !double.IsFinite(value)) continue;
+
+                labels.Add(new ChartLabel(
+                    ChartDataLabel.Write(value, plot.ValueFormat),
+                    new DocPoint(area.Left + column * (at + 0.5), middle),
+                    ChartLabelAnchor.Centre,
+                    plot.LabelSize,
+                    AxisColour));
+            }
         }
     }
+
+    /// <summary>
+    /// Whether an arrangement is the one every uncrowded axis gets.
+    /// </summary>
+    /// <remarks>
+    /// The test that keeps a chart whose labels fit on exactly the measurements it had before any
+    /// of this existed: upright, every label drawn, one row.
+    /// </remarks>
+    private static bool IsPlain(ChartAxisLabelLayout layout)
+        => layout.Rotation == 0.0 && layout.Rhythm <= 1 && !layout.Staggered;
+
+    /// <summary>
+    /// How the category labels come out on the axis the plot rectangle gives them.
+    /// </summary>
+    private static ChartAxisLabelLayout ArrangeCategories(
+        ChartPlot plot, DocRect area, int categories, IChartTextMeasurer measurer)
+    {
+        string?[] texts = new string?[categories];
+        Length[] centres = new Length[categories];
+
+        for (int at = 0; at < categories; at++)
+        {
+            texts[at] = at < plot.Categories.Count
+                ? ChartDataLabel.WriteCategory(plot.Categories[at], plot.CategoryFormat)
+                : null;
+
+            centres[at] = area.Left + area.Width * CategoryAt(plot, at, categories);
+        }
+
+        return ChartAxisLabels.Resolve(
+            texts, centres, plot.CategoryAxisText, plot.LabelSize, measurer);
+    }
+
 
     /// <summary>
     /// Where a category sits along the axis, 0 at the plot area's start and 1 at its end.

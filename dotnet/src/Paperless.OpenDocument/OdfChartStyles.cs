@@ -135,6 +135,20 @@ public sealed class OdfChartStyles
     public string? Text(string? name, string property)
         => Attribute(Properties(name, "chart-properties"), OdfNamespaces.Chart, property);
 
+    /// <summary>
+    /// The rotation a style states for its text, in degrees anticlockwise, or null.
+    /// </summary>
+    /// <remarks>
+    /// <c>style:rotation-angle</c> on <c>style:text-properties</c> — ODF's counterpart of
+    /// DrawingML's <c>a:bodyPr/@rot</c>, in whole degrees rather than sixtieths of a thousandth,
+    /// and anticlockwise rather than clockwise, so it needs neither the negation nor the ±90°
+    /// clamp its OOXML sibling does.
+    /// </remarks>
+    /// <param name="name">The style's name.</param>
+    public double? Rotation(string? name)
+        => OdfValue.ParseDouble(
+            Attribute(Properties(name, "text-properties"), OdfNamespaces.Style, "rotation-angle"));
+
     /// <summary>The font size a style states, or null when it states none.</summary>
     public Length? FontSize(string? name)
         => OdfValue.ParseLength(

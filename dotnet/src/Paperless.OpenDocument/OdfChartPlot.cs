@@ -125,6 +125,7 @@ public static class OdfChartPlot
                 Marker = MarkerOf(style, styles, own),
                 Label = LabelOf(style, styles, own, areaLabel),
                 PointLabels = PointLabelsOf(element, values.Count, styles, own, areaLabel),
+                Trendlines = TrendlinesOf(element, styles),
             });
         }
 
@@ -161,6 +162,8 @@ public static class OdfChartPlot
             ValueScale = ScaleOf(valueAxis, styles),
             ValueFormat = styles.Format(Attribute(valueAxis, OdfNamespaces.Chart, "style-name")),
             CategoryFormat = styles.Format(Attribute(categoryAxis, OdfNamespaces.Chart, "style-name")),
+            CategoryAxisText = AxisTextOf(
+                Attribute(categoryAxis, OdfNamespaces.Chart, "style-name"), styles),
 
             // chart:visible="false" is ODF's c:delete: an axis that is present in the file so that
             // its scale and its grid survive a round trip, and drawn as nothing.
@@ -383,6 +386,161 @@ public static class OdfChartPlot
             _ => ChartMarker.Square,
         };
     }
+
+    /// <summary>
+    /// What an axis' style says about how its labels are set.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF states three of the four and defaults the fourth. <c>chart:text-overlap</c> and
+    /// <c>chart:label-arrangement</c> are chart properties; the rotation is
+    /// <c>style:rotation-angle</c> on the axis' <em>text</em> properties, in whole degrees
+    /// anticlockwise, which is the direction ODF and this model already agree on and OOXML does
+    /// not. Line breaking has no ODF attribute at all, so it stays at chart2's own model default
+    /// of false (<c>Axis.cxx:239</c>) — which is the opposite of what OOXML's importer sets, and
+    /// it is why an ODF axis can reach the rotation path without a label having to wrap first.
+    /// </para>
+    /// <para>
+    /// The arrangement defaults to <c>ChartAxisArrangeOrderType_AUTO</c> (<c>Axis.cxx:242</c>),
+    /// which is <see cref="ChartLabelStagger.Auto"/> — so an ODF axis may stagger where an OOXML
+    /// one may not. In practice it rarely does; see <see cref="ChartAxisLabels"/> for why the
+    /// route to staggering is nearly closed.
+    /// </para>
+    /// </remarks>
+    private static ChartAxisText AxisTextOf(string? style, OdfChartStyles styles)
+    {
+        double degrees = styles.Rotation(style) ?? 0.0;
+        degrees -= 360.0 * Math.Floor(degrees / 360.0);
+
+        return new ChartAxisText(
+            degrees * Math.PI / 180.0,
+            OverlapAllowed: styles.Flag(style, "text-overlap") ?? false,
+            LineBreakAllowed: false,
+            Stagger: styles.Text(style, "label-arrangement") switch
+            {
+                "side-by-side" => ChartLabelStagger.SideBySide,
+                "stagger-even" => ChartLabelStagger.Even,
+                "stagger-odd" => ChartLabelStagger.Odd,
+                _ => ChartLabelStagger.Auto,
+            });
+    }
+
+    /// <summary>
+    /// The trendlines a series carries, or null when it carries none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>chart:regression-curve</c> plus, for the mean line, <c>chart:mean-value</c>. Everything
+    /// about the fit is on the curve's <em>style</em> —
+    /// <c>chart:regression-type</c>, <c>-max-degree</c>, <c>-period</c>, <c>-moving-type</c>,
+    /// <c>-extrapolate-forward</c>, <c>-extrapolate-backward</c>, <c>-force-intercept</c>,
+    /// <c>-intercept-value</c> — and only the two display flags are on the element, on its child
+    /// <c>chart:equation</c>. That child's absence means neither is shown, which is the opposite
+    /// of OOXML's rule and is why the two readers cannot share a default.
+    /// </para>
+    /// <para>
+    /// <strong>ODF bakes the equation's position into the file, exactly as it bakes the plot
+    /// rectangle.</strong> <c>chart:equation/@svg:x</c> and <c>@svg:y</c> are in the chart's own
+    /// coordinate space — the same space <c>chart:coordinate-region</c> uses — so an ODF chart
+    /// needs no equivalent of <c>VSeriesPlotter</c>'s default placement at all.
+    /// </para>
+    /// </remarks>
+    private static List<ChartTrendline>? TrendlinesOf(
+        XElement series, OdfChartStyles styles)
+    {
+        List<ChartTrendline>? trendlines = null;
+
+        foreach (XElement element in Children(series, OdfNamespaces.Chart, "regression-curve"))
+        {
+            string? style = Attribute(element, OdfNamespaces.Chart, "style-name");
+            XElement? equation = Child(element, OdfNamespaces.Chart, "equation");
+
+            bool forced = styles.Flag(style, "regression-force-intercept") ?? false;
+
+            trendlines ??= [];
+            trendlines.Add(new ChartTrendline
+            {
+                Kind = RegressionKindOf(styles.Text(style, "regression-type")),
+                Order = (int)(styles.Number(style, "regression-max-degree") ?? 2.0),
+                Period = (int)(styles.Number(style, "regression-period") ?? 2.0),
+                Moving = styles.Text(style, "regression-moving-type") switch
+                {
+                    "central" => ChartMovingAverage.Central,
+                    "averaged-abscissa" => ChartMovingAverage.AveragedAbscissa,
+                    _ => ChartMovingAverage.Prior,
+                },
+                Forward = styles.Number(style, "regression-extrapolate-forward") ?? 0.0,
+                Backward = styles.Number(style, "regression-extrapolate-backward") ?? 0.0,
+                Intercept = forced
+                    ? styles.Number(style, "regression-intercept-value") ?? 0.0
+                    : null,
+                ShowEquation = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-equation")) ?? false,
+                ShowRSquared = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-r-square")) ?? false,
+                Name = styles.Text(style, "regression-name"),
+                Line = styles.Line(style),
+                LineWidth = styles.LineWidth(style),
+                EquationAt = EquationAt(equation),
+            });
+        }
+
+        // chart:mean-value is a horizontal line at the series' average and not a regression at
+        // all, which is exactly why RegressionCurveHelper::isMeanValueLine is tested before every
+        // degree and period is read in VSeriesPlotter::createRegressionCurvesShapes.
+        foreach (XElement element in Children(series, OdfNamespaces.Chart, "mean-value"))
+        {
+            string? style = Attribute(element, OdfNamespaces.Chart, "style-name");
+            XElement? equation = Child(element, OdfNamespaces.Chart, "equation");
+
+            trendlines ??= [];
+            trendlines.Add(new ChartTrendline
+            {
+                Kind = ChartTrendlineKind.Mean,
+                ShowEquation = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-equation")) ?? false,
+                ShowRSquared = OdfValue.ParseBoolean(
+                    Attribute(equation, OdfNamespaces.Chart, "display-r-square")) ?? false,
+                Line = styles.Line(style),
+                LineWidth = styles.LineWidth(style),
+                EquationAt = EquationAt(equation),
+            });
+        }
+
+        return trendlines;
+    }
+
+    /// <summary>Where <c>chart:equation</c> states the label goes, or null.</summary>
+    private static (Length X, Length Y)? EquationAt(XElement? equation)
+    {
+        if (OdfValue.ParseLength(Attribute(equation, OdfNamespaces.SvgCompatible, "x"))
+            is not { } x)
+        {
+            return null;
+        }
+
+        return OdfValue.ParseLength(Attribute(equation, OdfNamespaces.SvgCompatible, "y"))
+            is { } y
+            ? (x, y)
+            : null;
+    }
+
+    /// <summary>The six spellings of <c>chart:regression-type</c>.</summary>
+    /// <remarks>
+    /// <c>XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE</c> in
+    /// <c>xmloff/source/chart/PropertyMaps.cxx:1018-1032</c>, which maps each to the same six
+    /// <c>com.sun.star.chart2.*RegressionCurve</c> services OOXML's <c>c:trendlineType</c> does —
+    /// so the two vocabularies differ only in spelling, and <c>power</c> is the one word both use.
+    /// </remarks>
+    private static ChartTrendlineKind RegressionKindOf(string? stated) => stated switch
+    {
+        "polynomial" => ChartTrendlineKind.Polynomial,
+        "exponential" => ChartTrendlineKind.Exponential,
+        "logarithmic" => ChartTrendlineKind.Logarithmic,
+        "power" => ChartTrendlineKind.Power,
+        "moving-average" => ChartTrendlineKind.MovingAverage,
+        _ => ChartTrendlineKind.Linear,
+    };
 
     /// <summary>
     /// The per-point fills a series states, or null when it states none.

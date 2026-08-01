@@ -686,10 +686,16 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       carries each series' own geometry and `ChartLayout` draws them back to front — areas, bars,
       lines. Measured on `stacked-non-stacked-mix-y-axis.pptx`, whose third chart holds one area
       series and two bar series: drawing the first group alone gave one series of the three.
-- [x] **The score on LibreOffice's own chart corpus, twice measured.** Over the 38 decks in
+- [x] **The score on LibreOffice's own chart corpus, three times measured.** Over the 38 decks in
       `chart2/qa/extras/data/pptx/`, comparing `pdftotext` word counts against
-      `soffice --convert-to pdf`: total absolute word error **354 → 234 → 128**, exact matches
-      **15 → 14 → 19**. The ODP set went **6 of 9 with an error of 31 → 8 of 9 with an error of 6**.
+      `soffice --convert-to pdf`: total absolute word error **354 → 234 → 128 → 79**, exact matches
+      **15 → 14 → 19 → 21**. The ODP set went **6 of 9 with an error of 31 → 8 of 9 with an error
+      of 6**, and stayed there. The last step was trendlines (`tdf127720` 16/28 → 28/28), the data
+      table (`tdf137691_dataTable` 68/80 → 80/80) and rotated labels (`bnc889755` 35/89 → 84/89),
+      against one row that moved the other way for a reason that is not ours — `tdf106217` 15 → 39
+      against a reference 7, whose rotated labels LibreOffice draws as glyph outlines that
+      `pdftotext` cannot read. **Thirty-two of the remaining 79 is that one row**, so the honest
+      figure for what is still missing is 47 over 37 decks.
       The three big movers on the deck set were number formats on ticks
       (`percentage-number-formats` 29/35 → 35/35), data labels (`tdf122765` 19/40 → 40/40,
       `tdf125444` 0/15 → 15/15) and a *deleted* axis (`tdf116163` 10/5 → 5/5, `tdf105517` 22/8 →
@@ -761,30 +767,108 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       line, no ticks and no labels, *and* it reserves no room, so the plot area grows into what its
       labels would have taken and every bar is the right height. Its gridlines survive, because
       `c:majorGridlines` hangs off the axis model rather than its view.
-- [ ] **A scatter chart draws no trendline, and that is now most of what is left.** `c:trendline`
-      with `c:dispEq` and `c:dispRSqr` writes `f(x) = 0.0174728496577696 x + 0.60719095698364` and
-      `R² = 0.999989640055375` onto `tdf127720.pptx`, which is 12 of that deck's remaining error and
-      the whole of `trendline.ods`'s chart residual. `RegressionCurveHelper` and
-      `RegressionCurveCalculator` are what to port. Radar, bubble, stock, surface and of-pie still
-      draw nothing; a doughnut still draws as a pie, losing the hole.
-- [ ] **Rotated, staggered and dropped axis labels.** When labels would collide LibreOffice
-      staggers them, then rotates them, then draws every *n*th, then draws none
-      (`VCartesianAxis::createTextShapes` and `autoStaggeringOfLabels`). None of that is
-      implemented, and it is the entire residual of two decks: `bnc889755.pptx` draws sixteen month
-      names turned a quarter turn, and `tdf106217.pptx` draws **eight category names in our render
-      and none in the reference** because they do not fit. Both look like data bugs and are layout.
-- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it just doubled.**
-      `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
-      (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
+- [x] **Trendlines draw, with their equations, in both vocabularies.** `c:trendline` and ODF's
+      `chart:regression-curve`/`chart:mean-value` become `ChartTrendline`; the seven fits are
+      `Paperless.Core/Charts/ChartRegression.cs`, a port of
+      `chart2/source/tools/RegressionCurveCalculator.cxx` and its six subclasses rather than a
+      rewrite. `tdf127720.pptx` went **16 words against 28 to 28/28**, its equation reading
+      `f(x) = 0.0174728496577697 x + 0.607190956983639` against the reference's
+      `…696 x + …64`. **Why reinventing the arithmetic is not safe**: each curve type throws away
+      different points before fitting — `RegressionCalculationHelper::cleanup` keeps `x > 0` for a
+      logarithm, `x > 0 && y > 0` for a power law, and for an exponential keeps `y > 0` *or*, if
+      that leaves fewer than two points, `y < 0` for the whole series and negates, which is how
+      LibreOffice fits an exponential through data entirely below the axis. Fitting over the raw
+      pairs gives `NaN` where the reference gives a curve. A forced intercept changes the R²
+      *formula* as well as the fit (`Σ(ŷ−c)² / (Σ(y−ŷ)² + Σ(ŷ−c)²)`, not `1 − SSE/SST`), and a
+      moving average is not a function of x at all — its `getCurveValue` returns `NaN` and its
+      curve is the averages themselves. **The trap, named**: a category chart's X values are
+      **1, 2, 3 …**, not 0, 1, 2 — `VDataSeries::getAllX` synthesises them with the comment "first
+      category (index 0) matches with real number 1.0" (`VDataSeries.cxx:760-772`) — so an
+      intercept is quoted at one whole category left of the first bar, and fitting over indices
+      writes a different equation for an identical picture.
+- [x] **The last significant digit of an equation is the number formatter, not the fit.** The
+      reference prints `0.0174728496577696` where fifteen-significant-digit rounding of the same
+      double gives `…697`: `rtl::math::doubleToUString` rounds the *shortest round-tripping
+      decimal* Dragonbox produced (`sal/rtl/strtmpl.hxx:1440-1560`) rather than the binary value,
+      so the two part company in the fifteenth digit and nowhere else. Worth writing down because
+      it looks exactly like a fit that is one ulp wrong, and half an hour went into checking that
+      it is not.
+- [x] **Rotated and dropped axis labels, and two of the four escapes turned out to be dead.**
+      `Paperless.Core/Charts/ChartAxisLabels.cs` is `VCartesianAxis::createTextShapes` and
+      `createTextShapesSimple` — lay every label out, and on the first collision change one thing
+      and *start over*, which is why the port is a loop and not a formula. What survives is:
+      rotate to 45°, then draw every *n*th. Auto-staggering does not, and the reason is worth the
+      line: it has the same prerequisites as auto-rotation (`canAutoAdjustLabelPlacement`,
+      `VCartesianAxis.cxx:1478`), the second collision test prefers rotation to it outright
+      ("starting from LibreOffice 5.1 the rotated layout is preferred", `:914-917`), and the first
+      test — which does try staggering — asks whether the next *tick* falls inside the previous
+      label's box, which for a bottom axis whose labels sit a tick length below the ticks never
+      happens. Staggering is therefore only what a file states, which ODF can and OOXML cannot.
+      `bnc889755.pptx` went **35 words against 89 to 84/89**.
+- [x] **The two decks that reach 45° reach it by different routes, and the difference is the axis
+      element.** Both state `rot="-60000000"` — a thousand degrees, which
+      `ObjectFormatter::convertTextRotation` throws away as out of `[-90°, 90°]`
+      (`objectformatter.cxx:1085-1093`) — so neither is rotated by its file. `bnc889755.pptx` is a
+      `c:dateAx`, and `AxisConverter` sets `TextOverlap`, `TextBreak` and `ArrangeOrder` only in
+      the `else` of a test on `bDateAxis` (`axisconverter.cxx:348`), so a date axis keeps chart2's
+      own defaults — wrapping **off**, which is exactly what auto-rotation requires — and turns the
+      moment its labels collide. `tdf106217.pptx` is a plain `c:catAx`, whose importer turns
+      wrapping **on**, which closes the rotation branch; it gets there only through the wrap test,
+      and that fires on a break *inside a word*: `lcl_hasWordBreak` returns true only where a line
+      starts somewhere no word does (`VCartesianAxis.cxx:369-404`). "Netherlands" is one word wider
+      than its slot; `Oct-12` would break cleanly after the hyphen and does not count.
+- [x] **Two decks measure LibreOffice's PDF writer and not its layout, and both read as layout
+      bugs.** `tdf106217.pptx` extracts **no** category names from the reference PDF and draws all
+      eight of them rotated in the picture: they are written as filled glyph **outlines**, which
+      `pdftotext` cannot see. `bnc889755.pptx` extracts 89 words for 16 month names, because the
+      writer emits one `Tj` per glyph for rotated text and `pdftotext` splits at each. Neither
+      number is reachable by drawing the labels correctly — ours draws `tdf106217`'s eight names as
+      real text and so *rises* from 15 words to 39 against a reference 7, while its picture now
+      matches the reference's crop-for-crop. The general lesson is the one the `VCLMTF` and
+      `coordinate-region` items already make twice: **a word count is a proxy, and the content
+      stream settles what the proxy is measuring**; `zlib.decompress` on one stream would have
+      saved the earlier reading that called this "eight category names the reference does not
+      draw".
+- [x] **A data table below the plot.** `c:dTable` becomes `ChartDataTable` and
+      `ChartLayout.AddDataTable`, a port of `DataTableView::createShapes`: a header row of category
+      names, a row per series with its key and its values, columns aligned with the category slots
+      because `m_bDataTableAlignAxisValuesWithColumns` is true for dimension 0. Two things it
+      changes about everything else, and both are invisible if missed — the plot rectangle gives up
+      one row per series plus a header row, and the **category axis stops drawing its own labels**,
+      `m_bDisplayLabels` being set false whenever a data table is present
+      (`VAxisProperties.cxx:336-343`), so the names appear once rather than twice.
+      `tdf137691_dataTable.pptx` went **68 words against 80 to 80/80**. All four `c:dTable` flags
+      default to **false**, not to `!bMSO2007Doc` — `DataTableModel` initialises each to false
+      outright — so the rule that governs the `c:show*` family does not carry across.
+- [ ] **The OOXML plot rectangle is still about a point out, and it is now the largest thing left
+      that is not a proxy artefact.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own
+      size (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
       (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
       (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
-      title (a flat 420 below, 450 to the left). The second pass re-derives the *tick count* from
-      the rectangle, which was the part that changed what is drawn; it does not re-derive the
-      rectangle from the laid-out labels, which is the rest of
-      `ChartView::impl_createDiagramAndContent`. Measured on `chart-bar-deck.pptx`: plot area
-      1.29 pt left of, 0.75 pt below, 0.50 pt narrower and 0.76 pt taller than the reference's —
-      0.2% of the frame's width, and the entire residual, because the bars *inside* the rectangle
-      are in the reference's proportions to a fortieth of a point.
+      title (a flat 420 below, 450 to the left). Two of the three feedback passes are now in —
+      the tick count is re-derived from the rectangle, and the rectangle is re-derived from a
+      *rotated* label arrangement — but the third is not: LibreOffice measures the **actual**
+      bounding box of everything the axes drew (`ShapeFactory::getRectangleOfShape` on
+      `mxDiagramWithAxesShapes`) and hands it to `VDiagram::adjustInnerSize`
+      (`chart2/source/view/diagram/VDiagram.cxx:653-700`), which grows the inner rectangle by the
+      slack and shifts it so the consumed rect meets the available one. Measured on
+      `chart-bar-deck.pptx`, unchanged by this run: plot area **1.291 pt left of, 0.776 pt above,
+      0.500 pt narrower and 0.761 pt taller** than the reference's 106.526 / 116.844 / 500.967 /
+      241.993 — the bottom edge agrees to **0.015 pt**, so the error is entirely in the three
+      reservations and not in the composition.
+- [ ] **Two things to know before attempting it, both measured on this run and both cost time.**
+      *One*: the naive fix — reserving the label's *shape* rather than its text, since
+      `ShapeFactory::createText` gives every chart text 0.18/0.30 × fontHeight of inset —
+      overshoots. On `chart-bar-deck.pptx` it moves the left edge from 1.29 pt short to 2.3 pt
+      long, so the discrepancy is not simply the missing insets and guessing at it is worse than
+      leaving it. *Two*: **deriving the rectangle from rendered PDFs does not work as an oracle.**
+      A script that takes the longest horizontal and vertical strokes as the plot rectangle agrees
+      with the axis to a hundredth on `chart-bar-deck` and picks up legend borders, series
+      polylines and error bars on half of `chart2/qa/extras/data/pptx/` — mean "error" 19 pt over
+      28 decks, most of it comparing different marks. The oracle that does work is
+      `chart:coordinate-region`, and using it needs a harness that composes an ODF chart with its
+      stated rectangle *suppressed* and a font-accurate measurer; that harness does not exist yet
+      and is the first thing to build.
 - [x] **The free oracle was two-thirds unread, and the corpus deck is what hid it.**
       `coordinate-region` is written under **two** namespaces: it began as a LibreOffice extension
       and was standardised later, so a file writes `chart:coordinate-region` or

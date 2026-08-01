@@ -1093,8 +1093,23 @@ Not yet, and why:
   which built-in code an XLSX style index stands for. ODF reaches the same engine through
   `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` tree into a
   format code exactly as `xmloff`'s own import does. See `dotnet/TODO.md` Phase 3.5.
-- **A rotated label in a chart is the only rotated text a sheet draws**, and it still is. Chart-wide
-  rather than spreadsheet-specific.
+- **A rotated label in a chart is no longer only the value-axis title.** A crowded category axis now
+  turns its labels 45° — `ChartAxisLabels` in `Paperless.Core.Charts`, a port of
+  `VCartesianAxis::createTextShapes` — and `Layout/SheetChart.cs` needed no change for it: the sink
+  transform it already built for the axis title carries any angle. Chart-wide rather than
+  spreadsheet-specific, and this is the second time putting rotation on `ChartLabel` rather than on
+  the one caller that had it has cost the consumers nothing.
+- **Trendlines draw, and `trendline.ods` is still not an oracle.** `chart:regression-curve` and
+  `chart:mean-value` are read in `Paperless.OpenDocument/OdfChartPlot.cs` and fitted by
+  `Paperless.Core/Charts/ChartRegression.cs`, a port of `chart2/source/tools/`'s seven calculators.
+  ODF states more than OOXML does and one thing it states is free: `chart:equation/@svg:x` and
+  `@svg:y` give the equation's position outright, in the same coordinate space
+  `chart:coordinate-region` uses, so an ODF chart needs no equivalent of `VSeriesPlotter`'s default
+  placement at the curve's own corner. The 59-workbook error is unchanged at ~2176 and still is not
+  a chart measurement: it is the *spreadsheet's* uncomputed formulas, which is why the deck set in
+  `chart2/qa/extras/data/pptx/` is the honest one. See `dotnet/TODO.md` Phase 3.5.
+- **A data table under a chart is OOXML-only.** `c:dTable` has no ODF counterpart at all, so an ODS
+  chart never draws one and `ChartPlot.DataTable` is always null on this family's ODF path.
 - **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
   `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
 
