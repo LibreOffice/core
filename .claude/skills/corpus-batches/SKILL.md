@@ -198,10 +198,31 @@ format is both safe and natural.
 
 ### How many agents actually fit
 
-Each agent worktree costs **about 2.8 GB once built** — the checkout plus a full solution
-build per worktree. Four concurrent agents is roughly the ceiling on a container with a
-12–20 GB writable allowance, and the failure mode is not a warning but `No space left on
-device` in the middle of somebody's build.
+Each agent worktree costs **about 2.8 GB once built**. Measured breakdown, because the
+obvious suspect is the wrong one:
+
+| Part | Size | |
+|---|---|---|
+| LibreOffice C++ source checkout | 1.5 GB | inherent — a worktree copies the whole tree, and the C++ tree dwarfs `dotnet/` |
+| Pinned build output, whole solution | 713 MB | working as designed |
+| Unpinned `runtimes/` under `Paperless.Cli` | 550 MB | should not be there — see below |
+
+**This is not the RID pin failing.** Verified on this commit: a clean `dotnet build` of the
+CLI, a bare solution `dotnet build`, and a `dotnet publish` each produce **31 MB** with only
+`bin/Debug/net10.0/linux-x64/` — no `runtimes/` at all. The pin does exactly what
+`Directory.Build.props` claims.
+
+The 550 MB is a `bin/Debug/net10.0/runtimes/` carrying all sixteen RIDs, present in every
+agent worktree and absent from the main checkout. That is the layout MSBuild emits when
+`RuntimeIdentifier` is empty, so some command run inside those worktrees built the CLI
+without the pin applying. **I could not reproduce it** with the three builds above, so treat
+this as an open question rather than a known cause — but check for it before blaming the
+pin, and delete it if disk is tight (nothing consumes it; the pinned output beside it is
+what runs).
+
+Four concurrent agents is roughly the ceiling on a container with a 12–20 GB writable
+allowance, and the failure mode is not a warning but `No space left on device` in the middle
+of somebody's build.
 
 Check before dispatching a fifth, and free the rendered PDFs from finished comparison runs
 first — those are large and disposable, while the TSV they produced is small and is the
