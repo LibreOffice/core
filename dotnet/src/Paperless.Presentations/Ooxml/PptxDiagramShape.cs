@@ -181,6 +181,16 @@ internal sealed class DiagramShape
     /// <summary>Where the text sits vertically — <c>t</c>, <c>mid</c> or <c>b</c>.</summary>
     public string TextAnchor { get; set; } = "mid";
 
+    /// <summary>
+    /// How far the label turns inside the node, in sixtieth-thousandths of a degree.
+    /// </summary>
+    /// <remarks>
+    /// What <c>autoTxRot</c> resolves to, and always a whole number of quarter turns. It is
+    /// emitted as <c>a:bodyPr/@rot</c>, so it reaches the layouter down the same path an authored
+    /// deck's would.
+    /// </remarks>
+    public int TextRotation { get; set; }
+
     /// <summary>The paragraph alignment the algorithm decided, or null to leave the text's own.</summary>
     public string? TextAlignment { get; set; }
 
@@ -195,4 +205,18 @@ internal sealed class DiagramShape
 
     /// <summary>True when the author formatted the text, which is what stops the fit being solved.</summary>
     public bool CustomText { get; set; }
+
+    /// <summary>
+    /// True when the <c>tx</c> algorithm turned shrink-to-fit on for this node's text.
+    /// </summary>
+    /// <remarks>
+    /// A diagram's labels are autofitted whether or not the file asks: the <c>tx</c> algorithm
+    /// sets <c>TextFitToSizeType_AUTOFIT</c> on every node whose text the author did not format
+    /// (<c>diagramlayoutatoms.cxx:1723-1728</c>, under its own comment "No customized text
+    /// properties: enable autofit"). That is what makes a <c>primFontSz</c> of 65 pt an
+    /// <em>upper bound</em> rather than a size, and it is the whole of the divergence the
+    /// evaluated path had left: 65 pt drawn against the reference's 49 on
+    /// <c>smartart-maxdepth.pptx</c>.
+    /// </remarks>
+    public bool AutoFitText { get; set; }
 }

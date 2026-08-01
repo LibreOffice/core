@@ -667,6 +667,14 @@ internal static class PptxDiagramAlgorithms
         shape.TextInsets = (left, top, right, bottom);
         shape.HasTextInsets = anyInset;
 
+        // The size a primFontSz constraint states is an upper bound, not an answer: unless the
+        // author formatted this node's text, the shape goes into shrink-to-fit and the size is
+        // solved against the box the algorithms above gave it
+        // (diagramlayoutatoms.cxx:1723-1728, "No customized text properties: enable autofit").
+        shape.AutoFitText = !shape.CustomText;
+
+        shape.TextRotation = TextRotation(atom.Parameter("autoTxRot", "upr"), shape.Rotation);
+
         shape.TextAnchor = atom.Parameter("txAnchorVert", "mid");
 
         // Levels are normalised so that the shallowest paragraph is level zero, whatever depth
@@ -701,5 +709,54 @@ internal static class PptxDiagramAlgorithms
             : bulleted
                 ? null
                 : "ctr";
+    }
+
+    /// <summary>How many rotation units make one degree, as everywhere else in DrawingML.</summary>
+    private const int RotationUnitsPerDegree = 60000;
+
+    /// <summary>
+    /// How far a node's <em>text</em> turns inside a node that has itself been turned.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ECMA-376-1:2016 21.4.7.5 <c>ST_AutoTextRotation</c>, ported from the <c>XML_tx</c> case of
+    /// <c>AlgAtom::layoutShape</c> (<c>diagramlayoutatoms.cxx:1730-1760</c>). It answers what
+    /// happens to a label when the algorithm above it turns its node — a cycle turning each node
+    /// to face along the ring, most of all.
+    /// </para>
+    /// <para>
+    /// <c>upr</c>, the default, keeps the label the right way up by counter-turning it to the
+    /// <em>nearest</em> quarter, which is why the thresholds are 45°, 135°, 225° and 315° rather
+    /// than the quarters themselves. <c>grav</c> only flips a label that would otherwise read
+    /// upside down, so a node in the lower half of a ring gets a half turn and the rest get
+    /// nothing. <c>none</c> lets the label turn with its node.
+    /// </para>
+    /// <para>
+    /// Measured on <c>smartart-autoTxRot.pptx</c>, whose 48 filled shapes already land within
+    /// 0.043 pt of the reference: LibreOffice draws 7 of its labels upright and writes a rotation
+    /// matrix for the other 41. Reading the attribute and ignoring it drew all 48 upright.
+    /// </para>
+    /// </remarks>
+    /// <param name="mode">The <c>autoTxRot</c> parameter — <c>upr</c>, <c>grav</c> or <c>none</c>.</param>
+    /// <param name="rotation">The shape's own rotation, in sixtieth-thousandths of a degree.</param>
+    private static int TextRotation(string mode, int rotation)
+    {
+        int turned = rotation;
+        while (turned < 0) turned += 360 * RotationUnitsPerDegree;
+        while (turned > 360 * RotationUnitsPerDegree) turned -= 360 * RotationUnitsPerDegree;
+
+        int quarters = mode switch
+        {
+            "none" => 0,
+            "grav" => turned > 90 * RotationUnitsPerDegree
+                      && turned < 270 * RotationUnitsPerDegree ? -2 : 0,
+            _ => turned >= 315 * RotationUnitsPerDegree ? 0
+                : turned > 225 * RotationUnitsPerDegree ? -3
+                : turned >= 135 * RotationUnitsPerDegree ? -2
+                : turned > 45 * RotationUnitsPerDegree ? -1
+                : 0,
+        };
+
+        return quarters * 90 * RotationUnitsPerDegree;
     }
 }
