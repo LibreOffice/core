@@ -364,7 +364,9 @@ parameter, `atan2(rx·sin θ, ry·cos θ)` — `ImplGetParameter`,
 `tools/source/generic/poly.cxx:60-67`. Measured on a 4:1 ellipse: a ray at 45° crosses at
 parameter 1.326 rad = **76°**, so using the ray's angle puts the end of the arc 31° away,
 about a twelfth of the way round. It is invisible on a circle, which is what makes it a trap:
-every test with a circular arc passes.
+every test with a circular arc passes. **EMF+ states its arcs as angles instead**, and those
+angles *are* the ellipse's parameter — so none of this conversion applies there, and the two
+arc implementations look wrongly duplicated until you notice why.
 
 **The arc parameter is measured with y upwards.** GDI's default arc direction is
 anticlockwise in the *logical* space, and the parameterisation is
@@ -386,17 +388,19 @@ end of a *legitimate* file — not a malformed one.
       and the rest combine the source with what is already on the page, which a display list
       cannot read back. The source is drawn alone and `PL6033` is raised, which is what
       LibreOffice falls back to as well. `BLACKNESS` and `WHITENESS` are honoured exactly.
-- [ ] **The transparent-bitmap idiom.** A monochrome mask blitted with `SRCAND` followed by a
-      colour image with `SRCPAINT` is how a WMF says "transparent", and merging the two into
-      one alpha bitmap is what `MtfTools::ResolveBitmapActions` (`mtftools.cxx:2557`) exists
-      for. It needs pixels, and pixels need a codec. Today both are drawn in order, so the
-      transparent area comes out black. **This is the strongest single argument for letting
-      `Paperless.Vector` see decoded pixels**, and it should be weighed against the
-      dependency the whole library was arranged to avoid.
-- [ ] **`ExcludeClipRect`.** Subtraction, which `ClipPath` cannot express. The excluded area
-      is left unclipped — drawing too much rather than too little, which loses no content —
-      and `PL6034` says so. Real path operations would fix this and the SVG side's `PL6012`
-      together.
+- [x] **The transparent-bitmap idiom, closed when EMF arrived.** A monochrome mask blitted
+      with `SRCAND` followed by a colour image with `SRCPAINT` is how a WMF says
+      "transparent", and merging the two into one alpha bitmap is what
+      `MtfTools::ResolveBitmapActions` (`mtftools.cxx:2557`) exists for. It looked as though
+      it needed a codec and it does not: an **uncompressed** DIB is not an encoded format but
+      a stride, a channel order and a palette, so merging it is arithmetic. One blit is held
+      back so the pair can be seen; the compressed forms answer null and fall back to drawing
+      the source alone.
+- [x] **`ExcludeClipRect`, closed when EMF arrived.** A rectangle minus a rectangle is at most
+      four rectangles, and subtraction distributes over intersection — so keeping the
+      rectangular part of a clip apart from the arbitrary part makes an exclusion exact even
+      under a non-rectangular clip path, with no general path arithmetic anywhere.
+      `PL6034` now means only union and symmetric difference with the clip as an operand.
 - [ ] **A hatched brush is a solid fill in LibreOffice.** Measured: LibreOffice paints a WMF
       `HS_DIAGCROSS` brush as a solid fill of the hatch colour, on **both** its PDF and its
       PNG export paths; Windows paints lines. Lines are what is drawn here, because that is
