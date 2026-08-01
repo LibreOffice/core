@@ -40,8 +40,9 @@ namespace Paperless.Presentations.Ooxml;
 /// <strong>A drawing part can be present and empty</strong>, which is why LibreOffice counts
 /// <c>dsp:sp</c> elements rather than trusting the relationship — <c>DiagramShapeCounter</c>,
 /// <c>diagram.cxx:521-556</c>, and "Ignore ext drawings which don't actually have any shapes".
-/// 16 of the 89 diagram documents in LibreOffice's own corpus have a drawing part whose
-/// <c>dsp:spTree</c> holds nothing but its <c>dsp:nvGrpSpPr</c>; <c>smartart-org-chart.pptx</c>
+/// 15 of the 86 diagram documents in LibreOffice's own corpus have a drawing part of exactly
+/// 436 bytes whose <c>dsp:spTree</c> holds nothing but its <c>dsp:nvGrpSpPr</c> — somebody
+/// stripped them so the layout-atom evaluator is what gets tested. <c>smartart-org-chart.pptx</c>
 /// is one, so a reader that took the part's existence as the answer would draw an eleven-node
 /// organisation chart as nothing.
 /// </para>
@@ -99,8 +100,8 @@ internal static class PptxDiagram
     /// <para>
     /// Renaming buys the whole slide layouter at once — 187 preset geometries, custom geometry,
     /// gradients, bitmap fills, dashes, arrowheads and text layout — for a diagram whose shapes
-    /// use all of them. Measured over the 77 drawing parts in LibreOffice's corpus, the baked
-    /// tree is a <em>flat</em> list of 481 <c>dsp:sp</c> with 415 <c>a:prstGeom</c>, 66
+    /// use all of them. Measured over the 61 drawing parts in LibreOffice's corpus, the baked
+    /// tree is a <em>flat</em> list of 469 <c>dsp:sp</c> with 403 <c>a:prstGeom</c>, 66
     /// <c>a:custGeom</c>, 64 <c>a:gradFill</c> and 16 <c>a:blipFill</c> between them, and no
     /// <c>dsp:grpSp</c> or <c>dsp:pic</c> at all — a diagram's pictures arrive as blip
     /// <em>fills</em> on ordinary shapes.

@@ -199,13 +199,14 @@ internal sealed class PptxSlideLayout
     /// <remarks>
     /// <para>
     /// <strong>Why the baked tree and not the layout algorithms.</strong> Measured over every
-    /// OOXML document in the LibreOffice tree carrying a <c>dgm:relIds</c> — 89 of them — the
-    /// 48 that came from a real authoring application split 42 with a usable baked drawing, 3
-    /// with an empty one and 3 with none, so 88% of real diagrams are already laid out in the
-    /// file. The other 41 are LibreOffice's own <c>smartart-*.pptx</c> fixtures, deliberately
-    /// stripped so that its layout-atom evaluator is what gets tested; all 23 of those with no
-    /// drawing part declare <c>&lt;AppVersion&gt;12.0000&lt;/AppVersion&gt;</c> and none of the
-    /// 63 with one does, which is a single authoring pass rather than a distribution.
+    /// OOXML document in the LibreOffice tree carrying a <c>dgm:relIds</c> — 86 of them — 46
+    /// have a drawing part with at least one <c>dsp:sp</c> in it, 15 have it emptied and 25 have
+    /// no part. Every one of the 40 without a usable one is a LibreOffice import fixture, and the
+    /// split is by authoring application: of the 62 written by Office 2010 or later
+    /// (<c>&lt;AppVersion&gt;</c> 14, 15 or 16), 46 carry a usable baked drawing and the other 16
+    /// all show it removed by hand. Office 2007 — <c>12.0000</c> — wrote none at all, 0 of 24,
+    /// which is not a distribution either: the drawing vocabulary's namespace is dated 2008, so
+    /// a 2007-era file predates the feature.
     /// Evaluating <c>layout1.xml</c> instead is the largest subsystem in LibreOffice's PPTX
     /// importer and would produce a diagram that differs from the reference; reading the baked
     /// tree reuses the slide layouter entire.
@@ -489,10 +490,18 @@ internal sealed class PptxSlideLayout
     /// says so in its own comment — "We cannot change the text area rectangle directly, because
     /// currently we depend on the geometry definition of the preset. As workaround we change the
     /// indents to move and scale the text block" — and its <c>ConstructPresetTextRectangle</c>
-    /// hand-implements the text rectangle for a short list of presets and gives up on the rest,
-    /// dropping the <c>dsp:txXfrm</c> entirely. Nothing here depends on the preset: the text
+    /// hand-implements the text rectangle for <em>fourteen</em> presets and returns false for the
+    /// rest, dropping the <c>dsp:txXfrm</c> entirely. Nothing here depends on the preset: the text
     /// rectangle is a parameter of text layout, so the file's own answer is usable as stated.
-    /// 298 of the 481 baked shapes in LibreOffice's corpus carry one.
+    /// </para>
+    /// <para>
+    /// The size of the divergence is measured rather than assumed. Of the 469 baked shapes in
+    /// LibreOffice's corpus 286 carry a <c>dsp:txXfrm</c>, and <strong>273 of those — 95% — use
+    /// one of the fourteen</strong>, where LibreOffice's indents land the text block on exactly
+    /// the stated rectangle and the two agree. The other 13 are where this puts a label where
+    /// PowerPoint does and LibreOffice does not:
+    /// <c>sd/qa/unit/data/pptx/tdf149551_SmartArt_Gear.pptx</c> is one, on a <c>gear9</c>, whose
+    /// 20 pt "Three" fits on one line for LibreOffice and wraps here.
     /// </para>
     /// </remarks>
     private static DocRect TextRectangle(
