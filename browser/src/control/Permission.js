@@ -34,7 +34,11 @@ window.L.Map.include({
 		//
 		// For mobile we need to display the edit button for all the cases except for PDF (which is read-only)
 		// we offer save-as to another place where the user can edit the document
-		if (!app.file.readOnly && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
+		// The mobile apps use local storage not WOPI, so BaseFileName will be empty.
+		// Fall back to the document URL which ends with the file name.
+		var fileName = this['wopi'].BaseFileName || this.options.doc || '';
+		var isPDF = fileName.toLowerCase().endsWith('.pdf');
+		if (!isPDF && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
 			button.css('display', 'flex');
 		} else {
 			button.hide();
