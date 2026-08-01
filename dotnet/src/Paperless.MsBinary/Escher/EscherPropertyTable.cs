@@ -65,7 +65,9 @@ public sealed class EscherPropertyTable
             if (isComplex && value > 0)
             {
                 dataStart = complex;
-                dataLength = (int)Math.Min(value, (uint)Math.Max(content.Length - complex, 0));
+                dataLength = (int)Math.Min(
+                    ArrayLength(content, complex, id, value),
+                    (uint)Math.Max(content.Length - complex, 0));
                 complex += dataLength;
             }
 
@@ -83,6 +85,59 @@ public sealed class EscherPropertyTable
         }
 
         return new EscherPropertyTable(entries);
+    }
+
+    /// <summary>
+    /// The nine properties whose complex value is an <c>IMsoArray</c> rather than a blob.
+    /// </summary>
+    /// <remarks>
+    /// They matter because their stated length lies. See <see cref="ArrayLength"/>.
+    /// </remarks>
+    private static bool IsArray(ushort id) => id is 325   // pVertices
+        or 326   // pSegmentInfo
+        or 337   // connectorPoints
+        or 341   // Handles
+        or 342   // pFormulas
+        or 343   // textRectangles
+        or 407   // fillShadeColors
+        or 463   // lineDashStyle
+        or 899;  // pWrapPolygonVertices
+
+    /// <summary>
+    /// How many bytes a complex property really occupies.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The stated value, except for the nine array properties, where <strong>a writer may leave
+    /// the array's own six-byte header out of the count</strong>. The header is three words —
+    /// element count, allocated count, element size — and when the stated length happens to equal
+    /// <c>count × size</c> exactly, the six bytes are there in the data and missing from the
+    /// number (<c>DffPropSet::ReadPropSet</c>, <c>filter/source/msfilter/dffpropset.cxx:1166-1204</c>,
+    /// whose comment on the subject is "I love special treatments").
+    /// </para>
+    /// <para>
+    /// <strong>The failure is silent and it is not local.</strong> Complex values sit in one block
+    /// in property order, so a shape whose vertex array is under-counted by six shifts every
+    /// complex property after it — and a shape name read six bytes early comes back as plausible
+    /// text rather than as an error. LibreOffice's own PPT export writes a vertex array on every
+    /// shape it emits, so this is the common case in that format rather than a corner of it.
+    /// </para>
+    /// </remarks>
+    private static uint ArrayLength(ReadOnlySpan<byte> content, int at, ushort id, uint stated)
+    {
+        if (!IsArray(id) || at < 0 || at + 6 > content.Length) return stated;
+
+        short count = unchecked((short)DffRecordBuffer.ReadUInt16(content[at..]));
+        short allocated = unchecked((short)DffRecordBuffer.ReadUInt16(content[(at + 2)..]));
+        short size = unchecked((short)DffRecordBuffer.ReadUInt16(content[(at + 4)..]));
+
+        if (allocated < count || count <= 0) return stated;
+
+        // A negative element size is a quarter of its magnitude; -16 means four bytes, which is
+        // how a writer says "eight-byte elements, low four bytes only".
+        if (size < 0) size = (short)(-size >> 2);
+
+        return (uint)(size * count) == stated ? stated + 6 : stated;
     }
 
     /// <summary>Whether the shape states this property itself.</summary>
@@ -145,6 +200,39 @@ public sealed class EscherPropertyTable
     /// the same property can hold either depending on how the writer stored the picture.
     /// </remarks>
     public bool IsBlip(ushort id) => _entries.TryGetValue(id, out Entry entry) && entry.IsBlip;
+
+    /// <summary>
+    /// The elements of an <c>IMsoArray</c> property, past its three-word header.
+    /// </summary>
+    /// <remarks>
+    /// An element size of <c>0xFFF0</c> means eight-byte elements of which only the low four
+    /// bytes were written — a compression the format applies to coordinate arrays that fit in
+    /// sixteen bits, and the reason a vertex reader cannot assume the size it expects
+    /// (<c>filter/source/msfilter/msdffimp.cxx:2216-2220</c>).
+    /// </remarks>
+    /// <param name="id">The property.</param>
+    /// <param name="count">How many elements the header claims, clamped to what is present.</param>
+    /// <param name="elementSize">How many bytes each occupies.</param>
+    public ReadOnlySpan<byte> Array(ushort id, out int count, out int elementSize)
+    {
+        count = 0;
+        elementSize = 0;
+
+        ReadOnlySpan<byte> data = Data(id);
+        if (data.Length < 6) return default;
+
+        int stated = unchecked((short)DffRecordBuffer.ReadUInt16(data));
+        int size = unchecked((short)DffRecordBuffer.ReadUInt16(data[4..]));
+
+        if (size == unchecked((short)0xFFF0)) size = 4;
+        else if (size < 0) size = -size >> 2;
+        if (size <= 0 || stated <= 0) return default;
+
+        ReadOnlySpan<byte> elements = data[6..];
+        count = Math.Min(stated, elements.Length / size);
+        elementSize = size;
+        return elements;
+    }
 
     /// <summary>A complex property's raw bytes, empty when it is absent or not complex.</summary>
     public ReadOnlySpan<byte> Data(ushort id)
