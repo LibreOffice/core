@@ -154,6 +154,23 @@ public static class EscherPropertyIds
     /// <summary>The inset between the shape's bottom edge and its own text, in EMUs.</summary>
     public const ushort TextInsetBottom = 132;
 
+    /// <summary>
+    /// Whether and how the shape's own text wraps at its margins, an <c>MSO_WRAPMODE</c>.
+    /// </summary>
+    /// <remarks>
+    /// Zero — wrap at the shape's own rectangle — is the default, and 2 means "do not wrap", in
+    /// which case a line runs on past the shape rather than breaking. Not to be confused with the
+    /// wrap <em>distances</em> at 900-903, which are about text <em>outside</em> the shape.
+    /// </remarks>
+    public const ushort WrapText = 133;
+
+    /// <summary>Where the shape's text sits inside it, an <c>MSO_ANCHOR</c>.</summary>
+    /// <remarks>
+    /// Ten values (<c>include/svx/msdffdef.hxx:522</c>), of which the "centered" and "baseline"
+    /// halves differ from the plain three only in how the block is justified across the shape.
+    /// </remarks>
+    public const ushort TextAnchor = 135;
+
     /// <summary>The blip to display, as an index into the blip store.</summary>
     public const ushort Picture = 260;
 

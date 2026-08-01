@@ -491,6 +491,51 @@ adding it as an input format would be scope Paperless has said no to.
       inputs each get a subdirectory named after the file, as `lo-convert.sh` does.
       SVG output and `paperless convert` are still to come.
 
+## Phase 3.5 — Embedded graphics: metafiles, charts, SmartArt
+
+Three things office documents embed constantly that a renderer currently draws as nothing.
+They are grouped because they share a dependency and an ordering, not because they are alike.
+
+**Vector metafiles come first, and everything else waits on them**, for a reason worth stating
+once: a chart, a SmartArt diagram and an OLE object all ship a *baked metafile fallback* beside
+their live model. LibreOffice itself draws the fallback in several of these cases rather than
+re-laying out the model. So WMF/EMF/EMF+ is not only the largest item — it is the one that makes
+the other two partly free, and doing them in the other order means writing a chart layout engine
+to draw something the file already contains a picture of.
+
+- [ ] **WMF, EMF, EMF+** — see `src/Paperless.Vector/TODO.md`, which holds the plan and orders it
+      WMF first because it exercises the shared device-context groundwork on the simplest of the
+      three. Port from `emfio/`; there is no C# prior art.
+- [ ] **SVG** is the exception and is being built first, because it reuses a vetted library and so
+      establishes the seam the metafile formats plug into.
+
+### Charts
+
+- [ ] **Read the chart model** — `c:chart` in DrawingML, `chart:chart` in ODF — well enough to
+      report its title, axis titles, series names and categories. Extraction wants this and it is
+      cheap; the presentations reader already records a chart as a graphic and can stop doing so.
+- [ ] **Decide where the numbers come from, and record the decision.** `c:strRef`/`c:numRef` name
+      a range in an *embedded workbook*, with a `c:strCache`/`c:numCache` beside them holding what
+      the authoring application last computed. Reaching the live values means
+      `Paperless.Presentations` depending on `Paperless.Spreadsheets`, which the layering forbids
+      and which extraction should not need. The cache is what a reference renderer draws, so
+      prefer it — the same rule already settled for formula results and field results. Say so
+      once rather than per chart type.
+- [ ] **Drawing a chart is a layout engine**, not a reader: plot area, axis scales and tick
+      selection, gridlines, series geometry per type, legend placement, data labels. Before
+      writing one, measure how often the embedded metafile fallback is present and whether
+      LibreOffice draws it — if it does, drawing the fallback is both cheaper and closer to the
+      reference.
+
+### SmartArt
+
+- [x] **Text** already reads, from `dgm:pt/dgm:t` in the diagram data part.
+- [ ] **Drawing.** Same question as charts and the same likely answer: a SmartArt shape carries a
+      `dgm:relIds` pointing at a `diagramDrawing.xml` — a *baked* shape tree with real geometry —
+      as well as the layout definition that generated it. LibreOffice reads the baked drawing.
+      Evaluating the layout algorithms instead is a large piece of work for output that would
+      differ from the reference, so establish what the baked part gives before considering it.
+
 ## Phase 4 — Fidelity
 
 - [ ] Run the whole corpus through the comparison harness; triage by failure signature
