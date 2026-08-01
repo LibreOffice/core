@@ -28,6 +28,7 @@
 #include <vcl/outdev.hxx>
 
 #include <font/FontSelectPattern.hxx>
+#include <font/HarfBuzzMetricsTags.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/LogicalFontInstance.hxx>
 #include <font/FontMetricData.hxx>
@@ -420,16 +421,6 @@ bool FontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAsc
     return false;
 }
 
-// These are “private” HarfBuzz metrics tags, they are supported by not exposed
-// in the public header. They are safe to use, HarfBuzz just does not want to
-// advertise them.
-constexpr auto ASCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'a', 's', 'c'));
-constexpr auto DESCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'd', 's', 'c'));
-constexpr auto LINEGAP_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'l', 'g', 'p'));
-constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', 's', 'c'));
-constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
-constexpr auto LINEGAP_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'l', 'g', 'p'));
-
 void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
@@ -479,9 +470,9 @@ void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 
         // Try hhea table first.
         hb_position_t nAscent = 0, nDescent = 0, nLineGap = 0;
-        if (hb_ot_metrics_get_position(pHbFont, ASCENT_HHEA, &nAscent)
-            && hb_ot_metrics_get_position(pHbFont, DESCENT_HHEA, &nDescent)
-            && hb_ot_metrics_get_position(pHbFont, LINEGAP_HHEA, &nLineGap))
+        if (hb_ot_metrics_get_position(pHbFont, vcl::font::ASCENT_HHEA, &nAscent)
+            && hb_ot_metrics_get_position(pHbFont, vcl::font::DESCENT_HHEA, &nDescent)
+            && hb_ot_metrics_get_position(pHbFont, vcl::font::LINEGAP_HHEA, &nLineGap))
         {
             // tdf#107605: Some fonts have weird values here, so check that
             // ascender is +ve and descender is -ve as they normally should.
@@ -495,9 +486,9 @@ void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 
         // But if OS/2 is present, prefer it.
         hb_position_t nTypoAscent, nTypoDescent, nTypoLineGap, nWinAscent, nWinDescent;
-        if (hb_ot_metrics_get_position(pHbFont, ASCENT_OS2, &nTypoAscent)
-            && hb_ot_metrics_get_position(pHbFont, DESCENT_OS2, &nTypoDescent)
-            && hb_ot_metrics_get_position(pHbFont, LINEGAP_OS2, &nTypoLineGap)
+        if (hb_ot_metrics_get_position(pHbFont, vcl::font::ASCENT_OS2, &nTypoAscent)
+            && hb_ot_metrics_get_position(pHbFont, vcl::font::DESCENT_OS2, &nTypoDescent)
+            && hb_ot_metrics_get_position(pHbFont, vcl::font::LINEGAP_OS2, &nTypoLineGap)
             && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_ASCENT,
                                           &nWinAscent)
             && hb_ot_metrics_get_position(pHbFont, HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_DESCENT,

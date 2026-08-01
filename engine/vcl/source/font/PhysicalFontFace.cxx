@@ -32,6 +32,7 @@
 #include <salgdi.hxx>
 
 #include <font/FontSelectPattern.hxx>
+#include <font/HarfBuzzMetricsTags.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -414,14 +415,6 @@ OUString GenerateVariableFontPSName(const PhysicalFontFace& rFace,
     return aName.makeStringAndClear();
 }
 }
-
-// These are “private” HarfBuzz metrics tags, they are supported by not exposed
-// in the public header. They are safe to use, HarfBuzz just does not want to
-// advertise them.
-constexpr auto ASCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'a', 's', 'c'));
-constexpr auto DESCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'd', 's', 'c'));
-constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', 's', 'c'));
-constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
 
 bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
