@@ -423,6 +423,27 @@ table asserted, not by the corpus.
       still draws as a pie, losing the hole; and a data label that does not fit is not wrapped —
       `tdf146756_bestFit.pptx`'s 11 remaining words are labels the reference breaks onto more
       lines than we do.
+- [ ] **The OOXML plot rectangle is still about a point out**, and the second layout pass still
+      re-derives only the *tick count* from the composed rectangle rather than the rectangle from
+      the laid-out labels. The oracle got twice as big while this was open: see the
+      `chartooo:coordinate-region` note in `dotnet/TODO.md` Phase 3.5.
+- [ ] **What a chart still does not draw**: a trendline and its equation (`c:trendline`,
+      `c:dispEq`, `c:dispRSqr` — `tdf127720.pptx` and `trendline.ods` are most of what is left on
+      each set); a data table below the plot (`tdf137691_dataTable.pptx`, 12 words); rotated and
+      staggered axis labels, which LibreOffice falls back to when they would collide and which is
+      the whole of `bnc889755.pptx`'s residual; and label *dropping*, which it falls back to after
+      that — `tdf106217.pptx` draws eight category names in our render and none in the reference,
+      because they do not fit.
+- [x] **Radar, bubble, stock and of-pie draw now; surface declines.** All of it is in
+      `Paperless.Core.Charts` — `ChartLayout.Plots.cs` for the geometry, `ChartPlotTypes.cs` for
+      the model — and this library gained nothing at all: a radar's web is `ChartLine`, its polygon
+      and a bubble are `ChartShape`, a candle's box is `ChartBox`, and `SlideChart` already turned
+      each of those into a `PlacedShape`. **The deck set is unchanged at 128 with 19 exact of 38,
+      and the ODP set at 6 with 8 exact of 9, because neither set contains one of the five types**
+      — counted: of the 38 decks and 9 ODPs, every chart is a bar, line, pie, area or scatter. The
+      five live in `docx/`, `xlsx/`, `ods/` and `odt/`, which is worth knowing before choosing the
+      deck set as the oracle for the next chart feature. See `dotnet/TODO.md` Phase 3.5 for the
+      corpus counts, the ported constants and the three named traps.
 - [x] **A flat ODP no longer draws an embedded document's markup as slide text.** Found by the
       chart corpus and fixed in `OdpSlideLayout.Paragraphs`, which took every `text:p` descendant
       of a `draw:frame` — and a flat file inlines the whole chart sub-document inside the

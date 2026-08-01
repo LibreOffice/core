@@ -843,6 +843,136 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
 - [ ] **The OOXML plot rectangle is still about a point out, and it is now the largest thing left
       that is not a proxy artefact.** `ChartLayout.PlotAreaOf` takes the frame less 2% of its own
       size (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
+- [ ] **A scatter chart draws no trendline, and that is now most of what is left.** `c:trendline`
+      with `c:dispEq` and `c:dispRSqr` writes `f(x) = 0.0174728496577696 x + 0.60719095698364` and
+      `R² = 0.999989640055375` onto `tdf127720.pptx`, which is 12 of that deck's remaining error and
+      the whole of `trendline.ods`'s chart residual. `RegressionCurveHelper` and
+      `RegressionCurveCalculator` are what to port. A doughnut still draws as a pie, losing the
+      hole.
+- [x] **Radar, bubble, stock and of-pie draw; surface declines, and the count is why.** The order
+      was set by counting the corpus first rather than by the brief's order. Over every chart part
+      in `chart2/qa/extras/data/` — 351 OOXML plot groups and 219 ODF `chart:class` attributes —
+      the five stand at **of-pie 5, bubble 3 + 1, stock 1 + 3, radar 2 + 0, surface 0 + 0**
+      (OOXML + ODF). Surface is not rare, it is *absent*; and it is absent from LibreOffice's
+      renderer too, which has no `SurfaceChart` in `chart2/source/view/charttypes/` and substitutes
+      "a deep 3D bar chart from all surface charts" in the importer instead
+      (`oox/source/drawingml/chart/typegroupconverter.cxx:198-199, 217-218`), its chart2 service
+      spelled `"com.sun.star.chart2.ColumnChartType"` with the comment `// Todo` at `:79`. So a
+      surface chart draws **nothing**: there is no file to measure against, the reference is itself
+      a substitution, and the projection is genuinely three-dimensional where this engine maps two
+      fractions onto a rectangle. An absent picture reads as a missing feature; one drawn as bars
+      reads as a layout bug, which is the rule the SmartArt evaluator was built on.
+      The geometry is `Paperless.Core/Charts/ChartLayout.Plots.cs` and the model additions are
+      `ChartPlotTypes.cs`; both readers gained the element and class names and nothing else moved.
+- [x] **Radar: a polar category axis, and the ring count is a constant.** `NetChart` over a
+      `PolarPlottingPositionHelper`. Category *i* of *n* sits at `90° − i × 360/n` — twelve
+      o'clock, clockwise, the same convention a pie uses — and the polygon **closes**, joining the
+      last point back to the first, which is the only structural difference from a line chart
+      (`NetChart::impl_createLine`'s "connect last point in last polygon with first point in first
+      polygon"). Measured in LibreOffice's PDF for `docx/radar-chart-labels.docx`: five vertices at
+      90°, 18°, −54°, −126° and 162° from a centre at (261.9, 582.6), all at radius 104.8 pt.
+      **The constant that is easy to miss**: `VPolarRadiusAxis::estimateMaximumAutoMainIncrementCount`
+      returns a flat **2** (`chart2/source/view/axes/VPolarRadiusAxis.cxx:87-90`) where the
+      cartesian one derives a count from the axis' length and lands on ten — so the web has three
+      rings whatever size it is drawn at, which is exactly what that file's rings at 0, 20 and 40
+      are against a data maximum of 40. The plot rectangle reserves one text-shape height above and
+      below for the labels that ring the web: 251.2 − 2 × 17.5 gives a radius of 103.1 against the
+      reference's 104.8, where reserving nothing gives 120.6 and puts the top vertex through its own
+      label.
+- [x] **Bubble: the size is an area, so the diameter is its square root.**
+      `BubbleChart::transformToScreenBubbleSize` is `sqrt(size/π) / sqrt(max/π)` — the two π
+      cancel — times a screen factor of `min(width, height) × 0.25`, commented "max bubble size is
+      25 percent of diagram size" (`BubbleChart.cxx:80-113`). That factor is the **diameter**: it
+      becomes the `Direction3D` `ShapeFactory::createCircle2D` uses as the shape's size, offsetting
+      the centre by half of it (`ShapeFactory.cxx:1729-1734`). Reading it as a radius draws every
+      bubble twice as wide; taking the size ratio without the square root draws a 1 beside a 9 at a
+      ninth of the width instead of a third. Both are the failure this type is named for — a
+      plausible picture with every bubble the wrong size. A bubble chart also repeats the scatter
+      chart's axis trap exactly: two `c:valAx`, no `c:catAx`, neither of them secondary, and the
+      group's **first** `c:axId` names the X axis.
+      **The named trap, and it is the reverse of the expected one**: LibreOffice *parses*
+      `c:bubbleScale` and `c:sizeRepresents` into `TypeGroupModel` and then never reads them again
+      — a grep for `mnBubbleScale` and `mnSizeRepresents` across `oox/` finds only the context that
+      writes them and the model that holds them. So the oracle every measurement here is against is
+      always area-at-100%, and honouring a stated `sizeRepresents="w"` is right by the
+      specification and a *disagreement* with the reference. It is honoured anyway, with the
+      reasoning recorded on `ChartBubbleSize`, and it costs nothing measurable: no file in the whole
+      corpus states anything but the default.
+- [x] **Stock: four numbers per category, and the two vocabularies order them differently.** A
+      stock chart is not a series shape per point — three or four ordinary series are merged into
+      one `VDataSeries` carrying the roles `values-first`, `values-max`, `values-min` and
+      `values-last`, and `CandleStickChart::createShapes` walks the *categories*, drawing a whisker
+      from each low to each high with either a box or two ticks across it. Drawing the series as
+      four polylines instead puts four plausible lines on the page and no candles at all.
+      **The named trap, and it cost the most time on this run: OOXML is open, high, low, close and
+      ODF is open, low, high, close.** `TypeGroupConverter` assigns `values-max` before
+      `values-min` and starts at index 1 when there are three series
+      (`oox/source/drawingml/chart/typegroupconverter.cxx:517-527`); `SchXMLChartContext` carries
+      the comment "with japanese candlesticks: open, low, high, close; otherwise: low, high, close"
+      (`xmloff/source/chart/SchXMLChartContext.cxx:1051-1085`). Nothing in either file says which
+      convention it is using — the series are three anonymous sequences in both — so reading one
+      order into the other draws every whisker upside down on the files where high and low happen to
+      be swapped and looks entirely correct on the rest. The role is therefore resolved in each
+      reader and carried on `ChartSeries.StockRole`, never inferred from position in the layout.
+      Two more that are presence rather than value: without `c:hiLowLines` there is **no whisker at
+      all** — the importer sets the merged series' line style to `NONE` rather than defaulting it,
+      its own comment recording that "hi/low-lines cannot be switched off via ShowHighLow property"
+      (`:543-546`) — and `c:upDownBars` sets both `Japanese` and `ShowFirst`, so a file without it
+      draws no opening mark either. A candle's box is white when the close is above the open and
+      black when it is not, and equality counts as a fall (`CandleStickChart.cxx:170-175`).
+- [x] **Of-pie: the split takes the *last* points and the main pie gains a composite wedge.**
+      `OfPieDataSrc::getNPoints` is `total − splitPos + 1` for the main pie and `splitPos` for the
+      second, and the main pie's last point is the sum of the ones that left
+      (`PieChart.cxx:2307-2339`). So a six-point series split at two draws five wedges on the left
+      and two on the right — seven paths for six numbers — and the composite wedge carries no label
+      of its own (`:1341-1345`). The main pie is at `−0.75` of the unit radius and two thirds of
+      its size, the second at `+0.75` and one third, and a bar-of-pie's bar runs `0.75 … 1.25`
+      across and `−0.5 … 0.5` down (`PieChart.hxx:259-269`); the main pie starts at *half the
+      composite wedge's own width* so that the wedge straddles three o'clock and the connectors can
+      meet it (`:1228-1244`). Fewer than four points and it falls back to an ordinary pie before
+      the sub-type is even chosen (`OfPieDataSrc::minPoints`, `:1052-1056`).
+      **What the corpus cannot check, said plainly.** The installed LibreOffice used as the oracle
+      is 24.2, which predates of-pie support: its PDF for `pieOfPieChart.xlsx` draws all six points
+      as one ordinary pie, a single centre at (337.0, 571.7) with six wedges and no second plot.
+      So this geometry is a port of the tree's source rather than a match against a rendering, and
+      only the words it contributes — the legend and any labels, which are the same either way —
+      are measured.
+- [x] **A pie whose part states no categories numbers its legend, and that was nine words a
+      file.** `barOfPieChart.xlsx` and `pieOfPieChart.xlsx` state a `c:val` and no `c:cat` at all,
+      and LibreOffice generates the 1-based index as each category's name
+      (`ExplicitCategoriesProvider`): its PDF draws a legend reading `1 2 … 9` against a sheet
+      whose own cells read `9 8 … 1`. Skipping the unnamed categories, which is what `Entries` did,
+      drew no legend at all. Gated on the chart stating *no* category sequence rather than on an
+      individual name being blank — a stated blank stays blank, and numbering the blanks inside a
+      stated sequence would invent labels on every sparse pie in the corpus.
+- [x] **A spreadsheet chart gets the workbook's theme now, and without it a themed chart draws
+      nothing.** `XlsxDrawings` called `DrawingChartPlot.Read` with no theme, which its own comment
+      recorded as harmless because "every chart in the corpus states its fills as `a:srgbClr`" —
+      which is true of files LibreOffice wrote and false of files Excel wrote. Measured on
+      `xlsx/bubble_chart_simple.xlsx`, whose three series state `a:schemeClr val="accent1|2|3"` and
+      `a:ln/a:noFill`: with no theme every bubble resolved to no fill and no outline and the plot
+      area came out with its axes and not one mark on it. `XlsxFile.ThemeRoot` was already loaded
+      for the cell decoration; threading it through is four lines and it took `barOfPieChart.xlsx`
+      from 11 drawn marks to 20.
+- [ ] **Two gaps found while measuring the five, both outside the chart engine and both worth
+      naming.** *One*: an ODS `draw:frame` inside `table:shapes` — a sheet-anchored rather than
+      cell-anchored drawing — is never read, because `OdsDrawings` walks `draw:frame` inside
+      `table:table-cell` only. `ods/tdf166428_Low_High_StockChart_LO248.ods` is one, so its stock
+      chart is read correctly and then never reaches a page: 24 words against the reference's 60,
+      all of the difference being the chart. *Two*: a chart anchored past the right-hand page break
+      of a workbook lands on a second page we do not produce — every one of the five OOXML chart
+      files here renders one page against LibreOffice's two — which is why
+      `xlsx/bubble_chart_simple.xlsx` still measures 5 words against 26 with a correct chart
+      composed behind it. Neither is plot-type geometry; both are the sheet drawing path.
+- [ ] **Rotated, staggered and dropped axis labels.** When labels would collide LibreOffice
+      staggers them, then rotates them, then draws every *n*th, then draws none
+      (`VCartesianAxis::createTextShapes` and `autoStaggeringOfLabels`). None of that is
+      implemented, and it is the entire residual of two decks: `bnc889755.pptx` draws sixteen month
+      names turned a quarter turn, and `tdf106217.pptx` draws **eight category names in our render
+      and none in the reference** because they do not fit. Both look like data bugs and are layout.
+- [ ] **The OOXML plot rectangle is still about a point out, and the oracle for it just doubled.**
+      `ChartLayout.PlotAreaOf` takes the frame less 2% of its own size
+      (`constPageLayoutDistancePercentage`, `ChartView.cxx:918`), then subtracts the title
       (`lcl_createTitle`, height + 2% + a flat 135), the legend, and each axis' labels
       (`AXIS2D_TICKLENGTH = 150`, `AXIS2D_TICKLABELSPACING = 100`, `ViewDefines.hxx:30-31`) and
       title (a flat 420 below, 450 to the left). Two of the three feedback passes are now in —

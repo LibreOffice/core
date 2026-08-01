@@ -168,7 +168,7 @@ public interface IChartTextMeasurer
 /// own coordinates to.
 /// </para>
 /// </remarks>
-public static class ChartLayout
+public static partial class ChartLayout
 {
     /// <summary>The length of a major tick mark, outside the axis.</summary>
     /// <remarks>
@@ -371,9 +371,13 @@ public static class ChartLayout
     [
         ChartPlotKind.Area,
         ChartPlotKind.Bar,
+        ChartPlotKind.Stock,
         ChartPlotKind.Line,
         ChartPlotKind.Scatter,
+        ChartPlotKind.Radar,
+        ChartPlotKind.Bubble,
         ChartPlotKind.Pie,
+        ChartPlotKind.OfPie,
     ];
 
     /// <summary>Composes a chart in the coordinates it is measured in.</summary>
@@ -389,7 +393,20 @@ public static class ChartLayout
 
         int categories = plot.CategoryCount();
         (double? dataMinimum, double? dataMaximum) = plot.ValueRange(0);
-        ChartScaleResult scale = ChartScale.Resolve(plot.ValueScale, dataMinimum, dataMaximum);
+
+        // A radar chart's radius axis is capped at two intervals whatever it is drawn at:
+        // VPolarRadiusAxis::estimateMaximumAutoMainIncrementCount returns a flat 2
+        // (chart2/source/view/axes/VPolarRadiusAxis.cxx:87-90) where the cartesian one derives a
+        // count from the axis' length. That is the whole of why a radar chart's web has three
+        // rings and not eleven, and it is measured: radar-chart-labels.docx peaks at 40 and
+        // LibreOffice draws rings at 0, 20 and 40.
+        ChartScaleResult scale = ChartScale.Resolve(
+            plot.ValueScale,
+            dataMinimum,
+            dataMaximum,
+            maximumIntervals: plot.Kind is ChartPlotKind.Radar
+                ? RadarIntervalCount
+                : ChartScale.MaximumAutoIntervalCount);
 
         // A scatter chart's X is a numeric dimension with a scale of its own rather than a run of
         // category slots, so it is resolved here and threaded through everything that maps a point
@@ -486,6 +503,10 @@ public static class ChartLayout
 
             AddDataTable(plot, frame, area, categories, columns, measurer, lines, labels);
         }
+        else if (plot.Kind is ChartPlotKind.Radar)
+        {
+            AddRadarAxis(plot, area, scale, categories, lines, labels);
+        }
 
         // Every plot group is drawn, not only the first, and the order is back to front: areas
         // fill, bars sit on them, lines go over both. A part holding a c:barChart and a
@@ -520,6 +541,18 @@ public static class ChartLayout
                     case ChartPlotKind.Line:
                     case ChartPlotKind.Scatter:
                         AddLines(part, area, against, domain, categories, columns, shapes, labels);
+                        break;
+                    case ChartPlotKind.Radar:
+                        AddRadar(part, area, against, categories, shapes, labels);
+                        break;
+                    case ChartPlotKind.Bubble:
+                        AddBubbles(part, area, against, domain, shapes, labels);
+                        break;
+                    case ChartPlotKind.Stock:
+                        AddCandles(part, area, against, categories, boxes, lines, labels);
+                        break;
+                    case ChartPlotKind.OfPie:
+                        AddOfPie(part, area, shapes, lines, labels);
                         break;
                     default:
                         AddBars(part, area, against, categories, columns, boxes, labels);
@@ -760,7 +793,12 @@ public static class ChartLayout
 
         foreach (ChartSeries series in plot.Series)
         {
-            if ((series.Kind ?? plot.Kind) != ChartPlotKind.Scatter) continue;
+            // A bubble chart is a scatter chart with a third number, so its X is a numeric
+            // dimension with a scale of its own in exactly the same way — and its chart part has
+            // the same pair of c:valAx and the same trap in reading them.
+            if ((series.Kind ?? plot.Kind) is not (ChartPlotKind.Scatter or ChartPlotKind.Bubble))
+                continue;
+
             if (series.XValues is not { } values) continue;
 
             foreach (double? point in values)
@@ -911,6 +949,24 @@ public static class ChartLayout
         // left after the title and the legend is the whole diagram.
         if (!plot.HasAxes)
         {
+            // Except a radar chart, whose category labels sit *outside* the web on all four sides
+            // rather than along one edge. Measured on chart2/qa/extras/data/docx/radar-chart-labels.docx,
+            // whose frame is 431.2 x 251.2 pt: LibreOffice draws the outermost web at a radius of
+            // 104.8 pt, and reserving a text shape's height above and below — 11.5 pt of text plus
+            // ShapeFactory's two 0.30 em insets, so 17.5 — leaves 206.2 pt and a radius of 103.1.
+            // Reserving nothing gives 120.6, which is 15% too big and puts the top vertex through
+            // its own label.
+            if (plot.Kind is ChartPlotKind.Radar && plot.CategoryAxisVisible)
+            {
+                Length wide = WidestCategoryLabel(plot, categories, measurer);
+                Length tall = Shape(measurer, "0", plot.LabelSize).Height;
+
+                left += wide;
+                right -= wide;
+                top += tall;
+                bottom -= tall;
+            }
+
             return right <= left || bottom <= top
                 ? DocRect.Empty
                 : new DocRect(left, top, right - left, bottom - top);
@@ -2302,19 +2358,46 @@ public static class ChartLayout
     /// <c>bIsPie</c> branch). Getting this wrong is worth several words of a word count and the
     /// whole legend of a picture.
     /// </remarks>
+    /// <remarks>
+    /// <strong>And a category with no name of its own is numbered, not skipped.</strong> A chart
+    /// part need not state a <c>c:cat</c> at all — <c>barOfPieChart.xlsx</c> and
+    /// <c>pieOfPieChart.xlsx</c> state a <c>c:val</c> and nothing else — and LibreOffice then
+    /// generates the 1-based index as each category's name, which is
+    /// <c>ExplicitCategoriesProvider</c>'s <c>lcl_getGeneratedCategories</c>. Its PDF for
+    /// <c>barOfPieChart.xlsx</c> draws a nine-entry legend reading <c>1 2 … 9</c> against a
+    /// spreadsheet whose own cells read <c>9 8 … 1</c>; skipping the unnamed categories instead
+    /// draws no legend at all, which is nine of that file's words.
+    /// </remarks>
+    /// <remarks>
+    /// The generation is gated on the chart stating <em>no</em> category sequence at all, not on
+    /// an individual name being empty. A stated but blank category is a blank label and stays
+    /// one — <c>ExplicitCategoriesProvider</c> generates the whole run or none of it — and
+    /// numbering the blanks inside a stated sequence would invent labels on every sparse pie in
+    /// the corpus.
+    /// </remarks>
     private static List<(string Name, Colour? Fill, Colour? Line, Length Width)> Entries(
         ChartPlot plot)
     {
         List<(string, Colour?, Colour?, Length)> entries = [];
 
-        if (plot.Kind == ChartPlotKind.Pie)
+        if (plot.Kind is ChartPlotKind.Pie or ChartPlotKind.OfPie)
         {
             ChartSeries? first = plot.Series.Count > 0 ? plot.Series[0] : null;
+            int points = Math.Max(plot.Categories.Count, first?.Values.Count ?? 0);
 
-            for (int at = 0; at < plot.Categories.Count; at++)
+            bool generated = plot.Categories.Count == 0;
+
+            for (int at = 0; at < points; at++)
             {
-                if (plot.Categories[at] is not { Length: > 0 } name) continue;
-                entries.Add((name, first?.FillAt(at), first?.Line, first?.LineWidth ?? Length.Zero));
+                string? stated = generated
+                    ? (at + 1).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                    : at < plot.Categories.Count
+                        ? ChartDataLabel.WriteCategory(plot.Categories[at], plot.CategoryFormat)
+                        : null;
+
+                if (stated is not { Length: > 0 }) continue;
+
+                entries.Add((stated, first?.FillAt(at), first?.Line, first?.LineWidth ?? Length.Zero));
             }
 
             return entries;

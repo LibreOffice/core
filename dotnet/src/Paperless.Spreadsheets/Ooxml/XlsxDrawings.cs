@@ -55,7 +55,11 @@ internal static class XlsxDrawings
     /// <summary>Reads the drawings anchored on one sheet.</summary>
     /// <param name="package">The workbook's package.</param>
     /// <param name="sheetPartName">The worksheet part the drawing hangs off.</param>
-    public static SheetDrawings Read(IPackage package, string? sheetPartName)
+    /// <param name="theme">
+    /// The workbook's theme, for resolving an <c>a:schemeClr</c> in a chart part.
+    /// </param>
+    public static SheetDrawings Read(
+        IPackage package, string? sheetPartName, DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(package);
         if (sheetPartName is null || package is not OpcPackage opc) return SheetDrawings.Empty;
@@ -97,7 +101,7 @@ internal static class XlsxDrawings
                 };
 
                 if (kind is not { } anchored) continue;
-                if (ReadAnchor(anchor, anchored, opc, images) is { } drawing) drawings.Add(drawing);
+                if (ReadAnchor(anchor, anchored, opc, images, theme) is { } drawing) drawings.Add(drawing);
             }
         }
 
@@ -108,7 +112,8 @@ internal static class XlsxDrawings
         XElement anchor,
         SheetAnchorKind kind,
         OpcPackage package,
-        Dictionary<string, OpcXml.Relationship> images)
+        Dictionary<string, OpcXml.Relationship> images,
+        DrawingTheme? theme)
     {
         XElement? picture = Child(anchor, DrawingNamespace, "pic");
         XElement? frame = Child(anchor, DrawingNamespace, "graphicFrame");
@@ -150,7 +155,7 @@ internal static class XlsxDrawings
 
             if (Attribute(data, "uri") != ChartUri) return drawing;
 
-            return drawing with { IsChart = true, Chart = Plot(data, package, images) };
+            return drawing with { IsChart = true, Chart = Plot(data, package, images, theme) };
         }
 
         // `BlipReference.Choose` rather than `r:embed` read straight off the blip: since Office 2016
@@ -185,16 +190,22 @@ internal static class XlsxDrawings
     /// content never opens a chart part.
     /// </para>
     /// <para>
-    /// <strong>No theme.</strong> A chart part may state <c>a:schemeClr</c>, which needs the
-    /// workbook's <c>xl/theme/theme1.xml</c> to resolve; the sheet reader does not load one, so a
-    /// themed fill reads as null and the bar draws as an outline. Every chart in the corpus states
-    /// its fills as <c>a:srgbClr</c>, which is what LibreOffice's own export writes.
+    /// <strong>The theme comes in from the workbook, and without it a themed chart draws
+    /// nothing.</strong> A chart part may state <c>a:schemeClr</c> rather than an
+    /// <c>a:srgbClr</c>, and resolving one needs <c>xl/theme/theme1.xml</c> —
+    /// <c>XlsxFile.ThemeRoot</c>, which the cell decoration already used and the drawing path did
+    /// not. Measured on <c>chart2/qa/extras/data/xlsx/bubble_chart_simple.xlsx</c>, whose three
+    /// series state <c>a:schemeClr val="accent1|2|3"</c> and <c>a:ln/a:noFill</c>: with no theme
+    /// every bubble resolved to no fill and no outline and the plot area came out with its axes
+    /// and not one mark on it. Every chart LibreOffice's own export writes states
+    /// <c>a:srgbClr</c>, which is why a corpus of round-tripped files never showed it.
     /// </para>
     /// </remarks>
     private static ChartPlot? Plot(
         XElement? data,
         OpcPackage package,
-        Dictionary<string, OpcXml.Relationship> parts)
+        Dictionary<string, OpcXml.Relationship> parts,
+        DrawingTheme? theme)
     {
         string? id = Attribute(
             Child(data, OoxmlNamespaces.DrawingMLChart, "chart"),
@@ -206,7 +217,7 @@ internal static class XlsxDrawings
         XElement? chartSpace;
         using (Stream content = chartPart.Open()) chartSpace = OoxmlXml.TryLoad(content, out _);
 
-        return chartSpace is null ? null : DrawingChartPlot.Read(chartSpace);
+        return chartSpace is null ? null : DrawingChartPlot.Read(chartSpace, theme);
     }
 
     /// <summary>
