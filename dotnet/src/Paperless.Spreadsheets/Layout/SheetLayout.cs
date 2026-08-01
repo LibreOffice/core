@@ -76,6 +76,16 @@ public sealed class SheetLayout
     public SheetCellFormats Formats { get; init; } = SheetCellFormats.Empty;
 
     /// <summary>
+    /// The cells whose text is not all in one format, if any.
+    /// </summary>
+    /// <remarks>
+    /// Beside <see cref="Formats"/> rather than inside it because the two have opposite shapes: a
+    /// cell format is shared by thousands of cells and is pooled, while a rich cell's portions
+    /// belong to that cell alone and almost no cell has any. See <see cref="SheetRichText"/>.
+    /// </remarks>
+    public SheetRichText RichText { get; init; } = SheetRichText.Empty;
+
+    /// <summary>
     /// The block of cells the sheet holds, from the sheet's origin.
     /// </summary>
     /// <remarks>

@@ -87,6 +87,7 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
         foreach (XElement table in body.Elements(XName.Get("table", OdfNamespaces.Table)))
         {
             (SheetPrintSetup setup, SheetGrid grid) = OdsPrintSetup.Read(document.File, table);
+            (SheetCellFormats formats, SheetRichText rich) = OdsCellFormats.Read(document.File, table);
             ContentSection? section = sections.FirstOrDefault(s => s.Index == index);
 
             sheets.Add(new SheetLayout
@@ -98,7 +99,8 @@ public sealed class OdsSpreadsheetDocument : IPaginatedDocument
                 Grid = grid,
                 Cells = section?.Children.OfType<ContentTable>().FirstOrDefault(),
                 Formatting = OdsCellDecoration.Read(document.File.Styles, table),
-                Formats = OdsCellFormats.Read(document.File, table),
+                Formats = formats,
+                RichText = rich,
                 FileName = fileName ?? string.Empty,
             });
 

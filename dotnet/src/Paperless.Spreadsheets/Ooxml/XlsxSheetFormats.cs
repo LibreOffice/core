@@ -1,10 +1,11 @@
+using System.Globalization;
 using System.Xml.Linq;
 using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
 
 /// <summary>
-/// Which cell format each cell of one sheet uses.
+/// Which cell format each cell of one sheet uses, and which cells hold more than one.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -21,18 +22,30 @@ namespace Paperless.Spreadsheets.Ooxml;
 /// so; without the flag the <c>s</c> on a <c>&lt;row&gt;</c> is Excel's record of what the row
 /// happens to hold and applies to nothing.
 /// </para>
+/// <para>
+/// Rich text is read in the same pass because it needs the same two answers — which cell, and what
+/// format does it resolve to — and because it can only be read from the cells: the shared string
+/// table says which <em>strings</em> carry runs and nothing about where they are used.
+/// </para>
 /// </remarks>
 internal static class XlsxSheetFormats
 {
-    /// <summary>Reads one sheet's per-cell format indices.</summary>
+    /// <summary>Reads one sheet's per-cell format indices and its rich cells.</summary>
     /// <param name="worksheet">The <c>worksheet</c> root, or null when the part is missing.</param>
-    /// <param name="formats">The workbook's cell formats, indexed as <c>cellXfs</c> orders them.</param>
-    public static SheetCellFormats Read(XElement? worksheet, IReadOnlyList<SheetCellFormat> formats)
+    /// <param name="table">The workbook's cell formats and palette.</param>
+    /// <param name="file">The workbook, for its shared strings and number formats.</param>
+    public static (SheetCellFormats Formats, SheetRichText RichText) Read(
+        XElement? worksheet, XlsxCellFormatTable table, XlsxFile file)
     {
-        ArgumentNullException.ThrowIfNull(formats);
-        if (worksheet is null || formats.Count == 0) return SheetCellFormats.Empty;
+        ArgumentNullException.ThrowIfNull(table);
+        ArgumentNullException.ThrowIfNull(file);
+
+        IReadOnlyList<SheetCellFormat> formats = table.Formats;
+        if (worksheet is null || formats.Count == 0)
+            return (SheetCellFormats.Empty, SheetRichText.Empty);
 
         SheetCellFormats.Builder builder = new();
+        SheetRichText.Builder rich = new();
         int[] pooled = new int[formats.Count];
         for (int at = 0; at < formats.Count; at++) pooled[at] = builder.Intern(formats[at]);
 
@@ -66,9 +79,11 @@ internal static class XlsxSheetFormats
             if (rowIndex < 0) rowIndex = expectedRow;
             expectedRow = rowIndex + 1;
 
+            int? rowFormat = null;
             if (Xlsx.Flag(row, "customFormat") && Index(row, "s") is { } rowStyle)
             {
                 builder.SetRow(rowIndex, pooled[rowStyle]);
+                rowFormat = rowStyle;
             }
 
             int expectedColumn = 0;
@@ -83,15 +98,76 @@ internal static class XlsxSheetFormats
                 if (column < 0) column = expectedColumn;
                 expectedColumn = column + 1;
 
-                if (Index(cell, "s") is { } style) builder.SetCell(rowIndex, column, pooled[style]);
+                int? style = Index(cell, "s");
+                if (style is { } own) builder.SetCell(rowIndex, column, pooled[own]);
+
+                ReadRichCell(cell, rowIndex, column, style ?? rowFormat ?? 0);
             }
         }
 
-        return builder.Build();
+        return (builder.Build(), rich.Build());
 
         int? Index(XElement element, string name)
             => Xlsx.Integer(element, name) is { } value && value >= 0 && value < formats.Count
                 ? value
                 : null;
+
+        void ReadRichCell(XElement cell, int row, int column, int style)
+        {
+            (IReadOnlyList<XlsxRichRun> runs, string text) = RunsOf(cell, file);
+            if (runs.Count == 0) return;
+
+            SheetCellFormat cellFormat = formats[Math.Clamp(style, 0, formats.Count - 1)];
+            List<SheetTextPortion> portions = [];
+
+            foreach (XlsxRichRun run in runs)
+            {
+                if (run.Font is not { } font) continue;
+
+                portions.Add(new SheetTextPortion(
+                    run.Start, run.Length, table.Apply(cellFormat, font)));
+            }
+
+            rich.Set(row, column, text, cellFormat, portions);
+        }
+    }
+
+    /// <summary>
+    /// The formatting runs a cell's text carries, and the text they index into.
+    /// </summary>
+    /// <remarks>
+    /// Two routes reach the same place: <c>t="s"</c> names a shared string whose runs were read
+    /// with the table, and <c>t="inlineStr"</c> writes the whole rich string in the cell. Nothing
+    /// else can be rich — a formula's cached string result and a number both carry one format.
+    /// </remarks>
+    private static (IReadOnlyList<XlsxRichRun> Runs, string Text) RunsOf(XElement cell, XlsxFile file)
+    {
+        switch (Xlsx.Attribute(cell, "t"))
+        {
+            case "s":
+            {
+                if (Xlsx.Child(cell, "v") is not { } value
+                    || !int.TryParse(
+                        value.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int index))
+                {
+                    return ([], string.Empty);
+                }
+
+                IReadOnlyList<XlsxRichRun>? runs = file.SharedStrings.RunsAt(index);
+                return runs is null ? ([], string.Empty) : (runs, file.SharedStrings[index] ?? string.Empty);
+            }
+
+            case "inlineStr":
+            {
+                XElement? inline = Xlsx.Child(cell, "is");
+                IReadOnlyList<XlsxRichRun>? runs = XlsxRichRuns.Read(inline);
+                return runs is null
+                    ? ([], string.Empty)
+                    : (runs, XlsxSharedStrings.ReadRichString(inline));
+            }
+
+            default:
+                return ([], string.Empty);
+        }
     }
 }

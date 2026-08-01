@@ -417,7 +417,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             sheet.Formats.At(row.Row, column.Column),
             row.Row,
             column.Column,
-            new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row))));
+            new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row)),
+            sheet.RichText.At(row.Row, column.Column, text)));
     }
 
     /// <summary>How wide a cell is, a merge's further columns included.</summary>

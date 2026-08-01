@@ -6,6 +6,19 @@ using Paperless.Text.Encodings;
 namespace Paperless.Spreadsheets.MsBinary;
 
 /// <summary>
+/// One formatting run of a BIFF8 rich string.
+/// </summary>
+/// <remarks>
+/// A start and a <c>FONT</c> index, and nothing else: BIFF states no length, so a run reaches to
+/// wherever the next one starts and the last one to the end of the string. It also names a whole
+/// font record rather than a delta over the cell's — the opposite of SpreadsheetML's <c>rPr</c>,
+/// which states only what it changes.
+/// </remarks>
+/// <param name="Start">The first character the run formats.</param>
+/// <param name="FontIndex">The <c>FONT</c> record that formats it.</param>
+public readonly record struct BiffFormattingRun(int Start, int FontIndex);
+
+/// <summary>
 /// Reads the record stream a BIFF workbook is made of, following <c>CONTINUE</c> records
 /// as if they were not there.
 /// </summary>
@@ -321,12 +334,21 @@ public sealed class BiffRecordReader
     /// True when the length is one byte rather than two. Which it is depends on the record,
     /// not on the format, so the caller has to say.
     /// </param>
-    public string ReadString(bool eightBitLength)
+    public string ReadString(bool eightBitLength) => ReadString(eightBitLength, out _);
+
+    /// <inheritdoc cref="ReadString(bool)"/>
+    /// <param name="eightBitLength">True when the length is one byte rather than two.</param>
+    /// <param name="runs">
+    /// Receives the string's formatting runs, or null when it has none. Always null before BIFF8,
+    /// where a byte string carries no formatting at all.
+    /// </param>
+    public string ReadString(bool eightBitLength, out List<BiffFormattingRun>? runs)
     {
         int chars = eightBitLength ? ReadByte() : ReadUInt16();
-        return Version == BiffVersion.Biff8
-            ? ReadUnicodeString(chars)
-            : ReadByteString(chars);
+        if (Version == BiffVersion.Biff8) return ReadUnicodeString(chars, ReadByte(), out runs);
+
+        runs = null;
+        return ReadByteString(chars);
     }
 
     /// <summary>
@@ -347,17 +369,41 @@ public sealed class BiffRecordReader
 
     /// <inheritdoc cref="ReadUnicodeString(int)"/>
     public string ReadUnicodeString(int chars, byte flags)
+        => ReadUnicodeString(chars, flags, out _);
+
+    /// <inheritdoc cref="ReadUnicodeString(int)"/>
+    /// <param name="chars">How many characters the string holds.</param>
+    /// <param name="flags">The already-read flags byte.</param>
+    /// <param name="runs">
+    /// Receives the formatting runs, or null when the string has none. They sit <em>after</em> the
+    /// characters although their count comes before them, which is why they cannot be left to the
+    /// caller: by the time it holds the string the stream is already past them.
+    /// </param>
+    public string ReadUnicodeString(int chars, byte flags, out List<BiffFormattingRun>? runs)
     {
         bool wide = (flags & 0x01) != 0;
         bool rich = (flags & 0x08) != 0;
         bool farEast = (flags & 0x04) != 0;
 
-        int runs = rich ? ReadUInt16() : 0;
+        int count = rich ? ReadUInt16() : 0;
         int extended = farEast ? ReadInt32() : 0;
 
         string text = ReadRawUnicodeString(chars, wide);
 
-        Skip(runs * 4);
+        runs = null;
+        if (count > 0)
+        {
+            List<BiffFormattingRun> read = new(count);
+            for (int at = 0; at < count && IsValid; at++)
+            {
+                int start = ReadUInt16();
+                int font = ReadUInt16();
+                if (start < chars) read.Add(new BiffFormattingRun(start, font));
+            }
+
+            if (read.Count > 0) runs = read;
+        }
+
         Skip(extended);
         return text;
     }

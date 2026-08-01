@@ -27,13 +27,18 @@ internal readonly record struct SheetTextContext(
 /// <param name="Row">The zero-based row.</param>
 /// <param name="Column">The zero-based column.</param>
 /// <param name="Box">Where the cell sits on the page, scaled.</param>
+/// <param name="Portions">
+/// The stretches its text is split into when they are not all in the cell's own format, or null
+/// when they are. See <see cref="SheetRichText"/>.
+/// </param>
 internal readonly record struct SheetCellText(
     string Text,
     object? Value,
     SheetCellFormat Format,
     int Row,
     int Column,
-    DocRect Box);
+    DocRect Box,
+    IReadOnlyList<SheetTextPortion>? Portions = null);
 
 /// <summary>
 /// Places and draws one cell's text.
@@ -105,11 +110,14 @@ internal static class SheetTextLayout
         Placement placement = Place(context, cell, face);
         if (placement.Lines.Count == 0) return;
 
-        Paint paint = Paint.Solid(cell.Format.Colour);
+        // The cell's own colour is the fallback rather than the answer: a rich cell's portions
+        // carry theirs, and a plain one's segment carries none so that the two paths emit the
+        // same paint for the same cell.
+        Colour fallback = cell.Format.Colour;
 
         if (cell.Format.IsRotated)
         {
-            DrawRotated(sink, context, cell, placement, paint);
+            DrawRotated(sink, context, cell, placement, fallback);
             return;
         }
 
@@ -133,7 +141,11 @@ internal static class SheetTextLayout
         {
             foreach (PlacedLine line in placement.Lines)
             {
-                sink.DrawGlyphRun(line.Run.At(new DocPoint(line.X, line.Baseline)), paint);
+                foreach ((GlyphRun run, Colour? colour) in
+                         line.Run.At(new DocPoint(line.X, line.Baseline)))
+                {
+                    sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
+                }
             }
         }
         finally
@@ -198,7 +210,37 @@ internal static class SheetTextLayout
         Length totalMargin = leftTotal + margin;
 
         string text = cell.Text;
-        SheetTextRun? run = SheetText.Shape(text, face, size);
+
+        // A value is never rich: SpreadsheetML's formatting runs and ODF's spans belong to a
+        // string, and a number that showed several fonts would have nowhere to put them once it
+        // was re-rendered as ### or in scientific notation.
+        IReadOnlyList<SheetTextPortion>? portions =
+            !isValue && cell.Portions is { Count: > 0 } stated ? stated : null;
+
+        // Every re-shape below is a range of the cell's own text at a percentage of its size, so
+        // that a rich cell keeps its portions lined up with its characters through shortening and
+        // wrapping. A plain cell takes the same route with one segment and one face.
+        SheetTextRun? ShapeRange(int start, int end, long percent)
+        {
+            if (portions is not null)
+                return SheetText.ShapeRich(text, portions, scale, start, end, percent);
+
+            Length em = percent == 100
+                ? size
+                : SheetDeviceUnits.SnapFontSize(Length.FromTwips(size.Twips * percent / 100));
+
+            return em > Length.Zero
+                ? SheetText.Shape(text[Math.Max(start, 0)..Math.Min(end, text.Length)], face, em)
+                : null;
+        }
+
+        // How much of its stated size the cell is being drawn at. Only shrink-to-fit moves it, and
+        // everything after that has to re-shape at the same percentage or a shortened cell comes
+        // back at full size — which is the sort of change that shows as one character more or fewer
+        // and nowhere else.
+        long percent = 100;
+
+        SheetTextRun? run = ShapeRange(0, text.Length, percent);
         if (run is null) return new Placement([]);
 
         Area area = OutputArea(
@@ -208,33 +250,35 @@ internal static class SheetTextLayout
 
         if (shrinks && area.IsClipped && available > Length.Zero && run.Width > Length.Zero)
         {
-            (run, size) = Shrink(text, face, size, run, available);
+            (run, percent) = Shrink(ShapeRange, text.Length, run, available);
             if (run.Width <= available) area = area.Unclipped();
         }
 
         if (isValue && area.IsClipped)
         {
-            (run, text) = Hash(cell, face, size, available, run);
+            (run, text) = Hash(cell, face, run.Size, available, run);
             if (run.Width + totalMargin <= area.Width) area = area.Unclipped();
         }
 
         Length shift = Length.Zero;
         if (!isValue && !breaks && area.IsClipped)
         {
-            (run, shift) = Shorten(run, text, face, size, horizontal, area);
+            (run, shift) = Shorten(run, text, ShapeRange, percent, horizontal, area);
         }
 
         List<SheetTextRun> lines = breaks
-            ? Wrap(text, face, size, available)
+            ? Wrap(text, portions, face, size, scale, available, ShapeRange, percent)
             : [run];
         if (lines.Count == 0) return new Placement([]);
 
-        Length lineHeight = face.LineHeightAt(size);
-        Length ascent = face.AscentAt(size);
-        Length textHeight = lineHeight * lines.Count;
+        // The block's height is the sum of its lines rather than a pitch times a count, because a
+        // rich cell's lines are not all the same height: EditEngine makes a line as tall as the
+        // tallest portion on it. For a cell in one face the two are the same number.
+        Length textHeight = Length.Zero;
+        foreach (SheetTextRun line in lines) textHeight += line.LineHeight;
 
         Length top = VerticalOffset(format.Vertical, cell.Box.Height, textHeight, margin);
-        Length baseline = cell.Box.Y + top + ascent;
+        Length y = cell.Box.Y + top;
 
         List<PlacedLine> placed = new(lines.Count);
         foreach (SheetTextRun line in lines)
@@ -242,17 +286,17 @@ internal static class SheetTextLayout
             placed.Add(new PlacedLine(
                 line,
                 Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin) + shift,
-                baseline));
-            baseline += lineHeight;
+                y + line.Ascent));
+            y += line.LineHeight;
         }
 
         // The clip never cuts the text vertically. Calc does not clip a printed cell's height
         // either unless the row's height was set by hand ("no vertical clipping when printing
         // cells with optimal height", output2.cxx:2093), and a wrapped cell taller than its row is
         // exactly the case that would lose a line to it.
-        Length textTop = Length.Min(cell.Box.Y, placed[0].Baseline - ascent);
+        Length textTop = Length.Min(cell.Box.Y, placed[0].Baseline - lines[0].Ascent);
         Length textBottom = Length.Max(
-            cell.Box.Y + cell.Box.Height, placed[^1].Baseline + (lineHeight - ascent));
+            cell.Box.Y + cell.Box.Height, placed[^1].Baseline + lines[^1].Descent);
 
         return new Placement(placed, area.IsClipped, area.Left, area.Right, textTop, textBottom);
     }
@@ -399,32 +443,28 @@ internal static class SheetTextLayout
     /// 87% of ten point in both renderers, which is 8.70 pt rather than the 8.74 an exact
     /// proportion would give.
     /// </remarks>
-    private static (SheetTextRun Run, Length Size) Shrink(
-        string text, SheetFace face, Length size, SheetTextRun run, Length available)
+    private static (SheetTextRun Run, long Percent) Shrink(
+        Func<int, int, long, SheetTextRun?> shape, int length, SheetTextRun run, Length available)
     {
         long percent = available.Emu * 100 / run.Width.Emu;
-        if (percent <= 0) return (run, size);
+        if (percent <= 0) return (run, 100);
 
         SheetTextRun scaled = run;
-        Length scaledSize = size;
+        long reached = 100;
 
         for (int attempt = 0; attempt <= ShrinkAttempts; attempt++)
         {
-            Length next = SheetDeviceUnits.SnapFontSize(Length.FromTwips(size.Twips * percent / 100));
-            if (next <= Length.Zero) break;
-
-            SheetTextRun? shaped = SheetText.Shape(text, face, next);
-            if (shaped is null) break;
+            if (shape(0, length, percent) is not { } shaped) break;
 
             scaled = shaped;
-            scaledSize = next;
+            reached = percent;
             if (shaped.Width <= available) break;
 
             percent = percent * 9 / 10;
             if (percent <= 0) break;
         }
 
-        return (scaled, scaledSize);
+        return (scaled, reached);
     }
 
     // --------------------------------------------------------------------------------- hash
@@ -490,8 +530,8 @@ internal static class SheetTextLayout
     private static (SheetTextRun Run, Length Shift) Shorten(
         SheetTextRun run,
         string text,
-        SheetFace face,
-        Length size,
+        Func<int, int, long, SheetTextRun?> shape,
+        long percent,
         SheetHorizontalAlignment horizontal,
         Area area)
     {
@@ -503,7 +543,7 @@ internal static class SheetTextLayout
             if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            return (SheetText.Shape(text[..keep], face, size) ?? run, Length.Zero);
+            return (shape(0, keep, percent) ?? run, Length.Zero);
         }
 
         if (horizontal == SheetHorizontalAlignment.Right && area.LeftClip)
@@ -512,7 +552,7 @@ internal static class SheetTextLayout
             if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            SheetTextRun? shorter = SheetText.Shape(text[^keep..], face, size);
+            SheetTextRun? shorter = shape(text.Length - keep, text.Length, percent);
             return shorter is null ? (run, Length.Zero) : (shorter, run.Width - shorter.Width);
         }
 
@@ -531,17 +571,32 @@ internal static class SheetTextLayout
     /// two sets of break positions to keep in step. Only the vertical geometry is Calc's own, so
     /// only the line <em>ranges</em> are taken from the result and the pitch is applied here.
     /// </remarks>
-    private static List<SheetTextRun> Wrap(string text, SheetFace face, Length size, Length available)
+    private static List<SheetTextRun> Wrap(
+        string text,
+        IReadOnlyList<SheetTextPortion>? portions,
+        SheetFace face,
+        Length size,
+        double scale,
+        Length available,
+        Func<int, int, long, SheetTextRun?> shape,
+        long percent)
     {
-        SheetTextRun? whole = SheetText.Shape(text, face, size);
+        SheetTextRun? whole = shape(0, text.Length, percent);
         if (whole is null) return [];
         if (available <= Length.Zero || whole.Width <= available) return [whole];
 
         ParagraphLayouter layouter = Layouters.GetOrAdd(
             face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
 
-        LaidOutParagraph laid = layouter.Layout(
-            text, emSize: size, textAreaWidth: available, options: SheetText.NoKerning);
+        // A rich cell breaks against its own runs rather than against one face, through the
+        // layouter's run-aware overload: a bold word is wider than the same characters set
+        // regular, so measuring the line in the cell's face alone puts the break in the wrong
+        // place. The single-face path is left exactly as it was.
+        LaidOutParagraph laid = portions is null
+            ? layouter.Layout(
+                text, emSize: size, textAreaWidth: available, options: SheetText.NoKerning)
+            : layouter.Layout(
+                Measured(text, portions, scale), textAreaWidth: available);
 
         List<SheetTextRun> lines = [];
         foreach (LineBox box in laid.Lines)
@@ -549,11 +604,31 @@ internal static class SheetTextLayout
             // To End rather than to VisibleEnd: Calc's own output shows a line's trailing spaces,
             // so a reference PDF's first wrapped line of "Wrapped text that needs …" holds
             // eighteen glyphs, not the seventeen the visible text has.
-            string line = text[box.Line.Start..Math.Min(box.Line.End, text.Length)];
-            if (SheetText.Shape(line, face, size) is { } shaped) lines.Add(shaped);
+            if (shape(box.Line.Start, Math.Min(box.Line.End, text.Length), percent) is { } shaped)
+                lines.Add(shaped);
         }
 
         return lines.Count == 0 ? [whole] : lines;
+    }
+
+    /// <summary>A rich cell's text, shaped run by run so that it can be broken into lines.</summary>
+    private static MeasuredParagraph Measured(
+        string text, IReadOnlyList<SheetTextPortion> portions, double scale)
+    {
+        List<FormattedRun> runs = [];
+        foreach (SheetTextPortion portion in portions)
+        {
+            if (SheetFonts.For(portion.Format) is not { } face) continue;
+
+            runs.Add(new FormattedRun(
+                portion.Start,
+                portion.Length,
+                face.Face,
+                SheetText.SizeOf(portion.Format.FontSize, scale, 100),
+                SheetText.NoKerning));
+        }
+
+        return MeasuredParagraph.Measure(text, runs);
     }
 
     // ---------------------------------------------------------------------------- placement
@@ -619,11 +694,11 @@ internal static class SheetTextLayout
         in SheetTextContext context,
         in SheetCellText cell,
         Placement placement,
-        Paint paint)
+        Colour fallback)
     {
         if (cell.Format.IsStacked)
         {
-            DrawStacked(sink, context, cell, placement, paint);
+            DrawStacked(sink, context, cell, placement, fallback);
             return;
         }
 
@@ -637,7 +712,8 @@ internal static class SheetTextLayout
 
             foreach (PlacedLine line in placement.Lines)
             {
-                sink.DrawGlyphRun(line.Run.At(pivot), paint);
+                foreach ((GlyphRun run, Colour? colour) in line.Run.At(pivot))
+                    sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
             }
         }
         finally
@@ -660,7 +736,7 @@ internal static class SheetTextLayout
         in SheetTextContext context,
         in SheetCellText cell,
         Placement placement,
-        Paint paint)
+        Colour fallback)
     {
         if (SheetFonts.For(cell.Format) is not { } face) return;
 
@@ -673,7 +749,8 @@ internal static class SheetTextLayout
             if (SheetText.Shape(character.ToString(), face, size) is not { } glyph) continue;
 
             Length x = cell.Box.X + ((cell.Box.Width - glyph.Width) / 2);
-            sink.DrawGlyphRun(glyph.At(new DocPoint(x, y)), paint);
+            foreach ((GlyphRun run, Colour? colour) in glyph.At(new DocPoint(x, y)))
+                sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
             y += pitch;
         }
     }
