@@ -269,7 +269,8 @@ internal static class OdsPrintSetup
                     column += Math.Max(1, Repeated(child, "number-columns-repeated"));
 
                     Describe(child, OdfStyleFamily.TableColumn, OdfPropertyKind.TableColumn,
-                             "column-width", out Length? size, out bool hidden, out bool breaks);
+                             "column-width", out Length? size, out bool hidden, out bool breaks,
+                             out _);
 
                     if (size is { } wide)
                         columns.Add(new SheetSizeRun(first, column - 1, wide, hidden));
@@ -287,13 +288,14 @@ internal static class OdsPrintSetup
                     row += Math.Max(1, Repeated(child, "number-rows-repeated"));
 
                     Describe(child, OdfStyleFamily.TableRow, OdfPropertyKind.TableRow,
-                             "row-height", out Length? size, out bool hidden, out bool breaks);
+                             "row-height", out Length? size, out bool hidden, out bool breaks,
+                             out bool optimal);
 
                     if (size is { } tall)
-                        rows.Add(new SheetSizeRun(first, row - 1, tall, hidden));
+                        rows.Add(new SheetSizeRun(first, row - 1, tall, hidden, optimal));
                     else if (hidden)
                         rows.Add(new SheetSizeRun(
-                            first, row - 1, SheetGrid.StandardRowHeight, true));
+                            first, row - 1, SheetGrid.StandardRowHeight, true, optimal));
 
                     if (breaks && first > 0) rowBreaks.Add(first);
                     if (inHeaderRows) repeatRows = ExtendRows(repeatRows, first, row - 1);
@@ -317,12 +319,20 @@ internal static class OdsPrintSetup
             string sizeProperty,
             out Length? size,
             out bool hidden,
-            out bool breaks)
+            out bool breaks,
+            out bool optimal)
         {
             OdfPropertySet? properties =
                 styles.Find(Attribute(element, "style-name"), family)?.Properties(kind);
 
             size = Measure(properties, OdfNamespaces.Style, sizeProperty);
+
+            // style:use-optimal-row-height says the height in the file is Calc's own measurement,
+            // so Calc recomputes it on load and the stored value is a cache. Absent means manual,
+            // which is the safe reading: every row LibreOffice writes states it either way.
+            optimal = string.Equals(
+                Get(properties, OdfNamespaces.Style, $"use-optimal-{sizeProperty}"), "true",
+                StringComparison.Ordinal);
 
             // "collapse" is a row or column the user hid and "filter" one an autofilter hid;
             // neither prints, and Calc's break loop treats them alike.

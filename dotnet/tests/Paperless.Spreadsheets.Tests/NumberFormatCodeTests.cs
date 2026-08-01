@@ -1,4 +1,4 @@
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 using Paperless.Spreadsheets.Ooxml;
 using Shouldly;
 
@@ -9,7 +9,8 @@ namespace Paperless.Spreadsheets.Tests;
 /// </summary>
 /// <remarks>
 /// The two halves are separable in the decomposed engine and separable here too:
-/// <see cref="NumberFormatterTests"/> asserts the text a code produces, and this asserts the
+/// <c>NumberFormatterTests</c> — which moved into <c>Paperless.Core.Tests</c> with the engine it
+/// exercises — asserts the text a code produces, and this asserts the
 /// classification a reader acts on before any text exists — whether a stored double is a date,
 /// a duration or a number, and which built-in code an index stands for. Those are the
 /// decisions that change a cell's *type* in the content tree, so they are worth pinning

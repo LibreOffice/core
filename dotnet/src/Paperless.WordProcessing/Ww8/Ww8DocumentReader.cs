@@ -256,6 +256,54 @@ public sealed partial class Ww8DocumentReader
         }
     }
 
+    /// <summary>The field tables already read, by the story each describes.</summary>
+    private readonly Dictionary<Ww8FibTable, Ww8FieldTypes> _fieldTypes = [];
+
+    /// <summary>
+    /// The field types of the story a range falls in, with the offset its positions are measured from.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Each story has its own <c>PlcFld</c> and its own <em>coordinate space</em>, and the second is the
+    /// part a caller gets wrong. The walk's positions are the whole document's — a footnote's first
+    /// character is at the body's length, not at nought — while a footnote's field table counts from its
+    /// own start, which is what LibreOffice's <c>WW8PLCFMan::GetCpOfs</c> exists to reconcile. Looking a
+    /// global position up in a story-relative table finds nothing where a field is and, worse, finds the
+    /// wrong field where two stories happen to overlap in their own numbering. So the base travels with
+    /// the table rather than being assumed nought.
+    /// </para>
+    /// <para>
+    /// A text box's own story is deliberately not among them. WW8 does keep a <c>PlcffldTxbx</c>, this
+    /// FIB reader does not index it, and the one thing the type is wanted for — a shape's anchor — is
+    /// decided by the story the shape's anchor character sits in rather than by any story nested
+    /// inside it. A shape anchored inside a text box therefore keeps the anchor its <c>FSPA</c> states,
+    /// which is what it had before the type was read at all.
+    /// </para>
+    /// </remarks>
+    private (Ww8FieldTypes Types, int Base) FieldTypesOf(Ww8Range range)
+    {
+        Ww8Ranges ranges = Ranges;
+
+        (Ww8FibTable Table, int Base)? story =
+            range.Start < ranges.Body.End ? (Ww8FibTable.BodyFields, ranges.Body.Start)
+            : range.Start < ranges.Footnotes.End ? (Ww8FibTable.FootnoteFields, ranges.Footnotes.Start)
+            : range.Start < ranges.Headers.End ? (Ww8FibTable.HeaderFields, ranges.Headers.Start)
+            : range.Start < ranges.Macros.End ? null
+            : range.Start < ranges.Comments.End ? (Ww8FibTable.AnnotationFields, ranges.Comments.Start)
+            : range.Start < ranges.Endnotes.End ? (Ww8FibTable.EndnoteFields, ranges.Endnotes.Start)
+            : null;
+
+        if (story is not { } which) return (Ww8FieldTypes.Empty, 0);
+        if (_fieldTypes.TryGetValue(which.Table, out Ww8FieldTypes? cached)) return (cached, which.Base);
+
+        Ww8FieldTypes read = _fib.Has(which.Table)
+            ? Ww8FieldTypes.Parse(Slice(which.Table), _diagnostics)
+            : Ww8FieldTypes.Empty;
+
+        _fieldTypes[which.Table] = read;
+        return (read, which.Base);
+    }
+
     /// <summary>
     /// Reads the footnotes and endnotes, each as its own section.
     /// </summary>

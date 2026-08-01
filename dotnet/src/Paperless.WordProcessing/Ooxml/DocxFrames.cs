@@ -38,10 +38,15 @@ internal static class DocxFrames
     /// <param name="drawing">The <c>w:drawing</c> element.</param>
     /// <param name="content">How to read a text frame's own paragraphs, or null to skip them.</param>
     /// <param name="anchorOffset">Where in the paragraph's text the drawing sits.</param>
+    /// <param name="pictures">
+    /// How to resolve an <c>a:blip</c>'s <c>r:embed</c> into bytes, or null to record the frame's
+    /// geometry without them — which is all the wrap ever needed.
+    /// </param>
     public static PageFrame? Read(
         XElement drawing,
         Func<XElement, IReadOnlyList<PageBlock>>? content,
-        int anchorOffset)
+        int anchorOffset,
+        DocxPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(drawing);
 
@@ -58,6 +63,13 @@ internal static class DocxFrames
         if (width <= Length.Zero || height <= Length.Zero) return null;
 
         XElement? box = Descendant(placed, "txbxContent");
+        FramePicture picture = box is null && pictures is not null ? pictures.Read(placed) : FramePicture.None;
+
+        // A chart is a graphic frame rather than a picture, so it names its part through a different
+        // relationship and is asked for separately. Only where the drawing holds no text box, which is
+        // the one thing it can be that is neither.
+        DocxChart chart = box is null && pictures is not null ? pictures.Chart(placed) : default;
+
         (Length x, FrameHorizontalOrigin horigin, FrameHorizontalAlignment halign) = Horizontal(anchor);
         (Length y, FrameVerticalOrigin vorigin, FrameVerticalAlignment valign) = Vertical(anchor);
 
@@ -74,7 +86,11 @@ internal static class DocxFrames
             VerticalAlignment = valign,
             VerticalOffset = y,
             Spacing = Spacing(placed),
-            IsImage = box is null,
+            IsImage = box is null && chart.Plot is null,
+            Image = picture.Raster,
+            Vector = picture.Vector,
+            Chart = chart.Plot,
+            ChartFontFamily = chart.Family,
             Name = Child(placed, "docPr")?.Attribute("name")?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

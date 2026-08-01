@@ -101,8 +101,28 @@ Still open here:
       below `Paperless.WordProcessing`; `OdtMarkSink` there resolves the ids against the regions.
       Null for Calc and Impress, and null for a text document too until someone asks, so the cost of
       the hook on an unmarked document is one null check per paragraph.
-- [ ] Embedded objects (`draw:object`): recorded as a graphic, not opened. An embedded
-      spreadsheet inside a text document is a whole nested document.
+- [x] **Charts** (`OdfChart.cs`), which serves all three families at once because
+      `OdfContentReader.ReadChart` is where the `draw:object` case already was. The chart's title
+      and its axis titles become paragraphs and its `local-table` becomes one `ContentTable`, in
+      the same section shape `Paperless.Ooxml/DrawingML/DrawingChart.cs` produces. Two things
+      worth knowing before touching it: the sub-document is a *directory* in a package
+      (`Object 1/content.xml`, reached by `xlink:href="./Object 1"`) and is inlined verbatim in a
+      flat file, which `OdfChart.Locate` hides; and a header cell of the local table can hold a
+      `draw:g/svg:desc` carrying the originating range address, so reading a cell with
+      `XElement.Value` splices `Sheet1.B1:Sheet1.B1` into the series name. Only `text:p` is text.
+- [x] **The chart section hoists rather than lands where it was found**, because ODF anchors a
+      spreadsheet chart *inside the cell it is fastened to* and a `ContentTable` cannot go in a
+      `ContentTableCell`. One rule for all three families, and it puts a chart where an annotation
+      already goes.
+- [x] **A frame's replacement image is not a second graphic.** A `draw:frame` lists its content in
+      decreasing order of preference, so a packaged chart is a `draw:object` followed by a
+      `draw:image` pointing at `ObjectReplacements/Object 1` — a metafile picture *of* the chart.
+      `ReadFrame` now stops at a chart, or a packaged `.odp` reports one more `ContentImage` than
+      the flat file it was converted from.
+- [ ] Other embedded objects (`draw:object`): a formula or a nested spreadsheet is still recorded
+      as a graphic, not opened. A spreadsheet inside a text document is a whole nested document,
+      and unlike a chart it has no bounded model — it would need the spreadsheet reader, which
+      sits above this library.
 - [ ] `text:ruby` annotation text — the base is read, the gloss is dropped.
 
 ## Legacy OpenOffice.org 1.x

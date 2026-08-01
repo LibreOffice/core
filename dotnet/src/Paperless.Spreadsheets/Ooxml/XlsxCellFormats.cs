@@ -7,6 +7,58 @@ using Paperless.Spreadsheets.Layout;
 namespace Paperless.Spreadsheets.Ooxml;
 
 /// <summary>
+/// A workbook's cell formats, with what a rich-text run needs to be resolved against them.
+/// </summary>
+/// <remarks>
+/// The palette travels with the formats because a formatting run states its colour the same three
+/// ways a font does — <c>rgb</c>, <c>indexed</c> or <c>theme</c> — and only the workbook's own
+/// <c>indexedColors</c> can answer the second. Reading it twice would be two chances to disagree.
+/// </remarks>
+/// <param name="Formats">The formats, indexed as <c>cellXfs</c> orders them.</param>
+/// <param name="Palette">The indexed colours, the workbook's overrides included.</param>
+/// <param name="DefaultFont">
+/// The workbook's own default font, which is what a rich-text run's unstated properties fall back
+/// to. See <see cref="Apply"/>.
+/// </param>
+internal sealed record XlsxCellFormatTable(
+    IReadOnlyList<SheetCellFormat> Formats, Colour[] Palette, SheetCellFormat DefaultFont)
+{
+    /// <summary>
+    /// Builds a rich-text run's format from what its <c>rPr</c> states.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An <c>rPr</c> is a complete font, not a delta over the cell's</strong> — and this
+    /// is measurable rather than a reading of the schema. Saving a cell whose first word is bold,
+    /// LibreOffice writes the <em>cell's</em> <c>fontId</c> as the bold one and then writes the
+    /// second run with an <c>rPr</c> that states a size and a name and no <c>b</c>; its own
+    /// rendering draws that run regular. Its importer says why: a portion's font is constructed
+    /// from the theme's default font model with every "used" flag already set
+    /// (<c>Font::Font(rHelper, bDxf=false)</c>, <c>sc/source/filter/oox/stylesbuffer.cxx:584</c>),
+    /// and the <c>rPr</c> then overwrites what it names, so the cell's own font never enters the
+    /// portion at all (<c>RichStringPortion::convert</c>,
+    /// <c>sc/source/filter/oox/richstring.cxx:109-118</c>). Reading it as a delta leaves the whole
+    /// cell bold.
+    /// </para>
+    /// <para>
+    /// The fallback is the workbook's <c>fonts[0]</c> rather than LibreOffice's literal
+    /// <c>Cambria 11</c> (<c>ThemeBuffer::ThemeBuffer</c>,
+    /// <c>sc/source/filter/oox/themebuffer.cxx:33</c>, marked as a locale TODO there). It differs
+    /// only for a file whose <c>rPr</c> omits <c>rFont</c> or <c>sz</c>, which no producer writes,
+    /// and the workbook's own default is the better answer when one does.
+    /// </para>
+    /// <para>
+    /// Everything that is not a font stays the cell's: alignment, wrapping, rotation and the
+    /// number format are properties of the cell, and a formatting run cannot state any of them.
+    /// </para>
+    /// </remarks>
+    /// <param name="cellFormat">What the cell resolved to, for everything but the font.</param>
+    /// <param name="font">What the run states.</param>
+    public SheetCellFormat Apply(SheetCellFormat cellFormat, XlsxRunFont font)
+        => XlsxCellFormats.Apply(cellFormat, DefaultFont, font, Palette);
+}
+
+/// <summary>
 /// The part of <c>styles.xml</c> that decides how a cell's text is <em>drawn</em>.
 /// </summary>
 /// <remarks>
@@ -48,10 +100,14 @@ internal static class XlsxCellFormats
     /// <summary>Reads the cell formats a workbook's <c>styleSheet</c> declares.</summary>
     /// <param name="styleSheet">The <c>styleSheet</c> root, or null when the part is missing.</param>
     /// <param name="styles">The already-read number formats, so a cell keeps its own.</param>
-    public static IReadOnlyList<SheetCellFormat> Read(XElement? styleSheet, XlsxStyles styles)
+    public static XlsxCellFormatTable Read(XElement? styleSheet, XlsxStyles styles)
     {
         ArgumentNullException.ThrowIfNull(styles);
-        if (styleSheet is null) return [SheetCellFormat.Default];
+        if (styleSheet is null)
+        {
+            return new XlsxCellFormatTable(
+                [SheetCellFormat.Default], [.. DefaultPalette], SheetCellFormat.Default);
+        }
 
         Colour[] palette = ReadPalette(styleSheet);
         List<Font> fonts =
@@ -76,7 +132,61 @@ internal static class XlsxCellFormats
             formats.Add(Resolve(record, parent, fonts, styles, indentUnit, formats.Count));
         }
 
-        return formats.Count == 0 ? [SheetCellFormat.Default] : formats;
+        // The workbook's own default font, which is what a rich-text run falls back to for
+        // anything its rPr does not name.
+        SheetCellFormat defaultFont = fonts.Count > 0
+            ? new SheetCellFormat
+            {
+                FontFamily = fonts[0].Family,
+                FontSize = fonts[0].Size,
+                FontWeight = fonts[0].Weight,
+                IsItalic = fonts[0].Italic,
+                Colour = fonts[0].HasColour ? fonts[0].Colour : Colour.Black,
+            }
+            : SheetCellFormat.Default;
+
+        return new XlsxCellFormatTable(
+            formats.Count == 0 ? [SheetCellFormat.Default] : formats, palette, defaultFont);
+    }
+
+    /// <inheritdoc cref="XlsxCellFormatTable.Apply"/>
+    /// <param name="cellFormat">What the cell resolved to, for everything but the font.</param>
+    /// <param name="defaultFont">The workbook's default font, which supplies what the run omits.</param>
+    /// <param name="font">What the run states.</param>
+    /// <param name="palette">The workbook's indexed colours.</param>
+    public static SheetCellFormat Apply(
+        SheetCellFormat cellFormat, SheetCellFormat defaultFont, XlsxRunFont font, Colour[] palette)
+    {
+        ArgumentNullException.ThrowIfNull(cellFormat);
+        ArgumentNullException.ThrowIfNull(defaultFont);
+        ArgumentNullException.ThrowIfNull(font);
+        ArgumentNullException.ThrowIfNull(palette);
+
+        return cellFormat with
+        {
+            FontFamily = font.Family ?? defaultFont.FontFamily,
+            FontSize = font.Points is > 0
+                ? Length.FromPoints(font.Points.Value)
+                : defaultFont.FontSize,
+            FontWeight = font.Bold is { } bold ? bold ? 700 : 400 : defaultFont.FontWeight,
+            IsItalic = font.Italic ?? defaultFont.IsItalic,
+            Colour = Resolve(font.Colour, palette) ?? defaultFont.Colour,
+        };
+    }
+
+    private static Colour? Resolve(XlsxRunColour? stated, Colour[] palette)
+    {
+        if (stated is not { } colour) return null;
+
+        Colour resolved;
+
+        if (colour.Rgb is { } rgb) resolved = Colour.FromRgb(rgb);
+        else if (colour.Indexed is { } indexed)
+            resolved = indexed >= 0 && indexed < palette.Length ? palette[indexed] : Colour.Black;
+        else if (colour.Theme is { } theme) resolved = ThemeColour(theme);
+        else return null;
+
+        return colour.Tint != 0 ? Tint(resolved, colour.Tint) : resolved;
     }
 
     // ------------------------------------------------------------------------------ records
@@ -365,7 +475,7 @@ internal static class XlsxCellFormats
             ? record.Alignment
             : parent.Value.Alignment;
 
-        Numbers.NumberFormatCode code = styles.FormatFor(index);
+        Core.Numbers.NumberFormatCode code = styles.FormatFor(index);
 
         return new SheetCellFormat
         {
@@ -382,7 +492,7 @@ internal static class XlsxCellFormats
             RotationDegrees = Rotation(alignment.Rotation),
             IsStacked = alignment.Stacked,
             NumberFormatKind = code.IsGeneral || code.Sections.Count == 0
-                ? Numbers.NumberFormatKind.General
+                ? Core.Numbers.NumberFormatKind.General
                 : code.Sections[0].Kind,
         };
     }

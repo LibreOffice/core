@@ -5,6 +5,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Fonts;
+using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
 using Paperless.WordProcessing.Layout;
 
@@ -65,16 +66,29 @@ public sealed partial class DocxLayoutSource
     /// <param name="footnotes">The footnote bodies by <c>w:id</c>, or null for a document with none.</param>
     /// <param name="endnotes">The endnote bodies by <c>w:id</c>.</param>
     /// <param name="theme">The document's theme, for themed run colours, or null.</param>
+    /// <param name="pictures">
+    /// How to reach the bytes an <c>a:blip</c> names, or null to lay the document out with its picture
+    /// frames empty — which is what a caller who wants only measurements should pay for.
+    /// </param>
+    /// <param name="numbering">
+    /// The document's <c>numbering.xml</c>, or null for a document with no lists. Its counters are
+    /// advanced by this walk, which is why <see cref="Read"/> and <see cref="ReadFlow"/> reset them: a
+    /// caller sharing one instance with the extraction pass must not have the two interleave.
+    /// </param>
     public DocxLayoutSource(
         WordStyles styles,
         XElement? settings = null,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, XElement>? footnotes = null,
         IReadOnlyDictionary<string, XElement>? endnotes = null,
-        DrawingTheme? theme = null)
+        DrawingTheme? theme = null,
+        DocxPictures? pictures = null,
+        WordNumbering? numbering = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _numbering = numbering ?? new WordNumbering();
+        Pictures = pictures;
         _theme = theme;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
@@ -84,6 +98,16 @@ public sealed partial class DocxLayoutSource
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
         _endnoteNumbering = NumberingIn(settings, "endnotePr", NoteNumbering.Endnotes);
     }
+
+    /// <summary>
+    /// How a picture's bytes are reached, or null when this source was built without a package.
+    /// </summary>
+    /// <remarks>
+    /// Exposed rather than private because its <see cref="DocxPictures.Scope"/> has to follow the walk:
+    /// relationship ids are numbered from one in every part, so whoever hands this source a header to
+    /// read must say which part it came from first.
+    /// </remarks>
+    public DocxPictures? Pictures { get; }
 
     /// <summary>The footnote bodies by <c>w:id</c>, from <c>footnotes.xml</c>.</summary>
     /// <remarks>
@@ -160,6 +184,11 @@ public sealed partial class DocxLayoutSource
         ArgumentNullException.ThrowIfNull(body);
 
         _sectionIndex = 0;
+
+        // The body is where the document's lists start counting. Reset rather than assumed clean,
+        // because the numbering may be the same instance the extraction pass already walked.
+        _numbering.ResetCounters();
+
         List<PageBlock> blocks = [];
         Walk(body, blocks, depth: 0);
         return blocks;
@@ -197,6 +226,10 @@ public sealed partial class DocxLayoutSource
     public List<PageBlock> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+
+        // Each flow numbers its own lists: a numbered paragraph in a footer does not continue the
+        // body's count, which is the same rule the extraction reader applies between flows.
+        _numbering.ResetCounters();
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
@@ -288,6 +321,12 @@ public sealed partial class DocxLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        // Taken before the walk and put back after it, because the walk can set a *new* one. What is
+        // read here was left by the paragraph before this one; what the walk leaves belongs to the
+        // paragraph after.
+        bool breaksPage = _pageBreakPending;
+        _pageBreakPending = false;
+
         RunWalker walker = new(CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, citation);
 
@@ -302,14 +341,22 @@ public sealed partial class DocxLayoutSource
         _footnoteNumber += walker.FootnotesSeen;
         _endnoteNumber += walker.EndnotesSeen;
 
-        return new PageParagraph
+        ParagraphFormat format =
+            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
+
+        // After the walk, because reading a note body or a text box re-enters this method and a list
+        // counter advanced from inside a nested flow would number the paragraph after it wrongly.
+        (PageLabel? label, format) = ListFormatting(properties, format, text, face);
+
+        PageParagraph read = new()
         {
             SectionIndex = _sectionIndex,
             Text = walker.Text,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval),
+            Format = breaksPage ? format with { StartsNewPage = true } : format,
+            Label = label,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
@@ -318,7 +365,19 @@ public sealed partial class DocxLayoutSource
             Frames = FramesOf(walker.Frames),
             Source = element,
         };
+
+        // After the note bodies and the text boxes above, which recurse into this method and share the
+        // field. Writer ignores a page break inside either — `DomainMapper.cxx:4376` applies a deferred
+        // one only when it is not in a footnote, a shape or a comment — and overwriting here is what
+        // makes that true here too: whatever a nested flow left behind is replaced by this paragraph's
+        // own answer, so a break inside a caption cannot push the paragraph after the caption's frame.
+        _pageBreakPending = walker.BreaksPage;
+
+        return read;
     }
+
+    /// <summary>Whether the paragraph read next begins a page, because the one before ended with a break.</summary>
+    private bool _pageBreakPending;
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
     private int _footnoteNumber;
@@ -543,7 +602,7 @@ public sealed partial class DocxLayoutSource
             Func<XElement, IReadOnlyList<PageBlock>>? content =
                 _frameDepth < MaxFrameNesting ? Content : null;
 
-            if (DocxFrames.Read(anchor.Element, content, anchor.Offset) is { } frame)
+            if (DocxFrames.Read(anchor.Element, content, anchor.Offset, Pictures) is { } frame)
             {
                 frames.Add(frame);
             }
@@ -629,6 +688,16 @@ public sealed partial class DocxLayoutSource
 
         /// <summary>How many endnotes it cited.</summary>
         internal int EndnotesSeen { get; private set; }
+
+        /// <summary>True when a <c>w:br w:type="page"</c> was passed, so the next paragraph starts a page.</summary>
+        /// <remarks>
+        /// The next one and not this one, which is the whole of why it is reported rather than acted on:
+        /// a page break is written at the point in the text where the page ends, and the layout model
+        /// says "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c>
+        /// has, and the same shape the DOC and RTF forms of a document state directly.
+        /// </remarks>
+        internal bool BreaksPage { get; private set; }
+
         private bool _inInstruction;
 
         /// <summary>The paragraph's text, as laid out.</summary>
@@ -690,8 +759,15 @@ public sealed partial class DocxLayoutSource
                         Emit("\t");
                         break;
 
+                    // A `w:br` is three things wearing one name and only one of them is a line break.
+                    // `w:type="page"` moves everything after it to the next page and contributes no
+                    // character at all: LibreOffice turns it back into the DOC's own U+000C
+                    // (`OOXMLBreakHandler::~OOXMLBreakHandler`, `writerfilter/ooxml/Handler.cxx:246`)
+                    // and then *defers* it, applying it to the paragraph that follows as
+                    // `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`).
                     case "br" when !_inInstruction:
-                        Emit(LineSeparator.ToString());
+                        if (Word.Attribute(child, "type") == "page") BreaksPage = true;
+                        else Emit(LineSeparator.ToString());
                         break;
 
                     case "footnoteReference" or "endnoteReference":

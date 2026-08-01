@@ -38,7 +38,7 @@ namespace Paperless.Presentations.Layout;
 /// within 0.014 pt.
 /// </para>
 /// </remarks>
-public static class SlideTextLayout
+public static partial class SlideTextLayout
 {
     /// <summary>
     /// The numerator and denominator of EditEngine's font-independent line height.
@@ -69,7 +69,8 @@ public static class SlideTextLayout
         List<PlacedGlyphRun> placed = [];
         if (body.Paragraphs.Count == 0) return placed;
 
-        (List<Block> blocks, Length total) = Measure(body, area.Width, fonts);
+        (List<Block> blocks, Length total) =
+            Measure(body, area.Width, fonts, Solve(body, area, fonts), body.FontIndependentLineSpacing);
 
         if (blocks.Count == 0) return placed;
 
@@ -80,9 +81,11 @@ public static class SlideTextLayout
             _ => Length.Zero,
         };
 
-        foreach (Block block in blocks)
+        for (int index = 0; index < blocks.Count; index++)
         {
-            top += block.SpaceBefore;
+            Block block = blocks[index];
+
+            if (index != 0) top += block.SpaceBefore;
 
             bool first = true;
             foreach (PlacedLine line in block.Lines)
@@ -97,7 +100,7 @@ public static class SlideTextLayout
                 top += line.Height;
             }
 
-            top += block.SpaceAfter;
+            if (index != blocks.Count - 1) top += block.SpaceAfter;
         }
 
         return placed;
@@ -121,12 +124,31 @@ public static class SlideTextLayout
         ArgumentNullException.ThrowIfNull(body);
         ArgumentNullException.ThrowIfNull(fonts);
 
-        return Measure(body, width, fonts).Total;
+        return Measure(body, width, fonts, Scaling.Stated(body), body.FontIndependentLineSpacing)
+            .Total;
     }
 
-    /// <summary>Breaks every paragraph of a body and totals their heights.</summary>
+    /// <summary>
+    /// Breaks every paragraph of a body and totals their heights.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The outer two spacings do not count.</strong> A paragraph's space-before is not
+    /// applied to the first paragraph of a body and its space-after is not applied to the last —
+    /// <c>ImpEditEngine::CalcHeight</c>, <c>editeng/source/editeng/impedit2.cxx:4792-4802</c>,
+    /// which guards the upper with <c>if (nPortion)</c> and the lower with
+    /// <c>if (nPortion != lastIndex())</c> under the comment "not in the last". Paragraph
+    /// spacing is therefore a gap <em>between</em> paragraphs and never padding inside the box.
+    /// Applying it at the ends as well grows the block, and a middle-anchored node then draws its
+    /// only line off centre: on <c>tdf125551.pptx</c>, whose diagram paragraphs each state
+    /// <c>spcAft</c> of 35% on 32 pt text, every label moved 5.6 pt — half of the 11.2 pt that
+    /// the trailing space added — until this matched LibreOffice.
+    /// </remarks>
     private static (List<Block> Blocks, Length Total) Measure(
-        SlideTextBody body, Length available, SlideFonts fonts)
+        SlideTextBody body,
+        Length available,
+        SlideFonts fonts,
+        Scaling scaling,
+        bool fontIndependentLineSpacing)
     {
         // wrap="none" is expressed as an effectively unbounded width rather than as clipping,
         // which is what keeps an unwrapped label on the single line its author saw.
@@ -139,11 +161,18 @@ public static class SlideTextLayout
 
         foreach (SlideParagraph paragraph in body.Paragraphs)
         {
-            Block? block = Measure(paragraph, body, width, fonts);
+            Block? block = Measure(
+                paragraph, body, width, fonts, scaling, fontIndependentLineSpacing);
             if (block is null) continue;
 
             total += block.Height;
             blocks.Add(block);
+        }
+
+        if (blocks.Count != 0)
+        {
+            total -= blocks[0].SpaceBefore;
+            total -= blocks[^1].SpaceAfter;
         }
 
         return (blocks, total);
@@ -153,9 +182,38 @@ public static class SlideTextLayout
     /// Draws a paragraph's bullet or number, on its first line and at its own pen.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// At <c>marL + indent</c>, which for the usual hanging indent is where the text would have
     /// started and where the text no longer does. Its own run rather than a prefix on the
     /// paragraph's, because it is a different face at a different size and it does not wrap.
+    /// </para>
+    /// <para>
+    /// <strong>And it does not sit on the text's baseline.</strong> A bullet is
+    /// <em>centred against the line's text</em>: <c>Outliner::ImpCalcBulletArea</c> puts its box
+    /// at <c>firstLineHeight − firstLineTextHeight/2 − bulletHeight/2</c> below the paragraph's
+    /// top and <c>Outliner::StripBullet</c> then draws it from that box's bottom less the bullet
+    /// font's descent — which is its top plus the bullet's <em>ascent</em>
+    /// (<c>editeng/source/outliner/outliner.cxx:1464-1467,946-955</c>). So the offset from the
+    /// text's baseline is
+    /// <c>lineHeight − textHeight/2 + (markerAscent − markerDescent)/2 − lineAscent</c>, and with
+    /// single spacing that reduces to aligning the two faces' half-way marks.
+    /// </para>
+    /// <para>
+    /// <strong>A generated number is not.</strong> The same function branches on
+    /// <c>SVX_NUM_CHAR_SPECIAL</c> and draws everything else at the text's own baseline, which is
+    /// why <see cref="SlideMarker.IsSymbol"/> exists — see its remarks for the measurement.
+    /// </para>
+    /// <para>
+    /// Measured on two decks that had both drifted the same way for the same reason.
+    /// <c>deck-features.pptx</c>'s 28 pt outline under the font-independent rule gives
+    /// 1186 − 593 + 106.5 − 988 = −288.5 hundredths of a millimetre, which is 8.176 pt above the
+    /// text; LibreOffice draws it 8.19 above. <c>slides-features.odp</c>'s same-sized outline
+    /// under the face's own metrics gives 1103 − 551.5 + 106.5 − 894 = −236, which is 6.690 pt;
+    /// LibreOffice draws it 6.718 above. The bullet's own metrics carry most of it, and the face
+    /// they come from is <em>OpenSymbol</em> in both — a StarBats or a Wingdings bullet resolves
+    /// there, and its hhea ascent and descent of 1420 and 442 on a 2048 em are why
+    /// <c>(markerAscent − markerDescent)/2</c> is 106.5 for a 12.6 pt marker in both files.
+    /// </para>
     /// </remarks>
     private static void EmitMarker(
         List<PlacedGlyphRun> placed,
@@ -170,23 +228,40 @@ public static class SlideTextLayout
         if (block.Paragraph.Runs.Count == 0) return;
 
         SlideTextRun first = block.Paragraph.Runs[0];
-        (OpenTypeFace? face, _) = fonts.Resolve(
+        (OpenTypeFace? face, FontReference? reference) = fonts.Resolve(
             marker.Typeface ?? first.Typeface, first.Weight, first.IsItalic);
 
         if (face is null) return;
 
+        // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
+        // bullet left at its authored size on a node scaled to a third overwhelms its own line.
+        Length runSize = block.Scaling.Scaled(first.Size);
         Length size = marker.Scale is > 0 and not 1.0
-            ? Length.FromEmu((long)Math.Round(first.Size.Emu * marker.Scale))
-            : first.Size;
+            ? Length.FromEmu((long)Math.Round(runSize.Emu * marker.Scale))
+            : runSize;
 
         ShapedText shaped = TextShaper.Default.Shape(face, marker.Text, default);
         if (shaped.Glyphs.Count == 0) return;
 
         Length pen = areaLeft + block.Paragraph.StartIndent + block.Paragraph.FirstLineIndent;
 
+        Length baseline = top + line.Ascent;
+
+        if (marker.IsSymbol)
+        {
+            LineMetrics metrics = LineSpacing.Resolve(face);
+            Length ascent = Rounded(metrics.ScaledAscent(size));
+            Length descent = Rounded(metrics.ScaledDescent(size));
+
+            baseline = top
+                       + line.Height
+                       - Length.FromEmu(line.TextHeight.Emu / 2)
+                       + Length.FromEmu((ascent.Emu - descent.Emu) / 2);
+        }
+
         placed.Add(new PlacedGlyphRun(
-            Build(shaped, marker.Text, size, Reference(face), new DocPoint(pen, top + line.Ascent),
-                  Length.Zero),
+            Build(shaped, marker.Text, size, reference ?? Reference(face),
+                  new DocPoint(pen, baseline), Length.Zero),
             marker.Colour ?? first.Colour));
     }
 
@@ -199,10 +274,15 @@ public static class SlideTextLayout
     /// put a presentation-specific metric into the engine three families share.
     /// </remarks>
     private static Block? Measure(
-        SlideParagraph paragraph, SlideTextBody body, Length width, SlideFonts fonts)
+        SlideParagraph paragraph,
+        SlideTextBody body,
+        Length width,
+        SlideFonts fonts,
+        Scaling scaling,
+        bool fontIndependentLineSpacing)
     {
         List<FormattedRun> runs = [];
-        List<Colour> colours = [];
+        List<RunStyle> styles = [];
         OpenTypeFace? first = null;
 
         foreach (SlideTextRun run in paragraph.Runs)
@@ -212,10 +292,10 @@ public static class SlideTextLayout
             if (face is null) continue;
 
             first ??= face;
-            Length size = Scaled(run.Size, body.FontScale);
+            Length size = scaling.Scaled(run.Size);
 
             runs.Add(new FormattedRun(run.Start, run.Length, face, size));
-            colours.Add(run.Colour);
+            styles.Add(new RunStyle(run.Colour, reference, face));
         }
 
         if (first is null) return null;
@@ -242,7 +322,7 @@ public static class SlideTextLayout
         List<PlacedLine> lines = [];
         foreach (LineBox box in laid.Lines)
         {
-            if (!body.FontIndependentLineSpacing)
+            if (!fontIndependentLineSpacing)
             {
                 // The face's own metrics — but its ascent and descent only, with no external
                 // leading. EditEngine adds the leading only when IsAddExtLeading() is on, which is
@@ -253,12 +333,22 @@ public static class SlideTextLayout
                 // slide-table-grid.pptx, whose four reference baselines are 20.154 pt apart.
                 (Length ascent, Length metric) = FaceHeight(runs, box.Line.Start, box.Line.VisibleEnd);
 
-                lines.Add(new PlacedLine(
-                    box,
-                    ascent > Length.Zero ? ascent : box.Baseline,
-                    Reduced(
-                        paragraph.LineSpacing.Apply(metric > Length.Zero ? metric : box.Height),
-                        body.LineSpaceReduction)));
+                Length faceHeight = metric > Length.Zero ? metric : box.Height;
+                // Through LineSpacingRule.Apply, whose whole-twip arithmetic this branch wants:
+                // it is the ODF path, whose line height is the face's own metrics rather than a
+                // fraction of the em, and slides-features.odp's sixth outline baseline moves
+                // 0.155 pt off LibreOffice's without it. The font-independent branch below is the
+                // one that needs finer units — see Spacing.
+                Length faceLine = Reduced(
+                    paragraph.LineSpacing.Apply(faceHeight), body.LineSpaceReduction);
+
+                lines.Add(Spaced(
+                    new PlacedLine(
+                        box,
+                        ascent > Length.Zero ? ascent : box.Baseline,
+                        faceLine,
+                        faceHeight),
+                    scaling));
                 continue;
             }
 
@@ -267,17 +357,30 @@ public static class SlideTextLayout
             // The rule itself: one em of ascent, 1.2 em of box, then whatever the paragraph's own
             // spacing does to it. A paragraph stating 150% gets 1.5 x 1.2 em, which is what
             // EditEngine's proportional spacing applies to the height it just computed.
-            Length natural = Length.FromEmu((long)Math.Round(em.Emu * LineHeightFactor));
-            Length height = Reduced(paragraph.LineSpacing.Apply(natural), body.LineSpaceReduction);
+            // Rounded to a whole hundredth of a millimetre, which is the unit EditEngine holds a
+            // line height in: SetHeight takes a sal_uInt16 of the outliner's own map unit, and for
+            // a draw object that unit is 1/100 mm. Keeping the exact EMU instead leaves a line
+            // height the reference cannot represent, and the error accumulates down the block.
+            Length natural = Length.FromMm100(
+                (long)Math.Floor((em.Mm100 * LineHeightFactor) + 0.5));
+            Length height = Reduced(
+                Spacing(paragraph.LineSpacing, natural), body.LineSpaceReduction);
 
-            lines.Add(new PlacedLine(box, em, height));
+            lines.Add(Spaced(
+                new PlacedLine(
+                    box,
+                    Ascent(em, natural, height, paragraph.LineSpacing),
+                    height,
+                    natural),
+                scaling));
         }
 
         Length total = Length.Zero;
         foreach (PlacedLine line in lines) total += line.Height;
 
         return new Block(
-            paragraph, measured, colours, lines, total + paragraph.SpaceBefore + paragraph.SpaceAfter);
+            paragraph, measured, styles, lines,
+            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling);
     }
 
     /// <summary>
@@ -325,6 +428,48 @@ public static class SlideTextLayout
     private static Length Rounded(Length metric)
         => Length.FromMm100((long)Math.Round((double)metric.Emu / Length.EmuPerMm100));
 
+    /// <summary>
+    /// Where the baseline sits inside a line whose height proportional spacing has changed.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One em under the plain font-independent rule, and <strong>not</strong> one em as soon as a
+    /// paragraph states a proportional line spacing other than 100%: EditEngine moves the baseline
+    /// with the box rather than leaving it where the font would put it. Below 100% the new ascent
+    /// is <c>round(lineHeight × proportion × 0.8)</c> and the old one is kept if it is already
+    /// smaller; above it the ascent grows by exactly the height the line gained
+    /// (<c>editeng/source/editeng/impedit3.cxx:1553-1580</c>).
+    /// </para>
+    /// <para>
+    /// The four-fifths is not derivable from anything; it is a constant EditEngine took from
+    /// Writer's line formatter and it decides the first baseline of every shape in a deck that
+    /// tightens its spacing. Measured on <c>ppt-features.ppt</c>, whose paragraphs all state 93%:
+    /// the reference puts the 40 pt title's baseline 35.7 pt below the text top, where one em
+    /// would be 40 and <c>1.2 × 40 × 0.93 × 0.8</c> is 35.71.
+    /// </para>
+    /// <para>
+    /// Guarded on the proportion so that it costs nothing for the two families whose corpus decks
+    /// state none: <see cref="LineSpacingRule.SingleSpaced"/> is exactly 100% and takes neither
+    /// branch.
+    /// </para>
+    /// </remarks>
+    private static Length Ascent(Length em, Length natural, Length height, LineSpacingRule spacing)
+    {
+        if (spacing.Mode != LineSpacingMode.Proportional || spacing.Proportion == 1.0) return em;
+
+        if (spacing.Proportion < 1.0)
+        {
+            Length reduced = Length.FromEmu(
+                (long)Math.Round(natural.Emu * spacing.Proportion * ShortSpacingAscent));
+            return Length.Min(em, reduced);
+        }
+
+        return em + (height - natural);
+    }
+
+    /// <summary>The fraction of a tightened line EditEngine puts above the baseline.</summary>
+    private const double ShortSpacingAscent = 0.8;
+
     /// <summary>The largest em size among the runs a line touches.</summary>
     /// <remarks>
     /// The line's own runs rather than the paragraph's, because a 32 pt word in an 18 pt paragraph
@@ -349,10 +494,61 @@ public static class SlideTextLayout
         return runs.Count > 0 ? runs[0].EmSize : Length.FromPoints(18);
     }
 
-    private static Length Scaled(Length size, double scale)
-        => scale is > 0 and not 1.0
-            ? Length.FromEmu((long)Math.Round(size.Emu * scale))
-            : size;
+    /// <summary>
+    /// The height a paragraph's stated line spacing gives a line, in the draw layer's own unit.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A pass-through for single spacing rather than a call to
+    /// <see cref="LineSpacingRule.Apply"/>, and the reason is the unit rather than the arithmetic.
+    /// <c>Apply</c> computes in <strong>whole twips</strong>, because that is Writer's layout unit
+    /// and the truncation there is observable; Impress lays out in hundredths of a millimetre, and
+    /// a twip is 0.05 pt against a hundredth of a millimetre's 0.028, so round-tripping a line
+    /// height through twips loses resolution the draw layer has.
+    /// </para>
+    /// <para>
+    /// A proportion of zero counts as single, because that is what <c>Apply</c> itself does with
+    /// it — a default-constructed rule and an explicit 100 per cent are the same rule — and a
+    /// hand-built body states neither.
+    /// </para>
+    /// <para>
+    /// Invisible until the shrink-to-fit search reads it. The search picks the candidate whose
+    /// height comes closest to filling the box, and a 27 pt line at full spacing and a 30 pt line
+    /// at nine-tenths differ by exactly one hundredth of a millimetre — 1144 against 1143. Through
+    /// twips both are 648, the search sees a tie, keeps the earlier candidate, and draws 30 where
+    /// LibreOffice draws 27. Three of the eighty-eight boxes in the fit probe deck turned on this
+    /// one unit.
+    /// </para>
+    /// </remarks>
+    private static Length Spacing(LineSpacingRule rule, Length natural)
+        => rule.Mode == LineSpacingMode.Proportional && rule.Proportion is <= 0 or 1.0
+            ? natural
+            : rule.Apply(natural);
+
+    /// <summary>
+    /// Applies the fit's spacing scale to a line, which moves its baseline as well as its box.
+    /// </summary>
+    /// <remarks>
+    /// EditEngine's <c>SvxInterLineSpaceRule::Off</c> branch — the one a paragraph that states no
+    /// line spacing takes — turns the scale into a proportional spacing and applies it to both:
+    /// the height is multiplied and the ascent is <em>capped</em> at the text height times the
+    /// same factor, never raised (<c>editeng/source/editeng/impedit3.cxx:1584-1600</c>). Capping
+    /// rather than assigning is what keeps a line whose ascent was already short where it was.
+    /// </remarks>
+    private static PlacedLine Spaced(PlacedLine line, Scaling scaling)
+    {
+        if (scaling.Spacing is <= 0 or >= 1.0) return line;
+
+        Length ascent = Length.FromEmu(
+            (long)Math.Round(line.TextHeight.Emu * scaling.Spacing));
+        Length height = Length.FromEmu((long)Math.Round(line.Height.Emu * scaling.Spacing));
+
+        return line with
+        {
+            Ascent = line.Ascent > Length.Zero && line.Ascent <= ascent ? line.Ascent : ascent,
+            Height = height,
+        };
+    }
 
     private static Length Reduced(Length height, double reduction)
         => reduction is > 0 and < 1
@@ -377,7 +573,9 @@ public static class SlideTextLayout
             if (shaped.Glyphs.Count == 0) continue;
 
             GlyphRun glyphs = Build(
-                shaped, text, run.EmSize, Reference(run.Face), new DocPoint(pen, baseline),
+                shaped, text, run.EmSize,
+                block.FontFor(run.Start, run.Face) ?? Reference(run.Face),
+                new DocPoint(pen, baseline),
                 line.Box.SpaceAdd);
 
             placed.Add(new PlacedGlyphRun(glyphs, block.ColourAt(run.Start)));
@@ -440,6 +638,17 @@ public static class SlideTextLayout
         };
     }
 
+    /// <summary>
+    /// A reference for a face that did not come through a resolver.
+    /// </summary>
+    /// <remarks>
+    /// The last resort, and it names the family because that is all an
+    /// <see cref="OpenTypeFace"/> knows: it is a parsed table directory with no memory of the file
+    /// it was read out of. A backend given this can group runs by font and can measure them, but
+    /// it cannot open the face — so a PDF built from it references the family and embeds no font
+    /// program. Everything laid out here reaches <see cref="Emit"/> with
+    /// <see cref="RunStyle.Font"/> set instead; see the remark on that.
+    /// </remarks>
     private static FontReference Reference(OpenTypeFace face) => new()
     {
         FamilyName = face.FamilyName ?? string.Empty,
@@ -448,13 +657,45 @@ public static class SlideTextLayout
         FaceKey = face.FamilyName ?? string.Empty,
     };
 
+    /// <summary>
+    /// What a run carries that changes how it is drawn but not how wide it is.
+    /// </summary>
+    /// <param name="Colour">The colour it is drawn in.</param>
+    /// <param name="Font">
+    /// The reference the run's face was resolved through, whose <c>FaceKey</c> is the font file's
+    /// own path.
+    /// </param>
+    /// <param name="Face">
+    /// The face that reference names, kept so that a sub-run drawn in a <em>different</em> face
+    /// cannot be embedded from it. See <see cref="Block.FontFor"/>.
+    /// </param>
+    /// <remarks>
+    /// <para>
+    /// The font reference travels here rather than on <see cref="FormattedRun"/> for the same
+    /// reason the colour does: <see cref="MeasuredParagraph"/> keeps only what changes a
+    /// measurement, and which file a face was loaded from moves no line break.
+    /// </para>
+    /// <para>
+    /// It has to travel <em>somewhere</em>, though, and that is the whole of this fix. Rebuilding
+    /// the reference from the face — <c>FaceKey = face.FamilyName</c>, which is what
+    /// <see cref="Reference"/> still does for hand-built input — hands the PDF writer a key
+    /// <c>FileFontProvider</c> cannot open, so every deck rendered to PDF referenced its faces and
+    /// embedded none of them. Measured with <c>pdffonts</c> on <c>deck-features.pptx</c>: both
+    /// <c>LiberationSans</c> and <c>OpenSymbol</c> reported <c>emb no</c>, while the same
+    /// document's text extracted at 43 of 43 words matching LibreOffice — which is exactly why no
+    /// existing check could see it.
+    /// </para>
+    /// </remarks>
+    private readonly record struct RunStyle(Colour Colour, FontReference? Font, OpenTypeFace? Face);
+
     /// <summary>One paragraph, measured and broken.</summary>
     private sealed record Block(
         SlideParagraph Paragraph,
         MeasuredParagraph Measured,
-        IReadOnlyList<Colour> Colours,
+        IReadOnlyList<RunStyle> Styles,
         IReadOnlyList<PlacedLine> Lines,
-        Length Height)
+        Length Height,
+        Scaling Scaling)
     {
         public Length SpaceBefore => Paragraph.SpaceBefore;
 
@@ -466,15 +707,45 @@ public static class SlideTextLayout
         /// <see cref="MeasuredParagraph"/> keeps only what changes a measurement — a colour does
         /// not move a line break, so it travels with whatever draws the text.
         /// </remarks>
-        public Colour ColourAt(int index)
+        public Colour ColourAt(int index) => StyleAt(index).Colour;
+
+        /// <summary>
+        /// The resolved reference for a sub-run, or null when nothing here can name its face.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Matched on the face and not only on the position. The runs a caller measures are cut
+        /// further before they are drawn — by direction, by script, and by <c>FontItemiser</c>
+        /// where the run's own face has no glyph for a character — and only the last of those
+        /// changes the face. A reference handed to a sub-run drawn in a face it does not name
+        /// would embed <em>the wrong font file</em>, which is worse than embedding none: the
+        /// glyph indices the shaper produced belong to the other face, so the page would draw
+        /// confidently wrong letters.
+        /// </para>
+        /// <para>
+        /// Reference equality is the right test because the face cache hands back one instance
+        /// per resolved request, and <c>FontItemiser</c> passes the primary face straight through
+        /// when it does not substitute. Nothing in this library turns glyph fallback on today, so
+        /// the guard costs a pointer comparison and buys the invariant outright.
+        /// </para>
+        /// </remarks>
+        /// <param name="index">A character the sub-run covers.</param>
+        /// <param name="face">The face the sub-run will actually be shaped and drawn in.</param>
+        public FontReference? FontFor(int index, OpenTypeFace face)
         {
-            for (int i = 0; i < Paragraph.Runs.Count && i < Colours.Count; i++)
+            RunStyle style = StyleAt(index);
+            return ReferenceEquals(style.Face, face) ? style.Font : null;
+        }
+
+        private RunStyle StyleAt(int index)
+        {
+            for (int i = 0; i < Paragraph.Runs.Count && i < Styles.Count; i++)
             {
                 if (index >= Paragraph.Runs[i].Start && index < Paragraph.Runs[i].End)
-                    return Colours[i];
+                    return Styles[i];
             }
 
-            return Colours.Count > 0 ? Colours[0] : Colour.Black;
+            return Styles.Count > 0 ? Styles[0] : new RunStyle(Colour.Black, null, null);
         }
     }
 
@@ -485,5 +756,13 @@ public static class SlideTextLayout
     /// the em size itself.
     /// </param>
     /// <param name="Height">The distance to the next line's top.</param>
-    private readonly record struct PlacedLine(LineBox Box, Length Ascent, Length Height);
+    /// <param name="TextHeight">
+    /// The height before the paragraph's line-spacing rule was applied, which is what EditEngine
+    /// calls the line's <em>text</em> height (<c>SetHeight(nHeight, nTxtHeight)</c>,
+    /// <c>editeng/source/editeng/impedit3.cxx:1574-1579</c>). Only a bullet needs it, and it needs
+    /// it because the bullet is centred on the text rather than on the line: a paragraph set at
+    /// 150% keeps its marker where single spacing would have put it.
+    /// </param>
+    private readonly record struct PlacedLine(
+        LineBox Box, Length Ascent, Length Height, Length TextHeight);
 }

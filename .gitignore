@@ -202,3 +202,4 @@ gdb.txt
 
 # xml unit tests sometimes leave these lying around
 **/secmod.db
+.vs

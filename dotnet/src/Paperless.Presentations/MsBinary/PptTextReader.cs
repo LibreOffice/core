@@ -21,6 +21,13 @@ public sealed record PptTextRun(
     IReadOnlyList<PptCharacterRun> Characters);
 
 /// <summary>One paragraph's properties, covering <paramref name="Length"/> characters.</summary>
+/// <remarks>
+/// The fields past the bullet are the ones only layout reads, and they mean nothing on their own:
+/// <paramref name="Mask"/> says which the run actually stated, and everything it does not name
+/// falls through to the master's per-level defaults. A run states its alignment and its indents
+/// far more often than it states its bullet, so treating a zero as "left, no indent" rather than
+/// as "unstated" moves the text of every inherited paragraph in the deck.
+/// </remarks>
 /// <param name="Length">How many characters the run covers, including its terminating return.</param>
 /// <param name="Depth">The outline level, zero for the first.</param>
 /// <param name="HasBullet">
@@ -28,18 +35,61 @@ public sealed record PptTextRun(
 /// per-level default decides.
 /// </param>
 /// <param name="BulletCharacter">The bullet's character, when the paragraph states one.</param>
+/// <param name="Mask">The property mask, which says which of the fields below were stated.</param>
+/// <param name="Alignment">0 left, 1 centre, 2 right, 3 justified.</param>
+/// <param name="LineFeed">A percentage when positive, eighths of a point when negative.</param>
+/// <param name="SpaceBefore">The space above, in the same two units.</param>
+/// <param name="SpaceAfter">The space below, in the same two units.</param>
+/// <param name="TextOffset">Where the text starts, in master units of a 576th of an inch.</param>
+/// <param name="BulletOffset">Where the bullet starts, in the same units.</param>
+/// <param name="BulletFont">The bullet's index into the document's font collection.</param>
+/// <param name="BulletHeight">The bullet's size as a percentage of the text's.</param>
+/// <param name="BulletColour">The bullet's packed colour word.</param>
 public readonly record struct PptParagraphRun(
-    int Length, int Depth, bool? HasBullet, char? BulletCharacter);
+    int Length,
+    int Depth,
+    bool? HasBullet,
+    char? BulletCharacter,
+    uint Mask = 0,
+    ushort Alignment = 0,
+    short LineFeed = 0,
+    short SpaceBefore = 0,
+    short SpaceAfter = 0,
+    ushort TextOffset = 0,
+    ushort BulletOffset = 0,
+    ushort BulletFont = 0,
+    ushort BulletHeight = 0,
+    uint BulletColour = 0)
+{
+    /// <summary>Whether the run's mask names a property, so its value is the run's own.</summary>
+    /// <param name="bit">The mask bit, as <c>PPT_ParaAttr_*</c> numbers them.</param>
+    public bool States(uint bit) => (Mask & bit) != 0;
+}
 
-/// <summary>One character run's emphasis, covering <paramref name="Length"/> characters.</summary>
+/// <summary>One character run's properties, covering <paramref name="Length"/> characters.</summary>
 /// <param name="Length">How many characters the run covers.</param>
 /// <param name="Emphasis">The emphasis the run states.</param>
 /// <param name="Stated">
 /// Which kinds of emphasis the run's mask claims. Everything else falls through to the master's
 /// per-level defaults, which is where a PowerPoint title's boldness normally lives.
 /// </param>
+/// <param name="Mask">The property mask, which says which of the fields below were stated.</param>
+/// <param name="FontIndex">The index into the document's font collection.</param>
+/// <param name="FontHeight">The size in points.</param>
+/// <param name="Colour">The packed colour word, in the text spelling.</param>
 public readonly record struct PptCharacterRun(
-    int Length, RunEmphasis Emphasis, RunEmphasis Stated);
+    int Length,
+    RunEmphasis Emphasis,
+    RunEmphasis Stated,
+    uint Mask = 0,
+    ushort FontIndex = 0,
+    ushort FontHeight = 0,
+    uint Colour = 0)
+{
+    /// <summary>Whether the run's mask names a property, so its value is the run's own.</summary>
+    /// <param name="bit">The mask bit, as <c>PPT_CharAttr_*</c> numbers them.</param>
+    public bool States(uint bit) => (Mask & bit) != 0;
+}
 
 /// <summary>
 /// Reads the text records inside a shape's client textbox.
@@ -282,18 +332,21 @@ public static class PptTextReader
 
             ushort? bulletFlags = null;
             char? bulletCharacter = null;
+            ushort bulletFont = 0, bulletHeight = 0, alignment = 0, textOffset = 0, bulletOffset = 0;
+            short lineFeed = 0, spaceBefore = 0, spaceAfter = 0;
+            uint bulletColour = 0;
 
             if ((mask & 0x0000000F) != 0) bulletFlags = Take16(content, ref position);
             if ((mask & 0x00000080) != 0) bulletCharacter = (char)Take16(content, ref position);
-            if ((mask & 0x00000010) != 0) Skip(ref position, 2);   // bullet typeface
-            if ((mask & 0x00000040) != 0) Skip(ref position, 2);   // bullet size
-            if ((mask & 0x00000020) != 0) Skip(ref position, 4);   // bullet colour
-            if ((mask & 0x00000800) != 0) Skip(ref position, 2);   // alignment
-            if ((mask & 0x00001000) != 0) Skip(ref position, 2);   // line spacing
-            if ((mask & 0x00002000) != 0) Skip(ref position, 2);   // space before
-            if ((mask & 0x00004000) != 0) Skip(ref position, 2);   // space after
-            if ((mask & 0x00000100) != 0) Skip(ref position, 2);   // left margin
-            if ((mask & 0x00000400) != 0) Skip(ref position, 2);   // indent
+            if ((mask & 0x00000010) != 0) bulletFont = Take16(content, ref position);
+            if ((mask & 0x00000040) != 0) bulletHeight = Take16(content, ref position);
+            if ((mask & 0x00000020) != 0) bulletColour = Take32(content, ref position);
+            if ((mask & 0x00000800) != 0) alignment = (ushort)(Take16(content, ref position) & 3);
+            if ((mask & 0x00001000) != 0) lineFeed = Signed(content, ref position);
+            if ((mask & 0x00002000) != 0) spaceBefore = Signed(content, ref position);
+            if ((mask & 0x00004000) != 0) spaceAfter = Signed(content, ref position);
+            if ((mask & 0x00000100) != 0) textOffset = Take16(content, ref position);
+            if ((mask & 0x00000400) != 0) bulletOffset = Take16(content, ref position);
             if ((mask & 0x00008000) != 0) Skip(ref position, 2);   // default tab size
             if ((mask & 0x00100000) != 0)
             {
@@ -315,7 +368,17 @@ public static class PptTextReader
                 // A paragraph that names no bullet flags at all leaves the decision to the
                 // master; one that names them and clears bit 0 has turned the bullet off.
                 (mask & 0x00000001) != 0 ? (bulletFlags & 1) != 0 : null,
-                bulletCharacter));
+                bulletCharacter,
+                mask,
+                alignment,
+                lineFeed,
+                spaceBefore,
+                spaceAfter,
+                textOffset,
+                bulletOffset,
+                bulletFont,
+                bulletHeight,
+                bulletColour));
 
             if (count <= 0) break;
             covered += count;
@@ -333,18 +396,20 @@ public static class PptTextReader
 
             ushort flags = 0;
             short escapement = 0;
+            ushort fontIndex = 0, fontHeight = 0;
+            uint colour = 0;
 
             // The flags word is present only when the mask's low half asks for something in it,
             // and its bits are the same bits — a mask that names bold but a flags word that does
             // not set it means bold is explicitly off.
             if ((mask & 0xFFFF) != 0) flags = Take16(content, ref position);
 
-            if ((mask & 0x00010000) != 0) Skip(ref position, 2);   // typeface
+            if ((mask & 0x00010000) != 0) fontIndex = Take16(content, ref position);
             if ((mask & 0x00200000) != 0) Skip(ref position, 2);   // east-asian typeface
             if ((mask & 0x00400000) != 0) Skip(ref position, 2);   // ANSI typeface
             if ((mask & 0x00800000) != 0) Skip(ref position, 2);   // symbol typeface
-            if ((mask & 0x00020000) != 0) Skip(ref position, 2);   // size
-            if ((mask & 0x00040000) != 0) Skip(ref position, 4);   // colour
+            if ((mask & 0x00020000) != 0) fontHeight = Take16(content, ref position);
+            if ((mask & 0x00040000) != 0) colour = Take32(content, ref position);
 
             if ((mask & 0x00080000) != 0)
             {
@@ -356,7 +421,11 @@ public static class PptTextReader
             characters.Add(new PptCharacterRun(
                 Math.Max(count, 0),
                 PptCharacterStyle.ToEmphasis(flags, escapement),
-                PptCharacterStyle.Stated(mask)));
+                PptCharacterStyle.Stated(mask),
+                mask,
+                fontIndex,
+                fontHeight,
+                colour));
             if (count <= 0) break;
             covered += count;
         }
@@ -372,6 +441,19 @@ public static class PptTextReader
         position += 2;
         return value;
     }
+
+    private static uint Take32(ReadOnlySpan<byte> content, ref int position)
+    {
+        uint value = position + 4 <= content.Length
+            ? DffRecordBuffer.ReadUInt32(content[position..])
+            : 0u;
+        position += 4;
+        return value;
+    }
+
+    /// <summary>A word read as signed, which the line feed and the two distances are.</summary>
+    private static short Signed(ReadOnlySpan<byte> content, ref int position)
+        => unchecked((short)Take16(content, ref position));
 
     private static void Skip(ref int position, int bytes) => position += bytes;
 

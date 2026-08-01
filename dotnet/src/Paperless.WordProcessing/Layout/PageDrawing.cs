@@ -129,14 +129,45 @@ public static class PageDrawing
     /// a border runs through the centre of its own line, so half of it overlaps whatever is inside.
     /// </para>
     /// <para>
-    /// An image frame draws nothing but its background and border. The raster is a separate matter and the
-    /// wrap, which is what moves text, never depended on it — so a picture reserves exactly the right room
-    /// and leaves a hole where its pixels will go.
+    /// A picture goes between the two, for the same reason its own text would: it covers the background
+    /// and the border is drawn over its edge. The image is handed over exactly as the reader found it —
+    /// still the file's own bytes — because the backend is what has a codec, and a PDF backend given a
+    /// JPEG passes it through to <c>DCTDecode</c> without ever decoding it. A frame the document called a
+    /// picture whose bytes could not be found draws as it always did: its background and its border, and
+    /// a hole where the pixels would have gone.
+    /// </para>
+    /// <para>
+    /// <strong>A vector picture is stretched onto the frame by its own view box, not by its ink.</strong>
+    /// <c>VectorImage.Draw</c> maps the picture's whole frame onto the destination and clips to it, which
+    /// is the mapping LibreOffice uses for a <c>Graphic</c> on an <c>SdrObject</c>'s logic rectangle. This
+    /// is the one call a reader gets wrong first: taking the extent of what the picture actually paints
+    /// instead makes a logo with margins come out several times too large and clipped, which reads as a
+    /// mapping bug in the decoder and is not one.
+    /// </para>
+    /// <para>
+    /// The vector wins over the raster where a frame has both, which happens only for a DrawingML
+    /// <c>svgBlip</c>. A decode that comes back empty falls through to the raster, which is what that
+    /// fallback is written into the file for.
+    /// </para>
+    /// <para>
+    /// <strong>A chart wins over both, and that ordering is the whole of the ODT case.</strong> ODF
+    /// stores a chart as a <c>draw:object</c> followed by a <c>draw:image</c> of it — a picture of the
+    /// chart for a reader that cannot embed one — so a frame holding a chart usually holds a replacement
+    /// picture too. Every one LibreOffice writes is a <c>VCLMTF</c> StarView metafile, which nothing
+    /// here decodes, so the fall-through costs nothing today; drawing the composed chart is still the
+    /// right answer whatever the fallback turns out to be, because it is live geometry rather than a
+    /// snapshot taken at some other size.
     /// </para>
     /// </remarks>
     private static void DrawFrame(PlacedFrame frame, IDrawingSink sink)
     {
         if (frame.Frame.Fill is { } fill) Fill(frame.Area, fill, sink);
+
+        if (frame.Frame.Chart is { } chart)
+            FrameChart.Draw(sink, chart, frame.Area, frame.Frame.ChartFontFamily);
+        else if (frame.Frame.Vector is { } vector && !vector.Value.IsEmpty)
+            vector.Value.Draw(sink, frame.Area);
+        else if (frame.Frame.Image is { } image) sink.DrawImage(image, frame.Area);
 
         DrawFlow(frame.Content, sink);
 
@@ -456,10 +487,31 @@ public static class PageDrawing
 
         int start = line.Box.Line.Start;
         int end = Math.Min(line.Box.Line.VisibleEnd, paragraph.Text.Length);
-        if (end <= start) return runs;
 
         Length lineLeft = area.X + line.Box.Left;
         Length baseline = area.Y + line.Baseline;
+
+        // Before the text and before the empty-line exit, because an item with no words still has a
+        // number: an empty list paragraph draws its label and nothing else, which is what LibreOffice
+        // does and what a list being typed into looks like.
+        if (line.StartsParagraph && paragraph.Label is { Text.Length: > 0 } label)
+        {
+            ShapedText shapedLabel = TextShaper.Default.Shape(label.Face, label.Text, label.Shaping);
+            if (shapedLabel.Glyphs.Count > 0)
+            {
+                runs.Add((
+                    Build(
+                        shapedLabel,
+                        label.Text,
+                        label.EmSize,
+                        label.Font ?? Reference(label.Face),
+                        new DocPoint(lineLeft - paragraph.LabelAdvance, baseline),
+                        Length.Zero),
+                    label.Colour.A == 0 ? Colour.Black : label.Colour));
+            }
+        }
+
+        if (end <= start) return runs;
 
         foreach (TabbedSegment segment in Stretches(paragraph, start, end))
         {
@@ -467,8 +519,24 @@ public static class PageDrawing
 
             Length pen = lineLeft + segment.Left;
 
+            // The as-character objects on this stretch, in position order, consumed as the pen reaches
+            // them. An object contributes no glyphs — the frame is drawn separately, by `DrawFrame` at
+            // the rectangle `FrameLayout` hung it at — so all the text pass owes it is the room it takes.
+            int nextObject = 0;
+            List<InlineObject> onStretch = paragraph.HasInlineObjects
+                ? [.. paragraph.InlineObjects
+                    .Where(one => one.Offset >= segment.Start && one.Offset < segment.End)
+                    .OrderBy(one => one.Offset)]
+                : [];
+
             foreach (PageRun run in InVisualOrder(paragraph, segment.Start, segment.End))
             {
+                while (nextObject < onStretch.Count && onStretch[nextObject].Offset <= run.Start)
+                {
+                    pen += onStretch[nextObject].Width;
+                    nextObject++;
+                }
+
                 string text = paragraph.Text[run.Start..run.End];
                 ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
                 if (shaped.Glyphs.Count == 0) continue;
@@ -531,17 +599,18 @@ public static class PageDrawing
     {
         if (!paragraph.HasRuns)
         {
-            return
-            [
-                new PageRun(
-                    start,
-                    end - start,
-                    paragraph.Face,
-                    paragraph.EmSize,
-                    paragraph.Font,
-                    paragraph.Colour,
-                    paragraph.Shaping),
-            ];
+            return AroundObjects(
+                paragraph,
+                [
+                    new PageRun(
+                        start,
+                        end - start,
+                        paragraph.Face,
+                        paragraph.EmSize,
+                        paragraph.Font,
+                        paragraph.Colour,
+                        paragraph.Shaping),
+                ]);
         }
 
         List<PageRun> clipped = [];
@@ -554,7 +623,40 @@ public static class PageDrawing
             clipped.Add(run with { Start = from, Length = to - from });
         }
 
-        return clipped;
+        return AroundObjects(paragraph, clipped);
+    }
+
+    /// <summary>
+    /// The runs cut at every as-character object's boundary, so the pen has somewhere to jump.
+    /// </summary>
+    /// <remarks>
+    /// The same cut <see cref="MeasuredParagraph"/> makes before it shapes, and it has to be the same one:
+    /// the pen advances by what it draws, so text after a picture starts where the run before the picture
+    /// ended plus the picture's width — and a run drawn across the boundary would draw the whole sentence
+    /// from one origin and put the words after the picture underneath it.
+    /// </remarks>
+    private static List<PageRun> AroundObjects(PageParagraph paragraph, List<PageRun> runs)
+    {
+        if (!paragraph.HasInlineObjects) return runs;
+
+        List<PageRun> cut = [];
+
+        foreach (PageRun run in runs)
+        {
+            int at = run.Start;
+
+            foreach (InlineObject one in paragraph.InlineObjects.OrderBy(one => one.Offset))
+            {
+                if (one.Offset <= at || one.Offset >= run.End) continue;
+
+                cut.Add(run with { Start = at, Length = one.Offset - at });
+                at = one.Offset;
+            }
+
+            if (at < run.End) cut.Add(run with { Start = at, Length = run.End - at });
+        }
+
+        return cut;
     }
 
     /// <summary>
@@ -636,6 +738,44 @@ public static class PageDrawing
     }
 
     /// <summary>
+    /// How far along a line a character position sits, measured from where the line's text starts.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// What an as-character anchor needs: an inline picture hangs at the position its anchor character
+    /// occupies, and that position is a sum of glyph advances rather than anything pagination recorded.
+    /// Answered through the same stretches and the same shaping the line will be <em>drawn</em> with, so
+    /// that the picture cannot land somewhere the words around it disagree with — which is the failure
+    /// re-measuring in a second way would produce, and it would be invisible in every document without a
+    /// tab in it.
+    /// </para>
+    /// <para>
+    /// A position on a later stretch of a tabbed line carries that stretch's own start, so a picture after
+    /// a tab hangs at the stop rather than where the text before the tab ended.
+    /// </para>
+    /// </remarks>
+    /// <param name="paragraph">The paragraph the line belongs to.</param>
+    /// <param name="line">The line, whose own range bounds the answer.</param>
+    /// <param name="at">The character position, as an index into the paragraph's text.</param>
+    internal static Length OffsetOnLine(PageParagraph paragraph, PlacedLine line, int at)
+    {
+        ArgumentNullException.ThrowIfNull(paragraph);
+
+        int start = line.Box.Line.Start;
+        int end = Math.Min(line.Box.Line.End, paragraph.Text.Length);
+        int position = Math.Clamp(at, start, end);
+
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        {
+            if (position > segment.End) continue;
+
+            return segment.Left + WidthBetween(paragraph, segment.Start, position);
+        }
+
+        return Length.Zero;
+    }
+
+    /// <summary>
     /// The width of a range of a paragraph's text, in whichever faces cover it.
     /// </summary>
     /// <remarks>
@@ -647,6 +787,15 @@ public static class PageDrawing
     private static Length WidthBetween(PageParagraph paragraph, int from, int to)
     {
         Length total = Length.Zero;
+
+        // The as-character objects the range crosses, on the same half-open rule the prefix table uses —
+        // an object at `from` belongs to this range and one at `to` to the next. So the tab stop a line
+        // with a picture before it reaches is the stop the layout measured, and the picture's own left
+        // edge, which is asked for as the width up to its own offset, does not include itself.
+        foreach (InlineObject one in paragraph.InlineObjects)
+        {
+            if (one.Offset >= from && one.Offset < to) total += one.Width;
+        }
 
         // The same pieces the stretch will be drawn in, unordered — a width is a sum and does not
         // care which way round they go, but it does care that they were shaped the same way, or a

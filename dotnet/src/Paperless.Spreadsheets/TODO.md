@@ -98,9 +98,9 @@ Not yet, and why:
   the two readers is worth more than matching each LibreOffice filter separately. The
   consequence: dates in January and February 1900 agree with an XLS render and are one day
   later than an XLSX one. Nothing real is affected; recorded so it is not mistaken for a bug.
-- **Drawings, charts, pivot caches and defined names.** None is reached yet;
-  `oneCellAnchor`/`twoCellAnchor` will want the shared DrawingML text-body reader in
-  `Paperless.Ooxml` that the PPTX work is building.
+- **Pivot caches and defined names.** Still not reached. Drawings are, for layout
+  (`Ooxml/XlsxDrawings.cs`, `OpenDocument/OdsDrawings.cs`), and charts are, for both content and
+  layout — see the two chart sections below.
 - **The sparse typed cell storage below**, which extraction does not need and layout will.
 
 ## Done: print setup and pagination
@@ -194,6 +194,23 @@ Traps that cost time, recorded so they are not rediscovered:
   whole-row reference with no column letters. In BIFF that is stored against sheet limits of 255
   columns and 65 535 rows, so the "spans the whole sheet" test has to be made against *those*
   limits and then widened, not against Calc's.
+- **A blank page is not printed, and that is a rule rather than a nicety.** The printed block runs
+  from A1 to the far corner of whatever the sheet reaches, so a sheet whose only content sits five
+  hundred rows down paginates to ten sheets of paper of which nine are white. Calc drops those:
+  `ScPrintPageRangesProvider` discards a whole band of rows when `ScDocument::IsPrintEmpty` holds
+  across it, and `lcl_SetHidden` then hides the individual pages inside a band that survived
+  (`printfun.cxx:3174, :3138`), both asking the same question of the same kind of block — so one
+  test per page gives the same answer as their two passes. `Layout/SheetEmptyPages.cs` is that
+  port, applied between `SheetPagination.Paginate` and the page list.
+  **Three things keep a page and only one of them is cells** (`documen9.cxx:449-484`): a cell with
+  something in it; a border anywhere in the block, because "we want to print sheets with borders
+  even if there is no cell content"; and any drawing whose bounding rectangle *overlaps* the
+  block, through `HasAnyDraw`, which walks the whole drawing page rather than the objects anchored
+  inside it. Measured on `sc/qa/unit/data/xlsx/singlecontrol.xlsx`, a sheet with no cells at all
+  and one form control anchored at row 516: **10 pages before this, 1 after, and LibreOffice
+  prints 1.** No corpus row moved — every corpus spreadsheet is small and dense, so not one of
+  them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
+  turned up with 516 empty rows.
 
 Deliberate deviations from the port, both narrow:
 
@@ -398,12 +415,83 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
 - [ ] Threaded comments (`threadedComments`). Excel writes them *in addition* to the legacy
       part rather than instead of it, so reading the legacy one alone loses nothing today —
       but it loses the reply threading and the resolved-state flag.
-- [ ] Drawing anchors: `oneCellAnchor`, `twoCellAnchor`, `absoluteAnchor`
+- [x] Drawing anchors: `oneCellAnchor`, `twoCellAnchor`, `absoluteAnchor` — `Ooxml/XlsxDrawings.cs`,
+      reached through the *worksheet's* own `drawing` relationship and never by part name.
+      `editAs` is read past deliberately: it says how a drawing behaves when the sheet is
+      **edited**, and the rectangle it occupies on a printed page is the same either way
 - [ ] Tables, autofilters, pivot caches (extraction only)
 
 ### XLSB
-- [ ] BIFF12 records inside an OPC package. Same logical model as XLSX, binary encoding.
-- [ ] **Import only** — LibreOffice cannot write XLSB, so test files must come from Excel.
+- [x] BIFF12 records inside an OPC package, in `Xlsb/`. Same logical model as XLSX, binary
+      encoding — and the split is worth stating precisely, because half of an XLSB is not binary
+      at all. The **package** is OPC and identical: parts, content types, a workbook part naming
+      every other part by relationship. The **spreadsheet** parts are BIFF12: `workbook.bin`,
+      `sheet1.bin`, `sharedStrings.bin`, `styles.bin`. Everything DrawingML — the drawing part,
+      the chart space, the theme, the images — is *the same XML an XLSX holds*, because DrawingML
+      has no binary encoding, so `Ooxml/XlsxDrawings.cs` and `Ooxml/XlsxCharts.cs` serve both
+      paths unchanged and only the part name comes out of BIFF12.
+- [x] Cells: all three families — `CELL_*` naming its column, `MULTCELL_*` continuing from the
+      previous one, `FORMULA_*` naming it and carrying a token array after the cached result. The
+      cached result is read and the tokens are not decoded, so an XLSB cell carries a null
+      `Formula`, like an XLS cell and unlike an XLSX one.
+- [x] `SST` and rich strings, `NUMFMT`/`CELLXFS`, `MERGECELLS`, `SHEETFORMATPR`, `COL`, `ROW`,
+      `PAGEMARGINS`, `PAGESETUP`, `PRINTOPTIONS`, `HEADERFOOTER`, `BRK`, the 1904 epoch,
+      hidden sheets
+- [ ] Cell fonts, fills and borders. `Xlsb/XlsbStyles.cs` reads `styles.bin` only as far as the
+      number format each `CELLXFS` entry names; the fonts-and-alignment half that
+      `Ooxml/XlsxCellFormats.cs` and `XlsxCellDecoration` take from `styles.xml` has no binary
+      counterpart yet, so an XLSB draws in the default face with no fills and no borders.
+- [ ] Comments (`comments1.bin`), which the XLSX path already reads from XML
+- [x] **Import only** — LibreOffice cannot write XLSB, so test files must come from Excel. The
+      ten in `sc/qa/unit/data/xlsb/` are the whole supply on this machine, and they are what the
+      reader was measured against; the record-level cover is `XlsbReaderTests`, which assembles
+      workbooks byte by byte, because a real file cannot say *which* record a regression broke.
+
+**Measured, `paperless render` against `soffice --convert-to pdf`, page counts and `pdftotext`
+word counts, over all ten files:** **eight match exactly.** The two that do not are understood:
+
+| file | ours | LibreOffice |
+| --- | --- | --- |
+| `pivot-table/calcfields.xlsb` | 4 pages, 151 words | 2 pages, 108 words |
+| `pivottable_error_item_filter.xlsb` | 1 page, 24 words | 1 page, 23 words |
+
+`calcfields` is not a reader defect, and that is worth knowing before someone "fixes" it:
+LibreOffice **rebuilds** a pivot table from its cache on import and writes its own result over the
+cells, dropping the five calculated fields Excel had already written into them. We read the cells
+as the file states them, which is what Excel shows; the extra pages follow from the extra columns.
+The single remaining word is the same thing on a smaller table.
+
+**Traps. Every one of these desynchronises the rest of the part rather than spoiling one field,
+so the symptom appears a long way from the cause:**
+
+- **A record identifier is one byte below 0x80 and two above it.** The identifier and the size
+  share one variable-length encoding (`lclReadRecordHeader`,
+  `oox/source/core/recordparser.cxx:255`), so a reader assuming a fixed width reads the second
+  byte of the first wide identifier as a length and never finds a cell again. `SHEETFORMATPR` is
+  0x01E5 and sits near the top of every worksheet part.
+- **A string count of −1 means "no string", not "a string of length −1"**
+  (`BiffHelper::readString`, `sc/source/filter/oox/biffhelper.cxx:86`). Read unsigned it asks for
+  four billion characters.
+- **`XF` is one identifier used inside both `CELLSTYLEXFS` and `CELLXFS`**, and only the container
+  distinguishes them (`stylesfragment.cxx:302`). A flat walk shifts every cell format's index by
+  however many named styles the workbook has — which reads as a number-format bug and is a
+  parsing one.
+- **The flag byte before a string is present for `SI` and `CELL_RSTRING` and absent for
+  `CELL_STRING`**: `importCellString` passes `bRich = false` and `importCellRString` passes true
+  (`sheetdatacontext.cxx:551, :574`). This cost time. One byte out of phase and every character
+  after it comes back a CJK ideograph, because the halves of each UTF-16 unit swap — `cached`
+  reads as `挀愀挀栀攀搀`, which looks like an encoding bug and is an offset bug.
+- **A `BinRange` is the row pair before the column pair** (`addressconverter.cxx:59`), the reverse
+  of how a range is spoken. Read in the spoken order it gives a plausible range that is wrong on
+  every block that is not square.
+- **Widths are 256ths of a digit and heights are twips**, where the XML states a fraction of a
+  digit and points (`worksheetfragment.cxx:800, :827`). The XML's scales give columns 256 times
+  too wide — one column to a page — and rows twenty times too tall.
+- **`BIFF12_PAGESETUP_INVALID` is the flag that makes `paperSize` count.** `mbValidSettings` is
+  its negation, and the paper size is applied only when `mbValidSettings` is *false*
+  (`pagesettings.cxx:271, :935`) — so the flag whose name says the settings are invalid is the
+  one that says to use them, and a sheet stating no `PAGESETUP` at all keeps the application's
+  own paper because `mbValidSettings` is constructed true.
 
 ### XLS (BIFF8)
 - [x] Substreams; the `BOF`/`EOF` structure. A sheet is found by the offset its `BOUNDSHEET`
@@ -442,8 +530,11 @@ readers extracts. Both are locale-dependent in the same way and both are on the 
       lives in the drawing layer's `TXO` records, so it needs the MS-ODRAW reader that the
       PPT work owns — this is the one piece of cell extraction that is blocked on somebody
       else's module rather than on effort here.
-- [ ] Rich-text runs inside a cell. The `SST` string's formatting runs are read far enough to
-      skip past them; splitting a cell into several `ContentRun`s needs the `FONT` table.
+- [x] Rich-text runs inside a cell, for **rendering** — `BiffRecordReader.ReadUnicodeString`
+      returns them and `XlsWorkbookReader.BuildRichText` pairs them into portions. A BIFF run
+      states a start and no length, so a portion reaches to the next run's start and the
+      characters before the first keep the cell's own font. Extraction is unchanged: splitting a
+      cell into several `ContentRun`s is a different question and the tree records no font
 
 **Two differences from LibreOffice's rendering, both deliberate.** A boolean cell shows as
 `TRUE` here and as `1` in Calc, which has no boolean cell type and imports the cell with the
@@ -521,7 +612,9 @@ number-formatted.
       `OpenDocument/OdsCellFormats.cs`. See the section below
 - [x] Overflow into adjacent empty cells; `###` when a number does not fit, and the
       `General`-shrunk form that is drawn *instead* of hashes when the format allows it
-- [ ] Rich text within a cell
+- [x] **Rich text within a cell** — the portions are `Layout/SheetRichText.cs`, read by
+      `Ooxml/XlsxRichRuns.cs`, `OpenDocument/OdsCellFormats.cs` and `MsBinary/XlsWorkbookReader.cs`,
+      and drawn one glyph run per portion by `Layout/SheetTextLayout.cs`. See the section below
 - [x] **Cell backgrounds, cell borders, the printed grid and the row and column headings** —
       in `Layout/SheetPageDecoration.cs`, read into `Layout/SheetDecoration.cs` by
       `Ooxml/XlsxCellDecoration.cs`, `OpenDocument/OdsCellDecoration.cs` and
@@ -530,7 +623,9 @@ number-formatted.
 - [x] Repeated rows/columns; scale-to-pages; page order
 - [x] **Header and footer text**: the field language is `Layout/SheetHeaderFooter.cs` and the
       placement is `SheetPageDecoration.DrawHeaderAndFooter`
-- [ ] Drawing objects and charts anchored to cells
+- [x] **Pictures anchored to cells** — `Layout/SheetDrawings.cs` and `Layout/SheetPageGraphics.cs`,
+      read by `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs`. A chart is read into a
+      `ChartPlot` and drawn by `Layout/SheetChart.cs`; see the chart section. BIFF is not read yet
 
 ### What the decoration path draws, and the rules it draws by
 
@@ -643,6 +738,30 @@ file's margins alone would give and matches LibreOffice's 21.11 pt to within 0.1
       `nHeaderWidth = PRINT_HEADER_WIDTH * nScaleX` on the paper (`printfun.cxx:2205`) while
       `CalcPages` subtracts the unscaled constant in document twips. The two agree; it is worth
       knowing they are different numbers before changing either
+- [ ] **A cell's overflow stops at a horizontal page break**, so the second page of a
+      horizontally-split sheet draws nothing at all when everything on it is spill. Measured on
+      `xls-features.xls`, whose `Strings` sheet is one column of 180-character strings over 48
+      rows and which splits into two horizontal pages: page 3 is **1213 words in both**, and page
+      4 is **3 in ours against 1011 in the reference** — the three being the `&A` header and the
+      `&P` footer, so not one cell reaches it. It is not the reader (`paperless extract` returns
+      all 48 rows) and not pagination (four A4 pages either way). It is that
+      `SpreadsheetPages.DrawCell` is driven by the *placed columns of the page*: a cell in column
+      A is drawn only on the page whose column band contains A, so the part of its string that
+      spills into the next band is never drawn there. `SheetTextContext` already measures the
+      spill against the document grid rather than against the page — see the remark on it, which
+      exists for exactly this — which is why page 3's clipped string is right. The missing half is
+      that Calc *also* draws, on each page, the cells left of the band whose text reaches into it:
+      `ScOutputData::LayoutStringsImpl` walks back over the left neighbours before it decides an
+      output area (`sc/source/ui/view/output2.cxx:1595-2290`). The fix is a per-page lead-in of
+      the columns left of the band, drawn for their overflow alone. **Not chart-related**: that
+      sheet holds no drawing at all
+- [ ] **Two smaller word-count differences from the same whole-corpus sweep**, neither a cascade:
+      `sheet-features.ods` renders **46 words against the reference's 45** — one *more*, the
+      direction that usually means a cell the reference suppresses rather than one we invent — and
+      `sheet-rich-text.xlsx` and `.xls` render **47 and 46 against 49**. The `.ods` of that same
+      rich-text document matches exactly, so those two are in the importers rather than in the
+      layout all three share
+
 ## Done: cell text
 
 `Layout/SheetTextLayout.cs`, a port of `ScOutputData::LayoutStringsImpl`
@@ -743,6 +862,29 @@ rather than a rendering one, which is why nothing that looked at pixels or posit
 have caught it, and "text stays glyph runs so PDF output can be real searchable text" is the stated
 reason the drawing IR is shaped the way it is. Both sides now give 2 281.
 
+**And the other half of that defect, which the widths fix hid for a while.** Recovering the
+`/Widths` from the run made the spacing right and the extraction right, and it did nothing at all
+about the embedding: a face whose file never loaded is still a face the PDF has no bytes for.
+`pdffonts` on `sheet-features.ods` reported the two cell faces `emb yes` and the header's third
+face `emb no`, in a file whose every word extracted correctly — which is exactly why the
+page-and-word sweep could not see it and neither could any operator comparison, since a reference
+and an embedding are not a pen position.
+
+The furniture path is where it lived. `SheetFace` had carried the resolver's own reference from
+the beginning, so **cell text was never affected**; `SheetBandText` resolved its face and then
+rebuilt the reference with `FaceKey = face.FamilyName`, which is a family name where
+`FileFontProvider` expects a path. That helper draws every header, every footer and — through
+`SheetChart` — **every chart label**, so one unembedded reference covered the furniture of every
+sheet in the corpus and the labels of every spreadsheet chart.
+
+Why it could not be built from what the helper had: an `OpenTypeFace` is a parsed table directory
+and does not know the file it came out of. `Load()` now returns the face and the reference it
+resolved through as one `Lazy<(OpenTypeFace?, FontReference?)>`, which is the same shape
+`SheetFace` uses and for the same reason. Eight spreadsheet files went from one unembedded face
+each to none, with no page count and no word count moving.
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` holds it, over `sheet-features.ods`,
+`sheet-ooxml-features.xlsx`, `xls-features.xls` and `chart-bar-sheet.xlsx`.
+
 **Deliberate deviations, all narrow.**
 
 - **A rotated cell is drawn but not compared.** Calc turns the text about the cell's bottom-left
@@ -751,9 +893,10 @@ reason the drawing IR is shaped the way it is. Both sides now give 2 281.
   and the reading of the angle is asserted without rendering. Stacked text (Excel's rotation 255,
   ODF's `style:direction="ttb"`) draws one character per line, centred.
 - **A rotated cell does not make its row taller**, and rotated text is not clipped against its
-  neighbours. Both need the rotated bounding box fed back into the row, which is a change to
-  pagination rather than to drawing (`ScColumn::GetNeededSize`'s rotation branch,
-  `sc/source/core/data/column2.cxx:517`).
+  neighbours. The row-height half was implemented, measured and backed out; the measurement is
+  below under "the row height a rotated cell asks for". The clip is Calc's own — its PDF carries a
+  `re W* n` round the printed block before the turned glyphs — but it changes no glyph in the
+  content stream, only which of them are visible, so nothing any comparison here reads would move.
 - **Justified and distributed alignment place from the left and are not stretched.** They force
   wrapping, which is the part that changes where the lines fall; the stretch would need the
   space-distribution the word processor's justification already does, through a `MeasuredParagraph`
@@ -766,11 +909,6 @@ reason the drawing IR is shaped the way it is. Both sides now give 2 281.
 
 Not yet, and why:
 
-- **Rich text inside a cell is drawn in the cell's own font.** A SpreadsheetML `inlineStr` with
-  several `r` elements, an ODF cell with spans, and a BIFF `SST` string with formatting runs all
-  carry per-character formatting that is read past rather than read. Drawing it needs the cell to
-  become a `MeasuredParagraph` of several `FormattedRun`s rather than one shaped string — which the
-  shared layouter already supports, so the work is in the three readers rather than here.
 - **A wrapping cell does not make its row taller.** Calc's rows are as tall as the file says unless
   the row asks for an optimal height, in which case Calc recomputes it from the text
   (`ScColumn::GetNeededSize`). Every file LibreOffice writes stores the computed height, so this
@@ -858,6 +996,431 @@ margin by the zoom before the device multiplies it back (`printfun.cxx:2104`).
 
 **What it cost, end to end.** The suite is 1 865 passing, 0 failed, 0 skipped — mainline's 1 836
 plus cell text's 29, with nothing dropped from either half. `sheet-print-xlsx.xlsx` still renders to
-14 pages against LibreOffice's 14, and `pdftotext` still reads 2 281 words and 13 269 non-whitespace
-characters from both, which is the check that catches a PDF whose glyphs land correctly but whose
-text will not come back out.
+14 pages against LibreOffice's 14, and `pdftotext` still reads 2 281 words from both, which is the
+check that catches a PDF whose glyphs land correctly but whose text will not come back out. (The
+character count recorded here as 13 269 measures 13 255 on both sides today; see the rich-text
+section below.)
+
+## Done: rich text in a cell
+
+`Layout/SheetRichText.cs` holds the portions a cell's text is split into; `Layout/SheetText.cs`
+shapes one segment per portion and `Layout/SheetTextLayout.cs` draws one glyph run per segment. The
+readers are `Ooxml/XlsxRichRuns.cs` (with `XlsxSheetFormats`), `OpenDocument/OdsCellFormats.cs` and
+`MsBinary/XlsWorkbookReader.cs` over `BiffRecordReader.ReadUnicodeString`.
+
+**What is measured.** `sheet-rich-text.{fods,xlsx}` agrees with LibreOffice 24.2.7.2's own PDF on
+all **24 portions** of its rich sheet: same count, same glyph counts, same em sizes, same colours,
+positions within **0.25 pt**. `sheet-rich-text.xls` agrees on the count and the em sizes.
+`sheet-print-xlsx.xlsx` is unchanged at 14/14 pages, 2 281/2 281 words and 13 255/13 255
+non-whitespace characters against `soffice` — that last number is 13 255 rather than the 13 269
+written down earlier, and *both* sides give 13 255 today, so the earlier figure was counted
+differently rather than lost.
+
+**The three formats state a run three different ways, and each is read as it is stated.** This is
+the whole of the reader work and it is not a detail:
+
+- **ODF's `text:span` is a delta over the cell's own text properties.** A span stating only
+  `fo:font-weight` keeps the cell's family, size and colour, because that is what ODF style
+  inheritance means. The spans are flattened in the same walk that counts the columns, mirroring
+  `OdfContentReader`'s whitespace collapsing exactly — a mismatch there shifts every offset in the
+  cell silently, so the text this counts is handed to `SheetRichText` and compared against what is
+  drawn.
+- **BIFF's formatting run names a whole `FONT` record**, so it restates the family, size, weight,
+  posture and colour whether or not it changes any of them. It states a *start* and no length, so a
+  portion reaches to the next run's start and the characters before the first keep the cell's own
+  font.
+- **SpreadsheetML's `rPr` is a complete font over the workbook's default, not a delta over the
+  cell's** — and this one is measured rather than read off the schema. Saving a cell whose first
+  word is bold, LibreOffice writes the *cell's* `fontId` as the bold one and then writes the second
+  run with an `rPr` that states a size and a name and no `b`; its own rendering draws that run
+  **regular**. Its importer says why: a portion's font is built from the theme's default font model
+  with every "used" flag already set (`Font::Font(rHelper, bDxf=false)`,
+  `sc/source/filter/oox/stylesbuffer.cxx:584`) and the `rPr` overwrites what it names, so the
+  cell's font never enters the portion (`RichStringPortion::convert`,
+  `sc/source/filter/oox/richstring.cxx:109-118`). **This is the trap that cost the most time here.**
+  Reading `rPr` as a delta is the obvious reading, it is what the other two formats do, and it
+  leaves the whole cell bold — which looks like a font-resolution bug and is not one.
+
+Rules the layouter gained, each measurable in the reference:
+
+- **A line is as tall as its tallest portion**, and the block's height is the sum of its lines
+  rather than a pitch times a count. A fourteen-point word in a ten-point cell pushes the line's
+  baseline down; for a cell in one face the two arithmetics give the same number, which is why
+  nothing already measured moved.
+- **A wrapping rich cell breaks against its own runs**, through `ParagraphLayouter`'s run-aware
+  overload over a `MeasuredParagraph`. A bold word is wider than the same characters set regular,
+  so breaking against the cell's font alone moves the break by a word — the corpus cell breaks
+  after "breaks" in both renderers and after "whose" if measured in one face.
+- **A shortened or shrunk rich cell keeps its portions lined up with its characters**, because
+  every re-shape is a *range of the cell's text at a percentage of its size* rather than a
+  substring handed round. Threading that percentage through is not cosmetic: without it a cell that
+  shrinks and is then clipped comes back at full size and keeps a different number of characters.
+
+**Concatenating separately shaped portions is exactly right here and would not be in a word
+processor.** Cell text is unkerned (`output2.cxx:405-409`), so there is no pair adjustment to lose
+across a portion boundary — checked on Liberation Sans, whose `GPOS` and legacy `kern` tables have
+no pair for any boundary in the corpus document, so shaping the portions together would give the
+same widths.
+
+Not yet, and why:
+
+- **A rich cell's portion widths are LibreOffice's to within 0.25 pt and not 0.1 pt.** A rich cell
+  goes through EditEngine in Calc and through the same shaper as any other cell here, and the two
+  measure a *portion* differently. LibreOffice's portion widths are always a whole hundredth of a
+  millimetre — `One ` in ten-point Liberation Sans is exactly 762 of them, 21.600 pt, against the
+  765.29 the font's own advances give — so the pen drifts, 0.09 pt after one portion and 0.21 pt
+  after four. Four models of that quantisation were measured against ten portions of the corpus
+  document and none reproduces it: per-character truncation to whole hundredths is the closest at
+  0.057 pt against our 0.09, per-character truncation to whole twips reproduces `One ` exactly and
+  nothing else, and rounding in either unit is worse than truncating. One portion comes out
+  *wider* in LibreOffice than the font's advances allow, which no rounding rule explains and
+  hinting would. The plain path has no such difference and still agrees to 0.006 pt.
+- **A rich cell's underline, strikethrough and escapement are read past.** All three formats state
+  them per run and the drawing IR has no underline, so a superscript footnote marker inside a cell
+  draws on the baseline at full size.
+- **Extraction still reports a rich cell as one `ContentRun`.** The portions are a rendering
+  structure; splitting the content tree would need `ContentRun` to carry a font, which it
+  deliberately does not.
+
+## Done: pictures anchored to a sheet
+
+`Layout/SheetDrawings.cs` is the model and `Layout/SheetPageGraphics.cs` places and paints;
+`Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs` read the two formats.
+
+**Measured**: the corpus picture lands within **0.028 pt** across, **0.011 pt** down and
+**0.028 pt** of width, and its height is exact, against LibreOffice's own PDF — from the flat ODF
+source and from the SpreadsheetML export alike, compared as image-XObject placements with
+`PdfPaints.ReadImageDraws`.
+
+**The anchor is the whole of the work.** A drawing is fastened to the grid by a cell and an offset,
+so it cannot be placed until the column widths are known, and a two-cell anchor's size is the span
+between its corners rather than anything the file states as a length. That is measurable rather
+than theoretical: the corpus frame states `svg:width="1.28in"` and ends at C3, and LibreOffice
+draws 1.3201 in — the two columns it crosses less its own start offset — and rewrites the attribute
+to match when it saves. So an ODF frame carrying a `table:end-cell-address` is read as a two-cell
+anchor and one without it as a one-cell anchor, which is the distinction the attribute exists to
+make. The span goes through `SheetDeviceUnits` per column, like everything else on the page, or a
+picture two columns wide would not line up with the column it ends in.
+
+**Drawn after the grid**, which is Calc's own order: the front drawing layer runs after
+`DrawGrid` (`printfun.cxx:1695-1703`), so a logo covers the gridlines under it rather than being
+crossed by them.
+
+**Nothing is decoded.** `RasterImage.Encoded` carries the bytes the file stored and whichever
+backend wants pixels calls `RasterImageDecoder.Ensure`. That is the layering rule rather than a
+convenience — a reader that decoded would put a codec in the extraction path.
+
+**A metafile draws too, and it is deferred by a different mechanism for the same reason.**
+`SheetDrawing` gained a `Lazy<VectorImage>?` beside its `RasterImage?`, and both readers sniff the
+bytes with `VectorImages.For` before wrapping them. It needed nothing in `Paperless.Core`:
+`VectorImage` is already `Draw(IDrawingSink, DocRect)` plus an intrinsic size, and this library
+already referenced `Paperless.Vector`. A `Lazy` rather than an eager decode because the decoder
+*is* reachable from here — measured on this tree, the first `VectorImages.Decode` in a process
+costs **1044 ms** for a WMF with one text run against 0.21 ms once warm, nearly all of it resolving
+faces through `Paperless.Text`, and a caller after cell values must not pay it.
+`SheetVectorPictureTests.NothingIsDecodedUntilSomethingAsksForThePicture` asserts `IsValueCreated`
+is false after a full layout.
+
+**The part name is a lie and the bytes are not.** `vector-picture-sheet.xlsx` is LibreOffice's own
+export of `vector-picture-sheet.ods` and it writes the EMF into **`xl/media/image2.wmf`**, with
+`[Content_Types].xml` declaring nothing useful for either extension. An EMF+ would be less
+distinguishable still — it *is* an EMF, same `EMR_HEADER`, same signature, with no signature of its
+own anywhere. So `VectorImages.For` sniffs and the declared type is not consulted at all.
+
+**The `svgBlip` extension reaches spreadsheets too**, which was not obvious: the same
+`{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension Word and PowerPoint write appears on an
+`xdr:pic`'s `a:blip`, naming an SVG beside the PNG on `r:embed`. `BlipReference.Choose` is what
+`XlsxDrawings` now calls, and the raster is kept beside the vector so an empty decode falls back to
+it rather than to nothing. ODF needs no such step — a `draw:frame` lists alternatives as sibling
+`draw:image` children and the first drawable one wins.
+
+**Measured**, both PDFs rasterised at `pdftoppm -r 150`: `vector-picture-sheet.ods` `mae 0.0059`
+and `.xlsx` `mae 0.0104`, 10/10 words and 1/1 pages on both. The residual ink is `emf-shapes.emf`'s
+gradient bar, which LibreOffice's own EMF import does not draw — verified by converting the bare
+`.emf` with `soffice`.
+
+**A named trap, and it cost an hour of looking in the wrong place.** The anchor arithmetic was
+right on the first run and the page came out blank, because four guards in `Paperless.Rendering`
+asked `image.Width <= 0` before drawing — the right question only for an image that has *already*
+been decoded, and an encoded one has zero for both dimensions until a codec has seen it. The
+display list held the picture, `Ensure` would have decoded it, and nothing reached the point of
+calling `Ensure`. Fixed on the slide-pictures branch (`fa666554d`) rather than here; the symptom to
+recognise is a placement that measures correctly and paints nothing at all.
+
+**A shape is not drawn and is still an object, and leaving it out cost whole files.** An
+`xdr:sp`, `xdr:cxnSp` or `xdr:grpSp` was dropped by `XlsxDrawings` on the reasonable ground that
+nothing here can paint one. But Calc's print area is the bounding box of *every object on the
+drawing layer* and a shape is an object like any other — `GroupShapeContext::createShapeContext`
+takes `sp`, `cxnSp`, `grpSp`, `graphicFrame` and `pic` alike
+(`sc/source/filter/oox/drawingfragment.cxx:198`) — so dropping them meant a sheet whose only
+content was a shape had **no printed block at all and produced no pages**: `paperless render`
+failed outright with *"the page range selects none of the 0 pages"*. Measured over the **55**
+workbooks in `sc/qa/unit/data/xlsx/` and `chart2/qa/extras/data/xlsx/` that hold a sheet shape:
+**27 rendered nothing, now 1** (`forcepoint107.xlsx`, which LibreOffice also declines), and exact
+page-and-word matches went **7 → 15**. Twelve of the chart workbooks went from one page to the two
+LibreOffice prints, or two to four. The anchor is read and the `cNvPr` is read; nothing else is,
+and `SheetPageGraphics` skips any drawing carrying neither picture nor chart, so a shape reaches
+the print area and stops there.
+
+**"Hidden" means two unrelated things and only one of them is a shape.** The print area skips an
+object only when it sits on `SC_LAYER_HIDDEN` (`ScDrawLayer::GetPrintArea`, `drwlayer.cxx:1408`),
+and that layer holds exactly one kind of thing: the caption of a comment nobody has pinned open
+(`sc/source/core/data/postit.cxx:84`). A shape whose `cNvPr` says `hidden="1"` is *not* on it —
+`oox` gives that shape `Visible = false` and `Printable = false` and leaves it on the standard
+layer (`oox/source/drawingml/shape.cxx:1436-1442`) — and the line immediately above the layer test
+admits as much: `//TODO: test Flags (hidden?)`. So the flag is read, the painter honours it, and
+the print area does not. Reading `#i104716# don't include hidden note objects` as though it were
+about the flag rather than about the layer is the mistake, and it is worth `sc/qa/unit/data/xlsb/
+universal-content.xlsb`: its only drawing is a hidden comment shape reaching column 12 and row 50,
+**1 page and 11 words here against LibreOffice's 4 and 20**, now 4/4 and 20/20.
+
+Not yet, and why:
+
+- **BIFF drawings are not read.** The route is the same shared Escher reader the DOC and PPT work
+  use — `MSODRAWINGGROUP` (0x00EB) in the workbook globals holds the BLIP store and `MSODRAWING`
+  (0x00EC) in each sheet substream holds the shapes, with the client anchor in the `OBJ` record
+  (`sc/source/filter/excel/xiescher.cxx`). What is missing is not the anchor arithmetic, which is
+  shared with the two formats above, but a **BLIP store reader**. That is now half-written and in
+  the wrong library: `Paperless.WordProcessing/Ww8/Ww8Blips.cs` reads an `F007` entry, follows its
+  `foDelay`, tolerates the one-or-two-checksum rule and — since the vector wiring — inflates a
+  metafile out of its `OfficeArtMetafileHeader`. None of that is DOC-specific. Moving it into
+  `Paperless.MsBinary/Escher/` is what buys XLS and PPT pictures at once, and the metafile half is
+  the part that would be most annoying to write twice.
+- **A drawing belongs to the page holding its top-left cell.** Calc positions the drawing layer in
+  document coordinates and clips it per page, so a picture straddling a page break appears on both
+  pages, cut. Anchoring it to one page is the same answer for everything that does not straddle.
+- **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than
+  a matrix, so `xdr:spPr/a:xfrm/@rot` and ODF's `draw:transform` are read past. Recorded rather
+  than fixed: four agents are building against that IR at once.
+- **A crop is not applied.** SpreadsheetML states one as `a:srcRect` fractions and ODF as
+  `fo:clip`. The drawing model has clipping and no crop, so the shape is a larger destination
+  rectangle clipped to the frame's outline rather than a new IR primitive.
+- **A chart's tick labels are formatted now, and the formatter is no longer this family's.** The
+  number-format engine moved from `Paperless.Spreadsheets/Numbers/` down into
+  `Paperless.Core/Numbers/`, beside `Core/Charts`, which is what a chart composed in Core needed to
+  write `1,200,000` on an axis instead of `1200000`. Nothing about this family's use of it changed
+  but the namespace: it is pure computation over a format code with no external dependencies, so
+  Core keeps its zero-dependency rule. `NumberFormatterTests` went with it to
+  `Paperless.Core.Tests`; `NumberFormatCodeTests` stayed here, because half of what it asserts is
+  which built-in code an XLSX style index stands for. ODF reaches the same engine through
+  `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` tree into a
+  format code exactly as `xmloff`'s own import does. See `dotnet/TODO.md` Phase 3.5.
+- **A rotated label in a chart is no longer only the value-axis title.** A crowded category axis now
+  turns its labels 45° — `ChartAxisLabels` in `Paperless.Core.Charts`, a port of
+  `VCartesianAxis::createTextShapes` — and `Layout/SheetChart.cs` needed no change for it: the sink
+  transform it already built for the axis title carries any angle. Chart-wide rather than
+  spreadsheet-specific, and this is the second time putting rotation on `ChartLabel` rather than on
+  the one caller that had it has cost the consumers nothing.
+- **Trendlines draw, and `trendline.ods` is still not an oracle.** `chart:regression-curve` and
+  `chart:mean-value` are read in `Paperless.OpenDocument/OdfChartPlot.cs` and fitted by
+  `Paperless.Core/Charts/ChartRegression.cs`, a port of `chart2/source/tools/`'s seven calculators.
+  ODF states more than OOXML does and one thing it states is free: `chart:equation/@svg:x` and
+  `@svg:y` give the equation's position outright, in the same coordinate space
+  `chart:coordinate-region` uses, so an ODF chart needs no equivalent of `VSeriesPlotter`'s default
+  placement at the curve's own corner. The 59-workbook error is unchanged at ~2176 and still is not
+  a chart measurement: it is the *spreadsheet's* uncomputed formulas, which is why the deck set in
+  `chart2/qa/extras/data/pptx/` is the honest one. See `dotnet/TODO.md` Phase 3.5.
+- **A data table under a chart is OOXML-only.** `c:dTable` has no ODF counterpart at all, so an ODS
+  chart never draws one and `ChartPlot.DataTable` is always null on this family's ODF path.
+- **VML shapes are not read.** A legacy cell comment's box and Excel's form controls live in
+  `xl/drawings/vmlDrawing*.vml`, a different vocabulary reached by a different relationship.
+- **A shape's own text is not drawn**, which is now the largest remaining gap on any sheet holding
+  one. A shape reaches its page and paints nothing, so `sc/qa/unit/data/xlsx/tdf119565.xlsx`
+  renders its one correct page with 0 words against LibreOffice's 29 — all 29 of them inside
+  `xdr:sp/xdr:txBody`. The body is DrawingML's ordinary `a:p`/`a:r`, the same vocabulary the deck
+  path already lays out, so this is a wiring job rather than a new reader; what it needs is a
+  laid-out text block inside a `DocRect` that this family does not yet have a route to.
+- **`FormatCatalogue` still reports XLSB as not readable.** `IsReadSupported` is what
+  `paperless identify` prints and the flag was deliberately left alone, because that list is in
+  `Paperless.Core`, another agent is working there, and it is already stale for XLS, CSV, PPT and
+  PPTX besides — so it wants one deliberate pass rather than one format bolted on.
+
+## The row height a rotated cell asks for, and why it is not recomputed
+
+All three formats say whether a row's height was set by a user or computed by the writer — ODF's
+`style:use-optimal-row-height`, SpreadsheetML's `customHeight` and BIFF's `fUnsynced` — and Calc
+honours it on load, recomputing every non-manual row before anything is drawn
+(`ScDocRowHeightUpdater`). The flag **is** read, into `SheetSizeRun.IsOptimalSize`, by all three
+readers. The recomputation is not shipped, and the reason is a measurement rather than an estimate.
+
+The formula is two lines: `height = textHeight × |cos θ| + textWidth × |sin θ|`, then the cell's top
+and bottom margins (`ScColumn::GetNeededSize`, `sc/source/core/data/column2.cxx:517-546`).
+Reproducing it exactly still gives the wrong answer, because the measurement it consumes is not the
+one Calc draws with. Five probe documents, each one rotated cell in a row asking for an optimal
+height, read back out of the ODS LibreOffice saved:
+
+| cell | LibreOffice | from the font's advances |
+| --- | --- | --- |
+| ten capital `X` at 90° | 68.65 pt | 68.70 pt |
+| `Upright heading` at 90° | 68.65 pt | 72.65 pt |
+| `Upright heading` at 45° | 56.69 pt | — |
+| the same text twice over at 90° | 135.81 pt | — |
+
+The first row says the formula and the margins are right. The second says the *measurement* is not:
+Calc's row-height path collapses two strings 4 pt apart onto the same height, while its printed
+output advances the pen by the font's exact widths — checked against the per-character `Tm`
+matrices in its own PDF, where `S` in `Slanted heading` advances 7.229 pt against the font's 7.227.
+
+So recomputing would replace a correct number with one 5.8% too large on **every file LibreOffice
+wrote**, because there the stored height *is* the height Calc computed, and it would move every row
+below it. It is only an improvement on a hand-written sheet whose stated height is a stale cache,
+which is the corpus's flat ODF sources and nothing a user has. Shipping it needs Calc's own coarse
+measurement reproduced first, and that is the same missing piece as the dynamic header band's:
+`UpdateHFHeight` measures through the same kind of reference device.
+
+The premise this was checked against is worth writing down because it does not survive: pagination
+already depends on measuring text once, in `ScTable::ExtendPrintArea`, and that is survivable
+because the extension is **by whole columns** — being within a column's width of LibreOffice's
+answer gives the same page. A row height is a length, so a 5.8% error is a 5.8% error, and there is
+no quantum to hide it in.
+
+**The XLSB reader reads the flag too**, so all four readers now fill `SheetSizeRun.IsOptimalSize`
+and the decision above covers the whole family: BIFF12's `ROW` states it as
+`BIFF12_ROW_CUSTOMHEIGHT` (0x2000), whose *absence* is the optimal-height case
+(`sheetdatacontext.cxx:432`). That is the same polarity as SpreadsheetML's `customHeight` and the
+opposite of BIFF8's `fUnsynced`, which is worth checking against the source rather than inferring
+from the neighbouring format. Nothing else about the decision changed: what unblocks it is still
+Calc's own coarse measurement, and nothing here has it yet.
+
+## Done: a chart's content, out of the cache
+
+`Ooxml/XlsxCharts.cs` for SpreadsheetML and `Paperless.OpenDocument/OdfChart.cs` for ODF, both
+producing the section shape `Paperless.Ooxml/DrawingML/DrawingChart.cs` documents: a
+`SectionKind.Frame` section whose `Name` is the chart's title, the title and each titled axis as
+paragraphs, then one `ContentTable` with the series across the header row and the categories down
+the first column. Read into `SheetChartTests` against `chart-bar-sheet.{fods,ods,xlsx}`.
+
+**A chart follows its sheet, it does not sit inside it**, and the reason is the anchor rather than
+taste. SpreadsheetML anchors a drawing by address, so a chart could have gone anywhere; ODF anchors
+it by *containment* — the `draw:frame` is a child of the `table:table-cell` it is fastened to — so
+placing the chart where it was found would put a whole `ContentTable` inside a `ContentTableCell`,
+a shape nothing else in the tree produces. Both readers therefore hoist it to a sibling section
+immediately after the sheet, which is exactly where a cell comment already goes, and the two
+families come out identical. Measured on LibreOffice's own `chart2/qa/extras/data/xlsx`: **151 →
+153** of its 154 workbooks extract to something. A small movement, and expected — a workbook
+carrying a chart also carries the cells behind it, so unlike a deck it was never empty. The
+comparison worth having on this family is the one `SheetChartTests` makes instead: the cache
+against the range it names.
+
+**Three relationship hops, and the middle one is easy to get wrong.** The sheet declares
+`…/drawing`; the drawing part declares `…/chart` per graphic frame; and `c:chart/@r:id` inside the
+frame resolves against the **drawing** part, not the sheet. Resolving it against the sheet finds
+nothing in most workbooks and finds the wrong part in one whose sheet happens to declare an `rId1`
+of its own.
+
+**The cache is preferred even where the live range is right there.** `chart-bar-sheet.xlsx` states
+`c:f = Revenue!$B$2:$B$5` over cells in the same workbook, and its `c:numCache` repeats those eight
+numbers; `SheetChartTests.TheCacheAgreesWithTheSheetItReferences` reads both and asserts they
+match, so a divergence fails a test instead of producing a plausible chart. Resolving the range
+instead would need the formula engine and the number formatter — and would disagree with what Calc
+draws the moment a cache is stale, which is the case the rule exists for.
+
+## Done: a sheet's chart is drawn
+
+**All three forms match the reference now.** `chart-bar-sheet.{ods,fods,xlsx}` went from **14 words
+against 34, 34 and 29** to **34/34, 34/34 and 29/29**. `SheetDrawing` carries a `ChartPlot` beside
+its `Image`; `Ooxml/XlsxDrawings.cs` and `OpenDocument/OdsDrawings.cs` read it in the same pass as
+the anchor, because the anchor is what gives the chart a rectangle and the rendering path walks the
+drawing part exactly once; and `Layout/SheetChart.cs` paints a laid-out chart straight into the
+`IDrawingSink`. `XlsxCharts` still walks the part a second time for the content tree, which is
+deliberate — extraction must not pay for the anchors.
+
+**The Core move is what made it possible, and it is done.** `ChartPlot`, `ChartScale` and
+`ChartLayout` are in `Paperless.Core.Charts`; `OdfChartPlot` and `OdfChartStyles` came down into
+`Paperless.OpenDocument`, so one ODF reader serves ODP, ODS and ODT and this family needed no copy
+of it. Only the geometry and the model moved — nothing that parses XML — so Core still has zero
+external dependencies.
+
+**And the number formatter followed it down, for the same reason and with the same test.**
+`Numbers/` — `NumberFormatCode`, `NumberFormatSection`, `NumberFormatter`, `BuiltInNumberFormats`,
+`SpreadsheetDate` — is now `Paperless.Core/Numbers/`. Every one of those files imported
+`System.Globalization` and `System.Text` and nothing else, so the move costs Core nothing; what it
+buys is that a chart composed in Core can write `1,200,000` on an axis. This family's readers
+changed by one `using` each.
+
+**A sheet's chart type is stretched properly now.** `SheetChart.Text` folds `ChartLabel.Stretch`
+into a sink transform, so a chart composed at its stated 12 × 7 cm and drawn into a frame 0.625 as
+wide and 0.709 as tall gets type at the right width rather than `sx/sy` too wide. Measured against
+LibreOffice's PDF for `chart-bar-sheet.ods`: the title measured **70.4 pt against a reference 62.1**
+and now measures **63.7**.
+
+**Three defects a deck could never have found, and each looked like something else.**
+
+- **The replacement picture wins if you look for it first.** An ODS `draw:frame` holding a chart
+  carries `draw:image xlink:href="./ObjectReplacements/Object 1"` *beside* the `draw:object`.
+  `OdsDrawings` tested for the image first, so every chart in every ODS LibreOffice has ever
+  written was recorded as a plain picture — and then painted as nothing, because all 82 of those
+  streams are `VCLMTF` and no decoder here reads StarView metafiles. An ODP frame carries the
+  object alone, so the deck path never saw it. **This is the named trap**: the symptom was "a
+  spreadsheet chart draws nothing", which reads as a missing feature and was a wrong `if` order.
+- **`a:graphic` is DrawingML's, not the spreadsheet drawing's.** `XlsxDrawings` looked the element
+  up in the `spreadsheetDrawing` namespace, found nothing, and therefore never set `IsChart` on any
+  XLSX graphic frame at all. Invisible until something downstream needed the flag.
+- **A chart is anchored below the used range and Calc prints it anyway.** `chart-bar-sheet.ods` has
+  four rows of data in `A1:C5` and anchors its chart in row 7. The print area is computed from the
+  *cells* — `ScTable::GetPrintArea` (`sc/source/core/data/table1.cxx:657`) tests data, notes,
+  sparklines and attributes and never asks the drawing layer — but the drawing layer is then painted
+  in document coordinates and clipped to the paper, not to the used range
+  (`PrintDrawingLayer(SC_LAYER_FRONT)`, `printfun.cxx:1699`). `SheetPageGraphics` now continues
+  through the grid past the last printed row or column, snapped per index as the two-cell anchor's
+  own edge already was.
+
+**The chart is composed at its own stated size and stretched into the frame.** Measured: the chart
+document states `svg:width="12cm" svg:height="7cm"` and the frame is 2.952 in by 1.9547 in, and in
+LibreOffice's PDF the chart's 13 pt title measures **62.1 pt wide against 99.4 pt for the same title
+in the same chart's `.xlsx` form** — 0.625, the width ratio exactly — with a height ratio of 0.708.
+Composing in the frame instead would give an axis 77 pt long, room for six tick intervals, and
+`0 50 … 200`; composing at 12 × 7 cm gives 108.8 pt, room for nine, and `0 20 … 180`, which is what
+the reference draws.
+
+**Text is measured and drawn by `SheetBandText`, not by the cell engine.** A chart's line height is
+the face's own — ascent plus descent plus the gap, 1.1499 em in Liberation Sans — where a cell's
+drops the gap (`ScDrawStringsVars`, `output2.cxx:734`). `ChartLineHeightAt` is the one method added
+for it. The print zoom is applied to the *type* as well as the rectangle, because a chart laid out
+at 100% type in a 50% rectangle reserves twice the room its labels need.
+
+**The workbook's theme reaches a chart part now, and it was the difference between a picture and an
+empty plot area.** `XlsxDrawings.Plot` called `DrawingChartPlot.Read` with no theme, and the comment
+beside it recorded that as harmless because "every chart in the corpus states its fills as
+`a:srgbClr`". That is true of every chart LibreOffice wrote and false of charts Excel wrote.
+Measured on `chart2/qa/extras/data/xlsx/bubble_chart_simple.xlsx`, whose three series state
+`a:schemeClr val="accent1|2|3"` with `a:ln/a:noFill`: every bubble resolved to no fill and no
+outline, so the plot area came out with its axes, its legend and not one mark on it — which reads
+as an unimplemented chart type and was an unresolved colour. `XlsxFile.ThemeRoot` was already being
+loaded for `XlsxCellDecoration`; threading it through `XlsxDrawings.Read` is four lines, and it took
+`barOfPieChart.xlsx` from 11 drawn marks to 20. Over the whole 154-file `xlsx/` set the total
+absolute word error went **2599 → 2547** with exact matches **8 → 9**.
+
+**A sheet-anchored ODS drawing is still not read, and it hides a whole chart.** `OdsDrawings` walks
+`draw:frame` inside `table:table-cell` only, so a frame in `table:shapes` — the sheet-level shapes
+container, positioned by `svg:x`/`svg:y` against the sheet rather than by a cell — never becomes a
+`SheetDrawing`. `chart2/qa/extras/data/ods/tdf166428_Low_High_StockChart_LO248.ods` writes its stock
+chart exactly that way: the chart is read into a correct `ChartPlot` and then has nowhere to go, and
+the file measures **24 words against LibreOffice's 60**, all of the difference being the chart. It
+is the same shape of defect as the `ObjectReplacements` one above — the chart engine is not
+involved, the drawing never arrives — which is why it is recorded here and not in the chart section.
+
+**A chart anchored past the right-hand page break lands on a page we do not produce.** Every one of
+the five OOXML chart files measured for the plot-type work renders one page against LibreOffice's
+two, and `xlsx/bubble_chart_simple.xlsx` — anchored at column 11, well right of its four cells —
+still measures 5 words against 26 with a complete chart composed behind it. Sheet pagination, not
+charts.
+
+Left open here:
+
+- **A glyph run cannot be stretched non-uniformly.** The frame-to-chart mapping scales positions by
+  `sx` and `sy` and the em size by `sy` alone, so text comes out `sx/sy` too wide — 12% on
+  `chart-bar-sheet.ods`. Fixing it means a transform round each run.
+- **BIFF charts** are still not read; see below.
+
+Not yet, and why:
+
+- **BIFF charts.** A chart in an XLS lives in a `Chart` substream of its own, reached from the
+  `OBJ`/`MSODRAWING` pair, with its series in `SERIES` (0x1003), `AI` (0x1051) and the `SIINDEX`
+  block rather than in anything resembling a cache. It needs the Escher work the pictures item
+  above is already waiting on, and then a fourth chart reader rather than a third: the BIFF chart
+  records are not a serialisation of the same model.
+- **`xl/charts/chartN.xml` is opened a second time.** `XlsxDrawings` walks the drawing part for
+  layout and `XlsxCharts` walks it again for content, because extraction must not pay for the
+  anchor arithmetic and a caller that never asks for content never opens a chart part. The parts
+  are cached by the package, so the cost is a second parse of one small XML document per chart.

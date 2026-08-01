@@ -34,13 +34,43 @@ public readonly record struct PptCharacterLevel(
 /// The paragraph defaults one outline level of one master text style states.
 /// </summary>
 /// <remarks>
-/// Only the fields extraction can observe are kept. The rest — indents, line spacing, tab
-/// stops — are read solely to advance past them, because the record is a sequence of optional
-/// fields whose presence a mask decides and whose sizes nothing else states.
+/// <para>
+/// Extraction needs only the bullet; layout needs the rest, so everything
+/// <c>PPTParaSheet::Read</c> keeps is kept here too
+/// (<c>filter/source/msfilter/svdfppt.cxx:3925-4062</c>). Tab stops are still skipped rather
+/// than stored — they are the one field whose size the mask alone does not give, and nothing
+/// consumes them yet.
+/// </para>
+/// <para>
+/// The measurements are in the format's own units and are converted by whoever uses them: the
+/// two offsets are in master units of a 576th of an inch, the line feed and the two paragraph
+/// distances are a percentage when positive and eighths of a point when negative, and the bullet
+/// height is a percentage of the text's size.
+/// </para>
 /// </remarks>
 /// <param name="BulletFlags">Bit 0 is "this level draws a bullet".</param>
 /// <param name="BulletCharacter">The bullet's code point, in whatever font the level names.</param>
-public readonly record struct PptParagraphLevel(ushort BulletFlags, ushort BulletCharacter)
+/// <param name="BulletFont">The bullet's index into the document's font collection.</param>
+/// <param name="BulletHeight">The bullet's size as a percentage of the text's.</param>
+/// <param name="BulletColour">The bullet's packed colour word.</param>
+/// <param name="Alignment">0 left, 1 centre, 2 right, 3 justified.</param>
+/// <param name="LineFeed">The line spacing.</param>
+/// <param name="SpaceBefore">The space above the paragraph.</param>
+/// <param name="SpaceAfter">The space below it.</param>
+/// <param name="TextOffset">Where the paragraph's text starts, from the text rectangle's edge.</param>
+/// <param name="BulletOffset">Where its bullet starts, from the same edge.</param>
+public readonly record struct PptParagraphLevel(
+    ushort BulletFlags,
+    ushort BulletCharacter,
+    ushort BulletFont = 0,
+    ushort BulletHeight = 100,
+    uint BulletColour = 0x08000000,
+    ushort Alignment = 0,
+    short LineFeed = 100,
+    short SpaceBefore = 0,
+    short SpaceAfter = 0,
+    ushort TextOffset = 0,
+    ushort BulletOffset = 0)
 {
     /// <summary>Whether a paragraph at this level draws a bullet unless it says otherwise.</summary>
     public bool HasBullet => (BulletFlags & 0x0001) != 0;
@@ -263,9 +293,7 @@ public sealed class PptStyleSheet
         ReadOnlySpan<byte> content, ref int position, PptParagraphLevel inherited, bool first)
     {
         uint mask = Take32(content, ref position);
-
-        ushort bulletFlags = inherited.BulletFlags;
-        ushort bulletCharacter = inherited.BulletCharacter;
+        PptParagraphLevel level = inherited;
 
         if ((mask & 0x0000000F) != 0)
         {
@@ -273,22 +301,35 @@ public sealed class PptStyleSheet
             // gave them.
             ushort stated = Take16(content, ref position);
             ushort touched = (ushort)(mask & 0x000F);
-            bulletFlags = (ushort)((bulletFlags & ~touched) | (stated & touched));
+            level = level with
+            {
+                BulletFlags = (ushort)((level.BulletFlags & ~touched) | (stated & touched)),
+            };
         }
 
-        if ((mask & 0x00000080) != 0) bulletCharacter = Take16(content, ref position);
-        if ((mask & 0x00000010) != 0) position += 2;   // bullet typeface
-        if ((mask & 0x00000040) != 0) position += 2;   // bullet size
-        if ((mask & 0x00000020) != 0) position += 4;   // bullet colour
+        if ((mask & 0x00000080) != 0)
+            level = level with { BulletCharacter = Take16(content, ref position) };
+        if ((mask & 0x00000010) != 0)
+            level = level with { BulletFont = Take16(content, ref position) };
+        if ((mask & 0x00000040) != 0)
+            level = level with { BulletHeight = Take16(content, ref position) };
+        if ((mask & 0x00000020) != 0)
+            level = level with { BulletColour = Take32(content, ref position) };
 
         if (first)
         {
-            if ((mask & 0x00000F00) != 0) position += 2;   // alignment
-            if ((mask & 0x00001000) != 0) position += 2;   // line spacing
-            if ((mask & 0x00002000) != 0) position += 2;   // space before
-            if ((mask & 0x00004000) != 0) position += 2;   // space after
-            if ((mask & 0x00008000) != 0) position += 2;   // left margin
-            if ((mask & 0x00010000) != 0) position += 2;   // indent
+            if ((mask & 0x00000F00) != 0)
+                level = level with { Alignment = (ushort)(Take16(content, ref position) & 3) };
+            if ((mask & 0x00001000) != 0)
+                level = level with { LineFeed = Signed(content, ref position) };
+            if ((mask & 0x00002000) != 0)
+                level = level with { SpaceBefore = Signed(content, ref position) };
+            if ((mask & 0x00004000) != 0)
+                level = level with { SpaceAfter = Signed(content, ref position) };
+            if ((mask & 0x00008000) != 0)
+                level = level with { TextOffset = Take16(content, ref position) };
+            if ((mask & 0x00010000) != 0)
+                level = level with { BulletOffset = Take16(content, ref position) };
             if ((mask & 0x00020000) != 0) position += 2;   // default tab size
             if ((mask & 0x00200000) != 0) SkipTabStops(content, ref position);
             if ((mask & 0x00040000) != 0) position += 2;   // baseline
@@ -297,14 +338,20 @@ public sealed class PptStyleSheet
         }
         else
         {
-            if ((mask & 0x00000800) != 0) position += 2;   // alignment
-            if ((mask & 0x00001000) != 0) position += 2;   // line spacing
-            if ((mask & 0x00002000) != 0) position += 2;   // space before
-            if ((mask & 0x00004000) != 0) position += 2;   // space after
+            if ((mask & 0x00000800) != 0)
+                level = level with { Alignment = (ushort)(Take16(content, ref position) & 3) };
+            if ((mask & 0x00001000) != 0)
+                level = level with { LineFeed = Signed(content, ref position) };
+            if ((mask & 0x00002000) != 0)
+                level = level with { SpaceBefore = Signed(content, ref position) };
+            if ((mask & 0x00004000) != 0)
+                level = level with { SpaceAfter = Signed(content, ref position) };
             if ((mask & 0x00008000) != 0) position += 2;   // default tab size
-            if ((mask & 0x00000100) != 0) position += 2;   // left margin
+            if ((mask & 0x00000100) != 0)
+                level = level with { TextOffset = Take16(content, ref position) };
             if ((mask & 0x00000200) != 0) position += 2;
-            if ((mask & 0x00000400) != 0) position += 2;   // indent
+            if ((mask & 0x00000400) != 0)
+                level = level with { BulletOffset = Take16(content, ref position) };
             if ((mask & 0x00010000) != 0) position += 2;   // baseline
             if ((mask & 0x000E0000) != 0) position += 2;   // the three wrap flags share one word
             if ((mask & 0x00100000) != 0) SkipTabStops(content, ref position);
@@ -318,8 +365,12 @@ public sealed class PptStyleSheet
             if ((rest & 1) != 0) position += 2;
         }
 
-        return new PptParagraphLevel(bulletFlags, bulletCharacter);
+        return level;
     }
+
+    /// <summary>A word read as signed, which the line feed and the two distances are.</summary>
+    private static short Signed(ReadOnlySpan<byte> content, ref int position)
+        => unchecked((short)Take16(content, ref position));
 
     /// <summary>Reads one level's character properties.</summary>
     private static PptCharacterLevel ReadCharacter(
@@ -426,19 +477,31 @@ public sealed class PptStyleSheet
     }
 
     /// <summary>
-    /// The paragraph defaults an instance starts from, from <c>PPTParaSheet</c>'s constructor.
+    /// The paragraph defaults an instance starts from, from <c>PPTParaSheet</c>'s constructor
+    /// (<c>svdfppt.cxx:3880-3922</c>).
     /// </summary>
+    /// <remarks>
+    /// Body text starts bulleted and with a fifth of a line above it; a note starts with a
+    /// thirtieth of an inch. Neither is stated in a file that leaves the level alone, so a reader
+    /// that started every level at zero would set an outline's paragraphs solid.
+    /// </remarks>
     private static PptParagraphLevel[] BulletDefaults(PptTextKind kind)
     {
-        ushort flags = kind switch
+        (ushort flags, short spaceBefore, uint bulletColour) = kind switch
         {
+            PptTextKind.Title or PptTextKind.CentreTitle
+                => ((ushort)0, (short)0, SchemeTitleText),
             PptTextKind.Body or PptTextKind.CentreBody
-                or PptTextKind.HalfBody or PptTextKind.QuarterBody => 1,
-            _ => 0,
+                or PptTextKind.HalfBody or PptTextKind.QuarterBody
+                => ((ushort)1, (short)0x14, SchemeBackground),
+            PptTextKind.Notes => ((ushort)0, (short)0x1E, SchemeBackground),
+            _ => ((ushort)0, (short)0, SchemeBackground),
         };
 
         PptParagraphLevel[] levels = new PptParagraphLevel[MaxLevels];
-        Array.Fill(levels, new PptParagraphLevel(flags, 0x2022));
+        Array.Fill(
+            levels,
+            new PptParagraphLevel(flags, 0x2022, BulletColour: bulletColour, SpaceBefore: spaceBefore));
         return levels;
     }
 }

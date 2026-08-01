@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Geometry;
@@ -49,6 +50,7 @@ internal static class OdfTextBody
 
         List<SlideParagraph> read = [];
         bool fontIndependent = false;
+        string? outlineBase = OutlineStyleBase(file, shapeCascade);
 
         foreach (XElement paragraph in paragraphs)
         {
@@ -56,7 +58,10 @@ internal static class OdfTextBody
                 paragraph.Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value,
                 OdfStyleFamily.Paragraph);
 
-            List<OdfStyleReference> cascade = [.. shapeCascade, style];
+            int level = OutlineLevel(paragraph);
+
+            List<OdfStyleReference> cascade =
+                [.. shapeCascade, OutlineStyle(outlineBase, level), style];
 
             if (file.Styles.ResolveProperty(
                     cascade, OdfPropertyKind.Paragraph,
@@ -65,7 +70,16 @@ internal static class OdfTextBody
                 fontIndependent = true;
             }
 
-            read.Add(Paragraph(file, paragraph, cascade));
+            SlideParagraph read1 = Paragraph(file, paragraph, cascade);
+
+            read.Add(Label(file, paragraph, level) is { } label
+                ? read1 with
+                {
+                    StartIndent = label.Start,
+                    FirstLineIndent = label.Hanging,
+                    Marker = label.Marker,
+                }
+                : read1);
         }
 
         return new SlideTextBody
@@ -76,6 +90,170 @@ internal static class OdfTextBody
             FontIndependentLineSpacing = fontIndependent,
         };
     }
+
+    /// <summary>
+    /// A list item's label: where its text starts, how far its marker hangs back, and what it is.
+    /// </summary>
+    private readonly record struct ListLabel(Length Start, Length Hanging, SlideMarker? Marker);
+
+    /// <summary>
+    /// How deeply a paragraph is nested in <c>text:list</c> elements, counted from one.
+    /// </summary>
+    /// <remarks>
+    /// ODF states list <em>structure</em> by nesting and list <em>appearance</em> by a separately
+    /// named style, which is the opposite way round from OOXML's flat "paragraph plus a level
+    /// number". So the level is the nesting depth, and zero means the paragraph is not in a list
+    /// at all — in which case its own <c>fo:margin-left</c> decides and nothing here applies.
+    /// </remarks>
+    private static int OutlineLevel(XElement paragraph)
+    {
+        int level = 0;
+
+        for (XElement? ancestor = paragraph.Parent; ancestor is not null;
+             ancestor = ancestor.Parent)
+        {
+            if (ancestor.Name.NamespaceName == OdfNamespaces.Text
+                && ancestor.Name.LocalName == "list")
+            {
+                level++;
+            }
+        }
+
+        return level;
+    }
+
+    /// <summary>
+    /// The indents and the marker a list level gives its items.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>ODF's default label geometry is not <c>fo:margin-left</c> and
+    /// <c>fo:text-indent</c>.</strong> Those belong to the ODF 1.2 <em>label-alignment</em> mode,
+    /// which LibreOffice writes for Writer; a presentation's list style uses the older
+    /// <em>label-width-and-position</em> mode, whose two quantities are <c>text:space-before</c>
+    /// and <c>text:min-label-width</c>. The text starts at the sum of them and the marker at the
+    /// space alone, which is exactly the <c>marL</c> and <c>marL + indent</c> pair PresentationML
+    /// states directly. Measured on <c>slides-features.odp</c>, whose level 1 states no space and
+    /// a 0.6 cm label: LibreOffice draws the bullet at 56.693 and the text at 73.701, and 17.008 pt
+    /// is 0.6 cm.
+    /// </para>
+    /// <para>
+    /// The label's own size is a percentage of the item's text — 45% in every deck LibreOffice
+    /// writes — and its face is the level's, which is a symbol font that will not be installed and
+    /// will substitute. Both come from the level's <c>style:text-properties</c> rather than from
+    /// the paragraph's.
+    /// </para>
+    /// </remarks>
+    private static ListLabel? Label(OdfFile file, XElement paragraph, int level)
+    {
+        if (level < 1) return null;
+        if (ListStyle(file, paragraph) is not { } style) return null;
+        if (style.GetLevel(level) is not { } definition) return null;
+
+        Length space = Measure(definition, "space-before");
+        Length label = Measure(definition, "min-label-width");
+
+        return new ListLabel(space + label, -label, Marker(definition, level, style));
+
+        static Length Measure(OdfListLevel definition, string name)
+            => OdfValue.ParseLength(
+                   definition.LevelProperties?.Get(OdfNamespaces.Text, name))
+               ?? Length.Zero;
+    }
+
+    /// <summary>
+    /// The list style a paragraph's innermost <c>text:list</c> names.
+    /// </summary>
+    /// <remarks>
+    /// Innermost first, then outwards: LibreOffice writes the style on the outermost list of a
+    /// run and leaves the nested ones bare, so a reader taking only the immediate parent finds
+    /// nothing on every level past the first.
+    /// </remarks>
+    private static OdfListStyle? ListStyle(OdfFile file, XElement paragraph)
+    {
+        for (XElement? ancestor = paragraph.Parent; ancestor is not null;
+             ancestor = ancestor.Parent)
+        {
+            if (ancestor.Name.NamespaceName != OdfNamespaces.Text) continue;
+            if (ancestor.Name.LocalName != "list") continue;
+
+            string? name = ancestor.Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
+            if (file.Styles.FindListStyle(name) is { } style) return style;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// The marker a level draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// Only a bullet, deliberately. A numbered level needs a counter carried across the body and
+    /// restarted where the level rises, and inventing "1." for every item is a worse answer than
+    /// none — the same decision the OOXML path records for <c>a:buAutoNum</c>. The counters passed
+    /// here are all ones so that <see cref="OdfListStyle.FormatLabel"/> returns the bullet without
+    /// pretending to number anything.
+    /// </remarks>
+    private static SlideMarker? Marker(OdfListLevel definition, int level, OdfListStyle style)
+    {
+        if (definition.Kind != OdfListLabelKind.Bullet) return null;
+        if (style.FormatLabel(level, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) is not { Length: > 0 } text)
+            return null;
+
+        return new SlideMarker(text, definition.Typeface, definition.RelativeSize ?? 1.0);
+    }
+
+    /// <summary>
+    /// The name a presentation's per-level outline styles share, or null when the shape has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>An outline placeholder's formatting is per level and lives in a style the shape
+    /// only reaches through its parent.</strong> LibreOffice creates one presentation style per
+    /// master page and outline level — <c>Default-outline1</c> … <c>Default-outline9</c>,
+    /// chained parent to child — and the shape's own <c>presentation:style-name</c> inherits from
+    /// level one (<c>xmloff/source/draw/ximpstyl.cxx</c>'s <c>ImpSetGraphicStyles</c>). So a
+    /// paragraph at level two must resolve against <c>Default-outline2</c>, which nothing in the
+    /// shape's own cascade points at.
+    /// </para>
+    /// <para>
+    /// What it carries is the font size per level and the space above a paragraph. Measured on
+    /// <c>slides-features.odp</c>: <c>Default-outline2</c> states <c>fo:margin-top="0.4cm"</c> and
+    /// nothing else, and without it the deck's third outline paragraph sat 11.23 pt above where
+    /// LibreOffice draws it — a drift that grows with every level-two paragraph and looks like a
+    /// line-height bug.
+    /// </para>
+    /// </remarks>
+    private static string? OutlineStyleBase(
+        OdfFile file, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        foreach (OdfStyleReference reference in cascade)
+        {
+            if (reference.Family != OdfStyleFamily.Presentation) continue;
+
+            string? name = reference.Name;
+            for (int depth = 0; name is not null && depth < OdfStyles.MaxParentChainDepth; depth++)
+            {
+                if (name.Length > 8
+                    && char.IsAsciiDigit(name[^1])
+                    && name.AsSpan(..^1).EndsWith("-outline", StringComparison.Ordinal))
+                {
+                    return name[..^1];
+                }
+
+                name = file.Styles.Find(name, OdfStyleFamily.Presentation)?.ParentStyleName;
+            }
+        }
+
+        return null;
+    }
+
+    private static OdfStyleReference OutlineStyle(string? outlineBase, int level)
+        => outlineBase is null || level < 1
+            ? new OdfStyleReference(null, OdfStyleFamily.Presentation)
+            : new OdfStyleReference(
+                outlineBase + Math.Clamp(level, 1, 9).ToString(CultureInfo.InvariantCulture),
+                OdfStyleFamily.Presentation);
 
     /// <summary>
     /// The text insets, which ODF spells as the shape's padding.

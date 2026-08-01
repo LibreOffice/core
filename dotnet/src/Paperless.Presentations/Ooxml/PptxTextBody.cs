@@ -81,7 +81,9 @@ internal static class PptxTextBody
             Paragraphs = paragraphs,
             Insets = Insets(properties),
             Anchor = Anchor(Drawing.Attribute(properties, "anchor")),
+            Rotation = Rotation(properties),
             Wraps = Drawing.Attribute(properties, "wrap") != "none",
+            AutoFit = autofit is not null,
             FontScale = Thousandth(autofit, "fontScale", 1.0),
             LineSpaceReduction = Thousandth(autofit, "lnSpcReduction", 0.0),
         };
@@ -102,6 +104,23 @@ internal static class PptxTextBody
         Length.FromEmu(Emu(properties, "tIns", 45720)),
         Length.FromEmu(Emu(properties, "rIns", 91440)),
         Length.FromEmu(Emu(properties, "bIns", 45720)));
+
+    /// <summary>
+    /// The turn <c>a:bodyPr/@rot</c> asks for, in radians clockwise.
+    /// </summary>
+    /// <remarks>
+    /// Sixtieth-thousandths of a degree, clockwise, like every other DrawingML angle — and unlike
+    /// ODF's, which runs the other way. The attribute is what a SmartArt <c>autoTxRot</c>
+    /// resolves to, so the diagram evaluator writes it and this reads it back through the same
+    /// path an authored deck's would take.
+    /// </remarks>
+    private static double Rotation(XElement? properties)
+    {
+        int units = Drawing.Number(properties, "rot") ?? 0;
+        return units == 0
+            ? 0
+            : units / ShapeTransform.RotationUnitsPerDegree * Math.PI / 180.0;
+    }
 
     private static TextAnchor Anchor(string? anchor) => anchor switch
     {
@@ -172,12 +191,20 @@ internal static class PptxTextBody
                 Drawing.Child(paragraph, "endParaRPr"), defaults, 0, 0, theme, defaultTypeface));
         }
 
+        // The size a percentage spacing is a percentage of: the tallest run in the paragraph, as
+        // LibreOffice takes it (textparagraph.cxx:131, `nCharHeight = std::max(...)`).
+        Length tallest = Length.Zero;
+        foreach (SlideTextRun run in runs)
+        {
+            if (run.Size > tallest) tallest = run.Size;
+        }
+
         return new SlideParagraph(
             text.ToString(),
             runs,
             Alignment(Drawing.Attribute(paragraphProperties, "algn")),
-            Spacing(Drawing.Child(paragraphProperties, "spcBef")),
-            Spacing(Drawing.Child(paragraphProperties, "spcAft")),
+            Spacing(Drawing.Child(paragraphProperties, "spcBef"), tallest),
+            Spacing(Drawing.Child(paragraphProperties, "spcAft"), tallest),
             LineSpacing(Drawing.Child(paragraphProperties, "lnSpc")),
             Length.FromEmu(Emu(paragraphProperties, "marL", 0)),
             Length.FromEmu(Emu(paragraphProperties, "indent", 0)),
@@ -240,7 +267,7 @@ internal static class PptxTextBody
 
                 return Marked(
                     DrawingTextBody.AutoNumber(number, slot, counters, counting),
-                    source, paragraphProperties, levelStyle, theme);
+                    source, paragraphProperties, levelStyle, theme, isSymbol: false);
             }
 
             if (Drawing.Child(source, "buChar") is not { } bullet) continue;
@@ -251,7 +278,7 @@ internal static class PptxTextBody
             if (string.IsNullOrEmpty(character)) return null;
 
             return Marked(
-                OutlineNumbers.NormaliseBullet(character),
+                OutlineNumbers.NormaliseBullet(FirstCodePoint(character)),
                 source, paragraphProperties, levelStyle, theme);
         }
 
@@ -259,13 +286,34 @@ internal static class PptxTextBody
         return null;
     }
 
+    /// <summary>
+    /// The first code point of a bullet character, which is all of it a bullet may be.
+    /// </summary>
+    /// <remarks>
+    /// <c>a:buChar/@char</c> is an <c>ST_Char</c>: one character, and real files break that.
+    /// <c>sd/qa/unit/data/pptx/bnc862510_5.pptx</c> writes
+    /// <c>&lt;a:buChar char="••"/&gt;</c> in a SmartArt shape, and drawing what it says puts a
+    /// second bullet where the reference draws the text's first letter — 22.5 pt of overlap on a
+    /// 40 pt line, because the hanging indent goes to <c>marL</c> whatever the marker's width
+    /// turned out to be. LibreOffice keeps the whole string through its import
+    /// (<c>textparagraphproperties.cxx:326</c>) and truncates where the numbering rule is built:
+    /// <c>aFmt.SetBulletChar(aStr.iterateCodePoints(…))</c>,
+    /// <c>editeng/source/uno/unonrule.cxx:320</c>. A code point rather than a UTF-16 unit, so an
+    /// astral bullet survives.
+    /// </remarks>
+    private static string FirstCodePoint(string character)
+        => char.IsHighSurrogate(character[0]) && character.Length > 1
+            ? character[..2]
+            : character[..1];
+
     /// <summary>A marker's text with the font, size and colour the chain gives it.</summary>
     private static SlideMarker Marked(
         string text,
         XElement source,
         XElement? paragraphProperties,
         XElement? levelStyle,
-        DrawingTheme? theme)
+        DrawingTheme? theme,
+        bool isSymbol = true)
         => new(
                 text,
                 Drawing.Attribute(Bullet(source, "buFont", paragraphProperties, levelStyle), "typeface"),
@@ -274,7 +322,8 @@ internal static class PptxTextBody
                     && percent > 0
                     ? percent / 100000.0
                     : 1.0,
-                ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme));
+                ColourIn(Bullet(source, "buClr", paragraphProperties, levelStyle), theme),
+                isSymbol);
 
     /// <summary>
     /// One of the bullet's satellite properties, from wherever in the chain states it.
@@ -396,17 +445,46 @@ internal static class PptxTextBody
     /// A <c>a:spcBef</c>/<c>a:spcAft</c> value, which is either points or a percentage.
     /// </summary>
     /// <remarks>
-    /// Only <c>a:spcPts</c> is honoured, in hundredths of a point. <c>a:spcPct</c> is a percentage
-    /// of the line height, which is not known until the paragraph's runs are — so resolving it
-    /// belongs with the line heights rather than here, and it is recorded in the TODO rather than
-    /// approximated against a size the paragraph may not use.
+    /// <para>
+    /// <c>a:spcPts</c> states hundredths of a point outright. <c>a:spcPct</c> states thousandths
+    /// of a per cent <em>of the paragraph's own character height</em> — not of the line height,
+    /// which is what the name suggests and what reading it as a line-spacing rule would give.
+    /// LibreOffice resolves it at import against the tallest run in the paragraph and stores the
+    /// result as an absolute margin (<c>TextSpacing::toMargin</c>,
+    /// <c>oox/inc/drawingml/textspacing.hxx:54</c>, reached from
+    /// <c>textparagraphproperties.cxx:438</c>), so it is resolved here for the same reason: by
+    /// the time the layouter sees a paragraph it has one spacing, not a rule.
+    /// </para>
+    /// <para>
+    /// <strong>The percentage form is the only one real files use.</strong> Of the 324
+    /// <c>a:pPr</c> in the baked diagram drawings of LibreOffice's <c>sd/qa</c> corpus, all 324
+    /// state their spacing as a percentage and none in points — so ignoring it set every
+    /// multi-paragraph node's lines tighter than the reference.
+    /// </para>
     /// </remarks>
-    private static Length Spacing(XElement? spacing)
+    /// <param name="spacing">The <c>a:spcBef</c> or <c>a:spcAft</c> element.</param>
+    /// <param name="characterHeight">The tallest run in the paragraph, which a percentage scales.</param>
+    private static Length Spacing(XElement? spacing, Length characterHeight)
     {
-        int? points = Drawing.Number(Drawing.Child(spacing, "spcPts"), "val");
-        return points is { } value && value > 0
-            ? Length.FromEmu(value * Length.EmuPerPoint / 100)
-            : Length.Zero;
+        if (Drawing.Number(Drawing.Child(spacing, "spcPts"), "val") is { } points && points > 0)
+        {
+            return Length.FromEmu(points * Length.EmuPerPoint / 100);
+        }
+
+        if (Drawing.Number(Drawing.Child(spacing, "spcPct"), "val") is not { } percent
+            || percent <= 0)
+        {
+            return Length.Zero;
+        }
+
+        // A paragraph with no run of its own is spaced against twelve points, the size
+        // LibreOffice falls back to when the paragraph style states no character height.
+        double size = characterHeight > Length.Zero ? characterHeight.Points : 12.0;
+
+        // Hundredths of a point, truncated exactly where LibreOffice truncates: the product is
+        // cast to an integer before it leaves points.
+        int hundredths = (int)(size * percent / 1000.0);
+        return Length.FromEmu(hundredths * Length.EmuPerPoint / 100);
     }
 
     /// <summary>A <c>a:lnSpc</c>, as a percentage of the line height or as an exact height.</summary>

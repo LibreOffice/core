@@ -30,6 +30,18 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 {
     private readonly OdfDocument _inner;
 
+    /// <summary>
+    /// What laying the document out found, which reading it could not have.
+    /// </summary>
+    /// <remarks>
+    /// A second list rather than an addition to the reader's, because the two are produced at different
+    /// times: <see cref="Diagnostics"/> is answerable the moment the document is open, and a picture that
+    /// will not draw is only discovered when something asks for the pages. So the list starts empty, and a
+    /// caller that has run <see cref="Layout"/> sees more than one that has not — which is the honest
+    /// answer, since before layout nothing had looked.
+    /// </remarks>
+    private readonly List<Diagnostic> _laidOut = [];
+
     internal OdtWordDocument(OdfDocument inner, WritingMarks marks)
     {
         ArgumentNullException.ThrowIfNull(inner);
@@ -51,7 +63,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     public ContentDocument Content => _inner.Content;
 
     /// <inheritdoc/>
-    public IReadOnlyList<Diagnostic> Diagnostics => _inner.Diagnostics;
+    public IReadOnlyList<Diagnostic> Diagnostics
+        => _laidOut.Count == 0 ? _inner.Diagnostics : [.. _inner.Diagnostics, .. _laidOut];
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
@@ -92,7 +105,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
                 .Select((master, index) => (master.Name, index))
                 .Where(pair => pair.Name is not null)
                 .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal),
-            stylesRoot: _inner.File.StylesRoot);
+            stylesRoot: _inner.File.StylesRoot,
+            pictures: new OdfPictures(_inner.File, _laidOut));
 
         List<PageBlock> blocks = source.Read(body);
 

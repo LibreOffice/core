@@ -93,11 +93,11 @@ internal sealed class PptxShapeReader
     /// </summary>
     /// <remarks>
     /// The frame is a generic wrapper and <c>a:graphicData/@uri</c> is the only thing that says
-    /// what is inside it. Only the table is read as content here; a chart's series and a
-    /// diagram's synthesised shapes live in their own parts and their own vocabularies, and
-    /// re-executing a SmartArt layout algorithm to recover its text is a project of its own. So
-    /// they are recorded as graphics rather than dropped, which keeps "there is something here"
-    /// distinguishable from "there is nothing here".
+    /// what is inside it. A table and a chart are read as content; a diagram's synthesised
+    /// shapes live in their own vocabulary and re-executing a SmartArt layout algorithm to
+    /// recover them is a project of its own. Whatever is left is recorded as a graphic rather
+    /// than dropped, which keeps "there is something here" distinguishable from "there is
+    /// nothing here".
     /// </remarks>
     private void ReadGraphicFrame(XElement frame, ContentNode target)
     {
@@ -112,7 +112,8 @@ internal sealed class PptxShapeReader
             return;
         }
 
-        if (uri == DiagramUri && ReadDiagram(data!, target)) return;
+        if (uri == DrawingChart.ChartUri && ReadChart(data!, target)) return;
+        if (uri == PptxDiagram.Uri && ReadDiagram(data!, target)) return;
 
         target.Children.Add(new ContentImage
         {
@@ -121,8 +122,39 @@ internal sealed class PptxShapeReader
         });
     }
 
-    /// <summary>The <c>a:graphicData</c> URI that identifies a SmartArt diagram.</summary>
-    private const string DiagramUri = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+    /// <summary>
+    /// Reads an embedded chart's content from the part the frame points at.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The frame holds nothing but <c>c:chart/@r:id</c>; the chart is a part of its own,
+    /// <c>/ppt/charts/chartN.xml</c> by convention and by relationship in fact. Its title, axis
+    /// titles, series names and cached values are real user text, so the frame becomes the
+    /// section <see cref="DrawingChart"/> builds instead of the bare
+    /// <see cref="ContentImage"/> it used to.
+    /// </para>
+    /// <para>
+    /// The chart's own <c>a:graphicData</c> is not the only route to one: a deck may also carry
+    /// <c>cx:chart</c> — the 2014 "chartex" vocabulary that funnel, waterfall and treemap charts
+    /// use — under a different URI, with its data in <c>cx:chartData</c> rather than
+    /// <c>c:ser</c>. Those still fall through to the graphic below, deliberately: they are rare,
+    /// their data model is a different shape, and LibreOffice's own support for them is partial.
+    /// </para>
+    /// </remarks>
+    private bool ReadChart(XElement data, ContentNode target)
+    {
+        XName chart = XName.Get("chart", OoxmlNamespaces.DrawingMLChart);
+        string? relationshipId = data.Element(chart)
+            ?.Attribute(XName.Get("id", OoxmlNamespaces.Relationships))?.Value;
+
+        if (_file.Relationship(_partName, relationshipId) is not { IsExternal: false } relationship)
+            return false;
+        if (_file.Load(relationship.Target) is not { } chartSpace) return false;
+        if (DrawingChart.Read(chartSpace) is not { } section) return false;
+
+        target.Children.Add(section);
+        return true;
+    }
 
     /// <summary>
     /// Reads the text of a SmartArt diagram from its data model.
@@ -146,20 +178,21 @@ internal sealed class PptxShapeReader
     /// diagram measured, and reconstructing a tree from <c>dgm:cxnLst</c> to reorder text is
     /// work the extracted output would not visibly benefit from.
     /// </para>
+    /// <para>
+    /// The data model is still the right source for extraction even now that
+    /// <see cref="PptxDiagram"/> reads the <em>baked</em> shape tree for rendering, and the two
+    /// disagree on purpose. The baked tree is what the author sees, so it repeats a node's text
+    /// wherever the layout drew it and adds text the layout generated; the data model is what the
+    /// author typed, once each. An index wants the second.
+    /// </para>
     /// </remarks>
     private bool ReadDiagram(XElement data, ContentNode target)
     {
-        XName relIds = XName.Get("relIds", DiagramUri);
-        string? dataModelId = data.Element(relIds)
-            ?.Attribute(XName.Get("dm", OoxmlNamespaces.Relationships))?.Value;
-
-        if (_file.Relationship(_partName, dataModelId) is not { IsExternal: false } relationship)
-            return false;
-        if (_file.Load(relationship.Target) is not { } model) return false;
+        if (PptxDiagram.DataModel(_file, _partName, data) is not { } model) return false;
 
         int before = target.Children.Count;
-        foreach (XElement point in model.Element(XName.Get("ptLst", DiagramUri))
-                                       ?.Elements(XName.Get("pt", DiagramUri)) ?? [])
+        foreach (XElement point in model.Element(XName.Get("ptLst", PptxDiagram.Uri))
+                                       ?.Elements(XName.Get("pt", PptxDiagram.Uri)) ?? [])
         {
             // "doc" is the diagram itself, "pres" is a generated presentation node, and the two
             // transition types are the connectors between points. None of them carries text a
@@ -167,7 +200,7 @@ internal sealed class PptxShapeReader
             string? type = point.Attribute("type")?.Value;
             if (type is "doc" or "pres" or "parTrans" or "sibTrans") continue;
 
-            XElement? body = point.Element(XName.Get("t", DiagramUri));
+            XElement? body = point.Element(XName.Get("t", PptxDiagram.Uri));
             if (DrawingTextBody.IsEmpty(body)) continue;
 
             DrawingTextBody.Read(body!, target, new DrawingTextOptions

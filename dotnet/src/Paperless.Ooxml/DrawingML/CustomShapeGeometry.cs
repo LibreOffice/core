@@ -164,10 +164,33 @@ public static class CustomShapeGeometry
         };
     }
 
-    /// <summary>Evaluates a definition against a size.</summary>
-    private static Geometry Evaluate(
-        PresetShape shape, DocSize size, IReadOnlyDictionary<string, double>? adjustments)
+    /// <summary>
+    /// Evaluates a shape definition against a size.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Public because it is the entry point a <em>second</em> vocabulary uses. ODF states the same
+    /// shapes as <c>draw:enhanced-geometry</c>, and its formula language and path syntax share
+    /// nothing with DrawingML's — an infix expression against a command-letter string, rather than
+    /// a prefix formula against an element tree. What the two do share is everything below the
+    /// syntax: the same adjustment-then-guide evaluation order, the same subpath coordinate
+    /// spaces, and the same six drawing commands plus arcs. So an ODF reader parses its own
+    /// vocabulary into a <see cref="PresetShape"/> whose operands are already numbers and calls
+    /// this, and there is one path emitter rather than two.
+    /// </para>
+    /// <para>
+    /// A definition whose operands are literals evaluates identically whether or not it declares
+    /// guides, which is why no separate entry point is needed for the pre-resolved case.
+    /// </para>
+    /// </remarks>
+    /// <param name="shape">The adjustments, guides, text rectangle and subpaths.</param>
+    /// <param name="size">The shape's extent.</param>
+    /// <param name="adjustments">Values overriding the definition's own handle defaults, by name.</param>
+    public static Geometry Evaluate(
+        PresetShape shape, DocSize size, IReadOnlyDictionary<string, double>? adjustments = null)
     {
+        ArgumentNullException.ThrowIfNull(shape);
+
         Dictionary<string, double> values = Builtins(size);
 
         // The adjustment handles first, in the order the preset declares them, with the shape's
@@ -278,12 +301,56 @@ public static class CustomShapeGeometry
                 current = Arc(command, outline, values, scaleX, scaleY, current);
                 break;
 
+            case PresetVerb.AngleEllipse:
+            case PresetVerb.AngleEllipseTo:
+            {
+                // ODF's T and U. The centre is stated rather than derived from the current point,
+                // which is the one structural difference from a:arcTo; U additionally begins a
+                // subpath of its own, which is what makes "U ... Z N" a whole ellipse
+                // (EnhancedCustomShape2d.cxx:2200-2211).
+                double centreX = Value(command.Operands[0], values) * scaleX;
+                double centreY = Value(command.Operands[1], values) * scaleY;
+                double statedX = Value(command.Operands[2], values);
+                double statedY = Value(command.Operands[3], values);
+                double from = Value(command.Operands[4], values);
+                double sweep = Value(command.Operands[5], values);
+
+                double radiusX = statedX * scaleX;
+                double radiusY = statedY * scaleY;
+                if (radiusX == 0 || radiusY == 0) break;
+
+                bool fresh = command.Verb == PresetVerb.AngleEllipse || outline.Commands.Count == 0;
+                DocPoint entry = EllipseAt(
+                    centreX, centreY, radiusX, radiusY, Eccentric(from, statedX, statedY));
+
+                if (fresh)
+                {
+                    current = start = entry;
+                    outline.MoveTo(current);
+                }
+                else if (entry != current)
+                {
+                    outline.LineTo(entry);
+                }
+
+                current = EllipseSegment(
+                    outline, centreX, centreY, radiusX, radiusY, statedX, statedY, from, sweep);
+                break;
+            }
+
             case PresetVerb.Close:
                 outline.Close();
                 current = start;
                 break;
         }
     }
+
+    /// <summary>The point an ellipse parameter names.</summary>
+    private static DocPoint EllipseAt(
+        double centreX, double centreY, double radiusX, double radiusY, double parameter)
+        => new(
+            Emu(centreX + (radiusX * Math.Cos(parameter))),
+            Emu(centreY + (radiusY * Math.Sin(parameter))));
 
     /// <summary>
     /// Draws an <c>a:arcTo</c>, which is an elliptical arc stated by its radii and two angles.
@@ -311,8 +378,10 @@ public static class CustomShapeGeometry
         double scaleY,
         DocPoint current)
     {
-        double radiusX = Value(command.Operands[0], values) * scaleX;
-        double radiusY = Value(command.Operands[1], values) * scaleY;
+        double statedX = Value(command.Operands[0], values);
+        double statedY = Value(command.Operands[1], values);
+        double radiusX = statedX * scaleX;
+        double radiusY = statedY * scaleY;
         double startAngle = Value(command.Operands[2], values) / UnitsPerDegree;
 
         // MS Office clamps a swing to one full turn and neither specification says so, which is
@@ -329,10 +398,63 @@ public static class CustomShapeGeometry
             return current;
         }
 
-        // Split at the quadrant boundaries rather than into equal parts, which is what
-        // createPolygonFromEllipseSegment does. It matters beyond curve quality: an arc broken
-        // into three eighty-degree pieces has no on-curve point at 180°, so it never reaches the
-        // ellipse's own leftmost point and the shape comes out narrower than it is.
+        double parameter = Eccentric(startAngle, statedX, statedY);
+
+        return EllipseSegment(
+            outline,
+            current.X.Emu - (radiusX * Math.Cos(parameter)),
+            current.Y.Emu - (radiusY * Math.Sin(parameter)),
+            radiusX,
+            radiusY,
+            statedX,
+            statedY,
+            startAngle,
+            sweepAngle);
+    }
+
+    /// <summary>
+    /// Appends one elliptical arc about a stated centre, as cubics.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The geometric heart of both vocabularies, which is why it is a method rather than part of
+    /// the <c>a:arcTo</c> case: ODF's <c>T</c> and <c>U</c> state the centre where DrawingML's
+    /// <c>a:arcTo</c> derives it from the current point, and everything after that — the eccentric
+    /// angle, the quadrant split, the control-point distance — is the same arithmetic.
+    /// LibreOffice shares it the same way, through
+    /// <c>basegfx::utils::createPolygonFromEllipseSegment</c>.
+    /// </para>
+    /// <para>
+    /// <strong>Split at the quadrant boundaries rather than into equal parts.</strong> It matters
+    /// beyond curve quality: an arc broken into three eighty-degree pieces has no on-curve point
+    /// at 180°, so it never reaches the ellipse's own leftmost point and the shape comes out
+    /// narrower than it is.
+    /// </para>
+    /// </remarks>
+    /// <param name="outline">The path being built.</param>
+    /// <param name="centreX">The ellipse's centre, already in the shape's own coordinates.</param>
+    /// <param name="centreY">Its centre down.</param>
+    /// <param name="radiusX">Its horizontal radius, scaled to the shape.</param>
+    /// <param name="radiusY">Its vertical radius, scaled.</param>
+    /// <param name="statedX">
+    /// The horizontal radius <em>as the file states it</em>, which is what the eccentric angle
+    /// conversion uses — see the remarks on <see cref="Eccentric"/>.
+    /// </param>
+    /// <param name="statedY">The vertical radius as stated.</param>
+    /// <param name="startAngle">The angle the arc starts at, in degrees.</param>
+    /// <param name="sweepAngle">How far it turns, signed, in degrees.</param>
+    /// <returns>The point the arc ends at, which becomes the path's current point.</returns>
+    private static DocPoint EllipseSegment(
+        GraphicsPath outline,
+        double centreX,
+        double centreY,
+        double radiusX,
+        double radiusY,
+        double statedX,
+        double statedY,
+        double startAngle,
+        double sweepAngle)
+    {
         List<double> stops = [startAngle];
         double direction = Math.Sign(sweepAngle);
 
@@ -356,12 +478,12 @@ public static class CustomShapeGeometry
         int segments = Math.Max(1, stops.Count - 1);
 
         double[] parameters = new double[segments + 1];
-        parameters[0] = Eccentric(startAngle, radiusX, radiusY);
+        parameters[0] = Eccentric(startAngle, statedX, statedY);
 
         for (int i = 1; i <= segments; i++)
         {
             double stated = i < stops.Count ? stops[i] : startAngle + sweepAngle;
-            double raw = Eccentric(stated, radiusX, radiusY);
+            double raw = Eccentric(stated, statedX, statedY);
 
             // Unwrapped against the previous parameter, because atan2 comes back in (−π, π] and a
             // segment that crosses the branch cut would otherwise sweep the long way round.
@@ -371,10 +493,9 @@ public static class CustomShapeGeometry
             parameters[i] = raw;
         }
 
-        double centreX = current.X.Emu - (radiusX * Math.Cos(parameters[0]));
-        double centreY = current.Y.Emu - (radiusY * Math.Sin(parameters[0]));
-
-        DocPoint end = current;
+        DocPoint end = new(
+            Emu(centreX + (radiusX * Math.Cos(parameters[0]))),
+            Emu(centreY + (radiusY * Math.Sin(parameters[0]))));
 
         for (int i = 0; i < segments; i++)
         {
@@ -427,6 +548,17 @@ public static class CustomShapeGeometry
     /// exact. So the six presets that were transcribed by hand agreed without it, and
     /// <c>pie</c> with a 240° sweep on a 3:2 box does not: the reference ends its arc at 249°
     /// in parameter terms, 7.6 pt from where the stated angle alone would put it.
+    /// </para>
+    /// <para>
+    /// <strong>The radii it takes are the ones the file states, not the ones the arc is drawn
+    /// with.</strong> When a subpath states its own coordinate space the two differ, and
+    /// LibreOffice converts before the scale: <c>lcl_getNormalizedCircleAngleRad(fWR, fHR, …)</c>
+    /// is called with the unscaled radii and only <c>fScaledWR</c>/<c>fScaledHR</c> reach
+    /// <c>createPolygonFromEllipseSegment</c> (<c>EnhancedCustomShape2d.cxx:2226-2227,2325-2327</c>).
+    /// No DrawingML preset has a subpath space, so the distinction was invisible until ODF — where
+    /// <em>every</em> path has one. Measured on a 240° sweep of an <c>svg:viewBox</c> circle in a
+    /// 6 × 4.5 cm box: converting the scaled radii ends the arc 3.31 pt above where LibreOffice
+    /// ends it, and converting the stated ones agrees to a hundredth.
     /// </para>
     /// </remarks>
     private static double Eccentric(double degrees, double radiusX, double radiusY)
@@ -580,8 +712,40 @@ public enum PresetVerb
     /// <summary>A straight segment.</summary>
     LineTo,
 
-    /// <summary>An elliptical arc, by radii and two angles.</summary>
+    /// <summary>
+    /// An elliptical arc, by radii and two angles, starting at the current point.
+    /// </summary>
+    /// <remarks>
+    /// DrawingML's <c>a:arcTo</c> and ODF's <c>G</c>, which are the same command: the centre is
+    /// wherever the start angle puts it relative to the point already reached. The operands are
+    /// <c>wR</c>, <c>hR</c>, the start angle and the swing, the last two in sixtieth-thousandths
+    /// of a degree — which is DrawingML's unit, so an ODF reader converts from degrees before it
+    /// gets here rather than the evaluator carrying two angular units.
+    /// </remarks>
     ArcTo,
+
+    /// <summary>
+    /// An elliptical arc about a stated centre, beginning a subpath of its own.
+    /// </summary>
+    /// <remarks>
+    /// ODF's <c>U</c>, which has no DrawingML equivalent — <c>a:arcTo</c> can only continue from
+    /// the current point, so a whole ellipse in PresentationML is four <c>a:arcTo</c>s and in ODF
+    /// is one <c>U</c>. The operands are the centre, the two radii, the start angle and the swing,
+    /// the angles in <em>degrees</em> because that is the only unit ODF's paths use.
+    /// </remarks>
+    AngleEllipse,
+
+    /// <summary>
+    /// The same arc, continuing the current subpath rather than starting one.
+    /// </summary>
+    /// <remarks>
+    /// ODF's <c>T</c>, and also what an <c>X</c>, <c>Y</c>, <c>A</c>, <c>B</c>, <c>W</c> or
+    /// <c>V</c> reduces to once its centre, radii and angles have been worked out from the points
+    /// it states. A straight edge joins the current point to the arc's start when the two differ,
+    /// which is what appending a polygon to a polygon does in basegfx and therefore what
+    /// LibreOffice draws.
+    /// </remarks>
+    AngleEllipseTo,
 
     /// <summary>A quadratic Bezier.</summary>
     QuadraticTo,

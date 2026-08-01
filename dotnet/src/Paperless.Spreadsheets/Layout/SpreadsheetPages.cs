@@ -162,8 +162,13 @@ public sealed class SpreadsheetPages : IPageSequence
 
             if (sheet.Setup.FirstPageNumber > 0) number = sheet.Setup.FirstPageNumber;
 
-            foreach (SheetPagePlacement placement in
-                     SheetPagination.Paginate(sheet.Setup, sheet.Grid, sheet.PrintedRange))
+            // Paginated, then thinned. The two are separate because Calc keeps them separate: the
+            // page grid is decided by geometry alone, and only afterwards is each page asked
+            // whether anything lands on it (`bSkipEmpty`, printfun.cxx:3174). Numbering follows the
+            // thinning — a dropped page takes its number with it.
+            foreach (SheetPagePlacement placement in SheetEmptyPages.Occupied(
+                         sheet,
+                         SheetPagination.Paginate(sheet.Setup, sheet.Grid, sheet.PrintedRange)))
             {
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 
@@ -175,6 +180,16 @@ public sealed class SpreadsheetPages : IPageSequence
         return pages;
     }
 }
+
+/// <summary>One run of columns placed together, and where it starts.</summary>
+/// <remarks>
+/// A page has one or two: the repeated columns, when the sheet declares any, and its own. They
+/// are separate because Calc prints them as separate blocks, so each has its own first column —
+/// and it is the first column of a block that decides whose spill reaches into it.
+/// </remarks>
+/// <param name="First">The band's first column, hidden or not.</param>
+/// <param name="Left">Where the band starts, scaled.</param>
+internal readonly record struct ColumnBand(int First, Length Left);
 
 /// <summary>
 /// Places and draws the cells of one page.
@@ -201,15 +216,18 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 {
     private readonly double _scale = Math.Max(1, placement.ZoomPercentage) / 100.0;
     private readonly SheetPageDecoration _decoration = new(sheet, placement);
+    private readonly SheetPageGraphics _graphics =
+        new(sheet, Math.Max(1, placement.ZoomPercentage) / 100.0);
 
     /// <summary>
     /// Draws the page: what is painted behind the cells, their text, and the page's furniture.
     /// </summary>
     /// <remarks>
-    /// The order is <c>ScPrintFunc</c>'s (<c>printfun.cxx:1679-1695</c> and <c>:2344-2404</c>):
-    /// backgrounds, borders, cell text, the grid, the headings and the frame round them. Each
-    /// step covers part of the one before it, so the order is correctness rather than taste —
-    /// a background painted after a border would erase half of it.
+    /// The order is <c>ScPrintFunc</c>'s (<c>printfun.cxx:1679-1713</c> and <c>:2344-2404</c>):
+    /// backgrounds, borders, cell text, the grid, the drawing layer, the headings and the frame
+    /// round them. Each step covers part of the one before it, so the order is correctness rather
+    /// than taste — a background painted after a border would erase half of it, and a picture
+    /// painted before the grid would be crossed by it.
     /// </remarks>
     /// <param name="sink">Receives the drawing commands.</param>
     /// <param name="context">
@@ -223,7 +241,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         try
         {
             DocPoint origin = BodyOrigin;
-            List<PlacedColumn> columns = Columns(origin.X);
+            List<PlacedColumn> columns = Columns(origin.X, out List<ColumnBand> bands);
             List<PlacedRow> rows = Rows(origin.Y);
 
             _decoration.DrawBackgrounds(columns, rows, sink);
@@ -231,6 +249,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 
             foreach (PlacedRow row in rows)
             {
+                foreach (ColumnBand band in bands) DrawLeadIn(band, row, sink);
+
                 foreach (PlacedColumn column in columns)
                 {
                     ContentTableCell? cell = sheet.CellAt(row.Row, column.Column);
@@ -244,6 +264,11 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             }
 
             _decoration.DrawGrid(columns, rows, sink);
+
+            // After the grid and before the headings, which is Calc's own order: a picture is on
+            // the front drawing layer and covers the gridlines under it (printfun.cxx:1695-1703).
+            _graphics.Draw(sink, columns, rows);
+
             _decoration.DrawHeadings(HeadingOrigin, columns, rows, sink);
             _decoration.DrawHeaderAndFooter(context ?? new SheetHeaderContext(), sink);
         }
@@ -344,19 +369,33 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// 72 pt column at 66% comes out at exactly 47.52 pt rather than at the 47.5087 that snapping
     /// the scaled value gives. See <see cref="SheetDeviceUnits"/>.
     /// </remarks>
-    private List<PlacedColumn> Columns(Length left)
+    private List<PlacedColumn> Columns(Length left) => Columns(left, out _);
+
+    /// <inheritdoc cref="Columns(Length)"/>
+    /// <param name="left">Where the block starts.</param>
+    /// <param name="bands">
+    /// Receives where each band of columns begins, which is what a lead-in needs: Calc prints a
+    /// page's repeated columns and its own columns as two separate <c>ScPrintFunc::PrintArea</c>
+    /// calls (<c>printfun.cxx:2312</c> and <c>:2330</c>), each with its own first column, and each
+    /// therefore with its own left-hand neighbour to look back at.
+    /// </param>
+    private List<PlacedColumn> Columns(Length left, out List<ColumnBand> bands)
     {
         List<PlacedColumn> placed = [];
+        List<ColumnBand> starts = [];
         Length offset = Length.Zero;
 
         if (placement.RepeatColumns is { IsValid: true } repeat)
             Append(repeat.FirstColumn, repeat.LastColumn);
 
         Append(placement.Cells.FirstColumn, placement.Cells.LastColumn);
+        bands = starts;
         return placed;
 
         void Append(int first, int last)
         {
+            starts.Add(new ColumnBand(first, left + (offset * _scale)));
+
             for (int column = first; column <= last; column++)
             {
                 if (sheet.Grid.Columns.IsHidden(column)) continue;
@@ -397,16 +436,101 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// The context a cell's text is laid out in: the zoom, the neighbours, the column widths.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The widths come from the sheet's grid rather than from the page's placed columns, because a
     /// string may spill past the last column on the page and Calc measures the spill against the
     /// document (<c>mpDoc-&gt;GetColWidth</c> in <c>GetOutputArea</c>). Using the page's columns
     /// would stop the overflow at the page boundary and draw a shorter string on the last column
     /// of every page.
+    /// </para>
+    /// <para>
+    /// A neighbour is free only when it is both empty <em>and</em> outside every merge.
+    /// <c>ScOutputData::IsAvailable</c> (<c>sc/source/ui/view/output2.cxx:1178-1191</c>) asks two
+    /// questions and the second is the one a content tree cannot answer on its own: the cells a
+    /// merge covers are dropped by every reader, so they look exactly like empty ones. Overflowing
+    /// through them draws a string that Calc cuts short — measured on <c>sheet-features.ods</c>,
+    /// where the reference shortens "Second row of pair" to "Second row of p" at the edge of the
+    /// two-row merge beside it and Paperless drew all of it.
+    /// </para>
     /// </remarks>
     private SheetTextContext Context => new(
         _scale,
-        (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column)),
+        (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column))
+                         && !sheet.IsMerged(row, column),
         column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale);
+
+    /// <summary>
+    /// Draws the cell left of a band whose text reaches into it, at the place it really is.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The half of Calc's string output that a page's own columns cannot supply.
+    /// <c>ScOutputData::LayoutStrings</c> starts its column loop <em>one before</em> the block's
+    /// first column — <c>if (mnX1 &gt; 0) --nLoopStartX; // start before mnX1 for rest of long text
+    /// to the left</c> (<c>sc/source/ui/view/output2.cxx:1541-1543</c>) — and that extra iteration
+    /// resolves to the nearest cell with text at or left of <c>mnX1</c>
+    /// (<c>output2.cxx:1638-1656</c>). Without it a sheet whose only content is one column of long
+    /// strings draws <em>nothing at all</em> on its second horizontal page, because no cell on that
+    /// page holds anything: the text there is entirely another column's spill.
+    /// </para>
+    /// <para>
+    /// The cell is placed at its true position, which is off the left of the block, and the text
+    /// then overflows rightwards under the ordinary rules — <see cref="Context"/> already measures
+    /// that against the document grid rather than against the page, which is what makes the two
+    /// halves of one string line up across the break.
+    /// </para>
+    /// <para>
+    /// It cannot draw a cell twice on one page. The walk starts at the band's own first column, so
+    /// a band whose first column holds text yields that column and the <c>&lt; first</c> test
+    /// rejects it; only a column strictly left of the band — and therefore not among the band's
+    /// placed columns — is ever drawn this way. A cell in two <em>bands</em> of the same page, or
+    /// on two pages, is Calc's behaviour and not a fault: each page draws the part of the string
+    /// that falls on it.
+    /// </para>
+    /// </remarks>
+    private void DrawLeadIn(ColumnBand band, PlacedRow row, IDrawingSink sink)
+    {
+        if (band.First <= 0) return;
+
+        // Calc walks back from mnX1 itself, so a band whose own first column holds text stops
+        // there and no lead-in is drawn (output2.cxx:1644-1646).
+        int at = band.First;
+        while (at > 0 && SheetTextLayout.IsAvailable(sheet.CellAt(row.Row, at))) at--;
+        if (at >= band.First) return;
+
+        ContentTableCell? cell = sheet.CellAt(row.Row, at);
+        if (cell is null || SheetTextLayout.IsAvailable(cell)) return;
+        if (sheet.Grid.Columns.IsHidden(at)) return;
+
+        string text = cell.GetText();
+        if (text.Length == 0) return;
+
+        // A merge anywhere between the two suppresses the lead-in: Calc asks
+        // HasAttrib(Merged | Overlapped) over exactly that span (output2.cxx:1652), because a
+        // merged block's own origin is what draws its text and it may be neither of these cells.
+        for (int between = at; between <= band.First; between++)
+        {
+            if (sheet.CellAt(row.Row, between) is { } spanning
+                && (spanning.ColumnSpan > 1 || spanning.RowSpan > 1))
+            {
+                return;
+            }
+        }
+
+        Length back = Length.Zero;
+        for (int column = at; column < band.First; column++)
+            back += SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column));
+
+        DrawCell(
+            text,
+            cell,
+            new PlacedColumn(
+                at,
+                band.Left - (back * _scale),
+                SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * _scale),
+            row,
+            sink);
+    }
 
     private void DrawCell(
         string text, ContentTableCell cell, PlacedColumn column, PlacedRow row, IDrawingSink sink)
@@ -417,7 +541,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             sheet.Formats.At(row.Row, column.Column),
             row.Row,
             column.Column,
-            new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row))));
+            new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row)),
+            sheet.RichText.At(row.Row, column.Column, text)));
     }
 
     /// <summary>How wide a cell is, a merge's further columns included.</summary>

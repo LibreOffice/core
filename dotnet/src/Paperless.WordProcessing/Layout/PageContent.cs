@@ -84,8 +84,57 @@ public sealed record PageParagraph : PageBlock
     /// </remarks>
     public Colour Colour { get; init; } = Colour.Black;
 
-    /// <summary>Its resolved layout properties.</summary>
-    public ParagraphFormat Format { get; init; } = ParagraphFormat.Default;
+    /// <summary>
+    /// Its resolved layout properties, with room made on the first line for a list label.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The only formatting anything downstream should measure against.</strong> A list label is
+    /// drawn beside the paragraph's text rather than spliced into it — see <see cref="PageLabel"/> — so
+    /// something has to hold the first line's text back far enough to leave room, and it is this: the
+    /// declared first-line indent, which for a list is negative, widened by the label's own advance.
+    /// Writer arrives at the same first line by making the label a portion within it
+    /// (<c>SwNumberPortion::Format</c>, <c>sw/source/core/text/porfld.cxx:607</c>).
+    /// </para>
+    /// <para>
+    /// Adjusted here rather than at each of the five places that lay a paragraph out, because a paragraph
+    /// measured against one first-line indent and drawn against another puts its own words in two
+    /// different places. <see cref="DeclaredFormat"/> is what the reader actually said, and the label
+    /// hangs at <em>its</em> <see cref="ParagraphFormat.LineStart"/>.
+    /// </para>
+    /// </remarks>
+    public ParagraphFormat Format
+    {
+        get => Label is null
+            ? _format
+            : _format with { FirstLineIndent = _format.FirstLineIndent + LabelAdvance };
+        init => _format = value;
+    }
+
+    private readonly ParagraphFormat _format = ParagraphFormat.Default;
+
+    /// <summary>The formatting as the reader stated it, before the label was allowed for.</summary>
+    /// <remarks>
+    /// Where the label's own pen sits, and what a test asserting a reader's work should compare against
+    /// rather than the widened <see cref="Format"/>.
+    /// </remarks>
+    public ParagraphFormat DeclaredFormat => _format;
+
+    /// <summary>
+    /// The label this paragraph draws in front of its first line, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// Null for the overwhelming majority of paragraphs, and for the continuation paragraphs of a
+    /// multi-paragraph list item as well: ODF gives the label to the first <c>text:p</c> of a
+    /// <c>text:list-item</c> only, and the other three formats say the same thing by putting no list
+    /// instance on the paragraph. Such a paragraph keeps the level's indents and draws nothing.
+    /// </remarks>
+    public PageLabel? Label { get; init; }
+
+    /// <summary>How far the label pushes the first line's text along, or zero when there is none.</summary>
+    internal Length LabelAdvance
+        => Label?.Advance(-_format.FirstLineIndent, _format.StartIndent + _format.FirstLineIndent)
+           ?? Length.Zero;
 
     /// <summary>The em size the text is set at.</summary>
     public Length EmSize { get; init; } = Length.FromPoints(12);
@@ -166,6 +215,55 @@ public sealed record PageParagraph : PageBlock
     /// two-pass affair; see <see cref="Paginator"/>.
     /// </remarks>
     public IReadOnlyList<PageFrame> Frames { get; init; } = [];
+
+    /// <summary>
+    /// The as-character frames among <see cref="Frames"/>: room <em>on</em> a line rather than beside it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Derived rather than stored, because a frame states one thing and layout needs it twice — an
+    /// as-character frame is placed by hanging it on its line, and the <em>same</em> frame is what makes
+    /// that line wider and taller. Deriving keeps the two from disagreeing, which they would the first
+    /// time a reader set one and forgot the other.
+    /// </para>
+    /// <para>
+    /// Empty for a paragraph with no inline frame, which is nearly all of them, and that is what lets the
+    /// paginator keep taking the cheaper single-face measurement for those.
+    /// </para>
+    /// </remarks>
+    public IReadOnlyList<InlineObject> InlineObjects =>
+        HasInlineObjects
+            ? [.. Frames
+                .Where(frame => frame.Anchor == FrameAnchor.AsCharacter)
+                .Select(frame => new InlineObject(
+                    frame.AnchorOffset, frame.Size.Width, frame.Size.Height, frame.InlineAscent))]
+            : [];
+
+    /// <summary>True when an as-character frame is set in the paragraph's text.</summary>
+    public bool HasInlineObjects
+        => Frames.Count > 0 && Frames.Any(frame => frame.Anchor == FrameAnchor.AsCharacter);
+
+    /// <summary>
+    /// Shapes the paragraph's runs, ready for measuring across them.
+    /// </summary>
+    /// <remarks>
+    /// Here rather than in the paginator because the body, a header, a table cell and a text box all need
+    /// the same answer, and they used to arrive at it separately — the flow layouter's copy passed
+    /// <see cref="Runs"/> straight through, so a uniform paragraph reaching the run path measured as
+    /// nothing at all. The paragraph's own face and size close any gap the runs leave, so a document that
+    /// formats its text and leaves its paragraph mark unmentioned is normal rather than malformed.
+    /// </remarks>
+    internal MeasuredParagraph Measure()
+    {
+        List<FormattedRun> runs = [.. Runs.Select(run => run.ToFormattedRun())];
+
+        if (runs.Count == 0)
+        {
+            runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
+        }
+
+        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects);
+    }
 }
 
 /// <summary>

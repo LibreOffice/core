@@ -3,7 +3,7 @@ using Paperless.Core.Extraction;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 using Paperless.Text.Encodings;
 
 namespace Paperless.Spreadsheets.MsBinary;
@@ -51,6 +51,15 @@ internal sealed class XlsWorkbookReader
     private readonly List<SheetEntry> _sheets = [];
     private readonly List<XfRecord> _formats = [];
     private readonly XlsCellFormats _cellFormats = new();
+
+    // The formatting runs of the shared strings that have any, by their index in the table. A
+    // dictionary rather than a parallel list because almost no string is rich, and because the
+    // table routinely runs to tens of thousands of entries.
+    private readonly Dictionary<int, List<BiffFormattingRun>> _sharedStringRuns = [];
+
+    // The rich cells of the sheet being read, held until its formats have been pooled: a cell's
+    // portions are a delta over what its XF resolved to, and that is only known at the end.
+    private readonly List<PendingRichCell> _richCells = [];
     private readonly Dictionary<int, SheetCellFormat> _resolvedFormats = [];
     private readonly Dictionary<int, int> _rowFormats = [];
     private readonly Dictionary<int, int> _columnFormats = [];
@@ -278,7 +287,11 @@ internal sealed class XlsWorkbookReader
         _sharedStrings.Capacity = (int)Math.Min(count, 65536);
 
         for (long i = 0; i < count && _stream.IsValid; i++)
-            _sharedStrings.Add(_stream.ReadString(eightBitLength: false));
+        {
+            string text = _stream.ReadString(eightBitLength: false, out List<BiffFormattingRun>? runs);
+            if (runs is not null) _sharedStringRuns[_sharedStrings.Count] = runs;
+            _sharedStrings.Add(text);
+        }
 
         if (declared > count)
         {
@@ -520,6 +533,46 @@ internal sealed class XlsWorkbookReader
     /// its <c>ixfe</c>, and <c>ROW</c> and <c>COLINFO</c> already state the defaults, so the map
     /// falls out of the same pass that read the cells rather than needing a second walk.
     /// </remarks>
+    /// <summary>A cell whose <c>SST</c> string carried formatting runs, kept until the sheet ends.</summary>
+    private readonly record struct PendingRichCell(
+        int Row, int Column, int Xf, string Text, List<BiffFormattingRun> Runs);
+
+    /// <summary>
+    /// Turns the sheet's formatting runs into portions of its cells' text.
+    /// </summary>
+    /// <remarks>
+    /// A run states a start and nothing else, so a portion reaches to the next run's start and the
+    /// last to the end of the string — and the characters before the first run keep the cell's own
+    /// font, which is why the runs are not simply zipped into a list. LibreOffice pairs them the
+    /// same way (<c>XclImpString::GetFormats</c>, <c>sc/source/filter/excel/xlstring.cxx</c>).
+    /// </remarks>
+    private SheetRichText BuildRichText()
+    {
+        if (_richCells.Count == 0) return SheetRichText.Empty;
+
+        SheetRichText.Builder rich = new();
+
+        foreach (PendingRichCell cell in _richCells)
+        {
+            SheetCellFormat format = CellFormatOf(cell.Xf);
+            List<SheetTextPortion> portions = [];
+
+            for (int at = 0; at < cell.Runs.Count; at++)
+            {
+                int start = cell.Runs[at].Start;
+                int end = at + 1 < cell.Runs.Count ? cell.Runs[at + 1].Start : cell.Text.Length;
+                if (end <= start) continue;
+
+                portions.Add(new SheetTextPortion(
+                    start, end - start, _cellFormats.ApplyFont(format, cell.Runs[at].FontIndex)));
+            }
+
+            rich.Set(cell.Row, cell.Column, cell.Text, format, portions);
+        }
+
+        return rich.Build();
+    }
+
     private SheetCellFormats BuildFormats(SheetBuilder builder)
     {
         SheetCellFormats.Builder formats = new();
@@ -612,6 +665,7 @@ internal sealed class XlsWorkbookReader
         _sheetDecoration = new XlsSheetDecoration();
         _rowFormats.Clear();
         _columnFormats.Clear();
+        _richCells.Clear();
 
         if (StartSubstream(sheet))
         {
@@ -659,6 +713,7 @@ internal sealed class XlsWorkbookReader
             Cells = table,
             Formatting = _sheetDecoration.Resolve(_decoration),
             Formats = BuildFormats(builder),
+            RichText = BuildRichText(),
             FileName = FileName,
         });
 
@@ -888,7 +943,12 @@ internal sealed class XlsWorkbookReader
 
         if (index >= 0 && index < _sharedStrings.Count)
         {
-            builder.SetText(row, column, xf, _sharedStrings[index]);
+            string text = _sharedStrings[index];
+            builder.SetText(row, column, xf, text);
+
+            if (_sharedStringRuns.TryGetValue(index, out List<BiffFormattingRun>? runs))
+                _richCells.Add(new PendingRichCell(row, column, xf, text, runs));
+
             return;
         }
 
@@ -1158,7 +1218,9 @@ internal sealed class XlsWorkbookReader
         _stream.Skip(4);
         ushort flags = _stream.ReadUInt16();
 
-        _page.AddRow(row, height, (flags & 0x0020) != 0);
+        // fUnsynced, bit 6: the height does not match the font, meaning a user set it. Without it
+        // the height is Excel's own measurement and Calc recomputes it on load.
+        _page.AddRow(row, height, (flags & 0x0020) != 0, (flags & 0x0040) != 0);
 
         // The trailing ixfe is the row's default cell format, and it only applies when the
         // record says so: fGhostDirty, bit 7 of grbit, is what makes the field mean anything.

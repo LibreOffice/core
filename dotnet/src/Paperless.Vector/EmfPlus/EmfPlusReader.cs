@@ -1,0 +1,2323 @@
+using Paperless.Core.Diagnostics;
+using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
+using Paperless.Core.Units;
+using Paperless.Text.Fonts;
+using Paperless.Vector.Metafiles;
+
+namespace Paperless.Vector.EmfPlus;
+
+/// <summary>
+/// Replays the EMF+ record stream that rides inside an enhanced metafile's comment records.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <b>EMF+ is not a file format.</b> It has no header of its own on disk, no signature and no
+/// extension: it is a second description of the same drawing, carried in
+/// <c>EMR_COMMENT_EMFPLUS</c> records inside an ordinary EMF. So there is no
+/// <c>IVectorImageDecoder</c> for it and nothing new registers in <c>VectorImages</c> — the EMF
+/// decoder finds it, and this class replays it onto the device context, clip, painter, budget and
+/// text engine the EMF reader already has.
+/// </para>
+/// <para>
+/// Ported from <c>drawinglayer/source/tools/emfphelperdata.cxx</c> and its seven companion files,
+/// with the record dispatch in <c>emfio/source/reader/emfreader.cxx</c> deciding which of the two
+/// descriptions is replayed; see <see cref="Emf.EmfReader"/> for that decision.
+/// </para>
+/// <para>
+/// <b>The coordinate chain is four stages and none of them is GDI's.</b> World transform, then
+/// the page transform's unit and scale, then the reference device's pixels-to-millimetres, then
+/// the frame origin — composed into one matrix whenever any of them changes, exactly as
+/// <c>EmfPlusHelperData::mappingChanged</c> does. None of <c>MetafileMapping</c>'s eight mapping
+/// modes appear anywhere in it, which is why EMF+ carries its own mapping rather than reusing the
+/// one WMF and EMF share.
+/// </para>
+/// </remarks>
+internal sealed class EmfPlusReader
+{
+    private readonly EmfPlusObject?[] _objects = new EmfPlusObject?[256];
+    private readonly Dictionary<int, SavedState> _saved = [];
+    private readonly Dictionary<int, SavedState> _containers = [];
+    private readonly List<byte> _multipart = [];
+    private readonly HashSet<string> _reported = [];
+
+    private readonly MetafileDeviceContext _context;
+    private readonly MetafilePainter _painter;
+    private readonly MetafileBudget _budget;
+    private readonly MetafileTextEngine _text;
+    private readonly List<Diagnostic> _diagnostics;
+
+    private readonly double _frameLeft;
+    private readonly double _frameTop;
+    private readonly double _deviceX;
+    private readonly double _deviceY;
+    private readonly DocRect _bounds;
+
+    private AffineTransform _world = AffineTransform.Identity;
+    private AffineTransform _map = AffineTransform.Identity;
+    private double _pageScaleX = 1.0;
+    private double _pageScaleY = 1.0;
+    private double _scaleX = 1.0;
+    private double _scaleY = 1.0;
+    private double _dpiX;
+    private double _dpiY;
+    private bool _multipartOpen;
+    private ushort _multipartFlags;
+
+    // The only referent "the current pen" and "the current brush" can have in a format that has
+    // no record for either: whatever the previous drawing record used. Nothing but
+    // EmfPlusStrokeFillPath reads these.
+    private uint? _lastPen;
+    private EmfPlusBrush? _lastBrush;
+    private Colour? _lastColour;
+
+    /// <summary>
+    /// Creates a reader seeded with the enclosing EMF's header fields.
+    /// </summary>
+    /// <remarks>
+    /// The frame and the reference device come from <c>EMR_HEADER</c> and nowhere else — an EMF+
+    /// stream states neither. That is what <c>MtfTools::PassEMFPlusHeaderInfo</c>
+    /// (<c>emfio/source/reader/mtftools.cxx:3165-3196</c>) exists to hand across, and it is why an
+    /// EMF+ replay cannot be started without having read the EMF header first.
+    /// </remarks>
+    /// <param name="context">The device context, shared with the EMF reader so a GetDC bracket sees the same clip.</param>
+    /// <param name="painter">The painter, shared for the same reason.</param>
+    /// <param name="budget">The work caps.</param>
+    /// <param name="text">The text engine.</param>
+    /// <param name="diagnostics">Where problems are recorded.</param>
+    /// <param name="frame">The EMF's <c>rclFrame</c>, in 1/100 mm.</param>
+    /// <param name="devicePixels">The reference device's size in pixels.</param>
+    /// <param name="deviceMillimetres">The reference device's size in millimetres.</param>
+    public EmfPlusReader(
+        MetafileDeviceContext context,
+        MetafilePainter painter,
+        MetafileBudget budget,
+        MetafileTextEngine text,
+        List<Diagnostic> diagnostics,
+        (int Left, int Top, int Right, int Bottom) frame,
+        (int X, int Y) devicePixels,
+        (int X, int Y) deviceMillimetres)
+    {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _painter = painter ?? throw new ArgumentNullException(nameof(painter));
+        _budget = budget ?? throw new ArgumentNullException(nameof(budget));
+        _text = text ?? throw new ArgumentNullException(nameof(text));
+        _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
+
+        _frameLeft = frame.Left;
+        _frameTop = frame.Top;
+
+        int pixelsX = devicePixels.X > 0 ? devicePixels.X : 100;
+        int pixelsY = devicePixels.Y > 0 ? devicePixels.Y : 100;
+        int millimetresX = deviceMillimetres.X > 0 ? deviceMillimetres.X : 1;
+        int millimetresY = deviceMillimetres.Y > 0 ? deviceMillimetres.Y : 1;
+
+        _deviceX = 100.0 * millimetresX / pixelsX;
+        _deviceY = 100.0 * millimetresY / pixelsY;
+
+        // The header record states the recording resolution, but plenty of files have no header
+        // at all — the reference device's own resolution is the only other thing that can say what
+        // a point or a millimetre is worth.
+        _dpiX = pixelsX * 25.4 / millimetresX;
+        _dpiY = pixelsY * 25.4 / millimetresY;
+
+        _bounds = new DocRect(
+            DocPoint.Origin,
+            new DocSize(
+                MetafileMapping.Emu(Math.Max(frame.Right - frame.Left + 1, 1)),
+                MetafileMapping.Emu(Math.Max(frame.Bottom - frame.Top + 1, 1))));
+
+        Remap();
+    }
+
+    /// <summary>
+    /// True when the file's header said it carries a GDI description of the same drawing as well.
+    /// </summary>
+    public bool IsDual { get; private set; }
+
+    /// <summary>
+    /// True when the stream has just handed the device context back, so the GDI records that
+    /// follow are meant to be drawn.
+    /// </summary>
+    public bool WantsDeviceContext { get; private set; }
+
+    /// <summary>True once an EMF+ record has actually been seen.</summary>
+    public bool HasRecords { get; private set; }
+
+    /// <summary>
+    /// Replays one comment record's worth of EMF+ records.
+    /// </summary>
+    /// <remarks>
+    /// The framing is twelve bytes — type, flags, size, data size — and the size counts the header
+    /// itself, so a size below twelve is the end of anything trustworthy. Every field is checked
+    /// against what is left rather than believed, because a comment's payload is the most
+    /// attacker-controllable part of a metafile: it is opaque to every consumer that does not
+    /// understand it.
+    /// </remarks>
+    /// <param name="bytes">The buffer the payload sits in.</param>
+    /// <param name="start">Where the payload begins.</param>
+    /// <param name="length">How long it is.</param>
+    public void Process(byte[] bytes, int start, int length)
+    {
+        ArgumentNullException.ThrowIfNull(bytes);
+
+        EmfPlusStream stream = new(bytes, start, length);
+
+        // The hand-back lasts until the next comment, which is what makes it bracket the GDI
+        // records between the two (emfreader.cxx:597 clears it on entry).
+        WantsDeviceContext = false;
+
+        while (stream.Remaining >= 12 && !_budget.IsExhausted)
+        {
+            int at = stream.Offset;
+
+            ushort type = stream.U16();
+            ushort flags = stream.U16();
+            uint size = stream.U32();
+            uint dataSize = stream.U32();
+
+            if (stream.Failed || size < 12) break;
+            if (size - 12 > (uint)stream.Remaining) break;
+            if (dataSize > size - 12) break;
+            if (!_budget.ChargeRecord()) break;
+
+            HasRecords = true;
+
+            long next = (long)at + size;
+            EmfPlusRecordType record = (EmfPlusRecordType)type;
+
+            if (Continued(record, flags, dataSize, stream))
+            {
+                stream.SeekTo(next);
+                continue;
+            }
+
+            if (record != EmfPlusRecordType.Object || (flags & 0x8000) == 0)
+            {
+                Record(record, flags, stream);
+            }
+
+            stream.SeekTo(next);
+        }
+    }
+
+    /// <summary>
+    /// Handles the continuation form of an object record, which splits one object over several.
+    /// </summary>
+    /// <remarks>
+    /// <b>A single object may be larger than a record can hold</b> — a texture brush carrying a
+    /// photograph routinely is — and EMF+ says so by setting the top flag bit and repeating the
+    /// record with the same slot and type. Each part after its four-byte total-size field is
+    /// appended, and the assembled buffer is parsed when a record arrives that is not part of the
+    /// same object. A decoder that treats each part as a whole object parses the first fragment as
+    /// an image header and then draws nothing at all.
+    /// </remarks>
+    /// <returns>True when the record was a fragment and nothing else should be done with it.</returns>
+    private bool Continued(EmfPlusRecordType record, ushort flags, uint dataSize, EmfPlusStream stream)
+    {
+        bool fragment = record == EmfPlusRecordType.Object
+            && ((_multipartOpen && (flags & 0x7FFF) == (_multipartFlags & 0x7FFF)) || (flags & 0x8000) != 0);
+
+        if (fragment && dataSize >= 4)
+        {
+            if (!_multipartOpen)
+            {
+                _multipartOpen = true;
+                _multipartFlags = flags;
+                _multipart.Clear();
+            }
+
+            stream.Skip(4);             // the object's total size, which the parts repeat
+
+            int take = (int)Math.Min(dataSize - 4, (uint)stream.Remaining);
+            if (_multipart.Count + take <= MaxAssembledObject) _multipart.AddRange(stream.Take(take));
+
+            return true;
+        }
+
+        if (_multipartOpen)
+        {
+            _multipartOpen = false;
+
+            byte[] assembled = [.. _multipart];
+            _multipart.Clear();
+            Object(_multipartFlags, new EmfPlusStream(assembled, 0, assembled.Length));
+        }
+
+        return false;
+    }
+
+    /// <summary>How large an assembled multi-part object may grow before the rest is dropped.</summary>
+    /// <remarks>
+    /// A cap is needed because the parts are attacker-controlled and nothing in the format bounds
+    /// how many there may be. Sixty-four megabytes is far beyond any real embedded image and far
+    /// below what would exhaust a process.
+    /// </remarks>
+    private const int MaxAssembledObject = 64 * 1024 * 1024;
+
+    // ---------------------------------------------------------------- dispatch
+
+    private void Record(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
+    {
+        switch (type)
+        {
+            case EmfPlusRecordType.Header:
+            {
+                IsDual = (flags & 0x01) != 0;
+                stream.Skip(4);         // version
+                stream.Skip(4);         // the recording device's kind
+                uint dpiX = stream.U32();
+                uint dpiY = stream.U32();
+
+                if (dpiX is > 0 and < 100000) _dpiX = dpiX;
+                if (dpiY is > 0 and < 100000) _dpiY = dpiY;
+                break;
+            }
+
+            case EmfPlusRecordType.GetDc:
+                WantsDeviceContext = true;
+                break;
+
+            case EmfPlusRecordType.Object:
+                Object(flags, stream);
+                break;
+
+            case EmfPlusRecordType.Clear:
+                _painter.FillWith(MetafileGeometry.Rectangle(_bounds), Paint.Solid(EmfPlusBrush.Argb(stream.U32())));
+                break;
+
+            // ------------------------------------------------------ shapes
+            case EmfPlusRecordType.FillRects:
+            case EmfPlusRecordType.DrawRects:
+                Rectangles(type, flags, stream);
+                break;
+
+            case EmfPlusRecordType.FillEllipse:
+            case EmfPlusRecordType.DrawEllipse:
+            {
+                bool fill = type == EmfPlusRecordType.FillEllipse;
+                uint brush = fill ? stream.U32() : 0;
+                (double x, double y, double w, double h) = Rect(stream, (flags & 0x4000) != 0);
+
+                GraphicsPath path = Ellipse(x, y, w, h);
+                if (fill) Fill(path, flags, brush);
+                else Stroke(path, flags);
+                break;
+            }
+
+            case EmfPlusRecordType.FillPie:
+            case EmfPlusRecordType.DrawPie:
+            case EmfPlusRecordType.DrawArc:
+                Pie(type, flags, stream);
+                break;
+
+            case EmfPlusRecordType.FillPolygon:
+            {
+                uint brush = stream.U32();
+                int points = (int)stream.U32();
+
+                if (EmfPlusPath.Read(stream, points, flags, withTypes: false) is { } polygon)
+                {
+                    Fill(polygon.ToPath(Map, close: true), flags, brush);
+                }
+
+                break;
+            }
+
+            case EmfPlusRecordType.DrawLines:
+            {
+                int points = (int)stream.U32();
+
+                if (EmfPlusPath.Read(stream, points, flags, withTypes: false) is { } line)
+                {
+                    // 0x2000 asks for one more line from the last point back to the first.
+                    Stroke(line.ToPath(Map, close: (flags & 0x2000) != 0), flags);
+                }
+
+                break;
+            }
+
+            case EmfPlusRecordType.FillPath:
+            {
+                uint brush = stream.U32();
+                if (_objects[flags & 0xFF] is EmfPlusPath path) Fill(path.ToPath(Map), flags, brush);
+                break;
+            }
+
+            case EmfPlusRecordType.DrawPath:
+            {
+                uint pen = stream.U32();
+                if (_objects[flags & 0xFF] is EmfPlusPath path) StrokeWithPen(path.ToPath(Map), pen);
+                break;
+            }
+
+            case EmfPlusRecordType.StrokeFillPath:
+                StrokeFillPath(flags);
+                break;
+
+            case EmfPlusRecordType.FillRegion:
+            {
+                uint brush = stream.U32();
+                if (_objects[flags & 0xFF] is EmfPlusRegion region) FillRegion(region, flags, brush);
+                break;
+            }
+
+            case EmfPlusRecordType.DrawBeziers:
+                Beziers(flags, stream);
+                break;
+
+            case EmfPlusRecordType.DrawCurve:
+            {
+                double tension = stream.F32();
+                int offset = (int)stream.U32();
+                int segments = (int)stream.U32();
+                int points = (int)stream.U32();
+
+                if (EmfPlusPath.Read(stream, points, flags, withTypes: false) is { } curve
+                    && curve.Spline(Map, tension, offset, segments, closed: false) is { } path)
+                {
+                    Stroke(path, flags);
+                }
+
+                break;
+            }
+
+            case EmfPlusRecordType.DrawClosedCurve:
+            case EmfPlusRecordType.FillClosedCurve:
+            {
+                bool fill = type == EmfPlusRecordType.FillClosedCurve;
+                uint brush = fill ? stream.U32() : 0;
+                double tension = stream.F32();
+                int points = (int)stream.U32();
+
+                if (EmfPlusPath.Read(stream, points, flags, withTypes: false) is { } curve
+                    && curve.Spline(Map, tension, 0, 0, closed: true) is { } path)
+                {
+                    if (fill) Fill(path, flags, brush);
+                    else Stroke(path, flags);
+                }
+
+                break;
+            }
+
+            // ------------------------------------------------------ images
+            case EmfPlusRecordType.DrawImage:
+            case EmfPlusRecordType.DrawImagePoints:
+                Image(type, flags, stream);
+                break;
+
+            // ------------------------------------------------------ text
+            case EmfPlusRecordType.DrawString:
+                DrawString(flags, stream);
+                break;
+
+            case EmfPlusRecordType.DrawDriverString:
+                DrawDriverString(flags, stream);
+                break;
+
+            // ------------------------------------------------------ transforms
+            case EmfPlusRecordType.SetWorldTransform:
+                _world = EmfPlusBrush.ReadTransform(stream);
+                Remap();
+                break;
+
+            case EmfPlusRecordType.ResetWorldTransform:
+                _world = AffineTransform.Identity;
+                Remap();
+                break;
+
+            case EmfPlusRecordType.MultiplyWorldTransform:
+                Multiply(EmfPlusBrush.ReadTransform(stream), flags);
+                break;
+
+            case EmfPlusRecordType.TranslateWorldTransform:
+            {
+                double dx = stream.F32();
+                double dy = stream.F32();
+                Multiply(new AffineTransform(1, 0, 0, 1, dx, dy), flags);
+                break;
+            }
+
+            case EmfPlusRecordType.ScaleWorldTransform:
+            {
+                double sx = stream.F32();
+                double sy = stream.F32();
+                Multiply(new AffineTransform(sx, 0, 0, sy, 0, 0), flags);
+                break;
+            }
+
+            case EmfPlusRecordType.RotateWorldTransform:
+            {
+                double radians = stream.F32() * Math.PI / 180.0;
+                double cos = Math.Cos(radians);
+                double sin = Math.Sin(radians);
+                Multiply(new AffineTransform(cos, sin, -sin, cos, 0, 0), flags);
+                break;
+            }
+
+            case EmfPlusRecordType.SetPageTransform:
+            {
+                double scale = stream.F32();
+                _pageScaleX = ToPixels(scale, (EmfPlusUnit)(flags & 0xFF), horizontal: true);
+                _pageScaleY = ToPixels(scale, (EmfPlusUnit)(flags & 0xFF), horizontal: false);
+                Remap();
+                break;
+            }
+
+            // ------------------------------------------------------ state
+            case EmfPlusRecordType.Save:
+                Push(_saved, (int)stream.U32());
+                break;
+
+            case EmfPlusRecordType.Restore:
+                Pop(_saved, (int)stream.U32());
+                break;
+
+            case EmfPlusRecordType.BeginContainerNoParams:
+                Push(_containers, (int)stream.U32());
+                break;
+
+            case EmfPlusRecordType.BeginContainer:
+                BeginContainer(flags, stream);
+                break;
+
+            case EmfPlusRecordType.EndContainer:
+                Pop(_containers, (int)stream.U32());
+                break;
+
+            // ------------------------------------------------------ clipping
+            case EmfPlusRecordType.ResetClip:
+                _context.Clip = _context.Clip.Clone();
+                _context.Clip.Reset();
+                break;
+
+            case EmfPlusRecordType.SetClipRect:
+            {
+                (double x, double y, double w, double h) = Rect(stream, compressed: false);
+                ClipRectangle(DocRect.FromCorners(Map(x, y), Map(x + w, y + h)), Combine(flags));
+                break;
+            }
+
+            case EmfPlusRecordType.SetClipPath:
+                if (_objects[flags & 0xFF] is EmfPlusPath clip) ClipShape(clip.ToPath(Map), Combine(flags));
+                break;
+
+            case EmfPlusRecordType.SetClipRegion:
+                if (_objects[flags & 0xFF] is EmfPlusRegion area) ClipRegion(area, Combine(flags));
+                break;
+
+            case EmfPlusRecordType.OffsetClip:
+            {
+                double dx = stream.F32();
+                double dy = stream.F32();
+
+                // The offset is a distance, so it goes through the mapping's linear part only —
+                // running it through Map would add the frame origin a second time.
+                _context.Clip = _context.Clip.Translate(
+                    MetafileMapping.Emu((dx * _map.A) + (dy * _map.C)),
+                    MetafileMapping.Emu((dx * _map.B) + (dy * _map.D)));
+                break;
+            }
+
+            // ------------------------------------------------------ quality
+            case EmfPlusRecordType.EndOfFile:
+            case EmfPlusRecordType.Comment:
+            case EmfPlusRecordType.SetRenderingOrigin:
+            case EmfPlusRecordType.SetAntiAliasMode:
+            case EmfPlusRecordType.SetTextRenderingHint:
+            case EmfPlusRecordType.SetTextContrast:
+            case EmfPlusRecordType.SetInterpolationMode:
+            case EmfPlusRecordType.SetPixelOffsetMode:
+            case EmfPlusRecordType.SetCompositingMode:
+            case EmfPlusRecordType.SetCompositingQuality:
+            case EmfPlusRecordType.MultiFormatStart:
+            case EmfPlusRecordType.MultiFormatSection:
+            case EmfPlusRecordType.MultiFormatEnd:
+            case EmfPlusRecordType.SetTsGraphics:
+            case EmfPlusRecordType.SetTsClip:
+                // All of these change how a device renders rather than what is drawn: anti-alias
+                // and pixel-offset modes are about sampling, the rendering origin only shifts a
+                // brush's phase, and the terminal-server records restate state a real record has
+                // already given. A display list has no equivalent for any of them.
+                break;
+
+            case EmfPlusRecordType.SerializableObject:
+                Warn("PL6031", "An EMF+ carried a producer-private object, which was not drawn.");
+                break;
+
+            default:
+                Warn("PL6031", $"An EMF+ used record type 0x{(ushort)type:X4}, which Paperless does not draw.");
+                break;
+        }
+    }
+
+    // ---------------------------------------------------------------- objects
+
+    private void Object(ushort flags, EmfPlusStream stream)
+    {
+        int slot = flags & 0xFF;
+        EmfPlusObjectType kind = (EmfPlusObjectType)(flags & 0x7F00);
+
+        switch (kind)
+        {
+            case EmfPlusObjectType.Brush:
+            {
+                EmfPlusBrush brush = new();
+                brush.Read(stream);
+                _objects[slot] = brush;
+                break;
+            }
+
+            case EmfPlusObjectType.Pen:
+            {
+                EmfPlusPen pen = new();
+                pen.ReadPen(stream);
+                _objects[slot] = pen;
+
+                // A cap that decorates is drawn as a filled outline at the line's ends, so
+                // PL6038 is left for the one form that states no path at all: an adjustable
+                // arrow, whose width, height and middle inset LibreOffice also reads and does
+                // not use (emfpcustomlinecap.cxx, "no test document").
+                if (pen.HasUndrawnCap)
+                {
+                    Warn(
+                        "PL6038",
+                        "An EMF+ pen asked for an adjustable arrow cap, which states no outline; "
+                            + "the line was drawn without it.");
+                }
+
+                break;
+            }
+
+            case EmfPlusObjectType.Path:
+            {
+                stream.Skip(4);         // version
+                int points = (int)stream.U32();
+                uint pathFlags = stream.U32();
+
+                if (!MetafileBudget.Plausible(points, 3, stream.Remaining)) break;
+                if (!_budget.ChargeSegments(points)) break;
+
+                _objects[slot] = EmfPlusPath.Read(stream, points, pathFlags, withTypes: true);
+                break;
+            }
+
+            case EmfPlusObjectType.Region:
+            {
+                EmfPlusRegion region = new();
+                region.Read(stream, Map);
+                _objects[slot] = region;
+                break;
+            }
+
+            case EmfPlusObjectType.Image:
+            {
+                EmfPlusImage image = new();
+                image.Read(stream);
+                _objects[slot] = image;
+
+                if (image.IsMetafile)
+                {
+                    Warn(
+                        "PL6039",
+                        "An EMF+ carried a metafile as an image, which Paperless does not replay "
+                            + "inside another metafile.");
+                }
+
+                break;
+            }
+
+            case EmfPlusObjectType.Font:
+            {
+                EmfPlusFont font = new();
+                font.Read(stream);
+                _objects[slot] = font;
+                break;
+            }
+
+            case EmfPlusObjectType.StringFormat:
+            {
+                EmfPlusStringFormat format = new();
+                format.Read(stream);
+                _objects[slot] = format;
+                break;
+            }
+
+            case EmfPlusObjectType.ImageAttributes:
+            {
+                EmfPlusImageAttributes attributes = new();
+                attributes.Read(stream);
+                _objects[slot] = attributes;
+                break;
+            }
+
+            case EmfPlusObjectType.CustomLineCap:
+                // Read for its slot and nothing else: what is left after DrawCaps is the
+                // adjustable-arrow form, which states a width, a height and a middle inset rather
+                // than a path.
+                _objects[slot] = null;
+                break;
+
+            default:
+                _objects[slot] = null;
+                break;
+        }
+    }
+
+    // ---------------------------------------------------------------- shapes
+
+    /// <summary>The wrap mode that does not repeat, which is the only one a paint can state.</summary>
+    private const int WrapClamp = 4;
+
+    private void Rectangles(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
+    {
+        bool fill = type == EmfPlusRecordType.FillRects;
+        uint brush = fill ? stream.U32() : 0;
+        int count = (int)stream.U32();
+        bool compressed = (flags & 0x4000) != 0;
+
+        if (!MetafileBudget.Plausible(count, compressed ? 8 : 16, stream.Remaining)) return;
+
+        GraphicsPath outlines = new();
+
+        for (int i = 0; i < count && !stream.Failed; i++)
+        {
+            (double x, double y, double w, double h) = Rect(stream, compressed);
+
+            GraphicsPath rect = new GraphicsPath()
+                .MoveTo(Map(x, y))
+                .LineTo(Map(x + w, y))
+                .LineTo(Map(x + w, y + h))
+                .LineTo(Map(x, y + h))
+                .Close();
+
+            if (!fill)
+            {
+                foreach (PathCommand command in rect.Commands)
+                {
+                    switch (command.Verb)
+                    {
+                        case PathVerb.MoveTo: outlines.MoveTo(command.Point); break;
+                        case PathVerb.LineTo: outlines.LineTo(command.Point); break;
+                        default: outlines.Close(); break;
+                    }
+                }
+
+                continue;
+            }
+
+            // Each rectangle fills its own interior, so they go through one at a time: emitting
+            // them as a single path would cancel pairwise overlaps under the even-odd rule and
+            // leave a hole where two of them meet.
+            Fill(rect, flags, brush);
+        }
+
+        if (!fill) Stroke(outlines, flags);
+    }
+
+    private void Pie(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
+    {
+        bool fill = type == EmfPlusRecordType.FillPie;
+        uint brush = fill ? stream.U32() : 0;
+
+        double start = stream.F32() * Math.PI / 180.0;
+        double sweep = Math.Clamp(stream.F32(), -360, 360) * Math.PI / 180.0;
+        (double x, double y, double w, double h) = Rect(stream, (flags & 0x4000) != 0);
+
+        GraphicsPath path = Arc(x, y, w, h, start, sweep, close: type != EmfPlusRecordType.DrawArc);
+
+        if (fill) Fill(path, flags, brush);
+        else Stroke(path, flags);
+    }
+
+    private void Beziers(ushort flags, EmfPlusStream stream)
+    {
+        int count = (int)stream.U32();
+        if (count < 4) return;
+
+        if (EmfPlusPath.Read(stream, count, flags, withTypes: false) is not { Count: >= 4 } points) return;
+
+        GraphicsPath path = new();
+        (double x, double y) = points.Raw(0);
+        path.MoveTo(Map(x, y));
+
+        for (int i = 1; i + 2 < points.Count; i += 3)
+        {
+            (double c1x, double c1y) = points.Raw(i);
+            (double c2x, double c2y) = points.Raw(i + 1);
+            (double ex, double ey) = points.Raw(i + 2);
+
+            path.CubicTo(Map(c1x, c1y), Map(c2x, c2y), Map(ex, ey));
+        }
+
+        Stroke(path, flags);
+    }
+
+    /// <summary>
+    /// An ellipse arc built in the file's own coordinates and mapped point by point.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Built unmapped and mapped afterwards because the world transform may rotate or shear, and a
+    /// shape built from a mapped rectangle would be an axis-aligned ellipse in the wrong space. A
+    /// cubic Bézier's image under an affine map is the cubic through its mapped control points, so
+    /// mapping the control points is exact rather than an approximation.
+    /// </para>
+    /// <para>
+    /// <b>GDI+ states an arc's ends as angles and GDI states them as points on a ray</b>, so none
+    /// of the ray-to-parameter conversion the WMF and EMF arcs need applies here: the angle
+    /// <em>is</em> the ellipse's parameter, measured clockwise because y runs down.
+    /// </para>
+    /// </remarks>
+    private GraphicsPath Arc(double x, double y, double w, double h, double start, double sweep, bool close)
+    {
+        double rx = w / 2.0;
+        double ry = h / 2.0;
+        double cx = x + rx;
+        double cy = y + ry;
+
+        int segments = Math.Max(1, (int)Math.Ceiling(Math.Abs(sweep) / (Math.PI / 2)));
+        double step = sweep / segments;
+        double alpha = 4.0 / 3.0 * Math.Tan(step / 4.0);
+
+        GraphicsPath path = new();
+        path.MoveTo(Map(cx + (rx * Math.Cos(start)), cy + (ry * Math.Sin(start))));
+
+        double angle = start;
+
+        for (int i = 0; i < segments; i++)
+        {
+            double next = angle + step;
+
+            path.CubicTo(
+                Map(
+                    cx + (rx * Math.Cos(angle)) - (alpha * rx * Math.Sin(angle)),
+                    cy + (ry * Math.Sin(angle)) + (alpha * ry * Math.Cos(angle))),
+                Map(
+                    cx + (rx * Math.Cos(next)) + (alpha * rx * Math.Sin(next)),
+                    cy + (ry * Math.Sin(next)) - (alpha * ry * Math.Cos(next))),
+                Map(cx + (rx * Math.Cos(next)), cy + (ry * Math.Sin(next))));
+
+            angle = next;
+        }
+
+        if (close)
+        {
+            path.LineTo(Map(cx, cy));
+            path.Close();
+        }
+
+        return path;
+    }
+
+    private GraphicsPath Ellipse(double x, double y, double w, double h)
+    {
+        GraphicsPath path = Arc(x, y, w, h, 0, 2 * Math.PI, close: false);
+        path.Close();
+        return path;
+    }
+
+    // ---------------------------------------------------------------- painting
+
+    private void Fill(GraphicsPath path, ushort flags, uint brushOrColour)
+    {
+        FillRule rule = (flags & 0x2000) != 0 ? FillRule.NonZero : FillRule.EvenOdd;
+
+        if ((flags & 0x8000) != 0)
+        {
+            Colour colour = EmfPlusBrush.Argb(brushOrColour);
+            (_lastBrush, _lastColour) = (null, colour);
+            _painter.FillWith(path, Paint.Solid(colour), rule);
+            return;
+        }
+
+        if (_objects[(int)(brushOrColour & 0xFF)] is not EmfPlusBrush brush) return;
+
+        FillWithBrush(path, brush, rule);
+    }
+
+    private void FillWithBrush(GraphicsPath path, EmfPlusBrush brush, FillRule rule)
+    {
+        (_lastBrush, _lastColour) = (brush, null);
+
+        switch (brush.Type)
+        {
+            case EmfPlusBrushType.Hatch:
+            {
+                if (HatchLines(brush.HatchStyle) is { } style)
+                {
+                    // A GDI+ hatch is opaque: it states both colours, and the background is always
+                    // painted. A GDI hatch takes its background from the device context instead.
+                    _painter.FillWith(path, Paint.Solid(brush.SecondColour), rule);
+                    _painter.FillHatch(path, brush.Colour, style, rule);
+                    return;
+                }
+
+                // The percentage and decorative hatches are dot screens rather than lines, and a
+                // blend of the two colours is what they average to — which is what LibreOffice
+                // draws for them as well.
+                _painter.FillWith(path, Paint.Solid(Blend(brush.Colour, brush.SecondColour, Shade(brush.HatchStyle))), rule);
+                return;
+            }
+
+            case EmfPlusBrushType.Texture:
+                if (Texture(brush) is { } tile) _painter.FillWith(path, tile, rule);
+                else _painter.FillWith(path, Paint.Solid(brush.Colour), rule);
+                return;
+
+            case EmfPlusBrushType.LinearGradient:
+                _painter.FillWith(path, Linear(brush), rule);
+                return;
+
+            case EmfPlusBrushType.PathGradient:
+            {
+                Paint sweep = PathGradient(brush);
+
+                // Outside the boundary the sweep has no triangles, and GDI+ does not leave that
+                // unpainted: the centre-to-edge parameter clamps at 1 and the pure edge colour is
+                // used, which is LibreOffice's second rasterisation pass (emfphelperdata.cxx,
+                // "the pixel is outside its closest triangle"). A flat undercoat of the edge
+                // colour states the same thing without a rasteriser, and it matters more than it
+                // sounds — see the trap in this library's TODO.md.
+                if (sweep is MeshPaint && !Covers(brush, path))
+                {
+                    _painter.FillWith(path, Paint.Solid(EdgeColour(brush)), rule);
+                }
+
+                _painter.FillWith(path, sweep, rule);
+                return;
+            }
+
+            default:
+                _painter.FillWith(path, Paint.Solid(brush.Colour), rule);
+                return;
+        }
+    }
+
+    /// <summary>
+    /// Fills and strokes one path in a single record, using whatever pen and brush the file last
+    /// drew with.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>This record is enumerated by [MS-EMFPLUS] and specified nowhere in it.</b> It is in the
+    /// <c>RecordType</c> enumeration (2.1.1.1) with the sentence <i>"closes any open figures in a
+    /// path, strokes the outline of the path by using the current pen, and fills its interior by
+    /// using the current brush"</i>, and it is <em>absent</em> from the drawing-record table in
+    /// section 2.3.4 that lists all twenty-one records with a defined layout. So there is no
+    /// documented field naming the path, the pen or the brush, and nothing to port — LibreOffice
+    /// reaches the same place and leaves a bare <c>//TODO</c>
+    /// (<c>drawinglayer/source/tools/emfphelperdata.hxx:89</c>).
+    /// </para>
+    /// <para>
+    /// What is done here is the reading every other record supports and nothing beyond it: the
+    /// flags' low byte is an object slot in every EMF+ record that names an object, and "current"
+    /// is taken to mean the pen and brush the previous drawing record used, which is the only
+    /// referent those words can have in a format with no pen or brush state. When the slot holds
+    /// something that is not a path, nothing is drawn and <c>PL6037</c> is raised, exactly as
+    /// before — so a file this guess does not fit is no worse off than it was.
+    /// </para>
+    /// </remarks>
+    private void StrokeFillPath(ushort flags)
+    {
+        if (_objects[flags & 0xFF] is not EmfPlusPath path)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path in one record, which named no path.");
+            return;
+        }
+
+        GraphicsPath geometry = path.ToPath(Map, close: true);
+
+        if (_lastBrush is { } brush) FillWithBrush(geometry, brush, FillRule.NonZero);
+        else if (_lastColour is { } colour) _painter.FillWith(geometry, Paint.Solid(colour), FillRule.NonZero);
+
+        if (_lastPen is { } pen) StrokeWithPen(geometry, pen);
+
+        if (_lastBrush is null && _lastColour is null && _lastPen is null)
+        {
+            Warn("PL6037", "An EMF+ filled and stroked a path before any pen or brush had been used.");
+        }
+    }
+
+    private void Stroke(GraphicsPath path, ushort flags) => StrokeWithPen(path, flags & 0xFFu);
+
+    private void StrokeWithPen(GraphicsPath path, uint index)
+    {
+        _lastPen = index & 0xFF;
+
+        if (_objects[(int)(index & 0xFF)] is not EmfPlusPen pen) return;
+
+        double pixels = ToPixels(pen.Width, pen.Unit, horizontal: true);
+        Length width = MetafileMapping.Emu(pixels * _scaleY);
+
+        IReadOnlyList<Length>? dashes = null;
+
+        if (pen.Dashes() is { Length: > 0 } pattern)
+        {
+            List<Length> lengths = new(pattern.Length);
+            foreach (double each in pattern) lengths.Add(width * Math.Max(each, 0.01));
+
+            // A dash pattern alternates, so an odd-length array would swap ink and gap on every
+            // other repeat; repeating it makes the period even without changing the picture.
+            if (lengths.Count % 2 != 0) lengths.AddRange(lengths);
+            dashes = lengths;
+        }
+
+        _painter.StrokeWith(path, new Stroke(
+            Paint.Solid(pen.Colour),
+            width,
+            EmfPlusPen.Cap(pen.StartCap),
+            pen.Join,
+            pen.MiterLimit,
+            dashes,
+            dashes is null ? Length.Zero : width * pen.DashOffset));
+
+        DrawCaps(path, pen, width);
+    }
+
+    /// <summary>
+    /// Draws the line decorations a pen asks for at the ends of every figure it strokes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Seven of GDI+'s ten line caps are decorations rather than caps.</b> A triangle, a
+    /// square, round or diamond <em>anchor</em>, an arrow anchor and a custom path are shapes
+    /// planted at the end of a line, not ways of finishing the stroke — <see cref="LineCap"/>
+    /// expresses the other three and can express none of these. They need nothing new in the
+    /// drawing model all the same, because a decoration is a filled path: an outline stated in a
+    /// unit space, scaled to the pen's width, turned to face along the line and filled in the
+    /// pen's colour.
+    /// </para>
+    /// <para>
+    /// The unit outlines and their width multipliers are
+    /// <c>EmfPlusHelperData::CreateLineEnd</c>'s
+    /// (<c>drawinglayer/source/tools/emfphelperdata.cxx:532-593</c>), so a diamond is the diamond
+    /// LibreOffice draws rather than one chosen here. The placement rule is
+    /// <c>createAreaGeometryForLineStartEnd</c>'s
+    /// (<c>basegfx/source/polygon/b2dlinegeometry.cxx:38</c>): centre the outline on x, put its
+    /// leading edge at y = 0, scale so its <em>width</em> is the stated one, then dock it — the
+    /// built-in caps straddle the endpoint, a custom cap sits wholly inside the line.
+    /// </para>
+    /// </remarks>
+    private void DrawCaps(GraphicsPath path, EmfPlusPen pen, Length width)
+    {
+        if (!pen.HasCustomCap) return;
+
+        foreach ((DocPoint at, double dx, double dy, bool start) in Ends(path))
+        {
+            int code = start ? pen.StartCap : pen.EndCap;
+            EmfPlusPath? custom = start ? pen.CustomStartCap : pen.CustomEndCap;
+
+            GraphicsPath? decoration = custom is not null
+                ? Decoration(
+                    CustomOutline(custom),
+                    at,
+                    dx,
+                    dy,
+                    // A custom cap states its own width in its outline, and the mapping's x
+                    // scale is what turns it into one — where the pen's width goes through the
+                    // y scale. Mixing the two axes looks like an oversight and is not one to
+                    // depart from: measured on TestEmfPlusDrawPathWithCustomCap, whose world
+                    // transform is anisotropic, using the y scale for both draws an arrow head
+                    // 17 px across where LibreOffice draws 28 — ink_ratio 0.673 against 1.035.
+                    width * (pen.CustomCapScale * CustomWidth(custom) * _scaleX / _scaleY),
+                    dock: 0)
+                : CapOutline(code) is { } outline
+                    ? Decoration(outline, at, dx, dy, width * CapWidth(code), dock: 0.5)
+                    : null;
+
+            if (decoration is not null)
+            {
+                _painter.FillWith(decoration, Paint.Solid(pen.Colour), FillRule.NonZero);
+            }
+        }
+    }
+
+    /// <summary>Every figure's two ends, with the outward direction of the line there.</summary>
+    /// <remarks>
+    /// A figure of one point has no direction and is skipped. A closed figure still has two ends
+    /// here, because GDI+ decorates the first and last point of the figure it was given rather
+    /// than noticing that they coincide.
+    /// </remarks>
+    private static IEnumerable<(DocPoint At, double Dx, double Dy, bool Start)> Ends(GraphicsPath path)
+    {
+        List<DocPoint> figure = [];
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.MoveTo)
+            {
+                foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+                figure = [command.Point];
+                continue;
+            }
+
+            if (command.Verb == PathVerb.Close) continue;
+
+            figure.Add(command.Point);
+        }
+
+        foreach ((DocPoint, double, double, bool) end in EndsOf(figure)) yield return end;
+
+        static IEnumerable<(DocPoint, double, double, bool)> EndsOf(List<DocPoint> points)
+        {
+            if (points.Count < 2) yield break;
+
+            if (Direction(points[1], points[0]) is { } first)
+            {
+                yield return (points[0], first.Dx, first.Dy, true);
+            }
+
+            if (Direction(points[^2], points[^1]) is { } last)
+            {
+                yield return (points[^1], last.Dx, last.Dy, false);
+            }
+        }
+
+        static (double Dx, double Dy)? Direction(DocPoint from, DocPoint to)
+        {
+            double dx = to.X.Emu - from.X.Emu;
+            double dy = to.Y.Emu - from.Y.Emu;
+            double length = Math.Sqrt((dx * dx) + (dy * dy));
+
+            return length <= 0 ? null : (dx / length, dy / length);
+        }
+    }
+
+    /// <summary>Places a unit outline at a line end, facing outwards.</summary>
+    private static GraphicsPath? Decoration(
+        (double X, double Y)[] outline,
+        DocPoint at,
+        double dx,
+        double dy,
+        Length width,
+        double dock)
+    {
+        if (outline.Length < 3 || width <= Length.Zero) return null;
+
+        double left = outline[0].X, right = outline[0].X;
+        double top = outline[0].Y, bottom = outline[0].Y;
+
+        foreach ((double x, double y) in outline)
+        {
+            left = Math.Min(left, x);
+            right = Math.Max(right, x);
+            top = Math.Min(top, y);
+            bottom = Math.Max(bottom, y);
+        }
+
+        if (right - left <= 0) return null;
+
+        double centre = (left + right) / 2;
+        double scale = width.Emu / (right - left);
+        double length = (bottom - top) * scale;
+
+        GraphicsPath shape = new();
+
+        for (int i = 0; i < outline.Length; i++)
+        {
+            double x = (outline[i].X - centre) * scale;
+            double y = ((outline[i].Y - top) * scale) - (length * dock);
+
+            DocPoint point = new(
+                Length.FromEmu(at.X.Emu + (long)((x * -dy) - (y * dx))),
+                Length.FromEmu(at.Y.Emu + (long)((x * dx) - (y * dy))));
+
+            if (i == 0) shape.MoveTo(point);
+            else shape.LineTo(point);
+        }
+
+        return shape.Close();
+    }
+
+    /// <summary>The unit outline of a built-in cap, or null when the stroke draws it itself.</summary>
+    private static (double X, double Y)[]? CapOutline(int code) => code switch
+    {
+        3 => [(-1, 1), (1, 1), (1, 0), (0, -1), (-1, 0)],
+        0x11 => [(-1, -1), (1, -1), (1, 1), (-1, 1)],
+        0x12 => Circle(),
+        0x13 => [(0, -1), (1, 0), (0.5, 0.5), (0.5, 1), (-0.5, 1), (-0.5, 0.5), (-1, 0)],
+        0x14 => [(0, -1), (1, 1), (-1, 1)],
+        _ => null,
+    };
+
+    /// <summary>How wide a built-in cap is, as a multiple of the pen's width.</summary>
+    private static double CapWidth(int code) => code switch
+    {
+        0x11 => 1.5,
+        0x12 or 0x13 or 0x14 => 2.0,
+        _ => 1.0,
+    };
+
+    private static (double X, double Y)[] Circle()
+    {
+        (double X, double Y)[] points = new (double, double)[16];
+        for (int i = 0; i < points.Length; i++)
+        {
+            double angle = i * 2 * Math.PI / points.Length;
+            points[i] = (Math.Cos(angle), Math.Sin(angle));
+        }
+
+        return points;
+    }
+
+    /// <summary>
+    /// A custom cap's own outline, turned to face the way the built-in ones do.
+    /// </summary>
+    /// <remarks>
+    /// The half-turn is LibreOffice's — <c>EMFPCustomLineCap::ReadPath</c> rotates the polygon by
+    /// π as it reads it — because a custom cap states its outline with the line running in +y and
+    /// every other cap here states it with the line running in −y.
+    /// </remarks>
+    private static (double X, double Y)[] CustomOutline(EmfPlusPath cap)
+    {
+        List<(double X, double Y)> points = new(cap.Count);
+        for (int i = 0; i < cap.Count; i++)
+        {
+            (double x, double y) = cap.Raw(i);
+            points.Add((-x, -y));
+        }
+
+        return [.. points];
+    }
+
+    /// <summary>A custom cap's own width, which its outline states rather than the pen.</summary>
+    private static double CustomWidth(EmfPlusPath cap)
+    {
+        (double left, _, double right, _) = cap.RawBounds();
+        return Math.Max(right - left, 1e-6);
+    }
+
+    private void FillRegion(EmfPlusRegion region, ushort flags, uint brushOrColour)
+    {
+        if (region.IsEmpty) return;
+
+        GraphicsPath? path = region.RectanglePath();
+
+        if (region.Shapes.Count == 0)
+        {
+            if (path is null) path = MetafileGeometry.Rectangle(_bounds);
+            Fill(path, (ushort)(flags | 0x2000), brushOrColour);
+            return;
+        }
+
+        // The rectangles and the shapes are a union and an intersection, so the fill goes inside a
+        // clip rather than into one path — which keeps the pair exact.
+        MetafileClip saved = _context.Clip;
+
+        if (path is not null && region.Rectangles is { } rectangles)
+        {
+            _context.Clip = _context.Clip.Clone();
+            _context.Clip.Intersect(rectangles);
+        }
+
+        foreach (GraphicsPath shape in region.Shapes) Fill(shape, flags, brushOrColour);
+
+        _context.Clip = saved;
+    }
+
+    // ---------------------------------------------------------------- brushes
+
+    /// <summary>
+    /// The six EMF+ hatch styles that are lines, as the six GDI hatches the painter draws.
+    /// </summary>
+    /// <remarks>
+    /// GDI+ names fifty-three hatch styles where GDI names six. Twenty of them are one of those
+    /// six at a different weight or spacing — a "dark upward diagonal" is a backward diagonal —
+    /// and mapping those keeps them lines. The percentage screens and the decorative ones
+    /// (confetti, weave, brick) have no line form at all, and <see cref="Shade"/> handles them.
+    /// </remarks>
+    private static HatchStyle? HatchLines(int style) => style switch
+    {
+        0x00 or 0x19 or 0x1B or 0x1D or 0x20 => HatchStyle.Horizontal,
+        0x01 or 0x18 or 0x1A or 0x1C or 0x21 => HatchStyle.Vertical,
+        0x02 or 0x12 or 0x14 or 0x16 or 0x1E => HatchStyle.ForwardDiagonal,
+        0x03 or 0x13 or 0x15 or 0x17 or 0x1F => HatchStyle.BackwardDiagonal,
+        0x04 or 0x2B or 0x2E or 0x30 => HatchStyle.Cross,
+        0x05 => HatchStyle.DiagonalCross,
+        _ => null,
+    };
+
+    /// <summary>How much of the foreground colour a dot-screen hatch style averages to.</summary>
+    /// <remarks>
+    /// The twelve percentage styles say so in their own names; every other style that is not a
+    /// line averages to something near half, which is what LibreOffice uses for all of them.
+    /// </remarks>
+    private static double Shade(int style) => style switch
+    {
+        0x06 => 0.05,
+        0x07 => 0.10,
+        0x08 => 0.20,
+        0x09 => 0.25,
+        0x0A => 0.30,
+        0x0B => 0.40,
+        0x0C => 0.50,
+        0x0D => 0.60,
+        0x0E => 0.70,
+        0x0F => 0.75,
+        0x10 => 0.80,
+        0x11 => 0.90,
+        _ => 0.50,
+    };
+
+    private static Colour Blend(Colour foreground, Colour background, double factor)
+    {
+        double f = Math.Clamp(factor, 0, 1);
+
+        return new Colour(
+            (byte)Math.Round((foreground.R * f) + (background.R * (1 - f))),
+            (byte)Math.Round((foreground.G * f) + (background.G * (1 - f))),
+            (byte)Math.Round((foreground.B * f) + (background.B * (1 - f))),
+            (byte)Math.Round((foreground.A * f) + (background.A * (1 - f))));
+    }
+
+    private BitmapPaint? Texture(EmfPlusBrush brush)
+    {
+        if (brush.Texture?.Image is not { } image) return null;
+
+        int width = brush.Texture.Width > 0 ? brush.Texture.Width : 1;
+        int height = brush.Texture.Height > 0 ? brush.Texture.Height : 1;
+
+        // A texture brush maps one bitmap pixel onto one world unit, so the tile's size in the
+        // document is the pixel count times what a world unit is worth.
+        DocSize tile = new(
+            MetafileMapping.Emu(width * _scaleX),
+            MetafileMapping.Emu(height * _scaleY));
+
+        if (tile.Width <= Length.Zero || tile.Height <= Length.Zero) return null;
+
+        return new BitmapPaint(image, tile, DocPoint.Origin, Stretch: brush.WrapMode == WrapClamp);
+    }
+
+    /// <summary>
+    /// A linear gradient brush, with the brush transform applied to its two ends.
+    /// </summary>
+    /// <remarks>
+    /// A linear gradient is settled by two points, so applying the brush transform to the points
+    /// and then mapping them is exact for any transform that is a similarity — which every rotated
+    /// gradient in real clip art is. A sheared or anisotropically scaled brush would additionally
+    /// tilt the ramp's iso-lines, which two points cannot say; LibreOffice expresses that by
+    /// conjugating the whole map transform, which <c>GradientPaint.Transform</c> could carry too.
+    /// </remarks>
+    private GradientPaint Linear(EmfPlusBrush brush)
+    {
+        (double x, double y) = brush.FirstPoint;
+        (double w, double h) = brush.Extent;
+
+        _ = h;
+
+        (double sx, double sy) = Apply(brush.Transform, x, y);
+        (double ex, double ey) = Apply(brush.Transform, x + w, y);
+
+        return new GradientPaint(
+            GradientKind.Linear,
+            Stops(brush),
+            Map(sx, sy),
+            Map(ex, ey),
+            AffineTransform.Identity,
+            Spread(brush.WrapMode));
+    }
+
+    /// <summary>
+    /// A GDI+ wrap mode as a <see cref="SpreadMethod"/>.
+    /// </summary>
+    /// <remarks>
+    /// <b>Four of the five tiling modes collapse into two here, and that is exact rather than
+    /// lossy.</b> GDI+ names <c>Tile</c>, <c>TileFlipX</c>, <c>TileFlipY</c>, <c>TileFlipXY</c>
+    /// and <c>Clamp</c>, and the flips say which axis a mirrored copy is reflected about. A
+    /// gradient's colour varies along <em>one</em> axis — the brush rectangle's x, before the
+    /// brush transform — so a flip in y produces a copy indistinguishable from the original and
+    /// only the x flip is visible. <c>Tile</c> and <c>TileFlipY</c> are therefore both a repeat,
+    /// and <c>TileFlipX</c> and <c>TileFlipXY</c> both a reflect. A texture brush, whose picture
+    /// does vary in both, keeps its own reading of the same field.
+    /// </remarks>
+    private static SpreadMethod Spread(int wrapMode) => wrapMode switch
+    {
+        1 or 3 => SpreadMethod.Reflect,
+        4 => SpreadMethod.Pad,
+        _ => SpreadMethod.Repeat,
+    };
+
+    /// <summary>
+    /// A path gradient brush, as a fan of Gouraud-shaded triangles about its centre.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>This is what a GDI+ path gradient actually is</b>, and it is why
+    /// <c>Paperless.Core</c> grew a <see cref="MeshPaint"/>. The brush names a centre colour and
+    /// a colour <em>per vertex of an arbitrary boundary</em> — a star with three surround
+    /// colours is three coloured points and no radial ramp anywhere in it — and no number of
+    /// <see cref="GradientStop"/>s says that, because a ramp has one colour at each end however
+    /// many stops sit between them. Partitioning the boundary into triangles
+    /// <c>(centre, V(i), V(i+1))</c> and interpolating the three corner colours across each is
+    /// the same construction LibreOffice uses (<c>emfphelperdata.cxx</c>, the
+    /// <c>BrushTypePathGradient</c> branch), except that LibreOffice Gouraud-shades it into a
+    /// 256-pixel bitmap and uses that as a texture, which needs a rasteriser, and both of our
+    /// backends state the triangles directly.
+    /// </para>
+    /// <para>
+    /// <b>Rings, and when more than one is needed.</b> With a plain centre-to-edge ramp one ring
+    /// of triangles is <em>exact</em>: barycentric interpolation across a triangle is linear, and
+    /// so is the ramp. A blend-factor curve or a preset-colour list makes the ramp non-linear in
+    /// the radius, which a triangle cannot bend, so the fan is subdivided into concentric rings
+    /// and the curve sampled at each. One ring for the linear case keeps the common brush at
+    /// three vertices a segment.
+    /// </para>
+    /// <para>
+    /// A boundary of fewer than three points has no interior to fan and cannot carry a colour per
+    /// vertex either; that falls back to the bounding-ellipse ramp this used to draw for
+    /// everything, with <c>PL6040</c>.
+    /// </para>
+    /// </remarks>
+    private Paint PathGradient(EmfPlusBrush brush)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return Radial(brush);
+
+        (double cx, double cy) = Apply(brush.Transform, brush.FirstPoint.X, brush.FirstPoint.Y);
+        DocPoint centre = Map(cx, cy);
+
+        Colour[] edge = new Colour[boundary.Count];
+        Colour[] surround = brush.SurroundColours is { Length: > 0 } named
+            ? named
+            : [brush.SecondColour];
+
+        for (int i = 0; i < edge.Length; i++) edge[i] = surround[i % surround.Length];
+
+        // A colour curve replaces the centre-to-edge mix outright; a factor curve only bends it.
+        // Both are non-linear in the radius, so both need rings; neither present is the linear
+        // case one ring states exactly.
+        bool curved = brush.PresetPositions is { Length: > 0 } || brush.BlendPositions is { Length: > 0 };
+        int rings = curved ? 12 : 1;
+
+        List<MeshVertex> vertices = new((boundary.Count * rings) + 1)
+        {
+            new MeshVertex(centre, Compose(brush, 0, brush.Colour)),
+        };
+
+        for (int ring = 1; ring <= rings; ring++)
+        {
+            double t = (double)ring / rings;
+
+            for (int i = 0; i < boundary.Count; i++)
+            {
+                vertices.Add(new MeshVertex(
+                    new DocPoint(
+                        Length.FromEmu(centre.X.Emu + (long)((boundary[i].X.Emu - centre.X.Emu) * t)),
+                        Length.FromEmu(centre.Y.Emu + (long)((boundary[i].Y.Emu - centre.Y.Emu) * t))),
+                    Compose(brush, t, edge[i])));
+            }
+        }
+
+        List<MeshTriangle> triangles = new(boundary.Count * ((2 * rings) - 1));
+
+        for (int i = 0; i < boundary.Count; i++)
+        {
+            int next = (i + 1) % boundary.Count;
+
+            triangles.Add(new MeshTriangle(0, 1 + i, 1 + next));
+
+            for (int ring = 2; ring <= rings; ring++)
+            {
+                int inner = 1 + ((ring - 2) * boundary.Count);
+                int outer = 1 + ((ring - 1) * boundary.Count);
+
+                triangles.Add(new MeshTriangle(inner + i, outer + i, outer + next));
+                triangles.Add(new MeshTriangle(inner + i, outer + next, inner + next));
+            }
+        }
+
+        return new MeshPaint(vertices, triangles);
+    }
+
+    /// <summary>
+    /// Whether a brush's boundary encloses everything a path covers, so nothing outside the
+    /// sweep is drawn.
+    /// </summary>
+    /// <remarks>
+    /// Asked of the two bounding boxes rather than of the polygons, which is the conservative
+    /// direction: a concave boundary can leave parts of its own box unswept, so a "yes" here can
+    /// still be wrong at a notch. It costs an undercoat that is then painted over.
+    /// </remarks>
+    private bool Covers(EmfPlusBrush brush, GraphicsPath path)
+    {
+        if (Boundary(brush) is not { Count: >= 3 } boundary) return false;
+
+        Length left = boundary[0].X, right = boundary[0].X;
+        Length top = boundary[0].Y, bottom = boundary[0].Y;
+
+        foreach (DocPoint point in boundary)
+        {
+            left = Length.Min(left, point.X);
+            right = Length.Max(right, point.X);
+            top = Length.Min(top, point.Y);
+            bottom = Length.Max(bottom, point.Y);
+        }
+
+        foreach (PathCommand command in path.Commands)
+        {
+            if (command.Verb == PathVerb.Close) continue;
+            if (command.Point.X < left || command.Point.X > right) return false;
+            if (command.Point.Y < top || command.Point.Y > bottom) return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// The colour a path gradient shows outside its own boundary: the mean of its surround
+    /// colours, or its second colour when it names none.
+    /// </summary>
+    private static Colour EdgeColour(EmfPlusBrush brush)
+    {
+        if (brush.SurroundColours is not { Length: > 0 } surround) return brush.SecondColour;
+        if (surround.Length == 1) return surround[0];
+
+        long r = 0, g = 0, b = 0, a = 0;
+        foreach (Colour colour in surround)
+        {
+            r += colour.R;
+            g += colour.G;
+            b += colour.B;
+            a += colour.A;
+        }
+
+        return new Colour(
+            (byte)(r / surround.Length),
+            (byte)(g / surround.Length),
+            (byte)(b / surround.Length),
+            (byte)(a / surround.Length));
+    }
+
+    /// <summary>
+    /// The brush boundary as a closed polygon of document points, flattened.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Only the first figure, because a path gradient sweeps one boundary and a brush carrying
+    /// several has no defined centre for the rest — which is what LibreOffice takes as well
+    /// (<c>getB2DPolygon(0)</c>).
+    /// </para>
+    /// <para>
+    /// <b>Curves must be flattened before the fan is built, not after.</b> A Bézier ellipse
+    /// states four cardinal points and eight control points; fanning its <em>on-curve</em> points
+    /// alone gives four triangles meeting at the centre — a diamond, not an ellipse — and nothing
+    /// about the resulting picture suggests that curves were the cause.
+    /// </para>
+    /// </remarks>
+    private List<DocPoint>? Boundary(EmfPlusBrush brush)
+    {
+        if (brush.Boundary is not { Count: > 0 } boundary) return null;
+
+        GraphicsPath outline = boundary.ToPath(
+            (x, y) =>
+            {
+                (double px, double py) = Apply(brush.Transform, x, y);
+                return Map(px, py);
+            },
+            close: true);
+
+        List<DocPoint> points = [];
+        DocPoint at = default;
+        bool started = false;
+
+        foreach (PathCommand command in outline.Commands)
+        {
+            switch (command.Verb)
+            {
+                case PathVerb.MoveTo when started:
+                    // A second figure begins; the first is the boundary.
+                    return Deduplicate(points);
+
+                case PathVerb.MoveTo:
+                    started = true;
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.LineTo:
+                    at = command.Point;
+                    points.Add(at);
+                    break;
+
+                case PathVerb.CubicTo:
+                    for (int step = 1; step <= CurveSteps; step++)
+                    {
+                        points.Add(OnCurve(at, command.Control1, command.Control2, command.Point,
+                            (double)step / CurveSteps));
+                    }
+
+                    at = command.Point;
+                    break;
+
+                case PathVerb.Close:
+                default:
+                    break;
+            }
+        }
+
+        return Deduplicate(points);
+    }
+
+    /// <summary>How many straight segments one Bézier of a gradient boundary becomes.</summary>
+    /// <remarks>
+    /// Fixed rather than adaptive, because the boundary of a brush is small — a rounded
+    /// rectangle or an ellipse — and sixteen segments put the error of a quarter-ellipse under a
+    /// thousandth of its radius, well below what a mesh vertex is quantised to anyway.
+    /// </remarks>
+    private const int CurveSteps = 16;
+
+    private static DocPoint OnCurve(DocPoint a, DocPoint b, DocPoint c, DocPoint d, double t)
+    {
+        double u = 1 - t;
+        double w0 = u * u * u, w1 = 3 * u * u * t, w2 = 3 * u * t * t, w3 = t * t * t;
+
+        return new DocPoint(
+            Length.FromEmu((long)((w0 * a.X.Emu) + (w1 * b.X.Emu) + (w2 * c.X.Emu) + (w3 * d.X.Emu))),
+            Length.FromEmu((long)((w0 * a.Y.Emu) + (w1 * b.Y.Emu) + (w2 * c.Y.Emu) + (w3 * d.Y.Emu))));
+    }
+
+    /// <summary>Drops a repeated closing point, which would fan a zero-width triangle.</summary>
+    private static List<DocPoint> Deduplicate(List<DocPoint> points)
+    {
+        while (points.Count >= 2 && points[0] == points[^1]) points.RemoveAt(points.Count - 1);
+
+        return points;
+    }
+
+    /// <summary>
+    /// The colour a path gradient takes at parameter <paramref name="t"/> on the way from its
+    /// centre to a boundary vertex of colour <paramref name="edge"/>.
+    /// </summary>
+    /// <remarks>
+    /// The three spellings are mutually exclusive and their precedence is LibreOffice's: a preset
+    /// colour list replaces the mix outright, a blend-factor curve remaps <paramref name="t"/>
+    /// before it, and neither present leaves the mix linear.
+    /// </remarks>
+    private static Colour Compose(EmfPlusBrush brush, double t, Colour edge)
+    {
+        if (brush.PresetPositions is { Length: > 0 } positions && brush.PresetColours is { } colours)
+        {
+            return SampleColour(positions, colours, t);
+        }
+
+        double factor = brush.BlendPositions is { Length: > 0 } blend && brush.BlendFactors is { } factors
+            ? SampleFactor(blend, factors, t)
+            : t;
+
+        return Blend(edge, brush.Colour, factor);
+    }
+
+    /// <summary>Linear interpolation over a sorted position/value curve, clamped at both ends.</summary>
+    private static double SampleFactor(double[] positions, double[] values, double t)
+    {
+        int count = Math.Min(positions.Length, values.Length);
+        if (count == 0) return t;
+        if (t <= positions[0]) return values[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return values[i - 1] + ((values[i] - values[i - 1]) * f);
+        }
+
+        return values[count - 1];
+    }
+
+    /// <summary>Linear interpolation over a sorted position/colour curve, clamped at both ends.</summary>
+    private static Colour SampleColour(double[] positions, Colour[] colours, double t)
+    {
+        int count = Math.Min(positions.Length, colours.Length);
+        if (count == 0) return Colour.Transparent;
+        if (t <= positions[0]) return colours[0];
+
+        for (int i = 1; i < count; i++)
+        {
+            if (t > positions[i]) continue;
+
+            double span = positions[i] - positions[i - 1];
+            double f = span > 0 ? (t - positions[i - 1]) / span : 0;
+            return Blend(colours[i], colours[i - 1], f);
+        }
+
+        return colours[count - 1];
+    }
+
+    /// <summary>
+    /// A path gradient whose boundary is too degenerate to fan, as the nearest radial gradient.
+    /// </summary>
+    /// <remarks>
+    /// Fewer than three boundary points is a malformed brush: there is no interior to partition
+    /// and nowhere for a colour per vertex to sit. The ramp over the boundary's own bounding
+    /// ellipse is what this reader drew for every path gradient before the mesh existed, so it
+    /// stays as the fallback rather than nothing being drawn, with <c>PL6040</c> saying so.
+    /// </remarks>
+    private GradientPaint Radial(EmfPlusBrush brush)
+    {
+        (double cx, double cy) = Apply(brush.Transform, brush.FirstPoint.X, brush.FirstPoint.Y);
+        DocPoint centre = Map(cx, cy);
+
+        Length rx = Length.FromEmu(1);
+        Length ry = Length.FromEmu(1);
+
+        if (brush.Boundary is { Count: > 0 } boundary)
+        {
+            (double left, double top, double right, double bottom) = boundary.RawBounds();
+
+            (double x0, double y0) = Apply(brush.Transform, left, top);
+            (double x1, double y1) = Apply(brush.Transform, right, bottom);
+
+            DocRect bounds = DocRect.FromCorners(Map(x0, y0), Map(x1, y1));
+            rx = Length.Max(bounds.Width / 2.0, Length.FromEmu(1));
+            ry = Length.Max(bounds.Height / 2.0, Length.FromEmu(1));
+        }
+
+        Warn(
+            "PL6040",
+            "An EMF+ path gradient stated a boundary of fewer than three points, which has no "
+                + "interior to shade; a ramp over its bounding ellipse was drawn instead.");
+
+        double squash = ry.Emu / (double)rx.Emu;
+
+        return new GradientPaint(
+            GradientKind.Elliptical,
+            Stops(brush),
+            centre,
+            new DocPoint(centre.X + rx, centre.Y),
+            new AffineTransform(1, 0, 0, squash, 0, centre.Y.Emu * (1 - squash)));
+    }
+
+    /// <summary>
+    /// A gradient brush's colour stops, from its two colours and whichever blend curve it carried.
+    /// </summary>
+    /// <remarks>
+    /// Three spellings and they are mutually exclusive: no curve at all, a factor curve that says
+    /// how far towards the second colour each position sits, or a preset list of colours. Ported
+    /// from <c>EmfPlusHelperData::EMFPPlusFillPolygon</c>'s gradient branch.
+    /// </remarks>
+    private static List<GradientStop> Stops(EmfPlusBrush brush)
+    {
+        List<GradientStop> stops = [];
+
+        if (brush.PresetPositions is { Length: > 0 } positions && brush.PresetColours is { } colours)
+        {
+            for (int i = 0; i < positions.Length && i < colours.Length; i++)
+            {
+                stops.Add(new GradientStop(Math.Clamp(positions[i], 0, 1), colours[i]));
+            }
+        }
+        else if (brush.BlendPositions is { Length: > 0 } blend && brush.BlendFactors is { } factors)
+        {
+            for (int i = 0; i < blend.Length && i < factors.Length; i++)
+            {
+                stops.Add(new GradientStop(
+                    Math.Clamp(blend[i], 0, 1),
+                    Blend(brush.SecondColour, brush.Colour, factors[i])));
+            }
+        }
+
+        if (stops.Count >= 2) return stops;
+
+        stops.Clear();
+        stops.Add(new GradientStop(0, brush.Colour));
+        stops.Add(new GradientStop(1, brush.SecondColour));
+        return stops;
+    }
+
+    // ---------------------------------------------------------------- images
+
+    private void Image(EmfPlusRecordType type, ushort flags, EmfPlusStream stream)
+    {
+        uint attributesSlot = stream.U32();
+        int sourceUnit = stream.I32();
+
+        // 0xFFFFFFFF is how a producer says "no attributes"; anything else is a slot, and the
+        // object there is 24 bytes of wrap mode and edge colour rather than the colour matrix the
+        // GDI+ API class of the same name carries. See EmfPlusImageAttributes.
+        EmfPlusImageAttributes? attributes = attributesSlot == 0xFFFFFFFF
+            ? null
+            : _objects[(int)(attributesSlot & 0xFF)] as EmfPlusImageAttributes;
+
+        if (_objects[flags & 0xFF] is not EmfPlusImage image) return;
+        if (image.Image is null && image.MetafileBytes.IsEmpty) return;
+
+        // [MS-EMFPLUS] 2.3.4.8 allows only a pixel source rectangle, and every producer writes one.
+        if (sourceUnit != (int)EmfPlusUnit.Pixel) return;
+
+        double sx = stream.F32();
+        double sy = stream.F32();
+        double sw = stream.F32();
+        double sh = stream.F32();
+
+        double dx;
+        double dy;
+        double dw;
+        double dh;
+        double shearX = 0;
+        double shearY = 0;
+
+        if (type == EmfPlusRecordType.DrawImagePoints)
+        {
+            if (stream.U32() != 3) return;
+
+            EmfPlusPath? corners = EmfPlusPath.Read(stream, 3, flags, withTypes: false);
+            if (corners is not { Count: 3 }) return;
+
+            (double x1, double y1) = corners.Raw(0);
+            (double x2, double y2) = corners.Raw(1);
+            (double x3, double y3) = corners.Raw(2);
+
+            dx = x1;
+            dy = y1;
+            dw = x2 - x1;
+            dh = y3 - y1;
+            shearX = x3 - x1;
+            shearY = y2 - y1;
+        }
+        else
+        {
+            (dx, dy, dw, dh) = Rect(stream, (flags & 0x4000) != 0);
+        }
+
+        if (dw == 0 || dh == 0) return;
+
+        // The destination is a parallelogram in the file's own space and the map may rotate it, so
+        // it is expressed as a transform and the image drawn into a square under it. That is
+        // exactly what a DrawImagePoints record means, and it costs nothing for the ordinary
+        // rectangle case, where the shear terms are zero.
+        const double Unit = MetafilePainter.PlacementUnit;
+
+        AffineTransform placement = Concat(
+            new AffineTransform(dw / Unit, shearY / Unit, shearX / Unit, dh / Unit, dx, dy),
+            Emu(_map));
+
+        // A nested metafile goes into the same placement square a bitmap would, so the
+        // destination arithmetic above is shared entirely. It is decoded here rather than when
+        // the object was read because a picture that is never drawn should cost nothing, which
+        // is the same reason a bitmap arrives undecoded.
+        if (image.Image is null)
+        {
+            if (Nested(image) is { } nested) _painter.DrawNestedPicture(nested, placement);
+            return;
+        }
+
+        RasterImage raster = image.Image;
+
+        bool cropped = sw > 0 && sh > 0 && image.Width > 0 && image.Height > 0
+            && (sx != 0 || sy != 0 || Math.Abs(sw - image.Width) > 0.5 || Math.Abs(sh - image.Height) > 0.5);
+
+        if (!cropped)
+        {
+            _painter.DrawTransformedImage(raster, placement);
+            return;
+        }
+
+        // The whole image is placed so that the wanted part lands on the square, and the square
+        // clips the rest — the same answer the WMF and EMF source rectangles got, and the reason
+        // nothing here needs a codec to crop with.
+        DocRect whole = new(
+            Length.FromEmu((long)Math.Round(-sx / sw * Unit)),
+            Length.FromEmu((long)Math.Round(-sy / sh * Unit)),
+            Length.FromEmu((long)Math.Round(image.Width / sw * Unit)),
+            Length.FromEmu((long)Math.Round(image.Height / sh * Unit)));
+
+        // A source rectangle reaching outside the bitmap leaves part of the destination with no
+        // pixel to take a colour from, and the wrap mode says what goes there. Clamping states a
+        // flat colour, which is a fill under the image and needs nothing new; the four tiling
+        // modes would need the bitmap repeated, which the placement square cannot express — see
+        // TODO.md for what that is worth, measured.
+        bool overhangs = sx < 0 || sy < 0 || sx + sw > image.Width || sy + sh > image.Height;
+        Colour? edge = attributes is { Clamps: true } && overhangs ? attributes.ClampColour : null;
+
+        _painter.DrawTransformedImage(raster, placement, whole, edge: edge);
+    }
+
+    /// <summary>
+    /// The picture an image object carries as a whole further metafile, decoded once.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Re-entering the decoder from inside itself needs a bound, and the budget is the wrong
+    /// one.</b> A budget is spent as work is done; a picture nested a thousand deep that draws
+    /// almost nothing at each level never spends any of it. <see cref="MetafileBudget.Nested"/>
+    /// counts the quantity that actually grows and answers null when none is left, which is why
+    /// the guard lives there rather than here.
+    /// </para>
+    /// <para>
+    /// <b>Which decoder reads it is <c>VectorImages</c>'s question.</b> The image record names
+    /// a WMF, an EMF or an EMF+, and all three are sniffed by content already — so a nested EMF+
+    /// re-enters this very reader through the ordinary front door, with no second entry point
+    /// and nothing here that knows which format it handed on.
+    /// </para>
+    /// </remarks>
+    private VectorImage? Nested(EmfPlusImage image)
+    {
+        if (image.Nested is not null) return image.Nested;
+        if (image.MetafileBytes.IsEmpty) return null;
+
+        if (_budget.Nested is not { } limits)
+        {
+            Warn(
+                "PL6039",
+                "An EMF+ carried a metafile as an image more deeply than Paperless will follow; "
+                    + "the nested picture was not drawn.");
+            return null;
+        }
+
+        image.Nested = VectorImages.Decode(image.MetafileBytes, limits);
+        return image.Nested.Content.Commands.Count > 0 ? image.Nested : null;
+    }
+
+    // ---------------------------------------------------------------- text
+
+    private void DrawString(ushort flags, EmfPlusStream stream)
+    {
+        uint brush = stream.U32();
+        uint format = stream.U32();
+        int length = (int)Math.Min(stream.U32(), 0x10000u);
+
+        double lx = stream.F32();
+        double ly = stream.F32();
+        double lw = stream.F32();
+        double lh = stream.F32();
+
+        string text = stream.Utf16(length);
+        if (text.Length == 0) return;
+
+        if (_objects[flags & 0xFF] is not EmfPlusFont font) return;
+
+        EmfPlusStringFormat? layout = _objects[(int)(format & 0xFF)] as EmfPlusStringFormat;
+        MetafileFont resolved = Font(font);
+
+        double em = ToWorld(resolved.Size);
+        double width = ToWorld(_text.Measure(text, resolved)) * (layout?.Tracking ?? 1.0);
+
+        double x = lx;
+        double y = ly;
+
+        if (layout is not null)
+        {
+            x += layout.Alignment switch
+            {
+                1 => (0.5 * lw) + ((layout.LeadingMargin - layout.TrailingMargin) * em) - (0.5 * width),
+                2 => lw - (layout.TrailingMargin * em) - width,
+                _ => layout.LeadingMargin * em,
+            };
+
+            y += layout.LineAlignment switch
+            {
+                1 => (lh - em) / 2.0,
+                2 => lh - em,
+                _ => 0,
+            };
+        }
+
+        // The baseline is placed in the file's own space and mapped once, so a rotated world
+        // transform rotates the whole placement rather than only the run's direction.
+        double ascent = ToWorld(Ascent(resolved));
+        DocPoint origin = Map(x, y + ascent);
+
+        IReadOnlyList<Length>? advances = Tracking(text, resolved, layout);
+
+        if (_text.Layout(text, resolved, origin, TextAlignment.Baseline, advances) is not { } laid) return;
+
+        Paint text_paint = Paint.Solid(TextColour(flags, brush));
+        foreach (GlyphRun run in laid.Runs) _painter.DrawGlyphRun(run, Rotation(), text_paint);
+    }
+
+    /// <summary>
+    /// Draws glyphs the producer has already positioned, one run per shared baseline.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>The option flags decide both what the array holds and how many positions follow it.</b>
+    /// Bit 0 says the values are characters to look up in the font's character map rather than
+    /// glyph indices; bit 2 says the producer supplied one origin and the font's own advances
+    /// rather than a position per glyph. LibreOffice reads a position per glyph unconditionally
+    /// and only handles the character form, so a record that sets bit 2 desynchronises its parse.
+    /// </para>
+    /// <para>
+    /// Glyphs sharing a y are one run, which keeps a PDF backend emitting real text; a change of y
+    /// starts a new one, because a glyph run has a single baseline.
+    /// </para>
+    /// </remarks>
+    private void DrawDriverString(ushort flags, EmfPlusStream stream)
+    {
+        uint brush = stream.U32();
+        uint options = stream.U32();
+        uint hasMatrix = stream.U32();
+        int count = (int)Math.Min(stream.U32(), 0x10000u);
+
+        if (count <= 0) return;
+        if (_objects[flags & 0xFF] is not EmfPlusFont font) return;
+
+        bool characters = (options & 0x01) != 0;
+        bool realised = (options & 0x04) != 0;
+
+        ushort[] codes = new ushort[count];
+        for (int i = 0; i < count; i++) codes[i] = stream.U16();
+
+        int positions = realised ? 1 : count;
+        if ((long)positions * 8 > stream.Remaining) return;
+
+        double[] xs = new double[count];
+        double[] ys = new double[count];
+
+        for (int i = 0; i < positions; i++)
+        {
+            xs[i] = stream.F32();
+            ys[i] = stream.F32();
+        }
+
+        AffineTransform? matrix = hasMatrix != 0 ? EmfPlusBrush.ReadTransform(stream) : null;
+
+        MetafileFont resolved = Font(font);
+        Paint paint = Paint.Solid(TextColour(flags, brush));
+        double rotation = Rotation();
+
+        int at = 0;
+
+        while (at < count)
+        {
+            int run = 1;
+            if (!realised) while (at + run < count && Math.Abs(ys[at + run] - ys[at]) < 1e-6) run++;
+            else run = count;
+
+            List<Length>? advances = null;
+
+            if (!realised && run > 1)
+            {
+                advances = new List<Length>(run);
+                for (int i = 0; i < run; i++)
+                {
+                    double advance = i + 1 < run ? xs[at + i + 1] - xs[at + i] : 0;
+                    advances.Add(MetafileMapping.Emu(advance * _scaleX));
+                }
+            }
+
+            (double px, double py) = Apply(matrix, xs[at], ys[at]);
+            DocPoint origin = Map(px, py);
+
+            (IReadOnlyList<GlyphRun> Runs, Length Width)? laid = characters
+                ? _text.Layout(new string([.. codes.Skip(at).Take(run).Select(code => (char)code)]),
+                    resolved, origin, TextAlignment.Baseline, advances)
+                : _text.LayoutGlyphs([.. codes.Skip(at).Take(run)], resolved, origin, TextAlignment.Baseline, advances);
+
+            if (laid is { } placed)
+            {
+                foreach (GlyphRun one in placed.Runs) _painter.DrawGlyphRun(one, rotation, paint);
+            }
+
+            at += run;
+        }
+    }
+
+    /// <summary>
+    /// Per-character advances when the string format asks for tracking, or null for the font's own.
+    /// </summary>
+    /// <remarks>
+    /// Tracking is a multiplier on every character's natural advance, so it is the one thing that
+    /// makes an EMF+ string need a DX array where the file supplies none. Measuring per character
+    /// rather than scaling the total keeps the run's internal spacing right.
+    /// </remarks>
+    private List<Length>? Tracking(string text, MetafileFont font, EmfPlusStringFormat? format)
+    {
+        if (format is null || Math.Abs(format.Tracking - 1.0) < 1e-6) return null;
+
+        List<Length> advances = new(text.Length);
+        foreach (char character in text) advances.Add(_text.Measure(character.ToString(), font) * format.Tracking);
+        return advances;
+    }
+
+    private MetafileFont Font(EmfPlusFont font)
+    {
+        double pixels = ToPixels(font.Size, font.Unit, horizontal: false);
+        Length size = MetafileMapping.Emu(pixels * _scaleY);
+
+        if (size <= Length.Zero) size = MetafileFont.Default.Size;
+
+        return new MetafileFont(
+            font.Family is { Length: > 0 } family ? family : MetafileFont.Default.Family,
+            size,
+            font.IsBold ? 700 : 400,
+            font.IsItalic,
+            font.IsUnderlined,
+            font.IsStruckOut);
+    }
+
+    private Length Ascent(MetafileFont font)
+        => _text.Face(font) is { } face ? LineSpacing.Resolve(face.Face).ScaledAscent(font.Size) : font.Size;
+
+    private Colour TextColour(ushort flags, uint brushOrColour)
+    {
+        if ((flags & 0x8000) != 0) return EmfPlusBrush.Argb(brushOrColour);
+
+        return _objects[(int)(brushOrColour & 0xFF)] is EmfPlusBrush brush ? brush.Colour : Colour.Black;
+    }
+
+    /// <summary>The angle the mapping rotates a baseline through, positive anticlockwise.</summary>
+    private double Rotation()
+    {
+        double angle = Math.Atan2(_map.B, _map.A);
+        return Math.Abs(angle) < 1e-9 ? 0 : -angle;
+    }
+
+    // ---------------------------------------------------------------- clipping
+
+    private static EmfPlusCombineMode Combine(ushort flags) => (EmfPlusCombineMode)((flags >> 8) & 0x0F);
+
+    private void ClipRectangle(DocRect rect, EmfPlusCombineMode mode) => ClipRectangles([rect], mode);
+
+    /// <summary>
+    /// Combines a rectangle set into the clip, in any of GDI+'s six modes.
+    /// </summary>
+    /// <remarks>
+    /// All six are exact while the clip stays rectangular, because rectangle sets are closed
+    /// under every one of them. <c>Complement</c> is the one to read twice: it keeps the part of
+    /// the <em>new</em> region that is not in the existing one, the operands the other way round
+    /// from <c>Exclude</c> (<c>emfphelperdata.cxx:1547-1558</c>).
+    /// </remarks>
+    private void ClipRectangles(IReadOnlyList<DocRect> rectangles, EmfPlusCombineMode mode)
+    {
+        _context.Clip = _context.Clip.Clone();
+
+        switch (mode)
+        {
+            case EmfPlusCombineMode.Replace:
+                _context.Clip.Replace(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Intersect:
+                _context.Clip.Intersect(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Exclude:
+                _context.Clip.Exclude(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Union:
+                _context.Clip.Union(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Xor:
+                _context.Clip.SymmetricDifference(rectangles);
+                break;
+
+            case EmfPlusCombineMode.Complement:
+                _context.Clip.Complement(rectangles);
+                break;
+
+            default:
+                _context.Clip.MarkUnsupported();
+                break;
+        }
+    }
+
+    private void ClipShape(GraphicsPath path, EmfPlusCombineMode mode)
+    {
+        _context.Clip = _context.Clip.Clone();
+
+        switch (mode)
+        {
+            case EmfPlusCombineMode.Replace:
+                _context.Clip.Replace(path, FillRule.EvenOdd);
+                break;
+
+            case EmfPlusCombineMode.Intersect:
+                _context.Clip.Intersect(path, FillRule.EvenOdd);
+                break;
+
+            default:
+                _context.Clip.MarkUnsupported();
+                break;
+        }
+    }
+
+    private void ClipRegion(EmfPlusRegion region, EmfPlusCombineMode mode)
+    {
+        if (region.IsApproximate) _context.Clip.MarkUnsupported();
+
+        if (region.IsInfinite)
+        {
+            if (mode == EmfPlusCombineMode.Replace)
+            {
+                _context.Clip = _context.Clip.Clone();
+                _context.Clip.Reset();
+            }
+
+            return;
+        }
+
+        // A region of rectangles alone combines exactly in every mode; one carrying a path does
+        // so only where the clip is being replaced or narrowed, which is the same boundary the
+        // rectangle algebra draws everywhere else.
+        if (region.Shapes.Count == 0 && region.Rectangles is { } only)
+        {
+            ClipRectangles(only, mode);
+            return;
+        }
+
+        _context.Clip = _context.Clip.Clone();
+
+        if (mode is not (EmfPlusCombineMode.Replace or EmfPlusCombineMode.Intersect))
+        {
+            _context.Clip.MarkUnsupported();
+            return;
+        }
+
+        if (mode == EmfPlusCombineMode.Replace) _context.Clip.Reset();
+
+        if (region.Rectangles is { } rectangles) _context.Clip.Intersect(rectangles);
+        foreach (GraphicsPath shape in region.Shapes) _context.Clip.Intersect(shape, FillRule.EvenOdd);
+    }
+
+    // ---------------------------------------------------------------- state
+
+    private sealed record SavedState(AffineTransform World, MetafileClip Clip, double PageScaleX, double PageScaleY);
+
+    /// <summary>
+    /// Saves the graphics state under a numbered index, as <c>Save</c> and <c>BeginContainer</c> do.
+    /// </summary>
+    /// <remarks>
+    /// <b>EMF+ save stacks are keyed, not stacked.</b> A record states the index it means, and a
+    /// second save to the same index replaces the first — so a decoder that pushes onto a stack
+    /// and pops from it restores the wrong state as soon as a file reuses an index, which the ones
+    /// PowerPoint writes do. Ported from <c>EmfPlusHelperData::GraphicStatePush</c>.
+    /// </remarks>
+    private void Push(Dictionary<int, SavedState> map, int index)
+        => map[index] = new SavedState(_world, _context.Clip.Clone(), _pageScaleX, _pageScaleY);
+
+    private void Pop(Dictionary<int, SavedState> map, int index)
+    {
+        if (!map.TryGetValue(index, out SavedState? state)) return;
+
+        _world = state.World;
+        _context.Clip = state.Clip;
+        _pageScaleX = state.PageScaleX;
+        _pageScaleY = state.PageScaleY;
+        Remap();
+    }
+
+    private void BeginContainer(ushort flags, EmfPlusStream stream)
+    {
+        (double dx, double dy, double dw, double dh) = Rect(stream, compressed: false);
+        (double sx, double sy, double sw, double sh) = Rect(stream, compressed: false);
+        int index = (int)stream.U32();
+
+        Push(_containers, index);
+
+        if (sw == 0 || sh == 0) return;
+
+        EmfPlusUnit unit = (EmfPlusUnit)(flags & 0xFF);
+
+        AffineTransform transform = new(
+            ToPixels(dw / sw, unit, horizontal: true),
+            0,
+            0,
+            ToPixels(dh / sh, unit, horizontal: false),
+            ToPixels(dx - sx, unit, horizontal: true),
+            ToPixels(dy - sy, unit, horizontal: false));
+
+        _world = Concat(_world, transform);
+        Remap();
+    }
+
+    // ---------------------------------------------------------------- mapping
+
+    private void Multiply(AffineTransform transform, ushort flags)
+    {
+        // 0x2000 is the post-multiply flag: the stated transform applies after the world one.
+        _world = (flags & 0x2000) != 0 ? Concat(_world, transform) : Concat(transform, _world);
+        Remap();
+    }
+
+    /// <summary>Composes the four stages into the one matrix every point goes through.</summary>
+    private void Remap()
+    {
+        double sx = _pageScaleX * _deviceX;
+        double sy = _pageScaleY * _deviceY;
+
+        _map = new AffineTransform(
+            _world.A * sx,
+            _world.B * sy,
+            _world.C * sx,
+            _world.D * sy,
+            (_world.E * sx) - _frameLeft,
+            (_world.F * sy) - _frameTop);
+
+        _scaleX = Math.Sqrt((_map.A * _map.A) + (_map.B * _map.B));
+        _scaleY = Math.Sqrt((_map.C * _map.C) + (_map.D * _map.D));
+
+        if (_scaleX <= 0) _scaleX = 1;
+        if (_scaleY <= 0) _scaleY = 1;
+    }
+
+    private DocPoint Map(double x, double y) => new(
+        MetafileMapping.Emu((x * _map.A) + (y * _map.C) + _map.E),
+        MetafileMapping.Emu((x * _map.B) + (y * _map.D) + _map.F));
+
+    /// <summary>A length in EMUs back in the file's own units, for an offset stated there.</summary>
+    private double ToWorld(Length length) => length.Emu / (_scaleX * MetafileMapping.EmuPerMm100);
+
+    /// <summary>
+    /// A size in one of the seven EMF+ units, as the pixels the rest of the mapping expects.
+    /// </summary>
+    /// <remarks>
+    /// A port of <c>EmfPlusHelperData::unitToPixel</c>. World and display units are already what
+    /// the world transform maps from, so they pass through; the physical units need the recording
+    /// resolution, which is why the header's DPI fields are load-bearing rather than informational.
+    /// </remarks>
+    private double ToPixels(double value, EmfPlusUnit unit, bool horizontal)
+    {
+        double dpi = horizontal ? _dpiX : _dpiY;
+
+        return unit switch
+        {
+            EmfPlusUnit.Point => value / 72.0 * dpi,
+            EmfPlusUnit.Inch => value * dpi,
+            EmfPlusUnit.Millimetre => value / 25.4 * dpi,
+            EmfPlusUnit.Document => value * dpi / 300.0,
+            _ => value,
+        };
+    }
+
+    private static (double X, double Y) Apply(AffineTransform? transform, double x, double y)
+    {
+        if (transform is not { } t) return (x, y);
+
+        return ((x * t.A) + (y * t.C) + t.E, (x * t.B) + (y * t.D) + t.F);
+    }
+
+    /// <summary>Applies <paramref name="first"/> and then <paramref name="second"/>.</summary>
+    private static AffineTransform Concat(AffineTransform first, AffineTransform second) => new(
+        (first.A * second.A) + (first.B * second.C),
+        (first.A * second.B) + (first.B * second.D),
+        (first.C * second.A) + (first.D * second.C),
+        (first.C * second.B) + (first.D * second.D),
+        (first.E * second.A) + (first.F * second.C) + second.E,
+        (first.E * second.B) + (first.F * second.D) + second.F);
+
+    /// <summary>The mapping as a transform into EMUs rather than into 1/100 mm.</summary>
+    private static AffineTransform Emu(AffineTransform map) => new(
+        map.A * MetafileMapping.EmuPerMm100,
+        map.B * MetafileMapping.EmuPerMm100,
+        map.C * MetafileMapping.EmuPerMm100,
+        map.D * MetafileMapping.EmuPerMm100,
+        map.E * MetafileMapping.EmuPerMm100,
+        map.F * MetafileMapping.EmuPerMm100);
+
+    private static (double X, double Y, double Width, double Height) Rect(EmfPlusStream stream, bool compressed)
+    {
+        if (!compressed) return (stream.F32(), stream.F32(), stream.F32(), stream.F32());
+
+        return (stream.I16(), stream.I16(), stream.I16(), stream.I16());
+    }
+
+    private void Warn(string code, string message)
+    {
+        if (!_reported.Add(code + message)) return;
+        _diagnostics.Add(new Diagnostic(DiagnosticSeverity.Warning, code, message));
+    }
+}

@@ -50,6 +50,7 @@ public static class SlideDrawing
     private static void DrawShape(PlacedShape shape, IDrawingSink sink)
     {
         if (shape.Fill is { } fill) sink.FillPath(shape.Outline, fill);
+        if (shape.Picture is { } picture) DrawPicture(shape, picture, sink);
         if (shape.Line is { } line) sink.StrokePath(shape.Outline, line);
 
         if (shape.Text is not { Runs.Count: > 0 } text) return;
@@ -68,6 +69,54 @@ public static class SlideDrawing
         {
             sink.Transform(text.Transform);
             foreach (PlacedGlyphRun run in text.Runs) sink.DrawGlyphRun(run.Run, Paint.Solid(run.Colour));
+        }
+        finally
+        {
+            sink.Restore();
+        }
+    }
+
+    /// <summary>
+    /// Draws a picture inside the shape that holds it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Always clipped to the outline, for two reasons that both matter. A crop is expressed by
+    /// drawing the whole picture into a rectangle larger than the frame, so without a clip a
+    /// cropped picture spills across the slide; and a picture frame need not be rectangular —
+    /// PowerPoint will put a photograph inside any preset geometry — so the outline is what
+    /// bounds it rather than the destination rectangle.
+    /// </para>
+    /// <para>
+    /// Between the fill and the line: the fill is behind a picture with transparency, and the
+    /// frame's own border is drawn over the picture's edge, which is what puts a hairline
+    /// exactly on the boundary rather than half under it.
+    /// </para>
+    /// </remarks>
+    private static void DrawPicture(PlacedShape shape, PlacedPicture picture, IDrawingSink sink)
+    {
+        if (picture.Destination.IsEmpty) return;
+
+        sink.Save();
+        try
+        {
+            sink.ClipPath(shape.Outline);
+
+            // The vector wins where a shape has both, which is the DrawingML `svgBlip` case and
+            // nothing else; an empty decode falls back to the raster the file put there for it.
+            //
+            // `VectorImage.Draw` stretches the picture's own *frame* onto the destination and not
+            // the extent of its ink, which is the same rule `DrawImage` follows for a raster and
+            // is why a crop is expressed here as a larger destination plus a clip rather than as
+            // anything the picture knows about.
+            if (picture.Vector is { } vector && !vector.Value.IsEmpty)
+            {
+                vector.Value.Draw(sink, picture.Destination);
+            }
+            else if (picture.Image is { } image)
+            {
+                sink.DrawImage(image, picture.Destination, picture.Opacity);
+            }
         }
         finally
         {

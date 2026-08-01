@@ -44,8 +44,16 @@ indexes or resolvable style chains.
       would take one style's parent from the other's chain. Cycle-guarded; the family's defaults lead
       a chain that does not reach them.
 - [x] Tables: rows, cells, spans, nested tables, and the column-edge grid the spans index into
-- [ ] Lists and numbering with multi-level definitions and restart semantics. The four readers each
-      compute labels already; the model holds the label but not yet the definitions that produced it.
+- [x] Lists and numbering with multi-level definitions and restart semantics — **for extraction and now
+      for layout too**. The definitions themselves still live in each reader rather than in the model, which
+      is the part of this item that is deliberately unfinished: nothing above the readers has yet needed to
+      ask what a list is, only what it draws.
+      This was the largest group in the whole-corpus sweep and it was one bug seen six times, not six bugs.
+      Every reader computed the label already and none of them had anywhere to put it: `PageParagraph`
+      carried no label, so `Paginator` measured none and `PageDrawing` drew none. All six rows closed
+      together — `text-features.{odt,fodt}` 149/154 → 154/154 and `word-features.{doc,docx,dotx,rtf}`
+      149–150/154–155 → 154–155/154–155. What it cost is described under the layout engine's
+      **list labels** item, which is where the fix is.
 - [x] **Page geometry**, in `Model/PageGeometry.cs`, read from all four formats and verified against
       LibreOffice's own rendering. The interesting part is that the formats do not mean the same thing
       by "top margin": Word's `w:top` is the distance to the first line of *body* text with the header
@@ -206,6 +214,40 @@ Order chosen so each is verifiable before the next gets harder.
       table needs nothing of its own. This also fixed a bug that predates frames: a `draw:frame` inside a
       `text:p` fell through the run walker's default case, which walked *into* the text box and spliced the
       frame's words into the middle of the sentence it floats beside.
+- [x] `draw:image` read for its bytes, in `OpenDocument/OdfPictures.cs`: a package entry named by
+      `xlink:href`, or base64 in `office:binary-data`. The href wins over the inline data — see the layout
+      engine's picture item, and the `data:` URI that follows from it.
+- [x] **The document's `Wrap` is recorded even where nothing may use it.** LibreOffice's `.odt` export of
+      `picture-anchor.fodt` inherits `style:wrap="dynamic"` from the built-in `Graphics` style onto a frame
+      anchored `as-char`, and Writer keeps that and ignores it: `SwTextFly::GetTop` asserts outright that it
+      is never called for a `SwFlyInContentFrame` (`sw/source/core/text/txtfly.cxx:777`). So the reader
+      stays faithful to the file and `FrameLayout` enforces the rule, rather than the reader normalising
+      `Wrap` to `Through` for an as-character anchor. Worth stating because the test that first asserted it
+      the other way round looked right: "an as-character frame is never an obstacle" is true, and it is a
+      statement about layout rather than about what a document is allowed to say.
+- [x] **A comment is not body text**, and the trap is one word long: it is `office:annotation`, not
+      `text:annotation`. The layout walk dispatches on the `text:` namespace first and had the case for it
+      under there, where it could never fire, so the generic branch below descended into the comment and
+      spliced its author, its timestamp and its body into the sentence it is anchored in. Silent in a
+      packaged `.odt`, where the elements abut and the words fuse into their neighbours; visible in the same
+      document saved flat, where the pretty-printer's newlines separate them — which is why
+      `text-features.odt` rendered 152 words and `text-features-flat.fodt` 155 against the same reference's
+      154, and why a *disagreement between two packagings of one document* was the sharper clue than either
+      number. Both went to 149, and the whole of the remaining five was the list labels; both are now 154.
+- [x] **The list level's indents, which are not the paragraph's.** ODF is the one format of the four whose
+      list paragraphs carry no indent of their own: `List_20_Bullet` states none, and the quarter inch every
+      item is set in comes from the level's `style:list-level-properties`. So `text-features.odt` laid its
+      whole list out flush with the left margin at 56.7 pt where LibreOffice draws the text at 74.8 and the
+      label at 56.8. Read in `OpenDocument/OdtLayoutSource.Lists.cs`.
+      **ODF says the geometry two ways and the attribute names conceal it.** The label-alignment mode has
+      `fo:margin-left` and `fo:text-indent` inside a `style:list-level-label-alignment` child, which is what
+      a reader looks for because those are the names a paragraph style uses. The older
+      label-width-and-position mode — which is what LibreOffice writes for levels 1 and 2 of its own
+      `ListBullet` and `ListNumber` styles, and therefore what this document uses — says
+      `text:space-before` and `text:min-label-width` instead, and the mapping is
+      `left-margin = space + width, first-line = -width` (`xmloff/source/style/xmlnumi.cxx:433`). Reading
+      only the first spelling leaves every list in a LibreOffice-written `.odt` at the margin, and the file
+      contains no attribute whose absence says so.
 
 ### DOCX — extraction done
 - [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
@@ -232,7 +274,9 @@ Order chosen so each is verifiable before the next gets harder.
 - [x] Headers/footers (only the parts a section names), footnotes/endnotes with computed
       citations, comments with their author
 - [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
-      section, and the DrawingML/VML pair read once rather than twice
+      section, and the DrawingML/VML pair read once rather than twice — and, in `Ooxml/DocxPictures.cs`,
+      the bytes behind `a:blip/@r:embed` as well. The relationship scope is the trap; it is written down
+      under the layout engine's picture item.
 - [x] `w:drawing` read for *layout* as well: `wp:anchor` states the same two facts per axis ODF does — an
       origin and either an offset in EMUs or an edge to align against — and the wrap in a way that needs
       saying out loud. It is which of five sibling **elements** is present, and two of the five are named
@@ -240,6 +284,25 @@ Order chosen so each is verifiable before the next gets harder.
       `wp:wrapTopAndBottom` is what ODF spells `none`. Only `wp:wrapSquare` carries a side, in `wrapText`.
       `wp:inline` is read as an as-character frame with no wrap, so an inline picture is recorded rather
       than misplaced.
+- [x] **`w:br w:type="page"` is a deferred page break, not a line break.** A `w:br` is three things wearing
+      one name and the reader drew all three as a line break, so `word-features.docx` was one page where the
+      reference is two — while the *same document* as `.doc` and `.rtf` paginated correctly, because those
+      two state the break as a property of the paragraph that follows (`sprmPFPageBreakBefore`, `\pagebb`)
+      and nothing had to be deferred. LibreOffice turns the OOXML form back into the DOC's own U+000C
+      (`OOXMLBreakHandler::~OOXMLBreakHandler`, `writerfilter/ooxml/Handler.cxx:246`) and then defers it,
+      applying it to the next paragraph as `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`); this
+      does the same, into `ParagraphFormat.StartsNewPage`. `word-features.docx` is now 2/2 pages and
+      150/155 words, the same bucket as its `.rtf` sibling.
+      Two limits, both LibreOffice's own behaviour in one direction and not the other. A break in a note
+      body or a text box is dropped rather than deferred, which is what `DomainMapper.cxx:4376` does by
+      testing the footnote, shape and comment contexts — here it falls out of putting the pending flag back
+      after the nested flows are read. And a break with text *after* it in the same paragraph still moves
+      the whole paragraph rather than splitting it; Writer splits (`m_bIsSplitPara`), and splitting here
+      would rebase every offset the paragraph carries — its notes, its frames, its bookmarks. No corpus
+      document has one, because neither Word nor LibreOffice writes one.
+- [ ] `w:br w:type="column"` is still drawn as a line break. The model has `StartsNewPage` and no column
+      equivalent, and Writer's `BreakType_COLUMN_BEFORE` would need one on `ParagraphFormat` plus a
+      column-advance in `Paginator`.
 - [ ] `wp:effectExtent`, and the reason it is unread is a measurement rather than a principle. LibreOffice
       folds it into the wrap margins (`GraphicImport.cxx`, the `WrapTextMode_PARALLEL` branch:
       `m_nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width - (aLOBoundRect.X + aLOBoundRect.Width)`,
@@ -515,6 +578,10 @@ Order chosen so each is verifiable before the next gets harder.
       *instruction* is still right and load-bearing, for a different reason: a `HYPERLINK` field's
       instruction characters carry a `sprmCPicLocation` pointing at the link's own data in the `Data`
       stream, which parses as a `PICF` with mapping mode 0 and would be reported as a picture.
+- [x] **The same walk again, for the bytes.** `Ww8Blips.cs` reads the blip store and
+      `Ww8DocumentReader.Drawings.cs` resolves a shape's `pib` through it, so a DOC picture reaches layout
+      still encoded. See the picture item under the layout engine for the four places the bytes can be and
+      the two fields that are not what they look like.
 - [ ] Shapes anchored in a **header or footer**. `PlcSpaHdr` is read and its positions rebased onto the
       header subdocument, and a header shape's text is taken from `PlcfHdrtxbxTxt` rather than the body's
       table. The *layout* half is no longer the obstacle it was: a frame a header paragraph carries is now
@@ -581,7 +648,9 @@ Order chosen so each is verifiable before the next gets harder.
       the words are the whole of a deletion's record. `{\*\bkmkstart}`/`{\*\bkmkend}` pair by name,
       which is the one format where the name is also the key
 - [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
-- [x] Embedded pictures recorded as graphics without decoding the bytes
+- [x] Embedded pictures recorded as graphics without decoding the bytes — and now read for layout as
+      well, bytes and all, in `Rtf/RtfDocumentReader.Pictures.cs`. See the picture item under the layout
+      engine for what `\binN` costs a tokeniser that does not know about it.
 - [x] `{\shp}` shapes read as floating frames: `\shpleft` and its three companions give the rectangle in
       twips, `\shpwr` and `\shpwrk` the wrap, and the `{\sp{\sn name}{\sv value}}` pairs — Escher's
       property table written out as text — give the origin and the distances from text. Those pairs sit
@@ -626,6 +695,56 @@ Only after extraction is solid and `Paperless.Text` breaks lines correctly. Line
 with Writer's — see `Paperless.Text/TODO.md` — and the page geometry every break is measured against
 is read and verified, so what remains is the filling of pages rather than the measuring of lines.
 
+- [x] **List labels**, in `Layout/ListLabel.cs`, `Layout/PageContent.cs` and `Layout/PageDrawing.cs`, with
+      one reader-side file each in `OpenDocument/OdtLayoutSource.Lists.cs` and
+      `Ooxml/DocxLayoutSource.Lists.cs` and a few lines apiece in the DOC and RTF paths.
+      **The bug was that nothing above the readers had anywhere to put a label.** All four readers had been
+      computing `1.`, `a)` and `◦` correctly since they were written — extraction reported them and the
+      corpus tests pinned them — but `PageParagraph` carried only text, so a label could not be measured or
+      drawn even in principle. That is why the shortfall appeared six times at once across four formats and
+      two packagings and why all six closed in one change: 197 of 223 sweep rows matched before, 203 after.
+      **Why the label is beside the paragraph's text and not in it.** Writer makes the label a *portion* at
+      the head of the first line (`SwTextFormatter::NewNumberPortion`, `sw/source/core/text/txtfld.cxx:506`)
+      so that it takes part in the line's measurement. Doing that here would mean splicing characters into
+      `PageParagraph.Text`, and every offset a paragraph carries — its notes, its frames, its bookmarks — is
+      counted against that string, so a label of two characters would rebase all of them. Instead the label
+      hangs beside the text and pays for itself through `PageParagraph.Format`, whose getter widens the
+      declared first-line indent by the label's advance. That single place is deliberate: five separate call
+      sites lay a paragraph out, and one measuring against a different first-line indent from the one it is
+      drawn against puts a paragraph's own words in two places.
+      **The advance is `SwNumberPortion::Format` (`sw/source/core/text/porfld.cxx:607`) reduced to its
+      result**: in label-width-and-position mode the portion stretches to the paragraph's left margin, which
+      is the negated hanging indent; in label-alignment mode it is the label's own width with a tab carrying
+      the text on to the level's stop; and in both the floor is `m_nFixWidth + m_nMinDist`, which is what
+      stops `viii.` from being written over by the text it labels.
+      **The trap, and it cost an hour.** `text-features.odt`'s "Continuation paragraph of item two" is the
+      second `text:p` of a list item: it draws no label but it is still *in* the list. Giving it the level's
+      indents whole put it at 56.7 pt where LibreOffice draws 74.8 — hanging into the space where a number
+      it does not have would have gone. `SwTextNode::GetFirstLineOfsWithNum`
+      (`sw/source/core/txtnode/ndtxt.cxx:3469`) applies the numbering's first-line offset only to a node
+      that `IsCountedInList`, while `GetLeftMarginWithNum` applies the left margin unconditionally — so an
+      unlabelled paragraph in a list takes half of its level's geometry and not the other half. The same
+      shape catches DOCX's `w:numId="0"` continuation paragraphs, and the fix is one line in each reader.
+      Measured on `text-features.odt` against LibreOffice's own PDF: level-one labels at 56.7 against 56.8
+      and their text at 74.7 against 74.8; level two at 74.7/92.7 against 74.8/92.8. The remaining tenth of
+      a point is the page's left margin, which was already off by that much before any of this.
+      **A second trap, found much later and only by looking at the rendered PDF's fonts.** A label
+      is the one piece of a word-processing page whose `FontReference` is built somewhere other
+      than the run walk — it carries its own face, so it carries its own reference — and three of
+      the four readers never set it. `PageLabel.Font` existed and only `OdtLayoutSource.Lists` filled
+      it in; DOCX, DOC and RTF left it null, so `PageDrawing` fell back to
+      `Reference(label.Face)`, which names the face's *family* where `FileFontProvider` expects the
+      resolver's key — the font file's path. The consequence is invisible to everything this file
+      records: the label is in the right place, in the right size, with the right glyph advances,
+      and the PDF carries **no font program for it at all**. Measured with `pdffonts` on
+      `word-features.docx`: six faces `emb yes` and the labels' `LiberationSerif` and `OpenSymbol`
+      `emb no`; the same two on `.dotx`, `LiberationSerif` on `.doc`, `LiberationSans` on `.rtf`.
+      A reader draws those as tofu or as whatever it happens to have under the name. The fix is
+      one line per reader — DOC and RTF set the label in the paragraph's own face and already had
+      its reference to hand; DOCX's `LabelFace` may resolve a *different* family for a bullet
+      level, so it now returns the face and the reference together. Held by
+      `tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs`, whose `AListLabelIsDrawnFromAnEmbeddedFace`
+      runs over all four readers with ODT as the control that already passed.
 - [x] **Pagination**: fill a page, split what does not fit, continue. Verified against LibreOffice on a
       sixty-paragraph document at three line spacings, comparing which paragraph starts each page — the
       assertion that catches every upstream measurement error, since a wrong advance width moves a line
@@ -816,22 +935,301 @@ is read and verified, so what remains is the filling of pages rather than the me
       flow — the flow knows that as it stacks — threaded through `TableLayouter` and `PageFurnitureSet`, and
       then the frame's position and the cell's height become circular in the same way the body's already are,
       so the bounded relayout has to cover the flows too. Four files, three of them shared.
-- [ ] **As-character frames take no room on their line.** All four readers recognise the anchor —
-      `text:anchor-type="as-char"`, `wp:inline`, and the RTF and WW8 equivalents — and record the frame, but
-      nothing gives the line a portion as wide as the frame, so the text closes over it. Writer's
-      `SwFlyCntPortion` (`sw/source/core/text/porfly.cxx`) is a line portion with the frame's own width and
-      height, which is a different mechanism from the wrap: it changes what a line *measures*, not what it
-      may use.
-      Why it is not merely more of the same. A floating frame is answered entirely inside
-      `Paperless.WordProcessing`, because `ILineObstacles` is the seam and the seam already exists. An
-      as-character frame has no such seam: the run model has no way to say "this range is this many EMUs
-      wide whatever its glyphs measure". `FormattedRun` would need a fixed advance, `MeasuredParagraph`
-      would have to honour it in its prefix sums and in `HeightOf`, and the drawing would have to skip the
-      range rather than shape it — all of which is `Paperless.Text`, and none of which the obstacles
-      interface reaches. There is a second half in the readers too: a `draw:frame` currently contributes no
-      character to its paragraph's text, only an offset, so an as-character frame has no range for a fixed
-      advance to apply to. It would have to emit an anchor character the way a comment and a footnote
-      citation already do (`OdtLayoutSource.AnchorCharacter`, U+0001) and mark the frame as owning it.
+- [x] **Pictures, in all four formats: read, placed and drawn.** A `PageFrame` carries a `RasterImage` in
+      the bytes the file stored and `PageDrawing` hands it to `IDrawingSink.DrawImage`. All ten corpus
+      pictures reach the PDF — `picture-anchor.{fodt,odt,docx,doc,rtf}` one each and `picture-flow.*` two
+      each, checked with `pdfimages -list` rather than by eye.
+      The four state the same picture in four unrelated ways and only the last of them is honest about the
+      format:
+      - **ODF** names a package entry in `draw:image/@xlink:href`, or inlines base64 in
+        `office:binary-data`. The two are mutually exclusive and **the href wins**, which is why a `data:`
+        URI in `xlink:href` is accepted and silently ignored — reproduced rather than repaired, so a
+        hand-written fixture behaves here as it does in LibreOffice, and `picture-anchor.fodt` therefore has
+        to use `office:binary-data`.
+      - **DOCX** resolves `a:blip/@r:embed` through the *part's own* relationships. **Relationship ids are
+        scoped to the part that uses them**, and this is the trap that costs an hour: `rId1` in
+        `document.xml` and `rId1` in `header1.xml` are different relationships in different `.rels` files
+        and Word numbers both from one, so a resolver looking only at the main document answers a header's
+        logo with whatever `document.xml` calls `rId1` — usually `styles.xml`, which sniffs as no picture
+        at all, so the frame stays empty and nothing says why. `DocxPictures.Scope` is what the reader sets
+        as it walks into a header, a footer or a note part.
+      - **RTF** writes `{\pict}` with the payload as hexadecimal by default and raw after `\binN`. The
+        `\bin` half belongs to the *tokeniser*: the N bytes after the delimiter are anything at all, and a
+        PNG's signature contains `\x1A` while its IDAT data contains braces about one byte in sixty-four,
+        so a picture read as text unbalances the document within a few kilobytes and loses everything after
+        it. LibreOffice's own RTF export also puts a picture inside a shape —
+        `{\field{\*\fldinst SHAPE }{\fldrslt{\shp …}}}` with `shapeType 75` and the bitmap in
+        `{\sp{\sn pib}{\sv {\pict …}}}` — and does that for an *as-character* picture too, so the round
+        trip loses the anchoring and a reader looking only for a bare `{\pict}` finds every picture Word
+        wrote and none of LibreOffice's.
+      - **DOC** goes `sprmCPicLocation` → the `PICF` in the `Data` stream → the `SpContainer` after it →
+        its `pib` → the blip store. Three things there are not guessable. The `PICF`'s `mx`/`my` are in
+        **tenths of a percent** (`ww8struc.hxx:457`), so an unscaled picture states 1000 and a reader
+        taking whole percent draws everything ten times too large. A blip record begins with **one or two**
+        sixteen-byte checksums and only the low bit of its instance field says which
+        (`SvxMSDffManager::GetBLIPDirect`, `filter/source/msfilter/msdffimp.cxx`); reading one where there
+        are two puts sixteen bytes of MD4 in front of the picture. And the bytes are usually **not** in the
+        blip store at all: the entry carries a `foDelay` into the `Data` stream, and LibreOffice tries the
+        `WordDocument` stream after it — "there is a second chance", `msdffimp.cxx:6465` — which for
+        `picture-flow.doc` is where the picture actually is, at offset 6717 of a 6835-byte stream while the
+        `Data` stream is 118 bytes long. An inline picture adds a fourth place: its own lone `msofbtBSE`
+        immediately after the shape container, with no `OfficeArtBStoreContainer` in the drawing group at
+        all, which is what `picture-anchor.doc` has.
+- [x] **Nothing on the reading path decodes.** `EmbeddedPicture.Read` sniffs the bytes, wraps them with
+      `RasterImage.Encoded` and stops; `RasterImageDecoder.Ensure` in `Paperless.Rendering` decodes when a
+      backend wants pixels, and a PDF backend passing a JPEG through to `DCTDecode` never decodes at all.
+      The signature table is a near-duplicate of `RasterImageDecoder.Sniff`'s **on purpose**: that method
+      lives beside the Skia decoder it guards, and referencing it would put a codec on the extraction path.
+      The pixel size is read from the header instead — PNG's `IHDR` at a fixed offset, GIF's and BMP's
+      likewise, and a walk over a JPEG's segments for the first start-of-frame — which is exactly what
+      LibreOffice separates `GraphicDescriptor` (`vcl/source/filter/graphicfilter2.cxx:63`) out to do.
+      Sniffing rather than believing the label matters in all four: a `.png` part holding a JPEG is common,
+      OPC requires a content type and producers still get it wrong, and RTF's own exporters mislabel blips.
+- [x] **An EMF, WMF, EMF+ or SVG blip draws.** `PageFrame` gained a `Lazy<VectorImage>?` beside its
+      `RasterImage?` and `PageDrawing` prefers it; `EmbeddedPicture.Read` answers a `FramePicture`, which
+      is the pair, and all four front ends thread that one value instead of two nullable fields. `PL2370`
+      survives with a narrower meaning — a vector format Paperless has *no decoder for*, which today is a
+      PICT and a StarView metafile and nothing else.
+      **It needed nothing in `Paperless.Core`, and the reason is worth stating rather than an interface
+      being written.** `VectorImage` already is the abstraction a frame wants: `Draw(IDrawingSink, DocRect)`
+      plus an intrinsic size, immutable and replayable, decoded once. A Core interface would have had
+      exactly those two members and one implementation, on the far side of a dependency the layering
+      already permits — `Paperless.Vector` sits beside `Paperless.Text` under Core and above nothing that
+      reads a document, and this library already referenced it.
+      Measured, both PDFs rasterised at `pdftoppm -r 150` and compared with `render-comparison`:
+
+      | Fixture | Before | After |
+      |---|---|---|
+      | `svg-picture.odt` / `.docx` | 7/8 words | **8/8**, `mae 0.0007` / `0.0009`, `ink_ratio 1.028` / `1.025` |
+      | `wmf-picture.odt` / `.docx` | 6/8 words | **8/8**, `mae 0.0005` / `0.0007`, `ink_ratio 1.003` / `1.001` |
+      | `emf-picture.odt` / `.docx` | 0/2 words | **2/2**, `mae 0.0037`, `ink_ratio 1.208` |
+      | `vector-picture-text.rtf` | new | 9/9, `mae 0.0044`, `ink_ratio 1.080` |
+
+      The EMF rows' `ink_ratio` is not a defect here and the diff image says so: the residue is the
+      gradient bar and the dashed polyline that `emf-shapes.emf` states and **LibreOffice's own EMF import
+      does not draw** — checked by converting the bare `.emf` with `soffice` and getting the same missing
+      bar. The WMF rows are the ones to watch for a regression, because `1.001` leaves nowhere to hide.
+- [x] **The vector is decoded when something draws it, not when the document is read**, and the
+      measurement is the reason. On this tree the *first* `VectorImages.Decode` in a process costs
+      **1044 ms** for a WMF carrying one text run, 381 ms for an EMF+ and 67 ms for a text-free EMF,
+      against **0.08–0.21 ms** once warm — nearly all of the first one is resolving and loading faces
+      through `Paperless.Text`. DOCX and ODT read their pictures only when a layout source asks, but **RTF
+      and DOC read theirs while parsing the document**, which is the extraction path, so an eager decode
+      there would have put a second of font work on a caller that wanted the words. A `Lazy<VectorImage>`
+      is the whole of the fix: it defers, it caches, and the per-part caches the readers already keep mean
+      a logo on forty pages still decodes once. `VectorFrameTests.NothingIsDecodedWhileTheDocumentIsRead`
+      pins it with `IsValueCreated`.
+- [x] **A DOCX `a:blip` may carry an SVG beside its raster, and the SVG is what to draw.**
+      `BlipReference.Choose` is now called instead of reading `r:embed`: an `asvg:svgBlip` inside the
+      `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension names the vector and `r:embed` the fallback.
+      Both are kept — `PageFrame.Image` beside `PageFrame.Vector` is *only* this case — so a decode that
+      comes back empty draws the raster rather than nothing, which is what the fallback is in the file
+      for. Measured on `svg-picture.docx`: 769 bytes of SVG against a 3 803-byte PNG.
+- [x] **A DOC's metafile blip is deflate-compressed and the raster ones are not**, which is the single
+      thing that made the Escher path work. `Ww8Blips` used to drop a vector blip's bytes; it now reads
+      the **34-byte `OfficeArtMetafileHeader`** — `cbSize`, `rcBounds`, `ptSize`, `cbSave`, `compression`,
+      `filter` — and inflates what follows. A raster blip has *one* tag byte in the same place.
+      `SvxMSDffManager::GetBLIPDirect` sets its ZCodec for the EMF, WMF and PICT cases and for no other
+      (`msdffimp.cxx:6518-6549`) and does it unconditionally, never reading the `compression` byte; the
+      byte is honoured here because the format states it and `0xFE` legitimately means stored, with a
+      fall-back to the raw bytes when the stream will not inflate. Measured on LibreOffice's own DOC
+      export: 892 bytes of EMF arrive as 262 bytes of deflate behind the header, so a reader that skipped
+      the header and not the compression finds neither a placeable magic nor a `METAHEADER` and declines
+      the picture as an unrecognised blob — which reads as a corrupt document and is not one.
+- [x] **A DOC's as-character picture came back floating, and the cause was a field rather than a
+      picture.** Found by `vector-picture-text.doc`, LibreOffice's own DOC export of three as-character
+      pictures, all three of which decoded and drew and all three of which overlapped the paragraph after
+      them because none reached `FrameAnchor.AsCharacter`. The row read OK in the sweep throughout — 1/1
+      pages, 13/13 words — which is exactly the kind of defect a word count cannot see.
+      **The earlier diagnosis here was wrong, and re-measuring is what found the real one.** It said the
+      `Data` stream held one valid `PICF` where a raster version held one per picture, and concluded that
+      LibreOffice wrote the other two somewhere only the `FSPA` table reaches. The stream holds **three**,
+      at 0, 120 and 240, every one of them `cb=118 cbHeader=68 mm=0x64`. Nothing was missing.
+      What is actually in the text is the pair **`U+0008 U+0001`** — the "canvas field" shape LibreOffice's
+      own comment names (`ww8par.cxx:3599`, "normally in the canvas field, the code is 0x8 0x1") — and the
+      `U+0008` has a full `FSPA` describing a floating shape. The only thing in the document that
+      contradicts that `FSPA` is one byte in the `PlcFld`: all three shapes sit inside a field of type
+      **95, `SHAPE`**, and `SwWW8ImplReader::IsInlineEscherHack` (`ww8par.hxx:1737`) is exactly "the
+      innermost open field is a `SHAPE`". `ProcessEscherAlign` then anchors the shape `FLY_AS_CHAR`
+      instead of `FLY_AT_CHAR` (`ww8graf.cxx:2355`). So a reader that never opens the field table has an
+      `FSPA` and no reason to distrust it, and every picture written this way comes back floating.
+      `Ww8FieldTypes` reads the `PlcFld` — a plain `Ww8Plcf` of two-byte records, `FLD.ch` in the low five
+      bits and the type in the second byte of a begin — and the layout walk keeps a stack of open field
+      types beside the instruction depth it already kept. The two counters are **not** the same: the
+      instruction depth drops at the separator and a shape sits in the *result*, where the field is still
+      open and the depth is already back to nought.
+      Three details cost time and are worth keeping:
+      - **The vertical orientation is the half `ProcessEscherAlign` does not replace.** It forces the
+        horizontal to `CENTER`/`FRAME` and leaves the vertical exactly as stated (`ww8graf.cxx:2436-2439`).
+        These shapes state `posrelv` 3 — relative to the line — with `posv` 0 and an `FSPA` top of nought,
+        which `aToLineVertOriTab` maps to `VertOrientation::NONE`, `GetRelPosToBase` resolves to nought,
+        and `SwFlyCntPortion::SetBase` turns into an **ascent of nought**: the object hangs entirely below
+        the baseline and raises the line's descent instead of its ascent. Applying the ordinary
+        as-character rule — bottom on the baseline — instead moved `word-features.doc`'s anchor line from
+        455.51 to 477.71, 22 pt of page moved by one frame.
+      - **The anchor characters have to go, and only when something was made of them.** LibreOffice
+        inserts a character for a `U+0001` only when the graphic *fails* (`if (!pResult) cInsert = ' '`,
+        `ww8par.cxx:3637`), and for the `U+0001` of a `U+0008 U+0001` pair inside a `SHAPE` field it takes
+        neither branch — it reads one character ahead, finds no second `U+0001`, and leaves `cInsert` at
+        nought. Keeping them cost 18.67 pt of `.notdef` in the middle of `word-features.doc`'s sentence,
+        invisible for as long as the box was misplaced far to the left and exactly the width by which the
+        sentence overshot once the box was put in the right place. A comment's `U+0005` makes no frame and
+        so keeps its placeholder, which is what the mark tables index it by.
+      - **A trap.** The pair means one shape and two characters, so a reader that treats `U+0001` as "a
+        picture" and `U+0008` as "a drawing" finds two objects where the document has one. Only the
+        `U+0008` carries the `FSPA`; the `U+0001`'s `SpContainer` has no `pib` at all, which is why
+        `IsPictureShape` already declined it and why the count came out right by accident.
+      Measured against LibreOffice's own PDF: `vector-picture-text.doc` now agrees on every word to within
+      1.24 pt, where before the three pictures reserved no room at all and each drew over the paragraph
+      after it. Still 1/1 pages and 13/13 words, as it was throughout.
+- [ ] **LibreOffice's RTF export rasterises every picture.** Measured on the same source: converting it to
+      `.rtf` writes `\pngblip` for the WMF and for the EMF, where the DOC export keeps both byte for byte.
+      So `vector-picture-text.rtf` is **hand-written**, with `\wmetafile8` and `\emfblip` and the two
+      metafiles as hex — a fixture that went through LibreOffice would exercise neither control word. Both
+      words are then ignored anyway: the sniff decides, because RTF exporters mislabel blips routinely.
+- [ ] **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than a
+      matrix, so `a:xfrm/@rot`, `draw:transform="rotate(…)"` and DOC's `sprmPicRotation` are recorded and
+      not applied. Deliberate: changing the IR for it would touch every backend and every family, and the
+      slide reader reached the same conclusion. A crop needs no such change — a crop is a larger
+      destination rectangle clipped to the outline, and the drawing model already has clipping.
+- [x] **As-character frames take room on their line**, and the room is both wide and tall. Writer's
+      `SwFlyCntPortion` (`sw/source/core/text/porfly.cxx`) is a line *portion* carrying the frame's own
+      width and height, which is a different mechanism from the wrap: it changes what a line measures, not
+      what it may use. `Text/Layout/MeasuredParagraph.cs` now takes an `InlineObject` list and folds it into
+      the two places a line is decided — the prefix widths and `HeightOf`.
+      **A boundary, not a character.** The item this replaces predicted that a reader would have to emit an
+      anchor character for a fixed advance to apply to. It does not, and the reason is worth keeping: three
+      of the four formats put no character in the text for an inline picture at all, so inventing one would
+      shift every offset the same reader recorded beside it — a note's citation, a bookmark, a comment's
+      anchor. An `InlineObject` occupies the *boundary* before character `n` instead, and the whole of the
+      width rule is `prefix[i] += width for i > n`. That gives the two edge cases for free: a line ending at
+      the boundary does not pay for the object, so a picture too wide for the room left moves to the next
+      line whole; and a paragraph whose only content is a picture is an empty text with an object at nought
+      and a line running nought to nought, which is what every RTF logo looks like.
+      **The height rule is one line.** An as-character object rests its bottom on the baseline, so it raises
+      the line's *ascent* and nothing else; `Max(height, ascent + descent)` — already there, and already
+      `SwLineLayout::CalcLine`'s rule — grows the box to hold it. Measured against LibreOffice's PDF of
+      `picture-anchor.fodt`: a 1 cm picture on a 12 pt Liberation Serif line gives ascent 28.35 where the
+      text alone gives 10.69, and a line 31.46 pt tall where the text alone gives 13.80. Before this, the
+      first line sat at the top margin and the reference sat 17.66 pt lower; the picture also drew over the
+      words after it, which started 28.35 pt too early — 186.34 against the reference's 214.80. Both now
+      agree to 0.11 pt, which is the constant offset the whole page carries.
+      **The runs are cut at the boundary, in both passes.** The pen accumulates across a stretch's runs, so
+      text after a picture starts where the run before it ended plus the picture's width — which needs a run
+      to end there. `MeasuredParagraph.Split` and `PageDrawing.AroundObjects` make the same cut for that
+      reason, and it has to be the *same* cut: a run shaped whole and drawn in halves measures very slightly
+      differently, which is enough to move a line break. The existing note on `InVisualOrder` pays the same
+      cost for the same reason.
+      **The baseline is a default and no longer the only answer.** `InlineObject.Ascent` says how much of
+      an object stands above the baseline and defaults to all of it, which is the ordinary inline picture
+      and keeps every number above unchanged. Writer's rule is more general and the two ends of it are
+      both real: `SwFlyCntPortion::SetBase` asks `SwAsCharAnchoredObjectPosition` for a position relative
+      to the baseline, turns a *negative* one into the portion's ascent, and leaves the ascent at nought
+      for anything else so the object hangs below the line and grows its descent instead. A DOC shape set
+      in a line by a `SHAPE` field is the second case; see the item on that below for the measurement.
+      What is still not done: ODF's `style:vertical-rel="baseline"` with `vertical-pos` of `middle` or
+      `top`, and DOCX's equivalents, are read into the frame and not resolved to an ascent. No corpus
+      document has one. The three alignments Writer resolves against the line's own ascent and descent —
+      `LINE_TOP`, `LINE_CENTER`, `LINE_BOTTOM` — could not be resolved by a reader in any case: they need
+      the line, and a frame is built long before there is one.
+- [x] **`word-features.doc`'s box was placed at its paragraph's corner, and the frame was never floating
+      in the first place.** It drew at 56.70 pt where LibreOffice draws 134.00, on top of the sentence it
+      belongs after. Settled, and the way it was settled is the point: **the previous item here proposed
+      the wrong shape of fix, and following it would have changed shared layout code for nothing.**
+      That item read the document as a *floating* frame anchored at a character and set within its anchor's
+      line, and concluded that the missing piece was a line filler in `Paperless.Text` that could split a
+      line around a mid-line obstacle rather than end it — because `FrameObstacles.SpaceFor` ends a line at
+      an obstacle starting after the line's own start, which is right for a paragraph-anchored frame and
+      would be wrong here. Every measurement in it reproduced. The conclusion did not follow from them.
+      The box is **as-character**, by the same `SHAPE` field rule as the pictures above: its shape sits in
+      a field of type 95 at cp 666–677, so `IsInlineEscherHack` holds and `ProcessEscherAlign` gives it
+      `FLY_AS_CHAR`. The item recorded that the shape *is* inside such a field, tried the anchor, saw the
+      anchor line move from 455.51 to 477.71, and inferred that LibreOffice's DOC import must therefore
+      not take the hack. It does. What it also does — and what the experiment was missing — is honour the
+      shape's vertical orientation, which for `posrelv` 3 / `posv` 0 / top 0 resolves to an ascent of
+      nought: the box hangs below the line instead of resting on the baseline. With that, the whole thing
+      falls out with no obstacle logic at all.
+      Measured against LibreOffice's own PDF, after: the box's own text at 134.01 against 134.00, "Before
+      the box." at 56.70 against 56.80, and **"After the box." at 306.40 against 306.54, on the same line**
+      — where the sweep's 22 pt of vertical error and 18.67 pt of horizontal came from the two things the
+      obstacle theory could not have reached, the vertical orientation and the anchor characters. 154/154
+      words and 2/2 pages throughout.
+      **The lesson, since it cost a full attempt-and-revert:** the measurements were right and the model
+      built from them was wrong, and the thing that distinguished them was reading `ww8graf.cxx` far
+      enough to find what `ProcessEscherAlign` leaves alone rather than what it replaces.
+      `PageFrame.HorizontalOrigin.Character` is still unresolved by `FrameLayout.Place` for a genuinely
+      floating frame — `Place` works from a `Placement`, which is the paragraph's first line — and no
+      corpus document now depends on it, so it stays open below rather than being closed by this.
+- [ ] **A genuinely floating character-origin frame is still placed at its paragraph's corner.**
+      `PageFrame.HorizontalOrigin` has a `Character` member and four readers set it; `FrameLayout.Place`
+      resolves it to the column, because a character origin needs the anchor's own line and its offset
+      along it and `Place` only has the paragraph's first line. The machinery exists —
+      `FrameLayout.HangInline` already asks `PageDrawing.OffsetOnLine` for exactly this. What kept this
+      item open until now was `word-features.doc`, and that document turned out to be an as-character
+      frame rather than a floating one, so **there is no longer a corpus document that demonstrates the
+      defect**. That is the reason to leave it rather than to guess: a fix with nothing to measure against
+      would be re-measured by every frame-wrap test and validated by none of them.
+- [x] **A frame can hold a chart, which is the third thing after a picture and a display list.** Writer was
+      the one family that never drew one, and what was missing was not a reader: `DrawingChart` and
+      `OdfChart` are family-blind by design and both already worked. `PageFrame` gained `Chart` and
+      `ChartFontFamily`, `Layout/FrameChart.cs` paints a laid-out `ChartPlot` straight into the sink the
+      way `SheetChart` does, and `PageDrawing.DrawFrame` gained one branch. `DocxPictures` resolves
+      `c:chart/@r:id` against the part the drawing sits in and `OdfPictures` calls `OdfChart.Locate`.
+      Measured over LibreOffice's `chart2/qa/extras/data/docx/` and `odt/`, 82 documents: total absolute
+      word error **3671 → 1390** and exact matches **0 → 10**; before it, every one of the 82 drew a
+      chart of no words at all.
+      **Those two numbers are a correction, and the exact-match one is a large correction.** The commit
+      that did this work claimed 3689 → 1348 and **0 → 27**. Re-measured from scratch against freshly
+      generated references, the totals reproduce to within about 1% — 3671 and 1390, which is ordinary
+      drift between two runs — and the exact-match count does not reproduce at all. It is 10, of which
+      seven are DOCX (`doughnut-chart-labels`, `doughnutChart`, `fdo74115_WallGradientFill`,
+      `fdo78290_Scatter_Chart_Marker_x`, `pieChartRotation`, `scatter-chart-text-x-values`, `tdf134255`)
+      and three ODT (`chart`, `tdf135366_data_label_export`, `testPieChartWallLineStyle`). A total error
+      that more than halves is the claim that survived; "27 of 82 land exactly" is not one anything here
+      supports.
+      **The trap that most likely produced it, because it is set for this exact data set.** `docx/` and
+      `odt/` both contain a file called `chart`, and `soffice --convert-to pdf` names its output after the
+      input *stem*, so converting both sets into one directory silently leaves one `chart.pdf` — the
+      second conversion overwrites the first. The corpus sweep's header warns about this for the nine
+      pairs it holds; `chart2/qa` has a tenth, in a directory nobody thought of as a corpus. Every
+      measurement in this item was taken with `ref/docx/` and `ref/odt/` kept apart.
+      **The order of a frame's children is what an ODT gets wrong first.** ODF writes a chart as a
+      `draw:object` followed by a `draw:image` of it, alternatives in decreasing order of preference, and
+      the reader must ask for the object first — looking at the picture first is exactly what recorded
+      every chart in every ODS as a plain picture and then painted nothing, all 82 of those replacement
+      streams being `VCLMTF`. `chart-bar-text.odt` carries 22 kB of one and is the corpus's guard for it.
+      **The face is per family and cannot ride on the model.** `ChartPlot` carries type sizes and no
+      family. Measured with `pdffonts` on LibreOffice's own PDFs, `odt/chart.odt` embeds Liberation Sans
+      and `docx/chart.docx` embeds Carlito from the same chart, because an OOXML chart takes the theme's
+      minor latin face and an ODF chart the office default — so the family sits on `PageFrame` beside the
+      plot, read as the first literal `a:latin/@typeface` in the chart part, then the theme's minor latin,
+      then Calibri. **A typeface beginning with a plus is a reference and not a name**: of the 69 DOCX
+      chart parts, 22 say `+mn-lt` and 11 state a real face, so taking `+mn-lt` as a family would measure
+      a third of the set in a fallback.
+      **The trap that cost the time here is not in the code.** `chart2/qa/extras/data/` lives in the
+      LibreOffice checkout and *not* in the `dotnet` worktree, so every sweep must be run with the
+      checkout as the working directory; run from `dotnet/` the shell glob does not expand, the CLI is
+      handed a path that does not exist, and the sweep prints a clean table of `0/0` rows that reads as a
+      catastrophic regression. It happened twice in one session.
+- [ ] **Several as-character objects at one boundary draw on top of each other, and the boundary rule is
+      why.** `testMultipleChart.docx` and `testMultiplechartembeddings.docx` each hold **three** inline
+      charts in a *single paragraph with no text at all* — three `w:drawing` runs, 432 pt wide by 252,
+      345 and 345 pt tall — and draw as one chart on one page where LibreOffice draws three on two
+      (26 words against 134). Nothing is wrong with the reading: all three parts resolve and all three
+      frames arrive.
+      An `InlineObject` occupies the *boundary* before character `n`, which is the right model and is
+      argued for at length above — three of the four formats put no character in the text for an inline
+      picture, so inventing one would shift every offset a reader recorded beside it. The consequence
+      here is that an empty paragraph gives every one of its objects the boundary **0**, and the width
+      rule is `prefix[i] += width for i > n` over a prefix table with a single entry, so none of the
+      three widths counts, the line runs 0 to 0, and `HangInline` asks `OffsetOnLine` for offset 0 three
+      times and gets the same answer three times.
+      Fixing it needs a line's extent to include the objects sitting at its *end* boundary, which is the
+      one thing the current rule deliberately excludes — that exclusion is what makes a picture too wide
+      for the room left move to the next line whole, and it is load-bearing for every other inline
+      picture in the corpus. So this is a change to how a line's width is decided rather than a reader
+      fix, and it should be measured with those two documents and `picture-anchor.fodt` together, since
+      the second is the case the current rule was measured against.
 - [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
       it used to share with floating frames is now only this.
 - [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and

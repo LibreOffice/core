@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using System.Xml.Linq;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -30,10 +31,10 @@ namespace Paperless.Spreadsheets.OpenDocument;
 /// </remarks>
 internal static class OdsCellFormats
 {
-    /// <summary>Reads one sheet's cell formats.</summary>
+    /// <summary>Reads one sheet's cell formats and its rich cells.</summary>
     /// <param name="file">The document, for its styles.</param>
     /// <param name="table">The <c>table:table</c> element.</param>
-    public static SheetCellFormats Read(OdfFile file, XElement table)
+    public static (SheetCellFormats Formats, SheetRichText RichText) Read(OdfFile file, XElement table)
     {
         ArgumentNullException.ThrowIfNull(file);
         ArgumentNullException.ThrowIfNull(table);
@@ -46,12 +47,20 @@ internal static class OdsCellFormats
     {
         private readonly Dictionary<string, SheetCellFormat> _resolved = new(StringComparer.Ordinal);
         private readonly SheetCellFormats.Builder _builder = new();
+        private readonly SheetRichText.Builder _rich = new();
 
-        public SheetCellFormats Read(XElement table)
+        // The pool the builder is filling, mirrored so that a rich cell can be told what its own
+        // format resolved to. The builder answers "which index"; the spans need the format itself,
+        // and a span's style is a delta over it.
+        private readonly Dictionary<int, SheetCellFormat> _pool = new() { [0] = SheetCellFormat.Default };
+        private readonly Dictionary<int, int> _columnDefaults = [];
+        private int _rowDefault;
+
+        public (SheetCellFormats Formats, SheetRichText RichText) Read(XElement table)
         {
             ReadColumns(table);
             ReadRows(table);
-            return _builder.Build();
+            return (_builder.Build(), _rich.Build());
         }
 
         private void ReadColumns(XElement table)
@@ -65,6 +74,7 @@ internal static class OdsCellFormats
                 for (int at = 0; at < repeat && column < SheetAddress.MaxColumn; at++, column++)
                 {
                     _builder.SetColumn(column, index);
+                    if (index != 0) _columnDefaults[column] = index;
                 }
             }
         }
@@ -86,6 +96,7 @@ internal static class OdsCellFormats
                 for (int at = 0; at < span && row < SheetAddress.MaxRow; at++, row++)
                 {
                     _builder.SetRow(row, rowStyle);
+                    _rowDefault = rowStyle;
                     ReadCells(element, row);
                 }
 
@@ -101,18 +112,210 @@ internal static class OdsCellFormats
                 if (cell.Name.NamespaceName != OdfNamespaces.Table) continue;
                 if (cell.Name.LocalName is not ("table-cell" or "covered-table-cell")) continue;
 
+                string? styleName = Attribute(cell, "style-name");
                 int repeat = Repeat(cell, "number-columns-repeated");
-                int index = Intern(Attribute(cell, "style-name"));
+                int index = Intern(styleName);
 
                 int span = Math.Min(repeat, MaxRepeat);
                 for (int at = 0; at < span && column < SheetAddress.MaxColumn; at++, column++)
                 {
                     _builder.SetCell(row, column, index);
+                    ReadSpans(cell, row, column, Effective(index, column));
                 }
 
                 if (repeat > span) column += repeat - span;
             }
         }
+
+        // ------------------------------------------------------------------------- rich text
+
+        /// <summary>
+        /// Reads a cell whose text carries <c>text:span</c>s, as portions of its flattened text.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// ODF is the only one of the three formats where a cell's rich text is <em>also</em> the
+        /// cell's text: the spans sit inside the same <c>text:p</c> elements the extraction path
+        /// reads, so the offsets have to be counted against exactly the flattening that path
+        /// performs — the same whitespace collapsing, the same expansion of <c>text:s</c>, and a
+        /// newline between paragraphs. A mismatch would silently shift every span, so the text this
+        /// counts is handed to <see cref="SheetRichText"/> and compared against what is drawn.
+        /// </para>
+        /// <para>
+        /// A cell that names one style throughout and no span is not rich, and costs nothing: the
+        /// walk stops at the first paragraph when it finds no span element.
+        /// </para>
+        /// </remarks>
+        private void ReadSpans(XElement cell, int row, int column, SheetCellFormat format)
+        {
+            if (!HasSpan(cell)) return;
+
+            StringBuilder text = new();
+            List<SheetTextPortion> portions = [];
+            Flattener state = new();
+
+            foreach (XElement paragraph in cell.Elements(XName.Get("p", OdfNamespaces.Text)))
+            {
+                if (text.Length > 0)
+                {
+                    text.Append('\n');
+                    state.Reset();
+                }
+
+                Flatten(paragraph, text, portions, format, null, state);
+            }
+
+            _rich.Set(row, column, text.ToString(), format, portions);
+        }
+
+        private static bool HasSpan(XElement cell)
+            => cell.Elements(XName.Get("p", OdfNamespaces.Text))
+                   .Any(paragraph => paragraph
+                       .Descendants(XName.Get("span", OdfNamespaces.Text)).Any());
+
+        /// <summary>Where the whitespace collapsing has got to, which is per paragraph.</summary>
+        private sealed class Flattener
+        {
+            public bool AtStart { get; set; } = true;
+
+            public bool LastWasSpace { get; set; }
+
+            public void Reset()
+            {
+                AtStart = true;
+                LastWasSpace = false;
+            }
+        }
+
+        private void Flatten(
+            XElement element,
+            StringBuilder text,
+            List<SheetTextPortion> portions,
+            SheetCellFormat cellFormat,
+            string? spanStyle,
+            Flattener state)
+        {
+            int start = text.Length;
+
+            foreach (XNode node in element.Nodes())
+            {
+                if (node is XText literal)
+                {
+                    Collapse(text, literal.Value, state);
+                    continue;
+                }
+
+                if (node is not XElement child || child.Name.NamespaceName != OdfNamespaces.Text)
+                    continue;
+
+                switch (child.Name.LocalName)
+                {
+                    case "span":
+                        Flatten(
+                            child, text, portions, cellFormat,
+                            child.Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value,
+                            state);
+                        break;
+
+                    case "a":
+                        Flatten(child, text, portions, cellFormat, spanStyle, state);
+                        break;
+
+                    case "s":
+                        Literal(text, new string(' ', Spaces(child)), state);
+                        break;
+
+                    case "tab":
+                        Literal(text, "\t", state);
+                        break;
+
+                    case "line-break":
+                        Literal(text, "\n", state);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            if (spanStyle is null || text.Length == start) return;
+
+            // A span's own portion is recorded after its children, so a nested span's portion comes
+            // first and the outer one is trimmed against it by SheetRichText's normalisation rather
+            // than overwriting it.
+            portions.Add(new SheetTextPortion(
+                start, text.Length - start, TextStyle(cellFormat, spanStyle)));
+        }
+
+        private static int Spaces(XElement element)
+            => Math.Clamp(
+                int.TryParse(
+                    element.Attribute(XName.Get("c", OdfNamespaces.Text))?.Value,
+                    NumberStyles.Integer, CultureInfo.InvariantCulture, out int count)
+                    ? count
+                    : 1,
+                0, 4096);
+
+        private static void Collapse(StringBuilder text, string value, Flattener state)
+        {
+            foreach (char character in value)
+            {
+                if (character is ' ' or '\t' or '\r' or '\n')
+                {
+                    if (state.AtStart || state.LastWasSpace) continue;
+                    text.Append(' ');
+                    state.LastWasSpace = true;
+                }
+                else
+                {
+                    text.Append(character);
+                    state.LastWasSpace = false;
+                    state.AtStart = false;
+                }
+            }
+        }
+
+        private static void Literal(StringBuilder text, string value, Flattener state)
+        {
+            if (value.Length == 0) return;
+            text.Append(value);
+            state.AtStart = false;
+            state.LastWasSpace = true;
+        }
+
+        /// <summary>
+        /// A <c>text:span</c>'s style, laid over the cell's own format.
+        /// </summary>
+        /// <remarks>
+        /// The style family is <c>text</c> rather than <c>table-cell</c>, and only the character
+        /// properties are read: a span inside a cell cannot state an alignment, a wrap or a
+        /// rotation, and would have nowhere to put one if it did.
+        /// </remarks>
+        private SheetCellFormat TextStyle(SheetCellFormat cellFormat, string styleName)
+        {
+            string? family = Span(styleName, "font-family", OdfNamespaces.FoCompatible)
+                             ?? FontFaceFamily(Span(styleName, "font-name", OdfNamespaces.Style));
+
+            Length? size = Measure(Span(styleName, "font-size", OdfNamespaces.FoCompatible));
+            string? weight = Span(styleName, "font-weight", OdfNamespaces.FoCompatible);
+            string? posture = Span(styleName, "font-style", OdfNamespaces.FoCompatible);
+            Colour? colour = Rgb(Span(styleName, "color", OdfNamespaces.FoCompatible));
+
+            return cellFormat with
+            {
+                FontFamily = family ?? cellFormat.FontFamily,
+                FontSize = size ?? cellFormat.FontSize,
+                FontWeight = weight is null ? cellFormat.FontWeight : Weight(weight),
+                IsItalic = posture is null
+                    ? cellFormat.IsItalic
+                    : posture is "italic" or "oblique",
+                Colour = colour ?? cellFormat.Colour,
+            };
+        }
+
+        private string? Span(string styleName, string property, string ns)
+            => styles.ResolveProperty(
+                styleName, OdfStyleFamily.Text, OdfPropertyKind.Text, ns, property).Value;
 
         /// <summary>
         /// How many repeats of one element are materialised.
@@ -134,7 +337,27 @@ internal static class OdsCellFormats
                 _resolved[styleName] = format;
             }
 
-            return _builder.Intern(format);
+            int index = _builder.Intern(format);
+            _pool[index] = format;
+            return index;
+        }
+
+        /// <summary>
+        /// What a cell resolves to, in the order the lookup itself resolves: cell, row, column.
+        /// </summary>
+        /// <remarks>
+        /// Repeated here because a span is a <em>delta</em> over the cell's format, so a bold word
+        /// in a cell that takes its font from its column has to start from the column's font. Row
+        /// before column is the same order <see cref="SheetCellFormats"/> states and the same order
+        /// every one of the three formats writes.
+        /// </remarks>
+        private SheetCellFormat Effective(int cellIndex, int column)
+        {
+            int index = cellIndex != 0
+                ? cellIndex
+                : _rowDefault != 0 ? _rowDefault : _columnDefaults.GetValueOrDefault(column);
+
+            return _pool.GetValueOrDefault(index, SheetCellFormat.Default);
         }
 
         private SheetCellFormat Resolve(string styleName)
@@ -169,21 +392,21 @@ internal static class OdsCellFormats
         /// all is <c>General</c>, which is what makes a too-narrow number re-render itself shorter
         /// instead of showing hashes.
         /// </remarks>
-        private Numbers.NumberFormatKind FormatKind(string styleName)
+        private Core.Numbers.NumberFormatKind FormatKind(string styleName)
         {
             string? name = DataStyleName(styleName);
-            if (name is null) return Numbers.NumberFormatKind.General;
+            if (name is null) return Core.Numbers.NumberFormatKind.General;
 
             return styles.FindDataStyle(name)?.Kind switch
             {
                 OdfDataStyleKind.Number or OdfDataStyleKind.Percentage
-                    or OdfDataStyleKind.Currency => Numbers.NumberFormatKind.Number,
-                OdfDataStyleKind.Date or OdfDataStyleKind.Time => Numbers.NumberFormatKind.DateTime,
-                OdfDataStyleKind.Text => Numbers.NumberFormatKind.Text,
+                    or OdfDataStyleKind.Currency => Core.Numbers.NumberFormatKind.Number,
+                OdfDataStyleKind.Date or OdfDataStyleKind.Time => Core.Numbers.NumberFormatKind.DateTime,
+                OdfDataStyleKind.Text => Core.Numbers.NumberFormatKind.Text,
 
                 // A boolean style is a number format in Calc too, and an unrecognised one is
                 // still a stated format — which is what the ### rule turns on.
-                _ => Numbers.NumberFormatKind.Number,
+                _ => Core.Numbers.NumberFormatKind.Number,
             };
         }
 

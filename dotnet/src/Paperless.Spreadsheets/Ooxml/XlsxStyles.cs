@@ -1,5 +1,5 @@
 using System.Xml.Linq;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 
 namespace Paperless.Spreadsheets.Ooxml;
 
@@ -52,6 +52,29 @@ public sealed class XlsxStyles
             styles._cellFormatIds.Add(Xlsx.Integer(xf, "numFmtId") ?? 0);
         }
 
+        return styles;
+    }
+
+    /// <summary>
+    /// The same table built from a binary styles part rather than from XML.
+    /// </summary>
+    /// <remarks>
+    /// XLSB's <c>styles.bin</c> states exactly what <c>styles.xml</c> states — a <c>NUMFMT</c>
+    /// record is an id and a code, an <c>XF</c> inside <c>CELLXFS</c> is a cell format naming a
+    /// number-format id — so the resolution, the parse cache and above all the <em>built-in
+    /// table</em> are shared. That last point is why this exists rather than a second class:
+    /// LibreOffice reads both formats through one <c>NumberFormatsBuffer</c>, so ids 0–49 mean
+    /// the same thing in both, and the separate table this library keeps for BIFF8 is separate
+    /// because LibreOffice's BIFF filter is a different filter — not because the file is binary.
+    /// </remarks>
+    /// <param name="customCodes">The codes <c>NUMFMT</c> records declared, by id.</param>
+    /// <param name="cellFormatIds">The number-format id of each <c>CELLXFS</c> entry, in order.</param>
+    internal static XlsxStyles FromRecords(
+        IEnumerable<KeyValuePair<int, string>> customCodes, IEnumerable<int> cellFormatIds)
+    {
+        XlsxStyles styles = new();
+        foreach ((int id, string code) in customCodes) _ = styles._customCodes.TryAdd(id, code);
+        styles._cellFormatIds.AddRange(cellFormatIds);
         return styles;
     }
 

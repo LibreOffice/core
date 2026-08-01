@@ -154,6 +154,10 @@ internal sealed class PdfContentSink(
                 FillBitmap(path, bitmap, rule);
                 return;
 
+            case MeshPaint mesh:
+                FillMesh(path, mesh, rule);
+                return;
+
             default:
                 break;
         }
@@ -290,10 +294,17 @@ internal sealed class PdfContentSink(
             return;
         }
 
-        string name = Shading(gradient, alphaOnly: false);
+        // What the shading has to cover, carried back through the gradient's own transform,
+        // because that transform is applied inside the clip below. Only a repeating spread
+        // reads it; a padded one covers the plane by /Extend alone.
+        DocRect? extent = gradient.Spread == SpreadMethod.Pad || Fills.Gradients.Bounds(path) is not { } box
+            ? null
+            : Fills.Gradients.Untransformed(box, gradient.Transform);
+
+        string name = Shading(gradient, alphaOnly: false, extent);
 
         _content.Append("q\n");
-        AppendTransparency(path, gradient, rule);
+        AppendTransparency(path, gradient, rule, extent);
         AppendPath(path);
         _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
 
@@ -302,10 +313,61 @@ internal sealed class PdfContentSink(
         _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
     }
 
-    /// <summary>Names a shading, adding it to the page's resources.</summary>
-    private string Shading(GradientPaint gradient, bool alphaOnly)
+    /// <summary>
+    /// Fills a path with a triangle mesh: a <c>/ShadingType 4</c> painted inside the path as a
+    /// clip, exactly as a gradient is.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The clip is what makes the mesh a <em>fill</em> rather than a picture in its own right.
+    /// A path-gradient brush's boundary and the shape it fills need not be the same polygon —
+    /// GDI+ lets a brush built from a star fill a rectangle — so the triangles are painted
+    /// wherever they lie and the path decides how much of that is seen.
+    /// </para>
+    /// <para>
+    /// A mesh with a translucent vertex takes the same luminosity soft mask a fading gradient
+    /// does, and for the same reason: a shading's colour space is <c>DeviceRGB</c> and has no
+    /// alpha, so the alpha has to be a second shading. That the two share
+    /// <see cref="SoftMask"/> is what keeps a faded mesh and a faded gradient from disagreeing.
+    /// </para>
+    /// </remarks>
+    private void FillMesh(GraphicsPath path, MeshPaint mesh, FillRule rule)
     {
-        int id = PdfShadings.Write(writer, gradient, _pageHeight, alphaOnly);
+        int id = PdfShadings.WriteMesh(writer, mesh, _pageHeight, alphaOnly: false);
+        if (id == 0) return;
+
+        string name = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
+        _shadings.Add((name, id));
+
+        _content.Append("q\n");
+
+        if (Fills.Meshes.Fades(mesh)
+            && PdfShadings.WriteMesh(writer, mesh, _pageHeight, alphaOnly: true) is > 0 and int alpha)
+        {
+            string mask = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
+            _shadings.Add((mask, alpha));
+
+            StringBuilder inner = new();
+            StringBuilder outer = _content;
+            _content = inner;
+
+            AppendPath(path);
+            _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+            _content.Append(CultureInfo.InvariantCulture, $"/{mask} sh\n");
+
+            _content = outer;
+            SoftMask(inner);
+        }
+
+        AppendPath(path);
+        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+        _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
+    }
+
+    /// <summary>Names a shading, adding it to the page's resources.</summary>
+    private string Shading(GradientPaint gradient, bool alphaOnly, DocRect? extent)
+    {
+        int id = PdfShadings.Write(writer, gradient, _pageHeight, alphaOnly, extent);
         string name = string.Create(CultureInfo.InvariantCulture, $"Sh{_shadings.Count + 1}");
         _shadings.Add((name, id));
         return name;
@@ -335,7 +397,8 @@ internal sealed class PdfContentSink(
     /// <c>/CS /DeviceGray</c> to match, since a luminosity mask reads brightness.
     /// </para>
     /// </remarks>
-    private void AppendTransparency(GraphicsPath path, GradientPaint gradient, FillRule rule)
+    private void AppendTransparency(
+        GraphicsPath path, GradientPaint gradient, FillRule rule, DocRect? extent)
     {
         IReadOnlyList<GradientStop> stops = Fills.Gradients.Normalise(gradient.Stops);
 
@@ -352,7 +415,7 @@ internal sealed class PdfContentSink(
             return;
         }
 
-        string mask = Shading(gradient, alphaOnly: true);
+        string mask = Shading(gradient, alphaOnly: true, extent);
 
         StringBuilder inner = new();
         StringBuilder outer = _content;
@@ -365,6 +428,21 @@ internal sealed class PdfContentSink(
 
         _content = outer;
 
+        SoftMask(inner);
+    }
+
+    /// <summary>
+    /// Turns a written mask stream into a luminosity soft mask and puts it in force.
+    /// </summary>
+    /// <remarks>
+    /// Shared by the two paints that carry their own alpha and cannot say so in
+    /// <c>DeviceRGB</c> — a fading gradient and a mesh with a translucent vertex. <c>/BC [0]</c>
+    /// makes everything outside the group's bounding box fully masked, so only what the mask
+    /// actually paints shows through, and the group states <c>/CS /DeviceGray</c> because a
+    /// luminosity mask reads brightness.
+    /// </remarks>
+    private void SoftMask(StringBuilder inner)
+    {
         int form = writer.Reserve();
         string name = string.Create(CultureInfo.InvariantCulture, $"Fm{_xObjects.Count + 1}");
         _xObjects.Add((name, form));
@@ -404,7 +482,7 @@ internal sealed class PdfContentSink(
     /// </remarks>
     private void FillBitmap(GraphicsPath path, BitmapPaint bitmap, FillRule rule)
     {
-        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return;
+        if (Empty(bitmap.Image)) return;
         if (Fills.Gradients.Bounds(path) is not { } bounds || bounds.IsEmpty) return;
 
         string name = ImageName(bitmap.Image);
@@ -424,6 +502,18 @@ internal sealed class PdfContentSink(
         _content.Append("Q\n");
     }
 
+    /// <summary>
+    /// True when an image has nothing to draw: neither pixels nor bytes to decode into some.
+    /// </summary>
+    /// <remarks>
+    /// Not <c>Width &lt;= 0</c>, which asks the same question only of an image that has already
+    /// been decoded. A reader emits <see cref="RasterImage.Encoded"/> and leaves the dimensions
+    /// at zero until a codec has seen the bytes, so testing the width here discards every
+    /// picture every reader emits — silently, and only in the backends.
+    /// </remarks>
+    private static bool Empty(RasterImage image)
+        => image.Pixels.IsEmpty && image.EncodedBytes.IsEmpty;
+
     /// <summary>The resource name of an image, written once however many times it is drawn.</summary>
     private string ImageName(RasterImage image)
     {
@@ -438,7 +528,10 @@ internal sealed class PdfContentSink(
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+        // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
+        // undecoded one reports no size until a codec has looked at it. Testing the size here
+        // dropped every `RasterImage.Encoded` silently — laying out correctly and drawing nothing.
+        if (Empty(image) || destination.IsEmpty) return;
 
         string name = ImageName(image);
         if (name.Length == 0) return;
@@ -741,6 +834,7 @@ internal sealed class PdfContentSink(
         SolidPaint solid => solid.Colour,
         GradientPaint { Stops.Count: > 0 } gradient
             => Fills.Gradients.Sample(Fills.Gradients.Normalise(gradient.Stops), 0.5),
+        MeshPaint mesh => Fills.Meshes.Average(mesh),
         _ => Colour.Transparent,
     };
 

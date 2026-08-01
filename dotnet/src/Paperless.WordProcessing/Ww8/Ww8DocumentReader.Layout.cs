@@ -50,6 +50,14 @@ public sealed partial class Ww8DocumentReader
     /// character position and nothing else — and because which page a shape lands on is decided by
     /// where its anchor paragraph lands, which is a pagination result rather than a property.
     /// </param>
+    /// <param name="ListMarker">
+    /// The label this item draws, or null when it draws none.
+    /// <para>
+    /// Computed rather than read: WW8 stores the template and the counters and never the rendered label,
+    /// which is why it has to be produced by a walk in document order and why the same paragraph must not
+    /// be described twice.
+    /// </para>
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -63,7 +71,8 @@ public sealed partial class Ww8DocumentReader
         Colour? Colour = null,
         IReadOnlyList<Ww8LayoutRun>? Runs = null,
         IReadOnlyList<Ww8LayoutNote>? Notes = null,
-        IReadOnlyList<Ww8LayoutFrame>? Frames = null);
+        IReadOnlyList<Ww8LayoutFrame>? Frames = null,
+        string? ListMarker = null);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -137,6 +146,11 @@ public sealed partial class Ww8DocumentReader
     {
         _layoutNoteNumber = 0;
         _layoutEndnoteNumber = 0;
+
+        // The body is where the document's lists start counting, and the numbering is the same instance
+        // the extraction pass advances — so it is reset rather than assumed clean.
+        _numbering.ResetCounters();
+
         return ReadLayoutBlocks(Ranges.Body, keepTrailingEmpty: true);
     }
 
@@ -271,6 +285,10 @@ public sealed partial class Ww8DocumentReader
             if (story >= stories.Count) break;
             if (stories[story].Length <= 0) continue;
 
+            // Each flow numbers its own lists: a numbered paragraph in a running head does not continue
+            // the body's count.
+            _numbering.ResetCounters();
+
             // Blocks rather than paragraphs, so a table in a running head survives: a two-part running head
             // is a two-cell table, and stacking its cells as loose paragraphs would give the header a height
             // no table has and push the body text down by the difference on every page.
@@ -344,10 +362,32 @@ public sealed partial class Ww8DocumentReader
         List<int> positions = [];
         int start = 0;
 
+        // How many fields deep the walk is inside an *instruction*. A field's text holds both halves —
+        // the instruction and the cached result — separated by a U+0014, and only the second is shown.
+        int instruction = 0;
+
+        // The fields the walk is inside, innermost last, by type. Separate from `instruction`, which
+        // counts only the hidden half: a shape sits in the *result*, where `instruction` is already
+        // back to nought and the field is still open. Nested fields are why it is a stack and not a
+        // single value — `IsInlineEscherHack` asks about the innermost one alone.
+        (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
+        Stack<int> openFields = new();
+
         for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
             char character = text[index];
             int position = body.Start + index;
+
+            // Everything between a field's start and its separator is its instruction and is not drawn.
+            // Not a refinement: LibreOffice's own DOC export writes a picture as a SHAPE field, so
+            // keeping the instruction puts the literal word "SHAPE" into the sentence — measured on
+            // `picture-flow.doc`, where it made our word count 191 against the reference's 190. The
+            // markers themselves are handled below and carry no width either way.
+            if (instruction > 0 && character is not (Special.FieldBegin or Special.FieldSeparator
+                or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
+            {
+                continue;
+            }
 
             switch (character)
             {
@@ -378,11 +418,22 @@ public sealed partial class Ww8DocumentReader
                 case Special.OptionalHyphen:
                     continue;
 
-                case Special.FieldBegin or Special.FieldSeparator or Special.FieldEnd:
-                    // A field's instruction and its result are both in the text; the content pass
-                    // distinguishes them. For measurement the markers themselves have no width and the
-                    // instruction is not shown, but skipping only the markers is close enough here and
-                    // wrong only for a document whose fields are unusually long — recorded in the TODO.
+                case Special.FieldBegin:
+                    // Nested fields are legal and Word writes them — a hyperlink around a cross
+                    // reference is two — so this counts rather than toggling.
+                    instruction++;
+                    openFields.Push(fieldTypes.At(position - fieldBase) ?? 0);
+                    continue;
+
+                case Special.FieldSeparator:
+                    // The instruction ends and the cached result begins. A field with no separator has
+                    // no result, and its instruction stays hidden until its end.
+                    if (instruction > 0) instruction--;
+                    continue;
+
+                case Special.FieldEnd:
+                    if (instruction > 0) instruction--;
+                    if (openFields.Count > 0) openFields.Pop();
                     continue;
 
                 case Special.AutoNumberedReference:
@@ -436,11 +487,38 @@ public sealed partial class Ww8DocumentReader
                 }
 
                 case Special.Picture or Special.DrawnObject or Special.AnnotationReference:
-                    // The anchor occupies a position and has no width. Collected before the character
-                    // is emitted, so that the frame's offset is where the anchor sits rather than one
-                    // past it — which is what an as-character frame will need and what a character
-                    // origin measures from.
-                    CollectFrame(position, current.Length);
+                    // Collected before the character is considered, so that the frame's offset is where
+                    // the anchor sits rather than one past it — which is what an as-character frame
+                    // needs and what a character origin measures from.
+                    //
+                    // A character stands in the text only when nothing was made of it. LibreOffice does
+                    // the same and states why: `if (!pResult) cInsert = ' '` (ww8par.cxx:3637) — a
+                    // graphic that arrives replaces the U+0001 entirely, and only one that fails leaves
+                    // something behind, so that a document with a missing picture still has a word gap
+                    // where the picture was. A comment's U+0005 makes no frame and so keeps its
+                    // placeholder, which is what the mark tables index it by.
+                    //
+                    // Keeping the character for a frame that *did* arrive is not free, and this is what
+                    // it cost: `word-features.doc` writes its text box as the pair U+0008 U+0001, and
+                    // the two shaped to 18.67 pt of .notdef between "Before the box." and "After the
+                    // box." — invisible while the box was misplaced far to the left, and exactly the
+                    // width by which the sentence overshot once the box was put in the right place.
+                    if (CollectFrame(position, current.Length)) continue;
+
+                    // The other half of the same rule, and it needs one character of lookahead.
+                    // `ww8par.cxx:3602` reads a U+0001 inside a SHAPE field as the shape's own
+                    // placeholder — the shape itself was written at the U+0008 just before it — and
+                    // imports nothing for it, leaving `cInsert` at nought so no character is inserted
+                    // either. The lookahead is what distinguishes it from the case the comment beside
+                    // it names: "in a special case, the code is 0x1 0x1, which yields a simple
+                    // picture", where the pair really is a picture and the first of them stands for it.
+                    if (character == Special.Picture
+                        && openFields.Count > 0 && openFields.Peek() == Ww8FieldTypes.Shape
+                        && (index + 1 >= text.Length || text[index + 1] != Special.Picture))
+                    {
+                        continue;
+                    }
+
                     Emit(current, positions, AnchorCharacter, position);
                     continue;
 
@@ -486,15 +564,35 @@ public sealed partial class Ww8DocumentReader
         // The shape anchored at a character position, if one is. Reading its own text here rather than
         // when the frame is built keeps the recursion inside the walk that already handles it: a text
         // box's story goes through ReadLayoutBlocks exactly as a note's body does, which is what makes a
-        // table inside a text box work without a second path.
-        void CollectFrame(int position, int offset)
+        // table inside a text box work without a second path. Returns whether a frame was made, which is
+        // what decides whether the anchor character stays in the text.
+        bool CollectFrame(int position, int offset)
         {
-            if (Drawings.IsEmpty) return;
-            if (Drawings.AnchorAt(position) is not { } anchor) return;
+            if (Drawings.AnchorAt(position) is not { } anchor)
+            {
+                // No FSPA, which for a U+0001 means an inline picture: its run states a
+                // sprmCPicLocation instead, and nothing in the anchor table mentions it at all.
+                if (InlinePicture(position, offset) is not { } inline) return false;
+
+                _pendingFrames.Add(inline);
+                return true;
+            }
 
             MsBinary.Escher.EscherShape? shape = Drawings.Shape(anchor.ShapeId);
             _pendingFrames.Add(
-                new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor)));
+                new Ww8LayoutFrame(anchor, shape, offset, ReadShapeText(shape, anchor.IsHeaderAnchor))
+                {
+                    Picture = PictureOf(shape),
+
+                    // SwWW8ImplReader::IsInlineEscherHack, ww8par.hxx:1737 — the innermost open field
+                    // being a SHAPE is the whole of the test, and ww8graf.cxx:2355 then anchors the
+                    // shape FLY_AS_CHAR instead of FLY_AT_CHAR. This is how Word writes a picture that
+                    // sits in the run of text: it still gets an FSPA, and the field around it is the
+                    // only thing that says the FSPA's position is not to be believed.
+                    IsSetInLine = openFields.Count > 0 && openFields.Peek() == Ww8FieldTypes.Shape,
+                });
+
+            return true;
         }
     }
 
@@ -654,8 +752,29 @@ public sealed partial class Ww8DocumentReader
             LanguageOf(character),
             paragraph.IsInTable,
             character.Colour,
-            ReadRuns(text, positions, markPosition));
+            ReadRuns(text, positions, markPosition),
+            ListMarker: LabelAt(paragraph));
     }
+
+    /// <summary>
+    /// The label a paragraph's list level draws, advancing that level's counter.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A side effect, so it belongs where a paragraph is described exactly once — which is why it is here
+    /// rather than beside <see cref="ResolveParagraphFormat"/>, whose result is asked for freely.
+    /// </para>
+    /// <para>
+    /// An <c>ilfo</c> of zero means the paragraph is not in a list at all, which is how a continuation
+    /// paragraph inside an item is written. Its indents still come from its own <c>sprmPDxaLeft</c> and
+    /// <c>sprmPDxaLeft1</c>, which Word writes onto every list paragraph, so nothing further is needed to
+    /// line it up under the item above it.
+    /// </para>
+    /// </remarks>
+    private string? LabelAt(Ww8ParagraphFormat paragraph)
+        => paragraph.ListNumber > 0
+            ? _numbering.Advance(paragraph.ListNumber, paragraph.ListLevel ?? 0)
+            : null;
 
     /// <summary>
     /// The stretches a paragraph's character formatting divides its text into.

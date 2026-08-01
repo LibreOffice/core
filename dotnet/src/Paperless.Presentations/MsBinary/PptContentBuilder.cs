@@ -18,20 +18,6 @@ namespace Paperless.Presentations.MsBinary;
 /// </remarks>
 internal sealed class PptContentBuilder
 {
-    /// <summary>
-    /// The header instance of each of the document's three slide lists.
-    /// </summary>
-    /// <remarks>
-    /// The instance is the reliable discriminator — 0 for slides, 1 for masters, 2 for notes.
-    /// LibreOffice instead uses the lists' order in the container and then has to special-case
-    /// files that write notes before slides
-    /// (<c>filter/source/msfilter/svdfppt.cxx:1502</c>, the <c>notePresentationSwap</c> flag);
-    /// reading the instance the format states avoids the guess entirely.
-    /// </remarks>
-    private const ushort SlideListInstance = 0;
-    private const ushort MasterListInstance = 1;
-    private const ushort NotesListInstance = 2;
-
     private readonly DffRecordBuffer _stream;
     private readonly PptPersistDirectory _persist;
     private readonly List<Diagnostic> _diagnostics;
@@ -63,60 +49,20 @@ internal sealed class PptContentBuilder
     /// <summary>Reads the document container and fills the content tree.</summary>
     public void Build(ContentDocument content)
     {
-        if (_persist.DocumentOffset is not { } offset
-            || !_stream.TryReadHeader(offset, out DffRecordHeader document)
-            || document.Type != PptRecordTypes.Document)
+        if (PptPages.Read(_stream, _persist, _diagnostics) is not { } pages) return;
+
+        ReadMasterStyles(pages);
+
+        Dictionary<uint, PptPageEntry> notesBySlide = [];
+        foreach (PptPageEntry entry in pages.Notes) notesBySlide.TryAdd(entry.SlideId, entry);
+
+        for (int index = 0; index < pages.Slides.Count; index++)
         {
-            _diagnostics.Add(new Diagnostic(
-                DiagnosticSeverity.Error, "PL2403",
-                "The persist directory does not resolve to a Document record, so no slides "
-                + "could be read."));
-            return;
-        }
-
-        List<List<SlideEntry>> lists = [];
-        List<ushort> instances = [];
-
-        foreach (DffRecordHeader child in _stream.Children(document))
-        {
-            if (child.Type != PptRecordTypes.SlideListWithText) continue;
-            lists.Add(ReadSlideList(child));
-            instances.Add(child.Instance);
-        }
-
-        List<SlideEntry> slides = [];
-        List<SlideEntry> masters = [];
-        List<SlideEntry> notes = [];
-
-        // Every writer distinguishes the three lists by instance. A file that leaves them all
-        // equal — which a repair tool can produce — falls back to their order in the container,
-        // masters first, which is what LibreOffice relies on unconditionally.
-        bool byInstance = instances.Contains(SlideListInstance)
-                          && instances.Distinct().Count() == instances.Count;
-
-        for (int i = 0; i < lists.Count; i++)
-        {
-            bool isSlides = byInstance ? instances[i] == SlideListInstance : i == 1;
-            bool isMasters = byInstance ? instances[i] == MasterListInstance : i == 0;
-            bool isNotes = byInstance ? instances[i] == NotesListInstance : i == 2;
-
-            if (isSlides) slides.AddRange(lists[i]);
-            else if (isMasters) masters.AddRange(lists[i]);
-            else if (isNotes) notes.AddRange(lists[i]);
-        }
-
-        ReadMasterStyles(document, masters);
-
-        Dictionary<uint, SlideEntry> notesBySlide = [];
-        foreach (SlideEntry entry in notes) notesBySlide.TryAdd(entry.SlideId, entry);
-
-        for (int index = 0; index < slides.Count; index++)
-        {
-            SlideEntry entry = slides[index];
+            PptPageEntry entry = pages.Slides[index];
             ContentSection slide = ReadSlide(entry, index);
             content.Children.Add(slide);
 
-            if (notesBySlide.TryGetValue(entry.SlideId, out SlideEntry notesEntry)
+            if (notesBySlide.TryGetValue(entry.SlideId, out PptPageEntry notesEntry)
                 && ReadNotes(notesEntry, index) is { } notesSection)
             {
                 content.Children.Add(notesSection);
@@ -124,43 +70,8 @@ internal sealed class PptContentBuilder
         }
     }
 
-    /// <summary>
-    /// Reads one <c>SlideListWithText</c>: an entry per slide, each followed by that slide's
-    /// outline text.
-    /// </summary>
-    /// <remarks>
-    /// The text records belonging to an entry are the ones between its
-    /// <c>SlidePersistAtom</c> and the next, which is why the range is recorded here rather
-    /// than looked for later: nothing inside the text records says which slide they belong to.
-    /// </remarks>
-    private List<SlideEntry> ReadSlideList(DffRecordHeader list)
-    {
-        List<SlideEntry> entries = [];
-        int listEnd = _stream.EndOf(list);
-        int pendingIndex = -1;
-
-        foreach (DffRecordHeader record in _stream.Children(list))
-        {
-            if (record.Type != PptRecordTypes.SlidePersistAtom) continue;
-
-            if (pendingIndex >= 0) entries[pendingIndex] = entries[pendingIndex] with { TextEnd = record.Position };
-
-            ReadOnlySpan<byte> content = _stream.Content(record);
-            if (content.Length < 16) continue;
-
-            entries.Add(new SlideEntry(
-                PersistId: DffRecordBuffer.ReadUInt32(content),
-                SlideId: DffRecordBuffer.ReadUInt32(content[12..]),
-                TextStart: _stream.EndOf(record),
-                TextEnd: listEnd));
-            pendingIndex = entries.Count - 1;
-        }
-
-        return entries;
-    }
-
     /// <summary>Reads one slide into a section.</summary>
-    private ContentSection ReadSlide(SlideEntry entry, int index)
+    private ContentSection ReadSlide(PptPageEntry entry, int index)
     {
         if (Resolve(entry, PptRecordTypes.Slide) is not { } container)
         {
@@ -195,12 +106,12 @@ internal sealed class PptContentBuilder
     /// is resolved in a second pass — the first cannot, because the list may write a title
     /// master before the main master it points at.
     /// </remarks>
-    private void ReadMasterStyles(DffRecordHeader document, List<SlideEntry> masters)
+    private void ReadMasterStyles(PptPages pages)
     {
-        DffRecordHeader? environment = _stream.FirstChild(document, PptRecordTypes.Environment);
+        DffRecordHeader? environment = pages.Environment;
         Dictionary<uint, uint> derived = [];
 
-        foreach (SlideEntry entry in masters)
+        foreach (PptPageEntry entry in pages.Masters)
         {
             if (_persist.Resolve(entry.PersistId) is not { } offset) continue;
             if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) continue;
@@ -209,7 +120,7 @@ internal sealed class PptContentBuilder
             // TxMasterStyleAtom, so there is nothing here to read from it.
             if (header.Type != PptRecordTypes.MainMaster) continue;
 
-            uint parent = MasterIdOf(header) ?? 0;
+            uint parent = PptPages.MasterIdOf(_stream, header) ?? 0;
             if (parent != 0)
             {
                 derived[entry.SlideId] = parent;
@@ -234,27 +145,9 @@ internal sealed class PptContentBuilder
         }
     }
 
-    /// <summary>
-    /// The slide id of the master a page names, or null when the page has no
-    /// <c>SlideAtom</c>.
-    /// </summary>
-    /// <remarks>
-    /// The field is a <em>slide</em> id, not a persist id — masters number themselves from
-    /// <c>0x80000000</c> — so it is matched against the master list's persist atoms rather than
-    /// resolved through the persist directory (<c>svdfppt.cxx:2520</c>). It sits behind a
-    /// four-byte layout geometry and the eight placeholder ids of that layout.
-    /// </remarks>
-    private uint? MasterIdOf(DffRecordHeader page)
-    {
-        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return null;
-
-        ReadOnlySpan<byte> content = _stream.Content(atom);
-        return content.Length >= 16 ? DffRecordBuffer.ReadUInt32(content[12..]) : null;
-    }
-
     /// <summary>The style sheet a page resolves its unstated formatting against.</summary>
     private PptStyleSheet? StylesFor(DffRecordHeader page)
-        => MasterIdOf(page) is { } master
+        => PptPages.MasterIdOf(_stream, page) is { } master
            && _stylesByMaster.TryGetValue(master, out PptStyleSheet? sheet)
             ? sheet
             : _defaultStyles;
@@ -266,7 +159,7 @@ internal sealed class PptContentBuilder
     /// notes section for every slide in every deck, so an empty one is dropped — the same rule
     /// the ODF path applies.
     /// </remarks>
-    private ContentSection? ReadNotes(SlideEntry entry, int index)
+    private ContentSection? ReadNotes(PptPageEntry entry, int index)
     {
         if (Resolve(entry, PptRecordTypes.Notes) is not { } container) return null;
 
@@ -280,30 +173,8 @@ internal sealed class PptContentBuilder
     /// The container a slide-list entry names, when its persist id resolves to one of the
     /// expected type.
     /// </summary>
-    private DffRecordHeader? Resolve(SlideEntry entry, ushort expected)
-    {
-        if (_persist.Resolve(entry.PersistId) is not { } offset)
-        {
-            _diagnostics.Add(new Diagnostic(
-                DiagnosticSeverity.Warning, "PL2404",
-                $"Slide list entry {entry.SlideId} names persist id {entry.PersistId}, which the "
-                + "persist directory does not resolve; the page was skipped."));
-            return null;
-        }
-
-        if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) return null;
-
-        if (header.Type != expected)
-        {
-            _diagnostics.Add(new Diagnostic(
-                DiagnosticSeverity.Warning, "PL2405",
-                $"Persist id {entry.PersistId} resolves to offset {offset}, which holds record "
-                + $"type {header.Type} rather than the expected {expected}."));
-            return null;
-        }
-
-        return header;
-    }
+    private DffRecordHeader? Resolve(PptPageEntry entry, ushort expected)
+        => PptPages.Resolve(_stream, _persist, entry, expected, _diagnostics);
 
     /// <summary>
     /// Whether a slide's show information marks it as skipped.
@@ -320,7 +191,7 @@ internal sealed class PptContentBuilder
 
     /// <summary>Reads a page's Escher drawing, adding each shape's text in document order.</summary>
     private void ReadDrawing(
-        DffRecordHeader page, SlideEntry entry, ContentSection target, PptStyleSheet? styles)
+        DffRecordHeader page, PptPageEntry entry, ContentSection target, PptStyleSheet? styles)
     {
         DffRecordHeader? drawing = _stream.FirstChild(page, PptRecordTypes.Drawing);
         if (drawing is not { } ppDrawing) return;
@@ -336,7 +207,7 @@ internal sealed class PptContentBuilder
 
     /// <summary>Adds one shape's text, then its children's, keeping document order.</summary>
     private void AddShape(
-        EscherShape shape, SlideEntry entry, ContentSection target, PptStyleSheet? styles)
+        EscherShape shape, PptPageEntry entry, ContentSection target, PptStyleSheet? styles)
     {
         // The background shape is a fill, not content; the deleted flag marks a record left
         // behind by an undo. Neither belongs in extracted text.
@@ -354,7 +225,7 @@ internal sealed class PptContentBuilder
     /// <summary>
     /// A shape's text, whether it holds the characters itself or refers to the slide list.
     /// </summary>
-    private PptTextRun? ReadShapeText(EscherShape shape, SlideEntry entry)
+    private PptTextRun? ReadShapeText(EscherShape shape, PptPageEntry entry)
     {
         if (shape.ClientTextbox is not { } textbox) return null;
 
@@ -384,7 +255,7 @@ internal sealed class PptContentBuilder
     /// synthesises a client-textbox header over exactly that span
     /// (<c>filter/source/msfilter/svdfppt.cxx:6660</c>); the effect is the same either way.
     /// </remarks>
-    private PptTextRun? ReadOutlineText(SlideEntry entry, uint reference)
+    private PptTextRun? ReadOutlineText(PptPageEntry entry, uint reference)
     {
         int matches = 0;
         int start = -1;
@@ -400,8 +271,4 @@ internal sealed class PptContentBuilder
 
         return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd) : null;
     }
-
-    /// <summary>One entry of a slide list, with the byte range holding its outline text.</summary>
-    private readonly record struct SlideEntry(
-        uint PersistId, uint SlideId, int TextStart, int TextEnd);
 }

@@ -105,13 +105,15 @@ internal sealed partial class PdfFile
     /// <remarks>
     /// A page's content is the one stream that states nothing about itself but its length:
     /// a font program carries <c>/Length1</c>, an image and a form carry a <c>/Subtype</c>,
-    /// and a <c>ToUnicode</c> CMap is not deflated at all.
+    /// a <c>ToUnicode</c> CMap is not deflated at all, and a triangle-mesh shading — the one
+    /// stream that is neither text nor a picture — names its <c>/ShadingType</c>.
     /// </remarks>
     public List<string> ContentStreams()
         => [.. Streams()
             .Where(s => s.Deflated
                         && !s.Dictionary.Contains("/Length1", StringComparison.Ordinal)
-                        && !s.Dictionary.Contains("/Subtype", StringComparison.Ordinal))
+                        && !s.Dictionary.Contains("/Subtype", StringComparison.Ordinal)
+                        && !s.Dictionary.Contains("/ShadingType", StringComparison.Ordinal))
             .Select(s => Encoding.Latin1.GetString(s.Data))];
 
     /// <summary>The embedded font programs, in file order.</summary>

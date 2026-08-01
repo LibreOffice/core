@@ -100,9 +100,68 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
             return;
         }
 
+        if (paint is MeshPaint mesh)
+        {
+            FillMesh(path, mesh, rule);
+            return;
+        }
+
         using SKPath skia = Convert(path, rule);
         using SKPaint brush = Brush(paint, SKPaintStyle.Fill, Fills.Gradients.Bounds(path));
         _canvas.DrawPath(skia, brush);
+    }
+
+    /// <summary>
+    /// Fills a path with a triangle mesh, as <c>SkVertices</c> inside the path as a clip.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The clip is what makes the mesh a fill: a path-gradient brush's boundary and the shape it
+    /// fills need not be the same polygon, so the triangles are drawn where they lie and the path
+    /// decides how much shows. The PDF backend paints its <c>/ShadingType 4</c> inside the same
+    /// clip, so the two agree by construction.
+    /// </para>
+    /// <para>
+    /// <b><c>SKBlendMode.Dst</c>, and the paint carries no shader.</b> Skia's
+    /// <c>drawVertices</c> blends the per-vertex colours <em>with the paint's shader</em>, so a
+    /// mode that reads the source — <c>Modulate</c>, the usual choice — multiplies the vertex
+    /// colours by whatever the shaderless paint supplies and can black the mesh out entirely.
+    /// <c>Dst</c> names the vertex colours alone, which is what a mesh means.
+    /// </para>
+    /// <para>
+    /// <b>Antialiasing is off for the triangles.</b> Adjacent fan triangles share an edge
+    /// exactly, and two antialiased edges composited over each other leave a visible seam of the
+    /// background along every one of them — a hundred-vertex boundary would be a hundred pale
+    /// spokes. The mesh's own outline is antialiased by the clip instead.
+    /// </para>
+    /// </remarks>
+    private void FillMesh(GraphicsPath path, MeshPaint mesh, FillRule rule)
+    {
+        List<SKPoint> positions = [];
+        List<SKColor> colours = [];
+
+        foreach (MeshTriangle triangle in Fills.Meshes.Valid(mesh))
+        {
+            foreach (int index in (ReadOnlySpan<int>)[triangle.A, triangle.B, triangle.C])
+            {
+                MeshVertex vertex = mesh.Vertices[index];
+                positions.Add(Point(vertex.Position));
+                colours.Add(new SKColor(
+                    vertex.Colour.R, vertex.Colour.G, vertex.Colour.B, vertex.Colour.A));
+            }
+        }
+
+        if (positions.Count == 0) return;
+
+        using SKPath skia = Convert(path, rule);
+        using SKVertices vertices = SKVertices.CreateCopy(
+            SKVertexMode.Triangles, [.. positions], [.. colours]);
+        using SKPaint brush = new() { IsAntialias = false };
+
+        _canvas.Save();
+        _canvas.ClipPath(skia, SKClipOperation.Intersect, _options.Antialias);
+        _canvas.DrawVertices(vertices, SKBlendMode.Dst, brush);
+        _canvas.Restore();
     }
 
     /// <inheritdoc/>
@@ -227,7 +286,10 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width <= 0 || image.Height <= 0 || destination.IsEmpty) return;
+        // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
+        // undecoded one reports no size until a codec has looked at it. Testing the size here
+        // dropped every `RasterImage.Encoded` silently — laying out correctly and drawing nothing.
+        if (Empty(image) || destination.IsEmpty) return;
         if (Image(image) is not { } drawable) return;
 
         using (drawable)
@@ -380,17 +442,35 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
         SKPoint end = Point(gradient.End);
         SKMatrix local = Matrix(gradient.Transform);
 
+        // Skia states a spread as a tile mode and repeats for nothing. The PDF backend has to
+        // lengthen the shading's axis to say the same thing, which is why the period arithmetic
+        // lives in Fills.Gradients and only that backend calls it.
+        SKShaderTileMode mode = gradient.Spread switch
+        {
+            SpreadMethod.Reflect => SKShaderTileMode.Mirror,
+            SpreadMethod.Repeat => SKShaderTileMode.Repeat,
+            _ => SKShaderTileMode.Clamp,
+        };
+
         if (gradient.Kind == GradientKind.Linear)
         {
-            return SKShader.CreateLinearGradient(
-                start, end, colours, offsets, SKShaderTileMode.Clamp, local);
+            return SKShader.CreateLinearGradient(start, end, colours, offsets, mode, local);
         }
 
         float radius = (float)Math.Sqrt(
             ((end.X - start.X) * (end.X - start.X)) + ((end.Y - start.Y) * (end.Y - start.Y)));
+        if (radius <= 0) radius = 1;
 
-        return SKShader.CreateRadialGradient(
-            start, radius <= 0 ? 1 : radius, colours, offsets, SKShaderTileMode.Clamp, local);
+        // A focal radial is Skia's two-point conical with the inner circle collapsed to a point
+        // at the focus, which is the same two-circle form PDF's /ShadingType 3 takes. Both are
+        // exact, so a focus needs no approximation in either backend.
+        if (gradient.Focus is { } focus)
+        {
+            return SKShader.CreateTwoPointConicalGradient(
+                Point(focus), 0, start, radius, colours, offsets, mode, local);
+        }
+
+        return SKShader.CreateRadialGradient(start, radius, colours, offsets, mode, local);
     }
 
     /// <summary>
@@ -406,7 +486,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// </remarks>
     private SKShader? Shader(BitmapPaint bitmap, DocRect region)
     {
-        if (bitmap.Image.Width <= 0 || bitmap.Image.Height <= 0) return null;
+        if (Empty(bitmap.Image)) return null;
         if (Image(bitmap.Image) is not { } image) return null;
 
         try
@@ -434,6 +514,18 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     }
 
     /// <summary>
+    /// True when an image has nothing to draw: neither pixels nor bytes to decode into some.
+    /// </summary>
+    /// <remarks>
+    /// Not <c>Width &lt;= 0</c>, which asks the same question only of an image that has already
+    /// been decoded. A reader emits <see cref="RasterImage.Encoded"/> and leaves the dimensions
+    /// at zero until a codec has seen the bytes, so testing the width here discards every
+    /// picture every reader emits — silently, and only in the backends.
+    /// </remarks>
+    private static bool Empty(RasterImage image)
+        => image.Pixels.IsEmpty && image.EncodedBytes.IsEmpty;
+
+    /// <summary>
     /// A display-list image as an immutable Skia one.
     /// </summary>
     /// <remarks>
@@ -443,6 +535,10 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// </remarks>
     private static SKImage? Image(RasterImage image)
     {
+        // A reader hands over the bytes the file stored; the codec lives here.
+        if (Images.RasterImageDecoder.Ensure(image) is not { } decoded) return null;
+        image = decoded;
+
         if (image.Pixels.Length < image.Width * image.Height * 4) return null;
 
         SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);

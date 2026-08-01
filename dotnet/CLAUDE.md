@@ -93,6 +93,27 @@ abstractions everything else agrees on: units, geometry, colour, the format cata
 document model, and the drawing IR. A dependency added here is inherited by every
 consumer.
 
+`Core/Charts` is the test of that rule and shows where the line falls. A chart's *model* and its
+*layout* — `ChartPlot`, `ChartScale`, `ChartLayout` — are geometry over the abstractions Core
+already holds, so they belong here; the readers that turn a `c:chartSpace` or a `chart:chart` into
+that model parse XML and stay in `Paperless.Ooxml` and `Paperless.OpenDocument`. Putting the model
+one layer up instead is what forced the ODF reader into `Paperless.Presentations`, where a
+spreadsheet could not reach it.
+
+`Core/Numbers` came down for the same reason and by the same test, and it is worth stating as a
+rule rather than as a second exception. **The question is not "who uses it" but "what does it
+depend on".** The number-format engine — parsing `#,##0.00` and rendering a double through it —
+began in `Paperless.Spreadsheets` because a cell is what wanted it, and a chart's axis composed in
+`Core/Charts` then could not reach it; every tick was written in its shortest round-trip form, which
+is right for a whole-number scale and wrong for every currency, percentage and date axis. The move
+was safe because the engine is pure computation over a string: its five files import
+`System.Globalization` and `System.Text` and nothing else, so Core's zero-dependency rule is intact.
+Read it as: **a thing belongs in Core when it depends on nothing above Core, whatever it was written
+for.** What did *not* move is the reading — `XlsxStyles`, `OdsCellFormats` and
+`OdfNumberFormat` parse markup and stay in their own libraries, the last of them compiling an ODF
+`number:*-style` element tree into a format code exactly as `xmloff` does before handing it to one
+formatter.
+
 ## Key design decisions, and why
 
 **All lengths are EMUs, in a `Length` struct.** 914400 per inch divides evenly by twips
@@ -188,9 +209,24 @@ dotnet test tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj \
     --filter "FullyQualifiedName~TableComparisonTests"                            # ~45 s
 ```
 
-Run the whole solution before committing anyway. The failure this project cares about most is
-the cascade — one wrong measurement moving every line after it — and it surfaces in projects you
-had no reason to think you had touched.
+Run every project before committing anyway. The failure this project cares about most is the
+cascade — one wrong measurement moving every line after it — and it surfaces in projects you had
+no reason to think you had touched.
+
+### A truncated run reports success
+
+**Check the count, not just the colour.** Under heavy load the test host can die part-way and
+still print `Passed! - Failed: 0`, having silently dropped the tests it never reached. Measured
+on one commit with several parallel builds running: the fidelity project reported **470 passed**
+on one run and **353 passed** on the next, both `Failed: 0`, against **471 discovered**
+(`dotnet test --list-tests`). Nothing had changed between them.
+
+This is worse than a failure, because it looks like a pass. Two habits make it safe:
+
+- Compare the passed count against the previous known-good count for that project. A drop with
+  zero failures is a truncated run, not a fixed test.
+- `dotnet test Paperless.slnx` is the most likely to truncate and the least likely to say so —
+  it has also been OOM-killed outright. Run the projects individually and total them yourself.
 
 ### Before trusting a green run
 

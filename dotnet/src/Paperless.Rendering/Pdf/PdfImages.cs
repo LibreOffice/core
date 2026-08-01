@@ -35,6 +35,11 @@ internal static class PdfImages
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(xObjects);
 
+        // A reader may hand over an undecoded image; the geometry below needs its size, and
+        // the JPEG pass-through still uses the original bytes that `Ensure` carries forward.
+        if (Images.RasterImageDecoder.Ensure(image) is not { } decoded) return string.Empty;
+        image = decoded;
+
         string name = string.Create(CultureInfo.InvariantCulture, $"Im{xObjects.Count + 1}");
         int id = writer.Reserve();
         xObjects.Add((name, id));

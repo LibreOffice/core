@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
@@ -39,11 +40,16 @@ internal static class OdfFrames
     /// is what an image needs and all the wrap ever depends on.
     /// </param>
     /// <param name="anchorOffset">Where in the paragraph's text the frame is anchored.</param>
+    /// <param name="pictures">
+    /// How to reach the bytes behind a <c>draw:image</c>, or null to record the frame's geometry without
+    /// them — which is all the wrap ever needed and what a caller measuring a document should pay for.
+    /// </param>
     public static PageFrame? Read(
         XElement element,
         OdfStyles styles,
         Func<XElement, IReadOnlyList<PageBlock>>? content,
-        int anchorOffset)
+        int anchorOffset,
+        OdfPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(element);
         ArgumentNullException.ThrowIfNull(styles);
@@ -57,6 +63,13 @@ internal static class OdfFrames
 
         XElement? box = element.Element(XName.Get("text-box", OdfNamespaces.Draw));
         XElement? image = element.Element(XName.Get("image", OdfNamespaces.Draw));
+        FramePicture picture =
+            image is not null && pictures is not null ? pictures.Read(element) : FramePicture.None;
+
+        // The chart before the picture, because a frame holding one holds both: ODF lists a frame's
+        // children as alternatives in decreasing order of preference, and a chart is written as a
+        // draw:object followed by a draw:image of it for a reader that cannot embed one.
+        ChartPlot? chart = pictures?.Chart(element);
 
         return new PageFrame
         {
@@ -75,7 +88,10 @@ internal static class OdfFrames
             Fill = style.Fill,
             BorderColour = style.BorderColour,
             BorderWidth = style.BorderWidth,
-            IsImage = image is not null,
+            IsImage = image is not null && chart is null,
+            Image = picture.Raster,
+            Vector = picture.Vector,
+            Chart = chart,
             Name = element.Attribute(XName.Get("name", OdfNamespaces.Draw))?.Value,
             Blocks = box is not null && content is not null ? content(box) : [],
         };

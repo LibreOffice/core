@@ -41,10 +41,20 @@ internal static class SheetBandText
     /// <summary>Ten point, which is Calc's default cell font height.</summary>
     public static Length DefaultSize { get; } = Length.FromPoints(10);
 
-    private static readonly Lazy<OpenTypeFace?> Face = new(Load);
-    private static readonly Lazy<FontReference> Reference = new(Describe);
+    /// <summary>
+    /// The face the furniture is drawn in, together with the reference it was resolved through.
+    /// </summary>
+    /// <remarks>
+    /// Both, and resolved in one place, because the reference cannot be rebuilt from the face
+    /// afterwards: an <see cref="OpenTypeFace"/> is a parsed table directory and does not know
+    /// which file it was read out of. The resolver's own <c>FaceKey</c> is that file's path, and
+    /// it is what lets a PDF embed the face — see the remark on <see cref="Description"/>.
+    /// </remarks>
+    private static readonly Lazy<(OpenTypeFace? Face, FontReference? Reference)> Resolved =
+        new(Load);
+
     private static readonly Lazy<LineMetrics?> Metrics = new(
-        () => Face.Value is { } face ? LineSpacing.Resolve(face) : null);
+        () => Resolved.Value.Face is { } face ? LineSpacing.Resolve(face) : null);
 
     /// <summary>The distance from a line's top to its baseline, at a size.</summary>
     /// <param name="size">The em size.</param>
@@ -64,12 +74,28 @@ internal static class SheetBandText
             ? metrics.ScaledAscent(size) + metrics.ScaledDescent(size)
             : size * 1.15;
 
+    /// <summary>
+    /// How tall one line of a <em>chart's</em> text is, at a size.
+    /// </summary>
+    /// <remarks>
+    /// Ascent plus descent plus the line gap, which is the face's own line height and not
+    /// <see cref="LineHeightAt"/>'s. The two differ because a chart is not laid out by Calc: its
+    /// labels are made by <c>chart2</c>'s view as plain text shapes, which take the face's metrics
+    /// whole, where a cell's height comes from <c>ScDrawStringsVars</c> and drops the gap
+    /// (<c>sc/source/ui/view/output2.cxx:734</c>). Liberation Sans is 1.1499 em here against
+    /// 1.1494 there, and the difference compounds through the insets that place the plot area
+    /// rather than showing up in any one label.
+    /// </remarks>
+    /// <param name="size">The em size.</param>
+    public static Length ChartLineHeightAt(Length size)
+        => Metrics.Value is { } metrics ? metrics.ScaledLineHeight(size) : size * 1.15;
+
     /// <summary>Shapes one line, or null when there is no face to shape it with.</summary>
     /// <param name="text">The text.</param>
     /// <param name="size">The em size.</param>
     public static BandRun? Shape(string text, Length size)
     {
-        if (text.Length == 0 || Face.Value is not { } face) return null;
+        if (text.Length == 0 || Resolved.Value.Face is not { } face) return null;
 
         ShapedText shaped = TextShaper.Default.Shape(face, text);
 
@@ -90,15 +116,37 @@ internal static class SheetBandText
             pen += advance;
         }
 
-        return new BandRun(glyphs, clusters, Reference.Value, size, text, pen);
+        return new BandRun(glyphs, clusters, Description, size, text, pen);
     }
 
-    private static OpenTypeFace? Load()
+    /// <summary>
+    /// How a backend names the furniture's face: the resolver's own key, which is a file path.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The reference is kept from the resolution rather than rebuilt from the loaded face. Naming
+    /// the family instead — <c>FaceKey = face.FamilyName</c>, which is what this did — gives
+    /// <c>FileFontProvider</c> a key it cannot open, so the PDF writer referenced the face and
+    /// embedded no <c>FontFile2</c> for it. A reader then substitutes or draws tofu, and neither
+    /// the page count nor the extracted words change, which is why the sweep never saw it.
+    /// </para>
+    /// <para>
+    /// Measured with <c>pdffonts</c> on <c>sheet-features.ods</c>: the two cell faces reported
+    /// <c>emb yes</c> and the header's third face <c>emb no</c>, in a file whose text extracted
+    /// correctly throughout.
+    /// </para>
+    /// </remarks>
+    private static FontReference Description =>
+        Resolved.Value.Reference
+        ?? new FontReference { FamilyName = DefaultFamily, FaceKey = string.Empty };
+
+    private static (OpenTypeFace? Face, FontReference? Reference) Load()
     {
         try
         {
             SystemFontResolver resolver = SystemFontResolver.Build();
-            return resolver.LoadOpenType(resolver.Resolve(new FontRequest(DefaultFamily)));
+            FontReference reference = resolver.Resolve(new FontRequest(DefaultFamily));
+            return (resolver.LoadOpenType(reference), reference);
         }
         catch (Exception exception) when (exception is Core.MalformedDocumentException
                                              or IOException
@@ -106,20 +154,9 @@ internal static class SheetBandText
         {
             // No readable face is not a reason to fail a layout: the page, its geometry and
             // everything drawn as a path are already decided, and only the ink is missing.
-            return null;
+            return (null, null);
         }
     }
-
-    private static FontReference Describe() => Face.Value is { } face
-        ? new FontReference
-        {
-            FamilyName = face.FamilyName ?? DefaultFamily,
-            RequestedFamily = DefaultFamily,
-            Weight = face.Weight,
-            IsItalic = face.IsItalic,
-            FaceKey = face.FamilyName ?? DefaultFamily,
-        }
-        : new FontReference { FamilyName = DefaultFamily, FaceKey = DefaultFamily };
 }
 
 /// <summary>A shaped line of furniture text, positioned once it is placed.</summary>

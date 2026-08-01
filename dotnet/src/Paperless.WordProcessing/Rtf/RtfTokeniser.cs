@@ -39,6 +39,19 @@ public enum RtfTokenKind
     /// page.
     /// </summary>
     UnicodeCharacter,
+
+    /// <summary>
+    /// The raw bytes a <c>\binN</c> control word introduces.
+    /// </summary>
+    /// <remarks>
+    /// Its own kind because it is the one place RTF stops being text. The <c>N</c> bytes after the
+    /// delimiter are a byte count's worth of anything at all — a brace, a backslash, a NUL — and a
+    /// tokeniser that read them as text would find groups that do not exist and control words nobody
+    /// wrote. That is not a hypothetical: a PNG's signature contains <c>\x1A</c> and its IDAT data
+    /// contains braces roughly one byte in sixty-four, so a picture written with <c>\bin</c> and
+    /// tokenised as text unbalances the document within a few kilobytes and loses everything after it.
+    /// </remarks>
+    Binary,
 }
 
 /// <summary>One token from an RTF stream.</summary>
@@ -215,6 +228,17 @@ public sealed class RtfTokeniser
         // Exactly one space after a control word is the delimiter and is not text. A second
         // space is text, which is why this consumes one and not a run.
         if (_position < _data.Length && _data[_position] == (byte)' ') _position++;
+
+        // \binN: the next N bytes are data and not RTF. Read here rather than by the reader, because
+        // the reader sees tokens and by then the damage is done — see RtfTokenKind.Binary.
+        if (name == "bin" && parameter is { } count)
+        {
+            int length = Math.Clamp(count, 0, _data.Length - _position);
+            ReadOnlyMemory<byte> data = _data.AsMemory(_position, length);
+            _position += length;
+
+            return new RtfToken(RtfTokenKind.Binary, name, parameter, Bytes: data);
+        }
 
         // \uN is a code point, and it is worth resolving here so the reader does not have to
         // treat it differently from any other character. RTF writes it signed, so a code point

@@ -1,5 +1,6 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.Layout;
 
@@ -111,8 +112,54 @@ public sealed record PlacedShape
     /// <summary>The marker at the end of its outline.</summary>
     public SlideLineEnd TailEnd { get; init; }
 
+    /// <summary>The picture it draws, or null when it is not a picture frame.</summary>
+    /// <remarks>
+    /// Separate from <see cref="Fill"/>, and the difference is not cosmetic. A
+    /// <see cref="BitmapPaint"/> covers whatever path it is given and repeats to do it; a
+    /// picture is placed once, in a rectangle of its own that a crop may push outside the
+    /// shape. Both can appear on one shape — a <c>p:pic</c> may carry a solid fill behind a
+    /// transparent PNG — so they are drawn in that order rather than made to exclude each
+    /// other.
+    /// </remarks>
+    public PlacedPicture? Picture { get; init; }
+
     /// <summary>The text inside it, or null when it holds none.</summary>
     public PlacedText? Text { get; init; }
+}
+
+/// <summary>
+/// A picture placed on a slide: the bytes, where the whole of it goes, and how opaque it is.
+/// </summary>
+/// <param name="Image">
+/// The picture, normally still encoded — a reader hands the file's own bytes on and whichever
+/// backend wants pixels decodes them, so that extraction never pays for a codec. Null when the
+/// picture is a vector and there is no raster fallback beside it.
+/// </param>
+/// <param name="Destination">
+/// Where the <em>undisturbed</em> picture goes. A cropped picture's rectangle is larger than
+/// the shape and is clipped to it, which is what a crop becomes once it reaches a drawing model
+/// that has clipping and no crop.
+/// </param>
+/// <param name="Opacity">A uniform opacity multiplier from 0 to 1.</param>
+public sealed record PlacedPicture(RasterImage? Image, DocRect Destination, double Opacity = 1.0)
+{
+    /// <summary>
+    /// The picture as a display list — an SVG, a WMF, an EMF or an EMF+ — or null when it is a
+    /// raster.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Decoded on first use rather than while the slide is read, which is what keeps a deck whose
+    /// master carries a metafile logo from paying the font stack's start-up cost on a caller that
+    /// only wanted the words. Measured: the first decode in a process is 1044 ms for a WMF with
+    /// text and 0.2 ms once warm.
+    /// </para>
+    /// <para>
+    /// <see cref="Image"/> may be set beside it, and then means the raster fallback of a
+    /// DrawingML <c>svgBlip</c> — what PowerPoint shows to a consumer that cannot read SVG.
+    /// </para>
+    /// </remarks>
+    public Lazy<VectorImage>? Vector { get; init; }
 }
 
 /// <summary>

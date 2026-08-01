@@ -58,6 +58,23 @@ internal static class XlsxPrintSetup
     /// </remarks>
     private const double DigitWidthTwips = 111;
 
+    /// <summary>
+    /// The padding <c>baseColWidth</c> carries that <c>defaultColWidth</c> does not.
+    /// </summary>
+    /// <remarks>
+    /// Five screen pixels, which <c>WorksheetGlobals::setBaseColumnWidth</c> adds with the comment
+    /// <c>#i3006# add 5 pixels padding to the width</c>
+    /// (<c>sc/source/filter/oox/worksheethelper.cxx:745-752</c>). It is added in
+    /// <em>digits</em> there — <c>scaleValue(5, Unit::ScreenX, Unit::Digit)</c> — and multiplied
+    /// back by the digit width afterwards, so in twips it is just the five pixels: a screen pixel
+    /// is a ninety-sixth of an inch and therefore fifteen twips exactly.
+    /// </remarks>
+    private const double BasePaddingTwips = 75;
+
+    /// <summary>The <c>baseColWidth</c> a sheet that states none is read as having.</summary>
+    /// <remarks><c>rAttribs.getInteger(XML_baseColWidth, 8)</c>, <c>worksheetfragment.cxx:672</c>.</remarks>
+    private const int DefaultBaseColumnWidth = 8;
+
     /// <summary>Builds a sheet's layout input from its <c>worksheet</c> element.</summary>
     /// <param name="worksheet">The worksheet part's root, or null when it did not load.</param>
     /// <param name="printAreas">The print areas the workbook's defined names gave this sheet.</param>
@@ -182,8 +199,31 @@ internal static class XlsxPrintSetup
     }
 
     /// <summary>The paper size, from the <c>paperSize</c> index or an explicit measure.</summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A sheet stating no <c>pageSetup</c> at all keeps the application's own paper, and
+    /// that is not what the element's defaults say.</strong> <c>PageSettingsModel</c> initialises
+    /// <c>mbValidSettings</c> to <em>true</em> (<c>pagesettings.cxx:117</c>) and only
+    /// <c>importPageSetup</c> overwrites it, from <c>usePrinterDefaults</c>, which defaults to
+    /// false (<c>:180</c>); and the paper size is written onto the page style only when
+    /// <c>mbValidSettings</c> is false (<c>:934</c>). So an absent <c>pageSetup</c> leaves Calc's
+    /// locale default standing and a present one applies the index — the opposite way round from
+    /// reading <c>paperSize</c>'s own default of 1 whenever the attribute is missing, which puts
+    /// every Excel workbook that states no page setup on Letter. Measured on
+    /// <c>chart2/qa/extras/data/xlsx/</c>: LibreOffice renders all seven of its chart workbooks on
+    /// A4 and this reader put them on Letter.
+    /// </para>
+    /// </remarks>
     private static DocSize PaperSize(XElement? setup, bool landscape)
     {
+        if (setup is null || Xlsx.Flag(setup, "usePrinterDefaults"))
+        {
+            (Length defaultWidth, Length defaultHeight) = ExcelPaperSizes.A4;
+            return landscape
+                ? new DocSize(defaultHeight, defaultWidth)
+                : new DocSize(defaultWidth, defaultHeight);
+        }
+
         Length width;
         Length height;
 
@@ -219,8 +259,16 @@ internal static class XlsxPrintSetup
     {
         XElement? format = Xlsx.Child(worksheet, "sheetFormatPr");
 
+        // **A sheet that states no defaultColWidth does not take Calc's own default.** Excel
+        // writes `baseColWidth` instead — or nothing at all, which means 8 — and LibreOffice reads
+        // it as that many digits plus five screen pixels of padding
+        // (`setBaseColumnWidth`, `worksheethelper.cxx:745`), which is 963 twips against Calc's own
+        // 1280. Every workbook LibreOffice writes states `defaultColWidth`, so this is invisible on
+        // anything round-tripped through it and decides the page count of anything Excel wrote:
+        // `chart2/qa/extras/data/xlsx/bubble_chart_simple.xlsx` fits ten columns to a Letter page
+        // at 963 and seven at 1280, which is two pages against three.
         Length defaultWidth = Digits(Xlsx.Attribute(format, "defaultColWidth"))
-                              ?? SheetGrid.StandardColumnWidth;
+                              ?? BaseWidth(Xlsx.Integer(format, "baseColWidth"));
         Length defaultHeight = Points(Xlsx.Attribute(format, "defaultRowHeight"))
                                ?? SheetGrid.StandardRowHeight;
 
@@ -247,7 +295,12 @@ internal static class XlsxPrintSetup
             Length? height = Points(Xlsx.Attribute(row, "ht"));
             if (height is null && !hidden) continue;
 
-            rows.Add(new SheetSizeRun(index - 1, index - 1, height ?? defaultHeight, hidden));
+            // customHeight is the flag that says the height came from a user rather than from
+            // the writer's own measurement, and LibreOffice writes it explicitly false on every
+            // ordinary row.
+            rows.Add(new SheetSizeRun(
+                index - 1, index - 1, height ?? defaultHeight, hidden,
+                !Xlsx.Flag(row, "customHeight")));
         }
 
         return new SheetGrid(
@@ -280,6 +333,13 @@ internal static class XlsxPrintSetup
         return digits is { } count && count > 0
             ? Length.FromTwips((long)Math.Round(count * DigitWidthTwips))
             : null;
+    }
+
+    /// <summary>A column width stated as a <c>baseColWidth</c>, which carries padding.</summary>
+    private static Length BaseWidth(int? baseColumnWidth)
+    {
+        int digits = baseColumnWidth is { } stated && stated > 0 ? stated : DefaultBaseColumnWidth;
+        return Length.FromTwips((long)Math.Round((digits * DigitWidthTwips) + BasePaddingTwips));
     }
 
     private static Length? Points(string? value)

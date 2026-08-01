@@ -173,6 +173,18 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 {
     private readonly DocxFile _file;
 
+    /// <summary>
+    /// What laying the document out found, which reading it could not have.
+    /// </summary>
+    /// <remarks>
+    /// A second list rather than an addition to the reader's, because the two are produced at different
+    /// times: the reader's are answerable the moment the package is open, and a picture that will not
+    /// draw is only discovered when something asks for the pages. So a caller that has run
+    /// <see cref="Layout"/> sees more than one that has not, which is the honest answer — before layout
+    /// nothing had looked.
+    /// </remarks>
+    private readonly List<Diagnostic> _laidOut = [];
+
     internal OoxmlWordDocument(
         DocumentFormat format,
         DocxFile file,
@@ -184,7 +196,7 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
         Format = format;
         _file = file;
         Content = content;
-        Diagnostics = diagnostics;
+        _read = diagnostics;
         Sections = sections.Count > 0 ? sections : [new WritingSection()];
         Marks = marks;
     }
@@ -202,7 +214,10 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
     public ContentDocument Content { get; }
 
     /// <inheritdoc/>
-    public IReadOnlyList<Diagnostic> Diagnostics { get; }
+    public IReadOnlyList<Diagnostic> Diagnostics
+        => _laidOut.Count == 0 ? _read : [.. _read, .. _laidOut];
+
+    private readonly IReadOnlyList<Diagnostic> _read;
 
     /// <inheritdoc/>
     public IReadOnlyList<WritingSection> Sections { get; }
@@ -236,7 +251,8 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
 
         DocxLayoutSource source = new(
             _file.Styles, _file.Settings, footnotes: _file.Footnotes, endnotes: _file.Endnotes,
-            theme: _file.Theme);
+            theme: _file.Theme, pictures: new DocxPictures(_file, _laidOut),
+            numbering: _file.Numbering);
         List<PageBlock> blocks = source.Read(body);
 
         // The compatibility options, of which two reach pagination. Which ones those are was
@@ -316,9 +332,28 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             if (!isHeader && !Word.Is(reference, "footerReference")) continue;
 
             if (SlotOf(Word.Attribute(reference, "type")) is not { } slot) continue;
-            if (_file.LoadHeaderOrFooter(Word.RelationshipId(reference)) is not { } part) continue;
+            string? relationshipId = Word.RelationshipId(reference);
+            if (_file.LoadHeaderOrFooter(relationshipId) is not { } part) continue;
 
-            List<PageBlock> blocks = source.ReadFlow(part);
+            // The furniture part's own relationships for the duration of its walk, and the main
+            // document's afterwards. A header's pictures index its own `.rels`, whose ids start again
+            // at one — see the remarks on `DocxPictures`, where getting this wrong is silent.
+            string? scope = source.Pictures?.Scope;
+            if (source.Pictures is { } pictures && _file.Relationship(relationshipId) is { } named)
+            {
+                pictures.Scope = named.Target;
+            }
+
+            List<PageBlock> blocks;
+            try
+            {
+                blocks = source.ReadFlow(part);
+            }
+            finally
+            {
+                if (source.Pictures is { } restore && scope is not null) restore.Scope = scope;
+            }
+
             if (blocks.Count == 0) continue;
 
             (isHeader ? headers : footers)[slot] = blocks;

@@ -4,7 +4,7 @@ using Paperless.Containers.Ooxml;
 using Paperless.Core;
 using Paperless.Core.Diagnostics;
 using Paperless.Ooxml;
-using Paperless.Spreadsheets.Numbers;
+using Paperless.Core.Numbers;
 
 namespace Paperless.Spreadsheets.Ooxml;
 

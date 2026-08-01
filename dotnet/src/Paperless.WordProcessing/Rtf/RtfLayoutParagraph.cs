@@ -91,6 +91,16 @@ public readonly record struct RtfLayoutRun(
 /// <param name="SectionIndex">Which of the document's sections the paragraph sits in.</param>
 /// <param name="Notes">The notes anchored in the paragraph's text, or null when it cites none.</param>
 /// <param name="Frames">The floating frames anchored in it, or null when it anchors none.</param>
+/// <param name="ListMarker">
+/// The label this item draws, or null when it draws none.
+/// <para>
+/// RTF is the one format of the four that writes the label out rather than the counters:
+/// <c>{\listtext …}</c> holds the rendered <c>1.</c> or <c>•</c> together with the tab that follows it,
+/// so nothing has to be counted and the marker is by definition the one the writer displayed. The
+/// trailing tab is trimmed off, because the distance it stands for is the hanging indent the same
+/// paragraph states in <c>\fi</c>.
+/// </para>
+/// </param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -103,7 +113,8 @@ public readonly record struct RtfLayoutParagraph(
     IReadOnlyList<RtfLayoutRun>? Runs = null,
     int SectionIndex = 0,
     IReadOnlyList<RtfLayoutNote>? Notes = null,
-    IReadOnlyList<RtfLayoutFrame>? Frames = null);
+    IReadOnlyList<RtfLayoutFrame>? Frames = null,
+    string? ListMarker = null);
 
 /// <summary>
 /// A floating frame as RTF states it: a shape's rectangle, its wrap, and the text inside it.
@@ -154,7 +165,21 @@ public sealed record RtfLayoutFrame(
     string? HorizontalOrigin,
     string? VerticalOrigin,
     IReadOnlyList<RtfLayoutBlock> Blocks,
-    Core.Geometry.Margins? WrapDistance = null);
+    Core.Geometry.Margins? WrapDistance = null)
+{
+    /// <summary>
+    /// True when this is a <c>{\pict}</c> in the run of text rather than a <c>{\shp}</c> beside it.
+    /// </summary>
+    /// <remarks>
+    /// One record for both because the two really are one thing to layout — a rectangle anchored in a
+    /// paragraph — and they differ only in what the rectangle is measured from. A shape states a
+    /// position; an inline picture has none, and hangs where its offset in the text puts it.
+    /// </remarks>
+    public bool IsInline { get; init; }
+
+    /// <summary>The picture the frame holds, or nothing when it holds none.</summary>
+    public FramePicture Picture { get; init; }
+}
 
 /// <summary>
 /// A footnote or endnote as layout sees it: where it is cited, and the blocks of its body.

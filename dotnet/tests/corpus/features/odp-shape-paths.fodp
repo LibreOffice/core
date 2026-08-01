@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'"/>
+ </office:font-face-decls>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm"
+       style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:fill-color="#ffffff"
+       draw:background-size="full" presentation:background-visible="true"
+       presentation:background-objects-visible="true" presentation:display-header="false"
+       presentation:display-footer="false" presentation:display-page-number="false"
+       presentation:display-date-time="false"/>
+  </style:style>
+
+  <style:style style:name="gBlue" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4f81bd" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gGreen" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#00b050" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gOrange" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#ff7f00" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gPurple" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#953735" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gTeal" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#31859b" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gOlive" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#9bbb59" draw:stroke="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0cm" fo:padding-right="0cm"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"/>
+  </style:style>
+  <style:style style:name="gFrame" style:family="graphic">
+   <style:graphic-properties draw:fill="none" draw:stroke="none"/>
+  </style:style>
+
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="10cm"/>
+  </style:style>
+  <style:style style:name="co2" style:family="table-column">
+   <style:table-column-properties style:column-width="6cm"/>
+  </style:style>
+  <style:style style:name="co3" style:family="table-column">
+   <style:table-column-properties style:column-width="8cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="1.5cm"/>
+  </style:style>
+  <style:style style:name="ceHead" style:family="table-cell">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#dce6f1"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0.254cm" fo:padding-right="0.254cm"
+       fo:padding-top="0.127cm" fo:padding-bottom="0.127cm"/>
+   <style:paragraph-properties fo:border-left="1.5pt solid #1f497d"
+       fo:border-right="1.5pt solid #1f497d" fo:border-top="1.5pt solid #1f497d"
+       fo:border-bottom="0.48pt solid #808080"/>
+  </style:style>
+  <style:style style:name="ceBody" style:family="table-cell">
+   <style:graphic-properties draw:fill="none"
+       draw:textarea-vertical-align="top"
+       fo:padding-left="0.254cm" fo:padding-right="0.254cm"
+       fo:padding-top="0.127cm" fo:padding-bottom="0.127cm"/>
+   <style:paragraph-properties fo:border-left="0.48pt solid #808080"
+       fo:border-right="0.48pt solid #808080" fo:border-top="0.48pt solid #808080"
+       fo:border-bottom="1.5pt solid #1f497d"/>
+  </style:style>
+  <style:style style:name="pCell" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'"
+       fo:font-size="14pt" fo:color="#000000"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+
+   <!-- Every shape is 6 x 4.5 cm on the 28 x 15.75 cm page Impress defaults to, so a vertex at a
+        round fraction of the 21600-unit view box is a round fraction of a centimetre. -->
+   <draw:page draw:name="paths" draw:style-name="dp1" draw:master-page-name="Default">
+
+    <!-- Straight edges from an equation and a modifier: $0 is the notch depth. -->
+    <draw:custom-shape draw:name="Chevron" draw:style-name="gBlue" draw:layer="layout"
+        svg:x="1.5cm" svg:y="2cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:modifiers="5400"
+         draw:text-areas="?f0 0 ?f1 21600"
+         draw:enhanced-path="M 0 0 L ?f1 0 21600 10800 ?f1 21600 0 21600 ?f0 10800 Z N">
+      <draw:equation draw:name="f0" draw:formula="$0"/>
+      <draw:equation draw:name="f1" draw:formula="21600-$0"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+
+    <!-- U: a whole ellipse as one command, which DrawingML cannot say at all. -->
+    <draw:custom-shape draw:name="WholeEllipse" draw:style-name="gGreen" draw:layer="layout"
+        svg:x="11cm" svg:y="2cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+    </draw:custom-shape>
+
+    <!-- U with a partial sweep, then a line to the centre: a pie on a 5:4 box, where the
+         eccentric-angle conversion is visible. -->
+    <draw:custom-shape draw:name="PieSweep" draw:style-name="gOrange" draw:layer="layout"
+        svg:x="20.5cm" svg:y="2cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:enhanced-path="U 10800 10800 10800 10800 0 240 L 10800 10800 Z N"/>
+    </draw:custom-shape>
+
+    <!-- X and Y: four quarter ellipses, each leaving one point along an axis and arriving at
+         the next along the other. -->
+    <draw:custom-shape draw:name="QuadrantCorners" draw:style-name="gPurple" draw:layer="layout"
+        svg:x="1.5cm" svg:y="9cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:enhanced-path="M 5400 0 L 16200 0 X 21600 5400 L 21600 16200 Y 16200 21600 L 5400 21600 X 0 16200 L 0 5400 Y 5400 0 Z N"/>
+    </draw:custom-shape>
+
+    <!-- G: the one command DrawingML shares, spelled in whole degrees instead of
+         sixtieth-thousandths. -->
+    <draw:custom-shape draw:name="ArcAngleStadium" draw:style-name="gTeal" draw:layer="layout"
+        svg:x="11cm" svg:y="9cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:enhanced-path="M 5400 5400 L 16200 5400 G 5400 5400 270 180 L 5400 16200 G 5400 5400 90 180 Z N"/>
+    </draw:custom-shape>
+
+    <!-- Two polygons in one subpath, the inner wound the other way, so it is a hole under
+         either fill rule. A second N would make them two separate objects instead. -->
+    <draw:custom-shape draw:name="FrameWithHole" draw:style-name="gOlive" draw:layer="layout"
+        svg:x="20.5cm" svg:y="9cm" svg:width="6cm" svg:height="4.5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive"
+         draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 Z M 5400 5400 L 5400 16200 16200 16200 16200 5400 Z N"/>
+    </draw:custom-shape>
+
+   </draw:page>
+
+   <!-- A table stated by hand, so the three column widths differ, one cell spans two of them,
+        and the outer rules are three times the inner ones. -->
+   <draw:page draw:name="grid" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:name="HandTable" draw:style-name="gFrame" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="24cm" svg:height="3cm">
+     <table:table>
+      <table:table-column table:style-name="co1"/>
+      <table:table-column table:style-name="co2"/>
+      <table:table-column table:style-name="co3"/>
+      <table:table-row table:style-name="ro1">
+       <table:table-cell table:style-name="ceHead" table:number-columns-spanned="2">
+        <text:p text:style-name="pCell">Spans two</text:p>
+       </table:table-cell>
+       <table:covered-table-cell/>
+       <table:table-cell table:style-name="ceHead">
+        <text:p text:style-name="pCell">Third</text:p>
+       </table:table-cell>
+      </table:table-row>
+      <table:table-row table:style-name="ro1">
+       <table:table-cell table:style-name="ceBody">
+        <text:p text:style-name="pCell">Wide</text:p>
+       </table:table-cell>
+       <table:table-cell table:style-name="ceBody">
+        <text:p text:style-name="pCell">Narrow</text:p>
+       </table:table-cell>
+       <table:table-cell table:style-name="ceBody">
+        <text:p text:style-name="pCell">Middling</text:p>
+       </table:table-cell>
+      </table:table-row>
+     </table:table>
+    </draw:frame>
+   </draw:page>
+
+  </office:presentation>
+ </office:body>
+</office:document>

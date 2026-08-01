@@ -48,7 +48,33 @@ public sealed class OdfListLevel
         LevelProperties = levelProperties is null
             ? null
             : new OdfPropertySet(OdfPropertyKind.ListLevel, levelProperties);
+
+        XElement? textProperties = element.Element(XName.Get("text-properties", OdfNamespaces.Style));
+        Typeface =
+            textProperties?.Attribute(XName.Get("font-family", OdfNamespaces.FoCompatible))?.Value
+            ?? textProperties?.Attribute(XName.Get("font-name", OdfNamespaces.Style))?.Value;
+        RelativeSize = OdfValue.ParsePercentage(
+            textProperties?.Attribute(XName.Get("font-size", OdfNamespaces.FoCompatible))?.Value);
     }
+
+    /// <summary>
+    /// The face the label itself is set in, when the level states one directly.
+    /// </summary>
+    /// <remarks>
+    /// A bullet level almost always does, and it names a symbol font — <c>StarBats</c>,
+    /// <c>OpenSymbol</c>, <c>Wingdings</c> — whose character is meaningless in any other face. The
+    /// separate <see cref="TextStyleName"/> is a named character style and is the rarer spelling.
+    /// </remarks>
+    public string? Typeface { get; }
+
+    /// <summary>
+    /// The label's size as a fraction of the item's own text, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// Written as <c>fo:font-size="45%"</c> in every list style LibreOffice generates, which is
+    /// what makes a bullet beside 28 pt text a 12.6 pt glyph.
+    /// </remarks>
+    public double? RelativeSize { get; }
 
     /// <summary>The one-based nesting level this definition applies to.</summary>
     public int Level { get; }

@@ -5,6 +5,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Ooxml;
+using Paperless.Ooxml.DrawingML;
 using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
@@ -62,8 +63,12 @@ public static class XlsxReader
             // The workbook's cell formats, read once. Only layout looks at them, and only the
             // fonts-and-alignment half of styles.xml is read here — the number formats extraction
             // needs are already resolved on file.Styles.
-            IReadOnlyList<SheetCellFormat> cellFormats =
-                XlsxCellFormats.Read(file.StyleSheet, file.Styles);
+            XlsxCellFormatTable cellFormats = XlsxCellFormats.Read(file.StyleSheet, file.Styles);
+
+            // The workbook's theme, read once. A chart part that states an a:schemeClr needs it
+            // and every other drawing does not, which is why it was missing: nothing in a
+            // spreadsheet's drawing path asked for a theme until a chart did.
+            DrawingTheme? theme = DrawingTheme.Read(file.ThemeRoot);
 
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
@@ -90,6 +95,9 @@ public static class XlsxReader
                 (SheetPrintSetup setup, SheetGrid grid) = XlsxPrintSetup.Read(
                     worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows);
 
+                (SheetCellFormats formats, SheetRichText rich) =
+                    XlsxSheetFormats.Read(worksheet, cellFormats, file);
+
                 layouts.Add(new SheetLayout
                 {
                     Name = entry.Name,
@@ -99,7 +107,9 @@ public static class XlsxReader
                     Grid = grid,
                     Cells = table,
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
-                    Formats = XlsxSheetFormats.Read(worksheet, cellFormats),
+                    Formats = formats,
+                    RichText = rich,
+                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName, theme),
                     FileName = source.FileName ?? string.Empty,
                 });
 
@@ -107,6 +117,12 @@ public static class XlsxReader
                 // it rather than at the end of the workbook.
                 foreach (ContentSection comment in reader.ReadComments(entry))
                     content.Children.Add(comment);
+
+                // A chart follows its sheet for the same reason, and cannot go inside it: the
+                // sheet section holds exactly one table, and a chart is another one. The ODS
+                // path puts it in the same place.
+                foreach (ContentSection chart in XlsxCharts.Read(file.Package, entry.PartName))
+                    content.Children.Add(chart);
             }
 
             if (file.Sheets.Count == 0)

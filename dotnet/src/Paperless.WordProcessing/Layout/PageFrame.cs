@@ -1,6 +1,8 @@
+using Paperless.Core.Charts;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Vector;
 
 namespace Paperless.WordProcessing.Layout;
 
@@ -199,6 +201,25 @@ public sealed record PageFrame
     /// <summary>Where the anchoring character sits in the paragraph's text, for a character anchor.</summary>
     public int AnchorOffset { get; init; }
 
+    /// <summary>
+    /// How much of an as-character frame sits above the baseline, or null for all of it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Null is the ordinary inline picture, which rests its bottom on the baseline, and is the default so
+    /// that the three readers that had no vertical rule to state keep the numbers they were measured
+    /// against. Zero is the other end: the frame hangs entirely below the line and raises its descent
+    /// instead, which is what Writer does for a fly whose position relative to the baseline comes back at
+    /// nought or more (<c>SwFlyCntPortion::SetBase</c>).
+    /// </para>
+    /// <para>
+    /// Only DOC sets it, and only for a shape a <c>SHAPE</c> field made as-character: those state a
+    /// vertical orientation of <c>TEXT_LINE</c> with no offset, which resolves to nought. Ignored for
+    /// every other anchor, since only an as-character frame has a baseline to be measured from.
+    /// </para>
+    /// </remarks>
+    public Length? InlineAscent { get; init; }
+
     /// <summary>A text frame's own content, empty for an image.</summary>
     public IReadOnlyList<PageBlock> Blocks { get; init; } = [];
 
@@ -216,11 +237,81 @@ public sealed record PageFrame
 
     /// <summary>True when the frame holds a picture rather than text.</summary>
     /// <remarks>
-    /// Recorded rather than drawn: decoding the raster is a separate unstarted item, and the wrap — which
-    /// is what moves text — depends only on the rectangle. So an image frame reserves its room correctly
-    /// and draws whatever placeholder the sink is given.
+    /// Separate from <see cref="Image"/> and <see cref="Vector"/>, because they answer different
+    /// questions. This is what the document <em>declared</em> the frame to be, which is what the wrap
+    /// and the extraction tree go by; the others are whether bytes were found and what kind they turned
+    /// out to be. A picture whose package part is missing, and a PICT nobody here decodes, both set this
+    /// and leave the other two null.
     /// </remarks>
     public bool IsImage { get; init; }
+
+    /// <summary>
+    /// The picture the frame holds, still in the bytes the file stored, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// Built with <see cref="RasterImage.Encoded"/> and never decoded here: a reader that decoded would
+    /// pull a codec into the extraction path, which the layering forbids and which is the reason the IR
+    /// carries encoded bytes at all. Whichever backend wants pixels asks <c>RasterImageDecoder.Ensure</c>
+    /// for them, and one that only wants to pass a JPEG through to <c>DCTDecode</c> never decodes at all.
+    /// </remarks>
+    public RasterImage? Image { get; init; }
+
+    /// <summary>
+    /// The vector picture the frame holds — an SVG, a WMF, an EMF or an EMF+ — or null when it holds
+    /// none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A display list rather than pixels, and it needed nothing in <c>Paperless.Core</c>:
+    /// <c>VectorImage</c> already is the abstraction a frame wants — <c>Draw(IDrawingSink, DocRect)</c>
+    /// plus an intrinsic size, immutable and replayable — and the layering already permits this library
+    /// to name it. A Core interface would have had those two members and one implementation.
+    /// </para>
+    /// <para>
+    /// <strong>Not decoded until something draws.</strong> See <see cref="FramePicture"/> for the
+    /// measurement that decided it; RTF and DOC read their pictures on the extraction path, where a
+    /// second of font resolution would be paid by a caller that only wanted the words.
+    /// </para>
+    /// <para>
+    /// <see cref="Image"/> may be set beside this, and means the raster fallback of a DrawingML
+    /// <c>svgBlip</c> — what a consumer that cannot read SVG would have shown. Nothing else sets both.
+    /// </para>
+    /// </remarks>
+    public Lazy<VectorImage>? Vector { get; init; }
+
+    /// <summary>
+    /// The chart the frame holds, or null when it holds none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The third thing a frame's rectangle can be filled with, beside <see cref="Image"/> and
+    /// <see cref="Vector"/>, and it is a <em>model</em> rather than a picture: the marks are composed
+    /// into the rectangle at drawing time by <c>Paperless.Core.Charts</c>, exactly as a slide's and a
+    /// sheet's are. Nothing about the wrap depends on it, which is why it sits beside the picture
+    /// rather than replacing it — a chart frame whose part could not be read still reserves its room.
+    /// </para>
+    /// <para>
+    /// A DOCX states one as a <c>w:drawing</c> whose <c>a:graphicData</c> names the chart namespace and
+    /// carries a relationship to a <c>c:chartSpace</c> part; an ODT as a <c>draw:frame</c> holding a
+    /// <c>draw:object</c> whose sub-document root is a <c>chart:chart</c>. Both arrive here as one
+    /// <see cref="ChartPlot"/>, so <c>PageDrawing</c> has one case rather than two.
+    /// </para>
+    /// </remarks>
+    public ChartPlot? Chart { get; init; }
+
+    /// <summary>
+    /// The family a chart's labels are set in, or null for the drawing code's own default.
+    /// </summary>
+    /// <remarks>
+    /// Beside <see cref="Chart"/> rather than inside it, because <see cref="ChartPlot"/> carries type
+    /// <em>sizes</em> and no family — the decks and workbooks it was built for each have one obvious
+    /// answer and Writer does not. Measured with <c>pdffonts</c> on LibreOffice's own PDFs:
+    /// <c>chart2/qa/extras/data/odt/chart.odt</c> draws its chart in Liberation Sans and
+    /// <c>docx/chart.docx</c> draws the same chart in Carlito, because an OOXML chart's text takes the
+    /// theme's minor latin face and an ODF chart's takes the office default. Measuring both in one face
+    /// leaves every label the wrong width, which moves the plot area rather than only the ink.
+    /// </remarks>
+    public string? ChartFontFamily { get; init; }
 
     /// <summary>What the frame was called in the document, for diagnostics.</summary>
     public string? Name { get; init; }

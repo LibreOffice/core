@@ -902,6 +902,39 @@ public sealed partial class OdfContentReader
     }
 
     /// <summary>
+    /// Reads an embedded chart, hoisting it to a section of its own.
+    /// </summary>
+    /// <returns>True when the object really was a chart and has been recorded.</returns>
+    /// <remarks>
+    /// <para>
+    /// Hoisted rather than placed where the object sits, because the three families anchor a
+    /// chart in three places and only one of them can hold a table. On a slide the
+    /// <c>draw:frame</c> is a child of the page and nesting would be fine; in a text document it
+    /// is anchored inside a paragraph, which is why text boxes hoist too; and on a
+    /// <em>spreadsheet</em> it is a child of the <c>table:table-cell</c> it is fastened to, so
+    /// placing it in the target would put a whole <see cref="ContentTable"/> inside a
+    /// <see cref="ContentTableCell"/> — a shape nothing else in the tree produces and no caller
+    /// would expect. One rule for all three, and it puts the chart in the same place a cell
+    /// comment goes: immediately after the sheet, slide or paragraph that carries it.
+    /// </para>
+    /// <para>
+    /// The chart's own sub-document has its own styles, and they are deliberately not merged
+    /// into this reader's: nothing read out of a chart is style-dependent — the titles are
+    /// paragraphs and the data is typed by <c>office:value-type</c> — and merging a second
+    /// document's automatic styles into the host's would let a name collision change how the
+    /// host renders.
+    /// </para>
+    /// </remarks>
+    private bool ReadChart(XElement drawObject)
+    {
+        if (OdfChart.Locate(drawObject, _file) is not { } chart) return false;
+        if (OdfChart.Read(chart) is not { } section) return false;
+
+        _hoisted.Add(section);
+        return true;
+    }
+
+    /// <summary>
     /// Reads a drawing object: an image, a text box, a grouped shape or a shape with text.
     /// </summary>
     /// <remarks>
@@ -941,9 +974,15 @@ public sealed partial class OdfContentReader
                 break;
 
             case "page-thumbnail" or "object" or "object-ole" or "applet" or "plugin" or "floating-frame":
-                // Placeholders for content Paperless does not read during extraction: a
-                // slide preview, or an embedded object whose own document would have to be
-                // opened. Recorded as a graphic so the caller knows something is there.
+                // An embedded chart is read: its title, axis titles, series names and cached
+                // numbers are user text, and they hoist to a section of their own rather than
+                // landing wherever the object was anchored. See ReadChart.
+                if (name == "object" && ReadChart(shape)) break;
+
+                // Everything else here is a placeholder for content Paperless does not read
+                // during extraction: a slide preview, or an embedded object whose own document
+                // would have to be opened. Recorded as a graphic so the caller knows something
+                // is there.
                 target.Children.Add(new ContentImage
                 {
                     AlternativeText = DescriptionOf(shape) ?? Attribute(shape, OdfNamespaces.Draw, "name"),
@@ -969,8 +1008,26 @@ public sealed partial class OdfContentReader
         _depth--;
     }
 
+    /// <summary>
+    /// Reads a <c>draw:frame</c>'s children.
+    /// </summary>
+    /// <remarks>
+    /// A frame states its content <em>in decreasing order of preference</em>: a viewer takes the
+    /// first child it can display and ignores the rest. That is why a packaged chart is written
+    /// as a <c>draw:object</c> followed by a <c>draw:image</c> pointing at
+    /// <c>ObjectReplacements/Object 1</c> — a metafile picture of the chart, for a reader that
+    /// cannot embed one. So when the object turns out to be a chart, its siblings are skipped:
+    /// reporting the replacement as well would say the frame holds a chart <em>and</em> a
+    /// picture, and would make a packaged ODP extract differently from the flat one it was
+    /// converted from, which has no replacement to write.
+    /// </remarks>
     private void ReadFrame(XElement frame, ContentNode target)
     {
+        foreach (XElement child in frame.Elements(XName.Get("object", OdfNamespaces.Draw)))
+        {
+            if (ReadChart(child)) return;
+        }
+
         foreach (XElement child in frame.Elements())
         {
             if (child.Name.NamespaceName != OdfNamespaces.Draw)

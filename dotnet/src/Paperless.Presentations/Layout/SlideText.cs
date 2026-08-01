@@ -60,14 +60,50 @@ public sealed record SlideTextBody
     public TextAnchor Anchor { get; init; }
 
     /// <summary>
+    /// How far the text is turned inside the shape, clockwise, in radians.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>a:bodyPr/@rot</c>, and what a SmartArt <c>autoTxRot</c> resolves to. It is <em>not</em>
+    /// the shape's own rotation: the shape stays where it is and only its text turns, which is
+    /// why it belongs to the body rather than to the placement. LibreOffice keeps the two apart
+    /// the same way, as <c>TextPreRotateAngle</c> beside <c>RotateAngle</c>.
+    /// </para>
+    /// <para>
+    /// A quarter turn swaps the text rectangle's width and height about its centre, because the
+    /// lines then run down the shape rather than across it; a half turn leaves the rectangle
+    /// alone. Only multiples of a quarter turn arise: <c>autoTxRot</c> produces nothing else.
+    /// </para>
+    /// </remarks>
+    public double Rotation { get; init; }
+
+    /// <summary>
+    /// Whether the text is shrunk until it fits the shape — DrawingML's <c>a:normAutofit</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// When this is set the layouter solves the fit itself and <see cref="FontScale"/> and
+    /// <see cref="LineSpaceReduction"/> are <em>ignored</em>, because that is what the reference
+    /// does: LibreOffice 24.2 reads <c>a:normAutofit/@fontScale</c> into a field
+    /// (<c>oox/source/drawingml/textbodypropertiescontext.cxx:240</c>) and never reads that field
+    /// again, so the authoring application's stated answer is discarded and
+    /// <c>SdrTextObj::autoFitTextForCompatibility</c> searches for its own. See
+    /// <see cref="SlideTextLayout"/> for the search and for what it is measured against.
+    /// </para>
+    /// <para>
+    /// This is a text-only fit. <c>a:spAutoFit</c> is the other direction — the shape grows to its
+    /// text rather than the text shrinking to the shape — and is not this flag.
+    /// </para>
+    /// </remarks>
+    public bool AutoFit { get; init; }
+
+    /// <summary>
     /// The multiplier <c>a:normAutofit/@fontScale</c> asks for, or one when it states none.
     /// </summary>
     /// <remarks>
-    /// Applied to every run's size rather than recomputed. The value in the file is what the
-    /// authoring application arrived at when it last shrank the text to fit, and LibreOffice
-    /// honours it as stated (<c>oox/source/drawingml/textbodypropertiescontext.cxx:240</c>)
-    /// rather than solving the fit again — so a reader that recomputed it would disagree with the
-    /// reference on every autofitted shape.
+    /// Applied to every run's size when <see cref="AutoFit"/> is <em>not</em> set — which after
+    /// the fit search means the ODF path and hand-built bodies only. The value in the file is what
+    /// the authoring application arrived at when it last shrank the text to fit.
     /// </remarks>
     public double FontScale { get; init; } = 1.0;
 
@@ -152,11 +188,25 @@ public sealed record SlideParagraph(
 /// <param name="Typeface">The family it is set in, or null for the paragraph's own.</param>
 /// <param name="Scale">Its size as a fraction of the first run's, one for the same size.</param>
 /// <param name="Colour">Its colour, or null for the first run's.</param>
+/// <param name="IsSymbol">
+/// Whether it is a fixed character rather than a generated number, which decides where it sits
+/// vertically.
+/// <para>
+/// <strong>The two are placed by different rules and the difference is a point.</strong>
+/// <c>Outliner::StripBullet</c> branches on <c>SVX_NUM_CHAR_SPECIAL</c>: a symbol is drawn from
+/// the bullet <em>area's</em> bottom, which centres it against the line's text, and anything else
+/// is drawn at <c>nFirstLineMaxAscent</c>, which is the text's own baseline
+/// (<c>editeng/source/outliner/outliner.cxx:918</c>). Measured on
+/// <c>slide-shape-features.pptx</c>, whose list is <c>a:buAutoNum</c>: LibreOffice draws its
+/// first number at 89.972 and centring it would put it at 89.036.
+/// </para>
+/// </param>
 public readonly record struct SlideMarker(
     string Text,
     string? Typeface = null,
     double Scale = 1.0,
-    Colour? Colour = null);
+    Colour? Colour = null,
+    bool IsSymbol = true);
 
 /// <summary>One run of a paragraph: a range of its text with its own face, size and colour.</summary>
 /// <param name="Start">The run's first character.</param>

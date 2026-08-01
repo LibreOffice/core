@@ -5,9 +5,18 @@ Backends consuming `IDrawingSink`: PDF, Skia raster, SVG.
 Reference: `research/06-rendering.md` sections A, E and G.
 
 Status: **the PDF writer and the Skia rasteriser both write files**, and the PDF one is
-compared against LibreOffice's own PDF operator for operator. **Both now paint every fill the
-display list can express** — solid, gradient and tiled bitmap — and a Skia-backed decoder turns
-an encoded picture into a `RasterImage`. SVG is still a stub, and so is vector import.
+compared against LibreOffice's own PDF operator for operator. **Both paint every fill the
+display list can express** — solid, gradient, tiled bitmap and coloured triangle mesh, with a
+spread and a focus on the gradient — and a Skia-backed decoder turns an encoded picture into a
+`RasterImage`. The SVG *writer* is still a stub.
+
+**The mesh is the newest of the four and the only one added for a format rather than for a
+document model.** A GDI+ path-gradient brush states a colour at every vertex of an arbitrary
+boundary, which no stop list says at any length, and both backends turn out to have a native
+form that agrees with the other on exactly "vertices with colours, plus index triples": a PDF
+`/ShadingType 4` and Skia's `SKVertices`. That agreement is what let `MeshPaint` go into
+`Paperless.Core` without either backend leaking into it — see `Graphics/Paint.cs`, and
+`src/Paperless.Vector/TODO.md` for what it retired.
 
 ## How this library is verified, and why it is verified that way
 
@@ -31,6 +40,14 @@ pages every existing comparison reports, so nothing about `PdfFills`, `PdfStroke
 — which is worth doing rather than guessing, because a shading dictionary contains the string
 `/ShadingType`, so picking the resource list as "the dictionary mentioning `/Shading`" silently
 selects the last shading in the file and every lookup then returns nothing.
+
+**A trap the mesh sprang, in the test reader rather than in the writer.** `PdfFile.ContentStreams`
+finds a page's content *by elimination* — a deflated stream with no `/Length1` and no `/Subtype`
+— which held for every stream this backend wrote until a `/ShadingType 4` arrived. A mesh
+shading is a stream, is deflated, and states neither, so the first mesh silently made every
+`ContentStreams().ShouldHaveSingleItem()` in the file fail on a page whose content was correct.
+The rule now excludes `/ShadingType` too. **Any future stream that is neither text nor a picture
+will do the same**, and the failure names the assertion rather than the cause.
 
 That is why the file is shaped the way it is, and each of these would otherwise be a free
 choice:
@@ -87,6 +104,38 @@ LibreOffice reaches the same conclusion and writes its own.
       PDF of `tests/corpus/features/paint-fills.fodp`, whose one checkerboard rectangle comes out
       as `re W* n` and 47 `q … cm /Im10 Do Q` groups over a single 8×8 XObject. A
       `/PatternType 1` tiling pattern would state the same picture and inherit no transform.
+- [x] **Triangle meshes as `/ShadingType 4`.** A free-form Gouraud triangle mesh: a stream of
+      vertices, each an edge flag, a packed coordinate pair and a colour, with flag 0 starting a
+      fresh triangle. Painted as a clip and an `sh` exactly as a gradient is, because a mesh is a
+      *fill* — a GDI+ path-gradient brush's boundary and the shape it fills need not be the same
+      polygon, so the triangles are painted where they lie and the path decides how much shows.
+      Three decisions worth keeping:
+      **type 4 and not 5**, because a fan built from a boundary is not a lattice and type 5's
+      `/VerticesPerRow` would have to be invented;
+      **every triangle written as three flag-0 vertices**, rather than as a strip or a fan,
+      which triples nothing that matters — consecutive fans share no edge — and removes the one
+      thing a reader can get wrong about the format;
+      and **`/BitsPerFlag 8`, `/BitsPerCoordinate 32`, `/BitsPerComponent 8`**, which make a
+      vertex 1 + 4 + 4 + 3 bytes so the "each vertex begins on a byte boundary" rule holds by
+      construction rather than by padding. Sixteen-bit coordinates would have quantised a
+      page-wide mesh to a fifteenth of a millimetre, visible as a ragged boundary on the very
+      shape the paint exists to draw. `/Decode` spends the whole 32-bit range on the mesh's own
+      bounding box rather than on the page.
+- [x] **A mesh with a translucent vertex takes the same luminosity soft mask a fading gradient
+      does** — a second `/ShadingType 4` in `DeviceGray` whose grey level is each vertex's alpha.
+      Sharing `PdfContentSink.SoftMask` between the two is what stops a faded mesh and a faded
+      gradient disagreeing; a shading has no alpha channel and there is only one way to say so.
+- [x] **A repeating gradient as a lengthened axis.** PDF has no tiling for `sh`: `/Extend` clamps
+      the shading's parameter and cannot repeat it ([PDF 32000-1] 8.7.4.5.3 computes `t` from a
+      parameter already clipped to 0..1). So a repeat is spelled by extending the *axis* over as
+      many whole periods as the shape spans, widening `/Domain` to match, and stitching one copy
+      of the ramp per period — with `/Encode [1 0]` on alternate periods for a reflect, which is
+      how PDF states a mirrored copy without a second function object. `Fills.Gradients.Periods`
+      counts the periods and is the only part of `SpreadMethod` either backend needed to share,
+      because Skia states the same thing as a tile mode and repeats for nothing.
+- [x] **A focal radial as the two circles `/ShadingType 3` already took.** The inner circle
+      collapsed to a point at the focus rather than at the centre. Exact, not an approximation,
+      which is why `GradientPaint.Focus` is a coordinate rather than a mesh.
 - [x] **Soft masks (`ExtGState` `/SMask`) for a gradient whose stops fade.** A shading's colour
       space is `DeviceRGB` and it has no alpha, so a fade is a second shading in `DeviceGray`
       with each stop's alpha as its grey level, painted into a `/Group << /S /Transparency /CS
@@ -120,7 +169,17 @@ LibreOffice reaches the same conclusion and writes its own.
       the shader's local matrix, which is also all an elliptical gradient needs. The stops go
       through the same normalisation the PDF backend uses rather than straight into Skia, which
       tolerates more than PDF's stitching function does; normalising in one place is what stops
-      two backends drawing different pictures from one list.
+      two backends drawing different pictures from one list. A `SpreadMethod` is the shader's
+      tile mode and a `Focus` makes it a two-point conical, both for nothing.
+- [x] **Triangle meshes as `SKVertices`**, drawn inside the path as a clip so the two backends
+      agree by construction. Two details that are not optional:
+      **`SKBlendMode.Dst` with a shaderless paint**, because `drawVertices` blends the per-vertex
+      colours *with the paint's shader* and a mode that reads the source — `Modulate`, the usual
+      choice — multiplies them by whatever a shaderless paint supplies and can black the mesh
+      out; and **antialiasing off for the triangles**, because adjacent fan triangles share an
+      edge exactly and two antialiased edges composited over each other leave a seam of the
+      background along every one — a hundred-vertex boundary would be a hundred pale spokes. The
+      mesh's own outline is antialiased by the clip instead.
 - [x] **Tiled and stretched `BitmapPaint`** as a repeating image shader whose local matrix
       places one cell of the grid `Fills.Tiles` computes — the same grid the PDF backend walks
       tile by tile, so the two agree by construction rather than by inspection. A stretched paint
@@ -192,10 +251,10 @@ picture agree with LibreOffice's, and both are invisible until the colours are c
 
 ### What is left, and why
 
-- [ ] **A focal radial gradient.** PDF's `/ShadingType 3` takes two circles with different
-      centres and DrawingML's `a:path`/`a:fillToRect` states one, but `GradientPaint` has a
-      single `Start`, so both circles are written concentric. Adding a focus to the IR is a Core
-      change and not worth making until a reader has a `fillToRect` to put in it.
+- [x] **A focal radial gradient**, closed when SVG's `fx`/`fy` and EMF+'s path gradient wanted
+      Core changes at the same time. `GradientPaint.Focus` is the inner circle's centre; PDF
+      writes the two circles it always could and Skia takes a two-point conical shader. Both are
+      exact. DrawingML's `a:fillToRect` now has somewhere to go when a reader reads one.
 - [ ] **`GradientKind.Conical` and `GradientKind.Rectangular` are bands, not shaders.** Skia's
       sweep gradient would draw a conical one natively and PDF has nothing for either, and using
       the shader in one backend and bands in the other would make a shape's colours depend on
@@ -203,9 +262,15 @@ picture agree with LibreOffice's, and both are invisible until the colours are c
       (`Gradient::GetMetafileSteps`, `gradient.cxx:336`) — the shorter side in 1/100 mm, clamped
       by the largest channel difference. Nothing emits either kind yet; LibreOffice's own
       `awt::GradientStyle` has no conical at all, so it can only arrive from EMF+ or SVG.
-- [ ] **A gradient *stroke* is drawn as its middle stop and a bitmap stroke as nothing.** There
-      is no gradient pen operator in PDF and LibreOffice's writer has none either. A glyph run is
-      the same case: text is shown in the current fill colour.
+- [ ] **A gradient *stroke* is drawn as its middle stop, a mesh stroke as the mean of its
+      vertices, and a bitmap stroke as nothing.** There is no gradient pen operator in PDF and
+      LibreOffice's writer has none either. A glyph run is the same case: text is shown in the
+      current fill colour.
+- [ ] **A mesh's triangles are painted in the order stated and may overlap.** Nothing sorts
+      them, nothing merges them, and neither backend is asked to: a fan built from a concave
+      boundary is neither convex nor consistently wound, and a mesh that overlaps itself is a
+      mesh whose later triangles win. That is what both a type 4 shading and `SkVertices` do, so
+      the agreement is free — but a producer that expected blending would get painting.
 - [ ] **A tiled fill stops at 8192 tiles.** A one-point tile over an A4 page is half a million
       image draws. At the cap the grid is drawn as far as it goes and the rest is left unpainted,
       which is visible and therefore reportable, unlike stretching the tile.
@@ -240,6 +305,80 @@ only visible on one axis.
 - [ ] Text as `<text>` where faithful, with a fallback to outlines when shaping cannot be
       expressed
 - [ ] Embed images as data URIs; never emit external references
+
+## Font embedding is a contract with the callers, and it went unmet for two families
+
+Worth reading before building anything that produces a `FontReference`, because for a long time
+this backend held up its end and nothing else did.
+
+**The key is a path.** `SystemFontResolver` answers a `FontRequest` with a `FontReference` whose
+`FaceKey` is `InstalledFace.FaceKey` — the font file, plus `#n` for a face inside a collection
+(`Fonts/SystemFontResolver.cs:22`). `FileFontProvider` opens exactly that, `PdfFontCatalogue`
+subsets what it opened and writes it as a `/FontFile2` on the descriptor. Give it anything else
+and the chain stops at the first link: no bytes, no descriptor entry, and a PDF that *names* a
+face it does not carry.
+
+**Why the callers could not simply build one.** The layouters hold an `OpenTypeFace`, which is a
+parsed table directory. It knows its family, its weight and its slant and it has no memory
+whatever of the file it was read out of — so `new FontReference { FaceKey = face.FamilyName }`
+was not laziness, it was the only key those three helpers could produce from what they were
+handed. The reference has to be *carried* from the resolution, and each family now does:
+
+| Family | Where the key was lost | Where it comes from now |
+|---|---|---|
+| Presentations | `SlideTextLayout.Reference(face)`, on every run and every outline bullet | `SlideFonts.Resolve` already returned `(Face, Reference)` and the reference was discarded. It now travels on `RunStyle`, beside the colour, which is where this file already puts what changes the drawing and not the measurement. |
+| Spreadsheets | `SheetBandText.Describe()`, on every header, footer and chart label | `Load()` returns the face *and* the reference it resolved through, as one `Lazy`. Cell text was never affected: `SheetFace` had carried the reference all along. |
+| Word processing | The list label in the DOCX, DOC and RTF readers | `PageLabel.Font`, which already existed and which only the ODT reader filled in. The body text was never affected. |
+
+**What it looked like.** `pdffonts` on our own output, `deck-features.pptx`:
+
+```
+AAAAAA+LiberationSans  TrueType  WinAnsi  emb no     ← before
+BAAAAA+OpenSymbol      TrueType  WinAnsi  emb no
+```
+```
+AAAAAA+LiberationSans  TrueType  WinAnsi  emb yes    ← after
+BAAAAA+OpenSymbol      TrueType  WinAnsi  emb yes
+CAAAAA+LiberationSans  TrueType  WinAnsi  emb yes
+DAAAAA+LiberationSans  TrueType  WinAnsi  emb yes
+```
+
+Across the corpus: **41 unembedded faces in 33 files, now 0**, with every page count and every
+`pdftotext` word count byte-for-byte unchanged — because the text was always right. Rasterised
+by poppler, the *before* PDF of that deck is a page of empty boxes; the *after* is
+indistinguishable from `soffice --convert-to pdf` of the same file.
+
+**Three faces where there had been one, and that is a second bug going with it.** The deck now
+writes three Liberation Sans subsets. Before, `FaceKey` was the family name, so regular, bold and
+italic — which live in *different files* — collapsed onto one catalogue entry and every one of
+them was drawn with the first face's glyph indices. Nothing noticed, because the face was not
+embedded and the reader was substituting its own anyway. Keying on the path separates them by
+construction.
+
+**The instrument that was missing, and it is the durable part of this.**
+`tests/Paperless.Rendering.Tests/PdfFontEmbeddingTests.cs` renders a corpus document per family
+*and per reader*, walks every `/Type/Font` object in the bytes to its `/FontDescriptor`, and
+asserts the descriptor carries a `/FontFile2`. It fails 16 of its 18 cases against the code as it
+stood — the two that pass are the ODT control, which was already right. Three things about its
+shape are deliberate:
+
+- **Descriptor by descriptor, not a count of embedded programs.** A count would pass a file that
+  embedded one face twice and another not at all, and would need revising every time a corpus
+  document's faces changed.
+- **Per reader, not per family.** DOC, DOCX and RTF each build their list labels in their own
+  reader; ODT built its correctly and the other three did not. A per-family sweep would have
+  called word processing clean.
+- **Rendered into memory, never to a file.** `word-features.doc` and `word-features.docx` both
+  render to `word-features.pdf`; a test that never names a file cannot silently measure one of
+  them twice. That trap has cost three agents an hour each and is warned about at the top of
+  `tests/corpus/render-sweep.txt` as well.
+
+**The general shape of the defect is worth remembering more than the defect.** Every check
+pointed at a rendered document asked *where the ink went* — page counts, pen positions, glyph
+counts, extracted words. A face that is referenced and not embedded moves none of them. When a
+backend's output has a property that no existing measurement is a function of, that property will
+be wrong and will stay wrong; the fix is an assertion about the property, not a sharper version of
+the measurements.
 
 ## Known deviations, measured
 
@@ -288,7 +427,8 @@ Each is a place our output differs from LibreOffice's on purpose, with the evide
   With the run's own advances the same file extracts as 2281. This is a fallback and not the fix:
   the face is still not embedded, and the callers that build the reference this way —
   `SheetText.Describe`, `SlideTextLayout.Reference`, `PageDrawing.Reference` — should carry the
-  resolver's own key.
+  resolver's own key. **They now do; see "Font embedding is a contract with the callers" below.**
+  The fallback stays, because a caller driving the display list by hand still has no key to give.
 - **A blank at the end of a wrapped line is not drawn.** LibreOffice draws it as a run of its
   own — eleven extra one-glyph runs on `paginated.fodt`, each at the right-hand end of a line
   it has already drawn. The glyph occupies the margin and marks nothing.
@@ -309,15 +449,22 @@ boxes, and neither is this library's: the layout is `Paperless.WordProcessing`'s
   it — starts two lines' worth higher. The evidence and the bisection are in
   `src/Paperless.WordProcessing/TODO.md`; `NoteSeparatorComparisonTests` pins the attribution and
   `PdfOutputComparisonTests` still leaves that one file out of the fill comparison.
-- **Three layouters throw the resolver's face key away**, which costs their PDFs their embedded
-  fonts. `SystemFontResolver.Resolve` returns a `FontReference` whose `FaceKey` is the font
-  file's path, and `Paperless.Spreadsheets`' `SheetText.Describe`,
-  `Paperless.Presentations`' `SlideTextLayout.Reference` and `Paperless.WordProcessing`'s
-  `PageDrawing.Reference` each rebuild the reference from the `OpenTypeFace` with
-  `FaceKey = FamilyName`. `FileFontProvider` reads that key as a path, so nothing loads and
-  nothing is embedded. This library now recovers the *metrics* from the run's own advances —
-  see "Known deviations" for what that fixed and what it measured — but not the embedding, which
-  only the callers can.
+- ~~**Three layouters throw the resolver's face key away**~~ — **settled**, in all three families
+  plus the three word-processing readers whose list labels had the same hole. Diagnosed here and
+  fixed by the callers, which is the only place it could be fixed: this library recovered the
+  *metrics* from the run's own advances and could never have recovered the *bytes*. The whole
+  account, the before-and-after `pdffonts` and the test that now holds it are under "Font
+  embedding is a contract with the callers" above.
+- **`Paperless.Vector` was going to need `RasterImageDecoder` and does not, and the reason is
+  worth keeping.** The one case standing between that library and a codec dependency was EMF+
+  image attributes, recorded there as "a colour matrix, a gamma, a chroma key and a colour remap
+  table". Those are fields of GDI+'s `ImageAttributes` **API class**; the object a metafile
+  actually serialises is [MS-EMFPLUS] 2.2.1.5, which is twenty-four bytes of wrap mode, clamp
+  colour and object clamp — the colour adjustments are applied by the producer before the bitmap
+  is written. So nothing there ever needed pixels, no `ProjectReference` was added, and the rule
+  that a reader must not pay for a rasteriser holds without an exception. **The general form:
+  when a gap is described in terms of an API's capabilities, check what the file format writes
+  down before sizing the work.**
 - **Two ODF gradient mappings, for whoever reads `draw:gradient`.** Its `draw:start-color` on a
   `radial` gradient paints the *outer* edge, and the radial's outer radius is half the shape's
   **diagonal** — `Gradient::GetBoundRect` builds a square of side `hypot(w, h)`

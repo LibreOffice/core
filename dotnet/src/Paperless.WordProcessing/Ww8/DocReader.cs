@@ -345,13 +345,17 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
             if (face is null) continue;
 
+            FontReference? font = fonts.Reference(
+                paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+
             paragraphs.Add(new PageParagraph
             {
                 Text = paragraph.Text,
                 Face = face,
-                Font = fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic),
+                Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
                 Format = paragraph.Format,
+                Label = Label(paragraph, face, font),
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
@@ -363,6 +367,43 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         return paragraphs;
     }
+
+    /// <summary>
+    /// The label a list item draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// In the item's own face and size. WW8 does state a label's character formatting — the level's
+    /// <c>grpprlChpx</c> — and it is not read: the only thing it usually carries is a symbol font for a
+    /// bullet, whose code point <see cref="Ww8Numbering"/> has already normalised to U+2022, so keeping
+    /// the font would draw a real bullet through a face with no glyph for it.
+    /// </para>
+    /// <para>
+    /// <see cref="LabelFollow.Nothing"/> because Word writes the level's geometry onto the paragraph as
+    /// well: <c>sprmPDxaLeft</c> and <c>sprmPDxaLeft1</c> give the same hanging indent the level does, and
+    /// <see cref="PageLabel.Advance"/> fills a hanging indent already.
+    /// </para>
+    /// <para>
+    /// The paragraph's own reference travels with it, because the label is set in the paragraph's
+    /// own face and a label that names only a family embeds no font program: the reference's
+    /// <c>FaceKey</c> is the font file's path, and it is the only thing that can be turned back
+    /// into bytes. Without it <c>word-features.doc</c> rendered with its list labels'
+    /// <c>LiberationSerif</c> reported <c>emb no</c> by <c>pdffonts</c> while every body face in
+    /// the same PDF reported <c>emb yes</c>.
+    /// </para>
+    /// </remarks>
+    private static PageLabel? Label(
+        Ww8DocumentReader.Ww8LayoutParagraph paragraph, OpenTypeFace face, FontReference? font)
+        => paragraph.ListMarker is { Length: > 0 } marker
+            ? PageLabel.Measured(
+                marker, face, paragraph.Size,
+                new Text.Shaping.ShapingOptions(Language: paragraph.Language)) with
+            {
+                Font = font,
+                Colour = paragraph.Colour ?? Colour.Black,
+                Follow = LabelFollow.Nothing,
+            }
+            : null;
 
     /// <summary>
     /// The floating shapes anchored in a paragraph, as frames the layout engine can place.
@@ -382,9 +423,34 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
 
         foreach (Ww8LayoutFrame frame in stated)
         {
+            // An inline picture has no origin to be placed against and no wrap to obey: it hangs on
+            // the line where its anchor character sits. So it skips Ww8Frames.Build entirely, whose
+            // whole subject is the FSPA an inline picture does not have.
+            if (frame.IsInline)
+            {
+                frames.Add(new PageFrame
+                {
+                    Size = new Core.Geometry.DocSize(
+                        Core.Units.Length.FromTwips(frame.Anchor.Width),
+                        Core.Units.Length.FromTwips(frame.Anchor.Height)),
+                    Anchor = FrameAnchor.AsCharacter,
+                    AnchorOffset = frame.Offset,
+                    Wrap = TextWrap.Through,
+                    IsImage = true,
+                    Image = frame.Picture.Raster,
+                    Vector = frame.Picture.Vector,
+                });
+
+                continue;
+            }
+
             PageFrame? built = Ww8Frames.Build(
-                frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks));
-            if (built is not null) frames.Add(built);
+                frame.Anchor, frame.Shape, frame.Offset, BlocksOf(fonts, frame.Blocks),
+                frame.IsSetInLine);
+            if (built is not null)
+            {
+                frames.Add(built with { Image = frame.Picture.Raster, Vector = frame.Picture.Vector });
+            }
         }
 
         return frames;

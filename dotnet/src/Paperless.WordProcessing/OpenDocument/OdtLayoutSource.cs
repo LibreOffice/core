@@ -61,6 +61,7 @@ public sealed partial class OdtLayoutSource
     private const char AnchorCharacter = '\u0001';
 
     private readonly OdfStyles _styles;
+    private readonly OdfPictures? _pictures;
     private readonly SystemFontResolver _fonts;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -87,14 +88,20 @@ public sealed partial class OdtLayoutSource
     /// The root of the styles part, for the <c>text:notes-configuration</c> that says how each class of note
     /// is numbered. Null leaves both classes on LibreOffice's defaults.
     /// </param>
+    /// <param name="pictures">
+    /// How to reach the bytes behind a <c>draw:image</c>, or null to lay the document out with its
+    /// picture frames empty — which is what a caller who wants only measurements should pay for.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
-        XElement? stylesRoot = null)
+        XElement? stylesRoot = null,
+        OdfPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
+        _pictures = pictures;
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
@@ -199,9 +206,7 @@ public sealed partial class OdtLayoutSource
         ArgumentNullException.ThrowIfNull(body);
 
         _sectionIndex = 0;
-        List<PageBlock> blocks = [];
-        Walk(body, blocks, depth: 0);
-        return blocks;
+        return WalkBlocks(body);
     }
 
     /// <summary>
@@ -216,10 +221,7 @@ public sealed partial class OdtLayoutSource
     public List<PageBlock> ReadCell(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
-
-        List<PageBlock> blocks = [];
-        Walk(element, blocks, depth: 0);
-        return blocks;
+        return WalkBlocks(element);
     }
 
     /// <summary>
@@ -236,10 +238,48 @@ public sealed partial class OdtLayoutSource
     public List<PageBlock> ReadFlow(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+        return WalkBlocks(element);
+    }
 
-        List<PageBlock> blocks = [];
-        Walk(element, blocks, depth: 0);
-        return blocks;
+    /// <summary>
+    /// Walks one element's block-level children, and settles any frame it found outside a paragraph.
+    /// </summary>
+    /// <remarks>
+    /// The one entry point all three public walks share, because the pending list must not cross
+    /// between them: a text box's own flow is read from inside <see cref="FramesOf"/>, so a frame the
+    /// body left pending would otherwise be handed to the first paragraph <em>inside</em> a frame.
+    /// Saved and restored rather than merely cleared, for the same reason.
+    /// </remarks>
+    private List<PageBlock> WalkBlocks(XElement element)
+    {
+        List<XElement>? outer = _looseFrames;
+        _looseFrames = null;
+
+        try
+        {
+            List<PageBlock> blocks = [];
+            Walk(element, blocks, depth: 0);
+
+            // A body whose last element is a frame — or whose only paragraph came before it — still
+            // has to draw it, so whatever is left over goes onto the last paragraph read. A walk that
+            // found no paragraph at all drops it, which is the one case ODF gives nothing to hang on.
+            if (_looseFrames is { Count: > 0 })
+            {
+                for (int at = blocks.Count - 1; at >= 0; at--)
+                {
+                    if (blocks[at] is not PageParagraph last) continue;
+
+                    blocks[at] = WithLooseFrames(last);
+                    break;
+                }
+            }
+
+            return blocks;
+        }
+        finally
+        {
+            _looseFrames = outer;
+        }
     }
 
     /// <summary>
@@ -277,12 +317,45 @@ public sealed partial class OdtLayoutSource
 
             if (ns == OdfNamespaces.Text && name is "p" or "h")
             {
-                if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
+                if (Paragraph(child) is { } paragraph && WithLooseFrames(paragraph) is T block)
+                {
+                    into.Add(block);
+                }
+
+                continue;
+            }
+
+            // A frame at block level rather than inside a paragraph. ODF allows it for a page-anchored
+            // shape, and LibreOffice writes it that way whenever a picture was placed by Draw's rules
+            // rather than typed into the text — `emf-picture.odt`'s whole body is one such frame and an
+            // empty paragraph. A frame belongs to a paragraph in this model, so it is held and given to
+            // the next one; the anchor it carries is what decides where it actually lands, and for a page
+            // anchor that is the page, not the paragraph.
+            if (OdfFrames.IsFrame(child))
+            {
+                (_looseFrames ??= []).Add(child);
+                continue;
+            }
+
+            if (ns == OdfNamespaces.Text && name == "list")
+            {
+                // Transparent to the block list and not to the walk: the nesting *is* the level, so the
+                // depth has to be counted here or every list item reads as a level-one item.
+                (int, OdfListStyle?) outer = EnterList(child);
+                Walk(child, into, depth + 1);
+                LeaveList(outer);
+                continue;
+            }
+
+            if (ns == OdfNamespaces.Text && name is "list-item" or "list-header")
+            {
+                BeginListItem(child, numbered: name == "list-item");
+                Walk(child, into, depth + 1);
                 continue;
             }
 
             if (ns == OdfNamespaces.Text
-                && name is "list" or "list-item" or "list-header" or "section" or "index-body"
+                && name is "section" or "index-body"
                     or "table-of-content" or "alphabetical-index" or "illustration-index"
                     or "table-index" or "object-index" or "user-index" or "bibliography"
                     or "tracked-changes" or "deletion" or "insertion")
@@ -303,6 +376,35 @@ public sealed partial class OdtLayoutSource
                 continue;
             }
         }
+    }
+
+    /// <summary>
+    /// Frames seen at block level, waiting for a paragraph to hang from.
+    /// </summary>
+    /// <remarks>
+    /// Null rather than an empty list in the overwhelmingly common case, which is a document that has
+    /// none: every frame typed into text is inside its <c>text:p</c> and never comes near this.
+    /// </remarks>
+    private List<XElement>? _looseFrames;
+
+    /// <summary>
+    /// A paragraph with any block-level frames seen before it attached to it.
+    /// </summary>
+    /// <remarks>
+    /// Before the paragraph's own frames rather than after, which is z-order: the file listed them
+    /// first. The pending list is cleared whether or not any of them read as a frame, so a shape this
+    /// reader declines cannot attach itself to every later paragraph in the document.
+    /// </remarks>
+    private PageParagraph WithLooseFrames(PageParagraph paragraph)
+    {
+        if (_looseFrames is not { Count: > 0 } loose) return paragraph;
+
+        List<PageFrame> frames = FramesOf([.. loose.Select(frame => new FrameAnchor(0, frame))]);
+        _looseFrames = null;
+
+        return frames.Count == 0
+            ? paragraph
+            : paragraph with { Frames = [.. frames, .. paragraph.Frames] };
     }
 
     /// <summary>
@@ -361,6 +463,11 @@ public sealed partial class OdtLayoutSource
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
+        // Taken before anything recurses, because a list item's label belongs to its first paragraph and
+        // reading a note body or a text box below re-enters this method.
+        bool wantsLabel = _labelPending;
+        _labelPending = false;
+
         RunWalker walker = new(styleName, CitationOf, _footnoteNumber, _endnoteNumber);
         walker.Walk(element, prefix, prefixStyle);
 
@@ -370,6 +477,17 @@ public sealed partial class OdtLayoutSource
         _footnoteNumber += walker.FootnotesSeen;
         _endnoteNumber += walker.EndnotesSeen;
 
+        (PageLabel? label, ParagraphFormat format) =
+            ListFormatting(OdfParagraphFormats.Resolve(_styles, styleName), text, face, wantsLabel);
+
+        // The nested flows are read with the list suspended: a paragraph inside this one's footnote or
+        // text box is not an item of the list this paragraph is in, and would otherwise take its indents.
+        (int, OdfListStyle?) outerList = (_listLevel, _listStyle);
+        (_listLevel, _listStyle) = (0, null);
+        IReadOnlyList<PageNote> notes = NotesOf(walker.Notes);
+        IReadOnlyList<PageFrame> frames = FramesOf(walker.Frames);
+        (_listLevel, _listStyle) = outerList;
+
         return new PageParagraph
         {
             SectionIndex = _sectionIndex,
@@ -377,13 +495,14 @@ public sealed partial class OdtLayoutSource
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = OdfParagraphFormats.Resolve(_styles, styleName),
+            Format = format,
+            Label = label,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
             Runs = RunsOf(walker.Ranges, text, face),
-            Notes = NotesOf(walker.Notes),
-            Frames = FramesOf(walker.Frames),
+            Notes = notes,
+            Frames = frames,
             Source = element,
         };
     }
@@ -630,7 +749,7 @@ public sealed partial class OdtLayoutSource
                 ? Content
                 : null;
 
-            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset) is { } frame)
+            if (OdfFrames.Read(anchor.Element, _styles, content, anchor.Offset, _pictures) is { } frame)
             {
                 frames.Add(frame);
             }
@@ -792,6 +911,21 @@ public sealed partial class OdtLayoutSource
                         AppendTextElement(child, depth);
                         break;
 
+                    // A comment's anchor occupies a position and draws nothing; its body is another flow,
+                    // and LibreOffice's own PDF export leaves it out of the page entirely.
+                    //
+                    // Matched here rather than beside the other anchors because a comment is
+                    // `office:annotation` and not `text:annotation` — the one paragraph-level element ODF
+                    // puts outside the text namespace. A case for it under `AppendTextElement` never
+                    // fires, so the walk below descended into the comment and spliced its author, its
+                    // timestamp and its body into the sentence it is anchored in. Silent in a packaged
+                    // `.odt`, where the elements abut and the words fuse into their neighbours; visible in
+                    // the same document saved flat, where the pretty-printer's newlines separate them.
+                    case XElement child when child.Name.NamespaceName == OdfNamespaces.Office
+                                             && child.Name.LocalName is "annotation" or "annotation-end":
+                        Emit(AnchorCharacter.ToString());
+                        break;
+
                     // A floating frame is *in* the paragraph and is not part of it: its own text belongs
                     // to a rectangle of its own, and walking into it would splice a caption into the
                     // middle of the sentence the frame is anchored in. Recorded with the offset it sits
@@ -820,9 +954,10 @@ public sealed partial class OdtLayoutSource
         /// spaces is written.
         /// </para>
         /// <para>
-        /// A note's or comment's body is inside the paragraph in the file but is not part of its text, so
-        /// it contributes only the anchor character it occupies. Walking into it would put a footnote's
-        /// whole text into the middle of the sentence that cites it.
+        /// A note's body is inside the paragraph in the file but is not part of its text, so it
+        /// contributes only the citation it occupies. Walking into it would put a footnote's whole text
+        /// into the middle of the sentence that cites it. A comment's body is the same case in the
+        /// <c>office:</c> namespace, and is handled by the caller for that reason.
         /// </para>
         /// </remarks>
         private void AppendTextElement(XElement child, int depth)
@@ -876,11 +1011,6 @@ public sealed partial class OdtLayoutSource
 
                     break;
                 }
-
-                case "annotation" or "annotation-end":
-                    // A comment's anchor occupies a position and draws nothing; its body is another flow.
-                    Emit(AnchorCharacter.ToString());
-                    break;
 
                 case "soft-page-break" or "bookmark" or "bookmark-start" or "bookmark-end"
                     or "reference-mark" or "reference-mark-start" or "reference-mark-end"
@@ -981,15 +1111,24 @@ public sealed partial class OdtLayoutSource
     /// means walking the substitution chain and reading a font file. Null only when nothing at all could
     /// be loaded, which means the machine has no usable fonts rather than that the document is bad.
     /// </remarks>
-    private OpenTypeFace? Face(OdfTextStyle text)
+    private OpenTypeFace? Face(OdfTextStyle text) => Face(text.FamilyName, text.Weight, text.IsItalic);
+
+    /// <summary>
+    /// The face one family request resolves to, through the same cache.
+    /// </summary>
+    /// <remarks>
+    /// Taken apart from <see cref="OdfTextStyle"/> because a list level names a family of its own — a
+    /// symbol font, for a bullet — while taking its weight and slant from the item's text.
+    /// </remarks>
+    private OpenTypeFace? Face(string? family, int weight, bool italic)
     {
-        (string? Family, int Weight, bool Italic) key = (text.FamilyName, text.Weight, text.IsItalic);
+        (string? Family, int Weight, bool Italic) key = (family, weight, italic);
         if (_faces.TryGetValue(key, out OpenTypeFace? cached)) return cached;
 
         try
         {
             FontReference reference = _fonts.Resolve(new FontRequest(
-                text.FamilyName ?? string.Empty, text.Weight, text.IsItalic));
+                family ?? string.Empty, weight, italic));
 
             OpenTypeFace face = _fonts.LoadOpenType(reference);
             _faces[key] = face;
