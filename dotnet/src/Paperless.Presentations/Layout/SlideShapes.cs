@@ -111,9 +111,35 @@ public sealed record PlacedShape
     /// <summary>The marker at the end of its outline.</summary>
     public SlideLineEnd TailEnd { get; init; }
 
+    /// <summary>The picture it draws, or null when it is not a picture frame.</summary>
+    /// <remarks>
+    /// Separate from <see cref="Fill"/>, and the difference is not cosmetic. A
+    /// <see cref="BitmapPaint"/> covers whatever path it is given and repeats to do it; a
+    /// picture is placed once, in a rectangle of its own that a crop may push outside the
+    /// shape. Both can appear on one shape — a <c>p:pic</c> may carry a solid fill behind a
+    /// transparent PNG — so they are drawn in that order rather than made to exclude each
+    /// other.
+    /// </remarks>
+    public PlacedPicture? Picture { get; init; }
+
     /// <summary>The text inside it, or null when it holds none.</summary>
     public PlacedText? Text { get; init; }
 }
+
+/// <summary>
+/// A picture placed on a slide: the bytes, where the whole of it goes, and how opaque it is.
+/// </summary>
+/// <param name="Image">
+/// The picture, normally still encoded — a reader hands the file's own bytes on and whichever
+/// backend wants pixels decodes them, so that extraction never pays for a codec.
+/// </param>
+/// <param name="Destination">
+/// Where the <em>undisturbed</em> picture goes. A cropped picture's rectangle is larger than
+/// the shape and is clipped to it, which is what a crop becomes once it reaches a drawing model
+/// that has clipping and no crop.
+/// </param>
+/// <param name="Opacity">A uniform opacity multiplier from 0 to 1.</param>
+public sealed record PlacedPicture(RasterImage Image, DocRect Destination, double Opacity = 1.0);
 
 /// <summary>
 /// A shape's text after layout: glyph runs, and the transform that puts them on the slide.
