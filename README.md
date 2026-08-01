@@ -124,6 +124,8 @@ Then "make run" to start coolwsd. Both developer options are convenience
 bundles; pass individual configure options to override a piece. To bootstrap
 from scratch, see scripts/clone-online.sh.
 
+See also README-gbuild.md for an ongoing merge of the two-step engine and online builds.
+
 ## Further recommended reading with build details
 
 * **[Build Collabora Online](https://www.collaboraoffice.org/post/build-code/)**
