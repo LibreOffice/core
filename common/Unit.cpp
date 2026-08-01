@@ -101,7 +101,8 @@ void UnitBase::filter()
 
 void UnitBase::selfTest()
 {
-    assert(init(UnitType::Wsd, std::string()));
+    [[maybe_unused]] bool const initialisedWsd = init(UnitType::Wsd, std::string());
+    assert(initialisedWsd);
     assert(!UnitBase::get().isFinished());
     assert(!UnitWSD::get().isFinished());
     assert(GlobalArray);
@@ -112,7 +113,8 @@ void UnitBase::selfTest()
     GlobalArray = nullptr;
     GlobalIndex = -1;
 
-    assert(init(UnitType::Kit, std::string()));
+    [[maybe_unused]] bool const initialisedKit = init(UnitType::Kit, std::string());
+    assert(initialisedKit);
     assert(!UnitBase::get().isFinished());
     assert(!UnitKit::get().isFinished());
     assert(GlobalArray);
