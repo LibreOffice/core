@@ -11,6 +11,7 @@
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/kit.hxx>
 #include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -72,6 +73,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestTypeMultiPara)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestMenuInsertPageNumber)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>1</PARAGRAPH>"_ustr, collectText());
@@ -79,6 +85,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestMenuInsertPageNumber)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestMenuInsertPageBreak)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));

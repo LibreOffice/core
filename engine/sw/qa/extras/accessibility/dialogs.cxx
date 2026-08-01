@@ -17,6 +17,7 @@
 
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/kit.hxx>
 #include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -28,6 +29,11 @@ using namespace css::accessibility;
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSpecialCharactersDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Special Characters", [this](Dialog& dialog) {
@@ -84,6 +90,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSpecialCharactersDialog)
 /* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestSpecialCharactersDialogFocus)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Special Characters", [](Dialog& dialog) {
@@ -131,6 +142,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestSpecialCharactersDialogFocus)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestHyperlinkDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Hyperlink", [this](Dialog& dialog) {
@@ -154,6 +170,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestHyperlinkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestBookmarkDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Bookmark", [this](Dialog& dialog) {
@@ -177,6 +198,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestBookmarkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSectionDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Insert Section", [this](Dialog& dialog) {
@@ -195,6 +221,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSectionDialog)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFontworkDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Fontwork Gallery", [this](Dialog& dialog) {
@@ -215,6 +246,11 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFontworkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFrameDialog)
 {
+    // The Kit creates no menu bar, the client drawing the menu, so there is nothing to
+    // drive these tests through
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Frame", [](Dialog& dialog) {
