@@ -151,10 +151,15 @@ public static class FlowLayouter
 
             // Collapsing: the gap between two paragraphs is the larger of the two spacings rather than
             // their sum, so only the part of this paragraph's space-before that exceeds the space-after
-            // already added for the one above is added again.
-            Length above = collapsesSpacing && previousSpaceAfter is { } settled
-                ? Length.Max(Length.Zero, layout.SpaceBefore - settled)
-                : layout.SpaceBefore;
+            // already added for the one above is added again. Contextual spacing goes further and
+            // suppresses the gap outright, which means taking that space-after back off.
+            Length above =
+                previousSpaceAfter is { } settled
+                    && ParagraphLayouter.SharesContextualSpacing(previous, paragraph.Format)
+                    ? Length.Zero - settled
+                    : collapsesSpacing && previousSpaceAfter is { } after
+                        ? Length.Max(Length.Zero, layout.SpaceBefore - after)
+                        : layout.SpaceBefore;
 
             top += above + leading;
 

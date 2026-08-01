@@ -920,15 +920,27 @@ public sealed class Paginator
             ? Length.Zero
             : ParagraphLeading.Below(laid[index - 1].Paragraph);
 
-        if (index == 0 || !_options.CollapsesSpacing) return before + leading;
+        if (index == 0 || blocks[index - 1] is not PageParagraph previous) return before + leading;
+
+        // Contextual spacing suppresses the gap entirely, which means taking back the space-after already
+        // added for the paragraph above: `before` is zero here, and leaving its space-after standing would
+        // keep the whole gap on a list whose style states an after and no before.
+        if (blocks[index] is PageParagraph current
+            && ParagraphLayouter.SharesContextualSpacing(previous.Format, current.Format))
+        {
+            // Only when the paragraph above is on this page: its space-after was added to the running
+            // height there and has to come back off here, and at the top of a page there is nothing to
+            // take off — subtracting anyway would put the first line above the margin.
+            return atTopOfPage ? Length.Zero : leading - previous.Format.SpaceAfter;
+        }
+
+        if (!_options.CollapsesSpacing) return before + leading;
 
         // Collapsing: the gap is the larger of the two rather than their sum. The previous paragraph's
         // space-after has already been added to the running height, so what is added here is only the
         // part of space-before that exceeds it. A table before this paragraph collapses nothing, because
         // its own space-after is a table property rather than a paragraph's and the formats do not
         // collapse the two against each other.
-        if (blocks[index - 1] is not PageParagraph previous) return before + leading;
-
         Length excess = before - previous.Format.SpaceAfter;
         return (excess > Length.Zero ? excess : Length.Zero) + leading;
     }

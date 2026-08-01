@@ -396,16 +396,42 @@ public sealed class ParagraphLayouter
     /// </para>
     /// </remarks>
     private static Length SpaceBetween(ParagraphFormat? previous, ParagraphFormat current)
+        => SharesContextualSpacing(previous, current) ? Length.Zero : current.SpaceBefore;
+
+    /// <summary>
+    /// True when contextual spacing suppresses the gap between two consecutive paragraphs.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The whole gap, not half of it: Writer zeroes the upper space outright
+    /// (<c>nUpper = bContextualSpacing ? 0 : …</c> in <c>SwFlowFrame::CalcUpperSpace</c>, both branches),
+    /// and that upper space is what the previous paragraph's space-after and this one's space-before both
+    /// feed into. Suppressing only the space-before leaves the space-after standing, which is the whole
+    /// gap on a list whose style states an after and no before — the common shape, since Word's own
+    /// <c>List Paragraph</c> style is exactly that.
+    /// </para>
+    /// <para>
+    /// So the caller that materialises the gap has to ask this too, and take the previous paragraph's
+    /// space-after back off again. This is exposed rather than folded into the layout because a
+    /// paragraph is laid out once and the gap above it is decided per page, by whatever is stacking them.
+    /// </para>
+    /// </remarks>
+    /// <param name="previous">The paragraph above, or null when there is none in this frame.</param>
+    /// <param name="current">The paragraph whose upper space is being decided.</param>
+    public static bool SharesContextualSpacing(ParagraphFormat? previous, ParagraphFormat current)
     {
-        if (previous is null) return current.SpaceBefore;
+        ArgumentNullException.ThrowIfNull(current);
 
-        bool contextual = current.HasContextualSpacing
-                          && previous.HasContextualSpacing
-                          && previous.LineSpacing == current.LineSpacing
-                          && previous.StartIndent == current.StartIndent
-                          && previous.Alignment == current.Alignment;
-
-        return contextual ? Length.Zero : current.SpaceBefore;
+        // Both sides have to ask for it: a paragraph with contextual spacing after one without still gets
+        // its space. Style identity is approximated by the properties a style carries that a reader can
+        // see here — Writer compares the format collections themselves, which the layout engine does not
+        // have.
+        return previous is not null
+               && current.HasContextualSpacing
+               && previous.HasContextualSpacing
+               && previous.LineSpacing == current.LineSpacing
+               && previous.StartIndent == current.StartIndent
+               && previous.Alignment == current.Alignment;
     }
 
     /// <summary>
