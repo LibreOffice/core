@@ -895,7 +895,8 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
 
     if ( aNameComps.bSchemas )
     {
-        sal_Int32 nIndex = sName.indexOf('.');
+        // tdf#149434 - use the last separator as table names cannot contain dots
+        sal_Int32 nIndex = sName.lastIndexOf('.');
         //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents: no schema separator!");
         if ( nIndex != -1 )
             _rSchema = sName.copy(0, nIndex);
