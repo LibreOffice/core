@@ -173,7 +173,7 @@ static void initWindow(GtvApplicationWindow* window)
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
-        COKitDocumentType eDocType = static_cast<COKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
+        COKitDocumentType eDocType = pDocument->pClass->getDocumentType(pDocument);
         if (eDocType == COKitDocumentType::SPREADSHEET)
         {
             // Align to top left corner, so the tiles are in sync with the

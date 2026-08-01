@@ -2380,7 +2380,7 @@ openDocumentInThread (gpointer data)
     }
     else
     {
-        priv->m_eDocumentType = static_cast<COKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
+        priv->m_eDocumentType = priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument);
         gdk_threads_add_idle(postDocumentLoad, pDocView);
         g_task_return_boolean (task, true);
     }
@@ -2657,7 +2657,7 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
         break;
     case PROP_DOC_POINTER:
         priv->m_pDocument = static_cast<COKitDocument*>(g_value_get_pointer(value));
-        priv->m_eDocumentType = static_cast<COKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
+        priv->m_eDocumentType = priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument);
         break;
     case PROP_EDITABLE:
         kit_doc_view_set_edit (pDocView, g_value_get_boolean (value));
