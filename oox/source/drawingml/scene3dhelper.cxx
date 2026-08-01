@@ -366,7 +366,7 @@ void Scene3DHelper::addProjectionGeometryToMap(
             fFov = std::clamp(fFov, 0.5, 179.5);
             // 15976 = 25000 * tan(32.5°) as in legacy. Better ideas to calculate the distance are
             // welcome.
-            aViewPoint.PositionZ = 15976.0 / tan(basegfx::deg2rad(fFov / 2.0));
+            aViewPoint.PositionZ = 15976.0 / tan(basegfx::deg2rad<2>(fFov));
         }
         else
             aViewPoint.PositionZ = aPrstCameraValuesArray[mnPrstCameraIndex].mfViewPointZ;
