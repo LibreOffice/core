@@ -627,15 +627,19 @@ bits 8-11 are a clip combine mode. There is no single mask that is right twice.
       inside itself and the recursion has to be bounded by something other than the budget,
       which is already shared. Measured: `TestEmfPlusDrawImagePointsWithMetafile` draws
       nothing where LibreOffice draws the nested picture, `ink_ratio 0.000`.
-- [ ] **Custom and anchor line caps.** Six of the eleven GDI+ cap types are arrow heads,
-      diamonds and anchors — line *decorations*, which the drawing model has no place for at
-      all — and a custom cap is a whole path with its own scale. Reported as `PL6038` and the
-      line is drawn without them. Measured: `TestEmfPlusDrawPathWithCustomCap` at `mae 0.0001`
+- [ ] **Custom, triangular and anchor line caps.** GDI+ names ten cap types and `LineCap`
+      expresses three of them; the other seven are triangles, diamonds, arrow heads and
+      anchors — line *decorations*, which the drawing model has no place for at all — and a
+      custom cap is a whole path with its own scale. Reported as `PL6038` and the line is
+      drawn without them. Measured: `TestEmfPlusDrawPathWithCustomCap` at `mae 0.0001`
       but `ink_ratio 0.538`, which is what a missing arrow head costs on a picture that is
       mostly arrow head.
 - [ ] **Image attributes.** A colour matrix, a gamma, a chroma key and a colour remap table,
-      all of which need the pixels. The slot is consumed so that later objects land in the
-      right ones; the image is drawn unadjusted.
+      all of which need the pixels of a JPEG or a PNG rather than of an uncompressed DIB — so
+      this is the one remaining case that a codec here would buy, and the reason the
+      *pixels* open question is answered "no" rather than "never". The object's slot is
+      cleared so that a stale object of another kind cannot be drawn through it, and the
+      image is drawn unadjusted.
 - [ ] **`EmfPlusStrokeFillPath`.** It names a path and nothing else: the pen and brush are
       whatever a preceding record left current, which EMF+ has no state for and this reader
       does not track. `PL6037`, and nothing is drawn — better than drawing it with an
