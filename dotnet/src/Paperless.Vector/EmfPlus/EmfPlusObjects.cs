@@ -605,6 +605,23 @@ internal sealed class EmfPlusImage : EmfPlusObject
     /// <summary>True when the record held a metafile rather than a bitmap.</summary>
     public bool IsMetafile => Type == 2;
 
+    /// <summary>
+    /// The nested picture's own bytes, when the record held a metafile.
+    /// </summary>
+    /// <remarks>
+    /// Kept undecoded, exactly as an encoded bitmap is. Which decoder reads them is
+    /// <c>VectorImages</c>'s question and not this one's: the record's own type field names a
+    /// WMF, an EMF or an EMF+, and all three are already sniffed by content, so believing the
+    /// field would only add a way to be wrong.
+    /// </remarks>
+    public ReadOnlyMemory<byte> MetafileBytes { get; private set; }
+
+    /// <summary>
+    /// The nested picture once it has been decoded, so a picture drawn on forty pages costs one
+    /// decode — the same reason <see cref="VectorImage"/> is a display list rather than a replay.
+    /// </summary>
+    public VectorImage? Nested { get; set; }
+
     /// <summary>Reads an image object.</summary>
     /// <param name="stream">The cursor, positioned at the image's version field.</param>
     public void Read(EmfPlusStream stream)
@@ -616,7 +633,10 @@ internal sealed class EmfPlusImage : EmfPlusObject
 
         if (Type == 2)
         {
-            stream.Skip(8);             // metafile type and size
+            stream.Skip(8);             // the metafile's own type and size, which the bytes repeat
+
+            ReadOnlySpan<byte> nested = stream.Rest();
+            if (!nested.IsEmpty) MetafileBytes = nested.ToArray();
             return;
         }
 

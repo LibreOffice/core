@@ -1672,7 +1672,8 @@ internal sealed class EmfPlusReader
         stream.Skip(4);                 // the image-attributes slot, which needs the pixels
         int sourceUnit = stream.I32();
 
-        if (_objects[flags & 0xFF] is not EmfPlusImage image || image.Image is not { } raster) return;
+        if (_objects[flags & 0xFF] is not EmfPlusImage image) return;
+        if (image.Image is null && image.MetafileBytes.IsEmpty) return;
 
         // [MS-EMFPLUS] 2.3.4.8 allows only a pixel source rectangle, and every producer writes one.
         if (sourceUnit != (int)EmfPlusUnit.Pixel) return;
@@ -1724,6 +1725,18 @@ internal sealed class EmfPlusReader
             new AffineTransform(dw / Unit, shearY / Unit, shearX / Unit, dh / Unit, dx, dy),
             Emu(_map));
 
+        // A nested metafile goes into the same placement square a bitmap would, so the
+        // destination arithmetic above is shared entirely. It is decoded here rather than when
+        // the object was read because a picture that is never drawn should cost nothing, which
+        // is the same reason a bitmap arrives undecoded.
+        if (image.Image is null)
+        {
+            if (Nested(image) is { } nested) _painter.DrawNestedPicture(nested, placement);
+            return;
+        }
+
+        RasterImage raster = image.Image;
+
         bool cropped = sw > 0 && sh > 0 && image.Width > 0 && image.Height > 0
             && (sx != 0 || sy != 0 || Math.Abs(sw - image.Width) > 0.5 || Math.Abs(sh - image.Height) > 0.5);
 
@@ -1743,6 +1756,42 @@ internal sealed class EmfPlusReader
             Length.FromEmu((long)Math.Round(image.Height / sh * Unit)));
 
         _painter.DrawTransformedImage(raster, placement, whole);
+    }
+
+    /// <summary>
+    /// The picture an image object carries as a whole further metafile, decoded once.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Re-entering the decoder from inside itself needs a bound, and the budget is the wrong
+    /// one.</b> A budget is spent as work is done; a picture nested a thousand deep that draws
+    /// almost nothing at each level never spends any of it. <see cref="MetafileBudget.Nested"/>
+    /// counts the quantity that actually grows and answers null when none is left, which is why
+    /// the guard lives there rather than here.
+    /// </para>
+    /// <para>
+    /// <b>Which decoder reads it is <c>VectorImages</c>'s question.</b> The image record names
+    /// a WMF, an EMF or an EMF+, and all three are sniffed by content already — so a nested EMF+
+    /// re-enters this very reader through the ordinary front door, with no second entry point
+    /// and nothing here that knows which format it handed on.
+    /// </para>
+    /// </remarks>
+    private VectorImage? Nested(EmfPlusImage image)
+    {
+        if (image.Nested is not null) return image.Nested;
+        if (image.MetafileBytes.IsEmpty) return null;
+
+        if (_budget.Nested is not { } limits)
+        {
+            Warn(
+                "PL6039",
+                "An EMF+ carried a metafile as an image more deeply than Paperless will follow; "
+                    + "the nested picture was not drawn.");
+            return null;
+        }
+
+        image.Nested = VectorImages.Decode(image.MetafileBytes, limits);
+        return image.Nested.Content.Commands.Count > 0 ? image.Nested : null;
     }
 
     // ---------------------------------------------------------------- text
