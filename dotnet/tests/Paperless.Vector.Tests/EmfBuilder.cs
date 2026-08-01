@@ -562,6 +562,9 @@ internal enum EmfFunction : uint
     /// <summary>Discards the recorded path.</summary>
     AbortPath = 68,
 
+    /// <summary>Producer-private data, and where an EMF+ stream lives.</summary>
+    Comment = 70,
+
     /// <summary>Combines a region into the clip.</summary>
     ExtSelectClipRgn = 75,
 
