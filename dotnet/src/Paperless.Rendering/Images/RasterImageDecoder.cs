@@ -107,6 +107,33 @@ public static class RasterImageDecoder
     /// saying nothing.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// The image with its pixels available, decoding it first if a reader handed it over
+    /// still encoded.
+    /// </summary>
+    /// <remarks>
+    /// Readers emit <see cref="RasterImage.Encoded"/> rather than decoding, so that nothing
+    /// on the extraction path depends on a codec. Every backend that wants pixels therefore
+    /// has to come through here first. Returns null when the bytes are not an image this
+    /// decoder knows, which is a document to draw without the picture rather than a document
+    /// that fails to draw.
+    /// </remarks>
+    public static RasterImage? Ensure(RasterImage image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+
+        if (image.IsDecoded) return image;
+        if (image.EncodedBytes.IsEmpty) return null;
+
+        RasterImage? decoded = Decode(image.EncodedBytes, image.EncodedMediaType);
+
+        // The original bytes are kept, so a JPEG can still pass through to DCTDecode
+        // untouched even though it had to be decoded here to learn its size.
+        return decoded is null
+            ? null
+            : decoded with { EncodedBytes = image.EncodedBytes, EncodedMediaType = image.EncodedMediaType };
+    }
+
     public static string? Sniff(ReadOnlySpan<byte> encoded)
     {
         // Spelled as bytes rather than as a u8 literal: PNG's first byte is 0x89, and a u8 literal

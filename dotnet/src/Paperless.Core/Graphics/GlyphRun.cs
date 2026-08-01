@@ -115,7 +115,7 @@ public sealed record FontReference
 }
 
 /// <summary>
-/// A decoded raster image.
+/// A raster image, either decoded to pixels or still in the bytes the file stored.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -128,17 +128,31 @@ public sealed record FontReference
 /// any. A PDF backend can then pass a JPEG through untouched instead of
 /// re-compressing it, which is both faster and lossless.
 /// </para>
+/// <para>
+/// <strong>A reader may emit one without decoding it</strong>, through
+/// <see cref="Encoded"/>: a picture in a document is a `.png` or `.jpeg` in a package
+/// entry or a record, and the only thing that can turn it into pixels is a codec.
+/// Decoding lives in <c>Paperless.Rendering</c> because that is where SkiaSharp lives,
+/// and requiring pixels here would have forced every reader to depend on the rasteriser
+/// — which would mean <c>paperless extract</c> paying for a codec it never uses, against
+/// the rule that extraction must not pay for rendering. So the invariant is *either*
+/// <see cref="Pixels"/> or <see cref="EncodedBytes"/>, and a backend decodes what it was
+/// given when it needs pixels.
+/// </para>
 /// </remarks>
 public sealed record RasterImage
 {
-    /// <summary>Width in pixels.</summary>
-    public required int Width { get; init; }
+    /// <summary>Width in pixels, or zero when the image has not been decoded yet.</summary>
+    public int Width { get; init; }
 
-    /// <summary>Height in pixels.</summary>
-    public required int Height { get; init; }
+    /// <summary>Height in pixels, or zero when the image has not been decoded yet.</summary>
+    public int Height { get; init; }
 
-    /// <summary>Straight RGBA pixels, row-major, <c>Width * Height * 4</c> bytes.</summary>
-    public required ReadOnlyMemory<byte> Pixels { get; init; }
+    /// <summary>
+    /// Straight RGBA pixels, row-major, <c>Width * Height * 4</c> bytes — empty when the
+    /// image is still encoded. Check <see cref="IsDecoded"/> before reading it.
+    /// </summary>
+    public ReadOnlyMemory<byte> Pixels { get; init; }
 
     /// <summary>
     /// The original encoded bytes, when the source was a compressed format that a
@@ -148,4 +162,20 @@ public sealed record RasterImage
 
     /// <summary>The media type of <see cref="EncodedBytes"/>, e.g. <c>image/jpeg</c>.</summary>
     public string? EncodedMediaType { get; init; }
+
+    /// <summary>True when <see cref="Pixels"/> holds the decoded image.</summary>
+    public bool IsDecoded => !Pixels.IsEmpty;
+
+    /// <summary>
+    /// An image a reader has taken from a file but not decoded, to be decoded by whichever
+    /// backend needs pixels.
+    /// </summary>
+    /// <param name="bytes">The bytes exactly as the file stored them.</param>
+    /// <param name="mediaType">
+    /// The media type the file declared, where it declared one. It is a hint only: a
+    /// decoder should sniff the bytes, because office files mislabel images as routinely
+    /// as they mislabel themselves.
+    /// </param>
+    public static RasterImage Encoded(ReadOnlyMemory<byte> bytes, string? mediaType = null)
+        => new() { EncodedBytes = bytes, EncodedMediaType = mediaType };
 }

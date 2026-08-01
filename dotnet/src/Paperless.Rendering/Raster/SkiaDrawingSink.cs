@@ -443,6 +443,10 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// </remarks>
     private static SKImage? Image(RasterImage image)
     {
+        // A reader hands over the bytes the file stored; the codec lives here.
+        if (Images.RasterImageDecoder.Ensure(image) is not { } decoded) return null;
+        image = decoded;
+
         if (image.Pixels.Length < image.Width * image.Height * 4) return null;
 
         SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
