@@ -98,6 +98,128 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		// Draws a text run at (50, 100), scaled by 10 at font size 10, with the given fields
+		// over those defaults, and returns the recorder of the drawing calls. The stub canvas
+		// measures every character 10 wide.
+		function drawRun(fields: any): CanvasRecorder {
+			const text = fields.text ?? 'ab';
+			const recorder = new CanvasRecorder(200, 150);
+			new cool.VectorPrimitiveRenderer().renderPrimitive(recorder as any, {
+				type: 'textSimplePortion',
+				text,
+				textPosition: 0,
+				textLength: text.length,
+				matrix: [10, 0, 0, 10, 50, 100],
+				fontSize: 10,
+				fontcolor: '#000000',
+				familyname: 'Arial',
+				...fields,
+			});
+			return recorder;
+		}
+
+		it('draws a run whole when the browser width matches its advances', function () {
+			const recorder = drawRun({
+				advances: [10, 10],
+			});
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 1);
+			nodeassert.deepStrictEqual(fills[0].args, ['ab', 50, 100]);
+		});
+
+		it('draws each word at the sum of the advances before it', function () {
+			// On this justified line the space steps 40 but measures 10, so the
+			// second word starts at 50 + 10 + 10 + 40. Each word matches its
+			// advances, so neither is stretched.
+			const recorder = drawRun({
+				text: 'ab cd',
+				advances: [10, 10, 40, 10, 10],
+			});
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.deepStrictEqual(fills[0].args, ['ab', 50, 100]);
+			nodeassert.deepStrictEqual(fills[1].args, ['cd', 110, 100]);
+			nodeassert.strictEqual(recorder.callsOf('scale').length, 0);
+		});
+
+		it('stretches a word to its advances when the browser measures another width', function () {
+			// The advances make the word 70 wide and the browser measures 20.
+			const recorder = drawRun({
+				advances: [30, 40],
+			});
+
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('translate')[0].args,
+				[50, 100],
+			);
+			nodeassert.deepStrictEqual(recorder.callsOf('scale')[0].args, [3.5, 1]);
+			nodeassert.deepStrictEqual(recorder.callsOf('fillText')[0].args, [
+				'ab',
+				0,
+				0,
+			]);
+		});
+
+		it('draws a letter with its combining mark, and a surrogate pair, each whole', function () {
+			// A letter with a combining accent, then a character of two UTF-16
+			// units. The advances have one entry per unit.
+			const pair = '\u{1F600}';
+			const accented = 'e\u0301';
+			const recorder = drawRun({
+				text: accented + ' ' + pair,
+				advances: [10, 0, 30, 20, 0],
+			});
+
+			const drawn = recorder
+				.callsOf('fillText')
+				.map((call: any) => call.args[0]);
+			nodeassert.deepStrictEqual(drawn, [accented, pair]);
+		});
+
+		it('draws a right-to-left run as the browser lays it out', function () {
+			// The browser orders and shapes right-to-left text, so the run is
+			// drawn in one call.
+			const recorder = drawRun({
+				rtl: true,
+				advances: [30, 40],
+			});
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 1);
+			nodeassert.deepStrictEqual(fills[0].args, ['ab', 50, 100]);
+		});
+
+		it('places words by their advances in a transformed run', function () {
+			// The matrix scales by 20 at font size 10, so the run draws under a
+			// transform and the advances are halved into drawing units.
+			const recorder = drawRun({
+				text: 'ab cd',
+				matrix: [20, 0, 0, 20, 50, 100],
+				advances: [20, 20, 80, 20, 20],
+			});
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.deepStrictEqual(fills[0].args, ['ab', 0, 0]);
+			nodeassert.deepStrictEqual(fills[1].args, ['cd', 60, 0]);
+		});
+
+		it('spans decorations over the width of the advances', function () {
+			// The advances make the run 70 wide and the browser measures 20, so
+			// the underline's end shows which width was used.
+			const recorder = drawRun({
+				type: 'textDecoratedPortion',
+				underline: true,
+				advances: [30, 40],
+			});
+
+			const lines = recorder.callsOf('lineTo');
+			nodeassert.strictEqual(lines.length, 1);
+			nodeassert.strictEqual(lines[0].args[0], 50 + 70);
+		});
+
 		it('renders polyPolygonColor with its fill colour', function () {
 			const primitive = loadVectorRenderingReference('testPolyPolygonColor')
 				.primitives[0];

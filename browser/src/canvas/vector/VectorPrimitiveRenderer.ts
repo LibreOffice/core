@@ -18,6 +18,16 @@ namespace cool {
 	/// loaded and registered, so it can be used for drawing.
 	export type FontLoadedLookup = (fontId: string) => boolean;
 
+	/// Where a text run is drawn: the anchor in drawing units, the font size, the factor from an
+	/// advance in the parent space to drawing units, and the substring to paint.
+	interface TextFrame {
+		x: number;
+		y: number;
+		fontSize: number;
+		advanceScale: number;
+		text: string;
+	}
+
 	/// Renders JSON primitives with Canvas 2D drawing operations.
 	export class VectorPrimitiveRenderer {
 		private _bitmapLookup: BitmapLookup | undefined;
@@ -389,7 +399,7 @@ namespace cool {
 		private _setupTextFrame(
 			context: CanvasRenderingContext2D,
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
-		): { x: number; y: number; fontSize: number; text: string } | null {
+		): TextFrame | null {
 			if (!primitive.text) return null;
 			const start = primitive.textPosition ?? 0;
 			const length = primitive.textLength ?? primitive.text.length - start;
@@ -437,12 +447,42 @@ namespace cool {
 					.then(matrix)
 					.applyTo(context);
 			}
+			// advanceScale converts an advance from the parent space to drawing
+			// units, which are font-size units under a transform.
+			const xScale = matrix.lengthOfXAxis();
 			return {
 				x: transformed ? 0 : matrix.e,
 				y: transformed ? 0 : matrix.f,
 				fontSize,
+				advanceScale: transformed && xScale > 0 ? fontSize / xScale : 1,
 				text,
 			};
+		}
+
+		// The x past each UTF-16 unit of the visible text, in the parent space:
+		// the running sum of the advances. Null when the run has no advances,
+		// too few for the text, or is right-to-left, which needs the browser's
+		// ordering and shaping.
+		private static _advanceDistances(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			text: string,
+		): number[] | null {
+			const steps = primitive.advances;
+			if (
+				!steps ||
+				steps.length < text.length ||
+				text.length === 0 ||
+				primitive.rtl
+			)
+				return null;
+
+			const distances: number[] = [];
+			let reached = 0;
+			for (let k = 0; k < text.length; k++) {
+				reached += steps[k];
+				distances.push(reached);
+			}
+			return distances;
 		}
 
 		private _renderTextSimplePortion(
@@ -453,17 +493,120 @@ namespace cool {
 			const frame = this._setupTextFrame(context, primitive);
 			if (frame) {
 				context.fillStyle = primitive.fontcolor ?? '#000000';
-				context.fillText(frame.text, frame.x, frame.y);
+				this._drawTextRun(context, primitive, frame, false);
 
 				if (primitive.outline) {
 					context.strokeStyle = primitive.fontcolor ?? '#000000';
-					// Outline thickness scales with the font size. A one-
-					// pixel stroke becomes invisible on large text.
+					// Outline thickness scales with the font size so it stays
+					// visible on large text.
 					context.lineWidth = Math.max(1, frame.fontSize / 20);
-					context.strokeText(frame.text, frame.x, frame.y);
+					this._drawTextRun(context, primitive, frame, true);
 				}
 			}
 			context.restore();
+		}
+
+		// Draws the run in one call when it has no usable advances or the
+		// browser width already matches them. Otherwise each word is drawn at
+		// the sum of the advances before it, and stretched to its advance width
+		// when the browser measures it differently. Spaces draw nothing and are
+		// skipped. The browser still shapes inside a word, so ligatures, marks
+		// and joined letters stay whole.
+		private _drawTextRun(
+			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			frame: TextFrame,
+			stroke: boolean,
+		): void {
+			const draw = (text: string, x: number, y: number): void => {
+				if (stroke) context.strokeText(text, x, y);
+				else context.fillText(text, x, y);
+			};
+
+			const text = frame.text;
+			const distances = VectorPrimitiveRenderer._advanceDistances(
+				primitive,
+				text,
+			);
+			if (!distances) {
+				draw(text, frame.x, frame.y);
+				return;
+			}
+
+			// The x a character of the text starts at, in drawing units.
+			const startOf = (k: number): number =>
+				k === 0 ? 0 : distances[k - 1] * frame.advanceScale;
+
+			// A difference under half a device pixel is invisible. The context
+			// transform scales drawing units to device pixels.
+			const transform = context.getTransform();
+			const pixelsPerUnit = Math.hypot(transform.a, transform.b) || 1;
+			const tolerance = 0.5 / pixelsPerUnit;
+
+			if (
+				Math.abs(this._measuredWidth(context, text) - startOf(text.length)) <=
+				tolerance
+			) {
+				draw(text, frame.x, frame.y);
+				return;
+			}
+
+			for (const [from, to] of VectorPrimitiveRenderer._words(text)) {
+				const word = text.substring(from, to);
+				const x = frame.x + startOf(from);
+				const width = startOf(to) - startOf(from);
+				const measured = this._measuredWidth(context, word);
+				if (measured > 0 && Math.abs(measured - width) > tolerance) {
+					context.save();
+					context.translate(x, frame.y);
+					context.scale(width / measured, 1);
+					draw(word, 0, 0);
+					context.restore();
+				} else {
+					draw(word, x, frame.y);
+				}
+			}
+		}
+
+		// The words of a text as [from, to) ranges of UTF-16 units, split at
+		// white space.
+		private static _words(text: string): number[][] {
+			const words: number[][] = [];
+			let from = -1;
+			for (let k = 0; k <= text.length; k++) {
+				const space = k === text.length || /\s/.test(text[k]);
+				if (space && from >= 0) {
+					words.push([from, k]);
+					from = -1;
+				} else if (!space && from < 0) {
+					from = k;
+				}
+			}
+			return words;
+		}
+
+		// Browser-measured widths by font and text. Every frame redraws the
+		// same runs, so each width is measured once. The cache is cleared when
+		// it holds more entries than a page shows.
+		private _measuredWidths: Map<string, number> = new Map();
+		private static readonly _MEASURED_WIDTHS_LIMIT = 4096;
+
+		private _measuredWidth(
+			context: CanvasRenderingContext2D,
+			text: string,
+		): number {
+			const key = context.font + '\n' + text;
+			let width = this._measuredWidths.get(key);
+			if (width === undefined) {
+				if (
+					this._measuredWidths.size >=
+					VectorPrimitiveRenderer._MEASURED_WIDTHS_LIMIT
+				)
+					this._measuredWidths.clear();
+				width = context.measureText(text).width;
+				this._measuredWidths.set(key, width);
+			}
+			return width;
 		}
 
 		private _renderTextDecoratedPortion(
@@ -480,7 +623,15 @@ namespace cool {
 			context.save();
 			const frame = this._setupTextFrame(context, primitive);
 			if (frame) {
-				const width = context.measureText(frame.text).width;
+				// Decorations span the same advances as the glyphs, when the
+				// run has them.
+				const distances = VectorPrimitiveRenderer._advanceDistances(
+					primitive,
+					frame.text,
+				);
+				const width = distances
+					? distances[frame.text.length - 1] * frame.advanceScale
+					: context.measureText(frame.text).width;
 				const lineWidth = Math.max(1, frame.fontSize / 20);
 				const textColor = primitive.fontcolor ?? '#000000';
 
