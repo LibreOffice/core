@@ -182,6 +182,10 @@ abstract class RenderManagerBase {
 	// -- vector rendering --
 	abstract isVectorRendering(): boolean;
 
+	abstract predictTextInsert(text: string): boolean;
+
+	abstract predictTextDelete(before: number, after: number): boolean;
+
 	abstract requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

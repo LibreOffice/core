@@ -213,6 +213,9 @@ interface AppInterface {
 		textCursor: {
 			visible: boolean;
 			rectangle: null | cool.SimpleRectangle;
+			// The caret's paragraph and character index, or null before a
+			// cursor message carries them.
+			logical: null | cool.LogicalCaret;
 		};
 		fileBasedView: boolean;
 		writer: {

@@ -391,6 +391,43 @@ namespace cool {
 			10: 900,
 		};
 
+		/// The font family for a run: the face the engine sent once its font
+		/// has loaded, otherwise the run's family name.
+		static resolveFontFamily(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			fontLoaded: FontLoadedLookup | undefined,
+		): string {
+			if (
+				primitive.fontId !== undefined &&
+				fontLoaded &&
+				fontLoaded(primitive.fontId)
+			)
+				return 'vecfont-' + primitive.fontId;
+			return primitive.familyname ?? 'sans-serif';
+		}
+
+		/// The CSS font string for a run's style, weight and size with the
+		/// given family.
+		static cssFont(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			family: string,
+		): string {
+			let style = primitive.italic ? 'italic' : 'normal';
+			let weight =
+				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
+			// The engine's own face is already the right cut, so the style and
+			// weight stay plain, except where the engine flags that the family
+			// has no cut and the browser must synthesize it.
+			if (
+				primitive.fontId !== undefined &&
+				family === 'vecfont-' + primitive.fontId
+			) {
+				if (!primitive.syntheticItalic) style = 'normal';
+				if (!primitive.syntheticBold) weight = 400;
+			}
+			return `${style} ${weight} ${primitive.fontSize ?? 12}px "${family}"`;
+		}
+
 		// Sets up the canvas font and (when needed) the rotation
 		// transform for a text primitive, and returns the drawing
 		// anchor and the substring to paint. Callers must save and
@@ -412,25 +449,11 @@ namespace cool {
 			const matrix =
 				Matrix2D.fromArray(primitive.matrix) ??
 				new Matrix2D(fontSize, 0, 0, fontSize, 0, 0);
-			let style = primitive.italic ? 'italic' : 'normal';
-			let weight =
-				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
-			// Prefer the exact face the engine sent, once it has loaded.
-			// Fall back to the family name otherwise.
-			let family = primitive.familyname ?? 'sans-serif';
-			if (
-				primitive.fontId !== undefined &&
-				this._fontLoaded &&
-				this._fontLoaded(primitive.fontId)
-			) {
-				family = 'vecfont-' + primitive.fontId;
-				// The face is already the right cut, so asking again would
-				// apply it twice. The engine flags a family that has no cut.
-				if (!primitive.syntheticItalic) style = 'normal';
-				if (!primitive.syntheticBold) weight = 400;
-			}
-
-			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
+			const family = VectorPrimitiveRenderer.resolveFontFamily(
+				primitive,
+				this._fontLoaded,
+			);
+			context.font = VectorPrimitiveRenderer.cssFont(primitive, family);
 			// A matrix that only scales by the font size moves the
 			// anchor and nothing else, so it skips the transform.
 			const transformed =

@@ -17,7 +17,7 @@
  * text area itself.
  */
 
-/* global app _ CursorHandler cool */
+/* global app _ CursorHandler cool RenderManager */
 
 window.L.TextInput = window.L.Layer.extend({
 	initialize: function() {
@@ -989,6 +989,11 @@ window.L.TextInput = window.L.Layer.extend({
 		// this._logCharCodeSequence(text);
 		this._fancyLog('send-text-to-coolwsd', text);
 
+		// Show plain typed text in the vector view before the server re-renders.
+		if (RenderManager.isVectorRendering() && cool.canPredictText(text)) {
+			RenderManager.predictTextInsert(text);
+		}
+
 		// MSIE/Edge cannot compare a string to "\n" for whatever reason,
 		// so compare charcode as well
 		if (text === '\n' || (text.length === 1 && text.charCodeAt(0) === 13)) {
@@ -1333,6 +1338,10 @@ window.L.TextInput = window.L.Layer.extend({
 		if (this._map._debug.logKeyboardEvents) {
 			window.app.console.log('Remove ' + before + ' before, and ' + after + ' after');
 		}
+
+		// Show the deletion in the vector view before the server re-renders.
+		if (RenderManager.isVectorRendering())
+			RenderManager.predictTextDelete(before, after);
 
 		this._followMyCursor();
 

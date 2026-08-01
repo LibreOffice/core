@@ -2411,9 +2411,17 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	// -- vector rendering --
-	// Bitmap tiles carry no vector content: there is no part to name, fetch or
-	// draw, and every layer is visible.
+	// Bitmap tiles carry no vector content or text to predict into, and every
+	// layer is visible.
 	public isVectorRendering(): boolean {
+		return false;
+	}
+
+	public predictTextInsert(_text: string): boolean {
+		return false;
+	}
+
+	public predictTextDelete(_before: number, _after: number): boolean {
 		return false;
 	}
 

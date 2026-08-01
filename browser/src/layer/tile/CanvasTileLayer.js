@@ -1792,6 +1792,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		app.file.textCursor.rectangle = new cool.SimpleRectangle(recCursor.getTopLeft().x, recCursor.getTopLeft().y, recCursor.getSize().x, recCursor.getSize().y);
 
+		// The caret's logical position, or null when the message does not carry it. The
+		// message sends every value as a string, so the numbers are parsed.
+		const cursorParagraph = obj.paragraph !== undefined ? parseInt(obj.paragraph) : NaN;
+		const cursorIndex = obj.index !== undefined ? parseInt(obj.index) : NaN;
+		if (!isNaN(cursorParagraph) && !isNaN(cursorIndex))
+			app.file.textCursor.logical = { paragraph: cursorParagraph, index: cursorIndex };
+		else
+			app.file.textCursor.logical = null;
+
 		if (this.isWriter()) {
 			app.sectionContainer.onCursorPositionChanged();
 		}

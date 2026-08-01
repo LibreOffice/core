@@ -20,6 +20,13 @@
  * a vector-rendered document has no bitmap tile grid.
  */
 
+/// The cached tree and caret that a predicted edit works on.
+interface EditTarget {
+	tree: cool.PredictionTree;
+	caret: cool.SimpleRectangle;
+	logical: cool.LogicalCaret | null;
+}
+
 class VectorManager extends RenderManagerBase {
 	private _renderer: cool.VectorPrimitiveRenderer =
 		new cool.VectorPrimitiveRenderer(
@@ -732,6 +739,174 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged(
 			carried.flatMap((object) => (object.id === undefined ? [] : [object.id])),
 		);
+	}
+
+	// Shared off-screen 2d context for measuring text, created on first use.
+	private static _measureContext: CanvasRenderingContext2D | null = null;
+
+	private static measureContext(): CanvasRenderingContext2D | null {
+		if (!VectorManager._measureContext) {
+			const canvas = document.createElement('canvas');
+			const context = canvas.getContext('2d');
+			// The prediction measures text one code point at a time and sums the widths. With
+			// kerning off the sum equals the width of the whole string, where the browser
+			// supports the setting.
+			if (context && 'fontKerning' in context) context.fontKerning = 'none';
+			VectorManager._measureContext = context;
+		}
+		return VectorManager._measureContext;
+	}
+
+	// The width of a string as the renderer draws the run, so predicted widths
+	// match the screen. Every width is zero without a 2d context.
+	protected _textMeasure(): cool.TextRunMeasure {
+		return (run, text) => {
+			const context = VectorManager.measureContext();
+			if (!context) return 0;
+			const family = cool.VectorPrimitiveRenderer.resolveFontFamily(
+				run,
+				(fontId) => this._fonts.has(fontId),
+			);
+			context.font = cool.VectorPrimitiveRenderer.cssFont(run, family);
+			return context.measureText(text).width;
+		};
+	}
+
+	// The measurer over that width, created on first use.
+	private _textMeasurer: cool.TextMeasurer | null = null;
+
+	private _measurer(): cool.TextMeasurer {
+		if (!this._textMeasurer)
+			this._textMeasurer = new cool.TextMeasurer(this._textMeasure());
+		return this._textMeasurer;
+	}
+
+	/// The id of the page in the edit view, or undefined while the page list
+	/// does not name it.
+	private _selectedPartId(): cool.VectorPartGuid | undefined {
+		const entry = app.impress?.partList?.[this._docLayer._selectedPart];
+		return typeof entry?.part === 'string' ? entry.part : undefined;
+	}
+
+	/// The tree with the entries of other views' running text edits left out of
+	/// the order. Every view that edits an object has its own entry for it.
+	private _asThisViewEditsIt(
+		data: cool.VectorPrimitivesData,
+	): cool.VectorPrimitivesData {
+		const ownViewId = this._ownViewId;
+		if (ownViewId === undefined) return data;
+		const order = data.order.filter((id) => {
+			const object = data.objects.get(id);
+			return object?.kind !== 'texteditoverlay' || object.viewId === ownViewId;
+		});
+		return order.length === data.order.length ? data : { ...data, order };
+	}
+
+	// The cached tree and caret of the edited part, or null when no caret is
+	// visible, text is selected or the part is not cached.
+	private _editTarget(): EditTarget | null {
+		const cursor = app.file.textCursor;
+		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
+		// Typing over a selection replaces it, which is more than an insertion,
+		// so the server handles that edit.
+		if (TextSelections.isActive()) return null;
+		const partId = this._selectedPartId();
+		const data = partId === undefined ? undefined : this._cache.get(partId);
+		if (!data) return null;
+		return {
+			tree: new cool.PredictionTree(
+				this._asThisViewEditsIt(data),
+				this._measurer(),
+			),
+			caret: cursor.rectangle,
+			logical: cursor.logical ?? null,
+		};
+	}
+
+	/// Insert typed text into the cached tree so it shows before the server
+	/// re-renders. Returns true when the tree changed.
+	predictTextInsert(text: string): boolean {
+		return this._predictEdit((position) => {
+			const advance = position.insert(text);
+			return advance > 0
+				? { indexShift: text.length, caretShift: advance }
+				: null;
+		});
+	}
+
+	/// Delete before characters left of the caret and after characters right of
+	/// it in the cached tree. Returns true when the tree changed.
+	predictTextDelete(before: number, after: number): boolean {
+		return this._predictEdit((position) => {
+			const result = position.delete(before, after);
+			return result.removed > 0
+				? { indexShift: -result.removedBefore, caretShift: result.caretShift }
+				: null;
+		});
+	}
+
+	// The caret position in the tree of the edit target, or null when no run
+	// there is editable.
+	private _lookUpCaret(target: EditTarget): cool.CaretPosition | null {
+		return target.tree.caretAt(
+			target.caret.x1,
+			target.caret.y1,
+			target.caret.y2,
+			target.logical ?? undefined,
+		);
+	}
+
+	// Run a predicted edit at the caret: find the edit target and the caret
+	// position, apply the edit, then place the caret and redraw. The edit
+	// returns how far the caret's index and x moved, or null when it changed
+	// nothing. Returns true when the tree changed.
+	private _predictEdit(
+		apply: (
+			position: cool.CaretPosition,
+		) => { indexShift: number; caretShift: number } | null,
+	): boolean {
+		const target = this._editTarget();
+		if (!target) return false;
+		const position = this._lookUpCaret(target);
+		if (!position) return false;
+		const moved = apply(position);
+		if (!moved) return false;
+		// Advance the logical caret so the next keystroke predicts from there.
+		if (target.logical)
+			target.logical.index = Math.max(
+				0,
+				target.logical.index + moved.indexShift,
+			);
+		this._placeCaret(target, moved.caretShift);
+		this.changedHere();
+		return true;
+	}
+
+	// Place the caret at its logical position in the edited tree, so it follows
+	// text a re-wrap moved to another line, and redraw it. Without a logical
+	// position, slide it along its line by the edit's width. target.caret is
+	// the caret before the edit, which finds the edited object in the new tree.
+	private _placeCaret(target: EditTarget, fallbackShift: number): void {
+		if (target.logical) {
+			const geometry = this._lookUpCaret(target)?.geometry();
+			if (geometry) {
+				app.file.textCursor.rectangle = new cool.SimpleRectangle(
+					geometry.x,
+					geometry.top,
+					0,
+					geometry.height,
+				);
+				(this._docLayer as any)._onUpdateCursor();
+				return;
+			}
+		}
+		this._advanceCaret(target.caret, fallbackShift);
+	}
+
+	private _advanceCaret(caret: cool.SimpleRectangle, shift: number): void {
+		if (shift === 0) return;
+		caret.moveBy([shift, 0]);
+		(this._docLayer as any)._onUpdateCursor();
 	}
 
 	/// Handle a fetched bitmap: cache it and re-render the previews

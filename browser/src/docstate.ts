@@ -115,6 +115,7 @@
 				This gives the coordinate relative to the document, not relative to the UI.
 			*/
 			rectangle: null, // SimpleRectangle.
+			logical: null, // { paragraph, index } once a cursor message carries it.
 		},
 		fileBasedView: false, // (draw-impress only) Default is false. For read-only documents, user can view all parts at once. In that case, this variable is set to "true".
 		writer: {

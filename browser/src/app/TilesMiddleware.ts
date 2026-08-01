@@ -234,6 +234,14 @@ class RenderManager {
 		return RenderManager.ensureInstance().isVectorRendering();
 	}
 
+	static predictTextInsert(text: string): boolean {
+		return RenderManager.ensureInstance().predictTextInsert(text);
+	}
+
+	static predictTextDelete(before: number, after: number): boolean {
+		return RenderManager.ensureInstance().predictTextDelete(before, after);
+	}
+
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,
