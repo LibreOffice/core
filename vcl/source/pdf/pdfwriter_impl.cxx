@@ -1926,33 +1926,11 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_uInt16>& rCIDs,
-                                     sal_uInt32 nGlyphs)
+sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, sal_uInt32 nGlyphs)
 {
     sal_Int32 nStream = createObject();
     if (!updateObject(nStream))
         return 0;
-
-    // Map each code byte to the CID of the glyph at the same subset position.
-    // For CID-keyed CFF the CIDs come from the font's charset; for name-keyed
-    // CFF glyph IDs are used as CIDs directly (identity).
-    SAL_WARN_IF(!rCIDs.empty() && rCIDs.size() < nGlyphs, "vcl.pdfwriter",
-                "CID mapping is shorter than the subset");
-    struct Range
-    {
-        sal_uInt32 nFirst;
-        sal_uInt32 nLast;
-        sal_uInt16 nCID;
-    };
-    std::vector<Range> aRanges;
-    for (sal_uInt32 i = 0; i < nGlyphs; ++i)
-    {
-        sal_uInt16 nCID = i < rCIDs.size() ? rCIDs[i] : i;
-        if (!aRanges.empty() && aRanges.back().nCID + (i - aRanges.back().nFirst) == nCID)
-            aRanges.back().nLast = i;
-        else
-            aRanges.push_back({ i, i, nCID });
-    }
 
     OStringBuffer aContents(PDFWRITER_IMPL_BUFFERSIZE);
     aContents.append("/CIDInit/ProcSet findresource begin\n"
@@ -1971,24 +1949,11 @@ sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_
                        "<00> <FF>\n"
                        "endcodespacerange\n");
 
-    // At most 100 entries per begincidrange section (Adobe CMap spec).
-    size_t nEmitted = 0;
-    while (nEmitted < aRanges.size())
-    {
-        size_t nChunk = std::min<size_t>(aRanges.size() - nEmitted, 100);
-        aContents.append(OString::number(nChunk) + " begincidrange\n");
-        for (size_t n = 0; n < nChunk; ++n)
-        {
-            const auto& rRange = aRanges[nEmitted + n];
-            aContents.append('<');
-            COSWriter::appendHex(static_cast<sal_Int8>(rRange.nFirst), aContents);
-            aContents.append("> <");
-            COSWriter::appendHex(static_cast<sal_Int8>(rRange.nLast), aContents);
-            aContents.append("> " + OString::number(rRange.nCID) + "\n");
-        }
-        aContents.append("endcidrange\n");
-        nEmitted += nChunk;
-    }
+    // The subset has an identity charset, so the CID of each glyph is its glyph
+    // ID, which is also the code we encoded it with.
+    aContents.append("1 begincidrange\n<00> <");
+    COSWriter::appendHex(static_cast<sal_Int8>(nGlyphs - 1), aContents);
+    aContents.append("> 0\nendcidrange\n");
 
     aContents.append("endcmap\n"
                      "CMapName currentdict /CMap defineresource pop\n"
@@ -2045,21 +2010,17 @@ sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitCIDSet(const std::vector<sal_uInt16>& rCIDs, sal_uInt32 nGlyphs)
+sal_Int32 PDFWriterImpl::emitCIDSet(sal_uInt32 nGlyphs)
 {
     // Only PDF/A-1 requires one, and PDF 2.0 deprecates it.
     if (m_nPDFA_Version != 1 || !nGlyphs)
         return 0;
 
     // A table of bits indexed by CID, high-order bit of the first byte first.
-    sal_uInt32 nMaxCID
-        = rCIDs.empty() ? nGlyphs - 1 : *std::max_element(rCIDs.begin(), rCIDs.end());
-    std::vector<sal_uInt8> aCIDSet(nMaxCID / 8 + 1, 0);
-    for (sal_uInt32 i = 0; i < nGlyphs; ++i)
-    {
-        sal_uInt32 nCID = i < rCIDs.size() ? rCIDs[i] : i;
+    // The charset is identity, so the CIDs are 0 to nGlyphs - 1.
+    std::vector<sal_uInt8> aCIDSet((nGlyphs - 1) / 8 + 1, 0);
+    for (sal_uInt32 nCID = 0; nCID < nGlyphs; ++nCID)
         aCIDSet[nCID / 8] |= 0x80 >> (nCID % 8);
-    }
 
     sal_Int32 nStream = createObject();
     if (!updateObject(nStream))
@@ -2300,7 +2261,7 @@ bool PDFWriterImpl::emitFonts()
                 if ( !writeBuffer( aLine ) ) return false;
 
                 // PDF/A-1 wants the CIDs of a composite subset listed
-                sal_Int32 nCIDSet = emitCIDSet(aSubsetInfo.m_aCIDs, nGlyphs);
+                sal_Int32 nCIDSet = emitCIDSet(nGlyphs);
 
                 // write font descriptor
                 sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first.m_pFace, aSubsetInfo, s_subset.m_nFontID, nFontStream, nCIDSet );
@@ -2311,7 +2272,7 @@ bool PDFWriterImpl::emitFonts()
                 // Emit the CMap and the descendant CIDFont before the Type 0
                 // wrapper. CFF subsets are CIDFontType0, glyf ones CIDFontType2.
                 bool bTrueType = aSubsetInfo.m_nFontType == FontType::SFNT_TTF;
-                sal_Int32 nCMapStream = emitCIDCMap(s_subset.m_nFontID, aSubsetInfo.m_aCIDs, nGlyphs);
+                sal_Int32 nCMapStream = emitCIDCMap(s_subset.m_nFontID, nGlyphs);
                 if (!nCMapStream) return false;
 
                 sal_Int32 nCIDFontObject = createObject();
@@ -2327,32 +2288,14 @@ bool PDFWriterImpl::emitFonts()
                         "/FontDescriptor " + OString::number(nFontDescriptor) + " 0 R\n");
                     if (bTrueType)
                         aCIDLine.append("/CIDToGIDMap/Identity\n");
-                    aCIDLine.append("/W[");
-                    // /W is indexed by CID, emit runs of consecutive CIDs
-                    std::vector<std::pair<sal_uInt16, sal_Int32>> aCIDWidths;
-                    aCIDWidths.reserve(nGlyphs);
+                    // /W is indexed by CID, which is the glyph ID here
+                    aCIDLine.append("/W[0[");
                     for (auto i = 0u; i < nGlyphs; i++)
                     {
-                        sal_uInt16 nCID = i < aSubsetInfo.m_aCIDs.size() ? aSubsetInfo.m_aCIDs[i] : i;
-                        aCIDWidths.emplace_back(nCID, pWidths[i]);
+                        aCIDLine.append(pWidths[i]);
+                        aCIDLine.append(((i & 15) == 15) ? "\n" : " ");
                     }
-                    std::sort(aCIDWidths.begin(), aCIDWidths.end());
-                    for (size_t i = 0; i < aCIDWidths.size();)
-                    {
-                        size_t nRun = 1;
-                        while (i + nRun < aCIDWidths.size()
-                               && aCIDWidths[i + nRun].first == aCIDWidths[i].first + nRun)
-                            nRun++;
-                        aCIDLine.append(OString::number(aCIDWidths[i].first) + "[");
-                        for (size_t n = 0; n < nRun; ++n)
-                        {
-                            aCIDLine.append(aCIDWidths[i + n].second);
-                            aCIDLine.append(((n & 15) == 15) ? "\n" : " ");
-                        }
-                        aCIDLine.append(']');
-                        i += nRun;
-                    }
-                    aCIDLine.append("]\n>>\nendobj\n\n");
+                    aCIDLine.append("]]\n>>\nendobj\n\n");
                     if (!writeBuffer(aCIDLine)) return false;
                 }
 

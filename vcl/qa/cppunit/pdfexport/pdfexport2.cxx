@@ -31,7 +31,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
-#include <font/CFFCharset.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -5434,38 +5433,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFA1CIDSet)
     aCIDSetCodec.Decompress(pCIDSetStream->GetMemory(), aCIDSet);
     CPPUNIT_ASSERT(aCIDSetCodec.EndCompression());
 
-    // Read the CIDs out of the font rather than hard coding them.
-    auto pFontFileRef
-        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pDescriptor->Lookup("FontFile3"_ostr));
-    CPPUNIT_ASSERT(pFontFileRef);
-    auto pFontFileStream = pFontFileRef->LookupObject()->GetStream();
-    CPPUNIT_ASSERT(pFontFileStream);
-    SvMemoryStream aCFF;
-    ZCodec aCFFCodec;
-    aCFFCodec.BeginCompression();
-    pFontFileStream->GetMemory().Seek(0);
-    aCFFCodec.Decompress(pFontFileStream->GetMemory(), aCFF);
-    CPPUNIT_ASSERT(aCFFCodec.EndCompression());
-
-    std::vector<sal_uInt16> aCIDs;
-    CPPUNIT_ASSERT(vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(aCFF.GetData()),
-                                               aCFF.GetSize(), aCIDs));
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aCIDs.size());
-
-    // Long enough for the largest CID and no longer.
-    const auto* pBits = static_cast<const sal_uInt8*>(aCIDSet.GetData());
-    sal_uInt16 nMaxCID = *std::max_element(aCIDs.begin(), aCIDs.end());
-    CPPUNIT_ASSERT_EQUAL(size_t(nMaxCID / 8 + 1), aCIDSet.GetSize());
-    for (auto nCID : aCIDs)
-        CPPUNIT_ASSERT((pBits[nCID / 8] & (0x80 >> (nCID % 8))) != 0);
-
-    // and nothing else is set
-    int nSet = 0;
-    for (size_t i = 0; i < aCIDSet.GetSize(); ++i)
-        for (int nBit = 0; nBit < 8; ++nBit)
-            if (pBits[i] & (0x80 >> nBit))
-                nSet++;
-    CPPUNIT_ASSERT_EQUAL(int(aCIDs.size()), nSet);
+    // The charset is identity, so the CIDs are those of the three glyphs of the
+    // subset: one byte with the top three bits set, and nothing else.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCIDSet.GetSize());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xE0), static_cast<const sal_uInt8*>(aCIDSet.GetData())[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNoCIDSetWithoutPDFA1)
@@ -5561,49 +5532,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf171869)
     aZCodec.Decompress(pEncodingStream->GetMemory(), aObjectStream);
     CPPUNIT_ASSERT(aZCodec.EndCompression());
     std::string aCMap(static_cast<const char*>(aObjectStream.GetData()), aObjectStream.GetSize());
-    CPPUNIT_ASSERT(aCMap.find("begincidrange") != std::string::npos);
 
-#if 1
-    // The codes must be mapped by a CMap to the CIDs that the embedded font
-    // gives its glyphs. Which CIDs these are is up to HarfBuzz, so we read
-    // them from the font we embedded instead of hard coding them.
-    auto pFontFileStream = pFontFile->GetStream();
-    CPPUNIT_ASSERT(pFontFileStream);
-    SvMemoryStream aCFFStream;
-    ZCodec aCFFCodec;
-    aCFFCodec.BeginCompression();
-    pFontFileStream->GetMemory().Seek(0);
-    aCFFCodec.Decompress(pFontFileStream->GetMemory(), aCFFStream);
-    CPPUNIT_ASSERT(aCFFCodec.EndCompression());
-
-    std::vector<sal_uInt16> aCIDs;
-    CPPUNIT_ASSERT(vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(aCFFStream.GetData()),
-                                               aCFFStream.GetSize(), aCIDs));
-    // It is a CID-keyed font, so it has a CID for each of its three glyphs
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aCIDs.size());
-
-    // Expand the “<lo> <hi> cid” ranges of the CMap and compare
-    std::vector<sal_uInt16> aCodeToCID(aCIDs.size(), 0xFFFF);
-    auto nRanges = aCMap.find("begincidrange");
-    std::string aRanges(aCMap, nRanges, aCMap.find("endcidrange", nRanges) - nRanges);
-    for (size_t nPos = 0; (nPos = aRanges.find('<', nPos)) != std::string::npos; nPos++)
-    {
-        unsigned nLow, nHigh, nCID;
-        if (sscanf(aRanges.c_str() + nPos, "<%x> <%x> %u", &nLow, &nHigh, &nCID) != 3)
-            continue;
-        for (unsigned nCode = nLow; nCode <= nHigh && nCode < aCodeToCID.size(); nCode++)
-            aCodeToCID[nCode] = nCID + (nCode - nLow);
-    }
-    for (size_t i = 0; i < aCIDs.size(); i++)
-        CPPUNIT_ASSERT_EQUAL(aCIDs[i], aCodeToCID[i]);
-#else
-    // Once our HarfBuzz baseline is >=14.3.0, the charset of the subset
-    // is always identity.
+    // The subset always has an identity charset, so the code of each glyph is
+    // also its CID.
     CPPUNIT_ASSERT(aCMap.find("begincidrange\n"
                               "<00> <02> 0\n"
                               "endcidrange")
                    != std::string::npos);
-#endif
 
     // Check the text can be extracted (i.e. the ToUnicode CMap works)
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

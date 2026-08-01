@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <hb-ot.h>
-#include <font/CFFCharset.hxx>
 #include <font/TrueTypeFont.hxx>
 #include <font/TTFStructure.hxx>
 #ifdef SYSTEM_LIBFIXMATH
@@ -216,15 +215,6 @@ FontWeight TrueTypeFont::getFontWeight() const
 
 } // namespace vcl
 
-int TestFontParsing(const void* data, sal_uInt32 size)
-{
-    // Exercise CFF parsing
-    if (data && size > 0)
-    {
-        std::vector<sal_uInt16> aCIDs;
-        vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(data), size, aCIDs);
-    }
-    return 0;
-}
+int TestFontParsing(const void*, sal_uInt32) { return 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

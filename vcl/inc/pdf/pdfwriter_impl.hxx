@@ -949,10 +949,9 @@ private:
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const std::vector<sal_Ucs>& CodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, uint32_t nGlyphs );
     /* writes the code to CID CMap for composite CFF fonts, returns the stream object id (or 0 in case of failure) */
-    sal_Int32 emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_uInt16>& rCIDs,
-                          sal_uInt32 nGlyphs);
+    sal_Int32 emitCIDCMap(sal_Int32 nSubsetID, sal_uInt32 nGlyphs);
     /* writes the CIDSet of a composite subset, returns the stream object id (or 0 if not wanted) */
-    sal_Int32 emitCIDSet(const std::vector<sal_uInt16>& rCIDs, sal_uInt32 nGlyphs);
+    sal_Int32 emitCIDSet(sal_uInt32 nGlyphs);
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()

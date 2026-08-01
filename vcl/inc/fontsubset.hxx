@@ -47,7 +47,6 @@ public: // TODO: make subsetter results private and provide accessor methods ins
     int                     m_nCapHeight = 0;
     tools::Rectangle        m_aFontBBox;
     FontType                m_nFontType = FontType::NO_FONT; ///< font-type of subset result
-    std::vector<sal_uInt16> m_aCIDs; ///< glyph ID → CID mapping for CID-keyed CFF (empty: CID = glyph ID)
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

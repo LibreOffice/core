@@ -28,7 +28,6 @@
 
 #include <fontattributes.hxx>
 #include <impfontcharmap.hxx>
-#include <font/CFFCharset.hxx>
 #include <font/TrueTypeFont.hxx>
 #include <salgdi.hxx>
 
