@@ -747,7 +747,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(KIT_POST_KEY);
-    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? COKitKeyEventType::KEYUP : COKitKeyEventType::KEYINPUT;
+    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? COKitKeyEventType::UP : COKitKeyEventType::DOWN;
     pLOEvent->m_nCharCode = nCharCode;
     pLOEvent->m_nKeyCode  = nKeyCode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);

@@ -5210,7 +5210,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
+            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::DOWN, 8, KEY_BACKSPACE, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
@@ -5223,7 +5223,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
+            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::DOWN, 46, KEY_DELETE, nCharAfter - 1);
     }
 }
 
@@ -5246,10 +5246,10 @@ static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindow
 
     switch (eType)
     {
-        case COKitKeyEventType::KEYINPUT:
+        case COKitKeyEventType::DOWN:
             Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
             break;
-        case COKitKeyEventType::KEYUP:
+        case COKitKeyEventType::UP:
             Application::PostKeyEvent(VclEventId::WindowKeyUp, pWindow, &aEvent);
             break;
         default:

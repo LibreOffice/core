@@ -58,8 +58,8 @@ void insertString(Document& rDocument, const std::string& s)
 {
     for (const char c : s)
     {
-        rDocument.postKeyEvent(COKitKeyEventType::KEYINPUT, c, 0);
-        rDocument.postKeyEvent(COKitKeyEventType::KEYUP, c, 0);
+        rDocument.postKeyEvent(COKitKeyEventType::DOWN, c, 0);
+        rDocument.postKeyEvent(COKitKeyEventType::UP, c, 0);
         processEventsToIdle();
     }
 }
@@ -250,17 +250,17 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
 
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::RIGHT);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::RETURN);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::RETURN);
     processEventsToIdle();
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::UP);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
 #if 0
@@ -280,17 +280,17 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // with cs-CZ, the decimal separator is ',' instead, assert that
     insertString(*pDocument, "1,5");
 
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::RIGHT);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::RETURN);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::RETURN);
     processEventsToIdle();
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, css::awt::Key::UP);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
     // we've got a meaningful result
@@ -416,16 +416,16 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
 
     // First a key-stroke from a
     pDocument->setView(nViewA);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 97, 0); // a
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, 512);   // 'a
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 97, 0); // a
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, 512);   // 'a
 
     // A space on 'a' - force commit
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 32, 0); // ' '
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, 1284);   // '' '
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 32, 0); // ' '
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, 1284);   // '' '
 
     // Another 'a'
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 97, 0); // a
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, 512);   // 'a
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 97, 0); // a
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, 512);   // 'a
 
     // FIXME: Wait for writer input handler to commit that.
     // without this we fall foul of edtwin's KeyInputFlushTimer
@@ -433,12 +433,12 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
 
     // Quickly a new key-stroke from b
     pDocument->setView(nViewB);
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 98, 0); // b
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, 514);   // 'b
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 98, 0); // b
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, 514);   // 'b
 
     // A space on 'b' - force commit
-    pDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 32, 0); // ' '
-    pDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, 1284);   // '' '
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 32, 0); // ' '
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, 1284);   // '' '
 
     // Wait for writer input handler to commit that.
     std::this_thread::sleep_for(std::chrono::milliseconds(300));

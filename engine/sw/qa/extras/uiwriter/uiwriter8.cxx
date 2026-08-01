@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130629)
 
     // Shape toolbar is active, use ESC before inserting a new shape
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
@@ -849,7 +849,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
     pWrtSh->Insert(u"Lorem"_ustr);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_F3);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
     // generating a big text with ~60k words and several paragraphs
@@ -914,19 +914,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 5; ++i)
     {
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_F3);
         Scheduler::ProcessEventsToIdle();
 
         // Title Case
         CPPUNIT_ASSERT_EQUAL(u"This is a Test"_ustr, getParagraph(1)->getString());
 
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_F3);
         Scheduler::ProcessEventsToIdle();
 
         // Upper Case
         CPPUNIT_ASSERT_EQUAL(u"This is a TEST"_ustr, getParagraph(1)->getString());
 
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_F3);
         Scheduler::ProcessEventsToIdle();
 
         // Lower Case
@@ -946,7 +946,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
     pWrtShell->Insert(u" jacr"_ustr);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_F3);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -1064,7 +1064,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
     pWrtSh->Insert(u"AR"_ustr);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_F3);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
     // was ...'letter of <placeholder:"November 21, 2004":"Click placeholder and overwrite">'
@@ -1085,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testGlossaryFieldUserDataConversion)
     pWrtSh->Insert(u"JARL"_ustr);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_F3);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
     // JARL contains "Thank you for your interest in <field:company>."
@@ -1564,7 +1564,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146356)
     createSwDoc("tdf146356.odt");
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_MOD2 | awt::Key::RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_MOD2 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     emulateTyping(u"Some Text");
@@ -1575,7 +1575,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146356)
     CPPUNIT_ASSERT_EQUAL(u"Some Text"_ustr, getParagraph(1)->getString());
 
     // tdf#160095: Without the fix in place, this test would have crashed here
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_MOD2 | awt::Key::RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_MOD2 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(u"Some Text"_ustr, getParagraph(1)->getString());
@@ -1614,7 +1614,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121546)
 
     // Without the fix in place, this test would have crashed here
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -2187,8 +2187,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf117601)
 
     //go to middle row
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_UP);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RIGHT);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_UP);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, u".uno:EntireColumn"_ustr, {});
@@ -2275,7 +2275,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145207)
     for (sal_Int32 i = 0; i < 10; ++i)
     {
         // Without the fix in place, this test would have crashed here
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
         Scheduler::ProcessEventsToIdle();
     }
 }
@@ -2296,7 +2296,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128782)
     selectShape(2);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
@@ -2333,7 +2333,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
     selectShape(1);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
@@ -2389,7 +2389,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 5; ++i)
     {
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RIGHT);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RIGHT);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -2593,8 +2593,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf137964)
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_UP);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_LEFT);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_UP);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the shape would have stayed where it was
@@ -2648,7 +2648,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf143244)
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 6; ++i)
     {
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -3223,7 +3223,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCrashOutlineFoldingPressingReturn)
 
     // Without the fix in place, this test would have crashed here
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // switch off "Outline Folding" mode
@@ -3292,7 +3292,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156560)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_MOD1 | KEY_PAGEUP);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_MOD1 | KEY_PAGEUP);
 
     // Insert header
     // Without the fix in place, this test would have got SIGABRT here

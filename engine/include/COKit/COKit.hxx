@@ -1198,9 +1198,9 @@ enum class COKitCallbackType
 enum class COKitKeyEventType
 {
     /// A key on the keyboard is pressed.
-    KEYINPUT,
+    DOWN,
     /// A key on the keyboard is released.
-    KEYUP
+    UP
 };
 
 enum class COKitExtTextInputType

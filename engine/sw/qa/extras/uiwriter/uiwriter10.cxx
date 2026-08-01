@@ -1184,10 +1184,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
     SwView* pView = getSwDocShell()->GetView();
     selectShape(1);
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.
@@ -1561,10 +1561,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
     SwView* pView = getSwDocShell()->GetView();
     selectShape(1);
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
-    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.

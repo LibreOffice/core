@@ -42,8 +42,8 @@ public:
     /** Posts a full key down/up cycle */
     void postKeyEventAsync(int nCharCode, int nKeyCode) const
     {
-        postKeyEventAsync(COKitKeyEventType::KEYINPUT, nCharCode, nKeyCode);
-        postKeyEventAsync(COKitKeyEventType::KEYUP, nCharCode, nKeyCode);
+        postKeyEventAsync(COKitKeyEventType::DOWN, nCharCode, nKeyCode);
+        postKeyEventAsync(COKitKeyEventType::UP, nCharCode, nKeyCode);
     }
 
     /** @see KitHelper::postExtTextEventAsync */

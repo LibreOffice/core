@@ -310,7 +310,7 @@ void ScJumboSheetsTest::testTdf133033()
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
-    pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     ScTabViewShell* pViewShell = getViewShell();

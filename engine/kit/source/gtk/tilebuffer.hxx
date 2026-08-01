@@ -251,7 +251,7 @@ struct LOEvent
         , m_bEdit(false)
         , m_nPartMode(COKitPartMode::SLIDES)
         , m_nPart(0)
-        , m_nKeyEvent(COKitKeyEventType::KEYINPUT)
+        , m_nKeyEvent(COKitKeyEventType::DOWN)
         , m_nCharCode(0)
         , m_nKeyCode(0)
         , m_nPaintTileX(0)

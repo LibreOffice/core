@@ -477,8 +477,8 @@ void SwModelTestBase::emulateTyping(std::u16string_view rStr)
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (const char16_t c : rStr)
     {
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, c, 0);
-        pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, c, 0);
+        pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, c, 0);
+        pTextDoc->postKeyEvent(COKitKeyEventType::UP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
 }

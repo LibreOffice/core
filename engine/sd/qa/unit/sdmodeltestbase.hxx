@@ -200,16 +200,16 @@ public:
     {
         for (const char16_t c : rStr)
         {
-            rImpressDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, c, 0);
-            rImpressDocument->postKeyEvent(COKitKeyEventType::KEYUP, c, 0);
+            rImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, c, 0);
+            rImpressDocument->postKeyEvent(COKitKeyEventType::UP, c, 0);
             Scheduler::ProcessEventsToIdle();
         }
     }
 
     void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey)
     {
-        rImpressDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, nKey);
-        rImpressDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, nKey);
+        rImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nKey);
+        rImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, nKey);
         Scheduler::ProcessEventsToIdle();
     }
 };

@@ -142,8 +142,8 @@ void ScTiledRenderingTest::cellInvalidationHelper(ScModelObj* pModelObj, ScTabVi
     else // DeleteText
     {
         pView->SetCursor(rAdr.Col(), rAdr.Row());
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::DELETE);
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::DELETE);
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::DELETE);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::DELETE);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -159,15 +159,15 @@ void ScTiledRenderingTest::typeCharsInCell(const std::string& aStr, SCCOL nCol, 
 
     for (const char& cChar : aStr)
     {
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, cChar, 0);
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, cChar, 0);
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, cChar, 0);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, cChar, 0);
         Scheduler::ProcessEventsToIdle();
     }
 
     if (bCommit)
     {
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::RETURN);
-        pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
 }

@@ -561,8 +561,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMissingInvalidation)
     Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::DELETE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
@@ -902,21 +902,21 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo2)
     // Type in the first view.
     KitHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 'f', 0);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 'f', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'f', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'f', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Type to the same paragraph in the second view.
     KitHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/true);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 's', 0);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 's', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 's', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 's', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Delete in the first view and undo.
     KitHelper::setView(nView1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::BACKSPACE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::BACKSPACE);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     Scheduler::ProcessEventsToIdle();
@@ -1125,8 +1125,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoGroupShells)
     SdrView* pView = pWrtShell->GetDrawView();
     pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
     emulateTyping(u"x");
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::BACKSPACE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::BACKSPACE);
     Scheduler::ProcessEventsToIdle();
 
     // Make sure that the undo item remembers who created it.
@@ -1686,8 +1686,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentEndTextEdit)
 
     // Create a comment and type a character there as well.
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 'c', nCtrlAltC);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 'c', nCtrlAltC);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'c', nCtrlAltC);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'c', nCtrlAltC);
     emulateTyping(u"x");
     // End comment text edit by clicking in the body text area, and assert that
     // no unexpected cursor callbacks are emitted at origin (top left corner of
@@ -1703,8 +1703,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentEndTextEdit)
     // Hit enter and expect invalidation.
     Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 }
@@ -2132,20 +2132,20 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf115088)
     SwXTextDocument* pXTextDocument = createDoc("tdf115088.odt");
 
     // Select and copy second and third line
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_HOME | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN | KEY_SHIFT);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RIGHT | KEY_SHIFT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
     comphelper::dispatchCommand(u".uno:Copy"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // Move cursor to the beginning of the first line and paste
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_HOME | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     comphelper::dispatchCommand(u".uno:PasteUnformatted"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
@@ -2220,8 +2220,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     for (int i = 0; i < 9; i++)
     {
-        pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DELETE);
-        pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DELETE);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
     }
 
     Scheduler::ProcessEventsToIdle();
@@ -2237,8 +2237,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // status: "a<bold>b</bold>\n"
@@ -2252,8 +2252,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // status: "a<bold>b</bold>\n
@@ -2339,16 +2339,16 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
     comphelper::dispatchCommand(u".uno:SelectAll"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DELETE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
 
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // status: "a\n"
@@ -2371,8 +2371,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // status: "a\n
@@ -2402,22 +2402,22 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSplitNodeRedlineCallback)
 
     // 1. test case
     // Move cursor between the two tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Add a new line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Assert that we get a notification about redline modification
@@ -2426,27 +2426,27 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSplitNodeRedlineCallback)
 
     // 2. test case
     // Move cursor back to the first line, so adding new line will affect both tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_HOME | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     // Add a new line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
 
     // 3. test case
     // Move cursor to the end of the document, so adding a new line won't affect any tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_END | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_END | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     // Add a new line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
 }
@@ -2460,22 +2460,22 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeleteNodeRedlineCallback)
 
     // 1. test case
     // Move cursor between the two tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DOWN);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
     // Remove one (empty) line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DELETE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
     Scheduler::ProcessEventsToIdle();
 
     // Assert that we get a notification about redline modification
@@ -2484,27 +2484,27 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeleteNodeRedlineCallback)
 
     // 2. test case
     // Move cursor back to the first line, so removing one line will affect both tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_HOME | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_HOME | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     // Remove a new line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DELETE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
 
     // 3. test case
     // Move cursor to the end of the document, so removing one line won't affect any tracked changes
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_END | KEY_MOD1);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_END | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
     // Remove a line
     m_nRedlineTableEntryModified = 0;
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_BACKSPACE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_BACKSPACE);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
 }
@@ -2530,8 +2530,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
     aView2.m_bOwnCursorInvalidated = false;
     aView2.m_bViewCursorInvalidated = false;
 
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RIGHT);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RIGHT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RIGHT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_bViewCursorInvalidated);
@@ -3299,8 +3299,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
     // delete all characters
     comphelper::dispatchCommand(u".uno:SelectAll"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_DELETE);
-    pXTextDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
     Scheduler::ProcessEventsToIdle();
 
     //check for comment remove callback

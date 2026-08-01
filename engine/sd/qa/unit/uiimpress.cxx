@@ -1941,8 +1941,8 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
     // Move to A1 using Alt + Tab and write 'A'
     for (int i = 0; i < 3; i++)
     {
-        pXImpressDocument->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_SHIFT | KEY_TAB);
-        pXImpressDocument->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_SHIFT | KEY_TAB);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_TAB);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_SHIFT | KEY_TAB);
         Scheduler::ProcessEventsToIdle();
     }
 
