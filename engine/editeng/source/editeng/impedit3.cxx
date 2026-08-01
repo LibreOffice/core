@@ -70,6 +70,7 @@
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <i18nutil/kashida.hxx>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/kit.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -3959,7 +3960,16 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 {
                                     // In COKit we drive spell checking from the paint path instead.
                                     if (comphelper::COKit::isActive())
-                                        EnsureWrongListForPaint(rParaPortion.GetNode());
+                                    {
+                                        try
+                                        {
+                                            EnsureWrongListForPaint(rParaPortion.GetNode());
+                                        }
+                                        catch (const css::uno::Exception&)
+                                        {
+                                            TOOLS_WARN_EXCEPTION("editeng", "spell check failed");
+                                        }
+                                    }
 
                                     WrongList* pWrongs = rParaPortion.GetNode()->GetWrongList();
 
