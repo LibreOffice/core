@@ -145,6 +145,66 @@ A brief that works contains all of:
 Ask for honesty about what is unproven. An overstated claim costs more than an admitted gap,
 because the next worker builds on it.
 
+## Putting more than one agent on a single track
+
+Worth doing, but **not by handing each agent a different batch range**. Batches are ordered
+by complexity, not by cause; two agents on batches 1–10 and 11–20 will meet in the same
+layout code and fix the same bug twice, differently.
+
+### Sweep the whole track first, then split by symptom cluster
+
+Measure every batch in the track at the current commit before dispatching anyone. It costs
+one background run and it changes the answer, because a sweep turns "38 failures" into "two
+clusters and a tail" — and the clusters, not the batches, are the work units that do not
+collide.
+
+The cheapest instrument is a **page-delta histogram**: for each failing document, ours minus
+the reference. Measured on the words track at `84e7fe976`:
+
+```
+-1 page   most common by far    we under-paginate: content that should overflow does not
++1 page   second                we over-paginate
+±2 or more                      a genuinely different layout, not an off-by-one
+0, words differ                 pagination is right; what reaches the page is not
+```
+
+Documents sharing a delta usually share a root cause, so each bucket is one agent's brief.
+A bucket also gives that agent something a batch never does: dozens of instances of the same
+bug, which is what distinguishes a real fix from a special case.
+
+### Check the split isolates the work before you commit to it
+
+The obvious split is by format — one agent on the binary reader, one on the OOXML reader.
+Verify it first. On the words track the failure rate was 42% for `doc` and 43% for `docx`,
+which says the failures are **not** in the readers at all; they are in the layout both
+formats share, and that split would have put two agents in one file.
+
+One line tells you:
+
+```sh
+awk -F'\t' '{k=$2"\t"($7=="match"?"match":"fail"); c[k]++} END{for(x in c) print c[x], x}' rows.tsv
+```
+
+Near-equal failure rates across formats mean the cause is downstream of the readers. Split
+by symptom. Sharply unequal rates mean the readers really are the problem, and splitting by
+format is both safe and natural.
+
+### Merging several agents into one branch
+
+Merge one agent at a time, and **re-verify after each merge, not once at the end**. The
+whole reason to sweep and cluster is that these changes interact; a merged result that
+neither agent ever measured is not evidence of anything.
+
+- **Combine conflicting hunks, never pick a side.** Every conflict here has been two correct
+  fixes to one function — a stretch rule and a leading rule, an ascent computation and a
+  height parameter. Taking one side silently reverts the other agent's work, and the tests
+  will not catch it because each agent's tests pass in isolation.
+- **Commit the resolved merge before starting the next one.** A `git merge` with an
+  unfinished merge in the tree refuses silently; the symptom appears much later as test
+  totals that do not add up.
+- **Re-run the full track sweep after the last merge.** Per-agent numbers are measured
+  against their own worktree. Only the sweep on the merged branch describes what you have.
+
 ## Building or re-scoring a corpus from scratch
 
 ```sh
