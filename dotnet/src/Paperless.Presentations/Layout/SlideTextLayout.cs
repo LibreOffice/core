@@ -162,7 +162,8 @@ public static partial class SlideTextLayout
         foreach (SlideParagraph paragraph in body.Paragraphs)
         {
             Block? block = Measure(
-                paragraph, body, width, fonts, scaling, fontIndependentLineSpacing);
+                paragraph, body, width, fonts, scaling, fontIndependentLineSpacing,
+                body.Wraps ? null : available);
             if (block is null) continue;
 
             total += block.Height;
@@ -215,6 +216,44 @@ public static partial class SlideTextLayout
     /// <c>(markerAscent − markerDescent)/2</c> is 106.5 for a 12.6 pt marker in both files.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// A line re-aligned against the shape's real width, for a body that does not wrap.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>wrap="none"</c> body is laid out at an effectively unbounded width, because that is
+    /// what keeps an unwrapped label on the one line its author saw. The width used for breaking
+    /// must not also be the width used for <em>aligning</em>: a centred paragraph measured against
+    /// two billion EMUs is offset by half of it, which is a mile off the right-hand edge of the
+    /// page. Measured on <c>SRDMG(16)024_60 GHz onboard airplanes.pptx</c>, whose layout carries a
+    /// centred, unwrapped strapline: six words lost from all 27 pages.
+    /// </para>
+    /// <para>
+    /// The offset is allowed to go <em>negative</em>, unlike the wrapping case where a line wider
+    /// than its stretch starts at the left edge. An unwrapped shape is one Impress gives
+    /// <c>TextAutoGrowWidth</c>, so it widens about its own centre and its text overhangs both
+    /// edges equally: the reference draws that strapline from 519.00 pt to 708.32 pt in a box
+    /// running 520.90 to 706.50 — 1.9 pt proud at each end, which is exactly half the excess.
+    /// </para>
+    /// </remarks>
+    private static LineBox Realigned(
+        LineBox box, ParagraphFormat format, Length? alignAgainst, bool isFirstLine)
+    {
+        if (alignAgainst is not { } width) return box;
+
+        Length start = format.LineStart(isFirstLine);
+        Length slack = width - start - box.Line.Width;
+
+        Length offset = format.Alignment switch
+        {
+            TextAlignment.Centre => Length.FromEmu(slack.Emu / 2),
+            TextAlignment.End => slack,
+            _ => Length.Zero,
+        };
+
+        return box with { Left = start + offset };
+    }
+
     private static void EmitMarker(
         List<PlacedGlyphRun> placed,
         Block block,
@@ -345,7 +384,8 @@ public static partial class SlideTextLayout
         Length width,
         SlideFonts fonts,
         Scaling scaling,
-        bool fontIndependentLineSpacing)
+        bool fontIndependentLineSpacing,
+        Length? alignAgainst = null)
     {
         List<FormattedRun> runs = [];
         List<RunStyle> styles = [];
@@ -388,8 +428,11 @@ public static partial class SlideTextLayout
             measured, format, width, paragraph.Language);
 
         List<PlacedLine> lines = [];
-        foreach (LineBox box in laid.Lines)
+        bool firstLine = true;
+        foreach (LineBox unaligned in laid.Lines)
         {
+            LineBox box = Realigned(unaligned, format, alignAgainst, firstLine);
+            firstLine = false;
             if (!fontIndependentLineSpacing)
             {
                 // The face's own metrics — but its ascent and descent only, with no external
