@@ -462,12 +462,19 @@ public sealed class Paginator
         }
 
         // The body area of the page about to be filled, which depends on how tall its own running head
-        // turned out. Called after every change to what that head is or which page draws it.
+        // and foot turned out. Called after every change to what those are or which page draws them.
         void MeasureBody()
         {
             body = PushedDownBy(
                 page,
                 pageFurniture?.Header(
+                    pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
+                    _options.CollapsesSpacing));
+
+            body = PulledUpBy(
+                body,
+                page,
+                pageFurniture?.Footer(
                     pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
                     _options.CollapsesSpacing));
 
@@ -1152,6 +1159,50 @@ public sealed class Paginator
         if (needed >= page.Size.Height - page.Margins.Bottom) return page;
 
         return page with { Margins = page.Margins with { Top = needed } };
+    }
+
+    /// <summary>
+    /// A page's geometry with the body's foot raised to clear a running foot that outgrew its margin.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The mirror of <see cref="PushedDownBy"/>, and the same mechanism read the other way up.
+    /// <c>SectionPropertyMap::PrepareHeaderFooterProperties</c> handles the two symmetrically
+    /// (<c>dmapper/PropertyMap.cxx</c>:1171): a section with a footer gets a bottom margin of
+    /// <c>w:footer</c>, a footer frame of <c>w:bottom − w:footer</c> with the same 1 mm floor, and the
+    /// same dynamic height and dynamic spacing. <c>SwHeadFootFrame::FormatPrt</c> then treats a footer
+    /// exactly as it treats a header, only growing upwards — so the body's last line can sit no lower
+    /// than <c>pageHeight − w:footer − footer height</c>, and a footer that still fits inside
+    /// <c>w:bottom</c> moves nothing.
+    /// </para>
+    /// <para>
+    /// Two corpus shapes make this bind. The obvious one is a footer of several paragraphs in a small
+    /// bottom margin. The other is a document whose <c>w:footer</c> is <em>larger</em> than its
+    /// <c>w:bottom</c> — legal, common in the corpus, and meaning the footer overlaps the space
+    /// <c>w:bottom</c> reserves. Ignoring it left the body several points taller than Writer gives it on
+    /// every page of such a document, which is how a long one loses a page.
+    /// </para>
+    /// <para>
+    /// Taken from the page's own margins rather than from the header-adjusted geometry, since the two
+    /// ends are independent: <paramref name="stated"/> supplies the bottom margin and the sheet height,
+    /// and <paramref name="body"/> carries whatever the head already did to the top.
+    /// </para>
+    /// </remarks>
+    /// <param name="body">The geometry as the running head left it.</param>
+    /// <param name="stated">The section's own geometry, for the margin the document asked for.</param>
+    /// <param name="footer">The running foot this page draws, or null when it has none.</param>
+    private static PageGeometry PulledUpBy(PageGeometry body, PageGeometry stated, PlacedFlow? footer)
+    {
+        if (footer is null || footer.IsEmpty) return body;
+
+        Length needed = stated.FooterDistance + footer.Advance;
+        if (needed <= stated.Margins.Bottom) return body;
+
+        // As with a running head, a foot that would leave no body at all is not honoured: a body of no
+        // height holds one overflowing line per page however much text is left.
+        if (needed >= stated.Size.Height - body.Margins.Top) return body;
+
+        return body with { Margins = body.Margins with { Bottom = needed } };
     }
 
     /// <summary>
