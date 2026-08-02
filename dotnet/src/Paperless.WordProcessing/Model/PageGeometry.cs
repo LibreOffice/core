@@ -198,6 +198,29 @@ public sealed record PageGeometry
     public Length FooterHeight { get; init; }
 
     /// <summary>
+    /// True when the header's height is the one stated and content that outgrows it overflows rather than
+    /// moving the body.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>SwFrameSize::Fixed</c> against <c>SwFrameSize::Minimum</c>, and it decides whether a
+    /// running head that needs more room than the margin reserved for it pushes the body down.
+    /// <c>SwHeadFootFrame::FormatPrt</c> grows a header only where the frame's size is a minimum and
+    /// <c>SwHeaderAndFooterEatSpacingItem</c> is on, which is what the DOC and DOCX importers always set
+    /// (<c>ww8par6.cxx</c>:652, <c>dmapper/PropertyMap.cxx</c>:1148) — so the Word formats leave this
+    /// false and their headers grow.
+    /// </para>
+    /// <para>
+    /// ODF says which it means: <c>svg:height</c> is a fixed height and <c>fo:min-height</c> is a floor.
+    /// A page style stating the first gets a header that does not move the body, however much it holds.
+    /// </para>
+    /// </remarks>
+    public bool HasFixedHeaderHeight { get; init; }
+
+    /// <summary>True when the footer's height is fixed, as <see cref="HasFixedHeaderHeight"/> is.</summary>
+    public bool HasFixedFooterHeight { get; init; }
+
+    /// <summary>
     /// How far below the body's last possible line the footer's first line starts, or null when the
     /// footer sits on the bottom of the space reserved for it instead.
     /// </summary>

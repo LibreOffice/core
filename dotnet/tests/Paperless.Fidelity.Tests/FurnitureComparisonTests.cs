@@ -184,6 +184,59 @@ public sealed class FurnitureComparisonTests : IDisposable
             page.Footer.Area.Y.Points, $"{fileName}: the footer's text is above its own area");
     }
 
+    /// <summary>
+    /// A running head and foot made of nothing but a picture take their room out of the body at both ends.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The two fixtures above carry words in their furniture, which is what lets the text comparison find a
+    /// misplaced header — and it is exactly the case a logo-only running head is not. Such a header has no
+    /// words to compare, so the whole of its effect is on where the body starts and stops, and that is what
+    /// this measures: LibreOffice's own first and last body lines against ours.
+    /// </para>
+    /// <para>
+    /// It catches two defects that between them cost this document five pages of its twenty-five on the
+    /// corpus file it came from. The reader dropped the picture-only paragraph as an empty placeholder, so
+    /// there was no furniture at all; and the paginator grew a header into the body but never a footer,
+    /// so the body still ran to the bottom margin.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void APictureOnlyHeadAndFootTakeTheirRoomFromTheBody()
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require("picture-furniture.doc");
+        RecordingDrawingSink sink = Record(path);
+        List<PdfWord> rendered = PdfWords.Read(_libreOffice.ConvertToPdf(path, _workDirectory));
+
+        Assert.SkipWhen(
+            rendered.Count == 0,
+            "pdftotext is not available; install poppler-utils — see check-env.sh");
+
+        int pages = rendered.Select(word => word.PageIndex).Distinct().Count();
+        sink.Pages.Count.ShouldBe(pages, "picture-furniture.doc: page count");
+
+        for (int page = 0; page < pages; page++)
+        {
+            List<DrawnWord> drawn = InDrawnOrder(DrawnWords.On(sink.Pages[page]));
+            List<PdfWord> reference = InReadingOrder(
+                [.. rendered.Where(word => word.PageIndex == page)]);
+
+            drawn.Count.ShouldBe(reference.Count, $"page {page + 1}: word count");
+
+            // The distance from the first body line to the last is the whole page's arithmetic in one
+            // number — the header's logo above it and the footer's below — and it is compared as a
+            // difference so the ascent that separates a PDF word box's top from a baseline cancels.
+            double drawnSpan = drawn[^1].Baseline - drawn[0].Baseline;
+            double renderedSpan = reference[^1].Top - reference[0].Top;
+
+            Math.Abs(drawnSpan - renderedSpan).ShouldBeLessThanOrEqualTo(
+                VerticalTolerancePoints,
+                $"page {page + 1}: the body spans {drawnSpan:F3} pt drawn, {renderedSpan:F3} pt rendered");
+        }
+    }
+
     // ------------------------------------------------------------------------- the machinery
 
     private static List<PdfWord> InReadingOrder(List<PdfWord> words)
