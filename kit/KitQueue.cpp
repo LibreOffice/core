@@ -165,7 +165,7 @@ void KitQueue::putCallback(int view, COKitCallbackType type, const std::string &
 
 bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const std::string &payload)
 {
-    const auto callbackType = static_cast<COKitCallbackType>(type);
+    const auto callbackType = type;
 
     // Nothing to combine in this case:
     if (_callbacks.empty())

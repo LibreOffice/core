@@ -3893,7 +3893,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         }
     }
 
-    switch (static_cast<COKitCallbackType>(type))
+    switch (type)
     {
     case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
         // Push the delta to the client as a zstd binary frame, the same
