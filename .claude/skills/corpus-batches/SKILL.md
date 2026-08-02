@@ -196,6 +196,25 @@ Near-equal failure rates across formats mean the cause is downstream of the read
 by symptom. Sharply unequal rates mean the readers really are the problem, and splitting by
 format is both safe and natural.
 
+### Check the worktree's base commit before measuring anything
+
+An agent worktree is not necessarily created from the commit you dispatched against. Three
+agents here reported bases hundreds of commits behind — one at 247, one at 249, one at 279 —
+and each caught it only because it went looking. A stale base does not announce itself: the
+tree builds, the tests pass, and the baseline sweep quietly measures a different program
+from the one being improved. One of those worktrees predated the CLI's `render` command
+entirely.
+
+Put it in the brief as the first instruction:
+
+```sh
+git log --oneline -1                       # is this the commit you were briefed against?
+git merge --ff-only <briefed-commit>       # if not, fast-forward before measuring
+```
+
+The tell that it worked: your own baseline sweep should reproduce the briefed numbers
+exactly. If it does not, stop — either the base is wrong or the measurement is.
+
 ### Worktrees isolate the code, not the scratch directory
 
 Agents get their own git worktree and share one filesystem everywhere else. Two agents this
