@@ -42,6 +42,7 @@
 
 #include <officecfg/Office/Writer.hxx>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1454,6 +1455,12 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
 {
+    if (comphelper::COKit::isActive())
+    {
+        // The client opens the URL, so nothing dispatches .uno:Open to intercept (see LoadURL)
+        return;
+    }
+
     class LocalDispatch : public comphelper::WeakImplHelper<css::frame::XDispatch>
     {
     public:
