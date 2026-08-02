@@ -102,6 +102,16 @@ public sealed partial class Ww8DocumentReader
         /// lists, where it draws one.
         /// </remarks>
         public int ListRule { get; init; }
+
+        /// <summary>
+        /// True when the paragraph mark's own formatting asks for pair kerning.
+        /// </summary>
+        /// <remarks>
+        /// The mark's, not the paragraph's — the same character format that supplies
+        /// <see cref="Size"/> and <see cref="Language"/> — because it is what a paragraph with no runs
+        /// of its own is set in, and what its label is drawn in.
+        /// </remarks>
+        public bool AutoKerning { get; init; }
     }
 
     /// <summary>
@@ -131,6 +141,9 @@ public sealed partial class Ww8DocumentReader
     /// <param name="IsStruckThrough">
     /// True when <c>sprmCFStrike</c> or <c>sprmCFDStrike</c> asks for one through it.
     /// </param>
+    /// <param name="AutoKerning">
+    /// True when <c>sprmCHpsKern</c> asks for the run's pairs to be kerned. Off unless it does.
+    /// </param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -144,7 +157,8 @@ public sealed partial class Ww8DocumentReader
         Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
         Colour? Highlight = null,
         bool IsUnderlined = false,
-        bool IsStruckThrough = false)
+        bool IsStruckThrough = false,
+        bool AutoKerning = false)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -913,6 +927,7 @@ public sealed partial class Ww8DocumentReader
             HasAutoSpaceBefore = layout.HasAutoSpaceBefore ?? false,
             HasAutoSpaceAfter = layout.HasAutoSpaceAfter ?? false,
             ListRule = paragraph.ListNumber,
+            AutoKerning = character.AutoKerning ?? false,
         };
     }
 
@@ -1004,7 +1019,8 @@ public sealed partial class Ww8DocumentReader
                 format.CaseMap,
                 format.Highlight,
                 format.IsUnderlined ?? false,
-                format.IsStruckThrough ?? false);
+                format.IsStruckThrough ?? false,
+                format.AutoKerning ?? false);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -1030,7 +1046,8 @@ public sealed partial class Ww8DocumentReader
            && a.CaseMap == b.CaseMap
            && a.Highlight == b.Highlight
            && a.IsUnderlined == b.IsUnderlined
-           && a.IsStruckThrough == b.IsStruckThrough;
+           && a.IsStruckThrough == b.IsStruckThrough
+           && a.AutoKerning == b.AutoKerning;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -1437,6 +1454,12 @@ public sealed partial class Ww8DocumentReader
                 case LayoutSprms.Underline:
                     format = format with { IsUnderlined = IsUnderlineStyle(sprm.Byte) };
                     break;
+
+                // Not a toggle: the operand is the threshold size, and only its being nonzero
+                // survives into Writer's boolean item.
+                case LayoutSprms.FontKern:
+                    format = format with { AutoKerning = sprm.Word != 0 };
+                    break;
                 case LayoutSprms.Language or LayoutSprms.Language80:
                     format = format with { LanguageId = sprm.Word };
                     break;
@@ -1511,6 +1534,16 @@ public sealed partial class Ww8DocumentReader
         /// so reading this byte as a boolean underlines text Word leaves plain.
         /// </remarks>
         internal const ushort Underline = 0x2A3E;
+
+        /// <summary>
+        /// <c>sprmCHpsKern</c>: the size at or above which the run is pair-kerned.
+        /// </summary>
+        /// <remarks>
+        /// Two bytes of half-points (<c>sw/source/filter/ww8/sprmids.hxx:330</c>), read as a boolean
+        /// because that is all Writer can hold — see <see cref="Ww8LayoutFormat.AutoKerning"/>.
+        /// </remarks>
+        internal const ushort FontKern = 0x484B;
+
         internal const ushort FontSize = 0x4A43;
         internal const ushort FontIndex = 0x4A4F;
         internal const ushort Language80 = 0x486D;

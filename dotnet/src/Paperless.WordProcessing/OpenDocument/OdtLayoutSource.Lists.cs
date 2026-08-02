@@ -236,7 +236,8 @@ public sealed partial class OdtLayoutSource
             : face;
 
         PageLabel label = PageLabel.Measured(
-            drawn, labelFace, size, new ShapingOptions(Language: text.Language));
+            drawn, labelFace, size,
+            new ShapingOptions(Language: text.Language, DisableKerning: !text.AutoKerning));
 
         return (
             label with

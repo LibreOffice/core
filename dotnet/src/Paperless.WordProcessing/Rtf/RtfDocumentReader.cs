@@ -764,6 +764,13 @@ public sealed partial class RtfDocumentReader
             case "strike" or "striked":
                 state.Strike = token.Parameter != 0;
                 return;
+            case "kerning":
+                // A size threshold rather than a switch, and read as a switch because that is all
+                // Writer's item can hold — see RtfState.AutoKerning. A bare `\kerning` with no
+                // parameter is `\kerning0` by RTF's own default-of-zero rule, so it turns kerning
+                // *off*, which is the opposite of what a toggle's default would do.
+                state.AutoKerning = (token.Parameter ?? 0) != 0;
+                return;
             case "caps":
                 state.Capitals = token.Parameter != 0;
                 return;

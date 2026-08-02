@@ -26,6 +26,11 @@ namespace Paperless.WordProcessing.Ooxml;
 /// </param>
 /// <param name="IsUnderlined">True when <c>w:u</c> names a line style other than <c>none</c>.</param>
 /// <param name="IsStruckThrough">True when <c>w:strike</c> or <c>w:dstrike</c> is on.</param>
+/// <param name="AutoKerning">
+/// True when the run asks for pair kerning, which <c>w:kern</c> is the only way to ask for.
+/// <em>Off</em> is the default, and that is not an omission — see
+/// <see cref="WordParagraphFormats.AutoKerningOf"/>.
+/// </param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
@@ -37,7 +42,8 @@ public readonly record struct WordTextStyle(
     PageCaseMap CaseMap = PageCaseMap.None,
     Colour? Highlight = null,
     bool IsUnderlined = false,
-    bool IsStruckThrough = false)
+    bool IsStruckThrough = false,
+    bool AutoKerning = false)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -359,6 +365,8 @@ internal static class WordParagraphFormats
             styles.ResolveRunProperty("strike", runProperties, styleId, characterStyleId);
         WordProperty doubleStrike =
             styles.ResolveRunProperty("dstrike", runProperties, styleId, characterStyleId);
+        WordProperty kerning =
+            styles.ResolveRunProperty("kern", runProperties, styleId, characterStyleId);
 
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
@@ -383,8 +391,42 @@ internal static class WordParagraphFormats
             underline.HasValue && underline.Value is not (null or "none"),
             // Folded onto one flag, as the extraction side folds them: `w:dstrike` is a second line
             // rather than a different decoration, and nothing below this models a doubled rule.
-            strike.IsOn || doubleStrike.IsOn);
+            strike.IsOn || doubleStrike.IsOn,
+            AutoKerningOf(kerning));
     }
+
+    /// <summary>
+    /// Whether a <c>w:kern</c> switches pair kerning on.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>w:kern</c> is not a switch. Its <c>w:val</c> is a font size in half-points, and Word reads it
+    /// as a <em>threshold</em>: kern text set at or above this size and leave smaller text alone. Writer
+    /// has no such item — <c>RES_CHRATR_AUTOKERN</c> is a plain boolean — so LibreOffice drops the
+    /// threshold and keeps only whether one was stated. Its importer says exactly that, in a comment
+    /// beside the line that does it: <c>// auto kerning is bound to a minimum font size in Word - but
+    /// not in Writer :-(</c>, then
+    /// <c>rContext-&gt;Insert(PROP_CHAR_AUTO_KERNING, uno::Any(nIntValue != 0))</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx:2482</c>).
+    /// </para>
+    /// <para>
+    /// So a document asking to kern from 16 pt upwards has every one of its runs kerned, at 8 pt as
+    /// much as at 24. Reproducing Word's threshold instead would be more faithful to the format and
+    /// less faithful to the reference, and the reference is what this is measured against.
+    /// </para>
+    /// <para>
+    /// Absent, it is off — which is the whole point of reading it at all. A loaded Writer document
+    /// starts from the pool default of <c>false</c> (<c>sw/source/core/bastyp/init.cxx:300</c>), and
+    /// <c>SwDocShell::Load</c> resets the user default to it on every load through
+    /// <c>RemoveAllFormatLanguageDependencies</c> (<c>sw/source/uibase/app/docsh.cxx:227</c>). The
+    /// DOCX importer states it a second time for good measure, seeding its own default character
+    /// properties with <c>CharAutoKerning=false</c> and citing that same function
+    /// (<c>StyleSheetTable.cxx:354</c>).
+    /// </para>
+    /// </remarks>
+    /// <param name="kerning">The resolved <c>w:kern</c>.</param>
+    internal static bool AutoKerningOf(WordProperty kerning)
+        => kerning.HasValue && kerning.IntegerValue is { } threshold && threshold != 0;
 
     /// <summary>
     /// The colour a <c>w:highlight</c> names, or null when it names none.

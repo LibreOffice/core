@@ -29,6 +29,9 @@ namespace Paperless.WordProcessing.Rtf;
 /// <param name="Highlight">The band <c>\highlight</c> draws behind the run, or null when it has none.</param>
 /// <param name="IsUnderlined">True when one of the <c>\ul…</c> words draws a rule under the run.</param>
 /// <param name="IsStruckThrough">True when <c>\strike</c> or <c>\striked</c> draws one through it.</param>
+/// <param name="AutoKerning">
+/// True when a nonzero <c>\kerning</c> asks for the run's pairs to be kerned. Off unless it does.
+/// </param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -42,7 +45,8 @@ public readonly record struct RtfLayoutRun(
     Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
     Colour? Highlight = null,
     bool IsUnderlined = false,
-    bool IsStruckThrough = false)
+    bool IsStruckThrough = false,
+    bool AutoKerning = false)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -66,7 +70,8 @@ public readonly record struct RtfLayoutRun(
            && CaseMap == other.CaseMap
            && Highlight == other.Highlight
            && IsUnderlined == other.IsUnderlined
-           && IsStruckThrough == other.IsStruckThrough;
+           && IsStruckThrough == other.IsStruckThrough
+           && AutoKerning == other.AutoKerning;
 }
 
 /// <summary>
@@ -113,6 +118,10 @@ public readonly record struct RtfLayoutRun(
 /// paragraph states in <c>\fi</c>.
 /// </para>
 /// </param>
+/// <param name="AutoKerning">
+/// True when a nonzero <c>\kerning</c> is in force at the paragraph's mark, which is what a paragraph
+/// with no runs of its own is set in and what its label is drawn in.
+/// </param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -126,7 +135,8 @@ public readonly record struct RtfLayoutParagraph(
     int SectionIndex = 0,
     IReadOnlyList<RtfLayoutNote>? Notes = null,
     IReadOnlyList<RtfLayoutFrame>? Frames = null,
-    string? ListMarker = null);
+    string? ListMarker = null,
+    bool AutoKerning = false);
 
 /// <summary>
 /// A floating frame as RTF states it: a shape's rectangle, its wrap, and the text inside it.

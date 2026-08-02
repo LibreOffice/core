@@ -107,7 +107,8 @@ public sealed partial class DocxLayoutSource
         (OpenTypeFace labelFace, FontReference? labelFont) = LabelFace(definition, text, face);
 
         PageLabel label = PageLabel.Measured(
-            drawn, labelFace, text.Size, new ShapingOptions(Language: text.Language));
+            drawn, labelFace, text.Size,
+            new ShapingOptions(Language: text.Language, DisableKerning: !text.AutoKerning));
 
         return (
             label with
