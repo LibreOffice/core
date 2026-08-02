@@ -66,10 +66,20 @@ DILATE = 3
 # 512x512 page is about 100 pixels — a character or two.
 DEFAULT_MIN_AREA = 0.0004
 
-# A page is "majorly different" when this fraction of it differs, or when any single
-# region exceeds MAJOR_REGION.
-MAJOR_PAGE = 0.01
-MAJOR_REGION = 0.004
+# What makes a page "major" is an *ink imbalance*, not a difference.
+#
+# This distinction is the whole design. Two renderers that agree about a page still differ
+# on almost every glyph pixel, because a two-pixel drift down the page makes every line of
+# text land somewhere slightly different — measured on a plain one-page letter that matches
+# the reference word for word, 9% of the page differs and every paragraph is a region. If
+# "differs" meant "wrong", every document in the corpus would be wrong.
+#
+# So a region only counts when one side has substantially more ink in it than the other.
+# Missing fills, absent graphics, undrawn rules and unreadable text all shift ink; a
+# reflowed paragraph moves the same ink somewhere else and is reported as `shifted`.
+INK_GAP = 22            # mean luma difference marking a region as present-vs-absent
+MAJOR_REGION = 0.004    # ... and how much of the page such a region must cover
+MAJOR_PAGE_INK = 0.012  # or this much of a page's total ink unaccounted for either way
 
 
 def run(cmd: list[str]) -> None:
@@ -213,19 +223,16 @@ def where(r: dict, w: int, h: int) -> str:
     return f"{row}-{col}"
 
 
-def classify(r: dict, ours: bytes, ref: bytes, w: int) -> str:
-    """What kind of difference this region most likely is.
+def measure(r: dict, ours: bytes, ref: bytes, w: int) -> None:
+    """Fill in a region's ink balance and colour spread, in place.
 
-    Deliberately a small number of coarse buckets. The hint is there to tell someone
-    which of several very different investigations to start, not to be right about the
-    cause — a wrong guess that sends you to the right part of the page still saves the
-    search.
+    `luma_gap` is the signed mean brightness difference over the region: positive when
+    ours is lighter, which means the reference has ink here that we do not. It is what
+    separates a missing thing from a moved thing, and therefore what the verdict rests on.
     """
     ow = r["x1"] - r["x0"] + 1
     oh = r["y1"] - r["y0"] + 1
-    our_sum = ref_sum = 0
-    our_chroma = ref_chroma = 0
-    n = 0
+    our_sum = ref_sum = our_chroma = ref_chroma = n = 0
     step = max(1, (ow * oh) // 4000)                      # sample big regions rather than walk them
     for y in range(r["y0"], r["y1"] + 1):
         for x in range(r["x0"], r["x1"] + 1, step):
@@ -237,30 +244,42 @@ def classify(r: dict, ours: bytes, ref: bytes, w: int) -> str:
             our_chroma += max(o0, o1, o2) - min(o0, o1, o2)
             ref_chroma += max(f0, f1, f2) - min(f0, f1, f2)
             n += 1
-    if not n:
-        return "unclassified"
+    n = n or 1
+    r["our_luma"] = our_sum / n
+    r["ref_luma"] = ref_sum / n
+    r["luma_gap"] = r["our_luma"] - r["ref_luma"]
+    r["chroma_gap"] = abs(our_chroma - ref_chroma) / n
+    r["fill"] = r["pixels"] / (ow * oh)
+    r["thin"] = min(ow, oh) <= 4 and max(ow, oh) >= 8 * max(1, min(ow, oh))
 
-    our_luma, ref_luma = our_sum / n, ref_sum / n
-    fill = r["pixels"] / (ow * oh)
-    thin = min(ow, oh) <= 4 and max(ow, oh) >= 8 * max(1, min(ow, oh))
-    chroma_gap = abs(our_chroma - ref_chroma) / n
 
-    if thin:
-        return "a rule or border" + (" missing here" if our_luma > ref_luma + 20 else "")
+def classify(r: dict) -> str:
+    """What kind of difference this region most likely is.
+
+    Deliberately a small number of coarse buckets. The hint is there to tell someone
+    which of several very different investigations to start, not to be right about the
+    cause — a wrong guess that sends you to the right part of the page still saves the
+    search.
+    """
+    gap, chroma = r["luma_gap"], r["chroma_gap"]
+    if r["thin"]:
+        return ("a rule or border missing here" if gap > INK_GAP else
+                "a rule or border we draw and the reference does not" if gap < -INK_GAP else
+                "a rule or border drawn differently")
     # A large, solidly-filled region is an area of colour rather than a cluster of marks.
-    if fill > 0.85 and ow * oh > 400:
-        if our_luma > ref_luma + 20:
+    if r["fill"] > 0.85 and (r["x1"] - r["x0"] + 1) * (r["y1"] - r["y0"] + 1) > 400:
+        if gap > INK_GAP:
             return "a fill or background shading the reference has and we do not"
-        if ref_luma > our_luma + 20:
+        if gap < -INK_GAP:
             return "a fill or background shading we draw and the reference does not"
-        if chroma_gap > 12:
+        if chroma > 12:
             return "a fill of the wrong colour"
         return "a solid area drawn differently"
-    if our_luma > ref_luma + 25:
+    if gap > INK_GAP:
         return "ink missing from ours — a graphic, glyphs or a fill"
-    if ref_luma > our_luma + 25:
+    if gap < -INK_GAP:
         return "ink we draw that the reference does not"
-    if chroma_gap > 12:
+    if chroma > 12:
         return "the same marks in a different colour"
     return "marks displaced or reshaped"
 
@@ -329,7 +348,7 @@ def main(argv: list[str]) -> int:
         ref_pages = render(ref_pdf, tmp / "r", args.long_edge)
 
         bad = 0
-        print("page\tdiff%\tregions\tverdict")
+        print("page\tdiff%\tink%\tregions\tverdict")
         for i, (op, rp) in enumerate(zip(ours_pages, ref_pages), start=1):
             ow, oh, orgb = read_ppm(op)
             rw, rh, rrgb = read_ppm(rp)
@@ -348,19 +367,32 @@ def main(argv: list[str]) -> int:
             raw_diff = sum(mask) / count
             found = regions(dilate(mask, ow, oh, DILATE), ow, oh,
                             max(8, int(args.min_area * count)))
+            for r in found:
+                measure(r, orgb, rrgb, ow)
             write_png(outdir / "diff" / f"page-{i:03d}.png", ow, oh,
                       annotate(orgb, rrgb, ow, oh, found))
 
-            biggest = max((r["pixels"] / count for r in found), default=0.0)
-            major = raw_diff > MAJOR_PAGE or biggest > MAJOR_REGION
+            # Ink the two sides do not account for between them, over the whole page. A
+            # reflow moves ink and leaves this near nought; a missing fill does not.
+            page_ink = sum(r["luma_gap"] * (r["x1"] - r["x0"] + 1) * (r["y1"] - r["y0"] + 1)
+                           for r in found)
+            page_ink = abs(page_ink) / (count * 255)
+
+            heavy = [r for r in found
+                     if abs(r["luma_gap"]) > INK_GAP and r["pixels"] / count > MAJOR_REGION]
+            major = bool(heavy) or page_ink > MAJOR_PAGE_INK
             if major:
                 bad += 1
             elif args.quiet:
                 continue
 
-            print(f"{i}\t{raw_diff * 100:.2f}\t{len(found)}\t{'MAJOR' if major else 'ok'}")
-            for r in found[:6] if major else []:
-                print(f"\t\t\t{where(r, ow, oh)}: {classify(r, orgb, rrgb, ow)} "
+            verdict = "MAJOR" if major else ("shifted" if raw_diff > 0.02 else "ok")
+            print(f"{i}\t{raw_diff * 100:.2f}\t{page_ink * 100:.2f}\t{len(found)}\t{verdict}")
+            # Ink-imbalanced regions first: they are the ones that mean something is
+            # missing rather than moved.
+            for r in (sorted(found, key=lambda r: -abs(r["luma_gap"]) * r["pixels"])[:6]
+                      if major else []):
+                print(f"\t\t\t\t{where(r, ow, oh)}: {classify(r)} "
                       f"({r['pixels'] * 100 / count:.2f}% of page, "
                       f"x {r['x0'] / ow:.2f}-{r['x1'] / ow:.2f}, "
                       f"y {r['y0'] / oh:.2f}-{r['y1'] / oh:.2f})")

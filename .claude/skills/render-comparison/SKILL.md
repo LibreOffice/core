@@ -177,12 +177,26 @@ like.
 ```
 
 ```
-page    diff%   regions verdict
-13      34.56   15      MAJOR
-                        middle-centre: ink missing from ours — a graphic, glyphs or a fill (16.47% of page, x 0.02-0.97, y 0.43-0.67)
-                        bottom-centre: a fill or background shading the reference has and we do not (15.98% of page, …)
-                        top-right: a fill or background shading the reference has and we do not (3.16% of page, …)
+page    diff%   ink%    regions verdict
+1       64.30   9.53    1       MAJOR
+                                the whole page: ink missing from ours — a graphic, glyphs or a fill (70.30% of page, …)
+2       60.56   33.60   3       MAJOR
+                                middle-centre: a fill or background shading the reference has and we do not (49.99% of page, …)
 ```
+
+### `ink%`, not `diff%`, is the column that decides
+
+This is the whole design, and getting it wrong makes the tool useless. **Two renderers that agree about a page still differ on almost every glyph pixel**, because a two-pixel drift down the page lands every line somewhere slightly different. Measured on a plain one-page letter that matches the reference word for word: **8.98% of pixels differ and every paragraph is a region.** Judged on `diff%`, all 23 documents in a level-one sample were "major" — which is the same as saying none of them were.
+
+So a region only counts when **one side has substantially more ink in it than the other**. `ink%` is the share of the page's ink the two sides cannot account for between them. A reflow moves ink and leaves it near nought; a missing fill does not:
+
+| | `diff%` | `ink%` | verdict |
+|---|---|---|---|
+| letter matching word for word, drifted two pixels | 8.98 | **0.04** | `shifted` |
+| deck missing its table-cell fills | 4.70 | **0.54** | `MAJOR` |
+| deck drawing white boxes over its background | 60.56 | **33.60** | `MAJOR` |
+
+`shifted` means the same ink in a different place — real, usually a font or spacing difference, and the extraction comparison is a better instrument for it than more pixels.
 
 It writes `cmp/ours/page-NNN.png`, `cmp/ref/page-NNN.png`, and `cmp/diff/page-NNN.png` — the
 reference faded to grey with each differing region boxed in red, which is the artefact to
