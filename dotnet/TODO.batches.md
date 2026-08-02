@@ -1,7 +1,7 @@
 # Corpus batch status
 
 Progress driving the [sample-files](https://github.com/theolivenbaum/sample-files) corpus —
-541 real-world documents ordered by rendering complexity — to parity with LibreOffice.
+534 real-world documents ordered by rendering complexity — to parity with LibreOffice.
 
 The method, the reasoning behind it and the dispatch rules live in the
 [`corpus-batches`](../.claude/skills/corpus-batches/SKILL.md) skill. This file is only the
@@ -284,30 +284,72 @@ documents, and the paginator's `!pageIsEmpty` guard already ruled out); `w:caps`
 parsed and consumed by nothing; and slide autofit shrinking text to fit where we overflow
 and drop the tail.
 
-### `words` — 202 documents, 21 batches
+## After the fourth round: the whole corpus, measured
+
+First measurement covering all three tracks, at `317607f2f`:
+
+| Track | documents | match | |
+|---|---|---|---|
+| `slides` | 163 | **135** | 82% |
+| `words` | 200 | **126** | 63% |
+| `sheets` | 171 | **82** | 47% |
+| **total** | **534** | **343** | **64%** |
+
+Sheets had never been measured before this round. Its baseline was 53/174 and its first fix
+took it to 82 — the largest single jump any track has had.
+
+### Sheets fails differently from the other two, as expected
+
+Its dominant defect was not a wrong page but a wrong *number* of them: 40 documents more
+than five pages over the reference, 20 of those by more than a hundred, the worst giving
+**1170 pages against LibreOffice's 220**. Three of the four causes produce **blank paper**:
+
+- A wrapping cell widened the print area, because the overflow measurement never asked
+  whether the cell wraps. A wrapping column is usually prose, so its strings measure to
+  thousands of points — and every point became empty columns, every band of empty columns a
+  band of blank pages.
+- "Is there any cell to the left" stood in for a measurement. That was the right trade only
+  while the measurement above was wrong.
+- A background fill was treated as a border.
+
+Total absolute page error is still **1120** on sheets against **141** on words, so the
+blank-paper class is not exhausted. Failure rates are 28/62 for `xls` and 61/109 for `xlsx`
+— near-equal, so the residue is downstream of both readers.
+
+### Words is now a boundary problem, not a metric problem
+
+41 of the 74 remaining failures are off by exactly ±1 page (22 at +1, 19 at −1) and total
+absolute page error is 141, down from 385. Metric errors give deltas proportional to length;
+these do not.
+
+Two more properties turned out to be parsed and never applied — `w:caps`/`w:smallCaps` this
+round, after `TabStop.Leader` last round. That is now a recognised shape worth grepping for
+rather than waiting to trip over.
+
+### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
-| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 9/10 |
+| `batch-001` | 10 | 43–59 | doc:5 docx:5 | 9/10 |
+| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 8/10 |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | 8/10 |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 5/10 |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
-| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 7/10 |
+| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 7/10 |
-| `batch-010` | 10 | 228–260 | doc:2 docx:8 | 5/10 |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 5/10 |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 5/10 |
-| `batch-013` | 10 | 338–370 | docx:10 | 5/10 |
-| `batch-014` | 10 | 372–422 | doc:4 docx:6 | 2/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 2/10 |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 9/10 |
+| `batch-010` | 9 | 228–260 | doc:2 docx:8 | 6/9 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 7/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 6/10 |
+| `batch-013` | 9 | 338–370 | docx:10 | 5/9 |
+| `batch-014` | 10 | 372–422 | doc:4 docx:6 | 3/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 4/10 |
 | `batch-016` | 10 | 473–537 | doc:5 docx:5 | 6/10 |
 | `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
-| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 1/10 |
-| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 2/10 |
+| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 2/10 |
+| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 3/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
 ### `slides` — 163 documents, 17 batches
@@ -332,25 +374,25 @@ and drop the tail.
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
 | `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 3/5 |
 
-### `sheets` — 174 documents, 18 batches
+### `sheets` — 171 documents, 18 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | — |
-| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | — |
-| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | — |
-| `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | — |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | — |
-| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | — |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | — |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | — |
-| `batch-009` | 10 | 421–540 | xls:2 xlsx:8 | — |
-| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | — |
-| `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | — |
-| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | — |
-| `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | — |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | — |
-| `batch-015` | 10 | 1773–2264 | xls:4 xlsx:6 | — |
-| `batch-016` | 10 | 2286–4300 | xls:6 xlsx:4 | — |
-| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | — |
-| `batch-018` | 4 | 19384–48127 | xlsx:4 | — |
+| `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | 6/10 |
+| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | 5/10 |
+| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 7/10 |
+| `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | 8/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
+| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 6/10 |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 5/10 |
+| `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 4/9 |
+| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 4/10 |
+| `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 4/10 |
+| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 4/10 |
+| `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 6/10 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 4/10 |
+| `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
+| `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 2/9 |
+| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 2/10 |
+| `batch-018` | 4 | 19384–48127 | xlsx:4 | 2/4 |
