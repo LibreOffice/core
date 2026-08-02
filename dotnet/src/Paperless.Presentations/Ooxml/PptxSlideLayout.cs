@@ -380,7 +380,8 @@ internal sealed partial class PptxSlideLayout
 
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))
             {
-                if (background && PptxPlaceholder.Read(element, slide.Master) is not null) continue;
+                if (background && PptxPlaceholder.Read(element, slide.Master, slide.Layout) is not null)
+                    continue;
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
@@ -735,7 +736,8 @@ internal sealed partial class PptxSlideLayout
     private XElement?[] PlaceholderProperties(XElement shape, PptxSlide slide)
     {
         if (_styles is null) return [];
-        if (PptxPlaceholder.Read(shape, slide.Master) is not { } placeholder) return [];
+        if (PptxPlaceholder.Read(shape, slide.Master, slide.Layout) is not { } placeholder)
+            return [];
 
         (XElement? direct, XElement? inherited) = _styles.Placeholders(placeholder);
         return [Ppt.Child(direct, "spPr"), Ppt.Child(inherited, "spPr")];

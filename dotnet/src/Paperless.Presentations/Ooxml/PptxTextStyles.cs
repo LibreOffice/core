@@ -83,7 +83,7 @@ internal sealed class PptxTextStyles
     {
         ArgumentNullException.ThrowIfNull(shape);
 
-        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master);
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
 
         // Resolved once per shape rather than once per level: the match does not depend on the
         // level, and a deck with a hundred paragraphs in one placeholder would otherwise search
