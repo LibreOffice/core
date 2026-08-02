@@ -177,6 +177,19 @@ public static class PageDrawing
         Stroke stroke = new(Paint.Solid(colour), frame.Frame.BorderWidth);
         DocRect area = frame.Area;
 
+        // A line shape's outline is its diagonal rather than its rectangle: corner to opposite corner,
+        // which is the two-point path `ImportShape` builds for it, with the mirror flags choosing which
+        // pair of corners. Drawing the box instead puts three sides on the page that are not in the file.
+        if (frame.Frame.IsLine)
+        {
+            sink.StrokePath(
+                new GraphicsPath()
+                    .MoveTo(new DocPoint(area.X, frame.Frame.IsLineMirrored ? area.Bottom : area.Y))
+                    .LineTo(new DocPoint(area.Right, frame.Frame.IsLineMirrored ? area.Y : area.Bottom)),
+                stroke);
+            return;
+        }
+
         sink.StrokePath(
             new GraphicsPath()
                 .MoveTo(new DocPoint(area.X, area.Y))

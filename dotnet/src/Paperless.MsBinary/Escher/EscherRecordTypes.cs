@@ -267,6 +267,30 @@ public static class EscherShapeTypes
     /// <summary>A plain rectangle, which is also what a shape with no type at all is drawn as.</summary>
     public const ushort Rectangle = 1;
 
+    /// <summary>
+    /// A straight line across the shape's own rectangle, from one corner to the opposite one.
+    /// </summary>
+    /// <remarks>
+    /// The one preset whose outline is not its rectangle, which is why it is here rather than with the
+    /// preset geometries: <c>SvxMSDffManager::ImportShape</c>
+    /// (<c>filter/source/msfilter/msdffimp.cxx</c>:4403) gives it a two-point <c>SdrPathObj</c> from the
+    /// bounding rectangle's top-left to its bottom-right instead of a shape with an area. A reader that
+    /// draws it as its rectangle paints an opaque box over whatever the line was drawn across.
+    /// </remarks>
+    public const ushort Line = 20;
+
+    /// <summary>
+    /// A straight connector, which is the same diagonal as <see cref="Line"/> by another name.
+    /// </summary>
+    /// <remarks>
+    /// Word writes this type for a line drawn with the connector tool, and the two are indistinguishable
+    /// on the page: <c>ImportShape</c> builds an <c>SdrEdgeObj</c> whose track runs from the bounding
+    /// rectangle's top-left to its bottom-right (<c>filter/source/msfilter/msdffimp.cxx</c>:4820), which
+    /// is the path the line branch builds. The <em>bent</em> and <em>curved</em> connectors that follow it
+    /// in <c>MSO_SPT</c> are not straight and are not this.
+    /// </remarks>
+    public const ushort StraightConnector = 32;
+
     /// <summary>A frame whose content is the blip its <c>pib</c> property names.</summary>
     public const ushort PictureFrame = 75;
 

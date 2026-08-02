@@ -107,6 +107,9 @@ public static class Ww8Frames
         Length lineWidth = Length.FromEmu(
             lined ? properties.Value(EscherPropertyIds.LineWidth, DefaultLineWidthEmu) : 0);
 
+        bool isLine = shape?.ShapeType
+            is EscherShapeTypes.Line or EscherShapeTypes.StraightConnector;
+
         return new PageFrame
         {
             Size = new DocSize(Length.FromTwips(anchor.Width), Length.FromTwips(anchor.Height)),
@@ -158,11 +161,19 @@ public static class Ww8Frames
             InlineAscent = setInLine ? InlineAscent(anchor, vertical, host) : null,
             Spacing = WrapSpacing(properties, lineWidth),
             Padding = TextInsets(properties),
-            Fill = properties.Boolean(EscherPropertyIds.Filled, fallback: true)
+            // A line has no area, so `fFilled` says nothing about it however the file sets the bit —
+            // `ImportShape` builds it as a two-point path and never reaches the fill (msdffimp.cxx:4403).
+            // The default the other branch takes is opaque white, so reading the bit here would put a
+            // solid box over everything the line was drawn across.
+            Fill = !isLine && properties.Boolean(EscherPropertyIds.Filled, fallback: true)
                 ? Colour(properties.Value(EscherPropertyIds.FillColour, 0x00FFFFFF))
                 : null,
             BorderColour = lined ? Colour(properties.Value(EscherPropertyIds.LineColour)) : null,
             BorderWidth = lineWidth,
+            IsLine = isLine,
+            IsLineMirrored = shape is not null
+                && shape.Flags.HasFlag(EscherShapeAttributes.FlipHorizontal)
+                    != shape.Flags.HasFlag(EscherShapeAttributes.FlipVertical),
             IsImage = blocks.Count == 0,
             Blocks = blocks,
             Name = shape?.Name,

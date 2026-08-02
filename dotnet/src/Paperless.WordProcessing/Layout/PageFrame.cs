@@ -235,6 +235,36 @@ public sealed record PageFrame
     /// <summary>How thick that border is.</summary>
     public Length BorderWidth { get; init; }
 
+    /// <summary>
+    /// True when the frame is a straight line across its own rectangle rather than a box.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one preset shape whose outline is not the rectangle it is anchored by, and the commonest
+    /// drawing in a form: a rule, a strike across a block, the cross over an unused half of a
+    /// certificate. It has no area, so it has neither a fill nor a rectangular border — it is stroked
+    /// corner to corner in <see cref="BorderColour"/> at <see cref="BorderWidth"/>.
+    /// </para>
+    /// <para>
+    /// A flag rather than a shape-geometry model, because that is the shape of the answer here: every
+    /// other preset really is drawn inside its rectangle, and the general evaluator that would draw the
+    /// rest of them is a separate piece of work. Drawing this one as a box is not a small error —
+    /// its fill defaults to opaque white, so it hides the text it was drawn over.
+    /// </para>
+    /// </remarks>
+    public bool IsLine { get; init; }
+
+    /// <summary>
+    /// True when a line frame runs from its bottom-left corner to its top-right rather than from its
+    /// top-left to its bottom-right.
+    /// </summary>
+    /// <remarks>
+    /// Mirroring once turns one diagonal into the other and mirroring twice turns it back, so this is
+    /// the <em>exclusive or</em> of the shape's two flip flags rather than either of them. A cross is
+    /// two of these shapes over one rectangle, distinguished by nothing else.
+    /// </remarks>
+    public bool IsLineMirrored { get; init; }
+
     /// <summary>True when the frame holds a picture rather than text.</summary>
     /// <remarks>
     /// Separate from <see cref="Image"/> and <see cref="Vector"/>, because they answer different
