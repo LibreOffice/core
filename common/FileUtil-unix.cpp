@@ -19,6 +19,7 @@
 #include <common/Anonymizer.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
+#include <climits>
 #include <dirent.h>
 #include <filesystem>
 #include <ftw.h>
@@ -346,16 +347,18 @@ namespace FileUtil
                 std::string fullpath(path);
                 fullpath.append("/").append(entry._name);
 
-                const std::size_t size = entry._size;
-                std::vector<char> target(size + 1);
-                char* target_data = target.data();
-                const ssize_t read = readlink(fullpath.c_str(), target_data, size);
+                // For a symlink st_size is the length of the target path,
+                // but fall back to PATH_MAX if it is not a sane value.
+                const std::size_t size =
+                    (entry._size > 0 && entry._size < PATH_MAX) ? entry._size : PATH_MAX;
+                std::string target(size, '\0');
+                const ssize_t read = readlink(fullpath.c_str(), target.data(), size);
                 if (read <= 0 || o3tl::make_unsigned(read) > size)
                     std::cerr << "lslr: fail to read: " << fullpath << " error: " << std::strerror(errno) << std::endl;
                 else
                 {
-                    target_data[read] = '\0';
-                    std::cout << " -> " << target.data();
+                    target.resize(read);
+                    std::cout << " -> " << target;
                 }
             }
 
