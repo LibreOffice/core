@@ -1393,11 +1393,11 @@ typedef void (*COKitCallback)(COKitCallbackType eType, const char* pPayload, voi
 enum class COKitMouseEventType
 {
     /// A mouse button has been pressed down.
-    MOUSEBUTTONDOWN,
+    BUTTONDOWN,
     /// A mouse button has been let go.
-    MOUSEBUTTONUP,
+    BUTTONUP,
     /// The mouse has moved while a button is pressed.
-    MOUSEMOVE
+    MOVE
 };
 
 enum class COKitSetTextSelectionType

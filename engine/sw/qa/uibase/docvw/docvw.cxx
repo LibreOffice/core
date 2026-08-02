@@ -272,7 +272,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     pWrtShell->StartOfSection(/*bSelect=*/false);
     Point aStart = pShellCursor->GetSttPos();
     Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
-    getSwTextDoc()->postMouseEvent(COKitMouseEventType::MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
+    getSwTextDoc()->postMouseEvent(COKitMouseEventType::MOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
                                    0);
     Scheduler::ProcessEventsToIdle();
 

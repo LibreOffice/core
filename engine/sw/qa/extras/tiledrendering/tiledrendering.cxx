@@ -131,8 +131,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostMouseEvent)
 
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor->GetPoint()->GetContentIndex());
@@ -658,8 +658,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorVisibility)
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     Point aCenter = pObject->GetSnapRect().Center();
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // Make sure the "view/text" cursor of the first view gets a notification.
     CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
@@ -681,8 +681,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorCleanup)
         SdrObject* pObject = pPage->GetObj(0);
         Point aCenter = pObject->GetSnapRect().Center();
         aView1.m_bGraphicViewSelection = false;
-        pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-        pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+        pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+        pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
         Scheduler::ProcessEventsToIdle();
         // Make sure there is a graphic view selection on the first view.
         CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
@@ -1028,8 +1028,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<frame::XFrame> xFrame2 = xDesktop->getActiveFrame();
@@ -1693,8 +1693,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentEndTextEdit)
     // no unexpected cursor callbacks are emitted at origin (top left corner of
     // the document).
     aView1.m_bOwnCursorAtOrigin = false;
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // This failed, the cursor was at 0, 0 at some point during end text edit
     // of the comment.
@@ -2639,8 +2639,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeselectCustomShape)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
 
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
 }
@@ -2988,9 +2988,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)
 
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() + 1800);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1,
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.getX(), aStart.getY(), 1,
             MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1,
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aStart.getX(), aStart.getY(), 1,
             MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
@@ -3857,7 +3857,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)
     pWrtShell->StartOfSection(/*bSelect=*/false);
     Point aStart = pShellCursor->GetSttPos();
     Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
-    pXTextDoc->postMouseEvent(COKitMouseEventType::MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0, 0);
+    pXTextDoc->postMouseEvent(COKitMouseEventType::MOVE, aMiddle.getX(), aMiddle.getY(), 1, 0, 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(m_aTooltip.text.starts_with("Inserted: "));

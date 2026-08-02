@@ -6149,13 +6149,13 @@ static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWind
 
     switch (eType)
     {
-        case COKitMouseEventType::MOUSEBUTTONDOWN:
+        case COKitMouseEventType::BUTTONDOWN:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonDown, pWindow, &aEvent);
             break;
-        case COKitMouseEventType::MOUSEBUTTONUP:
+        case COKitMouseEventType::BUTTONUP:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aEvent);
             break;
-        case COKitMouseEventType::MOUSEMOVE:
+        case COKitMouseEventType::MOVE:
             Application::PostMouseEvent(VclEventId::WindowMouseMove, pWindow, &aEvent);
             break;
         default:

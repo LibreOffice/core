@@ -2493,11 +2493,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMouseMergeRef)
     Point aA6 = pViewShell->GetViewData().GetPrintTwipsPos(0, 5);
     Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
 
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aA1.X() + 5, aA1.Y() + 5, 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEMOVE, aA6.X() + 5, aA6.Y() + 5, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1, MOUSE_LEFT,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOVE, aA6.X() + 5, aA6.Y() + 5, 1, MOUSE_LEFT,
                               0);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aA7.X() + 5, aA7.Y() + 5, 1,
+                              MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(pViewShell->IsRefInputMode());
@@ -2525,10 +2526,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testFillHandleDnD)
     Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aB2.X() - 1, aB2.Y() - 1, 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aB2.X() - 1, aB2.Y() - 1, 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEMOVE, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOVE, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     ScDocument* pDoc = getScDoc();

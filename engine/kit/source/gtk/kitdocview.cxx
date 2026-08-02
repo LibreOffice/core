@@ -2092,7 +2092,7 @@ kit_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonPressTime = pEvent->time;
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(KIT_POST_MOUSE_EVENT);
-        pLOEvent->m_nPostMouseEventType = COKitMouseEventType::MOUSEBUTTONDOWN;
+        pLOEvent->m_nPostMouseEventType = COKitMouseEventType::BUTTONDOWN;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
@@ -2134,7 +2134,7 @@ kit_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         priv->m_nLastButtonReleaseTime = pEvent->time;
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(KIT_POST_MOUSE_EVENT);
-        pLOEvent->m_nPostMouseEventType = COKitMouseEventType::MOUSEBUTTONUP;
+        pLOEvent->m_nPostMouseEventType = COKitMouseEventType::BUTTONUP;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
@@ -2265,7 +2265,7 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(KIT_POST_MOUSE_EVENT);
-    pLOEvent->m_nPostMouseEventType = COKitMouseEventType::MOUSEMOVE;
+    pLOEvent->m_nPostMouseEventType = COKitMouseEventType::MOVE;
     pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventCount = 1;
@@ -2277,7 +2277,7 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);
     if (error != nullptr)
     {
-        g_warning("Unable to call COKitMouseEventType::MOUSEMOVE: %s", error->message);
+        g_warning("Unable to call COKitMouseEventType::MOVE: %s", error->message);
         g_clear_error(&error);
     }
     g_object_unref(task);

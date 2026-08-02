@@ -1466,13 +1466,13 @@ void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouse
     KitAsyncEventData* pKitEv = new KitAsyncEventData;
     switch (rKitMouseEventData.meType)
     {
-    case COKitMouseEventType::MOUSEBUTTONDOWN:
+    case COKitMouseEventType::BUTTONDOWN:
         pKitEv->mnEvent = VclEventId::WindowMouseButtonDown;
         break;
-    case COKitMouseEventType::MOUSEBUTTONUP:
+    case COKitMouseEventType::BUTTONUP:
         pKitEv->mnEvent = VclEventId::WindowMouseButtonUp;
         break;
-    case COKitMouseEventType::MOUSEMOVE:
+    case COKitMouseEventType::MOVE:
         pKitEv->mnEvent = VclEventId::WindowMouseMove;
         break;
     default:
@@ -1540,7 +1540,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell,
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
-    if (eType != COKitMouseEventType::MOUSEMOVE)
+    if (eType != COKitMouseEventType::MOVE)
     {
         if (KitChartHelper::HitAny({nX, nY}))
             return true;

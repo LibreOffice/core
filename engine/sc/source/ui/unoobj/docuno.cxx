@@ -909,13 +909,13 @@ void ScModelObj::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int n
     aData.setLogicPosition(aPointHMM);
     switch (eType)
     {
-        case COKitMouseEventType::MOUSEBUTTONDOWN:
+        case COKitMouseEventType::BUTTONDOWN:
             aEvent = VclEventId::WindowMouseButtonDown;
             break;
-        case COKitMouseEventType::MOUSEBUTTONUP:
+        case COKitMouseEventType::BUTTONUP:
             aEvent = VclEventId::WindowMouseButtonUp;
             break;
-        case COKitMouseEventType::MOUSEMOVE:
+        case COKitMouseEventType::MOVE:
             aEvent = VclEventId::WindowMouseMove;
             break;
         default:

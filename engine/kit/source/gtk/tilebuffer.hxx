@@ -258,7 +258,7 @@ struct LOEvent
         , m_nPaintTileY(0)
         , m_fPaintTileZoom(0)
         , m_pTileBuffer(nullptr)
-        , m_nPostMouseEventType(COKitMouseEventType::MOUSEBUTTONDOWN)
+        , m_nPostMouseEventType(COKitMouseEventType::BUTTONDOWN)
         , m_nPostMouseEventX(0)
         , m_nPostMouseEventY(0)
         , m_nPostMouseEventCount(0)

@@ -2298,15 +2298,15 @@ bool ChildSession::mouseEvent(const StringVector& tokens,
             minTokens++;
     }
 
-    COKitMouseEventType type = COKitMouseEventType::MOUSEBUTTONDOWN;
+    COKitMouseEventType type = COKitMouseEventType::BUTTONDOWN;
     int x = 0;
     int y = 0;
     int count = 0;
     if (tokens.size() < minTokens ||
         !getTokenKeyword(tokens[counter++], "type",
-                         {{"buttondown", COKitMouseEventType::MOUSEBUTTONDOWN},
-                          {"buttonup", COKitMouseEventType::MOUSEBUTTONUP},
-                          {"move", COKitMouseEventType::MOUSEMOVE}},
+                         {{"buttondown", COKitMouseEventType::BUTTONDOWN},
+                          {"buttonup", COKitMouseEventType::BUTTONUP},
+                          {"move", COKitMouseEventType::MOVE}},
                          type) ||
         !getTokenInteger(tokens[counter++], "x", x) ||
         !getTokenInteger(tokens[counter++], "y", y) ||

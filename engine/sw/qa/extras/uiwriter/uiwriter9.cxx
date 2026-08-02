@@ -1462,9 +1462,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
     Point aPoint = pShellCursor->GetSttPos();
 
     // click on first line
-    pTextDoc->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pTextDoc->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                              MOUSE_LEFT, 0);
-    pTextDoc->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+    pTextDoc->postMouseEvent(COKitMouseEventType::BUTTONUP, aPoint.getX(), aPoint.getY(), 1,
                              MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
@@ -1506,9 +1506,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf122756)
 
     // click on cell A2
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pTextDoc->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                              MOUSE_LEFT, 0);
-    pTextDoc->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+    pTextDoc->postMouseEvent(COKitMouseEventType::BUTTONUP, aPoint.getX(), aPoint.getY(), 1,
                              MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
