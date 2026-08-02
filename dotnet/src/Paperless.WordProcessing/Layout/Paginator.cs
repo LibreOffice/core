@@ -39,12 +39,26 @@ public sealed record PaginationOptions
     /// Whether a paragraph keeps its space-before when it starts a page.
     /// </summary>
     /// <remarks>
-    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>: it drops the spacing, so the first line of a page sits at
-    /// the top margin whatever the paragraph asks for, while Word keeps it. Getting it wrong moves the
-    /// first baseline of every page after the first, which then changes how much fits and where the next
-    /// break falls. Unlike <see cref="CollapsesSpacing"/> this is not pinned by a comparison yet: the
-    /// corpus document's page tops all fall mid-paragraph or on paragraphs with no space-before, so it
-    /// makes no difference there.
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>, and — this is the part that took a measurement — the flag
+    /// does not mean "always keeps it". It decides whether the question is asked at all;
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c> (<c>flowfrm.cxx</c>:1415) then decides where. In the
+    /// document body it grants the space only on the <em>first</em> page and after an explicit break, and
+    /// takes it away at every automatic one; outside the body — a header, a footer, a table cell — it
+    /// grants it everywhere.
+    /// </para>
+    /// <para>
+    /// Measured rather than read, on a DOCX whose paragraphs carry 20 pt of space-before and nothing else:
+    /// LibreOffice puts page one's first line at 92.03 pt, which is the 72 pt margin plus the 20, and page
+    /// two's at 72.03 pt. Keeping it on every page put every page after the first 20 pt low and eventually
+    /// cost a page break.
+    /// </para>
+    /// <para>
+    /// The synthetic that establishes this needs a <c>word/settings.xml</c>, even an empty one. Without
+    /// that part LibreOffice never applies its OOXML compatibility defaults and the document lays out with
+    /// Writer's, which reverses both this rule and <see cref="CollapsesSpacing"/> — a minimal test file
+    /// missing a part it does not appear to need will otherwise answer the wrong question convincingly.
+    /// </para>
     /// </remarks>
     public bool KeepsSpacingAtTopOfPage { get; init; }
 
@@ -624,8 +638,17 @@ public sealed class Paginator
                 continue;
             }
 
+            // Writer's `HasParaSpaceAtPages`, which is what decides whether the top-of-frame rule applies
+            // at all: the document's first page keeps a paragraph's space-before, an explicit page break
+            // keeps it, and an automatic break in the body drops it. Only asked where the rule can bite —
+            // at the top of a column, where `SpaceAbove` would otherwise take the option's word for it.
+            bool keepsSpaceHere =
+                column == 0 && (pages.Count == 0 || paragraph.Format.StartsNewPage);
+
             Length spaceAbove = lineIndex == 0
-                ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
+                ? SpaceAbove(
+                    blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty,
+                    keepsSpacingAtTop: keepsSpaceHere)
                 : Length.Zero;
 
             // The notes those lines would anchor take their room out of the body's, so how many lines fit
@@ -954,15 +977,29 @@ public sealed class Paginator
     /// <see cref="ParagraphLeading"/> for the citations and for what it costs to get wrong.
     /// </para>
     /// </remarks>
+    /// <param name="blocks">The document's blocks, for the paragraph above this one.</param>
+    /// <param name="laid">Their laid-out forms, for the spacings the layout resolved.</param>
+    /// <param name="index">Which block the space is being measured above.</param>
+    /// <param name="atTopOfPage">True when nothing is on the column yet.</param>
+    /// <param name="keepsSpacingAtTop">
+    /// Whether <em>this</em> frame top is one of the places the option's rule applies — Writer's
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c>. See <see cref="PaginationOptions.KeepsSpacingAtTopOfPage"/>:
+    /// the flag says the document has the behaviour at all, and this says whether the paragraph in hand is
+    /// somewhere it is granted.
+    /// </param>
     private Length SpaceAbove(
         IReadOnlyList<PageBlock> blocks,
         List<LaidBlock> laid,
         int index,
-        bool atTopOfPage)
+        bool atTopOfPage,
+        bool keepsSpacingAtTop = true)
     {
         Length before = laid[index].Paragraph!.SpaceBefore;
 
-        if (atTopOfPage && !_options.KeepsSpacingAtTopOfPage) return Length.Zero;
+        if (atTopOfPage && !(_options.KeepsSpacingAtTopOfPage && keepsSpacingAtTop))
+        {
+            return Length.Zero;
+        }
 
         // The previous paragraph's leading, and only when there is a previous paragraph in this frame:
         // at the top of a page or a column Writer finds no previous frame at all
