@@ -21,11 +21,26 @@ Advancing on the first condition alone is how a corpus rots from the front: rend
 errors cascade, so a fix aimed at batch *n* routinely breaks batch *n−4* in a way that looks
 nothing like the change.
 
-## Priority
+## How the tracks advance
 
-`words` and `slides` are worked first, in parallel. `sheets` is ordered and ready but comes
-last — a spreadsheet's value is in its cells rather than its pagination, so faithful PDF
-output matters least there.
+**The three tracks advance independently, one agent each, and never wait for one another.**
+A track's agent takes its lowest still-open batch; when it lands, that batch's predecessor is
+re-proved and the next batch is dispatched for that track alone. Slides being three batches
+ahead of sheets is not a problem to correct — it is the point, because a track that waits is
+an agent idle.
+
+Sheets was originally scheduled last on the grounds that a spreadsheet's value is in its
+cells rather than its pagination. That ordering is retired: the track turned out to hold the
+corpus's largest systematic defects — one workbook paginating 1170 pages against 220 — and
+deferring it was hiding them rather than deprioritising them.
+
+## Level one: done
+
+`batch-001` on all three tracks passes the word gate — **29 of 29 documents**. Twenty-seven
+of the twenty-nine also pass the image check. What remains is three pages across two slide
+decks, each with a named cause of feature size rather than a defect: `<a:lum>`/`<a:grayscl>`
+blip effects needing the PDF backend to decode and re-encode, PPT auto-numbering across
+placeholders, and one undiagnosed measurement difference.
 
 ## Status key
 
@@ -330,7 +345,7 @@ rather than waiting to trip over.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 43–59 | doc:5 docx:5 | 9/10 |
+| `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | 8/10 |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | 8/10 |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 |
@@ -356,8 +371,8 @@ rather than waiting to trip over.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | 8/9 |
-| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | 9/10 |
+| `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | ✅ |
+| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | ✅ |
 | `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 9/10 |
 | `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | ✅ |
 | `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 8/9 |
@@ -378,8 +393,8 @@ rather than waiting to trip over.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | 6/10 |
-| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | 5/10 |
+| `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | ✅ |
+| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | 7/10 |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 7/10 |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | 8/10 |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
