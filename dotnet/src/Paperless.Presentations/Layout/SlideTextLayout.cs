@@ -401,7 +401,8 @@ public static partial class SlideTextLayout
             Length size = scaling.Scaled(run.Size);
 
             runs.Add(new FormattedRun(run.Start, run.Length, face, size, Tracking: run.Tracking));
-            styles.Add(new RunStyle(run.Colour, reference, face));
+            styles.Add(new RunStyle(
+                run.Colour, reference, face, run.IsUnderlined, run.IsStruckThrough));
         }
 
         if (first is null) return null;
@@ -690,12 +691,71 @@ public static partial class SlideTextLayout
                 line.Box.SpaceAdd,
                 run.Tracking);
 
-            placed.Add(new PlacedGlyphRun(glyphs, block.ColourAt(run.Start)));
+            Length advance = Length.Zero;
+            foreach (PositionedGlyph glyph in glyphs.Glyphs) advance += glyph.Advance;
+
+            placed.Add(new PlacedGlyphRun(
+                glyphs,
+                block.ColourAt(run.Start),
+                Rules(block.DecorationAt(run.Start), run.Face, run.EmSize, pen, baseline, advance)));
 
             // The pen carries across the runs of a line, so the second run starts where the first
             // ended rather than back at the margin.
-            foreach (PositionedGlyph glyph in glyphs.Glyphs) pen += glyph.Advance;
+            pen += advance;
         }
+    }
+
+    /// <summary>
+    /// The rectangles a run's underline and strikethrough fill, or null when it has neither.
+    /// </summary>
+    /// <remarks>
+    /// Computed here because this is the last point at which the <see cref="OpenTypeFace"/> is in
+    /// hand: the offset and thickness are the face's own <c>post</c> and <c>OS/2</c> values
+    /// through <see cref="LineSpacing.ResolveDecorations(OpenTypeFace, LineMetrics)"/>, which falls back to a fraction of
+    /// the em for a face declaring zero — otherwise a font that declines to say would draw a
+    /// rule of no thickness, which is to say none.
+    /// </remarks>
+    private static List<DocRect>? Rules(
+        (bool Underline, bool Strikethrough) decoration,
+        OpenTypeFace face,
+        Length size,
+        Length left,
+        Length baseline,
+        Length width)
+    {
+        if (!decoration.Underline && !decoration.Strikethrough) return null;
+        if (size <= Length.Zero || width <= Length.Zero) return null;
+
+        int unitsPerEm = face.UnitsPerEm > 0 ? face.UnitsPerEm : 1000;
+        FontVerticalMetrics metrics =
+            LineSpacing.ResolveDecorations(face, LineSpacing.Resolve(face));
+
+        Length Scaled(int designUnits) => size * ((double)designUnits / unitsPerEm);
+
+        List<DocRect> rules = [];
+
+        if (decoration.Underline)
+        {
+            // The face records the underline's offset as negative below the baseline.
+            Length thickness = Scaled(metrics.UnderlineThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add(new DocRect(
+                    left, baseline - Scaled(metrics.UnderlinePosition), width, thickness));
+            }
+        }
+
+        if (decoration.Strikethrough)
+        {
+            Length thickness = Scaled(metrics.StrikeoutThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add(new DocRect(
+                    left, baseline - Scaled(metrics.StrikeoutPosition), width, thickness));
+            }
+        }
+
+        return rules.Count == 0 ? null : rules;
     }
 
     /// <summary>Builds a glyph run from a shaped stretch of text at an origin.</summary>
@@ -806,7 +866,14 @@ public static partial class SlideTextLayout
     /// existing check could see it.
     /// </para>
     /// </remarks>
-    private readonly record struct RunStyle(Colour Colour, FontReference? Font, OpenTypeFace? Face);
+    /// <param name="IsUnderlined">Whether a rule is drawn under it.</param>
+    /// <param name="IsStruckThrough">Whether a rule is drawn through it.</param>
+    private readonly record struct RunStyle(
+        Colour Colour,
+        FontReference? Font,
+        OpenTypeFace? Face,
+        bool IsUnderlined = false,
+        bool IsStruckThrough = false);
 
     /// <summary>One paragraph, measured and broken.</summary>
     private sealed record Block(
@@ -828,6 +895,13 @@ public static partial class SlideTextLayout
         /// not move a line break, so it travels with whatever draws the text.
         /// </remarks>
         public Colour ColourAt(int index) => StyleAt(index).Colour;
+
+        /// <summary>The decorations covering a character, both false when no run does.</summary>
+        public (bool Underline, bool Strikethrough) DecorationAt(int index)
+        {
+            RunStyle style = StyleAt(index);
+            return (style.IsUnderlined, style.IsStruckThrough);
+        }
 
         /// <summary>
         /// The resolved reference for a sub-run, or null when nothing here can name its face.

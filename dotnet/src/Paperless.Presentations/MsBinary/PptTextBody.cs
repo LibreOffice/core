@@ -282,7 +282,9 @@ internal static class PptTextBody
             Length.FromPoints(height > 0 ? height : level.FontHeight),
             emphasis.HasFlag(RunEmphasis.Bold) ? 700 : 400,
             emphasis.HasFlag(RunEmphasis.Italic),
-            PptColour.ResolveText(colour, scheme) ?? Colour.Black);
+            PptColour.ResolveText(colour, scheme) ?? Colour.Black,
+            IsUnderlined: emphasis.HasFlag(RunEmphasis.Underline),
+            IsStruckThrough: emphasis.HasFlag(RunEmphasis.Strikethrough));
     }
 
     /// <summary>

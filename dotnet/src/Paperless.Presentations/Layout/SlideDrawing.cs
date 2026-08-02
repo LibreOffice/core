@@ -60,7 +60,7 @@ public static class SlideDrawing
         // plain numbers that compare directly against a reference renderer's.
         if (text.IsUpright)
         {
-            foreach (PlacedGlyphRun run in text.Runs) sink.DrawGlyphRun(run.Run, Paint.Solid(run.Colour));
+            foreach (PlacedGlyphRun run in text.Runs) DrawRun(run, sink);
             return;
         }
 
@@ -68,11 +68,38 @@ public static class SlideDrawing
         try
         {
             sink.Transform(text.Transform);
-            foreach (PlacedGlyphRun run in text.Runs) sink.DrawGlyphRun(run.Run, Paint.Solid(run.Colour));
+            foreach (PlacedGlyphRun run in text.Runs) DrawRun(run, sink);
         }
         finally
         {
             sink.Restore();
+        }
+    }
+
+    /// <summary>
+    /// Draws one run and the rules under and through it.
+    /// </summary>
+    /// <remarks>
+    /// The rules go on after the glyphs and in the run's own colour, which is what every renderer
+    /// here does with a decoration: they are filled rectangles rather than strokes so that a
+    /// half-point rule stays a half-point rule instead of becoming the device's thinnest line.
+    /// </remarks>
+    private static void DrawRun(in PlacedGlyphRun run, IDrawingSink sink)
+    {
+        sink.DrawGlyphRun(run.Run, Paint.Solid(run.Colour));
+
+        if (run.Rules is not { Count: > 0 } rules) return;
+
+        foreach (DocRect rule in rules)
+        {
+            sink.FillPath(
+                new GraphicsPath()
+                    .MoveTo(new DocPoint(rule.X, rule.Y))
+                    .LineTo(new DocPoint(rule.X + rule.Width, rule.Y))
+                    .LineTo(new DocPoint(rule.X + rule.Width, rule.Y + rule.Height))
+                    .LineTo(new DocPoint(rule.X, rule.Y + rule.Height))
+                    .Close(),
+                Paint.Solid(run.Colour));
         }
     }
 

@@ -181,4 +181,16 @@ public sealed record PlacedText(
 /// <summary>One glyph run and the colour it is drawn in.</summary>
 /// <param name="Run">The run.</param>
 /// <param name="Colour">Its colour.</param>
-public readonly record struct PlacedGlyphRun(GlyphRun Run, Colour Colour);
+/// <param name="Rules">
+/// The underline and strikethrough rectangles the run's own face asks for, in the same
+/// coordinates as the run, or empty when it carries neither.
+/// </param>
+/// <remarks>
+/// The rules travel with the run rather than being drawn by a backend from the font, because a
+/// decoration's offset and thickness come from the face's <c>post</c> and <c>OS/2</c> tables and
+/// the face is resolved here — a backend holds a <see cref="FontReference"/> and cannot read
+/// them. They are filled rectangles rather than strokes so their thickness is exact, which is
+/// what the spreadsheet layer does with the same metrics.
+/// </remarks>
+public readonly record struct PlacedGlyphRun(
+    GlyphRun Run, Colour Colour, IReadOnlyList<DocRect>? Rules = null);
