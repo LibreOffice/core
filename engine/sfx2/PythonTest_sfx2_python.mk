@@ -13,8 +13,10 @@ $(eval $(call gb_PythonTest_set_defs,sfx2_python,\
     TDOC="$(SRCDIR)/sfx2/qa/python/testdocuments" \
 ))
 
+# The sidebar's UNO API only creates the controller when the Kit is inactive, a Kit build
+# expecting the client to ask for the sidebar, which check_sidebar has no way of doing
 $(eval $(call gb_PythonTest_add_modules,sfx2_python,$(SRCDIR)/sfx2/qa/python,\
-	check_sidebar \
+	$(if $(ENABLE_KIT_ALWAYS_ACTIVE),,check_sidebar) \
 	check_sidebar_registry \
 ))
 

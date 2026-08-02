@@ -948,9 +948,12 @@ AC_ARG_ENABLE([kit-always-active],
         [Make comphelper::COKit::isActive() a compile-time constant
          returning true.])
 )
+ENABLE_KIT_ALWAYS_ACTIVE=
 if test "$enable_kit_always_active" = yes; then
     AC_DEFINE(KIT_ALWAYS_ACTIVE)
+    ENABLE_KIT_ALWAYS_ACTIVE=TRUE
 fi
+AC_SUBST(ENABLE_KIT_ALWAYS_ACTIVE)
 
 libo_FUZZ_ARG_ENABLE([android-editing],
     AS_HELP_STRING([--enable-android-editing],
