@@ -1,12 +1,11 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
-using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 
-namespace Paperless.WordProcessing.Ww8;
+namespace Paperless.MsBinary.Escher;
 
 /// <summary>
-/// A DOC's blip store: the pictures its shapes index by number.
+/// An Office Art blip store: the pictures a drawing's shapes index by number.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -25,6 +24,13 @@ namespace Paperless.WordProcessing.Ww8;
 /// reader's <c>m_pDataStream</c> as the BLIP stream.
 /// </para>
 /// <para>
+/// <strong>The store belongs to Escher, not to any one front end.</strong> PowerPoint keeps the same
+/// structure with a different delay stream — the compound file's <c>Pictures</c> stream — and Excel
+/// keeps it inline in the workbook stream, so all three delegate here rather than each carrying its own
+/// copy of the UID rule and the metafile inflate. <c>SvxMSDffManager</c> is the single class that serves
+/// all three in LibreOffice for the same reason.
+/// </para>
+/// <para>
 /// Measured on LibreOffice's own DOC export of <c>picture-flow.fodt</c>: the <c>msofbtBSE</c> in the
 /// table stream is exactly thirty-six bytes with nothing after it, and the <c>Data</c> stream is a
 /// hundred and eighteen — an eight-byte record header, a sixteen-byte checksum, one tag byte, and the
@@ -41,7 +47,7 @@ namespace Paperless.WordProcessing.Ww8;
 /// before anything else.
 /// </para>
 /// </remarks>
-internal static class Ww8Blips
+public static class EscherBlips
 {
     /// <summary>The fixed part of an <c>msofbtBSE</c>, before any inline blip record.</summary>
     /// <remarks>
@@ -113,22 +119,44 @@ internal static class Ww8Blips
     /// route: for <c>picture-flow.doc</c> the <c>foDelay</c> is 6717, the <c>Data</c> stream is 118
     /// bytes long, and the <c>WordDocument</c> stream is 6835 — the picture is the last thing in it.
     /// </param>
-    public static Dictionary<int, Ww8Blip> Read(byte[] officeArt, byte[] delay, byte[] fallback)
+    public static Dictionary<int, EscherBlip> Read(byte[] officeArt, byte[] delay, byte[] fallback)
     {
         ArgumentNullException.ThrowIfNull(officeArt);
         ArgumentNullException.ThrowIfNull(delay);
         ArgumentNullException.ThrowIfNull(fallback);
 
-        Dictionary<int, Ww8Blip> blips = [];
-        if (officeArt.Length < DffRecordHeader.HeaderSize) return blips;
+        if (officeArt.Length < DffRecordHeader.HeaderSize) return [];
 
         DffRecordBuffer buffer = new(officeArt);
 
-        if (!buffer.TryReadHeader(0, out DffRecordHeader group)
-            || group.Type != EscherRecordTypes.DrawingGroupContainer)
-        {
-            return blips;
-        }
+        return buffer.TryReadHeader(0, out DffRecordHeader group)
+               && group.Type == EscherRecordTypes.DrawingGroupContainer
+            ? Read(buffer, group, delay, fallback)
+            : [];
+    }
+
+    /// <summary>
+    /// The same, for a drawing group already located inside a larger stream.
+    /// </summary>
+    /// <remarks>
+    /// PowerPoint keeps its group inside a <c>PPDrawingGroup</c> record rather than at the head of a
+    /// blob of its own, so it arrives as a header into the document stream. Taking the pair rather
+    /// than a copied byte array also keeps a <c>foDelay</c> honest: the offset is into the delay
+    /// stream and is unaffected by where the group sits, but slicing the group out and re-reading it
+    /// from zero is the sort of rebasing that invites the mistake.
+    /// </remarks>
+    /// <param name="buffer">The stream the group was found in.</param>
+    /// <param name="group">The <c>msofbtDggContainer</c>.</param>
+    /// <param name="delay">The blip delay stream — <c>Data</c> for a DOC, <c>Pictures</c> for a PPT.</param>
+    /// <param name="fallback">A second stream to try the same offset in; empty when there is none.</param>
+    public static Dictionary<int, EscherBlip> Read(
+        DffRecordBuffer buffer, DffRecordHeader group, byte[] delay, byte[] fallback)
+    {
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(delay);
+        ArgumentNullException.ThrowIfNull(fallback);
+
+        Dictionary<int, EscherBlip> blips = [];
 
         foreach (DffRecordHeader child in buffer.Children(group))
         {
@@ -170,7 +198,7 @@ internal static class Ww8Blips
     /// </remarks>
     /// <param name="buffer">The stream the shape was read from.</param>
     /// <param name="offset">One past the shape container, where the entry begins.</param>
-    public static Ww8Blip? Inline(DffRecordBuffer buffer, int offset)
+    public static EscherBlip? Inline(DffRecordBuffer buffer, int offset)
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
@@ -187,7 +215,7 @@ internal static class Ww8Blips
     /// <c>foDelay</c>. The offset is checked against the entry's own length rather than believed,
     /// because <c>0xFFFFFFFF</c> is how "nowhere" is written and reading at it would fault.
     /// </remarks>
-    private static Ww8Blip? Blip(
+    private static EscherBlip? Blip(
         DffRecordBuffer buffer, DffRecordHeader entry, byte[] delay, byte[] fallback)
     {
         int at = entry.ContentStart + BlipStoreEntrySize;
@@ -220,8 +248,8 @@ internal static class Ww8Blips
         int skip = (blip.Instance & 1) != 0 ? UidSize * 2 : UidSize;
         if (content.Length <= skip) return null;
 
-        if (IsReadableMetafile(blip.Type)) return new Ww8Blip(blip.Type, Metafile(content[skip..]));
-        if (!IsRaster(blip.Type)) return new Ww8Blip(blip.Type, default);
+        if (IsReadableMetafile(blip.Type)) return new EscherBlip(blip.Type, Metafile(content[skip..]));
+        if (!IsRaster(blip.Type)) return new EscherBlip(blip.Type, default);
 
         // A one-byte tag follows the checksums on every raster blip. MS-ODRAW calls it `bTag` and gives
         // it no meaning; LibreOffice skips it the same way, and reading the picture from one byte early
@@ -234,8 +262,8 @@ internal static class Ww8Blips
         // LibreOffice does in `SvxMSDffManager::GetBLIPDirect`, where a DIB is written into a stream
         // behind a synthesised `BITMAPFILEHEADER` before the graphic filter sees it.
         return blip.Type == 0xF01F
-            ? new Ww8Blip(blip.Type, WithFileHeader(data))
-            : new Ww8Blip(blip.Type, data.ToArray());
+            ? new EscherBlip(blip.Type, WithFileHeader(data))
+            : new EscherBlip(blip.Type, data.ToArray());
     }
 
     /// <summary>
@@ -344,7 +372,7 @@ internal static class Ww8Blips
 /// arrives inflated and with its <c>OfficeArtMetafileHeader</c> already stripped, so what is here is
 /// always a whole file of its own format — which is what lets one sniffer serve all four front ends.
 /// </param>
-internal readonly record struct Ww8Blip(ushort RecordType, ReadOnlyMemory<byte> Bytes)
+public readonly record struct EscherBlip(ushort RecordType, ReadOnlyMemory<byte> Bytes)
 {
     /// <summary>The document's own name for the format, for a diagnostic about one that will not draw.</summary>
     public string Kind => RecordType switch

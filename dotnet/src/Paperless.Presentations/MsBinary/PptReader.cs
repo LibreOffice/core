@@ -45,6 +45,16 @@ public static class PptReader
     public const string CurrentUserStreamName = "Current User";
 
     /// <summary>
+    /// The stream holding the picture bytes every blip store entry points into.
+    /// </summary>
+    /// <remarks>
+    /// PowerPoint's blip delay stream. Its entries in the drawing group carry a <c>foDelay</c>
+    /// offset into this and no bytes of their own, so a reader without it finds a store full of
+    /// pictures and can draw none of them.
+    /// </remarks>
+    public const string PicturesStreamName = "Pictures";
+
+    /// <summary>
     /// Reads a presentation, leaving the source's stream for the caller to dispose.
     /// </summary>
     /// <param name="source">The document to read.</param>
@@ -76,7 +86,9 @@ public static class PptReader
             };
 
             new PptContentBuilder(stream, persist, diagnostics).Build(content);
-            return new PptDocument(format, file, content, diagnostics, stream, persist);
+            return new PptDocument(
+                format, file, content, diagnostics, stream, persist,
+                ReadStream(file, PicturesStreamName) ?? []);
         }
         catch
         {
@@ -127,6 +139,7 @@ public sealed class PptDocument : IPaginatedDocument
     private readonly CompoundFile _file;
     private readonly DffRecordBuffer _stream;
     private readonly PptPersistDirectory _persist;
+    private readonly byte[] _pictures;
 
     internal PptDocument(
         DocumentFormat format,
@@ -134,7 +147,8 @@ public sealed class PptDocument : IPaginatedDocument
         ContentDocument content,
         IReadOnlyList<Diagnostic> diagnostics,
         DffRecordBuffer stream,
-        PptPersistDirectory persist)
+        PptPersistDirectory persist,
+        byte[] pictures)
     {
         Format = format;
         _file = file;
@@ -142,6 +156,7 @@ public sealed class PptDocument : IPaginatedDocument
         Diagnostics = diagnostics;
         _stream = stream;
         _persist = persist;
+        _pictures = pictures;
     }
 
     /// <inheritdoc/>
@@ -193,7 +208,8 @@ public sealed class PptDocument : IPaginatedDocument
     {
         List<Diagnostic> diagnostics = [];
         List<LaidOutSlide> slides =
-            new PptSlideLayout(_stream, _persist, new SlideFonts(), diagnostics).Layout();
+            new PptSlideLayout(_stream, _persist, new SlideFonts(), diagnostics, _pictures)
+                .Layout();
 
         int limit = options?.MaxPages ?? 0;
         if (limit > 0 && slides.Count > limit) slides = [.. slides.Take(limit)];
