@@ -109,6 +109,57 @@ rather than its advance; headers and footers dropped whenever `w:top` equalled `
 and, on slides, rendering ignoring the placeholder inheritance chain that extraction had
 resolved all along.
 
+## After the second round: words
+
+Two agents, each given a root cause the first round had *named* rather than a cluster to
+explore. Merged one at a time and re-swept whole at `d1c401dcd`:
+
+| | baseline | round 1 | round 2 |
+|---|---|---|---|
+| full match | 84 | 98 | **107** |
+| exactly correct page count | 100 | 110 | **119** |
+| total absolute page error | 385 | 306 | **297** |
+
+**107 again beats both agents' own figures** (104 and 102 against a shared 98 baseline), and
+this time the compounding was predicted: each agent named the *other's* fix as its blocker.
+The row-splitting agent's leftovers showed 33.5 pt of accumulated vertical drift it put down
+to line height; the line-height agent's leftovers had advances matching to 0.01 pt while
+LibreOffice still emitted near-empty pages, which it put down to table rows. Both were right.
+
+### The most valuable finding was a wrong diagnosis
+
+The first round measured line heights 6% short and attributed it to `hhea`-vs-`OS/2`
+precedence. The second round **reproduced the measurement to the digit and refuted the
+cause**: 12.65 pt is Liberation Serif's line box at 11 pt and 13.45 pt is Carlito's — the
+paragraph was being laid out in the wrong font. Runs saying `w:rFonts w:asciiTheme="minorHAnsi"`
+reference the theme's font scheme, whose minor Latin face is Calibri; nothing read
+`w:asciiTheme` or its seven companions, so they fell back to `w:docDefaults` and Times New
+Roman. **112 of the words track's 136 DOCX files name their fonts this way.**
+
+This is the case for telling agents to verify a predecessor's claim rather than build on it.
+The measurement was sound and the diagnosis attached to it would have sent a whole round
+into font metrics instead of theme resolution.
+
+The precedence rule was corrected anyway — `LineSpacing.cs`, `research/06-rendering.md` B.4
+and two tests all had it backwards — and it is exactly neutral on this corpus, the two rules
+disagreeing on three installed faces, all CJK.
+
+### What remains: 95 failures
+
+| Shape | Documents |
+|---|---|
+| under-paginate | 65 |
+| over-paginate | 18 |
+| pages right, words wrong | 12 |
+
+Failure rates are 30/66 for `doc` and 65/136 for `docx` — still near-equal, so the residue
+is still in shared layout rather than in either reader. Named but unfixed leads: unknown
+families falling back through fontconfig to DejaVu Sans where LibreOffice uses its own
+`VCL.xcu` table and picks Liberation Sans (1.2% of the em apart, and `Aptos` — Microsoft
+365's new default — is in the corpus); `A_320.doc`'s in-cell line pitch of 13.0 pt against
+ours of 12.65 with font and size agreeing, most likely a `sprmPDyaLine` at-least value not
+reaching cell paragraphs; and a header height under-reserved by 27.7 pt on one document.
+
 ## Slides: baseline and first round
 
 Baseline at `1d13c1e0a` was **53 of 150** (the sweep was cut short at 150 of 163). After the
@@ -135,23 +186,23 @@ entirely about what reaches the page. Of the 79 remaining failures, 53 lose text
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
-| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 8/10 |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 7/10 |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 7/10 |
+| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 9/10 |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 8/10 |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 8/10 |
 | `batch-005` | 10 | 124–141 | doc:5 docx:5 | 4/10 |
-| `batch-006` | 10 | 141–158 | doc:4 docx:6 | 8/10 |
-| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 6/10 |
+| `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
+| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 7/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 4/10 |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 5/10 |
 | `batch-010` | 10 | 228–260 | doc:2 docx:8 | 4/10 |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 6/10 |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 3/10 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 5/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 4/10 |
 | `batch-013` | 10 | 338–370 | docx:10 | 5/10 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 1/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 0/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 1/10 |
 | `batch-016` | 10 | 473–537 | doc:5 docx:5 | 6/10 |
-| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
-| `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
+| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 6/10 |
+| `batch-018` | 10 | 620–859 | doc:2 docx:8 | 4/10 |
 | `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 1/10 |
 | `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 1/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
