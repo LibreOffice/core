@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <COKit/COKit.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -465,6 +466,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testShowTextobjectbarInReadonly)
 {
+    if (comphelper::COKit::isActive())
+    {
+        // No toolbar manager here to show or hide one (see LayoutManager::LayoutManager)
+        return;
+    }
+
     createSwDoc("tdf146549.odt");
 
     SwDocShell* pDocShell = getSwDocShell();
