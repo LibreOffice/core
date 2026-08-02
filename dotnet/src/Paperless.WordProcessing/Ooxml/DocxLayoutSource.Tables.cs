@@ -267,7 +267,7 @@ public sealed partial class DocxLayoutSource
         List<PendingCell> cells = [];
         int column = 0;
 
-        foreach (XElement child in Word.Children(element, "tc"))
+        foreach (XElement child in Cells(element, 0))
         {
             if (column >= PageTable.MaxColumns) break;
 
@@ -296,6 +296,38 @@ public sealed partial class DocxLayoutSource
             IsHeading: Word.IsOn(Word.Child(properties, "tblHeader"))
                        || Word.Child(properties, "tblHeader") is not null,
             RowHeight(properties));
+    }
+
+    /// <summary>
+    /// A row's cells, following the wrappers a cell can sit inside.
+    /// </summary>
+    /// <remarks>
+    /// The same wrappers a row can sit inside, and for the same reason — but one level further down, which
+    /// is where a form puts them: a content control over a single table cell is written as a
+    /// <c>w:sdt</c> between the <c>w:tr</c> and its <c>w:tc</c>, and it is how Word marks up every
+    /// fill-in box of a printed form. Taking only the row's direct <c>w:tc</c> children dropped the whole
+    /// cell — the corpus's own proposal form lost thirty-six of them, a quarter of its text.
+    /// </remarks>
+    private static IEnumerable<XElement> Cells(XElement row, int depth)
+    {
+        if (depth > 8) yield break;
+
+        foreach (XElement child in row.Elements())
+        {
+            if (Word.Is(child, "tc"))
+            {
+                yield return child;
+                continue;
+            }
+
+            if (!Word.Is(child, "sdt") && !Word.Is(child, "sdtContent")
+                && !Word.Is(child, "customXml") && !Word.Is(child, "ins"))
+            {
+                continue;
+            }
+
+            foreach (XElement nested in Cells(child, depth + 1)) yield return nested;
+        }
     }
 
     /// <summary>

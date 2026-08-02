@@ -190,9 +190,14 @@ public static class FlowLayouter
 
         if (placed.Count == 0 && tables.Count == 0) return null;
 
-        // Where the block as a whole goes. A bottom-aligned one only shifts when there is room to shift
-        // into; a stated offset is taken as given even when the content is taller than the area.
-        Length shift = offsetFromTop ?? (top < area.Height ? area.Height - top : Length.Zero);
+        // Where the block as a whole goes. A bottom-aligned one rests its last line on the area's bottom
+        // whether or not it fits, so a footer that outgrows the room reserved for it grows *upwards* into
+        // the body — which is what Word does and what Writer's dynamic-height footer frame does, since
+        // the frame's lower edge is fixed at the footer distance and only its top moves. Clamping the
+        // shift at nought instead pushed such a footer down past the page's bottom edge, and on a Word
+        // document whose `w:bottom` equals its `w:footer` that is every footer it has. A stated offset is
+        // taken as given either way.
+        Length shift = offsetFromTop ?? (area.Height - top);
 
         if (shift != Length.Zero)
         {

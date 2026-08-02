@@ -32,12 +32,13 @@ public sealed partial class DocxLayoutSource
     /// to see — the same reason the extraction reader advances them where it does.
     /// </para>
     /// <para>
-    /// The level's own <c>w:pPr/w:ind</c> applies only when nothing in the paragraph's own properties or
-    /// its style chain states an indent, which is Writer's
-    /// <c>SwTextNode::AreListLevelIndentsApplicable</c> (<c>sw/source/core/txtnode/ndtxt.cxx:3556</c>):
-    /// a hard-set indent beats the list. LibreOffice's own DOCX export writes the level's indent onto
-    /// every list paragraph as well as into <c>numbering.xml</c>, so on those documents the two agree
-    /// and this only matters for files that disagree.
+    /// Whether the level's own <c>w:pPr/w:ind</c> applies is Writer's
+    /// <c>SwTextNode::AreListLevelIndentsApplicable</c> — see
+    /// <see cref="WordParagraphFormats.ListLevelIndentsApplicable"/>, which ports it. LibreOffice's own
+    /// DOCX export writes the level's indent onto every list paragraph as well as into
+    /// <c>numbering.xml</c>, so on those documents the two agree and this only matters for files that
+    /// disagree — which Word's own output does, since <c>ListParagraph</c> carries a left indent and no
+    /// hanging one.
     /// </para>
     /// </remarks>
     /// <param name="properties">The paragraph's <c>w:pPr</c>, or null.</param>
@@ -58,15 +59,29 @@ public sealed partial class DocxLayoutSource
         XElement? indent = Word.Child(levelProperties, "ind");
         Length ownFirstLine = format.FirstLineIndent;
 
-        if (indent is not null && !WordParagraphFormats.DeclaresIndent(_styles, properties))
+        if (indent is not null)
         {
-            format = format with
+            ListLevelIndents applicable =
+                WordParagraphFormats.ListLevelIndentsApplicable(_styles, properties);
+
+            if (applicable.HasFlag(ListLevelIndents.LeftMargin))
             {
-                StartIndent = Twips(indent, "start") ?? Twips(indent, "left") ?? format.StartIndent,
-                FirstLineIndent = Twips(indent, "hanging") is { } hanging
-                    ? -hanging
-                    : Twips(indent, "firstLine") ?? format.FirstLineIndent,
-            };
+                format = format with
+                {
+                    StartIndent =
+                        Twips(indent, "start") ?? Twips(indent, "left") ?? format.StartIndent,
+                };
+            }
+
+            if (applicable.HasFlag(ListLevelIndents.FirstLine))
+            {
+                format = format with
+                {
+                    FirstLineIndent = Twips(indent, "hanging") is { } hanging
+                        ? -hanging
+                        : Twips(indent, "firstLine") ?? format.FirstLineIndent,
+                };
+            }
         }
 
         LabelFollow follow = definition.Suffix switch

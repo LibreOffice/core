@@ -112,9 +112,8 @@ public sealed partial class DocxContentReader
         if (Word.Child(rowProperties, "del") is not null) return row;
 
         int column = 0;
-        foreach (XElement cellElement in rowElement.Elements())
+        foreach (XElement cellElement in Cells(rowElement, 0))
         {
-            if (!Word.Is(cellElement, "tc")) continue;
             if (column >= MaxTableColumns) break;
 
             XElement? cellProperties = Word.Child(cellElement, "tcPr");
@@ -145,6 +144,37 @@ public sealed partial class DocxContentReader
         }
 
         return row;
+    }
+
+    /// <summary>
+    /// A row's cells, following the wrappers a cell can sit inside.
+    /// </summary>
+    /// <remarks>
+    /// A content control over one table cell is written as a <c>w:sdt</c> between the <c>w:tr</c> and its
+    /// <c>w:tc</c>, which is how Word marks up every fill-in box of a form. Taking only the row's direct
+    /// <c>w:tc</c> children loses the cell and everything in it.
+    /// </remarks>
+    private static IEnumerable<XElement> Cells(XElement row, int depth)
+    {
+        if (depth > 8) yield break;
+
+        foreach (XElement child in row.Elements())
+        {
+            if (Word.Is(child, "tc"))
+            {
+                yield return child;
+                continue;
+            }
+
+            if (!Word.Is(child, "sdt") && !Word.Is(child, "sdtContent")
+                && !Word.Is(child, "customXml") && !Word.Is(child, "ins")
+                && !Word.Is(child, "moveTo"))
+            {
+                continue;
+            }
+
+            foreach (XElement nested in Cells(child, depth + 1)) yield return nested;
+        }
     }
 
     /// <summary>
