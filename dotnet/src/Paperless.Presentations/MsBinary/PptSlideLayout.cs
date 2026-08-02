@@ -73,11 +73,15 @@ internal sealed class PptSlideLayout
     private readonly Dictionary<uint, PptStyleSheet> _stylesByMaster = [];
     private readonly Dictionary<uint, PptColourScheme> _schemesByMaster = [];
     private readonly Dictionary<uint, Paint?> _backgroundsByMaster = [];
+    private readonly Dictionary<uint, DffRecordHeader> _pagesByMaster = [];
+    private readonly Dictionary<uint, PptPageEntry> _entriesByMaster = [];
     private readonly Dictionary<int, PptPicture> _decoded = [];
 
     private PptStyleSheet? _defaultStyles;
     private PptFontTable _fontTable = PptFontTable.Empty;
     private Dictionary<int, EscherBlip>? _blips;
+    private PptHeadersFooters _deckHeadersFooters = PptHeadersFooters.None;
+    private bool _titlePlaceholdersOmitted;
 
     /// <param name="stream">The <c>PowerPoint Document</c> stream.</param>
     /// <param name="persist">The persist directory, which says which version of each object is current.</param>
@@ -113,6 +117,8 @@ internal sealed class PptSlideLayout
         DocSize size = SlideSize(pages);
         _fontTable = PptFontTable.Read(_stream, pages.Environment);
         _blips = ReadBlips(pages);
+        _deckHeadersFooters = DeckHeadersFooters(pages);
+        _titlePlaceholdersOmitted = TitlePlaceholdersOmitted(pages);
         ReadMasters(pages);
 
         for (int index = 0; index < pages.Slides.Count; index++)
@@ -151,6 +157,47 @@ internal sealed class PptSlideLayout
         }
 
         return new DocSize(Length.FromInches(10), Length.FromInches(7.5));
+    }
+
+    /// <summary>
+    /// Whether the deck suppresses the running placeholders on its title slides.
+    /// </summary>
+    /// <remarks>
+    /// Byte 37 of the <c>DocumentAtom</c>, past the two page sizes, the zoom ratio, the two
+    /// master persist ids, the first page number, the page format and the embedded-fonts flag
+    /// (<c>ReadPptDocumentAtom</c>, <c>svdfppt.cxx:257-290</c>). It is the reason a deck's title
+    /// slide carries no footer while every slide after it does
+    /// (<c>sd/source/filter/ppt/pptin.cxx:1456-1461</c>).
+    /// </remarks>
+    private bool TitlePlaceholdersOmitted(PptPages pages)
+    {
+        if (_stream.FirstChild(pages.Document, PptRecordTypes.DocumentAtom) is not { } atom)
+            return false;
+
+        ReadOnlySpan<byte> content = _stream.Content(atom);
+        return content.Length >= 38 && content[37] != 0;
+    }
+
+    /// <summary>
+    /// The deck-wide running-placeholder settings its slide masters start from.
+    /// </summary>
+    /// <remarks>
+    /// The document container carries one <c>HeadersFooters</c> per master kind, told apart by
+    /// the header instance: 3 for the slide masters and 4 for the notes master
+    /// (<c>svdfppt.cxx:1636-1653</c>). Only the slide one is read here; a notes page is not
+    /// rendered.
+    /// </remarks>
+    private PptHeadersFooters DeckHeadersFooters(PptPages pages)
+    {
+        PptHeadersFooters result = PptHeadersFooters.None;
+
+        foreach (DffRecordHeader child in _stream.Children(pages.Document))
+        {
+            if (child.Type != PptRecordTypes.HeadersFooters || child.Instance != 3) continue;
+            result = PptHeadersFooters.Read(_stream, child, result);
+        }
+
+        return result;
     }
 
     /// <summary>Converts a master-unit length to a <see cref="Length"/>.</summary>
@@ -265,6 +312,9 @@ internal sealed class PptSlideLayout
             if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) continue;
             if (header.Type != PptRecordTypes.MainMaster) continue;
 
+            _pagesByMaster[entry.SlideId] = header;
+            _entriesByMaster[entry.SlideId] = entry;
+
             if (SchemeOf(header) is { } scheme) _schemesByMaster[entry.SlideId] = scheme;
 
             uint parent = PptPages.MasterIdOf(_stream, header) ?? 0;
@@ -324,17 +374,30 @@ internal sealed class PptSlideLayout
     private LaidOutSlide LayoutSlide(
         DffRecordHeader page, PptPageEntry entry, int index, DocSize size)
     {
-        (uint masterId, ushort flags) = SlideAtom(page);
+        (uint masterId, ushort flags, int layout) = SlideAtom(page);
         PptColourScheme scheme = SchemeFor(page, masterId, flags);
         PptStyleSheet? styles = _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles;
 
         bool hidden = false;
+        PptHeadersFooters runningPlaceholders = _deckHeadersFooters;
+
         foreach (DffRecordHeader record in _stream.Children(page))
         {
             if (record.Type == PptRecordTypes.SlideShowSlideInfoAtom)
             {
                 hidden |= IsHidden(_stream.Content(record));
             }
+            else if (record.Type == PptRecordTypes.HeadersFooters)
+            {
+                runningPlaceholders = PptHeadersFooters.Read(_stream, record, runningPlaceholders);
+            }
+        }
+
+        // A deck that omits its title placeholders shows none of the four on a title slide, no
+        // matter what the atom says (pptin.cxx:1456-1461).
+        if (_titlePlaceholdersOmitted && layout == TitleSlideLayout)
+        {
+            runningPlaceholders = PptHeadersFooters.None;
         }
 
         List<PlacedShape> shapes = [];
@@ -342,7 +405,13 @@ internal sealed class PptSlideLayout
                             ?? _backgroundsByMaster.GetValueOrDefault(masterId)
                             ?? Paint.Solid(Colour.White);
 
-        Context context = new(entry, scheme, styles);
+        PptFieldValues fields = FieldsFor(index, runningPlaceholders);
+        Context context = new(entry, scheme, styles, fields);
+
+        if ((flags & FollowMasterObjects) != 0)
+        {
+            AddMasterShapes(masterId, runningPlaceholders, fields, shapes);
+        }
 
         if (_stream.FirstChild(page, PptRecordTypes.Drawing) is { } drawing
             && _stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is { } container)
@@ -363,15 +432,35 @@ internal sealed class PptSlideLayout
         };
     }
 
-    /// <summary>The master id and flags of a page's <c>SlideAtom</c>.</summary>
-    private (uint MasterId, ushort Flags) SlideAtom(DffRecordHeader page)
+    /// <summary>
+    /// Bit 0 of a <c>SlideAtom</c>'s flags: draw the master's shapes under this slide.
+    /// </summary>
+    /// <remarks>
+    /// Clearing it is how PowerPoint makes a title slide that keeps its own copies of the
+    /// decorations instead of the master's; Impress implements it by taking the background-objects
+    /// layer out of the page's visible set (<c>sd/source/filter/ppt/pptin.cxx:1548-1557</c>).
+    /// </remarks>
+    private const ushort FollowMasterObjects = 0x0001;
+
+    /// <summary>The <c>SlideLayoutAtom</c> geometry meaning "title slide".</summary>
+    private const int TitleSlideLayout = 0;
+
+    /// <summary>The layout, master id and flags of a page's <c>SlideAtom</c>.</summary>
+    /// <remarks>
+    /// The layout geometry comes first, then its eight placeholder ids — twelve bytes in all —
+    /// and only then the master and notes ids and the flags word.
+    /// </remarks>
+    private (uint MasterId, ushort Flags, int Layout) SlideAtom(DffRecordHeader page)
     {
-        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return (0, 0);
+        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return (0, 0, -1);
 
         ReadOnlySpan<byte> content = _stream.Content(atom);
+        int layout = content.Length >= 4
+            ? unchecked((int)DffRecordBuffer.ReadUInt32(content))
+            : -1;
         uint master = content.Length >= 16 ? DffRecordBuffer.ReadUInt32(content[12..]) : 0;
         ushort flags = content.Length >= 22 ? DffRecordBuffer.ReadUInt16(content[20..]) : (ushort)0;
-        return (master, flags);
+        return (master, flags, layout);
     }
 
     /// <summary>
@@ -413,7 +502,111 @@ internal sealed class PptSlideLayout
 
     /// <summary>What a page supplies to every shape on it.</summary>
     private sealed record Context(
-        PptPageEntry Entry, PptColourScheme Scheme, PptStyleSheet? Styles);
+        PptPageEntry Entry,
+        PptColourScheme Scheme,
+        PptStyleSheet? Styles,
+        PptFieldValues Fields);
+
+    /// <summary>
+    /// What the running fields resolve to on a page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The slide number is the page's position, one-based, which is what Impress's page field
+    /// renders. Header, footer and date come from the page's own running-placeholder settings.
+    /// </para>
+    /// <para>
+    /// <strong>An automatic date is left unresolved.</strong> LibreOffice inserts a live date
+    /// field for it (<c>PPTFieldEntry::SetDateTime</c>, <c>svdfppt.cxx:6449</c>), so the reference
+    /// rendering of such a deck says whatever day it was made on. Substituting today's date here
+    /// would agree with a reference taken today and disagree with one taken yesterday, which makes
+    /// every stored comparison a clock. The marker is dropped instead, so the page carries no
+    /// stray asterisk either way.
+    /// </para>
+    /// </remarks>
+    private static PptFieldValues FieldsFor(int index, PptHeadersFooters runningPlaceholders)
+        => new(
+            SlideNumber: (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Date: runningPlaceholders.DateIsAutomatic ? "" : runningPlaceholders.Date ?? "",
+            Header: runningPlaceholders.Header ?? "",
+            Footer: runningPlaceholders.Footer ?? "");
+
+    /// <summary>
+    /// Draws what a slide inherits from its master, under the slide's own shapes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A PPT master page is drawn whole, not merged into the slide's placeholders.</strong>
+    /// Impress imports every shape of a <c>MainMaster</c> except the patriarch onto the master page
+    /// and puts it on the background-objects layer
+    /// (<c>sd/source/filter/ppt/pptin.cxx:838-848</c>); the slide then shows that layer unless its
+    /// <c>SlideAtom</c> clears <see cref="FollowMasterObjects"/>. So a logo, a strapline and a rule
+    /// on the master reach every slide under it without any of them appearing in the slide's own
+    /// drawing — which is why a deck whose master carries its branding loses a fifth of its words
+    /// when this walk is missing, with nothing in the slide's records to suggest where they went.
+    /// </para>
+    /// <para>
+    /// Two kinds of master shape are held back. The master's own title, body, subtitle and notes
+    /// prompts — placeholder ids 1 to 6 — are presentation objects rather than background objects
+    /// and Impress never draws a master's presentation object while a slide is shown
+    /// (<see cref="PptPlaceholders.IsMasterPrompt"/>). The date, header, footer and slide-number
+    /// placeholders are drawn only where the page's own running-placeholder settings ask for them.
+    /// </para>
+    /// <para>
+    /// The master's colour scheme and style sheet are used rather than the slide's, because the
+    /// shapes belong to the master page: a slide that recolours itself recolours its own shapes,
+    /// not the branding it inherits.
+    /// </para>
+    /// </remarks>
+    private void AddMasterShapes(
+        uint masterId,
+        PptHeadersFooters runningPlaceholders,
+        PptFieldValues fields,
+        List<PlacedShape> shapes)
+    {
+        if (!_pagesByMaster.TryGetValue(masterId, out DffRecordHeader master)) return;
+        if (_stream.FirstChild(master, PptRecordTypes.Drawing) is not { } drawing) return;
+        if (_stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is not { } container)
+            return;
+
+        Context context = new(
+            _entriesByMaster.GetValueOrDefault(masterId),
+            _schemesByMaster.GetValueOrDefault(masterId, PptColourScheme.Default),
+            _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles,
+            fields);
+
+        foreach (EscherShape shape in _escher.ReadDrawing(container))
+        {
+            int placeholder = PlaceholderOf(shape);
+            if (PptPlaceholders.IsMasterPrompt(placeholder)) continue;
+            if (!runningPlaceholders.Shows(placeholder)) continue;
+
+            Add(shape, context, AffineTransform.Identity, shapes, depth: 0);
+        }
+    }
+
+    /// <summary>
+    /// The placeholder a shape's client data declares, or <see cref="PptPlaceholders.None"/>.
+    /// </summary>
+    /// <remarks>
+    /// The id is one byte behind a four-byte placement id
+    /// (<c>ReadPptOEPlaceholderAtom</c>, <c>svdfppt.cxx:490</c>). An ordinary shape has no client
+    /// data at all, so the absent record and the zero id mean the same thing.
+    /// </remarks>
+    private int PlaceholderOf(EscherShape shape)
+    {
+        if (shape.ClientData is not { } data) return PptPlaceholders.None;
+
+        foreach (DffRecordHeader record in _stream.Children(data))
+        {
+            if (record.Type != PptRecordTypes.PlaceholderAtom) continue;
+
+            ReadOnlySpan<byte> content = _stream.Content(record);
+            return content.Length >= 5 ? content[4] : PptPlaceholders.None;
+        }
+
+        return PptPlaceholders.None;
+    }
 
     private void Add(
         EscherShape shape,
@@ -828,17 +1021,17 @@ internal sealed class PptSlideLayout
             if (record.Type != PptRecordTypes.OutlineTextRefAtom) continue;
 
             uint reference = DffRecordBuffer.ReadUInt32(_stream.Content(record));
-            return OutlineText(context.Entry, reference);
+            return OutlineText(context.Entry, reference, context.Fields);
         }
 
-        return PptTextReader.Read(_stream, start, end);
+        return PptTextReader.Read(_stream, start, end, context.Fields);
     }
 
     /// <summary>
     /// The <paramref name="reference"/>th text run of a slide's entry in the document's slide
     /// list.
     /// </summary>
-    private PptTextRun? OutlineText(PptPageEntry entry, uint reference)
+    private PptTextRun? OutlineText(PptPageEntry entry, uint reference, PptFieldValues fields)
     {
         int matches = 0;
         int start = -1;
@@ -848,11 +1041,11 @@ internal sealed class PptSlideLayout
             if (record.Type == PptRecordTypes.SlidePersistAtom) break;
             if (record.Type != PptRecordTypes.TextHeaderAtom) continue;
 
-            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position);
+            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position, fields);
             if (matches++ == reference) start = record.Position;
         }
 
-        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd) : null;
+        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd, fields) : null;
     }
 
     /// <summary>

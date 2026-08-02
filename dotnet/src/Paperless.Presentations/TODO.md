@@ -62,6 +62,38 @@ all four text boxes' baselines. And `ppt-features.ppt` now agrees with `slides-f
 every shape rectangle and every comparable text pen, which is the strongest check available here:
 the two files are the same deck in vocabularies that share nothing.
 
+**Done: the master's own shapes, which were the largest single loss on the binary path.** A PPT
+master page is drawn *whole* under every slide that follows it — Impress imports every shape of a
+`MainMaster` except the patriarch onto the master page and puts it on the background-objects layer
+(`sd/source/filter/ppt/pptin.cxx:838-848`), and the slide shows that layer unless bit 0 of its
+`SlideAtom` flags is clear. Two kinds are held back, and both rules live in
+`SdPage::checkVisibility` (`sd/source/core/sdpage.cxx:2949-2993`): a master's title, body,
+subtitle and notes prompts — placeholder ids 1 to 6 — are presentation objects and are never drawn
+while a slide is shown, and the date, header, footer and slide-number placeholders are drawn only
+where the page's own `HeadersFooters` record asks for them. Measured on the slides corpus this was
+worth ppt 17/51 → 30/51 on its own; a deck whose branding sits on the master was losing a fifth of
+its words with nothing in the slide's records to say where they had gone.
+
+**Still missing on this path:** notes and handout pages, an automatic date (LibreOffice renders a
+live one, so a stored reference of such a deck is a clock), and `NeedToImportInstance` — a slide
+that recolours itself re-imports the master's header and footer objects under its own scheme
+(`svdfppt.cxx:3125-3138`) where this draws them in the master's.
+
+**Done: the symbol recode a bullet's own face implies.** A bullet whose `FontEntityAtom` declares
+`lfCharSet == 2` is a glyph slot rather than a letter — Wingdings' filled circle is `0x6C`, the
+letter `l` everywhere else — so LibreOffice moves the low byte into the Private Use Area before
+doing anything with it (`svdfppt.cxx:3767-3771`) and then substitutes OpenSymbol for the missing
+face. `OutlineNumbers.NormaliseBullet` already answers the second half for every family, so only
+the move is done here. **The same recode is owed to `Ww8Numbering`**, whose `Symbol` and
+`Wingdings` bullets reach `NormaliseBullet` by exactly the same route; it was left alone because
+it belongs to the word-processing path.
+
+**Why it showed up as a word-count excess rather than as a wrong glyph.** `wc -w` in the POSIX
+locale counts a word only where it sees a printable byte, so a token made entirely of non-ASCII —
+LibreOffice's U+F06C bullet, or ours after this change — is invisible to it, while a literal `l`
+is a word. On `policy-pesentation.ppt` that was the whole of a 13.2% excess: 445 words against the
+reference's 393, exactly 52 bullets, now 393 against 393.
+
 ## Document model
 
 - [ ] Slides, layouts, masters, notes pages, handouts. **Slides are done**; a notes page and a
