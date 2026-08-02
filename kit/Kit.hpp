@@ -46,8 +46,7 @@ namespace kit
 class Document;
 class Office;
 }
-struct COKitStruct;
-using COKit = COKitStruct;
+struct COKit;
 
 void lokit_main(
 #if !MOBILEAPP

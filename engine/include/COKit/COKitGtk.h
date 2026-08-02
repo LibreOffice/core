@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 // The document is an opaque pointer here. This header stays plain C, so that the GObject
 // introspection scanner can read it, while the header that defines the document is C++.
-typedef struct COKitDocumentStruct COKitDocument;
+typedef struct COKitDocument COKitDocument;
 
 #define KIT_TYPE_DOC_VIEW            (kit_doc_view_get_type())
 #define KIT_DOC_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), KIT_TYPE_DOC_VIEW, KitDocumentView))

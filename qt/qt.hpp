@@ -21,8 +21,7 @@
 
 // lo_kit is an opaque COKit handle; a forward declaration is all this header needs
 // (matches kit/Kit.hpp).
-struct COKitStruct;
-using COKit = COKitStruct;
+struct COKit;
 
 extern int coolwsd_server_socket_fd;
 extern const char* user_name;

@@ -38,7 +38,7 @@
  *
  * @see kit::Document::installClipboardProvider().
  */
-struct COKitClipboardProviderStruct
+struct COKitClipboardProvider
 {
     /**
      * Copy: advertise the given nullptr-terminated list of mime types on the
@@ -1433,19 +1433,16 @@ typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pRe
 /// @see kit::Office::registerRevealInFileManagerCallback()
 typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
 
-typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
-typedef struct COKitStruct COKit;
-typedef struct COKitClassStruct COKitClass;
+struct COKitClass;
+struct COKitDocument;
+struct COKitDocumentClass;
 
-typedef struct COKitDocumentStruct COKitDocument;
-typedef struct COKitDocumentClassStruct COKitDocumentClass;
-
-struct COKitStruct
+struct COKit
 {
     COKitClass* pClass;
 };
 
-struct COKitClassStruct
+struct COKitClass
 {
     void (*destroy) (COKit* pThis);
 
@@ -1596,12 +1593,12 @@ struct COKitClassStruct
                                char      ***pOutStreams);
 };
 
-struct COKitDocumentStruct
+struct COKitDocument
 {
     COKitDocumentClass* pClass;
 };
 
-struct COKitDocumentClassStruct
+struct COKitDocumentClass
 {
     void (*destroy) (COKitDocument* pThis);
 
