@@ -90,13 +90,10 @@ public static partial class SlideTextLayout
             bool first = true;
             foreach (PlacedLine line in block.Lines)
             {
-                if (first)
-                {
-                    EmitMarker(placed, block, line, area.X, top, fonts);
-                    first = false;
-                }
+                if (first) EmitMarker(placed, block, line, area.X, top, fonts);
 
-                Emit(placed, block, line, area.X, top);
+                Emit(placed, block, line, area.X, top, first);
+                first = false;
                 top += line.Height;
             }
 
@@ -421,6 +418,7 @@ public static partial class SlideTextLayout
                 ? paragraph.FirstLineIndent
                 : MarkerReach(paragraph, scaling, fonts),
             LineSpacing = paragraph.LineSpacing,
+            DefaultTabInterval = paragraph.DefaultTabInterval,
         };
 
         MeasuredParagraph measured = MeasuredParagraph.Measure(paragraph.Text, runs);
@@ -492,7 +490,7 @@ public static partial class SlideTextLayout
 
         return new Block(
             paragraph, measured, styles, lines,
-            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling);
+            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling, format);
     }
 
     /// <summary>
@@ -667,16 +665,71 @@ public static partial class SlideTextLayout
             ? Length.FromEmu((long)Math.Round(height.Emu * (1 - reduction)))
             : height;
 
-    /// <summary>Emits one line's glyph runs, one per formatting change along it.</summary>
+    /// <summary>
+    /// Emits one line's glyph runs, one per formatting change along it, placed at its tab stops.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A tab is the one character whose width is not a property of the font: it advances the pen to
+    /// the next stop. Letting it be shaped like any other character advances the pen by whatever
+    /// the face happens to give U+0009, which is nothing to do with where the stop is —
+    /// <c>policy-pesentation.ppt</c>'s conclusion is positioned by three of them and landed an inch
+    /// and a half to the left of where LibreOffice draws it.
+    /// </para>
+    /// <para>
+    /// The word processor has done this since tabs existed there
+    /// (<c>PageDrawing.Stretches</c>); this is the same <see cref="TabRuler"/> over the slide's own
+    /// paragraph format, and an untabbed line — nearly all of them — goes through the identical
+    /// code path as a single stretch at offset zero, so the two cannot drift apart.
+    /// </para>
+    /// </remarks>
     private static void Emit(
-        List<PlacedGlyphRun> placed, Block block, PlacedLine line, Length areaLeft, Length top)
+        List<PlacedGlyphRun> placed,
+        Block block,
+        PlacedLine line,
+        Length areaLeft,
+        Length top,
+        bool isFirstLine)
     {
         int start = line.Box.Line.Start;
         int end = Math.Min(line.Box.Line.VisibleEnd, block.Measured.Text.Length);
         if (end <= start) return;
 
-        Length pen = areaLeft + line.Box.Left;
+        Length lineLeft = areaLeft + line.Box.Left;
         Length baseline = top + line.Ascent;
+
+        foreach (TabbedSegment segment in Stretches(block, start, end, isFirstLine))
+        {
+            EmitStretch(placed, block, segment, lineLeft + segment.Left, baseline, line);
+        }
+    }
+
+    /// <summary>The stretches a line's tabs divide it into, each placed at its stop.</summary>
+    private static List<TabbedSegment> Stretches(
+        Block block, int start, int end, bool isFirstLine)
+    {
+        if (!TabRuler.HasTab(block.Measured.Text, start, end))
+        {
+            return [new TabbedSegment(start, end, Length.Zero, Length.Zero)];
+        }
+
+        return TabRuler.Segments(
+            block.Measured.Text, start, end, block.Format,
+            block.Measured.WidthBetween, isFirstLine);
+    }
+
+    /// <summary>Emits one stretch of a line, starting at a pen the caller has placed.</summary>
+    private static void EmitStretch(
+        List<PlacedGlyphRun> placed,
+        Block block,
+        TabbedSegment segment,
+        Length pen,
+        Length baseline,
+        PlacedLine line)
+    {
+        int start = segment.Start;
+        int end = segment.End;
+        if (end <= start) return;
 
         foreach (FormattedRun run in block.Measured.RunsBetween(start, end))
         {
@@ -882,7 +935,8 @@ public static partial class SlideTextLayout
         IReadOnlyList<RunStyle> Styles,
         IReadOnlyList<PlacedLine> Lines,
         Length Height,
-        Scaling Scaling)
+        Scaling Scaling,
+        ParagraphFormat Format)
     {
         public Length SpaceBefore => Paragraph.SpaceBefore;
 

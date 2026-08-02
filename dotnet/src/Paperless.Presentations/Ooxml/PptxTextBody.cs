@@ -306,7 +306,19 @@ internal static class PptxTextBody
             Length.FromEmu(Emu(chain, "marL")),
             Length.FromEmu(Emu(chain, "indent")),
             Language(Drawing.Child(paragraph, "r")),
-            Marker(chain, theme, level, counters, counting, hasText: text.Length > 0));
+            Marker(chain, theme, level, counters, counting, hasText: text.Length > 0))
+        {
+            // a:defTabSz, whose absence means DrawingML's own default of one inch and not a word
+            // processor's half inch. Nearly every master states it explicitly as 914400, which is
+            // the same inch — so the value that matters is the fallback.
+            DefaultTabInterval = Stated(chain, "defTabSz") is { } stated
+                                 && long.TryParse(
+                                     stated, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                     out long emu)
+                                 && emu > 0
+                ? Length.FromEmu(emu)
+                : SlideParagraph.DefaultTabDistance,
+        };
     }
 
     /// <summary>The first source in the chain to state an attribute.</summary>

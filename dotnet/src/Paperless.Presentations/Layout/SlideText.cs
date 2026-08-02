@@ -166,7 +166,24 @@ public sealed record SlideParagraph(
     Length StartIndent = default,
     Length FirstLineIndent = default,
     string? Language = null,
-    SlideMarker? Marker = null);
+    SlideMarker? Marker = null)
+{
+    /// <summary>The slide formats' own default tab distance: one inch.</summary>
+    public static Length DefaultTabDistance { get; } = Length.FromEmu(Length.EmuPerInch);
+
+    /// <summary>
+    /// How far apart the stops a tab advances to are, when the paragraph states none of its own.
+    /// </summary>
+    /// <remarks>
+    /// <strong>A slide's is an inch, not the half inch a word processor uses.</strong> PowerPoint
+    /// stores it as 0x240 master units and DrawingML as <c>a:defTabSz</c> defaulting to 914400
+    /// EMU, and both are one inch; <see cref="ParagraphFormat.DefaultTabInterval"/> defaults to
+    /// Word's 720 twips because that is what a document is. The difference compounds: a paragraph
+    /// positioned by three tabs lands an inch and a half to the left of where it belongs, which on
+    /// a ten-inch slide is fifteen per cent of the page.
+    /// </remarks>
+    public Length DefaultTabInterval { get; init; } = DefaultTabDistance;
+}
 
 /// <summary>
 /// The bullet or number a paragraph is labelled with.

@@ -166,7 +166,15 @@ internal static class PptTextBody
             MasterUnits(textOffset),
             MasterUnits(bulletOffset) - MasterUnits(textOffset),
             Language: null,
-            Marker: Marker(properties, level, scheme, fonts, runs));
+            Marker: Marker(properties, level, scheme, fonts, runs))
+        {
+            // The master's own value, which PowerPoint writes as 0x240 — one inch — and which the
+            // record's default already is. Reading it matters for the deck that states something
+            // else, and stating nothing must not fall back to a word processor's half inch.
+            DefaultTabInterval = level.DefaultTab > 0
+                ? MasterUnits(level.DefaultTab)
+                : SlideParagraph.DefaultTabDistance,
+        };
     }
 
     /// <summary>
