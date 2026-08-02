@@ -253,7 +253,8 @@ internal sealed partial class PptxSlideLayout
             FillContext context =
                 new(slide, theme.Colours, _file.SlideSize, AffineTransform.Identity);
 
-            if (Fill(properties, [], context) is { } fill) return fill;
+            // A slide background is in no group, so there is no group fill for it to ask for.
+            if (Fill(properties, [], context, groupFill: null) is { } fill) return fill;
             if (Drawing.Child(properties, "noFill") is not null) return null;
         }
 
@@ -393,7 +394,8 @@ internal sealed partial class PptxSlideLayout
         AffineTransform space,
         List<PlacedShape> shapes,
         int depth,
-        bool background = false)
+        bool background = false,
+        Paint? groupFill = null)
     {
         foreach (XElement element in parent.Elements())
         {
@@ -403,13 +405,13 @@ internal sealed partial class PptxSlideLayout
             {
                 if (background && PptxPlaceholder.Read(element, slide.Master, slide.Layout) is not null)
                     continue;
-                if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
+                if (Shape(element, slide, theme, space, groupFill) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
             {
                 Walk(
                     element, slide, theme, GroupSpace(element, space), shapes, depth + 1,
-                    background);
+                    background, GroupFill(element, slide, theme, space, groupFill));
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
@@ -429,7 +431,7 @@ internal sealed partial class PptxSlideLayout
                 // draw inside. A picture part that will not resolve leaves the frame — the outline
                 // and any line it carries — which is what makes a missing image visible as a hole
                 // rather than as nothing at all.
-                if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
+                if (Shape(element, slide, theme, space, groupFill) is { } placed) Add(placed, shapes);
             }
         }
     }
@@ -485,6 +487,40 @@ internal sealed partial class PptxSlideLayout
 
         shapes.Add(shape with { Outline = shaft });
         shapes.AddRange(markers);
+    }
+
+    /// <summary>
+    /// The fill a <c>p:grpSp</c> offers the children that ask for it with <c>a:grpFill</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Never painted. A group has no geometry of its own, so its <c>p:grpSpPr</c> fill exists
+    /// only to be inherited — which is why this is resolved on the way down the tree rather than
+    /// turned into a shape. A group may itself state <c>a:grpFill</c>, so the fill of the group
+    /// above it is passed in and the chain resolves as far up as it is written.
+    /// </para>
+    /// <para>
+    /// Measured on <c>slides/batch-002/pptx/iaeg_work_group_leader_updates.pptx</c>, an
+    /// organisation chart whose eight working-group boxes sit in a group filled
+    /// <c>bg2 lumMod 90000</c>: two state that colour outright and six say <c>a:grpFill</c>, so
+    /// the reference draws eight tan boxes and Paperless drew two. Six of the corpus's 269 PPTX
+    /// decks use the element on a slide.
+    /// </para>
+    /// </remarks>
+    private Paint? GroupFill(
+        XElement group,
+        PptxSlide slide,
+        SlideTheme theme,
+        AffineTransform space,
+        Paint? outerFill)
+    {
+        XElement? properties = Ppt.Child(group, "grpSpPr");
+        if (properties is null) return null;
+
+        DocRect bounds = Bounds(Drawing.Child(properties, "xfrm"));
+        FillContext fills = new(slide, theme.Colours, bounds.Size, space);
+
+        return Fill(properties, [], fills, outerFill);
     }
 
     /// <summary>The matrix taking a group's child coordinate space onto the slide.</summary>
@@ -622,7 +658,8 @@ internal sealed partial class PptxSlideLayout
     }
 
     private PlacedShape? Shape(
-        XElement shape, PptxSlide slide, SlideTheme theme, AffineTransform space)
+        XElement shape, PptxSlide slide, SlideTheme theme, AffineTransform space,
+        Paint? groupFill = null)
     {
         XElement? properties = Ppt.Child(shape, "spPr");
         XElement? transform = Drawing.Child(properties, "xfrm");
@@ -688,7 +725,7 @@ internal sealed partial class PptxSlideLayout
             Name = Name(shape),
             Outline = outline,
             Bounds = bounds,
-            Fill = Fill(properties, [.. inherited, themedFill], fills),
+            Fill = Fill(properties, [.. inherited, themedFill], fills, groupFill),
             Picture = Picture(shape, slide, bounds),
             Line = Line(properties, inherited, theme.Colours, themedLine),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
@@ -933,18 +970,30 @@ internal sealed partial class PptxSlideLayout
     /// A shape's fill: its own, then its placeholder's, then its <c>p:style</c>'s.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Four of DrawingML's six kinds. <c>a:pattFill</c> is left unpainted — it resolves into a
     /// tiled bitmap the reader would have to synthesise rather than read — and is in the TODO.
     /// The theme's style matrix comes last in the chain because that is the merging order
     /// <c>Shape::getActualFillProperties</c> uses: the theme is the base and anything the shape
     /// states wins over it, so a box stating <c>a:noFill</c> under an <c>a:fillRef</c> is empty.
+    /// </para>
+    /// <para>
+    /// The fifth kind, <c>a:grpFill</c>, is not a fill at all but a reference to the enclosing
+    /// group's: the reference threads the parent group's fill properties down the tree and
+    /// <c>Shape::getActualFillProperties</c> uses them when the shape's own fill type is
+    /// <c>XML_grpFill</c>. It ends the search either way — a shape asking for a group fill does
+    /// not then fall through to its placeholder or its theme — so a group with no fill leaves the
+    /// shape unfilled.
+    /// </para>
     /// </remarks>
-    private Paint? Fill(XElement? properties, XElement?[] inherited, in FillContext context)
+    private Paint? Fill(
+        XElement? properties, XElement?[] inherited, in FillContext context, Paint? groupFill)
     {
         foreach (XElement? source in (XElement?[])[properties, .. inherited])
         {
             if (source is null) continue;
             if (Drawing.Child(source, "noFill") is not null) return null;
+            if (Drawing.Child(source, "grpFill") is not null) return groupFill;
             if (SolidFill(source, context.Theme, placeholder: null) is { } fill) return fill;
             if (Gradient(Drawing.Child(source, "gradFill"), context) is { } gradient) return gradient;
             if (Bitmap(Drawing.Child(source, "blipFill"), source, context) is { } bitmap) return bitmap;
