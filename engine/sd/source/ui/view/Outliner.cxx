@@ -1203,8 +1203,13 @@ void SdOutliner::RestoreStartPosition()
             {
                 PutTextIntoOutliner();
                 EnterEditMode(false);
-                if (getOutlinerView())
-                    getOutlinerView()->SetSelection(maStartSelection);
+                // RememberStartPosition() took the selection from the text edit, so give it
+                // back to the text edit, and not to the outliner the search steps through:
+                // that one hands its view over to whatever object it visits next
+                ::Outliner* pTextEditOutliner
+                    = static_cast<sd::DrawView*>(mpView)->GetTextEditOutliner();
+                if (pTextEditOutliner && pTextEditOutliner->GetViewCount() > 0)
+                    pTextEditOutliner->GetView(0)->SetSelection(maStartSelection);
             }
         }
     }
