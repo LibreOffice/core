@@ -166,6 +166,17 @@ public sealed record PageParagraph : PageBlock
     public bool HasRuns => Runs.Count > 0;
 
     /// <summary>
+    /// The device grid the paragraph's fonts are measured through, or null to measure them exactly.
+    /// </summary>
+    /// <remarks>
+    /// Null for every document but the few that ask to be laid out against a printer rather than against a
+    /// virtual device — see <see cref="MetricGrid"/>. Carried on the paragraph rather than passed down the
+    /// layout call chain because a header, a table cell and a text box all need the same answer and all
+    /// reach the layouter by different routes; the reader that knows the document's answer sets it once.
+    /// </remarks>
+    public MetricGrid? Metrics { get; init; }
+
+    /// <summary>
     /// The direction its bidi resolution takes as its base.
     /// </summary>
     /// <remarks>
@@ -262,7 +273,7 @@ public sealed record PageParagraph : PageBlock
             runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
         }
 
-        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects);
+        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects, Metrics);
     }
 }
 

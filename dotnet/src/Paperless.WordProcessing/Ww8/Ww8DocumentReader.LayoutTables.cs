@@ -133,8 +133,15 @@ public sealed partial class Ww8DocumentReader
                 return;
             }
 
+            // Every paragraph, empty ones included. A blank paragraph in a cell is a line of the cell's
+            // height like any other, and padding a cell with a run of them is how Word documents make a
+            // block fill the rest of its page — so dropping them is not tidying, it is deleting the
+            // document's own vertical spacing. The extraction pass has always kept them, which is what
+            // made the disagreement visible: `A_320.doc` pads each of its 106 entries with twenty-one
+            // blank paragraphs, and losing those let one and a half entries share a page where
+            // LibreOffice gives each its own.
             bool closesCell = endsCell || format.IsInnerTableCell;
-            if (paragraph.Text.Length > 0 || closesCell) open.Cell.Add(new Ww8LayoutBlock(paragraph));
+            open.Cell.Add(new Ww8LayoutBlock(paragraph));
             if (closesCell) FinishCell(open);
         }
 

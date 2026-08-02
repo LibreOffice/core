@@ -131,12 +131,16 @@ public sealed class ParagraphLayouter
     /// <summary>Creates a layouter over a face.</summary>
     /// <param name="face">The face the paragraph is set in.</param>
     /// <param name="breaker">The break iterator, or null for the default.</param>
-    public ParagraphLayouter(OpenTypeFace face, ILineBreaker? breaker = null)
+    /// <param name="grid">
+    /// The device grid the face's vertical metrics are rounded through, or null to scale them exactly.
+    /// See <see cref="MetricGrid"/>.
+    /// </param>
+    public ParagraphLayouter(OpenTypeFace face, ILineBreaker? breaker = null, MetricGrid? grid = null)
     {
         ArgumentNullException.ThrowIfNull(face);
         _measurer = new TextMeasurer(face);
         _filler = new LineFiller(_measurer, breaker);
-        _metrics = LineSpacing.Resolve(face);
+        _metrics = LineSpacing.Resolve(face, grid);
     }
 
     /// <summary>The line metrics the face resolved to, and which set they came from.</summary>
