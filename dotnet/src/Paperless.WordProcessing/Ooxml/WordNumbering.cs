@@ -114,6 +114,19 @@ public sealed class WordNumbering
     private readonly Dictionary<(string NumId, int Level), int> _startOverrides = [];
     private readonly Dictionary<string, string> _abstractStyleLinks = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// Abstract definitions that define no levels of their own, only the name of one that does.
+    /// </summary>
+    /// <remarks>
+    /// <c>w:numStyleLink</c> is the other half of <c>w:styleLink</c>: one abstract definition declares
+    /// itself the numbering of a style, and any number of others say "I am that style's numbering" and
+    /// carry nothing else. A reader that takes such a definition at face value finds no levels and draws
+    /// no label at all — the whole numbering of the document disappears while its text and its indents
+    /// stay exactly right, which is why it shows up as a handful of missing tokens rather than as
+    /// anything visibly broken.
+    /// </remarks>
+    private readonly Dictionary<string, string> _abstractNumStyleLinks = new(StringComparer.Ordinal);
+
     // Live counters, per list instance and level. Advanced as paragraphs are read, which is the
     // only way to know a level's value: the file records the label nowhere.
     private readonly Dictionary<(string NumId, int Level), int> _counters = [];
@@ -140,6 +153,9 @@ public sealed class WordNumbering
             // instance, which is how "List Number" carries its numbering.
             if (Word.Value(abstractNum, "styleLink") is { Length: > 0 } styleLink)
                 _abstractStyleLinks[styleLink] = id;
+
+            if (Word.Value(abstractNum, "numStyleLink") is { Length: > 0 } numStyleLink)
+                _abstractNumStyleLinks[id] = numStyleLink;
         }
 
         foreach (XElement num in Word.Children(root, "num"))
@@ -177,6 +193,8 @@ public sealed class WordNumbering
         if (numId is null) return null;
         if (_overrides.TryGetValue((numId, level), out WordNumberingLevel? overridden)) return overridden;
         if (!_instanceToAbstract.TryGetValue(numId, out string? abstractId)) return null;
+
+        abstractId = FollowStyleLink(abstractId);
         if (!_abstractNumbering.TryGetValue(abstractId, out Dictionary<int, WordNumberingLevel>? levels))
             return null;
 
@@ -185,6 +203,37 @@ public sealed class WordNumbering
             if (levels.TryGetValue(candidate, out WordNumberingLevel? found)) return found;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Follows <c>w:numStyleLink</c> to the abstract definition that actually holds the levels.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice's <c>ListsManager::GetAbstractList</c>
+    /// (<c>sw/source/writerfilter/dmapper/NumberingManager.cxx:1140-1176</c>) tries the named paragraph
+    /// style's own list first and then, failing that, scans for the abstract definition whose
+    /// <c>w:styleLink</c> names the same style. Only the second is done here: the first needs the style
+    /// table, which this class does not hold, and it is the fallback that every file measured takes —
+    /// a producer that writes <c>numStyleLink</c> writes the matching <c>styleLink</c> beside it.
+    /// </para>
+    /// <para>
+    /// Walked rather than looked up once, because a chain is legal; bounded, because a file can point
+    /// two definitions at each other and neither Word nor this may hang on it.
+    /// </para>
+    /// </remarks>
+    private string FollowStyleLink(string abstractId)
+    {
+        for (int hop = 0; hop < LevelCount; hop++)
+        {
+            if (!_abstractNumStyleLinks.TryGetValue(abstractId, out string? styleName)) break;
+            if (!_abstractStyleLinks.TryGetValue(styleName, out string? target)) break;
+            if (string.Equals(target, abstractId, StringComparison.Ordinal)) break;
+
+            abstractId = target;
+        }
+
+        return abstractId;
     }
 
     /// <summary>

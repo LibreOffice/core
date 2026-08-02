@@ -215,7 +215,59 @@ public sealed partial class DocxLayoutSource
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
+        SuppressAutoSpacingInCell(blocks);
         return blocks;
+    }
+
+    /// <summary>
+    /// Drops the HTML auto margin at a cell's top and bottom edges.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>w:beforeAutospacing</c> means fourteen points in a body paragraph and <em>nothing</em> on the
+    /// first paragraph of a table cell; <c>w:afterAutospacing</c> likewise on the last. LibreOffice
+    /// applies both — the first in <c>DomainMapper_Impl::finishParagraph</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:2458-2470</c>, where
+    /// <c>bFirstParagraphInCell</c> at matching table depth forces the margin to zero) and the second in
+    /// <c>ClearPreviousParagraph</c> (<c>:5457-5468</c>, called from <c>TableManager::closeCell</c>).
+    /// Without it every row of a table whose style carries the flag is fourteen points taller than the
+    /// document asks for, which on a form of thirty single-line rows is seven pages of invented height.
+    /// </para>
+    /// <para>
+    /// A <em>stated</em> <c>w:before</c> survives, which is why this asks how the margin was arrived at
+    /// rather than merely whether it is fourteen points: the suppression is of the auto rule, not of
+    /// paragraph spacing in cells.
+    /// </para>
+    /// <para>
+    /// The bottom rule spares a numbered paragraph, exactly as <c>ClearPreviousParagraph</c> does — it
+    /// reads the paragraph's numbering rules and leaves the margin alone when it has any.
+    /// </para>
+    /// <para>
+    /// <b>Not done:</b> the same <c>if</c> in <c>finishParagraph</c> also zeroes the top margin of the
+    /// first paragraph of a <em>shape</em> and of the first paragraph of the document's first section.
+    /// Both are the same rule and both are unimplemented here, because neither was measured — a cell is
+    /// where the corpus showed it, and the other two move the body flow, which is not free to change on
+    /// an argument from symmetry alone.
+    /// </para>
+    /// </remarks>
+    private void SuppressAutoSpacingInCell(List<PageBlock> blocks)
+    {
+        // Only a paragraph at the very edge is affected; a nested table there shields whatever follows,
+        // because the rule is about the cell's own first and last paragraph.
+        if (blocks.Count > 0 && blocks[0] is PageParagraph first
+            && WordParagraphFormats.IsAutoSpaced(
+                _styles, Word.Child(first.Source as XElement, "pPr"), _tableStyle, before: true))
+        {
+            blocks[0] = first with { Format = first.Format with { SpaceBefore = Length.Zero } };
+        }
+
+        if (blocks.Count > 0 && blocks[^1] is PageParagraph last
+            && last.Label is null
+            && WordParagraphFormats.IsAutoSpaced(
+                _styles, Word.Child(last.Source as XElement, "pPr"), _tableStyle, before: false))
+        {
+            blocks[^1] = last with { Format = last.Format with { SpaceAfter = Length.Zero } };
+        }
     }
 
     /// <summary>
