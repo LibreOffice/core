@@ -24,22 +24,6 @@
 #include <TargetConditionals.h>
 #endif
 
-/** @see kit::Office::runLoop(). */
-typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
-typedef void (*COKitWakeCallback)(void* pData);
-
-/// @see kit::Office::registerAnyInputCallback()
-typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
-
-/// @see kit::Office::registerFileSaveDialogCallback()
-typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
-                                            size_t nResultUri);
-
-/// @see kit::Office::registerRevealInFileManagerCallback()
-typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
-
-typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
-
 /**
  * A clipboard backend the app registers to do the raw platform clipboard
  * input and output, in both directions. The engine drives the format
@@ -1387,9 +1371,6 @@ operator<<(std::basic_ostream<charT, traits>& rStream, COKitCallbackType eType)
     return rStream << static_cast<int>(eType);
 }
 
-/** @see kit::Office::registerCallback(). */
-typedef void (*COKitCallback)(COKitCallbackType eType, const char* pPayload, void* pData);
-
 enum class COKitMouseEventType
 {
     /// A mouse button has been pressed down.
@@ -1434,6 +1415,25 @@ enum class COKitSetGraphicSelectionType
     END
 };
 
+/** @see kit::Office::registerCallback(). */
+typedef void (*COKitCallback)(COKitCallbackType eType, const char* pPayload, void* pData);
+
+/** @see kit::Office::runLoop(). */
+typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
+
+typedef void (*COKitWakeCallback)(void* pData);
+
+/// @see kit::Office::registerAnyInputCallback()
+typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
+
+/// @see kit::Office::registerFileSaveDialogCallback()
+typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
+                                            size_t nResultUri);
+
+/// @see kit::Office::registerRevealInFileManagerCallback()
+typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
+
+typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
 typedef struct COKitStruct COKit;
 typedef struct COKitClassStruct COKitClass;
 
