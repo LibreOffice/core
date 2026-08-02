@@ -1,5 +1,6 @@
 using Paperless.Core.Extraction;
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
 using Shouldly;
@@ -61,6 +62,74 @@ public sealed class SheetEmptyPageTests
 
     private static int PageCount(SheetLayout sheet)
         => new SpreadsheetPages([sheet]).Pages.Count;
+
+    /// <summary>
+    /// A cell to the left keeps a page only when its text really reaches it.
+    /// </summary>
+    /// <remarks>
+    /// The fourth of <c>IsPrintEmpty</c>'s tests, and the one it needs a font for: Calc re-runs
+    /// <c>ExtendPrintArea</c> over the page's own rows from column zero and keeps the page when
+    /// the extension reaches it (<c>documen9.cxx:486-500</c>). Answering it with "is there any
+    /// cell at all to the left" instead keeps every column band of every row that has anything in
+    /// column A, which on a wide sheet is most of the paper — measured on
+    /// <c>RCO_VOR_Master_List_082824.xlsx</c> as 183 pages of which 103 were blank, against
+    /// LibreOffice's 80 with none.
+    /// </remarks>
+    [Fact]
+    public void AShortStringToTheLeftDoesNotKeepAPageAndALongOneDoes()
+    {
+        // Column BZ is far enough right to be a second column band on A4; the cell in column A
+        // is what decides whether the band's first page is printed.
+        SheetLayout brief = Sheet([(0, 0, "short"), (0, 77, "far right")]);
+        SheetLayout verbose = Sheet(
+            [(0, 0, new string('W', 4000)), (0, 77, "far right")]);
+
+        // Both sheets span the same block, so any difference in page count is this rule alone.
+        brief.PrintedRange.LastColumn.ShouldBe(77);
+
+        PageCount(brief).ShouldBeLessThan(PageCount(verbose));
+    }
+
+    /// <summary>
+    /// A border keeps a page and a background does not.
+    /// </summary>
+    /// <remarks>
+    /// Calc asks <c>HasAttrib(..., HasAttrFlags::Lines)</c>, and that flag tests the four edges of
+    /// <c>ATTR_BORDER</c> and nothing else (<c>attarray.cxx:1279-1284</c>) — "we want to print
+    /// sheets with borders even if there is no cell content". A fill is not a border, and treating
+    /// it as one keeps every page of a shaded region: <c>grants-2005.xls</c> came out at 1170
+    /// pages, 949 of them blank, against LibreOffice's 220.
+    /// </remarks>
+    [Fact]
+    public void ABorderKeepsAPageAndABackgroundDoesNot()
+    {
+        static SheetLayout Decorated(SheetCellDecoration decoration)
+        {
+            SheetFormatting formatting = new();
+            formatting.SetCell(400, 0, formatting.Intern(decoration));
+
+            SheetLayout sheet = Sheet([(0, 0, "top"), (600, 0, "bottom")]);
+            return new SheetLayout
+            {
+                Name = sheet.Name,
+                Cells = sheet.Cells,
+                Formatting = formatting,
+            };
+        }
+
+        SheetCellDecoration ruled = new(
+            null,
+            new SheetCellBorders(
+                SheetBorder.Line(Length.FromTwips(20), Colour.Black), SheetBorder.None,
+                SheetBorder.None, SheetBorder.None));
+
+        SheetCellDecoration shaded = new(Colour.FromRgb(0xFFFF00), SheetCellBorders.None);
+
+        // The ruled cell sits on a page between the two cells and keeps it; the shaded one does
+        // not, so that sheet prints one page fewer.
+        PageCount(Decorated(shaded)).ShouldBe(2);
+        PageCount(Decorated(ruled)).ShouldBe(3);
+    }
 
     [Fact]
     public void APageWithNothingOnItIsNotPrinted()
