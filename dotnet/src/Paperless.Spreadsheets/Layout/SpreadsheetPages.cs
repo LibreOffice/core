@@ -549,11 +549,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         // merged block's own origin is what draws its text and it may be neither of these cells.
         for (int between = at; between <= band.First; between++)
         {
-            if (sheet.CellAt(row.Row, between) is { } spanning
-                && (spanning.ColumnSpan > 1 || spanning.RowSpan > 1))
-            {
-                return;
-            }
+            if (sheet.IsMerged(row.Row, between)) return;
         }
 
         Length back = Length.Zero;

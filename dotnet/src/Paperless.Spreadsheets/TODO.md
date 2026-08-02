@@ -214,6 +214,57 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the fifth sheets sweep found
+
+`sheets/batch-003` measured **8/10** at `86ce2dc9b`, reproducing the briefed baseline exactly, and
+is **10/10** after this round with `batch-001` and `batch-002` re-proved at 10/10 each. Both
+failures were `.xlsx` and neither was in the reader: the two documents' cells extract correctly and
+the defects are in what layout does with cells and drawings that hold nothing.
+
+**"A cell exists here" was standing in for "there is content here", and the two differ by a whole
+column band.** `SheetEmptyPages` dropped a page only when the block held no `ContentTableCell` at
+all. `ScTable::IsBlockEmpty` (`sc/source/core/data/table2.cxx:2432-2452`) asks each column for
+`IsEmptyData` — the cell *store*, which a cell carrying nothing but a style index is not in; its
+attributes reach the question only through the separate `HasAttrFlags::Lines` test that follows.
+Every format writes such cells in quantity: SpreadsheetML a bare `<c r="I1" s="13"/>`, BIFF a
+`MULBLANK` across a whole formatted row. Measured on
+`Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx`, whose columns I to P carry a style
+on every cell of rows 1 to 15 and nothing else: **6 pages against LibreOffice's 5**, the extra one
+being that band. The same test governs `ReachedFromTheLeft`'s short-circuit and moved with it,
+which is what `bLeftIsEmpty` is — `IsPrintEmpty`'s own verdict on the band to the left, and that
+verdict starts at `IsBlockEmpty`.
+
+**A merge that holds nothing was reaching layout as no merge at all.** Every format states its
+merges once, as a list of ranges, and every reader then puts the span on the block's top-left cell
+and drops the cells it covers — which recovers the merge only when that top-left cell survives. An
+empty cell past the last filled one in its row is trailing padding that all four readers drop, so
+the anchor of an empty merge went with it and `SheetLayout` derived no merge from the tree. That is
+exactly the merge that matters, because `ScOutputData::IsAvailable` stops a neighbour's long string
+at a merged or overlapped cell **whether or not it holds anything**
+(`sc/source/ui/view/output2.cxx:1178-1191`). `SheetLayout.StatedMerges` now carries the ranges
+themselves and every reader fills it — `mergeCells`, BIFF12 `MERGECELL`, BIFF8 `MERGEDCELLS`, and
+ODF's `table:number-columns-spanned`. Measured on the same workbook, whose A1 title ran through its
+empty `B1:D1` merge and onto the next column band: **554 words against 541, and 541 now.**
+`DrawLeadIn`'s own merge test moved to `IsMerged` at the same time; it was asking the cells for
+spans and had the same blind spot.
+
+**A drawing belongs to the sheet, not to a page.** `SheetPageGraphics` anchored one to the page
+holding its top-left cell, which is the same answer for everything that does not straddle a break
+and loses half of everything that does. `ScOutputData::PrePrintDrawingLayer`
+(`sc/source/ui/view/output3.cxx:40-104`) sets a map-mode offset of minus the width of the columns
+and the height of the rows *before* the page's first, and `PrintDrawingLayer` (`:138`) paints the
+whole drawing page through it. `ColumnX` and `RowY` now walk the grid in **either** direction, so a
+drawing anchored left of the band sits at a negative offset and shows its right-hand part, and an
+absolute anchor resolves through the same walk instead of only landing on the page holding A1.
+A rectangle that misses the paper is dropped. Measured on `Air_Boss_Master_List.xlsx`, whose note
+box is anchored in column E and straddles the column break: LibreOffice prints its left half on
+page 1 and its right half on page 3, so **514 words against 527, and 530 now.**
+
+Fixtures: `features/sheet-empty-merge.fods` and `features/sheet-drawing-across-break.xlsx`, each
+checked against LibreOffice 24.2.7.2's own PDF and each carrying its negative half — an unmerged
+string that must still spill, and cells that must still be split between the two pages. All three
+tests were confirmed to fail with their defect put back.
+
 ## What the fourth sheets sweep found
 
 Measured at `161d62fb9`. `sheets/batch-002` was **7/10** and the briefed baseline reproduced to the
@@ -1618,9 +1669,17 @@ Not yet, and why:
   metafile out of its `OfficeArtMetafileHeader`. None of that is DOC-specific. Moving it into
   `Paperless.MsBinary/Escher/` is what buys XLS and PPT pictures at once, and the metafile half is
   the part that would be most annoying to write twice.
-- **A drawing belongs to the page holding its top-left cell.** Calc positions the drawing layer in
-  document coordinates and clips it per page, so a picture straddling a page break appears on both
-  pages, cut. Anchoring it to one page is the same answer for everything that does not straddle.
+- [x] **A drawing belongs to the sheet, not to a page.** It used to be anchored to the page holding
+  its top-left cell, which is the same answer for everything that does not straddle a break and
+  loses half of everything that does. `ScOutputData::PrePrintDrawingLayer`
+  (`sc/source/ui/view/output3.cxx:40-104`) sets a map-mode offset of minus the width of the columns
+  and the height of the rows *before* the page's first and `PrintDrawingLayer` (`:138`) paints the
+  whole drawing page through it, so the anchor is now resolved against the page's own columns
+  wherever it can be and walked out through the grid in **either** direction where it cannot — a
+  drawing anchored left of the band sits at a negative offset and shows its right-hand part.
+  A rectangle that misses the paper is dropped rather than drawn off the edge. Measured on
+  `Air_Boss_Master_List.xlsx`, whose note box is anchored in column E and straddles the column
+  break: its right half is on LibreOffice's page 3 and was on none of ours, 514 words against 527.
 - **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than
   a matrix, so `xdr:spPr/a:xfrm/@rot` and ODF's `draw:transform` are read past. Recorded rather
   than fixed: four agents are building against that IR at once.

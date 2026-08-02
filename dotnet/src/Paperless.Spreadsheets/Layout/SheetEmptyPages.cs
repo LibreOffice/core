@@ -31,11 +31,19 @@ namespace Paperless.Spreadsheets.Layout;
 /// nine it does not touch. LibreOffice prints one.
 /// </para>
 /// <para>
-/// <strong>One thing is still narrower than Calc's.</strong> A page is dropped only when nothing in
-/// the block is a cell <em>at all</em>, rather than when its cells exist and are empty, because the
-/// content tree records no formatting and cannot tell the two apart. The fourth test — whether a
-/// long string in a column to the left reaches into the block — is Calc's own, measured the way
-/// Calc measures it; see <see cref="ReachedFromTheLeft"/>.
+/// <strong>The question is whether the block holds cell <em>content</em>, not whether it holds a
+/// cell.</strong> <c>ScTable::IsBlockEmpty</c> (<c>sc/source/core/data/table2.cxx:2432-2452</c>)
+/// asks each column for <c>IsEmptyData</c>, which reads the cell store alone; a cell carrying
+/// nothing but a style index is not in that store, and its attributes are consulted only by the
+/// separate <c>HasAttrFlags::Lines</c> test below. Reading "a cell record exists here" as content
+/// instead keeps a page for every band of styled-but-empty columns — measured on
+/// <c>Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx</c>, whose columns I to P carry
+/// a style on every cell of rows 1 to 15 and nothing else: LibreOffice drops that whole column
+/// band and prints five pages where we printed six.
+/// </para>
+/// <para>
+/// The fourth test — whether a long string in a column to the left reaches into the block — is
+/// Calc's own, measured the way Calc measures it; see <see cref="ReachedFromTheLeft"/>.
 /// </para>
 /// </remarks>
 internal static class SheetEmptyPages
@@ -79,7 +87,7 @@ internal static class SheetEmptyPages
         {
             for (int column = block.FirstColumn; column <= block.LastColumn; column++)
             {
-                if (sheet.CellAt(row, column) is not null) return false;
+                if (!SheetTextLayout.IsAvailable(sheet.CellAt(row, column))) return false;
                 if (sheet.IsMerged(row, column)) return false;
 
                 // A border keeps the page and a background does not, which reads as an oversight
@@ -123,7 +131,9 @@ internal static class SheetEmptyPages
     /// <para>
     /// The cheap half of Calc's own short-circuit is kept: it carries <c>bLeftIsEmpty</c> across
     /// the row band so that a band with nothing to its left is never measured at all. Asking
-    /// whether any cell exists there first is the same saving without the bookkeeping.
+    /// whether any cell there holds content first is the same saving without the bookkeeping, and
+    /// it is the same question <c>bLeftIsEmpty</c> answers: the flag is <c>IsPrintEmpty</c>'s own
+    /// verdict on the band to the left, and that verdict starts at <c>IsBlockEmpty</c>.
     /// </para>
     /// </remarks>
     private static bool ReachedFromTheLeft(SheetLayout sheet, SheetRange block)
@@ -135,7 +145,7 @@ internal static class SheetEmptyPages
         {
             for (int column = 0; column < block.FirstColumn; column++)
             {
-                if (sheet.CellAt(row, column) is null) continue;
+                if (SheetTextLayout.IsAvailable(sheet.CellAt(row, column))) continue;
                 anythingLeft = true;
                 break;
             }
