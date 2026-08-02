@@ -16,10 +16,16 @@ namespace Paperless.Spreadsheets.Layout;
 /// <c>sc/source/ui/view/output2.cxx:1178</c>.
 /// </param>
 /// <param name="ColumnWidth">The printed width of a column, already scaled.</param>
+/// <param name="BlockLeft">
+/// The left edge of the block of columns being printed, scaled — Calc's <c>mnScrX</c>.
+/// </param>
+/// <param name="BlockRight">Its right edge, Calc's <c>mnScrX + mnScrW</c>.</param>
 internal readonly record struct SheetTextContext(
     double Scale,
     Func<int, int, bool> IsAvailable,
-    Func<int, Length> ColumnWidth);
+    Func<int, Length> ColumnWidth,
+    Length BlockLeft = default,
+    Length BlockRight = default);
 
 /// <summary>One cell as it is about to be drawn.</summary>
 /// <param name="Text">The text the number format produced.</param>
@@ -110,6 +116,7 @@ internal static class SheetTextLayout
 
         Placement placement = Place(context, cell, face);
         if (placement.Lines.Count == 0) return;
+        if (IsOutside(context, placement)) return;
 
         // The cell's own colour is the fallback rather than the answer: a rich cell's portions
         // carry theirs, and a plain one's segment carries none so that the two paths emit the
@@ -154,6 +161,33 @@ internal static class SheetTextLayout
             if (clipped) sink.Restore();
         }
     }
+
+    /// <summary>
+    /// Whether the room the cell was given falls entirely outside the block being printed.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>bOutside</c> (<c>output2.cxx:2037</c>), and it is the whole reason a page does not
+    /// carry every neighbour of its own first column. Calc's string loop starts one column
+    /// <em>before</em> the block so that a long string reaching in from the left is drawn — but
+    /// it then asks of every cell whether what it occupies overlaps the block at all, and draws
+    /// nothing when it does not. A short string in that column is therefore skipped and a long
+    /// one is not, because only the long one's output area, widened through its empty
+    /// neighbours, reaches the paper.
+    /// </para>
+    /// <para>
+    /// Measured: <c>ExampleWhiteListData.xlsx</c> drew twenty part numbers off the left edge of
+    /// its last two pages — <strong>838 words against the reference's 821</strong> — because
+    /// every one of them was the nearest cell left of a band and none of them spilled into it.
+    /// </para>
+    /// <para>
+    /// Calc's rectangle is inclusive at the right, so a cell ending exactly where the block
+    /// begins is outside it; hence the <c>&lt;=</c>.
+    /// </para>
+    /// </remarks>
+    private static bool IsOutside(in SheetTextContext context, in Placement placement)
+        => context.BlockRight > context.BlockLeft
+           && (placement.Right <= context.BlockLeft || placement.Left >= context.BlockRight);
 
     private static GraphicsPath Rectangle(DocRect rect)
         => new GraphicsPath()

@@ -189,7 +189,12 @@ public sealed class SpreadsheetPages : IPageSequence
 /// </remarks>
 /// <param name="First">The band's first column, hidden or not.</param>
 /// <param name="Left">Where the band starts, scaled.</param>
-internal readonly record struct ColumnBand(int First, Length Left);
+/// <param name="Right">
+/// Where it ends, scaled — Calc's <c>mnScrX + mnScrW</c> for the block it prints. A cell whose
+/// output area falls entirely outside those two edges is not drawn at all, which is the whole of
+/// what the pair is for; see <see cref="SheetTextContext"/>.
+/// </param>
+internal readonly record struct ColumnBand(int First, Length Left, Length Right);
 
 /// <summary>
 /// Places and draws the cells of one page.
@@ -254,12 +259,16 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
                 foreach (PlacedColumn column in columns)
                 {
                     ContentTableCell? cell = sheet.CellAt(row.Row, column.Column);
-                    if (cell is null) continue;
+                    if (cell is null)
+                    {
+                        DrawCoveredMerge(column, row, sink, BandOf(bands, column));
+                        continue;
+                    }
 
                     string text = cell.GetText();
                     if (text.Length == 0) continue;
 
-                    DrawCell(text, cell, column, row, sink);
+                    DrawCell(text, cell, column, row, sink, BandOf(bands, column));
                 }
             }
 
@@ -394,7 +403,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 
         void Append(int first, int last)
         {
-            starts.Add(new ColumnBand(first, left + (offset * _scale)));
+            Length start = left + (offset * _scale);
 
             for (int column = first; column <= last; column++)
             {
@@ -404,6 +413,8 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
                 placed.Add(new PlacedColumn(column, left + (offset * _scale), width * _scale));
                 offset += width;
             }
+
+            starts.Add(new ColumnBand(first, start, left + (offset * _scale)));
         }
     }
 
@@ -453,11 +464,29 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// two-row merge beside it and Paperless drew all of it.
     /// </para>
     /// </remarks>
-    private SheetTextContext Context => new(
+    private SheetTextContext ContextFor(ColumnBand band) => new(
         _scale,
         (row, column) => SheetTextLayout.IsAvailable(sheet.CellAt(row, column))
                          && !sheet.IsMerged(row, column),
-        column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale);
+        column => SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(column)) * _scale,
+        band.Left,
+        band.Right);
+
+    /// <summary>Which band a placed column belongs to, by where it sits on the paper.</summary>
+    /// <remarks>
+    /// The bands do not overlap and are appended left to right, so the last one starting at or
+    /// left of the column is the one that placed it. Asking by column <em>number</em> would be
+    /// ambiguous: a repeated column is in both ranges and drawn twice, in two different places.
+    /// </remarks>
+    private static ColumnBand BandOf(List<ColumnBand> bands, PlacedColumn column)
+    {
+        ColumnBand found = bands[0];
+        foreach (ColumnBand band in bands)
+        {
+            if (band.Left <= column.X) found = band;
+        }
+        return found;
+    }
 
     /// <summary>
     /// Draws the cell left of a band whose text reaches into it, at the place it really is.
@@ -475,7 +504,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// </para>
     /// <para>
     /// The cell is placed at its true position, which is off the left of the block, and the text
-    /// then overflows rightwards under the ordinary rules — <see cref="Context"/> already measures
+    /// then overflows rightwards under the ordinary rules — <see cref="ContextFor"/> already measures
     /// that against the document grid rather than against the page, which is what makes the two
     /// halves of one string line up across the break.
     /// </para>
@@ -529,13 +558,66 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
                 band.Left - (back * _scale),
                 SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * _scale),
             row,
-            sink);
+            sink,
+            band);
+    }
+
+    /// <summary>
+    /// Draws a merged block whose own top-left cell is in a hidden column, from the first
+    /// visible column it covers.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A hidden column is not placed on the page at all, so the cell that anchors a merge
+    /// starting inside one would never be reached — and the whole block would vanish, however
+    /// many visible columns it goes on to cover.
+    /// </para>
+    /// <para>
+    /// Calc reaches it from the other end. Every covered cell asks
+    /// <c>ScOutputData::GetMergeOrigin</c> (<c>output2.cxx:953</c>) for the block's origin, and
+    /// that walk gives up the moment it steps onto a column that is <em>not</em> hidden — <c>if
+    /// (!bDoMerge &amp;&amp; !bHidden) return false;</c> (<c>:993</c>) — because that column is
+    /// either the origin itself or a nearer covered cell, and one of those will draw the block
+    /// instead. So exactly one cell of a block ever draws it: the leftmost one whose path back
+    /// to the origin is entirely hidden. This walks the same path in the same direction and
+    /// stops on the same condition.
+    /// </para>
+    /// <para>
+    /// The origin is placed at the visible column's own left edge, which is where it belongs: a
+    /// hidden column contributes nothing to the page's width, so the block starts where the
+    /// first column it can be seen in starts.
+    /// </para>
+    /// <para>
+    /// Measured on <c>RPD 155 REDAC SCHEDULE 2014-04-02.xls</c>, whose <c>Funds ($000)</c>
+    /// heading is a four-column merge anchored in a collapsed column: the two words were
+    /// missing from the page and are drawn now.
+    /// </para>
+    /// </remarks>
+    private void DrawCoveredMerge(
+        PlacedColumn column, PlacedRow row, IDrawingSink sink, ColumnBand band)
+    {
+        for (int at = column.Column - 1; at >= 0 && sheet.Grid.Columns.IsHidden(at); at--)
+        {
+            if (sheet.CellAt(row.Row, at) is not { } origin) continue;
+            if (at + Math.Max(1, origin.ColumnSpan) <= column.Column) return;
+
+            string text = origin.GetText();
+            if (text.Length == 0) return;
+
+            DrawCell(text, origin, new PlacedColumn(at, column.X, Length.Zero), row, sink, band);
+            return;
+        }
     }
 
     private void DrawCell(
-        string text, ContentTableCell cell, PlacedColumn column, PlacedRow row, IDrawingSink sink)
+        string text,
+        ContentTableCell cell,
+        PlacedColumn column,
+        PlacedRow row,
+        IDrawingSink sink,
+        ColumnBand band)
     {
-        SheetTextLayout.Draw(sink, Context, new SheetCellText(
+        SheetTextLayout.Draw(sink, ContextFor(band), new SheetCellText(
             text,
             cell.Value,
             sheet.Formats.At(row.Row, column.Column),
