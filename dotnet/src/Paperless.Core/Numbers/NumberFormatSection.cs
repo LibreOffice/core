@@ -39,6 +39,13 @@ public sealed class NumberFormatSection
         TwelveHour = twelveHour;
         HasElapsed = hasElapsed;
         HasUnreproducedDirective = hasUnreproducedDirective;
+
+        foreach (FormatToken token in tokens)
+        {
+            if (token.Kind != FormatTokenKind.Fill) continue;
+            HasFillDirective = true;
+            break;
+        }
     }
 
     /// <summary>The subformat as written.</summary>
@@ -83,6 +90,18 @@ public sealed class NumberFormatSection
     /// which is worse than saying so — a caller can raise a diagnostic instead.
     /// </remarks>
     public bool HasUnreproducedDirective { get; }
+
+    /// <summary>
+    /// True when the subformat carries a <c>*c</c> fill directive, whose expansion needs a
+    /// column width.
+    /// </summary>
+    /// <remarks>
+    /// Worth asking before rendering rather than after: a caller that owns a width re-renders
+    /// the value to find where the fill goes, and every other format would be re-rendered for
+    /// nothing. Accounting formats — built-in ids 5–8, 41–44 and every <c>_("$"* …)</c> code
+    /// Excel writes — are the ones that carry it.
+    /// </remarks>
+    public bool HasFillDirective { get; }
 
     /// <summary>The tokens, for the renderer.</summary>
     internal IReadOnlyList<FormatToken> Tokens => _tokens;
@@ -138,9 +157,12 @@ public sealed class NumberFormatSection
                     i += 2;
                     continue;
 
-                // "Repeat the next character to fill the column." Column-width dependent, so
-                // it contributes nothing to extracted text.
+                // "Repeat the next character to fill the column." How many copies is a function
+                // of the column, which extraction has no width for — so the token records only
+                // *where* the fill goes and which character fills it, and the renderer emits a
+                // marker there for a caller that has a width. See FormatToken.Fill.
                 case '*':
+                    if (i + 1 < code.Length) tokens.Add(FormatToken.Fill(code[i + 1]));
                     i += 2;
                     continue;
 
@@ -434,6 +456,7 @@ internal enum FormatTokenKind
     AmPm,
     TextPlaceholder,
     GeneralPlaceholder,
+    Fill,
 }
 
 /// <summary>One token of a parsed subformat.</summary>
@@ -476,4 +499,17 @@ internal readonly record struct FormatToken(
 
     public static FormatToken GeneralPlaceholder()
         => new(FormatTokenKind.GeneralPlaceholder, "General", '\0', 0, false);
+
+    /// <summary>
+    /// A <c>*c</c> directive: repeat <paramref name="fill"/> until the column is full.
+    /// </summary>
+    /// <remarks>
+    /// The token's text is the marker LibreOffice itself writes into the formatted string —
+    /// <c>U+001B</c> followed by the fill character (<c>lcl_appendStarFillChar</c>,
+    /// <c>svl/source/numbers/zformat.cxx:2200</c>) — so a fill renders exactly like a literal
+    /// everywhere in the renderer, and the one caller that owns a column width finds it by its
+    /// escape and expands it.
+    /// </remarks>
+    public static FormatToken Fill(char fill)
+        => new(FormatTokenKind.Fill, string.Concat(NumberFormatter.FillMarker, fill), fill, 0, false);
 }

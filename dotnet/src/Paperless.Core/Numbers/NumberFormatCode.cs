@@ -25,6 +25,13 @@ public sealed class NumberFormatCode
     {
         Code = code;
         Sections = sections;
+
+        foreach (NumberFormatSection section in sections)
+        {
+            if (!section.HasFillDirective) continue;
+            HasFillDirective = true;
+            break;
+        }
     }
 
     /// <summary>The format code as written in the file.</summary>
@@ -71,6 +78,15 @@ public sealed class NumberFormatCode
             return true;
         }
     }
+
+    /// <summary>
+    /// True when any subformat carries a <c>*c</c> fill directive.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="NumberFormatSection.HasFillDirective"/>. Asked per format rather than per
+    /// cell, so that the re-render a fill needs is paid only by the formats that have one.
+    /// </remarks>
+    public bool HasFillDirective { get; }
 
     /// <summary>
     /// Parses a format code. Never throws: an unparseable code degrades to <c>General</c>,

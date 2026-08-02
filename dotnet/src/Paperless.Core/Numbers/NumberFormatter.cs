@@ -23,14 +23,40 @@ namespace Paperless.Core.Numbers;
 public static class NumberFormatter
 {
     /// <summary>
+    /// Where a <c>*c</c> fill directive expands, as it appears in a formatted string.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// LibreOffice's own convention, reproduced rather than invented: <c>SvNumberformat</c>
+    /// writes <c>U+001B</c> followed by the fill character into the output string
+    /// (<c>lcl_appendStarFillChar</c>, <c>svl/source/numbers/zformat.cxx:2200</c>) and Calc's
+    /// cell output finds it by that escape, records the position and the character, removes
+    /// the pair and pads at that point once it knows the column width
+    /// (<c>ScDrawStringsVars::RepeatToFill</c>, <c>sc/source/ui/view/output2.cxx:572</c>).
+    /// </para>
+    /// <para>
+    /// It is never in the string a caller sees unless that caller asked for it: LibreOffice
+    /// passes a <c>bStarFlag</c> down the whole renderer and emits nothing when it is false,
+    /// which is what keeps an accounting format's extracted text free of control characters.
+    /// </para>
+    /// </remarks>
+    public const char FillMarker = '\u001B';
+
+    /// <summary>
     /// Formats a number through a format code.
     /// </summary>
     /// <param name="code">The parsed format code.</param>
     /// <param name="value">The stored value.</param>
     /// <param name="system">The workbook's date epoch, used only by date and time formats.</param>
+    /// <param name="keepFillMarkers">
+    /// Whether a <c>*c</c> fill directive leaves a <see cref="FillMarker"/> pair where it
+    /// expands. False for extraction, which has no column to fill; true for a caller that owns
+    /// a width and will expand it.
+    /// </param>
     public static string Format(
         NumberFormatCode code, double value,
-        SpreadsheetDateSystem system = SpreadsheetDateSystem.Date1900)
+        SpreadsheetDateSystem system = SpreadsheetDateSystem.Date1900,
+        bool keepFillMarkers = false)
     {
         ArgumentNullException.ThrowIfNull(code);
 
@@ -41,13 +67,16 @@ public static class NumberFormatter
         // as well is how "-1,234.50" becomes "--1,234.50".
         bool suppressSign = code.Sections.Count >= 2 && value < 0;
 
-        return Render(section, value, suppressSign, system);
+        string rendered = Render(section, value, suppressSign, system);
+        return keepFillMarkers ? rendered : WithoutFillMarkers(rendered);
     }
 
     /// <summary>
     /// Formats a string through a format code: the fourth subformat when the code has one.
     /// </summary>
-    public static string Format(NumberFormatCode code, string text)
+    /// <inheritdoc cref="Format(NumberFormatCode, double, SpreadsheetDateSystem, bool)"
+    ///     path="/param[@name='keepFillMarkers']"/>
+    public static string Format(NumberFormatCode code, string text, bool keepFillMarkers = false)
     {
         ArgumentNullException.ThrowIfNull(code);
         ArgumentNullException.ThrowIfNull(text);
@@ -63,12 +92,29 @@ public static class NumberFormatter
                 case FormatTokenKind.TextPlaceholder or FormatTokenKind.GeneralPlaceholder:
                     output.Append(text);
                     break;
-                case FormatTokenKind.Literal:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill:
                     output.Append(token.Text);
                     break;
                 default:
                     break;
             }
+        }
+
+        string rendered = output.ToString();
+        return keepFillMarkers ? rendered : WithoutFillMarkers(rendered);
+    }
+
+    /// <summary>Drops every <see cref="FillMarker"/> and the fill character after it.</summary>
+    private static string WithoutFillMarkers(string rendered)
+    {
+        int at = rendered.IndexOf(FillMarker, StringComparison.Ordinal);
+        if (at < 0) return rendered;
+
+        StringBuilder output = new(rendered.Length);
+        for (int i = 0; i < rendered.Length; i++)
+        {
+            if (rendered[i] != FillMarker) { output.Append(rendered[i]); continue; }
+            i++;   // and the character it names
         }
         return output.ToString();
     }
@@ -120,7 +166,7 @@ public static class NumberFormatter
         StringBuilder output = new();
         foreach (FormatToken token in section.Tokens)
         {
-            if (token.Kind == FormatTokenKind.Literal) output.Append(token.Text);
+            if (token.Kind is FormatTokenKind.Literal or FormatTokenKind.Fill) output.Append(token.Text);
         }
         return output.ToString();
     }
@@ -137,7 +183,7 @@ public static class NumberFormatter
                 case FormatTokenKind.GeneralPlaceholder:
                     output.Append(General(effective));
                     break;
-                case FormatTokenKind.Literal:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill:
                     output.Append(token.Text);
                     break;
                 default:
@@ -193,7 +239,7 @@ public static class NumberFormatter
             FormatToken token = tokens[i];
             switch (token.Kind)
             {
-                case FormatTokenKind.Literal:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill:
                     output.Append(token.Text);
                     break;
 
@@ -286,7 +332,7 @@ public static class NumberFormatter
             FormatToken token = tokens[i];
             switch (token.Kind)
             {
-                case FormatTokenKind.Literal:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill:
                     output.Append(token.Text);
                     break;
 
@@ -362,7 +408,7 @@ public static class NumberFormatter
             FormatToken token = tokens[i];
             switch (token.Kind)
             {
-                case FormatTokenKind.Literal:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill:
                     output.Append(token.Text);
                     break;
 
@@ -617,7 +663,8 @@ public static class NumberFormatter
                 // "m/d/yyyy" tokenises its slashes as fraction bars and "m,d" its comma as a
                 // scaling one. In a date they are punctuation, and dropping them turns
                 // 7/30/2026 into 7302026.
-                case FormatTokenKind.Literal or FormatTokenKind.Slash or FormatTokenKind.ScaleComma:
+                case FormatTokenKind.Literal or FormatTokenKind.Fill
+                    or FormatTokenKind.Slash or FormatTokenKind.ScaleComma:
                     output.Append(token.Text);
                     break;
 

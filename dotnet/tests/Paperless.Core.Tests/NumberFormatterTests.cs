@@ -278,6 +278,55 @@ public class NumberFormatterTests
         => SpreadsheetDate.FromSerial(serial, SpreadsheetDateSystem.Date1900)
                           .ShouldBe(new DateTime(year, month, day));
 
+    /// <summary>
+    /// A <c>*c</c> directive says where a column-filling repeat goes, and states nothing about
+    /// how much of it there is.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is the whole of the accounting formats — built-in ids 5–8 and 41–44, and every
+    /// <c>_("$"* #,##0.00_)</c> Excel writes — and dropping it silently is what puts an
+    /// accounting cell's currency symbol against its digits instead of against the far edge of
+    /// its column. Extraction has no column, so the default is still to drop it; the marker is
+    /// for the one caller that has a width.
+    /// </para>
+    /// <para>
+    /// The marker is LibreOffice's own: <c>U+001B</c> then the fill character
+    /// (<c>lcl_appendStarFillChar</c>, <c>svl/source/numbers/zformat.cxx:2200</c>).
+    /// </para>
+    /// </remarks>
+    [Theory]
+    // The three numeric subformats of the accounting format, one per sign, and the digits each
+    // shows — so that a change to the fill cannot quietly change the number beside it.
+    [InlineData(1234.5, " $", "1,234.50 ")]
+    [InlineData(-1234.5, " $", "(1,234.50)")]
+    [InlineData(0.0, " $", "-   ")]
+    public void AFillDirectiveMarksWhereItExpands(double value, string before, string after)
+    {
+        const string Accounting =
+            "_(\"$\"* #,##0.00_);_(\"$\"* \\(#,##0.00\\);_(\"$\"* \"-\"??_);_(@_)";
+
+        NumberFormatCode code = NumberFormatCode.Parse(Accounting);
+        code.HasFillDirective.ShouldBeTrue();
+
+        // The fill sits between the currency symbol and the digits, and its character — a space
+        // here — is what a caller holding a column width repeats at that point.
+        NumberFormatter.Format(code, value, keepFillMarkers: true)
+                       .ShouldBe(before + NumberFormatter.FillMarker + " " + after);
+
+        // Nothing of it survives into extracted text: neither the marker nor the one copy of the
+        // fill character beside it, which would otherwise read as a stray space.
+        NumberFormatter.Format(code, value).ShouldBe(before + after);
+    }
+
+    /// <summary>A code with no <c>*</c> says so, so the re-render is never paid for.</summary>
+    [Theory]
+    [InlineData("#,##0.00")]
+    [InlineData("General")]
+    [InlineData("[$£-809]#,##0.00;[RED]-#,##0.00")]
+    public void ACodeWithoutAFillSaysSo(string code)
+        => NumberFormatCode.Parse(code).HasFillDirective.ShouldBeFalse();
+
     [Fact]
     public void The1904EpochIs1462DaysLater()
         => SpreadsheetDate.FromSerial(46233 - SpreadsheetDate.Date1904Offset,

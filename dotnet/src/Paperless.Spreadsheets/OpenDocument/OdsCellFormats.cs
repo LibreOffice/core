@@ -309,6 +309,13 @@ internal static class OdsCellFormats
                 IsItalic = posture is null
                     ? cellFormat.IsItalic
                     : posture is "italic" or "oblique",
+                Underline = Underline(
+                    Span(styleName, "text-underline-style", OdfNamespaces.Style),
+                    Span(styleName, "text-underline-type", OdfNamespaces.Style))
+                    ?? cellFormat.Underline,
+                IsStruckThrough = Struck(
+                    Span(styleName, "text-line-through-style", OdfNamespaces.Style))
+                    ?? cellFormat.IsStruckThrough,
                 Colour = colour ?? cellFormat.Colour,
             };
         }
@@ -371,6 +378,10 @@ internal static class OdsCellFormats
                 FontSize = Points(Text(styleName, "font-size")) ?? Length.FromPoints(10),
                 FontWeight = Weight(Text(styleName, "font-weight")),
                 IsItalic = Text(styleName, "font-style") is "italic" or "oblique",
+                Underline = Underline(
+                    Text(styleName, "text-underline-style"),
+                    Text(styleName, "text-underline-type")) ?? SheetUnderline.None,
+                IsStruckThrough = Struck(Text(styleName, "text-line-through-style")) ?? false,
                 Colour = Rgb(Text(styleName, "color")) ?? Colour.Black,
                 Horizontal = HorizontalOf(styleName),
                 Vertical = VerticalOf(Cell(styleName, "vertical-align", OdfNamespaces.Style)),
@@ -494,6 +505,32 @@ internal static class OdsCellFormats
                ?? styles.ResolveProperty(
                    styleName, OdfStyleFamily.TableCell, OdfPropertyKind.Text,
                    OdfNamespaces.Style, property).Value;
+
+        /// <summary>
+        /// ODF's underline, which is stated as two properties rather than one.
+        /// </summary>
+        /// <remarks>
+        /// <c>style:text-underline-style</c> names the dash pattern — solid, dotted, wave and a
+        /// dozen more — and <c>style:text-underline-type</c> says single or double, so a double
+        /// underline is <c>style="solid" type="double"</c> and not a style of its own. Only the
+        /// count is reproduced; a dotted underline draws solid, which is the same simplification
+        /// <see cref="SheetUnderline"/> already records for Excel's accounting forms.
+        /// </remarks>
+        /// <returns>Null when the style states nothing, so an inherited value survives.</returns>
+        private static SheetUnderline? Underline(string? style, string? type) => style switch
+        {
+            null => null,
+            "none" => SheetUnderline.None,
+            _ => type == "double" ? SheetUnderline.DoubleLine : SheetUnderline.SingleLine,
+        };
+
+        /// <inheritdoc cref="Underline"/>
+        private static bool? Struck(string? style) => style switch
+        {
+            null => null,
+            "none" => false,
+            _ => true,
+        };
 
         private static int Weight(string? value)
             => value switch

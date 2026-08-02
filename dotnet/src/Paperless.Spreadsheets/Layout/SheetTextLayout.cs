@@ -2,7 +2,9 @@ using System.Collections.Concurrent;
 using Paperless.Core.Extraction;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Numbers;
 using Paperless.Core.Units;
+using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
 
 namespace Paperless.Spreadsheets.Layout;
@@ -15,10 +17,16 @@ namespace Paperless.Spreadsheets.Layout;
 /// <c>sc/source/ui/view/output2.cxx:1178</c>.
 /// </param>
 /// <param name="ColumnWidth">The printed width of a column, already scaled.</param>
+/// <param name="BlockLeft">
+/// The left edge of the block of columns being printed, scaled — Calc's <c>mnScrX</c>.
+/// </param>
+/// <param name="BlockRight">Its right edge, Calc's <c>mnScrX + mnScrW</c>.</param>
 internal readonly record struct SheetTextContext(
     double Scale,
     Func<int, int, bool> IsAvailable,
-    Func<int, Length> ColumnWidth);
+    Func<int, Length> ColumnWidth,
+    Length BlockLeft = default,
+    Length BlockRight = default);
 
 /// <summary>One cell as it is about to be drawn.</summary>
 /// <param name="Text">The text the number format produced.</param>
@@ -109,6 +117,7 @@ internal static class SheetTextLayout
 
         Placement placement = Place(context, cell, face);
         if (placement.Lines.Count == 0) return;
+        if (IsOutside(context, placement)) return;
 
         // The cell's own colour is the fallback rather than the answer: a rich cell's portions
         // carry theirs, and a plain one's segment carries none so that the two paths emit the
@@ -146,12 +155,107 @@ internal static class SheetTextLayout
                 {
                     sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
                 }
+
+                Decorate(sink, cell.Format, face, line, fallback);
             }
         }
         finally
         {
             if (clipped) sink.Restore();
         }
+    }
+
+    /// <summary>
+    /// Whether the room the cell was given falls entirely outside the block being printed.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>bOutside</c> (<c>output2.cxx:2037</c>), and it is the whole reason a page does not
+    /// carry every neighbour of its own first column. Calc's string loop starts one column
+    /// <em>before</em> the block so that a long string reaching in from the left is drawn — but
+    /// it then asks of every cell whether what it occupies overlaps the block at all, and draws
+    /// nothing when it does not. A short string in that column is therefore skipped and a long
+    /// one is not, because only the long one's output area, widened through its empty
+    /// neighbours, reaches the paper.
+    /// </para>
+    /// <para>
+    /// Measured: <c>ExampleWhiteListData.xlsx</c> drew twenty part numbers off the left edge of
+    /// its last two pages — <strong>838 words against the reference's 821</strong> — because
+    /// every one of them was the nearest cell left of a band and none of them spilled into it.
+    /// </para>
+    /// <para>
+    /// Calc's rectangle is inclusive at the right, so a cell ending exactly where the block
+    /// begins is outside it; hence the <c>&lt;=</c>.
+    /// </para>
+    /// </remarks>
+    private static bool IsOutside(in SheetTextContext context, in Placement placement)
+        => context.BlockRight > context.BlockLeft
+           && (placement.Right <= context.BlockLeft || placement.Left >= context.BlockRight);
+
+    /// <summary>
+    /// Draws the rules a font asks for under and through one line of a cell.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A cell's underline is a font property in all three formats and is drawn by the output
+    /// device rather than shaped, so it is a filled rectangle under the run and not a glyph. The
+    /// offset and the thickness come from the face's own <c>post</c> and <c>OS/2</c> tables
+    /// through <see cref="LineSpacing.ResolveDecorations"/>, which is the same resolution and the
+    /// same fallbacks the rest of the project uses — a font that declares neither would otherwise
+    /// draw a zero-thickness line, which is to say none.
+    /// </para>
+    /// <para>
+    /// Excel's two accounting underline styles run the full width of the <em>cell</em> rather
+    /// than of the text; both are folded onto their plain counterparts here, so an accounting
+    /// underline is as wide as its number. See <see cref="SheetUnderline"/>.
+    /// </para>
+    /// <para>
+    /// Per line and per cell rather than per portion: a rich cell mixing an underlined run with a
+    /// plain one underlines the whole line. The portions carry the format that would answer
+    /// properly, and the run geometry to place a partial rule with does not exist yet.
+    /// </para>
+    /// </remarks>
+    private static void Decorate(
+        IDrawingSink sink, SheetCellFormat format, SheetFace face, PlacedLine line, Colour colour)
+    {
+        if (format.Underline == SheetUnderline.None && !format.IsStruckThrough) return;
+
+        Length size = line.Run.Size;
+        Length width = line.Run.Width;
+        if (size <= Length.Zero || width <= Length.Zero) return;
+
+        int unitsPerEm = face.Face.UnitsPerEm > 0 ? face.Face.UnitsPerEm : 1000;
+        FontVerticalMetrics metrics = LineSpacing.ResolveDecorations(face.Face, face.Metrics);
+
+        Length Scaled(int designUnits) => size * ((double)designUnits / unitsPerEm);
+
+        if (format.Underline != SheetUnderline.None)
+        {
+            Length thickness = Scaled(metrics.UnderlineThickness);
+
+            // The font records the underline's offset as negative below the baseline.
+            Length top = line.Baseline - Scaled(metrics.UnderlinePosition);
+            Rule(sink, line.X, top, width, thickness, colour);
+
+            if (format.Underline == SheetUnderline.DoubleLine)
+                Rule(sink, line.X, top + (thickness * 2), width, thickness, colour);
+        }
+
+        if (format.IsStruckThrough)
+        {
+            Length thickness = Scaled(metrics.StrikeoutThickness);
+            Rule(sink, line.X, line.Baseline - Scaled(metrics.StrikeoutPosition),
+                 width, thickness, colour);
+        }
+    }
+
+    /// <summary>One horizontal rule, filled rather than stroked so its thickness is exact.</summary>
+    private static void Rule(
+        IDrawingSink sink, Length x, Length top, Length width, Length thickness, Colour colour)
+    {
+        if (thickness <= Length.Zero) return;
+
+        sink.FillPath(Rectangle(new DocRect(x, top, width, thickness)), Paint.Solid(colour));
     }
 
     private static GraphicsPath Rectangle(DocRect rect)
@@ -209,7 +313,7 @@ internal static class SheetTextLayout
         Length leftTotal = margin + indent;
         Length totalMargin = leftTotal + margin;
 
-        string text = cell.Text;
+        (string text, int fillAt, char fillChar) = Fill(cell);
 
         // A value is never rich: SpreadsheetML's formatting runs and ODF's spans belong to a
         // string, and a number that showed several fonts would have nowhere to put them once it
@@ -258,6 +362,17 @@ internal static class SheetTextLayout
         if (format.IsRotated) area = area.Unclipped();
 
         Length available = cell.Box.Width - totalMargin;
+
+        // Between the output area and the shrink, which is where Calc does it
+        // (output2.cxx:1853): the fill is measured against the cell's own column and not
+        // against the room a neighbour lent, so it must not see the widened area — and
+        // everything after it re-measures the text it produced.
+        if (fillAt >= 0 && portions is null
+            && RepeatToFill(text, fillAt, fillChar, face, size, available, run.Width) is { } filled)
+        {
+            text = filled;
+            run = ShapeRange(0, text.Length, percent) ?? run;
+        }
 
         if (shrinks && area.IsClipped && available > Length.Zero && run.Width > Length.Zero)
         {
@@ -354,6 +469,76 @@ internal static class SheetTextLayout
                           or SheetVerticalAlignment.Distributed;
 
         return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
+    }
+
+    // --------------------------------------------------------------------------------- fill
+
+    /// <summary>
+    /// Where a <c>*c</c> fill directive expands in this cell's text, and with which character.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The reader already produced the cell's text with the directive dropped, because
+    /// extraction has no column to fill. Finding the position again means putting the value
+    /// through the code a second time with <c>NumberFormatter.FillMarker</c> left in — which is
+    /// only done for the formats that carry one, and those are the accounting formats.
+    /// </para>
+    /// <para>
+    /// The re-render is trusted only when it reproduces the text the reader produced. The two
+    /// calls resolve the workbook's epoch separately and layout does not carry it, so a date
+    /// format with a fill would come back different — and a disagreement must change nothing
+    /// rather than replace a correct string with a plausible one.
+    /// </para>
+    /// </remarks>
+    private static (string Text, int At, char Fill) Fill(in SheetCellText cell)
+    {
+        if (cell.Format.NumberFormat is not { HasFillDirective: true } code) return (cell.Text, -1, '\0');
+        if (cell.Value is not double value) return (cell.Text, -1, '\0');
+
+        string marked = NumberFormatter.Format(code, value, keepFillMarkers: true);
+        int at = marked.IndexOf(NumberFormatter.FillMarker, StringComparison.Ordinal);
+        if (at < 0 || at + 1 >= marked.Length) return (cell.Text, -1, '\0');
+
+        char fill = marked[at + 1];
+        string plain = marked.Remove(at, 2);
+        return plain == cell.Text ? (plain, at, fill) : (cell.Text, -1, '\0');
+    }
+
+    /// <summary>
+    /// Pads the fill point with as many copies of the fill character as the column has room for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScDrawStringsVars::RepeatToFill</c> (<c>output2.cxx:572</c>), including the two
+    /// deliberate truncations it marks in its own comments. The character's width is taken from
+    /// a twenty-character sample rather than from one copy — "measuring a string containing a
+    /// single copy of the repeat char is inaccurate" — and both the width and the count are
+    /// truncated towards zero, so the fill can never overrun the column by a rounding.
+    /// </para>
+    /// <para>
+    /// Nothing is added when the space left is no wider than one character: an accounting cell
+    /// in a column that only just fits its number shows its symbol against its digits, which is
+    /// what Calc draws.
+    /// </para>
+    /// </remarks>
+    /// <returns>The padded text, or null when nothing fits.</returns>
+    private static string? RepeatToFill(
+        string text, int at, char fill, SheetFace face, Length size, Length available, Length width)
+    {
+        const int SampleSize = 20;
+
+        if (at > text.Length || available <= Length.Zero) return null;
+        if (SheetText.Shape(new string(fill, SampleSize), face, size) is not { } sample) return null;
+
+        double averageWidth = (double)sample.Width.Emu / SampleSize;
+        long characterWidth = (long)averageWidth;
+        if (characterWidth < 1) return null;
+
+        long spaceToFill = (available - width).Emu;
+        if (spaceToFill <= characterWidth) return null;
+
+        int count = (int)(spaceToFill / averageWidth);
+        return count <= 0 ? null : text.Insert(at, new string(fill, count));
     }
 
     // -------------------------------------------------------------------------- output area

@@ -212,6 +212,150 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the third sheets sweep found
+
+Measured at `ef1aac0c8`. `sheets/batch-001` was **6/10**, the weakest level-one batch of the three
+tracks, and its four failures all had the right page count and the wrong word count. Three of them
+turned out to be **one defect**, and it was not the one the handover named.
+
+**Whole track, `sheets/batch-001 … batch-018`, 171 documents: 92 matching against the previous
+round's 84, with total absolute page error unchanged at 1007 and 109 documents on an exactly
+correct page count.** `xls` is 39/62 and `xlsx` 53/109. The page error not moving at all is the
+right result rather than a disappointing one: every fix this round is a word-level fix, none of
+them touches a column width or a row height, and a page count that moved would have meant one of
+them had a side effect nobody asked for. **Page error is where this track's remaining value is**,
+and the item that would move it most is the column-width measurement below.
+
+The 84 is the predecessor's number and was not independently re-measured at `ef1aac0c8`; what was
+re-measured is `sheets/batch-001`, which reproduced the briefed 6/10 and all four of its word
+counts to the digit, and the whole-track page error, which came out at the briefed 1007 exactly.
+
+**An accounting format's `*` fill was dropped, not deferred.** `_("$"* #,##0.00_)` is what Excel
+writes for every accounting cell, and `*c` means "repeat `c` until the column is full" — which is
+what puts the currency symbol against the cell's left edge and the digits against its right. The
+parser threw the directive away with a comment saying it is column-width dependent and therefore
+contributes nothing to extracted text. That is true of extracted text and false of a rendering: the
+symbol came out jammed against the digits at the right-hand end, and `wc -w` scored the missing gap
+as a missing word on every currency cell in the corpus.
+
+LibreOffice keeps the two apart with a flag rather than by dropping it, and the mechanism is worth
+reproducing exactly because it is what makes the two paths one implementation. `SvNumberformat`
+writes `U+001B` followed by the fill character into the output string when `bStarFlag` is set
+(`lcl_appendStarFillChar`, `svl/source/numbers/zformat.cxx:2200`) and emits nothing when it is not;
+Calc's cell output finds the escape, records the position and the character, removes the pair, and
+pads at that point once it knows the column width (`ScDrawStringsVars::RepeatToFill`,
+`sc/source/ui/view/output2.cxx:572`). `NumberFormatter.FillMarker` and its `keepFillMarkers`
+parameter are that flag; `SheetTextLayout.RepeatToFill` is that padding, including both truncations
+Calc marks in its own comments — the character's width is measured from a twenty-copy sample rather
+than one, and both it and the count round towards zero.
+
+Three of the batch's four failures were nothing else:
+`REDAC_SCHEDULE_RPD_135.xls` **178 words against 202**, which is exactly its 24 currency cells;
+`RPD 155 REDAC SCHEDULE 2014-04-02.xls` 133 against 151, of which 16; and
+`einvoice-summary-worksheet.xlsx` **203 against 298**, the largest single gap in the batch.
+
+**The handover's named cause for the two `.xls` files was wrong, and its measurement was right.**
+It attributed their shortfall to the missing BIFF drawing layer and called `MSODRAWING` + `OBJ`/`TXO`
+"the next contained win". Neither file has a drawing at all: `pdftotext -layout` on the two
+renderings side by side shows the reference writing `$   400` where we wrote `$400`, once per
+currency cell, and the counts fall out exactly. The Escher item is still real — `apron-area.xls` and
+its 137 words stand — but it was not this batch's defect.
+
+**A cell whose output area misses the page was drawn anyway.** Calc's string loop starts one column
+*before* the block it prints, so a long string reaching in from the left lands on the page its tail
+falls on (`output2.cxx:1541`); the port had that half. The other half is `bOutside` (`:2037`),
+which skips any cell whose area — its own column, widened through the empty cells beside it — does
+not overlap the block at all. Without it every band's nearest-left neighbour was drawn whether or
+not a stroke of it reached the paper. `ExampleWhiteListData.xlsx` put twenty part numbers off the
+left edge of its last two pages, at `x = -2.6 pt`: **838 words against 821, now 821**. This is the
+one document in the batch where we drew *more* than the reference, and over-drawing is the harder
+direction to notice.
+
+**A merged heading anchored in a hidden column vanished.** A hidden column is not placed on the
+page, so the cell that anchors a merge starting inside one is never reached — and the whole block
+goes with it, however many visible columns it covers. Calc reaches it from the other end: every
+covered cell asks `ScOutputData::GetMergeOrigin` (`:953`) for the block's origin, and that walk
+gives up the moment it steps onto a column that is *not* hidden (`if (!bDoMerge && !bHidden) return
+false;`, `:993`), because that column is either the origin or a nearer covered cell and one of them
+will draw it. So exactly one cell of a block ever draws it: the leftmost whose path back is entirely
+hidden. `RPD 155 REDAC SCHEDULE 2014-04-02.xls`'s `Funds ($000)` is a four-column merge anchored in
+a collapsed column, and it was the last two words of that document's deficit.
+
+`sheets/batch-001` is **10/10** with these three, and nine of the ten pass the ink-imbalance image
+diff. Two of them did not before, and the tenth still does not — both are below.
+
+**A cell's underline was neither read nor drawn, by any of the three readers.** It is the commonest
+decoration a spreadsheet has, because the hyperlink style *is* an underlined blue font, and a column
+heading ruled off from its data is the other half. `FMMO_NMPF_37C.xlsx` passed the word gate — 216
+against 216 — and its ink imbalance against LibreOffice's rendering was 0.45%, all of it the lines
+under its three source links and every one of its headings. It is 0.09% now, which is the image
+comparison's difference between `MAJOR` and `shifted`. `SheetCellFormat` carries
+`Underline` and `IsStruckThrough`, all three readers fill them — SpreadsheetML's `<u val="…"/>`,
+BIFF's `FONT` underline byte and `fStrikeOut` flag, ODF's `style:text-underline-style` plus its
+separate `-type` — and `SheetTextLayout.Decorate` draws them as filled rules from the face's own
+`post` and `OS/2` metrics, through the same `LineSpacing.ResolveDecorations` the rest of the
+project uses. Excel's two *accounting* underline styles run the width of the cell rather than of the
+text and are folded onto their plain counterparts; a dotted or wavy ODF underline draws solid. Both
+are recorded on `SheetUnderline` rather than silently lost.
+
+Not reproduced, and it is one thing: a rich cell mixing an underlined portion with a plain one
+underlines the whole line, because the rule is drawn per line from the cell's own format. The
+portions carry the format that would answer properly and the per-portion run geometry to place a
+partial rule with does not exist yet.
+
+**The last major image difference on the batch is column widths, and its cause is measured.**
+`Patent Index 2024 - Top 100 applicants 2024.xlsx` matches on pages and words and its columns are
+about 20% too narrow, so every column after the first is displaced. SpreadsheetML states a column
+width in *digits of the workbook's default font*, and `DigitWidthTwips` is the constant **111** in
+all three of `Ooxml/XlsxPrintSetup.cs`, `MsBinary/XlsPrintSetup.cs` and `Xlsb/XlsbPrintSetup.cs` —
+the widest digit of **ten-point** Liberation Sans. This workbook's default font is twelve-point
+Arial, whose widest digit is 133 twips, and 133/111 = 1.198 against the 1.20–1.22 the two renderings
+differ by. The existing note under the print-setup section already called this out; what is new is
+that it has now been measured on a document rather than inferred, and that it is the single largest
+systematic error left on this track — **Excel's own default is eleven-point Calibri**, so almost
+every real `.xlsx` is affected, and a column width error moves page counts.
+
+Fixing it is not a constant swap, and the obstacle is a layering rule rather than the arithmetic.
+LibreOffice takes the maximum advance of `'0'`–`'9'` in the default font from its reference device
+in whole twips (`UnitConverter::finalizeImport`, `sc/source/filter/oox/unitconverter.cxx:113-137`),
+which needs a resolved face — and the readers build a `SheetGrid` of lengths while reading, on the
+extraction path, which `dotnet/CLAUDE.md` says must not pay for fonts. Doing it properly means
+`SheetGrid` carrying a column's width in *digits* and resolving it in layout, where a face already
+exists; doing it the quick way puts a font resolution in every `paperless extract` of a workbook.
+
+There is a second, much smaller difference on the same document that this would not fix: the
+reference draws the same text at an em 3.5% larger than ours while placing every row at exactly our
+pitch — 4.096 pt against 3.9569 pt for a twelve-point font at the file's 33% print scale, with the
+first and last rows within 0.03 pt of each other over 700 pt of page. That is a glyph size taken
+down one path and a position taken down another, which is what `ScOutputData`'s split between
+`mpRefDevice` and `mpDev` — and the `GetStretch()` division that goes with it — would produce. It is
+recorded rather than diagnosed.
+
+**Two fixtures were added rather than one, because each of the last two rules has a negative half
+that a single sheet cannot state.** `features/sheet-lead-in.fods` holds two rows differing in
+nothing but the length of one string: the short one must not be drawn on the second page and the
+long one must. `features/sheet-hidden-merge.fods` holds a three-column merge anchored in a collapsed
+column beside an ordinary cell in that same column: the merge must be drawn and the ordinary cell
+must not. Both were checked against LibreOffice's own PDF word by word and position by position
+before being committed, and both are flat ODF so the fixture is readable.
+
+Still open, and found while doing the above:
+
+- **`_c` reserves one space rather than the character's width.** LibreOffice pads with
+  `cCharWidths[c - 32]` blanks — a table of approximate widths in units of a space
+  (`SvNumberformat::InsertBlanks`, `zformat.cxx:90`) — where the parser here always writes one. It
+  happens to be right for `_(` and `_)`, which are what the accounting formats use and what every
+  corpus file reaches, and wrong by one space for a digit or a capital. Porting the table would
+  change extracted text as well as drawn text, so it wants its own measurement.
+- **ODF states no fill directive at all.** `OdfNumberFormat` compiles a `number:*-style` tree into
+  a format code and emits no `*`, so `SheetCellFormat.NumberFormat` is left null on the ODS path
+  and an accounting-formatted ODS draws no fill. Nothing in the corpus reaches it.
+- **XLSB likewise**, for the older reason: `Xlsb/XlsbStyles.cs` reads `styles.bin` only as far as
+  the number format's *code*, and nothing there builds a `SheetCellFormat`.
+- **A merge anchored in a hidden *row* is still lost.** `GetMergeOrigin` walks up as well as left
+  and the port only walks left. No corpus document reaches it, and the shape of the fix is the same
+  loop over rows.
+
 ## What the second sheets sweep found
 
 Measured at `306f86e65` over `sheets/batch-001 … batch-018`, 171 documents: **82 matching, total
