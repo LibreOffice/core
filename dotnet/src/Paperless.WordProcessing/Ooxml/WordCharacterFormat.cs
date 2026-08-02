@@ -115,7 +115,8 @@ public sealed record WordCharacterFormat
             FontSize = size.IntegerValue is { } halfPoints and > 0
                 ? Length.FromPoints(halfPoints / 2.0)
                 : null,
-            FontName = Word.Attribute(Get("rFonts").Element, "ascii"),
+            FontName = WordParagraphFormats.SlotFamily(
+                Get("rFonts").Element, theme?.Fonts, "ascii", "asciiTheme"),
             Colour = WordThemeColour.Read(colour.Element, theme),
             Language = Get("lang").Value,
         };

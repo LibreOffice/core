@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- So the property-resolution rules can be tested where they live, rather than only
+         through a whole package. -->
+    <InternalsVisibleTo Include="Paperless.WordProcessing.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
     <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
     <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />

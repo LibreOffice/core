@@ -334,7 +334,7 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "pPr");
 
-        WordTextStyle text = WordParagraphFormats.ResolveText(_styles, properties);
+        WordTextStyle text = WordParagraphFormats.ResolveText(_styles, properties, _theme);
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
