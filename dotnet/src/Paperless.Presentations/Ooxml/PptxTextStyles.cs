@@ -160,6 +160,16 @@ internal sealed class PptxTextStyles
         XElement? masterStyle = Ppt.Child(Ppt.Child(_master, "txStyles"), textStyle ?? "otherStyle");
         if (DrawingTextBody.LevelProperties(masterStyle, level) is { } fromMaster) yield return fromMaster;
 
+        // A placeholder's chain ends at the master's own style for its kind. p:defaultTextStyle
+        // is reached only by a shape that found none — PPTShape::createAndInsert picks the
+        // title, body or notes style by placeholder subtype and consults
+        // getDefaultTextStyle() strictly under "if (!aMasterTextListStyle)"
+        // (oox/source/ppt/pptshape.cxx:257-291 and 492-497). Letting a title fall through to it
+        // is not a harmless extra rung: a deck converted from .ppt states
+        // <a:buChar char="•"/> at every level of p:defaultTextStyle, so every title on every
+        // slide acquires a bullet the reference does not draw.
+        if (textStyle is not null) yield break;
+
         if (DrawingTextBody.LevelProperties(_defaultTextStyle, level) is { } fromDefault)
             yield return fromDefault;
     }
