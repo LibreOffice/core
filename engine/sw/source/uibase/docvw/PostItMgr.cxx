@@ -1063,15 +1063,10 @@ void SwPostItMgr::LayoutPostIts()
                             else
                                 nTextHeight = pPostIt->GuessTextHeightForWidth(nSidebarWidth);
 
-                            tools::Long postItPixelTextHeight
-                                = (comphelper::COKit::isActive()
-                                       ? mpEditWin->LogicToPixel(Point(0, nTextHeight)).Y()
-                                       : nTextHeight);
-                            aPostItHeight
-                                = (postItPixelTextHeight < pPostIt->GetMinimumSizeWithoutMeta()
-                                       ? pPostIt->GetMinimumSizeWithoutMeta()
-                                       : postItPixelTextHeight)
-                                  + pPostIt->GetMetaHeight();
+                            aPostItHeight = (nTextHeight < pPostIt->GetMinimumSizeWithoutMeta()
+                                                 ? pPostIt->GetMinimumSizeWithoutMeta()
+                                                 : nTextHeight)
+                                            + pPostIt->GetMetaHeight();
                             pPostIt->SetPosSizePixelRect( mlPageBorder ,
                                                           Y - GetInitialAnchorDistance(),
                                                           nSidebarWidth,

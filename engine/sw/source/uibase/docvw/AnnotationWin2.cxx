@@ -174,24 +174,6 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement, OUString());
     }
 
-    auto lclSizePixelToLogic = [this](Size szs) {
-        // In COKit, SwAnnotationWin doesn't have the right conversion when
-        // printing to PDF but mxSidebarTextControl does
-        if (comphelper::COKit::isActive())
-            return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(szs);
-        else
-            return PixelToLogic(szs);
-    };
-
-    auto lclPointPixelToLogic = [this](Point pnt) {
-        // In COKit, SwAnnotationWin doesn't have the right conversion when
-        // printing to PDF but mxSidebarTextControl does
-        if (comphelper::COKit::isActive())
-            return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(pnt);
-        else
-            return PixelToLogic(pnt);
-    };
-
     pDev->Push();
 
     pDev->SetFillColor(mColorDark);
@@ -202,7 +184,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     aFont.SetFontHeight(aFont.GetFontHeight() * 20);
     pDev->SetFont(aFont);
 
-    Size aSz = lclSizePixelToLogic(GetSizePixel());
+    Size aSz = PixelToLogic(GetSizePixel());
 
     pDev->DrawRect(tools::Rectangle(rPt, aSz));
 
@@ -210,8 +192,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataAuthor->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
-        Size aSize(lclSizePixelToLogic(Size(width, height)));
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
 
         auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -222,8 +204,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataDate->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
-        Size aSize(lclSizePixelToLogic(Size(width, height)));
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
 
         auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -234,8 +216,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataResolved->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
-        Size aSize(lclSizePixelToLogic(Size(width, height)));
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
 
         auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -261,7 +243,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         // completely shown
         int x, y, width, height;
         mxMenuButton->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
         pDev->DrawText(aPos, u"..."_ustr);
     }
 
@@ -530,14 +512,6 @@ void SwAnnotationWin::SetMenuButtonColors()
 
 void SwAnnotationWin::Rescale()
 {
-    // On Android, this method leads to invoke ImpEditEngine::UpdateViews
-    // which hides the text cursor. Moreover it causes sudden document scroll
-    // when modifying a commented text. Not clear the root cause,
-    // anyway skipping this method fixes the problem, and there should be
-    // no side effect, since the client has disabled annotations rendering.
-    if (comphelper::COKit::isActive())
-        return;
-
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
     // Avoid re-initialising state unless something has changed to invalidate it. speeds up scrolling.
@@ -545,6 +519,10 @@ void SwAnnotationWin::Rescale()
         return;
     SetMapMode( aMode );
     mxSidebarTextControl->SetMapMode( aMode );
+
+    // Nothing below this rescales anything a Kit client draws for itself
+    if (comphelper::COKit::isActive())
+        return;
 
     SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
     if (!pWrtShell)
