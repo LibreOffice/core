@@ -591,6 +591,14 @@ internal static class PptxTextBody
         string? strike = First(
             runProperties, defaults, element => Drawing.Attribute(element, "strike"));
 
+        // a:rPr/@baseline, in thousandths of a percent of the em, and the size that goes with it
+        // is not in the file: LibreOffice divides the attribute by 1000 and pairs it with
+        // DFLT_ESC_PROP, so 30000 means "raised 30% and set at 58%"
+        // (oox/source/drawingml/textcharacterproperties.cxx:196-199). The shrink is the half that
+        // moves line breaks — an ordinal set full size is 42% wider than the reference draws it.
+        int baseline = First(runProperties, defaults, element => Drawing.Number(element, "baseline"))
+                       ?? 0;
+
         return new SlideTextRun(
             start,
             length,
@@ -601,7 +609,10 @@ internal static class PptxTextBody
             colour ?? Colour.Black,
             Length.FromEmu(tracking * Length.EmuPerPoint / 100),
             IsUnderlined: underline is not null and not "none",
-            IsStruckThrough: strike is not null and not "noStrike");
+            IsStruckThrough: strike is not null and not "noStrike",
+            Escapement: baseline == 0
+                ? SlideEscapement.None
+                : new SlideEscapement(baseline / 1000, SlideEscapement.AutomaticProportion));
     }
 
     /// <summary>

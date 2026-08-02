@@ -233,6 +233,64 @@ public readonly record struct SlideMarker(
     Colour? Colour = null,
     bool IsSymbol = true);
 
+/// <summary>
+/// A run raised or lowered off its baseline, and shrunk while it is up there.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Two numbers rather than one because a slide's formats state two: DrawingML's
+/// <c>a:rPr/@baseline</c> gives the offset alone and the importer supplies the size
+/// (<c>oox/source/drawingml/textcharacterproperties.cxx:196-199</c>), and a binary PowerPoint's
+/// <c>PPT_CharAttr_Escapement</c> does the same
+/// (<c>filter/source/msfilter/svdfppt.cxx:5764-5775</c>). Both end as one
+/// <c>SvxEscapementItem(nEsc, nProp)</c>, which is this pair.
+/// </para>
+/// <para>
+/// <strong>The percentage is of the em size here, not of the font's height.</strong> That is
+/// where a slide differs from a word processor: EditEngine draws the run at
+/// <c>GetFontSize().Height() × nEsc / 100</c> above the pen
+/// (<c>editeng/source/items/svxfont.cxx:549-558</c>), where Writer's <c>swfont.cxx</c> takes the
+/// same percentage of the unshrunk font's ascent-plus-descent. Using the wrong one of the two
+/// misplaces a superscript by about a fifth of its rise.
+/// </para>
+/// <para>
+/// The size matters more than the offset does, because it moves line breaks: a 12 pt run set at
+/// 58% is 42% narrower, so a line that fits with the shrink wraps without it. Measured on
+/// <c>slides/batch-003/pptx/NCW-2024-Guide-.pptx</c>, whose dates are written
+/// <c>5<sup>th</sup> March</c>: drawing the ordinals full size wraps one line of a text box that
+/// already overflows the slide, which pushes its last paragraph off the bottom edge.
+/// </para>
+/// </remarks>
+/// <param name="Percent">
+/// How far the run moves, as a percentage of its em size; positive raises it and negative lowers
+/// it.
+/// </param>
+/// <param name="Proportion">
+/// The size the run is set at, as a percentage of the size it would otherwise take. Zero and 100
+/// both mean no change, so a default-constructed value is "no escapement at all".
+/// </param>
+public readonly record struct SlideEscapement(int Percent, int Proportion)
+{
+    /// <summary>The size an escaped run is set at when the file states only an offset.</summary>
+    /// <remarks><c>DFLT_ESC_PROP</c>, <c>include/editeng/escapementitem.hxx:30</c>.</remarks>
+    public const int AutomaticProportion = 58;
+
+    /// <summary>Neither moved nor resized.</summary>
+    public static SlideEscapement None => default;
+
+    /// <summary>True when the run sits on its baseline at its own size.</summary>
+    public bool IsNone => Percent == 0 && Proportion is 0 or 100;
+
+    /// <summary>The size the run is actually set at, given the size it would otherwise take.</summary>
+    public Length SizeOf(Length emSize)
+        => Proportion is 0 or 100 ? emSize : emSize * (Proportion / 100.0);
+
+    /// <summary>How far the run sits above its baseline, negative for a subscript.</summary>
+    /// <param name="emSize">The size the run would take were it not escaped.</param>
+    public Length RiseOf(Length emSize)
+        => Percent == 0 ? Length.Zero : emSize * (Percent / 100.0);
+}
+
 /// <summary>One run of a paragraph: a range of its text with its own face, size and colour.</summary>
 /// <param name="Start">The run's first character.</param>
 /// <param name="Length">How many characters it covers.</param>
@@ -252,6 +310,11 @@ public readonly record struct SlideMarker(
 /// break and is drawn from the face's own <c>post</c> metrics after the text is placed.
 /// </param>
 /// <param name="IsStruckThrough">Whether a rule is drawn through it.</param>
+/// <param name="Escapement">
+/// How far off its baseline the run sits and how much it shrinks to sit there — a superscript or
+/// a subscript. Unlike the decorations above, this <em>does</em> move line breaks, because the
+/// shrink is what makes the run narrower.
+/// </param>
 public readonly record struct SlideTextRun(
     int Start,
     int Length,
@@ -262,7 +325,8 @@ public readonly record struct SlideTextRun(
     Colour Colour,
     Length Tracking = default,
     bool IsUnderlined = false,
-    bool IsStruckThrough = false)
+    bool IsStruckThrough = false,
+    SlideEscapement Escapement = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;

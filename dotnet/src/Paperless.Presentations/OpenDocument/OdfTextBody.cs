@@ -394,8 +394,25 @@ internal static class OdfTextBody
             format.FontSize ?? DefaultSize,
             format.IsBold ? 700 : 400,
             format.IsItalic,
-            format.Colour ?? Colour.Black);
+            format.Colour ?? Colour.Black,
+            Escapement: Escaped(format.Position));
     }
+
+    /// <summary>
+    /// The rise and shrink an ODF text position asks for.
+    /// </summary>
+    /// <remarks>
+    /// <c>style:text-position</c> can state both numbers and <see cref="OdfTextFormat"/> keeps
+    /// only the direction, so this is LibreOffice's automatic pair: 58% of the size, raised or
+    /// lowered by <c>0.8 × (100 − 58)</c> of it (<c>editeng/source/items/svxfont.cxx:85-91</c>,
+    /// which is where <c>DFLT_ESC_SUPER</c>'s 33 comes from).
+    /// </remarks>
+    private static SlideEscapement Escaped(OdfTextPosition position) => position switch
+    {
+        OdfTextPosition.Superscript => new SlideEscapement(33, SlideEscapement.AutomaticProportion),
+        OdfTextPosition.Subscript => new SlideEscapement(-33, SlideEscapement.AutomaticProportion),
+        _ => SlideEscapement.None,
+    };
 
     /// <summary>
     /// The family name a <c>style:font-name</c> refers to.

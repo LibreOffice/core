@@ -53,6 +53,9 @@ internal static class PptTextBody
     private const uint StatesFontHeight = 0x0002_0000;
     private const uint StatesColour = 0x0004_0000;
 
+    /// <summary>The mask bit for a raised or lowered baseline, <c>PPT_CharAttr_Escapement</c>.</summary>
+    private const uint StatesEscapement = 0x0008_0000;
+
     /// <summary>
     /// Builds a body, or returns null when the run holds nothing to draw.
     /// </summary>
@@ -304,6 +307,12 @@ internal static class PptTextBody
         RunEmphasis emphasis = (level.Emphasis & ~character.Stated)
                                | (character.Emphasis & character.Stated);
 
+        // Already a percentage in the file, so it goes straight through; the size that goes with
+        // it does not, and LibreOffice supplies DFLT_ESC_PROP whenever the value is non-zero
+        // (filter/source/msfilter/svdfppt.cxx:5764-5775).
+        short escapement =
+            character.States(StatesEscapement) ? character.Escapement : level.Escapement;
+
         return new SlideTextRun(
             start,
             length,
@@ -313,7 +322,10 @@ internal static class PptTextBody
             emphasis.HasFlag(RunEmphasis.Italic),
             PptColour.ResolveText(colour, scheme) ?? Colour.Black,
             IsUnderlined: emphasis.HasFlag(RunEmphasis.Underline),
-            IsStruckThrough: emphasis.HasFlag(RunEmphasis.Strikethrough));
+            IsStruckThrough: emphasis.HasFlag(RunEmphasis.Strikethrough),
+            Escapement: escapement == 0
+                ? SlideEscapement.None
+                : new SlideEscapement(escapement, SlideEscapement.AutomaticProportion));
     }
 
     /// <summary>
