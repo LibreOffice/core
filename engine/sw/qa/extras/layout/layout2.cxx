@@ -13,6 +13,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/unolingu.hxx>
@@ -1978,6 +1979,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the Y position of horizontal category axis label.
     sal_Int32 nYposition = getXPath(pXmlDoc, "(//textarray)[7]", "y").toInt32();
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font rather than the map mode, so the label position is in the page's
+        // own units instead of the chart's
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8058, nYposition, 20);
+        return;
+    }
     CPPUNIT_ASSERT_DOUBLES_EQUAL(11248, nYposition, 20);
 }
 

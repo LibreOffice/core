@@ -18,6 +18,7 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
@@ -285,6 +286,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf137116)
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]", "x").toInt32(); // second data label
     sal_Int32 nX4 = getXPath(pXmlDoc, "(//textarray)[4]", "x").toInt32(); // fourth data label
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font rather than the map mode, so the label positions are in the
+        // page's own units instead of the chart's, and their distance shrinks with them
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(589, nX2 - nX4, 100);
+        return;
+    }
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1229
     // - Actual  : -225
@@ -342,6 +350,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf130031)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font rather than the map mode, so the label position is in the page's
+        // own units instead of the chart's
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4346, nY, 50);
+        return;
+    }
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4653
     // - Actual  : 2182
@@ -361,6 +376,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf130242)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit scales the font rather than the map mode, so the label positions are in the
+        // page's own units instead of the chart's
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4958, nY, 50);
+        nY = getXPath(pXmlDoc, "(//textarray)[13]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
+        return;
+    }
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 5758
     // - Actual  : 3352
