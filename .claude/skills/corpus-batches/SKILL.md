@@ -237,6 +237,37 @@ CPU is the softer limit: agents are mostly waiting on model calls, and the burst
 builds and renders. On four cores, four agents plus a background sweep pushed load average
 to ~8 and roughly halved sweep throughput, but nothing failed.
 
+### Symptom clusters can still share a root cause
+
+Splitting by symptom stops agents working the same *documents*. It does not stop them
+working the same *bug*. Measured: the under-pagination agent and the over-pagination agent —
+opposite signs, disjoint document lists — independently found and fixed the same defect,
+that a table style's `w:pPr` was never applied. Two implementations, two commits, one
+conflict.
+
+That is not an argument against the split; it is an argument for telling agents what the
+others have found as they find it. When an agent reports a root cause, pass it to the others
+still running. The cost of a duplicated fix is a merge conflict in the hottest file in the
+tree, which is exactly where you least want one.
+
+Expect it especially where two clusters are *opposite signs of one quantity*. Too much
+vertical space and too little are the same code with the same bugs, and a document lands in
+one bucket or the other depending on which of several errors happens to dominate.
+
+### Fixes that cancel: a green document is not necessarily a correct one
+
+The over-pagination agent's changes moved 19 documents *further* from the reference and cost
+5 full matches — all in the same direction, all previously passing because **a too-small
+line height and too-large paragraph spacing were cancelling**. Removing one error exposed
+the other.
+
+So a match count can fall while the code gets strictly better, and the honest way to see
+that is to track a continuous quantity alongside the binary one. Total absolute page error
+across the track went 385 → 357, and documents with an exactly-correct page count went
+100 → 109, over the same change that dropped 5 matches. Report both, and do not revert a
+change that is right on its own evidence because a compensating bug elsewhere made the old
+number look better.
+
 ### Merging several agents into one branch
 
 Merge one agent at a time, and **re-verify after each merge, not once at the end**. The
