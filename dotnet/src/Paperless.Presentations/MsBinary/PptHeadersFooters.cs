@@ -164,4 +164,14 @@ internal static class PptPlaceholders
     /// every slide of a French deck carries "Cliquez pour modifier le style du titre".
     /// </remarks>
     public static bool IsMasterPrompt(int id) => id is >= MasterTitle and <= MasterNotesBodyImage;
+
+    /// <summary>
+    /// Whether an id names one of the four running placeholders — date, slide number, footer,
+    /// header — that a slide switches on and off and can recolour.
+    /// </summary>
+    /// <remarks>
+    /// These are the four <c>HeaderFooterOfs</c> records exactly
+    /// (<c>filter/source/msfilter/svdfppt.cxx:756-772</c>).
+    /// </remarks>
+    public static bool IsRunning(int id) => id is >= MasterDate and <= MasterHeader;
 }

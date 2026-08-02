@@ -63,6 +63,25 @@ public sealed class PptColourScheme
     public Colour this[int slot]
         => slot >= 0 && slot < SlotCount ? _slots[slot] : Default._slots[BackgroundSlot];
 
+    /// <summary>Whether two schemes name the same eight colours.</summary>
+    /// <remarks>
+    /// LibreOffice compares the thirty-two raw bytes (<c>HeaderFooterEntry::NeedToImportInstance</c>,
+    /// <c>svdfppt.cxx:3131</c>). The fourth byte of each slot is ignored on read, so comparing the
+    /// eight colours is the same test on any file whose padding is what the writer put there.
+    /// </remarks>
+    /// <param name="other">The scheme to compare against.</param>
+    public bool SameColoursAs(PptColourScheme? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        for (int slot = 0; slot < SlotCount; slot++)
+        {
+            if (_slots[slot] != other._slots[slot]) return false;
+        }
+        return true;
+    }
+
     /// <summary>
     /// Reads a <c>ColorSchemeAtom</c> payload, or returns null when it is too short to be one.
     /// </summary>

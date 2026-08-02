@@ -366,9 +366,44 @@ internal sealed class PptSlideLayout
     /// </remarks>
     private PptColourScheme SchemeFor(DffRecordHeader page, uint masterId, ushort flags)
     {
-        if ((flags & 0x0002) == 0 && SchemeOf(page) is { } own) return own;
+        if ((flags & FollowMasterScheme) == 0 && SchemeOf(page) is { } own) return own;
         if (_schemesByMaster.TryGetValue(masterId, out PptColourScheme? master)) return master;
         return SchemeOf(page) ?? PptColourScheme.Default;
+    }
+
+    /// <summary>
+    /// The scheme the master's running placeholders have to be re-resolved under, or null when the
+    /// master's own scheme is right for them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is <c>HeaderFooterEntry::NeedToImportInstance</c>
+    /// (<c>filter/source/msfilter/svdfppt.cxx:3125</c>). The date, header, footer and slide number
+    /// are shapes on the master, so drawing them means drawing master shapes — but a slide that
+    /// recolours itself has to draw them in <em>its own</em> colours, or a deck whose title slide
+    /// inverts the scheme shows a dark footer on a dark background.
+    /// </para>
+    /// <para>
+    /// LibreOffice implements it by re-importing each placeholder from the master's recorded file
+    /// offset (<c>HeaderFooterOfs</c>, set at <c>svdfppt.cxx:772</c> for exactly these four ids)
+    /// into the <em>slide's</em> <c>ProcessData</c>, so the same Escher shape resolves its scheme
+    /// colours against the slide. Here the master's shapes are walked anyway, so the equivalent is
+    /// to hand those four a different scheme rather than to read them twice.
+    /// </para>
+    /// <para>
+    /// The condition is both halves of the reference's: the slide must not be following the
+    /// master's scheme, <em>and</em> the two schemes must actually differ. A slide that states its
+    /// own atom identical to its master's — which is what PowerPoint writes on most pages — is
+    /// not a recolour and must keep drawing under the master's.
+    /// </para>
+    /// </remarks>
+    private PptColourScheme? RecolouredRunningPlaceholders(
+        uint masterId, ushort flags, PptColourScheme slideScheme)
+    {
+        if ((flags & FollowMasterScheme) != 0) return null;
+        if (!_schemesByMaster.TryGetValue(masterId, out PptColourScheme? master)) return null;
+
+        return slideScheme.SameColoursAs(master) ? null : slideScheme;
     }
 
     private LaidOutSlide LayoutSlide(
@@ -410,7 +445,9 @@ internal sealed class PptSlideLayout
 
         if ((flags & FollowMasterObjects) != 0)
         {
-            AddMasterShapes(masterId, runningPlaceholders, fields, shapes);
+            AddMasterShapes(
+                masterId, runningPlaceholders, fields,
+                RecolouredRunningPlaceholders(masterId, flags, scheme), shapes);
         }
 
         if (_stream.FirstChild(page, PptRecordTypes.Drawing) is { } drawing
@@ -441,6 +478,12 @@ internal sealed class PptSlideLayout
     /// layer out of the page's visible set (<c>sd/source/filter/ppt/pptin.cxx:1548-1557</c>).
     /// </remarks>
     private const ushort FollowMasterObjects = 0x0001;
+
+    /// <summary>
+    /// Bit 1 of a <c>SlideAtom</c>'s flags: resolve scheme colours against the master's atom
+    /// rather than the page's own (<c>svdfppt.cxx:2566-2604</c>).
+    /// </summary>
+    private const ushort FollowMasterScheme = 0x0002;
 
     /// <summary>The <c>SlideLayoutAtom</c> geometry meaning "title slide".</summary>
     private const int TitleSlideLayout = 0;
@@ -562,6 +605,7 @@ internal sealed class PptSlideLayout
         uint masterId,
         PptHeadersFooters runningPlaceholders,
         PptFieldValues fields,
+        PptColourScheme? recoloured,
         List<PlacedShape> shapes)
     {
         if (!_pagesByMaster.TryGetValue(masterId, out DffRecordHeader master)) return;
@@ -575,13 +619,19 @@ internal sealed class PptSlideLayout
             _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles,
             fields);
 
+        Context slideColours = recoloured is null ? context : context with { Scheme = recoloured };
+
         foreach (EscherShape shape in _escher.ReadDrawing(container))
         {
             int placeholder = PlaceholderOf(shape);
             if (PptPlaceholders.IsMasterPrompt(placeholder)) continue;
             if (!runningPlaceholders.Shows(placeholder)) continue;
 
-            Add(shape, context, AffineTransform.Identity, shapes, depth: 0);
+            // Only the four running placeholders move to the slide's scheme; the master's own
+            // decorations stay in the master's, which is what re-importing exactly the shapes
+            // HeaderFooterOfs recorded amounts to.
+            Context effective = PptPlaceholders.IsRunning(placeholder) ? slideColours : context;
+            Add(shape, effective, AffineTransform.Identity, shapes, depth: 0);
         }
     }
 

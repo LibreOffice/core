@@ -428,14 +428,73 @@ internal static class PptxTextBody
     /// </remarks>
     private static SlideMarker Marked(
         string text, List<XElement> chain, DrawingTheme? theme, bool isSymbol = true)
-        => new(
-                text,
-                Drawing.Attribute(Child(chain, "buFont"), "typeface"),
+    {
+        XElement? font = Child(chain, "buFont");
+
+        // Only a stated character is a symbol position. A generated number is digits whatever
+        // face the level names for its bullet, and recoding it would make nonsense of it.
+        bool symbolFont = isSymbol && IsSymbolFont(font);
+
+        return new SlideMarker(
+                symbolFont ? OutlineNumbers.NormaliseBullet(Symbolised(text)) : text,
+
+                // The face is kept even for a symbol bullet: LibreOffice sets both PROP_BulletFont
+                // and PROP_BulletFontName from it and lets the substitution find OpenSymbol
+                // (textparagraphproperties.cxx:347-348). Dropping it here draws the bullet in the
+                // body face instead, which is a different glyph and a different embedded program.
+                Drawing.Attribute(font, "typeface"),
                 Drawing.Number(Child(chain, "buSzPct"), "val") is { } percent && percent > 0
                     ? percent / 100000.0
                     : 1.0,
                 ColourIn(Child(chain, "buClr"), theme),
                 isSymbol);
+    }
+
+    /// <summary>
+    /// Whether an <c>a:buFont</c> names a face whose code points are symbol positions rather than
+    /// characters.
+    /// </summary>
+    /// <remarks>
+    /// <c>charset="2"</c> is <c>SYMBOL_CHARSET</c> and is the attribute that decides it; the name
+    /// list behind it is LibreOffice's, which checks both because writers omit the charset on the
+    /// very faces that most need it (<c>oox/source/drawingml/textparagraphproperties.cxx:334-346</c>,
+    /// with the charset read at <c>textfont.cxx:92</c>).
+    /// </remarks>
+    private static bool IsSymbolFont(XElement? font)
+    {
+        if (font is null) return false;
+        if (Drawing.Attribute(font, "charset") is "2" or "0x02") return true;
+
+        string? typeface = Drawing.Attribute(font, "typeface");
+        return typeface is not null && SymbolFaces.Contains(typeface);
+    }
+
+    private static readonly HashSet<string> SymbolFaces = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Wingdings", "Wingdings 2", "Wingdings 3", "Monotype Sorts", "Monotype Sorts 2",
+        "Webdings", "StarBats", "StarMath", "ZapfDingbats",
+    };
+
+    /// <summary>
+    /// Moves a symbol-font bullet into the Private Use Area the way the reference does.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A file states a Wingdings bullet by the byte its position has in the legacy symbol
+    /// encoding, so <c>char="§"</c> means position 0xA7 and not the section sign. LibreOffice
+    /// rewrites it as <c>(c &amp; 0x00ff) | 0xf000</c>
+    /// (<c>oox/source/drawingml/textparagraphproperties.cxx:358-361</c>), which is where the
+    /// glyph really lives in the symbol-encoded face.
+    /// </para>
+    /// <para>
+    /// Doing only that would draw nothing on a machine without the face, so the result goes on
+    /// through <see cref="OutlineNumbers.NormaliseBullet"/> to U+2022 — the same two steps the
+    /// binary path already takes (<c>PptTextReader.Symbolised</c>), and the reason a
+    /// <c>.ppt</c> and a <c>.pptx</c> of the same deck no longer draw different bullets.
+    /// </para>
+    /// </remarks>
+    private static string Symbolised(string bullet)
+        => bullet.Length == 1 ? ((char)(0xF000 | (bullet[0] & 0x00FF))).ToString() : bullet;
 
     /// <summary>
     /// The colour a wrapper element holds directly, rather than through an <c>a:solidFill</c>.

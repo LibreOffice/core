@@ -2119,7 +2119,7 @@ internal sealed class EmfReader
         bool poly = type is EmfRecordType.PolyTextOutA or EmfRecordType.PolyTextOutW;
 
         Skip(16);                       // bounds
-        Skip(4);                        // graphics mode; see the remarks on TextScale
+        uint graphicsMode = U32();
         float scaleX = Single();
         float scaleY = Single();
 
@@ -2176,8 +2176,8 @@ internal sealed class EmfReader
 
             if (!data.IsEmpty)
             {
-                if (glyphs) DrawGlyphs(Glyphs(data), x, y, alignment, advances, scaleX, scaleY);
-                else DrawText(Text(data, eightBit), x, y, alignment, advances, scaleX, scaleY);
+                if (glyphs) DrawGlyphs(Glyphs(data), x, y, alignment, advances, scaleX, scaleY, graphicsMode);
+                else DrawText(Text(data, eightBit), x, y, alignment, advances, scaleX, scaleY, graphicsMode);
             }
 
             if (clipped) _context.Clip = saved;
@@ -2192,7 +2192,7 @@ internal sealed class EmfReader
         int y = I32();
         int characters = (int)U32();
         uint options = U32();
-        Skip(4);                        // graphics mode
+        uint graphicsMode = U32();
         float scaleX = Single();
         float scaleY = Single();
 
@@ -2228,7 +2228,7 @@ internal sealed class EmfReader
             _context.Clip.Intersect(rect);
         }
 
-        DrawText(Text(data, eightBit), x, y, alignment, null, scaleX, scaleY);
+        DrawText(Text(data, eightBit), x, y, alignment, null, scaleX, scaleY, graphicsMode);
 
         if (clipped) _context.Clip = saved;
         _context.BackgroundMode = background;
@@ -2318,7 +2318,8 @@ internal sealed class EmfReader
         TextAlignment alignment,
         IReadOnlyList<Length>? advances,
         float scaleX,
-        float scaleY)
+        float scaleY,
+        uint graphicsMode)
     {
         if (string.IsNullOrEmpty(text)) return;
 
@@ -2326,7 +2327,7 @@ internal sealed class EmfReader
             ? Map(_context.CurrentPosition.X, _context.CurrentPosition.Y)
             : Map(x, y);
 
-        MetafileFont font = TextScale(scaleX, scaleY, out double extra);
+        MetafileFont font = TextScale(scaleX, scaleY, graphicsMode, out double extra);
 
         if (_text.Layout(text, font, reference, alignment, advances) is not { } laid) return;
 
@@ -2344,7 +2345,8 @@ internal sealed class EmfReader
         TextAlignment alignment,
         IReadOnlyList<Length>? advances,
         float scaleX,
-        float scaleY)
+        float scaleY,
+        uint graphicsMode)
     {
         if (glyphs.Length == 0) return;
 
@@ -2352,7 +2354,7 @@ internal sealed class EmfReader
             ? Map(_context.CurrentPosition.X, _context.CurrentPosition.Y)
             : Map(x, y);
 
-        MetafileFont font = TextScale(scaleX, scaleY, out double extra);
+        MetafileFont font = TextScale(scaleX, scaleY, graphicsMode, out double extra);
 
         if (_text.LayoutGlyphs(glyphs, font, reference, alignment, advances) is not { } laid) return;
 
@@ -2363,21 +2365,55 @@ internal sealed class EmfReader
         AdvanceCurrentPosition(alignment, laid.Width);
     }
 
+    /// <summary>The record's <c>iGraphicsMode</c> value meaning <c>GM_ADVANCED</c>.</summary>
+    private const uint GraphicsModeAdvanced = 2;
+
     /// <summary>
-    /// Applies a text record's own scale factors to the selected font.
+    /// Works out how the selected font has to be turned or condensed for one text record.
     /// </summary>
     /// <remarks>
-    /// The two floats on every EMF text record are the recording device's page-to-device scale.
-    /// When they differ in magnitude the font is condensed or expanded by their ratio, and when
-    /// exactly one is negative the coordinate system is mirrored on one axis, which reverses the
-    /// direction the text reads in without mirroring the glyphs
-    /// (<c>MtfTools::DrawText</c>, <c>mtftools.cxx:2100-2136</c>).
+    /// <para>
+    /// <b>Which of the two rules applies is decided by the record's own graphics mode, not by the
+    /// device context's</b> — <c>MtfTools::DrawText</c> takes <c>iGraphicsMode</c> straight off the
+    /// record and branches on it (<c>emfio/source/reader/mtftools.cxx:2083-2138</c>, called from
+    /// <c>emfreader.cxx:2055</c> and <c>:2273</c>).
+    /// </para>
+    /// <para>
+    /// <b><c>GM_ADVANCED</c>: the world transform rotates the text.</b> In advanced mode a
+    /// producer turns text by turning the coordinate system rather than by setting a font
+    /// escapement, so the escapement is zero and the rotation only exists in the transform. It is
+    /// recovered by mapping the local <em>Y</em> axis and reading the angle off the result — which
+    /// is what <c>mtftools.cxx:2085-2100</c> does, and why the +90° is there: the vector measured
+    /// is the up direction, and the font's orientation describes the reading direction, a quarter
+    /// turn from it. <c>2014BSA_Sunday_Killion.pptx</c> is the corpus case; its chart EMFs draw
+    /// each category label under its own <c>EMR_MODIFYWORLDTRANSFORM</c> of
+    /// <c>[0 −1; 1 0]</c> with <c>lfEscapement</c> zero, so without this the fourteen labels are
+    /// drawn flat and overlapping instead of turned on their sides.
+    /// </para>
+    /// <para>
+    /// <b><c>GM_COMPATIBLE</c>: the record's own scale factors do it.</b> The two floats are the
+    /// recording device's page-to-device scale; differing magnitudes condense or expand the font
+    /// by their ratio, and a negative one mirrors an axis, which reverses the direction the text
+    /// reads in without mirroring the glyphs.
+    /// </para>
+    /// <para>
+    /// The two are exclusive in the reference, and deliberately so: an advanced-mode record's
+    /// scale factors have already been folded into its transform, so applying them again would
+    /// condense the font twice.
+    /// </para>
     /// </remarks>
-    private MetafileFont TextScale(float scaleX, float scaleY, out double extraRotation)
+    private MetafileFont TextScale(
+        float scaleX, float scaleY, uint graphicsMode, out double extraRotation)
     {
         extraRotation = 0;
 
         MetafileFont font = _context.Font;
+
+        if (graphicsMode == GraphicsModeAdvanced)
+        {
+            extraRotation = TransformRotation();
+            return font;
+        }
 
         if (!float.IsFinite(scaleX) || !float.IsFinite(scaleY) || scaleX == 0 || scaleY == 0) return font;
 
@@ -2394,6 +2430,48 @@ internal sealed class EmfReader
         else if (scaleX < 0 || scaleY < 0) extraRotation = -2 * (font.Escapement * Math.PI / 1800.0);
 
         return font;
+    }
+
+    /// <summary>
+    /// The angle the current mapping turns text through, anticlockwise in radians.
+    /// </summary>
+    /// <remarks>
+    /// Measured rather than decomposed: the local <em>Y</em> axis is mapped and the angle read off
+    /// the mapped vector, so a mapping built from any number of chained
+    /// <c>EMR_MODIFYWORLDTRANSFORM</c> records, window/viewport settings and mirrors is handled by
+    /// the same three lines. Zero when the mapped vector has no horizontal component, which is the
+    /// unrotated case and the overwhelming majority of records — <c>if (fX)</c> at
+    /// <c>mtftools.cxx:2093</c>, and the reason an ordinary metafile is untouched by any of this.
+    /// <para>
+    /// <b>The two points are rounded to whole 1/100 mm before they are subtracted</b>, because
+    /// <c>ImplMap</c> returns an integer <c>Point</c> and the reference's "is there a horizontal
+    /// component" test is therefore made on integers. Measuring in EMU instead makes an unrotated
+    /// mapping produce a horizontal component of one or two EMU out of a million from ordinary
+    /// rounding, and <c>acos</c> of that is 90° — which lands as a 180° turn on text that should
+    /// not move at all.
+    /// </para>
+    /// </remarks>
+    private double TransformRotation()
+    {
+        (double ox, double oy) = _context.Mapping.MapPointMm100(0, 0);
+        (double ux, double uy) = _context.Mapping.MapPointMm100(0, 100);
+
+        if (!double.IsFinite(ox) || !double.IsFinite(oy)
+            || !double.IsFinite(ux) || !double.IsFinite(uy))
+        {
+            return 0;
+        }
+
+        double dx = Math.Round(ux) - Math.Round(ox);
+        double dy = Math.Round(uy) - Math.Round(oy);
+
+        double length = Math.Sqrt((dx * dx) + (dy * dy));
+        if (dx == 0 || length == 0) return 0;
+
+        double degrees = Math.Acos(Math.Clamp(dx / length, -1.0, 1.0)) * 180.0 / Math.PI;
+        if (dy > 0) degrees = 360 - degrees;
+
+        return (degrees + 90) * Math.PI / 180.0;
     }
 
     private void AdvanceCurrentPosition(TextAlignment alignment, Length width)
