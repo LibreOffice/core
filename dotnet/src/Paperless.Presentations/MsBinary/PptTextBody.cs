@@ -242,12 +242,19 @@ internal static class PptTextBody
         int end = start + length;
         int position = 0;
 
+        // The properties in force at the paragraph's first character, kept for the empty-paragraph
+        // case below: an empty paragraph covers no characters, so the loop places nothing from it,
+        // and the run it sits inside is the only thing that says how tall its blank line is.
+        PptCharacterRun atStart = default;
+        bool found = false;
+
         foreach (PptCharacterRun character in run.Characters)
         {
             int runEnd = position + character.Length;
             int from = Math.Max(position, start);
             int to = Math.Min(runEnd, end);
 
+            if (!found && start >= position && start < runEnd) { atStart = character; found = true; }
             if (to > from) runs.Add(Run(character, scheme, fonts, level, from - start, to - from));
 
             position = runEnd;
@@ -263,6 +270,20 @@ internal static class PptTextBody
         if (covered < textLength)
         {
             runs.Add(Run(default, scheme, fonts, level, covered, textLength - covered));
+        }
+
+        // An empty paragraph still gets one run, of no characters, carrying the level's size.
+        //
+        // It is a blank *line*, not nothing: layout drops a paragraph that resolves no face at
+        // all, so without this an empty paragraph contributes no height and everything below it
+        // moves up by a line. PowerPoint decks use them as spacing constantly — the fourth page of
+        // WC_Update-Aug03.ppt separates all eleven of its bullets that way, and LibreOffice's own
+        // flat-ODF export of it writes each as a list header holding one empty paragraph.
+        //
+        // The PPTX reader has always done this; the comment on SlideParagraph.Runs says why.
+        if (runs.Count == 0)
+        {
+            runs.Add(Run(atStart, scheme, fonts, level, 0, 0));
         }
 
         return runs;
