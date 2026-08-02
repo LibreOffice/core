@@ -135,18 +135,37 @@ public class ThemeFontTests
         => Family(theme: null, ("ascii", "Verdana"), ("asciiTheme", "minorHAnsi")).ShouldBe("Verdana");
 
     /// <summary>
-    /// A run's own <c>w:rFonts</c> replaces the inherited one whole, attributes included.
+    /// Each of <c>w:rFonts</c>' four families is inherited in its own right.
     /// </summary>
     /// <remarks>
-    /// Pinned because it is a known divergence rather than a decision: LibreOffice resolves each
-    /// of <c>w:rFonts</c>' attributes as a property in its own right
-    /// (<c>DomainMapper::lcl_attribute</c>'s separate <c>LN_CT_Fonts_*</c> cases), so a run
-    /// naming only a complex-script face there keeps the style's Latin one. Here the element is
-    /// the unit, so the same run states no Latin face at all. It costs nothing on the documents
-    /// measured so far — a run that overrides one script almost always restates the others — but
-    /// it is the next thing to look at if a face resolves to the layout default for no reason.
+    /// <para>
+    /// A run naming only a complex-script face keeps its style's Latin one. This is the shape Word
+    /// writes constantly — <c>&lt;w:rFonts w:cs="Arial"/&gt;</c> beside a <c>w:szCs</c>, on a run of
+    /// ordinary Latin text — and it appears in three quarters of the corpus's DOCX files. Treating
+    /// the innermost element as the whole answer leaves such a run with no Latin family at all, and
+    /// the search then falls through to the complex-script one, setting Latin text in it.
+    /// </para>
+    /// <para>
+    /// LibreOffice gets this by construction: its importer maps each attribute to a property of its
+    /// own (<c>DomainMapper::lcl_attribute</c>'s separate <c>LN_CT_Fonts_*</c> cases), so nothing is
+    /// ever inherited as a group.
+    /// </para>
     /// </remarks>
     [Fact]
-    public void ARunsOwnFontsElementReplacesTheInheritedOneWhole()
-        => Family(theme: null, ("asciiTheme", "minorHAnsi")).ShouldBeNull();
+    public void EachOfTheFourFamiliesIsInheritedOnItsOwn()
+    {
+        // Only a complex-script face here, so the document default's Latin one still applies.
+        Family(theme: null, ("cs", "Arial")).ShouldBe("Times New Roman");
+
+        // And with a theme, the layer below resolves through it rather than being skipped.
+        Family(Theme(), ("cs", "Arial")).ShouldBe("Times New Roman");
+    }
+
+    /// <summary>
+    /// A theme reference that resolves to nothing falls through to the layer below, not to the
+    /// complex-script face beside it.
+    /// </summary>
+    [Fact]
+    public void AnUnresolvableThemeReferenceFallsThroughToTheNextLayer()
+        => Family(theme: null, ("asciiTheme", "minorHAnsi")).ShouldBe("Times New Roman");
 }

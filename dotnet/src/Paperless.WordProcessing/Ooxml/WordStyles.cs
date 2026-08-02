@@ -358,6 +358,63 @@ public sealed class WordStyles
     }
 
     /// <summary>
+    /// Every layer that states one <c>w:rPr</c> child, innermost first: the run's own, then the
+    /// character style chain, then the paragraph style chain, then the document defaults.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The run-property counterpart of <see cref="ParagraphPropertyLayers"/>, and it exists for one
+    /// element: <c>w:rFonts</c>, which names up to four families in four attributes and is inherited
+    /// attribute by attribute rather than whole. A run carrying <c>&lt;w:rFonts w:cs="Arial"/&gt;</c> —
+    /// which Word writes constantly, beside a <c>w:szCs</c>, to set only the complex-script face —
+    /// still takes its Latin family from its style. Taking the innermost element whole instead loses
+    /// that family and falls back to the complex-script one, so ordinary Latin text is laid out in the
+    /// wrong face and every line it sets is the wrong height.
+    /// </para>
+    /// <para>
+    /// The order is <see cref="ResolveRunProperty"/>'s: character style before paragraph style, since
+    /// the character style is the inner of the two. No toggle rule applies — <c>w:rFonts</c> is not a
+    /// toggle, and the elements this is used for never are.
+    /// </para>
+    /// </remarks>
+    /// <param name="localName">The property element's local name, e.g. <c>rFonts</c>.</param>
+    /// <param name="directRunProperties">The run's own <c>w:rPr</c>, or null.</param>
+    /// <param name="paragraphStyleId">The paragraph style in force, or null.</param>
+    /// <param name="characterStyleId">The character style the run names, or null.</param>
+    public List<XElement> RunPropertyLayers(
+        string localName,
+        XElement? directRunProperties,
+        string? paragraphStyleId,
+        string? characterStyleId)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(localName);
+
+        List<XElement> layers = [];
+
+        if (Word.Child(directRunProperties, localName) is { } direct) layers.Add(direct);
+
+        AddChain(characterStyleId, WordStyleType.Character);
+        AddChain(paragraphStyleId, WordStyleType.Paragraph);
+
+        if (Word.Child(DefaultRunProperties, localName) is { } fallback) layers.Add(fallback);
+
+        return layers;
+
+        void AddChain(string? styleId, WordStyleType type)
+        {
+            WordStyle? current = Find(styleId, type);
+            HashSet<string> visited = new(StringComparer.Ordinal);
+
+            for (int depth = 0; current is not null && depth < MaxBasedOnDepth; depth++)
+            {
+                if (Word.Child(current.RunProperties, localName) is { } found) layers.Add(found);
+                if (!visited.Add(current.StyleId)) break;
+                current = Find(current.BasedOn, type);
+            }
+        }
+    }
+
+    /// <summary>
     /// A table style's <c>w:pPr</c> elements, its own first and then its <c>w:basedOn</c> chain.
     /// </summary>
     /// <remarks>

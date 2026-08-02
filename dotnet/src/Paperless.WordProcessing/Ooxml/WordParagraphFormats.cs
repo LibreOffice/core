@@ -326,7 +326,8 @@ internal static class WordParagraphFormats
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
         string? characterStyleId = Word.Attribute(Word.Child(runProperties, "rStyle"), "val");
 
-        WordProperty fonts = styles.ResolveRunProperty("rFonts", runProperties, styleId, characterStyleId);
+        List<XElement> fonts =
+            styles.RunPropertyLayers("rFonts", runProperties, styleId, characterStyleId);
         WordProperty size = styles.ResolveRunProperty("sz", runProperties, styleId, characterStyleId);
         WordProperty bold = styles.ResolveRunProperty("b", runProperties, styleId, characterStyleId);
         WordProperty italic = styles.ResolveRunProperty("i", runProperties, styleId, characterStyleId);
@@ -339,7 +340,7 @@ internal static class WordParagraphFormats
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
         return new WordTextStyle(
-            Family(fonts.Element, theme?.Fonts),
+            Family(fonts, theme?.Fonts),
             resolvedSize,
             bold.IsOn ? 700 : 400,
             italic.IsOn,
@@ -627,22 +628,35 @@ internal static class WordParagraphFormats
     /// comes first would depend on the producer's attribute order.
     /// </para>
     /// <para>
+    /// The four are inherited independently, which is why this takes the layers rather than one
+    /// element. A run stating only <c>w:cs</c> — Word's way of setting a complex-script face, written
+    /// beside a <c>w:szCs</c> in three quarters of the documents in the corpus — still takes its Latin
+    /// family from its style. Reading only the innermost element leaves that run with no ASCII family
+    /// at all, so the search falls through to the complex-script one and sets ordinary Latin text in
+    /// it. The fallback order below is therefore a last resort for a run that genuinely names nothing
+    /// else, not the ordinary path.
+    /// </para>
+    /// <para>
     /// Each of the four can be named <em>indirectly</em> instead, by a companion attribute pointing at
     /// the theme's font scheme: <c>w:asciiTheme="minorHAnsi"</c> means "the theme's minor Latin face".
     /// Word writes that form for every run of an unmodified Office document, so a reader that ignores
     /// it falls all the way back to the <c>w:docDefaults</c> face — typically Times New Roman where the
-    /// theme says Calibri. That is not merely the wrong shapes: the two have different vertical metrics
-    /// (2268/2048 against 2500/2048 of the em), so every line is six per cent short and a long document
-    /// loses pages. The theme attribute wins over its direct companion when both are present, which is
+    /// theme says Calibri. That is not merely the wrong shapes: the substitutes for those two have
+    /// different vertical metrics (Liberation Serif's line box is 2355/2048 of the em, Carlito's is
+    /// 2500/2048), so every line comes out six per cent short and enough of them eventually cost a
+    /// page break. The theme attribute wins over its direct companion when both are present, which is
     /// what Word does and what <c>DomainMapper::lcl_attribute</c>
     /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx</c>:453) says out loud.
     /// </para>
     /// </remarks>
-    private static string? Family(XElement? fonts, DrawingFontScheme? scheme)
+    private static string? Family(IReadOnlyList<XElement> layers, DrawingFontScheme? scheme)
     {
         foreach ((string attribute, string themeAttribute) in Slots)
         {
-            if (SlotFamily(fonts, scheme, attribute, themeAttribute) is { } name) return name;
+            foreach (XElement fonts in layers)
+            {
+                if (SlotFamily(fonts, scheme, attribute, themeAttribute) is { } name) return name;
+            }
         }
 
         return null;
