@@ -39,6 +39,15 @@ public sealed class Ww8FieldTypes
     /// </remarks>
     public const int Shape = 95;
 
+    /// <summary>The <c>FILENAME</c> field, which names the file the document was read from.</summary>
+    /// <remarks>
+    /// 29, <c>Read_F_FileName</c>'s slot in <c>aWW8FieldTab</c> (<c>ww8par5.cxx</c>:874). One of the
+    /// fields whose cached result must not be believed: it is whatever the document was called when it
+    /// was last saved, so renaming the file makes every copy of it wrong at once, and LibreOffice
+    /// re-evaluates it on load rather than drawing the cache.
+    /// </remarks>
+    public const int FileName = 29;
+
     /// <summary>A field's beginning, as <c>FLD.ch</c> states it.</summary>
     private const byte BeginMarker = 19;
 

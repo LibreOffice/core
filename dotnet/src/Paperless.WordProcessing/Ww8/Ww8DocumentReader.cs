@@ -66,6 +66,16 @@ public sealed partial class Ww8DocumentReader
     private int _hoistedIndex;
     private int _furnitureIndex;
 
+    /// <summary>
+    /// The document's own file name, or null when it was read from a nameless stream.
+    /// </summary>
+    /// <remarks>
+    /// Only a <c>FILENAME</c> field wants it. Null is a real answer rather than a gap — Paperless reads
+    /// streams as readily as files — and the field falls back to its cached result there, which is the
+    /// lenient reading and better than drawing nothing.
+    /// </remarks>
+    public string? FileName { get; }
+
     /// <summary>Creates a reader over a document's streams.</summary>
     /// <param name="wordDocument">The <c>WordDocument</c> stream.</param>
     /// <param name="table">The <c>0Table</c> or <c>1Table</c> stream, whichever the FIB names.</param>
@@ -76,18 +86,24 @@ public sealed partial class Ww8DocumentReader
     /// it at the offset <c>sprmCPicLocation</c> states; when it has none the same offsets are into
     /// <c>WordDocument</c>, which is why this falls back to that stream rather than to nothing.
     /// </param>
+    /// <param name="fileName">
+    /// The document's own file name, for a <c>FILENAME</c> field to evaluate to, or null when the
+    /// caller read from a stream and there is none. See <see cref="FileName"/>.
+    /// </param>
     public Ww8DocumentReader(
         byte[] wordDocument,
         byte[] table,
         Ww8Fib fib,
         List<Diagnostic> diagnostics,
-        byte[]? data = null)
+        byte[]? data = null,
+        string? fileName = null)
     {
         ArgumentNullException.ThrowIfNull(wordDocument);
         ArgumentNullException.ThrowIfNull(table);
         ArgumentNullException.ThrowIfNull(fib);
         ArgumentNullException.ThrowIfNull(diagnostics);
 
+        FileName = fileName;
         _wordDocument = wordDocument;
         _table = table;
         _fib = fib;

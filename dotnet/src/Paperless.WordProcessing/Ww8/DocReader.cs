@@ -90,7 +90,8 @@ public static class DocReader
             // that looks in the main stream regardless finds whatever happens to sit at that offset.
             byte[]? data = ReadStream(file, PictureStreamName);
 
-            Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics, data);
+            Ww8DocumentReader reader =
+                new(wordDocument, table, fib, diagnostics, data, source.FileName);
             ContentDocument content = reader.Read(OlePropertySetReader.Read(file));
 
             return new Ww8Document(

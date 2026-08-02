@@ -419,6 +419,13 @@ public sealed partial class Ww8DocumentReader
         (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
         Stack<int> openFields = new();
 
+        // How many enclosing fields had their result replaced by a computed one, and which they were.
+        // A count for the same reason `instruction` is one — fields nest, and the result of an outer
+        // field can contain a whole inner field whose characters are equally not to be drawn — with the
+        // stack beside it so that the right field's end is the one that stops the suppression.
+        int computed = 0;
+        Stack<bool> replacedFields = new();
+
         // Where the last U+000C fell, until the paragraph after it has been read and can be asked whether
         // it starts a new section. Null everywhere else, which is every paragraph of a document that has
         // neither a section break nor a hard page break in it.
@@ -445,6 +452,18 @@ public sealed partial class Ww8DocumentReader
             // `picture-flow.doc`, where it made our word count 191 against the reference's 190. The
             // markers themselves are handled below and carry no width either way.
             if (instruction > 0 && character is not (Special.FieldBegin or Special.FieldSeparator
+                or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
+            {
+                continue;
+            }
+
+            // The cached result of a field this reader computes itself is suppressed the same way, and
+            // for a sharper reason: the cache is what the field said when the document was last saved,
+            // and a FILENAME's is stale the moment the file is renamed. Both corpus documents carrying
+            // one are wrong today — `DEP2008-1900.doc`'s reads "EMS-P16 Travel Procedure (3)EMS-P16
+            // Travel Procedure (2)", a doubled string from some earlier save, where LibreOffice draws
+            // `DEP2008-1900.doc`. The replacement was written at the separator, below.
+            if (computed > 0 && character is not (Special.FieldBegin or Special.FieldSeparator
                 or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
             {
                 continue;
@@ -505,17 +524,37 @@ public sealed partial class Ww8DocumentReader
                     // reference is two — so this counts rather than toggling.
                     instruction++;
                     openFields.Push(fieldTypes.At(position - fieldBase) ?? 0);
+                    replacedFields.Push(false);
                     continue;
 
                 case Special.FieldSeparator:
+                {
                     // The instruction ends and the cached result begins. A field with no separator has
                     // no result, and its instruction stays hidden until its end.
                     if (instruction > 0) instruction--;
+
+                    // The one point at which a computed field can be written: the instruction has been
+                    // read, so the field's type is known, and the result it is replacing starts here.
+                    if (instruction == 0
+                        && computed == 0
+                        && openFields.Count > 0
+                        && openFields.Peek() == Ww8FieldTypes.FileName
+                        && FileName is { Length: > 0 } name)
+                    {
+                        foreach (char letter in name) Emit(current, positions, letter, position);
+
+                        replacedFields.Pop();
+                        replacedFields.Push(true);
+                        computed++;
+                    }
+
                     continue;
+                }
 
                 case Special.FieldEnd:
                     if (instruction > 0) instruction--;
                     if (openFields.Count > 0) openFields.Pop();
+                    if (replacedFields.Count > 0 && replacedFields.Pop() && computed > 0) computed--;
                     continue;
 
                 case Special.AutoNumberedReference:
