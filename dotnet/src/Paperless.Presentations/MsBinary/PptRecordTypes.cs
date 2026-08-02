@@ -95,8 +95,11 @@ public static class PptRecordTypes
     /// <summary>A length-prefixed UTF-16 string, used for names throughout.</summary>
     public const ushort CString = 4026;
 
-    /// <summary>The headers and footers of a master.</summary>
+    /// <summary>The headers and footers of a page or of a master.</summary>
     public const ushort HeadersFooters = 4057;
+
+    /// <summary>Which of the four running placeholders a page shows, and how it formats a date.</summary>
+    public const ushort HeadersFootersAtom = 4058;
 
     /// <summary>One of the document's three slide lists, distinguished by the header instance.</summary>
     public const ushort SlideListWithText = 4080;
