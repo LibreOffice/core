@@ -1518,7 +1518,7 @@ void SwTableLine::ChgFrameFormat(SwTableLineFormat* pNewFormat)
         delete pOld;
 }
 
-SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
+gfx::Length SwTableLine::GetTableLineHeight(bool& bLayoutAvailable) const
 {
     SwTwips nRet = 0;
     bLayoutAvailable = false;
@@ -1557,7 +1557,7 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
                 break;
         }
     }
-    return nRet;
+    return gfx::Length::twip(nRet);
 }
 
 bool SwTableLine::IsEmpty() const
