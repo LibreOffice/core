@@ -19,10 +19,10 @@ namespace Paperless.Presentations.Tests;
 /// prompt appears anywhere.
 /// </para>
 /// <para>
-/// That makes the deck the smallest thing that separates the two rules at once: draw the
-/// master's shapes, and hold back its prompts. The corpus deck used before this —
-/// <c>ppt-features.ppt</c> — has a master too, but every shape on it is a prompt, so it can only
-/// prove the negative.
+/// That makes the deck the smallest thing that separates the three rules at once: draw the
+/// master's shapes, hold back its prompts, and resolve the field markers against the page.
+/// The corpus deck used before this — <c>ppt-features.ppt</c> — has a master too, but every
+/// shape on it is a prompt, so it can only prove the negative.
 /// </para>
 /// </remarks>
 public class PptMasterShapeTests
@@ -52,7 +52,23 @@ public class PptMasterShapeTests
             // The slide's drawing holds one text box. The date, the footer and the slide number
             // are three more shapes, and all three are on the master.
             slide.Shapes.Count(shape => shape.Text is not null).ShouldBe(4);
+
+            List<string> text = [.. TextOf(slide)];
+            text.ShouldContain("14 March 2011");
+            text.ShouldContain("Confidential draft");
         }
+    }
+
+    [Fact]
+    public void TheSlideNumberFieldBecomesThePagesOwnNumber()
+    {
+        SlidePages pages = Layout("ppt-master-shapes.ppt");
+
+        // One shape on the master, one asterisk in its text, a different number on each page.
+        TextOf(pages.Slides[0]).ShouldContain("1");
+        TextOf(pages.Slides[1]).ShouldContain("2");
+        TextOf(pages.Slides[0]).ShouldNotContain("*");
+        TextOf(pages.Slides[1]).ShouldNotContain("*");
     }
 
     [Fact]

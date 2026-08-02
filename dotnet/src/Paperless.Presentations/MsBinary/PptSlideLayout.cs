@@ -405,11 +405,12 @@ internal sealed class PptSlideLayout
                             ?? _backgroundsByMaster.GetValueOrDefault(masterId)
                             ?? Paint.Solid(Colour.White);
 
-        Context context = new(entry, scheme, styles);
+        PptFieldValues fields = FieldsFor(index, runningPlaceholders);
+        Context context = new(entry, scheme, styles, fields);
 
         if ((flags & FollowMasterObjects) != 0)
         {
-            AddMasterShapes(masterId, runningPlaceholders, shapes);
+            AddMasterShapes(masterId, runningPlaceholders, fields, shapes);
         }
 
         if (_stream.FirstChild(page, PptRecordTypes.Drawing) is { } drawing
@@ -501,7 +502,34 @@ internal sealed class PptSlideLayout
 
     /// <summary>What a page supplies to every shape on it.</summary>
     private sealed record Context(
-        PptPageEntry Entry, PptColourScheme Scheme, PptStyleSheet? Styles);
+        PptPageEntry Entry,
+        PptColourScheme Scheme,
+        PptStyleSheet? Styles,
+        PptFieldValues Fields);
+
+    /// <summary>
+    /// What the running fields resolve to on a page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The slide number is the page's position, one-based, which is what Impress's page field
+    /// renders. Header, footer and date come from the page's own running-placeholder settings.
+    /// </para>
+    /// <para>
+    /// <strong>An automatic date is left unresolved.</strong> LibreOffice inserts a live date
+    /// field for it (<c>PPTFieldEntry::SetDateTime</c>, <c>svdfppt.cxx:6449</c>), so the reference
+    /// rendering of such a deck says whatever day it was made on. Substituting today's date here
+    /// would agree with a reference taken today and disagree with one taken yesterday, which makes
+    /// every stored comparison a clock. The marker is dropped instead, so the page carries no
+    /// stray asterisk either way.
+    /// </para>
+    /// </remarks>
+    private static PptFieldValues FieldsFor(int index, PptHeadersFooters runningPlaceholders)
+        => new(
+            SlideNumber: (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Date: runningPlaceholders.DateIsAutomatic ? "" : runningPlaceholders.Date ?? "",
+            Header: runningPlaceholders.Header ?? "",
+            Footer: runningPlaceholders.Footer ?? "");
 
     /// <summary>
     /// Draws what a slide inherits from its master, under the slide's own shapes.
@@ -531,7 +559,10 @@ internal sealed class PptSlideLayout
     /// </para>
     /// </remarks>
     private void AddMasterShapes(
-        uint masterId, PptHeadersFooters runningPlaceholders, List<PlacedShape> shapes)
+        uint masterId,
+        PptHeadersFooters runningPlaceholders,
+        PptFieldValues fields,
+        List<PlacedShape> shapes)
     {
         if (!_pagesByMaster.TryGetValue(masterId, out DffRecordHeader master)) return;
         if (_stream.FirstChild(master, PptRecordTypes.Drawing) is not { } drawing) return;
@@ -541,7 +572,8 @@ internal sealed class PptSlideLayout
         Context context = new(
             _entriesByMaster.GetValueOrDefault(masterId),
             _schemesByMaster.GetValueOrDefault(masterId, PptColourScheme.Default),
-            _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles);
+            _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles,
+            fields);
 
         foreach (EscherShape shape in _escher.ReadDrawing(container))
         {
@@ -989,17 +1021,17 @@ internal sealed class PptSlideLayout
             if (record.Type != PptRecordTypes.OutlineTextRefAtom) continue;
 
             uint reference = DffRecordBuffer.ReadUInt32(_stream.Content(record));
-            return OutlineText(context.Entry, reference);
+            return OutlineText(context.Entry, reference, context.Fields);
         }
 
-        return PptTextReader.Read(_stream, start, end);
+        return PptTextReader.Read(_stream, start, end, context.Fields);
     }
 
     /// <summary>
     /// The <paramref name="reference"/>th text run of a slide's entry in the document's slide
     /// list.
     /// </summary>
-    private PptTextRun? OutlineText(PptPageEntry entry, uint reference)
+    private PptTextRun? OutlineText(PptPageEntry entry, uint reference, PptFieldValues fields)
     {
         int matches = 0;
         int start = -1;
@@ -1009,11 +1041,11 @@ internal sealed class PptSlideLayout
             if (record.Type == PptRecordTypes.SlidePersistAtom) break;
             if (record.Type != PptRecordTypes.TextHeaderAtom) continue;
 
-            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position);
+            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position, fields);
             if (matches++ == reference) start = record.Position;
         }
 
-        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd) : null;
+        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd, fields) : null;
     }
 
     /// <summary>
