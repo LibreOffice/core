@@ -1005,7 +1005,7 @@ internal sealed class PptSlideLayout
     {
         if (TextOf(shape, context) is not { } run) return null;
         if (PptTextBody.Build(run, context.Styles, context.Scheme, _fontTable, Insets(shape),
-                              Anchor(shape), Wraps(shape)) is not { } body)
+                              Anchor(shape), Wraps(shape), Autofits(shape, run)) is not { } body)
         {
             return null;
         }
@@ -1055,6 +1055,58 @@ internal sealed class PptSlideLayout
 
     private static bool Wraps(EscherShape shape)
         => shape.Properties.Value(EscherPropertyIds.WrapText, 0) != PptShapeGeometry.WrapNone;
+
+    /// <summary>
+    /// Whether a shape's text is shrunk until it fits — the binary format's answer to
+    /// <c>a:normAutofit</c>, which it does not spell anywhere.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Nothing in the file asks for it.</strong> The PowerPoint import turns autofit on
+    /// from the <em>kind</em> of text a shape holds: a <c>TextHeaderAtom</c> naming Body, HalfBody
+    /// or QuarterBody gets <c>TextFitToSizeType_AUTOFIT</c> and every other kind — a title, a
+    /// subtitle, an ordinary shape's own text — gets none
+    /// (<c>filter/source/msfilter/svdfppt.cxx:1030-1099</c>). So an outline placeholder shrinks to
+    /// fit and the title above it does not, which is what a deck written in PowerPoint 97 looks
+    /// like when it is opened today.
+    /// </para>
+    /// <para>
+    /// The two exceptions are the shape growing instead of the text: <c>fFitShapeToText</c> makes
+    /// the box taller, and a non-wrapping box makes it wider, and the import suppresses autofit
+    /// for either (fdo#41245 — "autofit text only if there is no auto grow height and width").
+    /// </para>
+    /// <para>
+    /// <strong>The wrap half of that is an approximation, and the direction it errs in is
+    /// known.</strong> The reference derives auto-grow-<em>width</em> from the wrap only where the
+    /// shape is a custom shape holding plain rectangle text; a true outline placeholder takes
+    /// <c>bAutoGrowWidth = false</c> whatever its wrap says, so LibreOffice would shrink it even
+    /// unwrapped. Paperless does not model "is a custom shape" here, so a non-wrapping outline
+    /// placeholder is left alone where the reference shrinks it. No deck in the slides corpus
+    /// holds that combination — the track went from 44 to 46 matching PPT documents with none
+    /// moving the other way — but it is a difference rather than a simplification, and it is the
+    /// first place to look if one turns up.
+    /// </para>
+    /// <para>
+    /// Measured on <c>berlin.ppt</c>, whose 29 slides are all outline placeholders: without this
+    /// the text overflows the shape, runs off the bottom of the slide and is clipped away by the
+    /// page, losing 39 of 1395 words with the page count still exactly right.
+    /// </para>
+    /// </remarks>
+    internal static bool Autofits(EscherShape shape, PptTextRun run)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+        ArgumentNullException.ThrowIfNull(run);
+
+        if (run.Kind is not (PptTextKind.Body or PptTextKind.HalfBody or PptTextKind.QuarterBody))
+        {
+            return false;
+        }
+
+        bool growsToText =
+            (shape.Properties.Value(PptShapeGeometry.FitTextToShape, 0) & PptShapeGeometry.FitShapeToText) != 0;
+
+        return !growsToText && Wraps(shape);
+    }
 
     /// <summary>
     /// A shape's text, whether it holds the characters itself or refers to the slide list.

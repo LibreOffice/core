@@ -38,13 +38,36 @@ namespace Paperless.Text.Layout;
 /// repaginate the document under it.
 /// </para>
 /// </param>
+/// <param name="Tracking">
+/// A fixed distance added between the run's characters, zero for none.
+/// <para>
+/// <c>SvxKerningItem</c> / <c>EE_CHAR_KERNING</c>, which DrawingML spells <c>a:rPr/@spc</c> in
+/// hundredths of a point and a word processor spells <c>w:spacing</c> in twentieths. It is
+/// <em>not</em> pair kerning — that is the face's own <c>kern</c> feature and is applied by the
+/// shaper — but a constant per character, commonly negative, that a designer uses to pull a
+/// heading in. Ignoring it makes a tracked line measure wider than the reference by the whole
+/// accumulated amount, which on a 50-character line at the corpus's commonest value of −0.2 pt is
+/// ten points: enough to move the last word of every line onto the next one.
+/// </para>
+/// <para>
+/// <strong>It is a distance between characters, so a run of <c>n</c> of them carries
+/// <c>n − 1</c>.</strong> That is what the reference measures
+/// (<c>SvxFont::QuickGetTextSize</c>, <c>editeng/source/items/svxfont.cxx:481-500</c>, which adds
+/// one per distinct advance and then takes the trailing one back off), and it is exactly what a
+/// prefix table can express for a whole paragraph and cannot express for an arbitrary range: the
+/// count of gaps inside a range depends on the range. So the table charges the gap
+/// <em>before</em> each character, which is right to the last unit for a paragraph measured whole
+/// and one tracking unit generous for a line that starts part-way in.
+/// </para>
+/// </param>
 public readonly record struct FormattedRun(
     int Start,
     int Length,
     OpenTypeFace Face,
     Length EmSize,
     ShapingOptions Shaping = default,
-    Length MetricEmSize = default)
+    Length MetricEmSize = default,
+    Length Tracking = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -243,6 +266,8 @@ public sealed class MeasuredParagraph
 
         List<MeasuredRun> measured = [];
         long[] prefix = new long[text.Length + 1];
+        long[] tracking = new long[text.Length];
+        bool tracked = false;
         long running = 0;
 
         foreach (FormattedRun run in formatted)
@@ -263,6 +288,12 @@ public sealed class MeasuredParagraph
                     prefix[part.Start + i] = running + shaped.WidthUpTo(i, part.EmSize).Emu;
                 }
 
+                if (part.Tracking != Length.Zero)
+                {
+                    tracked = true;
+                    for (int i = 0; i < part.Length; i++) tracking[part.Start + i] = part.Tracking.Emu;
+                }
+
                 running += shaped.Width(part.EmSize).Emu;
             }
         }
@@ -273,6 +304,24 @@ public sealed class MeasuredParagraph
         for (int i = 1; i <= text.Length; i++)
         {
             if (prefix[i] < prefix[i - 1]) prefix[i] = prefix[i - 1];
+        }
+
+        // Tracking is charged for the gap *before* each character, so the first pays nothing and a
+        // paragraph of n characters carries n - 1 gaps, which is what the reference measures. See
+        // FormattedRun.Tracking for why a prefix table cannot do better than that.
+        if (tracked)
+        {
+            long carried = 0;
+
+            for (int i = 1; i <= text.Length; i++)
+            {
+                prefix[i] += carried;
+                carried += tracking[i - 1];
+
+                // A tracking value more negative than a character is wide would walk the table
+                // backwards, and every width read out of it is a difference of two entries.
+                if (prefix[i] < prefix[i - 1]) prefix[i] = prefix[i - 1];
+            }
         }
 
         // Each object widens every prefix *past* the boundary it occupies and none at or before it, which

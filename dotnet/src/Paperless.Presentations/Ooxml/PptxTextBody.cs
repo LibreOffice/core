@@ -520,6 +520,18 @@ internal static class PptxTextBody
     private static string? Language(XElement? run)
         => Drawing.Attribute(Drawing.Child(run, "rPr"), "lang");
 
+    /// <summary>
+    /// A typeface attribute with no theme to follow it: the name itself, or nothing when it is an
+    /// unfollowable reference.
+    /// </summary>
+    /// <remarks>
+    /// Reporting <c>+mn-lt</c> as a family name is worse than reporting none, because one falls
+    /// back to the next source in the chain and the other ends the search on a face that does not
+    /// exist.
+    /// </remarks>
+    private static string? Literal(string? typeface)
+        => string.IsNullOrEmpty(typeface) || typeface[0] == '+' ? null : typeface;
+
     private static SlideTextRun Run(
         XElement? runProperties,
         XElement?[] defaults,
@@ -534,12 +546,27 @@ internal static class PptxTextBody
         bool bold = First(runProperties, defaults, element => Drawing.Flag(element, "b")) ?? false;
         bool italic = First(runProperties, defaults, element => Drawing.Flag(element, "i")) ?? false;
 
+        // A theme reference rather than a family name is the normal case here, not the exception:
+        // a master's txStyles states <a:latin typeface="+mn-lt"/> and every body placeholder in the
+        // deck inherits it. Taking the attribute at face value ends the font search on a family
+        // called "+mn-lt", which exists nowhere and falls all the way through to the generic
+        // sans-serif — DejaVu Sans against the reference's Carlito, some 39 per cent wider, so
+        // every line breaks early and the tail of a full placeholder overflows off the slide.
         string? typeface = First(
             runProperties, defaults,
-            element => Drawing.Attribute(Drawing.Child(element, "latin"), "typeface"));
+            element => theme?.Fonts is { } fonts
+                ? fonts.Resolve(Drawing.Attribute(Drawing.Child(element, "latin"), "typeface"))
+                : Literal(Drawing.Attribute(Drawing.Child(element, "latin"), "typeface")));
 
         Colour? colour = First(
             runProperties, defaults, element => SolidColour(element, theme));
+
+        // a:rPr/@spc, in hundredths of a point, and negative far more often than not: a deck's
+        // designer pulls a heading in and PowerPoint records it per run. LibreOffice reads it into
+        // CharKerning (oox/source/drawingml/textcharacterproperties.cxx:190) and EditEngine adds it
+        // between characters, so a run that states it is measurably narrower than the same text
+        // without it — 10 pt over a 50-character line at the corpus's commonest value of -20.
+        int tracking = First(runProperties, defaults, element => Drawing.Number(element, "spc")) ?? 0;
 
         return new SlideTextRun(
             start,
@@ -548,7 +575,8 @@ internal static class PptxTextBody
             Length.FromEmu(size * Length.EmuPerPoint / 100),
             bold ? 700 : 400,
             italic,
-            colour ?? Colour.Black);
+            colour ?? Colour.Black,
+            Length.FromEmu(tracking * Length.EmuPerPoint / 100));
     }
 
     /// <summary>

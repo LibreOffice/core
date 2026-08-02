@@ -216,6 +216,11 @@ public readonly record struct SlideMarker(
 /// <param name="Weight">The weight on the OpenType 1–1000 scale.</param>
 /// <param name="IsItalic">Whether it is italic.</param>
 /// <param name="Colour">The colour it is drawn in.</param>
+/// <param name="Tracking">
+/// A fixed distance added between the run's characters — <c>a:rPr/@spc</c>, stated in hundredths
+/// of a point and commonly negative. See <see cref="Paperless.Text.Layout.FormattedRun.Tracking"/>
+/// for how it is charged.
+/// </param>
 public readonly record struct SlideTextRun(
     int Start,
     int Length,
@@ -223,7 +228,8 @@ public readonly record struct SlideTextRun(
     Length Size,
     int Weight,
     bool IsItalic,
-    Colour Colour)
+    Colour Colour,
+    Length Tracking = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;

@@ -400,7 +400,7 @@ public static partial class SlideTextLayout
             first ??= face;
             Length size = scaling.Scaled(run.Size);
 
-            runs.Add(new FormattedRun(run.Start, run.Length, face, size));
+            runs.Add(new FormattedRun(run.Start, run.Length, face, size, Tracking: run.Tracking));
             styles.Add(new RunStyle(run.Colour, reference, face));
         }
 
@@ -687,7 +687,8 @@ public static partial class SlideTextLayout
                 shaped, text, run.EmSize,
                 block.FontFor(run.Start, run.Face) ?? Reference(run.Face),
                 new DocPoint(pen, baseline),
-                line.Box.SpaceAdd);
+                line.Box.SpaceAdd,
+                run.Tracking);
 
             placed.Add(new PlacedGlyphRun(glyphs, block.ColourAt(run.Start)));
 
@@ -709,15 +710,23 @@ public static partial class SlideTextLayout
         Length emSize,
         FontReference font,
         DocPoint origin,
-        Length spaceAdd)
+        Length spaceAdd,
+        Length tracking = default)
     {
         List<PositionedGlyph> glyphs = new(shaped.Glyphs.Count);
         List<int> clusters = new(shaped.Glyphs.Count);
 
         Length pen = Length.Zero;
+        int remaining = shaped.Glyphs.Count;
+
         foreach (ShapedGlyph glyph in shaped.Glyphs)
         {
             Length advance = shaped.Scale(glyph.Advance, emSize);
+
+            // Tracking is the gap *between* characters, so the last glyph of the run does not
+            // carry one — which is also what keeps the drawn pen within a tracking unit of the
+            // width the measurement charged. See FormattedRun.Tracking.
+            if (tracking != Length.Zero && --remaining > 0) advance += tracking;
 
             if (spaceAdd != Length.Zero
                 && glyph.Cluster >= 0
