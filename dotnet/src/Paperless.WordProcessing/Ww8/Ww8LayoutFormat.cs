@@ -185,6 +185,17 @@ public readonly record struct Ww8LayoutFormat
     public Colour? Colour { get; init; }
 
     /// <summary>
+    /// The band drawn behind the run, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// Word's highlighter, <c>sprmCHighlight</c> — an index into the same seventeen-colour palette
+    /// <c>sprmCIco</c> uses, whose nought entry is "automatic" and means <em>no</em> band here rather
+    /// than the document's default colour. Distinct from cell or paragraph shading, which is a property
+    /// of the box rather than of the characters.
+    /// </remarks>
+    public Colour? Highlight { get; init; }
+
+    /// <summary>
     /// The superscript or subscript <c>sprmCIss</c> asks for, or null when the run states neither.
     /// </summary>
     /// <remarks>
@@ -203,7 +214,19 @@ public readonly record struct Ww8LayoutFormat
     /// </param>
     public ParagraphFormat ToParagraphFormat(Length emSize)
     {
-        bool widows = HasWidowControl ?? false;
+        // On unless the document turns it off, which is Word's default and not the struct's. A DOC
+        // states widow control with sprmPFWidowControl and most never state it at all: the flag lives
+        // on the root paragraph style, and Word writes a style's properties only where they differ
+        // from the built-in defaults. LibreOffice restores the same default explicitly —
+        // WW8RStyle::Set1StyleDefaults (sw/source/filter/ww8/ww8par2.cxx:3751) puts SvxWidowsItem(2)
+        // and SvxOrphansItem(2) on every paragraph style with no parent that did not set the sprm,
+        // and its flat-ODF export of a document whose Normal style carries no sprms at all shows
+        // fo:widows="2" on Standard.
+        //
+        // Reading the absence as "off" is not a small difference: it lets a paragraph's last line
+        // stand alone at the top of a page, and a page that keeps two lines it should have pushed
+        // shifts every paragraph after it.
+        bool widows = HasWidowControl ?? true;
 
         bool rightToLeft = IsRightToLeft ?? false;
 
