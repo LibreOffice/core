@@ -32,8 +32,10 @@ namespace Paperless.Text.Layout;
 /// </item>
 /// <item>
 /// <description>
-/// <strong>A number range breaks after its hyphen</strong> (i#83229): <c>100-199</c> may break after
-/// the hyphen, where plain LB25 keeps the whole range together.
+/// <strong>A hyphen never opens a number</strong>, so a break after one is always allowed:
+/// <c>100-199</c>, <c>E-22</c> and <c>$-22</c> all break after the hyphen, where plain LB25 keeps
+/// each whole. LibreOffice's rule file carries only the number-range half of this (i#83229); the
+/// running binary does the rest, and it is the binary that made the reference renderings.
 /// </description>
 /// </item>
 /// <item>
@@ -338,12 +340,8 @@ public sealed class LineBreaker : ILineBreaker
             && after is LineBreakClass.PR or LineBreakClass.PO)
             return false;
 
-        // LB25: do not break inside a number. LibreOffice's own addition comes first: a hyphen
-        // between two numbers *is* a break opportunity, so "100-199" may break after the hyphen
-        // (i#83229).
-        if (before == LineBreakClass.HY && after == LineBreakClass.NU
-            && index >= 2 && analysis.Resolved[index - 2] == LineBreakClass.NU)
-            return true;
+        // LB25: do not break inside a number. A hyphen never begins one, so a break after it is
+        // always allowed — see the note on MatchNumber.
         if (insideNumber[index]) return false;
 
         // LB26: do not break inside a Hangul syllable.
@@ -468,9 +466,17 @@ public sealed class LineBreaker : ILineBreaker
         LineBreakClass ClassAt(int index)
             => index < analysis.Count ? analysis.Resolved[index] : LineBreakClass.XX;
 
-        // An optional leading sign, then an optional bracket or hyphen, then an optional separator.
+        // An optional leading sign, then an optional bracket, then an optional separator.
+        //
+        // UAX #14 lets a hyphen open a number here as well, so that "-5" holds together. LibreOffice
+        // does not, and the difference is visible on any narrow frame: measured against
+        // LibreOffice 24.2.7.2, "E-22", "$-22", "10-19" and a hyphen that begins its own token in
+        // "A -222" all break *after* the hyphen, while "(222" — an opening bracket, which this
+        // grammar still admits — does not break after the bracket. Dropping HY here is therefore the
+        // whole of the rule: it subsumes LibreOffice's own i#83229 number-range customisation, whose
+        // "100-199" case is just the instance where the hyphen happens to follow a digit.
         if (ClassAt(at) is LineBreakClass.PR or LineBreakClass.PO) at++;
-        if (ClassAt(at) is LineBreakClass.OP or LineBreakClass.HY) at++;
+        if (ClassAt(at) == LineBreakClass.OP) at++;
         if (ClassAt(at) == LineBreakClass.IS) at++;
 
         // The digits are what make it a number: without one, whatever was consumed was not a prefix.

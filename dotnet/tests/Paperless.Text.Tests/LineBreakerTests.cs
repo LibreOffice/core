@@ -234,16 +234,29 @@ public class LineBreakerTests
     }
 
     [Fact]
-    public void ANumberRangeBreaksAfterItsHyphen()
+    public void AHyphenNeverOpensANumberSoABreakAfterItIsAlwaysAllowed()
     {
-        // LibreOffice issue i#83229. Plain LB25 keeps "100-199" whole; LibreOffice adds a break
-        // opportunity after the hyphen when a digit follows, so a wide range can wrap.
+        // Plain LB25 lets a hyphen open a number, holding "-199" together; LibreOffice's rule file
+        // carries a customisation (i#83229) that re-allows the break for number *ranges* only.
         Marked("100-199").ShouldBe("100-|199|");
 
-        // Only between digits. A hyphen before a letter is an ordinary hyphen, and one before digits
-        // with no digits before it is a negative number rather than a range — LB25 keeps that whole.
+        // The running binary goes further than its own rule file, and measurement is what decides
+        // this — LibreOffice 24.2.7.2 breaks after the hyphen in every one of these, in a text frame
+        // narrow enough to force the choice (probed on a corpus deck's 77.7 pt frame):
+        //
+        //     E-22   -> "E-" / "22"        $-22   -> "$-" / "22"
+        //     10-19  -> "10-" / "19"       A -222 -> "A -" / "22" / "2"
+        //
+        // so what precedes the hyphen is irrelevant: a letter, a currency prefix, a digit and a
+        // space all behave alike. Dropping HY from the number grammar is the whole rule.
         Marked("100-x").ShouldBe("100-|x|");
-        Marked("x-199").ShouldBe("x-199|");
+        Marked("x-199").ShouldBe("x-|199|");
+        Marked("$-199").ShouldBe("$-|199|");
+        Marked("a -199").ShouldBe("a |-|199|");
+
+        // An opening bracket still opens a number, which is why this has to be about HY alone and
+        // not about the whole prefix: "(222" does not break after the bracket.
+        Marked("(222").ShouldBe("(222|");
     }
 
     [Fact]

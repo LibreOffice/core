@@ -7,6 +7,7 @@ two must disagree, and those cases are excluded here and asserted separately.
 
 Emits a data file the tests read, so running them needs no Python.
 """
+import os
 import sys
 import unicodedata
 
@@ -64,9 +65,10 @@ def is_customised(text):
                 and classes[i + 1] in ('HY', 'BA') and classes[i + 2] == 'HL'):
             return True
 
-        # Number range: NU HY NU.
-        if (i + 2 < len(classes)
-                and classes[i] == 'NU' and classes[i + 1] == 'HY' and classes[i + 2] == 'NU'):
+        # A hyphen before digits. Plain LB25 lets HY open a number and holds "-199" together;
+        # LibreOffice breaks after the hyphen whatever precedes it, so this is wider than the
+        # NU HY NU "number range" its own rule file documents (i#83229). Measured on 24.2.7.2.
+        if classes[i] == 'HY' and classes[i + 1] == 'NU':
             return True
 
     # CJ: LibreOffice folds it into NS for strict breaking; uniseg's default is normal.
@@ -143,7 +145,10 @@ for text in cases:
     offsets = ' '.join(str(o) for o in uniseg_breaks(text))
     lines.append(f'{escaped}\t{offsets}')
 
-path = ('/home/user/libreoffice-core/dotnet/tests/Paperless.Text.Tests/'
-        'line-break-cases.txt')
+# Relative to this script, so the generator writes into whichever checkout or worktree it is run
+# from rather than into whichever one happened to be current when it was written.
+path = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'tests', 'Paperless.Text.Tests', 'line-break-cases.txt')
 open(path, 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
 print('written ' + path, file=sys.stderr)
