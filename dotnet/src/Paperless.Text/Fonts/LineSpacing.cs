@@ -294,36 +294,88 @@ public static class LineSpacing
     }
 
     /// <summary>
+    /// The families whose <c>post</c> underline metrics LibreOffice refuses to use.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Not a workaround of ours. It is LibreOffice's own shipped configuration —
+    /// <c>Office::Common::Misc::FontsDontUseUnderlineMetrics</c>, tdf#152267 and tdf#154235 —
+    /// consulted by <c>FontMetricData::ShouldNotUseUnderlineMetrics</c>
+    /// (<c>vcl/source/font/fontmetric.cxx:190</c>) before it will read the face's own numbers.
+    /// </para>
+    /// <para>
+    /// It matters far more than three names suggest, because these three <em>are</em> the
+    /// metric-compatible substitutes for Arial, Times New Roman and Courier New, so they are what
+    /// most of a real corpus is actually set in. Their <c>post</c> tables are wrong in a way that
+    /// shows: Liberation Serif Bold declares a thickness of 195 units and an offset of 28, which
+    /// at 28 pt is a 2.67 pt rule drawn 0.38 pt under the baseline — nearly touching the text and
+    /// almost twice as thick as the 1.53 pt rule at 2.30 pt that LibreOffice actually draws.
+    /// </para>
+    /// </remarks>
+    private static readonly string[] FontsWithoutUsableUnderlineMetrics =
+        ["Liberation Serif", "Liberation Sans", "Liberation Mono"];
+
+    /// <summary>
     /// The underline and strikethrough metrics, in design units.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Both come from tables that may be absent or zero, and a zero-thickness line draws nothing —
     /// so each falls back to a fraction of the em rather than being left at zero. The underline sits
     /// below the baseline, which the font records as a negative offset; the strikethrough sits above
     /// it, recorded positive.
+    /// </para>
+    /// <para>
+    /// A face on <see cref="FontsWithoutUsableUnderlineMetrics"/> is treated as declaring nothing
+    /// at all, which sends it down the same descent-derived path LibreOffice uses — see
+    /// <see cref="FromDescent"/>.
+    /// </para>
     /// </remarks>
     public static FontVerticalMetrics ResolveDecorations(OpenTypeFace face, LineMetrics line)
     {
         ArgumentNullException.ThrowIfNull(face);
 
-        int unitsPerEm = face.UnitsPerEm;
+        return ResolveDecorations(face.FamilyName, face.Post, face.Os2, line);
+    }
 
-        int underlineThickness = face.Post.UnderlineThickness > 0
-            ? face.Post.UnderlineThickness
+    /// <summary>
+    /// The same, from the four things the answer actually depends on.
+    /// </summary>
+    /// <remarks>
+    /// The family name is one of them, and not incidentally: it is the whole discriminator for
+    /// <see cref="FontsWithoutUsableUnderlineMetrics"/>.
+    /// </remarks>
+    /// <param name="family">The face's family name, as the blacklist spells it.</param>
+    /// <param name="post">Its <c>post</c> table.</param>
+    /// <param name="os2">Its <c>OS/2</c> table, or null when it has none.</param>
+    /// <param name="line">Its resolved line metrics, in design units.</param>
+    public static FontVerticalMetrics ResolveDecorations(
+        string? family, PostTable post, Os2Table? os2, LineMetrics line)
+    {
+        if (family is not null
+            && Array.IndexOf(FontsWithoutUsableUnderlineMetrics, family) >= 0)
+        {
+            return FromDescent(line);
+        }
+
+        int unitsPerEm = line.UnitsPerEm > 0 ? line.UnitsPerEm : 1000;
+
+        int underlineThickness = post.UnderlineThickness > 0
+            ? post.UnderlineThickness
             : Math.Max(1, unitsPerEm / 20);
 
-        int underlinePosition = face.Post.UnderlinePosition != 0
-            ? face.Post.UnderlinePosition
+        int underlinePosition = post.UnderlinePosition != 0
+            ? post.UnderlinePosition
             : -Math.Max(1, unitsPerEm / 10);
 
-        int strikeoutThickness = face.Os2?.StrikeoutSize > 0
-            ? face.Os2.Value.StrikeoutSize
+        int strikeoutThickness = os2?.StrikeoutSize > 0
+            ? os2.Value.StrikeoutSize
             : underlineThickness;
 
         // A quarter of the em above the baseline is roughly the middle of a lower-case letter, which
         // is where a strikethrough belongs when the font declines to say.
-        int strikeoutPosition = face.Os2?.StrikeoutPosition is > 0
-            ? face.Os2!.Value.StrikeoutPosition
+        int strikeoutPosition = os2?.StrikeoutPosition is > 0
+            ? os2!.Value.StrikeoutPosition
             : Math.Max(1, unitsPerEm / 4);
 
         return new FontVerticalMetrics(
@@ -334,6 +386,57 @@ public static class LineSpacing
             underlineThickness,
             strikeoutPosition,
             strikeoutThickness);
+    }
+
+    /// <summary>
+    /// Decorations derived from the line metrics rather than from the face's own tables.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>FontMetricData::ImplInitTextLineSize</c>, <c>vcl/source/font/fontmetric.cxx:261-330</c>,
+    /// which is the path VCL takes for every font whose <c>post</c> metrics it will not read. A
+    /// rule is a quarter of the descent thick and hangs half a descent below the baseline, less
+    /// half its own thickness so that the stated offset is to its top; a strikethrough sits a
+    /// third of the way up the ascent, less its internal leading.
+    /// </para>
+    /// <para>
+    /// <strong>The clamp applies to the thickness and not to the offset</strong>, which is easy to
+    /// miss and reads as arbitrary until you see the two variables: the C++ reassigns its local
+    /// <c>nDescent</c> for the line height while <c>nUnderlineOffset</c> is computed from the
+    /// member <c>mnDescent</c>. It fires on a face whose descent is more than a third of its
+    /// ascent — #i55341, "for some fonts it is not a good idea to calculate their text line
+    /// metrics from the real font descent".
+    /// </para>
+    /// <para>
+    /// LibreOffice does this arithmetic in device units, so its results carry a rounding of one
+    /// hundredth of a millimetre — 0.028 pt — that design units cannot reproduce. Measured against
+    /// its own PDF for 28 pt Liberation Serif Bold, this gives 2.269 pt where it draws 2.296 and
+    /// 1.518 pt thick where it draws 1.531: a tenth of a pixel at 300 dpi.
+    /// </para>
+    /// </remarks>
+    /// <param name="line">The face's resolved line metrics, in design units.</param>
+    private static FontVerticalMetrics FromDescent(LineMetrics line)
+    {
+        int descent = line.Descent > 0 ? line.Descent : Math.Max(1, line.Ascent / 10);
+        int clamped = 3 * descent > line.Ascent ? line.Ascent / 3 : descent;
+
+        int thickness = Math.Max(1, (clamped * 25 + 50) / 100);
+        int half = thickness / 2;
+
+        // The face's internal leading: how much of its line box sits outside the em.
+        int internalLeading = Math.Max(0, line.Ascent + line.Descent - line.UnitsPerEm);
+
+        return new FontVerticalMetrics(
+            line.Ascent,
+            line.Descent,
+            line.LineGap,
+
+            // Negative below the baseline, which is the sign convention a post table uses and the
+            // opposite of VCL's own — its offsets are positive downwards.
+            -((descent / 2) - half),
+            thickness,
+            ((line.Ascent - internalLeading) / 3) + half,
+            thickness);
     }
 
     /// <summary>
