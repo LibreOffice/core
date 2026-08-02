@@ -22,6 +22,7 @@
 #include <tools/ref.hxx>
 #include "tblenum.hxx"
 #include "swtypes.hxx"
+#include <basegfx/units/Length.hxx>
 #include "calbck.hxx"
 #include "swrect.hxx"
 #include "swtblfmt.hxx"
@@ -409,7 +410,7 @@ public:
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
 
-    SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
+    gfx::Length GetTableLineHeight(bool& bLayoutAvailable) const;
 
     bool hasSoftPageBreak() const;
 

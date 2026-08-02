@@ -99,7 +99,7 @@ tools::Long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     {
         // At first we try to get the height of the layout.
         bool bLayoutAvailable = false;
-        nHeight = pLine->GetTableLineHeight(bLayoutAvailable);
+        nHeight = pLine->GetTableLineHeight(bLayoutAvailable).as_twip<tools::Long>();
         if( nHeight > 0 )
             return nHeight;
 

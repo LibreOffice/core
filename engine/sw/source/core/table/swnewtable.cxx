@@ -1366,7 +1366,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
     for( sal_uInt16 i = nFirst; i <= nLast; ++i )
     {
         bool bLayoutAvailable = false;
-        nHeight += rTable.GetTabLines()[ i ]->GetTableLineHeight( bLayoutAvailable );
+        nHeight += rTable.GetTabLines()[i]->GetTableLineHeight(bLayoutAvailable).as_twip<SwTwips>();
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
     }
