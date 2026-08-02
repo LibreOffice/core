@@ -352,7 +352,12 @@ public sealed class Paginator
         WritingSection geometry = resolved[sectionIndex].Section;
         PageFurnitureSet? furnitureSet = resolved[sectionIndex].Furniture;
         PageGeometry page = geometry.Page;
-        Length bodyHeight = page.TextHeight;
+
+        // The geometry the body actually gets, which is the section's own once the running head has been
+        // measured against the room reserved for it — see PushedDownBy. Recomputed at the top of every
+        // page, because the head a page draws is the page's and not the section's.
+        PageGeometry body = page;
+        Length bodyHeight = body.TextHeight;
         Length bodyWidth = page.ColumnWidth;
 
         // A note breaks at the body's full width rather than a column's, which is what LibreOffice's own
@@ -456,6 +461,21 @@ public sealed class Paginator
             pageIsSectionFirst = pages.Count == sectionFirstPage;
         }
 
+        // The body area of the page about to be filled, which depends on how tall its own running head
+        // turned out. Called after every change to what that head is or which page draws it.
+        void MeasureBody()
+        {
+            body = PushedDownBy(
+                page,
+                pageFurniture?.Header(
+                    pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
+                    _options.CollapsesSpacing));
+
+            bodyHeight = body.TextHeight;
+        }
+
+        MeasureBody();
+
         List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
@@ -540,13 +560,13 @@ public sealed class Paginator
                 geometry = resolved[sectionIndex].Section;
                 furnitureSet = resolved[sectionIndex].Furniture;
                 page = geometry.Page;
-                bodyHeight = page.TextHeight;
                 sectionFirstPage = pages.Count;
                 pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
 
                 // A page with nothing on it yet belongs to the section starting here; one that already
                 // carries lines keeps the head of the section it started in.
                 if (placed.Count == 0 && tables.Count == 0) AdoptSection();
+                MeasureBody();
                 continue;
             }
 
@@ -557,7 +577,7 @@ public sealed class Paginator
                     : table.SpaceBefore;
 
                 TablePart part = PlaceTablePart(
-                    table, laid[paragraphIndex], lineIndex, rowDrawn, page.ColumnArea(column),
+                    table, laid[paragraphIndex], lineIndex, rowDrawn, body.ColumnArea(column),
                     used + before, column, bodyHeight - (used + before), columnIsEmpty);
 
                 // Nothing of the table may go here, and the column already holds something — so the page
@@ -743,19 +763,19 @@ public sealed class Paginator
                 return;
             }
 
-            PlacedFlow? noteArea = NoteArea(notes, page);
+            PlacedFlow? noteArea = NoteArea(notes, body);
 
             pages.Add(Page(
                 pages.Count,
                 pageNumber,
-                page,
+                body,
                 placed,
                 tables,
                 Furniture(
                     pageFurniture, pageFurnitureSection, pageFurnitureGeometry, pageNumber,
                     first: pageIsSectionFirst),
                 noteArea,
-                Separator(noteArea, page)));
+                Separator(noteArea, body)));
 
             AdoptSection();
             pageNumber++;
@@ -764,6 +784,7 @@ public sealed class Paginator
             tables = [];
             notes = [];
             used = Length.Zero;
+            MeasureBody();
         }
     }
 
@@ -1083,6 +1104,56 @@ public sealed class Paginator
             ? (null, null)
             : (furniture.Header(section, geometry, pageNumber, first, _options.CollapsesSpacing),
                furniture.Footer(section, geometry, pageNumber, first, _options.CollapsesSpacing));
+
+    /// <summary>
+    /// A page's geometry with the body moved down to clear a running head that outgrew its margin.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A Word header is not confined to the room the top margin reserves for it. <c>w:header</c> says where
+    /// the header starts and <c>w:top</c> says where the body does, and when the header's own content needs
+    /// more than the difference between them the body is pushed down rather than drawn over.
+    /// </para>
+    /// <para>
+    /// LibreOffice reaches the same answer through two properties its DOCX importer sets together:
+    /// <c>SectionPropertyMap::PrepareHeaderFooterProperties</c> (<c>dmapper/PropertyMap.cxx</c>:1148) makes
+    /// the page's top margin <c>w:header</c>, gives the header frame a height of
+    /// <c>w:top − w:header</c> with a 1 mm floor, and turns on both dynamic height and dynamic spacing.
+    /// <c>SwHeadFootFrame::FormatPrt</c> (<c>sw/source/core/layout/hffrm.cxx</c>:116) is what dynamic
+    /// spacing then means: growth first eats the gap between the header and the body — so a header that
+    /// still fits inside <c>w:top</c> moves nothing — and once that gap is gone the frame keeps growing and
+    /// the body follows it down. The body therefore starts at
+    /// <c>max(w:top, w:header + header height)</c>, which is what this computes.
+    /// </para>
+    /// <para>
+    /// Per page rather than per section, because the height belongs to the head that page actually draws:
+    /// a section whose first page carries a tall title block and whose later pages carry one line has two
+    /// different body areas, and taking the tallest of its slots shortens every page for the sake of one.
+    /// </para>
+    /// <para>
+    /// The height taken is the flow's <see cref="PlacedFlow.Advance"/>, its last paragraph's space-after
+    /// included. Writer's <c>lcl_CalcContentHeight</c> sums frame heights instead, and a text frame's
+    /// height excludes its own lower spacing — so a running head whose last paragraph has space after it
+    /// is measured a little tall here. Measured on the corpus document above the difference is 1.2 pt the
+    /// other way, which is within the ascent of the first body line, so the simpler figure is what this
+    /// uses until a document is found that needs the harder one.
+    /// </para>
+    /// </remarks>
+    private static PageGeometry PushedDownBy(PageGeometry page, PlacedFlow? header)
+    {
+        if (header is null || header.IsEmpty) return page;
+
+        Length needed = page.HeaderDistance + header.Advance;
+        if (needed <= page.Margins.Top) return page;
+
+        // A head that would leave no body at all is not honoured. Writer would let the frame keep growing,
+        // but a body of no height holds one overflowing line per page however much text is left, so a
+        // malformed running head would turn a ten-page document into a thousand-page one.
+        if (needed >= page.Size.Height - page.Margins.Bottom) return page;
+
+        return page with { Margins = page.Margins with { Top = needed } };
+    }
+
     /// <summary>
     /// The notes a run of a paragraph's lines anchors.
     /// </summary>
