@@ -37,6 +37,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 #include <authfld.hxx>
@@ -449,6 +450,11 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLStyleRefFlags)
 ///        this docx only has such stylerefs to avoid confusion)
 CPPUNIT_TEST_FIXTURE(Test, testODFStyleRef)
 {
+    // These are the values of a document with no layout, where a marginal STYLEREF has no page to
+    // resolve against; a Kit build lays out on load, so it never sees them
+    if (comphelper::COKit::isActive())
+        return;
+
     // if createSwDoc is used then calcLayout is called and the field values are different
     loadFromFile(u"styleref.odt");
 
