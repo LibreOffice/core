@@ -196,6 +196,28 @@ Near-equal failure rates across formats mean the cause is downstream of the read
 by symptom. Sharply unequal rates mean the readers really are the problem, and splitting by
 format is both safe and natural.
 
+### Worktrees isolate the code, not the scratch directory
+
+Agents get their own git worktree and share one filesystem everywhere else. Two agents this
+round both wrote `batch-check.sh` output into `scratchpad/base/`, and the resulting
+`rows.tsv` held another track's rows interleaved with duplicated copies of its own. It looks
+like a normal file, nothing errors, and the totals are simply wrong — the worst kind of
+measurement failure, because it survives into a report and then into the next agent's brief.
+
+Two lines in every brief prevent it:
+
+- **Name output directories after the agent or the cluster**, never `base`, `out`, `before`
+  or `after`. Those are what everyone independently picks.
+- **Sanity-check every sweep before believing it.** The row count must equal the track size
+  exactly, and no path may appear twice:
+
+```sh
+wc -l <outdir>/rows.tsv                          # must equal the track size
+cut -f1 <outdir>/rows.tsv | sort | uniq -d       # must print nothing
+```
+
+Discard and re-measure on either failure; do not try to repair the file.
+
 ### How many agents actually fit
 
 Each agent worktree costs **about 2.8 GB once built**. Measured breakdown, because the
