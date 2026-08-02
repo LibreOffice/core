@@ -190,6 +190,7 @@ public sealed partial class DocxLayoutSource
         ArgumentNullException.ThrowIfNull(body);
 
         _sectionIndex = 0;
+        _blocksInSection = 0;
 
         // The body is where the document's lists start counting. Reset rather than assumed clean,
         // because the numbering may be the same instance the extraction pass already walked.
@@ -305,6 +306,50 @@ public sealed partial class DocxLayoutSource
     private int _sectionIndex;
 
     /// <summary>
+    /// How many blocks the current section has already contributed, reset when a section closes.
+    /// </summary>
+    /// <remarks>
+    /// Only <see cref="IsSectionMarkOnly"/> reads it, and only to answer "is this section mark the whole
+    /// section". Counted for every paragraph and table the walk passes rather than for the ones it keeps,
+    /// which is what Writer's <c>bIsFirstParaInSection</c> counts — a paragraph the reader could not
+    /// resolve a face for still separates the section mark from the start of its section.
+    /// </remarks>
+    private int _blocksInSection;
+
+    /// <summary>
+    /// Whether a paragraph that closes a section is nothing but the section mark, and so is not laid out.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word stores a section break as a paragraph mark carrying <c>w:sectPr</c>, and that mark is not a
+    /// paragraph: it takes no line and no spacing. Writer's DOCX importer says so directly — "if the
+    /// paragraph contains only the section properties and it has no runs, we should not create a paragraph
+    /// for it in Writer, unless that would remove the whole section"
+    /// (<c>writerfilter/dmapper/DomainMapper.cxx</c>:4840, the <c>bRemove</c> expression) — and it is the
+    /// <c>!bSingleParagraphAfterRedline</c> term there that spells the exception: a mark that is both the
+    /// first and the last paragraph of its section is kept, because dropping it would leave the section
+    /// with no content to hang a page on.
+    /// </para>
+    /// <para>
+    /// Measured on <c>easa-form-1.docx</c>, whose first section ends with an ordinary empty paragraph and
+    /// then a section mark: laying the mark out overflowed the page by one line and produced a sixth page
+    /// carrying nothing but the section's footer. LibreOffice's own flat-ODF export of that document holds
+    /// one empty paragraph where the DOCX has two, which is this rule visible in its output.
+    /// </para>
+    /// <para>
+    /// "Nothing but the mark" is read from what the paragraph produced rather than from its markup, so a
+    /// mark that anchors a frame, cites a note, or defers a page break keeps its paragraph: each of those
+    /// is content the page would otherwise lose, and Writer guards them individually
+    /// (<c>HasTopAnchoredObjects</c>, <c>IsParaWithInlineObject</c>, the column-break test).
+    /// </para>
+    /// </remarks>
+    private static bool IsSectionMarkOnly(PageParagraph paragraph)
+        => paragraph.Text.Length == 0
+           && paragraph.Frames.Count == 0
+           && paragraph.Notes.Count == 0
+           && !paragraph.Format.StartsNewPage;
+
+    /// <summary>
     /// How many tables enclose the one being read, counted while its rows are walked.
     /// </summary>
     /// <remarks>
@@ -352,18 +397,35 @@ public sealed partial class DocxLayoutSource
 
             if (Word.Is(child, "p"))
             {
-                if (Paragraph(child) is { } paragraph && paragraph is T block) into.Add(block);
+                bool endsSection = Word.Child(Word.Child(child, "pPr"), "sectPr") is not null;
+
+                // Read it either way: even a paragraph that is only a section mark can leave a page break
+                // behind for the paragraph after it, and that bookkeeping lives in `Paragraph`.
+                if (Paragraph(child) is { } paragraph
+                    && !(endsSection && _blocksInSection > 0 && IsSectionMarkOnly(paragraph))
+                    && paragraph is T block)
+                {
+                    into.Add(block);
+                }
+
+                _blocksInSection++;
 
                 // A DOCX states a section's properties at its *end*: the w:sectPr inside a paragraph's
                 // properties closes the section that paragraph finishes. So the counter advances after the
                 // paragraph, which is what puts that paragraph in the section it ends rather than the next.
-                if (Word.Child(Word.Child(child, "pPr"), "sectPr") is not null) _sectionIndex++;
+                if (endsSection)
+                {
+                    _sectionIndex++;
+                    _blocksInSection = 0;
+                }
+
                 continue;
             }
 
             if (Word.Is(child, "tbl"))
             {
                 if (Table(child) is { } table && table is T grid) into.Add(grid);
+                _blocksInSection++;
                 continue;
             }
 
@@ -434,6 +496,10 @@ public sealed partial class DocxLayoutSource
                 ? format with { StartsNewPage = true }
                 : format,
             Label = label,
+
+            // #i3952#: a tab or a run of spaces does not raise a line's height in a Word document, and a
+            // DOCX imports with the setting on. See PageParagraph.BlanksAreTransparentToHeight.
+            BlanksAreTransparentToHeight = true,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),

@@ -106,7 +106,8 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
                 .Where(pair => pair.Name is not null)
                 .ToDictionary(pair => pair.Name!, pair => pair.index, StringComparer.Ordinal),
             stylesRoot: _inner.File.StylesRoot,
-            pictures: new OdfPictures(_inner.File, _laidOut));
+            pictures: new OdfPictures(_inner.File, _laidOut),
+            settings: _inner.File.Settings);
 
         List<PageBlock> blocks = source.Read(body);
 

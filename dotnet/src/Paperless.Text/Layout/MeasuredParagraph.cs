@@ -171,13 +171,16 @@ public sealed class MeasuredParagraph
     private readonly TextItem[] _items;
     private readonly InlineObject[] _objects;
 
+    private readonly bool _blanksAreTransparentToHeight;
+
     private MeasuredParagraph(
         string text,
         MeasuredRun[] runs,
         long[] prefixEmu,
         TextItem[] items,
         byte paragraphLevel,
-        InlineObject[] objects)
+        InlineObject[] objects,
+        bool blanksAreTransparentToHeight)
     {
         Text = text;
         _runs = runs;
@@ -185,6 +188,7 @@ public sealed class MeasuredParagraph
         _items = items;
         ParagraphLevel = paragraphLevel;
         _objects = objects;
+        _blanksAreTransparentToHeight = blanksAreTransparentToHeight;
     }
 
     /// <summary>The paragraph's text.</summary>
@@ -241,13 +245,19 @@ public sealed class MeasuredParagraph
     /// The device grid each run's vertical metrics are rounded through, or null to scale them exactly.
     /// See <see cref="MetricGrid"/>.
     /// </param>
+    /// <param name="blanksAreTransparentToHeight">
+    /// True to leave tabs and all-blank runs out of a line's height, which is what the Word formats ask
+    /// for; see <see cref="HeightOf"/>. False — the default — measures every run on the line, which is
+    /// what ODF and RTF want.
+    /// </param>
     public static MeasuredParagraph Measure(
         string text,
         IReadOnlyList<FormattedRun> runs,
         ITextShaper? shaper = null,
         ItemisationOptions? itemisation = null,
         IReadOnlyList<InlineObject>? objects = null,
-        MetricGrid? grid = null)
+        MetricGrid? grid = null,
+        bool blanksAreTransparentToHeight = false)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(runs);
@@ -334,7 +344,8 @@ public sealed class MeasuredParagraph
         }
 
         return new MeasuredParagraph(
-            text, [.. measured], prefix, [.. items], bidi.ParagraphLevel, inline);
+            text, [.. measured], prefix, [.. items], bidi.ParagraphLevel, inline,
+            blanksAreTransparentToHeight);
     }
 
     /// <summary>
@@ -484,6 +495,23 @@ public sealed class MeasuredParagraph
     /// An empty range takes the run that would contain it, so an empty line is still as tall as the text
     /// that would go on it.
     /// </para>
+    /// <para>
+    /// <strong>Tabs and blanks are transparent when the paragraph was measured that way.</strong> Word
+    /// does not let a tab or a run of spaces make a line taller, and Writer follows it behind the
+    /// <c>IgnoreTabsAndBlanksForLineCalculation</c> setting, which its DOC and DOCX importers both turn on
+    /// and its RTF and ODF ones leave off (measured: a flat-ODF export of the same prose reads
+    /// <c>true</c> from <c>.doc</c> and <c>.docx</c>, <c>false</c> from <c>.rtf</c>, <c>.odt</c> and
+    /// <c>.fodt</c>). <c>SwLineLayout::CalcLine</c> skips such a portion outright while any other portion
+    /// is on the line (<c>porlay.cxx</c>:340) and falls back to it when none is (<c>porlay.cxx</c>:601),
+    /// which is the two passes below.
+    /// </para>
+    /// <para>
+    /// It matters far more than it sounds. A tab between two runs carries whatever size the character
+    /// formatting left it — usually the document default, not the size of the text either side of it — so
+    /// a tabbed table set in 8 pt with 12 pt tabs is laid out on 12 pt lines by anything that measures the
+    /// tabs. Measured on <c>prison-population-bulletin-june.doc</c>: 16.7 pt of row pitch against the
+    /// reference's 12.1, at identical glyph sizes, which cost that document two whole pages.
+    /// </para>
     /// </remarks>
     public (Length Height, Length Ascent) HeightOf(int start, int end)
     {
@@ -491,13 +519,13 @@ public sealed class MeasuredParagraph
         Length ascent = Length.Zero;
         Length descent = Length.Zero;
 
-        foreach (MeasuredRun run in _runs)
-        {
-            bool touches = run.Run.Start < end && start < run.Run.End;
-            bool contains = start == end && run.Run.Covers(start);
-            if (!touches && !contains) continue;
+        Fold(start, end, _blanksAreTransparentToHeight, ref height, ref ascent, ref descent);
 
-            Accumulate(run, ref height, ref ascent, ref descent);
+        // A line holding nothing but tabs and blanks is as tall as those tabs and blanks: they are skipped
+        // only while something else is there to be measured instead.
+        if (height == Length.Zero && _blanksAreTransparentToHeight)
+        {
+            Fold(start, end, skipBlankRuns: false, ref height, ref ascent, ref descent);
         }
 
         // No run at all, which happens for an empty paragraph. The first run's metrics are the
@@ -528,6 +556,69 @@ public sealed class MeasuredParagraph
         }
 
         return (Length.Max(height, ascent + descent), ascent);
+    }
+
+    /// <summary>Folds every run touching a range into the maxima a line's height is built from.</summary>
+    /// <param name="start">Where the line starts.</param>
+    /// <param name="end">Where the line's visible text ends.</param>
+    /// <param name="skipBlankRuns">
+    /// True to pass over a run whose share of the range is nothing but tabs and blanks, which is what
+    /// <see cref="HeightOf"/> documents.
+    /// </param>
+    /// <param name="height">The tallest run so far.</param>
+    /// <param name="ascent">The largest ascent so far.</param>
+    /// <param name="descent">The largest descent so far.</param>
+    private void Fold(
+        int start, int end, bool skipBlankRuns,
+        ref Length height, ref Length ascent, ref Length descent)
+    {
+        foreach (MeasuredRun run in _runs)
+        {
+            bool touches = run.Run.Start < end && start < run.Run.End;
+            bool contains = start == end && run.Run.Covers(start);
+            if (!touches && !contains) continue;
+
+            if (skipBlankRuns
+                && IsAllBlanks(Text, Math.Max(start, run.Run.Start), Math.Min(end, run.Run.End)))
+            {
+                continue;
+            }
+
+            Accumulate(run, ref height, ref ascent, ref descent);
+        }
+    }
+
+    /// <summary>
+    /// Whether a stretch of the text is nothing but the characters Word measures no line height from.
+    /// </summary>
+    /// <remarks>
+    /// The tab first, which Writer answers separately because a tab is its own portion type
+    /// (<c>SwLinePortion::InTabGrp</c>), then the four spaces <c>lcl_HasOnlyBlanks</c> lists
+    /// (<c>porlay.cxx</c>:231) plus the en space it accepts outside a fieldmark. An empty stretch is
+    /// <em>not</em> all blanks: that is the empty-line case, which takes its height from the run covering
+    /// it rather than losing it.
+    /// </remarks>
+    private static bool IsAllBlanks(string text, int start, int end)
+    {
+        if (end <= start) return false;
+
+        for (int i = start; i < end && i < text.Length; i++)
+        {
+            switch (text[i])
+            {
+                case '\t':
+                case ' ': // SPACE
+                case '\u2002': // EN SPACE
+                case '\u2003': // EM SPACE
+                case '\u2005': // FOUR-PER-EM SPACE
+                case '\u3000': // IDEOGRAPHIC SPACE
+                    continue;
+                default:
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>Folds one run into the running maxima a line's height is built from.</summary>

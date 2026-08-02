@@ -92,12 +92,17 @@ public sealed partial class OdtLayoutSource
     /// How to reach the bytes behind a <c>draw:image</c>, or null to lay the document out with its
     /// picture frames empty — which is what a caller who wants only measurements should pay for.
     /// </param>
+    /// <param name="settings">
+    /// The document's <c>office:settings</c>, or null for one that states none. Only the compatibility
+    /// flags are read from it; see <see cref="_blanksAreTransparentToHeight"/>.
+    /// </param>
     public OdtLayoutSource(
         OdfStyles styles,
         SystemFontResolver? fonts = null,
         IReadOnlyDictionary<string, int>? masterPages = null,
         XElement? stylesRoot = null,
-        OdfPictures? pictures = null)
+        OdfPictures? pictures = null,
+        XElement? settings = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
         _styles = styles;
@@ -106,7 +111,33 @@ public sealed partial class OdtLayoutSource
         _masterPages = masterPages ?? new Dictionary<string, int>(StringComparer.Ordinal);
         _footnotes = NumberingIn(stylesRoot, "footnote", NoteNumbering.Footnotes);
         _endnotes = NumberingIn(stylesRoot, "endnote", NoteNumbering.Endnotes);
+        _blanksAreTransparentToHeight =
+            Setting(settings, "IgnoreTabsAndBlanksForLineCalculation") == "true";
     }
+
+    /// <summary>
+    /// Whether tabs and blanks are left out of a line's height, as the document's settings say.
+    /// </summary>
+    /// <remarks>
+    /// False unless the file asks for it, which is the ODF default — and the reason it can be asked for at
+    /// all is that LibreOffice writes the flag out. A document exported from a <c>.doc</c> or a <c>.docx</c>
+    /// carries <c>true</c>, so a flat-ODF round trip of a Word file lays out the way the Word file does
+    /// instead of quietly diverging from it. See <see cref="PageParagraph.BlanksAreTransparentToHeight"/>.
+    /// </remarks>
+    private readonly bool _blanksAreTransparentToHeight;
+
+    /// <summary>One <c>config:config-item</c>'s value from a document's settings, or null when absent.</summary>
+    /// <remarks>
+    /// The items are nested in <c>config:config-item-set</c> elements, so this searches by descendant name
+    /// rather than walking the sets: which set a flag lives in is a detail of how LibreOffice groups them,
+    /// and a reader that hard-codes the grouping breaks on the next version that regroups.
+    /// </remarks>
+    private static string? Setting(XElement? settings, string name)
+        => settings?
+            .Descendants(XName.Get("config-item", OdfNamespaces.Config))
+            .FirstOrDefault(item =>
+                item.Attribute(XName.Get("name", OdfNamespaces.Config))?.Value == name)?
+            .Value;
 
     /// <summary>How the document's footnotes are numbered.</summary>
     private readonly NoteNumbering _footnotes;
@@ -504,6 +535,7 @@ public sealed partial class OdtLayoutSource
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
+            BlanksAreTransparentToHeight = _blanksAreTransparentToHeight,
             Runs = runs,
             Notes = notes,
             Frames = frames,
