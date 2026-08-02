@@ -61,11 +61,15 @@ internal static class PptxTextBody
     /// <see cref="PptxTextStyles.LevelPropertiesFor"/>. Null reads the body alone, which is right
     /// for a shape with no placeholder chain behind it and wrong for every slide placeholder.
     /// </param>
+    /// <param name="fields">
+    /// What this slide's automatic fields resolve to, or null to draw the cached text instead.
+    /// </param>
     public static SlideTextBody Read(
         XElement body,
         DrawingTheme? theme = null,
         string? defaultTypeface = null,
-        Func<int, IReadOnlyList<XElement>>? inherited = null)
+        Func<int, IReadOnlyList<XElement>>? inherited = null,
+        SlideFields? fields = null)
     {
         ArgumentNullException.ThrowIfNull(body);
 
@@ -83,7 +87,8 @@ internal static class PptxTextBody
         {
             paragraphs.Add(
                 Paragraph(
-                    paragraph, listStyle, theme, defaultTypeface, counters, counting, inherited));
+                    paragraph, listStyle, theme, defaultTypeface, counters, counting, inherited,
+                    fields));
         }
 
         XElement? autofit = Drawing.Child(properties, "normAutofit");
@@ -134,6 +139,27 @@ internal static class PptxTextBody
             : units / ShapeTransform.RotationUnitsPerDegree * Math.PI / 180.0;
     }
 
+    /// <summary>
+    /// What an <c>a:fld</c> of this type draws, or null to fall back to its cached text.
+    /// </summary>
+    /// <remarks>
+    /// Only the two that are a property of the deck rather than of the machine reading it.
+    /// A date or a file name is deliberately left as cached: the reference substitutes the
+    /// conversion's own clock and path, and reproducing that would make a rendering
+    /// unreproducible.
+    /// </remarks>
+    private static string? FieldText(string? type, SlideFields? fields)
+    {
+        if (fields is not { } known) return null;
+
+        return type switch
+        {
+            "slidenum" => known.Number.ToString(CultureInfo.InvariantCulture),
+            "slidecount" => known.Count.ToString(CultureInfo.InvariantCulture),
+            _ => null,
+        };
+    }
+
     private static TextAnchor Anchor(string? anchor) => anchor switch
     {
         "ctr" => TextAnchor.Middle,
@@ -148,7 +174,8 @@ internal static class PptxTextBody
         string? defaultTypeface,
         int[] counters,
         bool[] counting,
-        Func<int, IReadOnlyList<XElement>>? inherited)
+        Func<int, IReadOnlyList<XElement>>? inherited,
+        SlideFields? fields)
     {
         XElement? paragraphProperties = Drawing.Child(paragraph, "pPr");
         int level = Math.Clamp(Drawing.Number(paragraphProperties, "lvl") ?? 0, 0, 8);
@@ -186,10 +213,17 @@ internal static class PptxTextBody
             }
             else if (Drawing.Is(child, "fld"))
             {
-                // The cached value, not a recomputed one: what the file says a reader saw is what
-                // a reference renderer draws, and recomputing a slide number would disagree with
-                // it on any deck whose fields are stale.
-                string content = Drawing.Child(child, "t")?.Value ?? string.Empty;
+                // The slide's own position, and otherwise the cached value. A field is not a run
+                // with stale text: TextField::insertAt turns a slidenum into a
+                // com.sun.star.text.TextField.PageNumber (textfield.cxx:107-111), which draws the
+                // page it lands on. It matters because the cached text of the field on a *master*
+                // is the literal placeholder "‹#›" — one master shape serving forty slides cannot
+                // cache forty different numbers — so drawing the cache puts "‹#›" on every page of
+                // any deck whose page number lives on the master rather than on each slide.
+                string content =
+                    FieldText(Drawing.Attribute(child, "type"), fields)
+                    ?? Drawing.Child(child, "t")?.Value
+                    ?? string.Empty;
                 if (content.Length == 0) continue;
 
                 runs.Add(Run(

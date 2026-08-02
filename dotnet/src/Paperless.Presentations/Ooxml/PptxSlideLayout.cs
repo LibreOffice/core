@@ -61,6 +61,12 @@ internal sealed partial class PptxSlideLayout
     /// </remarks>
     private PptxTextStyles? _styles;
 
+    /// <summary>
+    /// What the slide currently being laid out resolves its automatic fields to.
+    /// </summary>
+    /// <remarks>Held beside <see cref="_styles"/>, and for the same reason.</remarks>
+    private SlideFields _fields;
+
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
         _file = file;
@@ -74,6 +80,7 @@ internal sealed partial class PptxSlideLayout
         _styles = new PptxTextStyles(
             slide.Layout, slide.Master, _file.DefaultTextStyle, isNotesPage: false,
             theme.Colours);
+        _fields = new SlideFields(slide.Index + 1, _file.Slides.Count);
 
         List<PlacedShape> shapes = [];
 
@@ -749,7 +756,8 @@ internal sealed partial class PptxSlideLayout
         return body is null || DrawingTextBody.IsEmpty(body)
             ? null
             : PptxTextBody.Read(
-                body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape));
+                body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape),
+                _fields);
     }
 
     /// <summary>
