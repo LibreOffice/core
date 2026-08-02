@@ -177,6 +177,26 @@ public sealed record PageParagraph : PageBlock
     public MetricGrid? Metrics { get; init; }
 
     /// <summary>
+    /// True when a tab or a run of spaces must not make a line taller, which is what Word does.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>IgnoreTabsAndBlanksForLineCalculation</c> (#i3952). Its DOC importer sets it outright
+    /// (<c>sw/source/filter/ww8/ww8par.cxx</c>:2041) and its DOCX import ends up with it too, while RTF and
+    /// ODF leave it off unless the file says otherwise — measured by exporting the same prose from each
+    /// format to flat ODF and reading the setting back: <c>true</c> from <c>.doc</c> and <c>.docx</c>,
+    /// <c>false</c> from <c>.rtf</c>, <c>.odt</c> and <c>.fodt</c>.
+    /// </para>
+    /// <para>
+    /// It only ever matters on a paragraph whose formatting varies, since a tab takes the size of whatever
+    /// character formatting covers it and that is frequently the document's default rather than the size of
+    /// the text around it. Beside <see cref="Metrics"/> and for the same reason: the reader knows the
+    /// answer, and four different routes into the layouter need it.
+    /// </para>
+    /// </remarks>
+    public bool BlanksAreTransparentToHeight { get; init; }
+
+    /// <summary>
     /// The direction its bidi resolution takes as its base.
     /// </summary>
     /// <remarks>
@@ -273,7 +293,9 @@ public sealed record PageParagraph : PageBlock
             runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
         }
 
-        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects, Metrics);
+        return MeasuredParagraph.Measure(
+            Text, runs, shaper: null, Itemisation, InlineObjects, Metrics,
+            BlanksAreTransparentToHeight);
     }
 }
 

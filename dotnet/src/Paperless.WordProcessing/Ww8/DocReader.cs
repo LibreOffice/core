@@ -397,6 +397,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
                 Metrics = fonts.Metrics,
+
+                // #i3952#, which the WW8 importer turns on for every DOC without asking the file
+                // (`ww8par.cxx`:2041). See PageParagraph.BlanksAreTransparentToHeight.
+                BlanksAreTransparentToHeight = true,
                 Runs = runs,
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames),

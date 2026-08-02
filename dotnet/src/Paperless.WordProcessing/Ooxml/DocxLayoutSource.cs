@@ -497,6 +497,9 @@ public sealed partial class DocxLayoutSource
                 : format,
             Label = label,
 
+            // #i3952#: a tab or a run of spaces does not raise a line's height in a Word document, and a
+            // DOCX imports with the setting on. See PageParagraph.BlanksAreTransparentToHeight.
+            BlanksAreTransparentToHeight = true,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
