@@ -181,6 +181,51 @@ the remaining slides work is mostly `.ppt`.
 entirely about what reaches the page. Of the 79 remaining failures, 53 lose text and 25 emit
 *more* than the reference — both real, and different bugs.
 
+## After the second round: slides — 133 of 163
+
+Two agents, one per format, each given a named cause. Merged one at a time, with a sweep
+between them to isolate the first:
+
+| | baseline | round 1 | r2, ppt merged | r2, both |
+|---|---|---|---|---|
+| `ppt` | 15/49 | 17/51 | 36/51 | **42/51** |
+| `pptx` | 38/101 | 67/112 | 67/112 | **91/112** |
+| total | 53/150 | 84/163 | 103/163 | **133/163** |
+
+**The strongest compounding yet: 133 against individual claims of 103 and 111.** The
+intermediate sweep is why that is knowable — it confirmed the PPT agent's *inferred* claim
+that pptx could not have moved (all its commits were under `MsBinary`), and it isolates the
++6 that `.ppt` gained from the PPTX agent's shared-layout fix, which that agent had measured
+as +3 in its own worktree.
+
+Four slides batches are now at full parity — 002, 004, 006, 011 — the first anywhere in the
+corpus besides `words/batch-001`.
+
+The two widest-reaching defects were not about text at all: a chart's data-label flags are
+read as `value_or(!bMSO2007Doc)` and the `!bMSO2007Doc` half was hard-coded true, so on a
+file Office 2007 wrote a bare `<c:dLbls/>` turned every label on (one deck drew
+"Manufacturing" 349 times); and a grouped shape's `a:chExt`/`a:ext` ratio scaled the
+placement matrix but not the text rectangle, so 12 pt runs were measured against a box a
+thousandth of an inch wide and chopped away — **39 of 112 decks hold a scaled group**, which
+is what a deck converted from `.ppt` looks like.
+
+### What remains: 30 failures
+
+Every page count is still correct. The tail is now genuinely small and several of it are not
+our defects:
+
+- `010605Vul.ppt` (−100%) — the only document that fails outright; its directory entry
+  declares a `PowerPoint Document` stream above 2 GiB in an 84 kB file. A leniency fix was
+  written, found to turn a clean error into an OOM, and reverted.
+- `Sylva%20introduction%20session.pptx` (−8.6%) — **the reference is wrong**: LibreOffice
+  shapes that deck's title per character (`S e p t m b r`), inflating its own word count. We
+  render it correctly.
+- Two decks at +2.5% are byte-twins of each other; three more sit inside ±3%, at the edge of
+  the 2% band.
+- `8_P-Pavese` and `16 - UTM - (NASA)` put EMF image text in the PDF text layer where
+  LibreOffice does not — arguably better output, and matching would mean preferring EMF+
+  records over the downlevel EMF fallback.
+
 ### `words` — 202 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -211,23 +256,23 @@ entirely about what reaches the page. Of the 79 remaining failures, 53 lose text
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | 6/9 |
-| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | 6/10 |
-| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 3/10 |
-| `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | 6/10 |
-| `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 5/9 |
-| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | 4/10 |
-| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 7/10 |
-| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 7/10 |
-| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 4/10 |
-| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 7/10 |
-| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | 5/10 |
+| `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | 8/9 |
+| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | ✅ |
+| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 7/10 |
+| `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | ✅ |
+| `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 8/9 |
+| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | ✅ |
+| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 8/10 |
+| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 |
+| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 8/10 |
+| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 |
+| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 6/10 |
-| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 7/10 |
-| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 3/10 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 1/10 |
-| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 5/10 |
-| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 2/5 |
+| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 8/10 |
+| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 5/10 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 7/10 |
+| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
+| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 |
 
 ### `sheets` — 174 documents, 18 batches
 
