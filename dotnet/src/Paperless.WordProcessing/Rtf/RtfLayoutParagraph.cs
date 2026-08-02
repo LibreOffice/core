@@ -27,6 +27,8 @@ namespace Paperless.WordProcessing.Rtf;
 /// </param>
 /// <param name="CaseMap">The case <c>\caps</c> or <c>\scaps</c> draws the run in.</param>
 /// <param name="Highlight">The band <c>\highlight</c> draws behind the run, or null when it has none.</param>
+/// <param name="IsUnderlined">True when one of the <c>\ul…</c> words draws a rule under the run.</param>
+/// <param name="IsStruckThrough">True when <c>\strike</c> or <c>\striked</c> draws one through it.</param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -38,7 +40,9 @@ public readonly record struct RtfLayoutRun(
     Colour? Colour,
     Layout.Escapement Escapement = default,
     Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
-    Colour? Highlight = null)
+    Colour? Highlight = null,
+    bool IsUnderlined = false,
+    bool IsStruckThrough = false)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -60,7 +64,9 @@ public readonly record struct RtfLayoutRun(
            && Colour == other.Colour
            && Escapement == other.Escapement
            && CaseMap == other.CaseMap
-           && Highlight == other.Highlight;
+           && Highlight == other.Highlight
+           && IsUnderlined == other.IsUnderlined
+           && IsStruckThrough == other.IsStruckThrough;
 }
 
 /// <summary>

@@ -286,7 +286,7 @@ public sealed record PageParagraph : PageBlock
     /// </remarks>
     internal MeasuredParagraph Measure()
     {
-        List<FormattedRun> runs = [.. Runs.Select(run => run.ToFormattedRun())];
+        List<FormattedRun> runs = Coalesce(Runs);
 
         if (runs.Count == 0)
         {
@@ -296,6 +296,55 @@ public sealed record PageParagraph : PageBlock
         return MeasuredParagraph.Measure(
             Text, runs, shaper: null, Itemisation, InlineObjects, Metrics,
             BlanksAreTransparentToHeight);
+    }
+
+    /// <summary>
+    /// The runs' measurement halves, with adjacent identical ones joined.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>What makes a drawing-only property free.</strong> A <see cref="PageRun"/> carries both
+    /// what changes a width and what only changes a mark — a colour, a highlight, an underline — and the
+    /// readers split a paragraph into runs whenever any of them varies, because a property dropped by
+    /// the uniform-paragraph shortcut is a property never drawn. Without this, that split reaches
+    /// measurement: a shaper called twice across a boundary loses the kern pair that straddles it, so
+    /// underlining a sentence would make it fractionally wider and could move a line break. Joining the
+    /// runs whose <see cref="FormattedRun"/>s are equal restores exactly the shaping the paragraph would
+    /// have had, which is the invariant worth stating outright — <em>a property that decides only what a
+    /// mark looks like cannot decide where it lands.</em>
+    /// </para>
+    /// <para>
+    /// Only <em>adjacent</em> and only <em>identical</em>: a run boundary that is a real change of face
+    /// or size still breaks the shaping context, and it should — those are different fonts, and there is
+    /// no kern pair across them to lose.
+    /// </para>
+    /// </remarks>
+    private static List<FormattedRun> Coalesce(IReadOnlyList<PageRun> runs)
+    {
+        List<FormattedRun> formatted = new(runs.Count);
+
+        foreach (PageRun run in runs)
+        {
+            FormattedRun next = run.ToFormattedRun();
+
+            // Equal in every field but the range, and butting up against the one before it. The record
+            // struct's own equality is what decides "identical", so a field added to the measurement
+            // half is accounted for here without this method being touched.
+            if (formatted.Count > 0
+                && formatted[^1].End == next.Start
+                && formatted[^1] with { Start = next.Start, Length = next.Length } == next)
+            {
+                formatted[^1] = formatted[^1] with
+                {
+                    Length = formatted[^1].Length + next.Length,
+                };
+                continue;
+            }
+
+            formatted.Add(next);
+        }
+
+        return formatted;
     }
 }
 
@@ -414,6 +463,17 @@ public sealed record PageNote
 /// when it has none. It changes no measurement: the band takes the room the glyphs already had, so a
 /// document gains and loses highlighting without a line moving.
 /// </param>
+/// <param name="IsUnderlined">
+/// True when a rule is drawn under the run — <c>w:u</c>, <c>sprmCKul</c>, <c>\ul</c> and
+/// <c>style:text-underline-style</c>. Like <paramref name="Highlight"/> it changes no measurement: the
+/// rule is drawn across the advance the glyphs already had, so nothing reflows when it appears.
+/// </param>
+/// <param name="IsStruckThrough">
+/// True when a rule is drawn through the run — <c>w:strike</c> and <c>w:dstrike</c>,
+/// <c>sprmCFStrike</c> and <c>sprmCFDStrike</c>, <c>\strike</c> and
+/// <c>style:text-line-through-style</c>. The doubled forms are folded onto the single one, which is
+/// what the extraction side does with the same four properties.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -425,10 +485,15 @@ public readonly record struct PageRun(
     Length Rise = default,
     PageCaseMap CaseMap = PageCaseMap.None,
     Length MetricEmSize = default,
-    Colour Highlight = default)
+    Colour Highlight = default,
+    bool IsUnderlined = false,
+    bool IsStruckThrough = false)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
+
+    /// <summary>True when the run carries a rule under it, through it, or both.</summary>
+    public bool IsDecorated => IsUnderlined || IsStruckThrough;
 
     /// <summary>The colour to draw with, black when the run states none.</summary>
     /// <remarks>

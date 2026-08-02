@@ -24,6 +24,8 @@ namespace Paperless.WordProcessing.Ooxml;
 /// <param name="Highlight">
 /// The band <c>w:highlight</c> draws behind the text, or null when it names none.
 /// </param>
+/// <param name="IsUnderlined">True when <c>w:u</c> names a line style other than <c>none</c>.</param>
+/// <param name="IsStruckThrough">True when <c>w:strike</c> or <c>w:dstrike</c> is on.</param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
@@ -33,7 +35,9 @@ public readonly record struct WordTextStyle(
     Colour? Colour = null,
     Layout.Escapement Escapement = default,
     PageCaseMap CaseMap = PageCaseMap.None,
-    Colour? Highlight = null)
+    Colour? Highlight = null,
+    bool IsUnderlined = false,
+    bool IsStruckThrough = false)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -349,6 +353,12 @@ internal static class WordParagraphFormats
             styles.ResolveRunProperty("smallCaps", runProperties, styleId, characterStyleId);
         WordProperty highlight =
             styles.ResolveRunProperty("highlight", runProperties, styleId, characterStyleId);
+        WordProperty underline =
+            styles.ResolveRunProperty("u", runProperties, styleId, characterStyleId);
+        WordProperty strike =
+            styles.ResolveRunProperty("strike", runProperties, styleId, characterStyleId);
+        WordProperty doubleStrike =
+            styles.ResolveRunProperty("dstrike", runProperties, styleId, characterStyleId);
 
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
@@ -366,7 +376,14 @@ internal static class WordParagraphFormats
             capitals.IsOn ? PageCaseMap.Uppercase
                 : smallCapitals.IsOn ? PageCaseMap.SmallCaps
                 : PageCaseMap.None,
-            HighlightOf(Word.Attribute(highlight.Element, "val")));
+            HighlightOf(Word.Attribute(highlight.Element, "val")),
+            // `w:u` is not a toggle and its `w:val` is a line style rather than a switch, so `IsOn` is
+            // the wrong reading of it: it would take `w:u w:val="none"` — which is how a run turns off
+            // an underline its style set — for an underline. The extraction side reads it the same way.
+            underline.HasValue && underline.Value is not (null or "none"),
+            // Folded onto one flag, as the extraction side folds them: `w:dstrike` is a second line
+            // rather than a different decoration, and nothing below this models a doubled rule.
+            strike.IsOn || doubleStrike.IsOn);
     }
 
     /// <summary>

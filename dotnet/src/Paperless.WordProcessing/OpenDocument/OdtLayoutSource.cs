@@ -682,7 +682,11 @@ public sealed partial class OdtLayoutSource
                 || style.CaseMap != PageCaseMap.None
                 // So does a highlight: the paragraph carries none of its own, so a paragraph highlighted
                 // end to end is uniform by every other test and would lose its band entirely.
-                || style.Highlight is { A: not 0 })
+                || style.Highlight is { A: not 0 }
+                // And so do the two rules, for the same reason: neither changes a width, so a paragraph
+                // underlined end to end is uniform by every measurement test and would be drawn plain.
+                || style.IsUnderlined
+                || style.IsStruckThrough)
             {
                 varies = true;
             }
@@ -697,7 +701,9 @@ public sealed partial class OdtLayoutSource
                 new ShapingOptions(Language: style.Language),
                 rise,
                 style.CaseMap,
-                Highlight: style.Highlight ?? default));
+                Highlight: style.Highlight ?? default,
+                IsUnderlined: style.IsUnderlined,
+                IsStruckThrough: style.IsStruckThrough));
         }
 
         return varies ? runs : [];

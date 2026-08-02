@@ -35,6 +35,12 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// where a Word highlighter lands after a round trip: LibreOffice exports both its character highlight
 /// and its character shading to the one ODF attribute.
 /// </param>
+/// <param name="IsUnderlined">
+/// True when <c>style:text-underline-style</c> names a style other than <c>none</c>.
+/// </param>
+/// <param name="IsStruckThrough">
+/// True when <c>style:text-line-through-style</c> names a style other than <c>none</c>.
+/// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
@@ -44,7 +50,9 @@ public readonly record struct OdfTextStyle(
     Colour? Colour = null,
     Layout.Escapement Escapement = default,
     Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
-    Colour? Highlight = null)
+    Colour? Highlight = null,
+    bool IsUnderlined = false,
+    bool IsStruckThrough = false)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -173,8 +181,17 @@ internal static class OdfParagraphFormats
             Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
             EscapementIn(styles, cascade),
             CaseMapIn(styles, cascade),
-            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "background-color").AsColour());
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "background-color").AsColour(),
+            // ODF names the *pattern* rather than switching a flag, so "any value but none" is the
+            // reading — the same one `OdfTextFormat` takes of the same two attributes. The width and
+            // colour attributes beside them are not read: nothing below this can draw a rule other than
+            // one text-coloured line, so honouring them would be a promise the model cannot keep.
+            IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-underline-style").Value),
+            IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-line-through-style").Value));
     }
+
+    /// <summary>Whether one of ODF's two line-style attributes asks for a line.</summary>
+    private static bool IsLineOn(string? value) => value is not (null or "none");
 
     /// <summary>
     /// The case the cascade draws the text in.

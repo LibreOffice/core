@@ -458,7 +458,9 @@ public static class PageDrawing
             if (blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
 
             List<(DocRect Area, Colour Colour)> highlights = [];
-            List<(GlyphRun Run, Colour Colour)> runs = RunsIn(area, line, paragraph, highlights);
+            List<(DocRect Area, Colour Colour)> rules = [];
+            List<(GlyphRun Run, Colour Colour)> runs =
+                RunsIn(area, line, paragraph, highlights, rules);
 
             // Every band on the line before any of its glyphs, not band-then-glyphs run by run: two
             // adjacent highlighted runs overlap by a fraction of a point where one's advance ends and the
@@ -469,6 +471,11 @@ public static class PageDrawing
             {
                 sink.DrawGlyphRun(run, Paint.Solid(colour));
             }
+
+            // After the glyphs, which is the order every other layer here draws a decoration in and the
+            // order Writer paints one: a strikethrough belongs over the letters it crosses out, and an
+            // underline that a descender interrupts is what a font's own offset already expresses.
+            foreach ((DocRect rule, Colour colour) in rules) Fill(rule, colour, sink);
         }
     }
 
@@ -506,11 +513,17 @@ public static class PageDrawing
     /// pen positions the tab stops and the justification decided here — recomputing them elsewhere would
     /// be a second place for that arithmetic to be got right.
     /// </param>
+    /// <param name="rules">
+    /// Collects the underline and strikethrough rectangles each decorated run asks for, or null when the
+    /// caller wants only the glyphs. Out of this walk for the same reason the bands are: a rule spans the
+    /// advance the pen just measured, and its offset and thickness come from the face this walk resolved.
+    /// </param>
     public static List<(GlyphRun Run, Colour Colour)> RunsIn(
         DocRect area,
         PlacedLine line,
         PageParagraph paragraph,
-        List<(DocRect Area, Colour Colour)>? highlights = null)
+        List<(DocRect Area, Colour Colour)>? highlights = null,
+        List<(DocRect Area, Colour Colour)>? rules = null)
     {
         ArgumentNullException.ThrowIfNull(paragraph);
 
@@ -598,6 +611,11 @@ public static class PageDrawing
                     highlights.Add((Band(paragraph, run, pen, extent, baseline), run.Highlight));
                 }
 
+                if (rules is not null && run.IsDecorated)
+                {
+                    Rules(run, pen, extent, baseline, rules);
+                }
+
                 pen += extent;
             }
         }
@@ -635,6 +653,77 @@ public static class PageDrawing
 
         // The rise moves the band with the text: a highlighted superscript is banded where it is drawn.
         return new DocRect(pen, baseline - run.Rise - ascent, extent, height);
+    }
+
+    /// <summary>
+    /// The rules drawn under and through one decorated run.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A decoration is not shaped. It is a rectangle the output device fills across the run's advance,
+    /// which is why it can be added here without any measurement changing: the glyphs had that advance
+    /// already. The offset and the thickness are the face's own <c>post</c> and <c>OS/2</c> numbers
+    /// through <see cref="LineSpacing.ResolveDecorations(OpenTypeFace, LineMetrics)"/> — the same call
+    /// the slide and the cell layers make, including its refusal to believe the three Liberation faces'
+    /// <c>post</c> tables, which is LibreOffice's own shipped <c>FontsDontUseUnderlineMetrics</c> and
+    /// matters here more than anywhere: those three are what a corpus set in Arial, Times New Roman and
+    /// Courier New actually resolves to.
+    /// </para>
+    /// <para>
+    /// No <see cref="MetricGrid"/> is passed, unlike <see cref="Band"/>, and deliberately: a grid
+    /// quantises the <em>scaling</em> of a metric onto device pixels and this resolution reads design
+    /// units, so a printer-metrics document would get an identical answer from a grid it had to be
+    /// threaded here to supply.
+    /// </para>
+    /// <para>
+    /// Per run rather than per line, which is what makes an underlined phrase inside a plain sentence
+    /// underline only itself. Two adjacent underlined runs abut, since each spans exactly the advance
+    /// the pen charged it — there is no gap to bridge and no overlap to double-darken.
+    /// </para>
+    /// </remarks>
+    private static void Rules(
+        PageRun run,
+        Length pen,
+        Length extent,
+        Length baseline,
+        List<(DocRect Area, Colour Colour)> rules)
+    {
+        if (run.EmSize <= Length.Zero || extent <= Length.Zero) return;
+
+        int unitsPerEm = run.Face.UnitsPerEm > 0 ? run.Face.UnitsPerEm : 1000;
+        FontVerticalMetrics metrics =
+            LineSpacing.ResolveDecorations(run.Face, LineSpacing.Resolve(run.Face));
+
+        Length Scaled(int designUnits) => run.EmSize * ((double)designUnits / unitsPerEm);
+
+        // The rise carries the rules with the text, exactly as it carries the band: a struck-through
+        // superscript is struck where it is drawn rather than where it would have sat unraised.
+        Length baselineOfRun = baseline - run.Rise;
+
+        if (run.IsUnderlined)
+        {
+            // The face records the underline's offset as negative below the baseline.
+            Length thickness = Scaled(metrics.UnderlineThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add((
+                    new DocRect(
+                        pen, baselineOfRun - Scaled(metrics.UnderlinePosition), extent, thickness),
+                    run.EffectiveColour));
+            }
+        }
+
+        if (run.IsStruckThrough)
+        {
+            Length thickness = Scaled(metrics.StrikeoutThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add((
+                    new DocRect(
+                        pen, baselineOfRun - Scaled(metrics.StrikeoutPosition), extent, thickness),
+                    run.EffectiveColour));
+            }
+        }
     }
 
     /// <summary>

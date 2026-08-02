@@ -90,7 +90,8 @@ public static class DocReader
             // that looks in the main stream regardless finds whatever happens to sit at that offset.
             byte[]? data = ReadStream(file, PictureStreamName);
 
-            Ww8DocumentReader reader = new(wordDocument, table, fib, diagnostics, data);
+            Ww8DocumentReader reader =
+                new(wordDocument, table, fib, diagnostics, data, source.FileName);
             ContentDocument content = reader.Read(OlePropertySetReader.Read(file));
 
             return new Ww8Document(
@@ -587,7 +588,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 // So does a highlight, and for the same reason read the other way: the paragraph carries
                 // no highlight of its own, so a paragraph highlighted end to end is uniform by every other
                 // test and would lose its band entirely.
-                || run.Highlight is not null)
+                || run.Highlight is not null
+                // And so do the two rules, for the same reason: neither changes a width, so a paragraph
+                // underlined end to end is uniform by every measurement test and would be drawn plain.
+                || run.IsUnderlined
+                || run.IsStruckThrough)
             {
                 varies = true;
             }
@@ -602,7 +607,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 new Text.Shaping.ShapingOptions(Language: run.Language),
                 rise,
                 run.CaseMap,
-                Highlight: run.Highlight ?? default));
+                Highlight: run.Highlight ?? default,
+                IsUnderlined: run.IsUnderlined,
+                IsStruckThrough: run.IsStruckThrough));
         }
 
         return varies ? runs : [];
