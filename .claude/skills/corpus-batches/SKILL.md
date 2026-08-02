@@ -183,6 +183,20 @@ A brief that works contains all of:
 Ask for honesty about what is unproven. An overstated claim costs more than an admitted gap,
 because the next worker builds on it.
 
+### A green test that proves nothing is worse than no test
+
+Ask agents to verify each new test by **reintroducing the bug and watching it fail**. One
+agent wrote a test for a two-pass invariant, found it still passed with the defect
+deliberately put back, and deleted it rather than ship it — which is the right call and
+worth asking for explicitly, because the alternative is a permanent false assurance that
+nobody re-examines.
+
+The same agent could not unit-test its largest fix at all: LibreOffice's own DOC export
+writes a page break as `sprmPFPageBreakBefore` and never as the character the bug concerned,
+so no fixture could be generated and none in the tree contained the case. It said so plainly
+and rested the claim on a 66-file corpus measurement instead. **"I could not test this and
+here is what I measured instead" is a complete answer**; a test that cannot fail is not.
+
 ## Putting more than one agent on a single track
 
 Worth doing, but **not by handing each agent a different batch range**. Batches are ordered
