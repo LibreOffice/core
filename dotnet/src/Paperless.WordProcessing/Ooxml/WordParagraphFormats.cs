@@ -4,6 +4,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Paperless.Text.Layout;
+using Paperless.WordProcessing.Layout;
 
 namespace Paperless.WordProcessing.Ooxml;
 
@@ -19,6 +20,7 @@ namespace Paperless.WordProcessing.Ooxml;
 /// rather than as a length and a size because the rise is a fraction of the face's <em>height</em>, which is
 /// not known until the face has been loaded — see <see cref="Layout.Escapement"/>.
 /// </param>
+/// <param name="CaseMap">The case <c>w:caps</c> or <c>w:smallCaps</c> asks the text to be drawn in.</param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
@@ -26,7 +28,8 @@ public readonly record struct WordTextStyle(
     bool IsItalic,
     string? Language,
     Colour? Colour = null,
-    Layout.Escapement Escapement = default)
+    Layout.Escapement Escapement = default,
+    PageCaseMap CaseMap = PageCaseMap.None)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -336,6 +339,10 @@ internal static class WordParagraphFormats
         WordProperty colour = styles.ResolveRunProperty("color", runProperties, styleId, characterStyleId);
         WordProperty vertical =
             styles.ResolveRunProperty("vertAlign", runProperties, styleId, characterStyleId);
+        WordProperty capitals =
+            styles.ResolveRunProperty("caps", runProperties, styleId, characterStyleId);
+        WordProperty smallCapitals =
+            styles.ResolveRunProperty("smallCaps", runProperties, styleId, characterStyleId);
 
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
@@ -346,7 +353,13 @@ internal static class WordParagraphFormats
             italic.IsOn,
             Word.Attribute(language.Element, "val"),
             WordThemeColour.Read(colour.Element, theme),
-            EscapementOf(vertical.Element));
+            EscapementOf(vertical.Element),
+            // Both are toggles and both are the same item, so the two cannot combine: Word writes at most
+            // one of them per layer, and full capitals win where a file states both — which is what
+            // `SvxCaseMapItem` holding a single value forces on any reader.
+            capitals.IsOn ? PageCaseMap.Uppercase
+                : smallCapitals.IsOn ? PageCaseMap.SmallCaps
+                : PageCaseMap.None);
     }
 
     /// <summary>

@@ -125,6 +125,22 @@ public sealed partial class RtfDocumentReader
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
 
+        /// <summary>True inside <c>\caps</c>: drawn in capitals whatever the text says.</summary>
+        public bool Capitals { get; set; }
+
+        /// <summary>True inside <c>\scaps</c>: drawn in small capitals.</summary>
+        public bool SmallCapitals { get; set; }
+
+        /// <summary>The case the text is drawn in, from the two toggles above.</summary>
+        /// <remarks>
+        /// <c>\caps</c> wins where a file sets both, matching the single-valued item every consumer of
+        /// this ends up holding.
+        /// </remarks>
+        public Layout.PageCaseMap CaseMap
+            => Capitals ? Layout.PageCaseMap.Uppercase
+                : SmallCapitals ? Layout.PageCaseMap.SmallCaps
+                : Layout.PageCaseMap.None;
+
         /// <summary>True inside <c>\revised</c>: text a tracked change added.</summary>
         public bool Revised { get; set; }
 
@@ -231,6 +247,8 @@ public sealed partial class RtfDocumentReader
             Underline = Underline,
             Strike = Strike,
             Hidden = Hidden,
+            Capitals = Capitals,
+            SmallCapitals = SmallCapitals,
             Revised = Revised,
             RevisionAuthor = RevisionAuthor,
             RevisionDate = RevisionDate,
@@ -278,6 +296,8 @@ public sealed partial class RtfDocumentReader
             Underline = false;
             Strike = false;
             Hidden = false;
+            Capitals = false;
+            SmallCapitals = false;
             Revised = false;
             VerticalPosition = 0;
             CharacterStyleId = 0;
@@ -988,7 +1008,8 @@ public sealed partial class RtfDocumentReader
                 ? WindowsLanguages.TagOf((ushort)state.LanguageId)
                 : null,
             ColourAt(state.ForegroundColourIndex),
-            EscapementOf(state));
+            EscapementOf(state),
+            state.CaseMap);
 
         flow.LayoutLength += length;
 

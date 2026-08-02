@@ -117,6 +117,25 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>True when it is italic.</summary>
     public bool? IsItalic { get; init; }
 
+    /// <summary>True when <c>sprmCFCaps</c> draws the run in capitals.</summary>
+    public bool? IsCapitalised { get; init; }
+
+    /// <summary>True when <c>sprmCFSmallCaps</c> draws it in small capitals.</summary>
+    public bool? IsSmallCapitalised { get; init; }
+
+    /// <summary>
+    /// The case the run is drawn in, from the two toggles above.
+    /// </summary>
+    /// <remarks>
+    /// Full capitals win where a document sets both, because <c>SvxCaseMapItem</c> holds one value and
+    /// LibreOffice's <c>SwWW8ImplReader</c> applies <c>sprmCFCaps</c> after <c>sprmCFSmallCaps</c> in
+    /// sprm order — which is the order they appear in a CHPX.
+    /// </remarks>
+    public Layout.PageCaseMap CaseMap
+        => IsCapitalised == true ? Layout.PageCaseMap.Uppercase
+            : IsSmallCapitalised == true ? Layout.PageCaseMap.SmallCaps
+            : Layout.PageCaseMap.None;
+
     /// <summary>The Windows language id, from <c>sprmCRgLid0</c>.</summary>
     public int? LanguageId { get; init; }
 
