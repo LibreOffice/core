@@ -168,7 +168,12 @@ internal sealed partial class PptxSlideLayout
     /// <c>a:fontScheme/a:minorFont/a:latin</c>, which is what body text uses when its run names no
     /// typeface — DrawingML's <c>+mn-lt</c>.
     /// </param>
-    private readonly record struct SlideTheme(DrawingTheme? Colours, string? MinorLatin);
+    /// <param name="Styles">
+    /// <c>a:fmtScheme</c>'s fill and line style lists, which a shape's <c>p:style</c> names by
+    /// index. Null when the deck's theme declares no format scheme.
+    /// </param>
+    private readonly record struct SlideTheme(
+        DrawingTheme? Colours, string? MinorLatin, DrawingStyleMatrix? Styles);
 
     /// <summary>
     /// The theme in force for a slide: the master's theme part, seen through the master's colour map.
@@ -202,7 +207,8 @@ internal sealed partial class PptxSlideLayout
                           "minorFont"),
             "latin");
 
-        SlideTheme theme = new(colours, Drawing.Attribute(minor, "typeface"));
+        SlideTheme theme = new(
+            colours, Drawing.Attribute(minor, "typeface"), DrawingStyleMatrix.Read(part));
         _themes[master] = theme;
         return theme;
     }
@@ -628,14 +634,22 @@ internal sealed partial class PptxSlideLayout
         FillContext fills = new(slide, theme.Colours, local.Size, placement);
         DocRect bounds = ShapeTransform.PlacedBounds(placement, local.Size);
 
+        // What the shape's p:style takes from the theme's format matrix. A shape stating neither
+        // a fill nor an outline is still painted when it names one — a flowchart box outlined in
+        // accent 1, a master's rule — and taking the elements here rather than inside Fill and
+        // Line keeps the two indices resolved once per shape.
+        XElement? style = Ppt.Child(shape, "style");
+        XElement? themedFill = theme.Styles?.Fill(style, theme.Colours);
+        XElement? themedLine = theme.Styles?.Line(style, theme.Colours);
+
         return new PlacedShape
         {
             Name = Name(shape),
             Outline = outline,
             Bounds = bounds,
-            Fill = Fill(properties, inherited, fills),
+            Fill = Fill(properties, [.. inherited, themedFill], fills),
             Picture = Picture(shape, slide, bounds),
-            Line = Line(properties, inherited, theme.Colours),
+            Line = Line(properties, inherited, theme.Colours, themedLine),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
             Text = Text(
@@ -875,13 +889,14 @@ internal sealed partial class PptxSlideLayout
         => transform.A == 1 && transform.B == 0 && transform.C == 0 && transform.D == 1;
 
     /// <summary>
-    /// A shape's fill: its own, then its placeholder's.
+    /// A shape's fill: its own, then its placeholder's, then its <c>p:style</c>'s.
     /// </summary>
     /// <remarks>
     /// Four of DrawingML's six kinds. <c>a:pattFill</c> is left unpainted — it resolves into a
-    /// tiled bitmap the reader would have to synthesise rather than read — and a fill inherited
-    /// from the theme's style matrix (<c>a:fillRef</c>) is a separate lookup that nothing
-    /// measured needs yet. Both are in the TODO.
+    /// tiled bitmap the reader would have to synthesise rather than read — and is in the TODO.
+    /// The theme's style matrix comes last in the chain because that is the merging order
+    /// <c>Shape::getActualFillProperties</c> uses: the theme is the base and anything the shape
+    /// states wins over it, so a box stating <c>a:noFill</c> under an <c>a:fillRef</c> is empty.
     /// </remarks>
     private Paint? Fill(XElement? properties, XElement?[] inherited, in FillContext context)
     {
@@ -1173,43 +1188,66 @@ internal sealed partial class PptxSlideLayout
     }
 
     /// <summary>
-    /// A shape's outline: its <c>a:ln</c>, then its placeholder's.
+    /// A shape's outline: its <c>a:ln</c>, then its placeholder's, over its <c>p:style</c>'s.
     /// </summary>
     /// <remarks>
-    /// <c>w</c> is in EMUs and its absence means a hairline rather than nothing —
-    /// <c>lineproperties.cxx</c> leaves the width unset and the draw layer draws the thinnest line
-    /// the device can. A line whose only child is <c>a:noFill</c> is not drawn at all, which is
-    /// how <c>&lt;a:ln w="0"&gt;&lt;a:noFill/&gt;&lt;/a:ln&gt;</c> — what LibreOffice's own export
-    /// writes for an unstroked shape — says "no outline" rather than "a hairline in black".
+    /// <para>
+    /// A line whose only child is <c>a:noFill</c> is not drawn at all, which is how
+    /// <c>&lt;a:ln w="0"&gt;&lt;a:noFill/&gt;&lt;/a:ln&gt;</c> — what LibreOffice's own export
+    /// writes for an unstroked shape — says "no outline" rather than "a hairline in black". It
+    /// beats the theme's style matrix too: an arrow suppressing its outline under an
+    /// <c>a:lnRef</c> has none.
+    /// </para>
+    /// <para>
+    /// Anything else the shape states is laid <em>over</em> the themed line rather than replacing
+    /// it, because a shape routinely states one half of a line and means the theme's for the
+    /// other — <c>&lt;a:ln w="57150"/&gt;</c> under an <c>a:lnRef idx="1"</c> is the theme's
+    /// colour at four and a half points. See <see cref="DrawingStyleMatrix.Overlay"/>.
+    /// </para>
     /// </remarks>
-    private static Stroke? Line(XElement? properties, XElement?[] inherited, DrawingTheme? theme)
+    private static Stroke? Line(
+        XElement? properties, XElement?[] inherited, DrawingTheme? theme, XElement? themed)
     {
         foreach (XElement? source in (XElement?[])[properties, .. inherited])
         {
             XElement? line = Drawing.Child(source, "ln");
             if (line is null) continue;
             if (Drawing.Child(line, "noFill") is not null) return null;
-            if (SolidFill(line, theme, placeholder: null) is not { } paint) continue;
-
-            // The width rounds into the drawing layer's own unit before anything is drawn with
-            // it: a stated 38100 EMU — three points — comes out of the reference's PDF as a
-            // 3.00467 pt pen, which is 106 hundredths of a millimetre. It matters beyond the pen
-            // itself, because a dash pattern's lengths are multiples of it.
-            Length width = Length.FromMm100((Emu(line, "w") + 180) / 360);
-            LineCap cap = Cap(Drawing.Attribute(line, "cap"));
-
-            return new Stroke(
-                paint,
-                width,
-                cap,
-                Join(line),
-                DashPattern: SlideDashes.Pattern(
-                    Drawing.Attribute(Drawing.Child(line, "prstDash"), "val"),
-                    width,
-                    capExtendsDash: cap != LineCap.Butt));
+            if (themed is not null) line = DrawingStyleMatrix.Overlay(themed, line);
+            if (Pen(line, theme) is { } stroke) return stroke;
         }
 
-        return null;
+        return themed is null ? null : Pen(themed, theme);
+    }
+
+    /// <summary>
+    /// The stroke one resolved <c>a:ln</c> draws, or null when it names no colour.
+    /// </summary>
+    /// <remarks>
+    /// <c>w</c> is in EMUs and its absence means a hairline rather than nothing —
+    /// <c>lineproperties.cxx</c> leaves the width unset and the draw layer draws the thinnest line
+    /// the device can.
+    /// </remarks>
+    private static Stroke? Pen(XElement line, DrawingTheme? theme)
+    {
+        if (SolidFill(line, theme, placeholder: null) is not { } paint) return null;
+
+        // The width rounds into the drawing layer's own unit before anything is drawn with
+        // it: a stated 38100 EMU — three points — comes out of the reference's PDF as a
+        // 3.00467 pt pen, which is 106 hundredths of a millimetre. It matters beyond the pen
+        // itself, because a dash pattern's lengths are multiples of it.
+        Length width = Length.FromMm100((Emu(line, "w") + 180) / 360);
+        LineCap cap = Cap(Drawing.Attribute(line, "cap"));
+
+        return new Stroke(
+            paint,
+            width,
+            cap,
+            Join(line),
+            DashPattern: SlideDashes.Pattern(
+                Drawing.Attribute(Drawing.Child(line, "prstDash"), "val"),
+                width,
+                capExtendsDash: cap != LineCap.Butt));
     }
 
     /// <summary>The marker one end of a line carries, from its own <c>a:ln</c> or its placeholder's.</summary>
