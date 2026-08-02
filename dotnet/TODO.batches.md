@@ -384,6 +384,33 @@ The percentage is of the em size on a slide and of the font's height in a word p
 `editeng/source/items/svxfont.cxx:549-558` against `swfont.cxx` — which is why
 `Layout/Escapement.cs` could not simply be reused.
 
+### Batches 008–010, measured at the same commit but not worked
+
+`batch-008` 9/10, `batch-009` 9/10, `batch-010` 8/10 — 26 of 30, every page count exact and
+**all four failures over-count words**, none under-count. That is the inversion the skill warns
+about, and one of them was taken apart far enough to name the mechanism rather than assume it.
+
+`8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` (3099 against 2108) puts its whole excess on two
+pages, +474 and +473, and both hold one `image8.emf`. `pdfimages -list` settles what the two
+renderers do with it: **LibreOffice rasterises it** — a 692×240 JPEG with a soft mask at 184 dpi,
+so its PDF has no text there at all — while we play the metafile and emit real glyph runs. The
+rendered pages are all but indistinguishable at 512 px. Matching the number would mean making
+the output worse, which is the documented ceiling of this gate.
+
+**But only part of that excess is ours being better, and the rest is a real defect.** The
+picture's frame is 3433763 × 1190625 EMU and the metafile draws a whole journal page into it, so
+most of the text is clipped away. Counting word boxes against that rectangle: of our 552 words on
+page 5, **48 are inside the frame and 504 outside**, against the reference's 0 and 70. So roughly
+430 words a page are drawn where nothing can see them and `pdftotext` reads them out anyway —
+invisible-but-extractable text, which is the inverse of the defect the word gate exists to catch.
+
+The fix is in the PDF backend rather than in any reader: `PdfContentSink` writes a real `W n`
+clip and then emits the glyph runs inside it regardless, so it would need to track the CTM and
+the active clip and drop a run whose box the clip excludes. Not attempted here — it is a change
+to the sink every family shares, and it wants its own sweep. On its own it would take that
+document to roughly 2200 against 2108, still outside the 2% band, so it is worth doing for its own
+sake rather than for this document.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
