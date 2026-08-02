@@ -120,6 +120,24 @@ and that band separates "the same text" from "text is missing" on this corpus.
 it is correct. Where the ink actually lands is the fidelity suite's job — it compares PDF
 operators directly. Use `render-comparison` to diagnose *why* two renderings differ.
 
+### The word count has a blind spot, and it cuts both ways
+
+`wc -w` in the POSIX locale counts a word only where it sees a printable byte, so **a token
+made entirely of non-ASCII characters is invisible to it**. Two consequences worth holding
+onto:
+
+- A document heavy in non-Latin script is scored loosely by this gate. Passing means less
+  there than it does for an English memo.
+- A change can move the number for reasons that are not about text at all. Bullets are the
+  clean example: LibreOffice draws a symbol-font bullet as a private-use code point, which
+  `wc -w` ignores, while drawing the same bullet as an ASCII `•` makes it *count*. One deck
+  read as **+13.2% excess text** purely because 52 bullets were being drawn in the wrong
+  encoding — a real rendering bug, but one whose numeric signature says "too many words".
+
+So an over-count is not automatically extra text, and a document that matches is not
+automatically right. When a word delta has no plausible textual explanation, check what the
+two renderers are drawing rather than what they are saying.
+
 ## Priority
 
 `words` and `slides` first; `sheets` last. A spreadsheet's value is in its cells rather
