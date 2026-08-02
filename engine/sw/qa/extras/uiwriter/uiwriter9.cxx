@@ -956,6 +956,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf34804)
 {
+    if (comphelper::COKit::isActive())
+    {
+        // No toolbar button here to preselect a color (see ToolboxButtonColorUpdaterBase::Init)
+        return;
+    }
+
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
