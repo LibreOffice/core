@@ -351,14 +351,41 @@ Two more properties turned out to be parsed and never applied — `w:caps`/`w:sm
 round, after `TabStop.Leader` last round. That is now a recognised shape worth grepping for
 rather than waiting to trip over.
 
+## After the fifth round: what a VM restart costs, and what it does not
+
+The restart killed three agents mid-flight — words batch-004, slides batch-003, sheets
+batch-003. Salvage, at `86ce2dc9b`:
+
+| Track | Committed on its branch | Uncommitted | Outcome |
+|---|---|---|---|
+| `slides` | one fix | — | merged, verified, kept |
+| `words` | nothing | 570 lines | saved as a patch, **not** merged |
+| `sheets` | nothing | 673 lines | saved as a patch, **not** merged |
+
+The slides fix — painting a PPT's shaded and picture fills instead of falling back to the
+shape's `fillColor` — merged clean and holds on the merged tree: build warning-free, ten unit
+projects totalling 2505 passing with Presentations up 403 → 416, fidelity 515 of 515 with 0
+skipped.
+
+**The lesson is about commit granularity, not about the restart.** An agent that commits each
+fix as it lands loses nothing; an agent holding a session's work in the index loses all of it
+to a process that was never asked. Both surviving patches went back out as *unverified prior
+attempts* rather than as starting points, because a mid-flight diff has no measurement attached
+and the one thing this project has learned repeatedly is that an unmeasured claim is usually
+wrong in some particular while its measurement, if it had one, would have held.
+
+`words/batch-003` is merged at its agent's 10/10 but has **not** been re-swept on the merged
+branch, so it is recorded below as merged-pending rather than `✅`. That sweep is the gate the
+words agent runs before advancing, which settles it either way.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 9/10 |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 10/10 in worktree, awaiting merged-branch sweep |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 · WIP |
 | `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
@@ -383,7 +410,7 @@ rather than waiting to trip over.
 |---|---|---|---|---|
 | `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | ✅ |
 | `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | ✅ |
-| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 9/10 |
+| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 9/10 · WIP |
 | `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | ✅ |
 | `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 8/9 |
 | `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | 9/10 |
@@ -405,7 +432,7 @@ rather than waiting to trip over.
 |---|---|---|---|---|
 | `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | ✅ |
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
-| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 8/10 |
+| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 8/10 · WIP |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | 8/10 |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |

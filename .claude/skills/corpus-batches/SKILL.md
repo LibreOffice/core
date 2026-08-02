@@ -236,6 +236,27 @@ A brief that works contains all of:
 Ask for honesty about what is unproven. An overstated claim costs more than an admitted gap,
 because the next worker builds on it.
 
+### Tell agents to commit each fix as it lands, not at the end
+
+"Commit, do not push" is not enough on its own — it leaves *when* open, and the default is to
+commit once at the end of the session. A VM restart killed three agents mid-round and the
+difference between them was entirely granularity: the one that had committed its single fix
+lost nothing, and the two holding a session's work in the index lost 570 and 673 lines of
+uncommitted diff.
+
+Those two diffs were recoverable as patches, and that is the more useful half of the finding,
+because **a salvaged patch is worth much less than it looks.** It carries no measurement. The
+work that makes a fix worth having in this project is the sweep that shows it neutral-or-better
+across the earlier batches, and that is exactly the part a mid-flight diff has not reached. So
+hand a salvaged patch to the next agent as *an unverified prior attempt* — a hypothesis with
+some code attached — and say so in those words. Re-derive anything kept from it. On this
+corpus the pattern has been consistent enough to plan around: the measurement survives, the
+explanation usually does not, and an unmeasured diff has only the explanation.
+
+The parent session's job at salvage time is to check each killed agent's branch for commits
+(`git log --oneline HEAD..worktree-agent-*`), merge and re-verify what is there, and stash the
+rest as patches before removing the worktrees — which also frees the disk the next round needs.
+
 ### A green test that proves nothing is worse than no test
 
 Ask agents to verify each new test by **reintroducing the bug and watching it fail**. One
