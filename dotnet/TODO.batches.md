@@ -59,6 +59,56 @@ cluster and not by format.
 Cluster lists live in the scratch directory as `c1-underpaginate.tsv`,
 `c2-overpaginate.tsv`, `c3-textloss.tsv` (path, delta, pages ours/ref, words ours/ref).
 
+## After the first round: words, measured on the merged branch
+
+Four agents, one per cluster plus the slides track, merged one at a time and re-swept whole
+at `fea15726e`:
+
+| | baseline | merged | |
+|---|---|---|---|
+| full match | 84 | **98** | +14 |
+| exactly correct page count | 100 | **110** | +10 |
+| total absolute page error | 385 | **306** | −21% |
+| failing on pages *and* words | 45 | **26** | −19 |
+
+**The merged result beats every agent's own figure** — they measured 89 and 86 in their
+separate worktrees against different bases. The fixes compose: removing a spacing error and
+removing a line-height error each expose the other while alone, and land together.
+
+That is the argument for re-sweeping rather than adding up. It is also the argument for not
+reverting on a per-agent number: the over-pagination agent's work cost 5 matches *in
+isolation* and is part of a +14 here.
+
+### Two batches fell, and the reason matters
+
+`batch-004` 8→7 and `batch-015` 3→0. The second looks alarming and is mostly the fixes
+working:
+
+```
+                                          before                    after
+644730BRI…doc          match   5/5  words 2315/2330    pages  4/5  words 2330/2330
+A320SimNotes.doc       pages  36/42 words 13716/14025  pages 37/42 words 13949/14025
+…Experience logbook    words   6/6  words  864/1110    words  6/6  words 1180/1110
+```
+
+Word counts rose on every document in the batch and one reached the reference **exactly**.
+The recovered text — headers and footers that were previously dropped entirely — then
+changed what fits on each page, so documents passing on a ±1 page count stopped passing.
+Text recovery is upstream of pagination; getting the content right first and the page
+boundaries right second is the correct order, not a regression to revert.
+
+Three now *over*-count words (1180 vs 1110, 1108 vs 1081), which is a real defect in the
+recovery — a header drawn on pages the reference does not put one on, or drawn twice. That
+is the next thing to chase in this batch.
+
+Nineteen defects across the four, the ones with the widest reach being: DOCX `w:spacing` and
+`w:ind` inherited element-wise rather than attribute-wise (a paragraph stating only `w:line`
+silently lost its style's spacing); `sprmSBkc` read with 0 and 1 swapped, so every
+*continuous* section break in a DOC became a page break; a table cell sized from its ink
+rather than its advance; headers and footers dropped whenever `w:top` equalled `w:header`;
+and, on slides, rendering ignoring the placeholder inheritance chain that extraction had
+resolved all along.
+
 ## Baseline: slides
 
 `slides/batch-001` at `84e7fe976` — **2/10**. Every page count already correct, so the
@@ -70,25 +120,25 @@ all. A full-track sweep is running.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 43–59 | doc:5 docx:5 | 9/10 |
-| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 6/10 |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 6/10 |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 8/10 |
+| `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
+| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 8/10 |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 7/10 |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 7/10 |
 | `batch-005` | 10 | 124–141 | doc:5 docx:5 | 4/10 |
-| `batch-006` | 10 | 141–158 | doc:4 docx:6 | 7/10 |
-| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 4/10 |
-| `batch-008` | 10 | 186–204 | doc:4 docx:6 | 8/10 |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 3/10 |
+| `batch-006` | 10 | 141–158 | doc:4 docx:6 | 8/10 |
+| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 6/10 |
+| `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 4/10 |
 | `batch-010` | 10 | 228–260 | doc:2 docx:8 | 4/10 |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 4/10 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 6/10 |
 | `batch-012` | 10 | 306–333 | doc:4 docx:6 | 3/10 |
-| `batch-013` | 10 | 338–370 | docx:10 | 3/10 |
+| `batch-013` | 10 | 338–370 | docx:10 | 5/10 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 1/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 3/10 |
-| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 4/10 |
-| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 3/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 0/10 |
+| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 6/10 |
+| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
-| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 0/10 |
+| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 1/10 |
 | `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 1/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
