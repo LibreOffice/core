@@ -29,6 +29,19 @@ internal static class PptShapeGeometry
     /// <summary>The property naming the kind of fill.</summary>
     public const ushort FillType = 384;
 
+    /// <summary>
+    /// Whether the shape resizes itself around its text — <c>DFF_Prop_FitTextToShape</c>.
+    /// </summary>
+    /// <remarks>
+    /// A bit field rather than a boolean, and only bit 1 — <c>fFitShapeToText</c>, value 2 — is
+    /// the one the PowerPoint import reads (<c>svdfppt.cxx:1051</c>). Bit 0 is
+    /// <c>fFitTextToShape</c>, which the drawing layer ignores.
+    /// </remarks>
+    public const ushort FitTextToShape = 191;
+
+    /// <summary>The <see cref="FitTextToShape"/> bit meaning "grow the shape to its text".</summary>
+    public const uint FitShapeToText = 2;
+
     /// <summary>How lines are joined; the property's own default is a mitre.</summary>
     public const ushort LineJoin = 470;
 

@@ -3,6 +3,7 @@ using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Ooxml.DrawingML;
 using Paperless.TestKit;
+using Paperless.Presentations.Layout;
 using Paperless.Presentations.Ooxml;
 using Shouldly;
 
@@ -149,6 +150,82 @@ public class SlideCharacterStyleTests
 
         style.Colour.ShouldBe(Colour.FromRgb(0xC0504D));
         style.LatinTypeface.ShouldBeNull();
+    }
+
+    /// <summary>
+    /// The face a laid-out run is set in follows the theme too, not only the extracted style.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Two readers resolve a typeface — <see cref="DrawingCharacterStyle"/> for the content tree
+    /// and <c>PptxTextBody</c> for the page — and only the first of them followed the
+    /// indirection. That gap is invisible in extraction and decides every line break on the page:
+    /// a master's <c>p:txStyles</c> states <c>&lt;a:latin typeface="+mn-lt"/&gt;</c> and nothing
+    /// else, so every body placeholder in such a deck asked for a family called <c>+mn-lt</c>,
+    /// found none, and fell through to the generic sans — DejaVu Sans against the reference's
+    /// Carlito, some two fifths wider, so each line broke early and the tail of a full
+    /// placeholder overflowed off the slide.
+    /// </para>
+    /// <para>
+    /// Measured on the slides corpus: nine PPTX documents went from mismatching to matching on
+    /// this one change, <c>bitesize-writing-a-report.pptx</c> from 613 of the reference's 658
+    /// words to 656 with its page count unchanged throughout.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ALaidOutRunsTypefaceIsResolvedThroughTheThemeToo()
+    {
+        XElement body = Drawing(
+            "<p:txBody><a:bodyPr/><a:p><a:r><a:rPr lang=\"en-GB\"/><a:t>Body</a:t></a:r></a:p></p:txBody>");
+
+        // The master's body style, which is where a real deck states the indirection.
+        XElement master = Drawing("<a:lvl1pPr><a:defRPr><a:latin typeface=\"+mn-lt\"/></a:defRPr></a:lvl1pPr>");
+
+        SlideTextBody read = PptxTextBody.Read(
+            body, Theme(), defaultTypeface: "Fallback", inherited: _ => [master]);
+
+        read.Paragraphs[0].Runs[0].Typeface.ShouldBe("Calibri");
+    }
+
+    /// <summary>
+    /// A reference the theme cannot answer falls through to the deck's default face.
+    /// </summary>
+    /// <remarks>
+    /// Rather than to the placeholder name, which is not a family and would end the search on a
+    /// face that does not exist. <c>+mn-ea</c> is unset in this theme's minor set, and a run
+    /// asking for it is left to whatever the caller supplies.
+    /// </remarks>
+    [Fact]
+    public void AnUnanswerableIndirectionFallsThroughToTheDefault()
+    {
+        XElement body = Drawing(
+            "<p:txBody><a:p><a:r><a:rPr><a:latin typeface=\"+mj-ea\"/></a:rPr><a:t>Body</a:t></a:r></a:p></p:txBody>");
+
+        PptxTextBody.Read(body, Theme(), defaultTypeface: "Fallback")
+                    .Paragraphs[0].Runs[0].Typeface.ShouldBe("Fallback");
+    }
+
+    /// <summary>
+    /// <c>a:rPr/@spc</c> becomes the run's tracking, in hundredths of a point.
+    /// </summary>
+    /// <remarks>
+    /// Negative far more often than not — 54 of the slides corpus's 112 PPTX files state it — and
+    /// it is what LibreOffice reads into <c>CharKerning</c>
+    /// (<c>oox/source/drawingml/textcharacterproperties.cxx:190</c>). A run that states it is
+    /// measurably narrower than the same text without it, so a reader that drops the attribute
+    /// breaks a tracked line one word early.
+    /// </remarks>
+    [Fact]
+    public void CharacterSpacingBecomesTheRunsTracking()
+    {
+        XElement body = Drawing(
+            "<p:txBody><a:p><a:r><a:rPr spc=\"-20\"/><a:t>Tracked</a:t></a:r>"
+            + "<a:r><a:rPr/><a:t>Plain</a:t></a:r></a:p></p:txBody>");
+
+        IReadOnlyList<SlideTextRun> runs = PptxTextBody.Read(body).Paragraphs[0].Runs;
+
+        runs[0].Tracking.ShouldBe(Length.FromPoints(-0.2));
+        runs[1].Tracking.ShouldBe(Length.Zero);
     }
 
     /// <summary>

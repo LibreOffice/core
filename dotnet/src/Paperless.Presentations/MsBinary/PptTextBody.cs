@@ -63,6 +63,10 @@ internal static class PptTextBody
     /// <param name="insets">The shape's text insets.</param>
     /// <param name="anchor">Where the block sits vertically.</param>
     /// <param name="wraps">Whether lines break at the shape's width.</param>
+    /// <param name="autofits">
+    /// Whether the text shrinks until it fits the shape. Decided by the shape rather than by the
+    /// text — see <c>PptSlideLayout.Autofits</c> for what the binary format makes that mean.
+    /// </param>
     public static SlideTextBody? Build(
         PptTextRun run,
         PptStyleSheet? styles,
@@ -70,7 +74,8 @@ internal static class PptTextBody
         PptFontTable fonts,
         Margins insets,
         TextAnchor anchor,
-        bool wraps)
+        bool wraps,
+        bool autofits = false)
     {
         ArgumentNullException.ThrowIfNull(run);
 
@@ -115,6 +120,7 @@ internal static class PptTextBody
             Insets = insets,
             Anchor = anchor,
             Wraps = wraps,
+            AutoFit = autofits,
         };
     }
 
