@@ -66,6 +66,29 @@ public enum SheetVerticalAlignment
 }
 
 /// <summary>
+/// How a cell's text is underlined.
+/// </summary>
+/// <remarks>
+/// The two accounting forms are Excel's own and Calc keeps them apart from the ordinary ones
+/// (<c>XclFontData</c>'s <c>EXC_FONTUNDERL_SINGLE_ACC</c>, <c>sc/source/filter/inc/xlstyle.hxx</c>):
+/// they run the full width of the cell rather than the width of the text, and Calc maps both to
+/// its own <c>LINESTYLE_SINGLE</c> and <c>LINESTYLE_DOUBLE</c>. They are folded here for the same
+/// reason — the distinction is a width rule that the drawing path does not implement — but kept
+/// distinguishable in the file formats' own vocabulary would buy nothing else.
+/// </remarks>
+public enum SheetUnderline
+{
+    /// <summary>No line.</summary>
+    None,
+
+    /// <summary>One line under the text.</summary>
+    SingleLine,
+
+    /// <summary>Two lines under the text.</summary>
+    DoubleLine,
+}
+
+/// <summary>
 /// Everything about a cell that decides how its text is drawn.
 /// </summary>
 /// <remarks>
@@ -107,6 +130,21 @@ public sealed record SheetCellFormat
 
     /// <summary>True when the face is italic or oblique.</summary>
     public bool IsItalic { get; init; }
+
+    /// <summary>
+    /// The line drawn under the text, if any.
+    /// </summary>
+    /// <remarks>
+    /// Not a property of the face: the three formats state it beside the weight and the slant and
+    /// it is drawn as a rule rather than shaped, so it belongs to the format rather than to the
+    /// font resolution. Every workbook with a hyperlink has one, since the hyperlink style is an
+    /// underlined blue font, and a column heading ruled off from its data is the other common case.
+    /// </remarks>
+    public SheetUnderline Underline { get; init; }
+
+    /// <summary>True when a line is drawn through the text.</summary>
+    /// <remarks>Read and drawn on the same path as <see cref="Underline"/>, from the same records.</remarks>
+    public bool IsStruckThrough { get; init; }
 
     /// <summary>The colour the text is filled with.</summary>
     public Colour Colour { get; init; } = Colour.Black;

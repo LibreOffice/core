@@ -269,8 +269,55 @@ will draw it. So exactly one cell of a block ever draws it: the leftmost whose p
 hidden. `RPD 155 REDAC SCHEDULE 2014-04-02.xls`'s `Funds ($000)` is a four-column merge anchored in
 a collapsed column, and it was the last two words of that document's deficit.
 
-`sheets/batch-001` is **10/10** with these three, and every one of the ten passes the ink-imbalance
-image diff.
+`sheets/batch-001` is **10/10** with these three, and nine of the ten pass the ink-imbalance image
+diff. Two of them did not before, and the tenth still does not — both are below.
+
+**A cell's underline was neither read nor drawn, by any of the three readers.** It is the commonest
+decoration a spreadsheet has, because the hyperlink style *is* an underlined blue font, and a ruled
+-off column heading is the other half. `FMMO_NMPF_37C.xlsx` passed the word gate exactly — 216
+against 216 — and its ink imbalance against LibreOffice's rendering was 0.45%, all of it the lines
+under its three source links and every one of its headings. It is 0.09% now, which is the image
+comparison's difference between `MAJOR` and `shifted`. `SheetCellFormat` carries
+`Underline` and `IsStruckThrough`, all three readers fill them — SpreadsheetML's `<u val="…"/>`,
+BIFF's `FONT` underline byte and `fStrikeOut` flag, ODF's `style:text-underline-style` plus its
+separate `-type` — and `SheetTextLayout.Decorate` draws them as filled rules from the face's own
+`post` and `OS/2` metrics, through the same `LineSpacing.ResolveDecorations` the rest of the
+project uses. Excel's two *accounting* underline styles run the width of the cell rather than of the
+text and are folded onto their plain counterparts; a dotted or wavy ODF underline draws solid. Both
+are recorded on `SheetUnderline` rather than silently lost.
+
+Not reproduced, and it is one thing: a rich cell mixing an underlined portion with a plain one
+underlines the whole line, because the rule is drawn per line from the cell's own format. The
+portions carry the format that would answer properly and the per-portion run geometry to place a
+partial rule with does not exist yet.
+
+**The last major image difference on the batch is column widths, and its cause is measured.**
+`Patent Index 2024 - Top 100 applicants 2024.xlsx` matches on pages and words and its columns are
+about 20% too narrow, so every column after the first is displaced. SpreadsheetML states a column
+width in *digits of the workbook's default font*, and `DigitWidthTwips` is the constant **111** in
+all three of `Ooxml/XlsxPrintSetup.cs`, `MsBinary/XlsPrintSetup.cs` and `Xlsb/XlsbPrintSetup.cs` —
+the widest digit of **ten-point** Liberation Sans. This workbook's default font is twelve-point
+Arial, whose widest digit is 133 twips, and 133/111 = 1.198 against the 1.20–1.22 the two renderings
+differ by. The existing note under the print-setup section already called this out; what is new is
+that it has now been measured on a document rather than inferred, and that it is the single largest
+systematic error left on this track — **Excel's own default is eleven-point Calibri**, so almost
+every real `.xlsx` is affected, and a column width error moves page counts.
+
+Fixing it is not a constant swap, and the obstacle is a layering rule rather than the arithmetic.
+LibreOffice takes the maximum advance of `'0'`–`'9'` in the default font from its reference device
+in whole twips (`UnitConverter::finalizeImport`, `sc/source/filter/oox/unitconverter.cxx:113-137`),
+which needs a resolved face — and the readers build a `SheetGrid` of lengths while reading, on the
+extraction path, which `dotnet/CLAUDE.md` says must not pay for fonts. Doing it properly means
+`SheetGrid` carrying a column's width in *digits* and resolving it in layout, where a face already
+exists; doing it the quick way puts a font resolution in every `paperless extract` of a workbook.
+
+There is a second, much smaller difference on the same document that this would not fix: the
+reference draws the same text at an em 3.5% larger than ours while placing every row at exactly our
+pitch — 4.096 pt against 3.9569 pt for a twelve-point font at the file's 33% print scale, with the
+first and last rows within 0.03 pt of each other over 700 pt of page. That is a glyph size taken
+down one path and a position taken down another, which is what `ScOutputData`'s split between
+`mpRefDevice` and `mpDev` — and the `GetStretch()` division that goes with it — would produce. It is
+recorded rather than diagnosed.
 
 **Two fixtures were added rather than one, because each of the last two rules has a negative half
 that a single sheet cannot state.** `features/sheet-lead-in.fods` holds two rows differing in

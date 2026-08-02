@@ -11,8 +11,11 @@ namespace Paperless.Spreadsheets.MsBinary;
 /// <param name="Weight">400 or 700 in every file, but the field is a full weight.</param>
 /// <param name="IsItalic">Whether the face is italic.</param>
 /// <param name="ColourIndex">An index into the workbook's palette, or 0x7FFF for automatic.</param>
+/// <param name="Underline">The line under the text, from the record's own underline byte.</param>
+/// <param name="IsStruckThrough">Whether a line is drawn through it.</param>
 internal readonly record struct BiffFont(
-    string Name, Length Height, int Weight, bool IsItalic, int ColourIndex);
+    string Name, Length Height, int Weight, bool IsItalic, int ColourIndex,
+    SheetUnderline Underline = SheetUnderline.None, bool IsStruckThrough = false);
 
 /// <summary>A cell format's alignment half, as an <c>XF</c> record states it.</summary>
 internal readonly record struct BiffAlignment(
@@ -106,6 +109,8 @@ internal sealed class XlsCellFormats
             FontSize = font.Height,
             FontWeight = font.Weight,
             IsItalic = font.IsItalic,
+            Underline = font.Underline,
+            IsStruckThrough = font.IsStruckThrough,
             Colour = ColourAt(font.ColourIndex),
             Horizontal = alignment.Horizontal,
             Vertical = alignment.Vertical,
@@ -147,6 +152,8 @@ internal sealed class XlsCellFormats
             FontSize = font.Height,
             FontWeight = font.Weight,
             IsItalic = font.IsItalic,
+            Underline = font.Underline,
+            IsStruckThrough = font.IsStruckThrough,
             Colour = ColourAt(font.ColourIndex),
         };
     }

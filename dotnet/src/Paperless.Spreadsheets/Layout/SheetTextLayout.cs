@@ -4,6 +4,7 @@ using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Numbers;
 using Paperless.Core.Units;
+using Paperless.Text.Fonts;
 using Paperless.Text.Layout;
 
 namespace Paperless.Spreadsheets.Layout;
@@ -154,6 +155,8 @@ internal static class SheetTextLayout
                 {
                     sink.DrawGlyphRun(run, Paint.Solid(colour ?? fallback));
                 }
+
+                Decorate(sink, cell.Format, face, line, fallback);
             }
         }
         finally
@@ -188,6 +191,72 @@ internal static class SheetTextLayout
     private static bool IsOutside(in SheetTextContext context, in Placement placement)
         => context.BlockRight > context.BlockLeft
            && (placement.Right <= context.BlockLeft || placement.Left >= context.BlockRight);
+
+    /// <summary>
+    /// Draws the rules a font asks for under and through one line of a cell.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A cell's underline is a font property in all three formats and is drawn by the output
+    /// device rather than shaped, so it is a filled rectangle under the run and not a glyph. The
+    /// offset and the thickness come from the face's own <c>post</c> and <c>OS/2</c> tables
+    /// through <see cref="LineSpacing.ResolveDecorations"/>, which is the same resolution and the
+    /// same fallbacks the rest of the project uses — a font that declares neither would otherwise
+    /// draw a zero-thickness line, which is to say none.
+    /// </para>
+    /// <para>
+    /// Excel's two accounting underline styles run the full width of the <em>cell</em> rather
+    /// than of the text; both are folded onto their plain counterparts here, so an accounting
+    /// underline is as wide as its number. See <see cref="SheetUnderline"/>.
+    /// </para>
+    /// <para>
+    /// Per line and per cell rather than per portion: a rich cell mixing an underlined run with a
+    /// plain one underlines the whole line. The portions carry the format that would answer
+    /// properly, and the run geometry to place a partial rule with does not exist yet.
+    /// </para>
+    /// </remarks>
+    private static void Decorate(
+        IDrawingSink sink, SheetCellFormat format, SheetFace face, PlacedLine line, Colour colour)
+    {
+        if (format.Underline == SheetUnderline.None && !format.IsStruckThrough) return;
+
+        Length size = line.Run.Size;
+        Length width = line.Run.Width;
+        if (size <= Length.Zero || width <= Length.Zero) return;
+
+        int unitsPerEm = face.Face.UnitsPerEm > 0 ? face.Face.UnitsPerEm : 1000;
+        FontVerticalMetrics metrics = LineSpacing.ResolveDecorations(face.Face, face.Metrics);
+
+        Length Scaled(int designUnits) => size * ((double)designUnits / unitsPerEm);
+
+        if (format.Underline != SheetUnderline.None)
+        {
+            Length thickness = Scaled(metrics.UnderlineThickness);
+
+            // The font records the underline's offset as negative below the baseline.
+            Length top = line.Baseline - Scaled(metrics.UnderlinePosition);
+            Rule(sink, line.X, top, width, thickness, colour);
+
+            if (format.Underline == SheetUnderline.DoubleLine)
+                Rule(sink, line.X, top + (thickness * 2), width, thickness, colour);
+        }
+
+        if (format.IsStruckThrough)
+        {
+            Length thickness = Scaled(metrics.StrikeoutThickness);
+            Rule(sink, line.X, line.Baseline - Scaled(metrics.StrikeoutPosition),
+                 width, thickness, colour);
+        }
+    }
+
+    /// <summary>One horizontal rule, filled rather than stroked so its thickness is exact.</summary>
+    private static void Rule(
+        IDrawingSink sink, Length x, Length top, Length width, Length thickness, Colour colour)
+    {
+        if (thickness <= Length.Zero) return;
+
+        sink.FillPath(Rectangle(new DocRect(x, top, width, thickness)), Paint.Solid(colour));
+    }
 
     private static GraphicsPath Rectangle(DocRect rect)
         => new GraphicsPath()

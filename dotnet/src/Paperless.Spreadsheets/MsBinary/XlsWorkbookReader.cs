@@ -462,15 +462,23 @@ internal sealed class XlsWorkbookReader
         ushort flags = _stream.ReadUInt16();
         bool italic = (flags & 0x0002) != 0;
 
+        // fStrikeOut is in the flags beside fItalic and is there in every BIFF; the underline
+        // is a byte of its own and only from BIFF5 on (XclFontData::FillFromMsoFont,
+        // sc/source/filter/excel/xlstyle.cxx). BIFF2's fUnderline lives in the flags instead,
+        // which is the one case the short form below still misses.
+        bool strike = (flags & 0x0008) != 0;
+
         int weight = (flags & 0x0001) != 0 ? BoldWeight : NormalWeight;
         int colour = AutomaticColourIndex;
+        SheetUnderline underline = SheetUnderline.None;
 
         if (_stream.RecordLeft >= 10)
         {
             colour = _stream.ReadUInt16();
             weight = _stream.ReadUInt16();
             _stream.Skip(2);                    // escapement
-            _stream.Skip(4);                    // underline, family, character set, reserved
+            underline = Underline(_stream.ReadByte());
+            _stream.Skip(3);                    // family, character set, reserved
         }
 
         string name = _stream.RecordLeft > 0
@@ -484,8 +492,26 @@ internal sealed class XlsWorkbookReader
             Length.FromTwips(height),
             weight is >= 100 and <= 1000 ? weight : NormalWeight,
             italic,
-            colour));
+            colour,
+            underline,
+            strike));
     }
+
+    /// <summary>
+    /// The <c>FONT</c> record's underline byte.
+    /// </summary>
+    /// <remarks>
+    /// <c>EXC_FONTUNDERL_*</c> (<c>sc/source/filter/inc/xlstyle.hxx</c>): 0 none, 1 single,
+    /// 2 double, 0x21 single accounting, 0x22 double accounting. The two accounting forms differ
+    /// only in how wide Calc draws the line, which is not reproduced — see
+    /// <see cref="SheetUnderline"/> — so each folds onto its plain counterpart.
+    /// </remarks>
+    private static SheetUnderline Underline(int stated) => stated switch
+    {
+        0x01 or 0x21 => SheetUnderline.SingleLine,
+        0x02 or 0x22 => SheetUnderline.DoubleLine,
+        _ => SheetUnderline.None,
+    };
 
     /// <summary>BIFF's own weights, which are the only two any writer emits.</summary>
     private const int NormalWeight = 400;
