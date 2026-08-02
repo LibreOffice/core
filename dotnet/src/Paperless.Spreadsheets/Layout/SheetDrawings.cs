@@ -115,6 +115,13 @@ public sealed record SheetDrawing
     /// </remarks>
     public ChartPlot? Chart { get; init; }
 
+    /// <summary>The text inside the shape, or null when it holds none.</summary>
+    /// <remarks>
+    /// A text box is a shape carrying nothing but this, and it is the only content on the sheet
+    /// that no walk of the cells can find — see <see cref="SheetShapeText"/>.
+    /// </remarks>
+    public SheetShapeText? Text { get; init; }
+
     /// <summary>True when the drawing is hidden and therefore not printed.</summary>
     public bool IsHidden { get; init; }
 }

@@ -212,6 +212,56 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the second sheets sweep found
+
+Measured at `306f86e65` over `sheets/batch-001 … batch-018`, 171 documents: **82 matching, total
+absolute page error 1120**, `xls` 34/62 and `xlsx` 48/109. The near-equal failure rates across the
+two formats say the residue is below both readers, which is where both of this round's causes were.
+
+**A repeated title row was keeping every blank page.** `SheetEmptyPages.IsBlank` returned "not
+blank" for any page carrying a repeated band, on the reasoning that the band does print there. Calc
+does not count it: `IsPrintEmpty` is asked for the page's own block alone —
+`IsPrintEmpty(getStartColumn(), nPageStartRow, getEndColumn(), nRow-1, …)` and the same range
+through `lcl_SetHidden` (`sc/source/ui/view/printfun.cxx:3174, :3053`) — and `PrintPage` adds the
+repeated band afterwards, so it never enters the question. One `if` therefore disabled the whole
+empty-page class for **every sheet declaring `_xlnm.Print_Titles`**. `fy20-may20-sep20.xlsx` repeats
+row 1 and its column F reaches only row 76, so its second column band is two pages to Calc and was
+103 blank ones here: **233 pages against 96, now 118**.
+
+The residue on that document is the row heights, and it is the item already recorded above under
+*the row height a rotated cell asks for*: its rows state `ht` without `customHeight`, so Excel's
+cached heights are stale caches and Calc recomputes every one of them on load. Ours are 26.45 pt
+where Calc makes 23.84, and the default row is 13.15 against 12.73 — about 11% too tall, hence 118
+pages against 96. Nothing here is wrong about pagination; the measurement feeding it is Excel's
+rather than Calc's, and closing it needs Calc's own coarse row-height measurement, which is the
+same missing piece the rotated-cell section describes.
+
+**A sheet's text boxes were read for their anchor and never drawn.** `XlsxDrawings` took `xdr:sp`
+so the print area would be right and dropped its `xdr:txBody` on the floor, so a text box put
+nothing on the paper — and a text box is the one thing on a sheet that no walk of the cells can
+find, so no check built on the grid could see it either. Ten of the corpus's `xlsx` workbooks carry
+shape text and 1083 words of it between them; on
+`SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`, whose entire methodology note is one text
+box, that was **163 words against 550, now 386**. `Layout/SheetShapeText.cs` models it,
+`Layout/SheetShapePainter.cs` draws it.
+
+**What that shape text still gets wrong, and it is one thing.** The runs name `+mn-lt` — the
+theme's minor Latin face, Calibri, so Carlito — and the sheet path can shape in one face only, so
+they are set in Liberation Sans. Carlito is about 9% narrower at the same size, so our lines run
+further right and more of them fall off the paper, which is the whole of the remaining 386-against-
+550. That is the module's existing single-face limitation rather than a new one; it is the same gap
+the cell engine has, and it will close with the same work. Two smaller ones beside it: `a:br` is
+treated as a paragraph end, which gives the same lines; and `vertOverflow="clip"` is not honoured,
+so a body too tall for its box is drawn over the cells below instead of being cut. Honouring the
+clip **before** the face is fixed would make the corpus word count worse while making the rendering
+better, which is the trap the corpus-batches skill names — so it is left until the face is right.
+
+**The XLS half of the same defect is not fixed.** `apron-area.xls` has 137 words in eleven Escher
+custom shapes and a deficit of exactly 137; the BIFF reader has no drawing layer at all
+(`MsBinary/` holds no Escher reader, though `Paperless.MsBinary/Escher` exists and DOC and PPT use
+it). Reaching it needs `MSODRAWING` walked in the sheet substream and the `OBJ`/`TXO` pair that
+carries a text box's string. That is the next contained win on this track.
+
 ## What the first sheets sweep found
 
 The first whole-track sweep of `sheets/batch-001 … batch-018` (174 documents, `xls` and `xlsx`)
@@ -275,12 +325,24 @@ Not yet, and why:
   `SvxPaperInfo::GetDefaultPaperSize()`, which is Letter in an American locale; the same missing
   locale infrastructure that keeps the two built-in number-format tables apart is what keeps this
   from being answered properly.
-- **`SkipEmpty` is not implemented.** Calc drops a page whose whole block is blank, but only when
-  the caller passes the option (`ScPrintOptions::GetSkipEmpty`), and its PDF export does not — so
-  reproducing the reference means not implementing it.
+- ~~**`SkipEmpty` is not implemented.**~~ **This was wrong twice over and is now done.** The claim
+  was that the option is off unless a caller passes it "and its PDF export does not". Both halves
+  are false: `ScPrintOptions::SetDefaults` sets `bSkipEmpty = true`
+  (`sc/source/core/tool/printopt.cxx:38`) and the render path reads the module's options straight
+  out of it (`ScPrintUIOptions::ScPrintUIOptions`, `sc/source/ui/unoobj/docuno.cxx:266-268`), so
+  **Calc drops empty pages on export by default**. `Layout/SheetEmptyPages.cs` implements it. The
+  general lesson is the one the render-comparison skill states: the source says what mechanism
+  exists, the binary says what it does, and the reference PDF settles it — `fy20-may20-sep20.xlsx`
+  has a second column band whose content stops at row 76, and LibreOffice prints two pages of that
+  band against a full 94.
 - **The used area counts cells with content only.** Calc's own search also counts a cell carrying
   nothing but a style, because its attribute array knows about it. The content tree records no
   formatting, so a sheet whose last two columns are empty-but-shaded comes out narrower here.
+  **This now costs pages as well as columns**, because the empty-page test above asks the same
+  question: a page whose block holds only styled-but-empty cells is blank here and is not to Calc.
+  Measured on `FAA-2019-0995-0002_attachment_2.xlsx`, whose `ADSB` sheet loses the last row band of
+  each of its two column bands: 31 pages against 33, and it was a match before. That is the whole
+  cost of the repeated-band fix below, against 115 pages saved on one document.
 - **Multiple print ranges are paginated but not merged.** Calc paginates each in turn with a zoom
   of its own, which is what the port does; what it does not do is Calc's own oddity of hiding all
   breaks when a sheet has more than one range (`table5.cxx:97`).

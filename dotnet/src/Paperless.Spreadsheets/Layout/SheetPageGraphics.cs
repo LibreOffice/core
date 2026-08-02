@@ -5,7 +5,7 @@ using Paperless.Core.Units;
 namespace Paperless.Spreadsheets.Layout;
 
 /// <summary>
-/// Places and paints the pictures and charts anchored on one page.
+/// Places and paints the pictures, charts and shape text anchored on one page.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -35,7 +35,7 @@ namespace Paperless.Spreadsheets.Layout;
 /// </remarks>
 internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
 {
-    /// <summary>Paints the sheet's pictures that belong to this page.</summary>
+    /// <summary>Paints the sheet's drawings that belong to this page.</summary>
     /// <param name="sink">Receives the drawing commands.</param>
     /// <param name="columns">The columns on the page, with their positions.</param>
     /// <param name="rows">The rows on the page.</param>
@@ -56,7 +56,12 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
         foreach (SheetDrawing drawing in sheet.Drawings.Items)
         {
             if (drawing.IsHidden) continue;
-            if (drawing.Image is null && drawing.Vector is null && drawing.Chart is null) continue;
+            if (drawing.Image is null && drawing.Vector is null && drawing.Chart is null
+                && drawing.Text is null)
+            {
+                continue;
+            }
+
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
 
@@ -67,6 +72,10 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
             if (drawing.Vector is { } vector && !vector.Value.IsEmpty) vector.Value.Draw(sink, box);
             else if (drawing.Image is { } image) sink.DrawImage(image, box);
             else if (drawing.Chart is { } chart) SheetChart.Draw(sink, chart, box, scale);
+
+            // Not an `else`: a shape may carry both a picture and a caption, and the text goes
+            // over the fill rather than instead of it.
+            if (drawing.Text is { } text) SheetShapePainter.Draw(sink, text, box, scale);
         }
     }
 

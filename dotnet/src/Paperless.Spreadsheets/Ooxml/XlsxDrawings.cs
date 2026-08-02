@@ -118,10 +118,9 @@ internal static class XlsxDrawings
         XElement? picture = Child(anchor, DrawingNamespace, "pic");
         XElement? frame = Child(anchor, DrawingNamespace, "graphicFrame");
 
-        // A shape, a connector or a group. Nothing here draws one — the painter skips any drawing
-        // carrying neither picture nor chart — but the *anchor* still counts, because Calc's print
-        // area is the bounding box of every object on the drawing layer and a shape is an object
-        // like any other (`GroupShapeContext::createShapeContext` takes sp, cxnSp, grpSp,
+        // A shape, a connector or a group. Its *anchor* counts whatever it holds, because Calc's
+        // print area is the bounding box of every object on the drawing layer and a shape is an
+        // object like any other (`GroupShapeContext::createShapeContext` takes sp, cxnSp, grpSp,
         // graphicFrame and pic alike, `sc/source/filter/oox/drawingfragment.cxx:198`). Dropping
         // them meant a sheet whose only content was a shape had no printed block at all and
         // produced *no pages*: `paperless render` failed outright with "the page range selects
@@ -173,6 +172,16 @@ internal static class XlsxDrawings
             if (Attribute(data, "uri") != ChartUri) return drawing;
 
             return drawing with { IsChart = true, Chart = Plot(data, package, images, theme) };
+        }
+
+        // A shape's text box, which is the only content on a sheet that no walk of the cells can
+        // reach. `xdr:txBody` holds a DrawingML body — the same `a:bodyPr`/`a:p`/`a:r` a slide's
+        // does — so the element is looked up in the spreadsheet drawing namespace and everything
+        // inside it in the main one.
+        if (shape is not null && Child(shape, DrawingNamespace, "txBody") is { } body
+            && ShapeText(body) is { IsEmpty: false } shapeText)
+        {
+            drawing = drawing with { Text = shapeText };
         }
 
         // A shape carries no image and no chart, so it reaches the print area and stops there.
@@ -289,6 +298,90 @@ internal static class XlsxDrawings
             Integer(element, "row"),
             Length.FromEmu(Integer(element, "rowOff")));
     }
+
+    /// <summary>Reads a shape's <c>xdr:txBody</c> into the text the painter draws.</summary>
+    /// <remarks>
+    /// <para>
+    /// The insets default to DrawingML's own — <c>91440</c> EMUs left and right and <c>45720</c>
+    /// top and bottom, which is a tenth and a twentieth of an inch
+    /// (<c>oox/source/drawingml/textbodyproperties.cxx</c>) — because a body that states none is
+    /// laid out with them and a text box relies on the left one to clear its own border.
+    /// </para>
+    /// <para>
+    /// A run's size is <c>sz</c> in hundredths of a point, and a run that states none inherits the
+    /// paragraph's <c>a:defRPr</c> before falling back to the body default. Nothing else on the run
+    /// is read: the furniture face is the only one the sheet path can shape with, so a typeface,
+    /// weight or colour would be recorded and then ignored.
+    /// </para>
+    /// </remarks>
+    private static SheetShapeText ShapeText(XElement body)
+    {
+        XElement? properties = Child(body, MainNamespace, "bodyPr");
+
+        List<SheetShapeParagraph> paragraphs = [];
+        foreach (XElement paragraph in body.Elements(XName.Get("p", MainNamespace)))
+        {
+            XElement? paragraphProperties = Child(paragraph, MainNamespace, "pPr");
+            Length inherited = Points(Child(paragraphProperties, MainNamespace, "defRPr"))
+                               ?? SheetShapeText.DefaultSize;
+
+            List<SheetShapeRun> runs = [];
+            foreach (XElement run in paragraph.Elements(XName.Get("r", MainNamespace)))
+            {
+                string text = Child(run, MainNamespace, "t")?.Value ?? string.Empty;
+                if (text.Length == 0) continue;
+
+                runs.Add(new SheetShapeRun(
+                    text, Points(Child(run, MainNamespace, "rPr")) ?? inherited));
+            }
+
+            // `a:br` is a line break inside a paragraph. Splitting the paragraph at one gives the
+            // same lines, since a break and a paragraph end both start a new line here.
+            paragraphs.Add(new SheetShapeParagraph
+            {
+                Runs = runs,
+                Alignment = Attribute(paragraphProperties, "algn") switch
+                {
+                    "ctr" => SheetShapeAlignment.Centre,
+                    "r" => SheetShapeAlignment.Right,
+                    _ => SheetShapeAlignment.Left,
+                },
+            });
+        }
+
+        return new SheetShapeText
+        {
+            Paragraphs = paragraphs,
+            LeftInset = Inset(properties, "lIns", 91440),
+            RightInset = Inset(properties, "rIns", 91440),
+            TopInset = Inset(properties, "tIns", 45720),
+            BottomInset = Inset(properties, "bIns", 45720),
+            Wraps = !string.Equals(Attribute(properties, "wrap"), "none", StringComparison.Ordinal),
+            Anchor = Attribute(properties, "anchor") switch
+            {
+                "ctr" => SheetShapeAnchor.Middle,
+                "b" => SheetShapeAnchor.Bottom,
+                _ => SheetShapeAnchor.Top,
+            },
+        };
+    }
+
+    /// <summary>A run's <c>sz</c>, in hundredths of a point, or null where it states none.</summary>
+    private static Length? Points(XElement? properties)
+        => properties?.Attribute("sz")?.Value is { } text
+           && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value)
+           && value > 0
+            ? Length.FromPoints(value / 100.0)
+            : null;
+
+    /// <summary>A body inset in EMUs, falling back to DrawingML's default.</summary>
+    private static Length Inset(XElement? properties, string name, long fallback)
+        => Length.FromEmu(
+            properties?.Attribute(name)?.Value is { } text
+            && long.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out long value)
+            && value >= 0
+                ? value
+                : fallback);
 
     private static DocSize Size(XElement? element)
         => element is null
