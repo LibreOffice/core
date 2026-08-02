@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Paperless.Core.Extraction;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
+using Paperless.Core.Numbers;
 using Paperless.Core.Units;
 using Paperless.Text.Layout;
 
@@ -209,7 +210,7 @@ internal static class SheetTextLayout
         Length leftTotal = margin + indent;
         Length totalMargin = leftTotal + margin;
 
-        string text = cell.Text;
+        (string text, int fillAt, char fillChar) = Fill(cell);
 
         // A value is never rich: SpreadsheetML's formatting runs and ODF's spans belong to a
         // string, and a number that showed several fonts would have nowhere to put them once it
@@ -258,6 +259,17 @@ internal static class SheetTextLayout
         if (format.IsRotated) area = area.Unclipped();
 
         Length available = cell.Box.Width - totalMargin;
+
+        // Between the output area and the shrink, which is where Calc does it
+        // (output2.cxx:1853): the fill is measured against the cell's own column and not
+        // against the room a neighbour lent, so it must not see the widened area — and
+        // everything after it re-measures the text it produced.
+        if (fillAt >= 0 && portions is null
+            && RepeatToFill(text, fillAt, fillChar, face, size, available, run.Width) is { } filled)
+        {
+            text = filled;
+            run = ShapeRange(0, text.Length, percent) ?? run;
+        }
 
         if (shrinks && area.IsClipped && available > Length.Zero && run.Width > Length.Zero)
         {
@@ -354,6 +366,76 @@ internal static class SheetTextLayout
                           or SheetVerticalAlignment.Distributed;
 
         return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
+    }
+
+    // --------------------------------------------------------------------------------- fill
+
+    /// <summary>
+    /// Where a <c>*c</c> fill directive expands in this cell's text, and with which character.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The reader already produced the cell's text with the directive dropped, because
+    /// extraction has no column to fill. Finding the position again means putting the value
+    /// through the code a second time with <c>NumberFormatter.FillMarker</c> left in — which is
+    /// only done for the formats that carry one, and those are the accounting formats.
+    /// </para>
+    /// <para>
+    /// The re-render is trusted only when it reproduces the text the reader produced. The two
+    /// calls resolve the workbook's epoch separately and layout does not carry it, so a date
+    /// format with a fill would come back different — and a disagreement must change nothing
+    /// rather than replace a correct string with a plausible one.
+    /// </para>
+    /// </remarks>
+    private static (string Text, int At, char Fill) Fill(in SheetCellText cell)
+    {
+        if (cell.Format.NumberFormat is not { HasFillDirective: true } code) return (cell.Text, -1, '\0');
+        if (cell.Value is not double value) return (cell.Text, -1, '\0');
+
+        string marked = NumberFormatter.Format(code, value, keepFillMarkers: true);
+        int at = marked.IndexOf(NumberFormatter.FillMarker, StringComparison.Ordinal);
+        if (at < 0 || at + 1 >= marked.Length) return (cell.Text, -1, '\0');
+
+        char fill = marked[at + 1];
+        string plain = marked.Remove(at, 2);
+        return plain == cell.Text ? (plain, at, fill) : (cell.Text, -1, '\0');
+    }
+
+    /// <summary>
+    /// Pads the fill point with as many copies of the fill character as the column has room for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScDrawStringsVars::RepeatToFill</c> (<c>output2.cxx:572</c>), including the two
+    /// deliberate truncations it marks in its own comments. The character's width is taken from
+    /// a twenty-character sample rather than from one copy — "measuring a string containing a
+    /// single copy of the repeat char is inaccurate" — and both the width and the count are
+    /// truncated towards zero, so the fill can never overrun the column by a rounding.
+    /// </para>
+    /// <para>
+    /// Nothing is added when the space left is no wider than one character: an accounting cell
+    /// in a column that only just fits its number shows its symbol against its digits, which is
+    /// what Calc draws.
+    /// </para>
+    /// </remarks>
+    /// <returns>The padded text, or null when nothing fits.</returns>
+    private static string? RepeatToFill(
+        string text, int at, char fill, SheetFace face, Length size, Length available, Length width)
+    {
+        const int SampleSize = 20;
+
+        if (at > text.Length || available <= Length.Zero) return null;
+        if (SheetText.Shape(new string(fill, SampleSize), face, size) is not { } sample) return null;
+
+        double averageWidth = (double)sample.Width.Emu / SampleSize;
+        long characterWidth = (long)averageWidth;
+        if (characterWidth < 1) return null;
+
+        long spaceToFill = (available - width).Emu;
+        if (spaceToFill <= characterWidth) return null;
+
+        int count = (int)(spaceToFill / averageWidth);
+        return count <= 0 ? null : text.Insert(at, new string(fill, count));
     }
 
     // -------------------------------------------------------------------------- output area

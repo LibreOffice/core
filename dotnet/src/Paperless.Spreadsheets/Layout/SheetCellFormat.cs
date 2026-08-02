@@ -181,4 +181,25 @@ public sealed record SheetCellFormat
     /// <remarks><c>General</c> counts: it is <c>SvNumFormatType::NUMBER</c> in Calc too.</remarks>
     public bool HasPlainNumberFormat =>
         NumberFormatKind is Core.Numbers.NumberFormatKind.General or Core.Numbers.NumberFormatKind.Number;
+
+    /// <summary>
+    /// The cell's number format code, when the reader has one, for the single question the
+    /// <see cref="NumberFormatKind"/> cannot answer.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>*c</c> fill directive expands to as many copies of its character as the column has
+    /// room for, so an accounting cell's currency symbol sits against the left edge and its
+    /// digits against the right. Where that expansion goes depends on the rendered text, so the
+    /// value has to be put through the code again with
+    /// <c>NumberFormatter.FillMarker</c> left in — which needs the code, not its kind.
+    /// </para>
+    /// <para>
+    /// Null when the reader states no code: ODF writes a structured <c>number:*-style</c>, and
+    /// a cell with no explicit format keeps <c>General</c>, which has no fill either way. Only
+    /// <see cref="Core.Numbers.NumberFormatCode.HasFillDirective"/> is ever asked of it, so a
+    /// null costs nothing.
+    /// </para>
+    /// </remarks>
+    public Core.Numbers.NumberFormatCode? NumberFormat { get; init; }
 }

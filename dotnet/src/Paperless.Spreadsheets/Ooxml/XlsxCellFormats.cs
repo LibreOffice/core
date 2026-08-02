@@ -494,6 +494,7 @@ internal static class XlsxCellFormats
             NumberFormatKind = code.IsGeneral || code.Sections.Count == 0
                 ? Core.Numbers.NumberFormatKind.General
                 : code.Sections[0].Kind,
+            NumberFormat = code,
         };
     }
 

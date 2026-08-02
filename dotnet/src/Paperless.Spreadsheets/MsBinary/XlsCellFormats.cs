@@ -117,6 +117,7 @@ internal sealed class XlsCellFormats
             NumberFormatKind = format.IsGeneral || format.Sections.Count == 0
                 ? NumberFormatKind.General
                 : format.Sections[0].Kind,
+            NumberFormat = format,
         };
     }
 
