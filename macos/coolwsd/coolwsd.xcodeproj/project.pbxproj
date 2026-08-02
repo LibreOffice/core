@@ -81,8 +81,6 @@
 		BE74B1F92D3F96CB009786DF /* Delta.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Delta.hpp; path = ../../../kit/Delta.hpp; sourceTree = "<group>"; };
 		BE74B1FA2D3F96CB009786DF /* DeltaSimd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeltaSimd.h; path = ../../../kit/DeltaSimd.h; sourceTree = "<group>"; };
 		BE74B1FB2D3F96CB009786DF /* DeltaSimd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = DeltaSimd.c; path = ../../../kit/DeltaSimd.c; sourceTree = "<group>"; };
-		BE74B1FC2D3F96CB009786DF /* DummyCOKit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DummyCOKit.hpp; path = ../../../kit/DummyCOKit.hpp; sourceTree = "<group>"; };
-		BE74B1FD2D3F96CB009786DF /* DummyCOKit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DummyCOKit.cpp; path = ../../../kit/DummyCOKit.cpp; sourceTree = "<group>"; };
 		BE74B1FE2D3F96CB009786DF /* ForKit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ForKit.cpp; path = ../../../kit/ForKit.cpp; sourceTree = "<group>"; };
 		BE74B1FF2D3F96CB009786DF /* forkit-main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "forkit-main.cpp"; path = "../../../kit/forkit-main.cpp"; sourceTree = "<group>"; };
 		BE74B2002D3F96CB009786DF /* ChildSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ChildSession.hpp; path = ../../../kit/ChildSession.hpp; sourceTree = "<group>"; };
@@ -270,8 +268,6 @@
 				BE74B1F92D3F96CB009786DF /* Delta.hpp */,
 				BE74B1FA2D3F96CB009786DF /* DeltaSimd.h */,
 				BE74B1FB2D3F96CB009786DF /* DeltaSimd.c */,
-				BE74B1FC2D3F96CB009786DF /* DummyCOKit.hpp */,
-				BE74B1FD2D3F96CB009786DF /* DummyCOKit.cpp */,
 				BE74B1FE2D3F96CB009786DF /* ForKit.cpp */,
 				BE74B1FF2D3F96CB009786DF /* forkit-main.cpp */,
 				BE74B2002D3F96CB009786DF /* ChildSession.hpp */,

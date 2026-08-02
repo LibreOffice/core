@@ -543,7 +543,6 @@ kit_headers = \
               kit/ChildSession.hpp \
               kit/Delta.hpp \
               kit/DeltaSimd.h \
-              kit/DummyCOKit.hpp \
               kit/Kit.hpp \
               kit/KitHelper.hpp \
               kit/KitWebSocket.hpp \
