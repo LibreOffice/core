@@ -205,7 +205,8 @@ public sealed class DocxPictures
         if (chartSpace is null) return default;
 
         return new DocxChart(
-            DrawingChartPlot.Read(chartSpace, _file.Theme), LabelFamily(chartSpace));
+            DrawingChartPlot.Read(chartSpace, _file.Theme, _file.IsOffice2007),
+            LabelFamily(chartSpace));
     }
 
     /// <summary>

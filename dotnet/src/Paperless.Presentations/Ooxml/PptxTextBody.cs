@@ -61,15 +61,51 @@ internal static class PptxTextBody
     /// <see cref="PptxTextStyles.LevelPropertiesFor"/>. Null reads the body alone, which is right
     /// for a shape with no placeholder chain behind it and wrong for every slide placeholder.
     /// </param>
+    /// <param name="fields">
+    /// What this slide's automatic fields resolve to, or null to draw the cached text instead.
+    /// </param>
+    /// <param name="inheritedBodyProperties">
+    /// <para>
+    /// The <c>a:bodyPr</c> of each placeholder behind this shape, nearest first — normally
+    /// <see cref="PptxTextStyles.BodyPropertiesFor"/>.
+    /// </para>
+    /// <para>
+    /// <strong>A placeholder's body properties are inherited, attribute by attribute.</strong>
+    /// <c>PPTShapeContext</c> copy-constructs the slide shape's text body from the one
+    /// <c>applyShapeReference</c> already brought over from the layout or master placeholder
+    /// (<c>oox/source/ppt/pptshapecontext.cxx:183-186</c>), so the slide's own
+    /// <c>&lt;a:bodyPr/&gt;</c> — which is what PowerPoint writes on a placeholder it has not
+    /// re-formatted — overrides nothing, and the anchor, the insets, the wrap and the autofit all
+    /// come from above.
+    /// </para>
+    /// <para>
+    /// It matters most for the anchor. <c>chapter_4_0.pptx</c> states <c>anchor="ctr"</c> once,
+    /// on the master's footer, and its footer runs to two lines in a one-line box on all 55
+    /// slides: centred, both lines are on the page; anchored to the top, the second falls off the
+    /// bottom edge and three words a page go with it.
+    /// </para>
+    /// </param>
     public static SlideTextBody Read(
         XElement body,
         DrawingTheme? theme = null,
         string? defaultTypeface = null,
-        Func<int, IReadOnlyList<XElement>>? inherited = null)
+        Func<int, IReadOnlyList<XElement>>? inherited = null,
+        SlideFields? fields = null,
+        IReadOnlyList<XElement?>? inheritedBodyProperties = null)
     {
         ArgumentNullException.ThrowIfNull(body);
 
-        XElement? properties = Drawing.Child(body, "bodyPr");
+        List<XElement> bodyChain = [];
+        if (Drawing.Child(body, "bodyPr") is { } own) bodyChain.Add(own);
+        if (inheritedBodyProperties is not null)
+        {
+            foreach (XElement? source in inheritedBodyProperties)
+            {
+                if (source is not null) bodyChain.Add(source);
+            }
+        }
+
+        XElement? properties = bodyChain.Count > 0 ? bodyChain[0] : null;
         XElement? listStyle = Drawing.Child(body, "lstStyle");
 
         // One counter and one "is this level numbering" flag per outline level, carried across
@@ -83,18 +119,30 @@ internal static class PptxTextBody
         {
             paragraphs.Add(
                 Paragraph(
-                    paragraph, listStyle, theme, defaultTypeface, counters, counting, inherited));
+                    paragraph, listStyle, theme, defaultTypeface, counters, counting, inherited,
+                    fields));
         }
 
-        XElement? autofit = Drawing.Child(properties, "normAutofit");
+        // The autofit choice is taken whole from the nearest a:bodyPr that states one of the
+        // three: a slide's <a:bodyPr/> saying nothing is not the same as its saying a:noAutofit.
+        XElement? autofit = null;
+        foreach (XElement source in bodyChain)
+        {
+            if (Drawing.Child(source, "normAutofit") is { } stated) { autofit = stated; break; }
+            if (Drawing.Child(source, "spAutoFit") is not null
+                || Drawing.Child(source, "noAutofit") is not null)
+            {
+                break;
+            }
+        }
 
         return new SlideTextBody
         {
             Paragraphs = paragraphs,
-            Insets = Insets(properties),
-            Anchor = Anchor(Drawing.Attribute(properties, "anchor")),
-            Rotation = Rotation(properties),
-            Wraps = Drawing.Attribute(properties, "wrap") != "none",
+            Insets = Insets(bodyChain),
+            Anchor = Anchor(Stated(bodyChain, "anchor")),
+            Rotation = Rotation(bodyChain),
+            Wraps = Stated(bodyChain, "wrap") != "none",
             AutoFit = autofit is not null,
             FontScale = Thousandth(autofit, "fontScale", 1.0),
             LineSpaceReduction = Thousandth(autofit, "lnSpcReduction", 0.0),
@@ -111,11 +159,11 @@ internal static class PptxTextBody
     /// second box states them explicitly and whose first states zero: LibreOffice draws the two
     /// pens 7.2 pt apart.
     /// </remarks>
-    private static Margins Insets(XElement? properties) => new(
-        Length.FromEmu(Emu(properties, "lIns", 91440)),
-        Length.FromEmu(Emu(properties, "tIns", 45720)),
-        Length.FromEmu(Emu(properties, "rIns", 91440)),
-        Length.FromEmu(Emu(properties, "bIns", 45720)));
+    private static Margins Insets(List<XElement> chain) => new(
+        Length.FromEmu(Emu(Stated(chain, "lIns"), 91440)),
+        Length.FromEmu(Emu(Stated(chain, "tIns"), 45720)),
+        Length.FromEmu(Emu(Stated(chain, "rIns"), 91440)),
+        Length.FromEmu(Emu(Stated(chain, "bIns"), 45720)));
 
     /// <summary>
     /// The turn <c>a:bodyPr/@rot</c> asks for, in radians clockwise.
@@ -126,12 +174,37 @@ internal static class PptxTextBody
     /// resolves to, so the diagram evaluator writes it and this reads it back through the same
     /// path an authored deck's would take.
     /// </remarks>
-    private static double Rotation(XElement? properties)
+    private static double Rotation(List<XElement> chain)
     {
-        int units = Drawing.Number(properties, "rot") ?? 0;
+        int units = int.TryParse(
+            Stated(chain, "rot"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+            out int stated)
+            ? stated
+            : 0;
         return units == 0
             ? 0
             : units / ShapeTransform.RotationUnitsPerDegree * Math.PI / 180.0;
+    }
+
+    /// <summary>
+    /// What an <c>a:fld</c> of this type draws, or null to fall back to its cached text.
+    /// </summary>
+    /// <remarks>
+    /// Only the two that are a property of the deck rather than of the machine reading it.
+    /// A date or a file name is deliberately left as cached: the reference substitutes the
+    /// conversion's own clock and path, and reproducing that would make a rendering
+    /// unreproducible.
+    /// </remarks>
+    private static string? FieldText(string? type, SlideFields? fields)
+    {
+        if (fields is not { } known) return null;
+
+        return type switch
+        {
+            "slidenum" => known.Number.ToString(CultureInfo.InvariantCulture),
+            "slidecount" => known.Count.ToString(CultureInfo.InvariantCulture),
+            _ => null,
+        };
     }
 
     private static TextAnchor Anchor(string? anchor) => anchor switch
@@ -148,7 +221,8 @@ internal static class PptxTextBody
         string? defaultTypeface,
         int[] counters,
         bool[] counting,
-        Func<int, IReadOnlyList<XElement>>? inherited)
+        Func<int, IReadOnlyList<XElement>>? inherited,
+        SlideFields? fields)
     {
         XElement? paragraphProperties = Drawing.Child(paragraph, "pPr");
         int level = Math.Clamp(Drawing.Number(paragraphProperties, "lvl") ?? 0, 0, 8);
@@ -186,10 +260,17 @@ internal static class PptxTextBody
             }
             else if (Drawing.Is(child, "fld"))
             {
-                // The cached value, not a recomputed one: what the file says a reader saw is what
-                // a reference renderer draws, and recomputing a slide number would disagree with
-                // it on any deck whose fields are stale.
-                string content = Drawing.Child(child, "t")?.Value ?? string.Empty;
+                // The slide's own position, and otherwise the cached value. A field is not a run
+                // with stale text: TextField::insertAt turns a slidenum into a
+                // com.sun.star.text.TextField.PageNumber (textfield.cxx:107-111), which draws the
+                // page it lands on. It matters because the cached text of the field on a *master*
+                // is the literal placeholder "‹#›" — one master shape serving forty slides cannot
+                // cache forty different numbers — so drawing the cache puts "‹#›" on every page of
+                // any deck whose page number lives on the master rather than on each slide.
+                string content =
+                    FieldText(Drawing.Attribute(child, "type"), fields)
+                    ?? Drawing.Child(child, "t")?.Value
+                    ?? string.Empty;
                 if (content.Length == 0) continue;
 
                 runs.Add(Run(
@@ -521,10 +602,8 @@ internal static class PptxTextBody
             ? value / 100000.0
             : whenAbsent;
 
-    private static long Emu(XElement? element, string attribute, long whenAbsent)
-        => long.TryParse(
-            Drawing.Attribute(element, attribute), NumberStyles.Integer,
-            CultureInfo.InvariantCulture, out long value)
+    private static long Emu(string? stated, long whenAbsent)
+        => long.TryParse(stated, NumberStyles.Integer, CultureInfo.InvariantCulture, out long value)
             ? value
             : whenAbsent;
 

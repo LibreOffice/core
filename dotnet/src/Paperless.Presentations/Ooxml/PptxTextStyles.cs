@@ -83,7 +83,7 @@ internal sealed class PptxTextStyles
     {
         ArgumentNullException.ThrowIfNull(shape);
 
-        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master);
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
 
         // Resolved once per shape rather than once per level: the match does not depend on the
         // level, and a deck with a hundred paragraphs in one placeholder would otherwise search
@@ -93,6 +93,30 @@ internal sealed class PptxTextStyles
         string? textStyle = placeholder?.TextStyle(_isNotesPage);
 
         return level => [.. Chain(direct, inherited, textStyle, level)];
+    }
+
+    /// <summary>
+    /// The <c>a:bodyPr</c> a shape inherits from the placeholders behind it, nearest first.
+    /// </summary>
+    /// <remarks>
+    /// Empty for a shape that is not a placeholder. See <see cref="PptxTextBody"/> for why the
+    /// body properties inherit at all — a slide's <c>&lt;a:bodyPr/&gt;</c> is silence, not an
+    /// instruction, and PowerPoint writes one on every placeholder it has not re-formatted.
+    /// </remarks>
+    /// <param name="shape">The shape whose text body is being read.</param>
+    public XElement?[] BodyPropertiesFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
+        if (placeholder is null) return [];
+
+        (XElement? direct, XElement? inherited) = Placeholders(placeholder);
+        return
+        [
+            Drawing.Child(Ppt.Child(direct, "txBody"), "bodyPr"),
+            Drawing.Child(Ppt.Child(inherited, "txBody"), "bodyPr"),
+        ];
     }
 
     /// <summary>
@@ -159,6 +183,16 @@ internal sealed class PptxTextStyles
         // "other" in its name means: everything that is not a title and not an outline.
         XElement? masterStyle = Ppt.Child(Ppt.Child(_master, "txStyles"), textStyle ?? "otherStyle");
         if (DrawingTextBody.LevelProperties(masterStyle, level) is { } fromMaster) yield return fromMaster;
+
+        // A placeholder's chain ends at the master's own style for its kind. p:defaultTextStyle
+        // is reached only by a shape that found none — PPTShape::createAndInsert picks the
+        // title, body or notes style by placeholder subtype and consults
+        // getDefaultTextStyle() strictly under "if (!aMasterTextListStyle)"
+        // (oox/source/ppt/pptshape.cxx:257-291 and 492-497). Letting a title fall through to it
+        // is not a harmless extra rung: a deck converted from .ppt states
+        // <a:buChar char="•"/> at every level of p:defaultTextStyle, so every title on every
+        // slide acquires a bullet the reference does not draw.
+        if (textStyle is not null) yield break;
 
         if (DrawingTextBody.LevelProperties(_defaultTextStyle, level) is { } fromDefault)
             yield return fromDefault;

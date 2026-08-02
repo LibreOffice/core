@@ -46,10 +46,26 @@ internal readonly record struct PptxPlaceholder(string Type, int? Index)
     /// </summary>
     /// <param name="shape">A <c>p:sp</c>, <c>p:pic</c> or <c>p:graphicFrame</c>.</param>
     /// <param name="master">
-    /// The tree to consult when the shape states an <c>idx</c> but no <c>type</c>, since the
-    /// type is then whatever the placeholder of that index on the master is. Null skips it.
+    /// The master, consulted when the shape states an <c>idx</c> but no <c>type</c>, since the
+    /// type is then whatever the placeholder of that index above it is. Null skips it.
     /// </param>
-    public static PptxPlaceholder? Read(XElement shape, XElement? master)
+    /// <param name="layout">
+    /// The layout, searched <em>before</em> the master for that same index.
+    /// <para>
+    /// <strong>Which of the two answers decides which placeholder the shape then matches.</strong>
+    /// <c>PPTShapeContext</c> looks the index up in <c>pMasterPersist->getShapes()</c>
+    /// (<c>oox/source/ppt/pptshapecontext.cxx:87</c>) — and for a slide that persist is the
+    /// <em>layout's</em>, whose shape list is the master's shapes with the layout's appended, walked
+    /// backwards. So a layout's untyped <c>&lt;p:ph idx="1"/&gt;</c> answers "obj" and the master's
+    /// <c>&lt;p:ph type="body" idx="1"/&gt;</c> never gets asked. Taking the master's answer instead
+    /// makes the shape a <c>body</c>, which then matches the master's placeholder at the first
+    /// priority and never reaches the layout's — so the shape inherits the master's size and list
+    /// style rather than the layout's. Measured on
+    /// <c>John_Broggio__RSS_Campion_event_John_Broggio.pptx</c>: 24 pt body text against a
+    /// reference's 18 pt, which wraps a third earlier and overflows the box on nine slides.
+    /// </para>
+    /// </param>
+    public static PptxPlaceholder? Read(XElement shape, XElement? master, XElement? layout = null)
     {
         XElement? ph = Element(shape);
         if (ph is null) return null;
@@ -69,15 +85,15 @@ internal readonly record struct PptxPlaceholder(string Type, int? Index)
 
             index = (int)Math.Clamp(parsed, int.MinValue, int.MaxValue);
 
-            // An idx with no type takes its type from the master's placeholder of that index —
+            // An idx with no type takes its type from the placeholder of that index above it —
             // which is how a slide can say "the second content box" without repeating what kind
-            // of box the layout decided it was.
-            if (type is null && master is not null
-                && FindByIndex(index.Value, ShapesOf(master)) is { } byIndex
-                && Element(byIndex) is { } masterPh
-                && Ppt.Attribute(masterPh, "type") is { Length: > 0 } masterType)
+            // of box the layout decided it was. The layout is searched first; see the remarks.
+            if (type is null && (master is not null || layout is not null)
+                && FindByIndex(index.Value, [.. ShapesOf(master), .. ShapesOf(layout)]) is { } byIndex
+                && Element(byIndex) is { } abovePh
+                && Ppt.Attribute(abovePh, "type") is { Length: > 0 } aboveType)
             {
-                type = masterType;
+                type = aboveType;
             }
         }
 

@@ -61,6 +61,12 @@ internal sealed partial class PptxSlideLayout
     /// </remarks>
     private PptxTextStyles? _styles;
 
+    /// <summary>
+    /// What the slide currently being laid out resolves its automatic fields to.
+    /// </summary>
+    /// <remarks>Held beside <see cref="_styles"/>, and for the same reason.</remarks>
+    private SlideFields _fields;
+
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
         _file = file;
@@ -74,6 +80,7 @@ internal sealed partial class PptxSlideLayout
         _styles = new PptxTextStyles(
             slide.Layout, slide.Master, _file.DefaultTextStyle, isNotesPage: false,
             theme.Colours);
+        _fields = new SlideFields(slide.Index + 1, _file.Slides.Count);
 
         List<PlacedShape> shapes = [];
 
@@ -380,7 +387,8 @@ internal sealed partial class PptxSlideLayout
 
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))
             {
-                if (background && PptxPlaceholder.Read(element, slide.Master) is not null) continue;
+                if (background && PptxPlaceholder.Read(element, slide.Master, slide.Layout) is not null)
+                    continue;
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
@@ -391,14 +399,13 @@ internal sealed partial class PptxSlideLayout
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
-                // A graphic frame is a table, a chart, a diagram or an embedded object. Three of
-                // the four now draw: a table from its own model, a chart from the plot the reader
-                // built, and a diagram from the shape tree the authoring application baked beside
-                // its layout definition. An embedded object still has no geometry here, and
-                // drawing its frame would put an empty rectangle where the reference draws a
-                // picture.
+                // A graphic frame is a table, a chart, a diagram or an embedded object, and all
+                // four now draw: a table from its own model, a chart from the plot the reader
+                // built, a diagram from the shape tree the authoring application baked beside its
+                // layout definition, and an embedded object from the picture of itself it carries.
                 shapes.AddRange(Table(element, theme, space));
                 shapes.AddRange(Chart(element, slide, theme, space));
+                shapes.AddRange(Ole(element, slide, theme, space));
                 Diagram(element, slide, theme, space, shapes, depth);
             }
             else if (Ppt.Is(element, "pic"))
@@ -589,6 +596,11 @@ internal sealed partial class PptxSlideLayout
             ? ShapeTransform.Place(local, turn, flipHorizontal: false, flipVertical: false, space)
             : placement;
 
+        // What a parent group's child coordinate space multiplies this shape's own units by;
+        // (1, 1) outside one, and outside the very common group that states a child space equal
+        // to its own extent.
+        (double scaleX, double scaleY) = ShapeTransform.ScaleOf(upright);
+
         XElement? geometry = Drawing.Child(properties, "prstGeom") ?? First(inherited, "prstGeom");
         string? preset = Drawing.Attribute(geometry, "prst");
         Dictionary<string, double>? adjustment = Adjustments(geometry);
@@ -620,10 +632,20 @@ internal sealed partial class PptxSlideLayout
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
             Text = Text(
                 shape,
-                Mirrored(
-                    TextRectangle(shape, local, own, preset, adjustment),
-                    local.Size, flipHorizontal, flipVertical),
-                upright,
+                // Into slide units, because the type inside is already in them. A group scales
+                // its children's coordinates and not their font sizes — LibreOffice decomposes
+                // the cumulative matrix and gives the shape the absolute size the scale produces
+                // (shape.cxx:1129-1140), then lays the text out in that. Leaving the rectangle in
+                // the child space measures 12 pt text against a box a thousandth of an inch wide,
+                // so every word is too wide for its line. The scale has to come back off the
+                // matrix that carries the runs, which is what Text is given below.
+                ShapeTransform.Scaled(
+                    Mirrored(
+                        TextRectangle(shape, local, own, preset, adjustment),
+                        local.Size, flipHorizontal, flipVertical),
+                    scaleX,
+                    scaleY),
+                ShapeTransform.WithoutScale(upright, scaleX, scaleY),
                 theme),
         };
     }
@@ -721,7 +743,8 @@ internal sealed partial class PptxSlideLayout
     private XElement?[] PlaceholderProperties(XElement shape, PptxSlide slide)
     {
         if (_styles is null) return [];
-        if (PptxPlaceholder.Read(shape, slide.Master) is not { } placeholder) return [];
+        if (PptxPlaceholder.Read(shape, slide.Master, slide.Layout) is not { } placeholder)
+            return [];
 
         (XElement? direct, XElement? inherited) = _styles.Placeholders(placeholder);
         return [Ppt.Child(direct, "spPr"), Ppt.Child(inherited, "spPr")];
@@ -733,7 +756,8 @@ internal sealed partial class PptxSlideLayout
         return body is null || DrawingTextBody.IsEmpty(body)
             ? null
             : PptxTextBody.Read(
-                body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape));
+                body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape),
+                _fields, _styles?.BodyPropertiesFor(shape));
     }
 
     /// <summary>
@@ -750,8 +774,13 @@ internal sealed partial class PptxSlideLayout
     /// defect survives a visual check.
     /// </remarks>
     /// <param name="shape">The shape whose body is being read.</param>
-    /// <param name="rectangle">Its text rectangle, in the shape's own coordinates.</param>
-    /// <param name="placement">The matrix placing the shape, with any mirror already removed.</param>
+    /// <param name="rectangle">
+    /// Its text rectangle, at slide scale but still at the shape's own origin — so a parent
+    /// group's scale is already in the extent and is not in the matrix.
+    /// </param>
+    /// <param name="placement">
+    /// The matrix placing the shape, with any mirror and any group scale already removed.
+    /// </param>
     /// <param name="theme">The theme, for run colours and the fallback typeface.</param>
     private PlacedText? Text(
         XElement shape, DocRect rectangle, AffineTransform placement, SlideTheme theme)
