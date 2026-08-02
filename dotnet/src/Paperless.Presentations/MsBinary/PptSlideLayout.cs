@@ -72,10 +72,12 @@ internal sealed class PptSlideLayout
 
     private readonly Dictionary<uint, PptStyleSheet> _stylesByMaster = [];
     private readonly Dictionary<uint, PptColourScheme> _schemesByMaster = [];
-    private readonly Dictionary<uint, Paint?> _backgroundsByMaster = [];
+    private readonly Dictionary<uint, uint> _masterParents = [];
     private readonly Dictionary<uint, DffRecordHeader> _pagesByMaster = [];
     private readonly Dictionary<uint, PptPageEntry> _entriesByMaster = [];
     private readonly Dictionary<int, PptPicture> _decoded = [];
+
+    private readonly Dictionary<uint, EscherPropertyTable> _shapePropertiesById = [];
 
     private PptStyleSheet? _defaultStyles;
     private PptFontTable _fontTable = PptFontTable.Empty;
@@ -120,6 +122,7 @@ internal sealed class PptSlideLayout
         _deckHeadersFooters = DeckHeadersFooters(pages);
         _titlePlaceholdersOmitted = TitlePlaceholdersOmitted(pages);
         ReadMasters(pages);
+        IndexShapes(pages);
 
         for (int index = 0; index < pages.Slides.Count; index++)
         {
@@ -298,9 +301,20 @@ internal sealed class PptSlideLayout
     /// Reads what each master supplies to the slides under it: styles, colours and background.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A title master states another master's slide id and carries no styles of its own, so the
     /// derived ones are resolved in a second pass — the first cannot, because the list may write
     /// a title master before the main master it points at.
+    /// </para>
+    /// <para>
+    /// <strong>A title master is written as a <c>Slide</c> record, not a <c>MainMaster</c>
+    /// one</strong>, and requiring the latter drops it — with it the deck's title slides lose
+    /// every decoration the master carries, since nothing then answers for that master id.
+    /// LibreOffice never asks: it takes whatever the persist id resolves to and looks inside for
+    /// a <c>SlideAtom</c> (<c>svdfppt.cxx:1583-1586</c>), which both kinds carry and a handout
+    /// does not. Both are accepted here for the same reason, and the master list is already
+    /// separate from the notes list, so nothing else can arrive through it.
+    /// </para>
     /// </remarks>
     private void ReadMasters(PptPages pages)
     {
@@ -310,7 +324,7 @@ internal sealed class PptSlideLayout
         {
             if (_persist.Resolve(entry.PersistId) is not { } offset) continue;
             if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) continue;
-            if (header.Type != PptRecordTypes.MainMaster) continue;
+            if (header.Type is not (PptRecordTypes.MainMaster or PptRecordTypes.Slide)) continue;
 
             _pagesByMaster[entry.SlideId] = header;
             _entriesByMaster[entry.SlideId] = entry;
@@ -327,13 +341,12 @@ internal sealed class PptSlideLayout
             PptStyleSheet sheet = PptStyleSheet.Read(_stream, header, pages.Environment);
             _stylesByMaster[entry.SlideId] = sheet;
             _defaultStyles = sheet;
-
-            _backgroundsByMaster[entry.SlideId] = BackgroundOf(
-                header, _schemesByMaster.GetValueOrDefault(entry.SlideId, PptColourScheme.Default));
         }
 
         foreach ((uint child, uint parent) in derived)
         {
+            _masterParents[child] = parent;
+
             if (_stylesByMaster.TryGetValue(parent, out PptStyleSheet? sheet))
             {
                 _stylesByMaster[child] = sheet;
@@ -342,18 +355,90 @@ internal sealed class PptSlideLayout
             {
                 _stylesByMaster[child] = fallback;
             }
-
-            if (_backgroundsByMaster.TryGetValue(parent, out Paint? background))
-            {
-                _backgroundsByMaster[child] = background;
-            }
         }
     }
 
+    /// <summary>
+    /// The background a master supplies, resolved against the scheme the <em>slide</em> is being
+    /// drawn under.
+    /// </summary>
+    /// <remarks>
+    /// Resolved per slide rather than cached with the master because the master's background shape
+    /// states a scheme <em>slot</em>, and which colours that slot names is the current page's
+    /// question: LibreOffice re-imports the master's background object into the slide's
+    /// <c>ProcessData</c> (<c>svdfppt.cxx:2846-2852</c>), so it resolves under whatever
+    /// <c>GetColorFromPalette</c> answers for the slide. A deck that recolours one slide and still
+    /// follows the master's background is the case that separates the two.
+    /// </remarks>
+    private Paint? MasterBackground(uint masterId, PptColourScheme scheme)
+    {
+        uint id = masterId;
+
+        // A title master can follow its own master's background, so the chain is walked rather
+        // than looked up once (svdfppt.cxx:2833-2841, which walks the same chain and guards
+        // against a file whose masters point at each other).
+        for (int hop = 0; hop <= MaxMasterChain; hop++)
+        {
+            if (!_pagesByMaster.TryGetValue(id, out DffRecordHeader master)) return null;
+            if (BackgroundOf(master, scheme) is { } paint) return paint;
+            if (!_masterParents.TryGetValue(id, out uint parent) || parent == id) return null;
+            id = parent;
+        }
+
+        return null;
+    }
+
+    /// <summary>How far a master-follows-master chain is walked before it is abandoned.</summary>
+    private const int MaxMasterChain = 8;
+
+    /// <summary>
+    /// Indexes every shape in the deck by identifier, then lets the drawing reader inherit
+    /// through it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is <c>SvxMSDffManager::SeekToShape</c> (<c>msdffimp.cxx:6270</c>) without the cluster
+    /// table: that walks a shape id back through <c>maFidcls</c> to the drawing that owns it and
+    /// scans that drawing, and since a shape id is unique across the file, one dictionary answers
+    /// the same question. Groups are descended into, because the C++ loop falls through a group
+    /// container's header rather than stepping over it and so reaches nested shapes too.
+    /// </para>
+    /// <para>
+    /// <strong>Built before the resolver is attached, so the tables it holds have inherited
+    /// nothing.</strong> A master's placeholder may itself name a master — a title master
+    /// deriving from the main one — and indexing an already-merged table would compound the two
+    /// silently. The C++ has the property for free: it re-reads the master shape's own
+    /// <c>msofbtOPT</c> record from the stream, so it can only ever see one level.
+    /// </para>
+    /// </remarks>
+    private void IndexShapes(PptPages pages)
+    {
+        foreach (PptPageEntry entry in pages.Masters.Concat(pages.Slides).Concat(pages.Notes))
+        {
+            if (_persist.Resolve(entry.PersistId) is not { } offset) continue;
+            if (!_stream.TryReadHeader(offset, out DffRecordHeader page)) continue;
+            if (_stream.FirstChild(page, PptRecordTypes.Drawing) is not { } drawing) continue;
+            if (_stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is not { } container)
+                continue;
+
+            foreach (EscherShape shape in _escher.ReadDrawing(container))
+            {
+                foreach (EscherShape each in shape.SelfAndDescendants())
+                {
+                    if (each.ShapeId != 0 && each.Properties.Count > 0)
+                    {
+                        _shapePropertiesById.TryAdd(each.ShapeId, each.Properties);
+                    }
+                }
+            }
+        }
+
+        _escher.MasterShapeProperties = id
+            => _shapePropertiesById.GetValueOrDefault(id);
+    }
+
     private PptColourScheme? SchemeOf(DffRecordHeader page)
-        => _stream.FirstChild(page, PptRecordTypes.ColorSchemeAtom) is { } atom
-            ? PptColourScheme.Read(_stream.Content(atom))
-            : null;
+        => PptColourScheme.OfPage(_stream, page);
 
     /// <summary>
     /// The page's own colour scheme, or its master's when the slide follows it.
@@ -436,9 +521,15 @@ internal sealed class PptSlideLayout
         }
 
         List<PlacedShape> shapes = [];
-        Paint? background = BackgroundOf(page, scheme)
-                            ?? _backgroundsByMaster.GetValueOrDefault(masterId)
-                            ?? Paint.Solid(Colour.White);
+
+        // Bit 2 decides which background shape is the page's, and a slide that sets it carries one
+        // of its own regardless — PowerPoint writes a background shape on every page whether or not
+        // it is used. Preferring the slide's own would draw the wrong one on most decks.
+        Paint? background = (flags & FollowMasterBackground) != 0
+            ? MasterBackground(masterId, scheme) ?? BackgroundOf(page, scheme)
+            : BackgroundOf(page, scheme) ?? MasterBackground(masterId, scheme);
+
+        background ??= Paint.Solid(Colour.White);
 
         PptFieldValues fields = FieldsFor(index, runningPlaceholders);
         Context context = new(entry, scheme, styles, fields);
@@ -484,6 +575,12 @@ internal sealed class PptSlideLayout
     /// rather than the page's own (<c>svdfppt.cxx:2566-2604</c>).
     /// </summary>
     private const ushort FollowMasterScheme = 0x0002;
+
+    /// <summary>
+    /// Bit 2 of a <c>SlideAtom</c>'s flags: take the master's background shape rather than the
+    /// page's own (<c>svdfppt.cxx:2826</c>, "follow master background?").
+    /// </summary>
+    private const ushort FollowMasterBackground = 0x0004;
 
     /// <summary>The <c>SlideLayoutAtom</c> geometry meaning "title slide".</summary>
     private const int TitleSlideLayout = 0;

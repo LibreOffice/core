@@ -83,6 +83,59 @@ public sealed class PptColourScheme
     }
 
     /// <summary>
+    /// The <c>ColorSchemeAtom</c> instance that marks a page's own scheme —
+    /// <c>SlideSchemeColorSchemeAtom</c>.
+    /// </summary>
+    public const ushort PageSchemeInstance = 1;
+
+    /// <summary>
+    /// A page's own colour scheme: the <c>ColorSchemeAtom</c> whose instance says it is one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A slide master carries several, and only one of them is its scheme.</strong> The
+    /// header's instance tells them apart: 1 is the page's <c>SlideSchemeColorSchemeAtom</c>, and
+    /// 6 is a <c>SchemeListElementColorSchemeAtom</c> — a member of the palette PowerPoint offers
+    /// in its scheme picker, which the page does not use. LibreOffice writes exactly that pair of
+    /// instances in its own export (<c>eppt.cxx:337</c> and <c>eppt.cxx:396-408</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Taking the first atom in the container reads a palette entry as the page's
+    /// scheme</strong>, because the list entries are written before the drawing and the real one
+    /// after it. LibreOffice never notices: its <c>SeekToRec</c> for the scheme runs after it has
+    /// already sought past the <c>PPDrawing</c> record (<c>svdfppt.cxx:1590-1622</c>), so the scan
+    /// starts beyond the list and lands on the right atom by position rather than by instance.
+    /// Measured on a corpus deck whose master lists twelve: the first is white paper with black
+    /// text and the real one is a navy page with white text, so every placeholder filling with
+    /// "text and lines" came out black on black.
+    /// </para>
+    /// <para>
+    /// The first atom of any instance is still the fallback, for a page that states one without
+    /// saying which kind it is.
+    /// </para>
+    /// </remarks>
+    /// <param name="stream">The stream the page lives in.</param>
+    /// <param name="page">The <c>Slide</c>, <c>MainMaster</c> or <c>Notes</c> container.</param>
+    public static PptColourScheme? OfPage(DffRecordBuffer stream, DffRecordHeader page)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        DffRecordHeader? fallback = null;
+
+        foreach (DffRecordHeader child in stream.Children(page))
+        {
+            if (child.Type != ColorSchemeAtom) continue;
+            if (child.Instance == PageSchemeInstance) return Read(stream.Content(child));
+            fallback ??= child;
+        }
+
+        return fallback is { } atom ? Read(stream.Content(atom)) : null;
+    }
+
+    /// <summary>The <c>ColorSchemeAtom</c> record type, <c>PPT_PST_ColorSchemeAtom</c>.</summary>
+    private const ushort ColorSchemeAtom = 2032;
+
+    /// <summary>
     /// Reads a <c>ColorSchemeAtom</c> payload, or returns null when it is too short to be one.
     /// </summary>
     /// <param name="content">The atom's payload.</param>

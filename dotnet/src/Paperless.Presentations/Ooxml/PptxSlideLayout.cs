@@ -186,8 +186,16 @@ internal sealed partial class PptxSlideLayout
         if (_themes.TryGetValue(master, out SlideTheme cached)) return cached;
 
         XElement? part = _file.Load(_file.TargetOfType(master, "theme"));
+
+        // p:clrMap, not a:clrMap. The map is the one element of the pair that is PresentationML —
+        // the scheme it reorders is DrawingML — and asking for it in the drawing namespace finds
+        // nothing on every deck ever written, which reads as the identity map. That silently
+        // inverts a dark master: `bg2` resolves to the theme's second *light* colour instead of
+        // its second dark one, so the deck renders as dark text on pale paper where the reference
+        // draws white text on a navy slide. Extraction has always read it correctly
+        // (`PptxFile.ThemeOf`), which is why no text comparison ever saw this.
         DrawingTheme? colours = DrawingTheme.Read(part)
-            ?.WithMap(DrawingColourMap.Read(Drawing.Child(slide.Master, "clrMap")));
+            ?.WithMap(DrawingColourMap.Read(Ppt.Child(slide.Master, "clrMap")));
 
         XElement? minor = Drawing.Child(
             Drawing.Child(Drawing.Child(Drawing.Child(part, "themeElements"), "fontScheme"),

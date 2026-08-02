@@ -233,8 +233,13 @@ public static class EscherBlips
             ReadOnlySpan<byte> bse = buffer.Content(entry);
             if (bse.Length < BlipStoreEntrySize) return null;
 
+            // Zero is a real offset, not "nowhere". LibreOffice reads a `foDelay` of zero as
+            // "the picture is inside this entry" only when the entry is big enough to hold it —
+            // `if ( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )`, msdffimp.cxx:6084 — and the branch
+            // above has already taken that case by finding the blip record inline. What is left
+            // is a store whose first picture begins at offset zero of the delay stream, which is
+            // where PowerPoint puts a deck's only picture: the `Pictures` stream starts with it.
             uint offset = BinaryPrimitives.ReadUInt32LittleEndian(bse[28..]);
-            if (offset == 0) return null;
 
             if (!At(delay, offset, out source, out blip) && !At(fallback, offset, out source, out blip))
             {

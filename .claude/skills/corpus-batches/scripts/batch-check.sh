@@ -26,6 +26,11 @@ set -uo pipefail
 ROOT_DIR="${1:?usage: batch-check.sh <corpus-root> <batch-glob> [outdir] [workers]}"
 GLOB="${2:?batch glob, e.g. batch-001 or 'batch-0[0-1]*'}"
 OUT="${3:-$(mktemp -d)}"
+# Absolute, always. soffice takes its profile as `file://$OUT/profN`, and a relative path
+# there is not a URL — it silently starts with an unusable profile and converts nothing, so
+# every document is reported as `ref-failed` rather than as an error. Cost one agent a whole
+# sweep before the pattern was recognised.
+mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 WORKERS="${4:-3}"
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
