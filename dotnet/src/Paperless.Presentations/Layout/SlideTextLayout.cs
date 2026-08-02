@@ -462,9 +462,15 @@ public static partial class SlideTextLayout
             first ??= face;
             Length size = scaling.Scaled(run.Size);
 
-            runs.Add(new FormattedRun(run.Start, run.Length, face, size, Tracking: run.Tracking));
+            // A superscript is measured at the size it is drawn at, which is the whole reason the
+            // shrink has to reach the layouter rather than the painter: 58% of the em is 42% less
+            // advance, and a line that fits at that width wraps at the full one.
+            Length escaped = run.Escapement.SizeOf(size);
+
+            runs.Add(new FormattedRun(run.Start, run.Length, face, escaped, Tracking: run.Tracking));
             styles.Add(new RunStyle(
-                run.Colour, reference, face, run.IsUnderlined, run.IsStruckThrough));
+                run.Colour, reference, face, run.IsUnderlined, run.IsStruckThrough,
+                run.Escapement.RiseOf(size), size));
         }
 
         if (first is null) return null;
@@ -506,7 +512,8 @@ public static partial class SlideTextLayout
                 // gap of 67/2048, so keeping it makes an 18 pt line 20.70 pt where LibreOffice
                 // draws 20.15 — half a point per line, measured on the wrapping cell of
                 // slide-table-grid.pptx, whose four reference baselines are 20.154 pt apart.
-                (Length ascent, Length metric) = FaceHeight(runs, box.Line.Start, box.Line.VisibleEnd);
+                (Length ascent, Length metric) =
+                    FaceHeight(runs, styles, box.Line.Start, box.Line.VisibleEnd);
 
                 Length faceHeight = metric > Length.Zero ? metric : box.Height;
                 // Through LineSpacingRule.Apply, whose whole-twip arithmetic this branch wants:
@@ -526,7 +533,7 @@ public static partial class SlideTextLayout
                 continue;
             }
 
-            Length em = LargestSize(runs, box.Line.Start, box.Line.VisibleEnd);
+            Length em = LargestSize(runs, styles, box.Line.Start, box.Line.VisibleEnd);
 
             // The rule itself: one em of ascent, 1.2 em of box, then whatever the paragraph's own
             // spacing does to it. A paragraph stating 150% gets 1.5 x 1.2 em, which is what
@@ -560,19 +567,31 @@ public static partial class SlideTextLayout
     /// The tallest ascent and the tallest ascent-plus-descent among the runs a line touches.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Per run rather than per paragraph, for the same reason <see cref="LargestSize"/> is: a
     /// bigger word on a line makes that line taller and leaves the others alone. Both quantities
     /// come from the same face resolution the shared layouter uses, so the only difference from
     /// its answer is the line gap.
+    /// </para>
+    /// <para>
+    /// A run that sits off its baseline is measured at its shrunk size and then given its rise
+    /// back, which is <c>RecalcFormatterFontMetrics</c>'s closing rule —
+    /// <c>ascent × propr / 100 + em × esc / 100</c> upwards and the mirror of it downwards
+    /// (<c>editeng/source/editeng/impedit3.cxx:3164-3181</c>). At 58% of Liberation Sans's
+    /// 0.905 em ascent plus DrawingML's usual 30% rise that comes to 0.83 em against 0.91 plain,
+    /// so an ordinal never makes its own line taller; a file stating a rise past 42% does, and
+    /// this is the arithmetic that lets it.
+    /// </para>
     /// </remarks>
     private static (Length Ascent, Length Height) FaceHeight(
-        List<FormattedRun> runs, int start, int end)
+        List<FormattedRun> runs, List<RunStyle> styles, int start, int end)
     {
         Length ascent = Length.Zero;
         Length height = Length.Zero;
 
-        foreach (FormattedRun run in runs)
+        for (int i = 0; i < runs.Count; i++)
         {
+            FormattedRun run = runs[i];
             bool touches = run.Start < end && start < run.End;
             bool contains = start == end && run.Covers(start);
             if (!touches && !contains) continue;
@@ -580,6 +599,10 @@ public static partial class SlideTextLayout
             LineMetrics metrics = LineSpacing.Resolve(run.Face);
             Length up = Rounded(metrics.ScaledAscent(run.EmSize));
             Length down = Rounded(metrics.ScaledDescent(run.EmSize));
+
+            Length rise = i < styles.Count ? styles[i].Rise : Length.Zero;
+            if (rise > Length.Zero) up += rise;
+            else if (rise < Length.Zero) down -= rise;
 
             ascent = Length.Max(ascent, up);
             height = Length.Max(height, up + down);
@@ -645,26 +668,43 @@ public static partial class SlideTextLayout
 
     /// <summary>The largest em size among the runs a line touches.</summary>
     /// <remarks>
+    /// <para>
     /// The line's own runs rather than the paragraph's, because a 32 pt word in an 18 pt paragraph
     /// makes <em>its</em> line taller and leaves the others alone — which is the same rule the
     /// shared layouter applies to font metrics, restated for a metric that is not the font's.
+    /// </para>
+    /// <para>
+    /// A superscript counts at the size it would have taken, not the size it was shrunk to:
+    /// <c>RecalcFormatterFontMetrics</c> forces the proportion back to 100% before it reads a
+    /// metric, so the ordinal in "5th" leaves its line exactly as tall as the date beside it
+    /// (<c>editeng/source/editeng/impedit3.cxx:3121-3126</c>).
+    /// </para>
     /// </remarks>
-    private static Length LargestSize(List<FormattedRun> runs, int start, int end)
+    private static Length LargestSize(
+        List<FormattedRun> runs, List<RunStyle> styles, int start, int end)
     {
         Length largest = Length.Zero;
 
-        foreach (FormattedRun run in runs)
+        for (int i = 0; i < runs.Count; i++)
         {
+            FormattedRun run = runs[i];
             bool touches = run.Start < end && start < run.End;
             bool contains = start == end && run.Covers(start);
-            if (touches || contains) largest = Length.Max(largest, run.EmSize);
+            if (touches || contains) largest = Length.Max(largest, Nominal(runs, styles, i));
         }
 
         if (largest > Length.Zero) return largest;
 
         // An empty paragraph still occupies a line, and it is as tall as the text that would go
         // on it: the first run's size, which is what the paragraph mark carries.
-        return runs.Count > 0 ? runs[0].EmSize : Length.FromPoints(18);
+        return runs.Count > 0 ? Nominal(runs, styles, 0) : Length.FromPoints(18);
+    }
+
+    /// <summary>The size a run would take were it not escaped.</summary>
+    private static Length Nominal(List<FormattedRun> runs, List<RunStyle> styles, int index)
+    {
+        Length nominal = index < styles.Count ? styles[index].NominalSize : Length.Zero;
+        return nominal > Length.Zero ? nominal : runs[index].EmSize;
     }
 
     /// <summary>
@@ -795,10 +835,15 @@ public static partial class SlideTextLayout
             ShapedText shaped = TextShaper.Default.Shape(run.Face, text, run.Shaping);
             if (shaped.Glyphs.Count == 0) continue;
 
+            // A superscript's own baseline, which the rules under and through it share:
+            // EditEngine moves the pen and leaves the line's baseline where it was
+            // (editeng/source/items/svxfont.cxx:549-558).
+            Length pitch = baseline - block.RiseAt(run.Start);
+
             GlyphRun glyphs = Build(
                 shaped, text, run.EmSize,
                 block.FontFor(run.Start, run.Face) ?? Reference(run.Face),
-                new DocPoint(pen, baseline),
+                new DocPoint(pen, pitch),
                 line.Box.SpaceAdd,
                 run.Tracking);
 
@@ -808,7 +853,7 @@ public static partial class SlideTextLayout
             placed.Add(new PlacedGlyphRun(
                 glyphs,
                 block.ColourAt(run.Start),
-                Rules(block.DecorationAt(run.Start), run.Face, run.EmSize, pen, baseline, advance)));
+                Rules(block.DecorationAt(run.Start), run.Face, run.EmSize, pen, pitch, advance)));
 
             // The pen carries across the runs of a line, so the second run starts where the first
             // ended rather than back at the margin.
@@ -979,12 +1024,25 @@ public static partial class SlideTextLayout
     /// </remarks>
     /// <param name="IsUnderlined">Whether a rule is drawn under it.</param>
     /// <param name="IsStruckThrough">Whether a rule is drawn through it.</param>
+    /// <param name="Rise">
+    /// How far above its line's baseline the run is drawn, negative for a subscript. The
+    /// <em>size</em> half of an escapement travels on the measured run, because it moves line
+    /// breaks; this half does not, so it travels with the colour and the decorations.
+    /// </param>
+    /// <param name="NominalSize">
+    /// The size the run would take were it not escaped. A line's height is derived from this
+    /// rather than from the shrunk size, because EditEngine forces the proportion back to 100%
+    /// before it asks the font for a metric
+    /// (<c>editeng/source/editeng/impedit3.cxx:3121-3126</c>).
+    /// </param>
     private readonly record struct RunStyle(
         Colour Colour,
         FontReference? Font,
         OpenTypeFace? Face,
         bool IsUnderlined = false,
-        bool IsStruckThrough = false);
+        bool IsStruckThrough = false,
+        Length Rise = default,
+        Length NominalSize = default);
 
     /// <summary>One paragraph, measured and broken.</summary>
     private sealed record Block(
@@ -1029,6 +1087,11 @@ public static partial class SlideTextLayout
             RunStyle style = StyleAt(index);
             return (style.IsUnderlined, style.IsStruckThrough);
         }
+
+        /// <summary>
+        /// How far above the line's baseline a character is drawn, zero for ordinary text.
+        /// </summary>
+        public Length RiseAt(int index) => StyleAt(index).Rise;
 
         /// <summary>
         /// The resolved reference for a sub-run, or null when nothing here can name its face.

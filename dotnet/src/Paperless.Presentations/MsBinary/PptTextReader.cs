@@ -77,6 +77,12 @@ public readonly record struct PptParagraphRun(
 /// <param name="FontIndex">The index into the document's font collection.</param>
 /// <param name="FontHeight">The size in points.</param>
 /// <param name="Colour">The packed colour word, in the text spelling.</param>
+/// <param name="Escapement">
+/// How far off the baseline the run sits, as a signed percentage of its size. Carried as well as
+/// folded into <paramref name="Emphasis"/> because the magnitude is what places the run:
+/// <c>svdfppt.cxx:5764-5775</c> puts the value straight into a <c>SvxEscapementItem</c>, and the
+/// flag alone cannot say whether a file asked for 30% or for 100%.
+/// </param>
 public readonly record struct PptCharacterRun(
     int Length,
     RunEmphasis Emphasis,
@@ -84,7 +90,8 @@ public readonly record struct PptCharacterRun(
     uint Mask = 0,
     ushort FontIndex = 0,
     ushort FontHeight = 0,
-    uint Colour = 0)
+    uint Colour = 0,
+    short Escapement = 0)
 {
     /// <summary>Whether the run's mask names a property, so its value is the run's own.</summary>
     /// <param name="bit">The mask bit, as <c>PPT_CharAttr_*</c> numbers them.</param>
@@ -592,7 +599,8 @@ public static class PptTextReader
                 mask,
                 fontIndex,
                 fontHeight,
-                colour));
+                colour,
+                escapement));
             if (count <= 0) break;
             covered += count;
         }
