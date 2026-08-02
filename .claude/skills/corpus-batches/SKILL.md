@@ -160,6 +160,19 @@ A brief that works contains all of:
    time this has been checked, the predecessor's numbers were wrong in some way: describing
    already-fixed work, counting 27 exact matches that were really 10, a headline claim with
    no harness behind it.
+
+   **Say explicitly that the measurement and its explanation must be checked separately.**
+   Three times now a predecessor's number reproduced to the digit while the cause attached to
+   it was wrong, and each time following the stated cause would have wasted a round:
+
+   | Reported | Reproduced? | Actual cause |
+   |---|---|---|
+   | "line heights 6% short, `hhea` vs `OS/2` precedence" | exactly | `w:asciiTheme` never read — laid out in the wrong font |
+   | "`A_320` in-cell pitch 13.0 vs 12.65, an `sprmPDyaLine` at-least value" | exactly | `fUsePrinterMetrics` — formatted against a 300 dpi grid |
+   | "chart category labels drawn touching" | the deck has no chart parts | EMF labels needing `GM_ADVANCED` rotation |
+
+   A measurement is evidence; the sentence after it is a hypothesis. Briefs should carry both
+   and label which is which.
 4. **Known-good test counts, per project, with the instruction to compare counts.** A
    truncated run prints `Passed! - Failed: 0` while silently dropping the tests it never
    reached. Measured: 470 passed on one run and 353 on the next, both green, nothing

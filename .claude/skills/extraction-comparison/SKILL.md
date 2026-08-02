@@ -95,6 +95,28 @@ is a codepage mismatch, not a parsing bug:
 `compare-text.py --show-codepoints` prints the differing characters with their code
 points, which usually makes the substitution pattern obvious at a glance.
 
+## When extraction and layout disagree about the same document
+
+Extraction and `IPaginatedDocument.Layout()` are separate paths over the same reader. They
+can therefore hold *different* views of one file, and that discrepancy is a precise
+diagnostic rather than a curiosity:
+
+- **Text extracts but does not render** → the layout assembler is dropping it. Found this
+  way: blank paragraphs kept by extraction and discarded from DOC table cells by the layout
+  pass, on a document that pads each of 106 entries with 21 of them so each takes a page.
+- **Text renders but does not extract** → the glyphs are landing without a usable text
+  representation. This project has shipped that twice, once from zero `/Widths` producing
+  per-glyph TJ kerning of −700.
+- **Neither has it** → a reading gap, and the cheapest of the three to find, because you can
+  work entirely in text.
+
+So when a rendering is short of content, extract first and note *which* of the three you
+have before opening a PDF. It costs one command and eliminates two thirds of the search
+space.
+
+A corollary worth stating: **a rendering bug whose text extracts perfectly is not a reading
+bug**, however much it looks like one. Chase it in layout and drawing, not in the importer.
+
 ## Metadata
 
 Metadata comes from three unrelated systems — ODF `meta.xml`, OOXML `docProps/*`, and the
