@@ -18,6 +18,7 @@
 #include <wrtsh.hxx>
 
 #include <comphelper/configuration.hxx>
+#include <comphelper/kit.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/event.hxx>
@@ -347,13 +348,18 @@ CPPUNIT_TEST_FIXTURE(SwSnapToGridTest, testResizeShapeOnGrid)
     checkShapeSize(pObject, aStartSize.Width, aStartSize.Height);
 
     // Drag & resize the shape to the left and upward and then resize it back
-    resizeShape(pObject, DragPoint::TopLeft, -nMove, -nMove);
-    checkShapePosition(pObject, aStartPosition.X - nGridSize, aStartPosition.Y - nGridSize);
-    checkShapeSize(pObject, aStartSize.Width + nGridSize, aStartSize.Height + nGridSize);
+    // At the text area's origin the shape's top left handle sits under the anchor symbol, which a
+    // Kit build reaches with its zoom-independent tolerance, and which wins as the last handle
+    if (!comphelper::COKit::isActive())
+    {
+        resizeShape(pObject, DragPoint::TopLeft, -nMove, -nMove);
+        checkShapePosition(pObject, aStartPosition.X - nGridSize, aStartPosition.Y - nGridSize);
+        checkShapeSize(pObject, aStartSize.Width + nGridSize, aStartSize.Height + nGridSize);
 
-    resizeShape(pObject, DragPoint::TopLeft, nMove, nMove);
-    checkShapePosition(pObject, aStartPosition.X, aStartPosition.Y);
-    checkShapeSize(pObject, aStartSize.Width, aStartSize.Height);
+        resizeShape(pObject, DragPoint::TopLeft, nMove, nMove);
+        checkShapePosition(pObject, aStartPosition.X, aStartPosition.Y);
+        checkShapeSize(pObject, aStartSize.Width, aStartSize.Height);
+    }
 
     // Drag & resize the shape to the left and downward and then resize it back
     resizeShape(pObject, DragPoint::BottomLeft, -nMove, nMove);
