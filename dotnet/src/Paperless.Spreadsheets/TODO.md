@@ -218,6 +218,18 @@ Measured at `ef1aac0c8`. `sheets/batch-001` was **6/10**, the weakest level-one 
 tracks, and its four failures all had the right page count and the wrong word count. Three of them
 turned out to be **one defect**, and it was not the one the handover named.
 
+**Whole track, `sheets/batch-001 … batch-018`, 171 documents: 92 matching against the previous
+round's 84, with total absolute page error unchanged at 1007 and 109 documents on an exactly
+correct page count.** `xls` is 39/62 and `xlsx` 53/109. The page error not moving at all is the
+right result rather than a disappointing one: every fix this round is a word-level fix, none of
+them touches a column width or a row height, and a page count that moved would have meant one of
+them had a side effect nobody asked for. **Page error is where this track's remaining value is**,
+and the item that would move it most is the column-width measurement below.
+
+The 84 is the predecessor's number and was not independently re-measured at `ef1aac0c8`; what was
+re-measured is `sheets/batch-001`, which reproduced the briefed 6/10 and all four of its word
+counts to the digit, and the whole-track page error, which came out at the briefed 1007 exactly.
+
 **An accounting format's `*` fill was dropped, not deferred.** `_("$"* #,##0.00_)` is what Excel
 writes for every accounting cell, and `*c` means "repeat `c` until the column is full" — which is
 what puts the currency symbol against the cell's left edge and the digits against its right. The
@@ -273,8 +285,8 @@ a collapsed column, and it was the last two words of that document's deficit.
 diff. Two of them did not before, and the tenth still does not — both are below.
 
 **A cell's underline was neither read nor drawn, by any of the three readers.** It is the commonest
-decoration a spreadsheet has, because the hyperlink style *is* an underlined blue font, and a ruled
--off column heading is the other half. `FMMO_NMPF_37C.xlsx` passed the word gate exactly — 216
+decoration a spreadsheet has, because the hyperlink style *is* an underlined blue font, and a column
+heading ruled off from its data is the other half. `FMMO_NMPF_37C.xlsx` passed the word gate — 216
 against 216 — and its ink imbalance against LibreOffice's rendering was 0.45%, all of it the lines
 under its three source links and every one of its headings. It is 0.09% now, which is the image
 comparison's difference between `MAJOR` and `shifted`. `SheetCellFormat` carries
