@@ -3199,7 +3199,7 @@ int KitSocketPoll::kitPoll(int timeoutMicroS)
     // and leave lastWarned untouched too so a later depth-1 kitPoll doesn't fire spuriously.
     // loKitPtr is the engine's COKit ABI handle, set in startMainLoop() for MOBILEAPP and via
     // globalPreinit() on the server.
-    if (reentries != lastWarned && !(loKitPtr && loKitPtr->pClass->isExpectedReentry()))
+    if (reentries != lastWarned && !(loKitPtr && loKitPtr->isExpectedReentry()))
     {
         LOG_ERR("non-async dialog triggered; reentry depth " << reentries
                 << ", triggering call site:\n" << ProcUtil::Backtrace::get(30));

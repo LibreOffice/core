@@ -625,7 +625,7 @@ void DesktopKitTest::testGetPartPageRectangles()
 void DesktopKitTest::testGetFilterTypes()
 {
     LibCO_Impl aOffice;
-    char* pJSON = aOffice.m_pOfficeClass->getFilterTypes(&aOffice);
+    char* pJSON = aOffice.getFilterTypes();
 
     std::stringstream aStream(pJSON);
     boost::property_tree::ptree aTree;
@@ -3605,7 +3605,7 @@ void DesktopKitTest::testRunMacro()
     // Basic library (removed with the wizards module) or a document loaded
     // with MacroExecutionMode::ALWAYS_EXECUTE_NO_WARN which this test
     // framework doesn't easily support.
-    bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, "macro:///I.Am.Not(There)");
+    bNonExistentMacro = aOffice.runMacro("macro:///I.Am.Not(There)");
     CPPUNIT_ASSERT(!bNonExistentMacro);
 }
 
@@ -3892,7 +3892,7 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
     readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
     LibCO_Impl aOffice;
-    bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, maTempFile.GetURL().toUtf8().getStr(),
+    bool bResult = aOffice.signDocument(maTempFile.GetURL().toUtf8().getStr(),
                                          aCertificate.data(), int(aCertificate.size()),
                                          aPrivateKey.data(), int(aPrivateKey.size()));
 

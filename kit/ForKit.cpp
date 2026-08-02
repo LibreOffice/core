@@ -208,7 +208,7 @@ protected:
             std::string fontFile = tokens[1];
 
             assert(loKitPtr);
-            loKitPtr->pClass->setOption(loKitPtr, "addfont", Poco::URI(Poco::Path(fontFile)).toString().c_str());
+            loKitPtr->setOption("addfont", Poco::URI(Poco::Path(fontFile)).toString().c_str());
         }
         else if (tokens.equals(0, "exit"))
         {
@@ -631,7 +631,7 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
             Poco::Path sharedPresets(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
             Poco::Path presetsPath = Poco::Path(sharedPresets, Uri::encode(subForKitIdent)).toString();
             assert(loKitPtr);
-            loKitPtr->pClass->setOption(loKitPtr, "addconfig", Poco::URI(presetsPath).toString().c_str());
+            loKitPtr->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
         }
 
         LOG_INF("SubForKit process is ready. Parent: " << parentPid);

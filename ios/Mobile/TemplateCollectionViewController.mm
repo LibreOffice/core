@@ -163,7 +163,7 @@ static NSString *mapTemplateExtensionToActual(NSString *templateName) {
     // Load the template into LibreOffice core, save as the corresponding document type (with the
     // same basename), and then proceed to edit that.
 
-    COKitDocument *doc = lo_kit->pClass->documentLoad(lo_kit, [[selectedTemplate absoluteString] UTF8String]);
+    COKitDocument *doc = lo_kit->documentLoad([[selectedTemplate absoluteString] UTF8String]);
     doc->pClass->saveAs(doc, [[newURL absoluteString] UTF8String], nullptr, nullptr);
     doc->pClass->destroy(doc);
 

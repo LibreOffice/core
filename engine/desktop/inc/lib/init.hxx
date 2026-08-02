@@ -305,7 +305,6 @@ namespace desktop {
     struct DESKTOP_DLLPUBLIC LibCO_Impl : public COKit
     {
         OUString maLastExceptionMsg;
-        std::shared_ptr< COKitClass > m_pOfficeClass;
         oslThread maThread;
         COKitCallback mpCallback;
         void *mpCallbackData;
@@ -321,6 +320,53 @@ namespace desktop {
         }
 
         void dumpState(rtl::OStringBuffer &aState);
+
+        void destroy() override;
+        COKitDocument* documentLoad(const char* pURL) override;
+        char* getError() override;
+        COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) override;
+        void freeError(char* pFree) override;
+        void registerCallback(COKitCallback pCallback, void* pData) override;
+        char* getFilterTypes() override;
+        void setOptionalFeatures(COKitOptionalFeatures features) override;
+        void setDocumentPassword(char const* pURL, char const* pPassword) override;
+        char* getVersionInfo() override;
+        int runMacro(const char* pURL) override;
+        bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
+                          const int nCertificateBinarySize, const unsigned char* pPrivateKeyBinary,
+                          const int nPrivateKeyBinarySize) override;
+        void runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
+                     void* pData) override;
+        void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) override;
+        void setOption(const char* pOption, const char* pValue) override;
+        void dumpState(const char* pOptions, char** pState) override;
+        char* extractRequest(const char* pFilePath) override;
+        void trimMemory(int nTarget) override;
+        void* startURP(
+            void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) override;
+        void stopURP(void* pSendURPToLOContext) override;
+        int joinThreads() override;
+        void startThreads() override;
+        void setForkedChild(bool bIsChild) override;
+        char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) override;
+        void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) override;
+        int getDocsCount() override;
+        void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
+        void executeScript(char const * script, char ** result, char ** error,
+                           void (*proxyCallback) (void * data, char const * payload),
+                           void * proxyCallbackData, bool * usedLegacyUnoApi) override;
+        void deliverProxyResult(char const * callId, char const * jsonValue) override;
+        void cancelProxyCalls() override;
+        int isExpectedReentry() override;
+        bool takeLegacyUnoApiUseFlag() override;
+        void
+        registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) override;
+        void installClipboardProvider(const COKitClipboardProvider* pProvider) override;
+        int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                               char      ***pOutMimeTypes, size_t     **pOutSizes,
+                               char      ***pOutStreams) override;
     };
 
     /// Helper function to extract the value from parameters delimited by

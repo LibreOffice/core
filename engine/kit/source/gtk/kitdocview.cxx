@@ -2378,17 +2378,17 @@ openDocumentInThread (gpointer data)
         priv->m_pDocument = nullptr;
     }
 
-    priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
+    priv->m_pOffice->registerCallback(globalCallbackWorker, pDocView);
     std::string url = priv->m_aDocPath;
     if (gchar* pURL = g_filename_to_uri(url.c_str(), nullptr, nullptr))
     {
         url = pURL;
         g_free(pURL);
     }
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoadWithOptions( priv->m_pOffice, url.c_str(), "en-US" );
+    priv->m_pDocument = priv->m_pOffice->documentLoadWithOptions(url.c_str(), "en-US" );
     if ( !priv->m_pDocument )
     {
-        char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
+        char *pError = priv->m_pOffice->getError();
         g_task_return_new_error(task, g_quark_from_static_string ("COKit error"), 0, "%s", pError);
     }
     else
@@ -2702,14 +2702,14 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
         if (bool(g_value_get_boolean (value)) != bDocPasswordEnabled)
         {
             priv->m_nKitFeatures = priv->m_nKitFeatures ^ COKitOptionalFeatures::DOCUMENT_PASSWORD;
-            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
+            priv->m_pOffice->setOptionalFeatures(priv->m_nKitFeatures);
         }
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
         if ( bool(g_value_get_boolean (value)) != bDocPasswordToModifyEnabled)
         {
             priv->m_nKitFeatures = priv->m_nKitFeatures ^ COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY;
-            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
+            priv->m_pOffice->setOptionalFeatures(priv->m_nKitFeatures);
         }
         break;
     default:
@@ -2828,9 +2828,9 @@ static void kit_doc_view_destroy (GtkWidget* widget)
             // Last view(s) gone
             priv->m_pDocument->pClass->destroy (priv->m_pDocument);
             priv->m_pDocument = nullptr;
-            if (priv->m_pOffice && priv->m_pOffice->pClass->getDocsCount(priv->m_pOffice) == 0)
+            if (priv->m_pOffice && priv->m_pOffice->getDocsCount() == 0)
             {
-                priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+                priv->m_pOffice->destroy();
                 priv->m_pOffice = nullptr;
             }
         }
@@ -2882,7 +2882,7 @@ static gboolean spin_kit_loop(void *pData)
 {
     KitDocumentView *pDocView = KIT_DOC_VIEW (pData);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
-    priv->m_pOffice->pClass->runLoop(priv->m_pOffice, kit_poll_callback, kit_wake_callback, nullptr);
+    priv->m_pOffice->runLoop(kit_poll_callback, kit_wake_callback, nullptr);
     return FALSE;
 }
 
@@ -2941,7 +2941,7 @@ static gboolean kit_doc_view_initable_init (GInitable *initable, GCancellable* /
     }
     priv->m_nKitFeatures |= COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK;
     priv->m_nKitFeatures |= COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
-    priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
+    priv->m_pOffice->setOptionalFeatures(priv->m_nKitFeatures);
 
     if (priv->m_bUnipoll)
         g_idle_add(spin_kit_loop, pDocView);
@@ -4037,7 +4037,7 @@ kit_doc_view_set_document_password (KitDocumentView* pDocView,
 {
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    priv->m_pOffice->pClass->setDocumentPassword(priv->m_pOffice, pURL, pPassword);
+    priv->m_pOffice->setDocumentPassword(pURL, pPassword);
 }
 
 SAL_DLLPUBLIC_EXPORT gchar*
@@ -4045,7 +4045,7 @@ kit_doc_view_get_version_info (KitDocumentView* pDocView)
 {
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    return priv->m_pOffice->pClass->getVersionInfo(priv->m_pOffice);
+    return priv->m_pOffice->getVersionInfo();
 }
 
 

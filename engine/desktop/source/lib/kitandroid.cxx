@@ -51,7 +51,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getErr
     (JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    char* pError = pCOKit->pClass->getError(pCOKit);
+    char* pError = pCOKit->getError();
     return pEnv->NewStringUTF(pError);
 }
 
@@ -59,13 +59,13 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    pCOKit->pClass->destroy(pCOKit);
+    pCOKit->destroy();
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAndExit(JNIEnv* pEnv, jobject aObject)
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
-    pCOKit->pClass->destroy(pCOKit);
+    pCOKit->destroy();
     // Stopgap fix: _exit() to force the OS to restart the LO activity.
     // Better than to hang.
     _exit(0);
@@ -131,7 +131,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
     const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
-    COKitDocument* pDocument = pCOKit->pClass->documentLoad(pCOKit, aCloneDocumentPath);
+    COKitDocument* pDocument = pCOKit->documentLoad(aCloneDocumentPath);
 
     if (pDocument == NULL)
         return NULL;
@@ -148,10 +148,10 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setDocume
 
     char const* pUrl = copyJavaString(pEnv, sUrl);
     if (sPassword == NULL) {
-        pCOKit->pClass->setDocumentPassword(pCOKit, pUrl, nullptr);
+        pCOKit->setDocumentPassword(pUrl, nullptr);
     } else {
         char const* pPassword = copyJavaString(pEnv, sPassword);
-        pCOKit->pClass->setDocumentPassword(pCOKit, pUrl, pPassword);
+        pCOKit->setDocumentPassword(pUrl, pPassword);
     }
 }
 
@@ -160,7 +160,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setOption
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
-    pCOKit->pClass->setOptionalFeatures(pCOKit, static_cast<COKitOptionalFeatures>(options));
+    pCOKit->setOptionalFeatures(static_cast<COKitOptionalFeatures>(options));
 }
 
 /** Implementation of org.libreoffice.kit.Office.bindMessageCallback method */
@@ -175,7 +175,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessa
 
     gCallbackDataKit.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrievedLOKit", "(ILjava/lang/String;)V");
 
-    pCOKit->pClass->registerCallback(pCOKit, messageCallback, (void*) &gCallbackDataKit);
+    pCOKit->registerCallback(messageCallback, (void*) &gCallbackDataKit);
 }
 
 /* Document */

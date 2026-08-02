@@ -293,7 +293,6 @@ using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::Language
 static LibCO_Impl *gImpl = nullptr;
 static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
-static std::weak_ptr< COKitClass > gOfficeClass;
 static std::weak_ptr< COKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
@@ -3006,55 +3005,200 @@ static int lo_isExpectedReentry();
 static bool lo_takeLegacyUnoApiUseFlag();
 
 LibCO_Impl::LibCO_Impl()
-    : m_pOfficeClass( gOfficeClass.lock() )
-    , maThread(nullptr)
+    : maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
     , mOptionalFeatures(COKitOptionalFeatures::NONE)
 {
-    if(!m_pOfficeClass) {
-        m_pOfficeClass = std::make_shared<COKitClass>();
+}
 
-        m_pOfficeClass->destroy = lo_destroy;
-        m_pOfficeClass->documentLoad = lo_documentLoad;
-        m_pOfficeClass->getError = lo_getError;
-        m_pOfficeClass->freeError = lo_freeError;
-        m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
-        m_pOfficeClass->registerCallback = lo_registerCallback;
-        m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
-        m_pOfficeClass->setOptionalFeatures = lo_setOptionalFeatures;
-        m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
-        m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
-        m_pOfficeClass->runMacro = lo_runMacro;
-        m_pOfficeClass->signDocument = lo_signDocument;
-        m_pOfficeClass->runLoop = lo_runLoop;
-        m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
-        m_pOfficeClass->setOption = lo_setOption;
-        m_pOfficeClass->dumpState = lo_dumpState;
-        m_pOfficeClass->extractRequest = lo_extractRequest;
-        m_pOfficeClass->trimMemory = lo_trimMemory;
-        m_pOfficeClass->startURP = lo_startURP;
-        m_pOfficeClass->stopURP = lo_stopURP;
-        m_pOfficeClass->joinThreads = lo_joinThreads;
-        m_pOfficeClass->startThreads = lo_startThreads;
-        m_pOfficeClass->setForkedChild = lo_setForkedChild;
-        m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
-        m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
-        m_pOfficeClass->registerFileSaveDialogCallback = lo_registerFileSaveDialogCallback;
-        m_pOfficeClass->registerRevealInFileManagerCallback = lo_registerRevealInFileManagerCallback;
-        m_pOfficeClass->getDocsCount = lo_getDocsCount;
-        m_pOfficeClass->executeScript = lo_executeScript;
-        m_pOfficeClass->deliverProxyResult = lo_deliverProxyResult;
-        m_pOfficeClass->cancelProxyCalls = lo_cancelProxyCalls;
-        m_pOfficeClass->isExpectedReentry = lo_isExpectedReentry;
-        m_pOfficeClass->installClipboardProvider = lo_installClipboardProvider;
-        m_pOfficeClass->getGlobalClipboard = lo_getGlobalClipboard;
-        m_pOfficeClass->takeLegacyUnoApiUseFlag = lo_takeLegacyUnoApiUseFlag;
+void LibCO_Impl::destroy()
+{
+    lo_destroy(this);
+}
 
-        gOfficeClass = m_pOfficeClass;
-    }
+COKitDocument* LibCO_Impl::documentLoad(const char* pURL)
+{
+    return lo_documentLoad(this, pURL);
+}
 
-    pClass = m_pOfficeClass.get();
+char* LibCO_Impl::getError()
+{
+    return lo_getError(this);
+}
+
+COKitDocument* LibCO_Impl::documentLoadWithOptions(const char* pURL, const char* pOptions)
+{
+    return lo_documentLoadWithOptions(this, pURL, pOptions);
+}
+
+void LibCO_Impl::freeError(char* pFree)
+{
+    lo_freeError(pFree);
+}
+
+void LibCO_Impl::registerCallback(COKitCallback pCallback, void* pData)
+{
+    lo_registerCallback(this, pCallback, pData);
+}
+
+char* LibCO_Impl::getFilterTypes()
+{
+    return lo_getFilterTypes(this);
+}
+
+void LibCO_Impl::setOptionalFeatures(COKitOptionalFeatures features)
+{
+    lo_setOptionalFeatures(this, features);
+}
+
+void LibCO_Impl::setDocumentPassword(char const* pURL, char const* pPassword)
+{
+    lo_setDocumentPassword(this, pURL, pPassword);
+}
+
+char* LibCO_Impl::getVersionInfo()
+{
+    return lo_getVersionInfo(this);
+}
+
+int LibCO_Impl::runMacro(const char* pURL)
+{
+    return lo_runMacro(this, pURL);
+}
+
+bool LibCO_Impl::signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
+                              const int nCertificateBinarySize,
+                              const unsigned char* pPrivateKeyBinary,
+                              const int nPrivateKeyBinarySize)
+{
+    return lo_signDocument(this, pUrl, pCertificateBinary, nCertificateBinarySize,
+                           pPrivateKeyBinary, nPrivateKeyBinarySize);
+}
+
+void LibCO_Impl::runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
+                         void* pData)
+{
+    lo_runLoop(this, pPollCallback, pWakeCallback, pData);
+}
+
+void LibCO_Impl::sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments)
+{
+    lo_sendDialogEvent(this, nKitWindowId, pArguments);
+}
+
+void LibCO_Impl::setOption(const char* pOption, const char* pValue)
+{
+    lo_setOption(this, pOption, pValue);
+}
+
+void LibCO_Impl::dumpState(const char* pOptions, char** pState)
+{
+    lo_dumpState(this, pOptions, pState);
+}
+
+char* LibCO_Impl::extractRequest(const char* pFilePath)
+{
+    return lo_extractRequest(this, pFilePath);
+}
+
+void LibCO_Impl::trimMemory(int nTarget)
+{
+    lo_trimMemory(this, nTarget);
+}
+
+void* LibCO_Impl::startURP(
+    void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
+{
+    return lo_startURP(this, pReceiveURPFromLOContext, pSendURPToLOContext, fnReceiveURPFromLO,
+                       fnSendURPToLO);
+}
+
+void LibCO_Impl::stopURP(void* pSendURPToLOContext)
+{
+    lo_stopURP(this, pSendURPToLOContext);
+}
+
+int LibCO_Impl::joinThreads()
+{
+    return lo_joinThreads(this);
+}
+
+void LibCO_Impl::startThreads()
+{
+    lo_startThreads(this);
+}
+
+void LibCO_Impl::setForkedChild(bool bIsChild)
+{
+    lo_setForkedChild(this, bIsChild);
+}
+
+char* LibCO_Impl::extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
+{
+    return lo_extractDocumentStructureRequest(this, pFilePath, pFilter);
+}
+
+void LibCO_Impl::registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
+{
+    lo_registerAnyInputCallback(this, pCallback, pData);
+}
+
+int LibCO_Impl::getDocsCount()
+{
+    return lo_getDocsCount(this);
+}
+
+void LibCO_Impl::registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
+{
+    lo_registerFileSaveDialogCallback(this, pCallback);
+}
+
+void LibCO_Impl::executeScript(char const * script, char ** result, char ** error,
+                               void (*proxyCallback) (void * data, char const * payload),
+                               void * proxyCallbackData, bool * usedLegacyUnoApi)
+{
+    lo_executeScript(script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
+}
+
+void LibCO_Impl::deliverProxyResult(char const * callId, char const * jsonValue)
+{
+    lo_deliverProxyResult(callId, jsonValue);
+}
+
+void LibCO_Impl::cancelProxyCalls()
+{
+    lo_cancelProxyCalls();
+}
+
+int LibCO_Impl::isExpectedReentry()
+{
+    return lo_isExpectedReentry();
+}
+
+bool LibCO_Impl::takeLegacyUnoApiUseFlag()
+{
+    return lo_takeLegacyUnoApiUseFlag();
+}
+
+void LibCO_Impl::registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
+{
+    lo_registerRevealInFileManagerCallback(this, pCallback);
+}
+
+void LibCO_Impl::installClipboardProvider(const COKitClipboardProvider* pProvider)
+{
+    lo_installClipboardProvider(this, pProvider);
+}
+
+int LibCO_Impl::getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                   char      ***pOutStreams)
+{
+    return lo_getGlobalClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
+                                 pOutStreams);
 }
 
 LibCO_Impl::~LibCO_Impl()

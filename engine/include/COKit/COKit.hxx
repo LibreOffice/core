@@ -1433,27 +1433,20 @@ typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pRe
 /// @see kit::Office::registerRevealInFileManagerCallback()
 typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
 
-struct COKitClass;
 struct COKitDocument;
 struct COKitDocumentClass;
 
 struct COKit
 {
-    COKitClass* pClass;
-};
+    virtual ~COKit() = default;
 
-struct COKitClass
-{
-    void (*destroy) (COKit* pThis);
+    virtual void destroy() = 0;
 
-    COKitDocument* (*documentLoad) (COKit* pThis,
-                                             const char* pURL);
+    virtual COKitDocument* documentLoad(const char* pURL) = 0;
 
-    char* (*getError) (COKit* pThis);
+    virtual char* getError() = 0;
 
-    COKitDocument* (*documentLoadWithOptions) (COKit* pThis,
-                                                        const char* pURL,
-                                                        const char* pOptions);
+    virtual COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) = 0;
 
     /// The name "freeError" is a historical accident, actually this
     /// is a generic deallocation function for dynamically allocated
@@ -1468,129 +1461,110 @@ struct COKitClass
     /// same C runtime where the malloc() that allocated the pointer
     /// is.
 
-    void (*freeError) (char* pFree);
+    virtual void freeError(char* pFree) = 0;
 
-    void (*registerCallback) (COKit* pThis,
-                              COKitCallback pCallback,
-                              void* pData);
+    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
 
     /** @see kit::Office::getFilterTypes(). */
-    char* (*getFilterTypes) (COKit* pThis);
+    virtual char* getFilterTypes() = 0;
 
     /** @see kit::Office::setOptionalFeatures(). */
-    void (*setOptionalFeatures)(COKit* pThis, COKitOptionalFeatures features);
+    virtual void setOptionalFeatures(COKitOptionalFeatures features) = 0;
 
     /** @see kit::Office::setDocumentPassword(). */
-    void (*setDocumentPassword) (COKit* pThis,
-            char const* pURL,
-            char const* pPassword);
+    virtual void setDocumentPassword(char const* pURL, char const* pPassword) = 0;
 
     /** @see kit::Office::getVersionInfo(). */
-    char* (*getVersionInfo) (COKit* pThis);
+    virtual char* getVersionInfo() = 0;
 
     /** @see kit::Office::runMacro(). */
-    int (*runMacro) (COKit *pThis, const char* pURL);
+    virtual int runMacro(const char* pURL) = 0;
 
     /** @see kit::Office::signDocument(). */
-     bool (*signDocument) (COKit* pThis,
-                           const char* pUrl,
-                           const unsigned char* pCertificateBinary,
-                           const int nCertificateBinarySize,
-                           const unsigned char* pPrivateKeyBinary,
-                           const int nPrivateKeyBinarySize);
+    virtual bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
+                               const int nCertificateBinarySize,
+                               const unsigned char* pPrivateKeyBinary,
+                               const int nPrivateKeyBinarySize) = 0;
 
     /// @see kit::Office::runLoop()
-    void (*runLoop) (COKit* pThis,
-                     COKitPollCallback pPollCallback,
-                     COKitWakeCallback pWakeCallback,
-                     void* pData);
+    virtual void runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
+                         void* pData) = 0;
 
     /// @see kit::Office::sendDialogEvent
-    void (*sendDialogEvent) (COKit* pThis,
-                            unsigned long long int nKitWindowId,
-                            const char* pArguments);
+    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
 
     /// @see kit::Office::setOption
-    void (*setOption) (COKit* pThis, const char* pOption, const char* pValue);
+    virtual void setOption(const char* pOption, const char* pValue) = 0;
 
     /// @see kit::Office::dumpState
-    void (*dumpState) (COKit* pThis, const char* pOptions, char** pState);
+    virtual void dumpState(const char* pOptions, char** pState) = 0;
 
     /** @see kit::Office::extractRequest.
      */
-    char* (*extractRequest) (COKit* pThis,
-                           const char* pFilePath);
+    virtual char* extractRequest(const char* pFilePath) = 0;
 
     /// @see kit::Office::trimMemory
-    void (*trimMemory) (COKit* pThis, int nTarget);
+    virtual void trimMemory(int nTarget) = 0;
 
     /// @see kit::Office::startURP
-    void* (*startURP)(COKit* pThis,
-                    void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
-                    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-                    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
+    virtual void* startURP(
+        void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+        int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+        int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen)) = 0;
 
     /// @see kit::Office::stopURP
-    void (*stopURP)(COKit* pThis, void* pSendURPToLOContext);
+    virtual void stopURP(void* pSendURPToLOContext) = 0;
 
     /// @see kit::Office::joinThreads
-    int (*joinThreads)(COKit* pThis);
+    virtual int joinThreads() = 0;
 
     /// @see kit::Office::startThreads
-    void (*startThreads)(COKit* pThis);
+    virtual void startThreads() = 0;
 
     /// @see kit::Office::setForkedChild
-    void (*setForkedChild)(COKit* pThis, bool bIsChild);
+    virtual void setForkedChild(bool bIsChild) = 0;
 
     /** @see kit::Office::extractDocumentStructureRequest.
      */
-    char* (*extractDocumentStructureRequest)(COKit* pThis, const char* pFilePath,
-                                             const char* pFilter);
+    virtual char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter) = 0;
 
     /// @see kit::Office::registerAnyInputCallback()
-    void (*registerAnyInputCallback)(COKit* pThis,
-                                     COKitAnyInputCallback pCallback, void* pData);
+    virtual void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) = 0;
 
     /// @see kit::Office::getDocsCount().
-    int (*getDocsCount) (COKit* pThis);
+    virtual int getDocsCount() = 0;
 
     /// @see kit::Office::registerFileSaveDialogCallback()
-    void (*registerFileSaveDialogCallback)(COKit* pThis,
-            COKitFileSaveDialogCallback pCallback);
+    virtual void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) = 0;
 
     /// @see kit::Office::executeScript().
-    void (*executeScript) (
-        char const * script, char ** result, char ** error,
-        void (*proxyCallback) (void * data, char const * payload),
-        void * proxyCallbackData, bool * usedLegacyUnoApi);
+    virtual void executeScript(char const * script, char ** result, char ** error,
+                               void (*proxyCallback) (void * data, char const * payload),
+                               void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
 
     /// @see kit::Office::deliverProxyResult().
-    void (*deliverProxyResult) (char const * callId, char const * jsonValue);
+    virtual void deliverProxyResult(char const * callId, char const * jsonValue) = 0;
 
     /// @see kit::Office::cancelProxyCalls().
-    void (*cancelProxyCalls) (void);
+    virtual void cancelProxyCalls() = 0;
 
     /// @see kit::Office::isExpectedReentry().
-    int (*isExpectedReentry) (void);
+    virtual int isExpectedReentry() = 0;
 
     /// @see kit::Office::takeLegacyUnoApiUseFlag().
-    bool (*takeLegacyUnoApiUseFlag) (void);
+    virtual bool takeLegacyUnoApiUseFlag() = 0;
 
     /// @see kit::Office::registerRevealInFileManagerCallback()
-    void (*registerRevealInFileManagerCallback)(COKit* pThis,
-            COKitRevealInFileManagerCallback pCallback);
+    virtual void
+    registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) = 0;
 
     /** @see kit::Office::installClipboardProvider(). */
-    void (*installClipboardProvider) (COKit* pThis,
-                                      const COKitClipboardProvider* pProvider);
+    virtual void installClipboardProvider(const COKitClipboardProvider* pProvider) = 0;
 
     /** @see kit::Office::getGlobalClipboard(). */
-    int (*getGlobalClipboard) (COKit* pThis,
-                               const char **pMimeTypes,
-                               size_t      *pOutCount,
-                               char      ***pOutMimeTypes,
-                               size_t     **pOutSizes,
-                               char      ***pOutStreams);
+    virtual int getGlobalClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                   char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                   char      ***pOutStreams) = 0;
 };
 
 struct COKitDocument
@@ -3015,7 +2989,7 @@ public:
 
     ~Office()
     {
-        mpThis->pClass->destroy(mpThis);
+        mpThis->destroy();
     }
 
     /**
@@ -3029,7 +3003,7 @@ public:
      */
     Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
-        COKitDocument* pDoc = mpThis->pClass->documentLoadWithOptions(mpThis, pUrl, pFilterOptions);
+        COKitDocument* pDoc = mpThis->documentLoadWithOptions(pUrl, pFilterOptions);
 
         if (pDoc == NULL)
             return NULL;
@@ -3041,7 +3015,7 @@ public:
     /// by calling the freeError() member function.
     char* getError()
     {
-        return mpThis->pClass->getError(mpThis);
+        return mpThis->getError();
     }
 
     /**
@@ -3054,7 +3028,7 @@ public:
      */
     void freeError(char* pFree)
     {
-        mpThis->pClass->freeError(pFree);
+        mpThis->freeError(pFree);
     }
 
     /**
@@ -3066,7 +3040,7 @@ public:
      */
     void registerCallback(COKitCallback pCallback, void* pData)
     {
-        mpThis->pClass->registerCallback(mpThis, pCallback, pData);
+        mpThis->registerCallback(pCallback, pData);
     }
 
     /**
@@ -3086,7 +3060,7 @@ public:
      */
     char* getFilterTypes()
     {
-        return mpThis->pClass->getFilterTypes(mpThis);
+        return mpThis->getFilterTypes();
     }
 
     /**
@@ -3096,7 +3070,7 @@ public:
      */
     void setOptionalFeatures(COKitOptionalFeatures features)
     {
-        return mpThis->pClass->setOptionalFeatures(mpThis, features);
+        return mpThis->setOptionalFeatures(features);
     }
 
     /**
@@ -3120,7 +3094,7 @@ public:
      */
     void setDocumentPassword(char const* pURL, char const* pPassword)
     {
-        mpThis->pClass->setDocumentPassword(mpThis, pURL, pPassword);
+        mpThis->setDocumentPassword(pURL, pPassword);
     }
 
     /**
@@ -3136,7 +3110,7 @@ public:
      */
     char* getVersionInfo()
     {
-        return mpThis->pClass->getVersionInfo(mpThis);
+        return mpThis->getVersionInfo();
     }
 
     /**
@@ -3148,7 +3122,7 @@ public:
      */
     bool runMacro( const char* pURL)
     {
-        return mpThis->pClass->runMacro( mpThis, pURL );
+        return mpThis->runMacro(pURL );
     }
 
     /**
@@ -3158,7 +3132,7 @@ public:
                        const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
                        const unsigned char* pPrivateKeyBinary, const int nPrivateKeyBinarySize)
     {
-        return mpThis->pClass->signDocument(mpThis, pURL,
+        return mpThis->signDocument(pURL,
                                             pCertificateBinary, nCertificateBinarySize,
                                             pPrivateKeyBinary, nPrivateKeyBinarySize);
     }
@@ -3178,7 +3152,7 @@ public:
                  COKitWakeCallback pWakeCallback,
                  void* pData)
     {
-        mpThis->pClass->runLoop(mpThis, pPollCallback, pWakeCallback, pData);
+        mpThis->runLoop(pPollCallback, pWakeCallback, pData);
     }
 
     /**
@@ -3189,7 +3163,7 @@ public:
      */
     void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
     {
-        mpThis->pClass->sendDialogEvent(mpThis, nWindowId, pArguments);
+        mpThis->sendDialogEvent(nWindowId, pArguments);
     }
 
     /**
@@ -3226,7 +3200,7 @@ public:
      */
     void setOption(const char* pOption, const char* pValue)
     {
-        mpThis->pClass->setOption(mpThis, pOption, pValue);
+        mpThis->setOption(pOption, pValue);
     }
 
     /**
@@ -3241,12 +3215,12 @@ public:
      */
     void dumpState(const char* pOption, char** pState)
     {
-        mpThis->pClass->dumpState(mpThis, pOption, pState);
+        mpThis->dumpState(pOption, pState);
     }
 
     char* extractRequest(const char* pFilePath)
     {
-        return mpThis->pClass->extractRequest(mpThis, pFilePath);
+        return mpThis->extractRequest(pFilePath);
     }
 
     /**
@@ -3263,7 +3237,7 @@ public:
      */
     void trimMemory (int nTarget)
     {
-        mpThis->pClass->trimMemory(mpThis, nTarget);
+        mpThis->trimMemory(nTarget);
     }
 
     /**
@@ -3298,7 +3272,7 @@ public:
                        void (*proxyCallback) (void * data, char const * payload) = nullptr,
                        void * proxyCallbackData = nullptr, bool * usedLegacyUnoApi = nullptr)
     {
-        mpThis->pClass->executeScript(
+        mpThis->executeScript(
             script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
     }
 
@@ -3318,7 +3292,7 @@ public:
      */
     void deliverProxyResult(char const * callId, char const * jsonValue)
     {
-        mpThis->pClass->deliverProxyResult(callId, jsonValue);
+        mpThis->deliverProxyResult(callId, jsonValue);
     }
 
     /**
@@ -3330,7 +3304,7 @@ public:
      */
     void cancelProxyCalls()
     {
-        mpThis->pClass->cancelProxyCalls();
+        mpThis->cancelProxyCalls();
     }
 
     /**
@@ -3342,7 +3316,7 @@ public:
      */
     bool isExpectedReentry()
     {
-        return mpThis->pClass->isExpectedReentry();
+        return mpThis->isExpectedReentry();
     }
 
     /**
@@ -3354,7 +3328,7 @@ public:
      */
     bool takeLegacyUnoApiUseFlag()
     {
-        return mpThis->pClass->takeLegacyUnoApiUseFlag();
+        return mpThis->takeLegacyUnoApiUseFlag();
     }
 
     /**
@@ -3369,7 +3343,7 @@ public:
                    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
                    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
     {
-        return mpThis->pClass->startURP(mpThis, pReceiveURPFromLOContext, pSendURPToLOContext,
+        return mpThis->startURP(pReceiveURPFromLOContext, pSendURPToLOContext,
                                         fnReceiveURPFromLO, fnSendURPToLO);
     }
 
@@ -3380,7 +3354,7 @@ public:
      */
     void stopURP(void* pURPContext)
     {
-        mpThis->pClass->stopURP(mpThis, pURPContext);
+        mpThis->stopURP(pURPContext);
     }
 
     /**
@@ -3391,7 +3365,7 @@ public:
      */
     int joinThreads()
     {
-        return mpThis->pClass->joinThreads(mpThis);
+        return mpThis->joinThreads();
     }
 
     /**
@@ -3400,7 +3374,7 @@ public:
      */
     void startThreads()
     {
-        mpThis->pClass->startThreads(mpThis);
+        mpThis->startThreads();
     }
 
     /**
@@ -3409,12 +3383,12 @@ public:
      */
     void setForkedChild(bool bIsChild)
     {
-        return mpThis->pClass->setForkedChild(mpThis, bIsChild);
+        return mpThis->setForkedChild(bIsChild);
     }
 
     char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
     {
-        return mpThis->pClass->extractDocumentStructureRequest(mpThis, pFilePath, pFilter);
+        return mpThis->extractDocumentStructureRequest(pFilePath, pFilter);
     }
 
     /**
@@ -3422,7 +3396,7 @@ public:
      */
     void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
     {
-        return mpThis->pClass->registerAnyInputCallback(mpThis, pCallback, pData);
+        return mpThis->registerAnyInputCallback(pCallback, pData);
     }
 
     /**
@@ -3430,7 +3404,7 @@ public:
      */
     int getDocsCount()
     {
-        return mpThis->pClass->getDocsCount(mpThis);
+        return mpThis->getDocsCount();
     }
 
     /**
@@ -3438,7 +3412,7 @@ public:
      */
     void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
     {
-        return mpThis->pClass->registerFileSaveDialogCallback(mpThis, pCallback);
+        return mpThis->registerFileSaveDialogCallback(pCallback);
     }
 
     /**
@@ -3446,7 +3420,7 @@ public:
      */
     void registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
     {
-        return mpThis->pClass->registerRevealInFileManagerCallback(mpThis, pCallback);
+        return mpThis->registerRevealInFileManagerCallback(pCallback);
     }
 
     /**
@@ -3459,7 +3433,7 @@ public:
      */
     void installClipboardProvider(const COKitClipboardProvider* pProvider)
     {
-        mpThis->pClass->installClipboardProvider(mpThis, pProvider);
+        mpThis->installClipboardProvider(pProvider);
     }
 
     /**
@@ -3474,7 +3448,8 @@ public:
                             size_t     **pOutSizes,
                             char      ***pOutStreams)
     {
-        return mpThis->pClass->getGlobalClipboard(mpThis, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+        return mpThis->getGlobalClipboard(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
+                                          pOutStreams);
     }
 
     /**
