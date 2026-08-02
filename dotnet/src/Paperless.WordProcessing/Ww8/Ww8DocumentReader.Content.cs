@@ -74,10 +74,19 @@ public sealed partial class Ww8DocumentReader
         };
         _marks.OpenParagraph();
 
+        // LibreOffice's <c>m_bWasParaEnd</c>: a U+000C ends a paragraph only when one is under way, so a
+        // break character directly after a paragraph mark adds no paragraph of its own. The layout pass
+        // applies the same rule, and the two have to agree — a document whose extracted paragraphs and
+        // laid-out paragraphs differ is the shape of defect this reader has shipped before.
+        bool wasParagraphMark = false;
+
         for (int index = 0; index < text.Length; index++)
         {
             int position = range.Start + index;
             char character = text[index];
+
+            bool afterParagraphMark = wasParagraphMark;
+            wasParagraphMark = character is ParagraphMark or CellMark;
 
             // Bookmarks are keyed by character position rather than marked in the text, so the walk
             // has to ask at each one. A single advancing index over a sorted list, not a search.
@@ -94,7 +103,7 @@ public sealed partial class Ww8DocumentReader
                     continue;
 
                 case Special.SectionMark:
-                    EndParagraph(state, position);
+                    if (!afterParagraphMark) EndParagraph(state, position);
                     continue;
 
                 case Special.LineBreak:

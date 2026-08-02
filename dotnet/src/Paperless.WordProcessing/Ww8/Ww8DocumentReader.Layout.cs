@@ -380,10 +380,25 @@ public sealed partial class Ww8DocumentReader
         (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
         Stack<int> openFields = new();
 
+        // Where the last U+000C fell, until the paragraph after it has been read and can be asked whether
+        // it starts a new section. Null everywhere else, which is every paragraph of a document that has
+        // neither a section break nor a hard page break in it.
+        int? pageBreakAt = null;
+
+        // Whether the character just read closed a paragraph — LibreOffice's <c>m_bWasParaEnd</c>. False
+        // at the start, which is what makes a range beginning with a U+000C still yield its first
+        // paragraph.
+        bool wasParagraphMark = false;
+
         for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
             char character = text[index];
             int position = body.Start + index;
+
+            // LibreOffice's `m_bWasParaEnd`, which it recomputes on every character read
+            // (`ww8par.cxx`:3714) and which decides whether a U+000C ends a paragraph of its own.
+            bool afterParagraphMark = wasParagraphMark;
+            wasParagraphMark = character is ParagraphMark or CellMark;
 
             // Everything between a field's start and its separator is its instruction and is not drawn.
             // Not a refinement: LibreOffice's own DOC export writes a picture as a SHAPE field, so
@@ -399,7 +414,28 @@ public sealed partial class Ww8DocumentReader
             switch (character)
             {
                 case ParagraphMark or Special.SectionMark:
-                    Close(position, endsCell: false);
+                    // A U+000C ends a paragraph only when one is under way. `HandlePageBreakChar`
+                    // (`ww8par.cxx`:3438) adds a paragraph end exactly when the character before it was
+                    // not one — `if (!m_bWasParaEnd && IsTemp)` — and otherwise lets the break settle on
+                    // the empty paragraph already open. Closing one unconditionally put a blank line
+                    // above every hard page break and every section break in the document, which is a
+                    // line's worth of height per break and eventually a page.
+                    if (character == ParagraphMark || !afterParagraphMark)
+                    {
+                        Close(position, endsCell: false);
+                    }
+
+                    // A U+000C is *either* a section break or a hard page break, and WW8 says which only
+                    // by whether a section ends at this position. LibreOffice looks the position up in the
+                    // section PLCF and, finding no section boundary, inserts an ordinary
+                    // `SvxBreak::PageBefore` on the paragraph that follows
+                    // (`SwWW8ImplReader::ReadText`, `ww8par.cxx`:4097, after `HandlePageBreakChar` set
+                    // `m_bPgSecBreak`). Without this, every Ctrl+Enter in a DOC is silently dropped —
+                    // the paragraph after it simply carries on down the same page.
+                    // The lookup is done as "does the next paragraph belong to another section", which is
+                    // the same question without the character-position arithmetic: a section-terminating
+                    // U+000C is the last character of its section, so the mark after it is in the next one.
+                    pageBreakAt = character == Special.SectionMark ? position : null;
                     start = index + 1;
                     continue;
 
@@ -552,14 +588,30 @@ public sealed partial class Ww8DocumentReader
         {
             Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
 
-            assembler.Add(
+            Ww8LayoutParagraph paragraph =
                 Describe(current.ToString(), positions, body.Start + start, markPosition) with
                 {
                     Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
                     Frames = _pendingFrames.Count == 0 ? null : [.. _pendingFrames],
-                },
-                format,
-                endsCell);
+                };
+
+            // The U+000C above this paragraph was a hard page break rather than a section boundary, so
+            // this paragraph starts a page. Not inside a table: "#i1909# section/page breaks should not
+            // occur in tables, word itself ignores them in this case" — `HandlePageBreakChar` declines
+            // outright when `m_nInTable`.
+            if (pageBreakAt is { } breakAt
+                && !paragraph.IsInTable
+                && SectionAt(breakAt) == paragraph.SectionIndex)
+            {
+                paragraph = paragraph with
+                {
+                    Format = paragraph.Format with { StartsNewPage = true },
+                };
+            }
+
+            pageBreakAt = null;
+
+            assembler.Add(paragraph, format, endsCell);
 
             current.Clear();
             positions.Clear();
