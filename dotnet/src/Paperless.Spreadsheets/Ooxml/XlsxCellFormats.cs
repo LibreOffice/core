@@ -56,6 +56,18 @@ internal sealed record XlsxCellFormatTable(
     /// <param name="font">What the run states.</param>
     public SheetCellFormat Apply(SheetCellFormat cellFormat, XlsxRunFont font)
         => XlsxCellFormats.Apply(cellFormat, DefaultFont, font, Palette);
+
+    /// <summary>
+    /// The same default font, in the shape a column width needs it.
+    /// </summary>
+    /// <remarks>
+    /// A column width is a count of digits of this face, so pagination cannot happen until it
+    /// has been measured — see <see cref="SheetColumnDigits"/>. It is the same
+    /// <see cref="DefaultFont"/> a rich-text run falls back to because LibreOffice reads it from
+    /// the same place for both (<c>StylesBuffer::getDefaultFont</c>).
+    /// </remarks>
+    public SheetDefaultFont DefaultColumnFont { get; } = new(
+        DefaultFont.FontFamily, DefaultFont.FontSize, DefaultFont.FontWeight, DefaultFont.IsItalic);
 }
 
 /// <summary>

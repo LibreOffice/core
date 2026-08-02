@@ -42,14 +42,38 @@ public sealed class SheetLayout
     /// Its column widths and row heights, exactly as the file states them.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A row that asks for an optimal height is <em>not</em> recomputed here, although Calc
     /// recomputes one on load and although the runs carry
     /// <see cref="SheetSizeRun.IsOptimalSize"/> so that a reader can tell which rows those are.
     /// The reason is measured and is recorded in the module's TODO: Calc's own measurement of a
     /// cell for that purpose is coarser than the one it draws with, so reproducing the formula
     /// with an accurate measurement disagrees with the height the file already holds.
+    /// </para>
+    /// <para>
+    /// <strong>The column widths of an Excel file are not lengths until this property is read.</strong>
+    /// Both Excel formats state a column width in digits of the workbook's default font, so the
+    /// widths only become measurements once that face has been resolved — and resolving a face is
+    /// exactly what a reader must not do, because reading is the extraction path. So the reader
+    /// stores the digits (see <see cref="SheetColumnDigits"/>) and the first read of the geometry
+    /// measures the face and converts them, once per sheet. Nothing on the extraction path asks
+    /// for the geometry, so nothing on it pays for a font.
+    /// </para>
     /// </remarks>
-    public SheetGrid Grid { get; init; } = SheetGrid.Standard;
+    public SheetGrid Grid
+    {
+        get => _resolvedGrid ??= _statedGrid.WithDigitWidth(
+            SheetFonts.DigitWidthTwips(_statedGrid.ColumnDigits?.Font));
+
+        init
+        {
+            _statedGrid = value;
+            _resolvedGrid = null;
+        }
+    }
+
+    private readonly SheetGrid _statedGrid = SheetGrid.Standard;
+    private SheetGrid? _resolvedGrid;
 
     /// <summary>The sheet's cells, or null when it holds none.</summary>
     public ContentTable? Cells { get; init; }

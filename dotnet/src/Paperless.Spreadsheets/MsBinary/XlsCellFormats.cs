@@ -76,6 +76,23 @@ internal sealed class XlsCellFormats
         _fonts.Add(font);
     }
 
+    /// <summary>
+    /// The workbook's "app font", which a column width is a count of digits of.
+    /// </summary>
+    /// <remarks>
+    /// <c>FONT</c> record zero, which <c>XclImpFontBuffer::UpdateAppFont</c> hands straight to
+    /// <c>XclRoot::SetCharWidth</c> (<c>sc/source/filter/excel/xistyle.cxx:632</c>). Null before
+    /// the workbook globals have been read, which leaves the width on Calc's own default face.
+    /// See <see cref="SheetColumnDigits"/>.
+    /// </remarks>
+    public SheetDefaultFont? DefaultFont => _fonts.Count > 0
+        ? new SheetDefaultFont(
+            _fonts[0].Name.Length == 0 ? null : _fonts[0].Name,
+            _fonts[0].Height,
+            _fonts[0].Weight,
+            _fonts[0].IsItalic)
+        : null;
+
     /// <summary>Replaces the palette from index eight upwards, which is what <c>PALETTE</c> sets.</summary>
     /// <param name="colours">The colours the record listed, in order.</param>
     public void SetPalette(IReadOnlyList<Colour> colours)

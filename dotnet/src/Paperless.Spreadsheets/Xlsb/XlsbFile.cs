@@ -5,6 +5,7 @@ using Paperless.Core;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Numbers;
 using Paperless.Ooxml;
+using Paperless.Spreadsheets.Layout;
 using Paperless.Spreadsheets.Ooxml;
 
 namespace Paperless.Spreadsheets.Xlsb;
@@ -49,7 +50,7 @@ internal sealed class XlsbFile : IDisposable
             _workbookRelationships[relationship.Id] = relationship;
 
         SharedStrings = XlsbSharedStrings.Read(LoadRelated("sharedStrings", "xl/sharedStrings.bin"));
-        Styles = XlsbStyles.Read(LoadRelated("styles", "xl/styles.bin"));
+        (Styles, DefaultFont) = XlsbStyles.Read(LoadRelated("styles", "xl/styles.bin"));
 
         // Still XML, and that is the whole point of the remark above: only the parts the
         // *spreadsheet* filter writes are BIFF12. A theme belongs to DrawingML, which has no
@@ -72,6 +73,12 @@ internal sealed class XlsbFile : IDisposable
 
     /// <summary>The number format each cell format names.</summary>
     public XlsxStyles Styles { get; }
+
+    /// <summary>
+    /// The workbook's default font, which a column width is a count of digits of.
+    /// </summary>
+    /// <remarks>Null when <c>styles.bin</c> lists no font. See <c>SheetColumnDigits</c>.</remarks>
+    public SheetDefaultFont? DefaultFont { get; }
 
     /// <summary>The workbook's <c>theme</c> root, for an <c>a:schemeClr</c> inside a chart.</summary>
     public XElement? ThemeRoot { get; }

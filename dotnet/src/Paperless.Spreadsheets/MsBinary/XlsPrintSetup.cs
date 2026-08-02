@@ -94,17 +94,15 @@ internal sealed class XlsSheetPrintState
     private const double DefaultBandMarginMm100 = 1300;
 
     /// <summary>
-    /// The advance of the widest digit of the workbook's default font, in twips.
+    /// The half twip <c>XclTools::GetScColumnWidth</c> takes off before truncating.
     /// </summary>
     /// <remarks>
-    /// BIFF states a column's width in 256ths of a character, so a length only exists once this
-    /// is known. LibreOffice measures it from the workbook's own default font and falls back to
-    /// 110 twips when it has no device to measure with (<c>XclRoot</c>'s <c>mnCharWidth</c>,
-    /// <c>sc/source/filter/excel/xlroot.cxx:107</c>); 111 is what 10-point Liberation Sans
-    /// measures, which is the font LibreOffice writes these files in. Reading the
-    /// <c>FONT</c> table and measuring properly is on the module's TODO.
+    /// Not rounding, a deliberate bias (<c>sc/source/filter/excel/xltools.cxx:304</c>): it is
+    /// what makes an eight-character column come out at the width Excel shows rather than one
+    /// twip wider. Carried as <see cref="SheetDigitWidth.BiasTwips"/> because it does not scale
+    /// with the font.
     /// </remarks>
-    private const double DigitWidthTwips = 111;
+    private const double BiasTwips = -0.5;
 
     private double _leftMargin = DefaultSideMarginMm100 / 2540;
     private double _rightMargin = DefaultSideMarginMm100 / 2540;
@@ -113,12 +111,12 @@ internal sealed class XlsSheetPrintState
     private double _headerMargin = DefaultBandMarginMm100 / 2540;
     private double _footerMargin = DefaultBandMarginMm100 / 2540;
 
-    private readonly List<SheetSizeRun> _columns = [];
+    private readonly List<SheetDigitRun> _columns = [];
     private readonly List<SheetSizeRun> _rows = [];
     private readonly List<int> _columnBreaks = [];
     private readonly List<int> _rowBreaks = [];
 
-    private Length _defaultColumnWidth = SheetGrid.StandardColumnWidth;
+    private SheetDigitWidth _defaultColumnWidth = SheetDigitWidth.Fixed(SheetGrid.StandardColumnWidth);
     private Length _defaultRowHeight = SheetGrid.StandardRowHeight;
 
     private int _paperSize = 1;
@@ -230,7 +228,7 @@ internal sealed class XlsSheetPrintState
     {
         if (last < first) return;
 
-        _columns.Add(new SheetSizeRun(
+        _columns.Add(new SheetDigitRun(
             first,
             Math.Min(last, SheetAddress.MaxColumn),
             width > 0 ? FromCharacterWidth(width) : _defaultColumnWidth,
@@ -351,20 +349,42 @@ internal sealed class XlsSheetPrintState
         };
     }
 
-    /// <summary>The sheet's column widths and row heights.</summary>
-    public SheetGrid ToGrid() => new(
-        new SheetAxis(_defaultColumnWidth, _columns),
-        new SheetAxis(_defaultRowHeight, _rows));
-
     /// <summary>
-    /// Turns a BIFF column width into twips.
+    /// The workbook's default font, which a column width is a count of digits of.
     /// </summary>
     /// <remarks>
-    /// <c>XclTools::GetScColumnWidth</c> (<c>sc/source/filter/excel/xltools.cxx:304</c>) — the
-    /// half-twip taken off before truncating is not rounding, it is a deliberate bias, and it is
-    /// what makes an eight-character column come out at the width Excel shows rather than one
-    /// twip wider.
+    /// BIFF's "app font" — <c>FONT</c> record zero, which
+    /// <c>XclImpFontBuffer::UpdateAppFont</c> (<c>sc/source/filter/excel/xistyle.cxx:632</c>)
+    /// hands straight to <c>SetCharWidth</c>. Set from the workbook globals, which are read before
+    /// any sheet; null leaves the widths on Calc's own ten-point face.
     /// </remarks>
-    private static Length FromCharacterWidth(int width)
-        => Length.FromTwips((long)((width / 256.0 * DigitWidthTwips) - 0.5));
+    public SheetDefaultFont? DefaultFont { get; init; }
+
+    /// <summary>The sheet's column widths and row heights.</summary>
+    /// <remarks>
+    /// The columns are still stated in digits of <see cref="DefaultFont"/> and are materialised at
+    /// the fallback digit width here; <see cref="SheetLayout.Grid"/> remeasures them once it can
+    /// resolve a face. See <see cref="SheetColumnDigits"/>.
+    /// </remarks>
+    public SheetGrid ToGrid()
+    {
+        SheetColumnDigits digits = new(
+            DefaultFont ?? SheetDefaultFont.Calc, _defaultColumnWidth, _columns);
+
+        return new SheetGrid(
+            digits.Resolve(SheetColumnDigits.FallbackDigitWidthTwips),
+            new SheetAxis(_defaultRowHeight, _rows))
+        {
+            ColumnDigits = digits,
+        };
+    }
+
+    /// <summary>
+    /// Turns a BIFF column width, in 256ths of a character, into a count of digits.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclTools::GetScColumnWidth</c> (<c>sc/source/filter/excel/xltools.cxx:304</c>).
+    /// </remarks>
+    private static SheetDigitWidth FromCharacterWidth(int width)
+        => new(width / 256.0, BiasTwips);
 }

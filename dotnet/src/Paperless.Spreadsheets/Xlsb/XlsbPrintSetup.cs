@@ -33,9 +33,9 @@ namespace Paperless.Spreadsheets.Xlsb;
 /// </remarks>
 internal static class XlsbPrintSetup
 {
-    /// <summary>The advance of the widest digit in the default font, in twips.</summary>
-    /// <remarks>Ten-point Liberation Sans; see <c>XlsxPrintSetup</c> for what this assumes.</remarks>
-    private const double DigitWidthTwips = 111;
+    /// <summary>Half a twip, which turns <see cref="SheetDigitWidth"/>'s truncation into rounding.</summary>
+    /// <remarks>See <c>XlsxPrintSetup</c>, whose conversion this is byte for byte.</remarks>
+    private const double RoundingBiasTwips = 0.5;
 
     /// <summary>The five screen pixels <c>baseColWidth</c> carries and <c>defaultColWidth</c> does not.</summary>
     private const double BasePaddingTwips = 75;
@@ -61,7 +61,12 @@ internal static class XlsbPrintSetup
 
     /// <summary>Builds a sheet's layout input from its worksheet part.</summary>
     /// <param name="part">The part's bytes, or null when it did not load.</param>
-    public static (SheetPrintSetup Setup, SheetGrid Grid) Read(byte[]? part)
+    /// <param name="defaultFont">
+    /// The workbook's default font, which a column width is stated in digits of. Null falls back
+    /// to Calc's own — see <see cref="SheetColumnDigits"/>.
+    /// </param>
+    public static (SheetPrintSetup Setup, SheetGrid Grid) Read(
+        byte[]? part, SheetDefaultFont? defaultFont = null)
     {
         if (part is null) return (SheetPrintSetup.Default, SheetGrid.Standard);
 
@@ -82,9 +87,9 @@ internal static class XlsbPrintSetup
         bool centresHorizontally = false;
         bool centresVertically = false;
 
-        Length defaultWidth = BaseWidth(null);
+        SheetDigitWidth defaultWidth = BaseWidth(null);
         Length defaultHeight = SheetGrid.StandardRowHeight;
-        List<SheetSizeRun> columns = [];
+        List<SheetDigitRun> columns = [];
         List<SheetSizeRun> rows = [];
         List<int> columnBreaks = [];
         List<int> rowBreaks = [];
@@ -149,7 +154,7 @@ internal static class XlsbPrintSetup
                     ushort flags = cursor.ReadUInt16();
 
                     if (last < first || first < 0) break;
-                    columns.Add(new SheetSizeRun(
+                    columns.Add(new SheetDigitRun(
                         first,
                         Math.Min(last, SheetAddress.MaxColumn),
                         width > 0 ? Digits(width / 256.0) : defaultWidth,
@@ -267,16 +272,24 @@ internal static class XlsbPrintSetup
             ManualRowBreaks = rowBreaks,
         };
 
+        SheetColumnDigits digits = new(defaultFont ?? SheetDefaultFont.Calc, defaultWidth, columns);
+
+        // Materialised at the fallback so the grid is complete the moment it is built, and
+        // remeasured by `SheetLayout.Grid` once a face can be resolved.
         return (setup, new SheetGrid(
-            new SheetAxis(defaultWidth, columns), new SheetAxis(defaultHeight, rows)));
+            digits.Resolve(SheetColumnDigits.FallbackDigitWidthTwips),
+            new SheetAxis(defaultHeight, rows))
+        {
+            ColumnDigits = digits,
+        });
     }
 
-    private static Length Digits(double count)
-        => count > 0 ? Length.FromTwips((long)Math.Round(count * DigitWidthTwips)) : Length.Zero;
+    private static SheetDigitWidth Digits(double count)
+        => count > 0 ? new SheetDigitWidth(count, RoundingBiasTwips) : default;
 
-    private static Length BaseWidth(int? baseColumnWidth)
+    private static SheetDigitWidth BaseWidth(int? baseColumnWidth)
     {
         int digits = baseColumnWidth is { } stated && stated > 0 ? stated : DefaultBaseColumnWidth;
-        return Length.FromTwips((long)Math.Round((digits * DigitWidthTwips) + BasePaddingTwips));
+        return new SheetDigitWidth(digits, BasePaddingTwips + RoundingBiasTwips);
     }
 }

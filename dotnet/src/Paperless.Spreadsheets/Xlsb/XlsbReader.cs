@@ -77,7 +77,7 @@ public static class XlsbReader
                 section.Children.Add(reader.ReadSheet(part));
                 content.Children.Add(section);
 
-                (SheetPrintSetup setup, SheetGrid grid) = XlsbPrintSetup.Read(part);
+                (SheetPrintSetup setup, SheetGrid grid) = XlsbPrintSetup.Read(part, file.DefaultFont);
                 layouts.Add(new SheetLayout
                 {
                     Name = entry.Name,

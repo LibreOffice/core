@@ -268,6 +268,30 @@ public sealed class SheetAxis
 /// <param name="Rows">The row heights.</param>
 public sealed record SheetGrid(SheetAxis Columns, SheetAxis Rows)
 {
+    /// <summary>
+    /// The column widths as the file still states them, when it states them in digits.
+    /// </summary>
+    /// <remarks>
+    /// Null for ODF, which states a real length on every <c>table:table-column</c> and needs no
+    /// font to become a measurement, and set by the three Excel readers, which do. See
+    /// <see cref="SheetColumnDigits"/> for why the resolution is deferred rather than done while
+    /// reading, and <see cref="WithDigitWidth"/> for where it lands.
+    /// </remarks>
+    public SheetColumnDigits? ColumnDigits { get; init; }
+
+    /// <summary>
+    /// The same grid with its columns measured in a font whose digit is worth so many twips.
+    /// </summary>
+    /// <remarks>
+    /// A no-op when the widths were already lengths, so a caller need not ask which format the
+    /// sheet came from.
+    /// </remarks>
+    /// <param name="digitWidthTwips">The advance of the default font's widest digit.</param>
+    public SheetGrid WithDigitWidth(double digitWidthTwips)
+        => ColumnDigits is { } digits
+            ? this with { Columns = digits.Resolve(digitWidthTwips) }
+            : this;
+
     /// <summary>Calc's own standard column width: 64 points.</summary>
     /// <remarks><c>STD_COL_WIDTH</c>, <c>sc/inc/global.hxx:107</c>.</remarks>
     public static Length StandardColumnWidth { get; } = Length.FromTwips(1280);

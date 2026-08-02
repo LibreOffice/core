@@ -687,7 +687,7 @@ internal sealed class XlsWorkbookReader
     private ContentSection ReadSheet(SheetEntry sheet, int index)
     {
         SheetBuilder builder = new(this, sheet.Name);
-        _page = new XlsSheetPrintState();
+        _page = new XlsSheetPrintState { DefaultFont = _cellFormats.DefaultFont };
         _sheetDecoration = new XlsSheetDecoration();
         _rowFormats.Clear();
         _columnFormats.Clear();

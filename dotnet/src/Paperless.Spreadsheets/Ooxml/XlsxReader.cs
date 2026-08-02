@@ -93,7 +93,8 @@ public static class XlsxReader
                 // workbook and doing it twice is also a second chance to disagree with itself.
                 XlsxSheetPrintNames print = names.GetValueOrDefault(entry.Index, XlsxSheetPrintNames.None);
                 (SheetPrintSetup setup, SheetGrid grid) = XlsxPrintSetup.Read(
-                    worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows);
+                    worksheet, print.PrintAreas, print.RepeatColumns, print.RepeatRows,
+                    cellFormats.DefaultColumnFont);
 
                 (SheetCellFormats formats, SheetRichText rich) =
                     XlsxSheetFormats.Read(worksheet, cellFormats, file);

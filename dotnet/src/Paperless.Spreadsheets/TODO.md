@@ -181,7 +181,9 @@ Traps that cost time, recorded so they are not rediscovered:
   advance in whole twips (`worksheethelper.cxx:1212`, `xltools.cxx:304`). 111 twips is what
   10-point Liberation Sans gives, and it checks out: `sheet-ooxml-features.xlsx` writes
   `width="20.76"` and LibreOffice's rendering puts the columns 115.2 points — 2304 twips — apart,
-  which is 20.76 × 111 rounded.
+  which is 20.76 × 111 rounded. **The font is now read and the digit measured** — see the
+  column-width section below for where the measurement lands and why it could not go in the
+  reader.
 - **A whole-column print range covers a million rows.** `A:D` paginated literally gives a
   four-column sheet twenty thousand blank pages. Calc cuts it back by re-searching the axis the
   range spans entirely, and only that axis (`AdjustPrintArea(false)`, `printfun.cxx:707`).
@@ -303,33 +305,73 @@ underlines the whole line, because the rule is drawn per line from the cell's ow
 portions carry the format that would answer properly and the per-portion run geometry to place a
 partial rule with does not exist yet.
 
-**The last major image difference on the batch is column widths, and its cause is measured.**
-`Patent Index 2024 - Top 100 applicants 2024.xlsx` matches on pages and words and its columns are
-about 20% too narrow, so every column after the first is displaced. SpreadsheetML states a column
-width in *digits of the workbook's default font*, and `DigitWidthTwips` is the constant **111** in
-all three of `Ooxml/XlsxPrintSetup.cs`, `MsBinary/XlsPrintSetup.cs` and `Xlsb/XlsbPrintSetup.cs` —
-the widest digit of **ten-point** Liberation Sans. This workbook's default font is twelve-point
-Arial, whose widest digit is 133 twips, and 133/111 = 1.198 against the 1.20–1.22 the two renderings
-differ by. The existing note under the print-setup section already called this out; what is new is
-that it has now been measured on a document rather than inferred, and that it is the single largest
-systematic error left on this track — **Excel's own default is eleven-point Calibri**, so almost
-every real `.xlsx` is affected, and a column width error moves page counts.
+## Done: a column width is measured in the workbook's own font
 
-Fixing it is not a constant swap, and the obstacle is a layering rule rather than the arithmetic.
-LibreOffice takes the maximum advance of `'0'`–`'9'` in the default font from its reference device
-in whole twips (`UnitConverter::finalizeImport`, `sc/source/filter/oox/unitconverter.cxx:113-137`),
-which needs a resolved face — and the readers build a `SheetGrid` of lengths while reading, on the
-extraction path, which `dotnet/CLAUDE.md` says must not pay for fonts. Doing it properly means
-`SheetGrid` carrying a column's width in *digits* and resolving it in layout, where a face already
-exists; doing it the quick way puts a font resolution in every `paperless extract` of a workbook.
+`DigitWidthTwips` was the constant **111** in all three of `Ooxml/XlsxPrintSetup.cs`,
+`MsBinary/XlsPrintSetup.cs` and `Xlsb/XlsbPrintSetup.cs` — the widest digit of ten-point Liberation
+Sans — and every workbook whose default font is anything else therefore had proportionally wrong
+columns. `Patent Index 2024 - Top 100 applicants 2024.xlsx` defaults to twelve-point Arial, whose
+digit is 133 twips, and it was the last major image difference on `sheets/batch-001`.
 
-There is a second, much smaller difference on the same document that this would not fix: the
-reference draws the same text at an em 3.5% larger than ours while placing every row at exactly our
-pitch — 4.096 pt against 3.9569 pt for a twelve-point font at the file's 33% print scale, with the
-first and last rows within 0.03 pt of each other over 700 pt of page. That is a glyph size taken
-down one path and a position taken down another, which is what `ScOutputData`'s split between
-`mpRefDevice` and `mpDev` — and the `GetStretch()` division that goes with it — would produce. It is
-recorded rather than diagnosed.
+**The 133 was confirmed against LibreOffice rather than against arithmetic, and the arithmetic
+alone would have been misread.** Measuring the two renderings' column pitch gives 137 twips per
+digit, not 133; the extra 3% is that LibreOffice paginates that sheet at a **34%** fit-to-page zoom
+where we pick 33%, and the same 3% is the whole of the "reference draws the same text at an em 3.5%
+larger" note this section used to carry. That was recorded as an undiagnosed second defect and a
+possible `mpRefDevice`/`mpDev` split; it is neither. **The instrument that settles it is
+`--convert-to fods`**: LibreOffice writes the width it computed into `style:column-width`, so a
+round trip states the answer outright — 886.2, 6591.2, 1389.0 and 1182.1 twips against digit counts
+of 6.6640625, 49.5546875, 10.44140625 and 8.88671875, which is 133.0 four times over. Use it for
+anything stated in a unit the file does not carry; it is far sharper than fitting a pitch.
+
+**The claim that almost every real `.xlsx` is affected is false, and the survey is worth keeping.**
+Of the 109 corpus `.xlsx` files, 51 default to Calibri 11 and 29 to Arial 10, whose digits measure
+111.50 and 111.23 twips — both of which LibreOffice reports as **111**, the constant that was
+already there. So 80 of 109 were already right to within half a percent, and the same holds for
+49 of 61 `.xls`. The 41 documents that were wrong were wrong by 9% to 38% (Aptos Narrow 11 and
+Verdana 11 at 1.26, Arial Black 12 at 1.38), which is what makes it worth doing.
+
+**The digit is truncated, not rounded**, and that was measured too: one-column probe workbooks
+round-tripped through LibreOffice 24.2.7.2 give 111.23 → 111, 122.35 → 122, 133.48 → 133,
+111.50 → **111**, 121.64 → **121**, 100.00 → 100, 120.02 → 120, 139.97 → **140**, 152.70 → **153**.
+Eight are exact either way and the two Carlito rows disagree with the two DejaVu ones, so a device's
+quantisation decides them rather than a rounding rule. Truncation is the half that matters: Carlito
+11 is what Excel's own default resolves to and is the default of 65 of the 171 corpus spreadsheets,
+all of which were already correct at 111 and which rounding would move to 112.
+
+**Where the measurement lives, and why not in the reader.** `Layout/SheetColumnDigits.cs` holds a
+width as a count of digits plus a fixed part that does not scale (`baseColWidth`'s five screen
+pixels, BIFF's deliberate half-twip bias, and Calc's own 64-point standard column, which is a
+length rather than a count). The readers build that and the default font's *name* — both free — and
+`SheetLayout.Grid` resolves the face and converts, once per sheet, the first time anything asks for
+the geometry. Nothing on the extraction path asks, so `paperless extract` still pays for no font,
+which is the rule in `dotnet/CLAUDE.md` that made this look bigger than it is. LibreOffice resolves
+early instead (`UnitConverter::finalizeImport`, `sc/source/filter/oox/unitconverter.cxx:113`) because
+it has a document with a reference device attached where Paperless has a reader with a stream.
+The grid is still materialised eagerly at the 111 fallback, so a caller that never resolves gets
+exactly what it got before.
+
+Measured over `sheets/batch-001 … batch-018`, 171 documents: **92 matching → 97, total absolute
+page error 1007 → 885, exactly-correct page counts 109 → 117**; `xls` 39/62 → 40/62 and `xlsx`
+53/109 → 57/109. `sheets/batch-001` stays 10/10 on the word gate and is now **10/10 on the
+ink-imbalance image diff as well** — the Patent workbook was 6.20% differing at 2.29% ink imbalance
+and is `shifted` with no major region.
+
+Two things this exposed rather than caused, both now visible because the widths are right:
+
+- **`DEFCOLWIDTH` needs `#i3006#`'s font-dependent correction.** `ImportExcel::DefColWidth`
+  (`sc/source/filter/excel/impop.cxx:640`) adds `40960 / max(fontHeightTwips - 15, 60) + 50` in
+  256ths of a digit before converting, "additional space for default width — Excel adds space
+  depending on font size". `aircraft_analysis_2016-04-27.xls` is twelve-point Calibri with
+  `DEFCOLWIDTH` 10: LibreOffice's own flat-ODF export puts its default column at 1319 twips and we
+  put it at 1209. Its two explicit columns now agree with LibreOffice exactly — 5424 and 6231
+  against 5423.8 and 6231.2 — and its page count moved from 44 to 64 against a reference of 46, so
+  the default column is what is left. The correction was invisible while the font height was not
+  read, because it depends on it.
+- **A fit-to-page zoom is picked one percent low.** The Patent workbook sets
+  `<pageSetUpPr fitToPage="1"/>` with `fitToWidth="0"`, and LibreOffice fits its 103 rows to one
+  page at 34% where the search here lands on 33%. It costs nothing in pages on that document and
+  three percent in every position on it.
 
 **Two fixtures were added rather than one, because each of the last two rules has a negative half
 that a single sheet cannot state.** `features/sheet-lead-in.fods` holds two rows differing in
