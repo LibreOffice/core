@@ -303,8 +303,14 @@ public sealed partial class Ww8DocumentReader
 
             // Word writes all six stories whether the section uses them or not, so an empty paragraph is a
             // placeholder rather than a blank line — but only when there is nothing else in the story.
+            //
+            // "Nothing else" has to include the shapes anchored in it. A running head that is one logo and
+            // no words is an ordinary thing, and its paragraph reads back with no text at all: the U+0001
+            // that stood for the picture is consumed by the frame it made (see CollectFrame), so testing
+            // the text alone throws the whole header away and leaves the body starting at the top margin.
             blocks.RemoveAll(
-                block => block.Paragraph is { Text.Length: 0 } && block.Table is null);
+                block => block.Paragraph is { Text.Length: 0, Frames: null or { Count: 0 } }
+                    && block.Table is null);
 
             if (blocks.Count == 0) continue;
 
