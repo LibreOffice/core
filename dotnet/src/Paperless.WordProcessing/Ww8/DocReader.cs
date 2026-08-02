@@ -379,9 +379,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// the font would draw a real bullet through a face with no glyph for it.
     /// </para>
     /// <para>
-    /// <see cref="LabelFollow.Nothing"/> because Word writes the level's geometry onto the paragraph as
-    /// well: <c>sprmPDxaLeft</c> and <c>sprmPDxaLeft1</c> give the same hanging indent the level does, and
-    /// <see cref="PageLabel.Advance"/> fills a hanging indent already.
+    /// The follower and its stop come from the level's <c>ixchFollow</c> and its <c>grpprlPapx</c>, which
+    /// is where Word states them. Assuming <see cref="LabelFollow.Nothing"/> instead worked only for the
+    /// documents that also repeat the level's geometry on every list paragraph — Word usually does, and
+    /// the ones that do not drew the label touching the item's first word.
     /// </para>
     /// <para>
     /// The paragraph's own reference travels with it, because the label is set in the paragraph's
@@ -401,7 +402,13 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             {
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
-                Follow = LabelFollow.Nothing,
+                Follow = paragraph.ListFollow switch
+                {
+                    1 => LabelFollow.Space,
+                    2 => LabelFollow.Nothing,
+                    _ => LabelFollow.ListTab,
+                },
+                TabStop = Core.Units.Length.FromTwips(paragraph.ListTabStop),
             }
             : null;
 

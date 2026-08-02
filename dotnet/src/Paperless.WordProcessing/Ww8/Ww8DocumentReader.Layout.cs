@@ -58,6 +58,11 @@ public sealed partial class Ww8DocumentReader
     /// be described twice.
     /// </para>
     /// </param>
+    /// <param name="ListFollow">
+    /// The level's <c>ixchFollow</c>: what closes the gap between the label and the item's first word —
+    /// 0 a tab to <paramref name="ListTabStop"/>, 1 a space, 2 nothing.
+    /// </param>
+    /// <param name="ListTabStop">Where that tab lands, in twips from the text area's start edge.</param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -72,7 +77,9 @@ public sealed partial class Ww8DocumentReader
         IReadOnlyList<Ww8LayoutRun>? Runs = null,
         IReadOnlyList<Ww8LayoutNote>? Notes = null,
         IReadOnlyList<Ww8LayoutFrame>? Frames = null,
-        string? ListMarker = null);
+        string? ListMarker = null,
+        byte ListFollow = 2,
+        int ListTabStop = 0);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -738,13 +745,23 @@ public sealed partial class Ww8DocumentReader
 
         Length size = SizeOf(character);
 
+        Text.Layout.ParagraphFormat format = layout.ToParagraphFormat(size) with
+        {
+            DefaultTabInterval = DocumentProperties.DefaultTabInterval,
+        };
+
+        // The level is looked up whether or not it draws a label, because a continuation paragraph of a
+        // list item is written with the same indents and no marker.
+        Ww8ListLevel? level = paragraph.ListNumber > 0
+            ? _numbering.FindLevel(paragraph.ListNumber, paragraph.ListLevel ?? 0)
+            : null;
+
+        if (level is { } stated) format = WithListIndents(format, stated, layout, markPosition);
+
         return new Ww8LayoutParagraph(
             SectionAt(markPosition),
             text,
-            layout.ToParagraphFormat(size) with
-            {
-                DefaultTabInterval = DocumentProperties.DefaultTabInterval,
-            },
+            format,
             character.FontIndex is { } index ? Fonts.Name(index) : null,
             size,
             character.IsBold == true ? 700 : 400,
@@ -753,8 +770,20 @@ public sealed partial class Ww8DocumentReader
             paragraph.IsInTable,
             character.Colour,
             ReadRuns(text, positions, markPosition),
-            ListMarker: LabelAt(paragraph));
+            ListMarker: LabelAt(paragraph),
+            ListFollow: level?.Follow ?? LabelFollowsWithNothing,
+            ListTabStop: level?.TabPosition ?? 0);
     }
+
+    /// <summary>
+    /// The <c>ixchFollow</c> a paragraph with no level of its own is given: nothing at all.
+    /// </summary>
+    /// <remarks>
+    /// Two rather than nought, because nought means a tab and a paragraph whose level could not be found
+    /// has no stop to aim at — so the label would be pushed to the paragraph's own indent for reasons the
+    /// document never stated.
+    /// </remarks>
+    private const byte LabelFollowsWithNothing = 2;
 
     /// <summary>
     /// The label a paragraph's list level draws, advancing that level's counter.
@@ -887,6 +916,87 @@ public sealed partial class Ww8DocumentReader
         }
 
         return ApplyLayoutSprms(format, direct);
+    }
+
+    /// <summary>
+    /// What a paragraph's <em>own</em> PAPX states about its indents and its list, as opposed to what it
+    /// inherits.
+    /// </summary>
+    /// <remarks>
+    /// The distinction Writer's <c>SwTextNode::AreListLevelIndentsApplicableImpl</c> turns on: a
+    /// hard-set indent beats the list level's, and a list named directly on the paragraph beats the
+    /// indents its <em>style</em> sets. A WW8 import puts exactly the paragraph's own sprms on the node
+    /// and its style's on the format, so "hard-set" is the direct grpprl and nothing else.
+    /// </remarks>
+    private (bool SetsLeftIndent, bool SetsFirstLineIndent, bool NamesList) DirectParagraphSprms(
+        int position)
+    {
+        (_, ReadOnlyMemory<byte> direct) =
+            Ww8FormattingTable.SplitParagraphProperties(
+                _paragraphProperties.Find(_pieces.FileOffsetOf(position)));
+
+        bool left = false;
+        bool firstLine = false;
+        bool list = false;
+
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(direct))
+        {
+            switch (sprm.Identifier)
+            {
+                case LayoutSprms.LeftIndent or LayoutSprms.LeftIndent80:
+                    left = true;
+                    break;
+                case LayoutSprms.FirstLineIndent or LayoutSprms.FirstLineIndent80:
+                    firstLine = true;
+                    break;
+                case Ww8SprmReader.Ids.ListFormatOverride:
+                    list = true;
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        return (left, firstLine, list);
+    }
+
+    /// <summary>
+    /// A list paragraph's format with whichever of its level's indents it is entitled to take.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word writes a level's geometry into the <c>LVL</c>'s own <c>grpprlPapx</c> and usually — but not
+    /// always — repeats it on every paragraph in the list. On the documents that do not repeat it, a
+    /// reader taking only the paragraph's own sprms gives every item a nought indent and no hanging one,
+    /// so the label is drawn exactly where the item's first word starts and the two fuse.
+    /// </para>
+    /// <para>
+    /// The rule is Writer's, per item: a hard-set indent on the paragraph wins; failing that a list named
+    /// directly on the paragraph wins over the style chain; failing that the style chain wins. The last
+    /// arm is the conservative reading — Writer would still let the level through when the style carrying
+    /// the numbering is met before any indent, and telling those apart needs the chain walked in order,
+    /// which is not worth it for a case no corpus document exercises.
+    /// </para>
+    /// </remarks>
+    private Text.Layout.ParagraphFormat WithListIndents(
+        Text.Layout.ParagraphFormat format,
+        Ww8ListLevel level,
+        Ww8LayoutFormat resolved,
+        int markPosition)
+    {
+        (bool setsLeft, bool setsFirstLine, bool namesList) = DirectParagraphSprms(markPosition);
+
+        bool leftApplies = !setsLeft && (namesList || resolved.LeftIndent is null);
+        bool firstLineApplies = !setsFirstLine && (namesList || resolved.FirstLineIndent is null);
+
+        if (leftApplies) format = format with { StartIndent = Length.FromTwips(level.IndentAt) };
+
+        if (firstLineApplies)
+        {
+            format = format with { FirstLineIndent = Length.FromTwips(level.FirstLineIndent) };
+        }
+
+        return format;
     }
 
     /// <summary>
