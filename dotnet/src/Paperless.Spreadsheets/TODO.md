@@ -295,6 +295,39 @@ box is 1.37 inches tall and holds five paragraphs of caveats: 1556 words against
 — inside the gate's 2% band rather than exactly equal, the residue being the same box drawn on
 each of the sheet's column bands, which LibreOffice does too and clips differently.
 
+### Where `batch-005` stands, and the largest lead in the track
+
+`batch-005` measured **7/10** after the two rounds above — the scoreboard recorded 4/10, and the
+three it gained were gained by the empty-page and merge work rather than by anything aimed at it.
+Its three remaining failures are three different things, and one of them is the biggest systematic
+defect this track has left.
+
+**A row height stated without `customHeight` is a hint, and Calc recomputes it.** `ht` on a `row`
+is what the *writer* measured; `customHeight` is the flag that says a user chose it.
+`WorksheetGlobals::convertRows` (`sc/source/filter/oox/worksheethelper.cxx:1268-1286`) imports the
+stated height either way — "always import the row height, ensures better layout" — but calls
+`SetManualHeight` only when `mbCustomHeight`, so every other row stays on optimal height and Calc
+re-derives it from what the row holds. Measured on `National-Reports.xlsx`, whose 117 rows all
+state `ht="15.75"` and none states `customHeight`: **our row pitch is 15.735 pt and LibreOffice's
+is 15.0**, taken from the two PDFs' own glyph boxes, and the 4.9% compounds into 8 pages against 6.
+LibreOffice's flat-ODF export of the same sheet gives `0.2083in` for every single-line row,
+`0.3728in` for the two-line rows the file states as `31.5` and `0.5492in` for the one it states as
+`47.25` — so it is a real re-measurement of the content and not a fallback to the default.
+
+**The flag this needs is already read and used by nothing.** `SheetSizeRun.IsOptimalSize` is set
+from `!customHeight` by the SpreadsheetML reader, has the same meaning wired up for ODF's
+`style:use-optimal-row-height` and BIFF's unset-manual bit, and `SheetGrid.IsOptimalSize(index)`
+has **no callers at all**. That is the shape worth grepping for that this project has now hit four
+times. What is missing is the measurement itself — Calc's `ScColumn::GetNeededSize`
+(`sc/inc/column.hxx:95-105`) — which is a feature rather than a fix, and is not attempted here.
+
+The other two, named and unfixed: `esurf-12-135-2024-t01.xlsx` draws four-digit years as `201` and
+`202`, three characters wide, where LibreOffice draws them whole — a number clipped to its column
+instead of overflowing or becoming `###`, which is F.3's two-way coupling between the `General`
+format and the column width. `Background_Declaration_Template.xls` draws about twenty words twice
+and embeds a fourth font the reference does not, which looks like the column-band duplication the
+round above fixed for SpreadsheetML arriving in the BIFF path, but that was not confirmed.
+
 ## What the fourth sheets sweep found
 
 Measured at `161d62fb9`. `sheets/batch-002` was **7/10** and the briefed baseline reproduced to the

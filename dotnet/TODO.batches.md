@@ -407,7 +407,7 @@ rather than waiting to trip over.
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 7/10 |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 6/10 |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 5/10 |
