@@ -120,6 +120,30 @@ and that band separates "the same text" from "text is missing" on this corpus.
 it is correct. Where the ink actually lands is the fidelity suite's job — it compares PDF
 operators directly. Use `render-comparison` to diagnose *why* two renderings differ.
 
+### The fourth check, once the first three pass
+
+When a document's page count and word count both agree, the gate has nothing left to say
+about it — and "nothing left to say" is not the same as "correct". Add the image comparison
+at that point:
+
+```sh
+.claude/skills/render-comparison/scripts/pdf-image-diff.py ours.pdf ref.pdf --outdir cmp
+```
+
+It renders both at 512 pixels on the longest edge, groups the differing pixels into regions,
+and says where each is and what it looks like. **It refuses to run when the page counts
+differ**, because page 3 compared against a different page 3 produces a plausible and
+entirely meaningless report.
+
+The document that motivated it passed this gate perfectly. `Sylva introduction session.pptx`
+matches at **1115 words against 1115** — and the reference draws dark teal table cells with
+white text where we draw pale cells, so the white text is invisible. Word parity is not
+visual parity, and on a deck it is not even close.
+
+So the order is **page count → words → font embedding → image**, each check making the next
+one meaningful. Run the image diff over documents that already pass, not over the failures:
+the failures already have a cheaper explanation.
+
 ### Know when the gate has hit its ceiling
 
 Word count drives progress efficiently until the residue stops being about words. Measured on

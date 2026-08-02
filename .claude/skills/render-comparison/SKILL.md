@@ -166,6 +166,98 @@ Once a page differs, narrow it down before theorising:
    every dotted table-of-contents line was blank) and `IsCapitalised`. Grep for the property
    name: if the only hits are the readers and the model, it does nothing.
 
+## Comparing whole documents as images
+
+`pdf-image-diff.py` renders two PDFs to PNG, diffs them page by page, groups the differing
+pixels into regions, and reports where each region is and what kind of difference it looks
+like.
+
+```sh
+.claude/skills/render-comparison/scripts/pdf-image-diff.py ours.pdf ref.pdf --outdir cmp
+```
+
+```
+page    diff%   regions verdict
+13      34.56   15      MAJOR
+                        middle-centre: ink missing from ours — a graphic, glyphs or a fill (16.47% of page, x 0.02-0.97, y 0.43-0.67)
+                        bottom-centre: a fill or background shading the reference has and we do not (15.98% of page, …)
+                        top-right: a fill or background shading the reference has and we do not (3.16% of page, …)
+```
+
+It writes `cmp/ours/page-NNN.png`, `cmp/ref/page-NNN.png`, and `cmp/diff/page-NNN.png` — the
+reference faded to grey with each differing region boxed in red, which is the artefact to
+look at when the text report is ambiguous. Exit status is 0 when no page differs majorly, 1
+when one does, 2 when the comparison could not be made.
+
+### Use it only once page counts and word counts already agree
+
+This answers "the right text is on the right page, but does the page *look* right". It
+cannot answer anything else, because if pagination differs then page 3 here is being
+compared against a different page 3 there and every region it reports is an artefact of the
+misalignment. **The script enforces this** — it exits 2 rather than produce a plausible,
+meaningless report.
+
+So the order is: page count, then extractable words, then this. Each earlier check makes the
+next one meaningful, and running this one first wastes the effort and misleads you.
+
+### What it is for
+
+The word count is blind to anything that is not a word, and this project has now shipped a
+document that passes it perfectly while being obviously wrong to a human. On
+`Sylva introduction session.pptx` — **1115 words against 1115, an exact match** — the
+reference draws dark teal table cells with white text on them and we draw pale cells, so the
+white text is invisible against white. The image diff names it on the first page it appears:
+*"a fill or background shading the reference has and we do not"*.
+
+That is the class it exists to catch:
+
+- a missing fill, gradient or background panel
+- a missing or misplaced graphic, logo or chart
+- a rule, border or table grid that is not drawn
+- a whole block in the wrong place, or in the wrong colour
+- text that is drawn but unreadable because what is behind it is wrong
+
+### Reading the hints
+
+The hint is coarse on purpose. It exists to tell you which of several very different
+investigations to start, not to be right about the cause — a wrong guess that sends you to
+the right part of the page still saves the search.
+
+| Hint | Usually means |
+|---|---|
+| *a fill or background shading the reference has and we do not* | a shape's fill, a table cell background, a slide background |
+| *ink missing from ours* | a graphic or a block of glyphs never drawn |
+| *ink we draw that the reference does not* | we draw something it suppresses — an overflowing frame, a hidden shape, metafile text it rasterises |
+| *a rule or border* | a table grid line, a paragraph border, an underline |
+| *the same marks in a different colour* | theme colour resolution, or a fill/stroke mix-up |
+| *marks displaced or reshaped* | the commonest and least specific: a font substitution, a wrong indent, a line break |
+
+`marks displaced or reshaped` covering most of a page usually means a reflow, and the useful
+next step is the extraction comparison rather than more pixels.
+
+### Why 512, and what it deliberately cannot see
+
+512 pixels on the longest edge is about a sixth of the rendered size. A half-point line-break
+difference disappears at that scale and a missing background panel does not — which is the
+whole point. It finds the differences that survive being squinted at.
+
+It will therefore **not** find: sub-pixel positioning, hinting and antialiasing differences,
+one-word reflows, or a font substituted for a metrically-compatible one. Those are the
+fidelity suite's job, which compares PDF operators directly.
+
+A page diffs in about a tenth of a second, so a fifteen-page deck takes three seconds and a
+corpus batch is practical. Raise `--long-edge` when you need to see detail on one document;
+do not raise it for a sweep.
+
+### Tuning
+
+- `--threshold` (default 40) — how far a channel must differ for a pixel to count. Two
+  renderers that agree about where a glyph is still differ by 20–30 along its antialiased
+  edge, so lowering this floods the report with noise.
+- `--min-area` (default 0.0004) — the smallest region worth reporting, as a fraction of the
+  page. About 100 pixels at 512, which is a character or two.
+- `--quiet` — only pages with major differences, for sweeping many documents.
+
 ## Turn a measurement into a name
 
 A line advance is not an opaque number. It is `(ascent + descent + gap) / unitsPerEm × size`

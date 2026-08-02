@@ -38,6 +38,7 @@ verified against LibreOffice 24.2.7.2 on real files.
 | `libreoffice-reference/scripts/lo-convert.sh` | Documents → reference PDFs and page PNGs |
 | `libreoffice-reference/scripts/lo-extract.sh` | Documents → reference text (right filter per family) |
 | `render-comparison/scripts/compare-images.py` | Page images → metrics, diagnosis, diff images |
+| `render-comparison/scripts/pdf-image-diff.py` | Two PDFs → page PNGs, diff PNGs, and where each page differs |
 | `extraction-comparison/scripts/compare-text.py` | Text → similarity, first divergence, codepoint diagnostics |
 | `paperless-corpus/scripts/make-corpus.sh` | Generates a test corpus across all 17 formats |
 | `corpus-batches/scripts/render-corpus.sh` | Renders a whole corpus with LibreOffice — parallel, resumable |
