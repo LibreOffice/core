@@ -96,6 +96,30 @@ internal sealed class PptxTextStyles
     }
 
     /// <summary>
+    /// The <c>a:bodyPr</c> a shape inherits from the placeholders behind it, nearest first.
+    /// </summary>
+    /// <remarks>
+    /// Empty for a shape that is not a placeholder. See <see cref="PptxTextBody"/> for why the
+    /// body properties inherit at all — a slide's <c>&lt;a:bodyPr/&gt;</c> is silence, not an
+    /// instruction, and PowerPoint writes one on every placeholder it has not re-formatted.
+    /// </remarks>
+    /// <param name="shape">The shape whose text body is being read.</param>
+    public XElement?[] BodyPropertiesFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
+        if (placeholder is null) return [];
+
+        (XElement? direct, XElement? inherited) = Placeholders(placeholder);
+        return
+        [
+            Drawing.Child(Ppt.Child(direct, "txBody"), "bodyPr"),
+            Drawing.Child(Ppt.Child(inherited, "txBody"), "bodyPr"),
+        ];
+    }
+
+    /// <summary>
     /// The layout placeholder a shape stands in for, and the master placeholder behind that one.
     /// </summary>
     /// <remarks>

@@ -64,16 +64,48 @@ internal static class PptxTextBody
     /// <param name="fields">
     /// What this slide's automatic fields resolve to, or null to draw the cached text instead.
     /// </param>
+    /// <param name="inheritedBodyProperties">
+    /// <para>
+    /// The <c>a:bodyPr</c> of each placeholder behind this shape, nearest first — normally
+    /// <see cref="PptxTextStyles.BodyPropertiesFor"/>.
+    /// </para>
+    /// <para>
+    /// <strong>A placeholder's body properties are inherited, attribute by attribute.</strong>
+    /// <c>PPTShapeContext</c> copy-constructs the slide shape's text body from the one
+    /// <c>applyShapeReference</c> already brought over from the layout or master placeholder
+    /// (<c>oox/source/ppt/pptshapecontext.cxx:183-186</c>), so the slide's own
+    /// <c>&lt;a:bodyPr/&gt;</c> — which is what PowerPoint writes on a placeholder it has not
+    /// re-formatted — overrides nothing, and the anchor, the insets, the wrap and the autofit all
+    /// come from above.
+    /// </para>
+    /// <para>
+    /// It matters most for the anchor. <c>chapter_4_0.pptx</c> states <c>anchor="ctr"</c> once,
+    /// on the master's footer, and its footer runs to two lines in a one-line box on all 55
+    /// slides: centred, both lines are on the page; anchored to the top, the second falls off the
+    /// bottom edge and three words a page go with it.
+    /// </para>
+    /// </param>
     public static SlideTextBody Read(
         XElement body,
         DrawingTheme? theme = null,
         string? defaultTypeface = null,
         Func<int, IReadOnlyList<XElement>>? inherited = null,
-        SlideFields? fields = null)
+        SlideFields? fields = null,
+        IReadOnlyList<XElement?>? inheritedBodyProperties = null)
     {
         ArgumentNullException.ThrowIfNull(body);
 
-        XElement? properties = Drawing.Child(body, "bodyPr");
+        List<XElement> bodyChain = [];
+        if (Drawing.Child(body, "bodyPr") is { } own) bodyChain.Add(own);
+        if (inheritedBodyProperties is not null)
+        {
+            foreach (XElement? source in inheritedBodyProperties)
+            {
+                if (source is not null) bodyChain.Add(source);
+            }
+        }
+
+        XElement? properties = bodyChain.Count > 0 ? bodyChain[0] : null;
         XElement? listStyle = Drawing.Child(body, "lstStyle");
 
         // One counter and one "is this level numbering" flag per outline level, carried across
@@ -91,15 +123,26 @@ internal static class PptxTextBody
                     fields));
         }
 
-        XElement? autofit = Drawing.Child(properties, "normAutofit");
+        // The autofit choice is taken whole from the nearest a:bodyPr that states one of the
+        // three: a slide's <a:bodyPr/> saying nothing is not the same as its saying a:noAutofit.
+        XElement? autofit = null;
+        foreach (XElement source in bodyChain)
+        {
+            if (Drawing.Child(source, "normAutofit") is { } stated) { autofit = stated; break; }
+            if (Drawing.Child(source, "spAutoFit") is not null
+                || Drawing.Child(source, "noAutofit") is not null)
+            {
+                break;
+            }
+        }
 
         return new SlideTextBody
         {
             Paragraphs = paragraphs,
-            Insets = Insets(properties),
-            Anchor = Anchor(Drawing.Attribute(properties, "anchor")),
-            Rotation = Rotation(properties),
-            Wraps = Drawing.Attribute(properties, "wrap") != "none",
+            Insets = Insets(bodyChain),
+            Anchor = Anchor(Stated(bodyChain, "anchor")),
+            Rotation = Rotation(bodyChain),
+            Wraps = Stated(bodyChain, "wrap") != "none",
             AutoFit = autofit is not null,
             FontScale = Thousandth(autofit, "fontScale", 1.0),
             LineSpaceReduction = Thousandth(autofit, "lnSpcReduction", 0.0),
@@ -116,11 +159,11 @@ internal static class PptxTextBody
     /// second box states them explicitly and whose first states zero: LibreOffice draws the two
     /// pens 7.2 pt apart.
     /// </remarks>
-    private static Margins Insets(XElement? properties) => new(
-        Length.FromEmu(Emu(properties, "lIns", 91440)),
-        Length.FromEmu(Emu(properties, "tIns", 45720)),
-        Length.FromEmu(Emu(properties, "rIns", 91440)),
-        Length.FromEmu(Emu(properties, "bIns", 45720)));
+    private static Margins Insets(List<XElement> chain) => new(
+        Length.FromEmu(Emu(Stated(chain, "lIns"), 91440)),
+        Length.FromEmu(Emu(Stated(chain, "tIns"), 45720)),
+        Length.FromEmu(Emu(Stated(chain, "rIns"), 91440)),
+        Length.FromEmu(Emu(Stated(chain, "bIns"), 45720)));
 
     /// <summary>
     /// The turn <c>a:bodyPr/@rot</c> asks for, in radians clockwise.
@@ -131,9 +174,13 @@ internal static class PptxTextBody
     /// resolves to, so the diagram evaluator writes it and this reads it back through the same
     /// path an authored deck's would take.
     /// </remarks>
-    private static double Rotation(XElement? properties)
+    private static double Rotation(List<XElement> chain)
     {
-        int units = Drawing.Number(properties, "rot") ?? 0;
+        int units = int.TryParse(
+            Stated(chain, "rot"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+            out int stated)
+            ? stated
+            : 0;
         return units == 0
             ? 0
             : units / ShapeTransform.RotationUnitsPerDegree * Math.PI / 180.0;
@@ -555,10 +602,8 @@ internal static class PptxTextBody
             ? value / 100000.0
             : whenAbsent;
 
-    private static long Emu(XElement? element, string attribute, long whenAbsent)
-        => long.TryParse(
-            Drawing.Attribute(element, attribute), NumberStyles.Integer,
-            CultureInfo.InvariantCulture, out long value)
+    private static long Emu(string? stated, long whenAbsent)
+        => long.TryParse(stated, NumberStyles.Integer, CultureInfo.InvariantCulture, out long value)
             ? value
             : whenAbsent;
 

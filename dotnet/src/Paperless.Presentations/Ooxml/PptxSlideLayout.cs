@@ -757,7 +757,7 @@ internal sealed partial class PptxSlideLayout
             ? null
             : PptxTextBody.Read(
                 body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape),
-                _fields);
+                _fields, _styles?.BodyPropertiesFor(shape));
     }
 
     /// <summary>
