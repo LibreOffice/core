@@ -60,6 +60,8 @@ public sealed class DocxFile : IDisposable
             .Read(LoadRelated("theme", "word/theme/theme1.xml"))
             ?.WithMap(DrawingColourMap.Read(Word.Child(Settings, "clrSchemeMapping")));
 
+        IsOffice2007 = OoxmlMetadata.IsOffice2007(package);
+
         FontTable = WordFontTable.Read(LoadRelated("fontTable", "word/fontTable.xml"));
         if (FontTable.HasEmbeddedFonts)
         {
@@ -117,6 +119,12 @@ public sealed class DocxFile : IDisposable
     /// one resolves to nothing rather than to a guess.
     /// </remarks>
     public DrawingTheme? Theme { get; }
+
+    /// <summary>
+    /// Whether Office 2007 wrote the document, which inverts several unstated chart defaults.
+    /// </summary>
+    /// <remarks>See <see cref="OoxmlMetadata.IsOffice2007(OpcPackage)"/>.</remarks>
+    public bool IsOffice2007 { get; }
 
     /// <summary>
     /// What <c>fontTable.xml</c> declares about the fonts the document names.

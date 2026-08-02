@@ -49,7 +49,13 @@ public static class DrawingChartPlot
     /// </summary>
     /// <param name="chartSpace">The <c>c:chartSpace</c> root, or the <c>c:chart</c> inside it.</param>
     /// <param name="theme">The theme, for resolving a <c>a:schemeClr</c> fill.</param>
-    public static ChartPlot? Read(XElement chartSpace, DrawingTheme? theme = null)
+    /// <param name="office2007">
+    /// Whether Office 2007 wrote the package — <see cref="OoxmlMetadata.IsOffice2007(XElement?)"/>.
+    /// It inverts the default of every unstated data-label and trendline flag; see
+    /// <see cref="LabelOf"/>.
+    /// </param>
+    public static ChartPlot? Read(
+        XElement chartSpace, DrawingTheme? theme = null, bool office2007 = false)
     {
         ArgumentNullException.ThrowIfNull(chartSpace);
 
@@ -86,7 +92,7 @@ public static class DrawingChartPlot
         for (int at = 0; at < groups.Count; at++)
         {
             (List<ChartSeries> read, string?[] labels) =
-                ReadSeries(groups[at], kinds[at], theme, axes.IndexOf(groups[at]));
+                ReadSeries(groups[at], kinds[at], theme, axes.IndexOf(groups[at]), office2007);
 
             if (categories.Length == 0 && labels.Length > 0) categories = labels;
             series.AddRange(read);
@@ -578,7 +584,7 @@ public static class DrawingChartPlot
             };
 
     private static (List<ChartSeries> Series, string?[] Categories) ReadSeries(
-        XElement group, ChartPlotKind kind, DrawingTheme? theme, int axisIndex)
+        XElement group, ChartPlotKind kind, DrawingTheme? theme, int axisIndex, bool office2007)
     {
         List<ChartSeries> series = [];
         string?[] categories = [];
@@ -591,7 +597,7 @@ public static class DrawingChartPlot
         string? radarStyle = Value(Child(group, "radarStyle"));
 
         // A group's own c:dLbls is the default every series in it inherits.
-        ChartDataLabel? groupLabel = LabelOf(Child(group, "dLbls"), null, kind);
+        ChartDataLabel? groupLabel = LabelOf(Child(group, "dLbls"), null, kind, office2007);
 
         // Which of a stock plot's four numbers each of its series carries, by position. Four
         // series are open, high, low, close and three are high, low, close — which is
@@ -656,11 +662,11 @@ public static class DrawingChartPlot
                 Marker = MarkerOf(Child(element, "marker"), kind, scatterStyle, radarStyle),
                 HasLine = scatterLine
                           && Drawing.Child(Drawing.Child(properties, "ln"), "noFill") is null,
-                Label = WithSource(LabelOf(seriesLabels, groupLabel, kind), sourceFormat),
+                Label = WithSource(LabelOf(seriesLabels, groupLabel, kind, office2007), sourceFormat),
                 PointLabels = PointLabelsOf(
-                    seriesLabels, numbers.Length, groupLabel, kind, sourceFormat),
+                    seriesLabels, numbers.Length, groupLabel, kind, sourceFormat, office2007),
                 AxisIndex = axisIndex,
-                Trendlines = TrendlinesOf(element, theme),
+                Trendlines = TrendlinesOf(element, theme, office2007),
                 SizeValues = sizes,
                 InvertIfNegative = Flag(element, "invertIfNegative") ?? false,
                 StockRole = stockRole >= 0 && stockRole < stockRoles.Length
@@ -694,7 +700,7 @@ public static class DrawingChartPlot
     /// </para>
     /// </remarks>
     private static List<ChartTrendline>? TrendlinesOf(
-        XElement series, DrawingTheme? theme)
+        XElement series, DrawingTheme? theme, bool office2007)
     {
         List<ChartTrendline>? trendlines = null;
 
@@ -713,8 +719,8 @@ public static class DrawingChartPlot
                 Intercept = Child(element, "intercept") is { } intercept
                     ? Real(intercept) ?? 0.0
                     : null,
-                ShowEquation = Flag(element, "dispEq") ?? true,
-                ShowRSquared = Flag(element, "dispRSqr") ?? true,
+                ShowEquation = Flag(element, "dispEq") ?? !office2007,
+                ShowRSquared = Flag(element, "dispRSqr") ?? !office2007,
                 Name = Child(element, "name")?.Value,
                 Line = LineOf(properties, theme),
                 LineWidth = LineWidthOf(properties),
@@ -791,13 +797,24 @@ public static class DrawingChartPlot
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <strong>An unstated flag means "true", not "false".</strong>
-    /// <c>SeriesConverter::convertDataLabel</c> reads each of the five as
+    /// <strong>An unstated flag means "true", not "false" — unless Office 2007 wrote the
+    /// file.</strong> <c>SeriesConverter::convertDataLabel</c> reads each of the five as
     /// <c>value_or( !bMSO2007Doc )</c> (<c>seriesconverter.cxx:139-144</c>) — so on anything but a
-    /// file Excel 2007 wrote, a <c>c:dLbls</c> that states nothing shows everything. The
+    /// file Office 2007 wrote, a <c>c:dLbls</c> that states nothing shows everything. The
     /// ubiquitous "no labels" form Excel writes is not silence but six explicit zeroes, which is
     /// why defaulting to false looks right on every file that has them and loses every label on
     /// the files that do not.
+    /// </para>
+    /// <para>
+    /// Office 2007 is the exception, and it is not a rare one: it wrote a bare
+    /// <c>&lt;c:dLbls/&gt;</c> to mean "no labels at all", so reading that as "show everything"
+    /// prints the category, the value and the series name beside every point of every series.
+    /// Measured on <c>171128IPAP.pptx</c>, whose nine line charts each carry an empty
+    /// <c>c:dLbls</c> over 42 quarters: 11026 words drawn against a reference's 4705, the series
+    /// name "Manufacturing" alone appearing 349 times. Office 2007 also leaves the label
+    /// settings of a data point alone when the point states none of the seven elements, which is
+    /// what the <c>stated</c> test below reproduces —
+    /// <c>lclConvertLabelFormatting</c>'s <c>bHasAnyElement</c>.
     /// </para>
     /// <para>
     /// <c>c:delete val="1"</c> is the other spelling of "nothing here", and it wins over the
@@ -805,7 +822,7 @@ public static class DrawingChartPlot
     /// </para>
     /// </remarks>
     private static ChartDataLabel? LabelOf(
-        XElement? labels, ChartDataLabel? inherited, ChartPlotKind kind)
+        XElement? labels, ChartDataLabel? inherited, ChartPlotKind kind, bool office2007)
     {
         if (labels is null) return inherited;
 
@@ -815,15 +832,20 @@ public static class DrawingChartPlot
         // only label the reference draws.
         if (Number(Child(labels, "delete")) is 1.0) return Deleted;
 
-        bool value = Flag(labels, "showVal") ?? inherited?.ShowValue ?? true;
+        // An Office 2007 c:dLbls that states none of the seven settings states nothing at all,
+        // and leaves whatever it inherited exactly as it was.
+        if (office2007 && !StatesLabelSetting(labels)) return inherited;
+
+        bool shown = !office2007;
+        bool value = Flag(labels, "showVal") ?? inherited?.ShowValue ?? shown;
 
         // A percentage is a pie's business and nobody else's: bShowPercent is ANDed with
         // meTypeCategory == TYPECATEGORY_PIE (seriesconverter.cxx:141). Honouring it on a column
         // chart puts a second number on every bar of several corpus decks.
         bool percent = kind == ChartPlotKind.Pie
-                       && (Flag(labels, "showPercent") ?? inherited?.ShowPercent ?? true);
-        bool category = Flag(labels, "showCatName") ?? inherited?.ShowCategory ?? true;
-        bool name = Flag(labels, "showSerName") ?? inherited?.ShowSeries ?? true;
+                       && (Flag(labels, "showPercent") ?? inherited?.ShowPercent ?? shown);
+        bool category = Flag(labels, "showCatName") ?? inherited?.ShowCategory ?? shown;
+        bool name = Flag(labels, "showSerName") ?? inherited?.ShowSeries ?? shown;
 
         // The stated format goes to whichever of the two properties the label will use, which is
         // the percentage one whenever a percentage is shown and the format is not source-linked.
@@ -869,16 +891,31 @@ public static class DrawingChartPlot
     /// <summary>The per-point labels a <c>c:dLbls</c> overrides, or null when it overrides none.</summary>
     private static readonly ChartDataLabel Deleted = new();
 
+    /// <summary>
+    /// Whether a <c>c:dLbls</c> or <c>c:dLbl</c> states any of the seven settings Office 2007
+    /// treats as "this element says something" — <c>lclConvertLabelFormatting</c>'s
+    /// <c>bHasAnyElement</c> (<c>seriesconverter.cxx:130-137</c>).
+    /// </summary>
+    private static bool StatesLabelSetting(XElement labels)
+        => Child(labels, "separator") is not null
+           || Child(labels, "dLblPos") is not null
+           || Child(labels, "showVal") is not null
+           || Child(labels, "showCatName") is not null
+           || Child(labels, "showSerName") is not null
+           || Child(labels, "showPercent") is not null
+           || Child(labels, "showLegendKey") is not null;
+
     private static ChartDataLabel?[]? PointLabelsOf(
         XElement? labels,
         int count,
         ChartDataLabel? inherited,
         ChartPlotKind kind,
-        NumberFormatCode? source)
+        NumberFormatCode? source,
+        bool office2007)
     {
         if (labels is null) return null;
 
-        ChartDataLabel? seriesLevel = LabelOf(labels, inherited, kind);
+        ChartDataLabel? seriesLevel = LabelOf(labels, inherited, kind, office2007);
         ChartDataLabel?[]? points = null;
 
         foreach (XElement point in Children(labels, "dLbl"))
@@ -889,7 +926,7 @@ public static class DrawingChartPlot
             points ??= new ChartDataLabel?[Math.Max(count, index + 1)];
             if (index >= points.Length) continue;
 
-            points[index] = WithSource(LabelOf(point, seriesLevel, kind), source);
+            points[index] = WithSource(LabelOf(point, seriesLevel, kind, office2007), source);
         }
 
         return points;

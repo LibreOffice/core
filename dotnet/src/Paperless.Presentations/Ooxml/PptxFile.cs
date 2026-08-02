@@ -52,8 +52,18 @@ internal sealed class PptxFile : IDisposable
 
         SlideSize = ReadSlideSize(Ppt.Child(presentation, "sldSz"));
         DefaultTextStyle = Ppt.Child(presentation, "defaultTextStyle");
+        IsOffice2007 = OoxmlMetadata.IsOffice2007(package);
         Slides = [.. ReadSlideList()];
     }
+
+    /// <summary>
+    /// Whether Office 2007 wrote the deck, which inverts several unstated chart defaults.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="OoxmlMetadata.IsOffice2007(OpcPackage)"/>. Read once at open: it costs a
+    /// part load, and the chart reader asks for it on every graphic frame.
+    /// </remarks>
+    public bool IsOffice2007 { get; }
 
     /// <summary>The presentation part's name, for diagnostics and relationship resolution.</summary>
     public string MainPartName { get; }
