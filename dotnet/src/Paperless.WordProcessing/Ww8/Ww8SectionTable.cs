@@ -77,8 +77,97 @@ internal static class Ww8SectionTable
             sections.Add(ReadProperties(PropertiesAt(wordDocument, at)));
         }
 
+        ResolveContinuousBreaks(sections);
         return sections;
     }
+
+    /// <summary>
+    /// Settles what a continuous section break does to the page, which is much less than it says.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A DOC section descriptor always restates the whole page setup, whatever kind of break it opens with,
+    /// so a continuous section carries a full set of margins that Word never applies: a break that does not
+    /// start a fresh sheet cannot re-cut the sheet it lands on. Reading the restated values as the page's is
+    /// what makes a document paginate against a page it never has.
+    /// </para>
+    /// <para>
+    /// LibreOffice draws the line in <c>wwSectionManager::InsertSegments</c>
+    /// (<c>sw/source/filter/ww8/ww8par.cxx</c>:4422). A section that is continuous <em>and</em> agrees with
+    /// the one before it about the sheet — width, height and orientation — becomes a Writer
+    /// <em>text</em> section rather than a page descriptor, and a text section carries only columns and a
+    /// left/right indent (<c>InsertSection</c>, <c>ww8par6.cxx</c>:717). Everything the page descriptor
+    /// holds — the sheet, the head and foot bands, the vertical margins — stays as the last section that
+    /// made one left it, which is what this copies forward.
+    /// </para>
+    /// <para>
+    /// The other half of the same rule is the sentence that comment opens with: <em>"If two following
+    /// sections are different in following properties, Word will interpret a continuous section break
+    /// between them as if it was a section break next page."</em> An incompatible continuous section does
+    /// get its own page descriptor, and giving a node a page descriptor in Writer starts a page — so the
+    /// break is promoted rather than honoured.
+    /// </para>
+    /// <para>
+    /// Measured on <c>foca_form_1.doc</c>, whose second section is continuous, begins inside the opening
+    /// table, and states a top margin of 1135 twips against the first section's 567. Taking it at its word
+    /// started the body an inch down every page and pushed the paragraph after the table onto a sheet of
+    /// its own: four pages against the reference's three.
+    /// </para>
+    /// </remarks>
+    private static void ResolveContinuousBreaks(List<WritingSection> sections)
+    {
+        for (int i = 1; i < sections.Count; i++)
+        {
+            WritingSection section = sections[i];
+            if (section.Break != SectionBreak.Continuous) continue;
+
+            // The section before it as this pass has already settled it, so a run of continuous sections
+            // all inherit from the last one that cut a page rather than from each other's restatements.
+            PageGeometry carried = sections[i - 1].Page;
+
+            if (!SameSheet(section.Page, carried))
+            {
+                sections[i] = section with { Break = SectionBreak.NextPage };
+                continue;
+            }
+
+            sections[i] = section with
+            {
+                Page = section.Page with
+                {
+                    Size = carried.Size,
+                    IsLandscape = carried.IsLandscape,
+                    HasMirroredMargins = carried.HasMirroredMargins,
+                    HeaderDistance = carried.HeaderDistance,
+                    FooterDistance = carried.FooterDistance,
+                    HeaderHeight = carried.HeaderHeight,
+                    FooterHeight = carried.FooterHeight,
+
+                    // The left and right margins are the exception, and they are an exception in
+                    // LibreOffice too: a text section takes them as an indent relative to the page's own,
+                    // which narrows the text area by exactly the difference.
+                    Margins = section.Page.Margins with
+                    {
+                        Top = carried.Margins.Top,
+                        Bottom = carried.Margins.Bottom,
+                    },
+                },
+            };
+        }
+    }
+
+    /// <summary>
+    /// True when two sections would print on the same sheet, which is what decides whether a continuous
+    /// break can be honoured at all.
+    /// </summary>
+    /// <remarks>
+    /// The three properties LibreOffice compares, and only those: a section may change its margins, its
+    /// columns and its running heads across a continuous break, but not its paper.
+    /// </remarks>
+    private static bool SameSheet(PageGeometry section, PageGeometry previous)
+        => section.Size.Width == previous.Size.Width
+            && section.Size.Height == previous.Size.Height
+            && section.IsLandscape == previous.IsLandscape;
 
     /// <summary>
     /// The grpprl a descriptor's offset names, or empty when there is none.
