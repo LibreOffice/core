@@ -40,9 +40,12 @@ namespace Paperless.Spreadsheets.Layout;
 /// page 3, and anchoring it to one page lost the second half.
 /// </para>
 /// <para>
-/// A drawing whose rectangle misses the paper is dropped rather than drawn off the edge. That is
-/// the same clip stated as a test, and it costs nothing: without it every band of a sheet several
-/// columns wide would carry every drawing on the sheet.
+/// <strong>What bounds it is the page's own cell block, not the paper.</strong> The rectangle
+/// <c>PrePrintDrawingLayer</c> hands to <c>BeginDrawLayers</c> runs exactly from the page's first
+/// printed column to its last, so a drawing anchored in a band this page does not print is culled
+/// even where the margin would have left room for it. Without that test every column band of a
+/// sheet several bands wide carries every drawing on the sheet — see
+/// <see cref="ReachesTheBlock"/>.
 /// </para>
 /// </remarks>
 internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
@@ -76,7 +79,7 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
 
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
-            if (!ReachesThePaper(box)) continue;
+            if (!ReachesTheBlock(box, columns, rows)) continue;
 
             // The vector before the raster, since a shape carrying both means the DrawingML `svgBlip`
             // case where the raster is the fallback. `VectorImage.Draw` maps the picture's own frame
@@ -92,21 +95,51 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
         }
     }
 
-    /// <summary>Whether any part of a placed rectangle falls on the sheet of paper.</summary>
+    /// <summary>Whether any part of a placed rectangle falls inside the page's own cell block.</summary>
     /// <remarks>
-    /// Calc's clip, asked as a question instead. <c>PrintDrawingLayer</c> hands the whole drawing
-    /// page to the device with the page's own block mapped onto the paper and the device discards
-    /// what falls outside; here the rectangle is known before anything is painted, so it is cheaper
-    /// to decide first — and it keeps the output free of ink a viewer would clip away but a text
-    /// extractor would not.
+    /// <para>
+    /// <strong>The clip is the block, not the paper</strong>, and the difference is the whole
+    /// question of which page a drawing appears on. <c>PrePrintDrawingLayer</c> builds a rectangle
+    /// running from the width of the columns before the page's first to the width of the columns it
+    /// prints, and the same on the row axis, and hands <em>that</em> to
+    /// <c>BeginDrawLayers</c> as the paint region (<c>sc/source/ui/view/output3.cxx:41-95</c>).
+    /// So a drawing anchored in a column band the page does not print is culled even when the
+    /// margin would have left room for it on the paper.
+    /// </para>
+    /// <para>
+    /// Measured on <c>Part_375_Operators.xlsx</c>, whose two table slicers sit in columns E and F —
+    /// the third of its three column bands. The bands are narrow enough that the second band's
+    /// right edge stops well short of the right margin, so both slicers fitted on the paper of the
+    /// first band's pages as well: LibreOffice draws them once, on page 19, and we drew them on
+    /// pages 1, 10 and 19 — 2251 words against 2197.
+    /// </para>
     /// </remarks>
-    private bool ReachesThePaper(DocRect box)
+    private static bool ReachesTheBlock(
+        DocRect box, List<PlacedColumn> columns, List<PlacedRow> rows)
     {
-        DocSize paper = sheet.Setup.PageSize;
-        return box.X + box.Width > Length.Zero
-               && box.Y + box.Height > Length.Zero
-               && box.X < paper.Width
-               && box.Y < paper.Height;
+        Length left = columns[0].X;
+        Length right = columns[0].Right;
+        foreach (PlacedColumn column in columns)
+        {
+            if (column.X < left) left = column.X;
+            if (column.Right > right) right = column.Right;
+        }
+
+        Length top = rows[0].Y;
+        Length bottom = rows[0].Bottom;
+        foreach (PlacedRow row in rows)
+        {
+            if (row.Y < top) top = row.Y;
+            if (row.Bottom > bottom) bottom = row.Bottom;
+        }
+
+        // Inclusive on both edges, because Calc's is: `aRect` is a `tools::Rectangle`, whose
+        // `Right()` and `Bottom()` are the last coordinates *inside* it, so a drawing whose left
+        // edge sits exactly on the block's right edge still overlaps it by one unit. Measured on
+        // `sheet-shape-clip.xlsx`, whose box is anchored in the first column of the second band and
+        // which LibreOffice prints on both pages.
+        return box.X + box.Width >= left && box.X <= right
+               && box.Y + box.Height >= top && box.Y <= bottom;
     }
 
     /// <summary>Where a drawing lands on this page, or null when it does not.</summary>

@@ -20,6 +20,14 @@ namespace Paperless.Spreadsheets.Layout;
 /// place this is knowingly cruder than the cell engine — it shows only on an unbroken string wider
 /// than its own shape, and a text box that narrow is not a case the corpus has.
 /// </para>
+/// <para>
+/// <strong>A body stating <c>vertOverflow="clip"</c> loses the lines that do not fit</strong>, and
+/// loses them rather than merely hiding them — see
+/// <see cref="SheetShapeText.ClipsVerticalOverflow"/>. Measured on
+/// <c>Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx</c>, whose notes box is 1.37 inches tall and holds
+/// five paragraphs of caveats: LibreOffice prints its first sentence and we printed all of it,
+/// 1556 words against 1504.
+/// </para>
 /// </remarks>
 internal static class SheetShapePainter
 {
@@ -48,12 +56,27 @@ internal static class SheetShapePainter
 
         Length top = box.Y + (text.TopInset * scale);
         Length room = box.Height - (text.TopInset * scale) - (text.BottomInset * scale);
-        if (text.Anchor == SheetShapeAnchor.Middle && room > total) top += (room - total) / 2;
-        else if (text.Anchor == SheetShapeAnchor.Bottom && room > total) top += room - total;
+
+        // Calc's own condition: the clip applies only when the text really is taller than the box,
+        // and while it applies the vertical adjustment is suppressed as well, so an overflowing
+        // centred body starts at the top rather than being centred on a block that does not fit
+        // (`bClipVerticalTextOverflow`, svdotextdecomposition.cxx:581-596).
+        bool clipping = text.ClipsVerticalOverflow && total > room;
+
+        if (!clipping)
+        {
+            if (text.Anchor == SheetShapeAnchor.Middle && room > total) top += (room - total) / 2;
+            else if (text.Anchor == SheetShapeAnchor.Bottom && room > total) top += room - total;
+        }
 
         Length pen = top;
         foreach (Line line in lines)
         {
+            // Wholly inside or not drawn: LibreOffice accepts "only text portions completely
+            // inside" the clip range and discards the rest outright, so an overflowing line is
+            // absent from the output rather than half-drawn (svdoutl.hxx:56-59).
+            if (clipping && pen + line.Height > top + room) break;
+
             // A blank paragraph carries no run and only advances the pen, which is what keeps the
             // gap a text box puts between its blocks.
             if (line.Run is { } run)

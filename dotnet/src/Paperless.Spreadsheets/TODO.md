@@ -265,6 +265,36 @@ checked against LibreOffice 24.2.7.2's own PDF and each carrying its negative ha
 string that must still spill, and cells that must still be split between the two pages. All three
 tests were confirmed to fail with their defect put back.
 
+`batch-004` measured **8/10** at the same commit and is **10/10** now, with `batch-001` to
+`batch-003` re-proved: **40 of 40**. Its two failures were both `.xlsx` over-counting words by
+about fifty with the page count already right, and both were shapes drawn where the reference does
+not draw them.
+
+**A shape is bounded by the page's own cell block, not by the paper.** This is the correction to
+the paragraph above: the first attempt dropped a drawing only once its rectangle missed the sheet
+of paper, and the region `PrePrintDrawingLayer` hands to `BeginDrawLayers` runs from the page's
+first printed column to its last (`sc/source/ui/view/output3.cxx:41-95`). The two differ wherever a
+column band stops short of the right margin, which is most bands of a wide sheet. Measured on
+`Part_375_Operators.xlsx`, whose two table slicers sit in the third of its three column bands and
+fit comfortably on the paper of the other two: LibreOffice draws them once, on page 19, and we drew
+them on pages 1, 10 and 19 — 2251 words against 2197, and 2197 now. The edges are inclusive because
+Calc's `tools::Rectangle` is: probed against the binary with a box anchored exactly on a band's
+right edge (drawn on both pages) and one half an inch past it (drawn on neither but its own), which
+is `features/sheet-shape-clip.xlsx`.
+
+**`vertOverflow="clip"` removes lines rather than masking them.**
+`SdrTextObj::impDecomposeBlockTextPrimitive` builds a clip range of the box's height
+(`svx/source/svdraw/svdotextdecomposition.cxx:581-624`) and hands it to
+`TextHierarchyBreakupBlockText`, whose comment states the rule outright: "only text portions
+completely inside are to be accepted, so this is different from geometric clipping (which would
+allow e.g. upper parts of portions to remain)" (`include/svx/svdoutl.hxx:56-59`). So the overflow
+never reaches the text layer, which is why it shows in a word count at all. `oox` sets the flag for
+both `clip` and `ellipsis` (`textbodypropertiescontext.cxx:85-97`), and the vertical adjustment is
+suppressed while it applies. Measured on `Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx`, whose notes
+box is 1.37 inches tall and holds five paragraphs of caveats: 1556 words against 1504, and 1530 now
+— inside the gate's 2% band rather than exactly equal, the residue being the same box drawn on
+each of the sheet's column bands, which LibreOffice does too and clips differently.
+
 ## What the fourth sheets sweep found
 
 Measured at `161d62fb9`. `sheets/batch-002` was **7/10** and the briefed baseline reproduced to the

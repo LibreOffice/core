@@ -118,6 +118,29 @@ public sealed record SheetShapeText
     /// <summary>Where the block of lines sits down the box.</summary>
     public SheetShapeAnchor Anchor { get; init; }
 
+    /// <summary>
+    /// True when text taller than the box is cut off at the box rather than drawn past it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// DrawingML's <c>a:bodyPr/@vertOverflow</c>, which <c>oox</c> turns into
+    /// <c>TextClipVerticalOverflow</c> for both <c>clip</c> and <c>ellipsis</c>
+    /// (<c>oox/source/drawingml/textbodypropertiescontext.cxx:85-97</c>); the default, both there
+    /// and here, is to let the text run on.
+    /// </para>
+    /// <para>
+    /// <strong>It removes lines rather than masking them.</strong>
+    /// <c>SdrTextObj::impDecomposeBlockTextPrimitive</c> builds a clip range of the box's height
+    /// (<c>svx/source/svdraw/svdotextdecomposition.cxx:581-624</c>) and hands it to
+    /// <c>TextHierarchyBreakupBlockText</c>, whose own comment states the rule: "only text portions
+    /// completely inside are to be accepted, so this is different from geometric clipping (which
+    /// would allow e.g. upper parts of portions to remain)" (<c>include/svx/svdoutl.hxx:56-59</c>).
+    /// So an overflowing line is never drawn at all, which is why it is missing from the reference's
+    /// text layer and not merely invisible in it.
+    /// </para>
+    /// </remarks>
+    public bool ClipsVerticalOverflow { get; init; }
+
     /// <summary>True when there is nothing to draw.</summary>
     public bool IsEmpty
     {
