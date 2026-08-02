@@ -268,4 +268,109 @@ public class FontResolutionTests
         first.Dispose();
         second.HasGlyphFor('A').ShouldBeTrue();
     }
+
+    // ------------------------------------------------- the shape a failed chain falls back to
+
+    [Theory]
+    [InlineData("Tahoma", FontFamilyClass.SansSerif)]
+    [InlineData("Verdana", FontFamilyClass.SansSerif)]
+    [InlineData("Century Gothic", FontFamilyClass.SansSerif)]
+    [InlineData("Garamond", FontFamilyClass.Serif)]
+    [InlineData("Georgia", FontFamilyClass.Serif)]
+    [InlineData("Times New Roman", FontFamilyClass.Serif)]
+    [InlineData("Courier New", FontFamilyClass.Fixed)]
+    [InlineData("Wingdings", FontFamilyClass.Symbol)]
+    public void TheTableSaysWhatShapeAFamilyIs(string requested, FontFamilyClass expected)
+    {
+        // Read from the same VCL.xcu node as the chain, out of its FontType property. This is the
+        // half of the entry that decides what happens when *none* of the chain is installed — which
+        // on a Linux box is the usual outcome, since the chains name Microsoft and Agfa faces.
+        FontSubstitutions.ClassOf(requested).ShouldBe(expected);
+    }
+
+    [Fact]
+    public void AFamilyTheTableNeverHeardOfHasNoShape()
+    {
+        // Reported as unknown rather than guessed at, so the resolver decides what to do about it in
+        // one place instead of the table pretending to a certainty it does not have.
+        FontSubstitutions.ClassOf("Nonexistent Display Face").ShouldBe(FontFamilyClass.Unknown);
+        FontSubstitutions.ClassOf(null).ShouldBe(FontFamilyClass.Unknown);
+    }
+
+    [Fact]
+    public void AGrotesqueWhoseChainIsAbsentFallsBackToASansFace()
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(resolver.Index.Has("DejaVu Sans"), "DejaVu Sans is not installed");
+
+        // Tahoma's chain names fourteen faces and this machine has none of them, so resolution
+        // reaches the generic fallback. That fallback used to guess the shape from the family name,
+        // and nothing in "Tahoma" says grotesque — so a sans-serif document was rendered in a roman.
+        FontReference reference = resolver.Resolve(new FontRequest("Tahoma"));
+
+        FontSubstitutions.ClassOf(reference.FamilyName).ShouldNotBe(FontFamilyClass.Serif);
+        reference.FamilyName.ShouldBe("DejaVu Sans");
+    }
+
+    [Fact]
+    public void AFamilyNobodyHasAtAllFallsBackToSansRatherThanSerif()
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(resolver.Index.Has("DejaVu Sans"), "DejaVu Sans is not installed");
+
+        // Aptos is Microsoft 365's current default and postdates the table entirely, so neither half
+        // of the entry exists. LibreOffice answers this case by asking fontconfig, whose reply for a
+        // name it does not recognise is its default family — measured here as DejaVu Sans, for Aptos
+        // and for every other unrecognised family probed.
+        resolver.Resolve(new FontRequest("Aptos")).FamilyName.ShouldBe("DejaVu Sans");
+        resolver.Resolve(new FontRequest("Segoe UI")).FamilyName.ShouldBe("DejaVu Sans");
+    }
+
+    [Fact]
+    public void AGenericFallbackPrefersDejaVuOverLiberation()
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(
+            resolver.Index.Has("DejaVu Serif") && resolver.Index.Has("Liberation Serif"),
+            "both families are needed to tell the preference apart");
+
+        // Liberation is the metric-compatible stand-in for Arial, Times New Roman and Courier New
+        // specifically, and those three reach it through their chains. A request that got this far is
+        // for something Liberation was never built to imitate, so its metrics carry no authority —
+        // and LibreOffice, which asks fontconfig at this point, lands on DejaVu.
+        resolver.Resolve(new FontRequest("Garamond")).FamilyName.ShouldBe("DejaVu Serif");
+
+        // The chains still win where they name something installed, so the pairs that preserve every
+        // line break are untouched by the reordering.
+        resolver.Resolve(new FontRequest("Arial")).FamilyName.ShouldBe("Liberation Sans");
+        resolver.Resolve(new FontRequest("Times New Roman")).FamilyName.ShouldBe("Liberation Serif");
+    }
+
+    [Fact]
+    public void ARequestNamingNoFamilyGetsTheApplicationDefaultRatherThanTheUnknownFamilyAnswer()
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(resolver.Index.Has("Liberation Serif"), "Liberation Serif is not installed");
+
+        // The two cases look alike and are not. "A font nobody has" is fontconfig's question, and its
+        // answer is DejaVu Sans; "no font named" is the document expressing no preference, and its
+        // answer is the default template's face. Conflating them sets every document that specifies
+        // no font in DejaVu Sans — which is a reflow of the entire corpus, not a cosmetic difference.
+        resolver.Resolve(new FontRequest("")).FamilyName.ShouldBe("Liberation Serif");
+        resolver.Resolve(new FontRequest("   ")).FamilyName.ShouldBe("Liberation Serif");
+    }
+
+    [Fact]
+    public void ADeclaredFixedPitchStillOutranksTheTablesShape()
+    {
+        SystemFontResolver resolver = Resolver();
+        Assert.SkipUnless(resolver.Index.Has("DejaVu Sans Mono"), "DejaVu Sans Mono is not installed");
+
+        // Tahoma is a grotesque by the table, but a document that marked the request fixed is relying
+        // on its columns lining up, and that is the stronger claim of the two.
+        FontReference reference = resolver.Resolve(
+            new FontRequest("Tahoma", Pitch: FontPitch.Fixed));
+
+        resolver.Index.Family(reference.FamilyName)[0].IsFixedPitch.ShouldBeTrue();
+    }
 }

@@ -340,20 +340,47 @@ public sealed class SystemFontResolver : IFontResolver, IGlyphFallbackResolver
         return face;
     }
 
-    /// <summary>The families a resolver falls back to when nothing else matches, by shape.</summary>
+    /// <summary>The families a resolver falls back to when nothing in the chain is installed.</summary>
     /// <remarks>
-    /// The free faces that are metric-compatible with the fonts documents most often ask for, so the
-    /// last resort is still the best available guess rather than whatever happens to be installed
-    /// first.
+    /// <para>
+    /// DejaVu first, and that ordering is measured rather than chosen. A chain that names none of
+    /// the faces on the machine is where LibreOffice stops consulting its own table and asks
+    /// fontconfig, and fontconfig's generic families resolve to DejaVu on a stock Linux
+    /// configuration — <c>60-latin.conf</c> heads every one of its three preference lists with it.
+    /// Verified against LibreOffice 24.2.7.2 on this machine over fifty-five families: every single
+    /// one that reached the generic path landed on DejaVu Sans, DejaVu Serif or DejaVu Sans Mono,
+    /// and none landed on Liberation.
+    /// </para>
+    /// <para>
+    /// Preferring Liberation here looked right and is not: Liberation is the metric-compatible
+    /// stand-in for Arial, Times New Roman and Courier New specifically, and those three reach it
+    /// through their <em>chains</em>, which name it outright. By the time control arrives here the
+    /// request is for something Liberation was never built to imitate, so its metrics carry no
+    /// authority — and choosing it puts a face on the page that LibreOffice would not have used.
+    /// </para>
     /// </remarks>
     private static readonly string[] SerifFallbacks =
-        ["liberationserif", "dejavuserif", "timesnewroman", "freeserif", "notoserif"];
+        ["dejavuserif", "liberationserif", "timesnewroman", "freeserif", "notoserif"];
 
     private static readonly string[] SansFallbacks =
-        ["liberationsans", "dejavusans", "arial", "freesans", "notosans"];
+        ["dejavusans", "liberationsans", "arial", "freesans", "notosans"];
 
     private static readonly string[] MonoFallbacks =
-        ["liberationmono", "dejavusansmono", "couriernew", "freemono", "notosansmono"];
+        ["dejavusansmono", "liberationmono", "couriernew", "freemono", "notosansmono"];
+
+    /// <summary>The faces to try for a request that names no family at all.</summary>
+    /// <remarks>
+    /// A blank family name is not a family nobody has installed — it is a document expressing no
+    /// preference, and the answer to that is the application's default rather than the answer given
+    /// to an unrecognised name. So it comes from the configuration's <c>DefaultFonts</c> node rather
+    /// than its <c>FontSubstitutions</c> node, and it is read from there rather than transcribed:
+    /// the list is data in the tree, and a hand-copied prefix of it would silently diverge on a
+    /// machine whose installed faces differ from this one's. Measured: a fixture declaring no font
+    /// renders in Liberation Serif under LibreOffice 24.2.7.2 here, which is what this list heads
+    /// with. Routing the blank case through the generic unknown-family rule instead sets every such
+    /// document in DejaVu Sans and reflows all of them.
+    /// </remarks>
+    private static IReadOnlyList<string> DefaultFallbacks => FontSubstitutions.DefaultLatinTextChain;
 
     /// <inheritdoc/>
     public FontReference Resolve(FontRequest request)
@@ -388,9 +415,7 @@ public sealed class SystemFontResolver : IFontResolver, IGlyphFallbackResolver
 
         // Nothing named matched, so fall back by shape. A monospaced request must not land on a
         // proportional face: the document is relying on the columns lining up.
-        string[] fallbacks = request.Pitch == FontPitch.Fixed
-            ? MonoFallbacks
-            : LooksLikeSans(request.FamilyName) ? SansFallbacks : SerifFallbacks;
+        IReadOnlyList<string> fallbacks = GenericFallbacks(request);
 
         foreach (string candidate in fallbacks)
         {
@@ -489,21 +514,43 @@ public sealed class SystemFontResolver : IFontResolver, IGlyphFallbackResolver
             FontSubstitutions.AreMetricCompatible(request.FamilyName, chosen.FamilyName)));
 
     /// <summary>
-    /// Whether a family name a resolver has never heard of is more likely sans-serif than serif.
+    /// The shape to fall back to once nothing the chain named turned out to be installed.
     /// </summary>
     /// <remarks>
-    /// A guess, and only reached once the substitution table has already failed. It is worth making
-    /// because the shapes are not interchangeable — a document set in an unknown grotesque rendered in
-    /// a serif face looks wrong at a glance, whatever its metrics.
+    /// <para>
+    /// LibreOffice's own <c>FontType</c> decides it, which is the point: the configuration that says
+    /// what to substitute also says what shape the family is, and reading the second half means the
+    /// answer is data rather than a guess. A document's declared pitch still wins, because a request
+    /// marked fixed is relying on its columns whatever the family is called.
+    /// </para>
+    /// <para>
+    /// Where the table has never heard of the family the answer is sans-serif, and that is not a
+    /// coin toss. This path is what LibreOffice reaches by asking fontconfig, and fontconfig's reply
+    /// for a name it does not recognise is its default family — DejaVu Sans. Measured against
+    /// LibreOffice 24.2.7.2 here, every unrecognised family probed resolved to DejaVu Sans: Aptos,
+    /// Segoe UI, Roboto, Lato, Montserrat, Myriad Pro, Futura, Optima, Univers and the rest. The
+    /// previous rule guessed serif for all of them, on the reasoning that a name carrying no hint is
+    /// probably a roman — which is the wrong default and, worse, wrong for the modern UI faces
+    /// documents actually name.
+    /// </para>
     /// </remarks>
-    private static bool LooksLikeSans(string? familyName)
+    private static IReadOnlyList<string> GenericFallbacks(FontRequest request)
     {
-        string normalised = FontSubstitutions.Normalise(familyName);
-        foreach (string hint in new[] { "sans", "gothic", "grotesk", "grotesque", "arial", "helvetica" })
+        if (request.Pitch == FontPitch.Fixed) return MonoFallbacks;
+
+        // "No font named" and "a font nobody has" are different questions with different answers,
+        // and only the second one is fontconfig's to answer.
+        if (string.IsNullOrWhiteSpace(request.FamilyName)) return DefaultFallbacks;
+
+        return FontSubstitutions.ClassOf(request.FamilyName) switch
         {
-            if (normalised.Contains(hint, StringComparison.Ordinal)) return true;
-        }
-        return false;
+            FontFamilyClass.Fixed => MonoFallbacks,
+            FontFamilyClass.Serif => SerifFallbacks,
+
+            // A symbol face has no shape-compatible stand-in among the text faces, so there is
+            // nothing better to do than treat it as text and let glyph fallback place what it can.
+            _ => SansFallbacks,
+        };
     }
 
     /// <summary>A face loaded through a resolver.</summary>
