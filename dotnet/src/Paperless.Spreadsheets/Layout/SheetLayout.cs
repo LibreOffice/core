@@ -207,7 +207,11 @@ public sealed class SheetLayout
         {
             if (_printedRange is { } cached) return cached;
 
-            SheetRange used = SheetDrawingArea.Extend(UsedRange, Drawings, Grid);
+            // Attributes first, then drawings, then text: Calc's own order, and the attribute
+            // pass is part of GetPrintArea itself rather than a widening applied to its answer
+            // (`// Test attribute`, table1.cxx:710) — see SheetDecorationArea.
+            SheetRange used = SheetDrawingArea.Extend(
+                SheetDecorationArea.Extend(UsedRange, Formatting), Drawings, Grid);
             SheetRange printed = used.IsValid && Setup.PrintAreas.Count == 0
                 ? used with { LastColumn = SheetTextOverflow.ExtendedLastColumn(this, used) }
                 : used;

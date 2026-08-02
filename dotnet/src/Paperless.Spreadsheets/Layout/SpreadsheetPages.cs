@@ -194,7 +194,15 @@ public sealed class SpreadsheetPages : IPageSequence
 /// output area falls entirely outside those two edges is not drawn at all, which is the whole of
 /// what the pair is for; see <see cref="SheetTextContext"/>.
 /// </param>
-internal readonly record struct ColumnBand(int First, Length Left, Length Right);
+/// <param name="FirstVisible">
+/// The band's first column that is actually placed — Calc's <c>mnVisX1</c>, which is
+/// <c>mnX1</c> after <c>ScDocument::StripHidden</c> has walked it past any leading hidden
+/// columns (<c>sc/source/ui/view/output.cxx:198-202</c>). It is not the same question as
+/// <see cref="First"/>, and one rule turns on it: a covered cell may reach back to a merge's
+/// origin outside the band only when it is this column. Minus one when the band places nothing.
+/// </param>
+internal readonly record struct ColumnBand(
+    int First, Length Left, Length Right, int FirstVisible);
 
 /// <summary>
 /// Places and draws the cells of one page.
@@ -404,17 +412,19 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         void Append(int first, int last)
         {
             Length start = left + (offset * _scale);
+            int visible = -1;
 
             for (int column = first; column <= last; column++)
             {
                 if (sheet.Grid.Columns.IsHidden(column)) continue;
+                if (visible < 0) visible = column;
 
                 Length width = SheetDeviceUnits.Snap(sheet.Grid.Columns.SizeAt(column));
                 placed.Add(new PlacedColumn(column, left + (offset * _scale), width * _scale));
                 offset += width;
             }
 
-            starts.Add(new ColumnBand(first, start, left + (offset * _scale)));
+            starts.Add(new ColumnBand(first, start, left + (offset * _scale), visible));
         }
     }
 
@@ -563,48 +573,82 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     }
 
     /// <summary>
-    /// Draws a merged block whose own top-left cell is in a hidden column, from the first
-    /// visible column it covers.
+    /// Draws a merged block from a covered cell, when the cell that anchors it is not on the
+    /// page to draw it itself.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// A hidden column is not placed on the page at all, so the cell that anchors a merge
-    /// starting inside one would never be reached — and the whole block would vanish, however
-    /// many visible columns it goes on to cover.
+    /// Two situations put a merge's origin out of reach, and they are one rule. A hidden column
+    /// is not placed on the page at all, so a merge anchored inside one is never reached; and a
+    /// merge that straddles a horizontal page break has its origin on the *previous* page, so
+    /// the page carrying its tail holds nothing but covered cells. Either way the whole block
+    /// vanishes, however many visible columns it goes on to cover.
     /// </para>
     /// <para>
-    /// Calc reaches it from the other end. Every covered cell asks
+    /// Calc reaches it from the other end: every covered cell asks
     /// <c>ScOutputData::GetMergeOrigin</c> (<c>output2.cxx:953</c>) for the block's origin, and
-    /// that walk gives up the moment it steps onto a column that is <em>not</em> hidden — <c>if
-    /// (!bDoMerge &amp;&amp; !bHidden) return false;</c> (<c>:993</c>) — because that column is
-    /// either the origin itself or a nearer covered cell, and one of those will draw the block
-    /// instead. So exactly one cell of a block ever draws it: the leftmost one whose path back
-    /// to the origin is entirely hidden. This walks the same path in the same direction and
-    /// stops on the same condition.
+    /// the walk left is governed by one flag — <c>bDoMerge</c>, which for a horizontally
+    /// overlapped cell is <c>bIsLeft = (nX == mnVisX1)</c> (<c>:957</c>), the block's first
+    /// <em>visible</em> column. When it is set the walk runs back to the origin through anything;
+    /// when it is not, the walk gives up the moment it steps onto a column that is not hidden —
+    /// <c>if (!bDoMerge &amp;&amp; !bHidden) return false;</c> (<c>:993</c>) — because that column
+    /// is either the origin itself or a nearer covered cell, and one of them will draw the block
+    /// instead.
     /// </para>
     /// <para>
-    /// The origin is placed at the visible column's own left edge, which is where it belongs: a
-    /// hidden column contributes nothing to the page's width, so the block starts where the
-    /// first column it can be seen in starts.
+    /// So exactly one cell of a block ever draws it on a given page: the block's first visible
+    /// column when the origin is off the page to the left, and otherwise the leftmost cell whose
+    /// path back to the origin is entirely hidden. Both pages of a straddling merge draw it,
+    /// each from the origin's true position, and each shows the part that lands on the paper —
+    /// which is Calc's behaviour and the reason a long merged heading reads continuously across
+    /// a column break.
+    /// </para>
+    /// <para>
+    /// The origin is placed at its true position, reached by subtracting the printed width of
+    /// every column between. A hidden column contributes nothing, so a merge anchored in one
+    /// still starts exactly where the first column it can be seen in starts.
     /// </para>
     /// <para>
     /// Measured on <c>RPD 155 REDAC SCHEDULE 2014-04-02.xls</c>, whose <c>Funds ($000)</c>
-    /// heading is a four-column merge anchored in a collapsed column: the two words were
-    /// missing from the page and are drawn now.
+    /// heading is a four-column merge anchored in a collapsed column; and on
+    /// <c>P1636e.xls</c>, whose title and eight footnotes are each merged across all six
+    /// columns while the page break falls after the third.
     /// </para>
     /// </remarks>
     private void DrawCoveredMerge(
         PlacedColumn column, PlacedRow row, IDrawingSink sink, ColumnBand band)
     {
-        for (int at = column.Column - 1; at >= 0 && sheet.Grid.Columns.IsHidden(at); at--)
+        // Only a covered position reaches back at all. An ordinary empty cell has no origin to
+        // find, and walking left from one would drag an unrelated neighbour onto the page.
+        if (!sheet.IsMerged(row.Row, column.Column)) return;
+
+        bool doMerge = column.Column == band.FirstVisible;
+        Length back = Length.Zero;
+
+        for (int at = column.Column - 1; at >= 0; at--)
         {
-            if (sheet.CellAt(row.Row, at) is not { } origin) continue;
+            if (!doMerge && !sheet.Grid.Columns.IsHidden(at)) return;
+
+            Length width = SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * _scale;
+            back += width;
+
+            // A covered position carries no cell — every reader keeps a merge's origin and drops
+            // the rest — so the first position that does carry one is the origin the walk wanted.
+            if (sheet.CellAt(row.Row, at) is not { } origin)
+            {
+                // Neither a cell nor covered: the run of overlapped cells has ended without an
+                // origin, which is Calc's `bHOver` going false on a cell it will not draw.
+                if (!sheet.IsMerged(row.Row, at)) return;
+                continue;
+            }
+
             if (at + Math.Max(1, origin.ColumnSpan) <= column.Column) return;
 
             string text = origin.GetText();
             if (text.Length == 0) return;
 
-            DrawCell(text, origin, new PlacedColumn(at, column.X, Length.Zero), row, sink, band);
+            DrawCell(
+                text, origin, new PlacedColumn(at, column.X - back, width), row, sink, band);
             return;
         }
     }

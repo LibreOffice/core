@@ -1,5 +1,7 @@
+using Paperless.Core.Charts;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
+using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
@@ -72,6 +74,7 @@ internal sealed class XlsWorkbookReader
     private readonly XlsDecorationTable _decoration = new();
     private XlsSheetDecoration _sheetDecoration = new();
     private XlsSheetPrintState _page = new();
+    private XlsDrawingCollector _drawings = new([]);
     private bool _reportedFormat;
     private bool _reportedSstIndex;
 
@@ -115,16 +118,13 @@ internal sealed class XlsWorkbookReader
         int index = 0;
         foreach (SheetEntry sheet in _sheets)
         {
-            // Chart, macro and Visual Basic substreams carry no cells. They keep their place
-            // in the sheet order — a workbook's third sheet is still its third — but produce
-            // no section, exactly as LibreOffice's SkipSubStream does.
-            if (sheet.Kind != SheetKind.Worksheet)
-            {
-                index++;
-                continue;
-            }
+            // A chart sheet is a sheet: it has its own page setup, it prints, and losing it
+            // costs a page of the workbook. Macro and Visual Basic substreams carry nothing a
+            // reader wants and keep their place in the numbering without producing a section,
+            // exactly as LibreOffice's SkipSubStream does.
+            if (sheet.Kind == SheetKind.Chart) sections.AddRange(ReadChartSheet(sheet, index));
+            else if (sheet.Kind == SheetKind.Worksheet) sections.Add(ReadSheet(sheet, index));
 
-            sections.Add(ReadSheet(sheet, index));
             index++;
         }
 
@@ -683,12 +683,207 @@ internal sealed class XlsWorkbookReader
         return 0;
     }
 
+    /// <summary>
+    /// Reads a chart sheet: a sheet whose whole content is one chart.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// It is a substream of its own, headed by a <c>BOF</c> of type <c>0x0020</c>, and it holds
+    /// the page setup a worksheet's does — margins, <c>SETUP</c>, header and footer — plus the
+    /// chart records and any drawing objects laid over the chart.
+    /// </para>
+    /// <para>
+    /// <strong>The chart's printed rectangle is computed from the paper, not read.</strong>
+    /// <c>XclImpChartObj::FinalizeTabChart</c> (<c>sc/source/filter/excel/xiescher.cxx</c>)
+    /// derives it: the paper less the margins, less two centimetres of width and one of height
+    /// "to give some more extra space", less another two and one when the sheet prints its row
+    /// and column headings, offset a centimetre from the left of the sheet and half a centimetre
+    /// from the top. The <c>CHCHART</c> record does state a rectangle, and it is the one Excel
+    /// showed the chart at on screen rather than the one it prints at — using it puts the chart
+    /// off the paper.
+    /// </para>
+    /// <para>
+    /// The chart lands as an absolutely anchored drawing rather than as cells, which is what
+    /// makes the rest of the pipeline work unchanged: <c>SheetDrawingArea</c> widens the printed
+    /// range to cover it, <c>SheetEmptyPages</c> keeps the page it overlaps, and
+    /// <c>SheetPageGraphics</c> paints it through the same <c>SheetChart</c> a worksheet's chart
+    /// goes through.
+    /// </para>
+    /// </remarks>
+    private List<ContentSection> ReadChartSheet(SheetEntry sheet, int index)
+    {
+        _page = new XlsSheetPrintState { DefaultFont = _cellFormats.DefaultFont };
+        _sheetDecoration = new XlsSheetDecoration();
+        _drawings = new XlsDrawingCollector(_diagnostics);
+        XlsChartBuilder chart = new();
+
+        if (!StartSubstream(sheet))
+        {
+            _diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Warning, "PL2327",
+                $"No chart substream could be found for \"{sheet.Name}\"; the sheet is empty.",
+                new DiagnosticLocation(PartName: "Workbook", Context: sheet.Name)));
+            return [];
+        }
+
+        ReadChartRecords(chart);
+
+        ChartPlot? plot = chart.Build();
+        SheetPrintSetup setup = _page.ToSetup();
+        DocRect frame = ChartSheetFrame(setup);
+
+        List<SheetDrawing> drawings =
+        [
+            new SheetDrawing
+            {
+                Anchor = SheetAnchorKind.Absolute,
+                Position = new DocPoint(frame.X, frame.Y),
+                Extent = new DocSize(frame.Width, frame.Height),
+                Name = sheet.Name,
+                IsChart = true,
+                Chart = plot,
+            },
+            .. _drawings.BuildForChart(
+                new DocPoint(frame.X, frame.Y), new DocSize(frame.Width, frame.Height)),
+        ];
+
+        _layouts.Add(new SheetLayout
+        {
+            Name = sheet.Name,
+            Index = index,
+            IsHidden = sheet.IsHidden,
+            Setup = setup,
+            Grid = _page.ToGrid(),
+            Cells = new ContentTable(),
+            Drawings = new SheetDrawings(drawings),
+            FileName = FileName,
+        });
+
+        ContentSection section = new()
+        {
+            Kind = SectionKind.Sheet,
+            Index = index,
+            Name = sheet.Name,
+            IsHidden = sheet.IsHidden,
+        };
+        section.Children.Add(new ContentTable());
+
+        List<ContentSection> sections = [section];
+
+        // The chart follows its sheet as a sibling rather than sitting inside it, which is where
+        // `XlsxCharts` and `OdfChart` already put one — see the module's TODO.
+        if (ChartSection(plot, index) is { } frameSection) sections.Add(frameSection);
+
+        return sections;
+    }
+
+    /// <summary>The chart's titles as a frame section, or null when it names none.</summary>
+    private static ContentSection? ChartSection(ChartPlot? plot, int index)
+    {
+        if (plot is null) return null;
+
+        string?[] lines = [plot.Title, plot.CategoryAxisTitle, plot.ValueAxisTitle];
+        if (Array.TrueForAll(lines, line => line is not { Length: > 0 })) return null;
+
+        ContentSection section = new() { Kind = SectionKind.Frame, Index = index, Name = plot.Title };
+        foreach (string? line in lines)
+        {
+            if (line is not { Length: > 0 }) continue;
+
+            ContentParagraph paragraph = new();
+            paragraph.Children.Add(new ContentRun { Text = line });
+            section.Children.Add(paragraph);
+        }
+
+        return section;
+    }
+
+    /// <summary>
+    /// Where a chart sheet's chart is drawn on the sheet, in the sheet's own coordinates.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclImpChartObj::FinalizeTabChart</c>, in hundredths of a millimetre throughout. The
+    /// two extra subtractions and the offsets are the C++'s own constants and are reproduced as
+    /// written; three of them are unexplained there too.
+    /// </remarks>
+    private static DocRect ChartSheetFrame(SheetPrintSetup setup)
+    {
+        Length left = Length.FromMm100(ChartSheetOffsetX);
+        Length top = Length.FromMm100(ChartSheetOffsetY);
+
+        Length right = setup.PageSize.Width - setup.LeftMargin - setup.RightMargin
+                       - Length.FromMm100(ChartSheetSlackX);
+        Length bottom = setup.PageSize.Height - setup.TopMargin - setup.BottomMargin
+                        - Length.FromMm100(ChartSheetSlackY);
+
+        if (setup.PrintsHeadings)
+        {
+            right -= Length.FromMm100(ChartSheetSlackX);
+            bottom -= Length.FromMm100(ChartSheetSlackY);
+        }
+
+        return new DocRect(
+            left, top,
+            Length.Max(right - left, Length.FromMm100(1000)),
+            Length.Max(bottom - top, Length.FromMm100(1000)));
+    }
+
+    private const int ChartSheetOffsetX = 1000;
+    private const int ChartSheetOffsetY = 500;
+    private const int ChartSheetSlackX = 2000;
+    private const int ChartSheetSlackY = 1000;
+
+    /// <summary>
+    /// Walks a chart substream, routing its records to the page setup, the drawing layer or the
+    /// chart.
+    /// </summary>
+    private void ReadChartRecords(XlsChartBuilder chart)
+    {
+        int depth = 0;
+
+        while (_stream.MoveNext())
+        {
+            ushort id = _stream.RecordId;
+
+            if (BiffRecords.IsBof(id)) { depth++; continue; }
+            if (id == BiffRecords.Eof)
+            {
+                if (depth == 0) return;
+                depth--;
+                continue;
+            }
+
+            if (depth > 0) continue;
+
+            switch (id)
+            {
+                case BiffRecords.MsoDrawing or BiffRecords.MsoDrawingSelection:
+                    _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
+                    break;
+
+                case BiffRecords.Obj:
+                    _drawings.ReadObject(_stream);
+                    break;
+
+                case BiffRecords.Txo:
+                    _drawings.ReadText(_stream);
+                    break;
+
+                default:
+                    if (BiffChartRecords.IsChartRecord(id)) chart.Read(id, _stream);
+                    else ReadPageRecord(id);
+                    break;
+            }
+        }
+    }
+
     /// <summary>Reads one sheet substream into a section.</summary>
     private ContentSection ReadSheet(SheetEntry sheet, int index)
     {
         SheetBuilder builder = new(this, sheet.Name);
         _page = new XlsSheetPrintState { DefaultFont = _cellFormats.DefaultFont };
         _sheetDecoration = new XlsSheetDecoration();
+        _drawings = new XlsDrawingCollector(_diagnostics);
         _rowFormats.Clear();
         _columnFormats.Clear();
         _richCells.Clear();
@@ -729,17 +924,24 @@ internal sealed class XlsWorkbookReader
         if (_repeatRows.TryGetValue(index, out SheetRange rows))
             _page.RepeatRows = rows;
 
+        // After ToGrid, and it has to be: a client anchor states its offsets as fractions of the
+        // column and row it names, so a drawing cannot be placed until their sizes are known.
+        SheetGrid grid = _page.ToGrid();
+
         _layouts.Add(new SheetLayout
         {
             Name = sheet.Name,
             Index = index,
             IsHidden = sheet.IsHidden,
             Setup = _page.ToSetup(),
-            Grid = _page.ToGrid(),
+            Grid = grid,
             Cells = table,
             Formatting = _sheetDecoration.Resolve(_decoration),
             Formats = BuildFormats(builder),
             RichText = BuildRichText(),
+            Drawings = _drawings.IsEmpty
+                ? SheetDrawings.Empty
+                : new SheetDrawings(_drawings.BuildForSheet(grid)),
             FileName = FileName,
         });
 
@@ -850,6 +1052,24 @@ internal sealed class XlsWorkbookReader
 
                 case BiffRecords.MergedCells:
                     ReadMergedCells(builder);
+                    break;
+
+                // The drawing layer, which is three record kinds and one assembly step; see
+                // XlsDrawingCollector. Kept in the sheet loop rather than skipped, because a
+                // text box is the only content on a sheet that no walk of the cells can find.
+                // The drawing layer, which is three record kinds and one assembly step; see
+                // XlsDrawingCollector. Kept in the sheet loop rather than skipped, because a
+                // text box is the only content on a sheet that no walk of the cells can find.
+                case BiffRecords.MsoDrawing or BiffRecords.MsoDrawingSelection:
+                    _drawings.AddDrawing(_stream.ReadBytes(_stream.RecordLeft));
+                    break;
+
+                case BiffRecords.Obj:
+                    _drawings.ReadObject(_stream);
+                    break;
+
+                case BiffRecords.Txo:
+                    _drawings.ReadText(_stream);
                     break;
 
                 case BiffRecords.Dimensions or BiffRecords.Dimensions2:

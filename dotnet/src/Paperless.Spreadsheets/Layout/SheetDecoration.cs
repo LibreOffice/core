@@ -290,6 +290,35 @@ public sealed class SheetFormatting
         _hasDefaults = true;
     }
 
+    /// <summary>
+    /// The positions that state a format of their own, whatever it paints.
+    /// </summary>
+    /// <remarks>
+    /// For <see cref="SheetDecorationArea"/>, which has to know where a border or a fill is
+    /// before it can say how far the sheet prints. Only the per-cell entries: a run of columns
+    /// or a sheet default reaches the end of the sheet, and Calc stops the same scan at the
+    /// first long run of equally-formatted rows for exactly that reason.
+    /// </remarks>
+    internal IEnumerable<(int Row, int Column, SheetCellDecoration Format)> Cells
+    {
+        get
+        {
+            foreach (KeyValuePair<(int Row, int Column), int> entry in _cells)
+                yield return (entry.Key.Row, entry.Key.Column, _palette[entry.Value]);
+        }
+    }
+
+    /// <summary>The rows that state a format of their own.</summary>
+    /// <inheritdoc cref="Cells"/>
+    internal IEnumerable<(int Row, SheetCellDecoration Format)> Rows
+    {
+        get
+        {
+            foreach (KeyValuePair<int, int> entry in _rows)
+                yield return (entry.Key, _palette[entry.Value]);
+        }
+    }
+
     /// <summary>What is painted behind and around one cell.</summary>
     /// <param name="row">The zero-based row.</param>
     /// <param name="column">The zero-based column.</param>
