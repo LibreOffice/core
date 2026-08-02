@@ -278,6 +278,17 @@ neither agent ever measured is not evidence of anything.
   fixes to one function — a stretch rule and a leading rule, an ascent computation and a
   height parameter. Taking one side silently reverts the other agent's work, and the tests
   will not catch it because each agent's tests pass in isolation.
+- **`git checkout --ours` is not "resolve this conflict".** It replaces the *whole file* with
+  your side, discarding every change of theirs that git had already auto-merged into it
+  cleanly. Measured here: two of three conflicted files held a duplicated fix *and* a
+  distinct one, so `--ours` fixed the duplicate and silently dropped a page-break fix and a
+  tab-stop fix that had merged without complaint. Check what each of their commits touched
+  (`git show --stat <sha> -- <file>`) before resolving a file wholesale, and re-apply the
+  parts that are not duplicates (`git show <sha> -- <file> | git apply -3`).
+- **Expect at least one conflict that is neither side.** Two fixes can each be complete and
+  still not compose: a parameter one agent threaded through a call chain, on a code path the
+  other agent added. It builds with either change alone and fails with both, so no amount of
+  choosing resolves it — the merge needs code neither agent wrote.
 - **Commit the resolved merge before starting the next one.** A `git merge` with an
   unfinished merge in the tree refuses silently; the symptom appears much later as test
   totals that do not add up.
