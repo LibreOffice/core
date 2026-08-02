@@ -109,12 +109,26 @@ rather than its advance; headers and footers dropped whenever `w:top` equalled `
 and, on slides, rendering ignoring the placeholder inheritance chain that extraction had
 resolved all along.
 
-## Baseline: slides
+## Slides: baseline and first round
 
-`slides/batch-001` at `84e7fe976` — **2/10**. Every page count already correct, so the
-failures are about what reaches the page rather than pagination. Text is lost on six
-documents and *over*-emitted on two — different bugs — and one document produces no PDF at
-all. A full-track sweep is running.
+Baseline at `1d13c1e0a` was **53 of 150** (the sweep was cut short at 150 of 163). After the
+first round, measured whole on the merged branch at `fea15726e`: **84 of 163.**
+
+The headline is what the two formats did separately:
+
+| | baseline | merged |
+|---|---|---|
+| `pptx` | 38/101 | **67/112** |
+| `ppt` | 15/49 | **17/51** |
+
+PPTX nearly doubled; **PPT barely moved.** The first round fixed the OOXML placeholder
+inheritance chain — resolved for extraction all along, ignored by rendering — and the binary
+path never had the corresponding master-shape walk at all. So the tracks have diverged and
+the remaining slides work is mostly `.ppt`.
+
+**Every page count in the whole track is correct**, baseline and merged alike. Slides is
+entirely about what reaches the page. Of the 79 remaining failures, 53 lose text and 25 emit
+*more* than the reference — both real, and different bugs.
 
 ### `words` — 202 documents, 21 batches
 
@@ -142,27 +156,27 @@ all. A full-track sweep is running.
 | `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 1/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
-### `slides` — 165 documents, 17 batches
+### `slides` — 163 documents, 17 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 14–282 | ppt:3 pptx:7 | WIP (2/10) |
-| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | — |
-| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | — |
-| `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | — |
-| `batch-005` | 10 | 587–668 | ppt:3 pptx:7 | — |
-| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | — |
-| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | — |
-| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | — |
-| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | — |
-| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | — |
-| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | — |
-| `batch-012` | 10 | 2403–3036 | pptx:10 | — |
-| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | — |
-| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | — |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | — |
-| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | — |
-| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | — |
+| `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | 6/9 |
+| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | 6/10 |
+| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 3/10 |
+| `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | 6/10 |
+| `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 5/9 |
+| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | 4/10 |
+| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 7/10 |
+| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 7/10 |
+| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 4/10 |
+| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 7/10 |
+| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | 5/10 |
+| `batch-012` | 10 | 2403–3036 | pptx:10 | 6/10 |
+| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 7/10 |
+| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 3/10 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 1/10 |
+| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 5/10 |
+| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 2/5 |
 
 ### `sheets` — 174 documents, 18 batches
 
