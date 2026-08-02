@@ -427,6 +427,28 @@ public sealed class Paginator
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
         int sectionFirstPage = 0;
         int column = 0;
+
+        // The furniture the page being built will draw, which is the section its *first* content belongs
+        // to rather than the section it happens to end in. A continuous section break puts two sections on
+        // one sheet, and a sheet has one running head: Word gives it to the section the page starts in, and
+        // so does LibreOffice — its rendering of a document whose first section is a title page and whose
+        // second begins part way down it leaves page one bare and puts the new head on page two. Taking the
+        // current section instead put the second section's head on the title page.
+        PageFurnitureSet? pageFurniture = furnitureSet;
+        WritingSection pageFurnitureSection = geometry;
+        PageGeometry pageFurnitureGeometry = page;
+        bool pageIsSectionFirst = true;
+
+        // Called wherever a page's first content is decided: at the start, after each page is emitted, and
+        // at a section break that finds the page still empty.
+        void AdoptSection()
+        {
+            pageFurniture = furnitureSet;
+            pageFurnitureSection = geometry;
+            pageFurnitureGeometry = page;
+            pageIsSectionFirst = pages.Count == sectionFirstPage;
+        }
+
         List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
@@ -509,6 +531,10 @@ public sealed class Paginator
                 bodyHeight = page.TextHeight;
                 sectionFirstPage = pages.Count;
                 pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
+
+                // A page with nothing on it yet belongs to the section starting here; one that already
+                // carries lines keeps the head of the section it started in.
+                if (placed.Count == 0 && tables.Count == 0) AdoptSection();
                 continue;
             }
 
@@ -720,11 +746,12 @@ public sealed class Paginator
                 placed,
                 tables,
                 Furniture(
-                    furnitureSet, geometry, page, pageNumber,
-                    first: pages.Count == sectionFirstPage),
+                    pageFurniture, pageFurnitureSection, pageFurnitureGeometry, pageNumber,
+                    first: pageIsSectionFirst),
                 noteArea,
                 Separator(noteArea, page)));
 
+            AdoptSection();
             pageNumber++;
             column = 0;
             placed = [];
