@@ -1717,7 +1717,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)
         // - Actual  : 7.54150390625
         // But if it fails in some configurations because of different page units, then this
         // check is not as important as that this value is the same as on the 6th page below.
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(7.49, expectedOffset, 0.01);
+        // A headless Windows build places the subscript 0.01 lower, so the delta covers that.
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7.49, expectedOffset, 0.02);
     }
 
     // Page 6
