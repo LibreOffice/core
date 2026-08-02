@@ -351,6 +351,39 @@ Two more properties turned out to be parsed and never applied — `w:caps`/`w:sm
 round, after `TabStop.Leader` last round. That is now a recognised shape worth grepping for
 rather than waiting to trip over.
 
+## Slides batches 001–007: full parity, swept at `d3cba1703`
+
+Measured, not inferred: `batch-001`–`batch-003` 29 of 29, `batch-004`–`batch-007` 39 of 39.
+Every page count in the range is exact.
+
+One document changed state in this round — `slides/batch-003/pptx/NCW-2024-Guide-.pptx`, 216
+extractable words against LibreOffice's 224 before and 221 after. The rest of the range was
+already passing on the base this was measured against (`86ce2dc9b`), which was checked rather
+than assumed: the seven decks in batches 004–007 that state a non-zero `a:rPr/@baseline` were
+re-rendered at the base commit and all seven already matched, two of them moving *closer* with
+the fix (`DOE Interactive Exercise…pptx` 631→625 against 628, `flying-by-numbers…pptx` 558→560
+against 560) without crossing the band. **So the ✅ on 004–007 is a re-proof of merged work, not
+a claim about this change.**
+
+### The defect: escapement read by both readers and applied by neither
+
+`a:rPr/@baseline` and a binary PowerPoint's `PPT_CharAttr_Escapement` were each folded into a
+`RunEmphasis` flag for extraction, and `SlideTextRun` had nowhere to put the magnitude — so
+every ordinal in every deck sat on its baseline at full size. **29 of the track's 112 pptx decks
+state a non-zero baseline on a slide.** It is the "read but never used" shape again, the third
+found this way after `TabStop.Leader` and `w:caps`.
+
+What made it a corpus failure was not the offset but the *size*: LibreOffice pairs the offset
+with `DFLT_ESC_PROP` and sets the run at 58% of its em, which is 42% less advance
+(`oox/source/drawingml/textcharacterproperties.cxx:196-199`). On `NCW-2024-Guide-.pptx` an
+ordinal drawn full size wrapped one line of a text box already taller than the slide, and the
+wrap pushed that box's last paragraph off the bottom edge. The shrink has to reach the line
+breaker; applying it in the painter alone would have fixed the picture and not the text.
+
+The percentage is of the em size on a slide and of the font's height in a word processor —
+`editeng/source/items/svxfont.cxx:549-558` against `swfont.cxx` — which is why
+`Layout/Escapement.cs` could not simply be reused.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -383,11 +416,11 @@ rather than waiting to trip over.
 |---|---|---|---|---|
 | `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | ✅ |
 | `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | ✅ |
-| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 9/10 |
+| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | ✅ |
 | `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | ✅ |
-| `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 8/9 |
-| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | 9/10 |
-| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 9/10 |
+| `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | ✅ |
+| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | ✅ |
+| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | ✅ |
 | `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 |
 | `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 9/10 |
 | `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 |
