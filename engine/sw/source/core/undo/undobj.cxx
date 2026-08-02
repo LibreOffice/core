@@ -101,6 +101,8 @@ SwPaM & SwUndRng::AddUndoRedoPaM(
         ::sw::UndoRedoContext & rContext, bool const bCorrToContent) const
 {
     SwCursor & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    // the recorded offsets only mean anything in the document being undone
+    assert(&rPaM.GetDoc() == &rContext.GetDoc());
     SetPaM( rPaM, bCorrToContent );
     return rPaM;
 }

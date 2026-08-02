@@ -9,9 +9,12 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <editeng/tstpitem.hxx>
+
+#include <sfx2/kit/helper.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -216,6 +219,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf148703CopyFooterAcrossDocuments)
 {
     // A document containing some text to overwrite and no custom page styles.
     createSwDoc("tdf148703-dest.odt");
+    // remember the destination's view; loading the source below will make the source current
+    const int nDestView = comphelper::COKit::isActive() ? KitHelper::getCurrentView() : -1;
 
     // A document containing a custom page style, two paragraphs, and a footer.
     uno::Reference<css::lang::XComponent> xSrcComponent
@@ -223,6 +228,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf148703CopyFooterAcrossDocuments)
 
     dispatchCommand(xSrcComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(xSrcComponent, u".uno:Copy"_ustr, {});
+
+    // A kit process assumes it only ever works with a single document; undo takes its cursor from
+    // the current view, trusting that the view is on that document. A second document in the same
+    // process is outside that expectation, so point the current view back at the destination.
+    if (nDestView != -1)
+        KitHelper::setView(nDestView);
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});

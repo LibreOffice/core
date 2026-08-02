@@ -672,6 +672,8 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
 
     UnoActionContext c(& rDoc); // exception-safe StartAllAction/EndAllAction
 
+    // Prefer the view that asked, so the undo moves its own cursor rather than another view's. A
+    // kit process only ever works with a single document, so its current view is a view of rDoc.
     SwView* pViewShell = dynamic_cast<SwView*>(SfxViewShell::Current());
     SwEditShell *const pEditShell(
         comphelper::COKit::isActive() && pViewShell ? pViewShell->GetWrtShellPtr()
