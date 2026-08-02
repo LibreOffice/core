@@ -25,7 +25,7 @@ namespace Paperless.Presentations.Tests;
 /// two unfilled shapes are.
 /// </para>
 /// <para>
-/// Worth a fixture rather than a corpus note because the element is not rare: six of the 269
+/// Worth a fixture rather than a corpus note because the element is not rare: eight of the 112
 /// PPTX decks in the slides corpus use it on a slide, and on
 /// <c>slides/batch-002/pptx/iaeg_work_group_leader_updates.pptx</c> it decides six of the eight
 /// boxes of an organisation chart.
