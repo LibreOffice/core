@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/seqstream.hxx>
@@ -35,6 +36,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtinfmt.hxx>
+#include <rootfrm.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -1466,6 +1468,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf156348)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
 {
     createSwDoc();
+
+    if (comphelper::COKit::isActive())
+    {
+        // The default position is centered in the Kit's visible area, which only a client declares
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->setKitVisibleArea(pWrtShell->GetLayout()->GetLower()->getFrameArea().SVRect());
+    }
 
     // Insert text box with ctrl key
     // Without the fix in place, this test would have crashed here
