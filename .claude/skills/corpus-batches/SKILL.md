@@ -120,6 +120,35 @@ and that band separates "the same text" from "text is missing" on this corpus.
 it is correct. Where the ink actually lands is the fidelity suite's job — it compares PDF
 operators directly. Use `render-comparison` to diagnose *why* two renderings differ.
 
+### Know when the gate has hit its ceiling
+
+Word count drives progress efficiently until the residue stops being about words. Measured on
+the slides track at 146/163: of 7420 residual word error, **6311 is text we draw and the
+reference does not**, and only 267 is text we miss. On the worst page of nine failing
+documents LibreOffice rasterises an embedded object's replacement metafile — or draws nothing
+at all — where we emit real vector glyph runs. Our output is arguably the better one, and
+`wc -w` scores it as failure.
+
+Watch for the inversion: **when over-drawing dominates under-drawing by an order of
+magnitude, the gate is measuring a difference in rendering strategy rather than a defect.**
+Further progress there needs a pixel metric, not a word count. Say so and switch instruments
+rather than driving the number down by making the output worse.
+
+### "The reference is wrong" needs a higher bar than it usually gets
+
+It is occasionally true — LibreOffice really does shape one corpus deck's title per character,
+inflating its own word count. But it is a comfortable conclusion, and comfortable conclusions
+get reached too early.
+
+One document was written down as "not our defect, confirmed twice" by two independent agents.
+It was ours: a theme font reference taken literally, which the third agent found and fixed,
+and the document now matches **exactly**. Two rounds of work skipped that file because the
+record said not to look.
+
+So before recording it: name the mechanism in the reference that produces the difference, and
+check it against a document where the same mechanism should apply and does not. "I cannot
+explain our output" is not evidence the other side is wrong.
+
 ### The word count has a blind spot, and it cuts both ways
 
 `wc -w` in the POSIX locale counts a word only where it sees a printable byte, so **a token

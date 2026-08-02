@@ -145,7 +145,22 @@ Once a page differs, narrow it down before theorising:
    Grepping the decompressed part for the record or attribute you are about to blame costs a
    minute and refutes a plausible story before you spend a day on it.
 
-7. **Check whether the field is read but never used.** A property parsed by every reader and
+7. **When extraction is right and rendering is wrong, suspect a value only rendering resolves.**
+   The two paths read the same file and can resolve the same attribute differently — and a
+   defect that lives only in the rendering path is invisible to every text comparison, which
+   is exactly how it survives round after round.
+
+   Measured twice in this project, both times the largest defect of their round:
+   `<a:latin typeface="+mn-lt"/>` taken literally by the slide layout reader while extraction
+   resolved it through the theme (DejaVu Sans against Carlito, 39% wider, so every line broke
+   early and the tail fell off the slide); and the placeholder inheritance chain resolved for
+   extraction and ignored by rendering.
+
+   The tell is a document whose extracted text is perfect and whose page is wrong. Grep the
+   attribute name and check *both* readers handle it — a value resolved in one and taken
+   literally in the other is a standing bug waiting for a corpus big enough to show it.
+
+8. **Check whether the field is read but never used.** A property parsed by every reader and
    consumed by nothing is invisible to unit tests and produces a quiet, systematic error.
    Two were found this way — `TabStop.Leader` (declared by 51 of 136 corpus DOCX files, so
    every dotted table-of-contents line was blank) and `IsCapitalised`. Grep for the property
