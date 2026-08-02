@@ -439,7 +439,7 @@ void DesktopKitTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
 {
     if (pDocument)
     {
-        pDocument->pClass->registerCallback(pDocument.get(), nullptr, nullptr);
+        pDocument->registerCallback(nullptr, nullptr);
         pDocument.reset();
     }
 
@@ -524,7 +524,7 @@ void DesktopKitTest::testGetStyles()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:StyleApply");
+    char* pJSON = pDocument->getCommandValues(".uno:StyleApply");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
@@ -559,7 +559,7 @@ void DesktopKitTest::testGetFonts()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CharFontName");
+    char* pJSON = pDocument->getCommandValues(".uno:CharFontName");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
@@ -578,27 +578,27 @@ void DesktopKitTest::testGetFonts()
 void DesktopKitTest::testCreateView()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getViewsCount());
 
-    int nId0 = pDocument->m_pDocumentClass->getView(pDocument);
-    int nId1 = pDocument->m_pDocumentClass->createView(pDocument);
-    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    int nId0 = pDocument->getView();
+    int nId1 = pDocument->createView();
+    CPPUNIT_ASSERT_EQUAL(2, pDocument->getViewsCount());
 
     // Test getViewIds().
     std::vector<int> aViewIds(2);
-    CPPUNIT_ASSERT(pDocument->m_pDocumentClass->getViewIds(pDocument, aViewIds.data(), aViewIds.size()));
+    CPPUNIT_ASSERT(pDocument->getViewIds(aViewIds.data(), aViewIds.size()));
     // The expectation is that the most recently used shell is at the start
     CPPUNIT_ASSERT_EQUAL(nId1, aViewIds[0]);
     CPPUNIT_ASSERT_EQUAL(nId0, aViewIds[1]);
 
     // Make sure the created view is the active one, then switch to the old
     // one.
-    CPPUNIT_ASSERT_EQUAL(nId1, pDocument->m_pDocumentClass->getView(pDocument));
-    pDocument->m_pDocumentClass->setView(pDocument, nId0);
-    CPPUNIT_ASSERT_EQUAL(nId0, pDocument->m_pDocumentClass->getView(pDocument));
+    CPPUNIT_ASSERT_EQUAL(nId1, pDocument->getView());
+    pDocument->setView(nId0);
+    CPPUNIT_ASSERT_EQUAL(nId0, pDocument->getView());
 
-    pDocument->m_pDocumentClass->destroyView(pDocument, nId1);
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    pDocument->destroyView(nId1);
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getViewsCount());
 }
 
 void DesktopKitTest::testGetPartPageRectangles()
@@ -606,7 +606,7 @@ void DesktopKitTest::testGetPartPageRectangles()
     // Test that we get as many page rectangles as expected: blank document is
     // one page.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    char* pRectangles = pDocument->pClass->getPartPageRectangles(pDocument);
+    char* pRectangles = pDocument->getPartPageRectangles();
     OUString sRectangles = OUString::fromUtf8(pRectangles);
 
     std::vector<OUString> aRectangles;
@@ -641,8 +641,8 @@ void DesktopKitTest::testSearchCalc()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -671,8 +671,8 @@ void DesktopKitTest::testSearchAllNotificationsCalc()
 {
     LibCO_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -703,7 +703,7 @@ void DesktopKitTest::testPaintTile()
     // This used to crash: paintTile() implementation did not handle
     // nCanvasWidth != nCanvasHeight correctly, as usually both are just always
     // 256.
-    pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDocument->paintTile(aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // This crashed in OutputDevice::DrawDeviceAlphaBitmap().
     nCanvasWidth = 200;
@@ -711,13 +711,13 @@ void DesktopKitTest::testPaintTile()
     nTileWidth = 4000;
     nTileHeight = 4000;
     aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
-    pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDocument->paintTile(aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 void DesktopKitTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopKitTest::testSaveFailedReportsReason()
@@ -728,7 +728,7 @@ void DesktopKitTest::testSaveFailedReportsReason()
     // document is loaded.
     m_pDocument = loadDocUrlImpl(createFileURL(u"blank_text.odt"), COKitDocumentType::TEXT);
     LibLODocument_Impl* pDocument = m_pDocument.get();
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(pDocument->mxComponent);
     CPPUNIT_ASSERT(pShell);
@@ -738,7 +738,7 @@ void DesktopKitTest::testSaveFailedReportsReason()
     m_aCommandResultCondition.reset();
     // A save argument makes the dispatch report the store's own true/false result rather than
     // masking a failed save as done, matching how the kit posts a save with its own arguments.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Save",
+    pDocument->postUnoCommand(".uno:Save",
                                       "{\"NoFileSync\":{\"type\":\"boolean\",\"value\":false}}", true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
@@ -789,7 +789,7 @@ void DesktopKitTest::testExportDirectToPdfDottedName()
         []() { comphelper::COKit::setFileSaveDialogCallback({}); });
 
     LibLODocument_Impl* pDocument = loadDocUrl(aDocUrl, COKitDocumentType::TEXT);
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:ExportDirectToPDF", nullptr, false);
+    pDocument->postUnoCommand(".uno:ExportDirectToPDF", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("file-save dialog callback was not invoked", !aSuggestedUri.isEmpty());
@@ -808,7 +808,7 @@ void DesktopKitTest::testSaveAsJsonOptions()
 
     // When exporting that document to PDF, skipping the first page:
     OString aOptions("{\"PageRange\":{\"type\":\"string\",\"value\":\"2-\"}}"_ostr);
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "pdf", aOptions.getStr()));
 
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
@@ -827,7 +827,7 @@ void DesktopKitTest::testSaveAsJsonOptions()
 void DesktopKitTest::testSaveAsCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopKitTest::testPasteWriter()
@@ -835,24 +835,24 @@ void DesktopKitTest::testPasteWriter()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello"_ostr);
 
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(pDocument->paste("text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    char* pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL("hello"_ostr, OString(pText));
     free(pText);
 
     // textt/plain should be rejected.
-    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(!pDocument->paste("textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(pDocument->paste("text/html", aText.getStr(), aText.getLength()));
 
     // Overwrite doc contents with a HTML paste.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
     OString aComment("foo <!-- bar --> baz"_ostr);
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aComment.getStr(), aComment.getLength()));
+    CPPUNIT_ASSERT(pDocument->paste("text/html", aComment.getStr(), aComment.getLength()));
 
     // Check if we have a comment.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -867,10 +867,10 @@ void DesktopKitTest::testPasteWriter()
     CPPUNIT_ASSERT(!xTextPortionEnumeration->hasMoreElements());
 
     // Overwrite the doc contents with an explicitly plain text paste.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
     OString aPlainText("foo _bar_ baz"_ostr);
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain", aPlainText.getStr(),
+    CPPUNIT_ASSERT(pDocument->paste("text/plain", aPlainText.getStr(),
                                             aPlainText.getLength()));
 
     // Check if '_bar_' was pasted as-is.
@@ -896,7 +896,7 @@ void DesktopKitTest::testPasteWriterJPEG()
     std::vector<char> aImageContents(aImageStream.remainingSize());
     aImageStream.ReadBytes(aImageContents.data(), aImageContents.size());
 
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+    CPPUNIT_ASSERT(pDocument->paste("image/jpeg", aImageContents.data(), aImageContents.size()));
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -923,12 +923,12 @@ void DesktopKitTest::testUndoWriter()
 {
     // Load a Writer document and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 't', 0);
     Scheduler::ProcessEventsToIdle();
     // Get undo info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:Undo");
+    char* pJSON = pDocument->getCommandValues(".uno:Undo");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -970,11 +970,11 @@ void DesktopKitTest::testRowColumnHeaders()
      */
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
 
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
 
     long nWidth = 0;
     long nHeight = 0;
-    pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    pDocument->getDocumentSize(&nWidth, &nHeight);
     tools::Long nX = rtl::math::round(nWidth / 4.0);
     tools::Long nY = rtl::math::round(nHeight / 4.0);
     nWidth = rtl::math::round(nWidth / 2.0);
@@ -984,7 +984,7 @@ void DesktopKitTest::testRowColumnHeaders()
     aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
 
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aPayload.str().c_str());
+    char* pJSON = pDocument->getCommandValues(aPayload.str().c_str());
     std::stringstream aStream(pJSON);
     free(pJSON);
 
@@ -1053,19 +1053,19 @@ void DesktopKitTest::testHiddenRowHeaders()
 {
     LibLODocument_Impl* pDocument = loadDoc("hidden-row.ods");
 
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
 
     tools::Long const nX = 0;
     tools::Long const nY = 0;
     long nWidth = 0;
     long nHeight = 0;
-    pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    pDocument->getDocumentSize(&nWidth, &nHeight);
 
     std::stringstream aPayload;
     aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
 
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aPayload.str().c_str());
+    char* pJSON = pDocument->getCommandValues(aPayload.str().c_str());
     std::stringstream aStream(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
 
@@ -1093,7 +1093,7 @@ void DesktopKitTest::testCellCursor()
 
     boost::property_tree::ptree aTree;
 
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CellCursor?tileWidth=1&tileHeight=1&outputWidth=1&outputHeight=1");
+    char* pJSON = pDocument->getCommandValues(".uno:CellCursor?tileWidth=1&tileHeight=1&outputWidth=1&outputHeight=1");
 
     std::stringstream aStream(pJSON);
     free(pJSON);
@@ -1118,17 +1118,17 @@ void DesktopKitTest::testCommandResult()
     // nothing is triggered when we have no callback yet, we just time out on
     // the condition var.
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    pDocument->postUnoCommand(".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
     // but we get some real values when the callback is set up
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
+    pDocument->postUnoCommand(".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
 
@@ -1143,14 +1143,14 @@ void DesktopKitTest::testCommandResult()
 void DesktopKitTest::testWriterComments()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
     uno::Reference<awt::XReschedule> xToolkit = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     // Insert a comment at the beginning of the document and wait till the main
     // loop grabs the focus, so characters end up in the annotation window.
     TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", R"({"Author":{"type":"string","value":"LocalUser#0"},"Html":{"type":"string","value":"test"}})", true);
+    pDocument->postUnoCommand(".uno:InsertAnnotation", R"({"Author":{"type":"string","value":"LocalUser#0"},"Html":{"type":"string","value":"test"}})", true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
@@ -1175,15 +1175,14 @@ void DesktopKitTest::testCommentAuthorFromSession()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // The server provides "Jane Doe" as the author for this view.
-    pDocument->pClass->initializeForRendering(
-        pDocument, R"({".uno:Author":{"type":"string","value":"Jane Doe"}})");
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(R"({".uno:Author":{"type":"string","value":"Jane Doe"}})");
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
     uno::Reference<awt::XReschedule> xToolkit = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     // The InsertAnnotation command carries a different author than the session.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+    pDocument->postUnoCommand(".uno:InsertAnnotation",
         R"({"Author":{"type":"string","value":"Other User"},"Html":{"type":"string","value":"test"}})", true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
@@ -1206,13 +1205,13 @@ void DesktopKitTest::testCommentAuthorAnonymous()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // An anonymous session sends no .uno:Author, so the view has no server-provided author.
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
     uno::Reference<awt::XReschedule> xToolkit = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+    pDocument->postUnoCommand(".uno:InsertAnnotation",
         R"({"Author":{"type":"string","value":"Other User"},"Html":{"type":"string","value":"test"}})", true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
@@ -1237,28 +1236,28 @@ void DesktopKitTest::testSheetOperations()
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
 
     // insert the last sheet
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Insert",
+    pDocument->postUnoCommand(".uno:Insert",
           "{ \"Name\": { \"type\": \"string\", \"value\": \"LastSheet\" }, \"Index\": { \"type\": \"long\", \"value\": 0 } }", false);
 
     // insert the first sheet
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Insert",
+    pDocument->postUnoCommand(".uno:Insert",
           "{ \"Name\": { \"type\": \"string\", \"value\": \"FirstSheet\" }, \"Index\": { \"type\": \"long\", \"value\": 1 } }", false);
 
     // rename the \"Sheet1\" (2nd now) to \"Renamed\"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Name",
+    pDocument->postUnoCommand(".uno:Name",
           "{ \"Name\": { \"type\": \"string\", \"value\": \"Renamed\" }, \"Index\": { \"type\": \"long\", \"value\": 2 } }", false);
 
     // delete the \"Sheet2\" (3rd)
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Remove",
+    pDocument->postUnoCommand(".uno:Remove",
           "{ \"Index\": { \"type\": \"long\", \"value\": 3 } }", false);
 
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(6, pDocument->pClass->getParts(pDocument));
+    CPPUNIT_ASSERT_EQUAL(6, pDocument->getParts());
 
     std::vector<OString> aExpected = { "FirstSheet"_ostr, "Renamed"_ostr, "Sheet3"_ostr, "Sheet4"_ostr, "Sheet5"_ostr, "LastSheet"_ostr };
     for (int i = 0; i < 6; ++i)
     {
-        char* pPartName = pDocument->pClass->getPartName(pDocument, i);
+        char* pPartName = pDocument->getPartName(i);
         CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pPartName));
         free(pPartName);
     }
@@ -1267,8 +1266,8 @@ void DesktopKitTest::testSheetOperations()
 void DesktopKitTest::testSheetSelections()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", COKitDocumentType::SPREADSHEET);
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     /*
      * Check if selection data is correct
@@ -1282,28 +1281,22 @@ void DesktopKitTest::testSheetSelections()
     int col5 = 5500;
 
     // Select row 5 from column 1 through column 5
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       col1, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col2, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col3, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col4, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col5, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONUP,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
                                       col5, row5,
                                       1, 1, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1311,7 +1304,7 @@ void DesktopKitTest::testSheetSelections()
     // Copy the contents and check if matches expected data
     {
         char* pUsedMimeType = nullptr;
-        char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
+        char* pCopiedContent = pDocument->getTextSelection(nullptr, &pUsedMimeType);
         std::vector<long> aExpected = {5, 6, 7, 8, 9};
         std::istringstream iss(pCopiedContent);
         for (const long nIndex : aExpected)
@@ -1330,12 +1323,10 @@ void DesktopKitTest::testSheetSelections()
      */
 
     // Click at row5, col4
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       col4, row5,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONUP,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
                                       col4, row5,
                                       1, 1, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1344,7 +1335,7 @@ void DesktopKitTest::testSheetSelections()
     // content of only one cell, now
     {
         char* pUsedMimeType  = nullptr;
-        char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
+        char* pCopiedContent = pDocument->getTextSelection(nullptr, &pUsedMimeType);
         std::vector<long> aExpected = { 8 };
         std::istringstream iss(pCopiedContent);
         for (const long nIndex : aExpected)
@@ -1362,8 +1353,8 @@ void DesktopKitTest::testSheetSelections()
 void DesktopKitTest::testSheetDragDrop()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", COKitDocumentType::SPREADSHEET);
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     int row01 = 100;
     int col01 = 1100;
@@ -1373,20 +1364,16 @@ void DesktopKitTest::testSheetDragDrop()
     int col07 = 5700;
 
     // Select row 01 from column 01 through column 05
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       col01, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col02, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col05, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONUP,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
                                       col05, row01,
                                       1, 1, 0);
 
@@ -1414,7 +1401,7 @@ void DesktopKitTest::testSheetDragDrop()
     // Check selection content
     {
         char* pMimeType = nullptr;
-        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        char* pContent = pDocument->getTextSelection(nullptr, &pMimeType);
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(pContent);
         std::string token;
@@ -1429,20 +1416,16 @@ void DesktopKitTest::testSheetDragDrop()
     }
 
     // drag and drop
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       col01, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col02, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::MOVE,
+    pDocument->postMouseEvent(COKitMouseEventType::MOVE,
                                       col03, row01,
                                       1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONUP,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
                                       col07, row01,
                                       1, 1, 0);
 
@@ -1470,7 +1453,7 @@ void DesktopKitTest::testSheetDragDrop()
     // Check selection content
     {
         char* pMimeType = nullptr;
-        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        char* pContent = pDocument->getTextSelection(nullptr, &pMimeType);
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(pContent);
         std::string token;
@@ -1565,13 +1548,12 @@ namespace {
 void DesktopKitTest::testContextMenuCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", COKitDocumentType::SPREADSHEET);
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     // Values in twips
     Point aPointOnImage(1150, 1100);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       aPointOnImage.X(), aPointOnImage.Y(),
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1673,12 +1655,11 @@ void DesktopKitTest::testContextMenuCalc()
 void DesktopKitTest::testContextMenuWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     Point aRandomPoint(1150, 1100);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      COKitMouseEventType::BUTTONDOWN,
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
@@ -2218,29 +2199,29 @@ void DesktopKitTest::testInput()
 
     Scheduler::ProcessEventsToIdle(); // Get focus & other bits setup.
 
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "far");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "far");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "beyond");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "beyond");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, "far");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, "far");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, "beyond");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, "beyond");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, " ");
     // Mis-spelled ...
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "kovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "kovely");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, "kovely");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, "kovely");
     // Remove it again
-    pDocument->pClass->removeTextContext(pDocument, 0, 6, 0);
+    pDocument->removeTextContext(0, 6, 0);
     // Replace it with lovely
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "lovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "lovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, "lovely");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, "lovely");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, " ");
 
     // get the text ...
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    char* pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
     CPPUNIT_ASSERT_EQUAL("far beyond lovely "_ostr, OString(pText));
     free(pText);
@@ -2252,13 +2233,13 @@ void DesktopKitTest::testRedlineWriter()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 't', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Get redline info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    char* pJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -2279,15 +2260,15 @@ void DesktopKitTest::testRedlineCalc()
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, KEY_RETURN);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 0, KEY_RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 't', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Get redline info.
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    char* pJSON = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -2336,7 +2317,7 @@ std::vector<RedlineInfo> getRedlineInfo(const boost::property_tree::ptree& redli
 std::vector<RedlineInfo> getRedlineInfo(LibLODocument_Impl* pDocument)
 {
     char* json
-        = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+        = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::stringstream stream(json);
     free(json);
     CPPUNIT_ASSERT(!stream.str().empty());
@@ -2378,13 +2359,13 @@ public:
           m_stateBold(false)
     {
         mnView = KitHelper::getCurrentView();
-        mpDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, this);
+        mpDocument->registerCallback(&ViewCallback::callback, this);
     }
 
     ~ViewCallback()
     {
-        mpDocument->m_pDocumentClass->setView(mpDocument, mnView);
-        mpDocument->m_pDocumentClass->registerCallback(mpDocument, nullptr, nullptr);
+        mpDocument->setView(mnView);
+        mpDocument->registerCallback(nullptr, nullptr);
     }
 
     static void callback(COKitCallbackType eType, const char* pPayload, void* pData)
@@ -2540,38 +2521,38 @@ void DesktopKitTest::testPaintPartTile()
 //    ViewCallback aView1;
 //    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-//    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
-    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+    pDocument->initializeForRendering("{}");
+//    pDocument->registerCallback(&ViewCallback::callback, &aView1);
+    int nView1 = pDocument->getView();
 
     // Create a second view.
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-//    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
+//    pDocument->registerCallback(&ViewCallback::callback, &aView2);
 
     // Go to the second slide in the second view. The boundary names a slide by
     // its part number, the page's stable unique id.
     const int nSecondSlide
-        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 1, 0));
-    pDocument->m_pDocumentClass->setPart(pDocument, nSecondSlide);
+        = static_cast<int>(pDocument->getPartUniqueId(1, 0));
+    pDocument->setPart(nSecondSlide);
 
     // Switch back to the first view and start typing.
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, awt::Key::TAB);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 0, awt::Key::TAB);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'x', 0);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 'x', 0);
+    pDocument->setView(nView1);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
     unsigned char pPixels[256 * 256 * 4];
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, nSecondSlide, 0, 256, 256, 0, 0, 256, 256);
+    pDocument->paintPartTile(pPixels, nSecondSlide, 0, 256, 256, 0, 0, 256, 256);
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
 //    aView1.m_bTilesInvalidated = false;
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'x', 0);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
@@ -2591,13 +2572,13 @@ void DesktopKitTest::testPaintTileOmitInvalidate()
     const int nCanvasWidth = 256;
     const int nCanvasHeight = 256;
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
-    pDocument->m_pDocumentClass->paintTile(pDocument, aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    pDocument->paintTile(aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
     Scheduler::ProcessEventsToIdle();
     aView.m_bTilesInvalidated = false;
 
     // When pressing a key:
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure we get an invalidation:
@@ -2614,27 +2595,27 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
         comphelper::COKit::setPartInInvalidation(false);
     });
     LibLODocument_Impl* pDocument = loadDoc("create-view-omit-invalidate.ods");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
     ViewCallback aView1(pDocument);
-    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+    int nView1 = pDocument->getView();
     const int nCanvasWidth = 256;
     const int nCanvasHeight = 256;
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
-    pDocument->m_pDocumentClass->paintTile(pDocument, aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    pDocument->paintTile(aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    pDocument->createView();
+    pDocument->initializeForRendering(nullptr);
     ViewCallback aView2(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
-    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+    pDocument->setView(nView1);
+    pDocument->setPart(1);
     Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
 
     // When pressing a key in view 1, on sheet Two:
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, KEY_RETURN);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 0, KEY_RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure that both views are invalidated:
@@ -2670,20 +2651,20 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
 
     // This view will default to light scheme
     LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+    pDocument->initializeForRendering("{}");
+    int nView1 = pDocument->getView();
 
     // Create a second view
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
 
     // Go to the second slide in the second view. The boundary names a slide by
     // its part number, the page's stable unique id.
     const int nFirstSlide
-        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 0, 0));
+        = static_cast<int>(pDocument->getPartUniqueId(0, 0));
     const int nSecondSlide
-        = static_cast<int>(pDocument->m_pDocumentClass->getPartUniqueId(pDocument, 1, 0));
-    pDocument->m_pDocumentClass->setPart(pDocument, nSecondSlide);
+        = static_cast<int>(pDocument->getPartUniqueId(1, 0));
+    pDocument->setPart(nSecondSlide);
 
     // Set to dark scheme
     {
@@ -2706,23 +2687,23 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
 
     // Both parts should be painted with dark scheme
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     Color aPixel(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
     // Switch back to first view
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->setView(nView1);
 
     // Both parts should be painted with light scheme
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels.data(), nFirstSlide, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 }
@@ -2740,7 +2721,7 @@ void DesktopKitTest::testGetFontSubset()
     );
     OString aCommand = ".uno:FontSubset&name=" + OUStringToOString(aFontName, RTL_TEXTENCODING_UTF8);
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aCommand.getStr());
+    char* pJSON = pDocument->getCommandValues(aCommand.getStr());
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( !aTree.empty() );
@@ -2754,16 +2735,16 @@ void DesktopKitTest::testGetFontSubset()
 void DesktopKitTest::testCommentsWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
     long nWidth, nHeight;
-    pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    pDocument->getDocumentSize(&nWidth, &nHeight);
 
     // Document width alongwith without sidebar comes to be < 13000
     CPPUNIT_ASSERT( nWidth < 13000 );
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -2801,11 +2782,11 @@ void DesktopKitTest::testCommentsWriter()
 void DesktopKitTest::testCommentsCalc()
 {
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -2846,11 +2827,11 @@ void DesktopKitTest::testCommentsCalc()
 void DesktopKitTest::testCommentsImpress()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+    pDocument->initializeForRendering(nullptr);
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -2897,18 +2878,18 @@ void DesktopKitTest::testCommentsImpressCrossDocument()
 {
     // Two presentations open in the same process.
     std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("blank_presentation.odp");
-    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
-    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    pDocument1->initializeForRendering("{}");
+    int nView1 = pDocument1->getView();
     ViewCallback aView1(pDocument1.get());
 
     std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("2slides.odp");
-    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    pDocument2->initializeForRendering("{}");
     ViewCallback aView2(pDocument2.get());
 
     // Add a comment to the first presentation.
-    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
+    pDocument1->setView(nView1);
     OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Comment in doc1\" }, \"Author\": { \"type\": \"string\", \"value\": \"Kit User1\" } }"_ostr);
-    pDocument1->pClass->postUnoCommand(pDocument1.get(), ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    pDocument1->postUnoCommand(".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // The comment is delivered to the presentation that owns it.
@@ -2925,12 +2906,12 @@ void DesktopKitTest::testDocSizeChangedCrossDocument()
     // The two files differ so that the desktop keeps two separate views
     // instead of reusing one for the same file.
     std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("empty.ods");
-    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
-    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    pDocument1->initializeForRendering("{}");
+    int nView1 = pDocument1->getView();
     ViewCallback aView1(pDocument1.get());
 
     std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("search.ods");
-    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    pDocument2->initializeForRendering("{}");
     ViewCallback aView2(pDocument2.get());
 
     Scheduler::ProcessEventsToIdle();
@@ -2942,10 +2923,8 @@ void DesktopKitTest::testDocSizeChangedCrossDocument()
     // spreadsheets show the same sheet number, so a broadcast that matches only
     // on the sheet without checking the owning document would reach the second
     // spreadsheet too.
-    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
-    pDocument1->m_pDocumentClass->postUnoCommand(
-        pDocument1.get(),
-        ".uno:ColumnWidth",
+    pDocument1->setView(nView1);
+    pDocument1->postUnoCommand(".uno:ColumnWidth",
         "{ \"ColumnWidth\": { \"type\": \"unsigned short\", \"value\": \"4000\" },"
         " \"Column\": { \"type\": \"unsigned short\", \"value\": \"3\" } }",
         false);
@@ -2963,22 +2942,20 @@ void DesktopKitTest::testViewSelectionCrossDocument()
     // The two files differ so that the desktop keeps two separate views
     // instead of reusing one for the same file.
     std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("empty.ods");
-    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
-    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    pDocument1->initializeForRendering("{}");
+    int nView1 = pDocument1->getView();
     ViewCallback aView1(pDocument1.get());
 
     std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("search.ods");
-    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    pDocument2->initializeForRendering("{}");
     ViewCallback aView2(pDocument2.get());
 
     Scheduler::ProcessEventsToIdle();
     aView2.m_nTextViewSelection = 0;
 
     // Select a cell range in the first spreadsheet.
-    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
-    pDocument1->m_pDocumentClass->postUnoCommand(
-        pDocument1.get(),
-        ".uno:GoToCell",
+    pDocument1->setView(nView1);
+    pDocument1->postUnoCommand(".uno:GoToCell",
         "{ \"ToPoint\": { \"type\": \"string\", \"value\": \"B2:D5\" } }",
         false);
     Scheduler::ProcessEventsToIdle();
@@ -3025,10 +3002,10 @@ void DesktopKitTest::testAuthorFieldUpdateCrossDocument()
     // The two files differ so that the desktop keeps two separate views
     // instead of reusing one for the same file.
     std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("author-field-1.fodt");
-    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
+    pDocument1->initializeForRendering("{}");
 
     std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("author-field-2.fodt");
-    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    pDocument2->initializeForRendering("{}");
 
     // Record the second document's author field text before touching the first
     // document, so a later change to it would show up as a difference here.
@@ -3037,8 +3014,7 @@ void DesktopKitTest::testAuthorFieldUpdateCrossDocument()
     // Change the author on the first document while the second stays open.
     // Both documents' views are alive at this point, matching a process that
     // hosts several documents at once.
-    pDocument1->m_pDocumentClass->initializeForRendering(
-        pDocument1.get(), "{\".uno:Author\":{\"type\":\"string\",\"value\":\"New Author\"}}");
+    pDocument1->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"New Author\"}}");
 
     // The first document's field picks up the new author...
     CPPUNIT_ASSERT_EQUAL(u"New Author"_ustr, getAuthorFieldText(pDocument1.get()));
@@ -3049,15 +3025,15 @@ void DesktopKitTest::testAuthorFieldUpdateCrossDocument()
 void DesktopKitTest::testCommentsCallbacksWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
     ViewCallback aView2(pDocument);
 
     // Add a new comment
     OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"Kit User1\" } }"_ostr);
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
@@ -3067,7 +3043,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 
     // Reply to a comment just added
     aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Add' action and linked to its parent comment
@@ -3081,7 +3057,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 
     // Edit the previously added comment
     aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId2) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Edited comment\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
@@ -3095,7 +3071,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 
     // Delete the reply comment just added
     aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\":  \"" + OString::number(nCommentId2) + "\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteComment", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:DeleteComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
@@ -3106,7 +3082,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 
     // Reply to nCommentId1 again
     aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Html\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Add' action and linked to its parent comment
@@ -3120,15 +3096,15 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     // Ensure that an undo and redo restores the html contents
     aView1.m_aCommentCallbackResult.clear();
     aView2.m_aCommentCallbackResult.clear();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Undo", "", false);
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Redo", "", false);
+    pDocument->postUnoCommand(".uno:Undo", "", false);
+    pDocument->postUnoCommand(".uno:Redo", "", false);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
     CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
 
     // .uno:ViewAnnotations returns total of 5 comments
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    char* pJSON = pDocument->getCommandValues(".uno:ViewAnnotations");
     std::stringstream aStream(pJSON);
     free(pJSON);
     CPPUNIT_ASSERT(!aStream.str().empty());
@@ -3151,7 +3127,7 @@ void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view 
 void DesktopKitTest::testCommentsAddEditDeleteDraw()
 {
     LibLODocument_Impl* pDocument = loadDoc("BlankDrawDocument.odg");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
 
     // Add a new comment
@@ -3163,7 +3139,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
@@ -3178,7 +3154,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
@@ -3191,7 +3167,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
         addParameter(aJson, "Id", "string", OString::number(nCommentId1));
         aCommandArgs = aJson.finishAndGetAsOString();
     }
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
@@ -3203,10 +3179,10 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
-    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, viewId);
+    int viewId = pDocument->createView();
+    pDocument->setView(viewId);
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{\".uno:Author\":{\"type\":\"string\",\"value\":\"Kit User1\"}}");
+    pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"Kit User1\"}}");
 
     KitHelper::setViewReadOnly(viewId, true);
     KitHelper::setAllowChangeComments(viewId, true);
@@ -3224,7 +3200,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
@@ -3239,7 +3215,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
@@ -3252,7 +3228,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
         addParameter(aJson, "Id", "string", OString::number(nCommentId));
         aCommandArgs = aJson.finishAndGetAsOString();
     }
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
+    pDocument->postUnoCommand(".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
     // Result is not sent for delete operation for some reason. But it is sent when debugging with online.
@@ -3272,9 +3248,9 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
 
     LibLODocument_Impl* pDocument = loadDoc("three-changes.fodt");
 
-    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, viewId);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int viewId = pDocument->createView();
+    pDocument->setView(viewId);
+    pDocument->initializeForRendering("{}");
     ViewCallback aCallback(pDocument);
     Scheduler::ProcessEventsToIdle();
 
@@ -3284,12 +3260,12 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
     KitHelper::setViewReadOnly(viewId, true);
 
     // Go to the 1st tracked change: "Delete “Donec”"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:NextTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
 
     // Check that redline management commands don't work in pure read-only
     // Try to reject current redline
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:RejectTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
     // Nothing happened
     CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
@@ -3304,7 +3280,7 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
     KitHelper::setAllowManageRedlines(viewId, true);
 
     // Try to reject current redline
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:RejectTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
     // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
     CPPUNIT_ASSERT_EQUAL(size_t(2), getRedlineInfo(pDocument).size());
@@ -3316,11 +3292,11 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT_EQUAL("2025-06-16T14:08:27"s, aCallback.m_aLastRedlineInfo.dateTime);
 
     // Go to the 2nd tracked change: "Attributes changed"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:NextTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
 
     // Comment on it
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:CommentChangeTracking",
+    pDocument->postUnoCommand(".uno:CommentChangeTracking",
                                       R"({"Text":{"type":"string","value":"Some comment"}})",
                                       false);
     Scheduler::ProcessEventsToIdle();
@@ -3334,11 +3310,11 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:00"s, aCallback.m_aLastRedlineInfo.dateTime);
 
     // Go to the 3rd tracked change: "Insert “ Sapienti sat.”"
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:NextTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
 
     // Accept it
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptTrackedChange", {}, false);
+    pDocument->postUnoCommand(".uno:AcceptTrackedChange", {}, false);
     Scheduler::ProcessEventsToIdle();
     // One change gone; it is recorded "Remove"d in aCallback.m_aLastRedlineInfo
     CPPUNIT_ASSERT_EQUAL(size_t(1), getRedlineInfo(pDocument).size());
@@ -3350,7 +3326,7 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT_EQUAL("2025-06-17T12:41:19"s, aCallback.m_aLastRedlineInfo.dateTime);
 
     // Make sure that another (unrelated to redline management) editing command is not working
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+    pDocument->postUnoCommand(".uno:InsertAnnotation",
                                       R"({"Text":{"type":"string","value":"Comment"}})",
                                       false);
     Scheduler::ProcessEventsToIdle();
@@ -3358,7 +3334,7 @@ void DesktopKitTest::testRedlinesInReadOnlyMode()
 
     // Check that the same command would succeed in AllowChangeComments mode
     KitHelper::setAllowChangeComments(viewId, true);
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
+    pDocument->postUnoCommand(".uno:InsertAnnotation",
                                       R"({"Text":{"type":"string","value":"Comment"}})",
                                       false);
     Scheduler::ProcessEventsToIdle();
@@ -3369,34 +3345,34 @@ void DesktopKitTest::testCalcValidityDropdown()
 {
     LibLODocument_Impl* pDocument = loadDoc("validity.ods");
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
     // Select row 1 from column 1.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Open dropdown.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1380, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1380, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Select some value from dropdown.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"select\", \"data\": \"3\", \"type\": \"treeview\"}");
+    pDocument->sendDialogEvent(aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"select\", \"data\": \"3\", \"type\": \"treeview\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Activate the selected value.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"activate\", \"data\": \"3\", \"type\": \"treeview\"}");
+    pDocument->sendDialogEvent(aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"activate\", \"data\": \"3\", \"type\": \"treeview\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Check the content of the current cell. The selected value of the dropdown was 1. It should be 4 now.
-    char* pCellContent = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    char* pCellContent = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL("4"_ostr, OString(pCellContent));
     free(pCellContent);
 }
@@ -3405,27 +3381,27 @@ void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
 {
     LibLODocument_Impl* pDocument = loadDoc("validity.ods");
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
-    int viewId = pDocument->m_pDocumentClass->getView(pDocument);
+    int viewId = pDocument->getView();
     KitHelper::setViewReadOnly(viewId, true);
     Scheduler::ProcessEventsToIdle();
     aView.m_JSONDialog.clear();
 
     // Select row 1 from column 1.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Attempt to open dropdown.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1380, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1380, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Dropdown should not open in readonly mode.
@@ -3438,41 +3414,41 @@ void DesktopKitTest::testPropertySettingOnFormulaBar()
     LibLODocument_Impl* pDocument = loadDoc("formulabar.ods");
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
     // Go to A1. There are 2 words in the cell.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Set the focus to formulabar.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Select the first word.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Set bold property for the selected word.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
+    pDocument->postUnoCommand(".uno:Bold", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(true, aView.m_stateBold);
 
     // Select the second word. Without the fix, this selection removes the "bold" attribute.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"4;9;0;0\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"4;9;0;0\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Select the first word again.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Unset bold property for the selected word.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
+    pDocument->postUnoCommand(".uno:Bold", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
@@ -3484,29 +3460,29 @@ void DesktopKitTest::testSearchTermReset()
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
+    pDocument->postUnoCommand(".uno:SearchDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     // Send "something" as current search string (searchterm).
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"searchterm\", \"cmd\": \"change\", \"data\": \"something\", \"type\": \"combobox\"}");
+    pDocument->sendDialogEvent(aView.m_findReplaceDialogId, "{\"id\":\"searchterm\", \"cmd\": \"change\", \"data\": \"something\", \"type\": \"combobox\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Press search button.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"search\", \"cmd\": \"click\", \"data\": \"undefined\", \"type\": \"pushbutton\"}");
+    pDocument->sendDialogEvent(aView.m_findReplaceDialogId, "{\"id\":\"search\", \"cmd\": \"click\", \"data\": \"undefined\", \"type\": \"pushbutton\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Close the dialog.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"__DIALOG__\", \"cmd\": \"close\", \"data\": \"null\", \"type\": \"dialog\"}");
+    pDocument->sendDialogEvent(aView.m_findReplaceDialogId, "{\"id\":\"__DIALOG__\", \"cmd\": \"close\", \"data\": \"null\", \"type\": \"dialog\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Reopen search dialog.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
+    pDocument->postUnoCommand(".uno:SearchDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     // We should have got the "searchterm" again. It should be empty. Below line doesn't pass without the changes in this commit.
@@ -3520,14 +3496,14 @@ void DesktopKitTest::testWriterShapePosSizeDialog()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
     // Insert a rectangle. It is selected after insertion.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:BasicShapes.rectangle", nullptr, false);
+    pDocument->postUnoCommand(".uno:BasicShapes.rectangle", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -3536,18 +3512,18 @@ void DesktopKitTest::testWriterShapePosSizeDialog()
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     const awt::Size aSizeBefore = xShape->getSize();
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:TransformDialog", nullptr, false);
+    pDocument->postUnoCommand(".uno:TransformDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     // The dialog has arrived as a jsdialog.
     CPPUNIT_ASSERT(aView.m_posSizeDialogId != 0);
 
     // Enter a new width on the Position and Size tab and confirm with OK.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_posSizeDialogId,
+    pDocument->sendDialogEvent(aView.m_posSizeDialogId,
         "{\"id\":\"width\", \"cmd\": \"change\", \"data\": \"2\", \"type\": \"spinfield\"}");
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_posSizeDialogId,
+    pDocument->sendDialogEvent(aView.m_posSizeDialogId,
         "{\"id\":\"ok\", \"cmd\": \"click\", \"data\": \"1\", \"type\": \"pushbutton\"}");
     Scheduler::ProcessEventsToIdle();
 
@@ -3562,32 +3538,32 @@ void DesktopKitTest::testFormulaBarAcceptButton()
     LibLODocument_Impl* pDocument = loadDoc("empty.ods");
     Scheduler::ProcessEventsToIdle();
 
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
 
     // Go to A1.
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Set the focus to formulabar.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Set selection (nothing selected).
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;0;0;0\", \"type\": \"drawingarea\"}");
+    pDocument->sendDialogEvent(0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;0;0;0\", \"type\": \"drawingarea\"}");
     Scheduler::ProcessEventsToIdle();
 
     // Set text.
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "H");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "H");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT, "H");
+    pDocument->postWindowExtTextInputEvent(0, COKitExtTextInputType::TEXTINPUT_END, "H");
     Scheduler::ProcessEventsToIdle();
 
     aView.m_JSONDialog.clear();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptFormula", nullptr, false);
+    pDocument->postUnoCommand(".uno:AcceptFormula", nullptr, false);
     Scheduler::ProcessEventsToIdle();
     // Client should have receive a JSDialog event for formulabar by now.
 
@@ -3652,8 +3628,8 @@ void DesktopKitTest::testGetSignatureState_Signed()
 {
     LibLODocument_Impl* pDocument = loadDoc("signed.odt");
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    pDocument->initializeForRendering("{}");
+    int nState = pDocument->getSignatureState();
     if (nState == 1)
     {
         // Already SignatureState::OK, then can't test the effect of trusting new CAs.
@@ -3668,19 +3644,17 @@ void DesktopKitTest::testGetSignatureState_Signed()
     std::vector<unsigned char> aCertificate;
     {
         readFileIntoByteVector(u"rootCA.der", aCertificate);
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
-    nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    nState = pDocument->getSignatureState();
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
 #endif
 }
@@ -3689,8 +3663,8 @@ void DesktopKitTest::testGetSignatureState_NonSigned()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    pDocument->initializeForRendering("{}");
+    int nState = pDocument->getSignatureState();
     CPPUNIT_ASSERT_EQUAL(int(0), nState);
 }
 
@@ -3699,13 +3673,13 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
     pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     std::vector<unsigned char> aCertificate;
@@ -3714,16 +3688,14 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
     {
         readFileIntoByteVector(u"rootCA.der", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3731,13 +3703,12 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
         readFileIntoByteVector(u"certificate.der", aCertificate);
         readFileIntoByteVector(u"certificatePrivateKey.der", aPrivateKey);
 
-        bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
-                            aCertificate.data(), int(aCertificate.size()),
+        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
                             aPrivateKey.data(), int(aPrivateKey.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
-    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    int nState = pDocument->getSignatureState();
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
 }
 
@@ -3746,13 +3717,13 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
     pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     std::vector<unsigned char> aCertificate;
@@ -3761,24 +3732,21 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3786,13 +3754,12 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
         readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
         readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
-        bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
-                            aCertificate.data(), int(aCertificate.size()),
+        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
                             aPrivateKey.data(), int(aPrivateKey.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
-    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    int nState = pDocument->getSignatureState();
     CPPUNIT_ASSERT_EQUAL(int(1), nState);
 }
 
@@ -3800,13 +3767,13 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
 {
     // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.docx");
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
     closeDoc();
 
     pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     std::vector<unsigned char> aCertificate;
@@ -3815,24 +3782,21 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3840,13 +3804,12 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
         readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
         readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
-        bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
-                            aCertificate.data(), int(aCertificate.size()),
+        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
                             aPrivateKey.data(), int(aPrivateKey.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
-    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    int nState = pDocument->getSignatureState();
     CPPUNIT_ASSERT_EQUAL(int(5), nState);
 }
 #endif
@@ -3858,7 +3821,7 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
 
     std::vector<unsigned char> aCertificate;
@@ -3867,28 +3830,25 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->m_pDocumentClass->addCertificate(
-                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
+    CPPUNIT_ASSERT(pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
 
     closeDoc();
 
@@ -3909,15 +3869,15 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
 void DesktopKitTest::testTextSelectionHandles()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
     OString aText("hello"_ostr);
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(pDocument->paste("text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // select the inserted text
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    char* pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
@@ -3926,9 +3886,9 @@ void DesktopKitTest::testTextSelectionHandles()
     // deselect & check
     m_aTextSelectionStart = ""_ostr;
     m_aTextSelectionEnd = ""_ostr;
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
-    pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(static_cast<char *>(nullptr), pText);
     free(pText);
     CPPUNIT_ASSERT_EQUAL(OString(), m_aTextSelectionStart);
@@ -3936,9 +3896,9 @@ void DesktopKitTest::testTextSelectionHandles()
 
     // select again; the positions of the selection handles have to be sent
     // again
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
@@ -3948,7 +3908,7 @@ void DesktopKitTest::testTextSelectionHandles()
 void DesktopKitTest::testDialogPaste()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
+    pDocument->postUnoCommand(".uno:HyperlinkDialog", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -3957,7 +3917,7 @@ void DesktopKitTest::testDialogPaste()
     VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
     CPPUNIT_ASSERT(pWindow);
 
-    pDocument->pClass->postWindow(pDocument, pWindow->GetKitWindowId(), COKitWindowAction::PASTE,
+    pDocument->postWindow(pWindow->GetKitWindowId(), COKitWindowAction::PASTE,
             "{ \"MimeType\" : { \"type\" : \"string\", \"value\" : \"text/plain;charset=utf-8\" }, \"Data\" : { \"type\" : \"[]byte\", \"value\" : \"www.softwarelibre.org.bo\" } }");
     Scheduler::ProcessEventsToIdle();
 
@@ -3978,47 +3938,45 @@ void DesktopKitTest::testComplexSelection()
 
     // Certainly not complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+                         static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
-                             pDocument, "", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
 
     // Paste text.
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    CPPUNIT_ASSERT(pDocument->paste("text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // No selection.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+                         static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
-                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
-                             pDocument, "", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
 
     // Paste an image.
     OUString aFileURL = createFileURL(u"paste.jpg");
     SvFileStream aImageStream(aFileURL, StreamMode::READ);
     std::vector<char> aImageContents(aImageStream.remainingSize());
     aImageStream.ReadBytes(aImageContents.data(), aImageContents.size());
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+    CPPUNIT_ASSERT(pDocument->paste("image/jpeg", aImageContents.data(), aImageContents.size()));
 
     // Now select-all.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     // Export as plain text, we should get only the text part "hello".
-    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    char* pText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
 
     // Export as rtf, we should also get the image.
-    pText = pDocument->pClass->getTextSelection(pDocument, "text/rtf", nullptr);
+    pText = pDocument->getTextSelection("text/rtf", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
     CPPUNIT_ASSERT(std::string(pText).find(aText.getStr()) != std::string::npos); // Must have the text.
     CPPUNIT_ASSERT(std::string(pText).find("pict{") != std::string::npos); // Must have the image as well.
     free(pText);
 
     // Export as html, we should also get the image.
-    pText = pDocument->pClass->getTextSelection(pDocument, "text/html", nullptr);
+    pText = pDocument->getTextSelection("text/html", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
     CPPUNIT_ASSERT(std::string(pText).find(aText.getStr()) != std::string::npos); // Must have the text.
     CPPUNIT_ASSERT(std::string(pText).find("<img") != std::string::npos); // Must have the image as well.
@@ -4026,10 +3984,9 @@ void DesktopKitTest::testComplexSelection()
 
     // We expect this to be complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
-                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+                         static_cast<int>(pDocument->getSelectionType()));
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
-                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
-                             pDocument, "", nullptr, nullptr)));
+                         static_cast<int>(pDocument->getSelectionTypeAndText("", nullptr, nullptr)));
 }
 
 void DesktopKitTest::testCalcSaveAs()
@@ -4038,12 +3995,12 @@ void DesktopKitTest::testCalcSaveAs()
     CPPUNIT_ASSERT(pDocument);
 
     // Enter some text, but don't commit.
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'X', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 'X', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'X', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'X', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Save as a new file.
-    pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
+    pDocument->saveAs(maTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
     closeDoc();
 
     // Load the new document and verify that the in-flight changes are saved.
@@ -4051,13 +4008,13 @@ void DesktopKitTest::testCalcSaveAs()
     CPPUNIT_ASSERT(pDocument);
 
     ViewCallback aView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
+    pDocument->initializeForRendering("{}");
+    pDocument->registerCallback(&ViewCallback::callback, &aView);
 
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, KEY_LEFT);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::UP, 0, KEY_LEFT);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RIGHT);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_LEFT);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL("X"_ostr, aView.m_aCellFormula);
@@ -4078,17 +4035,17 @@ void DesktopKitTest::testSpellcheckerMultiView()
     Application::SetSettings(aSettings);
 
     LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", COKitDocumentType::SPREADSHEET);
-    pDocument->pClass->setViewLanguage(pDocument, 0, "en-US"); // For spellchecking.
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+    pDocument->setViewLanguage(0, "en-US"); // For spellchecking.
+    pDocument->initializeForRendering(nullptr);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
 
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
 
     // Start spellchecking.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SpellDialog", nullptr, false);
+    pDocument->postUnoCommand(".uno:SpellDialog", nullptr, false);
 
     // Uncommenting this will result in a deadlock.
     // Because the language configuration above is not effective, and no
@@ -4098,17 +4055,17 @@ void DesktopKitTest::testSpellcheckerMultiView()
     // Need to fix the language configuration issue to enable this.
     // Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getViewsCount());
 
     // Now create another view.
-    const int nViewId = pDocument->m_pDocumentClass->createView(pDocument);
-    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    const int nViewId = pDocument->createView();
+    CPPUNIT_ASSERT_EQUAL(2, pDocument->getViewsCount());
 
     // And destroy it.
-    pDocument->m_pDocumentClass->destroyView(pDocument, nViewId);
+    pDocument->destroyView(nViewId);
 
     // We should survive the destroyed view.
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getViewsCount());
 }
 
 void DesktopKitTest::testMultiDocuments()
@@ -4118,88 +4075,88 @@ void DesktopKitTest::testMultiDocuments()
         // Load a document.
         std::unique_ptr<LibLODocument_Impl> document1 = loadDocImpl("blank_text.odt");
         LibLODocument_Impl* pDocument1 = document1.get();
-        CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(1, pDocument1->getViewsCount());
         const int nDocId1 = pDocument1->mnDocumentId;
 
-        const int nDoc1View0 = pDocument1->m_pDocumentClass->getView(pDocument1);
+        const int nDoc1View0 = pDocument1->getView();
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
-        const int nDoc1View1 = pDocument1->m_pDocumentClass->createView(pDocument1);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        const int nDoc1View1 = pDocument1->createView();
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
-        CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument1->getViewsCount());
 
         // Validate the views of document 1.
         std::vector<int> aViewIdsDoc1(2);
-        CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1.data(), aViewIdsDoc1.size()));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
 
-        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
-        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
+        pDocument1->setView(nDoc1View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
-        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View1);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        pDocument1->setView(nDoc1View1);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
-        CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument1->getViewsCount());
 
         // Load another document.
         std::unique_ptr<LibLODocument_Impl> document2 = loadDocImpl("blank_presentation.odp");
         LibLODocument_Impl* pDocument2 = document2.get();
-        CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(1, pDocument2->getViewsCount());
         const int nDocId2 = pDocument2->mnDocumentId;
 
-        const int nDoc2View0 = pDocument2->m_pDocumentClass->getView(pDocument2);
+        const int nDoc2View0 = pDocument2->getView();
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
-        const int nDoc2View1 = pDocument2->m_pDocumentClass->createView(pDocument2);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        const int nDoc2View1 = pDocument2->createView();
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
-        CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument2->getViewsCount());
 
         // Validate the views of document 2.
         std::vector<int> aViewIdsDoc2(2);
-        CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2.data(), aViewIdsDoc2.size()));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
 
-        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
-        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
+        pDocument2->setView(nDoc2View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
-        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View1);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        pDocument2->setView(nDoc2View1);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
-        CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument2->getViewsCount());
 
         // The views of document1 should be unchanged.
-        CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        CPPUNIT_ASSERT(pDocument1->getViewIds(aViewIdsDoc1.data(), aViewIdsDoc1.size()));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
         // Switch views in the first doc.
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
-        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
+        pDocument1->setView(nDoc1View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
-        pDocument1->m_pDocumentClass->destroyView(pDocument1, nDoc1View1);
-        CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        pDocument1->destroyView(nDoc1View1);
+        CPPUNIT_ASSERT_EQUAL(1, pDocument1->getViewsCount());
 
         // The views of document2 should be unchanged.
-        CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        CPPUNIT_ASSERT(pDocument2->getViewIds(aViewIdsDoc2.data(), aViewIdsDoc2.size()));
         // The expectation is that the most recently used shell is at the start
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
         // Switch views in the second doc.
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
-        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
+        pDocument2->setView(nDoc2View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->getView());
         CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
-        pDocument2->m_pDocumentClass->destroyView(pDocument2, nDoc2View1);
-        CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        pDocument2->destroyView(nDoc2View1);
+        CPPUNIT_ASSERT_EQUAL(1, pDocument2->getViewsCount());
 
         closeDoc(document2);
 
@@ -4210,7 +4167,7 @@ void DesktopKitTest::testMultiDocuments()
 void DesktopKitTest::testControlState()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    pDocument->postUnoCommand(".uno:StarShapes", nullptr, false);
     TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
@@ -4224,7 +4181,7 @@ void DesktopKitTest::testControlState()
 void DesktopKitTest::testMetricField()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    pDocument->postUnoCommand(".uno:StarShapes", nullptr, false);
     SfxChildWindow* pSideBar = TestKitCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
 
@@ -4246,16 +4203,16 @@ void DesktopKitTest::testMetricField()
 void DesktopKitTest::testJumpCursor()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
 
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'B', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'o', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'l', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'i', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'v', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'i', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'B', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'o', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'l', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'i', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'v', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'i', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // There is a cursor jump to (0, 0) due to
@@ -4263,7 +4220,7 @@ void DesktopKitTest::testJumpCursor()
     // when creating a comment
     ViewCallback aView1(pDocument);
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    pDocument->postUnoCommand(".uno:InsertAnnotation", nullptr, true);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_bZeroCursor);
@@ -4274,7 +4231,7 @@ void DesktopKitTest::testRenderSearchResult_WriterNode()
     constexpr const bool bDumpBitmap = false;
 
     LibLODocument_Impl* pDocument = loadDoc("SearchIndexResultTest.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
 
     Scheduler::ProcessEventsToIdle();
 
@@ -4288,7 +4245,7 @@ void DesktopKitTest::testRenderSearchResult_WriterNode()
     int nHeight = 0;
     size_t nByteSize = 0;
 
-    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
 
     CPPUNIT_ASSERT(bResult);
     CPPUNIT_ASSERT(pBuffer);
@@ -4319,7 +4276,7 @@ void DesktopKitTest::testRenderSearchResult_CommonNode()
     constexpr const bool bDumpBitmap = false;
 
     LibLODocument_Impl* pDocument = loadDoc("SearchIndexResultShapeTest.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
 
     Scheduler::ProcessEventsToIdle();
 
@@ -4333,7 +4290,7 @@ void DesktopKitTest::testRenderSearchResult_CommonNode()
     int nHeight = 0;
     size_t nByteSize = 0;
 
-    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+    bool bResult = pDocument->renderSearchResult(aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
 
     CPPUNIT_ASSERT(bResult);
     CPPUNIT_ASSERT(pBuffer);
@@ -4363,8 +4320,8 @@ static void lcl_repeatKeyStroke(LibLODocument_Impl *pDocument, int nCharCode, in
 {
     for (size_t nCtr = 0; nCtr < nCount; ++nCtr)
     {
-        pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::DOWN, nCharCode, nKeyCode);
-        pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::UP, nCharCode, nKeyCode);
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharCode, nKeyCode);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, nCharCode, nKeyCode);
     }
 }
 
@@ -4373,7 +4330,7 @@ void DesktopKitTest::testNoDuplicateTableSelection()
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
     // Create view 1.
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
 
     lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
@@ -4406,18 +4363,18 @@ void DesktopKitTest::testMultiViewTableSelection()
     LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
 
     // Create view 1.
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
-    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+    int nView1 = pDocument->getView();
 
     // Create view 2.
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
     ViewCallback aView2(pDocument);
-    int nView2 = pDocument->m_pDocumentClass->getView(pDocument);
+    int nView2 = pDocument->getView();
 
     // switch to view 1.
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->setView(nView1);
     lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
@@ -4428,7 +4385,7 @@ void DesktopKitTest::testMultiViewTableSelection()
     aView1.m_nTableSelectionCount = 0;
     aView2.m_nTableSelectionCount = 0;
 
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->setView(nView1);
     // Go to Table1.
     lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
     Scheduler::ProcessEventsToIdle();
@@ -4437,7 +4394,7 @@ void DesktopKitTest::testMultiViewTableSelection()
 
     aView1.m_nTableSelectionCount = 0;
     // Switch to view 2
-    pDocument->m_pDocumentClass->setView(pDocument, nView2);
+    pDocument->setView(nView2);
     // Go to Table2 in view 2.
     lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 7);
     Scheduler::ProcessEventsToIdle();
@@ -4452,7 +4409,7 @@ void DesktopKitTest::testMultiViewTableSelection()
     aView2.m_nTableSelectionCount = 0;
 
     // Switch to view 1
-    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->setView(nView1);
     // Go out of Table1 and re-enter..
     lcl_repeatKeyStroke(pDocument, 0, KEY_UP, 1);
     lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
@@ -4469,7 +4426,7 @@ void DesktopKitTest::testColorPaletteCallback()
     LibLODocument_Impl* pDocument = loadDoc("ThemeDocument.docx");
 
     // Create view 1.
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
     Scheduler::ProcessEventsToIdle();
     {
@@ -4480,8 +4437,8 @@ void DesktopKitTest::testColorPaletteCallback()
     }
 
     // Create view 2.
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
     ViewCallback aView2(pDocument);
     Scheduler::ProcessEventsToIdle();
     {

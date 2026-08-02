@@ -106,7 +106,7 @@ gtv_kit_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(priv->kitdocview));
-    pDocument->pClass->paintWindow(pDocument, priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
+    pDocument->paintWindow(priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), priv->m_nWidth, priv->m_nHeight);
 
@@ -165,8 +165,7 @@ gtv_kit_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             break;
         }
         priv->m_nLastButtonPressed = nEventButton;
-        pDocument->pClass->postWindowMouseEvent(pDocument,
-                                                priv->dialogid,
+        pDocument->postWindowMouseEvent(priv->dialogid,
                                                 COKitMouseEventType::BUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
@@ -196,8 +195,7 @@ gtv_kit_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             break;
         }
         priv->m_nLastButtonPressed = nEventButton;
-        pDocument->pClass->postWindowMouseEvent(pDocument,
-                                                priv->dialogid,
+        pDocument->postWindowMouseEvent(priv->dialogid,
                                                 COKitMouseEventType::BUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
@@ -226,8 +224,7 @@ gtv_kit_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
            static_cast<int>(o3tl::toTwips(pEvent->x, o3tl::Length::px)),
            static_cast<int>(o3tl::toTwips(pEvent->y, o3tl::Length::px)));
 
-    pDocument->pClass->postWindowMouseEvent(pDocument,
-                                            priv->dialogid,
+    pDocument->postWindowMouseEvent(priv->dialogid,
                                             COKitMouseEventType::MOVE,
                                             (pEvent->x),
                                             (pEvent->y),
@@ -342,8 +339,7 @@ gtv_kit_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
     ss << "gtv_kit_dialog::postKey(" << pEvent->type << ", " << nCharCode << ", " << nKeyCode << ")";
     g_info("%s", ss.str().c_str());
 
-    pDocument->pClass->postWindowKeyEvent(pDocument,
-                                          priv->dialogid,
+    pDocument->postWindowKeyEvent(priv->dialogid,
                                           pEvent->type == GDK_KEY_RELEASE ? COKitKeyEventType::UP : COKitKeyEventType::DOWN,
                                           nCharCode,
                                           nKeyCode);
@@ -488,7 +484,7 @@ gtv_kit_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpoin
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, priv->m_nChildWidth, priv->m_nChildHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(priv->kitdocview));
-    pDocument->pClass->paintWindow(pDocument, priv->m_nChildId, pBuffer, 0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
+    pDocument->paintWindow(priv->m_nChildId, pBuffer, 0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), priv->m_nChildWidth, priv->m_nChildHeight);
     //gtk_widget_set_size_request(GTK_WIDGET(pDialog), nWidth, nHeight);
@@ -544,8 +540,7 @@ gtv_kit_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
             break;
         }
         priv->m_nChildLastButtonPressed = nEventButton;
-        pDocument->pClass->postWindowMouseEvent(pDocument,
-                                                priv->m_nChildId,
+        pDocument->postWindowMouseEvent(priv->m_nChildId,
                                                 COKitMouseEventType::BUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
@@ -575,8 +570,7 @@ gtv_kit_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
             break;
         }
         priv->m_nChildLastButtonPressed = nEventButton;
-        pDocument->pClass->postWindowMouseEvent(pDocument,
-                                                priv->m_nChildId,
+        pDocument->postWindowMouseEvent(priv->m_nChildId,
                                                 COKitMouseEventType::BUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
@@ -605,8 +599,7 @@ gtv_kit_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
            static_cast<int>(o3tl::toTwips(pEvent->x, o3tl::Length::px)),
            static_cast<int>(o3tl::toTwips(pEvent->y, o3tl::Length::px)));
 
-    pDocument->pClass->postWindowMouseEvent(pDocument,
-                                            priv->m_nChildId,
+    pDocument->postWindowMouseEvent(priv->m_nChildId,
                                             COKitMouseEventType::MOVE,
                                             (pEvent->x),
                                             (pEvent->y),

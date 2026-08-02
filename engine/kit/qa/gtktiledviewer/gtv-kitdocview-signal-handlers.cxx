@@ -449,7 +449,7 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     }
 
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != COKitDocumentType::SPREADSHEET)
+    if (!pDocument || pDocument->getDocumentType() != COKitDocumentType::SPREADSHEET)
         return true;
 
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
@@ -468,7 +468,7 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     std::stringstream ss;
     ss << "kit::Document::getCommandValues(" << aCommand.str() << ")";
     g_info("%s", ss.str().c_str());
-    char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
+    char* pValues = pDocument->getCommandValues(aCommand.str().c_str());
     g_info("kit::Document::getCommandValues() returned '%s'", pValues);
     std::stringstream aStream(pValues);
     free(pValues);

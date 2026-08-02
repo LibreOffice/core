@@ -293,7 +293,6 @@ using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::Language
 static LibCO_Impl *gImpl = nullptr;
 static bool cok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
-static std::weak_ptr< COKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
@@ -1564,118 +1563,466 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 {
     assert(nDocumentId != -1 && "Cannot set mnDocumentId to -1");
 
-    m_pDocumentClass = gDocumentClass.lock();
-    if (!m_pDocumentClass)
-    {
-        m_pDocumentClass = std::make_shared<COKitDocumentClass>();
-
-        m_pDocumentClass->destroy = doc_destroy;
-        m_pDocumentClass->saveAs = doc_saveAs;
-        m_pDocumentClass->getDocumentType = doc_getDocumentType;
-        m_pDocumentClass->getParts = doc_getParts;
-        m_pDocumentClass->getPartPageRectangles = doc_getPartPageRectangles;
-        m_pDocumentClass->getPart = doc_getPart;
-        m_pDocumentClass->setPart = doc_setPart;
-        m_pDocumentClass->selectPart = doc_selectPart;
-        m_pDocumentClass->moveSelectedParts = doc_moveSelectedParts;
-        m_pDocumentClass->getPartName = doc_getPartName;
-        m_pDocumentClass->setPartMode = doc_setPartMode;
-        m_pDocumentClass->getEditMode = doc_getEditMode;
-        m_pDocumentClass->paintTile = doc_paintTile;
-        m_pDocumentClass->paintPartTile = doc_paintPartTile;
-        m_pDocumentClass->getTileMode = doc_getTileMode;
-        m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
-        m_pDocumentClass->getDataArea = doc_getDataArea;
-        m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
-        m_pDocumentClass->registerCallback = doc_registerCallback;
-        m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
-        m_pDocumentClass->postWindowExtTextInputEvent = doc_postWindowExtTextInputEvent;
-        m_pDocumentClass->removeTextContext = doc_removeTextContext;
-        m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
-        m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
-        m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
-        m_pDocumentClass->sendDialogEvent = doc_sendDialogEvent;
-        m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
-        m_pDocumentClass->setTextSelection = doc_setTextSelection;
-        m_pDocumentClass->setWindowTextSelection = doc_setWindowTextSelection;
-        m_pDocumentClass->getTextSelection = doc_getTextSelection;
-        m_pDocumentClass->getSelectionType = doc_getSelectionType;
-        m_pDocumentClass->getSelectionTypeAndText = doc_getSelectionTypeAndText;
-        m_pDocumentClass->getClipboard = doc_getClipboard;
-        m_pDocumentClass->setClipboard = doc_setClipboard;
-        m_pDocumentClass->transferClipboardFromView = doc_transferClipboardFromView;
-        m_pDocumentClass->paste = doc_paste;
-        m_pDocumentClass->flushClipboard = doc_flushClipboard;
-        m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
-        m_pDocumentClass->resetSelection = doc_resetSelection;
-        m_pDocumentClass->getCommandValues = doc_getCommandValues;
-        m_pDocumentClass->setClientZoom = doc_setClientZoom;
-        m_pDocumentClass->setClientVisibleArea = doc_setClientVisibleArea;
-        m_pDocumentClass->setOutlineState = doc_setOutlineState;
-
-        m_pDocumentClass->createView = doc_createView;
-        m_pDocumentClass->destroyView = doc_destroyView;
-        m_pDocumentClass->setView = doc_setView;
-        m_pDocumentClass->getView = doc_getView;
-        m_pDocumentClass->getViewsCount = doc_getViewsCount;
-        m_pDocumentClass->getViewIds = doc_getViewIds;
-
-        m_pDocumentClass->renderFontOrientation = doc_renderFontOrientation;
-        m_pDocumentClass->getPartHash = doc_getPartHash;
-
-        m_pDocumentClass->paintWindow = doc_paintWindow;
-        m_pDocumentClass->paintWindowDPI = doc_paintWindowDPI;
-        m_pDocumentClass->paintWindowForView = doc_paintWindowForView;
-        m_pDocumentClass->postWindow = doc_postWindow;
-        m_pDocumentClass->resizeWindow = doc_resizeWindow;
-
-        m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
-
-        m_pDocumentClass->getPartInfo = doc_getPartInfo;
-        m_pDocumentClass->getPartUniqueId = doc_getPartUniqueId;
-        m_pDocumentClass->getPartIndex = doc_getPartIndex;
-
-        m_pDocumentClass->insertCertificate = doc_insertCertificate;
-        m_pDocumentClass->addCertificate = doc_addCertificate;
-        m_pDocumentClass->getSignatureState = doc_getSignatureState;
-
-        m_pDocumentClass->renderShapeSelection = doc_renderShapeSelection;
-        m_pDocumentClass->postWindowGestureEvent = doc_postWindowGestureEvent;
-
-        m_pDocumentClass->createViewWithOptions = doc_createViewWithOptions;
-        m_pDocumentClass->completeFunction = doc_completeFunction;
-
-        m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
-        m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
-
-        m_pDocumentClass->setBlockedCommandList = doc_setBlockedCommandList;
-
-        m_pDocumentClass->sendContentControlEvent = doc_sendContentControlEvent;
-
-        m_pDocumentClass->setViewTimezone = doc_setViewTimezone;
-
-        m_pDocumentClass->setAccessibilityState = doc_setAccessibilityState;
-
-        m_pDocumentClass->getA11yFocusedParagraph = doc_getA11yFocusedParagraph;
-        m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
-
-        m_pDocumentClass->setViewReadOnly = doc_setViewReadOnly;
-
-        m_pDocumentClass->setAllowChangeComments = doc_setAllowChangeComments;
-        m_pDocumentClass->setAllowManageRedlines = doc_setAllowManageRedlines;
-
-        m_pDocumentClass->getPresentationInfo = doc_getPresentationInfo;
-        m_pDocumentClass->createSlideRenderer = doc_createSlideRenderer;
-        m_pDocumentClass->postSlideshowCleanup = doc_postSlideshowCleanup;
-        m_pDocumentClass->renderNextSlideLayer = doc_renderNextSlideLayer;
-        m_pDocumentClass->setViewOption = doc_setViewOption;
-        m_pDocumentClass->setColorPreviewState = doc_setColorPreviewState;
-
-        gDocumentClass = m_pDocumentClass;
-    }
-    pClass = m_pDocumentClass.get();
-
     forceSetClipboardForCurrentView(this);
+}
+
+void LibLODocument_Impl::destroy()
+{
+    doc_destroy(this);
+}
+
+int LibLODocument_Impl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
+{
+    return doc_saveAs(this, pUrl, pFormat, pFilterOptions);
+}
+
+COKitDocumentType LibLODocument_Impl::getDocumentType()
+{
+    return doc_getDocumentType(this);
+}
+
+int LibLODocument_Impl::getParts()
+{
+    return doc_getParts(this);
+}
+
+char* LibLODocument_Impl::getPartPageRectangles()
+{
+    return doc_getPartPageRectangles(this);
+}
+
+int LibLODocument_Impl::getPart()
+{
+    return doc_getPart(this);
+}
+
+void LibLODocument_Impl::setPart(int nPart)
+{
+    doc_setPart(this, nPart);
+}
+
+char* LibLODocument_Impl::getPartName(int nPart)
+{
+    return doc_getPartName(this, nPart);
+}
+
+void LibLODocument_Impl::setPartMode(COKitPartMode eMode)
+{
+    doc_setPartMode(this, eMode);
+}
+
+void LibLODocument_Impl::paintTile(unsigned char* pBuffer, const int nCanvasWidth,
+                                   const int nCanvasHeight, const int nTilePosX,
+                                   const int nTilePosY, const int nTileWidth, const int nTileHeight)
+{
+    doc_paintTile(this, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth,
+                  nTileHeight);
+}
+
+COKitTileMode LibLODocument_Impl::getTileMode()
+{
+    return doc_getTileMode(this);
+}
+
+void LibLODocument_Impl::getDocumentSize(long* pWidth, long* pHeight)
+{
+    doc_getDocumentSize(this, pWidth, pHeight);
+}
+
+void LibLODocument_Impl::initializeForRendering(const char* pArguments)
+{
+    doc_initializeForRendering(this, pArguments);
+}
+
+void LibLODocument_Impl::registerCallback(COKitCallback pCallback, void* pData)
+{
+    doc_registerCallback(this, pCallback, pData);
+}
+
+void LibLODocument_Impl::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
+{
+    doc_postKeyEvent(this, eType, nCharCode, nKeyCode);
+}
+
+void LibLODocument_Impl::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                        int nButtons, int nModifier)
+{
+    doc_postMouseEvent(this, eType, nX, nY, nCount, nButtons, nModifier);
+}
+
+void LibLODocument_Impl::postUnoCommand(const char* pCommand, const char* pArguments,
+                                        bool bNotifyWhenFinished)
+{
+    doc_postUnoCommand(this, pCommand, pArguments, bNotifyWhenFinished);
+}
+
+void LibLODocument_Impl::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
+{
+    doc_setTextSelection(this, eType, nX, nY);
+}
+
+char* LibLODocument_Impl::getTextSelection(const char* pMimeType, char** pUsedMimeType)
+{
+    return doc_getTextSelection(this, pMimeType, pUsedMimeType);
+}
+
+bool LibLODocument_Impl::paste(const char* pMimeType, const char* pData, size_t nSize)
+{
+    return doc_paste(this, pMimeType, pData, nSize);
+}
+
+void LibLODocument_Impl::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
+{
+    doc_setGraphicSelection(this, eType, nX, nY);
+}
+
+void LibLODocument_Impl::resetSelection()
+{
+    doc_resetSelection(this);
+}
+
+char* LibLODocument_Impl::getCommandValues(const char* pCommand)
+{
+    return doc_getCommandValues(this, pCommand);
+}
+
+void LibLODocument_Impl::setClientZoom(int nTilePixelWidth, int nTilePixelHeight,
+                                       int nTileTwipWidth, int nTileTwipHeight)
+{
+    doc_setClientZoom(this, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+}
+
+void LibLODocument_Impl::setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
+{
+    doc_setClientVisibleArea(this, nX, nY, nWidth, nHeight);
+}
+
+int LibLODocument_Impl::createView()
+{
+    return doc_createView(this);
+}
+
+void LibLODocument_Impl::destroyView(int nId)
+{
+    doc_destroyView(this, nId);
+}
+
+void LibLODocument_Impl::setView(int nId)
+{
+    doc_setView(this, nId);
+}
+
+int LibLODocument_Impl::getView()
+{
+    return doc_getView(this);
+}
+
+int LibLODocument_Impl::getViewsCount()
+{
+    return doc_getViewsCount(this);
+}
+
+char* LibLODocument_Impl::getPartHash(int nPart)
+{
+    return doc_getPartHash(this, nPart);
+}
+
+void LibLODocument_Impl::paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+                                       const int nCanvasWidth, const int nCanvasHeight,
+                                       const int nTilePosX, const int nTilePosY,
+                                       const int nTileWidth, const int nTileHeight)
+{
+    doc_paintPartTile(this, pBuffer, nPart, nMode, nCanvasWidth, nCanvasHeight, nTilePosX,
+                      nTilePosY, nTileWidth, nTileHeight);
+}
+
+bool LibLODocument_Impl::getViewIds(int* pArray, size_t nSize)
+{
+    return doc_getViewIds(this, pArray, nSize);
+}
+
+void LibLODocument_Impl::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
+{
+    doc_setOutlineState(this, bColumn, nLevel, nIndex, bHidden);
+}
+
+void LibLODocument_Impl::paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                     const int y, const int width, const int height)
+{
+    doc_paintWindow(this, nWindowId, pBuffer, x, y, width, height);
+}
+
+void LibLODocument_Impl::postWindow(unsigned nWindowId, COKitWindowAction eAction,
+                                    const char* pData)
+{
+    doc_postWindow(this, nWindowId, eAction, pData);
+}
+
+void LibLODocument_Impl::postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType,
+                                            int nCharCode, int nKeyCode)
+{
+    doc_postWindowKeyEvent(this, nWindowId, eType, nCharCode, nKeyCode);
+}
+
+void LibLODocument_Impl::postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType,
+                                              int nX, int nY, int nCount, int nButtons,
+                                              int nModifier)
+{
+    doc_postWindowMouseEvent(this, nWindowId, eType, nX, nY, nCount, nButtons, nModifier);
+}
+
+void LibLODocument_Impl::setViewLanguage(int nId, const char* language)
+{
+    doc_setViewLanguage(this, nId, language);
+}
+
+void LibLODocument_Impl::postWindowExtTextInputEvent(unsigned nWindowId,
+                                                     COKitExtTextInputType eType, const char* pText)
+{
+    doc_postWindowExtTextInputEvent(this, nWindowId, eType, pText);
+}
+
+char* LibLODocument_Impl::getPartInfo(int nPart)
+{
+    return doc_getPartInfo(this, nPart);
+}
+
+unsigned long long LibLODocument_Impl::getPartUniqueId(int nPart, int nMode)
+{
+    return doc_getPartUniqueId(this, nPart, nMode);
+}
+
+int LibLODocument_Impl::getPartIndex(int nPart, int nMode)
+{
+    return doc_getPartIndex(this, nPart, nMode);
+}
+
+void LibLODocument_Impl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                        const int y, const int width, const int height,
+                                        const double dpiscale)
+{
+    doc_paintWindowDPI(this, nWindowId, pBuffer, x, y, width, height, dpiscale);
+}
+
+bool LibLODocument_Impl::insertCertificate(const unsigned char* pCertificateBinary,
+                                           const int nCertificateBinarySize,
+                                           const unsigned char* pPrivateKeyBinary,
+                                           const int nPrivateKeyBinarySize)
+{
+    return doc_insertCertificate(this, pCertificateBinary, nCertificateBinarySize,
+                                 pPrivateKeyBinary, nPrivateKeyBinarySize);
+}
+
+bool LibLODocument_Impl::addCertificate(const unsigned char* pCertificateBinary,
+                                        const int nCertificateBinarySize)
+{
+    return doc_addCertificate(this, pCertificateBinary, nCertificateBinarySize);
+}
+
+int LibLODocument_Impl::getSignatureState()
+{
+    return doc_getSignatureState(this);
+}
+
+size_t LibLODocument_Impl::renderShapeSelection(char** pOutput)
+{
+    return doc_renderShapeSelection(this, pOutput);
+}
+
+void LibLODocument_Impl::postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX,
+                                                int nY, int nOffset)
+{
+    doc_postWindowGestureEvent(this, nWindowId, pType, nX, nY, nOffset);
+}
+
+int LibLODocument_Impl::createViewWithOptions(const char* pOptions)
+{
+    return doc_createViewWithOptions(this, pOptions);
+}
+
+void LibLODocument_Impl::selectPart(int nPart, int nSelect)
+{
+    doc_selectPart(this, nPart, nSelect);
+}
+
+void LibLODocument_Impl::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
+{
+    doc_moveSelectedParts(this, nPosition, bDuplicate, nIntoSection);
+}
+
+void LibLODocument_Impl::resizeWindow(unsigned nWindowId, const int width, const int height)
+{
+    doc_resizeWindow(this, nWindowId, width, height);
+}
+
+int LibLODocument_Impl::getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                                     char      ***pOutMimeTypes, size_t     **pOutSizes,
+                                     char      ***pOutStreams)
+{
+    return doc_getClipboard(this, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+}
+
+int LibLODocument_Impl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                                     const size_t  *pInSizes, const char   **pInStreams)
+{
+    return doc_setClipboard(this, nInCount, pInMimeTypes, pInSizes, pInStreams);
+}
+
+COKitSelectionType LibLODocument_Impl::getSelectionType()
+{
+    return doc_getSelectionType(this);
+}
+
+void LibLODocument_Impl::removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
+{
+    doc_removeTextContext(this, nWindowId, nBefore, nAfter);
+}
+
+void LibLODocument_Impl::sendDialogEvent(unsigned long long int nKitWindowId,
+                                         const char* pArguments)
+{
+    doc_sendDialogEvent(this, nKitWindowId, pArguments);
+}
+
+unsigned char* LibLODocument_Impl::renderFontOrientation(const char* pFontName, const char* pChar,
+                                                         int* pFontWidth, int* pFontHeight,
+                                                         int pOrientation)
+{
+    return doc_renderFontOrientation(this, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
+}
+
+void LibLODocument_Impl::paintWindowForView(unsigned nWindowId, unsigned char* pBuffer,
+                                            const int x, const int y, const int width,
+                                            const int height, const double dpiscale, int viewId)
+{
+    doc_paintWindowForView(this, nWindowId, pBuffer, x, y, width, height, dpiscale, viewId);
+}
+
+void LibLODocument_Impl::completeFunction(const char* pFunctionName)
+{
+    doc_completeFunction(this, pFunctionName);
+}
+
+void LibLODocument_Impl::setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
+{
+    doc_setWindowTextSelection(this, nWindowId, bSwap, nX, nY);
+}
+
+void LibLODocument_Impl::sendFormFieldEvent(const char* pArguments)
+{
+    doc_sendFormFieldEvent(this, pArguments);
+}
+
+void LibLODocument_Impl::setBlockedCommandList(int nViewId, const char* blockedCommandList)
+{
+    doc_setBlockedCommandList(this, nViewId, blockedCommandList);
+}
+
+bool LibLODocument_Impl::renderSearchResult(const char* pSearchResult,
+                                            unsigned char** pBitmapBuffer, int* pWidth,
+                                            int* pHeight, size_t* pByteSize)
+{
+    return doc_renderSearchResult(this, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
+}
+
+void LibLODocument_Impl::sendContentControlEvent(const char* pArguments)
+{
+    doc_sendContentControlEvent(this, pArguments);
+}
+
+COKitSelectionType LibLODocument_Impl::getSelectionTypeAndText(const char* pMimeType, char** pText,
+                                                               char** pUsedMimeType)
+{
+    return doc_getSelectionTypeAndText(this, pMimeType, pText, pUsedMimeType);
+}
+
+void LibLODocument_Impl::getDataArea(long nPart, long* pCol, long* pRow)
+{
+    doc_getDataArea(this, nPart, pCol, pRow);
+}
+
+int LibLODocument_Impl::getEditMode()
+{
+    return doc_getEditMode(this);
+}
+
+void LibLODocument_Impl::setViewTimezone(int nId, const char* pTimezone)
+{
+    doc_setViewTimezone(this, nId, pTimezone);
+}
+
+void LibLODocument_Impl::setAccessibilityState(int nId, bool nEnabled)
+{
+    doc_setAccessibilityState(this, nId, nEnabled);
+}
+
+char* LibLODocument_Impl::getA11yFocusedParagraph()
+{
+    return doc_getA11yFocusedParagraph(this);
+}
+
+int LibLODocument_Impl::getA11yCaretPosition()
+{
+    return doc_getA11yCaretPosition(this);
+}
+
+void LibLODocument_Impl::setViewReadOnly(int nId, const bool readOnly)
+{
+    doc_setViewReadOnly(this, nId, readOnly);
+}
+
+void LibLODocument_Impl::setAllowChangeComments(int nId, const bool allow)
+{
+    doc_setAllowChangeComments(this, nId, allow);
+}
+
+char* LibLODocument_Impl::getPresentationInfo()
+{
+    return doc_getPresentationInfo(this);
+}
+
+bool LibLODocument_Impl::createSlideRenderer(const char* pSlideHash, int nSlideNumber,
+                                             unsigned* nViewWidth, unsigned* nViewHeight,
+                                             bool bRenderBackground, bool bRenderMasterPage)
+{
+    return doc_createSlideRenderer(this, pSlideHash, nSlideNumber, nViewWidth, nViewHeight,
+                                   bRenderBackground, bRenderMasterPage);
+}
+
+void LibLODocument_Impl::postSlideshowCleanup()
+{
+    doc_postSlideshowCleanup(this);
+}
+
+bool LibLODocument_Impl::renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer,
+                                              double* pScale, char** pJsonMessage)
+{
+    return doc_renderNextSlideLayer(this, pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
+}
+
+void LibLODocument_Impl::setViewOption(const char* pOption, const char* pValue)
+{
+    doc_setViewOption(this, pOption, pValue);
+}
+
+void LibLODocument_Impl::setColorPreviewState(int nId, bool nEnabled)
+{
+    doc_setColorPreviewState(this, nId, nEnabled);
+}
+
+void LibLODocument_Impl::setAllowManageRedlines(int nId, bool allow)
+{
+    doc_setAllowManageRedlines(this, nId, allow);
+}
+
+void LibLODocument_Impl::transferClipboardFromView(int nSourceViewId)
+{
+    doc_transferClipboardFromView(this, nSourceViewId);
+}
+
+void LibLODocument_Impl::flushClipboard()
+{
+    doc_flushClipboard(this);
 }
 
 LibLODocument_Impl::~LibLODocument_Impl()
@@ -1740,7 +2087,7 @@ CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallba
     m_states.emplace(COKitCallbackType::VERTICAL_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(COKitCallbackType::STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 
-    if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
+    if (char* pViewRenderState = pDocument->getCommandValues(".uno:ViewRenderState"))
     {
         m_aViewRenderState = OString(pViewRenderState);
         free(pViewRenderState);

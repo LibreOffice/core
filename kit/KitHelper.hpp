@@ -49,7 +49,7 @@ namespace LOKitHelper
 
     inline std::string getPartData(COKitDocument *loKitDocument, int part)
     {
-        ScopedString ptrToData(loKitDocument->pClass->getPartInfo(loKitDocument, part));
+        ScopedString ptrToData(loKitDocument->getPartInfo(part));
         std::string result(ptrToData.get());
         return result;
     }
@@ -114,7 +114,7 @@ namespace LOKitHelper
     // TODO: create a struct with all the resultInfo properties and
     inline void fetchWriterSpecificData(COKitDocument *loKitDocument, std::unordered_map<std::string, std::string> &resultInfo, int& mode, std::string& hasComments)
     {
-        std::string rectangles = loKitDocument->pClass->getPartPageRectangles(loKitDocument);
+        std::string rectangles = loKitDocument->getPartPageRectangles();
 
         rectangles = Util::replace(rectangles, ";", "], [");
 
@@ -129,11 +129,11 @@ namespace LOKitHelper
     inline void fetchCalcSpecificData(COKitDocument *loKitDocument, std::unordered_map<std::string, std::string> &resultInfo, int part)
     {
         long lastColumn, lastRow;
-        loKitDocument->pClass->getDataArea(loKitDocument, part, &lastColumn, &lastRow);
+        loKitDocument->getDataArea(part, &lastColumn, &lastRow);
         resultInfo["lastcolumn"] = std::to_string(lastColumn);
         resultInfo["lastrow"] = std::to_string(lastRow);
 
-        ScopedString value(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:DefinePrintArea"));
+        ScopedString value(loKitDocument->getCommandValues(".uno:DefinePrintArea"));
         if (value)
         {
             resultInfo["printranges"] = std::string(value.get());
@@ -143,23 +143,23 @@ namespace LOKitHelper
     inline std::string getDocumentTypeAsString(COKitDocument *loKitDocument)
     {
         assert(loKitDocument && "null loKitDocument");
-        const auto type = loKitDocument->pClass->getDocumentType(loKitDocument);
+        const auto type = loKitDocument->getDocumentType();
         return documentTypeToString(type);
     }
 
     inline std::string documentStatus(COKitDocument *loKitDocument, bool diffSizePages = false)
     {
         assert(loKitDocument && "null loKitDocument");
-        const auto type = loKitDocument->pClass->getDocumentType(loKitDocument);
+        const auto type = loKitDocument->getDocumentType();
 
         std::unordered_map<std::string, std::string> resultInfo;
 
-        const int partsCount = loKitDocument->pClass->getParts(loKitDocument);
-        const int selectedPart = loKitDocument->pClass->getPart(loKitDocument);
+        const int partsCount = loKitDocument->getParts();
+        const int selectedPart = loKitDocument->getPart();
 
         long width, height;
-        loKitDocument->pClass->getDocumentSize(loKitDocument, &width, &height);
-        int viewId = loKitDocument->pClass->getView(loKitDocument);
+        loKitDocument->getDocumentSize(&width, &height);
+        int viewId = loKitDocument->getView();
 
         resultInfo["type"] = '"' + documentTypeToString(type) + '"';
         resultInfo["partscount"] = std::to_string(partsCount);
@@ -168,7 +168,7 @@ namespace LOKitHelper
         resultInfo["height"] = std::to_string(height);
         resultInfo["viewid"] = std::to_string(viewId);
 
-        ScopedString value(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:ReadOnly"));
+        ScopedString value(loKitDocument->getCommandValues(".uno:ReadOnly"));
         if (value)
         {
             const std::string isReadOnly(value.get());
@@ -177,7 +177,7 @@ namespace LOKitHelper
             resultInfo["readonly"] = readOnly ? "true": "false";
         }
 
-        ScopedString externalLinks(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:ExternalLinksDisabled"));
+        ScopedString externalLinks(loKitDocument->getCommandValues(".uno:ExternalLinksDisabled"));
         if (externalLinks)
         {
             const std::string isExternalLinksDisabled(externalLinks.get());
@@ -186,7 +186,7 @@ namespace LOKitHelper
             resultInfo["externallinksdisabled"] = externalLinksDisabled ? "true": "false";
         }
 
-        ScopedString values(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:AllPageSize"));
+        ScopedString values(loKitDocument->getCommandValues(".uno:AllPageSize"));
         if (values)
         {
             Poco::JSON::Parser parser;

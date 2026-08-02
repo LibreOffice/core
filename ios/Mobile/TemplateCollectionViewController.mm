@@ -164,8 +164,8 @@ static NSString *mapTemplateExtensionToActual(NSString *templateName) {
     // same basename), and then proceed to edit that.
 
     COKitDocument *doc = lo_kit->documentLoad([[selectedTemplate absoluteString] UTF8String]);
-    doc->pClass->saveAs(doc, [[newURL absoluteString] UTF8String], nullptr, nullptr);
-    doc->pClass->destroy(doc);
+    doc->saveAs([[newURL absoluteString] UTF8String], nullptr, nullptr);
+    doc->destroy();
 
     // Partial fix for issue #1962 Set import handler to nil after use
     if (self.importHandler) {

@@ -43,7 +43,7 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(sidebar)));
 
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    char* pValues = pDocument->getCommandValues(".uno:ViewAnnotations");
     g_info("kit::Document::getCommandValues(%s) : %s", ".uno:ViewAnnotations", pValues);
     std::stringstream aStream(pValues);
     free(pValues);

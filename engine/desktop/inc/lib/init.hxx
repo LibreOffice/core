@@ -285,7 +285,6 @@ namespace desktop {
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public COKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
-        std::shared_ptr< COKitDocumentClass > m_pDocumentClass;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
         WaitUntilIdle maIdleHelper;
@@ -300,6 +299,121 @@ namespace desktop {
         ~LibLODocument_Impl();
 
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
+
+        void destroy() override;
+        int saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
+        COKitDocumentType getDocumentType() override;
+        int getParts() override;
+        char* getPartPageRectangles() override;
+        int getPart() override;
+        void setPart(int nPart) override;
+        char* getPartName(int nPart) override;
+        void setPartMode(COKitPartMode eMode) override;
+        void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
+                       const int nTilePosX, const int nTilePosY, const int nTileWidth,
+                       const int nTileHeight) override;
+        COKitTileMode getTileMode() override;
+        void getDocumentSize(long* pWidth, long* pHeight) override;
+        void initializeForRendering(const char* pArguments) override;
+        void registerCallback(COKitCallback pCallback, void* pData) override;
+        void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) override;
+        void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
+                            int nModifier) override;
+        void postUnoCommand(const char* pCommand, const char* pArguments,
+                            bool bNotifyWhenFinished) override;
+        void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) override;
+        char* getTextSelection(const char* pMimeType, char** pUsedMimeType) override;
+        bool paste(const char* pMimeType, const char* pData, size_t nSize) override;
+        void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
+        void resetSelection() override;
+        char* getCommandValues(const char* pCommand) override;
+        void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
+                           int nTileTwipHeight) override;
+        void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) override;
+        int createView() override;
+        void destroyView(int nId) override;
+        void setView(int nId) override;
+        int getView() override;
+        int getViewsCount() override;
+        char* getPartHash(int nPart) override;
+        void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+                           const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
+                           const int nTilePosY, const int nTileWidth,
+                           const int nTileHeight) override;
+        bool getViewIds(int* pArray, size_t nSize) override;
+        void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
+        void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
+                         const int width, const int height) override;
+        void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData) override;
+        void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
+                                int nKeyCode) override;
+        void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX, int nY,
+                                  int nCount, int nButtons, int nModifier) override;
+        void setViewLanguage(int nId, const char* language) override;
+        void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
+                                         const char* pText) override;
+        char* getPartInfo(int nPart) override;
+        void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
+                            const int width, const int height, const double dpiscale) override;
+        bool insertCertificate(const unsigned char* pCertificateBinary,
+                               const int nCertificateBinarySize,
+                               const unsigned char* pPrivateKeyBinary,
+                               const int nPrivateKeyBinarySize) override;
+        bool addCertificate(const unsigned char* pCertificateBinary,
+                            const int nCertificateBinarySize) override;
+        int getSignatureState() override;
+        size_t renderShapeSelection(char** pOutput) override;
+        void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
+                                    int nOffset) override;
+        int createViewWithOptions(const char* pOptions) override;
+        void selectPart(int nPart, int nSelect) override;
+        void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
+        void resizeWindow(unsigned nWindowId, const int width, const int height) override;
+        int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                         char      ***pOutMimeTypes, size_t     **pOutSizes,
+                         char      ***pOutStreams) override;
+        int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                         const size_t  *pInSizes, const char   **pInStreams) override;
+        COKitSelectionType getSelectionType() override;
+        void removeTextContext(unsigned nWindowId, int nBefore, int nAfter) override;
+        void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) override;
+        unsigned char* renderFontOrientation(const char* pFontName, const char* pChar,
+                                             int* pFontWidth, int* pFontHeight,
+                                             int pOrientation) override;
+        void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                const int y, const int width, const int height,
+                                const double dpiscale, int viewId) override;
+        void completeFunction(const char* pFunctionName) override;
+        void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY) override;
+        void sendFormFieldEvent(const char* pArguments) override;
+        void setBlockedCommandList(int nViewId, const char* blockedCommandList) override;
+        bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                int* pWidth, int* pHeight, size_t* pByteSize) override;
+        void sendContentControlEvent(const char* pArguments) override;
+        COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
+                                                   char** pUsedMimeType) override;
+        void getDataArea(long nPart, long* pCol, long* pRow) override;
+        int getEditMode() override;
+        void setViewTimezone(int nId, const char* pTimezone) override;
+        void setAccessibilityState(int nId, bool nEnabled) override;
+        char* getA11yFocusedParagraph() override;
+        int getA11yCaretPosition() override;
+        void setViewReadOnly(int nId, const bool readOnly) override;
+        void setAllowChangeComments(int nId, const bool allow) override;
+        char* getPresentationInfo() override;
+        bool createSlideRenderer(const char* pSlideHash, int nSlideNumber, unsigned* nViewWidth,
+                                 unsigned* nViewHeight, bool bRenderBackground,
+                                 bool bRenderMasterPage) override;
+        void postSlideshowCleanup() override;
+        bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
+                                  char** pJsonMessage) override;
+        void setViewOption(const char* pOption, const char* pValue) override;
+        void setColorPreviewState(int nId, bool nEnabled) override;
+        void setAllowManageRedlines(int nId, bool allow) override;
+        void transferClipboardFromView(int nSourceViewId) override;
+        void flushClipboard() override;
+        unsigned long long getPartUniqueId(int nPart, int nMode) override;
+        int getPartIndex(int nPart, int nMode) override;
     };
 
     struct DESKTOP_DLLPUBLIC LibCO_Impl : public COKit

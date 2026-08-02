@@ -1434,7 +1434,6 @@ typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pRe
 typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
 
 struct COKitDocument;
-struct COKitDocumentClass;
 
 struct COKit
 {
@@ -1569,403 +1568,295 @@ struct COKit
 
 struct COKitDocument
 {
-    COKitDocumentClass* pClass;
-};
+    virtual ~COKitDocument() = default;
 
-struct COKitDocumentClass
-{
-    void (*destroy) (COKitDocument* pThis);
+    virtual void destroy() = 0;
 
-    int (*saveAs) (COKitDocument* pThis,
-                   const char* pUrl,
-                   const char* pFormat,
-                   const char* pFilterOptions);
+    virtual int saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) = 0;
 
     /** @see kit::Document::getDocumentType(). */
-    COKitDocumentType (*getDocumentType) (COKitDocument* pThis);
+    virtual COKitDocumentType getDocumentType() = 0;
 
     /// @see kit::Document::getParts().
-    int (*getParts) (COKitDocument* pThis);
+    virtual int getParts() = 0;
 
     /// @see kit::Document::getPartPageRectangles().
-    char* (*getPartPageRectangles) (COKitDocument* pThis);
+    virtual char* getPartPageRectangles() = 0;
 
     /// @see kit::Document::getPart().
-    int (*getPart) (COKitDocument* pThis);
+    virtual int getPart() = 0;
 
     /// @see kit::Document::setPart().
-    void (*setPart) (COKitDocument* pThis,
-                     int nPart);
+    virtual void setPart(int nPart) = 0;
 
     /// @see kit::Document::getPartName().
-    char* (*getPartName) (COKitDocument* pThis,
-                          int nPart);
+    virtual char* getPartName(int nPart) = 0;
 
     /// @see kit::Document::setPartMode().
-    void (*setPartMode) (COKitDocument* pThis,
-                         COKitPartMode eMode);
+    virtual void setPartMode(COKitPartMode eMode) = 0;
 
     /// @see kit::Document::paintTile().
-    void (*paintTile) (COKitDocument* pThis,
-                       unsigned char* pBuffer,
-                       const int nCanvasWidth,
-                       const int nCanvasHeight,
-                       const int nTilePosX,
-                       const int nTilePosY,
-                       const int nTileWidth,
-                       const int nTileHeight);
+    virtual void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
+                           const int nTilePosX, const int nTilePosY, const int nTileWidth,
+                           const int nTileHeight) = 0;
 
     /// @see kit::Document::getTileMode().
-    COKitTileMode (*getTileMode) (COKitDocument* pThis);
+    virtual COKitTileMode getTileMode() = 0;
 
     /// @see kit::Document::getDocumentSize().
-    void (*getDocumentSize) (COKitDocument* pThis,
-                             long* pWidth,
-                             long* pHeight);
+    virtual void getDocumentSize(long* pWidth, long* pHeight) = 0;
 
     /// @see kit::Document::initializeForRendering().
-    void (*initializeForRendering) (COKitDocument* pThis,
-                                    const char* pArguments);
+    virtual void initializeForRendering(const char* pArguments) = 0;
 
     /// @see kit::Document::registerCallback().
-    void (*registerCallback) (COKitDocument* pThis,
-                              COKitCallback pCallback,
-                              void* pData);
+    virtual void registerCallback(COKitCallback pCallback, void* pData) = 0;
 
     /// @see kit::Document::postKeyEvent
-    void (*postKeyEvent) (COKitDocument* pThis,
-                          COKitKeyEventType eType,
-                          int nCharCode,
-                          int nKeyCode);
+    virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) = 0;
 
     /// @see kit::Document::postMouseEvent
-    void (*postMouseEvent) (COKitDocument* pThis,
-                            COKitMouseEventType eType,
-                            int nX,
-                            int nY,
-                            int nCount,
-                            int nButtons,
-                            int nModifier);
+    virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                int nButtons, int nModifier) = 0;
 
     /// @see kit::Document::postUnoCommand
-    void (*postUnoCommand) (COKitDocument* pThis,
-                            const char* pCommand,
-                            const char* pArguments,
-                            bool bNotifyWhenFinished);
+    virtual void postUnoCommand(const char* pCommand, const char* pArguments,
+                                bool bNotifyWhenFinished) = 0;
 
     /// @see kit::Document::setTextSelection
-    void (*setTextSelection) (COKitDocument* pThis,
-                              COKitSetTextSelectionType eType,
-                              int nX,
-                              int nY);
+    virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) = 0;
 
     /// @see kit::Document::getTextSelection
-    char* (*getTextSelection) (COKitDocument* pThis,
-                               const char* pMimeType,
-                               char** pUsedMimeType);
+    virtual char* getTextSelection(const char* pMimeType, char** pUsedMimeType) = 0;
 
     /// @see kit::Document::paste().
-    bool (*paste) (COKitDocument* pThis,
-                   const char* pMimeType,
-                   const char* pData,
-                   size_t nSize);
+    virtual bool paste(const char* pMimeType, const char* pData, size_t nSize) = 0;
 
     /// @see kit::Document::setGraphicSelection
-    void (*setGraphicSelection) (COKitDocument* pThis,
-                                 COKitSetGraphicSelectionType eType,
-                                 int nX,
-                                 int nY);
+    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
 
     /// @see kit::Document::resetSelection
-    void (*resetSelection) (COKitDocument* pThis);
+    virtual void resetSelection() = 0;
 
     /// @see kit::Document::getCommandValues().
-    char* (*getCommandValues) (COKitDocument* pThis, const char* pCommand);
+    virtual char* getCommandValues(const char* pCommand) = 0;
 
     /// @see kit::Document::setClientZoom().
-    void (*setClientZoom) (COKitDocument* pThis,
-            int nTilePixelWidth,
-            int nTilePixelHeight,
-            int nTileTwipWidth,
-            int nTileTwipHeight);
+    virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
+                               int nTileTwipHeight) = 0;
 
     /// @see kit::Document::setVisibleArea).
-    void (*setClientVisibleArea) (COKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
+    virtual void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight) = 0;
 
     /// @see kit::Document::createView().
-    int (*createView) (COKitDocument* pThis);
+    virtual int createView() = 0;
     /// @see kit::Document::destroyView().
-    void (*destroyView) (COKitDocument* pThis, int nId);
+    virtual void destroyView(int nId) = 0;
     /// @see kit::Document::setView().
-    void (*setView) (COKitDocument* pThis, int nId);
+    virtual void setView(int nId) = 0;
     /// @see kit::Document::getView().
-    int (*getView) (COKitDocument* pThis);
+    virtual int getView() = 0;
     /// @see kit::Document::getViewsCount().
-    int (*getViewsCount) (COKitDocument* pThis);
+    virtual int getViewsCount() = 0;
 
     /// @see kit::Document::getPartHash().
-    char* (*getPartHash) (COKitDocument* pThis,
-                          int nPart);
+    virtual char* getPartHash(int nPart) = 0;
 
     /// Paints a tile from a specific part.
     /// @see kit::Document::paintTile().
-    void (*paintPartTile) (COKitDocument* pThis,
-                           unsigned char* pBuffer,
-                           const int nPart,
-                           const int nMode,
-                           const int nCanvasWidth,
-                           const int nCanvasHeight,
-                           const int nTilePosX,
-                           const int nTilePosY,
-                           const int nTileWidth,
-                           const int nTileHeight);
+    virtual void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
+                               const int nCanvasWidth, const int nCanvasHeight,
+                               const int nTilePosX, const int nTilePosY, const int nTileWidth,
+                               const int nTileHeight) = 0;
 
     /// @see kit::Document::getViewIds().
-    bool (*getViewIds) (COKitDocument* pThis,
-                       int* pArray,
-                       size_t nSize);
+    virtual bool getViewIds(int* pArray, size_t nSize) = 0;
 
     /// @see kit::Document::setOutlineState).
-    void (*setOutlineState) (COKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
+    virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) = 0;
 
     /// Paints window with given id to the buffer
     /// @see kit::Document::paintWindow().
-    void (*paintWindow) (COKitDocument* pThis, unsigned nWindowId,
-                         unsigned char* pBuffer,
-                         const int x, const int y,
-                         const int width, const int height);
+    virtual void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
+                             const int width, const int height) = 0;
 
     /// @see kit::Document::postWindow().
-    void (*postWindow) (COKitDocument* pThis, unsigned nWindowId, COKitWindowAction eAction,
-                        const char* pData);
+    virtual void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData) = 0;
 
     /// @see kit::Document::postWindowKeyEvent().
-    void (*postWindowKeyEvent) (COKitDocument* pThis,
-                                unsigned nWindowId,
-                                COKitKeyEventType eType,
-                                int nCharCode,
-                                int nKeyCode);
+    virtual void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
+                                    int nKeyCode) = 0;
 
     /// @see kit::Document::postWindowMouseEvent().
-    void (*postWindowMouseEvent) (COKitDocument* pThis,
-                                  unsigned nWindowId,
-                                  COKitMouseEventType eType,
-                                  int nX,
-                                  int nY,
-                                  int nCount,
-                                  int nButtons,
-                                  int nModifier);
+    virtual void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX,
+                                      int nY, int nCount, int nButtons, int nModifier) = 0;
 
     /// @see kit::Document::setViewLanguage().
-    void (*setViewLanguage) (COKitDocument* pThis, int nId, const char* language);
+    virtual void setViewLanguage(int nId, const char* language) = 0;
 
     /// @see kit::Document::postWindowExtTextInputEvent
-    void (*postWindowExtTextInputEvent) (COKitDocument* pThis,
-                                         unsigned nWindowId,
-                                         COKitExtTextInputType eType,
-                                         const char* pText);
+    virtual void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
+                                             const char* pText) = 0;
 
     /// @see kit::Document::getPartInfo().
-    char* (*getPartInfo) (COKitDocument* pThis, int nPart);
+    virtual char* getPartInfo(int nPart) = 0;
 
     /// Paints window with given id to the buffer with the give DPI scale
     /// (every pixel is dpiscale-times larger).
     /// @see kit::Document::paintWindow().
-    void (*paintWindowDPI) (COKitDocument* pThis, unsigned nWindowId,
-                            unsigned char* pBuffer,
-                            const int x, const int y,
-                            const int width, const int height,
-                            const double dpiscale);
+    virtual void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                const int y, const int width, const int height,
+                                const double dpiscale) = 0;
 
     /// @see kit::Document::insertCertificate().
-    bool (*insertCertificate) (COKitDocument* pThis,
-                                const unsigned char* pCertificateBinary,
-                                const int nCertificateBinarySize,
-                                const unsigned char* pPrivateKeyBinary,
-                                const int nPrivateKeyBinarySize);
+    virtual bool insertCertificate(const unsigned char* pCertificateBinary,
+                                   const int nCertificateBinarySize,
+                                   const unsigned char* pPrivateKeyBinary,
+                                   const int nPrivateKeyBinarySize) = 0;
 
     /// @see kit::Document::addCertificate().
-    bool (*addCertificate) (COKitDocument* pThis,
-                                const unsigned char* pCertificateBinary,
-                                const int nCertificateBinarySize);
+    virtual bool addCertificate(const unsigned char* pCertificateBinary,
+                                const int nCertificateBinarySize) = 0;
 
     /// @see kit::Document::getSignatureState().
-    int (*getSignatureState) (COKitDocument* pThis);
+    virtual int getSignatureState() = 0;
 
     /// @see kit::Document::renderShapeSelection
-    size_t (*renderShapeSelection)(COKitDocument* pThis, char** pOutput);
+    virtual size_t renderShapeSelection(char** pOutput) = 0;
 
     /// @see kit::Document::postWindowGestureEvent().
-    void (*postWindowGestureEvent) (COKitDocument* pThis,
-                                  unsigned nWindowId,
-                                  const char* pType,
-                                  int nX,
-                                  int nY,
-                                  int nOffset);
+    virtual void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
+                                        int nOffset) = 0;
 
     /// @see kit::Document::createViewWithOptions().
-    int (*createViewWithOptions) (COKitDocument* pThis, const char* pOptions);
+    virtual int createViewWithOptions(const char* pOptions) = 0;
 
     /// @see kit::Document::selectPart().
-    void (*selectPart) (COKitDocument* pThis, int nPart, int nSelect);
+    virtual void selectPart(int nPart, int nSelect) = 0;
 
     /// @see kit::Document::moveSelectedParts().
     /// nIntoSection: when >= 0, the section at that index will be re-anchored
     /// to the first moved slide (i.e. the slide becomes the new section start).
     /// Pass -1 to keep the default behaviour where sections stay anchored to
     /// their existing non-moved slides.
-    void (*moveSelectedParts) (COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection);
+    virtual void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) = 0;
 
     /// Resize window with given id.
     /// @see kit::Document::resizeWindow().
-    void (*resizeWindow) (COKitDocument* pThis, unsigned nWindowId,
-                          const int width, const int height);
+    virtual void resizeWindow(unsigned nWindowId, const int width, const int height) = 0;
 
     /// Pass a nullptr terminated array of mime-type strings
     /// @see kit::Document::getClipboard for more details
-    int (*getClipboard) (COKitDocument* pThis,
-                         const char **pMimeTypes,
-                         size_t      *pOutCount,
-                         char      ***pOutMimeTypes,
-                         size_t     **pOutSizes,
-                         char      ***pOutStreams);
+    virtual int getClipboard(const char **pMimeTypes, size_t      *pOutCount,
+                             char      ***pOutMimeTypes, size_t     **pOutSizes,
+                             char      ***pOutStreams) = 0;
 
     /// @see kit::Document::setClipboard
-    int (*setClipboard) (COKitDocument* pThis,
-                         const size_t   nInCount,
-                         const char   **pInMimeTypes,
-                         const size_t  *pInSizes,
-                         const char   **pInStreams);
+    virtual int setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
+                             const size_t  *pInSizes, const char   **pInStreams) = 0;
 
     /// @see kit::Document::getSelectionType
-    COKitSelectionType (*getSelectionType) (COKitDocument* pThis);
+    virtual COKitSelectionType getSelectionType() = 0;
 
     /// @see kit::Document::removeTextContext
-    void (*removeTextContext) (COKitDocument* pThis,
-                               unsigned nWindowId,
-                               int nBefore,
-                               int nAfter);
+    virtual void removeTextContext(unsigned nWindowId, int nBefore, int nAfter) = 0;
 
     /// @see kit::Document::sendDialogEvent
-    void (*sendDialogEvent) (COKitDocument* pThis,
-                            unsigned long long int nKitWindowId,
-                            const char* pArguments);
+    virtual void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) = 0;
 
     /// @see kit::Document::renderFontOrientation().
-    unsigned char* (*renderFontOrientation) (COKitDocument* pThis,
-                       const char* pFontName,
-                       const char* pChar,
-                       int* pFontWidth,
-                       int* pFontHeight,
-                       int pOrientation);
+    virtual unsigned char* renderFontOrientation(const char* pFontName, const char* pChar,
+                                                 int* pFontWidth, int* pFontHeight,
+                                                 int pOrientation) = 0;
 
     /// Switches view to viewId if viewId >= 0, and paints window
     /// @see kit::Document::paintWindowDPI().
-    void (*paintWindowForView) (COKitDocument* pThis, unsigned nWindowId,
-                                unsigned char* pBuffer,
-                                const int x, const int y,
-                                const int width, const int height,
-                                const double dpiscale,
-                                int viewId);
+    virtual void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
+                                    const int y, const int width, const int height,
+                                    const double dpiscale, int viewId) = 0;
 
     /// @see kit::Document::completeFunction().
-    void (*completeFunction) (COKitDocument* pThis, const char* pFunctionName);
+    virtual void completeFunction(const char* pFunctionName) = 0;
 
     /// @see kit::Document::setWindowTextSelection
-    void (*setWindowTextSelection) (COKitDocument* pThis,
-                                    unsigned nWindowId,
-                                    bool bSwap,
-                                    int nX,
-                                    int nY);
+    virtual void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY) = 0;
 
     /// @see kit::Document::sendFormFieldEvent
-    void (*sendFormFieldEvent) (COKitDocument* pThis,
-                                const char* pArguments);
+    virtual void sendFormFieldEvent(const char* pArguments) = 0;
 
     /// @see kit::Document::setBlockedCommandList
-    void (*setBlockedCommandList) (COKitDocument* pThis,
-                                int nViewId,
-                                const char* blockedCommandList);
+    virtual void setBlockedCommandList(int nViewId, const char* blockedCommandList) = 0;
 
     /// @see kit::Document::renderSearchResult
-    bool (*renderSearchResult) (COKitDocument* pThis,
-                                const char* pSearchResult,
-                                unsigned char** pBitmapBuffer,
-                                int* pWidth, int* pHeight, size_t* pByteSize);
+    virtual bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                    int* pWidth, int* pHeight, size_t* pByteSize) = 0;
 
     /// @see kit::Document::sendContentControlEvent().
-    void (*sendContentControlEvent)(COKitDocument* pThis, const char* pArguments);
+    virtual void sendContentControlEvent(const char* pArguments) = 0;
 
     /// @see kit::Document::getSelectionTypeAndText
-    COKitSelectionType (*getSelectionTypeAndText) (COKitDocument* pThis,
-                                                   const char* pMimeType,
-                                                   char** pText,
-                                                   char** pUsedMimeType);
+    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
+                                                       char** pUsedMimeType) = 0;
 
     /// @see kit::Document::getDataArea().
-    void (*getDataArea) (COKitDocument* pThis,
-                         long nPart,
-                         long* pCol,
-                         long* pRow);
+    virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;
 
     /// @see kit::Document::getEditMode().
-    int (*getEditMode) (COKitDocument* pThis);
+    virtual int getEditMode() = 0;
 
     /// @see kit::Document::setViewTimezone().
-    void (*setViewTimezone) (COKitDocument* pThis, int nId, const char* timezone);
+    virtual void setViewTimezone(int nId, const char* pTimezone) = 0;
 
     /// @see kit::Document::setAccessibilityState().
-    void (*setAccessibilityState) (COKitDocument* pThis, int nId, bool nEnabled);
+    virtual void setAccessibilityState(int nId, bool nEnabled) = 0;
 
     /// @see kit::Document::getA11yFocusedParagraph.
-    char* (*getA11yFocusedParagraph) (COKitDocument* pThis);
+    virtual char* getA11yFocusedParagraph() = 0;
 
     /// @see kit::Document::getA11yCaretPosition.
-    int (*getA11yCaretPosition) (COKitDocument* pThis);
+    virtual int getA11yCaretPosition() = 0;
 
     /// @see kit::Document::setViewReadOnly().
-    void (*setViewReadOnly) (COKitDocument* pThis, int nId, const bool readOnly);
+    virtual void setViewReadOnly(int nId, const bool readOnly) = 0;
 
     /// @see kit::Document::setAllowChangeComments().
-    void (*setAllowChangeComments) (COKitDocument* pThis, int nId, const bool allow);
+    virtual void setAllowChangeComments(int nId, const bool allow) = 0;
 
     /// @see kit::Document::getPresentationInfo
-    char* (*getPresentationInfo) (COKitDocument* pThis);
+    virtual char* getPresentationInfo() = 0;
 
     /// @see kit::Document::createSlideRenderer
-    bool (*createSlideRenderer) (
-        COKitDocument* pThis,
-        const char* pSlideHash,
-        int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
-        bool bRenderBackground, bool bRenderMasterPage);
+    virtual bool createSlideRenderer(const char* pSlideHash, int nSlideNumber,
+                                     unsigned* nViewWidth, unsigned* nViewHeight,
+                                     bool bRenderBackground, bool bRenderMasterPage) = 0;
 
     /// @see kit::Document::postSlideshowCleanup
-    void (*postSlideshowCleanup)(COKitDocument* pThis);
+    virtual void postSlideshowCleanup() = 0;
 
     /// @see kit::Document::renderNextSlideLayer
-    bool (*renderNextSlideLayer)(
-        COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMessage);
+    virtual bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
+                                      char** pJsonMessage) = 0;
 
     /// @see kit::Document::setViewOption
-    void (*setViewOption)(COKitDocument* pThis, const char* pOption, const char* pValue);
+    virtual void setViewOption(const char* pOption, const char* pValue) = 0;
 
     /// @see kit::Document::setColorPreviewState().
-    void (*setColorPreviewState) (COKitDocument* pThis, int nId, bool nEnabled);
+    virtual void setColorPreviewState(int nId, bool nEnabled) = 0;
 
     /// @see kit::Document::setAllowManageRedlines().
-    void (*setAllowManageRedlines)(COKitDocument* pThis, int nId, bool allow);
+    virtual void setAllowManageRedlines(int nId, bool allow) = 0;
 
     /// @see kit::Document::transferClipboardFromView().
-    void (*transferClipboardFromView)(COKitDocument* pThis, int nSourceViewId);
+    virtual void transferClipboardFromView(int nSourceViewId) = 0;
 
     /// @see kit::Document::flushClipboard().
-    void (*flushClipboard)(COKitDocument* pThis);
+    virtual void flushClipboard() = 0;
 
     /// @see kit::Document::getPartUniqueId().
-    unsigned long long (*getPartUniqueId)(COKitDocument* pThis, int nPart, int nMode);
+    virtual unsigned long long getPartUniqueId(int nPart, int nMode)= 0;
 
     /// @see kit::Document::getPartIndex().
-    int (*getPartIndex)(COKitDocument* pThis, int nPart, int nMode);
+    virtual int getPartIndex(int nPart, int nMode) = 0;
 
 };
 
@@ -1992,7 +1883,7 @@ public:
 
     ~Document()
     {
-        mpDoc->pClass->destroy(mpDoc);
+        mpDoc->destroy();
     }
 
     /**
@@ -2010,7 +1901,7 @@ public:
      */
     bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
-        return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat, pFilterOptions) != 0;
+        return mpDoc->saveAs(pUrl, pFormat, pFilterOptions) != 0;
     }
 
     /// Gives access to the underlying C pointer.
@@ -2023,7 +1914,7 @@ public:
      */
     COKitDocumentType getDocumentType()
     {
-        return mpDoc->pClass->getDocumentType(mpDoc);
+        return mpDoc->getDocumentType();
     }
 
     /**
@@ -2034,7 +1925,7 @@ public:
      */
     int getParts()
     {
-        return mpDoc->pClass->getParts(mpDoc);
+        return mpDoc->getParts();
     }
 
     /**
@@ -2049,7 +1940,7 @@ public:
      */
     char* getPartPageRectangles()
     {
-        return mpDoc->pClass->getPartPageRectangles(mpDoc);
+        return mpDoc->getPartPageRectangles();
     }
 
     /// Get the current part number of the document. For a presentation or
@@ -2057,26 +1948,26 @@ public:
     /// for other document types it is the part's index.
     int getPart()
     {
-        return mpDoc->pClass->getPart(mpDoc);
+        return mpDoc->getPart();
     }
 
     /// Set the current part of the document by its part number. The part
     /// number of a page that is gone selects nothing.
     void setPart(int nPart)
     {
-        mpDoc->pClass->setPart(mpDoc, nPart);
+        mpDoc->setPart(nPart);
     }
 
     /// Get the current part's name.
     char* getPartName(int nPart)
     {
-        return mpDoc->pClass->getPartName(mpDoc, nPart);
+        return mpDoc->getPartName(nPart);
     }
 
     /// Get the current part's hash.
     char* getPartHash(int nPart)
     {
-        return mpDoc->pClass->getPartHash(mpDoc, nPart);
+        return mpDoc->getPartHash(nPart);
     }
 
     /**
@@ -2089,7 +1980,7 @@ public:
      */
     unsigned long long getPartUniqueId(int nPart, int nMode)
     {
-        return mpDoc->pClass->getPartUniqueId(mpDoc, nPart, nMode);
+        return mpDoc->getPartUniqueId(nPart, nMode);
     }
 
     /**
@@ -2101,17 +1992,17 @@ public:
      */
     int getPartIndex(int nPart, int nMode)
     {
-        return mpDoc->pClass->getPartIndex(mpDoc, nPart, nMode);
+        return mpDoc->getPartIndex(nPart, nMode);
     }
 
     void setPartMode(COKitPartMode eMode)
     {
-        mpDoc->pClass->setPartMode(mpDoc, eMode);
+        mpDoc->setPartMode(eMode);
     }
 
     int getEditMode()
     {
-        return mpDoc->pClass->getEditMode(mpDoc);
+        return mpDoc->getEditMode();
     }
 
     /**
@@ -2137,7 +2028,7 @@ public:
                           const int nTileWidth,
                           const int nTileHeight)
     {
-        return mpDoc->pClass->paintTile(mpDoc, pBuffer, nCanvasWidth, nCanvasHeight,
+        return mpDoc->paintTile(pBuffer, nCanvasWidth, nCanvasHeight,
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     }
 
@@ -2166,7 +2057,7 @@ public:
                      const double dpiscale = 1.0,
                      const int viewId = -1)
     {
-        return mpDoc->pClass->paintWindowForView(mpDoc, nWindowId, pBuffer, x, y,
+        return mpDoc->paintWindowForView(nWindowId, pBuffer, x, y,
                                                  width, height, dpiscale, viewId);
     }
 
@@ -2177,7 +2068,7 @@ public:
      */
     void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData = nullptr)
     {
-        return mpDoc->pClass->postWindow(mpDoc, nWindowId, eAction, pData);
+        return mpDoc->postWindow(nWindowId, eAction, pData);
     }
 
     /**
@@ -2187,19 +2078,19 @@ public:
      */
     COKitTileMode getTileMode()
     {
-        return mpDoc->pClass->getTileMode(mpDoc);
+        return mpDoc->getTileMode();
     }
 
     /// Get the document sizes in TWIPs.
     void getDocumentSize(long* pWidth, long* pHeight)
     {
-        mpDoc->pClass->getDocumentSize(mpDoc, pWidth, pHeight);
+        mpDoc->getDocumentSize(pWidth, pHeight);
     }
 
     /// Get the data area (in Calc last row and column).
     void getDataArea(long nPart, long* pCol, long* pRow)
     {
-        mpDoc->pClass->getDataArea(mpDoc, nPart, pCol, pRow);
+        mpDoc->getDataArea(nPart, pCol, pRow);
     }
 
     /**
@@ -2224,7 +2115,7 @@ public:
      */
     void initializeForRendering(const char* pArguments = NULL)
     {
-        mpDoc->pClass->initializeForRendering(mpDoc, pArguments);
+        mpDoc->initializeForRendering(pArguments);
     }
 
     /**
@@ -2236,7 +2127,7 @@ public:
      */
     void registerCallback(COKitCallback pCallback, void* pData)
     {
-        mpDoc->pClass->registerCallback(mpDoc, pCallback, pData);
+        mpDoc->registerCallback(pCallback, pData);
     }
 
     /**
@@ -2248,7 +2139,7 @@ public:
      */
     void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
     {
-        mpDoc->pClass->postKeyEvent(mpDoc, eType, nCharCode, nKeyCode);
+        mpDoc->postKeyEvent(eType, nCharCode, nKeyCode);
     }
 
     /**
@@ -2262,7 +2153,7 @@ public:
     void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
                             int nKeyCode)
     {
-        mpDoc->pClass->postWindowKeyEvent(mpDoc, nWindowId, eType, nCharCode, nKeyCode);
+        mpDoc->postWindowKeyEvent(nWindowId, eType, nCharCode, nKeyCode);
     }
 
     /**
@@ -2278,7 +2169,7 @@ public:
     void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
                         int nModifier)
     {
-        mpDoc->pClass->postMouseEvent(mpDoc, eType, nX, nY, nCount, nButtons, nModifier);
+        mpDoc->postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier);
     }
 
     /**
@@ -2295,7 +2186,7 @@ public:
     void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX, int nY,
                               int nCount, int nButtons, int nModifier)
     {
-        mpDoc->pClass->postWindowMouseEvent(mpDoc, nWindowId, eType, nX, nY, nCount, nButtons,
+        mpDoc->postWindowMouseEvent(nWindowId, eType, nX, nY, nCount, nButtons,
                                            nModifier);
     }
 
@@ -2307,7 +2198,7 @@ public:
      */
     void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
     {
-        mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
+        mpDoc->sendDialogEvent(nWindowId, pArguments);
     }
 
     /**
@@ -2333,7 +2224,7 @@ public:
      */
     void postUnoCommand(const char* pCommand, const char* pArguments = NULL, bool bNotifyWhenFinished = false)
     {
-        mpDoc->pClass->postUnoCommand(mpDoc, pCommand, pArguments, bNotifyWhenFinished);
+        mpDoc->postUnoCommand(pCommand, pArguments, bNotifyWhenFinished);
     }
 
     /**
@@ -2345,7 +2236,7 @@ public:
      */
     void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
     {
-        mpDoc->pClass->setTextSelection(mpDoc, eType, nX, nY);
+        mpDoc->setTextSelection(eType, nX, nY);
     }
 
     /**
@@ -2356,7 +2247,7 @@ public:
      */
     char* getTextSelection(const char* pMimeType, char** pUsedMimeType = NULL)
     {
-        return mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
+        return mpDoc->getTextSelection(pMimeType, pUsedMimeType);
     }
 
     /**
@@ -2368,7 +2259,7 @@ public:
      */
     COKitSelectionType getSelectionType()
     {
-        return mpDoc->pClass->getSelectionType(mpDoc);
+        return mpDoc->getSelectionType();
     }
 
     /**
@@ -2387,7 +2278,7 @@ public:
     COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
                                               char** pUsedMimeType = NULL)
     {
-        return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
+        return mpDoc->getSelectionTypeAndText(pMimeType, pText, pUsedMimeType);
     }
 
     /**
@@ -2409,7 +2300,7 @@ public:
                       size_t     **pOutSizes,
                       char      ***pOutStreams)
     {
-        return mpDoc->pClass->getClipboard(mpDoc, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+        return mpDoc->getClipboard(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
     }
 
     /**
@@ -2427,7 +2318,7 @@ public:
                       const size_t *pInSizes,
                       const char  **pInStreams)
     {
-        return mpDoc->pClass->setClipboard(mpDoc, nInCount, pInMimeTypes, pInSizes, pInStreams);
+        return mpDoc->setClipboard(nInCount, pInMimeTypes, pInSizes, pInStreams);
     }
 
     /**
@@ -2439,7 +2330,7 @@ public:
      */
     void transferClipboardFromView(int nSourceViewId)
     {
-        mpDoc->pClass->transferClipboardFromView(mpDoc, nSourceViewId);
+        mpDoc->transferClipboardFromView(nSourceViewId);
     }
 
     /**
@@ -2451,7 +2342,7 @@ public:
      */
     void flushClipboard()
     {
-        mpDoc->pClass->flushClipboard(mpDoc);
+        mpDoc->flushClipboard();
     }
 
     /**
@@ -2463,7 +2354,7 @@ public:
      */
     bool paste(const char* pMimeType, const char* pData, size_t nSize)
     {
-        return mpDoc->pClass->paste(mpDoc, pMimeType, pData, nSize);
+        return mpDoc->paste(pMimeType, pData, nSize);
     }
 
     /**
@@ -2475,7 +2366,7 @@ public:
      */
     void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
     {
-        mpDoc->pClass->setGraphicSelection(mpDoc, eType, nX, nY);
+        mpDoc->setGraphicSelection(eType, nX, nY);
     }
 
     /**
@@ -2483,7 +2374,7 @@ public:
      */
     void resetSelection()
     {
-        mpDoc->pClass->resetSelection(mpDoc);
+        mpDoc->resetSelection();
     }
 
     /**
@@ -2497,7 +2388,7 @@ public:
      */
     char* getCommandValues(const char* pCommand)
     {
-        return mpDoc->pClass->getCommandValues(mpDoc, pCommand);
+        return mpDoc->getCommandValues(pCommand);
     }
 
     /**
@@ -2514,7 +2405,7 @@ public:
             int nTileTwipWidth,
             int nTileTwipHeight)
     {
-        mpDoc->pClass->setClientZoom(mpDoc, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+        mpDoc->setClientZoom(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
     }
 
     /**
@@ -2529,7 +2420,7 @@ public:
      */
     void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
     {
-        mpDoc->pClass->setClientVisibleArea(mpDoc, nX, nY, nWidth, nHeight);
+        mpDoc->setClientVisibleArea(nX, nY, nWidth, nHeight);
     }
 
     /**
@@ -2542,7 +2433,7 @@ public:
      */
     void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
     {
-        mpDoc->pClass->setOutlineState(mpDoc, bColumn, nLevel, nIndex, bHidden);
+        mpDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
     }
 
     /**
@@ -2553,7 +2444,7 @@ public:
      */
     int createView(const char* pOptions = nullptr)
     {
-        return mpDoc->pClass->createViewWithOptions(mpDoc, pOptions);
+        return mpDoc->createViewWithOptions(pOptions);
     }
 
     /**
@@ -2562,7 +2453,7 @@ public:
      */
     void destroyView(int nId)
     {
-        mpDoc->pClass->destroyView(mpDoc, nId);
+        mpDoc->destroyView(nId);
     }
 
     /**
@@ -2571,7 +2462,7 @@ public:
      */
     void setView(int nId)
     {
-        mpDoc->pClass->setView(mpDoc, nId);
+        mpDoc->setView(nId);
     }
 
     /**
@@ -2580,7 +2471,7 @@ public:
      */
     int getView()
     {
-        return mpDoc->pClass->getView(mpDoc);
+        return mpDoc->getView();
     }
 
     /**
@@ -2588,7 +2479,7 @@ public:
      */
     int getViewsCount()
     {
-        return mpDoc->pClass->getViewsCount(mpDoc);
+        return mpDoc->getViewsCount();
     }
 
     /**
@@ -2601,7 +2492,7 @@ public:
                           int *pFontHeight,
                           int pOrientation=0)
     {
-        return mpDoc->pClass->renderFontOrientation(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
+        return mpDoc->renderFontOrientation(pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
     }
 
     /**
@@ -2623,7 +2514,7 @@ public:
                               const int nTileWidth,
                               const int nTileHeight)
     {
-        return mpDoc->pClass->paintPartTile(mpDoc, pBuffer, nPart, nMode,
+        return mpDoc->paintPartTile(pBuffer, nPart, nMode,
                                             nCanvasWidth, nCanvasHeight,
                                             nTilePosX, nTilePosY,
                                             nTileWidth, nTileHeight);
@@ -2642,7 +2533,7 @@ public:
     bool getViewIds(int* pArray,
                            size_t nSize)
     {
-        return mpDoc->pClass->getViewIds(mpDoc, pArray, nSize);
+        return mpDoc->getViewIds(pArray, nSize);
     }
 
     /**
@@ -2653,7 +2544,7 @@ public:
      */
     void setViewLanguage(int nId, const char* language)
     {
-        mpDoc->pClass->setViewLanguage(mpDoc, nId, language);
+        mpDoc->setViewLanguage(nId, language);
     }
 
     /**
@@ -2667,7 +2558,7 @@ public:
     void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
                                      const char* pText)
     {
-        mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, eType, pText);
+        mpDoc->postWindowExtTextInputEvent(nWindowId, eType, pText);
     }
 
     /**
@@ -2678,8 +2569,7 @@ public:
                            const unsigned char* pPrivateKeyBinary,
                            const int nPrivateKeyBinarySize)
     {
-        return mpDoc->pClass->insertCertificate(mpDoc,
-                                                pCertificateBinary, pCertificateBinarySize,
+        return mpDoc->insertCertificate(pCertificateBinary, pCertificateBinarySize,
                                                 pPrivateKeyBinary, nPrivateKeyBinarySize);
     }
 
@@ -2690,8 +2580,7 @@ public:
     bool addCertificate(const unsigned char* pCertificateBinary,
                          const int pCertificateBinarySize)
     {
-        return mpDoc->pClass->addCertificate(mpDoc,
-                                             pCertificateBinary, pCertificateBinarySize);
+        return mpDoc->addCertificate(pCertificateBinary, pCertificateBinarySize);
     }
 
     /**
@@ -2701,7 +2590,7 @@ public:
      */
     int getSignatureState()
     {
-        return mpDoc->pClass->getSignatureState(mpDoc);
+        return mpDoc->getSignatureState();
     }
 
     /**
@@ -2711,7 +2600,7 @@ public:
      */
     size_t renderShapeSelection(char** pOutput)
     {
-        return mpDoc->pClass->renderShapeSelection(mpDoc, pOutput);
+        return mpDoc->renderShapeSelection(pOutput);
     }
 
     /**
@@ -2727,14 +2616,14 @@ public:
                               const char* pType,
                               int nX, int nY, int nOffset)
     {
-        return mpDoc->pClass->postWindowGestureEvent(mpDoc, nWindowId, pType, nX, nY, nOffset);
+        return mpDoc->postWindowGestureEvent(nWindowId, pType, nX, nY, nOffset);
     }
 
     /// Set a part's selection mode, naming the part by its part number.
     /// nSelect is 0 to deselect, 1 to select, and 2 to toggle.
     void selectPart(int nPart, int nSelect)
     {
-        mpDoc->pClass->selectPart(mpDoc, nPart, nSelect);
+        mpDoc->selectPart(nPart, nSelect);
     }
 
     /// Moves the selected pages/slides to a new position.
@@ -2745,7 +2634,7 @@ public:
     /// to keep the existing section anchoring.
     void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection = -1)
     {
-        mpDoc->pClass->moveSelectedParts(mpDoc, nPosition, bDuplicate, nIntoSection);
+        mpDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
     }
 
     /**
@@ -2759,7 +2648,7 @@ public:
                       const int width,
                       const int height)
     {
-        return mpDoc->pClass->resizeWindow(mpDoc, nWindowId, width, height);
+        return mpDoc->resizeWindow(nWindowId, width, height);
     }
 
     /**
@@ -2772,7 +2661,7 @@ public:
      */
     void removeTextContext(unsigned nWindowId, int nBefore, int nAfter)
     {
-        mpDoc->pClass->removeTextContext(mpDoc, nWindowId, nBefore, nAfter);
+        mpDoc->removeTextContext(nWindowId, nBefore, nAfter);
     }
 
     /**
@@ -2782,7 +2671,7 @@ public:
      */
     void completeFunction(const char* pFunctionName)
     {
-        mpDoc->pClass->completeFunction(mpDoc, pFunctionName);
+        mpDoc->completeFunction(pFunctionName);
     }
 
     /**
@@ -2795,7 +2684,7 @@ public:
      */
     void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
     {
-        mpDoc->pClass->setWindowTextSelection(mpDoc, nWindowId, bSwap, nX, nY);
+        mpDoc->setWindowTextSelection(nWindowId, bSwap, nX, nY);
     }
 
     /**
@@ -2805,12 +2694,12 @@ public:
      */
     void sendFormFieldEvent(const char* pArguments)
     {
-        mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
+        mpDoc->sendFormFieldEvent(pArguments);
     }
 
     void setBlockedCommandList(int nViewId, const char* blockedCommandList)
     {
-        mpDoc->pClass->setBlockedCommandList(mpDoc, nViewId, blockedCommandList);
+        mpDoc->setBlockedCommandList(nViewId, blockedCommandList);
     }
     /**
      * Render input search result to a bitmap buffer.
@@ -2825,7 +2714,7 @@ public:
     bool renderSearchResult(const char* pSearchResult, unsigned char** pBitmapBuffer,
                             int* pWidth, int* pHeight, size_t* pByteSize)
     {
-        return mpDoc->pClass->renderSearchResult(mpDoc, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
+        return mpDoc->renderSearchResult(pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
     }
 
     /**
@@ -2854,7 +2743,7 @@ public:
      */
     void sendContentControlEvent(const char* pArguments)
     {
-        mpDoc->pClass->sendContentControlEvent(mpDoc, pArguments);
+        mpDoc->sendContentControlEvent(pArguments);
     }
 
     /**
@@ -2865,7 +2754,7 @@ public:
      */
     void setViewTimezone(int nId, const char* timezone)
     {
-        mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
+        mpDoc->setViewTimezone(nId, timezone);
     }
 
     /** Set if the view should be treated as readonly or not.
@@ -2875,7 +2764,7 @@ public:
     */
     void setViewReadOnly(int nId, const bool readOnly)
     {
-        mpDoc->pClass->setViewReadOnly(mpDoc, nId, readOnly);
+        mpDoc->setViewReadOnly(nId, readOnly);
     }
 
     /** Set if the view can edit comments on readonly mode or not.
@@ -2885,7 +2774,7 @@ public:
     */
     void setAllowChangeComments(int nId, const bool allow)
     {
-        mpDoc->pClass->setAllowChangeComments(mpDoc, nId, allow);
+        mpDoc->setAllowChangeComments(nId, allow);
     }
 
     /** Set if the view can manage redlines in readonly mode or not.
@@ -2895,7 +2784,7 @@ public:
     */
     void setAllowManageRedlines(int nId, bool allow)
     {
-        mpDoc->pClass->setAllowManageRedlines(mpDoc, nId, allow);
+        mpDoc->setAllowManageRedlines(nId, allow);
     }
 
     /**
@@ -2906,7 +2795,7 @@ public:
      */
     void setAccessibilityState(int nId, bool nEnabled)
     {
-        mpDoc->pClass->setAccessibilityState(mpDoc, nId, nEnabled);
+        mpDoc->setAccessibilityState(nId, nEnabled);
     }
 
     /**
@@ -2919,19 +2808,19 @@ public:
      */
     char* getA11yFocusedParagraph()
     {
-        return mpDoc->pClass->getA11yFocusedParagraph(mpDoc);
+        return mpDoc->getA11yFocusedParagraph();
     }
 
     /// Get the current text cursor position.
     int getA11yCaretPosition()
     {
-        return mpDoc->pClass->getA11yCaretPosition(mpDoc);
+        return mpDoc->getA11yCaretPosition();
     }
 
     /// Get the information about the current presentation (Impress only).
     char* getPresentationInfo()
     {
-        return mpDoc->pClass->getPresentationInfo(mpDoc);
+        return mpDoc->getPresentationInfo();
     }
 
     /// Create a slide renderer in core for the input slide.
@@ -2940,26 +2829,25 @@ public:
         int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage)
     {
-        return mpDoc->pClass->createSlideRenderer(
-            mpDoc, pSlideHash, nSlideNumber, nViewWidth, nViewHeight, bRenderBackground, bRenderMasterPage);
+        return mpDoc->createSlideRenderer(pSlideHash, nSlideNumber, nViewWidth, nViewHeight, bRenderBackground, bRenderMasterPage);
     }
 
     /// Clean-up the slideshow (slide renderer)
     void postSlideshowCleanup()
     {
-        mpDoc->pClass->postSlideshowCleanup(mpDoc);
+        mpDoc->postSlideshowCleanup();
     }
 
     /// Render the slide layer
     bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMessage)
     {
-        return mpDoc->pClass->renderNextSlideLayer(mpDoc, pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
+        return mpDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
     }
 
     /// Set named view options
     void setViewOption(const char* pOption, const char* pValue)
     {
-        mpDoc->pClass->setViewOption(mpDoc, pOption, pValue);
+        mpDoc->setViewOption(pOption, pValue);
     }
 
     /**
@@ -2970,7 +2858,7 @@ public:
      */
     void setColorPreviewState(int nId, bool nEnabled)
     {
-        mpDoc->pClass->setColorPreviewState(mpDoc, nId, nEnabled);
+        mpDoc->setColorPreviewState(nId, nEnabled);
     }
 
 };

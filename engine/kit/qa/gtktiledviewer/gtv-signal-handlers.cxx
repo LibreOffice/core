@@ -142,7 +142,7 @@ void getRulerState(GtkWidget* pButton, gpointer /*pItem*/)
     const std::string type = ".uno:RulerState";
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    pDocument->pClass->getCommandValues(pDocument, type.c_str());
+    pDocument->getCommandValues(type.c_str());
 }
 
 static void removeUnoParam(GtkWidget* pWidget, gpointer userdata)
@@ -456,7 +456,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    char* pValues = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     if (!pValues)
         return;
 
@@ -565,7 +565,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
     for (size_t nType = 0; nType < aTypes.size(); ++nType)
     {
         const std::string& rType = aTypes[nType];
-        char* pValues = pDocument->pClass->getCommandValues(pDocument, rType.c_str());
+        char* pValues = pDocument->getCommandValues(rType.c_str());
         std::stringstream aInfo;
         aInfo << "kit::Document::getCommandValues('" << rType << "') returned '" << pValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
@@ -772,7 +772,7 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     // Different reply UNO command for impress
     std::string replyCommand = ".uno:ReplyComment";
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::PRESENTATION)
+    if (pDocument && pDocument->getDocumentType() == COKitDocumentType::PRESENTATION)
         replyCommand = ".uno:ReplyToAnnotation";
     kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), replyCommand.c_str(), aArguments.c_str(), false);
 }
@@ -795,9 +795,9 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
-        if (pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::PRESENTATION)
+        if (pDocument->getDocumentType() == COKitDocumentType::PRESENTATION)
             deleteCommand = ".uno:DeleteAnnotation";
-        else if (pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::SPREADSHEET)
+        else if (pDocument->getDocumentType() == COKitDocumentType::SPREADSHEET)
             deleteCommand = ".uno:DeleteNote";
     }
 

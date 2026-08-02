@@ -192,35 +192,35 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_bindMes
 
     gCallbackData.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrieved", "(ILjava/lang/String;)V");
 
-    pDocument->pClass->registerCallback(pDocument, messageCallback, (void*) &gCallbackData);
+    pDocument->registerCallback(messageCallback, (void*) &gCallbackData);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->destroy(pDocument);
+    pDocument->destroy();
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
     (JNIEnv* pEnv, jobject aObject, jint aPart)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setPart(pDocument, aPart);
+    pDocument->setPart(aPart);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    return (jint) pDocument->pClass->getPart(pDocument);
+    return (jint) pDocument->getPart();
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartPageRectangles
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    char* pRectangles = pDocument->pClass->getPartPageRectangles(pDocument);
+    char* pRectangles = pDocument->getPartPageRectangles();
     return pEnv->NewStringUTF(pRectangles);
 }
 
@@ -228,14 +228,14 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    return (jint) pDocument->pClass->getParts(pDocument);
+    return (jint) pDocument->getParts();
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartName
     (JNIEnv* pEnv, jobject aObject, jint nPartIndex)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    char* pPartName = pDocument->pClass->getPartName(pDocument, nPartIndex);
+    char* pPartName = pDocument->getPartName(nPartIndex);
     return pEnv->NewStringUTF(pPartName);
 }
 
@@ -244,14 +244,14 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
-    pDocument->pClass->setPartMode(pDocument, static_cast<COKitPartMode>(nPartMode));
+    pDocument->setPartMode(static_cast<COKitPartMode>(nPartMode));
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    return static_cast<jint>(pDocument->pClass->getDocumentType(pDocument));
+    return static_cast<jint>(pDocument->getDocumentType());
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTileNative
@@ -262,7 +262,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
-    pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDocument->paintTile(buffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeight
@@ -271,7 +271,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     long nWidth;
     long nHeight;
-    pDocument->pClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    pDocument->getDocumentSize(&nWidth, &nHeight);
     return nHeight;
 }
 
@@ -281,7 +281,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     long nWidth;
     long nHeight;
-    pDocument->pClass->getDocumentSize(pDocument, &nWidth, &nHeight);
+    pDocument->getDocumentSize(&nWidth, &nHeight);
     return nWidth;
 }
 
@@ -289,7 +289,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_initial
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->initializeForRendering(pDocument, NULL);
+    pDocument->initializeForRendering(NULL);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
@@ -301,7 +301,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
     const char* pFormat = pEnv->GetStringUTFChars(sFormat, NULL);
     const char* pOptions = pEnv->GetStringUTFChars(sOptions, NULL);
 
-    int result = pDocument->pClass->saveAs(pDocument, pUrl, pFormat, pOptions);
+    int result = pDocument->saveAs(pUrl, pFormat, pOptions);
 
     pEnv->ReleaseStringUTFChars(sUrl, pUrl);
     pEnv->ReleaseStringUTFChars(sFormat, pFormat);
@@ -314,7 +314,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postKey
     (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->postKeyEvent(pDocument, static_cast<COKitKeyEventType>(nType), nCharCode,
+    pDocument->postKeyEvent(static_cast<COKitKeyEventType>(nType), nCharCode,
                                     nKeyCode);
 }
 
@@ -322,7 +322,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMou
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count, jint button, jint modifier)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->postMouseEvent(pDocument, static_cast<COKitMouseEventType>(type), x, y,
+    pDocument->postMouseEvent(static_cast<COKitMouseEventType>(type), x, y,
                                       count, button, modifier);
 }
 
@@ -336,7 +336,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUno
     if (arguments != NULL)
         pArguments = pEnv->GetStringUTFChars(arguments, NULL);
 
-    pDocument->pClass->postUnoCommand(pDocument, pCommand, pArguments, bNotifyWhenFinished);
+    pDocument->postUnoCommand(pCommand, pArguments, bNotifyWhenFinished);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
     if (arguments != NULL)
@@ -347,7 +347,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setText
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setTextSelection(pDocument, static_cast<COKitSetTextSelectionType>(type), x, y);
+    pDocument->setTextSelection(static_cast<COKitSetTextSelectionType>(type), x, y);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getTextSelection
@@ -358,8 +358,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getT
     const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
 
     char* pUsedMimeType = 0;
-    COKitDocumentClass* pcls = pDocument->pClass;
-    char* pSelection = pcls->getTextSelection(pDocument, pMimeType, &pUsedMimeType);
+    char* pSelection = pDocument->getTextSelection(pMimeType, &pUsedMimeType);
     free(pUsedMimeType);
 
     pEnv->ReleaseStringUTFChars(mimeType, pMimeType);
@@ -376,8 +375,7 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_org_libreoffice_kit_Document_pas
     const char* pData = pEnv->GetStringUTFChars(data, NULL);
     const size_t nSize = pEnv->GetStringLength(data);
 
-    COKitDocumentClass* pcls = pDocument->pClass;
-    bool result = pcls->paste(pDocument, pMimeType, pData, nSize);
+    bool result = pDocument->paste(pMimeType, pData, nSize);
     pEnv->ReleaseStringUTFChars(mimeType, pMimeType);
     pEnv->ReleaseStringUTFChars(data, pData);
 
@@ -388,15 +386,14 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGrap
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setGraphicSelection(
-        pDocument, static_cast<COKitSetGraphicSelectionType>(type), x, y);
+    pDocument->setGraphicSelection(static_cast<COKitSetGraphicSelectionType>(type), x, y);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSelection
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->resetSelection(pDocument);
+    pDocument->resetSelection();
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getCommandValues
@@ -406,7 +403,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getC
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
 
-    char* pValue = pDocument->pClass->getCommandValues(pDocument, pCommand);
+    char* pValue = pDocument->getCommandValues(pCommand);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
 
@@ -417,7 +414,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setClie
     (JNIEnv* pEnv, jobject aObject, jint nTilePixelWidth, jint nTilePixelHeight, jint nTileTwipWidth, jint nTileTwipHeight)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setClientZoom(pDocument, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+    pDocument->setClientZoom(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

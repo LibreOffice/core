@@ -266,7 +266,7 @@ void setDocumentView(COKitDocument* pDoc, int viewId)
     std::stringstream ss;
     ss << "kit::Document::setView(" << viewId << ")";
     g_info("%s", ss.str().c_str());
-    pDoc->pClass->setView(pDoc, viewId);
+    pDoc->setView(viewId);
 }
 }
 
@@ -612,8 +612,7 @@ postKeyEventInThread(gpointer data)
         ss.str(std::string());
         ss << "kit::Document::setClientZoom(" << nTileSizePixelsScaled << ", " << nTileSizePixelsScaled << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
         g_info("%s", ss.str().c_str());
-        priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
-                                                 nTileSizePixelsScaled,
+        priv->m_pDocument->setClientZoom(nTileSizePixelsScaled,
                                                  nTileSizePixelsScaled,
                                                  priv->m_nTileSizeTwips,
                                                  priv->m_nTileSizeTwips);
@@ -625,8 +624,7 @@ postKeyEventInThread(gpointer data)
         ss << "kit::Document::setClientVisibleArea(" << priv->m_aVisibleArea.x << ", " << priv->m_aVisibleArea.y << ", ";
         ss << priv->m_aVisibleArea.width << ", " << priv->m_aVisibleArea.height << ")";
         g_info("%s", ss.str().c_str());
-        priv->m_pDocument->pClass->setClientVisibleArea(priv->m_pDocument,
-                                                        priv->m_aVisibleArea.x,
+        priv->m_pDocument->setClientVisibleArea(priv->m_aVisibleArea.x,
                                                         priv->m_aVisibleArea.y,
                                                         priv->m_aVisibleArea.width,
                                                         priv->m_aVisibleArea.height);
@@ -637,8 +635,7 @@ postKeyEventInThread(gpointer data)
     ss << "kit::Document::postKeyEvent(" << static_cast<int>(pLOEvent->m_nKeyEvent) << ", "
        << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
     g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
-                                            pLOEvent->m_nKeyEvent,
+    priv->m_pDocument->postKeyEvent(pLOEvent->m_nKeyEvent,
                                             pLOEvent->m_nCharCode,
                                             pLOEvent->m_nKeyCode);
 }
@@ -886,7 +883,7 @@ static void refreshSize(KitDocumentView* pDocView)
 {
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+    priv->m_pDocument->getDocumentSize(&priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     float zoom = priv->m_fZoom;
     gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
     gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
@@ -910,12 +907,12 @@ static gboolean postDocumentLoad(gpointer pData)
     KitDocumentViewPrivate& priv = getPrivate(pKitDocumentView);
 
     std::unique_lock<std::mutex> aGuard(g_aKitMutex);
-    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
+    priv->m_pDocument->initializeForRendering(priv->m_aRenderingArguments.c_str());
     // This returns the view id of the most recently used view of the document
-    priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
+    priv->m_nViewId = priv->m_pDocument->getView();
     g_aAuthorViews[getAuthorRenderingArgument(priv)] = priv->m_nViewId;
-    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pKitDocumentView);
-    priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
+    priv->m_pDocument->registerCallback(callbackWorker, pKitDocumentView);
+    priv->m_nParts = priv->m_pDocument->getParts();
     aGuard.unlock();
     priv->m_nTimeoutId = g_timeout_add(600, handleTimeout, pKitDocumentView);
 
@@ -1764,7 +1761,7 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
 
     if (priv->m_eDocumentType == COKitDocumentType::TEXT)
     {
-        char* pValues = priv->m_pDocument->pClass->getCommandValues(priv->m_pDocument, ".uno:TrackedChangeAuthors");
+        char* pValues = priv->m_pDocument->getCommandValues(".uno:TrackedChangeAuthors");
         std::stringstream aInfo;
         aInfo << "kit::Document::getCommandValues('.uno:TrackedChangeAuthors') returned '" << pValues << "'" << std::endl;
         g_info("%s", aInfo.str().c_str());
@@ -2213,21 +2210,21 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         getDragPoint(&priv->m_aHandleMiddleRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->setTextSelection(COKitSetTextSelectionType::RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         getDragPoint(&priv->m_aHandleStartRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->setTextSelection(COKitSetTextSelectionType::START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         getDragPoint(&priv->m_aHandleEndRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->setTextSelection(COKitSetTextSelectionType::END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     aGuard.unlock();
@@ -2313,8 +2310,7 @@ setGraphicSelectionInThread(gpointer data)
     ss << ", " << pLOEvent->m_nSetGraphicSelectionX;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionY << ")";
     g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument,
-                                                   pLOEvent->m_nSetGraphicSelectionType,
+    priv->m_pDocument->setGraphicSelection(pLOEvent->m_nSetGraphicSelectionType,
                                                    pLOEvent->m_nSetGraphicSelectionX,
                                                    pLOEvent->m_nSetGraphicSelectionY);
 }
@@ -2329,8 +2325,7 @@ setClientZoomInThread(gpointer data)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
-                                             pLOEvent->m_nTilePixelWidth,
+    priv->m_pDocument->setClientZoom(pLOEvent->m_nTilePixelWidth,
                                              pLOEvent->m_nTilePixelHeight,
                                              pLOEvent->m_nTileTwipWidth,
                                              pLOEvent->m_nTileTwipHeight);
@@ -2355,8 +2350,7 @@ postMouseEventInThread(gpointer data)
     ss << ", " << pLOEvent->m_nPostMouseEventButton;
     ss << ", " << pLOEvent->m_nPostMouseEventModifier << ")";
     g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument,
-                                              pLOEvent->m_nPostMouseEventType,
+    priv->m_pDocument->postMouseEvent(pLOEvent->m_nPostMouseEventType,
                                               pLOEvent->m_nPostMouseEventX,
                                               pLOEvent->m_nPostMouseEventY,
                                               pLOEvent->m_nPostMouseEventCount,
@@ -2374,7 +2368,7 @@ openDocumentInThread (gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     if ( priv->m_pDocument )
     {
-        priv->m_pDocument->pClass->destroy( priv->m_pDocument );
+        priv->m_pDocument->destroy();
         priv->m_pDocument = nullptr;
     }
 
@@ -2393,7 +2387,7 @@ openDocumentInThread (gpointer data)
     }
     else
     {
-        priv->m_eDocumentType = priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument);
+        priv->m_eDocumentType = priv->m_pDocument->getDocumentType();
         gdk_threads_add_idle(postDocumentLoad, pDocView);
         g_task_return_boolean (task, true);
     }
@@ -2420,7 +2414,7 @@ setPartInThread(gpointer data)
     if (nPartNumber != 0 && nPartNumber <= o3tl::make_unsigned(std::numeric_limits<int>::max()))
         nPart = static_cast<int>(nPartNumber);
 
-    priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
+    priv->m_pDocument->setPart(nPart );
     aGuard.unlock();
 
     kit_doc_view_reset_view(pDocView);
@@ -2437,7 +2431,7 @@ setPartmodeInThread(gpointer data)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, ePartMode );
+    priv->m_pDocument->setPartMode(ePartMode );
 }
 
 static void
@@ -2457,7 +2451,7 @@ setEditInThread(gpointer data)
         g_info("kit_doc_view_set_edit: leaving edit mode");
         std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
         setDocumentView(priv->m_pDocument, priv->m_nViewId);
-        priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
+        priv->m_pDocument->resetSelection();
     }
     priv->m_bEdit = bEdit;
     g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
@@ -2477,7 +2471,7 @@ postCommandInThread (gpointer data)
     std::stringstream ss;
     ss << "kit::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
     g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
+    priv->m_pDocument->postUnoCommand(pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
 }
 
 static void
@@ -2491,8 +2485,7 @@ paintTile(KitDocumentViewPrivate& priv,
     std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
 
-    priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
-                                         pBuffer,
+    priv->m_pDocument->paintTile(pBuffer,
                                          nTileSizePixelsScaled, nTileSizePixelsScaled,
                                          rTileRectangle.x, rTileRectangle.y,
                                          pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor),
@@ -2684,7 +2677,7 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
         break;
     case PROP_DOC_POINTER:
         priv->m_pDocument = static_cast<COKitDocument*>(g_value_get_pointer(value));
-        priv->m_eDocumentType = priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument);
+        priv->m_eDocumentType = priv->m_pDocument->getDocumentType();
         break;
     case PROP_EDITABLE:
         kit_doc_view_set_edit (pDocView, g_value_get_boolean (value));
@@ -2808,7 +2801,7 @@ static void kit_doc_view_destroy (GtkWidget* widget)
     if (priv->m_pDocument)
     {
         setDocumentView(priv->m_pDocument, priv->m_nViewId);
-        priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
+        priv->m_pDocument->registerCallback(nullptr, nullptr);
     }
 
     if (priv->kitThreadPool)
@@ -2822,11 +2815,11 @@ static void kit_doc_view_destroy (GtkWidget* widget)
     if (priv->m_pDocument)
     {
         // This call may drop several views - e.g., embedded OLE in-place clients
-        priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
-        if (priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) == 0)
+        priv->m_pDocument->destroyView(priv->m_nViewId);
+        if (priv->m_pDocument->getViewsCount() == 0)
         {
             // Last view(s) gone
-            priv->m_pDocument->pClass->destroy (priv->m_pDocument);
+            priv->m_pDocument->destroy();
             priv->m_pDocument = nullptr;
             if (priv->m_pOffice && priv->m_pOffice->getDocsCount() == 0)
             {
@@ -3610,7 +3603,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* kit_doc_view_new_from_widget(KitDocumentView* pO
     KitDocumentViewPrivate& pNewPriv = getPrivate(KIT_DOC_VIEW(pNewDocView));
     // Store the view id only later in postDocumentLoad(), as
     // initializeForRendering() changes the id in Impress.
-    pDocument->pClass->createView(pDocument);
+    pDocument->createView();
     pNewPriv->m_aRenderingArguments = pRenderingArguments;
 
     postDocumentLoad(pNewDocView);
@@ -3756,7 +3749,7 @@ kit_doc_view_get_parts (KitDocumentView* pDocView)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
+    return priv->m_pDocument->getParts();
 }
 
 SAL_DLLPUBLIC_EXPORT gint
@@ -3771,9 +3764,9 @@ kit_doc_view_get_part (KitDocumentView* pDocView)
 
     // The boundary reports the current part by its part number, while the
     // widget reports parts by their index in document order.
-    return priv->m_pDocument->pClass->getPartIndex(
-        priv->m_pDocument, priv->m_pDocument->pClass->getPart(priv->m_pDocument),
-        priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
+    return priv->m_pDocument->getPartIndex(
+        priv->m_pDocument->getPart(),
+        priv->m_pDocument->getEditMode());
 }
 
 SAL_DLLPUBLIC_EXPORT void
@@ -3817,7 +3810,7 @@ SAL_DLLPUBLIC_EXPORT void kit_doc_view_send_content_control_event(KitDocumentVie
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    return priv->m_pDocument->pClass->sendContentControlEvent(priv->m_pDocument, pArguments);
+    return priv->m_pDocument->sendContentControlEvent(pArguments);
 }
 
 SAL_DLLPUBLIC_EXPORT gchar*
@@ -3829,7 +3822,7 @@ kit_doc_view_get_part_name (KitDocumentView* pDocView, int nPart)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
+    return priv->m_pDocument->getPartName(nPart );
 }
 
 SAL_DLLPUBLIC_EXPORT void
@@ -3959,7 +3952,7 @@ kit_doc_view_get_command_values (KitDocumentView* pDocView,
     if (!pDocument)
         return nullptr;
 
-    return pDocument->pClass->getCommandValues(pDocument, pCommand);
+    return pDocument->getCommandValues(pCommand);
 }
 
 SAL_DLLPUBLIC_EXPORT void
@@ -3997,7 +3990,7 @@ kit_doc_view_copy_selection (KitDocumentView* pDocView,
     std::stringstream ss;
     ss << "kit::Document::getTextSelection('" << pMimeType << "')";
     g_info("%s", ss.str().c_str());
-    return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
+    return pDocument->getTextSelection(pMimeType, pUsedMimeType);
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean
@@ -4024,7 +4017,7 @@ kit_doc_view_paste (KitDocumentView* pDocView,
         std::stringstream ss;
         ss << "kit::Document::paste('" << pMimeType << "', '" << std::string(pData, nSize) << ", "<<nSize<<"')";
         g_info("%s", ss.str().c_str());
-        ret = pDocument->pClass->paste(pDocument, pMimeType, pData, nSize);
+        ret = pDocument->paste(pMimeType, pData, nSize);
     }
 
     return ret;

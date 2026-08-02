@@ -86,9 +86,9 @@ protected:
             return EX_UNAVAILABLE;
         }
 
-        loKitDocument->pClass->registerCallback(loKitDocument, myCallback, nullptr);
+        loKitDocument->registerCallback(myCallback, nullptr);
 
-        loKitDocument->pClass->initializeForRendering(loKitDocument, nullptr);
+        loKitDocument->initializeForRendering(nullptr);
 
         if (isatty(0))
         {
@@ -140,14 +140,14 @@ protected:
                 int tileHeight(NumUtil::stoi(tokens[7]));
 
                 std::vector<unsigned char> pixmap(canvasWidth*canvasHeight*4);
-                loKitDocument->pClass->setPart(loKitDocument, partNumber);
-                loKitDocument->pClass->paintTile(loKitDocument, pixmap.data(), canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
+                loKitDocument->setPart(partNumber);
+                loKitDocument->paintTile(pixmap.data(), canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
                 if (!Util::windowingAvailable())
                     continue;
 
                 std::vector<char> png;
-                const auto mode = loKitDocument->pClass->getTileMode(loKitDocument);
+                const auto mode = loKitDocument->getTileMode();
 
                 Png::encodeBufferToPNG(pixmap.data(), canvasWidth, canvasHeight, png, mode);
 
