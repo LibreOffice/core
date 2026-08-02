@@ -589,6 +589,11 @@ internal sealed partial class PptxSlideLayout
             ? ShapeTransform.Place(local, turn, flipHorizontal: false, flipVertical: false, space)
             : placement;
 
+        // What a parent group's child coordinate space multiplies this shape's own units by;
+        // (1, 1) outside one, and outside the very common group that states a child space equal
+        // to its own extent.
+        (double scaleX, double scaleY) = ShapeTransform.ScaleOf(upright);
+
         XElement? geometry = Drawing.Child(properties, "prstGeom") ?? First(inherited, "prstGeom");
         string? preset = Drawing.Attribute(geometry, "prst");
         Dictionary<string, double>? adjustment = Adjustments(geometry);
@@ -620,10 +625,20 @@ internal sealed partial class PptxSlideLayout
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
             Text = Text(
                 shape,
-                Mirrored(
-                    TextRectangle(shape, local, own, preset, adjustment),
-                    local.Size, flipHorizontal, flipVertical),
-                upright,
+                // Into slide units, because the type inside is already in them. A group scales
+                // its children's coordinates and not their font sizes — LibreOffice decomposes
+                // the cumulative matrix and gives the shape the absolute size the scale produces
+                // (shape.cxx:1129-1140), then lays the text out in that. Leaving the rectangle in
+                // the child space measures 12 pt text against a box a thousandth of an inch wide,
+                // so every word is too wide for its line. The scale has to come back off the
+                // matrix that carries the runs, which is what Text is given below.
+                ShapeTransform.Scaled(
+                    Mirrored(
+                        TextRectangle(shape, local, own, preset, adjustment),
+                        local.Size, flipHorizontal, flipVertical),
+                    scaleX,
+                    scaleY),
+                ShapeTransform.WithoutScale(upright, scaleX, scaleY),
                 theme),
         };
     }
@@ -750,8 +765,13 @@ internal sealed partial class PptxSlideLayout
     /// defect survives a visual check.
     /// </remarks>
     /// <param name="shape">The shape whose body is being read.</param>
-    /// <param name="rectangle">Its text rectangle, in the shape's own coordinates.</param>
-    /// <param name="placement">The matrix placing the shape, with any mirror already removed.</param>
+    /// <param name="rectangle">
+    /// Its text rectangle, at slide scale but still at the shape's own origin — so a parent
+    /// group's scale is already in the extent and is not in the matrix.
+    /// </param>
+    /// <param name="placement">
+    /// The matrix placing the shape, with any mirror and any group scale already removed.
+    /// </param>
     /// <param name="theme">The theme, for run colours and the fallback typeface.</param>
     private PlacedText? Text(
         XElement shape, DocRect rectangle, AffineTransform placement, SlideTheme theme)
