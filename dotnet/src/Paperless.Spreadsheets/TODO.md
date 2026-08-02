@@ -214,6 +214,133 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the fourth sheets sweep found
+
+Measured at `161d62fb9`. `sheets/batch-002` was **7/10** and the briefed baseline reproduced to the
+digit — the same three failures, the same page and word counts. All three are `.xls`, and the
+standing lead this track has carried for two rounds was **half right**: the two GA Survey files do
+carry `MSODRAWING` + `OBJ` + `TXO`, so the missing drawing layer is real, and it accounts for six of
+their twenty-eight and thirty missing words. The rest of both, and the missing page, is something
+else entirely — and `P1636e.xls` has no drawing at all.
+
+**A merged block straddling a column break is drawn on both pages, and only one of ours drew it.**
+`P1636e.xls` merges its title and its eight footnotes across all six of its columns and breaks after
+the third, so its second page holds nothing but covered cells. Calc reaches the block's anchor from
+the covered end — `ScOutputData::GetMergeOrigin` (`output2.cxx:953`) — and one flag decides which
+covered cell may reach: `bDoMerge`, which for a horizontally overlapped cell is
+`bIsLeft = (nX == mnVisX1)` (`:957`), the block's first **visible** column. Set, the walk runs back
+to the origin through anything; clear, it gives up at the first column that is not hidden, because a
+nearer cell will draw the block instead. The port had only the second half — the hidden-column case
+the previous round added — so a merge whose anchor was simply on the *previous page* vanished.
+`ColumnBand` now carries `FirstVisible` (Calc's `mnVisX1`, which is `mnX1` after `StripHidden`) and
+`DrawCoveredMerge` walks with it. The block is placed at its true position, off the left of the
+page, and the part that lands on the paper is what shows: **304 words against 344, and 345 now**.
+
+**A chart sheet is a sheet, and the BIFF reader dropped it.** `BOUNDSHEET` type 2 opens a substream
+headed by a `BOF` of type `0x0020` that carries its own page setup and a chart, and
+`XlsWorkbookReader` skipped it with the macro and Visual Basic substreams — so both GA files came out
+a page short. `MsBinary/XlsChartReader.cs` reads the substream into the same `ChartPlot` the other
+two families use, and `ReadChartSheet` gives it a `SheetLayout` whose only content is one absolutely
+anchored drawing. Everything downstream then works unchanged: `SheetDrawingArea` widens the printed
+range to cover it, `SheetEmptyPages` keeps the page it overlaps, and `SheetPageGraphics` paints it
+through `SheetChart`.
+
+Three things about that reader are worth stating because each was a decision rather than a
+transcription:
+
+- **The printed rectangle is computed from the paper, not read.** `CHCHART` does state a rectangle
+  and it is the one Excel showed the chart at on screen; using it puts the chart off the paper.
+  `XclImpChartObj::FinalizeTabChart` (`sc/source/filter/excel/xiescher.cxx`) derives the printed one
+  instead — the paper less the margins, less two centimetres of width and one of height, less
+  another two and one when the sheet prints its headings, offset a centimetre from the left of the
+  sheet and half a centimetre from the top.
+- **The series data is deliberately not resolved, and the reference agrees.** Both GA charts state
+  their source links as `EXC_CHSRCLINK_DIRECTLY`, which names no range; LibreOffice produces a series
+  with an empty range and draws no marks, and its flat-ODF export says so outright
+  (`chart:values-cell-range-address=""`). The `LABEL` and `NUMBER` records that trail the chart
+  substream *do* hold eight categories and eight numbers, and reading them would draw eight bars the
+  reference does not.
+- **A chart substream carries drawing objects too**, positioned in quarter-thousandths of the chart
+  area with the fractions in the *cell* fields of the client anchor rather than in its offsets
+  (`XclImpChartDrawing::CalcAnchorRect`, `xichart.cxx:4274`). The same eighteen bytes mean something
+  else on a worksheet. That is where the GA files' `Source: 2012 GA Survey Table 5.1` lives.
+
+**The BIFF drawing layer exists now, and it is the item this track has carried longest.**
+`MsBinary/XlsDrawing.cs` concatenates every `MSODRAWING` payload in a substream into one Escher
+stream — the split between records is arbitrary and a container routinely straddles it, so reading
+them one at a time yields truncated containers — walks it with the existing
+`Paperless.MsBinary/Escher` reader that DOC and PPT already use, and pairs each shape carrying
+client data with the `OBJ` that follows it. A `TXO` and its `CONTINUE` records carry the string.
+Nothing in `Paperless.MsBinary` changed. **`apron-area.xls` was 294 words against 431 and is
+431/431, exactly, page for page.** Twenty-six of the sixty-two corpus `.xls` files carry a drawing
+and twenty carry a `TXO`.
+
+Only the text is drawn, not the shape's fill or its outline — which is the SpreadsheetML path's
+limit too, so the two formats produce the same page from the same document.
+
+**A ruled but empty cell is inside the printed area, and a workbook of forms is mostly that.**
+`ScTable::GetPrintArea` runs two passes over the same columns: the first finds the last row and
+column holding *data*, and the second — headed `// Test attribute` (`table1.cxx:710`) — asks each
+column for its last *visibly* attributed row, where visible means a non-transparent background, any
+of the four border edges, a diagonal or a shadow (`ScPatternAttr::CalcVisible`, `patattr.cxx:1584`).
+`e-pass-contact-details-template.xlsx` has nine values and a ruled box on row 14, so the box was
+outside the block, never placed, and never drawn: it passed the page and word gates and differed
+from LibreOffice by 0.21% of its second page's ink. `Layout/SheetDecorationArea.cs` is that pass.
+
+**Getting the stop condition wrong costs more than the rule gains, and it was measured both ways.**
+Formatting reaches the end of a sheet far more often than data does, so the scan has to stop: Calc
+walks runs of visually equal rows below the last data row and breaks on the first run of
+`SC_VISATTR_STOP` = 84 rows or more (`ScAttrArray::GetLastVisibleAttr`, `attarray.cxx:1922`). **Both
+kinds of run count**, and the first implementation here only broke on *gaps*. Measured over the
+whole track: breaking on gaps alone took the page error from 885 to **957**, because
+`edb-emissions-databank v27`'s third sheet rules 46172 cells down to row 1001 in one unbroken run and
+that took its 368 pages to 460. Breaking on equal runs as well — one is one run far longer than the
+limit, so Calc takes nothing from it — gives **862**, and `links-2026.xlsx` goes from 21 pages
+against 45 to 45 exactly.
+
+**Two defects in `Paperless.Core.Charts` that only a spreadsheet found, both about a title being in
+the band already reserved for it.** They are in shared code and are in their own commit.
+
+- **A title states its own line breaks.** `'Chart 8\n2012 Average Fuel Consumption Rates by Aircraft
+  Type'` is one `CHSTRING`, and DrawingML writes the same thing as a second `a:p`. Measured as one
+  line, it reserves half the room it needs and the second line is drawn over the first. `LinesOf`
+  and `MeasureLines` are the fix, and putting them inside `Shape` means every reservation follows.
+- **A bar chart's axis titles swap places, because its axes do.** The room was already reserved that
+  way — `PlotAreaOf` picks `beside` and `below` from `plot.Direction` — and `AddTitles` drew them by
+  *role*, so each title landed in the other's band. `TITLE_AT_STANDARD_X_AXIS_POSITION` is always
+  `ALIGN_BOTTOM`: what runs horizontally is titled underneath, whichever axis that is.
+
+Both GA files now match page for page and word for word — **509/537 → 537/537 and 613/643 →
+643/643** — and neither has a major image difference. `sheets/batch-002` is **10/10 on the word gate
+and 10/10 on the ink-imbalance image diff**, and `sheets/batch-001` stays 10/10 on both.
+
+**Whole track, `sheets/batch-001 … batch-018`, 171 documents: 97 matching → 108, total absolute page
+error 881 → 860, exactly-correct page counts 118 → 121**; `xls` 40/62 → **45/62** and `xlsx` 57/109 →
+**63/109**. The worst pages by ink imbalance across the two level-one batches are 0.68% and 0.60%,
+neither of them a major region.
+
+**A word of caution about the last digit of any of those.** Re-running the sweep at the same commit
+gave a *reference* page count of 191 for `ans_mappings_of_eccairs_terms.xlsx` where the previous run
+gave 193, so `soffice` is not perfectly reproducible on every document and a difference of one or
+two in the page error is noise rather than signal. The A/B figures above — 885, 957, 862 — are
+sharper than the sweep totals because they re-rendered only our side against one fixed set of
+reference PDFs.
+
+Left open, and found while doing the above:
+
+- **A BIFF chart's series is never resolved.** A `CHSOURCELINK` of type `WORKSHEET` carries a
+  formula token array naming the range, which needs the formula engine. Both corpus chart sheets
+  state `DIRECTLY` and want no series, so nothing here reaches it — but an embedded worksheet chart
+  would, and those are not read at all yet either (they arrive through `OBJ` type 5 and the chart
+  substream that follows it, which the drawing collector now sees and ignores).
+- **A shape's fill and outline are not drawn**, on either Excel path.
+- **`CHLINEFORMAT`'s palette colour is not read**, so a gridline is always black.
+- **A merge anchored in a hidden *row* is still lost.** `GetMergeOrigin` walks up as well as left
+  and the port still only walks left. No corpus document reaches it.
+- **`XlsChartBuilder`'s `Inside(CHTEXT)` guard is defensive and untested.** A test written for it
+  passed with the guard removed — `_pendingText` is reset at every `CHTEXT` and consumed at its
+  `CHEND`, so a stray `CHSTRING` cannot leak into a title — and was deleted rather than shipped.
+
 ## What the third sheets sweep found
 
 Measured at `ef1aac0c8`. `sheets/batch-001` was **6/10**, the weakest level-one batch of the three

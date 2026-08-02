@@ -291,10 +291,43 @@ public static partial class ChartLayout
     /// </remarks>
     private static DocSize Shape(IChartTextMeasurer measurer, string text, Length size)
     {
-        DocSize measured = measurer.Measure(text, size);
+        DocSize measured = MeasureLines(measurer, text, size);
         return new DocSize(
             measured.Width + size * (TextShapeInsetX * 2),
             measured.Height + size * (TextShapeInsetY * 2));
+    }
+
+    /// <summary>
+    /// The lines a title breaks into, which is more than one when the file says so.
+    /// </summary>
+    /// <remarks>
+    /// A chart's title is one string with its own line breaks in it — Excel's BIFF <c>CHSTRING</c>
+    /// writes <c>"Chart 8\n2012 Average Fuel Consumption Rates"</c>, and DrawingML writes a second
+    /// <c>a:p</c> — and the break is part of the title rather than wrapping the engine chose. A
+    /// measurer handed the whole string reports one line, so a two-line title reserves half the
+    /// room it needs and the plot area starts a line too high.
+    /// </remarks>
+    private static string[] LinesOf(string text)
+        => text.AsSpan().IndexOfAny('\n', '\r') < 0
+            ? [text]
+            : text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+
+    /// <summary>How much room a possibly multi-line label needs: the widest line, all the heights.</summary>
+    private static DocSize MeasureLines(IChartTextMeasurer measurer, string text, Length size)
+    {
+        string[] lines = LinesOf(text);
+        if (lines.Length <= 1) return measurer.Measure(text, size);
+
+        Length width = Length.Zero;
+        Length height = Length.Zero;
+        foreach (string line in lines)
+        {
+            DocSize measured = measurer.Measure(line, size);
+            width = Length.Max(width, measured.Width);
+            height += measured.Height;
+        }
+
+        return new DocSize(width, height);
     }
 
     /// <summary>Lays a chart out inside a frame.</summary>
@@ -2472,37 +2505,51 @@ public static partial class ChartLayout
     {
         if (plot.Title is { Length: > 0 } title)
         {
-            Length height = measurer.Measure(title, plot.TitleSize).Height;
-            labels.Add(new ChartLabel(
-                title,
-                new DocPoint(
-                    frame.X + frame.Width / 2,
-                    frame.Y + frame.Height * PageMargin + height / 2),
-                ChartLabelAnchor.Centre,
-                plot.TitleSize,
-                AxisColour));
+            // Line by line, top down, from the same origin the reservation above measured from,
+            // so a two-line title fills exactly the band that was kept for it.
+            Length pen = frame.Y + (frame.Height * PageMargin);
+            foreach (string line in LinesOf(title))
+            {
+                Length height = measurer.Measure(line, plot.TitleSize).Height;
+                labels.Add(new ChartLabel(
+                    line,
+                    new DocPoint(frame.X + frame.Width / 2, pen + height / 2),
+                    ChartLabelAnchor.Centre,
+                    plot.TitleSize,
+                    AxisColour));
+                pen += height;
+            }
         }
 
-        if (plot.CategoryAxisTitle is { Length: > 0 } category)
+        // Which title goes where is decided by the axis' direction rather than by its role, and
+        // a bar chart turns both a quarter turn: the categories run up the left edge and the
+        // values along the bottom. The room was already reserved that way — `PlotAreaOf` chooses
+        // `beside` and `below` from `plot.Direction` — and drawing them the other way round put
+        // each title in the other's reserved band.
+        bool columns = plot.Direction == ChartBarDirection.Column;
+        string? beside = columns ? plot.ValueAxisTitle : plot.CategoryAxisTitle;
+        string? below = columns ? plot.CategoryAxisTitle : plot.ValueAxisTitle;
+
+        if (below is { Length: > 0 } under)
         {
-            Length height = measurer.Measure(category, plot.AxisTitleSize).Height;
+            Length height = measurer.Measure(under, plot.AxisTitleSize).Height;
             labels.Add(new ChartLabel(
-                category,
+                under,
                 new DocPoint(
                     area.X + area.Width / 2,
-                    frame.Bottom - frame.Height * PageMargin - height / 2),
+                    frame.Bottom - (frame.Height * PageMargin) - height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
                 AxisColour));
         }
 
-        if (plot.ValueAxisTitle is { Length: > 0 } value)
+        if (beside is { Length: > 0 } side)
         {
-            Length height = measurer.Measure(value, plot.AxisTitleSize).Height;
+            Length height = measurer.Measure(side, plot.AxisTitleSize).Height;
             labels.Add(new ChartLabel(
-                value,
+                side,
                 new DocPoint(
-                    frame.X + frame.Width * PageMargin + height / 2,
+                    frame.X + (frame.Width * PageMargin) + height / 2,
                     area.Y + area.Height / 2),
                 ChartLabelAnchor.Centre,
                 plot.AxisTitleSize,
