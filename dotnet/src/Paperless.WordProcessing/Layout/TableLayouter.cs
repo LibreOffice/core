@@ -166,6 +166,206 @@ public static class TableLayouter
     }
 
     /// <summary>
+    /// One row's cells restricted to the part of the row that goes on a single page.
+    /// </summary>
+    /// <remarks>
+    /// Positioned with the part's own top at nought and the table's left edge at nought, exactly as
+    /// <see cref="LayOut"/> leaves a whole table, so the caller moves it onto the page with
+    /// <see cref="Offset"/> and nothing here needs to know where the page is.
+    /// </remarks>
+    /// <param name="Cells">The cells, each holding only the lines that belong to this part.</param>
+    /// <param name="Height">How tall the part is, borders included.</param>
+    /// <param name="Cut">
+    /// The row-relative depth everything above which is now drawn. Handed back to
+    /// <see cref="SliceRow"/> for the next page's part, and equal to <see cref="Height"/> only by
+    /// coincidence — the part is as tall as its tallest cell needs, and the cut is where the text stopped.
+    /// </param>
+    /// <param name="IsComplete">True when nothing of the row is left over.</param>
+    public readonly record struct RowSlice(
+        List<PlacedTableCell> Cells, Length Height, Length Cut, bool IsComplete);
+
+    /// <summary>
+    /// Takes the part of a row that fits in a given height, starting below what is already drawn.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// What lets a table row cross a page break, which Writer does through a <em>follow flow line</em>:
+    /// <c>SwTabFrame::Split</c> keeps the rows that fit in the master table and hands the first one that
+    /// does not to <c>lcl_InsertNewFollowFlowLine</c>, which builds a second frame for the same row on the
+    /// next page and moves whatever text did not fit into it
+    /// (<c>sw/source/core/layout/tabfrm.cxx</c>). This is that in one function: the lines above the cut
+    /// stay, the rest are the next page's problem.
+    /// </para>
+    /// <para>
+    /// The cut is one depth for the whole row rather than a per-cell allowance, which is the point rather
+    /// than a simplification — a row has one bottom edge, and choosing per cell would let one cell's text
+    /// run past the edge another cell's stopped at. So the candidate cuts are the line bottoms of every
+    /// cell together, and the deepest one whose part still fits is taken.
+    /// </para>
+    /// <para>
+    /// Returns null when the row must move whole: a cell holding a nested table (Writer's
+    /// <c>bTableLayoutTooComplex</c>), a cell merged across this row, a row of a stated exact height, or a
+    /// cut that would leave nothing on either side of it. The last is what stops a split that gains
+    /// nothing — a page ending in an empty row followed by the same row again does not terminate.
+    /// </para>
+    /// </remarks>
+    /// <param name="row">The row, for its borders and its height rule.</param>
+    /// <param name="cells">Its cells as <see cref="LayOut"/> placed them.</param>
+    /// <param name="drawn">How far into the row an earlier page already reached; nought at its first part.</param>
+    /// <param name="room">How much height is left on this page.</param>
+    public static RowSlice? SliceRow(
+        PageTableRow row, IReadOnlyList<PlacedTableCell> cells, Length drawn, Length room)
+    {
+        ArgumentNullException.ThrowIfNull(row);
+        ArgumentNullException.ThrowIfNull(cells);
+
+        if (cells.Count == 0 || row.HasExactHeight) return null;
+
+        Length rowTop = cells[0].Area.Y;
+        foreach (PlacedTableCell cell in cells)
+        {
+            // A cell covering more than this row cannot be cut here: its text belongs to a row further
+            // down, and half of its rectangle would be drawn on each of two pages.
+            if (Math.Max(1, cell.Cell.RowSpan) > 1) return null;
+            if (cell.Content is { Tables.Count: > 0 }) return null;
+            rowTop = Length.Min(rowTop, cell.Area.Y);
+        }
+
+        Length border = BorderHeight(row);
+        Length above = rowTop + drawn;
+
+        // Every line that is not yet drawn, as the depth its bottom sits at. These are the only places the
+        // row may be cut, since a cut between two of them would draw half a line.
+        List<Length> candidates = [];
+        foreach (PlacedTableCell cell in cells)
+        {
+            if (cell.Content is not { } flow) continue;
+
+            foreach (PlacedLine line in flow.Lines)
+            {
+                Length bottom = flow.Area.Y + line.Top + line.Box.Height;
+                if (bottom > above) candidates.Add(bottom);
+            }
+        }
+
+        if (candidates.Count == 0) return null;
+
+        candidates.Sort();
+
+        // The deepest cut whose part still fits. The height is not decreasing in the cut, so the first
+        // candidate that does not fit ends the search.
+        Length? chosen = null;
+        Length height = Length.Zero;
+
+        foreach (Length candidate in candidates)
+        {
+            if (chosen is { } already && already == candidate) continue;
+
+            Length needed = HeightAt(cells, above, candidate, border);
+            if (needed > room) break;
+
+            chosen = candidate;
+            height = needed;
+        }
+
+        if (chosen is not { } cut) return null;
+
+        bool complete = candidates[^1] <= cut;
+
+        // A part holding every remaining line is not a split at all; the caller places the whole row.
+        if (complete && drawn <= Length.Zero) return null;
+
+        return new RowSlice(Sliced(cells, rowTop, above, cut, height), height, cut - rowTop, complete);
+    }
+
+    /// <summary>
+    /// How tall the row's part is when it is cut at a stated depth.
+    /// </summary>
+    /// <remarks>
+    /// The same sum <see cref="LayOut"/> makes a whole row from — the tallest cell's text plus its
+    /// padding, plus the row's borders — over the lines this part holds. The row's declared floor is
+    /// deliberately <em>not</em> applied: it is a floor on the row and the parts add up to the row, so
+    /// imposing it on each would make a split row twice as tall as an unsplit one. A row whose floor
+    /// exceeds its text never reaches here anyway, since every line then fits in one part and
+    /// <see cref="SliceRow"/> declines a split that leaves nothing over.
+    /// </remarks>
+    private static Length HeightAt(
+        IReadOnlyList<PlacedTableCell> cells, Length above, Length cut, Length border)
+    {
+        Length text = Length.Zero;
+
+        foreach (PlacedTableCell cell in cells)
+        {
+            if (cell.Content is not { } flow) continue;
+
+            Length? top = null;
+            Length bottom = Length.Zero;
+
+            foreach (PlacedLine line in flow.Lines)
+            {
+                Length end = flow.Area.Y + line.Top + line.Box.Height;
+                if (end <= above || end > cut) continue;
+
+                top ??= flow.Area.Y + line.Top;
+                bottom = end;
+            }
+
+            if (top is { } start) text = Length.Max(text, bottom - start + cell.Cell.Padding.Vertical);
+        }
+
+        return text + border;
+    }
+
+    /// <summary>The cells of one part, holding its lines and positioned from the part's own top.</summary>
+    private static List<PlacedTableCell> Sliced(
+        IReadOnlyList<PlacedTableCell> cells, Length rowTop, Length above, Length cut, Length height)
+    {
+        List<PlacedTableCell> sliced = new(cells.Count);
+
+        foreach (PlacedTableCell cell in cells)
+        {
+            List<PlacedLine> kept = [];
+            Length? first = null;
+
+            if (cell.Content is { } flow)
+            {
+                foreach (PlacedLine line in flow.Lines)
+                {
+                    Length end = flow.Area.Y + line.Top + line.Box.Height;
+                    if (end <= above || end > cut) continue;
+
+                    first ??= line.Top;
+                    kept.Add(line);
+                }
+            }
+
+            DocRect area = new(cell.Area.X, Length.Zero, cell.Area.Width, height);
+            PlacedFlow? content = null;
+
+            if (cell.Content is { } text && kept.Count > 0)
+            {
+                // The remaining text starts at the top of the part rather than where it was measured, which
+                // is what a follow flow line is: the cell begins again on the next page. The first part
+                // keeps the offset it was laid out with, so a short cell beside a long one stays where its
+                // vertical alignment put it.
+                Length top = above <= rowTop
+                    ? text.Area.Y - rowTop
+                    : cell.Cell.Padding.Top - first!.Value;
+
+                content = text with
+                {
+                    Area = new DocRect(text.Area.X, top, text.Area.Width, height),
+                    Lines = kept,
+                };
+            }
+
+            sliced.Add(cell with { Area = area, Content = content });
+        }
+
+        return sliced;
+    }
+
+    /// <summary>
     /// The same cells, shifted.
     /// </summary>
     /// <remarks>
