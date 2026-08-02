@@ -233,6 +233,18 @@ git merge --ff-only <briefed-commit>       # if not, fast-forward before measuri
 The tell that it worked: your own baseline sweep should reproduce the briefed numbers
 exactly. If it does not, stop — either the base is wrong or the measurement is.
 
+### A sweep and a build cannot share a tree
+
+`batch-check.sh` invokes the CLI once per document over tens of minutes. Rebuild that tree
+while it runs and the first half of the sweep measures one program and the second half
+another. The output looks completely normal — right row count, no duplicates, every check
+the section above prescribes passes.
+
+This caught an agent twice and the parent session once in a single round. Either finish the
+sweep before touching the tree, or snapshot the CLI first and point the sweep at the copy.
+When in doubt, discard and re-run: a sweep is cheap next to a wrong number that reaches a
+report.
+
 ### Worktrees isolate the code, not the scratch directory
 
 Agents get their own git worktree and share one filesystem everywhere else. Two agents this
