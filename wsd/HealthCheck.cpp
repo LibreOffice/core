@@ -47,9 +47,9 @@ struct CheckResult
     std::string reason;
 };
 
-CheckResult pass() { return CheckResult{ true, std::string() }; }
+CheckResult pass() { return { true, std::string() }; }
 
-CheckResult fail(std::string reason) { return CheckResult{ false, std::move(reason) }; }
+CheckResult fail(std::string reason) { return { false, std::move(reason) }; }
 
 CheckResult checkPing() { return pass(); }
 
