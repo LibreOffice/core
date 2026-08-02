@@ -79,6 +79,12 @@ internal static class OdfPageGeometry
             HeaderHeight = headerHeight,
             FooterHeight = footerHeight,
 
+            // svg:height is the height, fo:min-height is a floor — Writer's SwFrameSize::Fixed against
+            // SwFrameSize::Minimum. A fixed one does not grow, so content that outruns it overflows
+            // instead of moving the body, and the paginator has to be told which it is.
+            HasFixedHeaderHeight = HasFixedHeight(layout?.HeaderProperties),
+            HasFixedFooterHeight = HasFixedHeight(layout?.FooterProperties),
+
             // ODF's footer is top-aligned below the body rather than bottom-aligned against the page, so
             // the spacing that separates the two is where its first line goes. Stated only when there is a
             // footer at all: a page with none should not claim an offset for it.
@@ -164,6 +170,19 @@ internal static class OdfPageGeometry
 
         return declared + FurnitureSpacing(properties);
     }
+
+    /// <summary>
+    /// True when the furniture states a height rather than a floor, so it does not grow with its content.
+    /// </summary>
+    /// <remarks>
+    /// The same test <see cref="FurnitureExtent"/> makes, asked as a question rather than as a measurement,
+    /// because the paginator needs the answer and not the number: <c>svg:height</c> is
+    /// <c>SwFrameSize::Fixed</c> and <c>fo:min-height</c> is <c>SwFrameSize::Minimum</c>, and only the
+    /// second lets a running head or foot move the body.
+    /// </remarks>
+    private static bool HasFixedHeight(OdfPropertySet? properties)
+        => properties is not null
+           && OdfValue.ParseLength(properties.Get(OdfNamespaces.SvgCompatible, "height")) is not null;
 
     /// <summary>
     /// The gap between a header or footer and the body text.

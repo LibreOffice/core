@@ -461,13 +461,19 @@ public sealed class Paginator
             pageIsSectionFirst = pages.Count == sectionFirstPage;
         }
 
-        // The body area of the page about to be filled, which depends on how tall its own running head
-        // turned out. Called after every change to what that head is or which page draws it.
+        // The body area of the page about to be filled, which depends on how tall its own running head and
+        // running foot turned out. Called after every change to what those are or which page draws them.
         void MeasureBody()
         {
             body = PushedDownBy(
                 page,
                 pageFurniture?.Header(
+                    pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
+                    _options.CollapsesSpacing));
+
+            body = PulledUpBy(
+                body,
+                pageFurniture?.Footer(
                     pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
                     _options.CollapsesSpacing));
 
@@ -1141,7 +1147,7 @@ public sealed class Paginator
     /// </remarks>
     private static PageGeometry PushedDownBy(PageGeometry page, PlacedFlow? header)
     {
-        if (header is null || header.IsEmpty) return page;
+        if (header is null || header.IsEmpty || page.HasFixedHeaderHeight) return page;
 
         Length needed = page.HeaderDistance + header.Advance;
         if (needed <= page.Margins.Top) return page;
@@ -1152,6 +1158,52 @@ public sealed class Paginator
         if (needed >= page.Size.Height - page.Margins.Bottom) return page;
 
         return page with { Margins = page.Margins with { Top = needed } };
+    }
+
+    /// <summary>
+    /// A page's geometry with the body's bottom raised to clear a footer that outgrew its margin.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The mirror of <see cref="PushedDownBy"/>, and the same mechanism read at the other end of the page:
+    /// <c>SectionPropertyMap::PrepareHeaderFooterProperties</c> makes the bottom margin <c>w:footer</c> and
+    /// the footer frame's height <c>w:bottom − w:footer</c>, again with a 1 mm floor and dynamic spacing, so
+    /// <c>SwHeadFootFrame::FormatPrt</c> lets a footer eat the gap above it first and then keeps growing —
+    /// upwards, since a footer frame's lower edge is pinned at <c>w:footer</c>. The body therefore ends at
+    /// <c>min(pageHeight − w:bottom, pageHeight − w:footer − footer height)</c>. The DOC reader reaches the
+    /// same pair of numbers through <c>dyaBottom</c> and <c>dyaHdrBottom</c>
+    /// (<c>wwSectionManager::GetPageULData</c>, <c>ww8par6.cxx</c>:581).
+    /// </para>
+    /// <para>
+    /// The offset is in the sum because an ODF footer is top-aligned below the body rather than bottom
+    /// aligned against the page — see <see cref="PageGeometry.FooterOffset"/> — so what it needs is the
+    /// spacing above it plus its own content. A Word footer states no offset and needs only its content.
+    /// </para>
+    /// <para>
+    /// Measured on <c>words/batch-018/doc/120509coss.doc</c>, whose footer is one 60.7 pt logo in the
+    /// 21.3 pt its margins reserve: LibreOffice ends the body at 695.8 pt and Paperless ended it at
+    /// 735.3 pt, four lines lower, on every one of its pages.
+    /// </para>
+    /// <para>
+    /// A footer whose height the document <em>fixed</em> is left alone — see
+    /// <see cref="PageGeometry.HasFixedFooterHeight"/>. Only ODF can say so, and it is not a corner case:
+    /// an <c>svg:height</c> footer whose content is one ordinary line already overruns the room its own
+    /// style reserves, so growing it would shorten every page of every such document.
+    /// </para>
+    /// </remarks>
+    private static PageGeometry PulledUpBy(PageGeometry page, PlacedFlow? footer)
+    {
+        if (footer is null || footer.IsEmpty || page.HasFixedFooterHeight) return page;
+
+        Length needed = page.FooterDistance + (page.FooterOffset ?? Length.Zero) + footer.Advance;
+        if (needed <= page.Margins.Bottom) return page;
+
+        // As with a head that outgrows the whole page: a body of no height holds one overflowing line per
+        // page however much text is left, so an unreadable footer must not be able to make the document
+        // endless.
+        if (needed >= page.Size.Height - page.Margins.Top) return page;
+
+        return page with { Margins = page.Margins with { Bottom = needed } };
     }
 
     /// <summary>
