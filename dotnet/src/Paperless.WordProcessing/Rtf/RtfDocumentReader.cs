@@ -817,6 +817,12 @@ public sealed partial class RtfDocumentReader
             case "trhdr":
                 DefinitionTarget(CurrentFlow).RowIsHeader = true;
                 return;
+            case "trkeep":
+                // "Keep the row intact", which is the negation of what the layout asks — see
+                // `PageTableRow.CanSplit`. Not `\trkeepfollow`, which is keep-with-next and a different
+                // question.
+                DefinitionTarget(CurrentFlow).RowIsKeptTogether = true;
+                return;
             case "cellx":
                 AddCellDefinition(CurrentFlow, token.Parameter);
                 return;

@@ -267,11 +267,16 @@ public sealed record RtfLayoutTable(
 /// True when <c>\trrh</c>'s parameter was negative, which is how RTF says the height is exact rather than a
 /// floor — the row is that tall and content past it is clipped.
 /// </param>
+/// <param name="CanSplit">
+/// False when <c>\trkeep</c> forbade breaking the row across a page — see
+/// <see cref="Layout.PageTableRow.CanSplit"/>.
+/// </param>
 public sealed record RtfLayoutRow(
     IReadOnlyList<RtfLayoutCell> Cells,
     Core.Units.Length MinHeight,
     bool IsHeader,
-    bool HasExactHeight = false);
+    bool HasExactHeight = false,
+    bool CanSplit = true);
 
 /// <summary>One cell of an RTF table.</summary>
 /// <param name="Column">The grid column it starts at.</param>

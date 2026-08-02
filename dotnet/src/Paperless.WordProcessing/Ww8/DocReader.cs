@@ -334,6 +334,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 IsHeader = row.IsHeader,
                 MinHeight = row.MinHeight,
                 HasExactHeight = row.HasExactHeight,
+                CanSplit = row.CanSplit,
             });
         }
 
