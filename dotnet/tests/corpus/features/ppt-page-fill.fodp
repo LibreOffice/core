@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:gradient draw:name="pagegrad" draw:style="linear"
+      draw:start-color="#ffffff" draw:end-color="#3366cc"
+      draw:start-intensity="100%" draw:end-intensity="100%"
+      draw:angle="0deg" draw:border="0%"/>
+  <draw:gradient draw:name="shapegrad" draw:style="linear"
+      draw:start-color="#ff0000" draw:end-color="#00ff00"
+      draw:start-intensity="100%" draw:end-intensity="100%"
+      draw:angle="900" draw:border="0%"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="gradient" draw:fill-gradient-name="pagegrad"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="gradient"
+       draw:fill-gradient-name="shapegrad"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:text-properties fo:font-size="18pt"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="first" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:custom-shape draw:style-name="gr1" draw:name="panel"
+        svg:x="3cm" svg:y="6cm" svg:width="12cm" svg:height="5cm">
+     <text:p text:style-name="P1">Shaded panel</text:p>
+     <draw:enhanced-geometry draw:type="rectangle"/>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

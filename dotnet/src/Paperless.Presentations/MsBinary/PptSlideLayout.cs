@@ -254,8 +254,22 @@ internal sealed class PptSlideLayout
     /// decoder registry is the only thing that knows what it can read.
     /// </remarks>
     private PptPicture PictureOf(EscherShape shape)
+        => PictureAt(shape.Properties.Value(EscherPropertyIds.Picture));
+
+    /// <summary>
+    /// The raster a shape's <c>fillBlip</c> names, for a pattern, texture or picture fill.
+    /// </summary>
+    /// <remarks>
+    /// A fill blip and a displayed picture are different properties naming the same store, so
+    /// this is the same lookup under a different key. Rasters only: a
+    /// <see cref="BitmapPaint"/> carries pixels, so a metafile fill blip has nowhere to go and
+    /// is left unpainted rather than rasterised here.
+    /// </remarks>
+    private RasterImage? FillPictureOf(EscherShape shape)
+        => PictureAt(shape.Properties.Value(PptFills.FillBlip)).Raster;
+
+    private PptPicture PictureAt(uint pib)
     {
-        uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
         if (pib == 0 || _blips is null) return default;
         if (_decoded.TryGetValue((int)pib, out PptPicture cached)) return cached;
         if (!_blips.TryGetValue((int)pib, out EscherBlip blip)) return default;
@@ -370,7 +384,7 @@ internal sealed class PptSlideLayout
     /// <c>GetColorFromPalette</c> answers for the slide. A deck that recolours one slide and still
     /// follows the master's background is the case that separates the two.
     /// </remarks>
-    private Paint? MasterBackground(uint masterId, PptColourScheme scheme)
+    private Paint? MasterBackground(uint masterId, PptColourScheme scheme, DocSize size)
     {
         uint id = masterId;
 
@@ -380,7 +394,7 @@ internal sealed class PptSlideLayout
         for (int hop = 0; hop <= MaxMasterChain; hop++)
         {
             if (!_pagesByMaster.TryGetValue(id, out DffRecordHeader master)) return null;
-            if (BackgroundOf(master, scheme) is { } paint) return paint;
+            if (BackgroundOf(master, scheme, size) is { } paint) return paint;
             if (!_masterParents.TryGetValue(id, out uint parent) || parent == id) return null;
             id = parent;
         }
@@ -526,8 +540,8 @@ internal sealed class PptSlideLayout
         // of its own regardless — PowerPoint writes a background shape on every page whether or not
         // it is used. Preferring the slide's own would draw the wrong one on most decks.
         Paint? background = (flags & FollowMasterBackground) != 0
-            ? MasterBackground(masterId, scheme) ?? BackgroundOf(page, scheme)
-            : BackgroundOf(page, scheme) ?? MasterBackground(masterId, scheme);
+            ? MasterBackground(masterId, scheme, size) ?? BackgroundOf(page, scheme, size)
+            : BackgroundOf(page, scheme, size) ?? MasterBackground(masterId, scheme, size);
 
         background ??= Paint.Solid(Colour.White);
 
@@ -618,12 +632,20 @@ internal sealed class PptSlideLayout
     /// The page's background fill, or null when it states none.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The background is a shape rather than a property: a <c>SpContainer</c> whose flags carry
     /// <see cref="EscherShapeAttributes.Background"/>, sitting beside the patriarch group rather
-    /// than inside it. LibreOffice reads its <c>fillColor</c> with a default of white
-    /// (<c>svdfppt.cxx:3055-3060</c>), which is why a deck that says nothing is on paper.
+    /// than inside it. LibreOffice runs it through the ordinary <c>ApplyAttributes</c> and only
+    /// then overwrites the fill <em>colour</em> (<c>svdfppt.cxx:3055-3060</c>) — so a shaded or
+    /// picture background keeps its shading, and it is the solid case that falls back to white.
+    /// </para>
+    /// <para>
+    /// The page rectangle is the box a gradient is measured in and the rectangle a picture is
+    /// stretched across, so it has to be passed in: the shape's own anchor says nothing, and
+    /// LibreOffice substitutes a fixed rectangle for the same reason.
+    /// </para>
     /// </remarks>
-    private Paint? BackgroundOf(DffRecordHeader page, PptColourScheme scheme)
+    private Paint? BackgroundOf(DffRecordHeader page, PptColourScheme scheme, DocSize size)
     {
         if (_stream.FirstChild(page, PptRecordTypes.Drawing) is not { } drawing) return null;
         if (_stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is not { } container)
@@ -632,9 +654,18 @@ internal sealed class PptSlideLayout
         foreach (EscherShape shape in _escher.ReadDrawing(container))
         {
             if (!shape.IsBackground) continue;
-            return Paint.Solid(
-                PptColour.Resolve(shape.Properties.Value(EscherPropertyIds.FillColour, 0xFFFFFF), scheme)
-                ?? Colour.White);
+
+            return PptFills.Resolve(
+                       shape.Properties,
+                       filled: true,
+                       scheme,
+                       new DocRect(DocPoint.Origin, size),
+                       AffineTransform.Identity,
+                       FillPictureOf(shape))
+                   ?? Paint.Solid(
+                       PptColour.Resolve(
+                           shape.Properties.Value(EscherPropertyIds.FillColour, 0xFFFFFF), scheme)
+                       ?? Colour.White);
         }
 
         return null;
@@ -912,7 +943,7 @@ internal sealed class PptSlideLayout
             Name = shape.Name,
             Outline = ShapeTransform.Apply(placement, outline),
             Bounds = bounds,
-            Fill = Fill(shape, context.Scheme),
+            Fill = Fill(shape, context.Scheme, local, placement),
             Line = Line(shape, context.Scheme),
             Picture = Picture(shape, bounds),
             Text = Text(shape, context, local, preset, adjustment, placement),
@@ -1030,25 +1061,38 @@ internal sealed class PptSlideLayout
     /// <remarks>
     /// <c>fFilled</c> is a boolean packed into property 447, and a shape that does not
     /// <em>state</em> it takes its type's default rather than the packed bit
-    /// (<c>DffPropertyReader::ApplyFillAttributes</c>, <c>msdffimp.cxx:1320</c>). Only a solid fill
-    /// is resolved; a gradient or a picture is left unpainted rather than approximated by one of
-    /// its stops, which is the same rule the other two paths follow.
+    /// (<c>DffPropertyReader::ApplyFillAttributes</c>, <c>msdffimp.cxx:1320</c>). What the fill
+    /// then <em>is</em> — solid, shaded or a bitmap — is <see cref="PptFills"/>'s question, and
+    /// the same one a page background asks.
     /// </remarks>
-    private static Paint? Fill(EscherShape shape, PptColourScheme scheme)
+    private Paint? Fill(
+        EscherShape shape, PptColourScheme scheme, DocRect local, AffineTransform placement)
     {
         bool filled = shape.Properties.StatesBoolean(EscherPropertyIds.Filled)
             ? shape.Properties.Boolean(EscherPropertyIds.Filled)
             : PptShapeGeometry.IsFilledByDefault(shape.ShapeType);
 
-        if (!filled) return null;
-        if (shape.Properties.Value(PptShapeGeometry.FillType, 0) != PptShapeGeometry.SolidFill)
-            return null;
+        // The same split the text path makes: an upright shape's fill is stated in slide
+        // coordinates outright, so a shading's numbers land in a backend's output directly
+        // comparable with a reference renderer's; a rotated one keeps its own box and travels
+        // with the matrix, which a GradientPaint carries and a backend applies.
+        bool upright = IsUpright(placement);
+        DocRect box = upright
+            ? new DocRect(ShapeTransform.Apply(placement, DocPoint.Origin), local.Size)
+            : new DocRect(DocPoint.Origin, local.Size);
 
-        return PptColour.Resolve(
-            shape.Properties.Value(EscherPropertyIds.FillColour, 0xFFFFFF), scheme) is { } colour
-            ? Paint.Solid(colour)
-            : null;
+        return PptFills.Resolve(
+            shape.Properties,
+            filled,
+            scheme,
+            box,
+            upright ? AffineTransform.Identity : placement,
+            FillPictureOf(shape));
     }
+
+    /// <summary>True when a placement is a pure translation, so a fill needs no matrix.</summary>
+    private static bool IsUpright(AffineTransform transform)
+        => transform.A == 1 && transform.B == 0 && transform.C == 0 && transform.D == 1;
 
     /// <summary>
     /// A shape's outline, or null when it has none.
