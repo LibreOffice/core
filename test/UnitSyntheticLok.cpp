@@ -30,15 +30,6 @@
 
 using namespace std::literals;
 
-namespace {
-    void *memdup(const void *ptr, size_t size)
-    {
-        auto p = malloc(size);
-        memcpy(p, ptr, size);
-        return p;
-    }
-}
-
 bool testCompletedSuccess = false;
 
 class UnitSyntheticLok : public UnitWSD
@@ -106,55 +97,29 @@ void UnitSyntheticLok::endTest(const std::string& reason)
     testCompletedSuccess = !failed();
 }
 
-class UnitKitSyntheticLok;
-
-UnitKitSyntheticLok *GlobalUnitKit;
-
 // Inside the forkit & kit processes
 class UnitKitSyntheticLok : public UnitKit
 {
-public:
-    COKit *_kit;
-
-    // Original and overridden vtables
-    COKitClass *_kitClass;
-    COKitClass *_kitClassClean;
-
-    // Original and overridden vtables
-    COKitDocumentClass *_docClass;
-    COKitDocumentClass *_docClassClean;
-
-    // Polling replacement
-    COKitPollCallback _pollCallback;
-    COKitWakeCallback _wakeCallback;
-    void* _pollData;
-
     COKitCallback _docCallback;
-    void *_docCallbackData;
+    void* _docCallbackData;
 
     bool isDocumentCreated() const { return _docCallback != nullptr; }
 
+public:
     UnitKitSyntheticLok()
         : UnitKit("SyntheticLok")
-        , _kit(nullptr)
-        , _kitClass(nullptr)
-        , _kitClassClean(nullptr)
-        , _docClass(nullptr)
-        , _docClassClean(nullptr)
-        , _pollCallback(nullptr)
-        , _wakeCallback(nullptr)
-        , _pollData(nullptr)
         , _docCallback(nullptr)
         , _docCallbackData(nullptr)
     {
         TST_LOG("SyntheticLOK kit bootstrap\n");
         setTimeout(1h);
-        GlobalUnitKit = this;
     }
 
-    virtual COKit *cok_init(
-        const char *instdir, const char *userdir,
-        CokHookFunction2 fn) override;
+    void postViewCallbackRegistered(COKitCallback callback, void* data) override
+    {
+        _docCallback = callback;
+        _docCallbackData = data;
+    }
 
     void postLOKDocumentEvent(COKitCallbackType eType, const char* payload)
     {
@@ -162,105 +127,17 @@ public:
         _docCallback(eType, payload, _docCallbackData);
     }
 
-    bool prePollCallback(int /* timeoutUs */)
+    /// Once a view has a callback, feed one synthetic cell cursor event into the kit.
+    void preKitPollCallback() override
     {
-        return true;
-    }
+        if (isFinished() || !isDocumentCreated())
+            return;
 
-    virtual void doTest()
-    {
-        if (isDocumentCreated())
-        {
-            TST_LOG("Send test event");
-            postLOKDocumentEvent(COKitCallbackType::CELL_CURSOR, "EMPTY");
-            exitTest(TestResult::Ok);
-        }
+        TST_LOG("Send test event");
+        postLOKDocumentEvent(COKitCallbackType::CELL_CURSOR, "EMPTY");
+        exitTest(TestResult::Ok);
     }
 };
-
-
-extern "C" {
-
-    int syn_pollCallback(void* /* data */, int timeoutUs)
-    {
-        assert(GlobalUnitKit);
-        bool finished = UnitKit::get().isFinished();
-        if (!finished && timeoutUs > 1000) // post initial setup we hope
-            GlobalUnitKit->doTest();
-        if (GlobalUnitKit->prePollCallback(timeoutUs))
-            return GlobalUnitKit->_pollCallback(GlobalUnitKit->_pollData, timeoutUs);
-        return 0;
-    }
-
-    void syn_wakeCallback(void* /* data */)
-    {
-        assert(GlobalUnitKit);
-        GlobalUnitKit->_wakeCallback(GlobalUnitKit->_pollData);
-    }
-
-    void syn_registerCallback (COKitDocument* pThis,
-                               COKitCallback callback,
-                               void* data)
-    {
-        assert(GlobalUnitKit);
-        GlobalUnitKit->_docCallback = callback;
-        GlobalUnitKit->_docCallbackData = data;
-        GlobalUnitKit->_docClassClean->registerCallback(pThis, callback, data);
-    }
-
-    COKitDocument* syn_documentLoadWithOptions (COKit* pThis,
-                                                         const char* url,
-                                                         const char* options)
-    {
-        assert(GlobalUnitKit);
-
-        // chain to parent
-        COKitDocument *doc = GlobalUnitKit->_kitClassClean->documentLoadWithOptions(pThis, url, options);
-
-        GlobalUnitKit->_docClass = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, sizeof(*doc->pClass)));
-        GlobalUnitKit->_docClassClean = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, sizeof(*doc->pClass)));
-        doc->pClass = GlobalUnitKit->_docClass;
-
-        GlobalUnitKit->_docClass->registerCallback = syn_registerCallback;
-
-        return doc;
-    }
-
-    void syn_runLoop (COKit* pThis,
-                      COKitPollCallback pollCallback,
-                      COKitWakeCallback wakeCallback,
-                      void* data)
-    {
-        assert(GlobalUnitKit);
-
-        GlobalUnitKit->_pollCallback = pollCallback;
-        GlobalUnitKit->_wakeCallback = wakeCallback;
-        GlobalUnitKit->_pollData = data;
-
-        GlobalUnitKit->_kitClassClean->runLoop(pThis, syn_pollCallback, syn_wakeCallback, data);
-    }
-};
-
-COKit *UnitKitSyntheticLok::cok_init(const char *instdir,
-                                              const char *userdir,
-                                              CokHookFunction2 fn)
-{
-    // Let the parent have a go
-    _kit = fn(instdir, userdir);
-    if (!_kit || !_kit->pClass)
-        LOK_ASSERT_FAIL("Failed to get kit initialized");
-
-    _kitClass = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, sizeof(*_kit->pClass)));
-    _kitClassClean = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, sizeof(*_kit->pClass)));
-
-    // switch to our vtable
-    _kit->pClass = _kitClass;
-
-    _kitClass->runLoop = syn_runLoop;
-    _kitClass->documentLoadWithOptions = syn_documentLoadWithOptions;
-
-    return _kit;
-}
 
 UnitBase* unit_create_wsd(void) { return new UnitSyntheticLok(); }
 

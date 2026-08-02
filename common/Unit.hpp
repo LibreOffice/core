@@ -24,7 +24,7 @@
 
 #include <test/testlog.hpp>
 
-#include <COKit/COKitInit.h>
+#include <COKit/COKit.hxx>
 
 class UnitBase;
 class UnitWSD;
@@ -709,13 +709,9 @@ public:
     /// After the kit process created a ChildSession
     virtual void postKitSessionCreated(Session* /*session*/) {}
 
-    /// Allow a custom COKit wrapper
-    virtual COKit *cok_init(const char * /* instdir */,
-                                     const char * /* userdir */,
-                                     CokHookFunction2 /* fn */)
-    {
-        return nullptr;
-    }
+    /// After the kit process registered a view's callback with the document. The callback and
+    /// the data are the pair that the engine will invoke for that view.
+    virtual void postViewCallbackRegistered(COKitCallback /* callback */, void* /* data */) {}
 
 private:
     void onExitTest(TestResult result, const std::string& reason = std::string()) override;

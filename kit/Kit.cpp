@@ -2334,6 +2334,8 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
     _viewIdToCallbackDescr.emplace(viewId,
                                    std::unique_ptr<CallbackDescriptor>(new CallbackDescriptor({ this, viewId })));
     _loKitDocument->registerCallback(ViewCallback, _viewIdToCallbackDescr[viewId].get());
+    if (!Util::isMobileApp())
+        UnitKit::get().postViewCallbackRegistered(ViewCallback, _viewIdToCallbackDescr[viewId].get());
 
     const int viewCount = _loKitDocument->getViewsCount();
     LOG_INF("Document url [" << anonymizeUrl(_url) << "] for session [" <<
@@ -4227,10 +4229,7 @@ void lokit_main(
             if (!initFunction)
                 initFunction = cok_init_2;
 
-            if constexpr (!Util::isKitInProcess())
-                kit = UnitKit::get().cok_init(instdir, userdir, initFunction);
-            if (!kit)
-                kit = initFunction(instdir, userdir);
+            kit = initFunction(instdir, userdir);
 
             loKit = std::make_shared<kit::Office>(kit);
             if (!loKit)
