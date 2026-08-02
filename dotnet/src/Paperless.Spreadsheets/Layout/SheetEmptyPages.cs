@@ -31,14 +31,11 @@ namespace Paperless.Spreadsheets.Layout;
 /// nine it does not touch. LibreOffice prints one.
 /// </para>
 /// <para>
-/// <strong>This is deliberately narrower than Calc's.</strong> A page is dropped only when nothing
-/// in the block is a cell <em>at all</em> — not when its cells exist and are empty — and only when
-/// no cell lies to its left on any of its rows. Calc instead re-runs <c>ExtendPrintArea</c> from
-/// the start column to see whether a long string in an earlier column reaches in
-/// (<c>documen9.cxx:486-500</c>), and carries <c>bLeftIsEmpty</c> across the row so it can skip
-/// that work. The narrower rule needs no measurement and cannot drop a page that overflowing text
-/// would have reached, at the cost of keeping a blank page in the middle of a wide sparse sheet.
-/// Widening it means measuring, and measuring is what the whole-corpus sweep is sensitive to.
+/// <strong>One thing is still narrower than Calc's.</strong> A page is dropped only when nothing in
+/// the block is a cell <em>at all</em>, rather than when its cells exist and are empty, because the
+/// content tree records no formatting and cannot tell the two apart. The fourth test — whether a
+/// long string in a column to the left reaches into the block — is Calc's own, measured the way
+/// Calc measures it; see <see cref="ReachedFromTheLeft"/>.
 /// </para>
 /// </remarks>
 internal static class SheetEmptyPages
@@ -77,18 +74,70 @@ internal static class SheetEmptyPages
             {
                 if (sheet.CellAt(row, column) is not null) return false;
                 if (sheet.IsMerged(row, column)) return false;
-                if (!sheet.Formatting.IsEmpty && !sheet.Formatting.At(row, column).IsNone)
-                    return false;
-            }
 
-            // Anything to the left on this row may run through into the block, and deciding
-            // whether it does needs the string measured. Keeping the page instead is the
-            // conservative answer and costs a blank page nobody has.
-            for (int column = 0; column < block.FirstColumn; column++)
-                if (sheet.CellAt(row, column) is not null) return false;
+                // A border keeps the page and a background does not, which reads as an oversight
+                // and is not one: Calc asks for `HasAttrFlags::Lines`, and that flag tests the
+                // four edges of ATTR_BORDER and nothing else (attarray.cxx:1279-1284). Asking
+                // whether the cell is decorated at all instead keeps every page of a sheet with a
+                // banded or shaded region — measured on grants-2005.xls, whose shading reaches
+                // far past its cells: 1170 pages of which 949 were blank, against 220.
+                if (!sheet.Formatting.IsEmpty
+                    && !sheet.Formatting.At(row, column).Borders.IsNone)
+                {
+                    return false;
+                }
+            }
         }
 
-        return !TouchedByADrawing(sheet, block);
+        if (TouchedByADrawing(sheet, block)) return false;
+
+        return !ReachedFromTheLeft(sheet, block);
+    }
+
+    /// <summary>
+    /// True when a string in a column left of the block overflows far enough to reach into it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The last of <c>IsPrintEmpty</c>'s four tests and the only one that needs a font
+    /// (<c>sc/source/core/data/documen9.cxx:486-500</c>): Calc re-runs <c>ExtendPrintArea</c> over
+    /// the block's own rows, from column zero up to the column before the block, and keeps the
+    /// page when the extension reaches the block. So a page holding no cells is still printed
+    /// when a long label two columns to its left spills onto it — and dropped when it does not.
+    /// </para>
+    /// <para>
+    /// It was previously answered by "is there any cell at all to the left", which is the
+    /// conservative side of the same question and needs no measurement. That was the right
+    /// trade while the measurement it depends on was untrustworthy; it is the wrong one now,
+    /// because on a sheet several column bands wide it keeps <em>every</em> band of every row
+    /// that has anything in column A. Measured on <c>RCO_VOR_Master_List_082824.xlsx</c>:
+    /// 183 pages of which 103 were blank, against LibreOffice's 80 with none.
+    /// </para>
+    /// <para>
+    /// The cheap half of Calc's own short-circuit is kept: it carries <c>bLeftIsEmpty</c> across
+    /// the row band so that a band with nothing to its left is never measured at all. Asking
+    /// whether any cell exists there first is the same saving without the bookkeeping.
+    /// </para>
+    /// </remarks>
+    private static bool ReachedFromTheLeft(SheetLayout sheet, SheetRange block)
+    {
+        if (block.FirstColumn <= 0) return false;
+
+        bool anythingLeft = false;
+        for (int row = block.FirstRow; row <= block.LastRow && !anythingLeft; row++)
+        {
+            for (int column = 0; column < block.FirstColumn; column++)
+            {
+                if (sheet.CellAt(row, column) is null) continue;
+                anythingLeft = true;
+                break;
+            }
+        }
+
+        if (!anythingLeft) return false;
+
+        SheetRange left = new(0, block.FirstRow, block.FirstColumn - 1, block.LastRow);
+        return SheetTextOverflow.ExtendedLastColumn(sheet, left) >= block.FirstColumn;
     }
 
     /// <summary>

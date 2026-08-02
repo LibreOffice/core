@@ -345,7 +345,7 @@ internal static class SheetTextLayout
     /// which is why a wide number in a wrapping column shows <c>###</c> rather than folding onto a
     /// second line. A date or a time is not a plain number format and does wrap.
     /// </remarks>
-    private static bool Breaks(SheetCellFormat format, bool isValue)
+    internal static bool Breaks(SheetCellFormat format, bool isValue)
     {
         bool breaks = format.Wraps
                       || format.Horizontal is SheetHorizontalAlignment.Justify
