@@ -143,6 +143,88 @@ public sealed class EscherPropertyTable
     /// <summary>Whether the shape states this property itself.</summary>
     public bool Has(ushort id) => _entries.ContainsKey(id);
 
+    /// <summary>
+    /// This table with another laid underneath it, as a shape naming an <c>hspMaster</c> takes
+    /// the properties of the shape it names.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>DffPropertyReader::ReadPropSet</c> (<c>filter/source/msfilter/msdffimp.cxx:278-289</c>)
+    /// reads a shape's own table and then, when it states <c>hspMaster</c>, seeks to that shape
+    /// and merges its table in with <c>bSetUninitializedOnly</c> — the <c>|=</c> overload at
+    /// <c>dffpropset.cxx:1245</c>. Without it a slide's placeholders inherit nothing: PowerPoint
+    /// writes the fill, the line and the colours once on the master's placeholder and leaves the
+    /// per-slide copy stating little beyond its anchor.
+    /// </para>
+    /// <para>
+    /// <strong>An ordinary property is taken only where this table is silent</strong>, which is
+    /// what the C++ <c>!IsProperty(nRecType) || !IsHardAttribute(nRecType)</c> reduces to for a
+    /// table holding exactly what its shape stated.
+    /// </para>
+    /// <para>
+    /// <strong>A boolean group merges bit by bit, not as a value.</strong> Each group entry packs
+    /// thirty-two booleans as sixteen values and sixteen "was this stated" bits, so a shape
+    /// stating one boolean of a group states the group — and taking the master's word for the
+    /// whole entry would silently overwrite the fifteen the child did set. Per bit: the child's
+    /// value where the child states it, the master's where only the master does, and otherwise
+    /// the host's default, which is left to the caller because it is not in either table.
+    /// </para>
+    /// </remarks>
+    /// <param name="master">The table to inherit from; typically the master shape's.</param>
+    public EscherPropertyTable InheritFrom(EscherPropertyTable master)
+    {
+        ArgumentNullException.ThrowIfNull(master);
+        if (master._entries.Count == 0) return this;
+
+        Dictionary<ushort, Entry> merged = new(_entries);
+
+        foreach (KeyValuePair<ushort, Entry> pair in master._entries)
+        {
+            if (IsBooleanGroup(pair.Key))
+            {
+                merged[pair.Key] = merged.TryGetValue(pair.Key, out Entry child)
+                    ? child with { Value = MergeFlags(child.Value, pair.Value.Value) }
+                    : pair.Value;
+            }
+            else
+            {
+                merged.TryAdd(pair.Key, pair.Value);
+            }
+        }
+
+        return new EscherPropertyTable(merged);
+    }
+
+    /// <summary>
+    /// Whether an identifier names a group of booleans rather than one value.
+    /// </summary>
+    /// <remarks>
+    /// A group is written under its highest member's identifier, and those are the identifiers
+    /// congruent to 63 modulo 64 — <c>( nRecType &amp; 0x3f ) == 0x3f</c> in
+    /// <c>DffPropSet::ReadPropSet</c>. 447 is the fill group, 511 the line group, 191 the text
+    /// group.
+    /// </remarks>
+    private static bool IsBooleanGroup(ushort id) => (id & 0x3F) == 0x3F;
+
+    /// <summary>
+    /// One boolean group's entry, with the master's stated bits filled in under the child's.
+    /// </summary>
+    /// <remarks>
+    /// The C++ does this in four masked steps; they reduce to taking, for every bit the master
+    /// states and the child does not, the master's value, and accumulating the stated bits of
+    /// both. The high half is that stated set — <c>nComplexIndexOrFlagsHAttr |= nContent >> 16</c>
+    /// — and is what <see cref="StatesBoolean"/> reads.
+    /// </remarks>
+    private static uint MergeFlags(uint child, uint master)
+    {
+        uint childStated = child >> 16;
+        uint masterStated = master >> 16;
+        uint taken = masterStated & ~childStated;
+
+        uint values = (child & 0xFFFF & ~taken) | (master & 0xFFFF & taken);
+        return ((childStated | masterStated) << 16) | values;
+    }
+
     /// <summary>The property's value, or the fallback when the shape does not state it.</summary>
     public uint Value(ushort id, uint fallback = 0)
         => _entries.TryGetValue(id, out Entry entry) ? entry.Value : fallback;

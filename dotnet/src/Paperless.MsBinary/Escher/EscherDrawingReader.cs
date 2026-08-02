@@ -37,6 +37,26 @@ public sealed class EscherDrawingReader
     private readonly List<Diagnostic> _diagnostics;
     private bool _reportedDepth;
 
+    /// <summary>
+    /// Resolves a shape identifier to that shape's property table, so a shape stating an
+    /// <c>hspMaster</c> can inherit from it. Null — the default — inherits nothing.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A delegate rather than a lookup this class builds, because the shape a slide's placeholder
+    /// names lives on a <em>different page</em>, in a drawing this reader has not been given and
+    /// cannot reach: only the host knows how its pages are strung together.
+    /// <c>DffPropertyReader::ReadPropSet</c> has the same shape, asking its manager to
+    /// <c>SeekToShape</c> (<c>filter/source/msfilter/msdffimp.cxx:278-289</c>).
+    /// </para>
+    /// <para>
+    /// It must answer from tables that have <em>not</em> themselves inherited, which is also what
+    /// the C++ does — it re-reads the master shape's own <c>msofbtOPT</c> record and merges that
+    /// one record, never a resolved result. Inheritance is one level deep by construction.
+    /// </para>
+    /// </remarks>
+    public Func<uint, EscherPropertyTable?>? MasterShapeProperties { get; set; }
+
     /// <summary>Creates a reader over a record stream.</summary>
     /// <param name="stream">The stream the drawing lives in.</param>
     /// <param name="diagnostics">Where to record what could not be read.</param>
@@ -247,7 +267,7 @@ public sealed class EscherDrawingReader
             ShapeId = shapeId,
             ShapeType = shapeType,
             Flags = flags,
-            Properties = properties,
+            Properties = Inherited(properties),
             MasterProperties = master,
             TertiaryProperties = tertiary,
             ChildAnchor = childAnchor,
@@ -256,6 +276,19 @@ public sealed class EscherDrawingReader
             ClientData = clientData,
             ClientTextbox = clientTextbox,
         };
+    }
+
+    /// <summary>
+    /// A shape's properties with its master shape's laid underneath, when it names one.
+    /// </summary>
+    private EscherPropertyTable Inherited(EscherPropertyTable properties)
+    {
+        if (MasterShapeProperties is not { } resolve) return properties;
+        if (!properties.Has(EscherPropertyIds.MasterShape)) return properties;
+
+        return resolve(properties.Value(EscherPropertyIds.MasterShape)) is { } master
+            ? properties.InheritFrom(master)
+            : properties;
     }
 
     /// <summary>Reads the four 32-bit bounds a group or child anchor states.</summary>
