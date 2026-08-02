@@ -145,7 +145,9 @@ internal static class PptxTextBody
             Wraps = Stated(bodyChain, "wrap") != "none",
             AutoFit = autofit is not null,
             FontScale = Thousandth(autofit, "fontScale", 1.0),
-            LineSpaceReduction = Thousandth(autofit, "lnSpcReduction", 0.0),
+
+            // a:normAutofit/@lnSpcReduction is deliberately not read: neither does the reference,
+            // whose normAutofit handler takes @fontScale alone. See SlideTextBody.AutoFit.
         };
     }
 

@@ -69,15 +69,27 @@ public static partial class SlideTextLayout
         List<PlacedGlyphRun> placed = [];
         if (body.Paragraphs.Count == 0) return placed;
 
-        (List<Block> blocks, Length total) =
+        (List<Block> blocks, Length total, Length toLastNonEmpty) =
             Measure(body, area.Width, fonts, Solve(body, area, fonts), body.FontIndependentLineSpacing);
 
         if (blocks.Count == 0) return placed;
 
+        // A shape that solves a fit is anchored by the same height the fit measured, so trailing
+        // empty paragraphs push nothing down; one that does not is anchored by its whole text.
+        //
+        // Measured on the subtitle of `BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx`,
+        // three bottom-anchored paragraphs of which the last is empty. Deleting that paragraph
+        // from LibreOffice's own flat-ODF export of the deck leaves the remaining line at
+        // byte-identical coordinates while the shape autofits, and moves it 33 pt — a line and its
+        // space — once `style:shrink-to-fit` is turned off. So this is a property of the fit
+        // rather than of empty paragraphs, and applying it everywhere would move every
+        // middle-anchored and bottom-anchored box that ends in a blank line.
+        Length anchored = body.AutoFit ? toLastNonEmpty : total;
+
         Length top = area.Y + body.Anchor switch
         {
-            TextAnchor.Middle => (area.Height - total) / 2,
-            TextAnchor.Bottom => area.Height - total,
+            TextAnchor.Middle => (area.Height - anchored) / 2,
+            TextAnchor.Bottom => area.Height - anchored,
             _ => Length.Zero,
         };
 
@@ -140,7 +152,16 @@ public static partial class SlideTextLayout
     /// <c>spcAft</c> of 35% on 32 pt text, every label moved 5.6 pt — half of the 11.2 pt that
     /// the trailing space added — until this matched LibreOffice.
     /// </remarks>
-    private static (List<Block> Blocks, Length Total) Measure(
+    /// <param name="Blocks">The paragraphs, measured and broken.</param>
+    /// <param name="Total">Every paragraph's height, which is what the block occupies.</param>
+    /// <param name="TotalToLastNonEmpty">
+    /// The height down to the bottom of the last paragraph that has text, which is what the
+    /// shrink-to-fit search measures against. See <see cref="HeightToLastNonEmpty"/>.
+    /// </param>
+    private readonly record struct Measurement(
+        List<Block> Blocks, Length Total, Length TotalToLastNonEmpty);
+
+    private static Measurement Measure(
         SlideTextBody body,
         Length available,
         SlideFonts fonts,
@@ -173,7 +194,51 @@ public static partial class SlideTextLayout
             total -= blocks[^1].SpaceAfter;
         }
 
-        return (blocks, total);
+        return new Measurement(blocks, total, HeightToLastNonEmpty(blocks));
+    }
+
+    /// <summary>
+    /// The height down to the bottom of the last paragraph that has text.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The shrink-to-fit search measures this rather than the whole block, because the reference
+    /// does: <c>autoFitTextForCompatibility</c> calls <c>Outliner::CalcTextSizeNTP</c>
+    /// (<c>svx/source/svdraw/svdotext.cxx:1293,1358</c>), whose height comes from
+    /// <c>ImpEditEngine::Calc1ColumnTextHeight</c> — which records the running bottom offset only
+    /// while the paragraph it is looking at is not empty:
+    /// </para>
+    /// <code>
+    /// if (pHeightNTP &amp;&amp; !rInfo.rPortion.IsEmpty())
+    ///     *pHeightNTP = nHeight;
+    /// </code>
+    /// <para>
+    /// <em>NTP</em> is "no trailing paragraphs", and the asymmetry is the whole point: an empty
+    /// paragraph in the <em>middle</em> still counts, because a later paragraph with text sets the
+    /// bottom to an offset that already includes it. Only a run of empty paragraphs at the end is
+    /// dropped. Measured against LibreOffice 24.2.7.2 on
+    /// <c>slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt</c>, whose eighth slide
+    /// carries four empty paragraphs after its three bullets: the reference fits that text at
+    /// 25 pt, and moving three of those empty paragraphs into the middle of the body makes the
+    /// same LibreOffice fit it at 21 pt with nine-tenths line spacing — which is exactly what
+    /// Paperless produced for the untouched deck while it measured every paragraph.
+    /// </para>
+    /// </remarks>
+    private static Length HeightToLastNonEmpty(List<Block> blocks)
+    {
+        int last = blocks.Count - 1;
+        while (last >= 0 && blocks[last].Paragraph.Text.Length == 0) last--;
+        if (last < 0) return Length.Zero;
+
+        Length height = Length.Zero;
+        for (int index = 0; index <= last; index++) height += blocks[index].Height;
+
+        // The same two exclusions the full total makes, against the truncated run: a body's first
+        // paragraph gets no space-before, and the paragraph the measurement ends at contributes no
+        // space-after because the next paragraph's top is where that gap would be spent.
+        height -= blocks[0].SpaceBefore;
+        height -= blocks[last].SpaceAfter;
+        return height;
     }
 
     /// <summary>
@@ -449,8 +514,7 @@ public static partial class SlideTextLayout
                 // fraction of the em, and slides-features.odp's sixth outline baseline moves
                 // 0.155 pt off LibreOffice's without it. The font-independent branch below is the
                 // one that needs finer units — see Spacing.
-                Length faceLine = Reduced(
-                    paragraph.LineSpacing.Apply(faceHeight), body.LineSpaceReduction);
+                Length faceLine = paragraph.LineSpacing.Apply(faceHeight);
 
                 lines.Add(Spaced(
                     new PlacedLine(
@@ -473,8 +537,7 @@ public static partial class SlideTextLayout
             // height the reference cannot represent, and the error accumulates down the block.
             Length natural = Length.FromMm100(
                 (long)Math.Floor((em.Mm100 * LineHeightFactor) + 0.5));
-            Length height = Reduced(
-                Spacing(paragraph.LineSpacing, natural), body.LineSpaceReduction);
+            Length height = Spacing(paragraph.LineSpacing, natural);
 
             lines.Add(Spaced(
                 new PlacedLine(
@@ -659,11 +722,6 @@ public static partial class SlideTextLayout
             Height = height,
         };
     }
-
-    private static Length Reduced(Length height, double reduction)
-        => reduction is > 0 and < 1
-            ? Length.FromEmu((long)Math.Round(height.Emu * (1 - reduction)))
-            : height;
 
     /// <summary>
     /// Emits one line's glyph runs, one per formatting change along it, placed at its tab stops.
@@ -938,8 +996,23 @@ public static partial class SlideTextLayout
         Scaling Scaling,
         ParagraphFormat Format)
     {
+        /// <summary>The space above the paragraph.</summary>
+        /// <remarks>
+        /// <strong>Not touched by the fit's spacing scale, which reaches only the lines.</strong>
+        /// The reference does put a paragraph's own space through <c>scaleYSpacingValue</c>
+        /// (<c>ImpEditEngine::CalcHeight</c>, <c>editeng/source/editeng/impedit2.cxx:4406,4412</c>
+        /// in 24.2) — but that helper returns its argument unchanged unless
+        /// <c>maStatus.DoStretch()</c> is set (<c>impedit.hxx:748-754</c>), whereas the line
+        /// heights are scaled by <c>mfSpacingScaleY</c> directly and unconditionally
+        /// (<c>impedit3.cxx:1493-1528</c>). Scaling the paragraph space as well was measured
+        /// wrong: it shrank the sixth slide of
+        /// <c>slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt</c> a step below
+        /// the reference, where leaving it alone reproduces the reference's text width to
+        /// 0.2 per cent.
+        /// </remarks>
         public Length SpaceBefore => Paragraph.SpaceBefore;
 
+        /// <summary>The space below the paragraph, likewise unscaled.</summary>
         public Length SpaceAfter => Paragraph.SpaceAfter;
 
         /// <summary>The colour covering a character, or black when no run does.</summary>

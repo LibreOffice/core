@@ -185,7 +185,7 @@ public static partial class SlideTextLayout
 
             long height =
                 Measure(body, area.Width, fonts, new Scaling(font, spacing, true), body.FontIndependentLineSpacing)
-                    .Total.Mm100
+                    .TotalToLastNonEmpty.Mm100
                 - FitSlackMm100;
 
             double factor = height <= 0 ? double.MaxValue : (double)available / height;

@@ -82,13 +82,23 @@ public sealed record SlideTextBody
     /// </summary>
     /// <remarks>
     /// <para>
-    /// When this is set the layouter solves the fit itself and <see cref="FontScale"/> and
-    /// <see cref="LineSpaceReduction"/> are <em>ignored</em>, because that is what the reference
-    /// does: LibreOffice 24.2 reads <c>a:normAutofit/@fontScale</c> into a field
-    /// (<c>oox/source/drawingml/textbodypropertiescontext.cxx:240</c>) and never reads that field
+    /// When this is set the layouter solves the fit itself and <see cref="FontScale"/> is
+    /// <em>ignored</em>, because that is what the reference does: LibreOffice 24.2 reads
+    /// <c>a:normAutofit/@fontScale</c> into a field
+    /// (<c>oox/source/drawingml/textbodypropertiescontext.cxx:236</c>) and never reads that field
     /// again, so the authoring application's stated answer is discarded and
     /// <c>SdrTextObj::autoFitTextForCompatibility</c> searches for its own. See
     /// <see cref="SlideTextLayout"/> for the search and for what it is measured against.
+    /// </para>
+    /// <para>
+    /// <c>a:normAutofit/@lnSpcReduction</c> is modelled nowhere at all, which is deliberate: the
+    /// same handler does not read it either — the <c>normAutofit</c> case reads
+    /// <c>XML_fontScale</c> and nothing else — so a body carrying one must lay out exactly as a
+    /// body that does not. Paperless did apply it, and it was worth 20 per cent of a line on the
+    /// one shape in <c>slides/batch-001</c> that states it: the subtitle of
+    /// <c>BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx</c> shrank its lines, so the
+    /// fit search thought the text nearly fitted unshrunk and drew it at 20 pt where the
+    /// reference draws 15.
     /// </para>
     /// <para>
     /// This is a text-only fit. <c>a:spAutoFit</c> is the other direction — the shape grows to its
@@ -107,8 +117,6 @@ public sealed record SlideTextBody
     /// </remarks>
     public double FontScale { get; init; } = 1.0;
 
-    /// <summary>The fraction <c>a:normAutofit/@lnSpcReduction</c> takes off the line spacing.</summary>
-    public double LineSpaceReduction { get; init; }
 
     /// <summary>
     /// Whether the text wraps at the shape's width.
