@@ -595,7 +595,11 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 || run.CaseMap != PageCaseMap.None
                 // So does a highlight: the paragraph carries none of its own, so a paragraph highlighted
                 // end to end is uniform by every other test and would lose its band entirely.
-                || run.Highlight is not null)
+                || run.Highlight is not null
+                // And so do the two rules, for the same reason: neither changes a width, so a paragraph
+                // underlined end to end is uniform by every measurement test and would be drawn plain.
+                || run.IsUnderlined
+                || run.IsStruckThrough)
             {
                 varies = true;
             }
@@ -610,7 +614,9 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 new Text.Shaping.ShapingOptions(Language: run.Language),
                 rise,
                 run.CaseMap,
-                Highlight: run.Highlight ?? default));
+                Highlight: run.Highlight ?? default,
+                IsUnderlined: run.IsUnderlined,
+                IsStruckThrough: run.IsStruckThrough));
         }
 
         return varies ? runs : [];

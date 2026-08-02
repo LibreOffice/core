@@ -1022,7 +1022,9 @@ public sealed partial class RtfDocumentReader
             ColourAt(state.ForegroundColourIndex),
             EscapementOf(state),
             state.CaseMap,
-            ColourAt(state.HighlightColourIndex));
+            ColourAt(state.HighlightColourIndex),
+            state.Underline,
+            state.Strike);
 
         flow.LayoutLength += length;
 
@@ -1193,7 +1195,9 @@ public sealed partial class RtfDocumentReader
             ColourAt(state.ForegroundColourIndex),
             Layout.Escapement.Superscript,
             Layout.PageCaseMap.None,
-            ColourAt(state.HighlightColourIndex));
+            ColourAt(state.HighlightColourIndex),
+            state.Underline,
+            state.Strike);
 
     /// <summary>The escapement <c>\super</c> or <c>\sub</c> put in force, if either did.</summary>
     /// <remarks>

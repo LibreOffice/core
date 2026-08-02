@@ -127,6 +127,10 @@ public sealed partial class Ww8DocumentReader
     /// </param>
     /// <param name="CaseMap">The case <c>sprmCFCaps</c> or <c>sprmCFSmallCaps</c> draws the run in.</param>
     /// <param name="Highlight">The band drawn behind the run, or null when it has none.</param>
+    /// <param name="IsUnderlined">True when <c>sprmCKul</c> asks for a rule under the run.</param>
+    /// <param name="IsStruckThrough">
+    /// True when <c>sprmCFStrike</c> or <c>sprmCFDStrike</c> asks for one through it.
+    /// </param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -138,7 +142,9 @@ public sealed partial class Ww8DocumentReader
         Colour? Colour,
         Layout.Escapement Escapement = default,
         Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
-        Colour? Highlight = null)
+        Colour? Highlight = null,
+        bool IsUnderlined = false,
+        bool IsStruckThrough = false)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -957,7 +963,9 @@ public sealed partial class Ww8DocumentReader
                 format.Colour,
                 format.Escapement ?? Layout.Escapement.None,
                 format.CaseMap,
-                format.Highlight);
+                format.Highlight,
+                format.IsUnderlined ?? false,
+                format.IsStruckThrough ?? false);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -981,7 +989,9 @@ public sealed partial class Ww8DocumentReader
            && a.Colour == b.Colour
            && a.Escapement == b.Escapement
            && a.CaseMap == b.CaseMap
-           && a.Highlight == b.Highlight;
+           && a.Highlight == b.Highlight
+           && a.IsUnderlined == b.IsUnderlined
+           && a.IsStruckThrough == b.IsStruckThrough;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -1368,6 +1378,26 @@ public sealed partial class Ww8DocumentReader
                         IsCapitalised = sprm.ResolveToggle(format.IsCapitalised ?? false),
                     };
                     break;
+
+                // Both strike sprms are dispatched to `Read_BoldUsw` — the toggle handler — so both
+                // carry WW8's four-state operand rather than a boolean, and the doubled one folds onto
+                // the same flag because the page model draws one rule.
+                case LayoutSprms.Strike:
+                    format = format with
+                    {
+                        IsStruckThrough = sprm.ResolveToggle(format.IsStruckThrough ?? false),
+                    };
+                    break;
+                case LayoutSprms.DoubleStrike:
+                    format = format with
+                    {
+                        IsStruckThrough = sprm.ResolveToggle(format.IsStruckThrough ?? false),
+                    };
+                    break;
+
+                case LayoutSprms.Underline:
+                    format = format with { IsUnderlined = IsUnderlineStyle(sprm.Byte) };
+                    break;
                 case LayoutSprms.Language or LayoutSprms.Language80:
                     format = format with { LanguageId = sprm.Word };
                     break;
@@ -1379,6 +1409,21 @@ public sealed partial class Ww8DocumentReader
 
         return format;
     }
+
+    /// <summary>
+    /// Whether a <c>kul</c> names a line that is actually drawn.
+    /// </summary>
+    /// <remarks>
+    /// The set is <c>SwWW8ImplReader::Read_Underline</c>'s switch
+    /// (<c>sw/source/filter/ww8/ww8par6.cxx</c>:3600), and taking it from there rather than testing the
+    /// byte for non-zero matters in both directions: 5 is "hidden" and 8 is a dot style Word never
+    /// writes, and neither has a case in that switch, so both fall to <c>LINESTYLE_NONE</c> and draw
+    /// nothing. 255 is the cancelling value and is likewise absent. Every value that <em>is</em> listed
+    /// is drawn as one plain rule, because the page model carries no line style.
+    /// </remarks>
+    internal static bool IsUnderlineStyle(int kul) => kul
+        is 1 or 2 or 3 or 4 or 6 or 7 or 9 or 10 or 11
+        or 20 or 23 or 25 or 26 or 27 or 39 or 43 or 55;
 
     /// <summary>The layout sprms, from LibreOffice's <c>sprmids.hxx</c>.</summary>
     private static class LayoutSprms
@@ -1405,8 +1450,28 @@ public sealed partial class Ww8DocumentReader
 
         internal const ushort Bold = 0x0835;
         internal const ushort Italic = 0x0836;
+        internal const ushort Strike = 0x0837;
         internal const ushort SmallCaps = 0x083A;
         internal const ushort Caps = 0x083B;
+
+        /// <summary>
+        /// <c>sprmCFDStrike</c>: the second line of a double strike-through.
+        /// </summary>
+        /// <remarks>
+        /// Out of sequence with the other character toggles, which is why LibreOffice's
+        /// <c>Read_BoldUsw</c> singles it out before computing its bit — but a toggle all the same, and
+        /// dispatched to the same handler as <see cref="Strike"/>.
+        /// </remarks>
+        internal const ushort DoubleStrike = 0x2A53;
+
+        /// <summary>
+        /// <c>sprmCKul</c>: the <em>style</em> of the rule drawn under the run, not a switch.
+        /// </summary>
+        /// <remarks>
+        /// See <see cref="IsUnderlineStyle"/> — nought, 255 and two values in between all mean no line,
+        /// so reading this byte as a boolean underlines text Word leaves plain.
+        /// </remarks>
+        internal const ushort Underline = 0x2A3E;
         internal const ushort FontSize = 0x4A43;
         internal const ushort FontIndex = 0x4A4F;
         internal const ushort Language80 = 0x486D;
