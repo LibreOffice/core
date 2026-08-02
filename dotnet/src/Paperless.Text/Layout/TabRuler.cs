@@ -7,13 +7,29 @@ namespace Paperless.Text.Layout;
 /// <param name="End">One past its last character.</param>
 /// <param name="Left">Where it starts, measured from the line's own left edge.</param>
 /// <param name="Width">How wide its text is.</param>
-public readonly record struct TabbedSegment(int Start, int End, Length Left, Length Width)
+/// <param name="GapLeft">
+/// Where the tab that introduced the segment began, in the same coordinates as <paramref name="Left"/> —
+/// so <c>[GapLeft, Left)</c> is the blank the tab advanced across. Equal to <paramref name="Left"/> for
+/// the first stretch of a line, which no tab introduced.
+/// </param>
+/// <param name="Leader">
+/// The character filling that blank, or <c>'\0'</c> for none. It belongs to the stop rather than to the
+/// text, which is why it is carried on the stretch the stop placed instead of on the paragraph.
+/// </param>
+public readonly record struct TabbedSegment(
+    int Start, int End, Length Left, Length Width, Length GapLeft = default, char Leader = '\0')
 {
     /// <summary>Where the segment ends.</summary>
     public Length Right => Left + Width;
 
     /// <summary>True when the segment holds no characters, which an adjacent pair of tabs produces.</summary>
     public bool IsEmpty => End <= Start;
+
+    /// <summary>How wide the blank before the segment is, which is what a leader fills.</summary>
+    public Length GapWidth => Left - GapLeft;
+
+    /// <summary>True when a leader was asked for and there is room to draw any of it.</summary>
+    public bool HasLeader => Leader != '\0' && GapWidth > Length.Zero;
 }
 
 /// <summary>
@@ -100,7 +116,13 @@ public static class TabRuler
                 ? Place(stop, pen, width, text, at, stretchEnd, widthBetween)
                 : pen;
 
-            segments.Add(new TabbedSegment(at, stretchEnd, left - origin, width));
+            // `pen` is still where the tab began, so the blank it advanced across is [pen, left). A
+            // leader fills that blank; a space fill means none at all, which is how both formats spell
+            // "no leader" on a stop that has one syntactically.
+            char leader = pending is { Leader: var fill and not ' ' } ? fill : '\0';
+
+            segments.Add(
+                new TabbedSegment(at, stretchEnd, left - origin, width, pen - origin, leader));
             pen = left + width;
 
             if (stretchEnd >= last) break;
