@@ -25,15 +25,33 @@ namespace Paperless.Text.Layout;
 /// <param name="Face">The face it is set in.</param>
 /// <param name="EmSize">The em size it is set at.</param>
 /// <param name="Shaping">How it is shaped.</param>
+/// <param name="MetricEmSize">
+/// The size the run's <em>line metrics</em> are taken at, or zero for <paramref name="EmSize"/> — which is
+/// every run but one kind.
+/// <para>
+/// Small capitals are the kind. A lowercase letter inside a small-capitals run is drawn uppercase at four
+/// fifths of the size (<c>SMALL_CAPS_PERCENTAGE</c>, <c>include/editeng/svxfont.hxx</c>) and yet does
+/// <em>not</em> shorten the line it sits on: Writer builds the shrunken font locally inside
+/// <c>SwSubFont::DoOnCapitals</c> and leaves <c>SwFont::GetHeight</c> — which is what
+/// <c>SwLineLayout::CalcLine</c> asks — reporting the unshrunken one. Without this separation a heading
+/// set entirely in lowercase small capitals would draw its line four fifths as tall as the reference and
+/// repaginate the document under it.
+/// </para>
+/// </param>
 public readonly record struct FormattedRun(
     int Start,
     int Length,
     OpenTypeFace Face,
     Length EmSize,
-    ShapingOptions Shaping = default)
+    ShapingOptions Shaping = default,
+    Length MetricEmSize = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
+
+    /// <summary>The size this run's line metrics are scaled by.</summary>
+    public Core.Units.Length LineEmSize
+        => MetricEmSize > Core.Units.Length.Zero ? MetricEmSize : EmSize;
 
     /// <summary>True when the run covers a character.</summary>
     public bool Covers(int index) => index >= Start && index < End;
@@ -469,8 +487,8 @@ public sealed class MeasuredParagraph
     {
         // Twips throughout, because Writer lays out in whole twips and a fraction kept here would
         // eventually move a line onto a different page.
-        Length runHeight = Length.FromTwips(run.Metrics.ScaledLineHeight(run.Run.EmSize).Twips);
-        Length runAscent = Length.FromTwips(run.Metrics.ScaledAscent(run.Run.EmSize).Twips);
+        Length runHeight = Length.FromTwips(run.Metrics.ScaledLineHeight(run.Run.LineEmSize).Twips);
+        Length runAscent = Length.FromTwips(run.Metrics.ScaledAscent(run.Run.LineEmSize).Twips);
 
         height = Length.Max(height, runHeight);
         ascent = Length.Max(ascent, runAscent);

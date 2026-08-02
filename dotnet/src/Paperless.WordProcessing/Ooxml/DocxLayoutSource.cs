@@ -418,10 +418,15 @@ public sealed partial class DocxLayoutSource
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.
         (PageLabel? label, format) = ListFormatting(properties, format, text, face);
 
+        // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
+        // preserves are the ones the notes and frames below were recorded against.
+        List<PageRun> runs = RunsOf(walker.Ranges, properties, text, face);
+        string mapped = CaseMapping.Apply(walker.Text, runs);
+
         PageParagraph read = new()
         {
             SectionIndex = _sectionIndex,
-            Text = walker.Text,
+            Text = mapped,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
@@ -432,7 +437,7 @@ public sealed partial class DocxLayoutSource
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
-            Runs = RunsOf(walker.Ranges, properties, text, face),
+            Runs = runs,
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames),
             Source = element,
@@ -599,7 +604,10 @@ public sealed partial class DocxLayoutSource
                 || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
-                || rise != Length.Zero)
+                || rise != Length.Zero
+                // A case map has to survive the uniform-paragraph shortcut: it is the one property here
+                // that changes the *characters*, so dropping the runs would draw the text as stored.
+                || style.CaseMap != PageCaseMap.None)
             {
                 varies = true;
             }
@@ -612,7 +620,8 @@ public sealed partial class DocxLayoutSource
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
-                rise));
+                rise,
+                style.CaseMap));
         }
 
         return varies ? runs : [];

@@ -764,6 +764,12 @@ public sealed partial class RtfDocumentReader
             case "strike" or "striked":
                 state.Strike = token.Parameter != 0;
                 return;
+            case "caps":
+                state.Capitals = token.Parameter != 0;
+                return;
+            case "scaps":
+                state.SmallCapitals = token.Parameter != 0;
+                return;
             case "super":
                 state.VerticalPosition = token.Parameter == 0 ? 0 : 1;
                 return;

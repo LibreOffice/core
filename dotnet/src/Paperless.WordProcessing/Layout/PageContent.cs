@@ -377,6 +377,16 @@ public sealed record PageNote
 /// the smaller <paramref name="EmSize"/> that goes with it — the two are independent, and a document can
 /// raise text without shrinking it.
 /// </param>
+/// <param name="CaseMap">
+/// The case the run's text is drawn in, which is not the case it is stored in — <c>w:caps</c>,
+/// <c>w:smallCaps</c> and their counterparts in the other three formats. Resolved away by
+/// <see cref="CaseMapping.Apply"/> before the paragraph is measured, so nothing downstream of a reader
+/// ever sees a value other than <see cref="PageCaseMap.None"/>.
+/// </param>
+/// <param name="MetricEmSize">
+/// The size the run's line metrics are taken at, or zero for <paramref name="EmSize"/>. Set only by the
+/// small-capitals split; see <see cref="FormattedRun.MetricEmSize"/> for why the two sizes differ.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -385,7 +395,9 @@ public readonly record struct PageRun(
     FontReference? Font = null,
     Colour Colour = default,
     ShapingOptions Shaping = default,
-    Length Rise = default)
+    Length Rise = default,
+    PageCaseMap CaseMap = PageCaseMap.None,
+    Length MetricEmSize = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -398,7 +410,7 @@ public readonly record struct PageRun(
     public Colour EffectiveColour => Colour.A == 0 ? Core.Graphics.Colour.Black : Colour;
 
     /// <summary>The measurement half of this run.</summary>
-    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping);
+    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping, MetricEmSize);
 }
 
 /// <summary>

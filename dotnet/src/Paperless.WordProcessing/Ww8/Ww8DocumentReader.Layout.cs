@@ -102,6 +102,7 @@ public sealed partial class Ww8DocumentReader
     /// The superscript or subscript <c>sprmCIss</c> asks for, unresolved — its rise is a fraction of the
     /// face's height and this reader has no faces.
     /// </param>
+    /// <param name="CaseMap">The case <c>sprmCFCaps</c> or <c>sprmCFSmallCaps</c> draws the run in.</param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -111,7 +112,8 @@ public sealed partial class Ww8DocumentReader
         bool IsItalic,
         string? Language,
         Colour? Colour,
-        Layout.Escapement Escapement = default)
+        Layout.Escapement Escapement = default,
+        Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -863,7 +865,8 @@ public sealed partial class Ww8DocumentReader
                 format.IsItalic == true,
                 LanguageOf(format),
                 format.Colour,
-                format.Escapement ?? Layout.Escapement.None);
+                format.Escapement ?? Layout.Escapement.None,
+                format.CaseMap);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -885,7 +888,8 @@ public sealed partial class Ww8DocumentReader
            && a.IsItalic == b.IsItalic
            && string.Equals(a.Language, b.Language, StringComparison.Ordinal)
            && a.Colour == b.Colour
-           && a.Escapement == b.Escapement;
+           && a.Escapement == b.Escapement
+           && a.CaseMap == b.CaseMap;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -1219,6 +1223,18 @@ public sealed partial class Ww8DocumentReader
                         IsItalic = sprm.ResolveToggle(format.IsItalic ?? false),
                     };
                     break;
+                case LayoutSprms.SmallCaps:
+                    format = format with
+                    {
+                        IsSmallCapitalised = sprm.ResolveToggle(format.IsSmallCapitalised ?? false),
+                    };
+                    break;
+                case LayoutSprms.Caps:
+                    format = format with
+                    {
+                        IsCapitalised = sprm.ResolveToggle(format.IsCapitalised ?? false),
+                    };
+                    break;
                 case LayoutSprms.Language or LayoutSprms.Language80:
                     format = format with { LanguageId = sprm.Word };
                     break;
@@ -1254,6 +1270,8 @@ public sealed partial class Ww8DocumentReader
 
         internal const ushort Bold = 0x0835;
         internal const ushort Italic = 0x0836;
+        internal const ushort SmallCaps = 0x083A;
+        internal const ushort Caps = 0x083B;
         internal const ushort FontSize = 0x4A43;
         internal const ushort FontIndex = 0x4A4F;
         internal const ushort Language80 = 0x486D;
