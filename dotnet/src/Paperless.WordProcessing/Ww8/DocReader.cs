@@ -193,7 +193,13 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
     {
-        LayoutFonts fonts = new();
+        // A document asking for printer metrics is measured on the printer's pixel grid, which rounds every
+        // font metric and is worth up to 2.8% of a line's height. See Ww8DocumentProperties.UsesPrinterMetrics.
+        LayoutFonts fonts = new()
+        {
+            Metrics = _reader.DocumentProperties.UsesPrinterMetrics ? MetricGrid.Printer : null,
+        };
+
         List<PageBlock> blocks = BlocksOf(fonts, _reader.ReadLayoutBlocks());
 
         PaginationOptions pagination = PaginationOptions.Word with
@@ -386,6 +392,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
+                Metrics = fonts.Metrics,
                 Runs = RunsOf(fonts, paragraph, face),
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames),

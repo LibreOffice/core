@@ -34,6 +34,15 @@ public readonly record struct Ww8DocumentProperties
     /// </remarks>
     private const int CompatibilityOptions2Offset = 0x200;
 
+    /// <summary>
+    /// Where the first word of compatibility options sits, which Word 6 onwards writes.
+    /// </summary>
+    /// <remarks>
+    /// <c>WW8Dop::WW8Dop</c> reads it at 84 and hands it straight to <c>SetCompatibilityOptions</c>
+    /// (<c>ww8scan.cxx</c>), whose last line is the one that matters here.
+    /// </remarks>
+    private const int CompatibilityOptionsOffset = 0x54;
+
     /// <summary>The defaults, for a document whose <c>Dop</c> is missing or too short to read.</summary>
     /// <remarks>
     /// Half an inch, and spacings that do <em>not</em> collapse. Both are what Word itself defaults to, and
@@ -61,6 +70,19 @@ public readonly record struct Ww8DocumentProperties
     /// every line after the first paragraph boundary.
     /// </remarks>
     public bool CollapsesSpacing { get; init; }
+
+    /// <summary>
+    /// True when the document asks to be laid out against a printer rather than a virtual device.
+    /// </summary>
+    /// <remarks>
+    /// <c>fUsePrinterMetrics</c>, the top bit of the first compatibility word, which Word's own dialogue
+    /// calls "use printer metrics to lay out document". LibreOffice honours it literally —
+    /// <c>USE_VIRTUAL_DEVICE</c> becomes its negation (<c>ww8par.cxx</c>:2008) and the layout then formats
+    /// against an <c>SfxPrinter</c>, whose pixel grid rounds every font metric. Eight of sixty-six DOC
+    /// files in the sample corpus set it, and on those the line pitch is up to 2.8% taller than the
+    /// design units alone give.
+    /// </remarks>
+    public bool UsesPrinterMetrics { get; init; }
 
     /// <summary>How the document's footnotes are numbered.</summary>
     /// <remarks>
@@ -159,6 +181,12 @@ public readonly record struct Ww8DocumentProperties
                     Format = FormatOf((word & 0x03C0) >> 6, Layout.NoteNumberFormat.LowerRoman),
                 },
             };
+        }
+
+        if (dop.Length >= CompatibilityOptionsOffset + 4)
+        {
+            uint options = BinaryPrimitives.ReadUInt32LittleEndian(dop[CompatibilityOptionsOffset..]);
+            properties = properties with { UsesPrinterMetrics = (options & 0x80000000) != 0 };
         }
 
         if (dop.Length >= CompatibilityOptions2Offset + 4)

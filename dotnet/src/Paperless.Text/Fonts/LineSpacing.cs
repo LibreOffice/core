@@ -29,6 +29,58 @@ public enum LineMetricSource
 }
 
 /// <summary>
+/// The device a font's metrics are quantised through before layout sees them.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Layout normally scales a font's design units straight to the size the document asks for, which is what
+/// LibreOffice does when it formats against a virtual reference device. A document can ask for the other
+/// behaviour: Word's "use printer metrics to lay out document" compatibility option makes Writer format
+/// against a real printer instead — <c>WW8Dop::fUsePrinterMetrics</c> becomes
+/// <c>!USE_VIRTUAL_DEVICE</c> in <c>sw/source/filter/ww8/ww8par.cxx</c>:2008, and
+/// <c>DocumentDeviceManager::getReferenceDevice</c> then hands out an <c>SfxPrinter</c>.
+/// </para>
+/// <para>
+/// The difference is rounding, and it is not small. Every metric goes through the device's pixel grid
+/// twice — the em size is rounded to whole device pixels, the ascent, descent and line gap are each
+/// rounded to whole pixels at that size, and the sum is rounded back to whole twips. On a 300 dpi grid
+/// that is a pixel per 4.8 twips, so Liberation Sans at 11 pt measures 13.00 pt per line rather than the
+/// 12.65 pt its design units give — a 2.8% difference, which over a long document is many pages.
+/// Measured against LibreOffice on three sizes of two faces, the grid reproduces its line pitch exactly
+/// where unquantised scaling is out by up to 7 twips.
+/// </para>
+/// <para>
+/// 300 dpi because that is what a headless LibreOffice's printer reports: <c>PPDParser</c> defaults both
+/// axes to 300 when the queue names no resolution and when there is no PPD at all
+/// (<c>vcl/unx/generic/printer/ppdparser.cxx</c>:1500 and :1524). The resolution is the whole of what the
+/// device contributes here, so a machine whose default queue says otherwise would need a different number
+/// — which is the honest cost of a document asking to be laid out against hardware.
+/// </para>
+/// </remarks>
+/// <param name="Dpi">The device resolution the metrics are rounded onto.</param>
+public readonly record struct MetricGrid(int Dpi)
+{
+    /// <summary>The grid a document asking for printer metrics is laid out on.</summary>
+    public static MetricGrid Printer { get; } = new(300);
+
+    /// <summary>Twips per device pixel on this grid.</summary>
+    private double TwipsPerPixel => 1440.0 / Dpi;
+
+    /// <summary>A design-unit measurement in whole device pixels at an em size.</summary>
+    public long ToPixels(int designUnits, int unitsPerEm, Length emSize)
+    {
+        if (unitsPerEm <= 0 || Dpi <= 0) return 0;
+
+        double em = Math.Round(emSize.Twips / TwipsPerPixel);
+        return (long)Math.Round(designUnits * em / unitsPerEm);
+    }
+
+    /// <summary>Whole device pixels back in whole twips.</summary>
+    public Length ToLength(long pixels)
+        => Dpi <= 0 ? Length.Zero : Length.FromTwips((long)Math.Round(pixels * TwipsPerPixel));
+}
+
+/// <summary>
 /// A font's vertical metrics as a line height, resolved from the several sets a font may carry.
 /// </summary>
 /// <param name="Ascent">Distance from the baseline to the line's top, in design units.</param>
@@ -36,12 +88,17 @@ public enum LineMetricSource
 /// <param name="LineGap">Recommended extra leading between lines, in design units.</param>
 /// <param name="Source">Which of the font's metric sets these came from.</param>
 /// <param name="UnitsPerEm">The design grid the three measurements are in.</param>
+/// <param name="Grid">
+/// The device the measurements are rounded through, or null to scale them exactly — which is the usual
+/// case and what a virtual reference device does. See <see cref="MetricGrid"/>.
+/// </param>
 public readonly record struct LineMetrics(
     int Ascent,
     int Descent,
     int LineGap,
     LineMetricSource Source,
-    int UnitsPerEm)
+    int UnitsPerEm,
+    MetricGrid? Grid = null)
 {
     /// <summary>The distance from one baseline to the next, in design units.</summary>
     public int LineHeight => Ascent + Descent + LineGap;
@@ -50,13 +107,42 @@ public readonly record struct LineMetrics(
     /// The line height at an em size.
     /// </summary>
     /// <param name="emSize">The font size the document asks for.</param>
-    public Length ScaledLineHeight(Length emSize) => Scale(LineHeight, emSize);
+    public Length ScaledLineHeight(Length emSize)
+        => Grid is { } grid
+            ? TextHeightOn(grid, emSize) + LeadingOn(grid, emSize)
+            : Scale(LineHeight, emSize);
 
     /// <summary>The ascent at an em size.</summary>
-    public Length ScaledAscent(Length emSize) => Scale(Ascent, emSize);
+    /// <remarks>
+    /// On a device grid the leading sits above the text rather than below it, which is what
+    /// <c>SwFntObj::GetFontAscent</c> does everywhere but macOS — it adds the external leading to the
+    /// ascent it read from the device and says so in a comment.
+    /// </remarks>
+    public Length ScaledAscent(Length emSize)
+        => Grid is { } grid
+            ? grid.ToLength(grid.ToPixels(Ascent, UnitsPerEm, emSize)) + LeadingOn(grid, emSize)
+            : Scale(Ascent, emSize);
 
     /// <summary>The descent at an em size.</summary>
-    public Length ScaledDescent(Length emSize) => Scale(Descent, emSize);
+    public Length ScaledDescent(Length emSize)
+        => Grid is { } grid
+            ? ScaledLineHeight(emSize) - ScaledAscent(emSize)
+            : Scale(Descent, emSize);
+
+    /// <summary>
+    /// The ascent and descent together, as one rounding rather than two.
+    /// </summary>
+    /// <remarks>
+    /// <c>OutputDevice::GetTextHeight</c> converts the summed device-pixel ascent and descent to logical
+    /// units in a single step, so rounding each and adding gives a different answer on the grids where it
+    /// matters.
+    /// </remarks>
+    private Length TextHeightOn(MetricGrid grid, Length emSize)
+        => grid.ToLength(
+            grid.ToPixels(Ascent, UnitsPerEm, emSize) + grid.ToPixels(Descent, UnitsPerEm, emSize));
+
+    private Length LeadingOn(MetricGrid grid, Length emSize)
+        => grid.ToLength(grid.ToPixels(LineGap, UnitsPerEm, emSize));
 
     /// <summary>
     /// The internal leading at an em size: how much of the line height is above and below the em.
@@ -142,7 +228,12 @@ public static class LineSpacing
     private const double FallbackAscentFraction = 0.8;
 
     /// <summary>Resolves a face's line metrics.</summary>
-    public static LineMetrics Resolve(OpenTypeFace face)
+    /// <param name="face">The face to measure.</param>
+    /// <param name="grid">
+    /// The device grid to round the metrics through, or null to scale them exactly. Only a document that
+    /// asks to be laid out against a printer passes one — see <see cref="MetricGrid"/>.
+    /// </param>
+    public static LineMetrics Resolve(OpenTypeFace face, MetricGrid? grid = null)
     {
         ArgumentNullException.ThrowIfNull(face);
 
@@ -199,7 +290,7 @@ public static class LineSpacing
             source = LineMetricSource.Fallback;
         }
 
-        return new LineMetrics(ascent, descent, lineGap, source, unitsPerEm);
+        return new LineMetrics(ascent, descent, lineGap, source, unitsPerEm, grid);
     }
 
     /// <summary>

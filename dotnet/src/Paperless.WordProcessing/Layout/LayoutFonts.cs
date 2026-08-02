@@ -29,6 +29,16 @@ public sealed class LayoutFonts
     public LayoutFonts(SystemFontResolver? fonts = null)
         => _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
 
+    /// <summary>
+    /// The device grid this document's font metrics are rounded through, or null to scale them exactly.
+    /// </summary>
+    /// <remarks>
+    /// The document's answer rather than a face's, which is why it lives beside the resolver: a document
+    /// that asks to be laid out against a printer asks it of every font it uses. Null for all but the few
+    /// that do — see <see cref="MetricGrid"/>.
+    /// </remarks>
+    public MetricGrid? Metrics { get; init; }
+
     /// <summary>The substitutions made so far.</summary>
     /// <remarks>
     /// Worth surfacing rather than swallowing: a substitution that is not metric-compatible changes every

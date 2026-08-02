@@ -196,12 +196,17 @@ public sealed class MeasuredParagraph
     /// The as-character pictures and frames set in the text, or null for a paragraph with none — which is
     /// nearly every paragraph, and the path every one of them took before inline objects existed.
     /// </param>
+    /// <param name="grid">
+    /// The device grid each run's vertical metrics are rounded through, or null to scale them exactly.
+    /// See <see cref="MetricGrid"/>.
+    /// </param>
     public static MeasuredParagraph Measure(
         string text,
         IReadOnlyList<FormattedRun> runs,
         ITextShaper? shaper = null,
         ItemisationOptions? itemisation = null,
-        IReadOnlyList<InlineObject>? objects = null)
+        IReadOnlyList<InlineObject>? objects = null,
+        MetricGrid? grid = null)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(runs);
@@ -229,7 +234,7 @@ public sealed class MeasuredParagraph
                 ShapedText shaped = engine.Shape(
                     part.Face, text.AsSpan(part.Start, part.Length), part.Shaping);
 
-                measured.Add(new MeasuredRun(part, shaped, LineSpacing.Resolve(part.Face)));
+                measured.Add(new MeasuredRun(part, shaped, LineSpacing.Resolve(part.Face, grid)));
 
                 // Each sub-run's own prefix widths, scaled from its own grid into EMUs and added to
                 // the running total. Summing in design units instead would add numbers from two
