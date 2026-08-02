@@ -363,11 +363,11 @@ namespace {
 /// Helper struct used to pass the data from soffice thread -> main thread.
 struct CallbackData
 {
-    int m_nType;
+    COKitCallbackType m_nType;
     std::string m_aPayload;
     KitDocumentView* m_pDocView;
 
-    CallbackData(int nType, std::string aPayload, KitDocumentView* pDocView)
+    CallbackData(COKitCallbackType nType, std::string aPayload, KitDocumentView* pDocView)
         : m_nType(nType),
           m_aPayload(std::move(aPayload)),
           m_pDocView(pDocView) {}
@@ -1106,7 +1106,7 @@ callback (gpointer pData)
         return G_SOURCE_REMOVE;
     }
 
-    switch (static_cast<COKitCallbackType>(pCallback->m_nType))
+    switch (pCallback->m_nType)
     {
     case COKitCallbackType::INVALIDATE_TILES:
     {
