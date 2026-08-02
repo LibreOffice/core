@@ -48,6 +48,7 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
     nSheetToExport = 0;
     bEvaluateFormulas = true;   // true if not present at all, for compatibility
     bIncludeBOM = false;
+    nEndianness = SvStreamEndian::LITTLE;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -97,6 +98,8 @@ ScImportOptions::ScImportOptions( std::u16string_view rStr )
             bEvaluateFormulas = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if (nTokenCount >= 14)
             bIncludeBOM = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
+        if (nTokenCount >= 15)
+            nEndianness = static_cast<SvStreamEndian>(o3tl::toInt32(o3tl::getToken(rStr, 0, ',', nIdx)));
     }
 }
 
@@ -125,7 +128,9 @@ OUString ScImportOptions::BuildString() const
             "," +
             OUString::boolean( bEvaluateFormulas ) +  // same as "Evaluate formulas" in ScAsciiOptions
             "," +
-            OUString::boolean(bIncludeBOM) ;  // same as "Include BOM" in ScAsciiOptions
+            OUString::boolean(bIncludeBOM) +  // same as "Include BOM" in ScAsciiOptions
+            "," +
+            OUString::number( static_cast<sal_uInt16>(nEndianness) );  // same as "Endianness" in ScAsciiOptions
 
     return aResult;
 }

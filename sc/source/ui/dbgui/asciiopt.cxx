@@ -42,6 +42,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bSaveAsShown(true),
     bSaveFormulas(false),
     bIncludeBOM(false),
+    nEndianness(SvStreamEndian::LITTLE),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
@@ -226,6 +227,11 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString, SvStream* pStr
     else
         bDetectScientificNumber = true;    // default of versions that didn't add the parameter
 
+    // Token 15: determine endianness
+    if (nPos >= 0)
+    {
+        nEndianness = static_cast<SvStreamEndian>(o3tl::toInt32(o3tl::getToken(rString, 0, ',', nPos)));
+    }
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -298,7 +304,9 @@ OUString ScAsciiOptions::WriteToString() const
                // Token 13: include BOM
                OUString::boolean(bIncludeBOM) + "," +
                // Token 14: Detect scientific numbers.
-               OUString::boolean( bDetectScientificNumber )
+               OUString::boolean( bDetectScientificNumber ) + "," +
+               // Token 15: Determine endianness
+               OUString::number( static_cast<sal_uInt16>(nEndianness) )
             );
     return aOutStr.makeStringAndClear();
 }

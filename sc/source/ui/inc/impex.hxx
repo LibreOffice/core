@@ -72,6 +72,7 @@ class SAL_DLLPUBLIC_RTTI ScImportExport
                                 // In this case we cannot use the insert optimization, but we
                                 // do not need to broadcast after the import.
     bool        mbIncludeBOM; // Whether to include a byte-order-mark in the output.
+    SvStreamEndian mnEndianness; // Whether it's BIG or LITTLE endian
     ScExportTextOptions mExportTextOptions;
 
     std::unique_ptr<ScAsciiOptions> pExtOptions;        // extended options
@@ -156,6 +157,7 @@ public:
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 
     bool GetIncludeBOM() const { return mbIncludeBOM; }
+    SvStreamEndian GetEndianness() const { return mnEndianness; }
 };
 
 // Helper class for importing clipboard strings as streams.
