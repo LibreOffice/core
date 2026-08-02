@@ -181,54 +181,18 @@ internal sealed class PptxDiagramStyles
     }
 
     /// <summary>Clones a theme style element with its <c>phClr</c> replaced by a literal colour.</summary>
+    /// <remarks>
+    /// The substitution itself is <see cref="DrawingStyleMatrix"/>'s, because a diagram's quick
+    /// style and a shape's <c>p:style</c> index into the same <c>a:fmtScheme</c> and mean the
+    /// same thing by it. What stays here is only the diagram's way of choosing the placeholder
+    /// colour — a cycling list per label rather than a colour on the reference itself.
+    /// </remarks>
     private static XElement? Substitute(XElement element, Colour? placeholder)
-    {
-        if (placeholder is null) return null;
-
-        return (XElement)Replace(element, placeholder.Value);
-    }
-
-    private static XNode Replace(XNode node, Colour placeholder)
-    {
-        if (node is not XElement element) return node;
-
-        if (element.Name == Drawing.Name("schemeClr")
-            && Drawing.Attribute(element, "val") == "phClr")
-        {
-            return new XElement(
-                Drawing.Name("srgbClr"),
-                new XAttribute("val", $"{placeholder.R:X2}{placeholder.G:X2}{placeholder.B:X2}"),
-                Alpha(placeholder),
-                element.Elements().Select(child => Replace(child, placeholder)));
-        }
-
-        return new XElement(
-            element.Name,
-            element.Attributes().Where(a => !a.IsNamespaceDeclaration),
-            element.Nodes().Select(child => Replace(child, placeholder)));
-    }
+        => placeholder is null ? null : DrawingStyleMatrix.Substitute(element, placeholder.Value);
 
     private static XElement Literal(Colour colour)
         => new(
             Drawing.Name("srgbClr"),
             new XAttribute("val", $"{colour.R:X2}{colour.G:X2}{colour.B:X2}"),
-            Alpha(colour));
-
-    /// <summary>
-    /// The <c>a:alpha</c> a resolved colour needs, or nothing when it is opaque.
-    /// </summary>
-    /// <remarks>
-    /// The colour lists really do carry alpha — a Venn diagram's overlapping circles are the
-    /// same accent at 50% — and it is stated on the colour rather than on the fill, so it has to
-    /// survive the substitution or the circles hide each other.
-    /// </remarks>
-    private static XElement? Alpha(Colour colour)
-        => colour.IsOpaque
-            ? null
-            : new XElement(
-                Drawing.Name("alpha"),
-                new XAttribute(
-                    "val",
-                    ((int)Math.Round(colour.A / 255.0 * 100000))
-                    .ToString(CultureInfo.InvariantCulture)));
+            DrawingStyleMatrix.Alpha(colour));
 }

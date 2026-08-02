@@ -59,6 +59,11 @@ public readonly record struct PptCharacterLevel(
 /// <param name="SpaceAfter">The space below it.</param>
 /// <param name="TextOffset">Where the paragraph's text starts, from the text rectangle's edge.</param>
 /// <param name="BulletOffset">Where its bullet starts, from the same edge.</param>
+/// <param name="DefaultTab">
+/// How far apart the stops a tab advances to are, in master units. PowerPoint's own default is
+/// 0x240 — 576 master units, one inch — which is twice a word processor's half-inch stop, so a
+/// paragraph positioned by tabs lands in a visibly different place under the wrong one.
+/// </param>
 public readonly record struct PptParagraphLevel(
     ushort BulletFlags,
     ushort BulletCharacter,
@@ -70,8 +75,12 @@ public readonly record struct PptParagraphLevel(
     short SpaceBefore = 0,
     short SpaceAfter = 0,
     ushort TextOffset = 0,
-    ushort BulletOffset = 0)
+    ushort BulletOffset = 0,
+    ushort DefaultTab = PptParagraphLevel.PowerPointDefaultTab)
 {
+    /// <summary>PowerPoint's own default tab distance: 0x240 master units, which is one inch.</summary>
+    public const ushort PowerPointDefaultTab = 0x240;
+
     /// <summary>Whether a paragraph at this level draws a bullet unless it says otherwise.</summary>
     public bool HasBullet => (BulletFlags & 0x0001) != 0;
 }
@@ -330,7 +339,8 @@ public sealed class PptStyleSheet
                 level = level with { TextOffset = Take16(content, ref position) };
             if ((mask & 0x00010000) != 0)
                 level = level with { BulletOffset = Take16(content, ref position) };
-            if ((mask & 0x00020000) != 0) position += 2;   // default tab size
+            if ((mask & 0x00020000) != 0)
+                level = level with { DefaultTab = Take16(content, ref position) };
             if ((mask & 0x00200000) != 0) SkipTabStops(content, ref position);
             if ((mask & 0x00040000) != 0) position += 2;   // baseline
             if ((mask & 0x00080000) != 0) position += 2;   // the Asian line-break flags
@@ -346,7 +356,8 @@ public sealed class PptStyleSheet
                 level = level with { SpaceBefore = Signed(content, ref position) };
             if ((mask & 0x00004000) != 0)
                 level = level with { SpaceAfter = Signed(content, ref position) };
-            if ((mask & 0x00008000) != 0) position += 2;   // default tab size
+            if ((mask & 0x00008000) != 0)
+                level = level with { DefaultTab = Take16(content, ref position) };
             if ((mask & 0x00000100) != 0)
                 level = level with { TextOffset = Take16(content, ref position) };
             if ((mask & 0x00000200) != 0) position += 2;

@@ -90,13 +90,10 @@ public static partial class SlideTextLayout
             bool first = true;
             foreach (PlacedLine line in block.Lines)
             {
-                if (first)
-                {
-                    EmitMarker(placed, block, line, area.X, top, fonts);
-                    first = false;
-                }
+                if (first) EmitMarker(placed, block, line, area.X, top, fonts);
 
-                Emit(placed, block, line, area.X, top);
+                Emit(placed, block, line, area.X, top, first);
+                first = false;
                 top += line.Height;
             }
 
@@ -401,7 +398,8 @@ public static partial class SlideTextLayout
             Length size = scaling.Scaled(run.Size);
 
             runs.Add(new FormattedRun(run.Start, run.Length, face, size, Tracking: run.Tracking));
-            styles.Add(new RunStyle(run.Colour, reference, face));
+            styles.Add(new RunStyle(
+                run.Colour, reference, face, run.IsUnderlined, run.IsStruckThrough));
         }
 
         if (first is null) return null;
@@ -420,6 +418,7 @@ public static partial class SlideTextLayout
                 ? paragraph.FirstLineIndent
                 : MarkerReach(paragraph, scaling, fonts),
             LineSpacing = paragraph.LineSpacing,
+            DefaultTabInterval = paragraph.DefaultTabInterval,
         };
 
         MeasuredParagraph measured = MeasuredParagraph.Measure(paragraph.Text, runs);
@@ -491,7 +490,7 @@ public static partial class SlideTextLayout
 
         return new Block(
             paragraph, measured, styles, lines,
-            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling);
+            total + paragraph.SpaceBefore + paragraph.SpaceAfter, scaling, format);
     }
 
     /// <summary>
@@ -666,16 +665,71 @@ public static partial class SlideTextLayout
             ? Length.FromEmu((long)Math.Round(height.Emu * (1 - reduction)))
             : height;
 
-    /// <summary>Emits one line's glyph runs, one per formatting change along it.</summary>
+    /// <summary>
+    /// Emits one line's glyph runs, one per formatting change along it, placed at its tab stops.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A tab is the one character whose width is not a property of the font: it advances the pen to
+    /// the next stop. Letting it be shaped like any other character advances the pen by whatever
+    /// the face happens to give U+0009, which is nothing to do with where the stop is —
+    /// <c>policy-pesentation.ppt</c>'s conclusion is positioned by three of them and landed an inch
+    /// and a half to the left of where LibreOffice draws it.
+    /// </para>
+    /// <para>
+    /// The word processor has done this since tabs existed there
+    /// (<c>PageDrawing.Stretches</c>); this is the same <see cref="TabRuler"/> over the slide's own
+    /// paragraph format, and an untabbed line — nearly all of them — goes through the identical
+    /// code path as a single stretch at offset zero, so the two cannot drift apart.
+    /// </para>
+    /// </remarks>
     private static void Emit(
-        List<PlacedGlyphRun> placed, Block block, PlacedLine line, Length areaLeft, Length top)
+        List<PlacedGlyphRun> placed,
+        Block block,
+        PlacedLine line,
+        Length areaLeft,
+        Length top,
+        bool isFirstLine)
     {
         int start = line.Box.Line.Start;
         int end = Math.Min(line.Box.Line.VisibleEnd, block.Measured.Text.Length);
         if (end <= start) return;
 
-        Length pen = areaLeft + line.Box.Left;
+        Length lineLeft = areaLeft + line.Box.Left;
         Length baseline = top + line.Ascent;
+
+        foreach (TabbedSegment segment in Stretches(block, start, end, isFirstLine))
+        {
+            EmitStretch(placed, block, segment, lineLeft + segment.Left, baseline, line);
+        }
+    }
+
+    /// <summary>The stretches a line's tabs divide it into, each placed at its stop.</summary>
+    private static List<TabbedSegment> Stretches(
+        Block block, int start, int end, bool isFirstLine)
+    {
+        if (!TabRuler.HasTab(block.Measured.Text, start, end))
+        {
+            return [new TabbedSegment(start, end, Length.Zero, Length.Zero)];
+        }
+
+        return TabRuler.Segments(
+            block.Measured.Text, start, end, block.Format,
+            block.Measured.WidthBetween, isFirstLine);
+    }
+
+    /// <summary>Emits one stretch of a line, starting at a pen the caller has placed.</summary>
+    private static void EmitStretch(
+        List<PlacedGlyphRun> placed,
+        Block block,
+        TabbedSegment segment,
+        Length pen,
+        Length baseline,
+        PlacedLine line)
+    {
+        int start = segment.Start;
+        int end = segment.End;
+        if (end <= start) return;
 
         foreach (FormattedRun run in block.Measured.RunsBetween(start, end))
         {
@@ -690,12 +744,71 @@ public static partial class SlideTextLayout
                 line.Box.SpaceAdd,
                 run.Tracking);
 
-            placed.Add(new PlacedGlyphRun(glyphs, block.ColourAt(run.Start)));
+            Length advance = Length.Zero;
+            foreach (PositionedGlyph glyph in glyphs.Glyphs) advance += glyph.Advance;
+
+            placed.Add(new PlacedGlyphRun(
+                glyphs,
+                block.ColourAt(run.Start),
+                Rules(block.DecorationAt(run.Start), run.Face, run.EmSize, pen, baseline, advance)));
 
             // The pen carries across the runs of a line, so the second run starts where the first
             // ended rather than back at the margin.
-            foreach (PositionedGlyph glyph in glyphs.Glyphs) pen += glyph.Advance;
+            pen += advance;
         }
+    }
+
+    /// <summary>
+    /// The rectangles a run's underline and strikethrough fill, or null when it has neither.
+    /// </summary>
+    /// <remarks>
+    /// Computed here because this is the last point at which the <see cref="OpenTypeFace"/> is in
+    /// hand: the offset and thickness are the face's own <c>post</c> and <c>OS/2</c> values
+    /// through <see cref="LineSpacing.ResolveDecorations(OpenTypeFace, LineMetrics)"/>, which falls back to a fraction of
+    /// the em for a face declaring zero — otherwise a font that declines to say would draw a
+    /// rule of no thickness, which is to say none.
+    /// </remarks>
+    private static List<DocRect>? Rules(
+        (bool Underline, bool Strikethrough) decoration,
+        OpenTypeFace face,
+        Length size,
+        Length left,
+        Length baseline,
+        Length width)
+    {
+        if (!decoration.Underline && !decoration.Strikethrough) return null;
+        if (size <= Length.Zero || width <= Length.Zero) return null;
+
+        int unitsPerEm = face.UnitsPerEm > 0 ? face.UnitsPerEm : 1000;
+        FontVerticalMetrics metrics =
+            LineSpacing.ResolveDecorations(face, LineSpacing.Resolve(face));
+
+        Length Scaled(int designUnits) => size * ((double)designUnits / unitsPerEm);
+
+        List<DocRect> rules = [];
+
+        if (decoration.Underline)
+        {
+            // The face records the underline's offset as negative below the baseline.
+            Length thickness = Scaled(metrics.UnderlineThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add(new DocRect(
+                    left, baseline - Scaled(metrics.UnderlinePosition), width, thickness));
+            }
+        }
+
+        if (decoration.Strikethrough)
+        {
+            Length thickness = Scaled(metrics.StrikeoutThickness);
+            if (thickness > Length.Zero)
+            {
+                rules.Add(new DocRect(
+                    left, baseline - Scaled(metrics.StrikeoutPosition), width, thickness));
+            }
+        }
+
+        return rules.Count == 0 ? null : rules;
     }
 
     /// <summary>Builds a glyph run from a shaped stretch of text at an origin.</summary>
@@ -806,7 +919,14 @@ public static partial class SlideTextLayout
     /// existing check could see it.
     /// </para>
     /// </remarks>
-    private readonly record struct RunStyle(Colour Colour, FontReference? Font, OpenTypeFace? Face);
+    /// <param name="IsUnderlined">Whether a rule is drawn under it.</param>
+    /// <param name="IsStruckThrough">Whether a rule is drawn through it.</param>
+    private readonly record struct RunStyle(
+        Colour Colour,
+        FontReference? Font,
+        OpenTypeFace? Face,
+        bool IsUnderlined = false,
+        bool IsStruckThrough = false);
 
     /// <summary>One paragraph, measured and broken.</summary>
     private sealed record Block(
@@ -815,7 +935,8 @@ public static partial class SlideTextLayout
         IReadOnlyList<RunStyle> Styles,
         IReadOnlyList<PlacedLine> Lines,
         Length Height,
-        Scaling Scaling)
+        Scaling Scaling,
+        ParagraphFormat Format)
     {
         public Length SpaceBefore => Paragraph.SpaceBefore;
 
@@ -828,6 +949,13 @@ public static partial class SlideTextLayout
         /// not move a line break, so it travels with whatever draws the text.
         /// </remarks>
         public Colour ColourAt(int index) => StyleAt(index).Colour;
+
+        /// <summary>The decorations covering a character, both false when no run does.</summary>
+        public (bool Underline, bool Strikethrough) DecorationAt(int index)
+        {
+            RunStyle style = StyleAt(index);
+            return (style.IsUnderlined, style.IsStruckThrough);
+        }
 
         /// <summary>
         /// The resolved reference for a sub-run, or null when nothing here can name its face.

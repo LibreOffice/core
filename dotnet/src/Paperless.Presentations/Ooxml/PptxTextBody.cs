@@ -306,7 +306,19 @@ internal static class PptxTextBody
             Length.FromEmu(Emu(chain, "marL")),
             Length.FromEmu(Emu(chain, "indent")),
             Language(Drawing.Child(paragraph, "r")),
-            Marker(chain, theme, level, counters, counting, hasText: text.Length > 0));
+            Marker(chain, theme, level, counters, counting, hasText: text.Length > 0))
+        {
+            // a:defTabSz, whose absence means DrawingML's own default of one inch and not a word
+            // processor's half inch. Nearly every master states it explicitly as 914400, which is
+            // the same inch — so the value that matters is the fallback.
+            DefaultTabInterval = Stated(chain, "defTabSz") is { } stated
+                                 && long.TryParse(
+                                     stated, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                                     out long emu)
+                                 && emu > 0
+                ? Length.FromEmu(emu)
+                : SlideParagraph.DefaultTabDistance,
+        };
     }
 
     /// <summary>The first source in the chain to state an attribute.</summary>
@@ -568,6 +580,15 @@ internal static class PptxTextBody
         // without it — 10 pt over a 50-character line at the corpus's commonest value of -20.
         int tracking = First(runProperties, defaults, element => Drawing.Number(element, "spc")) ?? 0;
 
+        // ST_TextUnderlineType, whose nineteen values are all "underlined" except "none" — the
+        // dashes and the double rule differ in how the line is drawn and not in whether one is.
+        // "sng" and "none" are all the corpus uses; anything else falls to a single rule rather
+        // than to nothing, which is right far more often than the reverse.
+        string? underline = First(
+            runProperties, defaults, element => Drawing.Attribute(element, "u"));
+        string? strike = First(
+            runProperties, defaults, element => Drawing.Attribute(element, "strike"));
+
         return new SlideTextRun(
             start,
             length,
@@ -576,7 +597,9 @@ internal static class PptxTextBody
             bold ? 700 : 400,
             italic,
             colour ?? Colour.Black,
-            Length.FromEmu(tracking * Length.EmuPerPoint / 100));
+            Length.FromEmu(tracking * Length.EmuPerPoint / 100),
+            IsUnderlined: underline is not null and not "none",
+            IsStruckThrough: strike is not null and not "noStrike");
     }
 
     /// <summary>

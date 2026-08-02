@@ -166,7 +166,24 @@ public sealed record SlideParagraph(
     Length StartIndent = default,
     Length FirstLineIndent = default,
     string? Language = null,
-    SlideMarker? Marker = null);
+    SlideMarker? Marker = null)
+{
+    /// <summary>The slide formats' own default tab distance: one inch.</summary>
+    public static Length DefaultTabDistance { get; } = Length.FromEmu(Length.EmuPerInch);
+
+    /// <summary>
+    /// How far apart the stops a tab advances to are, when the paragraph states none of its own.
+    /// </summary>
+    /// <remarks>
+    /// <strong>A slide's is an inch, not the half inch a word processor uses.</strong> PowerPoint
+    /// stores it as 0x240 master units and DrawingML as <c>a:defTabSz</c> defaulting to 914400
+    /// EMU, and both are one inch; <see cref="ParagraphFormat.DefaultTabInterval"/> defaults to
+    /// Word's 720 twips because that is what a document is. The difference compounds: a paragraph
+    /// positioned by three tabs lands an inch and a half to the left of where it belongs, which on
+    /// a ten-inch slide is fifteen per cent of the page.
+    /// </remarks>
+    public Length DefaultTabInterval { get; init; } = DefaultTabDistance;
+}
 
 /// <summary>
 /// The bullet or number a paragraph is labelled with.
@@ -221,6 +238,12 @@ public readonly record struct SlideMarker(
 /// of a point and commonly negative. See <see cref="Paperless.Text.Layout.FormattedRun.Tracking"/>
 /// for how it is charged.
 /// </param>
+/// <param name="IsUnderlined">
+/// Whether a rule is drawn under it. A decoration rather than a glyph in every format here —
+/// <c>a:rPr/@u</c> in DrawingML, bit 2 of a PPT character-property mask — so it moves no line
+/// break and is drawn from the face's own <c>post</c> metrics after the text is placed.
+/// </param>
+/// <param name="IsStruckThrough">Whether a rule is drawn through it.</param>
 public readonly record struct SlideTextRun(
     int Start,
     int Length,
@@ -229,7 +252,9 @@ public readonly record struct SlideTextRun(
     int Weight,
     bool IsItalic,
     Colour Colour,
-    Length Tracking = default)
+    Length Tracking = default,
+    bool IsUnderlined = false,
+    bool IsStruckThrough = false)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;

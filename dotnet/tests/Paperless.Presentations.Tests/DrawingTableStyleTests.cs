@@ -1,0 +1,198 @@
+using System.Xml.Linq;
+using Paperless.Core.Graphics;
+using Paperless.Ooxml.DrawingML;
+using Shouldly;
+
+namespace Paperless.Presentations.Tests;
+
+/// <summary>
+/// A DrawingML table style — <c>tableStyles.xml</c> — resolved onto a table's cells.
+/// </summary>
+/// <remarks>
+/// <para>
+/// A PowerPoint-authored table states <c>&lt;a:tblPr firstRow="1" bandRow="1"&gt;</c> and a style
+/// GUID, gives every cell an empty <c>&lt;a:tcPr/&gt;</c>, and puts every fill and every border in
+/// the style part. Nothing read it, so such a table drew its text and nothing else — and on a
+/// header row whose style makes the text white, that means white text on white paper.
+/// </para>
+/// <para>
+/// Measured on <c>BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx</c>, the largest single
+/// image difference in <c>slides/batch-001</c>: its third page's ink imbalance against
+/// LibreOffice's own rendering was 12.39% and its second page's 10.55%, and both are now under
+/// the image comparison's threshold. The deck matches word for word either way, which is why the
+/// word gate never saw it.
+/// </para>
+/// </remarks>
+public class DrawingTableStyleTests
+{
+    private const string A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+
+    private const string Guid = "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}";
+
+    private static readonly Colour Accent = Colour.FromRgb(0x4F81BD);
+    private static readonly Colour Light = Colour.FromRgb(0xFFFFFF);
+    private static readonly Colour WholeTable = Colour.FromRgb(0xDCE6F1);
+    private static readonly Colour Band1 = Colour.FromRgb(0xB8CCE4);
+
+    private static XElement Theme() => XElement.Parse(
+        $"""
+         <a:theme xmlns:a="{A}">
+           <a:themeElements>
+             <a:clrScheme name="t">
+               <a:dk1><a:srgbClr val="000000"/></a:dk1>
+               <a:lt1><a:srgbClr val="FFFFFF"/></a:lt1>
+               <a:dk2><a:srgbClr val="1F497D"/></a:dk2>
+               <a:lt2><a:srgbClr val="EEECE1"/></a:lt2>
+               <a:accent1><a:srgbClr val="4F81BD"/></a:accent1>
+             </a:clrScheme>
+           </a:themeElements>
+         </a:theme>
+         """);
+
+    /// <summary>A style shaped like the ones PowerPoint ships: a header, banding, a grid.</summary>
+    private static XElement Styles() => XElement.Parse(
+        $"""
+         <a:tblStyleLst xmlns:a="{A}" def="{Guid}">
+           <a:tblStyle styleId="{Guid}" styleName="Medium 2">
+             <a:wholeTbl>
+               <a:tcStyle>
+                 <a:tcBdr>
+                   <a:top><a:ln w="12700"><a:solidFill><a:srgbClr val="112233"/></a:solidFill></a:ln></a:top>
+                   <a:insideH><a:ln w="6350"><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill></a:ln></a:insideH>
+                 </a:tcBdr>
+                 <a:fill><a:solidFill><a:srgbClr val="DCE6F1"/></a:solidFill></a:fill>
+               </a:tcStyle>
+             </a:wholeTbl>
+             <a:band1H>
+               <a:tcStyle><a:tcBdr/>
+                 <a:fill><a:solidFill><a:srgbClr val="B8CCE4"/></a:solidFill></a:fill>
+               </a:tcStyle>
+             </a:band1H>
+             <a:band2H><a:tcStyle><a:tcBdr/></a:tcStyle></a:band2H>
+             <a:firstRow>
+               <a:tcTxStyle b="on"><a:fontRef idx="minor"><a:prstClr val="black"/></a:fontRef>
+                 <a:schemeClr val="lt1"/></a:tcTxStyle>
+               <a:tcStyle><a:tcBdr/>
+                 <a:fill><a:solidFill><a:schemeClr val="accent1"/></a:solidFill></a:fill>
+               </a:tcStyle>
+             </a:firstRow>
+           </a:tblStyle>
+         </a:tblStyleLst>
+         """);
+
+    private static DrawingTableStyle Style(string? id = Guid)
+        => DrawingTableStyle.Read(Styles(), id).ShouldNotBeNull();
+
+    private static DrawingTableCellStyle At(
+        int row, int column, DrawingTableStyleOptions options, int lastRow = 3, int lastColumn = 2)
+        => Style().Resolve(options, row, lastRow, column, lastColumn, DrawingTheme.Read(Theme()), null);
+
+    private static readonly DrawingTableStyleOptions HeaderAndBands =
+        new(FirstRow: true, LastRow: false, FirstColumn: false, LastColumn: false,
+            BandRow: true, BandColumn: false);
+
+    [Fact]
+    public void AHeaderRowTakesTheFirstRowPartsFillAndItsWhiteBoldText()
+    {
+        DrawingTableCellStyle header = At(row: 0, column: 1, HeaderAndBands);
+
+        header.Fill.ShouldBe(Accent);
+        header.TextColour.ShouldBe(Light);
+        header.Bold.ShouldBe(true);
+    }
+
+    [Fact]
+    public void TheHeaderRowCountsAsABandSoTheBandingStartsOnTheOtherFoot()
+    {
+        // nBand = nRow; if (firstRow) nBand++ — tablecell.cxx:384-386 — and an odd band takes
+        // band2H, which here states no fill and so leaves the whole table's. Off by one inverts
+        // the shading of every banded table, which is why the same two rows are asserted with the
+        // header flag and without it.
+        At(row: 1, column: 1, HeaderAndBands).Fill.ShouldBe(Band1);
+        At(row: 2, column: 1, HeaderAndBands).Fill.ShouldBe(WholeTable);
+
+        DrawingTableStyleOptions bandsOnly = HeaderAndBands with { FirstRow = false };
+        At(row: 1, column: 1, bandsOnly).Fill.ShouldBe(WholeTable);
+        At(row: 2, column: 1, bandsOnly).Fill.ShouldBe(Band1);
+    }
+
+    [Fact]
+    public void WithoutTheBandFlagEveryBodyRowTakesTheWholeTablesFill()
+    {
+        DrawingTableStyleOptions headerOnly = HeaderAndBands with { BandRow = false };
+
+        At(row: 1, column: 1, headerOnly).Fill.ShouldBe(WholeTable);
+        At(row: 2, column: 1, headerOnly).Fill.ShouldBe(WholeTable);
+    }
+
+    [Fact]
+    public void WithoutTheHeaderFlagRowZeroIsAnOrdinaryRow()
+    {
+        // The flags are what decide, not the position: a table that declares no header row has
+        // none, however much its style has to say about one.
+        DrawingTableCellStyle plain =
+            At(row: 0, column: 1, HeaderAndBands with { FirstRow = false });
+
+        plain.Fill.ShouldNotBe(Accent);
+        plain.TextColour.ShouldBeNull();
+        plain.Bold.ShouldBeNull();
+    }
+
+    [Fact]
+    public void TheWholeTablesFourSidesAreTheTablesFrameAndNotEveryCells()
+    {
+        // a:wholeTbl's left/right/top/bottom are the *table's* outer frame — tablecell.cxx:199-215
+        // guards each with a grid-position test — with insideH and insideV carrying the interior.
+        // Applying them per cell rules every cell on all four sides.
+        At(row: 0, column: 1, HeaderAndBands).Top.ShouldNotBeNull();
+        At(row: 1, column: 1, HeaderAndBands).Top.ShouldBeNull();
+
+        At(row: 1, column: 1, HeaderAndBands).InsideHorizontal.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void AStyleTheDeckDoesNotCarryResolvesToNothingRatherThanToTheDefault()
+    {
+        // A table naming a style the package has not got has no style, not the wrong one.
+        DrawingTableStyle.Read(Styles(), "{00000000-0000-0000-0000-000000000000}").ShouldBeNull();
+
+        // But a table naming none at all takes the list's own default.
+        DrawingTableStyle.Read(Styles(), styleId: null).ShouldNotBeNull();
+        DrawingTableStyle.Read(tableStyles: null, Guid).ShouldBeNull();
+    }
+
+    [Fact]
+    public void ACellsOwnPropertiesBeatTheStyle()
+    {
+        XElement table = XElement.Parse(
+            $"""
+             <a:tbl xmlns:a="{A}">
+               <a:tblPr firstRow="1" bandRow="1"><a:tableStyleId>{Guid}</a:tableStyleId></a:tblPr>
+               <a:tblGrid><a:gridCol w="914400"/><a:gridCol w="914400"/></a:tblGrid>
+               <a:tr h="360000">
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody>
+                   <a:tcPr><a:solidFill><a:srgbClr val="FF0000"/></a:solidFill></a:tcPr></a:tc>
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody><a:tcPr/></a:tc>
+               </a:tr>
+               <a:tr h="360000">
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody>
+                   <a:tcPr><a:lnT><a:noFill/></a:lnT></a:tcPr></a:tc>
+                 <a:tc><a:txBody><a:bodyPr/><a:p/></a:txBody><a:tcPr/></a:tc>
+               </a:tr>
+             </a:tbl>
+             """);
+
+        DrawingTableBox box = DrawingTableGeometry.Read(
+            table, DrawingTheme.Read(Theme()), Style(), matrix: null);
+
+        // Stated fill wins over the header part's; the cell beside it still takes the style's.
+        box.Cells[0].Fill.ShouldBe(Colour.FromRgb(0xFF0000));
+        box.Cells[1].Fill.ShouldBe(Accent);
+        box.Cells[1].TextColour.ShouldBe(Light);
+
+        // An explicit a:noFill on a border is a decision and removes the style's interior rule;
+        // its neighbour, which states nothing, keeps it.
+        box.Cells[2].Top.ShouldBeNull();
+        box.Cells[3].Top.ShouldNotBeNull();
+    }
+}

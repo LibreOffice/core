@@ -200,7 +200,7 @@ internal static class SheetTextLayout
     /// A cell's underline is a font property in all three formats and is drawn by the output
     /// device rather than shaped, so it is a filled rectangle under the run and not a glyph. The
     /// offset and the thickness come from the face's own <c>post</c> and <c>OS/2</c> tables
-    /// through <see cref="LineSpacing.ResolveDecorations"/>, which is the same resolution and the
+    /// through <see cref="LineSpacing.ResolveDecorations(OpenTypeFace, LineMetrics)"/>, which is the same resolution and the
     /// same fallbacks the rest of the project uses — a font that declares neither would otherwise
     /// draw a zero-thickness line, which is to say none.
     /// </para>

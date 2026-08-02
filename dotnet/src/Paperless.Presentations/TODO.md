@@ -2033,3 +2033,44 @@ the shape's own space and travel with `PlacedText.Transform`.
       exactly as the reference does. `slide-master-shapes.pptx` is the committed fixture and
       `SlideMasterShapeComparisonTests` the standing check; all 27 presentation rows of the render
       sweep are unchanged.
+
+### What `slides/batch-001` still cannot draw, and what was measured about it
+
+The batch is 9/9 on the word gate and seven of its nine documents now have no page with a major
+image difference. The two that remain were diagnosed rather than fixed, and each needs a feature
+whose reach is much wider than the one document.
+
+**`111006 COMSTAC STOWG Aero spaceports IFG.pptx`, page 1 — blip colour effects.** Its two logos
+carry `<a:lum bright="70000" contrast="-70000"/>` and `<a:grayscl/>` inside their `a:blip`, and
+neither is read: `DrawingFill.ReadBlip` takes `a:alphaModFix` and nothing else. So the reference
+washes a black GIF almost to white and desaturates a blue EMF, and we draw both as they were
+stored. Measured: the page's ink imbalance is 0.84% overall with two regions of 2.38% and 2.11% of
+the page, which is what makes it major; the deck's other seven pages are clean.
+
+The cost is not the reading — the six effects (`a:biLevel`, `a:grayscl`, `a:duotone`, `a:lum`,
+`a:clrChange`, `a:alphaModFix`) are a small element each — it is that the transform has to survive
+to a backend. `RasterImage` carries *either* decoded pixels *or* the file's own encoded bytes, and
+the PDF writer passes the encoded bytes through unmodified; applying an effect there means decoding
+and re-encoding a picture that writer currently never touches. That is a `Paperless.Core` field
+plus work in both backends, which is its own round.
+
+**`wells08_basic.ppt`, pages 2 and 26 — two separate things.**
+
+Page 2: **PPT auto-numbering is not implemented.** The reference numbers the two outline
+placeholders `I.` to `V.` and `VI.` to `X.` — one sequence continuing across two shapes — where we
+draw a bullet at every level. The PPTX side reads `a:buAutoNum` and carries the counters across a
+body (`PptxTextBody`); the binary side has no equivalent, and the scheme lives in a
+`TextAutoNumberSchemeAtom` beside the paragraph properties rather than in them. Ink 0.13%, one
+heavy region.
+
+Page 26: the right-hand column wraps a line earlier in the reference than in ours, so its five
+items each sit a line lower. Ink 0.62%. Not diagnosed — the two shapes are the same width in the
+file, so it is a measurement difference rather than a placement one, and the extraction comparison
+is a better instrument for it than more pixels.
+
+**Also seen and not chased:** the deck's level-1 bullets are a Wingdings private-use code point.
+LibreOffice keeps the code point and substitutes OpenSymbol for the missing face; we convert the
+code point to U+2022 and draw it in the paragraph's own face, which resolves to a visibly smaller
+glyph. The comment in `PptTextBody.Marker` says the two routes reach the same place. They do not:
+on `policy-pesentation.ppt` the drawn diameter differs by roughly a factor of two — below the image
+comparison's region threshold on every page of this batch, but wrong.
