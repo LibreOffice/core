@@ -11,11 +11,14 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdview.hxx>
 #include <test/lokcallback.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
@@ -281,6 +284,54 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
 
     // Tear down LOK:
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testResizeAfterTextEdit)
+{
+    // Given a document with a shape that has text, selected, and in text edit:
+    createSwDoc();
+    auto xFactory(mxComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xShape(xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr)
+                    .queryThrow<drawing::XShape>());
+    mxComponent.queryThrow<drawing::XDrawPageSupplier>()->getDrawPage()->add(xShape);
+    xShape->setPosition(awt::Point(2000, 2000));
+    xShape->setSize(awt::Size(5000, 5000));
+    xShape.queryThrow<text::XText>()->setString(u"x"_ustr);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    CPPUNIT_ASSERT(pObject);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
+    const Point aCenter = rEditWin.LogicToPixel(pObject->GetCurrentBoundRect().Center());
+    // click to select the shape, then double-click to start editing its text
+    for (sal_uInt16 nClicks : { 1, 2 })
+    {
+        MouseEvent aEvent(aCenter, nClicks, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        rEditWin.MouseButtonDown(aEvent);
+        rEditWin.MouseButtonUp(aEvent);
+        Scheduler::ProcessEventsToIdle();
+    }
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->IsTextEdit());
+
+    // When dragging the bottom right handle, which first ends the text edit:
+    const awt::Point aPosition = xShape->getPosition();
+    const tools::Rectangle& rBound = pObject->GetCurrentBoundRect();
+    const Point aFrom = rEditWin.LogicToPixel(rBound.BottomRight());
+    const Point aTo = rEditWin.LogicToPixel(rBound.BottomRight() + Point(1000, 1000));
+    rEditWin.MouseButtonDown(MouseEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT));
+    rEditWin.MouseMove(MouseEvent(aTo, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT));
+    rEditWin.MouseMove(MouseEvent(aTo, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT));
+    rEditWin.MouseButtonUp(MouseEvent(aTo, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the shape grew where it stands:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2000
+    // - Actual  : 6260
+    // i.e. the drag took its start from the click before the one that ended the text edit, so it
+    // moved the shape rather than resizing it.
+    CPPUNIT_ASSERT_EQUAL(aPosition.X, xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPosition.Y, xShape->getPosition().Y);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(5000), xShape->getSize().Width);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

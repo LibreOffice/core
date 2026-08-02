@@ -5712,6 +5712,8 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
             rSh.LeaveSelFrameMode();
         else
         {
+            // a drag that this click starts has to start where this click is
+            rSh.EnterSelFrameMode(&aDocPos);
             SwEditWin::s_nDDStartPosY = aDocPos.Y();
             SwEditWin::s_nDDStartPosX = aDocPos.X();
             g_bFrameDrag = true;
