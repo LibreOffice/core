@@ -63,6 +63,46 @@ public sealed class FurnitureAreaTests
     }
 
     /// <summary>
+    /// An A4 landscape page whose footer sits <em>below</em> where the body's text area ends.
+    /// </summary>
+    /// <remarks>
+    /// <c>easa-form-1.docx</c>'s numbers: <c>w:bottom</c> 357 and <c>w:footer</c> 488. Nothing forbids a
+    /// document from stating a footer distance larger than its bottom margin, and Word draws the footer
+    /// at the distance it states either way.
+    /// </remarks>
+    private static PageGeometry CrossedFooter => new()
+    {
+        Size = new DocSize(Length.FromTwips(16840), Length.FromTwips(11907)),
+        Margins = new PageMargins(
+            Length.FromTwips(1134), Length.FromTwips(1134),
+            Length.FromTwips(851), Length.FromTwips(357)),
+        HeaderDistance = Length.FromTwips(720),
+        FooterDistance = Length.FromTwips(488),
+    };
+
+    /// <summary>
+    /// A footer stated further from the edge than the bottom margin still lands at its stated distance.
+    /// </summary>
+    /// <remarks>
+    /// The rectangle's <em>bottom</em> is what the distance fixes and its top is what gives way. Growing
+    /// it downwards from the body's edge instead starts it past where the footer belongs, and a
+    /// nought-height one then lands there outright: measured against the reference on
+    /// <c>easa-form-1.docx</c>, LibreOffice ends the footer's text at 570.9 pt of a 595.35 pt page — the
+    /// stated 488 twips from the edge — and we drew it at 577.3.
+    /// </remarks>
+    [Fact]
+    public void AFooterStatedBelowTheBodyEdgeStillSitsAtItsStatedDistance()
+    {
+        DocRect area = CrossedFooter.FooterArea;
+
+        area.Bottom.ShouldBe(CrossedFooter.Size.Height - CrossedFooter.FooterDistance);
+        area.Height.ShouldBe(Length.Zero, "the margins reserve it nothing");
+        area.Y.ShouldBeLessThan(
+            CrossedFooter.Margins.Top + CrossedFooter.TextHeight,
+            "the body's own edge is lower than the footer's, which is the whole of the case");
+    }
+
+    /// <summary>
     /// A bottom-aligned flow rests its last line on the area's bottom even when it does not fit.
     /// </summary>
     /// <remarks>

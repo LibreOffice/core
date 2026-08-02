@@ -465,6 +465,11 @@ public sealed class Paginator
         PageGeometry pageFurnitureGeometry = page;
         bool pageIsSectionFirst = true;
 
+        // The geometry a continuous section is waiting for a fresh sheet to claim, or null when nothing is
+        // waiting. A continuous break cannot re-cut the sheet it lands on — see the break handling below —
+        // so its paper and margins are held here until the next page begins.
+        PageGeometry? deferredPage = null;
+
         // Called wherever a page's first content is decided: at the start, after each page is emitted, and
         // at a section break that finds the page still empty.
         void AdoptSection()
@@ -580,7 +585,29 @@ public sealed class Paginator
                 sectionIndex = blockSection;
                 geometry = resolved[sectionIndex].Section;
                 furnitureSet = resolved[sectionIndex].Furniture;
-                page = geometry.Page;
+
+                // A continuous break shares a sheet with the section above it, and a sheet has one paper
+                // size and one set of margins — so the new section's take effect on the *next* page, not
+                // part way down this one. The same argument the running head already follows a few lines
+                // above, and the same one Writer's model forces: page geometry lives on a page style,
+                // `SectionPropertyMap::CloseSectionGroup` gives a continuous section no page style of its
+                // own, and `InheritOrFinalizePageStyles` then hands it the previous section's
+                // (`sw/source/writerfilter/dmapper/PropertyMap.cxx`:1309-1323, 1722).
+                // Measured on `b050-19.docx`, whose one-paragraph first section is half-inch-margined and
+                // whose continuous second section is inch-margined: LibreOffice sets page one's text from
+                // 36 pt to 574 pt and pages two and three from 72 pt to 539 pt. Switching at the break put
+                // page one at 72 pt, which is a tenth of the measure lost on every line of it.
+                // Columns are the exception and change at once, because Writer *does* start a text section
+                // for them mid-page.
+                page = kind == SectionBreak.Continuous && !pageIsEmpty
+                    ? page with
+                    {
+                        Columns = geometry.Page.Columns,
+                        ColumnGap = geometry.Page.ColumnGap,
+                    }
+                    : geometry.Page;
+
+                deferredPage = kind == SectionBreak.Continuous && !pageIsEmpty ? geometry.Page : null;
                 sectionFirstPage = pages.Count;
                 pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
 
@@ -806,6 +833,14 @@ public sealed class Paginator
                     first: pageIsSectionFirst),
                 noteArea,
                 Separator(noteArea, body)));
+
+            // The sheet just written is the one the outgoing geometry belonged to; the next one is free to
+            // be cut the way the section that is now current asks for.
+            if (deferredPage is { } waiting)
+            {
+                page = waiting;
+                deferredPage = null;
+            }
 
             AdoptSection();
             pageNumber++;

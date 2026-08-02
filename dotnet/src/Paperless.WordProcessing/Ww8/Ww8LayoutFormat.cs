@@ -66,6 +66,40 @@ public readonly record struct Ww8LayoutFormat
     public int? SpaceAfter { get; init; }
 
     /// <summary>
+    /// The twips <c>sprmPFDyaBeforeAuto</c> and <c>sprmPFDyaAfterAuto</c> stand for.
+    /// </summary>
+    /// <remarks>
+    /// Fourteen points, and not a property of the paragraph: WW8 states auto-spacing as a flag and
+    /// LibreOffice substitutes a constant for it in <c>GetParagraphAutoSpace</c>
+    /// (<c>sw/source/filter/ww8/ww8par6.cxx:4609</c>) with the comment "Seems to be always 14points in
+    /// this case". It is the same number the DOCX path uses for <c>w:beforeAutospacing</c>, because it
+    /// is the same rule reached through a different spelling.
+    /// </remarks>
+    public const int HtmlAutoSpacingTwips = 280;
+
+    /// <summary>
+    /// What the same two sprms stand for once <c>fDontUseHTMLAutoSpacing</c> is set.
+    /// </summary>
+    /// <remarks>
+    /// Five points. The flag does not mean "no spacing" — it means the pre-HTML value, which is what
+    /// the other branch of <c>GetParagraphAutoSpace</c> returns.
+    /// </remarks>
+    public const int WordAutoSpacingTwips = 100;
+
+    /// <summary>
+    /// True when the space above came from <c>sprmPFDyaBeforeAuto</c> rather than being stated.
+    /// </summary>
+    /// <remarks>
+    /// Kept apart from <see cref="SpaceBefore"/> because the suppression rules ask how the margin was
+    /// arrived at, not what it is: LibreOffice zeroes an <em>auto</em> margin at a cell's top edge and on
+    /// the document's first paragraph, and leaves a stated one of the same size alone.
+    /// </remarks>
+    public bool? HasAutoSpaceBefore { get; init; }
+
+    /// <inheritdoc cref="HasAutoSpaceBefore"/>
+    public bool? HasAutoSpaceAfter { get; init; }
+
+    /// <summary>
     /// <c>sprmPDyaLine</c>'s <c>dyaLine</c>: the spacing, whose sign is its mode.
     /// </summary>
     /// <remarks>

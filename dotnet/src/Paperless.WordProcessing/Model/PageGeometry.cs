@@ -376,17 +376,27 @@ public sealed record PageGeometry
     /// </summary>
     /// <remarks>
     /// Measured from the page's <em>bottom</em> edge, because that is how a footer's distance is stated —
-    /// so its top depends on the page's height and not on the body's. It starts where the body's text area
-    /// ends, since the space between the two belongs to neither. Its height can be nought for the same
-    /// reason a header's can; see <see cref="HeaderArea"/>.
+    /// so it is the rectangle's <em>bottom</em> that <see cref="FooterDistance"/> fixes, and its top that
+    /// gives way. It reaches up to where the body's text area ends, since the space between the two
+    /// belongs to neither. Its height can be nought for the same reason a header's can; see
+    /// <see cref="HeaderArea"/>.
+    /// <para>
+    /// Anchoring the top instead is wrong in exactly the case a form runs into: a document may set
+    /// <c>w:footer</c> <em>larger</em> than <c>w:bottom</c> — <c>easa-form-1.docx</c> says 488 and 357 —
+    /// which puts the body's bottom edge below the footer's, so a rectangle grown downwards from the body
+    /// starts past the place the footer belongs and a nought-height one lands there outright. Measured
+    /// against the reference on that document: LibreOffice ends the footer's text at 570.9 pt of a
+    /// 595.35 pt page, which is the stated 488 twips from the edge, and anchoring the top drew it at
+    /// 577.3.
+    /// </para>
     /// </remarks>
     public DocRect FooterArea
     {
         get
         {
-            Length top = Margins.Top + TextHeight;
-            return new DocRect(
-                Margins.Left + Gutter, top, TextWidth, Floor(Size.Height - FooterDistance - top));
+            Length bottom = Size.Height - FooterDistance;
+            Length height = Floor(bottom - Margins.Top - TextHeight);
+            return new DocRect(Margins.Left + Gutter, bottom - height, TextWidth, height);
         }
     }
 
