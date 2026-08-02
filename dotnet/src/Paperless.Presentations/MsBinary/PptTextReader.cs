@@ -304,7 +304,12 @@ public static class PptTextReader
     /// the run does not state falls through to it, per outline level — the boldness of a title
     /// above all, which PowerPoint records once in the master rather than once per slide.
     /// </param>
-    public static List<ContentParagraph> ToParagraphs(PptTextRun run, PptStyleSheet? styles = null)
+    /// <param name="fonts">
+    /// The document's font collection, which says whether a bullet's face carries the symbol
+    /// character set — the difference between a filled circle and the letter sharing its code.
+    /// </param>
+    public static List<ContentParagraph> ToParagraphs(
+        PptTextRun run, PptStyleSheet? styles = null, PptFontTable? fonts = null)
     {
         ArgumentNullException.ThrowIfNull(run);
 
@@ -327,6 +332,9 @@ public static class PptTextReader
             bool bulleted = properties.HasBullet ?? level.HasBullet;
             char? marker = properties.BulletCharacter
                            ?? (level.BulletCharacter != 0 ? (char)level.BulletCharacter : null);
+            ushort markerFont = properties.States(StatesBulletFont)
+                ? properties.BulletFont
+                : level.BulletFont;
 
             ContentParagraph paragraph = new()
             {
@@ -334,7 +342,7 @@ public static class PptTextReader
                 // bullet from the master would otherwise report every line as a list item.
                 ListLevel = bulleted ? properties.Depth : null,
                 ListMarker = bulleted && marker is { } bullet
-                    ? OutlineNumbers.NormaliseBullet(bullet.ToString())
+                    ? OutlineNumbers.NormaliseBullet(Symbolised(bullet, fonts, markerFont).ToString())
                     : null,
             };
 
@@ -358,6 +366,45 @@ public static class PptTextReader
 
         return paragraphs;
     }
+
+    /// <summary>The mask bit a paragraph sets when it states its bullet's own face.</summary>
+    private const uint StatesBulletFont = 0x0000_0010;
+
+    /// <summary>
+    /// A bullet character read the way its own face means it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A bullet whose face carries the symbol character set is a glyph slot, not a
+    /// letter.</strong> PowerPoint stores Wingdings' filled circle as <c>0x6C</c>, which is the
+    /// letter <c>l</c> in every other face; drawing it as one puts a lower-case L at the head of
+    /// every bulleted line, which is what this reader used to do wherever the symbol font was not
+    /// installed. LibreOffice moves the low byte into the Private Use Area first —
+    /// <c>nBuChar &amp;= 0x00ff; nBuChar |= 0xf000;</c>
+    /// (<c>PPTNumberFormatCreator::GetNumberFormat</c>, <c>svdfppt.cxx:3767-3771</c>) — and then
+    /// resolves the absent face to OpenSymbol, whose slot there is a bullet.
+    /// </para>
+    /// <para>
+    /// Moving it into the Private Use Area is all that is done here, because
+    /// <see cref="OutlineNumbers.NormaliseBullet"/> already answers the second half the same way
+    /// for every family: a code point that means nothing outside one font becomes U+2022. The
+    /// alternative — carrying the Private Use Area code point through to the page as LibreOffice
+    /// does — would need the symbol face substituted as well, and would put a character no
+    /// consumer can interpret into extracted text.
+    /// </para>
+    /// <para>
+    /// The same recode is owed to <c>Ww8Numbering</c>, whose <c>Symbol</c> and <c>Wingdings</c>
+    /// bullets reach <see cref="OutlineNumbers.NormaliseBullet"/> by the same route and with the
+    /// same result; it is not done here because that file belongs to the word-processing path.
+    /// </para>
+    /// </remarks>
+    /// <param name="character">The bullet character the file states.</param>
+    /// <param name="fonts">The document's font collection, or null when none was read.</param>
+    /// <param name="font">The bullet's index into that collection.</param>
+    internal static char Symbolised(char character, PptFontTable? fonts, ushort font)
+        => fonts is not null && fonts.IsSymbol(font)
+            ? (char)(0xF000 | (character & 0x00FF))
+            : character;
 
     /// <summary>
     /// The paragraph properties covering the character at <paramref name="start"/>.

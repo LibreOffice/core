@@ -79,6 +79,21 @@ live one, so a stored reference of such a deck is a clock), and `NeedToImportIns
 that recolours itself re-imports the master's header and footer objects under its own scheme
 (`svdfppt.cxx:3125-3138`) where this draws them in the master's.
 
+**Done: the symbol recode a bullet's own face implies.** A bullet whose `FontEntityAtom` declares
+`lfCharSet == 2` is a glyph slot rather than a letter — Wingdings' filled circle is `0x6C`, the
+letter `l` everywhere else — so LibreOffice moves the low byte into the Private Use Area before
+doing anything with it (`svdfppt.cxx:3767-3771`) and then substitutes OpenSymbol for the missing
+face. `OutlineNumbers.NormaliseBullet` already answers the second half for every family, so only
+the move is done here. **The same recode is owed to `Ww8Numbering`**, whose `Symbol` and
+`Wingdings` bullets reach `NormaliseBullet` by exactly the same route; it was left alone because
+it belongs to the word-processing path.
+
+**Why it showed up as a word-count excess rather than as a wrong glyph.** `wc -w` in the POSIX
+locale counts a word only where it sees a printable byte, so a token made entirely of non-ASCII —
+LibreOffice's U+F06C bullet, or ours after this change — is invisible to it, while a literal `l`
+is a word. On `policy-pesentation.ppt` that was the whole of a 13.2% excess: 445 words against the
+reference's 393, exactly 52 bullets, now 393 against 393.
+
 ## Document model
 
 - [ ] Slides, layouts, masters, notes pages, handouts. **Slides are done**; a notes page and a

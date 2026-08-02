@@ -193,12 +193,20 @@ internal static class PptTextBody
             ? properties.BulletColour
             : level.BulletColour;
 
-        string text = OutlineNumbers.NormaliseBullet(character.ToString());
+        string text = OutlineNumbers.NormaliseBullet(
+            PptTextReader.Symbolised(character, fonts, font).ToString());
         if (text.Length == 0) return null;
+
+        // A symbol face's own name goes with its own code points, and both have just been given
+        // up: what is drawn is U+2022, which Wingdings has no mapping for at all. Asking for the
+        // paragraph's face instead is what makes the substitution land on a glyph — LibreOffice
+        // reaches the same place from the other side, keeping the code point and substituting
+        // OpenSymbol for the missing face.
+        string? typeface = fonts.IsSymbol(font) ? null : fonts[font];
 
         return new SlideMarker(
             text,
-            fonts[font],
+            typeface,
             height is > 0 and <= 400 ? height / 100.0 : 1.0,
             PptColour.ResolveText(colour, scheme));
     }
