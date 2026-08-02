@@ -185,7 +185,8 @@ public sealed partial class DocxLayoutSource
 
         if (definition.LevelText is [>= '\uE000' and <= '\uF8FF']) return (face, own);
 
-        string? family = Word.Attribute(Word.Child(definition.RunProperties, "rFonts"), "ascii");
+        string? family = WordParagraphFormats.SlotFamily(
+            Word.Child(definition.RunProperties, "rFonts"), _theme?.Fonts, "ascii", "asciiTheme");
         if (family is not { Length: > 0 }) return (face, own);
 
         WordTextStyle named = text with { FamilyName = family };

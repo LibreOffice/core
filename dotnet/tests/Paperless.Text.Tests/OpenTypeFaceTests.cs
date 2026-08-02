@@ -168,7 +168,7 @@ public class OpenTypeFaceTests
         // most visible ways two renderers diverge, and knowing which set was believed turns an
         // unexplained half-page offset into a one-line answer.
         metrics.Source.ShouldBeOneOf(
-            LineMetricSource.WindowsMetrics, LineMetricSource.TypographicMetrics);
+            LineMetricSource.HorizontalHeader, LineMetricSource.TypographicMetrics);
 
         metrics.Ascent.ShouldBeGreaterThan(0);
         metrics.Descent.ShouldBeGreaterThan(0);
@@ -176,17 +176,33 @@ public class OpenTypeFaceTests
         metrics.LineHeight.ShouldBeGreaterThan(carlito.UnitsPerEm);
     }
 
+    /// <summary>
+    /// A face with usable <c>hhea</c> metrics is measured from them, not from <c>OS/2</c>'s
+    /// Windows metrics, unless the typographic flag overrides both.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The received wisdom — and what this test asserted until it was checked — is that the
+    /// Windows metrics are the default whenever <c>OS/2</c> is present. They are not, and have not
+    /// been for years: <c>FontMetricData::ImplCalcLineSpacing</c> reaches them only when
+    /// <c>hhea</c> gave nothing, or for four named families in an <c>officecfg</c> exception list.
+    /// </para>
+    /// <para>
+    /// Measured rather than argued. IPAGothic states an <c>hhea</c> line box of exactly one em and
+    /// Windows metrics 7.6% larger; a paragraph set in it at 20pt renders with a 20.00pt line
+    /// advance in LibreOffice 24.2. Carlito, the face used here, states the same total either way,
+    /// which is precisely why believing the wrong rule went unnoticed for so long — so what this
+    /// pins is the <em>source</em>, which differs, rather than the height, which does not.
+    /// </para>
+    /// </remarks>
     [Fact]
-    public void TheTypoMetricsFlagDecidesWhichHalfOfOs2Wins()
+    public void TheHorizontalHeaderIsBelievedUnlessTheTypoMetricsFlagOverridesIt()
     {
         OpenTypeFace carlito = Require("Carlito-Regular.ttf");
         Os2Table os2 = carlito.Os2.ShouldNotBeNull();
 
         LineMetrics metrics = LineSpacing.Resolve(carlito);
 
-        // The precedence is the point: the Windows metrics by default, the typographic ones only when
-        // fsSelection bit 7 asks for them. Reading whichever field came first would be right for
-        // roughly half the fonts installed.
         if (os2.UseTypoMetrics)
         {
             metrics.Source.ShouldBe(LineMetricSource.TypographicMetrics);
@@ -195,9 +211,10 @@ public class OpenTypeFaceTests
         }
         else
         {
-            metrics.Source.ShouldBe(LineMetricSource.WindowsMetrics);
-            metrics.Ascent.ShouldBe(os2.WindowsAscent);
-            metrics.Descent.ShouldBe(os2.WindowsDescent);
+            metrics.Source.ShouldBe(LineMetricSource.HorizontalHeader);
+            metrics.Ascent.ShouldBe(carlito.Horizontal.Ascender);
+            metrics.Descent.ShouldBe(-carlito.Horizontal.Descender);
+            metrics.LineGap.ShouldBe(Math.Max(0, carlito.Horizontal.LineGap));
         }
     }
 

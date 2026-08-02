@@ -281,13 +281,16 @@ internal static class WordParagraphFormats
     /// the paragraph style and a character style comes out <em>off</em>. Here only the paragraph's own
     /// run properties are in play, which is what an unstyled run inherits.
     /// </remarks>
-    internal static WordTextStyle ResolveText(WordStyles styles, XElement? paragraphProperties)
+    internal static WordTextStyle ResolveText(
+        WordStyles styles,
+        XElement? paragraphProperties,
+        DrawingTheme? theme = null)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
         // A paragraph's mark carries its own run properties, and they are what a run with no properties
         // of its own inherits.
-        return ResolveRun(styles, paragraphProperties, Word.Child(paragraphProperties, "rPr"));
+        return ResolveRun(styles, paragraphProperties, Word.Child(paragraphProperties, "rPr"), theme);
     }
 
     /// <summary>
@@ -323,7 +326,8 @@ internal static class WordParagraphFormats
                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
         string? characterStyleId = Word.Attribute(Word.Child(runProperties, "rStyle"), "val");
 
-        WordProperty fonts = styles.ResolveRunProperty("rFonts", runProperties, styleId, characterStyleId);
+        List<XElement> fonts =
+            styles.RunPropertyLayers("rFonts", runProperties, styleId, characterStyleId);
         WordProperty size = styles.ResolveRunProperty("sz", runProperties, styleId, characterStyleId);
         WordProperty bold = styles.ResolveRunProperty("b", runProperties, styleId, characterStyleId);
         WordProperty italic = styles.ResolveRunProperty("i", runProperties, styleId, characterStyleId);
@@ -336,7 +340,7 @@ internal static class WordParagraphFormats
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
         return new WordTextStyle(
-            Family(fonts.Element),
+            Family(fonts, theme?.Fonts),
             resolvedSize,
             bold.IsOn ? 700 : 400,
             italic.IsOn,
@@ -617,17 +621,93 @@ internal static class WordParagraphFormats
     /// The family from <c>w:rFonts</c>, preferring the one the text is actually in.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// <c>w:rFonts</c> names up to four families at once — ASCII, high-ANSI, complex-script and East
     /// Asian — because a run can contain all four kinds of character. Latin text is the ASCII one, and
     /// <c>w:cs</c> or <c>w:eastAsia</c> would be the wrong choice for it; picking whichever attribute
     /// comes first would depend on the producer's attribute order.
+    /// </para>
+    /// <para>
+    /// The four are inherited independently, which is why this takes the layers rather than one
+    /// element. A run stating only <c>w:cs</c> — Word's way of setting a complex-script face, written
+    /// beside a <c>w:szCs</c> in three quarters of the documents in the corpus — still takes its Latin
+    /// family from its style. Reading only the innermost element leaves that run with no ASCII family
+    /// at all, so the search falls through to the complex-script one and sets ordinary Latin text in
+    /// it. The fallback order below is therefore a last resort for a run that genuinely names nothing
+    /// else, not the ordinary path.
+    /// </para>
+    /// <para>
+    /// Each of the four can be named <em>indirectly</em> instead, by a companion attribute pointing at
+    /// the theme's font scheme: <c>w:asciiTheme="minorHAnsi"</c> means "the theme's minor Latin face".
+    /// Word writes that form for every run of an unmodified Office document, so a reader that ignores
+    /// it falls all the way back to the <c>w:docDefaults</c> face — typically Times New Roman where the
+    /// theme says Calibri. That is not merely the wrong shapes: the substitutes for those two have
+    /// different vertical metrics (Liberation Serif's line box is 2355/2048 of the em, Carlito's is
+    /// 2500/2048), so every line comes out six per cent short and enough of them eventually cost a
+    /// page break. The theme attribute wins over its direct companion when both are present, which is
+    /// what Word does and what <c>DomainMapper::lcl_attribute</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx</c>:453) says out loud.
+    /// </para>
     /// </remarks>
-    private static string? Family(XElement? fonts)
+    private static string? Family(IReadOnlyList<XElement> layers, DrawingFontScheme? scheme)
     {
-        foreach (string attribute in (string[])["ascii", "hAnsi", "cs", "eastAsia"])
+        foreach ((string attribute, string themeAttribute) in Slots)
         {
-            if (Word.Attribute(fonts, attribute) is { Length: > 0 } name) return name;
+            foreach (XElement fonts in layers)
+            {
+                if (SlotFamily(fonts, scheme, attribute, themeAttribute) is { } name) return name;
+            }
         }
+
         return null;
     }
+
+    /// <summary>
+    /// The four scripts a <c>w:rFonts</c> can name, each with the attribute naming it indirectly.
+    /// </summary>
+    private static readonly (string Direct, string Theme)[] Slots =
+    [
+        ("ascii", "asciiTheme"),
+        ("hAnsi", "hAnsiTheme"),
+        ("cs", "cstheme"),
+        ("eastAsia", "eastAsiaTheme"),
+    ];
+
+    /// <summary>
+    /// One script's family from a <c>w:rFonts</c>, the indirect attribute beating the direct one.
+    /// </summary>
+    /// <param name="fonts">The <c>w:rFonts</c> element, or null.</param>
+    /// <param name="scheme">The theme's font scheme, or null when the document has no theme.</param>
+    /// <param name="direct">The attribute naming the family outright, such as <c>ascii</c>.</param>
+    /// <param name="themed">Its companion, such as <c>asciiTheme</c>.</param>
+    internal static string? SlotFamily(
+        XElement? fonts, DrawingFontScheme? scheme, string direct, string themed)
+    {
+        if (ThemeFace(scheme, Word.Attribute(fonts, themed)) is { Length: > 0 } resolved)
+        {
+            return resolved;
+        }
+
+        return Word.Attribute(fonts, direct) is { Length: > 0 } name ? name : null;
+    }
+
+    /// <summary>
+    /// The typeface one of <c>ST_Theme</c>'s eight names stands for, or null when there is no theme.
+    /// </summary>
+    /// <remarks>
+    /// The scheme holds one Latin face rather than separate ASCII and high-ANSI ones, so
+    /// <c>majorAscii</c> and <c>majorHAnsi</c> name the same thing — as they do in LibreOffice's
+    /// <c>resolveMajorMinorTypeFace</c> (<c>sw/source/writerfilter/dmapper/ThemeHandler.cxx</c>:323).
+    /// </remarks>
+    internal static string? ThemeFace(DrawingFontScheme? scheme, string? name) => name switch
+    {
+        null => null,
+        "majorAscii" or "majorHAnsi" => scheme?.ForReference("major", "latin"),
+        "majorEastAsia" => scheme?.ForReference("major", "ea"),
+        "majorBidi" => scheme?.ForReference("major", "cs"),
+        "minorAscii" or "minorHAnsi" => scheme?.ForReference("minor", "latin"),
+        "minorEastAsia" => scheme?.ForReference("minor", "ea"),
+        "minorBidi" => scheme?.ForReference("minor", "cs"),
+        _ => null,
+    };
 }

@@ -115,7 +115,12 @@ public sealed record WordCharacterFormat
             FontSize = size.IntegerValue is { } halfPoints and > 0
                 ? Length.FromPoints(halfPoints / 2.0)
                 : null,
-            FontName = Word.Attribute(Get("rFonts").Element, "ascii"),
+            // Every layer, not the innermost one: w:rFonts is inherited attribute by attribute, so
+            // a run naming only a complex-script face still has its style's Latin one.
+            FontName = LatinFamily(
+                styles.RunPropertyLayers(
+                    "rFonts", directRunProperties, paragraphStyleId, characterStyleId),
+                theme),
             Colour = WordThemeColour.Read(colour.Element, theme),
             Language = Get("lang").Value,
         };
@@ -123,5 +128,26 @@ public sealed record WordCharacterFormat
         WordProperty Get(string localName)
             => styles.ResolveRunProperty(
                 localName, directRunProperties, paragraphStyleId, characterStyleId);
+    }
+
+    /// <summary>
+    /// The Latin family the innermost layer to name one gives, or null when none does.
+    /// </summary>
+    /// <remarks>
+    /// Only the ASCII slot, unlike the layout path's search: this is reported as "the font", and a
+    /// document whose runs name only an East Asian face has no Latin font to report rather than an
+    /// East Asian one masquerading as one.
+    /// </remarks>
+    private static string? LatinFamily(List<XElement> layers, DrawingTheme? theme)
+    {
+        foreach (XElement fonts in layers)
+        {
+            if (WordParagraphFormats.SlotFamily(fonts, theme?.Fonts, "ascii", "asciiTheme") is { } name)
+            {
+                return name;
+            }
+        }
+
+        return null;
     }
 }
