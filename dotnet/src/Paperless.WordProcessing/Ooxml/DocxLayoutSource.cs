@@ -54,6 +54,9 @@ public sealed partial class DocxLayoutSource
     private readonly SystemFontResolver _fonts;
     private readonly Length _defaultTabInterval;
     private readonly int _compatibilityMode;
+
+    /// <summary>What <c>w:beforeAutospacing</c> and <c>w:afterAutospacing</c> stand for here.</summary>
+    private readonly Length _autoSpacing;
     private readonly DrawingTheme? _theme;
     private readonly Dictionary<(string? Family, int Weight, bool Italic), OpenTypeFace?> _faces = [];
     private readonly Dictionary<(string? Family, int Weight, bool Italic), FontReference> _references =
@@ -93,6 +96,9 @@ public sealed partial class DocxLayoutSource
         _fonts = fonts ?? new SystemFontResolver(SystemFontIndex.Build());
         _defaultTabInterval = TabInterval(settings);
         _compatibilityMode = CompatibilityMode(settings);
+        _autoSpacing = WordCompatibility.Read(settings).DoNotUseHtmlParagraphAutoSpacing
+            ? WordParagraphFormats.WordAutoSpacing
+            : WordParagraphFormats.HtmlAutoSpacing;
         _footnotes = footnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _endnotes = endnotes ?? new Dictionary<string, XElement>(StringComparer.Ordinal);
         _footnoteNumbering = NumberingIn(settings, "footnotePr", NoteNumbering.Footnotes);
@@ -209,7 +215,59 @@ public sealed partial class DocxLayoutSource
 
         List<PageBlock> blocks = [];
         Walk(element, blocks, depth: 0);
+        SuppressAutoSpacingInCell(blocks);
         return blocks;
+    }
+
+    /// <summary>
+    /// Drops the HTML auto margin at a cell's top and bottom edges.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>w:beforeAutospacing</c> means fourteen points in a body paragraph and <em>nothing</em> on the
+    /// first paragraph of a table cell; <c>w:afterAutospacing</c> likewise on the last. LibreOffice
+    /// applies both — the first in <c>DomainMapper_Impl::finishParagraph</c>
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:2458-2470</c>, where
+    /// <c>bFirstParagraphInCell</c> at matching table depth forces the margin to zero) and the second in
+    /// <c>ClearPreviousParagraph</c> (<c>:5457-5468</c>, called from <c>TableManager::closeCell</c>).
+    /// Without it every row of a table whose style carries the flag is fourteen points taller than the
+    /// document asks for, which on a form of thirty single-line rows is seven pages of invented height.
+    /// </para>
+    /// <para>
+    /// A <em>stated</em> <c>w:before</c> survives, which is why this asks how the margin was arrived at
+    /// rather than merely whether it is fourteen points: the suppression is of the auto rule, not of
+    /// paragraph spacing in cells.
+    /// </para>
+    /// <para>
+    /// The bottom rule spares a numbered paragraph, exactly as <c>ClearPreviousParagraph</c> does — it
+    /// reads the paragraph's numbering rules and leaves the margin alone when it has any.
+    /// </para>
+    /// <para>
+    /// <b>Not done:</b> the same <c>if</c> in <c>finishParagraph</c> also zeroes the top margin of the
+    /// first paragraph of a <em>shape</em> and of the first paragraph of the document's first section.
+    /// Both are the same rule and both are unimplemented here, because neither was measured — a cell is
+    /// where the corpus showed it, and the other two move the body flow, which is not free to change on
+    /// an argument from symmetry alone.
+    /// </para>
+    /// </remarks>
+    private void SuppressAutoSpacingInCell(List<PageBlock> blocks)
+    {
+        // Only a paragraph at the very edge is affected; a nested table there shields whatever follows,
+        // because the rule is about the cell's own first and last paragraph.
+        if (blocks.Count > 0 && blocks[0] is PageParagraph first
+            && WordParagraphFormats.IsAutoSpaced(
+                _styles, Word.Child(first.Source as XElement, "pPr"), _tableStyle, before: true))
+        {
+            blocks[0] = first with { Format = first.Format with { SpaceBefore = Length.Zero } };
+        }
+
+        if (blocks.Count > 0 && blocks[^1] is PageParagraph last
+            && last.Label is null
+            && WordParagraphFormats.IsAutoSpaced(
+                _styles, Word.Child(last.Source as XElement, "pPr"), _tableStyle, before: false))
+        {
+            blocks[^1] = last with { Format = last.Format with { SpaceAfter = Length.Zero } };
+        }
     }
 
     /// <summary>
@@ -255,6 +313,17 @@ public sealed partial class DocxLayoutSource
     /// parameter somebody could pass wrongly. Only the table's own left edge depends on it.
     /// </remarks>
     private int _tableDepth;
+
+    /// <summary>
+    /// The <c>w:pPr</c> chain of the table style enclosing the paragraph being read, or null in the body.
+    /// </summary>
+    /// <remarks>
+    /// A field rather than a parameter because a cell's content is read by the same recursive walk the
+    /// body uses, and threading it through every overload would touch a dozen signatures for one value
+    /// that changes only when a table is entered. Saved and restored around each table, so a nested table
+    /// takes its own style and the outer one resumes after it.
+    /// </remarks>
+    private IReadOnlyList<XElement>? _tableStyle;
 
     /// <summary>
     /// Walks the body's block-level children.
@@ -317,7 +386,7 @@ public sealed partial class DocxLayoutSource
     {
         XElement? properties = Word.Child(element, "pPr");
 
-        WordTextStyle text = WordParagraphFormats.ResolveText(_styles, properties);
+        WordTextStyle text = WordParagraphFormats.ResolveText(_styles, properties, _theme);
         OpenTypeFace? face = Face(text);
         if (face is null) return null;
 
@@ -342,25 +411,33 @@ public sealed partial class DocxLayoutSource
         _endnoteNumber += walker.EndnotesSeen;
 
         ParagraphFormat format =
-            WordParagraphFormats.Resolve(_styles, properties, _defaultTabInterval);
+            WordParagraphFormats.Resolve(
+                _styles, properties, _defaultTabInterval, _autoSpacing, _tableStyle);
 
         // After the walk, because reading a note body or a text box re-enters this method and a list
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.
         (PageLabel? label, format) = ListFormatting(properties, format, text, face);
 
+        // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
+        // preserves are the ones the notes and frames below were recorded against.
+        List<PageRun> runs = RunsOf(walker.Ranges, properties, text, face);
+        string mapped = CaseMapping.Apply(walker.Text, runs);
+
         PageParagraph read = new()
         {
             SectionIndex = _sectionIndex,
-            Text = walker.Text,
+            Text = mapped,
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
-            Format = breaksPage ? format with { StartsNewPage = true } : format,
+            Format = breaksPage || walker.BreaksPageHere
+                ? format with { StartsNewPage = true }
+                : format,
             Label = label,
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
-            Runs = RunsOf(walker.Ranges, properties, text, face),
+            Runs = runs,
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames),
             Source = element,
@@ -527,7 +604,10 @@ public sealed partial class DocxLayoutSource
                 || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
-                || rise != Length.Zero)
+                || rise != Length.Zero
+                // A case map has to survive the uniform-paragraph shortcut: it is the one property here
+                // that changes the *characters*, so dropping the runs would draw the text as stored.
+                || style.CaseMap != PageCaseMap.None)
             {
                 varies = true;
             }
@@ -540,7 +620,8 @@ public sealed partial class DocxLayoutSource
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
-                rise));
+                rise,
+                style.CaseMap));
         }
 
         return varies ? runs : [];
@@ -689,14 +770,26 @@ public sealed partial class DocxLayoutSource
         /// <summary>How many endnotes it cited.</summary>
         internal int EndnotesSeen { get; private set; }
 
-        /// <summary>True when a <c>w:br w:type="page"</c> was passed, so the next paragraph starts a page.</summary>
+        /// <summary>Where in the text the last <c>w:br w:type="page"</c> fell, or −1 for none.</summary>
+        private int _pageBreakAt = -1;
+
+        /// <summary>
+        /// True when a <c>w:br w:type="page"</c> ended the paragraph, so the <em>next</em> one starts a page.
+        /// </summary>
         /// <remarks>
-        /// The next one and not this one, which is the whole of why it is reported rather than acted on:
-        /// a page break is written at the point in the text where the page ends, and the layout model
-        /// says "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c>
-        /// has, and the same shape the DOC and RTF forms of a document state directly.
+        /// A page break is written at the point in the text where the page ends, and the layout model says
+        /// "this paragraph starts a page" — the same shape Writer's <c>BreakType_PAGE_BEFORE</c> has, and
+        /// the same shape the DOC and RTF forms state directly. Which paragraph it lands on is decided by
+        /// what follows the break rather than by the paragraph boundary: LibreOffice defers the break and
+        /// applies it at the next run of text (<c>DomainMapper::lcl_utext</c>, which calls
+        /// <c>deferBreak(PAGE_BREAK)</c> for U+000C and inserts <c>BreakType_PAGE_BEFORE</c> into the
+        /// <em>current</em> paragraph context on the next text it sees). So a break with text after it in
+        /// the same paragraph breaks before that paragraph, and only one with nothing after it carries over.
         /// </remarks>
-        internal bool BreaksPage { get; private set; }
+        internal bool BreaksPage => _pageBreakAt >= 0 && _pageBreakAt >= _builder.Length;
+
+        /// <summary>True when the break fell before this paragraph's own text, so this one starts a page.</summary>
+        internal bool BreaksPageHere => _pageBreakAt >= 0 && _pageBreakAt < _builder.Length;
 
         private bool _inInstruction;
 
@@ -766,7 +859,7 @@ public sealed partial class DocxLayoutSource
                     // and then *defers* it, applying it to the paragraph that follows as
                     // `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`).
                     case "br" when !_inInstruction:
-                        if (Word.Attribute(child, "type") == "page") BreaksPage = true;
+                        if (Word.Attribute(child, "type") == "page") _pageBreakAt = _builder.Length;
                         else Emit(LineSeparator.ToString());
                         break;
 

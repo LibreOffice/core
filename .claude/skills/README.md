@@ -9,6 +9,7 @@ headless LibreOffice as the reference implementation.
 | [`render-comparison`](render-comparison/) | Comparing a Paperless rendering against the reference, and working out *why* it differs. |
 | [`extraction-comparison`](extraction-comparison/) | Comparing extracted text. Also the right first step for a visual bug — parsing bugs are far cheaper to find in text than in pixels. |
 | [`paperless-corpus`](paperless-corpus/) | Building or curating test documents. |
+| [`corpus-batches`](corpus-batches/) | Driving the 541-document sample corpus to parity, batch by batch — the ordering, the regression rule, and how to dispatch parallel agents across the three tracks. |
 
 ## Start here
 
@@ -39,6 +40,10 @@ verified against LibreOffice 24.2.7.2 on real files.
 | `render-comparison/scripts/compare-images.py` | Page images → metrics, diagnosis, diff images |
 | `extraction-comparison/scripts/compare-text.py` | Text → similarity, first divergence, codepoint diagnostics |
 | `paperless-corpus/scripts/make-corpus.sh` | Generates a test corpus across all 17 formats |
+| `corpus-batches/scripts/render-corpus.sh` | Renders a whole corpus with LibreOffice — parallel, resumable |
+| `corpus-batches/scripts/pdf-complexity.py` | Scores what each rendered PDF demands of a renderer |
+| `corpus-batches/scripts/make-batches.py` | Orders a corpus by that score and cuts it into per-family batches |
+| `corpus-batches/scripts/batch-check.sh` | Renders a batch range both ways and gates on whether they agree |
 
 ## Two facts worth knowing before you start
 

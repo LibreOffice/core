@@ -162,7 +162,8 @@ public static partial class SlideTextLayout
         foreach (SlideParagraph paragraph in body.Paragraphs)
         {
             Block? block = Measure(
-                paragraph, body, width, fonts, scaling, fontIndependentLineSpacing);
+                paragraph, body, width, fonts, scaling, fontIndependentLineSpacing,
+                body.Wraps ? null : available);
             if (block is null) continue;
 
             total += block.Height;
@@ -215,6 +216,44 @@ public static partial class SlideTextLayout
     /// <c>(markerAscent − markerDescent)/2</c> is 106.5 for a 12.6 pt marker in both files.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// A line re-aligned against the shape's real width, for a body that does not wrap.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>wrap="none"</c> body is laid out at an effectively unbounded width, because that is
+    /// what keeps an unwrapped label on the one line its author saw. The width used for breaking
+    /// must not also be the width used for <em>aligning</em>: a centred paragraph measured against
+    /// two billion EMUs is offset by half of it, which is a mile off the right-hand edge of the
+    /// page. Measured on <c>SRDMG(16)024_60 GHz onboard airplanes.pptx</c>, whose layout carries a
+    /// centred, unwrapped strapline: six words lost from all 27 pages.
+    /// </para>
+    /// <para>
+    /// The offset is allowed to go <em>negative</em>, unlike the wrapping case where a line wider
+    /// than its stretch starts at the left edge. An unwrapped shape is one Impress gives
+    /// <c>TextAutoGrowWidth</c>, so it widens about its own centre and its text overhangs both
+    /// edges equally: the reference draws that strapline from 519.00 pt to 708.32 pt in a box
+    /// running 520.90 to 706.50 — 1.9 pt proud at each end, which is exactly half the excess.
+    /// </para>
+    /// </remarks>
+    private static LineBox Realigned(
+        LineBox box, ParagraphFormat format, Length? alignAgainst, bool isFirstLine)
+    {
+        if (alignAgainst is not { } width) return box;
+
+        Length start = format.LineStart(isFirstLine);
+        Length slack = width - start - box.Line.Width;
+
+        Length offset = format.Alignment switch
+        {
+            TextAlignment.Centre => Length.FromEmu(slack.Emu / 2),
+            TextAlignment.End => slack,
+            _ => Length.Zero,
+        };
+
+        return box with { Left = start + offset };
+    }
+
     private static void EmitMarker(
         List<PlacedGlyphRun> placed,
         Block block,
@@ -223,25 +262,15 @@ public static partial class SlideTextLayout
         Length top,
         SlideFonts fonts)
     {
-        if (block.Paragraph.Marker is not { } marker) return;
-        if (marker.Text.Length == 0) return;
-        if (block.Paragraph.Runs.Count == 0) return;
+        if (Shaped(block.Paragraph, block.Scaling, fonts) is not
+            { Face: { } face, Shaped: { } shaped } marked)
+        {
+            return;
+        }
 
+        SlideMarker marker = marked.Marker;
         SlideTextRun first = block.Paragraph.Runs[0];
-        (OpenTypeFace? face, FontReference? reference) = fonts.Resolve(
-            marker.Typeface ?? first.Typeface, first.Weight, first.IsItalic);
-
-        if (face is null) return;
-
-        // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
-        // bullet left at its authored size on a node scaled to a third overwhelms its own line.
-        Length runSize = block.Scaling.Scaled(first.Size);
-        Length size = marker.Scale is > 0 and not 1.0
-            ? Length.FromEmu((long)Math.Round(runSize.Emu * marker.Scale))
-            : runSize;
-
-        ShapedText shaped = TextShaper.Default.Shape(face, marker.Text, default);
-        if (shaped.Glyphs.Count == 0) return;
+        Length size = marked.Size;
 
         Length pen = areaLeft + block.Paragraph.StartIndent + block.Paragraph.FirstLineIndent;
 
@@ -260,9 +289,85 @@ public static partial class SlideTextLayout
         }
 
         placed.Add(new PlacedGlyphRun(
-            Build(shaped, marker.Text, size, reference ?? Reference(face),
+            Build(shaped, marker.Text, size, marked.Reference ?? Reference(face),
                   new DocPoint(pen, baseline), Length.Zero),
             marker.Colour ?? first.Colour));
+    }
+
+    /// <summary>
+    /// A paragraph's marker shaped and sized, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// Shared by the placement and by the width the first line has to clear, so the two cannot
+    /// disagree about how wide the bullet is — which would put the text a fraction of a point
+    /// inside it or a fraction clear of it on every bulleted line in the deck.
+    /// </remarks>
+    private static MarkedParagraph? Shaped(
+        SlideParagraph paragraph, Scaling scaling, SlideFonts fonts)
+    {
+        if (paragraph.Marker is not { } marker) return null;
+        if (marker.Text.Length == 0) return null;
+        if (paragraph.Runs.Count == 0) return null;
+
+        SlideTextRun first = paragraph.Runs[0];
+        (OpenTypeFace? face, FontReference? reference) = fonts.Resolve(
+            marker.Typeface ?? first.Typeface, first.Weight, first.IsItalic);
+
+        if (face is null) return null;
+
+        // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
+        // bullet left at its authored size on a node scaled to a third overwhelms its own line.
+        Length runSize = scaling.Scaled(first.Size);
+        Length size = marker.Scale is > 0 and not 1.0
+            ? Length.FromEmu((long)Math.Round(runSize.Emu * marker.Scale))
+            : runSize;
+
+        ShapedText shaped = TextShaper.Default.Shape(face, marker.Text, default);
+        return shaped.Glyphs.Count == 0
+            ? null
+            : new MarkedParagraph(marker, face, reference, size, shaped);
+    }
+
+    /// <summary>A paragraph's marker, resolved once for both the width and the placement.</summary>
+    private readonly record struct MarkedParagraph(
+        SlideMarker Marker,
+        OpenTypeFace? Face,
+        FontReference? Reference,
+        Length Size,
+        ShapedText? Shaped);
+
+    /// <summary>
+    /// How far the marker reaches past the paragraph's left indent, which its first line clears.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A bullet claims its own width and text never starts inside it.</strong> EditEngine
+    /// records the bullet area's right edge on the paragraph portion and then, for the first line
+    /// only, takes <c>nStartX = max(textLeft + firstLineOffset, bulletX)</c>
+    /// (<c>editeng/source/editeng/impedit3.cxx:846-851</c>, over the <c>BulletX</c> set at
+    /// <c>:798-802</c>). A hanging indent wide enough for the marker therefore decides the
+    /// position, and one too narrow — or absent, which is what a binary PowerPoint outline
+    /// normally has, both offsets zero — is overridden by the marker's own advance.
+    /// </para>
+    /// <para>
+    /// Measured on <c>WC_Update-Aug03.ppt</c>, whose body paragraphs state <c>textOfs</c> 216 and
+    /// <c>bulletOfs</c> 0 on the master and nothing of their own: LibreOffice draws the bullet at
+    /// 49.10 pt and the line's first word at 62.87, which is the bullet's right edge at 57.14 plus
+    /// the leading space the author typed. Without this rule the text starts at the bullet's own
+    /// pen and the two overlap — legible on the page, and one word short per line to anything
+    /// reading the text back, because the bullet and the first word extract as one token.
+    /// </para>
+    /// </remarks>
+    private static Length MarkerReach(
+        SlideParagraph paragraph, Scaling scaling, SlideFonts fonts)
+    {
+        if (Shaped(paragraph, scaling, fonts) is not { Shaped: { } shaped } marked)
+            return Length.Zero;
+
+        // Never negative: the marker's right edge only ever pushes the first line further right,
+        // and a hanging indent wider than the marker leaves the line where the file put it.
+        Length reach = paragraph.FirstLineIndent + shaped.Width(marked.Size);
+        return reach > Length.Zero ? reach : Length.Zero;
     }
 
     /// <summary>
@@ -279,7 +384,8 @@ public static partial class SlideTextLayout
         Length width,
         SlideFonts fonts,
         Scaling scaling,
-        bool fontIndependentLineSpacing)
+        bool fontIndependentLineSpacing,
+        Length? alignAgainst = null)
     {
         List<FormattedRun> runs = [];
         List<RunStyle> styles = [];
@@ -310,7 +416,9 @@ public static partial class SlideTextLayout
         {
             Alignment = paragraph.Alignment,
             StartIndent = paragraph.StartIndent,
-            FirstLineIndent = paragraph.Marker is null ? paragraph.FirstLineIndent : Length.Zero,
+            FirstLineIndent = paragraph.Marker is null
+                ? paragraph.FirstLineIndent
+                : MarkerReach(paragraph, scaling, fonts),
             LineSpacing = paragraph.LineSpacing,
         };
 
@@ -320,8 +428,11 @@ public static partial class SlideTextLayout
             measured, format, width, paragraph.Language);
 
         List<PlacedLine> lines = [];
-        foreach (LineBox box in laid.Lines)
+        bool firstLine = true;
+        foreach (LineBox unaligned in laid.Lines)
         {
+            LineBox box = Realigned(unaligned, format, alignAgainst, firstLine);
+            firstLine = false;
             if (!fontIndependentLineSpacing)
             {
                 // The face's own metrics — but its ascent and descent only, with no external

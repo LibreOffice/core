@@ -27,6 +27,9 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// <em>height</em>, which is not known until the face has been loaded — see
 /// <see cref="Layout.Escapement"/>.
 /// </param>
+/// <param name="CaseMap">
+/// The case the text is drawn in, from <c>fo:text-transform</c> and <c>fo:font-variant</c>.
+/// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
@@ -34,7 +37,8 @@ public readonly record struct OdfTextStyle(
     bool IsItalic,
     string? Language,
     Colour? Colour = null,
-    Layout.Escapement Escapement = default)
+    Layout.Escapement Escapement = default,
+    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -161,7 +165,35 @@ internal static class OdfParagraphFormats
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "language").Value,
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
             Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
-            EscapementIn(styles, cascade));
+            EscapementIn(styles, cascade),
+            CaseMapIn(styles, cascade));
+    }
+
+    /// <summary>
+    /// The case the cascade draws the text in.
+    /// </summary>
+    /// <remarks>
+    /// ODF splits across two attributes what OOXML and WW8 each state as two toggles of one item.
+    /// <c>fo:text-transform="uppercase"</c> is full capitals and <c>fo:font-variant="small-caps"</c> is
+    /// small ones, and LibreOffice folds both into the single <c>SvxCaseMapItem</c>
+    /// (<c>xmloff/source/style/cdouthdl.cxx</c> and its neighbours), so a document setting both gets one
+    /// answer. <c>lowercase</c> and <c>capitalize</c> are the other two <c>fo:text-transform</c> values and
+    /// are deliberately not mapped: no reader in this tree produces them, so honouring them here would be a
+    /// path only ODF could reach and only ODF could test.
+    /// </remarks>
+    private static Layout.PageCaseMap CaseMapIn(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        if (Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "text-transform").Value
+            is "uppercase")
+        {
+            return Layout.PageCaseMap.Uppercase;
+        }
+
+        return Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-variant").Value
+            is "small-caps"
+            ? Layout.PageCaseMap.SmallCaps
+            : Layout.PageCaseMap.None;
     }
 
     /// <summary>

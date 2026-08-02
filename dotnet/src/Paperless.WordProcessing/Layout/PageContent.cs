@@ -166,6 +166,17 @@ public sealed record PageParagraph : PageBlock
     public bool HasRuns => Runs.Count > 0;
 
     /// <summary>
+    /// The device grid the paragraph's fonts are measured through, or null to measure them exactly.
+    /// </summary>
+    /// <remarks>
+    /// Null for every document but the few that ask to be laid out against a printer rather than against a
+    /// virtual device — see <see cref="MetricGrid"/>. Carried on the paragraph rather than passed down the
+    /// layout call chain because a header, a table cell and a text box all need the same answer and all
+    /// reach the layouter by different routes; the reader that knows the document's answer sets it once.
+    /// </remarks>
+    public MetricGrid? Metrics { get; init; }
+
+    /// <summary>
     /// The direction its bidi resolution takes as its base.
     /// </summary>
     /// <remarks>
@@ -262,7 +273,7 @@ public sealed record PageParagraph : PageBlock
             runs.Add(new FormattedRun(0, Text.Length, Face, EmSize, Shaping));
         }
 
-        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects);
+        return MeasuredParagraph.Measure(Text, runs, shaper: null, Itemisation, InlineObjects, Metrics);
     }
 }
 
@@ -366,6 +377,16 @@ public sealed record PageNote
 /// the smaller <paramref name="EmSize"/> that goes with it — the two are independent, and a document can
 /// raise text without shrinking it.
 /// </param>
+/// <param name="CaseMap">
+/// The case the run's text is drawn in, which is not the case it is stored in — <c>w:caps</c>,
+/// <c>w:smallCaps</c> and their counterparts in the other three formats. Resolved away by
+/// <see cref="CaseMapping.Apply"/> before the paragraph is measured, so nothing downstream of a reader
+/// ever sees a value other than <see cref="PageCaseMap.None"/>.
+/// </param>
+/// <param name="MetricEmSize">
+/// The size the run's line metrics are taken at, or zero for <paramref name="EmSize"/>. Set only by the
+/// small-capitals split; see <see cref="FormattedRun.MetricEmSize"/> for why the two sizes differ.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -374,7 +395,9 @@ public readonly record struct PageRun(
     FontReference? Font = null,
     Colour Colour = default,
     ShapingOptions Shaping = default,
-    Length Rise = default)
+    Length Rise = default,
+    PageCaseMap CaseMap = PageCaseMap.None,
+    Length MetricEmSize = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -387,7 +410,7 @@ public readonly record struct PageRun(
     public Colour EffectiveColour => Colour.A == 0 ? Core.Graphics.Colour.Black : Colour;
 
     /// <summary>The measurement half of this run.</summary>
-    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping);
+    public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping, MetricEmSize);
 }
 
 /// <summary>
@@ -457,6 +480,20 @@ public sealed record PlacedFlow
 
     /// <summary>Where the flow sits on the page.</summary>
     public required DocRect Area { get; init; }
+
+    /// <summary>
+    /// How far the flow advanced in all — the <em>last</em> block's own lower spacing included.
+    /// </summary>
+    /// <remarks>
+    /// Different from where the ink stops, which is what <see cref="FlowLayouter.Extent"/> reports, and
+    /// the difference is a table cell's whole point. Writer's
+    /// <c>SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell</c> adds the last frame's lower spacing to the
+    /// cell under the <c>AddParaSpacingToTableCells</c> setting, which both the DOC and the DOCX
+    /// importers switch on — so in a Word document every cell is as tall as its content plus the space
+    /// after its final paragraph. Sizing rows from the ink instead makes each one short by that spacing,
+    /// which on a long table is many pages.
+    /// </remarks>
+    public Length Advance { get; init; }
 
     /// <summary>True when nothing was laid out.</summary>
     public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;

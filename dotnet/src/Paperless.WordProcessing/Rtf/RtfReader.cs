@@ -220,6 +220,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 MinHeight = row.MinHeight,
                 HasExactHeight = row.HasExactHeight,
                 IsHeader = row.IsHeader,
+                CanSplit = row.CanSplit,
             });
         }
 
@@ -329,9 +330,13 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             FontReference? font = fonts.Reference(
                 paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
 
+            // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
+            // preserves are the ones the notes and frames below were recorded against.
+            List<PageRun> runs = RunsOf(fonts, paragraph, face);
+
             paragraphs.Add(new PageParagraph
             {
-                Text = paragraph.Text,
+                Text = CaseMapping.Apply(paragraph.Text, runs),
                 Face = face,
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
@@ -340,7 +345,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
                 Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
-                Runs = RunsOf(fonts, paragraph, face),
+                Runs = runs,
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames),
             });
@@ -584,7 +589,10 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 || size != paragraph.Size
                 || run.Colour != paragraph.Colour
                 || run.Language != paragraph.Language
-                || rise != Core.Units.Length.Zero)
+                || rise != Core.Units.Length.Zero
+                // A case map has to survive the uniform-paragraph shortcut: it is the one property here
+                // that changes the *characters*, so dropping the runs would draw the text as stored.
+                || run.CaseMap != PageCaseMap.None)
             {
                 varies = true;
             }
@@ -597,7 +605,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
                 run.Colour ?? paragraph.Colour ?? Colour.Black,
                 new Text.Shaping.ShapingOptions(Language: run.Language),
-                rise));
+                rise,
+                run.CaseMap));
         }
 
         return varies ? runs : [];

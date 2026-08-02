@@ -85,6 +85,54 @@ public static class OoxmlMetadata
         };
     }
 
+    /// <summary>
+    /// Whether Office 2007 wrote this package, which changes what an unstated setting means.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Office 2007 wrote the first OOXML files and it left out settings later versions state
+    /// explicitly, so a great many defaults in the format are "what 2007 meant by silence" for
+    /// a 2007 file and "what the schema says" for everything else. LibreOffice carries the
+    /// distinction as <c>XmlFilterBase::isMSO2007Document()</c> and consults it at some seventy
+    /// places, almost all of them in the chart reader
+    /// (<c>oox/source/core/xmlfilterbase.cxx:240-264</c>).
+    /// </para>
+    /// <para>
+    /// The test is the same one LibreOffice makes: the generator — <c>app.xml</c>'s
+    /// <c>Application</c> — begins with "Microsoft", <em>and</em> <c>AppVersion</c> begins with
+    /// "12.". Version 12 is Office 2007; 14, 15 and 16 are 2010, 2013 and 2016. Both halves
+    /// matter, because a third-party producer that copies an <c>AppVersion</c> is not Office
+    /// and Office 2010 is not Office 2007.
+    /// </para>
+    /// </remarks>
+    /// <param name="package">The package to inspect.</param>
+    public static bool IsOffice2007(OpcPackage package)
+    {
+        ArgumentNullException.ThrowIfNull(package);
+
+        XElement? app = LoadByRelationship(package, ExtendedPropertiesRelationship, "docProps/app.xml");
+        return IsOffice2007(app);
+    }
+
+    /// <summary>
+    /// Whether an already-loaded <c>docProps/app.xml</c> says Office 2007 wrote the package.
+    /// </summary>
+    /// <param name="app">The <c>Properties</c> root of the extended-properties part.</param>
+    public static bool IsOffice2007(XElement? app)
+    {
+        if (app is null) return false;
+
+        string? generator = Text(app, ExtendedProperties, "Application");
+        if (generator is null
+            || !generator.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        string? version = Text(app, ExtendedProperties, "AppVersion");
+        return version is not null && version.StartsWith("12.", StringComparison.Ordinal);
+    }
+
     private static DocumentStatistics? ReadStatistics(XElement? app, DocumentFamily family)
     {
         if (app is null) return null;

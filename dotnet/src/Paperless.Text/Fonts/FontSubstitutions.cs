@@ -1,6 +1,33 @@
 namespace Paperless.Text.Fonts;
 
 /// <summary>
+/// The shape LibreOffice files a family under, from its <c>FontType</c> in <c>VCL.xcu</c>.
+/// </summary>
+/// <remarks>
+/// What a substitution falls back to once the named chain has failed. The distinction is coarse on
+/// purpose — it is the same one the configuration draws, and it is the one that survives not having
+/// the requested face: a grotesque stands in for a grotesque, and a monospaced request keeps its
+/// columns.
+/// </remarks>
+public enum FontFamilyClass
+{
+    /// <summary>The table names no shape for this family, or has never heard of it.</summary>
+    Unknown = 0,
+
+    /// <summary>A grotesque: <c>Normal,SansSerif</c>.</summary>
+    SansSerif,
+
+    /// <summary>A roman: <c>Normal,Serif</c>.</summary>
+    Serif,
+
+    /// <summary>A monospaced face: <c>Normal,Fixed</c>.</summary>
+    Fixed,
+
+    /// <summary>A pi or dingbat face: <c>Symbol,Special</c>.</summary>
+    Symbol,
+}
+
+/// <summary>
 /// LibreOffice's own font substitution table: what it renders when a requested font is absent.
 /// </summary>
 /// <remarks>
@@ -70,6 +97,42 @@ public static partial class FontSubstitutions
     /// </remarks>
     public static IReadOnlyList<string> ChainFor(string? familyName)
         => Chains.TryGetValue(Normalise(familyName), out string[]? chain) ? chain : [];
+
+    /// <summary>
+    /// The shape LibreOffice files a family under, or <see cref="FontFamilyClass.Unknown"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The half of the table that decides what a substitution does when <em>nothing</em> in the
+    /// chain turned out to be installed — which on a typical Linux box is the common case rather
+    /// than the exception, because the chains are full of Microsoft and Agfa faces that are not
+    /// there. Tahoma's chain, for instance, names fourteen faces and a machine carrying only the
+    /// Liberation and DejaVu families has none of them.
+    /// </para>
+    /// <para>
+    /// It is worth reading from the table rather than guessing from the name because the guess is
+    /// wrong for precisely the families that matter. Nothing in the strings "Tahoma", "Verdana" or
+    /// "Segoe UI" says grotesque, so a name-based heuristic files all three under roman and renders
+    /// a sans-serif document in a serif face.
+    /// </para>
+    /// </remarks>
+    public static FontFamilyClass ClassOf(string? familyName)
+        => Classes.TryGetValue(Normalise(familyName), out FontFamilyClass kind)
+            ? kind
+            : FontFamilyClass.Unknown;
+
+    /// <summary>
+    /// The body-text faces LibreOffice falls back through when a document names no family at all.
+    /// </summary>
+    /// <remarks>
+    /// From <c>DefaultFonts</c>/<c>LATIN_TEXT</c> rather than from <c>FontSubstitutions</c>, because
+    /// they answer different questions. A request for a face nobody has installed is a substitution;
+    /// a request for nothing is the default template speaking, and the two have different answers —
+    /// the substitution path ends at fontconfig's generic sans, while this one is a serif list headed
+    /// by Liberation Serif. Sending blank requests down the substitution path sets every document
+    /// that specifies no font in the wrong shape at once.
+    /// </remarks>
+    public static IReadOnlyList<string> DefaultLatinTextChain => LatinTextDefaultChain;
 
     /// <summary>
     /// The Microsoft font a free face stands in for, or null when the table names none.

@@ -79,6 +79,7 @@ public sealed partial class RtfDocumentReader
         table.CellDefinitions.Clear();
         table.RowLeftEdge = 0;
         table.RowIsHeader = false;
+        table.RowIsKeptTogether = false;
         table.RowHalfGap = null;
         table.RowHeight = 0;
         Array.Clear(table.RowPadding);
@@ -301,6 +302,7 @@ public sealed partial class RtfDocumentReader
             Index = table.TableRows.Count,
             LeftEdge = table.RowLeftEdge,
             IsHeader = table.RowIsHeader,
+            IsKeptTogether = table.RowIsKeptTogether,
             Height = table.RowHeight,
         };
         row.Cells.AddRange(table.RowCells);
@@ -587,7 +589,8 @@ public sealed partial class RtfDocumentReader
             }
 
             layoutRows.Add(new RtfLayoutRow(
-                cells, Length.FromTwips(Math.Abs(row.Height)), row.IsHeader, row.Height < 0));
+                cells, Length.FromTwips(Math.Abs(row.Height)), row.IsHeader, row.Height < 0,
+                CanSplit: !row.IsKeptTogether));
         }
 
         // A nested table's indent is relative to the enclosing cell's text, which it cannot start to the

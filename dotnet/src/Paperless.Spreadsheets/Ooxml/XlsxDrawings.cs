@@ -237,7 +237,9 @@ internal static class XlsxDrawings
         XElement? chartSpace;
         using (Stream content = chartPart.Open()) chartSpace = OoxmlXml.TryLoad(content, out _);
 
-        return chartSpace is null ? null : DrawingChartPlot.Read(chartSpace, theme);
+        return chartSpace is null
+            ? null
+            : DrawingChartPlot.Read(chartSpace, theme, OoxmlMetadata.IsOffice2007(package));
     }
 
     /// <summary>

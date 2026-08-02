@@ -138,10 +138,15 @@ internal sealed class FrameResolution
     /// <param name="blocks">The document's blocks, whose paragraphs carry the frames.</param>
     /// <param name="sections">The sections, for the page geometry a frame's origins are measured in.</param>
     /// <param name="pages">Where the blocks landed.</param>
+    /// <param name="collapsesSpacing">
+    /// Whether the paragraphs inside a frame collapse their spacing against one another rather than adding
+    /// it — see <see cref="FlowLayouter.LayOut"/>. A frame's own text is a frame's text like a cell's.
+    /// </param>
     public static FrameResolution Of(
         IReadOnlyList<PageBlock> blocks,
         IReadOnlyList<PaginatedSection> sections,
-        IReadOnlyList<LaidOutPage> pages)
+        IReadOnlyList<LaidOutPage> pages,
+        bool collapsesSpacing = false)
     {
         Dictionary<int, Placement> placements = [];
 
@@ -196,7 +201,7 @@ internal sealed class FrameResolution
                     byPage[pageIndex] = placed = [];
                 }
 
-                placed.Add(new PlacedFrame(frame, area, Content(frame, area)));
+                placed.Add(new PlacedFrame(frame, area, Content(frame, area, collapsesSpacing)));
 
                 // A run-through frame is not an obstacle at all: it neither narrows a line nor pushes one
                 // down, which is exactly what `SwTextFly::ForEach` skips it for.
@@ -257,7 +262,7 @@ internal sealed class FrameResolution
                 // Never an obstacle, whatever the document says its wrap is. An as-character frame is
                 // part of the text rather than something the text flows around, which is why Writer
                 // gives it a portion and not an entry in `SwTextFly`'s object list.
-                placed.Add(new PlacedFrame(frame, placedAt, Content(frame, placedAt)));
+                placed.Add(new PlacedFrame(frame, placedAt, Content(frame, placedAt, collapsesSpacing)));
             }
         }
 
@@ -431,10 +436,14 @@ internal sealed class FrameResolution
     /// does. An image frame has no blocks and gets null, since the raster is decoded elsewhere and the
     /// rectangle is all the wrap ever needed.
     /// </remarks>
-    private static PlacedFlow? Content(PageFrame frame, DocRect area)
+    private static PlacedFlow? Content(PageFrame frame, DocRect area, bool collapsesSpacing)
         => frame.Blocks.Count == 0
             ? null
-            : FlowLayouter.LayOut(frame.Blocks, area.Deflate(frame.Padding), Length.Zero);
+            : FlowLayouter.LayOut(
+                frame.Blocks,
+                area.Deflate(frame.Padding),
+                Length.Zero,
+                collapsesSpacing: collapsesSpacing);
 
     /// <param name="Index">Which page the block starts on.</param>
     /// <param name="Page">That page.</param>

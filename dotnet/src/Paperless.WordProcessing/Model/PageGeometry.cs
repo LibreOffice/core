@@ -198,6 +198,29 @@ public sealed record PageGeometry
     public Length FooterHeight { get; init; }
 
     /// <summary>
+    /// True when the header's height is the one stated and content that outgrows it overflows rather than
+    /// moving the body.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>SwFrameSize::Fixed</c> against <c>SwFrameSize::Minimum</c>, and it decides whether a
+    /// running head that needs more room than the margin reserved for it pushes the body down.
+    /// <c>SwHeadFootFrame::FormatPrt</c> grows a header only where the frame's size is a minimum and
+    /// <c>SwHeaderAndFooterEatSpacingItem</c> is on, which is what the DOC and DOCX importers always set
+    /// (<c>ww8par6.cxx</c>:652, <c>dmapper/PropertyMap.cxx</c>:1148) — so the Word formats leave this
+    /// false and their headers grow.
+    /// </para>
+    /// <para>
+    /// ODF says which it means: <c>svg:height</c> is a fixed height and <c>fo:min-height</c> is a floor.
+    /// A page style stating the first gets a header that does not move the body, however much it holds.
+    /// </para>
+    /// </remarks>
+    public bool HasFixedHeaderHeight { get; init; }
+
+    /// <summary>True when the footer's height is fixed, as <see cref="HasFixedHeaderHeight"/> is.</summary>
+    public bool HasFixedFooterHeight { get; init; }
+
+    /// <summary>
     /// How far below the body's last possible line the footer's first line starts, or null when the
     /// footer sits on the bottom of the space reserved for it instead.
     /// </summary>
@@ -326,46 +349,49 @@ public sealed record PageGeometry
     }
 
     /// <summary>
-    /// The rectangle the header occupies, or an empty one when the page has no header.
+    /// The rectangle the header occupies.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// From the page's top edge by <see cref="HeaderDistance"/>, which is where every format but ODF
     /// states it — and the reader has already converted ODF's own spelling. Its height is
     /// <see cref="HeaderHeight"/> less the spacing that separates it from the body, because that spacing
     /// belongs to the gap rather than to the header: text drawn into it would sit closer to the body than
     /// the document asked for.
+    /// </para>
+    /// <para>
+    /// The height can be nought, and a nought-height header is <em>not</em> the same as no header. A
+    /// Word document setting <c>w:top</c> and <c>w:header</c> to the same value is ordinary — it reserves
+    /// no room and lets the header grow into the body's — and Writer renders one: its header is a
+    /// dynamic-height frame with a 1 mm floor, so it takes whatever room its content needs
+    /// (<c>SectionPropertyMap::PrepareHeaderFooterProperties</c>, <c>PropertyMap.cxx:1148</c>). Returning
+    /// an empty rectangle for that case dropped the header's every line and every frame anchored in it.
+    /// </para>
     /// </remarks>
     public DocRect HeaderArea
-    {
-        get
-        {
-            Length height = Margins.Top - HeaderDistance;
-            return height > Length.Zero
-                ? new DocRect(Margins.Left + Gutter, HeaderDistance, TextWidth, height)
-                : default;
-        }
-    }
+        => new(Margins.Left + Gutter, HeaderDistance, TextWidth, Floor(Margins.Top - HeaderDistance));
 
     /// <summary>
-    /// The rectangle the footer occupies, or an empty one when the page has no footer.
+    /// The rectangle the footer occupies.
     /// </summary>
     /// <remarks>
     /// Measured from the page's <em>bottom</em> edge, because that is how a footer's distance is stated —
     /// so its top depends on the page's height and not on the body's. It starts where the body's text area
-    /// ends, since the space between the two belongs to neither.
+    /// ends, since the space between the two belongs to neither. Its height can be nought for the same
+    /// reason a header's can; see <see cref="HeaderArea"/>.
     /// </remarks>
     public DocRect FooterArea
     {
         get
         {
             Length top = Margins.Top + TextHeight;
-            Length height = Size.Height - FooterDistance - top;
-
-            return height > Length.Zero
-                ? new DocRect(Margins.Left + Gutter, top, TextWidth, height)
-                : default;
+            return new DocRect(
+                Margins.Left + Gutter, top, TextWidth, Floor(Size.Height - FooterDistance - top));
         }
     }
+
+    /// <summary>A length with its negative values clamped away, which a rectangle cannot carry.</summary>
+    private static Length Floor(Length length) => length > Length.Zero ? length : Length.Zero;
 }
 
 /// <summary>

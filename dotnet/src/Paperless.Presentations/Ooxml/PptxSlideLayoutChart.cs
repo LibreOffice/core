@@ -49,7 +49,8 @@ internal sealed partial class PptxSlideLayout
         if (_file.Relationship(slide.PartName, relationshipId) is not { IsExternal: false } link)
             return [];
         if (_file.Load(link.Target) is not { } chartSpace) return [];
-        if (DrawingChartPlot.Read(chartSpace, theme.Colours) is not { } plot) return [];
+        if (DrawingChartPlot.Read(chartSpace, theme.Colours, _file.IsOffice2007) is not { } plot)
+            return [];
 
         // A frame's transform is p:xfrm — PresentationML's own element with DrawingML's a:off and
         // a:ext inside it — rather than the a:xfrm a shape carries. Reading it with the drawing

@@ -150,6 +150,57 @@ public static class ShapeTransform
         => rotationUnits / RotationUnitsPerDegree * Math.PI / 180.0;
 
     /// <summary>
+    /// The scale a placement applies to each of the two axes, rotation and mirror removed.
+    /// </summary>
+    /// <remarks>
+    /// The length of the image of each unit basis vector, which is what
+    /// <c>basegfx::B2DHomMatrix::decompose</c> extracts and what
+    /// <c>Shape::createAndInsert</c> uses as the shape's own size
+    /// (<c>oox/source/drawingml/shape.cxx:1129-1140</c>). A shape's placement gains a scale only
+    /// from a parent group whose <c>a:chExt</c> differs from its <c>a:ext</c>, so at the top
+    /// level and in an unscaled group this is (1, 1).
+    /// </remarks>
+    public static (double X, double Y) ScaleOf(AffineTransform transform)
+        => (Math.Sqrt((transform.A * transform.A) + (transform.B * transform.B)),
+            Math.Sqrt((transform.C * transform.C) + (transform.D * transform.D)));
+
+    /// <summary>
+    /// The same placement with a scale divided out of it, for coordinates already scaled by hand.
+    /// </summary>
+    /// <remarks>
+    /// <c>WithoutScale(m, sx, sy)</c> applied to <c>(x·sx, y·sy)</c> gives what <c>m</c> gives
+    /// for <c>(x, y)</c>. It exists so a measurement made in absolute units — a text rectangle,
+    /// whose font sizes are absolute and cannot be scaled with it — can still travel through the
+    /// matrix that positions and rotates the shape.
+    /// </remarks>
+    /// <param name="transform">The placement to divide.</param>
+    /// <param name="scaleX">The horizontal factor to remove; a zero leaves the axis alone.</param>
+    /// <param name="scaleY">The vertical factor to remove; a zero leaves the axis alone.</param>
+    public static AffineTransform WithoutScale(
+        AffineTransform transform, double scaleX, double scaleY)
+    {
+        if (scaleX is 0 or 1 && scaleY is 0 or 1) return transform;
+
+        double x = scaleX == 0 ? 1 : scaleX;
+        double y = scaleY == 0 ? 1 : scaleY;
+
+        return new AffineTransform(
+            transform.A / x, transform.B / x,
+            transform.C / y, transform.D / y,
+            transform.E, transform.F);
+    }
+
+    /// <summary>A rectangle with both its offset and its extent multiplied.</summary>
+    public static DocRect Scaled(DocRect rectangle, double scaleX, double scaleY)
+        => scaleX == 1 && scaleY == 1
+            ? rectangle
+            : new DocRect(
+                Length.FromEmu((long)Math.Round(rectangle.X.Emu * scaleX)),
+                Length.FromEmu((long)Math.Round(rectangle.Y.Emu * scaleY)),
+                Length.FromEmu((long)Math.Round(rectangle.Width.Emu * scaleX)),
+                Length.FromEmu((long)Math.Round(rectangle.Height.Emu * scaleY)));
+
+    /// <summary>
     /// The rectangle a shape occupies on the slide <em>before</em> its own rotation.
     /// </summary>
     /// <remarks>

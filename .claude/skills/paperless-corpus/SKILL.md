@@ -29,6 +29,25 @@ stem alone, so `t.docx` and `t.xlsx` both become `t.pdf` and one silently vanish
 corpus therefore names files by what they contain and which format they are —
 `table-merged.docx`, not `test.docx` — which is better documentation anyway.
 
+### A hand-built DOCX without `word/settings.xml` answers the wrong question
+
+A minimal DOCX you write yourself to settle a compatibility question **does not get
+LibreOffice's OOXML compatibility defaults** unless it contains a `word/settings.xml` part,
+even an empty one. Without it the importer takes a different set of defaults, and your
+fixture answers a question nobody asked.
+
+This is dangerous precisely because it fails quietly. One agent built five synthetics to
+decide whether paragraph-spacing collapse was inverted and whether a top-of-page rule was
+conditional, and got clean, consistent, mutually corroborating — and wrong — answers to
+both. Adding an empty settings part reversed both readings.
+
+So when a synthetic is standing in for real-world behaviour, include the parts a real writer
+would emit, and sanity-check the fixture against one genuine document before trusting a
+conclusion drawn from it.
+
+The general form of the trap: **a fixture minimal enough to be obviously correct may be
+minimal enough to be answering a different question.**
+
 ## Corpus layout
 
 ```

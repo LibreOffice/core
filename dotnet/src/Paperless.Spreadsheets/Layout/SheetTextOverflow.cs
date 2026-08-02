@@ -25,13 +25,20 @@ namespace Paperless.Spreadsheets.Layout;
 /// two pages.
 /// </para>
 /// <para>
-/// Three of Calc's conditions are reproduced and matter. Only a cell holding <em>text</em>
-/// overflows — a number too wide shows <c>###</c> instead, which takes no extra room. Overflow
+/// Four of Calc's conditions are reproduced and matter. Only a cell holding <em>text</em>
+/// overflows — a number too wide shows <c>###</c> instead, which takes no extra room. A cell that
+/// <em>wraps</em> never overflows at all, so it never widens anything. Overflow
 /// stops at the first non-empty cell to the right, so a value in the next column truncates the
 /// string rather than being written over. And a right-aligned cell overflows to the left, which
-/// costs no columns at the right-hand end; alignment is not read yet, so every text cell is
-/// treated as left-aligned, which is Calc's default for text and therefore right for a file that
-/// states nothing.
+/// costs no columns at the right-hand end.
+/// </para>
+/// <para>
+/// The wrap condition is the one that dominated the corpus and it is worth stating why. A
+/// wrapping column is usually a <em>wide</em> column of long prose, so the strings in it measure
+/// to thousands of points; extending the print area by that much adds column after column of
+/// empty sheet, each of which becomes a band of pages that hold nothing. Measured on
+/// <c>AFS-400_Contacts.xlsx</c>, seven columns of contacts with three wrapping ones: 340 pages
+/// against LibreOffice's 48, of which 289 of ours were blank and none of LibreOffice's were.
 /// </para>
 /// </remarks>
 internal static class SheetTextOverflow
@@ -83,6 +90,15 @@ internal static class SheetTextOverflow
                 if (measured++ >= MeasurementBudget) return last;
 
                 SheetCellFormat format = sheet.Formats.At(row.Index, cell.Column);
+
+                // A cell that breaks its text into lines needs no width beyond its own column, so
+                // it never widens the print area. `ScColumn::GetNeededSize` says it in one line —
+                // `if ( bWidth && bBreak ) return 0;` (sc/source/core/data/column2.cxx:226) —
+                // and it is the difference between a page and a hundred: a wrapping column of
+                // long strings measures to thousands of points, and extending the print area by
+                // that much manufactures column band after column band of blank paper.
+                // Never a value here: the walk above kept only cells holding text.
+                if (SheetTextLayout.Breaks(format, isValue: false)) continue;
 
                 if (!widths.TryGetValue((text, format), out Length width))
                 {

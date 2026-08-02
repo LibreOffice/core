@@ -488,10 +488,14 @@ public sealed partial class OdtLayoutSource
         IReadOnlyList<PageFrame> frames = FramesOf(walker.Frames);
         (_listLevel, _listStyle) = outerList;
 
+        // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
+        // preserves are the ones the notes and frames above were recorded against.
+        List<PageRun> runs = RunsOf(walker.Ranges, text, face);
+
         return new PageParagraph
         {
             SectionIndex = _sectionIndex,
-            Text = walker.Text,
+            Text = CaseMapping.Apply(walker.Text, runs),
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
@@ -500,7 +504,7 @@ public sealed partial class OdtLayoutSource
             EmSize = text.Size,
             Language = text.Language,
             Shaping = new ShapingOptions(Language: text.Language),
-            Runs = RunsOf(walker.Ranges, text, face),
+            Runs = runs,
             Notes = notes,
             Frames = frames,
             Source = element,
@@ -640,7 +644,10 @@ public sealed partial class OdtLayoutSource
                 || size != paragraph.Size
                 || style.Colour != paragraph.Colour
                 || style.Language != paragraph.Language
-                || rise != Core.Units.Length.Zero)
+                || rise != Core.Units.Length.Zero
+                // A case map has to survive the uniform-paragraph shortcut: it is the one property here
+                // that changes the *characters*, so dropping the runs would draw the text as stored.
+                || style.CaseMap != PageCaseMap.None)
             {
                 varies = true;
             }
@@ -653,7 +660,8 @@ public sealed partial class OdtLayoutSource
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
-                rise));
+                rise,
+                style.CaseMap));
         }
 
         return varies ? runs : [];

@@ -283,7 +283,8 @@ public sealed class LineFiller
                 }
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
-                Length width = Measure(text, lineStart, visibleEnd, widthBetween, tabs);
+                Length width = Measure(
+                    text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0);
 
                 if (width > limit && chosen >= 0) break;
 
@@ -297,8 +298,8 @@ public sealed class LineFiller
                 // lines on one of the page's.
                 if (mandatory.Contains(end)) break;
 
-                // The first opportunity is taken whatever it measures: a word too long for the line
-                // gets the line to itself rather than an empty line followed by the same problem.
+                // The first opportunity is taken whatever it measures, and chopped below if it does
+                // not fit: an empty line followed by the same problem is not an option.
                 if (width > limit) break;
             }
 
@@ -307,7 +308,20 @@ public sealed class LineFiller
                 // No opportunity at all past this point, which happens when the text ends without one.
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
-                chosenWidth = Measure(text, lineStart, chosenVisibleEnd, widthBetween, tabs);
+                chosenWidth = Measure(
+                    text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0);
+            }
+
+            // Nothing between this line's start and its first break opportunity fits. The word is
+            // chopped rather than left hanging over the margin — see the remarks on this class.
+            if (chosenWidth > limit
+                && Chop(text, lineStart, chosen, limit, widthBetween, tabs, lines.Count == 0)
+                       is { } cut)
+            {
+                chosen = cut;
+                chosenVisibleEnd = cut;
+                chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs, lines.Count == 0);
+                probe = nextOpportunity;
             }
 
             lines.Add(new TextLine(
@@ -319,6 +333,77 @@ public sealed class LineFiller
         }
 
         return lines;
+    }
+
+    /// <summary>
+    /// Where to cut a word that does not fit the line it starts, or null to leave it alone.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The last character position whose text still fits, and never the line's own start — a line
+    /// of no characters would make no progress and the fill loop would not terminate. LibreOffice
+    /// arrives at the same position from the other end: <c>ImpEditEngine::ImpBreakLine</c> walks
+    /// the character-position array while it is under the remaining width
+    /// (<c>editeng/source/editeng/impedit3.cxx:2016-2018</c>) and, when the break iterator offers
+    /// nothing inside the line, takes it outright — "No separator in line =&gt; Chop!",
+    /// <c>impedit3.cxx:2236-2247</c>, with the same guard against an empty line. Writer's
+    /// <c>SwTextGuess::Guess</c> ends in the same place, cutting at <c>m_nCutPos</c> when no break
+    /// position was found (<c>sw/source/core/text/guess.cxx:832-839</c>).
+    /// </para>
+    /// <para>
+    /// It only applies to a word that is alone on its line: a line that has already fitted
+    /// something breaks before the oversized word instead, and the word is chopped on the line it
+    /// then starts. That is why the caller tests the chosen width rather than each candidate's.
+    /// </para>
+    /// <para>
+    /// A cut never lands between a surrogate pair. It can still land inside a grapheme cluster
+    /// whose base and marks are separate code points, which is what LibreOffice's own
+    /// <c>iterateCodePoints</c> does too.
+    /// </para>
+    /// </remarks>
+    private static int? Chop(
+        string text,
+        int lineStart,
+        int end,
+        Length limit,
+        Func<int, int, Length> widthBetween,
+        ParagraphFormat? tabs,
+        bool isFirstLine)
+    {
+        int first = Whole(text, lineStart + 1);
+        if (first >= end) return null;
+
+        // Binary search: prefix widths only grow, so the last position that fits is found in a
+        // logarithm of the word's length rather than by measuring every prefix of it.
+        int low = first;
+        int high = end - 1;
+        int best = first;
+
+        while (low <= high)
+        {
+            int middle = Whole(text, low + ((high - low) / 2));
+            if (middle <= first) { low = first + 1; continue; }
+            if (middle >= end) { high = middle - 2; continue; }
+
+            if (Measure(text, lineStart, middle, widthBetween, tabs, isFirstLine) <= limit)
+            {
+                best = middle;
+                low = middle + 1;
+            }
+            else
+            {
+                high = middle - 1;
+            }
+        }
+
+        return best;
+    }
+
+    /// <summary>A cut position moved forward off the second half of a surrogate pair.</summary>
+    private static int Whole(string text, int index)
+    {
+        while (index < text.Length && char.IsLowSurrogate(text[index])) index++;
+        return index;
     }
 
     /// <summary>
@@ -334,9 +419,10 @@ public sealed class LineFiller
         int start,
         int end,
         Func<int, int, Length> widthBetween,
-        ParagraphFormat? tabs)
+        ParagraphFormat? tabs,
+        bool isFirstLine)
         => tabs is not null && TabRuler.HasTab(text, start, end)
-            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween)
+            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween, isFirstLine)
             : widthBetween(start, end);
 
     /// <summary>

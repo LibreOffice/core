@@ -182,6 +182,77 @@ public class CompoundFileTests
     }
 
     /// <summary>
+    /// A version-3 file's stream size is 32 bits and the upper dword is reserved. Writers leave
+    /// stale bytes there -- <c>slides/batch-003/ppt/010605Vul.ppt</c> in the corpus declares
+    /// 1 080 975 390 740 138 563 bytes for an 84 KB stream, and LibreOffice reads it perfectly
+    /// because <c>StgEntry::Load</c> never looks above 32 bits. Reading the field as a full 64-bit
+    /// length is what turned that file into the only outright failure in the corpus.
+    /// </summary>
+    [Fact]
+    public void IgnoresTheReservedUpperDwordOfAVersion3StreamLength()
+    {
+        const ulong staleHighDword = 0x0F0022A4UL << 32;
+
+        // A cutoff below the low dword keeps the stream on the FAT path, which is where the
+        // corpus file's 84 KB stream lives; the mini-FAT path has its own clamp and its own test.
+        byte[] file = BuildMinimalCompoundFile(
+            streamStartSector: 2, streamLength: staleHighDword | 400, cyclic: false,
+            miniStreamCutoff: 64);
+
+        using MemoryStream stream = new(file);
+        using CompoundFile cfb = CompoundFile.Open(stream, leaveOpen: true);
+
+        IPackagePart part = cfb.GetPart("Truncated")!;
+
+        // The low dword is the truth, and the one sector the chain covers can supply it.
+        Assert.Equal(400, part.Length);
+
+        using Stream content = part.Open();
+        Assert.Equal(400, content.Length);
+    }
+
+    /// <summary>
+    /// The declared length must never escape the reader, because callers size buffers from it:
+    /// <c>PptReader</c> and <c>OlePropertySetReader</c> both allocate a <c>MemoryStream</c> of
+    /// exactly <c>IPackagePart.Length</c>. Clamping the read but still reporting the declared
+    /// length turns a clean failure into an out-of-memory one several layers away.
+    /// </summary>
+    [Fact]
+    public void ReportsTheChainsExtentRatherThanTheDeclaredLength()
+    {
+        byte[] file = BuildMinimalCompoundFile(streamStartSector: 2, streamLength: 1 << 20,
+                                               cyclic: false);
+        using MemoryStream stream = new(file);
+        using CompoundFile cfb = CompoundFile.Open(stream, leaveOpen: true);
+
+        IPackagePart part = cfb.GetPart("Truncated")!;
+
+        // One 512-byte sector is all the chain reaches before it runs off the end of the file.
+        Assert.Equal(512, part.Length);
+        Assert.True(part.Length < 1 << 20);
+    }
+
+    /// <summary>
+    /// The same clamp on the pathological case: a length above <c>int.MaxValue</c> in a file of a
+    /// few kilobytes is read as the kilobytes, not rejected and not allocated for. A previous
+    /// attempt at this clamped the read alone and moved the failure from an exception to an OOM.
+    /// </summary>
+    [Fact]
+    public void ReadsAStreamDeclaringMoreThanTwoGibibytes()
+    {
+        byte[] file = BuildMinimalCompoundFile(streamStartSector: 2, streamLength: 3UL << 30,
+                                               cyclic: false);
+        using MemoryStream stream = new(file);
+        using CompoundFile cfb = CompoundFile.Open(stream, leaveOpen: true);
+
+        IPackagePart part = cfb.GetPart("Truncated")!;
+        Assert.InRange(part.Length, 0, file.Length);
+
+        using Stream content = part.Open();
+        Assert.InRange(content.Length, 0, file.Length);
+    }
+
+    /// <summary>
     /// Builds a minimal 512-byte-sector compound file containing one stream, used to
     /// exercise the damage paths that no legitimate producer emits.
     /// </summary>
@@ -191,7 +262,13 @@ public class CompoundFileTests
     /// When true the stream's FAT chain points at itself, which would loop forever without
     /// a guard. When false the chain simply runs off the end of the file.
     /// </param>
-    private static byte[] BuildMinimalCompoundFile(uint streamStartSector, ulong streamLength, bool cyclic)
+    /// <param name="miniStreamCutoff">
+    /// The header's mini-stream cutoff. The default is the only value the specification permits;
+    /// lowering it is how a test keeps a short stream on the FAT path, since this file has no
+    /// mini-stream for the mini-FAT path to read from.
+    /// </param>
+    private static byte[] BuildMinimalCompoundFile(
+        uint streamStartSector, ulong streamLength, bool cyclic, uint miniStreamCutoff = 4096)
     {
         const int sector = 512;
         byte[] file = new byte[sector * 4];
@@ -205,7 +282,7 @@ public class CompoundFileTests
         BitConverter.TryWriteBytes(file.AsSpan(32), (ushort)6);       // 64-byte mini sectors
         BitConverter.TryWriteBytes(file.AsSpan(44), 1u);              // one FAT sector
         BitConverter.TryWriteBytes(file.AsSpan(48), 1u);              // directory at sector 1
-        BitConverter.TryWriteBytes(file.AsSpan(56), 4096u);           // mini-stream cutoff
+        BitConverter.TryWriteBytes(file.AsSpan(56), miniStreamCutoff);  // mini-stream cutoff
         BitConverter.TryWriteBytes(file.AsSpan(60), 0xFFFFFFFEu);     // no mini-FAT
         BitConverter.TryWriteBytes(file.AsSpan(68), 0xFFFFFFFEu);     // no DIFAT chain
         BitConverter.TryWriteBytes(file.AsSpan(76), 0u);              // DIFAT[0] = sector 0

@@ -178,12 +178,12 @@ public sealed partial class Ww8DocumentReader
     /// it, because the two answer different questions and a document can have one without the other:
     /// a file whose only picture is inline has a blip store and an empty anchor table.
     /// </remarks>
-    private Dictionary<int, Ww8Blip> Blips =>
+    private Dictionary<int, EscherBlip> Blips =>
         _blips ??= _fib.Has(Ww8FibTable.DrawingInformation)
-            ? Ww8Blips.Read(Slice(Ww8FibTable.DrawingInformation).ToArray(), _pictures, _wordDocument)
+            ? EscherBlips.Read(Slice(Ww8FibTable.DrawingInformation).ToArray(), _pictures, _wordDocument)
             : [];
 
-    private Dictionary<int, Ww8Blip>? _blips;
+    private Dictionary<int, EscherBlip>? _blips;
 
     /// <summary>
     /// The picture a shape's <c>pib</c> names, or nothing when it names none this library can draw.
@@ -198,7 +198,7 @@ public sealed partial class Ww8DocumentReader
         if (shape is null) return FramePicture.None;
 
         uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
-        if (pib == 0 || !Blips.TryGetValue((int)pib, out Ww8Blip blip)) return FramePicture.None;
+        if (pib == 0 || !Blips.TryGetValue((int)pib, out EscherBlip blip)) return FramePicture.None;
 
         return blip.Bytes.IsEmpty
             ? Declined(blip)
@@ -212,7 +212,7 @@ public sealed partial class Ww8DocumentReader
     /// stops a missing picture from moving every line after it, and the diagnostic says which format it
     /// was.
     /// </remarks>
-    private FramePicture Declined(Ww8Blip blip)
+    private FramePicture Declined(EscherBlip blip)
     {
         _diagnostics.Add(new Diagnostic(
             DiagnosticSeverity.Information, "PL2370",
@@ -275,7 +275,7 @@ public sealed partial class Ww8DocumentReader
 
         if (image.IsEmpty
             && _inlinePictures.TryReadHeader(shapeAt, out DffRecordHeader container)
-            && Ww8Blips.Inline(_inlinePictures, _inlinePictures.EndOf(container)) is { } own)
+            && EscherBlips.Inline(_inlinePictures, _inlinePictures.EndOf(container)) is { } own)
         {
             image = own.Bytes.IsEmpty
                 ? Declined(own)

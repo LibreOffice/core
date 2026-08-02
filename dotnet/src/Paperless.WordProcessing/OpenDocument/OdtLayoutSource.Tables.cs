@@ -276,7 +276,27 @@ public sealed partial class OdtLayoutSource
             IsHeader = isHeader,
             MinHeight = RowHeight(element).Height,
             HasExactHeight = RowHeight(element).IsExact,
+            CanSplit = CanSplit(element),
         };
+    }
+
+    /// <summary>
+    /// Whether the row's content may be broken across a page.
+    /// </summary>
+    /// <remarks>
+    /// ODF states it the other way up from the three Word formats: <c>fo:keep-together</c> on a
+    /// <c>style:table-row-properties</c> is <c>always</c> to forbid the break and <c>auto</c> to allow it,
+    /// which <c>xmloff/source/text/txtprmap.cxx</c> maps to <c>IsSplitAllowed</c> through its negating
+    /// <c>XML_TYPE_TEXT_NKEEP</c>. Absent means allowed, which is Writer's own default for a row and what
+    /// its export writes explicitly.
+    /// </remarks>
+    private bool CanSplit(XElement row)
+    {
+        string? styleName = row.Attribute(XName.Get("style-name", OdfNamespaces.Table))?.Value;
+
+        return _styles.ResolveProperty(
+            styleName, OdfStyleFamily.TableRow, OdfPropertyKind.TableRow,
+            OdfNamespaces.FoCompatible, "keep-together").Value != "always";
     }
 
     /// <summary>

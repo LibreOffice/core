@@ -107,6 +107,17 @@ public static class Ww8SprmReader
         public const ushort IsTableHeaderRow = 0x3404;
 
         /// <summary>
+        /// <c>sprmTFCantSplit</c>: the row this paragraph ends may not be broken across a page.
+        /// </summary>
+        /// <remarks>
+        /// One byte, and Word stores it the way it reads — 1 means the row cannot split — so the layout's
+        /// <see cref="Layout.PageTableRow.CanSplit"/> is its negation. Word 97 also writes
+        /// <c>sprmTFCantSplit90</c> (0x3403) with the same operand; LibreOffice reads only this one for a
+        /// WW8 document (<c>GetTableSprm</c>, <c>sw/source/filter/ww8/ww8par2.cxx</c>) and so does this.
+        /// </remarks>
+        public const ushort RowCannotSplit = 0x3466;
+
+        /// <summary>
         /// <c>sprmTDyaRowHeight</c>: the row's height in twips, whose sign carries the rule.
         /// </summary>
         /// <remarks>

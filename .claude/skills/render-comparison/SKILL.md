@@ -113,8 +113,84 @@ Once a page differs, narrow it down before theorising:
 4. **Compare text before pixels.** If extracted text already differs, the bug is in
    parsing, not rendering, and is far easier to find there. Use the
    **extraction-comparison** skill.
-5. **Try the same content in a sibling format.** If a `.docx` differs but the equivalent
-   `.odt` does not, the bug is in the DOCX reader, not in layout.
+5. **Round-trip the document through LibreOffice and render *that*.** The sharpest form of
+   the sibling-format trick, and it takes one command:
+
+   ```bash
+   soffice --headless --convert-to fodt --outdir /tmp/rt problem.doc
+   paperless render /tmp/rt/problem.fodt --format pdf --outdir /tmp/rt
+   ```
+
+   LibreOffice has now done the reading and Paperless only the layout. If the round-tripped
+   file renders correctly, **the defect is in our reader** and the layout engine is
+   exonerated; if it renders wrong the same way, the reverse. This localised a WW8 bug in a
+   single step that had survived two rounds of layout theorising — blank paragraphs being
+   dropped from DOC table cells, on a document that pads each of 106 entries with 21 of them
+   so each takes a page.
+
+   `.fodt`, `.fods` and `.fodp` are the right targets: flat XML you can also read directly to
+   see what LibreOffice thinks the document says.
+
+6. **Ask what the document actually contains before believing a theory about it.** Three
+   diagnoses in this project named a mechanism the file does not use:
+
+   - "an `sprmPDyaLine` at-least value is not reaching cell paragraphs" — that document
+     contains no `sprmPDyaLine` at all, and LibreOffice's own flat-ODF export of it carries
+     no line spacing on any paragraph involved.
+   - "prefer EMF+ records over the downlevel EMF fallback" — those blobs contain zero EMF+
+     records; there was nothing to prefer.
+   - "chart category-axis labels are drawn touching" — the deck has no chart parts; the
+     labels are inside an EMF and should be *rotated*.
+
+   Grepping the decompressed part for the record or attribute you are about to blame costs a
+   minute and refutes a plausible story before you spend a day on it.
+
+7. **Check whether the field is read but never used.** A property parsed by every reader and
+   consumed by nothing is invisible to unit tests and produces a quiet, systematic error.
+   Two were found this way — `TabStop.Leader` (declared by 51 of 136 corpus DOCX files, so
+   every dotted table-of-contents line was blank) and `IsCapitalised`. Grep for the property
+   name: if the only hits are the readers and the model, it does nothing.
+
+## Turn a measurement into a name
+
+A line advance is not an opaque number. It is `(ascent + descent + gap) / unitsPerEm × size`
+for one specific face, so **you can invert it and find out which face is being used.**
+
+Worked example, which is how the largest single defect in this project was found. Our line
+advance was 12.65 pt where LibreOffice's was 13.45, at 11 pt:
+
+```
+12.65 / 11 × 2048 = 2355   → Liberation Serif's line box
+13.45 / 11 × 2048 = 2500   → Carlito's
+```
+
+Not a line-height rule at all — the paragraph was being laid out in the wrong font. The
+document's runs named `w:asciiTheme="minorHAnsi"`, a reference into the theme's font scheme
+whose minor Latin face is Calibri; nothing read `w:asciiTheme`, so they fell back to Times
+New Roman. 112 of 136 corpus DOCX files name their fonts that way.
+
+The same arithmetic, run the other way, identified DejaVu Sans as the reference's face on a
+whole family of documents: 12.80 pt per 11 pt line and 10.50 per 9 pt is `hhea`
+1901/−483/0. Dump `head.unitsPerEm` and `hhea` for the candidates and match.
+
+**So when a metric is wrong by a few percent, suspect the wrong face before suspecting the
+rule.** A rule error usually gives a clean ratio (1.15, 1.2, 2.0); a substitution error gives
+an arbitrary one that resolves exactly against some installed font's tables.
+
+## The C++ in this tree is not the reference binary
+
+The checkout is a development branch; the `soffice` generating your references is a release
+(24.2.7.2 here). They disagree, and the source is the more persuasive of the two, which makes
+it the more dangerous.
+
+Two diagnoses in this project were inverted by checking the installed binary instead of the
+code beside it — most sharply, the source said an unknown font family falls back through
+LibreOffice's own generic lists, while the running binary demonstrably takes fontconfig's
+answer. Reading the source alone would have produced a confident, wrong, and thoroughly
+cited fix.
+
+Read the source to learn *what mechanism exists*. Measure the binary to learn *what it does*.
+When they disagree, the binary wins, because the binary made the reference PDFs.
 
 ## Recording results
 

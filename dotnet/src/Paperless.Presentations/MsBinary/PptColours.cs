@@ -63,6 +63,25 @@ public sealed class PptColourScheme
     public Colour this[int slot]
         => slot >= 0 && slot < SlotCount ? _slots[slot] : Default._slots[BackgroundSlot];
 
+    /// <summary>Whether two schemes name the same eight colours.</summary>
+    /// <remarks>
+    /// LibreOffice compares the thirty-two raw bytes (<c>HeaderFooterEntry::NeedToImportInstance</c>,
+    /// <c>svdfppt.cxx:3131</c>). The fourth byte of each slot is ignored on read, so comparing the
+    /// eight colours is the same test on any file whose padding is what the writer put there.
+    /// </remarks>
+    /// <param name="other">The scheme to compare against.</param>
+    public bool SameColoursAs(PptColourScheme? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        for (int slot = 0; slot < SlotCount; slot++)
+        {
+            if (_slots[slot] != other._slots[slot]) return false;
+        }
+        return true;
+    }
+
     /// <summary>
     /// Reads a <c>ColorSchemeAtom</c> payload, or returns null when it is too short to be one.
     /// </summary>
@@ -175,12 +194,26 @@ public sealed class PptFontTable
     /// <summary>The fixed width of the name field, in bytes.</summary>
     private const int NameBytes = 64;
 
-    private readonly List<string> _names;
+    /// <summary>
+    /// <c>lfCharSet</c>'s value for a symbol font, which changes what its characters mean.
+    /// </summary>
+    /// <remarks>
+    /// The byte immediately after the name field (<c>ReadPptFontEntityAtom</c>,
+    /// <c>svdfppt.cxx:390-401</c>). Two is Windows's <c>SYMBOL_CHARSET</c>.
+    /// </remarks>
+    private const byte SymbolCharSet = 2;
 
-    private PptFontTable(List<string> names) => _names = names;
+    private readonly List<string> _names;
+    private readonly List<bool> _symbols;
+
+    private PptFontTable(List<string> names, List<bool> symbols)
+    {
+        _names = names;
+        _symbols = symbols;
+    }
 
     /// <summary>A collection holding nothing, for a document with no environment.</summary>
-    public static PptFontTable Empty { get; } = new([]);
+    public static PptFontTable Empty { get; } = new([], []);
 
     /// <summary>How many faces the collection names.</summary>
     public int Count => _names.Count;
@@ -188,6 +221,19 @@ public sealed class PptFontTable
     /// <summary>The face at an index, or null when the collection does not reach that far.</summary>
     public string? this[int index]
         => index >= 0 && index < _names.Count ? _names[index] : null;
+
+    /// <summary>
+    /// Whether the face at an index declares the symbol character set.
+    /// </summary>
+    /// <remarks>
+    /// It is not a property of the face so much as of how its code points must be read: a
+    /// character shown in a symbol font means the glyph at that slot rather than the letter, so
+    /// the same byte is <c>l</c> in Arial and a filled circle in Wingdings. LibreOffice moves such
+    /// a character into the Private Use Area before doing anything with it
+    /// (<c>svdfppt.cxx:3767-3771</c>), which is what stops a bullet being drawn as a letter.
+    /// </remarks>
+    public bool IsSymbol(int index)
+        => index >= 0 && index < _symbols.Count && _symbols[index];
 
     /// <summary>Reads the collection out of a document's <c>Environment</c> container.</summary>
     /// <param name="stream">The document stream.</param>
@@ -198,6 +244,7 @@ public sealed class PptFontTable
         if (environment is not { } container) return Empty;
 
         List<string> names = [];
+        List<bool> symbols = [];
 
         foreach (DffRecordHeader child in stream.Children(container))
         {
@@ -206,11 +253,14 @@ public sealed class PptFontTable
             foreach (DffRecordHeader entity in stream.Children(child))
             {
                 if (entity.Type != PptRecordTypes.FontEntityAtom) continue;
-                names.Add(NameOf(stream.Content(entity)));
+
+                ReadOnlySpan<byte> content = stream.Content(entity);
+                names.Add(NameOf(content));
+                symbols.Add(content.Length > NameBytes && content[NameBytes] == SymbolCharSet);
             }
         }
 
-        return names.Count > 0 ? new PptFontTable(names) : Empty;
+        return names.Count > 0 ? new PptFontTable(names, symbols) : Empty;
     }
 
     private static string NameOf(ReadOnlySpan<byte> content)

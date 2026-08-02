@@ -147,4 +147,52 @@ public sealed class TabRulerTests
         // The range matters, not the string: a tab past the line's end is the next line's problem.
         TabRuler.HasTab("plain\ttext", 0, 5).ShouldBeFalse();
     }
+
+    [Fact]
+    public void AStretchCarriesTheBlankItsTabAdvancedAcross()
+    {
+        List<TabbedSegment> segments = TabRuler.Segments(
+            "ab\tcd", 0, 5, With(new TabStop(Length.FromPoints(30), Leader: '.')), Measure);
+
+        // The first stretch was placed by no tab at all, so it has no blank before it and no leader.
+        segments[0].GapLeft.ShouldBe(segments[0].Left);
+        segments[0].HasLeader.ShouldBeFalse();
+
+        // The second was: the tab began where "ab" ended and carried the pen to the stop, so the blank
+        // is [2, 30) — which is what a dot leader has to fill.
+        segments[1].GapLeft.ShouldBe(Length.FromPoints(2));
+        segments[1].Left.ShouldBe(Length.FromPoints(30));
+        segments[1].GapWidth.ShouldBe(Length.FromPoints(28));
+        segments[1].Leader.ShouldBe('.');
+        segments[1].HasLeader.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void ARightStopPutsTheBlankBeforeTheTextRatherThanBeforeTheStop()
+    {
+        // The leader of a contents line runs up to where the page number starts, not up to the stop the
+        // number's *end* sits on — so the blank has to be measured against the placed text.
+        List<TabbedSegment> segments = TabRuler.Segments(
+            "ab\tcd",
+            0,
+            5,
+            With(new TabStop(Length.FromPoints(30), TabAlignment.Right, '.')),
+            Measure);
+
+        segments[1].Left.ShouldBe(Length.FromPoints(28));
+        segments[1].GapWidth.ShouldBe(Length.FromPoints(26));
+    }
+
+    [Fact]
+    public void ADefaultStopHasNoLeaderAndASpaceFillIsNoneAtAll()
+    {
+        // Only an explicit stop can carry a fill: Writer sets cFill to 0 for the stops it synthesises on
+        // the default grid (sw/source/core/text/txttab.cxx:218).
+        TabRuler.Segments("ab\tcd", 0, 5, With(), Measure)[1].HasLeader.ShouldBeFalse();
+
+        // And both formats spell "no leader" as a space on a stop that has the attribute at all.
+        TabRuler.Segments(
+                "ab\tcd", 0, 5, With(new TabStop(Length.FromPoints(30), Leader: ' ')), Measure)[1]
+            .HasLeader.ShouldBeFalse();
+    }
 }

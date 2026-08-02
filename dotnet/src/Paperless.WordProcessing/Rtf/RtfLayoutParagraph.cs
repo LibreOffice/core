@@ -25,6 +25,7 @@ namespace Paperless.WordProcessing.Rtf;
 /// halves of it — the rise and the smaller size — are fractions of the <em>face's</em> height and size, and
 /// this reader has no faces: it records what the token stream said and the layout reader loads the fonts.
 /// </param>
+/// <param name="CaseMap">The case <c>\caps</c> or <c>\scaps</c> draws the run in.</param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -34,7 +35,8 @@ public readonly record struct RtfLayoutRun(
     bool IsItalic,
     string? Language,
     Colour? Colour,
-    Layout.Escapement Escapement = default)
+    Layout.Escapement Escapement = default,
+    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -54,7 +56,8 @@ public readonly record struct RtfLayoutRun(
            && IsItalic == other.IsItalic
            && string.Equals(Language, other.Language, StringComparison.Ordinal)
            && Colour == other.Colour
-           && Escapement == other.Escapement;
+           && Escapement == other.Escapement
+           && CaseMap == other.CaseMap;
 }
 
 /// <summary>
@@ -267,11 +270,16 @@ public sealed record RtfLayoutTable(
 /// True when <c>\trrh</c>'s parameter was negative, which is how RTF says the height is exact rather than a
 /// floor — the row is that tall and content past it is clipped.
 /// </param>
+/// <param name="CanSplit">
+/// False when <c>\trkeep</c> forbade breaking the row across a page — see
+/// <see cref="Layout.PageTableRow.CanSplit"/>.
+/// </param>
 public sealed record RtfLayoutRow(
     IReadOnlyList<RtfLayoutCell> Cells,
     Core.Units.Length MinHeight,
     bool IsHeader,
-    bool HasExactHeight = false);
+    bool HasExactHeight = false,
+    bool CanSplit = true);
 
 /// <summary>One cell of an RTF table.</summary>
 /// <param name="Column">The grid column it starts at.</param>

@@ -270,6 +270,26 @@ public sealed record PageTableRow
 
     /// <summary>True when the row is one of the table's repeating heading rows.</summary>
     public bool IsHeader { get; init; }
+
+    /// <summary>
+    /// Whether the row's own content may be broken across a page, which every format allows by default.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>SwFormatRowSplit</c>, read back by <c>SwRowFrame::IsRowSplitAllowed</c>
+    /// (<c>sw/source/core/layout/tabfrm.cxx</c>). The default is <em>true</em> in all four formats, and a
+    /// document says otherwise by a flag on the row: DOCX's <c>w:cantSplit</c>, RTF's <c>\trkeep</c>,
+    /// WW8's <c>sprmTFCantSplit</c>, and ODF's <c>fo:keep-together="always"</c> on the row's style — the
+    /// last of which is the negation of the other three, which is why each reader states its own sense
+    /// rather than sharing one.
+    /// </para>
+    /// <para>
+    /// Only the row's <em>content</em> is meant: a row that may not split moves to the next page whole,
+    /// and the rows before it stay where they are. It is not the table's own
+    /// <c>SwFormatLayoutSplit</c>, which is whether the table may break at all.
+    /// </para>
+    /// </remarks>
+    public bool CanSplit { get; init; } = true;
 }
 
 /// <summary>

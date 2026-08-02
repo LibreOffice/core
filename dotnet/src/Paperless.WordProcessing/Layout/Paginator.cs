@@ -39,12 +39,26 @@ public sealed record PaginationOptions
     /// Whether a paragraph keeps its space-before when it starts a page.
     /// </summary>
     /// <remarks>
-    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>: it drops the spacing, so the first line of a page sits at
-    /// the top margin whatever the paragraph asks for, while Word keeps it. Getting it wrong moves the
-    /// first baseline of every page after the first, which then changes how much fits and where the next
-    /// break falls. Unlike <see cref="CollapsesSpacing"/> this is not pinned by a comparison yet: the
-    /// corpus document's page tops all fall mid-paragraph or on paragraphs with no space-before, so it
-    /// makes no difference there.
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>, and — this is the part that took a measurement — the flag
+    /// does not mean "always keeps it". It decides whether the question is asked at all;
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c> (<c>flowfrm.cxx</c>:1415) then decides where. In the
+    /// document body it grants the space only on the <em>first</em> page and after an explicit break, and
+    /// takes it away at every automatic one; outside the body — a header, a footer, a table cell — it
+    /// grants it everywhere.
+    /// </para>
+    /// <para>
+    /// Measured rather than read, on a DOCX whose paragraphs carry 20 pt of space-before and nothing else:
+    /// LibreOffice puts page one's first line at 92.03 pt, which is the 72 pt margin plus the 20, and page
+    /// two's at 72.03 pt. Keeping it on every page put every page after the first 20 pt low and eventually
+    /// cost a page break.
+    /// </para>
+    /// <para>
+    /// The synthetic that establishes this needs a <c>word/settings.xml</c>, even an empty one. Without
+    /// that part LibreOffice never applies its OOXML compatibility defaults and the document lays out with
+    /// Writer's, which reverses both this rule and <see cref="CollapsesSpacing"/> — a minimal test file
+    /// missing a part it does not appear to need will otherwise answer the wrong question convincingly.
+    /// </para>
     /// </remarks>
     public bool KeepsSpacingAtTopOfPage { get; init; }
 
@@ -296,7 +310,8 @@ public sealed class Paginator
         // because a frame need not be anchored in the body: one anchored in a table cell or a header is
         // reached through the flow it landed in, which exists only once a page has been filled. Scanning
         // the blocks instead returned early on exactly those documents and left their frames unplaced.
-        FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+        FrameResolution resolution = FrameResolution.Of(
+            blocks, withFrames, pages, _options.CollapsesSpacing);
         if (resolution.IsEmpty) return pages;
 
         for (int pass = 0; pass < MaxFramePasses; pass++)
@@ -312,7 +327,8 @@ public sealed class Paginator
                 _obstacles = null;
             }
 
-            FrameResolution settled = FrameResolution.Of(blocks, withFrames, next);
+            FrameResolution settled = FrameResolution.Of(
+                blocks, withFrames, next, _options.CollapsesSpacing);
             pages = next;
 
             bool converged = settled.SameAs(resolution);
@@ -350,7 +366,12 @@ public sealed class Paginator
         WritingSection geometry = resolved[sectionIndex].Section;
         PageFurnitureSet? furnitureSet = resolved[sectionIndex].Furniture;
         PageGeometry page = geometry.Page;
-        Length bodyHeight = page.TextHeight;
+
+        // The geometry the body actually gets, which is the section's own once the running head has been
+        // measured against the room reserved for it — see PushedDownBy. Recomputed at the top of every
+        // page, because the head a page draws is the page's and not the section's.
+        PageGeometry body = page;
+        Length bodyHeight = body.TextHeight;
         Length bodyWidth = page.ColumnWidth;
 
         // A note breaks at the body's full width rather than a column's, which is what LibreOffice's own
@@ -383,14 +404,19 @@ public sealed class Paginator
                 // The section's own breaking width is also what a table stating no widths of its own is
                 // fitted to. A table that declares its grid is laid out exactly as it was before.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) =
-                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero), 0, width);
+                    TableLayouter.LayOut(
+                        table,
+                        new DocPoint(Length.Zero, Length.Zero),
+                        0,
+                        width,
+                        _options.CollapsesSpacing);
 
                 laid.Add(new LaidBlock(null, cells, rowHeights));
                 continue;
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[i];
-            ParagraphLayouter layouter = new(paragraph.Face);
+            ParagraphLayouter layouter = new(paragraph.Face, breaker: null, paragraph.Metrics);
             ParagraphFormat? previous = PreviousFormat(blocks, i);
 
             // A paragraph with runs is measured across them, so each line is as tall as its own tallest
@@ -427,12 +453,61 @@ public sealed class Paginator
         int pageNumber = geometry.RestartPageNumberAt ?? startingNumber;
         int sectionFirstPage = 0;
         int column = 0;
+
+        // The furniture the page being built will draw, which is the section its *first* content belongs
+        // to rather than the section it happens to end in. A continuous section break puts two sections on
+        // one sheet, and a sheet has one running head: Word gives it to the section the page starts in, and
+        // so does LibreOffice — its rendering of a document whose first section is a title page and whose
+        // second begins part way down it leaves page one bare and puts the new head on page two. Taking the
+        // current section instead put the second section's head on the title page.
+        PageFurnitureSet? pageFurniture = furnitureSet;
+        WritingSection pageFurnitureSection = geometry;
+        PageGeometry pageFurnitureGeometry = page;
+        bool pageIsSectionFirst = true;
+
+        // Called wherever a page's first content is decided: at the start, after each page is emitted, and
+        // at a section break that finds the page still empty.
+        void AdoptSection()
+        {
+            pageFurniture = furnitureSet;
+            pageFurnitureSection = geometry;
+            pageFurnitureGeometry = page;
+            pageIsSectionFirst = pages.Count == sectionFirstPage;
+        }
+
+        // The body area of the page about to be filled, which depends on how tall its own running head
+        // and foot turned out. Called after every change to what those are or which page draws them.
+        void MeasureBody()
+        {
+            body = PushedDownBy(
+                page,
+                pageFurniture?.Header(
+                    pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
+                    _options.CollapsesSpacing));
+
+            body = PulledUpBy(
+                body,
+                page,
+                pageFurniture?.Footer(
+                    pageFurnitureSection, pageFurnitureGeometry, pageNumber, pageIsSectionFirst,
+                    _options.CollapsesSpacing));
+
+            bodyHeight = body.TextHeight;
+        }
+
+        MeasureBody();
+
         List<PageNote> notes = [];
         List<PlacedLine> placed = [];
         List<PlacedTable> tables = [];
         Length used = Length.Zero;
         int paragraphIndex = 0;
         int lineIndex = 0;
+
+        // How far into the row at `lineIndex` an earlier page already reached, for a table row that broke
+        // across the break. Nought for every row of every table that did not — which, since a row only
+        // splits when it has to, is nearly all of them.
+        Length rowDrawn = Length.Zero;
 
         while (paragraphIndex < blocks.Count)
         {
@@ -506,9 +581,13 @@ public sealed class Paginator
                 geometry = resolved[sectionIndex].Section;
                 furnitureSet = resolved[sectionIndex].Furniture;
                 page = geometry.Page;
-                bodyHeight = page.TextHeight;
                 sectionFirstPage = pages.Count;
                 pageNumber = geometry.RestartPageNumberAt ?? pageNumber;
+
+                // A page with nothing on it yet belongs to the section starting here; one that already
+                // carries lines keeps the head of the section it started in.
+                if (placed.Count == 0 && tables.Count == 0) AdoptSection();
+                MeasureBody();
                 continue;
             }
 
@@ -518,31 +597,24 @@ public sealed class Paginator
                     ? Length.Zero
                     : table.SpaceBefore;
 
-                int fittedRows = FittedRows(
-                    laid[paragraphIndex].RowHeights, lineIndex, used + before, bodyHeight);
+                TablePart part = PlaceTablePart(
+                    table, laid[paragraphIndex], lineIndex, rowDrawn, body.ColumnArea(column),
+                    used + before, column, bodyHeight - (used + before), columnIsEmpty);
 
-                // Nothing of the table may go here. An empty page would leave the same problem, so a row
-                // taller than a whole page is placed anyway and allowed to overflow.
-                if (fittedRows == 0)
+                // Nothing of the table may go here, and the column already holds something — so the page
+                // ends and the table starts again at the top of the next one.
+                if (part.Placed is null)
                 {
-                    if (!columnIsEmpty)
-                    {
-                        EmitPage();
-                        continue;
-                    }
-
-                    fittedRows = 1;
+                    EmitPage();
+                    continue;
                 }
 
-                (PlacedTable part, Length height) = PlaceRows(
-                    table, laid[paragraphIndex], lineIndex, fittedRows, page.ColumnArea(column),
-                    used + before, column, lineIndex > 0);
+                tables.Add(part.Placed);
+                used += before + part.Height;
+                lineIndex = part.NextRow;
+                rowDrawn = part.NextDrawn;
 
-                tables.Add(part);
-                used += before + height;
-                lineIndex = part.RowEnd;
-
-                if (lineIndex < laid[paragraphIndex].RowHeights.Count)
+                if (lineIndex < laid[paragraphIndex].RowHeights.Count || rowDrawn > Length.Zero)
                 {
                     // The table is split: the rest goes on the next page, with its headings repeated.
                     EmitPage();
@@ -552,6 +624,7 @@ public sealed class Paginator
                 used += table.SpaceAfter;
                 paragraphIndex++;
                 lineIndex = 0;
+                rowDrawn = Length.Zero;
                 continue;
             }
 
@@ -565,8 +638,17 @@ public sealed class Paginator
                 continue;
             }
 
+            // Writer's `HasParaSpaceAtPages`, which is what decides whether the top-of-frame rule applies
+            // at all: the document's first page keeps a paragraph's space-before, an explicit page break
+            // keeps it, and an automatic break in the body drops it. Only asked where the rule can bite —
+            // at the top of a column, where `SpaceAbove` would otherwise take the option's word for it.
+            bool keepsSpaceHere =
+                column == 0 && (pages.Count == 0 || paragraph.Format.StartsNewPage);
+
             Length spaceAbove = lineIndex == 0
-                ? SpaceAbove(blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty)
+                ? SpaceAbove(
+                    blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty,
+                    keepsSpacingAtTop: keepsSpaceHere)
                 : Length.Zero;
 
             // The notes those lines would anchor take their room out of the body's, so how many lines fit
@@ -711,26 +793,28 @@ public sealed class Paginator
                 return;
             }
 
-            PlacedFlow? noteArea = NoteArea(notes, page);
+            PlacedFlow? noteArea = NoteArea(notes, body);
 
             pages.Add(Page(
                 pages.Count,
                 pageNumber,
-                page,
+                body,
                 placed,
                 tables,
                 Furniture(
-                    furnitureSet, geometry, page, pageNumber,
-                    first: pages.Count == sectionFirstPage),
+                    pageFurniture, pageFurnitureSection, pageFurnitureGeometry, pageNumber,
+                    first: pageIsSectionFirst),
                 noteArea,
-                Separator(noteArea, page)));
+                Separator(noteArea, body)));
 
+            AdoptSection();
             pageNumber++;
             column = 0;
             placed = [];
             tables = [];
             notes = [];
             used = Length.Zero;
+            MeasureBody();
         }
     }
 
@@ -893,15 +977,29 @@ public sealed class Paginator
     /// <see cref="ParagraphLeading"/> for the citations and for what it costs to get wrong.
     /// </para>
     /// </remarks>
+    /// <param name="blocks">The document's blocks, for the paragraph above this one.</param>
+    /// <param name="laid">Their laid-out forms, for the spacings the layout resolved.</param>
+    /// <param name="index">Which block the space is being measured above.</param>
+    /// <param name="atTopOfPage">True when nothing is on the column yet.</param>
+    /// <param name="keepsSpacingAtTop">
+    /// Whether <em>this</em> frame top is one of the places the option's rule applies — Writer's
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c>. See <see cref="PaginationOptions.KeepsSpacingAtTopOfPage"/>:
+    /// the flag says the document has the behaviour at all, and this says whether the paragraph in hand is
+    /// somewhere it is granted.
+    /// </param>
     private Length SpaceAbove(
         IReadOnlyList<PageBlock> blocks,
         List<LaidBlock> laid,
         int index,
-        bool atTopOfPage)
+        bool atTopOfPage,
+        bool keepsSpacingAtTop = true)
     {
         Length before = laid[index].Paragraph!.SpaceBefore;
 
-        if (atTopOfPage && !_options.KeepsSpacingAtTopOfPage) return Length.Zero;
+        if (atTopOfPage && !(_options.KeepsSpacingAtTopOfPage && keepsSpacingAtTop))
+        {
+            return Length.Zero;
+        }
 
         // The previous paragraph's leading, and only when there is a previous paragraph in this frame:
         // at the top of a page or a column Writer finds no previous frame at all
@@ -913,15 +1011,27 @@ public sealed class Paginator
             ? Length.Zero
             : ParagraphLeading.Below(laid[index - 1].Paragraph);
 
-        if (index == 0 || !_options.CollapsesSpacing) return before + leading;
+        if (index == 0 || blocks[index - 1] is not PageParagraph previous) return before + leading;
+
+        // Contextual spacing suppresses the gap entirely, which means taking back the space-after already
+        // added for the paragraph above: `before` is zero here, and leaving its space-after standing would
+        // keep the whole gap on a list whose style states an after and no before.
+        if (blocks[index] is PageParagraph current
+            && ParagraphLayouter.SharesContextualSpacing(previous.Format, current.Format))
+        {
+            // Only when the paragraph above is on this page: its space-after was added to the running
+            // height there and has to come back off here, and at the top of a page there is nothing to
+            // take off — subtracting anyway would put the first line above the margin.
+            return atTopOfPage ? Length.Zero : leading - previous.Format.SpaceAfter;
+        }
+
+        if (!_options.CollapsesSpacing) return before + leading;
 
         // Collapsing: the gap is the larger of the two rather than their sum. The previous paragraph's
         // space-after has already been added to the running height, so what is added here is only the
         // part of space-before that exceeds it. A table before this paragraph collapses nothing, because
         // its own space-after is a table property rather than a paragraph's and the formats do not
         // collapse the two against each other.
-        if (blocks[index - 1] is not PageParagraph previous) return before + leading;
-
         Length excess = before - previous.Format.SpaceAfter;
         return (excess > Length.Zero ? excess : Length.Zero) + leading;
     }
@@ -1028,7 +1138,7 @@ public sealed class Paginator
     /// inside the set, because most pages of a document share one header and laying it out again per page
     /// would shape the same text for the same answer.
     /// </remarks>
-    private static (PlacedFlow? Header, PlacedFlow? Footer) Furniture(
+    private (PlacedFlow? Header, PlacedFlow? Footer) Furniture(
         PageFurnitureSet? furniture,
         WritingSection section,
         PageGeometry geometry,
@@ -1036,8 +1146,102 @@ public sealed class Paginator
         bool first)
         => furniture is null
             ? (null, null)
-            : (furniture.Header(section, geometry, pageNumber, first),
-               furniture.Footer(section, geometry, pageNumber, first));
+            : (furniture.Header(section, geometry, pageNumber, first, _options.CollapsesSpacing),
+               furniture.Footer(section, geometry, pageNumber, first, _options.CollapsesSpacing));
+
+    /// <summary>
+    /// A page's geometry with the body moved down to clear a running head that outgrew its margin.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A Word header is not confined to the room the top margin reserves for it. <c>w:header</c> says where
+    /// the header starts and <c>w:top</c> says where the body does, and when the header's own content needs
+    /// more than the difference between them the body is pushed down rather than drawn over.
+    /// </para>
+    /// <para>
+    /// LibreOffice reaches the same answer through two properties its DOCX importer sets together:
+    /// <c>SectionPropertyMap::PrepareHeaderFooterProperties</c> (<c>dmapper/PropertyMap.cxx</c>:1148) makes
+    /// the page's top margin <c>w:header</c>, gives the header frame a height of
+    /// <c>w:top − w:header</c> with a 1 mm floor, and turns on both dynamic height and dynamic spacing.
+    /// <c>SwHeadFootFrame::FormatPrt</c> (<c>sw/source/core/layout/hffrm.cxx</c>:116) is what dynamic
+    /// spacing then means: growth first eats the gap between the header and the body — so a header that
+    /// still fits inside <c>w:top</c> moves nothing — and once that gap is gone the frame keeps growing and
+    /// the body follows it down. The body therefore starts at
+    /// <c>max(w:top, w:header + header height)</c>, which is what this computes.
+    /// </para>
+    /// <para>
+    /// Per page rather than per section, because the height belongs to the head that page actually draws:
+    /// a section whose first page carries a tall title block and whose later pages carry one line has two
+    /// different body areas, and taking the tallest of its slots shortens every page for the sake of one.
+    /// </para>
+    /// <para>
+    /// The height taken is the flow's <see cref="PlacedFlow.Advance"/>, its last paragraph's space-after
+    /// included. Writer's <c>lcl_CalcContentHeight</c> sums frame heights instead, and a text frame's
+    /// height excludes its own lower spacing — so a running head whose last paragraph has space after it
+    /// is measured a little tall here. Measured on the corpus document above the difference is 1.2 pt the
+    /// other way, which is within the ascent of the first body line, so the simpler figure is what this
+    /// uses until a document is found that needs the harder one.
+    /// </para>
+    /// </remarks>
+    private static PageGeometry PushedDownBy(PageGeometry page, PlacedFlow? header)
+    {
+        if (header is null || header.IsEmpty) return page;
+
+        Length needed = page.HeaderDistance + header.Advance;
+        if (needed <= page.Margins.Top) return page;
+
+        // A head that would leave no body at all is not honoured. Writer would let the frame keep growing,
+        // but a body of no height holds one overflowing line per page however much text is left, so a
+        // malformed running head would turn a ten-page document into a thousand-page one.
+        if (needed >= page.Size.Height - page.Margins.Bottom) return page;
+
+        return page with { Margins = page.Margins with { Top = needed } };
+    }
+
+    /// <summary>
+    /// A page's geometry with the body's foot raised to clear a running foot that outgrew its margin.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The mirror of <see cref="PushedDownBy"/>, and the same mechanism read the other way up.
+    /// <c>SectionPropertyMap::PrepareHeaderFooterProperties</c> handles the two symmetrically
+    /// (<c>dmapper/PropertyMap.cxx</c>:1171): a section with a footer gets a bottom margin of
+    /// <c>w:footer</c>, a footer frame of <c>w:bottom − w:footer</c> with the same 1 mm floor, and the
+    /// same dynamic height and dynamic spacing. <c>SwHeadFootFrame::FormatPrt</c> then treats a footer
+    /// exactly as it treats a header, only growing upwards — so the body's last line can sit no lower
+    /// than <c>pageHeight − w:footer − footer height</c>, and a footer that still fits inside
+    /// <c>w:bottom</c> moves nothing.
+    /// </para>
+    /// <para>
+    /// Two corpus shapes make this bind. The obvious one is a footer of several paragraphs in a small
+    /// bottom margin. The other is a document whose <c>w:footer</c> is <em>larger</em> than its
+    /// <c>w:bottom</c> — legal, common in the corpus, and meaning the footer overlaps the space
+    /// <c>w:bottom</c> reserves. Ignoring it left the body several points taller than Writer gives it on
+    /// every page of such a document, which is how a long one loses a page.
+    /// </para>
+    /// <para>
+    /// Taken from the page's own margins rather than from the header-adjusted geometry, since the two
+    /// ends are independent: <paramref name="stated"/> supplies the bottom margin and the sheet height,
+    /// and <paramref name="body"/> carries whatever the head already did to the top.
+    /// </para>
+    /// </remarks>
+    /// <param name="body">The geometry as the running head left it.</param>
+    /// <param name="stated">The section's own geometry, for the margin the document asked for.</param>
+    /// <param name="footer">The running foot this page draws, or null when it has none.</param>
+    private static PageGeometry PulledUpBy(PageGeometry body, PageGeometry stated, PlacedFlow? footer)
+    {
+        if (footer is null || footer.IsEmpty) return body;
+
+        Length needed = stated.FooterDistance + footer.Advance;
+        if (needed <= stated.Margins.Bottom) return body;
+
+        // As with a running head, a foot that would leave no body at all is not honoured: a body of no
+        // height holds one overflowing line per page however much text is left.
+        if (needed >= stated.Size.Height - body.Margins.Top) return body;
+
+        return body with { Margins = body.Margins with { Bottom = needed } };
+    }
+
     /// <summary>
     /// The notes a run of a paragraph's lines anchors.
     /// </summary>
@@ -1177,7 +1381,8 @@ public sealed class Paginator
     {
         if (_noteHeights.TryGetValue(note, out Length cached)) return cached;
 
-        Length height = FlowLayouter.HeightOf(note.Blocks, _noteWidth);
+        Length height = FlowLayouter.HeightOf(
+            note.Blocks, _noteWidth, collapsesSpacing: _options.CollapsesSpacing);
         _noteHeights[note] = height;
         return height;
     }
@@ -1191,14 +1396,16 @@ public sealed class Paginator
     /// call a Word footer makes — a flow with no stated offset — and the notes take their room out of the
     /// body's, which is what makes a page with notes hold less text.
     /// </remarks>
-    private static PlacedFlow? NoteArea(List<PageNote> notes, PageGeometry page)
+    private PlacedFlow? NoteArea(List<PageNote> notes, PageGeometry page)
     {
         if (notes.Count == 0) return null;
 
         List<PageBlock> blocks = [];
         foreach (PageNote note in notes) blocks.AddRange(note.Blocks);
 
-        return FlowLayouter.LayOut(blocks, page.TextArea, offsetFromTop: null);
+        return FlowLayouter.LayOut(
+            blocks, page.TextArea, offsetFromTop: null,
+            collapsesSpacing: _options.CollapsesSpacing);
     }
 
     /// <summary>
@@ -1240,32 +1447,20 @@ public sealed class Paginator
         => index > 0 && blocks[index - 1] is PageParagraph previous ? previous.Format : null;
 
     /// <summary>
-    /// How many of a table's remaining rows fit in what is left of the page.
+    /// One page's worth of a table: what was placed, how tall it is, and where the next page resumes.
     /// </summary>
-    /// <remarks>
-    /// A row fits when its whole height does, the same rule a line follows — a row split across a page
-    /// break is a thing Word can do and Writer cannot, and Writer is what this matches. So a row taller
-    /// than the space left moves whole, and one taller than a page overflows rather than being cut.
-    /// </remarks>
-    private static int FittedRows(
-        List<Length> rowHeights, int from, Length used, Length available)
-    {
-        Length room = available - used;
-        int count = 0;
-
-        for (int row = from; row < rowHeights.Count; row++)
-        {
-            if (rowHeights[row] > room) break;
-
-            room -= rowHeights[row];
-            count++;
-        }
-
-        return count;
-    }
+    /// <param name="Placed">The cells that landed here, or null when nothing could.</param>
+    /// <param name="Height">How much of the page's height they took.</param>
+    /// <param name="NextRow">The row the next page starts at.</param>
+    /// <param name="NextDrawn">
+    /// How far into <paramref name="NextRow"/> this page already reached, which is nought unless the row
+    /// itself was broken.
+    /// </param>
+    private readonly record struct TablePart(
+        PlacedTable? Placed, Length Height, int NextRow, Length NextDrawn);
 
     /// <summary>
-    /// Puts a run of a table's rows on the page, repeating its headings when it is a continuation.
+    /// Puts as much of a table as fits on the page, repeating its headings when it is a continuation.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -1279,77 +1474,203 @@ public sealed class Paginator
     /// alternative is a page holding a heading and nothing else followed by another just like it, which
     /// does not terminate.
     /// </para>
+    /// <para>
+    /// Three things can go on the page, in this order: the rest of a row the previous page broke, the run
+    /// of whole rows that then fits, and the first part of the row that does not. The last is Writer's
+    /// follow flow line and the reason this is not simply "how many rows fit" — see
+    /// <see cref="TableLayouter.SliceRow"/>.
+    /// </para>
     /// </remarks>
     /// <param name="table">The table.</param>
     /// <param name="laid">Its cells and row heights, relative to its own top-left.</param>
     /// <param name="from">The first row to place.</param>
-    /// <param name="count">How many rows to place.</param>
+    /// <param name="drawn">How far into that row an earlier page already reached; nought for a fresh row.</param>
     /// <param name="body">
     /// The column the table goes in, which the cells' coordinates end up relative to — the whole body area
     /// for single-column text, and one column of it otherwise.
     /// </param>
     /// <param name="top">How far below that area's top the placed part starts.</param>
     /// <param name="column">Which column of the page it is, recorded on the result.</param>
-    /// <param name="repeatHeadings">True when this is a continuation and the headings come again.</param>
-    private static (PlacedTable Table, Length Height) PlaceRows(
+    /// <param name="room">How much of the column's height is left.</param>
+    /// <param name="columnIsEmpty">
+    /// True when nothing else is on the column yet, which is what makes overflowing the right answer: a
+    /// row too tall for a column of its own has nowhere better to go, and moving it would not terminate.
+    /// </param>
+    private static TablePart PlaceTablePart(
         PageTable table,
         LaidBlock laid,
         int from,
-        int count,
+        Length drawn,
         DocRect body,
         Length top,
         int column,
-        bool repeatHeadings)
+        Length room,
+        bool columnIsEmpty)
     {
         List<Length> heights = laid.RowHeights;
-        int end = Math.Min(from + count, heights.Count);
-
-        int headings = repeatHeadings
-            ? Math.Min(Math.Max(table.HeaderRowCount, 0), from)
-            : 0;
-
-        Length headingHeight = Length.Zero;
-        for (int row = 0; row < headings; row++) headingHeight += heights[row];
-
-        Length placedHeight = headingHeight;
-        for (int row = from; row < end; row++) placedHeight += heights[row];
-
-        Length skipped = Length.Zero;
-        for (int row = 0; row < from; row++) skipped += heights[row];
-
         List<PlacedTableCell> cells = [];
 
-        // The headings first, moved from the top of the table to the top of this part.
+        // The headings, moved from the top of the table to the top of this part. Only on a continuation:
+        // on the table's own first part they are the rows about to be placed.
+        int headings = Math.Min(Math.Max(table.HeaderRowCount, 0), from);
+        Length placed = Length.Zero;
+
+        for (int row = 0; row < headings; row++) placed += heights[row];
+
         if (headings > 0)
         {
             cells.AddRange(TableLayouter.Offset(
-                laid.Cells.Where(cell => cell.Row < headings),
-                body.X,
-                body.Y + top));
+                laid.Cells.Where(cell => cell.Row < headings), body.X, body.Y + top));
         }
 
-        // Then the rows themselves, moved up by everything above them and down by where this part starts.
-        cells.AddRange(TableLayouter.Offset(
-            laid.Cells.Where(cell => cell.Row >= from && cell.Row < end),
-            body.X,
-            body.Y + top + headingHeight - skipped));
+        int start = from;
 
-        return (
-            new PlacedTable
+        // The rest of a row the previous page broke. It cannot be moved — its first part is already drawn —
+        // so a remainder too tall for the page is placed anyway and broken again further down.
+        if (drawn > Length.Zero && from < heights.Count)
+        {
+            List<PlacedTableCell> rowCells = RowCells(laid, from);
+
+            TableLayouter.RowSlice? tail =
+                TableLayouter.SliceRow(table.Rows[from], rowCells, drawn, room - placed)
+                ?? TableLayouter.SliceRow(table.Rows[from], rowCells, drawn, Length.FromEmu(long.MaxValue));
+
+            // A remainder with nothing in it, which the cut said there was: the row is finished rather
+            // than unfinished. Asking again is what would not terminate.
+            if (tail is { } rest)
             {
-                Table = table,
-                Area = new DocRect(
-                    body.X + table.LeftIndent,
-                    body.Y + top,
-                    table.WidthWithin(body.Width),
-                    placedHeight),
-                Cells = cells,
-                FirstRow = from,
-                RowEnd = end,
-                Column = column,
-            },
-            placedHeight);
+                cells.AddRange(TableLayouter.Offset(rest.Cells, body.X, body.Y + top + placed));
+                placed += rest.Height;
+
+                if (!rest.IsComplete)
+                {
+                    return new TablePart(
+                        Part(table, cells, body, top, column, placed, from, from + 1),
+                        placed, from, rest.Cut);
+                }
+            }
+
+            start = from + 1;
+        }
+
+        // Then the run of whole rows that fits in what is left.
+        int end = start;
+        Length whole = Length.Zero;
+        while (end < heights.Count && placed + whole + heights[end] <= room)
+        {
+            whole += heights[end];
+            end++;
+        }
+
+        if (end > start)
+        {
+            Length skipped = Length.Zero;
+            for (int row = 0; row < start; row++) skipped += heights[row];
+
+            cells.AddRange(TableLayouter.Offset(
+                laid.Cells.Where(cell => cell.Row >= start && cell.Row < end),
+                body.X,
+                body.Y + top + placed - skipped));
+
+            placed += whole;
+        }
+
+        // Finally the first part of the row that does not fit, when the document lets it break.
+        if (end < heights.Count && MaySplit(table, end) && !IsCoveredByAMerge(laid, end))
+        {
+            List<PlacedTableCell> rowCells = RowCells(laid, end);
+
+            if (TableLayouter.SliceRow(table.Rows[end], rowCells, Length.Zero, room - placed)
+                is { } head)
+            {
+                cells.AddRange(TableLayouter.Offset(head.Cells, body.X, body.Y + top + placed));
+                placed += head.Height;
+
+                return new TablePart(
+                    Part(table, cells, body, top, column, placed, from, end + 1),
+                    placed, end, head.Cut);
+            }
+        }
+
+        // Nothing at all fitted. An empty column would leave the same problem, so the first row is placed
+        // anyway and allowed to overflow; otherwise the caller ends the page and tries again at its top.
+        if (end == from && drawn <= Length.Zero)
+        {
+            if (!columnIsEmpty || from >= heights.Count) return new TablePart(null, Length.Zero, from, drawn);
+
+            Length skipped = Length.Zero;
+            for (int row = 0; row < from; row++) skipped += heights[row];
+
+            cells.AddRange(TableLayouter.Offset(
+                RowCells(laid, from), body.X, body.Y + top + placed - skipped));
+
+            placed += heights[from];
+            end = from + 1;
+        }
+
+        return new TablePart(
+            Part(table, cells, body, top, column, placed, from, end), placed, end, Length.Zero);
     }
+
+    /// <summary>The cells of one row, as the table's own layout left them.</summary>
+    private static List<PlacedTableCell> RowCells(LaidBlock laid, int row)
+        => [.. laid.Cells.Where(cell => cell.Row == row)];
+
+    /// <summary>
+    /// Whether a cell starting further up the table reaches into this row.
+    /// </summary>
+    /// <remarks>
+    /// Such a row cannot be broken here: the merged cell is one rectangle drawn with the row it starts in,
+    /// and a break inside it would leave half of it on a page it was never placed on. Writer keeps the
+    /// same case out of its own split by re-formatting the line that a row span crosses
+    /// (<c>lcl_AdjustRowSpanCells</c>); declining is the same answer with none of the machinery.
+    /// </remarks>
+    private static bool IsCoveredByAMerge(LaidBlock laid, int row)
+    {
+        foreach (PlacedTableCell cell in laid.Cells)
+        {
+            if (cell.Row < row && cell.Row + Math.Max(1, cell.Cell.RowSpan) > row) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Whether a row's own content may be broken across a page.
+    /// </summary>
+    /// <remarks>
+    /// The document's say first — <see cref="PageTableRow.CanSplit"/> — and then the two rules Writer
+    /// applies whatever the document says: a repeated heading never splits, since it is drawn again on the
+    /// next page anyway, and neither does a row of a stated exact height, which is a fixed size rather than
+    /// a floor. Both are the first two tests in <c>SwRowFrame::IsRowSplitAllowed</c>.
+    /// </remarks>
+    private static bool MaySplit(PageTable table, int row)
+        => row >= Math.Max(table.HeaderRowCount, 0)
+           && table.Rows[row].CanSplit
+           && !table.Rows[row].HasExactHeight;
+
+    private static PlacedTable Part(
+        PageTable table,
+        List<PlacedTableCell> cells,
+        DocRect body,
+        Length top,
+        int column,
+        Length height,
+        int firstRow,
+        int rowEnd)
+        => new()
+        {
+            Table = table,
+            Area = new DocRect(
+                body.X + table.LeftIndent,
+                body.Y + top,
+                table.WidthWithin(body.Width),
+                height),
+            Cells = cells,
+            FirstRow = firstRow,
+            RowEnd = rowEnd,
+            Column = column,
+        };
 
     /// <summary>
     /// One block after its content has been laid out, whichever kind of block it is.

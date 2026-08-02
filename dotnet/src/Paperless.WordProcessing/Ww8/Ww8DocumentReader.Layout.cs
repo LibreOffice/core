@@ -58,6 +58,11 @@ public sealed partial class Ww8DocumentReader
     /// be described twice.
     /// </para>
     /// </param>
+    /// <param name="ListFollow">
+    /// The level's <c>ixchFollow</c>: what closes the gap between the label and the item's first word —
+    /// 0 a tab to <paramref name="ListTabStop"/>, 1 a space, 2 nothing.
+    /// </param>
+    /// <param name="ListTabStop">Where that tab lands, in twips from the text area's start edge.</param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -72,7 +77,9 @@ public sealed partial class Ww8DocumentReader
         IReadOnlyList<Ww8LayoutRun>? Runs = null,
         IReadOnlyList<Ww8LayoutNote>? Notes = null,
         IReadOnlyList<Ww8LayoutFrame>? Frames = null,
-        string? ListMarker = null);
+        string? ListMarker = null,
+        byte ListFollow = 2,
+        int ListTabStop = 0);
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -95,6 +102,7 @@ public sealed partial class Ww8DocumentReader
     /// The superscript or subscript <c>sprmCIss</c> asks for, unresolved — its rise is a fraction of the
     /// face's height and this reader has no faces.
     /// </param>
+    /// <param name="CaseMap">The case <c>sprmCFCaps</c> or <c>sprmCFSmallCaps</c> draws the run in.</param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -104,7 +112,8 @@ public sealed partial class Ww8DocumentReader
         bool IsItalic,
         string? Language,
         Colour? Colour,
-        Layout.Escapement Escapement = default)
+        Layout.Escapement Escapement = default,
+        Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -296,8 +305,14 @@ public sealed partial class Ww8DocumentReader
 
             // Word writes all six stories whether the section uses them or not, so an empty paragraph is a
             // placeholder rather than a blank line — but only when there is nothing else in the story.
+            //
+            // "Nothing else" has to include the shapes anchored in it. A running head that is one logo and
+            // no words is an ordinary thing, and its paragraph reads back with no text at all: the U+0001
+            // that stood for the picture is consumed by the frame it made (see CollectFrame), so testing
+            // the text alone throws the whole header away and leaves the body starting at the top margin.
             blocks.RemoveAll(
-                block => block.Paragraph is { Text.Length: 0 } && block.Table is null);
+                block => block.Paragraph is { Text.Length: 0, Frames: null or { Count: 0 } }
+                    && block.Table is null);
 
             if (blocks.Count == 0) continue;
 
@@ -373,10 +388,25 @@ public sealed partial class Ww8DocumentReader
         (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
         Stack<int> openFields = new();
 
+        // Where the last U+000C fell, until the paragraph after it has been read and can be asked whether
+        // it starts a new section. Null everywhere else, which is every paragraph of a document that has
+        // neither a section break nor a hard page break in it.
+        int? pageBreakAt = null;
+
+        // Whether the character just read closed a paragraph — LibreOffice's <c>m_bWasParaEnd</c>. False
+        // at the start, which is what makes a range beginning with a U+000C still yield its first
+        // paragraph.
+        bool wasParagraphMark = false;
+
         for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
             char character = text[index];
             int position = body.Start + index;
+
+            // LibreOffice's `m_bWasParaEnd`, which it recomputes on every character read
+            // (`ww8par.cxx`:3714) and which decides whether a U+000C ends a paragraph of its own.
+            bool afterParagraphMark = wasParagraphMark;
+            wasParagraphMark = character is ParagraphMark or CellMark;
 
             // Everything between a field's start and its separator is its instruction and is not drawn.
             // Not a refinement: LibreOffice's own DOC export writes a picture as a SHAPE field, so
@@ -392,7 +422,28 @@ public sealed partial class Ww8DocumentReader
             switch (character)
             {
                 case ParagraphMark or Special.SectionMark:
-                    Close(position, endsCell: false);
+                    // A U+000C ends a paragraph only when one is under way. `HandlePageBreakChar`
+                    // (`ww8par.cxx`:3438) adds a paragraph end exactly when the character before it was
+                    // not one — `if (!m_bWasParaEnd && IsTemp)` — and otherwise lets the break settle on
+                    // the empty paragraph already open. Closing one unconditionally put a blank line
+                    // above every hard page break and every section break in the document, which is a
+                    // line's worth of height per break and eventually a page.
+                    if (character == ParagraphMark || !afterParagraphMark)
+                    {
+                        Close(position, endsCell: false);
+                    }
+
+                    // A U+000C is *either* a section break or a hard page break, and WW8 says which only
+                    // by whether a section ends at this position. LibreOffice looks the position up in the
+                    // section PLCF and, finding no section boundary, inserts an ordinary
+                    // `SvxBreak::PageBefore` on the paragraph that follows
+                    // (`SwWW8ImplReader::ReadText`, `ww8par.cxx`:4097, after `HandlePageBreakChar` set
+                    // `m_bPgSecBreak`). Without this, every Ctrl+Enter in a DOC is silently dropped —
+                    // the paragraph after it simply carries on down the same page.
+                    // The lookup is done as "does the next paragraph belong to another section", which is
+                    // the same question without the character-position arithmetic: a section-terminating
+                    // U+000C is the last character of its section, so the mark after it is in the next one.
+                    pageBreakAt = character == Special.SectionMark ? position : null;
                     start = index + 1;
                     continue;
 
@@ -545,14 +596,30 @@ public sealed partial class Ww8DocumentReader
         {
             Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
 
-            assembler.Add(
+            Ww8LayoutParagraph paragraph =
                 Describe(current.ToString(), positions, body.Start + start, markPosition) with
                 {
                     Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
                     Frames = _pendingFrames.Count == 0 ? null : [.. _pendingFrames],
-                },
-                format,
-                endsCell);
+                };
+
+            // The U+000C above this paragraph was a hard page break rather than a section boundary, so
+            // this paragraph starts a page. Not inside a table: "#i1909# section/page breaks should not
+            // occur in tables, word itself ignores them in this case" — `HandlePageBreakChar` declines
+            // outright when `m_nInTable`.
+            if (pageBreakAt is { } breakAt
+                && !paragraph.IsInTable
+                && SectionAt(breakAt) == paragraph.SectionIndex)
+            {
+                paragraph = paragraph with
+                {
+                    Format = paragraph.Format with { StartsNewPage = true },
+                };
+            }
+
+            pageBreakAt = null;
+
+            assembler.Add(paragraph, format, endsCell);
 
             current.Clear();
             positions.Clear();
@@ -738,13 +805,27 @@ public sealed partial class Ww8DocumentReader
 
         Length size = SizeOf(character);
 
+        Text.Layout.ParagraphFormat format = layout.ToParagraphFormat(size) with
+        {
+            DefaultTabInterval = DocumentProperties.DefaultTabInterval,
+
+            // Word measures its tab stops from the text area rather than from the paragraph's
+            // indent, which is what `ww8par.cxx` records by clearing TABS_RELATIVE_TO_INDENT.
+            TabsRelativeToIndent = false,
+        };
+
+        // The level is looked up whether or not it draws a label, because a continuation paragraph of a
+        // list item is written with the same indents and no marker.
+        Ww8ListLevel? level = paragraph.ListNumber > 0
+            ? _numbering.FindLevel(paragraph.ListNumber, paragraph.ListLevel ?? 0)
+            : null;
+
+        if (level is { } stated) format = WithListIndents(format, stated, layout, markPosition);
+
         return new Ww8LayoutParagraph(
             SectionAt(markPosition),
             text,
-            layout.ToParagraphFormat(size) with
-            {
-                DefaultTabInterval = DocumentProperties.DefaultTabInterval,
-            },
+            format,
             character.FontIndex is { } index ? Fonts.Name(index) : null,
             size,
             character.IsBold == true ? 700 : 400,
@@ -753,8 +834,20 @@ public sealed partial class Ww8DocumentReader
             paragraph.IsInTable,
             character.Colour,
             ReadRuns(text, positions, markPosition),
-            ListMarker: LabelAt(paragraph));
+            ListMarker: LabelAt(paragraph),
+            ListFollow: level?.Follow ?? LabelFollowsWithNothing,
+            ListTabStop: level?.TabPosition ?? 0);
     }
+
+    /// <summary>
+    /// The <c>ixchFollow</c> a paragraph with no level of its own is given: nothing at all.
+    /// </summary>
+    /// <remarks>
+    /// Two rather than nought, because nought means a tab and a paragraph whose level could not be found
+    /// has no stop to aim at — so the label would be pushed to the paragraph's own indent for reasons the
+    /// document never stated.
+    /// </remarks>
+    private const byte LabelFollowsWithNothing = 2;
 
     /// <summary>
     /// The label a paragraph's list level draws, advancing that level's counter.
@@ -830,7 +923,8 @@ public sealed partial class Ww8DocumentReader
                 format.IsItalic == true,
                 LanguageOf(format),
                 format.Colour,
-                format.Escapement ?? Layout.Escapement.None);
+                format.Escapement ?? Layout.Escapement.None,
+                format.CaseMap);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -852,7 +946,8 @@ public sealed partial class Ww8DocumentReader
            && a.IsItalic == b.IsItalic
            && string.Equals(a.Language, b.Language, StringComparison.Ordinal)
            && a.Colour == b.Colour
-           && a.Escapement == b.Escapement;
+           && a.Escapement == b.Escapement
+           && a.CaseMap == b.CaseMap;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -887,6 +982,87 @@ public sealed partial class Ww8DocumentReader
         }
 
         return ApplyLayoutSprms(format, direct);
+    }
+
+    /// <summary>
+    /// What a paragraph's <em>own</em> PAPX states about its indents and its list, as opposed to what it
+    /// inherits.
+    /// </summary>
+    /// <remarks>
+    /// The distinction Writer's <c>SwTextNode::AreListLevelIndentsApplicableImpl</c> turns on: a
+    /// hard-set indent beats the list level's, and a list named directly on the paragraph beats the
+    /// indents its <em>style</em> sets. A WW8 import puts exactly the paragraph's own sprms on the node
+    /// and its style's on the format, so "hard-set" is the direct grpprl and nothing else.
+    /// </remarks>
+    private (bool SetsLeftIndent, bool SetsFirstLineIndent, bool NamesList) DirectParagraphSprms(
+        int position)
+    {
+        (_, ReadOnlyMemory<byte> direct) =
+            Ww8FormattingTable.SplitParagraphProperties(
+                _paragraphProperties.Find(_pieces.FileOffsetOf(position)));
+
+        bool left = false;
+        bool firstLine = false;
+        bool list = false;
+
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(direct))
+        {
+            switch (sprm.Identifier)
+            {
+                case LayoutSprms.LeftIndent or LayoutSprms.LeftIndent80:
+                    left = true;
+                    break;
+                case LayoutSprms.FirstLineIndent or LayoutSprms.FirstLineIndent80:
+                    firstLine = true;
+                    break;
+                case Ww8SprmReader.Ids.ListFormatOverride:
+                    list = true;
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        return (left, firstLine, list);
+    }
+
+    /// <summary>
+    /// A list paragraph's format with whichever of its level's indents it is entitled to take.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word writes a level's geometry into the <c>LVL</c>'s own <c>grpprlPapx</c> and usually — but not
+    /// always — repeats it on every paragraph in the list. On the documents that do not repeat it, a
+    /// reader taking only the paragraph's own sprms gives every item a nought indent and no hanging one,
+    /// so the label is drawn exactly where the item's first word starts and the two fuse.
+    /// </para>
+    /// <para>
+    /// The rule is Writer's, per item: a hard-set indent on the paragraph wins; failing that a list named
+    /// directly on the paragraph wins over the style chain; failing that the style chain wins. The last
+    /// arm is the conservative reading — Writer would still let the level through when the style carrying
+    /// the numbering is met before any indent, and telling those apart needs the chain walked in order,
+    /// which is not worth it for a case no corpus document exercises.
+    /// </para>
+    /// </remarks>
+    private Text.Layout.ParagraphFormat WithListIndents(
+        Text.Layout.ParagraphFormat format,
+        Ww8ListLevel level,
+        Ww8LayoutFormat resolved,
+        int markPosition)
+    {
+        (bool setsLeft, bool setsFirstLine, bool namesList) = DirectParagraphSprms(markPosition);
+
+        bool leftApplies = !setsLeft && (namesList || resolved.LeftIndent is null);
+        bool firstLineApplies = !setsFirstLine && (namesList || resolved.FirstLineIndent is null);
+
+        if (leftApplies) format = format with { StartIndent = Length.FromTwips(level.IndentAt) };
+
+        if (firstLineApplies)
+        {
+            format = format with { FirstLineIndent = Length.FromTwips(level.FirstLineIndent) };
+        }
+
+        return format;
     }
 
     /// <summary>
@@ -1105,6 +1281,18 @@ public sealed partial class Ww8DocumentReader
                         IsItalic = sprm.ResolveToggle(format.IsItalic ?? false),
                     };
                     break;
+                case LayoutSprms.SmallCaps:
+                    format = format with
+                    {
+                        IsSmallCapitalised = sprm.ResolveToggle(format.IsSmallCapitalised ?? false),
+                    };
+                    break;
+                case LayoutSprms.Caps:
+                    format = format with
+                    {
+                        IsCapitalised = sprm.ResolveToggle(format.IsCapitalised ?? false),
+                    };
+                    break;
                 case LayoutSprms.Language or LayoutSprms.Language80:
                     format = format with { LanguageId = sprm.Word };
                     break;
@@ -1140,6 +1328,8 @@ public sealed partial class Ww8DocumentReader
 
         internal const ushort Bold = 0x0835;
         internal const ushort Italic = 0x0836;
+        internal const ushort SmallCaps = 0x083A;
+        internal const ushort Caps = 0x083B;
         internal const ushort FontSize = 0x4A43;
         internal const ushort FontIndex = 0x4A4F;
         internal const ushort Language80 = 0x486D;

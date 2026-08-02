@@ -8,6 +8,7 @@ using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 using Paperless.Presentations.Layout;
 using Paperless.Text.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Presentations.MsBinary;
 
@@ -67,25 +68,44 @@ internal sealed class PptSlideLayout
     private readonly List<Diagnostic> _diagnostics;
     private readonly SlideFonts _fonts;
     private readonly EscherDrawingReader _escher;
+    private readonly byte[] _pictures;
 
     private readonly Dictionary<uint, PptStyleSheet> _stylesByMaster = [];
     private readonly Dictionary<uint, PptColourScheme> _schemesByMaster = [];
     private readonly Dictionary<uint, Paint?> _backgroundsByMaster = [];
+    private readonly Dictionary<uint, DffRecordHeader> _pagesByMaster = [];
+    private readonly Dictionary<uint, PptPageEntry> _entriesByMaster = [];
+    private readonly Dictionary<int, PptPicture> _decoded = [];
 
     private PptStyleSheet? _defaultStyles;
     private PptFontTable _fontTable = PptFontTable.Empty;
+    private Dictionary<int, EscherBlip>? _blips;
+    private PptHeadersFooters _deckHeadersFooters = PptHeadersFooters.None;
+    private bool _titlePlaceholdersOmitted;
 
+    /// <param name="stream">The <c>PowerPoint Document</c> stream.</param>
+    /// <param name="persist">The persist directory, which says which version of each object is current.</param>
+    /// <param name="fonts">The font stack layout measures with.</param>
+    /// <param name="diagnostics">Where anything unreadable is recorded.</param>
+    /// <param name="pictures">
+    /// The compound file's <c>Pictures</c> stream, which is this format's blip delay stream — a
+    /// PPT's <c>msofbtBSE</c> entries carry a <c>foDelay</c> into it and hold no bytes themselves.
+    /// Empty for a deck with no pictures, and for a caller that has none to give: the deck then
+    /// draws every frame empty, which is what it did before this stream was passed at all.
+    /// </param>
     public PptSlideLayout(
         DffRecordBuffer stream,
         PptPersistDirectory persist,
         SlideFonts fonts,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        byte[]? pictures = null)
     {
         _stream = stream;
         _persist = persist;
         _fonts = fonts;
         _diagnostics = diagnostics;
         _escher = new EscherDrawingReader(stream, diagnostics);
+        _pictures = pictures ?? [];
     }
 
     /// <summary>Lays every slide out, in presentation order.</summary>
@@ -96,6 +116,9 @@ internal sealed class PptSlideLayout
 
         DocSize size = SlideSize(pages);
         _fontTable = PptFontTable.Read(_stream, pages.Environment);
+        _blips = ReadBlips(pages);
+        _deckHeadersFooters = DeckHeadersFooters(pages);
+        _titlePlaceholdersOmitted = TitlePlaceholdersOmitted(pages);
         ReadMasters(pages);
 
         for (int index = 0; index < pages.Slides.Count; index++)
@@ -136,9 +159,140 @@ internal sealed class PptSlideLayout
         return new DocSize(Length.FromInches(10), Length.FromInches(7.5));
     }
 
+    /// <summary>
+    /// Whether the deck suppresses the running placeholders on its title slides.
+    /// </summary>
+    /// <remarks>
+    /// Byte 37 of the <c>DocumentAtom</c>, past the two page sizes, the zoom ratio, the two
+    /// master persist ids, the first page number, the page format and the embedded-fonts flag
+    /// (<c>ReadPptDocumentAtom</c>, <c>svdfppt.cxx:257-290</c>). It is the reason a deck's title
+    /// slide carries no footer while every slide after it does
+    /// (<c>sd/source/filter/ppt/pptin.cxx:1456-1461</c>).
+    /// </remarks>
+    private bool TitlePlaceholdersOmitted(PptPages pages)
+    {
+        if (_stream.FirstChild(pages.Document, PptRecordTypes.DocumentAtom) is not { } atom)
+            return false;
+
+        ReadOnlySpan<byte> content = _stream.Content(atom);
+        return content.Length >= 38 && content[37] != 0;
+    }
+
+    /// <summary>
+    /// The deck-wide running-placeholder settings its slide masters start from.
+    /// </summary>
+    /// <remarks>
+    /// The document container carries one <c>HeadersFooters</c> per master kind, told apart by
+    /// the header instance: 3 for the slide masters and 4 for the notes master
+    /// (<c>svdfppt.cxx:1636-1653</c>). Only the slide one is read here; a notes page is not
+    /// rendered.
+    /// </remarks>
+    private PptHeadersFooters DeckHeadersFooters(PptPages pages)
+    {
+        PptHeadersFooters result = PptHeadersFooters.None;
+
+        foreach (DffRecordHeader child in _stream.Children(pages.Document))
+        {
+            if (child.Type != PptRecordTypes.HeadersFooters || child.Instance != 3) continue;
+            result = PptHeadersFooters.Read(_stream, child, result);
+        }
+
+        return result;
+    }
+
     /// <summary>Converts a master-unit length to a <see cref="Length"/>.</summary>
     private static Length Units(long units)
         => Length.FromEmu(units * Length.EmuPerInch / MasterUnitsPerInch);
+
+    /// <summary>
+    /// The deck's blip store: every picture, indexed by the <c>pib</c> a shape carries.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A PPT keeps its drawing group in a <c>PPDrawingGroup</c> record inside the document
+    /// container, and the group's first child is the <c>OfficeArtBStoreContainer</c> — the same
+    /// structure a DOC keeps at <c>fcDggInfo</c>, which is why one reader serves both. The
+    /// entries here are always the <c>foDelay</c> form: PowerPoint writes the picture bytes into
+    /// the compound file's <c>Pictures</c> stream and leaves the entry at its bare thirty-six
+    /// bytes. LibreOffice hands <c>SdrPowerPointImport</c> exactly that stream as its BLIP stream
+    /// (<c>sd/source/filter/ppt/pptin.cxx:216</c>, <c>maPictureStream</c>).
+    /// </para>
+    /// <para>
+    /// <strong>Why the omission was expensive.</strong> A metafile blip in a PPT is zlib-deflated
+    /// behind its <c>OfficeArtMetafileHeader</c>, so a deck's pasted tables, charts and org
+    /// diagrams are invisible to any search of the file for their own text — which is what makes
+    /// "the reference draws words our reader cannot even find" look like a text bug rather than a
+    /// missing picture. Twelve of the thirteen worst text losses in the slides corpus were this.
+    /// </para>
+    /// </remarks>
+    private Dictionary<int, EscherBlip> ReadBlips(PptPages pages)
+    {
+        if (_stream.FirstChild(pages.Document, PptRecordTypes.DrawingGroup) is not { } group)
+            return [];
+
+        foreach (DffRecordHeader child in _stream.Children(group))
+        {
+            if (child.Type != EscherRecordTypes.DrawingGroupContainer) continue;
+
+            return EscherBlips.Read(_stream, child, _pictures, []);
+        }
+
+        return [];
+    }
+
+    /// <summary>
+    /// The picture a shape's <c>pib</c> names, decoded once per store entry.
+    /// </summary>
+    /// <remarks>
+    /// <c>pib</c> is one-based and zero means "no picture", so the lookup and the emptiness test
+    /// are the same question. Which of raster and vector a blip is comes from its bytes rather
+    /// than from its record type, for the reason <see cref="Ooxml.PptxSlideLayout"/> gives at
+    /// length: a producer writing a genuine EMF into a <c>WMF</c> blip is ordinary, and the
+    /// decoder registry is the only thing that knows what it can read.
+    /// </remarks>
+    private PptPicture PictureOf(EscherShape shape)
+    {
+        uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
+        if (pib == 0 || _blips is null) return default;
+        if (_decoded.TryGetValue((int)pib, out PptPicture cached)) return cached;
+        if (!_blips.TryGetValue((int)pib, out EscherBlip blip)) return default;
+
+        PptPicture picture = default;
+        if (!blip.Bytes.IsEmpty)
+        {
+            ReadOnlyMemory<byte> bytes = blip.Bytes;
+            picture = VectorImages.For(bytes.Span) is not null
+                ? new PptPicture(null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
+                : new PptPicture(RasterImage.Encoded(bytes, MediaType(blip.RecordType)), null);
+        }
+
+        _decoded[(int)pib] = picture;
+        return picture;
+    }
+
+    /// <summary>
+    /// What a blip record type says its bytes are, for a backend choosing a decoder.
+    /// </summary>
+    /// <remarks>
+    /// The record type is the only honest label a binary Office file gives a picture — there is
+    /// no file name and no content type — and it is a hint rather than a fact: a decoder still
+    /// sniffs. Null for the types that are not rasters, which never reach here.
+    /// </remarks>
+    private static string? MediaType(ushort recordType) => recordType switch
+    {
+        0xF01D or 0xF02A => "image/jpeg",
+        0xF01E => "image/png",
+        0xF01F => "image/bmp",
+        0xF029 => "image/tiff",
+        _ => null,
+    };
+
+    /// <summary>One blip store entry's picture: a raster, or a vector decoded when something draws it.</summary>
+    private readonly record struct PptPicture(RasterImage? Raster, Lazy<VectorImage>? Vector)
+    {
+        /// <summary>True when the entry held nothing drawable.</summary>
+        public bool IsEmpty => Raster is null && Vector is null;
+    }
 
     /// <summary>
     /// Reads what each master supplies to the slides under it: styles, colours and background.
@@ -157,6 +311,9 @@ internal sealed class PptSlideLayout
             if (_persist.Resolve(entry.PersistId) is not { } offset) continue;
             if (!_stream.TryReadHeader(offset, out DffRecordHeader header)) continue;
             if (header.Type != PptRecordTypes.MainMaster) continue;
+
+            _pagesByMaster[entry.SlideId] = header;
+            _entriesByMaster[entry.SlideId] = entry;
 
             if (SchemeOf(header) is { } scheme) _schemesByMaster[entry.SlideId] = scheme;
 
@@ -209,25 +366,73 @@ internal sealed class PptSlideLayout
     /// </remarks>
     private PptColourScheme SchemeFor(DffRecordHeader page, uint masterId, ushort flags)
     {
-        if ((flags & 0x0002) == 0 && SchemeOf(page) is { } own) return own;
+        if ((flags & FollowMasterScheme) == 0 && SchemeOf(page) is { } own) return own;
         if (_schemesByMaster.TryGetValue(masterId, out PptColourScheme? master)) return master;
         return SchemeOf(page) ?? PptColourScheme.Default;
+    }
+
+    /// <summary>
+    /// The scheme the master's running placeholders have to be re-resolved under, or null when the
+    /// master's own scheme is right for them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is <c>HeaderFooterEntry::NeedToImportInstance</c>
+    /// (<c>filter/source/msfilter/svdfppt.cxx:3125</c>). The date, header, footer and slide number
+    /// are shapes on the master, so drawing them means drawing master shapes — but a slide that
+    /// recolours itself has to draw them in <em>its own</em> colours, or a deck whose title slide
+    /// inverts the scheme shows a dark footer on a dark background.
+    /// </para>
+    /// <para>
+    /// LibreOffice implements it by re-importing each placeholder from the master's recorded file
+    /// offset (<c>HeaderFooterOfs</c>, set at <c>svdfppt.cxx:772</c> for exactly these four ids)
+    /// into the <em>slide's</em> <c>ProcessData</c>, so the same Escher shape resolves its scheme
+    /// colours against the slide. Here the master's shapes are walked anyway, so the equivalent is
+    /// to hand those four a different scheme rather than to read them twice.
+    /// </para>
+    /// <para>
+    /// The condition is both halves of the reference's: the slide must not be following the
+    /// master's scheme, <em>and</em> the two schemes must actually differ. A slide that states its
+    /// own atom identical to its master's — which is what PowerPoint writes on most pages — is
+    /// not a recolour and must keep drawing under the master's.
+    /// </para>
+    /// </remarks>
+    private PptColourScheme? RecolouredRunningPlaceholders(
+        uint masterId, ushort flags, PptColourScheme slideScheme)
+    {
+        if ((flags & FollowMasterScheme) != 0) return null;
+        if (!_schemesByMaster.TryGetValue(masterId, out PptColourScheme? master)) return null;
+
+        return slideScheme.SameColoursAs(master) ? null : slideScheme;
     }
 
     private LaidOutSlide LayoutSlide(
         DffRecordHeader page, PptPageEntry entry, int index, DocSize size)
     {
-        (uint masterId, ushort flags) = SlideAtom(page);
+        (uint masterId, ushort flags, int layout) = SlideAtom(page);
         PptColourScheme scheme = SchemeFor(page, masterId, flags);
         PptStyleSheet? styles = _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles;
 
         bool hidden = false;
+        PptHeadersFooters runningPlaceholders = _deckHeadersFooters;
+
         foreach (DffRecordHeader record in _stream.Children(page))
         {
             if (record.Type == PptRecordTypes.SlideShowSlideInfoAtom)
             {
                 hidden |= IsHidden(_stream.Content(record));
             }
+            else if (record.Type == PptRecordTypes.HeadersFooters)
+            {
+                runningPlaceholders = PptHeadersFooters.Read(_stream, record, runningPlaceholders);
+            }
+        }
+
+        // A deck that omits its title placeholders shows none of the four on a title slide, no
+        // matter what the atom says (pptin.cxx:1456-1461).
+        if (_titlePlaceholdersOmitted && layout == TitleSlideLayout)
+        {
+            runningPlaceholders = PptHeadersFooters.None;
         }
 
         List<PlacedShape> shapes = [];
@@ -235,7 +440,15 @@ internal sealed class PptSlideLayout
                             ?? _backgroundsByMaster.GetValueOrDefault(masterId)
                             ?? Paint.Solid(Colour.White);
 
-        Context context = new(entry, scheme, styles);
+        PptFieldValues fields = FieldsFor(index, runningPlaceholders);
+        Context context = new(entry, scheme, styles, fields);
+
+        if ((flags & FollowMasterObjects) != 0)
+        {
+            AddMasterShapes(
+                masterId, runningPlaceholders, fields,
+                RecolouredRunningPlaceholders(masterId, flags, scheme), shapes);
+        }
 
         if (_stream.FirstChild(page, PptRecordTypes.Drawing) is { } drawing
             && _stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is { } container)
@@ -256,15 +469,41 @@ internal sealed class PptSlideLayout
         };
     }
 
-    /// <summary>The master id and flags of a page's <c>SlideAtom</c>.</summary>
-    private (uint MasterId, ushort Flags) SlideAtom(DffRecordHeader page)
+    /// <summary>
+    /// Bit 0 of a <c>SlideAtom</c>'s flags: draw the master's shapes under this slide.
+    /// </summary>
+    /// <remarks>
+    /// Clearing it is how PowerPoint makes a title slide that keeps its own copies of the
+    /// decorations instead of the master's; Impress implements it by taking the background-objects
+    /// layer out of the page's visible set (<c>sd/source/filter/ppt/pptin.cxx:1548-1557</c>).
+    /// </remarks>
+    private const ushort FollowMasterObjects = 0x0001;
+
+    /// <summary>
+    /// Bit 1 of a <c>SlideAtom</c>'s flags: resolve scheme colours against the master's atom
+    /// rather than the page's own (<c>svdfppt.cxx:2566-2604</c>).
+    /// </summary>
+    private const ushort FollowMasterScheme = 0x0002;
+
+    /// <summary>The <c>SlideLayoutAtom</c> geometry meaning "title slide".</summary>
+    private const int TitleSlideLayout = 0;
+
+    /// <summary>The layout, master id and flags of a page's <c>SlideAtom</c>.</summary>
+    /// <remarks>
+    /// The layout geometry comes first, then its eight placeholder ids — twelve bytes in all —
+    /// and only then the master and notes ids and the flags word.
+    /// </remarks>
+    private (uint MasterId, ushort Flags, int Layout) SlideAtom(DffRecordHeader page)
     {
-        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return (0, 0);
+        if (_stream.FirstChild(page, PptRecordTypes.SlideAtom) is not { } atom) return (0, 0, -1);
 
         ReadOnlySpan<byte> content = _stream.Content(atom);
+        int layout = content.Length >= 4
+            ? unchecked((int)DffRecordBuffer.ReadUInt32(content))
+            : -1;
         uint master = content.Length >= 16 ? DffRecordBuffer.ReadUInt32(content[12..]) : 0;
         ushort flags = content.Length >= 22 ? DffRecordBuffer.ReadUInt16(content[20..]) : (ushort)0;
-        return (master, flags);
+        return (master, flags, layout);
     }
 
     /// <summary>
@@ -306,7 +545,118 @@ internal sealed class PptSlideLayout
 
     /// <summary>What a page supplies to every shape on it.</summary>
     private sealed record Context(
-        PptPageEntry Entry, PptColourScheme Scheme, PptStyleSheet? Styles);
+        PptPageEntry Entry,
+        PptColourScheme Scheme,
+        PptStyleSheet? Styles,
+        PptFieldValues Fields);
+
+    /// <summary>
+    /// What the running fields resolve to on a page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The slide number is the page's position, one-based, which is what Impress's page field
+    /// renders. Header, footer and date come from the page's own running-placeholder settings.
+    /// </para>
+    /// <para>
+    /// <strong>An automatic date is left unresolved.</strong> LibreOffice inserts a live date
+    /// field for it (<c>PPTFieldEntry::SetDateTime</c>, <c>svdfppt.cxx:6449</c>), so the reference
+    /// rendering of such a deck says whatever day it was made on. Substituting today's date here
+    /// would agree with a reference taken today and disagree with one taken yesterday, which makes
+    /// every stored comparison a clock. The marker is dropped instead, so the page carries no
+    /// stray asterisk either way.
+    /// </para>
+    /// </remarks>
+    private static PptFieldValues FieldsFor(int index, PptHeadersFooters runningPlaceholders)
+        => new(
+            SlideNumber: (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Date: runningPlaceholders.DateIsAutomatic ? "" : runningPlaceholders.Date ?? "",
+            Header: runningPlaceholders.Header ?? "",
+            Footer: runningPlaceholders.Footer ?? "");
+
+    /// <summary>
+    /// Draws what a slide inherits from its master, under the slide's own shapes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A PPT master page is drawn whole, not merged into the slide's placeholders.</strong>
+    /// Impress imports every shape of a <c>MainMaster</c> except the patriarch onto the master page
+    /// and puts it on the background-objects layer
+    /// (<c>sd/source/filter/ppt/pptin.cxx:838-848</c>); the slide then shows that layer unless its
+    /// <c>SlideAtom</c> clears <see cref="FollowMasterObjects"/>. So a logo, a strapline and a rule
+    /// on the master reach every slide under it without any of them appearing in the slide's own
+    /// drawing — which is why a deck whose master carries its branding loses a fifth of its words
+    /// when this walk is missing, with nothing in the slide's records to suggest where they went.
+    /// </para>
+    /// <para>
+    /// Two kinds of master shape are held back. The master's own title, body, subtitle and notes
+    /// prompts — placeholder ids 1 to 6 — are presentation objects rather than background objects
+    /// and Impress never draws a master's presentation object while a slide is shown
+    /// (<see cref="PptPlaceholders.IsMasterPrompt"/>). The date, header, footer and slide-number
+    /// placeholders are drawn only where the page's own running-placeholder settings ask for them.
+    /// </para>
+    /// <para>
+    /// The master's colour scheme and style sheet are used rather than the slide's, because the
+    /// shapes belong to the master page: a slide that recolours itself recolours its own shapes,
+    /// not the branding it inherits.
+    /// </para>
+    /// </remarks>
+    private void AddMasterShapes(
+        uint masterId,
+        PptHeadersFooters runningPlaceholders,
+        PptFieldValues fields,
+        PptColourScheme? recoloured,
+        List<PlacedShape> shapes)
+    {
+        if (!_pagesByMaster.TryGetValue(masterId, out DffRecordHeader master)) return;
+        if (_stream.FirstChild(master, PptRecordTypes.Drawing) is not { } drawing) return;
+        if (_stream.FirstChild(drawing, EscherRecordTypes.DrawingContainer) is not { } container)
+            return;
+
+        Context context = new(
+            _entriesByMaster.GetValueOrDefault(masterId),
+            _schemesByMaster.GetValueOrDefault(masterId, PptColourScheme.Default),
+            _stylesByMaster.GetValueOrDefault(masterId) ?? _defaultStyles,
+            fields);
+
+        Context slideColours = recoloured is null ? context : context with { Scheme = recoloured };
+
+        foreach (EscherShape shape in _escher.ReadDrawing(container))
+        {
+            int placeholder = PlaceholderOf(shape);
+            if (PptPlaceholders.IsMasterPrompt(placeholder)) continue;
+            if (!runningPlaceholders.Shows(placeholder)) continue;
+
+            // Only the four running placeholders move to the slide's scheme; the master's own
+            // decorations stay in the master's, which is what re-importing exactly the shapes
+            // HeaderFooterOfs recorded amounts to.
+            Context effective = PptPlaceholders.IsRunning(placeholder) ? slideColours : context;
+            Add(shape, effective, AffineTransform.Identity, shapes, depth: 0);
+        }
+    }
+
+    /// <summary>
+    /// The placeholder a shape's client data declares, or <see cref="PptPlaceholders.None"/>.
+    /// </summary>
+    /// <remarks>
+    /// The id is one byte behind a four-byte placement id
+    /// (<c>ReadPptOEPlaceholderAtom</c>, <c>svdfppt.cxx:490</c>). An ordinary shape has no client
+    /// data at all, so the absent record and the zero id mean the same thing.
+    /// </remarks>
+    private int PlaceholderOf(EscherShape shape)
+    {
+        if (shape.ClientData is not { } data) return PptPlaceholders.None;
+
+        foreach (DffRecordHeader record in _stream.Children(data))
+        {
+            if (record.Type != PptRecordTypes.PlaceholderAtom) continue;
+
+            ReadOnlySpan<byte> content = _stream.Content(record);
+            return content.Length >= 5 ? content[4] : PptPlaceholders.None;
+        }
+
+        return PptPlaceholders.None;
+    }
 
     private void Add(
         EscherShape shape,
@@ -458,15 +808,45 @@ internal sealed class PptSlideLayout
                 : null)
             ?? SlidePresetGeometry.Outline(preset, local.Size, Guides(adjustment));
 
+        DocRect bounds = ShapeTransform.PlacedBounds(placement, local.Size);
+
         return new PlacedShape
         {
             Name = shape.Name,
             Outline = ShapeTransform.Apply(placement, outline),
-            Bounds = ShapeTransform.PlacedBounds(placement, local.Size),
+            Bounds = bounds,
             Fill = Fill(shape, context.Scheme),
             Line = Line(shape, context.Scheme),
+            Picture = Picture(shape, bounds),
             Text = Text(shape, context, local, preset, adjustment, placement),
         };
+    }
+
+    /// <summary>
+    /// The picture a shape draws, in the rectangle the shape occupies.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Any shape may carry one, not only a picture frame.</strong> Escher has no separate
+    /// picture element: a <c>pib</c> is a property like a fill colour, so a rounded rectangle with
+    /// a photograph in it is one shape with both. <c>SvxMSDffManager::ImportShape</c> reads it the
+    /// same way — the graphic is fetched whenever the property is present
+    /// (<c>msdffimp.cxx:4693</c>) — which is why this is asked of every shape rather than of a
+    /// type.
+    /// </para>
+    /// <para>
+    /// The destination is the shape's placed rectangle, with no crop applied.
+    /// <c>cropFromTop</c> and its three siblings are recorded in the TODO rather than
+    /// approximated; a cropped picture drawn whole is the right picture in the right place at the
+    /// wrong scale, where dropping it is a hole.
+    /// </para>
+    /// </remarks>
+    private PlacedPicture? Picture(EscherShape shape, DocRect bounds)
+    {
+        PptPicture picture = PictureOf(shape);
+        return picture.IsEmpty
+            ? null
+            : new PlacedPicture(picture.Raster, bounds) { Vector = picture.Vector };
     }
 
     /// <summary>
@@ -691,17 +1071,17 @@ internal sealed class PptSlideLayout
             if (record.Type != PptRecordTypes.OutlineTextRefAtom) continue;
 
             uint reference = DffRecordBuffer.ReadUInt32(_stream.Content(record));
-            return OutlineText(context.Entry, reference);
+            return OutlineText(context.Entry, reference, context.Fields);
         }
 
-        return PptTextReader.Read(_stream, start, end);
+        return PptTextReader.Read(_stream, start, end, context.Fields);
     }
 
     /// <summary>
     /// The <paramref name="reference"/>th text run of a slide's entry in the document's slide
     /// list.
     /// </summary>
-    private PptTextRun? OutlineText(PptPageEntry entry, uint reference)
+    private PptTextRun? OutlineText(PptPageEntry entry, uint reference, PptFieldValues fields)
     {
         int matches = 0;
         int start = -1;
@@ -711,11 +1091,11 @@ internal sealed class PptSlideLayout
             if (record.Type == PptRecordTypes.SlidePersistAtom) break;
             if (record.Type != PptRecordTypes.TextHeaderAtom) continue;
 
-            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position);
+            if (start >= 0) return PptTextReader.Read(_stream, start, record.Position, fields);
             if (matches++ == reference) start = record.Position;
         }
 
-        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd) : null;
+        return start >= 0 ? PptTextReader.Read(_stream, start, entry.TextEnd, fields) : null;
     }
 
     /// <summary>

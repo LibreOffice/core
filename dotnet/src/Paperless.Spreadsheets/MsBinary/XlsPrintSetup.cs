@@ -44,7 +44,12 @@ internal static class BiffPageRecords
     /// <summary>The <c>SETUP</c> flags, from <c>EXC_SETUP_*</c>.</summary>
     public const ushort SetupInRows = 0x0001;
 
-    /// <summary>Set when the paper size and orientation are the printer's rather than the file's.</summary>
+    /// <summary>Set when <c>SETUP</c>'s values are the printer's rather than the file's.</summary>
+    /// <remarks>
+    /// <c>EXC_SETUP_INVALID</c>. It disqualifies the scale as well as the paper size and the
+    /// orientation — <c>mbValidPaper = maData.mbValid = !get_flag(nFlags, EXC_SETUP_INVALID)</c>
+    /// (<c>sc/source/filter/excel/xipage.cxx:68</c>) sets one flag for all three.
+    /// </remarks>
     public const ushort SetupInvalid = 0x0004;
 
     /// <summary>Set when <c>SETUP</c>'s start page is meant rather than the sheet continuing.</summary>
@@ -123,7 +128,7 @@ internal sealed class XlsSheetPrintState
     private int _fitToHeight = 1;
     private bool _fitsToPages;
     private bool _portrait = true;
-    private bool _paperIsValid;
+    private bool _setupIsValid;
     private bool _usesStartPage;
     private bool _printsInRows;
     private bool _centresHorizontally;
@@ -165,9 +170,10 @@ internal sealed class XlsSheetPrintState
         _printsInRows = (flags & BiffPageRecords.SetupInRows) != 0;
         _portrait = (flags & BiffPageRecords.SetupPortrait) != 0;
 
-        // A SETUP whose "invalid" bit is set means the paper size and orientation came from a
-        // printer rather than from the document, so neither is used.
-        _paperIsValid = (flags & BiffPageRecords.SetupInvalid) == 0;
+        // A SETUP whose "invalid" bit is set carries values that came from a printer rather
+        // than from the document, so none of them is used — the paper size, the orientation
+        // and, less obviously, the scale.
+        _setupIsValid = (flags & BiffPageRecords.SetupInvalid) == 0;
         _usesStartPage = (flags & BiffPageRecords.SetupStartPage) != 0;
 
         if (headerMargin is { } header) _headerMargin = header;
@@ -292,11 +298,11 @@ internal sealed class XlsSheetPrintState
         bool hasHeader = !string.IsNullOrEmpty(_header);
         bool hasFooter = !string.IsNullOrEmpty(_footer);
 
-        (Length paperWidth, Length paperHeight) = _paperIsValid
+        (Length paperWidth, Length paperHeight) = _setupIsValid
             ? ExcelPaperSizes.Portrait(_paperSize)
             : ExcelPaperSizes.A4;
 
-        bool landscape = _paperIsValid && !_portrait;
+        bool landscape = _setupIsValid && !_portrait;
         DocSize page = landscape
             ? new DocSize(paperHeight, paperWidth)
             : new DocSize(paperWidth, paperHeight);
@@ -319,7 +325,16 @@ internal sealed class XlsSheetPrintState
             Header = _header is null ? null : SheetHeaderFooter.ParseCodes(_header),
             Footer = _footer is null ? null : SheetHeaderFooter.ParseCodes(_footer),
             ScaleMode = _fitsToPages ? PrintScaleMode.FitToPages : PrintScaleMode.Percentage,
-            ScalePercentage = _scale,
+
+            // The scale is SETUP's, and SETUP's fields are only meant when the record is valid.
+            // XclImpPageSettings::Finalize puts ATTR_PAGE_SCALE under `else if (maData.mbValid)`
+            // (sc/source/filter/excel/xipage.cxx:274-276), so a SETUP marked "these came from a
+            // printer" leaves the page style's own 100%. It is not a corner case: a quarter of
+            // the corpus's .xls files set the bit, and the scale beside it is arbitrary —
+            // 255, 285, 300, once 20480 — so honouring it multiplies the whole sheet and turns
+            // a two-page workbook into a twelve-page one. Fit-to-pages is unaffected: it comes
+            // from WSBOOL and Finalize applies it whether or not SETUP is valid.
+            ScalePercentage = _setupIsValid ? _scale : 100,
             FitToPagesWide = Math.Max(0, _fitToWidth),
             FitToPagesTall = Math.Max(0, _fitToHeight),
             PageOrder = _printsInRows ? PagePrintOrder.AcrossThenDown : PagePrintOrder.DownThenAcross,

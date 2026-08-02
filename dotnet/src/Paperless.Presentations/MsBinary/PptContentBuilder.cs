@@ -36,6 +36,7 @@ internal sealed class PptContentBuilder
     /// from the main master's notes instance.
     /// </remarks>
     private PptStyleSheet? _defaultStyles;
+    private PptFontTable _fonts = PptFontTable.Empty;
 
     public PptContentBuilder(
         DffRecordBuffer stream, PptPersistDirectory persist, List<Diagnostic> diagnostics)
@@ -52,6 +53,11 @@ internal sealed class PptContentBuilder
         if (PptPages.Read(_stream, _persist, _diagnostics) is not { } pages) return;
 
         ReadMasterStyles(pages);
+
+        // Only a bullet needs the font collection here, and only to tell a symbol face from a
+        // text one — but a bullet stated in one is a glyph slot rather than a letter, so without
+        // this an extracted list is marked with the letter the slot happens to share a code with.
+        _fonts = PptFontTable.Read(_stream, pages.Environment);
 
         Dictionary<uint, PptPageEntry> notesBySlide = [];
         foreach (PptPageEntry entry in pages.Notes) notesBySlide.TryAdd(entry.SlideId, entry);
@@ -213,7 +219,7 @@ internal sealed class PptContentBuilder
         // behind by an undo. Neither belongs in extracted text.
         if (!shape.IsBackground && !shape.IsDeleted && ReadShapeText(shape, entry) is { } run)
         {
-            foreach (ContentParagraph paragraph in PptTextReader.ToParagraphs(run, styles))
+            foreach (ContentParagraph paragraph in PptTextReader.ToParagraphs(run, styles, _fonts))
             {
                 target.Children.Add(paragraph);
             }

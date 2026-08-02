@@ -125,6 +125,22 @@ public sealed partial class RtfDocumentReader
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
 
+        /// <summary>True inside <c>\caps</c>: drawn in capitals whatever the text says.</summary>
+        public bool Capitals { get; set; }
+
+        /// <summary>True inside <c>\scaps</c>: drawn in small capitals.</summary>
+        public bool SmallCapitals { get; set; }
+
+        /// <summary>The case the text is drawn in, from the two toggles above.</summary>
+        /// <remarks>
+        /// <c>\caps</c> wins where a file sets both, matching the single-valued item every consumer of
+        /// this ends up holding.
+        /// </remarks>
+        public Layout.PageCaseMap CaseMap
+            => Capitals ? Layout.PageCaseMap.Uppercase
+                : SmallCapitals ? Layout.PageCaseMap.SmallCaps
+                : Layout.PageCaseMap.None;
+
         /// <summary>True inside <c>\revised</c>: text a tracked change added.</summary>
         public bool Revised { get; set; }
 
@@ -231,6 +247,8 @@ public sealed partial class RtfDocumentReader
             Underline = Underline,
             Strike = Strike,
             Hidden = Hidden,
+            Capitals = Capitals,
+            SmallCapitals = SmallCapitals,
             Revised = Revised,
             RevisionAuthor = RevisionAuthor,
             RevisionDate = RevisionDate,
@@ -278,6 +296,8 @@ public sealed partial class RtfDocumentReader
             Underline = false;
             Strike = false;
             Hidden = false;
+            Capitals = false;
+            SmallCapitals = false;
             Revised = false;
             VerticalPosition = 0;
             CharacterStyleId = 0;
@@ -532,6 +552,14 @@ public sealed partial class RtfDocumentReader
 
         /// <summary><c>\trhdr</c>: the row repeats as a header at the top of every page.</summary>
         public bool RowIsHeader { get; set; }
+
+        /// <summary><c>\trkeep</c>: the row's content may not be broken across a page.</summary>
+        /// <remarks>
+        /// Named for keeping rather than for splitting because that is what the control word says, and
+        /// LibreOffice's tokeniser turns it straight into OOXML's opposite spelling —
+        /// <c>LN_CT_TrPrBase_cantSplit</c> (<c>rtftok/rtfdispatchflag.cxx</c>).
+        /// </remarks>
+        public bool RowIsKeptTogether { get; set; }
     }
 
     /// <summary>A cell's declaration from <c>\cellx</c> and the merge flags before it.</summary>
@@ -612,6 +640,9 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>True when the row repeats as a header on every page the table spans.</summary>
         public bool IsHeader { get; init; }
+
+        /// <summary>True when <c>\trkeep</c> forbade breaking the row across a page.</summary>
+        public bool IsKeptTogether { get; init; }
 
         /// <summary>
         /// The row's left edge in twips, from <c>\trleft</c>. The first cell starts here, so a row
@@ -977,7 +1008,8 @@ public sealed partial class RtfDocumentReader
                 ? WindowsLanguages.TagOf((ushort)state.LanguageId)
                 : null,
             ColourAt(state.ForegroundColourIndex),
-            EscapementOf(state));
+            EscapementOf(state),
+            state.CaseMap);
 
         flow.LayoutLength += length;
 
@@ -1082,6 +1114,10 @@ public sealed partial class RtfDocumentReader
                 Alignment = AlignmentOf(state),
                 TabStops = [.. state.TabStops.OrderBy(stop => stop.Position.Emu)],
                 DefaultTabInterval = _defaultTabInterval,
+
+                // As for DOCX: writerfilter's DomainMapper clears TABS_RELATIVE_TO_INDENT for every
+                // document it maps, and RTF goes through the same mapper.
+                TabsRelativeToIndent = false,
             },
             _fontFamilies.GetValueOrDefault(state.FontIndex),
             SizeOf(state),

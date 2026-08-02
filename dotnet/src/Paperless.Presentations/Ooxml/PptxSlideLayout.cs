@@ -50,6 +50,23 @@ internal sealed partial class PptxSlideLayout
     private readonly Dictionary<XElement, string> _diagrams =
         new(ReferenceEqualityComparer.Instance);
 
+    /// <summary>
+    /// The per-level inheritance chain for the slide currently being laid out.
+    /// </summary>
+    /// <remarks>
+    /// Held as state rather than threaded through every method because it is a property of the
+    /// slide and is needed at the leaves — a table cell's body, a diagram node's body — where
+    /// passing it down would mean widening a dozen signatures that have nothing else to do with
+    /// text. Set once at the top of <see cref="Layout"/>.
+    /// </remarks>
+    private PptxTextStyles? _styles;
+
+    /// <summary>
+    /// What the slide currently being laid out resolves its automatic fields to.
+    /// </summary>
+    /// <remarks>Held beside <see cref="_styles"/>, and for the same reason.</remarks>
+    private SlideFields _fields;
+
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
         _file = file;
@@ -60,6 +77,11 @@ internal sealed partial class PptxSlideLayout
     public LaidOutSlide Layout(PptxSlide slide)
     {
         SlideTheme theme = ThemeFor(slide);
+        _styles = new PptxTextStyles(
+            slide.Layout, slide.Master, _file.DefaultTextStyle, isNotesPage: false,
+            theme.Colours);
+        _fields = new SlideFields(slide.Index + 1, _file.Slides.Count);
+
         List<PlacedShape> shapes = [];
 
         InheritedShapes(slide, theme, shapes);
@@ -217,7 +239,7 @@ internal sealed partial class PptxSlideLayout
             FillContext context =
                 new(slide, theme.Colours, _file.SlideSize, AffineTransform.Identity);
 
-            if (Fill(properties, inherited: null, context) is { } fill) return fill;
+            if (Fill(properties, [], context) is { } fill) return fill;
             if (Drawing.Child(properties, "noFill") is not null) return null;
         }
 
@@ -361,9 +383,12 @@ internal sealed partial class PptxSlideLayout
     {
         foreach (XElement element in parent.Elements())
         {
+            if (IsHidden(element)) continue;
+
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))
             {
-                if (background && PptxPlaceholder.Read(element, slide.Master) is not null) continue;
+                if (background && PptxPlaceholder.Read(element, slide.Master, slide.Layout) is not null)
+                    continue;
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
             else if (Ppt.Is(element, "grpSp") && depth < MaxGroupDepth)
@@ -374,14 +399,13 @@ internal sealed partial class PptxSlideLayout
             }
             else if (Ppt.Is(element, "graphicFrame"))
             {
-                // A graphic frame is a table, a chart, a diagram or an embedded object. Three of
-                // the four now draw: a table from its own model, a chart from the plot the reader
-                // built, and a diagram from the shape tree the authoring application baked beside
-                // its layout definition. An embedded object still has no geometry here, and
-                // drawing its frame would put an empty rectangle where the reference draws a
-                // picture.
+                // A graphic frame is a table, a chart, a diagram or an embedded object, and all
+                // four now draw: a table from its own model, a chart from the plot the reader
+                // built, a diagram from the shape tree the authoring application baked beside its
+                // layout definition, and an embedded object from the picture of itself it carries.
                 shapes.AddRange(Table(element, theme, space));
                 shapes.AddRange(Chart(element, slide, theme, space));
+                shapes.AddRange(Ole(element, slide, theme, space));
                 Diagram(element, slide, theme, space, shapes, depth);
             }
             else if (Ppt.Is(element, "pic"))
@@ -394,6 +418,34 @@ internal sealed partial class PptxSlideLayout
                 if (Shape(element, slide, theme, space) is { } placed) Add(placed, shapes);
             }
         }
+    }
+
+    /// <summary>
+    /// True when a shape states <c>p:cNvPr/@hidden</c>, and so is not drawn at all.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One attribute on the non-visual properties of any shape kind, read by every shape context
+    /// in the importer (<c>oox/source/ppt/pptshapecontext.cxx:61</c>,
+    /// <c>drawingml/shapecontext.cxx:79</c>, and the two group contexts beside them) and turned
+    /// into <c>Visible = false</c> and <c>Printable = false</c> at
+    /// <c>oox/source/drawingml/shape.cxx:1436-1442</c>.
+    /// </para>
+    /// <para>
+    /// It is not a rarity confined to authoring artefacts. A corporate master routinely parks a
+    /// hidden prompt — "&lt;Presentation Title – Change on Master Slide&gt;" — behind its real
+    /// title, so a renderer that ignores the attribute prints instructions to the author on every
+    /// slide of the deck.
+    /// </para>
+    /// </remarks>
+    private static bool IsHidden(XElement element)
+    {
+        foreach (XElement child in element.Elements())
+        {
+            if (Ppt.Child(child, "cNvPr") is { } properties)
+                return Ppt.Flag(properties, "hidden", whenAbsent: false);
+        }
+        return false;
     }
 
     /// <summary>
@@ -524,29 +576,38 @@ internal sealed partial class PptxSlideLayout
         // layout, and failing that from the master — which is the normal case for a title, whose
         // slide-level shape carries only its text. Falling back to a zero rectangle instead puts
         // every such shape in the top-left corner at no size.
-        XElement? inherited = transform is null ? PlaceholderProperties(shape, slide) : null;
-        transform ??= Drawing.Child(inherited, "xfrm");
-        if (transform is null && inherited is null && properties is null) return null;
+        XElement?[] inherited = transform is null ? PlaceholderProperties(shape, slide) : [];
+        transform ??= First(inherited, "xfrm");
+        if (transform is null && inherited.Length == 0 && properties is null) return null;
 
         DocRect local = Bounds(transform);
         if (local.Width <= Length.Zero && local.Height <= Length.Zero) return null;
 
-        AffineTransform placement = ShapeTransform.Place(
-            local,
-            ShapeTransform.Radians(Rotation(transform)),
-            Drawing.Flag(transform, "flipH") ?? false,
-            Drawing.Flag(transform, "flipV") ?? false,
-            space);
+        double turn = ShapeTransform.Radians(Rotation(transform));
+        bool flipHorizontal = Drawing.Flag(transform, "flipH") ?? false;
+        bool flipVertical = Drawing.Flag(transform, "flipV") ?? false;
 
-        XElement? geometry = Drawing.Child(properties, "prstGeom")
-                             ?? Drawing.Child(inherited, "prstGeom");
+        AffineTransform placement =
+            ShapeTransform.Place(local, turn, flipHorizontal, flipVertical, space);
+
+        // The same placement without the mirror, which is what the shape's *text* travels with.
+        // See Text() for why the two differ.
+        AffineTransform upright = flipHorizontal || flipVertical
+            ? ShapeTransform.Place(local, turn, flipHorizontal: false, flipVertical: false, space)
+            : placement;
+
+        // What a parent group's child coordinate space multiplies this shape's own units by;
+        // (1, 1) outside one, and outside the very common group that states a child space equal
+        // to its own extent.
+        (double scaleX, double scaleY) = ShapeTransform.ScaleOf(upright);
+
+        XElement? geometry = Drawing.Child(properties, "prstGeom") ?? First(inherited, "prstGeom");
         string? preset = Drawing.Attribute(geometry, "prst");
         Dictionary<string, double>? adjustment = Adjustments(geometry);
 
         // a:custGeom states its own guides and paths, so it needs no preset name — and a shape
         // carrying one has no a:prstGeom at all.
-        XElement? custom = Drawing.Child(properties, "custGeom")
-                           ?? Drawing.Child(inherited, "custGeom");
+        XElement? custom = Drawing.Child(properties, "custGeom") ?? First(inherited, "custGeom");
 
         CustomShapeGeometry.Geometry? own = custom is null
             ? null
@@ -569,9 +630,43 @@ internal sealed partial class PptxSlideLayout
             Line = Line(properties, inherited, theme.Colours),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
             TailEnd = LineEnd(properties, inherited, "tailEnd"),
-            Text = Text(shape, local, TextRectangle(shape, local, own, preset, adjustment),
-                        placement, theme),
+            Text = Text(
+                shape,
+                // Into slide units, because the type inside is already in them. A group scales
+                // its children's coordinates and not their font sizes — LibreOffice decomposes
+                // the cumulative matrix and gives the shape the absolute size the scale produces
+                // (shape.cxx:1129-1140), then lays the text out in that. Leaving the rectangle in
+                // the child space measures 12 pt text against a box a thousandth of an inch wide,
+                // so every word is too wide for its line. The scale has to come back off the
+                // matrix that carries the runs, which is what Text is given below.
+                ShapeTransform.Scaled(
+                    Mirrored(
+                        TextRectangle(shape, local, own, preset, adjustment),
+                        local.Size, flipHorizontal, flipVertical),
+                    scaleX,
+                    scaleY),
+                ShapeTransform.WithoutScale(upright, scaleX, scaleY),
+                theme),
         };
+    }
+
+    /// <summary>
+    /// A text rectangle reflected about its shape's centre, for each axis the shape mirrors.
+    /// </summary>
+    /// <remarks>
+    /// The geometry a mirrored shape draws is the mirrored geometry, and the text area belongs
+    /// to the geometry — so an asymmetric preset's text moves with it. What does <em>not</em>
+    /// move is the writing: see <see cref="Text"/>.
+    /// </remarks>
+    private static DocRect Mirrored(DocRect rectangle, DocSize box, bool horizontal, bool vertical)
+    {
+        if (!horizontal && !vertical) return rectangle;
+
+        return new DocRect(
+            horizontal ? box.Width - rectangle.X - rectangle.Width : rectangle.X,
+            vertical ? box.Height - rectangle.Y - rectangle.Height : rectangle.Y,
+            rectangle.Width,
+            rectangle.Height);
     }
 
     /// <summary>
@@ -625,38 +720,70 @@ internal sealed partial class PptxSlideLayout
     }
 
     /// <summary>
-    /// The <c>p:spPr</c> of the layout or master placeholder a slide shape stands in for.
+    /// The <c>p:spPr</c> of every placeholder a slide shape stands in for, nearest first.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The layout's shapes are searched before the master's, which
     /// <see cref="PptxPlaceholder.Find"/> arranges by walking a concatenated list backwards —
     /// the same reversal LibreOffice relies on (<c>oox/source/ppt/pptshape.cxx:791</c>), and the
     /// reason searching the two trees in the obvious order lets the master win every tie.
+    /// </para>
+    /// <para>
+    /// <strong>Both rungs, not just the nearest.</strong> A layout written by PowerPoint states
+    /// <c>&lt;p:spPr/&gt;</c> — empty — on every placeholder it inherits unchanged, so stopping
+    /// at the layout finds no <c>a:xfrm</c> and the shape is dropped for having no size. That is
+    /// how a deck loses every slide title while keeping its body text, whose <c>idx</c> happens
+    /// to match the master's placeholder directly. LibreOffice reaches the same rectangle by
+    /// importing the master fragment and the layout fragment into one <c>SlidePersist</c>
+    /// (<c>presentationfragmenthandler.cxx:246-296</c>), which leaves both shapes in the list
+    /// the slide's placeholder searches.
+    /// </para>
     /// </remarks>
-    private static XElement? PlaceholderProperties(XElement shape, PptxSlide slide)
+    private XElement?[] PlaceholderProperties(XElement shape, PptxSlide slide)
     {
-        if (PptxPlaceholder.Read(shape, slide.Master) is not { } placeholder) return null;
+        if (_styles is null) return [];
+        if (PptxPlaceholder.Read(shape, slide.Master, slide.Layout) is not { } placeholder)
+            return [];
 
-        XElement? match = placeholder.Find(
-            [.. PptxPlaceholder.ShapesOf(slide.Master), .. PptxPlaceholder.ShapesOf(slide.Layout)]);
-
-        return Ppt.Child(match, "spPr");
+        (XElement? direct, XElement? inherited) = _styles.Placeholders(placeholder);
+        return [Ppt.Child(direct, "spPr"), Ppt.Child(inherited, "spPr")];
     }
 
-    private static SlideTextBody? BodyOf(XElement shape, SlideTheme theme)
+    private SlideTextBody? BodyOf(XElement shape, SlideTheme theme)
     {
         XElement? body = Ppt.Child(shape, "txBody");
         return body is null || DrawingTextBody.IsEmpty(body)
             ? null
-            : PptxTextBody.Read(body, theme.Colours, theme.MinorLatin);
+            : PptxTextBody.Read(
+                body, theme.Colours, theme.MinorLatin, _styles?.LevelPropertiesFor(shape),
+                _fields, _styles?.BodyPropertiesFor(shape));
     }
 
+    /// <summary>
+    /// The text a shape draws, laid out in its text rectangle.
+    /// </summary>
+    /// <remarks>
+    /// <strong>The placement is the shape's without its mirror.</strong> A flipped shape draws
+    /// mirrored geometry and upright writing: LibreOffice records <c>flipH</c> on a preset or
+    /// custom shape as <c>MirroredX</c> on the custom-shape properties
+    /// (<c>oox/source/drawingml/shape.cxx:2146-2151</c>), which reflects the geometry alone —
+    /// only the shapes with no attribute for it, pictures and the like, get the negative scale
+    /// at <c>shape.cxx:1128</c> that would reflect everything. Mirroring the runs instead draws
+    /// legible-looking text that reads backwards, and extracts backwards too, which is how the
+    /// defect survives a visual check.
+    /// </remarks>
+    /// <param name="shape">The shape whose body is being read.</param>
+    /// <param name="rectangle">
+    /// Its text rectangle, at slide scale but still at the shape's own origin — so a parent
+    /// group's scale is already in the extent and is not in the matrix.
+    /// </param>
+    /// <param name="placement">
+    /// The matrix placing the shape, with any mirror and any group scale already removed.
+    /// </param>
+    /// <param name="theme">The theme, for run colours and the fallback typeface.</param>
     private PlacedText? Text(
-        XElement shape,
-        DocRect local,
-        DocRect rectangle,
-        AffineTransform placement,
-        SlideTheme theme)
+        XElement shape, DocRect rectangle, AffineTransform placement, SlideTheme theme)
     {
         if (BodyOf(shape, theme) is not { } body) return null;
 
@@ -725,6 +852,16 @@ internal sealed partial class PptxSlideLayout
         return new PlacedText(runs, AffineTransform.Concat(turn, placement));
     }
 
+    /// <summary>The named child of the first source in a chain to carry one.</summary>
+    private static XElement? First(XElement?[] sources, string name)
+    {
+        foreach (XElement? source in sources)
+        {
+            if (Drawing.Child(source, name) is { } child) return child;
+        }
+        return null;
+    }
+
     /// <summary>True when a placement is a pure translation, so text needs no matrix.</summary>
     private static bool IsUpright(AffineTransform transform)
         => transform.A == 1 && transform.B == 0 && transform.C == 0 && transform.D == 1;
@@ -738,9 +875,9 @@ internal sealed partial class PptxSlideLayout
     /// from the theme's style matrix (<c>a:fillRef</c>) is a separate lookup that nothing
     /// measured needs yet. Both are in the TODO.
     /// </remarks>
-    private Paint? Fill(XElement? properties, XElement? inherited, in FillContext context)
+    private Paint? Fill(XElement? properties, XElement?[] inherited, in FillContext context)
     {
-        foreach (XElement? source in (XElement?[])[properties, inherited])
+        foreach (XElement? source in (XElement?[])[properties, .. inherited])
         {
             if (source is null) continue;
             if (Drawing.Child(source, "noFill") is not null) return null;
@@ -1037,9 +1174,9 @@ internal sealed partial class PptxSlideLayout
     /// how <c>&lt;a:ln w="0"&gt;&lt;a:noFill/&gt;&lt;/a:ln&gt;</c> — what LibreOffice's own export
     /// writes for an unstroked shape — says "no outline" rather than "a hairline in black".
     /// </remarks>
-    private static Stroke? Line(XElement? properties, XElement? inherited, DrawingTheme? theme)
+    private static Stroke? Line(XElement? properties, XElement?[] inherited, DrawingTheme? theme)
     {
-        foreach (XElement? source in (XElement?[])[properties, inherited])
+        foreach (XElement? source in (XElement?[])[properties, .. inherited])
         {
             XElement? line = Drawing.Child(source, "ln");
             if (line is null) continue;
@@ -1068,9 +1205,9 @@ internal sealed partial class PptxSlideLayout
     }
 
     /// <summary>The marker one end of a line carries, from its own <c>a:ln</c> or its placeholder's.</summary>
-    private static SlideLineEnd LineEnd(XElement? properties, XElement? inherited, string which)
+    private static SlideLineEnd LineEnd(XElement? properties, XElement?[] inherited, string which)
     {
-        foreach (XElement? source in (XElement?[])[properties, inherited])
+        foreach (XElement? source in (XElement?[])[properties, .. inherited])
         {
             XElement? line = Drawing.Child(source, "ln");
             if (line is null) continue;

@@ -95,8 +95,30 @@ public static class PptRecordTypes
     /// <summary>A length-prefixed UTF-16 string, used for names throughout.</summary>
     public const ushort CString = 4026;
 
-    /// <summary>The headers and footers of a master.</summary>
+    /// <summary>
+    /// Marks the position of the slide number inside a run's text.
+    /// </summary>
+    /// <remarks>
+    /// The field's own character in the text is an asterisk, and the atom says which one
+    /// (<c>svdfppt.cxx:6984</c> tests for <c>0x2a</c>). A shape whose whole text is that one
+    /// asterisk is what a master's slide-number placeholder looks like.
+    /// </remarks>
+    public const ushort SlideNumberMCAtom = 4056;
+
+    /// <summary>The headers and footers of a page or of a master.</summary>
     public const ushort HeadersFooters = 4057;
+
+    /// <summary>Which of the four running placeholders a page shows, and how it formats a date.</summary>
+    public const ushort HeadersFootersAtom = 4058;
+
+    /// <summary>Marks the position of the page's date inside a run's text.</summary>
+    public const ushort GenericDateMCAtom = 4088;
+
+    /// <summary>Marks the position of the page's header inside a run's text.</summary>
+    public const ushort HeaderMCAtom = 4089;
+
+    /// <summary>Marks the position of the page's footer inside a run's text.</summary>
+    public const ushort FooterMCAtom = 4090;
 
     /// <summary>One of the document's three slide lists, distinguished by the header instance.</summary>
     public const ushort SlideListWithText = 4080;

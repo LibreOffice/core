@@ -159,7 +159,7 @@ public sealed class LineBreakPositionTests : IDisposable
     }
 
     [Fact]
-    public void ALineTooNarrowForOneWordGivesItTheLineAnyway()
+    public void ALineTooNarrowForOneWordChopsIt()
     {
         string? fontPath = FindFont("Carlito-Regular.ttf");
         Assert.SkipWhen(fontPath is null, "Carlito is not installed; see check-env.sh");
@@ -167,15 +167,27 @@ public sealed class LineBreakPositionTests : IDisposable
         OpenTypeFace face = OpenTypeFace.ReadFile(fontPath!).ShouldNotBeNull();
         LineFiller filler = new(new TextMeasurer(face));
 
-        // A width narrower than a single word. The word overflows rather than being dropped, and the
-        // paragraph still terminates — the alternative is an empty line followed by the same problem,
-        // which is an infinite loop rather than a bad-looking page.
-        List<TextLine> lines = filler.Fill(
-            "unbreakable words here", Length.FromPoints(12), Length.FromPoints(4));
+        // A width narrower than a single word. LibreOffice cuts the word at the last character
+        // that fits rather than letting it hang over the margin — "No separator in line => Chop!",
+        // editeng/source/editeng/impedit3.cxx:2236, and the same ending in Writer's
+        // SwTextGuess::Guess (sw/source/core/text/guess.cxx:832-839). Real decks depend on it: a
+        // narrow autofitted text box splits ADMINISTRATIVE across two lines in the reference, and
+        // a reader that overflows instead reports one word where the reference has two.
+        const string paragraph = "unbreakable words here";
+        List<TextLine> lines = filler.Fill(paragraph, Length.FromPoints(12), Length.FromPoints(4));
 
-        lines.Count.ShouldBe(3);
+        // Every character is placed exactly once, and the paragraph terminates — the invariant that
+        // matters, because the alternative to overflowing is an empty line and an infinite loop.
+        lines.Sum(l => l.Length).ShouldBe(paragraph.Length);
         lines[^1].EndsParagraph.ShouldBeTrue();
-        lines.Sum(l => l.Length).ShouldBe("unbreakable words here".Length);
+
+        // Chopped, so there are more lines than words, and the first line is a piece of the first
+        // word rather than the whole of it.
+        lines.Count.ShouldBeGreaterThan(3);
+        paragraph.StartsWith(lines[0].VisibleTextIn(paragraph).ToString(), StringComparison.Ordinal)
+            .ShouldBeTrue();
+        lines[0].Length.ShouldBeLessThan("unbreakable".Length);
+        lines[0].Length.ShouldBeGreaterThan(0);
     }
 
     [Fact]

@@ -44,6 +44,14 @@ public static class FlowLayouter
     /// area's bottom. Null is what a Word footer does; see <see cref="Model.PageGeometry.FooterOffset"/>.
     /// </param>
     /// <param name="nesting">How many tables enclose this flow, for the recursion guard.</param>
+    /// <param name="collapsesSpacing">
+    /// Whether the gap between two paragraphs is the larger of the previous one's space-after and the next
+    /// one's space-before rather than their sum — <see cref="PaginationOptions.CollapsesSpacing"/>, which
+    /// is Writer's <c>PARA_SPACE_MAX</c> read the other way round. The same rule the body follows, because
+    /// <c>SwFlowFrame::CalcUpperSpace</c> is what measures the gap above <em>every</em> text frame and
+    /// knows nothing about whether it sits in a page, a cell or a running head. Defaults to adding, which
+    /// is what an ODF document asks for.
+    /// </param>
     /// <remarks>
     /// Nothing is clipped and nothing overflows into a second rectangle: content taller than the area is
     /// placed anyway and runs past its bottom, which is what Writer does with a fixed-height header whose
@@ -51,7 +59,11 @@ public static class FlowLayouter
     /// rather than climbing into the body.
     /// </remarks>
     public static PlacedFlow? LayOut(
-        IReadOnlyList<PageBlock> blocks, DocRect area, Length? offsetFromTop, int nesting = 0)
+        IReadOnlyList<PageBlock> blocks,
+        DocRect area,
+        Length? offsetFromTop,
+        int nesting = 0,
+        bool collapsesSpacing = false)
     {
         ArgumentNullException.ThrowIfNull(blocks);
 
@@ -65,6 +77,12 @@ public static class FlowLayouter
         // <see cref="ParagraphLeading"/>: the leading proportional line spacing adds above a first line
         // is the previous paragraph's, measured against the height of *its* last line.
         Length leading = Length.Zero;
+
+        // The space-after already added to `top` by the paragraph just placed, which is what a collapsing
+        // gap is measured against: adding only the part of the next paragraph's space-before that exceeds
+        // it leaves the larger of the two between them. Null after a table or before the first block,
+        // since neither collapses against a paragraph.
+        Length? previousSpaceAfter = null;
 
         for (int i = 0; i < blocks.Count; i++)
         {
@@ -80,7 +98,8 @@ public static class FlowLayouter
                     nested,
                     new DocPoint(area.X, area.Y + top),
                     nesting + 1,
-                    area.Width);
+                    area.Width,
+                    collapsesSpacing);
 
                 Length height = Length.Zero;
                 foreach (Length row in rowHeights) height += row;
@@ -101,13 +120,15 @@ public static class FlowLayouter
                 top += height + nested.SpaceAfter;
 
                 // A table hands no leading down: `GetSpacingValuesOfFrame` reports a line spacing only
-                // for a text frame.
+                // for a text frame. Nor does it collapse against the paragraph after it — its space-after
+                // is a table property rather than a paragraph's, and the formats keep the two apart.
                 leading = Length.Zero;
+                previousSpaceAfter = null;
                 continue;
             }
 
             PageParagraph paragraph = (PageParagraph)blocks[i];
-            ParagraphLayouter layouter = new(paragraph.Face);
+            ParagraphLayouter layouter = new(paragraph.Face, breaker: null, paragraph.Metrics);
             ParagraphFormat? previous = i > 0 && blocks[i - 1] is PageParagraph before
                 ? before.Format
                 : null;
@@ -128,7 +149,19 @@ public static class FlowLayouter
                     previous,
                     paragraph.Shaping);
 
-            top += layout.SpaceBefore + leading;
+            // Collapsing: the gap between two paragraphs is the larger of the two spacings rather than
+            // their sum, so only the part of this paragraph's space-before that exceeds the space-after
+            // already added for the one above is added again. Contextual spacing goes further and
+            // suppresses the gap outright, which means taking that space-after back off.
+            Length above =
+                previousSpaceAfter is { } settled
+                    && ParagraphLayouter.SharesContextualSpacing(previous, paragraph.Format)
+                    ? Length.Zero - settled
+                    : collapsesSpacing && previousSpaceAfter is { } after
+                        ? Length.Max(Length.Zero, layout.SpaceBefore - after)
+                        : layout.SpaceBefore;
+
+            top += above + leading;
 
             for (int line = 0; line < layout.Lines.Count; line++)
             {
@@ -152,13 +185,19 @@ public static class FlowLayouter
 
             top += layout.SpaceAfter;
             leading = ParagraphLeading.Below(layout);
+            previousSpaceAfter = layout.SpaceAfter;
         }
 
         if (placed.Count == 0 && tables.Count == 0) return null;
 
-        // Where the block as a whole goes. A bottom-aligned one only shifts when there is room to shift
-        // into; a stated offset is taken as given even when the content is taller than the area.
-        Length shift = offsetFromTop ?? (top < area.Height ? area.Height - top : Length.Zero);
+        // Where the block as a whole goes. A bottom-aligned one rests its last line on the area's bottom
+        // whether or not it fits, so a footer that outgrows the room reserved for it grows *upwards* into
+        // the body — which is what Word does and what Writer's dynamic-height footer frame does, since
+        // the frame's lower edge is fixed at the footer distance and only its top moves. Clamping the
+        // shift at nought instead pushed such a footer down past the page's bottom edge, and on a Word
+        // document whose `w:bottom` equals its `w:footer` that is every footer it has. A stated offset is
+        // taken as given either way.
+        Length shift = offsetFromTop ?? (area.Height - top);
 
         if (shift != Length.Zero)
         {
@@ -186,6 +225,7 @@ public static class FlowLayouter
             Lines = placed,
             Tables = tables,
             Area = area,
+            Advance = top,
         };
     }
 
@@ -198,10 +238,15 @@ public static class FlowLayouter
     /// ended, because that is the only answer that agrees with where the lines will actually be drawn —
     /// summing estimated line heights instead would drift from the real result exactly where it matters.
     /// </remarks>
-    public static Length HeightOf(IReadOnlyList<PageBlock> blocks, Length width, int nesting = 0)
+    public static Length HeightOf(
+        IReadOnlyList<PageBlock> blocks, Length width, int nesting = 0, bool collapsesSpacing = false)
     {
         PlacedFlow? flow = LayOut(
-            blocks, new DocRect(Length.Zero, Length.Zero, width, Length.Zero), Length.Zero, nesting);
+            blocks,
+            new DocRect(Length.Zero, Length.Zero, width, Length.Zero),
+            Length.Zero,
+            nesting,
+            collapsesSpacing);
 
         return flow is null ? Length.Zero : Extent(flow);
     }

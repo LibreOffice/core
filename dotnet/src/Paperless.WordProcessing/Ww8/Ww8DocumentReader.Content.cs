@@ -74,10 +74,19 @@ public sealed partial class Ww8DocumentReader
         };
         _marks.OpenParagraph();
 
+        // LibreOffice's <c>m_bWasParaEnd</c>: a U+000C ends a paragraph only when one is under way, so a
+        // break character directly after a paragraph mark adds no paragraph of its own. The layout pass
+        // applies the same rule, and the two have to agree — a document whose extracted paragraphs and
+        // laid-out paragraphs differ is the shape of defect this reader has shipped before.
+        bool wasParagraphMark = false;
+
         for (int index = 0; index < text.Length; index++)
         {
             int position = range.Start + index;
             char character = text[index];
+
+            bool afterParagraphMark = wasParagraphMark;
+            wasParagraphMark = character is ParagraphMark or CellMark;
 
             // Bookmarks are keyed by character position rather than marked in the text, so the walk
             // has to ask at each one. A single advancing index over a sorted list, not a search.
@@ -94,7 +103,7 @@ public sealed partial class Ww8DocumentReader
                     continue;
 
                 case Special.SectionMark:
-                    EndParagraph(state, position);
+                    if (!afterParagraphMark) EndParagraph(state, position);
                     continue;
 
                 case Special.LineBreak:
@@ -452,6 +461,11 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.IsTableHeaderRow:
                     format = format with { IsTableHeaderRow = sprm.Byte != 0 };
                     break;
+
+                case Ww8SprmReader.Ids.RowCannotSplit:
+                    format = format with { RowCannotSplit = sprm.Byte != 0 };
+                    break;
+
                 case Ww8SprmReader.Ids.RowHeight:
                     // Signed as the sprm gave it: positive is a floor and negative an exact height that
                     // clips, and the sign is the only thing that says which.
@@ -749,6 +763,15 @@ public readonly record struct Ww8ParagraphFormat
 
     /// <summary>True when the row this paragraph ends repeats as a header on every page.</summary>
     public bool IsTableHeaderRow { get; init; }
+
+    /// <summary>
+    /// True when <c>sprmTFCantSplit</c> forbade breaking the row this paragraph ends across a page.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the paragraph format for the same reason the row's height is: WW8 states a row's
+    /// properties on the paragraph mark that <em>ends</em> the row.
+    /// </remarks>
+    public bool RowCannotSplit { get; init; }
 
     /// <summary>
     /// The row's declared height in twips from <c>sprmTDyaRowHeight</c>, signed; zero for none.

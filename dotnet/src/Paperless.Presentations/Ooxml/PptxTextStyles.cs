@@ -60,37 +60,88 @@ internal sealed class PptxTextStyles
     {
         ArgumentNullException.ThrowIfNull(shape);
 
-        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master);
+        return new DrawingTextOptions
+        {
+            ResolveHyperlink = resolveHyperlink,
+            InheritedLevelProperties = LevelPropertiesFor(shape),
+            Theme = _theme,
+            ShapeTextStyle = ShapeTextStyle(shape),
+        };
+    }
+
+    /// <summary>
+    /// The per-level property sources a shape's text inherits, most specific first.
+    /// </summary>
+    /// <remarks>
+    /// Separate from <see cref="For"/> because rendering needs the same chain without the rest
+    /// of the extraction options: a bullet, an indent and a run's size all come out of it, and
+    /// a second implementation would let the two readers disagree about which level a nested
+    /// paragraph inherits from.
+    /// </remarks>
+    /// <param name="shape">The shape whose text body is being read.</param>
+    public Func<int, IReadOnlyList<XElement>> LevelPropertiesFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
 
         // Resolved once per shape rather than once per level: the match does not depend on the
         // level, and a deck with a hundred paragraphs in one placeholder would otherwise search
         // the master's shape tree a hundred times.
-        XElement? direct = null;
-        XElement? inherited = null;
-        if (placeholder is { } key)
-        {
-            List<XElement> masterShapes = [.. PptxPlaceholder.ShapesOf(_master)];
-            List<XElement> layoutShapes = [.. PptxPlaceholder.ShapesOf(_layout)];
-
-            direct = key.Find([.. masterShapes, .. layoutShapes]);
-
-            // The layout placeholder has a placeholder of its own on the master; that second hop
-            // is what makes a three-level chain rather than a two-level one.
-            if (direct is not null && !masterShapes.Contains(direct)
-                && PptxPlaceholder.Read(direct, _master) is { } layoutKey)
-                inherited = layoutKey.Find(masterShapes);
-        }
+        (XElement? direct, XElement? inherited) = Placeholders(placeholder);
 
         string? textStyle = placeholder?.TextStyle(_isNotesPage);
 
-        return new DrawingTextOptions
-        {
-            ResolveHyperlink = resolveHyperlink,
-            InheritedLevelProperties = level =>
-                [.. Chain(direct, inherited, textStyle, level)],
-            Theme = _theme,
-            ShapeTextStyle = ShapeTextStyle(shape),
-        };
+        return level => [.. Chain(direct, inherited, textStyle, level)];
+    }
+
+    /// <summary>
+    /// The <c>a:bodyPr</c> a shape inherits from the placeholders behind it, nearest first.
+    /// </summary>
+    /// <remarks>
+    /// Empty for a shape that is not a placeholder. See <see cref="PptxTextBody"/> for why the
+    /// body properties inherit at all — a slide's <c>&lt;a:bodyPr/&gt;</c> is silence, not an
+    /// instruction, and PowerPoint writes one on every placeholder it has not re-formatted.
+    /// </remarks>
+    /// <param name="shape">The shape whose text body is being read.</param>
+    public XElement?[] BodyPropertiesFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master, _layout);
+        if (placeholder is null) return [];
+
+        (XElement? direct, XElement? inherited) = Placeholders(placeholder);
+        return
+        [
+            Drawing.Child(Ppt.Child(direct, "txBody"), "bodyPr"),
+            Drawing.Child(Ppt.Child(inherited, "txBody"), "bodyPr"),
+        ];
+    }
+
+    /// <summary>
+    /// The layout placeholder a shape stands in for, and the master placeholder behind that one.
+    /// </summary>
+    /// <remarks>
+    /// The layout placeholder has a placeholder of its own on the master; that second hop is what
+    /// makes a three-level chain rather than a two-level one, and it is the reason a title whose
+    /// layout states nothing still finds the master's rectangle, list style and prompt geometry.
+    /// </remarks>
+    public (XElement? Direct, XElement? Inherited) Placeholders(PptxPlaceholder? placeholder)
+    {
+        if (placeholder is not { } key) return (null, null);
+
+        List<XElement> masterShapes = [.. PptxPlaceholder.ShapesOf(_master)];
+        List<XElement> layoutShapes = [.. PptxPlaceholder.ShapesOf(_layout)];
+
+        XElement? direct = key.Find([.. masterShapes, .. layoutShapes]);
+
+        XElement? inherited = null;
+        if (direct is not null && !masterShapes.Contains(direct)
+            && PptxPlaceholder.Read(direct, _master) is { } layoutKey)
+            inherited = layoutKey.Find(masterShapes);
+
+        return (direct, inherited);
     }
 
     /// <summary>
@@ -132,6 +183,16 @@ internal sealed class PptxTextStyles
         // "other" in its name means: everything that is not a title and not an outline.
         XElement? masterStyle = Ppt.Child(Ppt.Child(_master, "txStyles"), textStyle ?? "otherStyle");
         if (DrawingTextBody.LevelProperties(masterStyle, level) is { } fromMaster) yield return fromMaster;
+
+        // A placeholder's chain ends at the master's own style for its kind. p:defaultTextStyle
+        // is reached only by a shape that found none — PPTShape::createAndInsert picks the
+        // title, body or notes style by placeholder subtype and consults
+        // getDefaultTextStyle() strictly under "if (!aMasterTextListStyle)"
+        // (oox/source/ppt/pptshape.cxx:257-291 and 492-497). Letting a title fall through to it
+        // is not a harmless extra rung: a deck converted from .ppt states
+        // <a:buChar char="•"/> at every level of p:defaultTextStyle, so every title on every
+        // slide acquires a bullet the reference does not draw.
+        if (textStyle is not null) yield break;
 
         if (DrawingTextBody.LevelProperties(_defaultTextStyle, level) is { } fromDefault)
             yield return fromDefault;

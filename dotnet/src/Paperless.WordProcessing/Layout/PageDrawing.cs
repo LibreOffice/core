@@ -513,8 +513,12 @@ public static class PageDrawing
 
         if (end <= start) return runs;
 
-        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end, line.StartsParagraph))
         {
+            // Before the emptiness test: a tab followed by nothing still draws its leader, which is what
+            // a table-of-contents line whose page number sits on the next line looks like.
+            if (Leader(paragraph, segment, lineLeft, baseline) is { } filled) runs.Add(filled);
+
             if (segment.IsEmpty) continue;
 
             Length pen = lineLeft + segment.Left;
@@ -564,6 +568,96 @@ public static class PageDrawing
     }
 
     /// <summary>
+    /// How many fill characters one tab may draw, however small the face and however wide the blank.
+    /// </summary>
+    /// <remarks>
+    /// A guard on untrusted input, in the same spirit as <see cref="TabRuler.MaxSegments"/>. A page-wide
+    /// blank filled at a plausible size holds a few hundred dots; a document declaring a one-EMU face
+    /// would ask for billions, and each one costs a glyph.
+    /// </remarks>
+    private const int MaxLeaderCharacters = 4096;
+
+    /// <summary>
+    /// The run of fill characters a tab draws across the blank it advanced over, if it has one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The dot leader of a table of contents, and the port of <c>SwTabPortion::Paint</c>
+    /// (<c>sw/source/core/text/txttab.cxx:648-659</c>): the blank's width divided by one fill character's,
+    /// truncated, so the fill never runs past the stop it stops at. Underscore takes one extra, because
+    /// its glyph spans its whole advance and a truncated run of them shows the rounding as visible gaps —
+    /// Writer makes the same exception and for the same reason.
+    /// </para>
+    /// <para>
+    /// Drawn in the face in effect <em>at the tab</em> rather than the one after it, which is what
+    /// <c>rInf.GetFont()</c> means at that point in Writer. A contents line whose title is bold and whose
+    /// page number is not would otherwise draw bold dots between them.
+    /// </para>
+    /// <para>
+    /// This paints inside space the tab had already reserved, so it moves no line break and no page
+    /// break: a paragraph measures exactly as it did before the leader existed.
+    /// </para>
+    /// </remarks>
+    private static (GlyphRun Run, Colour Colour)? Leader(
+        PageParagraph paragraph, TabbedSegment segment, Length lineLeft, Length baseline)
+    {
+        if (!segment.HasLeader) return null;
+
+        PageRun at = RunAt(paragraph, segment.Start - 1);
+
+        Length unit = TextShaper.Default
+            .Shape(at.Face, segment.Leader.ToString(), at.Shaping)
+            .Width(at.EmSize);
+        if (unit <= Length.Zero) return null;
+
+        long count = segment.GapWidth.Emu / unit.Emu;
+        if (segment.Leader == '_') count++;
+        if (count <= 0) return null;
+
+        string fill = new(segment.Leader, (int)Math.Min(count, MaxLeaderCharacters));
+        ShapedText shaped = TextShaper.Default.Shape(at.Face, fill, at.Shaping);
+        if (shaped.Glyphs.Count == 0) return null;
+
+        return (
+            Build(
+                shaped,
+                fill,
+                at.EmSize,
+                at.Font ?? Reference(at.Face),
+                new DocPoint(lineLeft + segment.GapLeft, baseline - at.Rise),
+                Length.Zero),
+            at.EffectiveColour);
+    }
+
+    /// <summary>
+    /// The formatting run covering a character, or the paragraph's own formatting where none does.
+    /// </summary>
+    /// <remarks>
+    /// Asked for the tab character itself, which sits at the end of the stretch before the one the stop
+    /// placed — so a position before the paragraph's first character, or past its last, falls back rather
+    /// than failing.
+    /// </remarks>
+    private static PageRun RunAt(PageParagraph paragraph, int at)
+    {
+        if (paragraph.HasRuns)
+        {
+            foreach (PageRun run in paragraph.Runs)
+            {
+                if (at >= run.Start && at < run.End) return run;
+            }
+        }
+
+        return new PageRun(
+            Math.Max(at, 0),
+            0,
+            paragraph.Face,
+            paragraph.EmSize,
+            paragraph.Font,
+            paragraph.Colour,
+            paragraph.Shaping);
+    }
+
+    /// <summary>
     /// The stretches a line is divided into by its tabs, each placed at its stop.
     /// </summary>
     /// <remarks>
@@ -572,7 +666,8 @@ public static class PageDrawing
     /// measurement handed to the ruler is the same one the layout used, so the stops land in the same
     /// places here as they did when the line's width was decided.
     /// </remarks>
-    private static List<TabbedSegment> Stretches(PageParagraph paragraph, int start, int end)
+    private static List<TabbedSegment> Stretches(
+        PageParagraph paragraph, int start, int end, bool isFirstLine)
     {
         if (!TabRuler.HasTab(paragraph.Text, start, end))
         {
@@ -584,7 +679,8 @@ public static class PageDrawing
             start,
             end,
             paragraph.Format,
-            (from, to) => WidthBetween(paragraph, from, to));
+            (from, to) => WidthBetween(paragraph, from, to),
+            isFirstLine);
     }
 
     /// <summary>
@@ -765,7 +861,7 @@ public static class PageDrawing
         int end = Math.Min(line.Box.Line.End, paragraph.Text.Length);
         int position = Math.Clamp(at, start, end);
 
-        foreach (TabbedSegment segment in Stretches(paragraph, start, end))
+        foreach (TabbedSegment segment in Stretches(paragraph, start, end, line.StartsParagraph))
         {
             if (position > segment.End) continue;
 

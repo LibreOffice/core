@@ -38,8 +38,9 @@ public sealed class CompoundFile : IPackage
     private const int HeaderSize = 512;
 
     /// <summary>
-    /// Upper bound on sectors followed in one chain. A malformed or hostile file can
-    /// describe a cyclic or absurdly long chain; this caps the work.
+    /// Absolute upper bound on sectors followed in one chain. A malformed or hostile file can
+    /// describe a cyclic or absurdly long chain; this caps the work when no tighter physical
+    /// bound is available (see <see cref="ChainSectorLimit"/>).
     /// </summary>
     private const int MaxChainLength = 1 << 22;
 
@@ -304,8 +305,29 @@ public sealed class CompoundFile : IPackage
         if (count == 0) throw new MalformedDocumentException("Compound file has an empty directory.");
 
         DirectoryEntry[] entries = new DirectoryEntry[count];
+        bool warnedHighDword = false;
         for (int i = 0; i < count; i++)
+        {
             entries[i] = DirectoryEntry.Parse(raw.AsSpan(i * DirectoryEntrySize, DirectoryEntrySize));
+
+            // In a version-3 file (512-byte sectors) the stream-size field is 32 bits wide and
+            // the upper four bytes are reserved; MS-CFB 2.6.1 requires them to be zero. Writers
+            // leave rubbish there often enough that LibreOffice never reads them at all — its
+            // StgEntry::Load takes a plain ReadInt32 at offset 0x78 and the next dword into an
+            // "unknown" field (sot/source/sdstor/stgelem.cxx). Do the same, or a stale high
+            // dword turns an 84 KB stream into a nominal 1 EB one.
+            if (_sectorSize == 512 && (entries[i].StreamLength >> 32) != 0)
+            {
+                entries[i] = entries[i] with { StreamLength = entries[i].StreamLength & 0xFFFFFFFF };
+                if (!warnedHighDword)
+                {
+                    warnedHighDword = true;
+                    Warn("PL1114",
+                         "Directory entry declares a stream length above 4 GiB in a version-3 file; " +
+                         "the reserved upper dword was ignored.");
+                }
+            }
+        }
         _directory = entries;
 
         DirectoryEntry root = entries[0];
@@ -318,7 +340,7 @@ public sealed class CompoundFile : IPackage
         {
             _miniStream = ReadChain(
                 root.StartSector,
-                root.StreamLength > int.MaxValue ? -1 : (int)root.StreamLength,
+                ExtentOf(root, "Root Entry", useMiniFat: false),
                 useMiniFat: false);
         }
 
@@ -386,12 +408,117 @@ public sealed class CompoundFile : IPackage
 
     internal byte[] ReadEntry(DirectoryEntry entry)
     {
-        if (entry.StreamLength == 0) return [];
-        if (entry.StreamLength > int.MaxValue)
-            throw new MalformedDocumentException($"Stream '{entry.Name}' claims a length above 2 GiB.");
+        if (entry.StreamLength == 0 || entry.StartSector > MaxRegularSector) return [];
 
-        return ReadChain(entry.StartSector, (int)entry.StreamLength,
-                         useMiniFat: entry.StreamLength < _miniStreamCutoff);
+        bool useMiniFat = entry.StreamLength < _miniStreamCutoff;
+        return ReadChain(entry.StartSector, ExtentOf(entry, entry.Name, useMiniFat), useMiniFat);
+    }
+
+    /// <summary>The readable extent of an entry, for callers that need the size without the bytes.</summary>
+    internal long ExtentOfPart(DirectoryEntry entry)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (entry.StreamLength == 0 || entry.StartSector > MaxRegularSector) return 0;
+
+        bool useMiniFat = entry.StreamLength < _miniStreamCutoff;
+        return Math.Min((long)Math.Min(entry.StreamLength, long.MaxValue),
+                        MeasureChain(entry.StartSector, useMiniFat));
+    }
+
+    /// <summary>
+    /// The number of bytes an entry can actually yield: its declared length, capped by what its
+    /// sector chain is able to supply.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The declared length is <b>never</b> trusted on its own, and this is the only place a
+    /// length reaches an allocation. Clamping it here rather than at the point of use is what
+    /// keeps a nonsense declaration from turning into a nonsense allocation: a stream that says
+    /// it holds 2 GiB in a file of 84 KB is read as the 84 KB its chain covers, and nothing
+    /// downstream ever sees the declared figure.
+    /// </para>
+    /// <para>
+    /// This mirrors <c>sot</c>, which measures a stream by walking its FAT chain
+    /// (<c>StgStrm::scanBuildPageChainCache</c>) and rejects any directory entry claiming more
+    /// than the underlying file holds (<c>StgEntry::Load</c>). Truncating to the chain rather
+    /// than rejecting the entry is deliberate: a chain shorter than the declared length is the
+    /// ordinary signature of a truncated document, and the bytes that are present are still
+    /// worth reading.
+    /// </para>
+    /// </remarks>
+    private int ExtentOf(DirectoryEntry entry, string name, bool useMiniFat)
+    {
+        long available = MeasureChain(entry.StartSector, useMiniFat);
+        long declared = (long)Math.Min(entry.StreamLength, long.MaxValue);
+        long extent = Math.Min(declared, available);
+
+        // A genuine multi-gigabyte stream cannot be materialised as one byte[] regardless, so it
+        // is still an error rather than a silent truncation. Testing the *clamped* extent is what
+        // keeps that from firing on the malformed case: a declared 2 GiB backed by 84 KB of chain
+        // is 84 KB here, and only a chain that really does supply that much reaches the throw.
+        if (extent > int.MaxValue)
+            throw new MalformedDocumentException($"Stream '{name}' is larger than 2 GiB.");
+
+        if (extent < declared)
+        {
+            Warn("PL1115",
+                 $"Stream '{name}' declares {declared} bytes but its sector chain covers only " +
+                 $"{available}; the chain is authoritative.");
+        }
+
+        return (int)extent;
+    }
+
+    /// <summary>
+    /// Walks a sector chain without reading it, returning the number of bytes it spans.
+    /// </summary>
+    /// <remarks>
+    /// The walk stops at the first sector that lies outside the file, so the result can never
+    /// exceed the file's own size. <see cref="ChainSectorLimit"/> bounds the iteration by the
+    /// number of sectors physically present, which terminates cyclic chains too.
+    /// </remarks>
+    private long MeasureChain(uint startSector, bool useMiniFat)
+    {
+        int unitSize = useMiniFat ? _miniSectorSize : _sectorSize;
+        int limit = ChainSectorLimit(useMiniFat);
+        uint sector = startSector;
+        long sectors = 0;
+
+        while (sector <= MaxRegularSector && sectors < limit)
+        {
+            if (!SectorExists(sector, useMiniFat)) break;
+            sectors++;
+            sector = useMiniFat ? NextInMiniChain(sector) : NextInChain(sector);
+        }
+        return sectors * unitSize;
+    }
+
+    /// <summary>
+    /// How many sectors a chain may span before it is certainly damaged.
+    /// </summary>
+    /// <remarks>
+    /// A well-formed chain visits each sector at most once, so it cannot be longer than the
+    /// number of sectors the file physically contains. That is a far tighter bound than
+    /// <see cref="MaxChainLength"/> and it is the one that makes a cyclic chain cheap: without
+    /// it, a two-sector loop in a 90 KB file would still be followed four million times and
+    /// accumulate two gigabytes.
+    /// </remarks>
+    private int ChainSectorLimit(bool useMiniFat)
+    {
+        long units = useMiniFat
+            ? _miniStream.Length / Math.Max(1, _miniSectorSize)
+            : Math.Max(0, _stream.Length - HeaderSize) / Math.Max(1, _sectorSize);
+        return (int)Math.Clamp(units + 1, 1, MaxChainLength);
+    }
+
+    private bool SectorExists(uint sector, bool useMiniFat)
+    {
+        long size = useMiniFat ? _miniSectorSize : _sectorSize;
+        long offset = useMiniFat
+            ? (long)sector * _miniSectorSize
+            : HeaderSize + (long)sector * _sectorSize;
+        long extent = useMiniFat ? _miniStream.Length : _stream.Length;
+        return offset >= 0 && offset + size <= extent;
     }
 
     private byte[] ReadChain(uint startSector, int expectedLength, bool useMiniFat)
@@ -403,9 +530,10 @@ public sealed class CompoundFile : IPackage
         byte[] buffer = new byte[unitSize];
         uint sector = startSector;
         int guard = 0;
+        int limit = ChainSectorLimit(useMiniFat);
         long remaining = expectedLength >= 0 ? expectedLength : long.MaxValue;
 
-        while (sector <= MaxRegularSector && remaining > 0 && guard++ < MaxChainLength)
+        while (sector <= MaxRegularSector && remaining > 0 && guard++ < limit)
         {
             bool ok = useMiniFat ? TryReadMiniSector(sector, buffer) : TryReadSector(sector, buffer);
             if (!ok)
@@ -419,7 +547,7 @@ public sealed class CompoundFile : IPackage
             sector = useMiniFat ? NextInMiniChain(sector) : NextInChain(sector);
         }
 
-        if (guard >= MaxChainLength)
+        if (guard >= limit && remaining > 0)
             Warn("PL1112", "Sector chain exceeded the safety limit; it is probably cyclic. Truncated.");
 
         byte[] result = output.ToArray();
@@ -548,7 +676,15 @@ public sealed class CompoundFile : IPackage
         /// <summary>Always null: OLE2 records no media type for its streams.</summary>
         public string? MediaType => null;
 
-        public long Length => (long)Math.Min(entry.StreamLength, long.MaxValue);
+        /// <summary>The bytes this stream can actually yield, not the bytes it claims.</summary>
+        /// <remarks>
+        /// Callers size buffers from this — <c>PptReader</c> and <c>OlePropertySetReader</c> both
+        /// allocate a <see cref="MemoryStream"/> of exactly this capacity — so reporting a
+        /// declared length here is how a bogus directory entry becomes an out-of-memory failure
+        /// several layers away from the file that caused it. The declared figure never leaves
+        /// <see cref="CompoundFile"/>.
+        /// </remarks>
+        public long Length => owner.ExtentOfPart(entry);
 
         public Stream Open() => new MemoryStream(owner.ReadEntry(entry), writable: false);
     }

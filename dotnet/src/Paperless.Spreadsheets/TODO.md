@@ -212,6 +212,44 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the first sheets sweep found
+
+The first whole-track sweep of `sheets/batch-001 … batch-018` (174 documents, `xls` and `xlsx`)
+put the paragraph above right on the mechanism and wrong on the scale. "No corpus row moved" was
+true of the batches that existed then; measured across the whole track, **blank pages were the
+single largest defect on the track** — one document produced 1170 pages of which 949 were blank
+against LibreOffice's 220. The three causes, all now fixed, are worth stating because none of them
+is where a page-count problem is usually looked for:
+
+- **A wrapping cell was widening the print area.** `SheetTextOverflow` measured every text cell
+  against its column and extended the printed block to cover the spill, without asking whether the
+  cell wraps. `ScColumn::GetNeededSize` refuses in one line — `if ( bWidth && bBreak ) return 0;`
+  (`sc/source/core/data/column2.cxx:226`) — and it is the whole difference on a sheet with a wide
+  prose column, because those strings measure to thousands of points and every point of that
+  became empty columns, and every band of empty columns became a band of blank pages.
+  `AFS-400_Contacts.xlsx`: **340 pages against 48**, 289 of ours blank and none of LibreOffice's.
+- **"Is there any cell to the left" was standing in for a measurement.** The recorded reason was
+  that widening it means measuring and measuring is what the sweep is sensitive to. That was the
+  right trade while the measurement above was wrong; with it fixed, Calc's own fourth test is
+  portable as written — re-run `ExtendPrintArea` over the block's rows from column zero and keep
+  the page when the extension reaches it (`documen9.cxx:486-500`). The conservative version keeps
+  *every* column band of *every* row band that has anything in column A, which on a wide sheet is
+  most of the paper: `RCO_VOR_Master_List_082824.xlsx` at **183 pages against 80**, 103 blank.
+- **A background was being treated as a border.** `HasAttrFlags::Lines` tests the four edges of
+  `ATTR_BORDER` and nothing else (`attarray.cxx:1279-1284`); a fill is not a border and does not
+  keep a page. `grants-2005.xls`, whose shading reaches far past its cells: **1170 pages against
+  220**, 949 blank.
+
+And one that is not about blank pages at all:
+
+- **A BIFF `SETUP` marked invalid loses its scale, not only its paper.** `EXC_SETUP_INVALID` is
+  described everywhere as covering the paper size and the orientation, and LibreOffice reads it as
+  covering the scale too: one assignment sets both flags (`xipage.cxx:68`) and `ATTR_PAGE_SCALE` is
+  written only under `else if (maData.mbValid)` (`:274-276`). **Twenty-three of the corpus's 87
+  `.xls` files set the bit**, and the scale sitting beside it is arbitrary — 255, 285, 300, once
+  20480 — so honouring it multiplies the sheet by two or three in each direction. `P1636e.xls`
+  states 285 and came out on twelve pages against LibreOffice's two.
+
 Deliberate deviations from the port, both narrow:
 
 - **A fit-to-pages search that bottoms out is clamped rather than reproduced.** LibreOffice leaves
