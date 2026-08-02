@@ -6,6 +6,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
 using Paperless.Core.Formats;
 using Paperless.Core.Graphics;
+using Paperless.Core.Units;
 using Paperless.MsBinary.PropertySets;
 using Paperless.Text.Fonts;
 using Paperless.WordProcessing.Layout;
@@ -201,7 +202,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
             Metrics = _reader.DocumentProperties.UsesPrinterMetrics ? MetricGrid.Printer : null,
         };
 
-        List<PageBlock> blocks = BlocksOf(fonts, _reader.ReadLayoutBlocks());
+        List<PageBlock> blocks = BlocksOf(fonts, _reader.ReadLayoutBlocks(), TextWidths());
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
@@ -260,6 +261,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers)
     {
         Ww8LayoutFurniture stated = _reader.ReadLayoutFurniture(section);
+        IReadOnlyList<Length> widths = TextWidths();
 
         Fill(headers, stated.Headers);
         Fill(footers, stated.Footers);
@@ -273,10 +275,26 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         {
             foreach ((Model.PageFurnitureSlot slot, List<Ww8LayoutBlock> stories) in from)
             {
-                List<PageBlock> converted = BlocksOf(fonts, stories);
+                List<PageBlock> converted = BlocksOf(fonts, stories, widths);
                 if (converted.Count > 0) into[slot] = converted;
             }
         }
+    }
+
+    /// <summary>
+    /// Each section's text width, which is the only thing an auto-width text frame has to go on.
+    /// </summary>
+    /// <remarks>
+    /// A frame whose <c>sprmPDxaWidth</c> is ten or less is as wide as the text it sits beside, and
+    /// <c>WW8SwFlyPara</c> takes that from <c>m_aSectionManager.GetTextAreaWidth()</c>
+    /// (<c>sw/source/filter/ww8/ww8par6.cxx:1953</c>). Indexed by section because a document can change
+    /// its margins part-way and the frames after the change follow the new ones.
+    /// </remarks>
+    private List<Length> TextWidths()
+    {
+        List<Length> widths = new(Sections.Count);
+        foreach (Model.WritingSection section in Sections) widths.Add(section.Page.ColumnWidth);
+        return widths;
     }
 
     /// <summary>
@@ -289,7 +307,16 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// Recursive through a cell's own blocks, which is what makes a nested table convert by the same code as
     /// a table in the body: by this point the assembler has already put each in the right list.
     /// </remarks>
-    private static List<PageBlock> BlocksOf(LayoutFonts fonts, IReadOnlyList<Ww8LayoutBlock> stated)
+    /// <param name="fonts">The shared font cache.</param>
+    /// <param name="stated">The blocks as the reader recorded them.</param>
+    /// <param name="textWidths">
+    /// Each section's text width, for the one thing that needs it — an auto-width text frame. Empty
+    /// inside a cell, where a frame is not read in the first place.
+    /// </param>
+    private static List<PageBlock> BlocksOf(
+        LayoutFonts fonts,
+        IReadOnlyList<Ww8LayoutBlock> stated,
+        IReadOnlyList<Length>? textWidths = null)
     {
         List<PageBlock> blocks = new(stated.Count);
 
@@ -297,7 +324,7 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         {
             if (block.Paragraph is { } paragraph)
             {
-                blocks.AddRange(Convert(fonts, [paragraph])
+                blocks.AddRange(Convert(fonts, [paragraph], textWidths)
                     .Select(converted => (PageBlock)(converted with
                     {
                         SectionIndex = paragraph.SectionIndex,
@@ -369,7 +396,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// block they belong to, so the body's list holds none and a cell's list holds nothing else.
     /// </remarks>
     private static List<PageParagraph> Convert(
-        LayoutFonts fonts, List<Ww8DocumentReader.Ww8LayoutParagraph> stated)
+        LayoutFonts fonts,
+        List<Ww8DocumentReader.Ww8LayoutParagraph> stated,
+        IReadOnlyList<Length>? textWidths = null)
     {
         List<PageParagraph> paragraphs = new(stated.Count);
 
@@ -405,11 +434,16 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 BlanksAreTransparentToHeight = true,
                 Runs = runs,
                 Notes = NotesOf(fonts, paragraph.Notes),
-                Frames = FramesOf(fonts, paragraph.Frames),
+                Frames = FramesOf(fonts, paragraph.Frames, paragraph.TextFrames, WidthFor(paragraph)),
             });
         }
 
         return paragraphs;
+
+        Length WidthFor(Ww8DocumentReader.Ww8LayoutParagraph paragraph)
+            => textWidths is { Count: > 0 }
+                ? textWidths[Math.Clamp(paragraph.SectionIndex, 0, textWidths.Count - 1)]
+                : Length.Zero;
     }
 
     /// <summary>
@@ -466,14 +500,36 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// that <see cref="Ww8Frames.Build"/> declines — one with no area, one deleted, one hidden — is
     /// dropped rather than placed empty, since an empty frame would still make a hole in the text.
     /// </remarks>
+    /// <param name="fonts">The shared font cache.</param>
+    /// <param name="stated">The drawings anchored in the paragraph, or null when it anchors none.</param>
+    /// <param name="textFrames">
+    /// The Word text frames it anchors, or null when it anchors none. A different mechanism entirely —
+    /// see <see cref="Ww8TextFramePosition"/> — and the two produce the same kind of frame, so they are
+    /// converted together and the layout engine sees one list.
+    /// </param>
+    /// <param name="textWidth">The section's text width, for an auto-width text frame.</param>
     private static List<PageFrame> FramesOf(
-        LayoutFonts fonts, IReadOnlyList<Ww8LayoutFrame>? stated)
+        LayoutFonts fonts,
+        IReadOnlyList<Ww8LayoutFrame>? stated,
+        IReadOnlyList<Ww8LayoutTextFrame>? textFrames = null,
+        Length textWidth = default)
     {
-        if (stated is null || stated.Count == 0) return [];
+        if ((stated is null || stated.Count == 0)
+            && (textFrames is null || textFrames.Count == 0))
+        {
+            return [];
+        }
 
-        List<PageFrame> frames = new(stated.Count);
+        List<PageFrame> frames = new((stated?.Count ?? 0) + (textFrames?.Count ?? 0));
 
-        foreach (Ww8LayoutFrame frame in stated)
+        foreach (Ww8LayoutTextFrame frame in textFrames ?? [])
+        {
+            List<PageBlock> blocks = BlocksOf(fonts, frame.Blocks);
+            if (blocks.Count == 0) continue;
+            if (Ww8TextFrames.Build(frame, blocks, textWidth) is { } placed) frames.Add(placed);
+        }
+
+        foreach (Ww8LayoutFrame frame in stated ?? [])
         {
             // An inline picture has no origin to be placed against and no wrap to obey: it hangs on
             // the line where its anchor character sits. So it skips Ww8Frames.Build entirely, whose
