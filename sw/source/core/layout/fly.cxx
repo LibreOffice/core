@@ -1432,7 +1432,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                     nTmpY -= pAutoFrame->GetUpper()->getFramePrintArea().Height();
                     pAutoFrame = pAutoFrame->GetFollow();
                 }
-                nTmpY = static_cast<SwFlyAtContentFrame*>(this)->GetRelCharY(pAutoFrame)-nTmpY;
+                nTmpY = static_cast<SwFlyAtContentFrame*>(this)->GetRelCharY(pAutoFrame).as_twip<SwTwips>() - nTmpY;
             }
             else
                 aVert.SetVertOrient( text::VertOrientation::CHAR_BOTTOM );
@@ -1484,7 +1484,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                                pAutoFrame->GetFollow()->GetOffset() <= nOfs )
                             pAutoFrame = pAutoFrame->GetFollow();
                     }
-                    nTmpX -= static_cast<SwFlyAtContentFrame*>(this)->GetRelCharX(pAutoFrame);
+                    nTmpX -= static_cast<SwFlyAtContentFrame*>(this)->GetRelCharX(pAutoFrame).as_twip<SwTwips>();
                 }
             }
             else

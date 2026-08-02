@@ -160,14 +160,14 @@ void SwAnchoredObject::SetPageFrame( SwPageFrame* _pNewPageFrame )
 }
 
 
-SwTwips SwAnchoredObject::GetRelCharX( const SwFrame* pFrame ) const
+gfx::Length SwAnchoredObject::GetRelCharX(const SwFrame* pFrame) const
 {
-    return maLastCharRect.Left() - pFrame->getFrameArea().Left();
+    return gfx::Length::twip(maLastCharRect.Left() - pFrame->getFrameArea().Left());
 }
 
-SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
+gfx::Length SwAnchoredObject::GetRelCharY(const SwFrame* pFrame) const
 {
-    return maLastCharRect.Bottom() - pFrame->getFrameArea().Top();
+    return gfx::Length::twip(maLastCharRect.Bottom() - pFrame->getFrameArea().Top());
 }
 
 void SwAnchoredObject::AddLastCharY( tools::Long nDiff )

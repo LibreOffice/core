@@ -270,8 +270,8 @@ class SAL_DLLPUBLIC_RTTI SwAnchoredObject
 
         // accessors to member <maLastCharRect>
         const SwRect& GetLastCharRect() const { return maLastCharRect;}
-        SwTwips GetRelCharX( const SwFrame* pFrame ) const;
-        SwTwips GetRelCharY( const SwFrame* pFrame ) const;
+        gfx::Length GetRelCharX(const SwFrame* pFrame) const;
+        gfx::Length GetRelCharY(const SwFrame* pFrame) const;
         void AddLastCharY( tools::Long nDiff );
         void ResetLastCharRectHeight();
 
