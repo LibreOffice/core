@@ -92,11 +92,13 @@ public sealed class LineHeightComparisonTests : IDisposable
         OpenTypeFace face = OpenTypeFace.ReadFile(fontPath!).ShouldNotBeNull();
         LineMetrics metrics = LineSpacing.Resolve(face);
 
-        // Carlito is the interesting case: its two metric sets sum to the same line height — 1950+550
-        // and 1536+512+452 are both 2500 — so the total cannot tell them apart. The ascent can, and
-        // the ascent is what places the baseline within the line, so the source has to be recorded
-        // rather than inferred from the height.
-        metrics.Source.ShouldBe(LineMetricSource.WindowsMetrics);
+        // Carlito is the interesting case: its three metric sets sum to the same line height — hhea's
+        // 1950+550+0, the Windows metrics' 1950+550, and the typographic 1536+512+452 are all 2500 —
+        // so the total cannot tell them apart. The ascent can, and the ascent is what places the
+        // baseline within the line, so the source has to be recorded rather than inferred from the
+        // height. It is hhea rather than the Windows metrics because that is what LibreOffice reaches
+        // for first; the two agree here, and disagree on faces where the choice is visible.
+        metrics.Source.ShouldBe(LineMetricSource.HorizontalHeader);
         metrics.Ascent.ShouldBe(1950);
         metrics.Descent.ShouldBe(550);
         metrics.LineHeight.ShouldBe(2500);

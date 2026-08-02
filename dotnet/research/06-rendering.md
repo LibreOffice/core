@@ -385,22 +385,29 @@ input. `FontMetricData::ImplCalcLineSpacing`
      `Hasc`/`Hdsc`/`Hlgp`, since `hhea` is a mandatory table and should always be
      present) — but only accept it if ascent ≥ 0 and descent ≤ 0 (defends against
      malformed fonts, tdf#107605).
-   - If `OS/2` is present (mandatory on Windows), it takes priority: read
-     `usWinAscent`/`usWinDescent` (`HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_ASCENT/
-     DESCENT`) as the default (because historically Windows' `TEXTMETRIC`/GDI line
-     height comes from `usWinAscent/Descent`, and many legacy documents were
-     authored assuming that), **unless** the OS/2 `fsSelection` bit 7
-     (`USE_TYPO_METRICS`, read via a raw big-endian table parse at
-     `vcl::OS2_fsSelection_offset`, `:519-527`) is set, in which case the `sTypoAscender`/
-     `sTypoDescender`/`sTypoLineGap` ("typo" metrics) are used instead — this is the
-     official OpenType-recommended way for a font to say "please use my real
-     typographic metrics, not the (historically bloated) Win metrics."
-   - A per-font-name configurable override list exists for both directions:
-     `officecfg` keys `Office::Common::Misc::FontsUseWinMetrics` and
-     `FontsDontUseUnderlineMetrics` (read via `ShouldUseWinMetrics`,
-     `fontmetric.cxx:401`, and `ShouldNotUseUnderlineMetrics`, `:185`) — i.e. LO
-     ships a hardcoded exception list for specific fonts known to lie about their
-     own metrics.
+   - `usWinAscent`/`usWinDescent` (`HB_OT_METRICS_TAG_HORIZONTAL_CLIPPING_ASCENT/
+     DESCENT`) replace what `hhea` gave **only** when `hhea` gave nothing at all, or
+     when `ShouldUseWinMetrics` says so — and that predicate (`fontmetric.cxx:402-422`)
+     is nothing but a lookup in the `officecfg` key
+     `Office::Common::Misc::FontsUseWinMetrics`, which ships **four entries** (Celtic MD,
+     DIN Light, and two weights of B Nazanin — fonts whose own metrics make them
+     unreadable). When the Windows metrics are taken, the external leading is set to
+     **zero**: `hhea`'s `lineGap` is not carried over.
+   - **So the Windows metrics are not the default, whatever the historical accounts say.**
+     They were once; today `hhea` wins for every font not on that four-entry list.
+     Measured against LibreOffice 24.2 rather than inferred: a paragraph set in IPAGothic
+     at 20pt, a face whose `hhea` and Windows line boxes differ by 7.6% of the em, renders
+     with a line advance of exactly 20.00pt — the `hhea` figure. Paperless believed the
+     other story until this was measured, and it cost nothing only because the two rules
+     agree on all but three of the reference machine's installed faces.
+   - Over either of those, if OS/2 `fsSelection` bit 7 is set (`USE_TYPO_METRICS`, read
+     via a raw big-endian table parse at `vcl::OS2_fsSelection_offset`, `:519-527`), the
+     `sTypoAscender`/`sTypoDescender`/`sTypoLineGap` ("typo") metrics win outright — the
+     official OpenType way for a font to say "please use my real typographic metrics, not
+     the (historically bloated) Win metrics."
+   - A second per-font-name override list, `FontsDontUseUnderlineMetrics` (read via
+     `ShouldNotUseUnderlineMetrics`, `:185`), does the same job for the underline and
+     strikeout fields; the three Liberation faces are on it.
 3. `mnIntLeading` ("internal leading") is *derived*, not read from the font: `mnAscent
    + mnDescent - mnHeight` (`:543`), where `mnHeight` is the requested pixel/logical
    font size. This matches the classic Windows GDI `TEXTMETRIC` definition of
@@ -422,8 +429,9 @@ input. `FontMetricData::ImplCalcLineSpacing`
    hanging-baseline value via `hb_ot_layout_get_baseline`, used for
    vertical/hanging-baseline text alignment (Indic scripts).
 
-**Recommendation:** replicate this exact precedence (variable-font passthrough → hhea
-→ OS/2 win-vs-typo based on `fsSelection` bit 7 → derived internal leading) in the C#
+**Recommendation:** replicate this exact precedence (variable-font passthrough → hhea →
+OS/2 Windows metrics only where hhea said nothing → OS/2 typo metrics on `fsSelection`
+bit 7 → derived internal leading) in the C#
 port's metrics layer; HarfBuzzSharp exposes the same `hb_ot_metrics_get_position` API
 so the algorithm ports almost verbatim. Do **not** simply use whatever a naive
 "get font metrics" call from a higher-level text layout library returns (e.g. Skia's
