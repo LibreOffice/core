@@ -313,6 +313,21 @@ git merge --ff-only <briefed-commit>       # if not, fast-forward before measuri
 The tell that it worked: your own baseline sweep should reproduce the briefed numbers
 exactly. If it does not, stop — either the base is wrong or the measurement is.
 
+### A full disk looks exactly like a rendering regression
+
+When `/tmp` fills, `soffice` converts nothing and `batch-check.sh` reports the documents as
+`ref-failed` — the same verdict a genuinely unrenderable file gets. One sweep this round had
+19 documents fail that way and one of ours come out truncated, all of it disk rather than
+code.
+
+So treat a sudden cluster of `ref-failed` on documents that rendered before as an
+infrastructure question, not a code one. `df -h /` first, then re-run the affected documents
+individually and splice them back rather than repeating the whole sweep.
+
+Check headroom before starting a sweep: a whole-corpus run writes two PDFs per document and
+several agents' worth of these accumulate quickly. The disposable part is the rendered PDFs
+(`<outdir>/ours`, `<outdir>/ref`, `<outdir>/prof*`); the TSV is what you keep.
+
 ### A sweep and a build cannot share a tree
 
 `batch-check.sh` invokes the CLI once per document over tens of minutes. Rebuild that tree

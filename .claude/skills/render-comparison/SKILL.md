@@ -298,6 +298,29 @@ whole family of documents: 12.80 pt per 11 pt line and 10.50 per 9 pt is `hhea`
 rule.** A rule error usually gives a clean ratio (1.15, 1.2, 2.0); a substitution error gives
 an arbitrary one that resolves exactly against some installed font's tables.
 
+## Ask LibreOffice what it computed, instead of inferring it
+
+When a difference comes down to a number LibreOffice worked out — a column width, a line
+height, a margin, a resolved font — **export the document to flat ODF and read the number
+out of the XML**. It is faster than inferring it from pitch, and it is not subject to the
+compounding that makes an inferred figure ambiguous.
+
+```sh
+soffice --headless --convert-to fods --outdir /tmp/rt book.xlsx    # fodt / fodp likewise
+grep -o 'style:column-width="[^"]*"' /tmp/rt/book.fods | head
+```
+
+Worked example. A column width in SpreadsheetML is a count of digits of the workbook's
+default font, and Paperless had the twips-per-digit figure hardcoded. Measuring the *pitch*
+of the two renderings gave 137 twips per digit; the flat-ODF export gave 886.2, 6591.2,
+1389.0 and 1182.1 twips against digit counts of 6.664, 49.555, 10.441 and 8.887 — **133.0,
+four times over**. The 3% discrepancy was a separate fit-to-page zoom difference, and
+chasing the inferred 137 would have produced a fudge factor that fitted one document.
+
+The same export settles rounding questions that no amount of source-reading will: probe
+workbooks came back 111.50 → 111 and 121.64 → 121 but 139.97 → 140 and 152.70 → 153, which
+says a device's quantisation decides them rather than a rounding rule.
+
 ## The C++ in this tree is not the reference binary
 
 The checkout is a development branch; the `soffice` generating your references is a release
