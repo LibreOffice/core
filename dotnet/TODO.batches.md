@@ -39,41 +39,58 @@ output matters least there.
 Record measured numbers, never expected ones. A number here that was not produced by
 `batch-check.sh` is worse than a blank.
 
-## Baselines measured
+## Baseline: the whole words track, measured
 
-Both taken before any batch work began, on `84e7fe976`:
+All 202 documents at `1d13c1e0a`, before any fix: **84 match, 118 do not (42%).**
 
-- `words/batch-001` — **9/10**. `foca_form_1.doc` spills a table onto a fourth page where
-  LibreOffice uses three, and drops ~23 words of heading text. One cause, two symptoms.
-- `slides/batch-001` — **2/10**. Every page count already correct, so the failures are about
-  what reaches the page rather than pagination. Text is lost on six documents and *over*-emitted
-  on two — different bugs — and one document produces no PDF at all.
+Sorting the failures by page delta — ours minus LibreOffice — is what turns 118 problems
+into three:
+
+| Cluster | Documents | Shape |
+|---|---|---|
+| **Under-paginate** | 70 | We produce *fewer* pages. Page deltas run 5–43% while word deltas are only 1–6%: `A_320.doc` is 64 pages short and still carries 94% of the text. We are not losing content, we are **fitting too much of it onto each page** — a vertical-budget error (line height, text-area height, or the line-fits rule) manufacturing seventy unrelated-looking failures. |
+| **Over-paginate** | 32 | We produce *more* pages, with word counts near-identical. About *where* content breaks, not what it contains. Opposite sign, so probably a different rule. |
+| **Text loss** | 16 | Pagination already correct and text still short — 2%–22%, always short, never long. No reflow cascade confusing the picture, so whatever is missing never reached the page at all. |
+
+Failure rates were 42% for `doc` and 43% for `docx`. Near-equal rates say the cause is
+**downstream of both readers, in the layout they share** — which is why the work is split by
+cluster and not by format.
+
+Cluster lists live in the scratch directory as `c1-underpaginate.tsv`,
+`c2-overpaginate.tsv`, `c3-textloss.tsv` (path, delta, pages ours/ref, words ours/ref).
+
+## Baseline: slides
+
+`slides/batch-001` at `84e7fe976` — **2/10**. Every page count already correct, so the
+failures are about what reaches the page rather than pagination. Text is lost on six
+documents and *over*-emitted on two — different bugs — and one document produces no PDF at
+all. A full-track sweep is running.
 
 ### `words` — 202 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
-| `batch-001` | 10 | 43–59 | doc:5 docx:5 | WIP (9/10) |
-| `batch-002` | 10 | 59–81 | doc:3 docx:7 | — |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | — |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | — |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | — |
-| `batch-006` | 10 | 141–158 | doc:4 docx:6 | — |
-| `batch-007` | 10 | 160–185 | doc:4 docx:6 | — |
-| `batch-008` | 10 | 186–204 | doc:4 docx:6 | — |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | — |
-| `batch-010` | 10 | 228–260 | doc:2 docx:8 | — |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | — |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | — |
-| `batch-013` | 10 | 338–370 | docx:10 | — |
-| `batch-014` | 10 | 372–422 | doc:4 docx:6 | — |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | — |
-| `batch-016` | 10 | 473–537 | doc:5 docx:5 | — |
-| `batch-017` | 10 | 537–602 | doc:2 docx:8 | — |
-| `batch-018` | 10 | 620–859 | doc:2 docx:8 | — |
-| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | — |
-| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | — |
-| `batch-021` | 2 | 4417–4676 | docx:2 | — |
+| `batch-001` | 10 | 43–59 | doc:5 docx:5 | 9/10 |
+| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 6/10 |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 6/10 |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 8/10 |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 4/10 |
+| `batch-006` | 10 | 141–158 | doc:4 docx:6 | 7/10 |
+| `batch-007` | 10 | 160–185 | doc:4 docx:6 | 4/10 |
+| `batch-008` | 10 | 186–204 | doc:4 docx:6 | 8/10 |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 3/10 |
+| `batch-010` | 10 | 228–260 | doc:2 docx:8 | 4/10 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 4/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 3/10 |
+| `batch-013` | 10 | 338–370 | docx:10 | 3/10 |
+| `batch-014` | 10 | 372–422 | doc:4 docx:6 | 1/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 3/10 |
+| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 4/10 |
+| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 3/10 |
+| `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
+| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 0/10 |
+| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 1/10 |
+| `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
 ### `slides` — 165 documents, 17 batches
 

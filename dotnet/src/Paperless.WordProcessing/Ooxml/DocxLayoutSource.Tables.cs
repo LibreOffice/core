@@ -73,6 +73,14 @@ public sealed partial class DocxLayoutSource
         // Counted around the rows rather than around this table's own properties, because a cell's blocks
         // are read while the rows are, and a table inside one of them is what makes this table an enclosing
         // level. See LeftEdge for the one thing the count decides.
+        // The table style's paragraph formatting applies to every paragraph in the table's cells, and it
+        // is the layer that makes table text compact: `Table Grid`, which Word puts on nearly every table,
+        // sets `w:spacing w:after="0" w:line="240"`. Saved and restored so a nested table's style applies
+        // only inside it.
+        IReadOnlyList<XElement>? enclosing = _tableStyle;
+        _tableStyle = _styles.TableStyleParagraphProperties(
+            Word.Attribute(Word.Child(properties, "tblStyle"), "val"));
+
         _tableDepth++;
         try
         {
@@ -81,6 +89,7 @@ public sealed partial class DocxLayoutSource
         finally
         {
             _tableDepth--;
+            _tableStyle = enclosing;
         }
 
         if (rows.Count == 0) return null;

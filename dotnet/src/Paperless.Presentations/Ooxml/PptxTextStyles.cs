@@ -60,37 +60,64 @@ internal sealed class PptxTextStyles
     {
         ArgumentNullException.ThrowIfNull(shape);
 
+        return new DrawingTextOptions
+        {
+            ResolveHyperlink = resolveHyperlink,
+            InheritedLevelProperties = LevelPropertiesFor(shape),
+            Theme = _theme,
+            ShapeTextStyle = ShapeTextStyle(shape),
+        };
+    }
+
+    /// <summary>
+    /// The per-level property sources a shape's text inherits, most specific first.
+    /// </summary>
+    /// <remarks>
+    /// Separate from <see cref="For"/> because rendering needs the same chain without the rest
+    /// of the extraction options: a bullet, an indent and a run's size all come out of it, and
+    /// a second implementation would let the two readers disagree about which level a nested
+    /// paragraph inherits from.
+    /// </remarks>
+    /// <param name="shape">The shape whose text body is being read.</param>
+    public Func<int, IReadOnlyList<XElement>> LevelPropertiesFor(XElement shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
         PptxPlaceholder? placeholder = PptxPlaceholder.Read(shape, _master);
 
         // Resolved once per shape rather than once per level: the match does not depend on the
         // level, and a deck with a hundred paragraphs in one placeholder would otherwise search
         // the master's shape tree a hundred times.
-        XElement? direct = null;
-        XElement? inherited = null;
-        if (placeholder is { } key)
-        {
-            List<XElement> masterShapes = [.. PptxPlaceholder.ShapesOf(_master)];
-            List<XElement> layoutShapes = [.. PptxPlaceholder.ShapesOf(_layout)];
-
-            direct = key.Find([.. masterShapes, .. layoutShapes]);
-
-            // The layout placeholder has a placeholder of its own on the master; that second hop
-            // is what makes a three-level chain rather than a two-level one.
-            if (direct is not null && !masterShapes.Contains(direct)
-                && PptxPlaceholder.Read(direct, _master) is { } layoutKey)
-                inherited = layoutKey.Find(masterShapes);
-        }
+        (XElement? direct, XElement? inherited) = Placeholders(placeholder);
 
         string? textStyle = placeholder?.TextStyle(_isNotesPage);
 
-        return new DrawingTextOptions
-        {
-            ResolveHyperlink = resolveHyperlink,
-            InheritedLevelProperties = level =>
-                [.. Chain(direct, inherited, textStyle, level)],
-            Theme = _theme,
-            ShapeTextStyle = ShapeTextStyle(shape),
-        };
+        return level => [.. Chain(direct, inherited, textStyle, level)];
+    }
+
+    /// <summary>
+    /// The layout placeholder a shape stands in for, and the master placeholder behind that one.
+    /// </summary>
+    /// <remarks>
+    /// The layout placeholder has a placeholder of its own on the master; that second hop is what
+    /// makes a three-level chain rather than a two-level one, and it is the reason a title whose
+    /// layout states nothing still finds the master's rectangle, list style and prompt geometry.
+    /// </remarks>
+    public (XElement? Direct, XElement? Inherited) Placeholders(PptxPlaceholder? placeholder)
+    {
+        if (placeholder is not { } key) return (null, null);
+
+        List<XElement> masterShapes = [.. PptxPlaceholder.ShapesOf(_master)];
+        List<XElement> layoutShapes = [.. PptxPlaceholder.ShapesOf(_layout)];
+
+        XElement? direct = key.Find([.. masterShapes, .. layoutShapes]);
+
+        XElement? inherited = null;
+        if (direct is not null && !masterShapes.Contains(direct)
+            && PptxPlaceholder.Read(direct, _master) is { } layoutKey)
+            inherited = layoutKey.Find(masterShapes);
+
+        return (direct, inherited);
     }
 
     /// <summary>

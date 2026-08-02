@@ -20,8 +20,8 @@ documents proves only that the clean path works.
 
 ```
 words/batch-001 … batch-021     doc  docx     202 documents
-slides/batch-001 … batch-017    ppt  pptx     169 documents
-sheets/batch-001 … batch-018    xls  xlsx     170 documents
+slides/batch-001 … batch-017    ppt  pptx     165 documents
+sheets/batch-001 … batch-018    xls  xlsx     174 documents
 ```
 
 `MANIFEST.tsv` records the score that placed every document; `DUPLICATES.tsv` records every
@@ -47,6 +47,13 @@ test files. The absolute bands in `pdf-complexity.py` (`01-low` under 25, and so
 set against generated documents; measured across this corpus the 10th percentile is already
 95 and the median is 347. **Ordering is by rank, so the bands do not affect batching** — but
 do not read a band label as a difficulty claim on real files.
+
+**The ordering has since validated itself.** Sweeping all 21 words batches produced a match
+rate that falls almost monotonically with batch number — 9/10 and 8/10 in the first
+batches, 0/10 and 1/10 in the last three. The score is computed from LibreOffice's own
+output and knows nothing about Paperless, so that gradient is evidence the metric measures
+real difficulty rather than an artefact of how the corpus was assembled. It also means a
+batch number is a usable progress estimate: reaching batch *n* is worth more than *n*/21.
 
 ### 2. Ten documents per batch
 
@@ -188,6 +195,78 @@ awk -F'\t' '{k=$2"\t"($7=="match"?"match":"fail"); c[k]++} END{for(x in c) print
 Near-equal failure rates across formats mean the cause is downstream of the readers. Split
 by symptom. Sharply unequal rates mean the readers really are the problem, and splitting by
 format is both safe and natural.
+
+### How many agents actually fit
+
+Each agent worktree costs **about 2.8 GB once built**. Measured breakdown, because the
+obvious suspect is the wrong one:
+
+| Part | Size | |
+|---|---|---|
+| LibreOffice C++ source checkout | 1.5 GB | inherent — a worktree copies the whole tree, and the C++ tree dwarfs `dotnet/` |
+| Pinned build output, whole solution | 713 MB | working as designed |
+| Unpinned `runtimes/` under `Paperless.Cli` | 550 MB | should not be there — see below |
+
+**This is not the RID pin failing.** Verified on this commit: a clean `dotnet build` of the
+CLI, a bare solution `dotnet build`, and a `dotnet publish` each produce **31 MB** with only
+`bin/Debug/net10.0/linux-x64/` — no `runtimes/` at all. The pin does exactly what
+`Directory.Build.props` claims.
+
+The 550 MB is a `bin/Debug/net10.0/runtimes/` carrying all sixteen RIDs, present in every
+agent worktree and absent from the main checkout. That is the layout MSBuild emits when
+`RuntimeIdentifier` is empty, so some command run inside those worktrees built the CLI
+without the pin applying. **I could not reproduce it** with the three builds above, so treat
+this as an open question rather than a known cause — but check for it before blaming the
+pin, and delete it if disk is tight (nothing consumes it; the pinned output beside it is
+what runs).
+
+Four concurrent agents is roughly the ceiling on a container with a 12–20 GB writable
+allowance, and the failure mode is not a warning but `No space left on device` in the middle
+of somebody's build.
+
+Check before dispatching a fifth, and free the rendered PDFs from finished comparison runs
+first — those are large and disposable, while the TSV they produced is small and is the
+part worth keeping:
+
+```sh
+du -sh .claude/worktrees/* ; df -h /
+rm -rf <outdir>/ours <outdir>/ref <outdir>/prof* <outdir>/t?   # keep rows.tsv
+```
+
+CPU is the softer limit: agents are mostly waiting on model calls, and the bursts are
+builds and renders. On four cores, four agents plus a background sweep pushed load average
+to ~8 and roughly halved sweep throughput, but nothing failed.
+
+### Symptom clusters can still share a root cause
+
+Splitting by symptom stops agents working the same *documents*. It does not stop them
+working the same *bug*. Measured: the under-pagination agent and the over-pagination agent —
+opposite signs, disjoint document lists — independently found and fixed the same defect,
+that a table style's `w:pPr` was never applied. Two implementations, two commits, one
+conflict.
+
+That is not an argument against the split; it is an argument for telling agents what the
+others have found as they find it. When an agent reports a root cause, pass it to the others
+still running. The cost of a duplicated fix is a merge conflict in the hottest file in the
+tree, which is exactly where you least want one.
+
+Expect it especially where two clusters are *opposite signs of one quantity*. Too much
+vertical space and too little are the same code with the same bugs, and a document lands in
+one bucket or the other depending on which of several errors happens to dominate.
+
+### Fixes that cancel: a green document is not necessarily a correct one
+
+The over-pagination agent's changes moved 19 documents *further* from the reference and cost
+5 full matches — all in the same direction, all previously passing because **a too-small
+line height and too-large paragraph spacing were cancelling**. Removing one error exposed
+the other.
+
+So a match count can fall while the code gets strictly better, and the honest way to see
+that is to track a continuous quantity alongside the binary one. Total absolute page error
+across the track went 385 → 357, and documents with an exactly-correct page count went
+100 → 109, over the same change that dropped 5 matches. Report both, and do not revert a
+change that is right on its own evidence because a compensating bug elsewhere made the old
+number look better.
 
 ### Merging several agents into one branch
 
