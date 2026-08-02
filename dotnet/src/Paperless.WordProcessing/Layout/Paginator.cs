@@ -296,7 +296,8 @@ public sealed class Paginator
         // because a frame need not be anchored in the body: one anchored in a table cell or a header is
         // reached through the flow it landed in, which exists only once a page has been filled. Scanning
         // the blocks instead returned early on exactly those documents and left their frames unplaced.
-        FrameResolution resolution = FrameResolution.Of(blocks, withFrames, pages);
+        FrameResolution resolution = FrameResolution.Of(
+            blocks, withFrames, pages, _options.CollapsesSpacing);
         if (resolution.IsEmpty) return pages;
 
         for (int pass = 0; pass < MaxFramePasses; pass++)
@@ -312,7 +313,8 @@ public sealed class Paginator
                 _obstacles = null;
             }
 
-            FrameResolution settled = FrameResolution.Of(blocks, withFrames, next);
+            FrameResolution settled = FrameResolution.Of(
+                blocks, withFrames, next, _options.CollapsesSpacing);
             pages = next;
 
             bool converged = settled.SameAs(resolution);
@@ -383,7 +385,12 @@ public sealed class Paginator
                 // The section's own breaking width is also what a table stating no widths of its own is
                 // fitted to. A table that declares its grid is laid out exactly as it was before.
                 (List<PlacedTableCell> cells, List<Length> rowHeights) =
-                    TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero), 0, width);
+                    TableLayouter.LayOut(
+                        table,
+                        new DocPoint(Length.Zero, Length.Zero),
+                        0,
+                        width,
+                        _options.CollapsesSpacing);
 
                 laid.Add(new LaidBlock(null, cells, rowHeights));
                 continue;
@@ -913,15 +920,27 @@ public sealed class Paginator
             ? Length.Zero
             : ParagraphLeading.Below(laid[index - 1].Paragraph);
 
-        if (index == 0 || !_options.CollapsesSpacing) return before + leading;
+        if (index == 0 || blocks[index - 1] is not PageParagraph previous) return before + leading;
+
+        // Contextual spacing suppresses the gap entirely, which means taking back the space-after already
+        // added for the paragraph above: `before` is zero here, and leaving its space-after standing would
+        // keep the whole gap on a list whose style states an after and no before.
+        if (blocks[index] is PageParagraph current
+            && ParagraphLayouter.SharesContextualSpacing(previous.Format, current.Format))
+        {
+            // Only when the paragraph above is on this page: its space-after was added to the running
+            // height there and has to come back off here, and at the top of a page there is nothing to
+            // take off — subtracting anyway would put the first line above the margin.
+            return atTopOfPage ? Length.Zero : leading - previous.Format.SpaceAfter;
+        }
+
+        if (!_options.CollapsesSpacing) return before + leading;
 
         // Collapsing: the gap is the larger of the two rather than their sum. The previous paragraph's
         // space-after has already been added to the running height, so what is added here is only the
         // part of space-before that exceeds it. A table before this paragraph collapses nothing, because
         // its own space-after is a table property rather than a paragraph's and the formats do not
         // collapse the two against each other.
-        if (blocks[index - 1] is not PageParagraph previous) return before + leading;
-
         Length excess = before - previous.Format.SpaceAfter;
         return (excess > Length.Zero ? excess : Length.Zero) + leading;
     }
@@ -1028,7 +1047,7 @@ public sealed class Paginator
     /// inside the set, because most pages of a document share one header and laying it out again per page
     /// would shape the same text for the same answer.
     /// </remarks>
-    private static (PlacedFlow? Header, PlacedFlow? Footer) Furniture(
+    private (PlacedFlow? Header, PlacedFlow? Footer) Furniture(
         PageFurnitureSet? furniture,
         WritingSection section,
         PageGeometry geometry,
@@ -1036,8 +1055,8 @@ public sealed class Paginator
         bool first)
         => furniture is null
             ? (null, null)
-            : (furniture.Header(section, geometry, pageNumber, first),
-               furniture.Footer(section, geometry, pageNumber, first));
+            : (furniture.Header(section, geometry, pageNumber, first, _options.CollapsesSpacing),
+               furniture.Footer(section, geometry, pageNumber, first, _options.CollapsesSpacing));
     /// <summary>
     /// The notes a run of a paragraph's lines anchors.
     /// </summary>
@@ -1177,7 +1196,8 @@ public sealed class Paginator
     {
         if (_noteHeights.TryGetValue(note, out Length cached)) return cached;
 
-        Length height = FlowLayouter.HeightOf(note.Blocks, _noteWidth);
+        Length height = FlowLayouter.HeightOf(
+            note.Blocks, _noteWidth, collapsesSpacing: _options.CollapsesSpacing);
         _noteHeights[note] = height;
         return height;
     }
@@ -1191,14 +1211,16 @@ public sealed class Paginator
     /// call a Word footer makes — a flow with no stated offset — and the notes take their room out of the
     /// body's, which is what makes a page with notes hold less text.
     /// </remarks>
-    private static PlacedFlow? NoteArea(List<PageNote> notes, PageGeometry page)
+    private PlacedFlow? NoteArea(List<PageNote> notes, PageGeometry page)
     {
         if (notes.Count == 0) return null;
 
         List<PageBlock> blocks = [];
         foreach (PageNote note in notes) blocks.AddRange(note.Blocks);
 
-        return FlowLayouter.LayOut(blocks, page.TextArea, offsetFromTop: null);
+        return FlowLayouter.LayOut(
+            blocks, page.TextArea, offsetFromTop: null,
+            collapsesSpacing: _options.CollapsesSpacing);
     }
 
     /// <summary>

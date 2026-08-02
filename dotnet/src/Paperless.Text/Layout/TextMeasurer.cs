@@ -283,7 +283,8 @@ public sealed class LineFiller
                 }
 
                 int visibleEnd = TrimTrailingSpaces(text, lineStart, end);
-                Length width = Measure(text, lineStart, visibleEnd, widthBetween, tabs);
+                Length width = Measure(
+                    text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0);
 
                 if (width > limit && chosen >= 0) break;
 
@@ -307,17 +308,19 @@ public sealed class LineFiller
                 // No opportunity at all past this point, which happens when the text ends without one.
                 chosen = text.Length;
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
-                chosenWidth = Measure(text, lineStart, chosenVisibleEnd, widthBetween, tabs);
+                chosenWidth = Measure(
+                    text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0);
             }
 
             // Nothing between this line's start and its first break opportunity fits. The word is
             // chopped rather than left hanging over the margin — see the remarks on this class.
             if (chosenWidth > limit
-                && Chop(text, lineStart, chosen, limit, widthBetween, tabs) is { } cut)
+                && Chop(text, lineStart, chosen, limit, widthBetween, tabs, lines.Count == 0)
+                       is { } cut)
             {
                 chosen = cut;
                 chosenVisibleEnd = cut;
-                chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs);
+                chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs, lines.Count == 0);
                 probe = nextOpportunity;
             }
 
@@ -364,7 +367,8 @@ public sealed class LineFiller
         int end,
         Length limit,
         Func<int, int, Length> widthBetween,
-        ParagraphFormat? tabs)
+        ParagraphFormat? tabs,
+        bool isFirstLine)
     {
         int first = Whole(text, lineStart + 1);
         if (first >= end) return null;
@@ -381,7 +385,7 @@ public sealed class LineFiller
             if (middle <= first) { low = first + 1; continue; }
             if (middle >= end) { high = middle - 2; continue; }
 
-            if (Measure(text, lineStart, middle, widthBetween, tabs) <= limit)
+            if (Measure(text, lineStart, middle, widthBetween, tabs, isFirstLine) <= limit)
             {
                 best = middle;
                 low = middle + 1;
@@ -415,9 +419,10 @@ public sealed class LineFiller
         int start,
         int end,
         Func<int, int, Length> widthBetween,
-        ParagraphFormat? tabs)
+        ParagraphFormat? tabs,
+        bool isFirstLine)
         => tabs is not null && TabRuler.HasTab(text, start, end)
-            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween)
+            ? TabRuler.WidthOf(text, start, end, tabs, widthBetween, isFirstLine)
             : widthBetween(start, end);
 
     /// <summary>
