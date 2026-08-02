@@ -151,6 +151,41 @@ public sealed class SheetEmptyPageTests
     }
 
     /// <summary>
+    /// A repeated title row does not keep a page that is otherwise blank.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The obvious reading is the wrong one: the band does print on the page, so counting it as
+    /// content looks right and disables the whole rule for any sheet declaring
+    /// <c>_xlnm.Print_Titles</c>. Calc asks <c>IsPrintEmpty</c> for the page's own block alone —
+    /// <c>IsPrintEmpty(getStartColumn(), nPageStartRow, getEndColumn(), nRow-1, …)</c>
+    /// (<c>sc/source/ui/view/printfun.cxx:3174</c>) — and <c>PrintPage</c> adds the repeated band
+    /// afterwards, so it never enters the question.
+    /// </para>
+    /// <para>
+    /// Measured on <c>fy20-may20-sep20.xlsx</c>, which repeats row 1 and whose column F reaches
+    /// only row 76: LibreOffice prints two pages of the second column band and Paperless printed
+    /// 103 blank ones, 233 pages against 96.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ARepeatedRowDoesNotKeepABlankPage()
+    {
+        SheetLayout sheet = Sheet([(0, 0, "title"), (1, 0, "top"), (516, 0, "bottom")]);
+        SheetLayout titled = new()
+        {
+            Name = sheet.Name,
+            Cells = sheet.Cells,
+            Drawings = sheet.Drawings,
+            Setup = sheet.Setup with { RepeatRows = new SheetRange(0, 0, 0, 0) },
+        };
+
+        // The same two pages as without the repeated band: the rows between 1 and 516 are blank,
+        // and a title repeated onto them is not content of theirs.
+        PageCount(titled).ShouldBe(2);
+    }
+
+    /// <summary>
     /// A drawing keeps every page its rectangle touches, cells or no cells.
     /// </summary>
     /// <remarks>

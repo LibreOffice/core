@@ -65,9 +65,16 @@ internal static class SheetEmptyPages
     {
         SheetRange block = placement.Cells;
 
-        // The repeated bands print on every page and are part of what is on it.
-        if (placement.RepeatColumns is not null || placement.RepeatRows is not null) return false;
-
+        // The repeated bands are deliberately *not* consulted, though they print on this page and
+        // reading them as content is the obvious thing to do. Calc asks `IsPrintEmpty` for the
+        // page's own block alone — `IsPrintEmpty(getStartColumn(), nPageStartRow, getEndColumn(),
+        // nRow-1, …)` and the same range through `lcl_SetHidden`
+        // (`sc/source/ui/view/printfun.cxx:3174, :3053`) — and a repeated band is added by
+        // `PrintPage` afterwards, so it never enters the question. Counting it kept every page of
+        // every sheet that declares `_xlnm.Print_Titles`, which disabled this whole class for them:
+        // `fy20-may20-sep20.xlsx` states `Print_Titles` for row 1, and its column F reaches only
+        // row 76, so Calc prints two pages of the second column band and we printed 103 blank ones
+        // — 233 pages against 96.
         for (int row = block.FirstRow; row <= block.LastRow; row++)
         {
             for (int column = block.FirstColumn; column <= block.LastColumn; column++)
