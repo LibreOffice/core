@@ -546,8 +546,12 @@ internal sealed partial class PptxSlideLayout
             Drawing.Flag(transform, "flipV") ?? false,
             space);
 
+        DrawingTableStyle? style = DrawingTableStyle.Read(
+            _file.TableStyles,
+            Drawing.Child(Drawing.Child(table, "tblPr"), "tableStyleId")?.Value);
+
         return SlideTable.Place(
-            DrawingTableGeometry.Read(table, theme.Colours),
+            DrawingTableGeometry.Read(table, theme.Colours, style, theme.Styles),
             local.Size,
             placement,
             cell => CellBody(cell, theme),
@@ -559,7 +563,14 @@ internal sealed partial class PptxSlideLayout
     {
         if (cell.TextBody is not { } body || DrawingTextBody.IsEmpty(body)) return null;
 
-        return PptxTextBody.Read(body, theme.Colours, theme.MinorLatin) with
+        // The table style's text properties enter as an inherited level style rather than being
+        // stamped onto each run, because that is the rung they belong to: a run stating its own
+        // colour or weight still wins, and this is what it wins over.
+        IReadOnlyList<XElement> themed = CellTextStyle(cell);
+
+        return PptxTextBody.Read(
+            body, theme.Colours, theme.MinorLatin,
+            themed.Count == 0 ? null : _ => themed) with
         {
             Insets = cell.Margins,
             Anchor = cell.Anchor switch
@@ -578,6 +589,36 @@ internal sealed partial class PptxSlideLayout
             // which would have been 18.00.
             FontIndependentLineSpacing = false,
         };
+    }
+
+    /// <summary>
+    /// A table style's text properties as a level style, which is how the text reader takes them.
+    /// </summary>
+    /// <remarks>
+    /// One synthetic <c>a:lvl1pPr</c> carrying an <c>a:defRPr</c>, returned for every outline
+    /// level: a table cell has no outline and its style applies to all of its text. Building an
+    /// element rather than post-processing the runs keeps one precedence rule in one place — the
+    /// same chain a shape's placeholder and the master's text styles travel down.
+    /// </remarks>
+    private static IReadOnlyList<XElement> CellTextStyle(DrawingTableCellBox cell)
+    {
+        if (cell.TextColour is null && cell.Bold is null && cell.Italic is null) return [];
+
+        XElement run = new(Drawing.Name("defRPr"));
+
+        if (cell.Bold is { } bold) run.SetAttributeValue("b", bold ? "1" : "0");
+        if (cell.Italic is { } italic) run.SetAttributeValue("i", italic ? "1" : "0");
+
+        if (cell.TextColour is { } colour)
+        {
+            run.Add(new XElement(
+                Drawing.Name("solidFill"),
+                new XElement(
+                    Drawing.Name("srgbClr"),
+                    new XAttribute("val", $"{colour.R:X2}{colour.G:X2}{colour.B:X2}"))));
+        }
+
+        return [new XElement(Drawing.Name("lvl1pPr"), run)];
     }
 
     private PlacedShape? Shape(

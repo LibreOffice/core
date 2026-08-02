@@ -17,12 +17,12 @@ namespace Paperless.Ooxml.DrawingML;
 /// content tree carry them would charge it for a feature it never uses.
 /// </para>
 /// <para>
-/// What is <em>not</em> resolved here is the table style (<c>a:tblPr/@firstRow</c> and the
-/// <c>tableStyles.xml</c> part it bands against). A cell's own <c>a:tcPr</c> is authoritative when
-/// it states something, and every table LibreOffice writes states everything on every cell — its
-/// PPTX export writes an explicit <c>a:lnL</c>…<c>a:lnB</c> and an explicit fill per cell, even
-/// when the answer is <c>a:noFill</c>. So the style matters only for PowerPoint-authored decks,
-/// and is recorded in the TODO rather than guessed at.
+/// The table style (<c>a:tblPr/@firstRow</c> and the <c>tableStyles.xml</c> part it bands
+/// against) is resolved by <see cref="DrawingTableStyle"/> and merged in here, under the cell's
+/// own <c>a:tcPr</c>. It matters only for PowerPoint-authored decks — every table LibreOffice
+/// writes states everything on every cell, an explicit <c>a:lnL</c>…<c>a:lnB</c> and an explicit
+/// fill, even when the answer is <c>a:noFill</c> — which is exactly why a corpus of real decks
+/// found it and a corpus of round-tripped ones would not have.
 /// </para>
 /// </remarks>
 public static class DrawingTableGeometry
@@ -74,7 +74,17 @@ public static class DrawingTableGeometry
     /// <summary>Reads a table's geometry.</summary>
     /// <param name="table">The <c>a:tbl</c> element.</param>
     /// <param name="theme">The theme, for scheme colours on fills and borders.</param>
-    public static DrawingTableBox Read(XElement table, DrawingTheme? theme = null)
+    /// <param name="style">
+    /// The table style the <c>a:tblPr/a:tableStyleId</c> names, or null when the package carries
+    /// none. Everything it says is overridden by whatever the cell states for itself.
+    /// </param>
+    /// <param name="matrix">The theme's format matrix, for a style part naming an
+    /// <c>a:fillRef</c>.</param>
+    public static DrawingTableBox Read(
+        XElement table,
+        DrawingTheme? theme = null,
+        DrawingTableStyle? style = null,
+        DrawingStyleMatrix? matrix = null)
     {
         ArgumentNullException.ThrowIfNull(table);
 
@@ -84,11 +94,21 @@ public static class DrawingTableGeometry
             columns.Add(Length.FromEmu(Emu(column, "w", 0)));
         }
 
+        DrawingTableStyleOptions options =
+            DrawingTableStyleOptions.Read(Drawing.Child(table, "tblPr"));
+
+        List<XElement> rowElements = [.. Drawing.Children(table, "tr")];
+        int lastRow = rowElements.Count - 1;
+        int widest = rowElements.Count == 0
+            ? 0
+            : rowElements.Max(row => Drawing.Children(row, "tc").Count());
+        int lastColumn = Math.Max(columns.Count, widest) - 1;
+
         List<Length> rows = [];
         List<DrawingTableCellBox> cells = [];
 
         int rowIndex = 0;
-        foreach (XElement row in Drawing.Children(table, "tr"))
+        foreach (XElement row in rowElements)
         {
             rows.Add(Length.FromEmu(Emu(row, "h", 0)));
 
@@ -106,6 +126,9 @@ public static class DrawingTableGeometry
 
                 XElement? properties = Drawing.Child(cell, "tcPr");
 
+                DrawingTableCellStyle themed = style?.Resolve(
+                    options, rowIndex, lastRow, position, lastColumn, theme, matrix) ?? Empty;
+
                 cells.Add(new DrawingTableCellBox
                 {
                     Row = rowIndex,
@@ -115,12 +138,15 @@ public static class DrawingTableGeometry
                     IsCovered = covered,
                     Margins = MarginsOf(properties),
                     Anchor = Drawing.Attribute(properties, "anchor"),
-                    Fill = FillOf(properties, theme),
+                    Fill = FillOf(properties, theme) ?? themed.Fill,
                     TextBody = Drawing.Child(cell, "txBody"),
-                    Left = Edge(Drawing.Child(properties, "lnL"), theme),
-                    Right = Edge(Drawing.Child(properties, "lnR"), theme),
-                    Top = Edge(Drawing.Child(properties, "lnT"), theme),
-                    Bottom = Edge(Drawing.Child(properties, "lnB"), theme),
+                    Left = Side(properties, "lnL", themed.Left, position == 0, themed, theme),
+                    Right = Side(properties, "lnR", themed.Right, position >= lastColumn, themed, theme),
+                    Top = Side(properties, "lnT", themed.Top, rowIndex == 0, themed, theme),
+                    Bottom = Side(properties, "lnB", themed.Bottom, rowIndex >= lastRow, themed, theme),
+                    TextColour = themed.TextColour,
+                    Bold = themed.Bold,
+                    Italic = themed.Italic,
                 });
             }
 
@@ -133,6 +159,41 @@ public static class DrawingTableGeometry
             RowHeights = rows,
             Cells = cells,
         };
+    }
+
+    private static readonly DrawingTableCellStyle Empty = new();
+
+    /// <summary>
+    /// One of a cell's four edges, once the style's own side, the style's interior rule and the
+    /// cell's <c>a:tcPr</c> have all had their say.
+    /// </summary>
+    /// <remarks>
+    /// A style carries six edges and a cell has four, and the reduction is positional: at the
+    /// grid's boundary a cell takes the style's <c>left</c>, <c>right</c>, <c>top</c> or
+    /// <c>bottom</c>, and inside it takes <c>insideV</c> or <c>insideH</c> with the named side
+    /// laid over it where the style states one. That is
+    /// <c>tablecell.cxx:513-535</c> — <c>aLinePropertiesInsideH.assignUsed(aLinePropertiesTop)</c>
+    /// then applied as the top border, for every row but the first.
+    /// </remarks>
+    private static DrawingTableEdge? Side(
+        XElement? properties,
+        string name,
+        DrawingTableEdge? themedSide,
+        bool atBoundary,
+        DrawingTableCellStyle themed,
+        DrawingTheme? theme)
+    {
+        XElement? own = Drawing.Child(properties, name);
+
+        // An explicit a:noFill on the cell is a decision, not silence: it removes a border the
+        // style would otherwise have drawn.
+        if (own is not null && Drawing.Child(own, "noFill") is not null) return null;
+        if (Edge(own, theme) is { } stated) return stated;
+
+        if (themedSide is not null) return themedSide;
+        if (atBoundary) return null;
+
+        return name is "lnT" or "lnB" ? themed.InsideHorizontal : themed.InsideVertical;
     }
 
     private static Margins MarginsOf(XElement? properties) => new(
@@ -164,7 +225,7 @@ public static class DrawingTableGeometry
     /// (<c>svx/source/table/tablelayouter.cxx:944-948</c>, <c>HasPriority</c>). A line stating no
     /// width at all is one point, which is the default <c>tablecell.cxx:99</c> substitutes.
     /// </remarks>
-    private static DrawingTableEdge? Edge(XElement? line, DrawingTheme? theme)
+    internal static DrawingTableEdge? Edge(XElement? line, DrawingTheme? theme)
     {
         if (line is null) return null;
         if (Drawing.Child(line, "noFill") is not null) return null;
@@ -265,6 +326,23 @@ public sealed record DrawingTableCellBox
 
     /// <summary>Its bottom edge.</summary>
     public DrawingTableEdge? Bottom { get; init; }
+
+    /// <summary>
+    /// The colour the table style gives its text, or null when the style says nothing.
+    /// </summary>
+    /// <remarks>
+    /// Carried rather than applied, because a run stating its own colour still wins and only the
+    /// family's own text reader knows how a run states one. A header row's white text is the case
+    /// that makes this visible: without it the run falls back to the body's dark default and
+    /// disappears into the accent-coloured band behind it.
+    /// </remarks>
+    public Colour? TextColour { get; init; }
+
+    /// <summary>Whether the table style makes its text bold, or null when it says nothing.</summary>
+    public bool? Bold { get; init; }
+
+    /// <summary>Whether the table style makes its text italic, or null when it says nothing.</summary>
+    public bool? Italic { get; init; }
 }
 
 /// <summary>One cell edge's pen.</summary>

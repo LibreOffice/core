@@ -89,6 +89,16 @@ internal sealed class PptxFile : IDisposable
     public IReadOnlyList<PptxSlide> Slides { get; }
 
     /// <summary>
+    /// The <c>a:tblStyleLst</c> of the deck's <c>tableStyles.xml</c>, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// One part for the whole deck, hung off the presentation rather than off a slide — a table
+    /// on slide seven and one on slide nine name the same style by GUID. Loaded through the
+    /// part cache, so asking once per table costs a dictionary lookup.
+    /// </remarks>
+    public XElement? TableStyles => Load(TargetOfType(MainPartName, "tableStyles"));
+
+    /// <summary>
     /// The deck's comment authors, by the id a comment refers to them with.
     /// </summary>
     /// <remarks>
