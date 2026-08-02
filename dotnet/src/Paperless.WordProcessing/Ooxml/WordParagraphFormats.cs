@@ -534,14 +534,59 @@ internal static class WordParagraphFormats
     /// </remarks>
     private static Length AutoOr(
         List<XElement> layers, string autoName, string name, Length autoSpacing)
+        => IsAuto(layers, autoName, name) ? autoSpacing : Stated(layers, name);
+
+    /// <summary>Whether the auto flag wins over any stated value, which is what decides the margin.</summary>
+    private static bool IsAuto(List<XElement> layers, string autoName, string name)
     {
         foreach (XElement layer in layers)
         {
-            if (Word.Attribute(layer, autoName) is { } flag && IsSwitchedOn(flag)) return autoSpacing;
+            if (Word.Attribute(layer, autoName) is { } flag && IsSwitchedOn(flag)) return true;
+            if (Twips(layer, name) is not null) return false;
+        }
+
+        return false;
+    }
+
+    /// <summary>The innermost stated value, for the case the auto flag did not win.</summary>
+    private static Length Stated(List<XElement> layers, string name)
+    {
+        foreach (XElement layer in layers)
+        {
             if (Twips(layer, name) is { } value) return value;
         }
 
         return Length.Zero;
+    }
+
+    /// <summary>
+    /// Whether a paragraph's space before or after is the HTML auto margin rather than a stated one.
+    /// </summary>
+    /// <remarks>
+    /// Asked by the table reader, because the auto margin is suppressed at a cell's edges and a stated
+    /// one is not — see <c>DocxLayoutSource.SuppressAutoSpacingInCell</c>. It re-derives the answer from
+    /// the same layers <see cref="Resolve"/> used rather than recording it on the format, since a
+    /// <see cref="ParagraphFormat"/> is shared with three other readers that have no such rule.
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
+    /// <param name="tableStyle">The <c>w:pPr</c> chain of the table style it sits in.</param>
+    /// <param name="before">True to ask about the space before, false for the space after.</param>
+    internal static bool IsAutoSpaced(
+        WordStyles styles,
+        XElement? paragraphProperties,
+        IReadOnlyList<XElement>? tableStyle,
+        bool before)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
+                          ?? styles.DefaultStyleId(WordStyleType.Paragraph);
+
+        return IsAuto(
+            styles.ParagraphPropertyLayers("spacing", paragraphProperties, styleId, tableStyle),
+            before ? "beforeAutospacing" : "afterAutospacing",
+            before ? "before" : "after");
     }
 
     /// <summary>An OOXML on/off attribute, which real files spell three ways.</summary>
