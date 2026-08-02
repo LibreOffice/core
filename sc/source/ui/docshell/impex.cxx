@@ -111,7 +111,8 @@ ScImportExport::ScImportExport( ScDocument& r )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mnEndianness(SvStreamEndian::LITTLE)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -126,7 +127,8 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mnEndianness(SvStreamEndian::LITTLE)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -142,7 +144,8 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mnEndianness(SvStreamEndian::LITTLE)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
@@ -159,7 +162,8 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false)
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ), mbIncludeBOM(false),
+      mnEndianness(SvStreamEndian::LITTLE)
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;

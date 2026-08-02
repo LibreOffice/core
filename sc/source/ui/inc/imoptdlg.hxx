@@ -22,6 +22,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <scdllapi.h>
+#include <tools/stream.hxx>
 
 class SC_DLLPUBLIC ScImportOptions
 {
@@ -32,7 +33,8 @@ public:
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
             bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false),
             bSaveNumberAsSuch(true), bSaveFormulas(false), bRemoveSpace(false),
-            bEvaluateFormulas(true), bIncludeBOM(false), nSheetToExport(0)
+            bEvaluateFormulas(true), bIncludeBOM(false), nEndianness(SvStreamEndian::LITTLE),
+            nSheetToExport(0)
         { SetTextEncoding( nEnc ); }
 
     ScImportOptions& operator=( const ScImportOptions& rCpy ) = default;
@@ -53,6 +55,7 @@ public:
     bool        bRemoveSpace;
     bool        bEvaluateFormulas;
     bool        bIncludeBOM;
+    SvStreamEndian nEndianness;
     // "0" for 'current sheet', "-1" for all sheets (each to a separate file),
     // or 1-based specific sheet number (to a separate file).
     sal_Int32   nSheetToExport;

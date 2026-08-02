@@ -1381,6 +1381,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (pInStream)
                 {
                     pInStream->SetStreamEncoding( aOptions.GetCharSet() );
+                    // tdf#169591 in case of RTL_TEXTENCODING_UCS2, we need to know endianess too.
+                    // For this, we'll have to call a second time DetectEncoding.
+                    // An alternative would be to save the endianess in ScFilterOptionsObj::aFilterOptions
+                    // but does it worth it?
+                    if (pInStream->GetStreamEncoding() == RTL_TEXTENCODING_UCS2)
+                    {
+                        pInStream->DetectEncoding();
+                    }
                     pInStream->Seek( 0 );
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::STRING );
                     eError = bRet ? ERRCODE_NONE : SCERR_IMPORT_CONNECT;
@@ -1389,9 +1397,17 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     m_pDocument->SetAllFormulasDirty(aCxt);
 
                     // tdf#82254 - check whether to include a byte-order-mark in the output
-                    if (const bool bIncludeBOM = aImpEx.GetIncludeBOM())
-                    {
+                    const bool bIncludeBOM = aImpEx.GetIncludeBOM();
+                    if (bIncludeBOM)
                         aOptions.SetIncludeBOM(bIncludeBOM);
+                    // tdf#169591 - check whether to include endianness
+                    const SvStreamEndian nEndianness = aImpEx.GetEndianness();
+                    if (nEndianness == SvStreamEndian::BIG)
+                        aOptions.SetEndianness(nEndianness);
+                    // if aOptions has been set at least with one parameter,
+                    // remember it
+                    if (bIncludeBOM || (nEndianness == SvStreamEndian::BIG))
+                    {
                         rMedium.GetItemSet().Put(
                             SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions.WriteToString()));
                     }
@@ -2024,6 +2040,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
     bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
     bool bIncludeBOM      = rAsciiOpt.bIncludeBOM;
+    SvStreamEndian nEndianness = rAsciiOpt.nEndianness;
 
     rtl_TextEncoding eOldCharSet = rStream.GetStreamEncoding();
     rStream.SetStreamEncoding( eCharSet );
@@ -2043,6 +2060,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         // tdf#82254 - check whether to include a byte-order-mark in the output
         if (bIncludeBOM && eCharSet == RTL_TEXTENCODING_UTF8)
             rStream.WriteUChar(0xEF).WriteUChar(0xBB).WriteUChar(0xBF);
+        if (nEndianness == SvStreamEndian::BIG)
+            rStream.SetEndian(SvStreamEndian::BIG);
         aStrDelimEncoded = OString(&cStrDelim, 1, eCharSet);
         aDelimEncoded = OString(&cDelim, 1, eCharSet);
         rtl_TextEncodingInfo aInfo;
