@@ -34,6 +34,7 @@
 #include <sortedobjs.hxx>
 #include <itabenum.hxx>
 #include <fmtfsize.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/lrspitem.hxx>
@@ -2574,7 +2575,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     AllSettings aSettings(m_aSavedSettings);
     aSettings.SetLanguageTag(LanguageTag(u"ar"_ustr));
     Application::SetSettings(aSettings);
-    comphelper::ScopeGuard g([this] { Application::SetSettings(this->m_aSavedSettings); });
+    // With the Kit active, AllSettings uses the Kit's language
+    const LanguageTag aSavedKitLanguage = comphelper::COKit::getLanguageTag();
+    comphelper::COKit::setLanguageTag(LanguageTag(u"ar"_ustr));
+    comphelper::ScopeGuard g([this, &aSavedKitLanguage] {
+        comphelper::COKit::setLanguageTag(aSavedKitLanguage);
+        Application::SetSettings(this->m_aSavedSettings);
+    });
 
     createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 
