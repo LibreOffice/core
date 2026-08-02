@@ -126,6 +126,7 @@ public sealed partial class Ww8DocumentReader
     /// face's height and this reader has no faces.
     /// </param>
     /// <param name="CaseMap">The case <c>sprmCFCaps</c> or <c>sprmCFSmallCaps</c> draws the run in.</param>
+    /// <param name="Highlight">The band drawn behind the run, or null when it has none.</param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -136,7 +137,8 @@ public sealed partial class Ww8DocumentReader
         string? Language,
         Colour? Colour,
         Layout.Escapement Escapement = default,
-        Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
+        Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
+        Colour? Highlight = null)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -954,7 +956,8 @@ public sealed partial class Ww8DocumentReader
                 LanguageOf(format),
                 format.Colour,
                 format.Escapement ?? Layout.Escapement.None,
-                format.CaseMap);
+                format.CaseMap,
+                format.Highlight);
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -977,7 +980,8 @@ public sealed partial class Ww8DocumentReader
            && string.Equals(a.Language, b.Language, StringComparison.Ordinal)
            && a.Colour == b.Colour
            && a.Escapement == b.Escapement
-           && a.CaseMap == b.CaseMap;
+           && a.CaseMap == b.CaseMap
+           && a.Highlight == b.Highlight;
 
     /// <summary>
     /// The em size a character format states, defaulting to ten points.
@@ -1132,10 +1136,18 @@ public sealed partial class Ww8DocumentReader
         // over the paragraph style's own, so every run of an 11 pt paragraph would come out at 12.
         if (CharacterStyleIndexIn(exception) is var styleIndex and not 0)
         {
+            Colour? outer = format.Highlight;
+
             foreach (ReadOnlyMemory<byte> fromStyle in _styles.ResolveCharacterChain(styleIndex))
             {
                 format = ApplyLayoutSprms(format, fromStyle);
             }
+
+            // Word ignores character highlighting in a *character* style, and only there — a paragraph
+            // style's CHPX carries it as it carries everything else. `SwWW8ImplReader::Read_CharHighlight`
+            // says so in its first two lines (`ww8par6.cxx`:4237): it returns without reading the operand
+            // when the style being built is a RES_CHRFMT.
+            format = format with { Highlight = outer };
         }
 
         return ApplyLayoutSprms(format, exception);
@@ -1260,6 +1272,16 @@ public sealed partial class Ww8DocumentReader
                     format = format with
                     {
                         Colour = sprm.Byte < IcoPalette.Length ? IcoPalette[sprm.Byte] : null,
+                    };
+                    break;
+
+                case LayoutSprms.Highlight:
+                    // Index nought is the palette's automatic entry and reads back as null, which is what
+                    // "no highlighter" already means here — so out-of-range values fall to the same place
+                    // rather than to black, as Read_CharHighlight's `if (b > 16) b = 0` does.
+                    format = format with
+                    {
+                        Highlight = sprm.Byte < IcoPalette.Length ? IcoPalette[sprm.Byte] : null,
                     };
                     break;
 
@@ -1390,6 +1412,17 @@ public sealed partial class Ww8DocumentReader
         internal const ushort Language80 = 0x486D;
         internal const ushort Language = 0x4873;
         internal const ushort ColourIndex = 0x2A42;
+
+        /// <summary>
+        /// <c>sprmCHighlight</c>: an <c>ico</c> index naming the band drawn behind the text.
+        /// </summary>
+        /// <remarks>
+        /// The same seventeen-entry palette <see cref="ColourIndex"/> indexes, and index nought means
+        /// <em>no</em> highlight rather than an automatic colour — Word's highlighter has an explicit
+        /// "none", and <c>SwWW8ImplReader::Read_CharHighlight</c>
+        /// (<c>sw/source/filter/ww8/ww8par6.cxx</c>) turns it into <c>COL_TRANSPARENT</c>.
+        /// </remarks>
+        internal const ushort Highlight = 0x2A0C;
 
         /// <summary>
         /// <c>sprmCIss</c>: 1 for superscript, 2 for subscript, 0 for neither.

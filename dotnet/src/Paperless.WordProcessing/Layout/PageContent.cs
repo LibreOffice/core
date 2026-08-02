@@ -387,6 +387,11 @@ public sealed record PageNote
 /// The size the run's line metrics are taken at, or zero for <paramref name="EmSize"/>. Set only by the
 /// small-capitals split; see <see cref="FormattedRun.MetricEmSize"/> for why the two sizes differ.
 /// </param>
+/// <param name="Highlight">
+/// The band drawn behind the run — Word's highlighter and ODF's character background — or transparent
+/// when it has none. It changes no measurement: the band takes the room the glyphs already had, so a
+/// document gains and loses highlighting without a line moving.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -397,7 +402,8 @@ public readonly record struct PageRun(
     ShapingOptions Shaping = default,
     Length Rise = default,
     PageCaseMap CaseMap = PageCaseMap.None,
-    Length MetricEmSize = default)
+    Length MetricEmSize = default,
+    Colour Highlight = default)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -408,6 +414,13 @@ public readonly record struct PageRun(
     /// colour has to mean the document's text colour rather than the struct's default.
     /// </remarks>
     public Colour EffectiveColour => Colour.A == 0 ? Core.Graphics.Colour.Black : Colour;
+
+    /// <summary>True when the run is drawn on a coloured band rather than on the page.</summary>
+    /// <remarks>
+    /// Transparent means no band, as it does for <see cref="Colour"/>: a highlight is an addition to the
+    /// page rather than something every run has, and the struct's default has to mean its absence.
+    /// </remarks>
+    public bool IsHighlighted => Highlight.A != 0;
 
     /// <summary>The measurement half of this run.</summary>
     public FormattedRun ToFormattedRun() => new(Start, Length, Face, EmSize, Shaping, MetricEmSize);

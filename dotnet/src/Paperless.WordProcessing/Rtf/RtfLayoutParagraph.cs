@@ -26,6 +26,7 @@ namespace Paperless.WordProcessing.Rtf;
 /// this reader has no faces: it records what the token stream said and the layout reader loads the fonts.
 /// </param>
 /// <param name="CaseMap">The case <c>\caps</c> or <c>\scaps</c> draws the run in.</param>
+/// <param name="Highlight">The band <c>\highlight</c> draws behind the run, or null when it has none.</param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -36,7 +37,8 @@ public readonly record struct RtfLayoutRun(
     string? Language,
     Colour? Colour,
     Layout.Escapement Escapement = default,
-    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
+    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
+    Colour? Highlight = null)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -57,7 +59,8 @@ public readonly record struct RtfLayoutRun(
            && string.Equals(Language, other.Language, StringComparison.Ordinal)
            && Colour == other.Colour
            && Escapement == other.Escapement
-           && CaseMap == other.CaseMap;
+           && CaseMap == other.CaseMap
+           && Highlight == other.Highlight;
 }
 
 /// <summary>

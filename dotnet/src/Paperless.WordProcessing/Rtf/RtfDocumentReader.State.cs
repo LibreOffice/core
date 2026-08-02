@@ -121,6 +121,16 @@ public sealed partial class RtfDocumentReader
         /// malformed file and because the table is a document-level thing while this is group state.
         /// </remarks>
         public int? ForegroundColourIndex { get; set; }
+
+        /// <summary>
+        /// The <c>\highlight</c> index into the colour table, or null when the text has no band.
+        /// </summary>
+        /// <remarks>
+        /// An index for the same reason <see cref="ForegroundColourIndex"/> is one. Nought is stored as
+        /// null rather than looked up: <c>\highlight0</c> is Word's "no colour" on the highlighter pen,
+        /// not the colour table's first entry.
+        /// </remarks>
+        public int? HighlightColourIndex { get; set; }
         public bool Underline { get; set; }
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
@@ -239,6 +249,7 @@ public sealed partial class RtfDocumentReader
             Bold = Bold,
             Italic = Italic,
             ForegroundColourIndex = ForegroundColourIndex,
+            HighlightColourIndex = HighlightColourIndex,
 
             // A copy, not the same list: a stop set inside a group belongs to that group.
             TabStops = [.. TabStops],
@@ -290,6 +301,7 @@ public sealed partial class RtfDocumentReader
             Bold = false;
             Italic = false;
             ForegroundColourIndex = null;
+            HighlightColourIndex = null;
             TabStops = [];
             PendingTabAlignment = TabAlignment.Left;
             PendingTabLeader = '\0';
@@ -1009,7 +1021,8 @@ public sealed partial class RtfDocumentReader
                 : null,
             ColourAt(state.ForegroundColourIndex),
             EscapementOf(state),
-            state.CaseMap);
+            state.CaseMap,
+            ColourAt(state.HighlightColourIndex));
 
         flow.LayoutLength += length;
 
@@ -1178,7 +1191,9 @@ public sealed partial class RtfDocumentReader
                 ? WindowsLanguages.TagOf((ushort)state.LanguageId)
                 : null,
             ColourAt(state.ForegroundColourIndex),
-            Layout.Escapement.Superscript);
+            Layout.Escapement.Superscript,
+            Layout.PageCaseMap.None,
+            ColourAt(state.HighlightColourIndex));
 
     /// <summary>The escapement <c>\super</c> or <c>\sub</c> put in force, if either did.</summary>
     /// <remarks>

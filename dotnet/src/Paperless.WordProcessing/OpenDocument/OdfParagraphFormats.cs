@@ -30,6 +30,11 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// <param name="CaseMap">
 /// The case the text is drawn in, from <c>fo:text-transform</c> and <c>fo:font-variant</c>.
 /// </param>
+/// <param name="Highlight">
+/// The band <c>fo:background-color</c> draws behind the text, or null when nothing sets one. This is
+/// where a Word highlighter lands after a round trip: LibreOffice exports both its character highlight
+/// and its character shading to the one ODF attribute.
+/// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
@@ -38,7 +43,8 @@ public readonly record struct OdfTextStyle(
     string? Language,
     Colour? Colour = null,
     Layout.Escapement Escapement = default,
-    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None)
+    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
+    Colour? Highlight = null)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -166,7 +172,8 @@ internal static class OdfParagraphFormats
                 Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
             Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
             EscapementIn(styles, cascade),
-            CaseMapIn(styles, cascade));
+            CaseMapIn(styles, cascade),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "background-color").AsColour());
     }
 
     /// <summary>

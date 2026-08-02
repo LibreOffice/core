@@ -647,7 +647,10 @@ public sealed partial class OdtLayoutSource
                 || rise != Core.Units.Length.Zero
                 // A case map has to survive the uniform-paragraph shortcut: it is the one property here
                 // that changes the *characters*, so dropping the runs would draw the text as stored.
-                || style.CaseMap != PageCaseMap.None)
+                || style.CaseMap != PageCaseMap.None
+                // So does a highlight: the paragraph carries none of its own, so a paragraph highlighted
+                // end to end is uniform by every other test and would lose its band entirely.
+                || style.Highlight is { A: not 0 })
             {
                 varies = true;
             }
@@ -661,7 +664,8 @@ public sealed partial class OdtLayoutSource
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
                 new ShapingOptions(Language: style.Language),
                 rise,
-                style.CaseMap));
+                style.CaseMap,
+                Highlight: style.Highlight ?? default));
         }
 
         return varies ? runs : [];

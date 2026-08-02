@@ -21,6 +21,9 @@ namespace Paperless.WordProcessing.Ooxml;
 /// not known until the face has been loaded — see <see cref="Layout.Escapement"/>.
 /// </param>
 /// <param name="CaseMap">The case <c>w:caps</c> or <c>w:smallCaps</c> asks the text to be drawn in.</param>
+/// <param name="Highlight">
+/// The band <c>w:highlight</c> draws behind the text, or null when it names none.
+/// </param>
 public readonly record struct WordTextStyle(
     string? FamilyName,
     Length Size,
@@ -29,7 +32,8 @@ public readonly record struct WordTextStyle(
     string? Language,
     Colour? Colour = null,
     Layout.Escapement Escapement = default,
-    PageCaseMap CaseMap = PageCaseMap.None)
+    PageCaseMap CaseMap = PageCaseMap.None,
+    Colour? Highlight = null)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -343,6 +347,8 @@ internal static class WordParagraphFormats
             styles.ResolveRunProperty("caps", runProperties, styleId, characterStyleId);
         WordProperty smallCapitals =
             styles.ResolveRunProperty("smallCaps", runProperties, styleId, characterStyleId);
+        WordProperty highlight =
+            styles.ResolveRunProperty("highlight", runProperties, styleId, characterStyleId);
 
         Length resolvedSize = HalfPoints(size.Element) ?? DefaultSize;
 
@@ -359,8 +365,42 @@ internal static class WordParagraphFormats
             // `SvxCaseMapItem` holding a single value forces on any reader.
             capitals.IsOn ? PageCaseMap.Uppercase
                 : smallCapitals.IsOn ? PageCaseMap.SmallCaps
-                : PageCaseMap.None);
+                : PageCaseMap.None,
+            HighlightOf(Word.Attribute(highlight.Element, "val")));
     }
+
+    /// <summary>
+    /// The colour a <c>w:highlight</c> names, or null when it names none.
+    /// </summary>
+    /// <remarks>
+    /// <c>ST_HighlightColor</c> is a closed list of sixteen names and <c>none</c>, with no way to state an
+    /// arbitrary colour — which is what distinguishes Word's highlighter from character shading. The values
+    /// are <c>DomainMapper::getColorFromId</c>'s (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx</c>:5198)
+    /// and are worth taking from there rather than from the obvious guess: <c>green</c> is bright green and
+    /// <c>darkGreen</c> is the one an eye would call green, exactly as in the DOC palette.
+    /// </remarks>
+    private static Colour? HighlightOf(string? name) => name switch
+    {
+        "black" => Colour.FromRgb(0x000000),
+        "blue" => Colour.FromRgb(0x0000FF),
+        "cyan" => Colour.FromRgb(0x00FFFF),
+        "green" => Colour.FromRgb(0x00FF00),
+        "magenta" => Colour.FromRgb(0xFF00FF),
+        "red" => Colour.FromRgb(0xFF0000),
+        "yellow" => Colour.FromRgb(0xFFFF00),
+        "white" => Colour.FromRgb(0xFFFFFF),
+        "darkBlue" => Colour.FromRgb(0x000080),
+        "darkCyan" => Colour.FromRgb(0x008080),
+        "darkGreen" => Colour.FromRgb(0x008000),
+        "darkMagenta" => Colour.FromRgb(0x800080),
+        "darkRed" => Colour.FromRgb(0x800000),
+        "darkYellow" => Colour.FromRgb(0x808000),
+        "darkGray" => Colour.FromRgb(0x808080),
+        "lightGray" => Colour.FromRgb(0xC0C0C0),
+
+        // "none" and anything the list does not hold, which is the automatic colour: no band.
+        _ => null,
+    };
 
     /// <summary>
     /// The superscript or subscript a <c>w:vertAlign</c> asks for.

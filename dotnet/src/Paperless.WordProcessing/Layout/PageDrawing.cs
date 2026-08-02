@@ -1,6 +1,7 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.Text.Fonts;
 using Paperless.Text.Itemisation;
 using Paperless.Text.Layout;
 using Paperless.Text.Shaping;
@@ -456,7 +457,15 @@ public static class PageDrawing
             if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
             if (blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
 
-            foreach ((GlyphRun run, Colour colour) in RunsIn(area, line, paragraph))
+            List<(DocRect Area, Colour Colour)> highlights = [];
+            List<(GlyphRun Run, Colour Colour)> runs = RunsIn(area, line, paragraph, highlights);
+
+            // Every band on the line before any of its glyphs, not band-then-glyphs run by run: two
+            // adjacent highlighted runs overlap by a fraction of a point where one's advance ends and the
+            // next begins, and painting a band after its neighbour's text has been drawn clips the text.
+            foreach ((DocRect band, Colour colour) in highlights) Fill(band, colour, sink);
+
+            foreach ((GlyphRun run, Colour colour) in runs)
             {
                 sink.DrawGlyphRun(run, Paint.Solid(colour));
             }
@@ -491,8 +500,17 @@ public static class PageDrawing
     /// <param name="area">The rectangle the line's coordinates are relative to.</param>
     /// <param name="line">The line.</param>
     /// <param name="paragraph">Its paragraph.</param>
+    /// <param name="highlights">
+    /// Collects the coloured band behind each highlighted run, or null when the caller wants only the
+    /// glyphs. Out of this walk rather than a second one, because the band's left edge and width are the
+    /// pen positions the tab stops and the justification decided here — recomputing them elsewhere would
+    /// be a second place for that arithmetic to be got right.
+    /// </param>
     public static List<(GlyphRun Run, Colour Colour)> RunsIn(
-        DocRect area, PlacedLine line, PageParagraph paragraph)
+        DocRect area,
+        PlacedLine line,
+        PageParagraph paragraph,
+        List<(DocRect Area, Colour Colour)>? highlights = null)
     {
         ArgumentNullException.ThrowIfNull(paragraph);
 
@@ -573,11 +591,50 @@ public static class PageDrawing
 
                 // The pen carries the justification with it, or the second run on a stretched line would
                 // start where the first would have ended unjustified and overlap the words before it.
-                pen += Extent(glyphRun);
+                Length extent = Extent(glyphRun);
+
+                if (highlights is not null && run.IsHighlighted)
+                {
+                    highlights.Add((Band(paragraph, run, pen, extent, baseline), run.Highlight));
+                }
+
+                pen += extent;
             }
         }
 
         return runs;
+    }
+
+    /// <summary>
+    /// The coloured band behind one highlighted run.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer paints a character background over the <em>portion's</em> box rather than the line's:
+    /// <c>SwTextPaintInfo::CalcRect</c> (<c>sw/source/core/text/inftxt.cxx</c>) takes the rectangle from
+    /// the baseline less the portion's ascent, with the portion's own height. So the band follows the
+    /// run's face and size, not the tallest thing on the line — which is what stops a highlighted word in
+    /// a footnote-sized face from being given a band as tall as the heading beside it, and what stops a
+    /// double-spaced paragraph from being highlighted across the whole of its leading.
+    /// </para>
+    /// <para>
+    /// The metrics are resolved through the same <see cref="LineSpacing"/> call and the same device grid
+    /// the measurement used, so the band's height is the height layout gave the run rather than a second
+    /// opinion about it.
+    /// </para>
+    /// </remarks>
+    private static DocRect Band(
+        PageParagraph paragraph, PageRun run, Length pen, Length extent, Length baseline)
+    {
+        LineMetrics metrics = LineSpacing.Resolve(run.Face, paragraph.Metrics);
+        Length size = run.MetricEmSize > Length.Zero ? run.MetricEmSize : run.EmSize;
+
+        Length ascent = metrics.ScaledAscent(size);
+        Length height = metrics.ScaledLineHeight(size);
+        if (height <= Length.Zero) return default;
+
+        // The rise moves the band with the text: a highlighted superscript is banded where it is drawn.
+        return new DocRect(pen, baseline - run.Rise - ascent, extent, height);
     }
 
     /// <summary>

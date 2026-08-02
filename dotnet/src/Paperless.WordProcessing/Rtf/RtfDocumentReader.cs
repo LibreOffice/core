@@ -805,6 +805,12 @@ public sealed partial class RtfDocumentReader
             case "cf":
                 state.ForegroundColourIndex = token.Parameter is { } index and >= 0 ? index : null;
                 return;
+            case "highlight":
+                // Index nought is the automatic colour, which for a highlighter means none —
+                // `RTFDocumentImpl` writes COL_AUTO for it rather than looking the table up
+                // (`sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`:937).
+                state.HighlightColourIndex = token.Parameter is { } band and > 0 ? band : null;
+                return;
 
             // ---- tables
             case "trowd":

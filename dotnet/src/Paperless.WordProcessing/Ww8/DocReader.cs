@@ -579,7 +579,11 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 || rise != Core.Units.Length.Zero
                 // A case map has to survive the uniform-paragraph shortcut: it is the one property here
                 // that changes the *characters*, so dropping the runs would draw the text as stored.
-                || run.CaseMap != PageCaseMap.None)
+                || run.CaseMap != PageCaseMap.None
+                // So does a highlight, and for the same reason read the other way: the paragraph carries
+                // no highlight of its own, so a paragraph highlighted end to end is uniform by every other
+                // test and would lose its band entirely.
+                || run.Highlight is not null)
             {
                 varies = true;
             }
@@ -593,7 +597,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 run.Colour ?? paragraph.Colour ?? Colour.Black,
                 new Text.Shaping.ShapingOptions(Language: run.Language),
                 rise,
-                run.CaseMap));
+                run.CaseMap,
+                Highlight: run.Highlight ?? default));
         }
 
         return varies ? runs : [];
