@@ -34,7 +34,17 @@ cells rather than its pagination. That ordering is retired: the track turned out
 corpus's largest systematic defects — one workbook paginating 1170 pages against 220 — and
 deferring it was hiding them rather than deprioritising them.
 
-## Level one: done
+## Levels one and two: done, re-proved on the merged branch
+
+At `28940d76f`, batches 001 and 002 swept together on each track: **words 20/20, slides
+19/19, sheets 20/20 — 59 of 59.** Not the agents' own figures from their worktrees, but a
+fresh sweep of the merged result, which is the only number that describes what is on the
+branch.
+
+Whole-track figures at the same commit: words **137/200** (page error 124), slides
+**147/163** (ppt 47/51, pptx 100/112), sheets **108/171** (page error 860).
+
+## Level one: the image check
 
 `batch-001` on all three tracks passes the word gate — **29 of 29 documents**. Twenty-seven
 of the twenty-nine also pass the image check. What remains is three pages across two slide
@@ -346,8 +356,8 @@ rather than waiting to trip over.
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
-| `batch-002` | 10 | 59–81 | doc:3 docx:7 | 8/10 |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 8/10 |
+| `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 9/10 |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 |
 | `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
@@ -394,8 +404,8 @@ rather than waiting to trip over.
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | ✅ |
-| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | 7/10 |
-| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 7/10 |
+| `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
+| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 8/10 |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | 8/10 |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
