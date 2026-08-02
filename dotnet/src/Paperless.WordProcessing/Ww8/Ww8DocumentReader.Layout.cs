@@ -79,7 +79,30 @@ public sealed partial class Ww8DocumentReader
         IReadOnlyList<Ww8LayoutFrame>? Frames = null,
         string? ListMarker = null,
         byte ListFollow = 2,
-        int ListTabStop = 0);
+        int ListTabStop = 0)
+    {
+        /// <summary>
+        /// True when <see cref="Text.Layout.ParagraphFormat.SpaceBefore"/> came from
+        /// <c>sprmPFDyaBeforeAuto</c> rather than from a stated <c>dyaBefore</c>.
+        /// </summary>
+        /// <remarks>
+        /// Carried because the suppression rules ask how the margin was arrived at rather than what it
+        /// is: an auto margin is dropped at a cell's top edge and on a flow's first paragraph, and a
+        /// stated margin of the same size is not.
+        /// </remarks>
+        public bool HasAutoSpaceBefore { get; init; }
+
+        /// <inheritdoc cref="HasAutoSpaceBefore"/>
+        public bool HasAutoSpaceAfter { get; init; }
+
+        /// <summary>The list this paragraph belongs to, or zero when it belongs to none.</summary>
+        /// <remarks>
+        /// The <c>ilfo</c>, which is what LibreOffice compares between neighbours to decide whether an
+        /// auto margin falls between two items of one list — where Word draws none — or between two
+        /// lists, where it draws one.
+        /// </remarks>
+        public int ListRule { get; init; }
+    }
 
     /// <summary>
     /// One stretch of a paragraph's text and the character formatting in force over it.
@@ -587,7 +610,9 @@ public sealed partial class Ww8DocumentReader
             Close(body.End - 1, endsCell: false);
         }
 
-        return assembler.Finished();
+        List<Ww8LayoutBlock> finished = assembler.Finished();
+        SuppressAutoSpacing(finished);
+        return finished;
 
         // One paragraph, handed to the assembler with the properties of the mark that ended it — which is
         // what says whether it was in a table, whether the mark closed a row, and what that row's columns
@@ -836,7 +861,12 @@ public sealed partial class Ww8DocumentReader
             ReadRuns(text, positions, markPosition),
             ListMarker: LabelAt(paragraph),
             ListFollow: level?.Follow ?? LabelFollowsWithNothing,
-            ListTabStop: level?.TabPosition ?? 0);
+            ListTabStop: level?.TabPosition ?? 0)
+        {
+            HasAutoSpaceBefore = layout.HasAutoSpaceBefore ?? false,
+            HasAutoSpaceAfter = layout.HasAutoSpaceAfter ?? false,
+            ListRule = paragraph.ListNumber,
+        };
     }
 
     /// <summary>
@@ -1140,9 +1170,16 @@ public sealed partial class Ww8DocumentReader
     /// and the Word 97 forms of the indents and the alignment are handled, because a document saved by
     /// any version of Word may carry either and they are different numbers.
     /// </remarks>
-    private static Ww8LayoutFormat ApplyLayoutSprms(
+    private Ww8LayoutFormat ApplyLayoutSprms(
         Ww8LayoutFormat format, ReadOnlyMemory<byte> grpprl)
     {
+        // What `sprmPFDyaBeforeAuto` and `sprmPFDyaAfterAuto` stand for in this document. Fourteen
+        // points ordinarily and five when the document switched HTML auto-spacing off, which is the
+        // whole of `SwWW8ImplReader::GetParagraphAutoSpace` (`ww8par6.cxx:4609`).
+        int autoSpacing = DocumentProperties.CollapsesSpacing
+            ? Ww8LayoutFormat.HtmlAutoSpacingTwips
+            : Ww8LayoutFormat.WordAutoSpacingTwips;
+
         foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
         {
             switch (sprm.Identifier)
@@ -1183,6 +1220,22 @@ public sealed partial class Ww8DocumentReader
                     break;
                 case LayoutSprms.SpaceAfter:
                     format = format with { SpaceAfter = sprm.Word };
+                    break;
+
+                // The auto-spacing pair sets the margin outright rather than flagging it, and is applied
+                // in file order beside `sprmPDyaBefore` so that whichever the document states last wins —
+                // which is exactly how `Read_ParaAutoBefore` and `Read_UL` compose on one `SvxULSpaceItem`.
+                // Switched *off* the sprm states nothing about the margin at all, only about the flag,
+                // which is why the else branch leaves the spacing alone.
+                case LayoutSprms.SpaceBeforeAuto:
+                    format = sprm.Byte != 0
+                        ? format with { HasAutoSpaceBefore = true, SpaceBefore = autoSpacing }
+                        : format with { HasAutoSpaceBefore = false };
+                    break;
+                case LayoutSprms.SpaceAfterAuto:
+                    format = sprm.Byte != 0
+                        ? format with { HasAutoSpaceAfter = true, SpaceAfter = autoSpacing }
+                        : format with { HasAutoSpaceAfter = false };
                     break;
 
                 case LayoutSprms.LineSpacing:
@@ -1318,6 +1371,8 @@ public sealed partial class Ww8DocumentReader
         internal const ushort LineSpacing = 0x6412;
         internal const ushort SpaceBefore = 0xA413;
         internal const ushort SpaceAfter = 0xA414;
+        internal const ushort SpaceBeforeAuto = 0x245B;
+        internal const ushort SpaceAfterAuto = 0x245C;
         internal const ushort WidowControl = 0x2431;
         internal const ushort RightIndent = 0x845D;
         internal const ushort LeftIndent = 0x845E;
