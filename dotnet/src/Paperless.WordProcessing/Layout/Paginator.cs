@@ -463,6 +463,11 @@ public sealed class Paginator
         int paragraphIndex = 0;
         int lineIndex = 0;
 
+        // How far into the row at `lineIndex` an earlier page already reached, for a table row that broke
+        // across the break. Nought for every row of every table that did not — which, since a row only
+        // splits when it has to, is nearly all of them.
+        Length rowDrawn = Length.Zero;
+
         while (paragraphIndex < blocks.Count)
         {
             if (pages.Count >= _options.MaxPages)
@@ -551,31 +556,24 @@ public sealed class Paginator
                     ? Length.Zero
                     : table.SpaceBefore;
 
-                int fittedRows = FittedRows(
-                    laid[paragraphIndex].RowHeights, lineIndex, used + before, bodyHeight);
+                TablePart part = PlaceTablePart(
+                    table, laid[paragraphIndex], lineIndex, rowDrawn, page.ColumnArea(column),
+                    used + before, column, bodyHeight - (used + before), columnIsEmpty);
 
-                // Nothing of the table may go here. An empty page would leave the same problem, so a row
-                // taller than a whole page is placed anyway and allowed to overflow.
-                if (fittedRows == 0)
+                // Nothing of the table may go here, and the column already holds something — so the page
+                // ends and the table starts again at the top of the next one.
+                if (part.Placed is null)
                 {
-                    if (!columnIsEmpty)
-                    {
-                        EmitPage();
-                        continue;
-                    }
-
-                    fittedRows = 1;
+                    EmitPage();
+                    continue;
                 }
 
-                (PlacedTable part, Length height) = PlaceRows(
-                    table, laid[paragraphIndex], lineIndex, fittedRows, page.ColumnArea(column),
-                    used + before, column, lineIndex > 0);
+                tables.Add(part.Placed);
+                used += before + part.Height;
+                lineIndex = part.NextRow;
+                rowDrawn = part.NextDrawn;
 
-                tables.Add(part);
-                used += before + height;
-                lineIndex = part.RowEnd;
-
-                if (lineIndex < laid[paragraphIndex].RowHeights.Count)
+                if (lineIndex < laid[paragraphIndex].RowHeights.Count || rowDrawn > Length.Zero)
                 {
                     // The table is split: the rest goes on the next page, with its headings repeated.
                     EmitPage();
@@ -585,6 +583,7 @@ public sealed class Paginator
                 used += table.SpaceAfter;
                 paragraphIndex++;
                 lineIndex = 0;
+                rowDrawn = Length.Zero;
                 continue;
             }
 
@@ -1289,32 +1288,20 @@ public sealed class Paginator
         => index > 0 && blocks[index - 1] is PageParagraph previous ? previous.Format : null;
 
     /// <summary>
-    /// How many of a table's remaining rows fit in what is left of the page.
+    /// One page's worth of a table: what was placed, how tall it is, and where the next page resumes.
     /// </summary>
-    /// <remarks>
-    /// A row fits when its whole height does, the same rule a line follows — a row split across a page
-    /// break is a thing Word can do and Writer cannot, and Writer is what this matches. So a row taller
-    /// than the space left moves whole, and one taller than a page overflows rather than being cut.
-    /// </remarks>
-    private static int FittedRows(
-        List<Length> rowHeights, int from, Length used, Length available)
-    {
-        Length room = available - used;
-        int count = 0;
-
-        for (int row = from; row < rowHeights.Count; row++)
-        {
-            if (rowHeights[row] > room) break;
-
-            room -= rowHeights[row];
-            count++;
-        }
-
-        return count;
-    }
+    /// <param name="Placed">The cells that landed here, or null when nothing could.</param>
+    /// <param name="Height">How much of the page's height they took.</param>
+    /// <param name="NextRow">The row the next page starts at.</param>
+    /// <param name="NextDrawn">
+    /// How far into <paramref name="NextRow"/> this page already reached, which is nought unless the row
+    /// itself was broken.
+    /// </param>
+    private readonly record struct TablePart(
+        PlacedTable? Placed, Length Height, int NextRow, Length NextDrawn);
 
     /// <summary>
-    /// Puts a run of a table's rows on the page, repeating its headings when it is a continuation.
+    /// Puts as much of a table as fits on the page, repeating its headings when it is a continuation.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -1328,77 +1315,203 @@ public sealed class Paginator
     /// alternative is a page holding a heading and nothing else followed by another just like it, which
     /// does not terminate.
     /// </para>
+    /// <para>
+    /// Three things can go on the page, in this order: the rest of a row the previous page broke, the run
+    /// of whole rows that then fits, and the first part of the row that does not. The last is Writer's
+    /// follow flow line and the reason this is not simply "how many rows fit" — see
+    /// <see cref="TableLayouter.SliceRow"/>.
+    /// </para>
     /// </remarks>
     /// <param name="table">The table.</param>
     /// <param name="laid">Its cells and row heights, relative to its own top-left.</param>
     /// <param name="from">The first row to place.</param>
-    /// <param name="count">How many rows to place.</param>
+    /// <param name="drawn">How far into that row an earlier page already reached; nought for a fresh row.</param>
     /// <param name="body">
     /// The column the table goes in, which the cells' coordinates end up relative to — the whole body area
     /// for single-column text, and one column of it otherwise.
     /// </param>
     /// <param name="top">How far below that area's top the placed part starts.</param>
     /// <param name="column">Which column of the page it is, recorded on the result.</param>
-    /// <param name="repeatHeadings">True when this is a continuation and the headings come again.</param>
-    private static (PlacedTable Table, Length Height) PlaceRows(
+    /// <param name="room">How much of the column's height is left.</param>
+    /// <param name="columnIsEmpty">
+    /// True when nothing else is on the column yet, which is what makes overflowing the right answer: a
+    /// row too tall for a column of its own has nowhere better to go, and moving it would not terminate.
+    /// </param>
+    private static TablePart PlaceTablePart(
         PageTable table,
         LaidBlock laid,
         int from,
-        int count,
+        Length drawn,
         DocRect body,
         Length top,
         int column,
-        bool repeatHeadings)
+        Length room,
+        bool columnIsEmpty)
     {
         List<Length> heights = laid.RowHeights;
-        int end = Math.Min(from + count, heights.Count);
-
-        int headings = repeatHeadings
-            ? Math.Min(Math.Max(table.HeaderRowCount, 0), from)
-            : 0;
-
-        Length headingHeight = Length.Zero;
-        for (int row = 0; row < headings; row++) headingHeight += heights[row];
-
-        Length placedHeight = headingHeight;
-        for (int row = from; row < end; row++) placedHeight += heights[row];
-
-        Length skipped = Length.Zero;
-        for (int row = 0; row < from; row++) skipped += heights[row];
-
         List<PlacedTableCell> cells = [];
 
-        // The headings first, moved from the top of the table to the top of this part.
+        // The headings, moved from the top of the table to the top of this part. Only on a continuation:
+        // on the table's own first part they are the rows about to be placed.
+        int headings = Math.Min(Math.Max(table.HeaderRowCount, 0), from);
+        Length placed = Length.Zero;
+
+        for (int row = 0; row < headings; row++) placed += heights[row];
+
         if (headings > 0)
         {
             cells.AddRange(TableLayouter.Offset(
-                laid.Cells.Where(cell => cell.Row < headings),
-                body.X,
-                body.Y + top));
+                laid.Cells.Where(cell => cell.Row < headings), body.X, body.Y + top));
         }
 
-        // Then the rows themselves, moved up by everything above them and down by where this part starts.
-        cells.AddRange(TableLayouter.Offset(
-            laid.Cells.Where(cell => cell.Row >= from && cell.Row < end),
-            body.X,
-            body.Y + top + headingHeight - skipped));
+        int start = from;
 
-        return (
-            new PlacedTable
+        // The rest of a row the previous page broke. It cannot be moved — its first part is already drawn —
+        // so a remainder too tall for the page is placed anyway and broken again further down.
+        if (drawn > Length.Zero && from < heights.Count)
+        {
+            List<PlacedTableCell> rowCells = RowCells(laid, from);
+
+            TableLayouter.RowSlice? tail =
+                TableLayouter.SliceRow(table.Rows[from], rowCells, drawn, room - placed)
+                ?? TableLayouter.SliceRow(table.Rows[from], rowCells, drawn, Length.FromEmu(long.MaxValue));
+
+            // A remainder with nothing in it, which the cut said there was: the row is finished rather
+            // than unfinished. Asking again is what would not terminate.
+            if (tail is { } rest)
             {
-                Table = table,
-                Area = new DocRect(
-                    body.X + table.LeftIndent,
-                    body.Y + top,
-                    table.WidthWithin(body.Width),
-                    placedHeight),
-                Cells = cells,
-                FirstRow = from,
-                RowEnd = end,
-                Column = column,
-            },
-            placedHeight);
+                cells.AddRange(TableLayouter.Offset(rest.Cells, body.X, body.Y + top + placed));
+                placed += rest.Height;
+
+                if (!rest.IsComplete)
+                {
+                    return new TablePart(
+                        Part(table, cells, body, top, column, placed, from, from + 1),
+                        placed, from, rest.Cut);
+                }
+            }
+
+            start = from + 1;
+        }
+
+        // Then the run of whole rows that fits in what is left.
+        int end = start;
+        Length whole = Length.Zero;
+        while (end < heights.Count && placed + whole + heights[end] <= room)
+        {
+            whole += heights[end];
+            end++;
+        }
+
+        if (end > start)
+        {
+            Length skipped = Length.Zero;
+            for (int row = 0; row < start; row++) skipped += heights[row];
+
+            cells.AddRange(TableLayouter.Offset(
+                laid.Cells.Where(cell => cell.Row >= start && cell.Row < end),
+                body.X,
+                body.Y + top + placed - skipped));
+
+            placed += whole;
+        }
+
+        // Finally the first part of the row that does not fit, when the document lets it break.
+        if (end < heights.Count && MaySplit(table, end) && !IsCoveredByAMerge(laid, end))
+        {
+            List<PlacedTableCell> rowCells = RowCells(laid, end);
+
+            if (TableLayouter.SliceRow(table.Rows[end], rowCells, Length.Zero, room - placed)
+                is { } head)
+            {
+                cells.AddRange(TableLayouter.Offset(head.Cells, body.X, body.Y + top + placed));
+                placed += head.Height;
+
+                return new TablePart(
+                    Part(table, cells, body, top, column, placed, from, end + 1),
+                    placed, end, head.Cut);
+            }
+        }
+
+        // Nothing at all fitted. An empty column would leave the same problem, so the first row is placed
+        // anyway and allowed to overflow; otherwise the caller ends the page and tries again at its top.
+        if (end == from && drawn <= Length.Zero)
+        {
+            if (!columnIsEmpty || from >= heights.Count) return new TablePart(null, Length.Zero, from, drawn);
+
+            Length skipped = Length.Zero;
+            for (int row = 0; row < from; row++) skipped += heights[row];
+
+            cells.AddRange(TableLayouter.Offset(
+                RowCells(laid, from), body.X, body.Y + top + placed - skipped));
+
+            placed += heights[from];
+            end = from + 1;
+        }
+
+        return new TablePart(
+            Part(table, cells, body, top, column, placed, from, end), placed, end, Length.Zero);
     }
+
+    /// <summary>The cells of one row, as the table's own layout left them.</summary>
+    private static List<PlacedTableCell> RowCells(LaidBlock laid, int row)
+        => [.. laid.Cells.Where(cell => cell.Row == row)];
+
+    /// <summary>
+    /// Whether a cell starting further up the table reaches into this row.
+    /// </summary>
+    /// <remarks>
+    /// Such a row cannot be broken here: the merged cell is one rectangle drawn with the row it starts in,
+    /// and a break inside it would leave half of it on a page it was never placed on. Writer keeps the
+    /// same case out of its own split by re-formatting the line that a row span crosses
+    /// (<c>lcl_AdjustRowSpanCells</c>); declining is the same answer with none of the machinery.
+    /// </remarks>
+    private static bool IsCoveredByAMerge(LaidBlock laid, int row)
+    {
+        foreach (PlacedTableCell cell in laid.Cells)
+        {
+            if (cell.Row < row && cell.Row + Math.Max(1, cell.Cell.RowSpan) > row) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Whether a row's own content may be broken across a page.
+    /// </summary>
+    /// <remarks>
+    /// The document's say first — <see cref="PageTableRow.CanSplit"/> — and then the two rules Writer
+    /// applies whatever the document says: a repeated heading never splits, since it is drawn again on the
+    /// next page anyway, and neither does a row of a stated exact height, which is a fixed size rather than
+    /// a floor. Both are the first two tests in <c>SwRowFrame::IsRowSplitAllowed</c>.
+    /// </remarks>
+    private static bool MaySplit(PageTable table, int row)
+        => row >= Math.Max(table.HeaderRowCount, 0)
+           && table.Rows[row].CanSplit
+           && !table.Rows[row].HasExactHeight;
+
+    private static PlacedTable Part(
+        PageTable table,
+        List<PlacedTableCell> cells,
+        DocRect body,
+        Length top,
+        int column,
+        Length height,
+        int firstRow,
+        int rowEnd)
+        => new()
+        {
+            Table = table,
+            Area = new DocRect(
+                body.X + table.LeftIndent,
+                body.Y + top,
+                table.WidthWithin(body.Width),
+                height),
+            Cells = cells,
+            FirstRow = firstRow,
+            RowEnd = rowEnd,
+            Column = column,
+        };
 
     /// <summary>
     /// One block after its content has been laid out, whichever kind of block it is.

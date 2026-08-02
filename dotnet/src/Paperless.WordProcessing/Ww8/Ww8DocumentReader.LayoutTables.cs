@@ -185,6 +185,7 @@ public sealed partial class Ww8DocumentReader
                 Index = level.Rows.Count,
                 LeftEdge = definition?.LeftEdge ?? 0,
                 IsHeader = format.IsTableHeaderRow,
+                CannotSplit = format.RowCannotSplit,
                 HeightTwips = format.RowHeightTwips,
                 DefaultBorders = format.TableBorders,
             };
@@ -303,7 +304,8 @@ public sealed partial class Ww8DocumentReader
                 cells,
                 row.IsHeader,
                 Length.FromTwips(Math.Abs(row.HeightTwips)),
-                row.HeightTwips < 0));
+                row.HeightTwips < 0,
+                CanSplit: !row.CannotSplit));
         }
 
         return new Ww8LayoutTable(
@@ -573,11 +575,16 @@ public sealed record Ww8LayoutTable(
 /// True when <c>sprmTDyaRowHeight</c>'s operand was negative, which is how WW8 says the height is exact
 /// rather than a floor — the row is that tall and content past it is clipped.
 /// </param>
+/// <param name="CanSplit">
+/// False when <c>sprmTFCantSplit</c> forbade breaking the row across a page — see
+/// <see cref="Layout.PageTableRow.CanSplit"/>.
+/// </param>
 public sealed record Ww8LayoutRow(
     IReadOnlyList<Ww8LayoutCell> Cells,
     bool IsHeader,
     Length MinHeight = default,
-    bool HasExactHeight = false);
+    bool HasExactHeight = false,
+    bool CanSplit = true);
 
 /// <summary>One cell of a DOC table.</summary>
 /// <param name="Column">The grid column it starts at.</param>

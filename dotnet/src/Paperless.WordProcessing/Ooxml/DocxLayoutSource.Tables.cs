@@ -295,7 +295,11 @@ public sealed partial class DocxLayoutSource
             cells,
             IsHeading: Word.IsOn(Word.Child(properties, "tblHeader"))
                        || Word.Child(properties, "tblHeader") is not null,
-            RowHeight(properties));
+            RowHeight(properties),
+            // `w:cantSplit` is on when it is present without a `w:val`, which is how Word writes it, and
+            // LibreOffice reads the same element the same way — "row can't break across pages if
+            // nIntValue == 1" (`dmapper/TablePropertiesHandler.cxx`).
+            CanSplit: !Word.IsOn(Word.Child(properties, "cantSplit")));
     }
 
     /// <summary>
@@ -561,6 +565,7 @@ public sealed partial class DocxLayoutSource
                 IsHeader = rows[row].IsHeading,
                 MinHeight = rows[row].Height.Height,
                 HasExactHeight = rows[row].Height.IsExact,
+                CanSplit = rows[row].CanSplit,
             });
         }
 
@@ -648,5 +653,8 @@ public sealed partial class DocxLayoutSource
 
     /// <summary>A row before its cells' row spans are known.</summary>
     private readonly record struct PendingRow(
-        List<PendingCell> Cells, bool IsHeading, (Length Height, bool IsExact) Height);
+        List<PendingCell> Cells,
+        bool IsHeading,
+        (Length Height, bool IsExact) Height,
+        bool CanSplit = true);
 }

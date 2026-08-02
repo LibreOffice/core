@@ -379,6 +379,9 @@ public sealed partial class Ww8DocumentReader
         /// <summary>Its declared height in twips, signed: negative means exact rather than a floor.</summary>
         public int HeightTwips { get; init; }
 
+        /// <summary>True when <c>sprmTFCantSplit</c> forbade breaking it across a page.</summary>
+        public bool CannotSplit { get; init; }
+
         /// <summary>The table's six default borders, as this row's sprms stated them.</summary>
         /// <remarks>
         /// Per row because that is where WW8 states them — every row-end paragraph carries the whole

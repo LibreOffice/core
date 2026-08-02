@@ -532,6 +532,14 @@ public sealed partial class RtfDocumentReader
 
         /// <summary><c>\trhdr</c>: the row repeats as a header at the top of every page.</summary>
         public bool RowIsHeader { get; set; }
+
+        /// <summary><c>\trkeep</c>: the row's content may not be broken across a page.</summary>
+        /// <remarks>
+        /// Named for keeping rather than for splitting because that is what the control word says, and
+        /// LibreOffice's tokeniser turns it straight into OOXML's opposite spelling —
+        /// <c>LN_CT_TrPrBase_cantSplit</c> (<c>rtftok/rtfdispatchflag.cxx</c>).
+        /// </remarks>
+        public bool RowIsKeptTogether { get; set; }
     }
 
     /// <summary>A cell's declaration from <c>\cellx</c> and the merge flags before it.</summary>
@@ -612,6 +620,9 @@ public sealed partial class RtfDocumentReader
 
         /// <summary>True when the row repeats as a header on every page the table spans.</summary>
         public bool IsHeader { get; init; }
+
+        /// <summary>True when <c>\trkeep</c> forbade breaking the row across a page.</summary>
+        public bool IsKeptTogether { get; init; }
 
         /// <summary>
         /// The row's left edge in twips, from <c>\trleft</c>. The first cell starts here, so a row
