@@ -1788,12 +1788,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
+    // The chart object's own drawing, inside the page's metafile.
+    static constexpr OString aChart
+        = "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]"_ostr;
+    // Address the drawn objects rather than the groups around them. A text run gets a group of its
+    // own only where it needs a map mode of its own, which is not so when the Kit is active.
+    const OString aChartObjects
+        = aChart + "//*[self::textarray or self::polyline or self::polypolygon]";
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 53
     // - Actual  : 0
     // i.e. the chart lost.
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push",
-                53);
+    assertXPath(pXmlDoc, aChartObjects, 53);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
