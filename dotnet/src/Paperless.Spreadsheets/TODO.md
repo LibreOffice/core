@@ -351,27 +351,46 @@ it has a document with a reference device attached where Paperless has a reader 
 The grid is still materialised eagerly at the 111 fallback, so a caller that never resolves gets
 exactly what it got before.
 
-Measured over `sheets/batch-001 … batch-018`, 171 documents: **92 matching → 97, total absolute
-page error 1007 → 885, exactly-correct page counts 109 → 117**; `xls` 39/62 → 40/62 and `xlsx`
-53/109 → 57/109. `sheets/batch-001` stays 10/10 on the word gate and is now **10/10 on the
-ink-imbalance image diff as well** — the Patent workbook was 6.20% differing at 2.29% ink imbalance
-and is `shifted` with no major region.
+Measured over `sheets/batch-001 … batch-018`, 171 documents, this change alone: **92 matching → 97,
+total absolute page error 1007 → 885, exactly-correct page counts 109 → 117**; `xls` 39/62 → 40/62
+and `xlsx` 53/109 → 57/109. `sheets/batch-001` stays 10/10 on the word gate and is now **10/10 on
+the ink-imbalance image diff as well** — the Patent workbook was 6.20% differing at 2.29% ink
+imbalance and now has no major region at all.
 
-Two things this exposed rather than caused, both now visible because the widths are right:
+**`DEFCOLWIDTH` carries `#i3006#`'s font-dependent correction, and it could not be applied before
+this** — it depends on the default font's size, which was not read. `ImportExcel::DefColWidth`
+(`sc/source/filter/excel/impop.cxx:640-657`) adds `40960 / max(fontHeightTwips − 15, 60) + 50` in
+256ths of a digit before converting, with the comment "additional space for default width — Excel
+adds space depending on font size"; `XclTools::GetXclDefColWidthCorrection` (`xltools.cxx:318`)
+reconstructs the formula as five screen pixels expressed in digit-widths and admits that three of
+its constants are of unknown origin, so it is reproduced as written. It is worth 110 twips — nine
+per cent of the column — on a twelve-point Calibri sheet: `aircraft_analysis_2016-04-27.xls` states
+`DEFCOLWIDTH` 10, LibreOffice's own flat-ODF export of it puts the default column at 1319 twips,
+and ten digits alone give 1209. Over the 62 corpus `.xls` documents it takes the page error from
+90 to **86** and the exactly-correct page counts from 46 to **47**; three documents move and no
+match is lost, of which `underlying-holdings-emea-en_gb-monthly-holdings-state-street.xls` goes
+from 11 pages against 15 to 15 against 15.
 
-- **`DEFCOLWIDTH` needs `#i3006#`'s font-dependent correction.** `ImportExcel::DefColWidth`
-  (`sc/source/filter/excel/impop.cxx:640`) adds `40960 / max(fontHeightTwips - 15, 60) + 50` in
-  256ths of a digit before converting, "additional space for default width — Excel adds space
-  depending on font size". `aircraft_analysis_2016-04-27.xls` is twelve-point Calibri with
-  `DEFCOLWIDTH` 10: LibreOffice's own flat-ODF export puts its default column at 1319 twips and we
-  put it at 1209. Its two explicit columns now agree with LibreOffice exactly — 5424 and 6231
-  against 5423.8 and 6231.2 — and its page count moved from 44 to 64 against a reference of 46, so
-  the default column is what is left. The correction was invisible while the font height was not
-  read, because it depends on it.
-- **A fit-to-page zoom is picked one percent low.** The Patent workbook sets
+**Both changes together, over the whole track: 92 matching → 97, total absolute page error
+1007 → 881, exactly-correct page counts 109 → 118**; `xls` 39/62 → 40/62 with its page error
+106 → 86, and `xlsx` 53/109 → 57/109 with its page error 901 → 795. The remaining 881 is
+overwhelmingly `.xlsx` and overwhelmingly a handful of documents: eight of them carry 648 of it,
+led by `sectors-defense-and-aerospace.xlsx` at 41 pages against 227 and
+`TK-Syllabus-Comparison-Document-v2.xlsx` at 1391 against 1235. **The next sweep's leverage is
+there rather than in another systematic width or height**: 118 of 171 documents already have the
+page count exactly right, and the tail is a few documents wrong by a lot.
+
+Two things the corrected widths exposed rather than caused, both left:
+
+- **`aircraft_analysis_2016-04-27.xls` paginates to 65 pages against LibreOffice's 46**, and its
+  column widths are now provably right — its two `COLINFO` columns come out 5424 and 6231 twips
+  against LibreOffice's own 5423.8 and 6231.2, and its default column matches too. So whatever is
+  left is not a width. It was 44 before, which was nearer by accident: two errors were cancelling.
+- **A fit-to-page zoom is picked one per cent low.** The Patent workbook sets
   `<pageSetUpPr fitToPage="1"/>` with `fitToWidth="0"`, and LibreOffice fits its 103 rows to one
   page at 34% where the search here lands on 33%. It costs nothing in pages on that document and
-  three percent in every position on it.
+  three per cent in every position on it — and it is the whole of what used to be recorded here as
+  an unexplained "the reference draws the same text at an em 3.5% larger".
 
 **Two fixtures were added rather than one, because each of the last two rules has a negative half
 that a single sheet cannot state.** `features/sheet-lead-in.fods` holds two rows differing in

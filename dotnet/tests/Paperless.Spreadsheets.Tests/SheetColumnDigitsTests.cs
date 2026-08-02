@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using Paperless.Core.Units;
 using Paperless.Spreadsheets.Layout;
+using Paperless.Spreadsheets.MsBinary;
 using Paperless.Spreadsheets.Ooxml;
 using Shouldly;
 
@@ -165,6 +166,42 @@ public sealed class SheetColumnDigitsTests
         // page measured in the wrong font.
         SheetFonts.DigitWidthTwips(new SheetDefaultFont("Liberation Sans", Length.Zero))
                   .ShouldBe(SheetColumnDigits.FallbackDigitWidthTwips);
+    }
+
+    [Fact]
+    public void ABiffDefaultColumnCarriesExcelsFontDependentPadding()
+    {
+        // `#i3006#`: `ImportExcel::DefColWidth` (impop.cxx:640) adds
+        // 40960 / max(fontHeight - 15, 60) + 50 in 256ths of a digit before converting, because
+        // "Excel adds space depending on font size". Twelve-point Calibri is 240 twips, so the
+        // correction is 40960/225 + 50 = 232.04, and ten characters becomes 2792/256 digits.
+        // At Carlito 12's 121-twip digit that is 1319 twips, which is what LibreOffice's own
+        // flat-ODF export of `aircraft_analysis_2016-04-27.xls` states; ten digits alone give
+        // 1209, nine per cent narrow.
+        XlsSheetPrintState state = new()
+        {
+            DefaultFont = new SheetDefaultFont("Carlito", Length.FromPoints(12)),
+        };
+        state.SetDefaultColumnWidth(10);
+
+        SheetLayout sheet = new() { Name = "S", Grid = state.ToGrid() };
+
+        sheet.Grid.Columns.DefaultSize.Twips.ShouldBe(1319);
+    }
+
+    [Fact]
+    public void ABiffSheetWithNoDefaultColumnWidthKeepsCalcsOwnStandardColumn()
+    {
+        // 64 points, and a length rather than a count of digits — so remeasuring it in the
+        // workbook's font would be wrong rather than more accurate.
+        XlsSheetPrintState state = new()
+        {
+            DefaultFont = new SheetDefaultFont("Carlito", Length.FromPoints(12)),
+        };
+
+        SheetLayout sheet = new() { Name = "S", Grid = state.ToGrid() };
+
+        sheet.Grid.Columns.DefaultSize.ShouldBe(SheetGrid.StandardColumnWidth);
     }
 
     private static (SheetPrintSetup Setup, SheetGrid Grid) Read(

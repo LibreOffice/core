@@ -211,11 +211,53 @@ internal sealed class XlsSheetPrintState
         }
     }
 
-    /// <summary>Records <c>DEFCOLWIDTH</c>, which is stated in whole characters.</summary>
+    /// <summary>
+    /// Records <c>DEFCOLWIDTH</c>, which is stated in whole characters and carries a correction.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The correction is <c>#i3006#</c>'s and depends on the default font's size</strong>,
+    /// which is why it could not be applied until that font was read.
+    /// <c>ImportExcel::DefColWidth</c> (<c>sc/source/filter/excel/impop.cxx:640-657</c>) adds
+    /// <see cref="DefaultWidthCorrection"/> in 256ths of a digit before converting, with the
+    /// comment "additional space for default width — Excel adds space depending on font size".
+    /// It is the same five screen pixels SpreadsheetML's <c>baseColWidth</c> carries, expressed
+    /// the way BIFF needs it: a count of digit-widths rather than a length, because BIFF's own
+    /// conversion multiplies by the digit afterwards.
+    /// </para>
+    /// <para>
+    /// Worth 110 twips on a twelve-point Calibri sheet, which is 9% of the column.
+    /// <c>aircraft_analysis_2016-04-27.xls</c> states <c>DEFCOLWIDTH</c> 10 in twelve-point
+    /// Calibri, and LibreOffice's own flat-ODF export of it puts the default column at 1319
+    /// twips against the 1209 ten digits alone give.
+    /// </para>
+    /// </remarks>
+    /// <param name="characters">The width in whole characters, as the record states it.</param>
     public void SetDefaultColumnWidth(int characters)
     {
-        if (characters > 0) _defaultColumnWidth = FromCharacterWidth(characters * 256);
+        if (characters <= 0) return;
+
+        double units = (characters * 256.0) + DefaultWidthCorrection(
+            DefaultFont?.Size ?? Length.FromPoints(10));
+
+        _defaultColumnWidth = FromCharacterWidth((int)Math.Clamp(units, 0, ushort.MaxValue));
     }
+
+    /// <summary>
+    /// Excel's five-pixel padding on a default column, in 256ths of a digit.
+    /// </summary>
+    /// <remarks>
+    /// <c>XclTools::GetXclDefColWidthCorrection</c>
+    /// (<c>sc/source/filter/excel/xltools.cxx:318-343</c>), whose own comment reconstructs it as
+    /// <c>5 × 256 × 1440 × 2.1333 / (96 × max(N−15, 60)) + 50</c> — five pixels, 256ths of a
+    /// digit, twips to inches, an empirical quotient turning a font <em>height</em> into a digit
+    /// <em>width</em>, and 96 DPI — and admits the 15, the 60 and the 50 are of unknown origin.
+    /// Reproduced as written rather than rederived, because the constants are what a file was
+    /// authored against.
+    /// </remarks>
+    /// <param name="fontHeight">The default font's em size.</param>
+    private static double DefaultWidthCorrection(Length fontHeight)
+        => (40960.0 / Math.Max(fontHeight.Twips - 15, 60)) + 50.0;
 
     /// <summary>Records <c>DEFAULTROWHEIGHT</c>, which is stated in twips.</summary>
     public void SetDefaultRowHeight(int twips)
