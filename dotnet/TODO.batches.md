@@ -226,6 +226,64 @@ our defects:
   LibreOffice does not — arguably better output, and matching would mean preferring EMF+
   records over the downlevel EMF fallback.
 
+## After the third round
+
+Four agents at `f182d6e98`: font substitution, words under-pagination, words
+over-pagination and text loss, and the slides tail.
+
+| words | baseline | r1 | r2 | r3 |
+|---|---|---|---|---|
+| full match | 84 | 98 | 107 | **114** |
+| exactly correct page count | 100 | 110 | 119 | **127** |
+| total absolute page error | 385 | 306 | 297 | **149** |
+
+| slides | baseline | r1 | r2 | r3 |
+|---|---|---|---|---|
+| `ppt` | 15/49 | 17/51 | 42/51 | **44/51** |
+| `pptx` | 38/101 | 67/112 | 91/112 | **91/112** |
+| total | 53/150 | 84/163 | 133/163 | **135/163** |
+
+**Total absolute page error halved, 297 → 149.** That is the number to read this round by:
+the match count rose 7, but the corpus moved from "wrong by a lot" to "wrong by one page".
+47 of the 88 remaining words failures are now off by exactly ±1 page, and only 12 documents
+are off by 3 or more.
+
+### The two premises I got wrong in the briefs
+
+Worth recording because the agents caught both by measuring rather than by reading:
+
+- **The VCL table was already there.** I briefed "Paperless resolves through fontconfig
+  alone; LibreOffice consults `VCL.xcu` first". Paperless already had the chains and already
+  walked them first. The defect was one layer down — it carried only *half* of each entry,
+  dropping `FontType`, so once a chain named nothing installed (the common case on Linux,
+  where all fourteen of Tahoma's candidates are absent) the shape was guessed from the family
+  name. Face agreement with LibreOffice went 6/55 → 47/55.
+- **And the fallback direction was backwards.** Verifying against the installed `soffice`
+  rather than its source showed LibreOffice's answer for an unknown family *is* fontconfig's;
+  Paperless was the one hard-coding a serif/Liberation list. Reading the source alone would
+  have produced a confident, well-cited, wrong fix.
+
+`A_320.doc`'s in-cell pitch was the third measurement-right-cause-wrong case: no
+`sprmPDyaLine` exists in that document. The cause is `WW8Dop.fUsePrinterMetrics`, which
+formats against a 300 dpi grid instead of the virtual device.
+
+### What remains
+
+**words, 88 failures** — 45 under, 30 over, 13 with correct pages and wrong words. The
+histogram is now dominated by ±1 (28 at −1, 19 at +1), so the residue is a boundary rule
+rather than a metric. Worst: `A_320.doc` 135/150, `150-5370-10H.docx` 714/721.
+
+**slides, 28 failures** — largest is `WC_Update-Aug03.ppt` at −11.9%, whose missing table is
+an *embedded Word document* (`PPT_PST_ExOleObjStg`, zlib-deflated, expanding to a complete
+OLE2 file with `WordDocument` and `1Table`); LibreOffice lays it out with Writer in-process.
+Rendering embedded OLE by delegating to the owning reader is a feature, not a tail fix.
+`Sylva…pptx` at −9.3% is the reference being wrong, confirmed twice.
+
+Named and unfixed: spurious wholly-blank pages (the largest over-pagination cause, four
+documents, and the paginator's `!pageIsEmpty` guard already ruled out); `w:caps`/`smallCaps`
+parsed and consumed by nothing; and slide autofit shrinking text to fit where we overflow
+and drop the tail.
+
 ### `words` — 202 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -233,23 +291,23 @@ our defects:
 | `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | 9/10 |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | 8/10 |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 8/10 |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 4/10 |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 5/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 7/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 5/10 |
-| `batch-010` | 10 | 228–260 | doc:2 docx:8 | 4/10 |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 7/10 |
+| `batch-010` | 10 | 228–260 | doc:2 docx:8 | 5/10 |
 | `batch-011` | 10 | 260–296 | doc:2 docx:8 | 5/10 |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 4/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 5/10 |
 | `batch-013` | 10 | 338–370 | docx:10 | 5/10 |
-| `batch-014` | 10 | 372–422 | doc:4 docx:6 | 1/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 1/10 |
+| `batch-014` | 10 | 372–422 | doc:4 docx:6 | 2/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 2/10 |
 | `batch-016` | 10 | 473–537 | doc:5 docx:5 | 6/10 |
-| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 6/10 |
-| `batch-018` | 10 | 620–859 | doc:2 docx:8 | 4/10 |
+| `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
+| `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
 | `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 1/10 |
-| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 1/10 |
+| `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 2/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
 
 ### `slides` — 163 documents, 17 batches
@@ -257,22 +315,22 @@ our defects:
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | 8/9 |
-| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | ✅ |
-| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 7/10 |
+| `batch-002` | 10 | 312–410 | ppt:6 pptx:4 | 9/10 |
+| `batch-003` | 10 | 411–482 | ppt:5 pptx:5 | 9/10 |
 | `batch-004` | 10 | 488–560 | ppt:3 pptx:7 | ✅ |
 | `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | 8/9 |
-| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | ✅ |
-| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 8/10 |
+| `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | 9/10 |
+| `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | 9/10 |
 | `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 |
-| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 8/10 |
+| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 9/10 |
 | `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 |
-| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
+| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | 7/10 |
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 6/10 |
-| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 8/10 |
-| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 5/10 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 7/10 |
+| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 9/10 |
+| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 |
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
-| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 |
+| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 3/5 |
 
 ### `sheets` — 174 documents, 18 batches
 
