@@ -75,6 +75,7 @@ class DebugManager {
 	private tileOverlaysOn: boolean;
 	public renderGeometryOn: boolean;
 	public vectorOn: boolean;
+	public predictedCaretOn: boolean;
 
 	public tileInvalidationsOn: boolean;
 	private _tileInvalidationMessages: Map<number, string>;
@@ -135,6 +136,7 @@ class DebugManager {
 		// The vector switch starts out at what the document was opened with, and is what the
 		// rendering follows from then on.
 		this.vectorOn = window.coolParams.get('vector') === 'true';
+		this.predictedCaretOn = false;
 	}
 
 	public toggle(): void {
@@ -486,6 +488,22 @@ class DebugManager {
 				onRemove: function () {
 					self.renderGeometryOn = false;
 					RenderGeometrySection.update();
+				},
+			});
+
+		// Predicted edits change the vector cache, so the caret that shows
+		// them is a Vector tool.
+		if (vectorDocument)
+			this._addDebugTool({
+				name: 'Predicted caret',
+				category: 'Display',
+				startsOn: false,
+				dependsOn: 'Vector',
+				onAdd: function () {
+					self.predictedCaretOn = true;
+				},
+				onRemove: function () {
+					self.predictedCaretOn = false;
 				},
 			});
 

@@ -823,6 +823,13 @@ class VectorManager extends RenderManagerBase {
 		};
 	}
 
+	/// True when a keystroke at the caret can be predicted. The tree stays
+	/// unchanged.
+	canPredictAtCaret(): boolean {
+		const target = this._editTarget();
+		return target !== null && this._lookUpCaret(target) !== null;
+	}
+
 	/// Insert typed text into the cached tree so it shows before the server
 	/// re-renders. Returns true when the tree changed.
 	predictTextInsert(text: string): boolean {

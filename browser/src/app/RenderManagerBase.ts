@@ -186,6 +186,9 @@ abstract class RenderManagerBase {
 
 	abstract predictTextDelete(before: number, after: number): boolean;
 
+	// Returns true when a keystroke at the caret would be predicted.
+	abstract canPredictAtCaret(): boolean;
+
 	abstract requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

@@ -242,6 +242,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().predictTextDelete(before, after);
 	}
 
+	static canPredictAtCaret(): boolean {
+		return RenderManager.ensureInstance().canPredictAtCaret();
+	}
+
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

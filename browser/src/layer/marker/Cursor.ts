@@ -161,6 +161,17 @@ class Cursor {
 		// Compute tile-section offset in css pixels.
 		this.updatePositionAndSize();
 		this.showCursorHeader();
+		this.showPredictionState();
+	}
+
+	// While the predicted caret debug tool is on, this view's caret turns red
+	// when a keystroke at it would be predicted. Other views' carets have a
+	// color of their own and keep it.
+	private showPredictionState() {
+		if (this.color) return;
+		const predicting =
+			this.map._debug?.predictedCaretOn && RenderManager.canPredictAtCaret();
+		window.L.DomUtil.setStyle(this.cursor, 'background', predicting ? 'red' : '');
 	}
 
 	setOpacity(opacity: number) {
