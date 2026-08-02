@@ -1331,8 +1331,6 @@ void StyleList::FillFlatTreeView()
                 const OUString& rName = aStyles[nIdx].getName();
                 m_xFmtLb->set_id(rIter, rName);
                 m_xFmtLb->set_text(rIter, rName);
-                m_xFmtLb->set_id(rIter, rName);
-                m_xFmtLb->set_text(rIter, rName);
                 auto pStyle = m_pStyleSheetPool->Find(rName, eFam);
                 if (pStyle && pStyle->IsHidden())
                     m_xFmtLb->set_font_color(
