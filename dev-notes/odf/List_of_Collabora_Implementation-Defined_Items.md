@@ -687,10 +687,8 @@ Evaluation of extrusion-shininess is the same as in case of
 
 ------------------------------------------------------------------------
 
-## Footer
-
 This page is based on a modified version of
-[https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_implementation-defined_items&oldid=872344](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_implementation-defined_items&oldid=872344)
+[the Wiki page ODF_Implementer_Notes/List_of_LibreOffice_ODF_implementation-defined_items](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_implementation-defined_items&oldid=872344)
 and the Original Authors are: Olivier Hallot, Michael Stahl, Kirk Abbott, Ady and Regina Henschel.
 
 This page is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/legalcode.en). The original work has been modified.

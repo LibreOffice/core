@@ -157,10 +157,8 @@ and Collabora Office.
 
 ------------------------------------------------------------------------
 
-## Footer
-
 This page is based on a modified version of
-[https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_OpenFormula_Extensions&oldid=753375](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_OpenFormula_Extensions&oldid=753375)
+[the Wiki page Development/ODF_Implementer_Notes/List_of_LibreOffice_OpenFormula_Extensions](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_OpenFormula_Extensions&oldid=753375)
 and the Original Authors are: Balazs Varga, Ilmari Lauhakangas, Eike Rathke, Adolfo Jayme Barrientos, Winfried Donkers, Dennis Roczek and Robinson Tryon.
 
 This page is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/legalcode.en). The original work has been modified.

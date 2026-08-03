@@ -143,10 +143,8 @@ Collabora Online and Collabora Office can be found
 
 ------------------------------------------------------------------------
 
-## Footer
-
 This page is based on a modified version of
-[https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes&oldid=855353](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes&oldid=855353)
+[the Wiki page Development/ODF_Implementer_Notes](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes&oldid=855353)
 and the Original Authors are: Balázs Meskó, Michael Stahl, Regina Henschel, Ilmari Lauhakangas, Dennis Roczek, Eike Rathke, Robinson Tryon, Miklos Vajna, Adolfo Jayme Barrientos, Andras Timar, Winfried Donkers, Dennis Roczek, Bjoern Michaelsen, Tamás Zolnai, Markus Mohrhard, Thorsten Behrens, Noel Power, Kohei Yoshida and Michael Meeks.
 
 This page is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/legalcode.en). The original work has been modified.

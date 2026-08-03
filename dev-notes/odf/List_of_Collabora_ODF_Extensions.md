@@ -138,10 +138,8 @@ and Collabora Office (both current and past).
 
 ------------------------------------------------------------------------
 
-## Footer
-
 This page is based on a modified version of
-[https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_Extensions&oldid=858457](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_Extensions&oldid=858457)
+[the Wiki page Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_Extensions](https://wiki.documentfoundation.org/index.php?title=Development/ODF_Implementer_Notes/List_of_LibreOffice_ODF_Extensions&oldid=858457)
 and the Original Authors are: Miklos Vajna, Devansh Varshney, Olivier Hallot, Regina Henschel, Ilmari Lauhakangas, Michael Stahl, Skyler Grey, Adolfo Jayme Barrientos, Vojtěch Doležal, Samuel Mehrbrodt, Gabor Kelemen, Sarper Akdemir, Thorsten Behrens, Mike Kaganski, László Németh, Luke D, Tomaž Vajngerl, Dennis Roczek, Laurent Balland, Jakub Trzebiatowski, Andras Timar, Dennis Roczek and Robinson Tryon.
 
 This page is licensed under the [Creative Commons Attribution-ShareAlike 3.0 Unported License](https://creativecommons.org/licenses/by-sa/3.0/legalcode.en). The original work has been modified.
