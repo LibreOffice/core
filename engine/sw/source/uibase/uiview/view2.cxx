@@ -2665,6 +2665,13 @@ bool SwView::JumpToSwMark( const SwMarkName& rMark )
                 m_pWrtShell->EnterStdMode();
                 bRet = m_pWrtShell->GotoOutline( sName );
             }
+            else if( sCmp == "page" )
+            {
+                const sal_Int32 nPage = sName.toInt32();
+                if( nPage > 0 && nPage <= SAL_MAX_UINT16 )
+                    bRet = m_pWrtShell->GotoPage( static_cast<sal_uInt16>(nPage),
+                                                  /*bRecord*/true );
+            }
             else if( sCmp == "frame" )
                 eFlyType = FLYCNTTYPE_FRM;
             else if( sCmp == "graphic" )
