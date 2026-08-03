@@ -616,6 +616,16 @@ function getNbIcon(unoCommand, tabName) {
 	return cy.cGet((tabName ? '#' + tabName + '-container' : '') + '.notebookbar  .uno' + unoCommand + ' > button.unobutton:visible');
 }
 
+// Get the notebookbar item that holds the icon for the given uno command.
+//
+// A click on the icon is acted on while this item carries no disabled attribute,
+// and the icon inside it takes that attribute one layouting task after the item
+// does. So this item, not the icon, is what tells whether a click is going to be
+// acted on.
+function getNbItem(unoCommand, tabName) {
+	return cy.cGet((tabName ? '#' + tabName + '-container' : '') + '.notebookbar  .uno' + unoCommand + ':visible');
+}
+
 // Bring a notebookbar tab's icons on screen.
 //
 // The click is made only while the tab's icons are away, which covers all three
@@ -858,10 +868,12 @@ module.exports.ensureSidebarHidden = ensureSidebarHidden;
 module.exports.assertSidebarStealsFocus = assertSidebarStealsFocus;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.getNbIcon = getNbIcon;
+module.exports.getNbItem = getNbItem;
 module.exports.selectNotebookbarTab = selectNotebookbarTab;
 module.exports.getCompactIconArrow = getCompactIconArrow;
 module.exports.getNbIconArrow = getNbIconArrow;
 module.exports.getDropdown = getDropdown;
+module.exports.getUndoCount = getUndoCount;
 module.exports.undoAll = undoAll;
 module.exports.closeAnyOpenDialogs = closeAnyOpenDialogs;
 module.exports.shareDocumentAcrossTests = shareDocumentAcrossTests;

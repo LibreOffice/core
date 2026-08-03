@@ -54,6 +54,51 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.length', 3); // One is invisible but it is included here.
 	}
 
+	// Click a Table tab icon while the item holding it is enabled, which is the
+	// state that decides whether the click is acted on. An item that reads disabled
+	// means core has no cell selection to work on, and the table selection at the
+	// start of the next round is what brings it back.
+	function clickTableIconWhenEnabled(unoCommand) {
+		return desktopHelper.getNbItem(unoCommand, 'Table').then(function($item) {
+			if ($item.attr('disabled'))
+				return;
+
+			desktopHelper.getNbIcon(unoCommand, 'Table').click();
+		});
+	}
+
+	// Select a whole row or column of the table in the centre and merge it into one
+	// cell.
+	//
+	// A merge shows up in the shape SVG only after the table is deselected and
+	// selected again, so core's undo depth is what says the merge arrived. When it
+	// did not arrive, the sequence is repeated from the table selection, because a
+	// click that was not acted on leaves nothing else to wait for.
+	function mergeEntireRowOrColumn(win, selectionCommand) {
+		var stepsBefore = 0;
+
+		desktopHelper.getUndoCount(win).then(function(count) {
+			stepsBefore = count;
+		});
+
+		helper.retryUntil(
+			function() {
+				selectFullTable(win);
+
+				clickTableIconWhenEnabled(selectionCommand);
+				helper.processToIdle(win);
+
+				clickTableIconWhenEnabled('MergeCells');
+				helper.processToIdle(win);
+			},
+			function() {
+				return desktopHelper.getUndoCount(win).then(function(count) {
+					return count > stepsBefore;
+				});
+			},
+			{ errorMsg: selectionCommand + ' and MergeCells never reached the undo stack' });
+	}
+
 	it('Insert Row Before', function() {
 		selectFullTable(this.win);
 		desktopHelper.getNbIcon('InsertRowsBefore', 'Table').click();
@@ -211,15 +256,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 	});
 
 	it('Merge Row', function() {
-		selectFullTable(this.win);
-
-		cy.cGet('.table-row-resize-marker')
-			.should('have.length', 3);
-
-		desktopHelper.getNbIcon('EntireRow', 'Table').click();
-		helper.processToIdle(this.win);
-		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
-		helper.processToIdle(this.win);
+		mergeEntireRowOrColumn(this.win, 'EntireRow');
 
 		retriggerNewSvgForTableInTheCenter(5);
 
@@ -240,15 +277,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 	});
 
 	it('Merge Column', function() {
-		selectFullTable(this.win);
-
-		cy.cGet('.table-row-resize-marker')
-			.should('have.length', 3);
-
-		desktopHelper.getNbIcon('EntireColumn', 'Table').click();
-		helper.processToIdle(this.win);
-		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
-		helper.processToIdle(this.win);
+		mergeEntireRowOrColumn(this.win, 'EntireColumn');
 
 		retriggerNewSvgForTableInTheCenter(4);
 
