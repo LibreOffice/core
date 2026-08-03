@@ -765,10 +765,7 @@ public sealed partial class DocxLayoutSource
             Func<XElement, IReadOnlyList<PageBlock>>? content =
                 _frameDepth < MaxFrameNesting ? Content : null;
 
-            if (DocxFrames.Read(anchor.Element, content, anchor.Offset, Pictures) is { } frame)
-            {
-                frames.Add(frame);
-            }
+            frames.AddRange(DocxFrames.ReadAll(anchor.Element, content, anchor.Offset, Pictures));
         }
 
         return frames;
