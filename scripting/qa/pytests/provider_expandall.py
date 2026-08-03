@@ -16,6 +16,7 @@ from com.sun.star.uri import UriReferenceFactory
 from com.sun.star.container import NoSuchElementException
 import uno
 
+import contextlib
 import os
 import tempfile
 
@@ -58,17 +59,19 @@ class ProviderExpandAllTest(unittest.TestCase):
         except NoSuchElementException:
             pass
 
-        # Check if JavaScript scripting is supported in this build
-        try:
-            js_path = get_user_script_directory(self.context, "JavaScript")
-        except Exception:
-            self.skipTest("JavaScript script provider not available in this build")
-
-        # Create a dummy JavaScript macro to make sure the JavaScript provider is triggered.
-        os.makedirs(js_path, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=js_path) as js_dir:
-            with open(os.path.join(js_dir, "dummy_js_script.js"), 'w'):
-                pass
+        with contextlib.ExitStack() as stack:
+            # If the QuickJS-based script provider is available then create a dummy JavaScript macro
+            # to make sure the provider is triggered.
+            if ("com.sun.star.script.provider.ScriptProviderForJavaScript"
+                in self.context.getServiceManager().getAvailableServiceNames()):
+                have_js_provider = True
+                js_path = get_user_script_directory(self.context, "JavaScript")
+                os.makedirs(js_path, exist_ok=True)
+                js_dir = stack.enter_context(tempfile.TemporaryDirectory(dir=js_path))
+                with open(os.path.join(js_dir, "dummy_js_script.js"), 'w'):
+                    pass
+            else:
+                have_js_provider = False
 
             xMasterProviderFactory = theMasterScriptProviderFactory.get(self.context)
 
@@ -92,8 +95,8 @@ class ProviderExpandAllTest(unittest.TestCase):
                     if node.hasChildNodes():
                         stack.extend(node.getChildNodes())
 
-            if not found_js_script:
-                self.skipTest("No active JavaScript provider found to process .js files")
+            if have_js_provider:
+                self.assertTrue(found_js_script)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
