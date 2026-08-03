@@ -44,6 +44,27 @@ const size_t INITIAL_SETUP_ACTION_COUNT = 5;
 
 class VclOutdevTest : public test::BootstrapFixture
 {
+// skip test for macOS (missing fonts?)
+#if !defined(MACOSX)
+
+    OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
+
+    OUString getFullUrl(std::u16string_view sFileName)
+    {
+        return m_directories.getURLFromSrc(maDataUrl) + sFileName;
+    }
+
+protected:
+    bool addFont(OutputDevice* pOutDev, std::u16string_view sFileName,
+                 std::u16string_view sFamilyName)
+    {
+        OutputDevice::ImplClearAllFontData(true);
+        bool bAdded = pOutDev->AddTempDevFont(getFullUrl(sFileName), OUString(sFamilyName));
+        OutputDevice::ImplRefreshAllFontData(true);
+        return bAdded;
+    }
+#endif
+
 public:
     VclOutdevTest()
         : BootstrapFixture(true, false)
@@ -2205,6 +2226,89 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testGetLegacyFontName)
     OUString aUnknown;
     CPPUNIT_ASSERT(!pVDev->GetLegacyFontName(u"No Such Font ZZZ", u"Condensed", WEIGHT_NORMAL,
                                              ITALIC_NONE, aUnknown));
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, TestSupportsOpenTypeMath)
+{
+// skip test for macOS
+#if !defined(MACOSX)
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    // Font with a MATH table
+    bool bAdded = addFont(pOutDev, u"STIXTwoMath-subset.otf", u"STIX Two Math");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load STIX Two Math Font", bAdded);
+
+    vcl::Font aMathFont(u"STIX Two Math"_ustr, u"Regular"_ustr, Size(0, 72));
+    pOutDev->SetFont(aMathFont);
+    bool bSupportsMath = pOutDev->SupportsOpenTypeMath();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("STIX Two Math has a MATH table and should support OpenType Math",
+                                 true, bSupportsMath);
+
+    // Font without a MATH table
+    bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load Source Han Sans Font", bAdded);
+
+    vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
+    pOutDev->SetFont(aFont);
+    bSupportsMath = pOutDev->SupportsOpenTypeMath();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Source Han Sans is a normal font and shouldn't OpenType Math",
+                                 false, bSupportsMath);
+
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, TestGetOpenTypeMathConstant)
+{
+// skip test for macOS
+#if !defined(MACOSX)
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    // Source Han Sans Font doesn't returns OpenType Math Constant
+    bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load Source Han Sans Font", bAdded);
+
+    vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
+    pOutDev->SetFont(aFont);
+
+    for (int i = vcl::OpenTypeMathConstant::ScriptPercentScaleDown;
+         i <= vcl::OpenTypeMathConstant::RadicalDegreeBottomRaisePercent; ++i)
+    {
+        auto eMathConstant = static_cast<vcl::OpenTypeMathConstant>(i);
+        double nResult = pOutDev->GetOpenTypeMathConstant(eMathConstant);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Source Han Sans is a normal font and it should return 0 for Math Constants", 0,
+            static_cast<int>(nResult));
+    }
+
+    // STIX Two Math Font returns OpenType Math Constant
+    bAdded = addFont(pOutDev, u"STIXTwoMath-subset.otf", u"STIX Two Math");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load STIX Two Math Font", bAdded);
+
+    vcl::Font aMathFont(u"STIX Two Math"_ustr, u"Regular"_ustr, Size(0, 72));
+    pOutDev->SetFont(aMathFont);
+
+    double nFractionRuleThickness
+        = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::FractionRuleThickness);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "STIX Two Math has a MATH table and should return FractionRuleThickness's value",
+        static_cast<double>(68), nFractionRuleThickness);
+
+    double nScriptScriptPercentScaleDown
+        = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::ScriptScriptPercentScaleDown);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "STIX Two Math has a MATH table and should return ScriptScriptPercentScaleDown's value",
+        0.55, nScriptScriptPercentScaleDown);
+
+    double nSubscriptShiftDown
+        = pOutDev->GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::SubscriptShiftDown);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "STIX Two Math has a MATH table and should return SubscriptShiftDown's value",
+        static_cast<double>(210), nSubscriptShiftDown);
+
 #endif
 }
 

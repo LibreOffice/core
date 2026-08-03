@@ -1,0 +1,10 @@
+This is a subset copy of STIXTwoMath-Regular font licensed under Open Font License and
+obtained from:
+
+  https://github.com/stipub/stixfonts/releases#release-v2.13b171
+
+And subset using hb-subset to contain only the space glyph used in the test and query the MATH table constants:
+
+  hb-subset STIXTwoMath-Regular.otf --unicodes="0041-005A,0061-007A,0020" -o STIXTwoMath-subset.otf
+
+The space is added to the subset as it seems needed to get the font to work on macOS.
