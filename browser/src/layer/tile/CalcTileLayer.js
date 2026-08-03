@@ -73,7 +73,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		map.on('splitposchanged', this.setSplitCellFromPos, this);
 		map.on('commandstatechanged', this._onCommandStateChanged, this);
 		map.uiManager.initializeSpecializedUI('spreadsheet');
-		window.keyboard.hintOnscreenKeyboard(window.keyboard.guessOnscreenKeyboard());
+		window.keyboard.applyOnscreenKeyboardMode();
 	},
 
 	onAdd: function (map) {
@@ -485,7 +485,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			if (app.socket._reconnecting) {
 				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
 				this._resetInternalState();
-				window.keyboard.hintOnscreenKeyboard(window.keyboard.guessOnscreenKeyboard());
+				window.keyboard.applyOnscreenKeyboardMode();
 			} else {
 				this._selectedPart = statusJSON.selectedpart;
 			}

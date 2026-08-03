@@ -157,8 +157,13 @@ window.L.Map.include({
 		// notebookbar dropdown queues a task on close that would otherwise
 		// steal focus back. In the iOS/android app, just clicking the
 		// mobile-edit-button is not reason enough to pop up the on-screen
-		// keyboard, so skip the focus there.
-		if (!(window.ThisIsTheiOSApp || window.ThisIsTheAndroidApp))
+		// keyboard, so skip the focus there. With a physical keyboard there is
+		// no on-screen keyboard to pop up, and taking the focus is what lets
+		// typing reach the document straight away.
+		const holdBackFocusForOnscreenKeyboard =
+			(window.ThisIsTheiOSApp || window.ThisIsTheAndroidApp)
+			&& !window.keyboard.hardwareKeyboardAttached;
+		if (!holdBackFocusForOnscreenKeyboard)
 			app.layoutingService.onDrain(this.focus.bind(this));
 	},
 

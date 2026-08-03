@@ -201,6 +201,14 @@ window.L.Map = window.L.Evented.extend({
 			this.on('editmode', function() {
 				this._switchToEditMode();
 			});
+			this.on('hardwarekeyboardattached', function() {
+				window.keyboard.setHardwareKeyboardAttached(true);
+				if (this.isEditMode())
+					this.focus(true);
+			});
+			this.on('hardwarekeyboarddetached', function() {
+				window.keyboard.setHardwareKeyboardAttached(false);
+			});
 		}
 
 		this.showBusy(_('Initializing...'), false);

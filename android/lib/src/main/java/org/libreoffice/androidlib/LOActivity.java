@@ -26,6 +26,8 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Insets;
+import android.hardware.input.InputManager;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -40,6 +42,7 @@ import android.print.PrintManager;
 import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.view.InputDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,6 +148,13 @@ public class LOActivity extends AppCompatActivity {
     private boolean mMobileWizardVisible = false;
     private boolean mIsEditModeActive = false;
 
+    /// True while a physical keyboard is attached and can be typed on. Written on the main thread
+    /// and read on the thread that serves the JavaScript bridge, so it is volatile.
+    private volatile boolean mHardwareKeyboardAttached = false;
+
+    private InputManager mInputManager = null;
+    private InputManager.InputDeviceListener mInputDeviceListener = null;
+
     private ValueCallback<Uri[]> valueCallback;
 
     /// Source file path remembered while a REQUEST_EXPORT_FILE intent is in flight.
@@ -246,6 +256,76 @@ public class LOActivity extends AppCompatActivity {
         return context.getPackageManager().hasSystemFeature("org.chromium.arc.device_management");
     }
 
+    /** True if a physical keyboard with letter keys is attached and can be typed on right now. */
+    private static boolean detectHardwareKeyboard(Context context) {
+        Configuration configuration = context.getResources().getConfiguration();
+        if (configuration.keyboard != Configuration.KEYBOARD_NOKEYS
+                && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES)
+            return false;
+
+        for (int id : InputDevice.getDeviceIds()) {
+            InputDevice device = InputDevice.getDevice(id);
+            if (device == null || device.isVirtual())
+                continue;
+
+            if ((device.getSources() & InputDevice.SOURCE_KEYBOARD) != 0
+                    && device.getKeyboardType() == InputDevice.KEYBOARD_TYPE_ALPHABETIC)
+                return true;
+        }
+
+        return false;
+    }
+
+    /** Watch for keyboards being paired, plugged in or removed. */
+    private void startWatchingForHardwareKeyboard() {
+        mHardwareKeyboardAttached = detectHardwareKeyboard(this);
+
+        mInputManager = (InputManager) getSystemService(Context.INPUT_SERVICE);
+        if (mInputManager == null)
+            return;
+
+        mInputDeviceListener = new InputManager.InputDeviceListener() {
+            @Override
+            public void onInputDeviceAdded(int deviceId) {
+                updateHardwareKeyboardState();
+            }
+
+            @Override
+            public void onInputDeviceRemoved(int deviceId) {
+                updateHardwareKeyboardState();
+            }
+
+            @Override
+            public void onInputDeviceChanged(int deviceId) {
+                updateHardwareKeyboardState();
+            }
+        };
+
+        mInputManager.registerInputDeviceListener(mInputDeviceListener, getMainHandler());
+    }
+
+    private void stopWatchingForHardwareKeyboard() {
+        if (mInputManager != null && mInputDeviceListener != null)
+            mInputManager.unregisterInputDeviceListener(mInputDeviceListener);
+
+        mInputManager = null;
+        mInputDeviceListener = null;
+    }
+
+    /** Re-read the keyboard state and pass it on when it differs from what JavaScript last saw. */
+    private void updateHardwareKeyboardState() {
+        boolean attached = detectHardwareKeyboard(this);
+        if (attached == mHardwareKeyboardAttached)
+            return;
+
+        mHardwareKeyboardAttached = attached;
+        Log.i(TAG, "Hardware keyboard " + (attached ? "attached" : "detached"));
+
+        if (documentLoaded)
+            callFakeWebsocketOnMessage(attached ? "mobile: hardwarekeyboardattached"
+                                                : "mobile: hardwarekeyboarddetached");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -282,7 +362,15 @@ public class LOActivity extends AppCompatActivity {
             }
         });
 
+        startWatchingForHardwareKeyboard();
+
         init();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfiguration) {
+        super.onConfigurationChanged(newConfiguration);
+        updateHardwareKeyboardState();
     }
 
     /** Initialize the app - copy the assets and create the UI. */
@@ -677,6 +765,8 @@ public class LOActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        stopWatchingForHardwareKeyboard();
+
         if (!documentLoaded) {
             super.onDestroy();
             return;
@@ -1035,6 +1125,14 @@ public class LOActivity extends AppCompatActivity {
     @JavascriptInterface
     public boolean isChromeOS() {
         return isChromeOS(this);
+    }
+
+    /**
+     * Tell the JavaScript side whether a physical keyboard is attached.
+     */
+    @JavascriptInterface
+    public boolean hasHardwareKeyboard() {
+        return mHardwareKeyboardAttached;
     }
 
     /**
