@@ -644,11 +644,19 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
     if (!pTabView)
         return;
 
+    ScDocument& rDocument = pViewData->GetDocument();
+
     if (SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView())
         pDrawView->SetNegativeX(comphelper::COKit::isActive() &&
-            pViewData->GetDocument().IsLayoutRTL(nPart));
+            rDocument.IsLayoutRTL(nPart));
 
-    pTabView->SelectTabPage(nPart + 1);
+    // The sheet tab bar carries a page for each visible sheet, and a sheet view is held on a
+    // hidden one, so it is switched to directly.
+    const SCTAB nTab(nPart);
+    if (rDocument.IsSheetViewHolder(nTab))
+        pTabView->SetTabNo(nTab);
+    else
+        pTabView->SelectTabPage(nPart + 1);
 }
 
 int ScModelObj::getParts()

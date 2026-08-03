@@ -757,6 +757,39 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCellEditInvalidatesBaseSheetTiles)
                            bBaseInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testTypeAfterClientSwitchesToSheetViewPart)
+{
+    // A client that follows the new part list and asks for the sheet view's part, the way the
+    // browser does after a sheet view opens, must still be able to type into the cell the cursor
+    // is on without moving the cursor first.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDocument);
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nBaseTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // The sheet view is hidden, so it has no page on the sheet tab bar the request goes through.
+    pModelObj->setPart(nSheetViewTab);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    typeCharsInCell(std::string("ABC"), 0, 0, pTabView, pModelObj, /*bInEdit*/ true,
+                    /*bCommit*/ true);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, pDocument->GetString(ScAddress(0, 0, nBaseTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, pTabView->GetCurrentString(0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesBaseSheetTiles)
 {
     // Undoing a cell edit made inside a sheet view must invalidate the tiles of
