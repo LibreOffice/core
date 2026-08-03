@@ -71,7 +71,7 @@ namespace cppcanvas
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
-                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const rtl::Reference< ::canvastools::UnoPolyPolygon >   mxPolyPoly;
 
                 // stroke color is now implicit: the maState.DeviceColor member
                 vclcanvas::RenderState                              maState;
@@ -211,7 +211,7 @@ namespace cppcanvas
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
-                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const rtl::Reference< ::canvastools::UnoPolyPolygon > mxPolyPoly;
 
                 // stroke color is now implicit: the maState.DeviceColor member
                 vclcanvas::RenderState                              maState;
@@ -294,7 +294,7 @@ namespace cppcanvas
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
-                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const rtl::Reference< ::canvastools::UnoPolyPolygon > mxPolyPoly;
                 vclcanvas::RenderState                              maState;
                 const rendering::StrokeAttributes                   maStrokeAttributes;
             };

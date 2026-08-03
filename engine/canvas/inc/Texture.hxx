@@ -21,10 +21,14 @@
 #include <sal/config.h>
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/bitmap.hxx>
+#include <rtl/ref.hxx>
+
+namespace canvas
+{
+class ParametricPolyPolygon;
+}
 
 namespace vclcanvas
 {
@@ -76,7 +80,7 @@ struct Texture
         parametric polygons color value is used to fill the returned
         polygonal outlines.<p>
      */
-    css::uno::Reference<css::rendering::XParametricPolyPolygon2D> Gradient;
+    rtl::Reference<canvas::ParametricPolyPolygon> Gradient;
 
     /** Repeat mode of the texture, x direction.<p>
 

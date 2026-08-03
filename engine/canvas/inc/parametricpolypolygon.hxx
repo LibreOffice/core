@@ -19,13 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
-#include <comphelper/compbase.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <utility>
 
 namespace vclcanvas { class Canvas; }
@@ -35,10 +33,7 @@ namespace vclcanvas { class Canvas; }
 
 namespace canvas
 {
-    typedef comphelper::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
-                                           css::lang::XServiceInfo > ParametricPolyPolygon_Base;
-
-    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ParametricPolyPolygon_Base
+    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public salhelper::SimpleReferenceObject
     {
     public:
         enum class GradientType
@@ -89,14 +84,6 @@ namespace canvas
             const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors,
             const ::cpo::uno::Sequence< double >& stops,
             double aspectRatio );
-
-        /// Dispose all internal references
-        virtual void disposing(std::unique_lock<std::mutex>&) override;
-
-        // XServiceInfo
-        virtual OUString getImplementationName(  ) override;
-        virtual bool supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         /// Query all defining values of this object atomically
         const Values & getValues() const;

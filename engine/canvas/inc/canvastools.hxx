@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -50,18 +51,16 @@ namespace com::sun::star::geometry
     struct Matrix2D;
 }
 
-namespace com::sun::star::rendering
-{
-    class XPolyPolygon2D;
-}
-
 namespace vclcanvas
 {
     struct RenderState;
     struct Texture;
     struct ViewState;
 }
-
+namespace canvastools
+{
+    class UnoPolyPolygon;
+}
 namespace com::sun::star::awt
 {
     struct Rectangle;
@@ -383,12 +382,12 @@ namespace canvastools
                         OutputDevice& rOutDev);
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
+            const rtl::Reference< ::canvastools::UnoPolyPolygon >& rPoly );
 
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+        CANVASTOOLS_DLLPUBLIC rtl::Reference< ::canvastools::UnoPolyPolygon >
             xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    );
 
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+        CANVASTOOLS_DLLPUBLIC rtl::Reference< ::canvastools::UnoPolyPolygon >
             xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)

@@ -2841,11 +2841,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	StrokeAttributes \
 	TextDirection \
 	TexturingMode \
-	XBezierPolyPolygon2D \
-	XLinePolyPolygon2D \
 	XMtfRenderer \
-	XParametricPolyPolygon2D \
-	XPolyPolygon2D \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \

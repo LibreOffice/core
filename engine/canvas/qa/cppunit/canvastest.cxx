@@ -114,7 +114,7 @@ public:
         ::basegfx::B2DPolyPolygon aPolyPoly;
         aPolyPoly.append(aPoly);
         rtl::Reference<canvastools::UnoPolyPolygon> polygon(
-            new ::canvastools::UnoPolyPolygon(aPolyPoly, rendering::FillRule_EVEN_ODD));
+            new ::canvastools::UnoPolyPolygon(aPolyPoly));
 
         mRenderState.DeviceColor = mColorBlue;
         rendering::StrokeAttributes strokeAttributes;
@@ -125,8 +125,7 @@ public:
         strokeAttributes.JoinType = rendering::PathJoinType::MITER;
         strokeAttributes.DashArray = { 10, 5, 0.1, 5 };
 
-        mCanvas->strokePolyPolygon(static_cast<rendering::XLinePolyPolygon2D*>(polygon.get()),
-                                   mViewState, mRenderState, strokeAttributes);
+        mCanvas->strokePolyPolygon(polygon, mViewState, mRenderState, strokeAttributes);
 
         exportDevice(u"test-tdf134053.png"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());

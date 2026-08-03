@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -32,6 +31,8 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/rendercontext/State.hxx>
 #include <canvasfont.hxx>
+
+namespace canvastools { class UnoPolyPolygon; }
 
 namespace cppcanvas
     {
@@ -79,7 +80,7 @@ namespace cppcanvas
 
             ::basegfx::B2DPolyPolygon                                                clip;
             ::tools::Rectangle                                                              clipRect;
-            css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
+            rtl::Reference< ::canvastools::UnoPolyPolygon >                          xClipPoly;
 
             cpo::uno::Sequence< double >                                             lineColor;
             cpo::uno::Sequence< double >                                             fillColor;

@@ -578,7 +578,7 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap > Canvas::fillTexturedPolyPolygon(
-                                     const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
+                                     const rtl::Reference< ::canvastools::UnoPolyPolygon >& xPolyPolygon,
                                      const vclcanvas::ViewState&                        viewState,
                                      const vclcanvas::RenderState&                      renderState,
                                      const std::vector< vclcanvas::Texture >&         textures )
@@ -605,12 +605,9 @@ namespace vclcanvas
             // TODO(F1): Multi-texturing
             if( textures[0].Gradient.is() )
             {
-                // try to cast XParametricPolyPolygon2D reference to
-                // our implementation class.
-                ::canvas::ParametricPolyPolygon* pGradient =
-                      dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
+                ::canvas::ParametricPolyPolygon* pGradient = textures[0].Gradient.get();
 
-                if( pGradient && pGradient->getValues().maColors.hasElements() )
+                if( pGradient->getValues().maColors.hasElements() )
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)

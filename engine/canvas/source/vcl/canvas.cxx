@@ -141,7 +141,7 @@ namespace vclcanvas
         }
     }
 
-    css::uno::Reference< css::rendering::XLinePolyPolygon2D > Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
+    rtl::Reference< canvastools::UnoPolyPolygon > Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
@@ -150,7 +150,7 @@ namespace vclcanvas
 
         // vcl only handles even_odd polygons
         rtl::Reference<canvastools::UnoPolyPolygon> xPoly( new ::canvastools::UnoPolyPolygon(
-                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ), rendering::FillRule_EVEN_ODD ) );
+                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
 
         return xPoly;
     }
@@ -225,7 +225,7 @@ namespace vclcanvas
     }
 
     void
-        Canvas::strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+        Canvas::strokePolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&   xPolyPolygon,
                           const ::vclcanvas::ViewState&                               viewState,
                           const ::vclcanvas::RenderState&                             renderState,
                           const css::rendering::StrokeAttributes&                        strokeAttributes)
@@ -343,7 +343,7 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap >
-        Canvas::fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
+        Canvas::fillPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&               xPolyPolygon,
                          const ::vclcanvas::ViewState&                                          viewState,
                          const ::vclcanvas::RenderState&                                        renderState)
     {
@@ -493,7 +493,7 @@ namespace vclcanvas
     }
 
     void
-        Canvas::drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+        Canvas::drawPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >& xPolyPolygon,
                         const ::vclcanvas::ViewState&                             viewState,
                         const ::vclcanvas::RenderState&                           renderState)
     {
@@ -823,12 +823,11 @@ namespace vclcanvas
         return true;
     }
 
-    css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > Canvas::createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
+    rtl::Reference< ::canvas::ParametricPolyPolygon > Canvas::createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
     {
-        return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
-            canvas::ParametricPolyPolygon::create(
+        return canvas::ParametricPolyPolygon::create(
                                           GradientService,
-                                          colors, stops, aspectRatio));
+                                          colors, stops, aspectRatio);
     }
 }
 

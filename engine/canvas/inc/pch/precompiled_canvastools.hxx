@@ -69,7 +69,6 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/implbase.hxx>

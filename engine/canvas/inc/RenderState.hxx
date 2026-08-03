@@ -20,11 +20,12 @@
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/rendering/ColorComponent.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <cpo/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
+#include "unopolypolygon.hxx"
 
-namespace vclcanvas {
-
+namespace vclcanvas
+{
 /** This structure contains information passed to each
     XCanvas render operation.<p>
 
@@ -42,8 +43,7 @@ struct RenderState
         subsequently transformed to device space by the view
         transform).<p>
      */
-    ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
-
+    ::com::sun::star::geometry::AffineMatrix2D AffineTransform;
 
     /** The clipping area associated with this render operation.<p>
 
@@ -60,8 +60,7 @@ struct RenderState
         clip. That means, nothing rendered to the canvas will be
         visible.<p>
      */
-    css::uno::Reference<css::rendering::XPolyPolygon2D> Clip;
-
+    rtl::Reference<::canvastools::UnoPolyPolygon> Clip;
 
     /** The device color associated with this render operation.<p>
 
@@ -72,7 +71,6 @@ struct RenderState
      */
     cpo::uno::Sequence<css::rendering::ColorComponent> DeviceColor;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

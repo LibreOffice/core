@@ -14,11 +14,6 @@
 #include <RenderState.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
-namespace com::sun::star::rendering
-{
-class XPolyPolygon2D;
-}
-
 namespace cppcanvastools
 {
 struct TextLineInfo;
@@ -34,9 +29,9 @@ struct OutDevState;
 
 class TextLinesHelper
 {
-    css::uno::Reference<css::rendering::XPolyPolygon2D> mxOverline;
-    css::uno::Reference<css::rendering::XPolyPolygon2D> mxUnderline;
-    css::uno::Reference<css::rendering::XPolyPolygon2D> mxStrikeout;
+    rtl::Reference<::canvastools::UnoPolyPolygon> mxOverline;
+    rtl::Reference<::canvastools::UnoPolyPolygon> mxUnderline;
+    rtl::Reference<::canvastools::UnoPolyPolygon> mxStrikeout;
 
     bool mbIsOverlineColorSet;
     const cpo::uno::Sequence<double> maOverlineColor;

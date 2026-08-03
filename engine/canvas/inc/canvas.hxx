@@ -37,6 +37,7 @@
 #include "cachedbitmap.hxx"
 
 class OutputDevice;
+namespace canvastools { class UnoPolyPolygon; }
 
 namespace vclcanvas
 {
@@ -57,9 +58,9 @@ namespace vclcanvas
         /// For resource tracking
         VCLCANVAS_DLLPUBLIC ~Canvas();
 
-        css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
+        rtl::Reference< ::canvastools::UnoPolyPolygon > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
 
-        css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio );
+        rtl::Reference< ::canvas::ParametricPolyPolygon > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio );
 
         void clear();
 
@@ -94,18 +95,18 @@ namespace vclcanvas
                                  const ::vclcanvas::RenderState&    renderState );
 
         VCLCANVAS_DLLPUBLIC void
-            strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+            strokePolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&   xPolyPolygon,
                               const ::vclcanvas::ViewState&                               viewState,
                               const ::vclcanvas::RenderState&                             renderState,
                               const css::rendering::StrokeAttributes&                        strokeAttributes);
 
         rtl::Reference< vclcanvas::CachedBitmap >
-            fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
+            fillPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&               xPolyPolygon,
                              const ::vclcanvas::ViewState&                                          viewState,
                              const ::vclcanvas::RenderState&                                        renderState);
 
         rtl::Reference< vclcanvas::CachedBitmap >
-            fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+            fillTexturedPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >& xPolyPolygon,
                                     const ::vclcanvas::ViewState&                             viewState,
                                     const ::vclcanvas::RenderState&                           renderState,
                                     const std::vector< vclcanvas::Texture >&           textures);
@@ -128,7 +129,7 @@ namespace vclcanvas
                             const ::vclcanvas::RenderState&                                     renderState);
 
         void
-            drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+            drawPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&    xPolyPolygon,
                             const ::vclcanvas::ViewState&                             viewState,
                             const ::vclcanvas::RenderState&                           renderState);
 

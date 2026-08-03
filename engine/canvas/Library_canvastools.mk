@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,canvastools,\
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	tk \
 	tl \
 	vcl \

@@ -309,79 +309,21 @@ namespace canvastools
                 rOutDev.SetClipRegion( aClipRegion );
         }
 
-        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
+        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const rtl::Reference< canvastools::UnoPolyPolygon >& xPoly )
         {
-            ::canvastools::UnoPolyPolygon* pPolyImpl =
-                dynamic_cast< ::canvastools::UnoPolyPolygon* >( xPoly.get() );
-
-            if( pPolyImpl )
-            {
-                return pPolyImpl->getPolyPolygon();
-            }
-            else
-            {
-                // not a known implementation object - try data source
-                // interfaces
-                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
-
-                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
-                    xPoly,
-                    uno::UNO_QUERY );
-
-                if( xBezierPoly.is() )
-                {
-                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
-                        xBezierPoly->getBezierSegments( 0,
-                                                        nPolys,
-                                                        0,
-                                                        -1 ) );
-                }
-                else
-                {
-                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
-                        xPoly,
-                        uno::UNO_QUERY );
-
-                    // no implementation class and no data provider
-                    // found - contract violation.
-                    if( !xLinePoly.is() )
-                    {
-                        throw lang::IllegalArgumentException(
-                            u"basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
-                            "poly-polygon, cannot retrieve vertex data"_ustr,
-                            uno::Reference< uno::XInterface >(),
-                            0 );
-                    }
-
-                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
-                        xLinePoly->getPoints( 0,
-                                              nPolys,
-                                              0,
-                                              -1 ));
-                }
-            }
+            return xPoly->getPolyPolygon();
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
+        rtl::Reference< canvastools::UnoPolyPolygon > xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
             // vcl only handles even_odd polygons
-            rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon( rPolyPoly, rendering::FillRule_EVEN_ODD );
-
-            if( rPolyPoly.areControlPointsUsed() )
-                return static_cast<rendering::XBezierPolyPolygon2D*>(xRes.get());
-            else
-                return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
+            return new ::canvastools::UnoPolyPolygon( rPolyPoly );
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    )
+        rtl::Reference< canvastools::UnoPolyPolygon > xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    )
         {
             // vcl only handles even_odd polygons
-            rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon(basegfx::B2DPolyPolygon(rPoly), rendering::FillRule_EVEN_ODD);
-
-            if( rPoly.areControlPointsUsed() )
-                return static_cast<rendering::XBezierPolyPolygon2D*>(xRes.get());
-            else
-                return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
+            return new ::canvastools::UnoPolyPolygon(basegfx::B2DPolyPolygon(rPoly));
         }
 
         /// Convert [0,1] double value to [0,255] int

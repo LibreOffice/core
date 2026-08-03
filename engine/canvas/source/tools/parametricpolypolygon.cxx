@@ -93,25 +93,6 @@ namespace canvas
             colors, stops, fAspectRatio );
     }
 
-    void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&)
-    {
-    }
-
-    OUString ParametricPolyPolygon::getImplementationName(  )
-    {
-        return u"Canvas::ParametricPolyPolygon"_ustr;
-    }
-
-    bool ParametricPolyPolygon::supportsService( const OUString& ServiceName )
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    cpo::uno::Sequence< OUString > ParametricPolyPolygon::getSupportedServiceNames(  )
-    {
-        return { u"com.sun.star.rendering.ParametricPolyPolygon"_ustr };
-    }
-
     ParametricPolyPolygon::~ParametricPolyPolygon()
     {
     }

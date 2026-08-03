@@ -27,7 +27,6 @@
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
