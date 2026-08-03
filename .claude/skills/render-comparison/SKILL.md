@@ -162,9 +162,26 @@ Once a page differs, narrow it down before theorising:
 
 8. **Check whether the field is read but never used.** A property parsed by every reader and
    consumed by nothing is invisible to unit tests and produces a quiet, systematic error.
-   Two were found this way — `TabStop.Leader` (declared by 51 of 136 corpus DOCX files, so
-   every dotted table-of-contents line was blank) and `IsCapitalised`. Grep for the property
-   name: if the only hits are the readers and the model, it does nothing.
+
+   This has now been the cause four times, once on each family, which makes it worth *grepping
+   for on purpose* rather than waiting to trip over:
+
+   | Property | Reach | Symptom |
+   |---|---|---|
+   | `TabStop.Leader` | 51 of 136 corpus DOCX | every dotted table-of-contents line blank |
+   | `IsCapitalised` (`w:caps`/`w:smallCaps`) | — | wrong advance widths, so wrong line breaks |
+   | `a:rPr/@baseline` | 29 of 112 corpus PPTX | superscripts on the baseline at full size |
+   | `SheetGrid.IsOptimalSize` (`ht` without `customHeight`) | every XLSX with a height hint | row pitch 15.735 pt against 15.0 |
+
+   Grep for the property name: **if the only hits are the readers and the model, it does
+   nothing.** Every reader parsing it is what makes the bug so quiet — the parse looks like
+   support, and four separate readers agreeing on a value nobody consumes reads as thoroughness.
+
+   Note the last two entries are also a warning about *why* these survive. Escapement had
+   nowhere to be stored (`SlideTextRun` carried a flag, not a magnitude) and the row-height flag
+   has nothing behind it to call (`ScColumn::GetNeededSize` is a feature, not a line). A field
+   read and never used is often blocked on something real rather than merely forgotten, so
+   budget for the feature rather than expecting a wiring change.
 
 ## Comparing whole documents as images
 
