@@ -23,7 +23,11 @@
 #include <unotools/resmgr.hxx>
 #include <dialmgr.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <comphelper/processfactory.hxx>
+#include <svtools/restartdialog.hxx>
 
 namespace
 {
@@ -312,6 +316,15 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
     }
     batch->commit();
 
+    if (m_xHighContrast->get_value_changed_from_saved())
+    {
+        SolarMutexGuard aGuard;
+        if (svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), nullptr,
+                svtools::RESTART_REASON_HIGH_CONTRAST))
+            GetDialogController()->response(RET_OK);
+    }
+
     return false;
 }
 
@@ -363,6 +376,7 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
     }
 
     m_xHighContrast->set_active( officecfg::Office::Common::Accessibility::HighContrast::get() );
+    m_xHighContrast->save_value();
     if (officecfg::Office::Common::Accessibility::HighContrast::isReadOnly())
     {
         m_xHighContrast->set_sensitive(false);
