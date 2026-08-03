@@ -3459,6 +3459,73 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillUndoRestore)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableValueNumberFormat)
+{
+    // The values of a pivot table are shown with the number format of the source data.
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    static const DPFieldDef aFields[]
+        = { { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
+
+    const char* aData[][3] = {
+        { "Andy", "A", "30" },
+        { "Bruce", "B", "20" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+
+    // Three decimals tell the format apart from the General format of an untouched cell.
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_Int32 nCheckPos = 0;
+    SvNumFormatType nType = SvNumFormatType::ALL;
+    sal_uInt32 nSourceFormat = 0;
+    OUString aFormatCode = u"0.000"_ustr;
+    pFormatter->PutEntry(aFormatCode, nCheckPos, nType, nSourceFormat);
+    CPPUNIT_ASSERT(nSourceFormat != 0);
+
+    SCCOL nScoreColumn = aSrcRange.aEnd.Col();
+    for (SCROW nRow = aSrcRange.aStart.Row() + 1; nRow <= aSrcRange.aEnd.Row(); ++nRow)
+        m_pDoc->ApplyAttr(nScoreColumn, nRow, 0, SfxUInt32Item(ATTR_VALUE_FORMAT, nSourceFormat));
+
+    ScDPObject* pDPObject
+        = createDPFromRange(m_pDoc, aSrcRange, aFields, nFieldCount, /*bFilterButton*/ false);
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObject));
+    pDPObject->SetName(pDPs->CreateNewName());
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObject->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT(!bOverflow);
+    pDPObject->Output(aOutRange.aStart);
+    aOutRange = pDPObject->GetOutRange();
+
+    SCTAB nTab = aOutRange.aStart.Tab();
+    // The first two rows hold the field name and the column field members, the first column holds
+    // the row field members.
+    SCCOL nDataColumn = aOutRange.aStart.Col() + 1;
+    SCROW nDataRow = aOutRange.aStart.Row() + 2;
+    SCCOL nGrandTotalColumn = aOutRange.aEnd.Col();
+    SCROW nGrandTotalRow = aOutRange.aEnd.Row();
+
+    CPPUNIT_ASSERT_EQUAL(nSourceFormat, m_pDoc->GetNumberFormat(nDataColumn, nDataRow, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"30.000"_ustr, m_pDoc->GetString(nDataColumn, nDataRow, nTab));
+
+    // The grand totals are values of the same data field, so they share the format.
+    CPPUNIT_ASSERT_EQUAL(nSourceFormat, m_pDoc->GetNumberFormat(nGrandTotalColumn, nDataRow, nTab));
+    CPPUNIT_ASSERT_EQUAL(nSourceFormat, m_pDoc->GetNumberFormat(nDataColumn, nGrandTotalRow, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"50.000"_ustr,
+                         m_pDoc->GetString(nGrandTotalColumn, nGrandTotalRow, nTab));
+
+    pDPs->FreeTable(pDPObject);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
