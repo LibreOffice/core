@@ -63,7 +63,11 @@ which of Word's property ids mean what. None of that belongs here.
       `Value(Filled)` compile and return the whole word — non-zero for any shape stating any
       fill property at all, so every shape came back filled. `Boolean` and `StatesBoolean` now
       do the arithmetic, and the second is needed as much as the first: "stated false" and "said
-      nothing" take different defaults in every host.
+      nothing" take different defaults in every host. `fShadow` is the same trap once more and
+      the least obvious of the three: it is **bit 1 of property 575**, whose own name is
+      `fshadowObscured`, so the shadow switch is read as `Has(575) && Boolean(574)` —
+      exactly LibreOffice's `IsProperty(DFF_Prop_fshadowObscured) && (GetPropertyValue(…) & 2)`
+      (`msdffimp.cxx:2665-2668`).
 - [x] **The tertiary table is kept apart from the secondary.** They share a layout and mean
       different things: `msofbtSecondaryOPT` holds a master's values for the shape's own
       properties, `msofbtUDefProp` is where a host writes properties of its own. Word puts a
