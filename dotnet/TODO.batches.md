@@ -1160,6 +1160,56 @@ content stream, each behind a clip one row tall.
   four lines, where the corpus document's equivalent cell is drawn on three consecutive pages at
   three different vertical offsets.
 
+## Words batches 010–019, measured at `65c197f15`: 53 of 98
+
+Swept to decide where the next words dispatch should aim. **All ten batch figures reproduced
+the scoreboard exactly** — 6/9, 7/10, 8/10, 5/9, 3/10, 5/10, 7/10, 5/10, 3/10, 4/10.
+
+That is worth recording because it contradicts what this file kept finding. Six stale records in
+one round, eleven of eighteen in another, and every one stale-low; I swept expecting the same and
+got ten exact hits. The difference is that the previous words agent swept the **whole 200-document
+track** rather than only the batches it worked, so every row was refreshed at once. Stale records
+are a symptom of partial sweeps, not of time passing — which makes a whole-track sweep worth its
+cost beyond the number it produces.
+
+### The shape of the 45 failures
+
+| | |
+|---|---|
+| over-paginate | 23 |
+| under-paginate | 15 |
+| page-exact, words wrong | 7 |
+| **off by exactly one page** | **26** |
+| word count short / long / equal | 33 / 9 / 3 |
+| absolute page error in this range | 87 of the track's 122 |
+
+Two things follow. Off-by-one dominates, so this range is the boundary problem the track was
+already diagnosed as. And **word counts are short far more often than long, in both pagination
+directions** — 33 against 9. That is not the classic cascade, where fitting too much on a page
+makes text and pages move together; text is missing roughly independently of where the breaks
+fall.
+
+### One producer accounts for six failures
+
+Seven documents in this range come from one issuer's form templates (EASA CAO / Part-145
+`TE.CAO`, `UG.CAO`, `FO.FCTOA`). **Six of the seven fail**, and the family holds the two largest
+word shortfalls in the range, −446 and −225.
+
+**Three hypotheses were tested against it and each explains only a minority. None is the cause.**
+Recorded so the next agent does not spend the round re-testing them:
+
+| Hypothesis | Measured | Verdict |
+|---|---|---|
+| the `TOC` field's cached result is dropped | TOC holds 48 and 145 words against shortfalls of 446 and 225 | explains a fraction at most |
+| grouped text boxes drawing only their first `txbxContent` (a known unfixed bug) | 198 and 64 words in text boxes, against 446 and 225 | explains a fraction |
+| the same, on the other big shortfalls | `xx_SETIS_PWS…docx` (−541) and `t_TEMPforInvProgs.docx` (−118) contain **zero** text boxes | refuted for those |
+
+The two `B11. TE.CAO.00129` files looked like an ideal A/B pair — our output 1181 and 1183 words
+where the reference gives 1278 and 1110, so LibreOffice diverges by 168 where we diverge by 2.
+They are **different revisions**, not one document twice: different images, one has
+`footer1.xml.rels` and the other `stylesWithEffects.xml`. The pair is still suggestive but it is
+not the controlled comparison it appears to be.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
