@@ -570,6 +570,43 @@ internal static class SheetTextLayout
         return lines;
     }
 
+    /// <summary>
+    /// The character ranges a cell in several formats breaks into at a width.
+    /// </summary>
+    /// <remarks>
+    /// The ranges rather than the count, because a rich cell's lines are not all the same height:
+    /// EditEngine makes a line as tall as the tallest portion on it
+    /// (<c>ImpEditEngine::CreateLines</c>, <c>editeng/source/editeng/impedit3.cxx:1516-1519</c>,
+    /// over the per-portion maxima <c>RecalcFormatterFontMetrics</c> accumulates at <c>:3160</c>),
+    /// so <see cref="SheetOptimalRowHeights"/> has to know which portions sit on which line. The
+    /// breaking itself is the same run-aware path <see cref="Wrap"/> takes, so a row is measured
+    /// against exactly the lines the cell will be drawn with.
+    /// </remarks>
+    /// <param name="text">The cell's text.</param>
+    /// <param name="portions">The stretches it is split into.</param>
+    /// <param name="face">The cell's own face, which names the layouter to break with.</param>
+    /// <param name="available">The room its lines have, margins already taken off.</param>
+    internal static IReadOnlyList<(int Start, int End)> RichLineRanges(
+        string text,
+        IReadOnlyList<SheetTextPortion> portions,
+        SheetFace face,
+        Length available)
+    {
+        if (text.Length == 0) return [];
+
+        ParagraphLayouter layouter = Layouters.GetOrAdd(
+            face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
+
+        LaidOutParagraph laid = layouter.Layout(
+            Measured(text, portions, scale: 1.0), textAreaWidth: available);
+
+        List<(int Start, int End)> ranges = new(laid.Lines.Count);
+        foreach (LineBox box in laid.Lines)
+            ranges.Add((box.Line.Start, Math.Min(box.Line.End, text.Length)));
+
+        return ranges;
+    }
+
     // --------------------------------------------------------------------------------- fill
 
     /// <summary>
