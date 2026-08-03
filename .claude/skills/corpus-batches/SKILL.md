@@ -276,6 +276,29 @@ A brief that works contains all of:
 Ask for honesty about what is unproven. An overstated claim costs more than an admitted gap,
 because the next worker builds on it.
 
+### "Commit each fix as it lands" is not enough on its own
+
+It was the rule for three rounds, and the third restart still cost two agents eight hours each
+with **zero commits on their branches**. The instruction is not being ignored — it simply does
+not bind, because an agent doing measurement-heavy work has no *fix* to commit for hours. It is
+sweeping a track, fitting a constant, disproving a hypothesis. There is no green moment, so the
+rule never fires, and the index grows to 732 lines.
+
+So say the stronger thing: **commit work in progress, explicitly and often, whether or not it
+works.** A `wip:` commit that builds is worth having; a `wip:` commit that does not build is
+still worth having, because a patch with a failing build is recoverable and an unreachable index
+is not. Rebase or squash later — that costs minutes, and reconstructing a day's exploration
+costs a day.
+
+Ask for a commit at each of these, none of which is a fix:
+
+- a baseline measured, before touching anything
+- a hypothesis disproved, with the measurement that killed it
+- a probe or fixture authored, before it is used
+- any sweep finished, with its numbers
+
+That list is also what makes a killed agent's branch readable by whoever picks the work up.
+
 ### Tell agents to commit each fix as it lands, not at the end
 
 "Commit, do not push" is not enough on its own — it leaves *when* open, and the default is to
