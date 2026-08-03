@@ -1697,7 +1697,7 @@ public sealed class Paginator
         {
             Table = table,
             Area = new DocRect(
-                body.X + table.LeftIndent,
+                body.X + table.LeftWithin(body.Width),
                 body.Y + top,
                 table.WidthWithin(body.Width),
                 height),
