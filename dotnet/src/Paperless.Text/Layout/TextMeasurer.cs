@@ -84,12 +84,24 @@ public sealed class TextMeasurer
 /// </param>
 /// <param name="Width">The width of the line's visible text.</param>
 /// <param name="EndsParagraph">True when this is the paragraph's last line.</param>
+/// <param name="ShrinkAllowance">
+/// How much wider than its room the line was allowed to be, because a justified line's blanks may be
+/// squeezed below their natural width. Zero for every line that was filled the ordinary way.
+/// <para>
+/// It travels with the line because the filler is the only thing that knows it — the room a line was
+/// filled to, and the natural width of the blanks on it — and whatever justifies the line afterwards
+/// needs the same number to know how far it may squeeze. Recomputing it there would mean measuring the
+/// blanks a second time, and a second measurement that disagreed by a twip would put the line's last word
+/// past the margin. See <see cref="JustificationShrink"/>.
+/// </para>
+/// </param>
 public readonly record struct TextLine(
     int Start,
     int End,
     int VisibleEnd,
     Length Width,
-    bool EndsParagraph)
+    bool EndsParagraph,
+    Length ShrinkAllowance = default)
 {
     /// <summary>How many characters the line spans, trailing spaces included.</summary>
     public int Length => End - Start;
@@ -153,8 +165,10 @@ public sealed class LineFiller
     /// <param name="firstLineWidth">The width available to the first line, when it differs.</param>
     /// <param name="language">A BCP 47 tag, for the language-specific break rules.</param>
     /// <param name="tabs">
-    /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
-    /// so a paragraph without one measures exactly as it would without this parameter.
+    /// The paragraph's format, or null. Two things are read from it: its tab stops, consulted only for a
+    /// line that holds a tab, and whether a justified line may squeeze its blanks
+    /// (<see cref="ParagraphFormat.ShrinksJustifiedBlanks"/>). A paragraph that is neither tabbed nor
+    /// justified measures exactly as it would without this parameter.
     /// </param>
     /// <param name="widthOfLine">
     /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
@@ -196,8 +210,10 @@ public sealed class LineFiller
     /// How to shape. The default is what Writer does, so passing nothing gives Writer's line breaks.
     /// </param>
     /// <param name="tabs">
-    /// The paragraph's tab stops, or null when it has none. Only consulted for a line that holds a tab,
-    /// so a paragraph without one measures exactly as it would without this parameter.
+    /// The paragraph's format, or null. Two things are read from it: its tab stops, consulted only for a
+    /// line that holds a tab, and whether a justified line may squeeze its blanks
+    /// (<see cref="ParagraphFormat.ShrinksJustifiedBlanks"/>). A paragraph that is neither tabbed nor
+    /// justified measures exactly as it would without this parameter.
     /// </param>
     /// <param name="widthOfLine">
     /// The width one line may use, asked once per line just before it is filled. Null for the ordinary
@@ -258,6 +274,13 @@ public sealed class LineFiller
         IReadOnlyList<int> opportunities = _breaker.FindBreakOpportunities(text, language);
         HashSet<int> mandatory = [.. _breaker.FindMandatoryBreaks(text, language)];
 
+        // A justified paragraph in a file that asks for Word 2013's justification may overrun its room
+        // by whatever squeezing its blanks recovers. Resolved once per paragraph rather than per
+        // candidate line, so a paragraph that is not justified measures exactly as it did before this
+        // existed.
+        bool shrinks = tabs is { ShrinksJustifiedBlanks: true }
+                       && tabs.Alignment is TextAlignment.Justify or TextAlignment.Distribute;
+
         int lineStart = 0;
         int nextOpportunity = 0;
 
@@ -270,6 +293,7 @@ public sealed class LineFiller
             int chosen = -1;
             Length chosenWidth = Length.Zero;
             int chosenVisibleEnd = lineStart;
+            Length chosenAllowance = Length.Zero;
 
             // Walk the opportunities after the line's start, keeping the last that fits.
             int probe = nextOpportunity;
@@ -286,11 +310,18 @@ public sealed class LineFiller
                 Length width = Measure(
                     text, lineStart, visibleEnd, widthBetween, tabs, lines.Count == 0);
 
-                if (width > limit && chosen >= 0) break;
+                // The allowance belongs to the candidate rather than to the line already chosen: the
+                // word being tried brings a blank with it, and that blank can be squeezed too.
+                Length allowance = shrinks
+                    ? JustificationShrink.AllowanceFor(text, lineStart, visibleEnd, widthBetween)
+                    : Length.Zero;
+
+                if (width > limit + allowance && chosen >= 0) break;
 
                 chosen = end;
                 chosenWidth = width;
                 chosenVisibleEnd = visibleEnd;
+                chosenAllowance = allowance;
                 probe++;
 
                 // A required break ends the line whether or not the text would have fitted: a manual
@@ -300,7 +331,7 @@ public sealed class LineFiller
 
                 // The first opportunity is taken whatever it measures, and chopped below if it does
                 // not fit: an empty line followed by the same problem is not an option.
-                if (width > limit) break;
+                if (width > limit + allowance) break;
             }
 
             if (chosen <= lineStart)
@@ -310,23 +341,32 @@ public sealed class LineFiller
                 chosenVisibleEnd = TrimTrailingSpaces(text, lineStart, chosen);
                 chosenWidth = Measure(
                     text, lineStart, chosenVisibleEnd, widthBetween, tabs, lines.Count == 0);
+                chosenAllowance = shrinks
+                    ? JustificationShrink.AllowanceFor(
+                        text, lineStart, chosenVisibleEnd, widthBetween)
+                    : Length.Zero;
             }
 
             // Nothing between this line's start and its first break opportunity fits. The word is
             // chopped rather than left hanging over the margin — see the remarks on this class.
-            if (chosenWidth > limit
+            if (chosenWidth > limit + chosenAllowance
                 && Chop(text, lineStart, chosen, limit, widthBetween, tabs, lines.Count == 0)
                        is { } cut)
             {
                 chosen = cut;
                 chosenVisibleEnd = cut;
                 chosenWidth = Measure(text, lineStart, cut, widthBetween, tabs, lines.Count == 0);
+
+                // A chop lands inside a word, so the line it leaves holds no blank between two words
+                // and there is nothing left to squeeze.
+                chosenAllowance = Length.Zero;
                 probe = nextOpportunity;
             }
 
             lines.Add(new TextLine(
                 lineStart, chosen, chosenVisibleEnd, chosenWidth,
-                EndsParagraph: chosen >= text.Length));
+                EndsParagraph: chosen >= text.Length,
+                ShrinkAllowance: chosenAllowance));
 
             lineStart = chosen;
             nextOpportunity = probe;

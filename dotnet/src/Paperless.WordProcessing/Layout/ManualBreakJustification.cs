@@ -67,7 +67,11 @@ internal static class ManualBreakJustification
             int to = Math.Min(box.Line.End, text.Length);
             bool endsWithBreak = text.AsSpan(from, Math.Max(0, to - from)).Contains(LineSeparator);
 
-            if (endsWithBreak && box.SpaceAdd != Length.Zero)
+            // Only the stretch. A negative space-add is a line whose blanks were squeezed to bring it
+            // back inside the margin (see `JustificationShrink`), and taking that off would leave the
+            // line's last word past the margin rather than merely un-stretched — the flag asks for a
+            // ragged line, not an overflowing one.
+            if (endsWithBreak && box.SpaceAdd > Length.Zero)
             {
                 lines.Add(box with { SpaceAdd = Length.Zero });
                 changed = true;

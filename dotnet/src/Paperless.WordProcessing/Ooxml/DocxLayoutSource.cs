@@ -474,7 +474,8 @@ public sealed partial class DocxLayoutSource
 
         ParagraphFormat format =
             WordParagraphFormats.Resolve(
-                _styles, properties, _defaultTabInterval, _autoSpacing, _tableStyle);
+                _styles, properties, _defaultTabInterval, _autoSpacing, _tableStyle,
+                _compatibilityMode >= 15);
 
         // After the walk, because reading a note body or a text box re-enters this method and a list
         // counter advanced from inside a nested flow would number the paragraph after it wrongly.

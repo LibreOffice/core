@@ -512,18 +512,44 @@ public sealed class ParagraphLayouter
     /// — <c>IsOneBlock</c> — but only when the paragraph asks for distributed alignment, and a single
     /// unbroken word filling a line is rare enough that leaving it short is the better error.
     /// </para>
+    /// <para>
+    /// <strong>The amount can be negative.</strong> A line the filler admitted on a
+    /// <see cref="TextLine.ShrinkAllowance"/> holds more text than fits at natural widths, and the same
+    /// division run over a negative slack is what squeezes its blanks back inside the margin — see
+    /// <see cref="JustificationShrink"/>. Unlike stretching, it applies to the paragraph's <em>last</em>
+    /// line too: Writer refuses to skip block formatting for a last line whose natural width exceeds the
+    /// paragraph's ("if the last line is longer than the paragraph width, it contains shrinking spaces:
+    /// don't skip block format here", <c>SwTextAdjuster::FormatBlock</c>,
+    /// <c>sw/source/core/text/itradj.cxx</c>), and it has to, because a squeezed line can be the one the
+    /// paragraph ends on.
+    /// </para>
     /// </remarks>
     private static Length Justification(
         TextAlignment alignment, TextLine line, string text, Length available, bool isLast)
     {
-        // The last line of a justified paragraph is not stretched; under distributed alignment it is,
-        // which is the only difference between the two modes.
-        bool justified = alignment == TextAlignment.Distribute
-                         || (alignment == TextAlignment.Justify && !isLast);
-        if (!justified) return Length.Zero;
+        bool justifiable = alignment is TextAlignment.Justify or TextAlignment.Distribute;
+        if (!justifiable) return Length.Zero;
 
         Length slack = available - line.Width;
-        if (slack <= Length.Zero) return Length.Zero;
+
+        if (slack > Length.Zero)
+        {
+            // The last line of a justified paragraph is not stretched; under distributed alignment it is,
+            // which is the only difference between the two modes.
+            if (alignment == TextAlignment.Justify && isLast) return Length.Zero;
+        }
+        else if (slack < Length.Zero)
+        {
+            // Only as far as the filler allowed for, and no further: an overrun this does not account for
+            // is a line that overflowed for some other reason — an over-long word, an inline object — and
+            // squeezing its blanks would not bring it inside the margin anyway.
+            if (line.ShrinkAllowance <= Length.Zero) return Length.Zero;
+            if (Length.Zero - slack > line.ShrinkAllowance) return Length.Zero;
+        }
+        else
+        {
+            return Length.Zero;
+        }
 
         // A tabbed line is left alone. Writer stops justifying the rest of a line at a centre, right or
         // decimal tab (`bDoNotJustifyTab` in `SwTextAdjuster::CalcNewBlock`) and gives each stretch between
