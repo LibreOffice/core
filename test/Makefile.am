@@ -18,9 +18,8 @@ check_PROGRAMS =
 noinst_PROGRAMS =
 else
 check_PROGRAMS = fakesockettest
-noinst_PROGRAMS = fakesockettest
+noinst_PROGRAMS = fakesockettest unittest unithttplib clienttest
 endif
-noinst_PROGRAMS += unittest unithttplib clienttest
 
 include_paths = ${ZLIB_CFLAGS} ${ZSTD_CFLAGS} ${PNG_CFLAGS}
 if ENABLE_SSL
@@ -508,6 +507,9 @@ check_valgrind: all
 	./run_unit.sh --log-file test.log --trs-file test.trs --valgrind
 
 # Run unittest and unithttplib during the normal build.
+if ENABLE_FUZZERS
+all-local:
+else
 all-local: unittest unithttplib clienttest
 	@echo
 	@echo "Running build-time unit tests.  For more thorough testing, please run 'make check'."
@@ -519,6 +521,7 @@ all-local: unittest unithttplib clienttest
 	@UNITTEST=1 ${top_builddir}/test/unithttplib --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
 	@echo "Done test all-local"
 	@$(CLEANUP_COMMAND)
+endif
 
 distclean-local:
 	rm -rf .deps
