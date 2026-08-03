@@ -97,7 +97,6 @@ namespace vclcanvas
     }
 
     Canvas::Canvas( OutputDevice* pOutDev ) :
-        mbHaveAlpha( false ),
         mbSurfaceDirty( true )
     {
         SolarMutexGuard aGuard;
@@ -108,8 +107,6 @@ namespace vclcanvas
             throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 
         mxOutDev = pOutDev;
-
-        mbHaveAlpha = false; // no alpha on surface
     }
 
 

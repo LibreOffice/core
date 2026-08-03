@@ -209,9 +209,6 @@ namespace vclcanvas
         /// For retrieving device info
         VclPtr<OutputDevice> mxOutDev;
 
-        /// When true, content is able to represent alpha
-        bool                                         mbHaveAlpha;
-
         mutable bool        mbSurfaceDirty;
     };
 }
