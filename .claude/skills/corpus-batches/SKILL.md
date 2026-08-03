@@ -158,6 +158,35 @@ magnitude, the gate is measuring a difference in rendering strategy rather than 
 Further progress there needs a pixel metric, not a word count. Say so and switch instruments
 rather than driving the number down by making the output worse.
 
+#### Flag those pages instead of rediscovering them
+
+`scripts/metafile-pages.py` builds the list, and the flagged pages live in
+`dotnet/TODO.metafile-pages.md`. **Check it before working any word-count failure**; four
+separate agents have now spent part of a round re-deriving that a particular page is this
+class.
+
+```sh
+.claude/skills/corpus-batches/scripts/metafile-pages.py /workspace/sample-files out           # full, slow
+.claude/skills/corpus-batches/scripts/metafile-pages.py /workspace/sample-files out --documents-only
+```
+
+The two stages matter and the second is the one that earns the flag:
+
+1. **Which documents embed a metafile.** Cheap and exact — package entries ending `.emf`/`.wmf`,
+   plus the EMF header signature and the WMF placeable magic inside embedded OLE `.bin` parts
+   and inside whole binary documents. An extension scan alone misses the OLE case entirely.
+2. **Which pages actually show the effect.** A page where the reference carries a raster *and*
+   we extract materially more words than it does.
+
+**Embedding a metafile is not evidence of anything by itself** — most play correctly on both
+sides, and several of the documents carrying the largest counts pass their batch outright. A
+flag list built from stage 1 alone would excuse dozens of real defects, which is worse than
+having no list: the point of flagging is to stop chasing what cannot be won, not to stop
+looking.
+
+Re-run it after a round that changes metafile playback, and treat a page dropping off the list
+as the win it is.
+
 ### "The reference is wrong" needs a higher bar than it usually gets
 
 It is occasionally true — LibreOffice really does shape one corpus deck's title per character,
