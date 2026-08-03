@@ -136,6 +136,25 @@ public sealed record PageParagraph : PageBlock
         => Label?.Advance(-_format.FirstLineIndent, _format.StartIndent + _format.FirstLineIndent)
            ?? Length.Zero;
 
+    /// <summary>
+    /// The colour filled behind the whole paragraph, or null when it has none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A paragraph's own background — <c>w:pPr/w:shd</c>, ODF's <c>fo:background-color</c>, RTF's
+    /// <c>\cbpat</c> — which is a different thing from a run's highlight and from a table cell's shade: it
+    /// covers the paragraph's <em>whole</em> text area rather than the width of its words, which is what
+    /// makes a shaded heading read as a bar across the page.
+    /// </para>
+    /// <para>
+    /// Kept beside <see cref="Colour"/> rather than inside <see cref="ParagraphFormat"/> because it is a
+    /// painting attribute and nothing about it changes a measurement: a shaded paragraph breaks its lines
+    /// exactly where an unshaded one would. See <see cref="PageDrawing"/> for the rectangle it fills, which
+    /// is the paragraph's print area and not its frame.
+    /// </para>
+    /// </remarks>
+    public Colour? Shading { get; init; }
+
     /// <summary>The em size the text is set at.</summary>
     public Length EmSize { get; init; } = Length.FromPoints(12);
 

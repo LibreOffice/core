@@ -299,6 +299,34 @@ internal static class WordParagraphFormats
     }
 
     /// <summary>
+    /// The <c>w:shd</c> that decides a paragraph's background, from whichever layer states one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Through the same layering every other paragraph property takes, which is the whole point of
+    /// exposing it: a heading is shaded by its <em>style</em> far more often than by its own
+    /// <c>w:pPr</c>, so a reader that looked only at the direct formatting would find no background on
+    /// the documents that most obviously have one.
+    /// </para>
+    /// <para>
+    /// The element rather than a colour, because resolving the colour needs the theme and the four
+    /// <c>w:themeFill*</c> attributes that go with a fill — which is the reader's business, not the
+    /// layering's.
+    /// </para>
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="paragraphProperties">The paragraph's own <c>w:pPr</c>, or null.</param>
+    internal static XElement? ShadingOf(WordStyles styles, XElement? paragraphProperties)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
+                          ?? styles.DefaultStyleId(WordStyleType.Paragraph);
+
+        return Layer(styles, paragraphProperties, styleId, "shd");
+    }
+
+    /// <summary>
     /// Resolves the character formatting a paragraph's text is set in.
     /// </summary>
     /// <remarks>

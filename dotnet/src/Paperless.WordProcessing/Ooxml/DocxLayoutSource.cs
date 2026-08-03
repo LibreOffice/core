@@ -493,6 +493,7 @@ public sealed partial class DocxLayoutSource
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
+            Shading = ShadeColour(WordParagraphFormats.ShadingOf(_styles, properties)),
             Format = breaksPage || walker.BreaksPageHere
                 ? format with { StartsNewPage = true }
                 : format,
