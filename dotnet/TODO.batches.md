@@ -520,6 +520,34 @@ separately:
   Either way the direction is settled: matching the count means blanking twenty pages of a
   137-page deck. Do not.
 
+### `batch-014` 7/10 and `batch-015` 8/10, and the next real defect is in SmartArt
+
+Measured at the same commit, both matching their recorded figures, every page count exact in
+all five failures. Three over-count (`Thailand17.ppt` 2813/2697, `N2_E_Maestroni_Swarm_COP.pptx`
+5422/5217, `WiGr_2021W_1_Angebot-Nachfrage-Elastizität…pptx` 2209/1988) and were not taken
+apart.
+
+**The other two under-count, which is the direction worth chasing**, and they are near-duplicate
+decks: `schematicplay.pptx` 2040 against 2129 and `schematicplaymar21.pptx` 2034 against 2123.
+Both put the whole deficit on one page — page 7, −86 — and both were measured **with the two
+sink guards disabled**, giving 2040 and 2034 unchanged, so this is not the clip fix. It predates
+it.
+
+The page is a SmartArt diagram (`ppt/diagrams/drawing1.xml`; the text appears in no slide part
+at all). The shapes come out right — four green chevrons and four rounded bars, in the right
+places, indistinguishable from the reference — and **every piece of text in them is drawn
+rotated 90° and stacked into a single vertical band down the middle of the slide**, where the
+overlapping glyphs collapse under extraction. It is one of the most visible defects seen on this
+track and it is invisible to a page-count check.
+
+The suspect, stated as a suspect: all eight `dsp:sp` in that drawing carry
+`<a:xfrm rot="5400000">` while their `<a:bodyPr>` says `vert="horz"` and states no `upright`.
+The reference draws neither the shapes nor the text rotated. So either the `dsp` drawing's
+`rot` is not meant to reach the text at all, or its extent is already stated post-rotation and
+we are applying the turn a second time. **Not verified** — nobody has read our `dsp` transform
+path against LibreOffice's, and on this project the sentence after a measurement has been wrong
+more often than not. The measurement is the rotated band; the explanation above is a lead.
+
 ### `batch-011` was already 10/10, and the recorded 7/10 was stale
 
 Swept at the same commit, unchanged by either fix: **10 of 10, every page count exact.** The
@@ -573,7 +601,7 @@ here did not exist.
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
 | `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
 | `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 · SmartArt text rotated |
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
 | `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 3/5 |
 
