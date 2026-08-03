@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <unordered_set>
+#include <basegfx/numeric/ftools.hxx>
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
@@ -2071,5 +2072,45 @@ void SdDrawDocument::connectPagePreviews()
         pObj->SetMarkProtect(true);
         mpCanvasPage->NbcInsertObject(pObj.get());
     }
+}
+
+Point SdDrawDocument::ConvertCanvasPointToSlide(const Point& rCanvasPoint,
+                                                const SdrPageObj& rPreview)
+{
+    const ::tools::Rectangle aPreviewRectangle = rPreview.GetSnapRect();
+    const SdrPage* pSlide = rPreview.GetReferencedPage();
+    if (!pSlide || aPreviewRectangle.IsEmpty())
+        return Point();
+    const double fScaleX = double(pSlide->GetWidth()) / aPreviewRectangle.GetWidth();
+    const double fScaleY = double(pSlide->GetHeight()) / aPreviewRectangle.GetHeight();
+    return Point(basegfx::fround((rCanvasPoint.X() - aPreviewRectangle.Left()) * fScaleX),
+                 basegfx::fround((rCanvasPoint.Y() - aPreviewRectangle.Top()) * fScaleY));
+}
+
+::tools::Rectangle
+SdDrawDocument::ConvertCanvasRectangleToSlide(const ::tools::Rectangle& rCanvasRectangle,
+                                              const SdrPageObj& rPreview)
+{
+    return ::tools::Rectangle(ConvertCanvasPointToSlide(rCanvasRectangle.TopLeft(), rPreview),
+                              ConvertCanvasPointToSlide(rCanvasRectangle.BottomRight(), rPreview));
+}
+
+::tools::Rectangle
+SdDrawDocument::ConvertSlideRectangleToCanvas(const ::tools::Rectangle& rSlideRectangle,
+                                              const SdrPageObj& rPreview)
+{
+    const ::tools::Rectangle aPreviewRectangle = rPreview.GetSnapRect();
+    const SdrPage* pSlide = rPreview.GetReferencedPage();
+    if (!pSlide || !pSlide->GetWidth() || !pSlide->GetHeight())
+        return ::tools::Rectangle();
+    const double fScaleX = double(aPreviewRectangle.GetWidth()) / pSlide->GetWidth();
+    const double fScaleY = double(aPreviewRectangle.GetHeight()) / pSlide->GetHeight();
+    const Point aTopLeft(
+        aPreviewRectangle.Left() + basegfx::fround(rSlideRectangle.Left() * fScaleX),
+        aPreviewRectangle.Top() + basegfx::fround(rSlideRectangle.Top() * fScaleY));
+    const Point aBottomRight(
+        aPreviewRectangle.Left() + basegfx::fround(rSlideRectangle.Right() * fScaleX),
+        aPreviewRectangle.Top() + basegfx::fround(rSlideRectangle.Bottom() * fScaleY));
+    return ::tools::Rectangle(aTopLeft, aBottomRight);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,6 +71,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svdotext.hxx>
 #include <unotools/tempfile.hxx>
+#include <svx/svdopage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -2065,6 +2066,58 @@ void SdMiscTest::testSlideLinkKeepsOnlyAReadableSourceTime()
     CPPUNIT_ASSERT_EQUAL(u"{22222222-2222-2222-2222-222222222222}"_ustr,
                          pPage->GetSourcePageGuid());
     CPPUNIT_ASSERT_EQUAL(OUString(), pPage->GetSourceModifiedTime());
+}
+
+CPPUNIT_TEST_FIXTURE(SdMiscTest, testCanvasPreviewTransformRoundTrip)
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+
+    // The single slide's preview object on the canvas page.
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    SdrPageObj* pPreview = nullptr;
+    for (size_t i = 0; i < pCanvasPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObject = pCanvasPage->GetObj(i);
+        if (pObject->GetObjIdentifier() == SdrObjKind::Page)
+        {
+            pPreview = static_cast<SdrPageObj*>(pObject);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pPreview);
+
+    const ::tools::Rectangle aPreviewRectangle = pPreview->GetSnapRect();
+    const SdrPage* pSlide = pPreview->GetReferencedPage();
+
+    // The preview's top-left corner maps to the slide origin.
+    Point aSlidePoint
+        = SdDrawDocument::ConvertCanvasPointToSlide(aPreviewRectangle.TopLeft(), *pPreview);
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), aSlidePoint);
+
+    // The preview's center maps close to the slide center. Center() divides by two with
+    // integer truncation, and that truncation is amplified by the preview-to-slide scale
+    // factor, so the result lands a few hundredths of a millimetre from the exact center
+    // rather than on it.
+    aSlidePoint = SdDrawDocument::ConvertCanvasPointToSlide(aPreviewRectangle.Center(), *pPreview);
+    CPPUNIT_ASSERT(std::abs(aSlidePoint.X() - ::tools::Long(pSlide->GetWidth() / 2)) <= 5);
+    CPPUNIT_ASSERT(std::abs(aSlidePoint.Y() - ::tools::Long(pSlide->GetHeight() / 2)) <= 5);
+
+    // A slide-space rectangle survives the round trip within rounding tolerance.
+    const ::tools::Rectangle aSlideRectangle(Point(1000, 2000), Size(4000, 3000));
+    const ::tools::Rectangle aOnCanvas
+        = SdDrawDocument::ConvertSlideRectangleToCanvas(aSlideRectangle, *pPreview);
+    CPPUNIT_ASSERT(aPreviewRectangle.Contains(aOnCanvas));
+    const ::tools::Rectangle aRoundTrip
+        = SdDrawDocument::ConvertCanvasRectangleToSlide(aOnCanvas, *pPreview);
+    CPPUNIT_ASSERT(std::abs(aRoundTrip.Left() - aSlideRectangle.Left()) <= 2);
+    CPPUNIT_ASSERT(std::abs(aRoundTrip.Top() - aSlideRectangle.Top()) <= 2);
+    CPPUNIT_ASSERT(std::abs(aRoundTrip.GetWidth() - aSlideRectangle.GetWidth()) <= 2);
+    CPPUNIT_ASSERT(std::abs(aRoundTrip.GetHeight() - aSlideRectangle.GetHeight()) <= 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

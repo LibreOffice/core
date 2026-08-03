@@ -61,7 +61,9 @@ class Idle;
 class Outliner;
 class SdrOutliner;
 class SdrPage;
+class SdrPageObj;
 class SdrTextObj;
+namespace tools { class Rectangle; }
 class SfxItemPool;
 class Size;
 class SdXImpressDocument;
@@ -1175,6 +1177,17 @@ public:
     SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
 
     SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
+
+    /** Map a point in canvas-page coordinates to the coordinate space of the slide a preview
+        shows. The preview's snap rectangle spans the whole slide, so the mapping is a linear
+        scale plus offset. */
+    static Point ConvertCanvasPointToSlide(const Point& rCanvasPoint, const SdrPageObj& rPreview);
+    static ::tools::Rectangle
+    ConvertCanvasRectangleToSlide(const ::tools::Rectangle& rCanvasRectangle,
+                                  const SdrPageObj& rPreview);
+    static ::tools::Rectangle
+    ConvertSlideRectangleToCanvas(const ::tools::Rectangle& rSlideRectangle,
+                                  const SdrPageObj& rPreview);
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
