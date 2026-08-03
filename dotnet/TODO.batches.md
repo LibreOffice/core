@@ -489,6 +489,37 @@ One residue on that deck is neither: `+46` words on slide 16, which carries thre
 date category axes. A separate question about axis-label density, and it would not move the
 document into band even solved.
 
+### `batch-012` 8/10 and `batch-013` 10/10, and both failures are the reference drawing less
+
+Recorded 6/10 and 9/10; measured at `068b0eb44` they are **8/10 and 10/10**, every page count
+exact. Both remaining failures over-count, and in both the reference's page is measurably the
+*less* complete one — but by two different mechanisms, which is why they are written down
+separately:
+
+- `OnTrac_StarCertificationProgram-3Day.pptx` (1344 against 1045) puts +251 of its +299 on page
+  10, where the reference draws the eight-week action-item table as a **644 × 542 JPEG with a
+  soft mask** and we play the same object as vectors with real text. The rasterisation ceiling
+  again, third instance.
+- `NAS-Infrastructure-Roadmaps-v16.0.pptx` (19219 against 15316, 137 pages exact) is a different
+  thing and the more interesting one. Twenty-odd of its pages carry four `Excel.Sheet.12` OLE
+  objects apiece, **linked rather than embedded** — `<p:oleObj r:id="…"><p:link/>` against a
+  SharePoint URL — each with an `mc:Fallback` holding a `<p:pic>` whose blip is a cached
+  `image*.emf` sitting in the package. We draw those replacement pictures; the reference draws
+  nothing at all, so its page 4 is a title and a footer, 13 words against our 226, with **no
+  images and no vector content on it**. That is measured rather than judged: the fallback
+  picture demonstrably exists in the file and demonstrably is not in the reference PDF.
+
+  What was *not* established is why. The import path is `OleObjectGraphicDataContext`
+  (`oox/source/drawingml/graphicshapecontext.cxx:222-285`), which takes the `mc:Choice` branch
+  when the object carries an `spid` — this one does, `_x0000_s1026` — and expects the VML
+  drawing to supply the replacement, falling back to `mc:Fallback` only through
+  `setMCEState(MCE_STATE::Started)` in `onEndElement`. The deck ships no `vmlDrawing` part.
+  That reading is from a 27.2-alpha checkout and the reference came from 24.2.7.2, so treat it
+  as a lead, not a conclusion.
+
+  Either way the direction is settled: matching the count means blanking twenty pages of a
+  137-page deck. Do not.
+
 ### `batch-011` was already 10/10, and the recorded 7/10 was stale
 
 Swept at the same commit, unchanged by either fix: **10 of 10, every page count exact.** The
@@ -539,8 +570,8 @@ here did not exist.
 | `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | ✅ |
 | `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 · ceiling |
 | `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
-| `batch-012` | 10 | 2403–3036 | pptx:10 | 6/10 |
-| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 9/10 |
+| `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
+| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
 | `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 |
 | `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 |
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
