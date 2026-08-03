@@ -378,15 +378,65 @@ wrong in some particular while its measurement, if it had one, would have held.
 branch, so it is recorded below as merged-pending rather than `✅`. That sweep is the gate the
 words agent runs before advancing, which settles it either way.
 
+## After the sixth round: words batch-004, and what the salvaged patch was worth
+
+Swept 001–005 together at each step, 50 documents, three workers:
+
+| | baseline | + kerning | + text frames |
+|---|---|---|---|
+| `batch-001` | 10/10 | 10/10 | 10/10 |
+| `batch-002` | 10/10 | 10/10 | 10/10 |
+| `batch-003` | 10/10 | 10/10 | 10/10 |
+| `batch-004` | 9/10 | 9/10 | **10/10** |
+| `batch-005` | 7/10 | 7/10 | 7/10 |
+
+The baseline reproduced the briefed 9/10 and 7/10 exactly, and settles `batch-003`,
+which was merged at its agent's figure and had never been swept on the merged branch:
+it holds.
+
+**batch-004's single failure was one defect and it was not a small one.** Word has two
+unrelated ways of positioning a block of text and this tree knew only one. A *text box*
+is an Escher shape with an `FSPA`; a *text frame* — WW8's APO — is a run of ordinary body
+paragraphs carrying `sprmPPc` and friends, delimited by nothing but those sprms ceasing to
+match. Laying them out in the flow cost `07-04.doc` 90 pt at the top of page 1 and spilled
+its last three lines onto a fourth page. **28 of the 66 `.doc` files in this track import
+with at least one**, so the reach is much wider than the one document it was found on.
+
+### The kerning change is neutral, and that is the finding
+
+Measured on its own, before the text-frame work: **46/50 before and 46/50 after, the same
+four documents failing with the same page and word counts to the digit.** It is in anyway,
+on its own evidence — the formats state the property, the fidelity suite is 515/515 with
+it, and every reader was previously kerning text the reference does not — but nothing on
+this corpus can see it, and a later agent should not expect it to have moved anything.
+
+Two things the salvaged patch had wrong, both caught by measuring rather than reading:
+
+- **`GroupState.Clone()` did not carry the flag**, so every RTF nested group lost its
+  paragraph's kerning. One unit test, on the fixture written for a different bug.
+- **ODF's default is kerning *on*, not off.** The patch reasoned from
+  `SwDocShell::Load` → `RemoveAllFormatLanguageDependencies`, which resets the default to
+  the pool's `false`, and that reading is what the source says. It cost fourteen fidelity
+  comparisons, every one of them `.fodt`. Rendering one flat-ODF document three times
+  through the installed `soffice` settled it in a minute: with no attribute the output is
+  byte-identical to `style:letter-kerning="true"` and differs from `"false"`. The other
+  half of the rule is in `SwDocShell::InitNew`, which sets the document default *true*
+  (`docshini.cxx:304`) where the three Microsoft importers each state `false` for
+  themselves.
+
+So the salvaged 570 lines were worth roughly what the skill says a mid-flight diff is
+worth: the shape of the change survived, one of its two central claims did not, and the
+measurement it never had is the only thing that could have told them apart.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 43–59 | doc:5 docx:5 | ✅ |
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
-| `batch-003` | 10 | 87–102 | doc:5 docx:5 | 10/10 in worktree, awaiting merged-branch sweep |
-| `batch-004` | 10 | 102–123 | doc:4 docx:6 | 9/10 · WIP |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 |
+| `batch-003` | 10 | 87–102 | doc:5 docx:5 | ✅ |
+| `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 · WIP |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
