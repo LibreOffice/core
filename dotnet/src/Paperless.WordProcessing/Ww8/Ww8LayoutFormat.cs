@@ -192,6 +192,19 @@ public readonly record struct Ww8LayoutFormat
     /// </remarks>
     public bool? IsStruckThrough { get; init; }
 
+    /// <summary>
+    /// True when the run asks for pair kerning, from <c>sprmCHpsKern</c>.
+    /// </summary>
+    /// <remarks>
+    /// The operand is a font size in half-points — the size at or above which Word kerns — and
+    /// LibreOffice keeps only whether it is nonzero:
+    /// <c>NewAttr(SvxAutoKernItem(static_cast&lt;bool&gt;(nAutoKern), RES_CHRATR_AUTOKERN))</c>
+    /// (<c>SwWW8ImplReader::Read_FontKern</c>, <c>sw/source/filter/ww8/ww8par6.cxx:4184</c>). RTF's
+    /// <c>\kerning</c> is the same statement and lands here too, which is why this is on the shared
+    /// format rather than in either reader.
+    /// </remarks>
+    public bool? AutoKerning { get; init; }
+
     /// <summary>The Windows language id, from <c>sprmCRgLid0</c>.</summary>
     public int? LanguageId { get; init; }
 

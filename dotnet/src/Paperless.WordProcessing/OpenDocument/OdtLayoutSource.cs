@@ -534,7 +534,8 @@ public sealed partial class OdtLayoutSource
             Label = label,
             EmSize = text.Size,
             Language = text.Language,
-            Shaping = new ShapingOptions(Language: text.Language),
+            Shaping = new ShapingOptions(
+                Language: text.Language, DisableKerning: !text.AutoKerning),
             BlanksAreTransparentToHeight = _blanksAreTransparentToHeight,
             Runs = runs,
             Notes = notes,
@@ -686,7 +687,11 @@ public sealed partial class OdtLayoutSource
                 // And so do the two rules, for the same reason: neither changes a width, so a paragraph
                 // underlined end to end is uniform by every measurement test and would be drawn plain.
                 || style.IsUnderlined
-                || style.IsStruckThrough)
+                || style.IsStruckThrough
+                // Kerning, unlike the two rules, does change a measurement — so a run that kerns
+                // inside a paragraph that does not has to survive the shortcut or its width is the
+                // paragraph's answer rather than its own.
+                || style.AutoKerning != paragraph.AutoKerning)
             {
                 varies = true;
             }
@@ -698,7 +703,7 @@ public sealed partial class OdtLayoutSource
                 size,
                 _references.GetValueOrDefault(style.FaceKey),
                 style.Colour ?? paragraph.Colour ?? Colour.Black,
-                new ShapingOptions(Language: style.Language),
+                new ShapingOptions(Language: style.Language, DisableKerning: !style.AutoKerning),
                 rise,
                 style.CaseMap,
                 Highlight: style.Highlight ?? default,

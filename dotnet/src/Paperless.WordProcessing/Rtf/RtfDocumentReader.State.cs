@@ -135,6 +135,19 @@ public sealed partial class RtfDocumentReader
         public bool Strike { get; set; }
         public bool Hidden { get; set; }
 
+        /// <summary>
+        /// True inside a nonzero <c>\kerning</c>: the run's pairs are kerned.
+        /// </summary>
+        /// <remarks>
+        /// <c>\kerningN</c> states the size in half-points at or above which Word kerns, and the RTF
+        /// importer routes it to the very sprm the DOCX one uses for <c>w:kern</c> —
+        /// <c>nSprm = NS_ooxml::LN_EG_RPrBase_kern</c>
+        /// (<c>sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx:190</c>) — so the threshold is
+        /// discarded there in exactly the same place and for exactly the same reason. Off unless
+        /// stated, which is what <c>\kerning0</c> also says.
+        /// </remarks>
+        public bool AutoKerning { get; set; }
+
         /// <summary>True inside <c>\caps</c>: drawn in capitals whatever the text says.</summary>
         public bool Capitals { get; set; }
 
@@ -260,6 +273,7 @@ public sealed partial class RtfDocumentReader
             Hidden = Hidden,
             Capitals = Capitals,
             SmallCapitals = SmallCapitals,
+            AutoKerning = AutoKerning,
             Revised = Revised,
             RevisionAuthor = RevisionAuthor,
             RevisionDate = RevisionDate,
@@ -310,6 +324,7 @@ public sealed partial class RtfDocumentReader
             Hidden = false;
             Capitals = false;
             SmallCapitals = false;
+            AutoKerning = false;
             Revised = false;
             VerticalPosition = 0;
             CharacterStyleId = 0;
@@ -1024,7 +1039,8 @@ public sealed partial class RtfDocumentReader
             state.CaseMap,
             ColourAt(state.HighlightColourIndex),
             state.Underline,
-            state.Strike);
+            state.Strike,
+            state.AutoKerning);
 
         flow.LayoutLength += length;
 
@@ -1147,7 +1163,8 @@ public sealed partial class RtfDocumentReader
             // Trimmed, because the group holds the tab that follows the label as well as the label —
             // and an outline level that shows no number writes the group with nothing but that tab,
             // which trims to nothing rather than to a label made of whitespace.
-            flow.ListMarker.ToString().Trim() is { Length: > 0 } marker ? marker : null);
+            flow.ListMarker.ToString().Trim() is { Length: > 0 } marker ? marker : null,
+            state.AutoKerning);
 
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);
@@ -1197,7 +1214,8 @@ public sealed partial class RtfDocumentReader
             Layout.PageCaseMap.None,
             ColourAt(state.HighlightColourIndex),
             state.Underline,
-            state.Strike);
+            state.Strike,
+            state.AutoKerning);
 
     /// <summary>The escapement <c>\super</c> or <c>\sub</c> put in force, if either did.</summary>
     /// <remarks>

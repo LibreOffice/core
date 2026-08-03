@@ -344,7 +344,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 Label = Label(paragraph, face, font),
                 EmSize = paragraph.Size,
                 Language = paragraph.Language,
-                Shaping = new Text.Shaping.ShapingOptions(Language: paragraph.Language),
+                Shaping = new Text.Shaping.ShapingOptions(
+                    Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning),
                 Runs = runs,
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = FramesOf(fonts, paragraph.Frames),
@@ -381,7 +382,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         => paragraph.ListMarker is { Length: > 0 } marker
             ? PageLabel.Measured(
                 marker, face, paragraph.Size,
-                new Text.Shaping.ShapingOptions(Language: paragraph.Language)) with
+                new Text.Shaping.ShapingOptions(
+                    Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning)) with
             {
                 Font = font,
                 Colour = paragraph.Colour ?? Colour.Black,
@@ -599,7 +601,11 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 // And so do the two rules, for the same reason: neither changes a width, so a paragraph
                 // underlined end to end is uniform by every measurement test and would be drawn plain.
                 || run.IsUnderlined
-                || run.IsStruckThrough)
+                || run.IsStruckThrough
+                // Kerning, unlike the two rules, does change a measurement — so a run that kerns
+                // inside a paragraph that does not has to survive the shortcut or its width is the
+                // paragraph's answer rather than its own.
+                || run.AutoKerning != paragraph.AutoKerning)
             {
                 varies = true;
             }
@@ -611,7 +617,8 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
                 size,
                 fonts.Reference(run.FamilyName, run.Weight, run.IsItalic),
                 run.Colour ?? paragraph.Colour ?? Colour.Black,
-                new Text.Shaping.ShapingOptions(Language: run.Language),
+                new Text.Shaping.ShapingOptions(
+                    Language: run.Language, DisableKerning: !run.AutoKerning),
                 rise,
                 run.CaseMap,
                 Highlight: run.Highlight ?? default,

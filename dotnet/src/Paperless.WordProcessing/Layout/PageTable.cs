@@ -227,6 +227,43 @@ public sealed record PageTable : PageBlock
         foreach (Length column in WidthsWithin(available)) total += column;
         return total;
     }
+
+    /// <summary>
+    /// How a <em>positioned</em> table is aligned across the area it sits in, or null when the table is
+    /// placed by <see cref="LeftIndent"/> like every ordinary one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// OOXML's <c>w:tblpPr</c> and RTF's <c>\tposxc</c> and friends. A positioned table names an edge to
+    /// align against rather than a distance, so it cannot be reduced to an indent while the table is
+    /// being read: the answer depends on the text area's width, which the reader has not got.
+    /// </para>
+    /// <para>
+    /// It matters most where it looks least likely to: a table <em>wider</em> than the text area. Left
+    /// where an indent puts it, its right-hand columns fall off the paper and their ink is clipped away
+    /// — visible as text that neither draws nor extracts, with no other symptom. Centred, as
+    /// <c>w:tblpXSpec="center"</c> asks, the overflow is shared between the two margins and stays on the
+    /// page. 21 of the words track's 134 DOCX files carry one of these, and all fifteen that state a
+    /// spec state <c>center</c>.
+    /// </para>
+    /// </remarks>
+    public FrameHorizontalAlignment? HorizontalPosition { get; init; }
+
+    /// <summary>
+    /// Where the table's left edge sits inside an area of a given width, measured from that area's own
+    /// left edge.
+    /// </summary>
+    /// <param name="available">The width of the area the table sits in.</param>
+    public Length LeftWithin(Length available) => HorizontalPosition switch
+    {
+        FrameHorizontalAlignment.Left => Length.Zero,
+        FrameHorizontalAlignment.Centre => (available - WidthWithin(available)) / 2,
+        FrameHorizontalAlignment.Right => available - WidthWithin(available),
+
+        // Including Offset, Inside and Outside: a stated distance is already an indent, and the two
+        // binding-dependent edges need a page parity that nothing here carries.
+        _ => LeftIndent,
+    };
 }
 
 /// <summary>One row of a table.</summary>

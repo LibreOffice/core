@@ -148,7 +148,7 @@ public static class TableLayouter
             Length height = tops[cell.LastRow] + heights[cell.LastRow] - tops[cell.Row];
 
             DocRect area = new(
-                origin.X + table.LeftIndent + lefts[cell.Cell.Column],
+                origin.X + table.LeftWithin(available ?? table.Width) + lefts[cell.Cell.Column],
                 origin.Y + tops[cell.Row],
                 cell.Width,
                 height);

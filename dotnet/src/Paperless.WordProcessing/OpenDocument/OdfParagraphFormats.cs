@@ -41,6 +41,28 @@ namespace Paperless.WordProcessing.OpenDocument;
 /// <param name="IsStruckThrough">
 /// True when <c>style:text-line-through-style</c> names a style other than <c>none</c>.
 /// </param>
+/// <param name="AutoKerning">
+/// True when pair kerning applies, which for ODF is <em>unless</em> <c>style:letter-kerning</c> says
+/// <c>false</c> — the opposite way round from the three Microsoft formats.
+/// <para>
+/// ODF is the one of the four that states this as the boolean it really is: <c>xmloff</c> maps the
+/// attribute straight onto <c>CharAutoKerning</c> with <c>XML_TYPE_BOOL</c>
+/// (<c>xmloff/source/text/txtprmap.cxx:193</c>), so there is no threshold to discard. What differs is
+/// what a silent document gets. <c>SwDocShell::InitNew</c> sets the document default to <em>true</em>
+/// — "#i16874# AutoKerning as default for new documents",
+/// <c>sw/source/uibase/app/docshini.cxx:304</c> — and the ODF import leaves it alone, while the three
+/// Microsoft importers each state <c>false</c> for themselves.
+/// </para>
+/// <para>
+/// Measured rather than inferred, because the source alone reads the other way: <c>SwDocShell::Load</c>
+/// calls <c>RemoveAllFormatLanguageDependencies</c>, which resets that same default back to the pool's
+/// <c>false</c> (<c>sw/source/core/doc/poolfmt.cxx:322</c>). Rendering one flat-ODF document three
+/// times through the installed <c>soffice</c> settles it: with no attribute the output is
+/// byte-identical to <c>style:letter-kerning="true"</c> and differs from <c>"false"</c> — every word
+/// on the page 0.6 pt further along. Reading the source and stopping there costs fourteen fidelity
+/// comparisons, all of them <c>.fodt</c>.
+/// </para>
+/// </param>
 public readonly record struct OdfTextStyle(
     string? FamilyName,
     Length Size,
@@ -52,7 +74,8 @@ public readonly record struct OdfTextStyle(
     Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
     Colour? Highlight = null,
     bool IsUnderlined = false,
-    bool IsStruckThrough = false)
+    bool IsStruckThrough = false,
+    bool AutoKerning = true)
 {
     /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
     public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
@@ -187,7 +210,8 @@ internal static class OdfParagraphFormats
             // colour attributes beside them are not read: nothing below this can draw a rule other than
             // one text-coloured line, so honouring them would be a promise the model cannot keep.
             IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-underline-style").Value),
-            IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-line-through-style").Value));
+            IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-line-through-style").Value),
+            Cascaded(styles, cascade, OdfNamespaces.Style, "letter-kerning").Value is not "false");
     }
 
     /// <summary>Whether one of ODF's two line-style attributes asks for a line.</summary>
