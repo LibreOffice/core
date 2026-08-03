@@ -2016,8 +2016,9 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
       the other way round for two rounds — "the reference draws none of those labels and we draw
       every one" — and the rendered pages say the opposite. On page 4 of
       `slides/batch-017/pptx/Demick_JetBlue.pptx` LibreOffice draws about twenty `2006-7`-style
-      labels rotated 45° along the axis and we draw **eleven**, so our rhythm thinning is the
-      more aggressive of the two. What produced the wrong reading is the word gate's blind spot
+      labels rotated 45° along the axis and we draw **eleven** — the chart states 21 category
+      points, so the reference settles on a rhythm of 1 and we settle on 2. Both sides rotate to
+      45°, so the difference is one step of `ChartAxisLabels.Collides` and not the arrangement. What produced the wrong reading is the word gate's blind spot
       working in both directions at once: the reference's rotated labels extract as **nothing at
       all** under `pdftotext`, while ours extract as *fragments* — `2012-9` comes back as `12`,
       `20`, `9` — so the page reads +29 words for us and the number has nothing to do with how
