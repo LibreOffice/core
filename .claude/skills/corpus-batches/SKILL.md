@@ -574,3 +574,25 @@ bites when a line overruns by less than a quarter of its blanks, about 9 pt on a
 which no grep can see. Report reach as documents whose rendering changed, measured by rendering
 them. The same applies in reverse when triaging: a property present in three files can still be
 the whole of a batch's residue.
+
+### A marker check must fail loudly, not sit in a success chain
+
+Resolving a merge conflict and then running
+
+```sh
+grep -c '^<<<<<<<' file && git add -A && git commit
+```
+
+commits the conflict markers. `grep` **succeeds when it finds matches**, so the chain runs on
+precisely the failure it was meant to catch. Measured: one merge went in with 268 lines of
+markers in the scoreboard, surfacing only at the next merge.
+
+Assert instead, and check the whole tree rather than the file you were editing — a second
+conflicted file is easy to miss:
+
+```sh
+! git grep -n '^<<<<<<<\|^>>>>>>>' -- dotnet || { echo 'unresolved markers'; exit 1; }
+```
+
+The same shape catches other inverted guards: any `check && commit` where the check reports a
+*count* rather than a verdict is backwards.
