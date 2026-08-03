@@ -1353,8 +1353,14 @@ internal sealed class XlsWorkbookReader
             case BiffPageRecords.DefaultRowHeight:
                 if (_stream.RecordLeft >= 4)
                 {
-                    _stream.ReadUInt16();
-                    _page.SetDefaultRowHeight(_stream.ReadUInt16());
+                    // Bit 0 is the sheet's own fUnsynced — EXC_DEFROW_UNSYNCED,
+                    // sc/source/filter/inc/xltable.hxx:114 — and it is not about the default
+                    // height alone. `XclImpColRowSettings::Convert` answers it by marking every
+                    // row of the sheet manual before it looks at a single ROW record
+                    // (sc/source/filter/excel/colrowst.cxx:212-215), so a sheet that sets it has
+                    // no row Calc will re-measure, whatever the ROW records say.
+                    bool manual = (_stream.ReadUInt16() & 0x0001) != 0;
+                    _page.SetDefaultRowHeight(_stream.ReadUInt16(), manual);
                 }
                 break;
 

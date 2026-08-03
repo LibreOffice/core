@@ -1,5 +1,6 @@
 using Paperless.Core.Extraction;
 using Paperless.Core.Units;
+using Paperless.Text.Fonts;
 
 namespace Paperless.Spreadsheets.Layout;
 
@@ -28,18 +29,24 @@ namespace Paperless.Spreadsheets.Layout;
 /// (<c>column2.cxx:866-892</c>): the font's <em>size</em> times 1.18, plus the cell's top and
 /// bottom margins, less 23 twips, floored at the sheet's minimum. No glyph is measured and no
 /// device is involved, so it can be reproduced exactly. Anything else is measured through
-/// <c>ScColumn::GetNeededSize</c> against a reference device, and that measurement is
-/// demonstrably coarser than the one Calc draws with — the module's TODO records five probe
-/// documents where reproducing the formula with an accurate measurement lands 5.8% out.
+/// <c>ScColumn::GetNeededSize</c> against a reference device.
 /// </para>
 /// <para>
-/// So the split here is Calc's own: a row of standard-only cells is recomputed, and a row holding
-/// anything that would go through <c>GetNeededSize</c> takes the larger of the arithmetic answer
-/// and the height its file already states. That second rule is not a fudge — the arithmetic answer
-/// really is a lower bound in Calc too, because <c>bStdAllowed</c> stays true for a wrapping cell
-/// and its attribute height is written into the array before the per-cell measurement is compared
-/// against it. It means a row we cannot measure never gets shorter than the writer said, which is
-/// the direction that cannot lose text.
+/// <strong>That measurement is coarser than the one Calc draws with, and the coarseness is the
+/// whole of it.</strong> It quantises to whole device pixels three times over — the em size, the
+/// ascent and the descent — and the two margins truncate to a pixel each. Reproducing the formula
+/// with accurate metrics is what put an earlier attempt 5.8% out; reproducing the quantisation
+/// puts it on the number. See <see cref="WrappedHeight"/>, which was fitted to thirty probe rows
+/// and reproduces all thirty exactly.
+/// </para>
+/// <para>
+/// What is still not reproduced is a turned or stacked cell, whose size is its text's *width* put
+/// through an angle, and a cell in several faces, whose lines are each as tall as the tallest
+/// portion on them. A row holding one of those takes the larger of the arithmetic answer and the
+/// height its file already states. That fallback is not a fudge — the arithmetic answer really is
+/// a lower bound in Calc too, because <c>bStdAllowed</c> stays true for such a cell and its
+/// attribute height is written into the array before any measurement is compared against it — and
+/// it means a row this cannot measure is never shorter than the writer made it.
 /// </para>
 /// <para>
 /// Measured on <c>National-Reports.xlsx</c>, whose 117 rows state <c>ht</c> and none states
@@ -100,6 +107,35 @@ internal static class SheetOptimalRowHeights
     /// </remarks>
     private const int TwipsPerPixel = 15;
 
+    /// <summary>The resolution of the device Calc measures a row against.</summary>
+    /// <remarks>
+    /// A headless <c>VirtualDevice</c>'s, and the grid the font metrics are rounded onto before
+    /// the row height is built out of them.
+    /// </remarks>
+    private const int ScreenDpi = 96;
+
+    /// <summary>
+    /// Pixels per twip on that device, as Calc computes it rather than as it is.
+    /// </summary>
+    /// <remarks>
+    /// Not 1/15. <c>ScSizeDeviceProvider</c> derives the figure by converting a thousand twips to
+    /// pixels and dividing — <c>LogicToPixel(Point(1000,1000), MapTwip).Y() / 1000.0</c>,
+    /// <c>sc/source/ui/docshell/sizedev.cxx:48-50</c> — and that conversion returns whole pixels,
+    /// so 666.67 becomes 667 and the ratio becomes 0.067 exactly. The 0.5% is not noise: every
+    /// height below is a pixel count divided by this, and dividing by 1/15 instead puts a
+    /// three-line twelve-point row at 795 twips where LibreOffice writes 791.
+    /// </remarks>
+    private const double PixelsPerTwip = 0.067;
+
+    /// <summary>
+    /// A cell's top or bottom margin in whole pixels on that device.
+    /// </summary>
+    /// <remarks>
+    /// <c>static_cast&lt;tools::Long&gt;(20 * 0.067)</c> is 1, and the truncation is why the pair
+    /// of them is worth 2 pixels rather than the 2.68 the twips would give.
+    /// </remarks>
+    private const int MarginPixels = 1;
+
     /// <summary>
     /// The grid a sheet is laid out on, with its hinted row heights re-derived from its content.
     /// </summary>
@@ -107,6 +143,8 @@ internal static class SheetOptimalRowHeights
     /// <param name="grid">Its geometry as the file states it.</param>
     internal static SheetGrid Apply(SheetLayout sheet, SheetGrid grid)
     {
+        if (grid.RowHeightsAreManual) return grid;
+
         SheetRange range = SheetDecorationArea.Extend(sheet.UsedRange, sheet.Formatting);
         if (!range.IsValid) return grid;
 
@@ -123,7 +161,7 @@ internal static class SheetOptimalRowHeights
         foreach (SheetCellFormat column in formats.ColumnDefaults(firstColumn, lastColumn))
             baseline = Math.Max(baseline, AttributeHeight(column));
 
-        Dictionary<int, RowState> rows = CollectRows(sheet, formats, range);
+        Dictionary<int, RowState> rows = CollectRows(sheet, formats, range, grid.Columns);
 
         SheetAxis axis = grid.Rows;
         int minimum = (int)grid.OptimalMinimumRowHeight.Twips;
@@ -213,17 +251,19 @@ internal static class SheetOptimalRowHeights
         Dictionary<int, RowState> rows, int row, int baseline, int minimum, SheetAxis axis)
     {
         int height = baseline;
-        bool measured = false;
+        bool unmeasurable = false;
 
         if (rows.TryGetValue(row, out RowState state))
         {
             height = Math.Max(state.Attribute, state.CoversEveryColumn ? 0 : baseline);
-            measured = state.NeedsMeasurement;
+            height = Math.Max(height, state.Measured);
+            unmeasurable = state.Unmeasurable;
         }
 
-        // A row Calc would have measured takes the larger of the arithmetic lower bound and what
-        // its file already states, so it can only be at least as tall as the writer made it.
-        if (measured) height = Math.Max(height, (int)axis.SizeAt(row).Twips);
+        // A row holding something Calc would have measured and this cannot takes the larger of the
+        // arithmetic lower bound and what its file already states, so it is never shorter than the
+        // writer made it.
+        if (unmeasurable) height = Math.Max(height, (int)axis.SizeAt(row).Twips);
 
         return Math.Max(height, minimum);
     }
@@ -234,24 +274,26 @@ internal static class SheetOptimalRowHeights
     /// True when the row states a format for every column in range, so nothing falls through to a
     /// column or sheet default.
     /// </param>
-    /// <param name="NeedsMeasurement">
-    /// True when one of its cells would have gone through <c>ScColumn::GetNeededSize</c>.
+    /// <param name="Measured">The tallest wrapped cell in it, in twips, or zero when it has none.</param>
+    /// <param name="Unmeasurable">
+    /// True when one of its cells would have gone through <c>ScColumn::GetNeededSize</c> along a
+    /// path this does not reproduce — a turned or stacked cell, or one in several faces.
     /// </param>
-    private readonly record struct RowState(int Attribute, bool CoversEveryColumn, bool NeedsMeasurement);
+    private readonly record struct RowState(
+        int Attribute, bool CoversEveryColumn, int Measured, bool Unmeasurable);
 
     private static Dictionary<int, RowState> CollectRows(
-        SheetLayout sheet, SheetCellFormats formats, SheetRange range)
+        SheetLayout sheet, SheetCellFormats formats, SheetRange range, SheetAxis columns)
     {
         Dictionary<int, RowState> rows = [];
         Dictionary<int, int> stated = [];
 
-        void Contribute(int row, SheetCellFormat format, bool needsMeasurement)
+        void Contribute(int row, SheetCellFormat format)
         {
             rows.TryGetValue(row, out RowState state);
             rows[row] = state with
             {
                 Attribute = Math.Max(state.Attribute, format.IsStacked ? 0 : AttributeHeight(format)),
-                NeedsMeasurement = state.NeedsMeasurement || needsMeasurement,
             };
         }
 
@@ -267,20 +309,20 @@ internal static class SheetOptimalRowHeights
             // `sc/source/core/data/column2.cxx:917-925`.
             if (IsExcludedByMerge(merges, row, column)) continue;
 
-            Contribute(row, format, false);
+            Contribute(row, format);
             stated[row] = stated.GetValueOrDefault(row) + 1;
         }
 
-        int columns = range.LastColumn - range.FirstColumn + 1;
+        int width = range.LastColumn - range.FirstColumn + 1;
         foreach ((int row, int count) in stated)
         {
-            if (count < columns) continue;
+            if (count < width) continue;
             rows[row] = rows[row] with { CoversEveryColumn = true };
         }
 
         for (int row = 0; row <= range.LastRow; row++)
         {
-            if (formats.RowDefault(row) is { } format) Contribute(row, format, false);
+            if (formats.RowDefault(row) is { } format) Contribute(row, format);
         }
 
         // Only a cell that holds something is measured: `GetNeededSize` returns zero for an empty
@@ -302,18 +344,109 @@ internal static class SheetOptimalRowHeights
                 // The same wrap decision the drawing path makes, so that a row is measured exactly
                 // when its text will be broken — including Calc's rule that a plain number never
                 // breaks however the cell is formatted.
-                bool needsMeasurement =
+                bool breaks =
+                    SheetTextLayout.Breaks(format, cell.Value is not null and not string)
+                    || text.AsSpan().IndexOfAny('\n', '\r') >= 0;
+
+                // A turned or stacked cell, and a cell in several faces, take paths through
+                // `GetNeededSize` this does not reproduce — the first two because their size is
+                // the text's *width* turned through an angle, the third because EditEngine makes
+                // each line as tall as the tallest portion on it.
+                bool opaque =
                     format.IsStacked
                     || format.RotationDegrees != 0
-                    || SheetTextLayout.Breaks(format, cell.Value is not null and not string)
-                    || text.AsSpan().IndexOfAny('\n', '\r') >= 0
                     || sheet.RichText.At(cell.Row, cell.Column, text) is not null;
 
-                if (needsMeasurement) Contribute(cell.Row, format, true);
+                if (!breaks && !opaque) continue;
+
+                rows.TryGetValue(cell.Row, out RowState state);
+
+                int measured = opaque
+                    ? 0
+                    : WrappedHeight(cell, format, text, columns, sheet.MergedRanges);
+
+                rows[cell.Row] = state with
+                {
+                    Measured = Math.Max(state.Measured, measured),
+                    Unmeasurable = state.Unmeasurable || opaque || (breaks && measured == 0),
+                };
             }
         }
 
         return rows;
+    }
+
+    /// <summary>
+    /// The height a wrapping cell asks for, in twips, or zero when its face cannot be resolved.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The EditEngine branch of <c>ScColumn::GetNeededSize</c>
+    /// (<c>sc/source/core/data/column2.cxx:409-600</c>), reproduced with the quantisation that
+    /// makes it Calc's answer rather than a more accurate one. Three roundings decide it and all
+    /// three are device pixels on a 96 dpi virtual device: the em size is rounded to whole pixels,
+    /// the ascent and the descent are each rounded to whole pixels at that em, and the cell's top
+    /// and bottom margins truncate to one pixel each. That is exactly
+    /// <see cref="Paperless.Text.Fonts.MetricGrid"/>, which Writer already had for
+    /// <c>fUsePrinterMetrics</c> — the same rounding on a different device.
+    /// </para>
+    /// <para>
+    /// Derived from thirty probe rows: six font sizes against five wrapped line counts, exported
+    /// through LibreOffice 24.2.7.2's flat ODF. Every one of the thirty is reproduced exactly, and
+    /// so is the odd one out — 18 pt, whose single word is wider than the column and takes two
+    /// lines, giving 805 twips where the arithmetic alone asks for 441.
+    /// </para>
+    /// </remarks>
+    private static int WrappedHeight(
+        ContentTableCell cell,
+        SheetCellFormat format,
+        string text,
+        SheetAxis columns,
+        IReadOnlyList<SheetRange> merges)
+    {
+        if (SheetFonts.For(format) is not { } face) return 0;
+        if (face.Metrics.UnitsPerEm <= 0) return 0;
+
+        Length size = format.FontSize;
+        if (size <= Length.Zero) return 0;
+
+        long width = 0;
+        int span = Math.Max(1, SpanOf(cell, merges));
+        for (int column = cell.Column; column < cell.Column + span; column++)
+            width += columns.SizeAt(column).Twips;
+
+        // `aPaper.setWidth(nDocWidth)`: the column in whole pixels, less a pixel of margin either
+        // side, less the one the gridline takes — "output size is width-1 pixel (due to gridline)"
+        // (`column2.cxx:466-470`). A left- or right-aligned indent comes off as well.
+        long paper = (long)(width * PixelsPerTwip) - (2 * MarginPixels) - 1;
+        if (format.Horizontal is SheetHorizontalAlignment.Left or SheetHorizontalAlignment.Right)
+            paper -= (long)(format.Indent.Twips * PixelsPerTwip);
+
+        if (paper <= 0) return 0;
+
+        int lines = SheetTextLayout.LineCount(
+            text, face, size, Length.FromTwips((long)(paper / PixelsPerTwip)));
+        if (lines <= 0) return 0;
+
+        MetricGrid grid = new(ScreenDpi);
+        long line = grid.ToPixels(face.Metrics.Ascent, face.Metrics.UnitsPerEm, size)
+                    + grid.ToPixels(face.Metrics.Descent, face.Metrics.UnitsPerEm, size);
+        if (line <= 0) return 0;
+
+        return (int)(((lines * line) + (2 * MarginPixels)) / PixelsPerTwip);
+    }
+
+    /// <summary>How many columns a cell covers, taking the widest merge it anchors.</summary>
+    private static int SpanOf(ContentTableCell cell, IReadOnlyList<SheetRange> merges)
+    {
+        int span = Math.Max(1, cell.ColumnSpan);
+        foreach (SheetRange merge in merges)
+        {
+            if (merge.FirstRow != cell.Row || merge.FirstColumn != cell.Column) continue;
+            span = Math.Max(span, merge.LastColumn - merge.FirstColumn + 1);
+        }
+
+        return span;
     }
 
     private static bool IsExcludedByMerge(IReadOnlyList<SheetRange> merges, int row, int column)

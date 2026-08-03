@@ -471,6 +471,47 @@ internal static class SheetTextLayout
         return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
     }
 
+    /// <summary>
+    /// How many lines a cell's text breaks into at a width.
+    /// </summary>
+    /// <remarks>
+    /// For <see cref="SheetOptimalRowHeights"/>, which needs the count and none of the rest of the
+    /// placement — the height it is deriving is what decides where the lines go, so it cannot ask
+    /// for them. A hard break starts a line of its own whatever the width is, which is why the
+    /// text is split before it is wrapped rather than handed to the layouter whole.
+    /// </remarks>
+    /// <param name="text">The cell's text.</param>
+    /// <param name="face">The face it is set in.</param>
+    /// <param name="size">The em size.</param>
+    /// <param name="available">The room its lines have, margins already taken off.</param>
+    internal static int LineCount(string text, SheetFace face, Length size, Length available)
+    {
+        if (text.Length == 0) return 0;
+
+        ParagraphLayouter? layouter = null;
+        int lines = 0;
+
+        foreach (string paragraph in
+                 text.Replace("\r\n", "\n", StringComparison.Ordinal).Split(['\n', '\r']))
+        {
+            if (paragraph.Length == 0 || available <= Length.Zero)
+            {
+                lines++;
+                continue;
+            }
+
+            layouter ??= Layouters.GetOrAdd(
+                face.Reference.FaceKey, _ => new ParagraphLayouter(face.Face));
+
+            LaidOutParagraph laid = layouter.Layout(
+                paragraph, emSize: size, textAreaWidth: available, options: SheetText.NoKerning);
+
+            lines += Math.Max(1, laid.Lines.Count);
+        }
+
+        return lines;
+    }
+
     // --------------------------------------------------------------------------------- fill
 
     /// <summary>

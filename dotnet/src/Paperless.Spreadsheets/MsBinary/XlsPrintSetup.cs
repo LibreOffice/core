@@ -260,10 +260,18 @@ internal sealed class XlsSheetPrintState
         => (40960.0 / Math.Max(fontHeight.Twips - 15, 60)) + 50.0;
 
     /// <summary>Records <c>DEFAULTROWHEIGHT</c>, which is stated in twips.</summary>
-    public void SetDefaultRowHeight(int twips)
+    /// <param name="twips">The default height.</param>
+    /// <param name="manual">
+    /// The record's <c>fUnsynced</c>, which makes every row of the sheet a user's choice rather
+    /// than a writer's measurement — see <see cref="SheetGrid.RowHeightsAreManual"/>.
+    /// </param>
+    public void SetDefaultRowHeight(int twips, bool manual = false)
     {
         if (twips > 0) _defaultRowHeight = Length.FromTwips(twips);
+        if (manual) _rowHeightsAreManual = true;
     }
+
+    private bool _rowHeightsAreManual;
 
     /// <summary>Records a <c>COLINFO</c>, whose width is in 256ths of a character.</summary>
     public void AddColumns(int first, int last, int width, bool hidden)
@@ -418,6 +426,7 @@ internal sealed class XlsSheetPrintState
             new SheetAxis(_defaultRowHeight, _rows))
         {
             ColumnDigits = digits,
+            RowHeightsAreManual = _rowHeightsAreManual,
         };
     }
 

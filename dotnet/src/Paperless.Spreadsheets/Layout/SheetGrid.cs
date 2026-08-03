@@ -326,6 +326,29 @@ public sealed record SheetGrid(SheetAxis Columns, SheetAxis Rows)
     public Length OptimalMinimumRowHeight { get; init; } = StandardRowHeight;
 
     /// <summary>
+    /// True when every row of the sheet is a user's choice, whatever its own flag says.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Only BIFF states this, and it states it in a place that is easy to read as being about
+    /// something else. <c>DEFAULTROWHEIGHT</c> carries its own <c>fUnsynced</c> —
+    /// <c>EXC_DEFROW_UNSYNCED</c>, <c>sc/source/filter/inc/xltable.hxx:114</c> — and
+    /// <c>XclImpColRowSettings::Convert</c> answers it by marking <em>every row of the sheet</em>
+    /// manual before it reads a single <c>ROW</c> record, with the comment "first access to row
+    /// flags, do not ask for old flags" (<c>sc/source/filter/excel/colrowst.cxx:212-215</c>).
+    /// Nothing later clears the bit — the per-row loop only ever sets it — so the sheet has no row
+    /// Calc will re-measure, however its <c>ROW</c> records are flagged.
+    /// </para>
+    /// <para>
+    /// Measured: recomputing without this cost eight <c>.xls</c> documents their page count across
+    /// the sheets track and gained none, which is what led to the record being re-read. BIFF2's
+    /// two-byte <c>DEFAULTROWHEIGHT</c> has no flags field and Calc passes the bit unconditionally
+    /// (<c>ImportExcel::Defrowheight2</c>, <c>impop.cxx:598-604</c>).
+    /// </para>
+    /// </remarks>
+    public bool RowHeightsAreManual { get; init; }
+
+    /// <summary>
     /// The same grid with its columns measured in a font whose digit is worth so many twips.
     /// </summary>
     /// <remarks>
