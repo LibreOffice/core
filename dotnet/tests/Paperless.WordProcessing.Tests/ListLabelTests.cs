@@ -150,6 +150,89 @@ public sealed class ListLabelTests
     }
 
     /// <summary>
+    /// A list tab whose stop the label has already passed goes on to the next stop, not to nothing.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The label's follower really is a tab — Writer's number portion expands to the number plus
+    /// <c>SvxNumberFormat::GetLabelFollowedByAsString</c>'s <c>"\t"</c> — so it goes through
+    /// <c>SwTextFormatter::GetTabStop</c>, which keeps searching past a stop already behind the pen:
+    /// the paragraph's own stops first, then the default interval
+    /// (<c>sw/source/core/text/txttab.cxx:189</c>). Falling back to the label's own end instead is
+    /// what drew <c>1.0Executive&#160;Summary</c> with no gap at all.
+    /// </para>
+    /// <para>
+    /// Measured against LibreOffice's PDF of <c>final-technical-report-template.docx</c>
+    /// (words/batch-007): its <c>Heading 1</c> level states <c>w:ind w:left="360" w:hanging="360"</c>,
+    /// so the stop is 18 pt along, and the 18 pt label <c>2.0</c> is 23.0 pt wide — LibreOffice starts
+    /// the heading at 36.0 pt, the document's default tab interval.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AListTabPastItsStopCarriesOnToTheNext()
+    {
+        PageParagraph paragraph = Overrunning();
+
+        paragraph.Label!.Width.ShouldBeGreaterThan(Length.FromPoints(18));
+        paragraph.Label.Width.ShouldBeLessThan(Length.FromPoints(36));
+
+        // Not the label's own end, and not the passed stop: the next multiple of the default interval.
+        paragraph.Format.LineStart(isFirstLine: true).ShouldBe(Length.FromPoints(36));
+    }
+
+    /// <summary>
+    /// The paragraph's own stops are searched before the default interval, as any other tab's are.
+    /// </summary>
+    [Fact]
+    public void AListTabPastItsStopPrefersTheParagraphsOwnStop()
+    {
+        PageParagraph paragraph = Overrunning(new TabStop(Length.FromPoints(27)));
+
+        paragraph.Format.LineStart(isFirstLine: true).ShouldBe(Length.FromPoints(27));
+    }
+
+    /// <summary>
+    /// A label that fits the room set aside for it still stops at that room's edge.
+    /// </summary>
+    /// <remarks>
+    /// The case the rule above must not disturb, and by far the common one: the tab's own stop is still
+    /// ahead of the label, so the search ends there and the default interval is never reached.
+    /// </remarks>
+    [Fact]
+    public void AListTabWithinItsStopIsUnaffected()
+    {
+        PageParagraph paragraph = Overrunning(label: "1.");
+
+        paragraph.Label!.Width.ShouldBeLessThan(Length.FromPoints(18));
+        paragraph.Format.LineStart(isFirstLine: true).ShouldBe(Length.FromPoints(18));
+    }
+
+    /// <summary>
+    /// A numbered item whose level reserves 18 pt, as Word's own heading numbering does.
+    /// </summary>
+    /// <remarks>
+    /// <c>TabsRelativeToIndent</c> is off because that is what the DOCX reader sets — writerfilter
+    /// clears LibreOffice's <c>TABS_RELATIVE_TO_INDENT</c> for every Word file — and it decides where
+    /// the stops' zero is, so a stop stated at 27 pt means 27 pt from the text area's edge here and
+    /// would mean 45 pt under the other convention.
+    /// </remarks>
+    private static PageParagraph Overrunning(TabStop? stop = null, string label = "viii.")
+        => Item(label, start: 18, firstLine: -18, adjust: measured => measured with
+        {
+            Follow = LabelFollow.ListTab,
+            TabStop = Length.FromPoints(18),
+        }) with
+        {
+            Format = new ParagraphFormat
+            {
+                StartIndent = Length.FromPoints(18),
+                FirstLineIndent = Length.FromPoints(-18),
+                TabsRelativeToIndent = false,
+                TabStops = stop is { } one ? [one] : [],
+            },
+        };
+
+    /// <summary>
     /// The label is drawn, once, at the head of the paragraph's first line and nowhere else.
     /// </summary>
     /// <remarks>

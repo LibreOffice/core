@@ -490,6 +490,28 @@ relative to the border, so the whole grid shifts. Measured on the first vertical
 DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
 right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
 
+### List documents
+
+`list-label-overrun.*` is two numbered lists on one page and the contrast between them is the document.
+The first level's label is `Paragraph 1)` and its `text:list-tab-stop-position` is a quarter inch, so the
+label runs past its own stop; the second's is `1.` against a half-inch stop, so it does not. The tab that
+follows a list label is a real tab — Writer's number portion expands to the number plus
+`SvxNumberFormat::GetLabelFollowedByAsString`'s `"\t"` — and a stop already behind the pen does not mean
+"no gap": the search carries on through the paragraph's own stops and then along the default interval. So
+the overrunning item's text lands at a stop and not against its label, and the fitting item's lands
+exactly where it always did.
+
+Worth knowing before reading the numbers: **the two families disagree about where a tab stop's zero is,
+and both are right.** LibreOffice's `TABS_RELATIVE_TO_INDENT` is on for ODF and off for every Word file,
+so the same document puts the overrunning item's text at 145.7 pt through `.fodt`/`.odt` and at 127.7 pt
+through `.docx`/`.doc`. A fixture that existed in only one family would look like it had pinned a number
+that is really a convention.
+
+There is no `.rtf`, and that is a recorded gap rather than an oversight: the RTF reader takes its label
+from the `{\listtext}` group and reads no level definition at all, so it cannot know the stop and marks
+every label `LabelFollow.Nothing`. On this document LibreOffice puts the overrunning item's text 35 pt
+further along than we do.
+
 ### Mark documents
 
 `revisions.*` and `bookmark-field.*` are the two documents for what a file records *over* its text rather
