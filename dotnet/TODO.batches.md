@@ -557,6 +557,193 @@ and everything alongside it. Worth stating as a habit rather than as a fact abou
 useful act is to re-measure the next batch before opening it.** Three batches of apparent work
 here did not exist.
 
+## Slides 008–017: the whole track measured, and the SmartArt lead was real
+
+Baseline at `db529cfb2`, all 163 documents in one run: **149 match, 14 do not, none the
+reference could not render, and every page count in the track exact.** Every one of the 14 is a
+word-count difference alone.
+
+Per batch, and against what the table above had recorded:
+
+| Batch | recorded | measured | |
+|---|---|---|---|
+| `batch-001`–`007` | ✅ | **68/68** | the gate, reproduced |
+| `batch-008` | 9/10 | 9/10 | |
+| `batch-009` | ✅ | 10/10 | |
+| `batch-010` | 8/10 | 8/10 | |
+| `batch-011` | ✅ | 10/10 | |
+| `batch-012` | 8/10 | 8/10 | |
+| `batch-013` | ✅ | 10/10 | |
+| `batch-014` | 7/10 | 7/10 | |
+| `batch-015` | 8/10 | 8/10 | |
+| `batch-016` | 7/10 | 7/10 | |
+| `batch-017` | 3/5 | **4/5** | the recorded figure was stale |
+
+The briefed numbers reproduced to the digit everywhere except `batch-017`. **The sweep was then
+run a second time on the same binary and came back byte-identical on all 163 rows**, which is
+worth recording once: the instrument is deterministic, so a difference between two sweeps is a
+difference in the program and never in the weather.
+
+### The lead was right about the symptom and wrong about the cause, as usual
+
+`schematicplay.pptx` and `schematicplaymar21.pptx` were handed over as "−86 words on page 7, a
+SmartArt diagram whose text is all rotated 90° into a vertical band", with the suspicion that
+`<a:xfrm rot="5400000">` on the eight `dsp:sp` should not reach the text at all. The symptom
+reproduced exactly. The suspicion is wrong in the way that matters: the shape's rotation *does*
+reach its text, and what nothing read was the **`rot` on the same shape's `dsp:txXfrm`**, which
+every one of those eight carries and which states `-5400000` — an angle *against* the shape's
+rather than a copy of it.
+
+The two add. `Transform2DContext` puts `dsp:txXfrm/@rot` into the same field `a:bodyPr/@rot`
+feeds, adding rather than replacing
+(`oox/source/drawingml/transform2dcontext.cxx:53-58`), and reads the sum back as "the rotation
+beyond compensation of the shape rotation" (`transform2dcontext.cxx:341-344`). So a chevron laid
+on its side by its own `a:xfrm` and compensated by its text area keeps its writing horizontal.
+
+**It turns the laid-out box and does not transpose it**, which is the second thing the fix had to
+get right and the one that would have been easy to get wrong: LibreOffice scales the text box to
+the stated width and height *first* and rotates the result about its centre
+(`svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx:168-191`), so the lines still break
+at the width the file states. Only `TextPreRotateAngle` — what a diagram's `upr` and `grav`
+produce — is applied before the scale and so reshapes the box. Transposing would have broken
+"Sensorimotor" at 32 pt instead of 75 and overflowed every chevron.
+
+Measured: **2040 → 2114 against 2129** and **2034 → 2108 against 2123**, both in band. Reach over
+the slides corpus: 15 of the 112 pptx decks bake a diagram drawing, 13 of those carry a
+`dsp:txXfrm` across 171 shapes, and **3 state a non-zero `rot` on one** — 18 shapes, every one a
+quarter turn against a shape turned the opposite quarter. The third,
+`batch-006/Course Selection 2025-26 Current Grade 09.pptx`, states it on two `rightArrow`
+connectors that carry no text, which is why a batch at full parity was not hiding the same
+defect.
+
+A worked comparison is now in the corpus: `slide-diagram-text-turned.pptx` puts the two cases
+side by side, and the reference's rendering of it and ours **differ on no pixel at all** —
+`pdf-image-diff.py` reports 0.00%. LibreOffice supports `rect` in
+`ConstructPresetTextRectangle`, so both honour the same rectangle. On `schematicplay.pptx` itself
+it does not: `chevron` is not one of that function's fourteen presets, so LibreOffice keeps the
+rotation and *drops the text rectangle*, and its own page 7 wraps the labels as
+"Stag e 1: / Sens orimo tor". Ours is the better output there and scores 240 words against its
+252, which is where the remaining difference on that page comes from.
+
+### The residue is 13 documents and four named mechanisms, three of them ceilings
+
+Every remaining failure is now attributed. Nothing in the list is a small fix.
+
+**1. LibreOffice rasterises an embedded object where we emit searchable text — 8 documents.**
+The recorded ceiling, re-verified and extended. The signature is exact: the reference's page holds
+an image *with a soft mask* that ours does not, at 66–265 dpi, and our page holds the same
+content as vectors and real glyph runs.
+
+| Document | ours / ref | worst page | what the reference holds there |
+|---|---|---|---|
+| `008 …AIRBUS-ATB-journee-CRATB.pptx` | 2240 / 2108 | — | a 692 × 240 JPEG with a soft mask |
+| `010 W3_Case_Study_of_a_Tsunami….ppt` | 910 / 817 | 10, +93 | an 845 × 572 image with a soft mask |
+| `010 Fundamentals_Module_1_basics.ppt` | 1146 / 1099 | 6, +50 | a 529 × 355 image with a soft mask |
+| `012 OnTrac_StarCertificationProgram-3Day.pptx` | 1344 / 1045 | 10, +251 | a 644 × 542 JPEG with a soft mask |
+| `012 NAS-Infrastructure-Roadmaps-v16.0.pptx` | 19219 / 15316 | 4, +213 | nothing: no image and no vector content |
+| `014 Thailand17.ppt` | 2813 / 2697 | 8, +93 | **the same 845 × 572 image** as `W3_Case_Study` |
+| `014 N2_E_Maestroni_Swarm_COP.pptx` | 5422 / 5217 | 7, +205 | 113 images against our 5 |
+| `016 16 - UTM - (NASA).pptx` | 2459 / 2261 | 29, +103 | a 640 × 480 JPEG with a soft mask |
+
+Two things were established this round that were open before.
+
+- **The raster is not in the file.** Both `.ppt` documents were scanned for a stored replacement
+  picture of the reference's exact pixel size — through every zlib stream in the file, not only
+  the raw bytes, because Escher blips and `PPT_PST_ExOleObjStg` are deflated. Neither holds one.
+  So LibreOffice really does produce the bitmap rather than draw one the author supplied, and
+  "our reader is drawing live content where LibreOffice draws a stored thumbnail" is refuted.
+- **It is not the PDF writer either.** `implWriteBitmapEx` downsamples only when
+  `ReduceImageResolution` is on, which is not the default, and the 300 dpi
+  `MetaActionType::FLOATTRANSPARENT` branch (`vcl/source/pdf/pdfwriter_impl2.cxx:452-470`) does
+  not fit resolutions of 66, 103, 126 and 265. The bitmap therefore enters `playMetafile`
+  **already rasterised**, so whatever does it is upstream of PDF export, in the metafile the
+  page hands the writer. That narrows it; it does not name it.
+
+Matching any of these means emitting pixels where we emit text. Do not.
+
+**2. `mc:Choice Requires="a14"`, and this one is finally named — 1 document.**
+`014 WiGr_2021W_1_Angebot-Nachfrage-Elastizität….pptx` (2209 / 1988) had never been taken apart.
+Twenty of its slides wrap their whole body in an `mc:AlternateContent` whose `mc:Choice` requires
+`a14` — DrawingML's 2010 extensions, used here for inline formulas — and whose `mc:Fallback` is
+one shape with an `a:blipFill` picture of that same text and a text body of a single space.
+PowerPoint takes the Choice and so do we; **LibreOffice takes the Fallback**, because its
+supported-namespace list has `a14` commented out with the reason attached —
+*"We do not currently support inline formulas and other a14 stuff"*,
+`oox/source/core/contexthandler2.cxx:243-249`. Its page 28 is therefore a title, a page number
+and a picture: 5 words against our 53.
+
+Measured reach: `Requires` appears in the slides corpus as `p14` 381 times, `v` 45 and `a14`
+**22**, the last across only 3 decks. The other two state it on one slide each and both pass the
+gate. Matching means drawing a picture of text instead of the text. Do not.
+
+**3. Drop shadows are not drawn at all — 1 document, and the widest-reaching lead on this track.**
+`016 pres_ioc_phuket.ppt` **under**-counts, 974 against 1005, with −22 of it on page 5. The
+reference's page 5 draws "National" 14 times and ours 7 — and the reference's 14 are *seven
+pairs*, each pair 6.01 pt apart in **both** axes, read straight out of `pdftotext -bbox`. Ours are
+the odd members of those pairs to within 0.02 pt. So LibreOffice is drawing each shape's shadow,
+text and all, and we draw no shadow at all; the rendered pages show it plainly, black offset
+shadows behind every coin, box and arrow that we leave flat.
+
+This is a feature rather than a fix — offset, colour, transparency and blur, applied to fill,
+outline *and* text — but it is the one lead here with real breadth: **59 of the 112 pptx decks in
+this track state an `a:outerShdw` or `a:innerShdw` on a slide shape, 3296 occurrences between
+them**, and nothing in `Paperless.Presentations` reads any of them. Its effect on the word gate
+is a side effect; its effect on the page is visible at a glance.
+
+**4. Two chart and text-effect gaps — 2 documents.**
+
+- `016 FAAAIandtheArtandScienceofV&Vfinal.pptx` (1201 / 1145) puts +28 on each of pages 13 and 14,
+  and it is not extra text: the same four labels, fragmented. Each is a `TextBox` with
+  `<a:prstTxWarp prst="textArchUp"/>` and a 45° `a:xfrm rot`, and `prstTxWarp` appears nowhere in
+  `dotnet/src`. The reference bends "Automation Autonomy", "Analysis", "Augmentation" and
+  "Assistance" around the dial; we lay them straight, they wrap and collide in the middle of the
+  slide, and `wc -w` counts the wreckage as more words.
+- `017 Demick_JetBlue.pptx` (713 / 617) is the axis-label-density question the last round named
+  and did not chase. Its charts have a two-level date category axis; **the reference draws none of
+  those labels and we draw every one**, split by `pdftotext` into `20` + `06`. LibreOffice
+  suppresses labels that will not fit — it increments a "rhythm" and redraws every *n*-th label
+  until they stop overlapping, then staggers, then gives up
+  (`chart2/source/view/axes/VCartesianAxis.cxx:810-860`), and caps it again by repeated-label
+  count in `estimateMaximumAutoLabelWidth` (`VCartesianAxis.cxx:1595-1620`). That mechanism is
+  read out of the source and **not** verified against the running binary on this document; the
+  measurement is that the reference draws no category labels there and we draw all of them.
+
+### A defect the word gate cannot see, found while doing the above
+
+`016 16 - UTM - (NASA).pptx` is the only one of the 163 whose PDF poppler complains about, and it
+does so 161 times: *"Mismatch between font type and embedded font file"* and then *"No font in
+show"* for every text operation using `/F10`. `pdffonts` reports that font — `JAAAAA+Unifont` — as
+embedded, and the gate's third check passes.
+
+The bytes settle it. The stream we write for it begins `OTTO` and its table directory is
+`CFF `, `OS/2`, `cmap`, `head`, `hhea`, `hmtx`, `maxp`, `name`, `post` — **a CFF-flavoured
+OpenType face, embedded as `/FontFile2` under `/Subtype/TrueType`**
+(`Paperless.Rendering/Pdf/PdfFontCatalogue.cs:311`, which writes that unconditionally). PDF 1.7
+§9.9 wants `/FontFile3` with `/Subtype/OpenType` for those, and a reader that follows it drops
+the font, so 161 glyph runs draw nothing while extracting perfectly. It reaches one document here
+only because Unifont is a last-resort fallback, but it would reach **any** `.otf` face on any
+machine that has one installed.
+
+Left unfixed deliberately: `PdfFontCatalogue` is shared by all three families and
+`PdfFontEmbeddingTests` asserts `/FontFile2` on every descriptor it walks, so the change needs
+that test taught the OpenType case and a sweep of all three tracks — which is more than this
+round had left. It is small and it is precisely located.
+
+### A sweep against a stale binary looks exactly like a sweep that found nothing
+
+Worth adding to the skill's list because it cost a whole slides sweep here and the failure is
+silent. The snapshot rule — copy the CLI so a rebuild cannot race the sweep — is necessary and
+not sufficient: the copy was taken while `tools/Paperless.Cli/bin` still held the binary from a
+*deliberately reverted* build made to prove the new test could fail, and the sweep then measured
+the base commit again. Every check in the skill passed: 163 rows, no duplicates, no `ref-failed`,
+every page count exact. The tell was that the two documents the fix was written for had not moved
+— which is only a tell if you already know what they should read.
+
+Two lines fix it, and `scratchpad/snapshot-cli.sh` now does both: **`md5sum` each of the copied
+assemblies against the built tree**, and **render one document whose number the fix is known to
+change** before starting. Under a shared machine the whole track takes over an hour, so a wasted
+sweep is the most expensive mistake available.
+
 ## Sheets batches 001–004: full parity, swept at `194c2dc9b`
 
 `batch-00[1-4]` swept together on the final binary: **40 of 40**. Four documents changed state
@@ -748,10 +935,10 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
 | `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
-| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 · SmartArt text rotated |
-| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
-| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 3/5 |
+| `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 · ceiling ×2, `a14` fallback ×1 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10; both failures fixed and measured in band, whole-track re-sweep pending |
+| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 · ceiling ×1, shadows, `prstTxWarp` |
+| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 · chart axis-label density |
 
 ### `sheets` — 171 documents, 18 batches
 
