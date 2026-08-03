@@ -596,3 +596,31 @@ conflicted file is easy to miss:
 
 The same shape catches other inverted guards: any `check && commit` where the check reports a
 *count* rather than a verdict is backwards.
+
+### Capture the whole test output, not just the count
+
+The per-project loop this skill recommends is usually written to extract the summary line:
+
+```sh
+dotnet test … | grep -oP 'Failed:\s+\d+, Passed:\s+\d+'
+```
+
+That is enough to *detect* a regression and useless for diagnosing one. Measured: a merge
+reported `Failed: 1, Passed: 290` in `Paperless.Vector.Tests` under load from three concurrent
+agents, and eighteen consecutive re-runs then passed 291/291. The failing test's name was gone,
+because only the summary had been kept — so an intermittent failure that is worth naming became
+an anecdote.
+
+Redirect each run to a file and read the summary from it, so the detail survives a failure that
+may not happen twice:
+
+```sh
+for p in Core Text …; do
+  dotnet test "tests/Paperless.$p.Tests/Paperless.$p.Tests.csproj" --no-build > "$OUT/$p.txt" 2>&1
+  grep -oP 'Failed:\s+\d+, Passed:\s+\d+' "$OUT/$p.txt" | tail -1
+done
+```
+
+And do not let a single unreproduced failure pass silently as "flaky". Say it happened, say it
+did not reproduce, and say you could not name it — a project this dependent on measured counts
+cannot afford a habit of explaining away the ones that disagree.
