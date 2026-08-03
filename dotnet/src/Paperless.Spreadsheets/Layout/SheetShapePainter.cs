@@ -89,7 +89,7 @@ internal static class SheetShapePainter
                 };
 
                 sink.DrawGlyphRun(
-                    run.At(new DocPoint(x, pen + SheetBandText.AscentAt(line.Size))),
+                    run.At(new DocPoint(x, pen + SheetBandText.AscentAt(line.Size, line.Family))),
                     Paint.Solid(Colour.Black));
             }
 
@@ -97,9 +97,11 @@ internal static class SheetShapePainter
         }
     }
 
-    /// <summary>One laid-out line: its run, its size, the height it advances, and its alignment.</summary>
+    /// <summary>
+    /// One laid-out line: its run, its size and face, the height it advances, and its alignment.
+    /// </summary>
     private readonly record struct Line(
-        BandRun? Run, Length Size, Length Height, SheetShapeAlignment Alignment);
+        BandRun? Run, Length Size, string? Family, Length Height, SheetShapeAlignment Alignment);
 
     /// <summary>Shapes every paragraph into the lines it wraps to.</summary>
     private static List<Line> Lines(SheetShapeText text, Length available, double scale)
@@ -113,19 +115,24 @@ internal static class SheetShapePainter
             if (size <= Length.Zero) size = SheetShapeText.DefaultSize;
             size *= scale;
 
-            Length height = SheetBandText.ChartLineHeightAt(size);
+            // The face reaches all three of the measurements below and not only the ink: it sets
+            // the line's height, it sets the advance widths the wrap is decided by, and it sets
+            // the ascent the baseline is placed at. Drawing one face and measuring another is the
+            // worst of the two, because every line then breaks in a place the metrics did not pick.
+            string? family = paragraph.Family;
+            Length height = SheetBandText.ChartLineHeightAt(size, family);
             string body = paragraph.Text;
 
             if (body.Length == 0)
             {
-                lines.Add(new Line(null, size, height, paragraph.Alignment));
+                lines.Add(new Line(null, size, family, height, paragraph.Alignment));
                 continue;
             }
 
-            foreach (string line in Wrap(body, size, available, text.Wraps))
+            foreach (string line in Wrap(body, size, family, available, text.Wraps))
             {
-                if (SheetBandText.Shape(line, size) is not { } run) continue;
-                lines.Add(new Line(run, size, height, paragraph.Alignment));
+                if (SheetBandText.Shape(line, size, family) is not { } run) continue;
+                lines.Add(new Line(run, size, family, height, paragraph.Alignment));
                 anyInk = true;
             }
         }
@@ -136,7 +143,8 @@ internal static class SheetShapePainter
     }
 
     /// <summary>Breaks one paragraph into lines that fit the width.</summary>
-    private static List<string> Wrap(string body, Length size, Length available, bool wraps)
+    private static List<string> Wrap(
+        string body, Length size, string? family, Length available, bool wraps)
     {
         if (!wraps) return [body];
 
@@ -146,7 +154,7 @@ internal static class SheetShapePainter
         foreach (string word in body.Split(' ', StringSplitOptions.None))
         {
             string candidate = current.Length == 0 ? word : current + " " + word;
-            if (current.Length > 0 && Width(candidate, size) > available)
+            if (current.Length > 0 && Width(candidate, size, family) > available)
             {
                 lines.Add(current);
                 current = word;
@@ -160,6 +168,6 @@ internal static class SheetShapePainter
         return lines.Count == 0 ? [body] : lines;
     }
 
-    private static Length Width(string text, Length size)
-        => SheetBandText.Shape(text, size)?.Width ?? Length.Zero;
+    private static Length Width(string text, Length size, string? family)
+        => SheetBandText.Shape(text, size, family)?.Width ?? Length.Zero;
 }

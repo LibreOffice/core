@@ -110,6 +110,18 @@ internal static class SheetFonts
         return Cache.GetOrAdd((family, format.FontWeight, format.IsItalic), Load);
     }
 
+    /// <summary>The upright regular face of one family, or null when none could be read.</summary>
+    /// <remarks>
+    /// For the callers that have a family name and nothing else — a shape's text, whose runs
+    /// carry a typeface but whose weight and slant this path does not model. It shares the cache
+    /// with <see cref="For(SheetCellFormat)"/> rather than keeping its own, because a workbook
+    /// whose text boxes are set in the same face as its cells should resolve it once.
+    /// </remarks>
+    /// <param name="family">The family name, or null for the default.</param>
+    public static SheetFace? ForFamily(string? family)
+        => Cache.GetOrAdd(
+            (string.IsNullOrWhiteSpace(family) ? DefaultFamily : family, 400, false), Load);
+
     /// <summary>
     /// What one digit of a workbook's default font is worth, in twips.
     /// </summary>

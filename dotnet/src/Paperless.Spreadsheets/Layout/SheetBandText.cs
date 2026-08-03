@@ -90,12 +90,53 @@ internal static class SheetBandText
     public static Length ChartLineHeightAt(Length size)
         => Metrics.Value is { } metrics ? metrics.ScaledLineHeight(size) : size * 1.15;
 
+    /// <summary>
+    /// The metrics of a named face, or the furniture's own where it names none.
+    /// </summary>
+    /// <remarks>
+    /// The furniture itself never names one — a header and a column heading are drawn in whatever
+    /// a plain cell would be — but a shape's text does, and it is laid out by the same three calls.
+    /// Returning null for a family that cannot be resolved would silently lose the text; falling
+    /// back to the default face loses only the face, which is what a substitution is.
+    /// </remarks>
+    /// <param name="family">The family name, or null for the furniture's own face.</param>
+    private static (OpenTypeFace? Face, FontReference Reference, LineMetrics? Metrics) FaceFor(
+        string? family)
+    {
+        if (string.IsNullOrWhiteSpace(family)) return (Resolved.Value.Face, Description, Metrics.Value);
+
+        return SheetFonts.ForFamily(family) is { } named
+            ? (named.Face, named.Reference, named.Metrics)
+            : (Resolved.Value.Face, Description, Metrics.Value);
+    }
+
+    /// <summary>The distance from a line's top to its baseline, at a size, in a named face.</summary>
+    /// <param name="size">The em size.</param>
+    /// <param name="family">The family name, or null for the furniture's own face.</param>
+    public static Length AscentAt(Length size, string? family)
+        => FaceFor(family).Metrics is { } metrics ? metrics.ScaledAscent(size) : size * 0.9;
+
+    /// <inheritdoc cref="ChartLineHeightAt(Length)"/>
+    /// <param name="size">The em size.</param>
+    /// <param name="family">The family name, or null for the furniture's own face.</param>
+    public static Length ChartLineHeightAt(Length size, string? family)
+        => FaceFor(family).Metrics is { } metrics ? metrics.ScaledLineHeight(size) : size * 1.15;
+
     /// <summary>Shapes one line, or null when there is no face to shape it with.</summary>
     /// <param name="text">The text.</param>
     /// <param name="size">The em size.</param>
-    public static BandRun? Shape(string text, Length size)
+    public static BandRun? Shape(string text, Length size) => Shape(text, size, null);
+
+    /// <inheritdoc cref="Shape(string, Length)"/>
+    /// <param name="text">The text.</param>
+    /// <param name="size">The em size.</param>
+    /// <param name="family">The family name, or null for the furniture's own face.</param>
+    public static BandRun? Shape(string text, Length size, string? family)
     {
-        if (text.Length == 0 || Resolved.Value.Face is not { } face) return null;
+        if (text.Length == 0) return null;
+
+        (OpenTypeFace? resolved, FontReference reference, _) = FaceFor(family);
+        if (resolved is not { } face) return null;
 
         ShapedText shaped = TextShaper.Default.Shape(face, text);
 
@@ -116,7 +157,7 @@ internal static class SheetBandText
             pen += advance;
         }
 
-        return new BandRun(glyphs, clusters, Description, size, text, pen);
+        return new BandRun(glyphs, clusters, reference, size, text, pen);
     }
 
     /// <summary>

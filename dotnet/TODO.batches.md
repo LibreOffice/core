@@ -1086,6 +1086,103 @@ Worth stating because it changes how each should be worked:
 - **`slides`** has largely stopped being a word-count problem at all: 151 of 163, and **all
   twelve remaining failures are attributed**, eight of them to the word gate's ceiling rather
   than to a defect. That track's next real work is judged by the image check, not by `wc`.
+## Sheets batches 006–010: a merge has two axes, and a shape has a face — swept at `7049756d9`
+
+Whole track swept at `7049756d9` before anything was changed and again after each fix, 171
+documents each time. **The baseline reproduced the briefed 125/171, page error 222 and 134 exact
+page counts to the digit** — the second handover on this track to be exactly right, after two that
+were stale-low.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 125 | **125** |
+| documents with an exactly correct page count | 134 | 134 |
+| total absolute page error | 222 | 222 |
+| every batch | — | unchanged |
+
+**No document changed verdict, and no page count moved in either direction.** That is the honest
+headline: two fixes landed, both measured neutral-or-better across the whole track, and neither
+bought a match. What they bought is words on the page — nineteen documents' word counts moved, and
+the largest single move on this track since the seventh round.
+
+### A merged block reaches back on two axes, and only one was walked
+
+`ScOutputData::GetMergeOrigin` (`sc/source/ui/view/output2.cxx:953`) walks left while a position is
+`bHOverlapped` (`:989`) and then **up** while it is `bVOverlapped` (`:1008`), both gated by the same
+`bDoMerge` — `bIsLeft = (nX == mnVisX1)`, `bIsTop = (nY == mnVisY1)`, and both together for a cell
+covered on both axes (`:958-983`). `DrawCoveredMerge` implemented the left walk and not the up one,
+so a block anchored on the page above vanished from the page its tail falls on.
+
+**The predecessor's salvaged patch was right and its explanation of the previous round's was wrong
+in the way this file keeps recording.** The seventh round wrote `RegChangeReport.xlsx` up as a
+manual-height row whose overflow was redrawn, and refuted itself with a probe built to that shape.
+Row 24 really is 12.75 pt and `customHeight`; what it missed is that the 3 278-character
+description *in* that row is `B24:B58`, a merge thirty-five rows tall, with `B59:B84`, `B85:B97`,
+`B103:B112` and `B113:B135` behind it. The probe could not reproduce it because the probe had no
+merge.
+
+Measured: **2314 words against 3137, and 3060 now**, its pages 2, 3 and 4 going from 5, 294 and 249
+to 505, 446 and 343 against 506, 434 and 344. Twelve documents changed across the track — eight
+closer, one exact (`Aircraft_Database.xlsx` 16504 → 16520 of 16520), three further by 8, 15 and
+1064 words on totals of 2372, 68 113 and 1 293 910, all three still matches.
+
+### A shape's text is set in the face its runs name
+
+`SheetShapeRun` carried a size and no typeface, so every text box on every sheet was shaped in the
+furniture face. `+mn-lt` — four of the seven affected documents write it — is not a family name but
+a reference into the theme's font scheme, and `DrawingFontScheme` already resolved it for the other
+two families.
+
+Measured on `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`: drawn line pitch **12.65 pt
+against the reference's 13.43, and 13.43 now**; words 479 → 519 of 550. **Seven of the track's 109
+package spreadsheets state a typeface on shape text**, all seven were rendered before and after,
+two moved closer, one moved two words further on 3740, four did not move, **none changed verdict**.
+
+### Three failures diagnosed and not fixed, and the first is worth 42 pages of the 222
+
+- **`orbus_togaf_tool_csq.xls` (017), 33 pages against 75: the reference prints a sheet the file
+  does not contain.** Its pages 34–75 are headed `DPCache`, and the workbook's BOUNDSHEET records
+  name six sheets, none of them that. `XclImpPivotCache::ReadPivotCacheStream` makes it — a pivot
+  cache whose source is an external or deleted sheet has no range to point at, so the filter calls
+  `rDoc.MakeTable` and names the new sheet `DPCache`
+  (`sc/source/filter/excel/xipivot.cxx:717-733`). **19% of the track's whole page error, on one
+  document, and it is the reference inventing a sheet.** `DPCache` appears in exactly one of the
+  171 reference PDFs, so the reach was measured rather than assumed.
+- **`INDEX_Digital_Transformation_Toolkits.xls` (010), 18 against 24 with the words matching
+  exactly.** It reads as six blank pages the reference keeps and is not: those six are the narrow
+  first column band of the last sheet and they carry 30, 42, 38, 32, 36 and 16 **images** apiece.
+  `SheetEmptyPages.TouchedByADrawing` would keep them; it does not, because we draw no images from
+  this workbook at all. A census across the track found **twelve documents whose image count
+  differs from the reference's**, four of them badly — `apron-area.xls` 0 against 1670,
+  `INDEX_…xls` 0 against 414, `SIL_TDB648.xlsx` 2 against 320,
+  `Application_Compliance_Checklist_5_Apr_2021.xlsx` 0 against 266 — and `apron-area.xls` is a full
+  match, which is why this had never surfaced. The word gate cannot see a picture.
+- **`TK-Syllabus-Comparison-Document-v2.xlsx` (017), 1314 against 1235 — 36% of the page error on
+  one document.** The words agree; the rows do not. On page 5 both renderings agree to 0.02 pt down
+  to the fifth row, both draw the same 25 wrapped lines breaking at the same words at the same
+  13.45 pt pitch, and the three rows those lines sit in measure 95.5, 135.8 and 122.3 pt in the
+  reference against 105.0, 149.9 and 135.0 here — **1.0995, 1.1038, 1.1038.** The height reserved
+  and the height drawn disagree with each other by the same ratio at three different line counts.
+  These sheets state `ht` on 634–719 rows *without* `customHeight`, so the number is
+  `SheetOptimalRowHeights.WrappedHeight`'s, and its 96 dpi quantisation was fitted to thirty probe
+  rows in one face. Read the caveat in the module TODO before trusting the ratio as a per-line
+  figure: the rows are 21 columns wide and the tallest cell was not the one whose lines were counted.
+
+  A second document carries the same signature and is in batch-009 rather than 017.
+  `airports_6.xlsx` is 18 pages against 17, its pages hold 590, 634, 667 and 644 words against 644,
+  654, 727 and 694 — **about 9% fewer per page** — and its dominant drawn row pitch is **8.99 pt on
+  both sides**, so again the pitch agrees and the fit does not. It states `ht` without
+  `customHeight` on 262 of its 1024 rows. Two documents is not a cluster, but it is the reason to
+  measure this one properly before writing it off as one workbook's oddity.
+
+### What this round says about the track
+
+The seventh round's brief called sheets a *quantity* problem — 222 pages of error over 46 failing
+documents — and asked for the shared shape behind it. Sorted by page delta, there is no shared
+shape: **the top three documents are 139 of the 222 pages**, and they have three unrelated causes,
+one of which is the reference and not us. Below them the distribution is a long ±1 to ±3 tail of
+individual documents. So the quantity reading has run out with the systematic causes that produced
+it, and 42 of the 222 should be struck off as not ours at all.
 ## Sheets batches 005–008: three ways a cell escapes `DrawStrings`, swept at `28d786009`
 
 Whole track swept at `e2e0bdee3` and again after each fix, 171 documents each time. **The
@@ -1487,7 +1584,11 @@ each one or two better than recorded.
 
 ### `sheets` — 171 documents, 18 batches
 
-Measured whole-track at `28d786009`: **125 of 171**, total page error 222.
+Measured whole-track at `7049756d9` and again after the eighth round's two fixes: **125 of 171**,
+total page error 222, 134 exact page counts — unmoved by either, and the per-batch scores below
+were re-proved unchanged. **42 of that 222 is `orbus_togaf_tool_csq.xls`, where the reference
+prints a sheet the file does not contain**; see the round's entry above before treating the total
+as work outstanding.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|

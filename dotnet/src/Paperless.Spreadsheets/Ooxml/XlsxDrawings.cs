@@ -58,8 +58,14 @@ internal static class XlsxDrawings
     /// <param name="theme">
     /// The workbook's theme, for resolving an <c>a:schemeClr</c> in a chart part.
     /// </param>
+    /// <param name="fonts">
+    /// The theme's font scheme, for resolving a shape run's <c>+mn-lt</c> into a real family.
+    /// </param>
     public static SheetDrawings Read(
-        IPackage package, string? sheetPartName, DrawingTheme? theme = null)
+        IPackage package,
+        string? sheetPartName,
+        DrawingTheme? theme = null,
+        DrawingFontScheme? fonts = null)
     {
         ArgumentNullException.ThrowIfNull(package);
         if (sheetPartName is null || package is not OpcPackage opc) return SheetDrawings.Empty;
@@ -101,7 +107,8 @@ internal static class XlsxDrawings
                 };
 
                 if (kind is not { } anchored) continue;
-                if (ReadAnchor(anchor, anchored, opc, images, theme) is { } drawing) drawings.Add(drawing);
+                if (ReadAnchor(anchor, anchored, opc, images, theme, fonts) is { } drawing)
+                    drawings.Add(drawing);
             }
         }
 
@@ -113,7 +120,8 @@ internal static class XlsxDrawings
         SheetAnchorKind kind,
         OpcPackage package,
         Dictionary<string, OpcXml.Relationship> images,
-        DrawingTheme? theme)
+        DrawingTheme? theme,
+        DrawingFontScheme? fonts)
     {
         XElement? picture = Child(anchor, DrawingNamespace, "pic");
         XElement? frame = Child(anchor, DrawingNamespace, "graphicFrame");
@@ -179,7 +187,7 @@ internal static class XlsxDrawings
         // does — so the element is looked up in the spreadsheet drawing namespace and everything
         // inside it in the main one.
         if (shape is not null && Child(shape, DrawingNamespace, "txBody") is { } body
-            && ShapeText(body) is { IsEmpty: false } shapeText)
+            && ShapeText(body, fonts) is { IsEmpty: false } shapeText)
         {
             drawing = drawing with { Text = shapeText };
         }
@@ -308,13 +316,22 @@ internal static class XlsxDrawings
     /// laid out with them and a text box relies on the left one to clear its own border.
     /// </para>
     /// <para>
-    /// A run's size is <c>sz</c> in hundredths of a point, and a run that states none inherits the
-    /// paragraph's <c>a:defRPr</c> before falling back to the body default. Nothing else on the run
-    /// is read: the furniture face is the only one the sheet path can shape with, so a typeface,
-    /// weight or colour would be recorded and then ignored.
+    /// A run's size is <c>sz</c> in hundredths of a point and its face is
+    /// <c>a:rPr/a:latin/@typeface</c>; a run stating neither inherits the paragraph's
+    /// <c>a:defRPr</c> before falling back to the body default. Weight, slant and colour are still
+    /// not read, because nothing downstream would use them.
+    /// </para>
+    /// <para>
+    /// <strong>The typeface is resolved before it is stored, never after.</strong>
+    /// <c>+mn-lt</c> means "the theme's minor Latin face" and is what most authoring tools write;
+    /// handing that string to a font resolver asks for a family that exists nowhere and gets
+    /// whatever fontconfig offers instead — which is how a Calibri text box came to be measured in
+    /// Liberation Sans. <see cref="DrawingFontScheme.Resolve"/> follows the six indirect names and
+    /// leaves every real one alone (<c>Theme::resolveFont</c>,
+    /// <c>oox/source/drawingml/theme.cxx:71</c>).
     /// </para>
     /// </remarks>
-    private static SheetShapeText ShapeText(XElement body)
+    private static SheetShapeText ShapeText(XElement body, DrawingFontScheme? fonts)
     {
         XElement? properties = Child(body, MainNamespace, "bodyPr");
 
@@ -322,8 +339,9 @@ internal static class XlsxDrawings
         foreach (XElement paragraph in body.Elements(XName.Get("p", MainNamespace)))
         {
             XElement? paragraphProperties = Child(paragraph, MainNamespace, "pPr");
-            Length inherited = Points(Child(paragraphProperties, MainNamespace, "defRPr"))
-                               ?? SheetShapeText.DefaultSize;
+            XElement? defaults = Child(paragraphProperties, MainNamespace, "defRPr");
+            Length inherited = Points(defaults) ?? SheetShapeText.DefaultSize;
+            string? inheritedFamily = Family(defaults, fonts);
 
             List<SheetShapeRun> runs = [];
             foreach (XElement run in paragraph.Elements(XName.Get("r", MainNamespace)))
@@ -331,8 +349,11 @@ internal static class XlsxDrawings
                 string text = Child(run, MainNamespace, "t")?.Value ?? string.Empty;
                 if (text.Length == 0) continue;
 
+                XElement? runProperties = Child(run, MainNamespace, "rPr");
                 runs.Add(new SheetShapeRun(
-                    text, Points(Child(run, MainNamespace, "rPr")) ?? inherited));
+                    text,
+                    Points(runProperties) ?? inherited,
+                    Family(runProperties, fonts) ?? inheritedFamily));
             }
 
             // `a:br` is a line break inside a paragraph. Splitting the paragraph at one gives the
@@ -369,6 +390,29 @@ internal static class XlsxDrawings
             // marks itself.
             ClipsVerticalOverflow = Attribute(properties, "vertOverflow") is "clip" or "ellipsis",
         };
+    }
+
+    /// <summary>
+    /// A run's Latin typeface with the theme followed, or null where it states none.
+    /// </summary>
+    /// <remarks>
+    /// Only <c>a:latin</c>. <c>a:ea</c> and <c>a:cs</c> are the East Asian and complex-script
+    /// members of the same triple, and choosing between the three is script itemisation, which
+    /// this path does not do — picking one arbitrarily would set a Latin body in a CJK face on
+    /// every file that states all three.
+    /// </remarks>
+    private static string? Family(XElement? properties, DrawingFontScheme? fonts)
+    {
+        if (Child(properties, MainNamespace, "latin")?.Attribute("typeface")?.Value is not
+            { Length: > 0 } stated)
+        {
+            return null;
+        }
+
+        // Without a scheme an indirect name resolves to nothing rather than to itself, which is
+        // the same choice `DrawingCharacterStyle` makes and for the same reason: falling through
+        // to the default face is a substitution, and asking for "+mn-lt" is a wrong answer.
+        return fonts is { } scheme ? scheme.Resolve(stated) : (stated[0] == '+' ? null : stated);
     }
 
     /// <summary>A run's <c>sz</c>, in hundredths of a point, or null where it states none.</summary>

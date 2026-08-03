@@ -214,6 +214,123 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the eighth sheets sweep found: a merge has two axes, and a shape has a face
+
+Swept whole at `7049756d9`: **125 of 171**, page error 222, exact page counts 134 — the briefed
+figures to the digit, for the second handover running.
+
+### A merged block reaches back on two axes, and only one was walked
+
+`DrawCoveredMerge` walked left to a merge's origin and never up, so a block anchored on the page
+above vanished from the page its tail falls on. It is one function in Calc, not two:
+`ScOutputData::GetMergeOrigin` (`sc/source/ui/view/output2.cxx:953`) walks left while the position
+is `bHOverlapped` (`:989`) and then up while it is `bVOverlapped` (`:1008`), both gated by the same
+`bDoMerge` — `bIsLeft = (nX == mnVisX1)` for a horizontally overlapped cell, `bIsTop =
+(nY == mnVisY1)` for a vertically overlapped one, and both together for a cell covered on both
+axes (`:958-983`). `GetOutputArea` subtracts the rows between (`:1237-1254`), which puts the anchor
+above the top of the paper and leaves the tail on it.
+
+**The previous round's diagnosis of `RegChangeReport.xlsx` was right about the row and wrong about
+the cell.** Row 24 really is 12.75 pt and `customHeight` — that is why a probe built to that shape
+rendered on one page — but the 3 278-character description in it is `B24:B58`, a merge **thirty-five
+rows tall**, and `B59:B84`, `B85:B97`, `B103:B112` and `B113:B135` are four more of the same. The
+row was never the unit; the block was.
+
+Measured on the document: **2314 extractable words against 3137, and 3060 now**, its pages 2, 3 and
+4 going from 5, 294 and 249 words to 505, 446 and 343 against the reference's 506, 434 and 344.
+Page 6 is the residue and is a different question — its block's tail lands there because the
+reference's page 6 starts one row earlier than ours, so nothing on our page 6 is covered by it.
+
+Whole-track before and after, 171 documents each time: **no page count and no verdict changed**;
+twelve documents' word counts moved, eight of them closer, one to exact
+(`Aircraft_Database.xlsx` 16504 → 16520 of 16520), and three further by 8, 15 and 1064 words on
+totals of 2372, 68113 and 1 293 910 — all three still matches. `features/sheet-merge-down-break.fods`
+states both halves and was checked against LibreOffice 24.2.7.2's own PDF for it.
+
+### A shape's text is set in the face its runs name
+
+`SheetShapeRun` carried a size and no typeface, and `SheetShapePainter` shaped every box in the
+furniture face. The face is not only the ink: it sets the line height, it sets the advance widths
+the wrap is decided by, and it sets the ascent the baseline sits at, so a body drawn in one face
+and measured in another breaks every line in a place its own metrics did not pick.
+
+**`+mn-lt` is the common case and is not a family name.** It means "the theme's minor Latin face"
+and is resolved through `a:fontScheme` (`Theme::resolveFont`, `oox/source/drawingml/theme.cxx:71`);
+handed literally to a resolver it asks for a family that exists nowhere. `DrawingFontScheme` in
+`Paperless.Ooxml` already did this for the other two families, so the fix is a read and a thread
+rather than new machinery.
+
+Measured on `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`, whose methodology note is one
+text box stating `+mn-lt` against a Calibri theme: its drawn line pitch was **12.65 pt against the
+reference's 13.43 and is 13.43 now**, and its extractable words went **479 to 519 of 550**. Seven of
+the track's 109 package spreadsheets state a typeface on shape text — four `+mn-lt`, two Arial, one
+Webdings — and all seven were rendered before and after: SSRO and `SIL_TDB648.xlsx` (7668 → 7680 of
+7678) moved closer, `arp-sop-300-Exhibit-A-Table-Templates.xlsx` moved 2 words further on 3740, and
+four did not change at all. **None changed verdict**, which is the honest headline: this is a
+correctness fix with no match to show for it on this corpus.
+
+`features/sheet-shape-theme-font.xlsx` is LibreOffice's own `sheet-shape-text.xlsx` with the
+theme's minor Latin face changed to Calibri and two text boxes in place of one, the first naming
+its face indirectly and the second naming Times New Roman. LibreOffice's own PDF for it embeds
+`Carlito-Regular`, `LiberationSerif` and `LiberationSans` and wraps each box after "the" and "run";
+we now produce the same three faces and the same two breaks.
+
+### `orbus_togaf_tool_csq.xls`: the reference invents a sheet, and it is 42 pages of it
+
+**33 pages against 75, and the 42 missing ones are a sheet the file does not contain.** The
+reference's pages 34 to 75 are headed `DPCache`; the workbook's BOUNDSHEET records name six sheets
+— `Instructions`, `Vendor Product Information`, `KTCs & TCRs`, `Evaluation Summary`,
+`Audit Checklist`, `Additional Features ` — and none of them is it.
+
+`XclImpPivotCache::ReadPivotCacheStream` creates it: a pivot cache whose source is an external or
+deleted sheet has no range to point at, so the filter calls `rDoc.MakeTable`, names the new sheet
+`DPCache` and redirects the cache's source range into it
+(`sc/source/filter/excel/xipivot.cxx:717-733`). LibreOffice then prints it, and it is 42 pages of
+cache rows. Nothing in the file asks for those pages and nothing we could read would produce them.
+
+This is worth stating precisely because it is **19% of the track's whole page error on one
+document**, and because "the reference is wrong" needs a higher bar than it usually gets: the
+mechanism is named, the sheet is demonstrably absent from the file, and the reach was measured
+rather than assumed — `DPCache` appears in **exactly one** of the track's 171 reference PDFs.
+
+### `INDEX_Digital_Transformation_Toolkits.xls`: six pages of pictures we never draw
+
+18 pages against 24 with the words matching **exactly** (1982 against 1982), which reads as six
+blank pages the reference keeps and is not. The last sheet's two columns are 0.2374 in and
+7.0555 in against a 7.1 in printable width, so they do not fit side by side and the sheet takes two
+column bands; the reference's pages 13 to 18 are the narrow first band, and they carry **30, 42, 38,
+32, 36 and 16 images each** — the small icons anchored at `svg:x="0in"`. `HasAnyDraw` keeps them.
+
+Our `SheetEmptyPages.TouchedByADrawing` would keep them too. It does not, because **we draw no
+images from this workbook at all**: `pdfimages -list` reports images on every one of the reference's
+24 pages and none anywhere in ours. So this is not an empty-page rule at all — it is the Escher
+picture path on this one `.xls`, and the six pages are a symptom.
+
+### `TK-Syllabus-Comparison-Document-v2.xlsx`: rows 10.4% too tall, lines exactly right
+
+**1314 pages against 1235 — 36% of the track's page error on one document**, and its sibling
+`tk-syllabus-comparison-document-v5.xlsx` is 849 against 855 in the other direction. The words agree
+(258 720 against 258 369), so this is pagination alone.
+
+The first divergence is page 6 and it is cumulative: on page 5 both renderings agree to 0.02 pt down
+to the fifth row and drift from there. What is drifting is measured and narrow:
+
+- **The wrapped lines are identical.** Between the same two markers on page 5 both draw 25 lines,
+  breaking at the same words, at a pitch of **13.45 pt in both**.
+- **The rows those lines sit in are not.** Three consecutive rows measure 95.5, 135.8 and 122.3 pt
+  in the reference and 105.0, 149.9 and 135.0 pt here — **1.0995, 1.1038 and 1.1038**.
+
+So the row height reserved and the line height drawn disagree with each other, by a ratio that is
+the same for rows of three different line counts. Both renderings set the body in Carlito and both
+PDFs embed it, so this is not a substitution. The sheets state `ht` on 634 to 719 rows **without**
+`customHeight`, which is the case `SheetOptimalRowHeights` recomputes — so the number in question is
+ours, and `WrappedHeight`'s pixel quantisation (`MetricGrid.ToPixels`, 96 dpi) is where to look.
+That figure was fitted to thirty probe rows in one face; Carlito's `OS/2` 1946/558 over 2048 units
+is not among them. Note the caveat that comes with it: the row here is 21 columns wide and its
+height is set by whichever cell needs most, so the tallest cell was not the one whose lines were
+counted above. Confirm which column sets each of the three rows before trusting the ratio as a
+per-line figure.
+
 ## What the seventh sheets sweep found: three ways a cell escapes `DrawStrings`
 
 Swept whole at `e2e0bdee3`: **122 of 171**, page error 222, exact page counts 134 — the briefed
@@ -316,7 +433,9 @@ same shape as the horizontal lead-in already implemented.
   (`:257`). Nothing here reads cell comments for layout in any format, so this is a feature rather
   than a wiring change, and no other corpus document was shown to need it.
 - **A sheet shape's text is drawn in one face whatever it states**, which `SheetShapeText` already
-  records as a limitation. Measured on `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`,
+  records as a limitation. *(Fixed in the eighth round — see above. The measurement below stands and
+  the pitch is 13.43 pt on both sides now; the document still fails the word gate, at 519 of 550.)*
+  Measured on `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`,
   whose 806 pt notes box states `<a:latin typeface="+mn-lt"/>` against a theme whose minor Latin
   face is Calibri: the reference's line pitch is 13.5 pt and ours 12.5, which inverts to Carlito's
   line box against Liberation Sans's. Every line therefore breaks in a different place and the
@@ -811,7 +930,9 @@ shape text and 1083 words of it between them; on
 box, that was **163 words against 550, now 386**. `Layout/SheetShapeText.cs` models it,
 `Layout/SheetShapePainter.cs` draws it.
 
-**What that shape text still gets wrong, and it is one thing.** The runs name `+mn-lt` — the
+**What that shape text still gets wrong, and it is one thing.** *(Closed in the eighth round: a run
+carries its typeface now and `+mn-lt` is resolved through the theme's font scheme before it is
+stored. What follows is the diagnosis as it stood.)* The runs name `+mn-lt` — the
 theme's minor Latin face, Calibri, so Carlito — and the sheet path can shape in one face only, so
 they are set in Liberation Sans. Carlito is about 9% narrower at the same size, so our lines run
 further right and more of them fall off the paper, which is the whole of the remaining 386-against-
