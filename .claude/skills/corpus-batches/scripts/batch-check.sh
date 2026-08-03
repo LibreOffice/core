@@ -77,7 +77,14 @@ one() {  # one <index>
       op=$(pdfinfo "$o" 2>/dev/null | awk '/^Pages/{print $2}')
       ow=$(pdftotext "$o" - 2>/dev/null | wc -w)
       of=$(pdffonts "$o" 2>/dev/null | tail -n +3 | grep -c .)
-      un=$(pdffonts "$o" 2>/dev/null | tail -n +3 | awk '$(NF-3)=="no"' | wc -l)
+      # The `emb` column, found by its position from the *right*: pdffonts ends every row with
+      # emb, sub, uni and a two-field object id, so `emb` is NF-4 and not NF-3. Counting from
+      # NF-3 reads `sub` instead, and it happens to give the right answer only for a font whose
+      # type name is two or three fields — "Type 1", "Type 1C", "CID Type 0C". Every font
+      # Paperless writes is "TrueType", one field, so this check tested nothing about our own
+      # output until it was corrected; measured on a PDF embedding ten faces and naming an
+      # eleventh, which it scored as zero unembedded.
+      un=$(pdffonts "$o" 2>/dev/null | tail -n +3 | awk 'NF>=8 && $(NF-4)=="no"' | wc -l)
     fi
     if [ -f "$r" ]; then
       rp=$(pdfinfo "$r" 2>/dev/null | awk '/^Pages/{print $2}')

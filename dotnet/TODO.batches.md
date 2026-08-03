@@ -1322,6 +1322,113 @@ unfixed pagination error on the same document.
   not pretty-print inside `text:p` — but it makes a hand-written `.fodt` fixture lay out
   differently from the same file through `soffice`, which is a trap for the next agent who writes
   one.
+## After the eighth round: slides drop shadows, and two recorded leads that were backwards
+
+Whole slides track swept before and after at `e2e0bdee3`, 163 documents each time. The baseline
+reproduced the briefed **151/163** to the digit — same twelve failures, no `ref-failed`, every
+page count exact — which is the tell that the instrument and the base are both right.
+
+| | baseline | after |
+|---|---|---|
+| documents matching | 151 | **152** |
+| pages with a correct count | 163/163 | 163/163 |
+| documents with an unembedded face | 0 | 0 |
+
+**Exactly four rows of the 163 changed, and all four are the intended ones.** Three of the four
+are documents that already matched and now sit closer to the reference:
+
+```
+71393_pp7.ppt                            2161/2171  ->  2172/2171   match  -> match
+redac-sas-201403-ppt-portfolio-rev-sim   1999/2026  ->  2030/2026   match  -> match
+16 - UTM - (NASA).pptx        fonts 10/11 -> 11/11               words  -> words
+pres_ioc_phuket.ppt                       974/1005  ->   998/1005   words  -> match
+```
+
+### Drop shadows: a feature, and the three things that decide whether it helps or hurts
+
+Nothing drew a shadow at all, on any of the three readers. LibreOffice draws the shape *again* —
+offset, every colour replaced by one, behind itself — and that shape of the feature settles three
+questions a "grey copy of the outline" reading gets wrong. All three were measured; two of them
+would have made the track worse if guessed.
+
+**The colour is replaced and the transparency is not.** Page 34 of
+`Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx` is covered by a rectangle whose
+gradient runs from zero to 30% alpha and whose shadow states no distance, so the copy sits exactly
+underneath it. Cast as a flat opaque fill it tinted the whole slide and that page's unaccounted
+ink went **0.18% → 13.52%**; cast with the fill's own alpha it is invisible, as the reference
+shows. The document's whole-file ink went 19.73 → 38.85 → **19.51** across the two attempts.
+
+**Blur decides whether the shadow's text is text**, and this is the one that would have cost a
+sweep. With a non-zero radius LibreOffice rasterises the shadow, so a themed shadow reaches the
+reference PDF as a greyscale image with a soft mask and *no words* — verified on `passiv.pptx`,
+whose every page carries a 918 × 272 gray JPEG plus smask and whose count is unchanged at
+1256/1256. With a zero radius it stays vector and the text extracts, which is how
+`pres_ioc_phuket.ppt` comes to draw "National" fourteen times in seven pairs 6.01 pt apart.
+Drawing the shadow's text under blur would have added words to every deck with a themed shadow.
+
+**Most shadows come from the theme.** 1120 slide shapes across the 112 corpus `pptx` decks reach
+one through `p:style/a:effectRef` against 352 that state one on their own `p:spPr`.
+
+The reach figure in the handover — "59 of 112 decks state a shadow, 3296 occurrences" — is an
+order of magnitude high, in exactly the way the skill warns about. Parsed rather than grepped, and
+counting only what a renderer acts on, it is **38 decks and 1472 slide shapes**: most of the 3296
+are `a14:hiddenEffects` (1740, which is PowerPoint's record of effects it is *not* drawing) and
+unreferenced theme entries.
+
+**One rule was measured rather than reasoned, and the source alone gets it backwards.**
+`EffectProperties::assignUsed` replaces the whole effect list when a shape states any effect, which
+says `<a:effectLst/>` or a lone `a:glow` drops the theme's shadow. LibreOffice 24.2.7.2 keeps it in
+both cases — its flat-ODF export of the new `slide-drop-shadow.pptx` gives the themed 38% black to
+the plain shape, the empty-list shape and the glow shape alike. So the first source that states an
+*outer shadow* wins, not the first that states anything.
+
+Left undone and stated: the blur itself, which needs offscreen rasterisation this layer has no
+access to, so a soft shadow is drawn hard; and a picture's silhouette, so a picture casts a shadow
+of its frame and only when its bytes are a JPEG, which has no alpha channel and for which the two
+coincide.
+
+### Two recorded leads that the rendered pages contradict
+
+Both were carried for two rounds. Both were reached from a word count, and both are backwards.
+
+**`Demick_JetBlue.pptx` — "the reference draws none of those labels and we draw every one".** The
+opposite. The chart states 21 category points; LibreOffice draws about twenty rotated 45° along the
+axis and **we draw eleven**, so our rhythm thinning is the more aggressive of the two. What
+produced the wrong reading is the word gate's blind spot working in both directions at once: the
+reference's rotated labels extract as *nothing at all* under `pdftotext` and ours extract as
+*fragments* — `2012-9` comes back as `12`, `20`, `9` — so the page reads +29 words for us while we
+put fewer marks on it. Two other differences on that page are real and easier than the density
+question: the reference draws a secondary value axis with its own title and we draw neither, and
+our legend collides with the category-axis title.
+
+**`a:prstTxWarp` — "appears nowhere in `dotnet/src`", with the implication of a wide gap.** True
+and narrow. The attribute appears on 39 of the 112 corpus `pptx` decks, 722 times — but **709 of
+those are `textNoShape`**, the identity, and three more are `textPlain`. Ten occurrences across two
+decks bend anything, and eight of the ten are `FAAAIandtheArtandScienceofV&Vfinal.pptx`.
+
+### The `/FontFile2` defect is real, and its stated mechanism is only the surface
+
+The measurement reproduced exactly: `16 - UTM - (NASA).pptx` is the one document of 163 whose PDF
+poppler complains about, 161 times, and all three gate checks pass while 161 glyph runs draw
+nothing. The cause is not the stream key alone. Correcting it to `/FontFile3` with
+`/Subtype /OpenType` under a `/Type1` dictionary — what PDF 1.7 §9.9 asks for — makes the file
+valid and still draws nothing useful, because a Type1 dictionary selects glyphs by *name* through
+the CFF charset while our codes are glyph indices: an 18 pt Loma probe came back as a row of tofu
+boxes, and so did the same probe before the change. And Unifont, which is what a last-resort
+fallback reaches, is **CID-keyed**, which no simple font dictionary admits at all.
+
+So a CFF-flavoured program is now dropped rather than misdescribed. That buys a valid file and 161
+fewer reader errors, not correct outlines; the complete fix is a `/Differences` glyph-name encoding
+for name-keyed faces and a composite `/Type0` font with Identity-H codes for CID-keyed ones, and
+neither is a line's change. `CompactFontFormat` reads a CFF top dictionary for the `ROS` operator
+so the two cases can be told apart when someone does it.
+
+**A hole in the gate found on the way.** `batch-check.sh`'s third check is
+`pdffonts … | awk '$(NF-3)=="no"'`, which reads the `sub` column rather than `emb` for a row whose
+type is a single word. Every font Paperless writes is `TrueType`, one word — so **the font
+embedding check has never tested our own output**. It fires correctly for `Type 1`, `Type 1C` and
+`CID Type 0C`, whose names are two or three fields. Worth fixing in the script rather than in a
+document.
 
 ### `words` — 200 documents, 21 batches
 
@@ -1375,8 +1482,8 @@ each one or two better than recorded.
 | `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
 | `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 · ceiling ×2, `a14` fallback ×1 |
 | `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | ✅ |
-| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 · ceiling ×1, shadows, `prstTxWarp` |
-| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 · chart axis-label density |
+| `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | **8/10** · ceiling ×1, `prstTxWarp` ×1 |
+| `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 · chart labels — see the correction below |
 
 ### `sheets` — 171 documents, 18 batches
 

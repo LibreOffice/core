@@ -370,7 +370,48 @@ internal sealed partial class OdpSlideLayout
             Picture = Picture(element, bounds),
             Line = Line(cascade),
             Text = Text(element, outline.TextRectangle, placement, cascade),
+            Shadow = Shadow(cascade),
         };
+    }
+
+    /// <summary>
+    /// The drop shadow a shape casts, from its graphic properties.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF states in five attributes exactly what the model holds, which is not a coincidence:
+    /// they are what LibreOffice's own <c>SdrShadowAttribute</c> is written out as, so this is
+    /// the format that describes the feature most directly. <c>draw:shadow</c> is the switch —
+    /// nearly every shape a Microsoft file produces carries a colour and an offset with the
+    /// switch off, so reading the offset without it draws a shadow on almost everything.
+    /// </para>
+    /// <para>
+    /// <c>draw:shadow-opacity</c> is an opacity and not a transparency, and defaults to fully
+    /// opaque; <c>draw:shadow-color</c> defaults to the grey a binary file's shadow takes when
+    /// it states none.
+    /// </para>
+    /// </remarks>
+    private SlideShadow? Shadow(IReadOnlyList<OdfStyleReference> cascade)
+    {
+        OdfProperty visible = Graphic(cascade, OdfNamespaces.Draw, "shadow");
+        if (!visible.HasValue || !visible.Is("visible")) return null;
+
+        Core.Units.Length x =
+            Graphic(cascade, OdfNamespaces.Draw, "shadow-offset-x").AsLength() ?? Core.Units.Length.Zero;
+        Core.Units.Length y =
+            Graphic(cascade, OdfNamespaces.Draw, "shadow-offset-y").AsLength() ?? Core.Units.Length.Zero;
+
+        Colour colour = Graphic(cascade, OdfNamespaces.Draw, "shadow-color").AsColour()
+                        ?? new Colour(0x80, 0x80, 0x80);
+
+        double opacity = Graphic(cascade, OdfNamespaces.Draw, "shadow-opacity").AsPercentage() ?? 1.0;
+
+        return new SlideShadow(
+            x,
+            y,
+            colour.WithAlpha(255),
+            Math.Clamp(opacity, 0, 1),
+            Graphic(cascade, OdfNamespaces.Draw, "shadow-blur").AsLength() ?? Core.Units.Length.Zero);
     }
 
     /// <summary>

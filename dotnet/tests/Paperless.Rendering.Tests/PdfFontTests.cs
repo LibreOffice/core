@@ -245,6 +245,45 @@ public sealed class PdfFontTests
         pdf.ContentStreams().Single().ShouldContain("Tj");
     }
 
+    /// <summary>
+    /// A CFF-flavoured face is named and not embedded, rather than embedded as a TrueType one.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A <c>/FontFile2</c> promises <c>glyf</c> outlines and a reader that believes it and finds
+    /// <c>OTTO</c> is entitled to stop. Poppler does: on <c>16 - UTM - (NASA).pptx</c> it
+    /// reported *"Mismatch between font type and embedded font file"* and then *"No font in
+    /// show"* 161 times, leaving 161 glyph runs blank on a document whose page count, word count
+    /// and <c>pdffonts</c> embedding check all passed. So the assertion here is that the file
+    /// does <em>not</em> claim a TrueType program for a face that has none.
+    /// </para>
+    /// <para>
+    /// The mechanism was not what the key alone suggested. Correcting it to
+    /// <c>/FontFile3 /Subtype /OpenType</c> under a <c>/Type1</c> dictionary — which is what PDF
+    /// 1.7 §9.9 asks for — makes poppler accept the file and still draw nothing useful: a Type1
+    /// dictionary selects glyphs by <em>name</em> through the CFF charset, and our codes are
+    /// glyph indices, so an 18 pt Loma probe came back as a row of tofu boxes. Embedding one
+    /// properly needs a <c>/Differences</c> name encoding, and a CID-keyed CFF needs a composite
+    /// <c>/Type0</c> font on top of that. Until then, naming the face without embedding it is the
+    /// one option that puts real words on the page.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ACffFlavouredFaceIsNotClaimedToBeTrueType()
+    {
+        Assert.SkipUnless(TestCffFace.IsAvailable, "no CFF-flavoured face on this machine");
+
+        PdfFile pdf = Write(TestCffFace.Run("Paperless", new DocPoint(Points(56.7), Points(120)), Points(11)));
+
+        pdf.FontPrograms().ShouldBeEmpty("a CFF face must not be written as a TrueType program");
+        pdf.Text.ShouldNotContain("/FontFile");
+
+        // Everything except the outlines survives: the widths are still the face's own, so the
+        // pen positions and the line breaks are the ones layout measured.
+        pdf.Text.ShouldContain("/Widths[");
+        pdf.Text.ShouldContain("/FontDescriptor ");
+    }
+
     // ------------------------------------------------------------------------- the machinery
 
     private static PdfFile Write(GlyphRun run)

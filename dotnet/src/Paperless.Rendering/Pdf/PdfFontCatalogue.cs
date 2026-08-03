@@ -264,14 +264,42 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
         int toUnicode = writer.Reserve();
         writer.SetStream(toUnicode, string.Empty, Encoding.Latin1.GetBytes(ToUnicode(subset)), compress: false);
 
-        int descriptor = WriteDescriptor(writer, subset, name, upem);
+        byte[]? embedded = Embed(subset);
+
+        // A CFF-flavoured face is named and not embedded. Everything else here writes a simple
+        // /Subtype/TrueType font whose one-byte codes select glyphs through an identity
+        // Macintosh cmap, and a CFF face cannot be addressed that way at all:
+        //
+        //   * under a TrueType dictionary the program is a /FontFile2, which promises `glyf`
+        //     outlines. Poppler says "Mismatch between font type and embedded font file" and,
+        //     for a CID-keyed one, "No font in show" for every text operation — measured 161
+        //     times on `16 - UTM - (NASA).pptx`, whose runs fall back to Unifont.
+        //   * under a Type1 dictionary (PDF 1.7 §9.9, which is where a name-keyed CFF belongs)
+        //     a code selects a glyph by *name* through the CFF charset. Our codes are indices,
+        //     so every one of them misses: measured on an 18 pt Loma probe, poppler drew a row
+        //     of tofu boxes where LibreOffice drew the words.
+        //   * a CID-keyed CFF is not admissible under any simple dictionary — it needs a
+        //     composite /Type0 font with a CIDFontType0 descendant.
+        //
+        // So the face is named and not embedded, which is what a face whose file could not be
+        // read already does: the widths are still the face's, so pen positions and line breaks
+        // are unchanged, and the text still extracts. Measured honestly, this buys a valid file
+        // and not correct glyphs — the reference draws Loma and both the old output and this one
+        // draw tofu, and on the UTM deck it turns 161 hard reader errors and a blank page into a
+        // clean file. Putting the right outlines on the page is two further pieces of work: a
+        // /Differences glyph-name encoding read out of the CFF charset for a name-keyed face,
+        // and a composite /Type0 font with Identity-H two-byte codes for a CID-keyed one.
+        if (embedded is not null && IsCompactFontFormat(embedded)) embedded = null;
+
+        int descriptor = WriteDescriptor(writer, subset, name, upem, embedded);
 
         return writer.Add(
             $"<</Type/Font/Subtype/TrueType/BaseFont/{name}/FirstChar 0/LastChar {last}"
             + $"/Widths{widths}/FontDescriptor {descriptor} 0 R/ToUnicode {toUnicode} 0 R>>");
     }
 
-    private static int WriteDescriptor(PdfDocumentWriter writer, Subset subset, string name, int upem)
+    private static int WriteDescriptor(
+        PdfDocumentWriter writer, Subset subset, string name, int upem, byte[]? embedded)
     {
         OpenTypeFace? opentype = subset.Face.OpenType;
         FontReference reference = subset.Face.Reference;
@@ -291,7 +319,6 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
             : ascent;
         double italicAngle = opentype?.Post.ItalicAngle ?? 0;
 
-        byte[]? embedded = Embed(subset);
         string fontFile = string.Empty;
 
         if (embedded is not null)
@@ -302,6 +329,9 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
             // streams by inflating every stream in the file and keeping the ones holding "BT"; a
             // deflated font program is binary that inflates successfully and contains "BT" often
             // enough to be read as a page. Leaving font programs stored keeps them invisible to it.
+            //
+            // /FontFile2 with /Length1, unconditionally, because only a `glyf`-flavoured program
+            // reaches here: see WriteSubset, which drops a CFF one rather than misdescribe it.
             writer.SetStream(
                 program,
                 string.Create(CultureInfo.InvariantCulture, $"/Length1 {embedded.Length}"),
@@ -317,6 +347,33 @@ internal sealed class PdfFontCatalogue(IPdfFontProvider provider, bool embed)
             + $"/ItalicAngle {PdfSyntax.Number(italicAngle)}/Ascent {ascent}/Descent {descent}"
             + $"/CapHeight {capHeight}/StemV {StemWidth(reference)}{fontFile}>>");
     }
+
+    /// <summary>
+    /// Whether an embedded face carries CFF outlines rather than <c>glyf</c> ones.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// It decides whether the program can be embedded at all, and getting it wrong is invisible
+    /// to every check short of looking at the page. Written as a <c>/FontFile2</c> — which
+    /// promises a TrueType program — a reader rejects the mismatch. Measured on
+    /// <c>16 - UTM - (NASA).pptx</c>: poppler reported *"Mismatch between font type and embedded
+    /// font file"* and then *"No font in show"* 161 times, so 161 glyph runs drew nothing at all
+    /// while <c>pdftotext</c> extracted every one of them and <c>pdffonts</c> reported the face
+    /// as embedded. Page count, word count and font embedding all passed.
+    /// </para>
+    /// <para>
+    /// Decided from the bytes rather than from the file name or the source face, because it is a
+    /// property of what <c>hb-subset</c> produced: an sfnt version of <c>OTTO</c> is CFF and
+    /// <c>0x00010000</c> or <c>true</c> is <c>glyf</c>. Every <c>.otf</c> on a machine is the
+    /// former, so this reaches any document that resolves one — here only through the Unifont
+    /// last-resort fallback, but not by anything special about that font.
+    /// </para>
+    /// </remarks>
+    private static bool IsCompactFontFormat(ReadOnlySpan<byte> program)
+        => program.Length >= 4 && BinaryPrimitives.ReadUInt32BigEndian(program) == OpenTypeCffTag;
+
+    /// <summary>The sfnt version tag <c>OTTO</c>, which marks CFF outlines.</summary>
+    private const uint OpenTypeCffTag = 0x4F54544F;
 
     /// <summary>
     /// A nominal vertical stem width.

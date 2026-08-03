@@ -101,7 +101,10 @@ reference's 393, exactly 52 bullets, now 393 against 393.
 - [x] Shape tree: rectangles, paths, groups, placeholders and pictures, in document order, which
       is z-order in both vocabularies. Tables and connectors have their own entries below.
 - [x] Shape properties: transform (with flip **before** rotation), solid fill, line, text body.
-      Not effects: no shadow, glow, soft edge or reflection is drawn.
+      **Drop shadows** are drawn, in all three readers — `a:outerShdw` inline or through the
+      theme's `a:effectRef`, the Escher `fShadow` group, and ODF's `draw:shadow*`. Still not
+      drawn: glow, soft edge, reflection, and `a:innerShdw`, which LibreOffice also ignores
+      (`EffectProperties::pushToPropMap` acts on `outerShdw` alone).
 - [x] Text bodies via the shared text layout, with insets and anchoring, including
       **shrink-to-fit**: a body stating `a:normAutofit` has its size solved from scratch, because
       the reference reads the stated `fontScale` into a field it never reads again and searches
@@ -786,7 +789,8 @@ Two reference artefacts worth knowing before chasing them:
       through the same path builder. A name that is not a preset still falls back to its bounding
       rectangle. See below for what the evaluator had to get right that six hand-written shapes
       never showed.
-- [x] Solid fills, including themed ones, and lines with width, cap and join. Not shadows.
+- [x] Solid fills, including themed ones, and lines with width, cap and join. Drop shadows too,
+      as a hard-edged offset copy — see the shadow note below for what blur costs.
 - [x] **Gradient fills**, for both formats: `a:gradFill` and `draw:gradient`, linear, axial,
       radial, elliptical and rectangular. `Layout/SlideGradients.cs` holds the geometry, which is
       LibreOffice's rather than either format's — both importers converge on `basegfx::BGradient`
@@ -839,8 +843,9 @@ Two reference artefacts worth knowing before chasing them:
       than DrawingML's. `OpenDocument/OdfEnhancedGeometry.cs` reads the notation and
       `CustomShapeGeometry.Evaluate` draws it; see **The same shapes in ODF** below for exactly
       what was shared and what was not.
-- [x] Solid fills, including themed ones, and lines with width, cap and join. Not shadows, and
-      not gradients: nothing here emits a `GradientPaint`, deliberately.
+- [x] Solid fills, including themed ones, and lines with width, cap and join, and drop shadows
+      from the Escher shadow properties. Not gradients: nothing here emits a `GradientPaint`,
+      deliberately.
 - [x] Text bodies with anchoring, insets and the stated autofit scale.
 - [x] Groups with nested transforms, including a child coordinate space that scales.
 - [ ] Picture *effects*: `a:effectLst` (shadow, glow, reflection, soft edge), `a:duotone`,
@@ -1438,6 +1443,45 @@ against the reference PDF's own `rg` operators. The colour map comes from the sl
 - [ ] **Compound lines.** `cmpd="dbl"`, `"thickThin"`, `"tri"`. A double line is two strokes with
       a gap, and the widths are fractions of the stated one; nothing in the corpus carries one.
 
+### A drop shadow is the shape drawn again, and blur is what decides its text
+
+A shadow is not a property of an outline. `createEmbeddedShadowPrimitive`
+(`svx/source/sdr/primitive2d/sdrdecompositiontools.cxx:860`) wraps a shape's *whole
+decomposition* — fill, outline, picture and text — in a `ShadowPrimitive2D`, which embeds it in a
+`BColorModifier_replace` and a translation and puts the result behind the shape. That shape of
+the feature settles three things that a "draw a grey copy of the outline" reading gets wrong.
+
+**The colour is replaced and the transparency is not.** A `BColorModifier_replace` changes a
+primitive's colour and leaves its alpha, so the shadow of a fill is as translucent as the fill.
+Filling the outline flat instead is not a rounding difference: page 34 of
+`Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx` is covered by a rectangle whose
+gradient runs from zero to 30% alpha and which states a shadow with no distance, so the copy sits
+exactly underneath it — cast opaque it tinted the whole slide and the page's unaccounted ink went
+from 0.18% to **13.52%**; cast with the fill's own alpha it is invisible, as the reference shows.
+
+**Blur decides whether the shadow's text is text.** With a non-zero radius `ShadowPrimitive2D`
+renders its children to a bitmap and softens that (`shadowprimitive2d.cxx:91-140`), so the
+reference PDF holds a greyscale image with a soft mask and **no words** — verified on
+`passiv.pptx`, whose every page carries a 918 × 272 gray JPEG plus smask and whose extractable
+count is unchanged at 1256. With a zero radius it stays vector and the shadow's text extracts,
+which is how `pres_ioc_phuket.ppt` comes to draw "National" fourteen times in seven pairs 6.01 pt
+apart. So a blurred shadow is drawn here as a hard-edged one *without* its text and an unblurred
+one *with* it. Drawing the text under blur would add words to every deck with a themed shadow,
+which is the largest avoidable regression this feature could cause.
+
+**Most shadows come from the theme.** 1120 slide shapes across the 112 corpus `pptx` decks reach
+one through `p:style/a:effectRef` against 352 that state one on their own `p:spPr`; a reader that
+looks only at `spPr` finds under a quarter of them. The `phClr` of an `effectRef` is *not*
+substituted, matching the reference's own unfinished note (`oox/source/drawingml/shape.cxx:1556`),
+and it costs nothing because Office's themes write their effect styles in literal black.
+
+Two things remain. The blur itself is not drawn — a soft shadow is approximated by a hard one,
+which needs offscreen rasterisation this layer has no access to. And a picture casts a shadow of
+its *frame* rather than of its silhouette, and only when its bytes are a JPEG: a JPEG has no
+alpha channel so the two coincide, and a PNG logo would otherwise gain a black rectangle behind
+it. The proper form of both is a colour-replacement the display list *names* rather than
+performs, which is the same missing record the picture-effects entry above wants.
+
 ### Two gradient conventions that are invisible except in colour
 
 A gradient's geometry is easy to check and tells you almost nothing: a red-to-blue ramp drawn
@@ -1968,6 +2012,37 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
 
 ### Small differences that are measured and not yet closed
 
+- [ ] **A chart's category-axis labels: we draw *fewer* than the reference, not more.** Recorded
+      the other way round for two rounds — "the reference draws none of those labels and we draw
+      every one" — and the rendered pages say the opposite. On page 4 of
+      `slides/batch-017/pptx/Demick_JetBlue.pptx` LibreOffice draws about twenty `2006-7`-style
+      labels rotated 45° along the axis and we draw **eleven** — the chart states 21 category
+      points, so the reference settles on a rhythm of 1 and we settle on 2. Both sides rotate to
+      45°, so the difference is one step of `ChartAxisLabels.Collides` and not the arrangement. What produced the wrong reading is the word gate's blind spot
+      working in both directions at once: the reference's rotated labels extract as **nothing at
+      all** under `pdftotext`, while ours extract as *fragments* — `2012-9` comes back as `12`,
+      `20`, `9` — so the page reads +29 words for us and the number has nothing to do with how
+      many labels either side drew. Two other differences on that page are real and easier:
+      the reference draws a secondary value axis with its own `Load Factor (%)` title on the
+      right and we draw neither, and our legend collides with the category-axis title
+      (`RPMYear ASM LF + ( 3rd Quarter)` on one line). Judge this one on the image, never on
+      `wc -w`.
+- [ ] **An ODF fill's `draw:opacity` is not read at all**, so a shape LibreOffice draws at 30%
+      comes out fully opaque. Found while building `slide-drop-shadow.odp`: the same shape that
+      carries `<a:alpha val="30000"/>` in the `pptx` carries `draw:opacity="30%"` on its
+      `style:graphic-properties` in LibreOffice's own ODF export of it, and nothing in
+      `OdpFills` looks for the attribute. Not a shadow defect — the shadow correctly matches a
+      fill it is told is opaque — but the same shape renders differently in the two formats,
+      which is the sharpest kind of evidence there is. The slides corpus holds no `.odp`, so
+      this cannot be measured there; the feature corpus can.
+- [ ] **`a:prstTxWarp` is not read, and it is narrower than it looks.** The attribute appears on
+      39 of the 112 corpus `pptx` decks, 722 times — which reads as a wide gap and is not one:
+      **709 of those are `textNoShape`**, the identity, and 3 more are `textPlain`. Only ten
+      occurrences bend anything, across two decks: `FAAAIandtheArtandScienceofV&Vfinal.pptx`
+      (eight, `textArchUp`/`textArchDown` round a dial, and the reason it scores 1201 words
+      against 1145 — the labels are laid straight, wrap, and collide) and
+      `redac-sas-201403-ppt-portfolio-rev-sim.pptx` (two). Worth doing for the shape of the
+      feature rather than for its reach; read the count before budgeting for it.
 - [ ] **A wrapped line is one glyph shorter here than in the reference.** LibreOffice draws the
       space a line broke at as part of that line's run; the shared layouter stops at the last
       *visible* character (`LineBox.VisibleEnd`). Nothing is visibly missing — it is a space at

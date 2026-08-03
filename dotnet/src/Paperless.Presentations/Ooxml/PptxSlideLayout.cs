@@ -747,7 +747,50 @@ internal sealed partial class PptxSlideLayout
                     scaleY),
                 ShapeTransform.WithoutScale(upright, scaleX, scaleY),
                 theme),
+            Shadow = Shadow(properties, inherited, style, theme),
         };
+    }
+
+    /// <summary>
+    /// The drop shadow a shape casts, from its own effect list or from the theme's.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The order is the shape's own <c>a:effectLst</c>, then the one it inherits from its
+    /// placeholder, then the theme's — the same chain <c>Shape::getActualEffectProperties</c>
+    /// walks (<c>oox/source/drawingml/shape.cxx:2868-2888</c>) — and the <em>first one that
+    /// states an outer shadow</em> wins rather than the first one that exists.
+    /// </para>
+    /// <para>
+    /// That distinction was measured rather than reasoned, and reading the source alone would
+    /// have got it backwards. <c>EffectProperties::assignUsed</c> replaces the whole effect list
+    /// when the source states any effect at all, which says a shape writing
+    /// <c>&lt;a:effectLst/&gt;</c> — or one holding only an <c>a:glow</c> — drops the theme's
+    /// shadow. The running binary does not: LibreOffice 24.2.7.2's own flat-ODF export of
+    /// <c>slide-drop-shadow.pptx</c> gives the themed 38%-black shadow to all three of the shape
+    /// that states nothing, the shape with an empty list and the shape with a glow. The binary
+    /// made the reference PDFs, so the binary wins.
+    /// </para>
+    /// </remarks>
+    private static SlideShadow? Shadow(
+        XElement? properties, XElement?[] inherited, XElement? style, SlideTheme theme)
+    {
+        XElement?[] sources =
+        [
+            Drawing.Child(properties, "effectLst"),
+            First(inherited, "effectLst"),
+            DrawingEffects.ThemeEffects(theme.Styles, style),
+        ];
+
+        foreach (XElement? effects in sources)
+        {
+            if (DrawingEffects.OuterShadow(effects, theme.Colours) is not { } shadow) continue;
+
+            return new SlideShadow(
+                shadow.OffsetX, shadow.OffsetY, shadow.Colour, shadow.Opacity, shadow.Blur);
+        }
+
+        return null;
     }
 
     /// <summary>

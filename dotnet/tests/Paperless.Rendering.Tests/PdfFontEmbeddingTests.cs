@@ -210,9 +210,15 @@ public sealed partial class PdfFontEmbeddingTests
 
             Match name = BaseFont().Match(body);
 
+            // Either stream key counts, and both have to. A CFF-flavoured OpenType face is only
+            // admissible as /FontFile3 (PDF 1.7 §9.9), so a test that insisted on /FontFile2 would
+            // fail the correct output for every .otf on the machine — and asserting /FontFile2
+            // alone is what let a CFF face be written under it, which poppler answers by dropping
+            // the font and drawing nothing. See PdfFontCatalogue.IsCompactFontFormat.
             faces.Add((
                 name.Success ? name.Groups[1].Value : "<unnamed>",
-                named.Contains("/FontFile2 ", StringComparison.Ordinal)));
+                named.Contains("/FontFile2 ", StringComparison.Ordinal)
+                || named.Contains("/FontFile3 ", StringComparison.Ordinal)));
         }
 
         return faces;

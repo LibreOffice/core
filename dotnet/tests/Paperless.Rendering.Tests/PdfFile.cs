@@ -118,8 +118,12 @@ internal sealed partial class PdfFile
 
     /// <summary>The embedded font programs, in file order.</summary>
     public List<byte[]> FontPrograms()
+        // /Length1 marks a TrueType program and /Subtype/OpenType a CFF-flavoured one; a font
+        // stream carries exactly one of the two, and looking only for the first misses every
+        // .otf the machine has.
         => [.. Streams()
-            .Where(s => s.Dictionary.Contains("/Length1", StringComparison.Ordinal))
+            .Where(s => s.Dictionary.Contains("/Length1", StringComparison.Ordinal)
+                        || s.Dictionary.Contains("/Subtype/OpenType", StringComparison.Ordinal))
             .Select(s => s.Data)];
 
     /// <summary>Every <c>/MediaBox</c> in the file, in order.</summary>

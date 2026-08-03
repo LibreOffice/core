@@ -947,8 +947,73 @@ internal sealed class PptSlideLayout
             Line = Line(shape, context.Scheme),
             Picture = Picture(shape, bounds),
             Text = Text(shape, context, local, preset, adjustment, placement),
+            Shadow = Shadow(shape, context.Scheme),
         };
     }
+
+    /// <summary>
+    /// The drop shadow a shape casts, from its Escher shadow properties.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>SvxMSDffManager::ApplyAttributes</c> (<c>filter/source/msfilter/msdffimp.cxx:2643-2733</c>),
+    /// with the two defaults that make the difference between a shadow in the right place and one
+    /// a third of a millimetre off. A shape that says it casts a shadow and states no offset gets
+    /// 35 hundredths of a millimetre in each axis; one whose <c>shadowType</c> is anything but a
+    /// plain offset, and which has no non-zero offset, gets 302 instead.
+    /// </para>
+    /// <para>
+    /// The offsets are EMUs here and hundredths of a millimetre there — <c>ScaleEmu</c>
+    /// (<c>msdffimp.cxx:3194</c>) is a division by 360 and a map factor that is 1 for a
+    /// presentation — so the property values go straight into a <see cref="Length"/> and the two
+    /// defaults are the ones that need converting back.
+    /// </para>
+    /// <para>
+    /// Not implemented: the <c>bCheckShadow</c> branch that turns a shadow off for a shape with
+    /// neither fill nor outline. It is <c>static bool bCheckShadow(false)</c> in the reference —
+    /// dead code kept for an easy revert, with the comment "#i124477# Found no reason not to set
+    /// shadow, esp. since it is applied to evtl. existing text" — so following it would differ
+    /// from the binary that draws the references.
+    /// </para>
+    /// </remarks>
+    private static SlideShadow? Shadow(EscherShape shape, PptColourScheme scheme)
+    {
+        EscherPropertyTable properties = shape.Properties;
+        if (!properties.Has(EscherPropertyIds.Shadowed | 31)) return null;
+        if (!properties.Boolean(EscherPropertyIds.Shadowed)) return null;
+
+        int x = properties.SignedValue(EscherPropertyIds.ShadowOffsetX, int.MinValue);
+        int y = properties.SignedValue(EscherPropertyIds.ShadowOffsetY, int.MinValue);
+        bool statesOffset = x != int.MinValue || y != int.MinValue;
+
+        if (x == int.MinValue) x = HundredthsOfAMillimetre(35);
+        if (y == int.MinValue) y = HundredthsOfAMillimetre(35);
+
+        bool nonZeroOffset = x > 0 || y > 0;
+        if (properties.Has(EscherPropertyIds.ShadowType)
+            && properties.Value(EscherPropertyIds.ShadowType) != 0
+            && !(statesOffset && nonZeroOffset))
+        {
+            x = y = HundredthsOfAMillimetre(302);
+        }
+
+        Colour colour = PptColour.Resolve(
+            properties.Value(EscherPropertyIds.ShadowColour, DefaultShadowColour), scheme)
+            ?? new Colour(0x80, 0x80, 0x80);
+
+        // 16.16 fixed point, so 0x10000 is opaque and a missing property is too.
+        double opacity = Math.Clamp(
+            properties.Value(EscherPropertyIds.ShadowOpacity, 0x10000) / 65536.0, 0, 1);
+
+        return new SlideShadow(
+            Length.FromEmu(x), Length.FromEmu(y), colour.WithAlpha(255), opacity);
+    }
+
+    /// <summary>The default shadow colour, <c>0x00808080</c> in the format's blue-green-red order.</summary>
+    private const uint DefaultShadowColour = 0x00808080;
+
+    /// <summary>A length the reference states in hundredths of a millimetre, in EMUs.</summary>
+    private static int HundredthsOfAMillimetre(int value) => value * 360;
 
     /// <summary>
     /// The picture a shape draws, in the rectangle the shape occupies.

@@ -117,7 +117,10 @@ can call it — DOCX does today, through `WordThemeColour`; XLSX's `theme=` inde
 - [ ] Custom geometry (`custGeom`): explicit path lists
 - [ ] Fills: `solidFill`, `gradFill`, `blipFill`, `pattFill`, `noFill`, `grpFill`
 - [ ] Lines: width, dash, caps, joins, head/tail arrows
-- [ ] Effects: shadow, glow, soft edge, reflection. Shadow first; the rest are lower value.
+- [x] Effects: **`a:outerShdw`**, inline and through the theme's `a:effectRef`
+      (`DrawingML/DrawingEffects.cs`). Glow, soft edge, reflection and `a:innerShdw` are still
+      not read, which matches the reference: `EffectProperties::pushToPropMap` acts on
+      `outerShdw` alone and drops the rest.
 - [ ] `txBody`: paragraphs, runs, `lvlXpPr` list styles, insets, anchoring, autofit
       (`normAutofit` `fontScale` and `lnSpcReduction`)
 - [ ] Groups, with child coordinate-space mapping (`chOff`/`chExt`)
