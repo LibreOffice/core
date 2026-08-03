@@ -382,13 +382,13 @@ words agent runs before advancing, which settles it either way.
 
 Swept 001–005 together at each step, 50 documents, three workers:
 
-| | baseline | + kerning | + text frames |
-|---|---|---|---|
-| `batch-001` | 10/10 | 10/10 | 10/10 |
-| `batch-002` | 10/10 | 10/10 | 10/10 |
-| `batch-003` | 10/10 | 10/10 | 10/10 |
-| `batch-004` | 9/10 | 9/10 | **10/10** |
-| `batch-005` | 7/10 | 7/10 | 7/10 |
+| | baseline | + kerning | + text frames | + table alignment |
+|---|---|---|---|---|
+| `batch-001` | 10/10 | 10/10 | 10/10 | 10/10 |
+| `batch-002` | 10/10 | 10/10 | 10/10 | 10/10 |
+| `batch-003` | 10/10 | 10/10 | 10/10 | 10/10 |
+| `batch-004` | 9/10 | 9/10 | **10/10** | 10/10 |
+| `batch-005` | 7/10 | 7/10 | 7/10 | **8/10** |
 
 The baseline reproduced the briefed 9/10 and 7/10 exactly, and settles `batch-003`,
 which was merged at its agent's figure and had never been swept on the merged branch:
@@ -428,6 +428,55 @@ So the salvaged 570 lines were worth roughly what the skill says a mid-flight di
 worth: the shape of the change survived, one of its two central claims did not, and the
 measurement it never had is the only thing that could have told them apart.
 
+### A table's alignment was never read, in either of the two ways a DOCX states it
+
+`batch-005`'s text-loss document was 602 words against 636 with its pagination already
+right, and the missing 34 were **30 cells containing the single letter C**. The table is
+11022 twips across a 9070-twip text area and centred; placed at the indent instead, its
+last four columns started past the page edge and their ink was clipped away. Text that
+neither draws nor extracts, with no other symptom — the parity gate could only see a word
+count.
+
+Neither attribute was read. `w:tblPr/w:jc` — a different element from the paragraph
+alignment of the same name — is stated by **31 of the track's 134 DOCX files, 315 of whose
+320 occurrences say `center`**; `w:tblpPr/@tblpXSpec` is stated by 21 more. Only `center`
+and `right` move anything: `convertTableJustification` leaves everything else on
+`LEFT_AND_WIDTH`, which is the indent. Despite touching a quarter of the track's DOCX
+files it cost nothing anywhere — batches 001–004 held at 10/10 and 005 went 7 to 8.
+
+Alignment cannot be folded into the indent at read time, because the answer needs the width
+of the area the table sits in, which the reader has not got. `PageTable.LeftWithin` resolves
+it at the two places that already know it.
+
+### The largest named-and-unfixed lead: Word 2013's justification
+
+`BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx` paginates 3 against 2 and the cause is neither a
+metric nor a break rule. Every word on the first page is within 0.1 pt of the reference's
+width, and the lines still break a word early — because **LibreOffice compresses the spaces
+and we only stretch them**. Measured on one justified line: sixteen words summing to 417.63
+pt in a 468.0 pt column, our fifteen gaps at 3.358 pt each and the reference's sixteen at
+1.894 pt, against a natural Carlito space of 2.26 pt. The reference squeezed a
+seventeenth word in by shrinking every space **below** its natural width.
+
+That is `JUSTIFY_LINES_WITH_SHRINKING` (tdf#158776, `sw/source/core/text/portxt.cxx:545`),
+and writerfilter turns it on for every DOCX whose `compatibilityMode` is 15 or more —
+`sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:10172`, whose comment states the
+consequence plainly: *"new paragraph justification has been introduced in version 15,
+breaking text layout interoperability: new line shrinking needs less space i.e. it typesets
+the same text with less lines and pages."* This document declares mode 15 and holds 44
+justified paragraphs.
+
+**Expect this to be worth a lot.** It is a whole-corpus effect on a class the residue is
+already known to be made of — documents off by ±1 page with the right words — it applies to
+every modern DOCX rather than to a feature some documents use, and its sign is always the
+same: we produce more lines than the reference, so more pages. `DocxLayoutSource` already
+reads `_compatibilityMode`. What it needs is a line breaker that can retry a full line with
+the blanks compressed, which is a change in `Paperless.Text.Layout` and was too large to
+start with the time left rather than too hard.
+
+The other `batch-005` failure, `loi_format_letter_of_intent…doc`, is the opposite sign — 9
+pages against 10, diverging only from page 5 — so it is *not* this, and it has no diagnosis.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -436,7 +485,7 @@ measurement it never had is the only thing that could have told them apart.
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | ✅ |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 7/10 · WIP |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 · WIP |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
