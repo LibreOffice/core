@@ -183,6 +183,38 @@ public sealed record PageLabel
         return Max(Max(wanted, floor), Length.Zero);
     }
 
+    /// <summary>
+    /// The line box the label alone would need: how tall, and how much of it is above the baseline.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A label can be bigger than the paragraph it labels, and then it raises the line.</strong>
+    /// Writer's label is an ordinary portion — <c>SwNumberPortion</c>, built by
+    /// <c>SwTextFormatter::NewNumberPortion</c> (<c>sw/source/core/text/txtfld.cxx</c>:506) — so
+    /// <c>SwLineLayout::CalcLine</c> (<c>sw/source/core/text/porlay.cxx</c>:340) folds its ascent and
+    /// height into the line's maxima exactly as it does for a run of text. A level stating a size the
+    /// item's own text does not use is ordinary rather than exotic: Word writes the level's character
+    /// formatting into <c>w:lvl/w:rPr</c> and into the WW8 level's <c>grpprlChpx</c>, and both frequently
+    /// name a size of their own.
+    /// </para>
+    /// <para>
+    /// Measured through the same <see cref="LineSpacing"/> the runs use, and on the same device grid, so
+    /// that a label and a run of the same face and size give the same box — otherwise a label equal to its
+    /// text would still move the line.
+    /// </para>
+    /// </remarks>
+    /// <param name="grid">The device grid the paragraph's metrics are rounded through, or null.</param>
+    public (Length Height, Length Ascent) LineExtent(MetricGrid? grid = null)
+    {
+        LineMetrics metrics = LineSpacing.Resolve(Face, grid);
+
+        // Whole twips, as MeasuredParagraph.Accumulate takes them: a fraction kept here would eventually
+        // put a line on a different page from the one the runs beside it were measured onto.
+        return (
+            Length.FromTwips(metrics.ScaledLineHeight(EmSize).Twips),
+            Length.FromTwips(metrics.ScaledAscent(EmSize).Twips));
+    }
+
     /// <summary>The width of one space in the label's own face, for <see cref="LabelFollow.Space"/>.</summary>
     private Length SpaceWidth() => TextShaper.Default.Shape(Face, " ", Shaping).Width(EmSize);
 

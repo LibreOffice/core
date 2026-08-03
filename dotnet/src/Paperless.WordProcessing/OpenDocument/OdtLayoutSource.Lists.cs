@@ -225,9 +225,7 @@ public sealed partial class OdtLayoutSource
         if (_listStyle.FormatLabel(_listLevel, _listCounters) is not { Length: > 0 } drawn)
             return (null, format);
 
-        Length size = definition.RelativeSize is { } fraction
-            ? Length.FromEmu((long)(text.Size.Emu * fraction))
-            : text.Size;
+        Length size = LabelSize(definition, text);
 
         // A bullet level names a symbol font and a numbered one usually names nothing, in which case the
         // label is set in the item's own face — which is what makes "1." match the text beside it.
@@ -255,5 +253,43 @@ public sealed partial class OdtLayoutSource
 
         static Length? Measure(XElement element, string ns, string name)
             => OdfValue.ParseLength(element.Attribute(XName.Get(name, ns))?.Value);
+    }
+
+    /// <summary>
+    /// The size the label is set at: the level's own when it states one, and the item's text otherwise.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF says it two ways and both are real. The one already handled is a <em>percentage</em> written
+    /// straight on the level — <c>fo:font-size="45%"</c>, which is what every list style LibreOffice
+    /// generates carries. The other is <c>text:style-name</c>, a named character style holding the
+    /// label's whole character formatting, and it is what LibreOffice's own WW8 import produces: a
+    /// <c>.doc</c> whose list level sets 12 pt over 11 pt text round-trips to a <c>WW8Num1z0</c>
+    /// character style with <c>fo:font-size="12pt"</c> and a level naming it.
+    /// </para>
+    /// <para>
+    /// <strong>Only the size is taken from it.</strong> The style also names a family, and for a bullet
+    /// level that family is a symbol font whose code point <see cref="OdfListStyle"/> has already
+    /// normalised — the same reason the WW8 reader takes a level's size and not its face. A level that
+    /// really means its face states it in <c>style:font-name</c> on the level itself, which
+    /// <see cref="OdfListLevel.Typeface"/> reads and the caller honours.
+    /// </para>
+    /// <para>
+    /// A label bigger than its item's text raises that item's first line; see
+    /// <see cref="Layout.PageParagraph.LabelRaisesFirstLine"/>.
+    /// </para>
+    /// </remarks>
+    private Length LabelSize(OdfListLevel definition, OdfTextStyle text)
+    {
+        if (definition.RelativeSize is { } fraction) return Length.FromEmu((long)(text.Size.Emu * fraction));
+
+        if (definition.TextStyleName is { Length: > 0 } named
+            && OdfParagraphFormats.StatedTextSize(_styles, named) is { } stated
+            && stated > Length.Zero)
+        {
+            return stated;
+        }
+
+        return text.Size;
     }
 }

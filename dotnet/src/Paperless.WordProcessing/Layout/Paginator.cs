@@ -423,10 +423,13 @@ public sealed class Paginator
             // run rather than as the paragraph's font. Without runs the single-face path is not merely a
             // shortcut — it is the common case, and it avoids building a prefix table per run for a
             // paragraph that has one. An inline picture takes the same road as runs do, because it is the
-            // prefix table that carries the room it takes on its line.
+            // prefix table that carries the room it takes on its line. So does a list label bigger than
+            // the text it labels, for the same reason: the label is a portion in the first line and only
+            // the per-line path can make one line taller than the rest.
             ILineObstacles? obstacles = _obstacles?.Invoke(i);
 
-            LaidOutParagraph laidOut = paragraph.HasRuns || paragraph.HasInlineObjects
+            LaidOutParagraph laidOut =
+                paragraph.HasRuns || paragraph.HasInlineObjects || paragraph.LabelRaisesFirstLine
                 ? layouter.Layout(
                     paragraph.Measure(),
                     paragraph.Format,

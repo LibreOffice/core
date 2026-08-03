@@ -47,20 +47,78 @@ internal static class DocxFrames
         Func<XElement, IReadOnlyList<PageBlock>>? content,
         int anchorOffset,
         DocxPictures? pictures = null)
+        => ReadAll(drawing, content, anchorOffset, pictures) is [PageFrame first, ..] ? first : null;
+
+    /// <summary>
+    /// Reads every frame a <c>w:drawing</c> holds: one, or one per member of a shape group.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>A <c>wpg:wgp</c> is many shapes in one drawing, and each of them can hold text.</strong>
+    /// A letterhead written in Word is routinely a group of a dozen text boxes and a logo, and reading
+    /// only the first text box in the drawing — the first <c>txbxContent</c> under the anchor — draws one
+    /// of them and silently loses the rest. Measured on
+    /// <c>Press release_EUREKA labels ITEA 3 Cluster.docx</c>: nineteen shapes, eighteen of them text
+    /// boxes, of which one drew.
+    /// </para>
+    /// <para>
+    /// LibreOffice imports a group as a <c>SdrObjGroup</c> and keeps the nesting
+    /// (<c>oox/source/drawingml/shapegroupcontext.cxx</c>); this flattens it instead, because the layout
+    /// engine places one rectangle per frame and a member's rectangle is fully determined once the
+    /// group's is. The flattening is what <see cref="PageFrame.GroupSize"/> and
+    /// <see cref="PageFrame.GroupOffset"/> carry.
+    /// </para>
+    /// <para>
+    /// The first frame returned is always the group's own envelope, which keeps the anchor's wrap so the
+    /// hole in the text is the group's rather than one per member.
+    /// </para>
+    /// </remarks>
+    /// <param name="drawing">The <c>w:drawing</c> element.</param>
+    /// <param name="content">How to read a text frame's own paragraphs, or null to skip them.</param>
+    /// <param name="anchorOffset">Where in the paragraph's text the drawing sits.</param>
+    /// <param name="pictures">How to resolve an <c>a:blip</c>'s <c>r:embed</c> into bytes, or null.</param>
+    public static IReadOnlyList<PageFrame> ReadAll(
+        XElement drawing,
+        Func<XElement, IReadOnlyList<PageBlock>>? content,
+        int anchorOffset,
+        DocxPictures? pictures = null)
     {
         ArgumentNullException.ThrowIfNull(drawing);
 
         XElement? anchor = Child(drawing, "anchor");
         XElement? inline = anchor is null ? Child(drawing, "inline") : null;
         XElement? placed = anchor ?? inline;
-        if (placed is null) return null;
+        if (placed is null) return [];
 
         XElement? extent = Child(placed, "extent");
-        if (extent is null) return null;
+        if (extent is null) return [];
 
         Length width = Emu(extent.Attribute("cx")?.Value);
         Length height = Emu(extent.Attribute("cy")?.Value);
-        if (width <= Length.Zero || height <= Length.Zero) return null;
+        if (width <= Length.Zero || height <= Length.Zero) return [];
+
+        if (Group(placed) is { } group)
+        {
+            return Members(group, placed, anchor, new DocSize(width, height), content, anchorOffset,
+                           pictures);
+        }
+
+        PageFrame? single = One(placed, anchor, new DocSize(width, height), content, anchorOffset,
+                                pictures);
+        return single is null ? [] : [single];
+    }
+
+    /// <summary>The one frame an ordinary drawing holds.</summary>
+    private static PageFrame? One(
+        XElement placed,
+        XElement? anchor,
+        DocSize size,
+        Func<XElement, IReadOnlyList<PageBlock>>? content,
+        int anchorOffset,
+        DocxPictures? pictures)
+    {
+        Length width = size.Width;
+        Length height = size.Height;
 
         XElement? box = Descendant(placed, "txbxContent");
         FramePicture picture = box is null && pictures is not null ? pictures.Read(placed) : FramePicture.None;
@@ -95,6 +153,238 @@ internal static class DocxFrames
             Blocks = box is not null && content is not null ? content(box) : [],
         };
     }
+
+    /// <summary>The <c>wpg:wgp</c> a drawing's graphic data holds, or null when it holds something else.</summary>
+    /// <remarks>
+    /// <c>wpg:wpc</c> — a drawing <em>canvas</em> — is the same shape with a different name and is taken
+    /// too: Word writes one whenever a user draws several shapes on a canvas rather than grouping them,
+    /// and the members are laid out by the same transform.
+    /// </remarks>
+    private static XElement? Group(XElement placed)
+    {
+        XElement? data = Child(Child(placed, "graphic") ?? placed, "graphicData");
+        if (data is null) return null;
+
+        foreach (XElement child in data.Elements())
+        {
+            if (child.Name.LocalName is "wgp" or "wpc") return child;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// A group flattened into its envelope and one frame per leaf shape.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The transform is the one every DrawingML group carries: a child stated at <c>a:off</c> in the
+    /// group's own child coordinate space — the space <c>a:chOff</c> and <c>a:chExt</c> describe — maps
+    /// to <c>(off − chOff) × ext ÷ chExt</c> inside the group's rectangle. Nested groups compose, which
+    /// is why this recurses with the transform rather than with the element.
+    /// </para>
+    /// <para>
+    /// A group with no <c>a:chExt</c> — which a canvas usually has — is read as one-to-one, since the
+    /// child coordinates are then the group's own.
+    /// </para>
+    /// </remarks>
+    private static List<PageFrame> Members(
+        XElement group,
+        XElement placed,
+        XElement? anchor,
+        DocSize size,
+        Func<XElement, IReadOnlyList<PageBlock>>? content,
+        int anchorOffset,
+        DocxPictures? pictures)
+    {
+        (Length x, FrameHorizontalOrigin horigin, FrameHorizontalAlignment halign) = Horizontal(anchor);
+        (Length y, FrameVerticalOrigin vorigin, FrameVerticalAlignment valign) = Vertical(anchor);
+
+        PageFrame envelope = new()
+        {
+            Size = size,
+            Anchor = anchor is null ? FrameAnchor.AsCharacter : FrameAnchor.Paragraph,
+            AnchorOffset = anchorOffset,
+            Wrap = anchor is null ? TextWrap.Through : WrapOf(anchor),
+            HorizontalOrigin = horigin,
+            HorizontalAlignment = halign,
+            HorizontalOffset = x,
+            VerticalOrigin = vorigin,
+            VerticalAlignment = valign,
+            VerticalOffset = y,
+            Spacing = Spacing(placed),
+            IsImage = false,
+            Name = Child(placed, "docPr")?.Attribute("name")?.Value,
+        };
+
+        List<PageFrame> frames = [envelope];
+
+        Walk(group, TransformOf(group, size), 0);
+        return frames;
+
+        void Walk(XElement container, GroupTransform transform, int depth)
+        {
+            // Real files nest a group inside a group and stop; the bound is against a file that says
+            // otherwise, since the walk is the only thing keeping it finite.
+            if (depth > MaxGroupNesting) return;
+
+            foreach (XElement child in container.Elements())
+            {
+                switch (child.Name.LocalName)
+                {
+                    case "grpSp" or "wgp" or "wpc":
+                        Walk(child, transform.Composed(TransformOf(child, size)), depth + 1);
+                        break;
+
+                    case "wsp" or "pic" or "sp":
+                    {
+                        if (Leaf(child, transform, envelope, size, content, anchorOffset, pictures)
+                            is { } leaf)
+                        {
+                            frames.Add(leaf);
+                        }
+
+                        break;
+                    }
+
+                    default:
+                        continue;
+                }
+            }
+        }
+    }
+
+    /// <summary>How deep a group may nest before the walk gives up.</summary>
+    private const int MaxGroupNesting = 8;
+
+    /// <summary>One leaf shape of a group, placed inside the group's rectangle.</summary>
+    /// <remarks>
+    /// A shape with no <c>a:xfrm</c> of its own has no rectangle to be placed at and is skipped rather
+    /// than drawn at the group's origin, where it would sit on top of the member that is really there.
+    /// </remarks>
+    private static PageFrame? Leaf(
+        XElement shape,
+        GroupTransform transform,
+        PageFrame envelope,
+        DocSize size,
+        Func<XElement, IReadOnlyList<PageBlock>>? content,
+        int anchorOffset,
+        DocxPictures? pictures)
+    {
+        XElement? properties = shape.Elements()
+            .FirstOrDefault(child => child.Name.LocalName is "spPr");
+        XElement? transformation = properties is null ? null : Child(properties, "xfrm");
+        if (transformation is null) return null;
+
+        XElement? offset = Child(transformation, "off");
+        XElement? extent = Child(transformation, "ext");
+        if (offset is null || extent is null) return null;
+
+        DocRect within = transform.Map(
+            Raw(offset, "x"), Raw(offset, "y"), Raw(extent, "cx"), Raw(extent, "cy"));
+
+        if (within.Width <= Length.Zero || within.Height <= Length.Zero) return null;
+
+        XElement? box = Descendant(shape, "txbxContent");
+        FramePicture picture = box is null && pictures is not null
+            ? pictures.Read(shape)
+            : FramePicture.None;
+
+        return envelope with
+        {
+            Size = new DocSize(within.Width, within.Height),
+            GroupSize = size,
+            GroupOffset = new DocPoint(within.X, within.Y),
+
+            // The envelope keeps the anchor's wrap; a member must not punch a hole of its own, or a
+            // nineteen-shape letterhead would narrow the text nineteen times over.
+            Wrap = TextWrap.Through,
+            Spacing = default,
+            IsImage = box is null,
+            Image = picture.Raster,
+            Vector = picture.Vector,
+            Chart = null,
+            ChartFontFamily = null,
+            AnchorOffset = anchorOffset,
+            Name = Descendant(shape, "cNvPr")?.Attribute("name")?.Value,
+            Blocks = box is not null && content is not null ? content(box) : [],
+        };
+    }
+
+    /// <summary>
+    /// A group's child-coordinate to group-rectangle mapping.
+    /// </summary>
+    /// <param name="OriginX">The child space's origin, <c>a:chOff/@x</c>.</param>
+    /// <param name="OriginY">The child space's origin, <c>a:chOff/@y</c>.</param>
+    /// <param name="ScaleX">Group width divided by <c>a:chExt/@cx</c>.</param>
+    /// <param name="ScaleY">Group height divided by <c>a:chExt/@cy</c>.</param>
+    /// <param name="ShiftX">Where the mapped rectangle starts inside the group, in EMUs.</param>
+    /// <param name="ShiftY">The same, vertically.</param>
+    private readonly record struct GroupTransform(
+        double OriginX, double OriginY, double ScaleX, double ScaleY, double ShiftX, double ShiftY)
+    {
+        /// <summary>The identity, for a group that states no child space of its own.</summary>
+        public static GroupTransform Identity => new(0, 0, 1, 1, 0, 0);
+
+        /// <summary>This transform applied inside an enclosing one.</summary>
+        public GroupTransform Composed(GroupTransform inner)
+            => new(
+                inner.OriginX, inner.OriginY,
+                inner.ScaleX * ScaleX, inner.ScaleY * ScaleY,
+                ShiftX + (inner.ShiftX * ScaleX), ShiftY + (inner.ShiftY * ScaleY));
+
+        /// <summary>A child rectangle mapped into the group's own.</summary>
+        public DocRect Map(double x, double y, double cx, double cy)
+            => new(
+                Round(ShiftX + ((x - OriginX) * ScaleX)),
+                Round(ShiftY + ((y - OriginY) * ScaleY)),
+                Round(cx * ScaleX),
+                Round(cy * ScaleY));
+
+        private static Length Round(double emu)
+            => Length.FromTwips(Length.FromEmu((long)Math.Round(emu)).Twips);
+    }
+
+    /// <summary>The transform a group's own <c>a:xfrm</c> describes.</summary>
+    private static GroupTransform TransformOf(XElement group, DocSize size)
+    {
+        XElement? properties = group.Elements()
+            .FirstOrDefault(child => child.Name.LocalName is "grpSpPr" or "spPr");
+        XElement? transformation = properties is null ? null : Child(properties, "xfrm");
+        if (transformation is null) return GroupTransform.Identity;
+
+        XElement? childOffset = Child(transformation, "chOff");
+        XElement? childExtent = Child(transformation, "chExt");
+        XElement? extent = Child(transformation, "ext");
+
+        // The group's own extent when it states one, and the anchor's otherwise: `wp:extent` is what the
+        // document says the whole drawing is, and the two agree in every file that states both.
+        double width = extent is not null && Raw(extent, "cx") > 0 ? Raw(extent, "cx") : size.Width.Emu;
+        double height = extent is not null && Raw(extent, "cy") > 0 ? Raw(extent, "cy") : size.Height.Emu;
+
+        double spanX = childExtent is null ? 0 : Raw(childExtent, "cx");
+        double spanY = childExtent is null ? 0 : Raw(childExtent, "cy");
+
+        return new GroupTransform(
+            childOffset is null ? 0 : Raw(childOffset, "x"),
+            childOffset is null ? 0 : Raw(childOffset, "y"),
+            spanX > 0 ? width / spanX : 1,
+            spanY > 0 ? height / spanY : 1,
+            0,
+            0);
+    }
+
+    /// <summary>One attribute as the number the file wrote, before any unit is assumed.</summary>
+    /// <remarks>
+    /// A group's child coordinates are in a space of the file's own choosing — the corpus letterhead
+    /// counts in twips — so they must not be read as EMUs on the way in. Only the mapped result is a
+    /// length.
+    /// </remarks>
+    private static double Raw(XElement element, string name)
+        => element.Attribute(name)?.Value is { } value
+           && double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsed)
+            ? parsed
+            : 0;
 
     /// <summary>
     /// How far text must stay clear, from the four <c>dist*</c> attributes.

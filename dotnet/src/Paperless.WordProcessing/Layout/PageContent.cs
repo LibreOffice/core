@@ -294,6 +294,68 @@ public sealed record PageParagraph : PageBlock
         => Frames.Count > 0 && Frames.Any(frame => frame.Anchor == FrameAnchor.AsCharacter);
 
     /// <summary>
+    /// True when the label is taller than the paragraph's own text, so it raises the first line.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A list level states its own character formatting — <c>w:lvl/w:rPr</c> in OOXML, the level's
+    /// <c>grpprlChpx</c> in WW8 — and it is regularly a different size from the item's text. Writer's
+    /// label is a portion in the line (<c>SwNumberPortion</c>), so
+    /// <c>SwLineLayout::CalcLine</c> folds it into the line's maxima and a 12 pt label over 11 pt text
+    /// gives a 12 pt line. Measured on <c>loi_format_letter_of_intent-a-320-214-a330.doc</c>, whose
+    /// bulleted items are 11 pt under a 12 pt level: LibreOffice's own pitch through the list is
+    /// 13.80 pt where the item's text alone would give 12.65.
+    /// </para>
+    /// <para>
+    /// Asked as a predicate rather than always folded in, because it decides which of the two layout
+    /// paths the paragraph takes. A label no taller than its text changes nothing, and a paragraph that
+    /// changes nothing must keep measuring through exactly the path it measured through before.
+    /// </para>
+    /// </remarks>
+    public bool LabelRaisesFirstLine => LabelExtent is not null;
+
+    /// <summary>
+    /// The label's line box, when it is taller than the paragraph's own, and null otherwise.
+    /// </summary>
+    private (Length Height, Length Ascent)? LabelExtent
+    {
+        get
+        {
+            if (Label is not { Text.Length: > 0 } label) return null;
+
+            (Length height, Length ascent) = label.LineExtent(Metrics);
+            (Length own, Length ownAscent) = OwnExtent();
+
+            return height > own || ascent > ownAscent ? (height, ascent) : null;
+        }
+    }
+
+    /// <summary>The line box the paragraph's own face and size give, for the label to be compared against.</summary>
+    /// <remarks>
+    /// The paragraph's rather than the first line's runs', because this only has to decide whether the
+    /// label can matter; <see cref="MeasuredParagraph.HeightOf"/> takes the maximum over whatever is
+    /// really on the line, so a run taller than both still wins.
+    /// </remarks>
+    private (Length Height, Length Ascent) OwnExtent()
+    {
+        Length height = Length.Zero;
+        Length ascent = Length.Zero;
+
+        foreach (PageRun run in Runs)
+        {
+            LineMetrics metrics = LineSpacing.Resolve(run.Face, Metrics);
+            Length size = run.MetricEmSize > Length.Zero ? run.MetricEmSize : run.EmSize;
+            height = Length.Max(height, Length.FromTwips(metrics.ScaledLineHeight(size).Twips));
+            ascent = Length.Max(ascent, Length.FromTwips(metrics.ScaledAscent(size).Twips));
+        }
+
+        LineMetrics own = LineSpacing.Resolve(Face, Metrics);
+        return (
+            Length.Max(height, Length.FromTwips(own.ScaledLineHeight(EmSize).Twips)),
+            Length.Max(ascent, Length.FromTwips(own.ScaledAscent(EmSize).Twips)));
+    }
+
+    /// <summary>
     /// Shapes the paragraph's runs, ready for measuring across them.
     /// </summary>
     /// <remarks>
@@ -313,8 +375,34 @@ public sealed record PageParagraph : PageBlock
         }
 
         return MeasuredParagraph.Measure(
-            Text, runs, shaper: null, Itemisation, InlineObjects, Metrics,
+            Text, runs, shaper: null, Itemisation, MeasurementObjects(), Metrics,
             BlanksAreTransparentToHeight);
+    }
+
+    /// <summary>
+    /// The inline objects the measurement sees, which is the drawn ones plus the list label.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Not <see cref="InlineObjects"/>, and the difference is deliberate.</strong> That property
+    /// is what the drawing pass walks alongside the paragraph's as-character frames, one for one; a
+    /// phantom in it would hang the wrong frame on the wrong line. This list is measurement's alone.
+    /// </para>
+    /// <para>
+    /// The label enters as a zero-width object at offset nought — the room for it is already made by
+    /// <see cref="Format"/>'s widened first-line indent, so all that is left to say is how tall it is and
+    /// where its baseline sits. An object at nought touches the first line only, which is where the label
+    /// is drawn, and a zero-width one at the head of the text neither cuts a run nor moves a break: see
+    /// <c>MeasuredParagraph.Split</c>, which skips a boundary at a run's own start.
+    /// </para>
+    /// </remarks>
+    private List<InlineObject>? MeasurementObjects()
+    {
+        if (LabelExtent is not (Length height, Length ascent)) return HasInlineObjects ? [.. InlineObjects] : null;
+
+        List<InlineObject> objects = [new InlineObject(0, Length.Zero, height, ascent)];
+        objects.AddRange(InlineObjects);
+        return objects;
     }
 
     /// <summary>

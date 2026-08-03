@@ -370,6 +370,31 @@ internal static class OdfParagraphFormats
             ?? DefaultSize);
     }
 
+    /// <summary>
+    /// The absolute size a named character style states, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from <see cref="ResolveText(OdfStyles, string?)"/>'s size, which always answers — it
+    /// falls back to the family defaults and then to <see cref="DefaultSize"/>, so a style silent about
+    /// size comes back as 12 pt. A caller asking "does this style change the size" needs the silence
+    /// itself, and getting 12 pt instead would resize everything the style is applied to. A percentage
+    /// is not answered either: it is relative to a context this method is not given.
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="styleName">The character style's name.</param>
+    internal static Length? StatedTextSize(OdfStyles styles, string? styleName)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        OdfProperty stated = styles.ResolveWithoutDefaults(
+            styleName, OdfStyleFamily.Text, OdfPropertyKind.Text,
+            OdfNamespaces.FoCompatible, "font-size");
+
+        return stated.HasValue && stated.AsLength() is { } absolute
+            ? OdfWriterUnits.ToCore(absolute)
+            : null;
+    }
+
     private static OdfProperty Paragraph(
         OdfStyles styles, string? styleName, string ns, string name)
         => styles.ResolveProperty(

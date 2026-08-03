@@ -158,6 +158,29 @@ public sealed record PageFrame
     /// <summary>How big the frame is.</summary>
     public required DocSize Size { get; init; }
 
+    /// <summary>
+    /// The whole shape group this frame is one member of, or null for a frame that stands alone.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A group is one anchored object holding many shapes, and the members are placed <em>relative to
+    /// it</em>: the anchor's position and alignment decide where the group's rectangle goes, and each
+    /// member sits at a fixed offset inside that rectangle. Carrying the group's size here is what lets a
+    /// centred or right-aligned group still be resolved once and its members follow — aligning each
+    /// member by its own width would spread a letterhead across the page.
+    /// </para>
+    /// <para>
+    /// The members are flattened into siblings rather than nested, because that is what the layout engine
+    /// can place: <see cref="FrameLayout"/> resolves one rectangle per frame and a group's member is a
+    /// rectangle like any other. What the flattening must not do is punch a hole in the text per member,
+    /// so a member takes <see cref="TextWrap.Through"/> and the group's own envelope keeps the wrap.
+    /// </para>
+    /// </remarks>
+    public DocSize? GroupSize { get; init; }
+
+    /// <summary>Where this frame sits inside <see cref="GroupSize"/>, from the group's top-left.</summary>
+    public DocPoint GroupOffset { get; init; }
+
     /// <summary>What the frame is fixed to.</summary>
     public FrameAnchor Anchor { get; init; } = FrameAnchor.Paragraph;
 

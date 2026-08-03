@@ -69,26 +69,32 @@ public static class FrameLayout
 
         bool towardsBinding = frame.HorizontalAlignment == FrameHorizontalAlignment.Inside == rightHandPage;
 
+        // A member of a shape group is aligned by its *group* and then offset within it — see
+        // PageFrame.GroupSize. Aligning it by its own size instead would centre each member of a
+        // centred group separately, which stacks a letterhead's boxes on top of one another.
+        DocSize aligned = frame.GroupSize ?? frame.Size;
+
         Length x = frame.HorizontalAlignment switch
         {
             FrameHorizontalAlignment.Left => horizontal.X,
             FrameHorizontalAlignment.Centre =>
-                horizontal.X + ((horizontal.Width - frame.Size.Width) / 2),
-            FrameHorizontalAlignment.Right => horizontal.Right - frame.Size.Width,
+                horizontal.X + ((horizontal.Width - aligned.Width) / 2),
+            FrameHorizontalAlignment.Right => horizontal.Right - aligned.Width,
             FrameHorizontalAlignment.Inside or FrameHorizontalAlignment.Outside =>
-                towardsBinding ? horizontal.X : horizontal.Right - frame.Size.Width,
+                towardsBinding ? horizontal.X : horizontal.Right - aligned.Width,
             _ => horizontal.X + frame.HorizontalOffset,
         };
 
         Length y = frame.VerticalAlignment switch
         {
             FrameVerticalAlignment.Top => vertical.Y,
-            FrameVerticalAlignment.Middle => vertical.Y + ((vertical.Height - frame.Size.Height) / 2),
-            FrameVerticalAlignment.Bottom => vertical.Bottom - frame.Size.Height,
+            FrameVerticalAlignment.Middle => vertical.Y + ((vertical.Height - aligned.Height) / 2),
+            FrameVerticalAlignment.Bottom => vertical.Bottom - aligned.Height,
             _ => vertical.Y + frame.VerticalOffset,
         };
 
-        return new DocRect(x, y, frame.Size.Width, frame.Size.Height);
+        return new DocRect(
+            x + frame.GroupOffset.X, y + frame.GroupOffset.Y, frame.Size.Width, frame.Size.Height);
     }
 }
 
