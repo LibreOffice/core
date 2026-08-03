@@ -2012,6 +2012,20 @@ the change is `PptxTextBody.FirstCodePoint` and it is guarded only by the refere
 
 ### Small differences that are measured and not yet closed
 
+- [ ] **A chart's category-axis labels: we draw *fewer* than the reference, not more.** Recorded
+      the other way round for two rounds — "the reference draws none of those labels and we draw
+      every one" — and the rendered pages say the opposite. On page 4 of
+      `slides/batch-017/pptx/Demick_JetBlue.pptx` LibreOffice draws about twenty `2006-7`-style
+      labels rotated 45° along the axis and we draw **eleven**, so our rhythm thinning is the
+      more aggressive of the two. What produced the wrong reading is the word gate's blind spot
+      working in both directions at once: the reference's rotated labels extract as **nothing at
+      all** under `pdftotext`, while ours extract as *fragments* — `2012-9` comes back as `12`,
+      `20`, `9` — so the page reads +29 words for us and the number has nothing to do with how
+      many labels either side drew. Two other differences on that page are real and easier:
+      the reference draws a secondary value axis with its own `Load Factor (%)` title on the
+      right and we draw neither, and our legend collides with the category-axis title
+      (`RPMYear ASM LF + ( 3rd Quarter)` on one line). Judge this one on the image, never on
+      `wc -w`.
 - [ ] **An ODF fill's `draw:opacity` is not read at all**, so a shape LibreOffice draws at 30%
       comes out fully opaque. Found while building `slide-drop-shadow.odp`: the same shape that
       carries `<a:alpha val="30000"/>` in the `pptx` carries `draw:opacity="30%"` on its
