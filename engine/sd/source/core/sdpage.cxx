@@ -1874,7 +1874,9 @@ void SdPage::GetPageInfo(::tools::JsonWriter& jsonWriter)
     jsonWriter.put("upperBorder", GetUpperBorder());
     jsonWriter.put("lowerBorder", GetLowerBorder());
     jsonWriter.put("name", GetName());
-    jsonWriter.put("hash", GetUniqueID());
+    // The page's part number: its stable unique id, the number every
+    // part-carrying message names this page by.
+    jsonWriter.put("part", GetUniqueID());
 }
 
 void SdPage::NotifyPagePropertyChanges()

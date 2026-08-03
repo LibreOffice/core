@@ -127,7 +127,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 				// Create the preview parts
 				for (var i = 0; i < app.impress.partList.length; i++) {
-					this._previewTiles.push(this._createPreview(i, app.impress.partList[i].hash));
+					this._previewTiles.push(this._createPreview(i, app.impress.partList[i].part));
 				}
 				if (!app.file.fileBasedView)
 					window.L.DomUtil.addClass(this._previewTiles[selectedPart], 'preview-img-currentpart');
@@ -319,7 +319,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	_createPreview: function (i, hashCode) {
+	_createPreview: function (i, part) {
 		var frameClass = 'preview-frame ' + this.options.frameClass;
 		var frame = window.L.DomUtil.create('div', frameClass, this._partsPreviewCont);
 		frame.id = 'preview-frame-part-' + this._idNum;
@@ -346,10 +346,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		img.setAttribute('tabindex', '-1');
 		window.L.control.attachTooltipEventListener(img, this._map);
 		img.id = 'preview-img-part-' + this._idNum;
-		// The unique id of the slide this preview shows. The slide list
-		// carries that id under its legacy name, hash, and this property
-		// keeps the name it is seeded from.
-		img.hash = hashCode;
+		// The part number of the slide this preview shows: the slide's
+		// stable unique id, carried by the slide list entries.
+		img._part = part;
 		this._setPlaceholder(img, 'previewSmile');
 		img.fetched = false;
 		if (!window.mode.isDesktop()) {
@@ -1363,12 +1362,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				if (app.impress.partList.length > this._previewTiles.length) {
 					for (it = 0; it < app.impress.partList.length; it++) {
 						if (it === this._previewTiles.length) {
-							this._insertPreview({selectedPart: it - 1, hashCode: app.impress.partList[it].hash});
+							this._insertPreview({selectedPart: it - 1, part: app.impress.partList[it].part});
 							break;
 						}
-						if (this._previewTiles[it].hash !== app.impress.partList[it].hash) {
+						if (this._previewTiles[it]._part !== app.impress.partList[it].part) {
 							// new slide is at it; _insertPreview adds at selectedPart + 1
-							this._insertPreview({selectedPart: it - 1, hashCode: app.impress.partList[it].hash});
+							this._insertPreview({selectedPart: it - 1, part: app.impress.partList[it].part});
 							break;
 						}
 					}
@@ -1376,7 +1375,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				else {
 					for (it = 0; it < this._previewTiles.length; it++) {
 						if (it === app.impress.partList.length ||
-						    this._previewTiles[it].hash !== app.impress.partList[it].hash) {
+						    this._previewTiles[it]._part !== app.impress.partList[it].part) {
 							this._deletePreview({selectedPart: it});
 							break;
 						}
@@ -1387,7 +1386,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				// sync all, should never happen
 				while (this._previewTiles.length < app.impress.partList.length) {
 					this._insertPreview({selectedPart: this._previewTiles.length - 1,
-							     hashCode: app.impress.partList[this._previewTiles.length].hash});
+							     part: app.impress.partList[this._previewTiles.length].part});
 				}
 
 				while (this._previewTiles.length > app.impress.partList.length) {
@@ -1395,23 +1394,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				}
 
 				for (it = 0; it < app.impress.partList.length; it++) {
-					this._previewTiles[it].hash = app.impress.partList[it].hash;
+					this._previewTiles[it]._part = app.impress.partList[it].part;
 					this._setPlaceholder(this._previewTiles[it], 'previewSmile');
 					this._previewTiles[it].fetched = false;
 				}
 			}
 		}
 		else {
-			// The same number of slides with hashes at new indices means the
-			// slides were reordered (or an index holds a new slide). A part's
-			// hash stays the same for its whole lifetime, so the preview
-			// image that already carries it can move to the part's new index
-			// and show up there immediately; only a hash no preview carries
-			// needs a fetch.
-			const previewByHash = {};
+			// The same number of slides with part numbers at new indices
+			// means the slides were reordered (or an index holds a new
+			// slide). A part number stays the same for the slide's whole
+			// lifetime, so the preview image that already carries it can
+			// move to the slide's new index and show up there immediately;
+			// only a part number no preview carries needs a fetch.
+			const previewByPart = {};
 			for (it = 0; it < this._previewTiles.length; it++) {
-				if (this._previewTiles[it].hash) {
-					previewByHash[this._previewTiles[it].hash] = {
+				if (this._previewTiles[it]._part) {
+					previewByPart[this._previewTiles[it]._part] = {
 						src: this._previewTiles[it].src,
 						fetched: this._previewTiles[it].fetched,
 						placeholderName: this._previewTiles[it].placeholderName
@@ -1419,10 +1418,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				}
 			}
 			for (it = 0; it < app.impress.partList.length; it++) {
-				const newHash = app.impress.partList[it].hash;
-				if (this._previewTiles[it].hash !== newHash) {
-					this._previewTiles[it].hash = newHash;
-					const knownPreview = newHash ? previewByHash[newHash] : undefined;
+				const newPart = app.impress.partList[it].part;
+				if (this._previewTiles[it]._part !== newPart) {
+					this._previewTiles[it]._part = newPart;
+					const knownPreview = newPart ? previewByPart[newPart] : undefined;
 					if (knownPreview) {
 						this._previewTiles[it].src = knownPreview.src;
 						this._previewTiles[it].fetched = knownPreview.fetched;
@@ -1507,7 +1506,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// renumbered while the request was under way. A slide deleted in
 			// the meantime has no preview left, so its image is dropped.
 			const tile = this._previewTiles.find(function (candidate) {
-				return candidate.hash === e.part;
+				return candidate._part === e.part;
 			});
 			if (tile) {
 				tile.placeholderName = null;
@@ -1524,7 +1523,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// keep its collapsed frames and gap bookkeeping.
 			this._finishDrag(false);
 			var newIndex = e.selectedPart + 1;
-			var newPreview = this._createPreview(newIndex, (e.hashCode === undefined ? null : e.hashCode));
+			var newPreview = this._createPreview(newIndex, (e.part === undefined ? null : e.part));
 
 			// insert newPreview to newIndex position
 			this._previewTiles.splice(newIndex, 0, newPreview);

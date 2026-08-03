@@ -295,7 +295,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 				var slide0Hash;
 				cy.window().then(function(win) {
-					slide0Hash = win['0'].app.impress.partList[0].hash;
+					slide0Hash = win['0'].app.impress.partList[0].part;
 				});
 
 				// Select slide 0 only.
@@ -317,7 +317,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 					// moved slide, Section-3 stays put.
 					expect(impress.sections.map(function(s) { return s.startIndex; }))
 						.to.deep.equal([0, 3, 11]);
-					expect(impress.partList[3].hash).to.equal(slide0Hash);
+					expect(impress.partList[3].part).to.equal(slide0Hash);
 				});
 			});
 
@@ -357,7 +357,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 
 				var slide0Hash;
 				cy.window().then(function(win) {
-					slide0Hash = win['0'].app.impress.partList[0].hash;
+					slide0Hash = win['0'].app.impress.partList[0].part;
 				});
 
 				// Select slides 0 and 1.
@@ -381,7 +381,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 					// Section-2 shift up to fill the gap left by the moved slides.
 					expect(impress.sections.map(function(s) { return s.startIndex; }))
 						.to.deep.equal([0, 2, 9]);
-					expect(impress.partList[9].hash).to.equal(slide0Hash);
+					expect(impress.partList[9].part).to.equal(slide0Hash);
 				});
 			});
 

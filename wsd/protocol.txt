@@ -251,8 +251,8 @@ unique ids, not indexes into the page list. The ids carry no order:
 adjacent pages do not hold adjacent numbers, and arithmetic on an id
 never yields another page. To reach a neighbouring page, find the page's
 position in the status message's page list and take the id listed next to
-it. The status message lists each page's id under the name hash, in
-document order; a page keeps its id for the whole document session when
+it. The status message lists each page's id as part, in document order; a
+page keeps its id for the whole document session when
 other pages are moved, inserted or deleted. Because the tile cache keys carry the part number, the cached
 tiles of a page stay valid when the page order changes. The ids of the
 pages a mode addresses come from that mode's page list: the standard
@@ -728,9 +728,9 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     status: implies document loading (deprecated, use loaded: instead). statusupdate: is just an update.
 
     For a presentation or drawing document the selectedpart field of the
-    JSON payload carries the current page's stable unique id, and each
-    entry of the parts array carries its page's id under the name hash,
-    in document order.
+    JSON payload carries the current page's part number, the page's
+    stable unique id, and each entry of the parts array carries its
+    page's part number as part, in document order.
 
 styles: {"styleFamily": ["styles in family"], etc. }
 

@@ -38,7 +38,7 @@ std::vector<std::string> getPartHashCodes(const Poco::SharedPtr<Poco::JSON::Obje
 
     for (std::size_t i = 0; i < status->getArray("parts")->size(); i++)
     {
-        partHashes.push_back(status->getArray("parts")->getObject(i)->get("hash").toString());
+        partHashes.push_back(status->getArray("parts")->getObject(i)->get("part").toString());
     }
 
     return partHashes;

@@ -1480,8 +1480,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(std::string("Kit User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
-    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("part").empty());
+    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("part").empty());
 
     // Reply to a just added comment
     KitHelper::setView(nView2);
@@ -1505,8 +1505,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT(aReplyTextView1.endsWith("Reply to comment"));
     CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to Kit User1"));
     CPPUNIT_ASSERT(aReplyTextView2.endsWith("Reply to comment"));
-    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
-    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("part").empty());
+    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("part").empty());
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1521,8 +1521,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
-    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
-    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("part").empty());
+    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("part").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
 
@@ -1563,7 +1563,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
 
-    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("part").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
@@ -1604,7 +1604,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
 
-    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("part").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 

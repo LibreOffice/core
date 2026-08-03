@@ -169,7 +169,7 @@ interface AppInterface {
 		notesMode: boolean;
 		savedViewMode: string | null; // 'normal' | 'notes' | 'master' | null
 		twipsCorrection: number;
-		getIndexFromSlideHash(hash: number): number;
+		getIndexFromPart(part: number): number;
 		isSlideHidden(partNo: number): boolean;
 		areAllSlidesHidden(): boolean;
 	};

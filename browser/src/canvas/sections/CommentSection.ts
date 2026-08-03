@@ -148,8 +148,8 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.showSelectedCoordinate = true; // Writer.
 
 		if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
-			this.sectionProperties.parthash = parseInt(this.sectionProperties.data.parthash);
-			this.sectionProperties.partIndex = app.impress.getIndexFromSlideHash(this.sectionProperties.parthash);
+			this.sectionProperties.part = parseInt(this.sectionProperties.data.part);
+			this.sectionProperties.partIndex = app.impress.getIndexFromPart(this.sectionProperties.part);
 		}
 
 		this.sectionProperties.isHighlighted = false;
@@ -926,7 +926,7 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.data.rectangle === null)
 			return;
 
-		const showMarker = app.impress.partList[app.map._docLayer._selectedPart].hash === this.sectionProperties.data.parthash ||
+		const showMarker = app.impress.partList[app.map._docLayer._selectedPart].part === this.sectionProperties.data.part ||
 							app.file.fileBasedView;
 
 		// Anchor-area outline: only when the comment carries an explicit

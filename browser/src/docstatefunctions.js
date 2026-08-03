@@ -472,13 +472,13 @@ app.impress.getSelectedSlidesCount = function () {
 	return count;
 };
 
-app.impress.getIndexFromSlideHash = function (hash) {
+app.impress.getIndexFromPart = function (part) {
 	if (app.impress.partList) {
 		for (let i = 0; i < app.impress.partList.length; i++) {
-			if (app.impress.partList[i].hash === hash) return i;
+			if (app.impress.partList[i].part === part) return i;
 		}
 
-		app.console.warn('No part with hash (getIndexFromSlideHash): ' + hash);
+		app.console.warn('No part with number (getIndexFromPart): ' + part);
 
 		return 0;
 	} else return 0;

@@ -72,7 +72,7 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 		clickSlideThumbnail(0);
 		helper.processToIdle(win2);
 		cy.then(function() {
-			win2.__orderBefore = win2.app.impress.partList.map(function(part) { return part.hash; });
+			win2.__orderBefore = win2.app.impress.partList.map(function(part) { return part.part; });
 			win2.app.socket.sendMessage('moveselectedclientparts position=1');
 		});
 		helper.processToIdle(win2);
@@ -80,7 +80,7 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 		// Confirm the move actually happened: the slide order changed, so the
 		// test cannot pass on a silent no-op.
 		cy.wrap(null).should(function() {
-			var orderAfter = win2.app.impress.partList.map(function(part) { return part.hash; });
+			var orderAfter = win2.app.impress.partList.map(function(part) { return part.part; });
 			expect(orderAfter).to.not.deep.equal(win2.__orderBefore);
 		});
 
@@ -121,7 +121,7 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 		// slide's id, so the renumbering must leave these same tile objects
 		// cached and drawable under the same key.
 		cy.then(function() {
-			win1.__viewedUniqueId = win1.app.impress.partList[2].hash;
+			win1.__viewedUniqueId = win1.app.impress.partList[2].part;
 		});
 		cy.wrap(null).should(function() {
 			expect(readyTilesForSlide(win1, win1.__viewedUniqueId).length).to.be.greaterThan(0);
@@ -167,7 +167,7 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 		cy.wrap(null).should(function() {
 			// A stays on its own slide, now renumbered from index 2 to index 1.
 			expect(win1.app.map.getCurrentPartNumber()).to.equal(1);
-			expect(win1.app.impress.partList[1].hash).to.equal(win1.__viewedUniqueId);
+			expect(win1.app.impress.partList[1].part).to.equal(win1.__viewedUniqueId);
 
 			// A processed the shift at least once, and every time the slide's
 			// own tiles were still in place under its id: no stale slide drawn,

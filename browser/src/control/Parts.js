@@ -42,7 +42,7 @@ window.L.Map.include({
 				app.calc.partHashes[docLayer._prevSelectedPart] === app.calc.partHashes[part];
 		} else if ((docType === 'presentation' || docType === 'drawing')) {
 			if (docLayer._prevSelectedPart !== undefined && part < app.impress.partList.length && app.impress.partList[docLayer._prevSelectedPart])
-				isTheSamePart = app.impress.partList[docLayer._prevSelectedPart].hash === app.impress.partList[part].hash;
+				isTheSamePart = app.impress.partList[docLayer._prevSelectedPart].part === app.impress.partList[part].part;
 		} else if (docType === 'text') {
 			isTheSamePart = true;
 		} else {

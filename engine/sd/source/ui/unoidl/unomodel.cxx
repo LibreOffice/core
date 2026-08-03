@@ -5213,7 +5213,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
-            rJsonWriter.put("parthash", pPage->GetUniqueID());
+            rJsonWriter.put("part", pPage->GetUniqueID());
             geometry::RealPoint2D const aPoint = xAnnotation->getPosition();
             geometry::RealSize2D const aSize = xAnnotation->getSize();
             ::tools::Rectangle aRectangle(Point(aPoint.X * 100.0, aPoint.Y * 100.0), Size(aSize.Width * 100.0, aSize.Height * 100.0));

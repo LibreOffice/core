@@ -97,7 +97,7 @@ window.L.Map.include({
 		// In PDF, enter a click-to-place mode and let the user pick the spot,
 		// then open the in-place editor anchored there. Switching the active
 		// part keeps save()'s setPart wrapper consistent and lets newAnnotation
-		// pick up the correct parthash; yAddition lets save() back the per-page
+		// pick up the correct part; yAddition lets save() back the per-page
 		// offset out before sending PositionY.
 		if (app.file.fileBasedView && commentSection) {
 			commentSection.startCommentPlacement((pick: cool.CommentPlacementPick) => {
@@ -2283,7 +2283,7 @@ export class CommentSection extends CanvasSectionObject {
 	// We will add their part's position to comment's variables.
 	// When we are saving their position, we will remove the additions before sending the information.
 	private adjustCommentFileBasedView (comment: any): void {
-		var index = app.impress.getIndexFromSlideHash(parseInt(comment.parthash));
+		var index = app.impress.getIndexFromPart(parseInt(comment.part));
 		const layout = app.activeDocument.activeLayout;
 		const fbLayout =
 			layout && layout.type === 'ViewLayoutFileBased'
@@ -2317,7 +2317,7 @@ export class CommentSection extends CanvasSectionObject {
 
 		comment.anchorSPoint = new cool.SimplePoint(comment.anchorPos[0], comment.anchorPos[1]);
 
-		comment.parthash = comment.parthash ? comment.parthash: null;
+		comment.part = comment.part ? comment.part: null;
 
 		if (comment.parentId)
 			comment.parent = String(comment.parentId);
@@ -2351,7 +2351,7 @@ export class CommentSection extends CanvasSectionObject {
 		if (app.map._docLayer._docType === 'spreadsheet' && app.map._docLayer.sheetGeometry)
 			app.map._docLayer.sheetGeometry.convertToTileTwips(comment.anchorSPoint);
 
-		comment.parthash = comment.parthash ? comment.parthash: null;
+		comment.part = comment.part ? comment.part: null;
 		comment.tab = (comment.tab || comment.tab === 0) ? comment.tab: null;
 		comment.layoutStatus = comment.layoutStatus !== undefined ? parseInt(comment.layoutStatus): null;
 

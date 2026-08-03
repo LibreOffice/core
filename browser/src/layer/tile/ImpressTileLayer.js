@@ -207,7 +207,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		commentData.anchorPos = [anchorX, anchorY];
 		commentData.rectangle = [anchorX, anchorY, w, h];
 
-		commentData.parthash = app.impress.partList[this._selectedPart].hash;
+		commentData.part = app.impress.partList[this._selectedPart].part;
 
 		const name = cool.Comment.makeName(commentData);
 		const comment = new cool.Comment(name, commentData, {}, app.sectionContainer.getSectionWithName(app.CSections.CommentList.name));
@@ -444,12 +444,12 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	// The part number of a presentation or drawing page is the page's stable
-	// unique id, carried as hash in the part list, so the tile keys survive
+	// unique id, carried by each part list entry, so the tile keys survive
 	// when slides are moved, inserted or deleted.
 	getPartFromIndex: function (index) {
 		const list = app.impress.partList;
 		if (list && index >= 0 && index < list.length)
-			return list[index].hash;
+			return list[index].part;
 		return -1;
 	},
 
@@ -462,8 +462,8 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			this._slideIndexCacheSource = list;
 			this._slideIndexCache = new Map();
 			for (let i = 0; i < list.length; i++) {
-				if (!this._slideIndexCache.has(list[i].hash))
-					this._slideIndexCache.set(list[i].hash, i);
+				if (!this._slideIndexCache.has(list[i].part))
+					this._slideIndexCache.set(list[i].part, i);
 			}
 		}
 		return this._slideIndexCache;

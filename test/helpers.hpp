@@ -855,7 +855,7 @@ inline std::vector<char> getTileMessage(const std::shared_ptr<http::WebSocketSes
 }
 
 /// The parts' stable unique ids from the JSON payload of a status: message, in
-/// document order: the hash member of each entry of the parts array. These are
+/// document order: the part member of each entry of the parts array. These are
 /// the numbers that name the parts of a presentation or drawing document in
 /// part-carrying messages.
 inline std::vector<std::string> parsePartUniqueIds(const std::string& message)
@@ -872,8 +872,8 @@ inline std::vector<std::string> parsePartUniqueIds(const std::string& message)
         for (std::size_t i = 0; i < parts->size(); ++i)
         {
             const Poco::JSON::Object::Ptr part = parts->getObject(i);
-            if (part && part->has("hash"))
-                ids.push_back(part->get("hash").toString());
+            if (part && part->has("part"))
+                ids.push_back(part->get("part").toString());
         }
     }
     return ids;

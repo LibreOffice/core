@@ -442,14 +442,13 @@ class VectorManager extends RenderManagerBase {
 		previewImage.src = canvas.toDataURL('image/png');
 
 		// A vector preview renders locally at fire time, so the slide now at
-		// this index is the one the image shows. The part list carries each
-		// slide's part number under its legacy name, hash.
+		// this index is the one the image shows.
 		app.map.fire('tilepreview', {
 			tile: previewImage,
 			id: id,
 			width: maxWidth,
 			height: maxHeight,
-			part: app.impress.partList?.[partIndex]?.hash,
+			part: app.impress.partList?.[partIndex]?.part,
 			partIndex: partIndex,
 			mode: 0,
 			docType: this._docLayer._docType,
