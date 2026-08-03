@@ -481,6 +481,26 @@ neither agent ever measured is not evidence of anything.
   totals that do not add up.
 - **Re-run the full track sweep after the last merge.** Per-agent numbers are measured
   against their own worktree. Only the sweep on the merged branch describes what you have.
+- **Sweep the *other* tracks too when a merge touches a shared layer.** An agent that changes
+  something below its own family — a sink, a shaper, a font metric — will sweep the other
+  tracks itself if asked, but it sweeps them on *its* base, which predates the other agents'
+  merges. That proves the change safe against the old code and says nothing about the tree you
+  end up with. The parent session owes that sweep.
+
+### Watch for the round where the sum stops beating the parts
+
+For three rounds the merged total beat every agent's own figure — 98 against 89 and 86, then
+107 against 104 and 102, then 133 against 103 and 111 — because the fixes completed each other:
+removing a spacing error and removing a line-height error each exposed the other while alone.
+That is the standing argument for re-sweeping rather than adding up.
+
+Then a round came in at exactly the sum of its parts, to the document. **That is a signal, not
+a disappointment.** It says the tracks have stopped sharing root causes: what is left is
+per-family rather than in the layers underneath. Two things follow. Compounding is no longer a
+reason to expect a merge to beat its inputs, so a merged figure matching the sum is the correct
+result rather than a sign something was lost. And the cross-track sweep changes purpose — it
+was discovery, finding fixes that reached further than their author knew, and it is now
+insurance against a shared layer being disturbed. Still run it; stop expecting it to pay.
 
 ## Building or re-scoring a corpus from scratch
 
