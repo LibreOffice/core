@@ -43,6 +43,8 @@ class OutputDevice;
 
 namespace vclcanvas
 {
+class OutDevHolder;
+
     typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice >    GraphicDeviceBase_Base;
 
     /** Product of this component's factory.
@@ -188,14 +190,6 @@ namespace vclcanvas
                               const ::vclcanvas::RenderState&   renderState,
                               ColorType                            eColorType ) const;
 
-       /** Set primary output device
-
-            This changes the primary output device, where rendering is
-            sent to.
-         */
-        void setOutDev( const OutDevProviderSharedPtr&  rOutDev,
-                        bool                            bProtect);
-
         rtl::Reference< vclcanvas::CachedBitmap >
             implDrawBitmap( const Bitmap&     rBitmap,
                             const ::vclcanvas::ViewState&   viewState,
@@ -215,13 +209,7 @@ namespace vclcanvas
         }
 
         /// For retrieving device info
-        OutDevProviderSharedPtr mpOutDev;
-
-        /// Rendering to this outdev preserves its state
-        OutDevProviderSharedPtr                      mpProtectedOutDevProvider;
-
-        /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mpOutDevProvider;
+        std::shared_ptr<OutDevHolder> mpOutDev;
 
         /// When true, content is able to represent alpha
         bool                                         mbHaveAlpha;

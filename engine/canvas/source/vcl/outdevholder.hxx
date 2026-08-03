@@ -36,10 +36,10 @@ public:
     {
     }
 
-private:
     virtual OutputDevice& getOutDev() override { return mrOutDev; }
     virtual const OutputDevice& getOutDev() const override { return mrOutDev; }
 
+private:
     // TODO(Q2): Lifetime issue. This _only_ works reliably,
     // if disposing the Canvas correctly disposes all
     // entities which hold this pointer.
