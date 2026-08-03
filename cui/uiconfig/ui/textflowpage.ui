@@ -991,7 +991,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkSplitPara">
-                <property name="label" translatable="yes" context="textflowpage|checkSplitPara">_Allow to split paragraph</property>
+                <property name="label" translatable="yes" context="textflowpage|checkSplitPara">_Allow splitting paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>

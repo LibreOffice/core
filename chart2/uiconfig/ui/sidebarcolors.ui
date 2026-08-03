@@ -26,7 +26,7 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:ChartColorPalette">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarcolors|bordertype|tooltip_text">Allow to select a color palette to apply to current chart data series.</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarcolors|bordertype|tooltip_text">Allows selecting a color palette to apply to current chart data series.</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="use-underline">True</property>
