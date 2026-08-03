@@ -109,8 +109,6 @@ namespace vclcanvas
                               static_cast< ::cppu::OWeakObject* >(this));
         }
 
-        VCLCANVAS_DLLPUBLIC css::uno::Reference< vclcanvas::XGraphicDevice > getDevice();
-
         bool repaint( const GraphicObjectSharedPtr&                 rGrf,
                               const ::vclcanvas::ViewState&              viewState,
                               const ::vclcanvas::RenderState&            renderState,

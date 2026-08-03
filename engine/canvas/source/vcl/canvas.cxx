@@ -186,13 +186,6 @@ namespace vclcanvas
                                      rOutDev.GetOutputSizePixel()) );
     }
 
-    css::uno::Reference< vclcanvas::XGraphicDevice > Canvas::getDevice()
-    {
-        vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-        return css::uno::Reference< vclcanvas::XGraphicDevice >(this);
-    }
-
     void Canvas::drawLine(const css::geometry::RealPoint2D&  aStartRealPoint2D,
                                    const css::geometry::RealPoint2D&  aEndRealPoint2D,
                                    const ::vclcanvas::ViewState&   viewState,
@@ -582,7 +575,7 @@ namespace vclcanvas
 
         ::canvastools::verifyInput( renderState,
                                       __func__,
-                                      const_cast<Canvas*>(this)->getDevice(),
+                                      const_cast<Canvas&>(*this),
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
@@ -646,7 +639,7 @@ namespace vclcanvas
     {
         ::canvastools::verifyInput( renderState,
                                       __func__,
-                                      getDevice(),
+                                      *this,
                                       4,
                                       bModulateColors ? 3 : 0 );
 

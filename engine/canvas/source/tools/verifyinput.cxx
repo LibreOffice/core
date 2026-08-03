@@ -41,6 +41,7 @@
 
 #include <verifyinput.hxx>
 #include <ViewState.hxx>
+#include <canvas.hxx>
 
 
 using namespace ::com::sun::star;
@@ -78,7 +79,7 @@ namespace canvastools
 
         void verifyInput( const geometry::AffineMatrix2D&           matrix,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
+                          vclcanvas::Canvas&                        rCanvas,
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -96,10 +97,10 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): AffineMatrix2D contains infinite or NAN value(s) at the following positions (m00-m12): " +
                     OUString::number(nBinaryState),
-                    xIf, nArgPos );
+                    static_cast<cppu::OWeakObject*>(&rCanvas), nArgPos );
             }
 #else
-            (void)pStr; (void)xIf; (void)nArgPos;
+            (void)pStr; (void)rCanvas; (void)nArgPos;
             if( !std::isfinite( matrix.m00 ) ||
                 !std::isfinite( matrix.m01 ) ||
                 !std::isfinite( matrix.m02 ) ||
@@ -155,12 +156,12 @@ namespace canvastools
 
         void verifyInput( const vclcanvas::RenderState&             renderState,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
+                          class vclcanvas::Canvas&                  rCanvas,
                           ::sal_Int16                               nArgPos,
                           sal_Int32                                 nMinColorComponents )
         {
             verifyInput( renderState.AffineTransform,
-                         pStr, xIf, nArgPos );
+                         pStr, rCanvas, nArgPos );
 
             if( renderState.DeviceColor.getLength() < nMinColorComponents )
             {
@@ -172,7 +173,7 @@ namespace canvastools
                     " expected, " +
                     OUString::number(renderState.DeviceColor.getLength()) +
                     " provided)",
-                    xIf, nArgPos );
+                    static_cast<cppu::OWeakObject*>(&rCanvas), nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif

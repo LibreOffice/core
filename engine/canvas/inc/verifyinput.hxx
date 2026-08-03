@@ -47,6 +47,7 @@ namespace cpo::uno { template <class E> class Sequence; }
 
 namespace vclcanvas
 {
+    class Canvas;
     struct RenderState;
     struct Texture;
     struct ViewState;
@@ -81,7 +82,7 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::AffineMatrix2D&   rMatrix,
                           const char*                                       pStr,
-                          const css::uno::Reference< css::uno::XInterface >&  xIf,
+                          vclcanvas::Canvas&                                rCanvas,
                           ::sal_Int16                                       nArgPos );
 
         /** Verify that the given transformation contains valid floating point
@@ -171,7 +172,7 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const ::vclcanvas::RenderState& renderState,
                           const char*                                       pStr,
-                          const css::uno::Reference< css::uno::XInterface >&  xIf,
+                          vclcanvas::Canvas&                                rCanvas,
                           ::sal_Int16                                       nArgPos,
                           sal_Int32                                         nMinColorComponents=0 );
 

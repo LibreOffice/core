@@ -30,7 +30,6 @@ class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
     rtl::Reference<vclcanvas::Canvas> mCanvas;
-    uno::Reference<vclcanvas::XGraphicDevice> mDevice;
     vclcanvas::ViewState mViewState;
     vclcanvas::RenderState mRenderState;
     cpo::uno::Sequence<double> mColorBlack;
@@ -72,7 +71,6 @@ public:
     {
         mVclDevice.disposeAndClear();
         mCanvas = rtl::Reference<vclcanvas::Canvas>();
-        mDevice = uno::Reference<vclcanvas::XGraphicDevice>();
         BootstrapFixture::tearDown();
     }
 
@@ -85,9 +83,6 @@ public:
         mVclDevice->Erase();
         mCanvas = new vclcanvas::Canvas(mVclDevice.get());
         CPPUNIT_ASSERT(mCanvas.is());
-        mDevice
-            = uno::Reference<vclcanvas::XGraphicDevice>(mCanvas->getDevice(), uno::UNO_SET_THROW);
-        CPPUNIT_ASSERT(mDevice.is());
     }
 
     void testDrawLine()
