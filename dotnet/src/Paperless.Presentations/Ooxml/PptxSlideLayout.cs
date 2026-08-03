@@ -40,14 +40,16 @@ internal sealed partial class PptxSlideLayout
     private readonly Dictionary<string, PptxPicture> _images = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// The part each synthesised SmartArt shape tree came from, by the tree's own identity.
+    /// The part each synthesised element tree came from, by the tree's own identity.
     /// </summary>
     /// <remarks>
-    /// Keyed by reference, because a diagram's tree is built rather than loaded and so is not
-    /// any of the three parts <see cref="PartOf"/> otherwise recognises — and its relationships
-    /// are its own. See the remarks there for what goes wrong without it.
+    /// Keyed by reference, because such a tree is built rather than loaded and so is not any of
+    /// the three parts <see cref="PartOf"/> otherwise recognises — and its relationships are its
+    /// own. See the remarks there for what goes wrong without it. Two things arrive this way: a
+    /// SmartArt diagram's baked shape tree, whose part is the drawing beside the data model; and
+    /// a themed fill lifted out of <c>a:fmtScheme</c>, whose part is the theme.
     /// </remarks>
-    private readonly Dictionary<XElement, string> _diagrams =
+    private readonly Dictionary<XElement, string> _synthesised =
         new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
@@ -233,10 +235,20 @@ internal sealed partial class PptxSlideLayout
     /// The slide's background, taken from the slide, then its layout, then its master.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A slide with no <c>p:bg</c> shows its layout's, and a layout with none shows its master's —
     /// which is why nearly every deck states a background exactly once, on the master, and every
     /// slide in it is that colour. A deck that states none anywhere is white, which is what
     /// LibreOffice paints.
+    /// </para>
+    /// <para>
+    /// <c>p:bg</c> holds one of two children and only one of them is a fill. <c>p:bgPr</c> states
+    /// it outright; <c>p:bgRef</c> names one of the theme's <c>a:bgFillStyleLst</c> entries by
+    /// index and supplies the colour it is written in terms of, which is
+    /// <see cref="DrawingStyleMatrix.Background"/>'s job. Reading only the first of the two makes
+    /// a deck that uses the second come out white — and a white slide passes a page count and a
+    /// word count alike, so nothing but a picture of the page can see it.
+    /// </para>
     /// </remarks>
     private Paint? Background(PptxSlide slide, SlideTheme theme)
     {
@@ -245,7 +257,7 @@ internal sealed partial class PptxSlideLayout
             XElement? background = Ppt.Child(Ppt.Child(part, "cSld"), "bg");
             if (background is null) continue;
 
-            XElement? properties = Ppt.Child(background, "bgPr");
+            XElement? properties = Ppt.Child(background, "bgPr") ?? Themed(background, slide, theme);
             if (properties is null) continue;
 
             // The whole sheet, so the fill's box is the slide and its placement is the identity —
@@ -259,6 +271,32 @@ internal sealed partial class PptxSlideLayout
         }
 
         return Paint.Solid(Colour.White);
+    }
+
+    /// <summary>
+    /// The fill a <c>p:bg</c>'s <c>p:bgRef</c> names in the theme, shaped like a <c>p:bgPr</c>.
+    /// </summary>
+    /// <remarks>
+    /// The result is a clone of the theme's entry and so belongs to no loaded part, which matters
+    /// for the one entry in three that is a <c>a:blipFill</c>: its <c>r:embed</c> is a
+    /// relationship of the <em>theme</em>, and resolving it against the slide finds a different
+    /// picture or none at all. Registering the wrapper in <see cref="_synthesised"/> is what tells
+    /// <see cref="PartOf"/> so — the same mechanism a baked SmartArt tree uses, and for the same
+    /// reason.
+    /// </remarks>
+    private XElement? Themed(XElement background, PptxSlide slide, SlideTheme theme)
+    {
+        if (theme.Styles is not { } styles) return null;
+        if (styles.Background(Ppt.Child(background, "bgRef"), theme.Colours) is not { } fill)
+            return null;
+
+        if (slide.MasterPartName is { } master
+            && _file.TargetOfType(master, "theme") is { } part)
+        {
+            _synthesised[fill] = part;
+        }
+
+        return fill;
     }
 
     /// <summary>
@@ -294,7 +332,7 @@ internal sealed partial class PptxSlideLayout
     {
         XElement root = element.AncestorsAndSelf().Last();
 
-        if (_diagrams.TryGetValue(root, out string? diagram)) return diagram;
+        if (_synthesised.TryGetValue(root, out string? synthesised)) return synthesised;
         if (ReferenceEquals(root, slide.Layout)) return slide.LayoutPartName;
         if (ReferenceEquals(root, slide.Master)) return slide.MasterPartName;
         return slide.PartName;
@@ -366,7 +404,7 @@ internal sealed partial class PptxSlideLayout
             return;
         }
 
-        _diagrams[baked.ShapeTree] = baked.PartName;
+        _synthesised[baked.ShapeTree] = baked.PartName;
 
         AffineTransform inside = ShapeTransform.GroupSpace(
             local,

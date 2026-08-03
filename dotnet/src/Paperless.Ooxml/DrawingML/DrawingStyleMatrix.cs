@@ -37,6 +37,7 @@ namespace Paperless.Ooxml.DrawingML;
 public sealed class DrawingStyleMatrix
 {
     private readonly List<XElement> _fills = [];
+    private readonly List<XElement> _backgrounds = [];
     private readonly List<XElement> _lines = [];
     private readonly List<XElement> _effects = [];
 
@@ -45,7 +46,8 @@ public sealed class DrawingStyleMatrix
     }
 
     /// <summary>True when the theme declared none of the lists, so nothing can be resolved.</summary>
-    public bool IsEmpty => _fills.Count == 0 && _lines.Count == 0 && _effects.Count == 0;
+    public bool IsEmpty =>
+        _fills.Count == 0 && _backgrounds.Count == 0 && _lines.Count == 0 && _effects.Count == 0;
 
     /// <summary>
     /// Reads an <c>a:theme</c> root's format scheme, or null when it has none.
@@ -58,6 +60,7 @@ public sealed class DrawingStyleMatrix
 
         DrawingStyleMatrix matrix = new();
         matrix._fills.AddRange(Drawing.Child(format, "fillStyleLst")?.Elements() ?? []);
+        matrix._backgrounds.AddRange(Drawing.Child(format, "bgFillStyleLst")?.Elements() ?? []);
         matrix._lines.AddRange(Drawing.Child(format, "lnStyleLst")?.Elements() ?? []);
         matrix._effects.AddRange(Drawing.Child(format, "effectStyleLst")?.Elements() ?? []);
 
@@ -80,6 +83,54 @@ public sealed class DrawingStyleMatrix
         => Resolve(Drawing.Child(style, "fillRef"), _fills, theme) is { } fill
             ? new XElement(Drawing.Name("spPr"), fill)
             : null;
+
+    /// <summary>
+    /// The fill a slide's <c>p:bgRef</c> names, wrapped so it reads like shape properties, or
+    /// null when the reference names none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A slide background is stated one of two ways and only one of them is a fill: <c>p:bgPr</c>
+    /// carries the fill itself, and <c>p:bgRef</c> carries an index into the theme's
+    /// <em>fourth</em> style list, <c>a:bgFillStyleLst</c> — the one every Office theme fills with
+    /// a flat, a gradient and a textured version of the same colour so that a deck can pick a
+    /// weight without restating it.
+    /// </para>
+    /// <para>
+    /// The index lives in the same numbering as <c>a:fillRef</c>'s and is separated from it by
+    /// magnitude rather than by name: <c>Theme::getFillStyle</c>
+    /// (<c>oox/source/drawingml/theme.cxx:49-54</c>) sends anything from 1000 up to the background
+    /// list with 1000 subtracted, and everything below it to <c>a:fillStyleLst</c>. So
+    /// <c>idx="1003"</c> is the third background style, not the thousand-and-third of anything,
+    /// and an index past the end of the list is clamped to its last entry rather than dropped —
+    /// <c>lclGetStyleElement</c>, the same file.
+    /// </para>
+    /// <para>
+    /// Missing this leaves the slide white, which is invisible to a word count and to a page
+    /// count alike, and catastrophic when the theme's colour map makes <c>bg1</c> a dark one:
+    /// the deck's white title text is then drawn on white. 60 of the 112 corpus <c>pptx</c> decks
+    /// state a <c>p:bgRef</c> somewhere.
+    /// </para>
+    /// </remarks>
+    /// <param name="reference">The slide's, layout's or master's <c>p:bgRef</c>, or null.</param>
+    /// <param name="theme">The colour scheme the reference's colour resolves against.</param>
+    public XElement? Background(XElement? reference, DrawingTheme? theme)
+    {
+        if (reference is null) return null;
+        if (Drawing.Number(reference, "idx") is not { } index) return null;
+
+        List<XElement> styles = index >= 1000 ? _backgrounds : _fills;
+        int position = index >= 1000 ? index - 1000 : index;
+        if (styles.Count == 0 || position < 1) return null;
+
+        // Clamped, not rejected: LibreOffice's `lclGetStyleElement` takes the last entry for an
+        // index past the end, and themes written by other producers do state one.
+        XElement style = styles[Math.Min(position, styles.Count) - 1];
+
+        return Placeholder(reference, theme) is { } placeholder
+            ? new XElement(Drawing.Name("spPr"), Substitute(style, placeholder))
+            : null;
+    }
 
     /// <summary>
     /// The <c>a:ln</c> a shape's style reference names, or null when the style names none.
@@ -159,17 +210,28 @@ public sealed class DrawingStyleMatrix
         if (Drawing.Number(reference, "idx") is not { } index) return null;
         if (index <= 0 || index > styles.Count) return null;
 
-        // The placeholder colour is the reference's own child, transforms and all: an
-        // `a:lnRef` naming `accent1` with a `a:shade val="50000"` inside it is a darker accent 1,
-        // and that darkening is the reference's, not the theme entry's.
-        Colour? placeholder = null;
+        return Placeholder(reference, theme) is { } placeholder
+            ? Substitute(styles[index - 1], placeholder)
+            : null;
+    }
+
+    /// <summary>
+    /// The colour a style reference substitutes for the theme entry's <c>phClr</c>.
+    /// </summary>
+    /// <remarks>
+    /// The reference's own child, transforms and all: an <c>a:lnRef</c> naming <c>accent1</c> with
+    /// an <c>a:shade val="50000"</c> inside it is a darker accent 1, and that darkening is the
+    /// reference's, not the theme entry's.
+    /// </remarks>
+    private static Colour? Placeholder(XElement reference, DrawingTheme? theme)
+    {
         foreach (XElement child in reference.Elements())
         {
             if (DrawingColour.Read(child) is not { } colour) continue;
-            if (colour.Resolve(theme) is { } resolved) { placeholder = resolved; break; }
+            if (colour.Resolve(theme) is { } resolved) return resolved;
         }
 
-        return placeholder is null ? null : Substitute(styles[index - 1], placeholder.Value);
+        return null;
     }
 
     /// <summary>
