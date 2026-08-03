@@ -46,7 +46,7 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     , m_aIMGCusGray(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM_GRAY)
     , m_xMFWidth(m_xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::POINT))
     , m_xIVWidth(m_xBuilder->weld_icon_view(u"line_iconview"_ustr))
-    , aPreviewSize(300, 20)
+    , m_aPreviewSize(300, 20)
 {
     maStrUnits[0] = u"0.5"_ustr;
     maStrUnits[1] = u"0.8"_ustr;
@@ -248,7 +248,7 @@ ScopedVclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWi
                                                               const OUString& rText)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    pVDev->SetOutputSizePixel(aPreviewSize);
+    pVDev->SetOutputSizePixel(m_aPreviewSize);
 
     // Set background
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -259,19 +259,19 @@ ScopedVclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWi
                                                  MsLangId::getConfiguredSystemLanguage(),
                                                  GetDefaultFontFlags::OnlyOne));
     Size aFontSize = aFont.GetFontSize();
-    aFontSize.setHeight(aPreviewSize.Height() * 3 / 5);
+    aFontSize.setHeight(m_aPreviewSize.Height() * 3 / 5);
     aFont.SetFontSize(aFontSize);
     aFont.SetColor(rStyleSettings.GetFieldTextColor());
     pVDev->SetFont(aFont);
 
     // Draw text
-    Point aTextStart(aPreviewSize.Width() * 7 / 9, aPreviewSize.Height() / 6);
+    Point aTextStart(m_aPreviewSize.Width() * 7 / 9, m_aPreviewSize.Height() / 6);
     pVDev->DrawText(aTextStart, rText);
 
     // Draw line with specified width
     pVDev->SetLineColor(rStyleSettings.GetFieldTextColor());
-    Point aLineStart(5, (aPreviewSize.Height() - nLineWidth) / 2);
-    Point aLineEnd(aPreviewSize.Width() * 7 / 9 - 10, (aPreviewSize.Height() - nLineWidth) / 2);
+    Point aLineStart(5, (m_aPreviewSize.Height() - nLineWidth) / 2);
+    Point aLineEnd(m_aPreviewSize.Width() * 7 / 9 - 10, (m_aPreviewSize.Height() - nLineWidth) / 2);
 
     for (sal_uInt16 i = 1; i <= nLineWidth; i++)
     {
@@ -287,13 +287,13 @@ ScopedVclPtr<VirtualDevice>
 LineWidthPopup::CreateCustomPreview(const Image& rImage, const OUString& rText, bool bEnabled)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    pVDev->SetOutputSizePixel(aPreviewSize);
+    pVDev->SetOutputSizePixel(m_aPreviewSize);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     pVDev->SetFillColor(rStyleSettings.GetWindowColor());
 
     // Draw image
-    Point aImgStart(5, (aPreviewSize.Height() - 23) / 2);
+    Point aImgStart(5, (m_aPreviewSize.Height() - 23) / 2);
     pVDev->DrawImage(aImgStart, rImage);
 
     // Set font and color
@@ -301,7 +301,7 @@ LineWidthPopup::CreateCustomPreview(const Image& rImage, const OUString& rText, 
                                                  MsLangId::getConfiguredSystemLanguage(),
                                                  GetDefaultFontFlags::OnlyOne));
     Size aFontSize = aFont.GetFontSize();
-    aFontSize.setHeight(aPreviewSize.Height() * 3 / 5);
+    aFontSize.setHeight(m_aPreviewSize.Height() * 3 / 5);
     aFont.SetFontSize(aFontSize);
 
     if (bEnabled)
@@ -312,9 +312,10 @@ LineWidthPopup::CreateCustomPreview(const Image& rImage, const OUString& rText, 
     pVDev->SetFont(aFont);
 
     // Draw text
-    tools::Rectangle aStrRect(Point(rImage.GetSizePixel().Width() + 20, aPreviewSize.Height() / 6),
-                              Size(aPreviewSize.Width() - rImage.GetSizePixel().Width() - 25,
-                                   aPreviewSize.Height() - aPreviewSize.Height() / 3));
+    tools::Rectangle aStrRect(
+        Point(rImage.GetSizePixel().Width() + 20, m_aPreviewSize.Height() / 6),
+        Size(m_aPreviewSize.Width() - rImage.GetSizePixel().Width() - 25,
+             m_aPreviewSize.Height() - m_aPreviewSize.Height() / 3));
     pVDev->DrawText(aStrRect, rText, DrawTextFlags::EndEllipsis);
 
     return pVDev;

@@ -55,7 +55,7 @@ private:
 
     std::unique_ptr<weld::MetricSpinButton> m_xMFWidth;
     std::unique_ptr<weld::IconView> m_xIVWidth;
-    Size aPreviewSize;
+    Size m_aPreviewSize;
 
     DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
