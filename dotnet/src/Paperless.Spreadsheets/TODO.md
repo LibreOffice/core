@@ -308,8 +308,8 @@ second one.
 
 `batch-005` measured **7/10** after the two rounds above — the scoreboard recorded 4/10, and the
 three it gained were gained by the empty-page and merge work rather than by anything aimed at it.
-Its three remaining failures are three different things, and one of them is the biggest systematic
-defect this track has left.
+Its three remaining failures were three different things, and one of them was the biggest
+systematic defect this track had left. Two of the three are fixed below; the batch is **9/10**.
 
 **A row height stated without `customHeight` is a hint, and Calc recomputes it.** `ht` on a `row`
 is what the *writer* measured; `customHeight` is the flag that says a user chose it.
