@@ -26,11 +26,26 @@ namespace Paperless.Spreadsheets.Layout;
 /// picture two columns wide would not line up with the column it ends in.
 /// </para>
 /// <para>
-/// <strong>A drawing belongs to the page holding its top-left cell.</strong> Calc positions the
-/// drawing layer in document coordinates and clips it to the printed block, so a picture
-/// straddling a page break appears on both pages, cut. Anchoring it to one page and clipping is
-/// the same answer for everything that does not straddle and a simpler one for what does; the
-/// difference is recorded in the module's TODO.
+/// <strong>A drawing does not belong to a page; it belongs to the sheet, and every page it reaches
+/// prints the part that lands on the paper.</strong> <c>ScOutputData::PrePrintDrawingLayer</c>
+/// (<c>sc/source/ui/view/output3.cxx:40-104</c>) sets a map-mode offset of minus the width of the
+/// columns and the height of the rows <em>before</em> the page's first, and
+/// <c>PrintDrawingLayer</c> (<c>:138</c>) then paints the whole drawing page through it, so a
+/// picture straddling a break appears on both pages, cut. The anchor is therefore resolved against
+/// the page's own columns wherever it can be and walked out through the grid in <em>either</em>
+/// direction where it cannot: a drawing anchored left of the band starts at a negative offset and
+/// shows its right-hand part, exactly as one anchored past the last printed row shows its top.
+/// Measured on <c>Air_Boss_Master_List.xlsx</c>, whose note box is anchored in column E and
+/// straddles the column break: LibreOffice prints its left half on page 1 and its right half on
+/// page 3, and anchoring it to one page lost the second half.
+/// </para>
+/// <para>
+/// <strong>What bounds it is the page's own cell block, not the paper.</strong> The rectangle
+/// <c>PrePrintDrawingLayer</c> hands to <c>BeginDrawLayers</c> runs exactly from the page's first
+/// printed column to its last, so a drawing anchored in a band this page does not print is culled
+/// even where the margin would have left room for it. Without that test every column band of a
+/// sheet several bands wide carries every drawing on the sheet — see
+/// <see cref="ReachesTheBlock"/>.
 /// </para>
 /// </remarks>
 internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
@@ -64,6 +79,7 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
 
             if (Place(drawing, byColumn, byRow) is not { } box) continue;
             if (box.Width <= Length.Zero || box.Height <= Length.Zero) continue;
+            if (!ReachesTheBlock(box, columns, rows)) continue;
 
             // The vector before the raster, since a shape carrying both means the DrawingML `svgBlip`
             // case where the raster is the fallback. `VectorImage.Draw` maps the picture's own frame
@@ -79,6 +95,53 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
         }
     }
 
+    /// <summary>Whether any part of a placed rectangle falls inside the page's own cell block.</summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>The clip is the block, not the paper</strong>, and the difference is the whole
+    /// question of which page a drawing appears on. <c>PrePrintDrawingLayer</c> builds a rectangle
+    /// running from the width of the columns before the page's first to the width of the columns it
+    /// prints, and the same on the row axis, and hands <em>that</em> to
+    /// <c>BeginDrawLayers</c> as the paint region (<c>sc/source/ui/view/output3.cxx:41-95</c>).
+    /// So a drawing anchored in a column band the page does not print is culled even when the
+    /// margin would have left room for it on the paper.
+    /// </para>
+    /// <para>
+    /// Measured on <c>Part_375_Operators.xlsx</c>, whose two table slicers sit in columns E and F —
+    /// the third of its three column bands. The bands are narrow enough that the second band's
+    /// right edge stops well short of the right margin, so both slicers fitted on the paper of the
+    /// first band's pages as well: LibreOffice draws them once, on page 19, and we drew them on
+    /// pages 1, 10 and 19 — 2251 words against 2197.
+    /// </para>
+    /// </remarks>
+    private static bool ReachesTheBlock(
+        DocRect box, List<PlacedColumn> columns, List<PlacedRow> rows)
+    {
+        Length left = columns[0].X;
+        Length right = columns[0].Right;
+        foreach (PlacedColumn column in columns)
+        {
+            if (column.X < left) left = column.X;
+            if (column.Right > right) right = column.Right;
+        }
+
+        Length top = rows[0].Y;
+        Length bottom = rows[0].Bottom;
+        foreach (PlacedRow row in rows)
+        {
+            if (row.Y < top) top = row.Y;
+            if (row.Bottom > bottom) bottom = row.Bottom;
+        }
+
+        // Inclusive on both edges, because Calc's is: `aRect` is a `tools::Rectangle`, whose
+        // `Right()` and `Bottom()` are the last coordinates *inside* it, so a drawing whose left
+        // edge sits exactly on the block's right edge still overlaps it by one unit. Measured on
+        // `sheet-shape-clip.xlsx`, whose box is anchored in the first column of the second band and
+        // which LibreOffice prints on both pages.
+        return box.X + box.Width >= left && box.X <= right
+               && box.Y + box.Height >= top && box.Y <= bottom;
+    }
+
     /// <summary>Where a drawing lands on this page, or null when it does not.</summary>
     private DocRect? Place(
         SheetDrawing drawing,
@@ -87,15 +150,17 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
     {
         if (drawing.Anchor == SheetAnchorKind.Absolute)
         {
-            // Measured from the sheet's own origin, so it lands on the page holding A1 and
-            // nowhere else. Calc treats it the same way: the position is a document coordinate
-            // and the first page is the one whose block contains it.
-            if (!columns.TryGetValue(0, out PlacedColumn first)) return null;
-            if (!rows.TryGetValue(0, out PlacedRow top)) return null;
+            // Measured from the sheet's own origin, which is where A1 would sit on this page —
+            // off to the left of a band that does not start at column A, and off the top of one
+            // that does not start at row 1. Resolving it through the same walk a cell anchor uses
+            // is what puts an absolutely-positioned shape on every page it reaches instead of only
+            // on the first.
+            if (ColumnX(0, columns) is not { } sheetX) return null;
+            if (RowY(0, rows) is not { } sheetY) return null;
 
             return new DocRect(
-                first.X + (SheetDeviceUnits.Snap(drawing.Position.X) * scale),
-                top.Y + (SheetDeviceUnits.Snap(drawing.Position.Y) * scale),
+                sheetX + (SheetDeviceUnits.Snap(drawing.Position.X) * scale),
+                sheetY + (SheetDeviceUnits.Snap(drawing.Position.Y) * scale),
                 SheetDeviceUnits.Snap(drawing.Extent.Width) * scale,
                 SheetDeviceUnits.Snap(drawing.Extent.Height) * scale);
         }
@@ -147,52 +212,82 @@ internal sealed class SheetPageGraphics(SheetLayout sheet, double scale)
     /// was dropped. Walking on from the last printed column or row through the grid — snapped per
     /// index, as <see cref="Edge"/> does — puts it where Calc puts it.
     /// </para>
+    /// <para>
+    /// <strong>And backwards, for the same reason.</strong> A page whose band starts at column C is
+    /// still a window onto one sheet, so a drawing anchored in column A sits at a negative offset on
+    /// it and shows whatever reaches past the left margin. Returning null for that case — which is
+    /// what this did — lost the right-hand half of every drawing straddling a column break.
+    /// A column inside the band that has no placement is a <em>hidden</em> column, which occupies
+    /// nothing: it is left to the caller as null rather than resolved to the next column's start,
+    /// because a drawing anchored in a hidden column is one Calc collapses away.
+    /// </para>
     /// </remarks>
     private Length? ColumnX(int column, Dictionary<int, PlacedColumn> columns)
     {
         if (columns.TryGetValue(column, out PlacedColumn placed)) return placed.X;
 
+        int first = int.MaxValue;
         int last = -1;
-        Length x = Length.Zero;
+        Length left = Length.Zero;
+        Length right = Length.Zero;
 
         foreach (PlacedColumn candidate in columns.Values)
         {
-            if (candidate.Column <= last) continue;
-            last = candidate.Column;
-            x = candidate.Right;
+            if (candidate.Column > last) { last = candidate.Column; right = candidate.Right; }
+            if (candidate.Column < first) { first = candidate.Column; left = candidate.X; }
         }
 
-        if (last < 0 || column <= last) return null;
+        if (last < 0) return null;
 
-        for (int at = last + 1; at < column; at++)
-            x += SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * scale;
+        if (column > last)
+        {
+            for (int at = last + 1; at < column; at++)
+                right += SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * scale;
+            return right;
+        }
 
-        return x;
+        if (column > first) return null;
+
+        for (int at = column; at < first; at++)
+            left -= SheetDeviceUnits.Snap(sheet.Grid.Columns.PrintedSizeAt(at)) * scale;
+
+        return left;
     }
 
-    /// <summary>Where a row starts on the page, continuing past the last one it prints.</summary>
-    /// <remarks>See <see cref="ColumnX"/>; the reason is the same and it is the row axis that
-    /// the corpus exercises.</remarks>
+    /// <summary>
+    /// Where a row starts on the page, continuing past the rows it prints in either direction.
+    /// </summary>
+    /// <remarks>See <see cref="ColumnX"/>; the rules are the same on both axes.</remarks>
     private Length? RowY(int row, Dictionary<int, PlacedRow> rows)
     {
         if (rows.TryGetValue(row, out PlacedRow placed)) return placed.Y;
 
+        int first = int.MaxValue;
         int last = -1;
-        Length y = Length.Zero;
+        Length top = Length.Zero;
+        Length bottom = Length.Zero;
 
         foreach (PlacedRow candidate in rows.Values)
         {
-            if (candidate.Row <= last) continue;
-            last = candidate.Row;
-            y = candidate.Bottom;
+            if (candidate.Row > last) { last = candidate.Row; bottom = candidate.Bottom; }
+            if (candidate.Row < first) { first = candidate.Row; top = candidate.Y; }
         }
 
-        if (last < 0 || row <= last) return null;
+        if (last < 0) return null;
 
-        for (int at = last + 1; at < row; at++)
-            y += SheetDeviceUnits.Snap(sheet.Grid.Rows.PrintedSizeAt(at)) * scale;
+        if (row > last)
+        {
+            for (int at = last + 1; at < row; at++)
+                bottom += SheetDeviceUnits.Snap(sheet.Grid.Rows.PrintedSizeAt(at)) * scale;
+            return bottom;
+        }
 
-        return y;
+        if (row > first) return null;
+
+        for (int at = row; at < first; at++)
+            top -= SheetDeviceUnits.Snap(sheet.Grid.Rows.PrintedSizeAt(at)) * scale;
+
+        return top;
     }
 
     /// <summary>

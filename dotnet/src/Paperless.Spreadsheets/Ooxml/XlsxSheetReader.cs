@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
 using Paperless.Core.Numbers;
+using Paperless.Spreadsheets.Layout;
 
 namespace Paperless.Spreadsheets.Ooxml;
 
@@ -93,6 +94,19 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
         foreach (ContentTableRow row in rows) table.Children.Add(row);
         return table;
     }
+
+    /// <summary>
+    /// The merged blocks a worksheet part states.
+    /// </summary>
+    /// <remarks>
+    /// Read separately from the cells because layout needs the merges the cells cannot carry: an
+    /// empty merged block's anchor is an empty cell, and an empty cell past the last filled one in
+    /// its row is padding the content tree drops. It costs one walk of <c>mergeCells</c>, which is
+    /// a single small element, against re-deriving something the file already states outright.
+    /// </remarks>
+    /// <param name="worksheet">The worksheet part's root element, or null when it did not load.</param>
+    public static IReadOnlyList<SheetRange> ReadMerges(XElement? worksheet)
+        => worksheet is null ? [] : MergeMap.Read(worksheet).Ranges;
 
     /// <summary>
     /// Reads the sheet's cell comments, each as its own section.
@@ -467,6 +481,10 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
     {
         private readonly Dictionary<(int Row, int Column), (int Columns, int Rows)> _anchors = [];
         private readonly HashSet<(int Row, int Column)> _covered = [];
+        private readonly List<SheetRange> _ranges = [];
+
+        /// <summary>Every merged block, as the sheet states it.</summary>
+        public IReadOnlyList<SheetRange> Ranges => _ranges;
 
         public static MergeMap Read(XElement worksheet)
         {
@@ -488,6 +506,7 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
                 if ((long)columns * rows > 1_000_000) continue;
 
                 map._anchors[(firstRow, firstColumn)] = (columns, rows);
+                map._ranges.Add(new SheetRange(firstColumn, firstRow, lastColumn, lastRow));
                 for (int row = firstRow; row <= lastRow; row++)
                 {
                     for (int column = firstColumn; column <= lastColumn; column++)

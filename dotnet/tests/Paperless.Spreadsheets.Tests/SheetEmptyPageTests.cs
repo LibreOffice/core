@@ -212,6 +212,57 @@ public sealed class SheetEmptyPageTests
         PageCount(sheet).ShouldBeGreaterThan(2);
     }
 
+    /// <summary>
+    /// A cell that exists and holds nothing is not content, and does not keep a page.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScTable::IsBlockEmpty</c> asks each column for <c>IsEmptyData</c>
+    /// (<c>sc/source/core/data/table2.cxx:2432-2452</c>), which reads the cell store alone: a cell
+    /// carrying nothing but a style index is not in it, and its attributes reach the question only
+    /// through the separate <c>HasAttrFlags::Lines</c> test. Every format writes such cells in
+    /// quantity — SpreadsheetML a <c>&lt;c r="I1" s="13"/&gt;</c>, BIFF a <c>MULBLANK</c> across a
+    /// whole formatted row — so reading "a cell record exists here" as content keeps a page for
+    /// every band of styled-but-empty columns.
+    /// </para>
+    /// <para>
+    /// Measured on <c>Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx</c>, whose
+    /// columns I to P carry a style on every cell of rows 1 to 15 and nothing else: LibreOffice
+    /// drops that column band entirely and prints five pages where Paperless printed six.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AnEmptyCellIsNotContentAndDoesNotKeepAPage()
+    {
+        // Content in column A and in column BZ, which on A4 are the first and the last of about a
+        // dozen column bands. Every column between them carries a cell that holds no value and no
+        // text — what a formatted-but-blank column looks like once it has been read.
+        SheetLayout sparse = Sheet([(0, 0, "left"), (0, 77, "far right")]);
+
+        ContentTable table = new();
+        ContentTableRow row = new() { Index = 0 };
+        foreach (ContentTableCell cell in sparse.Cells!.Children.OfType<ContentTableRow>()
+                                                .SelectMany(r => r.Children.OfType<ContentTableCell>()))
+        {
+            while (row.Children.OfType<ContentTableCell>().Count() < cell.Column)
+            {
+                int gap = row.Children.OfType<ContentTableCell>().Count();
+                row.Children.Add(new ContentTableCell { Row = 0, Column = gap });
+            }
+            row.Children.Add(cell);
+        }
+        table.Children.Add(row);
+
+        SheetLayout styled = new() { Name = "Sheet1", Cells = table };
+
+        // The block is the same either way, so any difference in page count is this rule alone.
+        styled.PrintedRange.LastColumn.ShouldBe(77);
+        PageCount(styled).ShouldBe(PageCount(sparse));
+
+        // And that count is the two bands that hold something, not a page per band of the block.
+        PageCount(styled).ShouldBe(2);
+    }
+
     [Fact]
     public void ASheetWithNothingOnItStillPrintsOnePage()
     {

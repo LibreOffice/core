@@ -86,6 +86,7 @@ public static class XlsbReader
                     Setup = setup,
                     Grid = grid,
                     Cells = (ContentTable)section.Children[0],
+                    StatedMerges = reader.SheetMerges,
 
                     // The XML readers, unchanged and deliberately so. A drawing hangs off the
                     // worksheet part by a relationship, and everything on the far side of that

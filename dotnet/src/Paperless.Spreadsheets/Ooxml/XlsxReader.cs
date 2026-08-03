@@ -107,6 +107,7 @@ public static class XlsxReader
                     Setup = setup,
                     Grid = grid,
                     Cells = table,
+                    StatedMerges = XlsxSheetReader.ReadMerges(worksheet),
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,

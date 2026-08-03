@@ -78,6 +78,22 @@ public sealed class SheetLayout
     /// <summary>The sheet's cells, or null when it holds none.</summary>
     public ContentTable? Cells { get; init; }
 
+    /// <summary>The merged blocks the file states, as it states them.</summary>
+    /// <remarks>
+    /// Beside the cells rather than derived from them. Every format states its merges once, as a
+    /// list of ranges — <c>mergeCells</c>, <c>MERGEDCELLS</c>, <c>table:number-columns-spanned</c>
+    /// — and a reader then puts the span on the anchor cell and drops the cells it covers. That is
+    /// enough to recover the merges of a block that holds something and not enough for one that
+    /// holds nothing: its anchor is an empty cell, and an empty cell past the last filled one in
+    /// its row is padding the content tree does not keep. An empty merge is exactly the one that
+    /// matters most, because it is the block a neighbour's long string would otherwise run
+    /// straight through — <c>ScOutputData::IsAvailable</c> stops at a merged or overlapped cell
+    /// whether or not it holds anything (<c>sc/source/ui/view/output2.cxx:1178-1191</c>).
+    /// A reader that leaves this empty falls back to the spans on the cells, which is what every
+    /// reader did before.
+    /// </remarks>
+    public IReadOnlyList<SheetRange> StatedMerges { get; init; } = [];
+
     /// <summary>
     /// What is painted behind and around the cells: their fills and their borders.
     /// </summary>
@@ -256,6 +272,16 @@ public sealed class SheetLayout
     /// column, which is a million positions to record and one range to test. Sheets carry few
     /// merges, and the case of none — nearly every sheet — costs a count check.
     /// </para>
+    /// <para>
+    /// The ranges the reader states (<see cref="StatedMerges"/>) are answered as well as the spans
+    /// found on the cells, because the two are not the same set: an empty merged block's anchor is
+    /// an empty cell, and an empty cell at the end of a row is dropped as padding before it ever
+    /// reaches the tree. Deriving the merges from the cells alone therefore loses exactly the
+    /// merges that matter — measured on
+    /// <c>Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx</c>, whose A1 title runs
+    /// straight through the empty <c>B1:D1</c> merge and onto the next column band, where
+    /// LibreOffice clips it at column A.
+    /// </para>
     /// </remarks>
     /// <param name="row">The zero-based row.</param>
     /// <param name="column">The zero-based column.</param>
@@ -282,7 +308,12 @@ public sealed class SheetLayout
     private Dictionary<(int, int), ContentTableCell> BuildIndex()
     {
         Dictionary<(int, int), ContentTableCell> index = [];
-        List<SheetRange> merges = [];
+
+        // The two sources overlap almost entirely — a merge whose anchor survived is in both — and
+        // the list is walked linearly for every position asked about, so the duplicates would be
+        // paid for on every cell of every page rather than once here.
+        List<SheetRange> merges = [.. StatedMerges];
+        HashSet<SheetRange> seen = [.. merges];
 
         foreach (ContentTableRow row in (Cells?.Children ?? []).OfType<ContentTableRow>())
         {
@@ -294,8 +325,9 @@ public sealed class SheetLayout
                 int rows = Math.Max(1, cell.RowSpan);
                 if (columns > 1 || rows > 1)
                 {
-                    merges.Add(new SheetRange(
-                        cell.Column, cell.Row, cell.Column + columns - 1, cell.Row + rows - 1));
+                    SheetRange merge = new(
+                        cell.Column, cell.Row, cell.Column + columns - 1, cell.Row + rows - 1);
+                    if (seen.Add(merge)) merges.Add(merge);
                 }
             }
         }

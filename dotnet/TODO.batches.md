@@ -437,6 +437,55 @@ to the sink every family shares, and it wants its own sweep. On its own it would
 document to roughly 2200 against 2108, still outside the 2% band, so it is worth doing for its own
 sake rather than for this document.
 
+## Sheets batches 001–004: full parity, swept at `194c2dc9b`
+
+`batch-00[1-4]` swept together on the final binary: **40 of 40**. Four documents changed state
+— `Air_Boss_Master_List.xlsx` and `Bulletin-37-Appendix-2-…xlsx` in 003, `Part_375_Operators.xlsx`
+and `Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx` in 004. `batch-005` rose from a recorded 4/10 to
+a measured **7/10** without being worked, which is the usual sign that the causes were systematic
+rather than per-document.
+
+Whole track, first sweep since `28940d76f`: **112/171** against the recorded 108, page error
+**843** against 860.
+
+### Four of the five defects are one sentence: a thing stopped belonging to exactly one page
+
+- **A styled-but-empty cell is not content.** `ScTable::IsBlockEmpty` asks the cell store, not the
+  attribute array — `sc/source/core/data/table2.cxx:2432-2452`. Bulletin-37's columns I–P carry a
+  style and nothing else, and bought a sixth page against LibreOffice's five.
+- **An empty merge must still block a neighbour's spill.** `ScOutputData::IsAvailable` stops at a
+  merged-or-overlapped cell regardless of content — `sc/source/ui/view/output2.cxx:1178-1191`.
+  Every reader was losing empty merges because the anchor looks like trailing padding;
+  `SheetLayout.StatedMerges` now carries the ranges.
+- **A drawing belongs to the sheet and is drawn on every page it reaches** —
+  `ScOutputData::PrePrintDrawingLayer`, `sc/source/ui/view/output3.cxx:40-104`. Air_Boss's note box
+  straddles a column break and its right half was on no page of ours.
+- **Its bound is the page's cell block, not the paper.** Part_375's slicers sit in band 3 and fit
+  on the paper of bands 1 and 2, so the first rule alone drew them three times.
+
+The fourth corrects the third, and the agent shipped the wrong version first, measured Part_375,
+and replaced it. That is the salvage patch's `ReachesThePaper` clip — kept as an idea, re-derived,
+and found wrong. Worth recording as the concrete answer to what a recovered diff is worth: two of
+its ideas survived re-derivation and one of them was a defect.
+
+The fifth is unrelated: **`vertOverflow="clip"` removes lines, not pixels** —
+`svx/source/svdraw/svdotextdecomposition.cxx:581-624`, with the rule stated at
+`include/svx/svdoutl.hxx:56-59`.
+
+### The largest remaining lead on this track, measured
+
+`ht` without `customHeight` is a *hint* that Calc recomputes —
+`sc/source/filter/oox/worksheethelper.cxx:1268-1286`. On `National-Reports.xlsx` our row pitch is
+**15.735 pt against LibreOffice's 15.0**, read from both PDFs' glyph boxes, and the flat-ODF export
+confirms LibreOffice re-measures every row from its content. The flag is already parsed by every
+reader — `SheetGrid.IsOptimalSize` — and **has no callers**: the read-but-never-used shape for the
+fourth time. What is missing behind it is `ScColumn::GetNeededSize`, which is a feature rather than
+a fix, so it was left rather than approximated.
+
+Marked unverified by the agent, and left that way: that `Background_Declaration_Template.xls`
+duplicates words for the same reason SpreadsheetML did (the duplication was measured, the cause was
+not), and how LibreOffice clips the two-line residue on `Foreign_SA` across column bands.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -491,9 +540,9 @@ sake rather than for this document.
 |---|---|---|---|---|
 | `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | ✅ |
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
-| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | 8/10 · WIP |
-| `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | 8/10 |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 4/10 |
+| `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
+| `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 7/10 |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 6/10 |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 5/10 |

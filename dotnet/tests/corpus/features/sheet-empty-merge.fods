@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A merged block that holds nothing, beside a string long enough to run through it.
+
+  Six columns of 5 cm each on a 21 cm page with 2 cm margins, so three fit and the sheet takes two
+  pages side by side with the break between column C and column D.
+
+  Row 1 is the case. A1 carries a title far wider than its own column and B1:C1 is merged and
+  empty. Calc stops the spill at the merge — ScOutputData::IsAvailable returns false for a merged
+  or an overlapped cell whether or not it holds anything
+  (sc/source/ui/view/output2.cxx:1178-1191) — so only what fits inside column A is printed and the
+  second page shows none of the title.
+
+  Row 3 is the control, and it is why the fixture has two titles: A3 carries the same kind of
+  string with nothing but absent cells to its right, so it spills the ordinary way and its tail
+  lands on the second page. A renderer that ignored merges would print both in full; one that
+  blocked every spill would print neither.
+
+  The blocking block is empty on purpose. A merge is stated once, as a range, and every reader
+  then puts the span on the block's own top-left cell and drops the cells it covers — which
+  recovers the merge only when that cell survives. An empty cell past the last filled one in its
+  row is trailing padding, so the anchor of an empty merge is dropped and the merge with it.
+  Measured on Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx, whose A1 title ran
+  straight through its empty B1:D1 merge and onto the next column band, where LibreOffice clips it
+  at the end of column A.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="5cm"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="6"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>Blocked title that would otherwise run across all six of the columns this sheet has and reach the second page BLOCKEDTAIL</text:p></table:table-cell>
+     <table:table-cell table:number-columns-spanned="2" table:number-rows-spanned="1"/>
+     <table:covered-table-cell/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>Alpha</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>Bravo</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>Charlie</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>Delta</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>Echo</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>Foxtrot</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>Spilling title with nothing but absent cells beside it so that it runs on across the break until its tail reaches SPILLEDTAIL</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

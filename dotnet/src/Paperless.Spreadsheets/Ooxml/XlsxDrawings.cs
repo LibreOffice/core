@@ -363,6 +363,11 @@ internal static class XlsxDrawings
                 "b" => SheetShapeAnchor.Bottom,
                 _ => SheetShapeAnchor.Top,
             },
+
+            // Both values that are not "overflow" clip, which is what `oox` does with the
+            // attribute (textbodypropertiescontext.cxx:85-97) — an ellipsis is a clip that
+            // marks itself.
+            ClipsVerticalOverflow = Attribute(properties, "vertOverflow") is "clip" or "ellipsis",
         };
     }
 

@@ -936,6 +936,7 @@ internal sealed class XlsWorkbookReader
             Setup = _page.ToSetup(),
             Grid = grid,
             Cells = table,
+            StatedMerges = builder.StatedMerges,
             Formatting = _sheetDecoration.Resolve(_decoration),
             Formats = BuildFormats(builder),
             RichText = BuildRichText(),
@@ -1693,6 +1694,23 @@ internal sealed class XlsWorkbookReader
         {
             if (lastRow < firstRow || lastColumn < firstColumn) return;
             _merged.Add((firstRow, lastRow, firstColumn, lastColumn));
+        }
+
+        /// <summary>The <c>MERGEDCELLS</c> ranges, for <see cref="SheetLayout.StatedMerges"/>.</summary>
+        /// <remarks>
+        /// The ranges rather than the spans the cells end up carrying: a merge whose whole block is
+        /// blank has an anchor that <see cref="BuildRow"/> drops as trailing padding, and it is
+        /// precisely that block a neighbour's long string must not run through.
+        /// </remarks>
+        public IReadOnlyList<SheetRange> StatedMerges
+        {
+            get
+            {
+                List<SheetRange> ranges = new(_merged.Count);
+                foreach ((int firstRow, int lastRow, int firstColumn, int lastColumn) in _merged)
+                    ranges.Add(new SheetRange(firstColumn, firstRow, lastColumn, lastRow));
+                return ranges;
+            }
         }
 
         private void Put(int row, int column, Cell cell)

@@ -1,6 +1,7 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Extraction;
 using Paperless.Core.Numbers;
+using Paperless.Spreadsheets.Layout;
 using Paperless.Spreadsheets.MsBinary;
 
 namespace Paperless.Spreadsheets.Xlsb;
@@ -46,13 +47,26 @@ internal sealed class XlsbSheetReader(XlsbFile file, List<Diagnostic> diagnostic
     private readonly List<Diagnostic> _diagnostics = diagnostics;
     private bool _reportedTruncation;
 
+    /// <summary>
+    /// The merged ranges the last <see cref="ReadSheet"/> found, for
+    /// <see cref="SheetLayout.StatedMerges"/>.
+    /// </summary>
+    /// <remarks>
+    /// Handed back rather than re-read, because finding them is a full pass over the part's
+    /// records and the caller wants exactly the ones the cells were built from. Sheets are read
+    /// one at a time and the layout is assembled immediately after, so there is one live answer.
+    /// </remarks>
+    public IReadOnlyList<SheetRange> SheetMerges { get; private set; } = [];
+
     /// <summary>Reads a worksheet part's cells.</summary>
     /// <param name="part">The part's bytes, or null when it did not load.</param>
     public ContentTable ReadSheet(byte[]? part)
     {
+        SheetMerges = [];
         if (part is null) return new ContentTable();
 
         XlsbMerges merges = XlsbMerges.Read(part);
+        SheetMerges = merges.Ranges;
 
         List<ContentTableRow> rows = [];
         List<ContentTableCell> cells = [];
@@ -376,6 +390,10 @@ internal sealed class XlsbMerges
 {
     private readonly Dictionary<(int Row, int Column), (int Columns, int Rows)> _anchors = [];
     private readonly HashSet<(int Row, int Column)> _covered = [];
+    private readonly List<SheetRange> _ranges = [];
+
+    /// <summary>Every merged block, as the sheet states it.</summary>
+    public IReadOnlyList<SheetRange> Ranges => _ranges;
 
     public static XlsbMerges Read(byte[] part)
     {
@@ -397,6 +415,7 @@ internal sealed class XlsbMerges
             if ((long)columns * rows > 1_000_000) continue;
 
             map._anchors[(firstRow, firstColumn)] = (columns, rows);
+            map._ranges.Add(new SheetRange(firstColumn, firstRow, lastColumn, lastRow));
             for (int row = firstRow; row <= lastRow; row++)
             {
                 for (int column = firstColumn; column <= lastColumn; column++)
