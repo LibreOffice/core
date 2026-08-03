@@ -40,13 +40,13 @@ namespace vclcanvas
                             FontEmphasisMark                                eEmphasisMark,
                             const geometry::Matrix2D&                       rFontMatrix,
                             vclcanvas::XGraphicDevice&                      rDevice,
-                            const OutDevProviderSharedPtr&                  rOutDevProvider ) :
+                            OutputDevice&                                   rOutDevProvider ) :
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
         mpRefDevice( &rDevice ),
-        mpOutDevProvider( rOutDevProvider ),
+        mpOutDevProvider( &rOutDevProvider ),
         maFontMatrix( rFontMatrix )
   {
         maFont->SetAlignment( ALIGN_BASELINE );
@@ -63,7 +63,7 @@ namespace vclcanvas
         maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
         // adjust to stretched/shrunk font
-        vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDevProvider->getOutDev());
+        vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDevProvider);
 
         maFont->SetEmphasisMark(eEmphasisMark);
     }

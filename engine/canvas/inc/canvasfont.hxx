@@ -31,8 +31,6 @@
 
 #include "vclwrapper.hxx"
 
-#include "outdevprovider.hxx"
-
 
 /* Definition of CanvasFont class */
 
@@ -61,7 +59,7 @@ namespace vclcanvas
                     FontEmphasisMark                                                       eMark,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
                     vclcanvas::XGraphicDevice&                                             rDevice,
-                    const OutDevProviderSharedPtr&                                                      rOutDevProvider );
+                    OutputDevice&                                                          rOutDevProvider );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -98,7 +96,7 @@ namespace vclcanvas
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
         css::uno::Reference< vclcanvas::XGraphicDevice>                   mpRefDevice;
-        OutDevProviderSharedPtr                                           mpOutDevProvider;
+        VclPtr<OutputDevice>                                              mpOutDevProvider;
         css::geometry::Matrix2D                                           maFontMatrix;
     };
 

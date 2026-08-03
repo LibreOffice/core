@@ -43,8 +43,6 @@ class OutputDevice;
 
 namespace vclcanvas
 {
-class OutDevHolder;
-
     typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice >    GraphicDeviceBase_Base;
 
     /** Product of this component's factory.
@@ -209,7 +207,7 @@ class OutDevHolder;
         }
 
         /// For retrieving device info
-        std::shared_ptr<OutDevHolder> mpOutDev;
+        VclPtr<OutputDevice> mxOutDev;
 
         /// When true, content is able to represent alpha
         bool                                         mbHaveAlpha;

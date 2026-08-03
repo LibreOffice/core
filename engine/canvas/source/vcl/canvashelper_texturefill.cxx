@@ -48,7 +48,6 @@
 #include <canvas.hxx>
 #include <impltools.hxx>
 #include <Texture.hxx>
-#include "outdevholder.hxx"
 
 
 using namespace ::com::sun::star;
@@ -594,9 +593,9 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( !textures.empty(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
-        if( mpOutDev )
+        if( mxOutDev )
         {
-            vclcanvastools::OutDevStateKeeper aStateKeeper( mpOutDev );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
 
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
             ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
@@ -636,7 +635,7 @@ namespace vclcanvas
 
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
-                        gradientFill( mpOutDev->getOutDev(),
+                        gradientFill( *mxOutDev,
                                       aValues,
                                       aColors,
                                       aPolyPoly,
@@ -889,7 +888,7 @@ namespace vclcanvas
                     const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
                                              1 : nY2 - nY1 );
 
-                    OutputDevice& rOutDev( mpOutDev->getOutDev() );
+                    OutputDevice& rOutDev( *mxOutDev );
 
                     if( bRectangularPolygon )
                     {

@@ -67,7 +67,7 @@ namespace vclcanvas
                     sal_Int8                                      nDirection,
                     CanvasFont::Reference                         rFont,
                     css::uno::Reference<vclcanvas::XGraphicDevice> xDevice,
-                    OutDevProviderSharedPtr                       xOutDev );
+                    const VclPtr<OutputDevice> &                  xOutDev );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -199,7 +199,7 @@ namespace vclcanvas
         cpo::uno::Sequence< bool >                   maKashidaPositions;
         CanvasFont::Reference                            mpFont;
         css::uno::Reference< vclcanvas::XGraphicDevice> mxDevice;
-        OutDevProviderSharedPtr                          mpOutDevProvider;
+        VclPtr<OutputDevice>                             mpOutDevProvider;
         sal_Int8                                         mnTextDirection;
     };
 

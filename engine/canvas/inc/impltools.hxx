@@ -28,8 +28,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include "outdevprovider.hxx"
-
 
 class Point;
 
@@ -85,37 +83,25 @@ namespace vclcanvastools
         class OutDevStateKeeper
         {
         public:
-            explicit OutDevStateKeeper( const vclcanvas::OutDevProviderSharedPtr& rOutDev ) :
-                mpOutDev( rOutDev ? &(rOutDev->getOutDev()) : nullptr ),
-                mbMappingWasEnabled( mpOutDev && mpOutDev->IsMapModeEnabled() ),
-                mnAntiAliasing( mpOutDev ? mpOutDev->GetAntialiasing() : AntialiasingFlags::NONE )
+            explicit OutDevStateKeeper( OutputDevice& rOutDev ) :
+                mrOutDev( rOutDev ),
+                mbMappingWasEnabled( mrOutDev.IsMapModeEnabled() ),
+                mnAntiAliasing( mrOutDev.GetAntialiasing() )
             {
-                init();
+                mrOutDev.Push();
+                mrOutDev.EnableMapMode(false);
+                mrOutDev.SetAntialiasing( AntialiasingFlags::Enable );
             }
 
             ~OutDevStateKeeper()
             {
-                if( mpOutDev )
-                {
-                    mpOutDev->EnableMapMode( mbMappingWasEnabled );
-                    mpOutDev->SetAntialiasing( mnAntiAliasing );
-
-                    mpOutDev->Pop();
-                }
+                mrOutDev.EnableMapMode( mbMappingWasEnabled );
+                mrOutDev.SetAntialiasing( mnAntiAliasing );
+                mrOutDev.Pop();
             }
 
         private:
-            void init()
-            {
-                if( mpOutDev )
-                {
-                    mpOutDev->Push();
-                    mpOutDev->EnableMapMode(false);
-                    mpOutDev->SetAntialiasing( AntialiasingFlags::Enable );
-                }
-            }
-
-            VclPtr<OutputDevice>    mpOutDev;
+            OutputDevice&           mrOutDev;
             const bool              mbMappingWasEnabled;
             const AntialiasingFlags mnAntiAliasing;
         };

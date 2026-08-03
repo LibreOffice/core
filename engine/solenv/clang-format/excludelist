@@ -425,13 +425,11 @@ canvas/inc/base/basemutexhelper.hxx
 canvas/inc/base/bufferedgraphicdevicebase.hxx
 canvas/inc/base/cachedprimitivebase.hxx
 canvas/inc/base/disambiguationhelper.hxx
-canvas/inc/bitmapbackbuffer.hxx
 canvas/inc/cachedbitmap.hxx
 canvas/inc/canvas.hxx
 canvas/inc/canvasfont.hxx
 canvas/inc/canvastools.hxx
 canvas/inc/impltools.hxx
-canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/textlayout.hxx
 canvas/inc/unopolypolygon.hxx
@@ -479,7 +477,6 @@ canvas/source/tools/parametricpolypolygon.cxx
 canvas/source/tools/surfacerect.hxx
 canvas/source/tools/unopolypolygon.cxx
 canvas/source/tools/verifyinput.cxx
-canvas/source/vcl/bitmapbackbuffer.cxx
 canvas/source/vcl/cachedbitmap.cxx
 canvas/source/vcl/canvas.cxx
 canvas/source/vcl/canvasfont.cxx

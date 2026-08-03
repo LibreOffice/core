@@ -77,11 +77,11 @@ namespace vclcanvas
                             sal_Int8                                   nDirection,
                             CanvasFont::Reference                      rFont,
                             uno::Reference<vclcanvas::XGraphicDevice>  xDevice,
-                            OutDevProviderSharedPtr                    xOutDev ) :
+                            const VclPtr<OutputDevice>&                xOutDev ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
         mxDevice(std::move( xDevice )),
-        mpOutDevProvider(std::move( xOutDev )),
+        mpOutDevProvider( xOutDev ),
         mnTextDirection( nDirection )
     {}
 
@@ -140,7 +140,7 @@ namespace vclcanvas
         if( !mpOutDevProvider )
             return geometry::RealRectangle2D();
 
-        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+        OutputDevice& rOutDev = *mpOutDevProvider;
 
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
