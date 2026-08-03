@@ -175,7 +175,11 @@ public static class FlowLayouter
                     isFirstOfParagraph: line == 0,
                     isFirstInFrame: placed.Count == 0 && tables.Count == 0);
 
-                placed.Add(new PlacedLine(i, line, box, top));
+                // `above` and not `above + leading`: the leading is the paragraph above's, and Writer's
+                // `GetTopForObjPos` keeps it in a paragraph-anchored frame's origin. See
+                // `PlacedLine.ParagraphTop`.
+                placed.Add(new PlacedLine(
+                    i, line, box, top, Column: 0, UpperSpace: line == 0 ? above : Length.Zero));
 
                 // A box that shares its line with the next leaves the pen where it is: a line beside a
                 // floating frame clear of both margins is two stretches on one baseline, and the line's

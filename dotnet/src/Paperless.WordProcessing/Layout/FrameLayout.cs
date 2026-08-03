@@ -35,6 +35,12 @@ public static class FrameLayout
     /// The top of the anchor paragraph, in page coordinates. Ignored for the origins that do not depend
     /// on it, which is what makes a page-anchored frame placeable before anything has been paginated.
     /// </param>
+    /// <param name="anchorLineTop">
+    /// The top of the anchoring <em>line</em>, which differs from <paramref name="anchorTop"/> by the
+    /// paragraph's own upper spacing — see <see cref="PlacedLine.ParagraphTop"/>. Only
+    /// <see cref="FrameVerticalOrigin.Line"/> uses it; it defaults to the paragraph's top, which is what
+    /// the two are on a paragraph whose gap above collapsed to nothing.
+    /// </param>
     /// <param name="rightHandPage">
     /// True when the page is a right-hand one, which is the only thing the inside and outside alignments
     /// differ by.
@@ -44,7 +50,8 @@ public static class FrameLayout
         PageGeometry geometry,
         DocRect column,
         Length anchorTop,
-        bool rightHandPage = true)
+        bool rightHandPage = true,
+        Length? anchorLineTop = null)
     {
         ArgumentNullException.ThrowIfNull(frame);
         ArgumentNullException.ThrowIfNull(geometry);
@@ -60,10 +67,14 @@ public static class FrameLayout
             _ => column,
         };
 
+        Length lineTop = anchorLineTop ?? anchorTop;
+
         DocRect vertical = frame.VerticalOrigin switch
         {
             FrameVerticalOrigin.Page => page,
             FrameVerticalOrigin.PageMargin => text,
+            FrameVerticalOrigin.Line =>
+                new DocRect(column.X, lineTop, column.Width, text.Bottom - lineTop),
             _ => new DocRect(column.X, anchorTop, column.Width, text.Bottom - anchorTop),
         };
 
@@ -168,7 +179,11 @@ internal sealed class FrameResolution
                 if (placements.ContainsKey(line.ParagraphIndex)) continue;
 
                 placements[line.ParagraphIndex] = new Placement(
-                    index, page, page.ColumnArea(line.Column), page.BodyArea.Y + line.Top);
+                    index,
+                    page,
+                    page.ColumnArea(line.Column),
+                    page.BodyArea.Y + line.Top,
+                    page.BodyArea.Y + line.ParagraphTop);
             }
         }
 
@@ -181,7 +196,12 @@ internal sealed class FrameResolution
         // ended up. Shared by the body's blocks and by the flows, which differ only in how those two are
         // arrived at — the body's from a placed line, a flow's from the flow's own area.
         void PlaceFrames(
-            PageParagraph paragraph, int pageIndex, LaidOutPage page, DocRect origin, Length anchorTop)
+            PageParagraph paragraph,
+            int pageIndex,
+            LaidOutPage page,
+            DocRect origin,
+            Length anchorTop,
+            Length anchorLineTop)
         {
             PageGeometry geometry = sections[
                 Math.Clamp(page.SectionIndex, 0, sections.Count - 1)].Section.Page;
@@ -194,7 +214,12 @@ internal sealed class FrameResolution
                 if (frame.Anchor == FrameAnchor.AsCharacter) continue;
 
                 DocRect area = FrameLayout.Place(
-                    frame, geometry, origin, anchorTop, rightHandPage: page.Number % 2 == 1);
+                    frame,
+                    geometry,
+                    origin,
+                    anchorTop,
+                    rightHandPage: page.Number % 2 == 1,
+                    anchorLineTop: anchorLineTop);
 
                 frames++;
                 signature.Add(area.X.Emu);
@@ -277,7 +302,13 @@ internal sealed class FrameResolution
             if (blocks[index] is not PageParagraph paragraph || paragraph.Frames.Count == 0) continue;
             if (!placements.TryGetValue(index, out Placement placement)) continue;
 
-            PlaceFrames(paragraph, placement.Index, placement.Page, placement.Column, placement.Top);
+            PlaceFrames(
+                paragraph,
+                placement.Index,
+                placement.Page,
+                placement.Column,
+                placement.ParagraphTop,
+                placement.Top);
         }
 
         for (int index = 0; index < pages.Count; index++)
@@ -322,7 +353,13 @@ internal sealed class FrameResolution
                     // resolves against inside a flow, and it is exact: LibreOffice draws the frame of
                     // `frame-in-cell.fodt` at 73.70 pt, which is the table's left edge plus the cell's
                     // 0.1 cm padding plus the frame's own 0.5 cm offset and nothing else.
-                    PlaceFrames(paragraph, index, pages[index], flow.Area, flow.Area.Y + line.Top);
+                    PlaceFrames(
+                        paragraph,
+                        index,
+                        pages[index],
+                        flow.Area,
+                        flow.Area.Y + line.ParagraphTop,
+                        flow.Area.Y + line.Top);
                 }
             }
         }
@@ -455,7 +492,12 @@ internal sealed class FrameResolution
     /// <param name="Page">That page.</param>
     /// <param name="Column">The rectangle of the column it starts in.</param>
     /// <param name="Top">Where its first line's box top sits, in page coordinates.</param>
-    private readonly record struct Placement(int Index, LaidOutPage Page, DocRect Column, Length Top);
+    /// <param name="ParagraphTop">
+    /// Where a frame anchored to the paragraph measures its offset from: the same point less the
+    /// paragraph's own upper spacing. See <see cref="PlacedLine.ParagraphTop"/>.
+    /// </param>
+    private readonly record struct Placement(
+        int Index, LaidOutPage Page, DocRect Column, Length Top, Length ParagraphTop);
 }
 
 /// <summary>
