@@ -329,6 +329,19 @@ public sealed record ParagraphFormat
     public bool TabsRelativeToIndent { get; init; } = true;
 
     /// <summary>
+    /// Whether a justified line may squeeze its blanks below their natural width to fit another word.
+    /// </summary>
+    /// <remarks>
+    /// A document-wide compatibility flag rather than a paragraph property, carried here for the same
+    /// reason <see cref="TabsRelativeToIndent"/> is: the layout engine has to know it and a paragraph is
+    /// the only thing that reaches it. LibreOffice spells it <c>JustifyLinesWithShrinking</c> and
+    /// writerfilter sets it for every file declaring <c>compatibilityMode</c> 15 or more
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:10172</c>). See
+    /// <see cref="JustificationShrink"/> for what it does and how far it goes.
+    /// </remarks>
+    public bool ShrinksJustifiedBlanks { get; init; }
+
+    /// <summary>
     /// Where the paragraph's tab stops are measured from, relative to the text area's start edge.
     /// </summary>
     public Length TabOrigin => TabsRelativeToIndent ? StartIndent : Length.Zero;

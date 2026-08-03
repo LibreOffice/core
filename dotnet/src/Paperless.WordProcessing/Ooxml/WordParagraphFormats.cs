@@ -126,12 +126,18 @@ internal static class WordParagraphFormats
     /// <param name="tableStyle">
     /// The <c>w:pPr</c> chain of the table style the paragraph sits in, or null outside a table.
     /// </param>
+    /// <param name="shrinksJustifiedBlanks">
+    /// True when a justified line may squeeze its blanks below their natural width, which is what the
+    /// document's <c>compatibilityMode</c> decides. See
+    /// <see cref="ParagraphFormat.ShrinksJustifiedBlanks"/>.
+    /// </param>
     internal static ParagraphFormat Resolve(
         WordStyles styles,
         XElement? paragraphProperties,
         Length defaultTabInterval,
         Length? autoSpacing = null,
-        IReadOnlyList<XElement>? tableStyle = null)
+        IReadOnlyList<XElement>? tableStyle = null,
+        bool shrinksJustifiedBlanks = false)
     {
         ArgumentNullException.ThrowIfNull(styles);
 
@@ -194,6 +200,8 @@ internal static class WordParagraphFormats
             // writerfilter's DomainMapper sets TABS_RELATIVE_TO_INDENT to false on every document it
             // maps, citing #i24363#.
             TabsRelativeToIndent = false,
+
+            ShrinksJustifiedBlanks = shrinksJustifiedBlanks,
         };
     }
 
