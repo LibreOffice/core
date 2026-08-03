@@ -70,6 +70,12 @@ public static class XlsxReader
             // spreadsheet's drawing path asked for a theme until a chart did.
             DrawingTheme? theme = DrawingTheme.Read(file.ThemeRoot);
 
+            // The same theme part, read for its other half. A text box's runs name their face
+            // indirectly far more often than directly, and the six names that indirection uses
+            // live here rather than in the colour scheme.
+            DrawingFontScheme? themeFonts = DrawingFontScheme.Read(
+                Drawing.Child(Drawing.Child(file.ThemeRoot, "themeElements"), "fontScheme"));
+
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
                 ContentSection section = new()
@@ -112,7 +118,8 @@ public static class XlsxReader
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,
-                    Drawings = XlsxDrawings.Read(file.Package, entry.PartName, theme),
+                    Drawings = XlsxDrawings.Read(
+                        file.Package, entry.PartName, theme, themeFonts),
                     FileName = source.FileName ?? string.Empty,
                 });
 

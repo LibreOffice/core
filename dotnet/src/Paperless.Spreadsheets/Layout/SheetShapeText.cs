@@ -28,10 +28,14 @@ public enum SheetShapeAnchor
     Bottom,
 }
 
-/// <summary>A run of a shape's text: the characters, and the size they are set at.</summary>
+/// <summary>A run of a shape's text: the characters, the size, and the face.</summary>
 /// <param name="Text">The characters.</param>
 /// <param name="Size">The em size the run states, or the body's default where it states none.</param>
-public readonly record struct SheetShapeRun(string Text, Length Size);
+/// <param name="Family">
+/// The typeface the run states, with the theme's indirection already followed, or null where it
+/// states none and the default face is right.
+/// </param>
+public readonly record struct SheetShapeRun(string Text, Length Size, string? Family = null);
 
 /// <summary>One paragraph of a shape's text.</summary>
 public sealed record SheetShapeParagraph
@@ -64,6 +68,27 @@ public sealed record SheetShapeParagraph
             return largest;
         }
     }
+
+    /// <summary>The face the paragraph is set in, or null where no run names one.</summary>
+    /// <remarks>
+    /// The <em>first</em> face any run states, where <see cref="Size"/> takes the largest. The two
+    /// rules differ because the quantities differ: a line's height is decided by its tallest run,
+    /// and its face is not a maximum of anything. A paragraph mixing faces is drawn wholly in the
+    /// first, which is the same single-face approximation the rest of this path makes and is
+    /// exact for every text box in the corpus — each states one face for the whole body.
+    /// </remarks>
+    public string? Family
+    {
+        get
+        {
+            foreach (SheetShapeRun run in Runs)
+            {
+                if (!string.IsNullOrWhiteSpace(run.Family)) return run.Family;
+            }
+
+            return null;
+        }
+    }
 }
 
 /// <summary>
@@ -79,12 +104,12 @@ public sealed record SheetShapeParagraph
 /// <c>PrintDrawingLayer</c> like any other object.
 /// </para>
 /// <para>
-/// <strong>What this carries is what can be drawn, and no more.</strong> The furniture face is the
-/// one face <see cref="SheetBandText"/> resolves, so a run's typeface, weight and slant are read
-/// by nobody and are not modelled; the size is, because it decides both the line height and the
-/// wrap and a body mixing 7 pt and 12 pt runs lays out visibly wrongly without it. That is a real
-/// limitation rather than a design: it is recorded in the module's TODO beside the cell engine's
-/// own single-face restriction, which is the same gap and will be closed by the same work.
+/// <strong>What this carries is what can be drawn, and no more.</strong> A run's size and typeface
+/// are carried because both decide the line height and the wrap; its weight, slant and colour are
+/// not, because nothing downstream would use them. The typeface arrives already resolved — a
+/// <c>a:latin typeface="+mn-lt"</c> has been through the theme's font scheme before it gets here,
+/// since taking that attribute literally asks the resolver for a family called <c>+mn-lt</c> and
+/// gets whatever fontconfig offers for a name that exists nowhere.
 /// </para>
 /// </remarks>
 public sealed record SheetShapeText

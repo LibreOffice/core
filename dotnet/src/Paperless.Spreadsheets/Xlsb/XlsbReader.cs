@@ -60,6 +60,10 @@ public static class XlsbReader
             // ever asks for it, and a chart part is XML in an XLSB too.
             DrawingTheme? theme = DrawingTheme.Read(file.ThemeRoot);
 
+            // And its other half, for a text box whose runs name their face through the theme.
+            DrawingFontScheme? themeFonts = DrawingFontScheme.Read(
+                Drawing.Child(Drawing.Child(file.ThemeRoot, "themeElements"), "fontScheme"));
+
             foreach (XlsxSheetEntry entry in file.Sheets)
             {
                 ContentSection section = new()
@@ -97,7 +101,8 @@ public static class XlsbReader
                     // *name*, which the workbook already gave. Leaving this unwired was worth
                     // 8 words and a page on `sc/qa/unit/data/xlsb/tdf108017_calcProtection.xlsb`:
                     // its chart read into nothing and its second page never existed.
-                    Drawings = XlsxDrawings.Read(file.PackageHandle, entry.PartName, theme),
+                    Drawings = XlsxDrawings.Read(
+                        file.PackageHandle, entry.PartName, theme, themeFonts),
                     FileName = source.FileName ?? string.Empty,
                 });
 
