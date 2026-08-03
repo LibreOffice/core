@@ -1093,6 +1093,10 @@ baseline reproduced the briefed 122/171, page error 222 and 134 exact page count
 — the first time this track's handover has been exactly right, and worth recording because the
 last two rounds' briefs were both stale-low.
 
+Verified on the merged branch at `b0dee3fac`, after that commit was made: fidelity **520 of 520,
+0 skipped**, agreeing with the worktree figure. The merge commit deliberately said the suite was
+still running rather than assuming it, so this is the promised result.
+
 | | before | after |
 | --- | --- | --- |
 | documents matching | 122 | **125** |
