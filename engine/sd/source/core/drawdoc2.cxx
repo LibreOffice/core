@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <basegfx/numeric/ftools.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <vcl/settings.hxx>
 
 #include <sal/log.hxx>
@@ -1825,6 +1826,7 @@ void SdDrawDocument::ImportCanvasPage()
         connectPagePreviews();
     }
     NotifyKitHasOverviewPage(true);
+    NotifyKitCanvasPreviewRectangles();
 }
 
 void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
@@ -1882,6 +1884,7 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 
     populatePagePreviewsGrid();
     connectPagePreviews();
+    NotifyKitCanvasPreviewRectangles();
 
     return pCanvasPage->GetPageNum() / 2;
 }
@@ -1989,6 +1992,7 @@ void SdDrawDocument::updatePagePreviewsGrid(const SdPage* pPage)
         mpCanvasPage->CreatePresObj(PresObjKind::PagePreview, true, ::tools::Rectangle(Point(nX,nY), Size(nPreviewWidth, nPreviewHeight)), OUString(), nPageNum);
     }
     connectPagePreviews();
+    NotifyKitCanvasPreviewRectangles();
 }
 
 void SdDrawDocument::connectPagePreviews()
@@ -2071,6 +2075,64 @@ void SdDrawDocument::connectPagePreviews()
 
         pObj->SetMarkProtect(true);
         mpCanvasPage->NbcInsertObject(pObj.get());
+    }
+}
+
+SdrPageObj* SdDrawDocument::GetCanvasPreviewForPart(sal_uInt16 nPart) const
+{
+    if (!HasCanvasPage())
+        return nullptr;
+    SdrObjListIter aIter(mpCanvasPage.get(), SdrIterMode::Flat);
+    for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
+    {
+        if (pObject->GetObjIdentifier() != SdrObjKind::Page)
+            continue;
+        SdrPageObj* pPageObject = static_cast<SdrPageObj*>(pObject);
+        SdrPage* pPage = pPageObject->GetReferencedPage();
+        if (pPage && (pPage->GetPageNum() - 1) / 2 == nPart)
+            return pPageObject;
+    }
+    return nullptr;
+}
+
+OString SdDrawDocument::GetCanvasPreviewRectanglesPayload() const
+{
+    ::tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("commandName", ".uno:CanvasPreviewRects");
+    {
+        auto aState = aJsonWriter.startNode("state");
+        auto aPreviews = aJsonWriter.startArray("previews");
+        SdrObjListIter aIter(mpCanvasPage.get(), SdrIterMode::Flat);
+        for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
+        {
+            if (pObject->GetObjIdentifier() != SdrObjKind::Page)
+                continue;
+            SdrPageObj* pPageObject = static_cast<SdrPageObj*>(pObject);
+            SdrPage* pPage = pPageObject->GetReferencedPage();
+            if (!pPage)
+                continue;
+            const ::tools::Rectangle aRectangle = pPageObject->GetSnapRect();
+            auto aEntry = aJsonWriter.startStruct();
+            aJsonWriter.put("part", static_cast<sal_Int32>((pPage->GetPageNum() - 1) / 2));
+            aJsonWriter.put("x", o3tl::toTwips(aRectangle.Left(), o3tl::Length::mm100));
+            aJsonWriter.put("y", o3tl::toTwips(aRectangle.Top(), o3tl::Length::mm100));
+            aJsonWriter.put("width", o3tl::toTwips(aRectangle.GetWidth(), o3tl::Length::mm100));
+            aJsonWriter.put("height", o3tl::toTwips(aRectangle.GetHeight(), o3tl::Length::mm100));
+        }
+    }
+    return aJsonWriter.finishAndGetAsOString();
+}
+
+void SdDrawDocument::NotifyKitCanvasPreviewRectangles()
+{
+    if (!comphelper::COKit::isActive() || !HasCanvasPage())
+        return;
+    const OString aPayload = GetCanvasPreviewRectanglesPayload();
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
+        pViewShell->NotifyOtherViews(COKitCallbackType::STATE_CHANGED,
+                                     ".uno:CanvasPreviewRects"_ostr, aPayload);
     }
 }
 

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/text/WritingMode.hpp>
+#include <rtl/string.hxx>
 #include <svl/style.hxx>
 #include <svx/fmmodel.hxx>
 #include <unotools/charclass.hxx>
@@ -1177,6 +1178,17 @@ public:
     SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
 
     SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
+
+    /** The canvas-page preview object whose referenced page is the standard page with the given
+        part number, or nullptr when there is none. */
+    SdrPageObj* GetCanvasPreviewForPart(sal_uInt16 nPart) const;
+
+    /** STATE_CHANGED payload listing every preview on the canvas page: for each preview the
+        part number of the slide it shows and its snap rectangle in twips. */
+    OString GetCanvasPreviewRectanglesPayload() const;
+
+    /** Send the preview rectangle list to every view. */
+    void NotifyKitCanvasPreviewRectangles();
 
     /** Map a point in canvas-page coordinates to the coordinate space of the slide a preview
         shows. The preview's snap rectangle spans the whole slide, so the mapping is a linear

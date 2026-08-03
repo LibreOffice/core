@@ -52,6 +52,7 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdopage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
@@ -65,6 +66,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svtools/colorcfg.hxx>
 #include <unotools/datetime.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <DrawDocShell.hxx>
 #include <TransitionPreset.hxx>
@@ -6995,6 +6997,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupTrimsACroppedI
     const SdrGrafCropItem& rCrop = rFirstImage.GetMergedItem(SDRATTR_GRAFCROP);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rCrop.GetRight());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rCrop.GetBottom());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasPreviewRectsBroadcast)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+
+    // Creating the canvas page announces the preview rectangles to the views.
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    auto it = aView.m_aStateChanges.find(".uno:CanvasPreviewRects");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    boost::property_tree::ptree aPreviews = it->second.get_child("state").get_child("previews");
+    // dummy.odp has 8 slides, so one preview per slide.
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aPreviews.size());
+    const boost::property_tree::ptree* pPreviewForPart1 = nullptr;
+    for (const auto& rEntry : aPreviews)
+    {
+        CPPUNIT_ASSERT(rEntry.second.get<sal_Int64>("width") > 0);
+        CPPUNIT_ASSERT(rEntry.second.get<sal_Int64>("height") > 0);
+        if (rEntry.second.get<int>("part") == 1)
+            pPreviewForPart1 = &rEntry.second;
+    }
+    CPPUNIT_ASSERT(pPreviewForPart1);
+
+    // The payload matches the model: the preview object the document reports for part 1.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdrPageObj* pPreview = pDocument->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+    const ::tools::Rectangle aSnap = pPreview->GetSnapRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::toTwips(aSnap.Left(), o3tl::Length::mm100),
+                         pPreviewForPart1->get<sal_Int64>("x"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
