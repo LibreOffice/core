@@ -402,11 +402,10 @@ internal static class SheetTextLayout
         // neighbours, the same ### for a value that will not fit — so the only thing to skip is
         // the shortening. A cell whose whole content is a hyperlink field is on the same path,
         // for the same reason: it is an EditTextObject rather than a string.
-        Length shift = Length.Zero;
         if (!isValue && !breaks && area.IsClipped
             && !cell.IsField && !HasEditCharacters(text, fillAt))
         {
-            (run, shift) = Shorten(run, text, ShapeRange, percent, horizontal, area);
+            run = Shorten(run, text, ShapeRange, percent, horizontal, area);
         }
 
         List<SheetTextRun> lines = breaks
@@ -428,7 +427,7 @@ internal static class SheetTextLayout
         {
             placed.Add(new PlacedLine(
                 line,
-                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin) + shift,
+                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin),
                 y + line.Ascent));
             y += line.LineHeight;
         }
@@ -819,11 +818,14 @@ internal static class SheetTextLayout
     /// <para>
     /// The estimate is deliberately crude on both sides — the ratio of visible width to total
     /// width, times the character count, plus one — so it over-keeps rather than under-keeps and
-    /// the clip does the rest. Right-aligned text keeps its <em>end</em> and is shifted right by
-    /// the width it lost, since its pen was placed for the whole string.
+    /// the clip does the rest. Right-aligned text keeps its <em>end</em>, and keeping it needs no
+    /// compensating shift: dropping the head of a string leaves every remaining glyph where it
+    /// already was, and <see cref="Horizontal"/> is handed the shortened run's own width, so
+    /// <c>right − margin − shortened</c> is exactly where the tail was standing. Shifting it right
+    /// by the width dropped carried the whole run over the cell's right edge by that much.
     /// </para>
     /// </remarks>
-    private static (SheetTextRun Run, Length Shift) Shorten(
+    private static SheetTextRun Shorten(
         SheetTextRun run,
         string text,
         Func<int, int, long, SheetTextRun?> shape,
@@ -831,28 +833,27 @@ internal static class SheetTextLayout
         SheetHorizontalAlignment horizontal,
         Area area)
     {
-        if (run.Width <= Length.Zero || text.Length == 0) return (run, Length.Zero);
+        if (run.Width <= Length.Zero || text.Length == 0) return run;
 
         if (horizontal == SheetHorizontalAlignment.Left && area.RightClip)
         {
             double ratio = (double)(run.Width - area.RightMissing).Emu / run.Width.Emu;
-            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+            if (ratio is <= 0.0 or >= 1.0) return run;
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            return (shape(0, keep, percent) ?? run, Length.Zero);
+            return shape(0, keep, percent) ?? run;
         }
 
         if (horizontal == SheetHorizontalAlignment.Right && area.LeftClip)
         {
             double ratio = (double)(run.Width - area.LeftMissing).Emu / run.Width.Emu;
-            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+            if (ratio is <= 0.0 or >= 1.0) return run;
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            SheetTextRun? shorter = shape(text.Length - keep, text.Length, percent);
-            return shorter is null ? (run, Length.Zero) : (shorter, run.Width - shorter.Width);
+            return shape(text.Length - keep, text.Length, percent) ?? run;
         }
 
-        return (run, Length.Zero);
+        return run;
     }
 
     // --------------------------------------------------------------------------------- wrap
