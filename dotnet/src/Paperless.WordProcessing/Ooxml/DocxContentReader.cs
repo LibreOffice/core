@@ -131,20 +131,75 @@ public sealed partial class DocxContentReader
     /// parts.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A document's final <c>w:sectPr</c> is a child of <c>w:body</c>; earlier sections keep
     /// theirs inside the last paragraph of the section. Both are collected, because a header
     /// belongs to whichever section names it.
+    /// </para>
+    /// <para>
+    /// <strong>The paragraph carrying a section break need not be a child of <c>w:body</c>.</strong>
+    /// A <c>w:sdt</c> — a content control — is a transparent wrapper that <see cref="ReadBlock"/>
+    /// already steps through, and Word puts one round a cover page or a table of contents as a
+    /// matter of course; the section break that ends it then lives two levels down. Taking only
+    /// the body's own children loses that section outright, which is worse than losing its page
+    /// setup: every later section shifts up by one, so the second section's headers are drawn
+    /// with the first section's geometry and the last section has none at all. Measured on
+    /// <c>final-technical-report-template.docx</c> (words/batch-007), whose three
+    /// <c>w:sectPr</c> were read as two — its running head drew on pages 1 and 3 against
+    /// LibreOffice's 2 to 6.
+    /// </para>
+    /// <para>
+    /// The containers stepped through are exactly the ones <c>DocxLayoutSource.Walk</c> steps
+    /// through, and that is a requirement rather than a coincidence: the walk counts a section
+    /// forward at each <c>w:sectPr</c> it meets to number the blocks, and this enumerates the same
+    /// breaks to build the sections those numbers index. Any container one of them descends into
+    /// and the other does not puts the two lists out of step, which is the same failure by a
+    /// different route. A table cell is in neither: a <c>w:sectPr</c> inside a <c>w:tc</c> belongs
+    /// to that cell's nested content, and Word does not end a body section there.
+    /// </para>
     /// </remarks>
     public static IEnumerable<XElement> SectionProperties(XElement body)
     {
         ArgumentNullException.ThrowIfNull(body);
 
-        foreach (XElement paragraph in Word.Children(body, "p"))
+        foreach (XElement paragraph in Paragraphs(body, 0))
         {
             if (Word.Child(Word.Child(paragraph, "pPr"), "sectPr") is { } inParagraph)
                 yield return inParagraph;
         }
         if (Word.Child(body, "sectPr") is { } final) yield return final;
+    }
+
+    /// <summary>
+    /// The body's paragraphs in document order, stepping through the wrappers that hold blocks.
+    /// </summary>
+    /// <remarks>
+    /// Depth-bounded for the same reason <see cref="EnterDepth"/> is: the nesting comes from a
+    /// file, and a document claiming a thousand levels of content control would recurse a
+    /// thousand deep for no content.
+    /// </remarks>
+    private static IEnumerable<XElement> Paragraphs(XElement container, int depth)
+    {
+        if (depth > MaxNestingDepth) yield break;
+
+        foreach (XElement child in container.Elements())
+        {
+            if (child.Name.NamespaceName != OoxmlNamespaces.WordprocessingML) continue;
+
+            switch (child.Name.LocalName)
+            {
+                case "p":
+                    yield return child;
+                    break;
+
+                case "sdt" or "sdtContent":
+                    foreach (XElement inside in Paragraphs(child, depth + 1)) yield return inside;
+                    break;
+
+                default:
+                    continue;
+            }
+        }
     }
 
     // ----------------------------------------------------------------------- block level

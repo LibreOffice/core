@@ -81,6 +81,45 @@ public sealed class SectionMarkParagraphTests
         Texts(pages, 2).ShouldBe(["Omega"]);
     }
 
+    /// <summary>
+    /// A section break inside a content control is still a section break.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Word wraps a cover page or a table of contents in a <c>w:sdt</c> as a matter of course, and the
+    /// paragraph carrying the break that ends it is then a grandchild of <c>w:body</c> rather than a
+    /// child. The section walk took the body's own paragraphs only, so that section was not merely
+    /// misread — it did not exist, and every later section shifted up by one to fill the gap.
+    /// </para>
+    /// <para>
+    /// Asserted through the page geometry, because that is the visible half: each section here states a
+    /// page width of its own, so a section that went missing shows up as a page of the wrong width
+    /// rather than as a count that has to be inferred. Measured on
+    /// <c>final-technical-report-template.docx</c> (words/batch-007), whose three <c>w:sectPr</c> read
+    /// as two and whose running head therefore drew on two pages of six.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ASectionBreakInsideAContentControlStillEndsItsSection()
+    {
+        WordProcessingPages pages = Paginate(
+            "<w:sdt><w:sdtContent>"
+            + Paragraph("Alpha")
+            + Paragraph(null, Section("nextPage", width: 6000))
+            + "</w:sdtContent></w:sdt>"
+            + Paragraph("Beta")
+            + Paragraph(null, Section("nextPage", width: 8000))
+            + Paragraph("Omega"));
+
+        Texts(pages).ShouldBe(["Alpha", "Beta", "Omega"]);
+
+        // Three sections, three widths: the wrapped one's own, the middle one's, and the body's.
+        pages.Count.ShouldBe(3);
+        pages.Pages[0].Size.Width.ShouldBe(Core.Units.Length.FromTwips(6000));
+        pages.Pages[1].Size.Width.ShouldBe(Core.Units.Length.FromTwips(8000));
+        pages.Pages[2].Size.Width.ShouldBe(Core.Units.Length.FromTwips(11906));
+    }
+
     /// <summary>The text of every paragraph the document laid out, in order and once each.</summary>
     private static List<string> Texts(WordProcessingPages pages)
         => [.. Enumerable.Range(0, pages.Count).SelectMany(page => Texts(pages, page))];
@@ -111,8 +150,8 @@ public sealed class SectionMarkParagraphTests
         return $"<w:p>{properties}{run}</w:p>";
     }
 
-    private static string Section(string? type)
-        => $"<w:sectPr>{(type is null ? "" : $"<w:type w:val=\"{type}\"/>")}{Geometry}</w:sectPr>";
+    private static string Section(string? type, int width = 11906)
+        => $"<w:sectPr>{(type is null ? "" : $"<w:type w:val=\"{type}\"/>")}{GeometryOf(width)}</w:sectPr>";
 
     private const string Geometry =
         """
@@ -120,6 +159,14 @@ public sealed class SectionMarkParagraphTests
         <w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"
                  w:header="709" w:footer="709" w:gutter="0"/>
         """;
+
+    /// <summary>The same geometry at a stated page width, so one section can be told from another.</summary>
+    private static string GeometryOf(int width)
+        => $"""
+           <w:pgSz w:w="{width.ToString(System.Globalization.CultureInfo.InvariantCulture)}" w:h="16838"/>
+           <w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"
+                    w:header="709" w:footer="709" w:gutter="0"/>
+           """;
 
     private static WordProcessingPages Paginate(string body)
     {
