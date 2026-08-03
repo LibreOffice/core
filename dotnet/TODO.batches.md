@@ -493,6 +493,21 @@ heights in Excel" (`sc/source/filter/excel/read.cxx:1282-1288`). BIFF2–5 still
   Implementing it needs a clip that drops the glyph runs it excludes, which is what
   `PdfContentSink` is being taught elsewhere.
 
+### A lead for whoever takes 009: a page that draws five words where the reference draws 507
+
+`RegChangeReport.xlsx` now paginates correctly — 12 pages against 12, up from 14 — and is still
+2302 extractable words against 3137. The deficit is **almost all on one page**: per-page counts run
+378/378, **5/507**, 295/436, 250/345, 422/437 and so on down. Our page 2 holds nothing but the
+sheet's `Security Classification: Protected A` band; the reference's holds the whole
+"Liability Management Framework" row, whose Description cell is several hundred words of wrapped
+text in a row LibreOffice computes at 6480 twips.
+
+The reference's page 3 then *begins mid-sentence* — "immediately. On August 19, 2025, Directive 011
+was" — where ours begins at the next whole row. **The mechanism is not established**, and the
+obvious explanation does not survive a look at the source: `ScTable::UpdatePageBreaks`
+(`sc/source/core/data/table5.cxx:206-240`) never splits a row, it gives an over-tall one a page of
+its own. Worth starting from the page-2 measurement rather than from that theory.
+
 ### What is left in 005–008
 
 `esurf-12-135-2024-t01.xlsx` draws four-digit years as `201` and `202` — a number clipped to its
