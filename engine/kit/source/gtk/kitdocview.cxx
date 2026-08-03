@@ -10,6 +10,7 @@
 #include <sal/types.h>
 #include <math.h>
 #include <string.h>
+#include <limits>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -19,6 +20,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
+#include <o3tl/safeint.hxx>
 #include <COKit/COKit.hxx>
 #include <COKit/COKitInit.h>
 #include <COKit/COKitGtk.h>
@@ -828,7 +830,17 @@ static void
 setPart(KitDocumentView* pDocView, const std::string& rString)
 {
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
-    priv->m_nPartId = std::stoi(rString);
+    if (!priv->m_pDocument)
+        return;
+
+    // The payload names the part by its part number, while the widget tracks
+    // and reports parts by their index in document order.
+    {
+        std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
+        priv->m_nPartId = priv->m_pDocument->pClass->getPartIndex(
+            priv->m_pDocument, std::stoi(rString),
+            priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
+    }
     g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, priv->m_nPartId);
 }
 
@@ -2398,6 +2410,16 @@ setPartInThread(gpointer data)
 
     std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
+
+    // The widget names parts by their index in document order, while the
+    // document boundary names parts of a presentation or drawing document by
+    // their stable page unique ids.
+    const unsigned long long nPartNumber = priv->m_pDocument->pClass->getPartUniqueId(
+        priv->m_pDocument, nPart,
+        priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
+    if (nPartNumber != 0 && nPartNumber <= o3tl::make_unsigned(std::numeric_limits<int>::max()))
+        nPart = static_cast<int>(nPartNumber);
+
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
     aGuard.unlock();
 
@@ -3746,7 +3768,12 @@ kit_doc_view_get_part (KitDocumentView* pDocView)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
+
+    // The boundary reports the current part by its part number, while the
+    // widget reports parts by their index in document order.
+    return priv->m_pDocument->pClass->getPartIndex(
+        priv->m_pDocument, priv->m_pDocument->pClass->getPart(priv->m_pDocument),
+        priv->m_pDocument->pClass->getEditMode(priv->m_pDocument));
 }
 
 SAL_DLLPUBLIC_EXPORT void
