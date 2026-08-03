@@ -584,10 +584,9 @@ namespace vclcanvas
                                      const std::vector< vclcanvas::Texture >&         textures )
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
-                              __func__,
-                              static_cast< ::cppu::OWeakObject* >(this));
+                              __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");

@@ -52,10 +52,10 @@ namespace cppcanvas
                 PointAction(const PointAction&) = delete;
                 const PointAction& operator=(const PointAction&) = delete;
 
-                virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -85,7 +85,7 @@ namespace cppcanvas
                     rAltColor );
             }
 
-            bool PointAction::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool PointAction::render( vclcanvas::Canvas& rCanvas,
                                       const vclcanvas::ViewState& rViewState,
                                       const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
@@ -95,14 +95,14 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
+                rCanvas.drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
                                      rViewState,
                                      aLocalState );
 
                 return true;
             }
 
-            bool PointAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool PointAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                             const vclcanvas::ViewState& rViewState,
                                             const ::basegfx::B2DHomMatrix&    rTransformation,
                                             const Subset&                     rSubset ) const

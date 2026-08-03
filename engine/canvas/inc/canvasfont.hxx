@@ -95,7 +95,7 @@ namespace vclcanvas
     private:
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
-        rtl::Reference< vclcanvas::Canvas >                               mpRefDevice;
+        vclcanvas::Canvas&                                                mrRefDevice;
         VclPtr<OutputDevice>                                              mpOutDevProvider;
         css::geometry::Matrix2D                                           maFontMatrix;
     };

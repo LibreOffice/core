@@ -50,7 +50,6 @@ namespace canvastools
 {
         void verifyInput( const geometry::RealPoint2D&              rPoint,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -58,17 +57,17 @@ namespace canvastools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
             }
 
             if( !std::isfinite( rPoint.Y ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
             }
 #else
-            (void)pStr; (void)xIf; (void)nArgPos;
+            (void)pStr; (void)nArgPos;
             if( !std::isfinite( rPoint.X ) ||
                 !std::isfinite( rPoint.Y ) )
             {
@@ -79,7 +78,6 @@ namespace canvastools
 
         void verifyInput( const geometry::AffineMatrix2D&           matrix,
                           const char*                               pStr,
-                          vclcanvas::Canvas&                        rCanvas,
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -97,10 +95,10 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): AffineMatrix2D contains infinite or NAN value(s) at the following positions (m00-m12): " +
                     OUString::number(nBinaryState),
-                    static_cast<cppu::OWeakObject*>(&rCanvas), nArgPos );
+                    nullptr, nArgPos );
             }
 #else
-            (void)pStr; (void)rCanvas; (void)nArgPos;
+            (void)pStr; (void)nArgPos;
             if( !std::isfinite( matrix.m00 ) ||
                 !std::isfinite( matrix.m01 ) ||
                 !std::isfinite( matrix.m02 ) ||
@@ -115,7 +113,6 @@ namespace canvastools
 
         void verifyInput( const geometry::Matrix2D&                 matrix,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -131,10 +128,10 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): Matrix2D contains infinite or NAN value(s) at the following positions (m00-m11): " +
                     OUString::number(nBinaryState),
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
             }
 #else
-            (void)pStr; (void)xIf; (void)nArgPos;
+            (void)pStr; (void)nArgPos;
             if( !std::isfinite( matrix.m00 ) ||
                 !std::isfinite( matrix.m01 ) ||
                 !std::isfinite( matrix.m10 ) ||
@@ -147,21 +144,19 @@ namespace canvastools
 
         void verifyInput( const vclcanvas::ViewState&               viewState,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
             verifyInput( viewState.AffineTransform,
-                         pStr, xIf, nArgPos );
+                         pStr, nArgPos );
         }
 
         void verifyInput( const vclcanvas::RenderState&             renderState,
                           const char*                               pStr,
-                          class vclcanvas::Canvas&                  rCanvas,
                           ::sal_Int16                               nArgPos,
                           sal_Int32                                 nMinColorComponents )
         {
             verifyInput( renderState.AffineTransform,
-                         pStr, rCanvas, nArgPos );
+                         pStr, nArgPos );
 
             if( renderState.DeviceColor.getLength() < nMinColorComponents )
             {
@@ -173,7 +168,7 @@ namespace canvastools
                     " expected, " +
                     OUString::number(renderState.DeviceColor.getLength()) +
                     " provided)",
-                    static_cast<cppu::OWeakObject*>(&rCanvas), nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -182,11 +177,10 @@ namespace canvastools
 
         void verifyInput( const vclcanvas::Texture&                 texture,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
             verifyInput( texture.AffineTransform,
-                         pStr, xIf, nArgPos );
+                         pStr, nArgPos );
 
             if( !std::isfinite( texture.Alpha ) ||
                 texture.Alpha < 0.0 ||
@@ -197,7 +191,7 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): textures' alpha value out of range (is " +
                     OUString::number(texture.Alpha) + ")",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -212,7 +206,7 @@ namespace canvastools
                     ": verifyInput(): textures' RepeatModeX value is out of range (" +
                     OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeX)) +
                     " not known)",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -228,7 +222,7 @@ namespace canvastools
                 ": verifyInput(): textures' RepeatModeY value is out of range (" +
                 OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
                 " not known)",
-                xIf, nArgPos );
+                nullptr, nArgPos );
 #else
             throw lang::IllegalArgumentException();
 #endif
@@ -239,10 +233,8 @@ namespace canvastools
             struct VerifyDashValue
             {
                 VerifyDashValue( const char*                                pStr,
-                                 const uno::Reference< uno::XInterface >&   xIf,
                                  ::sal_Int16                                nArgPos ) :
                     mpStr( pStr ),
-                    mrIf( xIf ),
                     mnArgPos( nArgPos )
                 {
                 }
@@ -255,19 +247,17 @@ namespace canvastools
                             OUString::createFromAscii(mpStr) +
                             ": verifyInput(): one of stroke attributes' DashArray value out of range (is " +
                             OUString::number(rVal) + ")",
-                            mrIf, mnArgPos );
+                            nullptr, mnArgPos );
                     }
                 }
 
                 const char*                                 mpStr;
-                const uno::Reference< uno::XInterface >&    mrIf;
                 sal_Int16                                   mnArgPos;
             };
         }
 
         void verifyInput( const rendering::StrokeAttributes&        strokeAttributes,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
             if( !std::isfinite( strokeAttributes.StrokeWidth ) ||
@@ -279,7 +269,7 @@ namespace canvastools
                     ": verifyInput(): stroke attributes' StrokeWidth value out of range (is " +
                     OUString::number(strokeAttributes.StrokeWidth) +
                     ")",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -293,13 +283,13 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' MiterLimit value out of range (is " +
                     OUString::number(strokeAttributes.MiterLimit) + ")",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
             }
 
-            VerifyDashValue aVerifyDashValue( pStr, xIf, nArgPos );
+            VerifyDashValue aVerifyDashValue( pStr, nArgPos );
             for (auto const& aStrokeAttribute : strokeAttributes.DashArray)
                 aVerifyDashValue( aStrokeAttribute );
 
@@ -315,7 +305,7 @@ namespace canvastools
                     ": verifyInput(): stroke attributes' StartCapType value is out of range (" +
                     OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.StartCapType)) +
                     " not known)",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -330,7 +320,7 @@ namespace canvastools
                     ": verifyInput(): stroke attributes' StartCapType value is out of range (" +
                     OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.EndCapType)) +
                     " not known)",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -346,7 +336,7 @@ namespace canvastools
                 ": verifyInput(): stroke attributes' JoinType value is out of range (" +
                 OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
                 " not known)",
-                xIf, nArgPos );
+                nullptr, nArgPos );
 #else
             throw lang::IllegalArgumentException();
 #endif
@@ -354,11 +344,10 @@ namespace canvastools
 
         void verifyInput( const rendering::FontRequest&             fontRequest,
                           const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
             verifyInput( fontRequest.FontDescription,
-                         pStr, xIf, nArgPos );
+                         pStr, nArgPos );
 
             if( !std::isfinite( fontRequest.CellSize ) )
             {
@@ -366,7 +355,7 @@ namespace canvastools
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): font request's CellSize value contains infinite or NAN",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -378,7 +367,7 @@ namespace canvastools
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): font request's ReferenceAdvancement value contains infinite or NAN",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -391,7 +380,7 @@ namespace canvastools
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): font request's CellSize and ReferenceAdvancement are mutually exclusive, one of them must be 0.0",
-                    xIf, nArgPos );
+                    nullptr, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
 #endif
@@ -399,8 +388,7 @@ namespace canvastools
         }
 
         void verifyBitmapSize( const geometry::IntegerSize2D&           size,
-                               const char*                              pStr,
-                               const uno::Reference< uno::XInterface >& xIf )
+                               const char*                              pStr)
         {
             if( size.Width <= 0 )
             {
@@ -409,9 +397,9 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyBitmapSize(): size has 0 or negative width (value: " +
                     OUString::number(size.Width) + ")",
-                    xIf, 0 );
+                    nullptr, 0 );
 #else
-                (void)pStr; (void)xIf;
+                (void)pStr;
                 throw lang::IllegalArgumentException();
 #endif
             }
@@ -425,7 +413,7 @@ namespace canvastools
                 ": verifyBitmapSize(): size has 0 or negative height (value: " +
                 OUString::number(size.Height) +
                 ")",
-                xIf, 0 );
+                nullptr, 0 );
 #else
             throw lang::IllegalArgumentException();
 #endif

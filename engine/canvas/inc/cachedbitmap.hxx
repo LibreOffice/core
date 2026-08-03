@@ -48,7 +48,7 @@ namespace vclcanvas
                       const GraphicAttr&                              rAttr,
                       const ::vclcanvas::ViewState&                rUsedViewState,
                       ::vclcanvas::RenderState                     aUsedRenderState,
-                      const rtl::Reference< vclcanvas::Canvas >&   rTarget );
+                      vclcanvas::Canvas&                           rTarget );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -57,7 +57,7 @@ namespace vclcanvas
 
     private:
         ::vclcanvas::ViewState                         maUsedViewState;
-        rtl::Reference< vclcanvas::Canvas >                            mxTarget;
+        vclcanvas::Canvas&                                             mrTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
         const ::vclcanvas::RenderState                              maRenderState;
         const ::Point                                                  maPoint;

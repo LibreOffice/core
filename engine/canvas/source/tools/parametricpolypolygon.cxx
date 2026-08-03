@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 namespace canvas
 {
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
-        const rtl::Reference< vclcanvas::Canvas >& rDevice,
         std::u16string_view rServiceName,
         const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colorSequence,
         const ::cpo::uno::Sequence< double >& colorStops,
@@ -41,15 +40,15 @@ namespace canvas
     {
         if ( rServiceName == u"LinearGradient" )
         {
-            return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
+            return createLinearHorizontalGradient(colorSequence, colorStops);
         }
         else if ( rServiceName == u"EllipticalGradient" )
         {
-            return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
+            return createEllipticalGradient(colorSequence, colorStops, fAspectRatio);
         }
         else if ( rServiceName == u"RectangularGradient" )
         {
-            return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
+            return createRectangularGradient(colorSequence, colorStops, fAspectRatio);
         }
         else
             assert(false && "unsupported service");
@@ -58,17 +57,15 @@ namespace canvas
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createLinearHorizontalGradient(
-        const rtl::Reference< vclcanvas::Canvas >&  rDevice,
         const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
         const cpo::uno::Sequence< double >&                      stops )
     {
         // TODO(P2): hold gradient brush statically, and only setup
         // the colors
-        return new ParametricPolyPolygon( rDevice, GradientType::Linear, colors, stops );
+        return new ParametricPolyPolygon( GradientType::Linear, colors, stops );
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createEllipticalGradient(
-        const rtl::Reference< vclcanvas::Canvas >&  rDevice,
         const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
         const cpo::uno::Sequence< double >&                      stops,
         double                                              fAspectRatio )
@@ -76,14 +73,13 @@ namespace canvas
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
         return new ParametricPolyPolygon(
-            rDevice,
             ::basegfx::utils::createPolygonFromCircle(
                 ::basegfx::B2DPoint(0,0), 1 ),
             GradientType::Elliptical,
             colors, stops, fAspectRatio );
     }
 
-    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient( const rtl::Reference< vclcanvas::Canvas >& rDevice,
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient(
                                                                              const cpo::uno::Sequence< cpo::uno::Sequence< double > >&    colors,
                                                                              const cpo::uno::Sequence< double >&                     stops,
                                                                              double                                             fAspectRatio )
@@ -91,7 +87,6 @@ namespace canvas
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
         return new ParametricPolyPolygon(
-            rDevice,
             ::basegfx::utils::createPolygonFromRect(
                 ::basegfx::B2DRectangle( -1, -1, 1, 1 ) ),
             GradientType::Rectangular,
@@ -100,7 +95,6 @@ namespace canvas
 
     void ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&)
     {
-        mxDevice.clear();
     }
 
     OUString ParametricPolyPolygon::getImplementationName(  )
@@ -122,13 +116,11 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >           xDevice,
-                                                  const ::basegfx::B2DPolygon&                          rGradientPoly,
+    ParametricPolyPolygon::ParametricPolyPolygon( const ::basegfx::B2DPolygon&                          rGradientPoly,
                                                   GradientType                                          eType,
                                                   const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
                                                   const cpo::uno::Sequence< double >&                        rStops,
                                                   double                                                nAspectRatio ) :
-        mxDevice(std::move( xDevice )),
         maValues( rGradientPoly,
                   rColors,
                   rStops,
@@ -137,11 +129,9 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >           xDevice,
-                                                  GradientType                                          eType,
+    ParametricPolyPolygon::ParametricPolyPolygon( GradientType                                          eType,
                                                   const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
                                                   const cpo::uno::Sequence< double >&                        rStops ) :
-        mxDevice(std::move( xDevice )),
         maValues( ::basegfx::B2DPolygon(),
                   rColors,
                   rStops,

@@ -52,7 +52,7 @@ namespace cppcanvas
                               const ::basegfx::B2DVector& rDstSize,
                               const OutDevState& );
 
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -61,7 +61,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderPrimitive( vclcanvas::Canvas& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -121,7 +121,7 @@ namespace cppcanvas
                                    nullptr );
             }
 
-            bool BitmapAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool BitmapAction::renderPrimitive( vclcanvas::Canvas& rCanvas,
                                                 const vclcanvas::ViewState& rViewState,
                                                 rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -132,14 +132,14 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCachedPrimitive = rCanvas->drawBitmap( maBitmap,
+                rCachedPrimitive = rCanvas.drawBitmap( maBitmap,
                                                      rViewState,
                                                      aLocalState );
 
                 return true;
             }
 
-            bool BitmapAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool BitmapAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                              const vclcanvas::ViewState& rViewState,
                                              const ::basegfx::B2DHomMatrix&   rTransformation,
                                              const Subset&                    rSubset ) const

@@ -49,10 +49,10 @@ namespace cppcanvas
                 LineAction(const LineAction&) = delete;
                 const LineAction& operator=(const LineAction&) = delete;
 
-                virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -75,7 +75,7 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool LineAction::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool LineAction::render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
@@ -85,7 +85,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
+                rCanvas.drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
                                     ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
                                     rViewState,
                                     aLocalState );
@@ -93,7 +93,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool LineAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool LineAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const

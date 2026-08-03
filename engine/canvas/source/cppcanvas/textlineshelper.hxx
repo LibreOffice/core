@@ -67,8 +67,7 @@ public:
         Use overline color and underline color if the value is true, ignore those
         colors otherwise ( typical case is to render the shadow ).
      */
-    void render(const rtl::Reference<vclcanvas::Canvas>& rCanvas,
-                const vclcanvas::ViewState& rViewState,
+    void render(vclcanvas::Canvas& rCanvas, const vclcanvas::ViewState& rViewState,
                 const ::vclcanvas::RenderState& rRenderState, bool bNormalText) const;
 };
 }

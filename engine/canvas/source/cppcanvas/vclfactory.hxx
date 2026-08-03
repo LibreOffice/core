@@ -47,7 +47,7 @@ namespace cppcanvas
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        static RendererSharedPtr createRenderer( const rtl::Reference< vclcanvas::Canvas >& rCanvas,
+        static RendererSharedPtr createRenderer( vclcanvas::Canvas& rCanvas,
                                                  const basegfx::B2DHomMatrix& rViewTransform,
                                                  const ::GDIMetaFile&            rMtf );
 

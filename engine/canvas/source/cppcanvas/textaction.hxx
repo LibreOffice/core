@@ -77,7 +77,7 @@ namespace cppcanvas
                                                      VirtualDevice&                 rVDev,
                                                      const OutDevState&             rState,
                                                      bool                           bSubsettable,
-                                                     const rtl::Reference<vclcanvas::Canvas>& );
+                                                     vclcanvas::Canvas& );
         }
 }
 

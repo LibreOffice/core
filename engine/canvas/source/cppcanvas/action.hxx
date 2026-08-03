@@ -89,7 +89,7 @@ namespace cppcanvas
                 @return true, if rendering was successful. If
                 rendering failed, false is returned.
              */
-            virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            virtual bool render( vclcanvas::Canvas& rCanvas,
                                  const vclcanvas::ViewState& rViewState,
                                  const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
@@ -107,7 +107,7 @@ namespace cppcanvas
                 specified subset is invalid for this action, or if
                 rendering failed for other reasons, false is returned.
              */
-            virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                        const vclcanvas::ViewState& rViewState,
                                        const ::basegfx::B2DHomMatrix& rTransformation,
                                        const Subset&                  rSubset ) const = 0;

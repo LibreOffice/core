@@ -46,7 +46,7 @@ namespace vclcanvas
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
-        mpRefDevice( &rDevice ),
+        mrRefDevice( rDevice ),
         mpOutDevProvider( &rOutDevProvider ),
         maFontMatrix( rFontMatrix )
   {
@@ -76,7 +76,6 @@ namespace vclcanvas
             SolarMutexGuard aGuard;
 
             mpOutDevProvider.reset();
-            mpRefDevice.clear();
         }
         rGuard.lock();
     }
@@ -85,13 +84,10 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        if( !mpRefDevice.is() )
-            return rtl::Reference< vclcanvas::TextLayout >(); // we're disposed
-
         return new TextLayout( aText,
                                nDirection,
                                Reference( this ),
-                               mpRefDevice,
+                               mrRefDevice,
                                mpOutDevProvider);
     }
 

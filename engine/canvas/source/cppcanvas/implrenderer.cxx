@@ -644,7 +644,7 @@ namespace cppcanvas
                                                                 aGradInfo.getTextureTransform() );
 
                 aTexture.Gradient =
-                    rParms.mrUnoCanvas->createParametricPolyPolygon(aGradientService, aColors, aStops, aGradInfo.getAspectRatio());
+                    rParms.mrUnoCanvas.createParametricPolyPolygon(aGradientService, aColors, aStops, aGradInfo.getAspectRatio());
                 if( aTexture.Gradient.is() )
                 {
                     std::shared_ptr<Action> pPolyAction(
@@ -782,7 +782,7 @@ namespace cppcanvas
             }
             aFontRequest.CellSize = (rState.mapModeTransform * vcl::unotools::b2DSizeFromSize(rFontSizeLog)).getHeight();
 
-            return rParms.mrUnoCanvas->createFont(aFontRequest,
+            return rParms.mrUnoCanvas.createFont(aFontRequest,
                                                     rFont.GetEmphasisMark(),
                                                     aFontMatrix);
         }
@@ -2420,10 +2420,10 @@ namespace cppcanvas
         // Public methods
 
 
-        Renderer::Renderer( const rtl::Reference< vclcanvas::Canvas >& rCanvas,
+        Renderer::Renderer( vclcanvas::Canvas& rCanvas,
                             const basegfx::B2DHomMatrix& rViewTransform,
                             const GDIMetaFile&      rMtf )
-            : mpCanvas(rCanvas)
+            : mrCanvas(rCanvas)
             , nFrameLeft(0)
             , nFrameTop(0)
             , nFrameRight(0)
@@ -2435,20 +2435,9 @@ namespace cppcanvas
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::Renderer(mtf)" );
 
-            OSL_ENSURE( rCanvas && rCanvas.is(),
-                        "Renderer::Renderer(): Invalid canvas" );
-
             ::canvastools::initViewState( maViewState );
             ::canvastools::setViewStateTransform( maViewState, rViewTransform );
             ::canvastools::initRenderState( maRenderState );
-
-            // make sure canvas and graphic device are valid; action
-            // creation don't check that every time
-            if( !rCanvas )
-            {
-                // leave actions empty
-                return;
-            }
 
             VectorOfOutDevStates    aStateStack;
 
@@ -2533,7 +2522,7 @@ namespace cppcanvas
                 for (const MtfAction & rAction : maActions)
                     // ANDing the result. We want to fail if at least
                     // one action failed.
-                    bRet &= rAction.mpAction->render( mpCanvas, maViewState, aMatrix );
+                    bRet &= rAction.mpAction->render( mrCanvas, maViewState, aMatrix );
                 return bRet;
             }
             catch( uno::Exception& )

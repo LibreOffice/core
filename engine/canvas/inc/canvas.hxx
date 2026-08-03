@@ -29,8 +29,6 @@
 #include <canvas/vclcanvasdllapi.h>
 #include <sal/types.h>
 
-#include "./base/basemutexhelper.hxx"
-
 #include "canvasfont.hxx"
 #include "impltools.hxx"
 #include "Texture.hxx"
@@ -42,8 +40,6 @@ class OutputDevice;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper<>    GraphicDeviceBase_Base;
-
     /** Product of this component's factory.
 
         The Canvas object combines the actual Window canvas with
@@ -53,47 +49,17 @@ namespace vclcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class SAL_DLLPUBLIC_RTTI Canvas : public ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >
+    class SAL_DLLPUBLIC_RTTI Canvas
     {
     public:
         VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
 
         /// For resource tracking
-        virtual ~Canvas() override;
-
-        /// Dispose all internal references
-        virtual void disposeThis() override;
-
-        // Forwarding the XComponent implementation to the
-        // cppu::ImplHelper templated base
-        virtual void acquire() noexcept override { GraphicDeviceBase_Base::acquire(); }   \
-        virtual void release() noexcept override { GraphicDeviceBase_Base::release(); }   \
-        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
-            { return GraphicDeviceBase_Base::queryInterface(_rType); }                               \
-        virtual void dispose() override \
-        {                                                                               \
-            ::cppu::WeakComponentImplHelperBase::dispose();                                                      \
-        }                                                                               \
-        virtual void addEventListener(                                         \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
-        {                                                                               \
-            ::cppu::WeakComponentImplHelperBase::addEventListener(xListener);                                        \
-        }                                                                               \
-        virtual void removeEventListener(                                      \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
-        {                                                                               \
-            ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
-        }
+        VCLCANVAS_DLLPUBLIC ~Canvas();
 
         css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
 
-        css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
-        {
-            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
-                canvas::ParametricPolyPolygon::create(this,
-                                              GradientService,
-                                              colors, stops, aspectRatio));
-        }
+        css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio );
 
         void clear();
 
@@ -102,8 +68,7 @@ namespace vclcanvas
                                         const ::vclcanvas::RenderState&    renderState)
         {
             canvastools::verifyArgs(aPoint, viewState, renderState,
-                              __func__,
-                              static_cast< ::cppu::OWeakObject* >(this));
+                              __func__);
         }
 
         bool repaint( const GraphicObjectSharedPtr&                 rGrf,
@@ -192,6 +157,7 @@ namespace vclcanvas
 
         css::geometry::IntegerSize2D getSize(  );
 
+        mutable osl::Mutex m_aMutex;
         /// For retrieving device info
         VclPtr<OutputDevice> mxOutDev;
     };

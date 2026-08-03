@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
-    rtl::Reference<vclcanvas::Canvas> mCanvas;
+    std::unique_ptr<vclcanvas::Canvas> mCanvas;
     vclcanvas::ViewState mViewState;
     vclcanvas::RenderState mRenderState;
     cpo::uno::Sequence<double> mColorBlack;
@@ -70,7 +70,7 @@ public:
     virtual void tearDown() override
     {
         mVclDevice.disposeAndClear();
-        mCanvas = rtl::Reference<vclcanvas::Canvas>();
+        mCanvas.reset();
         BootstrapFixture::tearDown();
     }
 
@@ -81,8 +81,7 @@ public:
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();
-        mCanvas = new vclcanvas::Canvas(mVclDevice.get());
-        CPPUNIT_ASSERT(mCanvas.is());
+        mCanvas = std::make_unique<vclcanvas::Canvas>(mVclDevice.get());
     }
 
     void testDrawLine()

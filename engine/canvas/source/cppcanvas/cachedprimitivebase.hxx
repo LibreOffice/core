@@ -59,7 +59,7 @@ namespace cppcanvas
             CachedPrimitiveBase(const CachedPrimitiveBase&) = delete;
             const CachedPrimitiveBase& operator=(const CachedPrimitiveBase&) = delete;
 
-            virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            virtual bool render( vclcanvas::Canvas& rCanvas,
                                  const vclcanvas::ViewState& rViewState,
                                  const ::basegfx::B2DHomMatrix& rTransformation ) const override;
 
@@ -67,7 +67,7 @@ namespace cppcanvas
             using Action::render;
 
         private:
-            virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            virtual bool renderPrimitive( vclcanvas::Canvas& rCanvas,
                                           const vclcanvas::ViewState& rViewState,
                                           rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;

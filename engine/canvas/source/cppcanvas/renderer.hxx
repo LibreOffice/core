@@ -125,7 +125,7 @@ namespace cppcanvas
         class VCLCANVAS_DLLPUBLIC Renderer
         {
         public:
-            Renderer( const rtl::Reference< vclcanvas::Canvas >&    rCanvas,
+            Renderer( vclcanvas::Canvas& rCanvas,
                       const basegfx::B2DHomMatrix& rViewTransform,
                       const GDIMetaFile&        rMtf );
 
@@ -206,7 +206,7 @@ namespace cppcanvas
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
-            rtl::Reference< vclcanvas::Canvas > mpCanvas;
+            vclcanvas::Canvas& mrCanvas;
             mutable vclcanvas::ViewState  maViewState;
             mutable ::vclcanvas::RenderState maRenderState;
             ActionVector maActions;
@@ -230,7 +230,7 @@ namespace cppcanvas
         struct ActionFactoryParameters
         {
             ActionFactoryParameters( VectorOfOutDevStates&       rStates,
-                                     const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                                     vclcanvas::Canvas&          rCanvas,
                                      ::VirtualDevice&            rVDev,
                                      sal_Int32&                  io_rCurrActionIndex ) :
                 mrStates(rStates),
@@ -240,7 +240,7 @@ namespace cppcanvas
             {}
 
             VectorOfOutDevStates&       mrStates;
-            const rtl::Reference<vclcanvas::Canvas>& mrUnoCanvas;
+            vclcanvas::Canvas&          mrUnoCanvas;
             ::VirtualDevice&            mrVDev;
             sal_Int32&                  mrCurrActionIndex;
         };

@@ -91,10 +91,10 @@ namespace cppcanvas
                 TransparencyGroupAction(const TransparencyGroupAction&) = delete;
                 const TransparencyGroupAction& operator=(const TransparencyGroupAction&) = delete;
 
-                virtual bool render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool render( vclcanvas::Canvas& rCanvas,
                                      const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -162,7 +162,7 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool TransparencyGroupAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                                         const vclcanvas::ViewState& rViewState,
                                                         const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
@@ -430,7 +430,7 @@ namespace cppcanvas
 #endif
 
                 // no further alpha changes necessary -> draw directly
-                rCanvas->drawBitmap( maBufferBitmap,
+                rCanvas.drawBitmap( maBufferBitmap,
                                       rViewState,
                                       aLocalState );
                 return true;
@@ -443,7 +443,7 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool TransparencyGroupAction::render( vclcanvas::Canvas& rCanvas,
                                                   const vclcanvas::ViewState& rViewState,
                                                   const ::basegfx::B2DHomMatrix& rTransformation ) const
             {

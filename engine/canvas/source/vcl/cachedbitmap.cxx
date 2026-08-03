@@ -39,10 +39,10 @@ namespace vclcanvas
                                 const GraphicAttr&                          rAttr,
                                 const vclcanvas::ViewState&                 rUsedViewState,
                                 vclcanvas::RenderState                      aUsedRenderState,
-                                const rtl::Reference< vclcanvas::Canvas >& rTarget ) :
+                                vclcanvas::Canvas& rTarget ) :
         CachedBitmap_Base(),
         maUsedViewState( rUsedViewState ),
-        mxTarget( rTarget ),
+        mrTarget( rTarget ),
         mpGraphicObject(std::move( xGraphicObject )),
         maRenderState(std::move(aUsedRenderState)),
         maPoint( rPoint ),
@@ -54,7 +54,6 @@ namespace vclcanvas
     void CachedBitmap::disposing(std::unique_lock<std::mutex>& )
     {
         mpGraphicObject.reset();
-        mxTarget.clear();
     }
 
     sal_Int8 CachedBitmap::redraw( const vclcanvas::ViewState& aState )
@@ -76,10 +75,7 @@ namespace vclcanvas
             return rendering::RepaintResult::FAILED;
         }
 
-        ENSURE_OR_THROW( mxTarget,
-                          "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
-
-        if( !mxTarget->repaint( mpGraphicObject,
+        if( !mrTarget.repaint( mpGraphicObject,
                                aState,
                                maRenderState,
                                maPoint,

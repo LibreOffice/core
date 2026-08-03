@@ -79,8 +79,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);
 }
 
-void TextLinesHelper::render(const rtl::Reference<vclcanvas::Canvas>& xCanvas,
-                             const vclcanvas::ViewState& aViewState,
+void TextLinesHelper::render(vclcanvas::Canvas& xCanvas, const vclcanvas::ViewState& aViewState,
                              const vclcanvas::RenderState& rRenderState, bool bNormalText) const
 {
     rendering::StrokeAttributes aStrokeAttributes;
@@ -95,10 +94,10 @@ void TextLinesHelper::render(const rtl::Reference<vclcanvas::Canvas>& xCanvas,
         if (mbOverlineWaveline)
         {
             aStrokeAttributes.StrokeWidth = mbOverlineWavelineBold ? 2.0 : 1.0;
-            xCanvas->strokePolyPolygon(mxOverline, aViewState, aLocalState, aStrokeAttributes);
+            xCanvas.strokePolyPolygon(mxOverline, aViewState, aLocalState, aStrokeAttributes);
         }
         else
-            xCanvas->fillPolyPolygon(mxOverline, aViewState, aLocalState);
+            xCanvas.fillPolyPolygon(mxOverline, aViewState, aLocalState);
     }
 
     if (mxUnderline.is())
@@ -109,14 +108,14 @@ void TextLinesHelper::render(const rtl::Reference<vclcanvas::Canvas>& xCanvas,
         if (mbUnderlineWaveline)
         {
             aStrokeAttributes.StrokeWidth = mbUnderlineWavelineBold ? 2.0 : 1.0;
-            xCanvas->strokePolyPolygon(mxUnderline, aViewState, aLocalState, aStrokeAttributes);
+            xCanvas.strokePolyPolygon(mxUnderline, aViewState, aLocalState, aStrokeAttributes);
         }
         else
-            xCanvas->fillPolyPolygon(mxUnderline, aViewState, aLocalState);
+            xCanvas.fillPolyPolygon(mxUnderline, aViewState, aLocalState);
     }
 
     if (mxStrikeout.is())
-        xCanvas->fillPolyPolygon(mxStrikeout, aViewState, rRenderState);
+        xCanvas.fillPolyPolygon(mxStrikeout, aViewState, rRenderState);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

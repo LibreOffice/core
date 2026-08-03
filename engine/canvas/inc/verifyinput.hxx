@@ -69,10 +69,6 @@ namespace canvastools
             @param rMatrix
             Matrix to check
 
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
-
             @param nArgPos
             Argument position on the call site (i.e. the position of
             the argument, checked here, on the UNO interface
@@ -82,7 +78,6 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::AffineMatrix2D&   rMatrix,
                           const char*                                       pStr,
-                          vclcanvas::Canvas&                                rCanvas,
                           ::sal_Int16                                       nArgPos );
 
         /** Verify that the given transformation contains valid floating point
@@ -90,10 +85,6 @@ namespace canvastools
 
             @param rMatrix
             Matrix to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -104,7 +95,6 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::Matrix2D& rMatrix,
                           const char*                                   pStr,
-                          const css::uno::Reference< css::uno::XInterface >&  xIf,
                           ::sal_Int16                                   nArgPos );
 
         /** Verify that the given point contains valid floating point
@@ -112,10 +102,6 @@ namespace canvastools
 
             @param rPoint
             Point to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -126,17 +112,12 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealPoint2D&  rPoint,
                           const char*                                       pStr,
-                          const css::uno::Reference< css::uno::XInterface >&   xIf,
                           ::sal_Int16                                       nArgPos );
 
         /** Basic check for view state validity.
 
             @param viewState
             Viewstate to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -147,17 +128,12 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const ::vclcanvas::ViewState&   viewState,
                           const char*                                   pStr,
-                          const css::uno::Reference< css::uno::XInterface >& xIf,
                           ::sal_Int16                                   nArgPos );
 
         /** Basic check for render state validity.
 
             @param renderState
             Renderstate to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -172,7 +148,6 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const ::vclcanvas::RenderState& renderState,
                           const char*                                       pStr,
-                          vclcanvas::Canvas&                                rCanvas,
                           ::sal_Int16                                       nArgPos,
                           sal_Int32                                         nMinColorComponents=0 );
 
@@ -180,10 +155,6 @@ namespace canvastools
 
             @param strokeAttributes
             Attributes to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -194,17 +165,12 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::StrokeAttributes&    strokeAttributes,
                           const char*                                           pStr,
-                          const css::uno::Reference< css::uno::XInterface >&    xIf,
                           ::sal_Int16                                           nArgPos );
 
         /** Basic check for texture validity.
 
             @param texture
             Texture to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -215,17 +181,12 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const vclcanvas::Texture&     texture,
                           const char*                                   pStr,
-                          const css::uno::Reference< css::uno::XInterface >& xIf,
                           ::sal_Int16                                   nArgPos );
 
         /** Basic check for font request validity.
 
             @param fontRequest
             Font request to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -236,17 +197,12 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::FontRequest& fontRequest,
                           const char*                                       pStr,
-                          const css::uno::Reference< css::uno::XInterface >&  xIf,
                           ::sal_Int16                                       nArgPos );
 
         /** Templatized check for uno::Reference validity.
 
             @param rRef
             Reference to check against non-NILness
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -258,7 +214,6 @@ namespace canvastools
         template< class Interface > void verifyInput(
             const css::uno::Reference< Interface >&                 rRef,
             const char*                                             pStr,
-            const css::uno::Reference< css::uno::XInterface >&      xIf,
             ::sal_Int16                                             nArgPos )
         {
             if( !rRef.is() )
@@ -266,10 +221,10 @@ namespace canvastools
 #if OSL_DEBUG_LEVEL > 0
                 throw css::lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) + ": reference is NULL",
-                    xIf,
+                    nullptr,
                     nArgPos );
 #else
-                (void)pStr; (void)xIf; (void)nArgPos;
+                (void)pStr; (void)nArgPos;
                 throw css::lang::IllegalArgumentException();
 #endif
             }
@@ -279,10 +234,6 @@ namespace canvastools
 
             @param rSequence
             Sequence of things to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
 
             @param nArgPos
             Argument position on the call site (i.e. the position of
@@ -294,27 +245,24 @@ namespace canvastools
         template< typename SequenceContent > void verifyInput(
             const cpo::uno::Sequence< SequenceContent >&                rSequence,
             const char*                                                 pStr,
-            const css::uno::Reference< css::uno::XInterface >&          xIf,
             ::sal_Int16                                                 nArgPos )
         {
             for (auto& element : rSequence)
-                verifyInput(element, pStr, xIf, nArgPos);
+                verifyInput(element, pStr, nArgPos);
         }
 
         template< typename SequenceContent > void verifyInput(
             const std::vector< SequenceContent >&                rSequence,
             const char*                                                 pStr,
-            const css::uno::Reference< css::uno::XInterface >&          xIf,
             ::sal_Int16                                                 nArgPos )
         {
             for (auto& element : rSequence)
-                verifyInput(element, pStr, xIf, nArgPos);
+                verifyInput(element, pStr, nArgPos);
         }
 
         /// Catch-all, to handle cases that DON'T need input checking (i.e. the Integer geometry ones)
         template< typename T > void verifyInput( const T&                                   /*rDummy*/,
                                                  const char*                                /*pStr*/,
-                                                 const css::uno::Reference< css::uno::XInterface >& /*xIf*/,
                                                  ::sal_Int16                                /*nArgPos*/ )
         {
         }
@@ -327,12 +275,11 @@ namespace canvastools
                   typename Arg2 > void verifyArgs( const Arg0&                                  rArg0,
                                                    const Arg1&                                  rArg1,
                                                    const Arg2&                                  rArg2,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
+                                                   const char*                                  pStr )
         {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-            verifyInput( rArg2, pStr, xIf, 2 );
+            verifyInput( rArg0, pStr, 0 );
+            verifyInput( rArg1, pStr, 1 );
+            verifyInput( rArg2, pStr, 2 );
         }
 
         template< typename Arg0,
@@ -342,13 +289,12 @@ namespace canvastools
                                                    const Arg1&                                  rArg1,
                                                    const Arg2&                                  rArg2,
                                                    const Arg3&                                  rArg3,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
+                                                   const char*                                  pStr )
         {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-            verifyInput( rArg2, pStr, xIf, 2 );
-            verifyInput( rArg3, pStr, xIf, 3 );
+            verifyInput( rArg0, pStr, 0 );
+            verifyInput( rArg1, pStr, 1 );
+            verifyInput( rArg2, pStr, 2 );
+            verifyInput( rArg3, pStr, 3 );
         }
 
         /** Range checker, which throws css::lang::IllegalArgument exception, when
@@ -370,8 +316,7 @@ namespace canvastools
             Size to verify
          */
         CANVASTOOLS_DLLPUBLIC void verifyBitmapSize( const css::geometry::IntegerSize2D& size,
-                               const char*                                      pStr,
-                               const css::uno::Reference< css::uno::XInterface >&     xIf );
+                               const char*                                      pStr );
 
 }
 

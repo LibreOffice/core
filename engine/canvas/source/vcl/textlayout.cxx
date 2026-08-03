@@ -77,11 +77,11 @@ namespace vclcanvas
     TextLayout::TextLayout( rendering::StringContext                   aText,
                             sal_Int8                                   nDirection,
                             CanvasFont::Reference                      rFont,
-                            rtl::Reference<vclcanvas::Canvas>          xDevice,
+                            vclcanvas::Canvas&                         xDevice,
                             const VclPtr<OutputDevice>&                xOutDev ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
-        mxDevice(std::move( xDevice )),
+        mxDevice( xDevice ),
         mpOutDevProvider( xOutDev ),
         mnTextDirection( nDirection )
     {}

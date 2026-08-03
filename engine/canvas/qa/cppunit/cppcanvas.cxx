@@ -97,12 +97,11 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 
         aOutputMetaFile.Record(pDev.get());
 
-        rtl::Reference<vclcanvas::Canvas> xCanvas = new vclcanvas::Canvas(pDev.get());
-        CPPUNIT_ASSERT(xCanvas.is());
+        vclcanvas::Canvas aCanvas(pDev.get());
 
         ::basegfx::B2DHomMatrix aMatrix;
         aMatrix.scale(1, 1);
-        auto pRenderer = cppcanvas::VCLFactory::createRenderer(xCanvas, aMatrix, aInputMetaFile);
+        auto pRenderer = cppcanvas::VCLFactory::createRenderer(aCanvas, aMatrix, aInputMetaFile);
         pRenderer->draw();
 
         aOutputMetaFile.Stop();

@@ -54,12 +54,12 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     ScopedVclPtrInstance<VirtualDevice> xVDev(*reinterpret_cast<OutputDevice*>(pOutputDevice), DeviceFormat::WITH_ALPHA);
     xVDev->SetOutputSizePixel(aSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
 
-    rtl::Reference<vclcanvas::Canvas> xBitmapCanvas(new vclcanvas::Canvas(xVDev.get()));
+    vclcanvas::Canvas aBitmapCanvas(xVDev.get());
 
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
     ::basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale( fScaleX, fScaleY );
-    cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (xBitmapCanvas, aMatrix, *pMetafile);
+    cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (aBitmapCanvas, aMatrix, *pMetafile);
     renderer->draw();
 
     Bitmap aBitmap = xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel());

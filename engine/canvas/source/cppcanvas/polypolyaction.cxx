@@ -57,7 +57,7 @@ namespace cppcanvas
                                 bool bStroke,
                                 int nTransparency );
 
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -66,7 +66,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderPrimitive( vclcanvas::Canvas& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -130,7 +130,7 @@ namespace cppcanvas
                 }
             }
 
-            bool PolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool PolyPolyAction::renderPrimitive( vclcanvas::Canvas& rCanvas,
                                                   const vclcanvas::ViewState& rViewState,
                                                   rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                   const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -148,7 +148,7 @@ namespace cppcanvas
                     cpo::uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
-                    rCachedPrimitive = rCanvas->fillPolyPolygon( mxPolyPoly,
+                    rCachedPrimitive = rCanvas.fillPolyPolygon( mxPolyPoly,
                                                                   rViewState,
                                                                   aLocalState );
 
@@ -157,7 +157,7 @@ namespace cppcanvas
 
                 if( aLocalState.DeviceColor.hasElements() )
                 {
-                    rCanvas->drawPolyPolygon( mxPolyPoly,
+                    rCanvas.drawPolyPolygon( mxPolyPoly,
                                               rViewState,
                                               aLocalState );
                 }
@@ -165,7 +165,7 @@ namespace cppcanvas
                 return true;
             }
 
-            bool PolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool PolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                                const vclcanvas::ViewState& rViewState,
                                                const ::basegfx::B2DHomMatrix& rTransformation,
                                                const Subset&                  rSubset ) const
@@ -197,7 +197,7 @@ namespace cppcanvas
                                         const OutDevState&               rState,
                                         const vclcanvas::Texture&        rTexture );
 
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -206,7 +206,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderPrimitive( vclcanvas::Canvas& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -228,7 +228,7 @@ namespace cppcanvas
                 cppcanvastools::initRenderState(maState,rState);
             }
 
-            bool TexturedPolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool TexturedPolyPolyAction::renderPrimitive( vclcanvas::Canvas& rCanvas,
                                                           const vclcanvas::ViewState& rViewState,
                                                           rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                                           const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -241,14 +241,14 @@ namespace cppcanvas
 
                 std::vector< vclcanvas::Texture > aSeq { maTexture };
 
-                rCachedPrimitive = rCanvas->fillTexturedPolyPolygon( mxPolyPoly,
+                rCachedPrimitive = rCanvas.fillTexturedPolyPolygon( mxPolyPoly,
                                                                   rViewState,
                                                                   aLocalState,
                                                                   aSeq );
                 return true;
             }
 
-            bool TexturedPolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool TexturedPolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                                        const vclcanvas::ViewState& rViewState,
                                                        const ::basegfx::B2DHomMatrix& rTransformation,
                                                        const Subset&                  rSubset ) const
@@ -280,7 +280,7 @@ namespace cppcanvas
                                        const OutDevState&                   rState,
                                        rendering::StrokeAttributes          aStrokeAttributes );
 
-                virtual bool renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderSubset( vclcanvas::Canvas& rCanvas,
                                            const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -289,7 +289,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+                virtual bool renderPrimitive( vclcanvas::Canvas& rCanvas,
                                               const vclcanvas::ViewState& rViewState,
                                               rtl::Reference< vclcanvas::CachedBitmap >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
@@ -310,7 +310,7 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool StrokedPolyPolyAction::renderPrimitive( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool StrokedPolyPolyAction::renderPrimitive( vclcanvas::Canvas& rCanvas,
                                                          const vclcanvas::ViewState& rViewState,
                                                          rtl::Reference< vclcanvas::CachedBitmap >& /*rCachedPrimitive*/,
                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
@@ -321,14 +321,14 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->strokePolyPolygon( mxPolyPoly,
+                rCanvas.strokePolyPolygon( mxPolyPoly,
                                             rViewState,
                                             aLocalState,
                                             maStrokeAttributes );
                 return true;
             }
 
-            bool StrokedPolyPolyAction::renderSubset( const rtl::Reference<vclcanvas::Canvas>& rCanvas,
+            bool StrokedPolyPolyAction::renderSubset( vclcanvas::Canvas& rCanvas,
                                                       const vclcanvas::ViewState& rViewState,
                                                       const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const

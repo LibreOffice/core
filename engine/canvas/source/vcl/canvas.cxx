@@ -115,18 +115,6 @@ namespace vclcanvas
         SAL_INFO("canvas.vcl", "VCLCanvas destroyed" );
     }
 
-    void Canvas::disposeThis()
-    {
-        SolarMutexGuard aGuard;
-
-        vclcanvastools::LocalGuard aGuard2( m_aMutex );
-
-        mxOutDev.reset();
-
-        // pass on to base class
-        ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::disposeThis();
-    }
-
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
                           const vclcanvas::ViewState&   viewState,
                           const vclcanvas::RenderState& renderState,
@@ -155,7 +143,7 @@ namespace vclcanvas
 
     css::uno::Reference< css::rendering::XLinePolyPolygon2D > Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
     {
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         if( !mxOutDev )
             return {}; // we're disposed
@@ -193,10 +181,9 @@ namespace vclcanvas
                                    const ::vclcanvas::RenderState& renderState)
     {
         canvastools::verifyArgs(aStartRealPoint2D, aEndRealPoint2D, viewState, renderState,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         // are we disposed?
         if( !mxOutDev )
@@ -219,7 +206,7 @@ namespace vclcanvas
                     const ::vclcanvas::ViewState&                                   viewState,
                     const ::vclcanvas::RenderState&                                 renderState )
     {
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         return implDrawBitmap( rBitmap,
                                viewState,
@@ -244,10 +231,9 @@ namespace vclcanvas
                           const css::rendering::StrokeAttributes&                        strokeAttributes)
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -362,10 +348,9 @@ namespace vclcanvas
                          const ::vclcanvas::RenderState&                                        renderState)
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -405,10 +390,9 @@ namespace vclcanvas
                           // dummy, to keep argPos in sync
                           fontRequest,
                           fontMatrix,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         if( mxOutDev )
         {
@@ -429,13 +413,12 @@ namespace vclcanvas
                  sal_Int8                                                                 textDirection)
     {
         canvastools::verifyArgs(xFont, viewState, renderState,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
         canvastools::verifyRange( textDirection,
                             css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
                             css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xFont.is(),
                          "font is NULL");
@@ -483,10 +466,9 @@ namespace vclcanvas
                         const ::vclcanvas::RenderState&                                     renderState)
     {
         canvastools::verifyArgs(xLayoutedText, viewState, renderState,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
@@ -516,10 +498,9 @@ namespace vclcanvas
                         const ::vclcanvas::RenderState&                           renderState)
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
-                          __func__,
-                          static_cast< ::cppu::OWeakObject* >(this));
+                          __func__);
 
-        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+        vclcanvastools::LocalGuard aGuard( m_aMutex );
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -576,7 +557,6 @@ namespace vclcanvas
 
         ::canvastools::verifyInput( renderState,
                                       __func__,
-                                      const_cast<Canvas&>(*this),
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
@@ -640,7 +620,6 @@ namespace vclcanvas
     {
         ::canvastools::verifyInput( renderState,
                                       __func__,
-                                      *this,
                                       4,
                                       bModulateColors ? 3 : 0 );
 
@@ -799,7 +778,7 @@ namespace vclcanvas
                                       aGrfAttr,
                                       viewState,
                                       renderState,
-                                      this);
+                                      *this);
             }
         }
 
@@ -844,6 +823,13 @@ namespace vclcanvas
         return true;
     }
 
+    css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > Canvas::createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
+    {
+        return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
+            canvas::ParametricPolyPolygon::create(
+                                          GradientService,
+                                          colors, stops, aspectRatio));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
