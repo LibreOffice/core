@@ -14,7 +14,7 @@ class TileCoordData {
 	x: number;
 	y: number;
 	z: number;
-	part: number;
+	part: PartNumber;
 	mode: number;
 
 	/*
@@ -27,7 +27,7 @@ class TileCoordData {
 		left: number,
 		top: number,
 		zoom: number = null,
-		part: number = null,
+		part: PartNumber = null,
 		mode: number = null,
 	) {
 		this.x = left;
@@ -90,7 +90,8 @@ class TileCoordData {
 		const k = key.split(':');
 		const mode = k.length === 4 ? +k[4] : 0;
 		window.app.console.assert(k.length >= 5, 'invalid key format');
-		return new TileCoordData(+k[0], +k[1], +k[2], +k[3], mode);
+		// The key was built from a part number, so the parsed field is one.
+		return new TileCoordData(+k[0], +k[1], +k[2], +k[3] as PartNumber, mode);
 	}
 
 	public static keyToTileCoords(key: string): TileCoordData {

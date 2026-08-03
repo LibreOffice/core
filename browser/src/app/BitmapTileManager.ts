@@ -32,7 +32,7 @@ let _lowTileCount = _highTileCount - 128;
 class BitmapTileManager extends RenderManagerBase {
 	private _docLayer: any;
 	private _zoom: number;
-	private _preFetchPart: number;
+	private _preFetchPart: PartNumber;
 	private _preFetchMode: number[] = [];
 	private _hasEditPerm: boolean;
 	private _pixelBounds: any;
@@ -589,7 +589,7 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 	}
 
-	private preFetchPartTiles(part: number, modes: number[]): void {
+	private preFetchPartTiles(part: PartNumber, modes: number[]): void {
 		this.updateProperties();
 		const tileRange = this.pxBoundsToTileRange(this._pixelBounds);
 
@@ -1007,7 +1007,7 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	private sendTileCombineMessage(
-		part: number,
+		part: PartNumber,
 		mode: number,
 		tilePositionsX: number[],
 		tilePositionsY: number[],
@@ -1415,7 +1415,7 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	public overlapInvalidatedRectangleWithView(
-		part: number,
+		part: PartNumber,
 		mode: number,
 		wireId: number,
 		invalidatedRectangle: cool.SimpleRectangle,

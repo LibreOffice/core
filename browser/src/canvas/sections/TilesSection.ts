@@ -256,7 +256,7 @@ export class TilesSection extends CanvasSectionObject {
 			this.paintSimple(tile, async);
 	}
 
-	private forEachTileInView(zoom: number, part: number, mode: number, ctx: any,
+	private forEachTileInView(zoom: number, part: PartNumber, mode: number, ctx: any,
 		callback: (tile: any, coords: any) => boolean) {
 		var tileRanges = ctx.paneBoundsList.map(RenderManager.pxBoundsToTileRange, RenderManager);
 
@@ -292,7 +292,7 @@ export class TilesSection extends CanvasSectionObject {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public haveAllTilesInView(zoom?: number, part?: number, mode?: number, ctx?: any): boolean {
+	public haveAllTilesInView(zoom?: number, part?: PartNumber, mode?: number, ctx?: any): boolean {
 		zoom = zoom || Math.round(this.map.getZoom());
 		part = part || this.sectionProperties.docLayer.getSelectedPart();
 		ctx = ctx || this.sectionProperties.tsManager._paintContext();
@@ -675,7 +675,7 @@ export class TilesSection extends CanvasSectionObject {
 		return Math.max(0, interSize.x) * Math.max(0, interSize.y) / (size.x * size.y);
 	}
 
-	private forEachTileInArea(area: any, zoom: number, part: number, mode: number, ctx: any,
+	private forEachTileInArea(area: any, zoom: number, part: PartNumber, mode: number, ctx: any,
 		callback: (tile: any, coords: TileCoordData, section: TilesSection) => boolean) {
 
 		if (app.file.fileBasedView) {
@@ -719,7 +719,7 @@ export class TilesSection extends CanvasSectionObject {
 	 * @returns the zoom-level with maximum tile content.
 	 */
 	private zoomLevelWithMaxContentInArea(area: any,
-		areaZoom: number, part: number, mode: number, ctx: any): number {
+		areaZoom: number, part: PartNumber, mode: number, ctx: any): number {
 
 		var frameScale = this.sectionProperties.tsManager._zoomFrameScale;
 		var docLayer = this.sectionProperties.docLayer;

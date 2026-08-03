@@ -205,6 +205,7 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 			const columnCount = Math.ceil((docVisX2 - startX) / tileSize);
 			const rowCount = Math.ceil((docVisY2 - startY) / tileSize);
 
+			// A text document renders everything as part 0.
 			this.pushTileGrid(
 				startX,
 				startY,
@@ -212,7 +213,7 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 				rowCount,
 				zoom,
 				tileSize,
-				0,
+				0 as PartNumber,
 				added,
 			);
 		}

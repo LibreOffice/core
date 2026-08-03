@@ -303,7 +303,7 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		rowCount: number,
 		zoom: number,
 		tileSize: number,
-		part: number,
+		part: PartNumber,
 		added: Set<string>,
 	): void {
 		for (let c = 0; c <= columnCount; c++) {

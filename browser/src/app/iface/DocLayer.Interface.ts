@@ -7,6 +7,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+// A part number: the number tiles and part-carrying messages name a part by.
+// For a presentation or drawing document it is the page's stable unique id;
+// for other document types it is the part's index. The brand keeps a plain
+// index from being stored or passed where a part number belongs: get one from
+// getPartFromIndex or getSelectedPart, or go through the index for order.
+type PartNumber = number & { readonly __partNumberBrand: 'PartNumber' };
+
 interface PainterInterface {
 	update(): void;
 	_addTilePixelGridSection(): void;
@@ -82,11 +89,11 @@ interface DocLayerInterface {
 	// part number is the page's stable unique id; for other document types
 	// it is the index itself. Part numbers carry no order, so arithmetic on
 	// them never yields another part. Go through the index for that.
-	getPartFromIndex(index: number): number;
+	getPartFromIndex(index: number): PartNumber;
 	// The current index of the part with the given part number, or -1 when
 	// no part carries it.
-	getIndexFromPart(part: number): number;
-	getSelectedPart(): number;
+	getIndexFromPart(part: PartNumber): number;
+	getSelectedPart(): PartNumber;
 	_oleCSelections: CSelections;
 	_shapeGridOffset: cool.SimplePoint;
 	getFiledBasedViewVerticalOffset(): number;

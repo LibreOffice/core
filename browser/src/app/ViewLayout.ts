@@ -363,11 +363,13 @@ class ViewLayoutBase {
 
 		for (let i = 0; i <= columnCount; i++) {
 			for (let j = 0; j <= rowCount; j++) {
+				// For a document type whose part numbers are indexes, 0 names
+				// the first part.
 				const coords = new TileCoordData(
 					startX + i * RenderManager.tileSize,
 					startY + j * RenderManager.tileSize,
 					zoom,
-					0,
+					0 as PartNumber,
 				);
 
 				if (RenderManager.isValidTile(coords))
