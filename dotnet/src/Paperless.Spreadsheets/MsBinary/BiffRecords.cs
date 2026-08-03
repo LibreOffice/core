@@ -62,6 +62,9 @@ public static class BiffRecords
     public const ushort Dimensions2 = 0x0000;
     public const ushort Dimensions = 0x0200;
     public const ushort MergedCells = 0x00E5;
+
+    /// <summary>A hyperlink over a range of cells, BIFF8 only.</summary>
+    public const ushort HLink = 0x01B8;
     public const ushort Window2 = 0x023E;
 
     // Cells.

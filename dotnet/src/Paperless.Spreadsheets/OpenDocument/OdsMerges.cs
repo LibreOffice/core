@@ -49,6 +49,52 @@ internal static class OdsMerges
         return ranges;
     }
 
+    /// <summary>
+    /// The cells whose content is a hyperlink, as one-cell ranges.
+    /// </summary>
+    /// <remarks>
+    /// ODF writes a cell's hyperlink as a <c>text:a</c> around the text, which is how Calc's own
+    /// <c>SvxURLField</c> round-trips — so a cell holding one is an edit cell holding a field, and
+    /// a field is never broken across lines. See <see cref="SheetLayout.HyperlinkRanges"/>.
+    /// </remarks>
+    /// <param name="table">The <c>table:table</c> element.</param>
+    public static IReadOnlyList<SheetRange> ReadHyperlinks(XElement table)
+    {
+        ArgumentNullException.ThrowIfNull(table);
+
+        List<SheetRange> ranges = [];
+        int row = 0;
+
+        foreach (XElement rowElement in Rows(table))
+        {
+            int repeat = Repeat(rowElement, "number-rows-repeated");
+            if (Math.Min(repeat, MaxRepeat) > 0 && row <= SheetAddress.MaxRow)
+            {
+                int column = 0;
+                foreach (XElement cell in rowElement.Elements())
+                {
+                    if (cell.Name.NamespaceName != OdfNamespaces.Table) continue;
+                    if (cell.Name.LocalName is not ("table-cell" or "covered-table-cell")) continue;
+
+                    if (cell.Name.LocalName == "table-cell"
+                        && column <= SheetAddress.MaxColumn
+                        && cell.Descendants(XName.Get("a", OdfNamespaces.Text)).Any())
+                    {
+                        ranges.Add(new SheetRange(column, row, column, row));
+                    }
+
+                    column += Repeat(cell, "number-columns-repeated");
+                    if (column > SheetAddress.MaxColumn) break;
+                }
+            }
+
+            row += repeat;
+            if (row > SheetAddress.MaxRow) break;
+        }
+
+        return ranges;
+    }
+
     private static void ReadCells(XElement rowElement, int row, List<SheetRange> ranges)
     {
         int column = 0;

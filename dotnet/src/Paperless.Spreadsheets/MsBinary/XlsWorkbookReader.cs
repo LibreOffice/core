@@ -959,6 +959,7 @@ internal sealed class XlsWorkbookReader
             Grid = grid,
             Cells = table,
             StatedMerges = builder.StatedMerges,
+            HyperlinkRanges = builder.HyperlinkRanges,
             Formatting = _sheetDecoration.Resolve(_decoration),
             Formats = BuildFormats(builder),
             RichText = BuildRichText(),
@@ -1071,6 +1072,10 @@ internal sealed class XlsWorkbookReader
 
                 case BiffRecords.FormulaString or BiffRecords.FormulaString2:
                     ReadFormulaString(builder);
+                    break;
+
+                case BiffRecords.HLink:
+                    ReadHyperlink(builder);
                     break;
 
                 case BiffRecords.MergedCells:
@@ -1292,6 +1297,49 @@ internal sealed class XlsWorkbookReader
         bool eightBitLength = _stream.Version != BiffVersion.Biff8
                               && _stream.RecordId == BiffRecords.FormulaString2;
         builder.SetExpectedString(_stream.ReadString(eightBitLength));
+    }
+
+    /// <summary>
+    /// Records which cells an <c>HLINK</c> covers, without decoding the link itself.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The record opens with a <c>XclRange</c> — first and last row, then first and last column —
+    /// followed by the embedded <c>StdLink</c> structure (<c>XclImpHyperlink::ReadHlink</c>,
+    /// <c>sc/source/filter/excel/xicontent.cxx:221-231</c>). Excel writes rubbish in the high
+    /// byte of the column indices and the importer masks it off, which is reproduced here.
+    /// </para>
+    /// <para>
+    /// Only whether a URL results matters to layout, not what it is: a link that resolves to an
+    /// empty string is dropped before it reaches a cell (<c>ReadHlink</c>'s
+    /// <c>if (!aString.isEmpty())</c>), and the string is non-empty exactly when the flags name a
+    /// UNC path, a file or URL moniker, or a text mark
+    /// (<c>ReadEmbeddedData</c>, <c>xicontent.cxx:233-330</c>). Testing the flags rather than
+    /// walking the monikers keeps this to a dozen lines and cannot disagree with itself about a
+    /// path it never has to resolve.
+    /// </para>
+    /// </remarks>
+    private void ReadHyperlink(SheetBuilder builder)
+    {
+        // BIFF8 only; earlier generations have no HLINK record at all.
+        if (_stream.RecordLeft < 8 + 16 + 8) return;
+
+        int firstRow = _stream.ReadUInt16();
+        int lastRow = _stream.ReadUInt16();
+        int firstColumn = _stream.ReadUInt16() & 0xFF;
+        int lastColumn = _stream.ReadUInt16() & 0xFF;
+
+        _stream.Skip(16);                     // the StdLink GUID
+        _stream.Skip(4);                      // the stream version
+        uint flags = _stream.ReadUInt32();
+
+        const uint Body = 0x00000001;         // EXC_HLINK_BODY
+        const uint Mark = 0x00000008;         // EXC_HLINK_MARK
+        const uint Unc = 0x00000100;          // EXC_HLINK_UNC
+
+        if ((flags & (Body | Mark | Unc)) == 0) return;
+
+        builder.AddHyperlinkRange(firstRow, lastRow, firstColumn, lastColumn);
     }
 
     private void ReadMergedCells(SheetBuilder builder)
@@ -1723,6 +1771,17 @@ internal sealed class XlsWorkbookReader
             if (lastRow < firstRow || lastColumn < firstColumn) return;
             _merged.Add((firstRow, lastRow, firstColumn, lastColumn));
         }
+
+        public void AddHyperlinkRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
+        {
+            if (lastRow < firstRow || lastColumn < firstColumn) return;
+            _links.Add(new SheetRange(firstColumn, firstRow, lastColumn, lastRow));
+        }
+
+        /// <summary>The <c>HLINK</c> ranges, for <see cref="SheetLayout.HyperlinkRanges"/>.</summary>
+        public IReadOnlyList<SheetRange> HyperlinkRanges => _links;
+
+        private readonly List<SheetRange> _links = [];
 
         /// <summary>The <c>MERGEDCELLS</c> ranges, for <see cref="SheetLayout.StatedMerges"/>.</summary>
         /// <remarks>

@@ -109,6 +109,43 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
         => worksheet is null ? [] : MergeMap.Read(worksheet).Ranges;
 
     /// <summary>
+    /// The blocks a worksheet part's <c>hyperlinks</c> element covers.
+    /// </summary>
+    /// <remarks>
+    /// A link with neither a relationship nor a location resolves to an empty URL and is skipped
+    /// before it reaches a cell — <c>getHyperlinkUrl</c> builds the string from exactly those two
+    /// and <c>finalizeHyperlinkRanges</c> tests it for emptiness
+    /// (<c>sc/source/filter/oox/worksheethelper.cxx:1011-1032</c>). What the URL <em>is</em> does
+    /// not matter here; that a cell holds one does, because it turns the cell into a field.
+    /// </remarks>
+    /// <param name="worksheet">The worksheet part's root element, or null when it did not load.</param>
+    public static IReadOnlyList<SheetRange> ReadHyperlinks(XElement? worksheet)
+    {
+        if (worksheet is null) return [];
+
+        List<SheetRange> links = [];
+        foreach (XElement link in Xlsx.Children(Xlsx.Child(worksheet, "hyperlinks"), "hyperlink"))
+        {
+            bool stated =
+                Xlsx.Attribute(link, "location") is { Length: > 0 }
+                || link.Attributes().Any(
+                    a => a.Name.LocalName == "id" && a.Value.Length > 0);
+            if (!stated) continue;
+
+            if (!Xlsx.TryParseRange(Xlsx.Attribute(link, "ref"),
+                                    out int firstColumn, out int firstRow,
+                                    out int lastColumn, out int lastRow))
+                continue;
+
+            if (lastColumn < firstColumn || lastRow < firstRow) continue;
+
+            links.Add(new SheetRange(firstColumn, firstRow, lastColumn, lastRow));
+        }
+
+        return links;
+    }
+
+    /// <summary>
     /// Reads the sheet's cell comments, each as its own section.
     /// </summary>
     /// <remarks>

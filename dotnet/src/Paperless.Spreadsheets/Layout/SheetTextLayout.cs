@@ -39,6 +39,11 @@ internal readonly record struct SheetTextContext(
 /// The stretches its text is split into when they are not all in the cell's own format, or null
 /// when they are. See <see cref="SheetRichText"/>.
 /// </param>
+/// <param name="IsField">
+/// Whether the cell's whole content is one EditEngine field — a hyperlink. A field is drawn as one
+/// indivisible portion, so it neither breaks across lines nor loses its tail to a narrow column.
+/// See <see cref="SheetLayout.HoldsField"/>.
+/// </param>
 internal readonly record struct SheetCellText(
     string Text,
     object? Value,
@@ -46,7 +51,8 @@ internal readonly record struct SheetCellText(
     int Row,
     int Column,
     DocRect Box,
-    IReadOnlyList<SheetTextPortion>? Portions = null);
+    IReadOnlyList<SheetTextPortion>? Portions = null,
+    bool IsField = false);
 
 /// <summary>
 /// Places and draws one cell's text.
@@ -306,7 +312,10 @@ internal static class SheetTextLayout
         bool isValue = cell.Value is not null and not string;
         SheetHorizontalAlignment horizontal = Resolve(format.Horizontal, isValue);
 
-        bool breaks = Breaks(format, isValue);
+        // A field is one indivisible portion, so a cell that is nothing but a hyperlink does not
+        // break however narrow its column is — and the clip `bWrapFields` turns on is what keeps
+        // it from being drawn across its neighbour instead (output2.cxx:2560-2567, :3239).
+        bool breaks = Breaks(format, isValue) && !cell.IsField;
         bool fills = format.Horizontal == SheetHorizontalAlignment.Fill && !breaks;
         bool shrinks = format.ShrinksToFit && !breaks && !fills;
 
@@ -391,9 +400,11 @@ internal static class SheetTextLayout
         // path clips the string to the cell without dropping a character from it. Everything
         // else about the two agrees — the same GetOutputArea with the same lending from empty
         // neighbours, the same ### for a value that will not fit — so the only thing to skip is
-        // the shortening.
+        // the shortening. A cell whose whole content is a hyperlink field is on the same path,
+        // for the same reason: it is an EditTextObject rather than a string.
         Length shift = Length.Zero;
-        if (!isValue && !breaks && area.IsClipped && !HasEditCharacters(text, fillAt))
+        if (!isValue && !breaks && area.IsClipped
+            && !cell.IsField && !HasEditCharacters(text, fillAt))
         {
             (run, shift) = Shorten(run, text, ShapeRange, percent, horizontal, area);
         }

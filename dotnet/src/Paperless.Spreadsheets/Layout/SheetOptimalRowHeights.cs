@@ -344,9 +344,13 @@ internal static class SheetOptimalRowHeights
                 // The same wrap decision the drawing path makes, so that a row is measured exactly
                 // when its text will be broken — including Calc's rule that a plain number never
                 // breaks however the cell is formatted.
+                // A hyperlink cell is one EditEngine field, and a field is never broken across
+                // lines — so it is measured at one line however narrow its column is. Missing
+                // that makes a column of URLs four or five times too tall.
                 bool breaks =
-                    SheetTextLayout.Breaks(format, cell.Value is not null and not string)
-                    || text.AsSpan().IndexOfAny('\n', '\r') >= 0;
+                    (SheetTextLayout.Breaks(format, cell.Value is not null and not string)
+                     || text.AsSpan().IndexOfAny('\n', '\r') >= 0)
+                    && !sheet.HoldsField(cell.Row, cell.Column);
 
                 // A turned or stacked cell, and a cell in several faces, take paths through
                 // `GetNeededSize` this does not reproduce — the first two because their size is
