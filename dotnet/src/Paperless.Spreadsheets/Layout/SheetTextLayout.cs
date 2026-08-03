@@ -39,6 +39,11 @@ internal readonly record struct SheetTextContext(
 /// The stretches its text is split into when they are not all in the cell's own format, or null
 /// when they are. See <see cref="SheetRichText"/>.
 /// </param>
+/// <param name="IsField">
+/// Whether the cell's whole content is one EditEngine field — a hyperlink. A field is drawn as one
+/// indivisible portion, so it neither breaks across lines nor loses its tail to a narrow column.
+/// See <see cref="SheetLayout.HoldsField"/>.
+/// </param>
 internal readonly record struct SheetCellText(
     string Text,
     object? Value,
@@ -46,7 +51,8 @@ internal readonly record struct SheetCellText(
     int Row,
     int Column,
     DocRect Box,
-    IReadOnlyList<SheetTextPortion>? Portions = null);
+    IReadOnlyList<SheetTextPortion>? Portions = null,
+    bool IsField = false);
 
 /// <summary>
 /// Places and draws one cell's text.
@@ -306,7 +312,10 @@ internal static class SheetTextLayout
         bool isValue = cell.Value is not null and not string;
         SheetHorizontalAlignment horizontal = Resolve(format.Horizontal, isValue);
 
-        bool breaks = Breaks(format, isValue);
+        // A field is one indivisible portion, so a cell that is nothing but a hyperlink does not
+        // break however narrow its column is — and the clip `bWrapFields` turns on is what keeps
+        // it from being drawn across its neighbour instead (output2.cxx:2560-2567, :3239).
+        bool breaks = Breaks(format, isValue) && !cell.IsField;
         bool fills = format.Horizontal == SheetHorizontalAlignment.Fill && !breaks;
         bool shrinks = format.ShrinksToFit && !breaks && !fills;
 
@@ -386,10 +395,17 @@ internal static class SheetTextLayout
             if (run.Width + totalMargin <= area.Width) area = area.Unclipped();
         }
 
-        Length shift = Length.Zero;
-        if (!isValue && !breaks && area.IsClipped)
+        // A cell holding a no-break space or one of the six other characters of
+        // HasEditCharacters is drawn by DrawEditStandard rather than by DrawStrings, and that
+        // path clips the string to the cell without dropping a character from it. Everything
+        // else about the two agrees — the same GetOutputArea with the same lending from empty
+        // neighbours, the same ### for a value that will not fit — so the only thing to skip is
+        // the shortening. A cell whose whole content is a hyperlink field is on the same path,
+        // for the same reason: it is an EditTextObject rather than a string.
+        if (!isValue && !breaks && area.IsClipped
+            && !cell.IsField && !HasEditCharacters(text, fillAt))
         {
-            (run, shift) = Shorten(run, text, ShapeRange, percent, horizontal, area);
+            run = Shorten(run, text, ShapeRange, percent, horizontal, area);
         }
 
         List<SheetTextRun> lines = breaks
@@ -411,7 +427,7 @@ internal static class SheetTextLayout
         {
             placed.Add(new PlacedLine(
                 line,
-                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin) + shift,
+                Horizontal(horizontal, cell.Box, line.Width, leftTotal, margin + indent, margin),
                 y + line.Ascent));
             y += line.LineHeight;
         }
@@ -469,6 +485,48 @@ internal static class SheetTextLayout
                           or SheetVerticalAlignment.Distributed;
 
         return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
+    }
+
+    /// <summary>
+    /// Whether the cell's text holds a character that sends Calc to the EditEngine.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScDrawStringsVars::HasEditCharacters</c> (<c>output2.cxx:823-847</c>), consulted at
+    /// <c>output2.cxx:1812</c> before anything about the output area has been decided. Seven code
+    /// points force it — a no-break space, a soft hyphen, a zero-width space, the two bidi marks,
+    /// a non-breaking hyphen and a word joiner — and the consequence is not cosmetic:
+    /// <c>DrawStrings</c> skips the cell entirely and <c>DrawEditStandard</c> draws it, which
+    /// clips the string to the cell and never shortens it. The plain path drops the characters it
+    /// cannot show; the EditEngine path leaves them in the text layer behind a clip.
+    /// </para>
+    /// <para>
+    /// The no-break space is excluded when the cell has a repeat directive, which is tdf#122676:
+    /// "Ignore CHAR_NBSP (this is thousand separator in any number) if repeat character is set".
+    /// The string tested is the cell's <em>display</em> text, so a number whose format groups with
+    /// a no-break space reaches this the same way a piece of typed text does.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The cell's display text.</param>
+    /// <param name="fillAt">Where the repeat directive expands, or −1 when there is none.</param>
+    internal static bool HasEditCharacters(string text, int fillAt = -1)
+    {
+        foreach (char c in text)
+        {
+            switch (c)
+            {
+                case '\u00A0' when fillAt < 0:  // CHAR_NBSP
+                case '\u00AD':                  // CHAR_SHY
+                case '\u200B':                  // CHAR_ZWSP
+                case '\u200E':                  // CHAR_LRM
+                case '\u200F':                  // CHAR_RLM
+                case '\u2011':                  // CHAR_NBHY
+                case '\u2060':                  // CHAR_WJ
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -760,11 +818,14 @@ internal static class SheetTextLayout
     /// <para>
     /// The estimate is deliberately crude on both sides — the ratio of visible width to total
     /// width, times the character count, plus one — so it over-keeps rather than under-keeps and
-    /// the clip does the rest. Right-aligned text keeps its <em>end</em> and is shifted right by
-    /// the width it lost, since its pen was placed for the whole string.
+    /// the clip does the rest. Right-aligned text keeps its <em>end</em>, and keeping it needs no
+    /// compensating shift: dropping the head of a string leaves every remaining glyph where it
+    /// already was, and <see cref="Horizontal"/> is handed the shortened run's own width, so
+    /// <c>right − margin − shortened</c> is exactly where the tail was standing. Shifting it right
+    /// by the width dropped carried the whole run over the cell's right edge by that much.
     /// </para>
     /// </remarks>
-    private static (SheetTextRun Run, Length Shift) Shorten(
+    private static SheetTextRun Shorten(
         SheetTextRun run,
         string text,
         Func<int, int, long, SheetTextRun?> shape,
@@ -772,28 +833,27 @@ internal static class SheetTextLayout
         SheetHorizontalAlignment horizontal,
         Area area)
     {
-        if (run.Width <= Length.Zero || text.Length == 0) return (run, Length.Zero);
+        if (run.Width <= Length.Zero || text.Length == 0) return run;
 
         if (horizontal == SheetHorizontalAlignment.Left && area.RightClip)
         {
             double ratio = (double)(run.Width - area.RightMissing).Emu / run.Width.Emu;
-            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+            if (ratio is <= 0.0 or >= 1.0) return run;
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            return (shape(0, keep, percent) ?? run, Length.Zero);
+            return shape(0, keep, percent) ?? run;
         }
 
         if (horizontal == SheetHorizontalAlignment.Right && area.LeftClip)
         {
             double ratio = (double)(run.Width - area.LeftMissing).Emu / run.Width.Emu;
-            if (ratio is <= 0.0 or >= 1.0) return (run, Length.Zero);
+            if (ratio is <= 0.0 or >= 1.0) return run;
 
             int keep = Math.Clamp((int)(ratio * text.Length) + 1, 1, text.Length);
-            SheetTextRun? shorter = shape(text.Length - keep, text.Length, percent);
-            return shorter is null ? (run, Length.Zero) : (shorter, run.Width - shorter.Width);
+            return shape(text.Length - keep, text.Length, percent) ?? run;
         }
 
-        return (run, Length.Zero);
+        return run;
     }
 
     // --------------------------------------------------------------------------------- wrap

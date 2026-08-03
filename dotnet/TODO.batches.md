@@ -44,7 +44,8 @@ branch.
 Whole-track figures at the same commit: words **137/200** (page error 124), slides
 **147/163** (ppt 47/51, pptx 100/112), sheets **108/171** (page error 860).
 
-Words is now **142/200** (page error 122) — see "After the seventh round" below.
+Words is now **142/200** (page error 122) — see "After the seventh round" below. Sheets is now
+**125/171** (page error 222) — see "Sheets batches 005–008" below.
 
 ## Level one: the image check
 
@@ -1085,6 +1086,75 @@ Worth stating because it changes how each should be worked:
 - **`slides`** has largely stopped being a word-count problem at all: 151 of 163, and **all
   twelve remaining failures are attributed**, eight of them to the word gate's ceiling rather
   than to a defect. That track's next real work is judged by the image check, not by `wc`.
+## Sheets batches 005–008: three ways a cell escapes `DrawStrings`, swept at `28d786009`
+
+Whole track swept at `e2e0bdee3` and again after each fix, 171 documents each time. **The
+baseline reproduced the briefed 122/171, page error 222 and 134 exact page counts to the digit**
+— the first time this track's handover has been exactly right, and worth recording because the
+last two rounds' briefs were both stale-low.
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 122 | **125** |
+| documents with an exactly correct page count | 134 | 134 |
+| total absolute page error | 222 | 222 |
+| `batch-001`–`004` | 40/40 | 40/40 |
+| `batch-005` | 9/10 | **10/10** |
+| `batch-006` | 7/10 | **8/10** |
+| `batch-008` | 7/10 | **8/10** |
+| every other batch | — | unchanged |
+
+**Nothing regressed** — no document changed verdict, page count or word count in the wrong
+direction, and the three that changed state all went `words` → `match`. Page error and exact page
+counts are unmoved because all three fixes are about *which characters reach the page*, not about
+where the page ends.
+
+The three defects are one finding: **`ScOutputData::DrawStrings` is not the only thing that draws
+a cell.** A cell that leaves it for `DrawEditStandard` is *clipped* rather than *shortened*, and
+the difference is visible in the PDF's text layer. In LibreOffice's own output those cells are
+easy to spot — they are drawn in a second, `/P<</MCID n>>BDC`-tagged pass at the end of the
+content stream, each behind a clip one row tall.
+
+- **Seven code points send a cell to the EditEngine** — `HasEditCharacters`,
+  `sc/source/ui/view/output2.cxx:823-847`, consulted at `:1812`. `esurf-12-135-2024-t01.xlsx`
+  writes its dates `28<NBSP>Oct<NBSP>2012`: 113 words against 124, and 123 now.
+- **A hyperlink replaces a cell's content with one field, and a field is never wrapped** —
+  `insertHyperlink` (`sc/source/filter/oox/worksheethelper.cxx:1062`) and `lclInsertUrl`
+  (`sc/source/filter/excel/xicontent.cxx:157`), with the rule stated in `readCellContent`'s own
+  comment at `output2.cxx:2560`. A URL is exactly the string a line breaker splits at every
+  solidus, so a wrapping column of links measured four or five lines a row instead of one — which
+  is a row height, hence a page count. `Published_Issuances_2024.xlsx`: 482 against 458, and 458
+  now. **33 of the 171 documents carry cell hyperlinks**; the other 32 were rendered before and
+  after and none changed verdict.
+- **A clipped string's surviving glyphs do not move.** Dropping the head of a right-aligned string
+  leaves the rest where it stood; it was being shifted right by the width dropped.
+  `RVSM_Non_approved_list_2025_84c0b3f4ac.xlsx`'s left-clipped dates ran flush into the next
+  column, 5.54 pt right of the reference: 419 words against 445, and 445 now.
+
+### What is left in 006–009, with what is established about each
+
+- `Hazard Analysis Template.xls` (006) prints its **cell notes on a page of their own** — Excel's
+  "Comments: at end of sheet", `EXC_SETUP_PRINTNOTES` → `ATTR_PAGE_NOTES`
+  (`sc/source/filter/excel/xipage.cxx:84`, `:257`). 2 pages against 3. Nothing here reads cell
+  comments for layout in any format, so it is a feature rather than a wiring change.
+- `SSRO_…_DATA.xlsx` (006) is the **single-face shape text** limitation `SheetShapeText` already
+  records: its notes box states `+mn-lt` against a Calibri theme, the reference's line pitch is
+  13.5 pt and ours 12.5, which inverts to Carlito against Liberation Sans. Measured reach: **7 of
+  the track's 109 XLSX** have shape text naming a typeface.
+- `dragon-175066A.xlsx` (007) 14 pages against 13 and `commander-authorisation…xlsx` (008) 22
+  against 23 are both cumulative row-height drift with the words already inside the band — no
+  single page diverges, every page's word count differs a little.
+- `Computer and Software Services_50 State Comparison.xlsx` (008) is 24 against 26 with the words
+  matching, and **the two missing pages are blank in the reference too** — footer page number
+  only. LibreOffice keeps them because `ScDocument::IsPrintEmpty`'s last branch runs
+  `ExtendPrintArea` from column 0 up to the band's first column (`documen9.cxx:486-505`): a
+  string in a column to the left reaches into the band, and the reference draws it at x = −348,
+  off the paper. We drop the pages.
+- `RegChangeReport.xlsx` (009) is measured further below in the module TODO and still not caused.
+  The obvious next theory is also refuted: a probe reproducing the file's shape — a 12.75 pt
+  manual-height wrapping cell holding 420 words — renders on one page with the text cut after
+  four lines, where the corpus document's equivalent cell is drawn on three consecutive pages at
+  three different vertical offsets.
 
 ### `words` — 200 documents, 21 batches
 
@@ -1141,7 +1211,7 @@ each one or two better than recorded.
 
 ### `sheets` — 171 documents, 18 batches
 
-Measured whole-track at `42253c784`: **122 of 171**, total page error 222.
+Measured whole-track at `28d786009`: **125 of 171**, total page error 222.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
@@ -1149,10 +1219,10 @@ Measured whole-track at `42253c784`: **122 of 171**, total page error 222.
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 9/10 |
-| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 7/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
+| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 8/10 |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 9/10 |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 7/10 |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 8/10 |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |

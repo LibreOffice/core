@@ -54,6 +54,9 @@ internal static class Biff12
     public const int Row = 0x0000;
     public const int MergeCells = 0x00B1;
     public const int MergeCell = 0x00B0;
+
+    /// <summary>A hyperlink over a range of cells; <c>BIFF12_ID_HYPERLINK</c>.</summary>
+    public const int HLink = 0x01EE;
     public const int PageMargins = 0x01DC;
     public const int PrintOptions = 0x01DD;
     public const int PageSetup = 0x01DE;

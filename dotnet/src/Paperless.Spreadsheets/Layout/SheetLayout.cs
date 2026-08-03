@@ -94,6 +94,53 @@ public sealed class SheetLayout
     /// </remarks>
     public IReadOnlyList<SheetRange> StatedMerges { get; init; } = [];
 
+    /// <summary>The blocks a hyperlink covers, as the file states them.</summary>
+    /// <remarks>
+    /// <para>
+    /// A hyperlink is not decoration on a cell: Calc replaces the cell's content with a single
+    /// <c>SvxURLField</c> whose representation is the string the cell held
+    /// (<c>WorksheetGlobals::insertHyperlink</c>,
+    /// <c>sc/source/filter/oox/worksheethelper.cxx:1062-1080</c>), which makes the cell an
+    /// <c>EditTextObject</c> holding one field. That has two consequences on paper, and the
+    /// second is the one that moves pages.
+    /// </para>
+    /// <para>
+    /// A field is not broken across lines — "Fields aren't wrapped, so clipping is enabled to
+    /// prevent a field from being drawn beyond the cell size", <c>readCellContent</c>
+    /// (<c>sc/source/ui/view/output2.cxx:2560-2567</c>) — so a wrapping cell holding nothing but
+    /// a URL stays on one line however narrow its column is, and the row it is in is measured at
+    /// one line rather than at the four or five a broken URL would need.
+    /// </para>
+    /// <para>
+    /// Only a cell whose content is text takes this route: <c>insertHyperlink</c> converts a
+    /// <c>CELLTYPE_STRING</c> or <c>CELLTYPE_EDIT</c> cell and leaves everything else as a plain
+    /// <c>ATTR_HYPERLINK</c> attribute, which changes nothing about how the cell is drawn.
+    /// </para>
+    /// </remarks>
+    public IReadOnlyList<SheetRange> HyperlinkRanges { get; init; } = [];
+
+    /// <summary>
+    /// Whether the cell's whole content is one field, so that it neither wraps nor shortens.
+    /// </summary>
+    /// <param name="row">The zero-based row.</param>
+    /// <param name="column">The zero-based column.</param>
+    public bool HoldsField(int row, int column)
+    {
+        if (HyperlinkRanges is not { Count: > 0 } links) return false;
+
+        foreach (SheetRange link in links)
+        {
+            if (row >= link.FirstRow && row <= link.LastRow
+                && column >= link.FirstColumn && column <= link.LastColumn)
+            {
+                // A hyperlink on a numeric cell stays an attribute; only text becomes a field.
+                return CellAt(row, column) is { Value: null or string };
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// What is painted behind and around the cells: their fills and their borders.
     /// </summary>

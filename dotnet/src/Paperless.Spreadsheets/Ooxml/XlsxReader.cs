@@ -108,6 +108,7 @@ public static class XlsxReader
                     Grid = grid,
                     Cells = table,
                     StatedMerges = XlsxSheetReader.ReadMerges(worksheet),
+                    HyperlinkRanges = XlsxSheetReader.ReadHyperlinks(worksheet),
                     Formatting = XlsxCellDecoration.Read(file.StyleSheet, file.ThemeRoot, worksheet),
                     Formats = formats,
                     RichText = rich,
