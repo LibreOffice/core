@@ -381,9 +381,16 @@ public sealed partial class DocxLayoutSource
     /// any table whose shading also states a pattern.
     /// </para>
     /// </remarks>
-    private Colour? Shading(XElement? properties)
+    private Colour? Shading(XElement? properties) => ShadeColour(Word.Child(properties, "shd"));
+
+    /// <summary>The colour a <c>w:shd</c> fills with, or null when it fills with nothing.</summary>
+    /// <remarks>
+    /// Separate from <see cref="Shading"/> because a paragraph's shading is not simply the child of its own
+    /// <c>w:pPr</c>: it can come from any layer of the style chain, and only the resolver knows which layer
+    /// won. Both reach the same reading of the element once it has been found.
+    /// </remarks>
+    private Colour? ShadeColour(XElement? shade)
     {
-        XElement? shade = Word.Child(properties, "shd");
         if (shade is null) return null;
 
         if (Word.Attribute(shade, "val") is "nil") return null;

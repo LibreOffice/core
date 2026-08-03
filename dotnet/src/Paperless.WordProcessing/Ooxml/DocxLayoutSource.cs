@@ -355,6 +355,7 @@ public sealed partial class DocxLayoutSource
             Face = face,
             Font = _references.GetValueOrDefault(text.FaceKey),
             Colour = text.Colour ?? Colour.Black,
+            Shading = ShadeColour(WordParagraphFormats.ShadingOf(_styles, properties)),
             Format = breaksPage ? format with { StartsNewPage = true } : format,
             Label = label,
             EmSize = text.Size,

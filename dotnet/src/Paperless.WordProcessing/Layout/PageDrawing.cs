@@ -438,6 +438,8 @@ public static class PageDrawing
         IReadOnlyList<PageBlock> blocks,
         IDrawingSink sink)
     {
+        DrawParagraphShading(area, lines, blocks, sink);
+
         foreach (PlacedLine line in lines)
         {
             if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
@@ -448,6 +450,122 @@ public static class PageDrawing
                 sink.DrawGlyphRun(run, Paint.Solid(colour));
             }
         }
+    }
+
+    /// <summary>
+    /// Fills the background behind each shaded paragraph, before any of the text is drawn.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Every shade before any glyph, for the reason a table's cells are drawn that way: a fill is opaque,
+    /// and a shaded paragraph drawn after its neighbour would paint over the descenders hanging into it.
+    /// </para>
+    /// <para>
+    /// <strong>The rectangle is the paragraph's print area, not its frame.</strong> Writer paints a text
+    /// frame's background over <c>lcl_CalcBorderRect</c>'s rectangle —
+    /// <c>getFramePrintArea() + getFrameArea().Pos()</c>, <c>sw/source/core/layout/paintfrm.cxx:1265</c> —
+    /// so the fill spans the indents rather than the whole column, and it stops at the first and last
+    /// line rather than covering the space before and after the paragraph. Measured on a shaded
+    /// paragraph indented 720 twips with 400 twips of spacing either side, LibreOffice fills exactly the
+    /// indented line stack and leaves both spacings white.
+    /// </para>
+    /// <para>
+    /// The one exception is the join, and it is why a run of same-coloured headings reads as one bar
+    /// rather than as stripes: when the previous frame carries the same background, the rectangle's top
+    /// is pulled up to the frame's top — <c>aRect.Top( getFrameArea().Top() )</c>,
+    /// <c>paintfrm.cxx:7033</c> — which is where the paragraph before it stopped filling. So the space
+    /// between two identically shaded paragraphs is filled and the space between two differently shaded
+    /// ones is not, both of which are measurable and neither of which follows from the other.
+    /// </para>
+    /// </remarks>
+    private static void DrawParagraphShading(
+        DocRect area,
+        IReadOnlyList<PlacedLine> lines,
+        IReadOnlyList<PageBlock> blocks,
+        IDrawingSink sink)
+    {
+        // The run being accumulated: one or more consecutive paragraphs that agree about their colour and
+        // their edges, and so become a single rectangle. Emitting one per paragraph would be the same
+        // coverage and not the same picture — two abutting fills leave a blended seam a rasteriser cannot
+        // avoid, which reads as a pale rule across a shaded heading.
+        Colour? colour = null;
+        DocRect run = default;
+        int last = -2;
+
+        int index = -1;
+        Length top = Length.Zero;
+        Length bottom = Length.Zero;
+
+        void Emit()
+        {
+            if (colour is { } fill) Fill(run, fill, sink);
+            colour = null;
+        }
+
+        void Flush()
+        {
+            if (index < 0 || blocks[index] is not PageParagraph paragraph) return;
+            if (paragraph.Shading is not { } fill)
+            {
+                Emit();
+                last = -2;
+                return;
+            }
+
+            DocRect next = ShadeArea(area, paragraph, top, bottom);
+
+            // Joined when the paragraph immediately before was filled the same way: the rectangle grows
+            // downwards over whatever sat between the two, which is the space one's spacing-after and the
+            // other's spacing-before left blank.
+            if (colour == fill && last == index - 1 && next.X == run.X && next.Width == run.Width)
+            {
+                run = new DocRect(run.X, run.Y, run.Width, next.Bottom - run.Y);
+            }
+            else
+            {
+                Emit();
+                colour = fill;
+                run = next;
+            }
+
+            last = index;
+        }
+
+        foreach (PlacedLine line in lines)
+        {
+            if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
+
+            if (line.ParagraphIndex != index)
+            {
+                Flush();
+                index = line.ParagraphIndex;
+                top = line.Top;
+            }
+
+            bottom = line.Top + line.Box.Height;
+        }
+
+        Flush();
+        Emit();
+    }
+
+    /// <summary>The rectangle a paragraph's shading fills, in the coordinates of the area holding it.</summary>
+    /// <remarks>
+    /// The indents narrow it from both sides, and which side each one is on depends on the paragraph's
+    /// direction — a right-to-left paragraph's start indent is its right edge. The first-line indent
+    /// deliberately does not narrow it: it moves one line's text, not the paragraph's print area.
+    /// </remarks>
+    private static DocRect ShadeArea(
+        DocRect area, PageParagraph paragraph, Length top, Length bottom)
+    {
+        ParagraphFormat format = paragraph.DeclaredFormat;
+        Length before = format.IsRightToLeft ? format.EndIndent : format.StartIndent;
+        Length after = format.IsRightToLeft ? format.StartIndent : format.EndIndent;
+
+        Length left = area.X + Length.Max(before, Length.Zero);
+        Length right = area.Right - Length.Max(after, Length.Zero);
+
+        return new DocRect(left, area.Y + top, right - left, bottom - top);
     }
 
     /// <summary>
