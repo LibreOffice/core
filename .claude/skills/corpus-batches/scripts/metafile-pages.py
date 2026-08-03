@@ -24,13 +24,26 @@ Output is `metafile-pages.tsv`, one row per flagged page, plus a summary on stdo
 """
 
 import os
+import re
 import subprocess
 import sys
 import zipfile
+import zlib
 from concurrent.futures import ThreadPoolExecutor
 
 EMF_SIGNATURE = b" EMF"          # at offset 40 of an EMF header record
 WMF_PLACEABLE = b"\xd7\xcd\xc6\x9a"
+
+# A binary DOC/PPT/XLS keeps its pictures in Escher blip records, and the metafile ones are
+# *deflated* -- so a raw signature search finds nothing at all in a .ppt that plainly contains
+# an EMF. Measured: three documents already established as the rasterisation ceiling scanned as
+# carrying no metafile whatsoever until this was added.
+#
+# msofbtBlipEMF/WMF/PICT are record types 0xF01A/0xF019/0xF01B; each holds a header followed by
+# a zlib stream. Rather than parse Escher, inflate every plausible zlib stream in the file and
+# look inside -- decisive, and blind to how the record around it is laid out.
+ZLIB_HEADERS = re.compile(rb"\x78[\x01\x5e\x9c\xda]")
+MAX_ZLIB_PROBES = 4000
 
 # A page is flagged when the reference draws a raster there and we extract at least this many
 # more words than it does. Two-thirds of a line of prose: below that the difference is
@@ -43,6 +56,27 @@ EXTENSIONS = (
     ".xls", ".xlsx", ".ods", ".csv",
     ".ppt", ".pptx", ".odp", ".otp",
 )
+
+
+def deflated_metafiles(blob):
+    """(emf, wmf) found inside deflated streams — how a binary document stores them."""
+    emf = wmf = 0
+    seen = 0
+    for match in ZLIB_HEADERS.finditer(blob):
+        seen += 1
+        if seen > MAX_ZLIB_PROBES:
+            break
+        try:
+            # decompressobj rather than zlib.decompress: the stream runs to the end of its
+            # Escher record and the bytes after it are not ours to explain.
+            inflated = zlib.decompressobj().decompress(blob[match.start():], 1 << 22)
+        except Exception:
+            continue
+        if len(inflated) < 64:
+            continue
+        emf += inflated.count(EMF_SIGNATURE)
+        wmf += inflated.count(WMF_PLACEABLE)
+    return emf, wmf
 
 
 def metafiles_in(path):
@@ -71,6 +105,9 @@ def metafiles_in(path):
                 blob = handle.read()
             emf = blob.count(EMF_SIGNATURE)
             wmf = blob.count(WMF_PLACEABLE)
+            deflated_emf, deflated_wmf = deflated_metafiles(blob)
+            emf += deflated_emf
+            wmf += deflated_wmf
     except Exception:
         return (0, 0)
     return (emf, wmf)
@@ -161,17 +198,27 @@ def main():
     documents_only = "--documents-only" in sys.argv
     workers = int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3].isdigit() else 2
 
+    # Every document, not only the metafile carriers. Filtering the page scan by "embeds a
+    # metafile" was the first design and it was wrong: a page whose ceiling comes from some
+    # other embedded object is then invisible to the whole tool. Measured -- one .ppt already
+    # established as this class holds no metafile at all, and scanning only carriers hid it.
+    # The metafile count is an *attribution* carried alongside each row, not a gate.
     carrying = []
+    with_metafiles = 0
     for document in corpus_documents(root):
         emf, wmf = metafiles_in(document)
         if emf or wmf:
-            carrying.append((os.path.relpath(document, root), document, emf, wmf))
+            with_metafiles += 1
+        if documents_only and not (emf or wmf):
+            continue
+        carrying.append((os.path.relpath(document, root), document, emf, wmf))
 
-    print(f"{len(carrying)} documents embed a metafile", file=sys.stderr)
+    print(f"{with_metafiles} documents embed a metafile", file=sys.stderr)
     if documents_only:
         for relative, _, emf, wmf in carrying:
             print(f"{relative}\t{emf}\t{wmf}")
         return 0
+    print(f"comparing pages across all {len(carrying)} documents", file=sys.stderr)
 
     for sub in ("ours", "ref"):
         os.makedirs(os.path.join(outdir, sub), exist_ok=True)
