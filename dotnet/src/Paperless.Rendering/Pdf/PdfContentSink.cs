@@ -62,12 +62,28 @@ internal sealed class PdfContentSink(
     private readonly Dictionary<RasterImage, string> _imageNames = new(ReferenceEqualityComparer.Instance);
     private readonly Stack<StringBuilder> _groups = new();
     private readonly Stack<double> _groupOpacities = new();
+    private readonly Stack<(AffineTransform Ctm, DocRect? Clip)> _saved = new();
 
     private StringBuilder _content = new();
     private DocSize _size;
     private double _pageHeight;
     private int _depth;
     private bool _open;
+
+    /// <summary>Where the space a draw call states its coordinates in sits on the page.</summary>
+    private AffineTransform _ctm = AffineTransform.Identity;
+
+    /// <summary>
+    /// The smallest rectangle in page coordinates that still contains everything the active
+    /// clip can show, or null when nothing has been clipped.
+    /// </summary>
+    /// <remarks>
+    /// A bounding box rather than the region itself, and deliberately so: it is only ever
+    /// asked whether something falls <em>entirely outside</em> it, and a box that is too large
+    /// answers that conservatively — it keeps a glyph the real clip would have hidden, and can
+    /// never drop one the real clip would have shown.
+    /// </remarks>
+    private DocRect? _clip;
 
     /// <summary>The pages drawn so far, in order.</summary>
     public IReadOnlyList<PdfPageContent> Pages => _pages;
@@ -83,6 +99,9 @@ internal sealed class PdfContentSink(
         _pageHeight = size.Height.Points;
         _depth = 0;
         _open = true;
+        _saved.Clear();
+        _ctm = AffineTransform.Identity;
+        _clip = null;
     }
 
     /// <inheritdoc/>
@@ -93,6 +112,10 @@ internal sealed class PdfContentSink(
         // A page that unbalanced its own state stack would otherwise nest the next one inside it.
         while (_depth > 0) { _content.Append("Q\n"); _depth--; }
 
+        _saved.Clear();
+        _ctm = AffineTransform.Identity;
+        _clip = null;
+
         _pages.Add(new PdfPageContent(_size, _content.ToString()));
         _open = false;
     }
@@ -100,6 +123,7 @@ internal sealed class PdfContentSink(
     /// <inheritdoc/>
     public void Save()
     {
+        _saved.Push((_ctm, _clip));
         _content.Append("q\n");
         _depth++;
     }
@@ -111,10 +135,39 @@ internal sealed class PdfContentSink(
 
         _content.Append("Q\n");
         _depth--;
+        if (_saved.Count > 0) (_ctm, _clip) = _saved.Pop();
     }
 
     /// <inheritdoc/>
     public void Transform(AffineTransform transform)
+    {
+        AppendTransform(transform);
+        _ctm = AffineTransform.Concat(transform, _ctm);
+    }
+
+    /// <inheritdoc/>
+    public void ClipPath(GraphicsPath path, FillRule rule = FillRule.NonZero)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        if (path.Commands.Count == 0) return;
+
+        AppendClip(path, rule);
+
+        if (Fills.Gradients.Bounds(path) is not { } bounds) return;
+
+        DocRect box = Mapped(bounds, _ctm);
+        _clip = _clip is { } existing ? Intersect(existing, box) : box;
+    }
+
+    /// <summary>Writes the <c>cm</c> a transform is, without recording it.</summary>
+    /// <remarks>
+    /// Split out from <see cref="Transform"/> because the fills below state a transform inside
+    /// a <c>q … Q</c> of their own making, which the tracked state knows nothing about. Those
+    /// brackets are balanced and hold nothing but a shading, so the transform they state is
+    /// gone by the time anything the tracked state governs is drawn again — recording it would
+    /// leave the current matrix wrong for the rest of the page.
+    /// </remarks>
+    private void AppendTransform(AffineTransform transform)
     {
         // A transform stated in a y-down space has to be conjugated by the flip that takes that
         // space to PDF's, or a rotation turns the wrong way and a translation moves up the page.
@@ -127,12 +180,10 @@ internal sealed class PdfContentSink(
             $"{N(transform.A)} {N(-transform.B)} {N(-transform.C)} {N(transform.D)} {N(e)} {N(f)} cm\n");
     }
 
-    /// <inheritdoc/>
-    public void ClipPath(GraphicsPath path, FillRule rule = FillRule.NonZero)
+    /// <summary>Writes the path and the <c>W n</c> a clip is, without recording it.</summary>
+    /// <remarks>The counterpart of <see cref="AppendTransform"/>, and for the same reason.</remarks>
+    private void AppendClip(GraphicsPath path, FillRule rule)
     {
-        ArgumentNullException.ThrowIfNull(path);
-        if (path.Commands.Count == 0) return;
-
         AppendPath(path);
         _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
     }
@@ -215,8 +266,22 @@ internal sealed class PdfContentSink(
         ArgumentNullException.ThrowIfNull(paint);
         if (run.Glyphs.Count == 0) return;
 
+
+        // An em of nothing paints nothing, so the glyphs would be a text layer over blank paper.
+        // Autofit is what produces one: a shape whose paragraphs carry an absolute top margin can
+        // be too tall for its box at *every* font scale, and the shrink search then runs to the
+        // bottom of its grid and rounds the smaller runs to zero. Measured on
+        // `NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, whose subtitle holds sixteen paragraphs
+        // at a 12 pt top margin in a 90.7 pt box — 180 pt of margin alone. The reference reaches
+        // the same conclusion and draws no glyph at all there; across the 98 decks of slides
+        // batches 001–010 it writes `0 Tf` exactly nowhere.
+        if (run.FontSize <= Length.Zero) return;
+
         Colour colour = Flatten(paint);
         if (colour.IsTransparent) return;
+
+        // Before `fonts.Observe`, so a run nothing can see contributes no glyph to a subset either.
+        if (Hidden(run)) return;
 
         // Before anything is written, because the pen corrections below are computed against the
         // widths the file will state and this is what supplies them when the face did not load.
@@ -265,6 +330,116 @@ internal sealed class PdfContentSink(
         _content.Append("ET\nQ\n");
     }
 
+    // ----------------------------------------------------------------------------- clipping
+
+    /// <summary>
+    /// True when the active clip excludes the whole of a run, so that drawing it would put
+    /// text in the file that no reader of the page can see and every reader of the text can.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A clip in a content stream hides ink; it does not remove the glyphs from the stream. So
+    /// a <c>W n</c> followed by a <c>Tj</c> outside it produces a page that looks right and
+    /// extracts wrongly — <c>pdftotext</c> reads the whole of it. That is the inverse of the
+    /// defect a word-count comparison usually catches, and it is invisible to every pixel
+    /// metric.
+    /// </para>
+    /// <para>
+    /// It is also a disagreement between our own two backends rather than a difference of
+    /// opinion with anyone else's: the raster sink hands the same clip to Skia, which drops
+    /// the glyphs outright, so one display list produced a picture with the text and a PDF
+    /// whose text layer had it. What forces the case in practice is a metafile whose records
+    /// draw well beyond the bounds its own header declares, played into a picture frame that
+    /// is scaled from those bounds — a whole journal page arriving inside a 95 × 33 mm
+    /// banner.
+    /// </para>
+    /// <para>
+    /// Every approximation here is in the direction of drawing too much: the clip is
+    /// remembered as a bounding box, the run's box is inflated by an em on each side and by
+    /// two ems above the baseline, and only a run that misses that enlarged box entirely is
+    /// dropped.
+    /// </para>
+    /// </remarks>
+    private bool Hidden(GlyphRun run)
+    {
+        if (_clip is not { } clip) return false;
+
+        Length minX = run.Origin.X, maxX = run.Origin.X;
+        Length minY = run.Origin.Y, maxY = run.Origin.Y;
+
+        foreach (PositionedGlyph glyph in run.Glyphs)
+        {
+            Length x = run.Origin.X + glyph.Offset.X;
+            Length y = run.Origin.Y + glyph.Offset.Y;
+
+            if (x < minX) minX = x;
+            if (x + glyph.Advance > maxX) maxX = x + glyph.Advance;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+
+        // The glyph positions describe baselines, so the box has to be grown to the face's
+        // extent. Two ems up and one down covers any face's ascent and descent with room to
+        // spare, which is the point: an over-large box keeps text, and a tight one loses it.
+        Length pad = run.FontSize;
+        DocRect box = new(
+            minX - pad,
+            minY - (pad * 2),
+            (maxX - minX) + (pad * 2),
+            (maxY - minY) + (pad * 3));
+
+        return !Mapped(box, _ctm).IntersectsWith(clip);
+    }
+
+    /// <summary>The bounding box of a rectangle carried through a transform.</summary>
+    /// <remarks>
+    /// The four corners rather than the two opposite ones, because a rotation or a shear moves
+    /// each corner independently and taking two of them would describe a rectangle the shape
+    /// does not fit inside.
+    /// </remarks>
+    private static DocRect Mapped(DocRect rect, AffineTransform transform)
+    {
+        if (transform.IsIdentity) return rect;
+
+        double left = double.PositiveInfinity, top = double.PositiveInfinity;
+        double right = double.NegativeInfinity, bottom = double.NegativeInfinity;
+
+        foreach ((Length cx, Length cy) in (ReadOnlySpan<(Length, Length)>)
+                 [(rect.Left, rect.Top), (rect.Right, rect.Top),
+                  (rect.Right, rect.Bottom), (rect.Left, rect.Bottom)])
+        {
+            double x = (transform.A * cx.Emu) + (transform.C * cy.Emu) + transform.E;
+            double y = (transform.B * cx.Emu) + (transform.D * cy.Emu) + transform.F;
+
+            left = Math.Min(left, x);
+            right = Math.Max(right, x);
+            top = Math.Min(top, y);
+            bottom = Math.Max(bottom, y);
+        }
+
+        return new DocRect(
+            Length.FromEmu(Clamp(left)), Length.FromEmu(Clamp(top)),
+            Length.FromEmu(Clamp(right) - Clamp(left)), Length.FromEmu(Clamp(bottom) - Clamp(top)));
+
+        // A degenerate matrix — a scale of zero, an infinity arriving from a metafile — would
+        // otherwise overflow the cast and produce a box on the wrong side of the page.
+        static long Clamp(double value)
+            => double.IsFinite(value) ? (long)Math.Clamp(value, long.MinValue / 4d, long.MaxValue / 4d) : 0;
+    }
+
+    /// <summary>The overlap of two rectangles, or an empty one where they do not meet.</summary>
+    private static DocRect Intersect(DocRect a, DocRect b)
+    {
+        Length left = a.Left > b.Left ? a.Left : b.Left;
+        Length top = a.Top > b.Top ? a.Top : b.Top;
+        Length right = a.Right < b.Right ? a.Right : b.Right;
+        Length bottom = a.Bottom < b.Bottom ? a.Bottom : b.Bottom;
+
+        return right <= left || bottom <= top
+            ? DocRect.Empty
+            : new DocRect(left, top, right - left, bottom - top);
+    }
+
     // -------------------------------------------------------------------------------- fills
 
     /// <summary>
@@ -305,10 +480,9 @@ internal sealed class PdfContentSink(
 
         _content.Append("q\n");
         AppendTransparency(path, gradient, rule, extent);
-        AppendPath(path);
-        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+        AppendClip(path, rule);
 
-        if (gradient.Transform != AffineTransform.Identity) Transform(gradient.Transform);
+        if (gradient.Transform != AffineTransform.Identity) AppendTransform(gradient.Transform);
 
         _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
     }
@@ -351,16 +525,14 @@ internal sealed class PdfContentSink(
             StringBuilder outer = _content;
             _content = inner;
 
-            AppendPath(path);
-            _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+            AppendClip(path, rule);
             _content.Append(CultureInfo.InvariantCulture, $"/{mask} sh\n");
 
             _content = outer;
             SoftMask(inner);
         }
 
-        AppendPath(path);
-        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+        AppendClip(path, rule);
         _content.Append(CultureInfo.InvariantCulture, $"/{name} sh\nQ\n");
     }
 
@@ -421,9 +593,8 @@ internal sealed class PdfContentSink(
         StringBuilder outer = _content;
         _content = inner;
 
-        AppendPath(path);
-        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
-        if (gradient.Transform != AffineTransform.Identity) Transform(gradient.Transform);
+        AppendClip(path, rule);
+        if (gradient.Transform != AffineTransform.Identity) AppendTransform(gradient.Transform);
         _content.Append(CultureInfo.InvariantCulture, $"/{mask} sh\n");
 
         _content = outer;
@@ -489,8 +660,7 @@ internal sealed class PdfContentSink(
         if (name.Length == 0) return;
 
         _content.Append("q\n");
-        AppendPath(path);
-        _content.Append(rule == FillRule.EvenOdd ? "W* n\n" : "W n\n");
+        AppendClip(path, rule);
 
         foreach (DocRect tile in Fills.Tiles.Cover(bitmap, bounds))
         {

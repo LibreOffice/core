@@ -60,6 +60,7 @@ placeholders, and one undiagnosed measurement difference.
 | `n/10` | measured, that many documents at parity |
 | `WIP` | an agent is working it now |
 | `✅` | full parity, **and** every earlier batch in the track re-proved after the last change |
+| `· ceiling` | the residue is measured to be the word gate's ceiling, not a defect — closing it would need the output made worse. Switch instruments rather than chase the number |
 
 Record measured numbers, never expected ones. A number here that was not produced by
 `batch-check.sh` is worse than a blank.
@@ -410,32 +411,151 @@ The percentage is of the em size on a slide and of the font's height in a word p
 `editeng/source/items/svxfont.cxx:549-558` against `swfont.cxx` — which is why
 `Layout/Escapement.cs` could not simply be reused.
 
-### Batches 008–010, measured at the same commit but not worked
+## Slides batches 008–010: 27 of 30, and the remaining three are the gate's ceiling
 
-`batch-008` 9/10, `batch-009` 9/10, `batch-010` 8/10 — 26 of 30, every page count exact and
-**all four failures over-count words**, none under-count. That is the inversion the skill warns
-about, and one of them was taken apart far enough to name the mechanism rather than assume it.
+Swept at `068b0eb44`, together with the whole gate and the other two tracks' finished batches,
+because both fixes are in the PDF sink all three families share:
 
-`8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` (3099 against 2108) puts its whole excess on two
-pages, +474 and +473, and both hold one `image8.emf`. `pdfimages -list` settles what the two
-renderers do with it: **LibreOffice rasterises it** — a 692×240 JPEG with a soft mask at 184 dpi,
-so its PDF has no text there at all — while we play the metafile and emit real glyph runs. The
-rendered pages are all but indistinguishable at 512 px. Matching the number would mean making
-the output worse, which is the documented ceiling of this gate.
+| Range | Before | After |
+|---|---|---|
+| `slides/batch-001`–`007` (the gate) | 68/68 | **68/68** |
+| `slides/batch-008` | 9/10 | 9/10 |
+| `slides/batch-009` | 9/10 | **10/10** |
+| `slides/batch-010` | 8/10 | 8/10 |
+| `words/batch-001`–`003` | — | **30/30** |
+| `sheets/batch-001`–`002` | — | **20/20** |
 
-**But only part of that excess is ours being better, and the rest is a real defect.** The
-picture's frame is 3433763 × 1190625 EMU and the metafile draws a whole journal page into it, so
-most of the text is clipped away. Counting word boxes against that rectangle: of our 552 words on
-page 5, **48 are inside the frame and 504 outside**, against the reference's 0 and 70. So roughly
-430 words a page are drawn where nothing can see them and `pdftotext` reads them out anyway —
-invisible-but-extractable text, which is the inverse of the defect the word gate exists to catch.
+148 documents, 145 matching, no document LibreOffice could not render. **Exactly two documents
+in slides 001–010 changed state or word count at all**, both of them the intended ones, and no
+page count moved anywhere. `words/batch-003` was carrying "10/10 in worktree, awaiting
+merged-branch sweep"; this is that sweep.
 
-The fix is in the PDF backend rather than in any reader: `PdfContentSink` writes a real `W n`
-clip and then emits the glyph runs inside it regardless, so it would need to track the CTM and
-the active clip and drop a run whose box the clip excludes. Not attempted here — it is a change
-to the sink every family shares, and it wants its own sweep. On its own it would take that
-document to roughly 2200 against 2108, still outside the 2% band, so it is worth doing for its own
-sake rather than for this document.
+The predecessor's baseline reproduced to the digit — 9/10, 9/10, 8/10, every page count exact,
+all four failures over-counting words — which is what made the two mechanisms below worth
+separating instead of treating the whole residue as one thing.
+
+### Invisible-but-extractable text, twice, both in `PdfContentSink`
+
+A clip hides ink; it does not remove glyphs from a content stream. Nor does an em of zero. Both
+produce a page that looks right and a text layer `pdftotext` reads in full — the inverse of the
+defect the word gate exists to catch, and invisible to every pixel metric. Both are also
+disagreements between *our own two backends*: `SkiaDrawingSink` hands the clip to Skia, which
+drops the glyphs outright, and draws nothing at zero size.
+
+**The clip.** `slides/batch-008/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` embeds
+`image8.emf`, whose header declares 720 × 250 device units and whose 2832 records draw a whole
+journal page — 791 `EXTTEXTOUTW` and not one bitmap. Stretched into a 3433763 × 1190625 EMU
+picture frame that `VectorImage.Draw` clips to (`Paperless.Vector/VectorImage.cs:106`), most of
+that text lands outside the frame. The sink now tracks the current matrix and the active clip
+beside the `q`/`Q` it already wrote and drops a run the clip excludes: **3099 extractable words
+against 2108 before, 2240 after.** Every approximation is towards drawing too much — the clip is
+kept as a bounding box, the run's box is inflated by an em each side and two above the baseline,
+and only a run missing that enlarged box entirely goes.
+
+**The zero em.** `slides/batch-009/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx` has a
+subtitle whose paragraphs carry an *absolute* top margin — LibreOffice's own flat-ODF export of
+the deck gives them `fo:margin-top="0.423cm"`, twelve points, which does not shrink with the
+font. Sixteen of those are 180 pt of margin in a 90.7 pt box, so **no font scale fits**, and
+`SlideTextLayout`'s bisection runs to the bottom of its grid and settles on 0.1/12 of the body's
+font height. There a 60 pt run rounds to 0.99 pt and a 52 pt run to nothing: the page held six
+`/F1 0 Tf`. The reference reaches the same conclusion and draws no glyph there at all — its page
+5 has two `BT` blocks, for the title and the "Official" marking — and across the 98 decks of
+batches 001–010 it writes `0 Tf` in no document at all. **658 words against 586 before, 596
+after**, so the batch is 10/10.
+
+### The three that remain are the same measured ceiling
+
+All three over-count, none under-counts, and in all three **LibreOffice rasterises an embedded
+object and we play it as vectors**. That is settled by measurement rather than by judgement:
+
+| Document | Ours / ref | What the reference's page holds instead |
+|---|---|---|
+| `batch-008 …AIRBUS-ATB-journee-CRATB.pptx` | 2240 / 2108 | a 692 × 240 JPEG with a soft mask, no text |
+| `batch-010 W3_Case_Study_of_a_Tsunami…ppt` | 910 / 817 | an 845 × 572 image with a soft mask, 4 `Tf` on the page |
+| `batch-010 Fundamentals_Module_1_basics.ppt` | 1146 / 1099 | the chart as a bitmap — **zero** line segments on the page |
+
+Each puts its whole excess on one or two pages (+474/+473, +93, +50) and the rendered pages are
+all but indistinguishable. Matching the numbers means emitting pixels where we emit searchable
+text, which is making the output worse to satisfy the instrument. **Do not.** Progress on these
+three needs a pixel metric, not `wc -w`.
+
+What was *not* established is which LibreOffice code path rasterises them. The obvious candidate
+— `MetaActionType::FLOATTRANSPARENT` with a non-constant gradient, rendered to a bitmap at up to
+300 dpi (`vcl/source/pdf/pdfwriter_impl2.cxx:427-470`) — does not fit: `image8.emf` contains no
+transparency record at all, and the measured resolutions are 184, 126 and 103 dpi rather than
+300. Treat the rasterisation as observed behaviour, not as an explained mechanism.
+
+One residue on that deck is neither: `+46` words on slide 16, which carries three charts with
+date category axes. A separate question about axis-label density, and it would not move the
+document into band even solved.
+
+### `batch-012` 8/10 and `batch-013` 10/10, and both failures are the reference drawing less
+
+Recorded 6/10 and 9/10; measured at `068b0eb44` they are **8/10 and 10/10**, every page count
+exact. Both remaining failures over-count, and in both the reference's page is measurably the
+*less* complete one — but by two different mechanisms, which is why they are written down
+separately:
+
+- `OnTrac_StarCertificationProgram-3Day.pptx` (1344 against 1045) puts +251 of its +299 on page
+  10, where the reference draws the eight-week action-item table as a **644 × 542 JPEG with a
+  soft mask** and we play the same object as vectors with real text. The rasterisation ceiling
+  again, third instance.
+- `NAS-Infrastructure-Roadmaps-v16.0.pptx` (19219 against 15316, 137 pages exact) is a different
+  thing and the more interesting one. Twenty-odd of its pages carry four `Excel.Sheet.12` OLE
+  objects apiece, **linked rather than embedded** — `<p:oleObj r:id="…"><p:link/>` against a
+  SharePoint URL — each with an `mc:Fallback` holding a `<p:pic>` whose blip is a cached
+  `image*.emf` sitting in the package. We draw those replacement pictures; the reference draws
+  nothing at all, so its page 4 is a title and a footer, 13 words against our 226, with **no
+  images and no vector content on it**. That is measured rather than judged: the fallback
+  picture demonstrably exists in the file and demonstrably is not in the reference PDF.
+
+  What was *not* established is why. The import path is `OleObjectGraphicDataContext`
+  (`oox/source/drawingml/graphicshapecontext.cxx:222-285`), which takes the `mc:Choice` branch
+  when the object carries an `spid` — this one does, `_x0000_s1026` — and expects the VML
+  drawing to supply the replacement, falling back to `mc:Fallback` only through
+  `setMCEState(MCE_STATE::Started)` in `onEndElement`. The deck ships no `vmlDrawing` part.
+  That reading is from a 27.2-alpha checkout and the reference came from 24.2.7.2, so treat it
+  as a lead, not a conclusion.
+
+  Either way the direction is settled: matching the count means blanking twenty pages of a
+  137-page deck. Do not.
+
+### `batch-014` 7/10 and `batch-015` 8/10, and the next real defect is in SmartArt
+
+Measured at the same commit, both matching their recorded figures, every page count exact in
+all five failures. Three over-count (`Thailand17.ppt` 2813/2697, `N2_E_Maestroni_Swarm_COP.pptx`
+5422/5217, `WiGr_2021W_1_Angebot-Nachfrage-Elastizität…pptx` 2209/1988) and were not taken
+apart.
+
+**The other two under-count, which is the direction worth chasing**, and they are near-duplicate
+decks: `schematicplay.pptx` 2040 against 2129 and `schematicplaymar21.pptx` 2034 against 2123.
+Both put the whole deficit on one page — page 7, −86 — and both were measured **with the two
+sink guards disabled**, giving 2040 and 2034 unchanged, so this is not the clip fix. It predates
+it.
+
+The page is a SmartArt diagram (`ppt/diagrams/drawing1.xml`; the text appears in no slide part
+at all). The shapes come out right — four green chevrons and four rounded bars, in the right
+places, indistinguishable from the reference — and **every piece of text in them is drawn
+rotated 90° and stacked into a single vertical band down the middle of the slide**, where the
+overlapping glyphs collapse under extraction. It is one of the most visible defects seen on this
+track and it is invisible to a page-count check.
+
+The suspect, stated as a suspect: all eight `dsp:sp` in that drawing carry
+`<a:xfrm rot="5400000">` while their `<a:bodyPr>` says `vert="horz"` and states no `upright`.
+The reference draws neither the shapes nor the text rotated. So either the `dsp` drawing's
+`rot` is not meant to reach the text at all, or its extent is already stated post-rotation and
+we are applying the turn a second time. **Not verified** — nobody has read our `dsp` transform
+path against LibreOffice's, and on this project the sentence after a measurement has been wrong
+more often than not. The measurement is the rotated band; the explanation above is a lead.
+
+### `batch-011` was already 10/10, and the recorded 7/10 was stale
+
+Swept at the same commit, unchanged by either fix: **10 of 10, every page count exact.** The
+7/10 in the table came from a much older base and had survived the merge of the escapement work
+and everything alongside it. Worth stating as a habit rather than as a fact about this batch:
+**a recorded number describes the commit it was taken at, and after a large merge the cheapest
+useful act is to re-measure the next batch before opening it.** Three batches of apparent work
+here did not exist.
 
 ## Sheets batches 001–004: full parity, swept at `194c2dc9b`
 
@@ -593,7 +713,7 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | ✅ |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 · WIP |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
@@ -622,14 +742,14 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-005` | 9 | 587–668 | ppt:3 pptx:6 | ✅ |
 | `batch-006` | 10 | 671–903 | ppt:4 pptx:6 | ✅ |
 | `batch-007` | 10 | 941–1129 | ppt:3 pptx:7 | ✅ |
-| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 |
-| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | 9/10 |
-| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 |
-| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | 7/10 |
-| `batch-012` | 10 | 2403–3036 | pptx:10 | 6/10 |
-| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | 9/10 |
+| `batch-008` | 10 | 1130–1437 | ppt:5 pptx:5 | 9/10 · ceiling |
+| `batch-009` | 10 | 1510–1711 | ppt:4 pptx:6 | ✅ |
+| `batch-010` | 10 | 1748–1935 | ppt:3 pptx:7 | 8/10 · ceiling |
+| `batch-011` | 10 | 1980–2294 | ppt:1 pptx:9 | ✅ |
+| `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
+| `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
 | `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10 · SmartArt text rotated |
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 |
 | `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 3/5 |
 
