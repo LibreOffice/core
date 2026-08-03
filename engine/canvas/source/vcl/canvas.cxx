@@ -96,8 +96,7 @@ namespace vclcanvas
         }
     }
 
-    Canvas::Canvas( OutputDevice* pOutDev ) :
-        mbSurfaceDirty( true )
+    Canvas::Canvas( OutputDevice* pOutDev )
     {
         SolarMutexGuard aGuard;
 
@@ -171,8 +170,6 @@ namespace vclcanvas
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        mbSurfaceDirty = true;
-
         // are we disposed?
         if( !mxOutDev )
             return;
@@ -207,8 +204,6 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
-        mbSurfaceDirty = true;
-
         // are we disposed?
         if( !mxOutDev )
             return;
@@ -231,8 +226,6 @@ namespace vclcanvas
                     const ::vclcanvas::RenderState&                                 renderState )
     {
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-
-        mbSurfaceDirty = true;
 
         return implDrawBitmap( rBitmap,
                                viewState,
@@ -261,8 +254,6 @@ namespace vclcanvas
                           static_cast< ::cppu::OWeakObject* >(this));
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-
-        mbSurfaceDirty = true;
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -382,8 +373,6 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
-        mbSurfaceDirty = true;
-
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
 
@@ -454,8 +443,6 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
-        mbSurfaceDirty = true;
-
         ENSURE_ARG_OR_THROW( xFont.is(),
                          "font is NULL");
 
@@ -507,8 +494,6 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
-        mbSurfaceDirty = true;
-
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
@@ -541,8 +526,6 @@ namespace vclcanvas
                           static_cast< ::cppu::OWeakObject* >(this));
 
         vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-
-        mbSurfaceDirty = true;
 
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");

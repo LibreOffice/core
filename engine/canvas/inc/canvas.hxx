@@ -107,10 +107,6 @@ namespace vclcanvas
             canvastools::verifyArgs(aPoint, viewState, renderState,
                               __func__,
                               static_cast< ::cppu::OWeakObject* >(this));
-
-            vclcanvastools::LocalGuard aGuard( m_aMutex );
-
-            mbSurfaceDirty = true;
         }
 
         VCLCANVAS_DLLPUBLIC css::uno::Reference< vclcanvas::XGraphicDevice > getDevice();
@@ -203,8 +199,6 @@ namespace vclcanvas
 
         /// For retrieving device info
         VclPtr<OutputDevice> mxOutDev;
-
-        mutable bool        mbSurfaceDirty;
     };
 }
 
