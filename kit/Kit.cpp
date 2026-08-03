@@ -573,8 +573,11 @@ namespace
             break;
         case FTW_SL:
             {
-                const std::size_t size = sb->st_size;
-                std::vector<char> target(size + 1);
+                // For a symlink st_size is the length of the target path,
+                // but fall back to PATH_MAX if it is not a sane value.
+                const std::size_t size =
+                    (sb->st_size > 0 && sb->st_size < PATH_MAX) ? sb->st_size : PATH_MAX;
+                std::string target(size, '\0');
                 char* target_data = target.data();
                 const ssize_t written = readlink(fpath, target_data, size);
                 if (written <= 0 || o3tl::make_unsigned(written) > size)
