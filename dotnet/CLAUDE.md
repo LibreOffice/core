@@ -259,19 +259,30 @@ Comparing against LibreOffice — use the skills, they encode hard-won details:
 
 ### The sample corpus
 
-`theolivenbaum/sample-files` holds 541 real-world documents — collected from the open web
+`theolivenbaum/sample-files` holds 534 real-world documents — collected from the open web
 and kept as found, mislabelled extensions and malformed markup included — ordered by what
 their LibreOffice rendering demands of a renderer and cut into batches of at most ten:
 
 ```
-words/batch-001 … batch-021     doc  docx     202 documents
-slides/batch-001 … batch-017    ppt  pptx     165 documents
-sheets/batch-001 … batch-018    xls  xlsx     174 documents   (deferred; worked last)
+words/batch-001 … batch-021     doc  docx     200 documents
+slides/batch-001 … batch-017    ppt  pptx     163 documents
+sheets/batch-001 … batch-018    xls  xlsx     171 documents
 ```
+
+Some of those extensions are **upper-case on disk** — four files are `.DOC`, `.XLS`, `.XLSX`.
+A case-sensitive glob quietly counts 530 instead of 534, which is the same mistake as
+trusting an extension at all, in miniature. Match case-insensitively or, better, do not
+filter by extension.
 
 Per-family tracks, because a single global ordering front-loads the easy end almost
 entirely with word processing and leaves the other two families idle for forty batches.
 Three tracks let three workers run in parallel and never touch the same file.
+
+**Sheets is not deferred.** It was originally scheduled last on the grounds that a
+spreadsheet's value is in its cells rather than its pagination; that was retired once the
+track turned out to hold the corpus's largest systematic defects — one workbook paginating
+1170 pages against 220 — so deferring it was hiding them rather than deprioritising them.
+All three tracks now advance in parallel and never wait for one another.
 
 ```sh
 .claude/skills/corpus-batches/scripts/batch-check.sh /workspace/sample-files 'words/batch-003' out 3
