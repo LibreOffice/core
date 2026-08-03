@@ -280,8 +280,8 @@ internal static class XlsxPrintSetup
         // at 963 and seven at 1280, which is two pages against three.
         SheetDigitWidth defaultWidth = Digits(Xlsx.Attribute(format, "defaultColWidth"))
                                        ?? BaseWidth(Xlsx.Integer(format, "baseColWidth"));
-        Length defaultHeight = Points(Xlsx.Attribute(format, "defaultRowHeight"))
-                               ?? SheetGrid.StandardRowHeight;
+        Length? statedHeight = Points(Xlsx.Attribute(format, "defaultRowHeight"));
+        Length defaultHeight = statedHeight ?? SheetGrid.StandardRowHeight;
 
         List<SheetDigitRun> columns = [];
         foreach (XElement column in Xlsx.Children(Xlsx.Child(worksheet, "cols"), "col"))
@@ -323,6 +323,14 @@ internal static class XlsxPrintSetup
             new SheetAxis(defaultHeight, rows))
         {
             ColumnDigits = digits,
+
+            // Only the OOXML filter tells the sheet what its recomputed rows may not go below,
+            // and it tells it the sheet's own default row height —
+            // `pTable->SetOptimalMinRowHeight(maDefRowModel.mfHeight * 20)`,
+            // `sc/source/filter/oox/worksheethelper.cxx:965`. A sheet stating none leaves
+            // `mfHeight` at 0, which `ScTable::GetOptimalMinRowHeight` reads as "not set" and
+            // answers with Calc's own 256 twips.
+            OptimalMinimumRowHeight = statedHeight ?? SheetGrid.StandardRowHeight,
         };
     }
 

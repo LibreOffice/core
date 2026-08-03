@@ -62,6 +62,30 @@ public sealed class SheetAxis
         _runs = Normalise(runs);
     }
 
+    // Reversed parameters so that this can never be reached by overload resolution from the
+    // public constructor's call shape, which normalises and must stay the only way in from
+    // outside.
+    private SheetAxis(List<SheetSizeRun> runs, Length defaultSize)
+    {
+        DefaultSize = defaultSize;
+        _runs = runs;
+    }
+
+    /// <summary>
+    /// An axis from runs already known to be sorted, non-overlapping and neighbour-merged.
+    /// </summary>
+    /// <remarks>
+    /// The public constructor normalises, and normalising is quadratic in the number of runs
+    /// because a later run may cut a hole in any earlier one. A sheet that states a height for
+    /// every one of its rows already has thousands of runs, so a caller that rebuilds the axis
+    /// row by row — recomputing hinted heights is the one that does — must not pay that again for
+    /// a list it has just built in order.
+    /// </remarks>
+    /// <param name="defaultSize">The size of anything no run covers.</param>
+    /// <param name="runs">The runs, in index order, taken as given.</param>
+    internal static SheetAxis FromOrdered(Length defaultSize, List<SheetSizeRun> runs)
+        => new(runs, defaultSize);
+
     /// <summary>The size of a column or row no run covers.</summary>
     public Length DefaultSize { get; }
 
@@ -278,6 +302,28 @@ public sealed record SheetGrid(SheetAxis Columns, SheetAxis Rows)
     /// reading, and <see cref="WithDigitWidth"/> for where it lands.
     /// </remarks>
     public SheetColumnDigits? ColumnDigits { get; init; }
+
+    /// <summary>
+    /// The floor a recomputed row height is held to.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Calc keeps this per sheet — <c>ScTable::GetOptimalMinRowHeight</c>
+    /// (<c>sc/inc/table.hxx:882-887</c>) — and falls back to <c>ScGlobal::nStdRowHeight</c>, which
+    /// is 256 twips, when nothing set it. **Only the OOXML filter sets it**, from the sheet's own
+    /// <c>defaultRowHeight</c>: <c>pTable-&gt;SetOptimalMinRowHeight(maDefRowModel.mfHeight * 20)</c>
+    /// (<c>sc/source/filter/oox/worksheethelper.cxx:965</c>). The BIFF and ODF filters do not, so
+    /// a sheet from either is floored at 256 whatever its file says its default row is — which is
+    /// why this is a property of its own rather than <see cref="SheetAxis.DefaultSize"/>, whose
+    /// value the two happen to share for SpreadsheetML and do not for the other two.
+    /// </para>
+    /// <para>
+    /// Excel's own default row height is exactly the height its default font asks for, so on a
+    /// SpreadsheetML sheet the floor usually binds on nothing; it is what stops a sheet whose rows
+    /// state a large <c>defaultRowHeight</c> from collapsing to a small font's measure.
+    /// </para>
+    /// </remarks>
+    public Length OptimalMinimumRowHeight { get; init; } = StandardRowHeight;
 
     /// <summary>
     /// The same grid with its columns measured in a font whose digit is worth so many twips.

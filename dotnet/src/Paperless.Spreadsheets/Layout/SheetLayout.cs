@@ -43,12 +43,11 @@ public sealed class SheetLayout
     /// </summary>
     /// <remarks>
     /// <para>
-    /// A row that asks for an optimal height is <em>not</em> recomputed here, although Calc
-    /// recomputes one on load and although the runs carry
-    /// <see cref="SheetSizeRun.IsOptimalSize"/> so that a reader can tell which rows those are.
-    /// The reason is measured and is recorded in the module's TODO: Calc's own measurement of a
-    /// cell for that purpose is coarser than the one it draws with, so reproducing the formula
-    /// with an accurate measurement disagrees with the height the file already holds.
+    /// A row that asks for an optimal height <em>is</em> recomputed here, because Calc recomputes
+    /// one on load and the height in the file is the writer's cache rather than a statement — see
+    /// <see cref="SheetOptimalRowHeights"/> for the formula and for which rows it declines to
+    /// touch. That is the second reason this is deferred rather than done while reading: the
+    /// recomputation needs the cells and their formats, which a reader is still assembling.
     /// </para>
     /// <para>
     /// <strong>The column widths of an Excel file are not lengths until this property is read.</strong>
@@ -62,8 +61,9 @@ public sealed class SheetLayout
     /// </remarks>
     public SheetGrid Grid
     {
-        get => _resolvedGrid ??= _statedGrid.WithDigitWidth(
-            SheetFonts.DigitWidthTwips(_statedGrid.ColumnDigits?.Font));
+        get => _resolvedGrid ??= SheetOptimalRowHeights.Apply(
+            this,
+            _statedGrid.WithDigitWidth(SheetFonts.DigitWidthTwips(_statedGrid.ColumnDigits?.Font)));
 
         init
         {
@@ -300,6 +300,24 @@ public sealed class SheetLayout
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Every merged block on the sheet: the ones the file states and the ones its cells' spans
+    /// imply.
+    /// </summary>
+    /// <remarks>
+    /// The same list <see cref="IsMerged"/> walks, exposed whole because a caller measuring rows
+    /// needs to tell a block one row tall from a taller one and a block's anchor from what it
+    /// covers — <see cref="IsMerged"/> answers none of the three.
+    /// </remarks>
+    internal IReadOnlyList<SheetRange> MergedRanges
+    {
+        get
+        {
+            _index ??= BuildIndex();
+            return _merges ?? [];
+        }
     }
 
     private Dictionary<(int Row, int Column), ContentTableCell>? _index;

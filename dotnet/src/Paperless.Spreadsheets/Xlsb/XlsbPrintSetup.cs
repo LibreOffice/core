@@ -89,6 +89,7 @@ internal static class XlsbPrintSetup
 
         SheetDigitWidth defaultWidth = BaseWidth(null);
         Length defaultHeight = SheetGrid.StandardRowHeight;
+        Length? statedHeight = null;
         List<SheetDigitRun> columns = [];
         List<SheetSizeRun> rows = [];
         List<int> columnBreaks = [];
@@ -141,7 +142,7 @@ internal static class XlsbPrintSetup
                     defaultWidth = statedWidth > 0
                         ? Digits(statedWidth / 256.0)
                         : BaseWidth(baseWidth > 0 ? baseWidth : null);
-                    if (height > 0) defaultHeight = Length.FromTwips(height);
+                    if (height > 0) statedHeight = defaultHeight = Length.FromTwips(height);
                     break;
                 }
 
@@ -281,6 +282,10 @@ internal static class XlsbPrintSetup
             new SheetAxis(defaultHeight, rows))
         {
             ColumnDigits = digits,
+
+            // BIFF12 goes through the same OOXML filter as SpreadsheetML, so it gets the same
+            // floor from the same place — `worksheethelper.cxx:965`, reached for both.
+            OptimalMinimumRowHeight = statedHeight ?? SheetGrid.StandardRowHeight,
         });
     }
 
