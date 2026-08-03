@@ -267,6 +267,16 @@ internal sealed class PdfContentSink(
         if (run.Glyphs.Count == 0) return;
 
 
+        // An em of nothing paints nothing, so the glyphs would be a text layer over blank paper.
+        // Autofit is what produces one: a shape whose paragraphs carry an absolute top margin can
+        // be too tall for its box at *every* font scale, and the shrink search then runs to the
+        // bottom of its grid and rounds the smaller runs to zero. Measured on
+        // `NWD-GLA-Community-Outreach-Day-Oct-2025.pptx`, whose subtitle holds sixteen paragraphs
+        // at a 12 pt top margin in a 90.7 pt box — 180 pt of margin alone. The reference reaches
+        // the same conclusion and draws no glyph at all there; across the 98 decks of slides
+        // batches 001–010 it writes `0 Tf` exactly nowhere.
+        if (run.FontSize <= Length.Zero) return;
+
         Colour colour = Flatten(paint);
         if (colour.IsTransparent) return;
 

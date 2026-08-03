@@ -13,8 +13,9 @@ namespace Paperless.Rendering.Tests;
 /// </summary>
 /// <remarks>
 /// <para>
-/// A clip hides ink and does not remove glyphs from a content stream, so the picture is right
-/// and <c>pdftotext</c> reads words no reader of the page can see — the inverse of the defect a
+/// A clip hides ink and does not remove glyphs from a content stream, and an em of nothing
+/// draws nothing while still showing a <c>Tj</c>. Either way the picture is right and
+/// <c>pdftotext</c> reads words no reader of the page can see — the inverse of the defect a
 /// word-count comparison usually catches, and invisible to every pixel metric.
 /// </para>
 /// <para>
@@ -160,6 +161,21 @@ public sealed class PdfInvisibleTextTests
             sink.DrawGlyphRun(Run("Off the page", 2000, 2000), Paint.Solid(Colour.Black)));
 
         content.ShouldContain("BT\n");
+    }
+
+    [Fact]
+    public void AnEmOfNothingDrawsNothing()
+    {
+        Assert.SkipUnless(TestFace.IsAvailable, "no usable font face on this machine");
+
+        GlyphRun sized = Run("Shrunk to nothing", 50, 100);
+        GlyphRun collapsed = sized with { FontSize = Length.Zero };
+
+        ContentOf(sink => sink.DrawGlyphRun(sized, Paint.Solid(Colour.Black)))
+            .ShouldContain("BT\n");
+
+        ContentOf(sink => sink.DrawGlyphRun(collapsed, Paint.Solid(Colour.Black)))
+            .ShouldNotContain("BT\n");
     }
 
     private static GlyphRun Run(string text, double x, double y)
