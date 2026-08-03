@@ -201,11 +201,6 @@ namespace vclcanvas
 
         css::geometry::IntegerSize2D getSize(  );
 
-        bool hasAlpha(  )
-        {
-            return true;
-        }
-
         /// For retrieving device info
         VclPtr<OutputDevice> mxOutDev;
 
