@@ -1572,7 +1572,7 @@ struct COKitDocument
 
     virtual void destroy() = 0;
 
-    virtual int saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) = 0;
+    virtual bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) = 0;
 
     /** @see kit::Document::getDocumentType(). */
     virtual COKitDocumentType getDocumentType() = 0;
@@ -1901,7 +1901,7 @@ public:
      */
     bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
-        return mpDoc->saveAs(pUrl, pFormat, pFilterOptions) != 0;
+        return mpDoc->saveAs(pUrl, pFormat, pFilterOptions);
     }
 
     /// Gives access to the underlying C pointer.
@@ -1956,6 +1956,40 @@ public:
     void setPart(int nPart)
     {
         mpDoc->setPart(nPart);
+    }
+
+    /**
+     * Renders a window (dialog, popup, etc.) with the given id, switching to
+     * viewId first when that is >= 0.
+     *
+     * @param pBuffer Buffer with enough memory allocated to render any dialog
+     * @param x x-coordinate from where the dialog should start painting
+     * @param y y-coordinate from where the dialog should start painting
+     * @param width The width of the dialog image to be painted
+     * @param height The height of the dialog image to be painted
+     * @param dpiscale The dpi scale value used by the client. Please note
+     *                 that the x, y, width, height are supposed to be the
+     *                 values with dpiscale applied (ie. dialog covering
+     *                 100x100 "normal" pixels with dpiscale '2' will have
+     *                 200x200 width x height), so that it is easy to compute
+     *                 the buffer sizes etc.
+     */
+    void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
+                            const int width, const int height, const double dpiscale = 1.0,
+                            const int viewId = -1)
+    {
+        mpDoc->paintWindowForView(nWindowId, pBuffer, x, y, width, height, dpiscale, viewId);
+    }
+
+    /**
+     * Paints a font name or character if provided to be displayed in the font list
+     * @param pFontName the font to be painted
+     */
+    unsigned char* renderFontOrientation(const char* pFontName, const char* pChar, int* pFontWidth,
+                                         int* pFontHeight, int pOrientation = 0)
+    {
+        return mpDoc->renderFontOrientation(pFontName, pChar, pFontWidth, pFontHeight,
+                                            pOrientation);
     }
 
     /// Get the current part's name.
@@ -2030,35 +2064,6 @@ public:
     {
         return mpDoc->paintTile(pBuffer, nCanvasWidth, nCanvasHeight,
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-    }
-
-    /**
-     * Renders a window (dialog, popup, etc.) with give id
-     *
-     * @param nWindowId
-     * @param pBuffer Buffer with enough memory allocated to render any dialog
-     * @param x x-coordinate from where the dialog should start painting
-     * @param y y-coordinate from where the dialog should start painting
-     * @param width The width of the dialog image to be painted
-     * @param height The height of the dialog image to be painted
-     * @param dpiscale The dpi scale value used by the client.  Please note
-     *                 that the x, y, width, height are supposed to be the
-     *                 values with dpiscale applied (ie. dialog covering
-     *                 100x100 "normal" pixels with dpiscale '2' will have
-     *                 200x200 width x height), so that it is easy to compute
-     *                 the buffer sizes etc.
-     */
-    void paintWindow(unsigned nWindowId,
-                     unsigned char* pBuffer,
-                     const int x,
-                     const int y,
-                     const int width,
-                     const int height,
-                     const double dpiscale = 1.0,
-                     const int viewId = -1)
-    {
-        return mpDoc->paintWindowForView(nWindowId, pBuffer, x, y,
-                                                 width, height, dpiscale, viewId);
     }
 
     /**
@@ -2384,7 +2389,7 @@ public:
      * @return {commandName: unoCmd, commandValues: {possible_values}}
      *
      * The return value is dynamically allocated and should be
-     * deallocated by calling the kit::Office::freeMemory() function.
+     * deallocated by calling the freeError() function.
      */
     char* getCommandValues(const char* pCommand)
     {
@@ -2437,12 +2442,11 @@ public:
     }
 
     /**
-     * Create a new view for an existing document with
-     * options similar to documentLoadWithOptions.
-     * By default a loaded document has 1 view.
+     * Create a new view for an existing document, with options in the same form
+     * as documentLoadWithOptions() takes. A loaded document has one view.
      * @return the ID of the new view.
      */
-    int createView(const char* pOptions = nullptr)
+    int createViewWithOptions(const char* pOptions = nullptr)
     {
         return mpDoc->createViewWithOptions(pOptions);
     }
@@ -2480,19 +2484,6 @@ public:
     int getViewsCount()
     {
         return mpDoc->getViewsCount();
-    }
-
-    /**
-     * Paints a font name or character if provided to be displayed in the font list
-     * @param pFontName the font to be painted
-     */
-    unsigned char* renderFont(const char *pFontName,
-                          const char *pChar,
-                          int *pFontWidth,
-                          int *pFontHeight,
-                          int pOrientation=0)
-    {
-        return mpDoc->renderFontOrientation(pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
     }
 
     /**
@@ -2910,9 +2901,7 @@ public:
      * Frees the memory pointed to by pFree.
      *
      * Use on dynamically allocated data returned by COKit
-     * functions. In other cases than the value returned by
-     * getError(), call freeMemory() instead for clarity.
-     *
+     * functions, not only on the value returned by getError().
      */
     void freeError(char* pFree)
     {
@@ -3338,17 +3327,6 @@ public:
     {
         return mpThis->getGlobalClipboard(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes,
                                           pOutStreams);
-    }
-
-    /**
-     * Frees the memory pointed to by pFree.
-     *
-     * Use on dynamically allocated data returned by COKit
-     * functions. Just a wrapper for freeError() with a better name.
-     */
-    void freeMemory(char* pFree)
-    {
-        freeError(pFree);
     }
 };
 

@@ -2948,8 +2948,8 @@ bool ChildSession::renderWindow(const StringVector& tokens)
     const int width = bufferWidth;
     const int height = bufferHeight;
     const auto start = std::chrono::steady_clock::now();
-    getLOKitDocument()->paintWindow(winId, pixmap.data(), startX, startY, width, height, dpiScale,
-                                    _viewId);
+    getLOKitDocument()->paintWindowForView(winId, pixmap.data(), startX, startY, width, height,
+                                           dpiScale, _viewId);
     const double area = width * height;
 
     const auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(

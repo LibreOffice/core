@@ -243,7 +243,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
 
     // Create two views.
     pDocument->getView();
-    pDocument->createView();
+    pDocument->createViewWithOptions();
 
     int nView2 = pDocument->getView();
 
@@ -423,7 +423,7 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     int nViewA = pDocument->getView();
     pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jill\"}}");
 
-    pDocument->createView();
+    pDocument->createViewWithOptions();
     int nViewB = pDocument->getView();
     pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"jack\"}}");
 

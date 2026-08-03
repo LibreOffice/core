@@ -301,7 +301,7 @@ namespace desktop {
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
 
         void destroy() override;
-        int saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
+        bool saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions) override;
         COKitDocumentType getDocumentType() override;
         int getParts() override;
         char* getPartPageRectangles() override;

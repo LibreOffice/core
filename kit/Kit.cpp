@@ -2260,7 +2260,7 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
         }
 
         LOG_INF("Creating view to url [" << uriAnonym << "] for session [" << sessionId << "] with " << options << '.');
-        _loKitDocument->createView(options.c_str());
+        _loKitDocument->createViewWithOptions(options.c_str());
         LOG_TRC("View to url [" << uriAnonym << "] created.");
 
         switch (_loKitDocument->getDocumentType())

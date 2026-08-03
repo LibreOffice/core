@@ -1571,7 +1571,7 @@ void LibLODocument_Impl::destroy()
     doc_destroy(this);
 }
 
-int LibLODocument_Impl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
+bool LibLODocument_Impl::saveAs(const char* pUrl, const char* pFormat, const char* pFilterOptions)
 {
     return doc_saveAs(this, pUrl, pFormat, pFilterOptions);
 }

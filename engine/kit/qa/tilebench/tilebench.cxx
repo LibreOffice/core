@@ -511,7 +511,7 @@ static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pDa
     unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
 
     aTimes.emplace_back("render dialog");
-    pDocument->paintWindow(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
+    pDocument->paintWindowForView(nDialogId, pBuffer, 0, 0, nWidth, nHeight);
     dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
     aTimes.emplace_back();
 
@@ -522,7 +522,7 @@ static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pDa
 
 static void testDialog( Document *pDocument, const char *uno_cmd )
 {
-    int view = pDocument->createView();
+    int view = pDocument->createViewWithOptions();
     pDocument->setView(view);
     pDocument->registerCallback(kitCallback, pDocument);
 

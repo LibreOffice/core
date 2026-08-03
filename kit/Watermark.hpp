@@ -129,7 +129,7 @@ private:
         // are always set to 0 (black) and the alpha level is 0 everywhere
         // except on the text area; the alpha level take into account of
         // performing anti-aliasing over the text edges.
-        ScopedBytes textPixels(_loKitDoc->renderFont(_font.c_str(), _text.c_str(), &width, &height, 0));
+        ScopedBytes textPixels(_loKitDoc->renderFontOrientation(_font.c_str(), _text.c_str(), &width, &height, 0));
 
         if (!textPixels)
         {
