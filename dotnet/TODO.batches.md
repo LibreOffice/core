@@ -44,6 +44,8 @@ branch.
 Whole-track figures at the same commit: words **137/200** (page error 124), slides
 **147/163** (ppt 47/51, pptx 100/112), sheets **108/171** (page error 860).
 
+Words is now **142/200** (page error 122) — see "After the seventh round" below.
+
 ## Level one: the image check
 
 `batch-001` on all three tracks passes the word gate — **29 of 29 documents**. Twenty-seven
@@ -705,6 +707,106 @@ start with the time left rather than too hard.
 The other `batch-005` failure, `loi_format_letter_of_intent…doc`, is the opposite sign — 9
 pages against 10, diverging only from page 5 — so it is *not* this, and it has no diagnosis.
 
+## After the seventh round: words, and what Word 2013's justification was actually worth
+
+The whole 200-document words track swept at `db529cfb2` and again with the shrinking
+justification landed. **139/200 before, 142/200 after**; total absolute page error 124 → 122;
+documents with an exactly correct page count 150 → 153.
+
+The baseline reproduced the briefed figures for `batch-005` (8/10), `batch-006` (9/10) and
+`batch-007` (8/10) exactly, and corrected two records in the *pessimistic* direction:
+**`batch-008` and `batch-009` are 10/10, not the 9/10 recorded.** One baseline row was a
+`SIGBUS` in our own CLI — `FMRBullletinB-28.doc` produced no PDF at all — which re-ran
+cleanly as 2/2 pages and 460/461 words; a crash and a mismatch look identical in a sweep, so
+re-run a zero-page row before believing it.
+
+### Shrinking justification: landed, neutral-or-better, and much narrower than expected
+
+The lead was right about the mechanism and wrong about the reach. `JUSTIFY_LINES_WITH_SHRINKING`
+is implemented — a justified line may overrun its column by a quarter of what its blanks are
+worth, and the blanks are then squeezed back (`JustificationShrink`, `TextLine.ShrinkAllowance`).
+`BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx` goes 3 pages to 2 against the reference's 2.
+
+What it moved across the track:
+
+| | before | after |
+|---|---|---|
+| whole track | 139/200 | **142/200** |
+| `batch-005` | 8/10 | **9/10** |
+| `batch-012` | 7/10 | **8/10** |
+| every other batch | — | unchanged |
+
+**No document regressed, in verdict, page count or word count.** Batches 001–004 held 10/10.
+
+The reach, measured rather than assumed: **91 of the track's 134 DOCX declare
+`compatibilityMode` 15 or more, and 39 of those also state `w:jc` of `both` or `distribute`
+in `document.xml`** — yet only **9 documents' output changed at all**, and only two of those
+were failing for it. The rule only moves a break when a line overruns by *less than* a quarter
+of its blanks, which is a narrow band; on a 468 pt column with sixteen blanks that is about
+nine points. So this is a real feature that applies to nearly half the track and tips very few
+documents, rather than the whole-corpus effect the previous round predicted. Predicting reach
+from how many files *state* a setting overestimated it by an order of magnitude.
+
+Two documents also moved to an exactly matching word count (`4400-91_Proposal_To_Lease_Space`,
+`Company-profile-2022-EN`) and one moved eight words further away while staying inside the 2%
+band (`PES-Technical-Report-Template_Jan_2019`, 2682 → 2690 against 2679).
+
+Unverified, and marked so: whether LibreOffice 24.2.7.2 — the binary the references come from
+— squeezes a paragraph's *last* line. The tree's own source does (`SwTextAdjuster::FormatBlock`,
+"if the last line is longer than the paragraph width, it contains shrinking spaces: don't skip
+block format here", which is tdf#162725 and may post-date 24.2). We squeeze it, because the
+feature needs it — pulling a paragraph's final words up is how it saves a line — and because
+the alternative differs only in whether that one line overflows the margin visually, not in
+where any break falls. Nothing in the gate can see the difference.
+
+### `batch-005`'s remaining failure, diagnosed and not fixed
+
+`loi_format_letter_of_intent-a-320-214-a330.doc` is 9 pages against 10 and the cause is *not*
+the page it diverges on. Page 4 ends in ten consecutive empty paragraphs, and the reference's
+soft page break falls after the eighth where ours falls after the ninth — because by the foot
+of page 4 the reference has accumulated **3.8 pt more than we have**, all of it inside one
+three-item bulleted list. Measured line pitches through that list: reference 13.80, 12.90,
+13.55, 12.90, 12.65, 12.65 pt against our uniform 12.65.
+
+13.80 pt is Liberation Serif's line box (2355/2048) at **12 pt**, where the item's text is
+11 pt — so the reference's line is tall because its *list label* is bigger than the paragraph,
+and ours is not because **the label contributes nothing to the line's height and is measured at
+the paragraph's own size**. `DocReader.Label` passes `paragraph.Size`
+(`Ww8/DocReader.cs:474`) and `Ww8Numbering` steps over the level's `grpprlChpx` outright
+(`Ww8Numbering.cs:377`, "the character grpprl is still only stepped over"); the label is not a
+run, so `MeasuredParagraph.HeightOf` never sees it. Writer's is `SwNumberPortion`, an ordinary
+portion that `SwLineLayout::CalcLine` accumulates like any other.
+
+Two changes, then: read the level's character size, and let the label raise its line. Both are
+features rather than wirings and both would touch every list in the corpus, which is why they
+were not started with the time left. The round-trip test does *not* localise it — the flat-ODF
+export renders 11 pages against the reference's 10, diverging the other way, so the `.fodt`
+path has separate defects and exonerates nothing.
+
+### `batch-006` and `batch-007`, diagnosed and not fixed
+
+- `f445896eb008d14c1746fc37d412dc22.docx` (006), 15 pages against 16, word counts identical at
+  5575. Diverges from page 3. Our page 2 stops at y = 536 pt with a third of the page empty
+  while the reference fills it to y = 740 — a table row we move whole to the next page and the
+  reference splits.
+- `Press release_EUREKA labels ITEA 3 Cluster.docx` (007), 798 words against 823. Two defects.
+  The letterhead in `header2.xml` is a `wpg:wgp` **group of nineteen shapes, eighteen of them
+  text boxes**, and `DocxFrames.Read` takes `Descendant(placed, "txbxContent")` — the first one
+  only, so seventeen boxes' worth of address block never draws (≈39 words). Separately, page 2
+  takes section 2's default header where LibreOffice takes section 1's: the file has three
+  `w:sectPr`, all with `w:titlePg`, and the last states only an `even` reference.
+- `final-technical-report-template.docx` (007), 1108 words against 1135. The header
+  "Final Technical Report [Recipient Organization Name] [Award Number]" is drawn by the
+  reference on pages 2–6 and by us on pages 1 and 3 only — the same header-slot selection
+  defect. Two smaller terms on top: we draw seven list bullets as ASCII `•` where the reference
+  draws a symbol-font private-use code point `wc -w` cannot see, and `PAGE`/`NUMPAGES` fields
+  print stale cached results.
+
+The `PAGE` field is worth calling out on its own because it is not document-specific:
+`FieldInstructions` maps `"PAGE"` to `WritingFieldKind.PageNumber` and **nothing consumes it**
+— the read-but-never-used shape again. On `loi_format_letter_of_intent…doc` every one of the
+nine footers prints `9`, which is the result Word last cached, against the reference's 1…9.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -713,23 +815,28 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | ✅ |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 9/10 |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
-| `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
-| `batch-009` | 10 | 208–226 | doc:5 docx:5 | 9/10 |
+| `batch-008` | 10 | 186–204 | doc:4 docx:6 | ✅ |
+| `batch-009` | 10 | 208–226 | doc:5 docx:5 | ✅ |
 | `batch-010` | 9 | 228–260 | doc:2 docx:8 | 6/9 |
 | `batch-011` | 10 | 260–296 | doc:2 docx:8 | 7/10 |
-| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 6/10 |
+| `batch-012` | 10 | 306–333 | doc:4 docx:6 | 8/10 |
 | `batch-013` | 9 | 338–370 | docx:10 | 5/9 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 3/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 4/10 |
-| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 6/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 5/10 |
+| `batch-016` | 10 | 473–537 | doc:5 docx:5 | 7/10 |
 | `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |
-| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 2/10 |
+| `batch-019` | 10 | 956–1521 | doc:1 docx:9 | 4/10 |
 | `batch-020` | 10 | 1523–3818 | doc:2 docx:8 | 3/10 |
 | `batch-021` | 2 | 4417–4676 | docx:2 | 0/2 |
+
+All twenty-one figures above are the measured sweep at the commit that landed the shrinking
+justification, not carried forward. Six of the recorded ones were stale, every one of them
+*under*-stating the batch: 008 and 009 at 10/10 rather than 9/10, and 012, 015, 016 and 019
+each one or two better than recorded.
 
 ### `slides` — 163 documents, 17 batches
 
