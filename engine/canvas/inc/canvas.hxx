@@ -34,7 +34,6 @@
 #include "canvasfont.hxx"
 #include "canvashelper.hxx"
 #include "impltools.hxx"
-#include "devicehelper.hxx"
 #include "XGraphicDevice.hxx"
 #include "Texture.hxx"
 #include "parametricpolypolygon.hxx"
@@ -89,12 +88,7 @@ namespace vclcanvas
 
         // XGraphicDevice
 
-        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-
-            return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
-        }
+        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override;
 
         virtual ::css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( const ::rtl::OUString& GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio ) override
         {
@@ -304,7 +298,8 @@ namespace vclcanvas
             return true;
         }
 
-        DeviceHelper      maDeviceHelper;
+        /// For retrieving device info
+        OutDevProviderSharedPtr mpOutDev;
         CanvasHelper        maCanvasHelper;
         mutable bool        mbSurfaceDirty;
     };

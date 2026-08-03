@@ -25,6 +25,8 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/outdev.hxx>
+#include <unopolypolygon.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 #include "outdevholder.hxx"
 
@@ -45,7 +47,7 @@ namespace vclcanvas
         OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 
         // setup helper
-        maDeviceHelper.init( pOutdevProvider );
+        mpOutDev = pOutdevProvider;
         maCanvasHelper.init( *this,
                              pOutdevProvider,
                              true,   // OutDev state preservation
@@ -64,7 +66,8 @@ namespace vclcanvas
         vclcanvastools::LocalGuard aGuard2( m_aMutex );
 
         maCanvasHelper.disposing();
-        maDeviceHelper.disposing();
+        // release all references
+        mpOutDev.reset();
 
         // pass on to base class
         ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::disposeThis();
@@ -80,6 +83,20 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
+    }
+
+    css::uno::Reference< css::rendering::XLinePolyPolygon2D > Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
+    {
+        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+
+        if( !mpOutDev )
+            return {}; // we're disposed
+
+        // vcl only handles even_odd polygons
+        rtl::Reference<canvastools::UnoPolyPolygon> xPoly( new ::canvastools::UnoPolyPolygon(
+                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ), rendering::FillRule_EVEN_ODD ) );
+
+        return xPoly;
     }
 }
 

@@ -432,7 +432,6 @@ canvas/inc/canvasbitmaphelper.hxx
 canvas/inc/canvasfont.hxx
 canvas/inc/canvashelper.hxx
 canvas/inc/canvastools.hxx
-canvas/inc/devicehelper.hxx
 canvas/inc/impltools.hxx
 canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
@@ -489,7 +488,6 @@ canvas/source/vcl/canvasbitmaphelper.cxx
 canvas/source/vcl/canvasfont.cxx
 canvas/source/vcl/canvashelper.cxx
 canvas/source/vcl/canvashelper_texturefill.cxx
-canvas/source/vcl/devicehelper.cxx
 canvas/source/vcl/impltools.cxx
 canvas/source/vcl/sprite.hxx
 canvas/source/vcl/textlayout.cxx
