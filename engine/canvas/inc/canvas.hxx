@@ -35,6 +35,7 @@
 #include "impltools.hxx"
 #include "devicehelper.hxx"
 #include "XGraphicDevice.hxx"
+#include "Texture.hxx"
 
 class OutputDevice;
 
