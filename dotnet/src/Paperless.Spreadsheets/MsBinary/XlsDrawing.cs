@@ -197,6 +197,16 @@ internal sealed class XlsDrawingCollector(List<Diagnostic> diagnostics)
 
             ObjectEntry entry = _objects[at++];
             if (entry.Text is not { Length: > 0 }) continue;
+
+            // A cell comment is not a shape on the page. Its `ftCmo` type is 25
+            // (`EXC_OBJTYPE_NOTE`, `sc/source/filter/inc/xlescher.hxx:69`) and Calc's importer
+            // takes the object apart rather than inserting it: `XclImpNoteObj` calls
+            // `SetInsertSdrObj(false)` in its constructor — "caption object will be created
+            // manually" — and turns the text into a `ScPostIt` on the cell instead
+            // (`sc/source/filter/excel/xiescher.cxx:1852-1883`). The caption exists only when the
+            // NOTE record marks the comment visible, which is the case this drops with it.
+            if (entry.Type == NoteObject) continue;
+
             if (ClientAnchor(buffer, shape) is not { } anchor) continue;
             if (place(anchor) is not { } placed) continue;
 
@@ -331,6 +341,12 @@ internal sealed class XlsDrawingCollector(List<Diagnostic> diagnostics)
 
     /// <summary>The <c>ftCmo</c> subrecord identifier, <c>EXC_ID_OBJCMO</c>.</summary>
     private const ushort ObjectCommon = 0x0015;
+
+    /// <summary>
+    /// The <c>ftCmo</c> object type a cell comment has.
+    /// </summary>
+    /// <remarks><c>EXC_OBJTYPE_NOTE</c>, <c>sc/source/filter/inc/xlescher.hxx:69</c>.</remarks>
+    private const ushort NoteObject = 25;
 
     private const int HorizontalCentre = 2;
     private const int HorizontalRight = 3;

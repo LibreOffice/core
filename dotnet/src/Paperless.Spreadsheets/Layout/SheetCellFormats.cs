@@ -58,6 +58,44 @@ public sealed class SheetCellFormats
         return _pool[_sheet];
     }
 
+    /// <summary>The format a cell that states nothing, in a row and column that state nothing, takes.</summary>
+    public SheetCellFormat SheetDefault => _pool[_sheet];
+
+    /// <summary>The format a whole row states, or null when it states none.</summary>
+    /// <param name="row">The zero-based row.</param>
+    public SheetCellFormat? RowDefault(int row)
+        => _rows.TryGetValue(row, out int index) ? _pool[index] : null;
+
+    /// <summary>The formats whole columns state, within a range.</summary>
+    /// <remarks>
+    /// A column format applies to every row at once, so a caller measuring rows can fold these in
+    /// once rather than per row. Bounded by the range because a file may state a format for all
+    /// sixteen thousand columns and only the ones a sheet reaches are allocated in Calc.
+    /// </remarks>
+    /// <param name="first">The first column of the range, inclusive.</param>
+    /// <param name="last">The last column of the range, inclusive.</param>
+    public IEnumerable<SheetCellFormat> ColumnDefaults(int first, int last)
+    {
+        foreach ((int column, int index) in _columns)
+            if (column >= first && column <= last)
+                yield return _pool[index];
+    }
+
+    /// <summary>Every cell that states a format of its own, with where it is.</summary>
+    /// <remarks>
+    /// Enumerated rather than indexed by row because the store is one dictionary keyed by
+    /// position: a caller that wants them grouped by row gets them in one pass and groups them
+    /// itself, where asking per row would rescan the whole sheet for each.
+    /// </remarks>
+    public IEnumerable<(int Row, int Column, SheetCellFormat Format)> Cells
+    {
+        get
+        {
+            foreach (((int row, int column), int index) in _cells)
+                yield return (row, column, _pool[index]);
+        }
+    }
+
     /// <summary>Accumulates a sheet's formats while its cells are being read.</summary>
     /// <remarks>
     /// Pooling by value rather than by the file's own index, because the three formats index

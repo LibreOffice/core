@@ -712,7 +712,18 @@ internal sealed class XlsWorkbookReader
     /// </remarks>
     private List<ContentSection> ReadChartSheet(SheetEntry sheet, int index)
     {
-        _page = new XlsSheetPrintState { DefaultFont = _cellFormats.DefaultFont };
+        _page = new XlsSheetPrintState
+        {
+            DefaultFont = _cellFormats.DefaultFont,
+
+            // BIFF8 keeps every height its file states. `ImportExcel::Read` calls
+            // `AdjustRowHeight()` (sc/source/filter/excel/read.cxx:780) and
+            // `ImportExcel8::Read` has the same call `#if 0`-ed out, with the reason beside
+            // it: "Excel documents look much better without this call; better in the sense
+            // that the row heights are identical to the original heights in Excel"
+            // (read.cxx:1282-1288). So a `.xls` written this century is never re-measured.
+            RowHeightsAreManual = _stream.Version == BiffVersion.Biff8,
+        };
         _sheetDecoration = new XlsSheetDecoration();
         _drawings = new XlsDrawingCollector(_diagnostics);
         XlsChartBuilder chart = new();
@@ -881,7 +892,18 @@ internal sealed class XlsWorkbookReader
     private ContentSection ReadSheet(SheetEntry sheet, int index)
     {
         SheetBuilder builder = new(this, sheet.Name);
-        _page = new XlsSheetPrintState { DefaultFont = _cellFormats.DefaultFont };
+        _page = new XlsSheetPrintState
+        {
+            DefaultFont = _cellFormats.DefaultFont,
+
+            // BIFF8 keeps every height its file states. `ImportExcel::Read` calls
+            // `AdjustRowHeight()` (sc/source/filter/excel/read.cxx:780) and
+            // `ImportExcel8::Read` has the same call `#if 0`-ed out, with the reason beside
+            // it: "Excel documents look much better without this call; better in the sense
+            // that the row heights are identical to the original heights in Excel"
+            // (read.cxx:1282-1288). So a `.xls` written this century is never re-measured.
+            RowHeightsAreManual = _stream.Version == BiffVersion.Biff8,
+        };
         _sheetDecoration = new XlsSheetDecoration();
         _drawings = new XlsDrawingCollector(_diagnostics);
         _rowFormats.Clear();
@@ -1353,8 +1375,14 @@ internal sealed class XlsWorkbookReader
             case BiffPageRecords.DefaultRowHeight:
                 if (_stream.RecordLeft >= 4)
                 {
-                    _stream.ReadUInt16();
-                    _page.SetDefaultRowHeight(_stream.ReadUInt16());
+                    // Bit 0 is the sheet's own fUnsynced — EXC_DEFROW_UNSYNCED,
+                    // sc/source/filter/inc/xltable.hxx:114 — and it is not about the default
+                    // height alone. `XclImpColRowSettings::Convert` answers it by marking every
+                    // row of the sheet manual before it looks at a single ROW record
+                    // (sc/source/filter/excel/colrowst.cxx:212-215), so a sheet that sets it has
+                    // no row Calc will re-measure, whatever the ROW records say.
+                    bool manual = (_stream.ReadUInt16() & 0x0001) != 0;
+                    _page.SetDefaultRowHeight(_stream.ReadUInt16(), manual);
                 }
                 break;
 

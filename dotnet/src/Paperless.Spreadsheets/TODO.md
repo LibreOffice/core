@@ -292,15 +292,24 @@ never reaches the text layer, which is why it shows in a word count at all. `oox
 both `clip` and `ellipsis` (`textbodypropertiescontext.cxx:85-97`), and the vertical adjustment is
 suppressed while it applies. Measured on `Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx`, whose notes
 box is 1.37 inches tall and holds five paragraphs of caveats: 1556 words against 1504, and 1530 now
-— inside the gate's 2% band rather than exactly equal, the residue being the same box drawn on
-each of the sheet's column bands, which LibreOffice does too and clips differently.
+— inside the gate's 2% band rather than exactly equal.
+
+**The residue is not the box drawn twice, and the previous round marked that guess unverified.**
+It is measured now, and it is the *page-edge clip*. LibreOffice's first page shows the notes block
+cut off at the right edge of the column band, mid-word — its own text layer holds `Ai` and `r` as
+separate tokens, and `the Flight Procedures an` ends there — with the tails picked up on the band
+to the right, because Calc draws the string once per page positioned at its cell and clipped to the
+page's output rectangle. We draw each line whole on the first band and none of it on the second, so
+we are 35 words up and 9 down for a net 26. Implementing it needs a clip that drops the glyph runs
+it excludes, which is what `PdfContentSink` is being taught elsewhere; nothing here should build a
+second one.
 
 ### Where `batch-005` stands, and the largest lead in the track
 
 `batch-005` measured **7/10** after the two rounds above — the scoreboard recorded 4/10, and the
 three it gained were gained by the empty-page and merge work rather than by anything aimed at it.
-Its three remaining failures are three different things, and one of them is the biggest systematic
-defect this track has left.
+Its three remaining failures were three different things, and one of them was the biggest
+systematic defect this track had left. Two of the three are fixed below; the batch is **9/10**.
 
 **A row height stated without `customHeight` is a hint, and Calc recomputes it.** `ht` on a `row`
 is what the *writer* measured; `customHeight` is the flag that says a user chose it.
@@ -308,25 +317,26 @@ is what the *writer* measured; `customHeight` is the flag that says a user chose
 stated height either way — "always import the row height, ensures better layout" — but calls
 `SetManualHeight` only when `mbCustomHeight`, so every other row stays on optimal height and Calc
 re-derives it from what the row holds. Measured on `National-Reports.xlsx`, whose 117 rows all
-state `ht="15.75"` and none states `customHeight`: **our row pitch is 15.735 pt and LibreOffice's
-is 15.0**, taken from the two PDFs' own glyph boxes, and the 4.9% compounds into 8 pages against 6.
-LibreOffice's flat-ODF export of the same sheet gives `0.2083in` for every single-line row,
-`0.3728in` for the two-line rows the file states as `31.5` and `0.5492in` for the one it states as
-`47.25` — so it is a real re-measurement of the content and not a fallback to the default.
+state `ht="15.75"` and none states `customHeight`: **our row pitch was 15.735 pt and LibreOffice's
+is 15.0**, and the 4.9% compounded into 8 pages against 6.
 
-**The flag this needs is already read and used by nothing.** `SheetSizeRun.IsOptimalSize` is set
-from `!customHeight` by the SpreadsheetML reader, has the same meaning wired up for ODF's
-`style:use-optimal-row-height` and BIFF's unset-manual bit, and `SheetGrid.IsOptimalSize(index)`
-has **no callers at all**. That is the shape worth grepping for that this project has now hit four
-times. What is missing is the measurement itself — Calc's `ScColumn::GetNeededSize`
-(`sc/inc/column.hxx:95-105`) — which is a feature rather than a fix, and is not attempted here.
+**This is now done — see "Done: the row height a file only guessed at" below.** The document
+matches exactly, 6 pages and 1276 words against 1276.
 
-The other two, named and unfixed: `esurf-12-135-2024-t01.xlsx` draws four-digit years as `201` and
-`202`, three characters wide, where LibreOffice draws them whole — a number clipped to its column
-instead of overflowing or becoming `###`, which is F.3's two-way coupling between the `General`
-format and the column width. `Background_Declaration_Template.xls` draws about twenty words twice
-and embeds a fourth font the reference does not, which looks like the column-band duplication the
-round above fixed for SpreadsheetML arriving in the BIFF path, but that was not confirmed.
+The remaining failure of the three: `esurf-12-135-2024-t01.xlsx` draws four-digit years as `201`
+and `202`, three characters wide, where LibreOffice draws them whole — a number clipped to its
+column instead of overflowing or becoming `###`, which is F.3's two-way coupling between the
+`General` format and the column width.
+
+`Background_Declaration_Template.xls`'s duplication was **not** what the previous round guessed.
+It was recorded as "the column-band duplication the round above fixed for SpreadsheetML arriving
+in the BIFF path", and that is wrong twice over. LibreOffice draws the text **zero** times, not
+once: "W. Post: need to adapt to logic rules per record" appears on none of the reference's 25
+pages. It is a *cell comment*, and a comment is not a shape — `ftCmo` type 25
+(`EXC_OBJTYPE_NOTE`, `sc/source/filter/inc/xlescher.hxx:69`), whose importer calls
+`SetInsertSdrObj(false)` in its constructor and turns the text into a `ScPostIt` instead
+(`sc/source/filter/excel/xiescher.cxx:1852-1883`). Drawing it twice was not a defect on its own —
+a shape really is drawn on every page it reaches — and the fourth embedded font was its.
 
 ## What the fourth sheets sweep found
 
@@ -1789,52 +1799,76 @@ Not yet, and why:
   `Paperless.Core`, another agent is working there, and it is already stale for XLS, CSV, PPT and
   PPTX besides — so it wants one deliberate pass rather than one format bolted on.
 
-## The row height a rotated cell asks for, and why it is not recomputed
+## Done: the row height a file only guessed at
 
-All three formats say whether a row's height was set by a user or computed by the writer — ODF's
-`style:use-optimal-row-height`, SpreadsheetML's `customHeight` and BIFF's `fUnsynced` — and Calc
-honours it on load, recomputing every non-manual row before anything is drawn
-(`ScDocRowHeightUpdater`). The flag **is** read, into `SheetSizeRun.IsOptimalSize`, by all three
-readers. The recomputation is not shipped, and the reason is a measurement rather than an estimate.
+All four formats say whether a row's height was set by a user or computed by the writer — ODF's
+`style:use-optimal-row-height`, SpreadsheetML's and BIFF12's `customHeight`, BIFF8's `fUnsynced` —
+and Calc honours it on load, recomputing every non-manual row before anything is drawn. Each filter
+does it in its own place: `WorkbookGlobals::finalize` for the OOXML family
+(`sc/source/filter/oox/workbookhelper.cxx:659`), `ImportExcel::AdjustRowHeight` for BIFF
+(`sc/source/filter/excel/impop.cxx:1285`), `ScXMLImport`'s recalc ranges for ODF
+(`sc/source/filter/xml/xmlimprt.cxx:1438`). `Layout/SheetOptimalRowHeights.cs` reproduces it, and
+`SheetLayout.Grid` applies it once per sheet on first read, so extraction still pays for none of it.
 
-The formula is two lines: `height = textHeight × |cos θ| + textWidth × |sin θ|`, then the cell's top
-and bottom margins (`ScColumn::GetNeededSize`, `sc/source/core/data/column2.cxx:517-546`).
-Reproducing it exactly still gives the wrong answer, because the measurement it consumes is not the
-one Calc draws with. Five probe documents, each one rotated cell in a row asking for an optimal
-height, read back out of the ODS LibreOffice saved:
+**Two computations, and only the first is a measurement.** `ScColumn::GetOptimalHeight`
+(`column2.cxx:898-1100`) walks each column's attribute ranges and asks two different questions.
+Every cell contributes `lcl_GetAttribHeight` (`column2.cxx:866-892`), which is arithmetic on the
+font's *size* and nothing else: `trunc(sizeTwips × 1.18) + topMargin + bottomMargin − 23`, floored
+at the sheet's minimum. A cell that also wraps, rotates, stacks or holds a second line contributes
+`GetNeededSize` as well, and the row takes the larger. So a plain sheet needs no glyph measured at
+all — which is why the arithmetic shipped first and on its own.
 
-| cell | LibreOffice | from the font's advances |
-| --- | --- | --- |
-| ten capital `X` at 90° | 68.65 pt | 68.70 pt |
-| `Upright heading` at 90° | 68.65 pt | 72.65 pt |
-| `Upright heading` at 45° | 56.69 pt | — |
-| the same text twice over at 90° | 135.81 pt | — |
+**The measurement is coarse, and reproducing the coarseness is what makes it exact.** The previous
+round measured five rotated probes, found an accurate reproduction 5.8% too large, and stopped —
+the right call on that evidence, and the evidence was incomplete. `GetNeededSize`'s EditEngine
+branch formats against a headless `VirtualDevice` and quantises to whole device pixels three times:
+the em size, the ascent and the descent. The two cell margins truncate to one pixel each. The
+pixel total is turned back into twips by dividing by `ScSizeDeviceProvider`'s `nPPTY`, which is
+**0.067 and not 1/15** — it is computed as `LogicToPixel(Point(1000,1000), MapTwip).Y() / 1000.0`
+and that conversion returns whole pixels, so 666.67 becomes 667
+(`sc/source/ui/docshell/sizedev.cxx:48-50`). Dividing by 1/15 instead puts a three-line twelve-point
+row at 795 twips where LibreOffice writes 791.
 
-The first row says the formula and the margins are right. The second says the *measurement* is not:
-Calc's row-height path collapses two strings 4 pt apart onto the same height, while its printed
-output advances the pen by the font's exact widths — checked against the per-character `Tm`
-matrices in its own PDF, where `S` in `Slanted heading` advances 7.229 pt against the font's 7.227.
+The quantisation is exactly `Paperless.Text.Fonts.MetricGrid`, which Writer already had for
+`fUsePrinterMetrics` — the same rounding on a different device, arrived at independently, which is
+the strongest evidence the model is right.
 
-So recomputing would replace a correct number with one 5.8% too large on **every file LibreOffice
-wrote**, because there the stored height *is* the height Calc computed, and it would move every row
-below it. It is only an improvement on a hand-written sheet whose stated height is a stale cache,
-which is the corpus's flat ODF sources and nothing a user has. Shipping it needs Calc's own coarse
-measurement reproduced first, and that is the same missing piece as the dynamic header band's:
-`UpdateHFHeight` measures through the same kind of reference device.
+Fitted to thirty probe rows — six font sizes against five wrapped line counts, read out of
+LibreOffice's own flat-ODF export — and reproduces **all thirty**, including the eighteen-point row
+whose single word is wider than its column and therefore takes two lines. `sheet-row-height-hint.xlsx`
+and `sheet-row-height-wrap.xlsx` hold the assertions.
 
-The premise this was checked against is worth writing down because it does not survive: pagination
-already depends on measuring text once, in `ScTable::ExtendPrintArea`, and that is survivable
-because the extension is **by whole columns** — being within a column's width of LibreOffice's
-answer gives the same page. A row height is a length, so a 5.8% error is a 5.8% error, and there is
-no quantum to hide it in.
+**What is still not measured**, and falls back to the larger of the arithmetic height and what the
+file states: a turned or stacked cell, whose size is its text's *width* put through an angle, and a
+cell in several faces, whose lines are each as tall as the tallest portion on them. The fallback
+cannot lose text, because the arithmetic height is a lower bound in Calc too — `bStdAllowed` stays
+true for such a cell and its attribute height is written into the array before any measurement is
+compared against it.
 
-**The XLSB reader reads the flag too**, so all four readers now fill `SheetSizeRun.IsOptimalSize`
-and the decision above covers the whole family: BIFF12's `ROW` states it as
-`BIFF12_ROW_CUSTOMHEIGHT` (0x2000), whose *absence* is the optimal-height case
-(`sheetdatacontext.cxx:432`). That is the same polarity as SpreadsheetML's `customHeight` and the
-opposite of BIFF8's `fUnsynced`, which is worth checking against the source rather than inferring
-from the neighbouring format. Nothing else about the decision changed: what unblocks it is still
-Calc's own coarse measurement, and nothing here has it yet.
+**Calc will not replace a height that rounds to the same pixel.** `lcl_pixelSizeChanged`
+(`sc/source/core/data/table2.cxx:3388`) compares `trunc(height × nPPTY)` and leaves the file's value
+alone when they agree, so a document LibreOffice wrote round-trips unchanged even where the
+arithmetic here lands a twip or two away. Calc applies that guard on the OOXML and ODF paths and not
+on the BIFF one, which reaches rows through `SetOptimalHeightOnly`; it is applied to all three here,
+because the difference can only ever leave a file's own height in place.
+
+**The floor is per sheet, and only one filter sets it.** `ScTable::GetOptimalMinRowHeight`
+(`sc/inc/table.hxx:882-887`) answers `ScGlobal::nStdRowHeight`, 256 twips, unless something set it,
+and the only thing that ever does is the OOXML filter, from the sheet's own `defaultRowHeight`
+(`worksheethelper.cxx:965`). A BIFF or ODF sheet is floored at 256 whatever its file says its
+default row is — which is why `SheetGrid.OptimalMinimumRowHeight` is a property of its own rather
+than `SheetAxis.DefaultSize`, whose value it happens to share for SpreadsheetML and not for the
+others.
+
+**A BIFF sheet can declare every row manual in the record about its default height**, and missing
+that cost eight `.xls` documents their page count on the sweep that found it. `DEFAULTROWHEIGHT`
+carries its own `fUnsynced` (`EXC_DEFROW_UNSYNCED`, `sc/source/filter/inc/xltable.hxx:114`), and
+`XclImpColRowSettings::Convert` answers it by marking every row of the sheet `ManualSize` before it
+reads a single `ROW` record — "first access to row flags, do not ask for old flags",
+`sc/source/filter/excel/colrowst.cxx:212-215`. Nothing later clears it: the per-row loop only ever
+sets the bit. `SheetGrid.RowHeightsAreManual` carries it, and the reader was previously skipping
+that word to get at the height behind it. BIFF2's two-byte record has no flags field at all and
+Calc passes the bit unconditionally (`impop.cxx:598-604`).
 
 ## Done: a chart's content, out of the cache
 

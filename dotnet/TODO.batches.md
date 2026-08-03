@@ -752,54 +752,85 @@ assemblies against the built tree**, and **render one document whose number the 
 change** before starting. Under a shared machine the whole track takes over an hour, so a wasted
 sweep is the most expensive mistake available.
 
-## Sheets batches 001–004: full parity, swept at `194c2dc9b`
+## Sheets batches 001–008: the row height a file only guessed at, swept at `42253c784`
 
-`batch-00[1-4]` swept together on the final binary: **40 of 40**. Four documents changed state
-— `Air_Boss_Master_List.xlsx` and `Bulletin-37-Appendix-2-…xlsx` in 003, `Part_375_Operators.xlsx`
-and `Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx` in 004. `batch-005` rose from a recorded 4/10 to
-a measured **7/10** without being worked, which is the usual sign that the causes were systematic
-rather than per-document.
+Whole track swept before and after, 171 documents each time.
 
-Whole track, first sweep since `28940d76f`: **112/171** against the recorded 108, page error
-**843** against 860.
+| | before | after |
+| --- | --- | --- |
+| documents matching | 113 | **122** |
+| documents with an exactly correct page count | 123 | **134** |
+| total absolute page error | 843 | **222** |
 
-### Four of the five defects are one sentence: a thing stopped belonging to exactly one page
+Eleven documents gained parity and two lost it, both of the latter by one page on a very large
+workbook — `FY2023-AIP-grants.xlsx` at 32 against 33 and `ans_mappings_of_eccairs_terms.xlsx` at
+193 against 191. Batches 001–004 are 40/40 again, so the gate holds.
 
-- **A styled-but-empty cell is not content.** `ScTable::IsBlockEmpty` asks the cell store, not the
-  attribute array — `sc/source/core/data/table2.cxx:2432-2452`. Bulletin-37's columns I–P carry a
-  style and nothing else, and bought a sixth page against LibreOffice's five.
-- **An empty merge must still block a neighbour's spill.** `ScOutputData::IsAvailable` stops at a
-  merged-or-overlapped cell regardless of content — `sc/source/ui/view/output2.cxx:1178-1191`.
-  Every reader was losing empty merges because the anchor looks like trailing padding;
-  `SheetLayout.StatedMerges` now carries the ranges.
-- **A drawing belongs to the sheet and is drawn on every page it reaches** —
-  `ScOutputData::PrePrintDrawingLayer`, `sc/source/ui/view/output3.cxx:40-104`. Air_Boss's note box
-  straddles a column break and its right half was on no page of ours.
-- **Its bound is the page's cell block, not the paper.** Part_375's slicers sit in band 3 and fit
-  on the paper of bands 1 and 2, so the first rule alone drew them three times.
+The recorded scoreboard was stale low almost everywhere: the baseline sweep measured 005 at 7/10
+against a recorded 4, 006 at 7 against 4, 008 at 7 against 5, and eleven of the eighteen batches
+one or more above what was written down. Re-measure before believing any of it.
 
-The fourth corrects the third, and the agent shipped the wrong version first, measured Part_375,
-and replaced it. That is the salvage patch's `ReachesThePaper` clip — kept as an idea, re-derived,
-and found wrong. Worth recording as the concrete answer to what a recovered diff is worth: two of
-its ideas survived re-derivation and one of them was a defect.
+### `ht` without `customHeight` is a hint, and it was the largest lead on the track
 
-The fifth is unrelated: **`vertOverflow="clip"` removes lines, not pixels** —
-`svx/source/svdraw/svdotextdecomposition.cxx:581-624`, with the rule stated at
-`include/svx/svdoutl.hxx:56-59`.
+The mechanism was in the handover and held exactly. What the handover did not have — and what
+made it shippable — is that **the common case measures nothing at all.**
+`ScColumn::GetOptimalHeight` (`sc/source/core/data/column2.cxx:898`) asks two questions of every
+cell. All of them contribute `lcl_GetAttribHeight` (`column2.cxx:866`), which is arithmetic on the
+font's *size*: `trunc(sizeTwips × 1.18) + margins − 23`, floored at the sheet's minimum. Only a
+cell that wraps, rotates, stacks or holds a second line also goes through `GetNeededSize`.
 
-### The largest remaining lead on this track, measured
+The wrapped case turned out to be reproducible too, and the previous round's "5.8% too large"
+finding was right about the number and wrong about the conclusion. `GetNeededSize`'s EditEngine
+branch quantises to whole device pixels three times — the em size, the ascent, the descent — adds
+two truncated one-pixel margins, and divides by `ScSizeDeviceProvider`'s **0.067, not 1/15**
+(`sc/source/ui/docshell/sizedev.cxx:48`). That is `Paperless.Text.Fonts.MetricGrid`, which Writer
+already had for `fUsePrinterMetrics`. Fitted to thirty probe rows — six font sizes against five
+line counts, read out of LibreOffice's own flat-ODF export — it reproduces all thirty.
 
-`ht` without `customHeight` is a *hint* that Calc recomputes —
-`sc/source/filter/oox/worksheethelper.cxx:1268-1286`. On `National-Reports.xlsx` our row pitch is
-**15.735 pt against LibreOffice's 15.0**, read from both PDFs' glyph boxes, and the flat-ODF export
-confirms LibreOffice re-measures every row from its content. The flag is already parsed by every
-reader — `SheetGrid.IsOptimalSize` — and **has no callers**: the read-but-never-used shape for the
-fourth time. What is missing behind it is `ScColumn::GetNeededSize`, which is a feature rather than
-a fix, so it was left rather than approximated.
+**A `.xls` written this century is never re-measured at all**, and missing that cost nineteen
+documents their page count on the sweep that found it. `ImportExcel8::Read` has its
+`AdjustRowHeight()` call `#if 0`-ed out with the reason beside it — "Excel documents look much
+better without this call; better in the sense that the row heights are identical to the original
+heights in Excel" (`sc/source/filter/excel/read.cxx:1282-1288`). BIFF2–5 still call it
+(`read.cxx:780`). Separately, a BIFF sheet can mark every one of its rows manual through
+`DEFAULTROWHEIGHT`'s own `fUnsynced` (`colrowst.cxx:212-215`).
 
-Marked unverified by the agent, and left that way: that `Background_Declaration_Template.xls`
-duplicates words for the same reason SpreadsheetML did (the duplication was measured, the cause was
-not), and how LibreOffice clips the two-line residue on `Foreign_SA` across column bands.
+### Both unverified claims were wrong in their explanation and right in their measurement
+
+- `Background_Declaration_Template.xls` was recorded as SpreadsheetML's column-band duplication
+  arriving in the BIFF path. LibreOffice draws the text **zero** times, not once: it is a cell
+  comment, `ftCmo` type 25, whose importer calls `SetInsertSdrObj(false)` and makes a `ScPostIt`
+  of it (`sc/source/filter/excel/xiescher.cxx:1852-1883`). 201 words against 181, and 181 now.
+- `Foreign_SA`'s residue was recorded as the same box drawn on each column band. It is the
+  **page-edge clip**: LibreOffice cuts the notes block mid-word at the band boundary — its own
+  text layer holds `Ai` and `r` as separate tokens — and picks the tail up on the next band. We
+  draw each line whole on the first band and none of it on the second, 35 words up and 9 down.
+  Implementing it needs a clip that drops the glyph runs it excludes, which is what
+  `PdfContentSink` is being taught elsewhere.
+
+### A lead for whoever takes 009: a page that draws five words where the reference draws 507
+
+`RegChangeReport.xlsx` now paginates correctly — 12 pages against 12, up from 14 — and is still
+2302 extractable words against 3137. The deficit is **almost all on one page**: per-page counts run
+378/378, **5/507**, 295/436, 250/345, 422/437 and so on down. Our page 2 holds nothing but the
+sheet's `Security Classification: Protected A` band; the reference's holds the whole
+"Liability Management Framework" row, whose Description cell is several hundred words of wrapped
+text in a row LibreOffice computes at 6480 twips.
+
+The reference's page 3 then *begins mid-sentence* — "immediately. On August 19, 2025, Directive 011
+was" — where ours begins at the next whole row. **The mechanism is not established**, and the
+obvious explanation does not survive a look at the source: `ScTable::UpdatePageBreaks`
+(`sc/source/core/data/table5.cxx:206-240`) never splits a row, it gives an over-tall one a page of
+its own. Worth starting from the page-2 measurement rather than from that theory.
+
+### What is left in 005–008
+
+`esurf-12-135-2024-t01.xlsx` draws four-digit years as `201` and `202` — a number clipped to its
+column rather than overflowing or becoming `###`, which is the two-way coupling between the
+`General` format and the column width. `Hazard Analysis Template.xls` is 2 pages against 3 and 461
+words against 682. `Published_Issuances_2024.xlsx`, `SSRO_…_DATA.xlsx` and
+`RVSM_Non_approved_list_2025_….xlsx` are word-count failures with correct page counts, two of them
+short and one long.
 
 ## After the sixth round: words batch-004, and what the salvaged patch was worth
 
@@ -1078,23 +1109,25 @@ each one or two better than recorded.
 
 ### `sheets` — 171 documents, 18 batches
 
+Measured whole-track at `42253c784`: **122 of 171**, total page error 222.
+
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 10 | 47–69 | xls:3 xlsx:7 | ✅ |
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 7/10 · WIP |
-| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 6/10 |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 5/10 |
-| `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 4/9 |
-| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 4/10 |
-| `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 4/10 |
-| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 4/10 |
-| `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 6/10 |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 4/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 9/10 |
+| `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 7/10 |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 9/10 |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 7/10 |
+| `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
+| `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
+| `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
+| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 6/10 |
+| `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 5/10 |
 | `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
-| `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 2/9 |
-| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 2/10 |
-| `batch-018` | 4 | 19384–48127 | xlsx:4 | 2/4 |
+| `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
+| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 3/10 |
+| `batch-018` | 4 | 19384–48127 | xlsx:4 | 3/4 |
