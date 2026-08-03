@@ -92,11 +92,11 @@ static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* retu
 {
     OUString sType;
     if (reportType == _CRT_WARN)
-        sType = "WARN";
+        sType = u"WARN"_ustr;
     else if (reportType == _CRT_ERROR)
-        sType = "ERROR";
+        sType = u"ERROR"_ustr;
     else if (reportType == _CRT_ASSERT)
-        sType = "ASSERT";
+        sType = u"ASSERT"_ustr;
     else
         sType = "?(" + OUString::number(reportType) + ")";
 
