@@ -33,6 +33,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <vcl/errinf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -101,6 +103,21 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         if (pNoEmbDS)
             bNoEmbDS = pNoEmbDS->GetValue();
     }
+
+    // The guard runs from a destructor that may already be unwinding another exception, so it
+    // keeps any exception of its own to itself.
+    comphelper::ScopeGuard aStatusIndicatorGuard([&xStatusIndicator] {
+        if (!xStatusIndicator.is())
+            return;
+        try
+        {
+            xStatusIndicator->end();
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sw.filter", "ending the status indicator");
+        }
+    });
 
     // Get service factory
     const uno::Reference< uno::XComponentContext >& xContext =
@@ -421,11 +438,6 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
 
     // tdf#115815 restore annotation ranges collapsed by hide redlines
     m_pDoc->getIDocumentMarkAccess()->restoreAnnotationMarks();
-
-    if (xStatusIndicator.is())
-    {
-        xStatusIndicator->end();
-    }
 
     if( bErr )
     {

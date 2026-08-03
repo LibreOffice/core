@@ -30,6 +30,8 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -113,6 +115,21 @@ bool DocxExportFilter::exportDocument()
         xStatusIndicator->start( SwResId(STR_STATSTR_W4WWRITE),
                                  sal_Int32(pDoc->GetNodes().Count()) );
 
+    // The guard runs from a destructor that may already be unwinding another exception, so it
+    // keeps any exception of its own to itself.
+    comphelper::ScopeGuard aStatusIndicatorGuard([&xStatusIndicator] {
+        if ( !xStatusIndicator.is() )
+            return;
+        try
+        {
+            xStatusIndicator->end();
+        }
+        catch ( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "sw.ww8", "ending the status indicator" );
+        }
+    });
+
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
@@ -125,9 +142,6 @@ bool DocxExportFilter::exportDocument()
     // delete the pCurPam
     while ( pCurPam->GetNext() != pCurPam.get() )
         delete pCurPam->GetNext();
-
-    if ( xStatusIndicator.is() )
-        xStatusIndicator->end();
 
     return true;
 }
