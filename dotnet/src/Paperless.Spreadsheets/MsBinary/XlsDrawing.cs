@@ -1,9 +1,11 @@
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Geometry;
+using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 using Paperless.Spreadsheets.Layout;
+using Paperless.Vector;
 
 namespace Paperless.Spreadsheets.MsBinary;
 
@@ -31,14 +33,29 @@ namespace Paperless.Spreadsheets.MsBinary;
 /// walk is done here from the shape side, which needs no map.
 /// </para>
 /// <para>
-/// <strong>Only text is drawn from a shape, not its fill or its outline.</strong> That is the
-/// SpreadsheetML path's limit too (<see cref="SheetShapePainter"/>), so the two formats produce
-/// the same page from the same document, and it is the difference that matters most: a text box is
-/// the one thing on a sheet no walk of the cells can find. Fills and outlines are recorded in the
-/// module's TODO.
+/// <strong>A shape contributes its picture and its text, not its fill or its outline.</strong> That
+/// is the SpreadsheetML path's limit too (<see cref="SheetShapePainter"/>), so the two formats
+/// produce the same page from the same document. Fills and outlines are recorded in the module's
+/// TODO.
+/// </para>
+/// <para>
+/// <strong>A picture is named by a <c>pib</c> and stored in the workbook, not in the sheet.</strong>
+/// The blip store lives once in the globals' <c>MSODRAWINGGROUP</c> and every sheet's shapes index
+/// into it one-based, which is why the store arrives from
+/// <see cref="XlsWorkbookReader"/> rather than being found in <c>_dff</c>. Reading only the shapes
+/// that carry text — as this did — drops every picture on every <c>.xls</c>, and the cost is not
+/// only the ink: <c>SheetEmptyPages.TouchedByADrawing</c> keeps a page holding no cells but holding
+/// a drawing, so a workbook whose last column band is nothing but pictures loses those pages
+/// outright.
 /// </para>
 /// </remarks>
-internal sealed class XlsDrawingCollector(List<Diagnostic> diagnostics)
+/// <param name="diagnostics">Where a picture that will not draw is recorded.</param>
+/// <param name="blips">
+/// The workbook's picture store, keyed by the one-based index a shape's <c>pib</c> holds. Empty for
+/// a workbook with no drawing group, which is most of them.
+/// </param>
+internal sealed class XlsDrawingCollector(
+    List<Diagnostic> diagnostics, IReadOnlyDictionary<int, EscherBlip>? blips = null)
 {
     /// <summary>
     /// How many bytes of Escher stream are accepted before the rest is dropped.
@@ -196,7 +213,13 @@ internal sealed class XlsDrawingCollector(List<Diagnostic> diagnostics)
             if (at >= _objects.Count) break;
 
             ObjectEntry entry = _objects[at++];
-            if (entry.Text is not { Length: > 0 }) continue;
+
+            // A picture and a text box are both shapes with a client anchor, and a shape can
+            // carry neither — a solver entry, a group's own frame, a rectangle drawn for its
+            // outline. Asking for the two things this can draw before doing any placement work
+            // is what keeps those out without a type test that would have to name every one.
+            SheetPicture picture = PictureOf(shape);
+            if (picture.IsEmpty && entry.Text is not { Length: > 0 }) continue;
 
             // A cell comment is not a shape on the page. Its `ftCmo` type is 25
             // (`EXC_OBJTYPE_NOTE`, `sc/source/filter/inc/xlescher.hxx:69`) and Calc's importer
@@ -210,10 +233,121 @@ internal sealed class XlsDrawingCollector(List<Diagnostic> diagnostics)
             if (ClientAnchor(buffer, shape) is not { } anchor) continue;
             if (place(anchor) is not { } placed) continue;
 
-            drawings.Add(placed with { Text = TextOf(entry), Name = NameOf(shape) });
+            drawings.Add(placed with
+            {
+                Text = entry.Text is { Length: > 0 } ? TextOf(entry) : null,
+                Image = picture.Raster,
+                Vector = picture.Vector,
+                Name = NameOf(shape),
+            });
         }
 
         return drawings;
+    }
+
+    /// <summary>
+    /// The picture a shape's <c>pib</c> names, or nothing when it names none this can draw.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>pib</c> is one-based and zero means "no picture", so the lookup and the emptiness test are
+    /// the same question — the rule <c>SvxMSDffManager</c> applies everywhere and the one Word's
+    /// reader states as well.
+    /// </para>
+    /// <para>
+    /// The bytes are sniffed rather than believed. An Escher blip record's type is the honest label
+    /// of what it holds, but <see cref="VectorImages"/> is the only thing that knows which of the
+    /// metafile dialects there is a decoder for — an EMF+ has no signature of its own — so the same
+    /// two-step the package path uses (<c>XlsxDrawings.Load</c>) is used here: ask the decoder
+    /// registry first, and fall back to a raster media type sniffed from the leading bytes.
+    /// </para>
+    /// <para>
+    /// Nothing is decoded here. <see cref="RasterImage.Encoded"/> keeps the bytes and the metafile
+    /// is deferred behind a <see cref="Lazy{T}"/>, so a caller that only wanted cell values never
+    /// pays for a codec or for the font stack a metafile's text would start.
+    /// </para>
+    /// </remarks>
+    private SheetPicture PictureOf(EscherShape shape)
+    {
+        if (blips is not { Count: > 0 }) return default;
+
+        uint pib = shape.Properties.Value(EscherPropertyIds.Picture);
+        if (pib == 0 || !blips.TryGetValue((int)pib, out EscherBlip blip)) return default;
+
+        ReadOnlyMemory<byte> bytes = blip.Bytes;
+
+        if (bytes.IsEmpty)
+        {
+            diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Information, "PL2370",
+                $"A {blip.Kind} picture was found on a sheet and has not been drawn: its bytes "
+                + "could not be read out of the blip store, so the sheet keeps its room and shows "
+                + "nothing there."));
+
+            return default;
+        }
+
+        if (VectorImages.For(bytes.Span) is not null)
+        {
+            return new SheetPicture(null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)));
+        }
+
+        if (RasterMediaType(bytes.Span) is not { } mediaType)
+        {
+            diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Warning, "PL2371",
+                $"A sheet's picture is in no format this library recognises; the blip store "
+                + $"declared it as {blip.Kind}."));
+
+            return default;
+        }
+
+        return new SheetPicture(RasterImage.Encoded(bytes, mediaType), null);
+    }
+
+    /// <summary>
+    /// The media type of a raster a backend can decode, or null for anything else.
+    /// </summary>
+    /// <remarks>
+    /// Sniffed from the bytes rather than taken from the blip record's type, for the reason the
+    /// format catalogue sniffs whole documents: a producer writing a JPEG into an
+    /// <c>msofbtBlipPNG</c> is common enough that LibreOffice's own <c>GraphicDescriptor</c> does
+    /// the same. Only what Skia carries — claiming a media type for a TIFF would put an image
+    /// object in the PDF that no reader can draw, which is worse than the empty room it gets.
+    /// </remarks>
+    private static string? RasterMediaType(ReadOnlySpan<byte> bytes)
+    {
+        // Spelled as bytes rather than as a u8 literal: PNG's first byte is 0x89, and a u8 literal
+        // would encode that as the two bytes UTF-8 uses for U+0089 and never match anything.
+        ReadOnlySpan<byte> png = [0x89, (byte)'P', (byte)'N', (byte)'G', 0x0D, 0x0A, 0x1A, 0x0A];
+        if (bytes.Length >= 8 && bytes[..8].SequenceEqual(png)) return "image/png";
+
+        if (bytes.Length >= 3 && bytes[0] == 0xFF && bytes[1] == 0xD8 && bytes[2] == 0xFF)
+        {
+            return "image/jpeg";
+        }
+
+        if (bytes.Length >= 6
+            && (bytes[..6].SequenceEqual("GIF87a"u8) || bytes[..6].SequenceEqual("GIF89a"u8)))
+        {
+            return "image/gif";
+        }
+
+        if (bytes.Length >= 12
+            && bytes[..4].SequenceEqual("RIFF"u8) && bytes[8..12].SequenceEqual("WEBP"u8))
+        {
+            return "image/webp";
+        }
+
+        // Last because it is the weakest — two ASCII letters — and would claim the first two bytes
+        // of something else if it were checked first.
+        return bytes.Length >= 2 && bytes[0] == 'B' && bytes[1] == 'M' ? "image/bmp" : null;
+    }
+
+    /// <summary>One of the two shapes a picture's bytes can take, or neither.</summary>
+    private readonly record struct SheetPicture(RasterImage? Raster, Lazy<VectorImage>? Vector)
+    {
+        public bool IsEmpty => Raster is null && Vector is null;
     }
 
     /// <summary>Walks a group before its children, which is the order the objects arrive in.</summary>
