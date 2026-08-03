@@ -121,4 +121,48 @@ describe(['tagdesktop'], 'JSDialog Help button test', function() {
 			expect(c.bottom - b.bottom, 'gap to nav bottom edge').to.be.at.least(0);
 		});
 	});
+
+	it('Settings config item focus ring is not clipped by the config pane', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.settings.showSettingsDialog();
+		});
+
+		// Wait until the iframe has loaded and the config pane is populated.
+		cy.cGet('.iframe-settings-modal').should(function($iframe) {
+			var doc = $iframe[0].contentDocument;
+			expect(doc, 'settings iframe document').to.not.be.null;
+			expect(
+				doc.querySelectorAll('#allConfigSection .section').length,
+				'config sections loaded'
+			).to.be.greaterThan(0);
+		});
+
+		cy.cGet('.iframe-settings-modal').should(function($iframe) {
+			var doc = $iframe[0].contentDocument;
+
+			// The signature fields span the full width of the pane, so both of
+			// their inline edges are the ones at risk of being clipped.
+			var item = doc.getElementById('signatureCert');
+			expect(item, 'the signature certificate field exists').to.not.be.null;
+
+			var b = item.getBoundingClientRect();
+			expect(b.width, 'field is rendered').to.be.greaterThan(0);
+
+			item.focus({ preventScroll: true });
+			expect(doc.activeElement, 'field is focused').to.equal(item);
+
+			// The config pane clips overflow (overflow-y:auto forces overflow-x
+			// to clip too), so it is what would cut off the field's focus ring.
+			var clip = doc.getElementById('allConfigSection');
+			expect(clip, 'config pane exists').to.not.be.null;
+
+			var c = clip.getBoundingClientRect();
+
+			// Only the inline edges are checked: the pane scrolls vertically, so
+			// where the field sits on that axis says nothing about clipping.
+			var slack = 2;
+			expect(b.left - c.left, 'gap to pane left edge').to.be.at.least(slack);
+			expect(c.right - b.right, 'gap to pane right edge').to.be.at.least(slack);
+		});
+	});
 });
