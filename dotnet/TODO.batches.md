@@ -705,6 +705,30 @@ start with the time left rather than too hard.
 The other `batch-005` failure, `loi_format_letter_of_intent…doc`, is the opposite sign — 9
 pages against 10, diverging only from page 5 — so it is *not* this, and it has no diagnosis.
 
+## The sixth round, swept whole at `db529cfb2`: 175 of 178
+
+Three tracks merged in one round, and one of the three changed `PdfContentSink` — a sink all
+three families share. Each agent's own cross-track sweep ran on a base predating the other two
+merges, so none of them described the tree that actually exists. This is that sweep:
+
+| Track | Batches | | |
+|---|---|---|---|
+| `words` | 001–005 | **48/50** | `BID_ACKNOWLEDGEMENT…docx` 3 pages vs 2, `loi_format…doc` 9 vs 10 |
+| `slides` | 001–009 | **87/88** | `8_P-Pavese_AIRBUS…pptx` 2240 words vs 2108 |
+| `sheets` | 001–004 | **40/40** | — |
+| **total** | | **175/178** | |
+
+**Every figure is exactly what the three agents reported separately.** That is the result worth
+recording: a change to the shared sink, landing in the same round as text frames, table
+alignment, kerning and four spreadsheet page-boundary fixes, moved nothing outside its own
+track. It is also the first round where the merged total did *not* beat the sum of its parts —
+which is what you would expect once the tracks stop sharing root causes, and is the signal that
+the remaining defects are per-family rather than in the layers underneath.
+
+The three residual failures are each already named: two with a diagnosis (`compatibilityMode`
+space-shrinking; an undiagnosed opposite-sign break at page 5) and one that is the gate's
+ceiling rather than a defect.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
@@ -713,7 +737,7 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-002` | 10 | 59–81 | doc:3 docx:7 | ✅ |
 | `batch-003` | 10 | 87–102 | doc:5 docx:5 | ✅ |
 | `batch-004` | 10 | 102–123 | doc:4 docx:6 | ✅ |
-| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 |
+| `batch-005` | 10 | 124–141 | doc:5 docx:5 | 8/10 · WIP |
 | `batch-006` | 10 | 141–158 | doc:4 docx:6 | 9/10 |
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 8/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | 9/10 |
@@ -761,7 +785,7 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-002` | 10 | 69–86 | xls:4 xlsx:6 | ✅ |
 | `batch-003` | 10 | 87–116 | xls:5 xlsx:5 | ✅ |
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
-| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 7/10 |
+| `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | 7/10 · WIP |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 4/10 |
 | `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 6/10 |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 5/10 |
