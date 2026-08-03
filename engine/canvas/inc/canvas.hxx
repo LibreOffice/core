@@ -26,6 +26,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <canvas/vclcanvasdllapi.h>
+#include <sal/types.h>
 
 #include "./base/basemutexhelper.hxx"
 #include "./base/bitmapcanvasbase.hxx"
@@ -63,7 +64,7 @@ namespace vclcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class Canvas : public CanvasBaseT
+    class SAL_DLLPUBLIC_RTTI Canvas : public CanvasBaseT
     {
     public:
         VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
