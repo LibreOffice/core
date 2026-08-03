@@ -22,7 +22,7 @@ endif
 # liblibpng.a / libzstd.a (system shared libraries in the Flatpak and Snap
 # builds).  The static libpng pulls in zlib symbols, so it must precede
 # $(ZLIB_LIBS) on the link line for the linker to resolve them.
-AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl ${PNG_LIBS} $(ZSTD_LIBS) $(ZLIB_LIBS)
+AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl ${PNG_LIBS} $(ZSTD_LIBS) $(POCO_LIBS) $(ZLIB_LIBS)
 
 # Android's CMakefile list re-worked:
 
@@ -99,7 +99,6 @@ endif
 
 coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
-coda_qt_LDADD = $(POCO_LIBS)
 
 metainfodir = $(datadir)/metainfo
 metainfo_DATA = com.collaboraoffice.Office.metainfo.xml

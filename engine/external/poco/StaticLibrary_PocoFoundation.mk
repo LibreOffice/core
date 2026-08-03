@@ -16,6 +16,10 @@ $(eval $(call gb_StaticLibrary_add_defs,PocoFoundation,\
 	-U_GLIBCXX_DEBUG \
 ))
 
+$(eval $(call gb_StaticLibrary_use_externals,PocoFoundation, \
+    zlib \
+))
+
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,PocoFoundation))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,PocoFoundation,cpp))
@@ -23,14 +27,13 @@ $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,PocoFoundation,cpp))
 $(eval $(call gb_StaticLibrary_set_include,PocoFoundation,\
 	-I$(gb_UnpackedTarball_workdir)/poco/include \
 	-I$(gb_UnpackedTarball_workdir)/poco/Foundation/src \
-	-I$(gb_UnpackedTarball_workdir)/poco/dependencies/zlib/src \
 	-I$(gb_UnpackedTarball_workdir)/poco/dependencies/pcre2/src \
 	-I$(gb_UnpackedTarball_workdir)/poco/dependencies/utf8proc/src \
 	-I$(gb_UnpackedTarball_workdir)/poco/dependencies/v8_double_conversion/src \
 	$$(INCLUDE) \
 ))
 
-# bundled zlib/pcre2/utf8proc are compiled in; double-conversion is included
+# bundled pcre2/utf8proc are compiled in; double-conversion is included
 # textually by NumericString.cpp.  expat/OpenSSL come from the engine, not from
 # POCO's bundled copies, so they are not referenced here.  FastLogger (which
 # would pull in the bundled quill library) is disabled.
@@ -246,16 +249,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,PocoFoundation,\
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,PocoFoundation,\
-	UnpackedTarball/poco/dependencies/zlib/src/adler32 \
-	UnpackedTarball/poco/dependencies/zlib/src/compress \
-	UnpackedTarball/poco/dependencies/zlib/src/crc32 \
-	UnpackedTarball/poco/dependencies/zlib/src/deflate \
-	UnpackedTarball/poco/dependencies/zlib/src/infback \
-	UnpackedTarball/poco/dependencies/zlib/src/inffast \
-	UnpackedTarball/poco/dependencies/zlib/src/inflate \
-	UnpackedTarball/poco/dependencies/zlib/src/inftrees \
-	UnpackedTarball/poco/dependencies/zlib/src/trees \
-	UnpackedTarball/poco/dependencies/zlib/src/zutil \
 	UnpackedTarball/poco/dependencies/pcre2/src/pcre2_auto_possess \
 	UnpackedTarball/poco/dependencies/pcre2/src/pcre2_chartables \
 	UnpackedTarball/poco/dependencies/pcre2/src/pcre2_chkdint \

@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_use_externals,coolconfig, \
     expat \
     openssl \
     openssl_headers \
+    zlib \
 ))
 
 $(eval $(call gb_Executable_add_libs,coolconfig,$(UNIX_DLAPI_LIBS)))

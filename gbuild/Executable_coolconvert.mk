@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_use_static_libraries,coolconvert, \
 $(eval $(call gb_Executable_use_externals,coolconvert, \
     expat \
     openssl \
+    zlib \
 ))
 
 $(eval $(call gb_Executable_add_generated_exception_objects,coolconvert, \

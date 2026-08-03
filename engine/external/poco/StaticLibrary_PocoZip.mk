@@ -18,6 +18,10 @@ $(eval $(call gb_StaticLibrary_add_defs,PocoZip,\
     -U_GLIBCXX_DEBUG \
 ))
 
+$(eval $(call gb_StaticLibrary_use_externals,PocoZip, \
+    zlib \
+))
+
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,PocoZip,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,PocoZip,\

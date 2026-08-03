@@ -39,17 +39,6 @@ the innards of these executables.  Mimicking that in gbuild is a source of compl
 (`unit-typing`, expecting to be able to run `dlopen`'ed within a `coolwsd` process) uses `KitQueue`
 from `StaticLibrary_shared`, but which no code from `Executable_coolwsd` references.
 
-* `StaticLibrary_PocoFoundation` bundles its own zlib (`adler32`, `crc32`, `deflate`, ...), while
-the online executables also pull engine's `libzlib.a` transitively through `libpng`, so two copies
-of every zlib symbol reach the link.  Normally harmless (whole-archived Poco defines them first, so
-the engine copy is never pulled), but fatal under ASan, whose `__odr_asan_gen_*` indicators defeat
-that lazy selection and drag both copies in as multiple-definition errors.  The proper fix will be
-to de-bundle:  Drop the zlib objects from `engine/external/poco/StaticLibrary_PocoFoundation.mk` and
-build Poco against the engine's `external/zlib`.  It is not self-contained, though: the Automake
-`coolwsd-inproc` also links `libPocoFoundation.a` with a hand-ordered link line (`AM_LDFLAGS =
-${PNG_LIBS} $(ZSTD_LIBS) $(ZLIB_LIBS)`) that assumes a self-contained Poco, so zlib would have to
-move after the Poco libraries there too.
-
 * Also, a few libraries that online's `configure` drops into the global `LIBS` are invisible to
 gbuild and re-added per program:  `librt` (Poco `SharedMemory`'s `shm_open`/`shm_unlink` on glibc
 before 2.34) on `coolwsd` and the `coolforkit` variants; and `libcap` (forkit/kit capability calls)

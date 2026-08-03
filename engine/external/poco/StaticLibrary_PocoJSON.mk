@@ -49,7 +49,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,PocoJSON,\
 ))
 
 # pdjson is the bundled streaming JSON parser that Poco::JSON::Parser is built
-# on top of; compiled in here, consistent with the bundled zlib/pcre2/utf8proc.
+# on top of; compiled in here, consistent with the bundled pcre2/utf8proc.
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,PocoJSON,\
 	UnpackedTarball/poco/dependencies/pdjson/src/pdjson \
 ))
