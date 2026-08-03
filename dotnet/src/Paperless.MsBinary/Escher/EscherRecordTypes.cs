@@ -248,6 +248,39 @@ public static class EscherPropertyIds
     /// <inheritdoc cref="HorizontalPosition"/>
     public const ushort VerticalRelation = 914;
 
+    /// <summary>The kind of shadow, an <c>MSO_SHADOWTYPE</c>; 0 is a plain offset.</summary>
+    public const ushort ShadowType = 512;
+
+    /// <summary>The shadow's colour.</summary>
+    /// <remarks>
+    /// A shape stating no shadow colour does not get black. The default is <c>0x00808080</c>,
+    /// applied unconditionally by <c>msdffimp.cxx:2646-2649</c> whether or not the shape casts a
+    /// shadow at all — which is why a file's own flat-ODF export carries a shadow colour on
+    /// every shape and a visible shadow on very few.
+    /// </remarks>
+    public const ushort ShadowColour = 513;
+
+    /// <summary>How opaque the shadow is, as 16.16 fixed point; <c>0x10000</c> is fully opaque.</summary>
+    public const ushort ShadowOpacity = 516;
+
+    /// <summary>How far right the shadow sits, in EMUs.</summary>
+    public const ushort ShadowOffsetX = 517;
+
+    /// <summary>How far down the shadow sits, in EMUs.</summary>
+    public const ushort ShadowOffsetY = 518;
+
+    /// <summary>
+    /// Whether the shape casts a shadow at all. A boolean property; see <see cref="Filled"/>.
+    /// </summary>
+    /// <remarks>
+    /// 574 rather than the group identifier 575 the entry is written under, and the distinction
+    /// decides the whole feature: <c>fShadow</c> is bit 1 of the group and <c>fshadowObscured</c>
+    /// is bit 0. LibreOffice spells the same test as
+    /// <c>IsProperty(DFF_Prop_fshadowObscured) &amp;&amp; (GetPropertyValue(...) &amp; 2)</c>
+    /// (<c>msdffimp.cxx:2665-2668</c>), which is the group being present and its second bit set.
+    /// </remarks>
+    public const ushort Shadowed = 574;
+
     /// <summary>Whether the shape is hidden. A boolean property; see <see cref="Filled"/>.</summary>
     public const ushort Hidden = 958;
 }

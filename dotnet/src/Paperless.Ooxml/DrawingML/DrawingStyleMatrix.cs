@@ -38,13 +38,14 @@ public sealed class DrawingStyleMatrix
 {
     private readonly List<XElement> _fills = [];
     private readonly List<XElement> _lines = [];
+    private readonly List<XElement> _effects = [];
 
     private DrawingStyleMatrix()
     {
     }
 
-    /// <summary>True when the theme declared neither list, so nothing can be resolved.</summary>
-    public bool IsEmpty => _fills.Count == 0 && _lines.Count == 0;
+    /// <summary>True when the theme declared none of the lists, so nothing can be resolved.</summary>
+    public bool IsEmpty => _fills.Count == 0 && _lines.Count == 0 && _effects.Count == 0;
 
     /// <summary>
     /// Reads an <c>a:theme</c> root's format scheme, or null when it has none.
@@ -58,6 +59,7 @@ public sealed class DrawingStyleMatrix
         DrawingStyleMatrix matrix = new();
         matrix._fills.AddRange(Drawing.Child(format, "fillStyleLst")?.Elements() ?? []);
         matrix._lines.AddRange(Drawing.Child(format, "lnStyleLst")?.Elements() ?? []);
+        matrix._effects.AddRange(Drawing.Child(format, "effectStyleLst")?.Elements() ?? []);
 
         return matrix.IsEmpty ? null : matrix;
     }
@@ -86,6 +88,26 @@ public sealed class DrawingStyleMatrix
     /// <param name="theme">The colour scheme the reference's colour resolves against.</param>
     public XElement? Line(XElement? style, DrawingTheme? theme)
         => Resolve(Drawing.Child(style, "lnRef"), _lines, theme);
+
+    /// <summary>
+    /// The <c>a:effectLst</c> an <c>a:effectRef</c> names, or null when it names none.
+    /// </summary>
+    /// <remarks>
+    /// Taken without substituting the reference's own colour for <c>phClr</c>, unlike
+    /// <see cref="Fill"/> and <see cref="Line"/>. That is LibreOffice's behaviour and its source
+    /// says why it is that way — *"TODO: use ph color when applying effect properties"*,
+    /// <c>oox/source/drawingml/shape.cxx:1556</c> — and it costs nothing measurable, because the
+    /// effect styles of every theme Office ships state a literal black with an <c>a:alpha</c>
+    /// rather than a placeholder.
+    /// </remarks>
+    /// <param name="reference">The shape's <c>a:effectRef</c> element, or null.</param>
+    public XElement? Effect(XElement? reference)
+    {
+        if (Drawing.Number(reference, "idx") is not { } index) return null;
+        if (index <= 0 || index > _effects.Count) return null;
+
+        return Drawing.Child(_effects[index - 1], "effectLst");
+    }
 
     /// <summary>
     /// A themed element with a shape's own stated overrides laid over it.

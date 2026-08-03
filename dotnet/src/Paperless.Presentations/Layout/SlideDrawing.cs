@@ -49,6 +49,8 @@ public static class SlideDrawing
 
     private static void DrawShape(PlacedShape shape, IDrawingSink sink)
     {
+        if (shape.Shadow is { } shadow) DrawShadow(shape, shadow, sink);
+
         if (shape.Fill is { } fill) sink.FillPath(shape.Outline, fill);
         if (shape.Picture is { } picture) DrawPicture(shape, picture, sink);
         if (shape.Line is { } line) sink.StrokePath(shape.Outline, line);
@@ -75,6 +77,163 @@ public static class SlideDrawing
             sink.Restore();
         }
     }
+
+    /// <summary>
+    /// Draws a shape's drop shadow: the shape again, offset, in one colour, behind itself.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The order of the three pieces is the shape's own — fill, then picture, then outline, then
+    /// text — because a shadow is the shape's whole decomposition put through a colour
+    /// replacement, not a separate drawing
+    /// (<c>svx/source/sdr/primitive2d/sdrdecompositiontools.cxx:860-900</c>). With one colour the
+    /// order cannot show, but keeping it means the shadow of a shape is derived from the shape
+    /// rather than reinvented beside it, and the two cannot drift apart.
+    /// </para>
+    /// <para>
+    /// The offset goes on the state stack rather than into the geometry. A shape's outline is
+    /// already in slide coordinates and its text may not be, so translating the two separately
+    /// would need the text's own matrix pre-multiplied by hand; one <see cref="IDrawingSink.Transform"/>
+    /// outside both is the same translation applied once, and it is what puts the shadow's glyph
+    /// runs into the PDF as real text at real positions.
+    /// </para>
+    /// <para>
+    /// A picture casts a shadow of its <em>frame</em> and only when its bytes are a JPEG. What
+    /// LibreOffice casts is the picture's own silhouette — the bitmap with every colour replaced
+    /// and its alpha kept — which needs pixels this layer deliberately does not have. A JPEG has
+    /// no alpha channel at all, so its silhouette <em>is</em> its frame and the approximation is
+    /// exact; a PNG's is not, and a logo with a transparent background would gain a black
+    /// rectangle behind it. Skipping those loses a shadow; drawing them would invent one.
+    /// </para>
+    /// </remarks>
+    private static void DrawShadow(PlacedShape shape, SlideShadow shadow, IDrawingSink sink)
+    {
+        if (shadow.IsInvisible) return;
+
+        bool silhouette = shape.Fill is not null || IsOpaqueRaster(shape.Picture);
+        bool outline = shape.Line is not null;
+        bool text = shadow.CarriesText && shape.Text is { Runs.Count: > 0 };
+
+        if (!silhouette && !outline && !text) return;
+
+        Paint paint = Paint.Solid(shadow.Colour);
+        bool grouped = shadow.Opacity < 1.0;
+
+        sink.Save();
+        try
+        {
+            sink.Transform(AffineTransform.Translation(shadow.OffsetX.Emu, shadow.OffsetY.Emu));
+            if (grouped) sink.BeginTransparencyGroup(shadow.Opacity);
+
+            try
+            {
+                if (silhouette)
+                {
+                    sink.FillPath(
+                        shape.Outline,
+                        shape.Fill is { } fill ? Recoloured(fill, shadow.Colour) : paint);
+                }
+
+                if (shape.Line is { } line)
+                {
+                    sink.StrokePath(shape.Outline, line with { Paint = Recoloured(line.Paint, shadow.Colour) });
+                }
+
+                if (text) DrawShadowText(shape.Text!, paint, sink);
+            }
+            finally
+            {
+                if (grouped) sink.EndTransparencyGroup();
+            }
+        }
+        finally
+        {
+            sink.Restore();
+        }
+    }
+
+    /// <summary>
+    /// A paint with every colour replaced and every alpha kept.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is <c>BColorModifier_replace</c> (<c>basegfx/source/color/bcolormodifier.cxx</c>),
+    /// which is what a <c>ShadowPrimitive2D</c> wraps its children in — and it modifies the
+    /// <em>colour</em> of a primitive and not its transparency, which are separate things all the
+    /// way down LibreOffice's drawing model. Filling the outline with a flat opaque colour
+    /// instead looks like the same thing and is not.
+    /// </para>
+    /// <para>
+    /// Measured, because the difference is a whole slide rather than a detail. Page 34 of
+    /// <c>Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx</c> is covered by a
+    /// 10515600 × 3912860 EMU rectangle whose gradient runs from <c>FFC000</c> at zero alpha to
+    /// the same at 30%, and which states <c>&lt;a:outerShdw&gt;</c> with no distance and no blur —
+    /// so its shadow sits exactly underneath it. Cast as an opaque rectangle at the shadow's 50%,
+    /// it tints the entire slide and the page's unaccounted ink goes from 0.18% to 13.52%. Cast
+    /// with the gradient's own alpha it is invisible, which is what the reference shows.
+    /// </para>
+    /// </remarks>
+    private static Paint Recoloured(Paint paint, Colour colour) => paint switch
+    {
+        SolidPaint solid => Paint.Solid(colour.WithAlpha(solid.Colour.A)),
+
+        GradientPaint gradient => gradient with
+        {
+            Stops = [.. gradient.Stops.Select(
+                stop => stop with { Colour = colour.WithAlpha(stop.Colour.A) })],
+        },
+
+        // A bitmap or mesh fill has per-pixel alpha this layer cannot see without a codec, so its
+        // shadow is the flat colour — right for an opaque one and too solid for a masked one.
+        _ => Paint.Solid(colour),
+    };
+
+    /// <summary>Draws a shape's text in one colour, in the same place its own text goes.</summary>
+    private static void DrawShadowText(PlacedText text, Paint paint, IDrawingSink sink)
+    {
+        if (text.IsUpright)
+        {
+            foreach (PlacedGlyphRun run in text.Runs) DrawShadowRun(run, paint, sink);
+            return;
+        }
+
+        sink.Save();
+        try
+        {
+            sink.Transform(text.Transform);
+            foreach (PlacedGlyphRun run in text.Runs) DrawShadowRun(run, paint, sink);
+        }
+        finally
+        {
+            sink.Restore();
+        }
+    }
+
+    private static void DrawShadowRun(in PlacedGlyphRun run, Paint paint, IDrawingSink sink)
+    {
+        sink.DrawGlyphRun(run.Run, paint);
+
+        if (run.Rules is not { Count: > 0 } rules) return;
+
+        foreach (DocRect rule in rules) sink.FillPath(GraphicsPath.Rectangle(rule), paint);
+    }
+
+    /// <summary>
+    /// Whether a picture is one whose silhouette is its whole frame.
+    /// </summary>
+    /// <remarks>
+    /// Decided from the bytes rather than from the declared media type, which office files
+    /// mislabel as routinely as they mislabel themselves: <c>FF D8 FF</c> is a JPEG's start-of-image
+    /// marker and JPEG has no alpha channel, so every pixel of one is opaque. A decoded image is
+    /// taken as shaped, because nothing here can look at its alpha without a codec.
+    /// </remarks>
+    private static bool IsOpaqueRaster(PlacedPicture? picture)
+        => picture is { Vector: null, Image: { } image }
+           && !image.IsDecoded
+           && image.EncodedBytes.Length >= 3
+           && image.EncodedBytes.Span[0] == 0xFF
+           && image.EncodedBytes.Span[1] == 0xD8
+           && image.EncodedBytes.Span[2] == 0xFF;
 
     /// <summary>
     /// Draws one run and the rules under and through it.
