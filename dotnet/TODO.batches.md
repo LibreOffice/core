@@ -561,28 +561,33 @@ here did not exist.
 
 Baseline at `db529cfb2`, all 163 documents in one run: **149 match, 14 do not, none the
 reference could not render, and every page count in the track exact.** Every one of the 14 is a
-word-count difference alone.
+word-count difference alone. `batch-015` closed this round; the other 12 failures are now each
+attributed, and none of them is a small fix.
 
-Per batch, and against what the table above had recorded:
+Re-swept whole at `3e149fcf6` after the one fix this round: **151 match.**
 
-| Batch | recorded | measured | |
+| Batch | recorded | baseline | after |
 |---|---|---|---|
-| `batch-001`–`007` | ✅ | **68/68** | the gate, reproduced |
-| `batch-008` | 9/10 | 9/10 | |
-| `batch-009` | ✅ | 10/10 | |
-| `batch-010` | 8/10 | 8/10 | |
-| `batch-011` | ✅ | 10/10 | |
-| `batch-012` | 8/10 | 8/10 | |
-| `batch-013` | ✅ | 10/10 | |
-| `batch-014` | 7/10 | 7/10 | |
-| `batch-015` | 8/10 | 8/10 | |
-| `batch-016` | 7/10 | 7/10 | |
-| `batch-017` | 3/5 | **4/5** | the recorded figure was stale |
+| `batch-001`–`007` (the gate) | ✅ | **68/68** | 68/68 |
+| `batch-008` | 9/10 | 9/10 | 9/10 |
+| `batch-009` | ✅ | 10/10 | 10/10 |
+| `batch-010` | 8/10 | 8/10 | 8/10 |
+| `batch-011` | ✅ | 10/10 | 10/10 |
+| `batch-012` | 8/10 | 8/10 | 8/10 |
+| `batch-013` | ✅ | 10/10 | 10/10 |
+| `batch-014` | 7/10 | 7/10 | 7/10 |
+| `batch-015` | 8/10 | 8/10 | **10/10** |
+| `batch-016` | 7/10 | 7/10 | 7/10 |
+| `batch-017` | 3/5 | **4/5** | 4/5 |
+| **whole track** | | 149/163 | **151/163** |
 
-The briefed numbers reproduced to the digit everywhere except `batch-017`. **The sweep was then
-run a second time on the same binary and came back byte-identical on all 163 rows**, which is
-worth recording once: the instrument is deterministic, so a difference between two sweeps is a
-difference in the program and never in the weather.
+The briefed numbers reproduced to the digit everywhere except `batch-017`, whose recorded 3/5 was
+stale. **Exactly two rows of the 163 changed between the two sweeps**, both of them the intended
+ones, and no page count moved anywhere in the track.
+
+The baseline was also run a second time on the same binary and came back **byte-identical on all
+163 rows**, which is worth recording once: the instrument is deterministic, so a difference
+between two sweeps is a difference in the program and never in the weather.
 
 ### The lead was right about the symptom and wrong about the cause, as usual
 
@@ -608,7 +613,8 @@ at the width the file states. Only `TextPreRotateAngle` — what a diagram's `up
 produce — is applied before the scale and so reshapes the box. Transposing would have broken
 "Sensorimotor" at 32 pt instead of 75 and overflowed every chevron.
 
-Measured: **2040 → 2114 against 2129** and **2034 → 2108 against 2123**, both in band. Reach over
+Measured on the whole-track re-sweep: **2040 → 2114 against 2129** and **2034 → 2108 against
+2123**, both in band, page counts unmoved at 21/21, and `batch-015` 8/10 → **10/10**. Reach over
 the slides corpus: 15 of the 112 pptx decks bake a diagram drawing, 13 of those carry a
 `dsp:txXfrm` across 171 shapes, and **3 state a non-zero `rot` on one** — 18 shapes, every one a
 quarter turn against a shape turned the opposite quarter. The third,
@@ -936,7 +942,7 @@ pages against 10, diverging only from page 5 — so it is *not* this, and it has
 | `batch-012` | 10 | 2403–3036 | pptx:10 | 8/10 · ceiling |
 | `batch-013` | 10 | 3054–3633 | ppt:3 pptx:7 | ✅ |
 | `batch-014` | 10 | 3638–4498 | ppt:2 pptx:8 | 7/10 · ceiling ×2, `a14` fallback ×1 |
-| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | 8/10; both failures fixed and measured in band, whole-track re-sweep pending |
+| `batch-015` | 10 | 4626–7249 | ppt:4 pptx:6 | ✅ |
 | `batch-016` | 10 | 7428–13730 | ppt:1 pptx:9 | 7/10 · ceiling ×1, shadows, `prstTxWarp` |
 | `batch-017` | 5 | 14810–32582 | ppt:1 pptx:4 | 4/5 · chart axis-label density |
 
