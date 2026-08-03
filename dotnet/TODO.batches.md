@@ -1054,6 +1054,38 @@ The `PAGE` field is worth calling out on its own because it is not document-spec
 — the read-but-never-used shape again. On `loi_format_letter_of_intent…doc` every one of the
 nine footers prints `9`, which is the result Word last cached, against the reference's 1…9.
 
+## The seventh round, swept whole at `e2e0bdee3`: 185 of 188
+
+| Track | Batches | | |
+|---|---|---|---|
+| `words` | 001–005 | **49/50** | `loi_format…doc` 9 pages vs 10 |
+| `slides` | 001–009 | **87/88** | `8_P-Pavese_AIRBUS…pptx` — the ceiling |
+| `sheets` | 001–005 | **49/50** | `esurf-12-135-2024-t01.xlsx` 113 words vs 124 |
+| **total** | | **185/188** | |
+
+Again exactly the three agents' own figures, so the sum-equals-parts reading from the sixth
+round holds for a second round rather than being a one-off. Whole-track figures at this commit:
+words **142/200** (page error 122), slides **151/163**, sheets **122/171** (page error 222).
+
+Sheets is the round's result: page error **843 → 222**, the largest single move any track has
+had, and it came from three instances of one mistake — believing a number a producer wrote
+instead of measuring. `ht` without `customHeight` is a hint Calc recomputes; a BIFF8 `.xls` is
+never re-measured at all, because `ImportExcel8::Read` has its `AdjustRowHeight()` call
+`#if 0`-ed out beside a comment asserting the heights are already Excel's
+(`sc/source/filter/excel/read.cxx:1282-1288`); and a cell comment is not a shape.
+
+### The three tracks now fail in three different ways
+
+Worth stating because it changes how each should be worked:
+
+- **`sheets`** is still a *quantity* problem — 222 pages of error across 49 failing documents.
+  Systematic causes remain, and finding one is worth more than fixing ten documents.
+- **`words`** is a *boundary* problem — page error 122 over 58 failures, most of them ±1 page.
+  The causes are individual and each is worth about one document.
+- **`slides`** has largely stopped being a word-count problem at all: 151 of 163, and **all
+  twelve remaining failures are attributed**, eight of them to the word gate's ceiling rather
+  than to a defect. That track's next real work is judged by the image check, not by `wc`.
+
 ### `words` — 200 documents, 21 batches
 
 | Batch | Files | Score | Mix | Status |
