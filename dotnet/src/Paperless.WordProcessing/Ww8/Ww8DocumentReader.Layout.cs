@@ -63,6 +63,12 @@ public sealed partial class Ww8DocumentReader
     /// 0 a tab to <paramref name="ListTabStop"/>, 1 a space, 2 nothing.
     /// </param>
     /// <param name="ListTabStop">Where that tab lands, in twips from the text area's start edge.</param>
+    /// <param name="ListLabelSize">
+    /// The size the level sets its label at, from <c>sprmCHps</c> in the level's <c>grpprlChpx</c>, or
+    /// zero when the level states none and the label takes the item's own size. Regularly different
+    /// from <paramref name="Size"/>, and then it makes the item's first line taller — see
+    /// <see cref="Layout.PageParagraph.LabelRaisesFirstLine"/>.
+    /// </param>
     public readonly record struct Ww8LayoutParagraph(
         int SectionIndex,
         string Text,
@@ -79,7 +85,8 @@ public sealed partial class Ww8DocumentReader
         IReadOnlyList<Ww8LayoutFrame>? Frames = null,
         string? ListMarker = null,
         byte ListFollow = 2,
-        int ListTabStop = 0)
+        int ListTabStop = 0,
+        Length ListLabelSize = default)
     {
         /// <summary>
         /// True when <see cref="Text.Layout.ParagraphFormat.SpaceBefore"/> came from
@@ -954,7 +961,10 @@ public sealed partial class Ww8DocumentReader
             ReadRuns(text, positions, markPosition),
             ListMarker: LabelAt(paragraph),
             ListFollow: level?.Follow ?? LabelFollowsWithNothing,
-            ListTabStop: level?.TabPosition ?? 0)
+            ListTabStop: level?.TabPosition ?? 0,
+            ListLabelSize: level is { HalfPointSize: > 0 } sized
+                ? Length.FromPoints(sized.HalfPointSize / 2.0)
+                : default)
         {
             HasAutoSpaceBefore = layout.HasAutoSpaceBefore ?? false,
             HasAutoSpaceAfter = layout.HasAutoSpaceAfter ?? false,

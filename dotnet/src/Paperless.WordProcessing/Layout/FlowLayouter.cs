@@ -133,7 +133,8 @@ public static class FlowLayouter
                 ? before.Format
                 : null;
 
-            LaidOutParagraph layout = paragraph.HasRuns || paragraph.HasInlineObjects
+            LaidOutParagraph layout =
+                paragraph.HasRuns || paragraph.HasInlineObjects || paragraph.LabelRaisesFirstLine
                 ? layouter.Layout(
                     paragraph.Measure(),
                     paragraph.Format,

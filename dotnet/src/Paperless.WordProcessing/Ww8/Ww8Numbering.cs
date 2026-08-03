@@ -38,6 +38,10 @@ namespace Paperless.WordProcessing.Ww8;
 /// <param name="Follow">
 /// <c>ixchFollow</c>: 0 a tab to <paramref name="TabPosition"/>, 1 a space, 2 nothing at all.
 /// </param>
+/// <param name="HalfPointSize">
+/// The size the label is set at, in half-points, from <c>sprmCHps</c> in the level's
+/// <c>grpprlChpx</c>, or nought when the level states none.
+/// </param>
 public readonly record struct Ww8ListLevel(
     int StartAt,
     byte NumberFormat,
@@ -49,7 +53,8 @@ public readonly record struct Ww8ListLevel(
     int IndentAt = 0,
     int FirstLineIndent = 0,
     int TabPosition = 0,
-    byte Follow = 0)
+    byte Follow = 0,
+    int HalfPointSize = 0)
 {
     /// <summary>The <c>nfc</c> meaning "this level draws a bullet, not a number".</summary>
     public const byte BulletFormat = 23;
@@ -400,13 +405,17 @@ public sealed class Ww8Numbering
         byte paragraphPropertiesLength = header[25];
         byte restartLimit = header[26];
 
-        // PAPX first, then CHPX. The order matters twice over: the template comes after both, and only
-        // the first of the two is read.
+        // PAPX first, then CHPX. Both lengths must be honoured exactly either way, since the label
+        // template follows them.
         if (position + paragraphPropertiesLength > stream.Length) return false;
         (int indentAt, int firstLine, int tabPosition) =
             LevelIndents(stream.Slice(position, paragraphPropertiesLength));
 
-        position += paragraphPropertiesLength + characterPropertiesLength;
+        position += paragraphPropertiesLength;
+        if (position < 0 || position + characterPropertiesLength > stream.Length) return false;
+        int halfPointSize = LevelSize(stream.Slice(position, characterPropertiesLength));
+
+        position += characterPropertiesLength;
         if (position < 0 || position + 2 > stream.Length) return false;
 
         int characters = BinaryPrimitives.ReadUInt16LittleEndian(stream[position..]);
@@ -420,8 +429,48 @@ public sealed class Ww8Numbering
 
         level = new Ww8ListLevel(
             startAt, numberFormat, numberText, placeholders, isLegal, neverRestarts, restartLimit,
-            indentAt, firstLine, tabPosition, follow);
+            indentAt, firstLine, tabPosition, follow, halfPointSize);
         return true;
+    }
+
+    /// <summary>
+    /// The size the level sets its label at, in half-points, or nought when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The one thing worth having out of the level's <c>grpprlChpx</c>. LibreOffice reads the whole
+    /// group into an item set and hangs it on the level as a character style
+    /// (<c>WW8ListManager::ReadLVL</c>, <c>sw/source/filter/ww8/ww8par3.cxx</c>:820, which runs the
+    /// group through <c>SubstituteBullet</c> and <c>maSprmParser</c> into <c>pLevel-&gt;maCharSet</c>);
+    /// its export writes the result back as a <c>WW8NumNzM</c> character style, which is where a
+    /// flat-ODF round trip shows it — <c>fo:font-size="12pt"</c> on the level of
+    /// <c>loi_format_letter_of_intent-a-320-214-a330.doc</c>, whose items are set in 11.
+    /// </para>
+    /// <para>
+    /// The face is deliberately still not taken: a bullet level names a symbol font and states its
+    /// bullet as a code point in that font's private use area, which <see cref="Ww8Numbering"/> has
+    /// already normalised to U+2022 — so keeping the font would draw a real bullet through a face with
+    /// no glyph for it. The <em>size</em> survives that normalisation intact, because it says how big
+    /// the mark is rather than which mark it is.
+    /// </para>
+    /// </remarks>
+    private static int LevelSize(ReadOnlySpan<byte> grpprl)
+    {
+        byte[] copy = grpprl.ToArray();
+
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(copy))
+        {
+            if (sprm.Identifier is not (FontSizeSprm or FontSizeSprm97)) continue;
+            if (sprm.Operand.Length < 2) continue;
+
+            int halfPoints = BinaryPrimitives.ReadUInt16LittleEndian(sprm.Operand.Span);
+
+            // Word's own limits: 2 to 3276 half-points. Anything outside them is a misread group
+            // rather than a size, and a label measured at it would be absurd.
+            if (halfPoints is >= 2 and <= 3276) return halfPoints;
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -486,6 +535,12 @@ public sealed class Ww8Numbering
 
         return (indentAt, firstLine, tabPosition);
     }
+
+    /// <summary><c>sprmCHps</c>, a font size in half-points, as Word 97 wrote it.</summary>
+    private const ushort FontSizeSprm97 = 0x4A43;
+
+    /// <summary><c>sprmCHps</c> in its earlier spelling, which a Word 6/95 level may carry.</summary>
+    private const ushort FontSizeSprm = 0x0043;
 
     /// <summary><c>sprmPDxaLeft</c> as Word 97 wrote it.</summary>
     private const ushort LeftIndentSprm97 = 0x840F;

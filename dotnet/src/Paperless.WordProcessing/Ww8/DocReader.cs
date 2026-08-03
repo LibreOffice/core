@@ -451,10 +451,13 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// </summary>
     /// <remarks>
     /// <para>
-    /// In the item's own face and size. WW8 does state a label's character formatting — the level's
-    /// <c>grpprlChpx</c> — and it is not read: the only thing it usually carries is a symbol font for a
-    /// bullet, whose code point <see cref="Ww8Numbering"/> has already normalised to U+2022, so keeping
-    /// the font would draw a real bullet through a face with no glyph for it.
+    /// In the item's own face, at the level's own size. WW8 states a label's character formatting in the
+    /// level's <c>grpprlChpx</c>, and the two halves of it are treated differently on purpose: the
+    /// <em>font</em> is not read, because the only thing it usually carries is a symbol face for a bullet
+    /// whose code point <see cref="Ww8Numbering"/> has already normalised to U+2022 — keeping it would
+    /// draw a real bullet through a face with no glyph for it — while the <em>size</em> is, because it
+    /// survives that normalisation and Word writes it constantly. A level a size larger than its items
+    /// makes their first lines taller; see <see cref="PageParagraph.LabelRaisesFirstLine"/>.
     /// </para>
     /// <para>
     /// The follower and its stop come from the level's <c>ixchFollow</c> and its <c>grpprlPapx</c>, which
@@ -475,7 +478,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
         Ww8DocumentReader.Ww8LayoutParagraph paragraph, OpenTypeFace face, FontReference? font)
         => paragraph.ListMarker is { Length: > 0 } marker
             ? PageLabel.Measured(
-                marker, face, paragraph.Size,
+                marker, face,
+                paragraph.ListLabelSize > Core.Units.Length.Zero
+                    ? paragraph.ListLabelSize
+                    : paragraph.Size,
                 new Text.Shaping.ShapingOptions(
                     Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning)) with
             {

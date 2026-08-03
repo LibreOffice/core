@@ -42,7 +42,11 @@ public sealed class OdfListLevel
         DisplayLevels =
             OdfValue.ParseInt(element.Attribute(XName.Get("display-levels", OdfNamespaces.Text))?.Value) ?? 1;
         BulletCharacter = element.Attribute(XName.Get("bullet-char", OdfNamespaces.Text))?.Value;
-        TextStyleName = element.Attribute(XName.Get("text-style-name", OdfNamespaces.Text))?.Value;
+        // `text:style-name`, not `text:text-style-name`. The attribute is named for its family the way
+        // every other ODF style reference is, and a list level is the one place where reading the longer
+        // spelling looks plausible — it was read that way here, so this was always null and the character
+        // style a level applies to its label was never found at all.
+        TextStyleName = element.Attribute(XName.Get("style-name", OdfNamespaces.Text))?.Value;
 
         XElement? levelProperties = element.Element(XName.Get("list-level-properties", OdfNamespaces.Style));
         LevelProperties = levelProperties is null
@@ -113,7 +117,16 @@ public sealed class OdfListLevel
     /// <summary>The bullet character, for a bullet level.</summary>
     public string? BulletCharacter { get; }
 
-    /// <summary>The character style applied to the label itself.</summary>
+    /// <summary>
+    /// The character style applied to the label itself, from <c>text:style-name</c>.
+    /// </summary>
+    /// <remarks>
+    /// The label's own formatting, and the only place a level can state it absolutely: the level element
+    /// carries <c>fo:font-size</c> as a percentage of the item's text (see <see cref="RelativeSize"/>),
+    /// while an exact size lives here. LibreOffice's own WW8 import writes a level's <c>grpprlChpx</c>
+    /// out this way — a <c>.doc</c> whose bullet level sets 12 pt over 11 pt text round-trips to a
+    /// <c>WW8Num1z0</c> character style and a level naming it.
+    /// </remarks>
     public string? TextStyleName { get; }
 
     /// <summary>The label's geometry, when the level declares any.</summary>
