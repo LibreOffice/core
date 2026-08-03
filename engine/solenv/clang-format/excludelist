@@ -436,7 +436,6 @@ canvas/inc/devicehelper.hxx
 canvas/inc/impltools.hxx
 canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
-canvas/inc/propertysethelper.hxx
 canvas/inc/textlayout.hxx
 canvas/inc/unopolypolygon.hxx
 canvas/inc/vclwrapper.hxx
@@ -480,7 +479,6 @@ canvas/source/tools/cachedprimitivebase.cxx
 canvas/source/tools/canvastools.cxx
 canvas/source/tools/elapsedtime.cxx
 canvas/source/tools/parametricpolypolygon.cxx
-canvas/source/tools/propertysethelper.cxx
 canvas/source/tools/surfacerect.hxx
 canvas/source/tools/unopolypolygon.cxx
 canvas/source/tools/verifyinput.cxx

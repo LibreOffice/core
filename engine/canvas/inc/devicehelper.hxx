@@ -46,15 +46,6 @@ namespace vclcanvas
             const css::uno::Reference< vclcanvas::XGraphicDevice >&                               rDevice,
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
 
-        cpo::uno::Any isAccelerated() const;
-        cpo::uno::Any getDeviceHandle() const;
-        cpo::uno::Any getSurfaceHandle() const;
-
-        /** called when DumpScreenContent property is enabled on
-            XGraphicDevice, and writes out bitmaps of current screen.
-         */
-        void dumpScreenContent() const;
-
     private:
         /// For retrieving device info
         OutDevProviderSharedPtr mpOutDev;

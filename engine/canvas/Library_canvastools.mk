@@ -49,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,canvastools,\
 	canvas/source/tools/canvastools \
 	canvas/source/tools/elapsedtime \
 	canvas/source/tools/parametricpolypolygon \
-	canvas/source/tools/propertysethelper \
 	canvas/source/tools/unopolypolygon \
 	canvas/source/tools/verifyinput \
 ))

@@ -63,46 +63,6 @@ namespace vclcanvas
         mpOutDev.reset();
     }
 
-    cpo::uno::Any DeviceHelper::isAccelerated() const
-    {
-        return cpo::uno::Any(false);
-    }
-
-    cpo::uno::Any DeviceHelper::getDeviceHandle() const
-    {
-        if( !mpOutDev )
-            return cpo::uno::Any();
-
-        return cpo::uno::Any(
-            reinterpret_cast< sal_Int64 >(&mpOutDev->getOutDev()) );
-    }
-
-    cpo::uno::Any DeviceHelper::getSurfaceHandle() const
-    {
-        return getDeviceHandle();
-    }
-
-    void DeviceHelper::dumpScreenContent() const
-    {
-        static sal_Int32 nFilePostfixCount(0);
-
-        if( !mpOutDev )
-            return;
-
-        OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
-
-        SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
-
-        const ::Point aEmptyPoint;
-        OutputDevice& rOutDev = mpOutDev->getOutDev();
-        bool bOldMap( rOutDev.IsMapModeEnabled() );
-        rOutDev.EnableMapMode( false );
-        WriteDIB(rOutDev.GetBitmap(aEmptyPoint, rOutDev.GetOutputSizePixel()), aStream, false);
-        rOutDev.EnableMapMode( bOldMap );
-
-        ++nFilePostfixCount;
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -81,7 +81,6 @@
 #include <canvastools.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <parametricpolypolygon.hxx>
-#include <propertysethelper.hxx>
 #include <verifyinput.hxx>
 #endif // PCH_LEVEL >= 4
 

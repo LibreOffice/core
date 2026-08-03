@@ -33,21 +33,8 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     Canvas::Canvas( OutputDevice* pOutDev ) :
-        mbDumpScreenContent(false),
         mbSurfaceDirty( true )
     {
-        maPropHelper.initProperties(
-            canvas::PropertySetHelper::InputMap {
-                {"HardwareAcceleration",
-                    { [this] () { return this->maDeviceHelper.isAccelerated(); }, {} } },
-                {"DeviceHandle",
-                    { [this] () { return this->maDeviceHelper.getDeviceHandle(); }, {} } },
-                {"SurfaceHandle",
-                    { [this] () { return this->maDeviceHelper.getSurfaceHandle(); }, {} } },
-                {"DumpScreenContent",
-                    { [this] () { return this->getDumpScreenContent(); },
-                      [this] (cpo::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
-
         SolarMutexGuard aGuard;
 
         SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );

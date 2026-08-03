@@ -37,7 +37,6 @@
 #include "devicehelper.hxx"
 #include "XGraphicDevice.hxx"
 #include "Texture.hxx"
-#include "propertysethelper.hxx"
 #include "parametricpolypolygon.hxx"
 #include "verifyinput.hxx"
 
@@ -45,9 +44,7 @@ class OutputDevice;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice,
-                                             css::util::XUpdatable,
-                                             css::beans::XPropertySet >    GraphicDeviceBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice >    GraphicDeviceBase_Base;
 
     /** Product of this component's factory.
 
@@ -105,62 +102,6 @@ namespace vclcanvas
                 canvas::ParametricPolyPolygon::create(this,
                                               GradientService,
                                               colors, stops, aspectRatio));
-        }
-
-        // XUpdatable
-        virtual void update() override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-
-            if( mbDumpScreenContent )
-                maDeviceHelper.dumpScreenContent();
-        }
-
-
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-            return maPropHelper.getPropertySetInfo();
-        }
-
-        virtual void setPropertyValue( const OUString&                   aPropertyName,
-                                                const cpo::uno::Any& aValue ) override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-            maPropHelper.setPropertyValue( aPropertyName, aValue );
-        }
-
-        virtual cpo::uno::Any getPropertyValue( const OUString& aPropertyName ) override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-            return maPropHelper.getPropertyValue( aPropertyName );
-        }
-
-        virtual void addPropertyChangeListener( const OUString& aPropertyName,
-                                                         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-            maPropHelper.addPropertyChangeListener( aPropertyName,
-                                                    xListener );
-        }
-
-        virtual void removePropertyChangeListener( const OUString& ,
-                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override
-        {
-        }
-
-        virtual void addVetoableChangeListener( const OUString& aPropertyName,
-                                                         const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener ) override
-        {
-            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
-            maPropHelper.addVetoableChangeListener( aPropertyName,
-                                                    xListener );
-        }
-
-        virtual void removeVetoableChangeListener( const OUString& ,
-                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override
-        {
         }
 
         void clear()
@@ -350,17 +291,6 @@ namespace vclcanvas
         }
 
     private:
-        cpo::uno::Any getDumpScreenContent() const
-        {
-            return cpo::uno::Any( mbDumpScreenContent );
-        }
-
-        void setDumpScreenContent( const cpo::uno::Any& rAny )
-        {
-            // TODO(Q1): this was mbDumpScreenContent =
-            // rAny.get<bool>(), only that gcc3.3 wouldn't eat it
-            rAny >>= mbDumpScreenContent;
-        }
 
         css::geometry::IntegerSize2D getSize(  )
         {
@@ -375,8 +305,6 @@ namespace vclcanvas
         }
 
         DeviceHelper      maDeviceHelper;
-        canvas::PropertySetHelper maPropHelper;
-        bool              mbDumpScreenContent;
         CanvasHelper        maCanvasHelper;
         mutable bool        mbSurfaceDirty;
     };
