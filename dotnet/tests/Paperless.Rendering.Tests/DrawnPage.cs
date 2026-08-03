@@ -142,3 +142,111 @@ internal static class TestFace
         return null;
     }
 }
+
+/// <summary>
+/// A real installed face with <c>CFF</c> outlines rather than <c>glyf</c> ones.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Found by its bytes rather than by its name, because what matters is the flavour and no
+/// family name states it: an sfnt beginning <c>OTTO</c> carries a <c>CFF </c> table, which PDF
+/// admits only as a <c>/FontFile3</c>. Any <c>.otf</c> on the machine will do, so scanning is
+/// both more portable than naming a family and closer to the thing under test.
+/// </para>
+/// <para>
+/// The face is loaded straight from its path, bypassing <c>SystemFontResolver</c>: the
+/// resolver answers a family request through fontconfig and would hand back whatever the
+/// machine prefers for that name, which on most Linux machines is a TrueType face.
+/// </para>
+/// </remarks>
+internal static class TestCffFace
+{
+    /// <summary>The sfnt version tag <c>OTTO</c>.</summary>
+    private static readonly byte[] Otto = "OTTO"u8.ToArray();
+
+    private static readonly Lazy<(FontReference Reference, OpenTypeFace Face)?> Resolved = new(Resolve);
+
+    /// <summary>True when a CFF-flavoured face was found on this machine.</summary>
+    public static bool IsAvailable => Resolved.Value is not null;
+
+    /// <summary>The resolved reference; only valid when <see cref="IsAvailable"/>.</summary>
+    public static FontReference Reference => Resolved.Value!.Value.Reference;
+
+    /// <summary>The face behind it.</summary>
+    public static OpenTypeFace Face => Resolved.Value!.Value.Face;
+
+    /// <summary>A glyph run for a string, shaped and positioned like layout's own.</summary>
+    /// <param name="text">What to draw.</param>
+    /// <param name="origin">Where the baseline starts.</param>
+    /// <param name="size">The em size.</param>
+    public static GlyphRun Run(string text, DocPoint origin, Length size)
+    {
+        ShapedText shaped = TextShaper.Default.Shape(Face, text);
+
+        List<PositionedGlyph> glyphs = [];
+        List<int> clusters = [];
+        Length pen = Length.Zero;
+
+        foreach (ShapedGlyph glyph in shaped.Glyphs)
+        {
+            Length advance = shaped.Scale(glyph.Advance, size);
+            glyphs.Add(new PositionedGlyph(
+                glyph.GlyphId,
+                new DocPoint(pen + shaped.Scale(glyph.OffsetX, size), -shaped.Scale(glyph.OffsetY, size)),
+                advance));
+            clusters.Add(glyph.Cluster);
+            pen += advance;
+        }
+
+        return new GlyphRun
+        {
+            Font = Reference,
+            FontSize = size,
+            Origin = origin,
+            Glyphs = glyphs,
+            Text = text,
+            ClusterMap = clusters,
+        };
+    }
+
+    private static (FontReference, OpenTypeFace)? Resolve()
+    {
+        foreach (string directory in (string[])
+                 ["/usr/share/fonts", "/usr/local/share/fonts", "/Library/Fonts"])
+        {
+            if (!Directory.Exists(directory)) continue;
+
+            foreach (string path in Directory.EnumerateFiles(directory, "*.otf", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    byte[] head = new byte[4];
+                    using (FileStream stream = File.OpenRead(path))
+                    {
+                        if (stream.Read(head) != 4 || !head.AsSpan().SequenceEqual(Otto)) continue;
+                    }
+
+                    if (OpenTypeFace.ReadFile(path) is not { } face) continue;
+
+                    return (
+                        new FontReference
+                        {
+                            FamilyName = face.FamilyName ?? Path.GetFileNameWithoutExtension(path),
+                            FaceKey = path,
+                        },
+                        face);
+                }
+                catch (IOException)
+                {
+                    // Unreadable font file: try the next one.
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // Likewise.
+                }
+            }
+        }
+
+        return null;
+    }
+}
