@@ -664,7 +664,8 @@ internal sealed class PptSlideLayout
                        FillPictureOf(shape))
                    ?? Paint.Solid(
                        PptColour.Resolve(
-                           shape.Properties.Value(EscherPropertyIds.FillColour, 0xFFFFFF), scheme)
+                           shape.Properties.Value(EscherPropertyIds.FillColour, 0xFFFFFF),
+                           scheme, shape.Properties, EscherPropertyIds.FillColour)
                        ?? Colour.White);
         }
 
@@ -998,7 +999,8 @@ internal sealed class PptSlideLayout
         }
 
         Colour colour = PptColour.Resolve(
-            properties.Value(EscherPropertyIds.ShadowColour, DefaultShadowColour), scheme)
+            properties.Value(EscherPropertyIds.ShadowColour, DefaultShadowColour),
+            scheme, properties, EscherPropertyIds.ShadowColour)
             ?? new Colour(0x80, 0x80, 0x80);
 
         // 16.16 fixed point, so 0x10000 is opaque and a missing property is too.
@@ -1175,7 +1177,8 @@ internal sealed class PptSlideLayout
         if (!lined) return null;
 
         if (PptColour.Resolve(
-                shape.Properties.Value(EscherPropertyIds.LineColour, 0), scheme) is not { } colour)
+                shape.Properties.Value(EscherPropertyIds.LineColour, 0),
+                scheme, shape.Properties, EscherPropertyIds.LineColour) is not { } colour)
         {
             return null;
         }

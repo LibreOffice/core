@@ -293,6 +293,15 @@ internal static class PptFills
         return turned >= 360 ? 0 : turned;
     }
 
+    /// <summary>
+    /// One of the shape's colour properties, resolved against the page and the shape itself.
+    /// </summary>
+    /// <remarks>
+    /// The table is passed on rather than merely read, because a colour word may name
+    /// <em>another</em> of the shape's properties and a function to put it through — the form
+    /// that draws a shade's second colour as a darkened copy of its first. See
+    /// <see cref="PptColour.Resolve"/>.
+    /// </remarks>
     private static Colour? Resolved(EscherPropertyTable properties, ushort id, PptColourScheme scheme)
-        => PptColour.Resolve(properties.Value(id, 0xFFFFFF), scheme);
+        => PptColour.Resolve(properties.Value(id, 0xFFFFFF), scheme, properties, id);
 }
