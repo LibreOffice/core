@@ -52,6 +52,15 @@ public class DrawingStyleMatrixTests
                  <a:ln w="25400" cap="flat"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
                    <a:prstDash val="dash"/></a:ln>
                </a:lnStyleLst>
+               <a:bgFillStyleLst>
+                 <a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+                 <a:gradFill><a:gsLst>
+                   <a:gs pos="0"><a:schemeClr val="phClr"/></a:gs>
+                   <a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="30000"/></a:schemeClr></a:gs>
+                 </a:gsLst></a:gradFill>
+                 <a:blipFill><a:blip r:embed="rId9" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/>
+                   <a:stretch/></a:blipFill>
+               </a:bgFillStyleLst>
              </a:fmtScheme>
            </a:themeElements>
          </a:theme>
@@ -156,6 +165,70 @@ public class DrawingStyleMatrixTests
 
         Drawing.Child(merged, "noFill").ShouldNotBeNull();
         Drawing.Child(merged, "solidFill").ShouldBeNull();
+    }
+
+    private static XElement BackgroundRef(string inner)
+        => XElement.Parse($"<p:bgRef xmlns:p=\"{P}\" xmlns:a=\"{A}\" {inner}</p:bgRef>");
+
+    [Fact]
+    public void ABackgroundReferenceIndexesTheBackgroundListWithAThousandSubtracted()
+    {
+        // idx="1003" is the *third* background style, not the thousand-and-third of anything:
+        // Theme::getFillStyle sends 1000 and up to a:bgFillStyleLst with 1000 taken off, and
+        // everything below it to a:fillStyleLst (oox/source/drawingml/theme.cxx:49-54). Reading
+        // the number without the split takes the wrong list or none, and the slide comes out white.
+        XElement first = Matrix()
+            .Background(BackgroundRef("idx=\"1001\"><a:schemeClr val=\"accent2\"/>"), Colours())
+            .ShouldNotBeNull();
+
+        Drawing.Attribute(
+            Drawing.Child(Drawing.Child(first, "solidFill"), "srgbClr"), "val").ShouldBe("C0504D");
+
+        XElement second = Matrix()
+            .Background(BackgroundRef("idx=\"1002\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldNotBeNull();
+
+        Drawing.Child(second, "gradFill").ShouldNotBeNull();
+
+        XElement third = Matrix()
+            .Background(BackgroundRef("idx=\"1003\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldNotBeNull();
+
+        Drawing.Child(third, "blipFill").ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void ABackgroundReferenceBelowAThousandIndexesTheOrdinaryFillList()
+    {
+        XElement fill = Matrix()
+            .Background(BackgroundRef("idx=\"1\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldNotBeNull();
+
+        Drawing.Attribute(
+            Drawing.Child(Drawing.Child(fill, "solidFill"), "srgbClr"), "val").ShouldBe("4F81BD");
+    }
+
+    [Fact]
+    public void ABackgroundIndexPastTheEndTakesTheLastEntryRatherThanNothing()
+    {
+        // lclGetStyleElement clamps rather than rejects, and themes from other producers do state
+        // an index past the end. Rejecting it leaves the slide white, which is the failure this
+        // whole path exists to stop.
+        XElement fill = Matrix()
+            .Background(BackgroundRef("idx=\"1009\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldNotBeNull();
+
+        Drawing.Child(fill, "blipFill").ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void ABackgroundReferenceNamingNothingResolvesNothing()
+    {
+        Matrix().Background(reference: null, Colours()).ShouldBeNull();
+        Matrix().Background(BackgroundRef("idx=\"1000\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldBeNull();
+        Matrix().Background(BackgroundRef("idx=\"0\"><a:schemeClr val=\"accent1\"/>"), Colours())
+            .ShouldBeNull();
     }
 
     [Fact]

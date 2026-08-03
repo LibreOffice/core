@@ -1562,6 +1562,9 @@ each one or two better than recorded.
 
 ### `slides` — 163 documents, 17 batches
 
+Every row below re-proved by a whole-track sweep at `adcbeb2de`: **152 of 163**, the same
+eleven failures as at `7049756d9`, all 163 page counts exact.
+
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
 | `batch-001` | 9 | 14–282 | ppt:3 pptx:6 | ✅ |
@@ -1610,3 +1613,200 @@ as work outstanding.
 | `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
 | `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 3/10 |
 | `batch-018` | 4 | 19384–48127 | xlsx:4 | 3/4 |
+
+## After the ninth round: slides, and two defects the gate is structurally blind to
+
+Whole slides track swept before at `7049756d9` and after at `adcbeb2de`, 163 documents each
+time, plus `words/batch-001..005` and `sheets/batch-001..005` because one of the two fixes
+lands in `Paperless.Ooxml`, which all three families share. The baseline reproduced the
+briefed **152/163** to the digit — the same eleven failures, no `ref-failed`, every page count
+exact — which is the tell that the base and the instrument are both right.
+
+| | baseline | after |
+|---|---|---|
+| slides matching | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 |
+| documents with an unembedded face | 1 | 1 |
+| `words/batch-001..005` | — | **50/50** |
+| `sheets/batch-001..005` | — | **50/50** |
+
+**The match count did not move, and that is the honest headline.** Every one of the eleven
+failures is a word-count failure whose cause is not a colour, and both fixes this round are
+colours. What moved is what the gate cannot see.
+
+### The instrument changed, because the gate has run out of things to say
+
+`pdf-image-diff.py` was run over the 45 documents of batches 010, 012, 014, 016 and 017 before
+and after. The unit is **unaccounted ink** — the share of a page's ink the two sides cannot
+account for between them, summed over a document's pages. Pixel difference is useless at this
+point: two renderers that agree about a page still differ on most glyph pixels.
+
+| | before | after |
+|---|---|---|
+| total unaccounted ink, 45 documents | 2152.23 | **1530.16** |
+| pages the tool calls major | 275 | **266** |
+| documents whose figure changed | — | **4, all downwards** |
+
+```
+466.89 ->  13.95   ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt   major 12 -> 4
+223.97 -> 139.20   HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.pptx major 12 -> 12
+113.69 ->  65.59   Wildlife for REDAC September 11.pptx                       major 10 -> 9
+ 79.14 ->  42.88   Demick_JetBlue.pptx                                        major  7 -> 7
+```
+
+**All four already matched the word gate**, three of them exactly. Nothing else in the 45
+moved in either direction.
+
+### A slide background can be *named* rather than stated, and 60 of 112 decks name theirs
+
+`p:bg` holds one of two children and only one of them is a fill outright. `p:bgPr` carries it;
+`p:bgRef` carries an index into `a:bgFillStyleLst` — a fourth style list beside the three
+`a:fillRef` uses — plus the colour those entries' `phClr` stands for. The string `bgRef` did
+not appear anywhere in `dotnet/src`, so `PptxSlideLayout.Background` walked past it, fell
+through slide, layout and master alike, and returned white.
+
+The index is separated from `a:fillRef`'s by magnitude rather than by name: `Theme::getFillStyle`
+(`oox/source/drawingml/theme.cxx:49-54`) sends 1000 and up to the background list with 1000
+subtracted, and `lclGetStyleElement` beside it *clamps* an index past the end to the last entry
+rather than dropping it.
+
+Found on `slides/batch-010/pptx/HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.pptx`,
+which **matches the reference at 327 words against 326** and draws its white title text on
+white paper: its master states `<p:bgRef idx="1001"><a:schemeClr val="bg1"/></p:bgRef>` under a
+colour map sending `bg1` to `dk1`, and `dk1` is `#921F07`. Unaccounted ink was 36.49% on page 1
+and 21.35% on each of pages 2–12.
+
+Reach, parsed rather than grepped: **60 of the 112 corpus `pptx` decks**, resolving to a
+`solidFill` 75 times, a `gradFill` 9 and a `blipFill` 7.
+
+Left undone and stated: `a:duotone`, which those seven `blipFill` entries wrap their blip in.
+It is a per-pixel luminance ramp between two colours
+(`vcl/source/bitmap/BitmapDuoToneFilter.cxx:15-52`) and the layer that reads the fill has no
+image decoder, so six decks now draw the theme's texture untinted rather than nothing at all —
+better, not right, and that residue is most of HENTZEN's remaining 139.20.
+
+### A binary deck's colour can name another of the shape's own properties
+
+`MSO_CLR_ToColor`'s `0x10` family holds two different things behind one flag bit, and
+`PptColour.Resolve` refused both, with a recorded rationale: "a headless renderer has no desktop
+theme, and inventing one would put a colour in the picture that no file states." Indices
+**below** `0xF0` do name a desktop colour and that rationale holds for them. From `0xF0` up the
+index names **another property of the same shape** (`include/svx/msdffdef.hxx:818-826`) plus a
+parameter and a function to put it through, which has nothing to do with a theme and is fully
+resolvable headlessly.
+
+The corpus says the distinction is the whole of it. Of the **161** such words across the 51
+`ppt` decks, **every one** names a property and **none** names a desktop colour: 31 `fillColor`,
+59 `lineOrFillColor`, 71 `shadowColor`, spread over 8 decks. The recorded sentence was right
+about the class and wrong about every instance of it in this corpus — the project's standing
+pattern, arriving this time inside a source comment rather than inside a handover.
+
+`slides/batch-014/ppt/ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt` is the clearest:
+its master background is a `ShadeScale` whose `fillBackColor` is `0x104301F0` — "take
+`fillColor`, darken it by 67/256" — over a `fillColor` of `0x00771531`. That is `#0C051F`, and
+LibreOffice's flat-ODF export of the deck states
+`draw:start-color="#0c051f" draw:end-color="#311577"`. Falling back to white drew every page as
+a pale gradient where the reference draws a near-black one. Its word count was an exact match
+throughout, on all thirteen pages.
+
+All eight decks that use the form still match the gate after the change; only the NATO deck's
+change was measured with the image diff, because the other seven are in batches with no
+before-render kept.
+
+### The eleven that remain
+
+| batch | document | words | what it is |
+|---|---|---|---|
+| 008 | `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` | 2240/2108 | ceiling, **verified this round**: page 5's reference is a 692×240 raster with a soft mask and no text |
+| 010 | `Fundamentals_Module_1_basics.ppt` | 1146/1099 | ceiling, verified: page 6 is +50 words against a 529×355 raster+smask; the other four differing pages sum to −2 |
+| 010 | `W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt` | 910/817 | ceiling, verified: page 10 is +93, **the entire delta**, against an 845×572 raster+smask; the other nineteen pages agree exactly |
+| 012 | `NAS-Infrastructure-Roadmaps-v16.0.pptx` | 19219/15316 | linked `Excel.Sheet.12` OLE with `mc:Fallback` EMFs; carried, not re-checked |
+| 012 | `OnTrac_StarCertificationProgram-3Day.pptx` | 1344/1045 | unattributed |
+| 014 | `Thailand17.ppt` | 2813/2697 | unattributed |
+| 014 | `N2_E_Maestroni_Swarm_COP.pptx` | 5422/5217 | **new**: page 7 alone is +205, the entire delta — a Gantt whose ~50 task labels we draw (left-clipped mid-word) where the reference draws ~15 |
+| 014 | `WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx` | 2209/1988 | unattributed |
+| 016 | `16 - UTM - (NASA).pptx` | 2459/2261 | the CFF-flavoured OpenType, now dropped rather than misdescribed; 1 of 11 faces unembedded |
+| 016 | `FAAAIandtheArtandScienceofV&Vfinal.pptx` | 1201/1145 | `a:prstTxWarp`, 8 of the corpus's 10 bending occurrences |
+| 017 | `Demick_JetBlue.pptx` | 713/617 | chart label density and a missing secondary value axis |
+
+`batch-016` is **8/10**, as this file already recorded; the ninth round's brief said 7/10. The
+file was right.
+
+### The rasterisation ceiling is a *metafile* path, not an OLE path
+
+Worth narrowing, because it is at least three of the eleven. Already established: the raster is
+not in the file and is not the PDF writer's downsampling. It is now also established that it is
+**not the OLE replacement path**, which was the obvious remaining suspect.
+
+On `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` slide 5 the shape is a bare `p:pic` — no
+`p:oleObj`, no `mc:AlternateContent`, no `a:alphaModFix` — whose one relationship besides the
+layout is `ppt/media/image8.emf`. That EMF holds 2832 records, 791 of them `EXTTEXTOUTW`, and
+**no EMF+ comment records, no `ALPHABLEND`, no `TRANSPARENTBLT`, no raster operation and no
+bitmap of any kind**. The reference PDF's page 5 nevertheless carries a single 692×240 RGB
+image with a soft mask and no extractable text. So LibreOffice manufactures the raster from a
+purely vector metafile, and the search belongs in the metafile-to-PDF path rather than in
+`SdrOle2Obj`.
+
+The counter-example rules out the obvious trigger. `2014BSA_Sunday_Killion.pptx` slide 5 embeds
+`image10.emf`, which *does* carry 40 EMF+ comment records and a `BITBLT` — and LibreOffice
+draws its text as real text, which `pdftotext` extracts. **EMF+ is not the trigger.** The
+standout structural difference between the two is that the rasterised one uses `SELECTCLIPPATH`
+(9 records) and `FILLPATH` (15) and the other uses neither. That is a correlation on two
+documents and is **not verified**.
+
+### A `path="circle"` gradient focused on a corner is drawn linear — and the checked-out source says otherwise
+
+Measured and deliberately **not** implemented. `slides/batch-017/pptx/Wildlife for REDAC September 11.pptx`
+matches on words and its page 3 carries 17.56% unaccounted ink: the background is
+`<a:gradFill>…<a:path path="circle"><a:fillToRect l="100000" t="100000"/></a:path>`, we draw a
+radial blob in the bottom-right corner and the reference draws a broad diagonal ramp.
+
+A ten-slide probe deck, one `a:fillToRect` per slide and nothing else varying, settles what
+LibreOffice 24.2.7.2 does. Confirmed twice over — in its flat-ODF export *and* in its rendered
+PDF, because the export alone could have been the exporter normalising something:
+
+| `path` | focus (clamped `cx`,`cy`) | LibreOffice 24.2.7.2 |
+|---|---|---|
+| `circle` | 100, 100 | **linear, 45°** |
+| `circle` | 0, 0 | **linear, 225°** |
+| `circle` | 100, 0 | **linear, 135°** |
+| `circle` | 0, 100 | **linear, 315°** |
+| `circle` | 99, 99 | radial, `cx=99% cy=99%` |
+| `circle` | 100, 50 | radial, `cx=100% cy=50%` |
+| `circle` | 50, 0 (the Office theme's, clamped up from −160) | radial, `cx=50% cy=0%` |
+| `rect` | 100, 100 | rectangular, `cx=100% cy=100%` |
+
+A circle path whose focus lands exactly on a corner is drawn as a linear ramp along that
+diagonal; one percent away it is an unmistakable circular blob. Rasterising the two
+neighbouring cases at 40 dpi shows exactly that, so this is the model rather than an export
+artefact.
+
+**Not implemented on purpose.** The checked-out
+`oox/source/drawingml/fillproperties.cxx:529-556` maps `XML_circle` to `GradientStyle_RADIAL`
+unconditionally and carries a fresh `FIXME tdf#166140` about the size of these gradients, so
+what the reference binary does here is very likely a 24.2 defect that upstream has already
+changed. Writing bug-compatibility against a release, for a difference no gate check can see,
+in code upstream is actively rewriting, is the wrong trade — and it is worth recording as the
+one case this round where "the reference is wrong here" probably *is* the right conclusion, and
+where the evidence for it is a constructed probe rather than an inability to explain our own
+output. Reach if a later round disagrees: 258 corner-focused `circle` path gradients across 85
+of the 112 `pptx` decks, though most are unreferenced theme entries and the skill's warning
+about grep-estimated reach applies in full.
+
+### What the next agent on this track should take
+
+The word gate is now measuring rendering strategy rather than defects on at least three of the
+eleven, and the remaining ink is concentrated rather than spread:
+
+```
+473.17  85 pages major  NAS-Infrastructure-Roadmaps-v16.0.pptx      (linked OLE, known)
+155.10  16              2014BSA_Sunday_Killion.pptx                 (an EMF chart drawn on a white
+                                                                     panel the reference leaves clear)
+139.20  12              HENTZEN_...AEROSPACE_INDUSTRY.pptx          (the missing a:duotone)
+ 80.22   5              N2_E_Maestroni_Swarm_COP.pptx
+ 67.65  18              Thailand17.ppt
+```
+
+`2014BSA_Sunday_Killion.pptx` page 5 is the cheapest of these to look at and matches on words:
+the reference shows the slide through the chart's area and we paint it white, so a correctly
+drawn chart sits in a white box that should not be there.

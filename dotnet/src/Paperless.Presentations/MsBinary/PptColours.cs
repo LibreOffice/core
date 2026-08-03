@@ -1,4 +1,5 @@
 using Paperless.Core.Graphics;
+using Paperless.MsBinary.Escher;
 using Paperless.MsBinary.Records;
 
 namespace Paperless.Presentations.MsBinary;
@@ -180,13 +181,20 @@ public static class PptColour
     /// </summary>
     /// <param name="raw">The packed word, as the property table states it.</param>
     /// <param name="scheme">The page's colour scheme.</param>
-    /// <remarks>
-    /// System colours — the <c>0x10</c> family, which resolve against the desktop theme and then
-    /// darken, lighten or invert by a parameter — are not resolved: a headless renderer has no
-    /// desktop theme, and inventing one would put a colour in the picture that no file states.
-    /// They come back null, which the caller treats as "no fill" rather than as black.
-    /// </remarks>
-    public static Colour? Resolve(uint raw, PptColourScheme scheme)
+    /// <param name="properties">
+    /// The shape's property table, for the <c>0x10</c> family that derives its colour from
+    /// another property of the same shape. Null answers null for those, which is what a caller
+    /// with no table to hand should do.
+    /// </param>
+    /// <param name="within">
+    /// Which property the word was read from, so a recursive reference back to it can be stopped
+    /// and the right fallback chosen. One of <see cref="EscherPropertyIds"/>' colour identifiers.
+    /// </param>
+    public static Colour? Resolve(
+        uint raw,
+        PptColourScheme scheme,
+        EscherPropertyTable? properties = null,
+        ushort within = 0)
     {
         ArgumentNullException.ThrowIfNull(scheme);
 
@@ -201,8 +209,7 @@ public static class PptColour
             if ((upper & 0x08) != 0) return scheme[(int)(raw & 0xFFFF)];
             if ((upper & 0x10) == 0) return scheme[upper];
 
-            // A system colour. Deliberately unresolved; see the remarks.
-            return null;
+            return System(raw, scheme, properties, within);
         }
 
         // PowerPoint's other spelling: a top byte of 4 with nothing else set is a scheme index
@@ -211,6 +218,148 @@ public static class PptColour
 
         return Literal(raw);
     }
+
+    /// <summary>
+    /// The <c>0x10</c> family: a colour named indirectly, then put through a function.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The family holds two quite different things behind one flag bit, and only the first is
+    /// unresolvable. Indices below <c>0xF0</c> name a <em>desktop</em> colour — the window
+    /// background, the menu text — and a headless renderer has no desktop to ask, so inventing
+    /// one would put a colour in the picture that no file states; those still come back null.
+    /// From <c>0xF0</c> up the index names <em>another property of the same shape</em>
+    /// (<c>include/svx/msdffdef.hxx:818-826</c>), which is entirely resolvable and has nothing
+    /// to do with a theme.
+    /// </para>
+    /// <para>
+    /// Treating the whole family as unresolvable is what this replaces, and the corpus says the
+    /// distinction is the whole of it: of the 161 such words across the 51 <c>ppt</c> decks,
+    /// <strong>every one</strong> names a property and none names a desktop colour. The clearest
+    /// is <c>slides/batch-014/ppt/ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt</c>,
+    /// whose master background is a shade whose second colour is <c>0x104301F0</c> — "take
+    /// <c>fillColor</c>, darken it by 67/256" — over a <c>fillColor</c> of <c>#311577</c>. That
+    /// is <c>#0C051F</c>, which is what LibreOffice's flat-ODF export of the deck states; falling
+    /// back to white instead made every one of its fourteen pages a pale gradient where the
+    /// reference draws a near-black one.
+    /// </para>
+    /// <para>
+    /// The parameter, the function and the two flag bits are read exactly as
+    /// <c>MSO_CLR_ToColor</c> reads them (<c>msdffimp.cxx:3456-3633</c>), including its shift of
+    /// the additional flags by eight rather than twelve, which leaves them in the high nibble of
+    /// a byte and is why they are tested against <c>0x80</c>, <c>0x40</c> and <c>0x20</c>.
+    /// </para>
+    /// </remarks>
+    private static Colour? System(
+        uint raw, PptColourScheme scheme, EscherPropertyTable? properties, ushort within)
+    {
+        if (properties is null) return null;
+
+        (ushort source, uint fallback) = Source((int)(raw & 0xFF), properties);
+        if (source == 0) return null;
+
+        // The same guard LibreOffice uses: a property whose own word carries 0x10000000 would
+        // send this straight back where it came from.
+        uint referenced = properties.Value(source, fallback);
+        if (source == within || (referenced & 0x10000000) != 0) return null;
+        if (Resolve(referenced, scheme, properties, source) is not { } resolved) return null;
+
+        int parameter = (int)((raw >> 16) & 0xFF);
+        int function = (int)((raw & 0x00000F00) >> 8);
+        int flags = (int)((raw & 0x0000F000) >> 8);
+
+        byte r = resolved.R, g = resolved.G, b = resolved.B;
+
+        if ((flags & 0x80) != 0)
+        {
+            // Color::GetLuminance, include/tools/color.hxx:274.
+            byte grey = (byte)(((b * 29) + (g * 151) + (r * 76)) >> 8);
+            r = g = b = grey;
+        }
+
+        switch (function)
+        {
+            case 1: // darken by the parameter
+                r = (byte)((parameter * r) >> 8);
+                g = (byte)((parameter * g) >> 8);
+                b = (byte)((parameter * b) >> 8);
+                break;
+
+            case 2: // lighten by the parameter
+                int inverse = (0xFF - parameter) * 0xFF;
+                r = (byte)((inverse + (parameter * r)) >> 8);
+                g = (byte)((inverse + (parameter * g)) >> 8);
+                b = (byte)((inverse + (parameter * b)) >> 8);
+                break;
+
+            case 3: // add a grey level
+                r = Clamp(r + parameter);
+                g = Clamp(g + parameter);
+                b = Clamp(b + parameter);
+                break;
+
+            case 4: // subtract a grey level
+                r = Clamp(r - parameter);
+                g = Clamp(g - parameter);
+                b = Clamp(b - parameter);
+                break;
+
+            case 5: // subtract from a grey level
+                r = Clamp(parameter - r);
+                g = Clamp(parameter - g);
+                b = Clamp(parameter - b);
+                break;
+
+            case 6: // per component, black below the parameter and white at or above it
+                r = r < parameter ? (byte)0 : (byte)0xFF;
+                g = g < parameter ? (byte)0 : (byte)0xFF;
+                b = b < parameter ? (byte)0 : (byte)0xFF;
+                break;
+
+            default:
+                break;
+        }
+
+        if ((flags & 0x40) != 0) (r, g, b) = ((byte)(r ^ 0x80), (byte)(g ^ 0x80), (byte)(b ^ 0x80));
+        if ((flags & 0x20) != 0) (r, g, b) = ((byte)(0xFF - r), (byte)(0xFF - g), (byte)(0xFF - b));
+
+        return new Colour(r, g, b);
+    }
+
+    /// <summary>
+    /// Which property an index from <c>0xF0</c> up names, and the value it takes when unstated.
+    /// </summary>
+    /// <remarks>
+    /// The defaults are LibreOffice's own and are not uniform — a missing line colour is black
+    /// and a missing fill colour is white — so they are carried here rather than left to the
+    /// property table's caller. <c>0xF1</c> is the only one that asks a second question: it takes
+    /// the line colour when <c>fNoLineDrawDash</c> says the shape is outlined and the fill colour
+    /// when it does not.
+    /// </remarks>
+    private static (ushort Property, uint Fallback) Source(int index, EscherPropertyTable properties)
+        => index switch
+        {
+            0xF0 or 0xF4 or 0xF7 or 0xFF => (EscherPropertyIds.FillColour, 0xFFFFFF),
+            0xF1 => (properties.Value(NoLineDrawDash) & 8) != 0
+                ? (EscherPropertyIds.LineColour, 0u)
+                : (EscherPropertyIds.FillColour, 0xFFFFFF),
+            0xF2 => (EscherPropertyIds.LineColour, 0u),
+            0xF3 => (EscherPropertyIds.ShadowColour, 0x808080),
+            0xF5 => (FillBackColour, 0xFFFFFF),
+            0xF6 => (LineBackColour, 0xFFFFFF),
+            _ => (0, 0),
+        };
+
+    /// <summary><c>DFF_Prop_fillBackColor</c>, the second colour of a shade or pattern.</summary>
+    private const ushort FillBackColour = 387;
+
+    /// <summary><c>DFF_Prop_lineBackColor</c>.</summary>
+    private const ushort LineBackColour = 450;
+
+    /// <summary><c>DFF_Prop_fNoLineDrawDash</c>, whose bit 3 is "the shape has a line".</summary>
+    private const ushort NoLineDrawDash = 511;
+
+    private static byte Clamp(int value) => (byte)Math.Clamp(value, 0, 0xFF);
 
     /// <summary>
     /// A text run's colour, whose scheme indices are packed into the top byte.

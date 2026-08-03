@@ -228,6 +228,95 @@ public class PptFillTests
         fill.Start.Y.Emu.ShouldBeGreaterThan(fill.End.Y.Emu);
     }
 
+    // -------------------------------------------------- colours named indirectly
+
+    /// <summary>
+    /// A colour word whose top byte carries <c>0x10</c> names another property and a function.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>0x104301F0</c> is the second colour of the master background of
+    /// <c>slides/batch-014/ppt/ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt</c>:
+    /// index <c>0xF0</c> is "use <c>fillColor</c>", function bits <c>1</c> are "darken by the
+    /// parameter", and the parameter is <c>0x43</c>. Over that deck's <c>fillColor</c> of
+    /// <c>0x00771531</c> — <c>#311577</c>, since Escher orders its literals blue-green-red —
+    /// each channel becomes <c>67 × c ÷ 256</c>, which is <c>#0C051F</c>.
+    /// </para>
+    /// <para>
+    /// That is exactly what LibreOffice 24.2.7.2's flat-ODF export of the deck states:
+    /// <c>draw:start-color="#0c051f" draw:end-color="#311577"</c>. Answering null instead —
+    /// which the whole <c>0x10</c> family used to do, on the grounds that a headless renderer has
+    /// no desktop theme — fell back to white and drew all fourteen of its pages as a pale
+    /// gradient where the reference draws a near-black one.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AColourNamingAnotherPropertyIsResolvedAndThenDarkened()
+    {
+        GradientPaint fill = Resolve(Table(
+                (PptFills.FillType, PptFills.ShadeScale),
+                (EscherPropertyIds.FillColour, 0x00771531),
+                (PptFills.FillBackColour, 0x104301F0)))
+            .ShouldBeOfType<GradientPaint>();
+
+        Colour[] colours = [.. fill.Stops.Select(stop => stop.Colour)];
+        colours.ShouldContain(Colour.FromRgb(0x0C051F));
+        colours.ShouldContain(Colour.FromRgb(0x311577));
+    }
+
+    [Fact]
+    public void AColourNamingADesktopColourIsStillLeftUnresolved()
+    {
+        // Index 0x12 is mso_syscolorWindow, which a headless renderer has no way to answer.
+        // Nothing in the 51-deck ppt corpus uses one; leaving it null keeps the shape unfilled
+        // rather than inventing a colour no file states.
+        Resolve(Table(
+                (PptFills.FillType, PptFills.Solid),
+                (EscherPropertyIds.FillColour, 0x10000012)))
+            .ShouldBeNull();
+    }
+
+    /// <summary>
+    /// The same indirection end to end, on a file LibreOffice has been asked to read.
+    /// </summary>
+    /// <remarks>
+    /// <c>ppt-derived-colour.ppt</c> is <c>shape-geometry-ppt.ppt</c> with <strong>four bytes
+    /// changed</strong>: one slide shape's <c>fillColor</c>, which was the literal
+    /// <c>0x000000C0</c>, is now <c>0x104301F5</c> — "take <c>fillBackColor</c> and darken it by
+    /// 67/256". That shape's <c>fillBackColor</c> is <c>0x00FFFF3F</c>, which is <c>#3FFFFF</c>,
+    /// and darkening it gives <c>#104242</c>.
+    /// <para>
+    /// LibreOffice 24.2.7.2's flat-ODF export of the patched file carries
+    /// <c>draw:fill-color="#104242"</c> and its export of the unpatched one carries no such
+    /// colour anywhere, which is what makes this a test of the reference's reading rather than
+    /// of my arithmetic. A hand-written binary fixture could not have settled that.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AShapeInAFileTakesTheColourTheReferenceGivesIt()
+    {
+        FirstSlide("ppt-derived-colour.ppt").Shapes
+            .Select(shape => shape.Fill)
+            .OfType<SolidPaint>()
+            .Select(paint => paint.Colour)
+            .ShouldContain(Colour.FromRgb(0x104242));
+    }
+
+    [Fact]
+    public void AColourNamingItselfDoesNotRecurse()
+    {
+        // 0xF5 is "use fillBackColor", stated *as* fillBackColor. LibreOffice guards the same
+        // loop; without a guard this is a stack overflow on a malformed file rather than a
+        // wrong colour.
+        Resolve(Table(
+                (PptFills.FillType, PptFills.Shade),
+                (EscherPropertyIds.FillColour, 0x00000000),
+                (PptFills.FillBackColour, 0x100001F5)))
+            .ShouldBeOfType<GradientPaint>()
+            .Stops.Select(stop => stop.Colour)
+            .ShouldContain(Colour.White);
+    }
+
     // ------------------------------------------------------------------------- fixtures
 
     /// <summary>A one-pixel PNG: enough for a fill to have something to draw.</summary>
