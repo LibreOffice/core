@@ -33,8 +33,21 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     Canvas::Canvas( OutputDevice* pOutDev ) :
+        mbDumpScreenContent(false),
         mbSurfaceDirty( true )
     {
+        maPropHelper.initProperties(
+            canvas::PropertySetHelper::InputMap {
+                {"HardwareAcceleration",
+                    { [this] () { return this->maDeviceHelper.isAccelerated(); }, {} } },
+                {"DeviceHandle",
+                    { [this] () { return this->maDeviceHelper.getDeviceHandle(); }, {} } },
+                {"SurfaceHandle",
+                    { [this] () { return this->maDeviceHelper.getSurfaceHandle(); }, {} } },
+                {"DumpScreenContent",
+                    { [this] () { return this->getDumpScreenContent(); },
+                      [this] (cpo::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
+
         SolarMutexGuard aGuard;
 
         SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );
@@ -61,12 +74,13 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        vclcanvastools::LocalGuard aGuard2( CanvasBase_Base::m_aMutex );
+        vclcanvastools::LocalGuard aGuard2( m_aMutex );
 
         maCanvasHelper.disposing();
+        maDeviceHelper.disposing();
 
         // pass on to base class
-        CanvasBase_Base::disposeThis();
+        ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::disposeThis();
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,

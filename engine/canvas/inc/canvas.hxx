@@ -30,7 +30,6 @@
 #include <sal/types.h>
 
 #include "./base/basemutexhelper.hxx"
-#include "./base/graphicdevicebase.hxx"
 
 #include "canvasfont.hxx"
 #include "canvashelper.hxx"
@@ -38,6 +37,9 @@
 #include "devicehelper.hxx"
 #include "XGraphicDevice.hxx"
 #include "Texture.hxx"
+#include "propertysethelper.hxx"
+#include "parametricpolypolygon.hxx"
+#include "verifyinput.hxx"
 
 class OutputDevice;
 
@@ -46,10 +48,6 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet >    GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
-                                           DeviceHelper,
-                                           vclcanvastools::LocalGuard,
-                                           ::cppu::OWeakObject >    CanvasBase_Base;
 
     /** Product of this component's factory.
 
@@ -60,7 +58,7 @@ namespace vclcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class SAL_DLLPUBLIC_RTTI Canvas : public CanvasBase_Base
+    class SAL_DLLPUBLIC_RTTI Canvas : public ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >
     {
     public:
         VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
@@ -92,9 +90,82 @@ namespace vclcanvas
             ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
         }
 
+        // XGraphicDevice
+
+        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+
+            return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
+        }
+
+        virtual ::css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( const ::rtl::OUString& GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio ) override
+        {
+            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
+                canvas::ParametricPolyPolygon::create(this,
+                                              GradientService,
+                                              colors, stops, aspectRatio));
+        }
+
+        // XUpdatable
+        virtual void update() override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+
+            if( mbDumpScreenContent )
+                maDeviceHelper.dumpScreenContent();
+        }
+
+
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+            return maPropHelper.getPropertySetInfo();
+        }
+
+        virtual void setPropertyValue( const OUString&                   aPropertyName,
+                                                const cpo::uno::Any& aValue ) override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+            maPropHelper.setPropertyValue( aPropertyName, aValue );
+        }
+
+        virtual cpo::uno::Any getPropertyValue( const OUString& aPropertyName ) override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+            return maPropHelper.getPropertyValue( aPropertyName );
+        }
+
+        virtual void addPropertyChangeListener( const OUString& aPropertyName,
+                                                         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+            maPropHelper.addPropertyChangeListener( aPropertyName,
+                                                    xListener );
+        }
+
+        virtual void removePropertyChangeListener( const OUString& ,
+                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override
+        {
+        }
+
+        virtual void addVetoableChangeListener( const OUString& aPropertyName,
+                                                         const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener ) override
+        {
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+            maPropHelper.addVetoableChangeListener( aPropertyName,
+                                                    xListener );
+        }
+
+        virtual void removeVetoableChangeListener( const OUString& ,
+                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override
+        {
+        }
+
         void clear()
         {
-            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -109,14 +180,14 @@ namespace vclcanvas
                               __func__,
                               static_cast< ::cppu::OWeakObject* >(this));
 
-            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( m_aMutex );
 
             mbSurfaceDirty = true;
         }
 
         css::uno::Reference< vclcanvas::XGraphicDevice > getDevice()
         {
-            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( m_aMutex );
 
             return maCanvasHelper.getDevice();
         }
@@ -135,9 +206,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -149,7 +220,7 @@ namespace vclcanvas
                         const ::vclcanvas::ViewState&                                   viewState,
                         const ::vclcanvas::RenderState&                                 renderState )
         {
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -164,9 +235,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -180,9 +251,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -197,9 +268,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -216,9 +287,9 @@ namespace vclcanvas
                               fontRequest,
                               fontMatrix,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             return maCanvasHelper.createFont( this, fontRequest, eMark, fontMatrix );
         }
@@ -233,12 +304,12 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(xFont, viewState, renderState,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
             canvastools::verifyRange( textDirection,
                                 css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
                                 css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -253,9 +324,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(laidOutText, viewState, renderState,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -269,9 +340,9 @@ namespace vclcanvas
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                               __func__,
-                              static_cast< UnambiguousBaseType* >(this));
+                              static_cast< ::cppu::OWeakObject* >(this));
 
-            MutexType aGuard( BaseType::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
 
             mbSurfaceDirty = true;
 
@@ -279,9 +350,21 @@ namespace vclcanvas
         }
 
     private:
+        cpo::uno::Any getDumpScreenContent() const
+        {
+            return cpo::uno::Any( mbDumpScreenContent );
+        }
+
+        void setDumpScreenContent( const cpo::uno::Any& rAny )
+        {
+            // TODO(Q1): this was mbDumpScreenContent =
+            // rAny.get<bool>(), only that gcc3.3 wouldn't eat it
+            rAny >>= mbDumpScreenContent;
+        }
+
         css::geometry::IntegerSize2D getSize(  )
         {
-            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+            vclcanvastools::LocalGuard aGuard( m_aMutex );
 
             return maCanvasHelper.getSize();
         }
@@ -291,6 +374,9 @@ namespace vclcanvas
             return true;
         }
 
+        DeviceHelper      maDeviceHelper;
+        canvas::PropertySetHelper maPropHelper;
+        bool              mbDumpScreenContent;
         CanvasHelper        maCanvasHelper;
         mutable bool        mbSurfaceDirty;
     };

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
@@ -29,6 +30,7 @@
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
 #include <canvas/vclcanvasdllapi.h>
+#include "Texture.hxx"
 
 
 namespace vclcanvas
