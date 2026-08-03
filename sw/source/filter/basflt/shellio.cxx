@@ -696,36 +696,39 @@ void Reader::EndPaste(SwPasteInfo& rPasteInfo)
         if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx)
             && rPasteInfo.m_pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
         {
-            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
-            // Don't join when the cursor was at the end of a list item and
-            // the first pasted paragraph is itself a list item.
-            bool bBothLists = rPasteInfo.m_bStartAtEndOfPara && pDelNd
-                              && pTextNode->GetNoCondAttr(RES_PARATR_NUMRULE, /*bInParents=*/false)
-                              && pDelNd->GetNoCondAttr(RES_PARATR_NUMRULE, /*bInParents=*/false);
-            if (!bBothLists)
+            if (SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode())
             {
-                // If the PaM points to the first new node, move the PaM to the
-                // end of the previous node.
-                if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
+                // Don't join when the cursor was at the end of a list item and
+                // the first pasted paragraph is itself a list item.
+                bool bBothLists
+                    = rPasteInfo.m_bStartAtEndOfPara
+                      && pTextNode->GetNoCondAttr(RES_PARATR_NUMRULE, /*bInParents=*/false)
+                      && pDelNd->GetNoCondAttr(RES_PARATR_NUMRULE, /*bInParents=*/false);
+                if (!bBothLists)
                 {
-                    aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
-                }
-                // If the first new node isn't empty, convert  the node's text
-                // attributes into hints. Otherwise, set the new node's
-                // paragraph style at the previous (empty) node.
-                if (pTextNode->GetText().getLength())
-                    pDelNd->FormatToTextAttr(pTextNode);
-                else
-                {
-                    pTextNode->ChgFormatColl(pDelNd->GetTextColl());
-                    if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                    // If the PaM points to the first new node, move the PaM to the
+                    // end of the previous node.
+                    if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
                     {
-                        // Lists would need manual merging, but copy paragraph direct formatting
-                        // otherwise.
-                        pDelNd->CopyCollFormat(*pTextNode);
+                        aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
                     }
+                    // If the first new node isn't empty, convert  the node's text
+                    // attributes into hints. Otherwise, set the new node's
+                    // paragraph style at the previous (empty) node.
+                    if (pTextNode->GetText().getLength())
+                        pDelNd->FormatToTextAttr(pTextNode);
+                    else
+                    {
+                        pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+                        if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                        {
+                            // Lists would need manual merging, but copy paragraph direct
+                            // formatting otherwise.
+                            pDelNd->CopyCollFormat(*pTextNode);
+                        }
+                    }
+                    pTextNode->JoinNext();
                 }
-                pTextNode->JoinNext();
             }
         }
     }
@@ -743,12 +746,14 @@ void Reader::EndPaste(SwPasteInfo& rPasteInfo)
             // If the last new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the next (empty) node.
-            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
-            if (pTextNode->GetText().getLength())
-                pDelNd->FormatToTextAttr(pTextNode);
-            else
-                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
-            pTextNode->JoinPrev();
+            if (SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode())
+            {
+                if (pTextNode->GetText().getLength())
+                    pDelNd->FormatToTextAttr(pTextNode);
+                else
+                    pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+                pTextNode->JoinPrev();
+            }
         }
     }
 }
