@@ -1055,7 +1055,6 @@ The `PAGE` field is worth calling out on its own because it is not document-spec
 — the read-but-never-used shape again. On `loi_format_letter_of_intent…doc` every one of the
 nine footers prints `9`, which is the result Word last cached, against the reference's 1…9.
 
-<<<<<<< HEAD
 ## The seventh round, swept whole at `e2e0bdee3`: 185 of 188
 
 | Track | Batches | | |
@@ -1210,7 +1209,6 @@ where the reference gives 1278 and 1110, so LibreOffice diverges by 168 where we
 They are **different revisions**, not one document twice: different images, one has
 `footer1.xml.rels` and the other `stylesWithEffects.xml`. The pair is still suggestive but it is
 not the controlled comparison it appears to be.
-=======
 ## After the eighth round: words, and a label that is bigger than its paragraph
 
 Swept whole-track three times at three commits, each against a checksummed CLI snapshot so the
@@ -1324,7 +1322,6 @@ unfixed pagination error on the same document.
   not pretty-print inside `text:p` — but it makes a hand-written `.fodt` fixture lay out
   differently from the same file through `soffice`, which is a trap for the next agent who writes
   one.
->>>>>>> worktree-agent-a943c440e3a8b1ef1
 
 ### `words` — 200 documents, 21 batches
 
