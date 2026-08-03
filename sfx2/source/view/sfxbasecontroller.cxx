@@ -873,7 +873,7 @@ void SAL_CALL SfxBaseController::dispose()
 {
     SolarMutexGuard aGuard;
 
-    // add idempotentcy guard to prevent teardown races (e.g. async Print Preview closures racing
+    // add idempotency guard to prevent teardown races (e.g. async Print Preview closures racing
     // against XFrame::terminate) from triggering a use-after-free on listeners.
     if ( m_pData->m_bDisposing )
     {
