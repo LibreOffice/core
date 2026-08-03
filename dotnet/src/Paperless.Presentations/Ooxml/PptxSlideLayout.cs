@@ -887,6 +887,14 @@ internal sealed partial class PptxSlideLayout
     {
         if (BodyOf(shape, theme) is not { } body) return null;
 
+        // The text area's own turn, outside the body's and inside the shape's — see
+        // TextAreaTurn. Folding it into the placement is what puts it in that order.
+        double areaTurn = TextAreaTurn(shape);
+        if (areaTurn != 0)
+        {
+            placement = AffineTransform.Concat(About(rectangle, areaTurn), placement);
+        }
+
         // A body that turns its own text can never be upright, whatever the shape does: the runs
         // have to travel with a matrix, because a glyph run carries an origin and advances rather
         // than one of its own.
@@ -943,13 +951,56 @@ internal sealed partial class PptxSlideLayout
         List<PlacedGlyphRun> runs = SlideTextLayout.Place(body, area, _fonts);
         if (runs.Count == 0) return null;
 
-        AffineTransform turn = AffineTransform.Concat(
+        return new PlacedText(
+            runs, AffineTransform.Concat(About(rectangle, body.Rotation), placement));
+    }
+
+    /// <summary>
+    /// How far a shape's <em>text area</em> is turned, clockwise, in radians.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A SmartArt shape's <c>dsp:txXfrm</c> states the rectangle its text occupies, and may state
+    /// a <c>rot</c> on it as well. That angle is not a second copy of the shape's own: it is
+    /// stated <em>against</em> it, and the two add — <c>Transform2DContext</c> puts it straight
+    /// into the same field <c>a:bodyPr/@rot</c> feeds, adding rather than replacing
+    /// (<c>oox/source/drawingml/transform2dcontext.cxx:53-58</c>), and reads the sum back as
+    /// "the rotation beyond compensation of the shape rotation" at
+    /// <c>transform2dcontext.cxx:341-344</c>. So a chevron laid on its side by
+    /// <c>&lt;a:xfrm rot="5400000"/&gt;</c> whose text area says <c>rot="-5400000"</c> keeps its
+    /// writing horizontal, which is the case this exists for.
+    /// </para>
+    /// <para>
+    /// <strong>It turns the laid-out box rather than transposing it</strong>, which is where it
+    /// differs from <see cref="Turned"/>. LibreOffice scales the text box to the text range's
+    /// stated width and height <em>first</em> and rotates the result about its centre
+    /// (<c>svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx:168-191</c>), so the lines
+    /// still break at the width the file states; only <c>TextPreRotateAngle</c>, the turn a
+    /// diagram's <c>upr</c> and <c>grav</c> produce, is applied before the scale and so changes
+    /// the shape of the box. Transposing here would break "Sensorimotor" at 32 pt instead of
+    /// 75 and overflow every chevron in the diagram.
+    /// </para>
+    /// <para>
+    /// Reach, measured over the slides corpus: 15 of its 112 decks bake a diagram drawing, 13 of
+    /// those carry a <c>dsp:txXfrm</c> (171 shapes), and <strong>3 state a non-zero
+    /// <c>rot</c> on one</strong> — 18 shapes, all of them a quarter turn against a shape
+    /// rotated the opposite quarter.
+    /// </para>
+    /// </remarks>
+    private static double TextAreaTurn(XElement shape)
+        => ShapeTransform.Radians(Rotation(Ppt.Child(shape, "txXfrm")));
+
+    /// <summary>A turn, clockwise in radians, about a rectangle's own centre.</summary>
+    private static AffineTransform About(DocRect rectangle, double radians)
+    {
+        double centreX = rectangle.X.Emu + (rectangle.Width.Emu / 2.0);
+        double centreY = rectangle.Y.Emu + (rectangle.Height.Emu / 2.0);
+
+        return AffineTransform.Concat(
             AffineTransform.Concat(
                 AffineTransform.Translation(-centreX, -centreY),
-                AffineTransform.Rotation(body.Rotation)),
+                AffineTransform.Rotation(radians)),
             AffineTransform.Translation(centreX, centreY));
-
-        return new PlacedText(runs, AffineTransform.Concat(turn, placement));
     }
 
     /// <summary>The named child of the first source in a chain to carry one.</summary>
