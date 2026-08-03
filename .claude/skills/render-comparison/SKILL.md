@@ -172,6 +172,7 @@ Once a page differs, narrow it down before theorising:
    | `IsCapitalised` (`w:caps`/`w:smallCaps`) | — | wrong advance widths, so wrong line breaks |
    | `a:rPr/@baseline` | 29 of 112 corpus PPTX | superscripts on the baseline at full size |
    | `SheetGrid.IsOptimalSize` (`ht` without `customHeight`) | every XLSX with a height hint | row pitch 15.735 pt against 15.0 |
+   | `WritingFieldKind.PageNumber` (`PAGE`) | every DOC/DOCX with a page-number field | footers print the producer's last cached result — `9` on all nine pages |
 
    Grep for the property name: **if the only hits are the readers and the model, it does
    nothing.** Every reader parsing it is what makes the bug so quiet — the parse looks like

@@ -215,17 +215,25 @@ A brief that works contains all of:
    no harness behind it.
 
    **Say explicitly that the measurement and its explanation must be checked separately.**
-   Three times now a predecessor's number reproduced to the digit while the cause attached to
-   it was wrong, and each time following the stated cause would have wasted a round:
+   This is the most reliable regularity the project has: **every** predecessor claim that has
+   been independently checked reproduced to the digit while the sentence attached to it was
+   wrong, and each time following the stated cause would have wasted a round:
 
    | Reported | Reproduced? | Actual cause |
    |---|---|---|
    | "line heights 6% short, `hhea` vs `OS/2` precedence" | exactly | `w:asciiTheme` never read — laid out in the wrong font |
    | "`A_320` in-cell pitch 13.0 vs 12.65, an `sprmPDyaLine` at-least value" | exactly | `fUsePrinterMetrics` — formatted against a 300 dpi grid |
    | "chart category labels drawn touching" | the deck has no chart parts | EMF labels needing `GM_ADVANCED` rotation |
+   | "the reference is wrong here, confirmed twice" | exactly | our own theme-font bug; it now matches exactly |
+   | "`.xls` duplicates words like SpreadsheetML did" | exactly | LibreOffice draws it **zero** times — a hidden cell comment |
+   | "the residue is the box drawn once per column band" | exactly | the page-edge clip, cutting the block mid-word |
+   | "row pitch 5.8% out" | exactly, on thirty probe rows | three separate 96 dpi pixel quantisations, not one ratio |
+   | "the shape's `rot` should not reach its text" | the symptom, yes | `dsp:txXfrm/@rot`, a *second* angle that adds to it |
 
    A measurement is evidence; the sentence after it is a hypothesis. Briefs should carry both
-   and label which is which.
+   and label which is which. Note the last row: an explanation can be wrong in the direction of
+   *inverting* the fix — that agent's predecessor thought a rotation needed removing, and what
+   was actually missing was a second rotation to add.
 4. **Known-good test counts, per project, with the instruction to compare counts.** A
    truncated run prints `Passed! - Failed: 0` while silently dropping the tests it never
    reached. Measured: 470 passed on one run and 353 on the next, both green, nothing
@@ -536,3 +544,24 @@ whichever lost. Use `<stem>__<ext>.pdf` throughout.
 **A whole-corpus render takes tens of minutes.** Three workers on four cores did 890
 documents in about 25. Make it resumable and run it in the background; do not hold a
 foreground shell for it.
+
+**A crash in your own CLI is indistinguishable from a mismatch.** One baseline row reported
+zero pages and was read as a parity failure; it was a SIGBUS, and the document re-ran cleanly
+at 2/2. A sweep records what came back, not why. Treat a zero-page result as "did not run"
+until you have re-run it on its own.
+
+**A sweep against a stale CLI snapshot passes every check this skill prescribes.** Snapshotting
+the built CLI so a sweep survives a rebuild is the right instinct — the sweep then compares
+binaries nobody is replacing — but a snapshot that silently failed to update is a sweep of the
+*previous* commit, and every symptom points at your change instead. It cost one agent a full
+sweep. If you snapshot, checksum the copied assemblies against the tree and render one document
+you *know* your change moves before starting the run.
+
+**Estimating a fix's reach by grepping overstates it by an order of magnitude.** Counting files
+that state a property is not counting files whose output changes. Measured: 91 of 134 DOCX
+declared `compatibilityMode >= 15` and 39 of those also justified, so the shrinking-justification
+fix "applies to" 39 documents — and moved **nine**, of which two were failing. The rule only
+bites when a line overruns by less than a quarter of its blanks, about 9 pt on a 468 pt column,
+which no grep can see. Report reach as documents whose rendering changed, measured by rendering
+them. The same applies in reverse when triaging: a property present in three files can still be
+the whole of a batch's residue.
