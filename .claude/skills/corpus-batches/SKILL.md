@@ -432,6 +432,15 @@ CPU is the softer limit: agents are mostly waiting on model calls, and the burst
 builds and renders. On four cores, four agents plus a background sweep pushed load average
 to ~8 and roughly halved sweep throughput, but nothing failed.
 
+**Memory is the harder one, and it kills the parent's sweep rather than an agent's.** Three
+agents each running `soffice` at two workers, plus the parent session's own re-sweep at two,
+is twelve headless LibreOffice processes; on a 15 GB machine the parent's sweep was killed
+mid-run while every agent carried on. The parent is the one to throttle, because its sweep is
+insurance and an agent's is on the critical path: run the parent's re-sweep at **one worker**,
+or after the agents report rather than beside them. A killed sweep is cheap — rerun it — but
+only if you notice, and a partially-written per-track log looks a lot like a track that had
+nothing to say.
+
 ### Symptom clusters can still share a root cause
 
 Splitting by symptom stops agents working the same *documents*. It does not stop them
