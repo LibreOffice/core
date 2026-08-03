@@ -636,13 +636,35 @@ public readonly record struct PageRun(
 /// <em>which</em> rectangle <see cref="Top"/> is measured from, since a second column's lines start again
 /// at the top of the page.
 /// </param>
+/// <param name="UpperSpace">
+/// How much of the gap above this line is the paragraph's <em>own</em> upper spacing, as collapsing and
+/// the top-of-frame rule left it. Zero on every line but a paragraph's first.
+/// </param>
+/// <remarks>
+/// <see cref="UpperSpace"/> is carried because a frame anchored to the paragraph is positioned from a
+/// point above the line: Writer's <c>SwAnchoredObjectPosition::GetTopForObjPos</c>
+/// (<c>sw/source/core/objectpositioning/anchoredobjectposition.cxx:225</c>) takes the anchor frame's own
+/// top and adds back only <c>GetUpperSpaceAmountConsideredForPrevFrame</c> — the previous paragraph's
+/// lower space and line spacing — so the paragraph's own space-before is <em>not</em> in the origin. That
+/// difference is not recoverable from <see cref="Top"/> alone, because collapsing, contextual spacing and
+/// the top-of-page rule each change how much of the gap the paragraph contributed.
+/// </remarks>
 public readonly record struct PlacedLine(
     int ParagraphIndex,
     int LineIndex,
     LineBox Box,
     Length Top,
-    int Column = 0)
+    int Column = 0,
+    Length UpperSpace = default)
 {
+    /// <summary>Where a frame anchored to this line's paragraph measures its offset from.</summary>
+    /// <remarks>
+    /// The paragraph's top for object positioning — see <see cref="UpperSpace"/>. Equal to
+    /// <see cref="Top"/> for every line that is not a paragraph's first, and for a paragraph whose space
+    /// above was collapsed away or dropped at the top of a page.
+    /// </remarks>
+    public Length ParagraphTop => Top - UpperSpace;
+
     /// <summary>The baseline's distance from the top of the body area.</summary>
     public Length Baseline => Top + Box.Baseline;
 

@@ -675,13 +675,22 @@ public static class PageDrawing
 
         if (end <= start) return runs;
 
-        foreach (TabbedSegment segment in Stretches(paragraph, start, end, line.StartsParagraph))
+        List<TabbedSegment> stretches = Stretches(paragraph, start, end, line.StartsParagraph);
+
+        for (int index = 0; index < stretches.Count; index++)
         {
+            TabbedSegment segment = stretches[index];
+
             // Before the emptiness test: a tab followed by nothing still draws its leader, which is what
             // a table-of-contents line whose page number sits on the next line looks like.
             if (Leader(paragraph, segment, lineLeft, baseline) is { } filled) runs.Add(filled);
 
             if (segment.IsEmpty) continue;
+
+            // The justification belongs to the last stretch alone. A tab is a fixed portion whose glue is
+            // nought, so the stretch it closes is stretched by nothing and only the last one reaches the
+            // right margin's glue — see `ParagraphLayouter.Justification`, which counts the same blanks.
+            Length spaceAdd = index == stretches.Count - 1 ? line.Box.SpaceAdd : Length.Zero;
 
             Length pen = lineLeft + segment.Left;
 
@@ -716,7 +725,7 @@ public static class PageDrawing
                     run.EmSize,
                     run.Font ?? Reference(run.Face),
                     new DocPoint(pen, baseline - run.Rise),
-                    line.Box.SpaceAdd);
+                    spaceAdd);
 
                 runs.Add((glyphRun, run.EffectiveColour));
 

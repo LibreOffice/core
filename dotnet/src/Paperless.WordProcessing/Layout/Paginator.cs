@@ -675,10 +675,11 @@ public sealed class Paginator
             bool keepsSpaceHere =
                 column == 0 && (pages.Count == 0 || paragraph.Format.StartsNewPage);
 
+            Length ownSpaceAbove = Length.Zero;
             Length spaceAbove = lineIndex == 0
                 ? SpaceAbove(
                     blocks, laid, paragraphIndex, atTopOfPage: columnIsEmpty,
-                    keepsSpacingAtTop: keepsSpaceHere)
+                    keepsSpacingAtTop: keepsSpaceHere, own: out ownSpaceAbove)
                 : Length.Zero;
 
             // The notes those lines would anchor take their room out of the body's, so how many lines fit
@@ -738,7 +739,16 @@ public sealed class Paginator
                     isFirstInFrame: firstLineHere);
                 bool shares = box.SharesLineWithNext;
 
-                placed.Add(new PlacedLine(paragraphIndex, lineIndex + i, box, top, column));
+                placed.Add(new PlacedLine(
+                    paragraphIndex,
+                    lineIndex + i,
+                    box,
+                    top,
+                    column,
+                    // The paragraph's own upper space, and only on the line the gap sits above — what a
+                    // frame anchored to the paragraph measures its offset from is that line's top less
+                    // this. See `PlacedLine.ParagraphTop`.
+                    lineIndex + i == 0 ? ownSpaceAbove : Length.Zero));
 
                 // A stretch that shares its line with the next one leaves the pen where it is: the box
                 // after it is more of the same line, at the same top.
@@ -1031,7 +1041,47 @@ public sealed class Paginator
         int index,
         bool atTopOfPage,
         bool keepsSpacingAtTop = true)
+        => SpaceAbove(blocks, laid, index, atTopOfPage, keepsSpacingAtTop, out _);
+
+    /// <summary>
+    /// The same, reporting separately how much of the gap the paragraph itself contributed.
+    /// </summary>
+    /// <param name="blocks">The document's blocks, for the paragraph above this one.</param>
+    /// <param name="laid">Their laid-out forms, for the spacings the layout resolved.</param>
+    /// <param name="index">Which block the space is being measured above.</param>
+    /// <param name="atTopOfPage">True when nothing is on the column yet.</param>
+    /// <param name="keepsSpacingAtTop">As the overload's.</param>
+    /// <param name="own">
+    /// The gap less the paragraph above's leading — everything Writer's <c>GetTopForObjPos</c> leaves out
+    /// of a paragraph-anchored frame's origin. It adds back <c>nPrevLowerSpace + nPrevLineSpacing</c>
+    /// (<c>SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame</c>,
+    /// <c>sw/source/core/layout/flowfrm.cxx:1835</c>), and each branch below has already netted the
+    /// previous paragraph's lower space off <c>before</c>, so what remains to exclude is the leading.
+    /// </param>
+    private Length SpaceAbove(
+        IReadOnlyList<PageBlock> blocks,
+        List<LaidBlock> laid,
+        int index,
+        bool atTopOfPage,
+        bool keepsSpacingAtTop,
+        out Length own)
     {
+        Length total = Gap(blocks, laid, index, atTopOfPage, keepsSpacingAtTop, out Length leading);
+        own = total - leading;
+        return total;
+    }
+
+    /// <summary>The gap above a paragraph, and how much of it is the paragraph above's leading.</summary>
+    private Length Gap(
+        IReadOnlyList<PageBlock> blocks,
+        List<LaidBlock> laid,
+        int index,
+        bool atTopOfPage,
+        bool keepsSpacingAtTop,
+        out Length leading)
+    {
+        leading = Length.Zero;
+
         Length before = laid[index].Paragraph!.SpaceBefore;
 
         if (atTopOfPage && !(_options.KeepsSpacingAtTopOfPage && keepsSpacingAtTop))
@@ -1045,7 +1095,7 @@ public sealed class Paginator
         // keeps its paragraph spacing still starts its first line hard against the margin. A table above
         // hands nothing down either — `GetSpacingValuesOfFrame` reports a line spacing only for a text
         // frame.
-        Length leading = atTopOfPage || index == 0 || blocks[index - 1] is not PageParagraph
+        leading = atTopOfPage || index == 0 || blocks[index - 1] is not PageParagraph
             ? Length.Zero
             : ParagraphLeading.Below(laid[index - 1].Paragraph);
 

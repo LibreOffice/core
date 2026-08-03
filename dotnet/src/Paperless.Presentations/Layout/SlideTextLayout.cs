@@ -796,9 +796,17 @@ public static partial class SlideTextLayout
         Length lineLeft = areaLeft + line.Box.Left;
         Length baseline = top + line.Ascent;
 
-        foreach (TabbedSegment segment in Stretches(block, start, end, isFirstLine))
+        List<TabbedSegment> stretches = Stretches(block, start, end, isFirstLine);
+
+        for (int index = 0; index < stretches.Count; index++)
         {
-            EmitStretch(placed, block, segment, lineLeft + segment.Left, baseline, line);
+            // The justification belongs to the last stretch alone: a tab is a fixed portion whose glue is
+            // nought, so the stretch it closes is stretched by nothing and only the last one reaches the
+            // right margin's glue. `ParagraphLayouter.Justification` counts the same blanks.
+            Length spaceAdd = index == stretches.Count - 1 ? line.Box.SpaceAdd : Length.Zero;
+
+            EmitStretch(
+                placed, block, stretches[index], lineLeft + stretches[index].Left, baseline, spaceAdd);
         }
     }
 
@@ -823,7 +831,7 @@ public static partial class SlideTextLayout
         TabbedSegment segment,
         Length pen,
         Length baseline,
-        PlacedLine line)
+        Length spaceAdd)
     {
         int start = segment.Start;
         int end = segment.End;
@@ -844,7 +852,7 @@ public static partial class SlideTextLayout
                 shaped, text, run.EmSize,
                 block.FontFor(run.Start, run.Face) ?? Reference(run.Face),
                 new DocPoint(pen, pitch),
-                line.Box.SpaceAdd,
+                spaceAdd,
                 run.Tracking);
 
             Length advance = Length.Zero;
