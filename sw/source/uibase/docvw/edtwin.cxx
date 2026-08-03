@@ -6621,29 +6621,29 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 
 void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
 {
-    enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
+    enum class Capitalization { Lower, Upper, Sentence, Other };
 
     // Determine word capitalization
     const CharClass& rCC = GetAppCharClass();
     const OUString sWordLower = rCC.lowercase( rWord );
-    Capitalization aWordCase = CASE_OTHER;
+    Capitalization aWordCase = Capitalization::Other;
     if ( !rWord.isEmpty() )
     {
         if ( rWord[0] == sWordLower[0] )
         {
             if ( rWord == sWordLower )
-                aWordCase = CASE_LOWER;
+                aWordCase = Capitalization::Lower;
         }
         else
         {
             // First character is not lower case i.e. assume upper or title case
             OUString sWordSentence = sWordLower.replaceAt( 0, 1, rtl::OUStringChar(rWord[0]) );
             if ( rWord == sWordSentence )
-                aWordCase = CASE_SENTENCE;
+                aWordCase = Capitalization::Sentence;
             else
             {
                 if ( rWord == rCC.uppercase( rWord ) )
-                    aWordCase = CASE_UPPER;
+                    aWordCase = Capitalization::Upper;
             }
         }
     }
@@ -6670,11 +6670,11 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
                 else
                     sStr = rStr; // to be added if no case conversion is performed below
 
-                if ( aWordCase == CASE_LOWER )
+                if ( aWordCase == Capitalization::Lower)
                     sStr = rCC.lowercase(rStr);
-                else if ( aWordCase == CASE_SENTENCE )
+                else if ( aWordCase == Capitalization::Sentence)
                     sStr = rCC.lowercase(rStr).replaceAt(0, 1, rtl::OUStringChar(rStr[0]));
-                else if ( aWordCase == CASE_UPPER )
+                else if ( aWordCase == Capitalization::Upper)
                     sStr = rCC.uppercase(rStr);
 
                 if (!sStr.isEmpty())
@@ -6720,12 +6720,12 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
         else
             sStr = aCompletedString; // to be added if no case conversion is performed below
 
-        if (aWordCase == CASE_LOWER)
+        if (aWordCase == Capitalization::Lower)
             sStr = rCC.lowercase(aCompletedString);
-        else if (aWordCase == CASE_SENTENCE)
+        else if (aWordCase == Capitalization::Sentence)
             sStr = rCC.lowercase(aCompletedString)
                        .replaceAt(0, 1, rtl::OUStringChar(aCompletedString[0]));
-        else if (aWordCase == CASE_UPPER)
+        else if (aWordCase == Capitalization::Upper)
             sStr = rCC.uppercase(aCompletedString);
 
         if (!sStr.isEmpty())
