@@ -68,6 +68,15 @@ public sealed class ParagraphLeadingComparisonTests : IDisposable
     [InlineData("paginated.docx")]
     [InlineData("paginated.doc")]
     [InlineData("paginated.rtf")]
+    // Contextual spacing between two *different* styles that resolve to the same properties. Writer
+    // compares the paragraphs' format collections (`lcl_IdenticalStyles`,
+    // sw/source/core/layout/flowfrm.cxx:1503), so a heading style based on a contextual body style
+    // keeps its space above; comparing resolved properties instead says the two are identical and
+    // swallows it. The Word formats only — see tests/corpus/README.md for why the document is
+    // hand-written and why there is no ODF member of the set.
+    [InlineData("contextual-spacing-styles.docx")]
+    [InlineData("contextual-spacing-styles.doc")]
+    [InlineData("contextual-spacing-styles.rtf")]
     public void EveryBaselineIsWhereLibreOfficePutsIt(string fileName)
     {
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");

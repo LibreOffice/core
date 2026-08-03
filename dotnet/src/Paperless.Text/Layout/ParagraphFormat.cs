@@ -298,6 +298,30 @@ public sealed record ParagraphFormat
     /// </remarks>
     public bool HasContextualSpacing { get; init; }
 
+    /// <summary>
+    /// Which paragraph style the paragraph is set in, or null when its reader does not say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Carried for one purpose: <see cref="HasContextualSpacing"/> suppresses the gap only between
+    /// paragraphs of the <em>same style</em>, and Writer decides that by comparing the two nodes'
+    /// <c>SwTextFormatColl</c> pointers (<c>lcl_IdenticalStyles</c>,
+    /// <c>sw/source/core/layout/flowfrm.cxx:1503</c>) rather than by comparing what the styles say.
+    /// The difference is not academic: a heading based on the body style inherits its indents, its
+    /// alignment and its line spacing, so any comparison of resolved properties calls the two
+    /// identical and swallows the space above every heading in the document.
+    /// </para>
+    /// <para>
+    /// An opaque key rather than a name — a WW8 <c>istd</c> and an RTF <c>\s</c> are numbers — and the
+    /// <em>named</em> style rather than the automatic one, since ODF's automatic styles are direct
+    /// formatting and LibreOffice gives the node its parent as a format collection. Null means the
+    /// reader cannot say, and two nulls are not a match: the readers that know say so, and one that
+    /// does not falls back to the older comparison rather than claiming an identity it has not
+    /// established.
+    /// </para>
+    /// </remarks>
+    public string? StyleKey { get; init; }
+
     /// <summary>How far apart the baselines sit.</summary>
     public LineSpacingRule LineSpacing { get; init; } = LineSpacingRule.SingleSpaced;
 

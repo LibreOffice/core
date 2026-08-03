@@ -346,6 +346,61 @@ public sealed class ParagraphLayoutComparisonTests : IDisposable
             .SpaceBefore.ShouldBe(Length.FromPoints(10));
     }
 
+    /// <summary>
+    /// "Contextual" means the same <em>style</em>, not the same resolved properties.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer compares the two nodes' <c>SwTextFormatColl</c> pointers — <c>lcl_IdenticalStyles</c>,
+    /// <c>sw/source/core/layout/flowfrm.cxx:1503</c> — so two paragraphs whose styles resolve to the
+    /// same indents, alignment and line spacing are still different styles. The case that makes it
+    /// matter is the commonest one there is: a heading style based on the body style inherits all
+    /// three <em>and</em> the body style's <c>w:contextualSpacing</c>, so comparing properties says
+    /// "identical" and eats the space above every heading in the document.
+    /// </para>
+    /// <para>
+    /// Measured on <c>technical report template.docx</c> (words/batch-010), whose <c>Normal</c> is
+    /// double-spaced and contextual and whose three heading styles are all based on it: LibreOffice
+    /// leaves 12 pt above each <c>Heading 1</c> and 8 pt above each <c>Heading 2</c>, we left
+    /// nothing, and the accumulated 32 pt on one page cost the document its tenth.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void ContextualSpacingNeedsTheSameStyleAndNotMerelyTheSameProperties()
+    {
+        string? fontPath = FindFont("Carlito-Regular.ttf");
+        Assert.SkipWhen(fontPath is null, "Carlito is not installed; see check-env.sh");
+
+        OpenTypeFace face = OpenTypeFace.ReadFile(fontPath!).ShouldNotBeNull();
+        ParagraphLayouter layouter = new(face);
+        Length em = Length.FromPoints(SizePoints);
+
+        ParagraphFormat body = ParagraphFormat.Default with
+        {
+            SpaceBefore = Length.FromPoints(10),
+            HasContextualSpacing = true,
+            StyleKey = "Normal",
+        };
+
+        // Everything a resolved-property comparison can see is identical; only the style differs, which
+        // is exactly what a heading based on the body style looks like.
+        ParagraphFormat heading = body with { StyleKey = "Heading1" };
+
+        layouter.Layout("Body", body, em, TextWidth, follows: body)
+            .SpaceBefore.ShouldBe(Length.Zero, "two paragraphs of one style still collapse");
+
+        layouter.Layout("Heading", heading, em, TextWidth, follows: body)
+            .SpaceBefore.ShouldBe(
+                Length.FromPoints(10), "a different style keeps its space above");
+
+        // A reader that cannot name the style falls back to comparing what it can see, which is the
+        // behaviour every format had before any of them could.
+        ParagraphFormat unnamed = body with { StyleKey = null };
+
+        layouter.Layout("Body", unnamed, em, TextWidth, follows: unnamed)
+            .SpaceBefore.ShouldBe(Length.Zero);
+    }
+
     // ------------------------------------------------------------------------- the reference
 
     /// <summary>

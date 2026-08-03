@@ -190,7 +190,31 @@ combination that tells the two transform orders apart.
 | `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
+| `contextual-spacing-styles.docx` | A `Normal` style carrying `w:contextualSpacing`, and two heading styles **based on it** — so both inherit the flag, the line spacing, the indents and the alignment, and differ from it in nothing a resolved-property comparison can see except the space above. That is what makes it a test: "contextual" means the same *style*, which Writer decides by comparing the paragraphs' format collections (`lcl_IdenticalStyles`, `sw/source/core/layout/flowfrm.cxx:1503`), so LibreOffice suppresses the gap between two `Normal` paragraphs and keeps the 12 pt and 18 pt above the headings. Every `w:after` in the file is zero on purpose — see below |
 | `paragraph-shading.docx` | Paragraph backgrounds, hand-written so every edge is a round number of twips. Thirteen paragraphs: one shaded directly with indents *and* spacing on both sides, so the fill can be shown to span the indents and to stop at the lines; a pair shaded the same colour with spacing between them, which LibreOffice paints as **one** band; a pair shaded different colours with the same spacing, which it paints as two with the gap left white; a paragraph shaded only by its style; and one whose style overrides its parent's fill with `w:fill="auto"`, which paints nothing. It is hand-written because LibreOffice's own DOCX export moves a paragraph fill into a `w:pPr/w:shd` on every paragraph of the style, which would lose the direct-versus-style distinction |
+
+#### Why `contextual-spacing-styles` is hand-written, and why every `w:after` in it is zero
+
+Two separate traps, and each one silently turned an earlier version of this document into a file that
+proved nothing.
+
+**LibreOffice's own export does not preserve a derived style's contextual flag.** The first version was
+a flat-ODF source with a `Head` style whose `style:parent-style-name` was a contextual `Body`.
+LibreOffice renders it correctly, and then writes `style:contextual-spacing="false"` and
+`fo:margin-bottom="0in"` onto `Head` in every format it exports — so all four conversions rendered
+identically whether the bug was present or not. A converted file is normally what this corpus wants; here
+it is exactly what destroys the case.
+
+**A `w:after` anywhere in the file measures a different bug.** With `w:after="160"` on the document
+defaults, LibreOffice's gap above a heading was the previous paragraph's after **plus** the heading's
+before — 8 + 12 pt — where we produce the larger of the two. That is `PARA_SPACE_MAX`, and for DOCX
+writerfilter never sets it: it keeps the *application's* configured default, which is on, so a Word
+document adds where `PaginationOptions.CollapsesSpacing` (mapped from
+`w:doNotUseHTMLParagraphAutoSpacing`) makes us collapse. **That is an open defect** and not this
+document's; setting every `w:after` to zero takes it out of the measurement so the two questions do not
+have to be answered in one commit. The `.doc` and `.rtf` beside the `.docx` are LibreOffice's own
+conversions of it and keep the case, since `sprmPFContextualSpacing` and `\contextualspace` survive the
+round trip where ODF's spelling does not.
 
 ### SVG picture documents
 

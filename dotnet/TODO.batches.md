@@ -44,7 +44,8 @@ branch.
 Whole-track figures at the same commit: words **137/200** (page error 124), slides
 **147/163** (ppt 47/51, pptx 100/112), sheets **108/171** (page error 860).
 
-Words is now **143/200** (page error 122) — see "After the eighth round" below. Sheets is now
+Words is now **146/200** by addition — 143 whole-track at the eighth round, plus the ninth
+round's three, which re-swept 001–007 and 010–017 only. Sheets is now
 **125/171** (page error 222) — see "Sheets batches 005–008" below.
 
 ## Level one: the image check
@@ -1322,6 +1323,94 @@ unfixed pagination error on the same document.
   not pretty-print inside `text:p` — but it makes a hand-written `.fodt` fixture lay out
   differently from the same file through `soffice`, which is a trap for the next agent who writes
   one.
+
+## After the ninth round: words, and three measures of a paragraph that disagreed
+
+Swept batches 001–007 and 010–017 together at `7049756d9` plus the three fixes below — **148
+documents, 116 matching, 34 pages of absolute error, 122 documents page-exact.** Batches 001–005
+are 10/10, so the gate for moving on is green.
+
+| Batch | before | after | what moved |
+|---|---|---|---|
+| `batch-010` | 6/9 | **7/9** | `technical report template.docx` 9 pages → 10 against 10 |
+| `batch-011` | 7/10 | **8/10** | not attributed — see the caveat below |
+| `batch-015` | 4/10 | **5/10** | `hdss-bulletin-issue-285…docx` 11 pages → 10 against 10, undoing the eighth round's regression |
+| every other batch | — | unchanged | 001–005 10/10, 006 and 007 9/10, 012 8/10, 013 5/9, 014 3/10, 016 7/10, 017 5/10 |
+
+**The caveat, stated rather than buried.** `batch-010` was swept at my own base before the fixes
+and its 6/9 is mine; `batch-011` and `batch-015` are compared against the *recorded* scoreboard
+rather than against a base sweep of my own, so "one document changed state" there is a difference
+between two measurements taken at different times and I cannot name the document. Treat those two
+rows as weaker evidence than the `batch-010` row.
+
+Each of the three fixes below is one sentence of mechanism, and each has a unit test that was
+watched to fail with the defect put back.
+
+### A row's part was measured one way and the row another
+
+`TableLayouter.HeightAt` sized the part of a table row that goes on a page from ink — first kept
+line's top to last kept line's bottom — while `LayOut` sizes the row from the cell's
+`PlacedFlow.Advance`, which carries the first paragraph's space-before and the last one's
+space-after. Cutting at the last line therefore looked cheaper than the row, so `SliceRow`
+reported "this holds every remaining line", declined the split as pointless, and handed the row
+back to a caller that had already found it too tall by the other measure: the row moved whole and
+the difference went blank. Measured on `f445896eb008d14c1746fc37d412dc22.docx` (006) as **205.8 pt
+of empty page**. Fixed at `Layout/TableLayouter.cs:292` — the row's own first part starts at the
+flow's top, and a part holding a cell's last line ends at its advance.
+
+It did **not** fix that document, which is still 15 pages against 16, but its first three pages
+now agree with the reference where only the first two did.
+
+### A list label's tab stops looking too early
+
+The follower after a list label is a real tab — Writer's number portion expands to the number plus
+`SvxNumberFormat::GetLabelFollowedByAsString`'s `"\t"` (`editeng/source/items/numitem.cxx:504`) —
+so past a stop already behind the pen the search carries on through the paragraph's own stops and
+then along the default interval (`sw/source/core/text/txttab.cxx:189`). `ListLabel.Advance` stopped
+at the level's own stop, so a label wider than its level's room left **no gap at all**. Fixed at
+`Layout/ListLabel.cs:214`.
+
+Measured on `final-technical-report-template.docx` (007): an 18 pt `2.0` is 23.0 pt wide against a
+stop 18 pt along, and LibreOffice starts the heading at 36.0 pt — the document's
+`w:defaultTabStop` — where we drew `2.0Background`. We now start it at 36.00.
+
+### "Contextual" spacing means the same style, not the same properties
+
+`w:contextualSpacing` suppresses the gap only between paragraphs **of the same style**, and Writer
+decides that by comparing the two nodes' `SwTextFormatColl` pointers (`lcl_IdenticalStyles`,
+`sw/source/core/layout/flowfrm.cxx:1503`). `SharesContextualSpacing` approximated style identity by
+line spacing, start indent and alignment — which a heading style based on the body style inherits
+wholesale, along with the contextual flag itself. So the space above **every** heading in such a
+document disappeared. `ParagraphFormat.StyleKey` now carries the style and all four readers set it
+(`Ooxml/WordParagraphFormats.cs:180`, `OpenDocument/OdfParagraphFormats.cs:141`,
+`Ww8/Ww8LayoutFormat.cs:288`, `Rtf/RtfDocumentReader.State.cs:1147`); the old comparison remains
+as the fallback for a reader that cannot name a style.
+
+Reach is broad — `w:contextualSpacing` on a `Normal` that headings derive from is Word's own
+default template — and the three earlier batches held at 68 of 70 across it.
+
+### Two things measured this round and deliberately not fixed
+
+- **We take the larger where LibreOffice adds.** With a `w:after` on the paragraph above and a
+  `w:before` on the heading, LibreOffice's gap is their **sum** — 8 + 12 pt measured on a
+  hand-written fixture — and `PaginationOptions.CollapsesSpacing` makes us take the larger. The
+  mapping is the bug: `DocxReader.cs:270` sets it from `w:doNotUseHTMLParagraphAutoSpacing`, but
+  writerfilter never sets `PARA_SPACE_MAX` for DOCX at all — it keeps the *application's* configured
+  `AddSpacing`, which is on. So a Word document should always add. This moves every DOCX with both
+  spacings set and wants its own round and its own whole-track sweep; the corpus fixture beside it
+  sets every `w:after` to zero precisely so the two questions did not have to be answered together.
+- **A row LibreOffice refuses to split, and the threshold is unexplained.** On
+  `f445896eb008d14c1746fc37d412dc22.docx` the reference leaves 144 pt of page 3 blank rather than
+  break row 8. Rewriting that row's `w:trHeight` and re-rendering puts the threshold between
+  **4200 and 4300 twips**: at or below it LibreOffice splits the row, above it the row moves whole.
+  The room left on the page is 2880 twips, so the rule is not "the declared minimum must fit"; I
+  could not find the quantity 4250 twips is. Recorded as a measurement with no explanation attached,
+  which is the honest state of it.
+
+### And one open item carried forward unchanged
+
+`WritingFieldKind.PageNumber` still has no consumer. Not attempted this round.
+
 ## After the eighth round: slides drop shadows, and two recorded leads that were backwards
 
 Whole slides track swept before and after at `e2e0bdee3`, 163 documents each time. The baseline
@@ -1433,6 +1522,10 @@ document.
 ### `words` — 200 documents, 21 batches
 
 Measured whole-track at the commit that landed the group reader: **143 of 200**, page error 122.
+Batches 001–007 and 010–017 were re-measured in the ninth round — see "After the ninth round"
+above — and 010, 011 and 015 are that sweep's figures rather than the whole-track one; the
+batches it did not cover (008, 009, 018–021) are unchanged from the whole-track sweep. So the
+track total is **146 of 200** by addition and has not been re-swept whole since.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
@@ -1445,12 +1538,12 @@ Measured whole-track at the commit that landed the group reader: **143 of 200**,
 | `batch-007` | 10 | 160–185 | doc:4 docx:6 | 9/10 |
 | `batch-008` | 10 | 186–204 | doc:4 docx:6 | ✅ |
 | `batch-009` | 10 | 208–226 | doc:5 docx:5 | ✅ |
-| `batch-010` | 9 | 228–260 | doc:2 docx:8 | 6/9 |
-| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 7/10 |
+| `batch-010` | 9 | 228–260 | doc:2 docx:8 | 7/9 |
+| `batch-011` | 10 | 260–296 | doc:2 docx:8 | 8/10 |
 | `batch-012` | 10 | 306–333 | doc:4 docx:6 | 8/10 |
 | `batch-013` | 9 | 338–370 | docx:10 | 5/9 |
 | `batch-014` | 10 | 372–422 | doc:4 docx:6 | 3/10 |
-| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 4/10 |
+| `batch-015` | 10 | 424–471 | doc:3 docx:7 | 5/10 |
 | `batch-016` | 10 | 473–537 | doc:5 docx:5 | 7/10 |
 | `batch-017` | 10 | 537–602 | doc:2 docx:8 | 5/10 |
 | `batch-018` | 10 | 620–859 | doc:2 docx:8 | 3/10 |

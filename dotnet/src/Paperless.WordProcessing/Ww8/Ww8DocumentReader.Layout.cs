@@ -1131,7 +1131,7 @@ public sealed partial class Ww8DocumentReader
             format = ApplyLayoutSprms(format, inherited);
         }
 
-        return ApplyLayoutSprms(format, direct);
+        return ApplyLayoutSprms(format, direct) with { StyleIndex = styleIndex };
     }
 
     /// <summary>
