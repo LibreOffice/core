@@ -138,6 +138,7 @@ internal static class OdfParagraphFormats
             HasContextualSpacing =
                 Paragraph(styles, styleName, OdfNamespaces.Style, "contextual-spacing")
                     .AsBoolean() == true,
+            StyleKey = NamedAncestorOf(styles, styleName),
             LineSpacing = Spacing(styles, styleName),
 
             // "always" against "auto", not a boolean — ODF spells both out, and treating a missing
@@ -153,6 +154,32 @@ internal static class OdfParagraphFormats
             TabStops = Tabs(styles, styleName),
             DefaultTabInterval = TabInterval(styles),
         };
+    }
+
+    /// <summary>
+    /// The named style a paragraph is really set in, which its automatic style hangs off.
+    /// </summary>
+    /// <remarks>
+    /// An automatic style is direct formatting rather than a style — LibreOffice hands the text node its
+    /// <c>style:parent-style-name</c> as the format collection and keeps the automatic style's own
+    /// properties as hard attributes — so it is the parent that decides whether two paragraphs are "of
+    /// the same style" for contextual spacing. Walking rather than taking one step, because a document
+    /// may chain automatic styles; the walk is bounded because a cycle in a malformed file otherwise is
+    /// not.
+    /// </remarks>
+    private static string? NamedAncestorOf(OdfStyles styles, string? styleName)
+    {
+        string? name = styleName;
+
+        for (int step = 0; name is not null && step < 16; step++)
+        {
+            if (styles.FindNamed(name, OdfStyleFamily.Paragraph) is not null) return name;
+            if (styles.Find(name, OdfStyleFamily.Paragraph) is not { } automatic) return null;
+
+            name = automatic.ParentStyleName;
+        }
+
+        return name;
     }
 
     /// <summary>

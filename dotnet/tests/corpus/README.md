@@ -190,7 +190,31 @@ combination that tells the two transform orders apart.
 | `theme-colours.docx` | The Office 2007 colour scheme in a real `theme1.xml`, an identity `w:clrSchemeMapping`, five runs stating a themed colour three different ways (a cached `w:val`, `w:val="auto"`, and no `w:val` at all), and twelve inline shapes whose `a:solidFill` carries a different DrawingML transform chain each — including the same two transforms in both orders, which come out different colours. LibreOffice's own DOCX export writes the "LibreOffice" scheme and resolves every run colour to a literal, so a converted file exercises none of this |
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
+| `contextual-spacing-styles.docx` | A `Normal` style carrying `w:contextualSpacing`, and two heading styles **based on it** — so both inherit the flag, the line spacing, the indents and the alignment, and differ from it in nothing a resolved-property comparison can see except the space above. That is what makes it a test: "contextual" means the same *style*, which Writer decides by comparing the paragraphs' format collections (`lcl_IdenticalStyles`, `sw/source/core/layout/flowfrm.cxx:1503`), so LibreOffice suppresses the gap between two `Normal` paragraphs and keeps the 12 pt and 18 pt above the headings. Every `w:after` in the file is zero on purpose — see below |
 | `paragraph-shading.docx` | Paragraph backgrounds, hand-written so every edge is a round number of twips. Thirteen paragraphs: one shaded directly with indents *and* spacing on both sides, so the fill can be shown to span the indents and to stop at the lines; a pair shaded the same colour with spacing between them, which LibreOffice paints as **one** band; a pair shaded different colours with the same spacing, which it paints as two with the gap left white; a paragraph shaded only by its style; and one whose style overrides its parent's fill with `w:fill="auto"`, which paints nothing. It is hand-written because LibreOffice's own DOCX export moves a paragraph fill into a `w:pPr/w:shd` on every paragraph of the style, which would lose the direct-versus-style distinction |
+
+#### Why `contextual-spacing-styles` is hand-written, and why every `w:after` in it is zero
+
+Two separate traps, and each one silently turned an earlier version of this document into a file that
+proved nothing.
+
+**LibreOffice's own export does not preserve a derived style's contextual flag.** The first version was
+a flat-ODF source with a `Head` style whose `style:parent-style-name` was a contextual `Body`.
+LibreOffice renders it correctly, and then writes `style:contextual-spacing="false"` and
+`fo:margin-bottom="0in"` onto `Head` in every format it exports — so all four conversions rendered
+identically whether the bug was present or not. A converted file is normally what this corpus wants; here
+it is exactly what destroys the case.
+
+**A `w:after` anywhere in the file measures a different bug.** With `w:after="160"` on the document
+defaults, LibreOffice's gap above a heading was the previous paragraph's after **plus** the heading's
+before — 8 + 12 pt — where we produce the larger of the two. That is `PARA_SPACE_MAX`, and for DOCX
+writerfilter never sets it: it keeps the *application's* configured default, which is on, so a Word
+document adds where `PaginationOptions.CollapsesSpacing` (mapped from
+`w:doNotUseHTMLParagraphAutoSpacing`) makes us collapse. **That is an open defect** and not this
+document's; setting every `w:after` to zero takes it out of the measurement so the two questions do not
+have to be answered in one commit. The `.doc` and `.rtf` beside the `.docx` are LibreOffice's own
+conversions of it and keep the case, since `sprmPFContextualSpacing` and `\contextualspace` survive the
+round trip where ODF's spelling does not.
 
 ### SVG picture documents
 
@@ -314,6 +338,16 @@ a cell's width is not a column's.
 `table-pages` is sixty rows and a `table:table-header-rows`, long enough to cross a page break. It is what
 proves the heading row is placed again on the continuation and that the split falls between rows rather
 than through one.
+
+`table-row-spacing.*` is the opposite case, and the page is short (10 cm) so the whole document is two
+pages. A middle row holds four paragraphs each with a 1 cm space below, so its *lines* fit in the room left
+on page one and the row does not — the difference being the space after its last paragraph, which counts
+towards a Word row's height (`AddParaSpacingToTableCells`) and is not ink. LibreOffice leaves three of the
+four paragraphs on page one. A renderer measuring a row's *part* from its ink instead judges the last cut
+free, declines the split as gaining nothing, and moves the whole row: **none** of the four stay, and 154 pt
+of the page goes blank. The margin either side of the band is a whole 28 pt space, so the fixture is not
+delicately balanced — but it does depend on the trailing space being charged to the row, which is why all
+five formats are exported from the one flat-ODF source rather than hand-written per format.
 
 Two things about writing these by hand, both learned the hard way:
 
@@ -479,6 +513,28 @@ reason is the table's *origin* rather than its borders: each export writes the t
 relative to the border, so the whole grid shifts. Measured on the first vertical — 56.70 pt in ODF, 56.70 in the
 DOCX render against 56.45 laid out, and 57.00 in the RTF render against 56.70. Their borders are otherwise
 right: the same nine strokes, the same extents, widths and colours. `table-borders.doc` is not read at all yet.
+
+### List documents
+
+`list-label-overrun.*` is two numbered lists on one page and the contrast between them is the document.
+The first level's label is `Paragraph 1)` and its `text:list-tab-stop-position` is a quarter inch, so the
+label runs past its own stop; the second's is `1.` against a half-inch stop, so it does not. The tab that
+follows a list label is a real tab — Writer's number portion expands to the number plus
+`SvxNumberFormat::GetLabelFollowedByAsString`'s `"\t"` — and a stop already behind the pen does not mean
+"no gap": the search carries on through the paragraph's own stops and then along the default interval. So
+the overrunning item's text lands at a stop and not against its label, and the fitting item's lands
+exactly where it always did.
+
+Worth knowing before reading the numbers: **the two families disagree about where a tab stop's zero is,
+and both are right.** LibreOffice's `TABS_RELATIVE_TO_INDENT` is on for ODF and off for every Word file,
+so the same document puts the overrunning item's text at 145.7 pt through `.fodt`/`.odt` and at 127.7 pt
+through `.docx`/`.doc`. A fixture that existed in only one family would look like it had pinned a number
+that is really a convention.
+
+There is no `.rtf`, and that is a recorded gap rather than an oversight: the RTF reader takes its label
+from the `{\listtext}` group and reads no level definition at all, so it cannot know the stop and marks
+every label `LabelFollow.Nothing`. On this document LibreOffice puts the overrunning item's text 35 pt
+further along than we do.
 
 ### Mark documents
 

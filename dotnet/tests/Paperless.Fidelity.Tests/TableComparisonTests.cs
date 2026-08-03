@@ -83,6 +83,16 @@ public sealed class TableComparisonTests : IDisposable
     [InlineData("table-exact-row.docx")]
     [InlineData("table-exact-row.doc")]
     [InlineData("table-exact-row.rtf")]
+    // A row whose *paragraph spacing* is the only thing that does not fit on the page it starts on. A row
+    // is as tall as its content plus the space around it, so the part of it that goes on a page has to be
+    // measured the same way — measuring the part from ink instead makes the last cut look free, the split
+    // is declined as pointless, and the whole row moves and leaves the page a third empty. LibreOffice
+    // leaves three of the four spaced paragraphs behind; measuring from ink leaves none.
+    [InlineData("table-row-spacing.fodt")]
+    [InlineData("table-row-spacing.odt")]
+    [InlineData("table-row-spacing.docx")]
+    [InlineData("table-row-spacing.doc")]
+    [InlineData("table-row-spacing.rtf")]
     // `table-borders` is deliberately absent, and only in the shading test: a border *takes space*, half its
     // width on each side of the grid line, so a table with 0.05 pt borders is 0.1 pt taller per row boundary
     // than the same table without them. Border widths are not read yet, so its text sits exactly that much

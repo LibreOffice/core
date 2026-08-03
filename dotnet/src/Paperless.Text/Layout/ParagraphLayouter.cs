@@ -427,16 +427,38 @@ public sealed class ParagraphLayouter
         ArgumentNullException.ThrowIfNull(current);
 
         // Both sides have to ask for it: a paragraph with contextual spacing after one without still gets
-        // its space. Style identity is approximated by the properties a style carries that a reader can
-        // see here — Writer compares the format collections themselves, which the layout engine does not
-        // have.
+        // its space.
         return previous is not null
                && current.HasContextualSpacing
                && previous.HasContextualSpacing
-               && previous.LineSpacing == current.LineSpacing
-               && previous.StartIndent == current.StartIndent
-               && previous.Alignment == current.Alignment;
+               && IdenticalStyles(previous, current);
     }
+
+    /// <summary>
+    /// Whether two paragraphs are set in the same style, which is what "contextual" means.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer compares the two nodes' format collections outright — <c>lcl_IdenticalStyles</c>,
+    /// <c>sw/source/core/layout/flowfrm.cxx:1503</c>, which is a pointer comparison — so
+    /// <see cref="ParagraphFormat.StyleKey"/> is what answers this when a reader supplies it.
+    /// </para>
+    /// <para>
+    /// The fallback compares the properties a style carries, and it is a fallback rather than the
+    /// rule because it gets a common case badly wrong: a heading style based on the body style
+    /// inherits its indents, its alignment and its line spacing, so the two look identical and the
+    /// space above every heading disappears. Measured on <c>technical report template.docx</c>
+    /// (words/batch-010), whose <c>Normal</c> carries the <c>w:contextualSpacing</c> that all three
+    /// heading styles inherit: the reference leaves 12 pt above each <c>Heading 1</c> and 8 pt above
+    /// each <c>Heading 2</c>, and we left nothing — which is a page over nine.
+    /// </para>
+    /// </remarks>
+    private static bool IdenticalStyles(ParagraphFormat previous, ParagraphFormat current)
+        => previous.StyleKey is not null && current.StyleKey is not null
+            ? string.Equals(previous.StyleKey, current.StyleKey, StringComparison.Ordinal)
+            : previous.LineSpacing == current.LineSpacing
+              && previous.StartIndent == current.StartIndent
+              && previous.Alignment == current.Alignment;
 
     /// <summary>
     /// Where the baseline sits inside a line box, and how much of the box is empty above the text.

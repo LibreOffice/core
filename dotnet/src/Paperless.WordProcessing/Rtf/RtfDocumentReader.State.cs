@@ -1140,6 +1140,11 @@ public sealed partial class RtfDocumentReader
                 StartsNewPage = state.StartsNewPage,
                 HasWidowControl = state.HasWidowControl,
                 HasContextualSpacing = state.HasContextualSpacing,
+
+                // `\sN`, for the "same style" half of contextual spacing — see
+                // `ParagraphFormat.StyleKey`. Zero is the default style rather than "no style", so it
+                // is a key like any other and two unstyled paragraphs match.
+                StyleIndex = (ushort)Math.Clamp(state.ParagraphStyleId, 0, ushort.MaxValue),
             }.ToParagraphFormat(SizeOf(state)) with
             {
                 Alignment = AlignmentOf(state),

@@ -156,7 +156,12 @@ public sealed record PageLabel
     /// <see cref="LabelFollow.ListTab"/> stop stated in the same frame of reference can be compared
     /// against it.
     /// </param>
-    public Length Advance(Length hangingIndent, Length lineStart)
+    /// <param name="format">
+    /// The paragraph's own stops and default interval, for the case where the label overruns both its
+    /// level's stop and the hanging indent — see the remarks. Null keeps the label butted against the
+    /// text, which is what a caller with no paragraph to consult can honestly say.
+    /// </param>
+    public Length Advance(Length hangingIndent, Length lineStart, ParagraphFormat? format = null)
     {
         // The label plus whatever the level insists on: the portion is never narrower than this, so a
         // long label pushes the text rather than colliding with it.
@@ -164,10 +169,7 @@ public sealed record PageLabel
 
         Length wanted = Follow switch
         {
-            // A tab stop before the label's end has already been passed, and Writer's tab code then falls
-            // through to the paragraph's left margin — which for a hanging indent is exactly the hanging
-            // distance. Taking the larger of the two says both at once.
-            LabelFollow.ListTab => Max(TabStop - lineStart, hangingIndent),
+            LabelFollow.ListTab => ListTabAdvance(floor, hangingIndent, lineStart, format),
 
             // No stop to aim at, so the space is the paragraph's own: the hanging indent is the room the
             // document set aside for the label, and Writer fills it.
@@ -181,6 +183,53 @@ public sealed record PageLabel
         if (Follow == LabelFollow.Space) floor += SpaceWidth();
 
         return Max(Max(wanted, floor), Length.Zero);
+    }
+
+    /// <summary>
+    /// Where the tab after a <see cref="LabelFollow.ListTab"/> label carries the text.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The follower is a real tab: Writer's number portion expands to the number <em>plus</em>
+    /// <c>SvxNumberFormat::GetLabelFollowedByAsString</c>'s <c>"\t"</c>
+    /// (<c>editeng/source/items/numitem.cxx:504</c>), and the tab that comes out of it goes through
+    /// <c>SwTextFormatter::GetTabStop</c> like any other. That matters at exactly one point: when the
+    /// label is wider than its level left room for. The level's own stop is then behind the pen and a
+    /// stop behind the pen is not "no gap" — the search carries on through the paragraph's own stops
+    /// and then along the default interval (<c>sw/source/core/text/txttab.cxx:189</c>). Stopping there
+    /// instead is what put <c>1.0Executive Summary</c> on the page.
+    /// </para>
+    /// <para>
+    /// Measured on <c>final-technical-report-template.docx</c> (words/batch-007): a level with
+    /// <c>w:ind w:left="360" w:hanging="360"</c> puts its stop 18 pt along, the 18 pt label <c>2.0</c>
+    /// is 23.0 pt wide, and LibreOffice starts the heading's text at 36.0 pt — the document's
+    /// <c>w:defaultTabStop</c> — where we started it at 23.0.
+    /// </para>
+    /// <para>
+    /// The order is the search's own. The level's stop first, when it is still ahead; then the
+    /// paragraph's left margin, which is where Writer sends a tab that is still inside the hanging
+    /// indent (<c>bNewTabPortionInsideHangingIndent</c>, <c>txttab.cxx:257</c>); and only then the
+    /// ordinary stops.
+    /// </para>
+    /// </remarks>
+    /// <param name="labelEnd">Where the label ends, measured from its own pen.</param>
+    /// <param name="hangingIndent">Where the paragraph's left margin sits, from the same pen.</param>
+    /// <param name="lineStart">The pen, from the text area's start edge.</param>
+    /// <param name="format">The paragraph, or null when the caller has none.</param>
+    private Length ListTabAdvance(
+        Length labelEnd, Length hangingIndent, Length lineStart, ParagraphFormat? format)
+    {
+        Length listStop = TabStop - lineStart;
+
+        if (listStop > labelEnd) return Max(listStop, hangingIndent);
+        if (hangingIndent > labelEnd || format is null) return hangingIndent;
+
+        // The stops are stated from the paragraph's own tab origin rather than from the text area, so the
+        // pen has to be moved into their frame of reference and the answer moved back out of it.
+        Length pen = lineStart + labelEnd - format.TabOrigin;
+        Length next = format.NextTabStop(pen).Position + format.TabOrigin - lineStart;
+
+        return Max(next, hangingIndent);
     }
 
     /// <summary>

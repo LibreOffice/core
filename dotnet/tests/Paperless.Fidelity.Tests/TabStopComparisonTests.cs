@@ -101,6 +101,63 @@ public sealed class TabStopComparisonTests : IDisposable
             20, $"{fileName}: only {afterTab} words followed a tab, which proves too little");
     }
 
+    /// <summary>
+    /// The tab that follows a list label advances to a stop, and not merely to the label's own end.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's list label really does end in a tab —
+    /// <c>SvxNumberFormat::GetLabelFollowedByAsString</c> returns <c>"\t"</c>
+    /// (<c>editeng/source/items/numitem.cxx:504</c>) — and that tab goes through the same
+    /// <c>GetTabStop</c> as any other. It matters only when the label is wider than the room its level
+    /// reserved, which is the whole of what the corpus document sets up: one list whose label overruns
+    /// its stop and one whose label fits, so a fix for the first cannot quietly move the second.
+    /// </para>
+    /// <para>
+    /// Four formats and not five. The RTF reader takes its label from the <c>{\listtext}</c> group and
+    /// reads no level definition, so it cannot know the stop and marks every label
+    /// <c>LabelFollow.Nothing</c>; on this document LibreOffice puts the overrunning item's text 35 pt
+    /// further along than we do. That is a real gap and it is recorded rather than papered over.
+    /// </para>
+    /// </remarks>
+    [Theory]
+    [InlineData("list-label-overrun.fodt")]
+    [InlineData("list-label-overrun.odt")]
+    [InlineData("list-label-overrun.docx")]
+    [InlineData("list-label-overrun.doc")]
+    public void AListLabelsTabAdvancesToLibreOfficesStop(string fileName)
+    {
+        Assert.SkipUnless(LibreOfficeRunner.IsAvailable, "LibreOffice is not installed");
+
+        string path = Corpus.Require(fileName);
+        List<DrawnWord> drawn = Drawn(path);
+        List<PdfWord> rendered = InReadingOrder(
+            PdfWords.Read(_libreOffice.ConvertToPdf(path, _workDirectory)));
+
+        Assert.SkipWhen(
+            rendered.Count == 0,
+            "pdftotext is not available; install poppler-utils — see check-env.sh");
+
+        string.Join(' ', drawn.Select(word => word.Text))
+            .ShouldBe(
+                string.Join(' ', rendered.Select(word => word.Text)),
+                $"{fileName}: the drawn text differs from the rendered text");
+
+        for (int i = 0; i < rendered.Count; i++)
+        {
+            Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
+                .ShouldBeLessThanOrEqualTo(
+                    TolerancePoints,
+                    $"{fileName}: word {i + 1} (\"{rendered[i].Text}\") starts at "
+                    + $"{drawn[i].Left:F3} pt drawn, {rendered[i].Left - PdfPenOffsetPoints:F3} pt "
+                    + "rendered");
+        }
+
+        // Both lists, so the document proves the overrun case and the ordinary one at once.
+        drawn.Count(word => word.Text == "Paragraph").ShouldBe(2);
+        drawn.Count(word => word.Text is "1." or "2.").ShouldBe(2);
+    }
+
     // ------------------------------------------------------------------------- the machinery
 
     private static List<PdfWord> InReadingOrder(List<PdfWord> words)

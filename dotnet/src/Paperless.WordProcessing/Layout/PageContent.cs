@@ -133,7 +133,8 @@ public sealed record PageParagraph : PageBlock
 
     /// <summary>How far the label pushes the first line's text along, or zero when there is none.</summary>
     internal Length LabelAdvance
-        => Label?.Advance(-_format.FirstLineIndent, _format.StartIndent + _format.FirstLineIndent)
+        => Label?.Advance(
+               -_format.FirstLineIndent, _format.StartIndent + _format.FirstLineIndent, _format)
            ?? Length.Zero;
 
     /// <summary>

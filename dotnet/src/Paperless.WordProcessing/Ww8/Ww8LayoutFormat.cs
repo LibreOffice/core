@@ -1,3 +1,4 @@
+using System.Globalization;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
 using Paperless.Text.Layout;
@@ -139,6 +140,15 @@ public readonly record struct Ww8LayoutFormat
     /// <summary>True when the space between two paragraphs of the same style is suppressed.</summary>
     public bool? HasContextualSpacing { get; init; }
 
+    /// <summary>
+    /// The paragraph style's <c>istd</c>, for the "same style" half of contextual spacing.
+    /// </summary>
+    /// <remarks>
+    /// Not a layout sprm but the index the sprms were resolved through, so it is set by the resolver
+    /// rather than by <c>ApplyLayoutSprms</c>. See <see cref="ParagraphFormat.StyleKey"/>.
+    /// </remarks>
+    public ushort? StyleIndex { get; init; }
+
     /// <summary>The font size in half-points, from <c>sprmCHps</c>.</summary>
     public int? FontSizeHalfPoints { get; init; }
 
@@ -276,6 +286,7 @@ public readonly record struct Ww8LayoutFormat
             SpaceBefore = Twips(SpaceBefore),
             SpaceAfter = Twips(SpaceAfter),
             HasContextualSpacing = HasContextualSpacing ?? false,
+            StyleKey = StyleIndex?.ToString(CultureInfo.InvariantCulture),
             LineSpacing = Spacing(),
             KeepWithNext = KeepWithNext ?? false,
             KeepTogether = KeepTogether ?? false,

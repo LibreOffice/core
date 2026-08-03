@@ -176,6 +176,10 @@ internal static class WordParagraphFormats
             HasContextualSpacing =
                 IsOn(styles, paragraphProperties, styleId, "contextualSpacing", tableStyle),
 
+            // Which style, for the "same style" half of contextual spacing. Already resolved to the
+            // document's default when the paragraph names none, so two unstyled paragraphs match.
+            StyleKey = styleId,
+
             // The one part of w:spacing that is *not* attribute-wise: line and lineRule are a pair, and
             // LibreOffice maps them onto one UNO struct that a layer either replaces whole or leaves
             // alone. So the innermost layer mentioning either decides both.
