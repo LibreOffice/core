@@ -19,6 +19,7 @@ AMD
 Amiga=
 Analogue
 Android
+Ansible
 ANSI
 API
 AppArmor
@@ -81,6 +82,7 @@ DHCP=
 Diners Club
 Discover Card
 DNS
+Docker
 DocLink
 Docuflex=
 Documaker=
@@ -163,12 +165,14 @@ iSCSI
 ISP
 JavaScript
 JCB
+Jenkins
 Jessie
 JPEG
 Kakao
 KDE
 Kerberos
 kHz
+Kubernetes
 Kubuntu
 Kyocera
 LAN
@@ -314,6 +318,7 @@ TCL
 TCP=
 TeliaSonera
 Tencent
+Terraform
 Tesla
 The
 Thunderbird
