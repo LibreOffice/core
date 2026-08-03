@@ -386,8 +386,14 @@ internal static class SheetTextLayout
             if (run.Width + totalMargin <= area.Width) area = area.Unclipped();
         }
 
+        // A cell holding a no-break space or one of the six other characters of
+        // HasEditCharacters is drawn by DrawEditStandard rather than by DrawStrings, and that
+        // path clips the string to the cell without dropping a character from it. Everything
+        // else about the two agrees — the same GetOutputArea with the same lending from empty
+        // neighbours, the same ### for a value that will not fit — so the only thing to skip is
+        // the shortening.
         Length shift = Length.Zero;
-        if (!isValue && !breaks && area.IsClipped)
+        if (!isValue && !breaks && area.IsClipped && !HasEditCharacters(text, fillAt))
         {
             (run, shift) = Shorten(run, text, ShapeRange, percent, horizontal, area);
         }
@@ -469,6 +475,48 @@ internal static class SheetTextLayout
                           or SheetVerticalAlignment.Distributed;
 
         return breaks && isValue ? !format.HasPlainNumberFormat : breaks;
+    }
+
+    /// <summary>
+    /// Whether the cell's text holds a character that sends Calc to the EditEngine.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ScDrawStringsVars::HasEditCharacters</c> (<c>output2.cxx:823-847</c>), consulted at
+    /// <c>output2.cxx:1812</c> before anything about the output area has been decided. Seven code
+    /// points force it — a no-break space, a soft hyphen, a zero-width space, the two bidi marks,
+    /// a non-breaking hyphen and a word joiner — and the consequence is not cosmetic:
+    /// <c>DrawStrings</c> skips the cell entirely and <c>DrawEditStandard</c> draws it, which
+    /// clips the string to the cell and never shortens it. The plain path drops the characters it
+    /// cannot show; the EditEngine path leaves them in the text layer behind a clip.
+    /// </para>
+    /// <para>
+    /// The no-break space is excluded when the cell has a repeat directive, which is tdf#122676:
+    /// "Ignore CHAR_NBSP (this is thousand separator in any number) if repeat character is set".
+    /// The string tested is the cell's <em>display</em> text, so a number whose format groups with
+    /// a no-break space reaches this the same way a piece of typed text does.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The cell's display text.</param>
+    /// <param name="fillAt">Where the repeat directive expands, or −1 when there is none.</param>
+    internal static bool HasEditCharacters(string text, int fillAt = -1)
+    {
+        foreach (char c in text)
+        {
+            switch (c)
+            {
+                case '\u00A0' when fillAt < 0:  // CHAR_NBSP
+                case '\u00AD':                  // CHAR_SHY
+                case '\u200B':                  // CHAR_ZWSP
+                case '\u200E':                  // CHAR_LRM
+                case '\u200F':                  // CHAR_RLM
+                case '\u2011':                  // CHAR_NBHY
+                case '\u2060':                  // CHAR_WJ
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
