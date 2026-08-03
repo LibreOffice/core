@@ -1026,7 +1026,6 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
         }
     }
 
-    //Do we need to create a new style?
     SfxObjectShell *pShell = SfxObjectShell::Current();
     if (!pShell)
         return;
@@ -1034,20 +1033,11 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
     SfxStyleSheetBase* pStyle = nullptr;
 
-    bool bCreateNew = false;
-
     if ( pPool )
     {
         pStyle = pPool->First(eStyleFamily);
         while ( pStyle && pStyle->GetName() != aSearchEntry )
             pStyle = pPool->Next();
-    }
-
-    if ( !pStyle )
-    {
-        // cannot find the style for whatever reason
-        // therefore create a new style
-        bCreateNew = true;
     }
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -1060,25 +1050,23 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
 
     if ( bClear )
         set_active_or_entry_text(aSearchEntry);
+
+    // Text that names no existing style applies nothing: creating a style here is
+    // a separate, deliberate action (the Styles panel's "New Style..." command).
+    if ( !pStyle )
+        return;
+
     m_xWidget->save_value();
 
     Sequence< PropertyValue > aArgs( 2 );
     auto pArgs = aArgs.getArray();
+    pArgs[0].Name   = u"Template"_ustr;
     pArgs[0].Value  <<= aSearchEntry;
     pArgs[1].Name   = u"Family"_ustr;
     pArgs[1].Value  <<= sal_Int16( eStyleFamily );
 
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
-    if( bCreateNew )
-    {
-        pArgs[0].Name   = u"Param"_ustr;
-        SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleNewByExample"_ustr, aArgs);
-    }
-    else
-    {
-        pArgs[0].Name   = u"Template"_ustr;
-        SfxToolBoxControl::Dispatch(xProvider, m_aCommand, aArgs);
-    }
+    SfxToolBoxControl::Dispatch(xProvider, m_aCommand, aArgs);
 }
 
 void SvxStyleBox_Base::SetFamily( SfxStyleFamily eNewFamily )
