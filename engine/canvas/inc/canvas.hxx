@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 
 #include <cppuhelper/compbase.hxx>
@@ -29,9 +30,9 @@
 #include <sal/types.h>
 
 #include "./base/basemutexhelper.hxx"
-#include "./base/bitmapcanvasbase.hxx"
 #include "./base/graphicdevicebase.hxx"
 
+#include "canvasfont.hxx"
 #include "canvashelper.hxx"
 #include "impltools.hxx"
 #include "devicehelper.hxx"
@@ -49,11 +50,6 @@ namespace vclcanvas
                                            DeviceHelper,
                                            vclcanvastools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
-    typedef canvas::BitmapCanvasBase<
-            CanvasBase_Base,
-            CanvasHelper,
-            vclcanvastools::LocalGuard,
-            ::cppu::OWeakObject> CanvasBaseT;
 
     /** Product of this component's factory.
 
@@ -64,7 +60,7 @@ namespace vclcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class SAL_DLLPUBLIC_RTTI Canvas : public CanvasBaseT
+    class SAL_DLLPUBLIC_RTTI Canvas : public CanvasBase_Base
     {
     public:
         VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
@@ -94,6 +90,35 @@ namespace vclcanvas
             css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
         {                                                                               \
             ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
+        }
+
+        void clear()
+        {
+            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.clear();
+        }
+
+        void drawPoint(const css::geometry::RealPoint2D&     aPoint,
+                                        const ::vclcanvas::ViewState&      viewState,
+                                        const ::vclcanvas::RenderState&    renderState)
+        {
+            canvastools::verifyArgs(aPoint, viewState, renderState,
+                              __func__,
+                              static_cast< ::cppu::OWeakObject* >(this));
+
+            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+
+            mbSurfaceDirty = true;
+        }
+
+        css::uno::Reference< vclcanvas::XGraphicDevice > getDevice()
+        {
+            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+
+            return maCanvasHelper.getDevice();
         }
 
         bool repaint( const GraphicObjectSharedPtr&                 rGrf,
@@ -252,6 +277,22 @@ namespace vclcanvas
 
             maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
+
+    private:
+        css::geometry::IntegerSize2D getSize(  )
+        {
+            vclcanvastools::LocalGuard aGuard( CanvasBase_Base::m_aMutex );
+
+            return maCanvasHelper.getSize();
+        }
+
+        bool hasAlpha(  )
+        {
+            return true;
+        }
+
+        CanvasHelper        maCanvasHelper;
+        mutable bool        mbSurfaceDirty;
     };
 }
 

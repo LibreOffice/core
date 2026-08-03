@@ -32,7 +32,8 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    Canvas::Canvas( OutputDevice* pOutDev )
+    Canvas::Canvas( OutputDevice* pOutDev ) :
+        mbSurfaceDirty( true )
     {
         SolarMutexGuard aGuard;
 
@@ -60,8 +61,12 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // forward to parent
-        CanvasBaseT::disposeThis();
+        vclcanvastools::LocalGuard aGuard2( CanvasBase_Base::m_aMutex );
+
+        maCanvasHelper.disposing();
+
+        // pass on to base class
+        CanvasBase_Base::disposeThis();
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
