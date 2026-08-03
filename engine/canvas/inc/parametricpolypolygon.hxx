@@ -26,10 +26,9 @@
 
 #include <canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
-#include "XGraphicDevice.hxx"
 #include <utility>
 
-namespace com::sun::star::rendering { class XGraphicDevice; }
+namespace vclcanvas { class Canvas; }
 
 
 /* Definition of ParametricPolyPolygon class */
@@ -86,7 +85,7 @@ namespace canvas
         };
 
         static rtl::Reference<ParametricPolyPolygon> create(
-            const css::uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
+            const rtl::Reference< vclcanvas::Canvas >& rDevice,
             std::u16string_view rServiceName,
             const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors,
             const ::cpo::uno::Sequence< double >& stops,
@@ -108,37 +107,34 @@ namespace canvas
         ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
-        static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient( const css::uno::Reference<
-                                                                         vclcanvas::XGraphicDevice >& rDevice,
+        static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient( const rtl::Reference<
+                                                                         vclcanvas::Canvas >& rDevice,
                                                                       const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                       const cpo::uno::Sequence< double >& stops );
-        static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient( const css::uno::Reference<
-                                                                   vclcanvas::XGraphicDevice >& rDevice,
+        static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient( const rtl::Reference<
+                                                                   vclcanvas::Canvas >& rDevice,
                                                                 const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                 const cpo::uno::Sequence< double >& stops,
                                                                 double fAspect );
-        static rtl::Reference<ParametricPolyPolygon> createRectangularGradient( const css::uno::Reference<
-                                                                    vclcanvas::XGraphicDevice >& rDevice,
+        static rtl::Reference<ParametricPolyPolygon> createRectangularGradient( const rtl::Reference<
+                                                                    vclcanvas::Canvas >& rDevice,
                                                                  const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                  const cpo::uno::Sequence< double >& stops,
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
-        ParametricPolyPolygon( css::uno::Reference<
-                                   vclcanvas::XGraphicDevice >             xDevice,
+        ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >             xDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
                                const cpo::uno::Sequence< double >&              stops,
                                double                                           nAspectRatio );
-        ParametricPolyPolygon( css::uno::Reference<
-                                   vclcanvas::XGraphicDevice >             xDevice,
+        ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >             xDevice,
                                GradientType                                     eType,
                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
                                const cpo::uno::Sequence< double >&              stops );
 
-        css::uno::Reference<
-            vclcanvas::XGraphicDevice >    mxDevice;
+        rtl::Reference< vclcanvas::Canvas >    mxDevice;
 
         /// All defining values of this object
         const Values                                         maValues;

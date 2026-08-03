@@ -52,7 +52,6 @@ namespace com::sun::star::geometry
 
 namespace com::sun::star::rendering
 {
-    class XGraphicDevice;
     class XPolyPolygon2D;
 }
 
@@ -71,10 +70,6 @@ namespace com::sun::star::awt
 
 namespace com::sun::star::beans {
     struct PropertyValue;
-}
-
-namespace vclcanvas {
-    class XGraphicDevice;
 }
 
 class Color;

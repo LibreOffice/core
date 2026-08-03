@@ -33,7 +33,6 @@
 
 #include "canvasfont.hxx"
 #include "impltools.hxx"
-#include "XGraphicDevice.hxx"
 #include "Texture.hxx"
 #include "parametricpolypolygon.hxx"
 #include "verifyinput.hxx"
@@ -43,7 +42,7 @@ class OutputDevice;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XGraphicDevice >    GraphicDeviceBase_Base;
+    typedef ::cppu::WeakComponentImplHelper<>    GraphicDeviceBase_Base;
 
     /** Product of this component's factory.
 
@@ -86,11 +85,9 @@ namespace vclcanvas
             ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
         }
 
-        // XGraphicDevice
+        css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
 
-        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override;
-
-        virtual ::css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( const ::rtl::OUString& GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio ) override
+        css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 canvas::ParametricPolyPolygon::create(this,

@@ -36,8 +36,8 @@
 
 namespace vclcanvas
 {
+    class Canvas;
     class TextLayout;
-    class XGraphicDevice;
 
     typedef ::comphelper::WeakComponentImplHelper<> CanvasFont_Base;
 
@@ -58,7 +58,7 @@ namespace vclcanvas
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
                     FontEmphasisMark                                                       eMark,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
-                    vclcanvas::XGraphicDevice&                                             rDevice,
+                    vclcanvas::Canvas&                                                     rDevice,
                     OutputDevice&                                                          rOutDevProvider );
 
         /// Dispose all internal references
@@ -95,7 +95,7 @@ namespace vclcanvas
     private:
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
-        css::uno::Reference< vclcanvas::XGraphicDevice>                   mpRefDevice;
+        rtl::Reference< vclcanvas::Canvas >                               mpRefDevice;
         VclPtr<OutputDevice>                                              mpOutDevProvider;
         css::geometry::Matrix2D                                           maFontMatrix;
     };

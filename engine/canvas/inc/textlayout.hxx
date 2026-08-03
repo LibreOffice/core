@@ -66,7 +66,7 @@ namespace vclcanvas
         TextLayout( css::rendering::StringContext                 aText,
                     sal_Int8                                      nDirection,
                     CanvasFont::Reference                         rFont,
-                    css::uno::Reference<vclcanvas::XGraphicDevice> xDevice,
+                    rtl::Reference<vclcanvas::Canvas>             xDevice,
                     const VclPtr<OutputDevice> &                  xOutDev );
 
         /// Dispose all internal references
@@ -198,7 +198,7 @@ namespace vclcanvas
         cpo::uno::Sequence< double >                     maLogicalAdvancements;
         cpo::uno::Sequence< bool >                   maKashidaPositions;
         CanvasFont::Reference                            mpFont;
-        css::uno::Reference< vclcanvas::XGraphicDevice> mxDevice;
+        rtl::Reference< vclcanvas::Canvas>               mxDevice;
         VclPtr<OutputDevice>                             mpOutDevProvider;
         sal_Int8                                         mnTextDirection;
     };

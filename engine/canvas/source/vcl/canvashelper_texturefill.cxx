@@ -32,6 +32,7 @@
 #include <basegfx/utils/keystoplerp.hxx>
 #include <basegfx/utils/lerp.hxx>
 #include <basegfx/utils/tools.hxx>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>

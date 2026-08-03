@@ -34,6 +34,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvastools.hxx>
+#include <canvas.hxx>
 
 #include <textlayout.hxx>
 
@@ -76,7 +77,7 @@ namespace vclcanvas
     TextLayout::TextLayout( rendering::StringContext                   aText,
                             sal_Int8                                   nDirection,
                             CanvasFont::Reference                      rFont,
-                            uno::Reference<vclcanvas::XGraphicDevice>  xDevice,
+                            rtl::Reference<vclcanvas::Canvas>          xDevice,
                             const VclPtr<OutputDevice>&                xOutDev ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),

@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <parametricpolypolygon.hxx>
+#include <canvas.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -32,7 +33,7 @@ using namespace ::com::sun::star;
 namespace canvas
 {
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
-        const uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
+        const rtl::Reference< vclcanvas::Canvas >& rDevice,
         std::u16string_view rServiceName,
         const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colorSequence,
         const ::cpo::uno::Sequence< double >& colorStops,
@@ -57,7 +58,7 @@ namespace canvas
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createLinearHorizontalGradient(
-        const uno::Reference< vclcanvas::XGraphicDevice >&  rDevice,
+        const rtl::Reference< vclcanvas::Canvas >&  rDevice,
         const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
         const cpo::uno::Sequence< double >&                      stops )
     {
@@ -67,7 +68,7 @@ namespace canvas
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createEllipticalGradient(
-        const uno::Reference< vclcanvas::XGraphicDevice >&  rDevice,
+        const rtl::Reference< vclcanvas::Canvas >&  rDevice,
         const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
         const cpo::uno::Sequence< double >&                      stops,
         double                                              fAspectRatio )
@@ -82,7 +83,7 @@ namespace canvas
             colors, stops, fAspectRatio );
     }
 
-    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient( const uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient( const rtl::Reference< vclcanvas::Canvas >& rDevice,
                                                                              const cpo::uno::Sequence< cpo::uno::Sequence< double > >&    colors,
                                                                              const cpo::uno::Sequence< double >&                     stops,
                                                                              double                                             fAspectRatio )
@@ -121,7 +122,7 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< vclcanvas::XGraphicDevice >           xDevice,
+    ParametricPolyPolygon::ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >           xDevice,
                                                   const ::basegfx::B2DPolygon&                          rGradientPoly,
                                                   GradientType                                          eType,
                                                   const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
@@ -136,7 +137,7 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< vclcanvas::XGraphicDevice >           xDevice,
+    ParametricPolyPolygon::ParametricPolyPolygon( rtl::Reference< vclcanvas::Canvas >           xDevice,
                                                   GradientType                                          eType,
                                                   const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
                                                   const cpo::uno::Sequence< double >&                        rStops ) :

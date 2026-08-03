@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvasfont.hxx>
+#include <canvas.hxx>
 #include <textlayout.hxx>
 
 using namespace ::com::sun::star;
@@ -39,7 +40,7 @@ namespace vclcanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             FontEmphasisMark                                eEmphasisMark,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            vclcanvas::XGraphicDevice&                      rDevice,
+                            vclcanvas::Canvas&                              rDevice,
                             OutputDevice&                                   rOutDevProvider ) :
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,

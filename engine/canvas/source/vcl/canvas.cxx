@@ -31,6 +31,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
