@@ -315,6 +315,16 @@ a cell's width is not a column's.
 proves the heading row is placed again on the continuation and that the split falls between rows rather
 than through one.
 
+`table-row-spacing.*` is the opposite case, and the page is short (10 cm) so the whole document is two
+pages. A middle row holds four paragraphs each with a 1 cm space below, so its *lines* fit in the room left
+on page one and the row does not — the difference being the space after its last paragraph, which counts
+towards a Word row's height (`AddParaSpacingToTableCells`) and is not ink. LibreOffice leaves three of the
+four paragraphs on page one. A renderer measuring a row's *part* from its ink instead judges the last cut
+free, declines the split as gaining nothing, and moves the whole row: **none** of the four stay, and 154 pt
+of the page goes blank. The margin either side of the band is a whole 28 pt space, so the fixture is not
+delicately balanced — but it does depend on the trailing space being charged to the row, which is why all
+five formats are exported from the one flat-ODF source rather than hand-written per format.
+
 Two things about writing these by hand, both learned the hard way:
 
 - A table's **column and cell styles must be automatic styles**. Declared in `office:styles`, LibreOffice

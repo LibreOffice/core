@@ -261,7 +261,7 @@ public static class TableLayouter
         {
             if (chosen is { } already && already == candidate) continue;
 
-            Length needed = HeightAt(cells, above, candidate, border);
+            Length needed = HeightAt(cells, rowTop, above, candidate, border);
             if (needed > room) break;
 
             chosen = candidate;
@@ -282,16 +282,34 @@ public static class TableLayouter
     /// How tall the row's part is when it is cut at a stated depth.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The same sum <see cref="LayOut"/> makes a whole row from — the tallest cell's text plus its
     /// padding, plus the row's borders — over the lines this part holds. The row's declared floor is
     /// deliberately <em>not</em> applied: it is a floor on the row and the parts add up to the row, so
     /// imposing it on each would make a split row twice as tall as an unsplit one. A row whose floor
     /// exceeds its text never reaches here anyway, since every line then fits in one part and
     /// <see cref="SliceRow"/> declines a split that leaves nothing over.
+    /// </para>
+    /// <para>
+    /// The two ends of the run are measured as <see cref="LayOut"/> measures them rather than as ink, and
+    /// that is what makes the two agree. A cell's flow does not begin at its first line — a first
+    /// paragraph's space-before sits above it — and it does not end at its last, since
+    /// <see cref="PlacedFlow.Advance"/> carries the last paragraph's space-after, which is exactly what
+    /// a row's height is built from. So the row's own first part starts at the flow's top, and a part
+    /// holding a cell's last line ends at its advance. Measuring both from the ink instead makes the sum
+    /// of a row's parts shorter than the row, and then a row whose text fits the page but whose *height*
+    /// does not is judged unbreakable by one measure and too tall by the other: it moves whole and leaves
+    /// the difference blank. Measured on
+    /// <c>f445896eb008d14c1746fc37d412dc22.docx</c>, where 205.8 pt of a page went empty because the row
+    /// was 211.8 pt tall and its lines measured 202.5.
+    /// </para>
     /// </remarks>
     private static Length HeightAt(
-        IReadOnlyList<PlacedTableCell> cells, Length above, Length cut, Length border)
+        IReadOnlyList<PlacedTableCell> cells, Length rowTop, Length above, Length cut, Length border)
     {
+        // The row's own first part keeps the offset it was laid out with — see `Sliced` — so its cells
+        // begin at the top of their flow and not at their first line.
+        bool isFirst = above <= rowTop;
         Length text = Length.Zero;
 
         foreach (PlacedTableCell cell in cells)
@@ -306,11 +324,21 @@ public static class TableLayouter
                 Length end = flow.Area.Y + line.Top + line.Box.Height;
                 if (end <= above || end > cut) continue;
 
-                top ??= flow.Area.Y + line.Top;
+                top ??= isFirst ? flow.Area.Y : flow.Area.Y + line.Top;
                 bottom = end;
             }
 
-            if (top is { } start) text = Length.Max(text, bottom - start + cell.Cell.Padding.Vertical);
+            if (top is not { } start) continue;
+
+            // Nothing of this cell is left over, so its part is as tall as the cell — the trailing
+            // spacing included, which is what `LayOut` charged the row for.
+            if (flow.Lines.Count > 0
+                && flow.Area.Y + flow.Lines[^1].Top + flow.Lines[^1].Box.Height <= cut)
+            {
+                bottom = Length.Max(bottom, flow.Area.Y + flow.Advance);
+            }
+
+            text = Length.Max(text, bottom - start + cell.Cell.Padding.Vertical);
         }
 
         return text + border;

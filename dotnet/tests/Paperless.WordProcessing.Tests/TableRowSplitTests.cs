@@ -1,6 +1,7 @@
 using Paperless.Core.Geometry;
 using Paperless.Core.Units;
 using Paperless.Text.Fonts;
+using Paperless.Text.Layout;
 using Paperless.WordProcessing.Layout;
 using Paperless.WordProcessing.Model;
 using Shouldly;
@@ -104,6 +105,40 @@ public sealed class TableRowSplitTests
         pages[1].Tables[0].FirstRow.ShouldBe(1);
     }
 
+    /// <summary>
+    /// A row is as tall as its content plus the space around it, and a part of it must be measured the
+    /// same way — otherwise a row that does not fit is judged to fit and moves whole.
+    /// </summary>
+    /// <remarks>
+    /// The two measures come apart at the ends of a cell's flow: a first paragraph's space-before sits
+    /// above its first line and a last paragraph's space-after below its last, and both count towards the
+    /// row's height (<c>AddParaSpacingToTableCells</c>) while neither is ink. Cutting the row at its last
+    /// line therefore looked cheaper than the row itself, so the cut "held every remaining line", the
+    /// split was declined as pointless, and the caller — which had already found the row too tall by the
+    /// other measure — sent it to the next page and left the difference blank. Measured on
+    /// <c>f445896eb008d14c1746fc37d412dc22.docx</c> as 205.8 pt of empty page.
+    /// </remarks>
+    [Fact]
+    public void ARowIsSplitWhenOnlyItsParagraphSpacingDoesNotFit()
+    {
+        PageTable table = Table(rows: 1, linesPerCell: 4, spacing: Length.FromPoints(20));
+
+        (List<PlacedTableCell> cells, List<Length> heights) =
+            TableLayouter.LayOut(table, new DocPoint(Length.Zero, Length.Zero));
+
+        // Room for every line the row holds, and not for the spacing above and below them.
+        Length room = heights[0] - Length.FromPoints(1);
+
+        TableLayouter.RowSlice? slice =
+            TableLayouter.SliceRow(table.Rows[0], cells, Length.Zero, room);
+
+        slice.ShouldNotBeNull("a row that does not fit must give up the lines that do");
+        slice.Value.IsComplete.ShouldBeFalse("something has to be left for the next page");
+        slice.Value.Height.ShouldBeLessThanOrEqualTo(room);
+        slice.Value.Cells.Sum(cell => cell.Content?.Lines.Count ?? 0)
+            .ShouldBeInRange(1, 3, "some lines stay behind and at least one goes over");
+    }
+
     /// <summary>How many of a page's table lines were drawn, over every cell of every part.</summary>
     private static int LinesOn(LaidOutPage page)
         => page.Tables
@@ -118,7 +153,8 @@ public sealed class TableRowSplitTests
         int rows,
         int linesPerCell,
         bool canSplit = true,
-        Length exactHeight = default)
+        Length exactHeight = default,
+        Length spacing = default)
         => new()
         {
             ColumnWidths = [Length.FromTwips(4000)],
@@ -133,7 +169,7 @@ public sealed class TableRowSplitTests
                             Blocks =
                             [
                                 .. Enumerable.Range(0, linesPerCell)
-                                    .Select(line => Paragraph($"row {row} line {line}")),
+                                    .Select(line => Paragraph($"row {row} line {line}", spacing)),
                             ],
                         },
                     ],
@@ -155,11 +191,12 @@ public sealed class TableRowSplitTests
             Length.FromTwips(720), Length.FromTwips(720)),
     };
 
-    private static PageParagraph Paragraph(string text) => new()
+    private static PageParagraph Paragraph(string text, Length spacing = default) => new()
     {
         Text = text,
         Face = Face,
         EmSize = Length.FromPoints(11),
+        Format = ParagraphFormat.Default with { SpaceBefore = spacing, SpaceAfter = spacing },
     };
 
     private static OpenTypeFace Face { get; } = Resolve();
