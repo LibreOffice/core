@@ -295,6 +295,11 @@ again in corpus form: a fix aimed at batch *n* routinely breaks batch *n−4* in
 looks nothing like the change, and advancing on the first condition alone is how a corpus
 rots from the front.
 
+**`TODO.metafile-pages.md` lists 27 pages the word gate cannot win.** LibreOffice rasterises
+an embedded EMF or WMF on those, so its PDF holds a picture where ours holds real searchable
+text — ours is the better output and `wc -w` scores it as failure. Check that list before
+working any word-count failure; several agents have each re-derived it the hard way.
+
 The `corpus-batches` skill holds the rest — why the ordering and the batch size are what
 they are, what parity does and does not prove, and what a dispatch brief for a parallel
 agent has to contain. `TODO.batches.md` is the scoreboard.

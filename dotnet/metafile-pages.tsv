@@ -1,0 +1,41 @@
+document	page	emf	wmf	our_words	ref_words	verdict
+words/batch-013/docx/A1. EASA Form 2.docx	0	1	0	-	-	pagination-differs
+words/batch-013/docx/FO.FCTOA_.000129 Application for activities related to FSTD.docx	2	2	0	254	187	ceiling
+words/batch-013/docx/FO.FCTOA_.000129 Application for activities related to FSTD.docx	5	2	0	429	162	ceiling
+words/batch-013/docx/bulletin.docx	0	6	0	-	-	pagination-differs
+words/batch-011/docx/f2_registro_de_aprovacao_com_pbcs_EN.docx	1	0	3	230	181	ceiling
+words/batch-021/docx/ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx	0	1	0	-	-	pagination-differs
+words/batch-021/docx/docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx	0	7	1	-	-	pagination-differs
+words/batch-010/docx/195584360.docx	0	0	1	-	-	pagination-differs
+words/batch-010/docx/5709.16 ch.40_mgfinal.docx	0	0	1	-	-	pagination-differs
+words/batch-016/docx/JEMIT_Template.docx	1	2	0	745	465	ceiling
+words/batch-017/docx/Agile_Arc_SysDes.docx	1	1	2	30	20	ceiling
+words/batch-017/docx/UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx	0	2	0	-	-	pagination-differs
+words/batch-019/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx	0	1	0	-	-	pagination-differs
+words/batch-018/docx/HC-Bulletin-template.docx	0	1	0	-	-	pagination-differs
+words/batch-018/docx/airbus-pdf-information-package_v1-4.docx	6	1	0	173	125	ceiling
+words/batch-020/docx/150-5370-10H.docx	0	0	1	-	-	pagination-differs
+words/batch-020/docx/AC-150-5370-10G-updated-201604.docx	0	1	5	-	-	pagination-differs
+words/batch-020/docx/EHEST-SMS-Safety-Management-Manual-V2.docx	18	6	0	418	224	ceiling
+words/batch-020/docx/EHEST-SMS-Safety-Management-Manual-V2.docx	43	6	0	396	229	ceiling
+words/batch-020/docx/EHEST-SMS-Safety-Management-Manual-V2.docx	76	6	0	97	51	ceiling
+slides/batch-008/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	5	3	2	114	70	ceiling
+slides/batch-016/pptx/16 - UTM - (NASA).pptx	7	2	0	261	158	ceiling
+slides/batch-016/pptx/16 - UTM - (NASA).pptx	29	2	0	109	1	ceiling
+slides/batch-016/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	14	1	1	119	91	ceiling
+slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx	5	31	0	53	41	ceiling
+slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx	6	31	0	85	59	ceiling
+slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx	7	31	0	106	82	ceiling
+slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx	8	31	0	52	40	ceiling
+slides/batch-014/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	30	6	0	130	103	ceiling
+slides/batch-014/pptx/Structural Testing.pptx	19	2	0	37	5	ceiling
+slides/batch-014/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	21	0	1	78	23	ceiling
+slides/batch-014/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	28	0	1	53	5	ceiling
+slides/batch-014/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	44	0	1	34	4	ceiling
+slides/batch-014/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	45	0	1	50	5	ceiling
+slides/batch-014/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	46	0	1	35	5	ceiling
+slides/batch-017/pptx/Wildlife for REDAC September 11.pptx	29	4	1	49	26	ceiling
+slides/batch-012/pptx/OnTrac_StarCertificationProgram-3Day.pptx	9	2	0	96	50	ceiling
+slides/batch-012/pptx/OnTrac_StarCertificationProgram-3Day.pptx	10	2	0	281	30	ceiling
+sheets/batch-014/xls/TICAPCapability_Final.xls	0	1	0	-	-	pagination-differs
+sheets/batch-012/xlsx/FAA-2019-0995-0002_attachment_2.xlsx	0	4	0	-	-	pagination-differs
