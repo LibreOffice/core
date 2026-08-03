@@ -214,6 +214,116 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the seventh sheets sweep found: three ways a cell escapes `DrawStrings`
+
+Swept whole at `e2e0bdee3`: **122 of 171**, page error 222, exact page counts 134 — the briefed
+figures to the digit, which is the first time this track's handover has reproduced exactly.
+
+All three fixes this round are the same shape, and it is worth stating as one finding rather than
+three. **`ScOutputData::DrawStrings` is not the only thing that draws a cell**, and the cells that
+leave it behave differently in a way the gate can see: the plain path *shortens* a string that
+will not fit, and the EditEngine path clips it instead. Every defect below is a cell taking the
+EditEngine path in Calc and the plain one here.
+
+### A no-break space sends a cell to the EditEngine
+
+`ScDrawStringsVars::HasEditCharacters` (`sc/source/ui/view/output2.cxx:823-847`) is consulted at
+`output2.cxx:1812`, before anything about the output area is decided. Seven code points force it —
+`CHAR_NBSP`, `CHAR_SHY`, `CHAR_ZWSP`, the two bidi marks, `CHAR_NBHY` and `CHAR_WJ` — and
+`DrawStrings` then skips the cell entirely for `DrawEditStandard`, which sets a clip of the cell
+and draws the whole string behind it. The no-break space alone is excused by a repeat directive,
+which is tdf#122676 stated in the comment beside the case: it is a thousands separator in half of
+Europe.
+
+Measured on `esurf-12-135-2024-t01.xlsx`, whose date column is written `28<NBSP>Oct<NBSP>2012` in a
+column one character too narrow: the reference's text layer holds all eleven characters on eighteen
+of its twenty-three rows and ours held ten. **113 extractable words against 124, and 123 now.**
+The tell in the reference PDF is unmistakable once seen — those cells are drawn in a second,
+`/P<</MCID n>>BDC`-tagged pass at the end of the page's content stream, each behind a clip one row
+tall, while every other cell is drawn inline behind a clip the whole band's height.
+
+### A hyperlink replaces a cell's content with one field, and a field never wraps
+
+Calc does not decorate a cell with a hyperlink. `WorksheetGlobals::insertHyperlink`
+(`sc/source/filter/oox/worksheethelper.cxx:1062-1080`) and `lclInsertUrl`
+(`sc/source/filter/excel/xicontent.cxx:157-215`) both replace a **string or edit** cell's content
+with a single `SvxURLField` whose representation is the string it held, and leave every other cell
+type carrying a plain `ATTR_HYPERLINK` that changes nothing. A field is one indivisible portion:
+"Fields aren't wrapped, so clipping is enabled to prevent a field from being drawn beyond the cell
+size" (`DrawEditParam::readCellContent`, `output2.cxx:2560-2567`, consulted at `:3239`).
+
+That reaches pagination and not only the word count, because a URL is exactly the string a line
+breaker splits at every solidus: a wrapping column of links measured four or five lines a row
+instead of one, and a row height is a page count. `SheetLayout.HyperlinkRanges` is filled by all
+four readers — `hyperlinks` in a SpreadsheetML worksheet, BIFF8 `HLINK`, BIFF12 `BrtHLink`, ODF
+`text:a`. Only *whether* a URL results is read, never what it is; for BIFF that is the flag word
+(`EXC_HLINK_BODY|MARK|UNC`) rather than a walk of the monikers, because a link resolving to an
+empty string never reaches a cell at all (`XclImpHyperlink::ReadHlink`'s `if (!aString.isEmpty())`).
+
+Measured on `Published_Issuances_2024.xlsx`, whose last column is a wrapping column of links:
+**482 extractable words against 458, and 458 now. 33 of the track's 171 documents carry cell
+hyperlinks**; the other 32 were rendered before and after and none changed verdict.
+
+### A clipped string's surviving glyphs do not move
+
+Not an EditEngine case, but found by the same reading. `Shorten` drops the characters a clipped
+cell cannot show — Calc does the same, "if the string is clipped, make it shorter for better
+performance since drawing by HarfBuzz is quite expensive" (`output2.cxx:2202`), and it is visible
+rather than merely faster because the PDF holds what was drawn. A right-aligned string loses its
+*head*, and the glyphs that remain were already standing at `right − margin − shortened`, which is
+what `Horizontal` returns when handed the shortened run's own width. It was then shifted right
+again by the width dropped.
+
+Measured on `RVSM_Non_approved_list_2025_84c0b3f4ac.xlsx`, whose left-clipped dates ran flush into
+the next column with no gap: the reference draws `2-10-2022` from 51.82 pt to 97.50 pt and we drew
+it from 57.36 pt — **5.54 pt right, the width of the one digit dropped.** `pdftotext` then read
+each date and its neighbour as one token: **419 extractable words against 445, and 445 now.**
+
+Fixtures: `features/sheet-edit-characters.fods`, `features/sheet-hyperlink-field.xlsx` and
+`features/sheet-clipped-alignment.fods`, each checked against LibreOffice 24.2.7.2's own PDF and
+each carrying its negative half — plain text in the same column that must still be shortened, the
+same URL without a link on it that must still wrap into five lines, and a left-aligned cell that
+must still lose its tail. All five tests were confirmed to fail with their defect put back.
+
+### `RegChangeReport.xlsx`: the lead is measured further and still not caused
+
+The previous round recorded page 2 as 5 words against 507 and refuted the row-split theory from
+`UpdatePageBreaks`. The measurement reproduces (2302 against 3137, and 2314 now), and this is what
+the reference's geometry says, which narrows it without settling it.
+
+Row 24 holds the 3 264-character "Liability Management Framework" description, wraps to about 57
+lines, and its row is **12.75 pt tall and marked `customHeight`** — LibreOffice's own flat-ODF
+export writes it `style:use-optimal-row-height="false"`. The reference draws that one cell on
+**three consecutive pages**, each time at a different vertical offset: page 1 from the row's own
+position near the bottom, running off the paper at y=774 of 792; page 2 with line 1 just above the
+sheet at y=−6, so lines 2 to 57 land; page 3 from line ~41 at y=1. Nothing on page 2 but that cell.
+We draw it once, on page 1, and leave page 2 holding only the security-classification band.
+
+**A probe does not reproduce it.** A flat-ODS sheet with one 12.75 pt manual-height wrapping cell
+holding 420 words, followed by eleven ordinary rows, renders on **one** page with the text cut off
+after four lines — so "a manual-height row's overflow is redrawn on the following pages" is *not*
+the rule as stated. Something about this document puts the cell on three pages and the probe's on
+one; whatever that is, it is worth finding, because it is 835 words on a single document and the
+same shape as the horizontal lead-in already implemented.
+
+### Two diagnosed and not fixed
+
+- **`Hazard Analysis Template.xls` prints its cell notes on a page of their own.** 2 pages against
+  3, 461 words against 682, and the missing page is a list of `D1:`, `F2:`, `H2:` … labels
+  followed by note text, which is Excel's "Comments: at end of sheet". LibreOffice's flat-ODS
+  export of the file says `style:print="annotations …"`, and `XclImpPageSettings::ReadSetup` reads
+  it from `EXC_SETUP_PRINTNOTES` (`sc/source/filter/excel/xipage.cxx:84`) into `ATTR_PAGE_NOTES`
+  (`:257`). Nothing here reads cell comments for layout in any format, so this is a feature rather
+  than a wiring change, and no other corpus document was shown to need it.
+- **A sheet shape's text is drawn in one face whatever it states**, which `SheetShapeText` already
+  records as a limitation. Measured on `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx`,
+  whose 806 pt notes box states `<a:latin typeface="+mn-lt"/>` against a theme whose minor Latin
+  face is Calibri: the reference's line pitch is 13.5 pt and ours 12.5, which inverts to Carlito's
+  line box against Liberation Sans's. Every line therefore breaks in a different place and the
+  page-edge clip cuts a different amount — 479 words against 550. The reach is small and was
+  measured rather than assumed: **7 of the track's 109 XLSX have shape text naming a typeface**,
+  three of them through `+mn-lt`.
+
 ## What the fifth sheets sweep found
 
 `sheets/batch-003` measured **8/10** at `86ce2dc9b`, reproducing the briefed baseline exactly, and
