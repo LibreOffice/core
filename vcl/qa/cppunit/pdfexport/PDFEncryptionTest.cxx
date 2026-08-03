@@ -20,7 +20,10 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <algorithm>
 #include <memory>
@@ -100,6 +103,48 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0_PaddingBlockBoundary)
+{
+    loadFromURL(u"private:factory/swriter"_ustr);
+
+    // 16 characters are exactly one cipher block
+    const OUString aLinkURL = u"http://16.by/tes"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aLinkURL.getLength());
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->setString(u"link"_ustr);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoStart(false);
+    xCursor->gotoEnd(true);
+    uno::Reference<beans::XPropertySet> xCursorProperties(xCursor, uno::UNO_QUERY_THROW);
+    xCursorProperties->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aLinkURL));
+
+    // Save PDF
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
+          { "EncryptFile", uno::Any(true) },
+          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+
+    // Load the exported result in PDFium and read the link target back
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    int nLinkIndex = 0;
+    std::unique_ptr<vcl::pdf::PDFiumLink> pLink
+        = pPdfPage->enumerateLink(&nLinkIndex, pPdfDocument.get());
+    CPPUNIT_ASSERT(pLink);
+    // the problem was that the padding on the encrypted string was wrong
+    // so it could not be read
+    CPPUNIT_ASSERT_EQUAL(aLinkURL, pLink->getURIPath());
 }
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6)
@@ -302,8 +347,26 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPadding)
     size_t nPaddedSize = vcl::pdf::addPaddingToVector(aVector, constBlockSize);
     CPPUNIT_ASSERT_EQUAL(size_t(constBlockSize), aVector.size());
     CPPUNIT_ASSERT_EQUAL(size_t(constBlockSize), nPaddedSize);
-    for (size_t i = 6; i < constBlockSize; i++)
+    for (size_t i = 5; i < constBlockSize; i++)
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x0B), aVector[i]);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPaddingBlockBoundary)
+{
+    // Data that already ends on a block boundary gets a whole block of padding
+    constexpr size_t constBlockSize = 16;
+    std::vector<sal_uInt8> aVector(constBlockSize, 'T');
+    size_t nPaddedSize = vcl::pdf::addPaddingToVector(aVector, constBlockSize);
+    CPPUNIT_ASSERT_EQUAL(size_t(2 * constBlockSize), aVector.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2 * constBlockSize), nPaddedSize);
+    for (size_t i = constBlockSize; i < 2 * constBlockSize; i++)
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(constBlockSize), aVector[i]);
+
+    // The encrypted size that is written as the stream length has to account
+    // for that block as well
+    vcl::pdf::PDFEncryptorR6 aEncryptor;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(48), aEncryptor.calculateSizeIncludingHeader(16));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(32), aEncryptor.calculateSizeIncludingHeader(5));
 }
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileDecryption)

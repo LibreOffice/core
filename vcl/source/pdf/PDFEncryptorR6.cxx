@@ -247,13 +247,10 @@ std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswor
 
 size_t addPaddingToVector(std::vector<sal_uInt8>& rVector, size_t nBlockSize)
 {
-    size_t nPaddedSize = comphelper::roundUp(rVector.size(), size_t(nBlockSize));
-    if (nPaddedSize > rVector.size())
-    {
-        sal_uInt8 nPaddedValue = sal_uInt8(nPaddedSize - rVector.size());
-        rVector.resize(nPaddedSize, nPaddedValue);
-    }
-    return nPaddedSize;
+    // RFC 8018 PKCS #5: Always add padding, between 1 and nBlockSize bytes.
+    size_t nPaddingSize = nBlockSize - (rVector.size() % nBlockSize);
+    rVector.resize(rVector.size() + nPaddingSize, sal_uInt8(nPaddingSize));
+    return rVector.size();
 }
 
 class VCL_DLLPUBLIC EncryptionContext
@@ -353,7 +350,8 @@ void PDFEncryptorR6::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties
 
 sal_uInt64 PDFEncryptorR6::calculateSizeIncludingHeader(sal_uInt64 nSize)
 {
-    return IV_SIZE + comphelper::roundUp<sal_uInt64>(nSize, BLOCK_SIZE);
+    // IV goes before the data, and padding adds 1 to BLOCK_SIZE bytes.
+    return IV_SIZE + nSize + (BLOCK_SIZE - nSize % BLOCK_SIZE);
 }
 
 void PDFEncryptorR6::setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 /*nObject*/)
