@@ -45,7 +45,7 @@
 #include <canvastools.hxx>
 #include <parametricpolypolygon.hxx>
 
-#include <canvashelper.hxx>
+#include <canvas.hxx>
 #include <impltools.hxx>
 #include <Texture.hxx>
 
@@ -576,12 +576,18 @@ namespace vclcanvas
         }
     }
 
-    rtl::Reference< vclcanvas::CachedBitmap > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::Canvas*                          pCanvas,
-                                                                                         const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const vclcanvas::ViewState&                        viewState,
-                                                                                         const vclcanvas::RenderState&                      renderState,
-                                                                                         const std::vector< vclcanvas::Texture >&         textures )
+    rtl::Reference< vclcanvas::CachedBitmap > Canvas::fillTexturedPolyPolygon(
+                                     const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
+                                     const vclcanvas::ViewState&                        viewState,
+                                     const vclcanvas::RenderState&                      renderState,
+                                     const std::vector< vclcanvas::Texture >&         textures )
     {
+        canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
+                              __func__,
+                              static_cast< ::cppu::OWeakObject* >(this));
+
+        vclcanvastools::LocalGuard aGuard( ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >::m_aMutex );
+
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
         ENSURE_ARG_OR_THROW( !textures.empty(),
@@ -615,7 +621,7 @@ namespace vclcanvas
                     {
                         vclcanvas::RenderState aTempState=renderState;
                         aTempState.DeviceColor = aValues.maColors[0];
-                        fillPolyPolygon(pCanvas, xPolyPolygon, viewState, aTempState);
+                        fillPolyPolygon(xPolyPolygon, viewState, aTempState);
                     }
                     else
                     {
@@ -707,15 +713,13 @@ namespace vclcanvas
                         pColor[2] = 0.0;
                         pColor[3] = textures[0].Alpha;
 
-                        return drawBitmapModulated( pCanvas,
-                                                    textures[0].aBitmap,
+                        return drawBitmapModulated( textures[0].aBitmap,
                                                     viewState,
                                                     aLocalState );
                     }
                     else
                     {
-                        return drawBitmap( pCanvas,
-                                           textures[0].aBitmap,
+                        return drawBitmap( textures[0].aBitmap,
                                            viewState,
                                            aLocalState );
                     }

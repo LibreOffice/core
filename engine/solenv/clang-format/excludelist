@@ -428,9 +428,7 @@ canvas/inc/base/disambiguationhelper.hxx
 canvas/inc/bitmapbackbuffer.hxx
 canvas/inc/cachedbitmap.hxx
 canvas/inc/canvas.hxx
-canvas/inc/canvasbitmaphelper.hxx
 canvas/inc/canvasfont.hxx
-canvas/inc/canvashelper.hxx
 canvas/inc/canvastools.hxx
 canvas/inc/impltools.hxx
 canvas/inc/outdevprovider.hxx
@@ -484,9 +482,7 @@ canvas/source/tools/verifyinput.cxx
 canvas/source/vcl/bitmapbackbuffer.cxx
 canvas/source/vcl/cachedbitmap.cxx
 canvas/source/vcl/canvas.cxx
-canvas/source/vcl/canvasbitmaphelper.cxx
 canvas/source/vcl/canvasfont.cxx
-canvas/source/vcl/canvashelper.cxx
 canvas/source/vcl/canvashelper_texturefill.cxx
 canvas/source/vcl/impltools.cxx
 canvas/source/vcl/sprite.hxx

@@ -29,6 +29,7 @@
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/numeric/ftools.hxx>

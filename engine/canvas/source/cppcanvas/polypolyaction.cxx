@@ -24,6 +24,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <RenderState.hxx>
 #include <canvastools.hxx>
 #include <osl/diagnose.h>

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drectangle.hxx>

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 
 using namespace ::com::sun::star;
 
