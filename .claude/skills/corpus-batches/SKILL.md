@@ -5,7 +5,7 @@ description: Drive a large real-world document corpus to rendering parity with L
 
 # Working a corpus to parity, batch by batch
 
-Proving a renderer correct on one document is a test. Proving it on 541 real documents
+Proving a renderer correct on one document is a test. Proving it on 534 real documents
 collected from the open web is a different problem, and the difference is not scale — it is
 that you cannot hold the state in your head, so the *process* has to hold it for you.
 
@@ -19,9 +19,9 @@ version quirks and malformed markup included. That is the point: a corpus of cle
 documents proves only that the clean path works.
 
 ```
-words/batch-001 … batch-021     doc  docx     202 documents
-slides/batch-001 … batch-017    ppt  pptx     165 documents
-sheets/batch-001 … batch-018    xls  xlsx     174 documents
+words/batch-001 … batch-021     doc  docx     200 documents
+slides/batch-001 … batch-017    ppt  pptx     163 documents
+sheets/batch-001 … batch-018    xls  xlsx     171 documents
 ```
 
 `MANIFEST.tsv` records the score that placed every document; `DUPLICATES.tsv` records every
@@ -160,29 +160,32 @@ rather than driving the number down by making the output worse.
 
 #### Flag those pages instead of rediscovering them
 
-`scripts/metafile-pages.py` builds the list, and the flagged pages live in
-`dotnet/TODO.metafile-pages.md`. **Check it before working any word-count failure**; four
+`scripts/raster-ceiling-pages.py` builds the list, and the flagged pages live in
+`dotnet/TODO.raster-ceiling.md`. **Check it before working any word-count failure**; four
 separate agents have now spent part of a round re-deriving that a particular page is this
 class.
 
 ```sh
-.claude/skills/corpus-batches/scripts/metafile-pages.py /workspace/sample-files out           # full, slow
-.claude/skills/corpus-batches/scripts/metafile-pages.py /workspace/sample-files out --documents-only
+.claude/skills/corpus-batches/scripts/raster-ceiling-pages.py /workspace/sample-files out           # full, slow
+.claude/skills/corpus-batches/scripts/raster-ceiling-pages.py /workspace/sample-files out --documents-only
 ```
 
-The two stages matter and the second is the one that earns the flag:
+**The flag keys on the observable signature, never on the presumed cause**, and getting that
+wrong is the mistake this tool was rebuilt to undo. The first version scanned for embedded
+metafiles and compared only the pages of documents carrying one; that hid 24 of the 53 real
+pages, including a `.ppt` whose page-10 ceiling had already been established by an agent. A
+page is flagged when the reference draws a raster there *and* we extract materially more words
+than it does — the metafile count rides along as an attribution.
 
-1. **Which documents embed a metafile.** Cheap and exact — package entries ending `.emf`/`.wmf`,
-   plus the EMF header signature and the WMF placeable magic inside embedded OLE `.bin` parts
-   and inside whole binary documents. An extension scan alone misses the OLE case entirely.
-2. **Which pages actually show the effect.** A page where the reference carries a raster *and*
-   we extract materially more words than it does.
+Two detection traps, both measured:
 
-**Embedding a metafile is not evidence of anything by itself** — most play correctly on both
-sides, and several of the documents carrying the largest counts pass their batch outright. A
-flag list built from stage 1 alone would excuse dozens of real defects, which is worse than
-having no list: the point of flagging is to stop chasing what cannot be won, not to stop
-looking.
+- **A binary document deflates its metafiles.** A `.ppt` keeps pictures zlib-compressed inside
+  Escher blip records, so a raw signature search finds nothing in a file that plainly holds an
+  EMF. Inflating every plausible stream took the carrier count from 76 documents to 100.
+- **Carrying a metafile proves nothing.** Most play correctly on both sides, and several
+  documents with the largest counts pass their batch outright. Filtering on it excuses real
+  defects, which is worse than having no list: the point is to stop chasing what cannot be won,
+  not to stop looking.
 
 Re-run it after a round that changes metafile playback, and treat a page dropping off the list
 as the win it is.
