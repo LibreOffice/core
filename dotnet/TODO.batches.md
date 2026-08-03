@@ -1616,6 +1616,30 @@ embedding check has never tested our own output**. It fires correctly for `Type 
 `CID Type 0C`, whose names are two or three fields. Worth fixing in the script rather than in a
 document.
 
+## The ninth round, swept whole at `18b4547ef`: 187 of 188
+
+| Track | Batches | | |
+|---|---|---|---|
+| `words` | 001–005 | **50/50** | — |
+| `slides` | 001–009 | **87/88** | `8_P-Pavese_AIRBUS…pptx` — the ceiling |
+| `sheets` | 001–005 | **50/50** | — |
+| **total** | | **187/188** | |
+
+Up from 185/188, and **words 001–005 is now clean for the first time**. The document that closed
+it is `loi_format_letter_of_intent…doc`, which had failed since the baseline: 10 pages against 10
+and **3365 words against 3365** — exact on both counts, where it had been 9 against 10.
+
+That one is worth following back, because it is the clearest return the salvage discipline has
+produced. The list-label diagnosis was written by an agent that never got to act on it; the fix —
+letting a label be bigger than its item and raise the line it sits on — was committed by the agent
+a VM restart then killed, and survived only because the brief said to commit each fix as it lands.
+A later round added the second half, that a label's follower is a real tab and continues past a
+stop already behind the pen. Three agents, two of them dead before the result existed.
+
+The single remaining failure in the swept range is the word gate's ceiling rather than a defect:
+LibreOffice rasterises an embedded metafile where we emit real searchable text, so closing the
+number would mean making the output worse.
+
 ### `words` — 200 documents, 21 batches
 
 Measured whole-track at the commit that landed the group reader: **143 of 200**, page error 122.
