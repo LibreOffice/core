@@ -41,8 +41,7 @@ namespace Paperless.Spreadsheets.Layout;
 /// </para>
 /// <para>
 /// What is still not reproduced is a turned or stacked cell, whose size is its text's *width* put
-/// through an angle, and a cell in several faces, whose lines are each as tall as the tallest
-/// portion on them. A row holding one of those takes the larger of the arithmetic answer and the
+/// through an angle. A row holding one takes the larger of the arithmetic answer and the
 /// height its file already states. That fallback is not a fudge — the arithmetic answer really is
 /// a lower bound in Calc too, because <c>bStdAllowed</c> stays true for such a cell and its
 /// attribute height is written into the array before any measurement is compared against it — and
@@ -277,7 +276,7 @@ internal static class SheetOptimalRowHeights
     /// <param name="Measured">The tallest wrapped cell in it, in twips, or zero when it has none.</param>
     /// <param name="Unmeasurable">
     /// True when one of its cells would have gone through <c>ScColumn::GetNeededSize</c> along a
-    /// path this does not reproduce — a turned or stacked cell, or one in several faces.
+    /// path this does not reproduce — a turned or stacked cell.
     /// </param>
     private readonly record struct RowState(
         int Attribute, bool CoversEveryColumn, int Measured, bool Unmeasurable);
@@ -352,14 +351,9 @@ internal static class SheetOptimalRowHeights
                      || text.AsSpan().IndexOfAny('\n', '\r') >= 0)
                     && !sheet.HoldsField(cell.Row, cell.Column);
 
-                // A turned or stacked cell, and a cell in several faces, take paths through
-                // `GetNeededSize` this does not reproduce — the first two because their size is
-                // the text's *width* turned through an angle, the third because EditEngine makes
-                // each line as tall as the tallest portion on it.
-                bool opaque =
-                    format.IsStacked
-                    || format.RotationDegrees != 0
-                    || sheet.RichText.At(cell.Row, cell.Column, text) is not null;
+                // A turned or stacked cell takes a path through `GetNeededSize` this does not
+                // reproduce: its size is the text's *width* turned through an angle.
+                bool opaque = format.IsStacked || format.RotationDegrees != 0;
 
                 if (!breaks && !opaque) continue;
 
@@ -367,7 +361,13 @@ internal static class SheetOptimalRowHeights
 
                 int measured = opaque
                     ? 0
-                    : WrappedHeight(cell, format, text, columns, sheet.MergedRanges);
+                    : WrappedHeight(
+                        cell,
+                        format,
+                        text,
+                        sheet.RichText.At(cell.Row, cell.Column, text),
+                        columns,
+                        sheet.MergedRanges);
 
                 rows[cell.Row] = state with
                 {
@@ -400,11 +400,17 @@ internal static class SheetOptimalRowHeights
     /// so is the odd one out — 18 pt, whose single word is wider than the column and takes two
     /// lines, giving 805 twips where the arithmetic alone asks for 441.
     /// </para>
+    /// <para>
+    /// A cell whose text is not all in one format is measured the same way with one difference:
+    /// its lines are summed rather than counted, because EditEngine makes each line as tall as the
+    /// tallest portion standing on it. See <see cref="RichPixels"/>.
+    /// </para>
     /// </remarks>
     private static int WrappedHeight(
         ContentTableCell cell,
         SheetCellFormat format,
         string text,
+        IReadOnlyList<SheetTextPortion>? portions,
         SheetAxis columns,
         IReadOnlyList<SheetRange> merges)
     {
@@ -428,17 +434,93 @@ internal static class SheetOptimalRowHeights
 
         if (paper <= 0) return 0;
 
-        int lines = SheetTextLayout.LineCount(
-            text, face, size, Length.FromTwips((long)(paper / PixelsPerTwip)));
+        Length available = Length.FromTwips((long)(paper / PixelsPerTwip));
+        MetricGrid grid = new(ScreenDpi);
+
+        long pixels = portions is { Count: > 0 }
+            ? RichPixels(text, portions, face, size, available, grid)
+            : PlainPixels(text, face, size, available, grid);
+
+        return pixels <= 0 ? 0 : (int)((pixels + (2 * MarginPixels)) / PixelsPerTwip);
+    }
+
+    /// <summary>The pixels a cell in one face needs: its line count times one line.</summary>
+    private static long PlainPixels(
+        string text, SheetFace face, Length size, Length available, MetricGrid grid)
+    {
+        int lines = SheetTextLayout.LineCount(text, face, size, available);
         if (lines <= 0) return 0;
 
-        MetricGrid grid = new(ScreenDpi);
-        long line = grid.ToPixels(face.Metrics.Ascent, face.Metrics.UnitsPerEm, size)
-                    + grid.ToPixels(face.Metrics.Descent, face.Metrics.UnitsPerEm, size);
-        if (line <= 0) return 0;
-
-        return (int)(((lines * line) + (2 * MarginPixels)) / PixelsPerTwip);
+        long line = LinePixels(face, size, grid);
+        return line <= 0 ? 0 : lines * line;
     }
+
+    /// <summary>
+    /// The pixels a cell in several formats needs, summed line by line.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// EditEngine does not give a paragraph one pitch. It walks the portions of each line, keeps
+    /// the largest ascent and the largest descent it saw separately, and makes the line their sum
+    /// — <c>ImpEditEngine::CreateLines</c> (<c>editeng/source/editeng/impedit3.cxx:1500-1519</c>)
+    /// over <c>RecalcFormatterFontMetrics</c> (<c>:3159-3163</c>). So a line carrying one word in
+    /// a larger face is taller than its neighbours, and a cell's height is a sum rather than a
+    /// product.
+    /// </para>
+    /// <para>
+    /// A line no portion covers is the empty paragraph a trailing hard break leaves, and it takes
+    /// the cell's own font — which is what EditEngine does with a paragraph holding no portion of
+    /// its own.
+    /// </para>
+    /// </remarks>
+    private static long RichPixels(
+        string text,
+        IReadOnlyList<SheetTextPortion> portions,
+        SheetFace face,
+        Length size,
+        Length available,
+        MetricGrid grid)
+    {
+        long total = 0;
+
+        foreach ((int start, int end) in
+                 SheetTextLayout.RichLineRanges(text, portions, face, available))
+        {
+            long ascent = 0;
+            long descent = 0;
+
+            foreach (SheetTextPortion portion in portions)
+            {
+                if (portion.End <= start || portion.Start >= end) continue;
+                if (SheetFonts.For(portion.Format) is not { } portionFace) return 0;
+                if (portionFace.Metrics.UnitsPerEm <= 0) return 0;
+
+                Length portionSize = portion.Format.FontSize;
+                if (portionSize <= Length.Zero) return 0;
+
+                ascent = Math.Max(
+                    ascent,
+                    grid.ToPixels(
+                        portionFace.Metrics.Ascent, portionFace.Metrics.UnitsPerEm, portionSize));
+                descent = Math.Max(
+                    descent,
+                    grid.ToPixels(
+                        portionFace.Metrics.Descent, portionFace.Metrics.UnitsPerEm, portionSize));
+            }
+
+            long line = ascent + descent > 0 ? ascent + descent : LinePixels(face, size, grid);
+            if (line <= 0) return 0;
+
+            total += line;
+        }
+
+        return total;
+    }
+
+    /// <summary>One line of a face at a size, in whole device pixels.</summary>
+    private static long LinePixels(SheetFace face, Length size, MetricGrid grid)
+        => grid.ToPixels(face.Metrics.Ascent, face.Metrics.UnitsPerEm, size)
+           + grid.ToPixels(face.Metrics.Descent, face.Metrics.UnitsPerEm, size);
 
     /// <summary>How many columns a cell covers, taking the widest merge it anchors.</summary>
     private static int SpanOf(ContentTableCell cell, IReadOnlyList<SheetRange> merges)
