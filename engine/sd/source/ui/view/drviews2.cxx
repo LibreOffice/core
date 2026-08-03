@@ -95,6 +95,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdopage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdundo.hxx>
@@ -112,6 +113,7 @@
 #include <svx/drawstyleutils.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -156,6 +158,7 @@
 #include <DrawViewShell.hxx>
 #include <LayerTabBar.hxx>
 #include <Outliner.hxx>
+#include <PreviewEditMode.hxx>
 #include <ViewShellHint.hxx>
 #include <ViewShellImplementation.hxx>
 #include <Window.hxx>
@@ -167,6 +170,7 @@
 #include <fubullet.hxx>
 #include <fuchar.hxx>
 #include <fucushow.hxx>
+#include <fuconcs.hxx>
 #include <fuconnct.hxx>
 #include <fucopy.hxx>
 #include <fudspord.hxx>
@@ -226,6 +230,7 @@
 
 #include <ViewShellBase.hxx>
 #include <memory>
+#include <optional>
 
 #include <sfx2/newstyle.hxx>
 #include <SelectLayerDlg.hxx>
@@ -2076,6 +2081,34 @@ public:
     }
 };
 
+    /** The rectangle four twip arguments describe, converted to model units, or nothing when an
+        argument is missing or out of range.
+
+        A position is zero or more, a width and a height are more than zero, and every value stays
+        under a generous cap that keeps the twip to mm100 conversion well clear of the sal_Int32
+        range. */
+    std::optional<::tools::Rectangle> lcl_getArgumentRectangle(const SfxInt32Item* pXItem,
+                                                               const SfxInt32Item* pYItem,
+                                                               const SfxInt32Item* pWidthItem,
+                                                               const SfxInt32Item* pHeightItem)
+    {
+        constexpr sal_Int32 MAX_ARGUMENT_TWIPS = 10000000;
+        if (!pXItem || !pYItem || !pWidthItem || !pHeightItem)
+            return std::nullopt;
+        if (pXItem->GetValue() < 0 || pYItem->GetValue() < 0 || pWidthItem->GetValue() <= 0
+            || pHeightItem->GetValue() <= 0 || pXItem->GetValue() > MAX_ARGUMENT_TWIPS
+            || pYItem->GetValue() > MAX_ARGUMENT_TWIPS || pWidthItem->GetValue() > MAX_ARGUMENT_TWIPS
+            || pHeightItem->GetValue() > MAX_ARGUMENT_TWIPS)
+            return std::nullopt;
+
+        auto nToMm100 = [](sal_Int32 nTwips) {
+            return static_cast<::tools::Long>(
+                o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::mm100));
+        };
+        return ::tools::Rectangle(
+            Point(nToMm100(pXItem->GetValue()), nToMm100(pYItem->GetValue())),
+            Size(nToMm100(pWidthItem->GetValue()), nToMm100(pHeightItem->GetValue())));
+    }
 }
 
 void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
@@ -2470,6 +2503,188 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel(); // Don't know what this does
             SwitchPage(nCanvasPageIndex);
             GetDoc()->NotifyKitHasOverviewPage(true);
+            rReq.Done();
+        }
+        break;
+
+        case SID_ENTER_PREVIEW_EDIT:
+        {
+            const SfxInt32Item* pPartItem
+                = rReq.GetArgs() ? rReq.GetArgs()->GetItem<SfxInt32Item>(FN_PARAM_1, false)
+                                 : nullptr;
+            if (comphelper::COKit::isActive() && GetDoc()->HasCanvasPage()
+                && GetActualPage() && GetActualPage()->IsCanvasPage() && pPartItem
+                && pPartItem->GetValue() > 0
+                && pPartItem->GetValue() < GetDoc()->GetSdPageCount(PageKind::Standard))
+            {
+                SdrPageObj* pPreview = GetDoc()->GetCanvasPreviewForPart(
+                    static_cast<sal_uInt16>(pPartItem->GetValue()));
+                if (pPreview)
+                    EnterPreviewEditMode(*pPreview);
+            }
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_LEAVE_PREVIEW_EDIT:
+        {
+            LeavePreviewEditMode();
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_DELETE_PREVIEW_SHAPE:
+        {
+            PreviewEditMode* pMode = GetPreviewEditMode();
+            SdrObject* pShape = pMode ? pMode->GetSelectedShape() : nullptr;
+            SdrPage* pShapePage = pShape ? pShape->getSdrPageFromSdrObject() : nullptr;
+            if (comphelper::COKit::isActive() && pShape && pShapePage)
+            {
+                std::unique_ptr<SdrUndoAction> pUndo
+                    = GetDoc()->GetSdrUndoFactory().CreateUndoDeleteObject(*pShape);
+                const OUString aComment = pUndo->GetComment();
+                GetView()->BegUndo(aComment);
+                GetView()->AddUndo(std::move(pUndo));
+                pShapePage->RemoveObject(pShape->GetOrdNum());
+                GetView()->EndUndo();
+                GetDocSh()->SetModified();
+                pMode->SetSelectedShape(nullptr);
+            }
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_INSERT_SHAPE_INTO_SLIDE:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxStringItem* pShapeTypeItem
+                = pArgs ? pArgs->GetItem<SfxStringItem>(FN_PARAM_1, false) : nullptr;
+            const SfxInt32Item* pPartItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_2, false) : nullptr;
+            const SfxInt32Item* pXItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_3, false) : nullptr;
+            const SfxInt32Item* pYItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_4, false) : nullptr;
+            const SfxInt32Item* pWidthItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_5, false) : nullptr;
+            const SfxInt32Item* pHeightItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_6, false) : nullptr;
+
+            if (!comphelper::COKit::isActive() || !GetDoc()->HasCanvasPage() || !pShapeTypeItem
+                || !pPartItem || pPartItem->GetValue() <= 0
+                || pPartItem->GetValue() >= GetDoc()->GetSdPageCount(PageKind::Standard))
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+
+            SdPage* pSlide = GetDoc()->GetSdPage(
+                static_cast<sal_uInt16>(pPartItem->GetValue()), PageKind::Standard);
+            if (pSlide->IsCanvasPage())
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+
+            std::optional<::tools::Rectangle> oArgumentRectangle
+                = lcl_getArgumentRectangle(pXItem, pYItem, pWidthItem, pHeightItem);
+            if (!oArgumentRectangle)
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+
+            // The rectangle arrives in slide space, so it is clamped to the slide.
+            ::tools::Rectangle aRectangle = *oArgumentRectangle;
+            aRectangle.Intersection(
+                ::tools::Rectangle(Point(0, 0), Size(pSlide->GetWidth(), pSlide->GetHeight())));
+            if (aRectangle.IsEmpty())
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+
+            SfxItemSetFixed<SID_DRAW_CS_ID, SID_DRAW_CS_ID> aShapeArguments(GetDoc()->GetPool());
+            aShapeArguments.Put(SfxStringItem(SID_DRAW_CS_ID, pShapeTypeItem->GetValue()));
+            SfxRequest aShapeRequest(SID_DRAW_CS_ID, SfxCallMode::SYNCHRON, aShapeArguments);
+            mpDrawView->SetCurrentObj(SdrObjKind::CustomShape);
+            rtl::Reference<FuPoor> xFunction = FuConstructCustomShape::Create(
+                *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), aShapeRequest, false);
+            rtl::Reference<SdrObject> pShape
+                = xFunction->CreateDefaultObject(SID_DRAW_CS_ID, aRectangle);
+            if (pShape)
+            {
+                GetView()->BegUndo(SdResId(STR_UNDO_INSERT_SHAPE_INTO_SLIDE));
+                pSlide->InsertObject(pShape.get());
+                GetView()->AddUndo(SdrUndoFactory::CreateUndoNewObject(*pShape));
+                GetView()->EndUndo();
+                GetDocSh()->SetModified();
+            }
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_MOVE_PREVIEW_SHAPE:
+        case SID_MOVE_PREVIEW_SHAPE_OUT:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxInt32Item* pXItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_1, false) : nullptr;
+            const SfxInt32Item* pYItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_2, false) : nullptr;
+            const SfxInt32Item* pWidthItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_3, false) : nullptr;
+            const SfxInt32Item* pHeightItem
+                = pArgs ? pArgs->GetItem<SfxInt32Item>(FN_PARAM_4, false) : nullptr;
+            PreviewEditMode* pMode = GetPreviewEditMode();
+            SdrObject* pShape = pMode ? pMode->GetSelectedShape() : nullptr;
+            std::optional<::tools::Rectangle> oArgumentRectangle
+                = lcl_getArgumentRectangle(pXItem, pYItem, pWidthItem, pHeightItem);
+            if (!comphelper::COKit::isActive() || !pShape || !oArgumentRectangle)
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+
+            ::tools::Rectangle aRectangle = *oArgumentRectangle;
+
+            if (nSId == SID_MOVE_PREVIEW_SHAPE)
+            {
+                SdrPage* pShapePage = pShape->getSdrPageFromSdrObject();
+                if (pShapePage)
+                {
+                    aRectangle.Intersection(::tools::Rectangle(
+                        Point(0, 0), Size(pShapePage->GetWidth(), pShapePage->GetHeight())));
+                    if (!aRectangle.IsEmpty())
+                    {
+                        std::unique_ptr<SdrUndoAction> pUndo
+                            = GetDoc()->GetSdrUndoFactory().CreateUndoGeoObject(*pShape);
+                        const OUString aComment = pUndo->GetComment();
+                        GetView()->BegUndo(aComment);
+                        GetView()->AddUndo(std::move(pUndo));
+                        pShape->SetLogicRect(aRectangle);
+                        GetView()->EndUndo();
+                        GetDocSh()->SetModified();
+                    }
+                }
+            }
+            else if (SdPage* pCanvasPage = GetDoc()->GetCanvasPage())
+            {
+                // Out to the canvas page: the inverse of drag-in, one undo action.
+                GetDoc()->MoveShapeBetweenPages(*pShape, *pCanvasPage, aRectangle);
+                GetDocSh()->SetModified();
+                pMode->SetSelectedShape(nullptr);
+            }
+            Cancel();
             rReq.Done();
         }
         break;

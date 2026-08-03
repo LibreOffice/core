@@ -1829,6 +1829,14 @@ void SdDrawDocument::ImportCanvasPage()
     NotifyKitCanvasPreviewRectangles();
 }
 
+OString SdDrawDocument::GetHasOverviewPagePayload(bool bHasOverviewPage)
+{
+    ::tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("commandName", ".uno:HasOverviewPage");
+    aJsonWriter.put("state", bHasOverviewPage ? std::string_view("true") : std::string_view("false"));
+    return aJsonWriter.finishAndGetAsOString();
+}
+
 void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
 {
     if (!comphelper::COKit::isActive())
@@ -1839,17 +1847,21 @@ void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
     SfxViewShell* pViewShell = pDrawViewSh->GetViewShell();
     if (!pViewShell)
         return;
-    ::tools::JsonWriter aJsonWriter;
-    aJsonWriter.put("commandName", ".uno:HasOverviewPage");
-    aJsonWriter.put("state", bHasOverviewPage ? std::string_view("true") : std::string_view("false"));
     pViewShell->viewCallback(
-        COKitCallbackType::STATE_CHANGED, aJsonWriter.finishAndGetAsOString());
+        COKitCallbackType::STATE_CHANGED, GetHasOverviewPagePayload(bHasOverviewPage));
 }
 
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
 {
     if (HasCanvasPage())
         return mpCanvasPage->GetPageNum() / 2;
+
+    // Building the overview page and the master page it needs is scaffolding for the slide
+    // previews rather than a change to the slides, so the whole construction stays off the undo
+    // stack and the stack keeps only the changes the user made to the slides themselves.
+    const bool bWasUndoEnabled = IsUndoEnabled();
+    EnableUndo(false);
+    comphelper::ScopeGuard aUndoGuard([this, bWasUndoEnabled]() { EnableUndo(bWasUndoEnabled); });
 
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
     SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
@@ -2174,5 +2186,39 @@ SdDrawDocument::ConvertSlideRectangleToCanvas(const ::tools::Rectangle& rSlideRe
         aPreviewRectangle.Left() + basegfx::fround(rSlideRectangle.Right() * fScaleX),
         aPreviewRectangle.Top() + basegfx::fround(rSlideRectangle.Bottom() * fScaleY));
     return ::tools::Rectangle(aTopLeft, aBottomRight);
+}
+
+void SdDrawDocument::MoveShapeBetweenPages(SdrObject& rObject, SdPage& rTargetPage,
+                                           const ::tools::Rectangle& rNewRectangle)
+{
+    SdrPage* pSourcePage = rObject.getSdrPageFromSdrObject();
+    if (!pSourcePage || pSourcePage == &rTargetPage)
+        return;
+
+    // The object leaves its page mid-way through; the reference keeps it alive until it is
+    // inserted again.
+    rtl::Reference<SdrObject> xObject(&rObject);
+    const bool bUndo = IsUndoEnabled();
+
+    if (bUndo)
+    {
+        BegUndo(SdResId(STR_UNDO_MOVE_SHAPE_TO_PAGE));
+        AddUndo(GetSdrUndoFactory().CreateUndoRemoveObject(rObject));
+    }
+    pSourcePage->RemoveObject(rObject.GetOrdNum());
+
+    std::unique_ptr<SdrUndoAction> pGeometryUndo;
+    if (bUndo)
+        pGeometryUndo = GetSdrUndoFactory().CreateUndoGeoObject(rObject);
+    rObject.SetLogicRect(rNewRectangle);
+    if (bUndo)
+        AddUndo(std::move(pGeometryUndo));
+
+    rTargetPage.InsertObject(&rObject);
+    if (bUndo)
+    {
+        AddUndo(SdrUndoFactory::CreateUndoInsertObject(rObject));
+        EndUndo();
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

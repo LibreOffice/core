@@ -458,6 +458,10 @@ private:
 
 public:
 
+    /** STATE_CHANGED payload carrying whether the document has an overview page. */
+    static OString GetHasOverviewPagePayload(bool bHasOverviewPage);
+
+    /** Send the overview-page flag to the document's current view. */
     void NotifyKitHasOverviewPage(bool bHasOverviewPage);
 
     /**
@@ -662,7 +666,7 @@ public:
     SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
     SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
     SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) override;
-    SAL_DLLPRIVATE rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum) override;
+    rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum) override; // export for unit test
 
     SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
     SAL_DLLPRIVATE virtual rtl::Reference<SdrPage> RemoveMasterPage(sal_uInt16 nPgNum) override;
@@ -1174,6 +1178,9 @@ public:
 
     SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage.is(); }
 
+    /** The overview page carrying the slide previews, or nullptr while the document has none. */
+    SAL_DLLPRIVATE SdPage* GetCanvasPage() const { return mpCanvasPage.get(); }
+
     SAL_DLLPRIVATE void ImportCanvasPage();
     SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
 
@@ -1200,6 +1207,12 @@ public:
     static ::tools::Rectangle
     ConvertSlideRectangleToCanvas(const ::tools::Rectangle& rSlideRectangle,
                                   const SdrPageObj& rPreview);
+
+    /** Move a shape from its current page onto rTargetPage, giving it rNewRectangle as its
+        new logic rectangle. The removal, the geometry change and the insertion form a single
+        undo action. */
+    void MoveShapeBetweenPages(SdrObject& rObject, SdPage& rTargetPage,
+                                const ::tools::Rectangle& rNewRectangle);
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */

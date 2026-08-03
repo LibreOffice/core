@@ -41,6 +41,7 @@ class SdStyleSheet;
 class SdrExternalToolEdit;
 class TabBar;
 class SdrObject;
+class SdrPageObj;
 class SdrPageView;
 class TransferableDataHelper;
 class TransferableClipboardListener;
@@ -57,6 +58,7 @@ class LayerTabBar;
 class Ruler;
 class AnnotationManager;
 class ViewOverlayManager;
+class PreviewEditMode;
 
 template <typename MIN_T, typename T, typename MAX_T>
 constexpr bool CHECK_RANGE(MIN_T nMin, T nValue, MAX_T nMax)
@@ -386,6 +388,11 @@ public:
 
     virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
 
+    void EnterPreviewEditMode(SdrPageObj& rPreview);
+    void LeavePreviewEditMode();
+    PreviewEditMode* GetPreviewEditMode() const { return mpPreviewEditMode.get(); }
+    SD_DLLPUBLIC bool IsInPreviewEditMode() const; // export for unit test
+
     DECL_LINK(SearchDialogHdl, SfxRequest&, void);
 
 protected:
@@ -508,6 +515,7 @@ private:
     /** True when the page this view last showed is the canvas page. It still answers for
         that page once the page itself has left the document. */
     bool                mbShowedCanvasPage = false;
+    std::unique_ptr<PreviewEditMode> mpPreviewEditMode;
 };
 
 /// Merge the background properties together and deposit the result in rMergeAttr

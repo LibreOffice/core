@@ -1192,6 +1192,17 @@ void ViewShellBase::afterCallbackRegistered()
         boost::property_tree::write_json(aStream, aTree);
         viewCallback(COKitCallbackType::STATE_CHANGED, OString(aStream.str()));
     }
+
+    // A document that already carries the overview page announces it while it is being loaded,
+    // which is earlier than any view can listen. Each view therefore gets its own copy of the
+    // overview states as soon as its callback is live.
+    if (comphelper::COKit::isActive() && mpDocument && mpDocument->HasCanvasPage())
+    {
+        viewCallback(COKitCallbackType::STATE_CHANGED,
+                     SdDrawDocument::GetHasOverviewPagePayload(true));
+        viewCallback(COKitCallbackType::STATE_CHANGED,
+                     mpDocument->GetCanvasPreviewRectanglesPayload());
+    }
 }
 
 void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const

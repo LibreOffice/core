@@ -47,6 +47,7 @@
 #include <helpids.h>
 
 #include <view/viewoverlaymanager.hxx>
+#include <PreviewEditMode.hxx>
 #include <app.hrc>
 #include <strings.hrc>
 #include <sdmod.hxx>

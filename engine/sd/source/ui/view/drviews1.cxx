@@ -43,6 +43,7 @@
 #include <vcl/graphicfilter.hxx>
 
 #include <view/viewoverlaymanager.hxx>
+#include <PreviewEditMode.hxx>
 
 #include <app.hrc>
 
@@ -903,6 +904,29 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             nSelectedPage = nPageCount-1;
     }
 
+    // Editing through a preview is scoped to the canvas page, so the mode ends when the switch
+    // takes the view to a different page and the focus goes along. A switch onto the page the view
+    // already shows, and a switch that keeps the focus where it is, leave the mode alone: tiles of
+    // the other pages are painted by briefly switching the page that way. A mode whose preview has
+    // since been removed is over in either kind of switch.
+    const SdPage* pTargetPage = nullptr;
+    if (meEditMode == EditMode::MasterPage)
+    {
+        if (GetDoc()->GetMasterSdPageCount(mePageKind) > nSelectedPage)
+            pTargetPage = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
+    }
+    else if (GetDoc()->GetSdPageCount(mePageKind) > nSelectedPage)
+    {
+        pTargetPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
+    }
+    const bool bMovesToAnotherPage = mpActualPage != pTargetPage;
+
+    if ((bAllowChangeFocus && bMovesToAnotherPage)
+        || (mpPreviewEditMode && !mpPreviewEditMode->GetEnteredPreview()))
+    {
+        LeavePreviewEditMode();
+    }
+
     if (IsSwitchPageAllowed())
     {
         ModifyGuard aGuard2( GetDoc() );
@@ -1541,6 +1565,31 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 
     return nResult;
+}
+
+void DrawViewShell::EnterPreviewEditMode(SdrPageObj& rPreview)
+{
+    // The mode carries its own selection handling, so it starts from an empty mark list. The
+    // click that entered the mode marked the preview object; unmarking broadcasts the empty
+    // selection, so no mark on the preview outlives the entry.
+    mpDrawView->UnmarkAll();
+    mpPreviewEditMode.reset(new PreviewEditMode(*this, rPreview));
+}
+
+void DrawViewShell::LeavePreviewEditMode()
+{
+    if (!mpPreviewEditMode)
+        return;
+    // Clearing the shape first sends an empty selection state, so a view that enters a preview
+    // again starts without the marquee of the previous one.
+    mpPreviewEditMode->SetSelectedShape(nullptr);
+    mpPreviewEditMode->SendModeState(false);
+    mpPreviewEditMode.reset();
+}
+
+bool DrawViewShell::IsInPreviewEditMode() const
+{
+    return mpPreviewEditMode && mpPreviewEditMode->GetEnteredPreview();
 }
 
 } // end of namespace sd

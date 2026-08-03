@@ -165,6 +165,36 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_ENTER_PREVIEW_EDIT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_LEAVE_PREVIEW_EDIT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DELETE_PREVIEW_SHAPE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_SHAPE_INTO_SLIDE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MOVE_PREVIEW_SHAPE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MOVE_PREVIEW_SHAPE_OUT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_HYPERLINK_SETLINK // ole : no, status : no
     [
         ExecMethod = FuTemporary ;

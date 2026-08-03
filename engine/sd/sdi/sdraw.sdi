@@ -3818,6 +3818,99 @@ SfxVoidItem MoveSlideSectionDown SID_MOVE_SLIDE_SECTION_DOWN
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem EnterPreviewEdit SID_ENTER_PREVIEW_EDIT
+(SfxInt32Item Part FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem LeavePreviewEdit SID_LEAVE_PREVIEW_EDIT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem DeletePreviewShape SID_DELETE_PREVIEW_SHAPE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem InsertShapeIntoSlide SID_INSERT_SHAPE_INTO_SLIDE
+(SfxStringItem ShapeType FN_PARAM_1, SfxInt32Item Part FN_PARAM_2, SfxInt32Item X FN_PARAM_3,
+ SfxInt32Item Y FN_PARAM_4, SfxInt32Item Width FN_PARAM_5, SfxInt32Item Height FN_PARAM_6)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Insert;
+]
+
+SfxVoidItem MovePreviewShape SID_MOVE_PREVIEW_SHAPE
+(SfxInt32Item X FN_PARAM_1, SfxInt32Item Y FN_PARAM_2, SfxInt32Item Width FN_PARAM_3,
+ SfxInt32Item Height FN_PARAM_4)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem MovePreviewShapeOut SID_MOVE_PREVIEW_SHAPE_OUT
+(SfxInt32Item X FN_PARAM_1, SfxInt32Item Y FN_PARAM_2, SfxInt32Item Width FN_PARAM_3,
+ SfxInt32Item Height FN_PARAM_4)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem ResolveComment SID_RESOLVE_POSTIT
 (SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [

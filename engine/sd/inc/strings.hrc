@@ -502,4 +502,7 @@
 #define STR_LINT_UNDO_CLEAR_NOTES                       NC_("STR_LINT_UNDO_CLEAR_NOTES", "Clear speaker notes")
 #define STR_LINT_UNDO_REPLACE_OBJECT                    NC_("STR_LINT_UNDO_REPLACE_OBJECT", "Replace object with image")
 
+#define STR_UNDO_MOVE_SHAPE_TO_PAGE                     NC_("STR_UNDO_MOVE_SHAPE_TO_PAGE", "Move shape to another page")
+#define STR_UNDO_INSERT_SHAPE_INTO_SLIDE                NC_("STR_UNDO_INSERT_SHAPE_INTO_SLIDE", "Insert shape")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

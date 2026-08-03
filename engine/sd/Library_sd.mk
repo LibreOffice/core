@@ -450,6 +450,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/Outliner \
 	sd/source/ui/view/OutlinerIterator \
 	sd/source/ui/view/PresentationViewShellBase \
+	sd/source/ui/view/PreviewEditMode \
 	sd/source/ui/view/SlideSorterViewShellBase \
 	sd/source/ui/view/SdSecurityLabelTarget \
 	sd/source/ui/view/ToolBarManager \

@@ -70,6 +70,7 @@
 
 #include <DrawDocShell.hxx>
 #include <TransitionPreset.hxx>
+#include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
@@ -79,6 +80,7 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
+#include <PreviewEditMode.hxx>
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 #include <unopage.hxx>
@@ -7029,6 +7031,663 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasPreviewRectsBroadcast)
     const ::tools::Rectangle aSnap = pPreview->GetSnapRect();
     CPPUNIT_ASSERT_EQUAL(o3tl::toTwips(aSnap.Left(), o3tl::Length::mm100),
                          pPreviewForPart1->get<sal_Int64>("x"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEnterLeave)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    auto it = aView.m_aStateChanges.find(".uno:PreviewEditMode");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    boost::property_tree::ptree aState = it->second.get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("active"));
+    CPPUNIT_ASSERT_EQUAL(1, aState.get<int>("part"));
+    CPPUNIT_ASSERT(aState.get<sal_Int64>("slideWidth") > 0);
+
+    // Entering starts from an empty shape selection.
+    auto itSelection = aView.m_aStateChanges.find(".uno:PreviewShapeSelection");
+    CPPUNIT_ASSERT(itSelection != aView.m_aStateChanges.end());
+    boost::property_tree::ptree aSelectionState = itSelection->second.get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aSelectionState.get<bool>("empty"));
+
+    // The mode is per view state on the shell.
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+
+    // Select a shape on the slide, so the view holds a non-empty selection when the mode ends.
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(1, PageKind::Standard);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    CPPUNIT_ASSERT(pTitle);
+    pDrawViewShell->GetPreviewEditMode()->SetSelectedShape(pTitle);
+    aSelectionState = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aSelectionState.get<bool>("empty"));
+
+    dispatchCommand(mxComponent, u".uno:LeavePreviewEdit"_ustr, {});
+    aState = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+
+    // Leaving empties the shape selection as well.
+    aSelectionState = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aSelectionState.get<bool>("empty"));
+}
+
+// Entering preview edit mode drops any marked object, so the mark the entering click put on the
+// preview does not linger through the mode and come back as a selection when the mode ends.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEntryClearsMarks)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    // A click on a preview marks its page object; marking it directly stands in for the click.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrPageObj* pPreview = pXImpressDocument->GetDoc()->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pPreview, pView->GetSdrPageView());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pView->GetMarkedObjectList().GetMarkCount());
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pView->GetMarkedObjectList().GetMarkCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeSurvivesPaintPartSwitch)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    const int nCanvasPart = pXImpressDocument->getPart();
+
+    // Painting a tile of another part goes to that part and back again, keeping the focus where
+    // it is. The mode stays on while that happens.
+    pXImpressDocument->setPart(1, /*bAllowChangeFocus*/ false);
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    pXImpressDocument->setPart(nCanvasPart, /*bAllowChangeFocus*/ false);
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("active"));
+
+    // The user moving to another page ends the mode and tells the view.
+    pXImpressDocument->setPart(1, /*bAllowChangeFocus*/ true);
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+    aState = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeSurvivesSamePageSwitch)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    const int nCanvasPart = pXImpressDocument->getPart();
+
+    // Selecting the page the view already shows keeps the view where it is, so the mode stays on
+    // even though the focus is free to move.
+    pXImpressDocument->setPart(nCanvasPart, /*bAllowChangeFocus*/ true);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("active"));
+
+    // Moving to another page ends the mode and tells the view.
+    pXImpressDocument->setPart(1, /*bAllowChangeFocus*/ true);
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+    aState = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeDropsWhenSlideDies)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    // A second slide, so one can be deleted while its preview is entered.
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(2)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+
+    // Removing the slide removes its preview, which ends the mode and tells the view.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(2, PageKind::Standard);
+    pDocument->RemovePage(pSlide->GetPageNum());
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeEndsWhenOtherViewDeletesSlide)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView1;
+    int nView1 = KitHelper::getCurrentView();
+
+    // A second slide, so the first view can enter its preview while a second view deletes it.
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(2)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+    sd::DrawViewShell* pDrawViewShell1
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell1->IsInPreviewEditMode());
+
+    // A second view opens the same slide directly and deletes it there.
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->setPart(2);
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view's mode ends along with the deleted preview, and it is told so.
+    KitHelper::setView(nView1);
+    CPPUNIT_ASSERT(!pDrawViewShell1->IsInPreviewEditMode());
+    boost::property_tree::ptree aState
+        = aView1.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeGesture)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdrPageObj* pPreview = pDocument->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+    const Point aCenter = pPreview->GetSnapRect().Center();
+    const int nX = o3tl::toTwips(aCenter.X(), o3tl::Length::mm100);
+    const int nY = o3tl::toTwips(aCenter.Y(), o3tl::Length::mm100);
+
+    // Ctrl + double click on the preview enters preview edit mode.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1,
+                                      MOUSE_LEFT, KEY_MOD1);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1,
+                                      MOUSE_LEFT, KEY_MOD1);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 2,
+                                      MOUSE_LEFT, KEY_MOD1);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 2,
+                                      MOUSE_LEFT, KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    // Still on the canvas page: the gesture did not switch to the slide.
+    CPPUNIT_ASSERT(pDrawViewShell->GetActualPage()->IsCanvasPage());
+
+    dispatchCommand(mxComponent, u".uno:LeavePreviewEdit"_ustr, {});
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+
+    // A plain double click switches the view to the slide the preview shows.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 2,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 2,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pDrawViewShell->GetActualPage()->IsCanvasPage());
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewEditModeClickRouting)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+
+    // A single click on another preview moves the editing there directly.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdrPageObj* pOtherPreview = pDocument->GetCanvasPreviewForPart(2);
+    CPPUNIT_ASSERT(pOtherPreview);
+    const Point aOtherCenter = pOtherPreview->GetSnapRect().Center();
+    const int nOtherX = o3tl::toTwips(aOtherCenter.X(), o3tl::Length::mm100);
+    const int nOtherY = o3tl::toTwips(aOtherCenter.Y(), o3tl::Length::mm100);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nOtherX, nOtherY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nOtherX, nOtherY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("active"));
+    CPPUNIT_ASSERT_EQUAL(2, aState.get<int>("part"));
+    // The switch starts with no shape selected on the new slide.
+    boost::property_tree::ptree aSelection
+        = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aSelection.get<bool>("empty"));
+
+    // A click on empty canvas, away from every preview, leaves the mode.
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    const int nEmptyX
+        = o3tl::toTwips(pCanvasPage->GetWidth() - 20000, o3tl::Length::mm100);
+    const int nEmptyY
+        = o3tl::toTwips(pCanvasPage->GetHeight() - 20000, o3tl::Length::mm100);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nEmptyX, nEmptyY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nEmptyX, nEmptyY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+    aState = aView.m_aStateChanges[".uno:PreviewEditMode"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("active"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewShapeSelection)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdrPageObj* pPreview = pDocument->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+
+    // The slide's title shape, mapped into canvas space, is the click target.
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    CPPUNIT_ASSERT(pTitle);
+    const Point aCanvasPoint = SdDrawDocument::ConvertSlideRectangleToCanvas(
+                                   pTitle->GetLogicRect(), *pPreview)
+                                   .Center();
+    const int nX = o3tl::toTwips(aCanvasPoint.X(), o3tl::Length::mm100);
+    const int nY = o3tl::toTwips(aCanvasPoint.Y(), o3tl::Length::mm100);
+
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    auto it = aView.m_aStateChanges.find(".uno:PreviewShapeSelection");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    boost::property_tree::ptree aState = it->second.get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("empty"));
+    CPPUNIT_ASSERT(aState.get<sal_Int64>("width") > 0);
+
+    // The shape stays where it is; nothing on the canvas page got marked.
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT_EQUAL(pTitle, pDrawViewShell->GetPreviewEditMode()->GetSelectedShape());
+
+    // A click inside the preview but off every shape clears the selection.
+    const ::tools::Rectangle aPreviewRectangle = pPreview->GetSnapRect();
+    const Point aEmptySpot(aPreviewRectangle.Left() + aPreviewRectangle.GetWidth() / 20,
+                           aPreviewRectangle.Bottom() - aPreviewRectangle.GetHeight() / 20);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
+                                      o3tl::toTwips(aEmptySpot.X(), o3tl::Length::mm100),
+                                      o3tl::toTwips(aEmptySpot.Y(), o3tl::Length::mm100), 1,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
+                                      o3tl::toTwips(aEmptySpot.X(), o3tl::Length::mm100),
+                                      o3tl::toTwips(aEmptySpot.Y(), o3tl::Length::mm100), 1,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    aState = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("empty"));
+
+    // A click on empty canvas space outside the preview leaves the mode.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN,
+                                      o3tl::toTwips(aPreviewRectangle.Left(), o3tl::Length::mm100) / 2,
+                                      o3tl::toTwips(aPreviewRectangle.Top(), o3tl::Length::mm100) / 2,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP,
+                                      o3tl::toTwips(aPreviewRectangle.Left(), o3tl::Length::mm100) / 2,
+                                      o3tl::toTwips(aPreviewRectangle.Top(), o3tl::Length::mm100) / 2,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDrawViewShell->IsInPreviewEditMode());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeletePreviewShape)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+    SdrObject* pTitle = pSlide->GetObj(0);
+
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    pDrawViewShell->GetPreviewEditMode()->SetSelectedShape(pTitle);
+
+    dispatchCommand(mxComponent, u".uno:DeletePreviewShape"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(nObjectCount - 1, pSlide->GetObjCount());
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("empty"));
+
+    // Undo restores the shape with its presentation-object role intact.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(PresObjKind::Title, pSlide->GetPresObjKind(pSlide->GetObj(0)));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertShapeIntoSlide)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+
+    // A 4000 x 3000 twip rectangle at slide position (2000, 1500).
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "ShapeType", cpo::uno::Any(u"rectangle"_ustr) },
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { "X", cpo::uno::Any(sal_Int32(2000)) },
+        { "Y", cpo::uno::Any(sal_Int32(1500)) },
+        { "Width", cpo::uno::Any(sal_Int32(4000)) },
+        { "Height", cpo::uno::Any(sal_Int32(3000)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertShapeIntoSlide"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
+    SdrObject* pShape = pSlide->GetObj(pSlide->GetObjCount() - 1);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::CustomShape, pShape->GetObjIdentifier());
+    const ::tools::Rectangle aRectangle = pShape->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(2000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Left()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(4000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetWidth()));
+
+    // Undo removes it again.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShape)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    pDrawViewShell->GetPreviewEditMode()->SetSelectedShape(pTitle);
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aMoveArgs(comphelper::InitPropertySequence({
+        { "X", cpo::uno::Any(sal_Int32(1000)) },
+        { "Y", cpo::uno::Any(sal_Int32(2000)) },
+        { "Width", cpo::uno::Any(sal_Int32(5000)) },
+        { "Height", cpo::uno::Any(sal_Int32(2500)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:MovePreviewShape"_ustr, aMoveArgs);
+
+    const ::tools::Rectangle aRectangle = pTitle->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(1000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.Left()));
+    CPPUNIT_ASSERT_EQUAL(o3tl::convert(5000, o3tl::Length::twip, o3tl::Length::mm100),
+                         static_cast<sal_Int64>(aRectangle.GetWidth()));
+    // The move refreshed the virtual selection marquee.
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(false, aState.get<bool>("empty"));
+    // The shape never left the slide.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pSlide), pTitle->getSdrPageFromSdrObject());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMovePreviewShapeOut)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    sd::DrawViewShell* pDrawViewShell
+        = static_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    pDrawViewShell->GetPreviewEditMode()->SetSelectedShape(pTitle);
+    const size_t nCanvasCount = pCanvasPage->GetObjCount();
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aOutArgs(comphelper::InitPropertySequence({
+        { "X", cpo::uno::Any(sal_Int32(50000)) },
+        { "Y", cpo::uno::Any(sal_Int32(60000)) },
+        { "Width", cpo::uno::Any(sal_Int32(8000)) },
+        { "Height", cpo::uno::Any(sal_Int32(4000)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:MovePreviewShapeOut"_ustr, aOutArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nCanvasCount + 1, pCanvasPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pCanvasPage), pTitle->getSdrPageFromSdrObject());
+    // The shape left the slide, so the virtual selection is empty; the mode stays entered.
+    boost::property_tree::ptree aState
+        = aView.m_aStateChanges[".uno:PreviewShapeSelection"].get_child("state");
+    CPPUNIT_ASSERT_EQUAL(true, aState.get<bool>("empty"));
+    CPPUNIT_ASSERT(pDrawViewShell->IsInPreviewEditMode());
+    // One undo step brings it back.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pSlide), pTitle->getSdrPageFromSdrObject());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragShapeIntoPreview)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    SdrPageObj* pPreview = pDocument->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+    const ::tools::Rectangle aPreviewRectangle = pPreview->GetSnapRect();
+
+    // A rectangle on the canvas page, clear of the preview, sized like a slide shape.
+    const ::tools::Rectangle aShapeRectangle(
+        Point(aPreviewRectangle.Left(), aPreviewRectangle.Bottom() + 5000), Size(3000, 2000));
+    rtl::Reference<SdrRectObj> pShape = new SdrRectObj(*pDocument, aShapeRectangle);
+    pCanvasPage->InsertObject(pShape.get());
+    const size_t nSlideCount = pSlide->GetObjCount();
+    SfxUndoManager* pUndoManager = pDocument->GetDocSh()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:EnterPreviewEdit"_ustr, aArgs);
+
+    auto toTwips = [](::tools::Long nValue) {
+        return static_cast<int>(o3tl::toTwips(nValue, o3tl::Length::mm100));
+    };
+    const Point aFrom = aShapeRectangle.Center();
+    const Point aTo = aPreviewRectangle.Center();
+
+    // Click to mark, then press, drag past the threshold, and drop on the preview center.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, toTwips(aFrom.X()) + 200,
+                                      toTwips(aFrom.Y()) + 200, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, toTwips(aTo.X()),
+                                      toTwips(aTo.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, toTwips(aTo.X()),
+                                      toTwips(aTo.Y()), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // The shape moved onto the slide, scaled up by the preview factor, in one undo step.
+    CPPUNIT_ASSERT_EQUAL(nSlideCount + 1, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pSlide),
+                         static_cast<SdrObject*>(pShape.get())->getSdrPageFromSdrObject());
+    CPPUNIT_ASSERT(pShape->GetLogicRect().GetWidth() > aShapeRectangle.GetWidth());
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragCanvasShapeNotifiesPreviewRects)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    SdrPageObj* pPreview = pDocument->GetCanvasPreviewForPart(1);
+    CPPUNIT_ASSERT(pPreview);
+    const ::tools::Rectangle aPreviewRectangle = pPreview->GetSnapRect();
+
+    // An ordinary rectangle on the canvas page, clear of the preview.
+    const ::tools::Rectangle aShapeRectangle(
+        Point(aPreviewRectangle.Left(), aPreviewRectangle.Bottom() + 5000), Size(3000, 2000));
+    rtl::Reference<SdrRectObj> pShape = new SdrRectObj(*pDocument, aShapeRectangle);
+    pCanvasPage->InsertObject(pShape.get());
+
+    SdTestViewCallback aView;
+    aView.m_aStateChanges.clear();
+
+    auto toTwips = [](::tools::Long nValue) {
+        return static_cast<int>(o3tl::toTwips(nValue, o3tl::Length::mm100));
+    };
+    const Point aFrom = aShapeRectangle.Center();
+    // A plain move that stays on the canvas page and lands clear of the preview.
+    const Point aTo(aFrom.X() + 6000, aFrom.Y());
+
+    // Click to mark, then press, drag past the threshold, and drop away from the preview.
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, toTwips(aFrom.X()),
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, toTwips(aFrom.X()) + 200,
+                                      toTwips(aFrom.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOVE, toTwips(aTo.X()),
+                                      toTwips(aTo.Y()), 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, toTwips(aTo.X()),
+                                      toTwips(aTo.Y()), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // The shape stayed on the canvas page, moved by an ordinary drag.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pCanvasPage),
+                         static_cast<SdrObject*>(pShape.get())->getSdrPageFromSdrObject());
+    CPPUNIT_ASSERT(pShape->GetLogicRect().Center().X() > aShapeRectangle.Center().X());
+
+    // The drag commit on the canvas page re-broadcasts the preview rectangles.
+    auto it = aView.m_aStateChanges.find(".uno:CanvasPreviewRects");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideKeepsUndoStackClean)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
+
+    // Building the overview page is scaffolding for the slide previews, so it leaves the undo
+    // stack as it was.
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
+
+    // An edit made through a preview afterwards is undoable, and undoing it empties the stack.
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "ShapeType", cpo::uno::Any(u"rectangle"_ustr) },
+        { "Part", cpo::uno::Any(sal_Int32(1)) },
+        { "X", cpo::uno::Any(sal_Int32(2000)) },
+        { "Y", cpo::uno::Any(sal_Int32(1500)) },
+        { "Width", cpo::uno::Any(sal_Int32(4000)) },
+        { "Height", cpo::uno::Any(sal_Int32(3000)) },
+    }));
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    const size_t nObjectCount = pSlide->GetObjCount();
+    dispatchCommand(mxComponent, u".uno:InsertShapeIntoSlide"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

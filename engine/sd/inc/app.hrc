@@ -438,4 +438,11 @@
 
 #define SID_PRESENTATION_CLEANUP            (SID_SD_START+460)
 
+#define SID_ENTER_PREVIEW_EDIT              (SID_SD_START+461)
+#define SID_LEAVE_PREVIEW_EDIT              (SID_SD_START+462)
+#define SID_DELETE_PREVIEW_SHAPE            (SID_SD_START+463)
+#define SID_INSERT_SHAPE_INTO_SLIDE         (SID_SD_START+464)
+#define SID_MOVE_PREVIEW_SHAPE              (SID_SD_START+465)
+#define SID_MOVE_PREVIEW_SHAPE_OUT          (SID_SD_START+466)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

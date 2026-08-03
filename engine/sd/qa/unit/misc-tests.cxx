@@ -2120,6 +2120,42 @@ CPPUNIT_TEST_FIXTURE(SdMiscTest, testCanvasPreviewTransformRoundTrip)
     CPPUNIT_ASSERT(std::abs(aRoundTrip.GetHeight() - aSlideRectangle.GetHeight()) <= 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdMiscTest, testMoveShapeBetweenPages)
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    SdPage* pSlide = pDocument->GetSdPage(1, PageKind::Standard);
+    SdrObject* pTitle = pSlide->GetObj(0);
+    CPPUNIT_ASSERT(pTitle);
+    const ::tools::Rectangle aOldRectangle = pTitle->GetLogicRect();
+    const size_t nSlideCount = pSlide->GetObjCount();
+    const size_t nCanvasCount = pCanvasPage->GetObjCount();
+    SfxUndoManager* pUndoManager = pDocument->GetDocSh()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    const ::tools::Rectangle aNewRectangle(Point(10000, 12000), Size(6000, 4000));
+    pDocument->MoveShapeBetweenPages(*pTitle, *pCanvasPage, aNewRectangle);
+
+    // The shape changed pages and took the new geometry.
+    CPPUNIT_ASSERT_EQUAL(nSlideCount - 1, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(nCanvasCount + 1, pCanvasPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pCanvasPage), pTitle->getSdrPageFromSdrObject());
+    CPPUNIT_ASSERT_EQUAL(aNewRectangle, pTitle->GetLogicRect());
+    // The whole move is one entry on the undo stack.
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+
+    // Undo puts it back on the slide with the old geometry.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, pSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pSlide), pTitle->getSdrPageFromSdrObject());
+    CPPUNIT_ASSERT_EQUAL(aOldRectangle, pTitle->GetLogicRect());
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

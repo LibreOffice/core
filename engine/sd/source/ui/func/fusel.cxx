@@ -50,6 +50,7 @@
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
+#include <PreviewEditMode.hxx>
 #include <ToolBarManager.hxx>
 #include <Client.hxx>
 #include <annotationmanager.hxx>
@@ -126,10 +127,88 @@ namespace {
     }
 }
 
+namespace
+{
+/** The object at the given position on the current canvas page, or null if the position
+    is not on a canvas page, or hits no object. */
+SdrObject* lcl_pickCanvasPageObject(::sd::View* pView, ::sd::ViewShell& rViewShell,
+                                    const Point& rPosition)
+{
+    if (!comphelper::COKit::isActive())
+        return nullptr;
+    SdPage* pPage = rViewShell.GetActualPage();
+    if (!pPage || !pPage->IsCanvasPage())
+        return nullptr;
+    SdrPageView* pPageView = nullptr;
+    return pView->PickObj(rPosition, pView->getHitTolLog(), pPageView,
+                          SdrSearchOptions::ALSOONMASTER);
+}
+
+/** Whether a canvas-page click at the given position lands on a page preview object. */
+bool lcl_hitsCanvasPagePreview(::sd::View* pView, ::sd::ViewShell& rViewShell, const Point& rPosition)
+{
+    SdrObject* pObject = lcl_pickCanvasPageObject(pView, rViewShell, rPosition);
+    return pObject && pObject->GetObjIdentifier() == SdrObjKind::Page;
+}
+}
+
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     pHdl = nullptr;
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+
+    // While a preview is entered, a single click inside it picks a shape on the slide the
+    // preview shows. Every model coordinate here is slide space, matching the objects' own
+    // geometry, so the canvas view's page view is only lent to the primitive hit test the
+    // same way the preview painter lends it when painting a non-displayed page.
+    DrawViewShell* pPreviewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
+    if (comphelper::COKit::isActive() && pPreviewShell && pPreviewShell->IsInPreviewEditMode()
+        && rMEvt.IsLeft() && rMEvt.GetClicks() == 1 && !rMEvt.IsMod1() && !rMEvt.IsMod2())
+    {
+        PreviewEditMode* pMode = pPreviewShell->GetPreviewEditMode();
+        SdrPageObj* pPreview = pMode->GetEnteredPreview();
+        SdrPage* pSlide = pPreview->GetReferencedPage();
+        SdrPageView* pPageView = mpView->GetSdrPageView();
+        if (!pSlide || !pPageView)
+        {
+            // Picking needs a slide behind the preview and a page view to hit test in. With
+            // either of them gone the mode is over, and the click goes on to the normal path.
+            pPreviewShell->LeavePreviewEditMode();
+        }
+        else
+        {
+            const ::tools::Rectangle aPreviewRectangle = pPreview->GetSnapRect();
+            if (aPreviewRectangle.Contains(aMDPos))
+            {
+                const Point aSlidePoint
+                    = SdDrawDocument::ConvertCanvasPointToSlide(aMDPos, *pPreview);
+                const double fScale
+                    = aPreviewRectangle.GetWidth()
+                          ? double(pSlide->GetWidth()) / aPreviewRectangle.GetWidth()
+                          : 1.0;
+                const double fTolerance = mpView->getHitTolLog() * fScale;
+                SdrObject* pHit
+                    = SdrObjListPrimitiveHit(*pSlide, aSlidePoint, { fTolerance, fTolerance },
+                                             *pPageView, nullptr, false);
+                pMode->SetSelectedShape(pHit);
+                return true;
+            }
+            SdrObject* pOutsideObject = lcl_pickCanvasPageObject(mpView, mrViewShell, aMDPos);
+            if (pOutsideObject && pOutsideObject->GetObjIdentifier() == SdrObjKind::Page)
+            {
+                // A click on another preview moves the editing there directly, without a
+                // leave and re-enter round trip.
+                pPreviewShell->EnterPreviewEditMode(
+                    *static_cast<SdrPageObj*>(pOutsideObject));
+                return true;
+            }
+            if (!pOutsideObject)
+                pPreviewShell->LeavePreviewEditMode();
+            // An ordinary canvas shape keeps the mode and takes the normal path, so a drag into
+            // the preview can start from here.
+        }
+    }
+
     bool bWaterCan = SdModule::get()->GetWaterCan();
     const bool bReadOnly = mpDocSh->IsReadOnly();
     // When the right mouse button is pressed then only select objects
@@ -359,9 +438,22 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if (rMEvt.GetClicks() == 2)
                         {
                             SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
-                            sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
                             DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
-                            pDrawViewShell->SwitchPage(nPageNum);
+                            SdPage* pActualPage = mrViewShell.GetActualPage();
+                            // On the canvas page a ctrl-modified double click on a preview
+                            // starts editing that slide in place. A plain double click
+                            // switches the view to the slide the preview shows.
+                            if (rMEvt.IsMod1() && comphelper::COKit::isActive() && pDrawViewShell
+                                && pActualPage && pActualPage->IsCanvasPage())
+                            {
+                                pDrawViewShell->EnterPreviewEditMode(*pPageObj);
+                                bReturn = true;
+                            }
+                            else if (pDrawViewShell)
+                            {
+                                sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
+                                pDrawViewShell->SwitchPage(nPageNum);
+                            }
                         }
                     }
                 }
@@ -699,9 +791,60 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             mpView->SetDragWithCopy(bDragWithCopy);
+
+            // A plain move drag whose drop centre lands inside the entered preview moves the
+            // dragged shape onto the slide that preview shows. The canvas drag is broken off
+            // first, so the whole change is the single undo action the move helper creates.
+            DrawViewShell* pPreviewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
+            if (comphelper::COKit::isActive() && pPreviewShell
+                && pPreviewShell->IsInPreviewEditMode() && !bDragWithCopy
+                && dynamic_cast<SdrDragMove*>(mpView->GetDragMethod()))
+            {
+                PreviewEditMode* pMode = pPreviewShell->GetPreviewEditMode();
+                SdrPageObj* pPreview = pMode->GetEnteredPreview();
+                SdPage* pSlide = static_cast<SdPage*>(pPreview->GetReferencedPage());
+                if (!pSlide)
+                {
+                    // The preview no longer shows a slide, so there is no target for the drop
+                    // and the mode is over. The drag ends on the ordinary path below.
+                    pPreviewShell->LeavePreviewEditMode();
+                }
+                else
+                {
+                    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                    SdrObject* pDragged = rMarkList.GetMarkCount() == 1
+                                              ? rMarkList.GetMark(0)->GetMarkedSdrObj()
+                                              : nullptr;
+                    if (pDragged && pDragged->GetObjIdentifier() != SdrObjKind::Page
+                        && pDragged->GetObjIdentifier() != SdrObjKind::Edge)
+                    {
+                        const ::tools::Rectangle aDroppedRectangle
+                            = pDragged->GetLogicRect() + (aPnt - aMDPos);
+                        if (pPreview->GetSnapRect().Contains(aDroppedRectangle.Center()))
+                        {
+                            mpView->BrkDragObj();
+                            mpView->UnmarkAllObj();
+                            mrDoc.MoveShapeBetweenPages(
+                                *pDragged, *pSlide,
+                                SdDrawDocument::ConvertCanvasRectangleToSlide(aDroppedRectangle,
+                                                                              *pPreview));
+                            mrViewShell.GetDocSh()->SetModified();
+                            return true;
+                        }
+                    }
+                }
+            }
+
             bWasDragged = mpView->EndDragObj(mpView->IsDragWithCopy());
 
             mpView->ForceMarkedToAnotherPage();
+
+            if (comphelper::COKit::isActive() && bWasDragged
+                && mrViewShell.GetActualPage()->IsCanvasPage())
+            {
+                // A committed drag may have moved or resized previews.
+                mrDoc.NotifyKitCanvasPreviewRectangles();
+            }
 
             if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                 !bSelectionChanged                   &&
@@ -792,7 +935,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         else if (rMEvt.IsMod1()
             && !rMEvt.IsMod2()
             && std::abs(aPnt.X() - aMDPos.X()) < nDrgLog
-            && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+            && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog
+            && !lcl_hitsCanvasPagePreview(mpView, mrViewShell, aPnt))
         {
             // Enter group
             mpView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
