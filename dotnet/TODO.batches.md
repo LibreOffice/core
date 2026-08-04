@@ -1125,6 +1125,48 @@ Total page error is **195** over 47 failing documents, and the top of the list i
 Below those it is a ±1-to-±3 tail: the failing page deltas are `-6:3 -4:1 -3:5 -2:5 -1:10 0:9
 +1:6 +2:1 +4:1 +6:2` once the five above are set aside.
 
+### Then: a legacy workbook's pictures, and the image check on what already passes
+
+Swept whole again after the picture fix, 171 documents:
+
+| | before | after |
+| --- | --- | --- |
+| documents matching | 124 | **125** |
+| documents with an exactly correct page count | 133 | **134** |
+| total absolute page error | 195 | **192** |
+| every batch | — | unchanged |
+
+**Three documents changed and nothing regressed.** `TICAPCapability_Final.xls` went
+`pages,words` → **match** (16/17 pages and 4096 words, now 17/17 and 4839 of 4930);
+`INDEX_Digital_Transformation_Toolkits.xls` 18 → 20 pages against 24; and
+`PBN Matrix NAAs (V01).xlsx` stayed a match while the *reference's* word count moved 5557 → 5555,
+which is worth noting only as a reminder that the reference is not perfectly repeatable either.
+
+`XlsDrawingCollector` produced a drawing only for a shape carrying `TXO` text, so no `.xls` in any
+corpus had ever had a picture on its page, and `MSODRAWINGGROUP` — where a workbook's blip store
+lives — was declared and read nowhere. **8 of the track's 61 `.xls` carry one**, 27 `msofbtBSE`
+between them.
+
+#### The image check, run over the 125 documents that pass the word gate
+
+The brief called this the track's blind spot and it is: **54 of the 125 have at least one page the
+image diff calls MAJOR, 348 pages in all.** Classified by the hint on the worst eight:
+
+| Documents | Class | Reading |
+| --- | --- | --- |
+| the plurality | *marks displaced or reshaped* | a reflow the word gate cannot see. The extraction comparison is the instrument, not more pixels |
+| `alle einzeln.xlsx`, `AFS-400_Contacts.xlsx` | *a fill or background shading the reference has and we do not* | 48 and 30 regions |
+| `Aircraft_Database.xlsx`, `links-2026.xlsx`, `environment-edb-…xls` | *ink we draw that the reference does not* | 56, 5 and 3 regions |
+
+`alle einzeln.xlsx` is the sharpest and is **a feature rather than a defect**: its first sheet is a
+**pivot table** (`xl/pivotTables/pivotTable1.xml`), and LibreOffice lays the pivot out itself —
+its own column widths and its own grid of borders — where we draw the cached cell values into the
+file's stated columns with the file's one empty border style. The module TODO's "pivot caches and
+defined names, still not reached" is what this looks like on paper, on 36 of its pages.
+
+So the sheets track's image residue is **not** the slides track's shape: it is one unimplemented
+feature and a long tail of reflow, rather than missing fills.
+
 ## Sheets batches 006–010: a merge has two axes, and a shape has a face — swept at `7049756d9`
 
 Whole track swept at `7049756d9` before anything was changed and again after each fix, 171
@@ -1742,11 +1784,18 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
-Measured whole-track at `7049756d9` and again after the eighth round's two fixes: **125 of 171**,
-total page error 222, 134 exact page counts — unmoved by either, and the per-batch scores below
-were re-proved unchanged. **42 of that 222 is `orbus_togaf_tool_csq.xls`, where the reference
-prints a sheet the file does not contain**; see the round's entry above before treating the total
-as work outstanding.
+Measured whole-track at `52f45c51b` and again after the twelfth round's picture fix: **125 of
+171**, total page error **192**, **134** exact page counts. The two figures moved in opposite
+directions across the eleventh round's merged row-height fix — 125 → 124 matches against 222 → 195
+pages of error — and the picture fix then took matches back to 125 and the error to 192.
+**42 of that 192 is `orbus_togaf_tool_csq.xls`, where the reference prints a sheet the file does
+not contain**; see the rounds' entries above before treating the total as work outstanding.
+
+`batch-007` fell 9/10 → 8/10 and `batch-014` rose 5/10 → 6/10 across the same two rounds; every
+other batch is where it was. The one that fell is
+`114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication.xlsx`, 18 pages against 21 with 2381 words
+against 2372 — the row-height fix's overshoot in miniature, on a document small enough to be worth
+probing.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
@@ -1756,14 +1805,14 @@ as work outstanding.
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 8/10 |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 9/10 |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 8/10 |
 | `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 8/10 |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
 | `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 6/10 |
 | `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 5/10 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 6/10 |
 | `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
 | `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
 | `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 3/10 |
