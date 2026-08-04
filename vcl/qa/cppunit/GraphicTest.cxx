@@ -1246,6 +1246,18 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadEPS)
     CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
 }
 
+CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadJXL)
+{
+    Graphic aGraphic = loadGraphic(u"TypeDetectionExample.jxl");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+
+    // The imported Graphic is tagged with its JPEG XL origin
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeJxl, aGraphic.GetGfxLink().GetType());
+}
+
 CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadWEBP)
 {
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.webp");
