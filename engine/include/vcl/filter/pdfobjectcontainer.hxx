@@ -39,6 +39,8 @@ public:
 
     virtual void disableStreamEncryption() = 0;
 
+    virtual sal_uInt64 calculateStreamSize(sal_uInt64 nDataSize) const = 0;
+
 protected:
     ~PDFObjectContainer() noexcept = default;
 };

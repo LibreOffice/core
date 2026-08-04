@@ -903,7 +903,7 @@ private:
 
     /** Number of bytes that nDataSize bytes of input data occupy, taking
         into account encryption overhead. */
-    sal_uInt64 calculateStreamSize(sal_uInt64 nDataSize) const;
+    sal_uInt64 calculateStreamSize(sal_uInt64 nDataSize) const override;
 
     /* */
     void enableStringEncryption( sal_Int32 nObject );
