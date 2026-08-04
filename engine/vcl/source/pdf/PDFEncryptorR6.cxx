@@ -138,11 +138,16 @@ std::vector<sal_uInt8> decryptKey(const sal_uInt8* pPass, size_t nLength, std::v
 std::vector<sal_uInt8> decryptPerms(std::vector<sal_uInt8>& rPermsEncrypted,
                                     std::vector<sal_uInt8>& rFileEncryptionKey)
 {
-    std::vector<sal_uInt8> aPermsDecrpyted(rPermsEncrypted.size());
+    std::vector<sal_uInt8> aPermsDecrypted(rPermsEncrypted.size());
     std::vector<sal_uInt8> iv(IV_SIZE, 0);
     comphelper::Decrypt aDecryptor(rFileEncryptionKey, iv, comphelper::CryptoType::AES_256_ECB);
-    aDecryptor.update(aPermsDecrpyted, rPermsEncrypted);
-    return aPermsDecrpyted;
+    aDecryptor.update(aPermsDecrypted, rPermsEncrypted);
+    if (aPermsDecrypted[9] == 'a' && aPermsDecrypted[10] == 'd' && aPermsDecrypted[11] == 'b')
+    {
+        return aPermsDecrypted;
+    }
+    SAL_INFO("vcl.pdfwriter", "decryptPerms failed");
+    return {};
 }
 
 /** Algorithm 10 step f) */
