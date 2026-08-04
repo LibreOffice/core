@@ -361,15 +361,18 @@ class ViewLayoutBase {
 			Math.floor(this._viewedRectangle.pY1 / RenderManager.tileSize) *
 			RenderManager.tileSize;
 
+		// The coordinates name tiles of the part the view currently shows:
+		// part 0 for a text document, the selected sheet for a spreadsheet,
+		// and the shown page's unique id for a presentation or drawing.
+		const part = app.map._docLayer.getSelectedPart();
+
 		for (let i = 0; i <= columnCount; i++) {
 			for (let j = 0; j <= rowCount; j++) {
-				// For a document type whose part numbers are indexes, 0 names
-				// the first part.
 				const coords = new TileCoordData(
 					startX + i * RenderManager.tileSize,
 					startY + j * RenderManager.tileSize,
 					zoom,
-					0 as PartNumber,
+					part,
 				);
 
 				if (RenderManager.isValidTile(coords))

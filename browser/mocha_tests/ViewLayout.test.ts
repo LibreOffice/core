@@ -75,6 +75,8 @@ describe('View Layout Tests', function () {
 				_docType: 'text',
 				isWriter: function () { return true; },
 				_sendClientZoom: function () {},
+				// A text document has a single part, part 0.
+				getSelectedPart: function () { return 0; },
 			},
 			getScaleZoom: function () { return 1; },
 			setZoom: function () {},
