@@ -135,6 +135,10 @@ internal static class SheetOptimalRowHeights
     /// </remarks>
     private const int MarginPixels = 1;
 
+    /// <summary>A scratch knob: how much wider than we measure it Calc's device makes the text.</summary>
+    /// <remarks>Probe only, to fit the factor against LibreOffice's own row heights.</remarks>
+    internal static double WidthScaleProbe = 1.0;
+
     /// <summary>
     /// The grid a sheet is laid out on, with its hinted row heights re-derived from its content.
     /// </summary>
@@ -434,7 +438,7 @@ internal static class SheetOptimalRowHeights
 
         if (paper <= 0) return 0;
 
-        Length available = Length.FromTwips((long)(paper / PixelsPerTwip));
+        Length available = Length.FromTwips((long)(paper / PixelsPerTwip / WidthScaleProbe));
         MetricGrid grid = new(ScreenDpi);
 
         long pixels = portions is { Count: > 0 }
