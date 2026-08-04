@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using unoidl.com.sun.star.uno;
+using unoidl.cpo.uno;
 using unoidl.com.sun.star.lang;
 
 namespace uno.util

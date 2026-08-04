@@ -41,8 +41,8 @@ namespace com::sun::star {
     namespace beans { class XPropertySetInfo; }
     namespace lang { class XComponent; }
     namespace lang { class XTypeProvider; }
-    namespace uno { class XAggregation; }
 }
+namespace cpo::uno { class XAggregation; }
 
 namespace accessibility
 {
