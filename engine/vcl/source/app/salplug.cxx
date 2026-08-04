@@ -35,6 +35,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
 #include <salinst.hxx>
+#include <sal/backtrace.hxx>
 #include <sal/log.hxx>
 #include <svdata.hxx>
 #include <vcl/svapp.hxx>
@@ -354,12 +355,12 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 #elif defined(iOS)
     NSLog(@"SalAbort: %s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr());
 #else
-    if( rErrorText.isEmpty() )
-        std::fprintf( stderr, "Unspecified Application Error\n" );
-    else
-    {
-        std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-    }
+    OUString sMsg = rErrorText;
+    if( sMsg.isEmpty() )
+        sMsg = u"Unspecified Application Error"_ustr;
+    std::unique_ptr<sal::BacktraceState> backtrace = sal::backtrace_get( 32 );
+    sMsg += "\n" + sal::backtrace_to_string( backtrace.get() );
+    std::fprintf( stderr, "%s\n", OUStringToOString(sMsg, osl_getThreadTextEncoding()).getStr() );
 #endif
     if( bDumpCore )
         abort();
