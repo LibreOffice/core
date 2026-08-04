@@ -214,6 +214,86 @@ Traps that cost time, recorded so they are not rediscovered:
   them has a blank page to drop, which is exactly why this went unnoticed until a `sc/qa` sheet
   turned up with 516 empty rows.
 
+## What the ninth sheets sweep found: a row is measured on a device Calc never draws with
+
+Swept whole at `6b6d54d37`: **125 of 171**, page error 192, 134 exact page counts — the briefed
+figures to the digit. After the fix below, at the same commit plus it: **132 of 171, page error
+119, 141 exact**. Thirteen documents improved and none regressed; batches 001–005 stay at 50/50.
+
+### The instrument, first, because it is what made the rest quick
+
+Export the workbook to flat ODS and read `style:row-height` out of it. That is LibreOffice's own
+recomputed height for every row, so ours can be joined against it row by row — 7909 comparable
+rows on `TK-Syllabus-Comparison-Document-v2.xlsx`. The scripts and a description of each are in
+`scratchpad/sheets-ad4b/`; `RowHeightProbe.cs.txt` there is the test class that dumps our side,
+kept out of the test project because it no-ops without an environment variable.
+
+It reframed the problem in one run. **7133 of 7909 rows were already exact and every one of the
+763 that were not was short by a whole number of lines** — one line is 18 device pixels at 11 pt,
+268.7 twips, and LibreOffice's own heights are 300.0, 566.9, 835.1, 1103.8 and 1373.0, which are
+exactly `(lines × 18 + 2) / 0.067`. So the vertical model was right to the twip and the *line
+count* was wrong. Column widths were ruled out the same way: the export gives 490.9, 5834.9,
+1649.2, 1632.8 and 6215.8 twips where we had 491, 5835, 1649, 1633 and 6216.
+
+### Two quantisations, both horizontal, both absent
+
+**The em is rounded to whole device pixels before a single advance is measured.**
+`ScColumn::GetNeededSize` formats through a `ScFieldEditEngine` whose reference device is a
+headless 96 dpi `VirtualDevice` (`column2.cxx:410-424`), and a device instantiates a font at an
+integer pixel size. Eleven point is 15 pixels rather than 14.667, so its advances come out 2.3%
+**wide**; ten point is 13 rather than 13.333 and comes out 2.5% **narrow**; twelve point is 16
+exactly and is unchanged. `MetricGrid.ToEmSize` is that rounding, and it is the same grid the
+ascent and descent already went through.
+
+**The paper is narrower than the column by the document's print-to-screen factor.**
+`ScSizeDeviceProvider` derives both resolutions from its virtual device and then divides **one**
+of them: `nPPTX /= rDocSh.GetOutputFactor()` (`sc/source/ui/docshell/sizedev.cxx:52`). `nPPTY` is
+left alone. And `nPPTX` is exactly what the column width is multiplied by to get the EditEngine's
+paper (`nDocWidth = GetOriginalWidth(nCol) * nPPTX`, `column2.cxx:463`). That asymmetry is the
+whole shape of the symptom — the pitch was exact and the width was 6% out.
+`ScDocShell::CalcOutputFactor` (`docsh3.cxx:380-426`) sets the factor once per document, before
+the import, from one fixed 72-character test string measured on two devices, so it is a property
+of the machine and the application's default cell font rather than of the workbook. **1.0345
+here**, alongside the 96 dpi and the 0.067 and fitted the same way.
+
+Two more corrections came with it, both small and both real: the paper is turned back into a
+length by `pDev->PixelToLogic` at the device's true resolution — 15 twips a pixel — and not by
+dividing by the rounded 0.067, which is only how the *height* comes back; and the cell's
+left/right margins come off in pixels computed from the divided `nPPTX`.
+
+### Measured against the binary, not derived
+
+The derivation would have been wrong. Reading `CalcOutputFactor` alone gives 1.005, because in
+headless both of the devices it compares are 96 dpi virtual devices; the binary says 1.0345.
+Five hand-authored flat-ODS probes, each holding unbreakable strings against 52 column widths and
+round-tripped through `soffice` so its own recomputed heights say where it broke each line:
+
+| probe | rows | exact |
+|---|---|---|
+| Calibri 11 pt, 8 strings × 52 widths | 416 | 416 |
+| Calibri 12 pt | 416 | 416 |
+| Calibri 10 pt | 416 | 416 |
+| Liberation Sans 10 pt | 416 | 416 |
+| Calibri 8/10/11/12/14 pt, one word per row | 450 | 450 |
+
+2114 rows, every one to the twip, on one constant. Fitting the same constant independently
+against the TK document's 7909 rows lands on 1.0345 as well, and takes it from 7079 exact rows to
+7804.
+
+**It is the measuring device and not the face.** A PDF of the same strings has LibreOffice
+drawing Carlito at our advances — 206.95 pt against our 207.20 for a 42-character word, 394.48
+against 395.00 for 42 M's, 105.78 against 106.05 for 42 i's. Only the row it reserves disagrees.
+`sheet-row-height-device.fods` and `SheetRowHeightDeviceTests` hold the assertions; each pair of
+its sheets sits fifty twips either side of a break, and at ten point the two quantisations act
+against each other, so an implementation carrying one alone puts a pair on the wrong side.
+
+### What is left on that document
+
+74 rows short and 31 tall out of 7909, almost all by exactly one line, and undiagnosed. The
+next thing to look at is the rich cells: the residue is concentrated in cells that carry both a
+hard break and more than one format, and `SheetTextLayout.RichLineRanges` hands the whole text
+to one `ParagraphLayouter.Layout` call where `LineCount` splits paragraphs itself first.
+
 ## What the eighth sheets sweep found: a merge has two axes, and a shape has a face
 
 Swept whole at `7049756d9`: **125 of 171**, page error 222, exact page counts 134 — the briefed
@@ -385,6 +465,12 @@ Whether every icon on those four pages is inside the *printed* range at all is t
 next — `HasAnyDraw` walks the whole drawing page rather than the objects anchored in the range.
 
 ### `TK-Syllabus-Comparison-Document-v2.xlsx`: rows 10.4% too tall, lines exactly right
+
+**Settled by the ninth sweep — see the top of this file.** Keep the measurement below and drop
+its last paragraph's conclusion: `WrappedHeight`'s *vertical* quantisation was never the problem.
+The row heights reserved and the lines drawn disagreed because the width the text was broken at
+was measured on a device 6% narrower than the column, and the document is now an exact match at
+1235 pages.
 
 **1314 pages against 1235 — 36% of the track's page error on one document**, and its sibling
 `tk-syllabus-comparison-document-v5.xlsx` is 849 against 855 in the other direction. The words agree
