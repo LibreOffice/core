@@ -47,7 +47,7 @@ window.CODA_TEMPLATES = [
 		"type": "writer",
 		"category": "writer",
 		"path": "templates/files/text/Default.odt",
-		"basename": _("Text Document"),
+		"basename": _("Default Style"),
 		"preview": "templates/previews/text/writer-styles-default.png",
 		"featured": false
 	},
@@ -57,7 +57,7 @@ window.CODA_TEMPLATES = [
 		"type": "writer",
 		"category": "writer",
 		"path": "templates/files/text/Modern.odt",
-		"basename": _("Text Document"),
+		"basename": _("Modern Style"),
 		"preview": "templates/previews/text/writer-styles-modern.png",
 		"featured": false
 	},
@@ -67,7 +67,7 @@ window.CODA_TEMPLATES = [
 		"type": "writer",
 		"category": "writer",
 		"path": "templates/files/text/Simple.odt",
-		"basename": _("Text Document"),
+		"basename": _("Simple Style"),
 		"preview": "templates/previews/text/writer-styles-simple.png",
 		"featured": false
 	},
@@ -77,7 +77,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Beehive.odp",
-		"basename": _("Presentation"),
+		"basename": _("Beehive"),
 		"preview": "templates/previews/presentation/impress-beehive.png",
 		"featured": false
 	},
@@ -87,7 +87,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Blue_Curve.odp",
-		"basename": _("Presentation"),
+		"basename": _("Blue Curve"),
 		"preview": "templates/previews/presentation/impress-blue-curve.png",
 		"featured": false
 	},
@@ -97,7 +97,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Blueprint_Plans.odp",
-		"basename": _("Presentation"),
+		"basename": _("Blueprint Plans"),
 		"preview": "templates/previews/presentation/impress-blueprint-plans.png",
 		"featured": false
 	},
@@ -107,7 +107,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Candy.odp",
-		"basename": _("Presentation"),
+		"basename": _("Candy"),
 		"preview": "templates/previews/presentation/impress-candy.png",
 		"featured": false
 	},
@@ -117,7 +117,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/DNA.odp",
-		"basename": _("Presentation"),
+		"basename": _("DNA"),
 		"preview": "templates/previews/presentation/impress-dna.png",
 		"featured": false
 	},
@@ -127,7 +127,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Focus.odp",
-		"basename": _("Presentation"),
+		"basename": _("Focus"),
 		"preview": "templates/previews/presentation/impress-focus.png",
 		"featured": false
 	},
@@ -137,7 +137,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Forestbird.odp",
-		"basename": _("Presentation"),
+		"basename": _("Forestbird"),
 		"preview": "templates/previews/presentation/impress-forestbird.png",
 		"featured": false
 	},
@@ -147,7 +147,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Freshes.odp",
-		"basename": _("Presentation"),
+		"basename": _("Freshes"),
 		"preview": "templates/previews/presentation/impress-freshes.png",
 		"featured": false
 	},
@@ -157,7 +157,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Grey_Elegant.odp",
-		"basename": _("Presentation"),
+		"basename": _("Grey Elegant"),
 		"preview": "templates/previews/presentation/impress-grey-elegant.png",
 		"featured": false
 	},
@@ -167,7 +167,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Growing_Liberty.odp",
-		"basename": _("Presentation"),
+		"basename": _("Growing Liberty"),
 		"preview": "templates/previews/presentation/impress-growing-liberty.png",
 		"featured": false
 	},
@@ -177,7 +177,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Inspiration.odp",
-		"basename": _("Presentation"),
+		"basename": _("Inspiration"),
 		"preview": "templates/previews/presentation/impress-inspiration.png",
 		"featured": false
 	},
@@ -187,7 +187,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Lights.odp",
-		"basename": _("Presentation"),
+		"basename": _("Lights"),
 		"preview": "templates/previews/presentation/impress-lights.png",
 		"featured": false
 	},
@@ -197,7 +197,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Metropolis.odp",
-		"basename": _("Presentation"),
+		"basename": _("Metropolis"),
 		"preview": "templates/previews/presentation/impress-metropolis.png",
 		"featured": false
 	},
@@ -207,7 +207,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Midnightblue.odp",
-		"basename": _("Presentation"),
+		"basename": _("Midnight Blue"),
 		"preview": "templates/previews/presentation/impress-midnightblue.png",
 		"featured": false
 	},
@@ -217,7 +217,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Nature_Illustration.odp",
-		"basename": _("Presentation"),
+		"basename": _("Nature Illustration"),
 		"preview": "templates/previews/presentation/impress-nature-illustration.png",
 		"featured": false
 	},
@@ -227,7 +227,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Pencil.odp",
-		"basename": _("Presentation"),
+		"basename": _("Pencil"),
 		"preview": "templates/previews/presentation/impress-pencil.png",
 		"featured": false
 	},
@@ -237,7 +237,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Piano.odp",
-		"basename": _("Presentation"),
+		"basename": _("Piano"),
 		"preview": "templates/previews/presentation/impress-piano.png",
 		"featured": false
 	},
@@ -247,7 +247,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Portfolio.odp",
-		"basename": _("Presentation"),
+		"basename": _("Portfolio"),
 		"preview": "templates/previews/presentation/impress-portfolio.png",
 		"featured": false
 	},
@@ -257,7 +257,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Progress.odp",
-		"basename": _("Presentation"),
+		"basename": _("Progress"),
 		"preview": "templates/previews/presentation/impress-progress.png",
 		"featured": false
 	},
@@ -267,7 +267,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Sunset.odp",
-		"basename": _("Presentation"),
+		"basename": _("Sunset"),
 		"preview": "templates/previews/presentation/impress-sunset.png",
 		"featured": false
 	},
@@ -276,7 +276,7 @@ window.CODA_TEMPLATES = [
 		"name": _("Vintage"),
 		"type": "impress",
 		"category": "impress",
-		"basename": _("Presentation"),
+		"basename": _("Vintage"),
 		"path": "templates/files/presentation/Vintage.odp",
 		"preview": "templates/previews/presentation/impress-vintage.png",
 		"featured": false
@@ -287,7 +287,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Vivid.odp",
-		"basename": _("Presentation"),
+		"basename": _("Vivid"),
 		"preview": "templates/previews/presentation/impress-vivid.png",
 		"featured": false
 	},
@@ -297,7 +297,7 @@ window.CODA_TEMPLATES = [
 		"type": "impress",
 		"category": "impress",
 		"path": "templates/files/presentation/Yellow_Idea.odp",
-		"basename": _("Presentation"),
+		"basename": _("Yellow Idea"),
 		"preview": "templates/previews/presentation/impress-yellow-idea.png",
 		"featured": false
 	}
