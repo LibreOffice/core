@@ -93,6 +93,13 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
 
     OStringBuffer aLine = OString::number(nObject) + " 0 obj\n";
 
+    filter::PDFStreamElement* pStream = rObject.GetStream();
+
+    // With encryption, the stream will be longer than the length of the
+    // source document.
+    sal_uInt64 const nDataSize{ pStream ? pStream->GetMemory().GetSize() : 0 };
+    sal_uInt64 const nStreamSize{ m_rContainer.calculateStreamSize(nDataSize) };
+
     if (rObject.GetDictionary())
     {
         aLine.append("<< ");
@@ -105,13 +112,19 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                 aLine.append(" ");
 
             aLine.append("/" + rPair.first + " ");
-            copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources);
+            if (rPair.first == "Length" && pStream && nStreamSize != nDataSize)
+            {
+                aLine.append(static_cast<sal_Int64>(nStreamSize));
+            }
+            else
+            {
+                copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources);
+            }
         }
 
         aLine.append(" >>\n");
     }
 
-    filter::PDFStreamElement* pStream = rObject.GetStream();
     if (pStream)
     {
         aLine.append("stream\n");

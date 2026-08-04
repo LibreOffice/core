@@ -593,6 +593,7 @@ public:
     SAL_DLLPRIVATE bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) override;
     void checkAndEnableStreamEncryption(sal_Int32 /*nObject*/) override {}
     void disableStreamEncryption() override {}
+    sal_uInt64 calculateStreamSize(sal_uInt64 const nDataSize) const override { return nDataSize; }
 };
 
 /// The trailer singleton is at the end of the doc.
