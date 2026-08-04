@@ -75,9 +75,14 @@ describe('Closing one document keeps another responsive', () => {
 		expect(await we().execute(() => app.file.modified)).toBe(false);
 
 		// Close the other document. BYE makes the app close that document's
-		// window, which is what releases its engine connection.
+		// window, which is what releases its engine connection. The call goes in
+		// a statement of its own: on coda-m postMobileMessage answers with a
+		// promise, and returning one from an executed script is not a result the
+		// driver can hand back.
 		await switchTo(handleToClose);
-		await we().execute(() => window.postMobileMessage('BYE'));
+		await we().execute(() => {
+			window.postMobileMessage('BYE');
+		});
 
 		// Wait for the close to actually take effect before testing the survivor,
 		// so the survivor's receive path has already had its chance to break.
