@@ -713,11 +713,21 @@ internal sealed partial class PptxSlideLayout
         XElement? properties = Ppt.Child(shape, "spPr");
         XElement? transform = Drawing.Child(properties, "xfrm");
 
-        // A placeholder that states no transform of its own inherits the whole of it from the
-        // layout, and failing that from the master — which is the normal case for a title, whose
-        // slide-level shape carries only its text. Falling back to a zero rectangle instead puts
-        // every such shape in the top-left corner at no size.
-        XElement?[] inherited = transform is null ? PlaceholderProperties(shape, slide) : [];
+        // A placeholder inherits the whole of its layout's — and failing that its master's —
+        // p:spPr, and what it states for itself wins property by property. A transform is only the
+        // commonest thing to inherit: a title whose slide-level shape carries only its text takes
+        // its rectangle this way, and falling back to a zero one puts every such shape in the
+        // top-left corner at no size.
+        //
+        // **Moving a placeholder does not cut it off from the rest of what it inherits**, and
+        // reading the chain only when the slide states no a:xfrm says that it does. LibreOffice
+        // applies the reference on p:nvSpPr — before p:spPr is parsed at all
+        // (oox/source/ppt/pptshapecontext.cxx:157-162) — and merges fill, line and geometry from
+        // it underneath the shape's own (shape.cxx:2816-2843). Measured on
+        // slides/batch-011/pptx/171128IPAP.pptx, whose slide titles state their own a:xfrm and
+        // take their C00000 plate from the layout: 32 of its 40 pages lost the red banner behind
+        // white title text, which is text that extracts perfectly and cannot be read.
+        XElement?[] inherited = PlaceholderProperties(shape, slide);
         transform ??= First(inherited, "xfrm");
         if (transform is null && inherited.Length == 0 && properties is null) return null;
 
