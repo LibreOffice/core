@@ -143,6 +143,54 @@ public sealed class PictureReadingTests
     }
 
     /// <summary>
+    /// An inline picture's anchor character takes no room, so the words after it are where the other
+    /// formats put them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// OOXML and WW8 put a <c>U+0001</c> in the text where the picture stands and ODF puts nothing there
+    /// at all, so the four fixtures are the same sentence written two ways. LibreOffice renders all four
+    /// identically — "and" begins at 214.80 pt in its PDF of the <c>.docx</c>, the <c>.doc</c> and the
+    /// <c>.fodt</c> alike — because <c>ImplLayoutArgs::AddRun</c> splits every run at each control
+    /// character before shaping (<c>vcl/source/text/ImplLayoutArgs.cxx:111</c>).
+    /// </para>
+    /// <para>
+    /// Handed to a shaper instead, that character comes back as <c>.notdef</c> at the face's glyph-zero
+    /// advance — 0.78 em in Liberation Serif, so 9.33 pt at this fixture's 12 pt — <em>on top of</em> the
+    /// picture's own width, which <c>PageContent.InlineObjects</c> already adds at the same offset. The
+    /// line is asserted rather than the picture because the picture hangs at the anchor's own offset and
+    /// so is placed correctly either way: only what follows it moves.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void AnAnchorCharacterTakesNoRoomOnTheLineItSitsOn()
+    {
+        Length WidthOfFirstLine(string name)
+        {
+            using IDocument document = Open(name);
+            WordProcessingPages pages = (WordProcessingPages)((IPaginatedDocument)document).Layout();
+
+            return pages.Pages[0].Lines
+                .First(candidate => candidate.ParagraphIndex == 0).Box.Width;
+        }
+
+        // The two formats that write an anchor character against the two that do not. A difference here
+        // is the box the character was shaped into, since the sentence and the picture are the same.
+        Length odf = WidthOfFirstLine("picture-anchor.fodt");
+
+        WidthOfFirstLine("picture-anchor.docx").Points.ShouldBe(odf.Points, 0.01);
+        WidthOfFirstLine("picture-anchor.doc").Points.ShouldBe(odf.Points, 0.01);
+        WidthOfFirstLine("picture-anchor.odt").Points.ShouldBe(odf.Points, 0.01);
+
+        // And the absolute figure, so four formats agreeing wrongly would still fail. LibreOffice's own
+        // PDF of the `.doc` and the `.fodt` puts "and" at 214.80 pt from the page edge and the full stop
+        // at 287.38, over a text area starting at 56.80 — a line of 230.58 pt. Read off the two rather
+        // than off its `.docx`, whose first line it draws with a 128 pt gap between "and" and "that"
+        // that neither of the other two has and that has nothing to do with this.
+        odf.Points.ShouldBe(230.58, 0.2);
+    }
+
+    /// <summary>
     /// An inline picture is never an obstacle, so the lines it shares a paragraph with keep their width.
     /// </summary>
     /// <remarks>
