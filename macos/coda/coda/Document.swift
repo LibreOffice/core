@@ -605,6 +605,59 @@ class Document: NSDocument {
     }
 
     /**
+     * Reads a statechanged message. The engine sends the state as "<command>=<value>".
+     * A JSON form carrying the same members is in use elsewhere, so accept that too.
+     */
+    private func stateChange(from message: String) -> CommandStateChange? {
+        let prefix = "statechanged: "
+        guard message.hasPrefix(prefix) else {
+            return nil
+        }
+        let payload = message.dropFirst(prefix.count)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if payload.hasPrefix("{") {
+            return try? JSONDecoder().decode(CommandStateChange.self, from: Data(payload.utf8))
+        }
+        guard let equals = payload.firstIndex(of: "=") else {
+            return nil
+        }
+        return CommandStateChange(commandName: String(payload[payload.startIndex..<equals]),
+                                  state: String(payload[payload.index(after: equals)...]))
+    }
+
+    /**
+     * Handles a statechanged message from the engine, which is where the app takes the
+     * document's modified state and the command states from.
+     *
+     * Reading them here rather than from the page's account of them keeps the modified
+     * state in step with the save results, which are read here as well: a save started
+     * from the page then finds the state already settled, and does not ask the engine to
+     * write a second time. The command states no longer wait for the page either, which
+     * matters for a window that is not in front, whose page may be given little time to
+     * run.
+     *
+     * They are applied on the main thread, being the document's edited mark and the
+     * state of menu items.
+     */
+    private func handleStateChanged(buffer: UnsafePointer<CChar>, length: Int) {
+        let message = String(
+            decoding: UnsafeRawBufferPointer(start: UnsafeRawPointer(buffer), count: length),
+            as: UTF8.self)
+        guard let change = stateChange(from: message) else {
+            return
+        }
+
+        DispatchQueue.main.async {
+            if change.commandName == ".uno:ModifiedStatus" {
+                self.isModified = change.state == "true"
+            }
+            (self.windowControllers.first as? WindowController)?
+                .handleCommandStateChange(change)
+        }
+    }
+
+    /**
      * Handles a unocommandresult message from the engine. The page receives the
      * message too, but its processing runs on the page's timers and animation
      * frames, which an occluded window's page may not run at all; a command result
@@ -641,10 +694,17 @@ class Document: NSDocument {
 
         let binaryMessage = COWrapper.isBinaryMessage(buffer, length: length)
 
-        // Handle command results straight from the engine's message stream, ahead
-        // of the page hand-off below.
-        if !binaryMessage && message(buffer, length: length, hasPrefix: "unocommandresult:") {
-            handleUnoCommandResult(buffer: buffer, length: length)
+        // Read what the save handling needs straight from the engine's message
+        // stream, ahead of the page hand-off below. The messages are handled in the
+        // order the engine sent them, which is what lets the state a save result is
+        // judged against be the state that came with it.
+        if !binaryMessage {
+            if message(buffer, length: length, hasPrefix: "unocommandresult:") {
+                handleUnoCommandResult(buffer: buffer, length: length)
+            }
+            else if message(buffer, length: length, hasPrefix: "statechanged:") {
+                handleStateChanged(buffer: buffer, length: length)
+            }
         }
 
         let pretext = binaryMessage

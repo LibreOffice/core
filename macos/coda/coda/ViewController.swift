@@ -318,27 +318,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     return (nil, nil)
                 }
                 else if body.hasPrefix("COMMANDSTATECHANGED ") {
-                    if let brace = body.firstIndex(of: "{") {
-                        // substring that shares storage with the original string
-                        let jsonSlice = body[brace...]
-
-                        // convert directly to Data and decode.
-                        let data = Data(jsonSlice.utf8)
-                        do {
-                            let state = try JSONDecoder().decode(CommandStateChange.self, from: data)
-
-                            // Has the modification state of the document changed?
-                            // This is smportant for saving which has to copy the document from the temporary location.
-                            if state.commandName == ".uno:ModifiedStatus" {
-                                document?.isModified = (state.state == "true")
-                            }
-
-                            // remember states of the commands for app menu handling
-                            if let windowController = view.window?.windowController as? WindowController {
-                                windowController.handleCommandStateChange(state)
-                            }
-                        } catch {}
-                    }
+                    // State changes are already handled in the Document's
+                    // handleStateChanged(), straight from the engine's message stream,
+                    // so the page's echo of them carries nothing new. Swallowing it here
+                    // keeps it from being forwarded back to the engine as a client
+                    // message.
                 }
                 else if body.hasPrefix("COMMANDRESULT ") {
                     // Command results are already handled in the Document's
