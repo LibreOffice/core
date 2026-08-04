@@ -1,0 +1,7 @@
+Test run for /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/Paperless.Spreadsheets.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.2 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   404, Skipped:     0, Total:   404, Duration: 14 s - Paperless.Spreadsheets.Tests.dll (net10.0)

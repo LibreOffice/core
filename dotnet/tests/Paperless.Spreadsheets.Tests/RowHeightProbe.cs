@@ -142,30 +142,6 @@ public class RowHeightProbe
 
         HashSet<string> wanted = [.. detail.Split(';', StringSplitOptions.RemoveEmptyEntries)];
 
-        string scales = Environment.GetEnvironmentVariable("PROBE_SCALES") ?? "";
-        if (scales.Length > 0)
-        {
-            foreach (string s in scales.Split(';', StringSplitOptions.RemoveEmptyEntries))
-            {
-                SheetOptimalRowHeights.OutputFactorProbe = double.Parse(
-                    s, System.Globalization.CultureInfo.InvariantCulture);
-                using IPaginatedDocument scaled = (IPaginatedDocument)PaperlessDocument.Open(path);
-                SpreadsheetPages sp = (SpreadsheetPages)scaled.Layout();
-                using StreamWriter sw = new($"{outPath}.{s}");
-                foreach (SheetLayout sheet in sp.Sheets)
-                {
-                    SheetRange r = SheetDecorationArea.Extend(sheet.UsedRange, sheet.Formatting);
-                    SheetGrid g = sheet.Grid;
-                    for (int row = 0; row <= (r.IsValid ? r.LastRow : -1); row++)
-                        sw.WriteLine(
-                            $"{sheet.Name}\t{row}\t{g.Rows.SizeAt(row).Twips}\t"
-                            + $"{(g.Rows.IsOptimalSize(row) ? "opt" : "man")}");
-                }
-            }
-
-            SheetOptimalRowHeights.OutputFactorProbe = 1.0;
-        }
-
         using IPaginatedDocument document = (IPaginatedDocument)PaperlessDocument.Open(path);
         SpreadsheetPages pages = (SpreadsheetPages)document.Layout();
 
