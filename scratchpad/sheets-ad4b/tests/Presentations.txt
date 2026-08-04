@@ -1,0 +1,23 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Paperless.Core -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Core/bin/Debug/net10.0/Paperless.Core.dll
+  Paperless.Text -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Text/bin/Debug/net10.0/Paperless.Text.dll
+  Paperless.Containers -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Containers/bin/Debug/net10.0/Paperless.Containers.dll
+  Paperless.Vector -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Vector/bin/Debug/net10.0/Paperless.Vector.dll
+  Paperless.OpenDocument -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.OpenDocument/bin/Debug/net10.0/Paperless.OpenDocument.dll
+  Paperless.Rendering -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Rendering/bin/Debug/net10.0/Paperless.Rendering.dll
+  Paperless.MsBinary -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.MsBinary/bin/Debug/net10.0/Paperless.MsBinary.dll
+  Paperless.Ooxml -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Ooxml/bin/Debug/net10.0/Paperless.Ooxml.dll
+  Paperless.Spreadsheets -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Spreadsheets/bin/Debug/net10.0/Paperless.Spreadsheets.dll
+  Paperless.WordProcessing -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.WordProcessing/bin/Debug/net10.0/Paperless.WordProcessing.dll
+  Paperless.Presentations -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Presentations/bin/Debug/net10.0/Paperless.Presentations.dll
+  Paperless -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless/bin/Debug/net10.0/Paperless.dll
+  Paperless.TestKit -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
+  Paperless.Presentations.Tests -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.Presentations.Tests/bin/Debug/net10.0/linux-x64/Paperless.Presentations.Tests.dll
+Test run for /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.Presentations.Tests/bin/Debug/net10.0/linux-x64/Paperless.Presentations.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.2 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   473, Skipped:     0, Total:   473, Duration: 37 s - Paperless.Presentations.Tests.dll (net10.0)

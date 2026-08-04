@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Paperless.Core -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Core/bin/Debug/net10.0/Paperless.Core.dll
+  Paperless.Text -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Text/bin/Debug/net10.0/Paperless.Text.dll
+  Paperless.Containers -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Containers/bin/Debug/net10.0/Paperless.Containers.dll
+  Paperless.Vector -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Vector/bin/Debug/net10.0/Paperless.Vector.dll
+  Paperless.Rendering -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Rendering/bin/Debug/net10.0/Paperless.Rendering.dll
+  Paperless.Ooxml -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/src/Paperless.Ooxml/bin/Debug/net10.0/Paperless.Ooxml.dll
+  Paperless.Vector.Tests -> /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.Vector.Tests/bin/Debug/net10.0/linux-x64/Paperless.Vector.Tests.dll
+Test run for /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/dotnet/tests/Paperless.Vector.Tests/bin/Debug/net10.0/linux-x64/Paperless.Vector.Tests.dll (.NETCoreApp,Version=v10.0)
+VSTest version 18.0.2 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   291, Skipped:     0, Total:   291, Duration: 3 s - Paperless.Vector.Tests.dll (net10.0)
