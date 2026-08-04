@@ -155,10 +155,28 @@ public class DrawingTableStyleTests
     {
         // A table naming a style the package has not got has no style, not the wrong one.
         DrawingTableStyle.Read(Styles(), "{00000000-0000-0000-0000-000000000000}").ShouldBeNull();
-
-        // But a table naming none at all takes the list's own default.
-        DrawingTableStyle.Read(Styles(), styleId: null).ShouldNotBeNull();
         DrawingTableStyle.Read(tableStyles: null, Guid).ShouldBeNull();
+    }
+
+    [Fact]
+    public void ATableNamingNoStyleGetsNoStyle()
+    {
+        // Not the list's own `def`, which reads exactly like the deck's default table look and is
+        // what PowerPoint applies. LibreOffice searches the list only when the id is non-empty and
+        // otherwise uses a static, empty TableStyle
+        // (oox/source/drawingml/table/tableproperties.cxx:89-124).
+        //
+        // Measured, because the source alone does not say which renderer to follow. Page 8 of
+        // slides/batch-011/pptx/section_1_our_rights_presentation.pptx is a three-column table
+        // with firstRow, firstCol and bandRow set and no a:tableStyleId: the reference leaves its
+        // first column white and we filled it accent1 with white text on it. Putting the id of the
+        // style the package declares as `def` into that a:tblPr makes the reference draw exactly
+        // what we drew, so the fallback was the whole of the difference. Removing it took the
+        // document from 123.54 unaccounted ink over 19 major pages to 8.34 over 2.
+        Styles().Attribute("def").ShouldNotBeNull().Value.ShouldBe(Guid);
+
+        DrawingTableStyle.Read(Styles(), styleId: null).ShouldBeNull();
+        DrawingTableStyle.Read(Styles(), styleId: "").ShouldBeNull();
     }
 
     [Fact]
