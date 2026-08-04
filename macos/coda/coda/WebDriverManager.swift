@@ -98,6 +98,19 @@ final class WebDriverManager {
         }
     }
 
+    /**
+     * Drop the entry for a webview, whatever its handle.  For use when the
+     * webview stops being usable at a known moment, such as its document
+     * closing: the weak reference alone would keep the handle listed until the
+     * webview is deallocated, which waits for everything still holding the
+     * document to let go of it.
+     */
+    func unregister(webView: WKWebView) {
+        for entry in entries where entry.webView.value === webView {
+            unregister(handle: entry.handle)
+        }
+    }
+
     /// Drop entries whose WKWebView has been deallocated.
     private func compact() {
         entries.removeAll { $0.webView.value == nil }
