@@ -1357,7 +1357,7 @@ bool PDFWriterImpl::emitTilings()
         if( bDeflate )
             aTilingObj.append( "/Filter/FlateDecode" );
         aTilingObj.append( "/Length "
-            + OString::number(nTilingStreamSize)
+            + OString::number(calculateStreamSize(nTilingStreamSize))
             + ">>\nstream\n" );
         if ( !updateObject( tiling.m_nObject ) ) return false;
         if ( !writeBuffer( aTilingObj ) ) return false;
@@ -1903,10 +1903,10 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     {
         nLen = aStream.Tell();
         aStream.Seek( 0 );
-        aLine.append( OString::number(nLen) + "/Filter/FlateDecode" );
+        aLine.append(OString::number(calculateStreamSize(nLen)) + "/Filter/FlateDecode");
     }
     else
-        aLine.append( aContents.getLength() );
+        aLine.append(OString::number(calculateStreamSize(aContents.getLength())));
     aLine.append( ">>\nstream\n" );
     if (!writeBuffer(aLine)) return 0;
     checkAndEnableStreamEncryption( nStream );
@@ -3786,7 +3786,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 aLine.append( getResourceDictObj() );
                 aLine.append( " 0 R\n"
                               "/Length " );
-                aLine.append( nStreamLen );
+                aLine.append(static_cast<sal_Int64>(calculateStreamSize(nStreamLen)));
                 aLine.append( "\n" );
                 if( bDeflate )
                     aLine.append( "/Filter/FlateDecode\n" );
@@ -4293,11 +4293,12 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         sal_Int64 nSize{};
         if (!rEmbeddedFile.m_aDataContainer.isEmpty())
         {
-            nSize = rEmbeddedFile.m_aDataContainer.getSize();
             checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
+            sal_uInt64 const nStartPos{getCurrentFilePosition()};
             if (!writeBufferBytes(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()))
                 return false;
             disableStreamEncryption();
+            nSize = sal_Int64(getCurrentFilePosition() - nStartPos);
         }
         else if (rEmbeddedFile.m_pStream)
         {
@@ -5138,13 +5139,18 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
     aMetadata.m_sCreateDate = m_aCreationMetaDateString;
 
+    bool const bEncryptMetadata{m_pPDFEncryptor && m_pPDFEncryptor->isMetadataEncrypted()};
+
     {
+        sal_uInt64 const nLength{bEncryptMetadata
+                ? calculateStreamSize(aMetadata.getSize())
+                : aMetadata.getSize()};
         COSWriter aWriter;
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Type", "/Metadata");
         aWriter.write("/Subtype", "/XML");
-        aWriter.write("/Length", sal_Int32(aMetadata.getSize()));
+        aWriter.write("/Length", sal_Int32(nLength));
         aWriter.endDict();
         aWriter.startStream();
         if (!writeBuffer(aWriter.getLine()))
@@ -5152,7 +5158,6 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     }
 
     //emit the stream
-    bool bEncryptMetadata = m_pPDFEncryptor && m_pPDFEncryptor->isMetadataEncrypted();
     if (bEncryptMetadata)
         checkAndEnableStreamEncryption(nObject);
 
@@ -8000,7 +8005,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     }
 
     aLine.append( "/Length " );
-    aLine.append( static_cast<sal_Int32>(nSize) );
+    aLine.append(static_cast<sal_Int64>(calculateStreamSize(nSize)));
     aLine.append( "\n" );
     if( bFlateFilter )
         aLine.append( "/Filter/FlateDecode\n" );
@@ -8314,7 +8319,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     else
         aLine.append( "/ColorSpace/DeviceGray" );
     aLine.append( "/Filter/DCTDecode/Length " );
-    aLine.append( static_cast<sal_Int64>(nLength) );
+    aLine.append(static_cast<sal_Int64>(calculateStreamSize(nLength)));
     if( nMaskObject )
     {
         aLine.append(" /SMask ");
@@ -8528,7 +8533,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         bool bIsTaggedNonReferenceXObject = m_aContext.Tagged && !m_aContext.UseReferenceXObject;
         sal_Int32 nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed,
                                                              bIsTaggedNonReferenceXObject);
-        aLine.append(nLength);
+        aLine.append(static_cast<sal_Int64>(calculateStreamSize(nLength)));
 
         aLine.append(">>\nstream\n");
         if (g_bDebugDisableCompression)
@@ -8643,7 +8648,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         aStream.append(" Do\n");
     }
     aStream.append("Q");
-    aLine.append(aStream.getLength());
+    aLine.append(static_cast<sal_Int64>(calculateStreamSize(aStream.getLength())));
 
     aLine.append(">>\nstream\n");
     if (!writeBuffer(aLine))

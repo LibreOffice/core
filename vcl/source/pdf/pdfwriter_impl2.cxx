@@ -1045,6 +1045,16 @@ void PDFWriterImpl::disableStreamEncryption()
         m_pPDFEncryptor->disableStreamEncryption();
 }
 
+sal_uInt64 PDFWriterImpl::calculateStreamSize(sal_uInt64 const nDataSize) const
+{
+    if (!m_aContext.Encryption.canEncrypt() || !m_pPDFEncryptor)
+    {
+        return nDataSize;
+    }
+
+    return m_pPDFEncryptor->calculateSizeIncludingHeader(nDataSize);
+}
+
 void PDFWriterImpl::enableStringEncryption(sal_Int32 nObject)
 {
     if (!m_aContext.Encryption.canEncrypt() || !m_pPDFEncryptor)
