@@ -178,6 +178,14 @@ public:
 
     static bool PathHasSegment( std::u16string_view aPath, std::u16string_view aSegment );
 
+    /** Split a package-relative URL into the name of the storage holding the object and the name
+        the object has inside it. A URL with no slash in it leaves the container name empty. A
+        leading "./" and a trailing "/" are dropped before the split.
+     */
+    static void SplitPackageURL(const OUString& rURL,
+                                OUString& rContainerStorageName,
+                                OUString& rObjectStorageName);
+
     // Methods to allow easy use of hierarchical names inside storages
 
     static css::uno::Reference< css::embed::XStorage > GetStorageAtPath(

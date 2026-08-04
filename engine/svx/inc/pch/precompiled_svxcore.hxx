@@ -522,9 +522,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/weakref.hxx>
-#include <xmloff/dllapi.h>
-#include <xmloff/families.hxx>
-#include <xmloff/xmltoken.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <cell.hxx>

@@ -19,8 +19,14 @@
 
 #include <memory>
 #include <utility>
-#include <xmlxtexp.hxx>
-#include <xmlxtimp.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <cppu/unotype.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
@@ -29,6 +35,54 @@
 #include <stack>
 
 using namespace com::sun::star;
+
+namespace
+{
+
+uno::Reference<document::XFilter> createTableFilter(const OUString& rServiceName)
+{
+    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    return uno::Reference<document::XFilter>(
+        xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext),
+        uno::UNO_QUERY);
+}
+
+bool importPropertyTable(const OUString& rURL, const OUString& rReferer,
+                         const uno::Reference<embed::XStorage>& rStorage,
+                         const uno::Reference<container::XNameContainer>& rTable)
+{
+    uno::Reference<document::XFilter> xFilter(
+        createTableFilter(u"com.sun.star.comp.Svx.XPropertyTableImporter"_ustr));
+    if( !xFilter.is() )
+        return false;
+
+    return xFilter->filter({ comphelper::makePropertyValue(u"URL"_ustr, rURL),
+                             comphelper::makePropertyValue(u"Referer"_ustr, rReferer),
+                             comphelper::makePropertyValue(u"Storage"_ustr, rStorage),
+                             comphelper::makePropertyValue(u"PropertyTable"_ustr, rTable) });
+}
+
+bool exportPropertyTable(const OUString& rURL,
+                         const uno::Reference<embed::XStorage>& rStorage,
+                         const uno::Reference<container::XNameContainer>& rTable)
+{
+    uno::Reference<document::XFilter> xFilter(
+        createTableFilter(u"com.sun.star.comp.Svx.XPropertyTableExporter"_ustr));
+    if( !xFilter.is() )
+        return false;
+
+    return xFilter->filter({ comphelper::makePropertyValue(u"URL"_ustr, rURL),
+                             comphelper::makePropertyValue(u"Storage"_ustr, rStorage),
+                             comphelper::makePropertyValue(u"PropertyTable"_ustr, rTable) });
+}
+
+/// A URL with no protocol names a path inside the storage rather than a file of its own.
+bool isPathInStorage(std::u16string_view rURL, const uno::Reference<embed::XStorage>& rStorage)
+{
+    return INetURLObject(rURL).GetProtocol() == INetProtocol::NotValid && rStorage.is();
+}
+
+}
 
 XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -293,9 +347,9 @@ bool XPropertyList::Load()
             if( aURL.getExtension().isEmpty() )
                 aURL.setExtension( GetDefaultExt() );
 
-            bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                                             maReferer, uno::Reference < embed::XStorage >(),
-                                             createInstance(), nullptr );
+            bool bRet = importPropertyTable(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                                            maReferer, uno::Reference < embed::XStorage >(),
+                                            createInstance() );
             if (bRet)
                 return bRet;
         }
@@ -309,7 +363,11 @@ bool XPropertyList::LoadFrom( const uno::Reference < embed::XStorage > &xStorage
     if( !mbListDirty )
         return false;
     mbListDirty = false;
-    return SvxXMLXTableImport::load( rURL, rReferer, xStorage, createInstance(), &mbEmbedInDocument );
+    // A relative URL means the list came out of the document package, which is what marks it as
+    // embedded. The import reaches that answer from the same two values.
+    if (isPathInStorage(rURL, xStorage))
+        mbEmbedInDocument = true;
+    return importPropertyTable(rURL, rReferer, xStorage, createInstance());
 }
 
 bool XPropertyList::Save()
@@ -355,15 +413,26 @@ bool XPropertyList::Save()
     css::uno::Reference<css::container::XNameContainer> xExportableNameContainer
         = mbNeedsExportableList ? rExportableList->createInstance() : createInstance();
 
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                              xExportableNameContainer,
-                                              uno::Reference< embed::XStorage >(), nullptr );
+    return exportPropertyTable(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                               uno::Reference<embed::XStorage>(),
+                               xExportableNameContainer);
 }
 
 bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
                             const OUString &rURL, OUString *pOptName )
 {
-    return SvxXMLXTableExportComponent::save( rURL, createInstance(), xStorage, pOptName );
+    uno::Reference<container::XNameContainer> xTable(createInstance());
+
+    if (pOptName)
+    {
+        // A bitmap table becomes a storage of its own and keeps the plain name. Every other table
+        // is written as a single stream and takes the .xml extension.
+        const bool bSaveAsStorage
+            = xTable->getElementType() == cppu::UnoType<awt::XBitmap>::get();
+        *pOptName = (isPathInStorage(rURL, xStorage) && !bSaveAsStorage) ? rURL + ".xml" : rURL;
+    }
+
+    return exportPropertyTable( rURL, xStorage, xTable );
 }
 
 XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,

@@ -539,6 +539,8 @@ core_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
+    "com_sun_star_comp_Svx_XPropertyTableExporter_get_implementation",
+    "com_sun_star_comp_Svx_XPropertyTableImporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation",
     "com_sun_star_comp_xmlscript_XMLBasicExporter",

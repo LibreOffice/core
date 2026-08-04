@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     sal \
     salhelper \
     sax \
+    sfx \
     svl \
     tl \
     utl \
@@ -298,6 +299,9 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/xmlstyle \
     xmloff/source/style/xmltabe \
     xmloff/source/style/xmltabi \
+    xmloff/source/style/xmlxtexp \
+    xmloff/source/style/xmlxtimp \
+    xmloff/source/style/XPropertyTableFilters \
     xmloff/source/table/XMLTableExport \
     xmloff/source/table/XMLTableImport \
     xmloff/source/text/XMLAutoMarkFileContext \

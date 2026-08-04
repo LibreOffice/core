@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
     sal \
     salhelper \
 	sax \
+	sfx \
     svl \
 	test \
     tl \

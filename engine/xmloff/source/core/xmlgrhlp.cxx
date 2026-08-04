@@ -30,6 +30,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/compbase.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -372,48 +373,6 @@ SvXMLGraphicHelper::~SvXMLGraphicHelper()
 {
 }
 
-void SvXMLGraphicHelper::splitObjectURL(const OUString& _aURLNoPar,
-    OUString& rContainerStorageName,
-    OUString& rObjectStorageName)
-{
-    DBG_ASSERT(_aURLNoPar.isEmpty() || '#' != _aURLNoPar[0], "invalid object URL" );
-    OUString aURLNoPar = _aURLNoPar;
-
-    sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
-    if( -1 == _nPos )
-    {
-        rContainerStorageName.clear();
-        rObjectStorageName = aURLNoPar;
-    }
-    else
-    {
-        //eliminate 'superfluous' slashes at start and end
-        //#i103076# load objects with all allowed xlink:href syntaxes
-        {
-            //eliminate './' at start
-            sal_Int32 nStart = 0;
-            sal_Int32 nCount = aURLNoPar.getLength();
-            if( aURLNoPar.startsWith( "./" ) )
-            {
-                nStart = 2;
-                nCount -= 2;
-            }
-
-            //eliminate '/' at end
-            sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
-            if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
-                nCount--;
-
-            aURLNoPar = aURLNoPar.copy( nStart, nCount );
-        }
-
-        _nPos = aURLNoPar.lastIndexOf( '/' );
-        if( _nPos >= 0 )
-            rContainerStorageName = aURLNoPar.copy( 0, _nPos );
-        rObjectStorageName = aURLNoPar.copy( _nPos+1 );
-    }
-}
-
 bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStorageName,
                                                  OUString& rPictureStreamName )
@@ -429,7 +388,7 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
         rPictureStreamName = aURLStr;
     }
     else
-        SvXMLGraphicHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
+        comphelper::OStorageHelper::SplitPackageURL(aURLStr, rPictureStorageName, rPictureStreamName);
 
     SAL_WARN_IF(rPictureStreamName.isEmpty(), "svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
 

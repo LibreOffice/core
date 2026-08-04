@@ -47,7 +47,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svx/xmleohlp.hxx>
-#include <xmloff/xmlgrhlp.hxx>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -243,7 +242,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     }
     else
     {
-        SvXMLGraphicHelper::splitObjectURL(aURLNoPar, rContainerStorageName, rObjectStorageName);
+        comphelper::OStorageHelper::SplitPackageURL(aURLNoPar, rContainerStorageName, rObjectStorageName);
     }
 
     if( -1 != rContainerStorageName.indexOf( '/' ) )

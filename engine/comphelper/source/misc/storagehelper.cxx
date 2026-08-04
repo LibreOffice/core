@@ -463,6 +463,49 @@ bool OStorageHelper::PathHasSegment( std::u16string_view aPath, std::u16string_v
     return bResult;
 }
 
+
+void OStorageHelper::SplitPackageURL(const OUString& rURL,
+                                     OUString& rContainerStorageName,
+                                     OUString& rObjectStorageName)
+{
+    SAL_WARN_IF (!rURL.isEmpty() && '#' == rURL[0], "comphelper", "invalid object URL: " << rURL);
+    OUString aURL = rURL;
+
+    sal_Int32 nPos = aURL.lastIndexOf('/');
+    if (-1 == nPos)
+    {
+        rContainerStorageName.clear();
+        rObjectStorageName = aURL;
+    }
+    else
+    {
+        //eliminate 'superfluous' slashes at start and end
+        //#i103076# load objects with all allowed xlink:href syntaxes
+        {
+            //eliminate './' at start
+            sal_Int32 nStart = 0;
+            sal_Int32 nCount = aURL.getLength();
+            if (aURL.startsWith( "./" ))
+            {
+                nStart = 2;
+                nCount -= 2;
+            }
+
+            //eliminate '/' at end
+            sal_Int32 nEnd = aURL.lastIndexOf('/');
+            if (nEnd == aURL.getLength()-1 && nEnd != (nStart-1))
+                nCount--;
+
+            aURL = aURL.copy(nStart, nCount);
+        }
+
+        nPos = aURL.lastIndexOf('/');
+        if (nPos >= 0)
+            rContainerStorageName = aURL.copy(0, nPos);
+        rObjectStorageName = aURL.copy(nPos + 1);
+    }
+}
+
 class LifecycleProxy::Impl
     : public std::vector< uno::Reference< embed::XStorage > > {};
 LifecycleProxy::LifecycleProxy()

@@ -93,10 +93,6 @@ public:
     static rtl::Reference<SvXMLGraphicHelper>  Create( SvXMLGraphicHelperMode eCreateMode,
                                         const OUString& rMimeType = OUString() );
 
-    static void splitObjectURL(const OUString& aURLNoPar,
-        OUString& rContainerStorageName,
-        OUString& rObjectStorageName);
-
 public:
 
     // XGraphicObjectResolver

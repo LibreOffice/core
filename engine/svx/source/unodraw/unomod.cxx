@@ -22,6 +22,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/unoevent.hxx>
@@ -48,7 +50,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/SvxXTextColumns.hxx>
 #include <svx/unoshape.hxx>
-#include <xmloff/xmlgrhlp.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -176,7 +178,12 @@ css::uno::Reference<css::uno::XInterface> create(
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
-        return cppu::getXWeak( SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read ).get() );
+        const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+        // The one empty argument makes the helper build itself without a storage, so it resolves
+        // the graphics handed to it and reads nothing from a package of its own.
+        cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any() };
+        return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, aArguments, xContext);
     }
     else if (rServiceSpecifier == "com.sun.star.text.TextColumns")
     {

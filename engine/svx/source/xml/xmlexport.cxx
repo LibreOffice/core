@@ -27,16 +27,42 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmleohlp.hxx>
-#include <xmloff/xmlgrhlp.hxx>
 
 #include <svx/unomodel.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
+
+namespace
+{
+
+/** Build a graphic storage handler for the drawing layer filter.
+
+    The single empty argument makes the handler come up without a storage of its own, so it works
+    on the graphics passed through it rather than on a package.
+ */
+uno::Reference<document::XGraphicStorageHandler> createGraphicStorageHandler(
+    const uno::Reference<uno::XComponentContext>& rContext, const OUString& rServiceName)
+{
+    cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any() };
+    return uno::Reference<document::XGraphicStorageHandler>(
+        rContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            rServiceName, aArguments, rContext ), uno::UNO_QUERY);
+}
+
+void disposeGraphicStorageHandler(const uno::Reference<document::XGraphicStorageHandler>& rHandler)
+{
+    uno::Reference<lang::XComponent> xComponent(rHandler, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+}
+
+}
 
 bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent )
 {
@@ -48,7 +74,6 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     bool bDocRet = xOut.is();
 
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
@@ -82,8 +107,8 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
                 xObjectResolver = xObjectHelper.get();
             }
 
-            xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
-            xGraphicStorageHandler = xGraphicHelper.get();
+            xGraphicStorageHandler = createGraphicStorageHandler(
+                xContext, u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr );
 
             uno::Reference<xml::sax::XDocumentHandler>  xHandler = xWriter;
 
@@ -123,9 +148,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
         bDocRet = false;
     }
 
-    if( xGraphicHelper )
-        xGraphicHelper->dispose();
-    xGraphicHelper.clear();
+    disposeGraphicStorageHandler(xGraphicStorageHandler);
     xGraphicStorageHandler = nullptr;
 
     if( xObjectHelper.is() )
@@ -156,7 +179,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     bool bRet = true;
 
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
-    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
@@ -180,8 +202,8 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xTargetModel->lockControllers();
         pModel->incImportExport();
 
-        xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
-        xGraphicStorageHandler = xGraphicHelper.get();
+        xGraphicStorageHandler = createGraphicStorageHandler(
+            xContext, u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr);
 
         ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
         if( pPersist )
@@ -227,9 +249,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         DBG_UNHANDLED_EXCEPTION("svx");
     }
 
-    if( xGraphicHelper )
-        xGraphicHelper->dispose();
-    xGraphicHelper.clear();
+    disposeGraphicStorageHandler(xGraphicStorageHandler);
     xGraphicStorageHandler = nullptr;
 
     if( xObjectHelper.is() )

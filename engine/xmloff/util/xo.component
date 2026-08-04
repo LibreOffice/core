@@ -239,4 +239,12 @@
     <service name="com.sun.star.document.BinaryStreamResolver"/>
     <service name="com.sun.star.document.GraphicStorageHandler"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Svx.XPropertyTableExporter"
+      constructor="com_sun_star_comp_Svx_XPropertyTableExporter_get_implementation">
+    <service name="com.sun.star.comp.Svx.XPropertyTableExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Svx.XPropertyTableImporter"
+      constructor="com_sun_star_comp_Svx_XPropertyTableImporter_get_implementation">
+    <service name="com.sun.star.comp.Svx.XPropertyTableImporter"/>
+  </implementation>
 </component>

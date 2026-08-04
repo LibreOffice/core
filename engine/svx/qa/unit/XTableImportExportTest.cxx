@@ -14,11 +14,14 @@
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/xtable.hxx>
+#include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace css;
@@ -74,6 +77,34 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
         CPPUNIT_ASSERT_EQUAL(aChecksum, aBitmap.GetChecksum());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExportInStorage)
+{
+    // A colour list kept inside a document goes into the document package under a name of its own,
+    // and comes back from there with its entries and with the mark that says it lives in the
+    // document.
+    uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+
+    OUString aWrittenName;
+    {
+        rtl::Reference<XColorList> xColorList = new XColorList(u""_ustr, u""_ustr);
+        // A list that still counts as dirty fills itself with the standard colours on first use,
+        // which would bury the single entry this test is about.
+        xColorList->SetDirty(false);
+        xColorList->Insert(std::make_unique<XColorEntry>(COL_RED, u"SomeColor"_ustr));
+        CPPUNIT_ASSERT(xColorList->SaveTo(xStorage, u"ColorTable"_ustr, &aWrittenName));
+    }
+
+    // A colour list is a single stream in the package, so it takes the .xml extension.
+    CPPUNIT_ASSERT_EQUAL(u"ColorTable.xml"_ustr, aWrittenName);
+
+    rtl::Reference<XColorList> xColorList = new XColorList(u""_ustr, u""_ustr);
+    CPPUNIT_ASSERT(xColorList->LoadFrom(xStorage, aWrittenName, u""_ustr));
+    CPPUNIT_ASSERT(xColorList->IsEmbedInDocument());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(1), xColorList->Count());
+    CPPUNIT_ASSERT_EQUAL(u"SomeColor"_ustr, xColorList->GetColor(0)->GetName());
+    CPPUNIT_ASSERT_EQUAL(COL_RED, xColorList->GetColor(0)->GetColor());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
