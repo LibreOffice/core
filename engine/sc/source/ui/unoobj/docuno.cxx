@@ -653,6 +653,11 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
 
 int ScModelObj::getParts()
 {
+    // pDocShell is cleared in Notify() when the doc shell dies, but the model
+    // object can still be asked for the status afterwards.
+    if (!pDocShell)
+        return 0;
+
     ScDocument& rDoc = pDocShell->GetDocument();
     return rDoc.GetTableCount();
 }
@@ -756,6 +761,9 @@ OUString ScModelObj::getPartHash( int nPart )
 VclPtr<vcl::Window> ScModelObj::getDocWindow()
 {
     SolarMutexGuard aGuard;
+
+    if (!pDocShell)
+        return VclPtr<vcl::Window>();
 
     ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
 
