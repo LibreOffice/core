@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-01 21:01+0000\n"
+"PO-Revision-Date: 2026-08-05 05:47+0000\n"
 "Last-Translator: Alexander Gabilondo <alexgabi@openmailbox.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
-"Language: \n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "Egoera"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Xehetasunak"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -410,6 +410,8 @@ msgstr "Zure WOPI zerbitzaria ez da segurua: SSL egiaztapenak huts egin du"
 msgid ""
 "Documents are not effectively contained: missing capabilities or namespaces."
 msgstr ""
+"Dokumentuak ez dira modu eraginkorrean jasotzen: gaitasunak edo izen-"
+"espazioak falta dira."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -417,6 +419,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"Arriskutsuak izan daitezkeen sistema-deien BPF iragaztea (seccomp) ez dago "
+"gaituta; segurtasun arrisku bat da."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -430,7 +434,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:54
 #: src/control/Control.ServerAuditDialog.ts:109
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
-msgstr ""
+msgstr "Slow Kit kartzela konfigurazioa kopiatuz, ezin da lotura muntatu."
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:119
@@ -442,6 +446,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Bezero batzuk kentzeko aurreikusita dagoen WebSocket URL inprimaki "
+"zaharrarekin konektatuta daude. Egiaztatu zure proxy formulario trinkoa "
+"pasatzen duela."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -451,7 +458,7 @@ msgstr "Errorea"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Lortu informazio gehiago"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -555,7 +562,7 @@ msgstr "Erakutsi erregela"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Erakutsi formatu-markak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -647,11 +654,11 @@ msgstr "Edukia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Bistaratu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Erakutsi ertzak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -703,11 +710,11 @@ msgstr "Denbora"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:603
 msgid "Hidden pages"
-msgstr ""
+msgstr "Ezkutuko orriak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:604
 msgid "From printer setup"
-msgstr ""
+msgstr "Inprimagailuaren ezarpenetatik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:605
 #: src/control/Control.BackstageView.ts:559 templates/templates.js:80
@@ -732,21 +739,21 @@ msgstr "Oharrak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:607
 msgid "Handouts"
-msgstr ""
+msgstr "Esku-orriak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:608
 #: src/control/Control.NavigatorPanel.ts:223
 #: src/control/Control.TopToolbar.js:505
 msgid "Outline"
-msgstr ""
+msgstr "Eskema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Esku-orri horizontala"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:610
 msgid "Images"
-msgstr ""
+msgstr "Irudiak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:611
 #, fuzzy
@@ -755,65 +762,67 @@ msgstr "Taula"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:612
 msgid "Controls"
-msgstr ""
+msgstr "Kontrolak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:613
 msgid "Background"
-msgstr ""
+msgstr "Atzeko planoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:614
 msgid "Print Black"
-msgstr ""
+msgstr "Inprimatu beltza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:615
 msgid "Hidden text"
-msgstr ""
+msgstr "Ezkutuko testua"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:616
 msgid "Placeholders"
-msgstr ""
+msgstr "Leku-markak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:617
 msgid "Left pages"
-msgstr ""
+msgstr "Ezkerreko orriak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:618
 msgid "Right pages"
-msgstr ""
+msgstr "Eskuineko orriak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:619
 msgid "Brochure"
-msgstr ""
+msgstr "Eskuliburua"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:620
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Eskuliburua eskuinetik ezkerrera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:826
 msgid "Invalid JSON file"
-msgstr ""
+msgstr "JSON fitxategi baliogabea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:830
 msgid "Error reading file"
-msgstr ""
+msgstr "Errorea fitxategia irakurtzean"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:842
 msgid "Autotext"
-msgstr ""
+msgstr "Testu automatikoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:844
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
+"Kargatu berrerabil daitezkeen testu zatiak (.bau). Testu hauek txertatzeko, "
+"idatzi Testu automatikoko sarrera baten lasterbidea eta sakatu F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Upload Autotext"
-msgstr ""
+msgstr "Igo testu automatikoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:856
 msgid "Custom dictionaries"
-msgstr ""
+msgstr "Hiztegi pertsonalizatuak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:858
 msgid ""
