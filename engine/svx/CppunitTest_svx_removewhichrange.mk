@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_externals,svx_removewhichrange, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,svx_removewhichrange, \
+    avmedia \
     basegfx \
     comphelper \
     cppu \
@@ -45,7 +46,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_removewhichrange, \
     utl \
     vcl \
     xo \
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     $(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 ))
 
