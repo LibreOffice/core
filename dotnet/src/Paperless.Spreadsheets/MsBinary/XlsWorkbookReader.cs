@@ -4,6 +4,7 @@ using Paperless.Core.Extraction;
 using Paperless.Core.Geometry;
 using Paperless.Core.Graphics;
 using Paperless.Core.Units;
+using Paperless.MsBinary.Escher;
 using Paperless.Spreadsheets.Layout;
 using Paperless.Core.Numbers;
 using Paperless.Text.Encodings;
@@ -75,6 +76,8 @@ internal sealed class XlsWorkbookReader
     private XlsSheetDecoration _sheetDecoration = new();
     private XlsSheetPrintState _page = new();
     private XlsDrawingCollector _drawings = new([]);
+    private readonly List<byte> _drawingGroup = [];
+    private Dictionary<int, EscherBlip>? _blips;
     private bool _reportedFormat;
     private bool _reportedSstIndex;
 
@@ -186,6 +189,13 @@ internal sealed class XlsWorkbookReader
                     ReadPalette();
                     break;
 
+                // The workbook's picture store. It is stated once, in the globals, and every
+                // sheet's shapes index into it — so it has to be collected before any sheet is
+                // read, which is what makes it a globals record rather than a sheet one.
+                case BiffRecords.MsoDrawingGroup:
+                    _drawingGroup.AddRange(_stream.ReadBytes(_stream.RecordLeft));
+                    break;
+
                 case BiffPageRecords.Name:
                     ReadName();
                     break;
@@ -195,6 +205,29 @@ internal sealed class XlsWorkbookReader
             }
         }
     }
+
+    /// <summary>
+    /// The workbook's picture store, read once from the globals and shared by every sheet.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Excel keeps the <c>OfficeArtDggContainer</c> inline, in <c>MSODRAWINGGROUP</c> records at the
+    /// head of the workbook, where Word puts it in the table stream and PowerPoint in a
+    /// <c>PPDrawingGroup</c>. The bytes are the same structure in all three, so the store is read by
+    /// <see cref="EscherBlips"/> rather than here — with no delay stream, because a workbook's
+    /// blips are inline in the <c>msofbtBSE</c> and there is no second stream for a <c>foDelay</c>
+    /// to point into (<c>XclImpObjectManager::ReadMsoDrawingGroup</c>,
+    /// <c>sc/source/filter/excel/xiescher.cxx</c>, hands <c>maDffStrm</c> alone to
+    /// <c>SvxMSDffManager</c>).
+    /// </para>
+    /// <para>
+    /// Read lazily and kept, because most workbooks have no drawing group at all: eight of the
+    /// corpus's sixty-one <c>.xls</c> carry one, and the other fifty-three would pay a walk of an
+    /// empty buffer per sheet.
+    /// </para>
+    /// </remarks>
+    private Dictionary<int, EscherBlip> Blips =>
+        _blips ??= _drawingGroup.Count > 0 ? EscherBlips.Read([.. _drawingGroup], [], []) : [];
 
     private void ReadBof()
     {
@@ -725,7 +758,7 @@ internal sealed class XlsWorkbookReader
             RowHeightsAreManual = _stream.Version == BiffVersion.Biff8,
         };
         _sheetDecoration = new XlsSheetDecoration();
-        _drawings = new XlsDrawingCollector(_diagnostics);
+        _drawings = new XlsDrawingCollector(_diagnostics, Blips);
         XlsChartBuilder chart = new();
 
         if (!StartSubstream(sheet))
@@ -905,7 +938,7 @@ internal sealed class XlsWorkbookReader
             RowHeightsAreManual = _stream.Version == BiffVersion.Biff8,
         };
         _sheetDecoration = new XlsSheetDecoration();
-        _drawings = new XlsDrawingCollector(_diagnostics);
+        _drawings = new XlsDrawingCollector(_diagnostics, Blips);
         _rowFormats.Clear();
         _columnFormats.Clear();
         _richCells.Clear();

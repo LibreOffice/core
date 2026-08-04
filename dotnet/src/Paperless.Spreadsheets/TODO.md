@@ -293,6 +293,76 @@ document**, and because "the reference is wrong" needs a higher bar than it usua
 mechanism is named, the sheet is demonstrably absent from the file, and the reach was measured
 rather than assumed — `DPCache` appears in **exactly one** of the track's 171 reference PDFs.
 
+### Fixed: a legacy workbook's pictures never reached its sheets
+
+`XlsDrawingCollector` emitted a drawing only for a shape carrying `TXO` text — it walked a picture
+shape, consumed its `OBJ` record and dropped it — and `MSODRAWINGGROUP` (0x00EB) was declared in
+`BiffRecords` and read nowhere. So no `.xls` in any corpus had ever had a picture on its page.
+
+Excel keeps the `OfficeArtDggContainer` **inline in the workbook globals**, where Word keeps it in
+the table stream and PowerPoint in a `PPDrawingGroup`, so `EscherBlips.Read` already knew the
+structure and needed only the bytes and no delay stream. A shape names its picture with `pib`
+(property 260), one-based into that store.
+
+Reach, measured by walking the globals substream rather than by grepping: **8 of the sheets track's
+61 `.xls` carry an `OfficeArtBStoreContainer`**, 27 `msofbtBSE` between them —
+`TICAPCapability_Final.xls` 12, `apron-area.xls` 6, `INDEX_Digital_Transformation_Toolkits.xls` 4,
+and five with one each.
+
+Two things worth carrying forward:
+
+- **Most of them are metafiles.** Every blip in `TICAPCapability_Final.xls` and the one every one of
+  `apron-area.xls`'s seven shapes points at are `0xF01A` (EMF), so they draw as vector content and a
+  count of `/Subtype /Image` in the output PDF sees none of them. The earlier census that read
+  `apron-area.xls` as "0 images against 1670" was counting placements of something the two sides
+  represent differently, not a picture we failed to draw — its page-1 unaccounted ink is 1.09% before
+  the fix and 1.00% after, and it was a full match throughout.
+- **A missing picture costs pages, not only ink.** `SheetEmptyPages.TouchedByADrawing` keeps a page
+  holding no cells but holding a drawing.
+
+### Vertical clipping: the rule is real, the document that named it is not explained
+
+`SheetTextLayout` says "the clip never cuts the text vertically" and cites
+`output2.cxx:2093`. **Half of that is wrong.** Calc asks one question in four places with the same
+three lines —
+
+```
+if ( meType != OUTTYPE_PRINTER ||
+     ( mpDoc->GetRowFlags( nCellY, mnTab ) & CRFlags::ManualSize ) ||
+     ( aVars.HasCondHeight() ) )
+    bVClip = true;
+```
+
+— at `output2.cxx:2104`, `:3256`, `:4132` and `:4419`, and the comment beside the third says why:
+*"Don't clip for text height when printing rows with optimal height."* A row whose file merely
+states `ht` is Calc's own measurement of its content, so nothing can overflow it and clipping would
+only cut its own answer. **A row the user sized is a statement, and a wrapping cell taller than it
+loses everything past its bottom edge.** The slack is one reference-device pixel —
+`nEngineHeight >= aCellSize.Height() + aRefOne.Height()` (`:3248`), 15 twips at 96 dpi.
+
+The second half matters as much and is easy to miss: `EnableSkipOutsideFormat` is turned on for
+every top- or standard-aligned cell (`:3115`) and the engine is given the *cell* as its paper, so a
+line whose top falls past the bottom is **never formatted at all**. That is what makes the
+difference visible to `wc -w` rather than only to the eye — a clipped glyph is still an extractable
+word and a glyph never drawn is not.
+
+**Both were implemented, built clean, and measured to move nothing.**
+`Application_Compliance_Checklist_5_Apr_2021.xlsx` — 18 pages against 14 and **26 353 words against
+17 718**, the reference drawing its checklist in six content pages where we take ten — came back
+byte-for-byte the same page and word counts with the clip in, and again with the skip on top. So
+the rule is right and the diagnosis of this document is not: its overflowing cells are not reaching
+the branch. Ruled out along the way:
+
+- **The row flags are correct.** Probed: `App. Compliance Checklist` rows 29 onward arrive as
+  manual-height at 450–765 twips, matching the file's `customHeight` on 715 of 858 `ht` rows.
+- **It is not hidden sheets.** Five of its nine are `hidden` or `veryHidden` and
+  `SpreadsheetPages.IsPrinted` already drops them.
+
+The next thing to check is whether those cells wrap at all: a cell that does not wrap is one long
+line taking the horizontal path, where Calc *shortens* the string — dropping characters — and we
+clip it instead, which keeps every glyph in the text layer. That is the same defect in the other
+axis and would explain an over-count with the row heights agreeing.
+
 ### `INDEX_Digital_Transformation_Toolkits.xls`: six pages of pictures we never draw
 
 18 pages against 24 with the words matching **exactly** (1982 against 1982), which reads as six
@@ -305,6 +375,14 @@ Our `SheetEmptyPages.TouchedByADrawing` would keep them too. It does not, becaus
 images from this workbook at all**: `pdfimages -list` reports images on every one of the reference's
 24 pages and none anywhere in ours. So this is not an empty-page rule at all — it is the Escher
 picture path on this one `.xls`, and the six pages are a symptom.
+
+**Half diagnosed, half fixed.** With the picture path in (see above) this workbook now draws 74
+image objects and renders **20 pages against 24**, so two of the six came back and four did not. The
+four remaining are still an empty-page question and are now worth asking as one: the icons are
+anchored at `svg:x="0in"`, so their rectangles begin exactly on the band's left edge, and
+`TouchedByADrawing` compares a drawing's bounds against the block's with `>=`/`<=` on both sides.
+Whether every icon on those four pages is inside the *printed* range at all is the thing to measure
+next — `HasAnyDraw` walks the whole drawing page rather than the objects anchored in the range.
 
 ### `TK-Syllabus-Comparison-Document-v2.xlsx`: rows 10.4% too tall, lines exactly right
 
