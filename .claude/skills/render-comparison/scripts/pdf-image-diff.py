@@ -81,6 +81,14 @@ INK_GAP = 22            # mean luma difference marking a region as present-vs-ab
 MAJOR_REGION = 0.004    # ... and how much of the page such a region must cover
 MAJOR_PAGE_INK = 0.012  # or this much of a page's total ink unaccounted for either way
 
+# How far two renderings of the same page may differ in pixel size before the comparison is
+# refused. `pdftoppm -scale-to` pins the long edge and rounds the short one, so a page size
+# differing in the second decimal of a point lands a pixel apart. Two pixels and one percent
+# are both well under the DILATE=3 region tolerance; beyond that it is a real paper-size
+# difference and cropping would be hiding it.
+SIZE_SLACK_PIXELS = 2
+SIZE_SLACK_RATIO = 0.01
+
 
 def run(cmd: list[str]) -> None:
     proc = subprocess.run(cmd, capture_output=True)
@@ -117,6 +125,18 @@ def read_ppm(path: pathlib.Path) -> tuple[int, int, bytes]:
             pos += 1
         fields.append(int(data[start:pos]))
     return fields[0], fields[1], data[pos + 1:]
+
+
+def crop(rgb: bytes, width: int, height: int, to_width: int, to_height: int) -> bytes:
+    """The top-left `to_width` x `to_height` of an RGB buffer."""
+    if (width, height) == (to_width, to_height):
+        return rgb
+    out = bytearray(to_width * to_height * 3)
+    for y in range(to_height):
+        src = y * width * 3
+        dst = y * to_width * 3
+        out[dst:dst + to_width * 3] = rgb[src:src + to_width * 3]
+    return bytes(out)
 
 
 def write_png(path: pathlib.Path, width: int, height: int, rgb: bytes) -> None:
@@ -348,6 +368,7 @@ def main(argv: list[str]) -> int:
         ref_pages = render(ref_pdf, tmp / "r", args.long_edge)
 
         bad = 0
+        trimmed = 0
         print("page\tdiff%\tink%\tregions\tverdict")
         for i, (op, rp) in enumerate(zip(ours_pages, ref_pages), start=1):
             ow, oh, orgb = read_ppm(op)
@@ -356,11 +377,31 @@ def main(argv: list[str]) -> int:
             write_png(outdir / "ref" / f"page-{i:03d}.png", rw, rh, rrgb)
 
             if (ow, oh) != (rw, rh):
-                # Same page count but a different paper size or orientation. Real, and
-                # not something a pixel diff can say anything useful about.
-                print(f"{i}\t-\t-\tpage size differs: {ow}x{oh} vs {rw}x{rh}")
-                bad += 1
-                continue
+                # `pdftoppm -scale-to` pins the longest edge and rounds the other from the
+                # aspect ratio, so two pages differing by a hair -- 841.89 pt against 842.0 --
+                # land on 288 and 289 and every page of the document was being skipped.
+                # Measured: nine of the slides track's 163 documents were unmeasurable for
+                # this reason alone, which made any change to them invisible.
+                #
+                # Crop to the common size rather than rescale. Both images are anchored at the
+                # top-left and are within a rounding step of the same scale, so the worst
+                # drift is one pixel at the far edge -- inside the DILATE=3 tolerance the
+                # regions already carry. Rescaling would resample every pixel to remove a
+                # difference smaller than the thing being measured.
+                slack = max(abs(ow - rw), abs(oh - rh))
+                relative = slack / max(ow, oh, rw, rh)
+                if slack <= SIZE_SLACK_PIXELS and relative <= SIZE_SLACK_RATIO:
+                    cw, ch = min(ow, rw), min(oh, rh)
+                    orgb = crop(orgb, ow, oh, cw, ch)
+                    rrgb = crop(rrgb, rw, rh, cw, ch)
+                    ow, oh = cw, ch
+                    trimmed += 1
+                else:
+                    # A genuinely different paper size or orientation. Real, and not something
+                    # a pixel diff can say anything useful about.
+                    print(f"{i}\t-\t-\tpage size differs: {ow}x{oh} vs {rw}x{rh}")
+                    bad += 1
+                    continue
 
             count = ow * oh
             mask = difference_mask(orgb, rrgb, count, args.threshold)
@@ -398,6 +439,11 @@ def main(argv: list[str]) -> int:
                       f"y {r['y0'] / oh:.2f}-{r['y1'] / oh:.2f})")
 
     print(f"\n{a} pages, {bad} with major differences")
+    if trimmed:
+        # Say it rather than silently cropping. A reader who sees a near-zero ink figure
+        # deserves to know the two images were not quite the same shape.
+        print(f"{trimmed} page(s) cropped to a common size, within "
+              f"{SIZE_SLACK_PIXELS} px — rounding in pdftoppm's aspect, not a paper difference")
     print(f"images in {outdir}")
     return 1 if bad else 0
 

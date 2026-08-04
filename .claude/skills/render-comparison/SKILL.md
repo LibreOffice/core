@@ -221,6 +221,24 @@ reference faded to grey with each differing region boxed in red, which is the ar
 look at when the text report is ambiguous. Exit status is 0 when no page differs majorly, 1
 when one does, 2 when the comparison could not be made.
 
+### A page a pixel taller than its twin is still the same page
+
+`pdftoppm -scale-to` pins the longest edge and rounds the other from the aspect ratio, so two
+renderings of a 16:9 deck whose page height differs in the second decimal of a point land on
+**512×288 and 512×289**. The tool used to call that "page size differs", skip the page — and
+count it as *major*, so a deck reported 22 major pages when it has 7. **Nine of the slides
+track's 163 documents were unmeasurable for this reason alone**, which made any change to them
+invisible to the one instrument that track still has.
+
+It now crops both to the common size when they are within 2 px and 1%, and says so in the
+summary. Cropping rather than rescaling is deliberate: both images are anchored top-left and
+within a rounding step of the same scale, so the worst drift is one pixel at the far edge —
+inside the `DILATE = 3` tolerance the regions already carry. Resampling every pixel to remove a
+difference smaller than the thing being measured would add noise, not remove it.
+
+Beyond that slack it is a real paper-size or orientation difference and still refuses, because
+there cropping would be hiding the finding rather than enabling it.
+
 ### Use it only once page counts and word counts already agree
 
 This answers "the right text is on the right page, but does the page *look* right". It
