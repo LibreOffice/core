@@ -564,10 +564,9 @@ namespace vclcanvas
 
         Color aColor( COL_WHITE );
 
-        if( renderState.DeviceColor.getLength() > 2 )
+        if( renderState.DeviceColor.has_value() )
         {
-            aColor = canvastools::stdColorSpaceSequenceToColor(
-                renderState.DeviceColor );
+            aColor = *renderState.DeviceColor;
         }
 
         // extract alpha, and make color opaque
@@ -631,12 +630,11 @@ namespace vclcanvas
             // channels (currently, works only for alpha). Note: this
             // is already implemented in transformBitmap()
             if( bModulateColors &&
-                renderState.DeviceColor.getLength() > 3 )
+                renderState.DeviceColor.has_value())
             {
                 // optimize away the case where alpha modulation value
                 // is 1.0 - we then simply switch off modulation at all
-                bModulateColors = !::rtl::math::approxEqual(
-                    renderState.DeviceColor[3], 1.0);
+                bModulateColors = renderState.DeviceColor->GetAlpha() != 255;
             }
 
             // check whether we can render bitmap as-is: must not
@@ -663,7 +661,7 @@ namespace vclcanvas
                 ::basegfx::B2DHomMatrix aSizeTransform;
                 aSizeTransform.scale( aBmp.GetSizePixel().Width(), aBmp.GetSizePixel().Height() );
                 aMatrix = aMatrix * aSizeTransform;
-                const double fAlpha = bModulateColors ? renderState.DeviceColor[3] : 1.0;
+                const double fAlpha = bModulateColors ? renderState.DeviceColor->GetAlpha() : 1.0;
 
                 mxOutDev->DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
                 return rtl::Reference< vclcanvas::CachedBitmap >(nullptr);
@@ -686,8 +684,6 @@ namespace vclcanvas
                 // setup alpha modulation
                 if( bModulateColors )
                 {
-                    const double nAlphaModulation( renderState.DeviceColor[3] );
-
                     // TODO(F1): Note that the GraphicManager has a
                     // subtle difference in how it calculates the
                     // resulting alpha value: it's using the inverse
@@ -697,9 +693,7 @@ namespace vclcanvas
                     // transOrig*transModulate (which would be
                     // equivalent to the origAlpha*modulateAlpha the
                     // DX canvas performs)
-                    aGrfAttr.SetAlpha(
-                        static_cast< sal_uInt8 >(
-                            ::basegfx::fround( 255.0 * nAlphaModulation ) ) );
+                    aGrfAttr.SetAlpha( renderState.DeviceColor->GetAlpha() );
                 }
 
                 if( ::basegfx::fTools::equalZero( nShearX ) )
@@ -796,10 +790,9 @@ namespace vclcanvas
 
         Color aColor( COL_BLACK );
 
-        if( renderState.DeviceColor.getLength() > 2 )
+        if( renderState.DeviceColor.has_value() )
         {
-            aColor = canvastools::stdColorSpaceSequenceToColor(
-                renderState.DeviceColor );
+            aColor = *renderState.DeviceColor;
         }
 
         // setup font color
@@ -814,7 +807,7 @@ namespace vclcanvas
         return true;
     }
 
-    rtl::Reference< ::canvas::ParametricPolyPolygon > Canvas::createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
+    rtl::Reference< ::canvas::ParametricPolyPolygon > Canvas::createParametricPolyPolygon( std::u16string_view GradientService, const std::vector<::Color>& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio )
     {
         return canvas::ParametricPolyPolygon::create(
                                           GradientService,

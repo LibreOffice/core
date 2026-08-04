@@ -490,8 +490,7 @@ namespace cppcanvas
 
                     ::canvastools::appendToRenderState(aShadowState, aTranslate);
 
-                    aShadowState.DeviceColor =
-                        canvastools::colorToDoubleSequence( rShadowColor );
+                    aShadowState.DeviceColor = rShadowColor;
 
                     rRenderer( rCanvas, rViewState, aShadowState, rTextFillColor, false );
                 }
@@ -507,8 +506,7 @@ namespace cppcanvas
 
                     ::canvastools::appendToRenderState(aReliefState, aTranslate);
 
-                    aReliefState.DeviceColor =
-                        canvastools::colorToDoubleSequence( rReliefColor );
+                    aReliefState.DeviceColor = rReliefColor;
 
                     rRenderer( rCanvas, rViewState, aReliefState, rTextFillColor, false );
                 }
@@ -737,8 +735,7 @@ namespace cppcanvas
                 if (rTextFillColor != COL_AUTO)
                 {
                     vclcanvas::RenderState aLocalState( rRenderState );
-                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
-                        rTextFillColor);
+                    aLocalState.DeviceColor = rTextFillColor;
                     auto xTextBounds = queryTextBoundsPoly();
                     // background of text
                     xCanvas.fillPolyPolygon(xTextBounds, rViewState, aLocalState);
@@ -1053,8 +1050,7 @@ namespace cppcanvas
                 if (rTextFillColor != COL_AUTO)
                 {
                     vclcanvas::RenderState aLocalState(rRenderState);
-                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
-                        rTextFillColor);
+                    aLocalState.DeviceColor = rTextFillColor;
                     auto xTextBounds = queryTextBoundsPoly();
                     // background of text
                     rCanvas.fillPolyPolygon(xTextBounds, rViewState, aLocalState);
@@ -1115,8 +1111,7 @@ namespace cppcanvas
                     if (rTextFillColor != COL_AUTO)
                     {
                         vclcanvas::RenderState aLocalState(rRenderState);
-                        aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
-                            rTextFillColor);
+                        aLocalState.DeviceColor = rTextFillColor;
                         auto xTextBounds = queryTextBounds();
                         // background of text
                         mrCanvas.fillPolyPolygon(xTextBounds, mrViewState, aLocalState);
@@ -1254,7 +1249,7 @@ namespace cppcanvas
                 const cpo::uno::Sequence< double >                       maOffsets;
                 vclcanvas::RenderState                              maState;
                 double                                              mnOutlineWidth;
-                const cpo::uno::Sequence< double >                       maFillColor;
+                ::Color                                             maFillColor;
                 basegfx::B2DPolyPolygon                             mxBackgroundFillPoly;
                 const cppcanvastools::TextLineInfo                           maTextLineInfo;
                 ::basegfx::B2DSize                                  maLinesOverallSize;
@@ -1293,9 +1288,7 @@ namespace cppcanvas
                 mxTextPoly(std::move( xTextPoly )),
                 maOffsets( rOffsets ),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
-                maFillColor(
-                    canvastools::colorToDoubleSequence(
-                        COL_WHITE )),
+                maFillColor( COL_WHITE ),
                 mxBackgroundFillPoly(std::move( xFillPoly )),
                 maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
                 maReliefOffset( rReliefOffset ),
@@ -1326,8 +1319,7 @@ namespace cppcanvas
                 if (mxBackgroundFillPoly.count())
                 {
                     vclcanvas::RenderState aLocalState( rRenderState );
-                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
-                        maBackgroundFillColor);
+                    aLocalState.DeviceColor = maBackgroundFillColor;
                     rCanvas.fillPolyPolygon(mxBackgroundFillPoly, rViewState, aLocalState);
                 }
 
@@ -1396,9 +1388,7 @@ namespace cppcanvas
                                               const basegfx::B2DPolyPolygon& rLinePolygon,
                                               const vclcanvas::ViewState&                        rViewState,
                                               double                                             nOutlineWidth ) :
-                    maFillColor(
-                        vcl::unotools::colorToDoubleSequence(
-                            ::COL_WHITE )),
+                    maFillColor(::COL_WHITE),
                     mnOutlineWidth( nOutlineWidth ),
                     mrCanvas( rCanvas ),
                     mrTextPolygon( rTextPolygon ),

@@ -82,8 +82,7 @@ namespace cppcanvas
                 maPoint( rPoint )
             {
                 cppcanvastools::initRenderState(maState,rState);
-                maState.DeviceColor = canvastools::colorToDoubleSequence(
-                    rAltColor );
+                maState.DeviceColor = rAltColor;
             }
 
             bool PointAction::render( vclcanvas::Canvas& rCanvas,

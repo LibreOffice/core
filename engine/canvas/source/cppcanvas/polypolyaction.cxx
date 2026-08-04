@@ -76,7 +76,7 @@ namespace cppcanvas
                 // stroke color is now implicit: the maState.DeviceColor member
                 vclcanvas::RenderState                              maState;
 
-                cpo::uno::Sequence< double >                             maFillColor;
+                std::optional<::Color>                              maFillColor;
             };
 
             PolyPolyAction::PolyPolyAction( const ::basegfx::B2DPolyPolygon&    rPolyPoly,
@@ -107,26 +107,23 @@ namespace cppcanvas
 
                 if( bFill )
                 {
-                    maFillColor = rState.fillColor;
-
-                    if( maFillColor.getLength() < 4 )
-                        maFillColor.realloc( 4 );
+                    maFillColor = rState.fillColor.value_or(COL_BLACK);
 
                     // TODO(F1): Color management
                     // adapt fill color transparency
-                    maFillColor.getArray()[3] = 1.0 - nTransparency / 100.0;
+                    maFillColor->SetAlpha(255 - (255 * nTransparency / 100.0));
                 }
 
                 if( bStroke )
                 {
-                    maState.DeviceColor = rState.lineColor;
-
-                    if( maState.DeviceColor.getLength() < 4 )
-                        maState.DeviceColor.realloc( 4 );
+                    if (rState.lineColor.has_value())
+                        maState.DeviceColor = *rState.lineColor;
+                    else
+                        maState.DeviceColor = COL_BLACK;
 
                     // TODO(F1): Color management
                     // adapt fill color transparency
-                    maState.DeviceColor.getArray()[3] = 1.0 - nTransparency / 100.0;
+                    maState.DeviceColor->SetAlpha(255 - (255 * nTransparency / 100.0));
                 }
             }
 
@@ -141,11 +138,11 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                if( maFillColor.hasElements() )
+                if( maFillColor.has_value() )
                 {
                     // TODO(E3): Use DBO's finalizer here,
                     // fillPolyPolygon() might throw
-                    cpo::uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
+                    ::Color aTmpColor( *aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
                     rCachedPrimitive = rCanvas.fillPolyPolygon( mxPolyPoly,
@@ -155,7 +152,7 @@ namespace cppcanvas
                     aLocalState.DeviceColor = std::move(aTmpColor);
                 }
 
-                if( aLocalState.DeviceColor.hasElements() )
+                if( aLocalState.DeviceColor.has_value() )
                 {
                     rCanvas.drawPolyPolygon( mxPolyPoly,
                                               rViewState,

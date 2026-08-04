@@ -32,8 +32,6 @@ class CanvasTest : public test::BootstrapFixture
     std::unique_ptr<vclcanvas::Canvas> mCanvas;
     vclcanvas::ViewState mViewState;
     vclcanvas::RenderState mRenderState;
-    cpo::uno::Sequence<double> mColorBlack;
-    cpo::uno::Sequence<double> mColorBlue;
 
     // if enabled - check the result images with:
     // "xdg-open ./workdir/CppunitTest/canvas_test.test.core/"
@@ -58,13 +56,11 @@ public:
     virtual void setUp() override
     {
         BootstrapFixture::setUp();
-        mColorBlack = canvastools::colorToStdColorSpaceSequence(COL_BLACK);
-        mColorBlue = canvastools::colorToStdColorSpaceSequence(COL_BLUE);
         // Geometry init
         geometry::AffineMatrix2D aUnit(1, 0, 0, 0, 1, 0);
         mViewState.AffineTransform = aUnit;
         mRenderState.AffineTransform = aUnit;
-        mRenderState.DeviceColor = mColorBlack;
+        mRenderState.DeviceColor = COL_BLACK;
     }
 
     virtual void tearDown() override
@@ -114,7 +110,7 @@ public:
         ::basegfx::B2DPolyPolygon aPolyPoly;
         aPolyPoly.append(aPoly);
 
-        mRenderState.DeviceColor = mColorBlue;
+        mRenderState.DeviceColor = COL_BLUE;
         rendering::StrokeAttributes strokeAttributes;
         strokeAttributes.StrokeWidth = 2.0;
         strokeAttributes.MiterLimit = 2.0; // ?

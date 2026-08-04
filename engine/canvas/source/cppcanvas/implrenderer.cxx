@@ -81,22 +81,18 @@ namespace
 {
     template < class MetaActionType > void setStateColor( MetaActionType*                   pAct,
                                                           bool&                             rIsColorSet,
-                                                          cpo::uno::Sequence< double >&     rColorSequence )
+                                                          std::optional<::Color>&           rColor )
     {
         rIsColorSet = pAct->IsSetting();
         if (!rIsColorSet)
             return;
 
-        ::Color aColor( pAct->GetColor() );
+        rColor = pAct->GetColor();
 
         // force alpha part of color to
         // opaque. transparent painting is done
         // explicitly via MetaActionType::Transparent
-        aColor.SetAlpha(255);
-        //aColor.SetTransparency(128);
-
-        rColorSequence = canvastools::colorToDoubleSequence(
-            aColor );
+        rColor->SetAlpha(255);
     }
 
     void setupStrokeAttributes( rendering::StrokeAttributes&                          o_rStrokeAttributes,
@@ -364,10 +360,8 @@ namespace cppcanvas
                                                 const ActionFactoryParameters&   rParms )
         {
             const OutDevState& rState( rParms.mrStates.getState() );
-            if( (!rState.isLineColorSet &&
-                 !rState.isFillColorSet) ||
-                (!rState.lineColor.hasElements() &&
-                 !rState.fillColor.hasElements()) )
+            if( (!rState.isLineColorSet && !rState.isFillColorSet) ||
+                (!rState.lineColor.has_value() && !rState.fillColor.has_value()))
             {
                 return false;
             }
@@ -515,23 +509,18 @@ namespace cppcanvas
                 aVCLEndColor.SetGreen( static_cast<sal_uInt8>(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
                 aVCLEndColor.SetBlue( static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
-                const cpo::uno::Sequence< double > aStartColor(
-                    canvastools::colorToDoubleSequence( aVCLStartColor ));
-                const cpo::uno::Sequence< double > aEndColor(
-                    canvastools::colorToDoubleSequence( aVCLEndColor ));
-
-                cpo::uno::Sequence< cpo::uno::Sequence < double > > aColors;
+                std::vector<::Color> aColors;
                 cpo::uno::Sequence< double > aStops;
 
                 if( rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
                 {
                     aStops = { 0.0, 0.5, 1.0 };
-                    aColors = { aEndColor, aStartColor, aEndColor };
+                    aColors = { aVCLEndColor, aVCLStartColor, aVCLEndColor };
                 }
                 else
                 {
                     aStops = { 0.0, 1.0 };
-                    aColors = { aStartColor, aEndColor };
+                    aColors = { aVCLStartColor, aVCLEndColor };
                 }
 
                 const ::basegfx::B2DRectangle aBounds(
@@ -826,8 +815,7 @@ namespace cppcanvas
                 aShadowOffset.setHeight( nShadowOffset );
 
                 // determine shadow color (from outdev3.cxx)
-                ::Color aTextColor = canvastools::doubleSequenceToColor(
-                    rState.textColor );
+                ::Color aTextColor = *rState.textColor;
                 bool bIsDark = (aTextColor == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
 
@@ -850,8 +838,7 @@ namespace cppcanvas
                 aReliefOffset.setHeight( nReliefOffset );
 
                 // determine relief color (from outdev3.cxx)
-                ::Color aTextColor = canvastools::doubleSequenceToColor(
-                    rState.textColor );
+                ::Color aTextColor = *rState.textColor;
 
                 aReliefColor = COL_LIGHTGRAY;
 
@@ -861,9 +848,7 @@ namespace cppcanvas
                 if( aTextColor == COL_BLACK )
                 {
                     aTextColor = COL_WHITE;
-                    rParms.mrStates.getState().textColor =
-                        canvastools::colorToDoubleSequence(
-                            aTextColor );
+                    rParms.mrStates.getState().textColor = aTextColor;
                 }
 
                 if( aTextColor == COL_WHITE )
@@ -872,7 +857,7 @@ namespace cppcanvas
             }
 
             if (rState.isTextFillColorSet)
-                aTextFillColor = canvastools::doubleSequenceToColor(rState.textFillColor);
+                aTextFillColor = *rState.textFillColor;
 
             // create the actual text action
             std::shared_ptr<Action> pTextAction(
@@ -1317,8 +1302,7 @@ namespace cppcanvas
                         // explicitly via MetaActionType::Transparent
                         aColor.SetAlpha(255);
 
-                        rStates.getState().textColor =
-                            canvastools::colorToDoubleSequence( aColor );
+                        rStates.getState().textColor = aColor;
                     }
                     break;
 
@@ -1661,7 +1645,7 @@ namespace cppcanvas
                     case MetaActionType::POINT:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.hasElements() )
+                        if( rState.lineColor.has_value() )
                         {
                             std::shared_ptr<Action> pPointAction(
                                 PointActionFactory::createPointAction(
@@ -1682,7 +1666,7 @@ namespace cppcanvas
                     case MetaActionType::PIXEL:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.hasElements() )
+                        if( rState.lineColor.has_value() )
                         {
                             std::shared_ptr<Action> pPointAction(
                                 PointActionFactory::createPointAction(
@@ -1704,7 +1688,7 @@ namespace cppcanvas
                     case MetaActionType::LINE:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.hasElements() )
+                        if( rState.lineColor.has_value() )
                         {
                             MetaLineAction* pLineAct = static_cast<MetaLineAction*>(pCurrAct);
 
@@ -1885,8 +1869,8 @@ namespace cppcanvas
                     case MetaActionType::POLYLINE:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.hasElements() ||
-                            rState.fillColor.hasElements() )
+                        if( rState.lineColor.has_value() ||
+                            rState.fillColor.has_value() )
                         {
                             MetaPolyLineAction* pPolyLineAct = static_cast<MetaPolyLineAction*>(pCurrAct);
 
@@ -2197,8 +2181,8 @@ namespace cppcanvas
                     case MetaActionType::Transparent:
                     {
                         const OutDevState& rState( rStates.getState() );
-                        if( rState.lineColor.hasElements() ||
-                            rState.fillColor.hasElements() )
+                        if( rState.lineColor.has_value() ||
+                            rState.fillColor.has_value() )
                         {
                             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pCurrAct);
                             ::basegfx::B2DPolyPolygon aPoly( pAct->GetPolyPolygon().getB2DPolyPolygon() );
@@ -2481,7 +2465,7 @@ namespace cppcanvas
                 rState.textColor =
                     rState.textFillColor =
                     rState.textOverlineColor =
-                    rState.textLineColor = cppcanvastools::intSRGBAToDoubleSequence( 0x000000FF );
+                    rState.textLineColor = COL_BLACK;
             }
 
             /* EMF+ */

@@ -415,9 +415,7 @@ namespace cppcanvas
 
 #if OSL_DEBUG_LEVEL > 2
                 aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    vcl::unotools::colorToDoubleSequence(
-                        ::Color( 0x80FF0000 ) );
+                aLocalState.DeviceColor = ::Color( 0x80FF0000 );
 
                 if( maState.Clip.is() )
                     mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,

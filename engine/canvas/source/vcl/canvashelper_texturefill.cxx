@@ -607,14 +607,14 @@ namespace vclcanvas
             {
                 ::canvas::ParametricPolyPolygon* pGradient = textures[0].Gradient.get();
 
-                if( pGradient->getValues().maColors.hasElements() )
+                if( pGradient->getValues().maColors.size() )
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
                     const ::canvas::ParametricPolyPolygon::Values aValues(
                         pGradient->getValues() );
 
-                    if( aValues.maColors.getLength() < 2 )
+                    if( aValues.maColors.size() < 2 )
                     {
                         vclcanvas::RenderState aTempState=renderState;
                         aTempState.DeviceColor = aValues.maColors[0];
@@ -622,19 +622,11 @@ namespace vclcanvas
                     }
                     else
                     {
-                        std::vector< ::Color > aColors(aValues.maColors.getLength());
-                        std::transform(&aValues.maColors[0],
-                                       &aValues.maColors[0]+aValues.maColors.getLength(),
-                                       aColors.begin(),
-                                       [](const cpo::uno::Sequence< double >& aColor) {
-                                           return canvastools::stdColorSpaceSequenceToColor( aColor );
-                                       } );
-
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
                         gradientFill( *mxOutDev,
                                       aValues,
-                                      aColors,
+                                      aValues.maColors,
                                       aPolyPoly,
                                       viewState,
                                       renderState,
@@ -703,12 +695,7 @@ namespace vclcanvas
                                                    1.0 ) )
                     {
                         // setup alpha modulation values
-                        aLocalState.DeviceColor.realloc(4);
-                        double* pColor = aLocalState.DeviceColor.getArray();
-                        pColor[0] =
-                        pColor[1] =
-                        pColor[2] = 0.0;
-                        pColor[3] = textures[0].Alpha;
+                        aLocalState.DeviceColor = ::Color(ColorAlpha, textures[0].Alpha * 255, 0, 0, 0);
 
                         return drawBitmapModulated( textures[0].aBitmap,
                                                     viewState,

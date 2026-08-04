@@ -80,12 +80,12 @@ namespace cppcanvas
             ::tools::Rectangle                                                              clipRect;
             basegfx::B2DPolyPolygon                                                  xClipPoly;
 
-            cpo::uno::Sequence< double >                                             lineColor;
-            cpo::uno::Sequence< double >                                             fillColor;
-            cpo::uno::Sequence< double >                                             textColor;
-            cpo::uno::Sequence< double >                                             textFillColor;
-            cpo::uno::Sequence< double >                                             textOverlineColor;
-            cpo::uno::Sequence< double >                                             textLineColor;
+            std::optional<::Color>                                             lineColor;
+            std::optional<::Color>                                             fillColor;
+            std::optional<::Color>                                             textColor;
+            std::optional<::Color>                                             textFillColor;
+            std::optional<::Color>                                             textOverlineColor;
+            std::optional<::Color>                                             textLineColor;
 
             /** Current font.
 

@@ -157,19 +157,15 @@ namespace canvastools
         {
             verifyInput( renderState.AffineTransform,
                          pStr, nArgPos );
-
-            if( renderState.DeviceColor.getLength() < nMinColorComponents )
+            if( !renderState.DeviceColor.has_value() && nMinColorComponents > 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
-                    ": verifyInput(): render state's device color has too few components (" +
-                    OUString::number(nMinColorComponents) +
-                    " expected, " +
-                    OUString::number(renderState.DeviceColor.getLength()) +
-                    " provided)",
+                    ": verifyInput(): expected color in render state, but no color",
                     nullptr, nArgPos );
 #else
+                (void)nMinColorComponents;
                 throw lang::IllegalArgumentException();
 #endif
             }

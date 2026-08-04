@@ -34,10 +34,10 @@ class TextLinesHelper
     basegfx::B2DPolyPolygon mxStrikeout;
 
     bool mbIsOverlineColorSet;
-    const cpo::uno::Sequence<double> maOverlineColor;
+    std::optional<::Color> maOverlineColor;
 
     bool mbIsUnderlineColorSet;
-    const cpo::uno::Sequence<double> maUnderlineColor;
+    std::optional<::Color> maUnderlineColor;
 
     bool mbOverlineWaveline;
     bool mbUnderlineWaveline;

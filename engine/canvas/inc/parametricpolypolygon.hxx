@@ -24,6 +24,7 @@
 #include <canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/color.hxx>
 #include <utility>
 
 namespace vclcanvas { class Canvas; }
@@ -51,7 +52,7 @@ namespace canvas
         struct Values
         {
             Values( ::basegfx::B2DPolygon                               aGradientPoly,
-                    const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rColors,
+                    const std::vector< ::Color >&                       rColors,
                     const cpo::uno::Sequence< double >&                 rStops,
                     double                                              nAspectRatio,
                     GradientType                                        eType ) :
@@ -70,7 +71,7 @@ namespace canvas
             const double                                        mnAspectRatio;
 
             /// Gradient colors
-            const cpo::uno::Sequence< cpo::uno::Sequence< double > >   maColors;
+            const std::vector<::Color>                          maColors;
 
             /// Gradient color stops
             const cpo::uno::Sequence< double >                  maStops;
@@ -81,7 +82,7 @@ namespace canvas
 
         static rtl::Reference<ParametricPolyPolygon> create(
             std::u16string_view rServiceName,
-            const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors,
+            const std::vector< ::Color >& colors,
             const ::cpo::uno::Sequence< double >& stops,
             double aspectRatio );
 
@@ -94,25 +95,25 @@ namespace canvas
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
         static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient(
-                                                                      const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                      const std::vector< ::Color >& colors,
                                                                       const cpo::uno::Sequence< double >& stops );
         static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient(
-                                                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                const std::vector< ::Color >& colors,
                                                                 const cpo::uno::Sequence< double >& stops,
                                                                 double fAspect );
         static rtl::Reference<ParametricPolyPolygon> createRectangularGradient(
-                                                                 const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                 const std::vector< ::Color >& colors,
                                                                  const cpo::uno::Sequence< double >& stops,
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
         ParametricPolyPolygon( const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
-                               const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
+                               const std::vector< ::Color >&                    colors,
                                const cpo::uno::Sequence< double >&              stops,
                                double                                           nAspectRatio );
         ParametricPolyPolygon( GradientType                                     eType,
-                               const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
+                               const std::vector< ::Color >&                    colors,
                                const cpo::uno::Sequence< double >&              stops );
 
         /// All defining values of this object

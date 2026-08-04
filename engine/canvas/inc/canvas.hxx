@@ -59,7 +59,7 @@ namespace vclcanvas
 
         basegfx::B2DPolyPolygon createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
 
-        rtl::Reference< ::canvas::ParametricPolyPolygon > createParametricPolyPolygon( std::u16string_view GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio );
+        rtl::Reference< ::canvas::ParametricPolyPolygon > createParametricPolyPolygon( std::u16string_view GradientService, const std::vector<::Color>& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio );
 
         void clear();
 

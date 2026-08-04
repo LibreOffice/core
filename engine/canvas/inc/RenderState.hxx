@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 
 namespace vclcanvas
 {
@@ -69,7 +70,7 @@ struct RenderState
 
         @see XGraphicDevice
      */
-    cpo::uno::Sequence<css::rendering::ColorComponent> DeviceColor;
+    std::optional<::Color> DeviceColor;
 };
 }
 
