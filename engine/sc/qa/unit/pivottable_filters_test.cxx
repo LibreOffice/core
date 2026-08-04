@@ -1937,7 +1937,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableBoolFieldFilterXLSX)
     ScDocument* pDoc = getScDoc();
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(ScAddress(0, 1, 0))); //A2
+    // Classic layout, so the data field caption takes a header row above the field headers
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Amount"_ustr, pDoc->GetString(ScAddress(0, 0, 0))); //A1
+    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(ScAddress(0, 2, 0))); //A3
 
     // Reload and check filtering of row dimensions
     saveAndReload(TestFilter::XLSX);
@@ -2209,6 +2211,34 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSX
     const int nSecond = countXPathNodes(pSecondTable, pRepeatItemLabelsXPath);
     CPPUNIT_ASSERT_EQUAL(5, nFirst + nSecond);
     CPPUNIT_ASSERT(nFirst == 0 || nSecond == 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableClassicLayoutXLSX)
+{
+    // The classic layout of MS Excel has a header row above the field headers
+    createScDoc("xlsx/pivot_outlineforms_norepeat_classic.xlsx");
+
+    ScDPCollection* pDPs = getScDoc()->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT((*pDPs)[0].GetHeaderLayout());
+
+    // The flag is written back, so the layout survives a round trip
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotTableDefinition", "gridDropZones", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"2");
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableClassicLayoutXLSB)
+{
+    // In the binary format the classic layout is the missing drop zones flag of the definition
+    createScDoc("xlsb/pivot_outlineforms_norepeat_classic.xlsb");
+
+    ScDPCollection* pDPs = getScDoc()->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT((*pDPs)[0].GetHeaderLayout());
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSB)

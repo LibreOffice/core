@@ -1281,6 +1281,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_outlineData, ToPsz10(!bTabularMode),
         XML_compact, ToPsz10(bCompactMode),
         XML_compactData, ToPsz10(bCompactMode),
+        XML_gridDropZones, sax_fastparser::UseIf(ToPsz10(true), rDPObj.GetHeaderLayout()),
         XML_rowGrandTotals, sax_fastparser::UseIf(ToPsz10(false), !rSaveData.GetRowGrand()),
         XML_colGrandTotals, sax_fastparser::UseIf(ToPsz10(false), !rSaveData.GetColumnGrand()));
 

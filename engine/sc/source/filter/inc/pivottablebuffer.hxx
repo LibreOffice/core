@@ -280,6 +280,7 @@ struct PTDefinitionModel : public AutoFormatModel
     bool                mbShowHeaders;
     bool                mbFieldListSortAsc;
     bool                mbCustomListSort;
+    bool                mbGridDropZones;    /// True = classic layout with in-grid drop zones.
 
     explicit            PTDefinitionModel();
 };

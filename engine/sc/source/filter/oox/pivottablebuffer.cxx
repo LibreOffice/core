@@ -154,6 +154,7 @@ const sal_uInt32 BIFF12_PTDEF_APPLYFILL             = 0x10000000;
 const sal_uInt32 BIFF12_PTDEF_APPLYPROTECTION       = 0x20000000;
 const sal_uInt32 BIFF12_PTDEF_HASTAG                = 0x40000000;
 
+const sal_uInt32 BIFF12_PTDEF_NEWDROPZONES          = 0x00000010;
 const sal_uInt32 BIFF12_PTDEF_NOERRORCAPTION        = 0x00000040;
 const sal_uInt32 BIFF12_PTDEF_NOMISSINGCAPTION      = 0x00000080;
 const sal_uInt32 BIFF12_PTDEF_HASROWHEADERCAPTION   = 0x00000400;
@@ -1062,7 +1063,8 @@ PTDefinitionModel::PTDefinitionModel() :
     mbShowEmptyCol( false ),
     mbShowHeaders( true ),
     mbFieldListSortAsc( false ),
-    mbCustomListSort( true )
+    mbCustomListSort( true ),
+    mbGridDropZones( false )
 {
 }
 
@@ -1126,6 +1128,7 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
     maDefModel.mbShowHeaders         = rAttribs.getBool( XML_showHeaders, true );
     maDefModel.mbFieldListSortAsc    = rAttribs.getBool( XML_fieldListSortAscending, false );
     maDefModel.mbCustomListSort      = rAttribs.getBool( XML_customListSort, true );
+    maDefModel.mbGridDropZones       = rAttribs.getBool( XML_gridDropZones, false );
     maDefModel.mbApplyNumFmt         = rAttribs.getBool( XML_applyNumberFormats, false );
     maDefModel.mbApplyFont           = rAttribs.getBool( XML_applyFontFormats, false );
     maDefModel.mbApplyAlignment      = rAttribs.getBool( XML_applyAlignmentFormats, false );
@@ -1253,6 +1256,7 @@ void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
     maDefModel.mbShowHeaders         = !getFlag( nFlags1, BIFF12_PTDEF_HIDEHEADERS );
     maDefModel.mbFieldListSortAsc    = getFlag( nFlags3, BIFF12_PTDEF_FIELDLISTSORTASC );
     maDefModel.mbCustomListSort      = !getFlag( nFlags3, BIFF12_PTDEF_NOCUSTOMLISTSORT );
+    maDefModel.mbGridDropZones       = !getFlag( nFlags3, BIFF12_PTDEF_NEWDROPZONES );
 }
 
 void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet )
@@ -1379,6 +1383,7 @@ void PivotTable::finalizeImport()
             pSaveData->SetExpandCollapse(maDefModel.mbShowDrill);
         }
         mpDPObject->SetHideHeader(maLocationModel.mnFirstHeaderRow == 0);
+        mpDPObject->SetHeaderLayout(maDefModel.mbGridDropZones);
         // finalize all fields, this finds field names and creates grouping fields
         finalizeFieldsImport();
 
