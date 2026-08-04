@@ -85,18 +85,21 @@ describe('Closing one document keeps another responsive', () => {
 		});
 
 		// Wait for the close to actually take effect before testing the survivor,
-		// so the survivor's receive path has already had its chance to break.
-		await we().waitUntil(
-			async () => {
-				const handles = await we().getWindowHandles();
-				return !handles.includes(handleToClose);
-			},
-			{
-				timeout: 15000,
-				interval: 250,
-				timeoutMsg: 'the closed document window did not go away',
-			},
-		);
+		// so the survivor's receive path has already had its chance to break. The
+		// app stops offering a document's web view as the document closes, so the
+		// handle going away is the signal that the close happened.
+		try {
+			await we().waitUntil(
+				async () => !(await we().getWindowHandles()).includes(handleToClose),
+				{ timeout: 15000, interval: 250 },
+			);
+		} catch {
+			const handles = await we().getWindowHandles();
+			throw new Error(
+				`the closed document is still on offer; asked to close ` +
+					`${handleToClose}, still listed: ${handles.join(', ')}`,
+			);
+		}
 
 		// Editing the survivor must still round-trip through the engine and come
 		// back as a modified notification.
