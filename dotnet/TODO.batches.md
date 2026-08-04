@@ -44,9 +44,16 @@ branch.
 Whole-track figures at the same commit: words **137/200** (page error 124), slides
 **147/163** (ppt 47/51, pptx 100/112), sheets **108/171** (page error 860).
 
-Words is now **146/200** by addition — 143 whole-track at the eighth round, plus the ninth
-round's three, which re-swept 001–007 and 010–017 only. Sheets is now
-**125/171** (page error 222) — see "Sheets batches 005–008" below.
+Words is **146/200** at `52f45c51b`, and that figure is now measured rather than added up:
+a whole-track sweep there gives 146 matches, **154 documents with an exactly correct page
+count, total absolute page error 120**, and total absolute word error 7110 — 3200 of it text
+we miss against 3910 we draw and the reference does not. The addition it replaces (143 at the
+eighth round plus the ninth round's three, which re-swept 001–007 and 010–017 only) happened
+to be right. Sheets is **125/171** (page error 222) — see "Sheets batches 005–008" below.
+
+Per batch at `52f45c51b`: 001–005 10/10, 006 9/10, 007 9/10, 008 10/10, 009 10/10, 010 7/9,
+011 8/10, 012 8/10, 013 5/9, 014 3/10, 015 5/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10,
+020 3/10, 021 0/2.
 
 ## Level one: the image check
 
