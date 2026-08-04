@@ -127,7 +127,21 @@ public sealed record BitmapPaint(
     RasterImage Image,
     DocSize TileSize,
     DocPoint TileOffset,
-    bool Stretch) : Paint;
+    bool Stretch) : Paint
+{
+    /// <summary>
+    /// How opaque the fill is, from 0 to 1; 1 unless the source states otherwise.
+    /// </summary>
+    /// <remarks>
+    /// A picture fill can be transparent without any pixel of the picture being so — DrawingML
+    /// spells it <c>a:blip/a:alphaModFix</c> and Escher <c>DFF_Prop_fillOpacity</c>, and both
+    /// are properties of the fill rather than of the image. It is separate from
+    /// <see cref="RasterImage.Duotone"/> for that reason: a recolouring changes the picture and
+    /// belongs to it, and this does not, so two shapes filled with one image at different
+    /// transparencies still share one decoded buffer.
+    /// </remarks>
+    public double Opacity { get; init; } = 1;
+}
 
 /// <summary>
 /// A fill stated as triangles with a colour at each corner, interpolated across each

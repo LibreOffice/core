@@ -122,7 +122,7 @@ public static class RasterImageDecoder
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        if (image.IsDecoded) return image;
+        if (image.IsDecoded) return Recoloured(image);
         if (image.EncodedBytes.IsEmpty) return null;
 
         RasterImage? decoded = Decode(image.EncodedBytes, image.EncodedMediaType);
@@ -131,8 +131,66 @@ public static class RasterImageDecoder
         // untouched even though it had to be decoded here to learn its size.
         return decoded is null
             ? null
-            : decoded with { EncodedBytes = image.EncodedBytes, EncodedMediaType = image.EncodedMediaType };
+            : Recoloured(decoded with
+              {
+                  EncodedBytes = image.EncodedBytes,
+                  EncodedMediaType = image.EncodedMediaType,
+                  Duotone = image.Duotone,
+              });
     }
+
+    /// <summary>
+    /// A decoded image with its pending <see cref="RasterImage.Duotone"/> carried out.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>BitmapDuoToneFilter</c> (<c>vcl/source/bitmap/BitmapDuoToneFilter.cxx</c>) replaces
+    /// each channel with <c>light × l / 255 + dark × (255 − l) / 255</c>, where <c>l</c> is
+    /// the pixel's luminance and both divisions truncate. Alpha is carried through untouched,
+    /// which is what makes a duotoned PNG keep its cut-out.
+    /// </para>
+    /// <para>
+    /// <strong>The encoded bytes have to go.</strong> They are kept so a JPEG can reach a PDF
+    /// as <c>DCTDecode</c> without being re-encoded, and that pass-through would emit the
+    /// original picture and lose the recolouring entirely — the failure would look like the
+    /// transform not being implemented, on the one backend where it is hardest to see.
+    /// </para>
+    /// </remarks>
+    private static RasterImage Recoloured(RasterImage image)
+    {
+        if (image.Duotone is not { } duotone || !image.IsDecoded) return image;
+
+        ReadOnlySpan<byte> source = image.Pixels.Span;
+        byte[] pixels = new byte[source.Length];
+        source.CopyTo(pixels);
+
+        for (int i = 0; i + 3 < pixels.Length; i += 4)
+        {
+            int luminance = Luminance(pixels[i], pixels[i + 1], pixels[i + 2]);
+            pixels[i] = Mix(luminance, duotone.Dark.R, duotone.Light.R);
+            pixels[i + 1] = Mix(luminance, duotone.Dark.G, duotone.Light.G);
+            pixels[i + 2] = Mix(luminance, duotone.Dark.B, duotone.Light.B);
+        }
+
+        return image with { Pixels = pixels, EncodedBytes = default, Duotone = null };
+    }
+
+    /// <summary>
+    /// A pixel's brightness on VCL's scale.
+    /// </summary>
+    /// <remarks>
+    /// <c>BitmapColor::GetLuminance</c> is <c>(B × 29 + G × 151 + R × 76) >> 8</c>
+    /// (<c>include/vcl/BitmapColor.hxx</c>) — integer weights summing to 256, not the
+    /// Rec. 601 coefficients they approximate. Using 0.299/0.587/0.114 instead is within one
+    /// step per channel and drifts the two renderers apart on a large flat area, which is
+    /// exactly what a duotoned background is.
+    /// </remarks>
+    private static int Luminance(byte red, byte green, byte blue)
+        => ((blue * 29) + (green * 151) + (red * 76)) >> 8;
+
+    /// <summary>One channel of the ramp, with LibreOffice's two truncating divisions.</summary>
+    private static byte Mix(int luminance, byte dark, byte light)
+        => (byte)((light * luminance / 0xFF) + (dark * (0xFF - luminance) / 0xFF));
 
     public static string? Sniff(ReadOnlySpan<byte> encoded)
     {

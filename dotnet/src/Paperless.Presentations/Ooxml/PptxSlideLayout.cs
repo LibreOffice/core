@@ -195,13 +195,17 @@ internal sealed partial class PptxSlideLayout
     /// Both halves are needed and neither answers a question alone. The scheme says what
     /// <c>dk1</c> is; the map says whether <c>bg1</c> means <c>dk1</c> or <c>lt1</c>, which is how
     /// a dark master inverts every themed shape on it. LibreOffice applies the same pair at
-    /// <c>oox/source/ppt/pptimport.cxx:155</c>. Cached per master part because one master serves
-    /// every slide under it.
+    /// <c>oox/source/ppt/pptimport.cxx:155</c>.
     /// </remarks>
     private SlideTheme ThemeFor(PptxSlide slide)
     {
         if (slide.MasterPartName is not { } master) return default;
-        if (_themes.TryGetValue(master, out SlideTheme cached)) return cached;
+
+        // Keyed by master *and* layout rather than by master alone. One master serves every
+        // layout under it and a layout may still amend the colour map, so caching by master
+        // hands the first layout's answer to all of them.
+        string key = master + "\u0000" + slide.LayoutPartName;
+        if (_themes.TryGetValue(key, out SlideTheme cached)) return cached;
 
         XElement? part = _file.Load(_file.TargetOfType(master, "theme"));
 
@@ -212,8 +216,19 @@ internal sealed partial class PptxSlideLayout
         // its second dark one, so the deck renders as dark text on pale paper where the reference
         // draws white text on a navy slide. Extraction has always read it correctly
         // (`PptxFile.ThemeOf`), which is why no text comparison ever saw this.
+        //
+        // The layout's override patches that map. A *slide* may state one too and this
+        // deliberately does not apply it: measured against the binary, a slide's override does
+        // not reach the background it inherits, because Impress resolves a master page's fill
+        // once as it imports the layout and the slide only shows it. Modelling that faithfully
+        // needs two maps, one for the inherited page and one for the slide's own shapes, and
+        // exactly one slide in the 112-deck corpus states an override at all — on
+        // NAS-Infrastructure-Roadmaps-v16.0.pptx, where it restates the master's map and
+        // changes nothing. Twenty layout overrides across nine decks are the reach here.
         DrawingTheme? colours = DrawingTheme.Read(part)
-            ?.WithMap(DrawingColourMap.Read(Ppt.Child(slide.Master, "clrMap")));
+            ?.WithMap(DrawingColourMap.ReadLayered(
+                Ppt.Child(slide.Master, "clrMap"),
+                Override(slide.Layout)));
 
         XElement? minor = Drawing.Child(
             Drawing.Child(Drawing.Child(Drawing.Child(part, "themeElements"), "fontScheme"),
@@ -222,9 +237,23 @@ internal sealed partial class PptxSlideLayout
 
         SlideTheme theme = new(
             colours, Drawing.Attribute(minor, "typeface"), DrawingStyleMatrix.Read(part));
-        _themes[master] = theme;
+        _themes[key] = theme;
         return theme;
     }
+
+    /// <summary>
+    /// A layout's <c>p:clrMapOvr/a:overrideClrMapping</c>, or null when it states none or
+    /// states <c>a:masterClrMapping</c>.
+    /// </summary>
+    /// <remarks>
+    /// The two children of <c>p:clrMapOvr</c> are alternatives and only one of them carries
+    /// attributes: <c>a:masterClrMapping</c> is the empty element that says "inherit", so an
+    /// absent override and an inheriting one are the same answer and both come back null.
+    /// The override itself is DrawingML while the wrapper is PresentationML, which is the sort
+    /// of split that makes a single-namespace search find nothing on every deck ever written.
+    /// </remarks>
+    private static XElement? Override(XElement? root)
+        => Drawing.Child(Ppt.Child(root, "clrMapOvr"), "overrideClrMapping");
 
     /// <summary>
     /// The slide's theme part as XML, which a diagram's style references index into directly.
@@ -1259,9 +1288,44 @@ internal sealed partial class PptxSlideLayout
             blip.SourceRect.Right, blip.SourceRect.Bottom);
 
         return destination is { } placed
-            ? new PlacedPicture(picture.Raster, placed, Math.Clamp(blip.Opacity, 0, 1))
+            ? new PlacedPicture(
+                  picture.Raster is { } raster
+                      ? Duotoned(raster, blip, ThemeFor(slide).Colours)
+                      : null,
+                  placed,
+                  Math.Clamp(blip.Opacity, 0, 1))
               { Vector = picture.Vector }
             : null;
+    }
+
+    /// <summary>
+    /// The picture with its <c>a:duotone</c> attached, resolved against the theme.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Attached rather than applied: mapping a JPEG's pixels onto a ramp needs a codec, and a
+    /// reader has none. <see cref="RasterImage.Duotone"/> carries the pair to whichever
+    /// backend decodes the picture.
+    /// </para>
+    /// <para>
+    /// This is how a theme paints one grey texture in a deck's own colours, and it is the
+    /// largest single figure on the slides track's ink measurement:
+    /// <c>order-of-worship-ppt-revised-2018.pptx</c> takes its whole background from
+    /// <c>a:bgFillStyleLst</c>'s third entry, a stretched blip under a duotone, and drew as a
+    /// dark grey vignette against a pale reference — 766.96 of unaccounted ink over 28 pages,
+    /// 27% of the whole track's figure. <c>HENTZEN_…AEROSPACE_INDUSTRY.pptx</c> is the same
+    /// mechanism at 127.20, its dark red banner coming out grey. 17 of the 112 corpus decks
+    /// state one.
+    /// </para>
+    /// </remarks>
+    private static RasterImage Duotoned(
+        RasterImage image, DrawingBlipFill blip, DrawingTheme? theme)
+    {
+        if (blip.Duotone is not { } pair) return image;
+        if (pair.Dark.Resolve(theme, placeholder: null) is not { } dark) return image;
+        if (pair.Light.Resolve(theme, placeholder: null) is not { } light) return image;
+
+        return image with { Duotone = new DuotoneRecolour(dark, light) };
     }
 
     /// <summary>
@@ -1334,9 +1398,17 @@ internal sealed partial class PptxSlideLayout
         if (DrawingFill.ReadBlip(element) is not { } blip) return null;
         if (Image(blip.EmbedId, PartOf(source, context.Slide)) is not { } image) return null;
 
+        image = Duotoned(image, blip, context.Theme);
+
         (DocRect box, _) = GradientSpace(context);
 
-        if (!blip.Tile) return new BitmapPaint(image, box.Size, box.Origin, Stretch: true);
+        double opacity = Math.Clamp(blip.Opacity, 0, 1);
+
+        if (!blip.Tile)
+        {
+            return new BitmapPaint(image, box.Size, box.Origin, Stretch: true)
+                { Opacity = opacity };
+        }
 
         DocSize natural = SlideImages.NaturalSize(image.EncodedBytes.Span) ?? box.Size;
         DocSize tile = new(natural.Width * blip.TileScaleX, natural.Height * blip.TileScaleY);
@@ -1351,7 +1423,8 @@ internal sealed partial class PptxSlideLayout
             new DocPoint(
                 origin.X + Length.FromEmu(blip.TileOffsetX),
                 origin.Y + Length.FromEmu(blip.TileOffsetY)),
-            Stretch: false);
+            Stretch: false)
+            { Opacity = opacity };
     }
 
     /// <summary>

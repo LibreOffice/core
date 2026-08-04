@@ -163,6 +163,18 @@ public sealed record RasterImage
     /// <summary>The media type of <see cref="EncodedBytes"/>, e.g. <c>image/jpeg</c>.</summary>
     public string? EncodedMediaType { get; init; }
 
+    /// <summary>
+    /// A two-colour recolouring still to be applied, or null when the picture is drawn as
+    /// stored.
+    /// </summary>
+    /// <remarks>
+    /// A recolouring is stated by a reader and carried out by whatever decodes the picture,
+    /// for the same reason the pixels are: turning a JPEG into a ramp between two colours
+    /// needs a codec, and a codec is what this layer cannot have. See
+    /// <see cref="DuotoneRecolour"/> for what it means.
+    /// </remarks>
+    public DuotoneRecolour? Duotone { get; init; }
+
     /// <summary>True when <see cref="Pixels"/> holds the decoded image.</summary>
     public bool IsDecoded => !Pixels.IsEmpty;
 
@@ -179,3 +191,27 @@ public sealed record RasterImage
     public static RasterImage Encoded(ReadOnlyMemory<byte> bytes, string? mediaType = null)
         => new() { EncodedBytes = bytes, EncodedMediaType = mediaType };
 }
+
+/// <summary>
+/// A picture mapped onto the ramp between two colours by its own brightness — DrawingML's
+/// <c>a:duotone</c>.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Every pixel is replaced by <c>dark + (light − dark) × luminance</c>, so the picture keeps
+/// its shading and loses its hue. It is how an Office theme paints one grey texture in a
+/// deck's own colours: the same background image serves every colour scheme, and the two
+/// ends are usually <c>phClr</c> under different shades.
+/// </para>
+/// <para>
+/// This is a description rather than a result. It survives into
+/// <see cref="RasterImage.Duotone"/> because the transform needs decoded pixels and the
+/// readers have no decoder; whichever backend decodes the picture applies it and clears the
+/// field, and must also drop <see cref="RasterImage.EncodedBytes"/> when it does — otherwise
+/// a PDF writer passes the original JPEG through as <c>DCTDecode</c> and the recolouring
+/// never reaches the page.
+/// </para>
+/// </remarks>
+/// <param name="Dark">The colour a black pixel becomes — <c>a:duotone</c>'s first child.</param>
+/// <param name="Light">The colour a white pixel becomes — its second.</param>
+public readonly record struct DuotoneRecolour(Colour Dark, Colour Light);

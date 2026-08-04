@@ -228,6 +228,91 @@ public class PptFillTests
         fill.Start.Y.Emu.ShouldBeGreaterThan(fill.End.Y.Emu);
     }
 
+    // ------------------------------------------------------------------------ opacity
+
+    /// <summary>
+    /// A shape saying nothing about opacity is opaque, not invisible.
+    /// </summary>
+    /// <remarks>
+    /// <c>ApplyFillAttributes</c> initialises <c>dTrans</c> to 1.0 and only overwrites it inside
+    /// <c>IsProperty(DFF_Prop_fillOpacity)</c> (<c>msdffimp.cxx:1365-1376</c>), so the absent
+    /// case is the whole corpus and getting it wrong empties every page.
+    /// </remarks>
+    [Fact]
+    public void AFillStatingNoOpacityIsOpaque()
+    {
+        Resolve(Table((PptFills.FillType, PptFills.Solid),
+                      (EscherPropertyIds.FillColour, 0x0000FF)))
+            .ShouldBeOfType<SolidPaint>()
+            .Colour.A.ShouldBe((byte)255);
+    }
+
+    [Fact]
+    public void ASolidFillCarriesItsOpacity()
+    {
+        // 0x8000 is a half in 16.16 fixed point.
+        Resolve(Table((PptFills.FillType, PptFills.Solid),
+                      (EscherPropertyIds.FillColour, 0x0000FF),
+                      (PptFills.FillOpacity, 0x8000)))
+            .ShouldBeOfType<SolidPaint>()
+            .Colour.ShouldBe(Colour.FromRgb(0xFF0000).WithAlpha(128));
+    }
+
+    [Fact]
+    public void AShadeCarriesAnOpacityAtEachEnd()
+    {
+        // 0xC28F and 0x428F are what LibreOffice's own PPT export writes for a 25%-to-75%
+        // ODF transparency gradient, and are the values in ppt-fill-opacity.ppt below.
+        IReadOnlyList<GradientStop> stops = Resolve(Table(
+                (PptFills.FillType, PptFills.Shade),
+                (PptFills.FillOpacity, 0xC28F),
+                (EscherPropertyIds.FillColour, 0x0000FF),
+                (PptFills.FillBackColour, 0x00FF00),
+                (PptFills.FillBackOpacity, 0x428F)))
+            .ShouldBeOfType<GradientPaint>()
+            .Stops;
+
+        stops.Select(stop => stop.Colour.A).ShouldBe([(byte)67, (byte)194]);
+    }
+
+    /// <summary>
+    /// <c>ppt-fill-opacity.ppt</c> is <c>ppt-fill-opacity.fodp</c> converted by LibreOffice:
+    /// a #0066ff rectangle at 50% opacity, an opaque one beside it, and a red-to-green shade
+    /// under a 25%-to-75% transparency ramp.
+    /// </summary>
+    /// <remarks>
+    /// The expectations are read out of LibreOffice's own reading of the converted file rather
+    /// than out of the ODF that produced it. Round-tripping it back to flat ODF gives
+    /// <c>draw:opacity="50%"</c> on the first rectangle, nothing on the second, and
+    /// <c>&lt;draw:opacity … draw:start="26%" draw:end="76%"/&gt;</c> on the shade — the 25 and
+    /// 75 come back as 26 and 76 because the export quantises them to 16.16 and the import
+    /// rounds them back, which is exactly the sort of thing that makes the source document the
+    /// wrong authority.
+    /// </remarks>
+    [Fact]
+    public void OpacityStatedInTheFileReachesThePage()
+    {
+        LaidOutSlide slide = FirstSlide("ppt-fill-opacity.ppt");
+
+        List<byte> solids = slide.Shapes
+            .Select(shape => shape.Fill)
+            .OfType<SolidPaint>()
+            .Where(paint => paint.Colour.WithAlpha(255) == Colour.FromRgb(0x0066FF))
+            .Select(paint => paint.Colour.A)
+            .Order()
+            .ToList();
+
+        solids.ShouldBe([(byte)128, (byte)255]);
+
+        slide.Shapes
+            .Select(shape => shape.Fill)
+            .OfType<GradientPaint>()
+            .ShouldHaveSingleItem()
+            .Stops.Select(stop => stop.Colour.A)
+            .Order()
+            .ShouldBe([(byte)67, (byte)194]);
+    }
+
     // -------------------------------------------------- colours named indirectly
 
     /// <summary>

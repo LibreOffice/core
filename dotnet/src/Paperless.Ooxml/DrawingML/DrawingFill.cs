@@ -98,7 +98,24 @@ public static class DrawingFill
             Stretch = stretch is not null,
             FillRect = RelativeRect(Drawing.Child(stretch, "fillRect"), whenAbsent: 0),
             Opacity = Percentage(Drawing.Attribute(Drawing.Child(blip, "alphaModFix"), "amt")) ?? 1,
+            Duotone = Duotone(Drawing.Child(blip, "duotone")),
         };
+    }
+
+    /// <summary>
+    /// An <c>a:duotone</c>'s pair of colours, or null when it does not carry two.
+    /// </summary>
+    private static (DrawingColour Dark, DrawingColour Light)? Duotone(XElement? element)
+    {
+        if (element is null) return null;
+
+        List<DrawingColour> colours = [];
+        foreach (XElement child in element.Elements())
+        {
+            if (DrawingColour.Read(child) is { } colour) colours.Add(colour);
+        }
+
+        return colours.Count >= 2 ? (colours[0], colours[1]) : null;
     }
 
     /// <summary>
@@ -259,6 +276,18 @@ public sealed record DrawingBlipFill
 
     /// <summary><c>a:blip/a:alphaModFix/@amt</c> as a fraction of one; 1 when absent.</summary>
     public double Opacity { get; init; } = 1;
+
+    /// <summary>
+    /// <c>a:blip/a:duotone</c>'s two colours, still unresolved against a theme, or null when
+    /// the blip states none or states one of them alone.
+    /// </summary>
+    /// <remarks>
+    /// Both or neither, because a ramp needs two ends: <c>lclCheckAndApplyDuotoneTransform</c>
+    /// applies the transform only when both are used
+    /// (<c>oox/source/drawingml/fillproperties.cxx:74</c>). The first is the colour a black
+    /// pixel becomes.
+    /// </remarks>
+    public (DrawingColour Dark, DrawingColour Light)? Duotone { get; init; }
 }
 
 /// <summary>

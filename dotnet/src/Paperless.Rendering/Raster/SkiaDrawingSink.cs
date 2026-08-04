@@ -396,7 +396,14 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
 
             case BitmapPaint bitmap when region is { } bounds:
                 brush.Shader = Shader(bitmap, bounds);
-                if (brush.Shader is null) brush.Color = SKColors.Transparent;
+
+                // With a shader set, the paint's own alpha modulates the shader's output —
+                // which is what a:alphaModFix and DFF_Prop_fillOpacity ask for, a transparent
+                // fill over an opaque picture.
+                brush.Color = brush.Shader is null
+                    ? SKColors.Transparent
+                    : SKColors.White.WithAlpha(
+                        (byte)Math.Clamp(Math.Round(bitmap.Opacity * 255), 0, 255));
                 break;
 
             default:

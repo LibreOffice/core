@@ -69,6 +69,17 @@ internal static class PptFills
     /// <summary>The second fill colour, <c>DFF_Prop_fillBackColor</c>.</summary>
     public const ushort FillBackColour = 387;
 
+    /// <summary>
+    /// How opaque the first fill colour is, 16.16 fixed point, <c>DFF_Prop_fillOpacity</c>.
+    /// </summary>
+    public const ushort FillOpacity = 386;
+
+    /// <summary>
+    /// How opaque the second fill colour is, 16.16 fixed point,
+    /// <c>DFF_Prop_fillBackOpacity</c>. A shade's far end only.
+    /// </summary>
+    public const ushort FillBackOpacity = 388;
+
     /// <summary>The blip a pattern, texture or picture fill draws, <c>DFF_Prop_fillBlip</c>.</summary>
     public const ushort FillBlip = 390;
 
@@ -125,9 +136,12 @@ internal static class PptFills
         return kind switch
         {
             Solid => Resolved(properties, EscherPropertyIds.FillColour, scheme) is { } colour
-                ? Paint.Solid(colour)
+                ? Paint.Solid(colour.WithAlpha(SolidAlpha(properties)))
                 : null,
 
+            // A bitmap fill takes the same XFillTransparenceItem in LibreOffice, and
+            // BitmapPaint has nowhere to put it. No corpus deck asks: of the six PPT files
+            // stating fillOpacity, every one states it on a solid or a shaded fill.
             Pattern or Texture or Picture => Bitmap(properties, kind, box, picture),
 
             Shade or ShadeCentre or ShadeShape or ShadeScale or ShadeTitle
@@ -240,6 +254,12 @@ internal static class PptFills
 
         Colour first = Resolved(properties, EscherPropertyIds.FillColour, scheme) ?? Colour.White;
         Colour second = Resolved(properties, FillBackColour, scheme) ?? Colour.White;
+
+        // A shade's two ends have their own opacities, and the swap above moves each with
+        // its colour — `std::swap(dTrans, dBackTrans)` sits inside the same `if (nChgColors)`
+        // as the colour swap (msdffimp.cxx:2915-2921).
+        first = first.WithAlpha(GradientAlpha(properties, FillOpacity));
+        second = second.WithAlpha(GradientAlpha(properties, FillBackOpacity));
         if (swap) (first, second) = (second, first);
 
         // BGradient takes its stops as (second, first): the ramp starts at the *back* colour once
@@ -266,6 +286,54 @@ internal static class PptFills
             ? SlideGradients.Linear(box, dx, dy, SlideGradients.Axial(second, first))
             : SlideGradients.Linear(
                 box, dx, dy, [new GradientStop(0, second), new GradientStop(1, first)]);
+    }
+
+    /// <summary>
+    /// The alpha a non-shaded fill's <c>fillOpacity</c> asks for; opaque when it states none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>ApplyFillAttributes</c> turns the 16.16 fraction into a whole-percent
+    /// <c>XFillTransparenceItem</c> — <c>100 − round(opacity ÷ 65536 × 100)</c>
+    /// (<c>msdffimp.cxx:1367-1376</c>) — so the value that reaches the page has already been
+    /// quantised to a percent. Quantising here too keeps a stated 0x8000 landing on exactly
+    /// half rather than on 127 or 128 depending on which way the arithmetic is written.
+    /// </para>
+    /// <para>
+    /// <strong>Absent is not zero.</strong> LibreOffice initialises <c>dTrans</c> to 1.0 and
+    /// only overwrites it inside <c>IsProperty</c>, so a shape saying nothing about opacity is
+    /// fully opaque — reading the property with a zero fallback would make every fill in every
+    /// deck invisible.
+    /// </para>
+    /// </remarks>
+    private static byte SolidAlpha(EscherPropertyTable properties)
+    {
+        if (!properties.Has(FillOpacity)) return 255;
+
+        int percent = (int)Math.Round(properties.Value(FillOpacity) / 65536.0 * 100.0,
+                                      MidpointRounding.AwayFromZero);
+        percent = Math.Clamp(percent, 0, 100);
+        return (byte)Math.Round(percent * 255.0 / 100.0, MidpointRounding.AwayFromZero);
+    }
+
+    /// <summary>
+    /// The alpha one end of a shade asks for; opaque when the property is absent.
+    /// </summary>
+    /// <remarks>
+    /// A shade takes a different path and a different rounding.
+    /// <c>ImportGradientColor</c> builds a second gradient whose grey level is
+    /// <c>static_cast&lt;sal_uInt8&gt;((1 − dTrans) × 255)</c> and reads it back as a
+    /// luminosity mask (<c>msdffimp.cxx:2930-2941</c>), so the value is truncated rather than
+    /// rounded and never passes through a percent. The two roundings differ by at most one
+    /// step and are kept apart because writing one of them twice is the kind of thing that
+    /// reproduces a measurement and not its cause.
+    /// </remarks>
+    private static byte GradientAlpha(EscherPropertyTable properties, ushort id)
+    {
+        if (!properties.Has(id)) return 255;
+
+        double opacity = Math.Clamp(properties.Value(id) / 65536.0, 0.0, 1.0);
+        return (byte)(255 - (int)((1.0 - opacity) * 255));
     }
 
     /// <summary>

@@ -296,7 +296,7 @@ internal sealed class PptxFile : IDisposable
             notesPart,
             Load(notesPart))
         {
-            Theme = ThemeOf(masterPart, master),
+            Theme = ThemeOf(masterPart, master, layout),
         };
     }
 
@@ -315,19 +315,31 @@ internal sealed class PptxFile : IDisposable
     /// The master's <c>p:clrMap</c> is applied here rather than left to the caller, because a
     /// theme without its map answers the wrong question: the map is what makes <c>bg1</c>
     /// something other than the theme's first light colour, and a dark master is precisely the
-    /// case where the difference shows. A layout or slide may override it with
-    /// <c>p:clrMapOvr/a:overrideClrMapping</c>; nothing measured carries one, so that is left
-    /// unread rather than guessed at.
+    /// case where the difference shows. A layout or a slide amends it with
+    /// <c>p:clrMapOvr/a:overrideClrMapping</c>, which patches the inherited map rather than
+    /// replacing it — 9 corpus decks carry one on a layout across 20 layouts, and 7 of those
+    /// change something. A slide may carry one too; see <c>PptxSlideLayout.ThemeFor</c> for
+    /// why that level is deliberately not applied.
     /// </para>
     /// </remarks>
-    private DrawingTheme? ThemeOf(string? masterPartName, XElement? master)
+    private DrawingTheme? ThemeOf(
+        string? masterPartName, XElement? master, XElement? layout)
     {
         if (masterPartName is null) return null;
 
         return DrawingTheme
             .Read(Load(TargetOfType(masterPartName, "theme")))
-            ?.WithMap(DrawingColourMap.Read(Ppt.Child(master, "clrMap")));
+            ?.WithMap(DrawingColourMap.ReadLayered(
+                Ppt.Child(master, "clrMap"),
+                ColourMapOverride(layout)));
     }
+
+    /// <summary>
+    /// A layout's <c>p:clrMapOvr/a:overrideClrMapping</c>, or null when it states none or
+    /// inherits with <c>a:masterClrMapping</c>.
+    /// </summary>
+    private static XElement? ColourMapOverride(XElement? root)
+        => Drawing.Child(Ppt.Child(root, "clrMapOvr"), "overrideClrMapping");
 }
 
 /// <summary>
