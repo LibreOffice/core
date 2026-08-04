@@ -661,6 +661,8 @@ internal sealed class PdfContentSink(
 
         _content.Append("q\n");
         AppendClip(path, rule);
+        AppendAlpha(
+            (byte)Math.Clamp(Math.Round(bitmap.Opacity * 255), 0, 255), stroking: false);
 
         foreach (DocRect tile in Fills.Tiles.Cover(bitmap, bounds))
         {

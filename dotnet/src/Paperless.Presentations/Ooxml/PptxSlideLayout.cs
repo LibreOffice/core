@@ -1402,7 +1402,13 @@ internal sealed partial class PptxSlideLayout
 
         (DocRect box, _) = GradientSpace(context);
 
-        if (!blip.Tile) return new BitmapPaint(image, box.Size, box.Origin, Stretch: true);
+        double opacity = Math.Clamp(blip.Opacity, 0, 1);
+
+        if (!blip.Tile)
+        {
+            return new BitmapPaint(image, box.Size, box.Origin, Stretch: true)
+                { Opacity = opacity };
+        }
 
         DocSize natural = SlideImages.NaturalSize(image.EncodedBytes.Span) ?? box.Size;
         DocSize tile = new(natural.Width * blip.TileScaleX, natural.Height * blip.TileScaleY);
@@ -1417,7 +1423,8 @@ internal sealed partial class PptxSlideLayout
             new DocPoint(
                 origin.X + Length.FromEmu(blip.TileOffsetX),
                 origin.Y + Length.FromEmu(blip.TileOffsetY)),
-            Stretch: false);
+            Stretch: false)
+            { Opacity = opacity };
     }
 
     /// <summary>
