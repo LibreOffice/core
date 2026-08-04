@@ -298,6 +298,9 @@ namespace desktop {
         cpo::uno::Reference<css::lang::XComponent> mxComponent;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
+        // Cached document type, to avoid holding the SolarMutex on
+        // document type queries.
+        COKitDocumentType meDocumentType;
         WaitUntilIdle maIdleHelper;
         std::set<OUString> maFontsMissing;
         // Canonical main URL this document's original-document-URL mapping was

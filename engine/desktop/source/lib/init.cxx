@@ -1335,6 +1335,7 @@ IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
 COKitDocumentImpl::COKitDocumentImpl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
     : mxComponent(std::move(xComponent))
     , mnDocumentId(nDocumentId)
+    , meDocumentType(lcl_getDocumentType(this))
 {
     assert(nDocumentId != -1 && "Cannot set mnDocumentId to -1");
 
@@ -4063,8 +4064,7 @@ static COKitDocumentType doc_getDocumentType (COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getDocumentType");
 
-    SolarMutexGuard aGuard;
-    return lcl_getDocumentType(pThis);
+    return static_cast<COKitDocumentImpl*>(pThis)->meDocumentType;
 }
 
 int COKitDocumentImpl::getParts()
