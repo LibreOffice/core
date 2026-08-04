@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 
 #include "QEnumTypes.hxx"
 #include <rtl/ustring.hxx>
@@ -116,12 +117,10 @@ namespace dbaui
 
         bool HasCriteria() const
         {
-            for (auto const& criteria : m_aCriteria)
+            return std::ranges::any_of(m_aCriteria, [](auto const& criteria)
             {
-                if(!criteria.isEmpty())
-                    return true;
-            }
-            return false;
+                return !criteria.isEmpty();
+            });
         }
 
         const std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }
