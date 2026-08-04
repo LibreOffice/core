@@ -1,0 +1,20 @@
+page	diff%	ink%	regions	verdict
+2	29.40	6.79	2	MAJOR
+				top-centre: a fill or background shading we draw and the reference does not (35.50% of page, x 0.08-0.91, y 0.04-0.54)
+				bottom-centre: a solid area drawn differently (0.46% of page, x 0.42-0.58, y 0.92-0.96)
+3	32.65	7.46	3	MAJOR
+				top-centre: a fill or background shading we draw and the reference does not (36.33% of page, x 0.08-0.91, y 0.04-0.55)
+				middle-centre: a fill or background shading we draw and the reference does not (2.43% of page, x 0.08-0.91, y 0.59-0.61)
+				bottom-centre: a solid area drawn differently (0.46% of page, x 0.42-0.58, y 0.92-0.96)
+5	17.41	3.72	2	MAJOR
+				middle-centre: marks displaced or reshaped (41.85% of page, x 0.08-0.73, y 0.04-0.90)
+				bottom-centre: marks displaced or reshaped (0.56% of page, x 0.40-0.60, y 0.92-0.96)
+8	17.18	2.93	2	MAJOR
+				middle-centre: the same marks in a different colour (44.75% of page, x 0.08-0.73, y 0.04-0.92)
+				bottom-centre: marks displaced or reshaped (0.56% of page, x 0.40-0.60, y 0.92-0.96)
+16	8.08	1.40	2	MAJOR
+				the whole page: marks displaced or reshaped (14.90% of page, x 0.08-0.91, y 0.04-0.90)
+				bottom-centre: marks displaced or reshaped (0.70% of page, x 0.37-0.62, y 0.92-0.96)
+
+17 pages, 5 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

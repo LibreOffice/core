@@ -1,0 +1,8 @@
+page	diff%	ink%	regions	verdict
+1	1.33	0.16	3	MAJOR
+				top-centre: ink we draw that the reference does not (0.90% of page, x 0.31-0.71, y 0.08-0.11)
+				middle-left: marks displaced or reshaped (4.19% of page, x 0.08-0.18, y 0.14-0.78)
+				bottom-left: a solid area drawn differently (0.62% of page, x 0.08-0.16, y 0.85-0.92)
+
+19 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

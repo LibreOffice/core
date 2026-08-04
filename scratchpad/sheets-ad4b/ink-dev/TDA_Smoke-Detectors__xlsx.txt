@@ -1,0 +1,27 @@
+page	diff%	ink%	regions	verdict
+1	8.91	1.15	5	MAJOR
+				top-right: a fill or background shading we draw and the reference does not (2.18% of page, x 0.88-1.00, y 0.06-0.23)
+				middle-left: marks displaced or reshaped (4.62% of page, x 0.17-0.43, y 0.26-0.51)
+				middle-centre: marks displaced or reshaped (4.67% of page, x 0.53-0.79, y 0.26-0.51)
+				top-left: a solid area drawn differently (0.34% of page, x 0.07-0.09, y 0.06-0.23)
+				bottom-centre: marks displaced or reshaped (13.41% of page, x 0.17-0.90, y 0.51-0.93)
+10	13.44	4.08	6	MAJOR
+				top-right: a fill or background shading we draw and the reference does not (6.19% of page, x 0.66-1.00, y 0.06-0.23)
+				top-left: a fill or background shading we draw and the reference does not (1.68% of page, x 0.00-0.09, y 0.06-0.23)
+				top-right: a fill or background shading the reference has and we do not (2.35% of page, x 0.66-1.00, y 0.25-0.31)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (2.22% of page, x 0.51-1.00, y 0.32-0.38)
+				middle-right: marks displaced or reshaped (3.15% of page, x 0.52-1.00, y 0.38-0.47)
+				bottom-centre: marks displaced or reshaped (8.71% of page, x 0.08-0.67, y 0.51-0.93)
+19	7.00	2.75	22	MAJOR
+				top-right: a fill or background shading we draw and the reference does not (2.28% of page, x 0.83-0.95, y 0.06-0.23)
+				top-left: a fill or background shading we draw and the reference does not (1.68% of page, x 0.00-0.09, y 0.06-0.23)
+				middle-centre: marks displaced or reshaped (5.40% of page, x 0.00-0.82, y 0.38-0.47)
+				middle-centre: a fill of the wrong colour (1.05% of page, x 0.08-0.84, y 0.36-0.38)
+				middle-centre: marks displaced or reshaped (1.44% of page, x 0.08-0.84, y 0.32-0.36)
+				top-right: a solid area drawn differently (0.44% of page, x 0.65-0.82, y 0.27-0.29)
+28	1.48	1.18	2	MAJOR
+				top-left: a fill or background shading we draw and the reference does not (1.68% of page, x 0.00-0.09, y 0.06-0.23)
+				top-left: a solid area drawn differently (0.34% of page, x 0.18-0.20, y 0.06-0.23)
+
+28 pages, 4 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

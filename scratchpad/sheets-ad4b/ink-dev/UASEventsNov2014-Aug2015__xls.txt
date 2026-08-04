@@ -1,0 +1,62 @@
+page	diff%	ink%	regions	verdict
+248	6.03	0.02	9	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (3.84% of page, x 0.08-0.81, y 0.51-0.56)
+				middle-centre: a fill or background shading we draw and the reference does not (3.98% of page, x 0.08-0.81, y 0.58-0.63)
+				top-centre: marks displaced or reshaped (4.73% of page, x 0.08-0.82, y 0.10-0.18)
+				middle-centre: marks displaced or reshaped (4.54% of page, x 0.08-0.80, y 0.39-0.47)
+				middle-left: a solid area drawn differently (0.60% of page, x 0.08-0.33, y 0.33-0.35)
+				middle-left: a solid area drawn differently (0.21% of page, x 0.08-0.16, y 0.36-0.38)
+307	8.36	0.08	6	MAJOR
+				middle-centre: a fill or background shading we draw and the reference does not (2.83% of page, x 0.08-0.81, y 0.35-0.39)
+				top-centre: marks displaced or reshaped (11.71% of page, x 0.08-0.81, y 0.11-0.34)
+				middle-centre: a solid area drawn differently (4.23% of page, x 0.08-0.82, y 0.43-0.49)
+				middle-centre: marks displaced or reshaped (2.87% of page, x 0.08-0.79, y 0.62-0.67)
+				bottom-centre: a solid area drawn differently (3.81% of page, x 0.08-0.81, y 0.69-0.75)
+				middle-left: marks displaced or reshaped (2.51% of page, x 0.08-0.58, y 0.52-0.61)
+315	10.96	0.12	7	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (7.21% of page, x 0.08-0.82, y 0.13-0.23)
+				middle-centre: a fill or background shading we draw and the reference does not (2.63% of page, x 0.08-0.81, y 0.50-0.54)
+				middle-centre: marks displaced or reshaped (9.99% of page, x 0.08-0.82, y 0.25-0.49)
+				bottom-centre: marks displaced or reshaped (4.10% of page, x 0.08-0.80, y 0.75-0.82)
+				middle-centre: marks displaced or reshaped (4.50% of page, x 0.08-0.82, y 0.56-0.64)
+				bottom-centre: marks displaced or reshaped (4.22% of page, x 0.08-0.81, y 0.83-0.90)
+330	11.83	0.12	5	MAJOR
+				top-centre: marks displaced or reshaped (14.56% of page, x 0.08-0.82, y 0.09-0.33)
+				middle-centre: ink we draw that the reference does not (3.21% of page, x 0.08-0.81, y 0.53-0.58)
+				bottom-centre: marks displaced or reshaped (7.32% of page, x 0.08-0.78, y 0.73-0.90)
+				middle-centre: marks displaced or reshaped (7.87% of page, x 0.08-0.82, y 0.34-0.52)
+				middle-centre: a solid area drawn differently (4.70% of page, x 0.08-0.81, y 0.63-0.70)
+372	8.52	0.64	8	MAJOR
+				top-centre: ink we draw that the reference does not (1.90% of page, x 0.08-0.77, y 0.05-0.09)
+				top-left: ink we draw that the reference does not (1.76% of page, x 0.08-0.34, y 0.12-0.21)
+				top-centre: marks displaced or reshaped (7.26% of page, x 0.08-0.79, y 0.22-0.40)
+				top-left: ink we draw that the reference does not (0.85% of page, x 0.08-0.31, y 0.00-0.04)
+				middle-centre: marks displaced or reshaped (6.33% of page, x 0.08-0.79, y 0.41-0.58)
+				bottom-centre: a solid area drawn differently (4.85% of page, x 0.08-0.81, y 0.83-0.91)
+380	10.09	0.10	6	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (3.62% of page, x 0.08-0.82, y 0.09-0.14)
+				middle-centre: a fill or background shading we draw and the reference does not (2.29% of page, x 0.08-0.73, y 0.55-0.59)
+				middle-centre: ink we draw that the reference does not (1.95% of page, x 0.08-0.78, y 0.33-0.36)
+				top-centre: marks displaced or reshaped (7.08% of page, x 0.08-0.82, y 0.15-0.31)
+				middle-centre: marks displaced or reshaped (4.78% of page, x 0.08-0.73, y 0.38-0.54)
+				bottom-centre: marks displaced or reshaped (13.67% of page, x 0.08-0.82, y 0.61-0.87)
+411	11.67	0.66	3	MAJOR
+				middle-centre: marks displaced or reshaped (16.07% of page, x 0.08-0.82, y 0.34-0.66)
+				top-centre: a fill or background shading we draw and the reference does not (2.83% of page, x 0.08-0.82, y 0.00-0.04)
+				top-centre: marks displaced or reshaped (15.31% of page, x 0.08-0.81, y 0.05-0.33)
+415	11.00	0.52	5	MAJOR
+				middle-centre: ink we draw that the reference does not (4.30% of page, x 0.08-0.81, y 0.46-0.53)
+				middle-centre: marks displaced or reshaped (7.44% of page, x 0.08-0.82, y 0.31-0.44)
+				bottom-centre: marks displaced or reshaped (16.50% of page, x 0.08-0.81, y 0.58-0.89)
+				top-centre: a solid area drawn differently (4.04% of page, x 0.08-0.82, y 0.11-0.17)
+				top-left: marks displaced or reshaped (1.73% of page, x 0.08-0.34, y 0.21-0.30)
+418	7.88	0.00	6	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (3.57% of page, x 0.08-0.80, y 0.54-0.59)
+				bottom-centre: ink we draw that the reference does not (2.11% of page, x 0.08-0.80, y 0.88-0.92)
+				bottom-left: marks displaced or reshaped (2.48% of page, x 0.08-0.58, y 0.78-0.87)
+				bottom-centre: marks displaced or reshaped (6.59% of page, x 0.08-0.80, y 0.62-0.76)
+				middle-centre: marks displaced or reshaped (4.52% of page, x 0.08-0.82, y 0.43-0.50)
+				middle-centre: marks displaced or reshaped (6.53% of page, x 0.08-0.81, y 0.25-0.43)
+
+523 pages, 9 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

@@ -1,0 +1,24 @@
+page	diff%	ink%	regions	verdict
+5	12.74	1.06	11	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (4.58% of page, x 0.07-0.81, y 0.06-0.12)
+				top-centre: the same marks in a different colour (11.55% of page, x 0.00-1.00, y 0.13-0.27)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.67-0.69, y 0.33-0.35)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.30-0.32, y 0.35-0.37)
+				middle-right: marks displaced or reshaped (0.05% of page, x 0.73-0.75, y 0.33-0.35)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.36-0.39, y 0.64-0.65)
+9	12.45	1.35	20	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (4.45% of page, x 0.07-0.78, y 0.06-0.12)
+				top-centre: the same marks in a different colour (11.03% of page, x 0.00-1.00, y 0.13-0.27)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.24-0.28, y 0.33-0.35)
+				middle-left: marks displaced or reshaped (0.06% of page, x 0.10-0.13, y 0.65-0.67)
+				bottom-centre: marks displaced or reshaped (0.06% of page, x 0.48-0.50, y 0.67-0.69)
+				bottom-left: marks displaced or reshaped (0.05% of page, x 0.11-0.13, y 0.71-0.73)
+13	12.84	1.53	5	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (15.20% of page, x 0.00-0.83, y 0.06-0.27)
+				bottom-left: marks displaced or reshaped (0.15% of page, x 0.21-0.27, y 0.77-0.80)
+				bottom-left: marks displaced or reshaped (0.13% of page, x 0.27-0.31, y 0.77-0.80)
+				bottom-centre: marks displaced or reshaped (1.36% of page, x 0.31-0.79, y 0.77-0.81)
+				bottom-left: marks displaced or reshaped (0.13% of page, x 0.10-0.15, y 0.77-0.80)
+
+16 pages, 3 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

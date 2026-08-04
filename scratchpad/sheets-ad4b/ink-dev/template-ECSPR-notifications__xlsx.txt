@@ -1,0 +1,33 @@
+page	diff%	ink%	regions	verdict
+13	2.41	0.51	8	MAJOR
+				top-centre: ink missing from ours — a graphic, glyphs or a fill (3.29% of page, x 0.07-1.00, y 0.06-0.12)
+				top-centre: a solid area drawn differently (0.83% of page, x 0.07-0.60, y 0.26-0.27)
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (0.11% of page, x 0.08-0.15, y 0.33-0.34)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.51-0.54, y 0.18-0.20)
+				top-left: marks displaced or reshaped (0.06% of page, x 0.30-0.33, y 0.18-0.20)
+				top-centre: marks displaced or reshaped (0.06% of page, x 0.40-0.43, y 0.18-0.20)
+17	5.15	0.60	2	MAJOR
+				top-left: a fill or background shading we draw and the reference does not (5.93% of page, x 0.07-0.42, y 0.11-0.29)
+				top-left: a fill or background shading we draw and the reference does not (0.23% of page, x 0.00-0.09, y 0.07-0.10)
+19	33.99	2.25	2	MAJOR
+				middle-centre: the same marks in a different colour (48.00% of page, x 0.07-0.76, y 0.11-0.93)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.47-0.50, y 0.08-0.10)
+21	16.56	1.51	1	MAJOR
+				the whole page: the same marks in a different colour (25.24% of page, x 0.07-1.00, y 0.06-0.93)
+23	32.05	2.10	6	MAJOR
+				bottom-centre: a fill of the wrong colour (22.84% of page, x 0.18-0.77, y 0.52-0.93)
+				top-centre: the same marks in a different colour (13.21% of page, x 0.07-1.00, y 0.06-0.27)
+				middle-centre: the same marks in a different colour (3.04% of page, x 0.18-0.77, y 0.37-0.43)
+				bottom-left: a fill or background shading we draw and the reference does not (0.75% of page, x 0.07-0.09, y 0.55-0.93)
+				middle-centre: the same marks in a different colour (3.16% of page, x 0.18-0.77, y 0.44-0.51)
+				middle-centre: the same marks in a different colour (2.15% of page, x 0.18-0.77, y 0.30-0.36)
+25	24.97	2.03	15	MAJOR
+				top-left: ink we draw that the reference does not (9.00% of page, x 0.00-0.59, y 0.07-0.27)
+				middle-centre: a fill of the wrong colour (2.62% of page, x 0.08-0.59, y 0.37-0.41)
+				middle-centre: a fill of the wrong colour (2.72% of page, x 0.08-0.59, y 0.44-0.49)
+				middle-centre: a fill of the wrong colour (2.41% of page, x 0.08-0.59, y 0.52-0.56)
+				top-centre: a fill of the wrong colour (1.81% of page, x 0.08-0.59, y 0.30-0.34)
+				bottom-centre: a fill of the wrong colour (1.92% of page, x 0.07-0.59, y 0.90-0.93)
+
+26 pages, 6 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

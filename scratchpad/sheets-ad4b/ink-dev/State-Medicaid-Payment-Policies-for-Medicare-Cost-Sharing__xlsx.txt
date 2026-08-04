@@ -1,0 +1,31 @@
+page	diff%	ink%	regions	verdict
+4	7.34	2.68	2	MAJOR
+				middle-left: ink we draw that the reference does not (25.28% of page, x 0.06-0.42, y 0.08-0.91)
+				bottom-centre: a solid area drawn differently (0.23% of page, x 0.46-0.54, y 0.92-0.95)
+5	7.35	2.71	2	MAJOR
+				middle-left: ink we draw that the reference does not (25.13% of page, x 0.06-0.42, y 0.08-0.93)
+				bottom-centre: a solid area drawn differently (0.23% of page, x 0.46-0.54, y 0.92-0.95)
+7	5.49	1.96	2	MAJOR
+				middle-left: marks displaced or reshaped (21.92% of page, x 0.06-0.38, y 0.09-0.92)
+				bottom-centre: a solid area drawn differently (0.24% of page, x 0.46-0.54, y 0.92-0.95)
+8	4.20	2.18	2	MAJOR
+				middle-left: marks displaced or reshaped (16.80% of page, x 0.06-0.38, y 0.08-0.94)
+				bottom-centre: a solid area drawn differently (0.24% of page, x 0.46-0.54, y 0.92-0.95)
+11	4.71	1.93	2	MAJOR
+				middle-left: marks displaced or reshaped (18.32% of page, x 0.06-0.40, y 0.08-0.90)
+				bottom-centre: a solid area drawn differently (0.26% of page, x 0.46-0.54, y 0.92-0.95)
+13	5.63	2.25	2	MAJOR
+				middle-left: marks displaced or reshaped (21.87% of page, x 0.06-0.40, y 0.09-0.94)
+				bottom-centre: a solid area drawn differently (0.26% of page, x 0.46-0.54, y 0.92-0.95)
+14	4.85	1.85	2	MAJOR
+				middle-left: marks displaced or reshaped (18.65% of page, x 0.06-0.40, y 0.08-0.93)
+				bottom-centre: a solid area drawn differently (0.26% of page, x 0.46-0.54, y 0.92-0.95)
+15	6.46	1.87	2	MAJOR
+				middle-left: marks displaced or reshaped (22.17% of page, x 0.06-0.42, y 0.08-0.86)
+				bottom-centre: a solid area drawn differently (0.26% of page, x 0.46-0.54, y 0.92-0.95)
+18	7.05	1.35	2	MAJOR
+				middle-left: a solid area drawn differently (23.42% of page, x 0.06-0.42, y 0.08-0.83)
+				bottom-centre: a solid area drawn differently (0.26% of page, x 0.46-0.54, y 0.92-0.95)
+
+18 pages, 9 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

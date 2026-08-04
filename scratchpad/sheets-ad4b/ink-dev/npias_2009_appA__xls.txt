@@ -1,0 +1,49 @@
+page	diff%	ink%	regions	verdict
+1	32.75	1.26	4	MAJOR
+				the whole page: a solid area drawn differently (85.76% of page, x 0.01-0.98, y 0.05-0.97)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+36	35.87	2.09	4	MAJOR
+				the whole page: a solid area drawn differently (85.04% of page, x 0.01-0.98, y 0.05-0.96)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+38	36.86	1.22	4	MAJOR
+				the whole page: a solid area drawn differently (84.38% of page, x 0.01-0.98, y 0.05-0.96)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+40	39.62	1.32	4	MAJOR
+				the whole page: a solid area drawn differently (85.61% of page, x 0.01-0.98, y 0.05-0.96)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+47	23.54	1.50	4	MAJOR
+				the whole page: a solid area drawn differently (76.65% of page, x 0.01-0.98, y 0.05-0.96)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+48	30.72	1.22	4	MAJOR
+				the whole page: a solid area drawn differently (81.70% of page, x 0.01-0.98, y 0.05-0.97)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+56	31.63	1.62	4	MAJOR
+				the whole page: a solid area drawn differently (82.59% of page, x 0.01-0.98, y 0.05-0.97)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+69	37.50	1.22	4	MAJOR
+				the whole page: a solid area drawn differently (84.11% of page, x 0.01-0.98, y 0.05-0.97)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+73	31.47	2.92	4	MAJOR
+				the whole page: a solid area drawn differently (75.94% of page, x 0.01-0.98, y 0.05-0.87)
+				top-centre: a solid area drawn differently (1.01% of page, x 0.35-0.64, y 0.01-0.05)
+				top-left: a solid area drawn differently (0.63% of page, x 0.01-0.28, y 0.02-0.04)
+				top-right: marks displaced or reshaped (0.32% of page, x 0.84-0.98, y 0.02-0.04)
+
+73 pages, 9 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

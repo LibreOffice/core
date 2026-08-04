@@ -1,0 +1,11 @@
+page	diff%	ink%	regions	verdict
+17	2.69	0.69	8	MAJOR
+				middle-centre: a fill or background shading we draw and the reference does not (7.78% of page, x 0.33-0.42, y 0.06-0.92)
+				middle-left: marks displaced or reshaped (0.12% of page, x 0.17-0.20, y 0.60-0.63)
+				top-centre: a solid area drawn differently (0.56% of page, x 0.48-0.64, y 0.06-0.10)
+				middle-centre: a solid area drawn differently (0.53% of page, x 0.48-0.72, y 0.63-0.65)
+				bottom-centre: a solid area drawn differently (0.22% of page, x 0.48-0.58, y 0.83-0.85)
+				bottom-centre: a solid area drawn differently (0.49% of page, x 0.48-0.61, y 0.68-0.72)
+
+23 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

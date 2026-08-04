@@ -1,0 +1,91 @@
+page	diff%	ink%	regions	verdict
+1	12.17	5.51	1	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (47.94% of page, x 0.07-0.79, y 0.06-0.93)
+2	13.22	6.56	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.59% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+3	13.45	6.66	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.68% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+4	13.49	6.49	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.67% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+5	13.44	6.63	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.66% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+6	13.49	6.53	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.68% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+7	13.58	6.60	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.65% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+8	13.52	6.50	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.68% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+9	13.49	6.44	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.65% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+10	13.67	6.50	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.68% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+11	13.87	7.01	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.77% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+12	13.92	6.83	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.66% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+13	12.84	5.66	1	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (48.82% of page, x 0.07-0.79, y 0.06-0.93)
+14	13.33	6.67	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.60% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+15	13.45	6.54	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.65% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+16	13.63	6.58	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.69% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+17	13.68	6.52	2	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (47.68% of page, x 0.22-0.79, y 0.06-0.93)
+				middle-left: a fill or background shading the reference has and we do not (1.69% of page, x 0.07-0.09, y 0.06-0.93)
+18	10.51	3.78	1	MAJOR
+				middle-centre: marks displaced or reshaped (38.26% of page, x 0.07-0.79, y 0.06-0.74)
+19	12.65	5.66	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (53.34% of page, x 0.07-0.76, y 0.11-0.93)
+20	13.16	6.33	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.22% of page, x 0.07-0.76, y 0.06-0.93)
+21	13.42	6.17	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.28% of page, x 0.07-0.76, y 0.06-0.93)
+22	13.70	6.31	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.32% of page, x 0.07-0.76, y 0.06-0.93)
+23	13.36	6.66	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.33% of page, x 0.07-0.76, y 0.06-0.93)
+24	13.20	6.57	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.19% of page, x 0.07-0.76, y 0.06-0.93)
+25	13.28	6.24	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.23% of page, x 0.07-0.76, y 0.06-0.93)
+26	13.47	6.20	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.29% of page, x 0.07-0.76, y 0.06-0.93)
+27	13.33	6.05	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.25% of page, x 0.07-0.76, y 0.06-0.93)
+28	13.46	6.07	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.24% of page, x 0.07-0.76, y 0.06-0.93)
+29	13.27	6.09	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.29% of page, x 0.07-0.76, y 0.06-0.93)
+30	13.51	5.83	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.38% of page, x 0.07-0.76, y 0.06-0.93)
+31	13.43	6.37	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.31% of page, x 0.07-0.76, y 0.06-0.93)
+32	13.68	6.39	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.35% of page, x 0.07-0.76, y 0.06-0.93)
+33	13.27	6.36	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.24% of page, x 0.07-0.76, y 0.06-0.93)
+34	13.44	6.24	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.27% of page, x 0.07-0.76, y 0.06-0.93)
+35	13.40	6.19	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (56.28% of page, x 0.07-0.76, y 0.06-0.93)
+36	10.34	5.76	1	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (43.17% of page, x 0.07-0.76, y 0.06-0.74)
+
+186 pages, 36 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

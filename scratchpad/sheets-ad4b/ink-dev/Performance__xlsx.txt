@@ -1,0 +1,11 @@
+page	diff%	ink%	regions	verdict
+5	0.38	0.09	15	MAJOR
+				top-right: a fill or background shading we draw and the reference does not (0.58% of page, x 0.88-0.90, y 0.16-0.46)
+				top-right: ink we draw that the reference does not (0.09% of page, x 0.88-0.90, y 0.11-0.16)
+				middle-left: a solid area drawn differently (0.29% of page, x 0.20-0.23, y 0.35-0.46)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.20-0.22, y 0.12-0.13)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.26-0.29, y 0.37-0.38)
+				middle-left: marks displaced or reshaped (0.07% of page, x 0.26-0.29, y 0.39-0.41)
+
+13 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

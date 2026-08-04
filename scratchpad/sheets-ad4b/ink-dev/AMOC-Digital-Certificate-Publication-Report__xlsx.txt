@@ -1,0 +1,4 @@
+page	diff%	ink%	regions	verdict
+
+148 pages, 0 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

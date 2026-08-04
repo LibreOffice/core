@@ -1,0 +1,11 @@
+page	diff%	ink%	regions	verdict
+1	5.56	0.31	10	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (1.14% of page, x 0.08-0.91, y 0.43-0.44)
+				middle-centre: marks displaced or reshaped (14.16% of page, x 0.07-0.91, y 0.53-0.73)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.17-0.22, y 0.11-0.13)
+				top-centre: marks displaced or reshaped (1.40% of page, x 0.08-0.91, y 0.31-0.34)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.51-0.53, y 0.11-0.13)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.51-0.53, y 0.15-0.17)
+
+2 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

@@ -1,0 +1,19 @@
+page	diff%	ink%	regions	verdict
+1	13.98	4.48	4	MAJOR
+				the whole page: marks displaced or reshaped (48.40% of page, x 0.02-0.97, y 0.02-0.87)
+				bottom-right: a solid area drawn differently (0.54% of page, x 0.82-0.98, y 0.95-0.98)
+				bottom-left: marks displaced or reshaped (0.17% of page, x 0.02-0.07, y 0.95-0.98)
+				bottom-centre: marks displaced or reshaped (0.12% of page, x 0.48-0.52, y 0.95-0.98)
+5	11.64	4.51	4	MAJOR
+				the whole page: marks displaced or reshaped (36.86% of page, x 0.02-0.97, y 0.02-0.86)
+				bottom-right: a solid area drawn differently (0.54% of page, x 0.82-0.98, y 0.95-0.98)
+				bottom-left: marks displaced or reshaped (0.17% of page, x 0.02-0.07, y 0.95-0.98)
+				bottom-centre: marks displaced or reshaped (0.12% of page, x 0.48-0.52, y 0.95-0.98)
+7	12.54	4.64	4	MAJOR
+				the whole page: marks displaced or reshaped (39.61% of page, x 0.02-0.97, y 0.02-0.87)
+				bottom-right: a solid area drawn differently (0.54% of page, x 0.82-0.98, y 0.95-0.98)
+				bottom-left: marks displaced or reshaped (0.17% of page, x 0.02-0.07, y 0.95-0.98)
+				bottom-centre: marks displaced or reshaped (0.12% of page, x 0.48-0.52, y 0.95-0.98)
+
+13 pages, 3 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

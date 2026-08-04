@@ -1,0 +1,14 @@
+page	diff%	ink%	regions	verdict
+1	15.17	1.40	25	MAJOR
+				the whole page: marks displaced or reshaped (20.03% of page, x 0.08-1.00, y 0.13-0.93)
+				top-centre: a fill of the wrong colour (0.39% of page, x 0.52-0.66, y 0.06-0.09)
+				middle-left: the same marks in a different colour (0.05% of page, x 0.25-0.27, y 0.49-0.51)
+				middle-centre: the same marks in a different colour (0.08% of page, x 0.38-0.41, y 0.49-0.51)
+				top-centre: the same marks in a different colour (0.11% of page, x 0.37-0.42, y 0.09-0.11)
+				top-right: the same marks in a different colour (0.05% of page, x 0.85-0.87, y 0.09-0.11)
+3	1.38	0.34	2	MAJOR
+				top-left: a fill or background shading the reference has and we do not (1.95% of page, x 0.00-0.28, y 0.14-0.22)
+				top-left: ink we draw that the reference does not (0.06% of page, x 0.07-0.09, y 0.08-0.12)
+
+5 pages, 2 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

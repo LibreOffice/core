@@ -1,0 +1,32 @@
+page	diff%	ink%	regions	verdict
+1	12.63	0.54	14	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (3.03% of page, x 0.31-0.93, y 0.08-0.13)
+				top-centre: ink we draw that the reference does not (4.71% of page, x 0.13-1.00, y 0.15-0.21)
+				top-centre: a fill or background shading we draw and the reference does not (4.61% of page, x 0.13-1.00, y 0.23-0.29)
+				top-centre: a fill or background shading we draw and the reference does not (4.61% of page, x 0.13-1.00, y 0.30-0.36)
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (3.75% of page, x 0.13-0.93, y 0.63-0.72)
+				middle-centre: marks displaced or reshaped (2.64% of page, x 0.13-1.00, y 0.37-0.41)
+2	9.83	1.31	17	MAJOR
+				top-centre: marks displaced or reshaped (5.43% of page, x 0.00-1.00, y 0.15-0.21)
+				middle-centre: marks displaced or reshaped (8.78% of page, x 0.00-1.00, y 0.45-0.60)
+				top-centre: a solid area drawn differently (5.16% of page, x 0.00-1.00, y 0.23-0.28)
+				top-centre: a solid area drawn differently (5.28% of page, x 0.00-1.00, y 0.30-0.36)
+				middle-centre: a fill or background shading the reference has and we do not (0.97% of page, x 0.08-0.69, y 0.63-0.64)
+				middle-centre: marks displaced or reshaped (2.82% of page, x 0.00-1.00, y 0.37-0.41)
+3	7.19	0.30	15	MAJOR
+				middle-centre: a fill or background shading the reference has and we do not (0.97% of page, x 0.08-0.69, y 0.63-0.64)
+				top-centre: marks displaced or reshaped (3.16% of page, x 0.00-0.69, y 0.15-0.21)
+				top-centre: marks displaced or reshaped (3.03% of page, x 0.00-0.68, y 0.23-0.28)
+				middle-centre: marks displaced or reshaped (3.16% of page, x 0.00-0.69, y 0.45-0.53)
+				top-centre: marks displaced or reshaped (3.08% of page, x 0.00-0.69, y 0.30-0.35)
+				bottom-centre: marks displaced or reshaped (3.07% of page, x 0.07-0.70, y 0.66-0.72)
+4	5.94	3.29	38	MAJOR
+				top-right: a fill or background shading the reference has and we do not (5.87% of page, x 0.51-1.00, y 0.06-0.18)
+				top-left: the same marks in a different colour (0.10% of page, x 0.26-0.29, y 0.13-0.16)
+				top-left: the same marks in a different colour (0.09% of page, x 0.20-0.23, y 0.08-0.11)
+				top-centre: the same marks in a different colour (0.05% of page, x 0.35-0.36, y 0.08-0.11)
+				top-left: the same marks in a different colour (0.05% of page, x 0.27-0.29, y 0.08-0.11)
+				middle-left: marks displaced or reshaped (0.09% of page, x 0.12-0.16, y 0.38-0.41)
+
+91 pages, 4 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

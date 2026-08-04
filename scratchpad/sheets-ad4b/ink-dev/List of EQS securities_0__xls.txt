@@ -1,0 +1,66 @@
+page	diff%	ink%	regions	verdict
+10	10.60	1.28	1	MAJOR
+				middle-centre: marks displaced or reshaped (38.14% of page, x 0.10-0.88, y 0.06-0.92)
+17	10.14	1.88	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.77% of page, x 0.10-0.88, y 0.06-0.92)
+18	10.78	1.51	1	MAJOR
+				middle-centre: marks displaced or reshaped (37.98% of page, x 0.10-0.88, y 0.06-0.92)
+47	8.59	1.29	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.01% of page, x 0.08-0.88, y 0.06-0.92)
+48	8.51	1.51	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.78% of page, x 0.08-0.88, y 0.06-0.92)
+50	8.47	1.42	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.02% of page, x 0.08-0.88, y 0.06-0.92)
+51	8.59	1.36	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.26% of page, x 0.08-0.88, y 0.06-0.92)
+80	9.26	1.70	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.50% of page, x 0.08-0.81, y 0.06-0.92)
+81	9.33	1.80	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.69% of page, x 0.08-0.81, y 0.06-0.92)
+82	9.44	1.73	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.95% of page, x 0.08-0.81, y 0.06-0.92)
+83	9.38	1.83	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.82% of page, x 0.08-0.81, y 0.06-0.92)
+84	9.41	1.80	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.81% of page, x 0.08-0.81, y 0.06-0.92)
+85	9.26	1.82	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.33% of page, x 0.08-0.81, y 0.06-0.92)
+86	9.04	1.82	1	MAJOR
+				middle-centre: marks displaced or reshaped (33.54% of page, x 0.08-0.81, y 0.06-0.92)
+87	9.22	1.77	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.32% of page, x 0.08-0.81, y 0.06-0.92)
+88	9.48	1.72	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.19% of page, x 0.08-0.81, y 0.06-0.92)
+89	9.57	1.78	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.43% of page, x 0.08-0.81, y 0.06-0.92)
+90	9.40	1.57	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.02% of page, x 0.08-0.81, y 0.06-0.92)
+91	9.53	1.72	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.43% of page, x 0.08-0.81, y 0.06-0.92)
+92	9.52	1.71	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.28% of page, x 0.08-0.81, y 0.06-0.92)
+93	9.43	1.74	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.81% of page, x 0.08-0.81, y 0.06-0.92)
+94	9.18	1.88	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.06% of page, x 0.08-0.81, y 0.06-0.92)
+95	9.58	1.86	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.49% of page, x 0.08-0.81, y 0.06-0.92)
+96	9.48	1.75	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.97% of page, x 0.08-0.81, y 0.06-0.92)
+97	9.04	1.82	1	MAJOR
+				middle-centre: marks displaced or reshaped (33.59% of page, x 0.08-0.81, y 0.06-0.92)
+98	9.53	1.73	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.26% of page, x 0.08-0.81, y 0.06-0.92)
+99	9.53	1.75	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.97% of page, x 0.08-0.81, y 0.06-0.92)
+100	9.36	1.82	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.78% of page, x 0.08-0.81, y 0.06-0.92)
+101	9.36	1.87	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.91% of page, x 0.08-0.81, y 0.06-0.92)
+102	9.64	1.58	1	MAJOR
+				middle-centre: marks displaced or reshaped (35.48% of page, x 0.08-0.81, y 0.06-0.92)
+103	9.19	1.70	1	MAJOR
+				middle-centre: marks displaced or reshaped (34.27% of page, x 0.08-0.81, y 0.06-0.92)
+
+104 pages, 31 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

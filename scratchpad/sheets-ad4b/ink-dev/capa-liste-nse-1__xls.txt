@@ -1,0 +1,7 @@
+page	diff%	ink%	regions	verdict
+70	12.53	1.37	2	MAJOR
+				middle-centre: a solid area drawn differently (36.24% of page, x 0.09-0.58, y 0.08-0.90)
+				middle-right: a solid area drawn differently (5.21% of page, x 0.78-0.84, y 0.08-0.90)
+
+108 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

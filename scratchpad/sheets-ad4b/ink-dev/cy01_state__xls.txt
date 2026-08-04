@@ -1,0 +1,36 @@
+page	diff%	ink%	regions	verdict
+5	10.37	1.50	9	MAJOR
+				the whole page: marks displaced or reshaped (31.50% of page, x 0.03-0.92, y 0.01-0.97)
+				top-left: a solid area drawn differently (0.37% of page, x 0.03-0.20, y 0.02-0.04)
+				top-right: a solid area drawn differently (0.27% of page, x 0.85-0.98, y 0.02-0.04)
+				bottom-centre: marks displaced or reshaped (5.67% of page, x 0.28-0.62, y 0.72-0.97)
+				bottom-right: marks displaced or reshaped (1.33% of page, x 0.84-0.92, y 0.71-0.97)
+				bottom-right: a solid area drawn differently (1.03% of page, x 0.78-0.82, y 0.73-0.97)
+8	12.96	1.27	3	MAJOR
+				the whole page: marks displaced or reshaped (50.14% of page, x 0.03-0.92, y 0.01-0.97)
+				top-left: a solid area drawn differently (0.37% of page, x 0.03-0.20, y 0.02-0.04)
+				top-right: a solid area drawn differently (0.27% of page, x 0.85-0.98, y 0.02-0.04)
+22	11.53	1.30	16	MAJOR
+				the whole page: marks displaced or reshaped (22.25% of page, x 0.03-0.92, y 0.01-0.85)
+				bottom-left: a solid area drawn differently (3.93% of page, x 0.03-0.10, y 0.41-0.97)
+				top-left: a solid area drawn differently (0.37% of page, x 0.03-0.20, y 0.02-0.04)
+				middle-centre: marks displaced or reshaped (8.60% of page, x 0.28-0.62, y 0.41-0.85)
+				top-right: a solid area drawn differently (0.27% of page, x 0.85-0.98, y 0.02-0.04)
+				middle-right: a solid area drawn differently (1.98% of page, x 0.78-0.82, y 0.41-0.85)
+25	12.08	1.56	16	MAJOR
+				the whole page: marks displaced or reshaped (35.88% of page, x 0.03-0.92, y 0.01-0.86)
+				top-left: a solid area drawn differently (0.37% of page, x 0.03-0.20, y 0.02-0.04)
+				top-right: a solid area drawn differently (0.27% of page, x 0.85-0.98, y 0.02-0.04)
+				bottom-left: marks displaced or reshaped (2.38% of page, x 0.11-0.26, y 0.72-0.97)
+				bottom-right: marks displaced or reshaped (1.13% of page, x 0.83-0.92, y 0.71-0.87)
+				bottom-centre: marks displaced or reshaped (1.47% of page, x 0.33-0.51, y 0.87-0.97)
+26	11.21	1.25	16	MAJOR
+				middle-centre: marks displaced or reshaped (34.32% of page, x 0.03-0.92, y 0.01-0.79)
+				top-left: a solid area drawn differently (0.37% of page, x 0.03-0.20, y 0.02-0.04)
+				top-right: a solid area drawn differently (0.27% of page, x 0.85-0.98, y 0.02-0.04)
+				bottom-left: a solid area drawn differently (1.80% of page, x 0.03-0.10, y 0.71-0.97)
+				bottom-right: marks displaced or reshaped (0.91% of page, x 0.83-0.92, y 0.81-0.97)
+				bottom-centre: marks displaced or reshaped (1.22% of page, x 0.33-0.54, y 0.71-0.79)
+
+36 pages, 5 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

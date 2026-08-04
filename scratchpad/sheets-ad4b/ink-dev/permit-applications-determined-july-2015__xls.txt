@@ -1,0 +1,10 @@
+page	diff%	ink%	regions	verdict
+1	3.31	0.38	5	MAJOR
+				middle-left: marks displaced or reshaped (4.73% of page, x 0.05-0.39, y 0.31-0.65)
+				bottom-left: ink we draw that the reference does not (0.69% of page, x 0.05-0.39, y 0.87-0.90)
+				top-left: marks displaced or reshaped (3.10% of page, x 0.05-0.39, y 0.09-0.28)
+				top-left: marks displaced or reshaped (0.10% of page, x 0.07-0.11, y 0.27-0.29)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.36-0.37, y 0.28-0.31)
+
+1 pages, 1 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp

@@ -1,0 +1,9 @@
+page	diff%	ink%	regions	verdict
+27	33.94	1.36	1	MAJOR
+				the whole page: a solid area drawn differently (78.29% of page, x 0.02-0.95, y 0.03-0.98)
+33	17.17	3.32	2	MAJOR
+				top-centre: a solid area drawn differently (42.51% of page, x 0.02-0.95, y 0.03-0.51)
+				bottom-centre: marks displaced or reshaped (0.31% of page, x 0.46-0.54, y 0.93-0.97)
+
+33 pages, 2 with major differences
+images in /home/user/libreoffice-core/.claude/worktrees/agent-ad4ba149aefc94b61/scratchpad/sheets-ad4b/ink-dev/cmp
