@@ -1927,3 +1927,148 @@ eleven, and the remaining ink is concentrated rather than spread:
 `2014BSA_Sunday_Killion.pptx` page 5 is the cheapest of these to look at and matches on words:
 the reference shows the slide through the chart's area and we paint it white, so a correctly
 drawn chart sits in a white box that should not be there.
+
+## After the tenth round: slides, four fills the gate cannot see
+
+Whole slides track swept before at `52f45c51b` and after at the head of this branch, 163
+documents each time, rendering **our** side twice and reusing the reference PDFs — the
+reference cannot change when nothing touches `soffice`, and the two sweeps' reference
+columns are identical row for row, which is the check that says so.
+
+| | baseline | after |
+|---|---|---|
+| slides matching the gate | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 |
+| documents whose page count, word count or verdict moved | — | **0** |
+| total unaccounted ink, 163 documents | 2564.46 | **1857.62** |
+| pages the image tool calls major | 662 | **582** |
+| documents whose ink moved | — | **21: 17 down, 4 up by 2.16 between them** |
+
+The baseline reproduced the briefed 152/163 exactly — same eleven failures, no `ref-failed`,
+every page count exact — which is the tell that the base and the instrument are both right.
+**Nothing the word gate can see moved, in either direction.** That is the expected shape:
+every one of the eleven remaining failures is attributed, and all four fixes are fills.
+
+```
+247.12 ->  11.10   Course Selection 2025-26 Current Grade 09.pptx   major  9 ->  4
+198.24 ->  45.05   171128IPAP.pptx                                  major 32 -> 18
+139.10 ->  16.84   2014BSA_Sunday_Killion.pptx                      major 16 ->  7
+123.54 ->   8.34   section_1_our_rights_presentation.pptx           major 19 ->  2
+ 27.75 ->   2.09   5b_upasana_dasgupta_-_liability_and_registration  major 15 ->  1
+388.17 -> 368.41   NAS-Infrastructure-Roadmaps-v16.0.pptx           major 85 -> 77
+ 75.22 ->  66.12   N2_E_Maestroni_Swarm_COP.pptx                    major  5 ->  1
+ 34.26 ->  25.99   ghgp-supply-chain-initiative_20100323_wri.pptx    major 14 -> 11
+```
+
+The four that rose are `OnTrac_StarCertificationProgram-3Day.pptx` (+1.82) and three under
+0.2. OnTrac's page 9 is **visually closer** after the change and scores worse: a spurious
+black drop shadow behind its form panel is gone, which is what the reference shows, and the
+512-pixel region metric moved the other way. Small figures on this instrument are noise.
+
+### Nine documents this instrument cannot measure at all
+
+`pdf-image-diff.py` refuses a page whose two renderings differ in size, and nine of the 163
+render to 512×288 on one side and 512×289 on the other — a rounding difference on a 16:9
+deck, not a page-size defect. Every page of those nine is skipped, so they contribute
+nothing to either total and a change to them would be invisible here. Worth fixing in the
+tool before the next round leans on it further.
+
+### `p:sp/@useBgFill` — a shape filled with the slide's own background
+
+The string appeared nowhere in `dotnet/src`. PowerPoint's Designer writes a full-slide
+`<p:sp useBgFill="1">` that states no fill and carries a `p:style` whose
+`<a:fillRef idx="1">` names `accent1`, so a reader that walks past the attribute paints the
+whole slide in the accent colour. On `Course Selection 2025-26 Current Grade 09.pptx` that is
+nine of ten pages solid orange against a white reference — 247.12 of unaccounted ink on a
+ten-page deck, the second largest figure on the track.
+
+The precedence is `oox/source/ppt/pptshapegroupcontext.cxx:109-113`, which sets the shape's
+own fill type to `XML_noFill` **before** parsing its children: a fill the shape states for
+itself still wins, and the theme's `a:fillRef` no longer reaches it. `fillproperties.cxx:439`
+then hangs `FillUseSlideBackground` on exactly the `noFill` branch, so an explicit
+`a:noFill` beside the attribute shows the background too rather than nothing.
+
+Reach, parsed: 19 shapes across 4 of the 112 corpus `pptx` decks.
+
+### Moving a placeholder does not cut it off from what it inherits
+
+`PlaceholderProperties` was consulted only when the slide's shape stated no `a:xfrm`. That
+reads "a placeholder that overrides its position inherits nothing else", and LibreOffice does
+the opposite: it applies the shape reference on `p:nvSpPr`, before `p:spPr` is parsed at all
+(`oox/source/ppt/pptshapecontext.cxx:157-162`), and merges the referenced shape's fill, line
+and geometry underneath the shape's own (`shape.cxx:2816-2843`).
+
+`171128IPAP.pptx` is the clean case: its slide titles state their own `a:xfrm` and take a
+`C00000` plate from the layout, so most of its forty pages drew **white title text on white
+paper** — text that extracts perfectly and cannot be read. 198.24 → 45.05, major 32 → 18.
+
+### A table naming no style gets no style, not the list's `def`
+
+`tableStyles.xml`'s `def` attribute reads exactly like the deck's default table look, and
+PowerPoint applies it. LibreOffice does not: `TableProperties::getUsedTableStyle`
+(`oox/source/drawingml/table/tableproperties.cxx:89-124`) searches the list only when
+`a:tableStyleId` is non-empty and otherwise returns a `static TableStyle` with nothing in it.
+
+Measured rather than read off, because the source alone does not say which renderer to
+follow. Page 8 of `section_1_our_rights_presentation.pptx` is a three-column table with
+`firstRow`, `firstCol` and `bandRow` set and no `a:tableStyleId`: the reference leaves its
+first column white and we filled it `accent1` with white text on it. **Putting the id of the
+style the package declares as `def` into that `a:tblPr` makes the reference draw exactly what
+we drew** — the fallback is the whole of the difference. 123.54 → 8.34, major 19 → 2.
+
+Reach, parsed: 130 such tables across 24 decks, including 44 in
+`NAS-Infrastructure-Roadmaps-v16.0.pptx`. `DrawingTableStyle` lives in `Paperless.Ooxml`,
+which all three families share, but `DrawingTableStyle.Read` has exactly one caller —
+`PptxSlideLayout` — so no other family's rendering can change.
+
+### A picture frame's fill, and the one thing about it that is still unresolved
+
+Impress adds a picture frame's fill to the shape's decomposition only when the graphic is
+transparent (`svx/source/sdr/primitive2d/sdrgrafprimitive2d.cxx:41-42`). The salvaged patch
+from the killed agent said a metafile does not count; that reproduced, and the sweep then
+found where it does not hold.
+
+Measured against the binary, four renderings of `2014BSA_Sunday_Killion.pptx`. Its slide 5 is
+a `p:pic` over `image10.emf` stating `<a:solidFill><a:schemeClr val="tx1"/>` — white, under a
+colour map sending `tx1` to a `dk1` of `#FFFFFF`. Page 5 comes back **byte-identical** with
+that fill white, red, or replaced by `<a:noFill/>`, showing the slide's own background inside
+the frame. A fourth, with the EMF swapped for a PNG whose right half is clear, draws the red
+through that half: the rule is about the graphic's kind, not about coverage. 139.10 → 16.84.
+
+**The checked-out source predicts the opposite** — `ImpGraphic::isTransparent` returns true
+for everything but an opaque bitmap — so this is measured, not ported.
+
+**Where it does not hold, and why that is not settled.** The first sweep of this rule improved
+nine documents and worsened two, both `.ppt` and both on `TODO.raster-ceiling.md`:
+`Thailand17.ppt` page 8 and `W3_Case_Study…Ed.ppt` page 10 draw a table on a white plate under
+an Escher metafile blip, and suppressing it cost 8.44 and 9.33. Across five measured cases the
+line falls on **how the metafile is stored**: the same 892-byte EMF inlined as
+`office:binary-data` in a flat ODP keeps its fill, the same deck zipped with it under
+`Pictures/` loses it, and a `.ppt` blip is inline by construction. That fits LibreOffice
+building a `GDIMetaFile` for one and a `VectorGraphicData` for the other.
+
+A second explanation fits the same five and could not be ruled out: those two `.ppt` pages are
+pages where the reference *rasterises* the metafile, and a raster with a soft mask is
+transparent by `isTransparent`'s own rule. Separating them needs a rasterised metafile that is
+**not** inline and whose frame states a fill; the corpus has none — the four candidates on
+`8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` all state `a:noFill`. Recorded as unresolved.
+
+### What the next agent on this track should take
+
+```
+368.41  77 pages major  NAS-Infrastructure-Roadmaps-v16.0.pptx   (linked Excel.Sheet.12 OLE, known)
+127.20  12              HENTZEN_...AEROSPACE_INDUSTRY.pptx       (the missing a:duotone, known)
+ 66.45  24 of 24        Framing Europe.ppt                       (unlooked at — every page major)
+ 66.12   1 of 30        N2_E_Maestroni_Swarm_COP.pptx            (one page, and it is the Gantt)
+ 56.67  10              Wildlife for REDAC September 11.pptx     (the circle-gradient case, known)
+ 49.65  18              Thailand17.ppt                           (raster ceiling on p8; 17 others)
+ 48.41   6 of 268       Reporting_responsibilities_matrix.pptx
+ 45.05  18 of 40        171128IPAP.pptx                          (residue after this round's fix)
+ 44.78   8 of 8         redac-fullComm-201705-EE-FRs-briefing.pptx (unlooked at)
+ 40.64  19 of 20        joint_user_outcomes_michael_fullerton_29.06.12.ppt (unlooked at)
+```
+
+`Framing Europe.ppt`, `redac-fullComm-201705-EE-FRs-briefing.pptx` and
+`joint_user_outcomes_michael_fullerton_29.06.12.ppt` have never been looked at and are all
+"every page major", which on this track has three times now meant one wrong fill repeated
+rather than ten separate problems.
