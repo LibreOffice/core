@@ -71,6 +71,7 @@ enum class Relationship
     VIDEO,
     AUDIO,
     VMLDRAWING,
+    WEBSETTINGS,
     WORDVBADATA,
     WORKSHEET,
     XMLMAPS,

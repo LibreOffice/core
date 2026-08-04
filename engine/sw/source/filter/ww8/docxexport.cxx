@@ -24,6 +24,7 @@
 #include "docxattributeoutput.hxx"
 #include "docxsdrexport.hxx"
 #include "docxhelper.hxx"
+#include "NamespaceAdjustmentHandler.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -733,6 +734,8 @@ ErrCode DocxExport::ExportDocument_Impl()
     WriteGlossary();
 
     WriteCustomXml();
+
+    WriteWebSettings();
 
     WriteEmbeddings();
 
@@ -1942,6 +1945,40 @@ void DocxExport::WriteCustomXml()
                     Concat2View("itemProps"+OUString::number(j+1)+".xml" ));
         }
     }
+}
+
+void DocxExport::WriteWebSettings()
+{
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo = m_xTextDoc->getPropertySetInfo();
+    if (!xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        return;
+
+    css::uno::Reference<css::xml::dom::XDocument> xWebSettingsDom;
+    cpo::uno::Sequence<beans::PropertyValue> propList;
+    m_xTextDoc->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
+    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
+                              [](const beans::PropertyValue& rProp)
+                              { return rProp.Name == "OOXWebSettings"; });
+    if (pProp != std::cend(propList))
+        pProp->Value >>= xWebSettingsDom;
+
+    if (!xWebSettingsDom.is())
+        return;
+
+    m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),
+                          oox::getRelationship(oox::Relationship::WEBSETTINGS),
+                          u"webSettings.xml");
+
+    uno::Reference<xml::sax::XSAXSerializable> xSerializer(xWebSettingsDom,
+                                                            uno::UNO_QUERY_THROW);
+    uno::Reference<xml::sax::XWriter> xWriter
+        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+    xWriter->setOutputStream(GetFilter().openFragmentStream(
+        u"word/webSettings.xml"_ustr,
+        u"application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"_ustr));
+    xSerializer->serialize(
+        uno::Reference<xml::sax::XDocumentHandler>(new NamespaceAdjustmentHandler(m_rFilter,
+            xWriter)), cpo::uno::Sequence<beans::StringPair>());
 }
 
 void DocxExport::WriteVBA()

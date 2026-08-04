@@ -135,6 +135,7 @@ class OOXMLDocument final : public writerfilter::Reference<Stream>
     cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
     cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
     css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
+    css::uno::Reference<css::xml::dom::XDocument> mxWebSettingsDom;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     cpo::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> m_aEmbeddings;
@@ -181,6 +182,7 @@ private:
     getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 nNoteId);
 
     void resolveCustomXmlStream(Stream & rStream);
+    void resolveWebSettingsStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
     void resolveCommentsExtendedStream(Stream & rStream);
@@ -293,6 +295,7 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getThemeDom() const;
     const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomList() const;
     const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomPropsList() const;
+    const css::uno::Reference<css::xml::dom::XDocument>& getWebSettingsDom() const;
     const css::uno::Reference<css::xml::dom::XDocument>& getGlossaryDocDom() const;
     const cpo::uno::Sequence<cpo::uno::Sequence< css::beans::NamedValue> >&  getGlossaryDomList() const;
     const cpo::uno::Sequence<css::beans::PropertyValue >&  getEmbeddingsList() const;
