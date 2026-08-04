@@ -388,9 +388,10 @@ double SwarmSolver::calculateFitness(std::vector<double> const& rVariables)
     // feasible region. The strict feasibility test still decides what is
     // reported as a solution, so a point that only nearly satisfies the
     // constraints is never returned as the answer.
+    constexpr double constInfeasibilityPenaltyWeight = 1.0e7;
     double fViolation = constraintViolation();
     if (fViolation > 0.0)
-        fFitness -= 1.0e7 * fViolation;
+        fFitness -= constInfeasibilityPenaltyWeight * fViolation;
 
     return fFitness;
 }
