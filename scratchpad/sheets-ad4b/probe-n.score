@@ -1,0 +1,10 @@
+# common rows: 450   (lo 450, ours 450)
+# total twips: lo 247056  ours 247072   ratio 1.00006
+# exact 450  ours-taller 0  ours-shorter 0
+# worst 40 by |delta|
+# per sheet: name, rows, lo, ours, delta, ratio
+S10	90	38354	38374	+20	1.0005
+S12	90	53691	53700	+9	1.0002
+S14	90	74732	74730	-2	1.0000
+S8	90	30883	30878	-5	0.9999
+S11	90	49396	49390	-6	0.9999

@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri"/>
+ </office:font-face-decls>
+ <office:automatic-styles>
+  <style:style style:name="co3600" style:family="table-column"><style:table-column-properties style:column-width="2.5000in"/></style:style>
+  <style:style style:name="co3650" style:family="table-column"><style:table-column-properties style:column-width="2.5347in"/></style:style>
+  <style:style style:name="co3700" style:family="table-column"><style:table-column-properties style:column-width="2.5694in"/></style:style>
+  <style:style style:name="co3750" style:family="table-column"><style:table-column-properties style:column-width="2.6042in"/></style:style>
+  <style:style style:name="co3800" style:family="table-column"><style:table-column-properties style:column-width="2.6389in"/></style:style>
+  <style:style style:name="co3850" style:family="table-column"><style:table-column-properties style:column-width="2.6736in"/></style:style>
+  <style:style style:name="co3900" style:family="table-column"><style:table-column-properties style:column-width="2.7083in"/></style:style>
+  <style:style style:name="co3950" style:family="table-column"><style:table-column-properties style:column-width="2.7431in"/></style:style>
+  <style:style style:name="co4000" style:family="table-column"><style:table-column-properties style:column-width="2.7778in"/></style:style>
+  <style:style style:name="co4050" style:family="table-column"><style:table-column-properties style:column-width="2.8125in"/></style:style>
+  <style:style style:name="co4100" style:family="table-column"><style:table-column-properties style:column-width="2.8472in"/></style:style>
+  <style:style style:name="co4150" style:family="table-column"><style:table-column-properties style:column-width="2.8819in"/></style:style>
+  <style:style style:name="co4200" style:family="table-column"><style:table-column-properties style:column-width="2.9167in"/></style:style>
+  <style:style style:name="co4250" style:family="table-column"><style:table-column-properties style:column-width="2.9514in"/></style:style>
+  <style:style style:name="co4300" style:family="table-column"><style:table-column-properties style:column-width="2.9861in"/></style:style>
+  <style:style style:name="co4350" style:family="table-column"><style:table-column-properties style:column-width="3.0208in"/></style:style>
+  <style:style style:name="co4400" style:family="table-column"><style:table-column-properties style:column-width="3.0556in"/></style:style>
+  <style:style style:name="co4450" style:family="table-column"><style:table-column-properties style:column-width="3.0903in"/></style:style>
+  <style:style style:name="co4500" style:family="table-column"><style:table-column-properties style:column-width="3.1250in"/></style:style>
+  <style:style style:name="co4550" style:family="table-column"><style:table-column-properties style:column-width="3.1597in"/></style:style>
+  <style:style style:name="co4600" style:family="table-column"><style:table-column-properties style:column-width="3.1944in"/></style:style>
+  <style:style style:name="co4650" style:family="table-column"><style:table-column-properties style:column-width="3.2292in"/></style:style>
+  <style:style style:name="co4700" style:family="table-column"><style:table-column-properties style:column-width="3.2639in"/></style:style>
+  <style:style style:name="co4750" style:family="table-column"><style:table-column-properties style:column-width="3.2986in"/></style:style>
+  <style:style style:name="co4800" style:family="table-column"><style:table-column-properties style:column-width="3.3333in"/></style:style>
+  <style:style style:name="co4850" style:family="table-column"><style:table-column-properties style:column-width="3.3681in"/></style:style>
+  <style:style style:name="co4900" style:family="table-column"><style:table-column-properties style:column-width="3.4028in"/></style:style>
+  <style:style style:name="co4950" style:family="table-column"><style:table-column-properties style:column-width="3.4375in"/></style:style>
+  <style:style style:name="co5000" style:family="table-column"><style:table-column-properties style:column-width="3.4722in"/></style:style>
+  <style:style style:name="co5050" style:family="table-column"><style:table-column-properties style:column-width="3.5069in"/></style:style>
+  <style:style style:name="co5100" style:family="table-column"><style:table-column-properties style:column-width="3.5417in"/></style:style>
+  <style:style style:name="co5150" style:family="table-column"><style:table-column-properties style:column-width="3.5764in"/></style:style>
+  <style:style style:name="co5200" style:family="table-column"><style:table-column-properties style:column-width="3.6111in"/></style:style>
+  <style:style style:name="co5250" style:family="table-column"><style:table-column-properties style:column-width="3.6458in"/></style:style>
+  <style:style style:name="co5300" style:family="table-column"><style:table-column-properties style:column-width="3.6806in"/></style:style>
+  <style:style style:name="co5350" style:family="table-column"><style:table-column-properties style:column-width="3.7153in"/></style:style>
+  <style:style style:name="co5400" style:family="table-column"><style:table-column-properties style:column-width="3.7500in"/></style:style>
+  <style:style style:name="co5450" style:family="table-column"><style:table-column-properties style:column-width="3.7847in"/></style:style>
+  <style:style style:name="co5500" style:family="table-column"><style:table-column-properties style:column-width="3.8194in"/></style:style>
+  <style:style style:name="co5550" style:family="table-column"><style:table-column-properties style:column-width="3.8542in"/></style:style>
+  <style:style style:name="co5600" style:family="table-column"><style:table-column-properties style:column-width="3.8889in"/></style:style>
+  <style:style style:name="co5650" style:family="table-column"><style:table-column-properties style:column-width="3.9236in"/></style:style>
+  <style:style style:name="co5700" style:family="table-column"><style:table-column-properties style:column-width="3.9583in"/></style:style>
+  <style:style style:name="co5750" style:family="table-column"><style:table-column-properties style:column-width="3.9931in"/></style:style>
+  <style:style style:name="co5800" style:family="table-column"><style:table-column-properties style:column-width="4.0278in"/></style:style>
+  <style:style style:name="co5850" style:family="table-column"><style:table-column-properties style:column-width="4.0625in"/></style:style>
+  <style:style style:name="co5900" style:family="table-column"><style:table-column-properties style:column-width="4.0972in"/></style:style>
+  <style:style style:name="co5950" style:family="table-column"><style:table-column-properties style:column-width="4.1319in"/></style:style>
+  <style:style style:name="co6000" style:family="table-column"><style:table-column-properties style:column-width="4.1667in"/></style:style>
+  <style:style style:name="co6050" style:family="table-column"><style:table-column-properties style:column-width="4.2014in"/></style:style>
+  <style:style style:name="co6100" style:family="table-column"><style:table-column-properties style:column-width="4.2361in"/></style:style>
+  <style:style style:name="co6150" style:family="table-column"><style:table-column-properties style:column-width="4.2708in"/></style:style>
+  <style:style style:name="ro1" style:family="table-row"><style:table-row-properties style:row-height="0.1783in" style:use-optimal-row-height="true"/></style:style>
+  <style:style style:name="ce0" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="12pt"/></style:style>
+  <style:style style:name="ce1" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="12pt" fo:font-weight="bold"/></style:style>
+ </office:automatic-styles>
+ <office:body><office:spreadsheet>
+  <table:table table:name="W3600">
+   <table:table-column table:style-name="co3600"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3650">
+   <table:table-column table:style-name="co3650"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3700">
+   <table:table-column table:style-name="co3700"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3750">
+   <table:table-column table:style-name="co3750"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3800">
+   <table:table-column table:style-name="co3800"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3850">
+   <table:table-column table:style-name="co3850"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3900">
+   <table:table-column table:style-name="co3900"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W3950">
+   <table:table-column table:style-name="co3950"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4000">
+   <table:table-column table:style-name="co4000"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4050">
+   <table:table-column table:style-name="co4050"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4100">
+   <table:table-column table:style-name="co4100"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4150">
+   <table:table-column table:style-name="co4150"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4200">
+   <table:table-column table:style-name="co4200"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4250">
+   <table:table-column table:style-name="co4250"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4300">
+   <table:table-column table:style-name="co4300"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4350">
+   <table:table-column table:style-name="co4350"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4400">
+   <table:table-column table:style-name="co4400"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4450">
+   <table:table-column table:style-name="co4450"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4500">
+   <table:table-column table:style-name="co4500"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4550">
+   <table:table-column table:style-name="co4550"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4600">
+   <table:table-column table:style-name="co4600"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4650">
+   <table:table-column table:style-name="co4650"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4700">
+   <table:table-column table:style-name="co4700"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4750">
+   <table:table-column table:style-name="co4750"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4800">
+   <table:table-column table:style-name="co4800"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4850">
+   <table:table-column table:style-name="co4850"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4900">
+   <table:table-column table:style-name="co4900"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W4950">
+   <table:table-column table:style-name="co4950"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5000">
+   <table:table-column table:style-name="co5000"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5050">
+   <table:table-column table:style-name="co5050"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5100">
+   <table:table-column table:style-name="co5100"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5150">
+   <table:table-column table:style-name="co5150"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5200">
+   <table:table-column table:style-name="co5200"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5250">
+   <table:table-column table:style-name="co5250"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5300">
+   <table:table-column table:style-name="co5300"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5350">
+   <table:table-column table:style-name="co5350"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5400">
+   <table:table-column table:style-name="co5400"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5450">
+   <table:table-column table:style-name="co5450"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5500">
+   <table:table-column table:style-name="co5500"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5550">
+   <table:table-column table:style-name="co5550"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5600">
+   <table:table-column table:style-name="co5600"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5650">
+   <table:table-column table:style-name="co5650"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5700">
+   <table:table-column table:style-name="co5700"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5750">
+   <table:table-column table:style-name="co5750"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5800">
+   <table:table-column table:style-name="co5800"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5850">
+   <table:table-column table:style-name="co5850"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5900">
+   <table:table-column table:style-name="co5900"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W5950">
+   <table:table-column table:style-name="co5950"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W6000">
+   <table:table-column table:style-name="co6000"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W6050">
+   <table:table-column table:style-name="co6050"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W6100">
+   <table:table-column table:style-name="co6100"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+  <table:table table:name="W6150">
+   <table:table-column table:style-name="co6150"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Statethereasonswhichcouldprobablyleadtothe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpretallindicationsandsignalsthatmaybe</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explaintherequirementstoactasaflightcrewme</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>SourceICAODoc4444Chapter7Selectionofrunway</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>oooooooooooooooooooooooooooooooooooooooooo</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</text:p></table:table-cell></table:table-row>
+  </table:table>
+ </office:spreadsheet></office:body>
+</office:document>

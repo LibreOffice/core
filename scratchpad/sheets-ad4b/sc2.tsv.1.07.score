@@ -1,0 +1,61 @@
+# common rows: 7909   (lo 7928, ours 7909)
+# total twips: lo 5169516  ours 5204167   ratio 1.00670
+# exact 7643  ours-taller 205  ours-shorter 61
+# worst 40 by |delta|
+022 AGK Instrumentation	row 577	lo 1373.0	ours 835.0	delta -538.0	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 710	lo 1373.0	ours 835.0	delta -538.0	loopt=true	ouropt=opt
+070-Operational-Procedures	row 190	lo 1373.0	ours 835.0	delta -538.0	loopt=true	ouropt=opt
+081-POF-(A)	row 322	lo 6745.8	ours 6208.0	delta -537.8	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 553	lo 1641.3	ours 1104.0	delta -537.3	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 713	lo 7282.8	ours 7820.0	delta +537.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 719	lo 7282.8	ours 7820.0	delta +537.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 698	lo 7014.1	ours 6477.0	delta -537.1	loopt=true	ouropt=opt
+081-POF-(A)	row 367	lo 2179.3	ours 1910.0	delta -269.3	loopt=true	ouropt=opt
+010 Air Law	row 63	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+010 Air Law	row 144	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+010 Air Law	row 232	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+010 Air Law	row 641	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+021 AGK Airframe, Systems...	row 11	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+021 AGK Airframe, Systems...	row 272	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+021 AGK Airframe, Systems...	row 759	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+021 AGK Airframe, Systems...	row 779	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 294	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 505	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 548	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 671	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+033-Flight-Plng-&-Monit.	row 159	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+061 General Navigation	row 62	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+070-Operational-Procedures	row 63	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+070-Operational-Procedures	row 167	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+070-Operational-Procedures	row 353	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+090 Communications	row 111	lo 1103.8	ours 1373.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 716	lo 2446.8	ours 2716.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 722	lo 2446.8	ours 2716.0	delta +269.2	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 740	lo 2446.8	ours 2716.0	delta +269.2	loopt=true	ouropt=opt
+070-Operational-Procedures	row 223	lo 5134.2	ours 4865.0	delta -269.2	loopt=true	ouropt=opt
+081-POF-(A)	row 345	lo 8088.9	ours 8358.0	delta +269.1	loopt=true	ouropt=opt
+010 Air Law	row 186	lo 2716.1	ours 2447.0	delta -269.1	loopt=true	ouropt=opt
+010 Air Law	row 279	lo 1373.0	ours 1104.0	delta -269.0	loopt=true	ouropt=opt
+010 Air Law	row 282	lo 1373.0	ours 1104.0	delta -269.0	loopt=true	ouropt=opt
+010 Air Law	row 310	lo 1373.0	ours 1104.0	delta -269.0	loopt=true	ouropt=opt
+010 Air Law	row 388	lo 1373.0	ours 1104.0	delta -269.0	loopt=true	ouropt=opt
+010 Air Law	row 561	lo 1910.0	ours 1641.0	delta -269.0	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 306	lo 1373.0	ours 1104.0	delta -269.0	loopt=true	ouropt=opt
+022 AGK Instrumentation	row 400	lo 1910.0	ours 2179.0	delta +269.0	loopt=true	ouropt=opt
+# per sheet: name, rows, lo, ours, delta, ratio
+010 Air Law	824	678495	684962	+6467	1.0095
+022 AGK Instrumentation	805	662335	668269	+5934	1.0090
+070-Operational-Procedures	595	524205	527727	+3522	1.0067
+061 General Navigation	407	226128	229616	+3488	1.0154
+050 Meteorology	707	327598	330294	+2696	1.0082
+081-POF-(A)	758	517568	520069	+2501	1.0048
+062-Radio-Navigation	643	411672	413835	+2163	1.0053
+040 Human Performance	538	250364	252520	+2156	1.0086
+032-Performance-(A)	462	284546	286699	+2153	1.0076
+021 AGK Airframe, Systems...	1002	639623	641542	+1919	1.0030
+090 Communications	214	118912	120007	+1095	1.0092
+033-Flight-Plng-&-Monit.	234	153455	153731	+276	1.0018
+031-Mass-&-Balance-final	160	72321	72592	+271	1.0037
+034-Performance-(H)	151	70126	70397	+271	1.0039
+082-POF-(H)	380	205505	205513	+8	1.0000
+Reader Instructions	29	26661	26394	-267	0.9900

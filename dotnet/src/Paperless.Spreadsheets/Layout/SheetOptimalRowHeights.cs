@@ -135,9 +135,9 @@ internal static class SheetOptimalRowHeights
     /// </remarks>
     private const int MarginPixels = 1;
 
-    /// <summary>A scratch knob: how much wider than we measure it Calc's device makes the text.</summary>
+    /// <summary>A scratch knob: the print-to-screen factor the horizontal resolution is divided by.</summary>
     /// <remarks>Probe only, to fit the factor against LibreOffice's own row heights.</remarks>
-    internal static double WidthScaleProbe = 1.0;
+    internal static double OutputFactorProbe = 1.0345;
 
     /// <summary>
     /// The grid a sheet is laid out on, with its hinted row heights re-derived from its content.
@@ -432,13 +432,15 @@ internal static class SheetOptimalRowHeights
         // `aPaper.setWidth(nDocWidth)`: the column in whole pixels, less a pixel of margin either
         // side, less the one the gridline takes — "output size is width-1 pixel (due to gridline)"
         // (`column2.cxx:466-470`). A left- or right-aligned indent comes off as well.
-        long paper = (long)(width * PixelsPerTwip) - (2 * MarginPixels) - 1;
+        double horizontal = PixelsPerTwip / OutputFactorProbe;
+        long paper = (long)(width * horizontal)
+                     - (2 * (long)(VerticalMarginTwips / 2 * horizontal)) - 1;
         if (format.Horizontal is SheetHorizontalAlignment.Left or SheetHorizontalAlignment.Right)
-            paper -= (long)(format.Indent.Twips * PixelsPerTwip);
+            paper -= (long)(format.Indent.Twips * horizontal);
 
         if (paper <= 0) return 0;
 
-        Length available = Length.FromTwips((long)(paper / PixelsPerTwip / WidthScaleProbe));
+        Length available = Length.FromTwips(paper * TwipsPerPixel);
         MetricGrid grid = new(ScreenDpi);
 
         long pixels = portions is { Count: > 0 }
@@ -452,7 +454,7 @@ internal static class SheetOptimalRowHeights
     private static long PlainPixels(
         string text, SheetFace face, Length size, Length available, MetricGrid grid)
     {
-        int lines = SheetTextLayout.LineCount(text, face, size, available);
+        int lines = SheetTextLayout.LineCount(text, face, grid.ToEmSize(size), available);
         if (lines <= 0) return 0;
 
         long line = LinePixels(face, size, grid);
@@ -488,7 +490,7 @@ internal static class SheetOptimalRowHeights
         long total = 0;
 
         foreach ((int start, int end) in
-                 SheetTextLayout.RichLineRanges(text, portions, face, available))
+                 SheetTextLayout.RichLineRanges(text, portions, face, available, grid))
         {
             long ascent = 0;
             long descent = 0;

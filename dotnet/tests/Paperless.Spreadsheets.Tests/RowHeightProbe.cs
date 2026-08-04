@@ -76,6 +76,62 @@ public class RowHeightProbe
         }
     }
 
+    /// <summary>
+    /// The line count a supplied string takes at a range of available widths, so our break points
+    /// can be bisected the same way LibreOffice's are.
+    /// </summary>
+    [Fact]
+    public void Strings()
+    {
+        string? file = Environment.GetEnvironmentVariable("PROBE_STRINGS");
+        if (string.IsNullOrEmpty(file)) return;
+
+        Length size = Length.FromPoints(double.Parse(
+            Environment.GetEnvironmentVariable("PROBE_SIZE") ?? "11",
+            System.Globalization.CultureInfo.InvariantCulture));
+        string family = Environment.GetEnvironmentVariable("PROBE_FONT") ?? "Calibri";
+        string[] widths = (Environment.GetEnvironmentVariable("PROBE_COLS") ?? "6200")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+        using StreamWriter w = new(
+            Environment.GetEnvironmentVariable("PROBE_OUT") ?? "/tmp/strings.tsv");
+
+        foreach (string raw in File.ReadAllLines(file))
+        {
+            if (raw.Trim().Length == 0) continue;
+            bool bold = raw.StartsWith('*');
+            string text = (bold ? raw[1..] : raw).Replace("\\n", "\n");
+
+            SheetCellFormat format = new()
+            {
+                FontFamily = family,
+                FontSize = size,
+                FontWeight = bold ? 700 : 400,
+                Wraps = true,
+            };
+
+            if (Paperless.Spreadsheets.Layout.SheetFonts.For(format) is not { } face) continue;
+
+            System.Text.StringBuilder row = new();
+            row.Append(bold ? "bold\t" : "reg\t").Append(text.Length).Append('\t');
+            row.Append("width=").Append(
+                new Paperless.Text.Layout.TextMeasurer(face.Face)
+                    .Measure(text, size, Paperless.Spreadsheets.Layout.SheetText.NoKerning).Twips);
+
+            foreach (string cw in widths)
+            {
+                long column = long.Parse(cw, System.Globalization.CultureInfo.InvariantCulture);
+                long paperPx = (long)(column * 0.067) - 2 - 1;
+                Length available = Length.FromTwips((long)(paperPx / 0.067));
+                row.Append(System.Globalization.CultureInfo.InvariantCulture,
+                    $"\t{cw}:{SheetTextLayout.LineCount(text, face, size, available)}"
+                    + $"@{available.Twips}");
+            }
+
+            w.WriteLine(row.ToString());
+        }
+    }
+
     [Fact]
     public void Dump()
     {
@@ -91,7 +147,7 @@ public class RowHeightProbe
         {
             foreach (string s in scales.Split(';', StringSplitOptions.RemoveEmptyEntries))
             {
-                SheetOptimalRowHeights.WidthScaleProbe = double.Parse(
+                SheetOptimalRowHeights.OutputFactorProbe = double.Parse(
                     s, System.Globalization.CultureInfo.InvariantCulture);
                 using IPaginatedDocument scaled = (IPaginatedDocument)PaperlessDocument.Open(path);
                 SpreadsheetPages sp = (SpreadsheetPages)scaled.Layout();
@@ -107,7 +163,7 @@ public class RowHeightProbe
                 }
             }
 
-            SheetOptimalRowHeights.WidthScaleProbe = 1.0;
+            SheetOptimalRowHeights.OutputFactorProbe = 1.0;
         }
 
         using IPaginatedDocument document = (IPaginatedDocument)PaperlessDocument.Open(path);

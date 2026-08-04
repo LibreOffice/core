@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri"/>
+ </office:font-face-decls>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column"><style:table-column-properties style:column-width="4.0521in"/></style:style>
+  <style:style style:name="ro1" style:family="table-row"><style:table-row-properties style:row-height="0.1783in" style:use-optimal-row-height="true"/></style:style>
+  <style:style style:name="ce0" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="11pt"/></style:style>
+  <style:style style:name="ce1" style:family="table-cell"><style:table-cell-properties fo:wrap-option="wrap"/><style:text-properties style:font-name="Calibri" fo:font-size="11pt" fo:font-weight="bold"/></style:style>
+ </office:automatic-styles>
+ <office:body><office:spreadsheet>
+  <table:table table:name="S">
+   <table:table-column table:style-name="co1"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>State the reasons which could probably lead to the decision to use another take-off or landing direction than the one into the wind.</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Interpret all indications and signals that may be used in a signals area.</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>Explain the requirements to act as a flight crew member of a civil aircraft registered in a Member State.</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce1" office:value-type="string"><text:p>Source: ICAO Doc 4444, Chapter 7, 7.2 Selection of runway-in-use</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce1" office:value-type="string"><text:p>Source: Commission Implementing Regulation (EU) No 923/2012 (SERA) - Appendix 1 Signals, 3.2 Visual ground signals</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce0" office:value-type="string"><text:p>nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn</text:p></table:table-cell></table:table-row>
+  </table:table>
+ </office:spreadsheet></office:body>
+</office:document>
