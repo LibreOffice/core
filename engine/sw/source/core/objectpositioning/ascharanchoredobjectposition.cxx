@@ -198,6 +198,35 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelPos.setY( nRelPos );
     }
 
+    // tdf#167714 a horizontal rule sits in the anchor paragraph's content rectangle by its own
+    // alignment, ignoring both the paragraph's adjustment and where in the text the rule is
+    // anchored; a rule wider than that rectangle overhangs it, which is what the crop then hides.
+    // Only the object is moved - the anchor position stays at the anchor character, which is what
+    // decides the page the object is painted on. Vertical and right-to-left text keep the plain
+    // as-character placement, since a rule is only defined for horizontal left-to-right text.
+    SwTwips nRuleOffset = 0;
+    if (!IsObjFly() && GetObject().IsHorizontalRule() && !rAnchorFrame.IsVertical()
+        && !rAnchorFrame.IsRightToLeft())
+    {
+        // the print area is relative to the frame area, so the content's left edge is their sum
+        const SwRect& rPrintArea = rAnchorFrame.getFramePrintArea();
+        const SwTwips nFree = rPrintArea.Width() - GetObject().GetSnapRect().getOpenWidth();
+        SwTwips nAlign = 0;
+        switch (rFrameFormat.GetHoriOrient().GetHoriOrient())
+        {
+            case text::HoriOrientation::CENTER:
+                nAlign = nFree / 2;
+                break;
+            case text::HoriOrientation::RIGHT:
+                nAlign = nFree;
+                break;
+            default:
+                break;
+        }
+        nRuleOffset
+            = rAnchorFrame.getFrameArea().Left() + rPrintArea.Left() + nAlign - aAnchorPos.X();
+    }
+
     if( !IsObjFly() )
     {
         if( !( mnFlags & AsCharFlags::Quick ) )
@@ -246,6 +275,8 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
                 if ( rAnchorFrame.IsVertical() )
                     aDiff = Point( -aDiff.Y(), aDiff.X() );
+
+                aDiff.AdjustX(nRuleOffset);
 
                 // OD 2004-04-06 #i26791# - distinction between 'master' drawing
                 // object and 'virtual' drawing object no longer needed.

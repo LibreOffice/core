@@ -71,6 +71,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::cpo::uno::Any;
@@ -92,6 +93,30 @@ namespace {
 
 const sal_Int32 VML_SHAPETYPE_PICTUREFRAME  = 75;
 const sal_Int32 VML_SHAPETYPE_HOSTCONTROL   = 201;
+
+/** tdf#167714 what makes a Word "standard horizontal rule" lay out like one
+
+    Word makes a rule either of a filled bar or of a picture, and lays both out the same way: the
+    percentage in o:hrpct is of the text column, the rule owns its line, and it hangs from the
+    bottom of that line 50 twip clear of it, whatever the paragraph's own spacing is. Bottom-aligning
+    the rectangle that includes the spacing expresses the last part, and also keeps the line at least
+    100 twip taller than the rule, which is what Word does.
+*/
+void lclSetHorizontalRule(const Reference<XShape>& rxShape, const ShapeTypeModel& rTypeModel)
+{
+    PropertySet aPropSet(rxShape);
+    aPropSet.setAnyProperty(PROP_HorizontalRule, Any(true));
+    if (!rTypeModel.maWidthPercent.isEmpty())
+    {
+        const sal_Int16 nWidth = rTypeModel.maWidthPercent.toInt32() / 10;
+        if (nWidth)
+            aPropSet.setAnyProperty(PROP_RelativeWidth, Any(nWidth));
+    }
+    aPropSet.setAnyProperty(PROP_VertOrient, Any(sal_Int16(text::VertOrientation::LINE_BOTTOM)));
+    const Any aSpacing(sal_Int32(o3tl::convert(50, o3tl::Length::twip, o3tl::Length::mm100)));
+    aPropSet.setAnyProperty(PROP_TopMargin, aSpacing);
+    aPropSet.setAnyProperty(PROP_BottomMargin, aSpacing);
+}
 
 awt::Point lclGetAbsPoint( const awt::Point& rRelPoint, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
@@ -808,7 +833,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // in the way we need.
 
         if (maTypeModel.mbHorizontalRule)
-            PropertySet(xShape).setAnyProperty(PROP_HorizontalRule, Any(true));
+            lclSetHorizontalRule(xShape, maTypeModel);
 
         // Set the relative width / height if any
         if ( !maTypeModel.maWidthPercent.isEmpty( ) )
@@ -1013,6 +1038,11 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         aPropSet.setProperty(PROP_RightMargin, cpo::uno::Any(nWrapDistanceRight));
         aPropSet.setProperty(PROP_TopMargin, cpo::uno::Any(nWrapDistanceTop));
         aPropSet.setProperty(PROP_BottomMargin, cpo::uno::Any(nWrapDistanceBottom));
+
+        // tdf#167714 o:hr on a picture shape rather than on a filled bar: a picture rule. Set after
+        // the wrap distances above, which a rule's own spacing replaces.
+        if (maTypeModel.mbHorizontalRule)
+            lclSetHorizontalRule(xShape, maTypeModel);
 
         if (maTypeModel.moCropBottom.has_value() || maTypeModel.moCropLeft.has_value() || maTypeModel.moCropRight.has_value() || maTypeModel.moCropTop.has_value())
         {

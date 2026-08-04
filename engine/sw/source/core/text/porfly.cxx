@@ -29,6 +29,7 @@
 #include <IDocumentState.hxx>
 
 #include <sal/log.hxx>
+#include <svx/svdobj.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <flyfrms.hxx>
@@ -109,7 +110,9 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
 
 bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
 {
-    bool bFull = rInf.Width() < rInf.X() + PrtWidth();
+    // tdf#167714 a horizontal rule owns the line it is on - nothing is placed beside one, whatever
+    // the rule's width - so treat it as not fitting and let the code below give it the whole line
+    bool bFull = m_bHorizontalRule || rInf.Width() < rInf.X() + PrtWidth();
 
     if( bFull )
     {
@@ -129,7 +132,8 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
         if( nLeft == rInf.X() && ! rInf.GetFly() )
         {
             Width( rInf.Width() );
-            bFull = false; // so that notes can still be placed in this line
+            // so that notes can still be placed in this line - but a rule keeps it to itself
+            bFull = m_bHorizontalRule;
         }
         else
         {
@@ -365,6 +369,10 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     SdrObject* pSdrObj = GetSdrObj(rFrame);
     if (!pSdrObj)
         return;
+
+    // tdf#167714 the rule's own placement is done by the positioning class below; the portion only
+    // needs to know that it must keep its line to itself
+    m_bHorizontalRule = pSdrObj->IsHorizontalRule();
 
     // position object
     objectpositioning::SwAsCharAnchoredObjectPosition aObjPositioning(

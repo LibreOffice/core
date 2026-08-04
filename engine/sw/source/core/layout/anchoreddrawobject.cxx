@@ -26,7 +26,10 @@
 #include <tolayoutanchoredobjectposition.hxx>
 #include <frmtool.hxx>
 #include <fmtornt.hxx>
+#include <bodyfrm.hxx>
+#include <ftnfrm.hxx>
 #include <txtfrm.hxx>
+#include <algorithm>
 #include <vector>
 #include <svx/svdogrp.hxx>
 #include <tools/fract.hxx>
@@ -307,7 +310,11 @@ void SwAnchoredDrawObject::MakeObjPos()
             {
                 // indicate that position will be valid after positioning is performed
                 mbValidPos = true;
-                // nothing to do, because as-character anchored objects are positioned
+                // tdf#167714 a horizontal rule is the one as-character object whose width layout
+                // has to resolve, and no other caller reaches GetObjBoundRect() on this path
+                if (GetDrawObj()->IsHorizontalRule())
+                    GetObjBoundRect();
+                // otherwise nothing to do, because as-character anchored objects are positioned
                 // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
             }
             break;
@@ -657,11 +664,62 @@ namespace
         else
             return pPageFrame->GetLeftMargin();
     }
+
+    /** tdf#167714 width a horizontal rule's percentage refers to
+
+        It is measured against the text column the rule is in, which is why any cell or text frame
+        around the rule leaves the width alone, less the anchor paragraph's own indents. Returns 0
+        when there is nothing to measure against.
+    */
+    tools::Long getHorizontalRuleRefWidth(const SwFrame* pAnchorFrame)
+    {
+        if (!pAnchorFrame)
+            return 0;
+
+        const SwFrame* pColumn = pAnchorFrame->FindColFrame();
+        if (!pColumn)
+            pColumn = pAnchorFrame->FindFooterOrHeader();
+        if (!pColumn)
+            pColumn = pAnchorFrame->FindFootnoteFrame();
+        if (!pColumn)
+            pColumn = pAnchorFrame->FindBodyFrame();
+        if (!pColumn)
+            return 0;
+
+        // What the anchor paragraph's print area is missing against its frame area is the
+        // paragraph's own indents - the one part of the paragraph that counts against the width.
+        const tools::Long nIndents
+            = pAnchorFrame->getFrameArea().Width() - pAnchorFrame->getFramePrintArea().Width();
+        return std::max(pColumn->getFramePrintArea().Width() - nIndents, tools::Long(0));
+    }
 }
 
 // --> #i70122#
 SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
+    // tdf#167714 a horizontal rule measures against the text column it sits in rather than the
+    // page, and its percentage names an exact width, which the scaling below cannot express - the
+    // factor would be a division by next to nothing for a rule whose width is still unresolved.
+    // Vertical text is left to the general handling: a rule is only defined for horizontal text.
+    if (GetDrawObj()->IsHorizontalRule() && GetDrawObj()->GetRelativeWidth() && GetAnchorFrame()
+        && !GetAnchorFrame()->IsVertical())
+    {
+        const tools::Long nWidth
+            = getHorizontalRuleRefWidth(GetAnchorFrame()) * (*GetDrawObj()->GetRelativeWidth());
+        tools::Rectangle aRule(GetDrawObj()->GetSnapRect());
+        if (nWidth > 0 && aRule.getOpenWidth() != nWidth)
+        {
+            // through the format, since an as-character anchored object has no page frame
+            SwDoc& rDoc = const_cast<SwDoc&>(GetFrameFormat()->GetDoc());
+            const bool bEnableSetModified = rDoc.getIDocumentState().IsEnableSetModified();
+            rDoc.getIDocumentState().SetEnableSetModified(false);
+            aRule.SetRight(aRule.Left() + nWidth);
+            const_cast<SdrObject*>(GetDrawObj())->SetSnapRect(aRule);
+            rDoc.getIDocumentState().SetEnableSetModified(bEnableSetModified);
+        }
+        return SwRect(GetDrawObj()->GetCurrentBoundRect());
+    }
+
     bool bGroupShape = dynamic_cast<const SdrObjGroup*>( GetDrawObj() );
     // Resize objects with relative width or height
     if ( !bGroupShape && GetPageFrame( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )

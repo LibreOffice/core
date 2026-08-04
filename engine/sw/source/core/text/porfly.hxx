@@ -46,6 +46,7 @@ class SwFlyCntPortion : public SwLinePortion
     Point m_aRef;     // Relatively to this point we calculate the AbsPos
     bool m_bMax;      // Line adjustment and height == line height
     bool m_bDeleted;  // Part of tracked deletion: it needs strikethrough
+    bool m_bHorizontalRule = false; // A horizontal rule, which owns the line it is on
     size_t m_nAuthor; // Redline author for color of the strikethrough
     sw::LineAlign m_eAlign;
 

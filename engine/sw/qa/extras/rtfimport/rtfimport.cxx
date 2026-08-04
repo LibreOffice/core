@@ -1047,6 +1047,102 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167713)
                          getProperty<OUString>(xImage2->getAnchor()->getText(), u"CellName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167714)
+{
+    // A Word horizontal rule takes its width from the text column, minus the anchor paragraph's
+    // own indents, and is then placed in the paragraph's content rectangle by its own alignHR -
+    // the paragraph's alignment has no say. It also owns the line it is on, and hangs from the
+    // bottom of that line rather than being centred in the paragraph.
+    createSwDoc("tdf167714.rtf");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // the reference every rule below is measured against, i.e. the page's text width
+    static constexpr sal_Int32 nRef = 9026;
+    CPPUNIT_ASSERT_EQUAL(nRef, getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "width").toInt32());
+    const sal_Int32 nLeft = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "left").toInt32();
+
+    // Widths are one more than the span, the way the layout dump reports a rectangle.
+
+    // centred at 100%: no room to move in
+    const OString sRule1 = "(//SwAnchoredDrawObject/bounds)[1]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule1, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft, getXPath(pXmlDoc, sRule1, "left").toInt32());
+
+    // left at 50%
+    const OString sRule2 = "(//SwAnchoredDrawObject/bounds)[2]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef / 2 + 1, getXPath(pXmlDoc, sRule2, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft, getXPath(pXmlDoc, sRule2, "left").toInt32());
+
+    // centred at 50%
+    const OString sRule3 = "(//SwAnchoredDrawObject/bounds)[3]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef / 2 + 1, getXPath(pXmlDoc, sRule3, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft + nRef / 4, getXPath(pXmlDoc, sRule3, "left").toInt32());
+
+    // right at 50%
+    const OString sRule4 = "(//SwAnchoredDrawObject/bounds)[4]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef / 2 + 1, getXPath(pXmlDoc, sRule4, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft + nRef / 2, getXPath(pXmlDoc, sRule4, "left").toInt32());
+
+    // left at 100% of what the indents leave
+    const OString sRule5 = "(//SwAnchoredDrawObject/bounds)[5]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef - 1440 - 720 + 1, getXPath(pXmlDoc, sRule5, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft + 1440, getXPath(pXmlDoc, sRule5, "left").toInt32());
+
+    // left at 25%, sharing its paragraph with text
+    const OString sRule6 = "(//SwAnchoredDrawObject/bounds)[6]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef / 4 + 1, getXPath(pXmlDoc, sRule6, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nLeft, getXPath(pXmlDoc, sRule6, "left").toInt32());
+
+    // The rule hangs 50 twip clear of the bottom of its line - which is what Word does, and what
+    // the old VertOrientation::CENTER import got wrong.
+    const sal_Int32 nLineBottom
+        = getXPath(pXmlDoc, "//page[1]/body/txt[1]/infos/bounds", "top").toInt32()
+          + getXPath(pXmlDoc, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nLineBottom - 50, getXPath(pXmlDoc, sRule1, "top").toInt32()
+                                               + getXPath(pXmlDoc, sRule1, "height").toInt32());
+
+    // The last paragraph has text before and after its rule, and Word puts neither beside it, so
+    // it takes three lines.
+    assertXPath(pXmlDoc, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout", 3);
+
+    // Word models a rule as an inline shape, and only as-character anchoring gives layout the
+    // above.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(getShape(1), u"AnchorType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::LINE_BOTTOM,
+                         getProperty<sal_Int16>(getShape(1), u"VertOrient"_ustr));
+
+    // Then a row of three cells, each with a rule at 100% aligned left, centre and right. The cell
+    // makes no difference to the width, so all three are the full nRef wide and overhang the cell
+    // they are in - which is what the paint-time crop then hides.
+    static constexpr sal_Int32 nPadding = 108;
+
+    // aligned left, so flush with the cell's content and overhanging to the right
+    const OString sCell1 = "//page[1]/body/tab/row/cell[1]/infos/bounds"_ostr;
+    const OString sRule7 = "(//SwAnchoredDrawObject/bounds)[7]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule7, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(getXPath(pXmlDoc, sCell1, "left").toInt32() + nPadding,
+                         getXPath(pXmlDoc, sRule7, "left").toInt32());
+
+    // centred on the content box, so overhanging both ways
+    const OString sCell2 = "//page[1]/body/tab/row/cell[2]/infos/bounds"_ostr;
+    const OString sRule8 = "(//SwAnchoredDrawObject/bounds)[8]"_ostr;
+    const sal_Int32 nCell2Left = getXPath(pXmlDoc, sCell2, "left").toInt32();
+    const sal_Int32 nCell2Width = getXPath(pXmlDoc, sCell2, "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule8, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nCell2Left + nPadding + (nCell2Width - 2 * nPadding - nRef) / 2,
+                         getXPath(pXmlDoc, sRule8, "left").toInt32());
+
+    // aligned right, so ending flush with the cell's content and overhanging to the left
+    const OString sCell3 = "//page[1]/body/tab/row/cell[3]/infos/bounds"_ostr;
+    const OString sRule9 = "(//SwAnchoredDrawObject/bounds)[9]"_ostr;
+    const sal_Int32 nCell3Left = getXPath(pXmlDoc, sCell3, "left").toInt32();
+    const sal_Int32 nCell3Width = getXPath(pXmlDoc, sCell3, "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule9, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nCell3Left + nCell3Width - nPadding - nRef,
+                         getXPath(pXmlDoc, sRule9, "left").toInt32());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

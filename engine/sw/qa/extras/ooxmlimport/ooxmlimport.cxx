@@ -18,6 +18,9 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <docsh.hxx>
+#include <vcl/gdimtf.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -1938,6 +1941,126 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineFormulaTextMode)
     // ... and an ODF round-trip: text mode is persisted in the formula's settings.
     saveAndReload(TestFilter::ODT);
     testFitsOnOnePage();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167714)
+{
+    // Word sizes a horizontal rule from the text column it is in - a table cell around it makes no
+    // difference - and then places it in the paragraph's content rectangle by its own o:hralign,
+    // which normally leaves it overhanging the cell. Word crops the overhang when painting rather
+    // than taking it off the rule, so the model keeps the geometry Word itself reports.
+    createSwDoc("tdf167714.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // the reference every rule below is measured against, i.e. the page's text width
+    static constexpr sal_Int32 nRef = 9026;
+    CPPUNIT_ASSERT_EQUAL(nRef, getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "width").toInt32());
+
+    // The cells are about 3009 twip wide with 108 twip of padding, so each holds a content box of
+    // about 2792 twip - less than a third of what its rule is sized from. Widths are one more than
+    // the span, the way the layout dump reports a rectangle.
+
+    // left: starts at the cell's content and overhangs to the right
+    const OString sRule1 = "(//SwAnchoredDrawObject/bounds)[1]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule1, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1827), getXPath(pXmlDoc, sRule1, "left").toInt32());
+
+    // centred at 50%: 4513 twip on a 2792 twip content box, so it overhangs both ways
+    const OString sRule2 = "(//SwAnchoredDrawObject/bounds)[2]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef / 2 + 1, getXPath(pXmlDoc, sRule2, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3976), getXPath(pXmlDoc, sRule2, "left").toInt32());
+
+    // right: ends at the cell's content and overhangs to the left
+    const OString sRule3 = "(//SwAnchoredDrawObject/bounds)[3]"_ostr;
+    CPPUNIT_ASSERT_EQUAL(nRef + 1, getXPath(pXmlDoc, sRule3, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1611), getXPath(pXmlDoc, sRule3, "left").toInt32());
+
+    // The rule after the table is in body text, where the column it is sized from is all there is.
+    CPPUNIT_ASSERT_EQUAL(
+        nRef + 1, getXPath(pXmlDoc, "(//SwAnchoredDrawObject/bounds)[4]", "width").toInt32());
+
+    // Painting crops each in-cell rule to its cell, so the visible rule ends with the cell...
+    MetafileXmlDump aDumper;
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+    xmlDocUniquePtr pMetaFile = dumpAndParse(aDumper, *xMetaFile);
+    assertXPath(pMetaFile, "(//clipregion)[1]", "left", u"1719"_ustr);
+    assertXPath(pMetaFile, "(//clipregion)[1]", "right", u"4727"_ustr);
+    assertXPath(pMetaFile, "(//clipregion)[2]", "left", u"4728"_ustr);
+    assertXPath(pMetaFile, "(//clipregion)[2]", "right", u"7735"_ustr);
+    assertXPath(pMetaFile, "(//clipregion)[3]", "left", u"7736"_ustr);
+    assertXPath(pMetaFile, "(//clipregion)[3]", "right", u"10744"_ustr);
+    // ... and only those three: the rule in body text has no cell to be cropped to.
+    assertXPath(pMetaFile, "//clipregion", 3);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167714Picture)
+{
+    // Word makes a horizontal rule out of a picture as well as out of a filled bar, and lays both
+    // out the same way. A picture rule's width is fixed rather than a percentage, so what matters
+    // here is that it is placed by its own o:hralign and cropped to its cell - cropped, not scaled,
+    // or the image would be squeezed instead of cut off.
+    createSwDoc("tdf167714-picture.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The picture is 139.5pt = 2790 twip wide and stays that wide wherever it goes; the layout dump
+    // reports a rectangle one more than its span.
+    static constexpr sal_Int32 nRuleWidth = 2791;
+    static constexpr sal_Int32 nPadding = 108;
+
+    // The rule above the table is left aligned in body text, so nothing crops it.
+    const sal_Int32 nBodyLeft = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "left").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nBodyLeft,
+                         getXPath(pXmlDoc, "(//SwAnchoredDrawObject/bounds)[1]", "left").toInt32());
+    CPPUNIT_ASSERT_EQUAL(
+        nRuleWidth, getXPath(pXmlDoc, "(//SwAnchoredDrawObject/bounds)[1]", "width").toInt32());
+
+    // Then one per cell, in cells of 1200, 2000 and 5826 twip, so the rule overhangs the first two
+    // and fits the third.
+
+    // aligned left, so flush with the cell's content and overhanging to the right
+    const OString sCell1 = "//page[1]/body/tab/row/cell[1]/infos/bounds"_ostr;
+    const OString sRule1 = "(//SwAnchoredDrawObject/bounds)[2]"_ostr;
+    const sal_Int32 nCell1Left = getXPath(pXmlDoc, sCell1, "left").toInt32();
+    const sal_Int32 nCell1Width = getXPath(pXmlDoc, sCell1, "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nRuleWidth, getXPath(pXmlDoc, sRule1, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nCell1Left + nPadding, getXPath(pXmlDoc, sRule1, "left").toInt32());
+
+    // centred on the content box, so overhanging both ways
+    const OString sCell2 = "//page[1]/body/tab/row/cell[2]/infos/bounds"_ostr;
+    const OString sRule2 = "(//SwAnchoredDrawObject/bounds)[3]"_ostr;
+    const sal_Int32 nCell2Left = getXPath(pXmlDoc, sCell2, "left").toInt32();
+    const sal_Int32 nCell2Width = getXPath(pXmlDoc, sCell2, "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nRuleWidth, getXPath(pXmlDoc, sRule2, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nCell2Left + nPadding + (nCell2Width - 2 * nPadding - nRuleWidth + 1) / 2,
+                         getXPath(pXmlDoc, sRule2, "left").toInt32());
+
+    // aligned right, so ending flush with the cell's content, and here it fits
+    const OString sCell3 = "//page[1]/body/tab/row/cell[3]/infos/bounds"_ostr;
+    const OString sRule3 = "(//SwAnchoredDrawObject/bounds)[4]"_ostr;
+    const sal_Int32 nCell3Left = getXPath(pXmlDoc, sCell3, "left").toInt32();
+    const sal_Int32 nCell3Width = getXPath(pXmlDoc, sCell3, "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nRuleWidth, getXPath(pXmlDoc, sRule3, "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(nCell3Left + nCell3Width - nPadding - nRuleWidth + 1,
+                         getXPath(pXmlDoc, sRule3, "left").toInt32());
+
+    // The last paragraph has text before and after its rule, and Word puts neither beside it, so it
+    // takes three lines.
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout", 3);
+
+    // Painting crops each in-cell rule to its cell; the two in body text keep their whole width.
+    MetafileXmlDump aDumper;
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+    xmlDocUniquePtr pMetaFile = dumpAndParse(aDumper, *xMetaFile);
+    assertXPath(pMetaFile, "(//clipregion)[1]", "left", OUString::number(nCell1Left));
+    assertXPath(pMetaFile, "(//clipregion)[1]", "right",
+                OUString::number(nCell1Left + nCell1Width - 1));
+    assertXPath(pMetaFile, "(//clipregion)[2]", "left", OUString::number(nCell2Left));
+    assertXPath(pMetaFile, "(//clipregion)[2]", "right",
+                OUString::number(nCell2Left + nCell2Width - 1));
+    assertXPath(pMetaFile, "(//clipregion)[3]", "left", OUString::number(nCell3Left));
+    assertXPath(pMetaFile, "(//clipregion)[3]", "right",
+                OUString::number(nCell3Left + nCell3Width - 1));
+    assertXPath(pMetaFile, "//clipregion", 3);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT

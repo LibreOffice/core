@@ -5180,11 +5180,22 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
                 // it needs to be set on the object too, as that's what object placement code uses.
+                // tdf#167714 but not for a horizontal rule: Word spaces one a fixed distance from
+                // its line whatever the paragraph does, and the import has set that already.
+                bool bHorizontalRule = false;
+                if (xShapePropertySet->getPropertySetInfo()->hasPropertyByName(
+                        u"HorizontalRule"_ustr))
+                    xShapePropertySet->getPropertyValue(u"HorizontalRule"_ustr) >>= bHorizontalRule;
+                // there is no paragraph context to read at all in a malformed document
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
-                std::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
-                if(aPropMargin)
-                    xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
-                                                        aPropMargin->second);
+                if (!bHorizontalRule && paragraphContext)
+                {
+                    std::optional<PropertyMap::Property> aPropMargin
+                        = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
+                    if (aPropMargin)
+                        xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
+                                                            aPropMargin->second);
+                }
             }
             else
             {

@@ -405,6 +405,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     oox::vml::ShadowModel aShadowModel; // Shadow.
 
     bool bOpaque = true;
+    bool bHorizontalRule = false;
 
     std::optional<sal_Int16> oRelativeWidth;
     std::optional<sal_Int16> oRelativeHeight;
@@ -815,11 +816,18 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 oRelativeWidth = 100;
             }
             nRelativeWidthRelation = text::RelOrientation::FRAME;
+            bHorizontalRule = true;
             if (xPropertySet.is())
             {
                 xPropertySet->setPropertyValue(u"HorizontalRule"_ustr, cpo::uno::Any(true));
-                sal_Int16 const nVertOrient = text::VertOrientation::CENTER;
+                // Word hangs the rule from the bottom of its line, 50 twip clear of it, and keeps
+                // the line at least 100 twip taller than the rule. Bottom-aligning the rect that
+                // includes the spacing expresses both.
+                sal_Int16 const nVertOrient = text::VertOrientation::LINE_BOTTOM;
                 xPropertySet->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(nVertOrient));
+                sal_Int32 const nSpacing = convertTwipToMm100(50);
+                xPropertySet->setPropertyValue(u"TopMargin"_ustr, cpo::uno::Any(nSpacing));
+                xPropertySet->setPropertyValue(u"BottomMargin"_ustr, cpo::uno::Any(nSpacing));
             }
         }
         else if (rProperty.first == "pctHR")
@@ -1134,8 +1142,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             // Sets the ShadowFormat UNO property.
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
-        xPropertySet->setPropertyValue(u"AnchorType"_ustr,
-                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+        // A rule is an inline shape in Word, and only as-char anchoring lets layout give it its
+        // own line and place it against the paragraph it sits in.
+        xPropertySet->setPropertyValue(
+            u"AnchorType"_ustr,
+            cpo::uno::Any(bHorizontalRule ? text::TextContentAnchorType_AS_CHARACTER
+                                          : text::TextContentAnchorType_AT_CHARACTER));
         xPropertySet->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(bOpaque));
         if (oRelativeWidth)
         {

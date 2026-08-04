@@ -23,11 +23,17 @@
 #include <pagefrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
+#include <anchoredobject.hxx>
+#include <dcontact.hxx>
 #include <flyfrm.hxx>
 #include <layact.hxx>
 #include <dview.hxx>
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <optional>
 
 #include <officecfg/Office/Common.hxx>
 #include <pagepreviewlayout.hxx>
@@ -528,6 +534,35 @@ void SwViewShellImp::FireAccessibleEvents()
 }
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
+namespace
+{
+/** tdf#167714 area a horizontal rule is cropped to, if any
+
+    The painted rule is cropped to the table cell or text frame that holds it, so a rule wider
+    than the cell - which is the normal case, since the width comes from the whole text column -
+    ends flush with the cell instead of running across the page. Nothing crops a rule in body
+    text, where there is no such box to crop to.
+*/
+std::optional<SwRect> getHorizontalRuleClip(const SdrObject* pObj)
+{
+    if (!pObj || !pObj->IsHorizontalRule())
+        return {};
+
+    // A rule in a group, or one not in a layout at all, has no contact to ask.
+    const SwContact* pContact = GetUserCall(pObj);
+    const SwAnchoredObject* pAnchoredObj = pContact ? pContact->GetAnchoredObj(pObj) : nullptr;
+    for (const SwFrame* pFrame = pAnchoredObj ? pAnchoredObj->GetAnchorFrame() : nullptr; pFrame;
+         pFrame = pFrame->GetUpper())
+    {
+        // The cell interior, border to border, not its content box: the crop takes in the cell
+        // padding too.
+        if (pFrame->IsCellFrame() || pFrame->IsFlyFrame())
+            return pFrame->getFrameArea();
+    }
+    return {};
+}
+}
+
 void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
                         const sdr::contact::ViewObjectContact& rOriginal,
                         const sdr::contact::DisplayInfo& rDisplayInfo,
@@ -543,6 +578,24 @@ void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
 
     if ( !bPaint )
     {
+        return;
+    }
+
+    // Crop rather than shrink the object, so that the model keeps the rule's own geometry, and so
+    // that a rule made of an image is cropped rather than scaled.
+    if (std::optional<SwRect> oClip = getHorizontalRuleClip(pObj))
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aRule;
+        sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+            rOriginal, rDisplayInfo, aRule);
+        if (!aRule.empty())
+        {
+            const basegfx::B2DRectangle aClip(oClip->Left(), oClip->Top(), oClip->Right(),
+                                              oClip->Bottom());
+            rVisitor.visit(new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClip)),
+                std::move(aRule)));
+        }
         return;
     }
 

@@ -526,11 +526,15 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 CPPUNIT_TEST_FIXTURE(Test, testTdf97648_relativeWidth)
 {
     auto verify = [this](bool bIsExport = false) {
+        // tdf#167714 these are the widths Word prints: 215.88pt for the rule in the two-column
+        // section, then 50%, 25% and 10% of the 467.76pt one-column text width. The last three were
+        // 8001, 4001 and 1600 while the percentage was resolved against a page width that had a
+        // column gap taken off it whether or not the section had columns.
         CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(7616), getShape(1)->getSize().Width, 10);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(8001), getShape(2)->getSize().Width, 10);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(4001), getShape(3)->getSize().Width, 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8250), getShape(2)->getSize().Width, 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4128), getShape(3)->getSize().Width, 10);
         CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr)) );
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(1600), getShape(4)->getSize().Width, 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1651), getShape(4)->getSize().Width, 10);
         CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr)) );
 
 
