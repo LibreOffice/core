@@ -419,6 +419,8 @@ bridges/source/jni_uno/jni_java2uno.cxx
 bridges/source/jni_uno/jni_uno2java.cxx
 bridges/source/jni_uno/jniunoenvironmentdata.hxx
 bridges/source/jni_uno/nativethreadpool.cxx
+canvas/inc/RenderState.hxx
+canvas/inc/ViewState.hxx
 canvas/inc/base/basemutexhelper.hxx
 canvas/inc/base/bitmapcanvasbase.hxx
 canvas/inc/base/bufferedgraphicdevicebase.hxx
@@ -4934,6 +4936,7 @@ include/sfx2/frame.hxx
 include/sfx2/frmdescr.hxx
 include/sfx2/frmhtmlw.hxx
 include/sfx2/ipclient.hxx
+include/sfx2/kit/callback.hxx
 include/sfx2/kit/componenthelpers.hxx
 include/sfx2/kit/helper.hxx
 include/sfx2/linkmgr.hxx
@@ -5443,6 +5446,8 @@ include/svx/xtextit0.hxx
 include/svx/zoomsliderctrl.hxx
 include/svx/zoomslideritem.hxx
 include/systools/win32/comtools.hxx
+include/test/a11y/eventposter.hxx
+include/test/kitcallback.hxx
 include/test/sheet/xarealinks.hxx
 include/test/sheet/xcellseries.hxx
 include/test/sheet/xdatapilotdescriptor.hxx
@@ -6799,6 +6804,7 @@ sc/inc/markarr.hxx
 sc/inc/markdata.hxx
 sc/inc/markmulti.hxx
 sc/inc/math.hxx
+sc/inc/matrixdecomposition.hxx
 sc/inc/matrixoperators.hxx
 sc/inc/miscuno.hxx
 sc/inc/mtvcellfunc.hxx
@@ -6914,6 +6920,8 @@ sc/qa/unit/functions_text.cxx
 sc/qa/unit/helper/csv_handler.hxx
 sc/qa/unit/helper/qahelper.cxx
 sc/qa/unit/helper/qahelper.hxx
+sc/qa/unit/helper/sctestviewcallback.cxx
+sc/qa/unit/helper/sctiledrenderingtest.cxx
 sc/qa/unit/helper/sorthelper.hxx
 sc/qa/unit/helper/xpath.cxx
 sc/qa/unit/helper/xpath.hxx
@@ -7121,6 +7129,7 @@ sc/source/core/tool/interpr8.cxx
 sc/source/core/tool/jumpmatrix.cxx
 sc/source/core/tool/listenerquery.cxx
 sc/source/core/tool/lookupcache.cxx
+sc/source/core/tool/matrixdecomposition.cxx
 sc/source/core/tool/navicfg.cxx
 sc/source/core/tool/numformat.cxx
 sc/source/core/tool/odffmap.cxx
@@ -8350,6 +8359,7 @@ sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/export-tests-ooxml4.cxx
 sd/qa/unit/filters-test.cxx
+sd/qa/unit/sdtiledrenderingtest.cxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uiimpress.cxx
 sd/qa/unit/uimpress.cxx
@@ -9230,6 +9240,7 @@ sfx2/source/inc/tplcitem.hxx
 sfx2/source/inc/workwin.hxx
 sfx2/source/inet/inettbc.cxx
 sfx2/source/kit/charthelper.cxx
+sfx2/source/kit/starmathhelper.cxx
 sfx2/source/notebookbar/NotebookbarTabControl.cxx
 sfx2/source/notebookbar/SfxNotebookBar.cxx
 sfx2/source/notify/eventsupplier.cxx
@@ -10694,6 +10705,7 @@ sw/inc/viewsh.hxx
 sw/inc/viscrs.hxx
 sw/inc/wdocsh.hxx
 sw/qa/core/Test-BigPtrArray.cxx
+sw/qa/core/edit/edit.cxx
 sw/qa/core/filters-test.cxx
 sw/qa/core/macros-test.cxx
 sw/qa/core/test_ToxLinkProcessor.cxx
@@ -10734,6 +10746,7 @@ sw/qa/extras/rtfexport/rtfexport.cxx
 sw/qa/extras/tiledrendering/tiledrendering.cxx
 sw/qa/extras/txtencexport/txtencexport.cxx
 sw/qa/extras/uiwriter/uiwriter.cxx
+sw/qa/extras/uiwriter/uiwriter3.cxx
 sw/qa/extras/unowriter/unowriter.cxx
 sw/qa/extras/ww8export/ww8export.cxx
 sw/qa/extras/ww8export/ww8export2.cxx
@@ -10746,6 +10759,7 @@ sw/qa/inc/swmodeltestbase.hxx
 sw/qa/uibase/uiview/uiview.cxx
 sw/qa/unit/sw-dialogs-test.cxx
 sw/qa/unit/sw-dialogs-test_2.cxx
+sw/qa/unit/swtiledrenderingtest.cxx
 sw/source/core/SwNumberTree/SwNodeNum.cxx
 sw/source/core/SwNumberTree/SwNumberTree.cxx
 sw/source/core/access/AccessibilityIssue.cxx
@@ -12094,6 +12108,7 @@ test/source/bootstrapfixture.cxx
 test/source/diff/diff.cxx
 test/source/htmltesttools.cxx
 test/source/isheadless.hxx
+test/source/kitcallback.cxx
 test/source/screenshot_test.cxx
 test/source/setupvcl.cxx
 test/source/sheet/datapilotfield.cxx
