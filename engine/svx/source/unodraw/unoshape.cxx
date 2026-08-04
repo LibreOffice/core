@@ -2395,6 +2395,16 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         }
         break;
     }
+    case OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE:
+    {
+        bool isHorizontalRule;
+        if (rValue >>= isHorizontalRule)
+        {
+            pSdrObject->SetHorizontalRule(isHorizontalRule);
+            return true;
+        }
+        break;
+    }
 
     case SDRATTR_OBJPRINTABLE:
     {
@@ -2849,6 +2859,12 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         break;
     }
 
+    case OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE:
+    {
+        rValue <<= GetSdrObject()->IsHorizontalRule();
+        break;
+    }
+
     case SDRATTR_OBJPRINTABLE:
         rValue <<= GetSdrObject()->IsPrintable();
         break;
@@ -2991,6 +3007,13 @@ bool SvxShape::getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, c
         {
             rState = beans::PropertyState_AMBIGUOUS_VALUE;
         }
+    }
+    else if( pProperty->nWID == OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE )
+    {
+        // hardly any shape is a horizontal rule, so report the default and keep the attribute
+        // out of every graphic style that gets written
+        rState = GetSdrObject()->IsHorizontalRule() ? beans::PropertyState_DIRECT_VALUE
+                                                    : beans::PropertyState_DEFAULT_VALUE;
     }
     else if((( pProperty->nWID >= OWN_ATTR_VALUE_START && pProperty->nWID <= OWN_ATTR_VALUE_END ) ||
        ( pProperty->nWID >= SDRATTR_NOTPERSIST_FIRST && pProperty->nWID <= SDRATTR_NOTPERSIST_LAST )) && ( pProperty->nWID != SDRATTR_TEXTDIRECTION ) )

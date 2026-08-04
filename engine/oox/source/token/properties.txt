@@ -301,6 +301,7 @@ HoriJustifyMethod
 HoriOrient
 HoriOrientPosition
 HoriOrientRelation
+HorizontalRule
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 Hyperlink

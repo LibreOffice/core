@@ -386,6 +386,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         OUString hrpct = rAttribs.getString( O_TOKEN( hrpct ), u"1000"_ustr );
         if( hrpct != "0" )
             mrTypeModel.maWidthPercent = OUString::number( hrpct.toInt32() );
+        mrTypeModel.mbHorizontalRule = true;
         mrTypeModel.maWrapDistanceLeft = u"0"_ustr;
         mrTypeModel.maWrapDistanceRight = u"0"_ustr;
         mrTypeModel.maPositionHorizontal = rAttribs.getString( O_TOKEN( hralign ), u"left"_ustr );

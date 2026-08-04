@@ -3627,6 +3627,8 @@ namespace xmloff::token {
         XML_DIAGRAM_COLORS,
         XML_DIAGRAM_QUICKSTYLE,
 
+        XML_HORIZONTAL_RULE,
+
         XML_TOKEN_END
     };
 

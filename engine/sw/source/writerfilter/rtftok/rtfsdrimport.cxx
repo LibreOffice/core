@@ -8,6 +8,7 @@
  */
 
 #include "rtfsdrimport.hxx"
+#include <algorithm>
 #include <cmath>
 #include <optional>
 #include <com/sun/star/container/XNamed.hpp>
@@ -317,6 +318,13 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
         }
     }
 
+    // tdf#167714 a horizontal rule is shapeType 1 with fHorizRule, i.e. a plain filled bar
+    const bool bHorizontalRule
+        = std::any_of(rShape.getProperties().begin(), rShape.getProperties().end(),
+                      [](const std::pair<OUString, OUString>& rProperty) {
+                          return rProperty.first == "fHorizRule" && rProperty.second.toInt32() != 0;
+                      });
+
     switch (nType)
     {
         case ESCHER_ShpInst_PictureFrame:
@@ -328,6 +336,13 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
             break;
         case ESCHER_ShpInst_Rectangle:
         case ESCHER_ShpInst_TextBox:
+            // A rule has to be the same model object the VML import creates for o:hr, so that
+            // layout has one thing to recognise and the marker can be restricted to rectangles.
+            if (bHorizontalRule)
+            {
+                createShape(u"com.sun.star.drawing.RectangleShape"_ustr, o_xShape, o_xPropSet);
+                break;
+            }
             // If we're inside a groupshape, can't use text frames.
             if (!bClose && m_aParents.size() == 1)
             {
@@ -788,7 +803,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 }
             }
         }
-        else if (rProperty.first == "fHorizRule") // TODO: what does "fStandardHR" do?
+        // "fStandardHR" tells the shaded rule from a picture rule. Both are laid out the same
+        // way, but a picture rule defaults to a fixed width instead of a percentage, so the
+        // property is not merely cosmetic - it is just not imported yet.
+        else if (rProperty.first == "fHorizRule")
         {
             // horizontal rule: relative width defaults to 100% of paragraph
             // TODO: does it have a default height?
@@ -799,6 +817,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             nRelativeWidthRelation = text::RelOrientation::FRAME;
             if (xPropertySet.is())
             {
+                xPropertySet->setPropertyValue(u"HorizontalRule"_ustr, cpo::uno::Any(true));
                 sal_Int16 const nVertOrient = text::VertOrientation::CENTER;
                 xPropertySet->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(nVertOrient));
             }

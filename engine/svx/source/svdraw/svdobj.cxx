@@ -560,6 +560,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_aObjTitle = rSource.m_aObjTitle;
     m_aObjDescription = rSource.m_aObjDescription;
     m_bDecorative = rSource.m_bDecorative;
+    m_bHorizontalRule = rSource.m_bHorizontalRule;
 
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)

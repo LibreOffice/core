@@ -3365,4 +3365,5 @@ diagram
 layout
 colors
 quickstyle
+horizontal-rule
 TOKEN_END_DUMMY
