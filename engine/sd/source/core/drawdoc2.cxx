@@ -61,9 +61,13 @@
 
 #include <svx/strings.hrc>
 #include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdtext.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
+#include <editeng/outlobj.hxx>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <tools/json_writer.hxx>
 
 #include <DrawDocShell.hxx>
@@ -455,6 +459,183 @@ sal_Int32 SdDrawDocument::GetStandardPageIndex(SdPage const * pPage) const
     return -1;
 }
 
+namespace
+{
+
+// The rectangles on a page, in twips, of the text objects whose rendered text depends on the page
+// numbering: one list for the objects showing the page number, one for the objects showing the
+// page count.
+struct PageFieldRectangles
+{
+    std::vector<::tools::Rectangle> aNumberRectangles;
+    std::vector<::tools::Rectangle> aCountRectangles;
+};
+
+// Whether any text of the object, including each cell of a table, holds a field of the given
+// type.
+bool lcl_objectHasField(SdrObject* pObj, sal_Int32 nFieldType)
+{
+    auto* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+    if (!pTextObj)
+        return false;
+
+    const sal_Int32 nTextCount = pTextObj->getTextCount();
+    for (sal_Int32 nText = 0; nText < nTextCount; ++nText)
+    {
+        SdrText* pText = pTextObj->getText(nText);
+        const OutlinerParaObject* pParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
+        if (pParaObject && pParaObject->GetTextObject().HasField(nFieldType))
+            return true;
+    }
+    return false;
+}
+
+// Whether the given master-page object renders on a page that uses the master. The header,
+// footer, date-time and slide-number placeholders render only when the page's header-and-footer
+// settings show them. The other presentation objects of a master never render on the page, and
+// its plain objects always do.
+bool lcl_masterObjectShowsOnPage(SdPage* pMasterPage, SdrObject* pObj, const SdPage* pPage)
+{
+    const sd::HeaderFooterSettings& rSettings = pPage->getHeaderFooterSettings();
+    switch (pMasterPage->GetPresObjKind(pObj))
+    {
+        case PresObjKind::NONE:
+            return true;
+        case PresObjKind::Header:
+            return rSettings.mbHeaderVisible;
+        case PresObjKind::Footer:
+            return rSettings.mbFooterVisible;
+        case PresObjKind::DateTime:
+            return rSettings.mbDateTimeVisible;
+        case PresObjKind::SlideNumber:
+            return rSettings.mbSlideNumberVisible;
+        default:
+            return false;
+    }
+}
+
+// Appends the object's rectangle to the list matching each page-dependent field its text holds:
+// the page-number field and the page-count field.
+void lcl_collectObjectFieldRectangles(SdrObject* pObj, PageFieldRectangles& rRectangles)
+{
+    const bool bNumber = lcl_objectHasField(pObj, text::textfield::Type::PAGE);
+    const bool bCount = lcl_objectHasField(pObj, text::textfield::Type::PAGES);
+    if (!bNumber && !bCount)
+        return;
+
+    const ::tools::Rectangle aRectangle
+        = o3tl::convert(pObj->GetCurrentBoundRect(), o3tl::Length::mm100, o3tl::Length::twip);
+    if (bNumber)
+        rRectangles.aNumberRectangles.push_back(aRectangle);
+    if (bCount)
+        rRectangles.aCountRectangles.push_back(aRectangle);
+}
+
+// Collects the field rectangles that page renumbering can change on the page as it renders: from
+// the objects of the page itself and from the master-page objects the page shows.
+void lcl_collectPageFieldRectangles(SdPage* pPage, PageFieldRectangles& rRectangles)
+{
+    SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
+    while (aIter.IsMore())
+        lcl_collectObjectFieldRectangles(aIter.Next(), rRectangles);
+
+    if (!pPage->TRG_HasMasterPage())
+        return;
+
+    auto* pMasterPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+    SdrObjListIter aMasterIter(pMasterPage, SdrIterMode::DeepNoGroups);
+    while (aMasterIter.IsMore())
+    {
+        SdrObject* pObj = aMasterIter.Next();
+        if (lcl_masterObjectShowsOnPage(pMasterPage, pObj, pPage))
+            lcl_collectObjectFieldRectangles(pObj, rRectangles);
+    }
+}
+
+// Emits the tile invalidations that renumbering the standard pages from position nFirstRenumbered
+// on makes necessary. Tiles are keyed by each page's stable unique id, so a surviving page keeps
+// its tiles wherever it moves: only the text that renders the page number or the page count
+// changes. The page number changes on the renumbered pages, the page count can change anywhere,
+// and the canvas page shows a preview grid of every page, so it repaints fully. The edit modes
+// address separate page lists: 0 the standard pages, 2 the notes pages. Master pages render page
+// fields as fixed placeholder text, so views in master mode (1) keep all their tiles.
+void lcl_invalidateRenumberedPageFields(SdDrawDocument& rDoc, SdXImpressDocument* pModel,
+                                        sal_Int32 nFirstRenumbered)
+{
+    // With no view yet, during load and teardown, no client holds tiles to refresh.
+    ::sd::DrawDocShell* pDocShell = rDoc.GetDocSh();
+    if (!pModel || !pDocShell || !pDocShell->GetViewShell())
+        return;
+
+    if (nFirstRenumbered < 0)
+        nFirstRenumbered = 0;
+
+    const sal_uInt16 nStandardCount = rDoc.GetSdPageCount(PageKind::Standard);
+    // Which standard pages render differently, for the preview each notes page shows of its
+    // standard page.
+    std::vector<bool> aStandardPageChanged(nStandardCount, false);
+    for (sal_uInt16 nIndex = 0; nIndex < nStandardCount; ++nIndex)
+    {
+        SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
+        if (pPage->IsCanvasPage())
+        {
+            KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 0, nullptr);
+            continue;
+        }
+
+        PageFieldRectangles aRectangles;
+        lcl_collectPageFieldRectangles(pPage, aRectangles);
+
+        const bool bRenumbered = nIndex >= nFirstRenumbered;
+        aStandardPageChanged[nIndex] = !aRectangles.aCountRectangles.empty()
+                                       || (bRenumbered && !aRectangles.aNumberRectangles.empty());
+
+        for (const ::tools::Rectangle& rRectangle : aRectangles.aCountRectangles)
+            KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 0, &rRectangle);
+        if (bRenumbered)
+            for (const ::tools::Rectangle& rRectangle : aRectangles.aNumberRectangles)
+                KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 0, &rRectangle);
+    }
+
+    const sal_uInt16 nNotesCount = rDoc.GetSdPageCount(PageKind::Notes);
+    for (sal_uInt16 nIndex = 0; nIndex < nNotesCount; ++nIndex)
+    {
+        SdPage* pNotesPage = rDoc.GetSdPage(nIndex, PageKind::Notes);
+        PageFieldRectangles aRectangles;
+        lcl_collectPageFieldRectangles(pNotesPage, aRectangles);
+
+        for (const ::tools::Rectangle& rRectangle : aRectangles.aCountRectangles)
+            KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 2, &rRectangle);
+        if (nIndex >= nFirstRenumbered)
+            for (const ::tools::Rectangle& rRectangle : aRectangles.aNumberRectangles)
+                KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 2, &rRectangle);
+
+        // The preview the notes page shows of its standard page renders that page's changed
+        // fields too. The standard list and the notes list are updated one page at a time, so
+        // while this runs the pairing around the renumbering point sits one step to either
+        // side. Checking the neighbouring standard pages as well covers every alignment.
+        bool bPairedStandardPageChanged = false;
+        for (sal_Int32 nPaired = std::max<sal_Int32>(0, sal_Int32(nIndex) - 1);
+             nPaired <= std::min<sal_Int32>(nStandardCount - 1, sal_Int32(nIndex) + 1); ++nPaired)
+        {
+            if (aStandardPageChanged[nPaired])
+                bPairedStandardPageChanged = true;
+        }
+        if (bPairedStandardPageChanged)
+        {
+            if (SdrObject* pPreviewObject = pNotesPage->GetPresObj(PresObjKind::Page))
+            {
+                const ::tools::Rectangle aRectangle
+                    = o3tl::convert(pPreviewObject->GetCurrentBoundRect(), o3tl::Length::mm100,
+                                    o3tl::Length::twip);
+                KitHelper::notifyInvalidationViewsInMode(pModel, nIndex, 2, &aRectangle);
+            }
+        }
+    }
+}
+
+}
+
 // Move page
 void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
@@ -476,6 +657,15 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     sal_uInt16 nMin = std::min(nPgNum, nNewPos);
 
     UpdatePageObjectsInNotes(nMin);
+
+    if (comphelper::COKit::isActive())
+    {
+        // The move renumbers the pages from the lower of its two positions on.
+        auto* pMinPage = static_cast<SdPage*>(GetPage(nMin));
+        if (pMinPage && pMinPage->GetPageKind() == PageKind::Standard)
+            lcl_invalidateRenumberedPageFields(*this, getUnoModel(),
+                                               GetStandardPageIndex(pMinPage));
+    }
 }
 
 // Insert page
@@ -496,7 +686,13 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
-        KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
+        // The existing pages keep their tiles: only the text that renders a page number or the
+        // page count changes, on the pages from the insertion point on. An internal page move
+        // renumbers from the lower of the move's two positions, and emits its invalidations
+        // once the whole move is done.
+        if (!mbInternalPageMove)
+            lcl_invalidateRenumberedPageFields(*this, pDoc, GetStandardPageIndex(pSdPage));
+        KitHelper::notifyDocumentSizeChangedAllViews(pDoc, /*bInvalidateAllParts=*/false);
     }
 
     if (!mbInternalPageMove && mpSectionManager && !pSdPage->IsMasterPage()
@@ -541,7 +737,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     // Computed before the erase, while the page is still in the model.
     sal_Int32 nRemovedStandardIndex = -1;
-    if (!mbInternalPageMove && mpSectionManager && !mbDestroying)
+    if (!mbDestroying)
     {
         SdPage* pOldPage = static_cast<SdPage*>(GetPage(nPgNum));
         if (pOldPage && !pOldPage->IsMasterPage()
@@ -579,7 +775,11 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
-        KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
+        // The surviving pages keep their tiles: only the text that renders a page number or the
+        // page count changes, on the pages from the removal point on.
+        if (!mbDestroying)
+            lcl_invalidateRenumberedPageFields(*this, pDoc, nRemovedStandardIndex);
+        KitHelper::notifyDocumentSizeChangedAllViews(pDoc, /*bInvalidateAllParts=*/false);
     }
 
     if (HasCanvasPage() && pSdPage->GetPageKind() == PageKind::Standard && !mbDestroying)
@@ -587,7 +787,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         updatePagePreviewsGrid(pSdPage);
     }
 
-    if (nRemovedStandardIndex >= 0 && mpSectionManager)
+    if (nRemovedStandardIndex >= 0 && !mbInternalPageMove && mpSectionManager)
         mpSectionManager->OnSlideRemoved(nRemovedStandardIndex);
 
     return pPage;

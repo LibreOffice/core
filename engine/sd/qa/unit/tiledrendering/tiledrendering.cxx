@@ -29,6 +29,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
@@ -40,6 +41,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <unotools/datetime.hxx>
@@ -2322,26 +2324,64 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
 {
-    // Load the document.
+    // Load a document where no slide shows a page-number or page-count field.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SdTestViewCallback aView1;
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
 
-    // Insert slide
-    aView1.m_bTilesInvalidated = false;
+    // Insert a slide: tiles are keyed by each page's stable unique id, so the other slides
+    // keep their tiles and no rectangle repaints. The view still fully invalidates the part
+    // it switches to, so only the rectangle invalidations are counted here.
     aView1.m_aInvalidations.clear();
     dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
-    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(9, pXImpressDocument->getParts());
-    CPPUNIT_ASSERT_EQUAL(size_t(9), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aView1.m_aInvalidations.size());
 
-    // Delete slide
-    aView1.m_bTilesInvalidated = false;
+    // Delete the slide again: the surviving slides keep their tiles the same way.
     aView1.m_aInvalidations.clear();
     dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
-    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
-    CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aView1.m_aInvalidations.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageFieldInvalidation)
+{
+    // A slide showing a page-number field renders a different number when a slide before it is
+    // inserted or removed, so exactly that field's rectangle repaints.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+
+    // Show the page number in a text box on the fifth slide.
+    SdPage* pFieldPage = pDoc->GetSdPage(4, PageKind::Standard);
+    rtl::Reference<SdrRectObj> pFieldObject
+        = new SdrRectObj(*pDoc, ::tools::Rectangle(1000, 1000, 6000, 3000));
+    pFieldPage->InsertObject(pFieldObject.get());
+    SdrOutliner& rOutliner = pDoc->GetDrawOutliner();
+    rOutliner.Clear();
+    rOutliner.QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection());
+    pFieldObject->SetOutlinerParaObject(rOutliner.CreateParaObject());
+    const ::tools::Rectangle aFieldRectangle = o3tl::convert(
+        pFieldObject->GetCurrentBoundRect(), o3tl::Length::mm100, o3tl::Length::twip);
+
+    SdTestViewCallback aView;
+
+    // Insert a slide before it, after the current first slide: only the field repaints.
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(aFieldRectangle, aView.m_aInvalidations[0]);
+
+    // Delete the inserted slide: the field renders its old number again, so it repaints.
+    aView.m_aInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(aFieldRectangle, aView.m_aInvalidations[0]);
+
+    // Insert a slide after the last one: the field's number does not change, so its slide
+    // keeps its tiles and no rectangle repaints.
+    pXImpressDocument->setPart(7);
+    aView.m_aInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aView.m_aInvalidations.size());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSpellOnlineRenderParameter)

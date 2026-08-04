@@ -64,6 +64,7 @@ std::vector<std::string> drainAndGetPartHashCodes(
 class UnitInsertDelete : public UnitWSD
 {
     TestResult testInsertDelete();
+    TestResult testInsertKeepsSlideTiles();
     TestResult testPasteBlank();
     TestResult testGetTextSelection();
     TestResult testCursorPosition();
@@ -230,6 +231,85 @@ UnitBase::TestResult UnitInsertDelete::testInsertDelete()
     return TestResult::Ok;
 }
 
+UnitBase::TestResult UnitInsertDelete::testInsertKeepsSlideTiles()
+{
+    try
+    {
+        // Load a presentation with a single slide, which shows no page-number or page-count
+        // field.
+        std::string documentPath, documentURL;
+        helpers::getDocumentPathAndURL("insert-delete.odp", documentPath, documentURL, testname);
+
+        std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>(testname);
+        socketPoll->startThread();
+
+        std::shared_ptr<http::WebSocketSession> socket = helpers::loadDocAndGetSession(
+            socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+        // Grow the document to two slides, so the later insertions and deletions happen on
+        // the second slide while the first one stays put.
+        helpers::sendTextFrame(socket, "uno .uno:InsertPage", testname);
+
+        Poco::JSON::Parser parser;
+        std::vector<std::string> partIds = drainAndGetPartHashCodes(socket, testname, parser);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), partIds.size());
+        const std::string firstSlideId = partIds[0];
+
+        // Hold a tile of the first slide.
+        helpers::sendTextFrame(socket,
+                               "tile nviewid=0 part=" + firstSlideId +
+                                   " width=256 height=256 tileposx=0 tileposy=0 "
+                                   "tilewidth=3840 tileheight=3840",
+                               testname);
+        const std::vector<char> tile = helpers::getTileMessage(socket, testname);
+        LOK_ASSERT_MESSAGE("did not receive a tile of the first slide", !tile.empty());
+        helpers::drain(socket, testname);
+
+        // Check that no invalidation received on the socket names the first slide. Tiles are
+        // keyed by each slide's stable unique id, so the first slide's tiles stay valid when
+        // the other slides change.
+        auto assertFirstSlideTilesValid = [&](const std::string& when)
+        {
+            for (;;)
+            {
+                const std::string invalidation = helpers::getResponseString(
+                    socket, "invalidatetiles:", testname, std::chrono::milliseconds(1000));
+                if (invalidation.empty())
+                    break;
+                LOK_ASSERT_MESSAGE("the first slide's tiles were invalidated " + when + ": " +
+                                       invalidation,
+                                   invalidation.find("part=" + firstSlideId + ' ') ==
+                                           std::string::npos &&
+                                       invalidation.find("EMPTY, " + firstSlideId + ',') ==
+                                           std::string::npos);
+            }
+        };
+
+        // Insert a slide after the current second one.
+        TST_LOG("Inserting a slide after the first one.");
+        helpers::sendTextFrame(socket, "uno .uno:InsertPage", testname);
+        std::string response = helpers::getResponseString(socket, "status:", testname);
+        LOK_ASSERT_MESSAGE("did not receive a status: message as expected", !response.empty());
+        assertFirstSlideTilesValid("after inserting a slide");
+
+        // Delete the current slide again.
+        TST_LOG("Deleting the inserted slide.");
+        helpers::sendTextFrame(socket, "uno .uno:DeletePage", testname);
+        response = helpers::getResponseString(socket, "status:", testname);
+        LOK_ASSERT_MESSAGE("did not receive a status: message as expected", !response.empty());
+        assertFirstSlideTilesValid("after deleting a slide");
+
+        socket->asyncShutdown();
+        LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket",
+                           socket->waitForDisconnection(std::chrono::seconds(5)));
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOK_ASSERT_FAIL(exc.displayText());
+    }
+    return TestResult::Ok;
+}
+
 UnitBase::TestResult UnitInsertDelete::testPasteBlank()
 {
     try
@@ -368,6 +448,10 @@ void UnitInsertDelete::invokeWSDTest()
     UnitBase::TestResult result = TestResult::Ok;
 
     result = testInsertDelete();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testInsertKeepsSlideTiles();
     if (result != TestResult::Ok)
         exitTest(result);
 

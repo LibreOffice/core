@@ -205,6 +205,11 @@ public:
     static void notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
                                            tools::Rectangle const* pRect,
                                            bool bSkipViewShowingPart = true);
+    /// Emits a COKitCallbackType::INVALIDATE_TILES for the given part and rectangle on the
+    /// views of the document whose current edit mode is nMode. A null rectangle invalidates
+    /// the whole part.
+    static void notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int nPart, int nMode,
+                                              tools::Rectangle const* pRect);
     /// Emits a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
     static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
     /// Emits a COKitCallbackType::INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.

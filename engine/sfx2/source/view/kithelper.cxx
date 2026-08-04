@@ -864,6 +864,23 @@ void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPar
     }
 }
 
+void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int nPart, int nMode,
+                                              tools::Rectangle const* pRect)
+{
+    if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
+        return;
+
+    // The invalidation belongs to a single document, and the part addresses the page list of
+    // one edit mode, so only the views of that document currently in that mode are notified.
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getEditMode() == nMode)
+            KitHelper::notifyInvalidation(pViewShell, nPart, pRect);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
     bool bMispelledWord, const OString& rHyperlink, int nEditorViewId)
 {
