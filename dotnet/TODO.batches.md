@@ -1934,3 +1934,156 @@ eleven, and the remaining ink is concentrated rather than spread:
 `2014BSA_Sunday_Killion.pptx` page 5 is the cheapest of these to look at and matches on words:
 the reference shows the slide through the chart's area and we paint it white, so a correctly
 drawn chart sits in a white box that should not be there.
+
+## Words, the paragraph-spacing rule: four formats measured, zero corpus movement
+
+The brief for this round said LibreOffice adds a paragraph's `w:after` to the `w:before` below
+where we take the larger, gave a fixture measuring 20 pt against our 12, and named this a
+vertical-budget rule that moves every page at once — "plausibly the largest single win left on
+this track *or* a large regression".
+
+It is neither. Swept whole before and after, on 200 documents:
+
+| | before | after |
+|---|---|---|
+| match | 146/200 | **146/200** |
+| exactly correct page count | 154 | **154** |
+| total absolute page error | 120 | **120** |
+| total absolute word error | 7110 (3200 short, 3910 over) | **7110 (3200 / 3910)** |
+| documents whose page or word count moved | — | **0** |
+
+Not "no net change": **no document changed at all**, in either number. That is the right result
+and it was predictable before the sweep, which is the part worth keeping. Three sweeps, not two:
+the second half of the fix landed after the "after" sweep started, so a third was run against the
+final binary and reproduces the same four figures and the same zero.
+
+The change is confined to `Paperless.WordProcessing`; nothing in `Paperless.Presentations` or
+`Paperless.Spreadsheets` references `PaginationOptions` or `WordProcessing.Layout`, and
+`Paperless.Text/Layout/ParagraphLayouter.cs` is untouched, so the other two tracks cannot have
+moved.
+
+### The measurement reproduced and the sentence attached to it was wrong, again
+
+The fixture reproduces to the digit. Eight paragraphs each carrying 12 pt of space-before and
+8 pt of space-after on 12 pt exact lines gives boundaries of 24 pt when the spacings collapse and
+32 pt when they add, and LibreOffice 24.2.7.2 puts them at 32 where we put 24.
+
+The claim attached to it — that `writerfilter` never sets `PARA_SPACE_MAX` for DOCX and keeps the
+application's `AddSpacing`, which is on — is wrong twice over.
+`DomainMapper_Impl::ApplySettingsTable` **does** set it, unconditionally within the method, from
+`w:doNotUseHTMLParagraphAutoSpacing` (`DomainMapper_Impl.cxx`:10179). What it cannot do is run at
+all when the package has no settings part, because the method returns at its first line on a null
+settings table (:10124). **The fixture had no `word/settings.xml`** — the exact trap
+`PaginationOptions.KeepsSpacingAtTopOfPage`'s own remarks already warn about, one file away from
+where the claim was written.
+
+Thirteen probes, every combination the four formats offer, ours against LibreOffice's:
+
+| probe | ext | LibreOffice | before | after |
+|---|---|---|---|---|
+| no `word/settings.xml` | docx | 32.0 | 24.0 | 32.0 |
+| empty `w:settings` | docx | 24.0 | 24.0 | 24.0 |
+| `compatibilityMode=15` only | docx | 24.0 | 24.0 | 24.0 |
+| `w:doNotUseHTMLParagraphAutoSpacing` | docx | 32.0 | 32.0 | 32.0 |
+| `AddParaTableSpacing=false` | fodt | 24.0 | 32.0 | 24.0 |
+| `AddParaTableSpacing=true` | fodt | 32.0 | 32.0 | 32.0 |
+| `AddParaTableSpacing=false` | odt | 24.0 | 32.0 | 24.0 |
+| `AddParaTableSpacing=true` | odt | 32.0 | 32.0 | 32.0 |
+| no `\htmautsp` | rtf | 32.0 | 32.0 | 32.0 |
+| `\htmautsp` | rtf | 24.0 | 32.0 | 24.0 |
+| `\htmautsp0` | rtf | 24.0 | 32.0 | 24.0 |
+| converted from the collapsing DOCX | doc | 24.0 | 24.0 | 24.0 |
+| `fDontUseHTMLAutoSpacing` set | doc | 32.0 | 32.0 | 32.0 |
+
+Four real defects, none of them the one predicted, and **DOC was already right in both
+directions**. `\htmautsp0` is worth singling out: LibreOffice declares `htmautsp` a
+`RTFControlType::FLAG` (`rtftokenizer.cxx`:701), so the parameter is ignored and `\htmautsp0` asks
+for collapsing exactly as `\htmautsp` does. A reader that wrote `Parameter != 0` — the obvious
+thing, and what an unmeasured prior attempt at this had written — gets that row backwards.
+
+### Why the reach is zero, and how that was known before the sweep
+
+Every one of the 200 documents was classified by what it says about this rule:
+
+```
+ 130  docx, settings part, no flag      collapses — already correct
+   4  docx, settings part, flag on      adds      — already correct
+  66  doc                               from its Dop — already correct
+   0  docx with no settings part
+   0  rtf stating \htmautsp
+   0  odf of any kind
+```
+
+The skill's rule is that counting files which *state* a setting overestimates reach by an order of
+magnitude. This is the other end of the same instrument and it is much cheaper: when the count of
+files that could possibly be affected is **zero**, no rendering is needed to know the answer. Half
+an hour of scanning replaced two sweeps' worth of suspense, and the sweeps then confirmed it
+exactly.
+
+Keep the fix anyway. It is five fixtures and six tests, the four defects are real, and the
+no-settings-part case is specifically the one that makes a synthetic fixture answer this question
+backwards — which has now cost two rounds. It also has reach where it was written down: **three of
+the 56 DOCX in our own committed corpus have no settings part** — `contextual-spacing-styles.docx`,
+`paragraph-shading.docx` and `alt-chunk.docx` — and all three were being laid out under the wrong
+rule. None of their assertions depended on it, which is why the suite went from green to green, but
+the sentence that made this an "open defect" was written against the first of them.
+
+### A second defect, found by the test rather than by the probe
+
+The probe compares *pitches*, and a pitch comparison is blind to an error the whole page shares.
+Adding the fixtures to `ParagraphLeadingComparisonTests`, which compares *absolute* baselines
+against LibreOffice, failed both ODF cases on line 1 alone: 81.600 pt against 93.601 pt, exactly
+the 12 pt of space-before that the first paragraph on a page is entitled to.
+
+`PARA_SPACE_MAX_AT_PAGES`, which `ww8par.cxx` sets on the line after `PARA_SPACE_MAX` (:1946 and
+:1947) and ODF spells `AddParaTableSpacingAtStart`. `PaginationOptions` already models it and the
+Word preset already sets it; the ODF path took the bare default, which is `false`, and the ODF
+answer is `true`. Measured, first baseline down an A4 page: `true` 93.60, `false` 81.60, **item
+removed entirely 93.60**. Absent means true — the reverse of what an absent DOCX settings part
+means, so the two formats really do disagree about what silence is.
+
+That is the general lesson from this round: **a probe that compares differences cannot find an
+error in the offset**, and the two instruments were half an hour apart in cost.
+
+### Where the four formats now stand, complete
+
+| | spacings add | space kept at top of page |
+|---|---|---|
+| DOCX | `w:doNotUseHTMLParagraphAutoSpacing`, or **true with no settings part** | true (writerfilter never sets it; the application default) |
+| DOC | `fDontUseHTMLAutoSpacing`, defaulting true on a short `Dop` | true (`ww8par.cxx`:1947, unconditional) |
+| RTF | true unless `\htmautsp`, whatever its parameter | true (the application default) |
+| ODF | `AddParaTableSpacing`, defaulting **true** | `AddParaTableSpacingAtStart`, defaulting **true** |
+
+### What the 54 remaining failures look like at `52f45c51b`
+
+```
+by format     doc   54/66 match, 18% fail
+              docx  92/134 match, 31% fail
+
+page delta    -31 -13 -12  -4  -2  -1  ±0  +1  +2  +3  +4  +5
+(failures)      1   1   1   1   3  14   8  16   6   1   1   1
+```
+
+Two things in that worth acting on.
+
+**The format split has stopped being equal.** An earlier round measured 42% `doc` against 43%
+`docx` and concluded, correctly then, that the failures were downstream of the readers and that
+splitting two agents by format would put them in one file. That is no longer true: `doc` now
+fails at 18% and `docx` at 31%, so the shared layout has improved out from under that finding and
+what is left leans DOCX-side. **Re-run the one-line check before reusing the conclusion.**
+
+**Thirty of the 54 are off by exactly one page**, 14 under and 16 over — the same near-symmetry
+earlier rounds found, and the same argument that the two signs are one quantity rather than two
+clusters.
+
+**Eight fail on words with the page count already right**, and they now lean the other way from
+the record: `xx_SETIS_PWS_template_10.19.22.docx` at −541 and two small shortfalls against five
+documents drawing more than the reference, the largest being `UG.CAO.00133` at +245 and
+`ABCD-FE-01-00 Flight Envelope` at +227.
+
+That last one matters beyond its own row, and it is corrected in `TODO.raster-ceiling.md`:
+`UG.CAO.00133` is the document that file uses to show that a flagged page does not excuse its
+document, on the strength of it running **225 words short overall**. It now runs **245 words
+over**, with its four flagged pages accounting for only +105. The point stands and the example has
+inverted, which says a document must be re-measured before its flagged pages are subtracted from
+it.
