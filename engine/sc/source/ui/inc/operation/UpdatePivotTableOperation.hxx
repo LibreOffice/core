@@ -20,12 +20,13 @@ class UpdatePivotTableOperation : public PivotTableOperation
 {
 private:
     ScDPObject& mrDPObject;
+    ScDPObject const* mpUndoDPObject;
 
     bool runImplementation() override;
 
 public:
-    UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObject, bool bRecord,
-                              bool bApi);
+    UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObject, bool bRecord, bool bApi,
+                              ScDPObject const* pUndoDPObject = nullptr);
 };
 } // end sc namespace
 

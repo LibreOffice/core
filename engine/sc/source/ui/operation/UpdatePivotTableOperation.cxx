@@ -20,9 +20,11 @@
 namespace sc
 {
 UpdatePivotTableOperation::UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObject,
-                                                     bool bRecord, bool bApi)
+                                                     bool bRecord, bool bApi,
+                                                     ScDPObject const* pUndoDPObject)
     : PivotTableOperation(OperationType::PivotTableUpdate, rDocShell, bRecord, bApi)
     , mrDPObject(rDPObject)
+    , mpUndoDPObject(pUndoDPObject)
 {
 }
 
@@ -49,7 +51,8 @@ bool UpdatePivotTableOperation::runImplementation()
     ScDocumentUniquePtr pOldUndoDoc;
     ScDocumentUniquePtr pNewUndoDoc;
 
-    ScDPObject aUndoDPObject(*pDPObject); // For undo or revert on failure.
+    // For undo or revert on failure, the caller may know the state before the change
+    ScDPObject aUndoDPObject(mpUndoDPObject ? *mpUndoDPObject : *pDPObject);
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;

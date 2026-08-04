@@ -111,7 +111,8 @@ public:
 
     SC_DLLPUBLIC bool RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi);
     SC_DLLPUBLIC bool CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi);
-    SC_DLLPUBLIC bool UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi);
+    SC_DLLPUBLIC bool UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi,
+                                       ScDPObject const* pUndoDPObj = nullptr);
 
     /**
      * Reload the referenced pivot cache, and refresh all pivot tables that

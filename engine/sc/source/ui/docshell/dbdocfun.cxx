@@ -1288,9 +1288,10 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     return aOperation.run();
 }
 
-bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
+bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi,
+                                   ScDPObject const* pUndoDPObj)
 {
-    sc::UpdatePivotTableOperation aOperation(rDocShell, rDPObj, bRecord, bApi);
+    sc::UpdatePivotTableOperation aOperation(rDocShell, rDPObj, bRecord, bApi, pUndoDPObj);
     return aOperation.run();
 }
 

@@ -1659,6 +1659,8 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     {
         // apply changes
         ScDBDocFunc aFunc( *GetViewData().GetDocShell() );
+        // Undo pivot object, before the change is applied
+        ScDPObject aUndoObj( *pDPObj );
         pDPObj->SetSaveData( aData );
         if (bNeedReloadGroups)
         {
@@ -1670,7 +1672,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                 pDPs->ReloadGroupsInCache(pDPObj, aRefs);
             } // pDPs
         } // bNeedReloadGroups
-        aFunc.UpdatePivotTable(*pDPObj, true, false);
+        aFunc.UpdatePivotTable(*pDPObj, true, false, &aUndoObj);
     }
     else
     {

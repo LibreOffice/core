@@ -2247,6 +2247,28 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableClassicLayoutXLSB)
     CPPUNIT_ASSERT((*pDPs)[0].GetHeaderLayout());
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRenameUndo)
+{
+    createScDoc("xlsx/pivot_outlineforms_norepeat_classic.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // The data field caption in the header row of the classic layout
+    const ScAddress aCaptionPos(0, 5, 1); //A6
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Accrual Value"_ustr, pDoc->GetString(aCaptionPos));
+
+    // Typing into a cell of a pivot table is a renaming
+    insertStringToCell(u"$Pivot_no_repeat.A6"_ustr, u"Renamed");
+    CPPUNIT_ASSERT_EQUAL(u"Renamed"_ustr, pDoc->GetString(aCaptionPos));
+
+    // The undo action has to keep the settings from before the change, taking
+    // them from the already changed pivot table made the undo a no-op
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Accrual Value"_ustr, pDoc->GetString(aCaptionPos));
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Renamed"_ustr, pDoc->GetString(aCaptionPos));
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSB)
 {
     // Repeat item labels of a pivot field is an Excel 2010 extension
