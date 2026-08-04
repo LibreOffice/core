@@ -11,20 +11,21 @@
 
 #pragma once
 
-#include <atomic>
-#include <string>
+struct COKit;
 
-#include <QStringList>
+/// Connect the clipboard-ownership watcher. Call once on the GUI thread at
+/// application startup, before the first document loads.
+void initializeQtClipboard();
 
-extern std::atomic<unsigned> sClipboardSourceDocId;
+/// Install the process-global clipboard provider; called from the kit main
+/// loop (kit/Kit.cpp). After this the engine advertises its formats on copy
+/// and reads the system clipboard on paste through the provider callbacks,
+/// using one shared clipboard for every document.
+void install_clipboard_provider(COKit& rOffice);
 
-void setLazyClipboard(unsigned appDocId, QStringList mimeTypes);
-void materializeClipboard(unsigned appDocId);
-
-/// Sync `dstDocId`'s LOKit clipboard from the latest copy and enqueue `unoCmd`
-/// (the paste) on `dstFd`. Call on the GUI thread. Returns true when the paste was
-/// deferred to the kit thread (a cross-window copy), so the caller can show a
-/// progress indicator.
-bool pasteFromClipboard(unsigned dstDocId, int dstFd, const std::string& unoCmd);
+/// Render the shared clipboard's lazy transferable into engine-held bytes
+/// before the document `appDocId` is destroyed, so a paste after the document
+/// closes still works. Call on the GUI thread from the document's BYE.
+void flushClipboardOnDocClose(unsigned appDocId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

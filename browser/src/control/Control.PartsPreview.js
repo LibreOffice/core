@@ -1533,7 +1533,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// app native bridges (where navigator.clipboard.read() is unavailable
 			// or would pop up the WebView's system "Paste" confirmation).
 			const canReadClipboard = window.L.Browser.clipboardApiAvailable
-				|| window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp;
+				|| window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp
+				|| window.ThisIsTheQtApp;
 			if (canReadClipboard) {
 				let html = '';
 				try {

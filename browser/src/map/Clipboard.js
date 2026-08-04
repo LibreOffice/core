@@ -84,7 +84,7 @@ window.L.Clipboard = window.L.Class.extend({
 		document.oncut = function(ev)   { return that.cut(ev); };
 		document.oncopy = function(ev)  { return that.copy(ev); };
 		document.onpaste = function(ev) {
-			if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+			if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
 				// For each app that uses the COKitClipboardProvider API
 				ev.preventDefault();
 				window.postMobileMessage('uno .uno:Paste');
@@ -492,7 +492,7 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	_sendToInternalClipboard: async function (content) {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
 			// Nothing to send: the engine serves the paste on the following
 			// .uno:Paste, either from our own copy (when we still own the platform
 			// clipboard) or by reading the platform clipboard through the installed
@@ -971,17 +971,6 @@ window.L.Clipboard = window.L.Class.extend({
 	_asyncAttemptNavigatorClipboardWrite: async function(params) {
 		const command = this._unoCommandForCopyCutPaste;
 
-		if (window.ThisIsTheQtApp) {
-			// Qt handles UNO command and clipboard sync only via COPY/CUT/COPYSLIDE messages.
-			if (command === '.uno:Cut')
-				window.postMobileMessage('CUT');
-			else if (command === '.uno:CopySlide')
-				window.postMobileMessage('COPYSLIDE');
-			else
-				window.postMobileMessage('COPY');
-			return;
-		}
-
 		const check_ = this._sendCommandAndWaitForCompletion(command, params);
 
 		// I strongly disrecommend awaiting before the clipboard.write line in the
@@ -997,7 +986,7 @@ window.L.Clipboard = window.L.Class.extend({
 		// I don't like it either :). If you change this make sure to thoroughly test
 		// cross-browser and cross-device!
 
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
 			// The engine advertises the copied formats straight onto the system
 			// clipboard through the installed clipboard provider, so there is no
 			// write to make here; just confirm the copy went through.
@@ -1111,7 +1100,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 	// Executes the navigator.clipboard.read() call, if it's available.
 	_navigatorClipboardRead: function(isSpecial) {
-		if (!window.L.Browser.clipboardApiAvailable && !window.ThisIsTheiOSApp && !window.ThisIsTheMacOSApp && !window.ThisIsTheWindowsApp) {
+		if (!window.L.Browser.clipboardApiAvailable && !window.ThisIsTheiOSApp && !window.ThisIsTheMacOSApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp) {
 			return false;
 		}
 
@@ -1123,7 +1112,7 @@ window.L.Clipboard = window.L.Class.extend({
 	// ClipboardItem array, or null on the apps whose engine reads the system
 	// clipboard itself.
 	_readClipboardItems: async function() {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp)
+		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp)
 			// The engine clipboard provider reads the pasteboard itself on
 			// .uno:Paste, so there is nothing to fetch here. Reporting null
 			// drops straight to an internal paste.
@@ -1223,25 +1212,6 @@ window.L.Clipboard = window.L.Class.extend({
 			// perform internal operations
 			app.socket.sendMessage('uno ' + cmd);
 			return true;
-		}
-
-		if (window.ThisIsTheQtApp) {
-			if (cmd === '.uno:Cut') {
-				window.postMobileMessage('CUT');
-				return true;
-			} else if (cmd === '.uno:Copy') {
-				window.postMobileMessage('COPY');
-				return true;
-			} else if (cmd === '.uno:CopySlide') {
-				window.postMobileMessage('COPYSLIDE');
-				return true;
-			} else if (cmd === '.uno:Paste') {
-				window.postMobileMessage('PASTE');
-				return true;
-			} else if (cmd === '.uno:PasteSpecial') {
-				window.postMobileMessage('PASTESPECIAL');
-				return true;
-			}
 		}
 
 		if (cmd === '.uno:Copy' || cmd === '.uno:CopyHyperlinkLocation' || cmd === '.uno:CopySlide') {
@@ -1353,12 +1323,6 @@ window.L.Clipboard = window.L.Class.extend({
 			ev.preventDefault();
 			this._map._textInput._abortComposition(ev);
 			this._clipboardSerial++;
-
-			if (window.ThisIsTheQtApp) {
-				// Native code handles clipboard sync + paste entirely.
-				window.postMobileMessage('PASTE');
-				return false;
-			}
 
 			if (window.ThisIsTheiOSApp) {
 				// The engine reads the system pasteboard itself, through the

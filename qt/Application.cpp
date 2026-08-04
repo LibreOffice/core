@@ -13,6 +13,7 @@
 
 #include <common/MobileApp.hpp>
 #include <qt/CoolUrlSchemeHandler.hpp>
+#include <qt/QtClipboard.hpp>
 #include <qt/qt.hpp>
 
 #include <common/Log.hpp>
@@ -194,6 +195,8 @@ void Application::initialize()
     // Provide AIChatSession with an HTTP transport (the COOL http::Session stack
     // isn't available here).
     registerAIHttpTransport();
+
+    initializeQtClipboard();
 }
 
 Poco::Path Desktop::getConfigPath()

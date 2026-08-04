@@ -136,6 +136,7 @@ Util::LoadTimings KitLoadTimings;
 #endif
 
 #ifdef QTAPP
+#include <qt/QtClipboard.hpp>
 #include <qt/QtFileManager.hpp>
 #include <qt/QtFilePicker.hpp>
 #endif
@@ -3837,9 +3838,8 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
 #endif
 
     // The desktop apps use one process-shared clipboard, so closing a document
-    // does not have to serialize the clipboard onto the system clipboard. Qt
-    // keeps its own per-view provider for now.
-#if defined(MACOSAPP) || defined(_WIN32)
+    // does not have to serialize the clipboard onto the system clipboard.
+#if defined(MACOSAPP) || defined(_WIN32) || defined(QTAPP)
     install_clipboard_provider(*loKit);
 #endif
 

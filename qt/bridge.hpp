@@ -45,14 +45,9 @@ class Bridge : public QObject
     int _closeNotificationPipeForForwardingThread[2];
     std::thread _app2js;
     bool _modified = false;
-    // true between sending a copy/cut command and receiving its COMMANDRESULT
-    bool _copyInProgress = false;
     // How many times we have reloaded the page because the server was still
     // cleaning up the previous use of this document when we tried to load it.
     int _docUnloadingRetries = 0;
-    // true between showing the deferred cross-window paste progress snackbar and
-    // receiving the paste's COMMANDRESULT; touched only on the GUI thread.
-    bool _pasteInProgress = false;
     // true from JS-side SAVESTARTED until the JS-side SAVECOMPLETED:
     // that brackets both the .uno:Save round-trip and (for remote
     // docs) the JS-driven collabUploadFile POST that pushes the

@@ -896,49 +896,6 @@ QVariant Bridge::cool(const QString& messageStr)
                 owner->onDocumentUnmodified();
         }
     }
-    else if (tokens.equals(0, "CLIPBOARDMIMETYPES"))
-    {
-        Poco::JSON::Object::Ptr object;
-        if (!JsonUtil::parseJSON(tokens.substrFromToken(1), object)
-            || !object->has("mimeTypes"))
-            return {};
-
-        QStringList types;
-        for (const auto& type : *object->getArray("mimeTypes"))
-            types.append(QString::fromStdString(type.convert<std::string>()));
-        setLazyClipboard(_document._appDocId, std::move(types));
-        return {};
-    }
-    else if (tokens.equals(0, "COMMANDRESULT"))
-    {
-        // Only the clipboard-fetch trigger lives in C++ now; .uno:Save
-        // is driven entirely from the page-JS (collabUploadFile in
-        // browser/js/global.js) which closes out via SAVECOMPLETED
-        // below.
-        Poco::JSON::Object::Ptr object;
-        if (!JsonUtil::parseJSON(tokens.substrFromToken(1), object))
-            return {};
-
-        const std::string commandName = object->get("commandName").toString();
-        if (commandName == ".uno:Copy" || commandName == ".uno:Cut"
-            || commandName == ".uno:CopySlide")
-        {
-            // Copy is lazy and never deferred, so its snackbar always closes here.
-            closeSnackbar();
-            _copyInProgress = false;
-        }
-        else if (commandName == ".uno:Paste" || commandName == ".uno:PasteSpecial")
-        {
-            // A deferred cross-window paste shows a progress snackbar; this
-            // result (enabled for the app via the kit notify list) is its
-            // deterministic completion signal, so dismiss the snackbar now.
-            if (_pasteInProgress)
-            {
-                closeSnackbar();
-                _pasteInProgress = false;
-            }
-        }
-    }
     else if (tokens.equals(0, "UPLOADSETTINGS"))
     {
         uploadAndApplySettings(tokens.substrFromToken(1));
@@ -986,8 +943,8 @@ QVariant Bridge::cool(const QString& messageStr)
     {
         // JS-side hand-off raised from the save() entry-point in
         // browser/src/control/Toolbar.js as the 'save' WS message
-        // goes out.  The COMMANDRESULT for .uno:Save will land in
-        // the handler above and call finishSave().
+        // goes out.  The JS-side SAVECOMPLETED below closes out via
+        // finishSave().
         _saveInFlight = true;
         LOG_TRC_NOFILE("Bridge::cool SAVESTARTED: _saveInFlight=true");
     }
@@ -997,9 +954,11 @@ QVariant Bridge::cool(const QString& messageStr)
         LOG_INF((quitApp ? "EXIT_TEST" : "BYE")
                 << " -- closing document with appDocId " << _document._appDocId
                 << (quitApp ? " and quitting" : ""));
-        // Materialise the lazy clipboard before closing so an external paste
-        // after the document closes still works.
-        materializeClipboard(_document._appDocId);
+        // Render the shared clipboard's lazy transferable into engine-held
+        // bytes before destroying the document, so a paste after the
+        // document closes still works.
+        flushClipboardOnDocClose(_document._appDocId);
+
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
         // The page-JS is already terminating, so the close below must not
         // drive another save-if-dirty round-trip through it.
@@ -1047,43 +1006,10 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "TEXTCLIPBOARD"))
     {
         QString text = QString::fromStdString(tokens.substrFromToken(1));
+        // The dataChanged watcher (QtClipboard.cpp) records the ownership
+        // loss, so the next in-document paste reads this plain text through
+        // the clipboard provider instead of replaying the stale engine copy.
         QApplication::clipboard()->setText(text);
-        // The system clipboard now holds this plain text, which is not the
-        // document's internal LOKit selection. Forget the source document so
-        // that the next paste syncs the system clipboard into LOKit instead of
-        // replaying the stale internal selection.
-        sClipboardSourceDocId.store(0);
-    }
-    else if (tokens.equals(0, "COPY") || tokens.equals(0, "COPYSLIDE") || tokens.equals(0, "CUT"))
-    {
-        _copyInProgress = true;
-        showProgressSnackbar();
-
-        std::string unoCmd;
-        if (tokens.equals(0, "CUT"))
-            unoCmd = "uno .uno:Cut";
-        else if (tokens.equals(0, "COPYSLIDE"))
-            unoCmd = "uno .uno:CopySlide";
-        else
-            unoCmd = "uno .uno:Copy";
-
-        fakeSocketWriteQueue(_document._fakeClientFd, unoCmd.c_str(), unoCmd.size());
-    }
-    else if (tokens.equals(0, "PASTE") || tokens.equals(0, "PASTESPECIAL"))
-    {
-        if (_copyInProgress)
-        {
-            LOG_DBG("Ignoring paste while copy is still in progress");
-            return {};
-        }
-        // Show progress while a deferred (cross-window) paste runs.
-        const char* unoCmd
-            = tokens.equals(0, "PASTESPECIAL") ? "uno .uno:PasteSpecial" : "uno .uno:Paste";
-        if (pasteFromClipboard(_document._appDocId, _document._fakeClientFd, unoCmd))
-        {
-            _pasteInProgress = true;
-            showProgressSnackbar();
-        }
     }
     else if (tokens.equals(0, "GETRECENTDOCS"))
     {

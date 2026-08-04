@@ -9,6 +9,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// The COKitClipboardProvider backend for the Qt app: the engine drives both
+// clipboard directions and this file only does the raw QClipboard input and
+// output, like the macOS (COWrapper.mm) and Windows (CODA.cpp) apps.
+//
+// Unlike NSPasteboard and the Win32 clipboard, QClipboard may only be used on
+// the GUI thread, while the provider callbacks fire on the kit thread with the
+// SolarMutex held. Advertising is therefore queued to the GUI thread (with the
+// ownership flag set synchronously so an immediate paste still sees its own
+// copy), and the paste-direction reads block on the GUI thread. That blocking
+// is deadlock-free because the engine only reads through the provider when
+// ownsClipboard() said the clipboard is foreign, and every GUI-thread path
+// into the engine is guarded on that same ownership flag.
+
 #include <config.h>
 
 #include "QtClipboard.hpp"
@@ -16,226 +29,79 @@
 #include <COKit/COKit.hxx>
 
 #include <common/MobileApp.hpp>
-#include <kit/Kit.hpp>
-#include <net/FakeSocket.hpp>
 
 #include <QApplication>
 #include <QByteArray>
 #include <QClipboard>
-#include <QFile>
-#include <QFileInfo>
 #include <QGuiApplication>
 #include <QHash>
 #include <QLatin1String>
+#include <QMetaObject>
 #include <QMimeData>
 #include <QString>
-#include <QUrl>
+#include <QStringList>
+#include <QThread>
 
 #include <atomic>
-#include <cstdlib>
 #include <functional>
-#include <memory>
 #include <string>
 #include <vector>
 
-std::atomic<unsigned> sClipboardSourceDocId{0};
-
 namespace
 {
-/// coda-qt keeps one view per document, so the first view owns the clipboard;
-/// a multi-view document would need the specific copying view instead.
-int firstViewId(COKitDocument* loKitDoc)
+// The engine office handle, captured when the clipboard provider is installed,
+// so a clipboard read can go straight to the process-shared clipboard without
+// needing a particular document.
+COKit* sOffice = nullptr;
+
+// Whether the system clipboard still holds our own last advertise. Set
+// synchronously on the kit thread when the engine advertises a copy, and
+// maintained by the GUI thread's dataChanged watcher afterwards.
+std::atomic<bool> sWeOwnClipboard{ false };
+
+/// Run fn on the GUI thread and wait for it to finish. The paste-direction
+/// provider callbacks fire on the kit thread, but QClipboard may only be used
+/// on the GUI thread.
+void runOnGuiThreadBlocking(std::function<void()> fn)
 {
-    const std::vector<int> aViewIds = loKitDoc->getViewIds();
-    if (aViewIds.empty() || aViewIds[0] < 0)
-        return -1;
-    return aViewIds[0];
-}
-
-/// doc_getClipboard and doc_setClipboard both route by the kit's current view.
-bool selectDocViewAsCurrent(COKitDocument* loKitDoc)
-{
-    const int nViewId = firstViewId(loKitDoc);
-    if (nViewId < 0)
-        return false;
-    loKitDoc->setView(nViewId);
-    return true;
-}
-
-std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
-                                              const char** pMimeTypes = nullptr)
-{
-    // A still-mounted LazyClipboardMimeData can outlive its source doc;
-    // DocumentData::get crashes on a removed id, so check first.
-    DocumentData* docData = DocumentData::getIfExists(appDocId);
-    if (!docData)
-        return nullptr;
-
-    COKitDocument* loKitDoc = docData->loKitDocument;
-    if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
-        return nullptr;
-
-    const std::vector<COKitClipboardItem> items = loKitDoc->getClipboard(pMimeTypes);
-    if (items.empty())
-        return nullptr;
-
-    auto mimeData = std::make_unique<QMimeData>();
-    for (const COKitClipboardItem& item : items)
+    if (QThread::currentThread() == qApp->thread())
     {
-        if (!item.aData.empty())
-            mimeData->setData(QString::fromUtf8(item.aMimeType.c_str()),
-                              QByteArray(item.aData.data(), static_cast<int>(item.aData.size())));
-    }
-
-    return mimeData;
-}
-
-/// MIME types LOKit can usefully consume on a paste; keeping the set small avoids
-/// serialising formats no paste uses.
-bool isLoKitFormat(const QString& f)
-{
-    return f.startsWith(QLatin1String("text/"))
-        || f == QLatin1String("image/png")
-        || f == QLatin1String("image/jpeg")
-        || f == QLatin1String("image/bmp")
-        || f.startsWith(QLatin1String("image/svg+"))   // image/svg+xml and ;params
-        || f.startsWith(QLatin1String("application/x-openoffice-"))
-        || f.startsWith(QLatin1String("application/x-libreoffice-"))
-        || f.startsWith(QLatin1String("application/vnd.oasis.opendocument."))
-        || f.startsWith(QLatin1String("application/vnd.sun.xml."))
-        || f == QLatin1String("application/msword")
-        || f == QLatin1String("application/mathml+xml")
-        || f == QLatin1String("application/pdf");
-}
-
-/// A file manager copy of an image file is a URI, we route it to "insertfile"
-/// message instead so that the picture is embedded in its original format.
-bool insertClipboardImageFile(int dstFd, const QMimeData* data)
-{
-    constexpr std::array imageExtensions = { "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg" };
-
-    bool inserted = false;
-
-    for (const QUrl& url : data->urls())
-    {
-        const QFileInfo fileInfo(url.toLocalFile());
-        if (!std::ranges::find(imageExtensions, fileInfo.suffix().toLower().toStdString()))
-        {
-            continue;
-        }
-
-        QFile file(fileInfo.absoluteFilePath());
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            continue;
-        }
-
-        const std::string filename = QUrl::toPercentEncoding(fileInfo.fileName()).toStdString();
-
-        const std::string message = "insertfile name=" + filename +
-                                    " type=graphic data=" + file.readAll().toBase64().toStdString();
-        fakeSocketWriteQueue(dstFd, message.c_str(), message.size());
-
-        if (data->urls().size() > 1)
-        {
-            const std::string resetMessage = "resetselection";
-            fakeSocketWriteQueue(dstFd, resetMessage.c_str(), resetMessage.size());
-        }
-
-        inserted = true;
-    }
-
-    return inserted;
-}
-
-void writeMimeDataToDoc(COKitDocument* dstDoc, const QMimeData* data)
-{
-    if (!dstDoc || !data)
+        fn();
         return;
-
-    std::vector<std::string> mimeTypeStrings;
-    std::vector<QByteArray> byteArrays;
-
-    // Enforce UTF-8 for text data as that is what COKit expects.
-    if (data->hasText())
-    {
-        QByteArray utf8 = data->text().toUtf8();
-        if (!utf8.isEmpty())
-        {
-            mimeTypeStrings.push_back("text/plain;charset=utf-8");
-            byteArrays.push_back(std::move(utf8));
-        }
     }
-
-    for (const QString& format : data->formats())
-    {
-        // Text already extracted as UTF-8 above; don't forward any raw text/plain* variant.
-        if (format.startsWith(QLatin1String("text/plain")))
-            continue;
-        if (!isLoKitFormat(format))
-            continue;
-        QByteArray bytes = data->data(format);
-        if (bytes.isEmpty())
-            continue;
-        mimeTypeStrings.push_back(format.toStdString());
-        byteArrays.push_back(std::move(bytes));
-    }
-
-    std::vector<const char*> mimeTypePtrs;
-    std::vector<size_t> sizes;
-    std::vector<const char*> streams;
-    for (size_t i = 0; i < mimeTypeStrings.size(); ++i)
-    {
-        mimeTypePtrs.push_back(mimeTypeStrings[i].c_str());
-        sizes.push_back(byteArrays[i].size());
-        streams.push_back(byteArrays[i].data());
-    }
-
-    // Make the destination the kit's current view even when there is nothing to
-    // forward: a preceding cross-document fetch left the source view current,
-    // and both the setClipboard below and the upcoming paste must run against
-    // this document's view.
-    if (!selectDocViewAsCurrent(dstDoc))
-        return;
-    if (!mimeTypePtrs.empty())
-        dstDoc->setClipboard(mimeTypePtrs.size(), mimeTypePtrs.data(), sizes.data(),
-                             streams.data());
+    QMetaObject::invokeMethod(qApp, std::move(fn), Qt::BlockingQueuedConnection);
 }
 
-bool transferClipboardOnKitThread(unsigned srcDocId, unsigned dstDocId)
+/// Pull the bytes the engine holds for one clipboard format. The clipboard is
+/// process-global (one shared clipboard for the whole app), so it is read
+/// straight from the office; no document is involved.
+QByteArray fetchEngineClipboardData(const QString& mimeType)
 {
-    DocumentData* srcData = DocumentData::getIfExists(srcDocId);
-    DocumentData* dstData = DocumentData::getIfExists(dstDocId);
-    if (!srcData || !dstData)
-        return false;
-    COKitDocument* srcDoc = srcData->loKitDocument;
-    COKitDocument* dstDoc = dstData->loKitDocument;
-    if (!srcDoc || !dstDoc)
-        return false;
+    if (!sOffice)
+        return {};
 
-    const int srcViewId = firstViewId(srcDoc);
-    if (srcViewId < 0 || !selectDocViewAsCurrent(dstDoc))
-        return false;
+    const std::string mimeStr = mimeType.toStdString();
+    const char* filter[] = { mimeStr.c_str(), nullptr };
+    std::vector<std::string> outMimeTypes;
+    std::vector<std::vector<char>> outStreams;
+    if (!sOffice->getGlobalClipboard(filter, outMimeTypes, outStreams) || outStreams.empty()
+        || outStreams[0].empty())
+        return {};
 
-    // Both documents live in one kit, so the by-reference transfer always suffices.
-    dstDoc->transferClipboardFromView(srcViewId);
-    return true;
-}
+    return QByteArray(outStreams[0].data(), static_cast<qsizetype>(outStreams[0].size()));
 }
 
-/// QMimeData subclass that advertises MIME types without serializing data.
-/// Data is fetched on demand from LOKit when an external app (or cross-document
-/// paste) actually requests it via retrieveData().
-class LazyClipboardMimeData : public QMimeData
+/// QMimeData subclass that advertises the engine's MIME types without
+/// serializing any data. The bytes are fetched from the engine's shared
+/// clipboard on demand, when a paste target actually requests a format.
+class LazyEngineMimeData : public QMimeData
 {
-    unsigned _appDocId;
     QStringList _mimeTypes;
     mutable QHash<QString, QByteArray> _cache;
 
 public:
-    LazyClipboardMimeData(unsigned appDocId, QStringList mimeTypes)
-        : _appDocId(appDocId)
-        , _mimeTypes(std::move(mimeTypes))
+    explicit LazyEngineMimeData(QStringList mimeTypes)
+        : _mimeTypes(std::move(mimeTypes))
     {
     }
 
@@ -256,26 +122,6 @@ public:
         return formats().contains(mimeType);
     }
 
-    unsigned sourceDocId() const { return _appDocId; }
-
-    /// Must be called while the source document is still alive.
-    void materialize() const
-    {
-        std::unique_ptr<QMimeData> data;
-        for (const QString& f : _mimeTypes)
-        {
-            if (_cache.contains(f))
-                continue;
-            if (!data)
-            {
-                data = fetchClipboardData(_appDocId);
-                if (!data)
-                    return;
-            }
-            _cache.insert(f, data->data(f));
-        }
-    }
-
 protected:
     QVariant retrieveData(const QString& mimeType, QMetaType /*type*/) const override
     {
@@ -289,103 +135,152 @@ protected:
         if (it != _cache.constEnd())
             return *it;
 
-        const std::string mimeStr = fetchType.toStdString();
-        const char* pMimeTypes[] = { mimeStr.c_str(), nullptr };
-        std::unique_ptr<QMimeData> data = fetchClipboardData(_appDocId, pMimeTypes);
+        // Enter the engine only while the clipboard is still ours: once it is
+        // foreign, the kit thread may be blocking on the GUI thread inside a
+        // paste-direction provider callback while holding the SolarMutex, and
+        // the engine read below would wait for that mutex - a deadlock. A
+        // transfer still in flight from a replaced offer comes back empty.
+        if (!sWeOwnClipboard.load())
+            return QByteArray();
+
+        const QByteArray bytes = fetchEngineClipboardData(fetchType);
         // Cache empty results too, to suppress repeated probes for unavailable formats.
-        QByteArray bytes = data ? data->data(fetchType) : QByteArray{};
         _cache.insert(fetchType, bytes);
         return bytes;
     }
 };
 
-namespace
+void onClipboardDataChanged()
 {
-/// True when `data` was put on the system clipboard by some other application,
-/// rather than our own (in-process) lazy clipboard.
-bool clipboardHoldsForeignData(const QMimeData* data)
-{
-    if (!data)
-        return false;
-    if (dynamic_cast<const LazyClipboardMimeData*>(data))
-        return false;
-    return !data->formats().isEmpty();
-}
+    const QMimeData* data = QGuiApplication::clipboard()->mimeData();
+    sWeOwnClipboard.store(dynamic_cast<const LazyEngineMimeData*>(data) != nullptr);
 }
 
-bool pasteFromClipboard(unsigned dstDocId, int dstFd, const std::string& unoCmd)
+/**
+ * The clipboard provider the engine drives. On copy the engine advertises its
+ * formats through advertise; on an external paste it reads the system
+ * clipboard one format at a time. The callbacks act on the process, not one
+ * document: every document shares the one engine clipboard.
+ */
+
+void clipboardProviderAdvertise(const char** pMimeTypes)
 {
-    const unsigned src = sClipboardSourceDocId.load();
-    const QMimeData* data = QApplication::clipboard()->mimeData();
+    QStringList types;
+    for (size_t i = 0; pMimeTypes && pMimeTypes[i]; ++i)
+        types.append(QString::fromUtf8(pMimeTypes[i]));
 
-    // External app owns the clipboard: copy it into LOKit before pasting.
-    if (clipboardHoldsForeignData(data))
-    {
-        if (insertClipboardImageFile(dstFd, data))
+    // Claim ownership synchronously: the copy completes on the kit thread
+    // before the queued QClipboard update below has run, and a paste in
+    // between must already take the engine's in-memory shortcut.
+    sWeOwnClipboard.store(true);
+
+    QMetaObject::invokeMethod(
+        qApp,
+        [types = std::move(types)]() mutable
+        { QGuiApplication::clipboard()->setMimeData(new LazyEngineMimeData(std::move(types))); },
+        Qt::QueuedConnection);
+}
+
+bool clipboardProviderOwns() { return sWeOwnClipboard.load(); }
+
+std::vector<std::string> clipboardProviderGetMimeTypes()
+{
+    QStringList types;
+    runOnGuiThreadBlocking(
+        [&types]()
         {
-            return false;
-        }
-
-        if (DocumentData* dstData = DocumentData::getIfExists(dstDocId))
-            writeMimeDataToDoc(dstData->loKitDocument, data);
-        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
-        return false;
-    }
-
-    // Same document or our own copy: the bytes are already in LOKit's clipboard.
-    if (src == 0 || src == dstDocId)
-    {
-        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
-        return false;
-    }
-
-    // Cross-window source whose document has since closed: its bytes survive in the
-    // Qt clipboard (materialized on BYE), but the kit-thread transfer below cannot
-    // read a gone view - so sync from the Qt clipboard here instead.
-    if (DocumentData* srcData = DocumentData::getIfExists(src);
-        !srcData || !srcData->loKitDocument)
-    {
-        if (DocumentData* dstData = DocumentData::getIfExists(dstDocId))
-            writeMimeDataToDoc(dstData->loKitDocument, data);
-        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
-        return false;
-    }
-
-    // Cross-window paste: defer to the kit thread, where reading the non-active
-    // source view is safe.
-    const bool scheduled = KitSocketPoll::scheduleOnKitThread(
-        dstDocId,
-        [src, dstDocId, dstFd, unoCmd]()
-        {
-            // Either document may have closed between enqueuing this callback
-            // and its execution.
-            if (transferClipboardOnKitThread(src, dstDocId))
-                fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+            const QMimeData* data = QGuiApplication::clipboard()->mimeData();
+            if (!data)
+                return;
+            bool havePlainText = data->hasText();
+            for (const QString& format : data->formats())
+            {
+                // Fold every text/plain variant into the one canonical UTF-8
+                // name the engine advertises itself; the bytes are converted
+                // to match in the data callback.
+                if (format.startsWith(QLatin1String("text/plain")))
+                {
+                    havePlainText = true;
+                    continue;
+                }
+                // Qt synthesizes entries like "application/x-qt-image" aside,
+                // non-MIME names mean nothing to the engine's format tables.
+                if (!format.contains(QLatin1Char('/')) || types.contains(format))
+                    continue;
+                types.append(format);
+            }
+            if (havePlainText)
+                types.append(QStringLiteral("text/plain;charset=utf-8"));
         });
-    if (!scheduled)
-    {
-        // No live poll serves the destination document, so it has closed;
-        // fall back to a plain paste rather than dropping the command.
-        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+
+    std::vector<std::string> result;
+    result.reserve(static_cast<size_t>(types.size()));
+    for (const QString& type : types)
+        result.push_back(type.toStdString());
+    return result;
+}
+
+bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData)
+{
+    const QString mimeType = QString::fromUtf8(pMimeType);
+    QByteArray bytes;
+    runOnGuiThreadBlocking(
+        [&bytes, &mimeType]()
+        {
+            const QMimeData* data = QGuiApplication::clipboard()->mimeData();
+            if (!data)
+                return;
+            // The advertised text/plain;charset=utf-8 stands for whatever
+            // text/plain variant the platform holds; QMimeData::text()
+            // decodes it and toUtf8() delivers what the engine expects.
+            if (mimeType.startsWith(QLatin1String("text/plain")))
+                bytes = data->text().toUtf8();
+            else
+                bytes = data->data(mimeType);
+        });
+
+    if (bytes.isEmpty())
         return false;
-    }
+
+    pOutData->assign(bytes.constData(), bytes.constData() + bytes.size());
     return true;
 }
-
-void setLazyClipboard(unsigned appDocId, QStringList mimeTypes)
-{
-    QGuiApplication::clipboard()->setMimeData(
-        new LazyClipboardMimeData(appDocId, std::move(mimeTypes)));
-    sClipboardSourceDocId.store(appDocId);
 }
 
-void materializeClipboard(unsigned appDocId)
+void initializeQtClipboard()
 {
-    const QMimeData* current = QGuiApplication::clipboard()->mimeData();
-    const LazyClipboardMimeData* lazy = dynamic_cast<const LazyClipboardMimeData*>(current);
-    if (!lazy || lazy->sourceDocId() != appDocId)
+    QObject::connect(QGuiApplication::clipboard(), &QClipboard::dataChanged,
+                     &onClipboardDataChanged);
+}
+
+void install_clipboard_provider(COKit& rOffice)
+{
+    sOffice = &rOffice;
+
+    static COKitClipboardProvider provider{};
+    provider.advertiseToPlatform = clipboardProviderAdvertise;
+    provider.ownsClipboard = clipboardProviderOwns;
+    provider.getMimeTypes = clipboardProviderGetMimeTypes;
+    provider.getDataForMimeType = clipboardProviderGetData;
+    rOffice.installClipboardProvider(&provider);
+}
+
+void flushClipboardOnDocClose(unsigned appDocId)
+{
+    // When the clipboard is foreign the engine's in-memory copy will never be
+    // read again, and entering the engine here could deadlock against a kit
+    // thread blocking on the GUI thread in a paste-direction callback.
+    if (!sWeOwnClipboard.load())
         return;
-    lazy->materialize();
+
+    DocumentData* docData = DocumentData::getIfExists(appDocId);
+    if (!docData || !docData->loKitDocument)
+        return;
+
+    // Render the lazy transferable into engine-held bytes now: the shared
+    // clipboard outlives the document, but a Writer or Impress transferable
+    // still references the document it was copied from.
+    docData->loKitDocument->flushClipboard();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

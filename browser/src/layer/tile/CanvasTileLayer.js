@@ -780,10 +780,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 					this._map._clip._execCopyCutPaste('copy');
 			}
 		}
-		else if (textMsg.startsWith('clipboardmimetypes:')) {
-			if (window.ThisIsTheQtApp)
-				window.postMobileMessage('CLIPBOARDMIMETYPES' + textMsg.substr(19));
-		}
 		else if (textMsg.startsWith('textselectionend:')) {
 			this._onTextSelectionEndMsg(textMsg);
 		}
@@ -2195,7 +2191,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!isCleanupEvent)
 			this._map.hideBusy();
 		this._map.fire('commandresult', {commandName: commandName, success: success, result: obj.result});
-		if (!isCleanupEvent && (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp)) {
+		if (!isCleanupEvent && window.ThisIsTheMacOSApp) {
 			window.postMobileMessage('COMMANDRESULT ' + textMsg);
 		}
 
