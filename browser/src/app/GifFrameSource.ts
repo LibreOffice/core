@@ -24,6 +24,10 @@ const GIF_DEFAULT_FRAME_DURATION_MICROS = 100000;
 // extra frames one at a time instead of caching them all.
 const GIF_MAX_CACHED_FRAMES = 60;
 
+// Downloaded image bytes shared across all GifFrameSource instances, keyed by
+// the media URL.
+const gifBytesCache: Map<string, Promise<ArrayBuffer>> = new Map();
+
 class GifFrameSource {
 	private _url: string;
 	private _onFrame: () => void;
@@ -49,24 +53,29 @@ class GifFrameSource {
 		return this._currentFrame;
 	}
 
-	// Returns the raw image bytes for the source, or null when the source is not
-	// a base64 data URL. The image arrives inline as a base64 data URL, so the
-	// bytes are decoded in place.
-	private _readImageBytes(url: string): ArrayBuffer | null {
-		const comma = url.indexOf(',');
-		if (url.startsWith('data:') && comma !== -1) {
-			const header = url.slice('data:'.length, comma);
-			if (header.endsWith(';base64')) {
-				const payload = url.slice(comma + 1);
-				const bytes = (Uint8Array as any).fromBase64(payload);
-				return bytes.buffer;
-			}
-		}
-		app.console.error('GifFrameSource: image data is not a base64 data URL');
-		return null;
+	// Returns the raw image bytes for the source.
+	// Media URL is downloaded over HTTP and its bytes are shared,
+	// so a later source with the same URL reuses the same download.
+	private _fetchImageBytes(url: string): Promise<ArrayBuffer> {
+		const cached = gifBytesCache.get(url);
+		if (cached) return cached;
+
+		const pending = fetch(url).then((response) => {
+			if (!response.ok)
+				throw new Error(
+					'GifFrameSource: fetch failed with status ' + response.status,
+				);
+			return response.arrayBuffer();
+		});
+		// Forget a failed download
+		pending.catch(() => {
+			if (gifBytesCache.get(url) === pending) gifBytesCache.delete(url);
+		});
+		gifBytesCache.set(url, pending);
+		return pending;
 	}
 
-	// Reads the image bytes, sets up the decoder, and starts the clock that
+	// Downloads the image bytes, sets up the decoder, and starts the clock that
 	// advances frames on their own durations.
 	public load(): void {
 		if (!GifFrameSource.isSupported()) {
@@ -76,11 +85,15 @@ class GifFrameSource {
 			return;
 		}
 
-		const buffer = this._readImageBytes(this._url);
-		if (!buffer) return;
-
-		this._initDecoder(buffer);
-		this._scheduleNextFrame(GIF_DEFAULT_FRAME_DURATION_MICROS);
+		this._fetchImageBytes(this._url)
+			.then((buffer) => {
+				if (this._disposed) return;
+				this._initDecoder(buffer);
+				this._scheduleNextFrame(GIF_DEFAULT_FRAME_DURATION_MICROS);
+			})
+			.catch((e: any) => {
+				app.console.error('GifFrameSource.load failed: ' + e);
+			});
 	}
 
 	// Creates the decoder from the image bytes and reads the frame count once

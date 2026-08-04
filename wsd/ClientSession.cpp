@@ -2854,6 +2854,38 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
                             }
                         }
                     }
+
+                    Poco::JSON::Array::Ptr gifs = slide->getArray("gifs");
+                    if (!gifs.isNull() && gifs->size() > 0)
+                    {
+                        for (size_t gifIndex = 0; gifIndex < gifs->size(); gifIndex++)
+                        {
+                            Poco::JSON::Object::Ptr gif = gifs->getObject(gifIndex);
+                            const std::string id = JsonUtil::getJSONValue<std::string>(gif, "id");
+                            const std::string url = JsonUtil::getJSONValue<std::string>(gif, "url");
+                            const std::string checksum =
+                                JsonUtil::getJSONValue<std::string>(gif, "checksum");
+                            std::string mimeType =
+                                JsonUtil::getJSONValue<std::string>(gif, "mimeType");
+                            if (mimeType.empty())
+                                mimeType = "image/gif";
+
+                            if (!id.empty() && !url.empty())
+                            {
+                                std::string original = R"({ "id" : ")" + id + R"(", "url" : ")" +
+                                                       url + R"(", "mimeType" : ")" + mimeType +
+                                                       "\" }";
+                                docBroker->addEmbeddedMedia(id, original); // Capture the original message with internal URL.
+
+                                std::string mediaUrl =
+                                    Uri::encode(createPublicURI("media", id, false), "&");
+                                if (!checksum.empty())
+                                    mediaUrl += "&Ver=" + checksum;
+                                gif->set("url", mediaUrl); // Replace the url with the public one.
+                                modified = true;
+                            }
+                        }
+                    }
                 }
             }
         }

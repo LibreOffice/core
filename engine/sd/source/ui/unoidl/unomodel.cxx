@@ -85,7 +85,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
-#include <comphelper/base64.hxx>
+#include <comphelper/seqstream.hxx>
+#include <avmedia/mediaitem.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
 
 #include <sal/log.hxx>
 #include <editeng/unofield.hxx>
@@ -5702,6 +5704,44 @@ static void getTextHyperlinkInteractions(const uno::Reference<drawing::XShape>& 
     rOutliner.Clear();
 }
 
+OUString SdXImpressDocument::getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphicObject) const
+{
+    const Graphic& rGraphic = rGraphicObject.GetGraphic();
+    if (!rGraphic.IsAnimated() || !rGraphic.IsGfxLink())
+        return OUString();
+
+    const GfxLink aGfxLink = rGraphic.GetGfxLink();
+    if (aGfxLink.GetType() != GfxLinkType::NativeGif || aGfxLink.GetDataSize() == 0)
+        return OUString();
+
+    const sal_uInt64 nId = rGraphicObject.GetUniqueID();
+    const sal_uInt64 nChecksum = rGraphic.GetChecksum();
+
+    // Reuse the file already written for this object while its image is
+    // unchanged. A replaced image has a different checksum and gets a fresh
+    // file below.
+    auto it = maAnimatedGifCache.find(nId);
+    if (it != maAnimatedGifCache.end() && it->second.mnChecksum == nChecksum
+        && it->second.mpTempFile)
+        return it->second.maUrl;
+
+    const cpo::uno::Sequence<sal_Int8> aBytes(
+        reinterpret_cast<const sal_Int8*>(aGfxLink.GetData()),
+        static_cast<sal_Int32>(aGfxLink.GetDataSize()));
+    uno::Reference<io::XInputStream> xStream(new comphelper::SequenceInputStream(aBytes));
+
+    OUString aTempFileUrl;
+    if (!avmedia::CreateMediaTempFile(xStream, aTempFileUrl, u".gif"))
+        return OUString();
+
+    AnimatedGifTempFile aEntry;
+    aEntry.mnChecksum = nChecksum;
+    aEntry.maUrl = aTempFileUrl;
+    aEntry.mpTempFile = std::make_shared<avmedia::MediaTempFile>(aTempFileUrl);
+    maAnimatedGifCache[nId] = std::move(aEntry);
+    return aTempFileUrl;
+}
+
 OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
@@ -5908,25 +5948,21 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         if (!pGraphicObject)
                             continue;
 
-                        const Graphic& rGraphic = pGraphicObject->GetGraphic();
-                        if (!rGraphic.IsAnimated() || !rGraphic.IsGfxLink())
+                        const OUString aUrl = getOrCreateAnimatedGifUrl(*pGraphicObject);
+                        if (aUrl.isEmpty())
                             continue;
-
-                        const GfxLink aGfxLink = rGraphic.GetGfxLink();
-                        if (aGfxLink.GetType() != GfxLinkType::NativeGif || aGfxLink.GetDataSize() == 0)
-                            continue;
-
-                        const cpo::uno::Sequence<sal_Int8> aBytes(
-                            reinterpret_cast<const sal_Int8*>(aGfxLink.GetData()),
-                            static_cast<sal_Int32>(aGfxLink.GetDataSize()));
-                        OUStringBuffer aBase64;
-                        comphelper::Base64::encode(aBase64, aBytes);
 
                         auto aGifNode = aJsonWriter.startStruct();
                         auto const& rRectangle = pGraphicObject->GetLogicRect();
                         auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                         aJsonWriter.put("id", static_cast<sal_Int64>(pGraphicObject->GetUniqueID()));
-                        aJsonWriter.put("url", u"data:image/gif;base64,"_ustr + aBase64.makeStringAndClear());
+                        aJsonWriter.put("url", aUrl);
+                        // The checksum changes when the image behind the shape is
+                        // replaced, so the client can tell a new image from a move.
+                        aJsonWriter.put(
+                            "checksum",
+                            static_cast<sal_Int64>(pGraphicObject->GetGraphic().GetChecksum()));
+                        aJsonWriter.put("mimeType", "image/gif");
                         aJsonWriter.put("x", aRectangle.Left());
                         aJsonWriter.put("y", aRectangle.Top());
                         aJsonWriter.put("width", aRectangle.GetWidth());
@@ -6133,6 +6169,9 @@ void SAL_CALL SdXImpressDocument::dispose()
         EndListening( *mpDoc );
         mpDoc = nullptr;
     }
+
+    // Drop the extracted animated GIF files so they are removed from the jail.
+    maAnimatedGifCache.clear();
 
     // Call the base class dispose() before setting the mbDisposed flag
     // to true.  The reason for this is that if close() has not yet been

@@ -37,6 +37,7 @@
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -54,7 +55,9 @@
 #include "sddllapi.h"
 
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
+namespace avmedia { struct MediaTempFile; }
 
+class SdrGrafObj;
 class SdDrawDocument;
 class SdPage;
 class SvxItemPropertySet;
@@ -150,6 +153,16 @@ private:
     std::unordered_map<sal_uInt64, BinaryDataContainer> maVectorFontCache;
     std::unordered_map<OUString, sal_uInt64> maVectorFontIdByKey;
 
+    struct AnimatedGifTempFile
+    {
+        sal_uInt64 mnChecksum = 0;
+        OUString maUrl;
+        std::shared_ptr<avmedia::MediaTempFile> mpTempFile;
+    };
+
+    /// Extracted animated GIF files, keyed by the graphic object's unique id.
+    mutable std::unordered_map<sal_uInt64, AnimatedGifTempFile> maAnimatedGifCache;
+
     /// Vector content state, keyed by 0-based slide index.
     std::unordered_map<sal_Int32, VectorPartState> maVectorParts;
 
@@ -192,6 +205,9 @@ private:
     bool mbPaintTextEdit;
 
     void initializeDocument();
+
+    /// Creates file URL of the animated GIF extracted from rGraphicObject
+    OUString getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphicObject) const;
 
     SAL_RET_MAYBENULL sd::DrawViewShell* GetViewShell();
 

@@ -5653,9 +5653,14 @@ void DocumentBroker::handleMediaRequest(const std::string_view range,
             std::string localPath = url.substr(sizeof("file:///") - 1);
             std::string path = getAbsoluteMediaPath(std::move(localPath));
 
+            std::string contentType = JsonUtil::getJSONValue<std::string>(object, "mimeType");
+            // FIXME: fallback, but we can define it every time and remove below code
+            if (contentType.empty())
+                contentType = (field == "url" ? "video/mp4" : "text/plain");
+
             auto session = std::make_shared<http::ServerSession>();
             http::ServerSession::ResponseHeaders responseHeaders;
-            responseHeaders.emplace_back("Content-Type", (field == "url" ? "video/mp4" : "text/plain"));
+            responseHeaders.emplace_back("Content-Type", contentType);
             session->asyncUpload(std::move(path), std::move(responseHeaders), range);
             streamSocket->setHandler(std::static_pointer_cast<ProtocolHandlerInterface>(session));
         }
