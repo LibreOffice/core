@@ -79,6 +79,12 @@ public:
     void copyColHidden(FilterData const& rFilter, SCCOL nStartCol, SCCOL nEndCol);
     void copyRowHidden(FilterData const& rFilter, SCROW nStartRow, SCROW nEndRow);
 
+    /** Moves the hidden and filtered columns from nStartCol on to the right by nColCount. */
+    void insertedColumns(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Drops nColCount columns from nStartCol on and moves the rest to the left. */
+    void deletedColumns(SCCOL nStartCol, SCCOL nColCount);
+
     SCROW firstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW lastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW countVisibleRows(SCROW nStartRow, SCROW nEndRow) const;

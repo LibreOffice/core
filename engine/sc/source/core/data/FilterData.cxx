@@ -363,6 +363,18 @@ void FilterData::copyColHidden(FilterData const& rFilter, SCCOL nStartCol, SCCOL
     }
 }
 
+void FilterData::insertedColumns(SCCOL nStartCol, SCCOL nColCount)
+{
+    mpHiddenCols->insertSegment(nStartCol, nColCount);
+    mpFilteredCols->insertSegment(nStartCol, nColCount);
+}
+
+void FilterData::deletedColumns(SCCOL nStartCol, SCCOL nColCount)
+{
+    mpHiddenCols->removeSegment(nStartCol, nStartCol + nColCount);
+    mpFilteredCols->removeSegment(nStartCol, nStartCol + nColCount);
+}
+
 void FilterData::copyRowHidden(FilterData const& rFilter, SCROW nStartRow, SCROW nEndRow)
 {
     SCROW nRow = nStartRow;

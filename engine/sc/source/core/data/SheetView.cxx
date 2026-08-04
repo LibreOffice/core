@@ -599,6 +599,18 @@ void SheetView::deletedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
     adjustSortParamForDeleteColumns(nStartColumn, nColumnCount);
 }
 
+void SheetView::shiftHiddenColumnsForInsert(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (mpTable)
+        mpTable->getFilterData().insertedColumns(nStartColumn, nColumnCount);
+}
+
+void SheetView::shiftHiddenColumnsForDelete(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (mpTable)
+        mpTable->getFilterData().deletedColumns(nStartColumn, nColumnCount);
+}
+
 void SheetView::resetSortData() { mpSortData.reset(); }
 
 std::shared_ptr<SheetViewSortData> SheetView::captureSortData() const

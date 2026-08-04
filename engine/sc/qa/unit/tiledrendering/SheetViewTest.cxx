@@ -237,6 +237,14 @@ protected:
         dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     }
 
+    void selectColumn(SCCOL nColumn)
+    {
+        dispatchCommand(
+            mxComponent, u".uno:SelectColumn"_ustr,
+            comphelper::InitPropertySequence({ { "Col", cpo::uno::Any(sal_Int32(nColumn)) },
+                                               { "Modifier", cpo::uno::Any(sal_Int16(0)) } }));
+    }
+
     void insertSheet(OUString const& rName, sal_Int16 nIndex)
     {
         dispatchCommand(mxComponent, u".uno:Insert"_ustr,
@@ -524,6 +532,167 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewHiddenColumnSurvivesCellEdit)
                            rDocument.ColHidden(nHiddenColumn, nSheetViewTab));
     // The default view is unaffected.
     CPPUNIT_ASSERT(!rDocument.ColHidden(nHiddenColumn, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewHiddenColumnShiftsOnColumnInsert)
+{
+    // A column hidden only inside a sheet view moves with its content when a
+    // column is inserted to the left of it, so the text the user hid stays out
+    // of sight.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    // Enter a sheet view of Sheet1. Layout becomes [Sheet1 (default) = 0,
+    // Sheet1 (sheet view) = 1] and the view moves onto the sheet view.
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Type into B1 while on the sheet view. A sheet view shares the cell
+    // content with its sheet, so the text lands on both tables.
+    typeCharsInCell(std::string("ABC"), 1, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(1, 0, nDefaultViewTab)));
+
+    // Hide the column that holds the text, the way the client does it. Hiding
+    // is a property of the sheet view alone.
+    selectColumn(1);
+    dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDocument.ColHidden(1, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(1, nDefaultViewTab));
+
+    // Insert one column before column A, still on the sheet view. Column A is
+    // selected first because hiding column B left the cursor on column C.
+    selectColumn(0);
+    dispatchCommand(mxComponent, u".uno:InsertColumnsBefore"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The insert pushed the text from B1 to C1 on both tables.
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(0, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(1, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(2, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+
+    // The hidden column moved along with the text.
+    CPPUNIT_ASSERT_MESSAGE("The column hidden in the sheet view stayed behind when a column was "
+                           "inserted before it",
+                           rDocument.ColHidden(2, nSheetViewTab));
+    // Column B, which the insert pushed the text out of, is visible again.
+    CPPUNIT_ASSERT(!rDocument.ColHidden(1, nSheetViewTab));
+
+    // The default view has nothing hidden.
+    CPPUNIT_ASSERT(!rDocument.ColHidden(1, nDefaultViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(2, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewHiddenColumnShiftsOnColumnDelete)
+{
+    // A column hidden only inside a sheet view moves with its content when a
+    // column to the left of it is deleted.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nDefaultViewTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Type into C1 while on the sheet view.
+    typeCharsInCell(std::string("ABC"), 2, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+
+    // Hide the column that holds the text, in the sheet view only.
+    selectColumn(2);
+    dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDocument.ColHidden(2, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(2, nDefaultViewTab));
+
+    // Delete column A, still on the sheet view.
+    selectColumn(0);
+    dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The delete pulled the text from C1 to B1 on both tables.
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(1, 0, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+
+    // The hidden column moved along with the text.
+    CPPUNIT_ASSERT_MESSAGE("The column hidden in the sheet view stayed behind when a column before "
+                           "it was deleted",
+                           rDocument.ColHidden(1, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(2, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(1, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewHiddenColumnFollowsUndoRedoOfColumnInsert)
+{
+    // Undo and redo of a column insert take the column a sheet view hides back
+    // and forth with the content it hides.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    typeCharsInCell(std::string("ABC"), 1, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    selectColumn(1);
+    dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    selectColumn(0);
+    dispatchCommand(mxComponent, u".uno:InsertColumnsBefore"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT(rDocument.ColHidden(2, nSheetViewTab));
+
+    // Undo puts the text back in B1, and the sheet view hides that column again.
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_MESSAGE("Undo of the column insert left the sheet view hiding the wrong column",
+                           rDocument.ColHidden(1, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(2, nSheetViewTab));
+
+    // Redo moves both the text and the hidden column back to C.
+    redo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(2, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_MESSAGE("Redo of the column insert left the sheet view hiding the wrong column",
+                           rDocument.ColHidden(2, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(1, nSheetViewTab));
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterSurvivesCellEditBelowRange)

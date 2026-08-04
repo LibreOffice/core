@@ -56,6 +56,7 @@
 #include <tabvwsh.hxx>
 #include <comphelper/kit.hxx>
 #include <dpobject.hxx>
+#include <SheetViewManager.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>
@@ -294,8 +295,12 @@ void ScTable::InsertCol(
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
 
-        maFilterData.mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
-        maFilterData.mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize));
+        maFilterData.insertedColumns(nStartCol, static_cast<SCCOL>(nSize));
+
+        // A sheet view of this sheet holds the same content and hides columns of its own, so
+        // those hidden columns should also follow the insert.
+        if (auto const& pSheetViewManager = GetSheetViewManager())
+            pSheetViewManager->shiftHiddenColumnsForInsert(nStartCol, static_cast<SCCOL>(nSize));
 
         if (!maColManualBreaks.empty())
         {
@@ -373,9 +378,12 @@ void ScTable::DeleteCol(
                 if (pUndoOutline)
                     *pUndoOutline = true;
 
-        SCCOL nRmSize = nStartCol + static_cast<SCCOL>(nSize);
-        maFilterData.mpHiddenCols->removeSegment(nStartCol, nRmSize);
-        maFilterData.mpFilteredCols->removeSegment(nStartCol, nRmSize);
+        maFilterData.deletedColumns(nStartCol, static_cast<SCCOL>(nSize));
+
+        // A sheet view of this sheet holds the same content and hides columns of its own, so
+        // those hidden columns should also follow the delete.
+        if (auto const& pSheetViewManager = GetSheetViewManager())
+            pSheetViewManager->shiftHiddenColumnsForDelete(nStartCol, static_cast<SCCOL>(nSize));
 
         if (!maColManualBreaks.empty())
         {

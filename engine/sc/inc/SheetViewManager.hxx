@@ -161,6 +161,12 @@ public:
     /** Update when columns are deleted. */
     void deletedColumns(SCCOL nStartCol, SCCOL nColCount);
 
+    /** Move the columns each sheet view hides on its own to the right, for inserted columns. */
+    void shiftHiddenColumnsForInsert(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Move the columns each sheet view hides on its own to the left, for deleted columns. */
+    void shiftHiddenColumnsForDelete(SCCOL nStartCol, SCCOL nColCount);
+
     /** Capture sort data (deep copy).*/
     std::shared_ptr<DefaultViewSortData> captureSortData() const;
 
