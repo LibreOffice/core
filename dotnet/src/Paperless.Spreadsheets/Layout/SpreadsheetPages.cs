@@ -755,7 +755,14 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
             column.Column,
             new DocRect(column.X, row.Y, SpanWidth(cell, column), SpanHeight(cell, row)),
             sheet.RichText.At(row.Row, column.Column, text),
-            sheet.HoldsField(row.Row, column.Column)));
+            sheet.HoldsField(row.Row, column.Column),
+
+            // `CRFlags::ManualSize`. A row states one height and means two different things by it,
+            // and this is the second consumer of the distinction after
+            // `SheetOptimalRowHeights`: a height the file merely states is Calc's own measurement
+            // and nothing overflows it, while one the user set is a statement that cuts whatever
+            // does not fit.
+            !sheet.Grid.Rows.IsOptimalSize(row.Row)));
     }
 
     /// <summary>How wide a cell is, a merge's further columns included.</summary>

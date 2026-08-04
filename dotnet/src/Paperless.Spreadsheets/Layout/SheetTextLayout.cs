@@ -44,6 +44,11 @@ internal readonly record struct SheetTextContext(
 /// indivisible portion, so it neither breaks across lines nor loses its tail to a narrow column.
 /// See <see cref="SheetLayout.HoldsField"/>.
 /// </param>
+/// <param name="RowIsManualHeight">
+/// Whether the row's height was set by hand rather than measured. It decides whether a cell taller
+/// than its row loses the overflow: see <see cref="SheetTextLayout"/>'s remarks on vertical
+/// clipping.
+/// </param>
 internal readonly record struct SheetCellText(
     string Text,
     object? Value,
@@ -52,7 +57,8 @@ internal readonly record struct SheetCellText(
     int Column,
     DocRect Box,
     IReadOnlyList<SheetTextPortion>? Portions = null,
-    bool IsField = false);
+    bool IsField = false,
+    bool RowIsManualHeight = false);
 
 /// <summary>
 /// Places and draws one cell's text.
@@ -85,6 +91,18 @@ internal static class SheetTextLayout
 {
     /// <summary>The margin between a cell's edge and its text, on all four sides.</summary>
     public static readonly Length CellMargin = Length.FromTwips(20);
+
+    /// <summary>
+    /// One pixel of the device Calc measures against, as a length.
+    /// </summary>
+    /// <remarks>
+    /// <c>aRefOne</c>, <c>mpRefDevice-&gt;PixelToLogic(Size(1, 1))</c>
+    /// (<c>sc/source/ui/view/output2.cxx:3196</c>), which is 15 twips on the 96 dpi virtual device
+    /// a headless Calc builds. It is the slack in every "is this taller than its cell" test, and
+    /// without it a cell whose text is the row's own height to within a rounding loses its last
+    /// line.
+    /// </remarks>
+    private static readonly Length ReferencePixel = Length.FromTwips(15);
 
     /// <summary>How many times the shrink loop is allowed to try again.</summary>
     /// <remarks><c>SC_SHRINKAGAIN_MAX</c>; each attempt takes a further tenth off the scale.</remarks>
@@ -432,13 +450,41 @@ internal static class SheetTextLayout
             y += line.LineHeight;
         }
 
-        // The clip never cuts the text vertically. Calc does not clip a printed cell's height
-        // either unless the row's height was set by hand ("no vertical clipping when printing
-        // cells with optimal height", output2.cxx:2093), and a wrapped cell taller than its row is
-        // exactly the case that would lose a line to it.
-        Length textTop = Length.Min(cell.Box.Y, placed[0].Baseline - lines[0].Ascent);
-        Length textBottom = Length.Max(
-            cell.Box.Y + cell.Box.Height, placed[^1].Baseline + lines[^1].Descent);
+        // Whether the cell keeps what will not fit in its row, which is a property of the *row*
+        // and not of the text. Calc asks the same question in four places with the same three
+        // lines — `meType != OUTTYPE_PRINTER || GetRowFlags(...) & CRFlags::ManualSize || ...`
+        // (output2.cxx:2104, :3256, :4132, :4419) — and the printer answers it with the row's own
+        // flag: "Don't clip for text height when printing rows with optimal height" (:3253). A row
+        // whose file merely states a height is Calc's own measurement of the content, so nothing
+        // can overflow it and clipping it would only cut its own answer; a row the user sized is a
+        // statement, and a wrapping cell taller than it loses everything past its bottom edge.
+        //
+        // The slack is Calc's `aRefOne` — one pixel of the reference device, 15 twips at 96 dpi —
+        // and it is what stops a rounding difference of a fraction of a pixel from cutting a line
+        // (`nEngineHeight >= aCellSize.Height() + aRefOne.Height()`, :3248).
+        Length top = placed[0].Baseline - lines[0].Ascent;
+        Length bottom = placed[^1].Baseline + lines[^1].Descent;
+
+        bool cutsVertically = cell.RowIsManualHeight
+            && bottom - cell.Box.Y >= cell.Box.Height + (ReferencePixel * scale);
+
+        if (cutsVertically)
+        {
+            // Only the affected dimension is cut. Calc widens the clip to the whole printed block
+            // when the text was not also overflowing horizontally — "only clip the affected
+            // dimension so that not all right-aligned columns are cut off" (:2113-2122) — so a
+            // cell that merely fails to fit its row does not also lose its overhang.
+            return new Placement(
+                placed,
+                Clipped: true,
+                area.IsClipped ? area.Left : context.BlockLeft,
+                area.IsClipped ? area.Right : context.BlockRight,
+                cell.Box.Y,
+                cell.Box.Y + cell.Box.Height);
+        }
+
+        Length textTop = Length.Min(cell.Box.Y, top);
+        Length textBottom = Length.Max(cell.Box.Y + cell.Box.Height, bottom);
 
         return new Placement(placed, area.IsClipped, area.Left, area.Right, textTop, textBottom);
     }
