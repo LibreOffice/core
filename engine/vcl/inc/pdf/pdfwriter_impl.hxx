@@ -901,6 +901,10 @@ private:
 
     void disableStreamEncryption() override;
 
+    /** Number of bytes that nDataSize bytes of input data occupy, taking
+        into account encryption overhead. */
+    sal_uInt64 calculateStreamSize(sal_uInt64 nDataSize) const;
+
     /* */
     void enableStringEncryption( sal_Int32 nObject );
 
