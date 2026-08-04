@@ -196,7 +196,8 @@ internal static class WordParagraphFormats
             WidowLines = IsOn(styles, paragraphProperties, styleId, "widowControl", tableStyle) ? 2 : 0,
 
             StartsNewPage = StartsNewPage(styles, paragraphProperties, styleId, tableStyle),
-            TabStops = Tabs(Layer(styles, paragraphProperties, styleId, "tabs", tableStyle)),
+            TabStops = Tabs(
+                styles.ParagraphPropertyLayers("tabs", paragraphProperties, styleId, tableStyle)),
             DefaultTabInterval =
                 defaultTabInterval > Length.Zero ? defaultTabInterval : Length.FromTwips(720),
 
@@ -539,55 +540,90 @@ internal static class WordParagraphFormats
     }
 
     /// <summary>
-    /// The paragraph's tab stops, from a <c>w:tabs</c>.
+    /// The paragraph's tab stops, merged across the layers that state a <c>w:tabs</c>.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Taken whole from whichever layer declares the element, because <c>w:tabs</c> is a list and the
-    /// direct formatting replaces the style's rather than adding to it.
+    /// <strong>A direct <c>w:tabs</c> adds to the style's rather than replacing it</strong>, keyed by
+    /// position: a stop at a position the style already uses replaces that one, a stop at a new position
+    /// joins the set, and <c>w:val="clear"</c> removes the inherited stop at its position — Word's way of
+    /// cancelling one. That is what <c>DomainMapper</c> does for <c>LN_CT_PPrBase_tabs</c>: it seeds the
+    /// working vector from the paragraph style sheet and then folds each stated stop in through
+    /// <c>IncorporateTabStop</c>, which replaces by equal position and appends otherwise
+    /// (<c>sw/source/writerfilter/dmapper/DomainMapper.cxx:2604-2620</c> and
+    /// <c>DomainMapper_Impl.cxx:1485-1498</c>).
     /// </para>
     /// <para>
-    /// <c>w:val="clear"</c> is a stop that <em>removes</em> one the style set — Word's way of cancelling an
-    /// inherited stop — so it contributes nothing here. Keeping it as a left stop would put a column
-    /// boundary exactly where the document asked for none.
+    /// Taking the innermost layer whole instead loses every stop the style set, and the one that costs is
+    /// the right stop with a dot leader that every table-of-contents style carries. Word writes a direct
+    /// <c>&lt;w:tab w:val="left"/&gt;</c> on a TOC entry to place its heading number, and a paragraph
+    /// carrying that lost its style's leader and its right margin together: the page number no longer
+    /// aligned right, no dots were drawn, and the entry wrapped onto a second line. Measured on
+    /// <c>SPA-11_mcar_part-11_v2.9.docx</c>, whose contents pages 8 to 10 are the first three in the
+    /// document to differ from the reference at all.
+    /// </para>
+    /// <para>
+    /// The RTF rule is the opposite and is not shared with this reader: there a stop is inherited only
+    /// if the paragraph also states it, and cleared otherwise, which <c>DomainMapper</c> spells out as an
+    /// <c>IsRTFImport</c> branch on the same case, citing fdo#81033.
     /// </para>
     /// </remarks>
-    private static List<TabStop> Tabs(XElement? tabs)
+    /// <param name="layers">
+    /// Every layer stating a <c>w:tabs</c>, innermost first — the paragraph's own, then its style chain,
+    /// then the table style, then the document defaults — as
+    /// <see cref="WordStyles.ParagraphPropertyLayers"/> returns them.
+    /// </param>
+    private static List<TabStop> Tabs(List<XElement> layers)
     {
-        List<TabStop> stops = [];
+        // Outermost first, so an inner layer's stop overwrites the outer one at the same position. Keyed
+        // by position in EMUs, which is what "the same stop" means to Word: alignment and leader travel
+        // with the position rather than identifying the stop.
+        Dictionary<long, TabStop> byPosition = [];
 
-        foreach (XElement tab in Word.Children(tabs, "tab"))
+        for (int layer = layers.Count - 1; layer >= 0; layer--)
         {
-            string? kind = Word.Attribute(tab, "val");
-            if (kind == "clear") continue;
-
-            if (Word.Attribute(tab, "pos") is not { } text
-                || !long.TryParse(text, CultureInfo.InvariantCulture, out long twips))
+            foreach (XElement tab in Word.Children(layers[layer], "tab"))
             {
-                continue;
+                if (Word.Attribute(tab, "pos") is not { } text
+                    || !long.TryParse(text, CultureInfo.InvariantCulture, out long twips))
+                {
+                    continue;
+                }
+
+                Length position = Length.FromTwips(twips);
+                string? kind = Word.Attribute(tab, "val");
+
+                // A cleared stop removes whatever an outer layer put there and adds nothing. Keeping it
+                // as a left stop would put a column boundary exactly where the document asked for none.
+                if (kind == "clear")
+                {
+                    byPosition.Remove(position.Emu);
+                    continue;
+                }
+
+                string? leader = Word.Attribute(tab, "leader");
+
+                byPosition[position.Emu] = new TabStop(
+                    position,
+                    kind switch
+                    {
+                        "center" => TabAlignment.Centre,
+                        "right" or "end" => TabAlignment.Right,
+                        "decimal" => TabAlignment.DecimalSeparator,
+                        _ => TabAlignment.Left,
+                    },
+                    leader switch
+                    {
+                        "dot" => '.',
+                        "hyphen" => '-',
+                        "underscore" => '_',
+                        "middleDot" => '\u00B7',
+                        _ => '\0',
+                    });
             }
-
-            string? leader = Word.Attribute(tab, "leader");
-
-            stops.Add(new TabStop(
-                Length.FromTwips(twips),
-                kind switch
-                {
-                    "center" => TabAlignment.Centre,
-                    "right" or "end" => TabAlignment.Right,
-                    "decimal" => TabAlignment.DecimalSeparator,
-                    _ => TabAlignment.Left,
-                },
-                leader switch
-                {
-                    "dot" => '.',
-                    "hyphen" => '-',
-                    "underscore" => '_',
-                    "middleDot" => '\u00B7',
-                    _ => '\0',
-                }));
         }
 
+        List<TabStop> stops = [.. byPosition.Values];
         stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
         return stops;
     }
