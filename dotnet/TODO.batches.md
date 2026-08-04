@@ -2367,3 +2367,129 @@ recording because the two statements cannot both describe the same number.
 
 **`order-of-worship-ppt-revised-2018.pptx` is 27% of the whole track's unaccounted ink** and
 had never been seen, because it is one of the nine.
+
+### Round eleven, measured: 2810.88 -> 1635.52 unaccounted ink
+
+Swept whole before and after, 163 documents each time, reusing the reference PDFs — nothing
+this round touches `soffice`, and the after sweep's reference column is the base sweep's file
+by construction.
+
+| | baseline | after |
+|---|---|---|
+| slides matching the word gate | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | 163/163 |
+| documents whose page count, word count or verdict moved | — | **0** |
+| total unaccounted ink | 2810.88 | **1635.52** |
+| pages the image tool calls major | 624 | **538** |
+| documents whose ink moved | — | **14: 12 down, 2 up by 5.08 between them** |
+
+```
+766.96 ->    8.03   order-of-worship-ppt-revised-2018.pptx       major 28 ->  3
+159.50 ->   15.70   3492.pptx                                    major  7 ->  3
+127.20 ->    5.78   HENTZEN_...AEROSPACE_INDUSTRY.pptx           major 12 ->  3
+ 66.45 ->   23.99   Framing Europe.ppt                           major 24 -> 10
+ 44.78 ->    2.95   redac-fullComm-201705-EE-FRs-briefing.pptx   major  8 ->  1
+ 40.64 ->    4.41   joint_user_outcomes_michael_fullerton.ppt    major 19 ->  1
+ 18.59 ->    3.48   PRM_training.pptx                            major 10 ->  2
+ 14.10 ->    3.68   SRDMG(16)024_60 GHz onboard airplanes.pptx   major  2 ->  3
+ 35.88 ->   26.67   Demick_JetBlue.pptx                          major  7 ->  6
+```
+
+The two that rose are `chapter_4_0.pptx` (+5.04) and `social-media-app-bulletin-january.pptx`
+(+0.04). **The first is visually closer and scores worse**, which this instrument has done
+before: its ink rises from about 0.10 to about 0.19 on nearly every page while `diff%` does
+not move at all, and the footer band that carries the difference reads 143 grey before, 119
+after, against the reference's **115**. Its six layouts carry `overrideClrMapping`, four of
+them differing from the master, so the change is the intended one and it moved the colour
+towards the reference. Small figures on a 512-pixel region metric are noise.
+
+### The four fills
+
+**`a:duotone` — 894.16 of ink between two documents.** An Office theme paints one grey
+texture in a deck's own colours by putting a duotone on the blip: every pixel becomes
+`dark + (light − dark) × its own luminance`. The string appeared nowhere in `dotnet/src`.
+`order-of-worship-ppt-revised-2018.pptx` takes its whole background from
+`a:bgFillStyleLst`'s third entry that way and drew as a dark vignette against a pale
+reference — **27% of the entire track's unaccounted ink in one document**, and it had never
+been looked at because it is one of the nine the image tool could not measure.
+`HENTZEN_…AEROSPACE_INDUSTRY.pptx` is the same mechanism, its dark red banner coming out
+grey. 17 of the 112 corpus decks state one.
+
+The port has three details that are not guessable. Luminance is
+`(B×29 + G×151 + R×76) >> 8`, integers summing to 256 rather than the Rec. 601 coefficients
+they approximate. Both divisions in `lcl_getDuotoneColorComponent` truncate, so it is not a
+rounded lerp. And the encoded bytes have to be dropped when the transform runs — they are
+kept so a JPEG reaches a PDF as `DCTDecode` untouched, and that pass-through would have
+emitted the original picture and lost the recolouring on one backend only.
+
+Verified against the binary rather than against the formula: `slide-duotone.pptx` draws four
+rows — black, mid grey, saturated blue, white — and LibreOffice puts them at `112255`,
+`127 126 127`, `41 54 93` and `EEDDAA`. Ours matches all four, and all four of the
+alphaModFix page's, exactly. The blue row is what separates VCL's weights from Rec. 601, at
+luminance 28 against 29; the grey row is what separates truncation from rounding.
+
+**`a:alphaModFix` on a fill — 143.80 on one document.** `DrawingBlipFill.Opacity` was parsed
+and reached only `PlacedPicture`, the `p:pic` path. A picture used as a *fill* went through
+`BitmapPaint`, which had nowhere to put it. `3492.pptx` lays black text over a runway
+photograph its layout states at `amt="16000"`; we drew the photograph at full strength and
+the text was unreadable on it. The "read but never used" shape for the fifth time, and the
+tell was the same as ever — every reader parsed the value and grepping it found only the
+readers and the model. 5 decks state one on a fill.
+
+**`p:clrMapOvr/a:overrideClrMapping` — 41.83 on one document.** A layout may amend the
+master's colour map, and `PptxFile` said so and left it unread with the note "nothing
+measured carries one". 10 of the 112 corpus decks carry one and 7 differ from their master's
+map. `redac-fullComm-201705-EE-FRs-briefing.pptx`'s title layout sends `bg2` to `dk2` where
+its master sends it to `lt2`, and its whole title page is the theme's circle gradient over
+that colour: a deep teal radial in the reference and a near-white wash in ours. Settled by
+arithmetic before any code was touched — the `tint`/`satMod` chain over `dk2` gives
+`(76,160,212)` and `(0,44,56)`, and LibreOffice's flat-ODF export states
+`draw:start-color="#002b36" draw:end-color="#4aa2d6"`.
+
+The override *patches* the map in force rather than replacing it, which is the part the
+schema does not say: `SlideFragmentHandler` copies the current map for an
+`overrideClrMapping` and starts from an empty one for a `clrMap`
+(`slidefragmenthandler.cxx:194-203`). A **slide's** own override is deliberately not applied:
+measured on a purpose-built fixture, the reference does not repaint a slide's *inherited*
+background with it, because Impress resolves a master page's fill once as it imports the
+layout. Exactly one slide in the corpus states one, and it restates the master's map.
+
+**`DFF_Prop_fillOpacity` — 92.69 across three `.ppt`.** Escher's fill opacity, absent from
+`dotnet/src`. `Framing Europe.ppt` draws four `#0066ff` bands over a blue-to-black shade on
+its master, and LibreOffice's flat-ODF export states `draw:opacity="50%"` on each; we drew
+them opaque, so twenty-four pages had bright bands through the body text. The 50% was fitted
+from the reference's own pixels before any source was read — with base *b* and stripe *s*,
+`ref = a·s + (1−a)·b` solves to a = 0.50 at three different heights down the gradient.
+
+Two roundings, deliberately not shared. A non-shaded fill goes through
+`XFillTransparenceItem`, a whole percent (`msdffimp.cxx:1367-1376`); a shade goes through
+`ImportGradientColor`, which truncates `(1−dTrans)×255` into a luminosity mask
+(`msdffimp.cxx:2930-2941`) and never sees a percent. A shade's two ends swap their opacities
+with their colours, inside the same `nChgColors` branch. Absent is not zero: `dTrans` starts
+at 1.0 and is only overwritten inside `IsProperty`, so reading the property with a zero
+fallback would empty every fill in every deck. Reach, parsed from all 51 corpus `.ppt`: 6
+documents.
+
+### What the next agent on this track should take
+
+```
+368.41  77 of 137 major  NAS-Infrastructure-Roadmaps-v16.0.pptx   (linked Excel OLE, known)
+ 66.12   1 of  30        N2_E_Maestroni_Swarm_COP.pptx            (the Gantt)
+ 56.67  10 of  41        Wildlife for REDAC September 11.pptx     (circle gradient, known)
+ 49.65  18 of  54        Thailand17.ppt
+ 48.41   6 of 268        Reporting_responsibilities_matrix.pptx   (unlooked at)
+ 45.05  18 of  40        171128IPAP.pptx                          (residue of round ten's fix)
+ 37.89  11 of  24        Sector_Skills_Insights_Advanced_Manufacturing…pptx  (unlooked at)
+ 31.84  28 of  94        2015-Civil-Rights-Website-training.ppt   (unlooked at)
+ 28.32  13 of  94        8.16_AOD_FINAL_Provider_Training…ppt     (unlooked at)
+ 26.67   6 of  10        Demick_JetBlue.pptx
+ 25.99  11 of  52        ghgp-supply-chain-initiative_20100323_wri.pptx
+ 25.95  12 of  47        ITE106-Chapter 4.ppt                     (unlooked at)
+ 23.99  10 of  24        Framing Europe.ppt                       (residue: bullet glyphs)
+```
+
+`Framing Europe.ppt`'s residue is a different defect and a small one, named but not chased:
+the reference draws its bullets as a Wingdings filled square 13.7 pt wide and we draw a
+6.3 pt `•`. Its text layer shows the reference's bullet as a private-use code point and ours
+as an ASCII bullet, which is the encoding difference the skill's word-gate note describes,
+seen here from the pixel side instead.
