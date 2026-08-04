@@ -10,6 +10,7 @@
 
 import { execSync } from 'child_process';
 import {
+	appendFileSync,
 	cpSync,
 	createReadStream,
 	existsSync,
@@ -219,25 +220,30 @@ export class CodaMacOSServiceLauncher {
 	#driverLogFile: string | null = null;
 	#stopTail: (() => void) | null = null;
 	#appLogPoll: ReturnType<typeof setInterval> | null = null;
+	#appLogFile: string | null = null;
 	#appLogOffset = 0;
 	#appLogDraining = false;
 	#options: CodaMacOSServiceOptions;
+
+	/// How many lines of the app's log to show when a run fails.
+	static #APP_LOG_TAIL_LINES = 60;
 
 	constructor(options: CodaMacOSServiceOptions) {
 		this.#options = options;
 	}
 
 	/**
-	 * Fetch whatever the app has logged since the last call and print it.
+	 * Fetch whatever the app has logged since the last call and append it to the
+	 * log file kept for this run.
 	 *
-	 * The log lives inside the app's sandbox container, so the app hands its
+	 * The app's own log lives inside its sandbox container, so it hands the
 	 * content out over the test driver's connection rather than us reading the
-	 * file.  Calls do not overlap: a slow answer would otherwise let a second
-	 * request ask from an offset the first has not accounted for yet, and the
-	 * same lines would be printed twice.
+	 * file there.  Calls do not overlap: a slow answer would otherwise let a
+	 * second request ask from an offset the first has not accounted for yet, and
+	 * the same lines would be written twice.
 	 */
 	async #drainAppLog(): Promise<void> {
-		if (this.#appLogDraining) return;
+		if (this.#appLogDraining || this.#appLogFile === null) return;
 		this.#appLogDraining = true;
 		try {
 			const { webDriverPort } = this.#options;
@@ -248,12 +254,41 @@ export class CodaMacOSServiceLauncher {
 			if (typeof answer.offset === 'number') {
 				this.#appLogOffset = answer.offset;
 			}
-			for (const line of answer.content.split('\n')) {
-				if (line.length > 0) console.log(`[coda-app]: ${line}`);
+			if (answer.content.length > 0) {
+				appendFileSync(this.#appLogFile, answer.content);
 			}
 		} finally {
 			this.#appLogDraining = false;
 		}
+	}
+
+	/**
+	 * Print the last lines of the collected app log, and where the whole of it
+	 * is.  For a failing run, where the app's own account of what happened is
+	 * usually what one wants to read first.
+	 */
+	#printAppLogTail(): void {
+		if (this.#appLogFile === null) return;
+		let content: string;
+		try {
+			content = readFileSync(this.#appLogFile, 'utf8');
+		} catch (e) {
+			console.warn(
+				`Could not read the app's log: ${(e as Error).message}`,
+			);
+			return;
+		}
+
+		const lines = content.split('\n').filter((line) => line.length > 0);
+		const tail = lines.slice(-CodaMacOSServiceLauncher.#APP_LOG_TAIL_LINES);
+		console.log(
+			`\nThe last ${tail.length} of ${lines.length} lines the app logged ` +
+				`(all of it is in ${this.#appLogFile}):`,
+		);
+		for (const line of tail) {
+			console.log(`[coda-app]: ${line}`);
+		}
+		console.log('');
 	}
 
 	/**
@@ -325,7 +360,7 @@ export class CodaMacOSServiceLauncher {
 		}
 	}
 
-	async onPrepare(): Promise<void> {
+	async onPrepare(config?: { outputDir?: string }): Promise<void> {
 		const { appPath, driverPath, webDriverPort, nativeUIPort, fixturesDir } = this.#options;
 
 		// A leftover instance from an earlier run still owns the test
@@ -413,27 +448,41 @@ export class CodaMacOSServiceLauncher {
 			),
 		]);
 
-		// Forward the app's log.  Polling starts at offset zero, so the lines it
-		// wrote while starting up arrive too, late as we are to it.
+		// Collect the app's log into a file of our own.  It is far too long to
+		// put in the test output, so only its location is announced here, and a
+		// failing run gets the tail of it printed.  Collecting starts at offset
+		// zero, so the lines written during startup are included, late as we are
+		// to it.
 		if (typeof appStatus?.logFile === 'string') {
+			const logDir = config?.outputDir ?? process.cwd();
+			mkdirSync(logDir, { recursive: true });
+			this.#appLogFile = join(logDir, 'coda-app.log');
+			writeFileSync(this.#appLogFile, '');
 			this.#appLogPoll = setInterval(() => {
 				void this.#drainAppLog();
 			}, 500);
+			console.log(`Collecting the app's log in ${this.#appLogFile}`);
 		} else {
 			console.warn(
-				'The app is not logging to a file, so its log will not appear here.',
+				'The app is not logging to a file, so no log will be collected.',
 			);
 		}
 
 		console.log('coda-macos is ready, tests will now run');
 	}
 
-	async onComplete(): Promise<void> {
+	async onComplete(exitCode?: number): Promise<void> {
 		// Collect the rest of the app's log while it can still answer for it.
 		if (this.#appLogPoll) {
 			clearInterval(this.#appLogPoll);
 			this.#appLogPoll = null;
 			await this.#drainAppLog();
+		}
+
+		// A run that failed gets the end of the app's log printed, which is
+		// where whatever went wrong shows up.
+		if (exitCode !== 0 && this.#appLogFile !== null) {
+			this.#printAppLogTail();
 		}
 
 		await this.#shutdownApp();
