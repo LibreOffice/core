@@ -1773,89 +1773,47 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
 
                     if (!bExportedFromProperties && GetDocumentType() == DOCUMENT_XLSX)
                     {
-                        // Fallback: hard-coded formulas for charts not imported from chartex
-
-                        // _xlchart.v1.N is only valid when workbook.xml has a matching hidden
-                        // definedName. For new histograms, write the raw values-y range directly.
-                        if (eChartType == chart::TYPEID_HISTO)
+                        // The chart was created through the UI, so the data
+                        // sequences carry no dimension info. Write a category dimension and a
+                        // value dimension directly. A sequence whose ChartExFormula property is
+                        // set refers to its data through that workbook defined name; otherwise
+                        // we write the source range
+                        if (mxCategoriesValues.is())
                         {
-                            OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
-                            aCellRange = parseFormula(aCellRange);
-
-                            pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
-
-                            pFS->startElement(FSNS(XML_cx, XML_f));
-                            pFS->writeEscaped(aCellRange);
-                            pFS->endElement(FSNS(XML_cx, XML_f));
-
-                            pFS->endElement(FSNS(XML_cx, XML_numDim));
-                        }
-                        else
-                        {
-                            sal_Int32 nSuffixVal = nSeriesIndex;
-
-                            if (eChartType ==  chart::TYPEID_SUNBURST ||
-                                eChartType == chart::TYPEID_TREEMAP)
+                            ChartDimInfo aCatInfo = getChartDimInfo(mxCategoriesValues);
+                            if (!aCatInfo.sFormula.isEmpty())
                             {
                                 pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
                                 pFS->startElement(FSNS(XML_cx, XML_f));
-
-                                std::string sFormulaId = "_xlchart.v1.";
-                                sFormulaId.append(std::to_string(nSuffixVal));
-
-                                pFS->writeEscaped(sFormulaId);
-
+                                pFS->writeEscaped(aCatInfo.sFormula);
                                 pFS->endElement(FSNS(XML_cx, XML_f));
                                 pFS->endElement(FSNS(XML_cx, XML_strDim));
-
-                                ++nSuffixVal;
                             }
-
-                            // Set the ST_NumericDimensionType. For some (stupid?)
-                            // reason, MSO requires the value data for sunburst and
-                            // treemap to be type "size", while for most other chart
-                            // types it's of type "val".
-                            std::string sNumDimType;
-                            if (eChartType ==  chart::TYPEID_SUNBURST ||
-                                    eChartType == chart::TYPEID_TREEMAP)
-                            {
-                                sNumDimType = "size";
-                            }
-                            else
-                            {
-                                sNumDimType = "val";
-                            }
-
-                            pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type,
-                                    sNumDimType.c_str());
-                            pFS->startElement(FSNS(XML_cx, XML_f));
-
-                            std::string sFormulaId;
-                            switch( eChartType )
-                            {
-                                case chart::TYPEID_BOXWHISKER:
-                                case chart::TYPEID_CLUSTEREDCOLUMN:
-                                case chart::TYPEID_PARETOLINE:
-                                case chart::TYPEID_SUNBURST:
-                                case chart::TYPEID_TREEMAP:
-                                case chart::TYPEID_WATERFALL:
-                                    sFormulaId = "_xlchart.v1.";
-                                    break;
-                                case chart::TYPEID_FUNNEL:
-                                    sFormulaId = "_xlchart.v2.";
-                                    break;
-                                case chart::TYPEID_REGIONMAP:
-                                    sFormulaId = "_xlchart.v5.";
-                                    break;
-                                default:
-                                    assert(false);
-                                    break;
-                            }
-                            sFormulaId.append(std::to_string(nSuffixVal));
-                            pFS->writeEscaped(sFormulaId);
-                            pFS->endElement(FSNS(XML_cx, XML_f));
-                            pFS->endElement(FSNS(XML_cx, XML_numDim));
                         }
+
+                        // Set the ST_NumericDimensionType. For some (stupid?)
+                        // reason, MSO requires the value data for sunburst and
+                        // treemap to be type "size", while for most other chart
+                        // types it's of type "val".
+                        const char* pNumDimType =
+                            (eChartType == chart::TYPEID_SUNBURST || eChartType == chart::TYPEID_TREEMAP) ?
+                            "size" : "val";
+
+                        OUString sValueFormula;
+                        if (xValueSeq.is())
+                        {
+                            ChartDimInfo aValueInfo = getChartDimInfo(xValueSeq);
+                            sValueFormula = aValueInfo.sFormula;
+                            if (sValueFormula.isEmpty())
+                                sValueFormula
+                                    = parseFormula(xValueSeq->getSourceRangeRepresentation());
+                        }
+
+                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, pNumDimType);
+                        pFS->startElement(FSNS(XML_cx, XML_f));
+                        pFS->writeEscaped(sValueFormula);
+                        pFS->endElement(FSNS(XML_cx, XML_f));
+                        pFS->endElement(FSNS(XML_cx, XML_numDim));
                     }
                     else if (GetDocumentType() != DOCUMENT_XLSX)
                     {    // PPTX, DOCX

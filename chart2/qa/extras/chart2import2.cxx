@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <set>
+
 #include "charttest.hxx"
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
@@ -1596,8 +1598,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramAutomaticODSToXLSXRoundtrip
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
 {
-    // Exporting an ODF-origin histogram to XLSX must write the raw
-    // cell range, not an _xlchart.v1.N alias with no matching definedName.
+    // Exporting an ODF-origin histogram to XLSX references the data through
+    // workbook definedName that holds the source range.
     loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
     saveAndReload(TestFilter::XLSX);
 
@@ -1609,37 +1611,45 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
     OUString aFormula
         = getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f");
     OString aMessage = "got formula: " + OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8);
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), !aFormula.startsWith("_xlchart"));
-    // The FODS series points at Sheet1.A1:A5. After conversion to XLSX
-    // notation the range should look like Sheet1!$A$1:$A$5.
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"Sheet1") >= 0);
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"$A$1") >= 0);
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.indexOf(u"$A$5") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), aFormula.startsWith("_xlchart.v1."));
+
+    // The FODS series points at Sheet1.A1:A5. The matching definedName has
+    // the range
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+    OString aNameXPath = "/x:workbook/x:definedNames/x:definedName[@name='"
+                         + OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8) + "']";
+    assertXPath(pWorkbook, aNameXPath, "hidden", u"true");
+    CPPUNIT_ASSERT_EQUAL(u"Sheet1!$A$1:$A$5"_ustr, getXPathContent(pWorkbook, aNameXPath));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramMultiChartODSToXLSXExport)
 {
-    // Multi-chart export must not reuse the same ChartEx formula for all histograms.
+    // Multi-chart export gives each histogram its own definedName
     loadFromFile(u"fods/tdf163727_histogram_roundtrip_multi_chart.fods");
     saveAndReload(TestFilter::XLSX);
 
-    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
-    CPPUNIT_ASSERT(pXmlDoc);
-    CPPUNIT_ASSERT_EQUAL(
-        u"Sheet1!$A$1:$A$6"_ustr,
-        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
 
-    pXmlDoc = parseExport(u"xl/charts/chartEx2.xml"_ustr);
-    CPPUNIT_ASSERT(pXmlDoc);
-    CPPUNIT_ASSERT_EQUAL(
-        u"Sheet1!$B$1:$B$5"_ustr,
-        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
-
-    pXmlDoc = parseExport(u"xl/charts/chartEx3.xml"_ustr);
-    CPPUNIT_ASSERT(pXmlDoc);
-    CPPUNIT_ASSERT_EQUAL(
-        u"Sheet1!$C$1:$C$6"_ustr,
-        getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f"));
+    const std::pair<OUString, OUString> aExpectedRanges[] = {
+        { u"xl/charts/chartEx1.xml"_ustr, u"Sheet1!$A$1:$A$6"_ustr },
+        { u"xl/charts/chartEx2.xml"_ustr, u"Sheet1!$B$1:$B$5"_ustr },
+        { u"xl/charts/chartEx3.xml"_ustr, u"Sheet1!$C$1:$C$6"_ustr },
+    };
+    std::set<OUString> aSeenNames;
+    for (const auto& rCase : aExpectedRanges)
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport(rCase.first);
+        CPPUNIT_ASSERT(pXmlDoc);
+        OUString aFormula
+            = getXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data/cx:numDim/cx:f");
+        CPPUNIT_ASSERT(aFormula.startsWith("_xlchart.v1."));
+        CPPUNIT_ASSERT(aSeenNames.insert(aFormula).second);
+        OString aNameXPath = "/x:workbook/x:definedNames/x:definedName[@name='"
+                             + OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8) + "']";
+        CPPUNIT_ASSERT_EQUAL(rCase.second, getXPathContent(pWorkbook, aNameXPath));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramMultiChartXLSXRoundtrip)

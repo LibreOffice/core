@@ -21,8 +21,11 @@
 
 #include <map>
 
+#include <charthelper.hxx>
+#include <compiler.hxx>
 #include <document.hxx>
 #include <global.hxx>
+#include <drwlayer.hxx>
 #include <rangenam.hxx>
 #include <unotools/charclass.hxx>
 #include <tokenarray.hxx>
@@ -38,6 +41,17 @@
 #include <formula/grammar.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hdl>
 #include <xihelper.hxx>
 
@@ -130,6 +144,9 @@ private:
 class XclExpNameManagerImpl : protected XclExpRoot
 {
 public:
+    // Prefix that MS Excel uses for chartex data ranges
+    static constexpr OUString mDataNamePrefix = u"_xlchart"_ustr;
+
     explicit            XclExpNameManagerImpl( const XclExpRoot& rRoot );
 
     /** Creates NAME records for built-in and user defined names. */
@@ -194,6 +211,15 @@ private:
     void                CreateBuiltInNames();
     /** Creates NAME records for all user-defined names in the document. */
     void                CreateUserNames();
+    /** Creates NAME records for the data ranges of all (chartex) charts. */
+    void                CreateDataRangeNames();
+    /** Creates NAME records for the data ranges of one (chartex) chart. */
+    void                CreateOneDataRangeName(
+                            const uno::Reference< chart2::XChartDocument >& rxChartDoc );
+    /** Creates NAME record for the source range of one chart data sequence. */
+    void                CreateSourceRangeName(
+                            const uno::Reference< chart2::data::XDataSequence >& rxSeq,
+                            sal_Int32 nVersion );
 
 private:
     /**
@@ -204,6 +230,8 @@ private:
     NamedExpMap         maNamedExpMap;
     XclExpNameList      maNameList;         /// List of NAME records.
     size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
+    /// Next free index of the  data reference names, keyed by chart version.
+    std::map< sal_Int32, sal_Int32 > maChartNameCounters;
 };
 
 // *** Implementation ***
@@ -517,6 +545,7 @@ void XclExpNameManagerImpl::Initialize()
     CreateBuiltInNames();
     mnFirstUserIdx = maNameList.GetSize();
     CreateUserNames();
+    CreateDataRangeNames();
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx, SCTAB nCurrTab )
@@ -923,6 +952,184 @@ void XclExpNameManagerImpl::CreateUserNames()
                 CreateName(nTab, *rangeDataItr );
         }
     }
+}
+
+// Map from chart type service name to the (implicit) versioning number that MS
+// Office uses. We use the same version number here just for the sake of
+// pedantic consistency
+static sal_Int32 lcl_GetChartNameVersion( std::u16string_view rChartType )
+{
+    if (rChartType == u"com.sun.star.chart2.FunnelChartType") {
+        return 2;
+    } else if (rChartType == u"com.sun.star.chart2.RegionMapChartType") {
+        return 5;
+    } else if (rChartType == u"com.sun.star.chart2.BoxWhiskerChartType"
+        || rChartType == u"com.sun.star.chart2.ClusteredColumnChartType"
+        || rChartType == u"com.sun.star.chart2.HistogramChartType"
+        || rChartType == u"com.sun.star.chart2.ParetoLineChartType"
+        || rChartType == u"com.sun.star.chart2.SunburstChartType"
+        || rChartType == u"com.sun.star.chart2.TreemapChartType"
+        || rChartType == u"com.sun.star.chart2.WaterfallChartType") {
+        return 1;
+    } else return 0;
+}
+
+void XclExpNameManagerImpl::CreateDataRangeNames()
+{
+    // in MS Excel OOXML output, chartex charts reference their source data through
+    // hidden workbook-level defined names of
+    // the form <mDataNamePrefix>.v<version>.<index>. Mimic that here.
+    if( GetOutput() == EXC_OUTPUT_BINARY )
+        return;
+
+    ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+    if( !pDrawLayer )
+        return;
+
+    for( SCTAB nTab = 0, nTabCount = GetDoc().GetTableCount(); nTab < nTabCount; ++nTab )
+    {
+        SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+        if( !pPage )
+            continue;
+        SdrObjListIter aObjIter( pPage, SdrIterMode::DeepNoGroups );
+        while( SdrObject* pObject = aObjIter.Next() )
+        {
+            uno::Reference< chart2::XChartDocument > xChartDoc(
+                ScChartHelper::GetChartFromSdrObject( pObject ) );
+            if( xChartDoc.is() )
+                CreateOneDataRangeName( xChartDoc );
+        }
+    }
+}
+
+void XclExpNameManagerImpl::CreateOneDataRangeName(
+    const uno::Reference< chart2::XChartDocument >& rxChartDoc )
+{
+    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+        rxChartDoc->getFirstDiagram(), uno::UNO_QUERY );
+    if( !xCooSysCnt.is() )
+        return;
+
+    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+        xCooSysCnt->getCoordinateSystems() );
+    for( const auto& rxCooSys : aCooSysSeq )
+    {
+        uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( rxCooSys, uno::UNO_QUERY );
+        if( !xChartTypeContainer.is() )
+            continue;
+        const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeSeq(
+            xChartTypeContainer->getChartTypes() );
+
+        // Get the relevant version number, if any
+        sal_Int32 nVersion = 0;
+        for( const auto& rxChartType : aChartTypeSeq )
+        {
+            if( rxChartType.is() )
+                nVersion = lcl_GetChartNameVersion( rxChartType->getChartType() );
+            if( nVersion != 0 )
+                break;
+        }
+        if( nVersion == 0 )
+            continue;
+
+        // Name the categories range first, then the values range of each series.
+        // This seems to be the order of the dimensions in the chartex data part
+        try
+        {
+            uno::Reference< chart2::XAxis > xAxis( rxCooSys->getAxisByDimension( 0, 0 ) );
+            if( xAxis.is() )
+            {
+                uno::Reference< chart2::data::XLabeledDataSequence > xCategories(
+                    xAxis->getScaleData().Categories );
+                if( xCategories.is() )
+                    CreateSourceRangeName( xCategories->getValues(), nVersion );
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        for( const auto& rxChartType : aChartTypeSeq )
+        {
+            uno::Reference< chart2::XDataSeriesContainer > xSeriesContainer( rxChartType, uno::UNO_QUERY );
+            if( !xSeriesContainer.is() )
+                continue;
+            const uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq(
+                xSeriesContainer->getDataSeries() );
+            for( const auto& rxSeries : aSeriesSeq )
+            {
+                uno::Reference< chart2::data::XDataSource > xSource( rxSeries, uno::UNO_QUERY );
+                if( !xSource.is() )
+                    continue;
+                const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >
+                    aLabeledSeqSeq( xSource->getDataSequences() );
+                for( const auto& rxLabeledSeq : aLabeledSeqSeq )
+                {
+                    if( !rxLabeledSeq.is() )
+                        continue;
+                    uno::Reference< chart2::data::XDataSequence > xValues(
+                        rxLabeledSeq->getValues() );
+                    uno::Reference< beans::XPropertySet > xSeqProp( xValues, uno::UNO_QUERY );
+                    if( !xSeqProp.is() )
+                        continue;
+                    OUString aRole;
+                    xSeqProp->getPropertyValue( u"Role"_ustr ) >>= aRole;
+                    if( aRole.startsWith( "values" ) )
+                        CreateSourceRangeName( xValues, nVersion );
+                }
+            }
+        }
+    }
+}
+
+void XclExpNameManagerImpl::CreateSourceRangeName(
+    const uno::Reference< chart2::data::XDataSequence >& rxSeq, sal_Int32 nVersion )
+{
+    uno::Reference< beans::XPropertySet > xSeqProp( rxSeq, uno::UNO_QUERY );
+    if( !xSeqProp.is() )
+        return;
+    uno::Reference< beans::XPropertySetInfo > xPropInfo( xSeqProp->getPropertySetInfo() );
+    if( !xPropInfo.is() || !xPropInfo->hasPropertyByName( u"ChartExFormula"_ustr ) )
+        return;
+
+    // If this chart was created through import (rather than in the UI), it
+    // should already have a name as part of the document's defined names
+    OUString sFormula;
+    xSeqProp->getPropertyValue( u"ChartExFormula"_ustr ) >>= sFormula;
+    if( !sFormula.isEmpty() )
+        return;
+
+    // Make sure it's valid
+    ScDocument& rDoc = GetDoc();
+    ScRangeList aRanges;
+    ScRefFlags nParseResult = aRanges.Parse( rxSeq->getSourceRangeRepresentation(), rDoc,
+        rDoc.GetAddressConvention(), 0, ScCompiler::GetNativeSymbolChar( ocSep ) );
+    if( aRanges.empty() || !(nParseResult & ScRefFlags::VALID) )
+        return;
+
+    // Take the next unused name of the form _xlchart.v<version>.<index>.
+    // Index is distinct for every datat range of every chart
+    sal_Int32& rNameIndex = maChartNameCounters[ nVersion ];
+    OUString sName;
+    do
+    {
+        sName = mDataNamePrefix + ".v" + OUString::number(nVersion) + "." + OUString::number(rNameIndex);
+        ++rNameIndex;
+    }
+    while( FindNamedExp( SCTAB_GLOBAL, sName ) != 0 );
+
+    XclExpNameRef xName = new XclExpName( GetRoot(), sName );
+    xName->SetHidden( true );   // not sure why it's hidden, but that's what MS does
+    xName->SetTokenArray( GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, aRanges ) );
+    OUString sSymbol;
+    aRanges.Format( sSymbol, ScRefFlags::RANGE_ABS_3D /* ? */,
+            rDoc,
+            ::formula::FormulaGrammar::CONV_XL_A1 /* or CONV_XL_OOX? */ );
+    xName->SetSymbol( sSymbol );
+    sal_uInt16 nNameIdx = Append( xName );
+    maNamedExpMap[ NamedExpMap::key_type( SCTAB_GLOBAL, sName ) ] = nNameIdx;
+
+    xSeqProp->setPropertyValue( u"ChartExFormula"_ustr, uno::Any( sName ) );
 }
 
 XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :

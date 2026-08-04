@@ -20,6 +20,7 @@
 #pragma once
 
 #include "rangelst.hxx"
+#include "scdllapi.h"
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
