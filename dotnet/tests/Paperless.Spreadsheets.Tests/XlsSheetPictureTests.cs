@@ -62,7 +62,14 @@ public class XlsSheetPictureTests
         // The same property the package path holds, and it matters more here: a `.xls` is read for
         // its cell values far more often than for its pictures, and inflating a metafile costs the
         // font stack's start-up on a caller that never draws a page.
-        foreach (SheetDrawing drawing in Drawings())
+        //
+        // Counted before it is walked, deliberately. A `foreach` over the drawings asserts nothing
+        // when there are none, which is exactly the state the defect this file pins produces — so
+        // without the count this test passes with every picture dropped.
+        IReadOnlyList<SheetDrawing> drawings = Drawings();
+        drawings.Count(d => d.Vector is not null).ShouldBe(2);
+
+        foreach (SheetDrawing drawing in drawings)
         {
             if (drawing.Vector is { } vector) vector.IsValueCreated.ShouldBeFalse();
         }
@@ -71,7 +78,10 @@ public class XlsSheetPictureTests
     [Fact]
     public void EveryMetafileDecodesToSomethingWithInkInIt()
     {
-        foreach (SheetDrawing drawing in Drawings())
+        IReadOnlyList<SheetDrawing> drawings = Drawings();
+        drawings.Count(d => d.Vector is not null).ShouldBe(2);
+
+        foreach (SheetDrawing drawing in drawings)
         {
             if (drawing.Vector is not { } vector) continue;
 
