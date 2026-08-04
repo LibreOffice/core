@@ -364,6 +364,13 @@ def filter_ignore(line, module):
             'boost/spirit/include/classic_core.hpp' # depends on BOOST_SPIRIT_DEBUG
         ]
 
+    if module != 'vcl':
+        ignore_list += [
+            'vcl/toolkit/treelist.hxx', # triggers deliberate error if included
+            'vcl/toolkit/treelistbox.hxx', # triggers deliberate error if included
+            'vcl/toolkit/treelistentries.hxx' # triggers deliberate error if included
+            ]
+
     if module == 'basic':
         ignore_list += [
             'basic/vbahelper.hxx',

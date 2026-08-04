@@ -164,9 +164,6 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolboxid.hxx>
-#include <vcl/toolkit/treelist.hxx>
-#include <vcl/toolkit/treelistbox.hxx>
-#include <vcl/toolkit/treelistentries.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
