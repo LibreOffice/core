@@ -56,7 +56,23 @@ final class WebDriverServer: WebDriverHTTPServerBase {
 
         // GET /status
         if request.method == "GET" && request.path == "/status" {
-            sendW3C(connection: connection, value: ["ready": true, "message": "coda-macos"])
+            // logFile names the file GET /log reads from; it is absent when the
+            // log goes to standard error and there is nothing to hand out.
+            var status: [String: Any] = ["ready": true, "message": "coda-macos"]
+            if let logFile = COWrapper.logFilePath() {
+                status["logFile"] = logFile
+            }
+            sendW3C(connection: connection, value: status)
+            return
+        }
+
+        // GET /log/{offset}  -- the app's own log from the given byte offset,
+        // with the offset to ask for next time.  A custom extension: the log
+        // sits inside the app's sandbox container, so this is how a test
+        // harness reads it without needing access to our data.
+        if request.method == "GET" && segments.first == "log" {
+            let offset = segments.count > 1 ? (UInt64(segments[1]) ?? 0) : 0
+            handleLog(fromOffset: offset, connection: connection)
             return
         }
 
@@ -151,6 +167,38 @@ final class WebDriverServer: WebDriverHTTPServerBase {
 
         sendW3CError(connection: connection, error: "unknown command",
                      message: "\(request.method) \(request.path) not implemented")
+    }
+
+    // MARK: - Log
+
+    /**
+     * Answer with the log content from the given byte offset, plus the offset
+     * that content ends at.  An offset past the end of the file yields empty
+     * content and the same offset, so a caller can poll.
+     */
+    private func handleLog(fromOffset offset: UInt64, connection: NWConnection) {
+        guard let path = COWrapper.logFilePath(),
+              let handle = FileHandle(forReadingAtPath: path) else {
+            sendW3C(connection: connection,
+                    value: ["content": "", "offset": Int(offset)] as [String: Any])
+            return
+        }
+        defer { try? handle.close() }
+
+        var content = ""
+        var next = offset
+        do {
+            try handle.seek(toOffset: offset)
+            let data = handle.readDataToEndOfFile()
+            content = String(decoding: data, as: UTF8.self)
+            next = offset + UInt64(data.count)
+        }
+        catch {
+            // Seeking past the end, or a file being rotated under us: report
+            // nothing new rather than failing the request.
+        }
+        sendW3C(connection: connection,
+                value: ["content": content, "offset": Int(next)] as [String: Any])
     }
 
     // MARK: - Execute sync

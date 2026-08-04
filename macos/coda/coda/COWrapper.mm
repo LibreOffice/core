@@ -24,6 +24,9 @@
 // Include necessary C++ headers
 #include <thread>
 #include <string>
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
 #include <set>
 #include <common/Clipboard.hpp>
 #include <common/ConfigUtil.hpp>
@@ -76,6 +79,9 @@ static COClipboardOwner *sClipboardOwner = nil;
 static COKit *sOffice = nullptr;
 
 static std::thread coolwsdThread;
+
+// Where the log is being written, or nil when it goes to standard error.
+static NSString *sLogFilePath = nil;
 
 /**
  * Register the AI chat HTTP transport. The desktop apps have no server-side AI
@@ -268,10 +274,38 @@ void install_clipboard_provider(COKit &rOffice)
     // Initialize logging
     // Use "debug" or potentially even "trace" for debugging
 #if DEBUG
-    Log::initialize("Mobile", "debug");
+    const std::string logLevel("debug");
 #else
-    Log::initialize("Mobile", "information");
+    const std::string logLevel("information");
 #endif
+
+    // In UI testing mode the log goes to a file, because standard error is not
+    // collected when the app is launched through LaunchServices.
+    //
+    // Standard error itself is redirected, rather than the logging channel
+    // being pointed at the file. The server re-initializes logging with a
+    // channel of its own once it starts, and log lines are written to the
+    // standard error file descriptor directly, so redirecting that keeps every
+    // line whichever channel is in place at the time. Opening the file with "w"
+    // also starts each run with an empty log.
+    //
+    // The file lives in our own temporary directory, the place the sandbox
+    // allows us to write, and the test driver hands its content out from there
+    // on request. Reading it from outside would mean granting the reader access
+    // to another app's data, which a test run should not have to ask for.
+    if ([[[NSProcessInfo processInfo] arguments] containsObject:@"--uitesting"]) {
+        NSString *logFile =
+            [NSTemporaryDirectory() stringByAppendingPathComponent:@"coda-app.log"];
+        if (freopen([logFile fileSystemRepresentation], "w", stderr) != nullptr) {
+            sLogFilePath = logFile;
+        }
+        else {
+            NSLog(@"CollaboraOffice: cannot log to %@: %s", logFile, strerror(errno));
+        }
+    }
+
+    Log::initialize("Mobile", logLevel);
+
     ProcUtil::setThreadName("main");
 
     // Give AIChatSession a native HTTP transport (no server-side AI proxy here).
@@ -300,6 +334,10 @@ void install_clipboard_provider(COKit &rOffice)
         coolwsd = nullptr; // Reset the pointer after deletion
         NSLog(@"CollaboraOffice: The COOLWSD thread completed");
     });
+}
+
++ (NSString *_Nullable)logFilePath {
+    return sLogFilePath;
 }
 
 + (void)stopServer {

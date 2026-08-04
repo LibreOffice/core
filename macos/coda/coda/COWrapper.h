@@ -19,6 +19,9 @@
 + (void)startServer;
 + (void)stopServer;
 
+// The file the log is being written to, or nil when it goes to standard error.
++ (NSString *_Nullable)logFilePath;
+
 + (void)handleHULLOWithDocument:(Document *_Nonnull)document;
 + (void)handleByeWith:(Document *_Nonnull)document NS_SWIFT_NAME(bye(_:));
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
