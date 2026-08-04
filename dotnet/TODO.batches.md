@@ -1087,6 +1087,44 @@ Worth stating because it changes how each should be worked:
 - **`slides`** has largely stopped being a word-count problem at all: 151 of 163, and **all
   twelve remaining failures are attributed**, eight of them to the word gate's ceiling rather
   than to a defect. That track's next real work is judged by the image check, not by `wc`.
+## Sheets: what the rich-cell row-height fix actually did — swept at `52f45c51b`
+
+The eleventh round merged **"Measure a rich cell's row instead of believing the writer's guess"**
+on its unit tests and one fixture; the agent that wrote it was killed before it could sweep. All
+171 documents swept here at `52f45c51b`, against the last whole-track figure at `18b4547ef`:
+
+| | `18b4547ef` | `52f45c51b` | |
+| --- | --- | --- | --- |
+| documents matching | 125 | **124** | −1 |
+| documents with an exactly correct page count | 134 | **133** | −1 |
+| total absolute page error | 222 | **195** | **−27** |
+
+**It works, it is the largest page-error move on this track since the seventh round, and it
+overshot.** `TK-Syllabus-Comparison-Document-v2.xlsx` was 1314 pages against 1235 and is now
+**1190** — the error on the document it was aimed at went 79 → 45 and changed sign, so the rows it
+recomputes now come out *short* where they used to come out long. Its sibling
+`tk-syllabus-comparison-document-v5.xlsx` is 846 against 855, the same sign. The −27 is that −34
+less about seven pages picked up elsewhere.
+
+This is the shape the skill's "fixes that cancel" section describes and the reason to report both
+numbers: a match count that falls by one while the continuous quantity falls by 12% is a change
+that is right on its own evidence.
+
+### The residue, sorted
+
+Total page error is **195** over 47 failing documents, and the top of the list is where it lives:
+
+| Pages | Document | What is established |
+| --- | --- | --- |
+| 45 | `TK-Syllabus-Comparison-Document-v2.xlsx` | the rich-cell measurement, now overshooting |
+| 42 | `orbus_togaf_tool_csq.xls` | **not ours** — the reference fabricates a `DPCache` sheet |
+| 18 | `ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` | undiagnosed |
+| 9 | `tk-syllabus-comparison-document-v5.xlsx` | the same signature as the first row |
+| 6 | `INDEX_Digital_Transformation_Toolkits.xls` | pictures — see below |
+
+Below those it is a ±1-to-±3 tail: the failing page deltas are `-6:3 -4:1 -3:5 -2:5 -1:10 0:9
++1:6 +2:1 +4:1 +6:2` once the five above are set aside.
+
 ## Sheets batches 006–010: a merge has two axes, and a shape has a face — swept at `7049756d9`
 
 Whole track swept at `7049756d9` before anything was changed and again after each fix, 171
