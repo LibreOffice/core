@@ -218,10 +218,42 @@ export class CodaMacOSServiceLauncher {
 	#testDocDir: string | null = null;
 	#driverLogFile: string | null = null;
 	#stopTail: (() => void) | null = null;
+	#appLogPoll: ReturnType<typeof setInterval> | null = null;
+	#appLogOffset = 0;
+	#appLogDraining = false;
 	#options: CodaMacOSServiceOptions;
 
 	constructor(options: CodaMacOSServiceOptions) {
 		this.#options = options;
+	}
+
+	/**
+	 * Fetch whatever the app has logged since the last call and print it.
+	 *
+	 * The log lives inside the app's sandbox container, so the app hands its
+	 * content out over the test driver's connection rather than us reading the
+	 * file.  Calls do not overlap: a slow answer would otherwise let a second
+	 * request ask from an offset the first has not accounted for yet, and the
+	 * same lines would be printed twice.
+	 */
+	async #drainAppLog(): Promise<void> {
+		if (this.#appLogDraining) return;
+		this.#appLogDraining = true;
+		try {
+			const { webDriverPort } = this.#options;
+			const answer = await httpGetValue(
+				`http://localhost:${webDriverPort}/log/${this.#appLogOffset}`,
+			);
+			if (typeof answer?.content !== 'string') return;
+			if (typeof answer.offset === 'number') {
+				this.#appLogOffset = answer.offset;
+			}
+			for (const line of answer.content.split('\n')) {
+				if (line.length > 0) console.log(`[coda-app]: ${line}`);
+			}
+		} finally {
+			this.#appLogDraining = false;
+		}
 	}
 
 	/**
@@ -348,6 +380,10 @@ export class CodaMacOSServiceLauncher {
 				'--native-port', String(nativeUIPort),
 				'--log-file', JSON.stringify(this.#driverLogFile),
 				'--',
+				// Keep the number of arguments below even.  The app's own
+				// defaults handling reads them as -key value pairs, so an odd
+				// one out leaves a stray token that AppKit takes for a file to
+				// open ("could not open document YES").
 				'--uitesting',
 				`--testDriverPort=${webDriverPort}`,
 				'-ApplePersistenceIgnoreState', 'YES',
@@ -362,7 +398,7 @@ export class CodaMacOSServiceLauncher {
 		// fast instead of timing out after 30 seconds.
 		const failureCheck = () =>
 			checkDriverLogForFailure(this.#driverLogFile);
-		await Promise.all([
+		const [appStatus] = await Promise.all([
 			waitForHttp(
 				`http://localhost:${webDriverPort}/status`,
 				'WebDriverServer',
@@ -377,10 +413,29 @@ export class CodaMacOSServiceLauncher {
 			),
 		]);
 
+		// Forward the app's log.  Polling starts at offset zero, so the lines it
+		// wrote while starting up arrive too, late as we are to it.
+		if (typeof appStatus?.logFile === 'string') {
+			this.#appLogPoll = setInterval(() => {
+				void this.#drainAppLog();
+			}, 500);
+		} else {
+			console.warn(
+				'The app is not logging to a file, so its log will not appear here.',
+			);
+		}
+
 		console.log('coda-macos is ready, tests will now run');
 	}
 
 	async onComplete(): Promise<void> {
+		// Collect the rest of the app's log while it can still answer for it.
+		if (this.#appLogPoll) {
+			clearInterval(this.#appLogPoll);
+			this.#appLogPoll = null;
+			await this.#drainAppLog();
+		}
+
 		await this.#shutdownApp();
 
 		if (this.#stopTail) {
