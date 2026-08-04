@@ -156,8 +156,8 @@ formats and the app does only raw NSPasteboard input and output:
 |---|---|---|---|
 | Web | HTTP `/cool/clipboard` plus WebSocket | browser `navigator.clipboard` | `Clipboard.js` |
 | macOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly with no `read` round-trip | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm` |
-| Windows | WebView2 `postMobileMessage`: COPY/CUT/PASTE/CLIPBOARD* | Win32 clipboard formats | `windows/coda/CODA/CODA.cpp:631` |
-| Qt | QWebChannel `Bridge.cool()`: COPY/CUT/PASTE/... | QClipboard, QMimeData | `qt/QtClipboard.cpp:162` |
+| Windows | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | Win32 clipboard formats, delayed rendering | `windows/coda/CODA/CODA.cpp` |
+| Qt | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | QClipboard, QMimeData | `qt/QtClipboard.cpp` |
 | iOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | UIPasteboard, UTType | `ios/ios.mm` |
 | Android | `@JavascriptInterface` plus JNI getClipboardContent/setClipboardContent/paste | ClipboardManager, ClipData | `android/lib/.../androidapp.cpp:355` |
 | WASM | none, uses the web browser path | browser `navigator.clipboard` | `Clipboard.js` |
@@ -372,9 +372,9 @@ fields are browser widgets, and clipboard there mostly bypasses the Kit.
 ## What is not shared (duplicated per platform)
 
 This section describes the state before the COKitClipboardProvider move and
-still holds for Qt and Android. macOS, Windows, and iOS have since moved to
+still holds for Android. macOS, Windows, Qt, and iOS have since moved to
 the provider (see the Done section): the engine now decides the formats, so
-there the mapping table is reached through the provider callbacks and the
+the mapping tables there are reached through the provider callbacks and the
 old eager write and read-everything paths named below are gone. The
 duplication described here is what the provider move is meant to remove,
 one app at a time.
@@ -519,9 +519,13 @@ one app at a time.
 - **Windows CF_HTML.** Windows reads back the CF_HTML fragment with a
   regular expression over the `StartFragment` and `EndFragment` markers
   (`CODA.cpp:709`).
-- **Qt lazy clipboard.** Qt advertises the flavor list up front and only
-  fetches bytes when a target asks, then forces a full fetch on document
-  close so an external paste survives (`QtClipboard.cpp:92,232`).
+- **Qt clipboard threading.** Unlike NSPasteboard and the Win32
+  clipboard, QClipboard may only be used on the GUI thread, while the
+  clipboard provider callbacks fire on the kit thread with the SolarMutex
+  held. Qt therefore queues the advertise to the GUI thread, answers the
+  ownership check from an atomic, and blocks on the GUI thread for the
+  paste-direction reads; the ownership flag doubles as the deadlock guard
+  for every GUI-thread path into the engine (`qt/QtClipboard.cpp`).
 - **iOS window paste.** The dialog paste branch in the Kit is compiled
   out on iOS (`#ifndef IOS`, `init.cxx:7662`).
 - **windows/clipboard.cpp is not the app bridge.** It is a standalone
@@ -603,8 +607,7 @@ per-app "which flavors matter" guesswork is gone.
   provider in process, the `clipboardmimetypes:` message and its forwarding
   (`browser/src/layer/tile/CanvasTileLayer.js`, the `ViewController`
   handler) are gone for macOS. That message path stays only for the
-  server, the web and WASM clients, and the Qt app, which are not yet on
-  the provider.
+  server, the web and WASM clients, which are not on the provider.
 - No browser round-trip for paste either. The engine reads the pasteboard
   through the provider on `.uno:Paste`, so the browser issues `.uno:Paste`
   directly instead of asking the native side through the `read` script
@@ -614,6 +617,41 @@ per-app "which flavors matter" guesswork is gone.
 - The provider is registered once, on the first message after the kit
   document loads (`COWrapper handleMessageWith`), not on copy or paste, so
   copy and paste need no setup step of their own.
+
+The provider install has since moved from per document to one
+process-global install at kit main-loop start (`kit/Kit.cpp`), paired
+with a process-shared kit clipboard that survives document close
+(`KitClipboardFactory::installGlobalProvider`,
+`engine/desktop/source/lib/kitclipboard.cxx`). Reads for external
+consumers then go through the document-less
+`COKit::getGlobalClipboard`, and closing a document only renders a
+still-lazy transferable in-engine (`COKitDocument::flushClipboard`).
+
+### Windows: same model as macOS
+
+CODA-W adopted the identical provider and then the process-shared
+clipboard. The Win32 specifics stay behind the same small provider
+surface in `windows/coda/CODA/CODA.cpp`: the advertised formats are
+served on demand through delayed rendering, and the pending promises
+are materialized at exit so the clipboard outlives the process.
+
+### Qt: same model, with GUI-thread marshaling
+
+The Qt app replaced its per-view lazy clipboard (the
+`clipboardmimetypes:` round-trip through the browser, the app-side paste
+orchestration with its paste-in format whitelist, the kit-thread
+cross-window transfer, and the QClipboard materialization on document
+close) with the same provider (`qt/QtClipboard.cpp`). Copy advertises a
+lazy `QMimeData` whose bytes come from `getGlobalClipboard` on demand;
+paste is a plain `.uno:Paste`, served from the engine's own transferable
+or, when the clipboard is foreign, read through the provider with no
+whitelist. The native COPY/CUT/COPYSLIDE/PASTE/PASTESPECIAL/
+CLIPBOARDMIMETYPES bridge verbs are gone; the JS gates Qt exactly like
+macOS and Windows. QClipboard is GUI-thread-only, so the callbacks
+marshal as described under "Qt clipboard threading" above. On Linux the
+clipboard dies with the process (no pasteboard server), so there is no
+exit-time materialization; a paste after a document closes is served by
+the flushed in-engine transferable for as long as the app runs.
 
 ### iOS: engine-driven clipboard through COKitClipboardProvider
 
@@ -671,17 +709,16 @@ explains it.
 
 ### Larger reworks
 
-- Move Qt onto the COKitClipboardProvider (the model macOS, Windows, and
-  iOS now use, see the Done section). Each app registers a provider
-  and implements the same small surface: advertise a flavor list on copy,
-  list the pasteboard flavors, fetch one format's bytes, and answer the
-  own-clipboard check. The engine then drives both directions and picks the
-  paste format, so the per-platform "which flavors matter" lists (the Qt
-  whitelist) and the eager copy out go away. Qt already has a lazy
-  clipboard, so it is a small step; Android can follow later. This is the
-  chosen shape of the "shares lots of code" goal for the in-process apps:
-  the shared logic lives in the engine instead of a shared C++ helper, and
-  each app is left a thin raw input and output adapter.
+- Move Android onto the COKitClipboardProvider (the model macOS,
+  Windows, Qt, and iOS now use, see the Done section). Each app implements
+  the same small surface: advertise a flavor list on copy, list the
+  pasteboard flavors, fetch one format's bytes, and answer the
+  own-clipboard check. The engine then drives both directions and picks
+  the paste format, so the per-platform "which flavors matter" lists and
+  the eager copy out go away. This is the chosen shape of the "shares
+  lots of code" goal for the in-process apps: the shared logic lives in
+  the engine instead of a shared C++ helper, and each app is left a thin
+  raw input and output adapter.
 - Browser to native rich paste (scenario 7, the easy half). Teach the
   native apps to spot a `data-coolorigin` URL in pasted HTML, fetch the
   rich content from the source server in one asynchronous HTTP request, and
