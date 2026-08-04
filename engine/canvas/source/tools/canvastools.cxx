@@ -51,7 +51,6 @@
 #include <vcl/window.hxx>
 
 #include <canvastools.hxx>
-#include <unopolypolygon.hxx>
 #include <ViewState.hxx>
 
 
@@ -276,10 +275,9 @@ namespace canvastools
             // accumulate non-empty clips into one region
             vcl::Region aClipRegion(true);
 
-            if( renderState.Clip.is() )
+            if( renderState.Clip.count() )
             {
-                ::basegfx::B2DPolyPolygon aClipPoly(
-                    b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
+                ::basegfx::B2DPolyPolygon aClipPoly( renderState.Clip );
 
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(mergeViewAndRenderTransform(aMatrix, viewState, renderState));
@@ -307,23 +305,6 @@ namespace canvastools
                 rOutDev.SetClipRegion();
             else
                 rOutDev.SetClipRegion( aClipRegion );
-        }
-
-        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const rtl::Reference< canvastools::UnoPolyPolygon >& xPoly )
-        {
-            return xPoly->getPolyPolygon();
-        }
-
-        rtl::Reference< canvastools::UnoPolyPolygon > xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
-        {
-            // vcl only handles even_odd polygons
-            return new ::canvastools::UnoPolyPolygon( rPolyPoly );
-        }
-
-        rtl::Reference< canvastools::UnoPolyPolygon > xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    )
-        {
-            // vcl only handles even_odd polygons
-            return new ::canvastools::UnoPolyPolygon(basegfx::B2DPolyPolygon(rPoly));
         }
 
         /// Convert [0,1] double value to [0,255] int

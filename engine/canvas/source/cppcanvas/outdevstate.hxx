@@ -32,8 +32,6 @@
 #include <vcl/rendercontext/State.hxx>
 #include <canvasfont.hxx>
 
-namespace canvastools { class UnoPolyPolygon; }
-
 namespace cppcanvas
     {
         struct OutDevState
@@ -80,7 +78,7 @@ namespace cppcanvas
 
             ::basegfx::B2DPolyPolygon                                                clip;
             ::tools::Rectangle                                                              clipRect;
-            rtl::Reference< ::canvastools::UnoPolyPolygon >                          xClipPoly;
+            basegfx::B2DPolyPolygon                                                  xClipPoly;
 
             cpo::uno::Sequence< double >                                             lineColor;
             cpo::uno::Sequence< double >                                             fillColor;

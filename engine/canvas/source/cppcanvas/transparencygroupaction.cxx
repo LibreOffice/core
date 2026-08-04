@@ -406,13 +406,11 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::setRenderStateTransform(aLocalState, aTransform);
 
-                if(aLocalState.Clip.is())
+                if(aLocalState.Clip.count())
                 {
                     // tdf#95709
                     // Adjust renderstate clip to modified scale from above
-                    ::basegfx::B2DPolyPolygon aClip = ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(aLocalState.Clip);
-                    aClip.transform(basegfx::utils::createScaleB2DHomMatrix(aScale));
-                    aLocalState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aClip);
+                    aLocalState.Clip.transform(basegfx::utils::createScaleB2DHomMatrix(aScale));
                 }
 
 #if OSL_DEBUG_LEVEL > 2

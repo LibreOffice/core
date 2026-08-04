@@ -29,9 +29,9 @@ struct OutDevState;
 
 class TextLinesHelper
 {
-    rtl::Reference<::canvastools::UnoPolyPolygon> mxOverline;
-    rtl::Reference<::canvastools::UnoPolyPolygon> mxUnderline;
-    rtl::Reference<::canvastools::UnoPolyPolygon> mxStrikeout;
+    basegfx::B2DPolyPolygon mxOverline;
+    basegfx::B2DPolyPolygon mxUnderline;
+    basegfx::B2DPolyPolygon mxStrikeout;
 
     bool mbIsOverlineColorSet;
     const cpo::uno::Sequence<double> maOverlineColor;

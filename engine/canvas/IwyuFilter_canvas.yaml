@@ -4,6 +4,3 @@ excludelist:
     canvas/inc/base/cachedprimitivebase.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    canvas/inc/unopolypolygon.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp

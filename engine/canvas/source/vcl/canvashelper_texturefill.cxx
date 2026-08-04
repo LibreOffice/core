@@ -578,7 +578,7 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap > Canvas::fillTexturedPolyPolygon(
-                                     const rtl::Reference< ::canvastools::UnoPolyPolygon >& xPolyPolygon,
+                                     const basegfx::B2DPolyPolygon&                   xPolyPolygon,
                                      const vclcanvas::ViewState&                        viewState,
                                      const vclcanvas::RenderState&                      renderState,
                                      const std::vector< vclcanvas::Texture >&         textures )
@@ -588,7 +588,7 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
         ENSURE_ARG_OR_THROW( !textures.empty(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
@@ -599,7 +599,7 @@ namespace vclcanvas
 
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
             ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
-                                       ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
+                                       xPolyPolygon,
                                        viewState, renderState ) );
 
             // TODO(F1): Multi-texturing

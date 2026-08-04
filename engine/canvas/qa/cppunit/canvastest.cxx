@@ -17,12 +17,12 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
-#include <unopolypolygon.hxx>
 #include <canvas.hxx>
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 
 using namespace ::com::sun::star;
 
@@ -113,8 +113,6 @@ public:
         aPoly.setClosed(false);
         ::basegfx::B2DPolyPolygon aPolyPoly;
         aPolyPoly.append(aPoly);
-        rtl::Reference<canvastools::UnoPolyPolygon> polygon(
-            new ::canvastools::UnoPolyPolygon(aPolyPoly));
 
         mRenderState.DeviceColor = mColorBlue;
         rendering::StrokeAttributes strokeAttributes;
@@ -125,7 +123,7 @@ public:
         strokeAttributes.JoinType = rendering::PathJoinType::MITER;
         strokeAttributes.DashArray = { 10, 5, 0.1, 5 };
 
-        mCanvas->strokePolyPolygon(polygon, mViewState, mRenderState, strokeAttributes);
+        mCanvas->strokePolyPolygon(aPolyPoly, mViewState, mRenderState, strokeAttributes);
 
         exportDevice(u"test-tdf134053.png"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());

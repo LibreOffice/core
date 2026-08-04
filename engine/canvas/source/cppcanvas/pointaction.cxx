@@ -27,6 +27,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvastools.hxx>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <RenderState.hxx>
 
 #include "pointaction.hxx"

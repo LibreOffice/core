@@ -39,7 +39,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <unopolypolygon.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 
@@ -141,7 +140,7 @@ namespace vclcanvas
         }
     }
 
-    rtl::Reference< canvastools::UnoPolyPolygon > Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
+    basegfx::B2DPolyPolygon Canvas::createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points )
     {
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
@@ -149,10 +148,7 @@ namespace vclcanvas
             return {}; // we're disposed
 
         // vcl only handles even_odd polygons
-        rtl::Reference<canvastools::UnoPolyPolygon> xPoly( new ::canvastools::UnoPolyPolygon(
-                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
-
-        return xPoly;
+        return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points );
     }
 
     void Canvas::clear()
@@ -225,7 +221,7 @@ namespace vclcanvas
     }
 
     void
-        Canvas::strokePolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&   xPolyPolygon,
+        Canvas::strokePolyPolygon(const basegfx::B2DPolyPolygon&                      xPolyPolygon,
                           const ::vclcanvas::ViewState&                               viewState,
                           const ::vclcanvas::RenderState&                             renderState,
                           const css::rendering::StrokeAttributes&                        strokeAttributes)
@@ -235,7 +231,7 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
         if( mxOutDev )
@@ -245,8 +241,7 @@ namespace vclcanvas
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
 
-            ::basegfx::B2DPolyPolygon aPolyPoly(
-                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+            ::basegfx::B2DPolyPolygon aPolyPoly( xPolyPolygon );
 
             // apply dashing, if any
             if( strokeAttributes.DashArray.hasElements() )
@@ -343,7 +338,7 @@ namespace vclcanvas
     }
 
     rtl::Reference< vclcanvas::CachedBitmap >
-        Canvas::fillPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >&               xPolyPolygon,
+        Canvas::fillPolyPolygon(const basegfx::B2DPolyPolygon&                                  xPolyPolygon,
                          const ::vclcanvas::ViewState&                                          viewState,
                          const ::vclcanvas::RenderState&                                        renderState)
     {
@@ -352,7 +347,7 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
         if( mxOutDev )
@@ -360,8 +355,7 @@ namespace vclcanvas
             vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
 
             const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
-            ::basegfx::B2DPolyPolygon aB2DPolyPoly(
-                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
+            ::basegfx::B2DPolyPolygon aB2DPolyPoly(xPolyPolygon);
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
             const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                              aB2DPolyPoly,
@@ -493,7 +487,7 @@ namespace vclcanvas
     }
 
     void
-        Canvas::drawPolyPolygon(const rtl::Reference< ::canvastools::UnoPolyPolygon >& xPolyPolygon,
+        Canvas::drawPolyPolygon(const basegfx::B2DPolyPolygon&                    xPolyPolygon,
                         const ::vclcanvas::ViewState&                             viewState,
                         const ::vclcanvas::RenderState&                           renderState)
     {
@@ -502,7 +496,7 @@ namespace vclcanvas
 
         vclcanvastools::LocalGuard aGuard( m_aMutex );
 
-        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.count(),
                          "polygon is NULL");
 
         if( mxOutDev )
@@ -510,11 +504,9 @@ namespace vclcanvas
             vclcanvastools::OutDevStateKeeper aStateKeeper( *mxOutDev );
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
-            const ::basegfx::B2DPolyPolygon aBasegfxPolyPoly(
-                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
-            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( aBasegfxPolyPoly, viewState, renderState ) );
+            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( xPolyPolygon, viewState, renderState ) );
 
-            if( aBasegfxPolyPoly.isClosed() )
+            if( xPolyPolygon.isClosed() )
             {
                 mxOutDev->DrawPolyPolygon( aPolyPoly );
             }

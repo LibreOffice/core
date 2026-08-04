@@ -59,19 +59,19 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     if (aOverline.count())
     {
         aRange.expand(aOverline.getB2DRange());
-        mxOverline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aOverline);
+        mxOverline = aOverline;
     }
 
     if (aUnderline.count())
     {
         aRange.expand(aUnderline.getB2DRange());
-        mxUnderline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aUnderline);
+        mxUnderline = aUnderline;
     }
 
     if (aStrikeout.count())
     {
         aRange.expand(aStrikeout.getB2DRange());
-        mxStrikeout = ::canvastools::xPolyPolygonFromB2DPolyPolygon(aStrikeout);
+        mxStrikeout = aStrikeout;
     }
 
     initLineStyleWaveline(rLineInfo.mnOverlineStyle, mbOverlineWaveline, mbOverlineWavelineBold);
@@ -85,7 +85,7 @@ void TextLinesHelper::render(vclcanvas::Canvas& xCanvas, const vclcanvas::ViewSt
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
 
-    if (mxOverline.is())
+    if (mxOverline.count())
     {
         vclcanvas::RenderState aLocalState(rRenderState);
         if (bNormalText && mbIsOverlineColorSet)
@@ -100,7 +100,7 @@ void TextLinesHelper::render(vclcanvas::Canvas& xCanvas, const vclcanvas::ViewSt
             xCanvas.fillPolyPolygon(mxOverline, aViewState, aLocalState);
     }
 
-    if (mxUnderline.is())
+    if (mxUnderline.count())
     {
         vclcanvas::RenderState aLocalState(rRenderState);
         if (bNormalText && mbIsUnderlineColorSet)
@@ -114,7 +114,7 @@ void TextLinesHelper::render(vclcanvas::Canvas& xCanvas, const vclcanvas::ViewSt
             xCanvas.fillPolyPolygon(mxUnderline, aViewState, aLocalState);
     }
 
-    if (mxStrikeout.is())
+    if (mxStrikeout.count())
         xCanvas.fillPolyPolygon(mxStrikeout, aViewState, rRenderState);
 }
 }

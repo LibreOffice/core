@@ -20,9 +20,9 @@
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/rendering/ColorComponent.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
-#include "unopolypolygon.hxx"
 
 namespace vclcanvas
 {
@@ -60,7 +60,7 @@ struct RenderState
         clip. That means, nothing rendered to the canvas will be
         visible.<p>
      */
-    rtl::Reference<::canvastools::UnoPolyPolygon> Clip;
+    basegfx::B2DPolyPolygon Clip;
 
     /** The device color associated with this render operation.<p>
 

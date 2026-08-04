@@ -1026,16 +1026,15 @@ namespace cppcanvas
                     // the right and the bottom
                     aRect.AdjustRight(1);
                     aRect.AdjustBottom(1);
-                    rState.xClipPoly = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
+                    rState.xClipPoly =
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
-                                vcl::unotools::b2DRectangleFromRectangle(aRect) ) ) );
+                                vcl::unotools::b2DRectangleFromRectangle(aRect) ) );
                 }
             }
             else
             {
-                rState.xClipPoly = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                    rState.clip );
+                rState.xClipPoly = rState.clip;
             }
         }
 
@@ -1098,16 +1097,15 @@ namespace cppcanvas
                     ::tools::Rectangle aRect = rState.clipRect;
                     aRect.AdjustRight(1);
                     aRect.AdjustBottom(1);
-                    rState.xClipPoly = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
+                    rState.xClipPoly =
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
-                                vcl::unotools::b2DRectangleFromRectangle(aRect) ) ) );
+                                vcl::unotools::b2DRectangleFromRectangle(aRect) ) );
                 }
             }
             else
             {
-                rState.xClipPoly = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                    rState.clip );
+                rState.xClipPoly = rState.clip;
             }
         }
 

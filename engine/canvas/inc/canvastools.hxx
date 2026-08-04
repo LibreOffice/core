@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <math.h>
@@ -56,10 +57,6 @@ namespace vclcanvas
     struct RenderState;
     struct Texture;
     struct ViewState;
-}
-namespace canvastools
-{
-    class UnoPolyPolygon;
 }
 namespace com::sun::star::awt
 {
@@ -380,15 +377,6 @@ namespace canvastools
         CANVASTOOLS_DLLPUBLIC void clipOutDev(const ::vclcanvas::ViewState& viewState,
                         const ::vclcanvas::RenderState& renderState,
                         OutputDevice& rOutDev);
-
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
-            const rtl::Reference< ::canvastools::UnoPolyPolygon >& rPoly );
-
-        CANVASTOOLS_DLLPUBLIC rtl::Reference< ::canvastools::UnoPolyPolygon >
-            xPolyPolygonFromB2DPolygon( const ::basegfx::B2DPolygon&                        rPoly    );
-
-        CANVASTOOLS_DLLPUBLIC rtl::Reference< ::canvastools::UnoPolyPolygon >
-            xPolyPolygonFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)
 

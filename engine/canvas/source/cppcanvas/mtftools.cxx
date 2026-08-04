@@ -142,8 +142,7 @@ namespace cppcanvastools
 
                 aLocalClip.transform( aTransform );
 
-                o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                    aLocalClip );
+                o_rRenderState.Clip = aLocalClip;
 
                 return true;
             }
@@ -172,33 +171,32 @@ namespace cppcanvastools
 
                     aLocalClip.transform( aTransform );
 
-                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
-                        ::basegfx::B2DPolyPolygon( aLocalClip ) );
+                    o_rRenderState.Clip = ::basegfx::B2DPolyPolygon( aLocalClip );
                 }
                 else if( bScaling )
                 {
                     // scale and offset - do it on the fly, have to
                     // convert to float anyway.
-                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
+                    o_rRenderState.Clip =
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
                                     (aLocalClipRect.Left() - rOffset.getX())/pScaling->getX(),
                                     (aLocalClipRect.Top() - rOffset.getY())/pScaling->getY(),
                                     (aLocalClipRect.Right() - rOffset.getX())/pScaling->getX(),
-                                    (aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY() ) ) ) );
+                                    (aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY() ) ) );
                 }
                 else
                 {
                     // offset only - do it on the fly, have to convert
                     // to float anyway.
-                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
+                    o_rRenderState.Clip =
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle( aLocalClipRect.Left() - rOffset.getX(),
                                                          aLocalClipRect.Top() - rOffset.getY(),
                                                          aLocalClipRect.Right() - rOffset.getX(),
-                                                         aLocalClipRect.Bottom() - rOffset.getY() ) ) ) );
+                                                         aLocalClipRect.Bottom() - rOffset.getY() ) ) );
                 }
 
                 return true;
