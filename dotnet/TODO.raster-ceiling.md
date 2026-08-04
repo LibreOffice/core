@@ -54,11 +54,21 @@ Both conditions, on a document whose page count already agrees:
 
 ## Two boundaries worth stating
 
-**A flagged page does not excuse its document, and the two can point opposite ways.**
-`UG.CAO.00133 …Language.docx` over-draws on a flagged page while running **−225 words overall** —
-it holds a genuine shortfall elsewhere. Subtract the flagged pages from the residue and work what
-is left. Likewise `NWD-GLA-Community-Outreach-Day-Oct-2025.pptx` passes its batch and still has a
-flagged page.
+**A flagged page does not excuse its document.** Subtract the flagged pages from the residue and
+work what is left. `NWD-GLA-Community-Outreach-Day-Oct-2025.pptx` passes its batch outright and
+still has a flagged page.
+
+**The example this section used to give has since inverted, which is worth more than the example
+was.** `UG.CAO.00133 …Language.docx` was recorded here as over-drawing on a flagged page while
+running **−225 words overall**, so that its flagged pages hid a genuine shortfall elsewhere.
+Swept at `52f45c51b` it is **18/18 pages and 3945/3700 words — +245 over**, not short at all, and
+the four rows it holds in the table below account for only +105 of that. Something between the two
+measurements — the grouped-text-box fix is the candidate — turned a shortfall into a surplus and
+left the record describing a document that no longer exists.
+
+So the boundary is real but its sign is not stable: **re-measure a document before subtracting its
+flagged pages**, because the table's per-page figures and a document's current total can be rounds
+apart. The rows below were measured when the file was built and this line was not.
 
 **Eighty-two documents cannot be judged.** A per-page comparison is meaningless while the page
 counts disagree, so those are an honest **unknown** rather than a pass — they may hold the
