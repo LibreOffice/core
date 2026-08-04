@@ -84,9 +84,19 @@ public sealed class HarfBuzzShaper : ITextShaper, IDisposable
         int at = 0;
         while (at < text.Length)
         {
-            int length = SegmentLength(text, at);
-            ShapeSegment(font, text, at, length, options, glyphs);
-            at += length;
+            // The control characters are cut out rather than shaped, which is what
+            // `ImplLayoutArgs::AddRun` does with the same list: they take no room and leave no glyph,
+            // and a shaper handed one returns `.notdef` at the face's glyph-zero advance.
+            at = ShapingControls.NextShapable(text, at, text.Length);
+            if (at >= text.Length) break;
+
+            int stretchEnd = ShapingControls.EndOfShapable(text, at, text.Length);
+            while (at < stretchEnd)
+            {
+                int length = SegmentLength(text, at, stretchEnd);
+                ShapeSegment(font, text, at, length, options, glyphs);
+                at += length;
+            }
         }
 
         ShapedGlyph[] shaped = [.. glyphs];
@@ -110,13 +120,16 @@ public sealed class HarfBuzzShaper : ITextShaper, IDisposable
     /// How many characters to shape in one call, starting at a position.
     /// </summary>
     /// <remarks>
-    /// The whole remainder when it fits. Otherwise back off to the last space before the cap, so a
-    /// segment boundary never falls inside a word — a word split across two shaping calls would lose
-    /// its ligatures and its internal kerning.
+    /// The whole remainder of the stretch when it fits. Otherwise back off to the last space before the
+    /// cap, so a segment boundary never falls inside a word — a word split across two shaping calls
+    /// would lose its ligatures and its internal kerning.
     /// </remarks>
-    private static int SegmentLength(ReadOnlySpan<char> text, int start)
+    /// <param name="text">The text being shaped.</param>
+    /// <param name="start">Where this call begins.</param>
+    /// <param name="stretchEnd">One past the last character a shaper may be given from here.</param>
+    private static int SegmentLength(ReadOnlySpan<char> text, int start, int stretchEnd)
     {
-        int remaining = text.Length - start;
+        int remaining = stretchEnd - start;
         if (remaining <= MaxCharactersPerShapingCall) return remaining;
 
         int limit = start + MaxCharactersPerShapingCall;

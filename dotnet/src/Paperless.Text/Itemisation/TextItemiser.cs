@@ -38,9 +38,9 @@ public readonly record struct TextItem(int Start, int Length, byte Level, string
 /// Format control characters are cut out rather than shaped, which is
 /// <c>ImplLayoutArgs::AddRun</c>'s splitting on <c>IsControlChar</c>. A left-to-right mark handed to a
 /// shaper comes back as a missing-glyph box with a real advance, which is both visible and wide; cut
-/// out, it takes no room at all, which is what it means. The one departure from LibreOffice's list is
-/// the C0 range: it removes U+0001 to U+001F, and Paperless keeps them, because the tab is in that
-/// range and the tab's width is resolved by the line filler rather than by the shaper.
+/// out, it takes no room at all, which is what it means. The list is
+/// <see cref="Shaping.ShapingControls"/>, and the one departure from LibreOffice's is the tab, which is
+/// kept because the line filler resolves its width against the paragraph's stops.
 /// </para>
 /// </remarks>
 public static class TextItemiser
@@ -220,16 +220,12 @@ public static class TextItemiser
     /// True for a character that must not reach a shaper.
     /// </summary>
     /// <remarks>
-    /// LibreOffice's <c>IsControlChar</c> (<c>vcl/source/text/ImplLayoutArgs.cxx</c>) minus its C0
-    /// range: the directional marks and the embedding and override controls, the invisible operators
-    /// and the deprecated format characters, the byte-order mark, the two permanent non-characters,
-    /// and NUL. Every one of them has no width and no glyph, and a shaper handed one draws a box.
+    /// The itemiser and the shaper agree on one list, <see cref="Shaping.ShapingControls"/>, because the
+    /// two cuts have to be the same cut: this one keeps a control character out of a sub-run's
+    /// <em>range</em>, so the prefix table records it as taking no room, and the shaper's keeps it out of
+    /// the buffer, so no glyph is drawn for it. Two lists would eventually disagree, and the symptom
+    /// would be a measurement that no longer describes what is drawn.
     /// </remarks>
-    private static bool IsFormatControl(char character) => character
-        is '\u0000'
-        or >= '\u200E' and <= '\u200F'
-        or >= '\u2028' and <= '\u202E'
-        or '\u2060'
-        or >= '\u206A' and <= '\u206F'
-        or '\uFEFF' or '\uFFFE' or '\uFFFF';
+    private static bool IsFormatControl(char character)
+        => Shaping.ShapingControls.IsRemovedBeforeShaping(character);
 }
