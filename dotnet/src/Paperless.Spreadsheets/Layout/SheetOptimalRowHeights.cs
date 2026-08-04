@@ -82,7 +82,7 @@ internal static class SheetOptimalRowHeights
     private const int StandardRowHeightDifference = 23;
 
     /// <summary>
-    /// A cell's top and bottom margins, together, in twips.
+    /// A cell's margin on any one side, in twips.
     /// </summary>
     /// <remarks>
     /// Calc's default <c>ATTR_MARGIN</c> is 20 twips on all four sides
@@ -97,6 +97,12 @@ internal static class SheetOptimalRowHeights
     /// <summary>
     /// A cell's top and bottom margins, together, in twips.
     /// </summary>
+    /// <remarks>
+    /// The pair, because the arithmetic height adds both at once. The horizontal pair is not the
+    /// same number of *pixels*: it comes off the paper as two truncations of
+    /// <c>CellMarginTwips × nPPTX</c>, and <c>nPPTX</c> has been divided by
+    /// <see cref="OutputFactor"/>.
+    /// </remarks>
     private const int VerticalMarginTwips = 2 * CellMarginTwips;
 
     /// <summary>

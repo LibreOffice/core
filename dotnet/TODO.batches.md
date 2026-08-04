@@ -1791,18 +1791,19 @@ eleven failures as at `7049756d9`, all 163 page counts exact.
 
 ### `sheets` — 171 documents, 18 batches
 
-Measured whole-track at `52f45c51b` and again after the twelfth round's picture fix: **125 of
-171**, total page error **192**, **134** exact page counts. The two figures moved in opposite
-directions across the eleventh round's merged row-height fix — 125 → 124 matches against 222 → 195
-pages of error — and the picture fix then took matches back to 125 and the error to 192.
-**42 of that 192 is `orbus_togaf_tool_csq.xls`, where the reference prints a sheet the file does
-not contain**; see the rounds' entries above before treating the total as work outstanding.
+Measured whole-track at `6b6d54d37`: **125 of 171**, page error **192**, **134** exact page
+counts — the twelfth round's figures to the digit. After the thirteenth round's device fix, at the
+same commit plus it: **132 of 171, page error 119, 141 exact.** Thirteen documents improved and
+none regressed.
 
-`batch-007` fell 9/10 → 8/10 and `batch-014` rose 5/10 → 6/10 across the same two rounds; every
-other batch is where it was. The one that fell is
-`114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication.xlsx`, 18 pages against 21 with 2381 words
-against 2372 — the row-height fix's overshoot in miniature, on a document small enough to be worth
-probing.
+**42 of that 119 is `orbus_togaf_tool_csq.xls`, where the reference prints a sheet the file does
+not contain**; see the rounds' entries above before treating the total as work outstanding. What
+is left after that is a long tail — the next largest is
+`ODs-February-2022-Airbus-Commercial-Aircraft.xlsx` at 18 and still undiagnosed, then two
+documents at 6 and the rest at 4 or fewer.
+
+`114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication.xlsx`, previously flagged as the
+row-height overshoot in miniature and worth probing, was exactly that and now matches at 21/21.
 
 | Batch | Files | Score | Mix | Status |
 |---|---|---|---|---|
@@ -1812,18 +1813,38 @@ probing.
 | `batch-004` | 10 | 118–173 | xls:3 xlsx:7 | ✅ |
 | `batch-005` | 10 | 173–217 | xls:5 xlsx:5 | ✅ |
 | `batch-006` | 10 | 223–249 | xls:3 xlsx:7 | 8/10 |
-| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 8/10 |
-| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 8/10 |
+| `batch-007` | 10 | 253–325 | xls:1 xlsx:9 | 9/10 |
+| `batch-008` | 10 | 328–420 | xls:3 xlsx:7 | 9/10 |
 | `batch-009` | 9 | 421–540 | xls:2 xlsx:8 | 6/9 |
 | `batch-010` | 10 | 560–691 | xls:7 xlsx:3 | 5/10 |
 | `batch-011` | 10 | 702–799 | xls:4 xlsx:6 | 6/10 |
-| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 6/10 |
+| `batch-012` | 10 | 825–995 | xls:1 xlsx:9 | 8/10 |
 | `batch-013` | 10 | 1039–1250 | xls:4 xlsx:6 | 7/10 |
-| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 6/10 |
+| `batch-014` | 10 | 1276–1765 | xls:6 xlsx:4 | 8/10 |
 | `batch-015` | 9 | 1773–2264 | xls:4 xlsx:6 | 5/9 |
 | `batch-016` | 9 | 2286–4300 | xls:6 xlsx:4 | 4/9 |
-| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 3/10 |
+| `batch-017` | 10 | 4468–14431 | xls:4 xlsx:6 | 4/10 |
 | `batch-018` | 4 | 19384–48127 | xlsx:4 | 3/4 |
+
+#### The image residue, re-measured on the fixed instrument
+
+Every figure taken before `6b6d54d37` was on a `pdf-image-diff.py` that skipped pages a pixel
+apart and counted them as major, so the predecessor's "54 of 125 documents, 348 pages" is not
+comparable. On the fixed tool, over the 132 documents that now pass the word gate:
+**58 have at least one MAJOR page, 687 pages in all.**
+
+263 of those 687 are `TK-Syllabus-Comparison-Document-v2.xlsx`, which entered the comparison for
+the first time this round because its page count only just started matching. Its signature is
+uniform across all 263 — *ink missing from ours* spanning the whole table area — which is what the
+105 rows out of 7909 that are still a line out look like once they accumulate down a page. So it
+is the tail of the row-height work rather than a separate defect.
+
+Of the rest, the plurality hint is still *marks displaced or reshaped* (959 regions), and the
+next two are *a solid area drawn differently* (487) and *a fill of the wrong colour* (452). The
+first wants the extraction comparison rather than more pixels. The sharpest single case is a
+feature and not a defect: `alle einzeln.xlsx`, 36 MAJOR pages of a fill the reference has and we
+do not, is a **pivot table**, which LibreOffice lays out itself with its own column widths and
+border grid.
 
 ## After the ninth round: slides, and two defects the gate is structurally blind to
 
