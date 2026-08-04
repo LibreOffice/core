@@ -568,25 +568,31 @@ public class LOActivity extends AppCompatActivity {
             postMobileMessageNative("save dontTerminateEdit=1 dontSaveIfUnmodified=1");
         }
 
-        final Intent finalIntent = intent;
-        mProgressDialog.indeterminate(R.string.exiting);
+        super.onNewIntent(intent);
+
+        if (documentLoaded) {
+            mProgressDialog.indeterminate(R.string.exiting);
+        }
+
+        // Closing a document ends the process, so the system holds the intent and opens the picked
+        // document in a fresh activity. Finishing first sends the start to a new instance.
+        final Intent reopenIntent = new Intent(intent);
+        reopenIntent.setClass(this, LOActivity.class);
+        finish();
+        startActivity(reopenIntent);
+
+        if (!documentLoaded) {
+            return;
+        }
+
         getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 documentLoaded = false;
                 postMobileMessageNative("BYE");
                 //copyTempBackToIntent();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgressDialog.dismiss();
-                        setIntent(finalIntent);
-                        init();
-                    }
-                });
             }
         });
-        super.onNewIntent(intent);
     }
 
     @Override
