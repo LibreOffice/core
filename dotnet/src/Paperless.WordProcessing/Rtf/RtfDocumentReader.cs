@@ -109,6 +109,9 @@ public sealed partial class RtfDocumentReader
     /// </remarks>
     private Core.Units.Length _defaultTabInterval = Core.Units.Length.FromTwips(720);
 
+    /// <summary>The document's <c>\htmautsp</c>; see <see cref="AddsParagraphSpacing"/>.</summary>
+    private bool _htmlAutoSpacing;
+
     private int _colourRed;
     private int _colourGreen;
     private int _colourBlue;
@@ -179,6 +182,32 @@ public sealed partial class RtfDocumentReader
 
     /// <summary>The sections' page geometry, valid once <see cref="Read"/> has run.</summary>
     public IReadOnlyList<Model.WritingSection> Sections => _geometry.Sections;
+
+    /// <summary>
+    /// True when two consecutive paragraphs' spacings add rather than the larger one winning.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX</c>, and RTF is the format that defaults it the other way from the
+    /// rest of the Word family: <c>SettingsTable</c>'s constructor sets
+    /// <c>doNotUseHTMLParagraphAutoSpacing</c> for an RTF import and leaves it clear for OOXML
+    /// (<c>sw/source/writerfilter/dmapper/SettingsTable.cxx</c>:119, "HTML paragraph auto-spacing is
+    /// opt-in for RTF, opt-out for OOXML"). So an RTF adds unless it opts in.
+    /// </para>
+    /// <para>
+    /// <c>\htmautsp</c> is that opt-in, and it reads backwards from its name: it asks for HTML
+    /// auto-spacing, which is the collapsing behaviour, so LibreOffice answers it by clearing the flag
+    /// (<c>rtftok/rtfdispatchflag.cxx</c>:1354). Measured on eight paragraphs carrying <c>\sb240</c> and
+    /// <c>\sa160</c> on <c>\sl-240</c> exact lines: without <c>\htmautsp</c> LibreOffice 24.2.7.2 puts
+    /// every boundary at 32.00 pt — the 12 pt line plus the 8 pt and 12 pt summed — and with it at
+    /// 24.00 pt, the line plus the larger of the two alone.
+    /// </para>
+    /// <para>
+    /// No RTF on the words corpus states it, so like the DOCX and ODF halves of this rule the change
+    /// is correctness rather than a measured win.
+    /// </para>
+    /// </remarks>
+    public bool AddsParagraphSpacing => !_htmlAutoSpacing;
 
     /// <summary>
     /// The body's blocks — its paragraphs and its tables — with the formatting layout needs, valid once
@@ -625,6 +654,14 @@ public sealed partial class RtfDocumentReader
             case "deftab":
                 if (token.Parameter is { } interval and > 0)
                     _defaultTabInterval = Core.Units.Length.FromTwips(interval);
+                return;
+
+            // Deliberately ignoring the parameter: LibreOffice declares \htmautsp a
+            // RTFControlType::FLAG (rtftokenizer.cxx:701), so \htmautsp0 asks for HTML auto-spacing
+            // exactly as \htmautsp does. Measured — both put the reference's paragraph boundaries at
+            // 24.00 pt where their absence gives 32.00 pt — which is why this is not `Parameter != 0`.
+            case "htmautsp":
+                _htmlAutoSpacing = true;
                 return;
 
             case "li":

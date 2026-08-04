@@ -266,8 +266,10 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             // wins, which is Word's behaviour. Its OOXML exporter writes
             // w:doNotUseHTMLParagraphAutoSpacing exactly when the flag is on (docxexport.cxx), so
             // the element's absence is what makes a DOCX collapse — and a document carrying it
-            // adds, like an ODF one.
-            CollapsesSpacing = !compatibility.DoNotUseHtmlParagraphAutoSpacing,
+            // adds, like an ODF one. A package with no settings part at all is the exception,
+            // because the write that decides this never runs; WordCompatibility.AddsParagraphSpacing
+            // says why, and measures it.
+            CollapsesSpacing = !compatibility.AddsParagraphSpacing,
             JustifiesLinesEndedByBreak = !compatibility.DoNotExpandShiftReturn,
             MaxPages = options?.MaxPages is > 0
                 ? options.MaxPages

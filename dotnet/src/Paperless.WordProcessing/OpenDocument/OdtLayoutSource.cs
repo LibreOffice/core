@@ -126,6 +126,70 @@ public sealed partial class OdtLayoutSource
     /// </remarks>
     private readonly bool _blanksAreTransparentToHeight;
 
+    /// <summary>
+    /// Whether two consecutive paragraphs' spacings add rather than the larger one winning, as the
+    /// document's settings say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX</c>, which ODF spells <c>AddParaTableSpacing</c>
+    /// (<c>SwXDocumentSettings.cxx</c> names the property at :189 and sets the flag at :449). Set, the two
+    /// spacings are summed; clear, the larger wins — the name says the opposite of what it does.
+    /// </para>
+    /// <para>
+    /// True when the file states nothing, because the setting then keeps the application's configured
+    /// <c>AddSpacing</c>, whose shipped default is <c>true</c>
+    /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>). That is the ODF
+    /// behaviour Paperless already had; what it did not have is the other branch, which a document
+    /// converted from a Word file always carries.
+    /// </para>
+    /// <para>
+    /// Measured on <c>paragraph-spacing-collapsed.odt</c> and its flat twin — eight paragraphs each with
+    /// 12 pt of space-before and 8 pt of space-after on 12 pt exact lines, saved by LibreOffice from the
+    /// collapsing DOCX: with <c>AddParaTableSpacing</c> false LibreOffice 24.2.7.2 puts every boundary at
+    /// 24.00 pt and with it true at 32.00 pt. Both containers honour it, so this is not a packaged-only
+    /// setting.
+    /// </para>
+    /// <para>
+    /// Like the DOCX case it reaches nothing on the corpus — the 200-file words track holds no ODF
+    /// document at all — so it is correctness rather than a measured win.
+    /// </para>
+    /// </remarks>
+    /// <param name="settings">The document's <c>office:settings</c>, or null.</param>
+    internal static bool AddsParagraphSpacing(XElement? settings)
+        => Setting(settings, "AddParaTableSpacing") != "false";
+
+    /// <summary>
+    /// Whether a paragraph keeps its space-before at the top of the first page and after a page break,
+    /// as the document's settings say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>, which ODF spells <c>AddParaTableSpacingAtStart</c>, and
+    /// the companion of <see cref="AddsParagraphSpacing"/> — <c>ww8par.cxx</c> sets the two on
+    /// consecutive lines (:1946 and :1947). It decides whether the question is asked at all;
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c> then decides where, granting the space on the first page
+    /// and after an explicit break and taking it away at every automatic one.
+    /// </para>
+    /// <para>
+    /// True when the file states nothing, because the application's shipped <c>AddSpacingAtPages</c>
+    /// default is <c>true</c>
+    /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>:47,
+    /// <c>DocumentSettingManager.cxx</c>:131). Paperless previously assumed the opposite for ODF, which
+    /// put the first line of a document whose first paragraph has space-before too high by exactly that
+    /// spacing.
+    /// </para>
+    /// <para>
+    /// Measured on the eight-paragraph fixture, whose paragraphs each carry 12 pt of space-before, in
+    /// points down an A4 page from LibreOffice 24.2.7.2: with the setting true the first baseline is at
+    /// 93.60, with it false at 81.60, and <b>with the item removed entirely at 93.60</b> — so absent
+    /// means true, which is the part that could not be inferred from the DOCX side.
+    /// </para>
+    /// </remarks>
+    /// <param name="settings">The document's <c>office:settings</c>, or null.</param>
+    internal static bool KeepsParagraphSpacingAtPages(XElement? settings)
+        => Setting(settings, "AddParaTableSpacingAtStart") != "false";
+
     /// <summary>One <c>config:config-item</c>'s value from a document's settings, or null when absent.</summary>
     /// <remarks>
     /// The items are nested in <c>config:config-item-set</c> elements, so this searches by descendant name

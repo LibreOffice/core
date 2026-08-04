@@ -45,7 +45,8 @@ public static class RtfReader
 
         return new RtfDocument(
             format, content, diagnostics, reader.Sections, reader.LayoutBlocks,
-            reader.HeaderLayout, reader.FooterLayout, reader.Marks);
+            reader.HeaderLayout, reader.FooterLayout, reader.Marks,
+            reader.AddsParagraphSpacing);
     }
 
     /// <summary>
@@ -110,8 +111,10 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
             headerLayout,
         IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
             footerLayout,
-        Model.WritingMarks marks)
+        Model.WritingMarks marks,
+        bool addsParagraphSpacing = true)
     {
+        _addsParagraphSpacing = addsParagraphSpacing;
         Format = format;
         Marks = marks;
         Content = content;
@@ -121,6 +124,12 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
         _headerLayout = headerLayout;
         _footerLayout = footerLayout;
     }
+
+    /// <summary>
+    /// Whether two consecutive paragraphs' spacings add rather than the larger one winning; see
+    /// <see cref="RtfDocumentReader.AddsParagraphSpacing"/>.
+    /// </summary>
+    private readonly bool _addsParagraphSpacing;
 
     /// <inheritdoc/>
     public DocumentFormat Format { get; }
@@ -152,9 +161,12 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
     /// stream with nothing to revisit — see <see cref="RtfLayoutParagraph"/>.
     /// </para>
     /// <para>
-    /// The two spacings add rather than the larger winning. LibreOffice's RTF importer turns HTML
-    /// auto-spacing on by default — "opt-in for RTF, opt-out for OOXML", as its own comment in
-    /// <c>SettingsTable.cxx</c> puts it — which is the opposite of the DOCX path and the same as ODF's.
+    /// The two spacings add rather than the larger winning, unless the document says <c>\htmautsp</c>.
+    /// LibreOffice's RTF importer turns HTML auto-spacing <em>off</em> by default — "opt-in for RTF,
+    /// opt-out for OOXML", as its own comment in <c>SettingsTable.cxx</c> puts it, the opt-in being what
+    /// makes the spacings collapse — which is the opposite of the DOCX path and the same as ODF's. See
+    /// <see cref="RtfDocumentReader.AddsParagraphSpacing"/> for the control word, which reads backwards
+    /// from its name.
     /// </para>
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
@@ -169,7 +181,7 @@ public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
 
         PaginationOptions pagination = PaginationOptions.Word with
         {
-            CollapsesSpacing = false,
+            CollapsesSpacing = !_addsParagraphSpacing,
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
         };
 

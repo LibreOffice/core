@@ -191,6 +191,9 @@ combination that tells the two transform orders apart.
 | `compat-shift-expand.docx`, `compat-shift-return.docx` | The same justified paragraph split by a `w:br`, differing only in whether `settings.xml` carries `w:doNotExpandShiftReturn`. The pair is the point: each file is measured against LibreOffice on its own, and the difference between them is what shows the flag did anything |
 | `alt-chunk.docx` | Three `w:altChunk` placeholders at once — a DOCX chunk declared by `Override`, an RTF chunk declared by a loose `Default` extension mapping, and an HTML chunk that no word-processing reader claims — so that splicing, content-type-independent sniffing and the surviving diagnostic are all covered by one file |
 | `contextual-spacing-styles.docx` | A `Normal` style carrying `w:contextualSpacing`, and two heading styles **based on it** — so both inherit the flag, the line spacing, the indents and the alignment, and differ from it in nothing a resolved-property comparison can see except the space above. That is what makes it a test: "contextual" means the same *style*, which Writer decides by comparing the paragraphs' format collections (`lcl_IdenticalStyles`, `sw/source/core/layout/flowfrm.cxx:1503`), so LibreOffice suppresses the gap between two `Normal` paragraphs and keeps the 12 pt and 18 pt above the headings. Every `w:after` in the file is zero on purpose — see below |
+| `paragraph-spacing-no-settings.docx`, `paragraph-spacing-settings.docx` | Whether two paragraphs' spacings add or the larger wins — Writer's `PARA_SPACE_MAX`. The same eight paragraphs in both, each carrying 12 pt of space-before and 8 pt of space-after on 12 pt exact lines, so a boundary is 24 pt collapsed and 32 pt added and the error accumulates down the page. They differ in **one thing**: whether the package has a `word/settings.xml` at all. LibreOffice puts the first at 32 pt and the second at 24, and the second's settings part is *empty* — so the pair is what separates "the document asked to add" from "nothing decided the question". Hand-written, because no exporter can be persuaded to omit the part |
+| `paragraph-spacing-collapsed.odt`, `paragraph-spacing-collapsed.fodt` | The same eight paragraphs saved by LibreOffice from the collapsing DOCX, so `office:settings` carries `AddParaTableSpacing=false` and the document takes the larger — against ODF's own default, which is to add. Both containers, because the setting had to be shown to survive packaging |
+| `paragraph-spacing-collapsed.rtf` | And again in the format that defaults the other way round from the rest of the Word family. `\htmautsp` is the opt-in and reads backwards from its name: it asks for HTML auto-spacing, which is the *collapsing* behaviour. Hand-written, because LibreOffice's RTF export writes the control word only when the document collapses and the interesting cases are both sides of it |
 | `paragraph-shading.docx` | Paragraph backgrounds, hand-written so every edge is a round number of twips. Thirteen paragraphs: one shaded directly with indents *and* spacing on both sides, so the fill can be shown to span the indents and to stop at the lines; a pair shaded the same colour with spacing between them, which LibreOffice paints as **one** band; a pair shaded different colours with the same spacing, which it paints as two with the gap left white; a paragraph shaded only by its style; and one whose style overrides its parent's fill with `w:fill="auto"`, which paints nothing. It is hand-written because LibreOffice's own DOCX export moves a paragraph fill into a `w:pPr/w:shd` on every paragraph of the style, which would lose the direct-versus-style distinction |
 
 #### Why `contextual-spacing-styles` is hand-written, and why every `w:after` in it is zero
@@ -207,12 +210,29 @@ it is exactly what destroys the case.
 
 **A `w:after` anywhere in the file measures a different bug.** With `w:after="160"` on the document
 defaults, LibreOffice's gap above a heading was the previous paragraph's after **plus** the heading's
-before — 8 + 12 pt — where we produce the larger of the two. That is `PARA_SPACE_MAX`, and for DOCX
-writerfilter never sets it: it keeps the *application's* configured default, which is on, so a Word
-document adds where `PaginationOptions.CollapsesSpacing` (mapped from
-`w:doNotUseHTMLParagraphAutoSpacing`) makes us collapse. **That is an open defect** and not this
-document's; setting every `w:after` to zero takes it out of the measurement so the two questions do not
-have to be answered in one commit. The `.doc` and `.rtf` beside the `.docx` are LibreOffice's own
+before — 8 + 12 pt — where we produced the larger of the two. That is `PARA_SPACE_MAX`, and setting
+every `w:after` to zero takes it out of the measurement so the two questions do not have to be answered
+in one commit.
+
+**The explanation that stood here was wrong, and it is worth leaving the correction rather than the
+sentence.** It said that for DOCX `writerfilter` never sets `PARA_SPACE_MAX` and keeps the
+application's configured default, so every Word document adds. It does set it —
+`DomainMapper_Impl::ApplySettingsTable` writes `AddParaTableSpacing` from
+`w:doNotUseHTMLParagraphAutoSpacing` unconditionally (`DomainMapper_Impl.cxx`:10179) — but that method
+returns at its first line when there is no settings table (:10124), and **this document has no
+`word/settings.xml`**. It is hand-written, and nothing here needed one. So the observation was real and
+particular to this file: measured on eight paragraphs carrying 12 pt before and 8 pt after, LibreOffice
+puts the boundaries at 32 pt with no settings part and at 24 pt with one, *even an empty one*. See
+`WordCompatibility.AddsParagraphSpacing`, which now reads exactly that distinction, and
+`ParagraphSpacingAccumulationTests`, whose `paragraph-spacing-settings.docx` is the counter-example.
+
+The general lesson is the one `PaginationOptions.KeepsSpacingAtTopOfPage` already records and this
+paragraph is the second casualty of: **a hand-written DOCX with no settings part lays out under
+Writer's own compatibility defaults rather than Word's**, so a synthetic fixture missing a part it does
+not appear to need answers the wrong question convincingly. Give a hand-written DOCX an empty
+`w:settings` unless the absence is the thing under test.
+
+The `.doc` and `.rtf` beside the `.docx` are LibreOffice's own
 conversions of it and keep the case, since `sprmPFContextualSpacing` and `\contextualspace` survive the
 round trip where ODF's spelling does not.
 
