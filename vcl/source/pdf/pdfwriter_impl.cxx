@@ -1719,17 +1719,23 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append(" cm /Im" + OString::number(nObject) + " Do Q\n");
             }
 
+            // The newline before `endstream` is not counted as within the stream
+            assert(aContents[aContents.getLength() - 1] == '\n');
+            aContents.setLength(aContents.getLength() - 1);
+            assert(aContents[aContents.getLength() - 1] != '\n');
             aLine.setLength(0);
             aLine.append(OString::number(nStream)
                 + " 0 obj\n<</Length "
-                + OString::number(aContents.getLength() - 1) // Trailing newline doesn't count
+                + OString::number(calculateStreamSize(aContents.getLength()))
                 + ">>\nstream\n");
             if (!writeBuffer(aLine))
                 return false;
+            checkAndEnableStreamEncryption(nStream);
             if (!writeBuffer(aContents))
                 return false;
+            disableStreamEncryption();
             aLine.setLength(0);
-            aLine.append("endstream\nendobj\n\n");
+            aLine.append("\nendstream\nendobj\n\n");
             if (!writeBuffer(aLine))
                 return false;
         }
@@ -2645,14 +2651,16 @@ bool PDFWriterImpl::emitScreenAnnotations()
 
             aLine.append(OString::number(rScreen.m_nTempFileObject)
                 + " 0 obj\n<< /Type /EmbeddedFile /Length "
-                + OString::number(aMemoryStream.GetSize())
+                + OString::number(calculateStreamSize(aMemoryStream.GetSize()))
                 + " >>\nstream\n");
             if (!writeBuffer(aLine))
                 return false;
             aLine.setLength(0);
 
+            checkAndEnableStreamEncryption(rScreen.m_nTempFileObject);
             if (!writeBufferBytes(aMemoryStream.GetData(), aMemoryStream.GetSize()))
                 return false;
+            disableStreamEncryption();
 
             aLine.append("\nendstream\nendobj\n\n");
             if (!writeBuffer(aLine))
