@@ -80,6 +80,7 @@ coolwsd_sources = \
                   ../wsd/DocumentBroker.cpp \
                   ../wsd/FileServer.cpp \
                   ../wsd/FileServerUtil.cpp \
+                  ../wsd/HealthCheck.cpp \
                   ../wsd/HostUtil.cpp \
                   ../wsd/ProofKey.cpp \
                   ../wsd/ProxyProtocol.cpp \
