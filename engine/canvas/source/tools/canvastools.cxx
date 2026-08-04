@@ -61,88 +61,21 @@ namespace canvastools
         vclcanvas::RenderState& initRenderState( vclcanvas::RenderState& renderState )
         {
             // setup identity transform
-            setIdentityAffineMatrix2D( renderState.AffineTransform );
+            renderState.AffineTransform.identity();
             renderState.Clip.clear();
             renderState.DeviceColor = COL_WHITE;
 
             return renderState;
         }
 
-        vclcanvas::ViewState& initViewState( vclcanvas::ViewState& viewState )
-        {
-            // setup identity transform
-            setIdentityAffineMatrix2D( viewState.AffineTransform );
-
-            return viewState;
-        }
-
-        ::basegfx::B2DHomMatrix getViewStateTransform( const vclcanvas::ViewState& viewState )
-        {
-            ::basegfx::B2DHomMatrix aTransform;
-            return ::basegfx::unotools::homMatrixFromAffineMatrix( aTransform, viewState.AffineTransform );
-        }
-
-        vclcanvas::ViewState& setViewStateTransform( vclcanvas::ViewState&          viewState,
-                                                     const ::basegfx::B2DHomMatrix& transform )
-        {
-            ::basegfx::unotools::affineMatrixFromHomMatrix( viewState.AffineTransform, transform );
-
-            return viewState;
-        }
-
-        ::basegfx::B2DHomMatrix getRenderStateTransform( const vclcanvas::RenderState& renderState )
-        {
-            ::basegfx::B2DHomMatrix aTransform;
-            return ::basegfx::unotools::homMatrixFromAffineMatrix( aTransform, renderState.AffineTransform );
-        }
-
-        vclcanvas::RenderState& setRenderStateTransform( vclcanvas::RenderState&        renderState,
-                                                         const ::basegfx::B2DHomMatrix& transform )
-        {
-            ::basegfx::unotools::affineMatrixFromHomMatrix( renderState.AffineTransform, transform );
-
-            return renderState;
-        }
-
-        vclcanvas::RenderState& appendToRenderState( vclcanvas::RenderState&        renderState,
-                                                   const ::basegfx::B2DHomMatrix&   rTransform )
-        {
-            ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
-            return setRenderStateTransform( renderState, transform * rTransform );
-        }
-
-        vclcanvas::RenderState& prependToRenderState( vclcanvas::RenderState&           renderState,
-                                                      const ::basegfx::B2DHomMatrix&    rTransform )
-        {
-            ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
-            return setRenderStateTransform( renderState, rTransform * transform );
-        }
-
         ::basegfx::B2DHomMatrix& mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&      combinedTransform,
                                                               const vclcanvas::ViewState&   viewState,
                                                               const vclcanvas::RenderState& renderState )
         {
-            ::basegfx::B2DHomMatrix viewTransform;
-
-            ::basegfx::unotools::homMatrixFromAffineMatrix( combinedTransform, renderState.AffineTransform );
-            ::basegfx::unotools::homMatrixFromAffineMatrix( viewTransform, viewState.AffineTransform );
-
             // this statement performs combinedTransform = viewTransform * combinedTransform
-            combinedTransform *= viewTransform;
+            combinedTransform = viewState.AffineTransform * renderState.AffineTransform;
 
             return combinedTransform;
-        }
-
-        geometry::AffineMatrix2D& setIdentityAffineMatrix2D( geometry::AffineMatrix2D& matrix )
-        {
-            matrix.m00 = 1.0;
-            matrix.m01 = 0.0;
-            matrix.m02 = 0.0;
-            matrix.m10 = 0.0;
-            matrix.m11 = 1.0;
-            matrix.m12 = 0.0;
-
-            return matrix;
         }
 
         geometry::Matrix2D& setIdentityMatrix2D( geometry::Matrix2D& matrix )

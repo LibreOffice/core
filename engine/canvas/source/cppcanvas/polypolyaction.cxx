@@ -136,7 +136,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 if( maFillColor.has_value() )
                 {
@@ -234,7 +234,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 std::vector< vclcanvas::Texture > aSeq { maTexture };
 
@@ -316,7 +316,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCanvas.strokePolyPolygon( mxPolyPoly,
                                             rViewState,

@@ -58,15 +58,7 @@ namespace vclcanvas
 
     sal_Int8 CachedBitmap::redraw( const vclcanvas::ViewState& aState )
     {
-        ::basegfx::B2DHomMatrix aUsedTransformation;
-        ::basegfx::B2DHomMatrix aNewTransformation;
-
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation,
-                                                        maUsedViewState.AffineTransform );
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation,
-                                                        aState.AffineTransform );
-
-        const bool bSameViewTransform( aUsedTransformation == aNewTransformation );
+        const bool bSameViewTransform( maUsedViewState.AffineTransform == aState.AffineTransform );
 
         if( !bSameViewTransform )
         {

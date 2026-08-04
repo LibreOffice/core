@@ -2417,8 +2417,7 @@ namespace cppcanvas
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::Renderer(mtf)" );
 
-            ::canvastools::initViewState( maViewState );
-            ::canvastools::setViewStateTransform( maViewState, rViewTransform );
+            maViewState.AffineTransform = rViewTransform;
             ::canvastools::initRenderState( maRenderState );
 
             VectorOfOutDevStates    aStateStack;
@@ -2488,15 +2487,14 @@ namespace cppcanvas
 
         void Renderer::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {
-            ::canvastools::setRenderStateTransform( maRenderState, rMatrix );
+            maRenderState.AffineTransform = rMatrix;
         }
 
         bool Renderer::draw() const
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::draw()" );
 
-            const ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
-                                                      maRenderState );
+            const ::basegfx::B2DHomMatrix aMatrix = maRenderState.AffineTransform;
 
             try
             {

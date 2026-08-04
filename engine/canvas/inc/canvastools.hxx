@@ -99,31 +99,6 @@ namespace canvastools
         CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
             initRenderState( ::vclcanvas::RenderState&                      renderState );
 
-        CANVASTOOLS_DLLPUBLIC ::vclcanvas::ViewState&
-            initViewState( ::vclcanvas::ViewState&                          viewState );
-
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
-            getViewStateTransform( const ::vclcanvas::ViewState&            viewState );
-
-        CANVASTOOLS_DLLPUBLIC ::vclcanvas::ViewState&
-            setViewStateTransform( ::vclcanvas::ViewState&                  viewState,
-                                   const ::basegfx::B2DHomMatrix&              transform );
-
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
-            getRenderStateTransform( const ::vclcanvas::RenderState&        renderState );
-
-        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
-            setRenderStateTransform( ::vclcanvas::RenderState&              renderState,
-                                     const ::basegfx::B2DHomMatrix&            transform );
-
-        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
-            appendToRenderState( ::vclcanvas::RenderState&                  renderState,
-                                 const ::basegfx::B2DHomMatrix&                transform );
-
-        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
-            prependToRenderState( ::vclcanvas::RenderState&                 renderState,
-                                  const ::basegfx::B2DHomMatrix&               transform );
-
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&              transform,
                                          const ::vclcanvas::ViewState&      viewState,
@@ -132,9 +107,6 @@ namespace canvastools
 
         // Matrix utilities
 
-
-        CANVASTOOLS_DLLPUBLIC css::geometry::AffineMatrix2D&
-            setIdentityAffineMatrix2D( css::geometry::AffineMatrix2D&  matrix );
 
         CANVASTOOLS_DLLPUBLIC css::geometry::Matrix2D&
             setIdentityMatrix2D( css::geometry::Matrix2D&              matrix );

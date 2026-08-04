@@ -75,8 +75,7 @@ namespace cppcanvas
                 basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createRotateB2DHomMatrix(rState.fontRotation));
                 aLocalTransformation.translate( rStartPoint.getX(),
                                                 rStartPoint.getY() );
-                ::canvastools::appendToRenderState( o_rRenderState,
-                                                      aLocalTransformation );
+                o_rRenderState.AffineTransform *= aLocalTransformation;
 
                 o_rRenderState.DeviceColor = rState.textColor;
             }
@@ -125,8 +124,7 @@ namespace cppcanvas
                 // prepend extra font transform to render state
                 // (prepend it, because it's interpreted in the unit
                 // rect coordinate space)
-                ::canvastools::prependToRenderState( o_rRenderState,
-                                                       rTextTransform );
+                o_rRenderState.AffineTransform = rTextTransform * o_rRenderState.AffineTransform;
             }
 
             void initLayoutWidth(double& rLayoutWidth, const cpo::uno::Sequence<double>& rOffsets)
@@ -321,8 +319,7 @@ namespace cppcanvas
                         aTranslation.translate(nOffset, 0.0);
                     }
 
-                    ::canvastools::appendToRenderState( io_rRenderState,
-                                                          aTranslation );
+                    io_rRenderState.AffineTransform *= aTranslation;
                 }
 
 
@@ -399,7 +396,7 @@ namespace cppcanvas
                                      const ::basegfx::B2DHomMatrix&             rTransformation,
                                      const Action::Subset&                      rSubset )
             {
-                ::canvastools::prependToRenderState(io_rRenderState, rTransformation);
+                io_rRenderState.AffineTransform = rTransformation * io_rRenderState.AffineTransform;
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
                 {
@@ -488,7 +485,7 @@ namespace cppcanvas
                     aTranslate.translate(rShadowOffset.getWidth(),
                                          rShadowOffset.getHeight());
 
-                    ::canvastools::appendToRenderState(aShadowState, aTranslate);
+                    aShadowState.AffineTransform *= aTranslate;
 
                     aShadowState.DeviceColor = rShadowColor;
 
@@ -504,7 +501,7 @@ namespace cppcanvas
                     aTranslate.translate(rReliefOffset.getWidth(),
                                          rReliefOffset.getHeight());
 
-                    ::canvastools::appendToRenderState(aReliefState, aTranslate);
+                    aReliefState.AffineTransform *= aTranslate;
 
                     aReliefState.DeviceColor = rReliefColor;
 
@@ -596,7 +593,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCanvas.drawText( maStringContext, mxFont,
                                     rViewState, aLocalState, maTextDirection );
@@ -762,7 +759,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,
@@ -887,7 +884,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCanvas.drawTextLayout( mxTextLayout,
                                       rViewState,
@@ -1074,7 +1071,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,
@@ -1368,7 +1365,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,

@@ -128,8 +128,7 @@ namespace cppcanvas
 
                 aLocalTransformation.translate( rDstPoint.getX(),
                                                 rDstPoint.getY() );
-                ::canvastools::appendToRenderState( rRenderState,
-                                                      aLocalTransformation );
+                rRenderState.AffineTransform *= aLocalTransformation;
             }
 
             TransparencyGroupAction::TransparencyGroupAction( std::unique_ptr< GDIMetaFile >&& rGroupMtf,
@@ -172,11 +171,9 @@ namespace cppcanvas
 
                 // determine overall transformation matrix (render, view,
                 // and passed transformation)
-                ::basegfx::B2DHomMatrix aTransform = ::canvastools::getRenderStateTransform( maState );
-                aTransform = rTransformation * aTransform;
+                ::basegfx::B2DHomMatrix aTransform = rTransformation * maState.AffineTransform;
 
-                ::basegfx::B2DHomMatrix aTotalTransform = ::canvastools::getViewStateTransform( rViewState );
-                aTotalTransform = aTotalTransform * aTransform;
+                ::basegfx::B2DHomMatrix aTotalTransform = rViewState.AffineTransform * aTransform;
 
                 // since pure translational changes to the transformation
                 // does not matter, remove them before comparing
@@ -404,7 +401,7 @@ namespace cppcanvas
                 aTransform = aTransform * aScaleCorrection;
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::setRenderStateTransform(aLocalState, aTransform);
+                aLocalState.AffineTransform = aTransform;
 
                 if(aLocalState.Clip.count())
                 {

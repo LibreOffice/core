@@ -57,9 +57,8 @@ public:
     {
         BootstrapFixture::setUp();
         // Geometry init
-        geometry::AffineMatrix2D aUnit(1, 0, 0, 0, 1, 0);
-        mViewState.AffineTransform = aUnit;
-        mRenderState.AffineTransform = aUnit;
+        mViewState.AffineTransform.identity();
+        mRenderState.AffineTransform.identity();
         mRenderState.DeviceColor = COL_BLACK;
     }
 
@@ -100,8 +99,8 @@ public:
     {
         setupCanvas(Size(1000, 100));
         // Scale everything up by 10 (2 in render state, 5 in view state).
-        mRenderState.AffineTransform = geometry::AffineMatrix2D(2, 0, 0, 0, 2, 0);
-        mViewState.AffineTransform = geometry::AffineMatrix2D(5, 0, 0, 0, 5, 0);
+        mRenderState.AffineTransform.scale(2, 2);
+        mViewState.AffineTransform.scale(5, 5);
 
         ::basegfx::B2DPolygon aPoly;
         aPoly.append({ 10, 5 });

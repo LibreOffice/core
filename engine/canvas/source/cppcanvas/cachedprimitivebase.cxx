@@ -46,9 +46,7 @@ namespace cppcanvas
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase::render()" );
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase: 0x" << std::hex << this );
 
-            ::basegfx::B2DHomMatrix     aTotalTransform = ::canvastools::getViewStateTransform(
-                                                    rViewState );
-            aTotalTransform *= rTransformation;
+            ::basegfx::B2DHomMatrix aTotalTransform = rViewState.AffineTransform * rTransformation;
 
             // can we use the cached primitive? For that, it must be
             // present in the first place, and, if

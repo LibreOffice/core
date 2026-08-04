@@ -682,13 +682,11 @@ namespace vclcanvas
                     aIntegerTextureDeviceRect == aPolygonDeviceRect )
                 {
                     vclcanvas::RenderState aLocalState( renderState );
-                    ::canvastools::appendToRenderState(aLocalState,
-                                                         aTextureTransform);
+                    aLocalState.AffineTransform *= aTextureTransform;
                     ::basegfx::B2DHomMatrix aScaleCorrection;
                     aScaleCorrection.scale( 1.0/aBmpSize.Width,
                                             1.0/aBmpSize.Height );
-                    ::canvastools::appendToRenderState(aLocalState,
-                                                         aScaleCorrection);
+                    aLocalState.AffineTransform *= aScaleCorrection;
 
                     // need alpha modulation?
                     if( !::rtl::math::approxEqual( textures[0].Alpha,

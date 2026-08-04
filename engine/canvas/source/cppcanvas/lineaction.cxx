@@ -84,7 +84,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCanvas.drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
                                     ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),

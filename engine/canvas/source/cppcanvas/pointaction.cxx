@@ -93,7 +93,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCanvas.drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
                                      rViewState,

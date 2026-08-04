@@ -18,10 +18,10 @@
  */
 #pragma once
 
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
-namespace vclcanvas {
-
+namespace vclcanvas
+{
 /** This structure contains information considered the view state.<p>
 
     This structure contains information considered the view state,
@@ -35,9 +35,8 @@ struct ViewState
         This member is used to transform coordinates of draw
         operations from user space to screen space.<p>
      */
-    ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
+    ::basegfx::B2DHomMatrix AffineTransform;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

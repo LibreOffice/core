@@ -41,10 +41,9 @@ namespace cppcanvastools
         void initRenderState( vclcanvas::RenderState&                   renderState,
                               const ::cppcanvas::OutDevState& outdevState )
         {
-            ::canvastools::initRenderState( renderState );
-            ::canvastools::setRenderStateTransform( renderState,
-                                                      outdevState.transform );
+            renderState.AffineTransform = outdevState.transform;
             renderState.Clip = outdevState.xClipPoly;
+            renderState.DeviceColor = COL_WHITE;
         }
 
         ::Size getBaselineOffset( const ::cppcanvas::OutDevState& outdevState,

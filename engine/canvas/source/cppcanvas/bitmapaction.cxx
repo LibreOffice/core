@@ -82,8 +82,7 @@ namespace cppcanvas
                 // Setup transformation such that the next render call is
                 // moved rPoint away.
                 const basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createTranslateB2DHomMatrix(rDstPoint));
-                ::canvastools::appendToRenderState( maState,
-                                                      aLocalTransformation );
+                maState.AffineTransform *= aLocalTransformation;
 
                 // correct clip (which is relative to original transform)
                 cppcanvastools::modifyClip( maState,
@@ -111,7 +110,7 @@ namespace cppcanvas
                                                    rDstSize.getY() / aBmpSize.Height() );
                 const basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aScale, rDstPoint));
-                ::canvastools::appendToRenderState( maState, aLocalTransformation );
+                maState.AffineTransform *= aLocalTransformation;
 
                 // correct clip (which is relative to original transform)
                 cppcanvastools::modifyClip( maState,
@@ -130,7 +129,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
+                aLocalState.AffineTransform = rTransformation * aLocalState.AffineTransform;
 
                 rCachedPrimitive = rCanvas.drawBitmap( maBitmap,
                                                      rViewState,
