@@ -38,9 +38,18 @@ public readonly record struct TextItem(int Start, int Length, byte Level, string
 /// Format control characters are cut out rather than shaped, which is
 /// <c>ImplLayoutArgs::AddRun</c>'s splitting on <c>IsControlChar</c>. A left-to-right mark handed to a
 /// shaper comes back as a missing-glyph box with a real advance, which is both visible and wide; cut
-/// out, it takes no room at all, which is what it means. The list is
-/// <see cref="Shaping.ShapingControls"/>, and the one departure from LibreOffice's is the tab, which is
-/// kept because the line filler resolves its width against the paragraph's stops.
+/// out, it takes no room at all, which is what it means.
+/// </para>
+/// <para>
+/// <strong>This list is deliberately narrower than <see cref="Shaping.ShapingControls"/>'s</strong>,
+/// which is what a shaper is actually handed. Cutting here removes a character from every sub-run, so a
+/// paragraph whose whole text is one control character produces no run at all — and a paragraph with no
+/// run has no line for a frame anchored in it to be measured against. The commonest such paragraph in
+/// the corpus is a logo: a footer paragraph holding nothing but a <c>w:drawing</c>, whose text is the
+/// single U+0001 that stands for it. Measured on
+/// <c>1603642410-MoM-CASCOM-06-2020-draft04.docx</c>, whose nine footers each lost the six words in
+/// that shape. So the C0 range stays in the items and is dropped one layer down, where removing it
+/// costs the glyph and not the structure.
 /// </para>
 /// </remarks>
 public static class TextItemiser
@@ -217,15 +226,19 @@ public static class TextItemiser
     }
 
     /// <summary>
-    /// True for a character that must not reach a shaper.
+    /// True for a character that must not appear in a sub-run's range at all.
     /// </summary>
     /// <remarks>
-    /// The itemiser and the shaper agree on one list, <see cref="Shaping.ShapingControls"/>, because the
-    /// two cuts have to be the same cut: this one keeps a control character out of a sub-run's
-    /// <em>range</em>, so the prefix table records it as taking no room, and the shaper's keeps it out of
-    /// the buffer, so no glyph is drawn for it. Two lists would eventually disagree, and the symptom
-    /// would be a measurement that no longer describes what is drawn.
+    /// <see cref="Shaping.ShapingControls"/> minus the C0 range, for the reason on the class: a cut here
+    /// removes the character from every run, and a paragraph that is nothing but control characters then
+    /// has no run and no line. The C0 range is dropped inside the shaper instead, which costs it its
+    /// glyph and its advance and leaves the run it sits in intact.
     /// </remarks>
-    private static bool IsFormatControl(char character)
-        => Shaping.ShapingControls.IsRemovedBeforeShaping(character);
+    private static bool IsFormatControl(char character) => character
+        is '\u0000'
+        or >= '\u200E' and <= '\u200F'
+        or >= '\u2028' and <= '\u202E'
+        or '\u2060'
+        or >= '\u206A' and <= '\u206F'
+        or '\uFEFF' or '\uFFFE' or '\uFFFF';
 }
