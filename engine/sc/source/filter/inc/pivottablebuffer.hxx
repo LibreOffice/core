@@ -83,6 +83,7 @@ struct PTFieldModel
     bool                mbAutoShow;         /// True = auto show (top 10) filter enabled.
     bool                mbTopAutoShow;      /// True = auto show filter shows top entries, false = bottom.
     bool                mbMultiPageItems;   /// True = multiple items selectable in page dimension.
+    bool                mbFillDownLabels;   /// True = repeat item labels for each row.
 
     explicit            PTFieldModel();
 
@@ -124,6 +125,8 @@ public:
 
     /** Imports pivot field settings from the pivotField element. */
     void                importPivotField( const AttributeList& rAttribs );
+    /** Imports pivot field settings from the x14:pivotField extension element. */
+    void                importPivotFieldExt( const AttributeList& rAttribs );
     /** Imports settings of an item in this pivot field from the item element. */
     void                importItem( const AttributeList& rAttribs );
     /** Imports pivot field reference settings from the reference element. */
@@ -133,6 +136,8 @@ public:
 
     /** Imports pivot field settings from the PTFIELD record. */
     void                importPTField( SequenceInputStream& rStrm );
+    /** Imports pivot field settings from the PTFIELD14 record. */
+    void                importPTField14( SequenceInputStream& rStrm );
     /** Imports settings of an item in this pivot field from the PTFITEM record. */
     void                importPTFItem( SequenceInputStream& rStrm );
     /** Imports pivot field reference settings from the PTREFERENCE record. */

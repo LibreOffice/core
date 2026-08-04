@@ -510,6 +510,7 @@ RelativeSize
 RelativeWidth
 Repeat
 RepeatDelay
+RepeatItemLabels
 Representation
 RightAngledAxes
 RightBorder

@@ -211,7 +211,8 @@ PTFieldModel::PTFieldModel() :
     mbInsertPageBreak( false ),
     mbAutoShow( false ),
     mbTopAutoShow( true ),
-    mbMultiPageItems( false )
+    mbMultiPageItems( false ),
+    mbFillDownLabels( false )
 {
 }
 
@@ -301,6 +302,11 @@ void PivotTableField::importPivotField( const AttributeList& rAttribs )
     maModel.mbMultiPageItems  = rAttribs.getBool( XML_multipleItemSelectionAllowed, false );
 }
 
+void PivotTableField::importPivotFieldExt( const AttributeList& rAttribs )
+{
+    maModel.mbFillDownLabels = rAttribs.getBool( XML_fillDownLabels, false );
+}
+
 void PivotTableField::importItem( const AttributeList& rAttribs )
 {
     PTFieldItemModel aModel;
@@ -359,6 +365,12 @@ void PivotTableField::importPTField( SequenceInputStream& rStrm )
     bool bAutoSort = getFlag( nFlags2, BIFF12_PTFIELD_AUTOSORT );
     bool bAscending = getFlag( nFlags2, BIFF12_PTFIELD_SORTASCENDING );
     maModel.mnSortType = bAutoSort ? (bAscending ? XML_ascending : XML_descending) : XML_manual;
+}
+
+void PivotTableField::importPTField14( SequenceInputStream& rStrm )
+{
+    rStrm.skip( 4 );    // FRT header
+    maModel.mbFillDownLabels = rStrm.readInt32() != 0;
 }
 
 void PivotTableField::importPTFItem( SequenceInputStream& rStrm )
@@ -828,6 +840,7 @@ rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( s
             aLayoutInfo.AddEmptyLines = maModel.mbInsertBlankRow;
             aPropSet.setProperty( PROP_LayoutInfo, aLayoutInfo );
             aPropSet.setProperty( PROP_ShowEmpty, maModel.mbShowAll );
+            aPropSet.setProperty( PROP_RepeatItemLabels, maModel.mbFillDownLabels );
 
             // auto show (OOXML/BIFF12 only)
             if( maModel.mbAutoShow )

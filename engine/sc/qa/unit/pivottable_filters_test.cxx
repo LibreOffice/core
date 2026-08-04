@@ -2188,6 +2188,51 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTabularModeXLSX)
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSX)
+{
+    // Repeat item labels of a pivot field is an Excel 2010 extension
+    const char* const pRepeatItemLabelsXPath
+        = "/x:pivotTableDefinition/x:pivotFields/x:pivotField/x:extLst/x:ext/"
+          "x14:pivotField[@fillDownLabels='1']";
+
+    createScDoc("xlsx/pivot_outlineforms_repeat.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pFirstTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    xmlDocUniquePtr pSecondTable = parseExport(u"xl/pivotTables/pivotTable2.xml"_ustr);
+    CPPUNIT_ASSERT(pFirstTable);
+    CPPUNIT_ASSERT(pSecondTable);
+
+    // Only the second pivot table of the document repeats the labels, and it does so on all of
+    // its five fields. The tables can be written in any order, so check them together.
+    const int nFirst = countXPathNodes(pFirstTable, pRepeatItemLabelsXPath);
+    const int nSecond = countXPathNodes(pSecondTable, pRepeatItemLabelsXPath);
+    CPPUNIT_ASSERT_EQUAL(5, nFirst + nSecond);
+    CPPUNIT_ASSERT(nFirst == 0 || nSecond == 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRepeatItemLabelsXLSB)
+{
+    // Repeat item labels of a pivot field is an Excel 2010 extension
+    const char* const pRepeatItemLabelsXPath
+        = "/x:pivotTableDefinition/x:pivotFields/x:pivotField/x:extLst/x:ext/"
+          "x14:pivotField[@fillDownLabels='1']";
+
+    createScDoc("xlsb/pivot_outlineforms_repeat.xlsb");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pFirstTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    xmlDocUniquePtr pSecondTable = parseExport(u"xl/pivotTables/pivotTable2.xml"_ustr);
+    CPPUNIT_ASSERT(pFirstTable);
+    CPPUNIT_ASSERT(pSecondTable);
+
+    // In the binary format the flag comes from the PTFIELD14 record
+    const int nFirst = countXPathNodes(pFirstTable, pRepeatItemLabelsXPath);
+    const int nSecond = countXPathNodes(pSecondTable, pRepeatItemLabelsXPath);
+    CPPUNIT_ASSERT_EQUAL(5, nFirst + nSecond);
+    CPPUNIT_ASSERT(nFirst == 0 || nSecond == 0);
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDuplicateFields)
 {
     createScDoc("ods/caseinsensitive-duplicate-fields.ods");

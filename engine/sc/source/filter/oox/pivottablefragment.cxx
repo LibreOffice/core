@@ -42,7 +42,14 @@ ContextHandlerRef PivotTableFieldContext::onCreateContext( sal_Int32 nElement, c
             {
                 case XLS_TOKEN( items ):            return this;
                 case XLS_TOKEN( autoSortScope ):    return this;
+                case XLS_TOKEN( extLst ):           return this;
             }
+        break;
+        case XLS_TOKEN( extLst ):
+            if( nElement == XLS_TOKEN( ext ) ) return this;
+        break;
+        case XLS_TOKEN( ext ):
+            if( nElement == XLS14_TOKEN( pivotField ) ) mrTableField.importPivotFieldExt( rAttribs );
         break;
         case XLS_TOKEN( items ):
             if( nElement == XLS_TOKEN( item ) ) mrTableField.importItem( rAttribs );
@@ -78,6 +85,7 @@ ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecI
             {
                 case BIFF12_ID_PTFITEMS:        return this;
                 case BIFF12_ID_AUTOSORTSCOPE:   return this;
+                case BIFF12_ID_PTFIELD14:       mrTableField.importPTField14( rStrm ); break;
             }
         break;
         case BIFF12_ID_PTFITEMS:

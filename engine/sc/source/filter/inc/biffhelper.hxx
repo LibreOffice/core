@@ -192,6 +192,7 @@ const sal_Int32 BIFF12_ID_PTDATAFIELD       = 0x0125;
 const sal_Int32 BIFF12_ID_PTDATAFIELDS      = 0x0127;
 const sal_Int32 BIFF12_ID_PTDEFINITION      = 0x0118;
 const sal_Int32 BIFF12_ID_PTFIELD           = 0x011D;
+const sal_Int32 BIFF12_ID_PTFIELD14         = 0x0425;
 const sal_Int32 BIFF12_ID_PTFIELDS          = 0x011F;
 const sal_Int32 BIFF12_ID_PTFILTER          = 0x0259;
 const sal_Int32 BIFF12_ID_PTFILTERS         = 0x0257;
