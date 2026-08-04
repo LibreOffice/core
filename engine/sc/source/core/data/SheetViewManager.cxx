@@ -181,6 +181,22 @@ void SheetViewManager::shiftHiddenColumnsForDelete(SCCOL nStartCol, SCCOL nColCo
     }
 }
 
+void SheetViewManager::shiftQueryColumnsForInsert(SCCOL nStartCol, SCCOL nColCount)
+{
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.shiftQueryColumnsForInsert(nStartCol, nColCount);
+    }
+}
+
+void SheetViewManager::shiftQueryColumnsForDelete(SCCOL nStartCol, SCCOL nColCount)
+{
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.shiftQueryColumnsForDelete(nStartCol, nColCount);
+    }
+}
+
 std::shared_ptr<DefaultViewSortData> SheetViewManager::captureSortData() const
 {
     auto pSortDataCopy = std::make_shared<DefaultViewSortData>();

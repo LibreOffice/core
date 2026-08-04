@@ -9,6 +9,9 @@
 
 #include <SheetView.hxx>
 #include <table.hxx>
+#include <dbdata.hxx>
+#include <queryentry.hxx>
+#include <queryparam.hxx>
 
 namespace sc
 {
@@ -609,6 +612,61 @@ void SheetView::shiftHiddenColumnsForDelete(SCCOL nStartColumn, SCCOL nColumnCou
 {
     if (mpTable)
         mpTable->getFilterData().deletedColumns(nStartColumn, nColumnCount);
+}
+
+void SheetView::shiftQueryColumnsForInsert(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    ScDBData* pFilterData = mpTable ? mpTable->GetAnonymousDBData() : nullptr;
+    if (!pFilterData || !pFilterData->HasQueryParam())
+        return;
+
+    ScQueryParam aQueryParam;
+    pFilterData->GetQueryParam(aQueryParam);
+
+    bool bChanged = false;
+    for (SCSIZE nEntry = 0; nEntry < aQueryParam.GetEntryCount(); ++nEntry)
+    {
+        ScQueryEntry& rEntry = aQueryParam.GetEntry(nEntry);
+        if (rEntry.bDoQuery && rEntry.nField >= nStartColumn)
+        {
+            rEntry.nField += nColumnCount;
+            bChanged = true;
+        }
+    }
+
+    if (bChanged)
+        pFilterData->SetQueryParam(aQueryParam);
+}
+
+void SheetView::shiftQueryColumnsForDelete(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    ScDBData* pFilterData = mpTable ? mpTable->GetAnonymousDBData() : nullptr;
+    if (!pFilterData || !pFilterData->HasQueryParam())
+        return;
+
+    ScQueryParam aQueryParam;
+    pFilterData->GetQueryParam(aQueryParam);
+
+    SCCOL nLastDeletedColumn = nStartColumn + nColumnCount - 1;
+
+    bool bChanged = false;
+    for (SCSIZE nEntry = 0; nEntry < aQueryParam.GetEntryCount(); ++nEntry)
+    {
+        ScQueryEntry& rEntry = aQueryParam.GetEntry(nEntry);
+        if (!rEntry.bDoQuery || rEntry.nField < nStartColumn)
+            continue;
+
+        // The condition goes away with the column it tests.
+        if (rEntry.nField <= nLastDeletedColumn)
+            rEntry.Clear();
+        else
+            rEntry.nField -= nColumnCount;
+
+        bChanged = true;
+    }
+
+    if (bChanged)
+        pFilterData->SetQueryParam(aQueryParam);
 }
 
 void SheetView::resetSortData() { mpSortData.reset(); }

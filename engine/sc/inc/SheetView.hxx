@@ -166,6 +166,15 @@ public:
     /** Move the columns this sheet view hides on its own to the left, for deleted columns. */
     void shiftHiddenColumnsForDelete(SCCOL nStartCol, SCCOL nColCount);
 
+    /** Move the columns this sheet view's own filter tests to the right, for inserted columns. */
+    void shiftQueryColumnsForInsert(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Move the columns this sheet view's own filter tests to the left, for deleted columns.
+     *
+     * A condition on one of the deleted columns is dropped.
+     */
+    void shiftQueryColumnsForDelete(SCCOL nStartCol, SCCOL nColCount);
+
     /** Last used sort parameters */
     ScSortParam const* getSortParam() const;
 

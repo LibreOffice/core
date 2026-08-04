@@ -297,10 +297,13 @@ void ScTable::InsertCol(
 
         maFilterData.insertedColumns(nStartCol, static_cast<SCCOL>(nSize));
 
-        // A sheet view of this sheet holds the same content and hides columns of its own, so
-        // those hidden columns should also follow the insert.
+        // A sheet view of this sheet holds the same content, and keeps hidden columns and a
+        // filter of its own over it, so both should also follow the insert.
         if (auto const& pSheetViewManager = GetSheetViewManager())
+        {
             pSheetViewManager->shiftHiddenColumnsForInsert(nStartCol, static_cast<SCCOL>(nSize));
+            pSheetViewManager->shiftQueryColumnsForInsert(nStartCol, static_cast<SCCOL>(nSize));
+        }
 
         if (!maColManualBreaks.empty())
         {
@@ -380,10 +383,13 @@ void ScTable::DeleteCol(
 
         maFilterData.deletedColumns(nStartCol, static_cast<SCCOL>(nSize));
 
-        // A sheet view of this sheet holds the same content and hides columns of its own, so
-        // those hidden columns should also follow the delete.
+        // A sheet view of this sheet holds the same content, and keeps hidden columns and a
+        // filter of its own over it, so both should also follow the delete.
         if (auto const& pSheetViewManager = GetSheetViewManager())
+        {
             pSheetViewManager->shiftHiddenColumnsForDelete(nStartCol, static_cast<SCCOL>(nSize));
+            pSheetViewManager->shiftQueryColumnsForDelete(nStartCol, static_cast<SCCOL>(nSize));
+        }
 
         if (!maColManualBreaks.empty())
         {
