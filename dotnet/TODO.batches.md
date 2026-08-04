@@ -2493,3 +2493,29 @@ the reference draws its bullets as a Wingdings filled square 13.7 pt wide and we
 6.3 pt `•`. Its text layer shows the reference's bullet as a private-use code point and ours
 as an ASCII bullet, which is the encoding difference the skill's word-gate note describes,
 seen here from the pixel side instead.
+
+### The regression guards, and the tests
+
+Four of the six files changed are shared below the presentation family —
+`Paperless.Core/Graphics` (a `RasterImage` field and a `BitmapPaint` field),
+`Paperless.Rendering` (the decoder and both sinks) and
+`Paperless.Ooxml/DrawingML/DrawingFill.cs` — so the other two tracks were swept as well.
+
+| | |
+|---|---|
+| `slides/batch-001`–`017`, whole track | **152/163**, every page count exact, 0 `ref-failed` |
+| `words/batch-001`–`005` | **50/50** |
+| `sheets/batch-001`–`005` | **50/50** |
+
+The two slides sweeps are **identical row for row on all 163 documents** — not one page count,
+word count, font count or verdict moved — which is both the regression check and the evidence
+that all four fixes are invisible to the word gate.
+
+Per project on the final tree, each run redirected to a file: Core 238, Text 182,
+Containers 109, Rendering **104** (was 97), Markup 259, OpenDocument 125, WordProcessing 541,
+Spreadsheets 374, Presentations **485** (was 473), Vector 291, Fidelity 538 with **0 skipped**.
+The two that moved are the twelve tests added and nothing else.
+
+Three fixtures, each verified by putting the bug back and watching the named tests fail:
+`ppt-fill-opacity.ppt` (LibreOffice's own conversion of `ppt-fill-opacity.fodp`),
+`slide-colour-map-override.pptx` and `slide-duotone.pptx`.
