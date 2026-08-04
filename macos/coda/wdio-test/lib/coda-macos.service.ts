@@ -223,6 +223,8 @@ export class CodaMacOSServiceLauncher {
 	#appLogFile: string | null = null;
 	#appLogOffset = 0;
 	#appLogDraining = false;
+	#appPid: number | null = null;
+	#appGoneReported = false;
 	#options: CodaMacOSServiceOptions;
 
 	/// How many lines of the app's log to show when a run fails.
@@ -230,6 +232,26 @@ export class CodaMacOSServiceLauncher {
 
 	constructor(options: CodaMacOSServiceOptions) {
 		this.#options = options;
+	}
+
+	/**
+	 * Say once that the app is no longer running, when it went away on its own.
+	 *
+	 * Without this the first test to touch the app afterwards fails with a bare
+	 * connection error, which says nothing about why, and the run before it looks
+	 * like it passed cleanly.
+	 */
+	#reportAppGone(): void {
+		if (this.#appGoneReported || this.#appPid === null) return;
+		if (isProcessAlive(this.#appPid)) return;
+
+		this.#appGoneReported = true;
+		console.error(
+			`\nThe app (pid ${this.#appPid}) is gone; it exited on its own, so ` +
+				`the tests from here on cannot reach it.\n` +
+				`Its log up to that point is in ${this.#appLogFile}, and a crash ` +
+				`report, if it crashed, is in ~/Library/Logs/DiagnosticReports.\n`,
+		);
 	}
 
 	/**
@@ -250,6 +272,7 @@ export class CodaMacOSServiceLauncher {
 			const answer = await httpGetValue(
 				`http://localhost:${webDriverPort}/log/${this.#appLogOffset}`,
 			);
+			if (answer === null) this.#reportAppGone();
 			if (typeof answer?.content !== 'string') return;
 			if (typeof answer.offset === 'number') {
 				this.#appLogOffset = answer.offset;
@@ -433,7 +456,7 @@ export class CodaMacOSServiceLauncher {
 		// fast instead of timing out after 30 seconds.
 		const failureCheck = () =>
 			checkDriverLogForFailure(this.#driverLogFile);
-		const [appStatus] = await Promise.all([
+		const [appStatus, driverStatus] = await Promise.all([
 			waitForHttp(
 				`http://localhost:${webDriverPort}/status`,
 				'WebDriverServer',
@@ -447,6 +470,13 @@ export class CodaMacOSServiceLauncher {
 				failureCheck,
 			),
 		]);
+
+		// The driver knows the app's process id; keep it, so that an app which
+		// goes away mid-run can be recognized as gone rather than merely
+		// unreachable.
+		if (typeof driverStatus?.targetPid === 'number') {
+			this.#appPid = driverStatus.targetPid;
+		}
 
 		// Collect the app's log into a file of our own.  It is far too long to
 		// put in the test output, so only its location is announced here, and a
