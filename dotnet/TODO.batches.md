@@ -2318,3 +2318,218 @@ transparent by `isTransparent`'s own rule. Separating them needs a rasterised me
 `joint_user_outcomes_michael_fullerton_29.06.12.ppt` have never been looked at and are all
 "every page major", which on this track has three times now meant one wrong fill repeated
 rather than ten separate problems.
+
+## After the eleventh round: words, and the 54 failures characterised at last
+
+Swept whole four times, 200 documents each: a baseline, the wide form of the one fix, its
+narrowed form, and a second fix that was measured and reverted. The baseline reproduced the
+brief **to the digit** — 146/200, 154 page-exact, 120 of absolute page error, 7110 of absolute
+word error split 3200 short against 3910 over, `doc` 54/66 and `docx` 92/134, and all
+twenty-one per-batch figures.
+
+| | baseline | shipped | wide form | + `w:tabs` merge |
+|---|---|---|---|---|
+| match | 146/200 | **146/200** | 145 | 145 |
+| exactly correct page count | 154 | **155** | 154 | 153 |
+| total absolute page error | 120 | **119** | 123 | 145 |
+| total absolute word error | 7110 | 7195 | 6979 | 7818 |
+| documents whose output moved | — | **22** | 28 | 30 |
+
+Batches 001–005 are 10/10 and 006 is 9/10, so the gate is green. Per batch, unchanged from the
+baseline everywhere: 001–005 10/10, 006 9/10, 007 9/10, 008 10/10, 009 10/10, 010 7/9, 011
+8/10, 012 8/10, 013 5/9, 014 3/10, 015 5/10, 016 7/10, 017 5/10, 018 4/10, 019 3/10, 020 3/10,
+021 0/2.
+
+The word error rising by 85 is one document: `TE.CAO.00125 … OJT Logbook.docx` goes 16 pages
+against 15 to **15 against 15** and loses that page's furniture with it, 3066 words to 2974.
+It fails either way; the page count is the number that got right.
+
+The whole slides track was swept on the same binary — **152/163, every page count exact, page
+error 0** — which is the recorded figure exactly, so the shared shaping change is neutral there.
+
+### The residue, sorted: 23 documents are pagination alone
+
+Nobody had clustered the failures since the fixes of the last four rounds landed. Sorted by
+whether the *text* is right:
+
+| Cluster | Documents | Shape |
+|---|---|---|
+| **pagination only** | 23 | page count wrong, word count inside 0.5%. The text is right and the boundaries are not. 16 of the 23 are off by exactly one page and their total page error is 56 |
+| **text only** | 8 | page count exact, words wrong: five over by 4.3% to 6.6%, three short |
+| **both** | 23 | the hard tail, and it holds every large deviation |
+
+**Whole families fail together, and that is the shape worth dispatching on** — not the batch:
+
+| Family | | |
+|---|---|---|
+| `*_mcar_part-*` | 0/5 | all over-paginate, +1 +1 +1 +4 +5, every word count inside ±0.6% |
+| `150_5300_13_chg*` | 0/3 | all `.doc`, all exactly +2 |
+| `150-5370-10*` | 0/2 | −13 and −12 on 700-page documents whose words agree to 0.04% |
+| `ABCD-*` | 0/3 | all over-draw, +4.6% to +6.0% |
+| `ESPN-R *` | 0/2 | both −1 |
+| `TE.CAO`/`UG.CAO`/`FO.FCTOA`/EASA forms | 2/9 | re-measured after the grouped-text-box fix; **not one cluster** — see below |
+| tpr/report templates | 1/5 | three at −1, one at +1 |
+
+### The format split: the earlier conclusion no longer holds, and the new one is weaker than it looks
+
+`doc` fails at 18% (12/66) and `docx` at 31% (42/134), reproducing the brief exactly. The
+earlier round's 42%/43% is genuinely gone, so "split two agents by format" is no longer refuted
+by near-equal rates. **It is still the wrong split**, and the families above are why: the two
+largest are `docx` (`mcar`) and `doc` (`150_5300_13`), each five and three documents failing
+the same way as each other. Splitting by format would hand one agent both halves of one cause
+and the other agent none of it.
+
+### The issuer's form templates are not one cluster
+
+Six of the eight `TE.CAO`/`UG.CAO`/`FO.FCTOA` documents fail, which was the reason to look, and
+taking two of them apart per page shows two unrelated defects:
+
+- `UG.CAO.00133 … Language.docx` (18/18 pages, +245 words) is **+18 to +22 words on 13 of its
+  18 pages** — a near-constant, which is page furniture. It is section 1's header, drawn by us on
+  every page and by LibreOffice on pages 1 and 14–17 only. See below.
+- `approvals-and-standardisation … TE.CAO.00129 … logbook.docx` (6/6, +73) is exactly 0 on four
+  pages and **+37 on each of the last two**, where we draw a table's numbered heading row and the
+  reference has already moved on to the data rows.
+
+Two documents, two mechanisms, no common cause. The family shares a template, not a bug.
+
+### `w:headerReference` and the header nobody inherits — measured, not implemented
+
+`UG.CAO.00133` has five sections. Sections 1 and 4 name a `w:headerReference w:type="default"`
+whose part has content; sections 2, 3 and 5 name only `"even"` and `"first"`, and every one of
+those parts is empty. The document sets neither `w:titlePg` nor `w:evenAndOddHeaders`. We apply
+ECMA-376 §17.10.1 per slot (`DocxReader.cs:299-301`): the Default slot is unnamed there, so it
+is inherited from section 1, and with both switches off that inherited header is what every page
+draws.
+
+Four probes on the real file, rendered through `soffice`, with the section boundaries confirmed
+by pointing a section at a header that has content:
+
+| Probe | Header pages |
+|---|---|
+| as found | 1, 14–17 |
+| section 3 given a `default` header with content | 1, **3–13**, 14–17 (so section 3 *is* pages 3–13) |
+| section 3 with every `headerReference` removed | 1, 14–17 — **no inheritance** |
+| section 2 given `even`+`first` **footer** references, both parts empty | footer on all 18 — **inert** |
+| section 2 given a `default` footer, part empty | footer on page 1 only — **settles the slot** |
+
+So an `even`/`first` reference is inert for the footer and suppressing for the header, on the
+same file, with equally empty parts. **I could not name the mechanism.**
+`sw/source/writerfilter/dmapper/PropertyMap.cxx:594-598` forces `HeaderIsOn` false for a section
+that pushed no applicable header, while `copyHeaderFooter` (:1117-1125) says in its own comment
+that it means to link to the previous section; which of the two wins here is not established.
+
+Left unimplemented deliberately. Our reading is the one the standard states, the rule that would
+match the reference costs this same document its footer on sixteen pages, and neither is worth
+guessing at across the 42 corpus DOCX that state `w:titlePg`. It is worth about 250 words on
+this document and it is the largest single named item in the "text only" cluster.
+
+### Four of `UG.CAO.00133`'s raster-ceiling pages are false positives
+
+`TODO.raster-ceiling.md` flags its pages 3, 7, 8 and 18 for +20, +45, +20 and +20 words.
+`pdfimages -list` says the raster on each is a 162×109 JPEG that **both** sides draw — the EU
+flag in the footer, same object, every flagged page. Condition 1 of the flag is met by a logo
+rather than by a rasterised object, and the excess is the header defect above: page 3 is +18 and
+the whole of it is that block.
+
+The signature therefore misfires on any document that puts a small logo in its page furniture
+*and* has a furniture defect elsewhere. That is not an argument against the flag; it is the
+second worked example of why the file says to re-measure a document before subtracting its
+flagged pages.
+
+### The anchor character was drawn as a missing-glyph box
+
+Every word-processing reader writes `U+0001` where a picture, a floating frame, an embedded
+object or a comment mark stands — `DocxLayoutSource.cs:998` and `:1002`,
+`OdtLayoutSource.cs:1045`, `Ww8DocumentReader.Layout.cs:693`, `WritingNodes.cs:221`. No text
+face maps it, so HarfBuzz returned `.notdef` at the face's glyph-zero advance — 0.78 em in
+Liberation Serif, 0.75 in Liberation Sans — which is ink on the page and room on the line, *on
+top of* the picture's own width, which `PageContent.InlineObjects` already adds at the same
+offset. 88 of the track's 134 DOCX carry a `w:drawing` and 48 carry a `w:pict`.
+
+`HarfBuzzShaper.Shape` now splits its input at the characters LibreOffice removes before shaping
+— `ImplLayoutArgs::AddRun` on `IsControlChar`, `vcl/source/text/ImplLayoutArgs.cxx:111` — and
+shapes the stretches between them, so the kern inside a word next to one survives. The tab is
+the one member of the C0 range deliberately kept, because `TabRuler` resolves it against the
+paragraph's stops the way Writer's tab portion does. Our own two shapers already disagreed about
+this: `MetricsShaper.cs:45` gives glyph zero an advance of nought.
+
+Measured on `picture-anchor.docx`, whose sentence has text on both sides of a 1 cm inline
+picture: every word of that line now lands where LibreOffice's own PDF of the `.doc` and the
+`.fodt` puts it, to 0.10 pt — which is the constant offset already present at the line's first
+character. `.notdef` had been adding 9.33 pt.
+
+**The first form of this fix cut the same list in `TextItemiser` as well, and that was wrong.** A
+cut there removes the character from every sub-run, so a paragraph whose whole text is one
+control character produces no run, no line, and no anchor for the frame it stands for — which is
+the ordinary shape of a logo, a footer paragraph holding one `w:drawing`.
+`1603642410-MoM-CASCOM-06-2020-draft04.docx` lost "An agency of the European Union" from all
+nine of its footers, 4527 words to 4473 with the page count unmoved, and two more documents lost
+a page and its furniture. On the whole track that form read 145/200 with 123 of page error, and
+part of what looked like an improvement in its word column was text going missing. The C0 range
+is dropped one layer down instead, where it costs the character its glyph and leaves the run
+intact.
+
+### `w:tabs` merging: right by the specification, and it costs 26 pages
+
+`WordParagraphFormats` takes the innermost layer stating a `w:tabs` whole, so a paragraph with
+any direct tab loses every stop its style set. `DomainMapper` does the opposite for
+`LN_CT_PPrBase_tabs`: it seeds the working vector from the paragraph style sheet and folds each
+stated stop in through `IncorporateTabStop`, which replaces by equal position and appends
+otherwise (`DomainMapper.cxx:2604-2620`, `DomainMapper_Impl.cxx:1485-1498`); `w:val="clear"`
+removes the inherited stop at its position. RTF has the opposite rule, spelled out on the same
+case as an `IsRTFImport` branch citing fdo#81033.
+
+The symptom is real and precisely located. `SPA-11_mcar_part-11_v2.9.docx` has a `TOC3` style
+carrying `<w:tab w:val="right" w:leader="dot" w:pos="9350"/>` and entries that each add
+`<w:tab w:val="left" w:pos="2520"/>`; those entries lost the leader and the right margin
+together, so no dots were drawn, the page number did not align right, and the entry wrapped onto
+a second line. Its contents pages 8–10 are the first three in the document to differ from the
+reference at all, and they go **+27/+26/+15 words → +22/+20/+12** with the merge.
+
+It is still a net regression and it was reverted. Eight documents moved and none improved:
+`02_mcar_part-2_and_IS_v2.10.docx` 317 → **329** pages against 312,
+`SPA-02_mcar_part-2_and_IS_v2.9.docx` 270 → **282** against 266,
+`hdss-bulletin-issue-285…docx` 10/10 → 11/10 and a lost match, `ABCD-FE-01-00` losing its exact
+page count. Page error 119 → 145.
+
+**The scope is what is wrong, not the mechanism.** I merged every layer
+`ParagraphPropertyLayers` returns — direct, the whole style chain, the table style,
+`w:docDefaults` — where `DomainMapper` seeds from the style sheet's already-resolved stops and
+folds only the stated ones in. Neither `w:docDefaults` nor `Normal` declares tabs in that
+document, so the defaults layer is not the difference; 119 of its body paragraphs state a direct
+`w:tabs` and now carry their style's stops as well, and a right stop the pen has already passed
+yields no gap at all where a default-interval stop used to give one. That is the untested half,
+and it is a `TabRuler` question rather than a reader one.
+
+The corpus fixture is kept — `tests/corpus/features/tab-stops-inherited.docx`, four paragraphs
+for the four cases, which LibreOffice renders distinguishably:
+
+```
+Inherited...........................................9
+1.1            Added................................9
+Cleared           9
+Replaced                                           9
+```
+
+The reverted code is at `b62aaf38b` and the tests that assert it at `3997fb739`.
+
+### Leads for the next round, in the order I would take them
+
+1. **The `mcar` family, 0/5, one cause.** Over-paginating by +1, +1, +1, +4, +5 with every word
+   count inside ±0.6%. On `SPA-11` the divergence is at **page 43** of 50 and pages 11–42 track
+   the reference to the word, so it is one boundary decision late in a long document rather than
+   accumulated drift. The TOC leader above is a separate, real defect on the same documents and
+   moves them three pages closer without changing the count.
+2. **The `w:tabs` scope**, with the measurement above and the reverted patch to start from.
+3. **The header inheritance**, if somebody can name LibreOffice's rule rather than fit one.
+4. **`WritingFieldKind.PageNumber` still has no consumer** — the sixth "read but never used", and
+   now with a worked example: our `UG.CAO.00133` page 3 prints *"Page 1 of 18"* where the
+   reference prints *"Page 3 of 18"*. `Paginator.cs:456` and `:615` already carry the number, so
+   what is missing is the substitution at draw time. It cannot move the gate — a footer printing
+   `1` on every page counts as one word exactly as `1`…`9` does — and it is a visible defect on
+   every document with a page-number field.
+5. **`w:pict` draws nothing at all.** `DocxLayoutSource.cs:1001` emits an anchor character for
+   `w:pict`, `w:object` and `w:commentReference` and adds no frame, so a VML picture is not laid
+   out or drawn. 48 of the track's 134 DOCX carry one, 332 occurrences. A feature rather than a
+   fix, and unmeasured.
