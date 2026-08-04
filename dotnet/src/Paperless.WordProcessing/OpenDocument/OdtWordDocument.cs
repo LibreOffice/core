@@ -113,6 +113,10 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
 
         PaginationOptions pagination = PaginationOptions.Default with
         {
+            // Adding is the ODF default and what the preset already says, but a document converted from
+            // a Word file carries AddParaTableSpacing=false and collapses instead — see
+            // OdtLayoutSource.AddsParagraphSpacing.
+            CollapsesSpacing = !OdtLayoutSource.AddsParagraphSpacing(_inner.File.Settings),
             MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Default.MaxPages,
         };
 

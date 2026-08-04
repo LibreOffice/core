@@ -126,6 +126,39 @@ public sealed partial class OdtLayoutSource
     /// </remarks>
     private readonly bool _blanksAreTransparentToHeight;
 
+    /// <summary>
+    /// Whether two consecutive paragraphs' spacings add rather than the larger one winning, as the
+    /// document's settings say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX</c>, which ODF spells <c>AddParaTableSpacing</c>
+    /// (<c>SwXDocumentSettings.cxx</c> names the property at :189 and sets the flag at :449). Set, the two
+    /// spacings are summed; clear, the larger wins — the name says the opposite of what it does.
+    /// </para>
+    /// <para>
+    /// True when the file states nothing, because the setting then keeps the application's configured
+    /// <c>AddSpacing</c>, whose shipped default is <c>true</c>
+    /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>). That is the ODF
+    /// behaviour Paperless already had; what it did not have is the other branch, which a document
+    /// converted from a Word file always carries.
+    /// </para>
+    /// <para>
+    /// Measured on <c>paragraph-spacing-collapsed.odt</c> and its flat twin — eight paragraphs each with
+    /// 12 pt of space-before and 8 pt of space-after on 12 pt exact lines, saved by LibreOffice from the
+    /// collapsing DOCX: with <c>AddParaTableSpacing</c> false LibreOffice 24.2.7.2 puts every boundary at
+    /// 24.00 pt and with it true at 32.00 pt. Both containers honour it, so this is not a packaged-only
+    /// setting.
+    /// </para>
+    /// <para>
+    /// Like the DOCX case it reaches nothing on the corpus — the 200-file words track holds no ODF
+    /// document at all — so it is correctness rather than a measured win.
+    /// </para>
+    /// </remarks>
+    /// <param name="settings">The document's <c>office:settings</c>, or null.</param>
+    internal static bool AddsParagraphSpacing(XElement? settings)
+        => Setting(settings, "AddParaTableSpacing") != "false";
+
     /// <summary>One <c>config:config-item</c>'s value from a document's settings, or null when absent.</summary>
     /// <remarks>
     /// The items are nested in <c>config:config-item-set</c> elements, so this searches by descendant name
