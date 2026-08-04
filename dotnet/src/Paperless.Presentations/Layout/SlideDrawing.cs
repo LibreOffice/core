@@ -51,7 +51,11 @@ public static class SlideDrawing
     {
         if (shape.Shadow is { } shadow) DrawShadow(shape, shadow, sink);
 
-        if (shape.Fill is { } fill) sink.FillPath(shape.Outline, fill);
+        if (shape.Fill is { } fill && FillReachesThePage(shape.Picture))
+        {
+            sink.FillPath(shape.Outline, fill);
+        }
+
         if (shape.Picture is { } picture) DrawPicture(shape, picture, sink);
         if (shape.Line is { } line) sink.StrokePath(shape.Outline, line);
 
@@ -110,7 +114,9 @@ public static class SlideDrawing
     {
         if (shadow.IsInvisible) return;
 
-        bool silhouette = shape.Fill is not null || IsOpaqueRaster(shape.Picture);
+        bool silhouette =
+            (shape.Fill is not null && FillReachesThePage(shape.Picture))
+            || IsOpaqueRaster(shape.Picture);
         bool outline = shape.Line is not null;
         bool text = shadow.CarriesText && shape.Text is { Runs.Count: > 0 };
 
@@ -217,6 +223,51 @@ public static class SlideDrawing
 
         foreach (DocRect rule in rules) sink.FillPath(GraphicsPath.Rectangle(rule), paint);
     }
+
+    /// <summary>
+    /// Whether a shape's own fill is drawn at all, given the picture that goes over it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A picture frame's fill is <em>not</em> a backdrop the picture happens to hide. Impress adds
+    /// it to the shape's decomposition only when the graphic can be seen through
+    /// (<c>svx/source/sdr/primitive2d/sdrgrafprimitive2d.cxx:41-42</c>, "add fill, but only when
+    /// graphic is transparent"), and a <em>metafile</em> loaded from a file does not count as
+    /// transparent however much of its frame it leaves unpainted. So a plate behind an EMF chart
+    /// reaches the page in PowerPoint and does not in Impress.
+    /// </para>
+    /// <para>
+    /// Measured against LibreOffice 24.2.7.2 rather than read out of that source, which predicts
+    /// the opposite: its <c>ImpGraphic::isTransparent</c> returns true for everything but an
+    /// opaque bitmap. Four renderings of
+    /// <c>slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx</c> settle what the binary does. Its
+    /// slide 5 is a <c>p:pic</c> over <c>image10.emf</c> stating
+    /// <c>&lt;a:solidFill&gt;&lt;a:schemeClr val="tx1"/&gt;</c> — white, under a colour map sending
+    /// <c>tx1</c> to a <c>dk1</c> of <c>#FFFFFF</c>. Rendering the deck as found, with that fill
+    /// changed to red, and with it replaced by <c>&lt;a:noFill/&gt;</c> gives a <em>byte-identical</em>
+    /// page 5 all three times, showing the slide's own background inside the picture frame: no
+    /// fill is drawn whatever it says. A fourth, with the EMF swapped for a PNG whose right half
+    /// is fully clear, draws the red through that half — so the rule is about the graphic's kind,
+    /// not about whether it happens to cover its frame.
+    /// </para>
+    /// <para>
+    /// A shape-level opacity is the other half of Impress's condition
+    /// (<c>255 != getGraphicAttr().GetAlpha()</c>) and keeps the fill whatever the picture is.
+    /// </para>
+    /// <para>
+    /// One case is deliberately not imitated. The same EMF inlined as <c>office:binary-data</c> in
+    /// a <em>flat</em> ODP <em>does</em> get its fill drawn by 24.2.7.2, while the same document
+    /// zipped with the metafile in <c>Pictures/</c> does not — a difference in how the graphic is
+    /// loaded rather than in what the document says. Following it would mean rendering one file
+    /// differently from its own byte-for-byte equivalent, so this rule keys on the picture.
+    /// </para>
+    /// </remarks>
+    private static bool FillReachesThePage(PlacedPicture? picture)
+        => picture is null
+           || picture.Opacity < 1.0
+           || picture.Destination.IsEmpty
+           || picture.Vector is not { } vector
+           || vector.Value.IsEmpty;
 
     /// <summary>
     /// Whether a picture is one whose silhouette is its whole frame.
