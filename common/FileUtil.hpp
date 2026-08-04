@@ -22,6 +22,10 @@
 #include <string>
 #include <sys/stat.h>
 
+#ifndef _WIN32
+#include <optional>
+#endif
+
 #if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
@@ -256,6 +260,12 @@ namespace FileUtil
 
     /// Reads the whole file to memory. Only for small files.
     std::unique_ptr<std::vector<char>> readFile(const std::string& path, int maxSize = 256 * 1024);
+
+#ifndef _WIN32
+    /// Read the symlink target at fpath using the size from the stat struct. This will perform
+    /// the safety checks against buffer overflow.
+    std::optional<std::string> readSymlinkTarget(const char *fpath, decltype(stat::st_size) stat_size);
+#endif
 
     void copyDirectoryRecursive(std::string_view srcDir, std::string_view destDir, bool log);
     /// File/Directory stat helper.

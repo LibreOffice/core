@@ -41,6 +41,10 @@
 #include <stdexcept>
 #include <string>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 namespace FileUtil
 {
     DownloadJailPath createDownloadJailPath(const std::string& jailDocRoot,
@@ -263,6 +267,26 @@ namespace FileUtil
         data->resize(0);
         return (readFile(path, *data, maxSize) >= 0) ? std::move(data) : nullptr;
     }
+
+#ifndef _WIN32
+    std::optional<std::string> readSymlinkTarget(const char *fpath, decltype(stat::st_size) stat_size)
+    {
+        // For a symlink st_size is the length of the target path,
+        // but fall back to PATH_MAX if it is not a sane value.
+        const std::size_t size =
+            (stat_size > 0 && stat_size < PATH_MAX) ? stat_size : PATH_MAX;
+        std::string target(size, '\0');
+        char* target_data = target.data();
+        const ssize_t written = ::readlink(fpath, target_data, size);
+        if (written <= 0 || o3tl::make_unsigned(written) > size)
+        {
+            return {};
+        }
+        target.resize(written);
+
+        return target;
+    }
+#endif
 
     std::string buildLocalPathToJail(bool usingMountNamespaces, std::string localStorePath, std::string localPath)
     {

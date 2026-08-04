@@ -347,18 +347,14 @@ namespace FileUtil
                 std::string fullpath(path);
                 fullpath.append("/").append(entry._name);
 
-                // For a symlink st_size is the length of the target path,
-                // but fall back to PATH_MAX if it is not a sane value.
-                const std::size_t size =
-                    (entry._size > 0 && entry._size < PATH_MAX) ? entry._size : PATH_MAX;
-                std::string target(size, '\0');
-                const ssize_t read = readlink(fullpath.c_str(), target.data(), size);
-                if (read <= 0 || o3tl::make_unsigned(read) > size)
+                auto target = FileUtil::readSymlinkTarget(fullpath.c_str(), entry._size);
+                if (!target)
+                {
                     std::cerr << "lslr: fail to read: " << fullpath << " error: " << std::strerror(errno) << std::endl;
+                }
                 else
                 {
-                    target.resize(read);
-                    std::cout << " -> " << target;
+                    std::cout << " -> " << *target;
                 }
             }
 

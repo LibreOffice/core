@@ -56,8 +56,6 @@
 #endif
 #endif // MOBILEAPP
 
-#include <o3tl/safeint.hxx>
-
 #include <csignal>
 #include <limits>
 
@@ -573,24 +571,17 @@ namespace
             break;
         case FTW_SL:
             {
-                // For a symlink st_size is the length of the target path,
-                // but fall back to PATH_MAX if it is not a sane value.
-                const std::size_t size =
-                    (sb->st_size > 0 && sb->st_size < PATH_MAX) ? sb->st_size : PATH_MAX;
-                std::string target(size, '\0');
-                char* target_data = target.data();
-                const ssize_t written = readlink(fpath, target_data, size);
-                if (written <= 0 || o3tl::make_unsigned(written) > size)
+                auto target = FileUtil::readSymlinkTarget(fpath, sb->st_size);
+                if (!target)
                 {
                     LOG_SYS("nftw: readlink(\"" << fpath << "\") failed");
                     Util::forcedExit(EX_SOFTWARE);
                 }
-                target_data[written] = '\0';
 
                 Poco::File(newPath.parent()).createDirectories();
-                if (symlink(target_data, newPath.toString().c_str()) == -1)
+                if (symlink(target->c_str(), newPath.toString().c_str()) == -1)
                 {
-                    LOG_SYS("nftw: symlink(\"" << target_data << "\", \"" << newPath.toString()
+                    LOG_SYS("nftw: symlink(\"" << *target << "\", \"" << newPath.toString()
                                                << "\") failed");
                     return FTW_STOP;
                 }
