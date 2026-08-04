@@ -90,6 +90,9 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
+        { u"ChartExDimType"_ustr, 0, cppu::UnoType<sal_Int32>::get(),                 0, 0 },
+        { u"ChartExFormula"_ustr, 0, cppu::UnoType<OUString>::get(),                  0, 0 },
+        { u"ChartExNFormula"_ustr, 0, cppu::UnoType<OUString>::get(),                 0, 0 },
         { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),                 0, 0 },
         { SC_UNONAME_ROLE, 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(),                  0, 0 },
         { SC_UNONAME_INCLUDEHIDDENCELLS, 0,        cppu::UnoType<bool>::get(),                  0, 0 },

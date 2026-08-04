@@ -360,7 +360,8 @@ private:
     // properties
     css::chart2::data::DataSequenceRole  m_aRole;
     bool                        m_bIncludeHiddenCells;
-    sal_Int32                   m_eDimType = 0; // actually oox::drawingml::chart::DataSourceType
+    sal_Int32                   m_eDimType = -1; // actually oox::drawingml::chart::DataSourceType,
+                                                // or -1 when no dimension type is set
     OUString                    m_sFormula; // from <cx:f>
     OUString                    m_sNFormula; // from <cx:nf>
 

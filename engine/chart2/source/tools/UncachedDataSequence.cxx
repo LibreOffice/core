@@ -55,7 +55,7 @@ UncachedDataSequence::UncachedDataSequence(
     rtl::Reference< InternalDataProvider > xIntDataProv,
     OUString aRangeRepresentation )
         : m_nNumberFormatKey(0),
-          m_nChartExDimType(0),
+          m_nChartExDimType(-1),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -68,7 +68,7 @@ UncachedDataSequence::UncachedDataSequence(
     OUString aRangeRepresentation,
     const OUString & rRole )
         : m_nNumberFormatKey(0),
-          m_nChartExDimType(0),
+          m_nChartExDimType(-1),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
