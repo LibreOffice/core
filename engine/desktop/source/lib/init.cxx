@@ -6398,7 +6398,20 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
 
     if (!isCommandAllowed(aCommand))
+    {
+        if (aCommand == ".uno:Save")
+        {
+            COKitDocumentImpl* pRefusedDocument = static_cast<COKitDocumentImpl*>(pThis);
+            tools::JsonWriter aJson;
+            aJson.put("commandName", pCommand);
+            aJson.put("success", false);
+            lcl_reportSaveResult(pRefusedDocument,
+                                 KitHelper::getViewId(pRefusedDocument->mnDocumentId),
+                                 aJson.finishAndGetAsOString());
+        }
+
         return;
+    }
 
     if (gImpl && aCommand == ".uno:None")
         return;
