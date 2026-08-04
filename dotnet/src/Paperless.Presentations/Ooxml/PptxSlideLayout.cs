@@ -201,11 +201,10 @@ internal sealed partial class PptxSlideLayout
     {
         if (slide.MasterPartName is not { } master) return default;
 
-        // Keyed by the three parts that can contribute to the map rather than by the master
-        // alone. One master serves every slide under it, and a layout may still amend its
-        // colour map — caching by master hands the first layout's answer to all of them.
-        string key = string.Concat(master, " ", slide.LayoutPartName, " ",
-                                   Override(slide.Root) is null ? "" : slide.PartName);
+        // Keyed by master *and* layout rather than by master alone. One master serves every
+        // layout under it and a layout may still amend the colour map, so caching by master
+        // hands the first layout's answer to all of them.
+        string key = master + "\u0000" + slide.LayoutPartName;
         if (_themes.TryGetValue(key, out SlideTheme cached)) return cached;
 
         XElement? part = _file.Load(_file.TargetOfType(master, "theme"));
@@ -218,12 +217,18 @@ internal sealed partial class PptxSlideLayout
         // draws white text on a navy slide. Extraction has always read it correctly
         // (`PptxFile.ThemeOf`), which is why no text comparison ever saw this.
         //
-        // The layout's and the slide's overrides patch that map in turn, innermost last.
+        // The layout's override patches that map. A *slide* may state one too and this
+        // deliberately does not apply it: measured against the binary, a slide's override does
+        // not reach the background it inherits, because Impress resolves a master page's fill
+        // once as it imports the layout and the slide only shows it. Modelling that faithfully
+        // needs two maps, one for the inherited page and one for the slide's own shapes, and
+        // exactly one slide in the 112-deck corpus states an override at all — on
+        // NAS-Infrastructure-Roadmaps-v16.0.pptx, where it restates the master's map and
+        // changes nothing. Twenty layout overrides across nine decks are the reach here.
         DrawingTheme? colours = DrawingTheme.Read(part)
             ?.WithMap(DrawingColourMap.ReadLayered(
                 Ppt.Child(slide.Master, "clrMap"),
-                Override(slide.Layout),
-                Override(slide.Root)));
+                Override(slide.Layout)));
 
         XElement? minor = Drawing.Child(
             Drawing.Child(Drawing.Child(Drawing.Child(part, "themeElements"), "fontScheme"),
@@ -237,8 +242,8 @@ internal sealed partial class PptxSlideLayout
     }
 
     /// <summary>
-    /// A slide's or layout's <c>p:clrMapOvr/a:overrideClrMapping</c>, or null when it states
-    /// none or states <c>a:masterClrMapping</c>.
+    /// A layout's <c>p:clrMapOvr/a:overrideClrMapping</c>, or null when it states none or
+    /// states <c>a:masterClrMapping</c>.
     /// </summary>
     /// <remarks>
     /// The two children of <c>p:clrMapOvr</c> are alternatives and only one of them carries
