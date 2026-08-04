@@ -72,6 +72,15 @@
 			slideCount: number;
 		}> | null,
 		hasOverviewPage: false, //Whether the file has an overview page
+		previewRects: null as Array<{ part: number; rectangle: any }> | null, // Canvas-space preview rectangles, twips.
+		previewEditMode: {
+			active: false,
+			part: -1,
+			rectangle: null as any, // The entered preview's canvas rectangle, twips.
+			slideWidth: 0, // Slide size in twips, for building slide-space rectangles.
+			slideHeight: 0,
+		},
+		previewShapeSelection: null as any, // Canvas-space rectangle of the preview-selected shape.
 		notesMode: false, // Opposite of "NormalMultiPaneGUI".
 		savedViewMode: null as string | null, // Remembered view mode ('normal'|'notes'|'master') for this document, sent by the server on load.
 		twipsCorrection: 0.567, // There is a constant ratio between tiletwips and impress page twips. For now, this seems safe to use.

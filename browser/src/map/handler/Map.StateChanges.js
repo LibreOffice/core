@@ -3,7 +3,7 @@
  * window.L.Map.StateChanges stores the state changes commands coming from core
  * LOK_CALLBACK_STATE_CHANGED callback
  */
-/* global $ app cool _ RenderManager HandleTravel */
+/* global $ app cool _ RenderManager HandleTravel PreviewEditSection */
 /*eslint no-extend-native:0*/
 window.L.Map.mergeOptions({
 	stateChangeHandler: true
@@ -145,6 +145,92 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 
 		if (commandName == '.uno:HasOverviewPage') {
 			app.impress.hasOverviewPage = e.state === "true";
+		}
+
+		if (commandName == '.uno:CanvasPreviewRects') {
+			const previews = [];
+			if (state && state.previews) {
+				for (const preview of state.previews) {
+					previews.push({
+						part: parseInt(preview.part),
+						rectangle: new cool.SimpleRectangle(
+							parseInt(preview.x),
+							parseInt(preview.y),
+							parseInt(preview.width),
+							parseInt(preview.height),
+						),
+					});
+				}
+			}
+			app.impress.previewRects = previews;
+			this._map.fire('canvaspreviewrects');
+		}
+
+		if (commandName == '.uno:PreviewEditMode') {
+			if (state && state.active) {
+				app.impress.previewEditMode = {
+					active: true,
+					part: parseInt(state.part),
+					rectangle: new cool.SimpleRectangle(
+						parseInt(state.x),
+						parseInt(state.y),
+						parseInt(state.width),
+						parseInt(state.height),
+					),
+					slideWidth: parseInt(state.slideWidth),
+					slideHeight: parseInt(state.slideHeight),
+				};
+			} else {
+				app.impress.previewEditMode = {
+					active: false,
+					part: -1,
+					rectangle: null,
+					slideWidth: 0,
+					slideHeight: 0,
+				};
+			}
+			if (app.impress.previewEditMode.active) {
+				PreviewEditSection.ensure();
+				// The bar teaches the way out; re-showing on a preview switch updates the
+				// slide number.
+				if (this._previewEditHintShown) app.map.uiManager.closeSnackbar();
+				app.map.uiManager.showSnackbar(
+					_('Editing slide %1 - click outside or press Esc to finish').replace(
+						'%1',
+						String(app.impress.previewEditMode.part),
+					),
+					null,
+					null,
+					-1,
+					false,
+					true,
+				);
+				this._previewEditHintShown = true;
+			} else {
+				PreviewEditSection.remove();
+				if (this._previewEditHintShown) {
+					app.map.uiManager.closeSnackbar();
+					this._previewEditHintShown = false;
+				}
+			}
+			app.sectionContainer.requestReDraw();
+			this._map.fire('previeweditmode');
+		}
+
+		if (commandName == '.uno:PreviewShapeSelection') {
+			if (state && state.empty === false) {
+				app.impress.previewShapeSelection = new cool.SimpleRectangle(
+					parseInt(state.x),
+					parseInt(state.y),
+					parseInt(state.width),
+					parseInt(state.height),
+				);
+			} else {
+				app.impress.previewShapeSelection = null;
+			}
+			if (app.sectionContainer.doesSectionExist(app.CSections.PreviewEdit.name))
+				app.sectionContainer.requestReDraw();
+			this._map.fire('previewshapeselection');
 		}
 
 		const docContainer = document.getElementById('document-container');

@@ -170,6 +170,19 @@ interface AppInterface {
 		isSlideImportSupported(): boolean;
 		getSelectedSlidesCount(): number;
 		getSelectedSectionName(): string | null;
+		// Canvas-space preview rectangles, twips.
+		previewRects: Array<{ part: number; rectangle: any }> | null;
+		previewEditMode: {
+			active: boolean;
+			part: number;
+			// The entered preview's canvas rectangle, twips.
+			rectangle: any;
+			// Slide size in twips, for building slide-space rectangles.
+			slideWidth: number;
+			slideHeight: number;
+		};
+		// Canvas-space rectangle of the preview-selected shape.
+		previewShapeSelection: any;
 	};
 	writer: {
 		compareDocumentProperties: CompareDocumentProperties | null;

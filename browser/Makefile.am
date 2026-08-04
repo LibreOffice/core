@@ -406,6 +406,7 @@ COOL_JS_LST =\
 	src/app/TableMiddleware.ts \
 	src/app/ImpressSelectionMiddleware.ts \
 	src/app/OverviewFade.ts \
+	src/app/PreviewEditTransform.ts \
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutImpress.ts \
 	src/app/ViewLayoutVector.ts \
@@ -565,6 +566,7 @@ COOL_JS_LST =\
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \
 	src/canvas/sections/CellRangeHandleSection.ts \
+	src/canvas/sections/PreviewEditSection.ts \
 	src/canvas/sections/TableResizeMarkerSection.ts \
 	src/canvas/sections/TableSelectMarkerSection.ts \
 	src/canvas/sections/FocusCellSection.ts \

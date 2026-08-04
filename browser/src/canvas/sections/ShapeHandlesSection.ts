@@ -1261,7 +1261,10 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.context.strokeStyle = app.map.uiManager.isBackgroundDark() ? 'white' : 'black';
 		this.context.setLineDash([3, 3]);
 
-		if (this.containerObject.isDraggingSomething() && this.containerObject.targetSection === this.name) {
+		const draggedFromHere =
+			this.containerObject.targetSection === this.name ||
+			this.containerObject.targetSection === app.CSections.PreviewEdit.name;
+		if (this.containerObject.isDraggingSomething() && draggedFromHere) {
 			const rectangle = this.boundingRectangle.clone();
 			rectangle.pX1 += app.calc.isRTL() ? -this.sectionProperties.lastDragDistance[0] : this.sectionProperties.lastDragDistance[0];
 			rectangle.pY1 += this.sectionProperties.lastDragDistance[1];

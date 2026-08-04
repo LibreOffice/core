@@ -488,6 +488,13 @@ class MouseControl extends CanvasSectionObject {
 		if (handles?.sectionProperties?.hasVideo) return;
 		if (!GraphicSelection.extraInfo?.isDraggable) return;
 
+		// Pointer's current offset from drag start, in core pixels.
+		handles.sectionProperties.lastDragDistance = [
+			dragDistance[0],
+			dragDistance[1],
+		];
+		this.containerObject.requestReDraw();
+
 		handles.sectionProperties.svg.style.left =
 			String((handles.myTopLeft[0] + dragDistance[0]) / app.dpiScale) + 'px';
 		handles.sectionProperties.svg.style.top =
@@ -563,6 +570,8 @@ class MouseControl extends CanvasSectionObject {
 	private hideShapeDragPreview(): void {
 		const handles = GraphicSelection.handlesSection;
 		if (!handles?.sectionProperties?.svg) return;
+
+		handles.sectionProperties.lastDragDistance = [0, 0];
 
 		handles.sectionProperties.svg.style.opacity = '1';
 		handles.hideSVG();

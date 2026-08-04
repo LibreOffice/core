@@ -54,6 +54,7 @@ app.CSections.RowGroup = 				{ name: 'row group'			, zIndex: 5 };
 app.CSections.CornerGroup = 			{ name: 'corner group'		, zIndex: 5 };
 app.CSections.SelectionRectangle =      { name: 'selection-rectangle', zIndex: 5 };
 app.CSections.ShapeHandlesSection =	{ name: 'shapeHandlesSection', zIndex: 5 };
+app.CSections.PreviewEdit =             { name: 'previewEdit', zIndex: 5 };
 
 app.CSections.Comment =				{ name: 'comment'			, zIndex: 7	}; // This class is for comment markers. It is a document object. One should change instance's name after initializing (there may be many instances of this class).
 
@@ -116,6 +117,7 @@ app.CSections.MouseControl.processingOrder =            72; // Writer & Impress 
 app.CSections.SelectionRectangle.processingOrder =      73; // Impress.
 app.CSections.TextSelection.processingOrder =           74; // All.
 app.CSections.ShapeHandlesSection.processingOrder =	75;
+app.CSections.PreviewEdit.processingOrder =              76; // Impress.
 app.CSections.Splitter.processingOrder = 			    80; // Calc.
 
 app.CSections.CalcGrid.drawingOrder = 				40; // Calc.
@@ -134,6 +136,7 @@ app.CSections.Debug.DebugOverlay.drawingOrder = 		60; // Writer & Impress & Calc
 app.CSections.RenderGeometry.drawingOrder =		70; // Impress & Draw. Before the overlay.
 app.CSections.Overlays.drawingOrder =					71; // Writer & Impress & Calc.
 app.CSections.SelectionRectangle.drawingOrder =     72; // Impress.
+app.CSections.PreviewEdit.drawingOrder =            73; // Impress.
 app.CSections.Debug.Splits.drawingOrder = 			90; // Calc.
 app.CSections.FocusCell.drawingOrder =		    	91; // Calc.
 app.CSections.CellRangeMarker.drawingOrder =		91; // Calc.

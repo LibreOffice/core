@@ -34,6 +34,13 @@ describe(['tagdesktop'], 'Edit slides through canvas previews', { testIsolation:
 			expect(win.app.impress.previewEditMode.active).to.equal(true);
 			expect(win.app.impress.previewEditMode.part).to.equal(part);
 		});
+		// The overlay section draws the entered-preview highlight. It has to be
+		// visible right away, without waiting for a scroll to place it.
+		cy.then(function() {
+			const section = win.app.sectionContainer.getSectionWithName('previewEdit');
+			expect(section).to.exist;
+			expect(section.isVisible).to.equal(true);
+		});
 	}
 
 	// Click the document canvas at a twips position (in the canvas page's own

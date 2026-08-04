@@ -155,6 +155,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		ALT:      18, // alt		: UNKOWN
 		PAUSE:    19, // pause/break	: UNKOWN
 		CAPSLOCK: 20, // caps lock	: UNKOWN,
+		ESCAPE:   27,
 		PAGEUP:   33,
 		PAGEDOWN: 34,
 		END:      35,
@@ -859,6 +860,28 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			if (!this._isMasterViewObjectKey(ev))
 				ev.preventDefault();
 			return;
+		}
+
+		if (app.impress.previewEditMode && app.impress.previewEditMode.active &&
+			ev.type === 'keydown' && !this.modifier) {
+			if ((ev.keyCode === this.keyCodes.DELETE || ev.keyCode === this.keyCodes.BACKSPACE) &&
+				app.impress.previewShapeSelection) {
+				this._map.sendUnoCommand('.uno:DeletePreviewShape');
+				ev.preventDefault();
+				return;
+			}
+			if (ev.keyCode === this.keyCodes.ESCAPE) { // Escape leaves preview edit mode.
+				// A real canvas-page selection or an active text edit can coexist with the
+				// mode; Escape belongs to that inner state and falls through, unless the
+				// mode itself has a preview selection to clear.
+				const hasInnerState = !app.impress.previewShapeSelection &&
+					(app.file.textCursor.visible || app.definitions.graphicSelection.hasActiveSelection());
+				if (!hasInnerState) {
+					this._map.sendUnoCommand('.uno:LeavePreviewEdit');
+					ev.preventDefault();
+					return;
+				}
+			}
 		}
 
 		if (this._map.isEditMode()) {

@@ -578,7 +578,7 @@ function createShapesPanel(shapeType) {
 	}
 
 	grid.onclick = function(e) {
-		map.sendUnoCommand('.uno:' + e.target.dataset.uno);
+		sendShapeCommand(e.target.dataset.uno);
 		map._docLayer._closeMobileWizard();
 	};
 
@@ -587,11 +587,35 @@ function createShapesPanel(shapeType) {
 	return wrapper;
 }
 
+// Sends a shape-picker command. While preview edit mode is active, the picked shape is
+// inserted into the entered slide instead, sized at a fifth of the slide and centered.
+// This only applies to the dotted Category.shapename commands that InsertShapeIntoSlide
+// understands, such as basicshapes.rectangle. A plain name with no dot, such as the
+// connectors picker's Connector or ConnectorArrows, still goes through the ordinary send.
+function sendShapeCommand(name) {
+	const mode = app.impress.previewEditMode;
+	if (mode && mode.active && name.indexOf('.') > 0) {
+		const shapeType = name.substring(name.indexOf('.') + 1);
+		const width = Math.round(mode.slideWidth / 5);
+		const height = Math.round(mode.slideHeight / 5);
+		app.map.sendUnoCommand('.uno:InsertShapeIntoSlide', {
+			ShapeType: { type: 'string', value: shapeType },
+			Part: { type: 'long', value: String(mode.part) },
+			X: { type: 'long', value: String(Math.round((mode.slideWidth - width) / 2)) },
+			Y: { type: 'long', value: String(Math.round((mode.slideHeight - height) / 2)) },
+			Width: { type: 'long', value: String(width) },
+			Height: { type: 'long', value: String(height) },
+		});
+	} else {
+		app.map.sendUnoCommand('.uno:' + name);
+	}
+}
+
 var onShapeClickFunction = function(e) {
 	let name = $(e.target).data().uno;
 	if (!name)
 		return;
-	app.map.sendUnoCommand('.uno:' + name);
+	sendShapeCommand(name);
 	closePopup();
 	e.stopPropagation();
 };
@@ -604,7 +628,7 @@ var onShapeKeyDownFunction = function(event) {
 	else if (event.code === 'Enter' || event.code === 'Space') {
 		let name = $(event.target).data().uno;
 		if (name) {
-			app.map.sendUnoCommand('.uno:' + name);
+			sendShapeCommand(name);
 			closePopup();
 		}
 		event.preventDefault();
