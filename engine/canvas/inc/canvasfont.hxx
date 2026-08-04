@@ -58,7 +58,6 @@ namespace vclcanvas
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
                     FontEmphasisMark                                                       eMark,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
-                    vclcanvas::Canvas&                                                     rDevice,
                     OutputDevice&                                                          rOutDevProvider );
 
         /// Dispose all internal references
@@ -95,8 +94,7 @@ namespace vclcanvas
     private:
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
-        vclcanvas::Canvas&                                                mrRefDevice;
-        VclPtr<OutputDevice>                                              mpOutDevProvider;
+        VclPtr<OutputDevice>                                              mxOutDev;
         css::geometry::Matrix2D                                           maFontMatrix;
     };
 

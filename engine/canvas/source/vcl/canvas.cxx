@@ -391,8 +391,7 @@ namespace vclcanvas
         if( mxOutDev )
         {
             // TODO(F2): font properties and font matrix
-            return new CanvasFont(fontRequest, eMark, fontMatrix,
-                                   *this, *mxOutDev);
+            return new CanvasFont(fontRequest, eMark, fontMatrix, *mxOutDev);
         }
 
         return rtl::Reference< vclcanvas::CanvasFont >();

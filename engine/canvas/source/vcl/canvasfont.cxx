@@ -40,14 +40,12 @@ namespace vclcanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             FontEmphasisMark                                eEmphasisMark,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            vclcanvas::Canvas&                              rDevice,
-                            OutputDevice&                                   rOutDevProvider ) :
+                            OutputDevice&                                   rOutDev ) :
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
-        mrRefDevice( rDevice ),
-        mpOutDevProvider( &rOutDevProvider ),
+        mxOutDev( &rOutDev ),
         maFontMatrix( rFontMatrix )
   {
         maFont->SetAlignment( ALIGN_BASELINE );
@@ -64,7 +62,7 @@ namespace vclcanvas
         maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
         // adjust to stretched/shrunk font
-        vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDevProvider);
+        vclcanvastools::setupFontWidth(rFontMatrix, maFont.get(), rOutDev);
 
         maFont->SetEmphasisMark(eEmphasisMark);
     }
@@ -75,7 +73,7 @@ namespace vclcanvas
         {
             SolarMutexGuard aGuard;
 
-            mpOutDevProvider.reset();
+            mxOutDev.reset();
         }
         rGuard.lock();
     }
@@ -87,8 +85,7 @@ namespace vclcanvas
         return new TextLayout( aText,
                                nDirection,
                                Reference( this ),
-                               mrRefDevice,
-                               mpOutDevProvider);
+                               mxOutDev);
     }
 
     rendering::FontRequest  CanvasFont::getFontRequest(  )

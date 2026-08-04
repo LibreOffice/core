@@ -77,12 +77,10 @@ namespace vclcanvas
     TextLayout::TextLayout( rendering::StringContext                   aText,
                             sal_Int8                                   nDirection,
                             CanvasFont::Reference                      rFont,
-                            vclcanvas::Canvas&                         xDevice,
                             const VclPtr<OutputDevice>&                xOutDev ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
-        mxDevice( xDevice ),
-        mpOutDevProvider( xOutDev ),
+        mxOutDev( xOutDev ),
         mnTextDirection( nDirection )
     {}
 
@@ -91,8 +89,7 @@ namespace vclcanvas
         rGuard.unlock();
         {
             SolarMutexGuard aGuard;
-            mpOutDevProvider.reset();
-            mxDevice.clear();
+            mxOutDev.reset();
             mpFont.clear();
         }
         rGuard.lock();
@@ -138,10 +135,10 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        if( !mpOutDevProvider )
+        if( !mxOutDev )
             return geometry::RealRectangle2D();
 
-        OutputDevice& rOutDev = *mpOutDevProvider;
+        OutputDevice& rOutDev = *mxOutDev;
 
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
