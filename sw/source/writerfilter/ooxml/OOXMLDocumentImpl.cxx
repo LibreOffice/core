@@ -346,6 +346,38 @@ void OOXMLDocument::resolveComment(Stream & rStream,
     resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_annotation);
 }
 
+void OOXMLDocument::resolveWebSettingsStream(Stream& /*rStream*/)
+{
+    OOXMLStream::Pointer_t pStream;
+    try
+    {
+        pStream
+            = OOXMLDocumentFactory::createStream(mpStream, OOXMLStream::StreamType_t::WEBSETTINGS);
+    }
+    catch (uno::Exception const&)
+    {
+        // No webSettings relationship
+        return;
+    }
+    if (!pStream)
+        return;
+
+    uno::Reference<io::XInputStream> xInputStream = pStream->getDocumentStream();
+    if (!xInputStream.is())
+        return;
+
+    try
+    {
+        uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
+            xml::dom::DocumentBuilder::create(pStream->getContext()));
+        mxWebSettingsDom = xDomBuilder->parse(xInputStream);
+    }
+    catch (uno::Exception const&)
+    {
+        TOOLS_WARN_EXCEPTION("writerfilter", "failed to parse word/webSettings.xml");
+    }
+}
+
 OOXMLPropertySet * OOXMLDocument::getPicturePropSet
 (const OUString & rId)
 {
@@ -512,6 +544,8 @@ void OOXMLDocument::resolve(Stream & rStream)
 
     // Custom xml's are handled as part of grab bag.
     resolveCustomXmlStream(rStream);
+
+    resolveWebSettingsStream(rStream);
 
     resolveFastSubStream(rStream, OOXMLStream::StreamType_t::FONTTABLE);
     resolveFastSubStream(rStream, OOXMLStream::StreamType_t::STYLES);
@@ -907,6 +941,11 @@ const uno::Reference<xml::dom::XDocument> & OOXMLDocument::getThemeDom() const
 const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomList( ) const
 {
     return mxCustomXmlDomList;
+}
+
+const uno::Reference<xml::dom::XDocument>& OOXMLDocument::getWebSettingsDom() const
+{
+    return mxWebSettingsDom;
 }
 
 const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomPropsList( ) const

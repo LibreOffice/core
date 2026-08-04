@@ -244,6 +244,9 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         aGrabBagProperties[u"OOXCustomXml"_ustr] <<= pDocument->getCustomXmlDomList();
         aGrabBagProperties[u"OOXCustomXmlProps"_ustr] <<= pDocument->getCustomXmlDomPropsList();
 
+        // Adding the saved webSettings XML to DOM
+        aGrabBagProperties[u"OOXWebSettings"_ustr] <<= pDocument->getWebSettingsDom();
+
         // Adding the saved Glossary Document DOM to the document's grab bag
         aGrabBagProperties[u"OOXGlossary"_ustr] <<= pDocument->getGlossaryDocDom();
         aGrabBagProperties[u"OOXGlossaryDom"_ustr] <<= pDocument->getGlossaryDomList();

@@ -296,6 +296,9 @@ private:
     /// Write customXml/item[n].xml and customXml/itemProps[n].xml
     void WriteCustomXml();
 
+    /// Write word/webSettings.xml
+    void WriteWebSettings();
+
     /// Write word/embeddings/Worksheet[n].xlsx
     void WriteEmbeddings();
 

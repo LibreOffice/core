@@ -1151,6 +1151,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
     CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testWebSettingsPreserved)
+{
+    // this test file has word/webSettings.xml
+    createSwDoc("1_page.docx");
+    save(TestFilter::DOCX);
+    // before this change the file would not exist
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/webSettings.xml"_ustr);
+    // test the content and that the relationship is present
+    assertXPath(pXmlDoc, "/w:webSettings/w:optimizeForBrowser", 1);
+    xmlDocUniquePtr pRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
+    assertXPath(pRels, "/rels:Relationships/rels:Relationship[@Target='webSettings.xml']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNoWebSettings)
+{
+    // no word/webSettings.xml to roundtrip in this document
+    createSwDoc("cloud.docx");
+    save(TestFilter::DOCX);
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"word/webSettings.xml"_ustr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
