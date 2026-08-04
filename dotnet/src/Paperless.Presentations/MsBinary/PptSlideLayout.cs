@@ -1041,7 +1041,14 @@ internal sealed class PptSlideLayout
         PptPicture picture = PictureOf(shape);
         return picture.IsEmpty
             ? null
-            : new PlacedPicture(picture.Raster, bounds) { Vector = picture.Vector };
+            : new PlacedPicture(picture.Raster, bounds)
+            {
+                Vector = picture.Vector,
+
+                // Every picture in a PPT is inline by construction: a blip lives in the Escher
+                // blip store, zlib-deflated, and never as a stream of its own.
+                IsInline = true,
+            };
     }
 
     /// <summary>

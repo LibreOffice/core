@@ -51,7 +51,11 @@ public static class SlideDrawing
     {
         if (shape.Shadow is { } shadow) DrawShadow(shape, shadow, sink);
 
-        if (shape.Fill is { } fill) sink.FillPath(shape.Outline, fill);
+        if (shape.Fill is { } fill && FillReachesThePage(shape.Picture))
+        {
+            sink.FillPath(shape.Outline, fill);
+        }
+
         if (shape.Picture is { } picture) DrawPicture(shape, picture, sink);
         if (shape.Line is { } line) sink.StrokePath(shape.Outline, line);
 
@@ -110,7 +114,9 @@ public static class SlideDrawing
     {
         if (shadow.IsInvisible) return;
 
-        bool silhouette = shape.Fill is not null || IsOpaqueRaster(shape.Picture);
+        bool silhouette =
+            (shape.Fill is not null && FillReachesThePage(shape.Picture))
+            || IsOpaqueRaster(shape.Picture);
         bool outline = shape.Line is not null;
         bool text = shadow.CarriesText && shape.Text is { Runs.Count: > 0 };
 
@@ -217,6 +223,68 @@ public static class SlideDrawing
 
         foreach (DocRect rule in rules) sink.FillPath(GraphicsPath.Rectangle(rule), paint);
     }
+
+    /// <summary>
+    /// Whether a shape's own fill is drawn at all, given the picture that goes over it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A picture frame's fill is <em>not</em> a backdrop the picture happens to hide. Impress adds
+    /// it to the shape's decomposition only when the graphic can be seen through
+    /// (<c>svx/source/sdr/primitive2d/sdrgrafprimitive2d.cxx:41-42</c>, "add fill, but only when
+    /// graphic is transparent"), and a <em>metafile</em> loaded from a file does not count as
+    /// transparent however much of its frame it leaves unpainted. So a plate behind an EMF chart
+    /// reaches the page in PowerPoint and does not in Impress.
+    /// </para>
+    /// <para>
+    /// Measured against LibreOffice 24.2.7.2 rather than read out of that source, which predicts
+    /// the opposite: its <c>ImpGraphic::isTransparent</c> returns true for everything but an
+    /// opaque bitmap. Four renderings of
+    /// <c>slides/batch-014/pptx/2014BSA_Sunday_Killion.pptx</c> settle what the binary does. Its
+    /// slide 5 is a <c>p:pic</c> over <c>image10.emf</c> stating
+    /// <c>&lt;a:solidFill&gt;&lt;a:schemeClr val="tx1"/&gt;</c> — white, under a colour map sending
+    /// <c>tx1</c> to a <c>dk1</c> of <c>#FFFFFF</c>. Rendering the deck as found, with that fill
+    /// changed to red, and with it replaced by <c>&lt;a:noFill/&gt;</c> gives a <em>byte-identical</em>
+    /// page 5 all three times, showing the slide's own background inside the picture frame: no
+    /// fill is drawn whatever it says. A fourth, with the EMF swapped for a PNG whose right half
+    /// is fully clear, draws the red through that half — so the rule is about the graphic's kind,
+    /// not about whether it happens to cover its frame.
+    /// </para>
+    /// <para>
+    /// A shape-level opacity is the other half of Impress's condition
+    /// (<c>255 != getGraphicAttr().GetAlpha()</c>) and keeps the fill whatever the picture is.
+    /// </para>
+    /// <para>
+    /// <strong>Only a metafile the package carries as an entry of its own.</strong> The same 892
+    /// byte EMF inlined as <c>office:binary-data</c> in a flat ODP has its fill drawn by 24.2.7.2,
+    /// and the same document zipped with the metafile under <c>Pictures/</c> does not; the two say
+    /// the same thing and differ only in how LibreOffice loads the graphic. A `.ppt` falls on the
+    /// inline side of that line and needs to: page 8 of
+    /// <c>slides/batch-014/ppt/Thailand17.ppt</c> and page 10 of
+    /// <c>slides/batch-010/ppt/W3_Case_Study…Ed.ppt</c> draw a table on a white plate under an
+    /// Escher metafile blip, and suppressing it cost 8.44 and 9.33 unaccounted ink.
+    /// </para>
+    /// <para>
+    /// <strong>The correlation is storage; the cause may not be.</strong> Across five measured
+    /// cases every inline metafile keeps its fill and every package entry loses it, which fits
+    /// LibreOffice building a <c>GDIMetaFile</c> graphic for the first and a
+    /// <c>VectorGraphicData</c> for the second. But those two `.ppt` pages are also pages where
+    /// the reference <em>rasterises</em> the metafile — both are on
+    /// <c>TODO.raster-ceiling.md</c> — and a raster with a soft mask is transparent by
+    /// <c>ImpGraphic::isTransparent</c>'s own rule, which explains them just as well. Separating
+    /// the two needs a document whose metafile is rasterised and is <em>not</em> inline, and the
+    /// corpus has none whose picture frame states a fill: the four candidates on
+    /// <c>8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx</c> all state <c>a:noFill</c>. Recorded as
+    /// unresolved rather than settled.
+    /// </para>
+    /// </remarks>
+    private static bool FillReachesThePage(PlacedPicture? picture)
+        => picture is null
+           || picture.Opacity < 1.0
+           || picture.Destination.IsEmpty
+           || picture.IsInline
+           || picture.Vector is not { } vector
+           || vector.Value.IsEmpty;
 
     /// <summary>
     /// Whether a picture is one whose silhouette is its whole frame.

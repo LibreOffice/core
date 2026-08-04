@@ -129,21 +129,38 @@ public sealed class DrawingTableStyle
     /// Reads the style a table names out of an <c>a:tblStyleLst</c>.
     /// </summary>
     /// <remarks>
-    /// The part's <c>def</c> attribute names the style a table that states no
-    /// <c>a:tableStyleId</c> uses, which is how a deck sets a default table look. A style id that
-    /// resolves to nothing yields null rather than the default, because a table naming a style
-    /// the package does not carry has no style, not the wrong one.
+    /// <para>
+    /// A table that states no <c>a:tableStyleId</c> gets <strong>no style at all</strong>, and the
+    /// part's <c>def</c> attribute is not consulted. It reads like the default table look a deck
+    /// sets for itself, and PowerPoint does apply it; LibreOffice does not.
+    /// <c>TableProperties::getUsedTableStyle</c>
+    /// (<c>oox/source/drawingml/table/tableproperties.cxx:89-124</c>) searches the list only when
+    /// the id is non-empty and otherwise returns a <c>static TableStyle</c> that has nothing in
+    /// it — no <c>wholeTbl</c>, no banding, no first column.
+    /// </para>
+    /// <para>
+    /// Measured rather than read off, because the source alone would not settle which renderer to
+    /// follow. <c>slides/batch-011/pptx/section_1_our_rights_presentation.pptx</c> page 8 holds a
+    /// three-column table with <c>firstRow="1" firstCol="1" bandRow="1"</c> and no
+    /// <c>a:tableStyleId</c>; the reference leaves its first column white and we filled it
+    /// <c>accent1</c> with white text on it. Putting the id of the very style the package declares
+    /// as <c>def</c> into that <c>a:tblPr</c> and re-rendering makes the reference draw exactly
+    /// what we drew — an orange first column and a tinted body — so the fallback is the whole of
+    /// the difference.
+    /// </para>
+    /// <para>
+    /// A style id that resolves to nothing likewise yields null rather than the default, because
+    /// a table naming a style the package does not carry has no style, not the wrong one.
+    /// </para>
     /// </remarks>
     /// <param name="tableStyles">The <c>a:tblStyleLst</c> root, or null.</param>
     /// <param name="styleId">The table's <c>a:tblPr/a:tableStyleId</c>, or null.</param>
     public static DrawingTableStyle? Read(XElement? tableStyles, string? styleId)
     {
         if (tableStyles is null) return null;
+        if (string.IsNullOrEmpty(styleId)) return null;
 
-        string? wanted = string.IsNullOrEmpty(styleId)
-            ? tableStyles.Attribute("def")?.Value
-            : styleId;
-        if (string.IsNullOrEmpty(wanted)) return null;
+        string wanted = styleId;
 
         foreach (XElement style in Drawing.Children(tableStyles, "tblStyle"))
         {

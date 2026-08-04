@@ -135,19 +135,19 @@ internal sealed class OdpFills
     /// </para>
     /// </remarks>
     /// <param name="element">A <c>draw:image</c>.</param>
-    public (RasterImage? Raster, Lazy<VectorImage>? Vector) Drawable(XElement? element)
+    public (RasterImage? Raster, Lazy<VectorImage>? Vector, bool IsInline) Drawable(XElement? element)
     {
         if (Bytes(element) is not { } found) return default;
 
         ReadOnlyMemory<byte> bytes = found.Bytes;
 
         return VectorImages.For(bytes.Span) is not null
-            ? (null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)))
-            : (RasterImage.Encoded(bytes, found.MediaType), null);
+            ? (null, new Lazy<VectorImage>(() => VectorImages.Decode(bytes)), found.IsInline)
+            : (RasterImage.Encoded(bytes, found.MediaType), null, found.IsInline);
     }
 
     /// <summary>The bytes an element names, inline or as a package part, with its declared type.</summary>
-    private (ReadOnlyMemory<byte> Bytes, string? MediaType)? Bytes(XElement? element)
+    private (ReadOnlyMemory<byte> Bytes, string? MediaType, bool IsInline)? Bytes(XElement? element)
     {
         if (element is null) return null;
 
@@ -159,7 +159,7 @@ internal sealed class OdpFills
                 byte[] bytes = Convert.FromBase64String(inline.Value);
                 return bytes.Length == 0
                     ? null
-                    : (bytes, Attribute(element, OdfNamespaces.Draw, "mime-type"));
+                    : (bytes, Attribute(element, OdfNamespaces.Draw, "mime-type"), true);
             }
             catch (FormatException)
             {
@@ -178,7 +178,7 @@ internal sealed class OdpFills
 
         return buffer.Length == 0
             ? null
-            : (buffer.ToArray(), _file.Package?.GetPart(part)?.MediaType);
+            : (buffer.ToArray(), _file.Package?.GetPart(part)?.MediaType, false);
     }
 
     /// <summary>

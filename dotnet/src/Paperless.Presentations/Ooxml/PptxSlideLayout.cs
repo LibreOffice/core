@@ -69,6 +69,16 @@ internal sealed partial class PptxSlideLayout
     /// <remarks>Held beside <see cref="_styles"/>, and for the same reason.</remarks>
     private SlideFields _fields;
 
+    /// <summary>
+    /// The background of the slide currently being laid out.
+    /// </summary>
+    /// <remarks>
+    /// Resolved before the shapes rather than after them because a shape can ask for it:
+    /// <c>p:sp/@useBgFill</c> fills a shape with the slide's own background. Held beside
+    /// <see cref="_styles"/> for the same reason those are.
+    /// </remarks>
+    private Paint? _background;
+
     public PptxSlideLayout(PptxFile file, SlideFonts fonts)
     {
         _file = file;
@@ -83,6 +93,7 @@ internal sealed partial class PptxSlideLayout
             slide.Layout, slide.Master, _file.DefaultTextStyle, isNotesPage: false,
             theme.Colours);
         _fields = new SlideFields(slide.Index + 1, _file.Slides.Count);
+        _background = Background(slide, theme);
 
         List<PlacedShape> shapes = [];
 
@@ -99,7 +110,7 @@ internal sealed partial class PptxSlideLayout
             Size = _file.SlideSize,
             Name = slide.Name,
             IsHidden = slide.IsHidden,
-            Background = Background(slide, theme),
+            Background = _background,
             Shapes = shapes,
         };
     }
@@ -702,11 +713,21 @@ internal sealed partial class PptxSlideLayout
         XElement? properties = Ppt.Child(shape, "spPr");
         XElement? transform = Drawing.Child(properties, "xfrm");
 
-        // A placeholder that states no transform of its own inherits the whole of it from the
-        // layout, and failing that from the master — which is the normal case for a title, whose
-        // slide-level shape carries only its text. Falling back to a zero rectangle instead puts
-        // every such shape in the top-left corner at no size.
-        XElement?[] inherited = transform is null ? PlaceholderProperties(shape, slide) : [];
+        // A placeholder inherits the whole of its layout's — and failing that its master's —
+        // p:spPr, and what it states for itself wins property by property. A transform is only the
+        // commonest thing to inherit: a title whose slide-level shape carries only its text takes
+        // its rectangle this way, and falling back to a zero one puts every such shape in the
+        // top-left corner at no size.
+        //
+        // **Moving a placeholder does not cut it off from the rest of what it inherits**, and
+        // reading the chain only when the slide states no a:xfrm says that it does. LibreOffice
+        // applies the reference on p:nvSpPr — before p:spPr is parsed at all
+        // (oox/source/ppt/pptshapecontext.cxx:157-162) — and merges fill, line and geometry from
+        // it underneath the shape's own (shape.cxx:2816-2843). Measured on
+        // slides/batch-011/pptx/171128IPAP.pptx, whose slide titles state their own a:xfrm and
+        // take their C00000 plate from the layout: 32 of its 40 pages lost the red banner behind
+        // white title text, which is text that extracts perfectly and cannot be read.
+        XElement?[] inherited = PlaceholderProperties(shape, slide);
         transform ??= First(inherited, "xfrm");
         if (transform is null && inherited.Length == 0 && properties is null) return null;
 
@@ -763,7 +784,7 @@ internal sealed partial class PptxSlideLayout
             Name = Name(shape),
             Outline = outline,
             Bounds = bounds,
-            Fill = Fill(properties, [.. inherited, themedFill], fills, groupFill),
+            Fill = ShapeFill(shape, properties, inherited, themedFill, fills, groupFill),
             Picture = Picture(shape, slide, bounds),
             Line = Line(properties, inherited, theme.Colours, themedLine),
             HeadEnd = LineEnd(properties, inherited, "headEnd"),
@@ -1118,6 +1139,52 @@ internal sealed partial class PptxSlideLayout
     /// shape unfilled.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// A shape's fill, and what <c>p:sp/@useBgFill</c> does to it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>useBgFill="1"</c> means "fill this shape with the slide's own background". It is not a
+    /// colour but a reference, and the shape that carries it normally states no fill and names a
+    /// themed one — PowerPoint's Designer writes a full-slide <c>p:sp useBgFill="1"</c> whose
+    /// <c>a:fillRef idx="1"</c> points at <c>accent1</c>, so a reader that walks past the
+    /// attribute paints the whole slide in the accent colour instead of leaving the background
+    /// showing. Measured on <c>slides/batch-006/pptx/Course Selection 2025-26 Current Grade
+    /// 09.pptx</c>: nine of its ten pages came out solid orange against a white reference, 247
+    /// points of unaccounted ink on a ten-page deck.
+    /// </para>
+    /// <para>
+    /// The precedence is <c>oox/source/ppt/pptshapegroupcontext.cxx:109-113</c>, which sets the
+    /// shape's own fill type to <c>XML_noFill</c> <em>before</em> parsing its children: a fill the
+    /// shape states for itself still wins, and the theme's <c>a:fillRef</c> — which is merged in
+    /// underneath rather than into the shape — no longer reaches it. Then
+    /// <c>fillproperties.cxx:439-443</c> sets <c>FillUseSlideBackground</c> on exactly the
+    /// <c>noFill</c> branch, so an explicit <c>a:noFill</c> beside the attribute shows the
+    /// background too rather than nothing.
+    /// </para>
+    /// <para>
+    /// What is drawn here is the background <em>paint</em> rather than the page behind the shape.
+    /// The two are the same thing for a solid background, which is every corpus instance; for a
+    /// gradient they differ, because LibreOffice shows the page's gradient in page coordinates and
+    /// a paint re-anchors to the shape.
+    /// </para>
+    /// </remarks>
+    private Paint? ShapeFill(
+        XElement shape,
+        XElement? properties,
+        XElement?[] inherited,
+        XElement? themedFill,
+        in FillContext context,
+        Paint? groupFill)
+    {
+        if (!Ppt.Flag(shape, "useBgFill", whenAbsent: false))
+        {
+            return Fill(properties, [.. inherited, themedFill], context, groupFill);
+        }
+
+        return Fill(properties, [], context, groupFill) ?? _background;
+    }
+
     private Paint? Fill(
         XElement? properties, XElement?[] inherited, in FillContext context, Paint? groupFill)
     {
