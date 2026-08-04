@@ -1803,8 +1803,6 @@ struct COKitDocumentClass
                             const int width, const int height,
                             const double dpiscale);
 
-// CERTIFICATE AND SIGNING
-
     /// @see kit::Document::insertCertificate().
     bool (*insertCertificate) (COKitDocument* pThis,
                                 const unsigned char* pCertificateBinary,
@@ -1819,7 +1817,6 @@ struct COKitDocumentClass
 
     /// @see kit::Document::getSignatureState().
     int (*getSignatureState) (COKitDocument* pThis);
-// END CERTIFICATE AND SIGNING
 
     /// @see kit::Document::renderShapeSelection
     size_t (*renderShapeSelection)(COKitDocument* pThis, char** pOutput);
