@@ -979,14 +979,12 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    std::vector<OString> aRect;
-    for (const OString & rSelectionRectangle : aSelectionRectangles)
+    std::erase_if(aSelectionRectangles, [](const OString& rSelectionRectangle)
     {
-        if (rSelectionRectangle.isEmpty())
-            continue;
-        aRect.push_back(rSelectionRectangle);
-    }
-    OString sRect = comphelper::string::join("; ", aRect);
+        return rSelectionRectangle.isEmpty();
+    });
+
+    OString sRect = comphelper::string::join("; ", aSelectionRectangles);
     if (pViewShell)
     {
         // Just notify pViewShell about our existing selection.
