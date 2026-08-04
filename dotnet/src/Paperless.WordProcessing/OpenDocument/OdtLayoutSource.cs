@@ -159,6 +159,37 @@ public sealed partial class OdtLayoutSource
     internal static bool AddsParagraphSpacing(XElement? settings)
         => Setting(settings, "AddParaTableSpacing") != "false";
 
+    /// <summary>
+    /// Whether a paragraph keeps its space-before at the top of the first page and after a page break,
+    /// as the document's settings say.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX_AT_PAGES</c>, which ODF spells <c>AddParaTableSpacingAtStart</c>, and
+    /// the companion of <see cref="AddsParagraphSpacing"/> — <c>ww8par.cxx</c> sets the two on
+    /// consecutive lines (:1946 and :1947). It decides whether the question is asked at all;
+    /// <c>SwFlowFrame::HasParaSpaceAtPages</c> then decides where, granting the space on the first page
+    /// and after an explicit break and taking it away at every automatic one.
+    /// </para>
+    /// <para>
+    /// True when the file states nothing, because the application's shipped <c>AddSpacingAtPages</c>
+    /// default is <c>true</c>
+    /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>:47,
+    /// <c>DocumentSettingManager.cxx</c>:131). Paperless previously assumed the opposite for ODF, which
+    /// put the first line of a document whose first paragraph has space-before too high by exactly that
+    /// spacing.
+    /// </para>
+    /// <para>
+    /// Measured on the eight-paragraph fixture, whose paragraphs each carry 12 pt of space-before, in
+    /// points down an A4 page from LibreOffice 24.2.7.2: with the setting true the first baseline is at
+    /// 93.60, with it false at 81.60, and <b>with the item removed entirely at 93.60</b> — so absent
+    /// means true, which is the part that could not be inferred from the DOCX side.
+    /// </para>
+    /// </remarks>
+    /// <param name="settings">The document's <c>office:settings</c>, or null.</param>
+    internal static bool KeepsParagraphSpacingAtPages(XElement? settings)
+        => Setting(settings, "AddParaTableSpacingAtStart") != "false";
+
     /// <summary>One <c>config:config-item</c>'s value from a document's settings, or null when absent.</summary>
     /// <remarks>
     /// The items are nested in <c>config:config-item-set</c> elements, so this searches by descendant name
