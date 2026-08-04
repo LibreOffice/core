@@ -2318,3 +2318,52 @@ transparent by `isTransparent`'s own rule. Separating them needs a rasterised me
 `joint_user_outcomes_michael_fullerton_29.06.12.ppt` have never been looked at and are all
 "every page major", which on this track has three times now meant one wrong fill repeated
 rather than ten separate problems.
+
+## Slides, round eleven: the ink baseline re-measured on the fixed tool
+
+`pdf-image-diff.py` used to refuse a page whose two renderings rounded to 512x288 and
+512x289 and skip it; nine of the 163 slides documents were unmeasurable for that reason
+alone. The tenth round's headline — 1857.62 unaccounted ink, 582 major pages — was taken
+with them in it.
+
+Swept whole at `6b6d54d37` on the fixed tool, 163 documents, two workers:
+
+| | round 10 | this baseline |
+|---|---|---|
+| documents matching the word gate | 152/163 | **152/163** |
+| pages with a correct count | 163/163 | **163/163** |
+| documents the reference could not render | 0 | **0** |
+| total unaccounted ink | 1857.62 | **2810.88** |
+| pages the image tool calls major | 582 | **624** |
+
+**The difference is the nine documents and nothing else, to the digit.** They come to
+953.26 ink and 42 major pages between them, and 1857.62 + 953.26 = 2810.88 while
+582 + 42 = 624. Every figure the tenth round published for a measurable document reproduces
+exactly — `NAS-Infrastructure-Roadmaps-v16.0` 368.41, `HENTZEN` 127.20, `Framing Europe`
+66.45, `N2_E_Maestroni` 66.12, `Wildlife for REDAC` 56.67, `Thailand17` 49.65,
+`Reporting_responsibilities_matrix` 48.41, `171128IPAP` 45.05, `redac-fullComm` 44.78,
+`joint_user_outcomes` 40.64, `Course Selection` 11.10.
+
+So the tenth round's totals **excluded** the nine rather than counting each skipped page as
+a major, which is what the handover said the tool did. The tool's own per-document line does
+count a skip as major — that part is right, and it is why `3492.pptx` was reported at 22
+majors and measures 7 — but whatever produced the track totals did not use that line. Worth
+recording because the two statements cannot both describe the same number.
+
+```
+766.96  28 of  28 major  order-of-worship-ppt-revised-2018.pptx   (invisible until now)
+368.41  77 of 137        NAS-Infrastructure-Roadmaps-v16.0.pptx   (linked OLE, known)
+159.50   7 of  22        3492.pptx                                (invisible until now)
+127.20  12 of  12        HENTZEN_...AEROSPACE_INDUSTRY.pptx       (the missing a:duotone)
+ 66.45  24 of  24        Framing Europe.ppt
+ 66.12   1 of  30        N2_E_Maestroni_Swarm_COP.pptx            (the Gantt)
+ 56.67  10 of  41        Wildlife for REDAC September 11.pptx     (circle gradient, known)
+ 49.65  18 of  54        Thailand17.ppt
+ 48.41   6 of 268        Reporting_responsibilities_matrix.pptx
+ 45.05  18 of  40        171128IPAP.pptx
+ 44.78   8 of   8        redac-fullComm-201705-EE-FRs-briefing.pptx
+ 40.64  19 of  20        joint_user_outcomes_michael_fullerton_29.06.12.ppt
+```
+
+**`order-of-worship-ppt-revised-2018.pptx` is 27% of the whole track's unaccounted ink** and
+had never been seen, because it is one of the nine.
