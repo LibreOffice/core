@@ -2222,6 +2222,12 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableClassicLayoutXLSX)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
     CPPUNIT_ASSERT((*pDPs)[0].GetHeaderLayout());
 
+    // The data field caption is in the header row above, so the only data
+    // column is labelled as a total instead of repeating the caption
+    CPPUNIT_ASSERT_EQUAL(u"Sum of Accrual Value"_ustr,
+                         getScDoc()->GetString(ScAddress(0, 5, 1))); //A6
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, getScDoc()->GetString(ScAddress(3, 6, 1))); //D7
+
     // The flag is written back, so the layout survives a round trip
     save(TestFilter::XLSX);
     xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);

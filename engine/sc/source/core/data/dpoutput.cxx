@@ -978,12 +978,17 @@ void ScDPOutput::Output()
     if (bColumnFieldIsDataOnly)
     {
         // the table contains exactly one data field and no column fields.
-        // Display data description at top right corner.
+        // Display data description at top right corner. The classic layout
+        // has it in the header row above, so label the column as a total.
         ScSetStringParam aParam;
         aParam.setTextInput();
         SCCOL nCol = mnDataStartCol;
-        SCCOL nRow = mnDataStartRow - 1;
-        mpDocument->SetString(nCol, nRow, nTab, maDataDescription, &aParam);
+        SCROW nRow = mnDataStartRow - 1;
+        // more than one header row means the description has its own row above
+        const bool bOwnHeaderRow = mnHeaderSize > 1;
+        const OUString aHeader
+            = bOwnHeaderRow ? ScResId(STR_PIVOT_TOTAL) : maDataDescription;
+        mpDocument->SetString(nCol, nRow, nTab, aHeader, &aParam);
         maFormatOutput.insertEmptyDataColumn(nCol, nRow);
     }
 
