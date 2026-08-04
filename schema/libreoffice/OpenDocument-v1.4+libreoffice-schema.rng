@@ -4303,6 +4303,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal: a "standard horizontal rule", laid out and cropped its own way -->
+  <rng:define name="style-graphic-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:horizontal-rule">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="paragraph-attrs" combine="interleave">
     <rng:optional>

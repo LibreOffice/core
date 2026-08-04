@@ -3627,6 +3627,8 @@ namespace xmloff::token {
         XML_ASIAN,
         XML_COMPLEX,
 
+        XML_HORIZONTAL_RULE,
+
         XML_TOKEN_END
     };
 

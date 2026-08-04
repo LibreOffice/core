@@ -3366,4 +3366,5 @@ color-type
 latin
 asian
 complex
+horizontal-rule
 TOKEN_END_DUMMY

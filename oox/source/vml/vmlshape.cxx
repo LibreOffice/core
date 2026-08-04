@@ -806,6 +806,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // TextFrames already have relative width/height feature... but currently not working
         // in the way we need.
 
+        if (maTypeModel.mbHorizontalRule)
+            PropertySet(xShape).setAnyProperty(PROP_HorizontalRule, Any(true));
+
         // Set the relative width / height if any
         if ( !maTypeModel.maWidthPercent.isEmpty( ) )
         {

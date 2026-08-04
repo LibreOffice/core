@@ -200,6 +200,7 @@
 #define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+108)
 #define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+109)
 #define OWN_ATTR_OBJ_ISEMPTYPRESOBJ             (OWN_ATTR_VALUE_START+110)
+#define OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE       (OWN_ATTR_VALUE_START+111)
 // ATTENTION: current maximum is OWN_ATTR_VALUE_START+120 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
@@ -380,6 +381,7 @@
     { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { u"Decorative"_ustr, OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0, 0}, \
+    { u"HorizontalRule"_ustr, OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE, ::cppu::UnoType<bool>::get(), 0, 0}, \
     { UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0}, \
     { u"WritingMode"_ustr, SDRATTR_WRITINGMODE2, ::cppu::UnoType<sal_Int16>::get(), 0, 0},
 

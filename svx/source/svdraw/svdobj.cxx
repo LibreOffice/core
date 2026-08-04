@@ -560,6 +560,8 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
         m_pPlusData->pBroadcast.reset(); // broadcaster isn't copied
     }
 
+    m_bHorizontalRule = rSource.m_bHorizontalRule;
+
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)
         m_pGrabBagItem.reset(rSource.m_pGrabBagItem->Clone());

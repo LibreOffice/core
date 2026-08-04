@@ -488,6 +488,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79319)
     createSwDoc("fdo79319.rtf");
     // the thin horizontal rule was imported as a big fat rectangle
     uno::Reference<drawing::XShape> xShape = getShape(1);
+    // tdf#167714 the rule has to stay recognisable as one, so that layout can size it from the
+    // text column and crop it to the cell the way Word does
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"HorizontalRule"_ustr));
+    // and it has to be the same model object the VML import makes for o:hr, a plain rectangle
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.RectangleShape"_ustr, xShape->getShapeType());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape, u"RelativeWidth"_ustr));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(16508), xShape->getSize().Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(53), xShape->getSize().Height, 10);

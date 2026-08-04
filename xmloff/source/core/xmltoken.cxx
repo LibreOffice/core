@@ -3628,6 +3628,8 @@ namespace xmloff::token {
         TOKEN("asian", XML_ASIAN),
         TOKEN("complex", XML_COMPLEX),
 
+        TOKEN( "horizontal-rule",                 XML_HORIZONTAL_RULE ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

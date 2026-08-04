@@ -85,6 +85,7 @@ struct ShapeTypeModel
     OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     bool         mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
     bool         mbVisible;              ///< Visible or Hidden
+    bool         mbHorizontalRule = false; ///< o:hr, a horizontal rule with its own layout rules
     OUString     maWrapStyle;            ///< Wrapping mode for text.
     OUString     maArcsize;              ///< round rectangles arc size
     OUString     maEditAs;               ///< Edit As type (e.g. "canvas" etc)

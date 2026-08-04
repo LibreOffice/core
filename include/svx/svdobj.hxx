@@ -369,6 +369,20 @@ public:
     virtual OUString GetDescription() const;
     virtual void SetDecorative(bool isDecorative);
     virtual bool IsDecorative() const;
+    // tdf#167714 a "standard horizontal rule", which is laid out and cropped its own way.
+    // This says which kind of object this is, not how it looks: it belongs to creating a rule and
+    // is read-only afterwards, never toggled on an existing shape, so no undo action reverses it.
+    void SetHorizontalRule(bool isHorizontalRule) { m_bHorizontalRule = isHorizontalRule; }
+    // The flag lives in a graphic style, which can be shared or applied to anything, so it is
+    // honoured only for the two shapes a rule can be made of: a filled bar (the shaded rule) and
+    // a picture (a picture rule). On an ellipse, a group or a custom shape it would ask for a
+    // layout that makes no sense.
+    bool IsHorizontalRule() const
+    {
+        const SdrObjKind eKind = GetObjIdentifier();
+        return m_bHorizontalRule
+               && (eKind == SdrObjKind::Rectangle || eKind == SdrObjKind::Graphic);
+    }
 
     // Object representing an annotation
     bool isAnnotationObject() const { return bool(mpAnnotationData); }
@@ -928,6 +942,9 @@ protected:
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
+
+    bool                        m_bHorizontalRule = false;
+
     // custom prompt text for empty presentation object
     OUString                    m_aCustomPromptText;
 

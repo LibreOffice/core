@@ -391,6 +391,7 @@ inline constexpr OUString PROP_HeaderTopBorderDistance = u"HeaderTopBorderDistan
 inline constexpr OUString PROP_Height = u"Height"_ustr;
 inline constexpr OUString PROP_HelpMarks = u"HelpMarks"_ustr;
 inline constexpr OUString PROP_HighResDuration = u"HighResDuration"_ustr;
+inline constexpr OUString PROP_HorizontalRule = u"HorizontalRule"_ustr;
 inline constexpr OUString PROP_HoriMirroredOnEvenPages = u"HoriMirroredOnEvenPages"_ustr;
 inline constexpr OUString PROP_HoriMirroredOnOddPages = u"HoriMirroredOnOddPages"_ustr;
 inline constexpr OUString PROP_HoriOrient = u"HoriOrient"_ustr;
