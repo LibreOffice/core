@@ -1288,9 +1288,44 @@ internal sealed partial class PptxSlideLayout
             blip.SourceRect.Right, blip.SourceRect.Bottom);
 
         return destination is { } placed
-            ? new PlacedPicture(picture.Raster, placed, Math.Clamp(blip.Opacity, 0, 1))
+            ? new PlacedPicture(
+                  picture.Raster is { } raster
+                      ? Duotoned(raster, blip, ThemeFor(slide).Colours)
+                      : null,
+                  placed,
+                  Math.Clamp(blip.Opacity, 0, 1))
               { Vector = picture.Vector }
             : null;
+    }
+
+    /// <summary>
+    /// The picture with its <c>a:duotone</c> attached, resolved against the theme.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Attached rather than applied: mapping a JPEG's pixels onto a ramp needs a codec, and a
+    /// reader has none. <see cref="RasterImage.Duotone"/> carries the pair to whichever
+    /// backend decodes the picture.
+    /// </para>
+    /// <para>
+    /// This is how a theme paints one grey texture in a deck's own colours, and it is the
+    /// largest single figure on the slides track's ink measurement:
+    /// <c>order-of-worship-ppt-revised-2018.pptx</c> takes its whole background from
+    /// <c>a:bgFillStyleLst</c>'s third entry, a stretched blip under a duotone, and drew as a
+    /// dark grey vignette against a pale reference — 766.96 of unaccounted ink over 28 pages,
+    /// 27% of the whole track's figure. <c>HENTZEN_…AEROSPACE_INDUSTRY.pptx</c> is the same
+    /// mechanism at 127.20, its dark red banner coming out grey. 17 of the 112 corpus decks
+    /// state one.
+    /// </para>
+    /// </remarks>
+    private static RasterImage Duotoned(
+        RasterImage image, DrawingBlipFill blip, DrawingTheme? theme)
+    {
+        if (blip.Duotone is not { } pair) return image;
+        if (pair.Dark.Resolve(theme, placeholder: null) is not { } dark) return image;
+        if (pair.Light.Resolve(theme, placeholder: null) is not { } light) return image;
+
+        return image with { Duotone = new DuotoneRecolour(dark, light) };
     }
 
     /// <summary>
@@ -1362,6 +1397,8 @@ internal sealed partial class PptxSlideLayout
     {
         if (DrawingFill.ReadBlip(element) is not { } blip) return null;
         if (Image(blip.EmbedId, PartOf(source, context.Slide)) is not { } image) return null;
+
+        image = Duotoned(image, blip, context.Theme);
 
         (DocRect box, _) = GradientSpace(context);
 
