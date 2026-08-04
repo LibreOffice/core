@@ -107,21 +107,56 @@ public sealed class DrawingColourMap
     /// differ (<c>dark1</c> against <c>dk1</c>), but both normalise onto the same twelve keys.
     /// </summary>
     /// <param name="element">The mapping element, or null for the identity.</param>
-    public static DrawingColourMap Read(XElement? element)
+    public static DrawingColourMap Read(XElement? element) => ReadLayered(element);
+
+    /// <summary>
+    /// Reads a chain of mapping elements, each one patching the one before it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// PresentationML states the base map once on the master, as <c>p:clrMap</c>, and lets a
+    /// layout or a slide amend it with <c>p:clrMapOvr/a:overrideClrMapping</c>. The override
+    /// is a <em>patch</em> rather than a replacement, which is the part that is not guessable
+    /// from the schema: <c>SlideFragmentHandler</c> starts an <c>overrideClrMapping</c> from a
+    /// copy of the map already in force and starts a <c>clrMap</c> from an empty one
+    /// (<c>oox/source/ppt/slidefragmenthandler.cxx:194-203</c>). An empty
+    /// <c>a:masterClrMapping</c> therefore means "keep what you have", and states no attributes
+    /// to say so.
+    /// </para>
+    /// <para>
+    /// <strong>An override that restates the master's map changes nothing, and most do.</strong>
+    /// Of the ten corpus decks carrying one, three name exactly what the master already said.
+    /// The seven that differ include a title layout sending <c>bg2</c> to <c>dk2</c> where the
+    /// master sends it to <c>lt2</c> — its background gradient is built from a dark teal in the
+    /// reference and from a near-white in ours, which is the whole page.
+    /// </para>
+    /// </remarks>
+    /// <param name="layers">
+    /// The mapping elements, outermost first. Nulls are skipped, so a caller can pass the
+    /// master's map and a layout's and a slide's override without testing each one.
+    /// </param>
+    public static DrawingColourMap ReadLayered(params XElement?[] layers)
     {
-        if (element is null) return Identity;
+        ArgumentNullException.ThrowIfNull(layers);
 
         DrawingColourMap map = new();
 
-        foreach (XAttribute attribute in element.Attributes())
+        foreach (XElement? element in layers)
         {
-            // Unprefixed in DrawingML, w:-prefixed in WordprocessingML; the local name is the
-            // key either way, once normalised.
-            if (ThemeColourSlots.MapKey(attribute.Name.LocalName) is not { } key) continue;
-            if (ThemeColourSlots.Parse(attribute.Value) is not { } slot) continue;
+            if (element is null) continue;
 
-            map._map[key] = slot;
+            foreach (XAttribute attribute in element.Attributes())
+            {
+                // Unprefixed in DrawingML, w:-prefixed in WordprocessingML; the local name is
+                // the key either way, once normalised.
+                if (ThemeColourSlots.MapKey(attribute.Name.LocalName) is not { } key) continue;
+                if (ThemeColourSlots.Parse(attribute.Value) is not { } slot) continue;
+
+                map._map[key] = slot;
+            }
         }
+
+        if (map._map.Count == 0) return Identity;
 
         // A map that names every key as itself is the identity, and saying so lets callers skip
         // it — which matters because Word writes the identity into every settings.xml it saves.

@@ -195,13 +195,18 @@ internal sealed partial class PptxSlideLayout
     /// Both halves are needed and neither answers a question alone. The scheme says what
     /// <c>dk1</c> is; the map says whether <c>bg1</c> means <c>dk1</c> or <c>lt1</c>, which is how
     /// a dark master inverts every themed shape on it. LibreOffice applies the same pair at
-    /// <c>oox/source/ppt/pptimport.cxx:155</c>. Cached per master part because one master serves
-    /// every slide under it.
+    /// <c>oox/source/ppt/pptimport.cxx:155</c>.
     /// </remarks>
     private SlideTheme ThemeFor(PptxSlide slide)
     {
         if (slide.MasterPartName is not { } master) return default;
-        if (_themes.TryGetValue(master, out SlideTheme cached)) return cached;
+
+        // Keyed by the three parts that can contribute to the map rather than by the master
+        // alone. One master serves every slide under it, and a layout may still amend its
+        // colour map — caching by master hands the first layout's answer to all of them.
+        string key = string.Concat(master, " ", slide.LayoutPartName, " ",
+                                   Override(slide.Root) is null ? "" : slide.PartName);
+        if (_themes.TryGetValue(key, out SlideTheme cached)) return cached;
 
         XElement? part = _file.Load(_file.TargetOfType(master, "theme"));
 
@@ -212,8 +217,13 @@ internal sealed partial class PptxSlideLayout
         // its second dark one, so the deck renders as dark text on pale paper where the reference
         // draws white text on a navy slide. Extraction has always read it correctly
         // (`PptxFile.ThemeOf`), which is why no text comparison ever saw this.
+        //
+        // The layout's and the slide's overrides patch that map in turn, innermost last.
         DrawingTheme? colours = DrawingTheme.Read(part)
-            ?.WithMap(DrawingColourMap.Read(Ppt.Child(slide.Master, "clrMap")));
+            ?.WithMap(DrawingColourMap.ReadLayered(
+                Ppt.Child(slide.Master, "clrMap"),
+                Override(slide.Layout),
+                Override(slide.Root)));
 
         XElement? minor = Drawing.Child(
             Drawing.Child(Drawing.Child(Drawing.Child(part, "themeElements"), "fontScheme"),
@@ -222,9 +232,23 @@ internal sealed partial class PptxSlideLayout
 
         SlideTheme theme = new(
             colours, Drawing.Attribute(minor, "typeface"), DrawingStyleMatrix.Read(part));
-        _themes[master] = theme;
+        _themes[key] = theme;
         return theme;
     }
+
+    /// <summary>
+    /// A slide's or layout's <c>p:clrMapOvr/a:overrideClrMapping</c>, or null when it states
+    /// none or states <c>a:masterClrMapping</c>.
+    /// </summary>
+    /// <remarks>
+    /// The two children of <c>p:clrMapOvr</c> are alternatives and only one of them carries
+    /// attributes: <c>a:masterClrMapping</c> is the empty element that says "inherit", so an
+    /// absent override and an inheriting one are the same answer and both come back null.
+    /// The override itself is DrawingML while the wrapper is PresentationML, which is the sort
+    /// of split that makes a single-namespace search find nothing on every deck ever written.
+    /// </remarks>
+    private static XElement? Override(XElement? root)
+        => Drawing.Child(Ppt.Child(root, "clrMapOvr"), "overrideClrMapping");
 
     /// <summary>
     /// The slide's theme part as XML, which a diagram's style references index into directly.
