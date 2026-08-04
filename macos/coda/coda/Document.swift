@@ -133,18 +133,31 @@ class Document: NSDocument {
         return false
     }
 
+    /** What the engine reported about a .uno:Save. */
+    enum SaveOutcome {
+        /// The engine wrote the document to tempFileURL. wasModified tells whether it
+        /// had edits to write, which only a save that was asked to write regardless
+        /// reports as false.
+        case saved(wasModified: Bool)
+        /// The engine had nothing to write, so tempFileURL already holds the current
+        /// content. This is how it answers a save of an unmodified document that was
+        /// asked to skip writing in that case.
+        case nothingToSave
+        /// The engine could not write the document.
+        case failed
+    }
+
     /**
      * Called with the result of a .uno:Save command from the engine; completes any pending
      * Save / Save As…
      *
-     * Every result completes a pending request, including "nothing to save" results
-     * (success without wasModified): the engine reports those when it had no edits to
-     * flush, and tempFileURL is current in that case, so the pending request can be
-     * finished by writing it out. A failed save fails the request instead, so the
-     * caller (and with it, for example, a quit waiting on the save) gets an answer
-     * rather than waiting forever.
+     * A pending request is completed by writing tempFileURL out, both when the engine
+     * wrote it and when it reported nothing to write - in the latter case the file is
+     * current from an earlier write, so its content is the one to save. Only a real
+     * failure fails the request, so the caller (and with it, for example, a quit
+     * waiting on the save) always gets an answer rather than waiting forever.
      */
-    func triggerSave(success: Bool, wasModified: Bool) {
+    func triggerSave(_ outcome: SaveOutcome) {
         // Grab and clear the pending request atomically.
         var ps: PendingSave?
 
@@ -153,22 +166,22 @@ class Document: NSDocument {
         pendingSave = nil
         modifiedLock.unlock()
 
+        COWrapper.LOG_DBG("Save result from the engine: \(outcome), pending request: \(ps != nil)")
+
         if let ps {
-            if success {
+            switch outcome {
+            case .saved, .nothingToSave:
                 // Finish the original AppKit request: write the bytes and call its original completion
                 DispatchQueue.main.async {
                     self.performPendingSave(ps)
                 }
-            }
-            else {
-                // The engine could not flush the edits, so there are no current bytes
-                // to write; fail the original AppKit request.
+            case .failed:
                 DispatchQueue.main.async {
                     ps.completion(CocoaError(.fileWriteUnknown))
                 }
             }
         }
-        else if success && wasModified {
+        else if case .saved(let wasModified) = outcome, wasModified {
             // No pending AppKit request → internal/webview save: ask AppKit to Save (or show Save As… if untitled)
             DispatchQueue.main.async {
                 self.performImplicitSave()
@@ -378,6 +391,7 @@ class Document: NSDocument {
             DispatchQueue.main.async { ps.completion(nil) }
         }
         catch {
+            COWrapper.LOG_ERR("Writing \(ps.url.path) failed: \(error.localizedDescription)")
             DispatchQueue.main.async { ps.completion(error) }
         }
     }
@@ -604,8 +618,15 @@ class Document: NSDocument {
         }
 
         if result.commandName == ".uno:Save" {
-            triggerSave(success: result.success == true,
-                        wasModified: result.wasModified == true)
+            if result.success == true {
+                triggerSave(.saved(wasModified: result.wasModified == true))
+            }
+            else if result.result?.value == "unmodified" {
+                triggerSave(.nothingToSave)
+            }
+            else {
+                triggerSave(.failed)
+            }
         }
     }
 

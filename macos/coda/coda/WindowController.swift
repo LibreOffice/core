@@ -17,11 +17,33 @@ struct CommandStateChange: Decodable {
     let state: String
 }
 
+/// The "result" member of a command result: a type name, plus the value for the
+/// types whose value is a string.
+struct CommandResultValue: Decodable {
+    let type: String
+    let value: String?
+
+    // Writing the initializer below means the compiler no longer derives these.
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case value
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = (try? container.decodeIfPresent(String.self, forKey: .type)) ?? ""
+        // The value has whatever type the "type" member names, and only string
+        // values are of interest here, so anything else reads as no value.
+        value = (try? container.decodeIfPresent(String.self, forKey: .value)) ?? nil
+    }
+}
+
 /// The structure we expect in the COMMANDRESULT payload.
 struct CommandResult: Decodable {
     let commandName: String
     let success: Bool?
     let wasModified: Bool?
+    let result: CommandResultValue?
 }
 
 /// Window controller that manages the document window & menus
