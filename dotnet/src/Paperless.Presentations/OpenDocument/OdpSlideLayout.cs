@@ -874,11 +874,11 @@ internal sealed partial class OdpSlideLayout
         if (element.Name.LocalName != "frame") return null;
 
         XElement? image = element.Element(XName.Get("image", OdfNamespaces.Draw));
-        (RasterImage? raster, Lazy<VectorImage>? vector) = _fills.Drawable(image);
+        (RasterImage? raster, Lazy<VectorImage>? vector, bool isInline) = _fills.Drawable(image);
 
         return raster is null && vector is null
             ? null
-            : new PlacedPicture(raster, bounds) { Vector = vector };
+            : new PlacedPicture(raster, bounds) { Vector = vector, IsInline = isInline };
     }
 
     /// <summary>

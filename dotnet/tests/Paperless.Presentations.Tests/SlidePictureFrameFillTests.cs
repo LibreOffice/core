@@ -40,8 +40,14 @@ public class SlidePictureFrameFillTests
 {
     private static readonly Colour Plate = Colour.FromRgb(0xFF0000);
 
-    public static TheoryData<string> BothFormats =>
+    /// <summary>The two that carry the metafile as a package entry of its own.</summary>
+    public static TheoryData<string> Packaged =>
         ["picture-frame-fill-deck.odp", "picture-frame-fill-deck.pptx"];
+
+    /// <summary>All three, including the flat one that inlines it.</summary>
+    public static TheoryData<string> BothFormats =>
+        ["picture-frame-fill-deck.odp", "picture-frame-fill-deck.pptx",
+         "picture-frame-fill-deck.fodp"];
 
     [Theory]
     [MemberData(nameof(BothFormats))]
@@ -57,14 +63,27 @@ public class SlidePictureFrameFillTests
     }
 
     [Theory]
-    [MemberData(nameof(BothFormats))]
-    public void TheFillUnderAMetafileIsNotDrawn(string document)
+    [MemberData(nameof(Packaged))]
+    public void TheFillUnderAPackagedMetafileIsNotDrawn(string document)
     {
         // The frame is 8 × 6 cm at (1, 2) cm. Before this rule the plate was painted there and the
         // slide's own background disappeared behind it.
         PlatesDrawn(document).ShouldNotContain(
             rect => Near(rect.X, 1) && Near(rect.Y, 2),
             "the metafile's frame paints its own fill");
+    }
+
+    [Fact]
+    public void TheFillUnderAnInlineMetafileIsDrawn()
+    {
+        // The flat ODP says exactly what the zipped one says and carries the same 892 bytes; the
+        // only difference is that they are base64 inside office:binary-data rather than a package
+        // entry, and LibreOffice 24.2.7.2 draws the plate under this one and not under that one.
+        // The corpus's `.ppt` decks fall on this side of the line and need to — see
+        // SlideDrawing.FillReachesThePage, which records what the five measured cases do and do
+        // not settle about why.
+        PlatesDrawn("picture-frame-fill-deck.fodp")
+            .ShouldContain(rect => Near(rect.X, 1) && Near(rect.Y, 2));
     }
 
     [Theory]
@@ -86,10 +105,16 @@ public class SlidePictureFrameFillTests
     }
 
     [Theory]
-    [MemberData(nameof(BothFormats))]
+    [MemberData(nameof(Packaged))]
     public void TheSlideDrawsThePlateExactlyTwice(string document)
     {
         PlatesDrawn(document).Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public void TheFlatSlideDrawsItThreeTimes()
+    {
+        PlatesDrawn("picture-frame-fill-deck.fodp").Count.ShouldBe(3);
     }
 
     private static bool Near(Length value, double centimetres)

@@ -225,6 +225,19 @@ public sealed record PlacedPicture(RasterImage? Image, DocRect Destination, doub
     /// </para>
     /// </remarks>
     public Lazy<VectorImage>? Vector { get; init; }
+
+    /// <summary>
+    /// True when the picture's bytes are carried inside the document's own markup or records
+    /// rather than as a package entry of their own.
+    /// </summary>
+    /// <remarks>
+    /// A `.ppt`'s Escher blip and a flat ODF's <c>office:binary-data</c> are inline; a
+    /// <c>ppt/media/…</c> relationship target and an ODP's <c>Pictures/…</c> entry are not. It is
+    /// a fact about storage and would be an odd thing to draw differently — see
+    /// <c>SlideDrawing.FillReachesThePage</c>, which is the one place that reads it, for the
+    /// measurement that made it necessary and for the competing explanation it could not rule out.
+    /// </remarks>
+    public bool IsInline { get; init; }
 }
 
 /// <summary>
