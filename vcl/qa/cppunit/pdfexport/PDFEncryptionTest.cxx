@@ -150,6 +150,32 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6LoopEndCondition)
+{
+    sal_uInt8 const pPassword[] = { 'T', 'e', 's', 't' };
+
+    // This should be 80 rounds.
+    std::vector<sal_uInt8> aValidationSalt = parseHex("6A5260B509E42E4F");
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("058d0adf871eaedf549963a8a60499af48c647abacf32605bf69518d4366dfe9"),
+        comphelper::hashToString(vcl::pdf::computeHashR6(pPassword, 4, aValidationSalt)));
+
+    // This should be 69 rounds.
+    aValidationSalt = parseHex("B8B897AF2CB52F00");
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("e9f540fad0c2531781e7d9671da52527ab281497cb0d51bf0e986dffa0e9e323"),
+        comphelper::hashToString(vcl::pdf::computeHashR6(pPassword, 4, aValidationSalt)));
+
+    // Test the owner key generation, taking additional U argument.
+    // This should be 69 rounds.
+    std::vector<sal_uInt8> U = parseHex("7BD210807A0277FECC52C261C442F02E1AD62C1A23553348B8F8AF7320"
+                                        "DC9978FAB7E65E1BF4CA76F4BE5E6D2AA8C7D5");
+    aValidationSalt = parseHex("35A0F8DF2F495D23");
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("a8a6e16751faebf5f8aef5d02eae8ddd8885fa3fe9d29e132ff9abe86bd4d0c8"),
+        comphelper::hashToString(vcl::pdf::computeHashR6(pPassword, 4, aValidationSalt, U)));
+}
+
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testGenerateUandUE)
 {
     // Checks we calculate U and UE correctly
