@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_GMH_HXX
-#define INCLUDED_COMPHELPER_GMH_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -46,7 +45,5 @@ public:
     static char const* GetExtensionForConvertDataFormat(ConvertDataFormat nFormat);
 };
 }
-
-#endif // INCLUDED_COMPHELPER_GMH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
