@@ -66,7 +66,6 @@ $(eval $(call gb_Library_use_libraries,svx,\
     ucbhelper \
     utl \
     vcl \
-    xo \
     xmlscript \
 ))
 

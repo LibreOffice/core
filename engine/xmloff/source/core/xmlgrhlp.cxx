@@ -48,7 +48,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <xmloff/xmlgrhlp.hxx>
-#include <svx/xmleohlp.hxx>
 
 #include <algorithm>
 #include <memory>

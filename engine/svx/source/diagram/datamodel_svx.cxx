@@ -32,7 +32,6 @@
 #include <sax/fastattribs.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <xmloff/xmltoken.hxx>
 
 using namespace ::oox;
 using namespace ::com::sun::star;
