@@ -853,7 +853,9 @@ void ScDPOutput::outputRowHeader(SCTAB nTab)
                     bool bHasContinue = !bLast && nRow + 1 < nThisRowCount && (pMemberArray[nRow + 1].Flags & sheet::MemberResultFlags::CONTINUE);
                     if (nIndent)
                         mpStyleOutput->addIndent(nColPos, nRowPos, nIndent);
-                    if (mbExpandCollapse && !bLast)
+                    // A repeated item label is not the header of the group, so it has no button
+                    const bool bRepeatedMember = rData.Flags & sheet::MemberResultFlags::CONTINUE;
+                    if (mbExpandCollapse && !bLast && !bRepeatedMember)
                     {
                         mpStyleOutput->addExpander(nColPos, nRowPos,
                             bHasContinue ? ScMF::DpCollapse : ScMF::DpExpand);

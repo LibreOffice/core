@@ -9,6 +9,7 @@
 
 #include <rtl/math.hxx>
 #include "helper/qahelper.hxx"
+#include <attrib.hxx>
 #include <dpshttab.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
@@ -2552,6 +2553,74 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableRepeatItemLabels)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
                                  size_t(0), pDPs->GetSheetCaches().size());
 
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableRepeatItemLabelsButtons)
+{
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    // Only "Name" repeats its item labels, "Country" is the unchanged reference
+    static const DPFieldDef aFields[] = {
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
+        { u"Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    };
+
+    const char* aData[][4] = {
+        { "Andy", "US", "1999", "30" },
+        { "Andy", "US", "2002", "20" },
+        { "Andy", "US", "2010", "45" },
+        { "David", "GB", "1998", "12" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
+    pDPObj->SetName(pDPs->CreateNewName());
+    pDPObj->GetSaveData()->SetExpandCollapse(true);
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+
+    const SCTAB nTab = aOutRange.aStart.Tab();
+    const SCCOL nNameCol = aOutRange.aStart.Col();
+    const SCCOL nCountryCol = nNameCol + 1;
+    // First data row of the output, the header row is above it
+    const SCROW nFirstRow = aOutRange.aStart.Row() + 1;
+
+    CPPUNIT_ASSERT_EQUAL(u"Andy"_ustr, m_pDoc->GetString(nNameCol, nFirstRow + 1, nTab));
+
+    // The first item label of the group is its header, it keeps the collapse button
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nNameCol, nFirstRow, nTab, ATTR_MERGE_FLAG).GetValue()
+                        & ScMF::DpCollapse));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nCountryCol, nFirstRow, nTab, ATTR_MERGE_FLAG).GetValue()
+                        & ScMF::DpCollapse));
+
+    // The repeated item labels are not group headers, so they have no button at all
+    for (SCROW nRow = nFirstRow + 1; nRow < nFirstRow + 3; ++nRow)
+    {
+        const ScMF nFlags = m_pDoc->GetAttr(nNameCol, nRow, nTab, ATTR_MERGE_FLAG).GetValue();
+        CPPUNIT_ASSERT(!bool(nFlags & (ScMF::DpCollapse | ScMF::DpExpand)));
+    }
+
+    pDPs->FreeTable(pDPObj);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
