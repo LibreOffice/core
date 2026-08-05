@@ -1908,6 +1908,19 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     return bDone;
 }
 
+//  The visible sheets of the document, in sheet order.
+static std::vector<SCTAB> lcl_GetVisibleTabs(const ScDocument& rDoc)
+{
+    std::vector<SCTAB> aTabs;
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+    {
+        if (rDoc.IsVisible(nTab))
+            aTabs.push_back(nTab);
+    }
+    return aTabs;
+}
+
 sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     const uno::Sequence<beans::PropertyValue>& rOptions)
 {
@@ -1974,7 +1987,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
 
     if (bSinglePageSheets)
     {
-        return pDocShell->GetDocument().GetTableCount();
+        return static_cast<sal_Int32>(lcl_GetVisibleTabs(pDocShell->GetDocument()).size());
     }
 
     bool bIsPrintEvenPages = (nEOContent != 1 && nContent == 0) || nContent != 0;
@@ -2053,8 +2066,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         }
     }
 
+    std::vector<SCTAB> aSinglePageTabs;
     if (bSinglePageSheets)
-        nTotalPages = pDocShell->GetDocument().GetTableCount();
+    {
+        aSinglePageTabs = lcl_GetVisibleTabs(pDocShell->GetDocument());
+        nTotalPages = aSinglePageTabs.size();
+    }
 
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
 
@@ -2102,7 +2119,11 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     SCTAB nTab;
     if (bSinglePageSheets)
-        nTab = nSelRenderer;
+    {
+        if (nSelRenderer < 0 || o3tl::make_unsigned(nSelRenderer) >= aSinglePageTabs.size())
+            throw lang::IllegalArgumentException();
+        nTab = aSinglePageTabs[nSelRenderer];
+    }
     else if ( !maValidPages.empty() )
         nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
     else
@@ -2644,8 +2665,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     }
 
+    std::vector<SCTAB> aSinglePageTabs;
     if (bSinglePageSheets)
-        nTotalPages = pDocShell->GetDocument().GetTableCount();
+    {
+        aSinglePageTabs = lcl_GetVisibleTabs(pDocShell->GetDocument());
+        nTotalPages = aSinglePageTabs.size();
+    }
 
     // if no pages counted then user must be trying to print sheet/selection without any content (i.e empty)
     if (nTotalPages == 0)
@@ -2669,7 +2694,13 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     ScDocument& rDoc = pDocShell->GetDocument();
 
     SCTAB nTab;
-    if (!maValidPages.empty())
+    if (bSinglePageSheets)
+    {
+        if (nSelRenderer < 0 || o3tl::make_unsigned(nSelRenderer) >= aSinglePageTabs.size())
+            throw lang::IllegalArgumentException();
+        nTab = aSinglePageTabs[nSelRenderer];
+    }
+    else if (!maValidPages.empty())
         nTab = pPrintFuncCache->GetTabForPage(maValidPages.at(nRenderer) - 1);
     else
         nTab = pPrintFuncCache->GetTabForPage(nRenderer);
@@ -2685,13 +2716,13 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         SCCOL nStartCol;
         SCROW nStartRow;
-        rDoc.GetDataStart( nSelRenderer, nStartCol, nStartRow );
+        rDoc.GetDataStart(nTab, nStartCol, nStartRow);
         SCCOL nEndCol;
         SCROW nEndRow;
-        rDoc.GetPrintArea( nSelRenderer, nEndCol, nEndRow );
+        rDoc.GetPrintArea(nTab, nEndCol, nEndRow);
 
-        aRange.aStart = ScAddress(nStartCol, nStartRow, nSelRenderer);
-        aRange.aEnd = ScAddress(nEndCol, nEndRow, nSelRenderer);
+        aRange.aStart = ScAddress(nStartCol, nStartRow, nTab);
+        aRange.aEnd = ScAddress(nEndCol, nEndRow, nTab);
 
         tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
                     aRange.aStart.Col(), aRange.aStart.Row(),
@@ -2699,9 +2730,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
         //Set visible tab
         SCTAB nVisTab = rDoc.GetVisibleTab();
-        if (nVisTab != nSelRenderer)
+        if (nVisTab != nTab)
         {
-            nVisTab = nSelRenderer;
+            nVisTab = nTab;
             rDoc.SetVisibleTab(nVisTab);
         }
 
