@@ -30,6 +30,29 @@ describe(['tagdesktop'], 'JSDialog Help button test', function() {
 		cy.cGet('#openlink-response').click();
 	});
 
+	it('Online Help opens at the beginning of the document', function() {
+		cy.cGet('#Help-tab-label').click();
+		cy.cGet('.unoOnlineHelp').click();
+		cy.cGet('#online-help-content').should('exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+
+		// The screenshots keep loading after the dialog is up and grow the
+		// content, so retry until the height settles rather than sampling once.
+		cy.cGet('#modal-dialog-online-help-content-box .ui-dialog-content')
+			.should(function($content) {
+				var content = $content[0];
+
+				// There has to be more help than fits, or nothing can scroll and
+				// the assertion below would pass for the wrong reason.
+				expect(
+					content.scrollHeight - content.clientHeight,
+					'the help content overflows the dialog'
+				).to.be.greaterThan(0);
+
+				expect(content.scrollTop, 'help opens scrolled to the top').to.equal(0);
+			});
+	});
+
 	it('Help button focus ring is not clipped by the dialog', function() {
 		// Open a dialog that carries a Help button (Data > Validity).
 		cy.cGet('#Data-tab-label').click();
