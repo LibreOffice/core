@@ -1332,16 +1332,16 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
             }
         }
 
-        // Get the current query (filter) state of the auto-filter
+        // Get the current query (filter) state of the auto-filter. A sheet view owns its own
+        // filter, so this captures the state whether or not it has an active condition. A
+        // query with no active condition shows every row, and re-applying it below keeps the
+        // sheet view showing every row.
         std::optional<ScQueryParam> oQueryParam;
         ScDBData* pNoNameData = GetAnonymousDBData(nSheetViewTab);
         if (pNoNameData && pNoNameData->HasAutoFilter())
         {
-            if (pNoNameData->HasQueryParam())
-            {
-                oQueryParam.emplace();
-                pNoNameData->GetQueryParam(*oQueryParam);
-            }
+            oQueryParam.emplace();
+            pNoNameData->GetQueryParam(*oQueryParam);
         }
 
         // Remember which columns are hidden in the sheet view. Overwriting the

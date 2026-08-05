@@ -99,6 +99,22 @@ protected:
         Scheduler::ProcessEventsToIdle();
     }
 
+    /** Resets the auto-filter on one column the way the drop-down's "all" entry does, on the
+     *  table the view sits on.
+     */
+    static void resetFilterOnColumn(ScDocument& rDocument, ScTabViewShell* pTabView, SCCOL nColumn)
+    {
+        SCTAB nTab = pTabView->GetViewData().GetTabNumber();
+        ScDBData* pDBData = rDocument.GetAnonymousDBData(nTab);
+        CPPUNIT_ASSERT(pDBData);
+        ScQueryParam aParam;
+        pDBData->GetQueryParam(aParam);
+        aParam.RemoveAllEntriesByField(nColumn);
+        aParam.bInplace = true;
+        pTabView->Query(aParam, nullptr, true);
+        Scheduler::ProcessEventsToIdle();
+    }
+
     /** The column the first filter condition of a table's auto-filter tests. */
     static SCCOLROW getFilterColumn(ScDocument& rDocument, SCTAB nTab)
     {
@@ -958,6 +974,127 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterSurvivesCellEditBelowRange)
                            rDocument.RowFiltered(4, nSheetViewTab));
     // The default view stays unfiltered throughout.
     CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewResetFilterSurvivesCellDelete)
+{
+    // A sheet view whose auto-filter the user reset keeps every row visible after a cell is
+    // deleted. The delete takes the full sync path, which must not hand the sheet view the
+    // default view's filter back.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Filter to the rows where column C (End) equals "e1" before any sheet view exists.
+    switchToDefaultView();
+    filterOnColumn(rDocument, mpTabViewDefaultView, 2, u"e1");
+
+    // Create a sheet view. Layout becomes [Sheet1 (default), Sheet1 (sheet view)].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // The new sheet view starts out carrying the filter it was copied from, so only the e1 row
+    // is visible on it.
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(1, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT(rDocument.RowFiltered(4, nSheetViewTab));
+
+    // Reset the filter on the sheet view alone.
+    resetFilterOnColumn(rDocument, mpTabViewSheetView, 2);
+    {
+        ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDBData);
+        CPPUNIT_ASSERT(!pSheetViewDBData->HasQueryParam());
+        CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nSheetViewTab));
+        CPPUNIT_ASSERT(!rDocument.RowFiltered(3, nSheetViewTab));
+        CPPUNIT_ASSERT(!rDocument.RowFiltered(4, nSheetViewTab));
+        // The reset reaches the sheet view only, the default view stays filtered.
+        CPPUNIT_ASSERT(rDocument.RowFiltered(2, nDefaultViewTab));
+    }
+
+    // Delete A7, an empty cell below the auto-filter range, still on the sheet view the user is
+    // looking at. This is what the Delete key does, and it takes the full sync path.
+    gotoCell(u"A7");
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The sheet view's filter must still be reset, with every row visible.
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(pSheetViewDBData);
+    CPPUNIT_ASSERT_MESSAGE("A filter came back on the sheet view after a cell delete",
+                           !pSheetViewDBData->HasQueryParam());
+    CPPUNIT_ASSERT_MESSAGE("e2 row was hidden again after a cell delete",
+                           !rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("e3 row was hidden again after a cell delete",
+                           !rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("e4 row was hidden again after a cell delete",
+                           !rDocument.RowFiltered(4, nSheetViewTab));
+    // The default view keeps its own filter.
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewIgnoresLaterDefaultViewFilter)
+{
+    // A filter applied to the default view after a sheet view was created leaves that sheet
+    // view showing every row, and a later cell delete does not change that. The delete takes
+    // the full sync path, which must leave the sheet view's own filter state alone.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create a sheet view while nothing is filtered anywhere.
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // Filter the default view to the rows where column C (End) equals "e1". Filtering is per
+    // sheet view, so this leaves every row of the sheet view visible.
+    switchToDefaultView();
+    filterOnColumn(rDocument, mpTabViewDefaultView, 2, u"e1");
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nDefaultViewTab));
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(4, nSheetViewTab));
+
+    // Delete A7, an empty cell below the auto-filter range, on the default view. This is what
+    // the Delete key does, and it takes the full sync path.
+    gotoCell(u"A7");
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The sheet view still shows every row.
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(pSheetViewDBData);
+    CPPUNIT_ASSERT_MESSAGE("The default view's filter reached the sheet view",
+                           !pSheetViewDBData->HasQueryParam());
+    CPPUNIT_ASSERT_MESSAGE("e2 row was hidden on the sheet view after a cell delete",
+                           !rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("e3 row was hidden on the sheet view after a cell delete",
+                           !rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("e4 row was hidden on the sheet view after a cell delete",
+                           !rDocument.RowFiltered(4, nSheetViewTab));
+    // The default view keeps its own filter.
+    CPPUNIT_ASSERT(rDocument.RowFiltered(2, nDefaultViewTab));
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
