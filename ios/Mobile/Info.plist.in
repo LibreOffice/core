@@ -206,33 +206,7 @@
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
 	<array>
-		<string>ar</string>
-		<string>cs</string>
-		<string>en</string>
-		<string>da</string>
-		<string>de</string>
-		<string>el</string>
-		<string>es</string>
-		<string>fr</string>
-		<string>he</string>
-		<string>hu</string>
-		<string>is</string>
-		<string>it</string>
-		<string>ja</string>
-		<string>ko</string>
-		<string>nb</string>
-		<string>nl</string>
-		<string>nn</string>
-		<string>pl</string>
-		<string>pt</string>
-		<string>pt-BR</string>
-		<string>ru</string>
-		<string>sk</string>
-		<string>sl</string>
-		<string>sv</string>
-		<string>tr</string>
-		<string>zh-CN</string>
-		<string>zh-TW</string>
+		@IOSAPP_CFBUNDLELOCALIZATIONS@
 	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>

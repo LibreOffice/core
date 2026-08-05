@@ -2508,6 +2508,37 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
                                echo '<string>Fonts/'$(basename $fname)'</string>'
                             done`
           fi
+          # Advertise the languages which engine was built with and which also
+          # have a UI translation for the iOS app. Lets us use the standard languages
+          # list in distro-configs/Langs.conf without having to keep the iOS list up
+          # to date
+          iosapp_langs=$(sed -n 's/^WITH_LANG_LIST=//p' "$LOBUILDDIR/config_host_lang.mk")
+          test -n "$iosapp_langs" || iosapp_langs="en-US"
+          IOSAPP_CFBUNDLELOCALIZATIONS=$(
+              seen=" "
+              sep=""
+              for lang in $iosapp_langs; do
+                  out=$(echo "$lang" | tr '_' '-')
+                  po=$(echo "$lang" | tr '-' '_')
+                  if test "$out" = "en-US" \
+                     || test -f "$srcdir/browser/po/ui-$po.po" \
+                     || test -f "$srcdir/browser/po/help-$po.po"; then
+                      # If you're not used to old versions of bash, the leading parens in the case statement
+                      # might look wrong to you here... it seems that old versions of bash (including some versions
+                      # used internally) parse the unmatched parens incorrectly inside the $(). To fix this, we can
+                      # match the parens - which I learned today is valid case syntax. The more you know!
+                      case "$seen" in
+                          (*" $out "*) ;;
+                          (*) seen="$seen$out "
+                             if test -z "$sep"; then
+                                 printf '<string>%s</string>' "$out"
+                                 sep=set
+                             else
+                                 printf '\n\t\t<string>%s</string>' "$out"
+                             fi ;;
+                      esac
+                  fi
+              done)
           rm -rf ios/Mobile/Branding
           mkdir ios/Mobile/Branding
           if test -n "$APP_BRANDING_DIR" ; then
@@ -2524,6 +2555,8 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
        fi
       ])
 AC_SUBST(IOSAPP_FONTS)
+AC_SUBST(IOSAPP_CFBUNDLELOCALIZATIONS)
+AM_SUBST_NOTMAKE(IOSAPP_CFBUNDLELOCALIZATIONS)
 
 # TODO MACOSAPP_FONTS?
 
