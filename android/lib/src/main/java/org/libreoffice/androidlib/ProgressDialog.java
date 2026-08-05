@@ -14,7 +14,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-/** Class to handle progress when loading, saving, or handling other time intensive operations. */
+/**
+ * Class to handle progress when loading, saving, or handling other time intensive operations.
+ *
+ * The dialog and its views belong to the main thread. Every method here hops onto that thread
+ * first, so a call from any thread is safe.
+ */
 public class ProgressDialog {
     /** For the inflater. */
     Activity mActivity;
@@ -55,48 +60,66 @@ public class ProgressDialog {
 
     /** Set the progress to indeterminate state. */
     public void indeterminate(int messageId) {
-        create();
+        mActivity.runOnUiThread(() -> {
+            create();
 
-        mIndeterminateProgress.setVisibility(View.VISIBLE);
-        mDeterminateProgress.setVisibility(View.INVISIBLE);
-        mTextView.setText(mActivity.getText(messageId));
+            mIndeterminateProgress.setVisibility(View.VISIBLE);
+            mDeterminateProgress.setVisibility(View.INVISIBLE);
+            mTextView.setText(mActivity.getText(messageId));
 
-        mProgressDialog.show();
+            mProgressDialog.show();
+        });
     }
 
     /** Set the progress to indeterminate state. */
     public void determinate(int messageId) {
-        create();
+        mActivity.runOnUiThread(() -> {
+            create();
 
-        mIndeterminateProgress.setVisibility(View.INVISIBLE);
-        mDeterminateProgress.setVisibility(View.VISIBLE);
-        mTextView.setText(mActivity.getText(messageId));
+            mIndeterminateProgress.setVisibility(View.INVISIBLE);
+            mDeterminateProgress.setVisibility(View.VISIBLE);
+            mTextView.setText(mActivity.getText(messageId));
 
-        mProgress = 0;
-        mDeterminateProgress.setProgress(mProgress);
+            mProgress = 0;
+            mDeterminateProgress.setProgress(mProgress);
 
-        mProgressDialog.show();
+            mProgressDialog.show();
+        });
+    }
+
+    /** Replace the message shown above the progress bar. */
+    public void message(String message) {
+        mActivity.runOnUiThread(() -> {
+            if (mProgressDialog == null)
+                return;
+
+            mTextView.setText(message);
+        });
     }
 
     /** Update the progress value. */
     public void determinateProgress(int progress) {
-        if (mProgressDialog == null)
-            return;
+        mActivity.runOnUiThread(() -> {
+            if (mProgressDialog == null)
+                return;
 
-        if (mProgress > progress)
-            return;
+            if (mProgress > progress)
+                return;
 
-        mProgress = progress;
-        mDeterminateProgress.setProgress(mProgress);
+            mProgress = progress;
+            mDeterminateProgress.setProgress(mProgress);
+        });
     }
 
     /** Kill the dialog. */
     public void dismiss() {
-        if (mProgressDialog == null)
-            return;
+        mActivity.runOnUiThread(() -> {
+            if (mProgressDialog == null)
+                return;
 
-        mProgressDialog.dismiss();
-        mProgressDialog = null;
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        });
     }
 }
 

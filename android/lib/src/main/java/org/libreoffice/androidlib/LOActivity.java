@@ -1093,7 +1093,7 @@ public class LOActivity extends AppCompatActivity {
 
                 try {
                     String text = messageJSON.getString("text");
-                    mProgressDialog.mTextView.setText(text);
+                    mProgressDialog.message(text);
                 } catch (JSONException ignored) {}
 
                 try {
