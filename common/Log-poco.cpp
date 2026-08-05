@@ -29,6 +29,7 @@
 
 #include <atomic>
 #include <cassert>
+#include <cerrno>
 #include <chrono>
 #include <cstdint>
 #include <cstring>
@@ -36,6 +37,7 @@
 #include <iomanip>
 #include <iostream>
 #include <mutex>
+#include <poll.h>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -174,21 +176,42 @@ namespace Log
             constexpr int LOG_FILE_FD = STDERR_FILENO;
 #endif
 
+            // We do not own this descriptor: it is inherited from whatever
+            // started us, and so may be non-blocking without our say. Wait for
+            // it to drain rather than truncating the message, but bound the
+            // wait, so that a wedged reader cannot stall us for ever.
+            constexpr int StallWaitMs = 100;
+            constexpr int MaxStalls = 300; // Give up after roughly 30 seconds.
+
             const char *ptr = data;
+            int stalls = 0;
             while (count > 0)
             {
-                ssize_t wrote;
-                while ((wrote = ::write(LOG_FILE_FD, ptr, count)) < 0 && errno == EINTR)
+                const ssize_t wrote = ::write(LOG_FILE_FD, ptr, count);
+                if (wrote > 0)
                 {
+                    ptr += wrote;
+                    count -= wrote;
+                    stalls = 0;
+                    continue;
                 }
 
-                if (wrote < 0)
+                if (wrote < 0 && errno == EINTR)
+                    continue;
+
+                if (wrote < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)
+                    && stalls++ < MaxStalls)
                 {
-                    break;
+                    struct pollfd pfd;
+                    pfd.fd = LOG_FILE_FD;
+                    pfd.events = POLLOUT;
+                    pfd.revents = 0;
+                    ::poll(&pfd, 1, StallWaitMs);
+                    continue;
                 }
 
-                ptr += wrote;
-                count -= wrote;
+                // A real error, no progress at all, or we have waited long enough.
+                break;
             }
             return ptr - data;
         }
