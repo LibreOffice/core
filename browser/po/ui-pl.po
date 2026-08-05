@@ -13,18 +13,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 22:58+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-08-06 13:27+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
-"Language: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -874,14 +874,16 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Prześlij spakowane rozszerzenie w formacie .zip; jego zawartość "
+"(manifest.json, ...) zostanie rozpakowana na serwerze."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:968
 msgid "Upload Extension"
-msgstr ""
+msgstr "Wyślij rozszerzenie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1057
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Ustawienia są dostępne wyłącznie dla zalogowanych użytkowników."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1066
 msgid "Something went wrong. Please try to refresh the page."
@@ -1045,7 +1047,7 @@ msgstr "np."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2441
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Pozostaw puste, jeśli serwer tego nie wymaga"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2460
 msgid ""
@@ -1106,7 +1108,7 @@ msgstr "Pobierz modele do wyboru"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3171
 msgid "API quota exceeded - check your plan and billing details"
-msgstr ""
+msgstr "Przekroczono limit API – sprawdź swój plan i szczegóły rozliczeń"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3176
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1443,7 +1445,7 @@ msgstr "Wersja bieżąca"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n więcej"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1550,7 +1552,7 @@ msgstr "Adres komórki"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Pole nazwy"
 
 #: src/control/Control.AIChatSidebar.ts:113
 msgid "Make the following text more concise"
@@ -1558,7 +1560,7 @@ msgstr "Uczyń poniższy tekst bardziej zwięzłym"
 
 #: src/control/Control.AIChatSidebar.ts:114
 msgid "Make it more concise"
-msgstr ""
+msgstr "Uczyń go bardziej zwięzłym"
 
 #: src/control/Control.AIChatSidebar.ts:117
 msgid "Summarize the key points of this text"
@@ -1566,7 +1568,7 @@ msgstr "Podsumuj najważniejsze punkty tego tekstu"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Summarize this text"
-msgstr ""
+msgstr "Podsumuj ten tekst"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Expand and add more detail to this text"
@@ -1574,7 +1576,7 @@ msgstr "Rozwiń i dodaj więcej szczegółów do tego tekstu"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Expand this text"
-msgstr ""
+msgstr "Rozwiń ten tekst"
 
 #: src/control/Control.AIChatSidebar.ts:125
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1582,7 +1584,7 @@ msgstr "Popraw błędy gramatyczne, ortograficzne i interpunkcyjne"
 
 #: src/control/Control.AIChatSidebar.ts:126
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Popraw gramatykę i pisownię"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Natural"
@@ -1610,7 +1612,7 @@ msgstr "Nieformalny"
 
 #: src/control/Control.AIChatSidebar.ts:387
 msgid "Best"
-msgstr ""
+msgstr "Najlepszy"
 
 #: src/control/Control.AIChatSidebar.ts:389
 #: src/control/Control.NotebookbarCalc.js:1030
@@ -1619,7 +1621,7 @@ msgstr "Dobry"
 
 #: src/control/Control.AIChatSidebar.ts:391
 msgid "Poor"
-msgstr ""
+msgstr "Słaby"
 
 #: src/control/Control.AIChatSidebar.ts:393
 msgid "Unknown"
@@ -1900,7 +1902,7 @@ msgstr "Zobacz więcej"
 
 #: src/control/Control.AIChatSidebar.ts:1798
 msgid "Design template choice cancelled."
-msgstr ""
+msgstr "Anulowano wybór szablonu projektu."
 
 #: src/control/Control.AIChatSidebar.ts:1892
 msgid "Image inserted at cursor"
@@ -1919,6 +1921,8 @@ msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Przekroczono limit czasu żądania. Możesz wydłużyć limit czasu żądania w "
+"sekcji AI ustawień."
 
 #: src/control/Control.AIChatSidebar.ts:2065
 #: src/control/Control.AIChatSidebar.ts:3254
@@ -2020,23 +2024,23 @@ msgstr "Nie udało się przeanalizować zawartości zaznaczenia"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid "Pick a design for your deck, or continue without one:"
-msgstr ""
+msgstr "Wybierz projekt swojego slajdu lub kontynuuj bez niego:"
 
 #: src/control/Control.AIChatSidebar.ts:2930
 msgid "No template"
-msgstr ""
+msgstr "Brak szablonu"
 
 #: src/control/Control.AIChatSidebar.ts:2933
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Kontynuuj bez szablonu projektu"
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid "Design template: %1"
-msgstr ""
+msgstr "Szablon projektu: %1"
 
 #: src/control/Control.AIChatSidebar.ts:2960
 msgid "Continuing without a design template."
-msgstr ""
+msgstr "Kontynuacja bez szablonu projektu."
 
 #: src/control/Control.AIChatSidebar.ts:3026
 msgid "Formula analysis timeout"
@@ -2509,104 +2513,104 @@ msgstr "Więcej informacji o właściwościach"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Otwórz dokument na swoim komputerze lub w chmurze."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Otwórz plik z komputera"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Dodaj chmurę +"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Edytuj konto"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Dodaj nowe konto"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Adres URL serwera"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Wpisz adres URL serwera"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Nazwa wyświetlana"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Wpisz nazwę wyświetlaną"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Nazwa wyświetlana na liście w chmurze (maks. 40 znaków)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Zapisz zmiany"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Dodaj konto"
 
 #: src/control/backstage/CloudDialogs.tsx:184
 msgid "Remove account"
-msgstr ""
+msgstr "Usuń konto"
 
 #: src/control/backstage/CloudDialogs.tsx:186
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Odłącza tę chmurę"
 
 #: src/control/backstage/CloudDialogs.tsx:214
 msgid "New account successfully added"
-msgstr ""
+msgstr "Nowe konto zostało pomyślnie dodane"
 
 #: src/control/backstage/CloudDialogs.tsx:219
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Teraz możesz uzyskać dostęp do swoich plików z tej chmury."
 
 #: src/control/backstage/CloudDialogs.tsx:242
 msgid "Open Files"
-msgstr ""
+msgstr "Otwórz pliki"
 
 #: src/control/backstage/CloudDialogs.tsx:268
 msgid "Remove this account?"
-msgstr ""
+msgstr "Usunąć to konto?"
 
 #: src/control/backstage/CloudDialogs.tsx:273
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Twoje połączenie z tym kontem w chmurze zostanie przerwane."
 
 #: src/control/backstage/CloudDialogs.tsx:316
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/control/backstage/CloudDialogs.tsx:317
 msgid "OpenCloud"
-msgstr ""
+msgstr "OpenCloud"
 
 #: src/control/backstage/CloudDialogs.tsx:318
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Upuść plik, aby otworzyć"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Ten widok mobilny nie jest w pełni dostępny."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Oświadczenie o dostępności"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:122
@@ -3842,11 +3846,11 @@ msgstr "Wyniki"
 
 #: src/control/Control.NavigatorPanel.ts:315
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Maksymalizuj do siatki"
 
 #: src/control/Control.NavigatorPanel.ts:627
 msgid "Find and Replace"
-msgstr ""
+msgstr "Znajdź i zamień"
 
 #: src/control/Control.NavigatorPanel.ts:636
 #: src/control/jsdialog/Widget.Combobox.js:405
@@ -4045,7 +4049,7 @@ msgstr "Animacje"
 #: src/control/Control.NotebookbarBuilder.js:168
 #: src/control/Control.NotebookbarBuilder.js:745
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Niezapisane zmiany. Zapisz"
 
 #: src/control/Control.NotebookbarBuilder.js:232
 msgid "Click to expand"
@@ -4085,7 +4089,7 @@ msgstr "Obraz (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:743
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Niezapisane zmiany."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -5079,7 +5083,7 @@ msgstr "Kopiuj arkusz..."
 
 #: src/control/Control.Tabs.js:350
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, chronione"
 
 #: src/control/Control.Tabs.js:672
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5142,6 +5146,8 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Osadzony skrypt wykorzystuje starszy interfejs API com.sun.star UNO, który "
+"może zostać usunięty w przyszłych wersjach."
 
 #: src/control/Control.UIManager.ts:2869
 msgid "Copy error details"
@@ -5434,64 +5440,65 @@ msgstr "Podaj nazwę pliku"
 
 #: src/control/Permission.js:366 src/control/Permission.js:520
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Jak chcesz edytować?"
 
 #: src/control/Permission.js:367
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
 msgstr ""
+"Inni użytkownicy przeglądają ten dokument. Wybierz, jak chcesz kontynuować:"
 
 #: src/control/Permission.js:372
 msgid "Edit locally"
-msgstr ""
+msgstr "Edytuj lokalnie"
 
 #: src/control/Permission.js:373
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Zmiany są synchronizowane podczas zapisywania"
 
 #: src/control/Permission.js:379
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Wspólna edycja"
 
 #: src/control/Permission.js:380 src/control/Permission.js:412
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Edytuj wspólnie w czasie rzeczywistym"
 
 #: src/control/Permission.js:402
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Kontynuuj przeglądanie lokalnej kopii"
 
 #: src/control/Permission.js:403
 msgid "Continue with your version"
-msgstr ""
+msgstr "Kontynuuj swoją wersję"
 
 #: src/control/Permission.js:411
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Dołącz do wspólnej edycji"
 
 #: src/control/Permission.js:437
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Oczekiwanie na zapisanie zmian..."
 
 #: src/control/Permission.js:521
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Inni użytkownicy edytują ten dokument. Wybierz, jak chcesz kontynuować:"
 
 #: src/control/Permission.js:537
 msgid "started editing"
-msgstr ""
+msgstr "zaczyna edytować"
 
 #: src/control/Permission.js:538
 #, javascript-format
 msgid "%0 started editing"
-msgstr ""
+msgstr "%0 zaczyna edytować"
 
 #: src/control/Permission.js:539
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
-msgstr ""
+msgstr "Ktoś inny edytuje teraz ten dokument. Wybierz, jak chcesz kontynuować:"
 
 #: src/control/Permission.js:572
 msgid "Save as ODF format"
@@ -5640,7 +5647,7 @@ msgstr "Zmiana nazwy..."
 
 #: src/control/Toolbar.js:837
 msgid "Unable to share"
-msgstr ""
+msgstr "Nie można udostępnić"
 
 #: src/control/VRuler.ts:195 src/control/VRuler.ts:424
 msgid "Top Margin"
@@ -6199,11 +6206,11 @@ msgstr "Funkcje komórek tabeli"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Rozmiar wybranego kształtu"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Rozmiar kształtu"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -6433,12 +6440,11 @@ msgid "Server is shutting down"
 msgstr "Serwer się zamyka"
 
 #: src/docdispatcher.ts:611
-#, fuzzy
 msgid ""
 "AI is not configured. Go to File > Options > AI Assistant to set it up."
 msgstr ""
-"AI nie jest skonfigurowana. Przejdź do Plik > Opcje > Ustawienia widoku, aby "
-"ją skonfigurować."
+"AI nie jest skonfigurowana. Przejdź do Plik > Opcje > Asystent AI, aby ją "
+"skonfigurować."
 
 #: src/docdispatcher.ts:869
 msgid "Are you sure you want to delete this slide?"
@@ -6812,7 +6818,7 @@ msgstr "Aby wkleić poza {productname}, najpierw kliknij przycisk 'Pobierz'"
 
 #: src/map/Clipboard.js:194
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Kopiowanie z dokumentu zostało wyłączone przez administratora"
 
 #: src/map/Clipboard.js:307
 msgid "warning: copy/paste request timed out"
@@ -6963,7 +6969,7 @@ msgstr "Prezentacja okienkowa: "
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1212
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Prezentowanie w innym oknie"
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1213
@@ -7033,7 +7039,7 @@ msgstr "Okno dialogowe powitania"
 
 #: src/map/handler/Map.Settings.ts:159
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Ustawienia zapisane. Dodaj klucz API, aby korzystać z asystenta AI."
 
 #: src/map/handler/Map.Settings.ts:164
 msgid "Settings saved"
@@ -7132,11 +7138,11 @@ msgstr "Oddal"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Podgląd bieżącego slajdu"
 
 #: src/slideshow/PresenterConsole.js:46
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Podgląd następnego slajdu"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -7144,11 +7150,11 @@ msgstr "Podgląd slajdu {1}"
 
 #: src/slideshow/PresenterConsole.js:797
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Opuszczasz prezentację."
 
 #: src/slideshow/PresenterConsole.js:798
 msgid "The link is not valid."
-msgstr ""
+msgstr "Łącze jest nieprawidłowe."
 
 #: src/slideshow/PresenterConsole.js:1470
 msgid "Slide {0} of {1}"
@@ -7314,11 +7320,11 @@ msgstr "Żółty pomysł"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Witamy w arkuszu kalkulacyjnym"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Witamy w prezentacji"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
