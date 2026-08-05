@@ -2289,7 +2289,7 @@ SwTwips SwLineLayout::GetHangingMargin_() const
     {
         if( pPor->IsHangingPortion() )
         {
-            nDiff = static_cast<SwHangingPortion*>(pPor)->GetInnerWidth() - pPor->Width();
+            nDiff = static_cast<SwHangingPortion*>(pPor)->GetInnerWidth().as_twip<SwTwips>() - pPor->Width();
             if( nDiff )
                 bFound = true;
         }

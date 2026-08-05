@@ -864,7 +864,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
     Size aSize( rPor.Width(), nHeight);
 
     if( rPor.IsHangingPortion() )
-        aSize.setWidth( static_cast<const SwHangingPortion&>(rPor).GetInnerWidth() );
+        aSize.setWidth(static_cast<const SwHangingPortion&>(rPor).GetInnerWidth().as_twip<SwTwips>());
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
     {
         SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
