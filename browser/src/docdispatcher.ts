@@ -301,6 +301,8 @@ class Dispatcher {
 			app.zoomControl.zoomTo(app.map.options.zoom, undefined, true);
 		};
 		this.actionsMap['fitwidthzoom'] = () => {
+			if (OverviewNavigation.fitNearestPreview(OverviewNavigation.fitFillRatio))
+				return;
 			if (app.activeDocument.activeLayout)
 				app.activeDocument.activeLayout.adjustViewZoomLevel();
 		};
@@ -962,6 +964,20 @@ class Dispatcher {
 
 		this.actionsMap['fullscreen-drawing'] = () => {
 			app.util.toggleFullScreen();
+		};
+
+		this.actionsMap['fitslidetoview'] = (data?: any) => {
+			const part =
+				data && typeof data.part === 'number' && data.part >= 1
+					? data.part
+					: -1;
+			if (part >= 1)
+				OverviewNavigation.centerPreviewOnViewport(
+					part,
+					OverviewNavigation.fitFillRatio,
+				);
+			else
+				OverviewNavigation.fitNearestPreview(OverviewNavigation.fitFillRatio);
 		};
 
 		this.actionsMap['deletepage'] = function () {

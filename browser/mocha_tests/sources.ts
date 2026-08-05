@@ -231,6 +231,7 @@
 /// <reference path="../src/layer/vector/CanvasOverlay.ts" />
 /// <reference path="../src/canvas/sections/ScrollSection.ts" />
 /// <reference path="../src/app/OverviewFade.ts" />
+/// <reference path="../src/app/OverviewNavigation.ts" />
 /// <reference path="../src/canvas/sections/MouseControl.ts" />
 /// <reference path="../src/canvas/sections/ZoomControl.ts" />
 /// <reference path="../src/app/LayerUtil.ts" />

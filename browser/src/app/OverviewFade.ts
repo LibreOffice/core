@@ -61,7 +61,13 @@ class OverviewFade {
 			if (currentZoom !== map.getMaxZoom() || docLayer._selectedPart !== 0)
 				return false;
 			if (docLayer._parts < 2) return false;
-			OverviewFade.fadeToPart(OverviewFade.getReturnPart(docLayer));
+			// Zoom into whatever is being looked at: the preview nearest the viewport
+			// center wins; the previously viewed slide is the fallback when no preview
+			// is in sight.
+			const nearestPart = OverviewNavigation.previewNearestViewportCenter();
+			const targetPart =
+				nearestPart >= 1 ? nearestPart : OverviewFade.getReturnPart(docLayer);
+			OverviewFade.fadeToPart(targetPart);
 			return true;
 		}
 
@@ -85,9 +91,18 @@ class OverviewFade {
 		const map = app.map;
 		const container = document.getElementById('document-container');
 
+		// Going to the overview page: remember the slide being left, so the view lands
+		// centered on its preview.
+		if (part === 0)
+			OverviewNavigation.requestLanding(app.map._docLayer._selectedPart);
+
 		// Cypress runs with animations disabled, so switch immediately.
 		if (!container || window.L.Browser.cypressTest) {
 			map.setPart(part);
+			// The request is valid only for the switch it was made for: clear it
+			// when setPart did not move to the requested part.
+			if (app.map._docLayer._selectedPart !== part)
+				OverviewNavigation.requestLanding(-1);
 			return;
 		}
 
@@ -96,6 +111,10 @@ class OverviewFade {
 
 		OverviewFade.runOpacityTransition(container, true, () => {
 			map.setPart(part);
+			// The request is valid only for the switch it was made for: clear it
+			// when setPart did not move to the requested part.
+			if (app.map._docLayer._selectedPart !== part)
+				OverviewNavigation.requestLanding(-1);
 
 			// Fade back in when the server confirms the switch. The timeout covers
 			// a confirmation that never arrives.

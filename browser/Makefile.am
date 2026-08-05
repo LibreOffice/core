@@ -406,6 +406,7 @@ COOL_JS_LST =\
 	src/app/TableMiddleware.ts \
 	src/app/ImpressSelectionMiddleware.ts \
 	src/app/OverviewFade.ts \
+	src/app/OverviewNavigation.ts \
 	src/app/PreviewEditTransform.ts \
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutImpress.ts \

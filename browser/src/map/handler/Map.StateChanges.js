@@ -3,7 +3,7 @@
  * window.L.Map.StateChanges stores the state changes commands coming from core
  * LOK_CALLBACK_STATE_CHANGED callback
  */
-/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection */
+/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection OverviewNavigation */
 /*eslint no-extend-native:0*/
 window.L.Map.mergeOptions({
 	stateChangeHandler: true
@@ -122,25 +122,29 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 		}
 
 		if (commandName == '.uno:CanvasPageVisArea') {
-			const x = parseInt(state.x);
-			const y = parseInt(state.y);
+			if (!OverviewNavigation.consumeLandingRequest()) {
+				const x = parseInt(state.x);
+				const y = parseInt(state.y);
 
-			const point = new cool.SimplePoint(x, y);
-			app.activeDocument.activeLayout.setOverviewPageVisArea(point);
+				const point = new cool.SimplePoint(x, y);
+				app.activeDocument.activeLayout.setOverviewPageVisArea(point);
+			}
 		}
 
 		if (commandName == '.uno:CanvasPageCenter') {
-			const pageCenterX = app.activeDocument.fileSize.x / 2;
-			const pageCenterY = app.activeDocument.fileSize.y / 2;
+			if (!OverviewNavigation.consumeLandingRequest()) {
+				const pageCenterX = app.activeDocument.fileSize.x / 2;
+				const pageCenterY = app.activeDocument.fileSize.y / 2;
 
-			const viewedRect = app.activeDocument.activeLayout.viewedRectangle;
+				const viewedRect = app.activeDocument.activeLayout.viewedRectangle;
 
-			// Calculate the top-left position that would center the view on the page center
-			const scrollX = pageCenterX - (viewedRect.width / 2);
-			const scrollY = pageCenterY - (viewedRect.height / 2);
+				// Calculate the top-left position that would center the view on the page center
+				const scrollX = pageCenterX - (viewedRect.width / 2);
+				const scrollY = pageCenterY - (viewedRect.height / 2);
 
-			const scrollPoint = new cool.SimplePoint(scrollX, scrollY);
-			app.activeDocument.activeLayout.scrollTo(scrollPoint.pX, scrollPoint.pY);
+				const scrollPoint = new cool.SimplePoint(scrollX, scrollY);
+				app.activeDocument.activeLayout.scrollTo(scrollPoint.pX, scrollPoint.pY);
+			}
 		}
 
 		if (commandName == '.uno:HasOverviewPage') {
