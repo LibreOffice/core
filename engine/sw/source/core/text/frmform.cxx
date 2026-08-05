@@ -1632,16 +1632,16 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         auto nBaseAscent = pNew->GetAscent();
         auto nMaxExtraAscent
             = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraAscent() - nBaseAscent,
-                         rLine.GetCurr()->GetExtraAscent() });
+                         rLine.GetCurr()->GetExtraAscent().as_twip<SwTwips>() });
         rRepaint.Top(rRepaint.Top() - nMaxExtraAscent);
-        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraAscent(nMaxExtraAscent);
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraAscent(gfx::Length::twip(nMaxExtraAscent));
 
         auto nBaseDescent = pNew->Height() - pNew->GetAscent();
         auto nMaxExtraDescent
             = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraDescent() - nBaseDescent,
-                         rLine.GetCurr()->GetExtraDescent() });
+                         rLine.GetCurr()->GetExtraDescent().as_twip<SwTwips>() });
         rRepaint.Bottom(rRepaint.Bottom() + nMaxExtraDescent);
-        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraDescent(nMaxExtraDescent);
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraDescent(gfx::Length::twip(nMaxExtraDescent));
     }
 
     // Calculating the good ol' nDelta

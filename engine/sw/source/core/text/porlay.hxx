@@ -22,6 +22,7 @@
 
 #include <swrect.hxx>
 #include <swtypes.hxx>
+#include <basegfx/units/Length.hxx>
 #include "portxt.hxx"
 #include <svx/ctredlin.hxx>
 
@@ -87,8 +88,8 @@ private:
     // Height that would be appropriate as double-spacing for this line,
     // based on the maximum height from a limited set of eligible line portion types.
     SwTwips m_nLineSpacingBaseHeight = 0;
-    SwTwips m_nExtraAscent = 0;
-    SwTwips m_nExtraDescent = 0;
+    gfx::Length m_nExtraAscent = 0_emu;
+    gfx::Length m_nExtraDescent = 0_emu;
     sal_Int32 m_nSpaceCount = 0;       // space count in the line
     SwTwips m_nLetterSpacing = 0;      // custom letter spacing
     SwTwips m_nScaleWidth = 100;       // glyph scaling (grain resolution to limit font generation)
@@ -182,11 +183,11 @@ public:
     SwTwips GetLineSpacingBaseHeight() const { return m_nLineSpacingBaseHeight; }
     void SetLineSpacingBaseHeight(SwTwips nSet) { m_nLineSpacingBaseHeight = nSet; }
 
-    void SetExtraAscent(SwTwips nNew) { m_nExtraAscent = nNew; }
-    SwTwips GetExtraAscent() const { return m_nExtraAscent; }
+    void SetExtraAscent(gfx::Length nNew) { m_nExtraAscent = nNew; }
+    gfx::Length GetExtraAscent() const { return m_nExtraAscent; }
 
-    void SetExtraDescent(SwTwips nNew) { m_nExtraDescent = nNew; }
-    SwTwips GetExtraDescent() const { return m_nExtraDescent; }
+    void SetExtraDescent(gfx::Length nNew) { m_nExtraDescent = nNew; }
+    gfx::Length GetExtraDescent() const { return m_nExtraDescent; }
 
     void SetSpaceCount(sal_Int32 nNew) { m_nSpaceCount = nNew; }
     sal_Int32 GetSpaceCount() const { return m_nSpaceCount; }

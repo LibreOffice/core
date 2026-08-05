@@ -320,7 +320,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = false;
-            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent(), m_pCurr->GetExtraDescent());
+            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent().as_twip<sal_Int32>(), m_pCurr->GetExtraDescent().as_twip<sal_Int32>());
         }
 #if OSL_DEBUG_LEVEL > 1
         static bool bClipAlways = false;
@@ -479,7 +479,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = false;
-            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent(), m_pCurr->GetExtraDescent());
+            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent().as_twip<sal_Int32>(), m_pCurr->GetExtraDescent().as_twip<sal_Int32>());
         }
 
         // Portions, which lay "below" the text like post-its
