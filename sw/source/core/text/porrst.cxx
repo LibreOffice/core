@@ -128,7 +128,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion, const SwTextAttr*
     {
         m_eClear = pAttr->GetLineBreak().GetValue();
     }
-    m_nTextHeight = 0;
+    m_nTextHeight = 0_emu;
 }
 
 TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const SwTwips) const
@@ -149,9 +149,9 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Reduce height to text height for the duration of the print, so the vertical height will look
     // correct for the line break character, even for clearing breaks.
     SwTwips nHeight = Height();
-    SwTwips nVertPosOffset = (nHeight - m_nTextHeight) / 2;
+    SwTwips nVertPosOffset = (nHeight - m_nTextHeight.as_twip<SwTwips>()) / 2;
     auto pPortion = const_cast<SwBreakPortion*>(this);
-    pPortion->Height(m_nTextHeight, false);
+    pPortion->Height(m_nTextHeight.as_twip<SwTwips>(), false);
     if (rInf.GetTextFrame()->IsVertical())
     {
         // Compensate for the offset done in SwTextCursor::AdjustBaseLine() for the vertical case.
@@ -206,7 +206,7 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
     const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
-    m_nTextHeight = Height();
+    m_nTextHeight = gfx::Length::twip(Height());
 
     // See if this is a clearing break. If so, calculate how much we need to "jump down" so the next
     // line can again use the full text width.
@@ -247,8 +247,8 @@ void SwBreakPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, 
     dumpAsXmlAttributes(pWriter, rText, nOffset);
     nOffset += GetLen();
 
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("text-height"),
-                                      BAD_CAST(OString::number(m_nTextHeight).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("text-height-twips"),
+                                      BAD_CAST(OString::number(m_nTextHeight.as_twip<SwTwips>()).getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }

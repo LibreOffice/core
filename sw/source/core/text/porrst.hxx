@@ -62,7 +62,7 @@ class SwBreakPortion : public SwLinePortion
     SwLineBreakClear m_eClear;
 
     /// Height of the line-break character itself, without spacing added for clearing.
-    SwTwips m_nTextHeight;
+    gfx::Length m_nTextHeight;
 
 public:
     explicit SwBreakPortion(const SwLinePortion& rPortion, const SwTextAttr* pAttr);
