@@ -1143,10 +1143,7 @@ OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName
     return aValue;
 }
 
-extern "C"
-{
-
-static int doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static bool doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static COKitDocumentType doc_getDocumentType(COKitDocument* pThis);
 static int doc_getParts(COKitDocument* pThis);
 static char* doc_getPartPageRectangles(COKitDocument* pThis);
@@ -1375,8 +1372,6 @@ static bool doc_renderNextSlideLayer(
 static void doc_setViewOption(COKitDocument* pDoc, const char* pOption, const char* pValue);
 
 static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnabled);
-
-} // extern "C"
 
 namespace {
 ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
@@ -2069,8 +2064,6 @@ static OUString getGenerator()
     ::rtl::Bootstrap::expandMacros(os);
     return sGenerator.replaceFirst("%1", os);
 }
-
-extern "C" {
 
 // One of these is created per view to handle events cf. doc_registerCallback
 CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData)
@@ -3938,14 +3931,14 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"Macro to run was not provided."_ustr;
         SAL_INFO("kit", "Macro URL is empty");
-        return false;
+        return 0;
     }
 
     if (!sURL.startsWith("macro://"))
     {
         pLib->maLastExceptionMsg = u"This doesn't look like macro URL"_ustr;
         SAL_INFO("kit", "Macro URL is invalid");
-        return false;
+        return 0;
     }
 
     pLib->maLastExceptionMsg.clear();
@@ -3954,7 +3947,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
         SAL_INFO("kit", "ComponentContext is not available");
-        return false;
+        return 0;
     }
 
     util::URL aURL;
@@ -3971,13 +3964,13 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
         SAL_INFO("kit", "ComponentLoader is not available");
-        return false;
+        return 0;
     }
 
     xFactory = xContext->getServiceManager();
 
     if (!xFactory)
-        return false;
+        return 0;
 
     uno::Reference<frame::XDispatchProvider> xDP;
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
@@ -3988,7 +3981,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = u"Macro loader is not available"_ustr;
         SAL_INFO("kit", "Macro loader is not available");
-        return false;
+        return 0;
     }
 
     uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
@@ -4005,10 +3998,10 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
         pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
         SAL_INFO("kit", "Macro execution terminated with error code " << nErrCode);
 
-        return false;
+        return 0;
     }
 
-    return true;
+    return 1;
 }
 
 static bool lo_signDocument(COKit* /*pThis*/,
@@ -4490,7 +4483,7 @@ static SfxObjectShell* getSfxObjectShell(COKitDocument* pThis)
     return pBaseModel->GetObjectShell();
 }
 
-static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
+static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     comphelper::ProfileZone aZone("doc_saveAs");
 
@@ -7462,7 +7455,7 @@ static int doc_setClipboard(COKitDocument* pThis,
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return false;
+        return 0;
     }
 
     uno::Reference<datatransfer::XTransferable> xTransferable(new KitTransferable(nInCount, pInMimeTypes, pInSizes, pInStreams));
@@ -7475,10 +7468,10 @@ static int doc_setClipboard(COKitDocument* pThis,
     if (!pDoc->isMimeTypeSupported())
     {
         SetLastExceptionMsg(u"Document doesn't support this mime type"_ustr);
-        return false;
+        return 0;
     }
 
-    return true;
+    return 1;
 }
 
 // Office-level: install one process-global provider and switch the kit to a
@@ -9726,7 +9719,7 @@ static void preloadData()
 
 namespace {
 
-static void activateNotebookbar(std::u16string_view rApp)
+void activateNotebookbar(std::u16string_view rApp)
 {
     OUString aPath = OUString::Concat("org.openoffice.Office.UI.ToolbarMode/Applications/") + rApp;
 
@@ -10053,7 +10046,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             SAL_INFO("kit", "Attempting to initialize UNO");
 
             if (!initialize_uno(aAppURL))
-                return false;
+                return 0;
 
             // Force headless -- this is only for bitmap rendering.
             rtl::Bootstrap::set(u"SAL_USE_VCLPLUGIN"_ustr, u"svp"_ustr);
@@ -10231,8 +10224,10 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     if (eStage == PRE_INIT)
         rtl_alloc_preInit(0);
 
-    return bInitialized;
+    return bInitialized ? 1 : 0;
 }
+
+extern "C" {
 
 SAL_JNI_EXPORT
 COKit *cokit_hook_2(const char* install_path, const char* user_profile_url)
