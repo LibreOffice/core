@@ -69,12 +69,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPath(pXmlDoc, "//font[1]", "orientation", u"900");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/font[1]", "orientation", u"900");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false
     // - Actual  : true
     // i.e. the glyph was rotated further, so it was upside down.
-    assertXPath(pXmlDoc, "//font[1]", "vertical", u"false");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/font[1]", "vertical", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)

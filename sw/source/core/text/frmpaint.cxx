@@ -778,7 +778,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         OutputDevice* pOut = aInf.GetOut();
         const bool bOnWin = pSh->GetWin() != nullptr;
 
-        SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : nullptr );
+        SwSaveClip aClip( bOnWin || IsUndersized() || pOut->GetConnectMetaFile() ? pOut : nullptr );
 
         // Output loop: For each Line ... (which is still visible) ...
         //   adapt rRect (Top + 1, Bottom - 1)
