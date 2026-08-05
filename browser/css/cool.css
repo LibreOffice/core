@@ -175,7 +175,8 @@ input, button {
 	background-color: yellow;
 	color: rgb(68, 24, 24);
 	position: absolute;
-	z-index: 20;
+	/* Above .main-nav (1001), below dialogs (1105+). */
+	z-index: 1002;
 	border: 1px solid black;
 	display: none;
 }
