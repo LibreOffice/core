@@ -28,7 +28,7 @@
  #include "core/fpdfapi/page/cpdf_textobject.h"
  #include "core/fpdfapi/page/cpdf_textstate.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
-@@ -834,6 +835,108 @@
+@@ -834,6 +835,110 @@
    return FPDFBitmapFromCFXDIBitmap(result_bitmap.Leak());
  }
  
@@ -61,9 +61,11 @@
 +  CFX_Matrix mtPattern2Bitmap;
 +  mtPattern2Bitmap.MatchRect(bitmap_rect, cell_bbox);
 +
-+  CFX_DefaultRenderDevice bitmap_device;
-+  bitmap_device.AttachWithBackdropAndGroupKnockout(
-+      result_bitmap, /*pBackdropBitmap=*/nullptr, /*bGroupKnockout=*/true);
++  auto bitmap_device =
++      CFX_RenderDevice::CreateForBitmapWithBackdropAndGroupKnockout(
++          result_bitmap, /*backdrop_bitmap=*/nullptr, /*group_knockout=*/true);
++  if (!bitmap_device)
++    return nullptr;
 +
 +  CPDF_RenderOptions options;
 +  if (!pTilingPattern->colored())
@@ -72,7 +74,7 @@
 +
 +  CPDF_RenderContext context(&doc, nullptr, nullptr);
 +  context.AppendLayer(pPatternForm.get(), mtPattern2Bitmap);
-+  context.Render(&bitmap_device, nullptr, &options, nullptr);
++  context.Render(bitmap_device.get(), nullptr, &options, nullptr);
 +
 +  CHECK(!result_bitmap->IsPremultiplied());
 +
