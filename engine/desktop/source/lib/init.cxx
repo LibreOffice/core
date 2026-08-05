@@ -3269,7 +3269,6 @@ static void                    lo_destroy       (COKit* pThis);
 static int                     lo_initialize    (COKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static COKitDocument* lo_documentLoad  (COKit* pThis, const char* pURL);
 static char *                  lo_getError      (COKit* pThis);
-static void                    lo_freeError     (char* pFree);
 static COKitDocument* lo_documentLoadWithOptions  (COKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
@@ -3377,11 +3376,6 @@ char* LibCO_Impl::getError()
 COKitDocument* LibCO_Impl::documentLoadWithOptions(const char* pURL, const char* pOptions)
 {
     return lo_documentLoadWithOptions(this, pURL, pOptions);
-}
-
-void LibCO_Impl::freeError(char* pFree)
-{
-    lo_freeError(pFree);
 }
 
 void LibCO_Impl::registerCallback(COKitCallback pCallback, void* pData)
@@ -9186,12 +9180,6 @@ static char* lo_getError (COKit *pThis)
 
     LibCO_Impl* pLib = static_cast<LibCO_Impl*>(pThis);
     return convertOUString(pLib->maLastExceptionMsg);
-}
-
-static void lo_freeError(char* pFree)
-{
-    // Do not try to do anything clever here. This should just call free() on the pointer.
-    free(pFree);
 }
 
 static char* lo_getFilterTypes(COKit* pThis)

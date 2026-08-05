@@ -1452,32 +1452,10 @@ struct COKit
      */
     virtual COKitDocument* documentLoad(const char* pURL) = 0;
 
-    /// Returns the last error as a string. The returned pointer has to be freed by the caller
-    /// by calling the freeError() member function.
+    /// Returns the last error as a string. The caller owns the returned string and frees it.
     virtual char* getError() = 0;
 
     virtual COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) = 0;
-
-    /// The name "freeError" is a historical accident, actually this
-    /// is a generic deallocation function for dynamically allocated
-    /// memory returned by other COKit functions.
-
-    /// Especially on Windows it is important to not call free() in
-    /// your own code on a pointer returned from some random other
-    /// dynamic library (like the one this code goes into) where it
-    /// might have been allocated by calling malloc() (etc) in a C
-    /// runtime library that is different from the one used by your
-    /// code. That will lead to a crash. Alays call the free() in the
-    /// same C runtime where the malloc() that allocated the pointer
-    /// is.
-
-    /**
-     * Frees the memory pointed to by pFree.
-     *
-     * Use on dynamically allocated data returned by COKit
-     * functions, not only on the value returned by getError().
-     */
-    virtual void freeError(char* pFree) = 0;
 
     /**
      * Registers a callback. COKit will invoke this function when it wants to
@@ -2020,8 +1998,7 @@ struct COKitDocument
      * @param pCommand a UNO command for which the possible values are requested
      * @return {commandName: unoCmd, commandValues: {possible_values}}
      *
-     * The return value is dynamically allocated and should be
-     * deallocated by calling the freeError() function.
+     * The caller owns the returned string and frees it.
      */
     virtual char* getCommandValues(const char* pCommand) = 0;
 

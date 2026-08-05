@@ -439,7 +439,6 @@ namespace desktop {
         COKitDocument* documentLoad(const char* pURL) override;
         char* getError() override;
         COKitDocument* documentLoadWithOptions(const char* pURL, const char* pOptions) override;
-        void freeError(char* pFree) override;
         void registerCallback(COKitCallback pCallback, void* pData) override;
         char* getFilterTypes() override;
         void setOptionalFeatures(COKitOptionalFeatures features) override;
