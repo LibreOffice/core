@@ -71,7 +71,6 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     bool operator <=(const SwPosition &) const;
     bool operator >=(const SwPosition &) const;
     bool operator ==(const SwPosition &) const;
-    bool operator !=(const SwPosition &) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 

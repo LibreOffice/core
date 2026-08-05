@@ -209,12 +209,6 @@ bool SwPosition::operator==(const SwPosition &rPos) const
         && (nContent == rPos.nContent);
 }
 
-bool SwPosition::operator!=(const SwPosition &rPos) const
-{
-    return (nNode != rPos.nNode)
-        || (nContent != rPos.nContent);
-}
-
 SwDoc& SwPosition::GetDoc() const
 {
     return GetNode().GetDoc();
