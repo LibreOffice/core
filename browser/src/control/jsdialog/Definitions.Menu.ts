@@ -1793,6 +1793,21 @@ menuDefinitions.set('CharSpacingMenu', [
 	{ id: 'space2', text: _('Very Loose'), uno: 'Spacing?Spacing:short=120' },
 ] as Array<MenuDefinition>);
 
+menuDefinitions.set('CopyMenu', [
+	{
+		text: _UNO('.uno:Copy', 'text'),
+		action: '.uno:Copy',
+		hint: JSDialog.ShortcutsUtil.getTooltipLabel(
+			_UNO('.uno:Copy', 'text'),
+			'.uno:Copy',
+		),
+	},
+	{
+		text: _('Copy Markdown'),
+		action: 'copy-markdown',
+	},
+] as Array<MenuDefinition>);
+
 menuDefinitions.set('PasteMenu', [
 	{
 		text: _UNO('.uno:Paste', 'text'),

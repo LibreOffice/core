@@ -505,6 +505,7 @@ public:
         CLIP_REQUEST_GET,
         CLIP_REQUEST_GET_RICH_HTML_ONLY,
         CLIP_REQUEST_GET_HTML_PLAIN_ONLY,
+        CLIP_REQUEST_GET_MARKDOWN_ONLY,
     };
 
     std::shared_ptr<ClientSession> getSessionFromClipboardTag(const std::string &viewId, const std::string &tag);

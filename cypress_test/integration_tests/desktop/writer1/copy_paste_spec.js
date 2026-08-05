@@ -65,6 +65,26 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 		});
 	});
 
+	it('Copy Markdown using the UI.', function() {
+		// Given a document with 3 words: middle word is italic:
+		helper.setupAndLoadDocument('writer/copy_markdown.odt');
+		helper.setDummyClipboardForCopy('text/plain');
+		helper.selectAllText();
+
+		// When invoking the 'copy-markdown' action, dispatched by Home -> Clipboard -> Copy
+		// -> Copy Markdown:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map._clip.filterExecCopyPaste('copy-markdown');
+		});
+
+		// Then the clipboard's text/plain slot should contain the markdown data:
+		// Without the accompanying fix in place, this test would have failed with:
+		// expected: 'foo *bar* baz\n'
+		// actual:
+		// i.e. nothing was placed on the system clipboard.
+		cy.cGet('#copy-plain-container').should('have.text', 'foo *bar* baz\n');
+	});
+
 	it('Right-click Paste does not duplicate when execCommand fires paste event synchronously but returns false.', function() {
 		helper.setupAndLoadDocument('writer/copy_paste.odt');
 

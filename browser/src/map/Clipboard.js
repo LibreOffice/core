@@ -33,6 +33,8 @@ window.L.Clipboard = window.L.Class.extend({
 		this._navigatorClipboardPasteSpecial = false;
 		// Is handling an 'Action_Copy' in progress?
 		this._isActionCopy = false;
+		// Is handling a 'copy-markdown' in progress?
+		this._copyAsMarkdown = false;
 
 		var div = document.createElement('div');
 		this._dummyDiv = div;
@@ -975,7 +977,8 @@ window.L.Clipboard = window.L.Class.extend({
 			// there is no eager write to make here; just confirm the copy went through.
 			await check_;
 		} else {
-			const url = this.getMetaURL() + '&MimeType=text/html,text/plain;charset=utf-8';
+			const mimeTypes = this._copyAsMarkdown ? 'text/markdown;charset=utf-8' : 'text/html,text/plain;charset=utf-8';
+			const url = this.getMetaURL() + '&MimeType=' + mimeTypes;
 
 			// It's important in DisableCopy to write something to the clipboard so that future paste actions can trigger an internal paste
 			const text = (this._map['wopi'].DisableCopy ? this._getDisabledCopyStubHtml() : (async () => {
@@ -987,10 +990,15 @@ window.L.Clipboard = window.L.Class.extend({
 				return await result.text();
 			})());
 
-			const clipboardItem = new ClipboardItem({
-				'text/html': this._parseClipboardFetchResult(text, 'text/html', 'html'),
-				'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'plain'),
-			});
+			const clipboardItem = this._copyAsMarkdown
+				? new ClipboardItem({
+					'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'markdown'),
+				})
+				: new ClipboardItem({
+					'text/html': this._parseClipboardFetchResult(text, 'text/html', 'html'),
+					'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'plain'),
+				});
+			this._copyAsMarkdown = false;
 			// Again, despite fetch(url), this._parseClipboardFetchResult(...) and check_ all being promises, we need to let browser internals await them after we have safely succeeded in calling clipboard.write
 			// We throw an error if our checks fail before returning our text to cause these promises to reject - that way everything can be deferred for later, with failures causing the clipboard write to fail later
 			// We define the text promise outside to allow us to reuse the fetch rather than fetching twice (as in Ic23f7f817cc855ff08f25a2afefcd73d6fc3472b)
@@ -1049,10 +1057,12 @@ window.L.Clipboard = window.L.Class.extend({
 	parseClipboard: function(text) {
 		let textHtml;
 		let textPlain = '';
+		let textMarkdown = '';
 		if (text.startsWith('{')) {
 			let textJson = JSON.parse(text);
 			textHtml = textJson['text/html'];
 			textPlain = textJson['text/plain;charset=utf-8'];
+			textMarkdown = textJson['text/markdown'] || '';
 		} else {
 			var idx = text.indexOf('<!DOCTYPE HTML');
 			if (idx === -1) {
@@ -1063,12 +1073,13 @@ window.L.Clipboard = window.L.Class.extend({
 			textHtml = text;
 		}
 
-		if (!app.sectionContainer.testing)
+		if (textHtml && !app.sectionContainer.testing)
 			textHtml = DocUtil.stripStyle(textHtml);
 
 		return {
 			'html': textHtml,
-			'plain': textPlain
+			'plain': textPlain,
+			'markdown': textMarkdown
 		};
 	},
 
@@ -1233,6 +1244,10 @@ window.L.Clipboard = window.L.Class.extend({
 
 		if (cmd === '.uno:Copy' || cmd === '.uno:CopyHyperlinkLocation' || cmd === '.uno:CopySlide') {
 			this._execCopyCutPaste('copy', cmd, params);
+		} else if (cmd === 'copy-markdown') {
+			// Same as .uno:Copy, but fetch markdown from the server.
+			this._copyAsMarkdown = true;
+			this._execCopyCutPaste('copy', '.uno:Copy', params);
 		} else if (cmd === '.uno:Cut') {
 			this._execCopyCutPaste('cut', cmd);
 		} else if (cmd === '.uno:Paste') {

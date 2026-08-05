@@ -2136,6 +2136,8 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
             type = DocumentBroker::CLIP_REQUEST_GET_RICH_HTML_ONLY;
         else if (mime == "text/html,text/plain;charset=utf-8")
             type = DocumentBroker::CLIP_REQUEST_GET_HTML_PLAIN_ONLY;
+        else if (mime == "text/markdown;charset=utf-8")
+            type = DocumentBroker::CLIP_REQUEST_GET_MARKDOWN_ONLY;
         else
             type = DocumentBroker::CLIP_REQUEST_GET;
     }

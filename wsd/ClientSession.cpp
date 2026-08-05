@@ -354,6 +354,10 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
     {
         specific = " mimetype=text/html,text/plain;charset=utf-8";
     }
+    else if (type == DocumentBroker::CLIP_REQUEST_GET_MARKDOWN_ONLY)
+    {
+        specific = " mimetype=text/markdown";
+    }
 
     if (type != DocumentBroker::CLIP_REQUEST_SET)
     {

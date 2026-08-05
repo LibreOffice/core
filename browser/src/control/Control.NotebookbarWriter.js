@@ -658,9 +658,11 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 							'type': 'toolbox',
 							'children': [
 								{
-									'id': 'home-copy',
-									'type': 'customtoolitem',
+									'id': 'home-copy:CopyMenu',
+									'type': 'menubutton',
+									'noLabel': true,
 									'text': _UNO('.uno:Copy'),
+									'applyCallback': 'copy',
 									'command': '.uno:Copy',
 									'accessibility': { focusBack: true, 	combination: 'C',	de: 'C' }
 								},

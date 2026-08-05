@@ -1350,9 +1350,16 @@ class Dispatcher {
 			action === '.uno:Copy' ||
 			action === '.uno:Cut' ||
 			action === '.uno:Paste' ||
-			action === '.uno:PasteSpecial'
+			action === '.uno:PasteSpecial' ||
+			action === 'copy-markdown'
 		) {
 			app.map._clip.filterExecCopyPaste(action);
+			return;
+		}
+
+		if (action === 'copy') {
+			// Split-button main-click case.
+			app.map._clip.filterExecCopyPaste('.uno:Copy');
 			return;
 		}
 
