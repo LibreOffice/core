@@ -548,6 +548,11 @@ namespace cool {
 				card
 					.querySelectorAll('textarea.aichat-outline-gist')
 					.forEach((ta) => this.growGist(ta as HTMLTextAreaElement));
+				return;
+			}
+
+			if (msg.isApproval && !el.querySelector('.aichat-approval-buttons')) {
+				el.appendChild(this.buildApprovalButtons());
 			}
 		}
 
@@ -2522,48 +2527,35 @@ namespace cool {
 			};
 			this.messages.push(approvalMsg);
 			this.appendMessage(approvalMsg, this.messages.length - 1);
+		}
 
-			// Insert approval buttons after the message is built
-			app.layoutingService.onDrain(() => {
-				const msgEl = document.getElementById(
-					'aichat-msg-' + (this.messages.length - 1),
-				);
-				if (!msgEl) return;
-				msgEl.classList.add('aichat-msg-assistant');
+		// The approve and reject buttons for a pending approval message. They are
+		// built from the message's own state on every render, so they come back
+		// after the messages area is rebuilt.
+		private buildApprovalButtons(): HTMLElement {
+			const btnContainer = document.createElement('div');
+			btnContainer.className = 'aichat-approval-buttons';
 
-				const btnContainer = document.createElement('div');
-				btnContainer.className = 'aichat-approval-buttons';
+			const approveBtn = document.createElement('button');
+			approveBtn.textContent = _('Approve');
+			approveBtn.className = 'aichat-approve-btn';
+			approveBtn.setAttribute('aria-label', _('Approve action'));
+			approveBtn.onclick = () => this.sendApprovalAction('approve');
 
-				const removeControls = () => {
-					btnContainer.remove();
-				};
+			const rejectBtn = document.createElement('button');
+			rejectBtn.textContent = _('Reject');
+			rejectBtn.className = 'aichat-reject-btn';
+			rejectBtn.setAttribute('aria-label', _('Reject action'));
+			rejectBtn.onclick = () => this.sendApprovalAction('reject');
 
-				const approveBtn = document.createElement('button');
-				approveBtn.textContent = _('Approve');
-				approveBtn.className = 'aichat-approve-btn';
-				approveBtn.setAttribute('aria-label', _('Approve action'));
-				approveBtn.onclick = () => {
-					this.sendApprovalAction('approve');
-					removeControls();
-				};
-
-				const rejectBtn = document.createElement('button');
-				rejectBtn.textContent = _('Reject');
-				rejectBtn.className = 'aichat-reject-btn';
-				rejectBtn.setAttribute('aria-label', _('Reject action'));
-				rejectBtn.onclick = () => {
-					this.sendApprovalAction('reject');
-					removeControls();
-				};
-
-				btnContainer.appendChild(approveBtn);
-				btnContainer.appendChild(rejectBtn);
-				msgEl.appendChild(btnContainer);
-			});
+			btnContainer.appendChild(approveBtn);
+			btnContainer.appendChild(rejectBtn);
+			return btnContainer;
 		}
 
 		private sendApprovalAction(action: string): void {
 			this.awaitingUserDecision = false;
+			this.markApprovalDecided();
 			const body: any = {
 				requestId: this.currentRequestId,
 				action: action,
@@ -2584,6 +2576,23 @@ namespace cool {
 					this.requestTimeoutMs,
 					(d) => this.onAIChatResult(d),
 				);
+			}
+		}
+
+		// Records the decision on the approval still awaiting one and removes its
+		// buttons, so the transcript keeps the message without offering the
+		// decision a second time.
+		private markApprovalDecided(): void {
+			for (let i = this.messages.length - 1; i >= 0; i--) {
+				const msg = this.messages[i];
+				if (msg.decided || !msg.isApproval) continue;
+				msg.decided = true;
+				const el = document.getElementById('aichat-msg-' + i);
+				const buttons = el
+					? el.querySelector('.aichat-approval-buttons')
+					: null;
+				if (buttons) buttons.remove();
+				return;
 			}
 		}
 

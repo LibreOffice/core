@@ -124,4 +124,38 @@ describe(['tagdesktop'], 'AI approval card', function() {
 			'contain.text',
 			'This will: run 1 ReplaceEverything command.');
 	});
+
+	it('The approve and reject buttons come back after the sidebar is reopened', function() {
+		aichatHelper.enableAIWithCaptureSocket(this.win, {
+			approvalToolName: 'transform_document_structure',
+		});
+		aichatHelper.openAIChat();
+		aichatHelper.typeIntoAIInput('Tidy up my deck');
+		aichatHelper.clickSend();
+		cy.cGet('.aichat-approval-buttons').should('exist');
+
+		aichatHelper.closeAIChat();
+		aichatHelper.openAIChat();
+
+		// The pending approval still offers its decision, and taking it works.
+		cy.cGet('.aichat-approval-buttons').should('exist');
+		cy.cGet('.aichat-approve-btn').click();
+		cy.cGet('.aichat-approval-buttons').should('not.exist');
+	});
+
+	it('A decided approval is not offered a second time after a reopen', function() {
+		aichatHelper.enableAIWithCaptureSocket(this.win, {
+			approvalToolName: 'transform_document_structure',
+		});
+		aichatHelper.openAIChat();
+		aichatHelper.typeIntoAIInput('Tidy up my deck');
+		aichatHelper.clickSend();
+		cy.cGet('.aichat-reject-btn').click();
+		cy.cGet('.aichat-approval-buttons').should('not.exist');
+
+		aichatHelper.closeAIChat();
+		aichatHelper.openAIChat();
+
+		cy.cGet('.aichat-approval-buttons').should('not.exist');
+	});
 });
