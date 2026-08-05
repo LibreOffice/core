@@ -189,6 +189,8 @@ export class Comment extends CanvasSectionObject {
 		window.L.DomEvent.on(this.sectionProperties.nodeReplyText, 'input', this.textAreaInput, this);
 		window.L.DomEvent.on(this.sectionProperties.nodeModifyText, 'keydown', this.textAreaKeyDown, this);
 		window.L.DomEvent.on(this.sectionProperties.nodeReplyText, 'keydown', this.textAreaKeyDown, this);
+		window.L.DomEvent.on(this.sectionProperties.nodeModifyText, 'paste', app.LOUtil.onPastePlainText);
+		window.L.DomEvent.on(this.sectionProperties.nodeReplyText, 'paste', app.LOUtil.onPastePlainText);
 		this.sectionProperties.cancelButton = this.createButton(button, 'annotation-cancel-' + this.sectionProperties.data.id, 'annotation-button button', _('Cancel'), this.handleCancelCommentButton);
 		this.sectionProperties.saveButton = this.createButton(button, 'annotation-save-' + this.sectionProperties.data.id, 'annotation-button button button-primary',_('Save'), this.handleSaveCommentButton);
 		button = window.L.DomUtil.create('div', '', this.sectionProperties.nodeReply);

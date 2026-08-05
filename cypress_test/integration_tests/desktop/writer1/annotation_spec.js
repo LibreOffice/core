@@ -33,6 +33,41 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('contain','some text0, some other text');
 	});
 
+	it('Paste keeps no formatting', function() {
+		desktopHelper.insertComment();
+
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('#annotation-modify-textarea-1').should('exist');
+
+		cy.getFrameWindow().then(function(win) {
+			var editable = win.document.getElementById('annotation-modify-textarea-1');
+			editable.focus();
+
+			// put the caret after the existing text
+			var range = win.document.createRange();
+			range.selectNodeContents(editable);
+			range.collapse(false);
+			var selection = win.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+
+			var clipboardData = new win.DataTransfer();
+			clipboardData.setData('text/plain', ', bold text');
+			clipboardData.setData('text/html', '<b>, bold text</b>');
+			editable.dispatchEvent(new win.ClipboardEvent('paste', {
+				clipboardData: clipboardData, bubbles: true, cancelable: true
+			}));
+		});
+
+		cy.cGet('#annotation-modify-textarea-1').should('have.text', 'some text0, bold text');
+		cy.cGet('#annotation-modify-textarea-1').find('b').should('not.exist');
+
+		cy.cGet('#annotation-save-1').click();
+		cy.cGet('#annotation-content-area-1').should('contain', 'some text0, bold text');
+		cy.cGet('#annotation-content-area-1').find('b').should('not.exist');
+	});
+
 	it('Reply', function() {
 		desktopHelper.insertComment();
 

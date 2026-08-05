@@ -46,8 +46,11 @@ function _multiLineEditControl(parentContainer, data, builder, callback) {
 		controlType = 'p';
 
 	let edit = window.L.DomUtil.create(controlType, 'ui-textarea ' + builder.options.cssClass, parentContainer);
-	if (data.contenteditable)
+	if (data.contenteditable) {
 		edit.setAttribute('contenteditable', 'true');
+		// only plain text is stored, so don't let a paste look formatted
+		edit.addEventListener('paste', window.app.LOUtil.onPastePlainText);
+	}
 
 	if (controlType === 'textarea') {
 		edit.value = builder._cleanText(data.text);

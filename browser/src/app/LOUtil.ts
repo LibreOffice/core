@@ -1010,6 +1010,19 @@ class LOUtil {
 		return '';
 	}
 
+	// Paste handler for contenteditable fields that only store plain text
+	// (comments): drop the source formatting right away, otherwise the
+	// pasted text looks formatted until the field is saved and its markup
+	// is dropped. insertText keeps the undo stack and fires 'input', which
+	// the mention handling relies on.
+	public static onPastePlainText(ev: ClipboardEvent): void {
+		if (!ev.clipboardData) return;
+
+		ev.preventDefault();
+		const text = ev.clipboardData.getData('text/plain');
+		if (text) document.execCommand('insertText', false, text);
+	}
+
 	// Mirror data-cooltip onto aria-label so the accessible name
 	// matches the visible tooltip, even when branding overrides
 	// data-cooltip after load (e.g. to "Collabora Online"). When
