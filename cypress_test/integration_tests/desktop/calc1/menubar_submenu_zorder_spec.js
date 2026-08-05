@@ -4,20 +4,18 @@ var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
 describe(['tagdesktop'], 'Menubar drop-down z-order', function () {
-	var win;
-
 	beforeEach(function () {
+		cy.viewport(1280, 500);
+
 		helper.setupAndLoadDocument('calc/focus.ods');
 		// The classic menubar (#menu-*) only exists in the compact UI; the
 		// desktop default renders the notebookbar.
 		desktopHelper.switchUIToCompact();
 		cy.cGet('#menu-data').should('be.visible');
-		cy.getFrameWindow().then(function (w) {
-			win = w;
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
 		});
-		cy.then(function () {
-			return helper.processToIdle(win);
-		});
+		cy.then(() => helper.processToIdle(this.win));
 	});
 
 	// A tall classic-menubar drop-down (e.g. Data, or its Statistics
@@ -27,10 +25,7 @@ describe(['tagdesktop'], 'Menubar drop-down z-order', function () {
 	// (z-index 1000) the trapped menu entries were hidden behind them.
 	// The menu must paint above the bottom bars.
 	it('tall Data menu entries are not hidden behind the bottom bars', function () {
-		// A short viewport forces the (very tall) Data drop-down down into the
-		// bottom bars, the same situation high browser zoom produces. Keep the
-		// width wide so the menubar does not collapse to a hamburger.
-		cy.viewport(1280, 500);
+		var win = this.win;
 
 		cy.cGet('#menu-data').click();
 		cy.cGet('#menu-data > ul').should('be.visible');
