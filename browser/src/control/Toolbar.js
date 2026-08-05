@@ -632,7 +632,10 @@ window.L.Map.include({
 			var contentContainer = document.getElementById(id);
 			if (contentContainer) {
 				contentContainer.setAttribute('tabindex', '-1');
-				contentContainer.focus();
+				contentContainer.focus({preventScroll: true});
+				var scrollContainer = contentContainer.closest('.ui-dialog-content');
+				if (scrollContainer)
+					scrollContainer.scrollTop = 0;
 			}
 		});
 	},
